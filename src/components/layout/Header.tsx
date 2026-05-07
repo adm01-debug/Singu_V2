@@ -7,6 +7,7 @@ import { BackButton } from '@/components/navigation/BackButton';
 import { UnifiedNotificationsBell } from '@/components/notifications/UnifiedNotificationsBell';
 import { SmartNotificationsBell } from '@/components/notifications/SmartNotificationsBell';
 import { GlobalDensityToggle } from '@/components/ui/global-density-toggle';
+import { Magnetic } from '@/components/ui/magnetic';
 
 interface HeaderProps {
   title: string;
