@@ -13,8 +13,14 @@ export function TeamDashboardPanel() {
 
   const totalContacts = data.members.reduce((s, m) => s + m.contacts_count, 0);
   const totalInteractions = data.members.reduce((s, m) => s + m.interactions_this_month, 0);
+  const totalPipeline = data.members.reduce((s, m) => s + m.pipeline_value, 0);
+  const totalWon = data.members.reduce((s, m) => s + m.won_deals_value, 0);
+  
   const onVacation = data.members.filter(m => m.is_on_vacation).length;
   const active = data.members.length - onVacation;
+
+  const sortedByWon = [...data.members].sort((a, b) => b.won_deals_value - a.won_deals_value);
+  const maxWon = Math.max(...data.members.map(m => m.won_deals_value), 1);
 
   return (
     <Card>
