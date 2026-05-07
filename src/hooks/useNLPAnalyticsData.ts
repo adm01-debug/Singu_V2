@@ -122,7 +122,8 @@ export function useNLPAnalyticsData() {
 
         return { totalAnalyses, emotionalStates, vakDistribution, discDistribution: disc, topValues, objectionTypes, emotionalTrend } as NLPStats;
       } catch (error) {
-        logger.error('Error fetching NLP stats:', error);
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching NLP stats:', { error: msg });
         return EMPTY;
       }
     },
