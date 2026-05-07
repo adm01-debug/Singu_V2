@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -88,9 +89,26 @@ export const SidebarMenuButton = React.forwardRef<
         data-sidebar="menu-button"
         data-size={size}
         data-active={isActive}
-        className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
+        className={cn(
+          sidebarMenuButtonVariants({ variant, size }),
+          "relative transition-all duration-300",
+          isActive && "text-primary font-semibold",
+          className
+        )}
         {...props}
-      />
+      >
+        {isActive && (
+          <motion.div
+            layoutId="active-sidebar-item"
+            className="absolute inset-0 bg-primary/10 rounded-md -z-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ type: "spring", stiffness: 380, damping: 30 }}
+          />
+        )}
+        {props.children}
+      </Comp>
     );
 
     if (!tooltip) {

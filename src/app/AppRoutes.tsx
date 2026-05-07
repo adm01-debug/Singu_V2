@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import { RequireAuth } from '@/hooks/useAuth';
 import { ErrorBoundary } from '@/components/feedback/ErrorBoundary';
 import { PageLoadingFallback } from '@/components/feedback/PageLoadingFallback';
@@ -7,6 +8,7 @@ import { useWebVitals } from '@/hooks/useWebVitals';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { useCircuitBreakerHandler } from '@/hooks/useCircuitBreakerHandler';
 import { useViewTransitions } from '@/hooks/useViewTransitions';
+import { PageTransition } from '@/components/layout/PageTransition';
 import {
   ContactsPageSkeleton,
   CompaniesPageSkeleton,
@@ -23,7 +25,11 @@ import * as P from './lazyPages';
 /** Suspense + ErrorBoundary wrapper for lazy routes */
 const LazyPage = ({ children, fallback }: { children: React.ReactNode; fallback?: React.ReactNode }) => (
   <ErrorBoundary showDetails={import.meta.env.DEV}>
-    <Suspense fallback={fallback || <PageLoadingFallback />}>{children}</Suspense>
+    <Suspense fallback={fallback || <PageLoadingFallback />}>
+      <PageTransition>
+        {children}
+      </PageTransition>
+    </Suspense>
   </ErrorBoundary>
 );
 
@@ -42,6 +48,7 @@ const Admin = ({ children }: { children: React.ReactNode }) => (
 );
 
 export const AppRoutes = () => {
+  const location = useLocation();
   useWebVitals();
   useViewTransitions();
   useOnlineStatus({
@@ -51,7 +58,9 @@ export const AppRoutes = () => {
   useCircuitBreakerHandler();
 
   return (
-    <Routes>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+
       {/* Public routes */}
       <Route path="/auth" element={<LazyPage><P.Auth /></LazyPage>} />
       <Route path="/survey/:token" element={<LazyPage><P.PublicSurvey /></LazyPage>} />
@@ -162,7 +171,7 @@ export const AppRoutes = () => {
       <Route path="/admin/error-budget" element={<Admin><P.AdminErrorBudget /></Admin>} />
 
       {/* Catch-all */}
-      <Route path="*" element={<LazyPage><P.NotFound /></LazyPage>} />
-    </Routes>
+      </Routes>
+    </AnimatePresence>
   );
 };

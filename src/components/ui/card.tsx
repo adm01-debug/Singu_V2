@@ -11,7 +11,7 @@ const cardVariants = cva(
         elevated: "bg-card border border-border/30 shadow-medium hover:shadow-strong hover:border-primary/20 hover:-translate-y-1",
         outlined: "bg-card border border-border/30 shadow-none hover:border-primary/40 hover:shadow-soft",
         ghost: "bg-transparent border-transparent shadow-none",
-        glass: "bg-card/40 backdrop-blur-xl border border-white/10 shadow-lg hover:bg-card/60 hover:border-primary/30 hover:shadow-xl hover:-translate-y-1",
+        glass: "bg-card/40 backdrop-blur-xl border border-white/10 shadow-lg hover:bg-card/60 hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 nexus-glass-noise",
         interactive: "bg-card border border-border/30 shadow-soft cursor-pointer hover:border-primary/30 hover:bg-muted/10 hover:shadow-medium active:scale-[0.98] hover:-translate-y-1",
         muted: "bg-muted/20 border border-border/30 shadow-none",
         success: "bg-success/5 border border-success/20 shadow-none hover:border-success/40",
