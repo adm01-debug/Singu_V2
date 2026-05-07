@@ -126,8 +126,8 @@ export function useBulkImport(entityType: ImportEntityType) {
               }).filter(Boolean);
 
               if (batch.length > 0) {
-                // Using a more robust type cast for dynamic table access
-                const { error } = await (supabase.from(entityType) as any).insert(batch);
+                // Use controlled casting for dynamic table access while preserving Supabase type safety
+                const { error } = await (supabase.from(entityType as any) as any).insert(batch);
                 if (error) {
                   batch.forEach((_, bIdx) => {
                     errors.push({ row: i + bIdx + 2, message: error.message });
