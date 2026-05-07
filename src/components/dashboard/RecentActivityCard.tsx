@@ -64,12 +64,12 @@ export const RecentActivityCard = React.memo(function RecentActivityCard({ activ
   const dedupedActivities = deduplicateActivities(activities);
   
   return (
-    <Card className="h-full border-border/60 hover:border-border transition-colors overflow-hidden relative">
-      <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-accent/60 rounded-t-xl" />
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-base font-semibold flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-gradient-to-br from-primary/15 to-accent/10 ring-1 ring-primary/20">
-            <Clock className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+    <Card className="h-full border-border/30 bg-card/60 backdrop-blur-sm hover:border-primary/20 hover:shadow-lg transition-all duration-300 ease-smooth overflow-hidden relative rounded-2xl">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-nexus-cyan to-nexus-emerald rounded-t-2xl opacity-80" />
+      <CardHeader className="flex flex-row items-center justify-between pb-4">
+        <CardTitle className="text-base font-heading font-bold flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-secondary/5 border border-border/20 shadow-inner-sm">
+            <Clock className="w-4 h-4 text-primary animate-pulse-soft" aria-hidden="true" />
           </div>
           Atividade Recente
         </CardTitle>
@@ -106,16 +106,16 @@ export const RecentActivityCard = React.memo(function RecentActivityCard({ activ
                     >
                       <Link
                         to={`/contatos/${activity.contactId}`}
-                        className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-primary/5 border border-transparent hover:border-primary/10 transition-all group cursor-pointer"
+                        className="flex items-center gap-4 p-3.5 rounded-2xl hover:bg-background/80 border border-transparent hover:border-border/30 hover:shadow-soft transition-all duration-300 group cursor-pointer"
                       >
-                        <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ring-1", visual.bg)}>
-                          <Icon className={cn("w-3.5 h-3.5", visual.color)} />
+                        <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 border border-transparent group-hover:border-primary/20 transition-all", visual.bg)}>
+                          <Icon className={cn("w-4 h-4 transition-transform duration-300 group-hover:scale-110", visual.color)} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors truncate">
+                          <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors truncate">
                             {activity.entityName}
                           </p>
-                          <p className="text-[11px] text-muted-foreground truncate">
+                          <p className="text-[11px] text-muted-foreground font-light tracking-tight truncate">
                             {activity.description}
                           </p>
                         </div>

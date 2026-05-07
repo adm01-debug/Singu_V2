@@ -167,25 +167,25 @@ export const OnboardingChecklist = React.memo(function OnboardingChecklist({
       transition={{ duration: 0.3 }}
     >
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-        <div className="flex items-center gap-3 px-4 py-3 rounded-2xl border border-border/60 bg-card/85 shadow-[0_18px_44px_-32px_hsl(var(--foreground)/0.45)] hover:border-primary/25 transition-colors">
-          <div className="w-8 h-8 rounded-xl bg-primary/12 ring-1 ring-primary/20 flex items-center justify-center shrink-0">
+        <div className="flex items-center gap-4 px-6 py-4 rounded-2xl border border-border/20 bg-card/60 backdrop-blur-xl shadow-soft hover:border-primary/30 transition-all duration-300">
+          <div className="w-10 h-10 rounded-2xl bg-primary/10 ring-1 ring-primary/20 flex items-center justify-center shrink-0 shadow-inner-sm">
             {completedCount >= 5 ? (
-              <Trophy className="w-4 h-4 text-warning" aria-hidden="true" />
+              <Trophy className="w-5 h-5 text-warning animate-bounce" aria-hidden="true" />
             ) : (
-              <Sparkles className="w-4 h-4 text-primary" aria-hidden="true" />
+              <Sparkles className="w-5 h-5 text-primary animate-pulse-soft" aria-hidden="true" />
             )}
           </div>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <Typography variant="small" className="font-semibold text-foreground">
-                Primeiros 7 dias
+              <Typography variant="small" className="font-heading font-bold text-foreground uppercase tracking-widest text-[10px]">
+                Início de Jornada
               </Typography>
               <span className="text-xs text-muted-foreground tabular-nums">
                 {completedCount}/{steps.length}
               </span>
             </div>
-            <Progress value={progress} className="h-1 mt-1.5" />
+            <Progress value={progress} className="h-1.5 mt-2 bg-primary/10" />
           </div>
 
           {!isOpen && nextStep && (
@@ -232,7 +232,7 @@ export const OnboardingChecklist = React.memo(function OnboardingChecklist({
                   <Link to={step.path}>
                     <div
                       className={cn(
-                        'flex flex-col gap-1.5 p-2.5 rounded-xl border border-border/40 bg-surface-1/55 transition-all hover:bg-primary/6 hover:border-primary/20 hover:shadow-[0_16px_36px_-28px_hsl(var(--nexus-glow)/0.35)] h-full',
+                        'flex flex-col gap-2 p-4 rounded-2xl border border-border/30 bg-background/40 backdrop-blur-sm transition-all duration-300 hover:bg-background/80 hover:border-primary/30 hover:shadow-soft hover:-translate-y-1 h-full group',
                         step.completed && 'opacity-60',
                       )}
                     >

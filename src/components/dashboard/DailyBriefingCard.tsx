@@ -116,20 +116,19 @@ export function DailyBriefingCard({
   };
 
   return (
-    <Card className={cn('relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background', className)} data-density-aware>
-      <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-primary/10 blur-3xl pointer-events-none" aria-hidden="true" />
-      <CardContent className="relative p-4 md:p-5">
+    <Card className={cn('relative overflow-hidden border-primary/20 bg-card/60 backdrop-blur-xl shadow-lg rounded-2xl', className)} data-density-aware>
+      <div className="absolute -top-24 -right-24 h-48 w-48 rounded-full bg-primary/15 blur-[60px] pointer-events-none animate-pulse-glow" aria-hidden="true" />
+      <div className="absolute -bottom-24 -left-24 h-48 w-48 rounded-full bg-nexus-cyan/10 blur-[60px] pointer-events-none" aria-hidden="true" />
+      <CardContent className="relative p-6 md:p-8">
         <div className="flex items-start justify-between gap-3">
-          <div className="flex items-start gap-3">
-            <div className="rounded-lg bg-primary/15 p-2">
-              <Sparkles className="h-4 w-4 text-primary" aria-hidden="true" />
+          <div className="flex items-start gap-4">
+            <div className="rounded-xl bg-primary/10 border border-primary/20 p-3 shadow-inner-sm">
+              <Sparkles className="h-5 w-5 text-primary animate-pulse-soft" aria-hidden="true" />
             </div>
-            <div className="space-y-0.5">
-              <h3 className="text-sm font-semibold leading-tight">Briefing do dia</h3>
-              <p className="text-xs text-muted-foreground">
-                {summary.interactionsToday} {summary.interactionsToday === 1 ? 'conversa' : 'conversas'} hoje ·{' '}
-                {summary.newContactsToday} novos contatos ·{' '}
-                {summary.trend >= 0 ? '+' : ''}{summary.trend} vs ontem
+            <div className="space-y-1">
+              <h3 className="text-lg font-heading font-bold tracking-tight text-foreground">Briefing do dia</h3>
+              <p className="text-sm text-muted-foreground font-light tracking-tight">
+                Você teve <span className="font-semibold text-foreground">{summary.interactionsToday}</span> {summary.interactionsToday === 1 ? 'conversa' : 'conversas'} hoje e <span className="font-semibold text-foreground">{summary.newContactsToday}</span> novos contatos.
               </p>
             </div>
           </div>
@@ -155,27 +154,26 @@ export function DailyBriefingCard({
         )}
 
         {summary.priorities.length > 0 && (
-          <div className="mt-4 space-y-1.5">
-            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+          <div className="mt-8 space-y-3">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/80">
               Prioridades sugeridas
             </p>
-            <ul className="space-y-1">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {summary.priorities.map((p, i) => {
                 const Icon = p.tone === 'urgent' ? AlertCircle : p.tone === 'opportunity' ? Sparkles : CheckCircle2;
                 return (
-                  <li key={i}>
-                    <Link
-                      to={p.href}
-                      className="group flex items-center gap-2 rounded-md border border-border/50 bg-background/60 px-2.5 py-1.5 text-xs transition-colors hover:bg-muted"
-                    >
-                      <Icon className={cn('h-3.5 w-3.5 shrink-0', p.tone === 'urgent' ? 'text-destructive' : p.tone === 'opportunity' ? 'text-primary' : 'text-success')} aria-hidden="true" />
-                      <span className="flex-1 truncate">{p.label}</span>
-                      <ArrowRight className="h-3 w-3 text-muted-foreground transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-                    </Link>
-                  </li>
+                  <Link
+                    key={i}
+                    to={p.href}
+                    className="group flex items-center gap-3 rounded-xl border border-border/20 bg-background/40 px-4 py-3 text-sm transition-all duration-300 hover:bg-background/80 hover:border-primary/30 hover:shadow-soft"
+                  >
+                    <Icon className={cn('h-4 w-4 shrink-0', p.tone === 'urgent' ? 'text-destructive' : p.tone === 'opportunity' ? 'text-primary' : 'text-success')} aria-hidden="true" />
+                    <span className="flex-1 truncate font-medium tracking-tight">{p.label}</span>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground/40 transition-transform group-hover:translate-x-1 group-hover:text-primary" aria-hidden="true" />
+                  </Link>
                 );
               })}
-            </ul>
+            </div>
           </div>
         )}
       </CardContent>

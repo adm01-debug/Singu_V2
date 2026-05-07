@@ -151,8 +151,8 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
 
       {/* Main content area */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Desktop Header Bar */}
-        <header className="hidden md:flex h-14 items-center border-b border-border/50 px-3 sm:px-5 bg-background/95 backdrop-blur-sm sticky top-0 z-30" role="banner">
+        {/* Desktop Header Bar — Premium Floating Navigation */}
+        <header className="hidden md:flex h-16 items-center border-b border-border/30 px-6 bg-background/60 backdrop-blur-xl sticky top-0 z-30 transition-all duration-300" role="banner">
           {/* Left: sidebar trigger + breadcrumb */}
           <div className="flex items-center gap-2 sm:gap-3 min-w-0 w-[200px] shrink-0">
             <SidebarTrigger className="text-muted-foreground hover:text-foreground hover:bg-secondary/60 rounded-lg transition-colors shrink-0" aria-label="Alternar sidebar" />
@@ -173,24 +173,24 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
           </div>
 
           {/* Center: search bar + mic */}
-          <div className="flex-1 flex items-center justify-center gap-2 pr-[30%]">
+          <div className="flex-1 flex items-center justify-center gap-3 pr-[15%] lg:pr-[25%]">
             <button
               onClick={() => setIsOpen(true)}
-              className="flex items-center gap-2.5 rounded-full bg-secondary/60 border border-border/40 px-4 py-2 text-sm text-muted-foreground cursor-pointer hover:bg-secondary/80 hover:border-primary/30 hover:text-foreground transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none w-full max-w-[480px]"
+              className="flex items-center gap-3 rounded-2xl bg-secondary/5 border border-border/20 px-5 py-2.5 text-sm text-muted-foreground cursor-pointer hover:bg-secondary/10 hover:border-primary/20 hover:text-foreground hover:shadow-soft transition-all duration-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none w-full max-w-[520px] group"
               aria-label="Abrir busca inteligente (⌘K)"
             >
-              <Search className="h-4 w-4 text-primary/70 shrink-0" aria-hidden="true" />
-              <span className="flex-1 text-left">Busca inteligente...</span>
-              <kbd className="inline-flex h-5 items-center gap-0.5 rounded border border-border/60 bg-background/80 px-1.5 text-[11px] font-mono text-muted-foreground/70 shrink-0" aria-hidden="true">
-                <Command className="h-2.5 w-2.5" />K
+              <Search className="h-4 w-4 text-primary/60 shrink-0 group-hover:text-primary transition-colors" aria-hidden="true" />
+              <span className="flex-1 text-left font-light tracking-tight">Buscar em todo o ecossistema...</span>
+              <kbd className="inline-flex h-5 items-center gap-0.5 rounded-md border border-border/40 bg-background/40 px-2 text-[10px] font-mono text-muted-foreground/60 shrink-0 uppercase tracking-tighter" aria-hidden="true">
+                <Command className="h-2.5 w-2.5" /> K
               </kbd>
             </button>
             <button
-              className="shrink-0 h-9 w-9 rounded-full border border-border/40 bg-secondary/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary/80 hover:border-primary/30 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="shrink-0 h-10 w-10 rounded-2xl border border-border/20 bg-secondary/5 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-secondary/10 hover:border-primary/20 hover:shadow-soft transition-all duration-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
               aria-label="Entrada por voz"
               onClick={() => setVoiceMode(true)}
             >
-              <Mic className="h-4 w-4" />
+              <Mic className="h-4.5 w-4.5" />
             </button>
             <AIEmailComposerTrigger />
           </div>
