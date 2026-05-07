@@ -30,19 +30,19 @@ async function persistError(message: string, severity: 'info' | 'warning' | 'err
     const errorObj = args.find(a => a instanceof Error) as Error | undefined;
     const context = args.filter(a => !(a instanceof Error));
 
-    await supabase.from('error_logs').insert({
+    await supabase.from('error_logs').insert([{
       message,
       severity,
-      stack: errorObj?.stack,
-      url: typeof window !== 'undefined' ? window.location.href : undefined,
-      user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
-      user_id: _userId,
+      stack: errorObj?.stack || null,
+      url: typeof window !== 'undefined' ? window.location.href : null,
+      user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+      user_id: _userId || null,
       context: {
         rid: _requestId,
         extra: context,
         timestamp: new Date().toISOString()
       }
-    });
+    }]);
   } catch (err) {
     // Falha silenciosa no logger para evitar loop infinito
     if (isDev) console.error('[Logger] Falha ao persistir erro no banco:', err);
