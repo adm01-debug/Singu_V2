@@ -332,7 +332,7 @@ export function useRoomActivities(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_activities").select("*").eq("room_id", roomId!).order("created_at", { ascending: false }).limit(100);
       if (error) throw error;
-      return (data ?? []) as any as DealRoomActivity[];
+      return (data ?? []) as unknown as DealRoomActivity[];
     },
   });
 }
@@ -344,7 +344,7 @@ export function useRoomComments(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_comments").select("*").eq("room_id", roomId!).order("created_at");
       if (error) throw error;
-      return (data ?? []) as any as DealRoomComment[];
+      return (data ?? []) as unknown as DealRoomComment[];
     },
   });
 }
