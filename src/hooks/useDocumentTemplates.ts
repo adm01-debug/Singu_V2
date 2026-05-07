@@ -112,9 +112,9 @@ export function useDocumentTemplates() {
   const update = useMutation({
     mutationFn: async ({ id, ...input }: Partial<DocumentTemplate> & { id: string }) => {
       const merge_fields = input.content_html ? extractMergeFields(input.content_html) : undefined;
-      const { error } = await supabase
-        .from('document_templates')
-        .update({ ...input, ...(merge_fields ? { merge_fields } : {}) } as any)
+      const { error } = await (supabase
+        .from('document_templates') as any)
+        .update({ ...input, ...(merge_fields ? { merge_fields } : {}) })
         .eq('id', id);
       if (error) throw error;
     },
