@@ -79,7 +79,7 @@ export function useUpsertPlaybook() {
       if (!user) throw new Error("not authenticated");
       const payload = { ...input, user_id: user.id } as Record<string, any>;
       if (input.id) {
-        const { data, error } = await supabase.from("sales_playbooks").update(payload).eq("id", input.id).select().single();
+        const { data, error } = await (supabase.from("sales_playbooks") as any).update(payload).eq("id", input.id).select().single();
         if (error) throw error;
         return data as unknown as SalesPlaybook;
       }
