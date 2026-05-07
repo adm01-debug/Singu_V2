@@ -215,7 +215,8 @@ export function useMetaprogramAnalysis() {
       if (error) throw error;
       return data;
     } catch (error) {
-      logger.error('Error saving metaprogram analysis:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error saving metaprogram analysis:', { error: msg });
       return null;
     }
   }, [user]);
