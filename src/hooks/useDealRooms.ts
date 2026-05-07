@@ -205,7 +205,7 @@ export function useUpsertMilestone(roomId: string) {
     mutationFn: async (m: Partial<DealRoomMilestone>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
-      const payload = { ...m, room_id: roomId, user_id: user.id };
+      const payload = { ...m, room_id: roomId, user_id: user.id } as any;
       const { data, error } = await supabase.from("deal_room_milestones").upsert(payload).select("*").single();
       if (error) throw error;
       return data as DealRoomMilestone;
@@ -235,7 +235,7 @@ export function useStakeholders(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_stakeholders").select("*").eq("room_id", roomId!);
       if (error) throw error;
-      return (data ?? []) as DealRoomStakeholder[];
+      return (data ?? []) as any as DealRoomStakeholder[];
     },
   });
 }
@@ -246,9 +246,10 @@ export function useUpsertStakeholder(roomId: string) {
     mutationFn: async (s: Partial<DealRoomStakeholder>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
-      const { data, error } = await supabase.from("deal_room_stakeholders").upsert({ ...s, room_id: roomId, user_id: user.id }).select("*").single();
+      const payload = { ...s, room_id: roomId, user_id: user.id } as any;
+      const { data, error } = await supabase.from("deal_room_stakeholders").upsert(payload).select("*").single();
       if (error) throw error;
-      return data as DealRoomStakeholder;
+      return data as any as DealRoomStakeholder;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.sh(roomId) }),
     onError: (e: Error) => toast.error(e.message),
