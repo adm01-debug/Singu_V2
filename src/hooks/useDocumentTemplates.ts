@@ -80,7 +80,7 @@ export function useDocumentTemplates() {
       return (data || []).map((t: any) => ({
         ...t,
         merge_fields: Array.isArray(t.merge_fields) ? t.merge_fields : [],
-      })) as DocumentTemplate[];
+      })) as unknown as DocumentTemplate[];
     },
     staleTime: 60_000,
   });
