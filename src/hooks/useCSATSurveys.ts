@@ -48,7 +48,7 @@ export function useCSATSurveys(contactId?: string) {
         channel: input.channel || 'email',
         status: 'sent',
         sent_at: new Date().toISOString(),
-      } as any);
+      });
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Pesquisa CSAT enviada!'); },
@@ -58,8 +58,11 @@ export function useCSATSurveys(contactId?: string) {
   const answer = useMutation({
     mutationFn: async ({ id, score, feedback }: { id: string; score: number; feedback?: string }) => {
       const { error } = await supabase.from('csat_surveys').update({
-        score, feedback: feedback || null, status: 'answered', answered_at: new Date().toISOString(),
-      } as any).eq('id', id);
+        score,
+        feedback: feedback || null,
+        status: 'answered' as const,
+        answered_at: new Date().toISOString(),
+      }).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Resposta registrada!'); },
