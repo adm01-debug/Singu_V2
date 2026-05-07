@@ -215,7 +215,8 @@ export function useMetaprogramAnalysis() {
       if (error) throw error;
       return data;
     } catch (error) {
-      logger.error('Error saving metaprogram analysis:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error saving metaprogram analysis:', { error: msg });
       return null;
     }
   }, [user]);
@@ -344,7 +345,8 @@ export function useMetaprogramAnalysis() {
         analyzedInteractions: data.length
       };
     } catch (error) {
-      logger.error('Error getting metaprogram profile:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error getting metaprogram profile:', { error: msg });
       return null;
     }
   }, [user]);
@@ -380,10 +382,11 @@ export function useMetaprogramAnalysis() {
         description: `${analyzedCount} interações analisadas para metaprogramas`
       });
     } catch (error) {
-      logger.error('Error analyzing interactions:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error analyzing interactions:', { error: msg });
       toast({
         title: "Erro na análise",
-        description: "Não foi possível analisar as interações",
+        description: msg,
         variant: "destructive"
       });
     } finally {
@@ -409,10 +412,11 @@ export function useMetaprogramAnalysis() {
         description: "Histórico de metaprogramas removido"
       });
     } catch (error) {
-      logger.error('Error clearing analysis:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error clearing analysis:', { error: msg });
       toast({
         title: "Erro",
-        description: "Não foi possível limpar a análise",
+        description: msg,
         variant: "destructive"
       });
     }

@@ -108,7 +108,8 @@ export function useStakeholderAlerts(companyId?: string) {
         await registration.showNotification(title, notificationOptions);
       }
     } catch (error) {
-      logger.error('Error sending stakeholder push notification:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error sending stakeholder push notification:', { error: msg });
     }
   }, []);
 
@@ -145,7 +146,8 @@ export function useStakeholderAlerts(companyId?: string) {
 
       setAlerts(typedData);
     } catch (error) {
-      logger.error('Error fetching stakeholder alerts:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching stakeholder alerts:', { error: msg });
     } finally {
       setLoading(false);
     }
@@ -227,7 +229,8 @@ export function useStakeholderAlerts(companyId?: string) {
 
       fetchAlerts();
     } catch (error) {
-      logger.error('Error creating stakeholder alert:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error creating stakeholder alert:', { error: msg });
     }
   }, [fetchAlerts]);
 
@@ -416,8 +419,9 @@ export function useStakeholderAlerts(companyId?: string) {
       toast.success('Alerta dispensado');
     } catch (error) {
       setAlerts(previousAlerts);
-      logger.error('Error dismissing alert:', error);
-      toast.error('Erro ao dispensar alerta');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error dismissing alert:', { error: msg });
+      toast.error('Erro ao dispensar alerta', { description: msg });
     }
   }, [alerts]);
 
@@ -448,8 +452,9 @@ export function useStakeholderAlerts(companyId?: string) {
       toast.success('Todos os alertas foram dispensados');
     } catch (error) {
       setAlerts(previousAlerts);
-      logger.error('Error dismissing all alerts:', error);
-      toast.error('Erro ao dispensar alertas');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error dismissing all alerts:', { error: msg });
+      toast.error('Erro ao dispensar alertas', { description: msg });
     }
   }, [companyId, alerts]);
 

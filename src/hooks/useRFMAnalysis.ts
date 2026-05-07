@@ -156,7 +156,8 @@ export function useRFMAnalysis(contactId?: string) {
       await queryClient.invalidateQueries({ queryKey: ['rfm-analysis'] });
       await queryClient.invalidateQueries({ queryKey: ['rfm-history'] });
     } catch (error) {
-      logger.error('Error running RFM analysis:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error running RFM analysis:', { error: msg });
     } finally {
       setAnalyzing(false);
     }

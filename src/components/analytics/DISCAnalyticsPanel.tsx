@@ -48,7 +48,10 @@ const DISCAnalyticsPanel = () => {
       const { count: recentCount } = await supabase.from('disc_analysis_history').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('analyzed_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
       setStats({ totalProfiled: mappedContacts.length, avgConfidence: confidenceCount > 0 ? Math.round(totalConfidence / confidenceCount) : 0, mostCommon, recentAnalyses: recentCount || 0 });
       await fetchDashboardData();
-    } catch (err) { logger.error('Error loading DISC data:', err); } finally { setLoading(false); }
+    } catch (err) { 
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Error loading DISC data:', { error: msg }); 
+    } finally { setLoading(false); }
   };
 
   useEffect(() => { loadData(); }, [user]);

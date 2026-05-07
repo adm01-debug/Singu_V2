@@ -92,10 +92,11 @@ export const useNotifications = () => {
         return false;
       }
     } catch (error) {
-      logger.error('Error requesting notification permission:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error requesting notification permission:', { error: msg });
       toast({
         title: 'Erro',
-        description: 'Ocorreu um erro ao ativar as notificações.',
+        description: msg,
         variant: 'destructive',
       });
       return false;
@@ -118,7 +119,8 @@ export const useNotifications = () => {
       }
       return success;
     } catch (error) {
-      logger.error('Error unsubscribing:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error unsubscribing:', { error: msg });
       return false;
     } finally {
       setIsLoading(false);
@@ -153,7 +155,8 @@ export const useNotifications = () => {
       }
       return true;
     } catch (error) {
-      logger.error('Error showing notification:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error showing notification:', { error: msg });
       return false;
     }
   }, [permissionState.permission, requestPermission]);
@@ -217,7 +220,8 @@ export const useNotifications = () => {
         }
       }
     } catch (error) {
-      logger.error('Error checking follow-up alerts:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error checking follow-up alerts:', { error: msg });
     }
   }, [permissionState.permission, showNotification]);
 
@@ -265,7 +269,8 @@ export const useNotifications = () => {
         );
       }
     } catch (error) {
-      logger.error('Error checking birthday alerts:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error checking birthday alerts:', { error: msg });
     }
   }, [permissionState.permission, showNotification]);
 
@@ -324,7 +329,8 @@ export const useNotifications = () => {
         }
       }
     } catch (error) {
-      logger.error('Error checking stakeholder alerts:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error checking stakeholder alerts:', { error: msg });
     }
   }, [permissionState.permission, showNotification]);
 

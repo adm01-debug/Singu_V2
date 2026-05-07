@@ -64,7 +64,10 @@ const Notificacoes = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) await supabase.from('profiles').update({ preferences: { notifications: newSettings } }).eq('id', user.id);
-    } catch (error) { logger.error('Error saving notification settings:', error); }
+    } catch (error) { 
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error saving notification settings:', { error: msg }); 
+    }
   };
 
   useEffect(() => {
@@ -80,7 +83,10 @@ const Notificacoes = () => {
             if (prefs.notifications) { setNotificationSettings(prefs.notifications); localStorage.setItem('notificationSettings', JSON.stringify(prefs.notifications)); }
           }
         }
-      } catch (error) { logger.error('Error loading notification settings:', error); }
+      } catch (error) { 
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error loading notification settings:', { error: msg }); 
+      }
     };
     loadSettings();
   }, []);

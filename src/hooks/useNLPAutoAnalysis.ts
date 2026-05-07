@@ -149,7 +149,8 @@ export function useNLPAutoAnalysis() {
 
       return result;
     } catch (error) {
-      logger.error('❌ NLP Auto-Analysis error:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('❌ NLP Auto-Analysis error:', { error: msg });
       return null;
     } finally {
       analysisQueue.current.delete(analysisKey);
@@ -208,7 +209,8 @@ export function useNLPAutoAnalysis() {
 
       return { analyzed, total: interactions.length };
     } catch (error) {
-      logger.error('Error batch analyzing interactions:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error batch analyzing interactions:', { error: msg });
       return { analyzed: 0, total: 0 };
     }
   }, [user, shouldAnalyze, analyzeInteraction]);
@@ -254,7 +256,8 @@ export function useNLPAutoAnalysis() {
         lastAnalyzed: vakData.data?.[0]?.created_at || null
       };
     } catch (error) {
-      logger.error('Error fetching NLP profile:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching NLP profile:', { error: msg });
       return null;
     }
   }, [user]);
