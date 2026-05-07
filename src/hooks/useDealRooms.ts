@@ -28,6 +28,64 @@ export interface DealRoom {
   updated_at: string;
 }
 
+export interface DealRoomMilestone {
+  id: string;
+  room_id: string;
+  user_id: string;
+  title: string;
+  description: string | null;
+  status: MilestoneStatus;
+  sort_order: number;
+  due_date: string | null;
+  completed_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DealRoomStakeholder {
+  id: string;
+  room_id: string;
+  user_id: string;
+  name: string;
+  email: string | null;
+  role: string | null;
+  side: Side;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DealRoomDocument {
+  id: string;
+  room_id: string;
+  user_id: string;
+  title: string;
+  file_path: string;
+  file_type: string | null;
+  file_size: number | null;
+  uploaded_by_side: Side;
+  created_at: string;
+}
+
+export interface DealRoomActivity {
+  id: string;
+  room_id: string;
+  type: string;
+  description: string;
+  performed_by_side: Side;
+  performed_by_label: string;
+  created_at: string;
+}
+
+export interface DealRoomComment {
+  id: string;
+  room_id: string;
+  user_id: string | null;
+  author_side: Side;
+  author_label: string;
+  body: string;
+  created_at: string;
+}
+
 const KEYS = {
   rooms: ["deal_rooms"] as const,
   room: (id: string) => ["deal_rooms", id] as const,
