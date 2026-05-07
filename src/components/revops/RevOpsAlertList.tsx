@@ -15,7 +15,7 @@ export function RevOpsAlertList() {
         const Icon = a.severity === "critical" ? AlertCircle : a.severity === "warning" ? AlertTriangle : Info;
         const variant = a.severity === "critical" ? "destructive" : "default";
         return (
-          <Alert key={a.id} variant={variant as any} className="pr-12 relative">
+          <Alert key={a.id} variant={variant} className="pr-12 relative">
             <Icon className="h-4 w-4" />
             <AlertTitle className="capitalize">{a.metric_key.replace(/_/g, " ")}</AlertTitle>
             <AlertDescription>{a.message}</AlertDescription>
