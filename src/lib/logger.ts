@@ -28,7 +28,8 @@ export function generateRequestId(): string {
 async function persistError(message: string, severity: 'info' | 'warning' | 'error' | 'critical', args: unknown[]) {
   try {
     const errorObj = args.find(a => a instanceof Error) as Error | undefined;
-    const context = args.filter(a => !(a instanceof Error));
+    // Converte para string para garantir compatibilidade com o tipo Json do Supabase
+    const contextStr = JSON.stringify(args.filter(a => !(a instanceof Error)));
 
     await supabase.from('error_logs').insert([{
       message,
@@ -39,7 +40,7 @@ async function persistError(message: string, severity: 'info' | 'warning' | 'err
       user_id: _userId || null,
       context: {
         rid: _requestId,
-        extra: context,
+        extra: contextStr,
         timestamp: new Date().toISOString()
       }
     }]);
