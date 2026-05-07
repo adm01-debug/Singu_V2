@@ -37,7 +37,10 @@ export function useCannedResponses() {
     mutationFn: async (input: { title: string; content: string; category?: string; shortcut?: string }) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
-      const { error } = await supabase.from('canned_responses').insert({ ...input, user_id: user.id } as any);
+      const { error } = await supabase.from('canned_responses').insert([{
+        ...input,
+        user_id: user.id
+      }]);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Resposta rápida criada!'); },
