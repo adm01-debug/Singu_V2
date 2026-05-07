@@ -10,6 +10,7 @@ import { QuickAddButton } from '@/components/quick-add/QuickAddButton';
 import { SlowQueryIndicator } from '@/components/feedback/SlowQueryIndicator';
 import { AIEmailComposerTrigger } from '@/components/ai/AIEmailComposerTrigger';
 import { NotificationCenter } from '@/components/notifications/NotificationCenter';
+import { generateRequestId, setRequestId, setLogUser } from '@/lib/logger';
 
 // Heavy global chrome — lazy + deferred to idle to avoid blocking route transitions
 const AskCrmChat = lazy(() => import('@/components/ask-crm/AskCrmChat').then(m => ({ default: m.AskCrmChat })));
