@@ -171,7 +171,7 @@ export const AppRoutes = () => {
       <Route path="/admin/error-budget" element={<Admin><P.AdminErrorBudget /></Admin>} />
 
       {/* Catch-all */}
-      <Route path="*" element={<LazyPage><P.NotFound /></LazyPage>} />
-    </Routes>
+      </Routes>
+    </AnimatePresence>
   );
 };
