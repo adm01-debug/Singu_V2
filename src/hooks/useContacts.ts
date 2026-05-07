@@ -183,9 +183,10 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       logActivity({ type: 'deleted', entityType: 'contact', entityId: id, entityName: deleted ? `${deleted.first_name} ${deleted.last_name}`.trim() : undefined, description: 'Contato excluído' });
       return true;
     } catch (error) {
-      logger.error('Error deleting contact:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error deleting contact:', { error: msg });
       if (previous) queryClient.setQueryData<Contact[]>(queryKey, previous);
-      toast({ title: 'Erro ao excluir contato', description: 'Não foi possível excluir. O contato foi restaurado.', variant: 'destructive' });
+      toast({ title: 'Erro ao excluir contato', description: msg, variant: 'destructive' });
       return false;
     }
   };
