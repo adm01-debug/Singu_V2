@@ -13,7 +13,7 @@ import {
   ReferenceLine,
   ReferenceDot,
 } from "recharts";
-import { TrendingUp, TrendingDown, Minus, Pin, ShieldCheck, Shield, ShieldAlert, HelpCircle, Activity, Filter, EyeOff, CalendarRange, Info } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Pin, ShieldCheck, Shield, ShieldAlert, Activity, Filter, EyeOff, CalendarRange, Info } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
@@ -30,21 +30,25 @@ import { AnnotationList } from "./AnnotationList";
 import { cn } from "@/lib/utils";
 import {
   WeeklySentimentTooltip,
-  SENTIMENT_TOKENS,
   type TooltipExtra,
 } from "./SentimentChartTooltip";
+import {
+  EvolutionStatsCard,
+  type EvolutionStats,
+  type EvolutionDirection,
+  type ConfidenceInfo,
+} from "./EvolutionStatsCard";
+import {
+  normalizeWeek,
+  parseWeekLocal,
+  normalizeAndSortWeekPoints,
+} from "./weekUtils";
 
 interface Props {
   data: SentimentTrendPoint[];
   summary?: SentimentTrendSummary;
   contactId?: string;
 }
-
-import {
-  normalizeWeek,
-  parseWeekLocal,
-  normalizeAndSortWeekPoints,
-} from "./weekUtils";
 
 function formatWeek(w: string): string {
   const d = parseWeekLocal(w);
@@ -66,16 +70,6 @@ const DIRECTION_CLASS: Record<SentimentTrendSummary["direction"], string> = {
 
 const DIRECTION_ICON = { up: TrendingUp, stable: Minus, down: TrendingDown } as const;
 
-
-type EvolutionDirection = "up" | "stable" | "down";
-interface EvolutionStats {
-  currentPct: number;
-  previousPct: number;
-  deltaPp: number;
-  direction: EvolutionDirection;
-  weeksCompared: number;
-}
-
 const SHOW_PCT_LINE_KEY = "singu:sentiment-trend:show-pct-line";
 const SMOOTH_ENABLED_KEY = "singu:sentiment-trend:smooth-enabled";
 const SMOOTH_WINDOW_KEY = "singu:sentiment-trend:smooth-window";
@@ -96,6 +90,7 @@ function readAnnotationFilter(): Set<AnnotationCategory> {
     return new Set(CATEGORY_KEYS);
   }
 }
+
 function readSmoothWindow(): SmoothWindow {
   if (typeof window === "undefined") return 3;
   const v = window.localStorage.getItem(SMOOTH_WINDOW_KEY);
@@ -108,12 +103,14 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
     const v = window.localStorage.getItem(SMOOTH_ENABLED_KEY);
     return v === null ? true : v === "1";
   });
+  
   const toggleSmooth = (next: boolean) => {
     setSmoothEnabled(next);
     if (typeof window !== "undefined") {
       window.localStorage.setItem(SMOOTH_ENABLED_KEY, next ? "1" : "0");
     }
   };
+
   const [smoothWindow, setSmoothWindow] = useState<SmoothWindow>(() => readSmoothWindow());
   const changeSmoothWindow = (next: SmoothWindow) => {
     setSmoothWindow(next);
@@ -121,6 +118,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
       window.localStorage.setItem(SMOOTH_WINDOW_KEY, String(next));
     }
   };
+
   const [annDialogOpen, setAnnDialogOpen] = useState(false);
   const [editingAnn, setEditingAnn] = useState<SentimentAnnotation | null>(null);
   const [showPositivePctLine, setShowPositivePctLine] = useState<boolean>(() => {
@@ -128,6 +126,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
     const v = window.localStorage.getItem(SHOW_PCT_LINE_KEY);
     return v === null ? true : v === "1";
   });
+
   const togglePctLine = (next: boolean) => {
     setShowPositivePctLine(next);
     if (typeof window !== "undefined") {
@@ -141,11 +140,13 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
   const [annCategoryFilter, setAnnCategoryFilter] = useState<Set<AnnotationCategory>>(() =>
     readAnnotationFilter()
   );
+
   const persistAnnFilter = (next: Set<AnnotationCategory>) => {
     if (typeof window !== "undefined") {
       window.localStorage.setItem(ANN_FILTER_KEY, JSON.stringify(Array.from(next)));
     }
   };
+
   const toggleAnnCategory = (cat: AnnotationCategory) => {
     setAnnCategoryFilter((prev) => {
       const next = new Set(prev);
@@ -155,6 +156,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
       return next;
     });
   };
+
   const setAllAnnCategories = (enable: boolean) => {
     const next: Set<AnnotationCategory> = enable ? new Set(CATEGORY_KEYS) : new Set();
     setAnnCategoryFilter(next);
@@ -171,10 +173,6 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
   }, [annotationsByWeekRaw]);
 
   const annotationsByWeek = useMemo(() => {
-    // Normaliza a chave do mapa para 'YYYY-MM-DD' para casar com o
-    // dataKey "week" do eixo X (que também é normalizado em sortedData).
-    // Sem isso, week_start vindo do banco como '2025-04-07T00:00:00' não
-    // bateria com '2025-04-07' usado no chart.
     const filtered = new Map<string, SentimentAnnotation[]>();
     for (const [week, list] of annotationsByWeekRaw.entries()) {
       const key = normalizeWeek(week);
@@ -200,12 +198,6 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
     [data]
   );
 
-  // Pontos com média móvel calculados a partir EXATAMENTE do mesmo
-  // sortedData usado por evolutionStats e confidenceInfo. Isolar essa etapa
-  // garante que duplicatas mescladas/normalização afetem MA e evolução de
-  // forma consistente — mudanças em anotações ou filtros visuais nunca
-  // recalculam os números, evitando divergência entre o badge "Subiu/Desceu"
-  // e a linha de tendência.
   const MIN_WINDOW_VOLUME = 3;
   const LOW_WINDOW_VOLUME = 8;
   const maPoints = useMemo(() => {
@@ -229,9 +221,6 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
     });
   }, [sortedData, smoothWindow]);
 
-  // Overlay puramente visual: injeta anotações filtradas e flag de smoothing
-  // sobre os pontos numéricos imutáveis acima. Recalcular este memo não
-  // muda nenhum valor de MA/evolução.
   const dataWithMA = useMemo(() => {
     return maPoints.map((p) => ({
       ...p,
@@ -255,10 +244,6 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
   const weekOptions = useMemo(() => sortedData.map((p) => p.week), [sortedData]);
 
   const annotationDots = useMemo(() => {
-    // Deriva os marcadores estritamente de dataWithMA, cujas chaves "week"
-    // são as mesmas do dataKey do eixo X (já normalizadas via sortedData).
-    // Isso garante que o ReferenceDot caia exatamente sobre a banda da
-    // semana correspondente, sem desalinhamento por strings divergentes.
     return dataWithMA
       .filter((p) => (p.annotations?.length ?? 0) > 0)
       .map((p) => {
@@ -266,7 +251,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
         const first = anns[0];
         const meta = ANNOTATION_CATEGORIES[first.category];
         return {
-          week: p.week, // chave canônica do eixo X
+          week: p.week,
           color: meta.color,
           count: anns.length,
           category: first.category,
@@ -277,9 +262,6 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
       });
   }, [dataWithMA]);
 
-  // Anotações cuja semana não existe no sortedData ficam invisíveis no
-  // gráfico (sem banda correspondente). Contamos para sinalizar ao usuário
-  // em vez de "perder" anotações silenciosamente.
   const orphanAnnotations = useMemo(() => {
     if (!annotationsApi.list.data) return 0;
     const validWeeks = new Set(sortedData.map((p) => p.week));
@@ -315,7 +297,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
     return { currentPct, previousPct, deltaPp, direction, weeksCompared: prev.length };
   }, [sortedData]);
 
-  const confidenceInfo = useMemo(() => {
+  const confidenceInfo = useMemo<ConfidenceInfo | null>(() => {
     if (!evolutionStats || sortedData.length < 4) return null;
     const pcts = sortedData.map((p) => {
       const tot = p.total ?? 0;
@@ -339,7 +321,6 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
     return { level, marginPp, stdDev, n: pcts.length, ...meta[level] };
   }, [sortedData, evolutionStats]);
 
-
   if (sortedData.length < 2) {
     return (
       <p className="text-sm text-muted-foreground text-center py-12">
@@ -351,17 +332,11 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
   const Icon = summary ? DIRECTION_ICON[summary.direction] : Minus;
   const deltaSign = summary && summary.deltaPct > 0 ? "+" : "";
 
-  // Normaliza as chaves de bestWeek/worstWeek para casar com o dataKey "week"
-  // do eixo X (que também é normalizado em sortedData). Sem isso, formatos
-  // como "2025-04-07T00:00:00" ou "2025-04-07Z" não casam com "2025-04-07"
-  // e o ReferenceLine fica posicionado fora da banda correspondente.
   const validWeekSet = useMemo(() => new Set(sortedData.map((p) => p.week)), [sortedData]);
   const bestWeekNorm = summary?.bestWeek ? normalizeWeek(summary.bestWeek.week) : undefined;
   const worstWeekNorm = summary?.worstWeek ? normalizeWeek(summary.worstWeek.week) : undefined;
   const bestWeekValid = !!bestWeekNorm && validWeekSet.has(bestWeekNorm);
   const worstWeekValid = !!worstWeekNorm && validWeekSet.has(worstWeekNorm);
-  const showRefLines =
-    bestWeekValid && worstWeekValid && bestWeekNorm !== worstWeekNorm;
 
   const firstWeek = sortedData[0]?.week;
   const lastWeek = sortedData[sortedData.length - 1]?.week;
@@ -416,61 +391,10 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
           )}
         </div>
       )}
-      {evolutionStats ? (() => {
-        const EvIcon = DIRECTION_ICON[evolutionStats.direction];
-        const evLabel = evolutionStats.direction === "up" ? "Subiu" : evolutionStats.direction === "down" ? "Desceu" : "Estável";
-        const evSign = evolutionStats.deltaPp > 0 ? "+" : evolutionStats.deltaPp < 0 ? "−" : "";
-        const CIcon = confidenceInfo?.icon;
-        return (
-          <div className={cn("rounded-md border px-3 py-2 space-y-1", DIRECTION_CLASS[evolutionStats.direction])}>
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <div className="flex items-center gap-2">
-                <EvIcon className="h-4 w-4" />
-                <span className="text-xs font-semibold">% positivo {evLabel.toLowerCase()}</span>
-                <span className="text-[11px] text-muted-foreground tabular-nums">
-                  Período atual: {evolutionStats.currentPct}% · Período anterior: {evolutionStats.previousPct}%
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className={cn("gap-1 text-[10px] tabular-nums", DIRECTION_CLASS[evolutionStats.direction])}>{evSign}{Math.abs(evolutionStats.deltaPp)}pp</Badge>
-                <span className="text-[10px] text-muted-foreground">vs. {evolutionStats.weeksCompared} semanas anteriores</span>
-              </div>
-            </div>
-            {confidenceInfo && CIcon && (
-              <TooltipProvider delayDuration={150}>
-                <div className={cn("flex items-center gap-1.5 text-[11px]", confidenceInfo.colorClass)}>
-                  <CIcon className="h-3 w-3 shrink-0" />
-                  <span>{confidenceInfo.label}</span>
-                  <UITooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        className="text-muted-foreground/70 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-full"
-                        aria-label="Como calculo o intervalo de confiança"
-                      >
-                        <HelpCircle className="h-3 w-3" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top" className="max-w-xs text-[11px] leading-relaxed">
-                      <p className="font-semibold mb-1">Como calculo essa margem</p>
-                      <p className="text-muted-foreground">
-                        Calculo o desvio-padrão semanal do % positivo nas {confidenceInfo.n} semanas do período
-                        (σ ≈ {confidenceInfo.stdDev.toFixed(1)}pp) e divido por √n para obter a margem
-                        (±{confidenceInfo.marginPp.toFixed(1)}pp). Se o delta atual for ≥ 2× a margem, a variação é
-                        <span className="text-success"> significativa</span>; abaixo da margem, está
-                        <span className="text-warning"> dentro do ruído</span>.
-                      </p>
-                      <p className="text-muted-foreground mt-1.5 italic">
-                        Heurística aproximada — não substitui um teste estatístico formal.
-                      </p>
-                    </TooltipContent>
-                  </UITooltip>
-                </div>
-              </TooltipProvider>
-            )}
-          </div>
-        );
-      })() : (
+      
+      {evolutionStats ? (
+        <EvolutionStatsCard stats={evolutionStats} confidence={confidenceInfo} />
+      ) : (
         <div className="rounded-md border border-border bg-muted/30 px-3 py-2 flex items-center gap-2 text-[11px] text-muted-foreground">
           <Minus className="h-3.5 w-3.5 shrink-0" />
           <span>
@@ -478,6 +402,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
           </span>
         </div>
       )}
+
       {summary && (
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
@@ -551,7 +476,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
                     <Filter className="h-3 w-3" />
                     Filtrar
                     {!allCategoriesActive && (
-                      <span className="ml-1 inline-flex items-center justify-center rounded-sm bg-primary/15 px-1 text-[9px] font-semibold tabular-nums text-primary">
+                      <span className="ml-1 text-[9px] font-bold">
                         {annCategoryFilter.size}/{CATEGORY_KEYS.length}
                       </span>
                     )}
@@ -585,7 +510,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
                   <ul className="py-1 space-y-0.5">
                     {CATEGORY_KEYS.map((k) => {
                       const meta = ANNOTATION_CATEGORIES[k];
-                      const Icon = meta.icon;
+                      const CatIcon = meta.icon;
                       const checked = annCategoryFilter.has(k);
                       const count = annotationCategoryCounts[k] ?? 0;
                       return (
@@ -606,7 +531,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
                               style={{ backgroundColor: meta.color }}
                               aria-hidden
                             >
-                              <Icon
+                              <CatIcon
                                 className="h-2.5 w-2.5"
                                 style={{ color: "hsl(var(--background))" }}
                                 strokeWidth={2.5}
@@ -729,19 +654,19 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
                 stroke="hsl(var(--success))"
                 strokeWidth={3}
                 strokeOpacity={0.45}
-                dot={(props: any) => {
-                  const { cx, cy, payload, index } = props;
+                dot={(props) => {
+                  const { cx, cy, payload, index } = props as { cx: number; cy: number; payload: SentimentTrendPoint & TooltipExtra; index: number };
                   if (cx == null || cy == null) return <></>;
                   const isPartial = !!payload?.maWindowPartial;
                   const isLow = !!payload?.maWindowLowVolume;
                   if (!isPartial && !isLow) return <></>;
-                  const fill = isLow ? "hsl(var(--warning))" : "hsl(var(--muted-foreground))";
-                  const stroke = "hsl(var(--background))";
+                  const fillColor = isLow ? "hsl(var(--warning))" : "hsl(var(--muted-foreground))";
+                  const strokeColor = "hsl(var(--background))";
                   return (
                     <g key={`ma-dot-${index}`}>
-                      <circle cx={cx} cy={cy} r={4} fill={fill} stroke={stroke} strokeWidth={1.5} />
+                      <circle cx={cx} cy={cy} r={4} fill={fillColor} stroke={strokeColor} strokeWidth={1.5} />
                       {isPartial && (
-                        <circle cx={cx} cy={cy} r={6} fill="none" stroke={fill} strokeWidth={1} strokeDasharray="2 2" opacity={0.7} />
+                        <circle cx={cx} cy={cy} r={6} fill="none" stroke={fillColor} strokeWidth={1} strokeDasharray="2 2" opacity={0.7} />
                       )}
                     </g>
                   );
@@ -777,7 +702,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
               />
             )}
             {annotationDots.map((d) => {
-              const Icon = d.icon;
+              const DotIcon = d.icon;
               return (
                 <ReferenceDot
                   key={d.week}
@@ -786,23 +711,23 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
                   y={100}
                   ifOverflow="visible"
                   isFront
-                  shape={(props: any) => {
-                    const { cx, cy } = props;
+                  shape={(props) => {
+                    const { cx, cy } = props as { cx: number; cy: number };
                     if (cx == null || cy == null) return null;
-                    const r = 9;
+                    const radius = 9;
                     return (
                       <g>
                         <title>{`${d.label}: ${d.title}${d.count > 1 ? ` (+${d.count - 1})` : ""}`}</title>
-                        <circle cx={cx} cy={cy} r={r} fill={d.color} stroke="hsl(var(--background))" strokeWidth={1.5} />
+                        <circle cx={cx} cy={cy} r={radius} fill={d.color} stroke="hsl(var(--background))" strokeWidth={1.5} />
                         <foreignObject x={cx - 6} y={cy - 6} width={12} height={12} style={{ pointerEvents: "none" }}>
                           <div style={{ width: 12, height: 12, display: "flex", alignItems: "center", justifyContent: "center", color: "hsl(var(--background))" }}>
-                            <Icon width={10} height={10} strokeWidth={2.5} />
+                            <DotIcon width={10} height={10} strokeWidth={2.5} />
                           </div>
                         </foreignObject>
                         {d.count > 1 && (
                           <g>
-                            <circle cx={cx + r - 1} cy={cy - r + 1} r={6} fill="hsl(var(--background))" stroke={d.color} strokeWidth={1} />
-                            <text x={cx + r - 1} y={cy - r + 3} textAnchor="middle" fontSize={8} fontWeight={700} fill={d.color}>
+                            <circle cx={cx + radius - 1} cy={cy - radius + 1} r={6} fill="hsl(var(--background))" stroke={d.color} strokeWidth={1} />
+                            <text x={cx + radius - 1} y={cy - radius + 3} textAnchor="middle" fontSize={8} fontWeight={700} fill={d.color}>
                               {d.count > 9 ? "9+" : d.count}
                             </text>
                           </g>
