@@ -299,7 +299,8 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
         setLatestAnalysis(records[0]);
       }
     } catch (err) {
-      logger.error('Error fetching DISC history:', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Error fetching DISC history:', { error: msg });
     }
   }, [user, contactId]);
 
