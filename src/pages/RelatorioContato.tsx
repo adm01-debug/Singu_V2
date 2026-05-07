@@ -63,7 +63,8 @@ const RelatorioContato = () => {
 
         setData({ contact, interactions, discHistory });
       } catch (error) {
-        logger.error('Error fetching report data:', error);
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching report data:', { error: msg });
         setData(null);
       } finally {
         setLoading(false);
