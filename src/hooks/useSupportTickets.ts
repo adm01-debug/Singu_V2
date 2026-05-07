@@ -80,10 +80,10 @@ export function useSupportTickets() {
         ...(resolved ? { resolved_at: new Date().toISOString() } : {})
       };
       
-      if ('created_at' in updateData) delete (updateData as any).created_at;
+      if ('created_at' in updateData) delete (updateData as Record<string, any>).created_at;
       
-      const { error } = await supabase.from('support_tickets')
-        .update(updateData as any)
+      const { error } = await (supabase.from('support_tickets') as any)
+        .update(updateData)
         .eq('id', id);
       if (error) throw error;
     },
