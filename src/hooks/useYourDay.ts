@@ -174,7 +174,8 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
           newInsights: insights,
         };
       } catch (error) {
-        logger.error('Error fetching your day data:', error);
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching your day data:', { error: msg });
         return { todayFollowUps: [], overdueFollowUps: [], upcomingBirthdays: [], needsAttention: [], newInsights: [] };
       }
     },
