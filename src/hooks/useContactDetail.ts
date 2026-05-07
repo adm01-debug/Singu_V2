@@ -354,9 +354,10 @@ export function useContactDetail(contactId: string | undefined) {
           user_id: user.id,
         })
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!newInteraction) throw new Error('Falha ao registrar interação.');
 
       // Realtime will handle the update, but we can optimistically update
       setData(prev => ({
