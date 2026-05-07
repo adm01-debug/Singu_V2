@@ -404,7 +404,7 @@ export function usePublicDealRoom(token: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_deal_room_by_token", { _token: token! });
       if (error) throw error;
-      return data as any as { 
+      return data as unknown as { 
         room: DealRoom; 
         milestones: DealRoomMilestone[]; 
         stakeholders: DealRoomStakeholder[]; 
