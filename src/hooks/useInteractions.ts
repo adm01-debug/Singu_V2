@@ -163,10 +163,11 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       return data;
     } catch (error) {
       if (previous) queryClient.setQueryData<Interaction[]>(queryKey, previous);
-      logger.error('Error updating interaction:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error updating interaction:', { error: msg });
       toast({
         title: 'Erro ao atualizar interação',
-        description: 'Verifique os dados e tente novamente.',
+        description: msg,
         variant: 'destructive',
       });
       return null;
