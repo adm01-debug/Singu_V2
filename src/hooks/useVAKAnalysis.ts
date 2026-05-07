@@ -243,7 +243,8 @@ export function useVAKAnalysis() {
         totalWordsAnalyzed: totals.totalWords,
       };
     } catch (error) {
-      logger.error('Error getting VAK profile:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error getting VAK profile:', { error: msg });
       return null;
     }
   }, [user]);
