@@ -83,7 +83,7 @@ export function useUpsertPlaybook() {
         if (error) throw error;
         return data as unknown as SalesPlaybook;
       }
-      const { data, error } = await supabase.from("sales_playbooks").insert(payload).select().single();
+      const { data, error } = await (supabase.from("sales_playbooks") as any).insert(payload).select().single();
       if (error) throw error;
       return data as unknown as SalesPlaybook;
     },
