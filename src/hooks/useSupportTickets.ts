@@ -65,7 +65,7 @@ export function useSupportTickets() {
       if ('created_at' in insertData) delete insertData.created_at;
       if ('updated_at' in insertData) delete insertData.updated_at;
 
-      const { error } = await supabase.from('support_tickets').insert(insertData as any);
+      const { error } = await (supabase.from('support_tickets') as any).insert(insertData);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Ticket criado!'); },
