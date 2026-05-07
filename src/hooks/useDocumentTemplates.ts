@@ -194,13 +194,13 @@ export function useDocumentSignatures() {
       if (input.template_id) {
         // Increment usage_count (best-effort)
         const { data: tpl } = await supabase
-          .from('document_templates' as any)
+          .from('document_templates')
           .select('usage_count')
           .eq('id', input.template_id)
           .maybeSingle();
         if (tpl) {
           await supabase
-            .from('document_templates' as any)
+            .from('document_templates')
             .update({ usage_count: ((tpl as any).usage_count ?? 0) + 1 } as any)
             .eq('id', input.template_id);
         }
