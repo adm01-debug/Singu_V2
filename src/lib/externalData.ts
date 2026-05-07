@@ -195,7 +195,8 @@ export async function deleteExternalData(table: string, id: string): Promise<{ s
     await callExternalData({ action: 'delete', table, id });
     return { success: true, error: null };
   } catch (err) {
-    logger.error('Error deleting external data:', err);
+    const msg = err instanceof Error ? err.message : 'Unknown error';
+    logger.error('Error deleting external data:', { error: msg });
     return { success: false, error: err as Error };
   }
 }
