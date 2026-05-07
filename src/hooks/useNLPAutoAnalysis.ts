@@ -149,7 +149,8 @@ export function useNLPAutoAnalysis() {
 
       return result;
     } catch (error) {
-      logger.error('❌ NLP Auto-Analysis error:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('❌ NLP Auto-Analysis error:', { error: msg });
       return null;
     } finally {
       analysisQueue.current.delete(analysisKey);
