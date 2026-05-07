@@ -37,7 +37,8 @@ export function useTemplateHistoryMetrics() {
         });
         setContactDISCMap(discMap);
       } catch (error) {
-        logger.error('Error fetching contact DISC profiles:', error);
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching contact DISC profiles:', { error: msg });
       } finally {
         setLoading(false);
       }
