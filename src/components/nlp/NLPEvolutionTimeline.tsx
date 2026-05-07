@@ -106,7 +106,8 @@ const NLPEvolutionTimeline: React.FC<NLPEvolutionTimelineProps> = ({
       setVakData(processedVak);
       setEmotionalData(processedEmotional);
     } catch (error) {
-      logger.error('Error fetching evolution data:', error);
+      const msg = error instanceof Error ? error.message : 'Erro ao carregar histórico';
+      logger.error('Error fetching evolution data:', { error: msg });
     } finally {
       setLoading(false);
     }
