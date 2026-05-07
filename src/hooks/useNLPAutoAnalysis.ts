@@ -256,7 +256,8 @@ export function useNLPAutoAnalysis() {
         lastAnalyzed: vakData.data?.[0]?.created_at || null
       };
     } catch (error) {
-      logger.error('Error fetching NLP profile:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching NLP profile:', { error: msg });
       return null;
     }
   }, [user]);
