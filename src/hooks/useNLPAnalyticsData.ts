@@ -79,10 +79,10 @@ export function useNLPAnalyticsData() {
       try {
         const [emRes, vakRes, cRes, vRes, oRes] = await Promise.all([
           supabase.from('emotional_states_history').select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
-          supabase.from('vak_analysis_history').select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
+          (supabase.from('vak_analysis_history') as any).select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
           supabase.from('contacts').select('behavior').eq('user_id', user!.id),
-          supabase.from('client_values').select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
-          supabase.from('hidden_objections').select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
+          (supabase.from('client_values') as any).select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
+          (supabase.from('hidden_objections') as any).select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
         ]);
 
         if (emRes.error) throw emRes.error;

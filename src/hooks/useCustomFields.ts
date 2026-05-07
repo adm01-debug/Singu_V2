@@ -51,9 +51,9 @@ export function useCustomFields(entityType: EntityType) {
     mutationFn: async (input: Omit<CustomField, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
-      const { data, error } = await supabase
-        .from('custom_fields')
-        .insert({ ...input, user_id: user.id } as any)
+      const { data, error } = await (supabase
+        .from('custom_fields') as any)
+        .insert({ ...input, user_id: user.id })
         .select()
         .single();
       if (error) throw error;
@@ -68,9 +68,9 @@ export function useCustomFields(entityType: EntityType) {
 
   const updateField = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<CustomField> & { id: string }) => {
-      const { error } = await supabase
-        .from('custom_fields')
-        .update(updates as any)
+      const { error } = await (supabase
+        .from('custom_fields') as any)
+        .update(updates)
         .eq('id', id);
       if (error) throw error;
     },
@@ -135,10 +135,10 @@ export function useCustomFieldValues(entityType: EntityType, entityId?: string) 
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
 
-      const { error } = await supabase
-        .from('custom_field_values')
+      const { error } = await (supabase
+        .from('custom_field_values') as any)
         .upsert(
-          { custom_field_id: fieldId, entity_id: entityId, user_id: user.id, value } as any,
+          { custom_field_id: fieldId, entity_id: entityId, user_id: user.id, value },
           { onConflict: 'custom_field_id,entity_id' }
         );
       if (error) throw error;

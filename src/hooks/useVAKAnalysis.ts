@@ -148,8 +148,7 @@ export function useVAKAnalysis() {
     if (!user) return false;
 
     try {
-      const { error } = await supabase
-        .from('vak_analysis_history')
+      const { error } = await (supabase.from('vak_analysis_history') as any)
         .insert({
           user_id: user.id,
           contact_id: contactId,
@@ -163,7 +162,7 @@ export function useVAKAnalysis() {
           kinesthetic_words: analysis.kinesthetic.words,
           digital_words: analysis.digital.words,
           analyzed_text: text.substring(0, 1000), // Limit stored text
-        } as any);
+        });
 
       if (error) throw error;
       return true;

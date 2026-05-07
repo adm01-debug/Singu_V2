@@ -14,10 +14,8 @@ export type ContactInsert = TablesInsert<'contacts'>;
 export type ContactUpdate = TablesUpdate<'contacts'>;
 
 export type ContactListItem = Pick<Contact, 
-  | 'id' | 'first_name' | 'last_name' | 'email' | 'phone'
-  | 'role' | 'role_title' | 'company_id' | 'relationship_score'
-  | 'relationship_stage' | 'sentiment' | 'tags' | 'avatar_url'
-  | 'updated_at' | 'created_at'
+  | 'id' | 'first_name' | 'last_name' | 'company_id' | 'relationship_score'
+  | 'relationship_stage' | 'sentiment' | 'tags' | 'updated_at' | 'created_at'
 >;
 
 /**
@@ -118,12 +116,22 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       for (const [k, v] of Object.entries(contact as Record<string, unknown>)) {
         if (!LOCAL_ONLY_FIELDS.has(k)) externalFields[k] = v;
       }
+      
+      // Map local role_title to external cargo if provided
+      if (contact.role_title && !externalFields.cargo) {
+        externalFields.cargo = contact.role_title;
+      }
+
       const { data, error } = await insertExternalData<Contact>('contacts', { ...externalFields, user_id: user.id });
       if (error) throw error;
-      if (data) queryClient.setQueryData<Contact[]>(queryKey, prev => prev ? [data, ...prev] : [data]);
-      toast({ title: 'Contato criado', description: `${data?.first_name} ${data?.last_name} foi adicionado com sucesso.` });
-      if (data) logActivity({ type: 'created', entityType: 'contact', entityId: data.id, entityName: `${data.first_name} ${data.last_name}`.trim(), description: 'Contato criado' });
-      return data;
+      if (data) {
+        const normalized = normalizeExternalContact(data as unknown as Record<string, unknown>);
+        queryClient.setQueryData<Contact[]>(queryKey, prev => prev ? [normalized, ...prev] : [normalized]);
+        toast({ title: 'Contato criado', description: `${normalized.first_name} ${normalized.last_name} foi adicionado com sucesso.` });
+        logActivity({ type: 'created', entityType: 'contact', entityId: normalized.id, entityName: `${normalized.first_name} ${normalized.last_name}`.trim(), description: 'Contato criado' });
+        return normalized;
+      }
+      return null;
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error creating contact:', { error: msg });
@@ -144,15 +152,37 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       for (const [k, v] of Object.entries(updates as Record<string, unknown>)) {
         if (!LOCAL_ONLY_FIELDS.has(k)) cleanUpdates[k] = v;
       }
+      
+      // Map local role_title to external cargo if provided
+      if (updates.role_title && !cleanUpdates.cargo) {
+        cleanUpdates.cargo = updates.role_title;
+      }
+
+      // Map local relationship_stage to external relationship_stage if provided (it matches 1:1)
+      if (updates.relationship_stage) {
+        cleanUpdates.relationship_stage = updates.relationship_stage;
+      }
+
+      // Map local relationship_score to external relationship_score if provided (it matches 1:1)
+      if (updates.relationship_score !== undefined) {
+        cleanUpdates.relationship_score = updates.relationship_score;
+      }
+
+      // Map local sentiment to external sentiment if provided (it matches 1:1)
+      if (updates.sentiment) {
+        cleanUpdates.sentiment = updates.sentiment;
+      }
+
       const { data, error } = expectedVersion !== undefined
         ? await updateExternalDataWithVersion<Contact>('contacts', id, expectedVersion, cleanUpdates)
         : await updateExternalData<Contact>('contacts', id, cleanUpdates);
       if (error) throw error;
       if (data) {
+        const normalized = normalizeExternalContact(data as unknown as Record<string, unknown>);
         queryClient.setQueryData<Contact[]>(queryKey, prev =>
-          prev?.map(c => c.id === id ? data : c) ?? []
+          prev?.map(c => c.id === id ? normalized : c) ?? []
         );
-        logActivity({ type: 'updated', entityType: 'contact', entityId: id, entityName: `${data.first_name} ${data.last_name}`.trim(), description: 'Contato atualizado' });
+        logActivity({ type: 'updated', entityType: 'contact', entityId: id, entityName: `${normalized.first_name} ${normalized.last_name}`.trim(), description: 'Contato atualizado' });
         // Track score changes
         if (updates.relationship_score !== undefined && user) {
           const prev = previous?.find(c => c.id === id);
