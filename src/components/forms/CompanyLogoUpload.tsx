@@ -49,7 +49,8 @@ export function CompanyLogoUpload({ logoUrl, onLogoChange, companyId }: CompanyL
       onLogoChange(data.publicUrl);
       toast.success('Logo atualizado!');
     } catch (err: unknown) {
-      logger.error('Upload error:', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Upload error:', { error: msg });
       toast.error('Erro ao enviar logo');
     } finally {
       setUploading(false);

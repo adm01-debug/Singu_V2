@@ -110,7 +110,8 @@ export function useLuxIntelligence(entityType: 'contact' | 'company', entityId?:
       setRecords(typed);
       setLatestRecord(typed[0] || null);
     } catch (err) {
-      logger.error('Error fetching lux records:', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Error fetching lux records:', { error: msg });
     } finally {
       setLoading(false);
     }
@@ -155,8 +156,9 @@ export function useLuxIntelligence(entityType: 'contact' | 'company', entityId?:
         throw new Error(data?.error || 'Falha ao iniciar varredura');
       }
     } catch (err) {
-      logger.error('Error triggering Lux:', err);
-      toast.error('Enriquecimento temporariamente indisponível');
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Error triggering Lux:', { error: msg });
+      toast.error('Enriquecimento temporariamente indisponível', { description: msg });
       return null;
     } finally {
       setTriggering(false);

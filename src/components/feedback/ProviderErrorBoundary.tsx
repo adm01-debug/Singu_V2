@@ -37,7 +37,7 @@ export class ProviderErrorBoundary extends Component<Props, State> {
 
     logger.error(
       `[ProviderErrorBoundary] ${this.props.providerName} falhou:`,
-      { error: error.message, isOrderIssue }
+      { error: error.message, stack: error.stack, isOrderIssue }
     );
   }
 

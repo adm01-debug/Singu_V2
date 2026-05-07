@@ -67,7 +67,8 @@ export function VoiceInput({
       }, 1000);
 
     } catch (err) {
-      logger.error('Error starting recording:', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Error starting recording:', { error: msg });
       setError('Não foi possível acessar o microfone');
       toast({
         title: 'Erro ao gravar',
@@ -124,7 +125,8 @@ export function VoiceInput({
         throw new Error('Nenhum texto reconhecido');
       }
     } catch (err) {
-      logger.error('Error processing audio:', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Error processing audio:', { error: msg });
       setError('Erro ao processar áudio');
       toast({
         title: 'Erro na transcrição',

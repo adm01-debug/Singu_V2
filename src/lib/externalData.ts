@@ -95,7 +95,8 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
     const result = await callExternalData({ action: 'select', ...options });
     return { data: (result?.data as T[]) || [], count: (result?.count as number) || 0, error: null };
   } catch (err) {
-    logger.error('Error querying external data:', err);
+    const msg = err instanceof Error ? err.message : 'Unknown error';
+    logger.error('Error querying external data:', { error: msg });
     return { data: null, count: null, error: err as Error };
   }
 }
@@ -105,7 +106,8 @@ export async function insertExternalData<T = Record<string, unknown>>(table: str
     const result = await callExternalData({ action: 'insert', table, record });
     return { data: (result?.data as T) || null, error: null };
   } catch (err) {
-    logger.error('Error inserting external data:', err);
+    const msg = err instanceof Error ? err.message : 'Unknown error';
+    logger.error('Error inserting external data:', { error: msg });
     return { data: null, error: err as Error };
   }
 }
@@ -115,7 +117,8 @@ export async function updateExternalData<T = Record<string, unknown>>(table: str
     const result = await callExternalData({ action: 'update', table, id, updates });
     return { data: (result?.data as T) || null, error: null };
   } catch (err) {
-    logger.error('Error updating external data:', err);
+    const msg = err instanceof Error ? err.message : 'Unknown error';
+    logger.error('Error updating external data:', { error: msg });
     return { data: null, error: err as Error };
   }
 }
@@ -181,7 +184,8 @@ export async function updateExternalDataWithVersion<T = Record<string, unknown>>
         error: new ConcurrentEditError(parsed.table, parsed.id, parsed.attemptedVersion, parsed.traceId),
       };
     }
-    logger.error('Error updating external data with version:', err);
+    const msgFinal = err instanceof Error ? err.message : 'Unknown error';
+    logger.error('Error updating external data with version:', { error: msgFinal });
     return { data: null, error: err as Error };
   }
 }
@@ -191,7 +195,8 @@ export async function deleteExternalData(table: string, id: string): Promise<{ s
     await callExternalData({ action: 'delete', table, id });
     return { success: true, error: null };
   } catch (err) {
-    logger.error('Error deleting external data:', err);
+    const msg = err instanceof Error ? err.message : 'Unknown error';
+    logger.error('Error deleting external data:', { error: msg });
     return { success: false, error: err as Error };
   }
 }
@@ -205,7 +210,8 @@ export async function callExternalRpc<T = unknown>(
     const result = await callExternalData({ action: 'rpc', functionName, params });
     return { data: (result?.data as T) ?? null, error: null };
   } catch (err) {
-    logger.error(`Error calling external RPC ${functionName}:`, err);
+    const msg = err instanceof Error ? err.message : 'Unknown error';
+    logger.error(`Error calling external RPC ${functionName}:`, { error: msg });
     return { data: null, error: err as Error };
   }
 }

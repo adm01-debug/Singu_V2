@@ -39,10 +39,12 @@ export function withProviderCheck<P extends object>(
                 `Verifique se ${providerName} está acima de ${componentName} na árvore.`
               );
             }
-          } catch {
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : 'Unknown error';
             logger.error(
               `[withProviderCheck] ${componentName}: falha ao acessar contexto de ${providerName}. ` +
-              `${providerName} DEVE estar acima de ${componentName} na hierarquia de providers.`
+              `${providerName} DEVE estar acima de ${componentName} na hierarquia de providers.`,
+              { error: msg }
             );
           }
         }

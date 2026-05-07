@@ -16,7 +16,8 @@ export function useErrorLogs() {
       .limit(200);
 
     if (error) {
-      logger.error('Erro ao buscar logs do banco:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Erro ao buscar logs do banco:', { error: msg });
       throw error;
     }
 

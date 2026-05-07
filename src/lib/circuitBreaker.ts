@@ -80,7 +80,9 @@ export class CircuitBreaker {
       return result;
     } catch (error) {
       this.onFailure();
-      // Rethrow with type guard if needed by consumers, but internally we just propagate
+      // Garantir logs consistentes mesmo para erros internos
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.warn(`[CircuitBreaker:${this.name}] Call failed: ${msg}`);
       throw error;
     }
   }

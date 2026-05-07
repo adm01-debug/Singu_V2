@@ -209,7 +209,8 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
 
       return record;
     } catch (err) {
-      logger.error('DISC analysis error:', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('DISC analysis error:', { error: msg });
       toast.error('Erro na análise DISC');
       return null;
     } finally {
@@ -298,7 +299,8 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
         setLatestAnalysis(records[0]);
       }
     } catch (err) {
-      logger.error('Error fetching DISC history:', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Error fetching DISC history:', { error: msg });
     }
   }, [user, contactId]);
 
@@ -345,7 +347,8 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
       setLatestAnalysis(record);
       return record;
     } catch (err) {
-      logger.error('Error fetching latest DISC analysis:', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Error fetching latest DISC analysis:', { error: msg });
       return null;
     }
   }, [user, contactId]);
@@ -398,8 +401,9 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
       toast.success('Perfil DISC salvo com sucesso');
       await fetchAnalysisHistory();
     } catch (err) {
-      logger.error('Error saving manual DISC profile:', err);
-      toast.error('Erro ao salvar perfil DISC');
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Error saving manual DISC profile:', { error: msg });
+      toast.error('Erro ao salvar perfil DISC', { description: msg });
     }
   }, [user, contactId, fetchAnalysisHistory]);
 

@@ -49,7 +49,8 @@ export function ContactAvatarUpload({ avatarUrl, onAvatarChange, contactId }: Co
       onAvatarChange(data.publicUrl);
       toast.success('Foto atualizada!');
     } catch (err: unknown) {
-      logger.error('Avatar upload error:', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Avatar upload error:', { error: msg });
       toast.error('Erro ao enviar foto');
     } finally {
       setUploading(false);
