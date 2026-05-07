@@ -192,8 +192,9 @@ export function useWeeklyReport() {
       if (error) throw error;
       toast.success('Email de teste enviado!');
     } catch (error) {
-      logger.error('Error sending test email:', error);
-      toast.error('Erro ao enviar email. Verifique se o Resend está configurado.');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error sending test email:', { error: msg });
+      toast.error('Erro ao enviar email', { description: 'Verifique se o Resend está configurado.' });
     }
   }, [userId, settings]);
 
