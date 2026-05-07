@@ -20,7 +20,7 @@ function write(value: boolean) {
   const strValue = value ? '1' : '0';
   
   try {
-    window.localStorage.setItem(STORAGE_KEY, strValue);
+    localStorage.setItem(STORAGE_KEY, strValue);
   } catch (err) {
     // Modo privado ou quota exceeded não deve quebrar o app
     console.warn('[useIPMaskingPreference] Falha ao persistir preferência:', err);
