@@ -154,15 +154,22 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       for (const [k, v] of Object.entries(updates as Record<string, unknown>)) {
         if (!LOCAL_ONLY_FIELDS.has(k)) cleanUpdates[k] = v;
       }
+      
+      // Map local role_title to external cargo if provided
+      if (updates.role_title && !cleanUpdates.cargo) {
+        cleanUpdates.cargo = updates.role_title;
+      }
+
       const { data, error } = expectedVersion !== undefined
         ? await updateExternalDataWithVersion<Contact>('contacts', id, expectedVersion, cleanUpdates)
         : await updateExternalData<Contact>('contacts', id, cleanUpdates);
       if (error) throw error;
       if (data) {
+        const normalized = normalizeExternalContact(data as unknown as Record<string, unknown>);
         queryClient.setQueryData<Contact[]>(queryKey, prev =>
-          prev?.map(c => c.id === id ? data : c) ?? []
+          prev?.map(c => c.id === id ? normalized : c) ?? []
         );
-        logActivity({ type: 'updated', entityType: 'contact', entityId: id, entityName: `${data.first_name} ${data.last_name}`.trim(), description: 'Contato atualizado' });
+        logActivity({ type: 'updated', entityType: 'contact', entityId: id, entityName: `${normalized.first_name} ${normalized.last_name}`.trim(), description: 'Contato atualizado' });
         // Track score changes
         if (updates.relationship_score !== undefined && user) {
           const prev = previous?.find(c => c.id === id);
