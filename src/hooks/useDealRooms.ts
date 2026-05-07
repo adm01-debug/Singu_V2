@@ -145,7 +145,7 @@ export function useCreateDealRoom() {
       qc.invalidateQueries({ queryKey: KEYS.rooms });
       toast.success("Deal Room criado");
     },
-    onError: (e: any) => toast.error(e.message),
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
