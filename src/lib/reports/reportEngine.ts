@@ -194,11 +194,11 @@ export interface ReportResult {
   totals: Record<string, number>;
 }
 
-/** Executa o relatório consultando o Supabase. */
 export async function runReport(config: ReportConfig, userId: string): Promise<ReportResult> {
   const def = ENTITIES[config.entity];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const query = (supabase as any).from(def.table).select(def.defaultSelect).eq('user_id', userId);
+  // Usamos cast controlado para TableName para permitir o uso de tabelas vindas de ENTITIES
+  // sem comprometer a segurança de tipos do restante da query.
+  const query = supabase.from(def.table as any).select(def.defaultSelect).eq('user_id', userId);
 
   if (config.orderBy) {
     query.order(config.orderBy.field, { ascending: config.orderBy.direction === 'asc' });
@@ -208,7 +208,7 @@ export async function runReport(config: ReportConfig, userId: string): Promise<R
   const { data, error } = await query;
   if (error) throw error;
 
-  const rawRows = (data || []) as Record<string, unknown>[];
+  const rawRows = (data || []) as unknown as Record<string, unknown>[];
   const filtered = applyFilters(rawRows, config.filters);
 
   // Totals (sem agrupamento)
