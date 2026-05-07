@@ -244,8 +244,9 @@ export function useContactCadence() {
     } catch (error) {
       setCadences(previousCadences);
       setAlerts(previousAlerts);
-      logger.error('Error removing cadence:', error);
-      toast.error('Erro ao remover cadência');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error removing cadence:', { error: msg });
+      toast.error('Erro ao remover cadência', { description: msg });
     }
   }, [user, cadences, alerts]);
 
