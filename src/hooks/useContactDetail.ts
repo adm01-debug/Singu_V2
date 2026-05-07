@@ -309,9 +309,12 @@ export function useContactDetail(contactId: string | undefined) {
 
       const { data: updatedContact, error } = await query
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!updatedContact) {
+        throw new Error('Contato não encontrado ou concorrência detectada (versão desatualizada).');
+      }
 
       setData(prev => ({
         ...prev,
