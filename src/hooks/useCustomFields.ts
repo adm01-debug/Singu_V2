@@ -51,9 +51,9 @@ export function useCustomFields(entityType: EntityType) {
     mutationFn: async (input: Omit<CustomField, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
-      const { data, error } = await supabase
-        .from('custom_fields')
-        .insert({ ...input, user_id: user.id } as any)
+      const { data, error } = await (supabase
+        .from('custom_fields') as any)
+        .insert({ ...input, user_id: user.id })
         .select()
         .single();
       if (error) throw error;
