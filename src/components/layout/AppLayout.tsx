@@ -99,6 +99,17 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
 
   useKeyboardShortcutsEnhanced();
 
+  // Set user for logging
+  useEffect(() => {
+    setLogUser(user?.id || null);
+  }, [user?.id]);
+
+  // Track Request ID per route change for correlation
+  useEffect(() => {
+    const rid = generateRequestId();
+    setRequestId(rid);
+  }, [location.pathname]);
+
   // Defer heavy chrome until browser is idle to keep route transitions snappy
   useEffect(() => {
     const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number };
