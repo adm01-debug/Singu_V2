@@ -151,8 +151,8 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
 
       {/* Main content area */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Desktop Header Bar */}
-        <header className="hidden md:flex h-14 items-center border-b border-border/50 px-3 sm:px-5 bg-background/95 backdrop-blur-sm sticky top-0 z-30" role="banner">
+        {/* Desktop Header Bar — Premium Floating Navigation */}
+        <header className="hidden md:flex h-16 items-center border-b border-border/30 px-6 bg-background/60 backdrop-blur-xl sticky top-0 z-30 transition-all duration-300" role="banner">
           {/* Left: sidebar trigger + breadcrumb */}
           <div className="flex items-center gap-2 sm:gap-3 min-w-0 w-[200px] shrink-0">
             <SidebarTrigger className="text-muted-foreground hover:text-foreground hover:bg-secondary/60 rounded-lg transition-colors shrink-0" aria-label="Alternar sidebar" />
@@ -173,7 +173,7 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
           </div>
 
           {/* Center: search bar + mic */}
-          <div className="flex-1 flex items-center justify-center gap-2 pr-[30%]">
+          <div className="flex-1 flex items-center justify-center gap-3 pr-[15%] lg:pr-[25%]">
             <button
               onClick={() => setIsOpen(true)}
               className="flex items-center gap-2.5 rounded-full bg-secondary/60 border border-border/40 px-4 py-2 text-sm text-muted-foreground cursor-pointer hover:bg-secondary/80 hover:border-primary/30 hover:text-foreground transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none w-full max-w-[480px]"
