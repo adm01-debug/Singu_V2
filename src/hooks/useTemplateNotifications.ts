@@ -88,7 +88,8 @@ export function useTemplateNotifications() {
 
       return true;
     } catch (error) {
-      logger.error('Error updating notification settings:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error updating notification settings:', { error: msg });
       return false;
     }
   };
