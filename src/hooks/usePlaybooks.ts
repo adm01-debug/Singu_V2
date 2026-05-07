@@ -166,7 +166,7 @@ export function useLogPlaybookUsage() {
         battle_card_id: input.battle_card_id ?? null,
         contact_id: input.contact_id ?? null,
         deal_id: input.deal_id ?? null,
-        context: (input.context ?? {}) as any,
+        context: (input.context ?? {}) as Record<string, any>,
       });
     },
   });
