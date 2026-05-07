@@ -139,7 +139,8 @@ export function useContactCadence() {
 
       setAlerts(calculatedAlerts);
     } catch (error) {
-      logger.error('Error fetching cadences:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching cadences:', { error: msg });
     } finally {
       setLoading(false);
     }
