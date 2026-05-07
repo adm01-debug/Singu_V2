@@ -173,7 +173,8 @@ export function useTriggerHistory(contactId?: string) {
       await fetchHistory();
       return data as TriggerUsageEntry;
     } catch (error) {
-      logger.error('Error creating trigger usage:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error creating trigger usage:', { error: msg });
       return null;
     }
   };
