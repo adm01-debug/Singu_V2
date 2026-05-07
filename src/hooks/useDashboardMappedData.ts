@@ -55,7 +55,7 @@ export function useDashboardMappedData(
         companyName: company?.name || '',
         relationshipScore: c.relationship_score || 0,
         sentiment: (c.sentiment as SentimentType) || 'neutral',
-        avatar: c.avatar_url || undefined,
+        avatar: (c as any).avatar_url || undefined,
         interactionCount: contactInteractions.length,
         lastInteraction,
         createdAt: new Date(c.created_at),
