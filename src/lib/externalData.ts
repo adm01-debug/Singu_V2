@@ -117,7 +117,8 @@ export async function updateExternalData<T = Record<string, unknown>>(table: str
     const result = await callExternalData({ action: 'update', table, id, updates });
     return { data: (result?.data as T) || null, error: null };
   } catch (err) {
-    logger.error('Error updating external data:', err);
+    const msg = err instanceof Error ? err.message : 'Unknown error';
+    logger.error('Error updating external data:', { error: msg });
     return { data: null, error: err as Error };
   }
 }
