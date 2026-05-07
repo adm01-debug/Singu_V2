@@ -55,7 +55,8 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
           contact_disc: contactDISCMap.get(usage.contact_id) || null,
         })));
       } catch (error) {
-        logger.error('Error fetching analytics data:', error);
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching analytics data:', { error: msg });
       } finally {
         setLoading(false);
       }

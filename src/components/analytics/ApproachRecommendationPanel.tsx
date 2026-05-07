@@ -67,7 +67,10 @@ export function ApproachRecommendationPanel({ contact, interactions, className }
         const [vak, meta] = await Promise.all([getContactVAKProfile(contact.id), getContactMetaprogramProfile(contact.id)]);
         setVakProfile(vak);
         setMetaprogramProfile(meta);
-      } catch (error) { logger.error('Error fetching profiles:', error); }
+      } catch (error) { 
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching profiles:', { error: msg }); 
+      }
       finally { setLoading(false); }
     };
     fetchProfiles();

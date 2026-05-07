@@ -61,7 +61,10 @@ export function CompatibilityScore({ contact, vakProfile, metaprogramProfile, cl
     try {
       const { data, error } = await supabase.from('profiles').select('nlp_profile').eq('id', user.id).maybeSingle();
       if (!error && data?.nlp_profile) setSalespersonProfile(data.nlp_profile as unknown as SalespersonProfile);
-    } catch (err) { logger.error('Error fetching salesperson profile:', err); }
+    } catch (err) { 
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Error fetching salesperson profile:', { error: msg }); 
+    }
     finally { setLoading(false); }
   };
 

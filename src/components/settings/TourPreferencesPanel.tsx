@@ -82,8 +82,9 @@ export function TourPreferencesPanel() {
         }
       }
     } catch (error) {
-      logger.error('Push toggle error:', error);
-      toast.error('Erro ao alterar configurações de push');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Push toggle error:', { error: msg });
+      toast.error('Erro ao alterar configurações de push', { description: msg });
     } finally {
       setPushLoading(false);
     }

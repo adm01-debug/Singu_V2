@@ -123,7 +123,8 @@ export function useSmartTemplateSuggestions(contact: Contact) {
 
       setTemplateStats(statsMap);
     } catch (error) {
-      logger.error('Error fetching template stats:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching template stats:', { error: msg });
     } finally {
       setLoading(false);
     }

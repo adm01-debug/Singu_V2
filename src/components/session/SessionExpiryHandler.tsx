@@ -47,8 +47,9 @@ export function SessionExpiryHandler({
       }
       return false;
     } catch (error) {
-      logger.error('Error refreshing session:', error);
-      toast.error('Erro ao renovar sessão');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error refreshing session:', { error: msg });
+      toast.error('Erro ao renovar sessão', { description: msg });
       return false;
     } finally {
       setIsRefreshing(false);

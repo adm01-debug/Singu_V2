@@ -151,8 +151,9 @@ export function usePortfolioCompatibility() {
 
       setContacts(contactsWithCompatibility);
     } catch (error) {
-      logger.error('Error loading portfolio data:', error);
-      toast.error('Erro ao carregar dados');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error loading portfolio data:', { error: msg });
+      toast.error('Erro ao carregar dados', { description: msg });
     } finally {
       setLoading(false);
     }

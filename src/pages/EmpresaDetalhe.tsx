@@ -82,7 +82,10 @@ const EmpresaDetalhe = () => {
       await updateExternalData('companies', id, { deleted_at: null, deleted_by: null });
       toast({ title: 'Empresa restaurada', description: 'A empresa foi reativada com sucesso.' });
       fetchCompanyData();
-    } catch { toast({ title: 'Erro ao restaurar', variant: 'destructive' }); }
+    } catch (e) { 
+      const msg = e instanceof Error ? e.message : 'Erro ao restaurar';
+      toast({ title: 'Erro ao restaurar', description: msg, variant: 'destructive' }); 
+    }
   };
 
   const fetchCompanyData = useCallback(async () => {
