@@ -380,8 +380,9 @@ export function useCompanies(options?: { enabled?: boolean }) {
       return true;
     } catch (error) {
       if (previous) queryClient.setQueryData<CompaniesPage>(queryKey, previous);
-      logger.error('Error deleting company:', error);
-      toast({ title: 'Erro ao excluir empresa', description: 'Não foi possível excluir a empresa.', variant: 'destructive' });
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error deleting company:', { error: msg });
+      toast({ title: 'Erro ao excluir empresa', description: msg, variant: 'destructive' });
       return false;
     }
   };
