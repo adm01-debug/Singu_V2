@@ -42,7 +42,7 @@ export function useCustomFields(entityType: EntityType) {
         .eq('entity_type', entityType)
         .order('display_order');
       if (error) throw error;
-      return (data || []) as unknown as CustomField[];
+      return (data || []) as CustomField[];
     },
     staleTime: 5 * 60_000,
   });
@@ -53,11 +53,11 @@ export function useCustomFields(entityType: EntityType) {
       if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from('custom_fields')
-        .insert({ ...input, user_id: user.id })
+        .insert({ ...input, user_id: user.id } as any)
         .select()
         .single();
       if (error) throw error;
-      return data;
+      return data as CustomField;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: key });
@@ -123,7 +123,7 @@ export function useCustomFieldValues(entityType: EntityType, entityId?: string) 
         .in('custom_field_id', fieldIds);
 
       if (error) throw error;
-      return (data || []) as unknown as CustomFieldValue[];
+      return (data || []) as CustomFieldValue[];
     },
     enabled: !!entityId,
     staleTime: 5 * 60_000,
@@ -138,7 +138,7 @@ export function useCustomFieldValues(entityType: EntityType, entityId?: string) 
       const { error } = await supabase
         .from('custom_field_values')
         .upsert(
-          { custom_field_id: fieldId, entity_id: entityId, user_id: user.id, value },
+          { custom_field_id: fieldId, entity_id: entityId, user_id: user.id, value } as any,
           { onConflict: 'custom_field_id,entity_id' }
         );
       if (error) throw error;
