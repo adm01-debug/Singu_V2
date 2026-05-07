@@ -72,7 +72,7 @@ export function useDocumentTemplates() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase
-        .from('document_templates' as any)
+        .from('document_templates')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
@@ -90,7 +90,7 @@ export function useDocumentTemplates() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const merge_fields = extractMergeFields(input.content_html || '');
-      const { error } = await supabase.from('document_templates' as any).insert({
+      const { error } = await supabase.from('document_templates').insert({
         user_id: user.id,
         name: input.name,
         description: input.description ?? null,
@@ -113,7 +113,7 @@ export function useDocumentTemplates() {
     mutationFn: async ({ id, ...input }: Partial<DocumentTemplate> & { id: string }) => {
       const merge_fields = input.content_html ? extractMergeFields(input.content_html) : undefined;
       const { error } = await supabase
-        .from('document_templates' as any)
+        .from('document_templates')
         .update({ ...input, ...(merge_fields ? { merge_fields } : {}) } as any)
         .eq('id', id);
       if (error) throw error;
