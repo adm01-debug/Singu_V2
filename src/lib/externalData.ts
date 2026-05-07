@@ -210,7 +210,8 @@ export async function callExternalRpc<T = unknown>(
     const result = await callExternalData({ action: 'rpc', functionName, params });
     return { data: (result?.data as T) ?? null, error: null };
   } catch (err) {
-    logger.error(`Error calling external RPC ${functionName}:`, err);
+    const msg = err instanceof Error ? err.message : 'Unknown error';
+    logger.error(`Error calling external RPC ${functionName}:`, { error: msg });
     return { data: null, error: err as Error };
   }
 }
