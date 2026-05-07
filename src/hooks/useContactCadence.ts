@@ -189,8 +189,9 @@ export function useContactCadence() {
       toast.success('Cadência configurada!');
       fetchCadences();
     } catch (error) {
-      logger.error('Error setting cadence:', error);
-      toast.error('Erro ao configurar cadência');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error setting cadence:', { error: msg });
+      toast.error('Erro ao configurar cadência', { description: msg });
     }
   }, [user, fetchCadences]);
 
