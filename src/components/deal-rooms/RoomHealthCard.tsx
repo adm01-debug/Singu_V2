@@ -9,7 +9,7 @@ export function RoomHealthCard({ room }: { room: DealRoom }) {
   const tone = !score ? "muted" : score >= 70 ? "success" : score >= 40 ? "warning" : "destructive";
 
   return (
-    <Card variant={tone === "muted" ? "default" : (tone as any)}>
+    <Card variant={tone === "muted" ? "default" : tone}>
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2"><Heart className="h-5 w-5" />Health do Room</CardTitle>

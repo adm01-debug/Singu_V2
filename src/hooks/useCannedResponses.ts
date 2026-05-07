@@ -28,7 +28,7 @@ export function useCannedResponses() {
         .eq('user_id', user.id)
         .order('usage_count', { ascending: false });
       if (error) throw error;
-      return (data || []) as unknown as CannedResponse[];
+      return (data || []) as CannedResponse[];
     },
     staleTime: 5 * 60_000,
   });
@@ -37,7 +37,10 @@ export function useCannedResponses() {
     mutationFn: async (input: { title: string; content: string; category?: string; shortcut?: string }) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
-      const { error } = await supabase.from('canned_responses').insert({ ...input, user_id: user.id } as any);
+      const { error } = await supabase.from('canned_responses').insert([{
+        ...input,
+        user_id: user.id
+      }]);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Resposta rápida criada!'); },
@@ -48,7 +51,9 @@ export function useCannedResponses() {
     mutationFn: async (id: string) => {
       const r = responses.find(r => r.id === id);
       if (!r) return '';
-      await supabase.from('canned_responses').update({ usage_count: r.usage_count + 1 } as any).eq('id', id);
+      await supabase.from('canned_responses').update({
+        usage_count: r.usage_count + 1
+      }).eq('id', id);
       return r.content;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: key }),
