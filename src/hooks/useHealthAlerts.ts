@@ -69,7 +69,8 @@ function useHealthAlertsFetch(userId?: string) {
       if (error) throw error;
       setAlerts((data || []) as unknown as HealthAlert[]);
     } catch (error) {
-      logger.error('Error fetching health alerts:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching health alerts:', { error: msg });
     } finally {
       setLoading(false);
     }
@@ -95,7 +96,8 @@ function useHealthAlertSettingsFetch(userId?: string) {
       if (error) throw error;
       setSettings(data as HealthAlertSettings | null);
     } catch (error) {
-      logger.error('Error fetching health alert settings:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching health alert settings:', { error: msg });
     } finally {
       setLoading(false);
     }
@@ -127,8 +129,9 @@ export function useHealthAlerts() {
       toast.success('Alerta dispensado');
     } catch (error) {
       setAlerts(previous);
-      logger.error('Error dismissing alert:', error);
-      toast.error('Erro ao dispensar alerta');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error dismissing alert:', { error: msg });
+      toast.error('Erro ao dispensar alerta', { description: msg });
     }
   }, [userId, alerts, setAlerts]);
 
@@ -146,8 +149,9 @@ export function useHealthAlerts() {
       toast.success('Todos os alertas foram dispensados');
     } catch (error) {
       setAlerts(previous);
-      logger.error('Error dismissing all alerts:', error);
-      toast.error('Erro ao dispensar alertas');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error dismissing all alerts:', { error: msg });
+      toast.error('Erro ao dispensar alertas', { description: msg });
     }
   }, [userId, alerts, setAlerts]);
 
@@ -164,8 +168,9 @@ export function useHealthAlerts() {
       setSettings(data as HealthAlertSettings);
       toast.success('Configurações salvas');
     } catch (error) {
-      logger.error('Error saving settings:', error);
-      toast.error('Erro ao salvar configurações');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error saving settings:', { error: msg });
+      toast.error('Erro ao salvar configurações', { description: msg });
     }
   }, [userId, settings, setSettings]);
 
@@ -181,8 +186,9 @@ export function useHealthAlerts() {
         toast.info('Nenhum cliente com saúde crítica encontrado');
       }
     } catch (error) {
-      logger.error('Error checking health:', error);
-      toast.error('Erro ao verificar saúde dos clientes');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error checking health:', { error: msg });
+      toast.error('Erro ao verificar saúde dos clientes', { description: msg });
     }
   }, [fetchAlerts]);
 

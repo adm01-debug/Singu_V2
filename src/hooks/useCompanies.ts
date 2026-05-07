@@ -325,8 +325,9 @@ export function useCompanies(options?: { enabled?: boolean }) {
       if (data) logActivity({ type: 'created', entityType: 'company', entityId: (data as Record<string, unknown>).id as string, entityName: String(companyName), description: 'Empresa criada' });
       return data;
     } catch (error) {
-      logger.error('Error creating company:', error);
-      toast({ title: 'Erro ao criar empresa', description: 'Verifique os dados e tente novamente.', variant: 'destructive' });
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error creating company:', { error: msg });
+      toast({ title: 'Erro ao criar empresa', description: msg, variant: 'destructive' });
       return null;
     }
   };
@@ -354,11 +355,12 @@ export function useCompanies(options?: { enabled?: boolean }) {
       return data;
     } catch (error) {
       if (previous) queryClient.setQueryData<CompaniesPage>(queryKey, previous);
-      logger.error('Error updating company:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error updating company:', { error: msg });
       if (error instanceof ConcurrentEditError) {
         showConcurrentEditToast({ entity: 'empresa', queryClient, queryKey });
       } else {
-        toast({ title: 'Erro ao atualizar empresa', description: 'Verifique os dados e tente novamente.', variant: 'destructive' });
+        toast({ title: 'Erro ao atualizar empresa', description: msg, variant: 'destructive' });
       }
       return null;
     }
@@ -378,8 +380,9 @@ export function useCompanies(options?: { enabled?: boolean }) {
       return true;
     } catch (error) {
       if (previous) queryClient.setQueryData<CompaniesPage>(queryKey, previous);
-      logger.error('Error deleting company:', error);
-      toast({ title: 'Erro ao excluir empresa', description: 'Não foi possível excluir a empresa.', variant: 'destructive' });
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error deleting company:', { error: msg });
+      toast({ title: 'Erro ao excluir empresa', description: msg, variant: 'destructive' });
       return false;
     }
   };

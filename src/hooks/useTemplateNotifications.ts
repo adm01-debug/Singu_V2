@@ -48,7 +48,8 @@ export function useTemplateNotifications() {
         });
       }
     } catch (error) {
-      logger.error('Error loading notification settings:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error loading notification settings:', { error: msg });
     } finally {
       setLoading(false);
     }
@@ -87,7 +88,8 @@ export function useTemplateNotifications() {
 
       return true;
     } catch (error) {
-      logger.error('Error updating notification settings:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error updating notification settings:', { error: msg });
       return false;
     }
   };
@@ -104,7 +106,8 @@ export function useTemplateNotifications() {
 
       return data;
     } catch (error) {
-      logger.error('Error checking for high performers:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error checking for high performers:', { error: msg });
       return null;
     }
   }, [user, settings.enabled]);

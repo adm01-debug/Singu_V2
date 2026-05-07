@@ -80,7 +80,8 @@ export function BulkActionsBar({
       toast.success(`${selectedCount} ${entityType === 'contacts' ? 'contatos' : entityType === 'companies' ? 'empresas' : 'interações'} excluídos`);
       onClearSelection();
     } catch (error) {
-      toast.error('Erro ao excluir itens');
+      const msg = error instanceof Error ? error.message : 'Erro ao excluir itens';
+      toast.error(msg);
     } finally {
       setIsProcessing(false);
       setShowDeleteConfirm(false);
@@ -95,7 +96,8 @@ export function BulkActionsBar({
       await onAddTag(selectedIds, tag);
       toast.success(`Tag "${tag}" adicionada a ${selectedCount} itens`);
     } catch (error) {
-      toast.error('Erro ao adicionar tag');
+      const msg = error instanceof Error ? error.message : 'Erro ao adicionar tag';
+      toast.error(msg);
     } finally {
       setIsProcessing(false);
     }
@@ -109,7 +111,8 @@ export function BulkActionsBar({
       await onExport(selectedIds);
       toast.success(`${selectedCount} itens exportados`);
     } catch (error) {
-      toast.error('Erro ao exportar');
+      const msg = error instanceof Error ? error.message : 'Erro ao exportar';
+      toast.error(msg);
     } finally {
       setIsProcessing(false);
     }
@@ -123,7 +126,8 @@ export function BulkActionsBar({
       await onToggleFavorite(selectedIds);
       toast.success(`${selectedCount} itens atualizados`);
     } catch (error) {
-      toast.error('Erro ao atualizar favoritos');
+      const msg = error instanceof Error ? error.message : 'Erro ao atualizar favoritos';
+      toast.error(msg);
     } finally {
       setIsProcessing(false);
     }

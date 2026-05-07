@@ -104,7 +104,8 @@ export function useWeeklyReport() {
       if (error) throw error;
       setSettings(data as WeeklyReportSettings | null);
     } catch (error) {
-      logger.error('Error fetching weekly report settings:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching weekly report settings:', { error: msg });
     } finally {
       setLoading(false);
     }
@@ -122,7 +123,8 @@ export function useWeeklyReport() {
       if (error) throw error;
       setReports((data || []) as unknown as WeeklyReportData[]);
     } catch (error) {
-      logger.error('Error fetching weekly reports:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching weekly reports:', { error: msg });
     }
   }, [userId]);
 
@@ -144,8 +146,9 @@ export function useWeeklyReport() {
       setSettings(data as WeeklyReportSettings);
       toast.success('Configurações salvas com sucesso');
     } catch (error) {
-      logger.error('Error saving settings:', error);
-      toast.error('Erro ao salvar configurações');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error saving settings:', { error: msg });
+      toast.error('Erro ao salvar configurações', { description: msg });
     }
   }, [userId, settings]);
 
@@ -167,8 +170,9 @@ export function useWeeklyReport() {
       toast.info('Relatório gerado - verifique seu email se configurado');
       return data;
     } catch (error) {
-      logger.error('Error generating report:', error);
-      toast.error('Erro ao gerar relatório');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error generating report:', { error: msg });
+      toast.error('Erro ao gerar relatório', { description: msg });
       return null;
     } finally {
       setGenerating(false);
@@ -188,8 +192,9 @@ export function useWeeklyReport() {
       if (error) throw error;
       toast.success('Email de teste enviado!');
     } catch (error) {
-      logger.error('Error sending test email:', error);
-      toast.error('Erro ao enviar email. Verifique se o Resend está configurado.');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error sending test email:', { error: msg });
+      toast.error('Erro ao enviar email', { description: 'Verifique se o Resend está configurado.' });
     }
   }, [userId, settings]);
 

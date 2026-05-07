@@ -87,7 +87,8 @@ export function useDISCConversionData(period: ConversionPeriod) {
 
         setMetrics(calculatedMetrics);
       } catch (error) {
-        logger.error('Error fetching conversion metrics:', error);
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching conversion metrics:', { error: msg });
       } finally {
         setLoading(false);
       }

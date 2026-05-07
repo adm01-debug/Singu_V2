@@ -90,7 +90,8 @@ const DISCEvolutionTimeline: React.FC<DISCEvolutionTimelineProps> = ({
           setSelectedPoint(chartData[chartData.length - 1]);
         }
       } catch (error) {
-        logger.error('Error fetching DISC history:', error);
+        const msg = error instanceof Error ? error.message : 'Erro desconhecido';
+        logger.error('Error fetching DISC history:', { error: msg });
       } finally {
         setLoading(false);
       }

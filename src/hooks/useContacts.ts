@@ -125,8 +125,9 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       if (data) logActivity({ type: 'created', entityType: 'contact', entityId: data.id, entityName: `${data.first_name} ${data.last_name}`.trim(), description: 'Contato criado' });
       return data;
     } catch (error) {
-      logger.error('Error creating contact:', error);
-      toast({ title: 'Erro ao criar contato', description: 'Verifique os dados e tente novamente.', variant: 'destructive' });
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error creating contact:', { error: msg });
+      toast({ title: 'Erro ao criar contato', description: msg, variant: 'destructive' });
       return null;
     }
   };
@@ -160,12 +161,13 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       }
       return data;
     } catch (error) {
-      logger.error('Error updating contact:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error updating contact:', { error: msg });
       if (previous) queryClient.setQueryData<Contact[]>(queryKey, previous);
       if (error instanceof ConcurrentEditError) {
         showConcurrentEditToast({ entity: 'contato', queryClient, queryKey });
       } else {
-        toast({ title: 'Erro ao atualizar contato', description: 'As alterações foram revertidas.', variant: 'destructive' });
+        toast({ title: 'Erro ao atualizar contato', description: msg, variant: 'destructive' });
       }
       return null;
     }
@@ -181,9 +183,10 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       logActivity({ type: 'deleted', entityType: 'contact', entityId: id, entityName: deleted ? `${deleted.first_name} ${deleted.last_name}`.trim() : undefined, description: 'Contato excluído' });
       return true;
     } catch (error) {
-      logger.error('Error deleting contact:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error deleting contact:', { error: msg });
       if (previous) queryClient.setQueryData<Contact[]>(queryKey, previous);
-      toast({ title: 'Erro ao excluir contato', description: 'Não foi possível excluir. O contato foi restaurado.', variant: 'destructive' });
+      toast({ title: 'Erro ao excluir contato', description: msg, variant: 'destructive' });
       return false;
     }
   };

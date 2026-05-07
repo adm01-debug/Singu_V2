@@ -139,7 +139,8 @@ export function useContactCadence() {
 
       setAlerts(calculatedAlerts);
     } catch (error) {
-      logger.error('Error fetching cadences:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching cadences:', { error: msg });
     } finally {
       setLoading(false);
     }
@@ -188,8 +189,9 @@ export function useContactCadence() {
       toast.success('Cadência configurada!');
       fetchCadences();
     } catch (error) {
-      logger.error('Error setting cadence:', error);
-      toast.error('Erro ao configurar cadência');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error setting cadence:', { error: msg });
+      toast.error('Erro ao configurar cadência', { description: msg });
     }
   }, [user, fetchCadences]);
 
@@ -216,7 +218,8 @@ export function useContactCadence() {
 
       fetchCadences();
     } catch (error) {
-      logger.error('Error updating last contact:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error updating last contact:', { error: msg });
     }
   }, [user, cadences, fetchCadences]);
 
@@ -241,8 +244,9 @@ export function useContactCadence() {
     } catch (error) {
       setCadences(previousCadences);
       setAlerts(previousAlerts);
-      logger.error('Error removing cadence:', error);
-      toast.error('Erro ao remover cadência');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error removing cadence:', { error: msg });
+      toast.error('Erro ao remover cadência', { description: msg });
     }
   }, [user, cadences, alerts]);
 

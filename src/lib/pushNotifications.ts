@@ -33,7 +33,8 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
     logger.info('Service Worker registered:', registration);
     return registration;
   } catch (error) {
-    logger.error('Service Worker registration failed:', error);
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Service Worker registration failed:', { error: msg });
     return null;
   }
 }
@@ -60,7 +61,8 @@ export async function subscribeToPush(): Promise<PushSubscription | null> {
     
     return subscription;
   } catch (error) {
-    logger.error('Failed to subscribe to push notifications:', error);
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Failed to subscribe to push notifications:', { error: msg });
     return null;
   }
 }
@@ -82,7 +84,8 @@ export async function unsubscribeFromPush(): Promise<boolean> {
     
     return true;
   } catch (error) {
-    logger.error('Failed to unsubscribe from push notifications:', error);
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Failed to unsubscribe from push notifications:', { error: msg });
     return false;
   }
 }
@@ -106,7 +109,8 @@ async function saveSubscription(subscription: PushSubscription): Promise<void> {
     });
 
   if (error) {
-    logger.error('Failed to save subscription:', error);
+    const msg = error.message || 'Unknown error';
+    logger.error('Failed to save subscription:', { error: msg });
     throw error;
   }
 }
@@ -122,7 +126,8 @@ async function removeSubscription(endpoint: string): Promise<void> {
     .eq('endpoint', endpoint);
 
   if (error) {
-    logger.error('Failed to remove subscription:', error);
+    const msg = error.message || 'Unknown error';
+    logger.error('Failed to remove subscription:', { error: msg });
   }
 }
 
@@ -139,7 +144,8 @@ export async function getSubscriptionStatus(): Promise<{
     const subscription = await registration.pushManager?.getSubscription();
     return { isSubscribed: !!subscription, subscription };
   } catch (error) {
-    logger.error('Failed to get subscription status:', error);
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Failed to get subscription status:', { error: msg });
     return { isSubscribed: false, subscription: null };
   }
 }

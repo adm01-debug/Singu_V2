@@ -99,8 +99,9 @@ const Auth = () => {
         }
       }
     } catch (error) {
-      logger.error('Auth submit error:', error);
-      toast.error('Não foi possível concluir a autenticação. Tente novamente.');
+      const msg = error instanceof Error ? error.message : 'Não foi possível concluir a autenticação. Tente novamente.';
+      logger.error('Auth submit error:', { error: msg });
+      toast.error(msg);
     } finally {
       setIsLoading(false);
     }
@@ -194,7 +195,11 @@ const Auth = () => {
 
                 <Button type="button" variant="outline" className="w-full" onClick={async () => {
                   const { error } = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-                  if (error) { toast.error('Erro ao entrar com Google. Tente novamente.'); logger.error('Google OAuth error:', error); }
+                  if (error) { 
+                    const msg = error instanceof Error ? error.message : 'Erro ao entrar com Google';
+                    toast.error(msg); 
+                    logger.error('Google OAuth error:', { error: msg }); 
+                  }
                 }}>
                   <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>

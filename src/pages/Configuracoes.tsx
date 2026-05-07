@@ -55,7 +55,10 @@ const Configuracoes = () => {
     try {
       const { data, error } = await supabase.from('profiles').select('first_name, last_name, avatar_url').eq('id', user.id).maybeSingle();
       if (data && !error) setProfile({ first_name: data.first_name || '', last_name: data.last_name || '', avatar_url: data.avatar_url });
-    } catch (error) { logger.error('Error fetching profile:', error); }
+    } catch (error) { 
+      const msg = error instanceof Error ? error.message : 'Erro ao buscar perfil';
+      logger.error('Error fetching profile:', { error: msg }); 
+    }
   };
 
   const handleSaveProfile = async () => {
@@ -67,7 +70,10 @@ const Configuracoes = () => {
       await supabase.auth.updateUser({ data: { first_name: profile.first_name, last_name: profile.last_name } });
       setHasUnsavedChanges(false);
       accessibleToast.success('Perfil atualizado com sucesso!');
-    } catch { accessibleToast.error('Erro ao atualizar perfil'); }
+    } catch (error) { 
+      const msg = error instanceof Error ? error.message : 'Erro ao atualizar perfil';
+      accessibleToast.error(msg); 
+    }
     finally { setLoading(false); }
   };
 

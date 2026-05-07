@@ -63,7 +63,11 @@ export function AdvancedDataExporter({ entityType, className }: AdvancedDataExpo
       document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url);
       setExportComplete(true); toast.success(`${data.length} registros exportados com sucesso!`);
       setTimeout(() => { setExportComplete(false); setOpen(false); }, 2000);
-    } catch (error) { logger.error('Export error:', error); toast.error('Erro ao exportar dados'); }
+    } catch (error) { 
+      const msg = error instanceof Error ? error.message : 'Erro ao exportar dados';
+      logger.error('Export error:', { error: msg }); 
+      toast.error(msg); 
+    }
     finally { setIsExporting(false); }
   };
 

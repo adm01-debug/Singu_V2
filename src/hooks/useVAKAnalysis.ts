@@ -168,7 +168,8 @@ export function useVAKAnalysis() {
       if (error) throw error;
       return true;
     } catch (error) {
-      logger.error('Error saving VAK analysis:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error saving VAK analysis:', { error: msg });
       return false;
     }
   }, [user]);
@@ -242,7 +243,8 @@ export function useVAKAnalysis() {
         totalWordsAnalyzed: totals.totalWords,
       };
     } catch (error) {
-      logger.error('Error getting VAK profile:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error getting VAK profile:', { error: msg });
       return null;
     }
   }, [user]);
@@ -279,7 +281,8 @@ export function useVAKAnalysis() {
       // Return aggregated profile
       return await getContactVAKProfile(contactId);
     } catch (error) {
-      logger.error('Error analyzing contact interactions:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error analyzing contact interactions:', { error: msg });
       return null;
     } finally {
       setAnalyzing(false);
@@ -300,7 +303,8 @@ export function useVAKAnalysis() {
       if (error) throw error;
       return true;
     } catch (error) {
-      logger.error('Error clearing VAK analysis:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error clearing VAK analysis:', { error: msg });
       return false;
     }
   }, [user]);

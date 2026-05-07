@@ -97,7 +97,10 @@ export function useInteractions(contactId?: string, companyId?: string, options?
                 description: `Perfil: ${discResult.analysis?.blendProfile || discResult.analysis?.primaryProfile}`,
               });
             }
-          }).catch(err => logger.error('DISC analysis error:', err));
+          }).catch(err => {
+            const msg = err instanceof Error ? err.message : 'Unknown error';
+            logger.error('DISC analysis error:', { error: msg });
+          });
         }
       }
 
@@ -113,16 +116,20 @@ export function useInteractions(contactId?: string, companyId?: string, options?
             data.transcription,
             data.type,
             true // showToast
-          ).catch(err => logger.error('NLP analysis error:', err));
+          ).catch(err => {
+            const msg = err instanceof Error ? err.message : 'Unknown error';
+            logger.error('NLP analysis error:', { error: msg });
+          });
         }
       }
 
       return data;
     } catch (error) {
-      logger.error('Error creating interaction:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error creating interaction:', { error: msg });
       toast({
         title: 'Erro ao registrar interação',
-        description: 'Verifique os dados e tente novamente.',
+        description: msg,
         variant: 'destructive',
       });
       return null;
@@ -156,10 +163,11 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       return data;
     } catch (error) {
       if (previous) queryClient.setQueryData<Interaction[]>(queryKey, previous);
-      logger.error('Error updating interaction:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error updating interaction:', { error: msg });
       toast({
         title: 'Erro ao atualizar interação',
-        description: 'Verifique os dados e tente novamente.',
+        description: msg,
         variant: 'destructive',
       });
       return null;
@@ -187,10 +195,11 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       return true;
     } catch (error) {
       if (previous) queryClient.setQueryData<Interaction[]>(queryKey, previous);
-      logger.error('Error deleting interaction:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error deleting interaction:', { error: msg });
       toast({
         title: 'Erro ao excluir interação',
-        description: 'Não foi possível excluir a interação.',
+        description: msg,
         variant: 'destructive',
       });
       return false;

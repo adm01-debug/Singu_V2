@@ -163,7 +163,8 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
       setVakMetrics(processedVak);
       setEmotionalMetrics(processedEmotional);
     } catch (error) {
-      logger.error('Error fetching NLP metrics:', error);
+      const msg = error instanceof Error ? error.message : 'Erro ao carregar métricas';
+      logger.error('Error fetching NLP metrics:', { error: msg });
     } finally {
       setLoading(false);
     }
