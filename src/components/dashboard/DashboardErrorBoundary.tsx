@@ -28,7 +28,7 @@ export class DashboardErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    logger.error(`[Dashboard] Error in ${this.props.sectionName || 'widget'}:`, error, errorInfo);
+    logger.error(`[Dashboard] Error in ${this.props.sectionName || 'widget'}:`, { error: error.message, stack: error.stack, componentStack: errorInfo.componentStack });
   }
 
   handleRetry = () => {
