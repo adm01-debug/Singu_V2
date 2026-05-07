@@ -186,8 +186,9 @@ export function useHealthAlerts() {
         toast.info('Nenhum cliente com saúde crítica encontrado');
       }
     } catch (error) {
-      logger.error('Error checking health:', error);
-      toast.error('Erro ao verificar saúde dos clientes');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error checking health:', { error: msg });
+      toast.error('Erro ao verificar saúde dos clientes', { description: msg });
     }
   }, [fetchAlerts]);
 
