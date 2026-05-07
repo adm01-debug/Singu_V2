@@ -121,13 +121,13 @@ export function useEmailCampaigns() {
       }
 
       // Marcar campanha como enviada e atualizar contadores
-      const { error: updError } = await supabase
-        .from('email_campaigns')
+      const { error: updError } = await (supabase
+        .from('email_campaigns') as any)
         .update({
           status: 'sent',
           sent_at: new Date().toISOString(),
           total_recipients: eligible.length,
-        } as any)
+        })
         .eq('id', campaignId);
       if (updError) throw updError;
 
