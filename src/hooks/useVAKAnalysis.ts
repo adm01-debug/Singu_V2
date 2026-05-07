@@ -281,7 +281,8 @@ export function useVAKAnalysis() {
       // Return aggregated profile
       return await getContactVAKProfile(contactId);
     } catch (error) {
-      logger.error('Error analyzing contact interactions:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error analyzing contact interactions:', { error: msg });
       return null;
     } finally {
       setAnalyzing(false);
