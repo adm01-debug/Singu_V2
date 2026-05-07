@@ -129,8 +129,9 @@ export function useHealthAlerts() {
       toast.success('Alerta dispensado');
     } catch (error) {
       setAlerts(previous);
-      logger.error('Error dismissing alert:', error);
-      toast.error('Erro ao dispensar alerta');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error dismissing alert:', { error: msg });
+      toast.error('Erro ao dispensar alerta', { description: msg });
     }
   }, [userId, alerts, setAlerts]);
 
