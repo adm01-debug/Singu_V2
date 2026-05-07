@@ -149,7 +149,7 @@ export function useDocumentSignatures() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase
-        .from('document_signatures' as any)
+        .from('document_signatures')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
@@ -176,7 +176,7 @@ export function useDocumentSignatures() {
         ? new Date(Date.now() + input.expires_in_days * 86_400_000).toISOString()
         : null;
       const { data, error } = await supabase
-        .from('document_signatures' as any)
+        .from('document_signatures')
         .insert({
           user_id: user.id,
           template_id: input.template_id ?? null,
@@ -194,13 +194,13 @@ export function useDocumentSignatures() {
       if (input.template_id) {
         // Increment usage_count (best-effort)
         const { data: tpl } = await supabase
-          .from('document_templates' as any)
+          .from('document_templates')
           .select('usage_count')
           .eq('id', input.template_id)
           .maybeSingle();
         if (tpl) {
           await supabase
-            .from('document_templates' as any)
+            .from('document_templates')
             .update({ usage_count: ((tpl as any).usage_count ?? 0) + 1 } as any)
             .eq('id', input.template_id);
         }
@@ -217,7 +217,7 @@ export function useDocumentSignatures() {
   const cancel = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
-        .from('document_signatures' as any)
+        .from('document_signatures')
         .update({ status: 'declined', declined_at: new Date().toISOString(), declined_reason: 'Cancelado pelo remetente' } as any)
         .eq('id', id);
       if (error) throw error;

@@ -45,7 +45,7 @@ export function useSupportTickets() {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
       if (error) throw error;
-      return (data || []) as unknown as SupportTicket[];
+      return (data || []) as SupportTicket[];
     },
     staleTime: 2 * 60_000,
   });
@@ -60,8 +60,7 @@ export function useSupportTickets() {
         user_id: user.id,
       };
       
-      // Delete properties that might cause TS issues if Partial<SupportTicket> 
-      // contains fields not in the Insert type or handled automatically
+      // Remove metadata fields that Supabase handles automatically
       if ('id' in insertData) delete insertData.id;
       if ('created_at' in insertData) delete insertData.created_at;
       if ('updated_at' in insertData) delete insertData.updated_at;
@@ -118,7 +117,7 @@ export function useTicketComments(ticketId?: string) {
         .eq('ticket_id', ticketId)
         .order('created_at');
       if (error) throw error;
-      return (data || []) as unknown as TicketComment[];
+      return (data || []) as TicketComment[];
     },
     enabled: !!ticketId,
   });

@@ -79,14 +79,20 @@ export function useNLPAnalyticsData() {
       try {
         const [emRes, vakRes, cRes, vRes, oRes] = await Promise.all([
           supabase.from('emotional_states_history').select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
-          supabase.from('vak_analysis_history' as 'emotional_states_history').select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
+          supabase.from('vak_analysis_history').select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
           supabase.from('contacts').select('behavior').eq('user_id', user!.id),
           supabase.from('client_values').select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
           supabase.from('hidden_objections').select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
         ]);
 
+        if (emRes.error) throw emRes.error;
+        if (vakRes.error) throw vakRes.error;
+        if (cRes.error) throw cRes.error;
+        if (vRes.error) throw vRes.error;
+        if (oRes.error) throw oRes.error;
+
         const emotionalData = emRes.data;
-        const vakData = vakRes.data as { visual_score?: number; auditory_score?: number; kinesthetic_score?: number; digital_score?: number }[] | null;
+        const vakData = vakRes.data as any[] | null;
 
         const emMap = new Map<string, { count: number; tc: number }>();
         emotionalData?.forEach(e => {
@@ -98,9 +104,19 @@ export function useNLPAnalyticsData() {
           .sort((a, b) => b.count - a.count);
 
         const vt = { visual: 0, auditory: 0, kinesthetic: 0, digital: 0 };
-        vakData?.forEach(v => { vt.visual += v.visual_score || 0; vt.auditory += v.auditory_score || 0; vt.kinesthetic += v.kinesthetic_score || 0; vt.digital += v.digital_score || 0; });
+        vakData?.forEach(v => { 
+          vt.visual += v.visual_score || 0; 
+          vt.auditory += v.auditory_score || 0; 
+          vt.kinesthetic += v.kinesthetic_score || 0; 
+          vt.digital += v.digital_score || 0; 
+        });
         const vc = vakData?.length || 1;
-        const vakDistribution = { visual: Math.round(vt.visual / vc), auditory: Math.round(vt.auditory / vc), kinesthetic: Math.round(vt.kinesthetic / vc), digital: Math.round(vt.digital / vc) };
+        const vakDistribution = { 
+          visual: Math.round(vt.visual / vc), 
+          auditory: Math.round(vt.auditory / vc), 
+          kinesthetic: Math.round(vt.kinesthetic / vc), 
+          digital: Math.round(vt.digital / vc) 
+        };
 
         const disc = { D: 0, I: 0, S: 0, C: 0 };
         cRes.data?.forEach(c => {
@@ -110,11 +126,17 @@ export function useNLPAnalyticsData() {
         });
 
         const vm = new Map<string, { count: number; ti: number }>();
-        vRes.data?.forEach(v => { const c = vm.get(v.value_name) || { count: 0, ti: 0 }; vm.set(v.value_name, { count: c.count + 1, ti: c.ti + (v.importance || 0) }); });
+        vRes.data?.forEach(v => { 
+          const c = vm.get(v.value_name) || { count: 0, ti: 0 }; 
+          vm.set(v.value_name, { count: c.count + 1, ti: c.ti + (v.importance || 0) }); 
+        });
         const topValues = Array.from(vm.entries()).map(([name, d]) => ({ name, count: d.count, avgImportance: Math.round(d.ti / d.count) })).sort((a, b) => b.count - a.count).slice(0, 8);
 
         const om = new Map<string, { count: number; resolved: number }>();
-        oRes.data?.forEach(o => { const c = om.get(o.objection_type) || { count: 0, resolved: 0 }; om.set(o.objection_type, { count: c.count + 1, resolved: c.resolved + (o.resolved ? 1 : 0) }); });
+        oRes.data?.forEach(o => { 
+          const c = om.get(o.objection_type) || { count: 0, resolved: 0 }; 
+          om.set(o.objection_type, { count: c.count + 1, resolved: c.resolved + (o.resolved ? 1 : 0) }); 
+        });
         const objectionTypes = Array.from(om.entries()).map(([type, d]) => ({ type, ...d })).sort((a, b) => b.count - a.count);
 
         const emotionalTrend = buildTrend(emotionalData, period);

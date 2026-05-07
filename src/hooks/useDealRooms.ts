@@ -205,10 +205,10 @@ export function useUpsertMilestone(roomId: string) {
     mutationFn: async (m: Partial<DealRoomMilestone>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
-      const payload = { ...m, room_id: roomId, user_id: user.id } as any;
-      const { data, error } = await supabase.from("deal_room_milestones").upsert(payload).select("*").single();
+      const payload = { ...m, room_id: roomId, user_id: user.id };
+      const { data, error } = await supabase.from("deal_room_milestones").upsert(payload as any).select("*").single();
       if (error) throw error;
-      return data as DealRoomMilestone;
+      return data as unknown as DealRoomMilestone;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.ms(roomId) }),
     onError: (e: Error) => toast.error(e.message),
@@ -235,7 +235,7 @@ export function useStakeholders(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_stakeholders").select("*").eq("room_id", roomId!);
       if (error) throw error;
-      return (data ?? []) as any as DealRoomStakeholder[];
+      return (data ?? []) as unknown as DealRoomStakeholder[];
     },
   });
 }
@@ -246,10 +246,10 @@ export function useUpsertStakeholder(roomId: string) {
     mutationFn: async (s: Partial<DealRoomStakeholder>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
-      const payload = { ...s, room_id: roomId, user_id: user.id } as any;
-      const { data, error } = await supabase.from("deal_room_stakeholders").upsert(payload).select("*").single();
+      const payload = { ...s, room_id: roomId, user_id: user.id };
+      const { data, error } = await supabase.from("deal_room_stakeholders").upsert(payload as any).select("*").single();
       if (error) throw error;
-      return data as any as DealRoomStakeholder;
+      return data as unknown as DealRoomStakeholder;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.sh(roomId) }),
     onError: (e: Error) => toast.error(e.message),
@@ -332,7 +332,7 @@ export function useRoomActivities(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_activities").select("*").eq("room_id", roomId!).order("created_at", { ascending: false }).limit(100);
       if (error) throw error;
-      return (data ?? []) as any as DealRoomActivity[];
+      return (data ?? []) as unknown as DealRoomActivity[];
     },
   });
 }
@@ -344,7 +344,7 @@ export function useRoomComments(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_comments").select("*").eq("room_id", roomId!).order("created_at");
       if (error) throw error;
-      return (data ?? []) as any as DealRoomComment[];
+      return (data ?? []) as unknown as DealRoomComment[];
     },
   });
 }
@@ -404,7 +404,7 @@ export function usePublicDealRoom(token: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_deal_room_by_token", { _token: token! });
       if (error) throw error;
-      return data as any as { 
+      return data as unknown as { 
         room: DealRoom; 
         milestones: DealRoomMilestone[]; 
         stakeholders: DealRoomStakeholder[]; 
