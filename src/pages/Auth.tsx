@@ -99,8 +99,9 @@ const Auth = () => {
         }
       }
     } catch (error) {
-      logger.error('Auth submit error:', error);
-      toast.error('Não foi possível concluir a autenticação. Tente novamente.');
+      const msg = error instanceof Error ? error.message : 'Não foi possível concluir a autenticação. Tente novamente.';
+      logger.error('Auth submit error:', { error: msg });
+      toast.error(msg);
     } finally {
       setIsLoading(false);
     }
