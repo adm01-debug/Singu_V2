@@ -216,9 +216,9 @@ export function useDocumentSignatures() {
 
   const cancel = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from('document_signatures')
-        .update({ status: 'declined', declined_at: new Date().toISOString(), declined_reason: 'Cancelado pelo remetente' } as any)
+      const { error } = await (supabase
+        .from('document_signatures') as any)
+        .update({ status: 'declined', declined_at: new Date().toISOString(), declined_reason: 'Cancelado pelo remetente' })
         .eq('id', id);
       if (error) throw error;
     },
