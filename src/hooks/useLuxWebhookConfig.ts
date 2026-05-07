@@ -27,7 +27,7 @@ export function useLuxWebhookConfig() {
         .select('*')
         .order('entity_type');
       if (error) throw error;
-      return (data || []) as LuxWebhookConfig[];
+      return (data || []) as unknown as LuxWebhookConfig[];
     },
   });
 
@@ -37,13 +37,27 @@ export function useLuxWebhookConfig() {
       if (existing) {
         const { error } = await supabase
           .from('lux_webhook_config')
-          .update({ ...config, updated_at: new Date().toISOString() } as any)
+          .update({
+            webhook_url: config.webhook_url,
+            is_active: config.is_active,
+            timeout_ms: config.timeout_ms,
+            max_retries: config.max_retries,
+            headers: config.headers as any,
+            updated_at: new Date().toISOString()
+          })
           .eq('id', existing.id);
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('lux_webhook_config')
-          .insert(config as any);
+          .insert({
+            entity_type: config.entity_type as 'contact' | 'company',
+            webhook_url: config.webhook_url,
+            is_active: config.is_active ?? true,
+            timeout_ms: config.timeout_ms ?? 5000,
+            max_retries: config.max_retries ?? 3,
+            headers: (config.headers ?? {}) as any
+          });
         if (error) throw error;
       }
     },

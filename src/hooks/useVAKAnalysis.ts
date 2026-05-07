@@ -163,7 +163,7 @@ export function useVAKAnalysis() {
           kinesthetic_words: analysis.kinesthetic.words,
           digital_words: analysis.digital.words,
           analyzed_text: text.substring(0, 1000), // Limit stored text
-        });
+        } as any);
 
       if (error) throw error;
       return true;
