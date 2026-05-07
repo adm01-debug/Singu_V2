@@ -92,18 +92,18 @@ export function StatCard({
       transition={{ duration: 0.25, delay: delay * 0.04 }}
       onClick={onClick}
       className={cn(
-        'group relative rounded-xl border border-border bg-card p-5 transition-colors duration-200 hover:bg-muted/30 hover:border-border/80',
+        'group relative rounded-2xl border border-border/30 bg-card/60 backdrop-blur-sm p-6 transition-all duration-300 ease-smooth hover:bg-card hover:border-primary/20 hover:shadow-lg hover:-translate-y-1',
         onClick && 'cursor-pointer',
         className
       )}
     >
       <div className="flex items-start justify-between gap-3">
-        <div className="space-y-1.5 min-w-0 flex-1">
-          <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
+        <div className="space-y-2 min-w-0 flex-1">
+          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
             {title}
           </p>
-          <div className="flex items-end gap-2.5">
-            <p className="text-2xl font-bold tabular-nums tracking-tight text-foreground">
+          <div className="flex items-end gap-3">
+            <p className="text-3xl font-bold tabular-nums tracking-tighter text-foreground font-heading">
               {isNumeric && animate ? <AnimatedNumber value={numericValue} /> : value}
             </p>
             {sparkline && sparkline.length > 1 && (
@@ -140,8 +140,8 @@ export function StatCard({
           )}
         </div>
 
-        <div className={cn('p-2.5 rounded-lg bg-muted/50 shrink-0', iconColorMap[gradientTone])}>
-          <Icon className="w-4 h-4" aria-hidden="true" />
+        <div className={cn('p-3 rounded-xl bg-secondary/5 border border-border/20 shrink-0 group-hover:bg-secondary/10 group-hover:border-primary/20 transition-all duration-300', iconColorMap[gradientTone])}>
+          <Icon className="w-5 h-5" aria-hidden="true" />
         </div>
       </div>
     </motion.div>
