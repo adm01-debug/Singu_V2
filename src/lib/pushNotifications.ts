@@ -126,7 +126,8 @@ async function removeSubscription(endpoint: string): Promise<void> {
     .eq('endpoint', endpoint);
 
   if (error) {
-    logger.error('Failed to remove subscription:', error);
+    const msg = error.message || 'Unknown error';
+    logger.error('Failed to remove subscription:', { error: msg });
   }
 }
 
