@@ -28,7 +28,7 @@ export function useCannedResponses() {
         .eq('user_id', user.id)
         .order('usage_count', { ascending: false });
       if (error) throw error;
-      return (data || []) as unknown as CannedResponse[];
+      return (data || []) as CannedResponse[];
     },
     staleTime: 5 * 60_000,
   });
