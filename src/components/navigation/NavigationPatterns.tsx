@@ -166,6 +166,7 @@ interface AnimatedTabsProps {
 }
 
 export function AnimatedTabs({ tabs, activeTab, onChange, className, variant = 'underline' }: AnimatedTabsProps) {
+  const prefersReducedMotion = useReducedMotion();
   const tabRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
   
@@ -276,7 +277,7 @@ export function AnimatedTabs({ tabs, activeTab, onChange, className, variant = '
           left: indicatorStyle.left,
           width: indicatorStyle.width,
         }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        transition={{ type: 'spring', stiffness: prefersReducedMotion ? 10000 : 300, damping: prefersReducedMotion ? 100 : 30, mass: 0.8 }}
       />
     </div>
   );
@@ -316,11 +317,11 @@ export function AccessibleMotion({ children, animation = 'fadeIn', delay = 0, cl
       animate: { opacity: 1 },
     },
     slideUp: {
-      initial: { opacity: 0, y: prefersReducedMotion ? 0 : 20 },
+      initial: { opacity: 0, y: prefersReducedMotion ? 0 : 32 },
       animate: { opacity: 1, y: 0 },
     },
     scaleIn: {
-      initial: { opacity: 0, scale: prefersReducedMotion ? 1 : 0.95 },
+      initial: { opacity: 0, scale: prefersReducedMotion ? 1 : 0.92 },
       animate: { opacity: 1, scale: 1 },
     },
   };
