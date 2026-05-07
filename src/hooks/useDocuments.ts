@@ -40,7 +40,7 @@ export function useDocuments(entityType: string, entityId?: string) {
         .eq('entity_id', entityId)
         .order('created_at', { ascending: false });
       if (error) throw error;
-      return (data || []) as unknown as Document[];
+      return (data || []) as Document[];
     },
     enabled: !!entityId,
     staleTime: 5 * 60_000,
@@ -74,7 +74,7 @@ export function useDocuments(entityType: string, entityId?: string) {
         file_url: fileUrl,
         file_size: file.size,
         mime_type: file.type,
-      } as any);
+      });
       if (error) throw error;
     },
     onSuccess: () => {

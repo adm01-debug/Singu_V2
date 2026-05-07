@@ -77,22 +77,22 @@ export function useUpsertPlaybook() {
   return useMutation({
     mutationFn: async (input: Partial<SalesPlaybook> & { id?: string }) => {
       if (!user) throw new Error("not authenticated");
-      const payload: any = { ...input, user_id: user.id };
+      const payload = { ...input, user_id: user.id } as any;
       if (input.id) {
         const { data, error } = await supabase.from("sales_playbooks").update(payload).eq("id", input.id).select().single();
         if (error) throw error;
-        return data;
+        return data as unknown as SalesPlaybook;
       }
       const { data, error } = await supabase.from("sales_playbooks").insert(payload).select().single();
       if (error) throw error;
-      return data;
+      return data as unknown as SalesPlaybook;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["playbooks"] });
       qc.invalidateQueries({ queryKey: ["playbook"] });
       toast.success("Playbook salvo");
     },
-    onError: (e: any) => toast.error(e?.message || "Erro ao salvar playbook"),
+    onError: (e: Error) => toast.error(e.message || "Erro ao salvar playbook"),
   });
 }
 
@@ -107,6 +107,7 @@ export function useDeletePlaybook() {
       qc.invalidateQueries({ queryKey: ["playbooks"] });
       toast.success("Playbook removido");
     },
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
@@ -123,14 +124,14 @@ export function useGeneratePlaybook() {
     }) => {
       const { data, error } = await supabase.functions.invoke("playbook-generator", { body: input });
       if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
-      return data;
+      if (data?.error) throw new Error(data.error);
+      return data as SalesPlaybook;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["playbooks"] });
       toast.success("Playbook gerado por IA");
     },
-    onError: (e: any) => toast.error(e?.message || "Erro ao gerar playbook"),
+    onError: (e: Error) => toast.error(e.message || "Erro ao gerar playbook"),
   });
 }
 

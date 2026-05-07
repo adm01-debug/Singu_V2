@@ -28,6 +28,70 @@ export interface DealRoom {
   updated_at: string;
 }
 
+export interface DealRoomMilestone {
+  id: string;
+  room_id: string;
+  user_id: string;
+  title: string;
+  description: string | null;
+  status: string;
+  sort_order: number;
+  due_date: string | null;
+  completed_at: string | null;
+  completed_by_side: Side | null;
+  owner_side: Side | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DealRoomStakeholder {
+  id: string;
+  room_id: string;
+  user_id: string;
+  contact_id: string | null;
+  name: string;
+  email: string | null;
+  role_title: string | null;
+  side: Side;
+  influence: string | null;
+  engagement_score: number | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DealRoomDocument {
+  id: string;
+  room_id: string;
+  user_id: string;
+  title: string;
+  file_path: string;
+  file_type: string | null;
+  file_size: number | null;
+  uploaded_by_side: Side;
+  created_at: string;
+}
+
+export interface DealRoomActivity {
+  id: string;
+  room_id: string;
+  activity_type: string;
+  actor_side: Side;
+  actor_label: string;
+  payload: any;
+  created_at: string;
+}
+
+export interface DealRoomComment {
+  id: string;
+  room_id: string;
+  user_id: string | null;
+  author_side: Side;
+  author_label: string;
+  body: string;
+  created_at: string;
+}
+
 const KEYS = {
   rooms: ["deal_rooms"] as const,
   room: (id: string) => ["deal_rooms", id] as const,
@@ -87,7 +151,7 @@ export function useCreateDealRoom() {
       qc.invalidateQueries({ queryKey: KEYS.rooms });
       toast.success("Deal Room criado");
     },
-    onError: (e: any) => toast.error(e.message),
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
@@ -103,7 +167,7 @@ export function useUpdateDealRoom() {
       qc.invalidateQueries({ queryKey: KEYS.rooms });
       qc.invalidateQueries({ queryKey: KEYS.room(d.id) });
     },
-    onError: (e: any) => toast.error(e.message),
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
@@ -118,6 +182,7 @@ export function useDeleteDealRoom() {
       qc.invalidateQueries({ queryKey: KEYS.rooms });
       toast.success("Deal Room excluído");
     },
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
@@ -129,7 +194,7 @@ export function useMilestones(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_milestones").select("*").eq("room_id", roomId!).order("sort_order");
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as DealRoomMilestone[];
     },
   });
 }
@@ -137,16 +202,16 @@ export function useMilestones(roomId: string | undefined) {
 export function useUpsertMilestone(roomId: string) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (m: any) => {
+    mutationFn: async (m: Partial<DealRoomMilestone>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
-      const payload = { ...m, room_id: roomId, user_id: user.id };
+      const payload = { ...m, room_id: roomId, user_id: user.id } as any;
       const { data, error } = await supabase.from("deal_room_milestones").upsert(payload).select("*").single();
       if (error) throw error;
-      return data;
+      return data as DealRoomMilestone;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.ms(roomId) }),
-    onError: (e: any) => toast.error(e.message),
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
@@ -158,6 +223,7 @@ export function useDeleteMilestone(roomId: string) {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.ms(roomId) }),
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
@@ -169,7 +235,7 @@ export function useStakeholders(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_stakeholders").select("*").eq("room_id", roomId!);
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as any as DealRoomStakeholder[];
     },
   });
 }
@@ -177,15 +243,16 @@ export function useStakeholders(roomId: string | undefined) {
 export function useUpsertStakeholder(roomId: string) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (s: any) => {
+    mutationFn: async (s: Partial<DealRoomStakeholder>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
-      const { data, error } = await supabase.from("deal_room_stakeholders").upsert({ ...s, room_id: roomId, user_id: user.id }).select("*").single();
+      const payload = { ...s, room_id: roomId, user_id: user.id } as any;
+      const { data, error } = await supabase.from("deal_room_stakeholders").upsert(payload).select("*").single();
       if (error) throw error;
-      return data;
+      return data as any as DealRoomStakeholder;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.sh(roomId) }),
-    onError: (e: any) => toast.error(e.message),
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
@@ -197,6 +264,7 @@ export function useDeleteStakeholder(roomId: string) {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.sh(roomId) }),
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
@@ -208,7 +276,7 @@ export function useRoomDocuments(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_documents").select("*").eq("room_id", roomId!).order("created_at", { ascending: false });
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as DealRoomDocument[];
     },
   });
 }
@@ -227,13 +295,13 @@ export function useUploadDocument(roomId: string) {
         file_type: file.type, file_size: file.size, uploaded_by_side: "seller",
       }).select("*").single();
       if (error) throw error;
-      return data;
+      return data as DealRoomDocument;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: KEYS.docs(roomId) });
       toast.success("Documento enviado");
     },
-    onError: (e: any) => toast.error(e.message),
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
@@ -246,6 +314,7 @@ export function useDeleteDocument(roomId: string) {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.docs(roomId) }),
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
@@ -263,7 +332,7 @@ export function useRoomActivities(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_activities").select("*").eq("room_id", roomId!).order("created_at", { ascending: false }).limit(100);
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as any as DealRoomActivity[];
     },
   });
 }
@@ -275,7 +344,7 @@ export function useRoomComments(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_comments").select("*").eq("room_id", roomId!).order("created_at");
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as any as DealRoomComment[];
     },
   });
 }
@@ -290,9 +359,10 @@ export function useAddComment(roomId: string) {
         room_id: roomId, user_id: user.id, author_side: "seller", author_label: user.email ?? "Vendedor", body,
       }).select("*").single();
       if (error) throw error;
-      return data;
+      return data as DealRoomComment;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.cmts(roomId) }),
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
@@ -309,7 +379,7 @@ export function useShareRoom() {
       qc.invalidateQueries({ queryKey: KEYS.room(vars.room_id) });
       qc.invalidateQueries({ queryKey: KEYS.rooms });
     },
-    onError: (e: any) => toast.error(e.message),
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
@@ -322,7 +392,7 @@ export function useRoomHealth() {
       return data as { health_score: number; recommendations: string[] };
     },
     onSuccess: (_d, room_id) => qc.invalidateQueries({ queryKey: KEYS.room(room_id) }),
-    onError: (e: any) => toast.error(e.message),
+    onError: (e: Error) => toast.error(e.message),
   });
 }
 
@@ -334,7 +404,14 @@ export function usePublicDealRoom(token: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_deal_room_by_token", { _token: token! });
       if (error) throw error;
-      return data as any;
+      return data as any as { 
+        room: DealRoom; 
+        milestones: DealRoomMilestone[]; 
+        stakeholders: DealRoomStakeholder[]; 
+        documents: DealRoomDocument[]; 
+        activities: DealRoomActivity[]; 
+        comments: DealRoomComment[]; 
+      };
     },
   });
 }
@@ -356,8 +433,5 @@ export async function buyerAddComment(token: string, body: string, label?: strin
 export async function getBuyerDocumentUrl(token: string, document_id: string) {
   const { data: path, error } = await supabase.rpc("get_buyer_document_path", { _token: token, _document_id: document_id });
   if (error || !path) throw error ?? new Error("Documento não encontrado");
-  // Note: Without auth, signed URLs require server. For MVP, expose path; storage RLS will block anon.
-  // For buyer downloads, owner must allow public bucket OR use server signed URL endpoint.
-  // Here, we return RPC-validated path and let edge sign if needed in future iteration.
   return path as string;
 }

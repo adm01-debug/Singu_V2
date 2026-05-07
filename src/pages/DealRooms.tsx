@@ -55,7 +55,7 @@ export default function DealRooms() {
         </Dialog>
       </div>
 
-      <Tabs value={status} onValueChange={(v) => setStatus(v as any)}>
+      <Tabs value={status} onValueChange={(v) => setStatus(v as DealRoomStatus | "all")}>
         <TabsList>
           <TabsTrigger value="all">Todos</TabsTrigger>
           <TabsTrigger value="active">Ativos</TabsTrigger>

@@ -31,7 +31,7 @@ export function useKnowledgeBase() {
         .eq('user_id', user.id)
         .order('updated_at', { ascending: false });
       if (error) throw error;
-      return (data || []) as unknown as KBArticle[];
+      return (data || []) as KBArticle[];
     },
     staleTime: 5 * 60_000,
   });

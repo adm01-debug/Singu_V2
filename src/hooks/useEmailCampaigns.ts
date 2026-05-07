@@ -36,7 +36,7 @@ export function useEmailCampaigns() {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
       if (error) throw error;
-      return (data || []) as unknown as EmailCampaign[];
+      return (data || []) as EmailCampaign[];
     },
     staleTime: 2 * 60_000,
   });
@@ -50,7 +50,7 @@ export function useEmailCampaigns() {
         .select()
         .single();
       if (error) throw error;
-      return data;
+      return data as EmailCampaign;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha criada!'); },
     onError: (e: Error) => toast.error(e.message),
@@ -58,7 +58,7 @@ export function useEmailCampaigns() {
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<EmailCampaign> & { id: string }) => {
-      const { error } = await supabase.from('email_campaigns').update(updates as any).eq('id', id);
+      const { error } = await supabase.from('email_campaigns').update(updates).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha atualizada!'); },

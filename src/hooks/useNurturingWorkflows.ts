@@ -84,7 +84,7 @@ export function useNurturingWorkflows() {
 
   const toggleActive = useMutation({
     mutationFn: async ({ id, is_active }: { id: string; is_active: boolean }) => {
-      const { error } = await supabase.from('nurturing_workflows').update({ is_active } as any).eq('id', id);
+      const { error } = await supabase.from('nurturing_workflows').update({ is_active }).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); },
