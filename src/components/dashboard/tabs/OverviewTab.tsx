@@ -73,33 +73,33 @@ export function OverviewTab({
       <DashboardStatsGrid stats={stats} prefersReducedMotion={prefersReducedMotion} />
 
       {/* 1b. Executive KPIs + Weekly Summary */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2">
         <DashboardErrorBoundary sectionName="KPIs Executivos">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+          <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-40 w-full" />}>
             <ExecutiveKpisWidget />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Resumo Semanal">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+          <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-40 w-full" />}>
             <WeeklySummaryWidget />
           </Suspense>
         </DashboardErrorBoundary>
       </div>
 
       {/* 2. Your Day + Pending Followups */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-3">
         <DashboardErrorBoundary sectionName="Seu Dia">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+          <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-40 w-full" />}>
             <YourDaySection />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Resumo Diário">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+          <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-40 w-full" />}>
             <DailySummaryWidget />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Follow-ups">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+          <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-40 w-full" />}>
             <PendingFollowupsWidget />
           </Suspense>
         </DashboardErrorBoundary>
@@ -113,8 +113,8 @@ export function OverviewTab({
               variant="outline"
               size="sm"
               className={cn(
-                "w-full gap-2 text-muted-foreground hover:text-primary border-dashed hover:border-primary/40 hover:bg-primary/5 transition-all duration-200",
-                briefingOpen && "border-primary/30 bg-primary/5 text-primary"
+                "w-full gap-3 py-6 text-muted-foreground hover:text-primary border-dashed hover:border-primary/40 hover:bg-primary/5 transition-all duration-300 rounded-2xl group",
+                briefingOpen && "border-primary/30 bg-primary/5 text-primary shadow-soft"
               )}
             >
               <div className="w-5 h-5 rounded-md bg-primary/10 flex items-center justify-center">
