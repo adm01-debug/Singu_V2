@@ -127,7 +127,7 @@ export function useDocumentTemplates() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('document_templates' as any).delete().eq('id', id);
+      const { error } = await supabase.from('document_templates').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
