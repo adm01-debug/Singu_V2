@@ -45,7 +45,7 @@ export function useSupportTickets() {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
       if (error) throw error;
-      return (data || []) as unknown as SupportTicket[];
+      return (data || []) as SupportTicket[];
     },
     staleTime: 2 * 60_000,
   });
