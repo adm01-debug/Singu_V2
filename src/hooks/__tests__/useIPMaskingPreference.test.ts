@@ -6,6 +6,7 @@ describe('useIPMaskingPreference', () => {
   beforeEach(() => {
     window.localStorage.clear();
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('deve inicializar como false (default seguro)', () => {
@@ -75,9 +76,12 @@ describe('useIPMaskingPreference', () => {
   });
 
   it('deve ser tolerante a falhas no localStorage (modo privado)', () => {
-    const setItemSpy = vi.spyOn(window.localStorage, 'setItem').mockImplementation(() => {
+    // Mockamos especificamente o setItem para lançar erro
+    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new Error('QuotaExceededError');
     });
+    
+    // Capturamos console.warn para verificar se o log de erro foi disparado
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     const { result } = renderHook(() => useIPMaskingPreference());
@@ -88,9 +92,13 @@ describe('useIPMaskingPreference', () => {
 
     // Estado em memória deve atualizar mesmo com erro no storage
     expect(result.current.masked).toBe(true);
-    expect(warnSpy).toHaveBeenCalled();
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('[useIPMaskingPreference] Falha ao persistir preferência:'),
+      expect.any(Error)
+    );
 
     setItemSpy.mockRestore();
     warnSpy.mockRestore();
   });
 });
+
