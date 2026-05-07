@@ -160,6 +160,21 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
         cleanUpdates.cargo = updates.role_title;
       }
 
+      // Map local relationship_stage to external relationship_stage if provided (it matches 1:1)
+      if (updates.relationship_stage) {
+        cleanUpdates.relationship_stage = updates.relationship_stage;
+      }
+
+      // Map local relationship_score to external relationship_score if provided (it matches 1:1)
+      if (updates.relationship_score !== undefined) {
+        cleanUpdates.relationship_score = updates.relationship_score;
+      }
+
+      // Map local sentiment to external sentiment if provided (it matches 1:1)
+      if (updates.sentiment) {
+        cleanUpdates.sentiment = updates.sentiment;
+      }
+
       const { data, error } = expectedVersion !== undefined
         ? await updateExternalDataWithVersion<Contact>('contacts', id, expectedVersion, cleanUpdates)
         : await updateExternalData<Contact>('contacts', id, cleanUpdates);
