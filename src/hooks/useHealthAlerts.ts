@@ -168,8 +168,9 @@ export function useHealthAlerts() {
       setSettings(data as HealthAlertSettings);
       toast.success('Configurações salvas');
     } catch (error) {
-      logger.error('Error saving settings:', error);
-      toast.error('Erro ao salvar configurações');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error saving settings:', { error: msg });
+      toast.error('Erro ao salvar configurações', { description: msg });
     }
   }, [userId, settings, setSettings]);
 
