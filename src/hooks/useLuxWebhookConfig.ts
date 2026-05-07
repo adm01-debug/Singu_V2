@@ -58,7 +58,7 @@ export function useLuxWebhookConfig() {
     mutationFn: async ({ id, is_active }: { id: string; is_active: boolean }) => {
       const { error } = await supabase
         .from('lux_webhook_config')
-        .update({ is_active } as any)
+        .update({ is_active })
         .eq('id', id);
       if (error) throw error;
     },
@@ -91,7 +91,7 @@ export function useLuxWebhookConfig() {
         const status = res.ok ? 'success' : `error:${res.status}`;
         await supabase
           .from('lux_webhook_config')
-          .update({ last_test_at: new Date().toISOString(), last_test_status: status } as any)
+          .update({ last_test_at: new Date().toISOString(), last_test_status: status })
           .eq('id', config.id);
         qc.invalidateQueries({ queryKey: ['lux-webhook-config'] });
 
@@ -101,7 +101,7 @@ export function useLuxWebhookConfig() {
         const msg = err instanceof Error ? err.message : 'Erro';
         await supabase
           .from('lux_webhook_config')
-          .update({ last_test_at: new Date().toISOString(), last_test_status: `error:${msg}` } as any)
+          .update({ last_test_at: new Date().toISOString(), last_test_status: `error:${msg}` })
           .eq('id', config.id);
         qc.invalidateQueries({ queryKey: ['lux-webhook-config'] });
         throw err;
