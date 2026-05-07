@@ -246,10 +246,10 @@ export function useUpsertStakeholder(roomId: string) {
     mutationFn: async (s: Partial<DealRoomStakeholder>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
-      const payload = { ...s, room_id: roomId, user_id: user.id } as any;
-      const { data, error } = await supabase.from("deal_room_stakeholders").upsert(payload).select("*").single();
+      const payload = { ...s, room_id: roomId, user_id: user.id };
+      const { data, error } = await supabase.from("deal_room_stakeholders").upsert(payload as any).select("*").single();
       if (error) throw error;
-      return data as any as DealRoomStakeholder;
+      return data as unknown as DealRoomStakeholder;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.sh(roomId) }),
     onError: (e: Error) => toast.error(e.message),
