@@ -60,8 +60,7 @@ export function useSupportTickets() {
         user_id: user.id,
       };
       
-      // Delete properties that might cause TS issues if Partial<SupportTicket> 
-      // contains fields not in the Insert type or handled automatically
+      // Remove metadata fields that Supabase handles automatically
       if ('id' in insertData) delete insertData.id;
       if ('created_at' in insertData) delete insertData.created_at;
       if ('updated_at' in insertData) delete insertData.updated_at;
