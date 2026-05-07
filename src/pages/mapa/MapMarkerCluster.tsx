@@ -38,17 +38,14 @@ export interface MappableCompany {
   relationship_score: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function MarkerClusterLayer({ companies }: { companies: MappableCompany[] }) {
   const map = useMap();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const clusterRef = useRef<any>(null);
+  const clusterRef = useRef<L.MarkerClusterGroup | null>(null);
 
   useEffect(() => {
     if (clusterRef.current) map.removeLayer(clusterRef.current);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const cluster = (L as any).markerClusterGroup({
+    const cluster = L.markerClusterGroup({
       chunkedLoading: true, maxClusterRadius: 50, spiderfyOnMaxZoom: true, showCoverageOnHover: false,
       iconCreateFunction: (c: { getChildCount: () => number }) => {
         const count = c.getChildCount();
