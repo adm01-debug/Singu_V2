@@ -126,7 +126,8 @@ export function BulkActionsBar({
       await onToggleFavorite(selectedIds);
       toast.success(`${selectedCount} itens atualizados`);
     } catch (error) {
-      toast.error('Erro ao atualizar favoritos');
+      const msg = error instanceof Error ? error.message : 'Erro ao atualizar favoritos';
+      toast.error(msg);
     } finally {
       setIsProcessing(false);
     }
