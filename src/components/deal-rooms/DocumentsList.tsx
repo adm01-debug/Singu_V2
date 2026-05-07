@@ -15,7 +15,10 @@ export function DocumentsList({ roomId }: { roomId: string }) {
     try {
       const url = await getDocumentSignedUrl(path);
       window.open(url, "_blank");
-    } catch (e: any) { toast.error(e.message); }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Erro ao baixar arquivo";
+      toast.error(msg);
+    }
   };
 
   return (
