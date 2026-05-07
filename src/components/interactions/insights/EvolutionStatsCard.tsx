@@ -1,8 +1,9 @@
-import { ShieldCheck, Shield, ShieldAlert, HelpCircle, Info } from "lucide-react";
+import { ShieldCheck, Shield, ShieldAlert, HelpCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip as UITooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 export type EvolutionDirection = "up" | "stable" | "down";
 
@@ -20,7 +21,7 @@ export interface ConfidenceInfo {
   stdDev: number;
   n: number;
   label: string;
-  icon: any;
+  icon: LucideIcon;
   colorClass: string;
 }
 
