@@ -200,7 +200,8 @@ export function useTriggerHistory(contactId?: string) {
       return true;
     } catch (error) {
       applyHistoryState(previousHistory);
-      logger.error('Error updating trigger usage:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error updating trigger usage:', { error: msg });
       return false;
     }
   };
