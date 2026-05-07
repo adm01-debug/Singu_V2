@@ -69,7 +69,8 @@ function useHealthAlertsFetch(userId?: string) {
       if (error) throw error;
       setAlerts((data || []) as unknown as HealthAlert[]);
     } catch (error) {
-      logger.error('Error fetching health alerts:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching health alerts:', { error: msg });
     } finally {
       setLoading(false);
     }
