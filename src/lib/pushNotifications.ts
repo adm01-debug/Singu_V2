@@ -33,7 +33,8 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
     logger.info('Service Worker registered:', registration);
     return registration;
   } catch (error) {
-    logger.error('Service Worker registration failed:', error);
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Service Worker registration failed:', { error: msg });
     return null;
   }
 }
