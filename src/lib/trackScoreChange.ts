@@ -24,6 +24,7 @@ export async function trackScoreChange(params: {
       factors: (params.factors ?? null) as Json,
     }]);
   } catch (error) {
-    logger.warn('Failed to track score change', error);
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    logger.warn('Failed to track score change', { error: msg });
   }
 }
