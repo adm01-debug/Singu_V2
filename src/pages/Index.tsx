@@ -114,23 +114,23 @@ const Dashboard = () => {
         {/* Dashboard Tabs */}
         <div ref={tabsRef}>
           <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-            <div className="sticky top-[57px] md:top-0 z-10 -mx-4 border-b border-border/30 bg-background/80 px-4 pb-3 pt-2 shadow-[0_16px_40px_-34px_hsl(var(--foreground)/0.7)] backdrop-blur-lg md:-mx-6 md:px-6">
-              <TabsList className="grid w-full grid-cols-4 relative">
+            <div className="sticky top-[57px] md:top-0 z-10 -mx-4 border-b border-border/20 bg-background/60 px-4 pb-4 pt-2 shadow-soft backdrop-blur-xl md:-mx-6 md:px-6 transition-all duration-300">
+              <TabsList className="grid w-full grid-cols-4 relative h-12 p-1.5 bg-secondary/5 border border-border/30 rounded-2xl overflow-hidden shadow-inner-sm">
                 {TAB_CONFIG.map(tab => (
                   <TabsTrigger
                     key={tab.value}
                     value={tab.value}
-                    className="relative z-[1] gap-1 rounded-xl text-[11px] font-medium transition-colors active:scale-[0.97] data-[state=active]:text-primary-foreground data-[state=inactive]:text-muted-foreground/80 data-[state=inactive]:hover:text-foreground sm:text-sm"
+                    className="relative z-[1] gap-2 rounded-xl text-xs font-semibold transition-all duration-300 data-[state=active]:text-primary-foreground data-[state=inactive]:text-muted-foreground/60 data-[state=inactive]:hover:text-foreground data-[state=active]:shadow-lg sm:text-sm group h-full"
                   >
                     {activeTab === tab.value && (
                       <motion.div
                         layoutId="dashboard-tab-indicator"
-                        className="absolute inset-0 bg-primary rounded-lg shadow-md"
+                        className="absolute inset-0 bg-primary rounded-xl shadow-lg shadow-primary/20"
                         transition={{ type: 'spring', bounce: 0.15, duration: 0.4 }}
                       />
                     )}
                     <span className="relative z-[1] flex items-center gap-1">
-                      <tab.icon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                      <tab.icon className="w-3.5 h-3.5 shrink-0 group-hover:scale-110 transition-transform duration-300" aria-hidden="true" />
                       <span className="truncate text-[11px] sm:text-sm">{tab.label}</span>
                     </span>
                   </TabsTrigger>
