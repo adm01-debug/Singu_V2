@@ -116,7 +116,10 @@ export function useInteractions(contactId?: string, companyId?: string, options?
             data.transcription,
             data.type,
             true // showToast
-          ).catch(err => logger.error('NLP analysis error:', err));
+          ).catch(err => {
+            const msg = err instanceof Error ? err.message : 'Unknown error';
+            logger.error('NLP analysis error:', { error: msg });
+          });
         }
       }
 
