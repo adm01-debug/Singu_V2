@@ -48,7 +48,8 @@ export function useTemplateNotifications() {
         });
       }
     } catch (error) {
-      logger.error('Error loading notification settings:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error loading notification settings:', { error: msg });
     } finally {
       setLoading(false);
     }
