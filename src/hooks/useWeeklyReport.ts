@@ -170,8 +170,9 @@ export function useWeeklyReport() {
       toast.info('Relatório gerado - verifique seu email se configurado');
       return data;
     } catch (error) {
-      logger.error('Error generating report:', error);
-      toast.error('Erro ao gerar relatório');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error generating report:', { error: msg });
+      toast.error('Erro ao gerar relatório', { description: msg });
       return null;
     } finally {
       setGenerating(false);
