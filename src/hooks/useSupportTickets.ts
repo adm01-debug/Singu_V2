@@ -117,7 +117,7 @@ export function useTicketComments(ticketId?: string) {
         .eq('ticket_id', ticketId)
         .order('created_at');
       if (error) throw error;
-      return (data || []) as unknown as TicketComment[];
+      return (data || []) as TicketComment[];
     },
     enabled: !!ticketId,
   });
