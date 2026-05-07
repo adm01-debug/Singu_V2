@@ -220,7 +220,8 @@ export const useNotifications = () => {
         }
       }
     } catch (error) {
-      logger.error('Error checking follow-up alerts:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error checking follow-up alerts:', { error: msg });
     }
   }, [permissionState.permission, showNotification]);
 
