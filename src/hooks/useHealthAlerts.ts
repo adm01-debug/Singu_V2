@@ -96,7 +96,8 @@ function useHealthAlertSettingsFetch(userId?: string) {
       if (error) throw error;
       setSettings(data as HealthAlertSettings | null);
     } catch (error) {
-      logger.error('Error fetching health alert settings:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching health alert settings:', { error: msg });
     } finally {
       setLoading(false);
     }
