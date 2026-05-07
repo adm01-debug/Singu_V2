@@ -401,8 +401,9 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
       toast.success('Perfil DISC salvo com sucesso');
       await fetchAnalysisHistory();
     } catch (err) {
-      logger.error('Error saving manual DISC profile:', err);
-      toast.error('Erro ao salvar perfil DISC');
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Error saving manual DISC profile:', { error: msg });
+      toast.error('Erro ao salvar perfil DISC', { description: msg });
     }
   }, [user, contactId, fetchAnalysisHistory]);
 
