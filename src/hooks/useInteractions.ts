@@ -66,9 +66,10 @@ export function useInteractions(contactId?: string, companyId?: string, options?
         .from('interactions')
         .insert({ ...interaction, user_id: user.id })
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error('Falha ao criar interação: nenhum dado retornado.');
 
       queryClient.setQueryData<Interaction[]>(queryKey, prev => prev ? [data, ...prev] : [data]);
       toast({
@@ -140,9 +141,10 @@ export function useInteractions(contactId?: string, companyId?: string, options?
         .update(updates)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error('Interação não encontrada ou permissão insuficiente para atualizar.');
 
       queryClient.setQueryData<Interaction[]>(queryKey, prev =>
         prev?.map(i => i.id === id ? data : i) ?? []

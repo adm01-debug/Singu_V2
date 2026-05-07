@@ -4159,6 +4159,42 @@ export type Database = {
           },
         ]
       }
+      error_logs: {
+        Row: {
+          context: Json | null
+          created_at: string
+          id: string
+          message: string
+          severity: Database["public"]["Enums"]["error_severity"]
+          stack: string | null
+          url: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          context?: Json | null
+          created_at?: string
+          id?: string
+          message: string
+          severity?: Database["public"]["Enums"]["error_severity"]
+          stack?: string | null
+          url?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          context?: Json | null
+          created_at?: string
+          id?: string
+          message?: string
+          severity?: Database["public"]["Enums"]["error_severity"]
+          stack?: string | null
+          url?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       favorite_templates: {
         Row: {
           created_at: string
@@ -10606,6 +10642,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      error_severity: "info" | "warning" | "error" | "critical"
       passo_outcome:
         | "respondeu_positivo"
         | "respondeu_neutro"
@@ -10742,6 +10779,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      error_severity: ["info", "warning", "error", "critical"],
       passo_outcome: [
         "respondeu_positivo",
         "respondeu_neutro",

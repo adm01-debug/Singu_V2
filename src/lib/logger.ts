@@ -1,21 +1,52 @@
+import { supabase } from "@/integrations/supabase/client";
+
 /**
- * Logger centralizado — suprime output em produção.
- * Em dev: logs estruturados com timestamp e requestId.
- * Em prod: silencioso (zero console output).
+ * Logger centralizado — suprime output em produção no console,
+ * mas envia erros para o banco de dados (tabela error_logs).
  */
 
 const isDev = import.meta.env.DEV;
 
 let _requestId: string | null = null;
+let _userId: string | null = null;
 
 /** Set a correlation ID for the current request/operation flow */
 export function setRequestId(id: string) {
   _requestId = id;
 }
 
+/** Set the current user ID for logging */
+export function setLogUser(id: string | null) {
+  _userId = id;
+}
+
 /** Generate a short unique request ID */
 export function generateRequestId(): string {
   return `req_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`;
+}
+
+async function persistError(message: string, severity: 'info' | 'warning' | 'error' | 'critical', args: unknown[]) {
+  try {
+    const errorObj = args.find(a => a instanceof Error) as Error | undefined;
+    const context = args.filter(a => !(a instanceof Error));
+
+    await supabase.from('error_logs').insert([{
+      message,
+      severity,
+      stack: errorObj?.stack || null,
+      url: typeof window !== 'undefined' ? window.location.href : null,
+      user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+      user_id: _userId || null,
+      context: {
+        rid: _requestId,
+        extra: context as any,
+        timestamp: new Date().toISOString()
+      } as any
+    }]);
+  } catch (err) {
+    // Falha silenciosa no logger para evitar loop infinito
+    if (isDev) console.error('[Logger] Falha ao persistir erro no banco:', err);
+  }
 }
 
 function formatArgs(level: string, args: unknown[]): unknown[] {
@@ -29,17 +60,23 @@ function formatArgs(level: string, args: unknown[]): unknown[] {
 }
 
 export const logger = {
-  error: (...args: unknown[]) => {
-    if (isDev) console.error(...formatArgs('error', args));
+  error: (message: string, ...args: unknown[]) => {
+    if (isDev) console.error(...formatArgs('error', [message, ...args]));
+    persistError(message, 'error', args);
   },
-  warn: (...args: unknown[]) => {
-    if (isDev) console.warn(...formatArgs('warn', args));
+  critical: (message: string, ...args: unknown[]) => {
+    if (isDev) console.error(...formatArgs('critical', [message, ...args]));
+    persistError(message, 'critical', args);
   },
-  info: (...args: unknown[]) => {
-    if (isDev) console.info(...formatArgs('info', args));
+  warn: (message: string, ...args: unknown[]) => {
+    if (isDev) console.warn(...formatArgs('warn', [message, ...args]));
+    // Em prod, persistimos apenas se for aviso importante ou erro
   },
-  log: (...args: unknown[]) => {
-    if (isDev) console.log(...formatArgs('log', args));
+  info: (message: string, ...args: unknown[]) => {
+    if (isDev) console.info(...formatArgs('info', [message, ...args]));
+  },
+  log: (message: string, ...args: unknown[]) => {
+    if (isDev) console.log(...formatArgs('log', [message, ...args]));
   },
   group: (label: string) => {
     if (isDev) console.group(label);
@@ -47,7 +84,6 @@ export const logger = {
   groupEnd: () => {
     if (isDev) console.groupEnd();
   },
-  /** Structured log entry as JSON (useful for debugging complex flows) */
   structured: (event: string, data?: Record<string, unknown>) => {
     if (isDev) {
       console.log(JSON.stringify({
