@@ -209,7 +209,8 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
 
       return record;
     } catch (err) {
-      logger.error('DISC analysis error:', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('DISC analysis error:', { error: msg });
       toast.error('Erro na análise DISC');
       return null;
     } finally {
