@@ -144,7 +144,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         if (vowels < 2) return false;
         return true;
       })
-      .sort((a, b) => ((b as any).relationship_score || 0) - ((a as any).relationship_score || 0))
+      .sort((a, b) => (b.relationship_score || 0) - (a.relationship_score || 0))
       .slice(0, 4)
       .map(contact => {
         const company = contact.company_id ? companyMap.get(contact.company_id) : undefined;
