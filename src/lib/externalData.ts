@@ -184,7 +184,8 @@ export async function updateExternalDataWithVersion<T = Record<string, unknown>>
         error: new ConcurrentEditError(parsed.table, parsed.id, parsed.attemptedVersion, parsed.traceId),
       };
     }
-    logger.error('Error updating external data with version:', err);
+    const msgFinal = err instanceof Error ? err.message : 'Unknown error';
+    logger.error('Error updating external data with version:', { error: msgFinal });
     return { data: null, error: err as Error };
   }
 }
