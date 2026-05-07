@@ -135,8 +135,9 @@ const OnboardingWizard = ({ onComplete }: OnboardingWizardProps) => {
       toast.success('🎉 Onboarding concluído! Bem-vindo ao SINGU!');
       onComplete();
     } catch (error) {
-      logger.error('Error completing onboarding:', error);
-      toast.error('Erro ao salvar configurações. Tente novamente.');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error completing onboarding:', { error: msg });
+      toast.error('Erro ao salvar configurações. Tente novamente.', { description: msg });
     } finally {
       setIsLoading(false);
     }
