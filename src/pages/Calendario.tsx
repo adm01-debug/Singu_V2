@@ -68,8 +68,9 @@ const Calendario = () => {
       setSelectedFollowUp(null);
       celebrate({ type: 'follow-up-complete', title: 'Follow-up Concluído! 🎉', subtitle: followUp?.contact ? `Ótimo trabalho com ${followUp.contact.first_name}!` : 'Continue mantendo seus relacionamentos em dia!', duration: 3000 });
     } catch (error) {
-      logger.error('Error marking as completed:', error);
-      toast.error('Erro ao concluir follow-up. Tente novamente.');
+      const msg = error instanceof Error ? error.message : 'Erro ao concluir follow-up';
+      logger.error('Error marking as completed:', { error: msg });
+      toast.error(msg);
     }
   };
 
