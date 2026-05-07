@@ -186,7 +186,10 @@ const Ficha360 = () => {
     navigator.clipboard
       .writeText(url)
       .then(() => toast.success('Link copiado', { duration: 2000 }))
-      .catch(() => toast.error('Não foi possível copiar o link'));
+      .catch((err) => {
+        const msg = err instanceof Error ? err.message : 'Não foi possível copiar o link';
+        toast.error(msg);
+      });
   };
 
   // Controle do menu de favoritos (atalho Shift+F abre o popover).
