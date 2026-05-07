@@ -130,7 +130,7 @@ export function OverviewTab({
             </Button>
           </CollapsibleTrigger>
           <CollapsibleContent className="mt-3">
-            <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+            <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-40 w-full" />}>
               <PreContactBriefing compact />
             </Suspense>
           </CollapsibleContent>
@@ -140,12 +140,12 @@ export function OverviewTab({
       {/* 3b. Today's Reminders + Active Alerts */}
       <div className="grid gap-4 md:grid-cols-2">
         <DashboardErrorBoundary sectionName="Lembretes">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+            <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-40 w-full" />}>
             <TodaysRemindersWidget />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Alertas">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+            <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-40 w-full" />}>
             <ActiveAlertsWidget />
           </Suspense>
         </DashboardErrorBoundary>
@@ -154,12 +154,12 @@ export function OverviewTab({
       {/* 3c. Business Alerts + Strategic Accounts */}
       <div className="grid gap-4 md:grid-cols-2">
         <DashboardErrorBoundary sectionName="Alertas de Negócio">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+            <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-40 w-full" />}>
             <BusinessAlertsWidget />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Contas Estratégicas">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+            <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-40 w-full" />}>
             <StrategicAccountsWidget />
           </Suspense>
         </DashboardErrorBoundary>
@@ -167,53 +167,53 @@ export function OverviewTab({
 
       {/* 3c. Data Quality */}
       <DashboardErrorBoundary sectionName="Qualidade de Dados">
-        <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+        <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-40 w-full" />}>
           <DataQualityWidget />
         </Suspense>
       </DashboardErrorBoundary>
 
       {/* 4a. Painel Executivo */}
       <DashboardErrorBoundary sectionName="Painel Executivo">
-        <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+        <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-60 w-full" />}>
           <CompleteDashboardWidget />
         </Suspense>
       </DashboardErrorBoundary>
 
       {/* 4b. KPIs Diários + Cadência */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <DashboardErrorBoundary sectionName="KPIs Diários">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-28 w-full" />}>
+            <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-32 w-full" />}>
             <DailyKpisWidget />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Cadência">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-28 w-full" />}>
+            <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-32 w-full" />}>
             <CadenceAlertWidget />
           </Suspense>
         </DashboardErrorBoundary>
       </div>
 
       {/* 5. Notificações + Insights + Churn */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <DashboardErrorBoundary sectionName="Notificações">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-28 w-full" />}>
+            <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-32 w-full" />}>
             <PendingNotificationsWidget />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Insights Diários">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-28 w-full" />}>
+            <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-32 w-full" />}>
             <DailyInsightsWidget />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Relatório Churn">
-          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-28 w-full" />}>
+          <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-32 w-full" />}>
             <ChurnRiskReportWidget />
           </Suspense>
         </DashboardErrorBoundary>
       </div>
 
       {/* 6. Recent Activity + Top Contacts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <DashboardErrorBoundary sectionName="Atividade Recente">
           <motion.div
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
