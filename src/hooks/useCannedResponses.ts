@@ -51,7 +51,9 @@ export function useCannedResponses() {
     mutationFn: async (id: string) => {
       const r = responses.find(r => r.id === id);
       if (!r) return '';
-      await supabase.from('canned_responses').update({ usage_count: r.usage_count + 1 } as any).eq('id', id);
+      await supabase.from('canned_responses').update({
+        usage_count: r.usage_count + 1
+      }).eq('id', id);
       return r.content;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: key }),
