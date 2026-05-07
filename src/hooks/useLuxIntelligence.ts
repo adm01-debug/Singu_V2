@@ -110,7 +110,8 @@ export function useLuxIntelligence(entityType: 'contact' | 'company', entityId?:
       setRecords(typed);
       setLatestRecord(typed[0] || null);
     } catch (err) {
-      logger.error('Error fetching lux records:', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Error fetching lux records:', { error: msg });
     } finally {
       setLoading(false);
     }
