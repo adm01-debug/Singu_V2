@@ -97,7 +97,10 @@ export function useInteractions(contactId?: string, companyId?: string, options?
                 description: `Perfil: ${discResult.analysis?.blendProfile || discResult.analysis?.primaryProfile}`,
               });
             }
-          }).catch(err => logger.error('DISC analysis error:', err));
+          }).catch(err => {
+            const msg = err instanceof Error ? err.message : 'Unknown error';
+            logger.error('DISC analysis error:', { error: msg });
+          });
         }
       }
 
