@@ -44,7 +44,10 @@ export default function PublicDealRoom() {
       setComment("");
       await qc.invalidateQueries({ queryKey: ["deal_rooms", "public", token] });
       toast.success("Comentário enviado");
-    } catch { toast.error("Falha ao comentar"); }
+    } catch (e) { 
+      const msg = e instanceof Error ? e.message : "Falha ao comentar";
+      toast.error(msg); 
+    }
   };
 
   const saveLabel = (v: string) => {
