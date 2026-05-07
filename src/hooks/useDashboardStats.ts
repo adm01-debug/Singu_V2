@@ -125,7 +125,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
 
     const topContacts = [...contacts]
       .filter(c => {
-        if (c.relationship_score === null) return false;
+        if ((c as any).relationship_score === null) return false;
         const firstName = (c.first_name || '').trim();
         const lastName = (c.last_name || '').trim();
         if (!firstName || !lastName) return false;
