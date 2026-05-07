@@ -84,7 +84,8 @@ export async function unsubscribeFromPush(): Promise<boolean> {
     
     return true;
   } catch (error) {
-    logger.error('Failed to unsubscribe from push notifications:', error);
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Failed to unsubscribe from push notifications:', { error: msg });
     return false;
   }
 }
