@@ -109,7 +109,8 @@ async function saveSubscription(subscription: PushSubscription): Promise<void> {
     });
 
   if (error) {
-    logger.error('Failed to save subscription:', error);
+    const msg = error.message || 'Unknown error';
+    logger.error('Failed to save subscription:', { error: msg });
     throw error;
   }
 }
