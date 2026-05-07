@@ -155,7 +155,8 @@ export const useNotifications = () => {
       }
       return true;
     } catch (error) {
-      logger.error('Error showing notification:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error showing notification:', { error: msg });
       return false;
     }
   }, [permissionState.permission, requestPermission]);
