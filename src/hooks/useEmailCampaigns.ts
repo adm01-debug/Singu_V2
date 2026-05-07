@@ -45,8 +45,8 @@ export function useEmailCampaigns() {
     mutationFn: async (input: Partial<EmailCampaign>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
-      const { data, error } = await supabase.from('email_campaigns')
-        .insert({ ...input, user_id: user.id } as Record<string, any>)
+      const { data, error } = await (supabase.from('email_campaigns') as any)
+        .insert({ ...input, user_id: user.id })
         .select()
         .single();
       if (error) throw error;
