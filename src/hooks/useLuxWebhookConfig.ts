@@ -37,7 +37,7 @@ export function useLuxWebhookConfig() {
       if (existing) {
         const { error } = await supabase
           .from('lux_webhook_config')
-          .update({ ...config, updated_at: new Date().toISOString() })
+          .update({ ...config, updated_at: new Date().toISOString() } as any)
           .eq('id', existing.id);
         if (error) throw error;
       } else {
