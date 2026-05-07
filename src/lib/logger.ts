@@ -39,9 +39,9 @@ async function persistError(message: string, severity: 'info' | 'warning' | 'err
       user_id: _userId || null,
       context: {
         rid: _requestId,
-        extra: context as any,
+        extra: context,
         timestamp: new Date().toISOString()
-      } as any
+      }
     }]);
   } catch (err) {
     // Falha silenciosa no logger para evitar loop infinito
