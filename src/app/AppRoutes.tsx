@@ -11,7 +11,13 @@ import { useViewTransitions } from '@/hooks/useViewTransitions';
 import { PageTransition } from '@/components/layout/PageTransition';
 import {
   ContactsPageSkeleton,
-  ...
+  CompaniesPageSkeleton,
+  InteractionsPageSkeleton,
+  AnalyticsPageSkeleton,
+  InsightsPageSkeleton,
+  CalendarPageSkeleton,
+  SettingsPageSkeleton,
+  NetworkPageSkeleton,
 } from '@/components/skeletons/PageSkeletons';
 import Index from '@/pages/Index';
 import * as P from './lazyPages';
