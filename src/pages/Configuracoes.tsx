@@ -70,7 +70,10 @@ const Configuracoes = () => {
       await supabase.auth.updateUser({ data: { first_name: profile.first_name, last_name: profile.last_name } });
       setHasUnsavedChanges(false);
       accessibleToast.success('Perfil atualizado com sucesso!');
-    } catch { accessibleToast.error('Erro ao atualizar perfil'); }
+    } catch (error) { 
+      const msg = error instanceof Error ? error.message : 'Erro ao atualizar perfil';
+      accessibleToast.error(msg); 
+    }
     finally { setLoading(false); }
   };
 
