@@ -57,7 +57,7 @@ export function useNurturingWorkflows() {
       const { error } = await supabase.from('nurturing_workflows').insert({
         user_id: user.id, name: input.name, description: input.description || null,
         trigger_type: input.trigger_type || 'manual', steps: input.steps || [],
-      });
+      } as any);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Workflow criado!'); },
