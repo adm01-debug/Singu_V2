@@ -96,7 +96,8 @@ export function BulkActionsBar({
       await onAddTag(selectedIds, tag);
       toast.success(`Tag "${tag}" adicionada a ${selectedCount} itens`);
     } catch (error) {
-      toast.error('Erro ao adicionar tag');
+      const msg = error instanceof Error ? error.message : 'Erro ao adicionar tag';
+      toast.error(msg);
     } finally {
       setIsProcessing(false);
     }
