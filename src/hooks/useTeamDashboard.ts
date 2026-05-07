@@ -8,6 +8,8 @@ export interface TeamMemberStats {
   contacts_count: number;
   interactions_this_month: number;
   deals_count: number;
+  pipeline_value: number;
+  won_deals_value: number;
   is_on_vacation: boolean;
 }
 
