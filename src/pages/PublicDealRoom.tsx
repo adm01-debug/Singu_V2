@@ -31,7 +31,10 @@ export default function PublicDealRoom() {
     try {
       await buyerToggleMilestone(token!, mid, done, label || "Comprador");
       await qc.invalidateQueries({ queryKey: ["deal_rooms", "public", token] });
-    } catch (e: any) { toast.error("Não foi possível atualizar"); }
+    } catch (e) { 
+      const msg = e instanceof Error ? e.message : "Não foi possível atualizar";
+      toast.error(msg); 
+    }
   };
 
   const onComment = async () => {
