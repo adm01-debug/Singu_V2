@@ -136,7 +136,8 @@ export function useTriggerHistory(contactId?: string) {
 
       applyHistoryState((data as TriggerUsageEntry[]) || []);
     } catch (error) {
-      logger.error('Error fetching trigger history:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching trigger history:', { error: msg });
     } finally {
       setLoading(false);
     }
