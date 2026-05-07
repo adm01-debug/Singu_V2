@@ -62,20 +62,20 @@ export default function Automacoes() {
           </TabsContent>
           <TabsContent value="rules" className="mt-4">
             <AutomacoesRulesList
-              rules={rules as any}
-              logs={logs as any}
+              rules={rules}
+              logs={logs}
               loading={loading}
               deleteId={deleteId}
               logsRuleId={logsRuleId}
               onSetFormOpen={setFormOpen}
-              onEditRule={(rule: any) => setEditingRule({
+              onEditRule={(rule) => setEditingRule({
                 id: rule.id,
                 name: rule.name,
                 description: rule.description,
-                trigger_type: rule.trigger_type as CreateRuleData['trigger_type'],
+                trigger_type: rule.trigger_type,
                 trigger_config: rule.trigger_config as Record<string, unknown>,
-                conditions: (rule.conditions as unknown as CreateRuleData['conditions']) ?? [],
-                actions: (rule.actions as unknown as CreateRuleData['actions']) ?? [],
+                conditions: rule.conditions ?? [],
+                actions: rule.actions ?? [],
               })}
               onToggleRule={toggleRule}
               onDeleteRequest={setDeleteId}
