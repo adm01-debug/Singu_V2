@@ -176,7 +176,7 @@ export function useDocumentSignatures() {
         ? new Date(Date.now() + input.expires_in_days * 86_400_000).toISOString()
         : null;
       const { data, error } = await supabase
-        .from('document_signatures' as any)
+        .from('document_signatures')
         .insert({
           user_id: user.id,
           template_id: input.template_id ?? null,
