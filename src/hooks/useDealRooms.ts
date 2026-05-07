@@ -206,7 +206,7 @@ export function useUpsertMilestone(roomId: string) {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const payload = { ...m, room_id: roomId, user_id: user.id };
-      const { data, error } = await supabase.from("deal_room_milestones").upsert(payload as any).select("*").single();
+      const { data, error } = await (supabase.from("deal_room_milestones") as any).upsert(payload).select("*").single();
       if (error) throw error;
       return data as unknown as DealRoomMilestone;
     },
@@ -247,7 +247,7 @@ export function useUpsertStakeholder(roomId: string) {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const payload = { ...s, room_id: roomId, user_id: user.id };
-      const { data, error } = await supabase.from("deal_room_stakeholders").upsert(payload as any).select("*").single();
+      const { data, error } = await (supabase.from("deal_room_stakeholders") as any).upsert(payload).select("*").single();
       if (error) throw error;
       return data as unknown as DealRoomStakeholder;
     },

@@ -148,7 +148,7 @@ export function useVAKAnalysis() {
     if (!user) return false;
 
     try {
-      const { error } = await (supabase.from('vak_analysis_history') as any)
+      const { error } = await supabase.from('vak_analysis_history')
         .insert({
           user_id: user.id,
           contact_id: contactId,

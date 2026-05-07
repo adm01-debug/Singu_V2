@@ -79,10 +79,10 @@ export function useNLPAnalyticsData() {
       try {
         const [emRes, vakRes, cRes, vRes, oRes] = await Promise.all([
           supabase.from('emotional_states_history').select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
-          (supabase.from('vak_analysis_history') as any).select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
+          supabase.from('vak_analysis_history').select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
           supabase.from('contacts').select('behavior').eq('user_id', user!.id),
-          (supabase.from('client_values') as any).select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
-          (supabase.from('hidden_objections') as any).select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
+          supabase.from('client_values').select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
+          supabase.from('hidden_objections').select('*').eq('user_id', user!.id).gte('created_at', dateFilter),
         ]);
 
         if (emRes.error) throw emRes.error;
@@ -92,7 +92,7 @@ export function useNLPAnalyticsData() {
         if (oRes.error) throw oRes.error;
 
         const emotionalData = emRes.data;
-        const vakData = vakRes.data as any[] | null;
+        const vakData = vakRes.data;
 
         const emMap = new Map<string, { count: number; tc: number }>();
         emotionalData?.forEach(e => {

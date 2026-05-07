@@ -77,13 +77,13 @@ export function useUpsertPlaybook() {
   return useMutation({
     mutationFn: async (input: Partial<SalesPlaybook> & { id?: string }) => {
       if (!user) throw new Error("not authenticated");
-      const payload = { ...input, user_id: user.id } as any;
+      const payload = { ...input, user_id: user.id } as Record<string, any>;
       if (input.id) {
-        const { data, error } = await supabase.from("sales_playbooks").update(payload).eq("id", input.id).select().single();
+        const { data, error } = await (supabase.from("sales_playbooks") as any).update(payload).eq("id", input.id).select().single();
         if (error) throw error;
         return data as unknown as SalesPlaybook;
       }
-      const { data, error } = await supabase.from("sales_playbooks").insert(payload).select().single();
+      const { data, error } = await (supabase.from("sales_playbooks") as any).insert(payload).select().single();
       if (error) throw error;
       return data as unknown as SalesPlaybook;
     },
@@ -166,7 +166,7 @@ export function useLogPlaybookUsage() {
         battle_card_id: input.battle_card_id ?? null,
         contact_id: input.contact_id ?? null,
         deal_id: input.deal_id ?? null,
-        context: (input.context ?? {}) as any,
+        context: (input.context ?? {}) as Record<string, any>,
       });
     },
   });

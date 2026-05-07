@@ -189,8 +189,8 @@ export function useMetaprogramAnalysis() {
     if (!user) return null;
 
     try {
-      const { data, error } = await (supabase
-        .from('metaprogram_analysis') as any)
+      const { data, error } = await supabase
+        .from('metaprogram_analysis')
         .insert({
           user_id: user.id,
           contact_id: contactId,

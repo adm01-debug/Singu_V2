@@ -90,7 +90,7 @@ export function useDocumentTemplates() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const merge_fields = extractMergeFields(input.content_html || '');
-      const { error } = await supabase.from('document_templates').insert({
+      const { error } = await (supabase.from('document_templates') as any).insert({
         user_id: user.id,
         name: input.name,
         description: input.description ?? null,
@@ -99,7 +99,7 @@ export function useDocumentTemplates() {
         merge_fields,
         category: input.category ?? null,
         is_active: input.is_active ?? true,
-      } as any);
+      });
       if (error) throw error;
     },
     onSuccess: () => {
@@ -112,9 +112,9 @@ export function useDocumentTemplates() {
   const update = useMutation({
     mutationFn: async ({ id, ...input }: Partial<DocumentTemplate> & { id: string }) => {
       const merge_fields = input.content_html ? extractMergeFields(input.content_html) : undefined;
-      const { error } = await supabase
-        .from('document_templates')
-        .update({ ...input, ...(merge_fields ? { merge_fields } : {}) } as any)
+      const { error } = await (supabase
+        .from('document_templates') as any)
+        .update({ ...input, ...(merge_fields ? { merge_fields } : {}) })
         .eq('id', id);
       if (error) throw error;
     },
@@ -127,7 +127,7 @@ export function useDocumentTemplates() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('document_templates' as any).delete().eq('id', id);
+      const { error } = await supabase.from('document_templates').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -175,8 +175,8 @@ export function useDocumentSignatures() {
       const expires_at = input.expires_in_days
         ? new Date(Date.now() + input.expires_in_days * 86_400_000).toISOString()
         : null;
-      const { data, error } = await supabase
-        .from('document_signatures')
+      const { data, error } = await (supabase
+        .from('document_signatures') as any)
         .insert({
           user_id: user.id,
           template_id: input.template_id ?? null,
@@ -187,7 +187,7 @@ export function useDocumentSignatures() {
           rendered_html: input.rendered_html,
           merge_data: input.merge_data,
           expires_at,
-        } as any)
+        })
         .select()
         .single();
       if (error) throw error;
@@ -199,9 +199,9 @@ export function useDocumentSignatures() {
           .eq('id', input.template_id)
           .maybeSingle();
         if (tpl) {
-          await supabase
-            .from('document_templates')
-            .update({ usage_count: ((tpl as any).usage_count ?? 0) + 1 } as any)
+          await (supabase
+            .from('document_templates') as any)
+            .update({ usage_count: ((tpl as any).usage_count ?? 0) + 1 })
             .eq('id', input.template_id);
         }
       }
@@ -216,9 +216,9 @@ export function useDocumentSignatures() {
 
   const cancel = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from('document_signatures')
-        .update({ status: 'declined', declined_at: new Date().toISOString(), declined_reason: 'Cancelado pelo remetente' } as any)
+      const { error } = await (supabase
+        .from('document_signatures') as any)
+        .update({ status: 'declined', declined_at: new Date().toISOString(), declined_reason: 'Cancelado pelo remetente' })
         .eq('id', id);
       if (error) throw error;
     },

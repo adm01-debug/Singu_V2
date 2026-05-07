@@ -107,9 +107,9 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
       }).length;
       interactionSparkline.push(count);
     }
-    const scoresWithValue = contacts.filter(c => (c as any).relationship_score !== null && (c as any).relationship_score !== undefined);
+    const scoresWithValue = contacts.filter(c => c.relationship_score !== null && c.relationship_score !== undefined);
     const avgScore = scoresWithValue.length > 0
-      ? Math.round(scoresWithValue.reduce((sum, c) => sum + ((c as any).relationship_score || 0), 0) / scoresWithValue.length)
+      ? Math.round(scoresWithValue.reduce((sum, c) => sum + (c.relationship_score || 0), 0) / scoresWithValue.length)
       : 0;
 
     const companyMap = new Map(companies.map(c => [c.id, c]));
@@ -125,7 +125,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
 
     const topContacts = [...contacts]
       .filter(c => {
-        if ((c as any).relationship_score === null) return false;
+        if (c.relationship_score === null) return false;
         const firstName = (c.first_name || '').trim();
         const lastName = (c.last_name || '').trim();
         if (!firstName || !lastName) return false;
@@ -144,7 +144,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         if (vowels < 2) return false;
         return true;
       })
-      .sort((a, b) => ((b as any).relationship_score || 0) - ((a as any).relationship_score || 0))
+      .sort((a, b) => (b.relationship_score || 0) - (a.relationship_score || 0))
       .slice(0, 4)
       .map(contact => {
         const company = contact.company_id ? companyMap.get(contact.company_id) : undefined;
@@ -157,8 +157,8 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
           avatar: (contact as any).avatar_url || '',
           companyName: company?.name || (contact as any).role_title || '',
           role: (contact as any).role || 'contact',
-          relationshipScore: (contact as any).relationship_score || 0,
-          sentiment: (contact as any).sentiment || 'neutral',
+          relationshipScore: contact.relationship_score || 0,
+          sentiment: contact.sentiment || 'neutral',
           interactionCount: interactionCountByContact.get(contact.id) || 0,
           lastInteraction: latestDate ? new Date(latestDate) : null,
         };

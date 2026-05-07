@@ -95,7 +95,7 @@ export function useNLPAutoAnalysis() {
       const emotionalResult = detectEmotionalState(text);
       
       // Save emotional state to history
-      const { error: emotionalInsertError } = await (supabase.from('emotional_states_history') as any).insert({
+      const { error: emotionalInsertError } = await supabase.from('emotional_states_history').insert({
         user_id: user.id,
         contact_id: contactId,
         interaction_id: interactionId,

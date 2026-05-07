@@ -59,10 +59,11 @@ export function useTeamDashboard() {
         const { count: ic } = await supabase.from('interactions').select('*', { count: 'exact', head: true }).eq('user_id', uid).gte('created_at', monthAgo.toISOString());
         
         // Fetch deals and pipeline with controlled casting for dynamic queries
-        const { data: deals } = await supabase.from('deals' as any).select('value, stage').eq('user_id', uid);
-        const dc = (deals as any[])?.length || 0;
-        const pv = (deals as any[])?.reduce((s, d) => s + (Number(d.value) || 0), 0) || 0;
-        const wv = (deals as any[])?.filter(d => d.stage === 'won').reduce((s, d) => s + (Number(d.value) || 0), 0) || 0;
+        const { data: deals } = await (supabase.from('deals' as any) as any).select('value, stage').eq('user_id', uid);
+        const dealList = (deals as any[]) || [];
+        const dc = dealList.length;
+        const pv = dealList.reduce((s, d) => s + (Number(d.value) || 0), 0);
+        const wv = dealList.filter(d => d.stage === 'won').reduce((s, d) => s + (Number(d.value) || 0), 0);
 
         enriched.push({
           id: m.id, name: m.name, role: m.role || 'vendedor',
