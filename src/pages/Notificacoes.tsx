@@ -83,7 +83,10 @@ const Notificacoes = () => {
             if (prefs.notifications) { setNotificationSettings(prefs.notifications); localStorage.setItem('notificationSettings', JSON.stringify(prefs.notifications)); }
           }
         }
-      } catch (error) { logger.error('Error loading notification settings:', error); }
+      } catch (error) { 
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error loading notification settings:', { error: msg }); 
+      }
     };
     loadSettings();
   }, []);
