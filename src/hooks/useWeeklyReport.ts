@@ -123,7 +123,8 @@ export function useWeeklyReport() {
       if (error) throw error;
       setReports((data || []) as unknown as WeeklyReportData[]);
     } catch (error) {
-      logger.error('Error fetching weekly reports:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching weekly reports:', { error: msg });
     }
   }, [userId]);
 
