@@ -195,10 +195,11 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       return true;
     } catch (error) {
       if (previous) queryClient.setQueryData<Interaction[]>(queryKey, previous);
-      logger.error('Error deleting interaction:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error deleting interaction:', { error: msg });
       toast({
         title: 'Erro ao excluir interação',
-        description: 'Não foi possível excluir a interação.',
+        description: msg,
         variant: 'destructive',
       });
       return false;
