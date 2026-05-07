@@ -235,7 +235,7 @@ export function useStakeholders(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_stakeholders").select("*").eq("room_id", roomId!);
       if (error) throw error;
-      return (data ?? []) as any as DealRoomStakeholder[];
+      return (data ?? []) as unknown as DealRoomStakeholder[];
     },
   });
 }
