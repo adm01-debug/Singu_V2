@@ -1,7 +1,8 @@
-import { Users, UserCheck, UserX, MessageSquare, TrendingUp, Building2 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Users, UserCheck, UserX, MessageSquare, TrendingUp, Building2, DollarSign, Trophy } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Progress } from '@/components/ui/progress';
 import { useTeamDashboard } from '@/hooks/useTeamDashboard';
 
 export function TeamDashboardPanel() {
