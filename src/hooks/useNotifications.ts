@@ -92,10 +92,11 @@ export const useNotifications = () => {
         return false;
       }
     } catch (error) {
-      logger.error('Error requesting notification permission:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error requesting notification permission:', { error: msg });
       toast({
         title: 'Erro',
-        description: 'Ocorreu um erro ao ativar as notificações.',
+        description: msg,
         variant: 'destructive',
       });
       return false;
