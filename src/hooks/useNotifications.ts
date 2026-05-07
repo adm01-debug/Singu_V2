@@ -119,7 +119,8 @@ export const useNotifications = () => {
       }
       return success;
     } catch (error) {
-      logger.error('Error unsubscribing:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error unsubscribing:', { error: msg });
       return false;
     } finally {
       setIsLoading(false);
