@@ -42,7 +42,7 @@ export function useLuxWebhookConfig() {
             is_active: config.is_active,
             timeout_ms: config.timeout_ms,
             max_retries: config.max_retries,
-            headers: config.headers as any,
+            headers: config.headers as Record<string, string>,
             updated_at: new Date().toISOString()
           })
           .eq('id', existing.id);
