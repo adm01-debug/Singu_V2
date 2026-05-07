@@ -209,7 +209,8 @@ export function useNLPAutoAnalysis() {
 
       return { analyzed, total: interactions.length };
     } catch (error) {
-      logger.error('Error batch analyzing interactions:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error batch analyzing interactions:', { error: msg });
       return { analyzed: 0, total: 0 };
     }
   }, [user, shouldAnalyze, analyzeInteraction]);
