@@ -977,10 +977,10 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
                 strokeOpacity={0.45}
                 dot={(props: any) => {
                   const { cx, cy, payload, index } = props;
-                  if (cx == null || cy == null) return null as any;
+                  if (cx == null || cy == null) return <></>;
                   const isPartial = !!payload?.maWindowPartial;
                   const isLow = !!payload?.maWindowLowVolume;
-                  if (!isPartial && !isLow) return null as any;
+                  if (!isPartial && !isLow) return <></>;
                   const fill = isLow ? "hsl(var(--warning))" : "hsl(var(--muted-foreground))";
                   const stroke = "hsl(var(--background))";
                   return (
