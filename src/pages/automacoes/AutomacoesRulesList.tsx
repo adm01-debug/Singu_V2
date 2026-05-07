@@ -11,13 +11,9 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { TRIGGER_OPTIONS, ACTION_OPTIONS } from '@/hooks/useAutomationRules';
+import { TRIGGER_OPTIONS, ACTION_OPTIONS, type AutomationRule, type AutomationLog } from '@/hooks/useAutomationRules';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import type { Tables } from '@/integrations/supabase/types';
-
-type AutomationRule = Tables<'automation_rules'>;
-type AutomationLog = Tables<'automation_logs'>;
 
 interface AutomacoesRulesListProps {
   rules: AutomationRule[];
