@@ -305,7 +305,8 @@ export function useBehaviorAlerts() {
         });
       }
     } catch (error) {
-      logger.error('Error detecting new alerts:', error);
+      const msg = error instanceof Error ? error.message : 'Erro desconhecido';
+      logger.error('Error detecting new alerts:', { error: msg });
     }
   }, [user, fetchAlerts, toast]);
 
@@ -316,8 +317,9 @@ export function useBehaviorAlerts() {
       queryClient.invalidateQueries({ queryKey });
       toast({ title: 'Alerta dispensado', description: 'O alerta foi removido da sua lista.' });
     } catch (error) {
-      logger.error('Error dismissing alert:', error);
-      toast({ title: 'Erro ao dispensar alerta', variant: 'destructive' });
+      const msg = error instanceof Error ? error.message : 'Erro desconhecido';
+      logger.error('Error dismissing alert:', { error: msg });
+      toast({ title: 'Erro ao dispensar alerta', description: msg, variant: 'destructive' });
     }
   }, [toast, queryClient, queryKey]);
 
@@ -328,8 +330,9 @@ export function useBehaviorAlerts() {
       queryClient.invalidateQueries({ queryKey });
       toast({ title: 'Ação registrada', description: 'A ação foi marcada como concluída.' });
     } catch (error) {
-      logger.error('Error marking action taken:', error);
-      toast({ title: 'Erro ao registrar ação', variant: 'destructive' });
+      const msg = error instanceof Error ? error.message : 'Erro desconhecido';
+      logger.error('Error marking action taken:', { error: msg });
+      toast({ title: 'Erro ao registrar ação', description: msg, variant: 'destructive' });
     }
   }, [toast, queryClient, queryKey]);
 
