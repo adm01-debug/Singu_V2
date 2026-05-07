@@ -141,9 +141,10 @@ export function useInteractions(contactId?: string, companyId?: string, options?
         .update(updates)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error('Interação não encontrada ou permissão insuficiente para atualizar.');
 
       queryClient.setQueryData<Interaction[]>(queryKey, prev =>
         prev?.map(i => i.id === id ? data : i) ?? []
