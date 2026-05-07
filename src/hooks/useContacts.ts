@@ -125,8 +125,9 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       if (data) logActivity({ type: 'created', entityType: 'contact', entityId: data.id, entityName: `${data.first_name} ${data.last_name}`.trim(), description: 'Contato criado' });
       return data;
     } catch (error) {
-      logger.error('Error creating contact:', error);
-      toast({ title: 'Erro ao criar contato', description: 'Verifique os dados e tente novamente.', variant: 'destructive' });
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error creating contact:', { error: msg });
+      toast({ title: 'Erro ao criar contato', description: msg, variant: 'destructive' });
       return null;
     }
   };
