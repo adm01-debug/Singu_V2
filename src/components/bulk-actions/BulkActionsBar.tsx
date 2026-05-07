@@ -80,7 +80,8 @@ export function BulkActionsBar({
       toast.success(`${selectedCount} ${entityType === 'contacts' ? 'contatos' : entityType === 'companies' ? 'empresas' : 'interações'} excluídos`);
       onClearSelection();
     } catch (error) {
-      toast.error('Erro ao excluir itens');
+      const msg = error instanceof Error ? error.message : 'Erro ao excluir itens';
+      toast.error(msg);
     } finally {
       setIsProcessing(false);
       setShowDeleteConfirm(false);
