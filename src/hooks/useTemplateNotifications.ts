@@ -106,7 +106,8 @@ export function useTemplateNotifications() {
 
       return data;
     } catch (error) {
-      logger.error('Error checking for high performers:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error checking for high performers:', { error: msg });
       return null;
     }
   }, [user, settings.enabled]);
