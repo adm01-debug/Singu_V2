@@ -80,6 +80,7 @@ export class CircuitBreaker {
       return result;
     } catch (error) {
       this.onFailure();
+      // Rethrow with type guard if needed by consumers, but internally we just propagate
       throw error;
     }
   }
