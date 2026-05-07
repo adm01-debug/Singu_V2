@@ -157,8 +157,8 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
           avatar: (contact as any).avatar_url || '',
           companyName: company?.name || (contact as any).role_title || '',
           role: (contact as any).role || 'contact',
-          relationshipScore: (contact as any).relationship_score || 0,
-          sentiment: (contact as any).sentiment || 'neutral',
+          relationshipScore: contact.relationship_score || 0,
+          sentiment: contact.sentiment || 'neutral',
           interactionCount: interactionCountByContact.get(contact.id) || 0,
           lastInteraction: latestDate ? new Date(latestDate) : null,
         };
