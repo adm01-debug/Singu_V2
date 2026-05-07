@@ -412,10 +412,11 @@ export function useMetaprogramAnalysis() {
         description: "Histórico de metaprogramas removido"
       });
     } catch (error) {
-      logger.error('Error clearing analysis:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error clearing analysis:', { error: msg });
       toast({
         title: "Erro",
-        description: "Não foi possível limpar a análise",
+        description: msg,
         variant: "destructive"
       });
     }
