@@ -95,7 +95,8 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
     const result = await callExternalData({ action: 'select', ...options });
     return { data: (result?.data as T[]) || [], count: (result?.count as number) || 0, error: null };
   } catch (err) {
-    logger.error('Error querying external data:', err);
+    const msg = err instanceof Error ? err.message : 'Unknown error';
+    logger.error('Error querying external data:', { error: msg });
     return { data: null, count: null, error: err as Error };
   }
 }
