@@ -31,7 +31,17 @@ export function BenchmarkConfigForm() {
   };
 
   const setVal = (key: string, field: "target" | "warn" | "crit", v: string) => {
-    setEdits(prev => ({ ...prev, [key]: { ...prev[key], [field]: v, target: prev[key]?.target ?? getValue(key, "target"), warn: prev[key]?.warn ?? getValue(key, "warn"), crit: prev[key]?.crit ?? getValue(key, "crit"), [field]: v } as any }));
+    setEdits(prev => {
+      const current = prev[key] || {
+        target: getValue(key, "target"),
+        warn: getValue(key, "warn"),
+        crit: getValue(key, "crit"),
+      };
+      return {
+        ...prev,
+        [key]: { ...current, [field]: v },
+      };
+    });
   };
 
   const save = (key: string) => {
