@@ -255,7 +255,8 @@ export function usePurchasePatterns() {
       setPredictions(upcomingPredictions);
 
     } catch (error) {
-      logger.error('Error analyzing purchase patterns:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error analyzing purchase patterns:', { error: msg });
     } finally {
       setLoading(false);
     }
