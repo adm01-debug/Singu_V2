@@ -211,7 +211,12 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
         companies: companiesResponse.data?.map(c => ({ id: c.id, type: 'company' as const, title: toTitleCase(c.name), subtitle: c.industry, meta: c.city && c.state ? `${c.city}, ${c.state}` : undefined })) || [],
         interactions: interactionsResponse.data?.map(i => ({ id: i.id, type: 'interaction' as const, title: i.title, subtitle: i.type, meta: new Date(i.created_at).toLocaleDateString('pt-BR') })) || [],
       });
-    } catch (error) { logger.error('Search error:', error); toast.error('Não foi possível completar a busca agora.'); setResults({ contacts: [], companies: [], interactions: [] }); } finally { setIsLoading(false); }
+    } catch (error) { 
+      const msg = error instanceof Error ? error.message : 'Não foi possível completar a busca agora.';
+      logger.error('Search error:', { error: msg }); 
+      toast.error(msg); 
+      setResults({ contacts: [], companies: [], interactions: [] }); 
+    } finally { setIsLoading(false); }
   }, [user, semanticMode, semanticSearch]);
 
   useEffect(() => {
