@@ -325,8 +325,9 @@ export function useCompanies(options?: { enabled?: boolean }) {
       if (data) logActivity({ type: 'created', entityType: 'company', entityId: (data as Record<string, unknown>).id as string, entityName: String(companyName), description: 'Empresa criada' });
       return data;
     } catch (error) {
-      logger.error('Error creating company:', error);
-      toast({ title: 'Erro ao criar empresa', description: 'Verifique os dados e tente novamente.', variant: 'destructive' });
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error creating company:', { error: msg });
+      toast({ title: 'Erro ao criar empresa', description: msg, variant: 'destructive' });
       return null;
     }
   };
