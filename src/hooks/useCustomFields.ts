@@ -68,8 +68,8 @@ export function useCustomFields(entityType: EntityType) {
 
   const updateField = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<CustomField> & { id: string }) => {
-      const { error } = await (supabase
-        .from('custom_fields') as any)
+      const { error } = await supabase
+        .from('custom_fields')
         .update(updates)
         .eq('id', id);
       if (error) throw error;
