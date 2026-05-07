@@ -92,7 +92,7 @@ export function useNLPAnalyticsData() {
         if (oRes.error) throw oRes.error;
 
         const emotionalData = emRes.data;
-        const vakData = vakRes.data as any[] | null;
+        const vakData = vakRes.data;
 
         const emMap = new Map<string, { count: number; tc: number }>();
         emotionalData?.forEach(e => {
