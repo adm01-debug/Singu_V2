@@ -54,7 +54,7 @@ export function usePlaybooks(filters: PlaybookFilters = {}) {
       if (filters.search) q = q.or(`name.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);
       const { data, error } = await q;
       if (error) throw error;
-      return (data || []) as SalesPlaybook[];
+      return (data || []) as unknown as SalesPlaybook[];
     },
   });
 }
@@ -66,7 +66,7 @@ export function usePlaybook(id?: string) {
     queryFn: async () => {
       const { data, error } = await supabase.from("sales_playbooks").select("*").eq("id", id!).maybeSingle();
       if (error) throw error;
-      return data as SalesPlaybook | null;
+      return data as unknown as SalesPlaybook | null;
     },
   });
 }
@@ -77,15 +77,15 @@ export function useUpsertPlaybook() {
   return useMutation({
     mutationFn: async (input: Partial<SalesPlaybook> & { id?: string }) => {
       if (!user) throw new Error("not authenticated");
-      const payload = { ...input, user_id: user.id };
+      const payload = { ...input, user_id: user.id } as any;
       if (input.id) {
         const { data, error } = await supabase.from("sales_playbooks").update(payload).eq("id", input.id).select().single();
         if (error) throw error;
-        return data as SalesPlaybook;
+        return data as unknown as SalesPlaybook;
       }
       const { data, error } = await supabase.from("sales_playbooks").insert(payload).select().single();
       if (error) throw error;
-      return data as SalesPlaybook;
+      return data as unknown as SalesPlaybook;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["playbooks"] });
