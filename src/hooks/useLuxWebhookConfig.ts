@@ -56,7 +56,7 @@ export function useLuxWebhookConfig() {
             is_active: config.is_active ?? true,
             timeout_ms: config.timeout_ms ?? 5000,
             max_retries: config.max_retries ?? 3,
-            headers: (config.headers ?? {}) as any
+            headers: (config.headers ?? {}) as Record<string, string>
           });
         if (error) throw error;
       }
