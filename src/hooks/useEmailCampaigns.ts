@@ -46,7 +46,7 @@ export function useEmailCampaigns() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase.from('email_campaigns')
-        .insert({ ...input, user_id: user.id })
+        .insert({ ...input, user_id: user.id } as any)
         .select()
         .single();
       if (error) throw error;
