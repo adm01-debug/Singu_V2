@@ -34,10 +34,12 @@ export interface DealRoomMilestone {
   user_id: string;
   title: string;
   description: string | null;
-  status: MilestoneStatus;
+  status: string;
   sort_order: number;
   due_date: string | null;
   completed_at: string | null;
+  completed_by_side: Side | null;
+  owner_side: Side | null;
   created_at: string;
   updated_at: string;
 }
@@ -46,10 +48,14 @@ export interface DealRoomStakeholder {
   id: string;
   room_id: string;
   user_id: string;
+  contact_id: string | null;
   name: string;
   email: string | null;
-  role: string | null;
+  role_title: string | null;
   side: Side;
+  influence: string | null;
+  engagement_score: number | null;
+  notes: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -69,10 +75,10 @@ export interface DealRoomDocument {
 export interface DealRoomActivity {
   id: string;
   room_id: string;
-  type: string;
-  description: string;
-  performed_by_side: Side;
-  performed_by_label: string;
+  activity_type: string;
+  actor_side: Side;
+  actor_label: string;
+  payload: any;
   created_at: string;
 }
 
