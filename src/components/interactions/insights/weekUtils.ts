@@ -19,6 +19,9 @@ export function normalizeWeek(w: string): string {
  * Faz parse de uma semana em fuso local — evita o shift de -1 dia que
  * `new Date('YYYY-MM-DD')` produz em fusos negativos por interpretar a
  * string como UTC.
+ * 
+ * USO: Apenas para exibição/formatação local (labels, UI).
+ * NÃO usar em comparators de sort (para isso use `weekTimestamp`).
  */
 export function parseWeekLocal(w: string): Date {
   const iso = normalizeWeek(w);
@@ -26,25 +29,34 @@ export function parseWeekLocal(w: string): Date {
 }
 
 /**
+ * Interno: Faz parse em UTC para garantir comparadores determinísticos
+ * e TZ-independentes.
+ */
+function parseWeekUtc(w: string): Date {
+  const iso = normalizeWeek(w);
+  return new Date(`${iso}T00:00:00Z`);
+}
+
+/**
  * Type guard: a string passa por normalizeWeek, casa com YYYY-MM-DD e
- * resulta em Date com timestamp finito.
+ * resulta em Date com timestamp finito (validado em UTC).
  */
 export function isValidWeek(w: unknown): w is string {
   if (typeof w !== "string" || w.length === 0) return false;
   const iso = normalizeWeek(w);
   if (!ISO_WEEK_RE.test(iso)) return false;
-  const ts = parseWeekLocal(iso).getTime();
+  const ts = parseWeekUtc(iso).getTime();
   return Number.isFinite(ts);
 }
 
 /**
  * Timestamp para uso em comparators de sort. Devolve `Number.MAX_SAFE_INTEGER`
- * para semanas inválidas — empurra lixo para o final mantendo ordem total
- * (`Array.prototype.sort` exige comparator que nunca retorne `NaN`, e
- * `Infinity - Infinity = NaN` quebraria comparações entre dois inválidos).
+ * para semanas inválidas — empurra lixo para o final mantendo ordem total.
+ * 
+ * Este valor é TZ-independente (UTC) e determinístico.
  */
 export function weekTimestamp(w: string): number {
-  const ts = parseWeekLocal(w).getTime();
+  const ts = parseWeekUtc(w).getTime();
   return Number.isFinite(ts) ? ts : Number.MAX_SAFE_INTEGER;
 }
 
