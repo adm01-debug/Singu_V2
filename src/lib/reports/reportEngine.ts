@@ -198,7 +198,7 @@ export async function runReport(config: ReportConfig, userId: string): Promise<R
   const def = ENTITIES[config.entity];
   // Usamos cast controlado para TableName para permitir o uso de tabelas vindas de ENTITIES
   // sem comprometer a segurança de tipos do restante da query.
-  const query = supabase.from(def.table as any).select(def.defaultSelect).eq('user_id', userId);
+  const query = (supabase.from(def.table as any) as any).select(def.defaultSelect).eq('user_id', userId);
 
   if (config.orderBy) {
     query.order(config.orderBy.field, { ascending: config.orderBy.direction === 'asc' });
