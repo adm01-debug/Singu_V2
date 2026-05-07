@@ -345,7 +345,8 @@ export function useMetaprogramAnalysis() {
         analyzedInteractions: data.length
       };
     } catch (error) {
-      logger.error('Error getting metaprogram profile:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error getting metaprogram profile:', { error: msg });
       return null;
     }
   }, [user]);
