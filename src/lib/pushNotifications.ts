@@ -61,7 +61,8 @@ export async function subscribeToPush(): Promise<PushSubscription | null> {
     
     return subscription;
   } catch (error) {
-    logger.error('Failed to subscribe to push notifications:', error);
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Failed to subscribe to push notifications:', { error: msg });
     return null;
   }
 }
