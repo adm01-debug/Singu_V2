@@ -135,10 +135,10 @@ export function useCustomFieldValues(entityType: EntityType, entityId?: string) 
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
 
-      const { error } = await supabase
-        .from('custom_field_values')
+      const { error } = await (supabase
+        .from('custom_field_values') as any)
         .upsert(
-          { custom_field_id: fieldId, entity_id: entityId, user_id: user.id, value } as any,
+          { custom_field_id: fieldId, entity_id: entityId, user_id: user.id, value },
           { onConflict: 'custom_field_id,entity_id' }
         );
       if (error) throw error;
