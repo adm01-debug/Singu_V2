@@ -146,7 +146,8 @@ export function useStakeholderAlerts(companyId?: string) {
 
       setAlerts(typedData);
     } catch (error) {
-      logger.error('Error fetching stakeholder alerts:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error fetching stakeholder alerts:', { error: msg });
     } finally {
       setLoading(false);
     }
