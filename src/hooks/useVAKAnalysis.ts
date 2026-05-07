@@ -168,7 +168,8 @@ export function useVAKAnalysis() {
       if (error) throw error;
       return true;
     } catch (error) {
-      logger.error('Error saving VAK analysis:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error saving VAK analysis:', { error: msg });
       return false;
     }
   }, [user]);
