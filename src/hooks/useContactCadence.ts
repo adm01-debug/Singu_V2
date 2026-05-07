@@ -218,7 +218,8 @@ export function useContactCadence() {
 
       fetchCadences();
     } catch (error) {
-      logger.error('Error updating last contact:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error updating last contact:', { error: msg });
     }
   }, [user, cadences, fetchCadences]);
 
