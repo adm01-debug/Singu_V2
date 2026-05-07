@@ -103,7 +103,7 @@ export function useNLPAutoAnalysis() {
         confidence: emotionalResult.confidence,
         trigger: emotionalResult.matchedWords[0] || null,
         context: text.substring(0, 200)
-      });
+      } as any);
 
       if (emotionalInsertError) throw emotionalInsertError;
 
