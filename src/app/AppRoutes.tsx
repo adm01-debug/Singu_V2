@@ -48,6 +48,7 @@ const Admin = ({ children }: { children: React.ReactNode }) => (
 );
 
 export const AppRoutes = () => {
+  const location = useLocation();
   useWebVitals();
   useViewTransitions();
   useOnlineStatus({
@@ -57,7 +58,9 @@ export const AppRoutes = () => {
   useCircuitBreakerHandler();
 
   return (
-    <Routes>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+
       {/* Public routes */}
       <Route path="/auth" element={<LazyPage><P.Auth /></LazyPage>} />
       <Route path="/survey/:token" element={<LazyPage><P.PublicSurvey /></LazyPage>} />
