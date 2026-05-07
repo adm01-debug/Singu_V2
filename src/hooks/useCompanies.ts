@@ -346,17 +346,26 @@ export function useCompanies(options?: { enabled?: boolean }) {
       const input = updates as Record<string, unknown>;
       const clean = stripLocal(input);
       delete clean.id;
+      
+      // Ensure name mappings if present
+      if (input.name) {
+        if (!clean.nome_crm) clean.nome_crm = input.name;
+        if (!clean.nome_fantasia) clean.nome_fantasia = input.name;
+      }
+
       const { data, error } = expectedVersion !== undefined
         ? await updateExternalDataWithVersion<Company>('companies', id, expectedVersion, clean)
         : await updateExternalData<Company>('companies', id, clean);
       if (error) throw error;
       if (data) {
+        const mapped = mapCompany(data as unknown as ExternalRow);
         queryClient.setQueryData<CompaniesPage>(queryKey, prev =>
-          prev ? { ...prev, companies: prev.companies.map(c => c.id === id ? mapCompany(data as unknown as ExternalRow) : c) } : prev
+          prev ? { ...prev, companies: prev.companies.map(c => c.id === id ? mapped : c) } : prev
         );
       }
+      const finalName = (data as Record<string, unknown>)?.nome_crm || input.name || 'Empresa';
       toast({ title: 'Empresa atualizada', description: 'As alterações foram salvas.' });
-      if (data) logActivity({ type: 'updated', entityType: 'company', entityId: id, entityName: (data as Record<string, unknown>).nome_crm as string || 'Empresa', description: 'Empresa atualizada' });
+      if (data) logActivity({ type: 'updated', entityType: 'company', entityId: id, entityName: String(finalName), description: 'Empresa atualizada' });
       return data;
     } catch (error) {
       if (previous) queryClient.setQueryData<CompaniesPage>(queryKey, previous);
