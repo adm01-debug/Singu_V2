@@ -37,7 +37,7 @@ export function useLuxWebhookConfig() {
       if (existing) {
         const { error } = await supabase
           .from('lux_webhook_config')
-          .update({ ...config, updated_at: new Date().toISOString() } as any)
+          .update({ ...config, updated_at: new Date().toISOString() })
           .eq('id', existing.id);
         if (error) throw error;
       } else {
@@ -51,7 +51,7 @@ export function useLuxWebhookConfig() {
       qc.invalidateQueries({ queryKey: ['lux-webhook-config'] });
       toast.success('Configuração salva');
     },
-    onError: (e) => toast.error(`Erro: ${e.message}`),
+    onError: (e: Error) => toast.error(`Erro: ${e.message}`),
   });
 
   const toggleActive = useMutation({
