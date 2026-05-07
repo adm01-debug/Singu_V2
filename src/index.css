@@ -530,30 +530,69 @@
    COMPONENT STYLES
    ============================================ */
 @layer components {
-  /* Typography Hierarchy */
-  .text-display { @apply text-2xl md:text-3xl font-bold tracking-tight; line-height: var(--leading-tight); }
-  .text-h1 { @apply text-xl md:text-2xl font-bold tracking-tight; line-height: var(--leading-tight); }
-  .text-h2 { @apply text-lg md:text-xl font-semibold; line-height: var(--leading-snug); }
-  .text-h3 { @apply text-base md:text-lg font-semibold; line-height: var(--leading-snug); }
-  .text-h4 { @apply text-sm md:text-base font-medium; line-height: var(--leading-normal); }
-  .text-lead { @apply text-sm text-muted-foreground; line-height: var(--leading-relaxed); }
-  .text-body { @apply text-sm; line-height: var(--leading-normal); }
-  .text-small { @apply text-xs text-muted-foreground; line-height: var(--leading-normal); }
-  .text-caption { @apply text-xs text-muted-foreground uppercase tracking-wide font-medium; }
-  .text-eyebrow { @apply text-xs uppercase tracking-widest font-semibold text-primary; }
+  /* Premium Typography Hierarchy */
+  .text-display { 
+    @apply text-3xl md:text-5xl font-heading font-bold tracking-tighter text-balance; 
+    line-height: 1.1; 
+  }
+  .text-h1 { 
+    @apply text-2xl md:text-3xl font-heading font-bold tracking-tight text-balance; 
+    line-height: var(--leading-tight); 
+  }
+  .text-h2 { @apply text-xl md:text-2xl font-heading font-semibold tracking-tight; line-height: var(--leading-snug); }
+  .text-h3 { @apply text-lg md:text-xl font-heading font-semibold tracking-tight; line-height: var(--leading-snug); }
+  .text-h4 { @apply text-base md:text-lg font-medium; line-height: var(--leading-normal); }
+  .text-lead { @apply text-base text-muted-foreground font-light; line-height: var(--leading-relaxed); }
+  .text-body { @apply text-sm md:text-base; line-height: var(--leading-relaxed); }
+  .text-small { @apply text-xs md:text-sm text-muted-foreground; line-height: var(--leading-normal); }
+  .text-caption { @apply text-[10px] md:text-xs text-muted-foreground uppercase tracking-widest font-semibold; }
+  .text-eyebrow { @apply text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-primary; }
+
+  .heading-premium {
+    @apply font-heading font-bold tracking-tighter text-balance;
+    background: linear-gradient(135deg, hsl(var(--foreground)) 0%, hsl(var(--foreground) / 0.7) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 
   /* Tabular nums for metrics — ensures aligned columns */
   .tabular-nums, [data-metric], .stat-value, .metric-value {
     font-variant-numeric: tabular-nums;
   }
 
-  /* Glass Effect */
+  /* Luxury Glass & Surface Effects */
   .glass {
     background: hsl(var(--glass-bg));
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid hsl(var(--glass-border));
+    @apply shadow-lg;
   }
+
+  .glass-card {
+    @apply glass rounded-2xl transition-all duration-300 ease-smooth;
+  }
+
+  .glass-card:hover {
+    @apply border-primary/20 shadow-xl -translate-y-1;
+  }
+
+  .card-premium {
+    @apply bg-card border border-border/40 shadow-soft transition-all duration-300 ease-smooth rounded-2xl;
+  }
+
+  .card-premium:hover {
+    @apply shadow-medium border-border/80 -translate-y-1;
+  }
+
+  /* 8pt Grid & Layout Helpers */
+  .section-container {
+    @apply max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-24;
+  }
+
+  .p-grid { @apply p-4 md:p-8; }
+  .gap-grid { @apply gap-4 md:gap-8; }
+  .m-grid { @apply m-4 md:m-8; }
 
   /* Sticky Table Headers */
   .table-sticky-header thead th {
