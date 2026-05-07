@@ -160,20 +160,15 @@ function AppSidebarInner() {
   return (
     <Sidebar collapsible="icon" className="border-r border-border" aria-label="Navegação principal">
       {/* ─── Header ─── */}
-      <SidebarHeader className="p-4">
-        <Link to="/" className="flex items-center gap-3 min-w-0 group">
-          <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl nexus-gradient-bg shadow-lg shadow-primary/20 transition-transform duration-300 group-hover:scale-110">
-            <Zap className="w-4.5 h-4.5 text-primary-foreground fill-primary-foreground/20" />
+      <SidebarHeader className="p-3">
+        <Link to="/" className="flex items-center gap-2.5 min-w-0">
+          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-primary">
+            <Zap className="w-4 h-4 text-primary-foreground" />
           </div>
           {!collapsed && (
-            <div className="flex flex-col">
-              <span className="font-heading text-base font-bold tracking-tighter text-foreground leading-none">
-                SINGU
-              </span>
-              <span className="text-[9px] font-bold tracking-[0.2em] text-primary/60 uppercase leading-tight">
-                Ecosystem
-              </span>
-            </div>
+            <span className="font-heading text-sm font-bold tracking-tight text-foreground">
+              SINGU
+            </span>
           )}
         </Link>
       </SidebarHeader>
@@ -223,7 +218,7 @@ function AppSidebarInner() {
                         {/* Discord-style active indicator bar */}
                         {isActive && (
                           <span
-                            className="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-6 rounded-r-full bg-primary shadow-[2px_0_10px_hsl(var(--primary)/0.4)] transition-all duration-300"
+                            className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-primary transition-all duration-200"
                             aria-hidden="true"
                           />
                         )}
@@ -232,10 +227,10 @@ function AppSidebarInner() {
                           isActive={isActive}
                           tooltip={item.title}
                           className={cn(
-                            "rounded-xl transition-all duration-300 h-10 ml-1.5",
+                            "rounded-md transition-all duration-150 h-9 ml-0.5",
                             isActive
-                              ? "text-foreground font-semibold bg-primary/10 border border-primary/20 shadow-inner-sm"
-                              : "text-muted-foreground/70 hover:text-foreground hover:bg-secondary/10 hover:border-border/30"
+                              ? "text-foreground font-medium bg-primary/10 dark:bg-primary/8"
+                              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                           )}
                         >
                           <Link to={item.url} aria-current={isActive ? "page" : undefined} onMouseEnter={() => prefetch(item.url)}>

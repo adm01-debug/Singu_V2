@@ -1,7 +1,6 @@
 import { useState, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { DISCConversionMetricsPanel } from '@/components/analytics/DISCConversionMetricsPanel';
 import { TriggerAnalyticsPanel } from '@/components/analytics/TriggerAnalyticsPanel';
 import { RFMSegmentDashboard } from '@/components/analytics/RFMSegmentDashboard';
@@ -46,17 +45,14 @@ export function AnalyticsTab({ prefersReducedMotion, tabDirection }: AnalyticsTa
           <Calendar className="w-5 h-5" aria-hidden="true" />
           <Typography variant="body" className="font-medium">Período dos Gráficos</Typography>
         </div>
-        <div className="flex items-center gap-1.5 bg-secondary/5 border border-border/30 p-1.5 rounded-2xl shadow-inner-sm">
+        <div className="flex items-center gap-1 bg-secondary/50 p-1 rounded-lg">
           {periodOptions.map((option) => (
             <Button
               key={option.value}
               variant={period === option.value ? "default" : "ghost"}
               size="sm"
               onClick={() => setPeriod(option.value)}
-              className={cn(
-                "text-xs sm:text-sm transition-all duration-300 rounded-xl px-4",
-                period === option.value ? 'shadow-md bg-primary text-primary-foreground' : 'hover:bg-secondary text-muted-foreground'
-              )}
+              className={`text-xs sm:text-sm transition-all ${period === option.value ? 'shadow-sm' : 'hover:bg-secondary'}`}
             >
               {option.label}
             </Button>
@@ -65,8 +61,8 @@ export function AnalyticsTab({ prefersReducedMotion, tabDirection }: AnalyticsTa
       </div>
 
       <DashboardErrorBoundary sectionName="Gráficos de Atividade">
-        <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-80 w-full" />}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-64 w-full" />}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <ActivityChart period={period} />
             <RelationshipEvolutionChart period={period} />
           </div>
@@ -74,8 +70,8 @@ export function AnalyticsTab({ prefersReducedMotion, tabDirection }: AnalyticsTa
       </DashboardErrorBoundary>
 
       <DashboardErrorBoundary sectionName="Distribuição e Scores">
-        <Suspense fallback={<Surface level={1} rounded="2xl" className="animate-pulse h-60 w-full" />}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-48 w-full" />}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             <ContactDistributionChart />
             <RelationshipScoreChart period={period} />
             <SentimentChart period={period} />

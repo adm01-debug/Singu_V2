@@ -48,8 +48,7 @@ export const Typography = React.forwardRef<HTMLElement, TypographyProps>(
       <Component
         ref={ref}
         className={cn(
-          variantClass,
-          gradient && 'heading-premium',
+          gradient ? 'text-gradient-heading' : variantClass,
           className
         )}
         {...props}

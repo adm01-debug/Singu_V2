@@ -61,14 +61,14 @@ export function TopContactsCard({ contacts, animations }: TopContactsCardProps) 
   const allLowScores = contacts.length > 0 && contacts.every(c => c.relationshipScore < 40);
 
   return (
-    <Card className="h-full border-border/30 bg-card/60 backdrop-blur-sm hover:border-primary/20 hover:shadow-lg transition-all duration-300 ease-smooth overflow-hidden relative rounded-2xl">
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-success via-nexus-emerald to-primary rounded-t-2xl opacity-80" />
-      <CardHeader className="flex flex-row items-center justify-between pb-4">
-        <CardTitle className="text-base font-heading font-bold flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-secondary/5 border border-border/20 shadow-inner-sm">
-            <Users className="w-4 h-4 text-success animate-pulse-soft" aria-hidden="true" />
+    <Card className="h-full border-border/60 hover:border-border transition-colors overflow-hidden relative">
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-success to-primary/60 rounded-t-xl" />
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-base font-semibold flex items-center gap-2">
+          <div className="p-1.5 rounded-lg bg-gradient-to-br from-success/15 to-primary/10 ring-1 ring-success/20">
+            <Users className="w-3.5 h-3.5 text-success" aria-hidden="true" />
           </div>
-          Relacionamentos Premium
+          Melhores Relacionamentos
         </CardTitle>
         <Link to="/contatos">
           <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
@@ -108,16 +108,16 @@ export function TopContactsCard({ contacts, animations }: TopContactsCardProps) 
                           level={1}
                           hoverable
                           rounded="lg"
-                          className="flex items-center justify-between p-4 group cursor-pointer hover:border-primary/20 hover:bg-background/80 hover:shadow-soft transition-all duration-300 rounded-2xl border-transparent"
+                          className="flex items-center justify-between p-3 group cursor-pointer hover:border-primary/15"
                         >
-                          <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-3">
                             <div className="relative">
                               <OptimizedAvatar
                                 src={contact.avatar || undefined}
                                 alt={`${contact.firstName} ${contact.lastName}`}
                                 fallback={`${contact.firstName?.[0] || 'C'}${contact.lastName?.[0] || 'N'}`}
-                                size="lg"
-                                className={cn("w-12 h-12 border-2 transition-all duration-300 shadow-md", avatarRing, "group-hover:scale-105 group-hover:border-primary/60")}
+                                size="md"
+                                className={cn("w-10 h-10 border-2 transition-colors", avatarRing, "group-hover:border-primary/50")}
                               />
                               {/* Position indicator dot */}
                               <span className="absolute -top-0.5 -right-0.5 text-[10px] font-bold text-muted-foreground/60">
@@ -125,7 +125,7 @@ export function TopContactsCard({ contacts, animations }: TopContactsCardProps) 
                               </span>
                             </div>
                             <div>
-                              <p className="font-bold text-sm tracking-tight text-foreground group-hover:text-primary transition-colors">
+                              <p className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors">
                                 {contact.firstName} {contact.lastName}
                               </p>
                               {contact.companyName && (

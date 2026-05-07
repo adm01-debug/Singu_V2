@@ -3,20 +3,20 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const cardVariants = cva(
-  "nexus-card rounded-2xl text-card-foreground transition-all duration-300 ease-smooth",
+  "nexus-card rounded-lg text-card-foreground transition-colors duration-150",
   {
     variants: {
       variant: {
-        default: "bg-card/60 backdrop-blur-sm border border-border/30 shadow-soft hover:shadow-medium hover:border-border/60 hover:-translate-y-1",
-        elevated: "bg-card border border-border/30 shadow-medium hover:shadow-strong hover:border-primary/20 hover:-translate-y-1",
-        outlined: "bg-card border border-border/30 shadow-none hover:border-primary/40 hover:shadow-soft",
+        default: "bg-card border border-border/60 shadow-none hover:border-border",
+        elevated: "bg-card border border-border/60 shadow-none hover:border-border",
+        outlined: "bg-card border border-border/60 shadow-none hover:border-primary/40",
         ghost: "bg-transparent border-transparent shadow-none",
-        glass: "bg-card/40 backdrop-blur-xl border border-white/10 shadow-lg hover:bg-card/60 hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 nexus-glass-noise",
-        interactive: "bg-card border border-border/30 shadow-soft cursor-pointer hover:border-primary/30 hover:bg-muted/10 hover:shadow-medium active:scale-[0.98] hover:-translate-y-1",
-        muted: "bg-muted/20 border border-border/30 shadow-none",
-        success: "bg-success/5 border border-success/20 shadow-none hover:border-success/40",
-        warning: "bg-warning/5 border border-warning/20 shadow-none hover:border-warning/40",
-        destructive: "bg-destructive/5 border border-destructive/20 shadow-none hover:border-destructive/40",
+        glass: "bg-card/80 border border-border/60 shadow-none hover:border-border",
+        interactive: "bg-card border border-border/60 shadow-none cursor-pointer hover:border-border hover:bg-muted/20 active:scale-[0.99]",
+        muted: "bg-muted/30 border border-border/60 shadow-none",
+        success: "bg-success/8 border border-success/25 shadow-none hover:border-success/45",
+        warning: "bg-warning/8 border border-warning/25 shadow-none hover:border-warning/45",
+        destructive: "bg-destructive/8 border border-destructive/25 shadow-none hover:border-destructive/45",
       },
       padding: {
         none: "",
@@ -49,33 +49,33 @@ Card.displayName = "Card";
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("card-header flex flex-col space-y-2 p-6 md:p-8", className)} {...props} />
+    <div ref={ref} className={cn("card-header flex flex-col space-y-1.5 p-5 md:p-6", className)} {...props} />
   ),
 );
 CardHeader.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
   ({ className, ...props }, ref) => (
-    <h3 ref={ref} className={cn("text-lg font-heading font-bold leading-tight tracking-tight", className)} {...props} />
+    <h3 ref={ref} className={cn("text-base font-semibold leading-none tracking-tight", className)} {...props} />
   ),
 );
 CardTitle.displayName = "CardTitle";
 
 const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn("text-sm text-muted-foreground font-light tracking-tight", className)} {...props} />
+    <p ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
   ),
 );
 CardDescription.displayName = "CardDescription";
 
 const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => <div ref={ref} className={cn("p-6 pt-0 md:p-8 md:pt-0", className)} {...props} />,
+  ({ className, ...props }, ref) => <div ref={ref} className={cn("p-5 pt-0 md:p-6 md:pt-0", className)} {...props} />,
 );
 CardContent.displayName = "CardContent";
 
 const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("card-footer flex items-center p-6 pt-0 md:p-8 md:pt-0", className)} {...props} />
+    <div ref={ref} className={cn("card-footer flex items-center p-5 pt-0 md:p-6 md:pt-0", className)} {...props} />
   ),
 );
 CardFooter.displayName = "CardFooter";
