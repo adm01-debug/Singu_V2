@@ -146,8 +146,9 @@ export function useWeeklyReport() {
       setSettings(data as WeeklyReportSettings);
       toast.success('Configurações salvas com sucesso');
     } catch (error) {
-      logger.error('Error saving settings:', error);
-      toast.error('Erro ao salvar configurações');
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error saving settings:', { error: msg });
+      toast.error('Erro ao salvar configurações', { description: msg });
     }
   }, [userId, settings]);
 
