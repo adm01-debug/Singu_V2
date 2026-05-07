@@ -355,11 +355,12 @@ export function useCompanies(options?: { enabled?: boolean }) {
       return data;
     } catch (error) {
       if (previous) queryClient.setQueryData<CompaniesPage>(queryKey, previous);
-      logger.error('Error updating company:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error updating company:', { error: msg });
       if (error instanceof ConcurrentEditError) {
         showConcurrentEditToast({ entity: 'empresa', queryClient, queryKey });
       } else {
-        toast({ title: 'Erro ao atualizar empresa', description: 'Verifique os dados e tente novamente.', variant: 'destructive' });
+        toast({ title: 'Erro ao atualizar empresa', description: msg, variant: 'destructive' });
       }
       return null;
     }
