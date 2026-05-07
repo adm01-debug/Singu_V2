@@ -35,7 +35,8 @@ export function useSavedFilters(type: 'contacts' | 'companies' | 'interactions')
         }
       }
     } catch (error) {
-      logger.error('Failed to load saved filters:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Failed to load saved filters:', { error: msg });
     }
   }, [type]);
 
