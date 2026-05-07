@@ -347,7 +347,8 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
       setLatestAnalysis(record);
       return record;
     } catch (err) {
-      logger.error('Error fetching latest DISC analysis:', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      logger.error('Error fetching latest DISC analysis:', { error: msg });
       return null;
     }
   }, [user, contactId]);
