@@ -74,7 +74,7 @@ export function useDocuments(entityType: string, entityId?: string) {
         file_url: fileUrl,
         file_size: file.size,
         mime_type: file.type,
-      } as any);
+      });
       if (error) throw error;
     },
     onSuccess: () => {
