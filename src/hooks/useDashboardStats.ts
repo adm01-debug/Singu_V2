@@ -155,7 +155,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
           firstName: contact.first_name,
           lastName: contact.last_name,
           avatar: contact.avatar_url || '',
-          companyName: company?.name || contact.role_title || '',
+          companyName: company?.name || (contact as any).role_title || '',
           role: contact.role || 'contact',
           relationshipScore: contact.relationship_score || 0,
           sentiment: contact.sentiment || 'neutral',
