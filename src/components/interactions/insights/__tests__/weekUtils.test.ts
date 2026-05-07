@@ -115,6 +115,24 @@ describe("weekTimestamp", () => {
   });
 });
 
+describe("weekTimestamp — TZ independence", () => {
+  it("é idêntico ao Date.UTC do dia correspondente", () => {
+    // 2025-04-07 -> ano 2025, mes 3 (abril), dia 7
+    const ts = weekTimestamp("2025-04-07");
+    expect(ts).toBe(Date.UTC(2025, 3, 7));
+  });
+
+  it("snapshot numérico fixo (determinismo)", () => {
+    expect(weekTimestamp("2025-04-07")).toBe(1743984000000);
+  });
+
+  it("diferença entre semanas é exatamente 7 dias em ms (ignorando DST local)", () => {
+    const ts1 = weekTimestamp("2025-04-07");
+    const ts2 = weekTimestamp("2025-04-14");
+    expect(ts2 - ts1).toBe(7 * 24 * 60 * 60 * 1000);
+  });
+});
+
 describe("normalizeAndSortWeekPoints — sort cronológico", () => {
   it("ordena entrada fora de ordem em ordem crescente", () => {
     const out = normalizeAndSortWeekPoints([
