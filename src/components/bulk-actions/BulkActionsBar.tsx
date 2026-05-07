@@ -111,7 +111,8 @@ export function BulkActionsBar({
       await onExport(selectedIds);
       toast.success(`${selectedCount} itens exportados`);
     } catch (error) {
-      toast.error('Erro ao exportar');
+      const msg = error instanceof Error ? error.message : 'Erro ao exportar';
+      toast.error(msg);
     } finally {
       setIsProcessing(false);
     }
