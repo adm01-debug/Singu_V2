@@ -106,7 +106,8 @@ export async function insertExternalData<T = Record<string, unknown>>(table: str
     const result = await callExternalData({ action: 'insert', table, record });
     return { data: (result?.data as T) || null, error: null };
   } catch (err) {
-    logger.error('Error inserting external data:', err);
+    const msg = err instanceof Error ? err.message : 'Unknown error';
+    logger.error('Error inserting external data:', { error: msg });
     return { data: null, error: err as Error };
   }
 }
