@@ -40,7 +40,7 @@ export function useKnowledgeBase() {
     mutationFn: async (input: Partial<KBArticle>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
-      const { error } = await (supabase.from('knowledge_base_articles') as any)
+      const { error } = await supabase.from('knowledge_base_articles')
         .insert({ ...input, user_id: user.id });
       if (error) throw error;
     },
