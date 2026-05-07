@@ -144,7 +144,8 @@ export async function getSubscriptionStatus(): Promise<{
     const subscription = await registration.pushManager?.getSubscription();
     return { isSubscribed: !!subscription, subscription };
   } catch (error) {
-    logger.error('Failed to get subscription status:', error);
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Failed to get subscription status:', { error: msg });
     return { isSubscribed: false, subscription: null };
   }
 }
