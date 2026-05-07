@@ -309,18 +309,23 @@ export function useCompanies(options?: { enabled?: boolean }) {
       const input = company as Record<string, unknown>;
       const ext = stripLocal(input);
       const record = { ...ext, user_id: user.id } as Record<string, unknown>;
+      
+      // Ensure name mappings for external DB
       if (!record.nome_crm && input.name) record.nome_crm = input.name;
+      if (!record.nome_fantasia && input.name) record.nome_fantasia = input.name;
+      if (!record.razao_social && input.name) record.razao_social = input.name;
 
       const { data, error } = await insertExternalData<Company>('companies', record);
       if (error) throw error;
       if (data) {
+        const mapped = mapCompany(data as unknown as ExternalRow);
         queryClient.setQueryData<CompaniesPage>(queryKey, prev =>
           prev
-            ? { ...prev, companies: [mapCompany(data as unknown as ExternalRow), ...prev.companies], count: prev.count + 1 }
-            : { companies: [mapCompany(data as unknown as ExternalRow)], count: 1 }
+            ? { ...prev, companies: [mapped, ...prev.companies], count: prev.count + 1 }
+            : { companies: [mapped], count: 1 }
         );
       }
-      const companyName = (data as Record<string, unknown>)?.nome_crm || 'Empresa';
+      const companyName = (data as Record<string, unknown>)?.nome_crm || input.name || 'Empresa';
       toast({ title: 'Empresa criada', description: `${companyName} foi adicionada com sucesso.` });
       if (data) logActivity({ type: 'created', entityType: 'company', entityId: (data as Record<string, unknown>).id as string, entityName: String(companyName), description: 'Empresa criada' });
       return data;
