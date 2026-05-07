@@ -131,7 +131,8 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
 
       setAlerts(newAlerts.slice(0, maxItems));
     } catch (error) {
-      logger.error('Error fetching compatibility alerts:', error);
+      const msg = error instanceof Error ? error.message : 'Erro desconhecido';
+      logger.error('Error fetching compatibility alerts:', { error: msg });
     } finally {
       setLoading(false);
     }
