@@ -96,7 +96,7 @@ export function useEmailCampaigns() {
       if (eligible.length === 0) throw new Error('Nenhum contato com email válido foi encontrado');
 
       // Marcar como enviando
-      await supabase.from('email_campaigns').update({ status: 'sending' } as any).eq('id', campaignId);
+      await (supabase.from('email_campaigns') as any).update({ status: 'sending' }).eq('id', campaignId);
 
       // Materializar destinatários (idempotente — só insere os que ainda não existem)
       const { data: existing } = await supabase
