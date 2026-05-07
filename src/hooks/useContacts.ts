@@ -118,12 +118,22 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       for (const [k, v] of Object.entries(contact as Record<string, unknown>)) {
         if (!LOCAL_ONLY_FIELDS.has(k)) externalFields[k] = v;
       }
+      
+      // Map local role_title to external cargo if provided
+      if (contact.role_title && !externalFields.cargo) {
+        externalFields.cargo = contact.role_title;
+      }
+
       const { data, error } = await insertExternalData<Contact>('contacts', { ...externalFields, user_id: user.id });
       if (error) throw error;
-      if (data) queryClient.setQueryData<Contact[]>(queryKey, prev => prev ? [data, ...prev] : [data]);
-      toast({ title: 'Contato criado', description: `${data?.first_name} ${data?.last_name} foi adicionado com sucesso.` });
-      if (data) logActivity({ type: 'created', entityType: 'contact', entityId: data.id, entityName: `${data.first_name} ${data.last_name}`.trim(), description: 'Contato criado' });
-      return data;
+      if (data) {
+        const normalized = normalizeExternalContact(data as unknown as Record<string, unknown>);
+        queryClient.setQueryData<Contact[]>(queryKey, prev => prev ? [normalized, ...prev] : [normalized]);
+        toast({ title: 'Contato criado', description: `${normalized.first_name} ${normalized.last_name} foi adicionado com sucesso.` });
+        logActivity({ type: 'created', entityType: 'contact', entityId: normalized.id, entityName: `${normalized.first_name} ${normalized.last_name}`.trim(), description: 'Contato criado' });
+        return normalized;
+      }
+      return null;
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error creating contact:', { error: msg });
