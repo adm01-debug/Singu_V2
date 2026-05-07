@@ -161,12 +161,13 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       }
       return data;
     } catch (error) {
-      logger.error('Error updating contact:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error updating contact:', { error: msg });
       if (previous) queryClient.setQueryData<Contact[]>(queryKey, previous);
       if (error instanceof ConcurrentEditError) {
         showConcurrentEditToast({ entity: 'contato', queryClient, queryKey });
       } else {
-        toast({ title: 'Erro ao atualizar contato', description: 'As alterações foram revertidas.', variant: 'destructive' });
+        toast({ title: 'Erro ao atualizar contato', description: msg, variant: 'destructive' });
       }
       return null;
     }
