@@ -30,7 +30,8 @@ export function useActivityLogger() {
         description: params.description ?? null,
       });
     } catch (error) {
-      logger.warn('Failed to log activity', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.warn('Failed to log activity', { error: msg });
     }
   }, [user?.id]);
 
