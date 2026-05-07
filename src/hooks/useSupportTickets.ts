@@ -54,7 +54,19 @@ export function useSupportTickets() {
     mutationFn: async (input: Partial<SupportTicket>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
-      const { error } = await supabase.from('support_tickets').insert({ ...input, user_id: user.id } as any);
+      
+      const insertData = {
+        ...input,
+        user_id: user.id,
+      };
+      
+      // Delete properties that might cause TS issues if Partial<SupportTicket> 
+      // contains fields not in the Insert type or handled automatically
+      if ('id' in insertData) delete insertData.id;
+      if ('created_at' in insertData) delete insertData.created_at;
+      if ('updated_at' in insertData) delete insertData.updated_at;
+
+      const { error } = await supabase.from('support_tickets').insert(insertData as any);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Ticket criado!'); },
@@ -64,8 +76,15 @@ export function useSupportTickets() {
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<SupportTicket> & { id: string }) => {
       const resolved = updates.status === 'resolved' || updates.status === 'closed';
+      const updateData = {
+        ...updates,
+        ...(resolved ? { resolved_at: new Date().toISOString() } : {})
+      };
+      
+      if ('created_at' in updateData) delete (updateData as any).created_at;
+      
       const { error } = await supabase.from('support_tickets')
-        .update({ ...updates, ...(resolved ? { resolved_at: new Date().toISOString() } : {}) } as any)
+        .update(updateData as any)
         .eq('id', id);
       if (error) throw error;
     },
@@ -114,7 +133,7 @@ export function useTicketComments(ticketId?: string) {
         user_id: user.id,
         content,
         is_internal: isInternal || false,
-      } as any);
+      });
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: key }),
