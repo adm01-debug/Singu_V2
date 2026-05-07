@@ -208,7 +208,7 @@ export function useMetaprogramAnalysis() {
           options_words: analysisResult.detectedWords.options,
           procedures_words: analysisResult.detectedWords.procedures,
           analyzed_text: analyzedText.substring(0, 1000)
-        })
+        } as any)
         .select()
         .single();
 
