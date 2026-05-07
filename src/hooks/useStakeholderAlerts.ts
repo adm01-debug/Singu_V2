@@ -108,7 +108,8 @@ export function useStakeholderAlerts(companyId?: string) {
         await registration.showNotification(title, notificationOptions);
       }
     } catch (error) {
-      logger.error('Error sending stakeholder push notification:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error sending stakeholder push notification:', { error: msg });
     }
   }, []);
 
