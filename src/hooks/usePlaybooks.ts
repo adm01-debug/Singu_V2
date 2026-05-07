@@ -77,7 +77,7 @@ export function useUpsertPlaybook() {
   return useMutation({
     mutationFn: async (input: Partial<SalesPlaybook> & { id?: string }) => {
       if (!user) throw new Error("not authenticated");
-      const payload = { ...input, user_id: user.id } as any;
+      const payload = { ...input, user_id: user.id };
       if (input.id) {
         const { data, error } = await supabase.from("sales_playbooks").update(payload).eq("id", input.id).select().single();
         if (error) throw error;
