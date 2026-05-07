@@ -63,13 +63,15 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
           )}
           <div className="min-w-0 flex items-center gap-2">
             {PageIcon && (
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="hidden shrink-0 rounded-xl border border-primary/15 bg-primary/10 p-2 md:flex"
-              >
-                <PageIcon className="w-4 h-4 text-primary" aria-hidden="true" />
-              </motion.div>
+              <Magnetic strength={0.3}>
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="hidden shrink-0 rounded-xl border border-primary/15 bg-primary/10 p-2 md:flex cursor-pointer"
+                >
+                  <PageIcon className="w-4 h-4 text-primary" aria-hidden="true" />
+                </motion.div>
+              </Magnetic>
             )}
             <div className="min-w-0">
               <h1 className="text-sm md:text-base font-semibold text-foreground truncate leading-tight">{title}</h1>
