@@ -194,11 +194,9 @@ export interface ReportResult {
   totals: Record<string, number>;
 }
 
-/** Executa o relatório consultando o Supabase. */
 export async function runReport(config: ReportConfig, userId: string): Promise<ReportResult> {
   const def = ENTITIES[config.entity];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const query = (supabase as any).from(def.table).select(def.defaultSelect).eq('user_id', userId);
+  const query = supabase.from(def.table).select(def.defaultSelect).eq('user_id', userId);
 
   if (config.orderBy) {
     query.order(config.orderBy.field, { ascending: config.orderBy.direction === 'asc' });
