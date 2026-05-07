@@ -382,10 +382,11 @@ export function useMetaprogramAnalysis() {
         description: `${analyzedCount} interações analisadas para metaprogramas`
       });
     } catch (error) {
-      logger.error('Error analyzing interactions:', error);
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error analyzing interactions:', { error: msg });
       toast({
         title: "Erro na análise",
-        description: "Não foi possível analisar as interações",
+        description: msg,
         variant: "destructive"
       });
     } finally {
