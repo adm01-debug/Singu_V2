@@ -107,9 +107,9 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
       }).length;
       interactionSparkline.push(count);
     }
-    const scoresWithValue = contacts.filter(c => (c as any).relationship_score !== null && (c as any).relationship_score !== undefined);
+    const scoresWithValue = contacts.filter(c => c.relationship_score !== null && c.relationship_score !== undefined);
     const avgScore = scoresWithValue.length > 0
-      ? Math.round(scoresWithValue.reduce((sum, c) => sum + ((c as any).relationship_score || 0), 0) / scoresWithValue.length)
+      ? Math.round(scoresWithValue.reduce((sum, c) => sum + (c.relationship_score || 0), 0) / scoresWithValue.length)
       : 0;
 
     const companyMap = new Map(companies.map(c => [c.id, c]));
