@@ -27,7 +27,7 @@ export function useLuxWebhookConfig() {
         .select('*')
         .order('entity_type');
       if (error) throw error;
-      return (data || []) as any;
+      return (data || []) as unknown as LuxWebhookConfig[];
     },
   });
 
