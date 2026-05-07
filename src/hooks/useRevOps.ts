@@ -68,7 +68,7 @@ export function useRevOpsSnapshots(periodStart: string, periodEnd: string) {
     enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("revops_snapshots" as any)
+        .from("revops_snapshots")
         .select("*")
         .gte("period", periodStart)
         .lte("period", periodEnd)
@@ -85,7 +85,7 @@ export function useRevOpsKPIs(periodStart: string, periodEnd: string) {
     queryKey: ["revops-kpis", user?.id, periodStart, periodEnd],
     enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("compute_revops_kpis" as any, {
+      const { data, error } = await supabase.rpc("compute_revops_kpis", {
         _user_id: user!.id,
         _period_start: periodStart,
         _period_end: periodEnd,
@@ -103,7 +103,7 @@ export function useRevOpsBenchmarks() {
     enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("revops_benchmarks" as any)
+        .from("revops_benchmarks")
         .select("*")
         .order("metric_key");
       if (error) throw error;
@@ -118,7 +118,7 @@ export function useUpsertBenchmark() {
   return useMutation({
     mutationFn: async (input: Partial<RevOpsBenchmark> & { metric_key: string; target_value: number }) => {
       const { data, error } = await supabase
-        .from("revops_benchmarks" as any)
+        .from("revops_benchmarks")
         .upsert({
           user_id: user!.id,
           metric_key: input.metric_key,
@@ -136,7 +136,7 @@ export function useUpsertBenchmark() {
       qc.invalidateQueries({ queryKey: ["revops-benchmarks"] });
       toast.success("Benchmark salvo");
     },
-    onError: (e: any) => toast.error(e.message || "Erro ao salvar benchmark"),
+    onError: (e: Error) => toast.error(e.message || "Erro ao salvar benchmark"),
   });
 }
 
@@ -147,7 +147,7 @@ export function useRevOpsAlerts() {
     enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("revops_alerts" as any)
+        .from("revops_alerts")
         .select("*")
         .eq("dismissed", false)
         .order("created_at", { ascending: false })
@@ -162,11 +162,11 @@ export function useDismissAlert() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (alertId: string) => {
-      const { error } = await supabase.rpc("dismiss_revops_alert" as any, { _alert_id: alertId });
+      const { error } = await supabase.rpc("dismiss_revops_alert", { _alert_id: alertId });
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["revops-alerts"] }),
-    onError: (e: any) => toast.error(e.message || "Erro ao dispensar alerta"),
+    onError: (e: Error) => toast.error(e.message || "Erro ao dispensar alerta"),
   });
 }
 
