@@ -32,6 +32,8 @@ const ChurnRiskReportWidget = lazy(() => import('@/components/dashboard/widgets/
 const SmartRemindersPanel = lazy(() => import('@/components/smart-reminders/SmartRemindersPanel').then(m => ({ default: m.SmartRemindersPanel })));
 const StrategicNextStepsCard = lazy(() => import('@/components/dashboard/StrategicNextStepsCard').then(m => ({ default: m.StrategicNextStepsCard })));
 const AIApprovalsWidget = lazy(() => import('@/components/dashboard/widgets/AIApprovalsWidget').then(m => ({ default: m.AIApprovalsWidget })));
+const PortfolioHealthDashboard = lazy(() => import('@/components/dashboard/PortfolioHealthDashboard').then(m => ({ default: m.PortfolioHealthDashboard })));
+const ImportantDatesCalendar = lazy(() => import('@/components/dashboard/ImportantDatesCalendar').then(m => ({ default: m.ImportantDatesCalendar })));
 
 interface StaggerAnimation {
   initial: TargetAndTransition;
@@ -169,6 +171,20 @@ export function OverviewTab({
         <DashboardErrorBoundary sectionName="Alertas">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
             <ActiveAlertsWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
+      </div>
+
+      {/* 3bb. Portfolio Health + Important Dates */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <DashboardErrorBoundary sectionName="Saúde do Portfólio">
+          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-48 w-full" />}>
+            <PortfolioHealthDashboard contacts={contacts} interactions={interactions} compact />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Datas Importantes">
+          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-48 w-full" />}>
+            <ImportantDatesCalendar contacts={contacts} interactions={interactions} compact />
           </Suspense>
         </DashboardErrorBoundary>
       </div>

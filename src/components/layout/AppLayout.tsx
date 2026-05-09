@@ -4,8 +4,6 @@ import { Search, Command, Settings, LogOut, ChevronRight, Mic } from 'lucide-rea
 import { AppSidebar } from './AppSidebar';
 import { MobileHeader } from './MobileHeader';
 import { MobileBottomNav } from './MobileBottomNav';
-import { GlobalSearch } from '@/components/search/GlobalSearch';
-import { GlobalCommandBar } from '@/components/command/GlobalCommandBar';
 import { QuickAddButton } from '@/components/quick-add/QuickAddButton';
 import { SlowQueryIndicator } from '@/components/feedback/SlowQueryIndicator';
 import { AIEmailComposerTrigger } from '@/components/ai/AIEmailComposerTrigger';
@@ -17,6 +15,9 @@ const AskCrmChat = lazy(() => import('@/components/ask-crm/AskCrmChat').then(m =
 const AIEmailComposer = lazy(() => import('@/components/ai/AIEmailComposer').then(m => ({ default: m.AIEmailComposer })));
 const OnboardingTourWrapper = lazy(() => import('@/components/onboarding/OnboardingTourWrapper').then(m => ({ default: m.OnboardingTourWrapper })));
 const KeyboardShortcutsCheatsheet = lazy(() => import('@/components/keyboard/KeyboardShortcutsCheatsheet').then(m => ({ default: m.KeyboardShortcutsCheatsheet })));
+const GlobalCommandBar = lazy(() => import('@/components/command/GlobalCommandBar').then(m => ({ default: m.GlobalCommandBar })));
+const GlobalSearch = lazy(() => import('@/components/search/GlobalSearch').then(m => ({ default: m.GlobalSearch })));
+
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useKeyboardShortcutsEnhanced } from '@/hooks/useKeyboardShortcutsEnhanced';
 import { SkipToContent, SmartBreadcrumbs } from '@/components/navigation/NavigationPatterns';
@@ -237,13 +238,22 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
       <MobileBottomNav />
 
       {/* Global Components */}
-      <GlobalCommandBar
-        open={cmdBarOpen}
-        onOpenChange={setCmdBarOpen}
-        onOpenLegacySearch={() => setLegacySearchOpen(true)}
-        onOpenAsk={() => window.dispatchEvent(new CustomEvent('open-ask-crm'))}
-      />
-      <GlobalSearch open={legacySearchOpen} onOpenChange={setLegacySearchOpen} voiceMode={voiceMode} onVoiceModeChange={setVoiceMode} />
+      {deferredReady && (
+        <Suspense fallback={null}>
+          <GlobalCommandBar
+            open={cmdBarOpen}
+            onOpenChange={setCmdBarOpen}
+            onOpenLegacySearch={() => setLegacySearchOpen(true)}
+            onOpenAsk={() => window.dispatchEvent(new CustomEvent('open-ask-crm'))}
+          />
+          <GlobalSearch 
+            open={legacySearchOpen} 
+            onOpenChange={setLegacySearchOpen} 
+            voiceMode={voiceMode} 
+            onVoiceModeChange={setVoiceMode} 
+          />
+        </Suspense>
+      )}
       {/*
         Stack flutuante única: empilha ScrollToTopButton (topo) acima do
         QuickAddButton (base) com `gap-3`, garantindo que jamais se sobreponham

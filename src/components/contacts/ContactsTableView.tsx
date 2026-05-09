@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/table';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import type { Contact } from '@/hooks/useContacts';
+import { useContacts, type Contact } from '@/hooks/useContacts';
 import { cn } from '@/lib/utils';
 import { formatContactName } from '@/lib/formatters';
 
@@ -39,6 +39,8 @@ export const ContactsTableView = React.memo(function ContactsTableView({
   sortOrder,
   onSortChange,
 }: ContactsTableViewProps) {
+  const { prefetchContactDetails } = useContacts();
+// ... keep existing code
   const SortButton = ({ field, children }: { field: string; children: React.ReactNode }) => (
     <button
       onClick={() => onSortChange(field)}
@@ -86,7 +88,12 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                   </TableCell>
                 )}
                 <TableCell>
-                  <Link to={`/contatos/${contact.id}`} className="flex items-center gap-3 min-w-0">
+                  <Link 
+                    to={`/contatos/${contact.id}`} 
+                    className="flex items-center gap-3 min-w-0"
+                    onMouseEnter={() => prefetchContactDetails(contact.id)}
+                    onFocus={() => prefetchContactDetails(contact.id)}
+                  >
                     <OptimizedAvatar
                       src={contact.avatar_url}
                       alt=""
