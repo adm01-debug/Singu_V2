@@ -55,7 +55,7 @@ export const ContactsTableView = React.memo(function ContactsTableView({
         <TableHeader>
           <TableRow className="hover:bg-transparent border-border/40">
             {selectionMode && <TableHead className="w-10" />}
-            <TableHead><SortButton field="first_name">CONTATO</SortButton></TableHead>
+            <TableHead aria-sort={sortBy === 'first_name' ? (sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'}><SortButton field="first_name">CONTATO</SortButton></TableHead>
             <TableHead className="hidden md:table-cell">EMPRESA</TableHead>
             <TableHead className="hidden lg:table-cell">CARGO</TableHead>
             <TableHead className="hidden md:table-cell text-center">SCORE</TableHead>
@@ -89,7 +89,8 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                   <Link to={`/contatos/${contact.id}`} className="flex items-center gap-3 min-w-0">
                     <OptimizedAvatar
                       src={contact.avatar_url}
-                      alt={fullName}
+                      alt=""
+                      aria-hidden="true"
                       fallback={fullName}
                       size="sm"
                     />

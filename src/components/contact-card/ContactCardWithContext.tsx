@@ -176,7 +176,8 @@ function ContactCardWithContextImpl({
                 <div className="flex items-center gap-3">
                   <OptimizedAvatar 
                     src={contact.avatar_url || undefined}
-                    alt={displayName}
+                    alt="" // Decorativo aqui pois o nome vem logo ao lado
+                    aria-hidden="true"
                     fallback={`${(contact.first_name || '?')[0]}${(contact.last_name || '?')[0]}`}
                     size="md"
                     className="w-10 h-10 shrink-0"
@@ -287,7 +288,8 @@ function ContactCardWithContextImpl({
 
                 <OptimizedAvatar 
                   src={contact.avatar_url || undefined}
-                  alt={displayName}
+                  alt=""
+                  aria-hidden="true"
                   fallback={`${(contact.first_name || '?')[0]}${(contact.last_name || '?')[0]}`}
                   size="md"
                   className="w-10 h-10 shrink-0"
