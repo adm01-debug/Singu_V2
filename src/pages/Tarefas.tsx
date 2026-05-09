@@ -12,11 +12,13 @@ import { useAllTasks, useOverdueTasks, useCompleteTask, useReopenTask, Task } fr
 import { useActionToast } from '@/hooks/useActionToast';
 import { TaskCard } from './tarefas/TaskCard';
 import { CreateTaskDialog } from './tarefas/CreateTaskDialog';
+import { TaskDetailDrawer } from './tarefas/TaskDetailDrawer';
 
 export default function Tarefas() {
   const [activeTab, setActiveTab] = useState('pending');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'due_date' | 'priority' | 'created_at'>('due_date');
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   const { data: allTasks, isLoading } = useAllTasks();
   const { data: overdueTasks } = useOverdueTasks();
@@ -56,7 +58,7 @@ export default function Tarefas() {
     const priorityOrder = { urgent: 0, high: 1, medium: 2, low: 3 };
     return [...tasks].sort((a, b) => {
       if (sortBy === 'priority') return (priorityOrder[a.priority as keyof typeof priorityOrder] ?? 2) - (priorityOrder[b.priority as keyof typeof priorityOrder] ?? 2);
-      if (sortBy === 'due_date') return (a.due_date || '9999').localeCompare(b.due_date || '9999');
+      if (sortBy === 'due_date') return (a.due_date || '9999').localeCompare(a.due_date || '9999');
       return (b.created_at || '').localeCompare(a.created_at || '');
     });
   }, [activeTab, categorizedTasks, searchTerm, sortBy]);
@@ -123,13 +125,19 @@ export default function Tarefas() {
                 <Card><CardContent className="py-12 text-center"><CheckSquare className="h-12 w-12 mx-auto text-muted-foreground/30 mb-3" /><p className="text-sm text-muted-foreground">{searchTerm ? 'Nenhuma tarefa encontrada com esse termo' : tab === 'completed' ? 'Nenhuma tarefa concluída' : tab === 'overdue' ? 'Nenhuma tarefa atrasada! 🎉' : 'Nenhuma tarefa pendente'}</p></CardContent></Card>
               ) : (
                 <AnimatePresence mode="popLayout">
-                  <div className="space-y-3">{filteredTasks.map(task => <TaskCard key={task.id} task={task} onComplete={(id) => handleComplete(id, task.title)} />)}</div>
+                  <div className="space-y-3">{filteredTasks.map(task => <TaskCard key={task.id} task={task} onComplete={(id) => handleComplete(id, task.title)} onEdit={setEditingTask} />)}</div>
                 </AnimatePresence>
               )}
             </TabsContent>
           ))}
         </Tabs>
       </div>
+
+      <TaskDetailDrawer 
+        task={editingTask} 
+        open={!!editingTask} 
+        onOpenChange={(open) => !open && setEditingTask(null)} 
+      />
     </>
   );
 }

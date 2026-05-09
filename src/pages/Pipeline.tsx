@@ -4,12 +4,16 @@ import { PipelinePageSkeleton } from '@/components/skeletons/PageSkeletons';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, DollarSign, Clock, Target, ArrowRight, Loader2, AlertTriangle, Gauge } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { TrendingUp, DollarSign, Clock, Target, ArrowRight, Loader2, AlertTriangle, Gauge, Plus } from 'lucide-react';
 import { useDealsPipeline, usePipelineSummary, useWeightedForecast, useMoveDeal, useStageVelocity, useStalledDeals, useVelocityMetrics, type PipelineDeal, type WeightedForecast } from '@/hooks/usePipeline';
 import { useDealSlipRisk } from '@/hooks/useDealSlipRisk';
 import { useDealForecastConfidence } from '@/hooks/useDealForecastConfidence';
 import { DealRiskBadge } from '@/components/pipeline/DealRiskBadge';
 import { DealRiskDrawer } from '@/components/pipeline/DealRiskDrawer';
+import { DealDetailDrawer } from '@/components/pipeline/DealDetailDrawer';
+import { DealDialog } from '@/components/pipeline/DealDialog';
+import { PipelineFilterBar } from '@/components/pipeline/PipelineFilterBar';
 import { DealConfidenceBadge } from '@/components/pipeline/DealConfidenceBadge';
 import { ForecastConfidencePanel } from '@/components/pipeline/ForecastConfidencePanel';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
@@ -33,9 +37,11 @@ const formatCurrency = (value: number) =>
 const DealCard = React.memo(function DealCard({
   deal,
   onOpenRisk,
+  onEdit,
 }: {
   deal: PipelineDeal;
   onOpenRisk: (deal: PipelineDeal) => void;
+  onEdit: (deal: PipelineDeal) => void;
 }) {
   const risk = useDealSlipRisk(deal);
   const conf = useDealForecastConfidence(deal);
@@ -43,14 +49,18 @@ const DealCard = React.memo(function DealCard({
     <div
       draggable
       onDragStart={(e) => e.dataTransfer.setData('dealId', deal.id)}
-      className="p-3 rounded-lg border bg-card cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow"
+      onClick={() => onEdit(deal)}
+      className="p-3 rounded-lg border bg-card cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow group relative"
     >
       <div className="flex items-start justify-between gap-2">
         <p className="font-medium text-sm truncate flex-1">{deal.titulo}</p>
         <DealRiskBadge
           score={risk.score}
           level={risk.level}
-          onClick={() => onOpenRisk(deal)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenRisk(deal);
+          }}
           dealId={deal.id}
           dealTitle={deal.titulo}
           factors={risk.factors}
@@ -90,11 +100,13 @@ function PipelineColumn({
   deals,
   onDrop,
   onOpenRisk,
+  onEditDeal,
 }: {
   stage: typeof STAGES[number];
   deals: PipelineDeal[];
   onDrop: (dealId: string, stageId: string) => void;
   onOpenRisk: (deal: PipelineDeal) => void;
+  onEditDeal: (deal: PipelineDeal) => void;
 }) {
   const totalValue = deals.reduce((sum, d) => sum + (d.valor || 0), 0);
 
@@ -119,7 +131,7 @@ function PipelineColumn({
       </div>
       <div className="space-y-2 p-2 bg-muted/30 rounded-b-lg min-h-[200px] border border-t-0">
         {deals.map((deal) => (
-          <DealCard key={deal.id} deal={deal} onOpenRisk={onOpenRisk} />
+          <DealCard key={deal.id} deal={deal} onOpenRisk={onOpenRisk} onEdit={onEditDeal} />
         ))}
         {deals.length === 0 && (
           <p className="text-xs text-muted-foreground text-center py-8">
@@ -287,17 +299,28 @@ export default function Pipeline() {
   const { data: forecast } = useWeightedForecast();
   const moveDeal = useMoveDeal();
   const [riskDeal, setRiskDeal] = useState<PipelineDeal | null>(null);
+  const [editDeal, setEditDeal] = useState<PipelineDeal | null>(null);
+  const [isDealDialogOpen, setIsDealDialogOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredDeals = useMemo(() => {
+    if (!deals) return [];
+    return deals.filter(d => 
+      d.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      d.company_name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [deals, searchTerm]);
 
   const dealsByStage = useMemo(() => {
     const map: Record<string, PipelineDeal[]> = {};
     STAGES.forEach((s) => (map[s.id] = []));
-    (deals || []).forEach((deal) => {
+    filteredDeals.forEach((deal) => {
       const stage = deal.pipeline_stage || 'lead';
       if (!map[stage]) map[stage] = [];
       map[stage].push(deal);
     });
     return map;
-  }, [deals]);
+  }, [filteredDeals]);
 
   const handleDrop = useCallback(
     (dealId: string, stageId: string) => {
@@ -337,33 +360,47 @@ export default function Pipeline() {
     <AppLayout title="Pipeline">
       <SEOHead title="Pipeline de Vendas" description="Gerencie seus deals com drag & drop" />
       <div className="space-y-6 p-4 md:p-6">
-      <div>
-        <h1 className="text-2xl font-bold">Pipeline de Vendas</h1>
-        <p className="text-muted-foreground text-sm">Gerencie seus deals com drag & drop</p>
-      </div>
-
-      <DashboardErrorBoundary sectionName="Resumo do Pipeline">
-        <SummaryCards forecast={forecast} />
-      </DashboardErrorBoundary>
-
-      <DashboardErrorBoundary sectionName="Confiança do Forecast">
-        <ForecastConfidencePanel />
-      </DashboardErrorBoundary>
-
-      <p className="sm:hidden text-[11px] text-muted-foreground text-center -mb-1">← deslize para ver os estágios →</p>
-      <DashboardErrorBoundary sectionName="Kanban de Deals">
-        <div className="flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory sm:snap-none -mx-4 px-4 sm:mx-0 sm:px-0">
-          {STAGES.map((stage) => (
-            <PipelineColumn
-              key={stage.id}
-              stage={stage}
-              deals={dealsByStage[stage.id] || []}
-              onDrop={handleDrop}
-              onOpenRisk={setRiskDeal}
+        <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">Pipeline de Vendas</h1>
+            <p className="text-muted-foreground text-sm">Gerencie seus deals com drag & drop</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <PipelineFilterBar 
+              search={searchTerm} 
+              onSearchChange={setSearchTerm} 
+              onFilterChange={() => {}} 
             />
-          ))}
+            <Button onClick={() => setIsDealDialogOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Novo Deal
+            </Button>
+          </div>
         </div>
-      </DashboardErrorBoundary>
+
+        <DashboardErrorBoundary sectionName="Resumo do Pipeline">
+          <SummaryCards forecast={forecast} />
+        </DashboardErrorBoundary>
+
+        <DashboardErrorBoundary sectionName="Confiança do Forecast">
+          <ForecastConfidencePanel />
+        </DashboardErrorBoundary>
+
+        <p className="sm:hidden text-[11px] text-muted-foreground text-center -mb-1">← deslize para ver os estágios →</p>
+        <DashboardErrorBoundary sectionName="Kanban de Deals">
+          <div className="flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory sm:snap-none -mx-4 px-4 sm:mx-0 sm:px-0">
+            {STAGES.map((stage) => (
+              <PipelineColumn
+                key={stage.id}
+                stage={stage}
+                deals={dealsByStage[stage.id] || []}
+                onDrop={handleDrop}
+                onOpenRisk={setRiskDeal}
+                onEditDeal={setEditDeal}
+              />
+            ))}
+          </div>
+        </DashboardErrorBoundary>
 
         {/* Velocity & Stalled Deals */}
         <div className="grid gap-4 md:grid-cols-2">
@@ -380,6 +417,17 @@ export default function Pipeline() {
         deal={riskDeal}
         open={!!riskDeal}
         onOpenChange={(o) => !o && setRiskDeal(null)}
+      />
+
+      <DealDialog 
+        open={isDealDialogOpen}
+        onOpenChange={setIsDealDialogOpen}
+      />
+
+      <DealDetailDrawer
+        deal={editDeal}
+        open={!!editDeal}
+        onOpenChange={(o) => !o && setEditDeal(null)}
       />
     </AppLayout>
   );

@@ -29,9 +29,10 @@ function getDueDateLabel(dateStr?: string): { label: string; className: string }
 interface TaskCardProps {
   task: Task;
   onComplete: (id: string) => void;
+  onEdit?: (task: Task) => void;
 }
 
-export function TaskCard({ task, onComplete }: TaskCardProps) {
+export function TaskCard({ task, onComplete, onEdit }: TaskCardProps) {
   const navigate = useNavigate();
   const priority = priorityConfig[task.priority || 'medium'] || priorityConfig.medium;
   const dueInfo = getDueDateLabel(task.due_date);
@@ -39,8 +40,10 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -50 }} layout>
-      <Card className={cn(
-        'transition-all hover:shadow-md border-l-4',
+      <Card 
+        onClick={() => onEdit?.(task)}
+        className={cn(
+        'transition-all hover:shadow-md border-l-4 cursor-pointer',
         isCompleted ? 'opacity-60 border-l-success/50' : 'border-l-transparent',
         task.priority === 'urgent' && !isCompleted && 'border-l-destructive',
         task.priority === 'high' && !isCompleted && 'border-l-red-500',
@@ -49,7 +52,14 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
       )}>
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <button onClick={() => !isCompleted && onComplete(task.id)} disabled={isCompleted} className="mt-0.5 shrink-0">
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!isCompleted) onComplete(task.id);
+              }} 
+              disabled={isCompleted} 
+              className="mt-0.5 shrink-0"
+            >
               {isCompleted ? <CheckCircle2 className="h-5 w-5 text-success" /> : <Circle className={cn('h-5 w-5 hover:text-success transition-colors', priority.color)} />}
             </button>
             <div className="flex-1 min-w-0">
@@ -61,8 +71,28 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
               <div className="flex items-center gap-3 mt-2 flex-wrap">
                 {dueInfo && <span className={cn('text-[11px] flex items-center gap-1', dueInfo.className)}><Calendar className="h-3 w-3" />{dueInfo.label}</span>}
                 {task.task_type && <Badge variant="outline" className="text-[10px]">{task.task_type}</Badge>}
-                {task.contact_name && <button onClick={() => task.contact_id && navigate(`/contatos/${task.contact_id}`)} className="text-[11px] text-primary hover:underline flex items-center gap-0.5">{task.contact_name}<ChevronRight className="h-3 w-3" /></button>}
-                {task.company_name && <button onClick={() => task.company_id && navigate(`/empresas/${task.company_id}`)} className="text-[11px] text-primary hover:underline flex items-center gap-0.5">{task.company_name}<ChevronRight className="h-3 w-3" /></button>}
+                {task.contact_name && (
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (task.contact_id) navigate(`/contatos/${task.contact_id}`);
+                    }} 
+                    className="text-[11px] text-primary hover:underline flex items-center gap-0.5"
+                  >
+                    {task.contact_name}<ChevronRight className="h-3 w-3" />
+                  </button>
+                )}
+                {task.company_name && (
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (task.company_id) navigate(`/empresas/${task.company_id}`);
+                    }} 
+                    className="text-[11px] text-primary hover:underline flex items-center gap-0.5"
+                  >
+                    {task.company_name}<ChevronRight className="h-3 w-3" />
+                  </button>
+                )}
               </div>
             </div>
           </div>
