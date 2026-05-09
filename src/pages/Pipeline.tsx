@@ -345,6 +345,13 @@ export default function Pipeline() {
       </AppLayout>
     );
   }
+        <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
+          <PipelineFilterBar 
+            search={searchTerm} 
+            onSearchChange={setSearchTerm} 
+            onFilterChange={() => {}} 
+          />
+        </div>
 
   return (
     <AppLayout title="Pipeline">
