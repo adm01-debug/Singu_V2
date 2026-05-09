@@ -118,9 +118,10 @@ export function useUpsertCSAccount() {
       if (!user?.id) throw new Error("Não autenticado");
       const payload = { ...input, user_id: user.id };
       const { data, error } = input.id
-        ? await supabase.from("cs_accounts").update(payload).eq("id", input.id).select().single()
-        : await supabase.from("cs_accounts").insert(payload).select().single();
+        ? await supabase.from("cs_accounts").update(payload).eq("id", input.id).select().maybeSingle()
+        : await supabase.from("cs_accounts").insert(payload).select().maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao salvar conta");
       return data as CSAccount;
     },
     onSuccess: () => {
