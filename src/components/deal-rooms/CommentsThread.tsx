@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRoomComments, useAddComment } from "@/hooks/useDealRooms";
+import { useRoomComments, useAddComment, type DealRoomComment } from "@/hooks/useDealRooms";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,8 +13,8 @@ export function CommentsThread({ roomId }: { roomId: string }) {
   return (
     <div className="space-y-3">
       <div className="space-y-2">
-        {data.map((c: any) => (
-          <Card key={c.id} variant="outlined">
+        {data.map((c: DealRoomComment) => (
+          <Card key={c.id} className="border shadow-none">
             <CardContent className="p-3 space-y-1">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium">{c.author_label}</span>
@@ -29,7 +29,7 @@ export function CommentsThread({ roomId }: { roomId: string }) {
         ))}
         {!data.length && <p className="text-sm text-muted-foreground italic text-center py-6">Sem comentários</p>}
       </div>
-      <Card variant="outlined">
+      <Card className="border shadow-none">
         <CardContent className="p-3 space-y-2">
           <Textarea placeholder="Escreva um comentário..." value={body} onChange={(e) => setBody(e.target.value)} rows={2} />
           <div className="flex justify-end">
