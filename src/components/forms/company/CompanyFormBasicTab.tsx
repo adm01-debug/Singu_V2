@@ -139,9 +139,9 @@ export function CompanyFormBasicTab({
       </FormSection>
 
       {!isEditing && (
-        <div className="flex items-center gap-2.5 p-3 rounded-lg bg-muted/30 border border-border text-xs text-muted-foreground">
+        <div className="flex items-center gap-2.5 p-3 rounded-lg bg-primary/5 border border-primary/10 text-xs text-muted-foreground animate-pulse">
           <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />
-          <span>Preencha os dados cadastrais nas abas acima. Após criar, você poderá complementar telefones, endereços, emails e redes sociais.</span>
+          <span>Complete as abas acima e não esqueça de adicionar <strong>Contato & Endereço</strong> na nova aba disponível!</span>
         </div>
       )}
     </div>
