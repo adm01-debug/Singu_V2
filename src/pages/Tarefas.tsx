@@ -58,7 +58,7 @@ export default function Tarefas() {
     const priorityOrder = { urgent: 0, high: 1, medium: 2, low: 3 };
     return [...tasks].sort((a, b) => {
       if (sortBy === 'priority') return (priorityOrder[a.priority as keyof typeof priorityOrder] ?? 2) - (priorityOrder[b.priority as keyof typeof priorityOrder] ?? 2);
-      if (sortBy === 'due_date') return (a.due_date || '9999').localeCompare(b.due_date || '9999');
+      if (sortBy === 'due_date') return (a.due_date || '9999').localeCompare(a.due_date || '9999');
       return (b.created_at || '').localeCompare(a.created_at || '');
     });
   }, [activeTab, categorizedTasks, searchTerm, sortBy]);
@@ -132,6 +132,12 @@ export default function Tarefas() {
           ))}
         </Tabs>
       </div>
+
+      <TaskDetailDrawer 
+        task={editingTask} 
+        open={!!editingTask} 
+        onOpenChange={(open) => !open && setEditingTask(null)} 
+      />
     </>
   );
 }
