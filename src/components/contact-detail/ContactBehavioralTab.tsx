@@ -13,6 +13,7 @@ import { EqSubTab } from './behavioral-tab/EqSubTab';
 import { BiasesSubTab } from './behavioral-tab/BiasesSubTab';
 import { MetaprogramsSubTab } from './behavioral-tab/MetaprogramsSubTab';
 import { PersonalitySubTab } from './behavioral-tab/PersonalitySubTab';
+import { BehavioralExecutiveSummary } from './behavioral-tab/BehavioralExecutiveSummary';
 const CommunicationIntelWidget = lazy(() => import('./CommunicationIntelWidget'));
 const EmotionalTrendWidget = lazy(() => import('./EmotionalTrendWidget'));
 const EmotionalTrendByContactWidget = lazy(() => import('./EmotionalTrendByContactWidget'));
