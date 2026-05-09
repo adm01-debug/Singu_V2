@@ -1,6 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Database } from "@/integrations/supabase/types";
+
+type PersonalityRow = Database['public']['Tables']['contact_personality']['Row'];
+export type ContactPersonality = Partial<PersonalityRow>;
 
 export interface ContactBehavior {
   disc_primary?: 'D' | 'I' | 'S' | 'C';
@@ -60,6 +64,8 @@ export interface ContactBusinessContext {
   seasonal_notes?: string;
 }
 
+// ContactPersonality is now typed from Database types in the header
+
 export const useContactBehavior = (contactId: string) => {
   const queryClient = useQueryClient();
 
@@ -101,6 +107,20 @@ export const useContactBehavior = (contactId: string) => {
         .maybeSingle();
       if (error) throw error;
       return data as ContactInfluence;
+    },
+    enabled: !!contactId,
+  });
+
+  const { data: personality, isLoading: isLoadingPersonality } = useQuery({
+    queryKey: ["contact-personality", contactId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("contact_personality")
+        .select("*")
+        .eq("contact_id", contactId)
+        .maybeSingle();
+      if (error) throw error;
+      return data as ContactPersonality;
     },
     enabled: !!contactId,
   });
@@ -171,6 +191,19 @@ export const useContactBehavior = (contactId: string) => {
     },
   });
 
+  const updatePersonalityMutation = useMutation({
+    mutationFn: async (updates: Partial<ContactPersonality>) => {
+      const { error } = await supabase
+        .from("contact_personality")
+        .upsert({ contact_id: contactId, ...updates }, { onConflict: 'contact_id' });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contact-personality", contactId] });
+      toast.success("Frameworks de personalidade atualizados");
+    },
+  });
+
   const { data: gaps, isLoading: isLoadingGaps } = useQuery({
     queryKey: ["contact-behavior-gaps", contactId],
     queryFn: async () => {
@@ -213,14 +246,16 @@ export const useContactBehavior = (contactId: string) => {
     decision,
     influence,
     businessContext,
+    personality,
     gaps,
     auditLogs,
     consistency,
-    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit,
+    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit || isLoadingPersonality,
     updateBehavior: updateBehaviorMutation.mutate,
     updateDecision: updateDecisionMutation.mutate,
     updateInfluence: updateInfluenceMutation.mutate,
     updateBusiness: updateBusinessMutation.mutate,
+    updatePersonality: updatePersonalityMutation.mutate,
     checkConsistency,
   };
 };

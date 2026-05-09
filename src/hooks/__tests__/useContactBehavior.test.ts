@@ -48,4 +48,15 @@ describe("Behavioral Data Integration Tests", () => {
     expect(error).toBeNull();
     expect(data?.length).toBeGreaterThan(0);
   });
+
+  test("should enforce MBTI pattern constraint", async () => {
+    const { error } = await supabase
+      .from("contact_personality")
+      .upsert({ 
+        contact_id: testContactId, 
+        mbti_type: 'INVALID' // Should fail regex
+      });
+    
+    expect(error).toBeDefined();
+  });
 });

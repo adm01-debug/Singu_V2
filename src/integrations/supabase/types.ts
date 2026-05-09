@@ -2295,6 +2295,86 @@ export type Database = {
           },
         ]
       }
+      contact_personality: {
+        Row: {
+          big_five_agreeableness: number | null
+          big_five_confidence: number | null
+          big_five_conscientiousness: number | null
+          big_five_extraversion: number | null
+          big_five_neuroticism: number | null
+          big_five_openness: number | null
+          contact_id: string
+          created_at: string
+          enneagram_scores: Json | null
+          enneagram_type: number | null
+          enneagram_wing: number | null
+          id: string
+          mbti_e_i_score: number | null
+          mbti_j_p_score: number | null
+          mbti_s_n_score: number | null
+          mbti_t_f_score: number | null
+          mbti_type: string | null
+          temperament_notes: string | null
+          temperament_primary: string | null
+          temperament_secondary: string | null
+          updated_at: string
+        }
+        Insert: {
+          big_five_agreeableness?: number | null
+          big_five_confidence?: number | null
+          big_five_conscientiousness?: number | null
+          big_five_extraversion?: number | null
+          big_five_neuroticism?: number | null
+          big_five_openness?: number | null
+          contact_id: string
+          created_at?: string
+          enneagram_scores?: Json | null
+          enneagram_type?: number | null
+          enneagram_wing?: number | null
+          id?: string
+          mbti_e_i_score?: number | null
+          mbti_j_p_score?: number | null
+          mbti_s_n_score?: number | null
+          mbti_t_f_score?: number | null
+          mbti_type?: string | null
+          temperament_notes?: string | null
+          temperament_primary?: string | null
+          temperament_secondary?: string | null
+          updated_at?: string
+        }
+        Update: {
+          big_five_agreeableness?: number | null
+          big_five_confidence?: number | null
+          big_five_conscientiousness?: number | null
+          big_five_extraversion?: number | null
+          big_five_neuroticism?: number | null
+          big_five_openness?: number | null
+          contact_id?: string
+          created_at?: string
+          enneagram_scores?: Json | null
+          enneagram_type?: number | null
+          enneagram_wing?: number | null
+          id?: string
+          mbti_e_i_score?: number | null
+          mbti_j_p_score?: number | null
+          mbti_s_n_score?: number | null
+          mbti_t_f_score?: number | null
+          mbti_type?: string | null
+          temperament_notes?: string | null
+          temperament_primary?: string | null
+          temperament_secondary?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_personality_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: true
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_preferences: {
         Row: {
           avoid_days: string[] | null
