@@ -2256,7 +2256,9 @@ export type Database = {
           hobbies: string[] | null
           id: string
           instagram: string | null
+          interactions_count: number | null
           interests: string[] | null
+          last_interaction_at: string | null
           last_name: string
           life_events: Json | null
           linkedin: string | null
@@ -2289,7 +2291,9 @@ export type Database = {
           hobbies?: string[] | null
           id?: string
           instagram?: string | null
+          interactions_count?: number | null
           interests?: string[] | null
+          last_interaction_at?: string | null
           last_name: string
           life_events?: Json | null
           linkedin?: string | null
@@ -2322,7 +2326,9 @@ export type Database = {
           hobbies?: string[] | null
           id?: string
           instagram?: string | null
+          interactions_count?: number | null
           interests?: string[] | null
+          last_interaction_at?: string | null
           last_name?: string
           life_events?: Json | null
           linkedin?: string | null
@@ -2516,6 +2522,53 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      crm_alerts: {
+        Row: {
+          contact_id: string
+          created_at: string | null
+          id: string
+          is_resolved: boolean | null
+          message: string
+          resolved_at: string | null
+          severity: string | null
+          suggested_action: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          is_resolved?: boolean | null
+          message: string
+          resolved_at?: string | null
+          severity?: string | null
+          suggested_action?: string | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          is_resolved?: boolean | null
+          message?: string
+          resolved_at?: string | null
+          severity?: string | null
+          suggested_action?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_alerts_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       cs_accounts: {
         Row: {
@@ -10845,6 +10898,7 @@ export type Database = {
         Returns: boolean
       }
       check_at_risk_contacts: { Args: never; Returns: undefined }
+      check_contact_health_alerts: { Args: never; Returns: undefined }
       cleanup_old_health_snapshots: { Args: never; Returns: number }
       compute_account_health: { Args: { _account_id: string }; Returns: Json }
       compute_attribution: {
