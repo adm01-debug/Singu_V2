@@ -164,6 +164,14 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                 <TableCell className="hidden lg:table-cell text-muted-foreground text-sm truncate max-w-[200px]">
                   {contact.email || '—'}
                 </TableCell>
+                <TableCell className="hidden xl:table-cell text-xs text-muted-foreground tabular-nums">
+                  {(() => {
+                    const lastInteraction = getLastInteractionDate(contact.id);
+                    return lastInteraction 
+                      ? formatDistanceToNow(new Date(lastInteraction), { locale: ptBR, addSuffix: true })
+                      : 'Nenhum';
+                  })()}
+                </TableCell>
                 <TableCell className="text-xs text-muted-foreground tabular-nums">
                   {formatDistanceToNow(new Date(contact.updated_at), { locale: ptBR, addSuffix: true })}
                 </TableCell>
