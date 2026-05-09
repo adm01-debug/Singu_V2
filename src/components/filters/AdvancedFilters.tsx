@@ -71,6 +71,8 @@ export function AdvancedFilters({
   sortBy,
   sortOrder,
   onSortChange,
+  multiSort = [],
+  onMultiSortChange,
 }: AdvancedFiltersProps) {
   const [openFilter, setOpenFilter] = useState<string | null>(null);
   const [sortOpen, setSortOpen] = useState(false);
