@@ -33,6 +33,19 @@ export function ContactFamilyInterestsCard({ contactId, hobbies, interests, fami
       setIsSaving(false);
     }
   };
+
+  const getSourceIcon = (source?: string) => {
+    if (!source) return null;
+    switch (source.toLowerCase()) {
+      case 'whatsapp': return <MessageSquare className="h-3 w-3 text-green-500" />;
+      case 'call': return <Phone className="h-3 w-3 text-blue-500" />;
+      case 'linkedin': return <Linkedin className="h-3 w-3 text-blue-600" />;
+      case 'instagram': return <Instagram className="h-3 w-3 text-pink-500" />;
+      case 'twitter': return <Twitter className="h-3 w-3 text-sky-400" />;
+      default: return <Globe className="h-3 w-3 text-muted-foreground" />;
+    }
+  };
+
   const hasHobbies = hobbies && hobbies.length > 0;
   const hasInterests = interests && interests.length > 0;
   const hasFamily = !!familyInfo;
