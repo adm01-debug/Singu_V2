@@ -167,9 +167,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
         cleanUpdates.cargo = updates.role_title;
       }
 
-      const { data, error } = (expectedVersion !== undefined || updates.version !== undefined)
-        ? await updateExternalDataWithVersion<Contact>('contacts', id, (expectedVersion ?? (updates.version as number)), cleanUpdates)
-        : await updateExternalData<Contact>('contacts', id, cleanUpdates);
+      const { data, error } = await updateExternalData<Contact>('contacts', id, cleanUpdates);
         
       if (error) throw error;
       
