@@ -1,6 +1,17 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Building2, ArrowUpDown } from 'lucide-react';
+import { 
+  Building2, 
+  ArrowUpDown, 
+  Star, 
+  Zap, 
+  Brain, 
+  MessageSquare, 
+  Phone, 
+  Linkedin, 
+  Instagram, 
+  Twitter 
+} from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { OptimizedAvatar } from '@/components/ui/optimized-avatar';

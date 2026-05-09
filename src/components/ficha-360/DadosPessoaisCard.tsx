@@ -218,7 +218,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
               </PopoverContent>
             </Popover>
 
-            {!isEditing && (
+            {!isEditing ? (
               <Button 
                 variant="ghost" 
                 size="icon" 
@@ -227,29 +227,29 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
               >
                 <Edit2 className="h-3.5 w-3.5" />
               </Button>
+            ) : (
+              <div className="flex items-center gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8 text-destructive"
+                  onClick={handleCancel}
+                  disabled={mutation.isPending}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8 text-success"
+                  onClick={handleSave}
+                  disabled={mutation.isPending}
+                >
+                  {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+                </Button>
+              </div>
             )}
           </div>
-            <div className="flex items-center gap-1">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 text-destructive"
-                onClick={handleCancel}
-                disabled={mutation.isPending}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 text-success"
-                onClick={handleSave}
-                disabled={mutation.isPending}
-              >
-                {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
-              </Button>
-            </div>
-          )}
           {!isEditing && (
             <Button
               variant="outline"
