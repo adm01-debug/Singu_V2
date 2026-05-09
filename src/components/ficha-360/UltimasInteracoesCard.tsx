@@ -176,8 +176,12 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
               { id: 'call', label: 'Ligações', icon: Phone },
               { id: 'email', label: 'E-mail', icon: Mail },
               { id: 'meeting', label: 'Reuniões', icon: Calendar },
+              { id: 'audio', label: 'Áudio', icon: Clock },
+              { id: 'transcription', label: 'Transcrição', icon: FileText },
             ].map((ch) => {
+              const isType = ['whatsapp', 'call', 'email', 'meeting'].includes(ch.id);
               const isActive = channels?.includes(ch.id);
+              
               return (
                 <Button
                   key={ch.id}
@@ -270,6 +274,16 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
                           <span className="capitalize">{it.channel ?? 'outro'}</span>
                           {it.direction && <span>· {it.direction}</span>}
                           <span>· {formatDate(it.data_interacao || it.created_at)}</span>
+                          {it.transcription && (
+                            <Badge variant="outline" className="text-[8px] h-3.5 px-1 ml-auto border-primary/20 bg-primary/5 text-primary">
+                              TXT
+                            </Badge>
+                          )}
+                          {it.audio_url && (
+                            <Badge variant="outline" className="text-[8px] h-3.5 px-1 border-blue-200 bg-blue-50 text-blue-600">
+                              AUDIO
+                            </Badge>
+                          )}
                         </div>
                       </div>
                     </Link>

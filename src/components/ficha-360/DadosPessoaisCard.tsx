@@ -458,11 +458,15 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                 ) : (
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {hobbies.length > 0 ? (
-                      hobbies.map((hobby, i) => (
-                        <Badge key={i} variant="secondary" className="text-[10px] font-normal bg-amber-50 text-amber-700 border-amber-100/50">
-                          {hobby}
-                        </Badge>
-                      ))
+                      hobbies.map((hobby, i) => {
+                        const source = rapportIntel?.rapport_metadata?.hobby?.[hobby];
+                        return (
+                          <Badge key={i} variant="secondary" className="text-[10px] font-normal bg-amber-50 text-amber-700 border-amber-100/50 gap-1">
+                            {source && getSourceIcon(source)}
+                            {hobby}
+                          </Badge>
+                        );
+                      })
                     ) : (
                       <p className="text-sm text-muted-foreground italic">Não informado</p>
                     )}
@@ -510,11 +514,15 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                 ) : (
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {interests.length > 0 ? (
-                      interests.map((interest, i) => (
-                        <Badge key={i} variant="secondary" className="text-[10px] font-normal bg-purple-50 text-purple-700 border-purple-100/50">
-                          {interest}
-                        </Badge>
-                      ))
+                      interests.map((interest, i) => {
+                        const source = rapportIntel?.rapport_metadata?.interest?.[interest];
+                        return (
+                          <Badge key={i} variant="secondary" className="text-[10px] font-normal bg-purple-50 text-purple-700 border-purple-100/50 gap-1">
+                            {source && getSourceIcon(source)}
+                            {interest}
+                          </Badge>
+                        );
+                      })
                     ) : (
                       <p className="text-sm text-muted-foreground italic">Não informado</p>
                     )}

@@ -62,17 +62,27 @@ export function useAIApprovals(contactId?: string) {
       
       const { data: contact, error: contactError } = await supabase
         .from('contacts')
-        .select(field)
+        .select(`${field}, rapport_metadata`)
         .eq('id', suggestion.contact_id)
         .single();
 
       if (contactError) throw contactError;
 
       const currentValues = (contact as any)[field] || [];
+      const currentMetadata = (contact as any).rapport_metadata || {};
+      const fieldMetadata = currentMetadata[field] || {};
+
       if (!currentValues.includes(suggestion.value)) {
+        const newValues = [...currentValues, suggestion.value];
+        const newFieldMetadata = { ...fieldMetadata, [suggestion.value]: suggestion.source };
+        const newMetadata = { ...currentMetadata, [field]: newFieldMetadata };
+
         const { error: saveError } = await supabase
           .from('contacts')
-          .update({ [field]: [...currentValues, suggestion.value] })
+          .update({ 
+            [field]: newValues,
+            rapport_metadata: newMetadata
+          })
           .eq('id', suggestion.contact_id);
         
         if (saveError) throw saveError;

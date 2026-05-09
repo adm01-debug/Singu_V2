@@ -2200,6 +2200,7 @@ export type Database = {
           notes: string | null
           personal_notes: string | null
           phone: string | null
+          rapport_metadata: Json | null
           relationship_score: number | null
           relationship_stage: string | null
           role: string | null
@@ -2232,6 +2233,7 @@ export type Database = {
           notes?: string | null
           personal_notes?: string | null
           phone?: string | null
+          rapport_metadata?: Json | null
           relationship_score?: number | null
           relationship_stage?: string | null
           role?: string | null
@@ -2264,6 +2266,7 @@ export type Database = {
           notes?: string | null
           personal_notes?: string | null
           phone?: string | null
+          rapport_metadata?: Json | null
           relationship_score?: number | null
           relationship_stage?: string | null
           role?: string | null
