@@ -244,23 +244,41 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
           </div>
 
           {/* Metrics row */}
-          <div className="mt-4 flex flex-wrap items-center gap-4">
-            <Badge className={cn('text-xs font-medium', stage.color)}>
-              {stage.label}
-            </Badge>
-            <div className="flex items-center gap-1.5">
-              <RelationshipScore score={contact.relationship_score || 0} size="sm" showMilestone />
-            </div>
-            <SentimentIndicator sentiment={(contact.sentiment as 'positive' | 'neutral' | 'negative') || 'neutral'} size="sm" />
-            <span className="text-xs text-muted-foreground">
-              {pluralize(interactionCount, 'interação', 'interações')}
-            </span>
-            {contact.birthday && (
-              <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Calendar className="h-3 w-3" />
-                {format(new Date(contact.birthday), "dd/MM/yyyy")}
+          <div className="mt-4 flex flex-col gap-4">
+            <div className="flex flex-wrap items-center gap-4">
+              <RelationshipStageBadge stage={(contact.relationship_stage as RelationshipStage) || 'unknown'} />
+              <div className="flex items-center gap-1.5">
+                <RelationshipScore score={contact.relationship_score || 0} size="sm" showMilestone />
+              </div>
+              <SentimentIndicator sentiment={(contact.sentiment as 'positive' | 'neutral' | 'negative') || 'neutral'} size="sm" />
+              <span className="text-xs text-muted-foreground">
+                {pluralize(interactionCount, 'interação', 'interações')}
               </span>
-            )}
+              {contact.birthday && (
+                <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Calendar className="h-3 w-3" />
+                  {format(new Date(contact.birthday), "dd/MM/yyyy")}
+                </span>
+              )}
+            </div>
+
+            {/* Interactive Relationship Funnel */}
+            <div className={cn("p-3 rounded-lg bg-muted/30 border border-border/50", isChangingStage && "opacity-60 pointer-events-none animate-pulse")}>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1">
+                  <Target className="h-3 w-3" />
+                  Funil de Relacionamento (Clique para alterar)
+                </span>
+                <Badge variant="outline" className="text-[9px] h-4">
+                  {contact.relationship_stage || 'unknown'}
+                </Badge>
+              </div>
+              <RelationshipFunnel 
+                currentStage={(contact.relationship_stage as RelationshipStage) || 'unknown'} 
+                onStageChange={handleStageChange}
+                isEditable
+              />
+            </div>
           </div>
 
           {/* 360° Intelligence Strip */}
