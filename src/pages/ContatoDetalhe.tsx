@@ -309,6 +309,12 @@ const ContatoDetalhe = () => {
               <ContactTouchpointsTab contactId={contact.id} />
             </DashboardErrorBoundary>
           </TabsContent>
+
+          <TabsContent value="life-events">
+            <DashboardErrorBoundary sectionName="Marcos de Vida">
+              <LifeEventsTab contactId={contact.id} />
+            </DashboardErrorBoundary>
+          </TabsContent>
         </Tabs>
       </div>
     </AppLayout>
