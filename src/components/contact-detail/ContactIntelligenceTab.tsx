@@ -30,6 +30,7 @@ const LocalChurnRiskPanel = lazy(() => import('@/components/churn-risk/ChurnRisk
 import { LeadScoreWidget } from '@/components/lead-score/LeadScoreWidget';
 import { ScoreExplicabilityPanel } from './ScoreExplicabilityPanel';
 import { MetricOverrideFlow } from './MetricOverrideFlow';
+import { RelationshipAuditPanel } from '../crm/relationship/RelationshipAuditPanel';
 
 
 interface Props {
@@ -278,6 +279,8 @@ export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, we
           currentSentiment={currentSentiment} 
         />
       </div>
+
+      <RelationshipAuditPanel contactId={contactId} />
 
 
 
