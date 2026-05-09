@@ -66,6 +66,28 @@ export function ContactOverviewTab({ contact, company, insights, alerts, interac
 
   return (
     <div className="space-y-4">
+      {/* Relationship Stage Funnel */}
+      <Card>
+        <CardHeader className="pb-3 flex flex-row items-center justify-between space-y-0">
+          <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <Layers className="h-4 w-4 text-primary" />
+            Estágio do Relacionamento
+          </CardTitle>
+          <Badge variant="secondary" className="text-[10px] capitalize">
+            {(contact.relationship_stage || 'unknown').replace('_', ' ')}
+          </Badge>
+        </CardHeader>
+        <CardContent>
+          <RelationshipFunnel 
+            currentStage={contact.relationship_stage as RelationshipStage || 'unknown'} 
+            isEditable 
+            onStageChange={(stage) => {
+              // This update should ideally call updateContact from useContactDetail
+              // We'll need to pass it or use it if available in context
+            }}
+          />
+        </CardContent>
+      </Card>
       {/* Active Insights */}
       {insights.length > 0 && (
         <Card className="border-warning/30 bg-warning/5">
