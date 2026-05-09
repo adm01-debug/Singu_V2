@@ -162,7 +162,7 @@ function AppSidebarInner() {
       {/* ─── Header ─── */}
       <SidebarHeader className="p-3">
         <Link to="/" className="flex items-center gap-2.5 min-w-0">
-          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-primary">
+          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary via-nexus-cyan to-accent shadow-[0_12px_24px_-12px_hsl(var(--nexus-glow)/0.8)]">
             <Zap className="w-4 h-4 text-primary-foreground" />
           </div>
           {!collapsed && (
