@@ -115,6 +115,8 @@ const ALLOWED_TABLES = [
   'company_stakeholder_map',
   // ── WhatsApp & Sales ──
   'whatsapp_messages', 'sales_activities',
+  // ── Logs & Approvals ──
+  'ai_recommendation_logs', 'follow_up_approvals',
   // ── Materialized views & KPIs ──
   'mv_daily_kpis', 'mv_daily_stats', 'v_daily_kpis',
   // ── Contact intelligence & analytics ──
