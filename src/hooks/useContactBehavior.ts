@@ -145,6 +145,20 @@ export const useContactBehavior = (contactId: string) => {
     enabled: !!contactId,
   });
 
+  const { data: rapport, isLoading: isLoadingRapport } = useQuery({
+    queryKey: ["contact-rapport", contactId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("contact_rapport_strategy")
+        .select("*")
+        .eq("contact_id", contactId)
+        .maybeSingle();
+      if (error) throw error;
+      return data as ContactRapportStrategy;
+    },
+    enabled: !!contactId,
+  });
+
   const { data: businessContext, isLoading: isLoadingBusiness } = useQuery({
     queryKey: ["contact-business-context", contactId],
     queryFn: async () => {
