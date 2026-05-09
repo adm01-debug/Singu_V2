@@ -19,6 +19,7 @@ const LEVEL_COLORS: Record<string, string> = {
 
 export function RapportCard({ contactId }: Props) {
   const { data, isLoading, error, refetch } = useRapportPoints(contactId);
+  const { data: rapportIntel } = useRapportIntel(contactId);
   const { suggestions, approve, reject } = useAIApprovals(contactId);
   const icon = <Handshake className="h-4 w-4 text-success" />;
 
