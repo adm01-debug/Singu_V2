@@ -309,10 +309,11 @@ export function useCompanies(options?: { enabled?: boolean }) {
     await queryClient.invalidateQueries({ queryKey: ['companies-remaining'] });
   }, [queryClient]);
 
-  const createCompany = async (company: Omit<CompanyInsert, 'user_id'>) => {
+  const createCompany = async (company: Omit<CompanyInsert, 'user_id'> & { phones?: any[], emails?: any[], addresses?: any[] }) => {
     if (!user) return null;
     try {
-      const input = company as Record<string, unknown>;
+      const { phones, emails, addresses, ...companyData } = company;
+      const input = companyData as Record<string, unknown>;
       const ext = stripLocal(input);
       const record = { ...ext, user_id: user.id } as Record<string, unknown>;
       
@@ -323,7 +324,26 @@ export function useCompanies(options?: { enabled?: boolean }) {
 
       const { data, error } = await insertExternalData<Company>('companies', record);
       if (error) throw error;
+      
       if (data) {
+        const companyId = (data as any).id;
+        
+        // Parallel insertion of related data if provided
+        const relatedPromises = [];
+        if (phones?.length) {
+          relatedPromises.push(...phones.map(p => insertExternalData('company_phones', { ...p, company_id: companyId })));
+        }
+        if (emails?.length) {
+          relatedPromises.push(...emails.map(e => insertExternalData('company_emails', { ...e, company_id: companyId })));
+        }
+        if (addresses?.length) {
+          relatedPromises.push(...addresses.map(a => insertExternalData('company_addresses', { ...a, company_id: companyId })));
+        }
+        
+        if (relatedPromises.length > 0) {
+          await Promise.allSettled(relatedPromises);
+        }
+
         const mapped = mapCompany(data as unknown as ExternalRow);
         queryClient.setQueryData<CompaniesPage>(queryKey, prev =>
           prev
@@ -331,9 +351,19 @@ export function useCompanies(options?: { enabled?: boolean }) {
             : { companies: [mapped], count: 1 }
         );
       }
+      
       const companyName = (data as Record<string, unknown>)?.nome_crm || input.name || 'Empresa';
       toast({ title: 'Empresa criada', description: `${companyName} foi adicionada com sucesso.` });
-      if (data) logActivity({ type: 'created', entityType: 'company', entityId: (data as Record<string, unknown>).id as string, entityName: String(companyName), description: 'Empresa criada' });
+      
+      if (data) {
+        logActivity({ 
+          type: 'created', 
+          entityType: 'company', 
+          entityId: (data as Record<string, unknown>).id as string, 
+          entityName: String(companyName), 
+          description: 'Empresa criada com dados compostos' 
+        });
+      }
       return data;
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';

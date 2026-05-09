@@ -7,7 +7,7 @@ import { useCompanyPhones, useCompanyEmails, useCompanyAddresses, useCompanySoci
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Building2, Loader2, FileText, Users, Landmark, Share2, MapPin, Phone } from 'lucide-react';
+import { Building2, Loader2, FileText, Users, Landmark, Share2, MapPin, Phone, Sparkles } from 'lucide-react';
 import type { Company } from '@/hooks/useCompanies';
 import { CompanyPhonesForm } from '@/components/forms/company/CompanyPhonesForm';
 import { CompanyEmailsForm } from '@/components/forms/company/CompanyEmailsForm';
@@ -18,6 +18,7 @@ import { CompanyFormBasicTab } from './company/CompanyFormBasicTab';
 import { CompanyFormFiscalTab } from './company/CompanyFormFiscalTab';
 import { CompanyFormClassificationTab } from './company/CompanyFormClassificationTab';
 import { CompanyFormStructureTab } from './company/CompanyFormStructureTab';
+import { CompanyFormCompositeFields } from './company/CompanyFormCompositeFields';
 
 interface CompanyFormProps {
   company?: Company | null;
@@ -114,14 +115,21 @@ export function CompanyForm({ company, onSubmit, onCancel, isSubmitting }: Compa
     { value: 'basico', label: 'Básico', icon: Building2 },
     { value: 'fiscal', label: 'Fiscal', icon: FileText },
     { value: 'classificacao', label: 'Classificação', icon: Users },
+    { value: 'contatos_end', label: 'Contato & Endereço', icon: MapPin },
     { value: 'estrutura', label: 'Estrutura', icon: Landmark },
     { value: 'telefones', label: 'Telefones', icon: Phone },
     { value: 'endereco', label: 'Endereços', icon: MapPin },
     { value: 'redes', label: 'Redes', icon: Share2 },
   ];
 
-  const createTabs = allTabs.slice(0, 4);
-  const visibleTabs = isEditing ? allTabs : createTabs;
+  const createTabs = allTabs.slice(0, 4); // basic, fiscal, classification, contacts_end
+  const visibleTabs = isEditing ? [
+    ...allTabs.slice(0, 3), // basic, fiscal, classification
+    allTabs[4], // structure
+    allTabs[5], // phones
+    allTabs[6], // addresses
+    allTabs[7], // networks
+  ] : createTabs;
 
   return (
     <Form {...form}>
@@ -176,6 +184,12 @@ export function CompanyForm({ company, onSubmit, onCancel, isSubmitting }: Compa
             <TabsContent value="classificacao" className="mt-0">
               <CompanyFormClassificationTab form={form} />
             </TabsContent>
+
+            {!isEditing && (
+              <TabsContent value="contatos_end" className="mt-0">
+                <CompanyFormCompositeFields form={form} />
+              </TabsContent>
+            )}
 
             <TabsContent value="estrutura" className="mt-0">
               <CompanyFormStructureTab form={form} />

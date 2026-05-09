@@ -1,5 +1,35 @@
 import { z } from 'zod';
 
+export const companyPhoneSchema = z.object({
+  id: z.string().uuid().optional(),
+  tipo: z.enum(['fixo', 'celular', 'whatsapp', 'outros']).default('fixo'),
+  numero: z.string().min(8, 'Número inválido'),
+  ramal: z.string().optional().or(z.literal('')),
+  is_primary: z.boolean().default(false),
+  contato_nome: z.string().optional().or(z.literal('')),
+});
+
+export const companyEmailSchema = z.object({
+  id: z.string().uuid().optional(),
+  tipo: z.enum(['comercial', 'financeiro', 'suporte', 'outros']).default('comercial'),
+  email: z.string().email('Email inválido'),
+  is_primary: z.boolean().default(false),
+});
+
+export const companyAddressSchema = z.object({
+  id: z.string().uuid().optional(),
+  tipo: z.enum(['comercial', 'entrega', 'cobranca', 'filial', 'deposito']).default('comercial'),
+  cep: z.string().optional().or(z.literal('')),
+  logradouro: z.string().min(1, 'Logradouro é obrigatório'),
+  numero: z.string().optional().or(z.literal('')),
+  complemento: z.string().optional().or(z.literal('')),
+  bairro: z.string().optional().or(z.literal('')),
+  cidade: z.string().min(1, 'Cidade é obrigatória'),
+  estado: z.string().length(2, 'UF deve ter 2 caracteres'),
+  pais: z.string().default('Brasil'),
+  is_primary: z.boolean().default(false),
+});
+
 export const companySchema = z.object({
   nome_crm: z.string().trim().min(1, 'Nome é obrigatório').max(150, 'Máximo 150 caracteres'),
   nome_fantasia: z.string().trim().max(150).optional().or(z.literal('')),
@@ -41,6 +71,10 @@ export const companySchema = z.object({
   confederacao_id: z.string().trim().max(50).optional().or(z.literal('')),
   bitrix_company_id: z.coerce.number().optional().or(z.literal(0)),
   merge_notes: z.string().trim().max(2000).optional().or(z.literal('')),
+  // Composite fields for unified creation
+  phones: z.array(companyPhoneSchema).optional(),
+  emails: z.array(companyEmailSchema).optional(),
+  addresses: z.array(companyAddressSchema).optional(),
 });
 
 export type CompanyFormData = z.infer<typeof companySchema>;
