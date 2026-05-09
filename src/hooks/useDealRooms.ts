@@ -362,8 +362,9 @@ export function useAddComment(roomId: string) {
       if (!user) throw new Error("Não autenticado");
       const { data, error } = await supabase.from("deal_room_comments").insert({
         room_id: roomId, user_id: user.id, author_side: "seller", author_label: user.email ?? "Vendedor", body,
-      }).select("*").single();
+      }).select("*").maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao adicionar comentário");
       return data as DealRoomComment;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.cmts(roomId) }),
