@@ -101,25 +101,44 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
       .slice(0, 3);
   }, [contacts, completedIds]);
 
-  const handleAction = (contactId: string, outcome: 'respondeu_positivo' | 'respondeu_neutro' | 'pulou') => {
+  const handleAction = async (contactId: string, outcome: 'respondeu_positivo' | 'respondeu_neutro' | 'pulou') => {
+    const contact = contacts.find(c => c.id === contactId);
+    const currentScore = contact?.relationship_score || 50;
+    
+    // Calcula ajuste de score
+    let scoreAdjustment = 0;
+    if (outcome === 'respondeu_positivo') scoreAdjustment = 5;
+    else if (outcome === 'respondeu_neutro') scoreAdjustment = 1;
+    else if (outcome === 'pulou') scoreAdjustment = -2;
+
+    const newScore = Math.min(100, Math.max(0, currentScore + scoreAdjustment));
+
     registerFeedback({
       contactId,
       passoId: 'dashboard_strategic_followup',
       outcome,
     }, {
-      onSuccess: () => {
+      onSuccess: async () => {
         setCompletedIds(prev => new Set(prev).add(contactId));
         
+        // Atualiza score no banco externo
+        if (scoreAdjustment !== 0) {
+          await updateExternalData('contacts', contactId, { 
+            relationship_score: newScore,
+            updated_at: new Date().toISOString()
+          });
+        }
+
         // Log auditoria
-        const contact = contacts.find(c => c.id === contactId);
         logAudit({
           contactId,
-          score: contact?.relationship_score || 0,
+          score: newScore,
           recommendationType: 'next_step',
-          reasons: ['Ação do usuário registrada via Próximos Passos'],
+          reasons: [`Ação "${outcome}" registrada via Próximos Passos. Score ajustado de ${currentScore} para ${newScore}`],
           userAction: outcome,
           dataUsed: {
-            score: contact?.relationship_score,
+            previous_score: currentScore,
+            new_score: newScore,
             last_interaction: contact?.last_interaction_at
           }
         });
@@ -128,7 +147,7 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
 
         toast({
           title: "Ação registrada",
-          description: "A pontuação e as recomendações foram atualizadas.",
+          description: `Score atualizado para ${newScore}. Recomendações reorganizadas.`,
         });
       }
     });
