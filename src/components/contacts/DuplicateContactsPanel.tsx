@@ -41,10 +41,30 @@ export const DuplicateContactsPanel = React.memo(function DuplicateContactsPanel
                   </div>
                 </div>
               </div>
-              {dup.similarity_score != null && <Badge variant="outline" className="text-[10px] shrink-0">{(dup.similarity_score * 100).toFixed(0)}% similar</Badge>}
+              <div className="flex items-center gap-2">
+                {dup.similarity_score != null && <Badge variant="outline" className="text-[10px] shrink-0">{(dup.similarity_score * 100).toFixed(0)}% similar</Badge>}
+                {dup.duplicate_of && (
+                  <Button 
+                    size="sm" 
+                    variant="ghost" 
+                    className="h-8 px-2 text-xs gap-1.5 hover:bg-warning/20 hover:text-warning"
+                    onClick={() => setMergeState({ open: true, primaryId: dup.duplicate_of!, secondaryId: dup.id || dup.contact_id! })}
+                  >
+                    <GitMerge className="h-3.5 w-3.5" />
+                    Mesclar
+                  </Button>
+                )}
+              </div>
             </div>
           ))}
         </div>
+        <MergeContactsDialog 
+          open={mergeState.open} 
+          onOpenChange={(open) => setMergeState(prev => ({ ...prev, open }))}
+          primaryId={mergeState.primaryId}
+          secondaryId={mergeState.secondaryId}
+          onSuccess={() => refetch()}
+        />
       </CardContent>
     </Card>
   );
