@@ -41,6 +41,8 @@ interface Props {
   sortBy: string;
   sortOrder: 'asc' | 'desc';
   onSortChange: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
+  multiSort?: any[];
+  onMultiSortChange?: (criteria: any[]) => void;
   dynamicFilters: FilterConfig[];
   selectionMode: boolean;
   selectedIds: Set<string>;
