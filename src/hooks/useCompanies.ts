@@ -402,7 +402,7 @@ export function useCompanies(options?: { enabled?: boolean }) {
   };
 
   return {
-    companies, loading, totalCount, searchTerm,
+    companies, loading, isFetching, totalCount, searchTerm,
     setSearchTerm: (term: string) => { setSearchTerm(term); },
     fetchCompanies, createCompany, updateCompany, deleteCompany,
   };
