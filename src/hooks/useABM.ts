@@ -147,8 +147,9 @@ export function useUpdateABMAccount() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<ABMAccount> & { id: string }) => {
-      const { data, error } = await supabase.from("abm_accounts").update(updates).eq("id", id).select().single();
+      const { data, error } = await supabase.from("abm_accounts").update(updates).eq("id", id).select().maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Conta ABM não encontrada");
       return data;
     },
     onSuccess: (_, vars) => {
