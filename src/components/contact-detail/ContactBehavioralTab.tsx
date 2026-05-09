@@ -109,7 +109,21 @@ export function ContactBehavioralTab({ contact }: Props) {
   const vakProfile = behavior?.vakProfile as Record<string, number> | null;
 
   return (
-    <>
+    <div className="space-y-6">
+      <BehavioralExecutiveSummary 
+        contactId={contact.id} 
+        data={{
+          disc: discProfile || (behavior?.discProfile as string),
+          discConfidence: discConfidence,
+          eqScore: eqAnalysis?.overall_score,
+          eqLevel: eqAnalysis?.overall_level,
+          primaryVak: (behavior?.vakProfile as any)?.primary || 'Auditivo',
+          summary: eqAnalysis?.profile_summary || biases?.profile_summary,
+          strengths: eqAnalysis?.strengths,
+          riskFactors: biases?.resistances,
+          approachStrategy: (biases?.sales_strategies as any)?.primary_approach
+        }}
+      />
     <Tabs defaultValue="disc" className="space-y-4">
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <TabsList className="flex-wrap h-auto gap-1">
