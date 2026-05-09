@@ -389,8 +389,9 @@ export function useUpsertCampaign() {
         const { id, metrics, ...rest } = input;
         const updates: Record<string, unknown> = { ...rest };
         if (metrics !== undefined) updates.metrics = metrics as unknown;
-        const { data, error } = await supabase.from("abm_campaigns").update(updates as never).eq("id", id).select().single();
+        const { data, error } = await supabase.from("abm_campaigns").update(updates as never).eq("id", id).select().maybeSingle();
         if (error) throw error;
+        if (!data) throw new Error("Campanha não encontrada");
         return data;
       }
       const { data, error } = await supabase
@@ -408,8 +409,9 @@ export function useUpsertCampaign() {
           user_id: user.id,
         })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar campanha");
       return data;
     },
     onSuccess: () => {
