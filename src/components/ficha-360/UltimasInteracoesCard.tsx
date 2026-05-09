@@ -65,7 +65,13 @@ function formatDate(iso?: string | null): string {
 }
 
 export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtra, filtersActive, isLoading, days, channels, q }: Props) => {
-  const { setQ } = useFicha360Filters();
+  const { setQ, setChannels } = useFicha360Filters();
+  const [localSearch, setLocalSearch] = useState(q || '');
+  
+  useEffect(() => {
+    setLocalSearch(q || '');
+  }, [q]);
+
   const items = Array.isArray(interactions) ? interactions : [];
   const channelsKey = Array.isArray(channels) ? [...channels].map((c) => c.toLowerCase()).sort().join(',') : '';
   const qKey = q ? hashString(q.trim().toLowerCase()) : 'noq';
