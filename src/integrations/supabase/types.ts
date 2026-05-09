@@ -2572,6 +2572,7 @@ export type Database = {
       }
       crm_automation_logs: {
         Row: {
+          audit_context: Json | null
           automation_name: string
           contact_id: string | null
           created_at: string | null
@@ -2583,6 +2584,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          audit_context?: Json | null
           automation_name: string
           contact_id?: string | null
           created_at?: string | null
@@ -2594,6 +2596,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          audit_context?: Json | null
           automation_name?: string
           contact_id?: string | null
           created_at?: string | null
@@ -2614,8 +2617,50 @@ export type Database = {
           },
         ]
       }
+      crm_automation_reprocess_queue: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_error: string | null
+          log_id: string | null
+          max_retries: number | null
+          next_retry_at: string | null
+          retry_count: number | null
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_error?: string | null
+          log_id?: string | null
+          max_retries?: number | null
+          next_retry_at?: string | null
+          retry_count?: number | null
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_error?: string | null
+          log_id?: string | null
+          max_retries?: number | null
+          next_retry_at?: string | null
+          retry_count?: number | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_automation_reprocess_queue_log_id_fkey"
+            columns: ["log_id"]
+            isOneToOne: false
+            referencedRelation: "crm_automation_logs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_cadence_rules: {
         Row: {
+          cadence_steps: Json | null
           created_at: string | null
           frequency_days: number
           id: string
@@ -2628,6 +2673,7 @@ export type Database = {
           version: number | null
         }
         Insert: {
+          cadence_steps?: Json | null
           created_at?: string | null
           frequency_days: number
           id?: string
@@ -2640,6 +2686,7 @@ export type Database = {
           version?: number | null
         }
         Update: {
+          cadence_steps?: Json | null
           created_at?: string | null
           frequency_days?: number
           id?: string
