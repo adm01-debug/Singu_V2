@@ -15,7 +15,7 @@ export type ContactUpdate = TablesUpdate<'contacts'>;
 
 export type ContactListItem = Pick<Contact, 
   | 'id' | 'first_name' | 'last_name' | 'company_id' | 'relationship_score'
-  | 'relationship_stage' | 'sentiment' | 'tags' | 'updated_at' | 'created_at' | 'version'
+  | 'relationship_stage' | 'sentiment' | 'tags' | 'updated_at' | 'created_at'
   | 'notes' // Added notes for summary
 >;
 
