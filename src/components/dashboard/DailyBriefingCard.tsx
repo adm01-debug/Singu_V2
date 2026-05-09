@@ -2,9 +2,10 @@ import { useMemo, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Sparkles, X, ArrowRight, TrendingUp, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Sparkles, X, ArrowRight, TrendingUp, AlertCircle, CheckCircle2, Sun, Moon, Coffee } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Contact {
   id: string;
@@ -44,10 +45,16 @@ function isYesterday(iso: string): boolean {
   return iso.slice(0, 10) === d.toISOString().slice(0, 10);
 }
 
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return { text: 'Bom dia', icon: Coffee };
+  if (hour < 18) return { text: 'Boa tarde', icon: Sun };
+  return { text: 'Boa noite', icon: Moon };
+}
+
 /**
  * Card "Briefing do dia" — aparece 1x por dia no topo do Dashboard.
  * Resume o que mudou desde ontem e sugere prioridades.
- * Heurística 100% client-side sobre dados já carregados.
  */
 export function DailyBriefingCard({
   contacts,
@@ -66,6 +73,8 @@ export function DailyBriefingCard({
       return false;
     }
   });
+
+  const greeting = useMemo(() => getGreeting(), []);
 
   const summary = useMemo(() => {
     const interactionsToday = interactions.filter((i) => isToday(i.created_at)).length;
@@ -115,70 +124,111 @@ export function DailyBriefingCard({
     } catch { /* noop */ }
   };
 
+  const GreetingIcon = greeting.icon;
+
   return (
-    <Card className={cn('relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background', className)} data-density-aware>
-      <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-primary/10 blur-3xl pointer-events-none" aria-hidden="true" />
-      <CardContent className="relative p-4 md:p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-start gap-3">
-            <div className="rounded-lg bg-primary/15 p-2">
-              <Sparkles className="h-4 w-4 text-primary" aria-hidden="true" />
-            </div>
-            <div className="space-y-0.5">
-              <h3 className="text-sm font-semibold leading-tight">Briefing do dia</h3>
-              <p className="text-xs text-muted-foreground">
-                {summary.interactionsToday} {summary.interactionsToday === 1 ? 'conversa' : 'conversas'} hoje ·{' '}
-                {summary.newContactsToday} novos contatos ·{' '}
-                {summary.trend >= 0 ? '+' : ''}{summary.trend} vs ontem
-              </p>
-            </div>
-          </div>
-          <Button
-            type="button"
-            size="icon"
-            variant="ghost"
-            className="h-7 w-7 shrink-0 text-muted-foreground"
-            onClick={dismiss}
-            aria-label="Dispensar briefing por hoje"
-          >
-            <X className="h-3.5 w-3.5" />
-          </Button>
-        </div>
+    <AnimatePresence>
+      {!dismissed && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+        >
+          <Card className={cn('relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background shadow-sm hover:shadow-md transition-shadow duration-300', className)} data-density-aware>
+            <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-primary/10 blur-3xl pointer-events-none" aria-hidden="true" />
+            <CardContent className="relative p-4 md:p-6">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="rounded-xl bg-primary/10 p-2.5 shadow-sm">
+                    <GreetingIcon className="h-5 w-5 text-primary" aria-hidden="true" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-bold tracking-tight text-foreground">
+                      {greeting.text}, seu briefing está pronto
+                    </h3>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+                      <span className="flex items-center gap-1.5 font-medium text-foreground/80">
+                        <Sparkles className="h-3.5 w-3.5 text-primary" />
+                        {summary.interactionsToday} {summary.interactionsToday === 1 ? 'conversa' : 'conversas'} hoje
+                      </span>
+                      <span className="h-1 w-1 rounded-full bg-border" />
+                      <span>{summary.newContactsToday} novos contatos</span>
+                      <span className="h-1 w-1 rounded-full bg-border" />
+                      <span className={cn('font-medium', summary.trend >= 0 ? 'text-success' : 'text-warning')}>
+                        {summary.trend >= 0 ? '+' : ''}{summary.trend} vs ontem
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  className="h-8 w-8 shrink-0 text-muted-foreground hover:bg-muted/80 rounded-full transition-colors"
+                  onClick={dismiss}
+                  aria-label="Dispensar briefing por hoje"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
 
-        {summary.vsAverage !== 0 && (
-          <div className="mt-3 flex items-center gap-2">
-            <Badge variant="outline" className={cn('gap-1 text-[10px]', summary.vsAverage >= 0 ? 'text-success border-success/30' : 'text-warning border-warning/30')}>
-              <TrendingUp className="h-3 w-3" />
-              {summary.vsAverage > 0 ? '+' : ''}{summary.vsAverage}% vs média semanal
-            </Badge>
-          </div>
-        )}
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                {summary.vsAverage !== 0 && (
+                  <Badge variant="outline" className={cn('gap-1.5 px-2.5 py-0.5 text-[11px] font-semibold border-2 transition-all', 
+                    summary.vsAverage >= 0 ? 'text-success border-success/20 bg-success/5' : 'text-warning border-warning/20 bg-warning/5')}>
+                    <TrendingUp className="h-3.5 w-3.5" />
+                    {summary.vsAverage > 0 ? '+' : ''}{summary.vsAverage}% vs média semanal
+                  </Badge>
+                )}
+                {summary.interactionsToday > 0 && (
+                  <Badge variant="outline" className="gap-1.5 px-2.5 py-0.5 text-[11px] font-semibold border-2 border-primary/20 bg-primary/5 text-primary">
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                    Ritmo ativo
+                  </Badge>
+                )}
+              </div>
 
-        {summary.priorities.length > 0 && (
-          <div className="mt-4 space-y-1.5">
-            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-              Prioridades sugeridas
-            </p>
-            <ul className="space-y-1">
-              {summary.priorities.map((p, i) => {
-                const Icon = p.tone === 'urgent' ? AlertCircle : p.tone === 'opportunity' ? Sparkles : CheckCircle2;
-                return (
-                  <li key={i}>
-                    <Link
-                      to={p.href}
-                      className="group flex items-center gap-2 rounded-md border border-border/50 bg-background/60 px-2.5 py-1.5 text-xs transition-colors hover:bg-muted"
-                    >
-                      <Icon className={cn('h-3.5 w-3.5 shrink-0', p.tone === 'urgent' ? 'text-destructive' : p.tone === 'opportunity' ? 'text-primary' : 'text-success')} aria-hidden="true" />
-                      <span className="flex-1 truncate">{p.label}</span>
-                      <ArrowRight className="h-3 w-3 text-muted-foreground transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+              {summary.priorities.length > 0 && (
+                <div className="mt-6 space-y-3">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/80">
+                    Sugestões de Ação
+                  </p>
+                  <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+                    {summary.priorities.map((p, i) => {
+                      const Icon = p.tone === 'urgent' ? AlertCircle : p.tone === 'opportunity' ? Sparkles : CheckCircle2;
+                      return (
+                        <li key={i}>
+                          <Link
+                            to={p.href}
+                            className={cn(
+                              "group flex items-center gap-3 rounded-xl border p-3 text-sm transition-all duration-200",
+                              p.tone === 'urgent' ? "border-destructive/10 bg-destructive/5 hover:border-destructive/30 hover:bg-destructive/10" : 
+                              p.tone === 'opportunity' ? "border-primary/10 bg-primary/5 hover:border-primary/30 hover:bg-primary/10" : 
+                              "border-border/50 bg-background/60 hover:border-border hover:bg-muted"
+                            )}
+                          >
+                            <div className={cn(
+                              "rounded-lg p-1.5 transition-colors",
+                              p.tone === 'urgent' ? "bg-destructive/10 group-hover:bg-destructive/20" : 
+                              p.tone === 'opportunity' ? "bg-primary/10 group-hover:bg-primary/20" : 
+                              "bg-muted group-hover:bg-background"
+                            )}>
+                              <Icon className={cn('h-4 w-4 shrink-0', p.tone === 'urgent' ? 'text-destructive' : p.tone === 'opportunity' ? 'text-primary' : 'text-success')} aria-hidden="true" />
+                            </div>
+                            <span className="flex-1 font-medium leading-tight">{p.label}</span>
+                            <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true" />
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
