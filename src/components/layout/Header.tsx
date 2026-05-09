@@ -99,6 +99,17 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
         </div>
 
         <div className="flex items-center gap-1 md:gap-3 shrink-0">
+          {showSearch && (
+            <div className="hidden md:flex relative group w-48 lg:w-64">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+              <Input 
+                placeholder="Buscar..." 
+                className="pl-8 h-8 text-[11px] bg-muted/40 border-none focus-visible:ring-1 focus-visible:ring-primary/20"
+                onChange={(e) => onSearchChange?.(e.target.value)}
+              />
+            </div>
+          )}
+
           <div className="hidden md:inline-flex items-center gap-4">
             <SystemStatusBadge />
             <div className="flex items-center gap-1">
