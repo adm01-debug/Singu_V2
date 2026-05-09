@@ -60,43 +60,48 @@ interface Props {
 }
 
 export function ContatosContent(props: Props) {
-  const { contacts, loading, createContact, updateContact, deleteContact, fetchContacts } = useContacts();
-  const { selectedIndex, setSelectedIndex } = { selectedIndex: -1, setSelectedIndex: (i: number) => {} }; // will update this below
+  const {
+    contacts, loading, filteredAndSortedContacts, searchTerm, onSearchChange,
+    viewMode, onViewModeChange, gridColumns, onGridColumnsChange,
+    activeFilters, onFiltersChange, sortBy, sortOrder, onSortChange,
+    filterConfigs, sortOptions, selectionMode, selectedIds,
+    onToggleSelectionMode, onSelect, onSelectAll, onBulkDelete, onBulkAddTag,
+    onSetEditingContact, onSetDeletingContact, onSetIsFormOpen,
+    updateContact, getCompanyName, getLastInteractionDate, onRefresh,
+  } = props;
+
+  const { isAdmin } = useIsAdmin();
+  const navigate = useNavigate();
+  const RENDER_BATCH = 60;
+  const [visibleCount, setVisibleCount] = useState(RENDER_BATCH);
+  const sentinelRef = useRef<HTMLDivElement>(null);
   
-  // Restore real list navigation
-  const listNav = (function useInternalListNav() {
-    const navigate = useNavigate();
-    const [idx, setIdx] = useState(-1);
+  // Real list navigation implementation
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  
+  useEffect(() => {
+    const handleNavigate = (e: any) => {
+      const direction = e.detail;
+      setSelectedIndex(prev => {
+        let next = direction === 'next' ? prev + 1 : prev - 1;
+        if (next < 0) next = filteredAndSortedContacts.length - 1;
+        if (next >= filteredAndSortedContacts.length) next = 0;
+        return next;
+      });
+    };
     
-    useEffect(() => {
-      const handleNavigate = (e: any) => {
-        const direction = e.detail;
-        setIdx(prev => {
-          let next = direction === 'next' ? prev + 1 : prev - 1;
-          if (next < 0) next = filteredAndSortedContacts.length - 1;
-          if (next >= filteredAndSortedContacts.length) next = 0;
-          return next;
-        });
-      };
-      
-      const handleOpen = () => {
-        const contact = filteredAndSortedContacts[idx];
-        if (contact) navigate(`/contatos/${contact.id}`);
-      };
+    const handleOpen = () => {
+      const contact = filteredAndSortedContacts[selectedIndex];
+      if (contact) navigate(`/contatos/${contact.id}`);
+    };
 
-      window.addEventListener('navigate-list', handleNavigate);
-      window.addEventListener('open-selected-item', handleOpen);
-      return () => {
-        window.removeEventListener('navigate-list', handleNavigate);
-        window.removeEventListener('open-selected-item', handleOpen);
-      };
-    }, [filteredAndSortedContacts, idx, navigate]);
-
-    return { selectedIndex: idx, setSelectedIndex: setIdx };
-  })();
-
-  const { selectedIndex, setSelectedIndex } = listNav;
-
+    window.addEventListener('navigate-list', handleNavigate);
+    window.addEventListener('open-selected-item', handleOpen);
+    return () => {
+      window.removeEventListener('navigate-list', handleNavigate);
+      window.removeEventListener('open-selected-item', handleOpen);
+    };
+  }, [filteredAndSortedContacts, selectedIndex, navigate]);
 
   useEffect(() => { setVisibleCount(RENDER_BATCH); }, [activeFilters, sortBy, sortOrder, searchTerm]);
 
