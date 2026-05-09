@@ -106,7 +106,9 @@ export function OverviewTab({
               avatar_url: c.avatar,
               relationship_score: c.relationshipScore,
               last_interaction_at: c.lastInteraction?.toISOString() || null,
-              role_title: c.role
+              last_interaction_summary: c.lastInteractionSummary,
+              role_title: c.role,
+              notes: c.lastInteractionSummary // Fallback
             }))} />
           </Suspense>
         </DashboardErrorBoundary>
