@@ -42,29 +42,24 @@ function getFilesFromAbs(dir: string, ext: string): string[] {
 // 1. Route & Page Integrity
 // ============================================
 describe('Route & Page Integrity', () => {
-  const appContent = readSrcFile('App.tsx');
+  const appContent = readSrcFile('app/AppRoutes.tsx');
 
-  it('App.tsx exists and is valid', () => {
+  it('AppRoutes.tsx exists and is valid', () => {
     expect(appContent.length).toBeGreaterThan(100);
   });
 
-  it('App.tsx imports React Router', () => {
-    expect(appContent).toContain('react-router');
+  it('AppRoutes.tsx imports React Router', () => {
+    expect(appContent).toContain('react-router-dom');
   });
 
-  it('App.tsx has route definitions', () => {
+  it('AppRoutes.tsx has route definitions', () => {
     expect(appContent).toContain('Route');
   });
 
   const expectedRoutes = ['/', '/contatos', '/configuracoes'];
   expectedRoutes.forEach(route => {
     it(`has route for ${route}`, () => {
-      // Check path prop or index route
-      if (route === '/') {
-        expect(appContent.includes('index') || appContent.includes('path="/"')).toBe(true);
-      } else {
-        expect(appContent).toContain(route.replace('/', ''));
-      }
+      expect(appContent).toContain(`path="${route}"`);
     });
   });
 });
