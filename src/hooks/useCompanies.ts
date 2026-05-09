@@ -8,7 +8,12 @@ import { showConcurrentEditToast } from '@/lib/concurrentEditToast';
 import type { Tables, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
 
-export type Company = Tables<'companies'>;
+export type Company = Tables<'companies'> & {
+  // Virtual fields for grouping/metrics
+  _contact_count?: number;
+  _last_interaction_days?: number | null;
+  _health_score?: number;
+};
 export type CompanyInsert = TablesInsert<'companies'>;
 export type CompanyUpdate = TablesUpdate<'companies'>;
 
