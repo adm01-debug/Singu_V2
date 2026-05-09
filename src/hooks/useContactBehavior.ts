@@ -251,6 +251,19 @@ export const useContactBehavior = (contactId: string) => {
     },
   });
 
+  const updateRapportMutation = useMutation({
+    mutationFn: async (updates: Partial<ContactRapportStrategy>) => {
+      const { error } = await supabase
+        .from("contact_rapport_strategy")
+        .upsert({ contact_id: contactId, ...updates }, { onConflict: 'contact_id' });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contact-rapport", contactId] });
+      toast.success("Estratégia de Rapport atualizada");
+    },
+  });
+
   const { data: gaps, isLoading: isLoadingGaps } = useQuery({
     queryKey: ["contact-behavior-gaps", contactId],
     queryFn: async () => {
