@@ -200,9 +200,9 @@ export function useDocumentSignatures() {
           .eq('id', input.template_id)
           .maybeSingle();
         if (tpl) {
-          await (supabase
-            .from('document_templates') as any)
-            .update({ usage_count: ((tpl as any).usage_count ?? 0) + 1 })
+          await supabase
+            .from('document_templates')
+            .update({ usage_count: (tpl.usage_count ?? 0) + 1 } as any)
             .eq('id', input.template_id);
         }
       }
