@@ -89,7 +89,7 @@ export default function PublicDealRoom() {
           <CardHeader><CardTitle className="text-base">Plano de Ação</CardTitle></CardHeader>
           <CardContent className="space-y-2">
             {milestones.length === 0 && <p className="text-sm text-muted-foreground italic">Sem milestones</p>}
-            {milestones.map((m: any) => {
+            {milestones.map((m) => {
               const buyerCanToggle = m.owner_side !== "seller";
               return (
                 <div key={m.id} className="flex items-start gap-3 p-2 rounded border border-border/60">
