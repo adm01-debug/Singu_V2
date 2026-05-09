@@ -15,13 +15,15 @@ export function ContactsStatsBar({ contacts, className }: ContactsStatsBarProps)
       ? Math.round(contacts.reduce((sum, c) => sum + (c.relationship_score || 0), 0) / total)
       : 0;
     const excellent = contacts.filter(c => (c.relationship_score || 0) >= 80).length;
-    const needsAttention = contacts.filter(c => {
-      const daysSince = Math.floor((Date.now() - new Date(c.updated_at).getTime()) / (1000 * 60 * 60 * 24));
-      return daysSince > 30;
+    const atRisk = contacts.filter(c => c.relationship_stage === 'at_risk').length;
+    const inactive = contacts.filter(c => {
+       // Logic for inactive: relationship_score low and no recent update
+       return (c.relationship_score || 0) < 40;
     }).length;
 
-    return { total, avgScore, excellent, needsAttention };
+    return { total, avgScore, excellent, atRisk, inactive };
   }, [contacts]);
+
 
   const getScoreColor = (score: number) => {
     if (score >= 70) return 'text-success';
@@ -55,11 +57,12 @@ export function ContactsStatsBar({ contacts, className }: ContactsStatsBarProps)
     },
     {
       icon: AlertTriangle,
-      label: 'Sem contato +30d',
-      value: stats.needsAttention,
-      color: stats.needsAttention > 0 ? 'text-warning' : 'text-muted-foreground',
-      bgColor: stats.needsAttention > 0 ? 'bg-warning/10' : 'bg-muted/50',
+      label: 'Em Risco',
+      value: stats.atRisk,
+      color: stats.atRisk > 0 ? 'text-destructive' : 'text-muted-foreground',
+      bgColor: stats.atRisk > 0 ? 'bg-destructive/10' : 'bg-muted/50',
     },
+
   ];
 
   return (
