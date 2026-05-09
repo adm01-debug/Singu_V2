@@ -29,6 +29,9 @@ const CadenceAlertWidget = lazy(() => import('@/components/contact-detail/Cadenc
 const PendingNotificationsWidget = lazy(() => import('@/components/dashboard/widgets/PendingNotificationsWidget'));
 const DailyInsightsWidget = lazy(() => import('@/components/dashboard/widgets/DailyInsightsWidget'));
 const ChurnRiskReportWidget = lazy(() => import('@/components/dashboard/widgets/ChurnRiskReportWidget'));
+const SmartRemindersPanel = lazy(() => import('@/components/smart-reminders/SmartRemindersPanel').then(m => ({ default: m.SmartRemindersPanel })));
+const StrategicNextStepsCard = lazy(() => import('@/components/dashboard/StrategicNextStepsCard').then(m => ({ default: m.StrategicNextStepsCard })));
+
 interface StaggerAnimation {
   initial: TargetAndTransition;
   animate: TargetAndTransition;
