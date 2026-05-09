@@ -133,9 +133,6 @@ export function OverviewTab({
             <SmartRemindersPanel compact contacts={contacts} interactions={interactions} />
           </Suspense>
         </DashboardErrorBoundary>
-        <DashboardErrorBoundary sectionName="Smart Reminders">
-...
-        </DashboardErrorBoundary>
       </div>
 
       <DashboardErrorBoundary sectionName="Briefing">
