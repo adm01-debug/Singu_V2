@@ -129,9 +129,16 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                         <span className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
                           {fullName}
                         </span>
-                        {contact.role_title && (
-                          <span className="text-xs text-muted-foreground line-clamp-1">{contact.role_title}</span>
-                        )}
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                           {contact.role_title && (
+                            <span className="text-[10px] text-muted-foreground line-clamp-1 border-r pr-1.5">{contact.role_title}</span>
+                          )}
+                          <span className="text-[10px] font-bold text-primary/80 flex items-center gap-1">
+                            <Zap className="w-2.5 h-2.5" />
+                            Ação sugerida disponível
+                          </span>
+                        </div>
+
                       </div>
                     </Link>
                     
