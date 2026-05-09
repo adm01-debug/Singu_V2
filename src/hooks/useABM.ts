@@ -130,8 +130,9 @@ export function useCreateABMAccount() {
         .from("abm_accounts")
         .insert({ ...input, user_id: user.id })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar conta ABM");
       return data;
     },
     onSuccess: () => {
