@@ -44,6 +44,15 @@ test.describe('Contacts CRUD & Rapport', () => {
     // Ensure filters are present
     await expect(page.getByRole('button', { name: 'WhatsApp' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Ligações' })).toBeVisible();
+
+    // 5. Test Approval Flow
+    await page.getByRole('button', { name: 'Rapport' }).first().click(); // Navigate to behavioral tab
+    await expect(page.getByText(/Sugestões para Revisão/i)).toBeVisible();
+    const approveButton = page.locator('button:has-text("Check")').first();
+    if (await approveButton.isVisible()) {
+      await approveButton.click();
+      await expect(page.getByText(/Sugestão aprovada/i)).toBeVisible();
+    }
   });
 
   test('Pagination (loadMore) flow', async ({ page }) => {
