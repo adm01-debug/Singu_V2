@@ -6,6 +6,7 @@ import { InlineEmptyState } from '@/components/ui/empty-state';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import type { RapportIntel } from '@/hooks/useRapportIntelView';
 import { useRapportIntelMutation } from '@/hooks/useRapportIntelMutation';
 import { cn } from '@/lib/utils';
