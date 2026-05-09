@@ -114,9 +114,19 @@ const Empresas = () => {
       }
       return true;
     });
-    result.sort((a, b) => { let aVal = a[sortBy as keyof Company]; let bVal = b[sortBy as keyof Company]; if (aVal === null || aVal === undefined) aVal = '' as never; if (bVal === null || bVal === undefined) bVal = '' as never; if (typeof aVal === 'string' && typeof bVal === 'string') { const comparison = aVal.localeCompare(bVal, 'pt-BR'); return sortOrder === 'asc' ? comparison : -comparison; } return 0; });
-    return result;
-  }, [companies, activeFilters, sortBy, sortOrder]);
+    
+    // Inject metrics into objects for sorting
+    const enriched = result.map(c => ({
+      ...c,
+      _contact_count: companyMetrics.contactCountMap.get(c.id) || 0,
+      _last_interaction_days: companyMetrics.lastInteractionMap.get(c.id) ?? 9999,
+    }));
+
+    return sortArray(enriched, multiSort as any, undefined, { 
+      dateFields: ['updated_at', 'created_at', 'data_fundacao', 'situacao_rf_data'],
+      numericFields: ['capital_social', 'lead_score', '_contact_count', '_last_interaction_days'] 
+    });
+  }, [companies, activeFilters, multiSort, companyMetrics]);
 
   const { selectedIndex } = useListNavigation(filteredAndSortedCompanies as Array<{ id: string }>, { onOpen: (company) => navigate(`/empresas/${company.id}`), onSelect: () => {} });
   useKeyboardShortcutsEnhanced();
