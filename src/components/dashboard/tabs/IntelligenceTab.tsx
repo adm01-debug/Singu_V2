@@ -30,21 +30,27 @@ export function IntelligenceTab({ prefersReducedMotion, tabDirection }: Intellig
   };
 
   return (
-    <motion.div key={`intelligence-${tabDirection}`} initial={animVariants.initial} animate={animVariants.animate} transition={animVariants.transition} className="space-y-5">
-      <DashboardErrorBoundary sectionName="Padrões de Compra">
-        <div className="flex items-center gap-2 mb-4">
-          <ShoppingBag className="w-5 h-5 text-primary" aria-hidden="true" />
-          <Typography variant="h4" gradient>Padrões de Compra e Comportamento</Typography>
+      <motion.div key={`intelligence-${tabDirection}`} initial={animVariants.initial} animate={animVariants.animate} transition={animVariants.transition} className="space-y-5">
+        <div className="flex items-center justify-between">
+          <DashboardErrorBoundary sectionName="Próximos Passos">
+            <StrategicNextStepsCard contacts={[]} className="w-full lg:max-w-xl" />
+          </DashboardErrorBoundary>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <LazySection fallbackVariant="chart">
-            <PurchasePatternsPanel compact />
-          </LazySection>
-          <LazySection fallbackVariant="card">
-            <BehaviorAlertsPanel compact />
-          </LazySection>
-        </div>
-      </DashboardErrorBoundary>
+
+        <DashboardErrorBoundary sectionName="Padrões de Compra">
+          <div className="flex items-center gap-2 mb-4">
+            <ShoppingBag className="w-5 h-5 text-primary" aria-hidden="true" />
+            <Typography variant="h4" gradient>Padrões de Compra e Comportamento</Typography>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <LazySection fallbackVariant="chart">
+              <PurchasePatternsPanel compact />
+            </LazySection>
+            <LazySection fallbackVariant="card">
+              <BehaviorAlertsPanel compact />
+            </LazySection>
+          </div>
+        </DashboardErrorBoundary>
 
       <DashboardErrorBoundary sectionName="Inteligência de Negócios">
         <div className="flex items-center gap-2 mb-4">
