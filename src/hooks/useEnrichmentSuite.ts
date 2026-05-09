@@ -15,7 +15,7 @@ export type EmailVerifyResult = {
   reasons: string[];
 };
 
-type PhoneValidateResult = {
+export type PhoneValidateResult = {
   status: "valid" | "invalid" | "unreachable" | "unknown";
   line_type: string | null;
   country: string | null;
