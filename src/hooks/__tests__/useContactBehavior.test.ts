@@ -1,5 +1,5 @@
 import { expect, test, describe, beforeAll } from "vitest";
-import { supabase } from "../integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 
 // This is a regression test for behavioral data consistency and audit logging
 describe("Behavioral Data Integration Tests", () => {
