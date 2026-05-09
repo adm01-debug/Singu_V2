@@ -1,6 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Database } from "@/integrations/supabase/types";
+
+type PersonalityRow = Database['public']['Tables']['contact_personality']['Row'];
+export type ContactPersonality = Partial<PersonalityRow>;
 
 export interface ContactBehavior {
   disc_primary?: 'D' | 'I' | 'S' | 'C';
