@@ -4,7 +4,6 @@ import { Search, Command, Settings, LogOut, ChevronRight, Mic } from 'lucide-rea
 import { AppSidebar } from './AppSidebar';
 import { MobileHeader } from './MobileHeader';
 import { MobileBottomNav } from './MobileBottomNav';
-// ... keep existing code
 import { QuickAddButton } from '@/components/quick-add/QuickAddButton';
 import { SlowQueryIndicator } from '@/components/feedback/SlowQueryIndicator';
 import { AIEmailComposerTrigger } from '@/components/ai/AIEmailComposerTrigger';
@@ -18,8 +17,7 @@ const OnboardingTourWrapper = lazy(() => import('@/components/onboarding/Onboard
 const KeyboardShortcutsCheatsheet = lazy(() => import('@/components/keyboard/KeyboardShortcutsCheatsheet').then(m => ({ default: m.KeyboardShortcutsCheatsheet })));
 const GlobalCommandBar = lazy(() => import('@/components/command/GlobalCommandBar').then(m => ({ default: m.GlobalCommandBar })));
 const GlobalSearch = lazy(() => import('@/components/search/GlobalSearch').then(m => ({ default: m.GlobalSearch })));
-const GlobalCommandBar = lazy(() => import('@/components/command/GlobalCommandBar').then(m => ({ default: m.GlobalCommandBar })));
-const GlobalSearch = lazy(() => import('@/components/search/GlobalSearch').then(m => ({ default: m.GlobalSearch })));
+
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useKeyboardShortcutsEnhanced } from '@/hooks/useKeyboardShortcutsEnhanced';
 import { SkipToContent, SmartBreadcrumbs } from '@/components/navigation/NavigationPatterns';
