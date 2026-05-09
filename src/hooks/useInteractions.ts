@@ -232,6 +232,8 @@ export function useInteractions(contactId?: string, companyId?: string, options?
     interactions,
     loading,
     hasMore,
+    isFetchingNextPage,
+    totalCount,
     fetchInteractions,
     loadMore,
     createInteraction,

@@ -61,9 +61,12 @@ interface Props {
   onSetDeletingInteraction: (interaction: Interaction | null) => void;
   filterConfigs: FilterConfig[];
   sortOptions: SortOption[];
+  hasMore?: boolean;
+  loadMore?: () => void;
+  isFetchingNextPage?: boolean;
 }
 
-export function InteracoesContent({ interactions, loading, contactMap, stats, onSetIsFormOpen, onSetEditingInteraction, onSetDeletingInteraction, filterConfigs, sortOptions }: Props) {
+export function InteracoesContent({ interactions, loading, contactMap, stats, onSetIsFormOpen, onSetEditingInteraction, onSetDeletingInteraction, filterConfigs, sortOptions, hasMore, loadMore, isFetchingNextPage }: Props) {
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
   const [sortBy, setSortBy] = useState('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
