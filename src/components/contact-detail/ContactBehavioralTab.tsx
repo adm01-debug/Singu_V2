@@ -21,6 +21,7 @@ import { BusinessContextSubTab } from './behavioral-tab/BusinessContextSubTab';
 import { BehavioralAuditSubTab } from '../crm/behavior/BehavioralAuditSubTab';
 import { BehavioralExecutiveSummary } from './behavioral-tab/BehavioralExecutiveSummary';
 import { ContactFamilyInterestsCard } from './behavioral-tab/ContactFamilyInterestsCard';
+import { RapportStrategySubTab } from './behavioral-tab/RapportStrategySubTab';
 const CommunicationIntelWidget = lazy(() => import('./CommunicationIntelWidget'));
 const EmotionalTrendWidget = lazy(() => import('./EmotionalTrendWidget'));
 const EmotionalTrendByContactWidget = lazy(() => import('./EmotionalTrendByContactWidget'));
