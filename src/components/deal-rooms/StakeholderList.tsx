@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useStakeholders, useUpsertStakeholder, useDeleteStakeholder, type DealRoomStakeholder } from "@/hooks/useDealRooms";
+import { useStakeholders, useUpsertStakeholder, useDeleteStakeholder, type DealRoomStakeholder, type Side } from "@/hooks/useDealRooms";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
