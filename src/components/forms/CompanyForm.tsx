@@ -115,14 +115,21 @@ export function CompanyForm({ company, onSubmit, onCancel, isSubmitting }: Compa
     { value: 'basico', label: 'Básico', icon: Building2 },
     { value: 'fiscal', label: 'Fiscal', icon: FileText },
     { value: 'classificacao', label: 'Classificação', icon: Users },
+    { value: 'contatos_end', label: 'Contato & Endereço', icon: MapPin },
     { value: 'estrutura', label: 'Estrutura', icon: Landmark },
     { value: 'telefones', label: 'Telefones', icon: Phone },
     { value: 'endereco', label: 'Endereços', icon: MapPin },
     { value: 'redes', label: 'Redes', icon: Share2 },
   ];
 
-  const createTabs = allTabs.slice(0, 4);
-  const visibleTabs = isEditing ? allTabs : createTabs;
+  const createTabs = allTabs.slice(0, 4); // basic, fiscal, classification, contacts_end
+  const visibleTabs = isEditing ? [
+    ...allTabs.slice(0, 3), // basic, fiscal, classification
+    allTabs[4], // structure
+    allTabs[5], // phones
+    allTabs[6], // addresses
+    allTabs[7], // networks
+  ] : createTabs;
 
   return (
     <Form {...form}>
