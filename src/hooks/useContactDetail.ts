@@ -3,6 +3,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { queryExternalData } from '@/lib/externalData';
+import { normalizeExternalContact } from '@/hooks/useContacts';
+import { useContacts } from '@/hooks/useContacts'; // To reuse normalization logic if possible, but let's define it or import it properly.
+// Wait, useContacts is a hook. I should probably move normalizeExternalContact to a lib file.
 import type { Tables, TablesUpdate, Json } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
 
@@ -55,7 +58,7 @@ export function useContactDetail(contactId: string | undefined) {
       if (contactError) throw contactError;
 
       if (localContact) {
-        contactData = localContact;
+        contactData = normalizeExternalContact(localContact as unknown as Record<string, unknown>);
       } else {
         const { data: externalContacts, error: externalContactError } = await queryExternalData<Contact>({
           table: 'contacts',
@@ -63,7 +66,7 @@ export function useContactDetail(contactId: string | undefined) {
         });
 
         if (externalContactError) throw externalContactError;
-        contactData = externalContacts?.[0] ?? null;
+        contactData = externalContacts?.[0] ? normalizeExternalContact(externalContacts[0] as unknown as Record<string, unknown>) : null;
       }
 
       if (!contactData) {

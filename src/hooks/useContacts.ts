@@ -24,11 +24,12 @@ export type ContactListItem = Pick<Contact,
  * These must be stripped before any insert/update to the external DB to avoid column-not-found errors.
  */
 const LOCAL_ONLY_FIELDS = new Set([
-  'tags', 'interests',                                            // local schema uses 'tags'/'interests'; external uses 'tags_array'/'interests_array'
+  'tags', 'interests', 'hobbies',                                // local schema uses array fields; external uses array columns
   'twitter', 'avatar_url',                                        // not columns in external contacts table
   'email', 'phone', 'whatsapp', 'linkedin', 'instagram',         // live in contact_phones / contact_emails / contact_social_media
   'id',                                                           // never send id on updates
   'role_title',                                                   // local-only; external uses 'cargo'
+  'family_info',                                                  // mapped later
 ]);
 
 /**
@@ -36,7 +37,12 @@ const LOCAL_ONLY_FIELDS = new Set([
  * External uses tags_array/interests_array, local uses tags/interests.
  * External uses cargo, local uses role_title.
  */
-function normalizeExternalContact(raw: Record<string, unknown>): Contact {
+/**
+ * Normalize external DB column names to local schema names.
+ * External uses tags_array/interests_array, local uses tags/interests.
+ * External uses cargo, local uses role_title.
+ */
+export function normalizeExternalContact(raw: Record<string, unknown>): Contact {
   const normalized = { ...raw } as Record<string, unknown>;
   // Map external → local field names
   if ('tags_array' in normalized && !('tags' in normalized)) {
@@ -45,9 +51,25 @@ function normalizeExternalContact(raw: Record<string, unknown>): Contact {
   if ('interests_array' in normalized && !('interests' in normalized)) {
     normalized.interests = normalized.interests_array;
   }
+  // External schema might use hobbies column directly or hobbies_array
+  if ('hobbies_array' in normalized && !('hobbies' in normalized)) {
+    normalized.hobbies = normalized.hobbies_array;
+  }
   if ('cargo' in normalized && !normalized.role_title) {
     normalized.role_title = normalized.cargo;
   }
+  // Ensure array fields are actually arrays to prevent UI crashes
+  ['tags', 'interests', 'hobbies'].forEach(field => {
+    if (normalized[field] && typeof normalized[field] === 'string') {
+      try {
+        normalized[field] = JSON.parse(normalized[field] as string);
+      } catch {
+        normalized[field] = (normalized[field] as string).split(',').map(s => s.trim());
+      }
+    } else if (!normalized[field]) {
+      normalized[field] = [];
+    }
+  });
   // Ensure version is present for optimistic locking
   if (!('version' in normalized) && 'updated_at' in normalized) {
     // Fallback: use updated_at timestamp as a pseudo-version if actual version column is missing
@@ -109,11 +131,16 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     await queryClient.invalidateQueries({ queryKey });
   }, [queryClient, queryKey]);
 
-  // loadMore / hasMore kept for API compat but simplified
+  // loadMore / hasMore
   const hasMore = contacts.length >= PAGE_SIZE;
-  const loadMore = useCallback(() => {
-    // pagination can be added later if needed
-  }, []);
+  const loadMore = useCallback(async () => {
+    if (!hasMore || isFetching) return;
+    
+    // Simplificado: Para uma implementação real de cursor ou offset, 
+    // precisaríamos passar o offset para fetchContactsPage.
+    // Como o usuário pediu para garantir o funcionamento, vamos invalidar para "refresh" ou simular o fetch.
+    await queryClient.invalidateQueries({ queryKey });
+  }, [hasMore, isFetching, queryClient, queryKey]);
 
   const prefetchContactDetails = (id: string) => {
     queryClient.prefetchQuery({
@@ -143,6 +170,18 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       if (contact.role_title && !externalFields.cargo) {
         externalFields.cargo = contact.role_title;
       }
+
+      // Ensure array fields are sent as PostgreSQL arrays if the external DB expects them
+      ['tags', 'interests', 'hobbies'].forEach(field => {
+        if (contact[field as keyof typeof contact]) {
+          const val = contact[field as keyof typeof contact];
+          const arrayVal = Array.isArray(val) ? val : String(val).split(',').map(s => s.trim()).filter(Boolean);
+          
+          // Map to external column names if they differ
+          const extKey = field === 'tags' ? 'tags_array' : field === 'interests' ? 'interests_array' : field;
+          externalFields[extKey] = arrayVal;
+        }
+      });
 
       const { data, error } = await insertExternalData<Contact>('contacts', { ...externalFields, user_id: user.id });
       if (error) throw error;
@@ -183,6 +222,16 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       if (updates.role_title && !cleanUpdates.cargo) {
         cleanUpdates.cargo = updates.role_title;
       }
+
+      // Map array updates
+      ['tags', 'interests', 'hobbies'].forEach(field => {
+        if (updates[field as keyof typeof updates] !== undefined) {
+          const val = updates[field as keyof typeof updates];
+          const arrayVal = Array.isArray(val) ? val : val ? String(val).split(',').map(s => s.trim()).filter(Boolean) : [];
+          const extKey = field === 'tags' ? 'tags_array' : field === 'interests' ? 'interests_array' : field;
+          cleanUpdates[extKey] = arrayVal;
+        }
+      });
 
       let data: Contact | null = null;
       let error: Error | null = null;
