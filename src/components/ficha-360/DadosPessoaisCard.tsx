@@ -50,6 +50,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
   const [isSyncing, setIsSyncing] = useState(false);
   const { suggestions, approve, reject } = useAIApprovals(rapportIntel?.contact_id);
   const { history, revert } = useFamilyHistory(rapportIntel?.contact_id);
+  const [suggestionSourceMap, setSuggestionSourceMap] = useState<Record<string, React.ReactNode>>({});
 
   const getSourceIcon = (source: string) => {
     switch (source) {
@@ -58,6 +59,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
       case 'linkedin': return <Linkedin className="h-3 w-3 text-blue-600" />;
       case 'instagram': return <Instagram className="h-3 w-3 text-pink-500" />;
       case 'twitter': return <Twitter className="h-3 w-3 text-sky-400" />;
+      case 'other': return <Globe className="h-3 w-3 text-muted-foreground" />;
       default: return <Brain className="h-3 w-3 text-primary" />;
     }
   };
