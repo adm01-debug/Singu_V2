@@ -48,7 +48,7 @@ export function useEmailCampaigns() {
       const { data, error } = await supabase.from('email_campaigns')
         .insert({ ...input, user_id: user.id } as never)
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Falha ao criar campanha");
       return data as EmailCampaign;
