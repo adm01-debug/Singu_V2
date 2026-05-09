@@ -66,7 +66,7 @@ export function useNurturingWorkflows() {
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<NurturingWorkflow> & { id: string }) => {
-      const { error } = await (supabase.from('nurturing_workflows') as any).update(updates as any).eq('id', id);
+      const { error } = await supabase.from('nurturing_workflows').update(updates as any).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Workflow atualizado!'); },
