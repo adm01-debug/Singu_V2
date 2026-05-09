@@ -10,12 +10,18 @@ import {
   Phone, 
   Linkedin, 
   Instagram, 
-  Twitter 
+  Twitter,
+  Activity,
+  Heart
 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { OptimizedAvatar } from '@/components/ui/optimized-avatar';
 import { RelationshipScore } from '@/components/ui/relationship-score';
+import { RelationshipStageBadge } from '@/components/ui/relationship-stage';
+import { SentimentIndicator } from '@/components/ui/sentiment-indicator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
 import {
   Table,
   TableBody,
@@ -72,12 +78,14 @@ export const ContactsTableView = React.memo(function ContactsTableView({
           <TableRow className="hover:bg-transparent border-border/40">
             {selectionMode && <TableHead className="w-10" />}
             <TableHead aria-sort={sortBy === 'first_name' ? (sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'}><SortButton field="first_name">CONTATO</SortButton></TableHead>
-            <TableHead className="hidden md:table-cell">EMPRESA</TableHead>
-            <TableHead className="hidden lg:table-cell">CARGO</TableHead>
+            <TableHead className="hidden md:table-cell">ESTÁGIO</TableHead>
             <TableHead className="hidden md:table-cell text-center">SCORE</TableHead>
-            <TableHead className="hidden lg:table-cell">E-MAIL</TableHead>
+            <TableHead className="hidden md:table-cell text-center">SNT</TableHead>
+            <TableHead className="hidden lg:table-cell">CARGO</TableHead>
+            <TableHead className="hidden xl:table-cell">EMPRESA</TableHead>
             <TableHead className="hidden xl:table-cell">ÚLTIMO CONTATO</TableHead>
             <TableHead aria-sort={sortBy === 'updated_at' ? (sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'}><SortButton field="updated_at">ATUALIZAÇÃO</SortButton></TableHead>
+
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -121,9 +129,16 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                         <span className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
                           {fullName}
                         </span>
-                        {contact.role_title && (
-                          <span className="text-xs text-muted-foreground line-clamp-1">{contact.role_title}</span>
-                        )}
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                           {contact.role_title && (
+                            <span className="text-[10px] text-muted-foreground line-clamp-1 border-r pr-1.5">{contact.role_title}</span>
+                          )}
+                          <span className="text-[10px] font-bold text-primary/80 flex items-center gap-1">
+                            <Zap className="w-2.5 h-2.5" />
+                            Ação sugerida disponível
+                          </span>
+                        </div>
+
                       </div>
                     </Link>
                     
@@ -143,16 +158,8 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="hidden md:table-cell text-muted-foreground text-sm">
-                  {companyName ? (
-                    <span className="flex items-center gap-1.5">
-                      <Building2 className="w-3 h-3" />
-                      {companyName}
-                    </span>
-                  ) : '—'}
-                </TableCell>
-                <TableCell className="hidden lg:table-cell text-muted-foreground text-sm">
-                  {contact.role_title || '—'}
+                <TableCell className="hidden md:table-cell">
+                  <RelationshipStageBadge stage={contact.relationship_stage as any || 'unknown'} />
                 </TableCell>
                 <TableCell className="hidden md:table-cell text-center">
                   {contact.relationship_score != null ? (
@@ -161,8 +168,19 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                     <span className="text-muted-foreground/50">—</span>
                   )}
                 </TableCell>
-                <TableCell className="hidden lg:table-cell text-muted-foreground text-sm truncate max-w-[200px]">
-                  {contact.email || '—'}
+                <TableCell className="hidden md:table-cell text-center">
+                   <SentimentIndicator sentiment={contact.sentiment as any || 'neutral'} size="sm" />
+                </TableCell>
+                <TableCell className="hidden lg:table-cell text-muted-foreground text-sm truncate max-w-[150px]">
+                  {contact.role_title || '—'}
+                </TableCell>
+                <TableCell className="hidden xl:table-cell text-muted-foreground text-sm">
+                  {companyName ? (
+                    <span className="flex items-center gap-1.5">
+                      <Building2 className="w-3 h-3" />
+                      {companyName}
+                    </span>
+                  ) : '—'}
                 </TableCell>
                 <TableCell className="hidden xl:table-cell text-xs text-muted-foreground tabular-nums">
                   {(() => {
@@ -175,6 +193,7 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                 <TableCell className="text-xs text-muted-foreground tabular-nums">
                   {formatDistanceToNow(new Date(contact.updated_at), { locale: ptBR, addSuffix: true })}
                 </TableCell>
+
               </TableRow>
             );
           })}

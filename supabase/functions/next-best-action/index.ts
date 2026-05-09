@@ -1,12 +1,13 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { corsHeaders, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  const pre = handleCorsAndMethod(req);
+  if (pre) return pre;
 
-  const authResult = await withAuth(req);
-  if (authResult instanceof Response) return authResult;
-  const userId = authResult;
+  const auth = await withAuth(req);
+  if (auth instanceof Response) return auth;
+  const userId = auth;
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -14,37 +15,107 @@ Deno.serve(async (req) => {
   );
 
   try {
-    const { contactId } = await req.json();
+    const { contactId, force = false } = await req.json();
     if (!contactId) return jsonError("contactId is required", 400);
 
-    // Call the stored procedure to check at-risk contacts (logic is in DB for efficiency)
-    const { error } = await supabase.rpc('check_at_risk_contacts');
-    if (error) throw error;
+    // 1. Gather Rich Context
+    const [contactRes, interactionsRes, socialRes] = await Promise.all([
+      supabase.from('contacts').select('*').eq('id', contactId).single(),
+      supabase.from('interactions').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(5),
+      supabase.from('social_behavior_analysis').select('*').eq('contact_id', contactId).order('analysis_date', { ascending: false }).limit(1)
+    ]);
 
-    // Fetch suggested actions based on funnel stage
-    const { data: contact } = await supabase
-      .from('contacts')
-      .select('relationship_stage, relationship_score')
-      .eq('id', contactId)
-      .single();
+    const contact = contactRes.data;
+    const interactions = interactionsRes.data || [];
+    const social = socialRes.data?.[0];
 
-    let suggestions = [];
-    if (contact?.relationship_stage === 'at_risk') {
-      suggestions = [
-        "Enviar mensagem personalizada de acompanhamento",
-        "Oferecer um benefício ou desconto exclusivo",
-        "Agendar uma breve ligação de alinhamento"
-      ];
-    } else if (contact?.relationship_stage === 'negotiation') {
-      suggestions = [
-        "Revisar proposta comercial",
-        "Validar decisores envolvidos",
-        "Enviar caso de sucesso similar"
-      ];
-    }
+    if (!contact) return jsonError("Contact not found", 404);
 
-    return jsonOk({ success: true, suggestions });
+    // 2. Call AI Gateway for Intelligent Suggestion
+    const apiKey = Deno.env.get("LOVABLE_API_KEY");
+    if (!apiKey) return jsonError("AI Gateway misconfigured", 500);
+
+    const systemPrompt = `Você é um Estrategista de Vendas e Customer Success de elite.
+Sua missão é sugerir a "Próxima Melhor Ação" para um contato no CRM, baseando-se no estágio do funil, perfil comportamental (DISC) e histórico recente.
+Seja específico, prático e persuasivo.`;
+
+    const userPrompt = `
+CONTATO: ${contact.first_name} ${contact.last_name}
+ESTÁGIO ATUAL: ${contact.relationship_stage}
+SCORE: ${contact.relationship_score}/100
+SENTIMENTO: ${contact.sentiment}
+
+PERFIL COMPORTAMENTAL (DISC): ${JSON.stringify(contact.behavior || {})}
+INSIGHTS SOCIAIS: ${social?.executive_summary || 'Nenhum dado social disponível'}
+
+ÚLTIMAS INTERAÇÕES:
+${interactions.map(i => `- ${i.type}: ${i.title} (${i.sentiment})`).join('\n')}
+
+Por favor, gere:
+1. Uma ação clara (ex: "Enviar Mensagem de Reaquecimento")
+2. O motivo estratégico (baseado nos dados)
+3. Um script/template sugerido pronto para uso
+4. O canal ideal (whatsapp, email, call, etc)
+5. Urgência (low, medium, high)
+`;
+
+    const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "google/gemini-2.0-flash-exp",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
+        ],
+        tools: [{
+          type: "function",
+          function: {
+            name: "submit_next_best_action",
+            parameters: {
+              type: "object",
+              properties: {
+                action: { type: "string" },
+                reason: { type: "string" },
+                suggested_script: { type: "string" },
+                channel: { type: "string", enum: ["whatsapp", "email", "call", "linkedin", "meeting"] },
+                urgency: { type: "string", enum: ["low", "medium", "high"] },
+                expected_outcome: { type: "string" }
+              },
+              required: ["action", "reason", "suggested_script", "channel", "urgency"]
+            }
+          }
+        }],
+        tool_choice: { type: "function", function: { name: "submit_next_best_action" } }
+      })
+    });
+
+    if (!aiResp.ok) throw new Error("AI Gateway failed");
+
+    const aiJson = await aiResp.json();
+    const toolCall = aiJson.choices?.[0]?.message?.tool_calls?.[0];
+    const result = JSON.parse(toolCall.function.arguments);
+
+    // 3. Persist Action
+    const nextActionData = {
+      user_id: userId,
+      contact_id: contactId,
+      action: result.action,
+      reason: result.reason,
+      channel: result.channel,
+      urgency: result.urgency,
+      suggested_script: result.suggested_script,
+      expected_outcome: result.expected_outcome,
+      generated_at: new Date().toISOString(),
+      model: "gemini-2.0-flash"
+    };
+
+    await supabase.from('contact_next_actions').upsert(nextActionData, { onConflict: 'contact_id' });
+
+    return jsonOk({ success: true, next_action: nextActionData });
+
   } catch (error) {
+    console.error("NBA Error:", error);
     return jsonError(error.message, 500);
   }
 });

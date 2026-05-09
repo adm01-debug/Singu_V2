@@ -86,33 +86,60 @@ export function SocialIntelligencePanel({ contactId }: Props) {
             </CardTitle>
           </CardHeader>
 
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-4 pt-4">
             {behaviorAnalysis.executive_summary && (
-              <p className="text-sm text-foreground">{behaviorAnalysis.executive_summary}</p>
+              <p className="text-sm text-foreground leading-relaxed italic border-l-4 border-primary/30 pl-3">
+                "{behaviorAnalysis.executive_summary}"
+              </p>
             )}
+
             <div className="grid grid-cols-2 gap-3">
               {behaviorAnalysis.overall_sentiment && (
-                <div className="rounded-lg border p-2 text-center">
-                  <p className="text-xs text-muted-foreground">Sentimento</p>
-                  <p className="font-medium text-sm capitalize text-foreground">{behaviorAnalysis.overall_sentiment}</p>
+                <div className="rounded-lg border bg-background p-2 text-center shadow-xs">
+                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1 tracking-wider">Sentimento</p>
+                  <p className="font-semibold text-sm capitalize text-foreground flex items-center justify-center gap-1.5">
+                    <Heart className="h-3.5 w-3.5 text-red-400" />
+                    {behaviorAnalysis.overall_sentiment}
+                  </p>
                 </div>
               )}
               {behaviorAnalysis.influence_level && (
-                <div className="rounded-lg border p-2 text-center">
-                  <p className="text-xs text-muted-foreground">Influência</p>
-                  <p className="font-medium text-sm capitalize text-foreground">{behaviorAnalysis.influence_level}</p>
+                <div className="rounded-lg border bg-background p-2 text-center shadow-xs">
+                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1 tracking-wider">Influência</p>
+                  <p className="font-semibold text-sm capitalize text-foreground flex items-center justify-center gap-1.5">
+                    <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+                    {behaviorAnalysis.influence_level}
+                  </p>
                 </div>
               )}
             </div>
+
+            {/* Negotiation Tips from sales_insights */}
+            {behaviorAnalysis.sales_insights && (
+              <div className="space-y-3 bg-white/50 p-3 rounded-lg border border-primary/10">
+                <p className="text-[10px] font-bold text-primary uppercase tracking-widest flex items-center gap-2">
+                  <TrendingUp className="h-3 w-3" /> Estratégia de Negociação
+                </p>
+                <div className="grid gap-2">
+                  {Object.entries(behaviorAnalysis.sales_insights as Record<string, string>).map(([key, insight], idx) => (
+                    <div key={idx} className="bg-background p-2.5 rounded border border-border/50 text-xs">
+                      <span className="font-bold text-muted-foreground block mb-1 uppercase text-[9px] tracking-tight">{key.replace(/_/g, ' ')}</span>
+                      <p className="text-foreground leading-snug">{insight}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {behaviorAnalysis.interests && (behaviorAnalysis.interests as string[]).length > 0 && (
               <div className="bg-background/60 p-3 rounded-lg border border-border/50">
                 <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-1.5">
                   <Heart className="h-3.5 w-3.5 text-red-500" />
-                  Interesses & Hobbies para Rapport
+                  Gatilhos de Rapport
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {(behaviorAnalysis.interests as string[]).map(i => (
-                    <Badge key={i} variant="secondary" className="text-xs px-2 py-0.5 bg-primary/10 text-primary border-primary/20">
+                    <Badge key={i} variant="secondary" className="text-xs px-2 py-0.5 bg-primary/5 text-primary border-primary/10">
                       {i}
                     </Badge>
                   ))}
@@ -121,13 +148,14 @@ export function SocialIntelligencePanel({ contactId }: Props) {
             )}
 
             {behaviorAnalysis.confidence != null && (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground">Confiança</span>
+              <div className="flex items-center gap-2 pt-2 border-t border-primary/10">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">Confiança Global</span>
                 <Progress value={Number(behaviorAnalysis.confidence)} className="h-1.5 flex-1" />
-                <span className="text-xs text-muted-foreground">{Number(behaviorAnalysis.confidence)}%</span>
+                <span className="text-xs font-bold text-muted-foreground">{Number(behaviorAnalysis.confidence)}%</span>
               </div>
             )}
           </CardContent>
+
         </Card>
       )}
 
