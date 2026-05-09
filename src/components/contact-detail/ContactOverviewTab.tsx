@@ -29,6 +29,9 @@ import { RelativesSection } from './contact-overview/RelativesSection';
 import { LifeEventsSection } from './contact-overview/LifeEventsSection';
 import { ConsolidatedHealthPanel } from './ConsolidatedHealthPanel';
 import { ScoreHistoryChart } from './ScoreHistoryChart';
+import { RelationshipFunnel } from '@/components/ui/relationship-stage';
+import { useContactDetail } from '@/hooks/useContactDetail';
+import type { RelationshipStage } from '@/types';
 
 interface Props {
   contact: Contact;
