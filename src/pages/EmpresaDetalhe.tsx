@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
 import { CustomFieldsDisplay } from '@/components/custom-fields/CustomFieldsDisplay';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
 import { useParams, Link } from 'react-router-dom';
@@ -11,11 +11,13 @@ import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useLuxIntelligence } from '@/hooks/useLuxIntelligence';
 import { useCompanyPhones, useCompanyEmails, useCompanyAddresses, useCompanySocialMedia, useCompanyCnaes, useCompanyRfmScores, useCompanyStakeholders } from '@/hooks/useCompanyRelatedData';
 import { useCompanySummaryView } from '@/hooks/useCompanyViews';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Building2, Users, Edit, Plus, MessageSquare,
   Network, BarChart3, Sparkles, Database, ShoppingCart,
-  AlertTriangle, RotateCcw, Target,
+  AlertTriangle, RotateCcw, Target, Zap, Globe, MapPin, 
+  Phone, Mail, Calendar, ExternalLink, ChevronRight, Activity, 
+  TrendingUp, ShieldCheck, UserCheck, Star, HeartPulse, Brain
 } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { EntityDetailPageSkeleton } from '@/components/skeletons/PageSkeletons';
@@ -44,6 +46,11 @@ import { useAuth } from '@/hooks/useAuth';
 import type { Tables } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
 import { useToast } from '@/hooks/use-toast';
+import { CompanyExecutiveSummary } from '@/components/company-detail/CompanyExecutiveSummary';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const ContactTimelineWidget = lazy(() => import('@/components/contact-detail/ContactTimelineWidget'));
+const UnifiedCommunicationHistory = lazy(() => import('@/components/interactions/UnifiedCommunicationHistory'));
 
 type Company = Tables<'companies'>;
 type Contact = Tables<'contacts'>;
@@ -184,7 +191,22 @@ const EmpresaDetalhe = () => {
 
         <div className="relative z-10 px-4 md:px-6 -mt-12 md:-mt-16 pb-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <CompanyProfileCard company={company} contactCount={contacts.length} totalInteractions={stats.total} avgRelationshipScore={stats.avgScore} phones={phonesHook.data} emails={emailsHook.data} addresses={addressesHook.data} socialMedia={socialMediaHook.data} />
+            <div className="space-y-6">
+              <CompanyProfileCard company={company} contactCount={contacts.length} totalInteractions={stats.total} avgRelationshipScore={stats.avgScore} phones={phonesHook.data} emails={emailsHook.data} addresses={addressesHook.data} socialMedia={socialMediaHook.data} />
+              
+              <DashboardErrorBoundary sectionName="Resumo Executivo">
+                <CompanyExecutiveSummary 
+                  companyId={id!} 
+                  data={{
+                    healthScore: companySummary?.health_score,
+                    rfmSegment: companySummary?.rfm_segment,
+                    leadScore: companySummary?.lead_score,
+                    leadStatus: companySummary?.lead_status,
+                    growthPropensity: 72 // Mock for now, would come from predictive hook
+                  }}
+                />
+              </DashboardErrorBoundary>
+            </div>
 
             <div className="lg:col-span-2 space-y-6">
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>

@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { sortArray } from '@/lib/sorting-utils';
 import { hapticSuccess, hapticHeavy } from '@/lib/haptics';
 import { useSuccessCelebration } from '@/hooks/useSuccessCelebration';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -33,6 +34,7 @@ interface EmpresasViewState {
   activeFilters: Record<string, string[]>;
   sortBy: string;
   sortOrder: 'asc' | 'desc';
+  multiSort: Array<{ column: string, order: 'asc' | 'desc' }>;
 }
 
 const Empresas = () => {
@@ -70,17 +72,29 @@ const Empresas = () => {
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(() => { try { const f = searchParams.get('filters'); return f ? JSON.parse(decodeURIComponent(f)) : {}; } catch { return {}; } });
   const [sortBy, setSortBy] = useState(() => searchParams.get('sort') || 'updated_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(() => (searchParams.get('order') as 'asc' | 'desc') || 'desc');
+  const [multiSort, setMultiSort] = useState<Array<{ column: string, order: 'asc' | 'desc' }>>(() => {
+    try {
+      const ms = searchParams.get('msort');
+      return ms ? JSON.parse(decodeURIComponent(ms)) : [{ column: sortBy, order: sortOrder }];
+    } catch {
+      return [{ column: sortBy, order: sortOrder }];
+    }
+  });
 
   useEffect(() => {
     const params = new URLSearchParams();
     if (localSearch) params.set('q', localSearch);
     if (viewMode !== 'grid') params.set('view', viewMode);
     if (Object.keys(activeFilters).length > 0) params.set('filters', encodeURIComponent(JSON.stringify(activeFilters)));
-    if (sortBy !== 'updated_at') params.set('sort', sortBy);
-    if (sortOrder !== 'desc') params.set('order', sortOrder);
+    if (multiSort.length > 0) {
+      params.set('msort', encodeURIComponent(JSON.stringify(multiSort)));
+    } else {
+      if (sortBy !== 'updated_at') params.set('sort', sortBy);
+      if (sortOrder !== 'desc') params.set('order', sortOrder);
+    }
     if (gridColumns !== 3) params.set('cols', String(gridColumns));
     setSearchParams(params, { replace: true });
-  }, [localSearch, viewMode, activeFilters, sortBy, sortOrder, gridColumns, setSearchParams]);
+  }, [localSearch, viewMode, activeFilters, sortBy, sortOrder, gridColumns, multiSort, setSearchParams]);
 
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const isSearching = localSearch.length > 0;
@@ -100,9 +114,19 @@ const Empresas = () => {
       }
       return true;
     });
-    result.sort((a, b) => { let aVal = a[sortBy as keyof Company]; let bVal = b[sortBy as keyof Company]; if (aVal === null || aVal === undefined) aVal = '' as never; if (bVal === null || bVal === undefined) bVal = '' as never; if (typeof aVal === 'string' && typeof bVal === 'string') { const comparison = aVal.localeCompare(bVal, 'pt-BR'); return sortOrder === 'asc' ? comparison : -comparison; } return 0; });
-    return result;
-  }, [companies, activeFilters, sortBy, sortOrder]);
+    
+    // Inject metrics into objects for sorting
+    const enriched = result.map(c => ({
+      ...c,
+      _contact_count: companyMetrics.contactCountMap.get(c.id) || 0,
+      _last_interaction_days: companyMetrics.lastInteractionMap.get(c.id) ?? 9999,
+    }));
+
+    return sortArray(enriched, multiSort as any, undefined, { 
+      dateFields: ['updated_at', 'created_at', 'data_fundacao', 'situacao_rf_data'] as any[],
+      numericFields: ['capital_social', 'lead_score', '_contact_count', '_last_interaction_days'] as any[]
+    }) as unknown as Company[];
+  }, [companies, activeFilters, multiSort, companyMetrics]);
 
   const { selectedIndex } = useListNavigation(filteredAndSortedCompanies as Array<{ id: string }>, { onOpen: (company) => navigate(`/empresas/${company.id}`), onSelect: () => {} });
   useKeyboardShortcutsEnhanced();
@@ -136,7 +160,7 @@ const Empresas = () => {
 
       <div className="px-4 md:px-6 -mt-2 mb-3">
         <EmpresasSavedViews
-          currentState={{ localSearch, viewMode, gridColumns, activeFilters, sortBy, sortOrder }}
+          currentState={{ localSearch, viewMode, gridColumns, activeFilters, sortBy, sortOrder, multiSort }}
           onApply={(s) => {
             setLocalSearch(s.localSearch);
             setViewMode(s.viewMode);
@@ -144,6 +168,7 @@ const Empresas = () => {
             setActiveFilters(s.activeFilters);
             setSortBy(s.sortBy);
             setSortOrder(s.sortOrder);
+            if (s.multiSort) setMultiSort(s.multiSort);
           }}
         />
       </div>
@@ -153,7 +178,8 @@ const Empresas = () => {
         localSearch={localSearch} onSearchChange={setLocalSearch} clearSearch={clearSearch} isSearching={isSearching}
         viewMode={viewMode} onViewModeChange={setViewMode} gridColumns={gridColumns} onGridColumnsChange={setGridColumns}
         activeFilters={activeFilters} onFiltersChange={setActiveFilters}
-        sortBy={sortBy} sortOrder={sortOrder} onSortChange={(sb, so) => { setSortBy(sb); setSortOrder(so); }}
+        sortBy={sortBy} sortOrder={sortOrder} onSortChange={(sb, so) => { setSortBy(sb); setSortOrder(so); setMultiSort([{ column: sb, order: so }]); }}
+        multiSort={multiSort} onMultiSortChange={setMultiSort}
         dynamicFilters={dynamicFilters} selectionMode={selectionMode} selectedIds={selectedIds}
         onToggleSelectionMode={() => { setSelectionMode(!selectionMode); if (selectionMode) setSelectedIds(new Set()); }}
         onSelect={handleSelect} onSelectAll={handleSelectAll} onBulkDelete={handleBulkDelete} onBulkAddTag={handleBulkAddTag}

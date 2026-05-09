@@ -41,6 +41,8 @@ interface Props {
   sortBy: string;
   sortOrder: 'asc' | 'desc';
   onSortChange: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
+  multiSort?: any[];
+  onMultiSortChange?: (criteria: any[]) => void;
   dynamicFilters: FilterConfig[];
   selectionMode: boolean;
   selectedIds: Set<string>;
@@ -128,7 +130,17 @@ export function EmpresasContent(props: Props) {
         </div>
       </div>
 
-      <AdvancedFilters filters={dynamicFilters} sortOptions={companySortOptions} activeFilters={activeFilters} onFiltersChange={onFiltersChange} sortBy={sortBy} sortOrder={sortOrder} onSortChange={(sb, so) => onSortChange(sb, so)} />
+      <AdvancedFilters 
+        filters={dynamicFilters} 
+        sortOptions={companySortOptions} 
+        activeFilters={activeFilters} 
+        onFiltersChange={onFiltersChange} 
+        sortBy={sortBy} 
+        sortOrder={sortOrder} 
+        onSortChange={(sb, so) => onSortChange(sb, so)} 
+        multiSort={props.multiSort}
+        onMultiSortChange={props.onMultiSortChange}
+      />
       <RecentlyViewedSection type="company" />
 
       {loading ? <CompaniesGridSkeleton /> : (
