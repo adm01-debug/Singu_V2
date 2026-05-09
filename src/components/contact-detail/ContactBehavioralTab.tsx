@@ -180,8 +180,8 @@ export function ContactBehavioralTab({ contact }: Props) {
 
       <TabsContent value="rapport">
         <div className="space-y-6">
+          <RapportStrategySubTab contactId={contact.id} />
           <RapportCard contactId={contact.id} />
-          {/* Adicionar RapportStrategySubTab aqui no futuro */}
         </div>
       </TabsContent>
 
