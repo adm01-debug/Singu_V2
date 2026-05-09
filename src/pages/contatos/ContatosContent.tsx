@@ -110,11 +110,11 @@ export function ContatosContent(props: Props) {
         <ContactsStatsBar contacts={contacts} />
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2 ml-auto">
+          <div className="flex items-center gap-2 ml-auto h-11 md:h-9">
             <SearchPresetsMenu context="contacts" currentFilters={activeFilters} currentSortBy={sortBy} currentSortOrder={sortOrder} currentSearchTerm={searchTerm}
               onApplyPreset={(preset: SearchPreset) => { onFiltersChange(preset.filters); onSortChange(preset.sortBy, preset.sortOrder); if (preset.searchTerm) onSearchChange(preset.searchTerm); }} />
             {isAdmin && <BulkImportDialog entityType="contacts" />}
-            <Button variant={selectionMode ? 'default' : 'outline'} size="sm" onClick={onToggleSelectionMode} className="gap-2 h-11 px-4 md:h-9 md:px-3">
+            <Button variant={selectionMode ? 'default' : 'outline'} size="sm" onClick={onToggleSelectionMode} className="gap-2 h-11 px-4 md:h-9 md:px-3 text-sm md:text-xs">
               <CheckSquare className="w-4 h-4" aria-hidden="true" /><span className="hidden sm:inline">{selectionMode ? 'Cancelar' : 'Selecionar'}</span>
             </Button>
             <ViewModeSwitcher value={viewMode} onChange={onViewModeChange} gridColumns={gridColumns} onGridColumnsChange={onGridColumnsChange} />
