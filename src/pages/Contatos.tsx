@@ -127,8 +127,8 @@ const Contatos = () => {
   const filteredAndSortedContacts = useMemo(() => {
     let result = searchTerm ? fuzzyResults : contacts;
     result = result.filter(contact => { for (const [key, values] of Object.entries(activeFilters)) { if (values.length === 0) continue; const contactValue = contact[key as keyof Contact]; if (!contactValue || !values.includes(String(contactValue))) return false; } return true; });
-    return sortArray(result, sortBy as keyof Contact, sortOrder, { dateFields: ['created_at', 'updated_at', 'birthday'], numericFields: ['relationship_score'] });
-  }, [contacts, fuzzyResults, searchTerm, activeFilters, sortBy, sortOrder]);
+    return sortArray(result, multiSort as any, undefined, { dateFields: ['created_at', 'updated_at', 'birthday'], numericFields: ['relationship_score'] });
+  }, [contacts, fuzzyResults, searchTerm, activeFilters, multiSort]);
 
   useKeyboardShortcutsEnhanced();
 
