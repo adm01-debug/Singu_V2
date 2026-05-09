@@ -264,6 +264,7 @@ const Contatos = () => {
           onToggleSelectionMode={() => { setSelectionMode(!selectionMode); if (selectionMode) setSelectedIds(new Set()); }}
           onSelect={handleSelect} onSelectAll={handleSelectAll}
           onBulkDelete={handleBulkDelete} onBulkAddTag={handleBulkAddTag}
+          onBulkUpdateStage={handleBulkUpdateStage}
           onSetEditingContact={setEditingContact} onSetDeletingContact={setDeletingContact}
           onSetIsFormOpen={setIsFormOpen} updateContact={updateContact}
           getCompanyName={getCompanyName} getLastInteractionDate={getLastInteractionDate}
