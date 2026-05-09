@@ -1,4 +1,4 @@
-import { lazy, useMemo } from 'react';
+import { lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { LazySection } from '@/components/dashboard/LazySection';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
