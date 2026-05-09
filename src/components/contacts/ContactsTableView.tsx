@@ -74,6 +74,7 @@ export const ContactsTableView = React.memo(function ContactsTableView({
             <TableHead className="hidden lg:table-cell">CARGO</TableHead>
             <TableHead className="hidden md:table-cell text-center">SCORE</TableHead>
             <TableHead className="hidden lg:table-cell">E-MAIL</TableHead>
+            <TableHead className="hidden xl:table-cell">ÚLTIMO CONTATO</TableHead>
             <TableHead aria-sort={sortBy === 'updated_at' ? (sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'}><SortButton field="updated_at">ATUALIZAÇÃO</SortButton></TableHead>
           </TableRow>
         </TableHeader>
