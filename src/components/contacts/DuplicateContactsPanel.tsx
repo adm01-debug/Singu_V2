@@ -8,7 +8,12 @@ import { MergeContactsDialog } from './MergeContactsDialog';
 import { AlertTriangle, Users, GitMerge } from 'lucide-react';
 
 export const DuplicateContactsPanel = React.memo(function DuplicateContactsPanel() {
-  const { data: duplicates, isLoading } = useDuplicateContacts();
+  const { data: duplicates, isLoading, refetch } = useDuplicateContacts();
+  const [mergeState, setMergeState] = useState<{ open: boolean; primaryId: string; secondaryId: string }>({
+    open: false,
+    primaryId: '',
+    secondaryId: ''
+  });
 
   if (isLoading) return <Card className="border-warning/30"><CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><AlertTriangle className="h-4 w-4 text-warning" />Contatos Duplicados</CardTitle></CardHeader><CardContent><Skeleton className="h-24" /></CardContent></Card>;
   if (!duplicates || duplicates.length === 0) return null;
