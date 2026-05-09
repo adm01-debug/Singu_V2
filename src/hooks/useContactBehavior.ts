@@ -277,15 +277,17 @@ export const useContactBehavior = (contactId: string) => {
     influence,
     businessContext,
     personality,
+    metaprograms,
     gaps,
     auditLogs,
     consistency,
-    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit || isLoadingPersonality,
+    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit || isLoadingPersonality || isLoadingMetaprograms,
     updateBehavior: updateBehaviorMutation.mutate,
     updateDecision: updateDecisionMutation.mutate,
     updateInfluence: updateInfluenceMutation.mutate,
     updateBusiness: updateBusinessMutation.mutate,
     updatePersonality: updatePersonalityMutation.mutate,
+    updateMetaprograms: updateMetaprogramsMutation.mutate,
     checkConsistency,
   };
 };
