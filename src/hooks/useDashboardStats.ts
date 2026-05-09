@@ -152,8 +152,14 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         if (vowels < 2) return false;
         return true;
       })
-      .sort((a, b) => (b.relationship_score || 0) - (a.relationship_score || 0))
-      .slice(0, 4)
+      .sort((a, b) => {
+        const scoreA = a.relationship_score || 0;
+        const scoreB = b.relationship_score || 0;
+        // Estratégia: Priorizar Score Alto > Score Médio com Inatividade > Recência
+        if (Math.abs(scoreB - scoreA) > 10) return scoreB - scoreA;
+        return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+      })
+      .slice(0, 10) // Aumentado para 10 para alimentar melhor os widgets compactos
       .map(contact => {
         const company = contact.company_id ? companyMap.get(contact.company_id) : undefined;
         const latestDate = latestInteractionByContact.get(contact.id);
@@ -216,7 +222,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         };
       })
       .filter(a => a.entityName !== 'Contato' && a.entityName !== 'Mensagem' && a.entityName !== 'Mensagem Enviada') // Remove unresolved generic entries
-      .slice(0, 8); // Aumentado para 8 para melhor visualização em telas grandes
+      .slice(0, 10); // Aumentado para 10 para melhor histórico no feed
 
     return {
       totalCompanies: companies.length,

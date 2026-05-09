@@ -97,7 +97,7 @@ export function OverviewTab({
 
 
       {/* 2. Your Day + AI Followups */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <DashboardErrorBoundary sectionName="Seu Dia">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
             <YourDaySection />
@@ -121,6 +121,11 @@ export function OverviewTab({
         <DashboardErrorBoundary sectionName="Aprovações IA">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
             <AIApprovalsWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Melhores Contatos">
+          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+            <TopContactsCard contacts={stats.topContacts} animations={topContactAnimations} compact />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Smart Reminders">

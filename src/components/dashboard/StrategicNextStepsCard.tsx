@@ -99,7 +99,7 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
         
         return (scoreB + ageB * 2) - (scoreA + ageA * 2);
       })
-      .slice(0, 3);
+      .slice(0, 5);
   }, [contacts, completedIds]);
 
   const handleAction = async (contactId: string, outcome: 'respondeu_positivo' | 'respondeu_neutro' | 'pulou') => {
