@@ -26,7 +26,8 @@ interface StaggerAnimation {
 
 interface TopContactsCardProps {
   contacts: DashboardStats['topContacts'];
-  animations: StaggerAnimation[];
+  animations?: StaggerAnimation[];
+  compact?: boolean;
 }
 
 /** Semantic score colors and labels */
@@ -57,7 +58,7 @@ function LowScoreHint() {
   );
 }
 
-export function TopContactsCard({ contacts, animations }: TopContactsCardProps) {
+export function TopContactsCard({ contacts, animations = [], compact = false }: TopContactsCardProps) {
   const allLowScores = contacts.length > 0 && contacts.every(c => c.relationshipScore < 40);
 
   return (
@@ -76,8 +77,8 @@ export function TopContactsCard({ contacts, animations }: TopContactsCardProps) 
           </Button>
         </Link>
       </CardHeader>
-      <CardContent>
-        <ScrollArea className="max-h-[320px]">
+      <CardContent className={cn(compact && "p-2 pt-1")}>
+        <ScrollArea className={cn("max-h-[320px]", compact && "max-h-[250px]")}>
           <div className="space-y-2 pr-2">
             {contacts.length === 0 ? (
               <EmptyState
@@ -108,7 +109,7 @@ export function TopContactsCard({ contacts, animations }: TopContactsCardProps) 
                           level={1}
                           hoverable
                           rounded="lg"
-                          className="flex items-center justify-between p-3 group cursor-pointer hover:border-primary/15"
+                          className={cn("flex items-center justify-between p-3 group cursor-pointer hover:border-primary/15", compact && "p-2")}
                         >
                           <div className="flex items-center gap-3">
                             <div className="relative">
@@ -153,7 +154,8 @@ export function TopContactsCard({ contacts, animations }: TopContactsCardProps) 
                             <div 
                               className={cn(
                                 "flex flex-col items-center px-2.5 py-1.5 rounded-lg border min-w-[52px]",
-                                scoreVisual.bg
+                                scoreVisual.bg,
+                                compact && "px-1.5 py-0.5 min-w-[40px]"
                               )}
                               role="meter" 
                               aria-valuenow={contact.relationshipScore} 
