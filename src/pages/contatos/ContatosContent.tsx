@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef, startTransition, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { List as VirtualList } from 'react-window';
-import { Search, UserPlus, Upload, CheckSquare } from 'lucide-react';
+import { Search, UserPlus, Upload, CheckSquare, Download } from 'lucide-react';
 import { ContactsGridSkeleton, ContactsListSkeleton } from '@/components/skeletons/PageSkeletons';
 import { EmptyState, SearchEmptyState } from '@/components/ui/empty-state';
 import { PullToRefresh } from '@/components/ui/pull-to-refresh';
@@ -20,6 +20,7 @@ import { RecentlyViewedSection } from '@/components/recently-viewed/RecentlyView
 import { SearchPresetsMenu } from '@/components/search/SearchPresetsMenu';
 import { ViewModeSwitcher, type ViewMode, type GridColumns } from '@/components/ui/view-mode-switcher';
 import { Header } from '@/components/layout/Header';
+import { exportToCSV } from '@/lib/export-utils';
 import type { SearchPreset } from '@/hooks/useSearchPresets';
 import type { Contact } from '@/hooks/useContacts';
 
