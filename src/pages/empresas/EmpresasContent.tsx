@@ -138,8 +138,8 @@ export function EmpresasContent(props: Props) {
         sortBy={sortBy} 
         sortOrder={sortOrder} 
         onSortChange={(sb, so) => onSortChange(sb, so)} 
-        multiSort={multiSort}
-        onMultiSortChange={onMultiSortChange}
+        multiSort={props.multiSort}
+        onMultiSortChange={props.onMultiSortChange}
       />
       <RecentlyViewedSection type="company" />
 
