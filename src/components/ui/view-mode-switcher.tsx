@@ -105,7 +105,7 @@ export function ViewModeSwitcher({ value, onChange, gridColumns = 3, onGridColum
                     key={cols}
                     onClick={() => onGridColumnsChange(cols)}
                     className={cn(
-                      'flex items-center justify-center h-9 flex-1 rounded-lg transition-colors',
+                      'flex items-center justify-center h-11 md:h-9 flex-1 rounded-lg transition-colors',
                       isActive
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-secondary/40 text-muted-foreground hover:text-foreground hover:bg-secondary/60'
