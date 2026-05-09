@@ -151,9 +151,9 @@ export function WhatsAppDashboard({ contactId }: Props) {
                   {msg.content && (
                     <p className="text-xs text-foreground whitespace-pre-wrap">{msg.content}</p>
                   )}
-                  {msg.message_type !== 'text' && msg.message_type !== 'conversation' && (
+                  {msg.metadata?.message_type && msg.metadata.message_type !== 'text' && (
                     <Badge variant="secondary" className="text-xs mt-1 capitalize">
-                      {msg.message_type}
+                      {msg.metadata.message_type}
                     </Badge>
                   )}
                 </div>
