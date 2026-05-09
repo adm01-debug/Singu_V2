@@ -325,8 +325,8 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       // Simulate/Trigger follow-up generation (could be an edge function call)
       const content = `Olá ${contact?.first_name}, notei que faz um tempo que não conversamos. Como estão as coisas por aí?`;
       
-      const { error } = await supabase
-        .from('follow_up_approvals')
+      const { error } = await (supabase as any)
+        .from('follow_up_approvals_v2')
         .insert({
           user_id: user.id,
           contact_id: contactId,
