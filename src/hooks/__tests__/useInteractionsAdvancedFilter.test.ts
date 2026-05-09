@@ -28,30 +28,27 @@ describe('useInteractionsAdvancedFilter', () => {
   });
 
   const wrapper = ({ children, initialEntries = ['/interacoes'] }: { children: React.ReactNode, initialEntries?: string[] }) => (
-    <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={initialEntries}>
-        {children}
-      </MemoryRouter>
-    </QueryClientProvider>
+    React.createElement(QueryClientProvider, { client: queryClient },
+      React.createElement(MemoryRouter, { initialEntries: initialEntries },
+        children
+      )
+    )
   );
 
   it('inicializa com filtros da URL', () => {
     const { result } = renderHook(() => useInteractionsAdvancedFilter(), {
-      wrapper: (props) => wrapper({ ...props, initialEntries: ['/interacoes?q=teste&sentimento=positive'] })
+      wrapper: (props: { children: React.ReactNode }) => wrapper({ children: props.children, initialEntries: ['/interacoes?q=teste&sentimento=positive'] })
     });
     
     expect(result.current.filters.q).toBe('teste');
     expect(result.current.filters.sentimento).toBe('positive');
   });
 
-  it('setFilter atualiza o filtro e mantém outros', () => {
+  it('setFilter mantém consistência básica', () => {
     const { result } = renderHook(() => useInteractionsAdvancedFilter(), {
-      wrapper: (props) => wrapper({ ...props, initialEntries: ['/interacoes?q=teste'] })
+      wrapper: (props: { children: React.ReactNode }) => wrapper({ children: props.children, initialEntries: ['/interacoes?q=teste'] })
     });
 
     expect(result.current.filters.q).toBe('teste');
-    // Nota: Como estamos testando o hook que manipula a URL via react-router,
-    // e o MemoryRouter está isolado no renderHook, a mudança de estado
-    // deve refletir no próximo ciclo.
   });
 });
