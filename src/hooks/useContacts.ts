@@ -37,7 +37,12 @@ const LOCAL_ONLY_FIELDS = new Set([
  * External uses tags_array/interests_array, local uses tags/interests.
  * External uses cargo, local uses role_title.
  */
-function normalizeExternalContact(raw: Record<string, unknown>): Contact {
+/**
+ * Normalize external DB column names to local schema names.
+ * External uses tags_array/interests_array, local uses tags/interests.
+ * External uses cargo, local uses role_title.
+ */
+export function normalizeExternalContact(raw: Record<string, unknown>): Contact {
   const normalized = { ...raw } as Record<string, unknown>;
   // Map external → local field names
   if ('tags_array' in normalized && !('tags' in normalized)) {
