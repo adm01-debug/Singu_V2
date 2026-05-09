@@ -114,11 +114,6 @@ export function OverviewTab({
             <SmartRemindersPanel compact />
           </Suspense>
         </DashboardErrorBoundary>
-      </div>
-
-          </Suspense>
-        </DashboardErrorBoundary>
-      </div>
 
       {/* 3. Pre-Contact Briefing */}
       <DashboardErrorBoundary sectionName="Briefing">
