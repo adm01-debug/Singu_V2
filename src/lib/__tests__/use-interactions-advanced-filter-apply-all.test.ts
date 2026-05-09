@@ -1,12 +1,19 @@
 import { describe, it, expect } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { useInteractionsAdvancedFilter } from '@/hooks/useInteractionsAdvancedFilter';
 
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
+
 function wrapperFor(initial: string) {
   return ({ children }: { children: React.ReactNode }) =>
-    React.createElement(MemoryRouter, { initialEntries: [initial] }, children);
+    React.createElement(QueryClientProvider, { client: queryClient },
+      React.createElement(MemoryRouter, { initialEntries: [initial] }, children)
+    );
 }
 
 describe('useInteractionsAdvancedFilter.applyAll', () => {
