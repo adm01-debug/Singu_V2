@@ -27,8 +27,8 @@ const CompleteDashboardWidget = lazy(() => import('@/components/dashboard/widget
 const DailyKpisWidget = lazy(() => import('@/components/dashboard/widgets/DailyKpisWidget'));
 const CadenceAlertWidget = lazy(() => import('@/components/contact-detail/CadenceAlertWidget'));
 const PendingNotificationsWidget = lazy(() => import('@/components/dashboard/widgets/PendingNotificationsWidget'));
-const DailyInsightsWidget = lazy(() => import('@/components/dashboard/widgets/DailyInsightsWidget'));
-const ChurnRiskReportWidget = lazy(() => import('@/components/dashboard/widgets/ChurnRiskReportWidget'));
+const DailyInsightsWidget = lazy(() => import('@/components/dashboard/widgets/DailyInsightsWidget').then(m => ({ default: m.DailyInsightsWidget })));
+const ChurnRiskReportWidget = lazy(() => import('@/components/dashboard/widgets/ChurnRiskReportWidget').then(m => ({ default: m.ChurnRiskReportWidget })));
 const SmartRemindersPanel = lazy(() => import('@/components/smart-reminders/SmartRemindersPanel').then(m => ({ default: m.SmartRemindersPanel })));
 const StrategicNextStepsCard = lazy(() => import('@/components/dashboard/StrategicNextStepsCard').then(m => ({ default: m.StrategicNextStepsCard })));
 const AIApprovalsWidget = lazy(() => import('@/components/dashboard/widgets/AIApprovalsWidget').then(m => ({ default: m.AIApprovalsWidget })));
