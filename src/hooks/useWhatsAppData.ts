@@ -13,8 +13,8 @@ export function useWhatsAppData(contactId?: string) {
         supabase.from('whatsapp_instances').select('*').order('created_at', { ascending: false }),
         supabase.from('whatsapp_kpis').select('*').order('created_at', { ascending: false }).limit(1),
         contactId
-          ? supabase.from('whatsapp_messages').select('*').eq('contact_id', contactId).order('timestamp', { ascending: false }).limit(50)
-          : supabase.from('whatsapp_messages').select('*').order('timestamp', { ascending: false }).limit(50),
+          ? (supabase as any).from('whatsapp_messages').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(50)
+          : (supabase as any).from('whatsapp_messages').select('*').order('created_at', { ascending: false }).limit(50),
       ]);
 
       return {
