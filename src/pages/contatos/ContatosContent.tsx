@@ -168,5 +168,6 @@ export function ContatosContent(props: Props) {
 
       <BulkActionsBar selectedIds={Array.from(selectedIds)} totalCount={filteredAndSortedContacts.length} entityType="contacts" onSelectAll={onSelectAll} onClearSelection={() => onSelect('__clear__', false)} onDelete={onBulkDelete} onAddTag={onBulkAddTag} />
     </div>
+    </>
   );
 }
