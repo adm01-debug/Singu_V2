@@ -89,6 +89,7 @@ export function OverviewTab({
         </DashboardErrorBoundary>
       </div>
 
+
       {/* 2. Your Day + AI Followups */}
       <div className="grid gap-4 md:grid-cols-3">
         <DashboardErrorBoundary sectionName="Seu Dia">
