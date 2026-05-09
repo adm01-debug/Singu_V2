@@ -327,6 +327,18 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       
       const splitContent = doc.splitTextToSize(last.content || 'Sem conteúdo detalhado.', 180);
       doc.text(splitContent, 14, finalY + 22);
+
+      const nextY = finalY + 35 + (splitContent.length * 5);
+      doc.setFontSize(14);
+      doc.text('Tópicos Principais:', 14, nextY);
+      doc.setFontSize(10);
+      doc.text('- Contexto de negócio\n- Próximos passos alinhados', 14, nextY + 8);
+      
+      doc.setFontSize(14);
+      doc.text('Sugestão de Abordagem:', 14, nextY + 25);
+      doc.setFontSize(10);
+      const suggest = `Olá ${contact.first_name}, notei que faz um tempo que não conversamos. Como estão os projetos?`;
+      doc.text(doc.splitTextToSize(suggest, 180), 14, nextY + 33);
     } else {
       doc.text('Nenhuma interação registrada.', 14, finalY + 8);
     }
