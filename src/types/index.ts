@@ -67,10 +67,9 @@ export type RelationshipStage =
   | 'customer' 
   | 'loyal_customer' 
   | 'advocate' 
-  | 'best_friend_forever'
-  | 'fan_club'
   | 'at_risk' 
   | 'lost';
+
 
 // Decision Criteria
 export type DecisionCriteria = 
@@ -133,12 +132,11 @@ export const RELATIONSHIP_STAGE_LABELS: Record<RelationshipStage, string> = {
   negotiation: 'Negociação',
   customer: 'Cliente',
   loyal_customer: 'Cliente Fiel',
-  advocate: 'Advogado da Marca',
-  best_friend_forever: 'Best Friend Forever',
-  fan_club: 'Fã Clube',
+  advocate: 'Promotor/Advogado',
   at_risk: 'Em Risco',
   lost: 'Perdido',
 };
+
 
 export interface Company {
   id: string;
