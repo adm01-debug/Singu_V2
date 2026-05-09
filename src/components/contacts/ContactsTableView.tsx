@@ -60,7 +60,7 @@ export const ContactsTableView = React.memo(function ContactsTableView({
             <TableHead className="hidden lg:table-cell">CARGO</TableHead>
             <TableHead className="hidden md:table-cell text-center">SCORE</TableHead>
             <TableHead className="hidden lg:table-cell">E-MAIL</TableHead>
-            <TableHead><SortButton field="updated_at">ATUALIZAÇÃO</SortButton></TableHead>
+            <TableHead aria-sort={sortBy === 'updated_at' ? (sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'}><SortButton field="updated_at">ATUALIZAÇÃO</SortButton></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -80,6 +80,8 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                     <Checkbox
                       checked={selectedIds.has(contact.id)}
                       onCheckedChange={(c) => onSelect(contact.id, c as boolean)}
+                      aria-label={`Selecionar ${fullName}`}
+                      className="h-11 w-11 md:h-4 md:w-4" // Touch target min 44px
                     />
                   </TableCell>
                 )}

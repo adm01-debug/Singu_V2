@@ -52,8 +52,8 @@ export function ContactFormTabs({ form, companies, suggestedRoleTitle, contact }
           <FormField control={form.control} name="apelido" render={({ field }) => (<FormItem><FormLabel>Apelido</FormLabel><FormControl><Input placeholder="Como é conhecido" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
           <FormField control={form.control} name="nome_tratamento" render={({ field }) => (<FormItem><FormLabel>Nome de Tratamento</FormLabel><FormControl><Input placeholder="Como prefere ser chamado" {...field} value={field.value ?? ''} /></FormControl><FormDescription>Usado em comunicações personalizadas</FormDescription><FormMessage /></FormItem>)} />
           <FormField control={form.control} name="sexo" render={({ field }) => (<FormItem><FormLabel>Sexo</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value || undefined}><FormControl><SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger></FormControl><SelectContent>{sexoOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select><FormMessage /></FormItem>)} />
-          <FormField control={form.control} name="cpf" render={({ field }) => (<FormItem><FormLabel>CPF</FormLabel><FormControl><Input placeholder="000.000.000-00" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
-          <FormField control={form.control} name="birthday" render={({ field }) => (<FormItem><FormLabel>Aniversário</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem>)} />
+          <FormField control={form.control} name="cpf" render={({ field }) => (<FormItem><FormLabel>CPF</FormLabel><FormControl><Input placeholder="000.000.000-00" inputMode="numeric" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+          <FormField control={form.control} name="birthday" render={({ field }) => (<FormItem><FormLabel>Aniversário</FormLabel><FormControl><Input type="date" autoComplete="bday" {...field} /></FormControl><FormMessage /></FormItem>)} />
         </div>
       </TabsContent>
 
