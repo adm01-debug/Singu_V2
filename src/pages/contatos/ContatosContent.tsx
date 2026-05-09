@@ -256,6 +256,13 @@ export function ContatosContent(props: Props) {
         onUpdateStage={onBulkUpdateStage}
         onExport={handleBulkExport}
       />
+
+      <Suspense fallback={null}>
+        <ExternalContactLookupDialog 
+          open={isExternalSearchOpen} 
+          onOpenChange={setIsExternalSearchOpen} 
+        />
+      </Suspense>
     </div>
     </>
   );
