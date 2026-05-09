@@ -24,7 +24,7 @@ const mainNavItems = [
   { icon: Home, label: 'Início', path: '/' },
   { icon: Users, label: 'Contatos', path: '/contatos' },
   { icon: Building2, label: 'Empresas', path: '/empresas' },
-  { icon: MessageSquare, label: 'Interações', path: '/interacoes' },
+  { icon: MessageSquare, label: 'Conversas', path: '/interacoes' },
 ];
 
 const moreNavItems = [
