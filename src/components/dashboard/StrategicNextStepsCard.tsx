@@ -260,6 +260,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
   const [approving, setApproving] = useState(false);
   const { user } = useAuth();
   const { mutate: logAudit } = useRecommendationAudit();
+  const queryClient = useQueryClient();
 
   const exportToPDF = useCallback(() => {
     if (!contact) return;
