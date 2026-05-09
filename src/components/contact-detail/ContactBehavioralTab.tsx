@@ -117,6 +117,7 @@ export function ContactBehavioralTab({ contact }: Props) {
 
   return (
     <div className="space-y-6">
+      <PersonalityExecutiveSummary contactId={contact.id} />
       <BehavioralExecutiveSummary 
         contactId={contact.id} 
         data={{
