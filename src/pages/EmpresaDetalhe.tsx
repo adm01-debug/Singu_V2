@@ -32,6 +32,7 @@ import { LuxIntelligencePanel } from '@/components/lux/LuxIntelligencePanel';
 import { CompanyProfileCard } from '@/components/company-detail/CompanyProfileCard';
 import { CompanyInsightsTab } from '@/components/company-detail/CompanyInsightsTab';
 import { CompanyInteractionsTab } from '@/components/company-detail/CompanyInteractionsTab';
+import { useInteractions } from '@/hooks/useInteractions';
 import { CompanyDataTab } from '@/components/company-detail/CompanyDataTab';
 import { CompanyCommercialTab } from '@/components/company-detail/CompanyCommercialTab';
 import { CompanyEnrichedCard } from '@/components/company-detail/CompanyEnrichedCard';
@@ -55,9 +56,9 @@ const EmpresaDetalhe = () => {
   const { toast } = useToast();
   const { trackView } = useRecentlyViewed();
   const { records: luxRecords, latestRecord: luxRecord, loading: luxLoading, triggering: luxTriggering, triggerLux } = useLuxIntelligence('company', id);
+  const { interactions: hookInteractions, loading: interactionsLoading } = useInteractions(undefined, id);
   const [company, setCompany] = useState<Company | null>(null);
   const [contacts, setContacts] = useState<Contact[]>([]);
-  const [interactions, setInteractions] = useState<Interaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isAddContactOpen, setIsAddContactOpen] = useState(false);
@@ -107,9 +108,8 @@ const EmpresaDetalhe = () => {
         const normalizedContacts = (contactsResult || []).map((c: Record<string, unknown>) => ({ ...c, first_name: c.first_name || c.nome || 'Sem', last_name: c.last_name || c.sobrenome || 'nome', tags: c.tags || [], hobbies: c.hobbies || [], interests: c.interests || [] })) as Contact[];
         setContacts(normalizedContacts);
 
-        const { data: interactionsData, error: interactionsError } = await supabase.from('interactions').select('*').eq('company_id', id!).order('created_at', { ascending: false }).limit(20);
-        if (interactionsError) throw interactionsError;
-        setInteractions(interactionsData || []);
+        // As interações agora são gerenciadas pelo hook useInteractions(undefined, id)
+        // Isso remove o fetch manual e garante resiliência e cache via React Query.
       }
     } catch (error) { logger.error('Error fetching company data:', error); } finally { setLoading(false); }
   }, [id, user, trackView]);
@@ -124,7 +124,7 @@ const EmpresaDetalhe = () => {
     const lastDate = total > 0 ? new Date(interactions[0]?.created_at || Date.now()) : null;
     const daysSince = lastDate ? Math.floor((Date.now() - lastDate.getTime()) / (1000 * 60 * 60 * 24)) : undefined;
     return { avgScore, total, positive, positiveRatio: total > 0 ? positive / total : 0, pending, daysSince };
-  }, [contacts, interactions]);
+  }, [contacts, hookInteractions]);
 
   const handleEditSubmit = async (data: Record<string, unknown>) => {
     if (!id) return;
@@ -204,8 +204,8 @@ const EmpresaDetalhe = () => {
 
                 <TabsContent value="contacts" className="mt-4"><DashboardErrorBoundary sectionName="Contatos"><ContactsTabContent contacts={contacts} /></DashboardErrorBoundary></TabsContent>
                 <TabsContent value="data" className="mt-4 space-y-4"><DashboardErrorBoundary sectionName="Dados"><CompanyDataTab cnaes={cnaesHook.data} rfmScores={rfmHook.data} stakeholders={stakeholdersHook.data} loading={cnaesHook.isLoading || rfmHook.isLoading || stakeholdersHook.isLoading} /></DashboardErrorBoundary><DashboardErrorBoundary sectionName="Campos Personalizados"><CustomFieldsDisplay entityType="company" entityId={id!} /></DashboardErrorBoundary><DashboardErrorBoundary sectionName="Documentos"><DocumentsPanel entityType="company" entityId={id!} /></DashboardErrorBoundary><DashboardErrorBoundary sectionName="Dados Enriquecidos"><CompanyEnrichedCard companyId={id!} /></DashboardErrorBoundary><DashboardErrorBoundary sectionName="Duplicatas"><CompanyDuplicatesPanel /></DashboardErrorBoundary></TabsContent>
-                <TabsContent value="stakeholders" className="mt-4"><DashboardErrorBoundary sectionName="Stakeholders"><motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}><StakeholderMap contacts={contacts} interactions={interactions} companyId={id} /></motion.div></DashboardErrorBoundary></TabsContent>
-                <TabsContent value="interactions" className="mt-4"><DashboardErrorBoundary sectionName="Interações"><CompanyInteractionsTab interactions={interactions} contacts={contacts} /></DashboardErrorBoundary></TabsContent>
+                <TabsContent value="stakeholders" className="mt-4"><DashboardErrorBoundary sectionName="Stakeholders"><motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}><StakeholderMap contacts={contacts} interactions={hookInteractions} companyId={id} /></motion.div></DashboardErrorBoundary></TabsContent>
+                <TabsContent value="interactions" className="mt-4"><DashboardErrorBoundary sectionName="Interações"><CompanyInteractionsTab interactions={hookInteractions} contacts={contacts} /></DashboardErrorBoundary></TabsContent>
                 <TabsContent value="commercial" className="mt-4 space-y-4"><DashboardErrorBoundary sectionName="Comercial"><CompanyCommercialTab companyId={id!} /></DashboardErrorBoundary><DashboardErrorBoundary sectionName="Propostas ERP"><CompanyErpProposalsWidget companyId={id!} /></DashboardErrorBoundary></TabsContent>
                 <TabsContent value="insights" className="mt-4"><DashboardErrorBoundary sectionName="Insights"><CompanyInsightsTab companyId={company.id} contacts={contacts} avgRelationshipScore={stats.avgScore} totalInteractions={stats.total} positiveInteractions={stats.positive} pendingFollowUps={stats.pending} /></DashboardErrorBoundary></TabsContent>
                 <TabsContent value="lux" className="mt-4"><DashboardErrorBoundary sectionName="Lux Intelligence"><motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}><Card><CardContent className="pt-6"><LuxIntelligencePanel record={luxRecord} records={luxRecords} entityType="company" loading={luxLoading} onTrigger={() => triggerLux({ name: company.name, cnpj: company.cnpj, website: company.website, industry: company.industry })} triggering={luxTriggering} /></CardContent></Card></motion.div></DashboardErrorBoundary></TabsContent>
