@@ -149,7 +149,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
   const currentAnchors = Array.isArray(rapportIntel?.positive_anchors) ? rapportIntel.positive_anchors : [];
   const events = Array.isArray(rapportIntel?.upcoming_events) ? rapportIntel.upcoming_events : [];
 
-  const isEmpty = !birthdayFormatted && !family && currentAnchors.length === 0 && events.length === 0 && !isEditing;
+  const isEmpty = !birthdayFormatted && !family && currentAnchors.length === 0 && events.length === 0 && hobbies.length === 0 && interests.length === 0 && !isEditing;
 
   return (
     <Card className={cn("transition-all", isEditing && "ring-2 ring-primary/20 shadow-lg")}>
