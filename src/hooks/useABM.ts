@@ -223,16 +223,18 @@ export function useUpsertCommitteeMember() {
       if (!user) throw new Error("Não autenticado");
       if (input.id) {
         const { id, ...updates } = input;
-        const { data, error } = await supabase.from("abm_buying_committee").update(updates).eq("id", id).select().single();
+        const { data, error } = await supabase.from("abm_buying_committee").update(updates).eq("id", id).select().maybeSingle();
         if (error) throw error;
+        if (!data) throw new Error("Stakeholder não encontrado");
         return data;
       }
       const { data, error } = await supabase
         .from("abm_buying_committee")
         .insert({ ...input, user_id: user.id })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar stakeholder");
       return data;
     },
     onSuccess: (_, vars) => {
