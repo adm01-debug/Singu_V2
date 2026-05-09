@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import type { MotionStyle, Transition, TargetAndTransition } from 'framer-motion';
 import { Brain, ChevronDown, ChevronUp } from 'lucide-react';
