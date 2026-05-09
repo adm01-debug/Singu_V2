@@ -1,20 +1,29 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders, requireCronSecret, jsonError, jsonOk } from "../_shared/auth.ts";
+import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 
 Deno.serve(async (req) => {
+  const traceId = extractTraceId(req);
+  const log = tracedLogger(traceId, "check-notifications");
+
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   // 🔒 Cron secret validation
   const cronError = requireCronSecret(req);
-  if (cronError) return cronError;
+  if (cronError) {
+    log.warn("unauthorized_cron_access");
+    return cronError;
+  }
 
   try {
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
+
+    log.info("check_started");
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -43,8 +52,9 @@ Deno.serve(async (req) => {
       .eq('follow_up_date', todayStr);
 
     if (followUpError) {
-      console.error('Error fetching follow-ups:', followUpError);
+      log.error('fetch_followups_failed', { error: followUpError.message });
     } else if (followUps) {
+      log.info('followups_found', { count: followUps.length });
       for (const followUp of followUps) {
         const contactData = followUp.contacts as unknown;
         const contact = Array.isArray(contactData) ? contactData[0] as { first_name: string; last_name: string } | undefined : contactData as { first_name: string; last_name: string } | null;
@@ -74,27 +84,28 @@ Deno.serve(async (req) => {
       .not('birthday', 'is', null);
 
     if (contactsError) {
-      console.error('Error fetching contacts:', contactsError);
+      log.error('fetch_contacts_birthday_failed', { error: contactsError.message });
     } else if (contacts) {
-      for (const contact of contacts) {
-        if (!contact.birthday) continue;
-        
+      const todayBirthdays = contacts.filter(contact => {
+        if (!contact.birthday) return false;
         const birthday = new Date(contact.birthday);
         const birthMonth = String(birthday.getMonth() + 1).padStart(2, '0');
         const birthDay = String(birthday.getDate()).padStart(2, '0');
-        
-        if (birthMonth === month && birthDay === day) {
-          notifications.push({
-            userId: contact.user_id,
-            title: `🎂 Aniversário: ${contact.first_name} ${contact.last_name}`,
-            body: 'Não esqueça de enviar uma mensagem de parabéns!',
-            data: {
-              type: 'birthday',
-              contactId: contact.id
-            },
-            tag: `birthday-${contact.id}`
-          });
-        }
+        return birthMonth === month && birthDay === day;
+      });
+
+      log.info('birthdays_found', { count: todayBirthdays.length });
+      for (const contact of todayBirthdays) {
+        notifications.push({
+          userId: contact.user_id,
+          title: `🎂 Aniversário: ${contact.first_name} ${contact.last_name}`,
+          body: 'Não esqueça de enviar uma mensagem de parabéns!',
+          data: {
+            type: 'birthday',
+            contactId: contact.id
+          },
+          tag: `birthday-${contact.id}`
+        });
       }
     }
 
@@ -115,8 +126,9 @@ Deno.serve(async (req) => {
       .gte('created_at', yesterday.toISOString());
 
     if (insightsError) {
-      console.error('Error fetching insights:', insightsError);
+      log.error('fetch_insights_failed', { error: insightsError.message });
     } else if (insights) {
+      log.info('insights_found', { count: insights.length });
       for (const insight of insights) {
         const contactData = insight.contacts as unknown;
         const contact = Array.isArray(contactData) ? contactData[0] as { first_name: string; last_name: string } | undefined : contactData as { first_name: string; last_name: string } | null;
@@ -148,7 +160,8 @@ Deno.serve(async (req) => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${supabaseAnonKey}`
+            'Authorization': `Bearer ${supabaseAnonKey}`,
+            'x-trace-id': traceId
           },
           body: JSON.stringify({
             userId: notification.userId,
@@ -161,37 +174,36 @@ Deno.serve(async (req) => {
         
         if (response.ok) {
           sentCount++;
+        } else {
+          log.warn('push_send_failed', { userId: notification.userId, status: response.status });
         }
       } catch (error) {
-        console.error('Error sending notification:', error);
+        log.error('push_error', { userId: notification.userId, error: error instanceof Error ? error.message : String(error) });
       }
     }
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        checked: {
-          followUps: followUps?.length || 0,
-          birthdays: contacts?.filter(c => {
-            if (!c.birthday) return false;
-            const birthday = new Date(c.birthday);
-            const birthMonth = String(birthday.getMonth() + 1).padStart(2, '0');
-            const birthDay = String(birthday.getDate()).padStart(2, '0');
-            return birthMonth === month && birthDay === day;
-          }).length || 0,
-          insights: insights?.length || 0
-        },
-        notificationsSent: sentCount,
-        totalNotifications: notifications.length
-      }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    log.info("check_complete", { sentCount, total: notifications.length });
+
+    return jsonOk({
+      success: true,
+      checked: {
+        followUps: followUps?.length || 0,
+        birthdays: contacts?.filter(c => {
+          if (!c.birthday) return false;
+          const birthday = new Date(c.birthday);
+          const birthMonth = String(birthday.getMonth() + 1).padStart(2, '0');
+          const birthDay = String(birthday.getDate()).padStart(2, '0');
+          return birthMonth === month && birthDay === day;
+        }).length || 0,
+        insights: insights?.length || 0
+      },
+      notificationsSent: sentCount,
+      totalNotifications: notifications.length,
+      traceId
+    }, req);
   } catch (error: unknown) {
-    console.error('Error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return new Response(
-      JSON.stringify({ error: errorMessage }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    log.error("fatal_error", { error: errorMessage });
+    return jsonError(errorMessage, 500, req);
   }
 });

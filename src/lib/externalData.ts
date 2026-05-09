@@ -93,7 +93,9 @@ export { CircuitOpenError };
 export async function queryExternalData<T = Record<string, unknown>>(options: ExternalQueryOptions): Promise<{ data: T[] | null; count: number | null; error: Error | null }> {
   try {
     const result = await callExternalData({ action: 'select', ...options });
-    return { data: (result?.data as T[]) || [], count: (result?.count as number) || 0, error: null };
+    const data = (result?.data as unknown as T[]) || [];
+    const count = (result?.count as number) || 0;
+    return { data, count, error: null };
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
     logger.error('Error querying external data:', { error: msg });
@@ -104,7 +106,8 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
 export async function insertExternalData<T = Record<string, unknown>>(table: string, record: Record<string, unknown>): Promise<{ data: T | null; error: Error | null }> {
   try {
     const result = await callExternalData({ action: 'insert', table, record });
-    return { data: (result?.data as T) || null, error: null };
+    const data = (result?.data as unknown as T) || null;
+    return { data, error: null };
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
     logger.error('Error inserting external data:', { error: msg });
@@ -115,7 +118,8 @@ export async function insertExternalData<T = Record<string, unknown>>(table: str
 export async function updateExternalData<T = Record<string, unknown>>(table: string, id: string, updates: Record<string, unknown>): Promise<{ data: T | null; error: Error | null }> {
   try {
     const result = await callExternalData({ action: 'update', table, id, updates });
-    return { data: (result?.data as T) || null, error: null };
+    const data = (result?.data as unknown as T) || null;
+    return { data, error: null };
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
     logger.error('Error updating external data:', { error: msg });
@@ -174,7 +178,8 @@ export async function updateExternalDataWithVersion<T = Record<string, unknown>>
 ): Promise<{ data: T | null; error: Error | null }> {
   try {
     const result = await callExternalData({ action: 'update_with_version', table, id, version, updates });
-    return { data: (result?.data as T) || null, error: null };
+    const data = (result?.data as unknown as T) || null;
+    return { data, error: null };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     if (/\b409\b/.test(msg) || /CONCURRENT_EDIT/i.test(msg)) {

@@ -5,6 +5,7 @@ import {
   jsonError,
   jsonOk,
 } from "../_shared/auth.ts";
+import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 
 interface AlertData {
   type: 'birthday' | 'renewal' | 'at_risk' | 'health_alert' | 'life_event';
@@ -15,15 +16,19 @@ interface AlertData {
   userId: string;
 }
 
-// deno-lint-ignore no-explicit-any
-async function sendPushToUser(supabase: any, userId: string, alert: AlertData) {
+async function sendPushToUser(supabase: any, userId: string, alert: AlertData, log: any, traceId: string) {
   const { data: subscriptions, error: subError } = await supabase
     .from('push_subscriptions')
     .select('*')
     .eq('user_id', userId);
 
-  if (subError || !subscriptions?.length) {
-    console.log(`No push subscriptions for user ${userId}`);
+  if (subError) {
+    log.error('fetch_subscriptions_failed', { userId, error: subError.message });
+    return { sent: 0 };
+  }
+
+  if (!subscriptions?.length) {
+    log.info(`no_push_subscriptions`, { userId });
     return { sent: 0 };
   }
 
@@ -31,7 +36,7 @@ async function sendPushToUser(supabase: any, userId: string, alert: AlertData) {
 
   for (const _sub of subscriptions) {
     try {
-      await (supabase as any).from('alerts').insert({
+      const { error: insertError } = await supabase.from('alerts').insert({
         user_id: userId,
         title: alert.title,
         description: alert.body,
@@ -41,9 +46,13 @@ async function sendPushToUser(supabase: any, userId: string, alert: AlertData) {
         priority: alert.type === 'at_risk' || alert.type === 'health_alert' ? 'high' : 'medium',
       });
 
-      sentCount++;
+      if (insertError) {
+        log.error('alert_insert_failed', { userId, error: insertError.message });
+      } else {
+        sentCount++;
+      }
     } catch (error) {
-      console.error(`Error sending push to subscription:`, error);
+      log.error('alert_insert_threw', { userId, error: error instanceof Error ? error.message : String(error) });
     }
   }
 
@@ -51,20 +60,26 @@ async function sendPushToUser(supabase: any, userId: string, alert: AlertData) {
 }
 
 Deno.serve(async (req) => {
+  const traceId = extractTraceId(req);
+  const log = tracedLogger(traceId, "client-notifications");
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   // 🔒 Cron secret validation
   const cronError = requireCronSecret(req);
-  if (cronError) return cronError;
+  if (cronError) {
+    log.warn("unauthorized_cron_access");
+    return cronError;
+  }
 
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    console.log('Checking for notification triggers (cron)...');
+    log.info('check_started');
 
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -74,10 +89,15 @@ Deno.serve(async (req) => {
     const alertsSent: AlertData[] = [];
 
     // Get all distinct user_ids from contacts
-    const { data: allContacts } = await supabase
+    const { data: allContacts, error: contactError } = await supabase
       .from('contacts')
       .select('id, first_name, last_name, birthday, relationship_score, user_id')
       .not('birthday', 'is', null);
+
+    if (contactError) {
+      log.error('fetch_all_contacts_failed', { error: contactError.message });
+      throw contactError;
+    }
 
     // Group contacts by user_id
     const userContactsMap = new Map<string, typeof allContacts>();
@@ -86,6 +106,8 @@ Deno.serve(async (req) => {
       existing.push(contact);
       userContactsMap.set(contact.user_id, existing);
     }
+
+    log.info('users_to_process', { count: userContactsMap.size });
 
     for (const [userId, contacts] of userContactsMap) {
       // 1. Check for birthdays
@@ -110,7 +132,7 @@ Deno.serve(async (req) => {
             contactId: contact.id,
             userId,
           };
-          await sendPushToUser(supabase, userId, alert);
+          await sendPushToUser(supabase, userId, alert, log, traceId);
           alertsSent.push(alert);
         } else if (daysUntil === 7) {
           const alert: AlertData = {
@@ -121,7 +143,7 @@ Deno.serve(async (req) => {
             contactId: contact.id,
             userId,
           };
-          await sendPushToUser(supabase, userId, alert);
+          await sendPushToUser(supabase, userId, alert, log, traceId);
           alertsSent.push(alert);
         }
       }
@@ -152,7 +174,7 @@ Deno.serve(async (req) => {
             contactId: renewal.contact_id,
             userId,
           };
-          await sendPushToUser(supabase, userId, alert);
+          await sendPushToUser(supabase, userId, alert, log, traceId);
           alertsSent.push(alert);
         }
       }
@@ -192,7 +214,7 @@ Deno.serve(async (req) => {
               contactId: contact.id,
               userId,
             };
-            await sendPushToUser(supabase, userId, alert);
+            await sendPushToUser(supabase, userId, alert, log, traceId);
             alertsSent.push(alert);
           }
         }
@@ -230,7 +252,7 @@ Deno.serve(async (req) => {
             contactId: event.contact_id,
             userId,
           };
-          await sendPushToUser(supabase, userId, alert);
+          await sendPushToUser(supabase, userId, alert, log, traceId);
           alertsSent.push(alert);
 
           await supabase
@@ -241,17 +263,18 @@ Deno.serve(async (req) => {
       }
     }
 
-    console.log(`Sent ${alertsSent.length} notifications`);
+    log.info('check_complete', { alertsSent: alertsSent.length });
 
     return jsonOk({ 
       success: true, 
       notificationsSent: alertsSent.length,
-      notifications: alertsSent.map(a => ({ type: a.type, title: a.title }))
-    });
+      notifications: alertsSent.map(a => ({ type: a.type, title: a.title })),
+      traceId
+    }, req);
 
   } catch (error: unknown) {
-    console.error("Error checking notifications:", error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return jsonError(errorMessage, 500);
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    log.error("fatal_error", { error: msg });
+    return jsonError(msg, 500, req);
   }
 });

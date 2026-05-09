@@ -177,7 +177,7 @@ export function EmpresasContent(props: Props) {
                   tips={['Adicione dados como segmento e porte para análises mais precisas', 'Vincule contatos às empresas para contexto nas interações', 'Use tags para agrupar empresas por oportunidade ou projeto']} />
           )}
 
-          {hasMore && <div ref={sentinelRef} className="flex items-center justify-center py-6 text-sm text-muted-foreground">Carregando mais {Math.min(RENDER_BATCH, filteredAndSortedCompanies.length - visibleCount)} empresas...</div>}
+          {hasMore && <div ref={sentinelRef} className="flex items-center justify-center py-6 text-sm text-muted-foreground animate-pulse">Carregando mais {Math.min(RENDER_BATCH, filteredAndSortedCompanies.length - visibleCount)} empresas...</div>}
         </>
       )}
 
