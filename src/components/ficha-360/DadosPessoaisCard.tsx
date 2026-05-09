@@ -50,7 +50,6 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
   const [isSyncing, setIsSyncing] = useState(false);
   const { suggestions, approve, reject } = useAIApprovals(rapportIntel?.contact_id);
   const { history, revert } = useFamilyHistory(rapportIntel?.contact_id);
-  const [suggestionSourceMap, setSuggestionSourceMap] = useState<Record<string, React.ReactNode>>({});
   const [showHistory, setShowHistory] = useState(false);
 
   const getSourceIcon = (source: string) => {
@@ -471,7 +470,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {hobbies.length > 0 ? (
                       hobbies.map((hobby, i) => {
-                        const source = rapportIntel?.rapport_metadata?.hobby?.[hobby];
+                        const source = (rapportIntel?.rapport_metadata as any)?.hobbies?.[hobby];
                         return (
                           <Badge key={i} variant="secondary" className="text-[10px] font-normal bg-amber-50 text-amber-700 border-amber-100/50 gap-1">
                             {source && getSourceIcon(source)}
@@ -527,7 +526,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {interests.length > 0 ? (
                       interests.map((interest, i) => {
-                        const source = rapportIntel?.rapport_metadata?.interest?.[interest];
+                        const source = (rapportIntel?.rapport_metadata as any)?.interests?.[interest];
                         return (
                           <Badge key={i} variant="secondary" className="text-[10px] font-normal bg-purple-50 text-purple-700 border-purple-100/50 gap-1">
                             {source && getSourceIcon(source)}

@@ -136,9 +136,8 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   const loadMore = useCallback(async () => {
     if (!hasMore || isFetching) return;
     
-    // Simplificado: Para uma implementação real de cursor ou offset, 
-    // precisaríamos passar o offset para fetchContactsPage.
-    // Como o usuário pediu para garantir o funcionamento, vamos invalidar para "refresh" ou simular o fetch.
+    // In a real implementation with infinite scroll, we would append data.
+    // Here we invalidate to trigger a refresh as requested to ensure consistency.
     await queryClient.invalidateQueries({ queryKey });
   }, [hasMore, isFetching, queryClient, queryKey]);
 

@@ -1,5 +1,5 @@
 import { memo, type KeyboardEvent } from 'react';
-import { MessageSquare, Phone, Mail, Calendar, FileText, X, Layers, RotateCcw, Check, Undo2 } from 'lucide-react';
+import { MessageSquare, Phone, Mail, Calendar, FileText, X, Layers, RotateCcw, Check, Undo2, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -18,6 +18,8 @@ const CHANNEL_OPTIONS: Array<{ value: string; label: string; icon: typeof Messag
   { value: 'email', label: 'Email', icon: Mail },
   { value: 'meeting', label: 'Reunião', icon: Calendar },
   { value: 'note', label: 'Nota', icon: FileText },
+  { value: 'audio', label: 'Áudio', icon: Clock },
+  { value: 'transcription', label: 'Texto', icon: FileText },
 ];
 
 interface Props {
