@@ -271,7 +271,7 @@ export function usePlaybookUsageLog(filters: { playbookId?: string; days?: numbe
       
       const { data, error } = await q;
       if (error) throw error;
-      return data || [];
+      return (data || []) as PlaybookUsageLog[];
     },
   });
 }
