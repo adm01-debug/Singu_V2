@@ -152,7 +152,13 @@ const Dashboard = () => {
             </TabsContent>
 
             <TabsContent value="analytics" className="mt-4">
-              <AnalyticsTab prefersReducedMotion={prefersReducedMotion} tabDirection={tabDirection} />
+              <AnalyticsTab 
+                contacts={contacts} 
+                companies={companies} 
+                interactions={interactions} 
+                prefersReducedMotion={prefersReducedMotion} 
+                tabDirection={tabDirection} 
+              />
             </TabsContent>
 
             <TabsContent value="relationships" className="mt-4">
