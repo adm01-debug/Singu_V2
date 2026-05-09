@@ -65,7 +65,13 @@ export const getRelationshipData = (period: PeriodFilter) => {
   };
   return d[period];
 };
-
+export const getRelationshipStats = (period: PeriodFilter) => {
+  const data = getRelationshipData(period);
+  return {
+    excellent: calcChange(data[0].value, data[0].prevValue),
+    total: calcChange(data.reduce((s, i) => s + i.value, 0), data.reduce((s, i) => s + i.prevValue, 0))
+  };
+};
 export const contactsByRole = [
   { name: 'Proprietário', value: 12, color: 'hsl(var(--secondary))' }, { name: 'Gerente', value: 18, color: 'hsl(var(--primary))' },
   { name: 'Comprador', value: 15, color: 'hsl(var(--success))' }, { name: 'Contato', value: 25, color: 'hsl(var(--muted-foreground))' },

@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react';
+import { useState, lazy, Suspense, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Lightbulb } from 'lucide-react';
 import { DISCConversionMetricsPanel } from '@/components/analytics/DISCConversionMetricsPanel';
@@ -26,11 +26,14 @@ const periodOptions: { value: PeriodFilter; label: string }[] = [
 ];
 
 interface AnalyticsTabProps {
+  contacts: any[];
+  companies: any[];
+  interactions: any[];
   prefersReducedMotion: boolean;
   tabDirection: number;
 }
 
-export function AnalyticsTab({ prefersReducedMotion, tabDirection }: AnalyticsTabProps) {
+export function AnalyticsTab({ contacts, companies, interactions, prefersReducedMotion, tabDirection }: AnalyticsTabProps) {
   const [period, setPeriod] = useState<PeriodFilter>('7d');
 
   const animVariants = {
@@ -73,8 +76,8 @@ export function AnalyticsTab({ prefersReducedMotion, tabDirection }: AnalyticsTa
       <DashboardErrorBoundary sectionName="Gráficos de Atividade">
         <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-64 w-full" />}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            <ActivityChart period={period} />
-            <RelationshipEvolutionChart period={period} />
+            <ActivityChart period={period} interactions={interactions} />
+            <RelationshipEvolutionChart period={period} contacts={contacts} interactions={interactions} />
           </div>
         </Suspense>
       </DashboardErrorBoundary>
@@ -82,9 +85,9 @@ export function AnalyticsTab({ prefersReducedMotion, tabDirection }: AnalyticsTa
       <DashboardErrorBoundary sectionName="Distribuição e Scores">
         <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-48 w-full" />}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <ContactDistributionChart />
-            <RelationshipScoreChart period={period} />
-            <SentimentChart period={period} />
+            <ContactDistributionChart contacts={contacts} />
+            <RelationshipScoreChart period={period} contacts={contacts} />
+            <SentimentChart period={period} contacts={contacts} interactions={interactions} />
           </div>
         </Suspense>
       </DashboardErrorBoundary>
