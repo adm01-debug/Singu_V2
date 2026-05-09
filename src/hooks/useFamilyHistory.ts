@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
@@ -25,7 +25,7 @@ export function useFamilyHistory(contactId?: string) {
         .order('changed_at', { ascending: false });
 
       if (error) throw error;
-      return data as FamilyHistoryEntry[];
+      return (data || []) as FamilyHistoryEntry[];
     },
     enabled: !!contactId && !!user,
   });
@@ -56,3 +56,4 @@ export function useFamilyHistory(contactId?: string) {
     revert: revertMutation.mutate,
   };
 }
+

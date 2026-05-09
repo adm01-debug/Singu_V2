@@ -9,7 +9,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 export function AIApprovalsWidget() {
-  const { approvals, isLoading, updateApproval } = useAIApprovals();
+  const { suggestions: approvals, isLoading, approve, reject } = useAIApprovals();
 
   if (isLoading) {
     return (
@@ -63,8 +63,8 @@ export function AIApprovalsWidget() {
                     size="sm" 
                     variant="outline" 
                     className="flex-1 h-8 text-[11px] gap-1 hover:bg-success/10 hover:text-success hover:border-success/30"
-                    onClick={() => updateApproval.mutate({ id: approval.id, status: 'approved' })}
-                    disabled={updateApproval.isPending}
+                    onClick={() => approve.mutate(approval)}
+                    disabled={approve.isPending}
                   >
                     <Check className="h-3 w-3" /> Aprovar
                   </Button>
@@ -72,8 +72,8 @@ export function AIApprovalsWidget() {
                     size="sm" 
                     variant="outline" 
                     className="flex-1 h-8 text-[11px] gap-1 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
-                    onClick={() => updateApproval.mutate({ id: approval.id, status: 'rejected' })}
-                    disabled={updateApproval.isPending}
+                    onClick={() => reject.mutate(approval.id)}
+                    disabled={reject.isPending}
                   >
                     <X className="h-3 w-3" /> Rejeitar
                   </Button>
