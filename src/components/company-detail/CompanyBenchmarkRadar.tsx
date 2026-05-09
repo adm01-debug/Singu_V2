@@ -5,7 +5,7 @@ import { useCompany360 } from '@/hooks/useCompanyIntelligence';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer } from 'recharts';
 import { Brain } from 'lucide-react';
 
-export function CompanyBenchmarkRadar({ companyId }: { companyId: string }) {
+export default function CompanyBenchmarkRadar({ companyId }: { companyId: string }) {
   const { data: company360, isLoading } = useCompany360(companyId);
 
   if (isLoading) return <Card><CardHeader className="pb-2"><CardTitle className="text-sm">Benchmark Competitivo</CardTitle></CardHeader><CardContent><Skeleton className="h-48" /></CardContent></Card>;
