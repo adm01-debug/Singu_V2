@@ -63,6 +63,22 @@ interface Props {
 
 export function ContactDetailHeader({ contact, company, interactionCount, onEdit }: Props) {
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const { updateContact } = useContacts();
+  const [isChangingStage, setIsChangingStage] = useState(false);
+
+  const handleStageChange = useCallback(async (newStage: RelationshipStage) => {
+    if (newStage === contact.relationship_stage) return;
+    
+    setIsChangingStage(true);
+    try {
+      await updateContact(contact.id, { relationship_stage: newStage });
+      toast.success(`Estágio atualizado para ${newStage}`);
+    } catch (error) {
+      toast.error('Erro ao atualizar estágio');
+    } finally {
+      setIsChangingStage(false);
+    }
+  }, [contact.id, contact.relationship_stage, updateContact]);
   
   // Use shared React Query hook — eliminates duplicate fetches, leverages cache
   const { data: relData } = useContactRelationalData(contact.id);
