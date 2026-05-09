@@ -186,6 +186,10 @@ export function ContactBehavioralTab({ contact }: Props) {
         <BusinessContextSubTab contactId={contact.id} />
       </TabsContent>
 
+      <TabsContent value="audit">
+        <BehavioralAuditSubTab contactId={contact.id} />
+      </TabsContent>
+
       <TabsContent value="eq">
         <EqSubTab eqAnalysis={eqAnalysis} />
       </TabsContent>
