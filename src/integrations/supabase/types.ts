@@ -11470,6 +11470,28 @@ export type Database = {
           },
         ]
       }
+      v_contact_personality_audit: {
+        Row: {
+          change_source: string | null
+          contact_id: string | null
+          field_name: string | null
+          id: string | null
+          new_value: string | null
+          old_value: string | null
+          reason: string | null
+          timestamp: string | null
+          user_email: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_relationship_audit_logs_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       _connection_encryption_key: { Args: never; Returns: string }
@@ -11556,6 +11578,15 @@ export type Database = {
         }[]
       }
       get_contact_behavior_gaps: {
+        Args: { p_contact_id: string }
+        Returns: {
+          category: string
+          field_name: string
+          issue_type: string
+          priority: string
+        }[]
+      }
+      get_contact_framework_gaps: {
         Args: { p_contact_id: string }
         Returns: {
           category: string

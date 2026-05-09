@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { PersonalityExecutiveSummary } from './behavioral-tab/PersonalityExecutiveSummary';
 import { RelationshipScoreChart } from './behavioral-tab/RelationshipScoreChart';
 import { DiscCompatibilityCard } from './behavioral-tab/DiscCompatibilityCard';
 import { RapportCard } from './behavioral-tab/RapportCard';
@@ -116,6 +117,7 @@ export function ContactBehavioralTab({ contact }: Props) {
 
   return (
     <div className="space-y-6">
+      <PersonalityExecutiveSummary contactId={contact.id} />
       <BehavioralExecutiveSummary 
         contactId={contact.id} 
         data={{

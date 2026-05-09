@@ -271,6 +271,31 @@ export const useContactBehavior = (contactId: string) => {
     enabled: !!contactId,
   });
 
+  const { data: frameworkGaps, isLoading: isLoadingFGaps } = useQuery({
+    queryKey: ["contact-framework-gaps", contactId],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("get_contact_framework_gaps", {
+        p_contact_id: contactId,
+      });
+      if (error) throw error;
+      return data as ContactBehaviorGap[];
+    },
+    enabled: !!contactId,
+  });
+
+  const { data: frameworkAudit, isLoading: isLoadingFAudit } = useQuery({
+    queryKey: ["contact-personality-audit", contactId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("v_contact_personality_audit")
+        .select("*")
+        .eq("contact_id", contactId);
+      if (error) throw error;
+      return data as BehavioralAuditLog[];
+    },
+    enabled: !!contactId,
+  });
+
   return {
     behavior,
     decision,
@@ -278,10 +303,10 @@ export const useContactBehavior = (contactId: string) => {
     businessContext,
     personality,
     metaprograms,
-    gaps,
-    auditLogs,
+    gaps: [...(gaps || []), ...(frameworkGaps || [])],
+    auditLogs: [...(auditLogs || []), ...(frameworkAudit || [])],
     consistency,
-    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit || isLoadingPersonality || isLoadingMetaprograms,
+    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit || isLoadingPersonality || isLoadingMetaprograms || isLoadingFGaps || isLoadingFAudit,
     updateBehavior: updateBehaviorMutation.mutate,
     updateDecision: updateDecisionMutation.mutate,
     updateInfluence: updateInfluenceMutation.mutate,
