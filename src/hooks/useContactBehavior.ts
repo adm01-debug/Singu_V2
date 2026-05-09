@@ -9,6 +9,9 @@ export type ContactPersonality = Partial<PersonalityRow>;
 type MetaprogramsRow = Database['public']['Tables']['contact_metaprograms']['Row'];
 export type ContactMetaprograms = Partial<MetaprogramsRow>;
 
+type RapportRow = Database['public']['Tables']['contact_rapport_strategy']['Row'];
+export type ContactRapportStrategy = Partial<RapportRow>;
+
 export interface ContactBehavior {
   disc_primary?: 'D' | 'I' | 'S' | 'C';
   disc_confidence?: number;
@@ -142,6 +145,20 @@ export const useContactBehavior = (contactId: string) => {
     enabled: !!contactId,
   });
 
+  const { data: rapport, isLoading: isLoadingRapport } = useQuery({
+    queryKey: ["contact-rapport", contactId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("contact_rapport_strategy")
+        .select("*")
+        .eq("contact_id", contactId)
+        .maybeSingle();
+      if (error) throw error;
+      return data as ContactRapportStrategy;
+    },
+    enabled: !!contactId,
+  });
+
   const { data: businessContext, isLoading: isLoadingBusiness } = useQuery({
     queryKey: ["contact-business-context", contactId],
     queryFn: async () => {
@@ -234,6 +251,19 @@ export const useContactBehavior = (contactId: string) => {
     },
   });
 
+  const updateRapportMutation = useMutation({
+    mutationFn: async (updates: Partial<ContactRapportStrategy>) => {
+      const { error } = await supabase
+        .from("contact_rapport_strategy")
+        .upsert({ contact_id: contactId, ...updates }, { onConflict: 'contact_id' });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contact-rapport", contactId] });
+      toast.success("Estratégia de Rapport atualizada");
+    },
+  });
+
   const { data: gaps, isLoading: isLoadingGaps } = useQuery({
     queryKey: ["contact-behavior-gaps", contactId],
     queryFn: async () => {
@@ -303,16 +333,18 @@ export const useContactBehavior = (contactId: string) => {
     businessContext,
     personality,
     metaprograms,
+    rapport,
     gaps: [...(gaps || []), ...(frameworkGaps || [])],
     auditLogs: [...(auditLogs || []), ...(frameworkAudit || [])],
     consistency,
-    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit || isLoadingPersonality || isLoadingMetaprograms || isLoadingFGaps || isLoadingFAudit,
+    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit || isLoadingPersonality || isLoadingMetaprograms || isLoadingFGaps || isLoadingFAudit || isLoadingRapport,
     updateBehavior: updateBehaviorMutation.mutate,
     updateDecision: updateDecisionMutation.mutate,
     updateInfluence: updateInfluenceMutation.mutate,
     updateBusiness: updateBusinessMutation.mutate,
     updatePersonality: updatePersonalityMutation.mutate,
     updateMetaprograms: updateMetaprogramsMutation.mutate,
+    updateRapport: updateRapportMutation.mutate,
     checkConsistency,
   };
 };

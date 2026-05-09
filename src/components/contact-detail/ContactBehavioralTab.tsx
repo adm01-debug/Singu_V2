@@ -21,6 +21,7 @@ import { BusinessContextSubTab } from './behavioral-tab/BusinessContextSubTab';
 import { BehavioralAuditSubTab } from '../crm/behavior/BehavioralAuditSubTab';
 import { BehavioralExecutiveSummary } from './behavioral-tab/BehavioralExecutiveSummary';
 import { ContactFamilyInterestsCard } from './behavioral-tab/ContactFamilyInterestsCard';
+import { RapportStrategySubTab } from './behavioral-tab/RapportStrategySubTab';
 const CommunicationIntelWidget = lazy(() => import('./CommunicationIntelWidget'));
 const EmotionalTrendWidget = lazy(() => import('./EmotionalTrendWidget'));
 const EmotionalTrendByContactWidget = lazy(() => import('./EmotionalTrendByContactWidget'));
@@ -152,6 +153,7 @@ export function ContactBehavioralTab({ contact }: Props) {
           <TabsTrigger value="disc" className="text-xs">DISC</TabsTrigger>
           <TabsTrigger value="vak" className="text-xs">VAK</TabsTrigger>
           <TabsTrigger value="motivations" className="text-xs">Motivadores</TabsTrigger>
+          <TabsTrigger value="rapport" className="text-xs">Rapport & NLP</TabsTrigger>
           <TabsTrigger value="decision" className="text-xs">Decisão</TabsTrigger>
           <TabsTrigger value="influence" className="text-xs">Influência</TabsTrigger>
           <TabsTrigger value="business" className="text-xs">Contexto Business</TabsTrigger>
@@ -174,6 +176,13 @@ export function ContactBehavioralTab({ contact }: Props) {
       
       <TabsContent value="motivations">
         <MotivationsSubTab contactId={contact.id} />
+      </TabsContent>
+
+      <TabsContent value="rapport">
+        <div className="space-y-6">
+          <RapportStrategySubTab contactId={contact.id} />
+          <RapportCard contactId={contact.id} />
+        </div>
       </TabsContent>
 
       <TabsContent value="decision">

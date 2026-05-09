@@ -2493,6 +2493,68 @@ export type Database = {
           },
         ]
       }
+      contact_rapport_strategy: {
+        Row: {
+          auditory_preference_score: number | null
+          contact_id: string
+          created_at: string
+          digital_preference_score: number | null
+          emotional_anchors: string[] | null
+          id: string
+          kinesthetic_preference_score: number | null
+          mirroring_technique: string | null
+          notes: string | null
+          pacing_speed: string | null
+          preferred_triggers: string[] | null
+          resistance_triggers: string[] | null
+          updated_at: string
+          visual_preference_score: number | null
+          voice_tone_preferred: string | null
+        }
+        Insert: {
+          auditory_preference_score?: number | null
+          contact_id: string
+          created_at?: string
+          digital_preference_score?: number | null
+          emotional_anchors?: string[] | null
+          id?: string
+          kinesthetic_preference_score?: number | null
+          mirroring_technique?: string | null
+          notes?: string | null
+          pacing_speed?: string | null
+          preferred_triggers?: string[] | null
+          resistance_triggers?: string[] | null
+          updated_at?: string
+          visual_preference_score?: number | null
+          voice_tone_preferred?: string | null
+        }
+        Update: {
+          auditory_preference_score?: number | null
+          contact_id?: string
+          created_at?: string
+          digital_preference_score?: number | null
+          emotional_anchors?: string[] | null
+          id?: string
+          kinesthetic_preference_score?: number | null
+          mirroring_technique?: string | null
+          notes?: string | null
+          pacing_speed?: string | null
+          preferred_triggers?: string[] | null
+          resistance_triggers?: string[] | null
+          updated_at?: string
+          visual_preference_score?: number | null
+          voice_tone_preferred?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_rapport_strategy_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: true
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_relatives: {
         Row: {
           age: number | null
