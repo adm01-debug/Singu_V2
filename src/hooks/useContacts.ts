@@ -115,6 +115,21 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     // pagination can be added later if needed
   }, []);
 
+  const prefetchContactDetails = (id: string) => {
+    queryClient.prefetchQuery({
+      queryKey: ['contact', id],
+      queryFn: async () => {
+        const { data, error } = await queryExternalData<Record<string, unknown>>({
+          table: 'contacts',
+          filters: [{ type: 'eq', column: 'id', value: id }]
+        });
+        if (error) throw error;
+        return data?.[0] ? normalizeExternalContact(data[0]) : null;
+      },
+      staleTime: 5 * 60 * 1000,
+    });
+  };
+
   const createContact = async (contact: Omit<ContactInsert, 'user_id'>) => {
     if (!user) return null;
     try {
