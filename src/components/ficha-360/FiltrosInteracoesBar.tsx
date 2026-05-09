@@ -1,5 +1,5 @@
 import { memo, type KeyboardEvent } from 'react';
-import { MessageSquare, Phone, Mail, Calendar, FileText, X, Layers, RotateCcw, Check, Undo2 } from 'lucide-react';
+import { MessageSquare, Phone, Mail, Calendar, FileText, X, Layers, RotateCcw, Check, Undo2, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
