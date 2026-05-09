@@ -62,20 +62,22 @@ export function TopContactsCard({ contacts, animations = [], compact = false }: 
   const allLowScores = contacts.length > 0 && contacts.every(c => c.relationshipScore < 40);
 
   return (
-    <Card className="h-full border-border/60 hover:border-border transition-colors overflow-hidden relative">
-      <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-success to-primary/60 rounded-t-xl" />
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-base font-semibold flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-gradient-to-br from-success/15 to-primary/10 ring-1 ring-success/20">
-            <Users className="w-3.5 h-3.5 text-success" aria-hidden="true" />
+    <Card className={cn("h-full border-border/60 hover:border-border transition-colors overflow-hidden relative", compact && "bg-background shadow-none border-transparent hover:bg-muted/30")}>
+      {!compact && <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-success to-primary/60 rounded-t-xl" />}
+      <CardHeader className={cn("flex flex-row items-center justify-between pb-2", compact && "p-2 pb-0")}>
+        <CardTitle className={cn("text-base font-semibold flex items-center gap-2", compact && "text-sm")}>
+          <div className={cn("p-1.5 rounded-lg bg-gradient-to-br from-success/15 to-primary/10 ring-1 ring-success/20", compact && "p-1")}>
+            <Users className={cn("w-3.5 h-3.5 text-success", compact && "w-3 h-3")} aria-hidden="true" />
           </div>
-          Melhores Relacionamentos
+          {compact ? "Contatos" : "Melhores Relacionamentos"}
         </CardTitle>
-        <Link to="/contatos">
-          <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
-            Ver todos <ArrowRight className="w-4 h-4 ml-1" aria-hidden="true" />
-          </Button>
-        </Link>
+        {!compact && (
+          <Link to="/contatos">
+            <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
+              Ver todos <ArrowRight className="w-4 h-4 ml-1" aria-hidden="true" />
+            </Button>
+          </Link>
+        )}
       </CardHeader>
       <CardContent className={cn(compact && "p-2 pt-1")}>
         <ScrollArea className={cn("max-h-[320px]", compact && "max-h-[250px]")}>
