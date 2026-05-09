@@ -190,10 +190,22 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
               </Button>
             </div>
           )}
+          {!isEditing && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-2 ml-2 text-xs"
+              onClick={handleSocialSync}
+              disabled={isSyncing}
+            >
+              {isSyncing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+              Social Sync
+            </Button>
+          )}
         </div>
       </CardHeader>
       <CardContent>
-        {isEmpty ? (
+        {isEmpty && !isEditing ? (
           <InlineEmptyState
             icon={Heart}
             title="Sem dados pessoais"
