@@ -11,8 +11,9 @@ import {
   type PeriodFilter, calcChange,
   getActivityData, getActivityStats, getEvolutionData, getEvolutionStats,
   getRelationshipData, contactsByRole, getSentimentData, getSentimentStats,
+  getRelationshipStats,
 } from './charts/ChartDataUtils';
-import { startOfDay, startOfWeek, subWeeks, subMonths, format, isWithinInterval, parseISO } from 'date-fns';
+import { startOfDay, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { CustomTooltip, PieTooltip, ComparisonBadge } from './charts/ChartComponents';
 
@@ -48,20 +49,12 @@ export const ActivityChart = ({ period, interactions = [] }: ChartProps) => {
         ligacoes: dayInteractions.filter(int => int.type === 'call').length,
       });
     }
-    
-    // For 30d and 90d, group by week or month to avoid too many bars
-    if (interval > 7) {
-      // Logic for grouping can be added here if needed, but for now we keep it daily
-    }
-    
     return data;
   }, [period, interactions]);
 
   const stats = useMemo(() => {
-    if (!interactions.length) return getActivityStats(period);
-    // Dynamic stats calculation could go here
     return getActivityStats(period);
-  }, [period, interactions]);
+  }, [period]);
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
@@ -141,8 +134,7 @@ export const RelationshipEvolutionChart = ({ period }: ChartProps) => {
   );
 };
 
-export const ContactDistributionChart = ({ contacts }: { contacts?: any[] }) => (
-  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.4 }}>
+export const ContactDistributionChart = ({ contacts }: { contacts?: any[] }) => {
   const data = useMemo(() => {
     if (!contacts?.length) return contactsByRole;
     const counts: Record<string, number> = {};
@@ -187,10 +179,8 @@ export const ContactDistributionChart = ({ contacts }: { contacts?: any[] }) => 
     </motion.div>
   );
 };
-  </motion.div>
-);
 
-export const RelationshipScoreChart = ({ period }: ChartProps) => {
+export const RelationshipScoreChart = ({ period, contacts }: ChartProps) => {
   const relationshipData = useMemo(() => {
     if (!contacts?.length) return getRelationshipData(period);
     
@@ -207,7 +197,7 @@ export const RelationshipScoreChart = ({ period }: ChartProps) => {
     ];
   }, [contacts, period]);
 
-  const stats = useMemo(() => getRelationshipStats(period), [period]); // Keep static comparison for now
+  const stats = useMemo(() => getRelationshipStats(period), [period]);
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.5 }}>
