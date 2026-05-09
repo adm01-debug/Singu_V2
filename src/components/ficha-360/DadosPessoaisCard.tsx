@@ -89,6 +89,49 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
     setIsEditing(false);
   };
 
+  const handleSocialSync = async () => {
+    if (!rapportIntel?.contact_id) return;
+    setIsSyncing(true);
+    try {
+      // Get profile URLs if available
+      const { data: contact } = await supabase
+        .from('contacts')
+        .select('linkedin, twitter, instagram')
+        .eq('id', rapportIntel.contact_id)
+        .single();
+
+      const platforms = [
+        { key: 'linkedin', url: contact?.linkedin },
+        { key: 'twitter', url: contact?.twitter },
+        { key: 'instagram', url: contact?.instagram },
+      ].filter(p => p.url);
+
+      if (platforms.length === 0) {
+        toast.error('Nenhum link de rede social encontrado para sincronizar.');
+        return;
+      }
+
+      for (const p of platforms) {
+        const { error } = await supabase.functions.invoke('social-profile-scraper', {
+          body: {
+            contactId: rapportIntel.contact_id,
+            platform: p.key,
+            profileUrl: p.url
+          }
+        });
+        if (error) throw error;
+      }
+
+      toast.success('Sincronização social concluída! Recarregando dados...');
+      window.location.reload(); // Refresh to show new data
+    } catch (error) {
+      console.error('Social sync error:', error);
+      toast.error('Erro na sincronização social. Verifique as configurações.');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
   const addAnchor = () => {
     if (newAnchor.trim()) {
       setAnchors(prev => [...prev, newAnchor.trim()]);
