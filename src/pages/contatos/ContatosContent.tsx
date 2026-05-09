@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef, startTransition, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { List as VirtualList } from 'react-window';
-import { Search, UserPlus, Upload, CheckSquare } from 'lucide-react';
+import { Search, UserPlus, Upload, CheckSquare, Download } from 'lucide-react';
 import { ContactsGridSkeleton, ContactsListSkeleton } from '@/components/skeletons/PageSkeletons';
 import { EmptyState, SearchEmptyState } from '@/components/ui/empty-state';
 import { PullToRefresh } from '@/components/ui/pull-to-refresh';
@@ -20,6 +20,7 @@ import { RecentlyViewedSection } from '@/components/recently-viewed/RecentlyView
 import { SearchPresetsMenu } from '@/components/search/SearchPresetsMenu';
 import { ViewModeSwitcher, type ViewMode, type GridColumns } from '@/components/ui/view-mode-switcher';
 import { Header } from '@/components/layout/Header';
+import { exportToCSV } from '@/lib/export-utils';
 import type { SearchPreset } from '@/hooks/useSearchPresets';
 import type { Contact } from '@/hooks/useContacts';
 
@@ -74,7 +75,33 @@ export function ContatosContent(props: Props) {
   const RENDER_BATCH = 60;
   const [visibleCount, setVisibleCount] = useState(RENDER_BATCH);
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const { selectedIndex } = { selectedIndex: -1 }; // simplified
+  
+  // Real list navigation implementation
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  
+  useEffect(() => {
+    const handleNavigate = (e: any) => {
+      const direction = e.detail;
+      setSelectedIndex(prev => {
+        let next = direction === 'next' ? prev + 1 : prev - 1;
+        if (next < 0) next = filteredAndSortedContacts.length - 1;
+        if (next >= filteredAndSortedContacts.length) next = 0;
+        return next;
+      });
+    };
+    
+    const handleOpen = () => {
+      const contact = filteredAndSortedContacts[selectedIndex];
+      if (contact) navigate(`/contatos/${contact.id}`);
+    };
+
+    window.addEventListener('navigate-list', handleNavigate);
+    window.addEventListener('open-selected-item', handleOpen);
+    return () => {
+      window.removeEventListener('navigate-list', handleNavigate);
+      window.removeEventListener('open-selected-item', handleOpen);
+    };
+  }, [filteredAndSortedContacts, selectedIndex, navigate]);
 
   useEffect(() => { setVisibleCount(RENDER_BATCH); }, [activeFilters, sortBy, sortOrder, searchTerm]);
 
@@ -88,6 +115,21 @@ export function ContatosContent(props: Props) {
 
   const visibleContacts = useMemo(() => filteredAndSortedContacts.slice(0, visibleCount), [filteredAndSortedContacts, visibleCount]);
   const hasMoreContacts = visibleCount < filteredAndSortedContacts.length;
+
+  const handleBulkExport = async (ids: string[]) => {
+    const dataToExport = contacts.filter(c => ids.includes(c.id)).map(c => ({
+      Nome: `${c.first_name} ${c.last_name}`,
+      Empresa: getCompanyName(c.company_id) || '',
+      Cargo: c.role_title || '',
+      Email: (c as any).email || '',
+      Telefone: (c as any).phone || '',
+      Score: c.relationship_score || 0,
+      Estagio: c.relationship_stage || '',
+      Sentimento: c.sentiment || '',
+      Tags: Array.isArray((c as any).tags) ? ((c as any).tags as string[]).join('; ') : ''
+    }));
+    exportToCSV(dataToExport, 'contatos_export');
+  };
 
   return (
     <>
@@ -168,7 +210,16 @@ export function ContatosContent(props: Props) {
         )}
       </PullToRefresh>
 
-      <BulkActionsBar selectedIds={Array.from(selectedIds)} totalCount={filteredAndSortedContacts.length} entityType="contacts" onSelectAll={onSelectAll} onClearSelection={() => onSelect('__clear__', false)} onDelete={onBulkDelete} onAddTag={onBulkAddTag} />
+      <BulkActionsBar 
+        selectedIds={Array.from(selectedIds)} 
+        totalCount={filteredAndSortedContacts.length} 
+        entityType="contacts" 
+        onSelectAll={onSelectAll} 
+        onClearSelection={() => onSelect('__clear__', false)} 
+        onDelete={onBulkDelete} 
+        onAddTag={onBulkAddTag}
+        onExport={handleBulkExport}
+      />
     </div>
     </>
   );

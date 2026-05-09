@@ -279,11 +279,14 @@ function ContactCardWithContextImpl({
             <CardContent className="px-4 py-3">
               <div className="flex items-center gap-4">
                 {selectionMode && (
-                  <Checkbox
-                    checked={isSelected}
-                    onCheckedChange={(checked) => onSelect(contact.id, checked as boolean)}
-                    onClick={(e) => e.stopPropagation()}
-                  />
+                  <div className="shrink-0">
+                    <Checkbox
+                      checked={isSelected}
+                      onCheckedChange={(checked) => onSelect(contact.id, checked as boolean)}
+                      onClick={(e) => e.stopPropagation()}
+                      className="h-11 w-11 md:h-4 md:w-4" // 44px em mobile para touch target (WCAG)
+                    />
+                  </div>
                 )}
 
                 <OptimizedAvatar 
