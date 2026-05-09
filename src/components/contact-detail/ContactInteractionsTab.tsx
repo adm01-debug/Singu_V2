@@ -1,11 +1,12 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { WhatsAppDashboard } from '@/components/whatsapp/WhatsAppDashboard';
 import { ExternalInteractionsTimeline } from './interactions-tab/ExternalInteractionsTimeline';
+import { UnifiedTimeline } from './UnifiedTimeline';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Phone, Mail, MessageSquare, Users, Video, FileText,
   Clock, AlertCircle, ArrowUpRight, ArrowDownLeft,
-  ChevronDown, ChevronUp, Plus, Search
+  ChevronDown, ChevronUp, Plus, Search, LayoutList
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -49,7 +50,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState('unified');
 
   const filteredInteractions = useMemo(() => {
     let result = interactions;
@@ -107,7 +108,11 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div className="flex flex-col space-y-4 mb-6">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-            <TabsList className="grid grid-cols-4 w-full sm:w-auto h-9">
+            <TabsList className="grid grid-cols-5 w-full sm:w-auto h-9">
+              <TabsTrigger value="unified" className="text-xs">
+                <LayoutList className="h-3 w-3 mr-1" />
+                Unificada
+              </TabsTrigger>
               <TabsTrigger value="all" className="text-xs">Timeline</TabsTrigger>
               <TabsTrigger value="whatsapp" className="text-xs">WhatsApp</TabsTrigger>
               <TabsTrigger value="calls" className="text-xs">Ligações</TabsTrigger>
@@ -131,6 +136,10 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
             </div>
           </div>
         </div>
+
+        <TabsContent value="unified" className="space-y-4 mt-0">
+          <UnifiedTimeline contactId={contact.id} />
+        </TabsContent>
 
         <TabsContent value="all" className="space-y-4 mt-0">
           {filteredInteractions.length === 0 ? (
