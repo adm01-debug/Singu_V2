@@ -1934,6 +1934,38 @@ export type Database = {
           },
         ]
       }
+      contact_family_history: {
+        Row: {
+          changed_at: string
+          contact_id: string
+          family_info: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          changed_at?: string
+          contact_id: string
+          family_info?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          changed_at?: string
+          contact_id?: string
+          family_info?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_family_history_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_next_actions: {
         Row: {
           action: string
@@ -9284,6 +9316,50 @@ export type Database = {
           },
           {
             foreignKeyName: "stakeholder_alerts_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      suggested_rapport_intel: {
+        Row: {
+          contact_id: string
+          created_at: string
+          id: string
+          source: string
+          status: string
+          type: string
+          updated_at: string
+          user_id: string
+          value: string
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string
+          id?: string
+          source: string
+          status?: string
+          type: string
+          updated_at?: string
+          user_id: string
+          value: string
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string
+          id?: string
+          source?: string
+          status?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "suggested_rapport_intel_contact_id_fkey"
             columns: ["contact_id"]
             isOneToOne: false
             referencedRelation: "contacts"

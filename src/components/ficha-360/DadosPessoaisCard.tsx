@@ -1,5 +1,5 @@
 import { memo, useState, useEffect, useCallback } from 'react';
-import { Cake, Heart, Sparkles, Users, Edit2, Check, X, Loader2, Plus, Trash2, Baby, RefreshCw, Zap, Star } from 'lucide-react';
+import { Cake, Heart, Sparkles, Users, Edit2, Check, X, Loader2, Plus, Trash2, Baby, RefreshCw, Zap, Star, History, RotateCcw, Brain, MessageSquare, Instagram, Linkedin, Twitter, Phone } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,8 +9,14 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import type { RapportIntel } from '@/hooks/useRapportIntelView';
 import { useRapportIntelMutation } from '@/hooks/useRapportIntelMutation';
+import { useAIApprovals } from '@/hooks/useAIApprovals';
+import { useFamilyHistory } from '@/hooks/useFamilyHistory';
+import { formatDistanceToNow } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -42,6 +48,19 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
   const [newHobby, setNewHobby] = useState('');
   const [newInterest, setNewInterest] = useState('');
   const [isSyncing, setIsSyncing] = useState(false);
+  const { suggestions, approve, reject } = useAIApprovals(rapportIntel?.contact_id);
+  const { history, revert } = useFamilyHistory(rapportIntel?.contact_id);
+
+  const getSourceIcon = (source: string) => {
+    switch (source) {
+      case 'whatsapp': return <MessageSquare className="h-3 w-3 text-green-500" />;
+      case 'call': return <Phone className="h-3 w-3 text-blue-500" />;
+      case 'linkedin': return <Linkedin className="h-3 w-3 text-blue-600" />;
+      case 'instagram': return <Instagram className="h-3 w-3 text-pink-500" />;
+      case 'twitter': return <Twitter className="h-3 w-3 text-sky-400" />;
+      default: return <Brain className="h-3 w-3 text-primary" />;
+    }
+  };
 
   // Parse family_info if it's JSON or string
   useEffect(() => {
@@ -159,37 +178,78 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
             <Heart className="h-4 w-4 text-primary" />
             Rapport & Dados Pessoais
           </CardTitle>
-          {!isEditing ? (
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-8 w-8 text-muted-foreground hover:text-primary"
-              onClick={() => setIsEditing(true)}
-            >
-              <Edit2 className="h-3.5 w-3.5" />
-            </Button>
-          ) : (
-            <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
+                  <History className="h-4 w-4" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80">
+                <div className="space-y-3">
+                  <h4 className="text-xs font-bold uppercase tracking-wider">Histórico Familiar</h4>
+                  <ScrollArea className="h-[200px]">
+                    {history.length === 0 ? (
+                      <p className="text-xs text-muted-foreground italic text-center py-4">Nenhum histórico disponível</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {history.map((entry) => (
+                          <div key={entry.id} className="p-2 rounded border border-border text-xs space-y-2">
+                            <div className="flex justify-between items-center text-[10px] text-muted-foreground">
+                              <span>{formatDistanceToNow(new Date(entry.changed_at), { addSuffix: true, locale: ptBR })}</span>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-6 px-2 gap-1 text-[10px] hover:text-primary"
+                                onClick={() => revert(entry)}
+                              >
+                                <RotateCcw className="h-3 w-3" /> Restaurar
+                              </Button>
+                            </div>
+                            <div className="italic text-muted-foreground truncate">
+                              {entry.family_info || '(Vazio)'}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </ScrollArea>
+                </div>
+              </PopoverContent>
+            </Popover>
+
+            {!isEditing ? (
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="h-8 w-8 text-destructive"
-                onClick={handleCancel}
-                disabled={mutation.isPending}
+                className="h-8 w-8 text-muted-foreground hover:text-primary"
+                onClick={() => setIsEditing(true)}
               >
-                <X className="h-4 w-4" />
+                <Edit2 className="h-3.5 w-3.5" />
               </Button>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 text-success"
-                onClick={handleSave}
-                disabled={mutation.isPending}
-              >
-                {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
-              </Button>
-            </div>
-          )}
+            ) : (
+              <div className="flex items-center gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8 text-destructive"
+                  onClick={handleCancel}
+                  disabled={mutation.isPending}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8 text-success"
+                  onClick={handleSave}
+                  disabled={mutation.isPending}
+                >
+                  {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+                </Button>
+              </div>
+            )}
+          </div>
           {!isEditing && (
             <Button
               variant="outline"
@@ -213,6 +273,36 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
           />
         ) : (
           <div className="space-y-4">
+            {/* Sugestões de IA para Revisão */}
+            {suggestions.length > 0 && (
+              <div className="p-3 rounded-lg border border-primary/20 bg-primary/5 space-y-3">
+                <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wider">
+                  <Brain className="h-3.5 w-3.5" /> Sugestões IA para Rapport
+                </div>
+                <div className="space-y-2">
+                  {suggestions.map((s) => (
+                    <div key={s.id} className="flex items-center justify-between p-2 bg-background rounded border border-border/50 shadow-xs">
+                      <div className="flex items-center gap-2 min-w-0">
+                        {getSourceIcon(s.source)}
+                        <div className="min-w-0">
+                          <p className="text-xs font-medium truncate">"{s.value}"</p>
+                          <p className="text-[10px] text-muted-foreground capitalize">{s.type === 'hobby' ? 'Hobby' : 'Interesse'}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-1 ml-2">
+                        <Button size="icon" variant="ghost" className="h-6 w-6 text-green-500 hover:bg-green-50" onClick={() => approve.mutate(s)}>
+                          <Check className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button size="icon" variant="ghost" className="h-6 w-6 text-destructive hover:bg-red-50" onClick={() => reject.mutate(s.id)}>
+                          <X className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Aniversário */}
             <div className="flex items-start gap-2">
               <Cake className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />

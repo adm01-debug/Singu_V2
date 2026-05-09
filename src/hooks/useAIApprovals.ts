@@ -1,65 +1,113 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
-export interface AIApproval {
+export interface SuggestedRapportIntel {
   id: string;
   contact_id: string;
-  user_id: string;
-  content: string;
-  channel: string;
-  status: 'pending' | 'approved' | 'rejected';
-  scheduled_at: string | null;
-  created_at: string;
   contact_name?: string;
+  type: 'hobby' | 'interest';
+  value: string;
+  source: 'whatsapp' | 'call' | 'linkedin' | 'instagram' | 'twitter';
+  status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
 }
 
-export function useAIApprovals() {
+export function useAIApprovals(contactId?: string) {
+  const queryClient = useQueryClient();
   const { user } = useAuth();
-  const qc = useQueryClient();
 
-  const { data: approvals = [], isLoading } = useQuery({
-    queryKey: ['ai-approvals'],
-    enabled: !!user,
+  const query = useQuery({
+    queryKey: ['suggested-rapport', contactId],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('follow_up_approvals_v2' as any)
+      if (!user) return [];
+      let query = supabase
+        .from('suggested_rapport_intel')
         .select(`
           *,
-          contacts:contact_id (first_name, last_name)
+          contacts:contact_id (
+            full_name
+          )
         `)
-        .eq('status', 'pending')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
+        .eq('status', 'pending');
       
-      return (data || []).map((item: any) => ({
-        ...item,
-        contact_name: item.contacts ? `${item.contacts.first_name} ${item.contacts.last_name}` : 'Contato Desconhecido'
-      })) as AIApproval[];
-    }
-  });
+      if (contactId) {
+        query = query.eq('contact_id', contactId);
+      }
 
-  const updateApproval = useMutation({
-    mutationFn: async ({ id, status }: { id: string, status: 'approved' | 'rejected' }) => {
-      const { error } = await supabase
-        .from('follow_up_approvals_v2' as any)
-        .update({ status, updated_at: new Date().toISOString() })
-        .eq('id', id);
+      const { data, error } = await query.order('created_at', { ascending: false });
 
       if (error) throw error;
-      return { id, status };
+      return (data || []).map(item => ({
+        ...item,
+        contact_name: (item.contacts as any)?.full_name || 'Contato'
+      })) as SuggestedRapportIntel[];
     },
-    onSuccess: (data) => {
-      qc.invalidateQueries({ queryKey: ['ai-approvals'] });
-      toast.success(data.status === 'approved' ? 'Follow-up aprovado para envio!' : 'Follow-up rejeitado.');
-    },
-    onError: (err) => {
-      toast.error('Erro ao processar aprovação.');
-      console.error(err);
-    }
+    enabled: !!user,
   });
 
-  return { approvals, isLoading, updateApproval };
+  const approveMutation = useMutation({
+    mutationFn: async (suggestion: SuggestedRapportIntel) => {
+      if (!user) throw new Error('Usuário não autenticado');
+
+      const { error: updateError } = await supabase
+        .from('suggested_rapport_intel')
+        .update({ status: 'approved' })
+        .eq('id', suggestion.id);
+
+      if (updateError) throw updateError;
+
+      const field = suggestion.type === 'hobby' ? 'hobbies' : 'interests';
+      
+      const { data: contact, error: contactError } = await supabase
+        .from('contacts')
+        .select(field)
+        .eq('id', suggestion.contact_id)
+        .single();
+
+      if (contactError) throw contactError;
+
+      const currentValues = (contact as any)[field] || [];
+      if (!currentValues.includes(suggestion.value)) {
+        const { error: saveError } = await supabase
+          .from('contacts')
+          .update({ [field]: [...currentValues, suggestion.value] })
+          .eq('id', suggestion.contact_id);
+        
+        if (saveError) throw saveError;
+      }
+
+      return suggestion;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['suggested-rapport'] });
+      queryClient.invalidateQueries({ queryKey: ['rapport-intel'] });
+      queryClient.invalidateQueries({ queryKey: ['contact'] });
+      toast.success('Sugestão aprovada e adicionada ao perfil');
+    },
+  });
+
+  const rejectMutation = useMutation({
+    mutationFn: async (suggestionId: string) => {
+      const { error } = await supabase
+        .from('suggested_rapport_intel')
+        .update({ status: 'rejected' })
+        .eq('id', suggestionId);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['suggested-rapport'] });
+      toast.info('Sugestão ignorada');
+    },
+  });
+
+  return {
+    suggestions: query.data || [],
+    isLoading: query.isLoading,
+    approve: approveMutation,
+    reject: rejectMutation,
+  };
 }
+

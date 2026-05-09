@@ -9,7 +9,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 export function AIApprovalsWidget() {
-  const { approvals, isLoading, updateApproval } = useAIApprovals();
+  const { suggestions: approvals, isLoading, approve, reject } = useAIApprovals();
 
   if (isLoading) {
     return (
@@ -42,8 +42,10 @@ export function AIApprovalsWidget() {
               <div key={approval.id} className="p-3 rounded-lg bg-background border border-border/50 shadow-sm space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    {approval.channel === 'whatsapp' ? (
+                    {approval.source === 'whatsapp' ? (
                       <MessageSquare className="h-3 w-3 text-success" />
+                    ) : approval.source === 'linkedin' || approval.source === 'twitter' || approval.source === 'instagram' ? (
+                      <Brain className="h-3 w-3 text-primary" />
                     ) : (
                       <Mail className="h-3 w-3 text-info" />
                     )}
@@ -55,7 +57,7 @@ export function AIApprovalsWidget() {
                 </div>
                 
                 <p className="text-xs text-muted-foreground leading-relaxed italic border-l-2 border-primary/20 pl-3">
-                  "{approval.content}"
+                  Sugerido {approval.type === 'hobby' ? 'hobby' : 'interesse'}: "{approval.value}" (via {approval.source})
                 </p>
 
                 <div className="flex gap-2">
@@ -63,8 +65,8 @@ export function AIApprovalsWidget() {
                     size="sm" 
                     variant="outline" 
                     className="flex-1 h-8 text-[11px] gap-1 hover:bg-success/10 hover:text-success hover:border-success/30"
-                    onClick={() => updateApproval.mutate({ id: approval.id, status: 'approved' })}
-                    disabled={updateApproval.isPending}
+                    onClick={() => approve.mutate(approval)}
+                    disabled={approve.isPending}
                   >
                     <Check className="h-3 w-3" /> Aprovar
                   </Button>
@@ -72,8 +74,8 @@ export function AIApprovalsWidget() {
                     size="sm" 
                     variant="outline" 
                     className="flex-1 h-8 text-[11px] gap-1 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
-                    onClick={() => updateApproval.mutate({ id: approval.id, status: 'rejected' })}
-                    disabled={updateApproval.isPending}
+                    onClick={() => reject.mutate(approval.id)}
+                    disabled={reject.isPending}
                   >
                     <X className="h-3 w-3" /> Rejeitar
                   </Button>
