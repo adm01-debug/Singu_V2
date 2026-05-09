@@ -52,7 +52,7 @@ test.describe('Contatos e Rapport (Meta 10/10)', () => {
     await page.locator('button:has(.lucide-history)').click();
     await expect(page.locator('text=Histórico Familiar')).toBeVisible();
     
-    const restoreButton = page.locator('button:has-text("Restaurar")').first();
+    const restoreButton = page.locator('button:has-text("Reverter")').first();
     if (await restoreButton.isVisible()) {
       await restoreButton.click();
       await expect(page.locator('text=revertidas com sucesso')).toBeVisible();
