@@ -22,12 +22,34 @@ export function useSocialIntelligence(contactId: string) {
       if (behaviorAnalysis?.interests && Array.isArray(behaviorAnalysis.interests)) {
         const { data: contact } = await supabase.from('contacts').select('interests, hobbies').eq('id', contactId).single();
         if (contact) {
-          const newInterests = [...new Set([...(contact.interests || []), ...behaviorAnalysis.interests])];
-          // Simple heuristic: if interests look like hobbies, we could split, but for now we just enrich interests
-          if (newInterests.length > (contact.interests || []).length) {
-             await supabase.from('contacts').update({ interests: newInterests }).eq('id', contactId);
-             // Optional: invalidate contact query
-             queryClient.invalidateQueries({ queryKey: ['contact', contactId] });
+          const currentInterests = contact.interests || [];
+          const suggestedInterests = behaviorAnalysis.interests.filter(i => !currentInterests.includes(i));
+          
+          if (suggestedInterests.length > 0) {
+            // Em vez de salvar direto, criar sugestões pendentes para o usuário aprovar
+            const suggestions = suggestedInterests.map(val => ({
+              contact_id: contactId,
+              user_id: user.id,
+              type: 'interest' as const,
+              value: val,
+              source: 'linkedin', // Simplificado, poderia vir da análise
+              status: 'pending' as const
+            }));
+
+            // Evitar duplicatas nas sugestões pendentes
+            const { data: existingPending } = await supabase
+              .from('suggested_rapport_intel')
+              .select('value')
+              .eq('contact_id', contactId)
+              .eq('status', 'pending');
+            
+            const pendingValues = new Set(existingPending?.map(p => p.value) || []);
+            const newSuggestions = suggestions.filter(s => !pendingValues.has(s.value));
+
+            if (newSuggestions.length > 0) {
+              await supabase.from('suggested_rapport_intel').insert(newSuggestions);
+              queryClient.invalidateQueries({ queryKey: ['suggested-rapport', contactId] });
+            }
           }
         }
       }
