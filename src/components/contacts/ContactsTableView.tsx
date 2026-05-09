@@ -88,28 +88,43 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                   </TableCell>
                 )}
                 <TableCell>
-                  <Link 
-                    to={`/contatos/${contact.id}`} 
-                    className="flex items-center gap-3 min-w-0"
-                    onMouseEnter={() => prefetchContactDetails(contact.id)}
-                    onFocus={() => prefetchContactDetails(contact.id)}
-                  >
-                    <OptimizedAvatar
-                      src={contact.avatar_url}
-                      alt=""
-                      aria-hidden="true"
-                      fallback={fullName}
-                      size="sm"
-                    />
-                    <div className="min-w-0">
-                      <span className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                        {fullName}
-                      </span>
-                      {contact.role_title && (
-                        <span className="text-xs text-muted-foreground line-clamp-1">{contact.role_title}</span>
-                      )}
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Link 
+                      to={`/contatos/${contact.id}`} 
+                      className="flex items-center gap-3 min-w-0 flex-shrink-0"
+                      onMouseEnter={() => prefetchContactDetails(contact.id)}
+                      onFocus={() => prefetchContactDetails(contact.id)}
+                    >
+                      <OptimizedAvatar
+                        src={contact.avatar_url}
+                        alt=""
+                        aria-hidden="true"
+                        fallback={fullName}
+                        size="sm"
+                      />
+                      <div className="min-w-0">
+                        <span className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                          {fullName}
+                        </span>
+                        {contact.role_title && (
+                          <span className="text-xs text-muted-foreground line-clamp-1">{contact.role_title}</span>
+                        )}
+                      </div>
+                    </Link>
+                    
+                    <div className="hidden sm:flex flex-wrap gap-1 ml-2 max-w-[200px]">
+                      {contact.hobbies?.slice(0, 2).map((hobby) => (
+                        <Badge key={hobby} variant="secondary" className="text-[10px] h-4 px-1.5 bg-blue-500/10 text-blue-600 border-blue-200/50">
+                          {hobby}
+                        </Badge>
+                      ))}
+                      {contact.interests?.slice(0, 2).map((interest) => (
+                        <Badge key={interest} variant="secondary" className="text-[10px] h-4 px-1.5 bg-purple-500/10 text-purple-600 border-purple-200/50">
+                          {interest}
+                        </Badge>
+                      ))}
                     </div>
-                  </Link>
+                  </div>
                 </TableCell>
                 <TableCell className="hidden md:table-cell text-muted-foreground text-sm">
                   {companyName ? (
