@@ -13,6 +13,7 @@ export type Company = Tables<'companies'> & {
   _contact_count?: number;
   _last_interaction_days?: number | null;
   _health_score?: number;
+  similarity?: number;
 };
 export type CompanyInsert = TablesInsert<'companies'>;
 export type CompanyUpdate = TablesUpdate<'companies'>;
@@ -55,6 +56,7 @@ const LISTING_SELECT = [
   'lead_score', 'lead_status', 'lead_score_updated_at',
   'bitrix_created_at', 'bitrix_updated_at', 'created_by_id',
   'deleted_at', 'deleted_by',
+  'similarity',
 ].join(',');
 const COMPANY_SEARCH_COLUMNS = [
   'nome_crm',
@@ -147,6 +149,7 @@ function mapCompany(ext: ExternalRow): Company {
     created_by_id: ext.created_by_id as string | null ?? null,
     deleted_at: ext.deleted_at as string | null ?? null,
     deleted_by: ext.deleted_by as string | null ?? null,
+    similarity: ext.similarity as number | null ?? undefined,
   } as unknown as Company;
 }
 
