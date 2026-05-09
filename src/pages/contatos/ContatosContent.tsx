@@ -167,7 +167,17 @@ export function ContatosContent(props: Props) {
         </div>
 
         <div className="md:block">
-          <AdvancedFilters filters={filterConfigs} sortOptions={sortOptions} activeFilters={activeFilters} onFiltersChange={onFiltersChange} sortBy={sortBy} sortOrder={sortOrder} onSortChange={(newSortBy, newSortOrder) => onSortChange(newSortBy, newSortOrder)} />
+          <AdvancedFilters 
+            filters={filterConfigs} 
+            sortOptions={sortOptions} 
+            activeFilters={activeFilters} 
+            onFiltersChange={onFiltersChange} 
+            sortBy={sortBy} 
+            sortOrder={sortOrder} 
+            onSortChange={(newSortBy, newSortOrder) => onSortChange(newSortBy, newSortOrder)} 
+            multiSort={multiSort}
+            onMultiSortChange={onMultiSortChange}
+          />
         </div>
       <RecentlyViewedSection type="contact" />
 
