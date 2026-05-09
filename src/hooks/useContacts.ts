@@ -46,9 +46,25 @@ function normalizeExternalContact(raw: Record<string, unknown>): Contact {
   if ('interests_array' in normalized && !('interests' in normalized)) {
     normalized.interests = normalized.interests_array;
   }
+  // External schema might use hobbies column directly or hobbies_array
+  if ('hobbies_array' in normalized && !('hobbies' in normalized)) {
+    normalized.hobbies = normalized.hobbies_array;
+  }
   if ('cargo' in normalized && !normalized.role_title) {
     normalized.role_title = normalized.cargo;
   }
+  // Ensure array fields are actually arrays to prevent UI crashes
+  ['tags', 'interests', 'hobbies'].forEach(field => {
+    if (normalized[field] && typeof normalized[field] === 'string') {
+      try {
+        normalized[field] = JSON.parse(normalized[field] as string);
+      } catch {
+        normalized[field] = (normalized[field] as string).split(',').map(s => s.trim());
+      }
+    } else if (!normalized[field]) {
+      normalized[field] = [];
+    }
+  });
   // Ensure version is present for optimistic locking
   if (!('version' in normalized) && 'updated_at' in normalized) {
     // Fallback: use updated_at timestamp as a pseudo-version if actual version column is missing
@@ -145,6 +161,18 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
         externalFields.cargo = contact.role_title;
       }
 
+      // Ensure array fields are sent as PostgreSQL arrays if the external DB expects them
+      ['tags', 'interests', 'hobbies'].forEach(field => {
+        if (contact[field as keyof typeof contact]) {
+          const val = contact[field as keyof typeof contact];
+          const arrayVal = Array.isArray(val) ? val : String(val).split(',').map(s => s.trim()).filter(Boolean);
+          
+          // Map to external column names if they differ
+          const extKey = field === 'tags' ? 'tags_array' : field === 'interests' ? 'interests_array' : field;
+          externalFields[extKey] = arrayVal;
+        }
+      });
+
       const { data, error } = await insertExternalData<Contact>('contacts', { ...externalFields, user_id: user.id });
       if (error) throw error;
       if (data) {
@@ -184,6 +212,16 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       if (updates.role_title && !cleanUpdates.cargo) {
         cleanUpdates.cargo = updates.role_title;
       }
+
+      // Map array updates
+      ['tags', 'interests', 'hobbies'].forEach(field => {
+        if (updates[field as keyof typeof updates] !== undefined) {
+          const val = updates[field as keyof typeof updates];
+          const arrayVal = Array.isArray(val) ? val : val ? String(val).split(',').map(s => s.trim()).filter(Boolean) : [];
+          const extKey = field === 'tags' ? 'tags_array' : field === 'interests' ? 'interests_array' : field;
+          cleanUpdates[extKey] = arrayVal;
+        }
+      });
 
       let data: Contact | null = null;
       let error: Error | null = null;
