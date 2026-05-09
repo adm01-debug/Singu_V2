@@ -1,11 +1,13 @@
-import { memo, useMemo } from 'react';
-import { Tag } from 'lucide-react';
+import { memo, useMemo, useState } from 'react';
+import { Tag, Brain, Check, X, MessageSquare, Phone, Linkedin, Instagram, Twitter, Globe } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { InlineEmptyState } from '@/components/ui/empty-state';
 import type { RapportIntel } from '@/hooks/useRapportIntelView';
 import type { RapportPoints } from '@/hooks/useRapportPoints';
 import { useFicha360Filters } from '@/hooks/useFicha360Filters';
+import { useAIApprovals } from '@/hooks/useAIApprovals';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -22,6 +24,18 @@ interface TagGroup {
 
 export const TagsInteresseCard = memo(({ rapportIntel, rapportPoints }: Props) => {
   const { q, setQ } = useFicha360Filters();
+  const { suggestions, approve, reject } = useAIApprovals(rapportIntel?.contact_id);
+
+  const getSourceIcon = (source: string) => {
+    switch (source) {
+      case 'whatsapp': return <MessageSquare className="h-3 w-3 text-green-500" />;
+      case 'call': return <Phone className="h-3 w-3 text-blue-500" />;
+      case 'linkedin': return <Linkedin className="h-3 w-3 text-blue-600" />;
+      case 'instagram': return <Instagram className="h-3 w-3 text-pink-500" />;
+      case 'twitter': return <Twitter className="h-3 w-3 text-sky-400" />;
+      default: return <Globe className="h-3 w-3 text-muted-foreground" />;
+    }
+  };
   
   const groups = useMemo<TagGroup[]>(() => {
     const safe = (arr: unknown): string[] =>
@@ -54,7 +68,51 @@ export const TagsInteresseCard = memo(({ rapportIntel, rapportPoints }: Props) =
           Tags de Interesse (Rapport)
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-4">
+        {/* Sugestões pendentes para revisão */}
+        {suggestions.length > 0 && (
+          <div className="p-3 rounded-lg border border-primary/20 bg-primary/5 space-y-3">
+            <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-wider">
+              <Brain className="h-3 w-3" /> Sugestões para Revisão
+            </div>
+            <div className="space-y-2">
+              {suggestions.map((s) => (
+                <div key={s.id} className="flex items-center justify-between p-2 bg-background rounded border border-border/50 shadow-xs">
+                  <div className="flex items-center gap-2 min-w-0">
+                    {getSourceIcon(s.source)}
+                    <div className="min-w-0">
+                      <p className="text-xs font-medium truncate">"{s.value}"</p>
+                      <p className="text-[10px] text-muted-foreground">
+                        {s.type === 'hobby' ? 'Hobby' : 'Interesse'} · {s.source}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-1 ml-2">
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="h-6 w-6 text-green-500 hover:bg-green-50" 
+                      onClick={() => approve.mutate(s)}
+                      disabled={approve.isPending}
+                    >
+                      <Check className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="h-6 w-6 text-destructive hover:bg-red-50" 
+                      onClick={() => reject.mutate(s.id)}
+                      disabled={reject.isPending}
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {isEmpty ? (
           <InlineEmptyState
             icon={Tag}

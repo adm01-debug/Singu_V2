@@ -1,5 +1,5 @@
 import { memo, useState, useEffect, useCallback } from 'react';
-import { Cake, Heart, Sparkles, Users, Edit2, Check, X, Loader2, Plus, Trash2, Baby, RefreshCw, Zap, Star, History, RotateCcw, Brain, MessageSquare, Instagram, Linkedin, Twitter, Phone } from 'lucide-react';
+import { Cake, Heart, Sparkles, Users, Edit2, Check, X, Loader2, Plus, Trash2, Baby, RefreshCw, Zap, Star, History, RotateCcw, Brain, MessageSquare, Instagram, Linkedin, Twitter, Phone, Globe } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -286,7 +286,19 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                         {getSourceIcon(s.source)}
                         <div className="min-w-0">
                           <p className="text-xs font-medium truncate">"{s.value}"</p>
-                          <p className="text-[10px] text-muted-foreground capitalize">{s.type === 'hobby' ? 'Hobby' : 'Interesse'}</p>
+                          <div className="flex items-center gap-1">
+                            <p className="text-[10px] text-muted-foreground capitalize">{s.type === 'hobby' ? 'Hobby' : 'Interesse'}</p>
+                            <span className="text-[10px] text-muted-foreground">·</span>
+                            <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                              {s.source === 'whatsapp' && <MessageSquare className="h-2 w-2" />}
+                              {s.source === 'call' && <Phone className="h-2 w-2" />}
+                              {s.source === 'linkedin' && <Linkedin className="h-2 w-2" />}
+                              {s.source === 'instagram' && <Instagram className="h-2 w-2" />}
+                              {s.source === 'twitter' && <Twitter className="h-2 w-2" />}
+                              {s.source === 'other' && <Globe className="h-2 w-2" />}
+                              {s.source}
+                            </span>
+                          </div>
                         </div>
                       </div>
                       <div className="flex gap-1 ml-2">
