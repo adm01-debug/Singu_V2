@@ -6,6 +6,9 @@ import { Database } from "@/integrations/supabase/types";
 type PersonalityRow = Database['public']['Tables']['contact_personality']['Row'];
 export type ContactPersonality = Partial<PersonalityRow>;
 
+type MetaprogramsRow = Database['public']['Tables']['contact_metaprograms']['Row'];
+export type ContactMetaprograms = Partial<MetaprogramsRow>;
+
 export interface ContactBehavior {
   disc_primary?: 'D' | 'I' | 'S' | 'C';
   disc_confidence?: number;
