@@ -4,18 +4,19 @@ import { PipelinePageSkeleton } from '@/components/skeletons/PageSkeletons';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, DollarSign, Clock, Target, ArrowRight, Loader2, AlertTriangle, Gauge } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { TrendingUp, DollarSign, Clock, Target, ArrowRight, Loader2, AlertTriangle, Gauge, Plus } from 'lucide-react';
 import { useDealsPipeline, usePipelineSummary, useWeightedForecast, useMoveDeal, useStageVelocity, useStalledDeals, useVelocityMetrics, type PipelineDeal, type WeightedForecast } from '@/hooks/usePipeline';
 import { useDealSlipRisk } from '@/hooks/useDealSlipRisk';
 import { useDealForecastConfidence } from '@/hooks/useDealForecastConfidence';
 import { DealRiskBadge } from '@/components/pipeline/DealRiskBadge';
 import { DealRiskDrawer } from '@/components/pipeline/DealRiskDrawer';
+import { DealDialog } from '@/components/pipeline/DealDialog';
 import { DealConfidenceBadge } from '@/components/pipeline/DealConfidenceBadge';
 import { ForecastConfidencePanel } from '@/components/pipeline/ForecastConfidencePanel';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { toast } from 'sonner';
-import { Plus } from 'lucide-react';
-import { DealDialog } from '@/components/pipeline/DealDialog';
+import { cn } from '@/lib/utils';
 
 const STAGES = [
   { id: 'lead', name: 'Novo Lead', probability: 10, color: 'bg-muted' },
@@ -288,6 +289,7 @@ export default function Pipeline() {
   const { data: forecast } = useWeightedForecast();
   const moveDeal = useMoveDeal();
   const [riskDeal, setRiskDeal] = useState<PipelineDeal | null>(null);
+  const [isDealDialogOpen, setIsDealDialogOpen] = useState(false);
 
   const dealsByStage = useMemo(() => {
     const map: Record<string, PipelineDeal[]> = {};
@@ -338,33 +340,39 @@ export default function Pipeline() {
     <AppLayout title="Pipeline">
       <SEOHead title="Pipeline de Vendas" description="Gerencie seus deals com drag & drop" />
       <div className="space-y-6 p-4 md:p-6">
-      <div>
-        <h1 className="text-2xl font-bold">Pipeline de Vendas</h1>
-        <p className="text-muted-foreground text-sm">Gerencie seus deals com drag & drop</p>
-      </div>
-
-      <DashboardErrorBoundary sectionName="Resumo do Pipeline">
-        <SummaryCards forecast={forecast} />
-      </DashboardErrorBoundary>
-
-      <DashboardErrorBoundary sectionName="Confiança do Forecast">
-        <ForecastConfidencePanel />
-      </DashboardErrorBoundary>
-
-      <p className="sm:hidden text-[11px] text-muted-foreground text-center -mb-1">← deslize para ver os estágios →</p>
-      <DashboardErrorBoundary sectionName="Kanban de Deals">
-        <div className="flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory sm:snap-none -mx-4 px-4 sm:mx-0 sm:px-0">
-          {STAGES.map((stage) => (
-            <PipelineColumn
-              key={stage.id}
-              stage={stage}
-              deals={dealsByStage[stage.id] || []}
-              onDrop={handleDrop}
-              onOpenRisk={setRiskDeal}
-            />
-          ))}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">Pipeline de Vendas</h1>
+            <p className="text-muted-foreground text-sm">Gerencie seus deals com drag & drop</p>
+          </div>
+          <Button onClick={() => setIsDealDialogOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Novo Deal
+          </Button>
         </div>
-      </DashboardErrorBoundary>
+
+        <DashboardErrorBoundary sectionName="Resumo do Pipeline">
+          <SummaryCards forecast={forecast} />
+        </DashboardErrorBoundary>
+
+        <DashboardErrorBoundary sectionName="Confiança do Forecast">
+          <ForecastConfidencePanel />
+        </DashboardErrorBoundary>
+
+        <p className="sm:hidden text-[11px] text-muted-foreground text-center -mb-1">← deslize para ver os estágios →</p>
+        <DashboardErrorBoundary sectionName="Kanban de Deals">
+          <div className="flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory sm:snap-none -mx-4 px-4 sm:mx-0 sm:px-0">
+            {STAGES.map((stage) => (
+              <PipelineColumn
+                key={stage.id}
+                stage={stage}
+                deals={dealsByStage[stage.id] || []}
+                onDrop={handleDrop}
+                onOpenRisk={setRiskDeal}
+              />
+            ))}
+          </div>
+        </DashboardErrorBoundary>
 
         {/* Velocity & Stalled Deals */}
         <div className="grid gap-4 md:grid-cols-2">
