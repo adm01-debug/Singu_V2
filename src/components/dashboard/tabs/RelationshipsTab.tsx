@@ -46,16 +46,16 @@ export function RelationshipsTab({ contacts, interactions, prefersReducedMotion,
 
       {/* Portfolio Health */}
       <DashboardErrorBoundary sectionName="Saúde do Portfólio">
-        <LazySection fallbackVariant="card" fallbackHeight="h-48">
+        <Suspense fallback={<div className="animate-pulse h-48 bg-muted rounded-lg" />}>
           <PortfolioHealthDashboard contacts={contacts} interactions={interactions} />
-        </LazySection>
+        </Suspense>
       </DashboardErrorBoundary>
 
       {/* Relationship Stats */}
       <DashboardErrorBoundary sectionName="Estatísticas de Relacionamento">
-        <LazySection fallbackVariant="chart" fallbackHeight="h-64">
+        <Suspense fallback={<div className="animate-pulse h-64 bg-muted rounded-lg" />}>
           <RelationshipStatsPanel />
-        </LazySection>
+        </Suspense>
       </DashboardErrorBoundary>
 
       {/* RFM Analysis + Closing Score */}
