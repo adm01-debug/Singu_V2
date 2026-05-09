@@ -123,9 +123,9 @@ const Empresas = () => {
     }));
 
     return sortArray(enriched, multiSort as any, undefined, { 
-      dateFields: ['updated_at', 'created_at', 'data_fundacao', 'situacao_rf_data'],
-      numericFields: ['capital_social', 'lead_score', '_contact_count', '_last_interaction_days'] 
-    });
+      dateFields: ['updated_at', 'created_at', 'data_fundacao', 'situacao_rf_data'] as any[],
+      numericFields: ['capital_social', 'lead_score', '_contact_count', '_last_interaction_days'] as any[]
+    }) as unknown as Company[];
   }, [companies, activeFilters, multiSort, companyMetrics]);
 
   const { selectedIndex } = useListNavigation(filteredAndSortedCompanies as Array<{ id: string }>, { onOpen: (company) => navigate(`/empresas/${company.id}`), onSelect: () => {} });
