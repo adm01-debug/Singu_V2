@@ -1,10 +1,12 @@
-import { useMemo, useState } from 'react';
-import { Plus, Loader2, AlertCircle } from 'lucide-react';
+import { useMemo, useState, useEffect } from 'react';
+import { Plus, Loader2, AlertCircle, Search } from 'lucide-react';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { SearchableSelect } from '@/components/ui/searchable-select';
+import { supabase } from '@/integrations/supabase/client';
 import {
   Dialog,
   DialogContent,
@@ -161,6 +163,8 @@ export function CreateTaskDialog() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
 
+  const minDate = useMemo(todayIso, [open]);
+
   useEffect(() => {
     if (open) {
       fetchEntities();
@@ -176,8 +180,6 @@ export function CreateTaskDialog() {
     if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
   };
 
-  const minDate = useMemo(todayIso, [open]);
-
   const reset = () => {
     setTitle('');
     setDescription('');
@@ -185,6 +187,8 @@ export function CreateTaskDialog() {
     setDueDate('');
     setDueTime('');
     setTaskType('');
+    setCompanyId('');
+    setContactId('');
     setChannelNote('');
     setErrors({});
     setSubmitAttempted(false);
@@ -232,6 +236,8 @@ export function CreateTaskDialog() {
         priority: data.priority,
         due_date: dueIso,
         task_type: data.taskType || undefined,
+        company_id: companyId || undefined,
+        contact_id: contactId || undefined,
         status: 'pending',
       },
       {
@@ -260,7 +266,7 @@ export function CreateTaskDialog() {
         <DialogHeader>
           <DialogTitle>Criar Nova Tarefa</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4 py-4">
+        <div className="space-y-4 py-4 overflow-y-auto max-h-[70vh]">
           <div className="space-y-2">
             <Label htmlFor="task-title">Título *</Label>
             <Input
@@ -270,12 +276,10 @@ export function CreateTaskDialog() {
               onBlur={handleBlur}
               placeholder="Ex: Ligar para cliente X"
               maxLength={140}
-              aria-invalid={!!errors.title}
-              aria-describedby={errors.title ? 'task-title-error' : undefined}
               className={cn(errors.title && 'border-destructive focus-visible:ring-destructive')}
             />
             {errors.title && (
-              <p id="task-title-error" className="text-xs text-destructive flex items-center gap-1">
+              <p className="text-xs text-destructive flex items-center gap-1">
                 <AlertCircle className="h-3 w-3" />
                 {errors.title}
               </p>
@@ -292,14 +296,12 @@ export function CreateTaskDialog() {
               placeholder="Detalhes opcionais..."
               rows={3}
               maxLength={2000}
-              aria-invalid={!!errors.description}
-              aria-describedby={errors.description ? 'task-desc-error' : undefined}
               className={cn(
                 errors.description && 'border-destructive focus-visible:ring-destructive',
               )}
             />
             {errors.description && (
-              <p id="task-desc-error" className="text-xs text-destructive flex items-center gap-1">
+              <p className="text-xs text-destructive flex items-center gap-1">
                 <AlertCircle className="h-3 w-3" />
                 {errors.description}
               </p>
@@ -330,14 +332,12 @@ export function CreateTaskDialog() {
                 min={minDate}
                 onChange={(e) => setDueDate(e.target.value)}
                 onBlur={handleBlur}
-                aria-invalid={!!errors.dueDate}
-                aria-describedby={errors.dueDate ? 'task-due-error' : undefined}
                 className={cn(
                   errors.dueDate && 'border-destructive focus-visible:ring-destructive',
                 )}
               />
               {errors.dueDate && (
-                <p id="task-due-error" className="text-xs text-destructive flex items-center gap-1">
+                <p className="text-xs text-destructive flex items-center gap-1">
                   <AlertCircle className="h-3 w-3" />
                   {errors.dueDate}
                 </p>
@@ -347,7 +347,7 @@ export function CreateTaskDialog() {
 
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Janela rápida</Label>
-            <div className="flex flex-wrap gap-1.5" role="group" aria-label="Definir data limite por janela de dias">
+            <div className="flex flex-wrap gap-1.5">
               {DUE_WINDOWS.map((w) => {
                 const iso = addDaysIso(w.days);
                 const active = dueDate === iso;
@@ -361,26 +361,11 @@ export function CreateTaskDialog() {
                       setDueDate(iso);
                       setErrors((prev) => ({ ...prev, dueDate: undefined, dueTime: undefined }));
                     }}
-                    aria-pressed={active}
                   >
                     {w.label}
                   </Button>
                 );
               })}
-              {dueDate && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="xs"
-                  onClick={() => {
-                    setDueDate('');
-                    setDueTime('');
-                    setErrors((prev) => ({ ...prev, dueDate: undefined, dueTime: undefined }));
-                  }}
-                >
-                  Limpar
-                </Button>
-              )}
             </div>
           </div>
 
@@ -394,14 +379,12 @@ export function CreateTaskDialog() {
                 onChange={(e) => setDueTime(e.target.value)}
                 onBlur={handleBlur}
                 disabled={!dueDate}
-                aria-invalid={!!errors.dueTime}
-                aria-describedby={errors.dueTime ? 'task-time-error' : undefined}
                 className={cn(
                   errors.dueTime && 'border-destructive focus-visible:ring-destructive',
                 )}
               />
               {errors.dueTime && (
-                <p id="task-time-error" className="text-xs text-destructive flex items-center gap-1">
+                <p className="text-xs text-destructive flex items-center gap-1">
                   <AlertCircle className="h-3 w-3" />
                   {errors.dueTime}
                 </p>
@@ -480,16 +463,12 @@ export function CreateTaskDialog() {
                     onClick={() =>
                       setChannelNote((prev) => (prev.trim() === s ? '' : s))
                     }
-                    aria-pressed={active}
                   >
                     {s}
                   </Button>
                 );
               })}
             </div>
-            <p className="text-[11px] text-muted-foreground">
-              Será anexada ao final da descrição da tarefa.
-            </p>
           </div>
         </div>
         <DialogFooter>
