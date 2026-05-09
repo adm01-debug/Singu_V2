@@ -527,6 +527,42 @@ export type Database = {
           },
         ]
       }
+      ai_recommendation_audit_logs_v2: {
+        Row: {
+          contact_id: string | null
+          created_at: string | null
+          data_used: Json | null
+          id: string
+          reasons: string[] | null
+          recommendation_type: string
+          score: number | null
+          user_action: string | null
+          user_id: string
+        }
+        Insert: {
+          contact_id?: string | null
+          created_at?: string | null
+          data_used?: Json | null
+          id?: string
+          reasons?: string[] | null
+          recommendation_type: string
+          score?: number | null
+          user_action?: string | null
+          user_id: string
+        }
+        Update: {
+          contact_id?: string | null
+          created_at?: string | null
+          data_used?: Json | null
+          id?: string
+          reasons?: string[] | null
+          recommendation_type?: string
+          score?: number | null
+          user_action?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_recommendation_logs: {
         Row: {
           action_timestamp: string | null
@@ -4396,6 +4432,42 @@ export type Database = {
           id?: string
           scheduled_for?: string | null
           status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      follow_up_approvals_v2: {
+        Row: {
+          channel: string | null
+          contact_id: string | null
+          content: string
+          created_at: string | null
+          id: string
+          scheduled_at: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          channel?: string | null
+          contact_id?: string | null
+          content: string
+          created_at?: string | null
+          id?: string
+          scheduled_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          channel?: string | null
+          contact_id?: string | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          scheduled_at?: string | null
+          status?: string | null
           updated_at?: string | null
           user_id?: string
         }
