@@ -10045,6 +10045,47 @@ export type Database = {
         }
         Relationships: []
       }
+      whatsapp_ingestion_logs: {
+        Row: {
+          contact_id: string | null
+          created_at: string
+          details: Json | null
+          event_type: string
+          id: string
+          message_id: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          contact_id?: string | null
+          created_at?: string
+          details?: Json | null
+          event_type: string
+          id?: string
+          message_id?: string | null
+          status: string
+          user_id: string
+        }
+        Update: {
+          contact_id?: string | null
+          created_at?: string
+          details?: Json | null
+          event_type?: string
+          id?: string
+          message_id?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_ingestion_logs_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       whatsapp_instances: {
         Row: {
           auto_read_messages: boolean | null
