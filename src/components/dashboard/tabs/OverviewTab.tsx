@@ -100,7 +100,7 @@ export function OverviewTab({
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Próximos Passos (IA)">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
-            <StrategicNextStepsCard contacts={stats.topContacts.map(c => ({
+            <StrategicNextStepsCard contacts={useMemo(() => stats.topContacts.map(c => ({
               id: c.id,
               first_name: c.firstName,
               last_name: c.lastName,
@@ -110,7 +110,7 @@ export function OverviewTab({
               last_interaction_summary: c.lastInteractionSummary,
               role_title: c.role,
               notes: c.lastInteractionSummary // Fallback
-            }))} />
+            })), [stats.topContacts])} />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Aprovações IA">
