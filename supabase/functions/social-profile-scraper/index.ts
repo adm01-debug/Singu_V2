@@ -154,7 +154,7 @@ Deno.serve(async (req) => {
     }
 
     const { data: existingProfile } = await supabaseClient
-      .from("social_profiles").select("*").eq("contact_id", contactId).eq("platform", platform).single();
+      .from("social_profiles").select("*").eq("contact_id", contactId).eq("platform", platform).maybeSingle();
 
     // deno-lint-ignore no-explicit-any
     const lifeEvents: any[] = [];

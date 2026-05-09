@@ -255,7 +255,7 @@ Deno.serve(async (req) => {
       .select("id, behavior")
       .eq("id", contactId)
       .eq("user_id", userId)
-      .single();
+      .maybeSingle();
 
     if (contactOwnership) {
       const currentBehavior = (contactOwnership.behavior as Record<string, unknown>) || {};
