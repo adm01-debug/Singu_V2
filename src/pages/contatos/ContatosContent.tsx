@@ -71,7 +71,7 @@ export function ContatosContent(props: Props) {
     activeFilters, onFiltersChange, sortBy, sortOrder, onSortChange,
     multiSort, onMultiSortChange,
     filterConfigs, sortOptions, selectionMode, selectedIds,
-    onToggleSelectionMode, onSelect, onSelectAll, onBulkDelete, onBulkAddTag,
+    onToggleSelectionMode, onSelect, onSelectAll, onBulkDelete, onBulkAddTag, onBulkUpdateStage,
     onSetEditingContact, onSetDeletingContact, onSetIsFormOpen,
     updateContact, getCompanyName, getLastInteractionDate, onRefresh,
     hasMore, onLoadMore,
