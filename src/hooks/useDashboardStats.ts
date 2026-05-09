@@ -17,6 +17,7 @@ interface TopContact {
   sentiment: string;
   interactionCount: number;
   lastInteraction: Date | null;
+  lastInteractionSummary?: string;
 }
 
 interface RecentActivity {
