@@ -13,6 +13,10 @@ import { EqSubTab } from './behavioral-tab/EqSubTab';
 import { BiasesSubTab } from './behavioral-tab/BiasesSubTab';
 import { MetaprogramsSubTab } from './behavioral-tab/MetaprogramsSubTab';
 import { PersonalitySubTab } from './behavioral-tab/PersonalitySubTab';
+import { MotivationsSubTab } from './behavioral-tab/MotivationsSubTab';
+import { DecisionMakingSubTab } from './behavioral-tab/DecisionMakingSubTab';
+import { InfluencersSubTab } from './behavioral-tab/InfluencersSubTab';
+import { BusinessContextSubTab } from './behavioral-tab/BusinessContextSubTab';
 import { BehavioralExecutiveSummary } from './behavioral-tab/BehavioralExecutiveSummary';
 import { ContactFamilyInterestsCard } from './behavioral-tab/ContactFamilyInterestsCard';
 const CommunicationIntelWidget = lazy(() => import('./CommunicationIntelWidget'));
@@ -144,10 +148,14 @@ export function ContactBehavioralTab({ contact }: Props) {
         <TabsList className="flex-wrap h-auto gap-1">
           <TabsTrigger value="disc" className="text-xs">DISC</TabsTrigger>
           <TabsTrigger value="vak" className="text-xs">VAK</TabsTrigger>
-          <TabsTrigger value="eq" className="text-xs">Inteligência Emocional</TabsTrigger>
-          <TabsTrigger value="biases" className="text-xs">Vieses Cognitivos</TabsTrigger>
-          <TabsTrigger value="metaprograms" className="text-xs">Metaprogramas</TabsTrigger>
-          <TabsTrigger value="personality" className="text-xs">Personalidade</TabsTrigger>
+          <TabsTrigger value="motivations" className="text-xs">Motivadores</TabsTrigger>
+          <TabsTrigger value="decision" className="text-xs">Decisão</TabsTrigger>
+          <TabsTrigger value="influence" className="text-xs">Influência</TabsTrigger>
+          <TabsTrigger value="business" className="text-xs">Contexto Business</TabsTrigger>
+          <TabsTrigger value="eq" className="text-xs">Int. Emocional</TabsTrigger>
+          <TabsTrigger value="biases" className="text-xs">Vieses</TabsTrigger>
+          <TabsTrigger value="metaprograms" className="text-xs">Meta</TabsTrigger>
+          <TabsTrigger value="personality" className="text-xs">Big Five/MBTI</TabsTrigger>
         </TabsList>
         <ModuleHelp {...moduleHelpContent.disc} />
       </div>
@@ -163,6 +171,22 @@ export function ContactBehavioralTab({ contact }: Props) {
 
       <TabsContent value="vak">
         <VakSubTab vakProfile={vakProfile} />
+      </TabsContent>
+      
+      <TabsContent value="motivations">
+        <MotivationsSubTab behavior={behavior} />
+      </TabsContent>
+
+      <TabsContent value="decision">
+        <DecisionMakingSubTab behavior={behavior} />
+      </TabsContent>
+
+      <TabsContent value="influence">
+        <InfluencersSubTab behavior={behavior} />
+      </TabsContent>
+
+      <TabsContent value="business">
+        <BusinessContextSubTab behavior={behavior} />
       </TabsContent>
 
       <TabsContent value="eq">

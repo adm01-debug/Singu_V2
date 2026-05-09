@@ -89,43 +89,49 @@ export function PersonalitySubTab({ behavior }: Props) {
         </CardContent>
       </Card>
 
-      {/* Communication Style */}
+      {/* Communication & Response */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-sm">
             <Shield className="h-4 w-4 text-accent" />
-            Estilo de Comunicação
+            Comunicação & Resposta
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2 text-sm">
+        <CardContent className="space-y-3 text-sm">
           {behavior?.preferredChannel && (
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Canal preferido</span>
-              <Badge variant="outline" className="capitalize text-xs">{String(behavior.preferredChannel)}</Badge>
+            <div className="flex items-center justify-between border-b pb-1">
+              <span className="text-muted-foreground text-xs">Canal preferido</span>
+              <Badge variant="outline" className="capitalize text-[10px]">{String(behavior.preferredChannel)}</Badge>
             </div>
           )}
           {behavior?.messageStyle && (
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Estilo de msg</span>
-              <Badge variant="outline" className="text-xs">{String(behavior.messageStyle)}</Badge>
+            <div className="flex items-center justify-between border-b pb-1">
+              <span className="text-muted-foreground text-xs">Estilo de msg</span>
+              <Badge variant="outline" className="text-[10px]">{String(behavior.messageStyle)}</Badge>
             </div>
           )}
+          <div className="flex items-center justify-between border-b pb-1">
+            <span className="text-muted-foreground text-xs">Tempo méd. resposta</span>
+            <span className="text-[10px] font-medium">{behavior?.avgResponseTimeHours || '?'}h</span>
+          </div>
+          <div className="flex items-center justify-between border-b pb-1">
+            <span className="text-muted-foreground text-xs">Melhor janela</span>
+            <span className="text-[10px] font-medium">{behavior?.bestContactWindow || 'Comercial'}</span>
+          </div>
           {behavior?.formalityLevel && (
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Formalidade</span>
-              <span className="text-xs">{Number(behavior.formalityLevel)}/5</span>
-            </div>
-          )}
-          {behavior?.decisionSpeed && (
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Vel. decisão</span>
-              <Badge variant="outline" className="text-xs capitalize">{String(behavior.decisionSpeed)}</Badge>
-            </div>
-          )}
-          {behavior?.decisionPower && (
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Poder de decisão</span>
-              <span className="text-xs">{Number(behavior.decisionPower)}/10</span>
+              <span className="text-muted-foreground text-xs">Nível de Formalidade</span>
+              <div className="flex gap-0.5">
+                {[1, 2, 3, 4, 5].map((level) => (
+                  <div 
+                    key={level} 
+                    className={cn(
+                      "h-1.5 w-3 rounded-full",
+                      level <= Number(behavior.formalityLevel) ? "bg-primary" : "bg-muted"
+                    )} 
+                  />
+                ))}
+              </div>
             </div>
           )}
         </CardContent>
