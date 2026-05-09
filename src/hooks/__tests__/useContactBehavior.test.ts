@@ -1,0 +1,51 @@
+import { expect, test, describe, beforeAll } from "vitest";
+import { supabase } from "@/integrations/supabase/client";
+
+// This is a regression test for behavioral data consistency and audit logging
+describe("Behavioral Data Integration Tests", () => {
+  const testContactId = "00000000-0000-0000-0000-000000000001"; // Assume a seed or specific test contact
+
+  test("should enforce range constraints on contact_behavior", async () => {
+    // Try to update with invalid confidence
+    const { error } = await supabase
+      .from("contact_behavior")
+      .upsert({ 
+        contact_id: testContactId, 
+        disc_confidence: 150 // Invalid (> 100)
+      });
+    
+    expect(error).toBeDefined();
+    expect(error?.message).toContain("disc_confidence_range");
+  });
+
+  test("should detect gaps via RPC", async () => {
+    const { data, error } = await supabase.rpc("get_contact_behavior_gaps", {
+      p_contact_id: testContactId
+    });
+
+    expect(error).toBeNull();
+    expect(Array.isArray(data)).toBe(true);
+  });
+
+  test("should log changes to audit table", async () => {
+    // Perform a valid update
+    await supabase
+      .from("contact_behavior")
+      .upsert({ 
+        contact_id: testContactId, 
+        disc_primary: 'D',
+        disc_confidence: 85
+      });
+
+    // Check if audit log exists
+    const { data, error } = await supabase
+      .from("crm_relationship_audit_logs")
+      .select("*")
+      .eq("contact_id", testContactId)
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+    expect(error).toBeNull();
+    expect(data?.length).toBeGreaterThan(0);
+  });
+});

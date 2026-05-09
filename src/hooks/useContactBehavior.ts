@@ -19,6 +19,24 @@ export interface ContactBehavior {
   formality_level?: number;
 }
 
+export interface ContactBehaviorGap {
+  category: string;
+  field_name: string;
+  issue_type: string;
+  priority: 'high' | 'medium' | 'low';
+}
+
+export interface BehavioralAuditLog {
+  id: string;
+  timestamp: string;
+  user_email: string;
+  change_source: string;
+  field_name: string;
+  old_value: any;
+  new_value: any;
+  reason: string;
+}
+
 export interface ContactDecisionMaking {
   decision_speed?: string;
   decision_criteria?: string[];
@@ -153,15 +171,56 @@ export const useContactBehavior = (contactId: string) => {
     },
   });
 
+  const { data: gaps, isLoading: isLoadingGaps } = useQuery({
+    queryKey: ["contact-behavior-gaps", contactId],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("get_contact_behavior_gaps", {
+        p_contact_id: contactId,
+      });
+      if (error) throw error;
+      return data as ContactBehaviorGap[];
+    },
+    enabled: !!contactId,
+  });
+
+  const { data: auditLogs, isLoading: isLoadingAudit } = useQuery({
+    queryKey: ["contact-behavior-audit", contactId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("v_contact_behavior_audit")
+        .select("*")
+        .eq("contact_id", contactId);
+      if (error) throw error;
+      return data as BehavioralAuditLog[];
+    },
+    enabled: !!contactId,
+  });
+
+  const { data: consistency, refetch: checkConsistency } = useQuery({
+    queryKey: ["contact-behavior-consistency", contactId],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("validate_behavioral_consistency", {
+        p_contact_id: contactId,
+      });
+      if (error) throw error;
+      return data as { is_consistent: boolean; issues: string[] };
+    },
+    enabled: !!contactId,
+  });
+
   return {
     behavior,
     decision,
     influence,
     businessContext,
-    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness,
+    gaps,
+    auditLogs,
+    consistency,
+    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit,
     updateBehavior: updateBehaviorMutation.mutate,
     updateDecision: updateDecisionMutation.mutate,
     updateInfluence: updateInfluenceMutation.mutate,
     updateBusiness: updateBusinessMutation.mutate,
+    checkConsistency,
   };
 };
