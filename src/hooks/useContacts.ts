@@ -311,5 +311,5 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     }
   };
 
-  return { contacts, loading, isFetching, hasMore, fetchContacts, loadMore, createContact, updateContact, deleteContact, prefetchContactDetails };
+  return { contacts, loading, isFetching, hasMore: hasNextPage, fetchContacts, loadMore, createContact, updateContact, deleteContact, prefetchContactDetails };
 }
