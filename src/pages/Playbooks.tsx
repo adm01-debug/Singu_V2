@@ -116,7 +116,7 @@ export default function Playbooks() {
                   <p className="p-12 text-center text-sm text-muted-foreground">Nenhum uso registrado nos últimos 30 dias.</p>
                 ) : (
                   <ul className="divide-y divide-border">
-                    {usage.data!.map((u: any) => (
+                    {usage.data!.map((u) => (
                       <li key={u.id} className="flex items-center justify-between gap-3 p-4">
                         <div className="space-y-0.5 min-w-0">
                           <p className="text-sm font-medium">
