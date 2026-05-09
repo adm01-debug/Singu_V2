@@ -7,6 +7,7 @@ import { BackButton } from '@/components/navigation/BackButton';
 import { UnifiedNotificationsBell } from '@/components/notifications/UnifiedNotificationsBell';
 import { SmartNotificationsBell } from '@/components/notifications/SmartNotificationsBell';
 import { GlobalDensityToggle } from '@/components/ui/global-density-toggle';
+import { SystemStatusBadge } from '@/components/ui/SystemStatusBadge';
 
 interface HeaderProps {
   title: string;
@@ -80,10 +81,13 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
         </div>
 
         <div className="flex items-center gap-1 md:gap-3 shrink-0">
-          <div className="hidden md:inline-flex items-center gap-1">
-            <GlobalDensityToggle />
-            <SmartNotificationsBell />
-            <UnifiedNotificationsBell />
+          <div className="hidden md:inline-flex items-center gap-4">
+            <SystemStatusBadge />
+            <div className="flex items-center gap-1">
+              <GlobalDensityToggle />
+              <SmartNotificationsBell />
+              <UnifiedNotificationsBell />
+            </div>
           </div>
 
           {/* Trigger ⌘K visível em mobile como ícone */}

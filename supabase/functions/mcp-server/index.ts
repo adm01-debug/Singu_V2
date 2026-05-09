@@ -70,7 +70,7 @@ async function callTool(name: string, args: Record<string, unknown>, admin: Admi
       phone: args.phone ? String(args.phone).slice(0, 50) : null,
       user_id: ownerUserId,
     };
-    const { data, error } = await admin.from("contacts").insert(payload).select("id,first_name,last_name").single();
+    const { data, error } = await admin.from("contacts").insert(payload).select("id,first_name,last_name").maybeSingle();
     if (error) throw new Error(error.message);
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
   }
@@ -78,7 +78,7 @@ async function callTool(name: string, args: Record<string, unknown>, admin: Admi
     const { data, error } = await admin.from("deals")
       .update({ stage: String(args.stage).slice(0, 64) })
       .eq("id", String(args.deal_id))
-      .select("id,stage").single();
+      .select("id,stage").maybeSingle();
     if (error) throw new Error(error.message);
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
   }
@@ -89,7 +89,7 @@ async function callTool(name: string, args: Record<string, unknown>, admin: Admi
       content: String(args.summary).slice(0, 4000),
       user_id: ownerUserId,
     };
-    const { data, error } = await admin.from("interactions").insert(payload).select("id,type").single();
+    const { data, error } = await admin.from("interactions").insert(payload).select("id,type").maybeSingle();
     if (error) throw new Error(error.message);
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
   }
