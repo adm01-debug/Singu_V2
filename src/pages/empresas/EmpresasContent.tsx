@@ -130,7 +130,17 @@ export function EmpresasContent(props: Props) {
         </div>
       </div>
 
-      <AdvancedFilters filters={dynamicFilters} sortOptions={companySortOptions} activeFilters={activeFilters} onFiltersChange={onFiltersChange} sortBy={sortBy} sortOrder={sortOrder} onSortChange={(sb, so) => onSortChange(sb, so)} />
+      <AdvancedFilters 
+        filters={dynamicFilters} 
+        sortOptions={companySortOptions} 
+        activeFilters={activeFilters} 
+        onFiltersChange={onFiltersChange} 
+        sortBy={sortBy} 
+        sortOrder={sortOrder} 
+        onSortChange={(sb, so) => onSortChange(sb, so)} 
+        multiSort={multiSort}
+        onMultiSortChange={onMultiSortChange}
+      />
       <RecentlyViewedSection type="company" />
 
       {loading ? <CompaniesGridSkeleton /> : (
