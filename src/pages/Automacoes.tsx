@@ -10,8 +10,14 @@ import { useAutomationRules, type CreateRuleData } from '@/hooks/useAutomationRu
 import { AutomationTemplates } from '@/components/automation/AutomationTemplates';
 import { RuleFormDialog } from './automacoes/RuleFormDialog';
 import { AutomacoesRulesList } from './automacoes/AutomacoesRulesList';
+import { CRMAutomationAuditLog } from '@/components/crm/CRMAutomationAuditLog';
+import { RelationshipKPIsDashboard } from '@/components/crm/RelationshipKPIsDashboard';
+
+
+import { CadenceRulesConfig } from '@/components/crm/CadenceRulesConfig';
 
 export default function Automacoes() {
+
   usePageTitle('Automações');
   const { rules, logs, loading, createRule, updateRule, deleteRule, toggleRule, fetchLogs } = useAutomationRules();
   const [formOpen, setFormOpen] = useState(false);
@@ -56,7 +62,21 @@ export default function Automacoes() {
           <TabsList>
             <TabsTrigger value="rules">Minhas Regras</TabsTrigger>
             <TabsTrigger value="templates">📦 Templates Prontos</TabsTrigger>
+            <TabsTrigger value="cadences">📅 Cadências CRM</TabsTrigger>
+            <TabsTrigger value="crm-audit">🔍 Auditoria CRM</TabsTrigger>
+            <TabsTrigger value="kpis">📊 KPIs Relacionamento</TabsTrigger>
           </TabsList>
+          <TabsContent value="cadences" className="mt-4">
+            <CadenceRulesConfig />
+          </TabsContent>
+
+          <TabsContent value="crm-audit" className="mt-4">
+            <CRMAutomationAuditLog />
+          </TabsContent>
+          <TabsContent value="kpis" className="mt-4">
+            <RelationshipKPIsDashboard />
+          </TabsContent>
+
           <TabsContent value="templates" className="mt-4">
             <AutomationTemplates onUseTemplate={handleUseTemplate} />
           </TabsContent>
