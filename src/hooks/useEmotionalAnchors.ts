@@ -36,8 +36,9 @@ export function useEmotionalAnchors(contactId?: string) {
         .from('emotional_anchors')
         .insert({ ...anchor, user_id: user!.id })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao registrar âncora emocional');
       return data;
     },
     onSuccess: () => {

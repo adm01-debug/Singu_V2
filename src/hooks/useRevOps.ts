@@ -128,8 +128,9 @@ export function useUpsertBenchmark() {
           description: input.description ?? null,
         }, { onConflict: "user_id,metric_key" })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao salvar benchmark');
       return data as unknown as RevOpsBenchmark;
     },
     onSuccess: () => {

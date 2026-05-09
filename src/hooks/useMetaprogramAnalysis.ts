@@ -210,9 +210,10 @@ export function useMetaprogramAnalysis() {
           analyzed_text: analyzedText.substring(0, 1000)
         })
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error('Falha ao salvar análise de metaprogramas');
       return data;
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';

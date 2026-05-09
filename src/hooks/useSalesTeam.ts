@@ -42,8 +42,9 @@ export function useCreateTeamMember() {
         .from('sales_team_members')
         .insert({ ...member, user_id: user.id } as never)
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao adicionar membro à equipe');
       return data;
     },
     onSuccess: () => {
@@ -64,8 +65,9 @@ export function useUpdateTeamMember() {
         .update(updates as never)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Membro não encontrado');
       return data;
     },
     onSuccess: () => {

@@ -41,8 +41,9 @@ export function useCreateRoutingRule() {
         .from('lead_routing_rules')
         .insert({ ...rule, user_id: user.id } as never)
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao criar regra de roteamento');
       return data;
     },
     onSuccess: () => {
@@ -62,8 +63,9 @@ export function useUpdateRoutingRule() {
         .update(updates as never)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Regra não encontrada');
       return data;
     },
     onSuccess: () => {

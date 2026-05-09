@@ -130,8 +130,9 @@ export function useCreatePixel() {
         label: input.label ?? null,
         pixel_key: generatePixelKey(),
         active: true,
-      }).select().single();
+      }).select().maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao criar pixel de intenção');
       return data as IntentPixel;
     },
     onSuccess: () => {
