@@ -188,7 +188,6 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
 
     const recentActivities = interactions
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-      .slice(0, 15) // fetch more, then filter
       .map(interaction => {
         const contact = contactMap.get(interaction.contact_id);
         const rawName = contact
@@ -217,7 +216,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         };
       })
       .filter(a => a.entityName !== 'Contato' && a.entityName !== 'Mensagem') // Remove unresolved generic entries
-      .slice(0, 5);
+      .slice(0, 8); // Aumentado para 8 para melhor visualização em telas grandes
 
     return {
       totalCompanies: companies.length,
