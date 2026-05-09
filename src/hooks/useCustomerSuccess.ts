@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { Database, Json } from "@/integrations/supabase/types";
 
 export type CSTier = "strategic" | "enterprise" | "mid" | "smb";
 export type CSLifecycle = "onboarding" | "adopting" | "mature" | "at_risk" | "churned";
@@ -74,6 +75,11 @@ export interface Renewal {
   notes: string | null;
 }
 
+type CSAccountInsert = Database["public"]["Tables"]["cs_accounts"]["Insert"];
+type CSAccountUpdate = Database["public"]["Tables"]["cs_accounts"]["Update"];
+type QBRInsert = Database["public"]["Tables"]["cs_qbrs"]["Insert"];
+type QBRUpdate = Database["public"]["Tables"]["cs_qbrs"]["Update"];
+
 // ============ Accounts ============
 export function useCSAccounts() {
   const { user } = useAuth();
@@ -116,10 +122,16 @@ export function useUpsertCSAccount() {
   return useMutation({
     mutationFn: async (input: Partial<CSAccount> & { account_name: string }) => {
       if (!user?.id) throw new Error("Não autenticado");
-      const payload = { ...input, user_id: user.id };
+      
+      const payload = {
+        ...input,
+        user_id: user.id,
+      } as CSAccountUpdate | CSAccountInsert;
+
       const { data, error } = input.id
-        ? await supabase.from("cs_accounts").update(payload).eq("id", input.id).select().maybeSingle()
-        : await supabase.from("cs_accounts").insert(payload).select().maybeSingle();
+        ? await supabase.from("cs_accounts").update(payload as CSAccountUpdate).eq("id", input.id).select().maybeSingle()
+        : await supabase.from("cs_accounts").insert(payload as CSAccountInsert).select().maybeSingle();
+      
       if (error) throw error;
       if (!data) throw new Error("Falha ao salvar conta");
       return data as CSAccount;
@@ -173,7 +185,7 @@ export function useRecordSignal() {
   const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (input: { account_id: string; signal_type: SignalType; score: number; weight?: number; source?: string }) => {
+    mutationFn: async (input: { account_id: string; signal_type: SignalType; score: number; weight?: number; source?: string; metadata?: Record<string, unknown> }) => {
       if (!user?.id) throw new Error("Não autenticado");
       const { error } = await supabase.from("cs_health_signals").insert({
         user_id: user.id,
@@ -182,6 +194,7 @@ export function useRecordSignal() {
         score: input.score,
         weight: input.weight ?? 1,
         source: input.source ?? null,
+        metadata: (input.metadata as unknown as Json) ?? null,
       });
       if (error) throw error;
     },
@@ -217,7 +230,8 @@ export function useSubmitNPS() {
     mutationFn: async (input: { account_id: string; score: number; comment?: string; contact_id?: string }) => {
       if (!user?.id) throw new Error("Não autenticado");
       const category = input.score >= 9 ? "promoter" : input.score >= 7 ? "passive" : "detractor";
-      const { error } = await supabase.from("cs_nps_responses").insert({
+      
+      const { error: npsError } = await supabase.from("cs_nps_responses").insert({
         user_id: user.id,
         account_id: input.account_id,
         contact_id: input.contact_id ?? null,
@@ -225,19 +239,20 @@ export function useSubmitNPS() {
         category,
         comment: input.comment ?? null,
       });
-      if (error) throw error;
+      if (npsError) throw npsError;
 
       // Registrar como signal para influenciar o health score
       const signalScore = input.score * 10; // 0-10 → 0-100
-      await supabase.from("cs_health_signals").insert({
+      const { error: signalError } = await supabase.from("cs_health_signals").insert({
         user_id: user.id,
         account_id: input.account_id,
         signal_type: "nps",
         score: signalScore,
         weight: 2,
         source: "nps_response",
-        metadata: { score: input.score, category },
+        metadata: { score: input.score, category } as unknown as Json,
       });
+      if (signalError) throw signalError;
     },
     onSuccess: (_, vars) => {
       toast.success("Resposta NPS registrada");
@@ -271,11 +286,33 @@ export function useUpsertQBR() {
   return useMutation({
     mutationFn: async (input: Partial<QBR> & { account_id: string; title: string; scheduled_at: string }) => {
       if (!user?.id) throw new Error("Não autenticado");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const payload = { ...input, user_id: user.id };
-      const { data, error } = input.id
-        ? await supabase.from("cs_qbrs").update(payload as any).eq("id", input.id).select().maybeSingle()
-        : await supabase.from("cs_qbrs").insert(payload as any).select().maybeSingle();
+      
+      const basePayload = {
+        ...input,
+        user_id: user.id,
+        agenda: (input.agenda as unknown as Json) ?? [],
+        outcomes: (input.outcomes as unknown as Json) ?? [],
+        next_steps: (input.next_steps as unknown as Json) ?? [],
+        attendees: (input.attendees as unknown as Json) ?? [],
+      };
+
+      if (input.id) {
+        const updatePayload: QBRUpdate = basePayload;
+        const { data, error } = await supabase.from("cs_qbrs").update(updatePayload).eq("id", input.id).select().maybeSingle();
+        if (error) throw error;
+        if (!data) throw new Error("Falha ao salvar QBR");
+        return data as QBR;
+      }
+
+      const insertPayload: QBRInsert = {
+        ...basePayload,
+        account_id: input.account_id,
+        title: input.title,
+        scheduled_at: input.scheduled_at,
+        user_id: user.id,
+      };
+      
+      const { data, error } = await supabase.from("cs_qbrs").insert(insertPayload).select().maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Falha ao salvar QBR");
       return data as QBR;
@@ -301,7 +338,8 @@ export function useRenewals(daysAhead = 90) {
         _days_ahead: daysAhead,
       });
       if (error) throw error;
-      return data as {
+      
+      return data as unknown as {
         total_count: number;
         total_arr: number;
         at_risk_count: number;
@@ -327,14 +365,14 @@ export function useUpdateRenewal() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: Partial<Renewal> & { id: string }) => {
-      const { data, error } = await supabase.from("cs_renewals").update(input).eq("id", input.id).select().maybeSingle();
+      const { data, error } = await supabase.from("cs_renewals").update(input as Database["public"]["Tables"]["cs_renewals"]["Update"]).eq("id", input.id).select().maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Renovação não encontrada");
       return data as Renewal;
     },
     onSuccess: () => {
-      toast.success("Renovação atualizada");
       qc.invalidateQueries({ queryKey: ["cs-renewals-pipeline"] });
+      toast.success("Renovação atualizada");
     },
     onError: (e: Error) => toast.error(e.message),
   });

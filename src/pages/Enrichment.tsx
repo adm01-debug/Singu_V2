@@ -16,8 +16,8 @@ export default function Enrichment() {
   const { data: phones = [] } = usePhoneValidations();
 
   const stats = useMemo(() => {
-    const validEmails = emails.filter((e: any) => e.status === "valid").length;
-    const validPhones = phones.filter((p: any) => p.status === "valid").length;
+    const validEmails = emails.filter((e) => e.status === "valid").length;
+    const validPhones = phones.filter((p) => p.status === "valid").length;
     return {
       emailsTotal: emails.length,
       emailsValid: validEmails,

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Calendar, DollarSign, Eye, Target } from "lucide-react";
+import { ArrowLeft, Calendar, DollarSign, Eye, Target, type LucideIcon } from "lucide-react";
 import { MilestoneKanban } from "@/components/deal-rooms/MilestoneKanban";
 import { StakeholderList } from "@/components/deal-rooms/StakeholderList";
 import { DocumentsList } from "@/components/deal-rooms/DocumentsList";
@@ -23,12 +23,12 @@ export default function DealRoomDetail() {
   if (!room) return <div className="container mx-auto p-6">Deal room não encontrado.</div>;
 
   const total = ms.length;
-  const done = ms.filter((m: any) => m.status === "done").length;
+  const done = ms.filter((m) => m.status === "done").length;
   const pct = total ? Math.round((done / total) * 100) : 0;
   const daysLeft = room.target_close_date
     ? Math.ceil((new Date(room.target_close_date).getTime() - Date.now()) / 86400000)
     : null;
-  const buyerEng = sh.filter((s: any) => s.side === "buyer").filter((s: any) => s.engagement_score >= 50).length;
+  const buyerEng = sh.filter((s) => s.side === "buyer").filter((s) => (s.engagement_score ?? 0) >= 50).length;
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -52,7 +52,7 @@ export default function DealRoomDetail() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Kpi icon={Target} label="Plano" value={`${pct}%`} sub={`${done}/${total}`} />
         <Kpi icon={Calendar} label="Dias até close" value={daysLeft !== null ? String(daysLeft) : "—"} sub={daysLeft !== null && daysLeft < 0 ? "atrasado" : ""} />
-        <Kpi icon={Target} label="Stakeholders engajados" value={String(buyerEng)} sub={`de ${sh.filter((s: any) => s.side === "buyer").length}`} />
+        <Kpi icon={Target} label="Stakeholders engajados" value={String(buyerEng)} sub={`de ${sh.filter((s) => s.side === "buyer").length}`} />
         <Kpi icon={Eye} label="Buyer views" value={String(room.buyer_view_count)} sub={room.last_buyer_view_at ? new Date(room.last_buyer_view_at).toLocaleDateString("pt-BR") : "—"} />
       </div>
 
@@ -76,7 +76,7 @@ export default function DealRoomDetail() {
   );
 }
 
-function Kpi({ icon: Icon, label, value, sub }: { icon: any; label: string; value: string; sub?: string }) {
+function Kpi({ icon: Icon, label, value, sub }: { icon: LucideIcon; label: string; value: string; sub?: string }) {
   return (
     <Card variant="outlined">
       <CardContent className="p-4">

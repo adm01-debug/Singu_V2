@@ -106,7 +106,7 @@ function MilestoneDialog({ editing, onSave }: { editing: DealRoomMilestone | nul
           </div>
           <div>
             <Label>Responsável</Label>
-            <Select value={form.owner_side as string} onValueChange={(v) => setForm({ ...form, owner_side: v as any })}>
+            <Select value={form.owner_side as string} onValueChange={(v) => setForm({ ...form, owner_side: v as Side })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="seller">Vendedor</SelectItem>

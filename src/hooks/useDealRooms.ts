@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Database } from "@/integrations/supabase/types";
 
 export type DealRoomStatus = "active" | "won" | "lost" | "paused";
 export type MilestoneStatus = "pending" | "in_progress" | "done" | "blocked";
@@ -92,6 +93,9 @@ export interface DealRoomComment {
   created_at: string;
 }
 
+type MilestoneInsert = Database["public"]["Tables"]["deal_room_milestones"]["Insert"];
+type StakeholderInsert = Database["public"]["Tables"]["deal_room_stakeholders"]["Insert"];
+
 const KEYS = {
   rooms: ["deal_rooms"] as const,
   room: (id: string) => ["deal_rooms", id] as const,
@@ -108,7 +112,9 @@ export function useDealRooms(filters?: { status?: DealRoomStatus | "all" }) {
     queryKey: [...KEYS.rooms, filters?.status ?? "all"],
     queryFn: async () => {
       let q = supabase.from("deal_rooms").select("*").order("updated_at", { ascending: false });
-      if (filters?.status && filters.status !== "all") q = q.eq("status", filters.status);
+      if (filters?.status && filters.status !== "all") {
+        q = q.eq("status", filters.status);
+      }
       const { data, error } = await q;
       if (error) throw error;
       return (data ?? []) as DealRoom[];
@@ -207,11 +213,18 @@ export function useUpsertMilestone(roomId: string) {
     mutationFn: async (m: Partial<DealRoomMilestone>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
-      const payload = { ...m, room_id: roomId, user_id: user.id };
-      const { data, error } = await supabase.from("deal_room_milestones").upsert([payload as never]).select("*").maybeSingle();
+      
+      const payload: MilestoneInsert = {
+        ...m,
+        room_id: roomId,
+        user_id: user.id,
+        title: m.title ?? "Sem título",
+      };
+
+      const { data, error } = await supabase.from("deal_room_milestones").upsert(payload).select("*").maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Falha ao salvar milestone");
-      return data as unknown as DealRoomMilestone;
+      return data as DealRoomMilestone;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.ms(roomId) }),
     onError: (e: Error) => toast.error(e.message),
@@ -238,7 +251,7 @@ export function useStakeholders(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_stakeholders").select("*").eq("room_id", roomId!);
       if (error) throw error;
-      return (data ?? []) as unknown as DealRoomStakeholder[];
+      return (data ?? []) as DealRoomStakeholder[];
     },
   });
 }
@@ -249,11 +262,19 @@ export function useUpsertStakeholder(roomId: string) {
     mutationFn: async (s: Partial<DealRoomStakeholder>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
-      const payload = { ...s, room_id: roomId, user_id: user.id };
-      const { data, error } = await supabase.from("deal_room_stakeholders").upsert([payload as never]).select("*").maybeSingle();
+      
+      const payload: StakeholderInsert = {
+        ...s,
+        room_id: roomId,
+        user_id: user.id,
+        name: s.name ?? "Sem nome",
+        side: s.side ?? "buyer",
+      };
+
+      const { data, error } = await supabase.from("deal_room_stakeholders").upsert(payload).select("*").maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Falha ao salvar stakeholder");
-      return data as unknown as DealRoomStakeholder;
+      return data as DealRoomStakeholder;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.sh(roomId) }),
     onError: (e: Error) => toast.error(e.message),
@@ -295,8 +316,13 @@ export function useUploadDocument(roomId: string) {
       const { error: upErr } = await supabase.storage.from("documents").upload(path, file);
       if (upErr) throw upErr;
       const { data, error } = await supabase.from("deal_room_documents").insert({
-        room_id: roomId, user_id: user.id, title: file.name, file_path: path,
-        file_type: file.type, file_size: file.size, uploaded_by_side: "seller",
+        room_id: roomId,
+        user_id: user.id,
+        title: file.name,
+        file_path: path,
+        file_type: file.type,
+        file_size: file.size,
+        uploaded_by_side: "seller",
       }).select("*").maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Falha ao salvar metadados do documento");
@@ -337,7 +363,7 @@ export function useRoomActivities(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_activities").select("*").eq("room_id", roomId!).order("created_at", { ascending: false }).limit(100);
       if (error) throw error;
-      return (data ?? []) as unknown as DealRoomActivity[];
+      return (data ?? []) as DealRoomActivity[];
     },
   });
 }
@@ -349,7 +375,7 @@ export function useRoomComments(roomId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_comments").select("*").eq("room_id", roomId!).order("created_at");
       if (error) throw error;
-      return (data ?? []) as unknown as DealRoomComment[];
+      return (data ?? []) as DealRoomComment[];
     },
   });
 }
@@ -410,6 +436,8 @@ export function usePublicDealRoom(token: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_deal_room_by_token", { _token: token! });
       if (error) throw error;
+      
+      // Use cast carefully for RPC results
       return data as unknown as { 
         room: DealRoom; 
         milestones: DealRoomMilestone[]; 
@@ -437,7 +465,7 @@ export async function buyerAddComment(token: string, body: string, label?: strin
 }
 
 export async function getBuyerDocumentUrl(token: string, document_id: string) {
-  const { data: path, error } = await supabase.rpc("get_buyer_document_path", { _token: token, _document_id: document_id });
-  if (error || !path) throw error ?? new Error("Documento não encontrado");
-  return path as string;
+  const { data, error } = await supabase.rpc("get_buyer_document_path", { _token: token, _document_id: document_id });
+  if (error || !data) throw error ?? new Error("Documento não encontrado");
+  return data as string;
 }

@@ -3,8 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
+import { Database } from "@/integrations/supabase/types";
 
-type EmailVerifyResult = {
+export type EmailVerifyResult = {
   email: string;
   status: "valid" | "invalid" | "risky" | "unknown" | "catchall";
   score: number;
@@ -15,7 +16,7 @@ type EmailVerifyResult = {
   reasons: string[];
 };
 
-type PhoneValidateResult = {
+export type PhoneValidateResult = {
   status: "valid" | "invalid" | "unreachable" | "unknown";
   line_type: string | null;
   country: string | null;
@@ -23,6 +24,9 @@ type PhoneValidateResult = {
   phone_e164: string | null;
   reasons: string[];
 };
+
+type EmailVerificationRow = Database["public"]["Tables"]["email_verifications"]["Row"];
+type PhoneValidationRow = Database["public"]["Tables"]["phone_validations"]["Row"];
 
 export function useEmailVerifier() {
   const qc = useQueryClient();
@@ -79,11 +83,18 @@ export function useEmailVerifications(contactId?: string) {
     enabled: !!user,
     staleTime: 60_000,
     queryFn: async () => {
-      let q = supabase.from("email_verifications").select("*").eq("user_id", user!.id).order("verified_at", { ascending: false }).limit(50);
+      let q = supabase
+        .from("email_verifications")
+        .select("*")
+        .eq("user_id", user!.id)
+        .order("verified_at", { ascending: false })
+        .limit(50);
+      
       if (contactId) q = q.eq("contact_id", contactId);
+      
       const { data, error } = await q;
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as EmailVerificationRow[];
     },
   });
 }
@@ -95,11 +106,18 @@ export function usePhoneValidations(contactId?: string) {
     enabled: !!user,
     staleTime: 60_000,
     queryFn: async () => {
-      let q = supabase.from("phone_validations").select("*").eq("user_id", user!.id).order("validated_at", { ascending: false }).limit(50);
+      let q = supabase
+        .from("phone_validations")
+        .select("*")
+        .eq("user_id", user!.id)
+        .order("validated_at", { ascending: false })
+        .limit(50);
+      
       if (contactId) q = q.eq("contact_id", contactId);
+      
       const { data, error } = await q;
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as PhoneValidationRow[];
     },
   });
 }
@@ -111,7 +129,13 @@ export function useEmailFinderResults() {
     enabled: !!user,
     staleTime: 60_000,
     queryFn: async () => {
-      const { data, error } = await supabase.from("email_finder_results").select("*").eq("user_id", user!.id).order("found_at", { ascending: false }).limit(30);
+      const { data, error } = await supabase
+        .from("email_finder_results")
+        .select("*")
+        .eq("user_id", user!.id)
+        .order("found_at", { ascending: false })
+        .limit(30);
+      
       if (error) throw error;
       return data ?? [];
     },
@@ -125,8 +149,15 @@ export function usePeopleIntelligenceEvents(contactId?: string) {
     enabled: !!user,
     staleTime: 60_000,
     queryFn: async () => {
-      let q = supabase.from("people_intelligence_events").select("*").eq("user_id", user!.id).order("detected_at", { ascending: false }).limit(50);
+      let q = supabase
+        .from("people_intelligence_events")
+        .select("*")
+        .eq("user_id", user!.id)
+        .order("detected_at", { ascending: false })
+        .limit(50);
+      
       if (contactId) q = q.eq("contact_id", contactId);
+      
       const { data, error } = await q;
       if (error) throw error;
       return data ?? [];
