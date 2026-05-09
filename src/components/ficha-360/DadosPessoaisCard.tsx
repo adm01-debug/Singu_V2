@@ -290,10 +290,10 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                         </div>
                       </div>
                       <div className="flex gap-1 ml-2">
-                        <Button size="icon" variant="ghost" className="h-6 w-6 text-green-500 hover:bg-green-50" onClick={() => approve(s)}>
+                        <Button size="icon" variant="ghost" className="h-6 w-6 text-green-500 hover:bg-green-50" onClick={() => approve.mutate(s)}>
                           <Check className="h-3.5 w-3.5" />
                         </Button>
-                        <Button size="icon" variant="ghost" className="h-6 w-6 text-destructive hover:bg-red-50" onClick={() => reject(s.id)}>
+                        <Button size="icon" variant="ghost" className="h-6 w-6 text-destructive hover:bg-red-50" onClick={() => reject.mutate(s.id)}>
                           <X className="h-3.5 w-3.5" />
                         </Button>
                       </div>
