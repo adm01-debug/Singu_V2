@@ -41,6 +41,7 @@ import { preserveScroll } from '@/lib/preserveScroll';
 import { groupInteractions } from '@/lib/groupInteractions';
 import { IncrementalLoadStickyBar } from '@/components/interactions/IncrementalLoadStickyBar';
 import { InfiniteScrollSentinel } from '@/components/interactions/InfiniteScrollSentinel';
+import { TimelineGroupCard } from '@/components/interactions/TimelineGroupCard';
 
 function normalize(s: string): string {
   return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -65,9 +66,14 @@ interface Props {
   hasMore?: boolean;
   loadMore?: () => void;
   isFetchingNextPage?: boolean;
+  totalCount?: number;
 }
 
-export function InteracoesContent({ interactions, loading, contactMap, stats, onSetIsFormOpen, onSetEditingInteraction, onSetDeletingInteraction, filterConfigs, sortOptions, hasMore, loadMore, isFetchingNextPage }: Props) {
+export function InteracoesContent({ 
+  interactions, loading, contactMap, stats, onSetIsFormOpen, 
+  onSetEditingInteraction, onSetDeletingInteraction, filterConfigs, 
+  sortOptions, hasMore, loadMore, isFetchingNextPage, totalCount 
+}: Props) {
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
   const [sortBy, setSortBy] = useState('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -240,7 +246,7 @@ export function InteracoesContent({ interactions, loading, contactMap, stats, on
   );
 
   // Paginação derivada (URL-driven). Defaults: page=1, perPage=25.
-  const total = isGrouped ? groups.length : (props.totalCount || sortedForView.length);
+  const total = isGrouped ? groups.length : (totalCount || sortedForView.length);
   const totalPages = Math.max(1, Math.ceil(total / adv.perPage));
   const safePage = Math.min(adv.page, totalPages);
   const start = (safePage - 1) * adv.perPage;
@@ -524,7 +530,7 @@ export function InteracoesContent({ interactions, loading, contactMap, stats, on
       <IncrementalLoadStickyBar 
         hasMore={!!hasMore} 
         totalLoaded={interactions.length} 
-        total={props.totalCount || interactions.length} 
+        total={totalCount || interactions.length} 
         className="top-24"
       />
 
@@ -620,9 +626,9 @@ export function InteracoesContent({ interactions, loading, contactMap, stats, on
           {hasMore && (
             <InfiniteScrollSentinel 
               sentinelRef={sentinelRef}
-              hasMore={hasMore}
+              hasMore={!!hasMore}
               totalLoaded={interactions.length}
-              total={props.totalCount || interactions.length}
+              total={totalCount || interactions.length}
               onLoadMore={loadMore}
               density={adv.density}
             />
