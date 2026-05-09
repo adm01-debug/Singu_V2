@@ -153,9 +153,28 @@ export function CreateTaskDialog() {
   const [dueDate, setDueDate] = useState('');
   const [dueTime, setDueTime] = useState('');
   const [taskType, setTaskType] = useState('');
+  const [companyId, setCompanyId] = useState('');
+  const [contactId, setContactId] = useState('');
+  const [companies, setCompanies] = useState<{ value: string; label: string }[]>([]);
+  const [contacts, setContacts] = useState<{ value: string; label: string }[]>([]);
   const [channelNote, setChannelNote] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      fetchEntities();
+    }
+  }, [open]);
+
+  const fetchEntities = async () => {
+    const [compRes, contRes] = await Promise.all([
+      supabase.from('companies').select('id, name').limit(100),
+      supabase.from('contacts').select('id, first_name, last_name').limit(100),
+    ]);
+    if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
+    if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
+  };
 
   const minDate = useMemo(todayIso, [open]);
 
@@ -403,6 +422,33 @@ export function CreateTaskDialog() {
                   <SelectItem value="other">📌 Outro</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label>Empresa Relacionada</Label>
+              <SearchableSelect
+                options={companies.map(c => c.label)}
+                value={companies.find(c => c.value === companyId)?.label || ''}
+                onValueChange={(label) => {
+                  const comp = companies.find(c => c.label === label);
+                  if (comp) setCompanyId(comp.value);
+                }}
+                placeholder="Buscar empresa..."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Contato Relacionado</Label>
+              <SearchableSelect
+                options={contacts.map(c => c.label)}
+                value={contacts.find(c => c.value === contactId)?.label || ''}
+                onValueChange={(label) => {
+                  const cont = contacts.find(c => c.label === label);
+                  if (cont) setContactId(cont.value);
+                }}
+                placeholder="Buscar contato..."
+              />
             </div>
           </div>
 
