@@ -67,7 +67,7 @@ const CONTACT_LISTING_SELECT = [
   'birthday', 'source',
   'updated_at', 'created_at', 'user_id',
   'bitrix_contact_id', 'is_duplicate', 'duplicate_of',
-  'notes' // Removed version as it's missing in external DB
+  'notes', 'version'
 ].join(',');
 
 async function fetchContactsPage(companyId?: string) {
