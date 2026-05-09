@@ -1,6 +1,7 @@
 import { z } from "npm:zod@3.23.8";
 import { corsHeaders, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 30, message: "Rate limit exceeded for insights. Please wait." });
 
@@ -11,6 +12,9 @@ const InsightsInput = z.object({
 });
 
 Deno.serve(async (req) => {
+  const traceId = extractTraceId(req);
+  const log = tracedLogger(traceId, "generate-insights");
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -27,15 +31,19 @@ Deno.serve(async (req) => {
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
+      log.error("lovable_key_missing");
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
     const rawBody = await req.json();
     const parsed = InsightsInput.safeParse(rawBody);
     if (!parsed.success) {
-      return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
+      log.warn("invalid_input", { errors: parsed.error.flatten().fieldErrors });
+      return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
     }
     const { contacts, interactions, companies } = parsed.data;
+
+    log.info("generation_started", { contacts: contacts.length, interactions: interactions.length, companies: companies.length });
 
     const systemPrompt = `Você é um assistente especializado em análise de relacionamentos comerciais e CRM. Sua função é analisar dados de contatos, empresas e interações para gerar insights acionáveis.
 
@@ -100,11 +108,17 @@ Gere entre 3 e 8 insights relevantes baseados nestes dados. Retorne um JSON com 
     });
 
     if (!response.ok) {
-      if (response.status === 429) return jsonError("Limite de requisições excedido. Tente novamente em alguns minutos.", 429);
-      if (response.status === 402) return jsonError("Créditos insuficientes. Adicione créditos em Configurações > Workspace > Uso.", 402);
+      if (response.status === 429) {
+        log.warn("ai_gateway_rate_limited");
+        return jsonError("Limite de requisições excedido. Tente novamente em alguns minutos.", 429, req);
+      }
+      if (response.status === 402) {
+        log.warn("insufficient_credits");
+        return jsonError("Créditos insuficientes. Adicione créditos em Configurações > Workspace > Uso.", 402, req);
+      }
       const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
-      return jsonError("Erro ao gerar insights", 500);
+      log.error("ai_gateway_failed", { status: response.status, error: errorText });
+      return jsonError("Erro ao gerar insights", 500, req);
     }
 
     const aiResponse = await response.json();
@@ -118,12 +132,14 @@ Gere entre 3 e 8 insights relevantes baseados nestes dados. Retorne um JSON com 
         insights = parsed.insights || [];
       }
     } catch (parseError) {
-      console.error("Error parsing AI response:", parseError);
+      log.error("json_parse_failed", { error: parseError.message, content });
     }
 
-    return jsonOk({ insights, raw: content });
+    log.info("generation_complete", { count: insights.length });
+    return jsonOk({ insights, traceId }, req);
   } catch (error) {
-    console.error("generate-insights error:", error);
-    return jsonError(error instanceof Error ? error.message : "Erro desconhecido", 500);
+    const msg = error instanceof Error ? error.message : "Erro desconhecido";
+    log.error("fatal_error", { error: msg });
+    return jsonError(msg, 500, req);
   }
 });
