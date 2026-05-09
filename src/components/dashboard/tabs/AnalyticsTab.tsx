@@ -1,6 +1,6 @@
 import { useState, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar } from 'lucide-react';
+import { Calendar, Lightbulb } from 'lucide-react';
 import { DISCConversionMetricsPanel } from '@/components/analytics/DISCConversionMetricsPanel';
 import { TriggerAnalyticsPanel } from '@/components/analytics/TriggerAnalyticsPanel';
 import { RFMSegmentDashboard } from '@/components/analytics/RFMSegmentDashboard';
@@ -14,6 +14,8 @@ const RelationshipEvolutionChart = lazy(() => import('@/components/dashboard/Das
 const ContactDistributionChart = lazy(() => import('@/components/dashboard/DashboardCharts').then(m => ({ default: m.ContactDistributionChart })));
 const RelationshipScoreChart = lazy(() => import('@/components/dashboard/DashboardCharts').then(m => ({ default: m.RelationshipScoreChart })));
 const SentimentChart = lazy(() => import('@/components/dashboard/DashboardCharts').then(m => ({ default: m.SentimentChart })));
+const DailyInsightsWidget = lazy(() => import('@/components/dashboard/widgets/DailyInsightsWidget'));
+
 
 type PeriodFilter = '7d' | '30d' | '90d';
 
