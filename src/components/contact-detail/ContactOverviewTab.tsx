@@ -43,6 +43,7 @@ interface Props {
 
 export function ContactOverviewTab({ contact, company, insights, alerts, interactionCount = 0 }: Props) {
   const { user } = useAuth();
+  const { updateContact } = useContactDetail(contact.id);
   const { data: relData } = useContactRelationalData(contact.id);
 
   const { data: lifeEvents = [] } = useQuery({
