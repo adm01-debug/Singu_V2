@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Phone, Mail, MessageSquare, Users, Video, FileText,
   Clock, AlertCircle, ArrowUpRight, ArrowDownLeft,
-  ChevronDown, ChevronUp, Plus, Search, LayoutList
+  ChevronDown, ChevronUp, Plus, Search
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -109,11 +109,8 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
         <div className="flex flex-col space-y-4 mb-6">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <TabsList className="grid grid-cols-5 w-full sm:w-auto h-9">
-              <TabsTrigger value="unified" className="text-xs">
-                <LayoutList className="h-3 w-3 mr-1" />
-                Unificada
-              </TabsTrigger>
-              <TabsTrigger value="all" className="text-xs">Timeline</TabsTrigger>
+              <TabsTrigger value="unified" className="text-xs">Timeline</TabsTrigger>
+              <TabsTrigger value="all" className="text-xs">Histórico Simples</TabsTrigger>
               <TabsTrigger value="whatsapp" className="text-xs">WhatsApp</TabsTrigger>
               <TabsTrigger value="calls" className="text-xs">Ligações</TabsTrigger>
               <TabsTrigger value="external" className="text-xs">Externo</TabsTrigger>
