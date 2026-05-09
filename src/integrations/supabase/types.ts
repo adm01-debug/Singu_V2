@@ -1359,6 +1359,7 @@ export type Database = {
           data_fundacao: string | null
           email: string | null
           employee_count: string | null
+          external_id: string | null
           extra_data_rf: Json | null
           facebook: string | null
           financial_health: string | null
@@ -1423,6 +1424,7 @@ export type Database = {
           data_fundacao?: string | null
           email?: string | null
           employee_count?: string | null
+          external_id?: string | null
           extra_data_rf?: Json | null
           facebook?: string | null
           financial_health?: string | null
@@ -1487,6 +1489,7 @@ export type Database = {
           data_fundacao?: string | null
           email?: string | null
           employee_count?: string | null
+          external_id?: string | null
           extra_data_rf?: Json | null
           facebook?: string | null
           financial_health?: string | null
@@ -2152,6 +2155,7 @@ export type Database = {
           company_id: string | null
           created_at: string
           email: string | null
+          external_id: string | null
           family_info: string | null
           first_name: string
           hobbies: string[] | null
@@ -2183,6 +2187,7 @@ export type Database = {
           company_id?: string | null
           created_at?: string
           email?: string | null
+          external_id?: string | null
           family_info?: string | null
           first_name: string
           hobbies?: string[] | null
@@ -2214,6 +2219,7 @@ export type Database = {
           company_id?: string | null
           created_at?: string
           email?: string | null
+          external_id?: string | null
           family_info?: string | null
           first_name?: string
           hobbies?: string[] | null
@@ -5413,6 +5419,7 @@ export type Database = {
           created_at: string
           duration: number | null
           emotion_analysis: Json | null
+          external_id: string | null
           follow_up_date: string | null
           follow_up_required: boolean | null
           id: string
@@ -5435,6 +5442,7 @@ export type Database = {
           created_at?: string
           duration?: number | null
           emotion_analysis?: Json | null
+          external_id?: string | null
           follow_up_date?: string | null
           follow_up_required?: boolean | null
           id?: string
@@ -5457,6 +5465,7 @@ export type Database = {
           created_at?: string
           duration?: number | null
           emotion_analysis?: Json | null
+          external_id?: string | null
           follow_up_date?: string | null
           follow_up_required?: boolean | null
           id?: string
