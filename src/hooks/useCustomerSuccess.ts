@@ -327,8 +327,9 @@ export function useUpdateRenewal() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: Partial<Renewal> & { id: string }) => {
-      const { data, error } = await supabase.from("cs_renewals").update(input).eq("id", input.id).select().single();
+      const { data, error } = await supabase.from("cs_renewals").update(input).eq("id", input.id).select().maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Renovação não encontrada");
       return data as Renewal;
     },
     onSuccess: () => {
