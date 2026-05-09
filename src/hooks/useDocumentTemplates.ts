@@ -175,8 +175,8 @@ export function useDocumentSignatures() {
       const expires_at = input.expires_in_days
         ? new Date(Date.now() + input.expires_in_days * 86_400_000).toISOString()
         : null;
-      const { data, error } = await (supabase
-        .from('document_signatures') as any)
+      const { data, error } = await supabase
+        .from('document_signatures')
         .insert({
           user_id: user.id,
           template_id: input.template_id ?? null,
@@ -187,10 +187,11 @@ export function useDocumentSignatures() {
           rendered_html: input.rendered_html,
           merge_data: input.merge_data,
           expires_at,
-        })
+        } as any)
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao registrar assinatura");
       if (input.template_id) {
         // Increment usage_count (best-effort)
         const { data: tpl } = await supabase
