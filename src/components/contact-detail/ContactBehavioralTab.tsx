@@ -14,6 +14,7 @@ import { BiasesSubTab } from './behavioral-tab/BiasesSubTab';
 import { MetaprogramsSubTab } from './behavioral-tab/MetaprogramsSubTab';
 import { PersonalitySubTab } from './behavioral-tab/PersonalitySubTab';
 import { BehavioralExecutiveSummary } from './behavioral-tab/BehavioralExecutiveSummary';
+import { ContactFamilyInterestsCard } from './behavioral-tab/ContactFamilyInterestsCard';
 const CommunicationIntelWidget = lazy(() => import('./CommunicationIntelWidget'));
 const EmotionalTrendWidget = lazy(() => import('./EmotionalTrendWidget'));
 const EmotionalTrendByContactWidget = lazy(() => import('./EmotionalTrendByContactWidget'));
@@ -123,6 +124,12 @@ export function ContactBehavioralTab({ contact }: Props) {
           riskFactors: biases?.resistances,
           approachStrategy: (biases?.sales_strategies as any)?.primary_approach
         }}
+      />
+      <ContactFamilyInterestsCard 
+        hobbies={contact.hobbies as string[]}
+        interests={contact.interests as string[]}
+        familyInfo={contact.family_info || undefined}
+        className="mb-6"
       />
     <Tabs defaultValue="disc" className="space-y-4">
       <div className="flex items-center justify-between gap-2 flex-wrap">
