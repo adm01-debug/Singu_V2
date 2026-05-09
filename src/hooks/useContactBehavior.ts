@@ -9,6 +9,9 @@ export type ContactPersonality = Partial<PersonalityRow>;
 type MetaprogramsRow = Database['public']['Tables']['contact_metaprograms']['Row'];
 export type ContactMetaprograms = Partial<MetaprogramsRow>;
 
+type RapportRow = Database['public']['Tables']['contact_rapport_strategy']['Row'];
+export type ContactRapportStrategy = Partial<RapportRow>;
+
 export interface ContactBehavior {
   disc_primary?: 'D' | 'I' | 'S' | 'C';
   disc_confidence?: number;
