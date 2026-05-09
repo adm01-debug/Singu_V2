@@ -152,6 +152,7 @@ export function ContactBehavioralTab({ contact }: Props) {
           <TabsTrigger value="disc" className="text-xs">DISC</TabsTrigger>
           <TabsTrigger value="vak" className="text-xs">VAK</TabsTrigger>
           <TabsTrigger value="motivations" className="text-xs">Motivadores</TabsTrigger>
+          <TabsTrigger value="rapport" className="text-xs">Rapport & NLP</TabsTrigger>
           <TabsTrigger value="decision" className="text-xs">Decisão</TabsTrigger>
           <TabsTrigger value="influence" className="text-xs">Influência</TabsTrigger>
           <TabsTrigger value="business" className="text-xs">Contexto Business</TabsTrigger>
