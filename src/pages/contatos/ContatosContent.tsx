@@ -80,6 +80,7 @@ export function ContatosContent(props: Props) {
 
   const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
+  const [isExternalSearchOpen, setIsExternalSearchOpen] = useState(false);
   const RENDER_BATCH = 50;
   const [visibleCount, setVisibleCount] = useState(RENDER_BATCH);
   const sentinelRef = useRef<HTMLDivElement>(null);
