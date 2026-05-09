@@ -51,6 +51,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
   const { suggestions, approve, reject } = useAIApprovals(rapportIntel?.contact_id);
   const { history, revert } = useFamilyHistory(rapportIntel?.contact_id);
   const [suggestionSourceMap, setSuggestionSourceMap] = useState<Record<string, React.ReactNode>>({});
+  const [showHistory, setShowHistory] = useState(false);
 
   const getSourceIcon = (source: string) => {
     switch (source) {
@@ -181,34 +182,45 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
             Rapport & Dados Pessoais
           </CardTitle>
           <div className="flex items-center gap-1">
-            <Popover>
+            <Popover open={showHistory} onOpenChange={setShowHistory}>
               <PopoverTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
                   <History className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-80">
+              <PopoverContent className="w-80" align="end">
                 <div className="space-y-3">
-                  <h4 className="text-xs font-bold uppercase tracking-wider">Histórico Familiar</h4>
-                  <ScrollArea className="h-[200px]">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+                      <History className="h-3 w-3" /> Histórico Familiar
+                    </h4>
+                    <Badge variant="outline" className="text-[10px]">{history.length} versões</Badge>
+                  </div>
+                  <ScrollArea className="h-[250px] pr-4">
                     {history.length === 0 ? (
-                      <p className="text-xs text-muted-foreground italic text-center py-4">Nenhum histórico disponível</p>
+                      <div className="flex flex-col items-center justify-center py-8 text-center opacity-50">
+                        <History className="h-8 w-8 mb-2" />
+                        <p className="text-xs italic">Nenhum histórico disponível</p>
+                      </div>
                     ) : (
                       <div className="space-y-3">
                         {history.map((entry) => (
-                          <div key={entry.id} className="p-2 rounded border border-border text-xs space-y-2">
+                          <div key={entry.id} className="p-2.5 rounded-lg border border-border bg-muted/30 text-xs space-y-2 hover:border-primary/30 transition-colors">
                             <div className="flex justify-between items-center text-[10px] text-muted-foreground">
-                              <span>{formatDistanceToNow(new Date(entry.changed_at), { addSuffix: true, locale: ptBR })}</span>
+                              <span className="font-medium">{formatDistanceToNow(new Date(entry.changed_at), { addSuffix: true, locale: ptBR })}</span>
                               <Button 
-                                variant="ghost" 
+                                variant="outline" 
                                 size="sm" 
-                                className="h-6 px-2 gap-1 text-[10px] hover:text-primary"
-                                onClick={() => revert(entry)}
+                                className="h-6 px-2 gap-1 text-[10px] hover:bg-primary hover:text-primary-foreground border-primary/20"
+                                onClick={() => {
+                                  revert(entry);
+                                  setShowHistory(false);
+                                }}
                               >
-                                <RotateCcw className="h-3 w-3" /> Restaurar
+                                <RotateCcw className="h-3 w-3" /> Reverter
                               </Button>
                             </div>
-                            <div className="italic text-muted-foreground truncate">
+                            <div className="text-foreground line-clamp-3 bg-background/50 p-1.5 rounded border border-border/50 text-[11px]">
                               {entry.family_info || '(Vazio)'}
                             </div>
                           </div>
