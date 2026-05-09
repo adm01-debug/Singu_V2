@@ -11657,6 +11657,15 @@ export type Database = {
           priority: string
         }[]
       }
+      get_contact_life_event_gaps: {
+        Args: { p_contact_id: string }
+        Returns: {
+          category: string
+          field_name: string
+          issue_type: string
+          priority: string
+        }[]
+      }
       get_deal_room_by_token: { Args: { _token: string }; Returns: Json }
       get_score_explicability: { Args: { p_contact_id: string }; Returns: Json }
       get_team_member_ids: {
