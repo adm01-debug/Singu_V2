@@ -85,12 +85,17 @@ export const employeeCountOptions = [
   { value: '51-100', label: '51-100' },
   { value: '101-500', label: '101-500' },
   { value: '500+', label: '500+' },
+  { value: 'unknown', label: 'Não informado' },
 ];
 
 export const financialHealthOptions = [
   { value: 'growing', label: 'Em Crescimento' },
   { value: 'stable', label: 'Estável' },
   { value: 'cutting', label: 'Em Retração' },
+  { value: 'excellent', label: 'Excelente' },
+  { value: 'good', label: 'Boa' },
+  { value: 'average', label: 'Regular' },
+  { value: 'poor', label: 'Ruim' },
   { value: 'unknown', label: 'Desconhecido' },
 ];
 

@@ -33,15 +33,10 @@ export function CompanyFormStructureTab({ form }: CompanyFormStructureTabProps) 
             <FormMessage />
           </FormItem>
         )} />
-        <FormField control={form.control} name="financial_health" render={({ field }) => (
+        <FormField control={form.control} name="bitrix_company_id" render={({ field }) => (
           <FormItem>
-            <FormLabel>Saúde Financeira</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value || 'unknown'}>
-              <FormControl><SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger></FormControl>
-              <SelectContent>
-                {financialHealthOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
-              </SelectContent>
-            </Select>
+            <FormLabel>ID Bitrix24</FormLabel>
+            <FormControl><Input type="number" placeholder="ID numérico" {...field} value={field.value ?? ''} /></FormControl>
             <FormMessage />
           </FormItem>
         )} />
@@ -96,10 +91,10 @@ export function CompanyFormStructureTab({ form }: CompanyFormStructureTabProps) 
             <FormMessage />
           </FormItem>
         )} />
-        <FormField control={form.control} name="bitrix_company_id" render={({ field }) => (
+        <FormField control={form.control} name="capital_social" render={({ field }) => (
           <FormItem>
-            <FormLabel>ID Bitrix24</FormLabel>
-            <FormControl><Input type="number" placeholder="ID numérico" {...field} value={field.value ?? ''} /></FormControl>
+            <FormLabel>Capital Social (R$)</FormLabel>
+            <FormControl><Input type="number" step="0.01" placeholder="0.00" {...field} value={field.value ?? ''} /></FormControl>
             <FormMessage />
           </FormItem>
         )} />

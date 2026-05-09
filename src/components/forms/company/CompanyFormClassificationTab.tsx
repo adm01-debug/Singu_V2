@@ -4,7 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { FormSection } from './CompanyFormSection';
-import type { CompanyFormData } from './CompanyFormSchema';
+import { financialHealthOptions, type CompanyFormData } from './CompanyFormSchema';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface CompanyFormClassificationTabProps {
   form: UseFormReturn<CompanyFormData>;
@@ -36,12 +37,25 @@ export function CompanyFormClassificationTab({ form }: CompanyFormClassification
             )} />
           </div>
         </div>
-        <div className="md:col-span-2">
+        <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField control={form.control} name="is_matriz" render={({ field }) => (
             <FormItem className="flex items-center gap-2.5 space-y-0 p-3 rounded-lg bg-muted/20 border border-border/30">
               <FormControl><Checkbox checked={field.value ?? false} onCheckedChange={field.onChange} /></FormControl>
-              <FormLabel className="font-normal cursor-pointer text-sm">É Matriz</FormLabel>
-              <FormDescription className="ml-1 text-xs">(desmarque para filial)</FormDescription>
+              <div className="space-y-1">
+                <FormLabel className="font-normal cursor-pointer text-sm">É Matriz</FormLabel>
+                <FormDescription className="text-[10px] leading-none">(desmarque para filial)</FormDescription>
+              </div>
+            </FormItem>
+          )} />
+          <FormField control={form.control} name="financial_health" render={({ field }) => (
+            <FormItem>
+              <FormLabel>Saúde Financeira</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value || 'unknown'}>
+                <FormControl><SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger></FormControl>
+                <SelectContent>
+                  {financialHealthOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </FormItem>
           )} />
         </div>
