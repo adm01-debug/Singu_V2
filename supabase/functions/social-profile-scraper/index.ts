@@ -194,6 +194,25 @@ Deno.serve(async (req) => {
     }, { onConflict: "contact_id,platform" });
     if (upsertError) console.error("Error saving profile:", upsertError);
 
+    // Auto-update contact hobbies and interests based on social profile
+    if (parsedProfile.skills && parsedProfile.skills.length > 0) {
+      const { data: contact } = await supabaseClient
+        .from("contacts")
+        .select("hobbies, interests")
+        .eq("id", contactId)
+        .single();
+      
+      if (contact) {
+        const currentInterests = contact.interests || [];
+        const newInterests = [...new Set([...currentInterests, ...parsedProfile.skills.slice(0, 5)])];
+        
+        await supabaseClient
+          .from("contacts")
+          .update({ interests: newInterests })
+          .eq("id", contactId);
+      }
+    }
+
     if (lifeEvents.length > 0) {
       const { error: eventsError } = await supabaseClient.from("social_life_events").insert(lifeEvents);
       if (eventsError) console.error("Error saving life events:", eventsError);

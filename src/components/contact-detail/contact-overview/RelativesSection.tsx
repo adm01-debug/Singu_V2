@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Users, Building2, Cake, Phone, Mail, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { CollapsibleSection } from '@/components/ui/collapsible-section';
