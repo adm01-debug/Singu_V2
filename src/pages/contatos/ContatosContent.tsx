@@ -52,6 +52,7 @@ interface Props {
   onSelectAll: () => void;
   onBulkDelete: (ids: string[]) => Promise<void>;
   onBulkAddTag: (ids: string[], tag: string) => Promise<void>;
+  onBulkUpdateStage: (ids: string[], stage: string) => Promise<void>;
   onSetEditingContact: (contact: Contact | null) => void;
   onSetDeletingContact: (contact: Contact | null) => void;
   onSetIsFormOpen: (open: boolean) => void;
@@ -70,7 +71,7 @@ export function ContatosContent(props: Props) {
     activeFilters, onFiltersChange, sortBy, sortOrder, onSortChange,
     multiSort, onMultiSortChange,
     filterConfigs, sortOptions, selectionMode, selectedIds,
-    onToggleSelectionMode, onSelect, onSelectAll, onBulkDelete, onBulkAddTag,
+    onToggleSelectionMode, onSelect, onSelectAll, onBulkDelete, onBulkAddTag, onBulkUpdateStage,
     onSetEditingContact, onSetDeletingContact, onSetIsFormOpen,
     updateContact, getCompanyName, getLastInteractionDate, onRefresh,
     hasMore, onLoadMore,
@@ -247,6 +248,7 @@ export function ContatosContent(props: Props) {
         onClearSelection={() => onSelect('__clear__', false)} 
         onDelete={onBulkDelete} 
         onAddTag={onBulkAddTag}
+        onUpdateStage={onBulkUpdateStage}
         onExport={handleBulkExport}
       />
     </div>

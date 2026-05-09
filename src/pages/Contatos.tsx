@@ -228,6 +228,7 @@ const Contatos = () => {
 
   const handleBulkDelete = async (ids: string[]) => { for (const id of ids) await deleteContact(id); setSelectedIds(new Set()); setSelectionMode(false); accessibleToast.success(`${ids.length} contato${ids.length > 1 ? 's' : ''} excluído${ids.length > 1 ? 's' : ''}`); };
   const handleBulkAddTag = async (ids: string[], tag: string) => { for (const id of ids) { const contact = contacts.find(c => c.id === id); if (contact) { const currentTags = contact.tags || []; if (!currentTags.includes(tag)) await updateContact(id, { tags: [...currentTags, tag] }); } } setSelectedIds(new Set()); accessibleToast.success(`Tag "${tag}" adicionada a ${ids.length} contato${ids.length > 1 ? 's' : ''}`); };
+  const handleBulkUpdateStage = async (ids: string[], stage: any) => { for (const id of ids) { await updateContact(id, { relationship_stage: stage }); } setSelectedIds(new Set()); accessibleToast.success(`Estágio atualizado para ${ids.length} contato${ids.length > 1 ? 's' : ''}`); };
 
   return (
     <>
@@ -263,6 +264,7 @@ const Contatos = () => {
           onToggleSelectionMode={() => { setSelectionMode(!selectionMode); if (selectionMode) setSelectedIds(new Set()); }}
           onSelect={handleSelect} onSelectAll={handleSelectAll}
           onBulkDelete={handleBulkDelete} onBulkAddTag={handleBulkAddTag}
+          onBulkUpdateStage={handleBulkUpdateStage}
           onSetEditingContact={setEditingContact} onSetDeletingContact={setDeletingContact}
           onSetIsFormOpen={setIsFormOpen} updateContact={updateContact}
           getCompanyName={getCompanyName} getLastInteractionDate={getLastInteractionDate}

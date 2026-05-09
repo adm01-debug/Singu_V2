@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 import { useDuplicateContacts } from '@/hooks/useDuplicateContacts';
-import { AlertTriangle, Users } from 'lucide-react';
+import { MergeContactsDialog } from './MergeContactsDialog';
+import { AlertTriangle, Users, GitMerge } from 'lucide-react';
 
 export const DuplicateContactsPanel = React.memo(function DuplicateContactsPanel() {
-  const { data: duplicates, isLoading } = useDuplicateContacts();
+  const { data: duplicates, isLoading, refetch } = useDuplicateContacts();
+  const [mergeState, setMergeState] = useState<{ open: boolean; primaryId: string; secondaryId: string }>({
+    open: false,
+    primaryId: '',
+    secondaryId: ''
+  });
 
   if (isLoading) return <Card className="border-warning/30"><CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><AlertTriangle className="h-4 w-4 text-warning" />Contatos Duplicados</CardTitle></CardHeader><CardContent><Skeleton className="h-24" /></CardContent></Card>;
   if (!duplicates || duplicates.length === 0) return null;
@@ -34,10 +41,30 @@ export const DuplicateContactsPanel = React.memo(function DuplicateContactsPanel
                   </div>
                 </div>
               </div>
-              {dup.similarity_score != null && <Badge variant="outline" className="text-[10px] shrink-0">{(dup.similarity_score * 100).toFixed(0)}% similar</Badge>}
+              <div className="flex items-center gap-2">
+                {dup.similarity_score != null && <Badge variant="outline" className="text-[10px] shrink-0">{(dup.similarity_score * 100).toFixed(0)}% similar</Badge>}
+                {dup.duplicate_of && (
+                  <Button 
+                    size="sm" 
+                    variant="ghost" 
+                    className="h-8 px-2 text-xs gap-1.5 hover:bg-warning/20 hover:text-warning"
+                    onClick={() => setMergeState({ open: true, primaryId: dup.duplicate_of!, secondaryId: dup.id || dup.contact_id! })}
+                  >
+                    <GitMerge className="h-3.5 w-3.5" />
+                    Mesclar
+                  </Button>
+                )}
+              </div>
             </div>
           ))}
         </div>
+        <MergeContactsDialog 
+          open={mergeState.open} 
+          onOpenChange={(open) => setMergeState(prev => ({ ...prev, open }))}
+          primaryId={mergeState.primaryId}
+          secondaryId={mergeState.secondaryId}
+          onSuccess={() => refetch()}
+        />
       </CardContent>
     </Card>
   );

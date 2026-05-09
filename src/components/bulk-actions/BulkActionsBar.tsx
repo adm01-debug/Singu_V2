@@ -28,6 +28,7 @@ import {
   ChevronDown,
   CheckSquare,
   Square,
+  Layers
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
@@ -39,6 +40,7 @@ interface BulkActionsBarProps {
   onSelectAll: () => void;
   onDelete?: (ids: string[]) => Promise<void>;
   onAddTag?: (ids: string[], tag: string) => Promise<void>;
+  onUpdateStage?: (ids: string[], stage: string) => Promise<void>;
   onExport?: (ids: string[]) => Promise<void>;
   onSendEmail?: (ids: string[]) => void;
   onToggleFavorite?: (ids: string[]) => Promise<void>;
@@ -52,6 +54,18 @@ const commonTags = [
   'Arquivado',
 ];
 
+const relationshipStages = [
+  { value: 'prospect', label: 'Prospect' },
+  { value: 'qualified_lead', label: 'Lead Qualificado' },
+  { value: 'opportunity', label: 'Oportunidade' },
+  { value: 'negotiation', label: 'Negociação' },
+  { value: 'customer', label: 'Cliente' },
+  { value: 'loyal_customer', label: 'Cliente Fiel' },
+  { value: 'advocate', label: 'Advogado' },
+  { value: 'at_risk', label: 'Em Risco' },
+  { value: 'lost', label: 'Perdido' },
+];
+
 export function BulkActionsBar({
   selectedIds,
   totalCount,
@@ -60,6 +74,7 @@ export function BulkActionsBar({
   onSelectAll,
   onDelete,
   onAddTag,
+  onUpdateStage,
   onExport,
   onSendEmail,
   onToggleFavorite,
@@ -85,6 +100,21 @@ export function BulkActionsBar({
     } finally {
       setIsProcessing(false);
       setShowDeleteConfirm(false);
+    }
+  };
+
+  const handleUpdateStage = async (stage: string) => {
+    if (!onUpdateStage) return;
+    
+    setIsProcessing(true);
+    try {
+      await onUpdateStage(selectedIds, stage);
+      toast.success(`Estágio atualizado para ${selectedCount} itens`);
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Erro ao atualizar estágio';
+      toast.error(msg);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -193,7 +223,28 @@ export function BulkActionsBar({
                   </DropdownMenu>
                 )}
 
-                {/* Favorite */}
+                {/* Update Stage */}
+                {entityType === 'contacts' && onUpdateStage && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" disabled={isProcessing}>
+                        <Layers className="w-4 h-4 mr-1" />
+                        Estágio
+                        <ChevronDown className="w-3 h-3 ml-1" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="center" className="max-h-[300px] overflow-y-auto">
+                      {relationshipStages.map(stage => (
+                        <DropdownMenuItem 
+                          key={stage.value}
+                          onClick={() => handleUpdateStage(stage.value)}
+                        >
+                          {stage.label}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
                 {onToggleFavorite && (
                   <Button 
                     variant="ghost" 
