@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Settings2, Save, Calendar, UserCheck } from 'lucide-react';
+import { Settings2, UserCheck } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }: Props) {
-  const [metricType, setMetricType] = useState<'score' | 'sentiment' | 'last_contact'>('score');
+  const [metricType, setMetricType] = useState<'score' | 'sentiment' | 'last_contact' | 'stage'>('score');
   const [newValue, setNewValue] = useState('');
   const [reason, setReason] = useState('');
   const queryClient = useQueryClient();
@@ -38,23 +38,20 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
         updates.relationship_stage = newValue;
       }
 
-      // 1. Get current user
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Usuário não autenticado');
 
-      // 2. Log the override
       const { error: logError } = await supabase.from('crm_metric_overrides').insert({
         user_id: user.id,
         contact_id: contactId,
         metric_type: metricType,
-        old_value: metricType === 'score' ? currentScore.toString() : metricType === 'stage' ? (updates.relationship_stage || 'unknown') : currentSentiment,
+        old_value: metricType === 'score' ? currentScore.toString() : currentSentiment,
         new_value: valToStore,
         reason: reason
       } as any);
 
       if (logError) throw logError;
 
-      // 3. Update the contact
       const { error: updateError } = await supabase.from('contacts').update(updates).eq('id', contactId);
       if (updateError) throw updateError;
     },
@@ -92,6 +89,7 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
                 <SelectItem value="score">Relationship Score</SelectItem>
                 <SelectItem value="sentiment">Sentimento</SelectItem>
                 <SelectItem value="last_contact">Data Último Contato</SelectItem>
+                <SelectItem value="stage">Estágio do Relacionamento</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -117,6 +115,24 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
                   <SelectItem value="positive">Positivo</SelectItem>
                   <SelectItem value="neutral">Neutro</SelectItem>
                   <SelectItem value="negative">Negativo</SelectItem>
+                </SelectContent>
+              </Select>
+            ) : metricType === 'stage' ? (
+              <Select value={newValue} onValueChange={setNewValue}>
+                <SelectTrigger className="h-8 text-xs">
+                  <SelectValue placeholder="Selecione o estágio..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="unknown">Desconhecido</SelectItem>
+                  <SelectItem value="prospect">Prospect</SelectItem>
+                  <SelectItem value="qualified_lead">Lead Qualificado</SelectItem>
+                  <SelectItem value="opportunity">Oportunidade</SelectItem>
+                  <SelectItem value="negotiation">Negociação</SelectItem>
+                  <SelectItem value="customer">Cliente</SelectItem>
+                  <SelectItem value="loyal_customer">Cliente Fiel</SelectItem>
+                  <SelectItem value="advocate">Promotor/Advogado</SelectItem>
+                  <SelectItem value="at_risk">Em Risco</SelectItem>
+                  <SelectItem value="lost">Perdido</SelectItem>
                 </SelectContent>
               </Select>
             ) : (
