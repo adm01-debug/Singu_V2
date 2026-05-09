@@ -48,6 +48,7 @@ export const ContactsTableView = React.memo(function ContactsTableView({
   selectedIds,
   onSelect,
   getCompanyName,
+  getLastInteractionDate,
   sortBy,
   sortOrder,
   onSortChange,
