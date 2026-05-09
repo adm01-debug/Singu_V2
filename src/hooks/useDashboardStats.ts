@@ -34,6 +34,7 @@ export interface DashboardStats {
   totalContacts: number;
   weeklyInteractions: number;
   averageScore: number;
+  averageClosingScore: number;
   companyChange: string;
   contactChange: string;
   interactionChange: string;
@@ -43,6 +44,7 @@ export interface DashboardStats {
   interactionSparkline: number[];
   loading: boolean;
 }
+
 
 interface UseDashboardStatsParams {
   contacts: Contact[];
@@ -59,6 +61,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         totalContacts: 0,
         weeklyInteractions: 0,
         averageScore: 0,
+        averageClosingScore: 0,
         companyChange: '',
         contactChange: '',
         interactionChange: '',
@@ -69,6 +72,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         loading: true,
       };
     }
+
 
     const now = new Date();
     const thisWeekStart = startOfWeek(now, { weekStartsOn: 1 });
@@ -112,6 +116,24 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
     const avgScore = scoresWithValue.length > 0
       ? Math.round(scoresWithValue.reduce((sum, c) => sum + (c.relationship_score || 0), 0) / scoresWithValue.length)
       : 0;
+
+    // Calculo de Score de Fechamento (estimado para o dashboard)
+    const closingScores = contacts
+      .filter(c => c.relationship_score !== null && c.relationship_score !== undefined)
+      .map(c => {
+        // Lógica simplificada: quanto maior o score e mais estável o estágio, maior o closing score
+        const stageWeight = 
+          c.relationship_stage === 'closed' ? 1.0 :
+          c.relationship_stage === 'negotiation' ? 0.8 :
+          c.relationship_stage === 'proposal' ? 0.6 :
+          c.relationship_stage === 'active' ? 0.4 : 0.2;
+        return (c.relationship_score || 0) * stageWeight;
+      });
+    
+    const avgClosingScore = closingScores.length > 0
+      ? Math.round(closingScores.reduce((sum, s) => sum + s, 0) / closingScores.length)
+      : 0;
+
 
     const interactionCountByContact = new Map<string, number>();
     const latestInteractionByContact = new Map<string, string>();
@@ -229,6 +251,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
       totalContacts: contacts.length,
       weeklyInteractions: thisWeekInteractions,
       averageScore: avgScore,
+      averageClosingScore: avgClosingScore,
       companyChange: companiesThisMonth > 0 ? `+${companiesThisMonth} este mês` : '~ Estável',
       contactChange: contactsThisMonth > 0 ? `+${contactsThisMonth} este mês` : '~ Estável',
       interactionChange: interactionDiff >= 0 
@@ -240,6 +263,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
       interactionSparkline,
       loading: false,
     };
+
   }, [contacts, companies, interactions, loading]);
 
   return stats;
