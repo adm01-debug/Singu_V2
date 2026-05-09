@@ -54,6 +54,18 @@ const commonTags = [
   'Arquivado',
 ];
 
+const relationshipStages = [
+  { value: 'prospect', label: 'Prospect' },
+  { value: 'qualified_lead', label: 'Lead Qualificado' },
+  { value: 'opportunity', label: 'Oportunidade' },
+  { value: 'negotiation', label: 'Negociação' },
+  { value: 'customer', label: 'Cliente' },
+  { value: 'loyal_customer', label: 'Cliente Fiel' },
+  { value: 'advocate', label: 'Advogado' },
+  { value: 'at_risk', label: 'Em Risco' },
+  { value: 'lost', label: 'Perdido' },
+];
+
 export function BulkActionsBar({
   selectedIds,
   totalCount,
