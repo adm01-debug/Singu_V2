@@ -127,12 +127,14 @@ export const TagsInteresseCard = memo(({ rapportIntel, rapportPoints }: Props) =
                 <div className="flex flex-wrap gap-1.5">
                   {g.items.slice(0, 12).map((item) => {
                     const isActive = q?.toLowerCase().includes(item.toLowerCase());
+                    const source = rapportIntel?.rapport_metadata?.[g.type]?.[item];
+                    
                     return (
                       <Badge 
                         key={`${g.label}-${item}`} 
                         variant={isActive ? 'default' : g.variant} 
                         className={cn(
-                          "text-xs font-normal cursor-pointer transition-all hover:scale-105 active:scale-95",
+                          "text-xs font-normal cursor-pointer transition-all hover:scale-105 active:scale-95 gap-1",
                           isActive && "ring-2 ring-primary ring-offset-1 bg-primary text-primary-foreground",
                           !isActive && g.variant === 'outline' && "hover:bg-accent hover:text-accent-foreground",
                           !isActive && g.variant === 'secondary' && "hover:bg-secondary/80",
@@ -140,6 +142,7 @@ export const TagsInteresseCard = memo(({ rapportIntel, rapportPoints }: Props) =
                         )}
                         onClick={() => handleTagClick(item)}
                       >
+                        {source && getSourceIcon(source)}
                         {item}
                       </Badge>
                     );
