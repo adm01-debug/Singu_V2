@@ -9,18 +9,18 @@ describe('useIPMaskingPreference', () => {
     vi.restoreAllMocks();
   });
 
-  it('deve inicializar como false (default seguro)', () => {
+  it('should initialize as false (safe default)', () => {
     const { result } = renderHook(() => useIPMaskingPreference());
     expect(result.current.masked).toBe(false);
   });
 
-  it('deve ler o valor persistido do localStorage na inicialização', () => {
+  it('should read persisted value from localStorage on init', () => {
     window.localStorage.setItem('singu:mask-ips', '1');
     const { result } = renderHook(() => useIPMaskingPreference());
     expect(result.current.masked).toBe(true);
   });
 
-  it('setMasked(true) deve persistir "1" no localStorage', () => {
+  it('setMasked(true) should persist "1" in localStorage', () => {
     const { result } = renderHook(() => useIPMaskingPreference());
     act(() => {
       result.current.setMasked(true);
@@ -29,7 +29,7 @@ describe('useIPMaskingPreference', () => {
     expect(result.current.masked).toBe(true);
   });
 
-  it('toggle() deve inverter o estado e persistir', () => {
+  it('toggle() should flip the state and persist', () => {
     const { result } = renderHook(() => useIPMaskingPreference());
     act(() => {
       result.current.toggle();
@@ -44,7 +44,7 @@ describe('useIPMaskingPreference', () => {
     expect(window.localStorage.getItem('singu:mask-ips')).toBe('0');
   });
 
-  it('deve sincronizar múltiplas instâncias na mesma aba via CustomEvent', () => {
+  it('should sync multiple instances in the same tab via CustomEvent', () => {
     const { result: hook1 } = renderHook(() => useIPMaskingPreference());
     const { result: hook2 } = renderHook(() => useIPMaskingPreference());
 
@@ -59,11 +59,11 @@ describe('useIPMaskingPreference', () => {
     expect(hook2.current.masked).toBe(true);
   });
 
-  it('deve sincronizar com outras abas via evento storage', () => {
+  it('should sync with other tabs via native storage event', () => {
     const { result } = renderHook(() => useIPMaskingPreference());
     
     act(() => {
-      // Simula evento disparado pelo navegador ao mudar em outra aba
+      // Simulate browser event fired when storage changes in another tab
       const event = new StorageEvent('storage', {
         key: 'singu:mask-ips',
         newValue: '1',
@@ -75,13 +75,13 @@ describe('useIPMaskingPreference', () => {
     expect(result.current.masked).toBe(true);
   });
 
-  it('deve ser tolerante a falhas no localStorage (modo privado)', () => {
-    // Mockamos especificamente o setItem para lançar erro
+  it('should be fault tolerant when localStorage fails (private mode)', () => {
+    // Mock setItem to throw
     const setItemSpy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new Error('QuotaExceededError');
     });
     
-    // Capturamos console.warn para verificar se o log de erro foi disparado
+    // Catch console.warn to verify error logging
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     const { result } = renderHook(() => useIPMaskingPreference());
@@ -90,15 +90,31 @@ describe('useIPMaskingPreference', () => {
       result.current.setMasked(true);
     });
 
-    // Estado em memória deve atualizar mesmo com erro no storage
+    // In-memory state should still update
     expect(result.current.masked).toBe(true);
     expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('[useIPMaskingPreference] Falha ao persistir preferência:'),
+      expect.stringContaining('[useIPMaskingPreference] Failed to persist preference:'),
       expect.any(Error)
     );
 
     setItemSpy.mockRestore();
     warnSpy.mockRestore();
   });
+
+  it('should be fault tolerant if reading localStorage fails', () => {
+    const getItemSpy = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('Access Denied');
+    });
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const { result } = renderHook(() => useIPMaskingPreference());
+    
+    expect(result.current.masked).toBe(false); // Default
+    expect(warnSpy).toHaveBeenCalled();
+
+    getItemSpy.mockRestore();
+    warnSpy.mockRestore();
+  });
 });
+
 
