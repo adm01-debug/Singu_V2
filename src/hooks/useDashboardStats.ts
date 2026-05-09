@@ -114,13 +114,21 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
 
     const companyMap = new Map(companies.map(c => [c.id, c]));
 
-    // Pre-build interaction counts by contact for O(1) lookup
+    // Pre-build interaction counts and summaries by contact for O(1) lookup
     const interactionCountByContact = new Map<string, number>();
     const latestInteractionByContact = new Map<string, string>();
+    const interactionSummariesByContact = new Map<string, string>();
+
     for (const i of interactions) {
       interactionCountByContact.set(i.contact_id, (interactionCountByContact.get(i.contact_id) || 0) + 1);
       const current = latestInteractionByContact.get(i.contact_id);
-      if (!current || i.created_at > current) latestInteractionByContact.set(i.contact_id, i.created_at);
+      if (!current || i.created_at > current) {
+        latestInteractionByContact.set(i.contact_id, i.created_at);
+        // Store the content of the latest interaction as a summary
+        if (i.content || i.title) {
+          interactionSummariesByContact.set(i.contact_id, i.content || i.title);
+        }
+      }
     }
 
     const topContacts = [...contacts]
