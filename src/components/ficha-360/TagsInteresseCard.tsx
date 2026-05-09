@@ -127,7 +127,7 @@ export const TagsInteresseCard = memo(({ rapportIntel, rapportPoints }: Props) =
                 <div className="flex flex-wrap gap-1.5">
                   {g.items.slice(0, 12).map((item) => {
                     const isActive = q?.toLowerCase().includes(item.toLowerCase());
-                    const source = rapportIntel?.rapport_metadata?.[g.type]?.[item];
+                    const source = (rapportIntel?.rapport_metadata as any)?.[g.type === 'hobby' ? 'hobbies' : 'interests']?.[item];
                     
                     return (
                       <Badge 
