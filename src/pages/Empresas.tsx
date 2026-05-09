@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { sortArray } from '@/lib/sorting-utils';
 import { hapticSuccess, hapticHeavy } from '@/lib/haptics';
 import { useSuccessCelebration } from '@/hooks/useSuccessCelebration';
 import { usePageTitle } from '@/hooks/usePageTitle';
