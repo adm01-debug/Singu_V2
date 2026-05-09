@@ -93,15 +93,21 @@ export function AnalyticsTab({ contacts, companies, interactions, prefersReduced
       </DashboardErrorBoundary>
 
       <DashboardErrorBoundary sectionName="Conversão por Perfil DISC">
-        <DISCConversionMetricsPanel />
+        <Suspense fallback={<div className="animate-pulse h-64 bg-muted rounded-lg" />}>
+          <DISCConversionMetricsPanel />
+        </Suspense>
       </DashboardErrorBoundary>
 
       <DashboardErrorBoundary sectionName="Métricas RFM Avançadas">
-        <RFMSegmentDashboard />
+        <Suspense fallback={<div className="animate-pulse h-64 bg-muted rounded-lg" />}>
+          <RFMSegmentDashboard />
+        </Suspense>
       </DashboardErrorBoundary>
 
       <DashboardErrorBoundary sectionName="Analytics de Gatilhos">
-        <TriggerAnalyticsPanel />
+        <Suspense fallback={<div className="animate-pulse h-64 bg-muted rounded-lg" />}>
+          <TriggerAnalyticsPanel />
+        </Suspense>
       </DashboardErrorBoundary>
     </motion.div>
   );
