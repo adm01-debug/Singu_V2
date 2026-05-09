@@ -46,6 +46,11 @@ import { useAuth } from '@/hooks/useAuth';
 import type { Tables } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
 import { useToast } from '@/hooks/use-toast';
+import { CompanyExecutiveSummary } from '@/components/company-detail/CompanyExecutiveSummary';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const ContactTimelineWidget = lazy(() => import('@/components/contact-detail/ContactTimelineWidget'));
+const UnifiedCommunicationHistory = lazy(() => import('@/components/interactions/UnifiedCommunicationHistory'));
 
 type Company = Tables<'companies'>;
 type Contact = Tables<'contacts'>;
