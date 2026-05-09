@@ -79,12 +79,14 @@ export function useUpsertPlaybook() {
       if (!user) throw new Error("not authenticated");
       const payload = { ...input, user_id: user.id } as Record<string, any>;
       if (input.id) {
-        const { data, error } = await (supabase.from("sales_playbooks") as any).update(payload).eq("id", input.id).select().single();
+        const { data, error } = await supabase.from("sales_playbooks").update(payload as any).eq("id", input.id).select().maybeSingle();
         if (error) throw error;
+        if (!data) throw new Error("Playbook não encontrado");
         return data as unknown as SalesPlaybook;
       }
-      const { data, error } = await (supabase.from("sales_playbooks") as any).insert(payload).select().single();
+      const { data, error } = await supabase.from("sales_playbooks").insert(payload as any).select().maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar playbook");
       return data as unknown as SalesPlaybook;
     },
     onSuccess: () => {
