@@ -62,6 +62,14 @@ export function AnalyticsTab({ prefersReducedMotion, tabDirection }: AnalyticsTa
         </div>
       </div>
 
+      <DashboardErrorBoundary sectionName="Insights da IA">
+        <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+          <div className="mb-5">
+            <DailyInsightsWidget />
+          </div>
+        </Suspense>
+      </DashboardErrorBoundary>
+
       <DashboardErrorBoundary sectionName="Gráficos de Atividade">
         <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-64 w-full" />}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
