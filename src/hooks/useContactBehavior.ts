@@ -205,6 +205,19 @@ export const useContactBehavior = (contactId: string) => {
     },
   });
 
+  const updatePersonalityMutation = useMutation({
+    mutationFn: async (updates: Partial<ContactPersonality>) => {
+      const { error } = await supabase
+        .from("contact_personality")
+        .upsert({ contact_id: contactId, ...updates }, { onConflict: 'contact_id' });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contact-personality", contactId] });
+      toast.success("Frameworks de personalidade atualizados");
+    },
+  });
+
   const { data: gaps, isLoading: isLoadingGaps } = useQuery({
     queryKey: ["contact-behavior-gaps", contactId],
     queryFn: async () => {
