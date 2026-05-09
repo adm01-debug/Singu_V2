@@ -35,6 +35,7 @@ const ACTION_CONFIG: Record<string, { label: string; icon: React.ElementType; co
   INSERT: { label: 'Criação', icon: Plus, color: 'text-success' },
   UPDATE: { label: 'Atualização', icon: Pencil, color: 'text-warning' },
   DELETE: { label: 'Exclusão', icon: Trash2, color: 'text-destructive' },
+  EXTERNAL_SYNC: { label: 'Sincronização Externa', icon: RefreshCw, color: 'text-info' },
 };
 
 const ENTITY_LABELS: Record<string, string> = {
