@@ -281,6 +281,7 @@ export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, we
 
 
 
+
       {/* Social Intelligence */}
 
       <SocialIntelligencePanel contactId={contactId} />
@@ -318,7 +319,10 @@ export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, we
         contactName={contactName || 'Contato'}
         linkedinUrl={linkedinUrl}
         websiteUrl={websiteUrl}
+        currentScore={currentScore}
+        currentSentiment={currentSentiment}
       />
+
     </div>
   );
 }
