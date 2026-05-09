@@ -31,6 +31,7 @@ import {
   ContactIntelligenceTab,
   ContactCommercialTab,
   ContactDataTab,
+  LifeEventsTab,
 } from '@/components/contact-detail';
 import { RelationshipTimeline } from '@/components/contact-detail/RelationshipTimeline';
 import { MeetingMode } from '@/components/contact-detail/MeetingMode';
