@@ -19,7 +19,7 @@ const OnboardingTourWrapper = lazy(() => import('@/components/onboarding/Onboard
 const KeyboardShortcutsCheatsheet = lazy(() => import('@/components/keyboard/KeyboardShortcutsCheatsheet').then(m => ({ default: m.KeyboardShortcutsCheatsheet })));
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useKeyboardShortcutsEnhanced } from '@/hooks/useKeyboardShortcutsEnhanced';
-import { SkipToContent } from '@/components/navigation/NavigationPatterns';
+import { SkipToContent, SmartBreadcrumbs } from '@/components/navigation/NavigationPatterns';
 import { PageTransition } from '@/components/navigation/PageTransition';
 import { SwipeBackIndicator } from '@/components/navigation/SwipeBackIndicator';
 import { RouteProgressBar } from '@/components/navigation/RouteProgressBar';
