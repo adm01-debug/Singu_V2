@@ -91,8 +91,26 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
       passoId: 'dashboard_strategic_followup',
       outcome,
     }, {
-      onSuccess: () => {
+      onSuccess: async () => {
         setCompletedIds(prev => new Set(prev).add(contactId));
+        
+        // Registrar log de auditoria da ação do usuário
+        const contact = contacts.find(c => c.id === contactId);
+        if (contact) {
+          await supabase.from('ai_recommendation_audit_logs').insert({
+            user_id: (await supabase.auth.getUser()).data.user?.id,
+            contact_id: contactId,
+            score: contact.relationship_score || 0,
+            recommendation_type: 'next_step',
+            reasons: ['Ação do usuário registrada via Próximos Passos'],
+            user_action: outcome,
+            data_used: {
+              score: contact.relationship_score,
+              last_interaction: contact.last_interaction_at
+            }
+          });
+        }
+
         toast({
           title: "Ação registrada",
           description: "A recomendação foi atualizada com sucesso.",

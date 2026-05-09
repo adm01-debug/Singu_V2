@@ -277,9 +277,8 @@ async function handleMessageUpsert(supabase: any, payload: any, instance: string
   // Find contact using enhanced search (local -> external -> create)
   const { contactId, userId, companyId, source } = await findContactByPhone(supabase, phoneNumber || '');
 
-  // Contact resolved: contactId=${contactId}, userId=${userId}, source=${source}`);
-
   // Save WhatsApp message
+  let dbMessageId = null;
   if (userId) {
     const messageData = {
       user_id: userId,
@@ -303,18 +302,29 @@ async function handleMessageUpsert(supabase: any, payload: any, instance: string
       },
     };
 
-    const { error: msgError } = await supabase
+    const { data: upsertedMsg, error: msgError } = await supabase
       .from('whatsapp_messages')
       .upsert(messageData, { onConflict: 'message_id' })
-      .select();
+      .select('id')
+      .single();
 
     if (msgError) {
       console.error('Error upserting whatsapp_message:', msgError.message);
-      // If upsert fails, just insert
-      const { error: insertError } = await supabase.from('whatsapp_messages').insert(messageData);
-      if (insertError) {
-        console.error('Error inserting whatsapp_message:', insertError.message);
-      }
+      // If upsert fails (e.g. duplicate from parallel request), try simple insert or select
+      const { data: insertedMsg, error: insertError } = await supabase.from('whatsapp_messages').insert(messageData).select('id').single();
+      if (!insertError) dbMessageId = insertedMsg.id;
+    } else {
+      dbMessageId = upsertedMsg.id;
+    }
+
+    // Ingestão automática: Se for áudio, disparar transcrição
+    if (messageType === 'audio' && dbMessageId) {
+      supabase.functions.invoke('voice-to-text', {
+        body: {
+          whatsappMessageId: dbMessageId,
+          userId,
+        },
+      }).catch((err: any) => console.error('Transcription trigger error:', err));
     }
   }
 
