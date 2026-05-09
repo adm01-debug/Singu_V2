@@ -54,7 +54,7 @@ function ContactDropdownActions({ contact, onEdit, onDelete }: { contact: Contac
         <Button 
           variant="ghost" 
           size="icon" 
-          className="opacity-0 group-hover:opacity-100 transition-opacity h-7 w-7"
+          className="opacity-0 group-hover:opacity-100 transition-opacity h-11 w-11 md:h-7 md:w-7" // 44px em mobile para touch target (WCAG)
           onClick={(e) => e.stopPropagation()}
         >
           <MoreVertical className="w-4 h-4" />
@@ -159,6 +159,7 @@ function ContactCardWithContextImpl({
                   checked={isSelected}
                   onCheckedChange={(checked) => onSelect(contact.id, checked as boolean)}
                   onClick={(e) => e.stopPropagation()}
+                  className="h-11 w-11 md:h-4 md:w-4" // 44px em mobile para touch target
                 />
               </div>
             )}
@@ -175,7 +176,8 @@ function ContactCardWithContextImpl({
                 <div className="flex items-center gap-3">
                   <OptimizedAvatar 
                     src={contact.avatar_url || undefined}
-                    alt={displayName}
+                    alt="" // Decorativo aqui pois o nome vem logo ao lado
+                    aria-hidden="true"
                     fallback={`${(contact.first_name || '?')[0]}${(contact.last_name || '?')[0]}`}
                     size="md"
                     className="w-10 h-10 shrink-0"
@@ -234,18 +236,18 @@ function ContactCardWithContextImpl({
                 {(contact.email || contact.phone || contact.whatsapp) && (
                   <div className="flex items-center gap-1 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     {contact.email && (
-                      <a href={`mailto:${contact.email}`} onClick={(e) => e.stopPropagation()} className="p-1.5 rounded-md hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors" title={contact.email}>
-                        <Mail className="w-3.5 h-3.5" />
+                      <a href={`mailto:${contact.email}`} onClick={(e) => e.stopPropagation()} className="p-3 md:p-1.5 rounded-md hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors flex items-center justify-center min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0" title={contact.email} aria-label={`Enviar email para ${displayName}`}>
+                        <Mail className="w-4 h-4 md:w-3.5 md:h-3.5" />
                       </a>
                     )}
                     {contact.phone && (
-                      <a href={`tel:${contact.phone}`} onClick={(e) => e.stopPropagation()} className="p-1.5 rounded-md hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors" title={contact.phone}>
-                        <Phone className="w-3.5 h-3.5" />
+                      <a href={`tel:${contact.phone}`} onClick={(e) => e.stopPropagation()} className="p-3 md:p-1.5 rounded-md hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors flex items-center justify-center min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0" title={contact.phone} aria-label={`Ligar para ${displayName}`}>
+                        <Phone className="w-4 h-4 md:w-3.5 md:h-3.5" />
                       </a>
                     )}
                     {contact.whatsapp && (
-                      <a href={`https://wa.me/${contact.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="p-1.5 rounded-md hover:bg-success/10 text-muted-foreground hover:text-success transition-colors" title={contact.whatsapp}>
-                        <MessageCircle className="w-3.5 h-3.5" />
+                      <a href={`https://wa.me/${contact.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="p-3 md:p-1.5 rounded-md hover:bg-success/10 text-muted-foreground hover:text-success transition-colors flex items-center justify-center min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0" title={contact.whatsapp} aria-label={`WhatsApp para ${displayName}`}>
+                        <MessageCircle className="w-4 h-4 md:w-3.5 md:h-3.5" />
                       </a>
                     )}
                   </div>
@@ -286,7 +288,8 @@ function ContactCardWithContextImpl({
 
                 <OptimizedAvatar 
                   src={contact.avatar_url || undefined}
-                  alt={displayName}
+                  alt=""
+                  aria-hidden="true"
                   fallback={`${(contact.first_name || '?')[0]}${(contact.last_name || '?')[0]}`}
                   size="md"
                   className="w-10 h-10 shrink-0"

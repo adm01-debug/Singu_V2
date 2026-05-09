@@ -147,6 +147,8 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
 
   const updateContact = async (id: string, updates: ContactUpdate, expectedVersion?: number) => {
     const previous = queryClient.getQueryData<Contact[]>(queryKey);
+    
+    // Optimistic Update
     queryClient.setQueryData<Contact[]>(queryKey, prev =>
       prev?.map(c => c.id === id ? { ...c, ...updates } as Contact : c) ?? []
     );
@@ -158,36 +160,24 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
         if (!LOCAL_ONLY_FIELDS.has(k)) cleanUpdates[k] = v;
       }
       
-      // Map local role_title to external cargo if provided
+      // Map local fields to external schema names if needed
       if (updates.role_title && !cleanUpdates.cargo) {
         cleanUpdates.cargo = updates.role_title;
-      }
-
-      // Map local relationship_stage to external relationship_stage if provided (it matches 1:1)
-      if (updates.relationship_stage) {
-        cleanUpdates.relationship_stage = updates.relationship_stage;
-      }
-
-      // Map local relationship_score to external relationship_score if provided (it matches 1:1)
-      if (updates.relationship_score !== undefined) {
-        cleanUpdates.relationship_score = updates.relationship_score;
-      }
-
-      // Map local sentiment to external sentiment if provided (it matches 1:1)
-      if (updates.sentiment) {
-        cleanUpdates.sentiment = updates.sentiment;
       }
 
       const { data, error } = (expectedVersion !== undefined || updates.version !== undefined)
         ? await updateExternalDataWithVersion<Contact>('contacts', id, (expectedVersion ?? (updates.version as number)), cleanUpdates)
         : await updateExternalData<Contact>('contacts', id, cleanUpdates);
+        
       if (error) throw error;
+      
       if (data) {
         const normalized = normalizeExternalContact(data as unknown as Record<string, unknown>);
         queryClient.setQueryData<Contact[]>(queryKey, prev =>
           prev?.map(c => c.id === id ? normalized : c) ?? []
         );
         logActivity({ type: 'updated', entityType: 'contact', entityId: id, entityName: `${normalized.first_name} ${normalized.last_name}`.trim(), description: 'Contato atualizado' });
+        
         // Track score changes
         if (updates.relationship_score !== undefined && user) {
           const prev = previous?.find(c => c.id === id);
@@ -196,9 +186,12 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       }
       return data;
     } catch (error) {
+      // Automatic Rollback on error
+      if (previous) queryClient.setQueryData<Contact[]>(queryKey, previous);
+      
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error updating contact:', { error: msg });
-      if (previous) queryClient.setQueryData<Contact[]>(queryKey, previous);
+      
       if (error instanceof ConcurrentEditError) {
         showConcurrentEditToast({ entity: 'contato', queryClient, queryKey });
       } else {
@@ -210,17 +203,23 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
 
   const deleteContact = async (id: string) => {
     const previous = queryClient.getQueryData<Contact[]>(queryKey);
+    
+    // Optimistic Delete
     queryClient.setQueryData<Contact[]>(queryKey, prev => prev?.filter(c => c.id !== id) ?? []);
 
     try {
       const { success, error } = await deleteExternalData('contacts', id);
+      if (error) throw error;
+      
       const deleted = previous?.find(c => c.id === id);
       logActivity({ type: 'deleted', entityType: 'contact', entityId: id, entityName: deleted ? `${deleted.first_name} ${deleted.last_name}`.trim() : undefined, description: 'Contato excluído' });
       return true;
     } catch (error) {
+      // Automatic Rollback on error
+      if (previous) queryClient.setQueryData<Contact[]>(queryKey, previous);
+      
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error deleting contact:', { error: msg });
-      if (previous) queryClient.setQueryData<Contact[]>(queryKey, previous);
       toast({ title: 'Erro ao excluir contato', description: msg, variant: 'destructive' });
       return false;
     }
