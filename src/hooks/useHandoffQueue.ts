@@ -59,8 +59,9 @@ export function useCreateHandoff() {
           sla_hours: 4,
         } as never)
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao criar solicitação de handoff');
       return data;
     },
     onSuccess: () => {

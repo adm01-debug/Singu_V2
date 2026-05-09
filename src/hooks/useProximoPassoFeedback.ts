@@ -66,8 +66,9 @@ export function useRegisterPassoFeedback() {
           notes: payload.notes?.trim() ? payload.notes.trim().slice(0, 200) : null,
         })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao registrar feedback de próximo passo');
       return data as PassoFeedback;
     },
     onSuccess: (_data, vars) => {

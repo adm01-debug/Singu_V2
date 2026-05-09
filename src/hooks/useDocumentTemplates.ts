@@ -99,7 +99,7 @@ export function useDocumentTemplates() {
         merge_fields,
         category: input.category ?? null,
         is_active: input.is_active ?? true,
-      } as any);
+      } as never);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -114,7 +114,7 @@ export function useDocumentTemplates() {
       const merge_fields = input.content_html ? extractMergeFields(input.content_html) : undefined;
       const { error } = await supabase
         .from('document_templates')
-        .update({ ...input, ...(merge_fields ? { merge_fields } : {}) } as any)
+        .update({ ...input, ...(merge_fields ? { merge_fields } : {}) } as never)
         .eq('id', id);
       if (error) throw error;
     },
@@ -187,7 +187,7 @@ export function useDocumentSignatures() {
           rendered_html: input.rendered_html,
           merge_data: input.merge_data,
           expires_at,
-        } as any)
+        } as never)
         .select()
         .maybeSingle();
       if (error) throw error;
@@ -202,7 +202,7 @@ export function useDocumentSignatures() {
         if (tpl) {
           await supabase
             .from('document_templates')
-            .update({ usage_count: (tpl.usage_count ?? 0) + 1 } as any)
+            .update({ usage_count: (tpl.usage_count ?? 0) + 1 } as never)
             .eq('id', input.template_id);
         }
       }
@@ -217,9 +217,9 @@ export function useDocumentSignatures() {
 
   const cancel = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase
-        .from('document_signatures') as any)
-        .update({ status: 'declined', declined_at: new Date().toISOString(), declined_reason: 'Cancelado pelo remetente' })
+      const { error } = await supabase
+        .from('document_signatures')
+        .update({ status: 'declined', declined_at: new Date().toISOString(), declined_reason: 'Cancelado pelo remetente' } as never)
         .eq('id', id);
       if (error) throw error;
     },

@@ -86,8 +86,9 @@ export function useSmsCampaigns() {
         .from('sms_campaigns')
         .insert({ ...input, user_id: userId })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao criar campanha SMS');
       return data as SmsCampaign;
     },
     onSuccess: () => {
@@ -190,8 +191,9 @@ export function useSmsTemplates() {
         .from('sms_templates')
         .insert({ ...input, variables, user_id: userId })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao criar template SMS');
       return data;
     },
     onSuccess: () => {

@@ -37,8 +37,9 @@ export function useDISCCommunicationLogs(contactId?: string) {
         .from('disc_communication_logs')
         .insert({ ...log, user_id: user!.id })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao registrar log DISC');
       return data;
     },
     onSuccess: () => {

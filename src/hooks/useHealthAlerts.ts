@@ -163,8 +163,9 @@ export function useHealthAlerts() {
         .from('health_alert_settings')
         .upsert(toSave, { onConflict: 'user_id' })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao salvar configurações de saúde');
       setSettings(data as HealthAlertSettings);
       toast.success('Configurações salvas');
     } catch (error) {

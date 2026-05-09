@@ -70,8 +70,9 @@ export function useNpsSurveys() {
           expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
         })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao criar pesquisa NPS');
       return data;
     },
     onSuccess: () => {

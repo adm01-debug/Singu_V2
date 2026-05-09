@@ -81,8 +81,9 @@ export function useUpsertAutomation() {
         if (error) throw error;
         return { id: input.id };
       }
-      const { data, error } = await supabase.from('lead_score_threshold_automations').insert(payload).select('id').single();
+      const { data, error } = await supabase.from('lead_score_threshold_automations').insert(payload).select('id').maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao criar automação de score');
       return { id: data.id };
     },
     onSuccess: () => {

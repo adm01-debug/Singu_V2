@@ -102,9 +102,10 @@ export function useCognitiveBiasPersistence(contactId: string) {
           profile_summary: analysis.profileSummary
         })
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error('Falha ao salvar análise de viés');
       return data;
     },
     onSuccess: () => {

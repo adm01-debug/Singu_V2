@@ -56,7 +56,7 @@ export function useNurturingWorkflows() {
       if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('nurturing_workflows').insert({
         user_id: user.id, name: input.name, description: input.description || null,
-        trigger_type: input.trigger_type || 'manual', steps: (input.steps || []) as any,
+        trigger_type: input.trigger_type || 'manual', steps: (input.steps || []) as never,
       });
       if (error) throw error;
     },
@@ -66,7 +66,7 @@ export function useNurturingWorkflows() {
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<NurturingWorkflow> & { id: string }) => {
-      const { error } = await supabase.from('nurturing_workflows').update(updates as any).eq('id', id);
+      const { error } = await supabase.from('nurturing_workflows').update(updates as never).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Workflow atualizado!'); },

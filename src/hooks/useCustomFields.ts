@@ -55,8 +55,9 @@ export function useCustomFields(entityType: EntityType) {
         .from('custom_fields')
         .insert({ ...input, user_id: user.id })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao criar campo personalizado');
       return data as CustomField;
     },
     onSuccess: () => {
