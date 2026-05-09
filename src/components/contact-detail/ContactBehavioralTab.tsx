@@ -199,7 +199,7 @@ export function ContactBehavioralTab({ contact }: Props) {
       </TabsContent>
 
       <TabsContent value="metaprograms">
-        <MetaprogramsSubTab metaprograms={metaprograms} />
+        <MetaprogramsSubTab contactId={contact.id} />
       </TabsContent>
 
       <TabsContent value="personality">
