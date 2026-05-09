@@ -118,28 +118,35 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   const queryKey = ['contacts', companyId ?? '__all__'];
   const externalEnabled = options?.enabled ?? true;
 
-  const { data: contacts = [], isLoading: loading, isFetching } = useQuery({
+  const { 
+    data, 
+    isLoading: loading, 
+    isFetching, 
+    fetchNextPage, 
+    hasNextPage, 
+    isFetchingNextPage 
+  } = useInfiniteQuery({
     queryKey,
-    queryFn: () => fetchContactsPage(companyId),
+    queryFn: ({ pageParam = 0 }) => fetchContactsPage(companyId, pageParam as number),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length === PAGE_SIZE ? allPages.length : undefined;
+    },
     enabled: !!user && externalEnabled,
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
-    placeholderData: (prev) => prev,
   });
+
+  const contacts = useMemo(() => data?.pages.flat() ?? [], [data]);
 
   const fetchContacts = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey });
   }, [queryClient, queryKey]);
 
-  // loadMore / hasMore
-  const hasMore = contacts.length >= PAGE_SIZE;
   const loadMore = useCallback(async () => {
-    if (!hasMore || isFetching) return;
-    
-    // In a real implementation with infinite scroll, we would append data.
-    // Here we invalidate to trigger a refresh as requested to ensure consistency.
-    await queryClient.invalidateQueries({ queryKey });
-  }, [hasMore, isFetching, queryClient, queryKey]);
+    if (!hasNextPage || isFetchingNextPage) return;
+    await fetchNextPage();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const prefetchContactDetails = (id: string) => {
     queryClient.prefetchQuery({
