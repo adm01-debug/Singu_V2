@@ -31,6 +31,8 @@ import type { Contact } from '@/hooks/useContacts';
 import type { RelationshipStage, DISCProfile } from '@/types';
 import { cn } from '@/lib/utils';
 import { formatContactName, toTitleCase } from '@/lib/formatters';
+import { Badge } from '@/components/ui/badge';
+import { Star, Zap } from 'lucide-react';
 
 interface ContactCardWithContextProps {
   contact: Contact;
@@ -225,6 +227,32 @@ function ContactCardWithContextImpl({
                     )}
                   </div>
                 </AnimatePresence>
+
+                {/* Hobbies & Interests Badges for quick rapport */}
+                {(contact.hobbies?.length > 0 || contact.interests?.length > 0) && (
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {contact.hobbies?.slice(0, 2).map((hobby, i) => (
+                      <Badge 
+                        key={`hobby-${i}`} 
+                        variant="secondary" 
+                        className="text-[9px] h-4 px-1 bg-amber-50 text-amber-700 border-amber-100/50"
+                      >
+                        <Star className="w-2 h-2 mr-0.5" />
+                        {hobby}
+                      </Badge>
+                    ))}
+                    {contact.interests?.slice(0, 2).map((interest, i) => (
+                      <Badge 
+                        key={`interest-${i}`} 
+                        variant="secondary" 
+                        className="text-[9px] h-4 px-1 bg-purple-50 text-purple-700 border-purple-100/50"
+                      >
+                        <Zap className="w-2 h-2 mr-0.5" />
+                        {interest}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
 
                 {/* Footer: Stage + Time */}
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/20">
