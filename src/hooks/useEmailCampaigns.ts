@@ -45,11 +45,12 @@ export function useEmailCampaigns() {
     mutationFn: async (input: Partial<EmailCampaign>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
-      const { data, error } = await (supabase.from('email_campaigns') as any)
-        .insert({ ...input, user_id: user.id })
+      const { data, error } = await supabase.from('email_campaigns')
+        .insert({ ...input, user_id: user.id } as any)
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar campanha");
       return data as EmailCampaign;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha criada!'); },
@@ -96,7 +97,7 @@ export function useEmailCampaigns() {
       if (eligible.length === 0) throw new Error('Nenhum contato com email válido foi encontrado');
 
       // Marcar como enviando
-      await (supabase.from('email_campaigns') as any).update({ status: 'sending' }).eq('id', campaignId);
+      await supabase.from('email_campaigns').update({ status: 'sending' } as any).eq('id', campaignId);
 
       // Materializar destinatários (idempotente — só insere os que ainda não existem)
       const { data: existing } = await supabase
@@ -120,14 +121,13 @@ export function useEmailCampaigns() {
         if (insError) throw insError;
       }
 
-      // Marcar campanha como enviada e atualizar contadores
-      const { error: updError } = await (supabase
-        .from('email_campaigns') as any)
+      const { error: updError } = await supabase
+        .from('email_campaigns')
         .update({
           status: 'sent',
           sent_at: new Date().toISOString(),
           total_recipients: eligible.length,
-        })
+        } as any)
         .eq('id', campaignId);
       if (updError) throw updError;
 

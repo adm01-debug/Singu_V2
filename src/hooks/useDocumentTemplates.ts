@@ -90,16 +90,16 @@ export function useDocumentTemplates() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const merge_fields = extractMergeFields(input.content_html || '');
-      const { error } = await (supabase.from('document_templates') as any).insert({
+      const { error } = await supabase.from('document_templates').insert({
         user_id: user.id,
-        name: input.name,
+        name: input.name!,
         description: input.description ?? null,
         document_type: input.document_type ?? 'contract',
-        content_html: input.content_html,
+        content_html: input.content_html!,
         merge_fields,
         category: input.category ?? null,
         is_active: input.is_active ?? true,
-      });
+      } as any);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -112,9 +112,9 @@ export function useDocumentTemplates() {
   const update = useMutation({
     mutationFn: async ({ id, ...input }: Partial<DocumentTemplate> & { id: string }) => {
       const merge_fields = input.content_html ? extractMergeFields(input.content_html) : undefined;
-      const { error } = await (supabase
-        .from('document_templates') as any)
-        .update({ ...input, ...(merge_fields ? { merge_fields } : {}) })
+      const { error } = await supabase
+        .from('document_templates')
+        .update({ ...input, ...(merge_fields ? { merge_fields } : {}) } as any)
         .eq('id', id);
       if (error) throw error;
     },
@@ -175,8 +175,8 @@ export function useDocumentSignatures() {
       const expires_at = input.expires_in_days
         ? new Date(Date.now() + input.expires_in_days * 86_400_000).toISOString()
         : null;
-      const { data, error } = await (supabase
-        .from('document_signatures') as any)
+      const { data, error } = await supabase
+        .from('document_signatures')
         .insert({
           user_id: user.id,
           template_id: input.template_id ?? null,
@@ -187,10 +187,11 @@ export function useDocumentSignatures() {
           rendered_html: input.rendered_html,
           merge_data: input.merge_data,
           expires_at,
-        })
+        } as any)
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao registrar assinatura");
       if (input.template_id) {
         // Increment usage_count (best-effort)
         const { data: tpl } = await supabase
@@ -199,9 +200,9 @@ export function useDocumentSignatures() {
           .eq('id', input.template_id)
           .maybeSingle();
         if (tpl) {
-          await (supabase
-            .from('document_templates') as any)
-            .update({ usage_count: ((tpl as any).usage_count ?? 0) + 1 })
+          await supabase
+            .from('document_templates')
+            .update({ usage_count: (tpl.usage_count ?? 0) + 1 } as any)
             .eq('id', input.template_id);
         }
       }

@@ -130,8 +130,9 @@ export function useCreateABMAccount() {
         .from("abm_accounts")
         .insert({ ...input, user_id: user.id })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar conta ABM");
       return data;
     },
     onSuccess: () => {
@@ -146,8 +147,9 @@ export function useUpdateABMAccount() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<ABMAccount> & { id: string }) => {
-      const { data, error } = await supabase.from("abm_accounts").update(updates).eq("id", id).select().single();
+      const { data, error } = await supabase.from("abm_accounts").update(updates).eq("id", id).select().maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Conta ABM não encontrada");
       return data;
     },
     onSuccess: (_, vars) => {
@@ -221,16 +223,18 @@ export function useUpsertCommitteeMember() {
       if (!user) throw new Error("Não autenticado");
       if (input.id) {
         const { id, ...updates } = input;
-        const { data, error } = await supabase.from("abm_buying_committee").update(updates).eq("id", id).select().single();
+        const { data, error } = await supabase.from("abm_buying_committee").update(updates).eq("id", id).select().maybeSingle();
         if (error) throw error;
+        if (!data) throw new Error("Stakeholder não encontrado");
         return data;
       }
       const { data, error } = await supabase
         .from("abm_buying_committee")
         .insert({ ...input, user_id: user.id })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar stakeholder");
       return data;
     },
     onSuccess: (_, vars) => {
@@ -337,16 +341,18 @@ export function useUpsertAccountPlan() {
       if (!user) throw new Error("Não autenticado");
       if (input.id) {
         const { id, ...updates } = input;
-        const { data, error } = await supabase.from("abm_account_plans").update(updates).eq("id", id).select().single();
+        const { data, error } = await supabase.from("abm_account_plans").update(updates).eq("id", id).select().maybeSingle();
         if (error) throw error;
+        if (!data) throw new Error("Plano de conta não encontrado");
         return data;
       }
       const { data, error } = await supabase
         .from("abm_account_plans")
         .insert({ ...input, user_id: user.id, template_type: input.template_type ?? "strategic" })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar plano de conta");
       return data;
     },
     onSuccess: (_, vars) => {
@@ -383,8 +389,9 @@ export function useUpsertCampaign() {
         const { id, metrics, ...rest } = input;
         const updates: Record<string, unknown> = { ...rest };
         if (metrics !== undefined) updates.metrics = metrics as unknown;
-        const { data, error } = await supabase.from("abm_campaigns").update(updates as never).eq("id", id).select().single();
+        const { data, error } = await supabase.from("abm_campaigns").update(updates as never).eq("id", id).select().maybeSingle();
         if (error) throw error;
+        if (!data) throw new Error("Campanha não encontrada");
         return data;
       }
       const { data, error } = await supabase
@@ -402,8 +409,9 @@ export function useUpsertCampaign() {
           user_id: user.id,
         })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar campanha");
       return data;
     },
     onSuccess: () => {

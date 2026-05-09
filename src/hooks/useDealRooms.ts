@@ -143,8 +143,9 @@ export function useCreateDealRoom() {
         target_close_date: payload.target_close_date ?? null,
         deal_value: payload.deal_value ?? null,
         description: payload.description ?? null,
-      }).select("*").single();
+      }).select("*").maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar Deal Room");
       return data as DealRoom;
     },
     onSuccess: () => {
@@ -159,8 +160,9 @@ export function useUpdateDealRoom() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...patch }: Partial<DealRoom> & { id: string }) => {
-      const { data, error } = await supabase.from("deal_rooms").update(patch).eq("id", id).select("*").single();
+      const { data, error } = await supabase.from("deal_rooms").update(patch).eq("id", id).select("*").maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Deal Room não encontrado");
       return data as DealRoom;
     },
     onSuccess: (d) => {
@@ -206,8 +208,9 @@ export function useUpsertMilestone(roomId: string) {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const payload = { ...m, room_id: roomId, user_id: user.id };
-      const { data, error } = await (supabase.from("deal_room_milestones") as any).upsert(payload).select("*").single();
+      const { data, error } = await supabase.from("deal_room_milestones").upsert([payload as any]).select("*").maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao salvar milestone");
       return data as unknown as DealRoomMilestone;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.ms(roomId) }),
@@ -247,8 +250,9 @@ export function useUpsertStakeholder(roomId: string) {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const payload = { ...s, room_id: roomId, user_id: user.id };
-      const { data, error } = await (supabase.from("deal_room_stakeholders") as any).upsert(payload).select("*").single();
+      const { data, error } = await supabase.from("deal_room_stakeholders").upsert([payload as any]).select("*").maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao salvar stakeholder");
       return data as unknown as DealRoomStakeholder;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.sh(roomId) }),
@@ -293,8 +297,9 @@ export function useUploadDocument(roomId: string) {
       const { data, error } = await supabase.from("deal_room_documents").insert({
         room_id: roomId, user_id: user.id, title: file.name, file_path: path,
         file_type: file.type, file_size: file.size, uploaded_by_side: "seller",
-      }).select("*").single();
+      }).select("*").maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao salvar metadados do documento");
       return data as DealRoomDocument;
     },
     onSuccess: () => {
@@ -357,8 +362,9 @@ export function useAddComment(roomId: string) {
       if (!user) throw new Error("Não autenticado");
       const { data, error } = await supabase.from("deal_room_comments").insert({
         room_id: roomId, user_id: user.id, author_side: "seller", author_label: user.email ?? "Vendedor", body,
-      }).select("*").single();
+      }).select("*").maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao adicionar comentário");
       return data as DealRoomComment;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.cmts(roomId) }),
