@@ -19,6 +19,24 @@ export interface ContactBehavior {
   formality_level?: number;
 }
 
+export interface ContactBehaviorGap {
+  category: string;
+  field_name: string;
+  issue_type: string;
+  priority: 'high' | 'medium' | 'low';
+}
+
+export interface BehavioralAuditLog {
+  id: string;
+  timestamp: string;
+  user_email: string;
+  change_source: string;
+  field_name: string;
+  old_value: any;
+  new_value: any;
+  reason: string;
+}
+
 export interface ContactDecisionMaking {
   decision_speed?: string;
   decision_criteria?: string[];
