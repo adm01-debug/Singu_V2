@@ -24,6 +24,7 @@ const OptimalContactWindowsWidget = lazy(() => import('./OptimalContactWindowsWi
 const QuickActionsWidget = lazy(() => import('./QuickActionsWidget'));
 const CompanyViewsWidget = lazy(() => import('./CompanyViewsWidget'));
 const InteractionHistoryWidget = lazy(() => import('./InteractionHistoryWidget'));
+const CompanyBenchmarkRadar = lazy(() => import('./CompanyBenchmarkRadar'));
 const CreateDealWidget = lazy(() => import('@/components/pipeline/CreateDealWidget'));
 
 type Contact = Tables<'contacts'>;
@@ -303,6 +304,9 @@ export function CompanyInsightsTab({
       </Suspense>
       <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
         <AccountPlanWidget companyId={companyId} />
+      </Suspense>
+      <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
+        <CompanyBenchmarkRadar companyId={companyId} />
       </Suspense>
       <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
         <CompanyDuplicatesWidget companyId={companyId} />
