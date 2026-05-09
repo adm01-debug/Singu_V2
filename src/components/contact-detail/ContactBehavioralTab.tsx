@@ -189,6 +189,6 @@ export function ContactBehavioralTab({ contact }: Props) {
 
     {/* Relationship Score Evolution Chart */}
     <RelationshipScoreChart contactId={contact.id} />
-  </>
+  </div>
   );
 }
