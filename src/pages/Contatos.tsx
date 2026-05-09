@@ -41,6 +41,7 @@ interface ContatosViewState {
   activeFilters: Record<string, string[]>;
   sortBy: string;
   sortOrder: 'asc' | 'desc';
+  multiSort: Array<{ column: string, order: 'asc' | 'desc' }>;
 }
 
 const filterConfigs = [
