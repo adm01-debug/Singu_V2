@@ -34,6 +34,8 @@ import { RelationshipFunnel } from '@/components/ui/relationship-stage';
 import { useContactDetail } from '@/hooks/useContactDetail';
 import type { RelationshipStage } from '@/types';
 
+import { Interaction } from '@/hooks/useContactDetail';
+
 interface Props {
   contact: Contact & { interactions?: Interaction[] };
   company: Company | null;
