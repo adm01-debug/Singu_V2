@@ -73,6 +73,7 @@ export function ContatosContent(props: Props) {
     onToggleSelectionMode, onSelect, onSelectAll, onBulkDelete, onBulkAddTag,
     onSetEditingContact, onSetDeletingContact, onSetIsFormOpen,
     updateContact, getCompanyName, getLastInteractionDate, onRefresh,
+    hasMore, onLoadMore,
   } = props;
 
   const { isAdmin } = useIsAdmin();
