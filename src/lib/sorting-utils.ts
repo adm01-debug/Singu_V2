@@ -57,12 +57,12 @@ export function compareDates(
 }
 
 /**
- * Generic sort function for arrays
+ * Generic sort function for arrays (supports multi-column sorting)
  */
 export function sortArray<T>(
   items: T[],
-  sortBy: keyof T,
-  sortOrder: 'asc' | 'desc',
+  sortBy: keyof T | Array<{ column: keyof T, order: 'asc' | 'desc' }>,
+  sortOrder?: 'asc' | 'desc',
   options?: {
     dateFields?: (keyof T)[];
     numericFields?: (keyof T)[];
@@ -70,23 +70,35 @@ export function sortArray<T>(
 ): T[] {
   const { dateFields = [], numericFields = [] } = options || {};
   
+  const sortCriteria = Array.isArray(sortBy) 
+    ? sortBy 
+    : [{ column: sortBy, order: sortOrder || 'asc' }];
+
+  if (sortCriteria.length === 0) return [...items];
+
   return [...items].sort((a, b) => {
-    const aVal = getSortValue(a, sortBy);
-    const bVal = getSortValue(b, sortBy);
-    
-    // Date comparison
-    if (dateFields.includes(sortBy)) {
-      return compareDates(aVal as string, bVal as string, sortOrder);
+    for (const { column, order } of sortCriteria) {
+      const aVal = getSortValue(a, column);
+      const bVal = getSortValue(b, column);
+      let result = 0;
+      
+      // Date comparison
+      if (dateFields.includes(column)) {
+        result = compareDates(aVal as string, bVal as string, order);
+      }
+      // Numeric comparison
+      else if (numericFields.includes(column)) {
+        const numA = Number(aVal) || 0;
+        const numB = Number(bVal) || 0;
+        result = order === 'asc' ? numA - numB : numB - numA;
+      }
+      // Default comparison
+      else {
+        result = compareValues(aVal, bVal, order);
+      }
+
+      if (result !== 0) return result;
     }
-    
-    // Numeric comparison
-    if (numericFields.includes(sortBy)) {
-      const numA = Number(aVal) || 0;
-      const numB = Number(bVal) || 0;
-      return sortOrder === 'asc' ? numA - numB : numB - numA;
-    }
-    
-    // Default comparison
-    return compareValues(aVal, bVal, sortOrder);
+    return 0;
   });
 }

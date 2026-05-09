@@ -1,24 +1,29 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { DuplicateManagementPanel } from './DuplicateManagementPanel';
 import { SoftDeletePanel } from './SoftDeletePanel';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Mail, Phone, MessageSquare, Linkedin, Instagram, Twitter,
   Building2, Briefcase, Calendar, Edit2, ExternalLink, Copy, Check,
-  MapPin, Globe, AlertTriangle, Trash2, Brain, Target, Shield, Bell
+  MapPin, Globe, AlertTriangle, Trash2, Brain, Target, Shield, Bell,
+  ChevronRight, ArrowRight, Zap
 } from 'lucide-react';
 import { OptimizedAvatar } from '@/components/ui/optimized-avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { RelationshipScore } from '@/components/ui/relationship-score';
 import { SentimentIndicator } from '@/components/ui/sentiment-indicator';
+import { RelationshipFunnel, RelationshipStageBadge } from '@/components/ui/relationship-stage';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { formatContactName, pluralize } from '@/lib/formatters';
 import { useContactRelationalData } from '@/hooks/useContactRelationalData';
 import { useContactView360 } from '@/hooks/useContactView360';
+import { useContacts } from '@/hooks/useContacts';
+import { toast } from 'sonner';
 import type { Contact, Company } from '@/hooks/useContactDetail';
+import type { RelationshipStage } from '@/types';
 
 const STAGE_CONFIG: Record<string, { label: string; color: string }> = {
   unknown: { label: 'Desconhecido', color: 'bg-muted text-muted-foreground' },
@@ -58,6 +63,22 @@ interface Props {
 
 export function ContactDetailHeader({ contact, company, interactionCount, onEdit }: Props) {
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const { updateContact } = useContacts();
+  const [isChangingStage, setIsChangingStage] = useState(false);
+
+  const handleStageChange = useCallback(async (newStage: RelationshipStage) => {
+    if (newStage === contact.relationship_stage) return;
+    
+    setIsChangingStage(true);
+    try {
+      await updateContact(contact.id, { relationship_stage: newStage });
+      toast.success(`Estágio atualizado para ${newStage}`);
+    } catch (error) {
+      toast.error('Erro ao atualizar estágio');
+    } finally {
+      setIsChangingStage(false);
+    }
+  }, [contact.id, contact.relationship_stage, updateContact]);
   
   // Use shared React Query hook — eliminates duplicate fetches, leverages cache
   const { data: relData } = useContactRelationalData(contact.id);
@@ -223,23 +244,41 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
           </div>
 
           {/* Metrics row */}
-          <div className="mt-4 flex flex-wrap items-center gap-4">
-            <Badge className={cn('text-xs font-medium', stage.color)}>
-              {stage.label}
-            </Badge>
-            <div className="flex items-center gap-1.5">
-              <RelationshipScore score={contact.relationship_score || 0} size="sm" showMilestone />
-            </div>
-            <SentimentIndicator sentiment={(contact.sentiment as 'positive' | 'neutral' | 'negative') || 'neutral'} size="sm" />
-            <span className="text-xs text-muted-foreground">
-              {pluralize(interactionCount, 'interação', 'interações')}
-            </span>
-            {contact.birthday && (
-              <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Calendar className="h-3 w-3" />
-                {format(new Date(contact.birthday), "dd/MM/yyyy")}
+          <div className="mt-4 flex flex-col gap-4">
+            <div className="flex flex-wrap items-center gap-4">
+              <RelationshipStageBadge stage={(contact.relationship_stage as RelationshipStage) || 'unknown'} />
+              <div className="flex items-center gap-1.5">
+                <RelationshipScore score={contact.relationship_score || 0} size="sm" showMilestone />
+              </div>
+              <SentimentIndicator sentiment={(contact.sentiment as 'positive' | 'neutral' | 'negative') || 'neutral'} size="sm" />
+              <span className="text-xs text-muted-foreground">
+                {pluralize(interactionCount, 'interação', 'interações')}
               </span>
-            )}
+              {contact.birthday && (
+                <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Calendar className="h-3 w-3" />
+                  {format(new Date(contact.birthday), "dd/MM/yyyy")}
+                </span>
+              )}
+            </div>
+
+            {/* Interactive Relationship Funnel */}
+            <div className={cn("p-3 rounded-lg bg-muted/30 border border-border/50", isChangingStage && "opacity-60 pointer-events-none animate-pulse")}>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1">
+                  <Target className="h-3 w-3" />
+                  Funil de Relacionamento (Clique para alterar)
+                </span>
+                <Badge variant="outline" className="text-[9px] h-4">
+                  {contact.relationship_stage || 'unknown'}
+                </Badge>
+              </div>
+              <RelationshipFunnel 
+                currentStage={(contact.relationship_stage as RelationshipStage) || 'unknown'} 
+                onStageChange={handleStageChange}
+                isEditable
+              />
+            </div>
           </div>
 
           {/* 360° Intelligence Strip */}

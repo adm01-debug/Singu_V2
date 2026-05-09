@@ -41,6 +41,7 @@ interface ContatosViewState {
   activeFilters: Record<string, string[]>;
   sortBy: string;
   sortOrder: 'asc' | 'desc';
+  multiSort: Array<{ column: string, order: 'asc' | 'desc' }>;
 }
 
 const filterConfigs = [
@@ -96,17 +97,29 @@ const Contatos = () => {
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(() => { try { const f = searchParams.get('filters'); return f ? JSON.parse(decodeURIComponent(f)) : {}; } catch { return {}; } });
   const [sortBy, setSortBy] = useState(() => searchParams.get('sort') || 'updated_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(() => (searchParams.get('order') as 'asc' | 'desc') || 'desc');
+  const [multiSort, setMultiSort] = useState<Array<{ column: string, order: 'asc' | 'desc' }>>(() => {
+    try {
+      const ms = searchParams.get('msort');
+      return ms ? JSON.parse(decodeURIComponent(ms)) : [{ column: sortBy, order: sortOrder }];
+    } catch {
+      return [{ column: sortBy, order: sortOrder }];
+    }
+  });
 
   useEffect(() => {
     const params = new URLSearchParams();
     if (searchTerm) params.set('q', searchTerm);
     if (viewMode !== 'grid') params.set('view', viewMode);
     if (Object.keys(activeFilters).length > 0) params.set('filters', encodeURIComponent(JSON.stringify(activeFilters)));
-    if (sortBy !== 'updated_at') params.set('sort', sortBy);
-    if (sortOrder !== 'desc') params.set('order', sortOrder);
+    if (multiSort.length > 0) {
+      params.set('msort', encodeURIComponent(JSON.stringify(multiSort)));
+    } else {
+      if (sortBy !== 'updated_at') params.set('sort', sortBy);
+      if (sortOrder !== 'desc') params.set('order', sortOrder);
+    }
     if (gridColumns !== 3) params.set('cols', String(gridColumns));
     setSearchParams(params, { replace: true });
-  }, [searchTerm, viewMode, activeFilters, sortBy, sortOrder, gridColumns, setSearchParams]);
+  }, [searchTerm, viewMode, activeFilters, sortBy, sortOrder, gridColumns, multiSort, setSearchParams]);
 
   const { results: fuzzyResults, setQuery: setFuzzyQuery } = useFuzzySearch(contacts, { keys: ['first_name', 'last_name', 'email', 'role_title'], threshold: 0.4 });
   const handleSearchChange = useCallback((value: string) => { setSearchTerm(value); setFuzzyQuery(value); }, [setFuzzyQuery]);
@@ -114,8 +127,8 @@ const Contatos = () => {
   const filteredAndSortedContacts = useMemo(() => {
     let result = searchTerm ? fuzzyResults : contacts;
     result = result.filter(contact => { for (const [key, values] of Object.entries(activeFilters)) { if (values.length === 0) continue; const contactValue = contact[key as keyof Contact]; if (!contactValue || !values.includes(String(contactValue))) return false; } return true; });
-    return sortArray(result, sortBy as keyof Contact, sortOrder, { dateFields: ['created_at', 'updated_at', 'birthday'], numericFields: ['relationship_score'] });
-  }, [contacts, fuzzyResults, searchTerm, activeFilters, sortBy, sortOrder]);
+    return sortArray(result, multiSort as any, undefined, { dateFields: ['created_at', 'updated_at', 'birthday'], numericFields: ['relationship_score'] });
+  }, [contacts, fuzzyResults, searchTerm, activeFilters, multiSort]);
 
   useKeyboardShortcutsEnhanced();
 
@@ -182,7 +195,7 @@ const Contatos = () => {
 
         <div className="px-4 md:px-6 -mt-2 mb-3">
           <ContatosSavedViews
-            currentState={{ searchTerm, viewMode, gridColumns, activeFilters, sortBy, sortOrder }}
+            currentState={{ searchTerm, viewMode, gridColumns, activeFilters, sortBy, sortOrder, multiSort }}
             onApply={(s) => {
               setSearchTerm(s.searchTerm);
               setViewMode(s.viewMode);
@@ -190,6 +203,7 @@ const Contatos = () => {
               setActiveFilters(s.activeFilters);
               setSortBy(s.sortBy);
               setSortOrder(s.sortOrder);
+              if (s.multiSort) setMultiSort(s.multiSort);
             }}
           />
         </div>
@@ -200,7 +214,8 @@ const Contatos = () => {
           viewMode={viewMode} onViewModeChange={setViewMode}
           gridColumns={gridColumns} onGridColumnsChange={setGridColumns}
           activeFilters={activeFilters} onFiltersChange={setActiveFilters}
-          sortBy={sortBy} sortOrder={sortOrder} onSortChange={(sb, so) => { setSortBy(sb); setSortOrder(so); }}
+          sortBy={sortBy} sortOrder={sortOrder} onSortChange={(sb, so) => { setSortBy(sb); setSortOrder(so); setMultiSort([{ column: sb, order: so }]); }}
+          multiSort={multiSort} onMultiSortChange={setMultiSort}
           filterConfigs={filterConfigs} sortOptions={sortOptions}
           selectionMode={selectionMode} selectedIds={selectedIds}
           onToggleSelectionMode={() => { setSelectionMode(!selectionMode); if (selectionMode) setSelectedIds(new Set()); }}

@@ -51,10 +51,12 @@ export function RelationshipStageBadge({ stage, className }: RelationshipStageBa
 
 interface RelationshipFunnelProps {
   currentStage: RelationshipStage;
+  onStageChange?: (stage: RelationshipStage) => void;
   className?: string;
+  isEditable?: boolean;
 }
 
-export function RelationshipFunnel({ currentStage, className }: RelationshipFunnelProps) {
+export function RelationshipFunnel({ currentStage, onStageChange, className, isEditable = false }: RelationshipFunnelProps) {
   const currentIndex = stageOrder.indexOf(currentStage);
 
   return (
@@ -66,17 +68,18 @@ export function RelationshipFunnel({ currentStage, className }: RelationshipFunn
           const isFuture = index > currentIndex;
 
           return (
-            <div key={stage} className="flex items-center flex-1">
+            <div key={stage} className={cn("flex items-center flex-1", isEditable && "cursor-pointer")} onClick={() => isEditable && onStageChange?.(stage)}>
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: index * 0.05 }}
                 className={cn(
-                  'h-2 flex-1 rounded-full transition-colors',
-                  isPast && 'bg-success',
-                  isCurrent && 'bg-primary',
+                  'h-2 flex-1 rounded-full transition-all duration-300',
+                  isPast && 'bg-success/60',
+                  isCurrent && 'bg-primary ring-2 ring-primary/20 ring-offset-1',
                   isFuture && 'bg-muted'
                 )}
+                whileHover={isEditable ? { scaleY: 1.5 } : {}}
               />
               {index < stageOrder.length - 1 && (
                 <div className={cn(

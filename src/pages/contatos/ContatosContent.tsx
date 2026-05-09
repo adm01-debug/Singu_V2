@@ -41,6 +41,8 @@ interface Props {
   sortBy: string;
   sortOrder: 'asc' | 'desc';
   onSortChange: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
+  multiSort?: any[];
+  onMultiSortChange?: (criteria: any[]) => void;
   filterConfigs: FilterConfig[];
   sortOptions: SortOption[];
   selectionMode: boolean;
@@ -64,6 +66,7 @@ export function ContatosContent(props: Props) {
     contacts, loading, filteredAndSortedContacts, searchTerm, onSearchChange,
     viewMode, onViewModeChange, gridColumns, onGridColumnsChange,
     activeFilters, onFiltersChange, sortBy, sortOrder, onSortChange,
+    multiSort, onMultiSortChange,
     filterConfigs, sortOptions, selectionMode, selectedIds,
     onToggleSelectionMode, onSelect, onSelectAll, onBulkDelete, onBulkAddTag,
     onSetEditingContact, onSetDeletingContact, onSetIsFormOpen,
@@ -164,7 +167,17 @@ export function ContatosContent(props: Props) {
         </div>
 
         <div className="md:block">
-          <AdvancedFilters filters={filterConfigs} sortOptions={sortOptions} activeFilters={activeFilters} onFiltersChange={onFiltersChange} sortBy={sortBy} sortOrder={sortOrder} onSortChange={(newSortBy, newSortOrder) => onSortChange(newSortBy, newSortOrder)} />
+          <AdvancedFilters 
+            filters={filterConfigs} 
+            sortOptions={sortOptions} 
+            activeFilters={activeFilters} 
+            onFiltersChange={onFiltersChange} 
+            sortBy={sortBy} 
+            sortOrder={sortOrder} 
+            onSortChange={(newSortBy, newSortOrder) => onSortChange(newSortBy, newSortOrder)} 
+            multiSort={multiSort}
+            onMultiSortChange={onMultiSortChange}
+          />
         </div>
       <RecentlyViewedSection type="contact" />
 
