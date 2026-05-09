@@ -280,6 +280,8 @@ export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, we
         />
       </div>
 
+      <RelationshipAuditPanel contactId={contactId} />
+
 
 
 
