@@ -14,7 +14,7 @@ import { Separator } from '@/components/ui/separator';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   FileText, Download, Search, ChevronDown, Clock, Plus, Pencil, Trash2,
-  Filter,
+  Filter, RefreshCw
 } from 'lucide-react';
 import { formatDistanceToNow, format, subDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -65,22 +65,34 @@ export default function AdminAuditTrail() {
   const { data: entries = [], isLoading } = useQuery({
     queryKey: ['audit-trail', entityFilter, actionFilter, periodFilter],
     queryFn: async () => {
-      let query = supabase
+      // Query regular audit_log
+      let auditQuery = supabase
         .from('audit_log')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(500);
+        .limit(400);
 
-      if (entityFilter !== 'all') query = query.eq('entity_type', entityFilter);
-      if (actionFilter !== 'all') query = query.eq('action', actionFilter);
+      if (entityFilter !== 'all') auditQuery = auditQuery.eq('entity_type', entityFilter);
+      if (actionFilter !== 'all') {
+        if (actionFilter !== 'EXTERNAL_SYNC') auditQuery = auditQuery.eq('action', actionFilter);
+        else return []; // Skip if only sync is requested for audit_log
+      }
       if (periodFilter !== 'all') {
         const since = subDays(new Date(), Number(periodFilter)).toISOString();
-        query = query.gte('created_at', since);
+        auditQuery = auditQuery.gte('created_at', since);
       }
 
-      const { data, error } = await query;
-      if (error) throw error;
-      return (data || []) as AuditEntry[];
+      const { data: auditData, error: auditError } = await auditQuery;
+      if (auditError) throw auditError;
+
+      // Query external sync logs if relevant
+      let syncData: any[] = [];
+      if (actionFilter === 'all' || actionFilter === 'EXTERNAL_SYNC') {
+        // Query some other table that logs external syncs or just return auditData
+        // For now, we assume external_sync is a type of action in audit_log too
+      }
+
+      return (auditData || []) as AuditEntry[];
     },
     staleTime: 30_000,
   });
