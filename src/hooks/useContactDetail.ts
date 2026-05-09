@@ -202,4 +202,3 @@ export function useContactDetail(contactId: string | undefined) {
     dismissInsight,
   };
 }
-}
