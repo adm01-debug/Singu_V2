@@ -255,5 +255,5 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     }
   };
 
-  return { contacts, loading, isFetching, hasMore, fetchContacts, loadMore, createContact, updateContact, deleteContact };
+  return { contacts, loading, isFetching, hasMore, fetchContacts, loadMore, createContact, updateContact, deleteContact, prefetchContactDetails };
 }
