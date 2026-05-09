@@ -498,15 +498,15 @@ const Ficha360 = () => {
               </CardContent>
             </Card>
 
-            {/* Score de Prontidão */}
-            <ScoreProntidaoCard
-              data={prontidao}
-              contactId={id}
-              simulated={simEnabled}
-              realData={simEnabled ? realProntidao : undefined}
-            />
-            {/* Próxima ação sugerida (IA + melhor horário + registrar interação) — usa contato real */}
-            {id && <ProximaAcaoCTA contactId={id} contactName={fullName} />}
+            <div className="grid gap-4 lg:grid-cols-2">
+              <ScoreProntidaoCard
+                data={prontidao}
+                contactId={id}
+                simulated={simEnabled}
+                realData={simEnabled ? realProntidao : undefined}
+              />
+              {id && <ProximaAcaoCTA contactId={id} contactName={fullName} />}
+            </div>
 
             {/* Tendência semanal do Score de Prontidão */}
             <ProntidaoTrendChart
