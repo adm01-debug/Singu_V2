@@ -16,11 +16,11 @@ import { cn } from '@/lib/utils';
 import { ReminderCard } from './smart-reminders-parts/ReminderCard';
 import { motion } from 'framer-motion';
 
-interface SmartRemindersPanelProps { className?: string; compact?: boolean; }
+interface SmartRemindersPanelProps { className?: string; compact?: boolean; contacts?: any[]; interactions?: any[]; }
 
 const typeLabels = { follow_up: 'Follow-up', birthday: 'Aniversário', decay: 'Esfriando', milestone: 'Marco' };
 
-export const SmartRemindersPanel = ({ className, compact = false }: SmartRemindersPanelProps) => {
+export const SmartRemindersPanel = ({ className, compact = false, contacts, interactions }: SmartRemindersPanelProps) => {
   const navigate = useNavigate();
   const { celebrate } = useCelebration();
   const { reminders, summary, aiInsights, isLoading, fetchReminders, dismissReminder, snoozeReminder, completeReminder } = useSmartReminders();
