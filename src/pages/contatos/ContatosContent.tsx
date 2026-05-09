@@ -75,6 +75,7 @@ export function ContatosContent(props: Props) {
   const RENDER_BATCH = 60;
   const [visibleCount, setVisibleCount] = useState(RENDER_BATCH);
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const selectedIndex = -1; // Simplified keyboard nav
 
   useEffect(() => { setVisibleCount(RENDER_BATCH); }, [activeFilters, sortBy, sortOrder, searchTerm]);
 
@@ -99,7 +100,7 @@ export function ContatosContent(props: Props) {
       Score: c.relationship_score || 0,
       Estagio: c.relationship_stage || '',
       Sentimento: c.sentiment || '',
-      Tags: Array.isArray(c.tags_array) ? (c.tags_array as string[]).join('; ') : ''
+      Tags: Array.isArray((c as any).tags) ? ((c as any).tags as string[]).join('; ') : ''
     }));
     exportToCSV(dataToExport, 'contatos_export');
   };
