@@ -151,8 +151,9 @@ export function useAutomationRules() {
           actions: data.actions as unknown as Json,
         })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!created) throw new Error("Falha ao criar automação");
       setRules(prev => [created as unknown as AutomationRule, ...prev]);
       toast.success('Automação criada com sucesso!');
       return created;

@@ -40,8 +40,8 @@ export function useKnowledgeBase() {
     mutationFn: async (input: Partial<KBArticle>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
-      const { error } = await (supabase.from('knowledge_base_articles') as any)
-        .insert({ ...input, user_id: user.id });
+      const { error } = await supabase.from('knowledge_base_articles')
+        .insert({ ...input, user_id: user.id } as any);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Artigo criado!'); },
@@ -50,7 +50,7 @@ export function useKnowledgeBase() {
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<KBArticle> & { id: string }) => {
-      const { error } = await (supabase.from('knowledge_base_articles') as any).update(updates as any).eq('id', id);
+      const { error } = await supabase.from('knowledge_base_articles').update(updates as any).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Artigo atualizado!'); },

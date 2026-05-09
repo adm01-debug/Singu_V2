@@ -89,8 +89,9 @@ export function useAppliedResponses() {
           note: input.note ?? null,
         })
         .select("id, user_id, objection, category, response_text, interaction_id, note, applied_at")
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao registrar aplicação de resposta");
       return data as AppliedResponse;
     },
     onSuccess: (row) => {

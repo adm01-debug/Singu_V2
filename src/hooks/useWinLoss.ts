@@ -118,8 +118,9 @@ export function useUpsertWinLossRecord() {
         .from('win_loss_records')
         .upsert({ ...payload, user_id: user.id }, { onConflict: 'user_id,deal_id' })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao registrar Win/Loss");
       return data as WinLossRecord;
     },
     onSuccess: () => {
@@ -174,8 +175,9 @@ export function useUpsertReason() {
         .from('win_loss_reasons')
         .upsert({ ...r, user_id: user.id }, { onConflict: 'user_id,category,label' })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao salvar motivo");
       return data as WinLossReason;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-reasons'] }),
@@ -234,8 +236,9 @@ export function useUpsertCompetitor() {
         .from('competitors')
         .upsert({ ...c, user_id: user.id }, { onConflict: 'user_id,name' })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao salvar competidor");
       return data as Competitor;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['competitors'] }),

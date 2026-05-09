@@ -89,8 +89,9 @@ export function useAiAssistant() {
           context_entity_id: context?.id || null,
         })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar conversa");
       const newThread = data as ChatThread;
       setThreads(prev => [newThread, ...prev]);
       setActiveThreadId(newThread.id);

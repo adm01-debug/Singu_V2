@@ -118,9 +118,10 @@ export function useUpsertCSAccount() {
       if (!user?.id) throw new Error("Não autenticado");
       const payload = { ...input, user_id: user.id };
       const { data, error } = input.id
-        ? await supabase.from("cs_accounts").update(payload).eq("id", input.id).select().single()
-        : await supabase.from("cs_accounts").insert(payload).select().single();
+        ? await supabase.from("cs_accounts").update(payload).eq("id", input.id).select().maybeSingle()
+        : await supabase.from("cs_accounts").insert(payload).select().maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao salvar conta");
       return data as CSAccount;
     },
     onSuccess: () => {
@@ -273,9 +274,10 @@ export function useUpsertQBR() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const payload: any = { ...input, user_id: user.id };
       const { data, error } = input.id
-        ? await supabase.from("cs_qbrs").update(payload).eq("id", input.id).select().single()
-        : await supabase.from("cs_qbrs").insert(payload).select().single();
+        ? await supabase.from("cs_qbrs").update(payload).eq("id", input.id).select().maybeSingle()
+        : await supabase.from("cs_qbrs").insert(payload).select().maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao salvar QBR");
       return data as QBR;
     },
     onSuccess: () => {
@@ -325,8 +327,9 @@ export function useUpdateRenewal() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: Partial<Renewal> & { id: string }) => {
-      const { data, error } = await supabase.from("cs_renewals").update(input).eq("id", input.id).select().single();
+      const { data, error } = await supabase.from("cs_renewals").update(input).eq("id", input.id).select().maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Renovação não encontrada");
       return data as Renewal;
     },
     onSuccess: () => {

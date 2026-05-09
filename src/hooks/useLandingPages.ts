@@ -74,8 +74,9 @@ export function useLandingPages() {
           is_published: false,
         })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar landing page");
       return data as unknown as LandingPage;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Landing page criada!'); },

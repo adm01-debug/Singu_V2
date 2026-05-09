@@ -128,7 +128,7 @@ export function useBulkImport(entityType: ImportEntityType) {
               if (batch.length > 0) {
                 // Determine the correct table name for type safety
                 const tableName = entityType === 'contacts' ? 'contacts' : 'companies';
-                const { error } = await (supabase.from(tableName as any) as any).insert(batch as any);
+                const { error } = await supabase.from(tableName as never).insert(batch as any);
                 
                 if (error) {
                   batch.forEach((_, bIdx) => {
