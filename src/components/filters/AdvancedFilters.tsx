@@ -46,14 +46,21 @@ export interface SortOption {
   label: string;
 }
 
+export interface SortCriteria {
+  column: string;
+  order: 'asc' | 'desc';
+}
+
 interface AdvancedFiltersProps {
   filters: FilterConfig[];
   sortOptions: SortOption[];
   activeFilters: Record<string, string[]>;
   onFiltersChange: (filters: Record<string, string[]>) => void;
-  sortBy: string;
-  sortOrder: 'asc' | 'desc';
-  onSortChange: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
+  sortBy: string; // legacy
+  sortOrder: 'asc' | 'desc'; // legacy
+  onSortChange: (sortBy: string, sortOrder: 'asc' | 'desc') => void; // legacy
+  multiSort?: SortCriteria[];
+  onMultiSortChange?: (criteria: SortCriteria[]) => void;
 }
 
 export function AdvancedFilters({
