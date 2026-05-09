@@ -126,14 +126,14 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                     
                     <div className="hidden sm:flex flex-wrap gap-1 ml-2 max-w-[300px]">
                       {contact.hobbies?.slice(0, 3).map((hobby) => (
-                        <Badge key={hobby} variant="secondary" className="text-[10px] h-4 px-1.5 bg-amber-500/10 text-amber-600 border-amber-200/50">
-                          <Star className="w-2.5 h-2.5 mr-0.5" />
+                        <Badge key={hobby} variant="secondary" className="text-[10px] h-4 px-1.5 bg-amber-50 text-amber-700 border-amber-100/50 font-medium">
+                          <Star className="w-2 h-2 mr-0.5" />
                           {hobby}
                         </Badge>
                       ))}
                       {contact.interests?.slice(0, 3).map((interest) => (
-                        <Badge key={interest} variant="secondary" className="text-[10px] h-4 px-1.5 bg-purple-500/10 text-purple-600 border-purple-200/50">
-                          <Zap className="w-2.5 h-2.5 mr-0.5" />
+                        <Badge key={interest} variant="secondary" className="text-[10px] h-4 px-1.5 bg-purple-50 text-purple-700 border-purple-100/50 font-medium">
+                          <Zap className="w-2 h-2 mr-0.5" />
                           {interest}
                         </Badge>
                       ))}
