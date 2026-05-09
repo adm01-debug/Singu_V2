@@ -34,6 +34,8 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
       } else if (metricType === 'last_contact') {
         updates.last_interaction_at = new Date(newValue).toISOString();
         valToStore = updates.last_interaction_at;
+      } else if (metricType === 'stage') {
+        updates.relationship_stage = newValue;
       }
 
       // 1. Get current user
@@ -45,7 +47,7 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
         user_id: user.id,
         contact_id: contactId,
         metric_type: metricType,
-        old_value: metricType === 'score' ? currentScore.toString() : currentSentiment,
+        old_value: metricType === 'score' ? currentScore.toString() : metricType === 'stage' ? (updates.relationship_stage || 'unknown') : currentSentiment,
         new_value: valToStore,
         reason: reason
       } as any);
