@@ -173,6 +173,7 @@ export function ContatosContent(props: Props) {
       <div className="p-4 md:p-6 space-y-5">
         <Suspense fallback={null}><DuplicateContactsPanel /></Suspense>
         <ContactsStatsBar contacts={contacts} />
+        <BirthdayWidget />
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2 ml-auto h-11 md:h-9">
