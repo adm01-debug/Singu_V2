@@ -61,6 +61,7 @@ interface Contact {
   avatar_url?: string | null;
   relationship_score?: number | null;
   last_interaction_at?: string | null;
+  last_interaction_summary?: string | null;
   role_title?: string | null;
   notes?: string | null;
 }
