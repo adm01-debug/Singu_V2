@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef, startTransition, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { List as VirtualList } from 'react-window';
-import { Search, UserPlus, Upload, CheckSquare, Download } from 'lucide-react';
+import { Search, UserPlus, Upload, CheckSquare, Download, Globe } from 'lucide-react';
 import { ContactsGridSkeleton, ContactsListSkeleton } from '@/components/skeletons/PageSkeletons';
 import { EmptyState, SearchEmptyState } from '@/components/ui/empty-state';
 import { PullToRefresh } from '@/components/ui/pull-to-refresh';
