@@ -165,7 +165,7 @@ const Dashboard = () => {
             </TabsContent>
 
             <TabsContent value="intelligence" className="mt-4">
-              <IntelligenceTab prefersReducedMotion={prefersReducedMotion} tabDirection={tabDirection} />
+              <IntelligenceTab contacts={contacts} prefersReducedMotion={prefersReducedMotion} tabDirection={tabDirection} />
             </TabsContent>
           </Tabs>
         </div>
