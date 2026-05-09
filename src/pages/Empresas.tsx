@@ -72,17 +72,29 @@ const Empresas = () => {
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(() => { try { const f = searchParams.get('filters'); return f ? JSON.parse(decodeURIComponent(f)) : {}; } catch { return {}; } });
   const [sortBy, setSortBy] = useState(() => searchParams.get('sort') || 'updated_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(() => (searchParams.get('order') as 'asc' | 'desc') || 'desc');
+  const [multiSort, setMultiSort] = useState<Array<{ column: string, order: 'asc' | 'desc' }>>(() => {
+    try {
+      const ms = searchParams.get('msort');
+      return ms ? JSON.parse(decodeURIComponent(ms)) : [{ column: sortBy, order: sortOrder }];
+    } catch {
+      return [{ column: sortBy, order: sortOrder }];
+    }
+  });
 
   useEffect(() => {
     const params = new URLSearchParams();
     if (localSearch) params.set('q', localSearch);
     if (viewMode !== 'grid') params.set('view', viewMode);
     if (Object.keys(activeFilters).length > 0) params.set('filters', encodeURIComponent(JSON.stringify(activeFilters)));
-    if (sortBy !== 'updated_at') params.set('sort', sortBy);
-    if (sortOrder !== 'desc') params.set('order', sortOrder);
+    if (multiSort.length > 0) {
+      params.set('msort', encodeURIComponent(JSON.stringify(multiSort)));
+    } else {
+      if (sortBy !== 'updated_at') params.set('sort', sortBy);
+      if (sortOrder !== 'desc') params.set('order', sortOrder);
+    }
     if (gridColumns !== 3) params.set('cols', String(gridColumns));
     setSearchParams(params, { replace: true });
-  }, [localSearch, viewMode, activeFilters, sortBy, sortOrder, gridColumns, setSearchParams]);
+  }, [localSearch, viewMode, activeFilters, sortBy, sortOrder, gridColumns, multiSort, setSearchParams]);
 
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const isSearching = localSearch.length > 0;
