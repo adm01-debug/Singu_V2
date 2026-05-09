@@ -77,7 +77,7 @@ export function ViewModeSwitcher({ value, onChange, gridColumns = 3, onGridColum
                   key={mode.value}
                   onClick={() => onChange(mode.value)}
                   className={cn(
-                    'flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-medium transition-colors flex-1 justify-center whitespace-nowrap',
+                    'flex items-center gap-1.5 h-11 px-3 md:h-8 rounded-md text-xs font-medium transition-colors flex-1 justify-center whitespace-nowrap',
                     isActive
                       ? 'bg-primary text-primary-foreground'
                       : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60'
