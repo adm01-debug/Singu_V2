@@ -3,62 +3,81 @@ import { useCallback, useEffect, useState } from 'react';
 const STORAGE_KEY = 'singu:mask-ips';
 const CUSTOM_EVENT_KEY = 'singu:mask-ips:changed';
 
+/**
+ * Robustly reads the preference from localStorage.
+ * Handles SSR and environment issues (like private mode or disabled storage).
+ */
 function read(): boolean {
   if (typeof window === 'undefined') return false;
   try {
     const val = window.localStorage.getItem(STORAGE_KEY);
-    // Default seguro: false. Só ativa se explicitamente '1'.
+    // Security default: false. Only activate if explicitly '1'.
     return val === '1';
   } catch (err) {
-    console.warn('[useIPMaskingPreference] Falha ao ler localStorage:', err);
+    // In some environments, accessing localStorage might throw even without reading/writing
+    console.warn('[useIPMaskingPreference] Failed to read localStorage:', err);
     return false;
   }
 }
 
+/**
+ * Persists value and notifies other instances/tabs.
+ */
 function write(value: boolean) {
   if (typeof window === 'undefined') return;
   const strValue = value ? '1' : '0';
   
   try {
-    localStorage.setItem(STORAGE_KEY, strValue);
+    window.localStorage.setItem(STORAGE_KEY, strValue);
   } catch (err) {
-    // Modo privado ou quota exceeded não deve quebrar o app
-    console.warn('[useIPMaskingPreference] Falha ao persistir preferência:', err);
+    // Private mode or quota exceeded should not crash the app
+    console.warn('[useIPMaskingPreference] Failed to persist preference:', err);
   }
 
-  // Notifica outras instâncias do hook NA MESMA aba via CustomEvent
+  // Notify other hook instances IN THE SAME tab via explicit CustomEvent.
+  // We use this instead of relying on local StorageEvents (which aren't triggered for the current window).
   window.dispatchEvent(new CustomEvent(CUSTOM_EVENT_KEY, { detail: value }));
 }
 
 /**
- * Hook para gerenciar a preferência global de mascaramento de IPs.
- * Sincroniza o estado entre múltiplas instâncias na mesma aba e entre abas diferentes.
+ * Hook to manage global IP masking preference.
+ * Synchronizes state across multiple instances in the same tab and between different tabs.
  */
 export function useIPMaskingPreference() {
   const [masked, setMaskedState] = useState<boolean>(read);
 
   useEffect(() => {
-    // 1. Sincronização ENTRE abas (evento nativo do navegador)
+    // 1. Sync BETWEEN tabs (native browser 'storage' event)
     const onStorage = (e: StorageEvent) => {
+      // Browsers trigger this event only when storage is changed by ANOTHER tab.
       if (e.key === STORAGE_KEY && e.newValue !== null) {
         setMaskedState(e.newValue === '1');
       }
     };
 
-    // 2. Sincronização NA MESMA aba (evento customizado interno)
+    // 2. Sync IN SAME tab (explicit internal CustomEvent)
+    // This allows instances in the same window to react immediately to changes.
     const onCustomChange = (e: Event) => {
-      const customEvent = e as CustomEvent<boolean>;
-      if (typeof customEvent.detail === 'boolean') {
-        setMaskedState(customEvent.detail);
+      if (!(e instanceof CustomEvent)) return;
+      if (typeof e.detail === 'boolean') {
+        setMaskedState(e.detail);
       }
     };
 
-    window.addEventListener('storage', onStorage);
-    window.addEventListener(CUSTOM_EVENT_KEY, onCustomChange);
+    try {
+      window.addEventListener('storage', onStorage);
+      window.addEventListener(CUSTOM_EVENT_KEY, onCustomChange);
+    } catch (err) {
+      console.warn('[useIPMaskingPreference] Failed to attach event listeners:', err);
+    }
     
     return () => {
-      window.removeEventListener('storage', onStorage);
-      window.removeEventListener(CUSTOM_EVENT_KEY, onCustomChange);
+      try {
+        window.removeEventListener('storage', onStorage);
+        window.removeEventListener(CUSTOM_EVENT_KEY, onCustomChange);
+      } catch (err) {
+        // Ignored
+      }
     };
   }, []);
 
@@ -77,3 +96,4 @@ export function useIPMaskingPreference() {
 
   return { masked, toggle, setMasked };
 }
+
