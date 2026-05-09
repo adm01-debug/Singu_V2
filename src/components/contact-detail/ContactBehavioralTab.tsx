@@ -126,9 +126,16 @@ export function ContactBehavioralTab({ contact }: Props) {
         }}
       />
       <ContactFamilyInterestsCard 
+        contactId={contact.id}
         hobbies={contact.hobbies as string[]}
         interests={contact.interests as string[]}
         familyInfo={contact.family_info || undefined}
+        onUpdate={async (data) => {
+          // Trigger the local update state via supabase
+          const { error } = await supabase.from('contacts').update(data).eq('id', contact.id);
+          if (error) throw error;
+          return { success: true };
+        }}
         className="mb-6"
       />
     <Tabs defaultValue="disc" className="space-y-4">

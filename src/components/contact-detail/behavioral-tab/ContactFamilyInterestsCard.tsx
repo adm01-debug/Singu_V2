@@ -1,22 +1,41 @@
-import { Users, Heart, Star, Baby, Info } from 'lucide-react';
+import { useState } from 'react';
+import { Users, Heart, Star, Info, Pencil, Check, X, Loader2, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 
 interface Props {
+  contactId: string;
   hobbies?: string[];
   interests?: string[];
   familyInfo?: string;
+  onUpdate?: (data: { family_info?: string; hobbies?: string[]; interests?: string[] }) => Promise<any>;
   className?: string;
 }
 
-export function ContactFamilyInterestsCard({ hobbies, interests, familyInfo, className }: Props) {
+export function ContactFamilyInterestsCard({ contactId, hobbies, interests, familyInfo, onUpdate, className }: Props) {
+  const [isEditingFamily, setIsEditingFamily] = useState(false);
+  const [familyValue, setFamilyValue] = useState(familyInfo || '');
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSaveFamily = async () => {
+    if (!onUpdate) return;
+    setIsSaving(true);
+    try {
+      await onUpdate({ family_info: familyValue });
+      setIsEditingFamily(false);
+    } finally {
+      setIsSaving(false);
+    }
+  };
   const hasHobbies = hobbies && hobbies.length > 0;
   const hasInterests = interests && interests.length > 0;
   const hasFamily = !!familyInfo;
 
-  if (!hasHobbies && !hasInterests && !hasFamily) {
+  if (!hasHobbies && !hasInterests && !hasFamily && !onUpdate) {
     return null;
   }
 
@@ -29,68 +48,126 @@ export function ContactFamilyInterestsCard({ hobbies, interests, familyInfo, cla
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Info className="h-3 w-3 text-muted-foreground cursor-help" />
+                <div className="flex items-center gap-1.5 cursor-help">
+                  <Info className="h-3 w-3 text-muted-foreground" />
+                  <Sparkles className="h-3 w-3 text-secondary animate-pulse" />
+                </div>
               </TooltipTrigger>
-              <TooltipContent>
-                <p className="text-xs">Use estas informações para criar conexão e empatia (rapport).</p>
+              <TooltipContent className="max-w-xs">
+                <p className="text-xs">Use estas informações para criar conexão e empatia (rapport). Hobbies e interesses podem ser sugeridos via Lux Intelligence.</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-4 space-y-4">
-        {hasFamily && (
-          <div className="space-y-2">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
             <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
               <Users className="h-3 w-3 text-blue-500" />
               Família & Contexto
             </h4>
-            <div className="p-3 rounded-lg bg-blue-50/50 border border-blue-100/50 text-xs leading-relaxed">
-              {familyInfo}
-            </div>
+            {!isEditingFamily && onUpdate && (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-6 w-6 text-muted-foreground hover:text-primary"
+                onClick={() => setIsEditingFamily(true)}
+              >
+                <Pencil className="h-3 w-3" />
+              </Button>
+            )}
           </div>
-        )}
+          
+          {isEditingFamily ? (
+            <div className="space-y-2">
+              <Textarea 
+                value={familyValue}
+                onChange={(e) => setFamilyValue(e.target.value)}
+                placeholder="Ex: Casado com Maria, 2 filhos (Pedro e Ana)..."
+                className="text-xs min-h-[80px]"
+                autoFocus
+              />
+              <div className="flex justify-end gap-2">
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="h-7 px-2 text-[10px]"
+                  onClick={() => {
+                    setIsEditingFamily(false);
+                    setFamilyValue(familyInfo || '');
+                  }}
+                  disabled={isSaving}
+                >
+                  <X className="h-3 w-3 mr-1" /> Cancelar
+                </Button>
+                <Button 
+                  size="sm" 
+                  className="h-7 px-2 text-[10px]"
+                  onClick={handleSaveFamily}
+                  disabled={isSaving}
+                >
+                  {isSaving ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <><Check className="h-3 w-3 mr-1" /> Salvar</>
+                  )}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div 
+              className={cn(
+                "p-3 rounded-lg bg-blue-50/50 border border-blue-100/50 text-xs leading-relaxed transition-colors",
+                onUpdate && "cursor-pointer hover:bg-blue-100/30"
+              )}
+              onClick={() => onUpdate && setIsEditingFamily(true)}
+            >
+              {familyInfo || <span className="text-muted-foreground italic">Nenhuma informação familiar registrada. Clique para adicionar.</span>}
+            </div>
+          )}
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {hasHobbies && (
-            <div className="space-y-2">
-              <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
-                <Star className="h-3 w-3 text-amber-500" />
-                Hobbies
-              </h4>
-              <div className="flex flex-wrap gap-1.5">
-                {hobbies.map((hobby, i) => (
-                  <Badge 
-                    key={i} 
-                    variant="secondary" 
-                    className="text-[10px] bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200/50"
-                  >
-                    {hobby}
-                  </Badge>
-                ))}
-              </div>
+          <div className="space-y-2">
+            <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+              <Star className="h-3 w-3 text-amber-500" />
+              Hobbies
+            </h4>
+            <div className="flex flex-wrap gap-1.5 min-h-[24px]">
+              {hobbies && hobbies.length > 0 ? hobbies.map((hobby, i) => (
+                <Badge 
+                  key={i} 
+                  variant="secondary" 
+                  className="text-[10px] bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200/50"
+                >
+                  {hobby}
+                </Badge>
+              )) : (
+                <span className="text-[10px] text-muted-foreground italic">Nenhum registrado</span>
+              )}
             </div>
-          )}
+          </div>
 
-          {hasInterests && (
-            <div className="space-y-2">
-              <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
-                <Zap className="h-3 w-3 text-purple-500" />
-                Interesses
-              </h4>
-              <div className="flex flex-wrap gap-1.5">
-                {interests.map((interest, i) => (
-                  <Badge 
-                    key={i} 
-                    variant="secondary" 
-                    className="text-[10px] bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200/50"
-                  >
-                    {interest}
-                  </Badge>
-                ))}
-              </div>
+          <div className="space-y-2">
+            <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+              <Zap className="h-3 w-3 text-purple-500" />
+              Interesses
+            </h4>
+            <div className="flex flex-wrap gap-1.5 min-h-[24px]">
+              {interests && interests.length > 0 ? interests.map((interest, i) => (
+                <Badge 
+                  key={i} 
+                  variant="secondary" 
+                  className="text-[10px] bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200/50"
+                >
+                  {interest}
+                </Badge>
+              )) : (
+                <span className="text-[10px] text-muted-foreground italic">Nenhum registrado</span>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </CardContent>
     </Card>

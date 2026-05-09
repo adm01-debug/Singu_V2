@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { WhatsAppDashboard } from '@/components/whatsapp/WhatsAppDashboard';
 import { ExternalInteractionsTimeline } from './interactions-tab/ExternalInteractionsTimeline';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SentimentIndicator } from '@/components/ui/sentiment-indicator';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import { InteractionForm } from '@/components/forms/InteractionForm';
 import { cn } from '@/lib/utils';
 import { format, formatDistanceToNow } from 'date-fns';
@@ -45,6 +46,18 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredInteractions = useMemo(() => {
+    if (!searchTerm.trim()) return interactions;
+    const lower = searchTerm.toLowerCase();
+    return interactions.filter(i => 
+      (i.title?.toLowerCase().includes(lower)) || 
+      (i.content?.toLowerCase().includes(lower)) ||
+      (i.transcription?.toLowerCase().includes(lower)) ||
+      (i.type?.toLowerCase().includes(lower))
+    );
+  }, [interactions, searchTerm]);
 
   const contactForForm = {
     id: contact.id,
@@ -78,17 +91,28 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
-          {interactions.length} interação{interactions.length !== 1 ? 'ões' : ''} registrada{interactions.length !== 1 ? 's' : ''}
-        </p>
-        <Button size="sm" onClick={() => setShowForm(true)}>
-          <Plus className="mr-1.5 h-3.5 w-3.5" />
-          Nova Interação
-        </Button>
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="relative flex-1 max-w-sm">
+          <MessageSquare className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <Input 
+            placeholder="Buscar nas atividades..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-8 h-9 text-xs"
+          />
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-xs text-muted-foreground whitespace-nowrap">
+            {filteredInteractions.length} de {interactions.length} atividades
+          </p>
+          <Button size="sm" className="h-9 px-3" onClick={() => setShowForm(true)}>
+            <Plus className="mr-1.5 h-3.5 w-3.5" />
+            Nova Atividade
+          </Button>
+        </div>
       </div>
 
-      {interactions.length === 0 ? (
+      {filteredInteractions.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12 text-center">
             <MessageSquare className="mb-3 h-10 w-10 text-muted-foreground/50" />
@@ -100,7 +124,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
         <div className="relative space-y-0">
           <div className="absolute left-5 top-3 bottom-3 w-px bg-border" />
 
-          {interactions.map((interaction, i) => {
+          {filteredInteractions.map((interaction, i) => {
             const config = TYPE_CONFIG[interaction.type] || TYPE_CONFIG.note;
             const Icon = config.icon;
             const isExpanded = expandedId === interaction.id;
