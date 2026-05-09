@@ -192,7 +192,7 @@ const ContatoDetalhe = () => {
             <TabsTrigger value="resumo" className="text-xs sm:text-sm">Resumo</TabsTrigger>
             <TabsTrigger value="dados" className="text-xs sm:text-sm">Dados</TabsTrigger>
             <TabsTrigger value="interacoes" className="text-xs sm:text-sm">
-              {pluralize(interactions.length, 'Interação', 'Interações')}
+              Atividades
             </TabsTrigger>
             <TabsTrigger value="comportamental" className="text-xs sm:text-sm">Comportamental</TabsTrigger>
             <TabsTrigger value="inteligencia" className="text-xs sm:text-sm">Inteligência</TabsTrigger>
@@ -238,7 +238,7 @@ const ContatoDetalhe = () => {
           </TabsContent>
 
           <TabsContent value="interacoes">
-            <DashboardErrorBoundary sectionName="Interações">
+            <DashboardErrorBoundary sectionName="Atividades">
               <SentimentTrendChart contactId={contact.id} />
               <ContactEmailThreadsSection contactId={contact.id} />
               <ContactInteractionsTab
