@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useStakeholders, useUpsertStakeholder, useDeleteStakeholder } from "@/hooks/useDealRooms";
+import { useStakeholders, useUpsertStakeholder, useDeleteStakeholder, type DealRoomStakeholder } from "@/hooks/useDealRooms";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -43,8 +43,8 @@ export function StakeholderList({ roomId }: { roomId: string }) {
               {side === "buyer" ? "Comprador" : "Vendedor"} ({grouped[side].length})
             </h4>
             <div className="space-y-2">
-              {grouped[side].map((s: any) => (
-                <Card key={s.id} variant="outlined">
+              {grouped[side].map((s) => (
+                <Card key={s.id} className="border shadow-none">
                   <CardContent className="p-3">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
@@ -52,7 +52,9 @@ export function StakeholderList({ roomId }: { roomId: string }) {
                         {s.role_title && <p className="text-xs text-muted-foreground">{s.role_title}</p>}
                         {s.email && <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1"><Mail className="h-3 w-3" />{s.email}</p>}
                         <div className="flex gap-1 mt-2">
-                          <Badge variant={INFLUENCE[s.influence].variant} className="text-xs">{INFLUENCE[s.influence].label}</Badge>
+                          <Badge variant={s.influence ? (INFLUENCE[s.influence]?.variant || "default") : "default"} className="text-xs">
+                            {s.influence ? (INFLUENCE[s.influence]?.label || s.influence) : "Membro"}
+                          </Badge>
                           <Badge variant="outline" className="text-xs">Eng. {s.engagement_score}</Badge>
                         </div>
                       </div>
@@ -73,8 +75,8 @@ export function StakeholderList({ roomId }: { roomId: string }) {
   );
 }
 
-function StakeholderDialog({ editing, onSave }: { editing: any; onSave: (s: any) => void }) {
-  const [form, setForm] = useState(editing ?? { name: "", email: "", role_title: "", side: "buyer", influence: "user", engagement_score: 50 });
+function StakeholderDialog({ editing, onSave }: { editing: DealRoomStakeholder | null; onSave: (s: Partial<DealRoomStakeholder>) => void }) {
+  const [form, setForm] = useState<Partial<DealRoomStakeholder>>(editing ?? { name: "", email: "", role_title: "", side: "buyer", influence: "user", engagement_score: 50 });
   return (
     <DialogContent>
       <DialogHeader><DialogTitle>{editing ? "Editar" : "Novo"} stakeholder</DialogTitle></DialogHeader>
