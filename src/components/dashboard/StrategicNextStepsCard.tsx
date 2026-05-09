@@ -189,8 +189,8 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
                       <div className="mt-1 flex items-start gap-1.5 max-w-full">
                         <MessageSquare className="h-3 w-3 text-primary/40 shrink-0 mt-0.5" />
                         <p className="text-[10px] text-muted-foreground italic truncate">
-                          {contact.notes ? contact.notes.slice(0, 60) : 'Nenhum resumo disponível'}
-                          {contact.notes && contact.notes.length > 60 && '...'}
+                          {contact.notes ? contact.notes.slice(0, 100) : 'Nenhum resumo disponível'}
+                          {contact.notes && contact.notes.length > 100 && '...'}
                         </p>
                       </div>
 
