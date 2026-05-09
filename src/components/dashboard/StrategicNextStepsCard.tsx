@@ -19,11 +19,14 @@ import {
   Send,
   Eye,
   MessageSquare,
-  Clock
+  Clock,
+  TrendingUp,
+  TrendingDown
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { updateExternalData } from '@/lib/externalData';
 import { useRegisterPassoFeedback } from '@/hooks/useProximoPassoFeedback';
 import { useRecommendationAudit } from '@/hooks/useRecommendationAudit';
 import { toast } from '@/hooks/use-toast';
