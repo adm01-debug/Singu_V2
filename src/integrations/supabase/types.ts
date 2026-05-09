@@ -1947,6 +1947,121 @@ export type Database = {
           },
         ]
       }
+      contact_behavior: {
+        Row: {
+          best_contact_window: string | null
+          career_stage: string | null
+          contact_id: string
+          created_at: string
+          current_pressure: string | null
+          disc_confidence: number | null
+          disc_notes: string | null
+          disc_primary: string | null
+          formality_level: number | null
+          id: string
+          main_fear: string | null
+          message_style: string | null
+          motivation_primary: string | null
+          preferred_channel: string | null
+          professional_goals: string | null
+          response_time_avg: string | null
+          updated_at: string
+          vak_primary: string | null
+        }
+        Insert: {
+          best_contact_window?: string | null
+          career_stage?: string | null
+          contact_id: string
+          created_at?: string
+          current_pressure?: string | null
+          disc_confidence?: number | null
+          disc_notes?: string | null
+          disc_primary?: string | null
+          formality_level?: number | null
+          id?: string
+          main_fear?: string | null
+          message_style?: string | null
+          motivation_primary?: string | null
+          preferred_channel?: string | null
+          professional_goals?: string | null
+          response_time_avg?: string | null
+          updated_at?: string
+          vak_primary?: string | null
+        }
+        Update: {
+          best_contact_window?: string | null
+          career_stage?: string | null
+          contact_id?: string
+          created_at?: string
+          current_pressure?: string | null
+          disc_confidence?: number | null
+          disc_notes?: string | null
+          disc_primary?: string | null
+          formality_level?: number | null
+          id?: string
+          main_fear?: string | null
+          message_style?: string | null
+          motivation_primary?: string | null
+          preferred_channel?: string | null
+          professional_goals?: string | null
+          response_time_avg?: string | null
+          updated_at?: string
+          vak_primary?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_behavior_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: true
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contact_business_context: {
+        Row: {
+          best_moment_to_approach: string | null
+          competitors_used: string[] | null
+          contact_id: string
+          created_at: string
+          current_challenges: string[] | null
+          financial_health: string | null
+          id: string
+          seasonal_notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          best_moment_to_approach?: string | null
+          competitors_used?: string[] | null
+          contact_id: string
+          created_at?: string
+          current_challenges?: string[] | null
+          financial_health?: string | null
+          id?: string
+          seasonal_notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          best_moment_to_approach?: string | null
+          competitors_used?: string[] | null
+          contact_id?: string
+          created_at?: string
+          current_challenges?: string[] | null
+          financial_health?: string | null
+          id?: string
+          seasonal_notes?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_business_context_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: true
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_cadence: {
         Row: {
           auto_remind: boolean | null
@@ -1997,6 +2112,57 @@ export type Database = {
           },
         ]
       }
+      contact_decision_making: {
+        Row: {
+          approver_id: string | null
+          budget_authority: string | null
+          contact_id: string
+          created_at: string
+          decision_criteria: string[] | null
+          decision_speed: string | null
+          id: string
+          needs_approval: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          approver_id?: string | null
+          budget_authority?: string | null
+          contact_id: string
+          created_at?: string
+          decision_criteria?: string[] | null
+          decision_speed?: string | null
+          id?: string
+          needs_approval?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          approver_id?: string | null
+          budget_authority?: string | null
+          contact_id?: string
+          created_at?: string
+          decision_criteria?: string[] | null
+          decision_speed?: string | null
+          id?: string
+          needs_approval?: boolean | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_decision_making_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_decision_making_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: true
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_family_history: {
         Row: {
           changed_at: string
@@ -2024,6 +2190,47 @@ export type Database = {
             foreignKeyName: "contact_family_history_contact_id_fkey"
             columns: ["contact_id"]
             isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contact_influence: {
+        Row: {
+          contact_id: string
+          created_at: string
+          decision_power: number | null
+          decision_role: string | null
+          id: string
+          influencer_ids: string[] | null
+          support_level: number | null
+          updated_at: string
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string
+          decision_power?: number | null
+          decision_role?: string | null
+          id?: string
+          influencer_ids?: string[] | null
+          support_level?: number | null
+          updated_at?: string
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string
+          decision_power?: number | null
+          decision_role?: string | null
+          id?: string
+          influencer_ids?: string[] | null
+          support_level?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_influence_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: true
             referencedRelation: "contacts"
             referencedColumns: ["id"]
           },
