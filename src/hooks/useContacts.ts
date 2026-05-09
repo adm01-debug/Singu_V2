@@ -15,7 +15,7 @@ export type ContactUpdate = TablesUpdate<'contacts'>;
 
 export type ContactListItem = Pick<Contact, 
   | 'id' | 'first_name' | 'last_name' | 'company_id' | 'relationship_score'
-  | 'relationship_stage' | 'sentiment' | 'tags' | 'updated_at' | 'created_at' | 'version'
+  | 'relationship_stage' | 'sentiment' | 'tags' | 'updated_at' | 'created_at'
   | 'notes' // Added notes for summary
 >;
 
@@ -67,7 +67,7 @@ const CONTACT_LISTING_SELECT = [
   'birthday', 'source',
   'updated_at', 'created_at', 'user_id',
   'bitrix_contact_id', 'is_duplicate', 'duplicate_of',
-  'version', 'notes' // Added version and notes
+  'notes' // Removed version as it's missing in external DB
 ].join(',');
 
 async function fetchContactsPage(companyId?: string) {
@@ -167,9 +167,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
         cleanUpdates.cargo = updates.role_title;
       }
 
-      const { data, error } = (expectedVersion !== undefined || updates.version !== undefined)
-        ? await updateExternalDataWithVersion<Contact>('contacts', id, (expectedVersion ?? (updates.version as number)), cleanUpdates)
-        : await updateExternalData<Contact>('contacts', id, cleanUpdates);
+      const { data, error } = await updateExternalData<Contact>('contacts', id, cleanUpdates);
         
       if (error) throw error;
       
