@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { MessageSquare, Phone, Mail, Calendar, FileText, ArrowRight } from 'lucide-react';
+import { MessageSquare, Phone, Mail, Calendar, FileText, ArrowRight, X } from 'lucide-react';
+import { useFicha360Filters } from '@/hooks/useFicha360Filters';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
