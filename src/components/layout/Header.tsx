@@ -47,6 +47,8 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
   onAddClick,
   backTo,
   hideBack = false,
+  showSearch,
+  onSearchChange,
 }, ref) {
   const location = useLocation();
   const navigate = useNavigate();
