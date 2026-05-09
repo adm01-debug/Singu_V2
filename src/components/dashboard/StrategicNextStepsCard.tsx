@@ -336,6 +336,16 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
 
       if (error) throw error;
 
+      // Log para auditoria da aprovação/geração
+      logAudit({
+        contactId,
+        score: contact?.relationship_score || 0,
+        recommendationType: 'followup_generated',
+        reasons: ['Usuário solicitou geração de follow-up IA'],
+        userAction: 'generated_followup',
+        dataUsed: { channel: 'whatsapp' }
+      });
+
       toast({
         title: "Follow-up gerado",
         description: "Aguardando sua revisão na fila de aprovação.",
@@ -356,7 +366,17 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       title: "Lembrete Agendado",
       description: "Sincronizado com seu calendário para amanhã às 09:00.",
     });
-    // In a real app, this would integrate with Google/Outlook Calendar API
+    
+    // Log do agendamento para auditoria
+    if (contactId) {
+      logAudit({
+        contactId,
+        score: contact?.relationship_score || 0,
+        recommendationType: 'calendar_schedule',
+        reasons: ['Usuário agendou lembrete no calendário'],
+        userAction: 'scheduled'
+      });
+    }
   };
 
   return (
