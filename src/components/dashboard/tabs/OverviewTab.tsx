@@ -92,7 +92,7 @@ export function OverviewTab({
 
 
       {/* 2. Your Day + AI Followups */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <DashboardErrorBoundary sectionName="Seu Dia">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
             <YourDaySection />
@@ -213,7 +213,7 @@ export function OverviewTab({
       </div>
 
       {/* 5. Notificações + Insights + Churn */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <DashboardErrorBoundary sectionName="Notificações">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-28 w-full" />}>
             <PendingNotificationsWidget />
