@@ -130,13 +130,10 @@ export function ContactBehavioralTab({ contact }: Props) {
         hobbies={contact.hobbies as string[]}
         interests={contact.interests as string[]}
         familyInfo={contact.family_info || undefined}
-        onUpdate={(data) => {
-          // Note: contact is from useContactDetail which should have updateContact
-          // But here in BehavioralTab we only get contact prop.
-          // Let's assume the parent might need to provide an update handler or 
-          // we use supabase directly if needed, but standard pattern is via parent.
-          // For now, let's use the supabase client directly for simplicity in this component
-          return supabase.from('contacts').update(data).eq('id', contact.id);
+        onUpdate={async (data) => {
+          const { error } = await supabase.from('contacts').update(data).eq('id', contact.id);
+          if (error) throw error;
+          return { success: true };
         }}
         className="mb-6"
       />
