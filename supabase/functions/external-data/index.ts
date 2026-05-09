@@ -421,8 +421,12 @@ Deno.serve(async (req) => {
         const clamped = clampRange(range);
         query = query.range(clamped.from, clamped.to);
 
+        log.info("executing_query", { table, select: select || '*', filters, search, range });
         const { data, error, count } = await query as unknown as { data: unknown[]; error: { message: string } | null; count: number };
-        if (error) throw new Error(`Select failed: ${error.message}`);
+        if (error) {
+          log.error("query_failed", { table, error: error.message });
+          throw new Error(`Select failed: ${error.message}`);
+        }
         return { data: data || [], count };
       });
 
