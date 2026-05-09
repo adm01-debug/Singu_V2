@@ -23,6 +23,7 @@ import { Link } from 'react-router-dom';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useRegisterPassoFeedback } from '@/hooks/useProximoPassoFeedback';
+import { useRecommendationAudit } from '@/hooks/useRecommendationAudit';
 import { toast } from '@/hooks/use-toast';
 import { 
   DropdownMenu, 
@@ -66,6 +67,7 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
   const { mutate: registerFeedback, isPending } = useRegisterPassoFeedback();
+  const { mutate: logAudit } = useRecommendationAudit();
 
   const nextSteps = useMemo(() => {
     return [...contacts]
