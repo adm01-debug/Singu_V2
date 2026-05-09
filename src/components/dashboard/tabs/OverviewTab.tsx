@@ -113,6 +113,11 @@ export function OverviewTab({
             }))} />
           </Suspense>
         </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Aprovações IA">
+          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+            <AIApprovalsWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Smart Reminders">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
             <SmartRemindersPanel compact />
