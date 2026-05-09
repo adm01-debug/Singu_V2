@@ -194,23 +194,46 @@ Deno.serve(async (req) => {
     }, { onConflict: "contact_id,platform" });
     if (upsertError) console.error("Error saving profile:", upsertError);
 
-    // Auto-update contact hobbies and interests based on social profile
+    // Suggest hobbies and interests based on social profile (AI Enrichment)
+    const suggestedIntel = [];
+    
+    // Suggest interests from skills
     if (parsedProfile.skills && parsedProfile.skills.length > 0) {
-      const { data: contact } = await supabaseClient
-        .from("contacts")
-        .select("hobbies, interests")
-        .eq("id", contactId)
-        .single();
-      
-      if (contact) {
-        const currentInterests = contact.interests || [];
-        const newInterests = [...new Set([...currentInterests, ...parsedProfile.skills.slice(0, 5)])];
-        
-        await supabaseClient
-          .from("contacts")
-          .update({ interests: newInterests })
-          .eq("id", contactId);
+      for (const skill of parsedProfile.skills.slice(0, 5)) {
+        suggestedIntel.push({
+          contact_id: contactId,
+          user_id: userId,
+          type: "interest",
+          value: skill,
+          source: platform,
+          status: "pending"
+        });
       }
+    }
+
+    // Try to extract hobbies from headline/bio
+    const textToAnalyze = `${parsedProfile.headline} ${markdown}`.toLowerCase();
+    const commonHobbies = ["futebol", "surf", "beach tennis", "viagem", "leitura", "vinhos", "gastronomia", "pets", "cachorros", "corrida", "academia", "yoga", "meditação"];
+    
+    for (const hobby of commonHobbies) {
+      if (textToAnalyze.includes(hobby)) {
+        suggestedIntel.push({
+          contact_id: contactId,
+          user_id: userId,
+          type: "hobby",
+          value: hobby.charAt(0).toUpperCase() + hobby.slice(1),
+          source: platform,
+          status: "pending"
+        });
+      }
+    }
+
+    if (suggestedIntel.length > 0) {
+      const { error: suggestError } = await supabaseClient
+        .from("suggested_rapport_intel")
+        .upsert(suggestedIntel, { onConflict: "contact_id,type,value" });
+      
+      if (suggestError) console.error("Error saving suggested intel:", suggestError);
     }
 
     if (lifeEvents.length > 0) {
