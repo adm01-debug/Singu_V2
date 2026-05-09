@@ -9,6 +9,7 @@ import { InboundActivityHeatmapCard } from '@/components/dashboard/InboundActivi
 import { ChannelPerformanceMatrixCard } from '@/components/dashboard/ChannelPerformanceMatrixCard';
 import { TouchpointSequenceCard } from '@/components/dashboard/TouchpointSequenceCard';
 import { DealsAtRiskCard } from '@/components/dashboard/DealsAtRiskCard';
+import { StrategicNextStepsCard } from '@/components/dashboard/StrategicNextStepsCard';
 
 const ChurnPredictionPanel = lazy(() => import('@/components/analytics/ChurnPredictionPanel').then(m => ({ default: m.ChurnPredictionPanel })));
 const BestTimeToContactPanel = lazy(() => import('@/components/analytics/BestTimeToContactPanel').then(m => ({ default: m.BestTimeToContactPanel })));
