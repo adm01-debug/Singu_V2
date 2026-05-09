@@ -31,7 +31,7 @@ interface TaskCardProps {
   onComplete: (id: string) => void;
 }
 
-export function TaskCard({ task, onComplete }: TaskCardProps) {
+export function TaskCard({ task, onComplete, onEdit }: TaskCardProps) {
   const navigate = useNavigate();
   const priority = priorityConfig[task.priority || 'medium'] || priorityConfig.medium;
   const dueInfo = getDueDateLabel(task.due_date);
