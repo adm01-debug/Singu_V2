@@ -146,7 +146,16 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
                   exit={{ opacity: 0, x: 20, scale: 0.95 }}
                   transition={{ duration: 0.2 }}
                   className="group flex items-center justify-between gap-4 rounded-xl border border-transparent hover:border-border/50 hover:bg-muted/50 p-2 transition-all cursor-pointer"
-                  onClick={() => setSelectedContactId(contact.id)}
+                  onClick={() => {
+                    setSelectedContactId(contact.id);
+                    logAudit({
+                      contactId: contact.id,
+                      score: contact.relationship_score || 0,
+                      recommendationType: 'next_step_view',
+                      reasons: ['Usuário visualizou detalhes da recomendação'],
+                      userAction: 'viewed'
+                    });
+                  }}
                 >
                   <div className="flex items-center gap-3 min-w-0 flex-1">
                     <Avatar className="h-10 w-10 border-2 border-background shadow-sm shrink-0">
