@@ -322,11 +322,12 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
     
     setApproving(true);
     try {
-      // Simulate/Trigger follow-up generation (could be an edge function call)
+      // 1. Generate follow-up content
       const content = `Olá ${contact?.first_name}, notei que faz um tempo que não conversamos. Como estão as coisas por aí?`;
       
-      const { error } = await (supabase as any)
-        .from('follow_up_approvals_v2')
+      // 2. Save to approvals table
+      const { error } = await supabase
+        .from('follow_up_approvals_v2' as any)
         .insert({
           user_id: user.id,
           contact_id: contactId,
@@ -337,7 +338,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
 
       if (error) throw error;
 
-      // Log para auditoria da aprovação/geração
+      // 3. Log audit for the generation
       logAudit({
         contactId,
         score: contact?.relationship_score || 0,
