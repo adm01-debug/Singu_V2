@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { Database, Json } from "@/integrations/supabase/types";
 
 export type PlaybookScenario =
   | "discovery" | "demo" | "negotiation" | "objection"
@@ -41,6 +42,9 @@ export interface PlaybookFilters {
   activeOnly?: boolean;
 }
 
+type PlaybookInsert = Database["public"]["Tables"]["sales_playbooks"]["Insert"];
+type PlaybookUpdate = Database["public"]["Tables"]["sales_playbooks"]["Update"];
+
 export function usePlaybooks(filters: PlaybookFilters = {}) {
   const { user } = useAuth();
   return useQuery({
@@ -48,10 +52,12 @@ export function usePlaybooks(filters: PlaybookFilters = {}) {
     enabled: !!user,
     queryFn: async () => {
       let q = supabase.from("sales_playbooks").select("*").order("usage_count", { ascending: false });
+      
       if (filters.scenario) q = q.eq("scenario", filters.scenario);
       if (filters.industry) q = q.ilike("industry_target", `%${filters.industry}%`);
       if (filters.activeOnly !== false) q = q.eq("active", true);
       if (filters.search) q = q.or(`name.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);
+      
       const { data, error } = await q;
       if (error) throw error;
       return (data || []) as unknown as SalesPlaybook[];
@@ -74,17 +80,53 @@ export function usePlaybook(id?: string) {
 export function useUpsertPlaybook() {
   const qc = useQueryClient();
   const { user } = useAuth();
+  
   return useMutation({
     mutationFn: async (input: Partial<SalesPlaybook> & { id?: string }) => {
-      if (!user) throw new Error("not authenticated");
-      const payload = { ...input, user_id: user.id } as Record<string, any>;
+      if (!user) throw new Error("Usuário não autenticado");
+
+      const basePayload = {
+        name: input.name,
+        description: input.description,
+        scenario: input.scenario,
+        stage_target: input.stage_target,
+        industry_target: input.industry_target,
+        persona_target: input.persona_target,
+        content: (input.content as unknown as Json) ?? { sections: [] },
+        tags: input.tags ?? [],
+        active: input.active ?? true,
+        user_id: user.id,
+      };
+
       if (input.id) {
-        const { data, error } = await supabase.from("sales_playbooks").update(payload as never).eq("id", input.id).select().maybeSingle();
+        const updatePayload: PlaybookUpdate = basePayload;
+        const { data, error } = await supabase
+          .from("sales_playbooks")
+          .update(updatePayload)
+          .eq("id", input.id)
+          .select()
+          .maybeSingle();
+        
         if (error) throw error;
         if (!data) throw new Error("Playbook não encontrado");
         return data as unknown as SalesPlaybook;
       }
-      const { data, error } = await supabase.from("sales_playbooks").insert(payload as never).select().maybeSingle();
+
+      if (!input.name) throw new Error("Nome do playbook é obrigatório");
+      if (!input.scenario) throw new Error("Cenário do playbook é obrigatório");
+
+      const insertPayload: PlaybookInsert = {
+        ...basePayload,
+        name: input.name,
+        scenario: input.scenario,
+      };
+
+      const { data, error } = await supabase
+        .from("sales_playbooks")
+        .insert(insertPayload)
+        .select()
+        .maybeSingle();
+      
       if (error) throw error;
       if (!data) throw new Error("Falha ao criar playbook");
       return data as unknown as SalesPlaybook;
@@ -92,9 +134,12 @@ export function useUpsertPlaybook() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["playbooks"] });
       qc.invalidateQueries({ queryKey: ["playbook"] });
-      toast.success("Playbook salvo");
+      toast.success("Playbook salvo com sucesso");
     },
-    onError: (e: Error) => toast.error(e.message || "Erro ao salvar playbook"),
+    onError: (e: Error) => {
+      console.error("[useUpsertPlaybook] Erro:", e);
+      toast.error(e.message || "Erro ao salvar playbook");
+    },
   });
 }
 
@@ -109,7 +154,10 @@ export function useDeletePlaybook() {
       qc.invalidateQueries({ queryKey: ["playbooks"] });
       toast.success("Playbook removido");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => {
+      console.error("[useDeletePlaybook] Erro:", e);
+      toast.error(e.message || "Erro ao remover playbook");
+    },
   });
 }
 
@@ -133,20 +181,31 @@ export function useGeneratePlaybook() {
       qc.invalidateQueries({ queryKey: ["playbooks"] });
       toast.success("Playbook gerado por IA");
     },
-    onError: (e: Error) => toast.error(e.message || "Erro ao gerar playbook"),
+    onError: (e: Error) => {
+      console.error("[useGeneratePlaybook] Erro:", e);
+      toast.error(e.message || "Erro ao gerar playbook");
+    },
   });
 }
 
 export function useRecommendPlaybooks() {
   return useMutation({
     mutationFn: async (input: {
-      contact_id?: string; deal_id?: string; current_stage?: string;
-      recent_topics?: string[]; industry?: string; persona?: string;
+      contact_id?: string; 
+      deal_id?: string; 
+      current_stage?: string;
+      recent_topics?: string[]; 
+      industry?: string; 
+      persona?: string;
       competitor_mentioned?: string;
     }) => {
       const { data, error } = await supabase.functions.invoke("playbook-recommender", { body: input });
       if (error) throw error;
-      return data as { recommendations: Array<{ playbook: SalesPlaybook; score: number; reasons: string[] }>; battle_card: any };
+      
+      return data as { 
+        recommendations: Array<{ playbook: SalesPlaybook; score: number; reasons: string[] }>; 
+        battle_card: unknown; 
+      };
     },
   });
 }
@@ -155,21 +214,28 @@ export function useLogPlaybookUsage() {
   const { user } = useAuth();
   return useMutation({
     mutationFn: async (input: {
-      playbook_id?: string; battle_card_id?: string;
-      contact_id?: string; deal_id?: string;
+      playbook_id?: string; 
+      battle_card_id?: string;
+      contact_id?: string; 
+      deal_id?: string;
       action: "opened" | "copied" | "shared" | "recommended" | "used_in_deal";
       context?: Record<string, unknown>;
     }) => {
       if (!user) return;
-      await supabase.from("playbook_usage_log").insert({
+      
+      const { error } = await supabase.from("playbook_usage_log").insert({
         user_id: user.id,
         action: input.action,
         playbook_id: input.playbook_id ?? null,
         battle_card_id: input.battle_card_id ?? null,
         contact_id: input.contact_id ?? null,
         deal_id: input.deal_id ?? null,
-        context: (input.context ?? {}) as Record<string, any>,
+        context: (input.context as unknown as Json) ?? null,
       });
+      
+      if (error) {
+        console.error("[useLogPlaybookUsage] Erro ao registrar log:", error);
+      }
     },
   });
 }
@@ -181,8 +247,15 @@ export function usePlaybookUsageLog(filters: { playbookId?: string; days?: numbe
     enabled: !!user,
     queryFn: async () => {
       const since = new Date(Date.now() - (filters.days ?? 30) * 86400_000).toISOString();
-      let q = supabase.from("playbook_usage_log").select("*").gte("opened_at", since).order("opened_at", { ascending: false }).limit(200);
+      let q = supabase
+        .from("playbook_usage_log")
+        .select("*")
+        .gte("opened_at", since)
+        .order("opened_at", { ascending: false })
+        .limit(200);
+      
       if (filters.playbookId) q = q.eq("playbook_id", filters.playbookId);
+      
       const { data, error } = await q;
       if (error) throw error;
       return data || [];
