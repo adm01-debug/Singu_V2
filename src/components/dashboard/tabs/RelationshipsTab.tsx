@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazy, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { LazySection } from '@/components/dashboard/LazySection';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
@@ -12,10 +12,11 @@ const ImportantDatesCalendar = lazy(() => import('@/components/dashboard/Importa
 const CompatibilityAlertsList = lazy(() => import('@/components/triggers/CompatibilityAlertsList').then(m => ({ default: m.CompatibilityAlertsList })));
 const ClosingScoreAlertsList = lazy(() => import('@/components/analytics/ClosingScoreAlertsList').then(m => ({ default: m.ClosingScoreAlertsList })));
 const ClosingScoreRanking = lazy(() => import('@/components/analytics/ClosingScoreRanking').then(m => ({ default: m.ClosingScoreRanking })));
+const RFMAnalysisPanel = lazy(() => import('@/components/analytics/RFMAnalysisPanel').then(m => ({ default: m.RFMAnalysisPanel })));
 
 interface RelationshipsTabProps {
-  contacts: Contact[];
-  interactions: Interaction[];
+  contacts: any[];
+  interactions: any[];
   prefersReducedMotion: boolean;
   tabDirection: number;
 }
@@ -57,15 +58,22 @@ export function RelationshipsTab({ contacts, interactions, prefersReducedMotion,
         </LazySection>
       </DashboardErrorBoundary>
 
-      {/* Closing Score */}
-      <DashboardErrorBoundary sectionName="Score de Fechamento">
-        <LazySection fallbackVariant="list">
-          <ClosingScoreRanking maxItems={5} showStats={false} compact />
-        </LazySection>
-        <LazySection fallbackVariant="list" className="mt-5">
-          <ClosingScoreAlertsList maxItems={3} compact />
-        </LazySection>
-      </DashboardErrorBoundary>
+      {/* RFM Analysis + Closing Score */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <DashboardErrorBoundary sectionName="Segmentação RFM">
+          <LazySection fallbackVariant="card">
+            <RFMAnalysisPanel compact />
+          </LazySection>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Score de Fechamento">
+          <LazySection fallbackVariant="list">
+            <ClosingScoreRanking maxItems={5} showStats={false} compact />
+          </LazySection>
+          <LazySection fallbackVariant="list" className="mt-5">
+            <ClosingScoreAlertsList maxItems={3} compact />
+          </LazySection>
+        </DashboardErrorBoundary>
+      </div>
 
       {/* Important Dates Calendar */}
       <DashboardErrorBoundary sectionName="Datas Importantes">
