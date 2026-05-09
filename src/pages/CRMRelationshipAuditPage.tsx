@@ -6,7 +6,7 @@ import { ShieldCheck, AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 
-export function CRMRelationshipAuditPage() {
+export default function CRMRelationshipAuditPage() {
   const { data: contacts, isLoading } = useQuery({
     queryKey: ['global-relationship-audit'],
     queryFn: async () => {
