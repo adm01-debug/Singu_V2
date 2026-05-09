@@ -45,11 +45,12 @@ export function useEmailCampaigns() {
     mutationFn: async (input: Partial<EmailCampaign>) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
-      const { data, error } = await (supabase.from('email_campaigns') as any)
-        .insert({ ...input, user_id: user.id })
+      const { data, error } = await supabase.from('email_campaigns')
+        .insert({ ...input, user_id: user.id } as any)
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar campanha");
       return data as EmailCampaign;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha criada!'); },
