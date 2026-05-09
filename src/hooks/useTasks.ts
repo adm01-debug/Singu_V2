@@ -130,6 +130,46 @@ export function useCreateTask() {
   });
 }
 
+export function useUpdateTask() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ taskId, updates }: { taskId: string; updates: Partial<Task> }) => {
+      const { updateExternalData } = await import('@/lib/externalData');
+      const { data, error } = await updateExternalData<Task>('tasks', taskId, updates);
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['tasks'] });
+      toast.success('✅ Tarefa atualizada');
+    },
+    onError: (err) => {
+      logger.error('[Tasks] Update failed:', err);
+      toast.error('Erro ao atualizar tarefa');
+    },
+  });
+}
+
+export function useDeleteTask() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (taskId: string) => {
+      const { deleteExternalData } = await import('@/lib/externalData');
+      const { success, error } = await deleteExternalData('tasks', taskId);
+      if (error) throw error;
+      return success;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['tasks'] });
+      toast.success('✅ Tarefa excluída');
+    },
+    onError: (err) => {
+      logger.error('[Tasks] Delete failed:', err);
+      toast.error('Erro ao excluir tarefa');
+    },
+  });
+}
+
 export function useCompleteTask() {
   const qc = useQueryClient();
   return useMutation<unknown, Error, string, { snapshot: TaskListSnapshot }>({
