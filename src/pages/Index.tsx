@@ -145,7 +145,7 @@ const Dashboard = () => {
                 companies={companies}
                 interactions={interactions}
                 briefingOpen={briefingOpen}
-                setBestBriefingOpen={setBriefingOpen}
+                setBriefingOpen={setBriefingOpen}
                 prefersReducedMotion={prefersReducedMotion}
                 recentActivityAnimations={recentActivityAnimations}
                 topContactAnimations={topContactAnimations}
