@@ -77,15 +77,17 @@ const ALLOWED_RPCS = [
   'get_territory_performance', 'assign_territory',
   // ── Seller / Team ──
   'get_seller_efficiency', 'compare_seller_efficiency',
-  'get_performance_benchmark', 'get_coaching_suggestions',
-  'prioritize_daily_tasks', 'get_batch_next_actions',
-  // ── Search ──
-  'unified_search', 'quick_search', 'search_by_cnpj',
-  'autocomplete_companies', 'fuzzy_search_companies',
-  // ── Data Quality ──
-  'find_invalid_cnpjs', 'find_duplicate_emails', 'find_duplicate_companies',
-  'get_data_quality_report', 'get_incomplete_companies',
-] as const;
+    'get_performance_benchmark', 'get_coaching_suggestions',
+    'prioritize_daily_tasks', 'get_batch_next_actions',
+    // ── Search ──
+    'unified_search', 'quick_search', 'search_by_cnpj',
+    'autocomplete_companies', 'fuzzy_search_companies',
+    // ── Data Quality ──
+    'find_invalid_cnpjs', 'find_duplicate_emails', 'find_duplicate_companies',
+    'get_data_quality_report', 'get_incomplete_companies',
+    // ── Logs & Approvals ──
+    'get_ai_recommendation_logs', 'approve_follow_up', 'reject_follow_up',
+  ] as const;
 
 type AllowedRpc = typeof ALLOWED_RPCS[number];
 
