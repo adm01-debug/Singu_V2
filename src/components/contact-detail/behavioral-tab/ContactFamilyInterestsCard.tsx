@@ -129,45 +129,45 @@ export function ContactFamilyInterestsCard({ contactId, hobbies, interests, fami
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {hasHobbies && (
-            <div className="space-y-2">
-              <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
-                <Star className="h-3 w-3 text-amber-500" />
-                Hobbies
-              </h4>
-              <div className="flex flex-wrap gap-1.5">
-                {hobbies.map((hobby, i) => (
-                  <Badge 
-                    key={i} 
-                    variant="secondary" 
-                    className="text-[10px] bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200/50"
-                  >
-                    {hobby}
-                  </Badge>
-                ))}
-              </div>
+          <div className="space-y-2">
+            <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+              <Star className="h-3 w-3 text-amber-500" />
+              Hobbies
+            </h4>
+            <div className="flex flex-wrap gap-1.5 min-h-[24px]">
+              {hobbies && hobbies.length > 0 ? hobbies.map((hobby, i) => (
+                <Badge 
+                  key={i} 
+                  variant="secondary" 
+                  className="text-[10px] bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200/50"
+                >
+                  {hobby}
+                </Badge>
+              )) : (
+                <span className="text-[10px] text-muted-foreground italic">Nenhum registrado</span>
+              )}
             </div>
-          )}
+          </div>
 
-          {hasInterests && (
-            <div className="space-y-2">
-              <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
-                <Zap className="h-3 w-3 text-purple-500" />
-                Interesses
-              </h4>
-              <div className="flex flex-wrap gap-1.5">
-                {interests.map((interest, i) => (
-                  <Badge 
-                    key={i} 
-                    variant="secondary" 
-                    className="text-[10px] bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200/50"
-                  >
-                    {interest}
-                  </Badge>
-                ))}
-              </div>
+          <div className="space-y-2">
+            <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+              <Zap className="h-3 w-3 text-purple-500" />
+              Interesses
+            </h4>
+            <div className="flex flex-wrap gap-1.5 min-h-[24px]">
+              {interests && interests.length > 0 ? interests.map((interest, i) => (
+                <Badge 
+                  key={i} 
+                  variant="secondary" 
+                  className="text-[10px] bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200/50"
+                >
+                  {interest}
+                </Badge>
+              )) : (
+                <span className="text-[10px] text-muted-foreground italic">Nenhum registrado</span>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </CardContent>
     </Card>
