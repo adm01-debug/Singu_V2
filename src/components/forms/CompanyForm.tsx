@@ -185,6 +185,12 @@ export function CompanyForm({ company, onSubmit, onCancel, isSubmitting }: Compa
               <CompanyFormClassificationTab form={form} />
             </TabsContent>
 
+            {!isEditing && (
+              <TabsContent value="contatos_end" className="mt-0">
+                <CompanyFormCompositeFields form={form} />
+              </TabsContent>
+            )}
+
             <TabsContent value="estrutura" className="mt-0">
               <CompanyFormStructureTab form={form} />
             </TabsContent>
