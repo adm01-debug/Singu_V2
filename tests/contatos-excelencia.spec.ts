@@ -85,6 +85,7 @@ test.describe('Contatos e Rapport (Meta 10/10)', () => {
     if (await syncButton.isVisible()) {
       await syncButton.click();
       await expect(page.locator('text=Sincronização social concluída')).toBeVisible();
+    }
   });
 
   test('Consistência Rapport e Metadata no Supabase', async ({ page }) => {
