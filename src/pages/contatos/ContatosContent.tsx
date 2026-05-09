@@ -177,6 +177,9 @@ export function ContatosContent(props: Props) {
           <div className="flex items-center gap-2 ml-auto h-11 md:h-9">
             <SearchPresetsMenu context="contacts" currentFilters={activeFilters} currentSortBy={sortBy} currentSortOrder={sortOrder} currentSearchTerm={searchTerm}
               onApplyPreset={(preset: SearchPreset) => { onFiltersChange(preset.filters); onSortChange(preset.sortBy, preset.sortOrder); if (preset.searchTerm) onSearchChange(preset.searchTerm); }} />
+            <Button variant="outline" size="sm" onClick={() => setIsExternalSearchOpen(true)} className="gap-2 h-11 px-4 md:h-9 md:px-3 text-sm md:text-xs">
+              <Globe className="w-4 h-4" aria-hidden="true" /><span className="hidden sm:inline">Busca Externa</span>
+            </Button>
             {isAdmin && <BulkImportDialog entityType="contacts" />}
             <Button variant={selectionMode ? 'default' : 'outline'} size="sm" onClick={onToggleSelectionMode} className="gap-2 h-11 px-4 md:h-9 md:px-3 text-sm md:text-xs">
               <CheckSquare className="w-4 h-4" aria-hidden="true" /><span className="hidden sm:inline">{selectionMode ? 'Cancelar' : 'Selecionar'}</span>
