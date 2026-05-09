@@ -153,15 +153,19 @@ export function ContactFamilyInterestsCard({ contactId, hobbies, interests, fami
               Hobbies
             </h4>
             <div className="flex flex-wrap gap-1.5 min-h-[24px]">
-              {hobbies && hobbies.length > 0 ? hobbies.map((hobby, i) => (
-                <Badge 
-                  key={i} 
-                  variant="secondary" 
-                  className="text-[10px] bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200/50"
-                >
-                  {hobby}
-                </Badge>
-              )) : (
+              {hobbies && hobbies.length > 0 ? hobbies.map((hobby, i) => {
+                const source = metadata?.hobbies?.[hobby];
+                return (
+                  <Badge 
+                    key={i} 
+                    variant="secondary" 
+                    className="text-[10px] bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200/50 gap-1"
+                  >
+                    {source && getSourceIcon(source)}
+                    {hobby}
+                  </Badge>
+                );
+              }) : (
                 <span className="text-[10px] text-muted-foreground italic">Nenhum registrado</span>
               )}
             </div>
@@ -173,15 +177,19 @@ export function ContactFamilyInterestsCard({ contactId, hobbies, interests, fami
               Interesses
             </h4>
             <div className="flex flex-wrap gap-1.5 min-h-[24px]">
-              {interests && interests.length > 0 ? interests.map((interest, i) => (
-                <Badge 
-                  key={i} 
-                  variant="secondary" 
-                  className="text-[10px] bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200/50"
-                >
-                  {interest}
-                </Badge>
-              )) : (
+              {interests && interests.length > 0 ? interests.map((interest, i) => {
+                const source = metadata?.interests?.[interest];
+                return (
+                  <Badge 
+                    key={i} 
+                    variant="secondary" 
+                    className="text-[10px] bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200/50 gap-1"
+                  >
+                    {source && getSourceIcon(source)}
+                    {interest}
+                  </Badge>
+                );
+              }) : (
                 <span className="text-[10px] text-muted-foreground italic">Nenhum registrado</span>
               )}
             </div>
