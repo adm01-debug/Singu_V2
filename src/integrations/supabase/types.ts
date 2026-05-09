@@ -960,6 +960,69 @@ export type Database = {
         }
         Relationships: []
       }
+      call_logs: {
+        Row: {
+          audio_url: string | null
+          company_id: string | null
+          contact_id: string | null
+          created_at: string
+          direction: string | null
+          duration_seconds: number | null
+          external_id: string | null
+          id: string
+          sentiment: string | null
+          status: string | null
+          summary: string | null
+          transcription: string | null
+          user_id: string
+        }
+        Insert: {
+          audio_url?: string | null
+          company_id?: string | null
+          contact_id?: string | null
+          created_at?: string
+          direction?: string | null
+          duration_seconds?: number | null
+          external_id?: string | null
+          id?: string
+          sentiment?: string | null
+          status?: string | null
+          summary?: string | null
+          transcription?: string | null
+          user_id: string
+        }
+        Update: {
+          audio_url?: string | null
+          company_id?: string | null
+          contact_id?: string | null
+          created_at?: string
+          direction?: string | null
+          duration_seconds?: number | null
+          external_id?: string | null
+          id?: string
+          sentiment?: string | null
+          status?: string | null
+          summary?: string | null
+          transcription?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_logs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_logs_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       campaign_recipients: {
         Row: {
           campaign_id: string
@@ -10781,6 +10844,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      check_at_risk_contacts: { Args: never; Returns: undefined }
       cleanup_old_health_snapshots: { Args: never; Returns: number }
       compute_account_health: { Args: { _account_id: string }; Returns: Json }
       compute_attribution: {

@@ -29,12 +29,15 @@ import { RelativesSection } from './contact-overview/RelativesSection';
 import { LifeEventsSection } from './contact-overview/LifeEventsSection';
 import { ConsolidatedHealthPanel } from './ConsolidatedHealthPanel';
 import { ScoreHistoryChart } from './ScoreHistoryChart';
+import { RelationshipTimeline } from './RelationshipTimeline';
 import { RelationshipFunnel } from '@/components/ui/relationship-stage';
 import { useContactDetail } from '@/hooks/useContactDetail';
 import type { RelationshipStage } from '@/types';
 
+import { Interaction } from '@/hooks/useContactDetail';
+
 interface Props {
-  contact: Contact;
+  contact: Contact & { interactions?: Interaction[] };
   company: Company | null;
   insights: Insight[];
   alerts: Alert[];
@@ -129,6 +132,16 @@ export function ContactOverviewTab({ contact, company, insights, alerts, interac
 
       {/* Life Events */}
       <LifeEventsSection lifeEvents={lifeEvents} />
+
+      {/* Relationship Timeline (Historical Context) */}
+      <RelationshipTimeline 
+        interactions={contact.interactions || []} 
+        contact={{
+          relationship_score: contact.relationship_score,
+          relationship_stage: contact.relationship_stage,
+          created_at: contact.created_at
+        }} 
+      />
 
       {/* Consolidated Health Panel */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
