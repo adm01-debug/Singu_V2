@@ -1,22 +1,8 @@
-/**
- * Integração: contagens do microdetalhe ↔ filtros reais do hook
- *
- * Garante que, para cada filtro ativo, o número exibido no microdetalhe compacto
- * (computado por `computeIsolatedFilterCounts`) coincide com o resultado que se
- * obteria aplicando APENAS aquele filtro ao mesmo dataset usado pelo hook —
- * percorrendo os mesmos caminhos de URL/whitelist/normalização que a página
- * /interacoes utiliza em produção.
- *
- * Por que integração e não unit:
- * - O bug típico desta área é divergência entre o parser/whitelist do hook e a
- *   reimplementação da contagem isolada (ex.: canal não-canônico contando como
- *   "1 a menos" no microdetalhe). Renderizar o hook real com `?canais=` cobre
- *   esse contrato de ponta a ponta.
- */
 import React, { useEffect } from 'react';
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useInteractionsAdvancedFilter } from '@/hooks/useInteractionsAdvancedFilter';
 import {
   computeIsolatedFilterCounts,
@@ -59,19 +45,6 @@ function makeInteraction(over: Partial<Interaction>): Interaction {
   } as unknown as Interaction;
 }
 
-/**
- * Dataset "diverso" pensado para que cada filtro tenha uma contagem isolada
- * distinta — facilita detectar contagens inflacionadas/sub-contadas.
- *
- * Composição (10 itens):
- *  - canais: 4 whatsapp, 2 email, 2 call, 1 meeting, 1 video_call
- *  - direcao: 6 us, 4 them
- *  - sentimento: 2 positive, 2 neutral, 1 negative, 1 mixed, 4 null
- *  - contact cA: 4 itens; cB: 3; cC: 3
- *  - company E1: 5 itens; E2: 3; null: 2
- *  - busca "proposta": 3 itens (em title/content/tags)
- *  - datas: 3 em jan/2025, 4 em fev/2025, 3 em mar/2025
- */
 const DATASET: Interaction[] = [
   makeInteraction({ id: '1',  type: 'whatsapp',   contact_id: 'cA', company_id: 'E1', initiated_by: 'us',   sentiment: 'positive', title: 'Proposta enviada',     created_at: '2025-01-05T10:00:00Z' }),
   makeInteraction({ id: '2',  type: 'whatsapp',   contact_id: 'cA', company_id: 'E1', initiated_by: 'them', sentiment: 'neutral',  content: 'Confirmando proposta', created_at: '2025-01-12T10:00:00Z' }),
@@ -85,17 +58,10 @@ const DATASET: Interaction[] = [
   makeInteraction({ id: '10', type: 'video_call', contact_id: 'cA', company_id: 'E1', initiated_by: 'us',                              created_at: '2025-03-28T10:00:00Z' }),
 ];
 
-/** Normalização equivalente ao hook (NFD + lowercase) para a busca textual. */
 function normalize(s: string): string {
   return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
-/**
- * Aplica APENAS um filtro ao dataset bruto, espelhando o que
- * `useInteractionsAdvancedFilter` + `InteracoesContent` fariam se aquele fosse
- * o único filtro ativo. É a "fonte de verdade" contra a qual o microdetalhe é
- * comparado.
- */
 function applyOnly(
   items: Interaction[],
   filter: { key: string; value: unknown },
@@ -133,23 +99,12 @@ function applyOnly(
   }
 }
 
-/**
- * Renderiza o hook real em uma rota arbitrária e devolve o snapshot atual de
- * `filters` + `debouncedQ`. Usar o hook em vez de construir `AdvancedFilters`
- * à mão garante que percorremos parser/whitelist/normalização de produção.
- */
 function captureHook(initial: string): {
   filters: ReturnType<typeof useInteractionsAdvancedFilter>['filters'];
   debouncedQ: string;
 } {
   const captured: { current: ReturnType<typeof useInteractionsAdvancedFilter> | null } = { current: null };
-  function Probe() {
-    const adv = useInteractionsAdvancedFilter();
-    useEffect(() => { captured.current = adv; });
-    captured.current = adv;
-    return null;
-  }
-  const queryClient = new (require('@tanstack/react-query').QueryClient)({
+  const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
         retry: false,
@@ -157,13 +112,21 @@ function captureHook(initial: string): {
     },
   });
 
+  function Probe() {
+    const adv = useInteractionsAdvancedFilter();
+    useEffect(() => { captured.current = adv; });
+    captured.current = adv;
+    return null;
+  }
+
   render(
-    <require('@tanstack/react-query').QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
       <MemoryRouter initialEntries={[initial]}>
         <Probe />
       </MemoryRouter>
-    </require('@tanstack/react-query').QueryClientProvider>,
+    </QueryClientProvider>,
   );
+
   if (!captured.current) throw new Error('hook não renderizou');
   return { filters: captured.current.filters, debouncedQ: captured.current.debouncedQ };
 }
@@ -173,10 +136,6 @@ function byKey(counts: IsolatedFilterCount[]): Record<string, number> {
 }
 
 describe('Microdetalhe ↔ filtros isolados (integração com o hook)', () => {
-  // O hook persiste filtros (q/contact/canais/de/ate/sentimento/...) em
-  // localStorage e o testing-library pode reusar o root entre testes. Sem
-  // isolar ambos, o snapshot capturado vaza filtros do teste anterior e
-  // contagens fantasmas aparecem no microdetalhe.
   beforeEach(() => {
     try { localStorage.clear(); } catch { /* noop */ }
   });
@@ -202,16 +161,12 @@ describe('Microdetalhe ↔ filtros isolados (integração com o hook)', () => {
     };
 
     expect(got).toEqual(expected);
-    // Sanidade: cada filtro mantém pelo menos 1 hit no dataset escolhido.
     Object.entries(got).forEach(([k, v]) => {
       expect(v, `microdetalhe '${k}' deve ser > 0 neste dataset`).toBeGreaterThan(0);
     });
   });
 
   it('canais inválidos na URL são descartados pela whitelist e NÃO inflam a contagem', () => {
-    // `xpto` e `sms` não estão na whitelist `INTERACTION_CHANNELS_SET`.
-    // O hook deve manter apenas `whatsapp` em `filters.canais`, e o microdetalhe
-    // precisa contar exatamente esses — não os tokens originais.
     const { filters, debouncedQ } = captureHook('/interacoes?canais=xpto,whatsapp,sms');
     expect(filters.canais).toEqual(['whatsapp']);
 
@@ -223,7 +178,6 @@ describe('Microdetalhe ↔ filtros isolados (integração com o hook)', () => {
   });
 
   it('canais com case/whitespace heterogêneos são normalizados (trim + lowercase + dedup)', () => {
-    // O parser do hook normaliza ` WhatsApp `, `EMAIL`, `whatsapp` → ['whatsapp','email'].
     const { filters, debouncedQ } = captureHook(
       '/interacoes?canais=%20WhatsApp%20,EMAIL,whatsapp',
     );
@@ -235,16 +189,12 @@ describe('Microdetalhe ↔ filtros isolados (integração com o hook)', () => {
   });
 
   it('busca textual usa a mesma normalização (NFD + lowercase) que o filtro real', () => {
-    // Caixa alta + acento na query devem casar com "Proposta" (sem acento) no
-    // title, porque a normalização aplicada é NFD + lowercase nos dois lados.
     const { filters, debouncedQ } = captureHook('/interacoes?q=PROP%C3%93STA');
-    // Sanidade: o hook preservou a string original (normalização é na contagem).
     expect(filters.q).toBe('PROPÓSTA');
 
     const counts = computeIsolatedFilterCounts(DATASET, filters, debouncedQ);
     const got = counts.find((c) => c.key === 'q')?.count;
     expect(got).toBe(applyOnly(DATASET, { key: 'q', value: filters.q }));
-    // E precisa achar os 3 itens com "proposta" no dataset, ignorando acento/caixa.
     expect(got).toBe(3);
   });
 
@@ -263,17 +213,12 @@ describe('Microdetalhe ↔ filtros isolados (integração com o hook)', () => {
   });
 
   it('soma das contagens isoladas ≠ total quando filtros são correlacionados (sanidade)', () => {
-    // Garante que o microdetalhe NÃO está acidentalmente devolvendo o mesmo
-    // valor para todos os filtros (ex.: total do dataset). Cada filtro tem
-    // poder discriminativo distinto neste dataset.
     const { filters, debouncedQ } = captureHook(
       '/interacoes?contact=cA&canais=whatsapp&sentimento=positive',
     );
     const counts = computeIsolatedFilterCounts(DATASET, filters, debouncedQ);
     const values = counts.map((c) => c.count);
-    // Pelo menos dois valores distintos entre os 3 filtros ativos.
     expect(new Set(values).size).toBeGreaterThan(1);
-    // Nenhuma contagem isolada pode exceder o total do dataset.
     values.forEach((v) => expect(v).toBeLessThanOrEqual(DATASET.length));
   });
 });
