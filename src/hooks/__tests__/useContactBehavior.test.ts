@@ -59,4 +59,24 @@ describe("Behavioral Data Integration Tests", () => {
     
     expect(error).toBeDefined();
   });
+
+  test("should store and retrieve NLP metaprograms", async () => {
+    const { error } = await supabase
+      .from("contact_metaprograms")
+      .upsert({ 
+        contact_id: testContactId, 
+        toward_score: 80,
+        away_from_score: 20
+      });
+    
+    expect(error).toBeNull();
+
+    const { data } = await supabase
+      .from("contact_metaprograms")
+      .select("*")
+      .eq("contact_id", testContactId)
+      .single();
+
+    expect(data.toward_score).toBe(80);
+  });
 });
