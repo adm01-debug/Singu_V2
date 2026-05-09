@@ -1,24 +1,29 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { DuplicateManagementPanel } from './DuplicateManagementPanel';
 import { SoftDeletePanel } from './SoftDeletePanel';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Mail, Phone, MessageSquare, Linkedin, Instagram, Twitter,
   Building2, Briefcase, Calendar, Edit2, ExternalLink, Copy, Check,
-  MapPin, Globe, AlertTriangle, Trash2, Brain, Target, Shield, Bell
+  MapPin, Globe, AlertTriangle, Trash2, Brain, Target, Shield, Bell,
+  ChevronRight, ArrowRight, Zap
 } from 'lucide-react';
 import { OptimizedAvatar } from '@/components/ui/optimized-avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { RelationshipScore } from '@/components/ui/relationship-score';
 import { SentimentIndicator } from '@/components/ui/sentiment-indicator';
+import { RelationshipFunnel, RelationshipStageBadge } from '@/components/ui/relationship-stage';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { formatContactName, pluralize } from '@/lib/formatters';
 import { useContactRelationalData } from '@/hooks/useContactRelationalData';
 import { useContactView360 } from '@/hooks/useContactView360';
+import { useContacts } from '@/hooks/useContacts';
+import { toast } from 'sonner';
 import type { Contact, Company } from '@/hooks/useContactDetail';
+import type { RelationshipStage } from '@/types';
 
 const STAGE_CONFIG: Record<string, { label: string; color: string }> = {
   unknown: { label: 'Desconhecido', color: 'bg-muted text-muted-foreground' },
