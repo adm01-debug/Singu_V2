@@ -15,7 +15,7 @@ export type ContactUpdate = TablesUpdate<'contacts'>;
 
 export type ContactListItem = Pick<Contact, 
   | 'id' | 'first_name' | 'last_name' | 'company_id' | 'relationship_score'
-  | 'relationship_stage' | 'sentiment' | 'tags' | 'updated_at' | 'created_at'
+  | 'relationship_stage' | 'sentiment' | 'tags' | 'updated_at' | 'created_at' | 'version'
 >;
 
 /**
@@ -47,6 +47,11 @@ function normalizeExternalContact(raw: Record<string, unknown>): Contact {
   if ('cargo' in normalized && !normalized.role_title) {
     normalized.role_title = normalized.cargo;
   }
+  // Ensure version is present for optimistic locking
+  if (!('version' in normalized) && 'updated_at' in normalized) {
+    // Fallback: use updated_at timestamp as a pseudo-version if actual version column is missing
+    normalized.version = new Date(normalized.updated_at as string).getTime();
+  }
   return normalized as unknown as Contact;
 }
 
@@ -60,7 +65,7 @@ const CONTACT_LISTING_SELECT = [
   'tags_array', 'interests_array', 'hobbies',
   'birthday', 'source',
   'updated_at', 'created_at', 'user_id',
-  'bitrix_contact_id', 'is_duplicate', 'duplicate_of',
+  'bitrix_contact_id', 'is_duplicate', 'duplicate_of', 'version',
 ].join(',');
 
 async function fetchContactsPage(companyId?: string) {
@@ -173,8 +178,8 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
         cleanUpdates.sentiment = updates.sentiment;
       }
 
-      const { data, error } = expectedVersion !== undefined
-        ? await updateExternalDataWithVersion<Contact>('contacts', id, expectedVersion, cleanUpdates)
+      const { data, error } = (expectedVersion !== undefined || updates.version !== undefined)
+        ? await updateExternalDataWithVersion<Contact>('contacts', id, (expectedVersion ?? (updates.version as number)), cleanUpdates)
         : await updateExternalData<Contact>('contacts', id, cleanUpdates);
       if (error) throw error;
       if (data) {

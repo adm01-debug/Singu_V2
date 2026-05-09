@@ -5,6 +5,7 @@ import {
   jsonError,
   jsonOk,
 } from "../_shared/auth.ts";
+import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 
 interface Contact {
   id: string;
@@ -115,20 +116,26 @@ function calculateHealthScore(
 }
 
 Deno.serve(async (req) => {
+  const traceId = extractTraceId(req);
+  const log = tracedLogger(traceId, "check-health-alerts");
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   // 🔒 Cron secret validation
   const cronError = requireCronSecret(req);
-  if (cronError) return cronError;
+  if (cronError) {
+    log.warn("unauthorized_cron_access");
+    return cronError;
+  }
 
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    console.log("Starting health alerts check...");
+    log.info("check_started");
 
     // Get all users' health alert settings (cron iterates all)
     const { data: allSettings, error: settingsError } = await supabase
@@ -136,14 +143,15 @@ Deno.serve(async (req) => {
       .select("*");
 
     if (settingsError) {
-      console.error("Error fetching settings:", settingsError);
+      log.error("fetch_settings_failed", { error: settingsError.message });
       throw settingsError;
     }
 
     const settings: HealthAlertSettings[] = allSettings || [];
 
     if (settings.length === 0) {
-      return jsonOk({ success: true, alertsCreated: 0, notificationsSent: 0, message: 'No health alert settings configured' });
+      log.info("no_settings_found");
+      return jsonOk({ success: true, alertsCreated: 0, notificationsSent: 0, message: 'No health alert settings configured', traceId }, req);
     }
 
     const alertsCreated: string[] = [];
@@ -156,7 +164,7 @@ Deno.serve(async (req) => {
         .eq("user_id", userSettings.user_id);
 
       if (contactsError) {
-        console.error(`Error fetching contacts:`, contactsError);
+        log.error("fetch_contacts_failed", { userId: userSettings.user_id, error: contactsError.message });
         continue;
       }
 
@@ -167,7 +175,7 @@ Deno.serve(async (req) => {
         .order("created_at", { ascending: false });
 
       if (interactionsError) {
-        console.error(`Error fetching interactions:`, interactionsError);
+        log.error("fetch_interactions_failed", { userId: userSettings.user_id, error: interactionsError.message });
         continue;
       }
 
@@ -218,7 +226,7 @@ Deno.serve(async (req) => {
           });
 
         if (insertError) {
-          console.error(`Error creating alert for contact ${contact.id}:`, insertError);
+          log.error("create_alert_failed", { contactId: contact.id, error: insertError.message });
           continue;
         }
 
@@ -236,27 +244,28 @@ Deno.serve(async (req) => {
                   contactId: contact.id,
                   url: `/contato/${contact.id}`
                 }
-              }
+              },
+              headers: { 'x-trace-id': traceId }
             });
 
             if (pushError) {
-              console.error("Error sending push notification:", pushError);
+              log.warn("push_notif_failed", { userId: userSettings.user_id, error: pushError.message });
             } else {
               notificationsSent.push(`push:${healthScore.contactName}`);
             }
           } catch (pushErr) {
-            console.error("Push notification error:", pushErr);
+            log.error("push_notif_error", { userId: userSettings.user_id, error: pushErr instanceof Error ? pushErr.message : String(pushErr) });
           }
         }
 
         if (userSettings.email_notifications && userSettings.email_address) {
-          console.log(`Would send email to ${userSettings.email_address} for ${healthScore.contactName}`);
+          log.info("email_simulated", { email: userSettings.email_address, contact: healthScore.contactName });
           notificationsSent.push(`email:${healthScore.contactName}`);
         }
       }
     }
 
-    console.log(`Health check complete. Created ${alertsCreated.length} alerts, sent ${notificationsSent.length} notifications`);
+    log.info("check_complete", { alertsCreated: alertsCreated.length, notificationsSent: notificationsSent.length });
 
     return jsonOk({
       success: true,
@@ -265,11 +274,12 @@ Deno.serve(async (req) => {
       details: {
         alerts: alertsCreated,
         notifications: notificationsSent
-      }
-    });
+      },
+      traceId
+    }, req);
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error("Error in check-health-alerts:", error);
-    return jsonError(errorMessage, 500);
+    log.error("fatal_error", { error: errorMessage });
+    return jsonError(errorMessage, 500, req);
   }
 });
