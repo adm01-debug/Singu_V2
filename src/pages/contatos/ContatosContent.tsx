@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef, startTransition, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { List as VirtualList } from 'react-window';
-import { Search, UserPlus, Upload, CheckSquare, Download } from 'lucide-react';
+import { Search, UserPlus, Upload, CheckSquare, Download, Globe } from 'lucide-react';
 import { ContactsGridSkeleton, ContactsListSkeleton } from '@/components/skeletons/PageSkeletons';
 import { EmptyState, SearchEmptyState } from '@/components/ui/empty-state';
 import { PullToRefresh } from '@/components/ui/pull-to-refresh';
@@ -16,6 +16,7 @@ import { KeyboardListHint } from '@/components/ui/keyboard-list-hint';
 import { BulkImportDialog } from '@/components/import/BulkImportDialog';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { ContactsTableView } from '@/components/contacts/ContactsTableView';
+import { BirthdayWidget } from '@/components/contacts/BirthdayWidget';
 import { RecentlyViewedSection } from '@/components/recently-viewed/RecentlyViewedSection';
 import { SearchPresetsMenu } from '@/components/search/SearchPresetsMenu';
 import { ViewModeSwitcher, type ViewMode, type GridColumns } from '@/components/ui/view-mode-switcher';
@@ -25,6 +26,7 @@ import type { SearchPreset } from '@/hooks/useSearchPresets';
 import type { Contact } from '@/hooks/useContacts';
 
 const DuplicateContactsPanel = lazy(() => import('@/components/contacts/DuplicateContactsPanel'));
+const ExternalContactLookupDialog = lazy(() => import('@/components/contacts/ExternalContactLookupDialog').then(m => ({ default: m.ExternalContactLookupDialog })));
 
 interface Props {
   contacts: Contact[];
@@ -79,6 +81,7 @@ export function ContatosContent(props: Props) {
 
   const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
+  const [isExternalSearchOpen, setIsExternalSearchOpen] = useState(false);
   const RENDER_BATCH = 50;
   const [visibleCount, setVisibleCount] = useState(RENDER_BATCH);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -170,11 +173,15 @@ export function ContatosContent(props: Props) {
       <div className="p-4 md:p-6 space-y-5">
         <Suspense fallback={null}><DuplicateContactsPanel /></Suspense>
         <ContactsStatsBar contacts={contacts} />
+        <BirthdayWidget />
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2 ml-auto h-11 md:h-9">
             <SearchPresetsMenu context="contacts" currentFilters={activeFilters} currentSortBy={sortBy} currentSortOrder={sortOrder} currentSearchTerm={searchTerm}
               onApplyPreset={(preset: SearchPreset) => { onFiltersChange(preset.filters); onSortChange(preset.sortBy, preset.sortOrder); if (preset.searchTerm) onSearchChange(preset.searchTerm); }} />
+            <Button variant="outline" size="sm" onClick={() => setIsExternalSearchOpen(true)} className="gap-2 h-11 px-4 md:h-9 md:px-3 text-sm md:text-xs">
+              <Globe className="w-4 h-4" aria-hidden="true" /><span className="hidden sm:inline">Busca Externa</span>
+            </Button>
             {isAdmin && <BulkImportDialog entityType="contacts" />}
             <Button variant={selectionMode ? 'default' : 'outline'} size="sm" onClick={onToggleSelectionMode} className="gap-2 h-11 px-4 md:h-9 md:px-3 text-sm md:text-xs">
               <CheckSquare className="w-4 h-4" aria-hidden="true" /><span className="hidden sm:inline">{selectionMode ? 'Cancelar' : 'Selecionar'}</span>
@@ -228,7 +235,7 @@ export function ContatosContent(props: Props) {
             )}
 
             {viewMode === 'table' && (
-              <ContactsTableView contacts={filteredAndSortedContacts} selectionMode={selectionMode} selectedIds={selectedIds} onSelect={onSelect} getCompanyName={getCompanyName} sortBy={sortBy} sortOrder={sortOrder} onSortChange={(field) => { if (sortBy === field) onSortChange(field, sortOrder === 'asc' ? 'desc' : 'asc'); else onSortChange(field, 'asc'); }} />
+              <ContactsTableView contacts={filteredAndSortedContacts} selectionMode={selectionMode} selectedIds={selectedIds} onSelect={onSelect} getCompanyName={getCompanyName} getLastInteractionDate={getLastInteractionDate} sortBy={sortBy} sortOrder={sortOrder} onSortChange={(field) => { if (sortBy === field) onSortChange(field, sortOrder === 'asc' ? 'desc' : 'asc'); else onSortChange(field, 'asc'); }} />
             )}
 
             {filteredAndSortedContacts.length === 0 && !loading && (
@@ -251,6 +258,13 @@ export function ContatosContent(props: Props) {
         onUpdateStage={onBulkUpdateStage}
         onExport={handleBulkExport}
       />
+
+      <Suspense fallback={null}>
+        <ExternalContactLookupDialog 
+          open={isExternalSearchOpen} 
+          onOpenChange={setIsExternalSearchOpen} 
+        />
+      </Suspense>
     </div>
     </>
   );

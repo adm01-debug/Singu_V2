@@ -36,6 +36,7 @@ interface ContactsTableViewProps {
   selectedIds: Set<string>;
   onSelect: (id: string, selected: boolean) => void;
   getCompanyName: (id: string | null) => string | null;
+  getLastInteractionDate: (contactId: string) => string | null;
   sortBy: string;
   sortOrder: 'asc' | 'desc';
   onSortChange: (field: string) => void;
@@ -47,6 +48,7 @@ export const ContactsTableView = React.memo(function ContactsTableView({
   selectedIds,
   onSelect,
   getCompanyName,
+  getLastInteractionDate,
   sortBy,
   sortOrder,
   onSortChange,
@@ -74,6 +76,7 @@ export const ContactsTableView = React.memo(function ContactsTableView({
             <TableHead className="hidden lg:table-cell">CARGO</TableHead>
             <TableHead className="hidden md:table-cell text-center">SCORE</TableHead>
             <TableHead className="hidden lg:table-cell">E-MAIL</TableHead>
+            <TableHead className="hidden xl:table-cell">ÚLTIMO CONTATO</TableHead>
             <TableHead aria-sort={sortBy === 'updated_at' ? (sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'}><SortButton field="updated_at">ATUALIZAÇÃO</SortButton></TableHead>
           </TableRow>
         </TableHeader>
@@ -160,6 +163,14 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                 </TableCell>
                 <TableCell className="hidden lg:table-cell text-muted-foreground text-sm truncate max-w-[200px]">
                   {contact.email || '—'}
+                </TableCell>
+                <TableCell className="hidden xl:table-cell text-xs text-muted-foreground tabular-nums">
+                  {(() => {
+                    const lastInteraction = getLastInteractionDate(contact.id);
+                    return lastInteraction 
+                      ? formatDistanceToNow(new Date(lastInteraction), { locale: ptBR, addSuffix: true })
+                      : 'Nenhum';
+                  })()}
                 </TableCell>
                 <TableCell className="text-xs text-muted-foreground tabular-nums">
                   {formatDistanceToNow(new Date(contact.updated_at), { locale: ptBR, addSuffix: true })}
