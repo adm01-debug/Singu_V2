@@ -326,6 +326,18 @@ export const useContactBehavior = (contactId: string) => {
     enabled: !!contactId,
   });
 
+  const { data: lifeEventGaps, isLoading: isLoadingLEGaps } = useQuery({
+    queryKey: ["contact-life-event-gaps", contactId],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("get_contact_life_event_gaps", {
+        p_contact_id: contactId,
+      });
+      if (error) throw error;
+      return data as ContactBehaviorGap[];
+    },
+    enabled: !!contactId,
+  });
+
   return {
     behavior,
     decision,
@@ -334,10 +346,10 @@ export const useContactBehavior = (contactId: string) => {
     personality,
     metaprograms,
     rapport,
-    gaps: [...(gaps || []), ...(frameworkGaps || [])],
+    gaps: [...(gaps || []), ...(frameworkGaps || []), ...(lifeEventGaps || [])],
     auditLogs: [...(auditLogs || []), ...(frameworkAudit || [])],
     consistency,
-    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit || isLoadingPersonality || isLoadingMetaprograms || isLoadingFGaps || isLoadingFAudit || isLoadingRapport,
+    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit || isLoadingPersonality || isLoadingMetaprograms || isLoadingFGaps || isLoadingFAudit || isLoadingRapport || isLoadingLEGaps,
     updateBehavior: updateBehaviorMutation.mutate,
     updateDecision: updateDecisionMutation.mutate,
     updateInfluence: updateInfluenceMutation.mutate,

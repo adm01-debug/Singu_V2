@@ -31,6 +31,7 @@ import {
   ContactIntelligenceTab,
   ContactCommercialTab,
   ContactDataTab,
+  LifeEventsTab,
 } from '@/components/contact-detail';
 import { RelationshipTimeline } from '@/components/contact-detail/RelationshipTimeline';
 import { MeetingMode } from '@/components/contact-detail/MeetingMode';
@@ -199,6 +200,7 @@ const ContatoDetalhe = () => {
             <TabsTrigger value="comercial" className="text-xs sm:text-sm">Comercial</TabsTrigger>
             <TabsTrigger value="lux" className="text-xs sm:text-sm">Lux Intelligence</TabsTrigger>
             <TabsTrigger value="touchpoints" className="text-xs sm:text-sm">Touchpoints</TabsTrigger>
+            <TabsTrigger value="life-events" className="text-xs sm:text-sm">Marcos de Vida</TabsTrigger>
           </TabsList>
 
           <TabsContent value="resumo">
@@ -305,6 +307,12 @@ const ContatoDetalhe = () => {
           <TabsContent value="touchpoints">
             <DashboardErrorBoundary sectionName="Touchpoints">
               <ContactTouchpointsTab contactId={contact.id} />
+            </DashboardErrorBoundary>
+          </TabsContent>
+
+          <TabsContent value="life-events">
+            <DashboardErrorBoundary sectionName="Marcos de Vida">
+              <LifeEventsTab contactId={contact.id} />
             </DashboardErrorBoundary>
           </TabsContent>
         </Tabs>
