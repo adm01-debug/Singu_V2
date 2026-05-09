@@ -17,6 +17,8 @@ export interface ExternalInteraction {
   resumo: string | null;
   data_interacao: string | null;
   duracao_segundos: number | null;
+  audio_url: string | null;
+  transcription: string | null;
   created_at: string;
   contato_nome: string | null;
   contato_email: string | null;
