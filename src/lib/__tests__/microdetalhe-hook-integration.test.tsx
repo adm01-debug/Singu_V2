@@ -149,10 +149,20 @@ function captureHook(initial: string): {
     captured.current = adv;
     return null;
   }
+  const queryClient = new (require('@tanstack/react-query').QueryClient)({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+
   render(
-    <MemoryRouter initialEntries={[initial]}>
-      <Probe />
-    </MemoryRouter>,
+    <require('@tanstack/react-query').QueryClientProvider client={queryClient}>
+      <MemoryRouter initialEntries={[initial]}>
+        <Probe />
+      </MemoryRouter>
+    </require('@tanstack/react-query').QueryClientProvider>,
   );
   if (!captured.current) throw new Error('hook não renderizou');
   return { filters: captured.current.filters, debouncedQ: captured.current.debouncedQ };
