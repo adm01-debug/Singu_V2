@@ -12,6 +12,7 @@ interface CollapsibleSectionProps {
   defaultOpen?: boolean;
   children: ReactNode;
   className?: string;
+  headerAction?: ReactNode;
 }
 
 export function CollapsibleSection({

@@ -100,7 +100,7 @@ export function ContactOverviewTab({ contact, company, insights, alerts, interac
       <CadencePreferencesCardInline cadence={cadence} preferences={preferences} />
 
       {/* Relatives */}
-      <RelativesSection relatives={relatives} />
+      <RelativesSection contactId={contact.id} relatives={relatives} />
 
       {/* Life Events */}
       <LifeEventsSection lifeEvents={lifeEvents} />

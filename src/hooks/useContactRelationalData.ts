@@ -192,6 +192,17 @@ export function useRelativeMutations(contactId: string | undefined) {
     onError: (e) => toast.error(`Erro: ${e.message}`),
   });
 
+  const updateRelative = useMutation({
+    mutationFn: async ({ id, updates }: { id: string; updates: Partial<Tables<'contact_relatives'>> }) => {
+      const { error } = await supabase.from('contact_relatives').update(updates).eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contact-relational-data', contactId] });
+    },
+    onError: (e) => toast.error(`Erro ao atualizar: ${e.message}`),
+  });
+
   const deleteRelative = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase.from('contact_relatives').delete().eq('id', id);
@@ -204,7 +215,7 @@ export function useRelativeMutations(contactId: string | undefined) {
     onError: (e) => toast.error(`Erro: ${e.message}`),
   });
 
-  return { addRelative, deleteRelative };
+  return { addRelative, updateRelative, deleteRelative };
 }
 
 // ─── Cadence Upsert Mutation ──────────────────────────────────
