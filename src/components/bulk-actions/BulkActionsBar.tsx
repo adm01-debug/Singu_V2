@@ -102,6 +102,21 @@ export function BulkActionsBar({
     }
   };
 
+  const handleUpdateStage = async (stage: string) => {
+    if (!onUpdateStage) return;
+    
+    setIsProcessing(true);
+    try {
+      await onUpdateStage(selectedIds, stage);
+      toast.success(`Estágio atualizado para ${selectedCount} itens`);
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Erro ao atualizar estágio';
+      toast.error(msg);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const handleAddTag = async (tag: string) => {
     if (!onAddTag) return;
     
