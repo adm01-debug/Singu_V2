@@ -99,8 +99,7 @@ function mapCompany(ext: ExternalRow): Company {
     name: rawName,
     industry: ext.ramo_atividade || ext.nicho_cliente as string || null,
     tags: ext.tags_array || [],
-    city,
-    state,
+    // city and state are mapped below from ext.city/ext.state
     // Dados fiscais/cadastrais
     capital_social: ext.capital_social as number | null ?? null,
     cnpj: ext.cnpj as string | null ?? null,

@@ -75,7 +75,7 @@ export function ContatosContent(props: Props) {
 
   const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
-  const RENDER_BATCH = 60;
+  const RENDER_BATCH = 50;
   const [visibleCount, setVisibleCount] = useState(RENDER_BATCH);
   const sentinelRef = useRef<HTMLDivElement>(null);
   

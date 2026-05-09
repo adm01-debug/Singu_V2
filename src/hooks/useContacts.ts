@@ -148,6 +148,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       queryFn: async () => {
         const { data, error } = await queryExternalData<Record<string, unknown>>({
           table: 'contacts',
+          select: '*', // Ensure all fields are fetched for details
           filters: [{ type: 'eq', column: 'id', value: id }]
         });
         if (error) throw error;
