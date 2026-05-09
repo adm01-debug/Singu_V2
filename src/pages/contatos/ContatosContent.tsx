@@ -66,6 +66,7 @@ export function ContatosContent(props: Props) {
     contacts, loading, filteredAndSortedContacts, searchTerm, onSearchChange,
     viewMode, onViewModeChange, gridColumns, onGridColumnsChange,
     activeFilters, onFiltersChange, sortBy, sortOrder, onSortChange,
+    multiSort, onMultiSortChange,
     filterConfigs, sortOptions, selectionMode, selectedIds,
     onToggleSelectionMode, onSelect, onSelectAll, onBulkDelete, onBulkAddTag,
     onSetEditingContact, onSetDeletingContact, onSetIsFormOpen,
