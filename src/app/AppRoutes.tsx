@@ -85,6 +85,7 @@ export const AppRoutes = () => {
       <Route path="/network" element={<Protected fallback={<NetworkPageSkeleton />}><P.Network /></Protected>} />
       <Route path="/intelligence" element={<Protected><P.Intelligence /></Protected>} />
       <Route path="/intelligence/auditoria" element={<Protected><P.RecommendationAudit /></Protected>} />
+      <Route path="/intelligence/relacionamento/auditoria" element={<Protected><P.CRMRelationshipAudit /></Protected>} />
       <Route path="/relatorio/:id" element={<Protected><P.RelatorioContato /></Protected>} />
 
       {/* Protected — automação/marketing */}
