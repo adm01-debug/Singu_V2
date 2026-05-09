@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-import { Database } from "@/integrations/supabase/types";
+import { Database, Json } from "@/integrations/supabase/types";
 
 export interface BattleCardItem { title: string; detail: string }
 export interface ProofPoint { client: string; result: string }
@@ -29,6 +29,9 @@ export interface BattleCard {
 type BattleCardInsert = Database["public"]["Tables"]["battle_cards"]["Insert"];
 type BattleCardUpdate = Database["public"]["Tables"]["battle_cards"]["Update"];
 
+/**
+ * Hook to list all active battle cards.
+ */
 export function useBattleCards(search?: string) {
   const { user } = useAuth();
   return useQuery({
@@ -41,7 +44,9 @@ export function useBattleCards(search?: string) {
         .eq("active", true)
         .order("competitor_name");
       
-      if (search) q = q.ilike("competitor_name", `%${search}%`);
+      if (search) {
+        q = q.ilike("competitor_name", `%${search}%`);
+      }
       
       const { data, error } = await q;
       if (error) throw error;
@@ -51,6 +56,9 @@ export function useBattleCards(search?: string) {
   });
 }
 
+/**
+ * Hook to fetch a single battle card by ID.
+ */
 export function useBattleCard(id?: string) {
   return useQuery({
     queryKey: ["battle-card", id],
@@ -68,34 +76,40 @@ export function useBattleCard(id?: string) {
   });
 }
 
+/**
+ * Hook to create or update a battle card.
+ */
 export function useUpsertBattleCard() {
   const qc = useQueryClient();
   const { user } = useAuth();
   
   return useMutation({
     mutationFn: async (input: Partial<BattleCard> & { id?: string }) => {
-      if (!user) throw new Error("not authenticated");
+      if (!user) throw new Error("Usuário não autenticado");
 
-      // Converte o input para o formato do banco (JSON types)
-      const payload = {
-        competitor_name: input.competitor_name,
+      // Prepare payload with explicit JSON casting to avoid 'any'
+      const basePayload = {
         competitor_logo_url: input.competitor_logo_url,
         summary: input.summary,
-        our_strengths: input.our_strengths as any, // Supabase types expect Json
-        their_strengths: input.their_strengths as any,
-        weaknesses: input.weaknesses as any,
+        our_strengths: (input.our_strengths as unknown as Json) ?? [],
+        their_strengths: (input.their_strengths as unknown as Json) ?? [],
+        weaknesses: (input.weaknesses as unknown as Json) ?? [],
         pricing_comparison: input.pricing_comparison,
-        win_themes: input.win_themes,
-        landmines: input.landmines,
-        proof_points: input.proof_points as any,
-        active: input.active,
-        version: input.version,
+        win_themes: input.win_themes ?? [],
+        landmines: input.landmines ?? [],
+        proof_points: (input.proof_points as unknown as Json) ?? [],
+        active: input.active ?? true,
+        version: input.version ?? 1,
         user_id: user.id,
         last_updated_by: user.id,
       };
 
       if (input.id) {
-        const updatePayload: BattleCardUpdate = payload;
+        const updatePayload: BattleCardUpdate = {
+          ...basePayload,
+          competitor_name: input.competitor_name,
+        };
+        
         const { data, error } = await supabase
           .from("battle_cards")
           .update(updatePayload)
@@ -108,9 +122,11 @@ export function useUpsertBattleCard() {
         return data as unknown as BattleCard;
       }
 
+      if (!input.competitor_name) throw new Error("Nome do competidor é obrigatório");
+
       const insertPayload: BattleCardInsert = {
-        ...payload,
-        competitor_name: payload.competitor_name!, // Name is required in Insert
+        ...basePayload,
+        competitor_name: input.competitor_name,
       };
       
       const { data, error } = await supabase
@@ -126,23 +142,36 @@ export function useUpsertBattleCard() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["battle-cards"] });
       qc.invalidateQueries({ queryKey: ["battle-card"] });
-      toast.success("Battle card salvo");
+      toast.success("Battle card salvo com sucesso");
     },
-    onError: (e: Error) => toast.error(e.message || "Erro ao salvar battle card"),
+    onError: (e: Error) => {
+      console.error("[useUpsertBattleCard] Erro:", e);
+      toast.error(e.message || "Erro ao salvar battle card");
+    },
   });
 }
 
+/**
+ * Hook to delete a battle card.
+ */
 export function useDeleteBattleCard() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("battle_cards").delete().eq("id", id);
+      const { error } = await supabase
+        .from("battle_cards")
+        .delete()
+        .eq("id", id);
+      
       if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["battle-cards"] });
       toast.success("Battle card removido");
     },
+    onError: (e: Error) => {
+      console.error("[useDeleteBattleCard] Erro:", e);
+      toast.error("Erro ao remover battle card");
+    },
   });
 }
-
