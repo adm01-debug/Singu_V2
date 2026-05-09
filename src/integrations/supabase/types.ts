@@ -2236,6 +2236,68 @@ export type Database = {
           },
         ]
       }
+      contact_metaprograms: {
+        Row: {
+          away_from_score: number | null
+          contact_id: string
+          created_at: string
+          detail_score: number | null
+          external_score: number | null
+          global_score: number | null
+          id: string
+          internal_score: number | null
+          notes: string | null
+          options_score: number | null
+          proactive_score: number | null
+          procedures_score: number | null
+          reactive_score: number | null
+          toward_score: number | null
+          updated_at: string
+        }
+        Insert: {
+          away_from_score?: number | null
+          contact_id: string
+          created_at?: string
+          detail_score?: number | null
+          external_score?: number | null
+          global_score?: number | null
+          id?: string
+          internal_score?: number | null
+          notes?: string | null
+          options_score?: number | null
+          proactive_score?: number | null
+          procedures_score?: number | null
+          reactive_score?: number | null
+          toward_score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          away_from_score?: number | null
+          contact_id?: string
+          created_at?: string
+          detail_score?: number | null
+          external_score?: number | null
+          global_score?: number | null
+          id?: string
+          internal_score?: number | null
+          notes?: string | null
+          options_score?: number | null
+          proactive_score?: number | null
+          procedures_score?: number | null
+          reactive_score?: number | null
+          toward_score?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_metaprograms_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: true
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_next_actions: {
         Row: {
           action: string

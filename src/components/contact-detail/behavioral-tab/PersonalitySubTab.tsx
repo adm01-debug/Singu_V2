@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { useContactBehavior } from '@/hooks/useContactBehavior';
@@ -153,6 +154,22 @@ export function PersonalitySubTab({ contactId }: Props) {
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Scores por Tipo (JSON)</Label>
+              <Textarea 
+                value={typeof formData.enneagram_scores === 'object' ? JSON.stringify(formData.enneagram_scores, null, 2) : formData.enneagram_scores || ""} 
+                onChange={(e) => {
+                  try {
+                    const parsed = JSON.parse(e.target.value);
+                    setFormData({ ...formData, enneagram_scores: parsed });
+                  } catch {
+                    setFormData({ ...formData, enneagram_scores: e.target.value });
+                  }
+                }}
+                placeholder='{"1": 85, "2": 40...}'
+                className="font-mono text-[10px] min-h-[60px]"
+              />
             </div>
           </CardContent>
         </Card>

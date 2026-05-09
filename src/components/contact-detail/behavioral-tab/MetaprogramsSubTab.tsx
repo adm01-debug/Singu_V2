@@ -1,57 +1,182 @@
-import { Target } from 'lucide-react';
+import { Target, Save, Info } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
-interface MetaprogramData {
-  toward_score?: number;
-  away_from_score?: number;
-  internal_score?: number;
-  external_score?: number;
-  options_score?: number;
-  procedures_score?: number;
-}
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Progress } from '@/components/ui/progress';
+import { Textarea } from '@/components/ui/textarea';
+import { useContactBehavior } from '@/hooks/useContactBehavior';
+import { useState, useEffect } from 'react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface Props {
-  metaprograms: MetaprogramData | null;
+  contactId: string;
 }
 
-export function MetaprogramsSubTab({ metaprograms }: Props) {
+export function MetaprogramsSubTab({ contactId }: Props) {
+  const { metaprograms, updateMetaprograms, isLoading } = useContactBehavior(contactId);
+  const [formData, setFormData] = useState<any>({});
+
+  useEffect(() => {
+    if (metaprograms) setFormData(metaprograms);
+  }, [metaprograms]);
+
+  if (isLoading) return <div className="p-8 text-center">Carregando metaprogramas...</div>;
+
+  const handleSave = () => updateMetaprograms(formData);
+
+  const sliders = [
+    { 
+      label: 'Direção da Motivação', 
+      left: 'Toward (Aproximação)', 
+      right: 'Away-From (Afastamento)', 
+      leftKey: 'toward_score', 
+      rightKey: 'away_from_score',
+      tooltip: 'Toward foca em objetivos; Away-From foca em evitar problemas.'
+    },
+    { 
+      label: 'Fonte de Autoridade', 
+      left: 'Interno (Self)', 
+      right: 'Externo (Others)', 
+      leftKey: 'internal_score', 
+      rightKey: 'external_score',
+      tooltip: 'Interno decide por si; Externo precisa de validação de terceiros.'
+    },
+    { 
+      label: 'Estilo de Decisão', 
+      left: 'Opções (Creativity)', 
+      right: 'Procedimentos (Rules)', 
+      leftKey: 'options_score', 
+      rightKey: 'procedures_score',
+      tooltip: 'Opções gosta de criar novos caminhos; Procedimentos segue passos definidos.'
+    },
+    { 
+      label: 'Estilo de Ação', 
+      left: 'Proativo (Direct)', 
+      right: 'Reativo (Wait)', 
+      leftKey: 'proactive_score', 
+      rightKey: 'reactive_score',
+      tooltip: 'Proativo toma a iniciativa; Reativo analisa antes de agir.'
+    },
+    { 
+      label: 'Tamanho do Chunk', 
+      left: 'Global (Big Picture)', 
+      right: 'Detalhe (Specific)', 
+      leftKey: 'global_score', 
+      rightKey: 'detail_score',
+      tooltip: 'Global foca na visão geral; Detalhe foca na minúcia dos dados.'
+    },
+  ];
+
   return (
     <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-sm">
+      <CardHeader className="flex flex-row items-center justify-between pb-3">
+        <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase">
           <Target className="h-4 w-4 text-primary" />
-          Metaprogramas NLP
+          Metaprogramas NLP & Filtros Mentais
         </CardTitle>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="max-w-xs text-xs">Os metaprogramas são os filtros que as pessoas usam para processar informações e tomar decisões.</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </CardHeader>
-      <CardContent>
-        {metaprograms ? (
-          <div className="space-y-4">
-            {[
-              { left: 'Toward', right: 'Away-From', leftVal: metaprograms.toward_score, rightVal: metaprograms.away_from_score },
-              { left: 'Interno', right: 'Externo', leftVal: metaprograms.internal_score, rightVal: metaprograms.external_score },
-              { left: 'Opções', right: 'Procedimentos', leftVal: metaprograms.options_score, rightVal: metaprograms.procedures_score },
-            ].map(({ left, right, leftVal, rightVal }) => {
-              const total = (leftVal || 0) + (rightVal || 0);
-              const leftPct = total > 0 ? Math.round(((leftVal || 0) / total) * 100) : 50;
-              return (
-                <div key={left}>
-                  <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                    <span>{left} ({leftVal || 0})</span>
-                    <span>{right} ({rightVal || 0})</span>
+      <CardContent className="space-y-6">
+        <div className="grid gap-6 md:grid-cols-2">
+          {sliders.map((s) => {
+            const leftVal = formData[s.leftKey] || 0;
+            const rightVal = formData[s.rightKey] || 0;
+            const total = leftVal + rightVal;
+            const leftPct = total > 0 ? (leftVal / total) * 100 : 50;
+
+            return (
+              <div key={s.label} className="space-y-3 p-4 bg-muted/30 rounded-lg border border-border/50">
+                <div className="flex justify-between items-center mb-1">
+                  <Label className="text-xs font-semibold">{s.label}</Label>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="h-3 w-3 text-muted-foreground cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent><p className="text-[10px]">{s.tooltip}</p></TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <Label className="text-[10px] text-muted-foreground uppercase">{s.left}</Label>
+                    <div className="flex items-center gap-2">
+                      <Input 
+                        type="number" 
+                        min="0" max="100" 
+                        value={leftVal} 
+                        onChange={(e) => setFormData({ ...formData, [s.leftKey]: parseInt(e.target.value) || 0 })}
+                        className="h-7 text-xs w-16"
+                      />
+                      <Progress value={leftVal} className="h-1 flex-1" />
+                    </div>
                   </div>
-                  <div className="relative h-3 rounded-full bg-muted overflow-hidden">
-                    <div
-                      className="absolute left-0 top-0 h-full rounded-full bg-primary transition-all"
-                      style={{ width: `${leftPct}%` }}
-                    />
+                  <div className="space-y-1">
+                    <Label className="text-[10px] text-muted-foreground uppercase text-right block">{s.right}</Label>
+                    <div className="flex items-center gap-2">
+                      <Progress value={rightVal} className="h-1 flex-1" />
+                      <Input 
+                        type="number" 
+                        min="0" max="100" 
+                        value={rightVal} 
+                        onChange={(e) => setFormData({ ...formData, [s.rightKey]: parseInt(e.target.value) || 0 })}
+                        className="h-7 text-xs w-16"
+                      />
+                    </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <p className="text-sm text-muted-foreground italic">Análise de metaprogramas ainda não realizada</p>
-        )}
+
+                <div className="relative h-2 rounded-full bg-muted/50 overflow-hidden mt-2">
+                  <div 
+                    className="absolute h-full bg-primary transition-all duration-500 ease-in-out"
+                    style={{ 
+                      left: '0', 
+                      width: `${leftPct}%`,
+                      opacity: 0.7
+                    }}
+                  />
+                  <div 
+                    className="absolute h-full bg-accent transition-all duration-500 ease-in-out"
+                    style={{ 
+                      right: '0', 
+                      width: `${100 - leftPct}%`,
+                      opacity: 0.7
+                    }}
+                  />
+                  <div className="absolute left-1/2 top-0 h-full w-0.5 bg-background z-10" />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-xs">Notas Adicionais sobre Processamento</Label>
+          <Textarea 
+            value={formData.notes || ""} 
+            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+            placeholder="Descreva observações sobre como o contato processa informações e toma decisões..."
+            className="min-h-[80px]"
+          />
+        </div>
+
+        <div className="flex justify-end pt-4">
+          <Button onClick={handleSave} className="gap-2">
+            <Save className="h-4 w-4" />
+            Salvar Metaprogramas
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
