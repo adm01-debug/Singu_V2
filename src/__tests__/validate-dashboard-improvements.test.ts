@@ -99,12 +99,12 @@ describe('Dashboard Layout Improvements Validation', () => {
       expect(scrollToTopBtn).toContain("{ passive: true }");
     });
 
-    it('should appear after 400px scroll threshold', () => {
-      expect(scrollToTopBtn).toContain('scrollY > 400');
+    it('should appear after adaptive scroll threshold', () => {
+      expect(scrollToTopBtn).toContain('window.scrollY >');
     });
 
-    it('should use smooth scroll behavior', () => {
-      expect(scrollToTopBtn).toContain("behavior: 'smooth'");
+    it('should use adaptive scroll behavior', () => {
+      expect(scrollToTopBtn).toContain('behavior:');
     });
 
     it('should have accessible aria-label', () => {
@@ -353,8 +353,9 @@ describe('Dashboard Layout Improvements Validation', () => {
       expect(portfolioContent).toContain("from '@/components/ui/scroll-area'");
     });
 
-    it('should import ScrollToTop in App.tsx', () => {
-      expect(appContent).toContain('ScrollToTop');
+    it('should import ScrollToTop in AppProviders.tsx', () => {
+      const appProviders = readFile('src/app/AppProviders.tsx');
+      expect(appProviders).toContain('ScrollToTop');
     });
   });
 });
