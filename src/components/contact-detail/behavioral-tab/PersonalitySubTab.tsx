@@ -2,6 +2,7 @@ import { Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
 
 interface Props {
   behavior: Record<string, unknown> | null;
@@ -112,11 +113,11 @@ export function PersonalitySubTab({ behavior }: Props) {
           )}
           <div className="flex items-center justify-between border-b pb-1">
             <span className="text-muted-foreground text-xs">Tempo méd. resposta</span>
-            <span className="text-[10px] font-medium">{behavior?.avgResponseTimeHours || '?'}h</span>
+            <span className="text-[10px] font-medium">{String(behavior?.avgResponseTimeHours || '?')}h</span>
           </div>
           <div className="flex items-center justify-between border-b pb-1">
             <span className="text-muted-foreground text-xs">Melhor janela</span>
-            <span className="text-[10px] font-medium">{behavior?.bestContactWindow || 'Comercial'}</span>
+            <span className="text-[10px] font-medium">{String(behavior?.bestContactWindow || 'Comercial')}</span>
           </div>
           {behavior?.formalityLevel && (
             <div className="flex items-center justify-between">
