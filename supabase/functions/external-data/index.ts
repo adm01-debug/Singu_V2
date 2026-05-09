@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
-import { withAuth, jsonError, jsonOk, handleCorsAndMethod } from "../_shared/auth.ts";
+import { withAuth, jsonError, jsonOk, handleCorsAndMethod, withAuthOrServiceRole } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { assertVersionMatch } from "../_shared/version-guard.ts";
@@ -205,7 +205,7 @@ Deno.serve(async (req) => {
   if (limited) return limited;
 
   // ── Auth guard ──
-  const authResult = await withAuth(req);
+  const authResult = await withAuthOrServiceRole(req);
   if (authResult instanceof Response) return authResult;
 
   const startTime = performance.now();
