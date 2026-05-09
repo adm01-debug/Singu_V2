@@ -59,6 +59,8 @@ interface Props {
   getCompanyName: (companyId: string | null) => string | null;
   getLastInteractionDate: (contactId: string) => string | null;
   onRefresh: () => Promise<void>;
+  hasMore?: boolean;
+  onLoadMore?: () => void;
 }
 
 export function ContatosContent(props: Props) {
