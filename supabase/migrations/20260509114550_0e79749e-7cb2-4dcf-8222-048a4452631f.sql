@@ -1,0 +1,2 @@
+ALTER TABLE public.contacts ADD COLUMN IF NOT EXISTS version INTEGER DEFAULT 1;
+COMMENT ON COLUMN public.contacts.version IS 'Versão incremental para controle de concorrência e rastreamento de atualizações.';
