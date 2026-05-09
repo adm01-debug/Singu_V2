@@ -42,8 +42,10 @@ export function AIApprovalsWidget() {
               <div key={approval.id} className="p-3 rounded-lg bg-background border border-border/50 shadow-sm space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    {approval.channel === 'whatsapp' ? (
+                    {approval.source === 'whatsapp' ? (
                       <MessageSquare className="h-3 w-3 text-success" />
+                    ) : approval.source === 'linkedin' || approval.source === 'twitter' || approval.source === 'instagram' ? (
+                      <Brain className="h-3 w-3 text-primary" />
                     ) : (
                       <Mail className="h-3 w-3 text-info" />
                     )}
@@ -55,7 +57,7 @@ export function AIApprovalsWidget() {
                 </div>
                 
                 <p className="text-xs text-muted-foreground leading-relaxed italic border-l-2 border-primary/20 pl-3">
-                  "{approval.content}"
+                  Sugerido {approval.type === 'hobby' ? 'hobby' : 'interesse'}: "{approval.value}" (via {approval.source})
                 </p>
 
                 <div className="flex gap-2">

@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 export interface SuggestedRapportIntel {
   id: string;
   contact_id: string;
+  contact_name?: string;
   type: 'hobby' | 'interest';
   value: string;
   source: 'whatsapp' | 'call' | 'linkedin' | 'instagram' | 'twitter';
@@ -23,7 +24,12 @@ export function useAIApprovals(contactId?: string) {
       if (!user) return [];
       let query = supabase
         .from('suggested_rapport_intel')
-        .select('*')
+        .select(`
+          *,
+          contacts:contact_id (
+            full_name
+          )
+        `)
         .eq('status', 'pending');
       
       if (contactId) {
@@ -33,7 +39,10 @@ export function useAIApprovals(contactId?: string) {
       const { data, error } = await query.order('created_at', { ascending: false });
 
       if (error) throw error;
-      return (data || []) as SuggestedRapportIntel[];
+      return (data || []).map(item => ({
+        ...item,
+        contact_name: (item.contacts as any)?.full_name || 'Contato'
+      })) as SuggestedRapportIntel[];
     },
     enabled: !!user,
   });
