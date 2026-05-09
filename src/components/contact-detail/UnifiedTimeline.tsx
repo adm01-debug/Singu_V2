@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { format, isWithinInterval, startOfDay, endOfDay } from 'date-fns';
+import { format, isWithinInterval, startOfDay, endOfDay, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -61,12 +61,13 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
           />
         </div>
         
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="outline" className="text-[10px] uppercase font-bold text-muted-foreground mr-1">Tipo:</Badge>
           <Button 
             variant={selectedType === 'all' ? 'default' : 'outline'} 
             size="sm" 
             onClick={() => setSelectedType('all')}
-            className="h-8 text-xs"
+            className="h-8 text-xs px-3"
           >
             Tudo
           </Button>
@@ -76,11 +77,47 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
               variant={selectedType === type ? 'default' : 'outline'} 
               size="sm" 
               onClick={() => setSelectedType(type)}
-              className="h-8 text-xs"
+              className="h-8 text-xs px-3"
             >
               {TYPE_CONFIG[type].label}
             </Button>
           ))}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 border-t pt-3 md:border-t-0 md:pt-0">
+          <Badge variant="outline" className="text-[10px] uppercase font-bold text-muted-foreground mr-1">Período:</Badge>
+          <Button 
+            variant={dateFilter === 'all' ? 'secondary' : 'ghost'} 
+            size="sm" 
+            onClick={() => setDateFilter('all')}
+            className="h-8 text-xs px-3"
+          >
+            Sempre
+          </Button>
+          <Button 
+            variant={dateFilter === 'today' ? 'secondary' : 'ghost'} 
+            size="sm" 
+            onClick={() => setDateFilter('today')}
+            className="h-8 text-xs px-3"
+          >
+            Hoje
+          </Button>
+          <Button 
+            variant={dateFilter === 'week' ? 'secondary' : 'ghost'} 
+            size="sm" 
+            onClick={() => setDateFilter('week')}
+            className="h-8 text-xs px-3"
+          >
+            7 dias
+          </Button>
+          <Button 
+            variant={dateFilter === 'month' ? 'secondary' : 'ghost'} 
+            size="sm" 
+            onClick={() => setDateFilter('month')}
+            className="h-8 text-xs px-3"
+          >
+            30 dias
+          </Button>
         </div>
       </div>
 
