@@ -208,8 +208,9 @@ export function useUpsertMilestone(roomId: string) {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const payload = { ...m, room_id: roomId, user_id: user.id };
-      const { data, error } = await (supabase.from("deal_room_milestones") as any).upsert(payload).select("*").single();
+      const { data, error } = await supabase.from("deal_room_milestones").upsert(payload).select("*").maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao salvar milestone");
       return data as unknown as DealRoomMilestone;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.ms(roomId) }),
