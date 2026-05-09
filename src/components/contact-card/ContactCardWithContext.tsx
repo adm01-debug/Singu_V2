@@ -170,7 +170,7 @@ function ContactCardWithContextImpl({
               onDelete={() => onDelete(contact)}
             />
 
-            <Link to={`/contatos/${contact.id}`}>
+            <Link to={`/contatos/${contact.id}`} onMouseEnter={() => prefetchFn()}>
               <CardContent className="p-4">
                 {/* Header: Avatar + Name + Score */}
                 <div className="flex items-center gap-3">
