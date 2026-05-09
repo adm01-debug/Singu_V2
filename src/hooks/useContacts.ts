@@ -16,6 +16,7 @@ export type ContactUpdate = TablesUpdate<'contacts'>;
 export type ContactListItem = Pick<Contact, 
   | 'id' | 'first_name' | 'last_name' | 'company_id' | 'relationship_score'
   | 'relationship_stage' | 'sentiment' | 'tags' | 'updated_at' | 'created_at' | 'version'
+  | 'notes' // Added notes for summary
 >;
 
 /**
@@ -66,6 +67,7 @@ const CONTACT_LISTING_SELECT = [
   'birthday', 'source',
   'updated_at', 'created_at', 'user_id',
   'bitrix_contact_id', 'is_duplicate', 'duplicate_of',
+  'version', 'notes' // Added version and notes
 ].join(',');
 
 async function fetchContactsPage(companyId?: string) {
