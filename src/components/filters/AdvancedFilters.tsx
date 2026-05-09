@@ -210,35 +210,83 @@ export function AdvancedFilters({
             <Button variant="outline" size="sm" className="gap-1.5 h-9 shrink-0 whitespace-nowrap">
               <ArrowUpDown className="w-3.5 h-3.5" />
               Ordenar
+              {multiSort.length > 0 && (
+                <Badge variant="secondary" className="ml-1 rounded-full px-1.5 py-0 text-xs font-medium">
+                  {multiSort.length}
+                </Badge>
+              )}
               <ChevronDown className="w-3.5 h-3.5 ml-0.5" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-56 p-0" align="start">
+          <PopoverContent className="w-64 p-0" align="start">
             <Command>
               <CommandList>
-                <CommandGroup heading="Ordenar por">
-                  {sortOptions.map(option => (
-                    <CommandItem
-                      key={option.value}
-                      onSelect={() => {
-                        if (sortBy === option.value) {
-                          onSortChange(option.value, sortOrder === 'asc' ? 'desc' : 'asc');
-                        } else {
-                          onSortChange(option.value, 'asc');
-                        }
-                        setSortOpen(false);
-                      }}
-                      className="cursor-pointer justify-between"
-                    >
-                      <span>{option.label}</span>
-                      {sortBy === option.value && (
-                        sortOrder === 'asc' 
-                          ? <ArrowUp className="w-4 h-4" />
-                          : <ArrowDown className="w-4 h-4" />
-                      )}
-                    </CommandItem>
-                  ))}
+                <CommandGroup heading="Ordenação Múltipla">
+                  {sortOptions.map(option => {
+                    const criteriaIndex = multiSort.findIndex(s => s.column === option.value);
+                    const isSorted = criteriaIndex !== -1;
+                    const order = isSorted ? multiSort[criteriaIndex].order : null;
+
+                    return (
+                      <CommandItem
+                        key={option.value}
+                        onSelect={() => {
+                          if (!onMultiSortChange) {
+                            // Legacy fallback
+                            if (sortBy === option.value) {
+                              onSortChange(option.value, sortOrder === 'asc' ? 'desc' : 'asc');
+                            } else {
+                              onSortChange(option.value, 'asc');
+                            }
+                            setSortOpen(false);
+                            return;
+                          }
+
+                          let newSort = [...multiSort];
+                          if (isSorted) {
+                            if (order === 'asc') {
+                              newSort[criteriaIndex] = { ...newSort[criteriaIndex], order: 'desc' };
+                            } else {
+                              newSort.splice(criteriaIndex, 1);
+                            }
+                          } else {
+                            newSort.push({ column: option.value, order: 'asc' });
+                          }
+                          onMultiSortChange(newSort);
+                        }}
+                        className="cursor-pointer justify-between"
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className={cn(
+                            "flex h-4 w-4 items-center justify-center rounded-sm border",
+                            isSorted ? "bg-primary border-primary text-primary-foreground" : "border-muted-foreground/30"
+                          )}>
+                            {isSorted && <span className="text-[10px] font-bold">{criteriaIndex + 1}</span>}
+                          </div>
+                          <span>{option.label}</span>
+                        </div>
+                        {isSorted && (
+                          order === 'asc' 
+                            ? <ArrowUp className="w-4 h-4" />
+                            : <ArrowDown className="w-4 h-4" />
+                        )}
+                      </CommandItem>
+                    );
+                  })}
                 </CommandGroup>
+                {multiSort.length > 0 && onMultiSortChange && (
+                  <>
+                    <CommandSeparator />
+                    <CommandGroup>
+                      <CommandItem
+                        onSelect={() => onMultiSortChange([])}
+                        className="justify-center text-center cursor-pointer text-muted-foreground"
+                      >
+                        Limpar ordenação
+                      </CommandItem>
+                    </CommandGroup>
+                  </>
+                )}
               </CommandList>
             </Command>
           </PopoverContent>
