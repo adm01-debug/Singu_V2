@@ -3,7 +3,8 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Header } from '@/components/layout/Header';
-import { Zap, Power, History } from 'lucide-react';
+import { Zap, Power, History, LayoutDashboard, Search, CalendarClock } from 'lucide-react';
+
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAutomationRules, type CreateRuleData } from '@/hooks/useAutomationRules';
@@ -59,13 +60,14 @@ export default function Automacoes() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList>
-            <TabsTrigger value="rules">Minhas Regras</TabsTrigger>
-            <TabsTrigger value="templates">📦 Templates Prontos</TabsTrigger>
-            <TabsTrigger value="cadences">📅 Cadências CRM</TabsTrigger>
-            <TabsTrigger value="crm-audit">🔍 Auditoria CRM</TabsTrigger>
-            <TabsTrigger value="kpis">📊 KPIs Relacionamento</TabsTrigger>
+          <TabsList className="bg-muted/50 p-1 h-auto flex flex-wrap gap-1">
+            <TabsTrigger value="rules" className="gap-2"><Zap className="h-3.5 w-3.5" />Regras de Negócio</TabsTrigger>
+            <TabsTrigger value="cadences" className="gap-2"><CalendarClock className="h-3.5 w-3.5" />Cadências CRM</TabsTrigger>
+            <TabsTrigger value="crm-audit" className="gap-2"><Search className="h-3.5 w-3.5" />Auditoria CRM</TabsTrigger>
+            <TabsTrigger value="kpis" className="gap-2"><LayoutDashboard className="h-3.5 w-3.5" />KPIs de Relacionamento</TabsTrigger>
+            <TabsTrigger value="templates">📦 Templates</TabsTrigger>
           </TabsList>
+
           <TabsContent value="cadences" className="mt-4">
             <CadenceRulesConfig />
           </TabsContent>

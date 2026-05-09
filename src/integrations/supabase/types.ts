@@ -11021,6 +11021,14 @@ export type Database = {
         }
         Returns: boolean
       }
+      calculate_relationship_metrics_for_contact: {
+        Args: { p_contact_id: string }
+        Returns: undefined
+      }
+      calculate_relationship_metrics_internal: {
+        Args: { v_contact_id: string }
+        Returns: undefined
+      }
       check_at_risk_contacts: { Args: never; Returns: undefined }
       check_contact_health_alerts: { Args: never; Returns: undefined }
       cleanup_old_health_snapshots: { Args: never; Returns: number }
