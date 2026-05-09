@@ -242,7 +242,7 @@ export function OverviewTab({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: prefersReducedMotion ? 0 : 0.25 }}
           >
-            <RecentActivityCard activities={stats.recentActivities} animations={recentActivityAnimations} />
+            <RecentActivityCard activities={useMemo(() => stats.recentActivities, [stats.recentActivities])} animations={recentActivityAnimations} />
           </motion.div>
         </DashboardErrorBoundary>
 
