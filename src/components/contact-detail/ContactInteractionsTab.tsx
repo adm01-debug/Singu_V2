@@ -56,9 +56,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
       (i.title?.toLowerCase().includes(lower)) || 
       (i.content?.toLowerCase().includes(lower)) ||
       (i.transcription?.toLowerCase().includes(lower)) ||
-      (i.type?.toLowerCase().includes(lower)) ||
-      (i.content_type?.toLowerCase().includes(lower)) ||
-      (i.metadata?.toString().toLowerCase().includes(lower))
+      (i.type?.toLowerCase().includes(lower))
     );
   }, [interactions, searchTerm]);
 

@@ -1,4 +1,5 @@
-import { Users, Building2, Cake, Phone, Mail, Plus, Edit2, Check } from 'lucide-react';
+import { useState } from 'react';
+import { Users, Building2, Cake, Phone, Mail, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { CollapsibleSection } from '@/components/ui/collapsible-section';
 import { InlineEmptyState } from '@/components/ui/empty-state';
@@ -14,7 +15,6 @@ interface RelativesSectionProps {
 }
 
 export function RelativesSection({ contactId, relatives }: RelativesSectionProps) {
-  const [editingId, setEditingId] = useState<string | null>(null);
   const { addRelative, updateRelative, deleteRelative } = useRelativeMutations(contactId);
 
   const handleUpdate = async (id: string, field: string, value: any) => {
