@@ -16,6 +16,7 @@ import { KeyboardListHint } from '@/components/ui/keyboard-list-hint';
 import { BulkImportDialog } from '@/components/import/BulkImportDialog';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { ContactsTableView } from '@/components/contacts/ContactsTableView';
+import { BirthdayWidget } from '@/components/contacts/BirthdayWidget';
 import { RecentlyViewedSection } from '@/components/recently-viewed/RecentlyViewedSection';
 import { SearchPresetsMenu } from '@/components/search/SearchPresetsMenu';
 import { ViewModeSwitcher, type ViewMode, type GridColumns } from '@/components/ui/view-mode-switcher';
