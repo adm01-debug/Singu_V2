@@ -252,7 +252,7 @@ export function OverviewTab({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: prefersReducedMotion ? 0 : 0.25, delay: prefersReducedMotion ? 0 : 0.05 }}
           >
-            <TopContactsCard contacts={stats.topContacts} animations={topContactAnimations} />
+            <TopContactsCard contacts={useMemo(() => stats.topContacts, [stats.topContacts])} animations={topContactAnimations} />
           </motion.div>
         </DashboardErrorBoundary>
       </div>
