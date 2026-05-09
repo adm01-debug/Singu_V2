@@ -177,6 +177,13 @@ export function ContactBehavioralTab({ contact }: Props) {
         <MotivationsSubTab contactId={contact.id} />
       </TabsContent>
 
+      <TabsContent value="rapport">
+        <div className="space-y-6">
+          <RapportCard contactId={contact.id} />
+          {/* Adicionar RapportStrategySubTab aqui no futuro */}
+        </div>
+      </TabsContent>
+
       <TabsContent value="decision">
         <DecisionMakingSubTab contactId={contact.id} />
       </TabsContent>
