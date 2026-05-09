@@ -341,16 +341,18 @@ export function useUpsertAccountPlan() {
       if (!user) throw new Error("Não autenticado");
       if (input.id) {
         const { id, ...updates } = input;
-        const { data, error } = await supabase.from("abm_account_plans").update(updates).eq("id", id).select().single();
+        const { data, error } = await supabase.from("abm_account_plans").update(updates).eq("id", id).select().maybeSingle();
         if (error) throw error;
+        if (!data) throw new Error("Plano de conta não encontrado");
         return data;
       }
       const { data, error } = await supabase
         .from("abm_account_plans")
         .insert({ ...input, user_id: user.id, template_type: input.template_type ?? "strategic" })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar plano de conta");
       return data;
     },
     onSuccess: (_, vars) => {
