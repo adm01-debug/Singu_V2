@@ -1,11 +1,12 @@
-import { memo, useState } from 'react';
-import { Cake, Heart, Sparkles, Users, Edit2, Check, X, Loader2, Plus, Trash2 } from 'lucide-react';
+import { memo, useState, useEffect } from 'react';
+import { Cake, Heart, Sparkles, Users, Edit2, Check, X, Loader2, Plus, Trash2, Baby } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { InlineEmptyState } from '@/components/ui/empty-state';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import type { RapportIntel } from '@/hooks/useRapportIntelView';
 import { useRapportIntelMutation } from '@/hooks/useRapportIntelMutation';
 import { cn } from '@/lib/utils';
@@ -28,15 +29,37 @@ function formatBirthday(date?: string | null): string | null {
 export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [familyInfo, setFamilyInfo] = useState(rapportIntel?.family_info || '');
+  const [spouseName, setSpouseName] = useState('');
+  const [children, setChildren] = useState<string[]>([]);
   const [birthday, setBirthday] = useState(rapportIntel?.birthday || '');
   const [anchors, setAnchors] = useState<string[]>(Array.isArray(rapportIntel?.positive_anchors) ? rapportIntel.positive_anchors : []);
   const [newAnchor, setNewAnchor] = useState('');
+  const [newChild, setNewChild] = useState('');
+
+  // Parse family_info if it's JSON or string
+  useEffect(() => {
+    if (rapportIntel?.family_info) {
+      try {
+        const parsed = JSON.parse(rapportIntel.family_info);
+        setSpouseName(parsed.spouse || '');
+        setChildren(parsed.children || []);
+      } catch {
+        // Fallback for plain string
+        setFamilyInfo(rapportIntel.family_info);
+      }
+    }
+  }, [rapportIntel?.family_info]);
 
   const mutation = useRapportIntelMutation(rapportIntel?.contact_id);
 
   const handleSave = async () => {
+    const updatedFamilyInfo = JSON.stringify({
+      spouse: spouseName,
+      children: children
+    });
+    
     await mutation.mutateAsync({
-      family_info: familyInfo,
+      family_info: updatedFamilyInfo,
       birthday: birthday || null,
       positive_anchors: anchors,
     });
@@ -44,7 +67,15 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
   };
 
   const handleCancel = () => {
-    setFamilyInfo(rapportIntel?.family_info || '');
+    if (rapportIntel?.family_info) {
+      try {
+        const parsed = JSON.parse(rapportIntel.family_info);
+        setSpouseName(parsed.spouse || '');
+        setChildren(parsed.children || []);
+      } catch {
+        setFamilyInfo(rapportIntel.family_info);
+      }
+    }
     setBirthday(rapportIntel?.birthday || '');
     setAnchors(Array.isArray(rapportIntel?.positive_anchors) ? rapportIntel.positive_anchors : []);
     setIsEditing(false);
@@ -142,14 +173,80 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
               <div className="flex-1">
                 <p className="text-xs text-muted-foreground">Família (Cônjuge e Filhos)</p>
                 {isEditing ? (
-                  <Textarea 
-                    value={familyInfo} 
-                    onChange={(e) => setFamilyInfo(e.target.value)}
-                    placeholder="Ex: Esposa Maria, filhos Pedro (10) e Ana (7)"
-                    className="mt-1 text-sm min-h-[60px]"
-                  />
+                  <div className="space-y-3 mt-1">
+                    <div>
+                      <Label className="text-[10px] uppercase text-muted-foreground">Cônjuge</Label>
+                      <Input 
+                        value={spouseName} 
+                        onChange={(e) => setSpouseName(e.target.value)}
+                        placeholder="Nome do cônjuge"
+                        className="h-8 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-[10px] uppercase text-muted-foreground">Filhos</Label>
+                      <div className="flex flex-wrap gap-1.5 mb-2">
+                        {children.map((child, i) => (
+                          <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1">
+                            {child}
+                            <button onClick={() => setChildren(prev => prev.filter((_, idx) => idx !== i))}>
+                              <Trash2 className="h-3 w-3 text-destructive" />
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-1">
+                        <Input 
+                          value={newChild} 
+                          onChange={(e) => setNewChild(e.target.value)}
+                          placeholder="Adicionar filho..."
+                          className="h-8 text-sm"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && newChild.trim()) {
+                              e.preventDefault();
+                              setChildren(prev => [...prev, newChild.trim()]);
+                              setNewChild('');
+                            }
+                          }}
+                        />
+                        <Button 
+                          size="icon" 
+                          variant="outline" 
+                          className="h-8 w-8" 
+                          onClick={() => {
+                            if (newChild.trim()) {
+                              setChildren(prev => [...prev, newChild.trim()]);
+                              setNewChild('');
+                            }
+                          }}
+                        >
+                          <Plus className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 ) : (
-                  <p className="text-sm whitespace-pre-wrap">{family || 'Não informado'}</p>
+                  <div className="mt-1 space-y-1">
+                    {spouseName && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Heart className="h-3 w-3 text-pink-400" />
+                        <span>{spouseName}</span>
+                      </div>
+                    )}
+                    {children.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {children.map((child, i) => (
+                          <Badge key={i} variant="outline" className="text-[10px] font-normal border-blue-100 bg-blue-50 text-blue-600">
+                            <Baby className="h-2.5 w-2.5 mr-1" />
+                            {child}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                    {!spouseName && children.length === 0 && (
+                      <p className="text-sm text-muted-foreground italic">Não informado</p>
+                    )}
+                  </div>
                 )}
               </div>
             </div>

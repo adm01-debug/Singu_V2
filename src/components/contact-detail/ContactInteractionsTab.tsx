@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { WhatsAppDashboard } from '@/components/whatsapp/WhatsAppDashboard';
 import { ExternalInteractionsTimeline } from './interactions-tab/ExternalInteractionsTimeline';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -49,16 +49,28 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
+  const [activeTab, setActiveTab] = useState('all');
+
   const filteredInteractions = useMemo(() => {
-    if (!searchTerm.trim()) return interactions;
+    let result = interactions;
+    
+    // Filter by Tab
+    if (activeTab === 'whatsapp') {
+      result = result.filter(i => i.type === 'whatsapp');
+    } else if (activeTab === 'calls') {
+      result = result.filter(i => i.type === 'call');
+    }
+    
+    // Filter by Search Term
+    if (!searchTerm.trim()) return result;
     const lower = searchTerm.toLowerCase();
-    return interactions.filter(i => 
+    return result.filter(i => 
       (i.title?.toLowerCase().includes(lower)) || 
       (i.content?.toLowerCase().includes(lower)) ||
       (i.transcription?.toLowerCase().includes(lower)) ||
       (i.type?.toLowerCase().includes(lower))
     );
-  }, [interactions, searchTerm]);
+  }, [interactions, searchTerm, activeTab]);
 
   const contactForForm = {
     id: contact.id,
@@ -92,7 +104,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
 
   return (
     <div className="space-y-4">
-      <Tabs defaultValue="all" className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div className="flex flex-col space-y-4 mb-6">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <TabsList className="grid grid-cols-4 w-full sm:w-auto h-9">
