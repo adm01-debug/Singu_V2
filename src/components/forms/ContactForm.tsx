@@ -83,7 +83,7 @@ export function ContactForm({ contact, companies, defaultCompanyId, onSubmit, on
       assinatura_contato: getField(c, 'assinatura_contato'),
       tags_array: Array.isArray(c?.tags_array) ? (c.tags_array as string[]).join(', ') : '',
       interests_array: Array.isArray(c?.interests_array) ? (c.interests_array as string[]).join(', ') : '',
-      hobbies: Array.isArray(c?.hobbies) ? (c.hobbies as string[]).join(', ') : getField(c, 'hobbies'),
+      hobbies: Array.isArray(c?.hobbies) ? (c.hobbies as string[]).join(', ') : (c?.hobbies_array ? (c.hobbies_array as string[]).join(', ') : ''),
       family_info: getField(c, 'family_info'), avatar_url: getField(c, 'avatar_url'),
     },
   });
