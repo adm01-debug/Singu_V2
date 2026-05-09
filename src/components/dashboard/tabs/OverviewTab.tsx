@@ -52,13 +52,16 @@ interface OverviewTabProps {
 
 export function OverviewTab({
   stats,
+  contacts,
+  companies,
+  interactions,
   briefingOpen,
   setBriefingOpen,
   prefersReducedMotion,
   recentActivityAnimations,
   topContactAnimations,
   tabDirection,
-}: OverviewTabProps) {
+}: OverviewTabProps & { contacts: any[]; companies: any[]; interactions: any[] }) {
   const animVariants = {
     initial: { opacity: 0, x: prefersReducedMotion ? 0 : tabDirection * 20 },
     animate: { opacity: 1, x: 0 },
