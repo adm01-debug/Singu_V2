@@ -14,7 +14,8 @@ import { DealConfidenceBadge } from '@/components/pipeline/DealConfidenceBadge';
 import { ForecastConfidencePanel } from '@/components/pipeline/ForecastConfidencePanel';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
+import { Plus } from 'lucide-react';
+import { DealDialog } from '@/components/pipeline/DealDialog';
 
 const STAGES = [
   { id: 'lead', name: 'Novo Lead', probability: 10, color: 'bg-muted' },
@@ -380,6 +381,11 @@ export default function Pipeline() {
         deal={riskDeal}
         open={!!riskDeal}
         onOpenChange={(o) => !o && setRiskDeal(null)}
+      />
+
+      <DealDialog 
+        open={isDealDialogOpen}
+        onOpenChange={setIsDealDialogOpen}
       />
     </AppLayout>
   );

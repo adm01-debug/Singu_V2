@@ -222,7 +222,6 @@ export function DealDialog({ open, onOpenChange, initialStage = 'lead' }: Props)
                           if (comp) field.onChange(comp.value);
                         }}
                         placeholder="Buscar empresa..."
-                        emptyMessage="Nenhuma empresa encontrada."
                       />
                     </FormControl>
                     <FormMessage />
@@ -248,7 +247,6 @@ export function DealDialog({ open, onOpenChange, initialStage = 'lead' }: Props)
                           if (cont) field.onChange(cont.value);
                         }}
                         placeholder="Buscar contato..."
-                        emptyMessage="Nenhum contato encontrado."
                       />
                     </FormControl>
                     <FormMessage />
