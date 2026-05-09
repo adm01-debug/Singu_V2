@@ -2741,6 +2741,53 @@ export type Database = {
           },
         ]
       }
+      crm_relationship_audit_logs: {
+        Row: {
+          change_source: string
+          contact_id: string
+          created_at: string
+          field_name: string
+          id: string
+          new_value: string | null
+          old_value: string | null
+          reason: string | null
+          trigger_name: string | null
+          user_id: string
+        }
+        Insert: {
+          change_source: string
+          contact_id: string
+          created_at?: string
+          field_name: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          reason?: string | null
+          trigger_name?: string | null
+          user_id: string
+        }
+        Update: {
+          change_source?: string
+          contact_id?: string
+          created_at?: string
+          field_name?: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          reason?: string | null
+          trigger_name?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_relationship_audit_logs_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cs_accounts: {
         Row: {
           account_name: string
@@ -11078,6 +11125,10 @@ export type Database = {
       }
       check_at_risk_contacts: { Args: never; Returns: undefined }
       check_contact_health_alerts: { Args: never; Returns: undefined }
+      check_relationship_consistency: {
+        Args: { p_contact_id: string }
+        Returns: Json
+      }
       cleanup_old_health_snapshots: { Args: never; Returns: number }
       compute_account_health: { Args: { _account_id: string }; Returns: Json }
       compute_attribution: {
