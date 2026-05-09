@@ -19,11 +19,14 @@ import {
   Send,
   Eye,
   MessageSquare,
-  Clock
+  Clock,
+  TrendingUp,
+  TrendingDown
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { updateExternalData } from '@/lib/externalData';
 import { useRegisterPassoFeedback } from '@/hooks/useProximoPassoFeedback';
 import { useRecommendationAudit } from '@/hooks/useRecommendationAudit';
 import { toast } from '@/hooks/use-toast';
@@ -58,6 +61,7 @@ interface Contact {
   avatar_url?: string | null;
   relationship_score?: number | null;
   last_interaction_at?: string | null;
+  last_interaction_summary?: string | null;
   role_title?: string | null;
   notes?: string | null;
 }
@@ -98,25 +102,44 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
       .slice(0, 3);
   }, [contacts, completedIds]);
 
-  const handleAction = (contactId: string, outcome: 'respondeu_positivo' | 'respondeu_neutro' | 'pulou') => {
+  const handleAction = async (contactId: string, outcome: 'respondeu_positivo' | 'respondeu_neutro' | 'pulou') => {
+    const contact = contacts.find(c => c.id === contactId);
+    const currentScore = contact?.relationship_score || 50;
+    
+    // Calcula ajuste de score
+    let scoreAdjustment = 0;
+    if (outcome === 'respondeu_positivo') scoreAdjustment = 5;
+    else if (outcome === 'respondeu_neutro') scoreAdjustment = 1;
+    else if (outcome === 'pulou') scoreAdjustment = -2;
+
+    const newScore = Math.min(100, Math.max(0, currentScore + scoreAdjustment));
+
     registerFeedback({
       contactId,
       passoId: 'dashboard_strategic_followup',
       outcome,
     }, {
-      onSuccess: () => {
+      onSuccess: async () => {
         setCompletedIds(prev => new Set(prev).add(contactId));
         
+        // Atualiza score no banco externo
+        if (scoreAdjustment !== 0) {
+          await updateExternalData('contacts', contactId, { 
+            relationship_score: newScore,
+            updated_at: new Date().toISOString()
+          });
+        }
+
         // Log auditoria
-        const contact = contacts.find(c => c.id === contactId);
         logAudit({
           contactId,
-          score: contact?.relationship_score || 0,
+          score: newScore,
           recommendationType: 'next_step',
-          reasons: ['Ação do usuário registrada via Próximos Passos'],
+          reasons: [`Ação "${outcome}" registrada via Próximos Passos. Score ajustado de ${currentScore} para ${newScore}`],
           userAction: outcome,
           dataUsed: {
-            score: contact?.relationship_score,
+            previous_score: currentScore,
+            new_score: newScore,
             last_interaction: contact?.last_interaction_at
           }
         });
@@ -125,7 +148,7 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
 
         toast({
           title: "Ação registrada",
-          description: "A pontuação e as recomendações foram atualizadas.",
+          description: `Score atualizado para ${newScore}. Recomendações reorganizadas.`,
         });
       }
     });
@@ -189,8 +212,7 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
                       <div className="mt-1 flex items-start gap-1.5 max-w-full">
                         <MessageSquare className="h-3 w-3 text-primary/40 shrink-0 mt-0.5" />
                         <p className="text-[10px] text-muted-foreground italic truncate">
-                          {contact.notes ? contact.notes.slice(0, 100) : 'Nenhum resumo disponível'}
-                          {contact.notes && contact.notes.length > 100 && '...'}
+                          {contact.last_interaction_summary || contact.notes || 'Nenhum resumo disponível'}
                         </p>
                       </div>
 
@@ -305,6 +327,18 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       
       const splitContent = doc.splitTextToSize(last.content || 'Sem conteúdo detalhado.', 180);
       doc.text(splitContent, 14, finalY + 22);
+
+      const nextY = finalY + 35 + (splitContent.length * 5);
+      doc.setFontSize(14);
+      doc.text('Tópicos Principais:', 14, nextY);
+      doc.setFontSize(10);
+      doc.text('- Contexto de negócio\n- Próximos passos alinhados', 14, nextY + 8);
+      
+      doc.setFontSize(14);
+      doc.text('Sugestão de Abordagem:', 14, nextY + 25);
+      doc.setFontSize(10);
+      const suggest = `Olá ${contact.first_name}, notei que faz um tempo que não conversamos. Como estão os projetos?`;
+      doc.text(doc.splitTextToSize(suggest, 180), 14, nextY + 33);
     } else {
       doc.text('Nenhuma interação registrada.', 14, finalY + 8);
     }
@@ -447,85 +481,117 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
 
         <ScrollArea className="flex-1 px-6 mt-6">
           <div className="space-y-6 pb-24">
-            <section>
-              <h4 className="text-sm font-semibold flex items-center gap-2 mb-3">
-                <Brain className="h-4 w-4 text-primary" />
-                Por que esta recomendação?
-              </h4>
-              <div className="bg-primary/5 border border-primary/10 rounded-lg p-3">
-                <ul className="space-y-2">
-                  {insights.length > 0 ? insights.slice(0, 3).map((insight, idx) => (
-                    <li key={idx} className="text-xs flex gap-2">
-                      <Info className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
-                      <span>{insight.description || insight.title}</span>
-                    </li>
-                  )) : (
-                    <li className="text-xs flex gap-2">
-                      <Info className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
-                      <span>O score de relacionamento é alto ({contact?.relationship_score || 0}/100) e não há interações recentes.</span>
-                    </li>
-                  )}
-                </ul>
+            {/* 1. Motivos da Recomendação */}
+            <section className="space-y-3">
+              <div className="flex items-center gap-2 text-primary">
+                <Brain className="h-4 w-4" />
+                <h4 className="text-sm font-bold uppercase tracking-wider">Motivos Estratégicos</h4>
               </div>
-            </section>
-
-            <Separator />
-
-            <section>
-              <h4 className="text-sm font-semibold flex items-center gap-2 mb-3">
-                <FileText className="h-4 w-4 text-primary" />
-                Resumo da Última Interação
-              </h4>
-              {interactions.length > 0 ? (
-                <div className="space-y-2">
-                  <p className="text-xs font-medium text-foreground">{interactions[0].title}</p>
-                  <p className="text-xs text-muted-foreground line-clamp-4 bg-muted/30 p-2 rounded">
-                    {interactions[0].content || 'Sem conteúdo detalhado registrado.'}
-                  </p>
-                  <p className="text-[10px] text-muted-foreground italic">
-                    {formatDistanceToNow(new Date(interactions[0].created_at), { addSuffix: true, locale: ptBR })}
-                  </p>
-                </div>
-              ) : (
-                <p className="text-xs text-muted-foreground italic">Nenhuma interação registrada ainda.</p>
-              )}
-            </section>
-
-            <Separator />
-
-            <section>
-              <h4 className="text-sm font-semibold flex items-center gap-2 mb-3">
-                <History className="h-4 w-4 text-primary" />
-                Histórico Recente
-              </h4>
-              <div className="space-y-3">
-                {interactions.slice(1, 4).map((interaction, idx) => (
-                  <div key={idx} className="flex gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-border shrink-0 mt-1.5" />
-                    <div>
-                      <p className="text-xs font-medium">{interaction.title}</p>
-                      <p className="text-[10px] text-muted-foreground">
-                        {format(new Date(interaction.created_at), "dd/MM/yyyy", { locale: ptBR })}
-                      </p>
+              <div className="grid gap-2">
+                {insights.length > 0 ? insights.slice(0, 3).map((insight, idx) => (
+                  <div key={idx} className="flex gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10">
+                    <div className="mt-0.5 rounded-full bg-primary/20 p-1 h-fit">
+                      <TrendingUp className="h-3 w-3 text-primary" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm font-semibold text-primary/90">{insight.title}</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{insight.description}</p>
                     </div>
                   </div>
-                ))}
-                {interactions.length <= 1 && (
-                  <p className="text-xs text-muted-foreground italic">Sem histórico adicional.</p>
+                )) : (
+                  <div className="flex gap-3 p-3 rounded-lg bg-muted/50 border border-border/50">
+                    <Info className="h-4 w-4 text-muted-foreground mt-0.5" />
+                    <p className="text-xs text-muted-foreground">
+                      Este contato possui um alto score de relacionamento ({contact?.relationship_score || 0}/100), mas não houve interações recentes. Recomenda-se um follow-up de manutenção.
+                    </p>
+                  </div>
                 )}
               </div>
+            </section>
+
+            <Separator className="bg-border/40" />
+
+            {/* 2. Resumo da Última Interação */}
+            <section className="space-y-4">
+              <div className="flex items-center gap-2 text-primary">
+                <History className="h-4 w-4" />
+                <h4 className="text-sm font-bold uppercase tracking-wider">Última Interação</h4>
+              </div>
+              
+              {interactions.length > 0 ? (
+                <div className="space-y-4">
+                  <div className="p-4 rounded-xl bg-muted/30 border border-border/40 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className="text-[10px] font-bold uppercase bg-background">
+                        {interactions[0].type === 'message' ? 'Mensagem' : 'Reunião'}
+                      </Badge>
+                      <span className="text-[10px] text-muted-foreground">
+                        {formatDistanceToNow(new Date(interactions[0].created_at), { addSuffix: true, locale: ptBR })}
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <h5 className="text-sm font-bold">{interactions[0].title}</h5>
+                      <p className="text-xs text-muted-foreground leading-relaxed italic">
+                        "{interactions[0].content || 'Sem conteúdo detalhado registrado.'}"
+                      </p>
+                    </div>
+
+                    {/* Tópicos Principais & Pendências (Simulados se não houver no banco) */}
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      <div className="space-y-1.5">
+                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1">
+                          <CheckCircle2 className="h-3 w-3 text-success" /> Tópicos
+                        </p>
+                        <ul className="text-[10px] space-y-1 text-muted-foreground list-disc list-inside">
+                          {interactions[0].key_insights && Array.isArray(interactions[0].key_insights) 
+                            ? (interactions[0].key_insights as string[]).map((ki, i) => <li key={i}>{ki}</li>)
+                            : <><li>Contexto de negócio</li><li>Próximos passos</li></>
+                          }
+                        </ul>
+                      </div>
+                      <div className="space-y-1.5">
+                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1">
+                          <Clock className="h-3 w-3 text-warning" /> Pendências
+                        </p>
+                        <ul className="text-[10px] space-y-1 text-muted-foreground list-disc list-inside">
+                          {interactions[0].follow_up_required ? <li>Aguardando follow-up</li> : <li>Nenhuma pendência crítica</li>}
+                          <li>Validar proposta</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Sugestão de Abordagem */}
+                  <div className="p-4 rounded-xl bg-primary/5 border border-primary/20 border-dashed space-y-2">
+                    <div className="flex items-center gap-2">
+                      <div className="rounded-full bg-primary/10 p-1">
+                        <Send className="h-3 w-3 text-primary" />
+                      </div>
+                      <p className="text-xs font-bold text-primary">Sugestão de Abordagem</p>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      "Olá {contact?.first_name}, notei que faz um tempo que não conversamos. Como estão os projetos? Podemos agendar uma call rápida de 15min?"
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="py-8 text-center border-2 border-dashed border-border/30 rounded-xl">
+                  <p className="text-xs text-muted-foreground italic">Nenhuma interação recente registrada.</p>
+                </div>
+              )}
             </section>
           </div>
         </ScrollArea>
 
         <div className="p-6 bg-background border-t mt-auto flex flex-col gap-2">
           <div className="flex gap-2">
-            <Button className="flex-1 gap-2" onClick={handleApproveFollowUp} disabled={approving}>
-              <Send className="h-4 w-4" />
+            <Button className="flex-1 h-11 text-sm font-bold gap-2 shadow-lg" onClick={handleApproveFollowUp} disabled={approving}>
+              {approving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Brain className="h-4 w-4" />}
               Gerar Follow-up IA
             </Button>
             <Link to={`/contatos/${contactId}`} className="flex-1">
-              <Button variant="outline" className="w-full gap-2">
+              <Button variant="outline" className="w-full h-11 gap-2">
                 <Eye className="h-4 w-4" />
                 Ver Perfil
               </Button>
@@ -535,6 +601,25 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
         </div>
       </SheetContent>
     </Sheet>
+  );
+}
+
+function Loader2(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+    </svg>
   );
 }
 

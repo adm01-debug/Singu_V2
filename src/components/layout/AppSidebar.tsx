@@ -36,6 +36,7 @@ const navSections = [
     items: [
       { title: "Network", url: "/network", icon: Share2 },
       { title: "Intelligence", url: "/intelligence", icon: Activity },
+      { title: "Auditoria IA", url: "/intelligence/auditoria", icon: Shield },
       { title: "Insights", url: "/insights", icon: Lightbulb },
       { title: "Analytics", url: "/analytics", icon: BarChart3 },
       { title: "Performance", url: "/performance", icon: Zap },

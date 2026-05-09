@@ -31,6 +31,7 @@ const DailyInsightsWidget = lazy(() => import('@/components/dashboard/widgets/Da
 const ChurnRiskReportWidget = lazy(() => import('@/components/dashboard/widgets/ChurnRiskReportWidget'));
 const SmartRemindersPanel = lazy(() => import('@/components/smart-reminders/SmartRemindersPanel').then(m => ({ default: m.SmartRemindersPanel })));
 const StrategicNextStepsCard = lazy(() => import('@/components/dashboard/StrategicNextStepsCard').then(m => ({ default: m.StrategicNextStepsCard })));
+const AIApprovalsWidget = lazy(() => import('@/components/dashboard/widgets/AIApprovalsWidget').then(m => ({ default: m.AIApprovalsWidget })));
 
 interface StaggerAnimation {
   initial: TargetAndTransition;
@@ -106,8 +107,15 @@ export function OverviewTab({
               avatar_url: c.avatar,
               relationship_score: c.relationshipScore,
               last_interaction_at: c.lastInteraction?.toISOString() || null,
-              role_title: c.role
+              last_interaction_summary: c.lastInteractionSummary,
+              role_title: c.role,
+              notes: c.lastInteractionSummary // Fallback
             }))} />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Aprovações IA">
+          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+            <AIApprovalsWidget />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Smart Reminders">
