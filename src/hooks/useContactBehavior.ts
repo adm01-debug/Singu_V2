@@ -128,6 +128,20 @@ export const useContactBehavior = (contactId: string) => {
     enabled: !!contactId,
   });
 
+  const { data: metaprograms, isLoading: isLoadingMetaprograms } = useQuery({
+    queryKey: ["contact-metaprograms", contactId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("contact_metaprograms")
+        .select("*")
+        .eq("contact_id", contactId)
+        .maybeSingle();
+      if (error) throw error;
+      return data as ContactMetaprograms;
+    },
+    enabled: !!contactId,
+  });
+
   const { data: businessContext, isLoading: isLoadingBusiness } = useQuery({
     queryKey: ["contact-business-context", contactId],
     queryFn: async () => {
