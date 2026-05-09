@@ -92,7 +92,7 @@ const CONTACT_LISTING_SELECT = [
   'notes'
 ].join(',');
 
-async function fetchContactsPage(companyId?: string) {
+async function fetchContactsPage(companyId?: string, page = 0) {
   const filters = companyId
     ? [{ type: 'eq' as const, column: 'company_id', value: companyId }]
     : undefined;
@@ -101,7 +101,7 @@ async function fetchContactsPage(companyId?: string) {
     table: 'contacts',
     select: CONTACT_LISTING_SELECT,
     order: { column: 'updated_at', ascending: false },
-    range: { from: 0, to: PAGE_SIZE - 1 },
+    range: { from: page * PAGE_SIZE, to: (page + 1) * PAGE_SIZE - 1 },
     filters,
   });
 
