@@ -19,6 +19,7 @@ import { ContactsTableView } from '@/components/contacts/ContactsTableView';
 import { RecentlyViewedSection } from '@/components/recently-viewed/RecentlyViewedSection';
 import { SearchPresetsMenu } from '@/components/search/SearchPresetsMenu';
 import { ViewModeSwitcher, type ViewMode, type GridColumns } from '@/components/ui/view-mode-switcher';
+import { Header } from '@/components/layout/Header';
 import type { SearchPreset } from '@/hooks/useSearchPresets';
 import type { Contact } from '@/hooks/useContacts';
 
@@ -89,27 +90,40 @@ export function ContatosContent(props: Props) {
   const hasMoreContacts = visibleCount < filteredAndSortedContacts.length;
 
   return (
-    <div className="p-4 md:p-6 space-y-5">
-      <Suspense fallback={null}><DuplicateContactsPanel /></Suspense>
-      <ContactsStatsBar contacts={contacts} />
-
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-        <div className="relative flex-1 max-w-md group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground transition-colors group-focus-within:text-primary" aria-hidden="true" />
-          <Input placeholder="Buscar por nome, cargo ou email..." value={searchTerm} onChange={(e) => onSearchChange(e.target.value)} className="pl-10 transition-shadow focus-visible:shadow-[0_0_0_3px_hsl(var(--primary)/0.15)]" aria-label="Buscar contatos" />
-        </div>
-        <div className="flex items-center gap-2">
-          <SearchPresetsMenu context="contacts" currentFilters={activeFilters} currentSortBy={sortBy} currentSortOrder={sortOrder} currentSearchTerm={searchTerm}
-            onApplyPreset={(preset: SearchPreset) => { onFiltersChange(preset.filters); onSortChange(preset.sortBy, preset.sortOrder); if (preset.searchTerm) onSearchChange(preset.searchTerm); }} />
-          {isAdmin && <BulkImportDialog entityType="contacts" />}
-          <Button variant={selectionMode ? 'default' : 'outline'} size="sm" onClick={onToggleSelectionMode} className="gap-2">
-            <CheckSquare className="w-4 h-4" aria-hidden="true" /><span className="hidden sm:inline">{selectionMode ? 'Cancelar' : 'Selecionar'}</span>
-          </Button>
-          <ViewModeSwitcher value={viewMode} onChange={onViewModeChange} gridColumns={gridColumns} onGridColumnsChange={onGridColumnsChange} />
-        </div>
+    <>
+      <div className="sticky top-[57px] z-20 w-full">
+        <Header 
+          title="Contatos" 
+          subtitle={`${filteredAndSortedContacts.length} de ${contacts.length} pessoas`}
+          showAddButton 
+          addButtonLabel="Novo" 
+          onAddClick={() => onSetIsFormOpen(true)}
+          hideBack
+          showSearch
+          onSearchChange={onSearchChange}
+          className="shadow-none border-b-0"
+        />
       </div>
 
-      <AdvancedFilters filters={filterConfigs} sortOptions={sortOptions} activeFilters={activeFilters} onFiltersChange={onFiltersChange} sortBy={sortBy} sortOrder={sortOrder} onSortChange={(newSortBy, newSortOrder) => onSortChange(newSortBy, newSortOrder)} />
+      <div className="p-4 md:p-6 space-y-5">
+        <Suspense fallback={null}><DuplicateContactsPanel /></Suspense>
+        <ContactsStatsBar contacts={contacts} />
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2 ml-auto h-11 md:h-9">
+            <SearchPresetsMenu context="contacts" currentFilters={activeFilters} currentSortBy={sortBy} currentSortOrder={sortOrder} currentSearchTerm={searchTerm}
+              onApplyPreset={(preset: SearchPreset) => { onFiltersChange(preset.filters); onSortChange(preset.sortBy, preset.sortOrder); if (preset.searchTerm) onSearchChange(preset.searchTerm); }} />
+            {isAdmin && <BulkImportDialog entityType="contacts" />}
+            <Button variant={selectionMode ? 'default' : 'outline'} size="sm" onClick={onToggleSelectionMode} className="gap-2 h-11 px-4 md:h-9 md:px-3 text-sm md:text-xs">
+              <CheckSquare className="w-4 h-4" aria-hidden="true" /><span className="hidden sm:inline">{selectionMode ? 'Cancelar' : 'Selecionar'}</span>
+            </Button>
+            <ViewModeSwitcher value={viewMode} onChange={onViewModeChange} gridColumns={gridColumns} onGridColumnsChange={onGridColumnsChange} />
+          </div>
+        </div>
+
+        <div className="md:block">
+          <AdvancedFilters filters={filterConfigs} sortOptions={sortOptions} activeFilters={activeFilters} onFiltersChange={onFiltersChange} sortBy={sortBy} sortOrder={sortOrder} onSortChange={(newSortBy, newSortOrder) => onSortChange(newSortBy, newSortOrder)} />
+        </div>
       <RecentlyViewedSection type="contact" />
 
       <PullToRefresh onRefresh={onRefresh}>
@@ -156,5 +170,6 @@ export function ContatosContent(props: Props) {
 
       <BulkActionsBar selectedIds={Array.from(selectedIds)} totalCount={filteredAndSortedContacts.length} entityType="contacts" onSelectAll={onSelectAll} onClearSelection={() => onSelect('__clear__', false)} onDelete={onBulkDelete} onAddTag={onBulkAddTag} />
     </div>
+    </>
   );
 }

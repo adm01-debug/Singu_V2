@@ -1,6 +1,6 @@
-import { forwardRef } from 'react';
-import { Plus, Search } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { forwardRef, memo } from 'react';
+import { Plus, Search, ChevronLeft } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { BackButton } from '@/components/navigation/BackButton';
@@ -8,6 +8,8 @@ import { UnifiedNotificationsBell } from '@/components/notifications/UnifiedNoti
 import { SmartNotificationsBell } from '@/components/notifications/SmartNotificationsBell';
 import { GlobalDensityToggle } from '@/components/ui/global-density-toggle';
 import { SystemStatusBadge } from '@/components/ui/SystemStatusBadge';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 
 interface HeaderProps {
   title: string;
@@ -18,6 +20,9 @@ interface HeaderProps {
   onAddClick?: () => void;
   backTo?: string;
   hideBack?: boolean;
+  showSearch?: boolean;
+  onSearchChange?: (val: string) => void;
+  className?: string;
 }
 
 const PARENT_ROUTES: Record<string, string> = {
@@ -43,8 +48,11 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
   onAddClick,
   backTo,
   hideBack = false,
+  showSearch,
+  onSearchChange,
 }, ref) {
   const location = useLocation();
+  const navigate = useNavigate();
   const isRoot = location.pathname === '/';
   const showBack = !hideBack && !isRoot;
   const resolvedBackTo = backTo || PARENT_ROUTES[location.pathname] || '/';
@@ -54,12 +62,23 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
           {showBack && (
-            <BackButton
-              to={resolvedBackTo}
-              label="Voltar"
-              variant="ghost"
-              className="shrink-0 -ml-1 hidden md:inline-flex"
-            />
+            <div className="flex items-center">
+              <BackButton
+                to={resolvedBackTo}
+                label="Voltar"
+                variant="ghost"
+                className="shrink-0 -ml-1 hidden md:inline-flex"
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden h-11 w-11 -ml-2"
+                onClick={() => navigate(-1)}
+                aria-label="Voltar"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </Button>
+            </div>
           )}
           <div className="min-w-0 flex items-center gap-2">
             {PageIcon && (
@@ -81,6 +100,17 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
         </div>
 
         <div className="flex items-center gap-1 md:gap-3 shrink-0">
+          {showSearch && (
+            <div className="hidden md:flex relative group w-48 lg:w-64">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+              <Input 
+                placeholder="Buscar..." 
+                className="pl-8 h-8 text-[11px] bg-muted/40 border-none focus-visible:ring-1 focus-visible:ring-primary/20"
+                onChange={(e) => onSearchChange?.(e.target.value)}
+              />
+            </div>
+          )}
+
           <div className="hidden md:inline-flex items-center gap-4">
             <SystemStatusBadge />
             <div className="flex items-center gap-1">
@@ -94,7 +124,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden h-8 w-8"
+            className="h-11 w-11 md:h-8 md:w-8"
             aria-label="Buscar (⌘K)"
             onClick={() => {
               const ev = new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true });
@@ -105,8 +135,12 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
           </Button>
 
           {showAddButton && (
-            <Button onClick={onAddClick} size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground h-8 text-xs px-2 sm:px-3">
-              <Plus className="w-3.5 h-3.5 sm:mr-1.5" aria-hidden="true" />
+            <Button 
+              onClick={onAddClick} 
+              size="sm" 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground h-11 px-3 sm:h-8 text-xs sm:px-3 font-semibold shadow-sm"
+            >
+              <Plus className="w-4 h-4 sm:w-3.5 sm:h-3.5 sm:mr-1.5" aria-hidden="true" />
               <span className="hidden sm:inline">{addButtonLabel || 'Adicionar'}</span>
             </Button>
           )}
@@ -117,3 +151,4 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
 });
 
 Header.displayName = 'Header';
+export const HeaderMemo = memo(Header);

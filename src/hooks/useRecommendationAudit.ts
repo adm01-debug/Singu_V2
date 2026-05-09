@@ -19,8 +19,8 @@ export function useRecommendationAudit() {
       const { data: auth } = await supabase.auth.getUser();
       if (!auth.user) throw new Error('Not authenticated');
 
-      const { error } = await supabase
-        .from('ai_recommendation_audit_logs')
+      const { error } = await (supabase as any)
+        .from('ai_recommendation_audit_logs_v2')
         .insert({
           user_id: auth.user.id,
           contact_id: payload.contactId,

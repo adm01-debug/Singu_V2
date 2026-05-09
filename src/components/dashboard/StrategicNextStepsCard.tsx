@@ -186,14 +186,13 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
                       </p>
                       
                       {/* Dashboard "Resumo da Última Interação" mini-display */}
-                      {contact.notes && (
-                        <div className="mt-1 flex items-start gap-1.5 max-w-full">
-                          <MessageSquare className="h-3 w-3 text-primary/40 shrink-0 mt-0.5" />
-                          <p className="text-[10px] text-muted-foreground italic truncate">
-                            {contact.notes.slice(0, 60)}...
-                          </p>
-                        </div>
-                      )}
+                      <div className="mt-1 flex items-start gap-1.5 max-w-full">
+                        <MessageSquare className="h-3 w-3 text-primary/40 shrink-0 mt-0.5" />
+                        <p className="text-[10px] text-muted-foreground italic truncate">
+                          {contact.notes ? contact.notes.slice(0, 60) : 'Nenhum resumo disponível'}
+                          {contact.notes && contact.notes.length > 60 && '...'}
+                        </p>
+                      </div>
 
                       <div className="flex items-center gap-1.5 mt-1">
                         <Clock className="h-3 w-3 text-muted-foreground/60" />
@@ -325,8 +324,8 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       // Simulate/Trigger follow-up generation (could be an edge function call)
       const content = `Olá ${contact?.first_name}, notei que faz um tempo que não conversamos. Como estão as coisas por aí?`;
       
-      const { error } = await supabase
-        .from('follow_up_approvals')
+      const { error } = await (supabase as any)
+        .from('follow_up_approvals_v2')
         .insert({
           user_id: user.id,
           contact_id: contactId,
