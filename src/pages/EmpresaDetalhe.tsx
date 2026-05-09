@@ -17,7 +17,7 @@ import {
   Network, BarChart3, Sparkles, Database, ShoppingCart,
   AlertTriangle, RotateCcw, Target, Zap, Globe, MapPin, 
   Phone, Mail, Calendar, ExternalLink, ChevronRight, Activity, 
-  TrendingUp, ShieldCheck, UserCheck, Star
+  TrendingUp, ShieldCheck, UserCheck, Star, HeartPulse, Brain
 } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { EntityDetailPageSkeleton } from '@/components/skeletons/PageSkeletons';
