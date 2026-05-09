@@ -36,6 +36,18 @@ export interface SalesPlaybook {
   updated_at: string;
 }
 
+export interface PlaybookUsageLog {
+  id: string;
+  user_id: string;
+  playbook_id: string | null;
+  battle_card_id: string | null;
+  contact_id: string | null;
+  deal_id: string | null;
+  action: "opened" | "copied" | "shared" | "recommended" | "used_in_deal";
+  context: Record<string, any> | null;
+  opened_at: string;
+}
+
 export interface PlaybookFilters {
   scenario?: PlaybookScenario;
   industry?: string;
