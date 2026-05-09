@@ -15,7 +15,11 @@ import { CustomTooltip, PieTooltip, ComparisonBadge } from './charts/ChartCompon
 
 export type { PeriodFilter };
 
-interface ChartProps { period: PeriodFilter; }
+interface ChartProps { 
+  period: PeriodFilter; 
+  contacts?: any[];
+  interactions?: any[];
+}
 
 export const ActivityChart = ({ period }: ChartProps) => {
   const activityData = getActivityData(period);
@@ -85,7 +89,7 @@ export const RelationshipEvolutionChart = ({ period }: ChartProps) => {
   );
 };
 
-export const ContactDistributionChart = () => (
+export const ContactDistributionChart = ({ contacts }: { contacts?: any[] }) => (
   <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.4 }}>
     <Card className="h-full">
       <CardHeader><CardTitle className="text-lg font-semibold flex items-center gap-2"><PieChartIcon className="w-5 h-5 text-info" />Distribuição por Função</CardTitle></CardHeader>
