@@ -153,7 +153,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         return true;
       })
       .sort((a, b) => (b.relationship_score || 0) - (a.relationship_score || 0))
-      .slice(0, 4)
+      .slice(0, 5) // Aumentado de 4 para 5 para mais opções estratégicas
       .map(contact => {
         const company = contact.company_id ? companyMap.get(contact.company_id) : undefined;
         const latestDate = latestInteractionByContact.get(contact.id);
@@ -216,7 +216,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         };
       })
       .filter(a => a.entityName !== 'Contato' && a.entityName !== 'Mensagem' && a.entityName !== 'Mensagem Enviada') // Remove unresolved generic entries
-      .slice(0, 8); // Aumentado para 8 para melhor visualização em telas grandes
+      .slice(0, 10); // Aumentado para 10 para melhor histórico no feed
 
     return {
       totalCompanies: companies.length,

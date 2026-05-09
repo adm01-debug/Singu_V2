@@ -45,7 +45,7 @@ export function IntelligenceTab({ contacts, prefersReducedMotion, tabDirection }
               last_name: c.last_name,
               avatar_url: c.avatar_url,
               relationship_score: c.relationship_score,
-              last_interaction_at: c.last_interaction_at,
+              last_interaction_at: c.last_interaction_at || c.updated_at,
               role_title: c.role_title,
               notes: c.last_interaction_summary || c.notes
             })), [contacts])}
