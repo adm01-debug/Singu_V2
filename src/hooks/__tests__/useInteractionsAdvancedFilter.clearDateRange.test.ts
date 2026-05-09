@@ -2,19 +2,20 @@ import { describe, it, expect } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useInteractionsAdvancedFilter } from '@/hooks/useInteractionsAdvancedFilter';
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
 
 function wrapperFor(initial: string) {
   return ({ children }: { children: React.ReactNode }) =>
-    React.createElement(MemoryRouter, { initialEntries: [initial] }, children);
+    React.createElement(QueryClientProvider, { client: queryClient },
+      React.createElement(MemoryRouter, { initialEntries: [initial] }, children)
+    );
 }
 
-/**
- * `clearDateRange` é a função atômica de limpeza do range de datas. Garante
- * que `de` e `ate` saiam da URL em UMA ÚNICA escrita de searchParams,
- * eliminando qualquer condição de corrida que poderia surgir com dois
- * `setFilter` em sequência.
- */
 describe('useInteractionsAdvancedFilter.clearDateRange', () => {
   it('remove `de` e `ate` em uma única operação atômica', () => {
     const { result } = renderHook(() => useInteractionsAdvancedFilter(), {
@@ -45,7 +46,6 @@ describe('useInteractionsAdvancedFilter.clearDateRange', () => {
     expect(result.current.filters.canais).toEqual(['email', 'whatsapp']);
     expect(result.current.filters.sentimento).toBe('positive');
     expect(result.current.filters.sort).toBe('oldest');
-    // page é zerada (qualquer mudança em filtros volta para 1)
     expect(result.current.filters.page).toBe(1);
   });
 

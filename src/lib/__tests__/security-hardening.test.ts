@@ -112,9 +112,9 @@ describe('Security Hardening', () => {
     });
 
     it('QueryClient retries with backoff', () => {
-      const app = readFile('src/App.tsx');
-      expect(app).toContain('retryDelay');
-      expect(app).toMatch(/Math\.min.*2.*attemptIndex/);
+      const qc = readFile('src/app/queryClient.ts');
+      expect(qc).toContain('retryDelay');
+      expect(qc).toMatch(/Math\.min.*2.*attemptIndex/);
     });
   });
 

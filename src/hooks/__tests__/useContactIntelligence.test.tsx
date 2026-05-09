@@ -15,9 +15,8 @@ vi.mock('@/lib/externalData', () => ({
 
 function makeWrapper() {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-  return ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={qc}>{children}</QueryClientProvider>
-  );
+  return ({ children }: { children: React.ReactNode }) => 
+    React.createElement(QueryClientProvider, { client: qc }, children);
 }
 
 beforeEach(() => {
