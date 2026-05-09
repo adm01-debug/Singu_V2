@@ -1,91 +1,59 @@
-/**
- * Integração: URL ↔ chips de canais em /interacoes
- *
- * Cobre o ciclo crítico que junta `useInteractionsAdvancedFilter` (parser/whitelist)
- * com `ActiveFiltersBar` (chips com botão de fechar):
- *   1) Abrir /interacoes?canais=… popula `filters.canais` na ordem correta.
- *   2) Clicar no "X" de um chip remove só aquele canal e mantém o param.
- *   3) Remover o último canal apaga `?canais=` da URL (não persiste vazio).
- *
- * Por que integração e não unit:
- * - O bug clássico desta área é a divergência entre a normalização do parser e
- *   o setter (lowercasing/whitelist/dedup). Renderizar os chips reais e clicar
- *   no DOM garante que o caminho de UI usa exatamente a mesma fonte de verdade
- *   já centralizada em `@/lib/canaisInteracao`.
- */
 import React, { useEffect } from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, useLocation } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useInteractionsAdvancedFilter } from '@/hooks/useInteractionsAdvancedFilter';
 import { ActiveFiltersBar } from '@/components/interactions/ActiveFiltersBar';
 
-// `sonner` é usado pelo hook para avisar sobre canais inválidos vindos da URL.
-// Mockamos para não vazar toasts em jsdom e para podermos asseverar quando quisermos.
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
+
 vi.mock('sonner', () => ({
-  toast: {
-    warning: vi.fn(),
-    success: vi.fn(),
-    error: vi.fn(),
-    info: vi.fn(),
-  },
+  toast: { warning: vi.fn(), success: vi.fn(), error: vi.fn(), info: vi.fn() },
 }));
 
-// `useDebounce` introduz timers que não interessam aos asserts deste arquivo.
-// Devolvemos o valor cru: nenhum dos cenários valida `debouncedQ`.
 vi.mock('@/hooks/useDebounce', () => ({
-  useDebounce: <T,>(v: T) => v,
+  useDebounce: (v: any) => v,
 }));
 
-// `channelPersistence` toca `localStorage`. O wrapper `MemoryRouter` em jsdom
-// já é estável, mas preferimos no-ops para isolar do estado entre testes.
 vi.mock('@/lib/channelPersistence', () => ({
   readAppliedCanais: () => null,
   writeAppliedCanais: vi.fn(),
   clearAppliedCanais: vi.fn(),
 }));
 
-/**
- * Harness que renderiza a barra de chips real e expõe a URL atual via `data-*`
- * para asserts diretos no DOM — evita acoplar o teste ao formato interno do
- * `URLSearchParams` e simula como o usuário enxergaria o link copiado.
- */
-function Harness({ onReady }: { onReady?: (api: ReturnType<typeof useInteractionsAdvancedFilter>) => void }) {
+function Harness({ onReady }: { onReady?: (api: any) => void }) {
   const adv = useInteractionsAdvancedFilter();
   const location = useLocation();
   useEffect(() => { onReady?.(adv); }, [adv, onReady]);
-  return (
-    <div>
-      <div data-testid="url-search">{location.search}</div>
-      <div data-testid="canais-count">{adv.filters.canais.length}</div>
-      <div data-testid="canais-csv">{adv.filters.canais.join(',')}</div>
-      <ActiveFiltersBar
-        filters={adv.filters}
-        setFilter={adv.setFilter}
-        clear={adv.clear}
-        activeCount={adv.activeCount}
-        totalCount={100}
-        visibleCount={100}
-      />
-    </div>
+  return React.createElement('div', null,
+    React.createElement('div', { 'data-testid': 'url-search' }, location.search),
+    React.createElement('div', { 'data-testid': 'canais-count' }, adv.filters.canais.length),
+    React.createElement('div', { 'data-testid': 'canais-csv' }, adv.filters.canais.join(',')),
+    React.createElement(ActiveFiltersBar, {
+      filters: adv.filters,
+      setFilter: adv.setFilter,
+      clear: adv.clear,
+      activeCount: adv.activeCount,
+      totalCount: 100,
+      visibleCount: 100,
+    })
   );
 }
 
 function renderAt(initial: string) {
   return render(
-    <MemoryRouter initialEntries={[initial]}>
-      <Harness />
-    </MemoryRouter>,
+    React.createElement(QueryClientProvider, { client: queryClient },
+      React.createElement(MemoryRouter, { initialEntries: [initial] },
+        React.createElement(Harness)
+      )
+    )
   );
 }
 
-/**
- * Encontra o botão "X" do chip cujo texto visível inclui `label`.
- * Estratégia: varre TODOS os botões `aria-label="Remove"` e escolhe aquele
- * cujo elemento-pai (o Badge) contém o texto exato do canal. Isso ignora o
- * resumo lateral "N canais: …" que também renderiza o nome.
- */
 function getRemoveButtonForChip(label: string): HTMLButtonElement {
   const buttons = Array.from(
     document.querySelectorAll<HTMLButtonElement>('button[aria-label="Remove"]'),
@@ -102,11 +70,9 @@ describe('integração /interacoes ?canais= ↔ chips', () => {
     renderAt('/interacoes?canais=email,call,whatsapp');
     expect(screen.getByTestId('canais-csv').textContent).toBe('email,call,whatsapp');
     expect(screen.getByTestId('canais-count').textContent).toBe('3');
-    // Cada canal aparece pelo menos uma vez (chip + resumo lateral).
     expect(screen.getAllByText('Email').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('Ligação').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('WhatsApp').length).toBeGreaterThanOrEqual(1);
-    // Há exatamente 3 botões de "Remove" — um por chip de canal.
     expect(document.querySelectorAll('button[aria-label="Remove"]')).toHaveLength(3);
   });
 
@@ -119,9 +85,7 @@ describe('integração /interacoes ?canais= ↔ chips', () => {
     expect(screen.getByTestId('canais-csv').textContent).toBe('call,whatsapp');
     expect(screen.getByTestId('canais-count').textContent).toBe('2');
     expect(screen.getByTestId('url-search').textContent).toContain('canais=call%2Cwhatsapp');
-    // Sobrou só o resumo mencionando "Email"? Não — o resumo também atualiza.
     expect(screen.queryByText('Email')).not.toBeInTheDocument();
-    // Restaram 2 chips (2 botões "Remove").
     expect(document.querySelectorAll('button[aria-label="Remove"]')).toHaveLength(2);
   });
 
@@ -157,17 +121,18 @@ describe('integração /interacoes ?canais= ↔ chips', () => {
 
   it('descarta valores fora da whitelist mas mantém os válidos', () => {
     renderAt('/interacoes?canais=email,garbage,CALL');
-    // `garbage` é descartado; `CALL` é normalizado para minúsculas.
     expect(screen.getByTestId('canais-csv').textContent).toBe('email,call');
     expect(screen.getByTestId('canais-count').textContent).toBe('2');
   });
 
   it('setFilter("canais", []) programaticamente também limpa o param', () => {
-    let api: ReturnType<typeof useInteractionsAdvancedFilter> | null = null;
+    let api: any = null;
     render(
-      <MemoryRouter initialEntries={['/interacoes?canais=email,call']}>
-        <Harness onReady={(a) => { api = a; }} />
-      </MemoryRouter>,
+      React.createElement(QueryClientProvider, { client: queryClient },
+        React.createElement(MemoryRouter, { initialEntries: ['/interacoes?canais=email,call'] },
+          React.createElement(Harness, { onReady: (a) => { api = a; } })
+        )
+      )
     );
 
     expect(screen.getByTestId('canais-count').textContent).toBe('2');
