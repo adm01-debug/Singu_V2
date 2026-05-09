@@ -21,7 +21,7 @@ export function GeneratePlaybookDialog({ trigger }: { trigger?: React.ReactNode 
 
   const handleSubmit = async () => {
     if (prompt.trim().length < 5) return;
-    const result: any = await generate.mutateAsync({
+    const result = await generate.mutateAsync({
       scenario, prompt,
       industry: industry || undefined,
       persona: persona || undefined,
@@ -29,8 +29,8 @@ export function GeneratePlaybookDialog({ trigger }: { trigger?: React.ReactNode 
       save: true,
     });
     setOpen(false);
-    if (result?.playbook?.id) {
-      navigate(`/playbooks/${result.playbook.id}`);
+    if (result?.id) {
+      navigate(`/playbooks/${result.id}`);
     }
   };
 

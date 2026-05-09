@@ -1,8 +1,8 @@
-import { useRoomActivities } from "@/hooks/useDealRooms";
+import { useRoomActivities, type DealRoomActivity } from "@/hooks/useDealRooms";
 import { Card, CardContent } from "@/components/ui/card";
 import { Eye, CheckCircle2, MessageSquare, Upload } from "lucide-react";
 
-const ICONS: Record<string, any> = {
+const ICONS: Record<string, React.ComponentType<any>> = {
   view: Eye,
   milestone_completed: CheckCircle2,
   milestone_reopened: CheckCircle2,
@@ -15,10 +15,10 @@ export function ActivityFeed({ roomId }: { roomId: string }) {
   const { data = [] } = useRoomActivities(roomId);
   return (
     <div className="space-y-2">
-      {data.map((a: any) => {
+      {data.map((a: DealRoomActivity) => {
         const Icon = ICONS[a.activity_type] ?? Eye;
         return (
-          <Card key={a.id} variant="outlined">
+          <Card key={a.id} className="border shadow-none">
             <CardContent className="p-3 flex items-start gap-3">
               <Icon className="h-4 w-4 text-primary mt-0.5" />
               <div className="flex-1 min-w-0">

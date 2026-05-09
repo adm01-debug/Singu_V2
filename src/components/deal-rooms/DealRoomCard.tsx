@@ -23,9 +23,9 @@ const STATUS_LABEL: Record<string, string> = {
 export function DealRoomCard({ room }: { room: DealRoom }) {
   const { data: ms } = useMilestones(room.id);
   const total = ms?.length ?? 0;
-  const done = ms?.filter((m: any) => m.status === "done").length ?? 0;
+  const done = ms?.filter((m) => m.status === "done").length ?? 0;
   const pct = total ? Math.round((done / total) * 100) : 0;
-  const next = ms?.find((m: any) => m.status !== "done");
+  const next = ms?.find((m) => m.status !== "done");
 
   const lastView = room.last_buyer_view_at
     ? `${Math.round((Date.now() - new Date(room.last_buyer_view_at).getTime()) / 86400000)}d atrás`

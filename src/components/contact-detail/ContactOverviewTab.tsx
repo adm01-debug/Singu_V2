@@ -240,7 +240,7 @@ function PersonalInfoCard({ contact }: { contact: Contact }) {
 }
 
 // --- Cadence & Preferences Card ---
-function CadencePreferencesCardInline({ cadence, preferences }: { cadence: any; preferences: any }) {
+function CadencePreferencesCardInline({ cadence, preferences }: { cadence: Tables<'contact_cadence'> | null; preferences: Tables<'contact_preferences'> | null }) {
   return (
     <Card>
       <CardHeader className="pb-3">

@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, Sparkles, Loader2, Swords, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useRecommendPlaybooks, useLogPlaybookUsage, SCENARIO_LABELS } from "@/hooks/usePlaybooks";
+import { useRecommendPlaybooks, useLogPlaybookUsage, SCENARIO_LABELS, type SalesPlaybook } from "@/hooks/usePlaybooks";
+import { type BattleCard } from "@/hooks/useBattleCards";
 import { useEffect } from "react";
 
 interface Props {
@@ -24,7 +25,10 @@ interface Props {
 export function PlaybookSuggestionDrawer({ open, onOpenChange, context }: Props) {
   const recommend = useRecommendPlaybooks();
   const log = useLogPlaybookUsage();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<{ 
+    recommendations: Array<{ playbook: SalesPlaybook; score: number; reasons: string[] }>; 
+    battle_card?: BattleCard; 
+  } | null>(null);
 
   useEffect(() => {
     if (open && !recommend.isPending) {
@@ -67,7 +71,7 @@ export function PlaybookSuggestionDrawer({ open, onOpenChange, context }: Props)
             <p className="text-sm text-muted-foreground text-center py-8">Nenhum playbook relevante encontrado. <br/>Crie um novo na biblioteca.</p>
           )}
 
-          {!recommend.isPending && data?.recommendations?.map((rec: any) => (
+          {!recommend.isPending && data?.recommendations?.map((rec) => (
             <div key={rec.playbook.id} className="rounded-lg border border-border/60 bg-card p-4 space-y-2">
               <div className="flex items-start justify-between gap-2">
                 <div className="space-y-1 min-w-0">

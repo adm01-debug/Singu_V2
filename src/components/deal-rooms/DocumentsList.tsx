@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { useRoomDocuments, useUploadDocument, useDeleteDocument, getDocumentSignedUrl } from "@/hooks/useDealRooms";
+import { useRoomDocuments, useUploadDocument, useDeleteDocument, getDocumentSignedUrl, type DealRoomDocument } from "@/hooks/useDealRooms";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Upload, Download, Trash2, FileText } from "lucide-react";
@@ -33,8 +33,8 @@ export function DocumentsList({ roomId }: { roomId: string }) {
         </Button>
       </div>
       <div className="space-y-2">
-        {data.map((d: any) => (
-          <Card key={d.id} variant="outlined">
+        {data.map((d: DealRoomDocument) => (
+          <Card key={d.id} className="border shadow-none">
             <CardContent className="p-3 flex items-center gap-3">
               <FileText className="h-5 w-5 text-muted-foreground" />
               <div className="flex-1 min-w-0">

@@ -77,7 +77,7 @@ export function useDocumentTemplates() {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
       if (error) throw error;
-      return (data || []).map((t: any) => ({
+      return (data || []).map((t: Record<string, unknown>) => ({
         ...t,
         merge_fields: Array.isArray(t.merge_fields) ? t.merge_fields : [],
       })) as unknown as DocumentTemplate[];

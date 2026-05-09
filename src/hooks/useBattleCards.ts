@@ -58,14 +58,14 @@ export function useUpsertBattleCard() {
   return useMutation({
     mutationFn: async (input: Partial<BattleCard> & { id?: string }) => {
       if (!user) throw new Error("not authenticated");
-      const payload: any = { ...input, user_id: user.id, last_updated_by: user.id };
+      const payload = { ...input, user_id: user.id, last_updated_by: user.id };
       if (input.id) {
-        const { data, error } = await supabase.from("battle_cards").update(payload).eq("id", input.id).select().maybeSingle();
+        const { data, error } = await supabase.from("battle_cards").update(payload as any).eq("id", input.id).select().maybeSingle();
         if (error) throw error;
         if (!data) throw new Error("Battle card não encontrado");
         return data;
       }
-      const { data, error } = await supabase.from("battle_cards").insert(payload).select().maybeSingle();
+      const { data, error } = await supabase.from("battle_cards").insert(payload as any).select().maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Falha ao criar battle card");
       return data;
@@ -75,7 +75,7 @@ export function useUpsertBattleCard() {
       qc.invalidateQueries({ queryKey: ["battle-card"] });
       toast.success("Battle card salvo");
     },
-    onError: (e: any) => toast.error(e?.message || "Erro ao salvar battle card"),
+    onError: (e: Error) => toast.error(e.message || "Erro ao salvar battle card"),
   });
 }
 

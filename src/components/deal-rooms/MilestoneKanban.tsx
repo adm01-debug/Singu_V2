@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMilestones, useUpsertMilestone, useDeleteMilestone, type MilestoneStatus, type Side } from "@/hooks/useDealRooms";
+import { useMilestones, useUpsertMilestone, useDeleteMilestone, type MilestoneStatus, type Side, type DealRoomMilestone } from "@/hooks/useDealRooms";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,9 +24,8 @@ export function MilestoneKanban({ roomId }: { roomId: string }) {
   const upsert = useUpsertMilestone(roomId);
   const del = useDeleteMilestone(roomId);
   const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState<any>(null);
-
-  const onSave = async (m: any) => {
+  const [editing, setEditing] = useState<DealRoomMilestone | null>(null);
+  const onSave = async (m: Partial<DealRoomMilestone>) => {
     await upsert.mutateAsync(m);
     setOpen(false);
     setEditing(null);
@@ -47,11 +46,11 @@ export function MilestoneKanban({ roomId }: { roomId: string }) {
           <div key={c.status} className="space-y-2">
             <div className="flex items-center justify-between px-2">
               <h4 className="text-sm font-semibold">{c.label}</h4>
-              <span className="text-xs text-muted-foreground">{ms.filter((x: any) => x.status === c.status).length}</span>
+              <span className="text-xs text-muted-foreground">{ms.filter((x) => x.status === c.status).length}</span>
             </div>
             <div className="space-y-2 min-h-[80px]">
-              {ms.filter((x: any) => x.status === c.status).map((m: any) => (
-                <Card key={m.id} variant="outlined" className="cursor-pointer" onClick={() => { setEditing(m); setOpen(true); }}>
+              {ms.filter((x) => x.status === c.status).map((m) => (
+                <Card key={m.id} className="cursor-pointer border shadow-none" onClick={() => { setEditing(m); setOpen(true); }}>
                   <CardContent className="p-3 space-y-2">
                     <div className="flex items-start justify-between gap-2">
                       <p className="text-sm font-medium line-clamp-2">{m.title}</p>
@@ -78,8 +77,8 @@ export function MilestoneKanban({ roomId }: { roomId: string }) {
   );
 }
 
-function MilestoneDialog({ editing, onSave }: { editing: any; onSave: (m: any) => void }) {
-  const [form, setForm] = useState(editing ?? { title: "", description: "", status: "pending", owner_side: "both", due_date: "", sort_order: 0 });
+function MilestoneDialog({ editing, onSave }: { editing: DealRoomMilestone | null; onSave: (m: Partial<DealRoomMilestone>) => void }) {
+  const [form, setForm] = useState<Partial<DealRoomMilestone>>(editing ?? { title: "", description: "", status: "pending", owner_side: "both", due_date: "", sort_order: 0 });
   return (
     <DialogContent>
       <DialogHeader><DialogTitle>{editing ? "Editar milestone" : "Novo milestone"}</DialogTitle></DialogHeader>
@@ -107,7 +106,7 @@ function MilestoneDialog({ editing, onSave }: { editing: any; onSave: (m: any) =
           </div>
           <div>
             <Label>Responsável</Label>
-            <Select value={form.owner_side} onValueChange={(v) => setForm({ ...form, owner_side: v })}>
+            <Select value={form.owner_side as string} onValueChange={(v) => setForm({ ...form, owner_side: v as any })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="seller">Vendedor</SelectItem>
