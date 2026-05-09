@@ -143,8 +143,9 @@ export function useCreateDealRoom() {
         target_close_date: payload.target_close_date ?? null,
         deal_value: payload.deal_value ?? null,
         description: payload.description ?? null,
-      }).select("*").single();
+      }).select("*").maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar Deal Room");
       return data as DealRoom;
     },
     onSuccess: () => {
