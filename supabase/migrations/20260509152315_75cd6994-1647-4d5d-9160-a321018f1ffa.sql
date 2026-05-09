@@ -1,0 +1,1 @@
+ALTER FUNCTION public.record_family_history() SET search_path = public;
