@@ -135,17 +135,17 @@ export function WhatsAppDashboard({ contactId }: Props) {
                   key={msg.id}
                   className={cn(
                     'rounded-lg p-2.5 text-sm max-w-[85%]',
-                    msg.from_me
+                    msg.direction === 'outbound'
                       ? 'ml-auto bg-primary/10 border border-primary/20'
                       : 'bg-muted border'
                   )}
                 >
                   <div className="flex items-center justify-between gap-2 mb-0.5">
                     <span className="text-xs font-medium text-foreground">
-                      {msg.from_me ? 'Você' : (msg.sender_name || 'Contato')}
+                      {msg.direction === 'outbound' ? 'Você' : 'Contato'}
                     </span>
                     <span className="text-xs text-muted-foreground">
-                      {format(new Date(msg.timestamp), 'dd/MM HH:mm')}
+                      {format(new Date(msg.created_at), 'dd/MM HH:mm')}
                     </span>
                   </div>
                   {msg.content && (
