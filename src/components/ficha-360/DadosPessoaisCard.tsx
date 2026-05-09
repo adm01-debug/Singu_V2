@@ -31,10 +31,15 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
   const [familyInfo, setFamilyInfo] = useState(rapportIntel?.family_info || '');
   const [spouseName, setSpouseName] = useState('');
   const [children, setChildren] = useState<string[]>([]);
+  const [hobbies, setHobbies] = useState<string[]>(Array.isArray(rapportIntel?.hobbies) ? rapportIntel.hobbies : []);
+  const [interests, setInterests] = useState<string[]>(Array.isArray(rapportIntel?.interests) ? rapportIntel.interests : []);
   const [birthday, setBirthday] = useState(rapportIntel?.birthday || '');
   const [anchors, setAnchors] = useState<string[]>(Array.isArray(rapportIntel?.positive_anchors) ? rapportIntel.positive_anchors : []);
   const [newAnchor, setNewAnchor] = useState('');
   const [newChild, setNewChild] = useState('');
+  const [newHobby, setNewHobby] = useState('');
+  const [newInterest, setNewInterest] = useState('');
+  const [isSyncing, setIsSyncing] = useState(false);
 
   // Parse family_info if it's JSON or string
   useEffect(() => {
