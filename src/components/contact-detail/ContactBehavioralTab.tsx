@@ -203,7 +203,7 @@ export function ContactBehavioralTab({ contact }: Props) {
       </TabsContent>
 
       <TabsContent value="personality">
-        <PersonalitySubTab behavior={behavior} />
+        <PersonalitySubTab contactId={contact.id} />
       </TabsContent>
     </Tabs>
 
