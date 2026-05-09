@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Briefcase, DollarSign, Target, Shield } from 'lucide-react';
+import { Briefcase, DollarSign, Target, Shield, HeartPulse } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { Tables } from '@/integrations/supabase/types';
 
@@ -23,10 +23,19 @@ export function BusinessInfoCard({ company }: BusinessInfoCardProps) {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
+          {company.financial_health && (
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground flex items-center gap-1.5">
+                <HeartPulse className="w-3.5 h-3.5 text-success" />
+                Saúde Financeira
+              </span>
+              <Badge variant="outline" className="text-xs capitalize">{company.financial_health}</Badge>
+            </div>
+          )}
           {c.ramo_atividade && (
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">Ramo</span>
-              <span className="text-sm">{String(c.ramo_atividade)}</span>
+              <span className="text-sm truncate max-w-[150px] text-right">{String(c.ramo_atividade)}</span>
             </div>
           )}
           {c.nicho_cliente && (

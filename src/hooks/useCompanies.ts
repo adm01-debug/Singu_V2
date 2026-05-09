@@ -20,9 +20,8 @@ export type CompanyUpdate = TablesUpdate<'companies'>;
 
 /** Fields from the local Supabase schema that do NOT exist in the external DB */
 const LOCAL_ONLY = new Set([
-  'name', 'industry', 'tags', 'notes', 'phone', 'email', 'address',
-  'city', 'state', 'instagram', 'linkedin', 'facebook',
-  'youtube', 'twitter', 'tiktok', 'merge_notes',
+  'name', 'industry', 'tags', 'notes',
+  'merge_notes',
 ]);
 
 interface ExternalRow extends Record<string, unknown> {
@@ -49,7 +48,7 @@ const LISTING_SELECT = [
   'matriz_id', 'central_id', 'singular_id', 'confederacao_id',
   'capital_social', 'porte_rf', 'situacao_rf', 'situacao_rf_data',
   'natureza_juridica', 'natureza_juridica_desc', 'data_fundacao',
-  'website', 'logo_url',
+  'website', 'phone', 'email', 'address', 'city', 'state', 'logo_url',
   'updated_at', 'created_at', 'user_id',
   'financial_health', 'annual_revenue', 'employee_count',
   'bitrix_company_id', 'cores_marca',
@@ -149,6 +148,11 @@ function mapCompany(ext: ExternalRow): Company {
     created_by_id: ext.created_by_id as string | null ?? null,
     deleted_at: ext.deleted_at as string | null ?? null,
     deleted_by: ext.deleted_by as string | null ?? null,
+    phone: ext.phone as string | null ?? null,
+    email: ext.email as string | null ?? null,
+    address: ext.address as string | null ?? null,
+    city,
+    state,
     similarity: ext.similarity as number | null ?? undefined,
   } as unknown as Company;
 }

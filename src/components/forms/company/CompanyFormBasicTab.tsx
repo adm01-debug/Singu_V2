@@ -1,5 +1,5 @@
 import type { UseFormReturn } from 'react-hook-form';
-import { Building2, Briefcase, Globe, Tag, Sparkles } from 'lucide-react';
+import { Building2, Briefcase, Globe, Tag, Sparkles, Phone, Mail, MapPin } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {

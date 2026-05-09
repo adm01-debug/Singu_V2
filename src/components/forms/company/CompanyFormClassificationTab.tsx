@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { FormSection } from './CompanyFormSection';
-import { financialHealthOptions, type CompanyFormData } from './CompanyFormSchema';
+import { financialHealthOptions, employeeCountOptions, type CompanyFormData } from './CompanyFormSchema';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface CompanyFormClassificationTabProps {
@@ -63,6 +63,18 @@ export function CompanyFormClassificationTab({ form }: CompanyFormClassification
           <FormItem>
             <FormLabel>Grupo Econômico</FormLabel>
             <FormControl><Input placeholder="Ex: Coanorp Cooperativa" {...field} value={field.value ?? ''} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name="employee_count" render={({ field }) => (
+          <FormItem>
+            <FormLabel>Número de Funcionários</FormLabel>
+            <Select onValueChange={field.onChange} defaultValue={field.value || 'unknown'}>
+              <FormControl><SelectTrigger><SelectValue placeholder="Selecione a faixa" /></SelectTrigger></FormControl>
+              <SelectContent>
+                {employeeCountOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+              </SelectContent>
+            </Select>
             <FormMessage />
           </FormItem>
         )} />
