@@ -195,7 +195,7 @@ const Contatos = () => {
 
         <div className="px-4 md:px-6 -mt-2 mb-3">
           <ContatosSavedViews
-            currentState={{ searchTerm, viewMode, gridColumns, activeFilters, sortBy, sortOrder }}
+            currentState={{ searchTerm, viewMode, gridColumns, activeFilters, sortBy, sortOrder, multiSort }}
             onApply={(s) => {
               setSearchTerm(s.searchTerm);
               setViewMode(s.viewMode);
@@ -203,6 +203,7 @@ const Contatos = () => {
               setActiveFilters(s.activeFilters);
               setSortBy(s.sortBy);
               setSortOrder(s.sortOrder);
+              if (s.multiSort) setMultiSort(s.multiSort);
             }}
           />
         </div>
@@ -213,7 +214,8 @@ const Contatos = () => {
           viewMode={viewMode} onViewModeChange={setViewMode}
           gridColumns={gridColumns} onGridColumnsChange={setGridColumns}
           activeFilters={activeFilters} onFiltersChange={setActiveFilters}
-          sortBy={sortBy} sortOrder={sortOrder} onSortChange={(sb, so) => { setSortBy(sb); setSortOrder(so); }}
+          sortBy={sortBy} sortOrder={sortOrder} onSortChange={(sb, so) => { setSortBy(sb); setSortOrder(so); setMultiSort([{ column: sb, order: so }]); }}
+          multiSort={multiSort} onMultiSortChange={setMultiSort}
           filterConfigs={filterConfigs} sortOptions={sortOptions}
           selectionMode={selectionMode} selectedIds={selectedIds}
           onToggleSelectionMode={() => { setSelectionMode(!selectionMode); if (selectionMode) setSelectedIds(new Set()); }}
