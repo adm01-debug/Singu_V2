@@ -100,7 +100,7 @@ function ContactCardWithContextImpl({
     prefetchInteractions(contact.id);
   }, [contact.id, prefetchContact, prefetchInteractions]);
   
-  const hoverProps = usePrefetchOnHover(prefetchFn, 150);
+  const hoverProps = usePrefetchOnHover(prefetchFn, 100);
 
   const handleInlineSave = async (field: string, value: string): Promise<boolean> => {
     try {
