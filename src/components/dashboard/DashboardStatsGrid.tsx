@@ -38,12 +38,13 @@ export const DashboardStatsGrid = React.memo(function DashboardStatsGrid({ stats
       gradientTone: 'primary' as const,
     },
     {
-      title: 'Contatos Cadastrados',
-      value: stats.totalContacts,
-      change: stats.contactChange,
-      changeType: contactChangeType,
-      icon: Users,
-      gradientTone: 'success' as const,
+      title: 'Score Médio',
+      value: `${stats.averageScore}%`,
+      change: stats.scoreChange,
+      changeType: scoreChangeType,
+      icon: TrendingUp,
+      gradientTone: 'warning' as const,
+      subtitle: getScoreLabel(stats.averageScore),
     },
     {
       title: 'Interações (7 dias)',
@@ -57,15 +58,16 @@ export const DashboardStatsGrid = React.memo(function DashboardStatsGrid({ stats
       subtitle: getInteractionLabel(stats.weeklyInteractions),
     },
     {
-      title: 'Score Médio',
-      value: `${stats.averageScore}%`,
-      change: stats.scoreChange,
-      changeType: scoreChangeType,
-      icon: TrendingUp,
-      gradientTone: 'warning' as const,
-      subtitle: getScoreLabel(stats.averageScore),
+      title: 'Closing Score (Avg)',
+      value: `${stats.averageClosingScore}%`,
+      change: '+2% vs ontem',
+      changeType: 'positive' as const,
+      icon: Users,
+      gradientTone: 'success' as const,
+      subtitle: 'Probabilidade de fechamento',
     },
   ];
+
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
