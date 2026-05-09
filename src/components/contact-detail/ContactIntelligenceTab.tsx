@@ -28,6 +28,9 @@ const CRMAlertsWidget = lazy(() => import('./CRMAlertsWidget').then(m => ({ defa
 const LocalChurnRiskPanel = lazy(() => import('@/components/churn-risk/ChurnRiskPanel'));
 
 import { LeadScoreWidget } from '@/components/lead-score/LeadScoreWidget';
+import { ScoreExplicabilityPanel } from './ScoreExplicabilityPanel';
+import { MetricOverrideFlow } from './MetricOverrideFlow';
+
 
 interface Props {
   contactId: string;
@@ -263,7 +266,18 @@ export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, we
       </Card>
       </div>
 
+      {/* Explicability & Control */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <ScoreExplicabilityPanel contactId={contactId} />
+        <MetricOverrideFlow 
+          contactId={contactId} 
+          currentScore={data?.objections?.[0]?.contact?.relationship_score || 0} 
+          currentSentiment={data?.objections?.[0]?.contact?.sentiment || 'neutral'} 
+        />
+      </div>
+
       {/* Social Intelligence */}
+
       <SocialIntelligencePanel contactId={contactId} />
 
       {/* Communication Preferences + Score History */}
