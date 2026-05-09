@@ -268,7 +268,10 @@ const ContatoDetalhe = () => {
                 contactName={formatContactName(contact.first_name, contact.last_name)}
                 linkedinUrl={contact.linkedin}
                 websiteUrl={company?.website}
+                currentScore={contact.relationship_score || 0}
+                currentSentiment={contact.sentiment || 'neutral'}
               />
+
             </DashboardErrorBoundary>
           </TabsContent>
 
