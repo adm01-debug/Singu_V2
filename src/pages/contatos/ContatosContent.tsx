@@ -75,7 +75,6 @@ export function ContatosContent(props: Props) {
   const RENDER_BATCH = 60;
   const [visibleCount, setVisibleCount] = useState(RENDER_BATCH);
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const { selectedIndex } = { selectedIndex: -1 }; // simplified
 
   useEffect(() => { setVisibleCount(RENDER_BATCH); }, [activeFilters, sortBy, sortOrder, searchTerm]);
 
@@ -89,6 +88,21 @@ export function ContatosContent(props: Props) {
 
   const visibleContacts = useMemo(() => filteredAndSortedContacts.slice(0, visibleCount), [filteredAndSortedContacts, visibleCount]);
   const hasMoreContacts = visibleCount < filteredAndSortedContacts.length;
+
+  const handleBulkExport = async (ids: string[]) => {
+    const dataToExport = contacts.filter(c => ids.includes(c.id)).map(c => ({
+      Nome: `${c.first_name} ${c.last_name}`,
+      Empresa: getCompanyName(c.company_id) || '',
+      Cargo: c.role_title || '',
+      Email: (c as any).email || '',
+      Telefone: (c as any).phone || '',
+      Score: c.relationship_score || 0,
+      Estagio: c.relationship_stage || '',
+      Sentimento: c.sentiment || '',
+      Tags: Array.isArray(c.tags_array) ? (c.tags_array as string[]).join('; ') : ''
+    }));
+    exportToCSV(dataToExport, 'contatos_export');
+  };
 
   return (
     <>
@@ -169,7 +183,16 @@ export function ContatosContent(props: Props) {
         )}
       </PullToRefresh>
 
-      <BulkActionsBar selectedIds={Array.from(selectedIds)} totalCount={filteredAndSortedContacts.length} entityType="contacts" onSelectAll={onSelectAll} onClearSelection={() => onSelect('__clear__', false)} onDelete={onBulkDelete} onAddTag={onBulkAddTag} />
+      <BulkActionsBar 
+        selectedIds={Array.from(selectedIds)} 
+        totalCount={filteredAndSortedContacts.length} 
+        entityType="contacts" 
+        onSelectAll={onSelectAll} 
+        onClearSelection={() => onSelect('__clear__', false)} 
+        onDelete={onBulkDelete} 
+        onAddTag={onBulkAddTag}
+        onExport={handleBulkExport}
+      />
     </div>
     </>
   );
