@@ -6,7 +6,7 @@ import { useContactMeetings } from './useContactMeetings';
 import { useAuth } from '@/hooks/useAuth';
 import { useMemo } from 'react';
 
-export type UnifiedEventType = 'message' | 'call' | 'meeting' | 'note' | 'task' | 'event';
+export type UnifiedEventType = 'message' | 'call' | 'meeting' | 'note' | 'task' | 'event' | 'score_change' | 'stage_change' | 'alert';
 
 export interface UnifiedTimelineEvent {
   id: string;
@@ -33,6 +33,20 @@ export function useUnifiedTimeline(contactId: string) {
         .select('*')
         .eq('contact_id', contactId)
         .order('event_date', { ascending: false });
+      return data || [];
+    },
+    enabled: !!user && !!contactId,
+  });
+
+  // Fetch CRM Alerts
+  const { data: crmAlerts, isLoading: alertsLoading } = useQuery({
+    queryKey: ['crm-alerts', contactId],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('crm_alerts')
+        .select('*')
+        .eq('contact_id', contactId)
+        .order('created_at', { ascending: false });
       return data || [];
     },
     enabled: !!user && !!contactId,
@@ -110,11 +124,28 @@ export function useUnifiedTimeline(contactId: string) {
       });
     });
 
+    // Map CRM Alerts
+    (crmAlerts || []).forEach((alert) => {
+      events.push({
+        id: alert.id,
+        type: 'alert',
+        subType: alert.type,
+        title: alert.type === 'at_risk' ? '⚠️ Risco de Churn Detectado' : '🔔 Lembrete de Follow-up',
+        content: `${alert.message}\n\nAção sugerida: ${alert.suggested_action}`,
+        timestamp: alert.created_at,
+        metadata: {
+          severity: alert.severity,
+          is_resolved: alert.is_resolved,
+        },
+      });
+    });
+
     return events.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-  }, [interactions, tasks, meetings, lifeEvents]);
+  }, [interactions, tasks, meetings, lifeEvents, crmAlerts]);
 
   return {
     events: unifiedEvents,
-    loading: interactionsLoading || tasksLoading || meetingsLoading || lifeEventsLoading,
+    loading: interactionsLoading || tasksLoading || meetingsLoading || lifeEventsLoading || alertsLoading,
   };
 }
+
