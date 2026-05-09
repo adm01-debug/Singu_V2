@@ -215,7 +215,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
           type: interaction.type,
         };
       })
-      .filter(a => a.entityName !== 'Contato' && a.entityName !== 'Mensagem') // Remove unresolved generic entries
+      .filter(a => a.entityName !== 'Contato' && a.entityName !== 'Mensagem' && a.entityName !== 'Mensagem Enviada') // Remove unresolved generic entries
       .slice(0, 8); // Aumentado para 8 para melhor visualização em telas grandes
 
     return {

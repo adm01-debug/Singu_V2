@@ -27,8 +27,8 @@ const CompleteDashboardWidget = lazy(() => import('@/components/dashboard/widget
 const DailyKpisWidget = lazy(() => import('@/components/dashboard/widgets/DailyKpisWidget'));
 const CadenceAlertWidget = lazy(() => import('@/components/contact-detail/CadenceAlertWidget'));
 const PendingNotificationsWidget = lazy(() => import('@/components/dashboard/widgets/PendingNotificationsWidget'));
-const DailyInsightsWidget = lazy(() => import('@/components/dashboard/widgets/DailyInsightsWidget'));
-const ChurnRiskReportWidget = lazy(() => import('@/components/dashboard/widgets/ChurnRiskReportWidget'));
+const DailyInsightsWidget = lazy(() => import('@/components/dashboard/widgets/DailyInsightsWidget').then(m => ({ default: m.DailyInsightsWidget })));
+const ChurnRiskReportWidget = lazy(() => import('@/components/dashboard/widgets/ChurnRiskReportWidget').then(m => ({ default: m.ChurnRiskReportWidget })));
 const SmartRemindersPanel = lazy(() => import('@/components/smart-reminders/SmartRemindersPanel').then(m => ({ default: m.SmartRemindersPanel })));
 const StrategicNextStepsCard = lazy(() => import('@/components/dashboard/StrategicNextStepsCard').then(m => ({ default: m.StrategicNextStepsCard })));
 const AIApprovalsWidget = lazy(() => import('@/components/dashboard/widgets/AIApprovalsWidget').then(m => ({ default: m.AIApprovalsWidget })));
@@ -52,13 +52,16 @@ interface OverviewTabProps {
 
 export function OverviewTab({
   stats,
+  contacts,
+  companies,
+  interactions,
   briefingOpen,
   setBriefingOpen,
   prefersReducedMotion,
   recentActivityAnimations,
   topContactAnimations,
   tabDirection,
-}: OverviewTabProps) {
+}: OverviewTabProps & { contacts: any[]; companies: any[]; interactions: any[] }) {
   const animVariants = {
     initial: { opacity: 0, x: prefersReducedMotion ? 0 : tabDirection * 20 },
     animate: { opacity: 1, x: 0 },
@@ -100,7 +103,7 @@ export function OverviewTab({
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Próximos Passos (IA)">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
-            <StrategicNextStepsCard contacts={stats.topContacts.map(c => ({
+            <StrategicNextStepsCard contacts={useMemo(() => stats.topContacts.map(c => ({
               id: c.id,
               first_name: c.firstName,
               last_name: c.lastName,
@@ -110,7 +113,7 @@ export function OverviewTab({
               last_interaction_summary: c.lastInteractionSummary,
               role_title: c.role,
               notes: c.lastInteractionSummary // Fallback
-            }))} />
+            })), [stats.topContacts])} />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Aprovações IA">
@@ -120,7 +123,7 @@ export function OverviewTab({
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Smart Reminders">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
-            <SmartRemindersPanel compact />
+            <SmartRemindersPanel compact contacts={contacts} interactions={interactions} />
           </Suspense>
         </DashboardErrorBoundary>
       </div>
@@ -221,12 +224,12 @@ export function OverviewTab({
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Insights Diários">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-28 w-full" />}>
-            <DailyInsightsWidget />
+            <DailyInsightsWidget contacts={contacts} interactions={interactions} />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Relatório Churn">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-28 w-full" />}>
-            <ChurnRiskReportWidget />
+            <ChurnRiskReportWidget contacts={contacts} interactions={interactions} />
           </Suspense>
         </DashboardErrorBoundary>
       </div>
@@ -239,7 +242,7 @@ export function OverviewTab({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: prefersReducedMotion ? 0 : 0.25 }}
           >
-            <RecentActivityCard activities={stats.recentActivities} animations={recentActivityAnimations} />
+            <RecentActivityCard activities={useMemo(() => stats.recentActivities, [stats.recentActivities])} animations={recentActivityAnimations} />
           </motion.div>
         </DashboardErrorBoundary>
 
@@ -249,7 +252,7 @@ export function OverviewTab({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: prefersReducedMotion ? 0 : 0.25, delay: prefersReducedMotion ? 0 : 0.05 }}
           >
-            <TopContactsCard contacts={stats.topContacts} animations={topContactAnimations} />
+            <TopContactsCard contacts={useMemo(() => stats.topContacts, [stats.topContacts])} animations={topContactAnimations} />
           </motion.div>
         </DashboardErrorBoundary>
       </div>

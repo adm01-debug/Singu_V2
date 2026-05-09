@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingBag, Target, Clock, AlertTriangle, TrendingUp, Sparkles, Brain } from 'lucide-react';
 import { Typography } from '@/components/ui/typography';
@@ -39,7 +39,7 @@ export function IntelligenceTab({ contacts, prefersReducedMotion, tabDirection }
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DashboardErrorBoundary sectionName="Próximos Passos">
           <StrategicNextStepsCard 
-            contacts={contacts.map((c: any) => ({
+            contacts={useMemo(() => contacts.map((c: any) => ({
               id: c.id,
               first_name: c.first_name,
               last_name: c.last_name,
@@ -48,7 +48,7 @@ export function IntelligenceTab({ contacts, prefersReducedMotion, tabDirection }
               last_interaction_at: c.last_interaction_at,
               role_title: c.role_title,
               notes: c.last_interaction_summary || c.notes
-            }))}
+            })), [contacts])}
             className="h-full shadow-md border-primary/10" 
           />
         </DashboardErrorBoundary>
@@ -94,9 +94,11 @@ export function IntelligenceTab({ contacts, prefersReducedMotion, tabDirection }
         </div>
 
         <div className="mt-5">
-          <LazySection fallbackVariant="chart" fallbackHeight="h-64">
-            <RFMAnalysisPanel compact />
-          </LazySection>
+          <DashboardErrorBoundary sectionName="Segmentação RFM">
+            <Suspense fallback={<div className="animate-pulse h-64 bg-muted rounded-lg" />}>
+              <RFMAnalysisPanel compact />
+            </Suspense>
+          </DashboardErrorBoundary>
         </div>
       </DashboardErrorBoundary>
 

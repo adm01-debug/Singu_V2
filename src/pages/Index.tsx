@@ -141,6 +141,9 @@ const Dashboard = () => {
             <TabsContent value="overview" className="space-y-5 mt-4">
               <OverviewTab
                 stats={dashboardStats}
+                contacts={contacts}
+                companies={companies}
+                interactions={interactions}
                 briefingOpen={briefingOpen}
                 setBriefingOpen={setBriefingOpen}
                 prefersReducedMotion={prefersReducedMotion}

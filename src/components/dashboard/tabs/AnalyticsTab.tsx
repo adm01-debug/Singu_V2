@@ -14,7 +14,7 @@ const RelationshipEvolutionChart = lazy(() => import('@/components/dashboard/Das
 const ContactDistributionChart = lazy(() => import('@/components/dashboard/DashboardCharts').then(m => ({ default: m.ContactDistributionChart })));
 const RelationshipScoreChart = lazy(() => import('@/components/dashboard/DashboardCharts').then(m => ({ default: m.RelationshipScoreChart })));
 const SentimentChart = lazy(() => import('@/components/dashboard/DashboardCharts').then(m => ({ default: m.SentimentChart })));
-const DailyInsightsWidget = lazy(() => import('@/components/dashboard/widgets/DailyInsightsWidget'));
+const DailyInsightsWidget = lazy(() => import('@/components/dashboard/widgets/DailyInsightsWidget').then(m => ({ default: m.DailyInsightsWidget })));
 
 
 type PeriodFilter = '7d' | '30d' | '90d';
@@ -68,7 +68,7 @@ export function AnalyticsTab({ contacts, companies, interactions, prefersReduced
       <DashboardErrorBoundary sectionName="Insights da IA">
         <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
           <div className="mb-5">
-            <DailyInsightsWidget />
+            <DailyInsightsWidget contacts={contacts} interactions={interactions} />
           </div>
         </Suspense>
       </DashboardErrorBoundary>
@@ -93,15 +93,21 @@ export function AnalyticsTab({ contacts, companies, interactions, prefersReduced
       </DashboardErrorBoundary>
 
       <DashboardErrorBoundary sectionName="Conversão por Perfil DISC">
-        <DISCConversionMetricsPanel />
+        <Suspense fallback={<div className="animate-pulse h-64 bg-muted rounded-lg" />}>
+          <DISCConversionMetricsPanel />
+        </Suspense>
       </DashboardErrorBoundary>
 
       <DashboardErrorBoundary sectionName="Métricas RFM Avançadas">
-        <RFMSegmentDashboard />
+        <Suspense fallback={<div className="animate-pulse h-64 bg-muted rounded-lg" />}>
+          <RFMSegmentDashboard />
+        </Suspense>
       </DashboardErrorBoundary>
 
       <DashboardErrorBoundary sectionName="Analytics de Gatilhos">
-        <TriggerAnalyticsPanel />
+        <Suspense fallback={<div className="animate-pulse h-64 bg-muted rounded-lg" />}>
+          <TriggerAnalyticsPanel />
+        </Suspense>
       </DashboardErrorBoundary>
     </motion.div>
   );
