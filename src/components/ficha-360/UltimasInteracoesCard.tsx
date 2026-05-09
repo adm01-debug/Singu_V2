@@ -176,8 +176,12 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
               { id: 'call', label: 'Ligações', icon: Phone },
               { id: 'email', label: 'E-mail', icon: Mail },
               { id: 'meeting', label: 'Reuniões', icon: Calendar },
+              { id: 'audio', label: 'Áudio', icon: Clock },
+              { id: 'transcription', label: 'Transcrição', icon: FileText },
             ].map((ch) => {
+              const isType = ['whatsapp', 'call', 'email', 'meeting'].includes(ch.id);
               const isActive = channels?.includes(ch.id);
+              
               return (
                 <Button
                   key={ch.id}
