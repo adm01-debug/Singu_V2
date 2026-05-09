@@ -65,7 +65,7 @@ const CONTACT_LISTING_SELECT = [
   'tags_array', 'interests_array', 'hobbies',
   'birthday', 'source',
   'updated_at', 'created_at', 'user_id',
-  'bitrix_contact_id', 'is_duplicate', 'duplicate_of', 'version',
+  'bitrix_contact_id', 'is_duplicate', 'duplicate_of',
 ].join(',');
 
 async function fetchContactsPage(companyId?: string) {
