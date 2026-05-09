@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
 import { CustomFieldsDisplay } from '@/components/custom-fields/CustomFieldsDisplay';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
 import { useParams, Link } from 'react-router-dom';
