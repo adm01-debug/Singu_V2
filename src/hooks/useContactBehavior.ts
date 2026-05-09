@@ -64,25 +64,7 @@ export interface ContactBusinessContext {
   seasonal_notes?: string;
 }
 
-export interface ContactPersonality {
-  big_five_openness?: number;
-  big_five_conscientiousness?: number;
-  big_five_extraversion?: number;
-  big_five_agreeableness?: number;
-  big_five_neuroticism?: number;
-  big_five_confidence?: number;
-  mbti_type?: string;
-  mbti_e_i_score?: number;
-  mbti_s_n_score?: number;
-  mbti_t_f_score?: number;
-  mbti_j_p_score?: number;
-  enneagram_type?: number;
-  enneagram_wing?: number;
-  enneagram_scores?: any;
-  temperament_primary?: string;
-  temperament_secondary?: string;
-  temperament_notes?: string;
-}
+// ContactPersonality is now typed from Database types in the header
 
 export const useContactBehavior = (contactId: string) => {
   const queryClient = useQueryClient();
