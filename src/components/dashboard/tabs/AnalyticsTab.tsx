@@ -14,7 +14,7 @@ const RelationshipEvolutionChart = lazy(() => import('@/components/dashboard/Das
 const ContactDistributionChart = lazy(() => import('@/components/dashboard/DashboardCharts').then(m => ({ default: m.ContactDistributionChart })));
 const RelationshipScoreChart = lazy(() => import('@/components/dashboard/DashboardCharts').then(m => ({ default: m.RelationshipScoreChart })));
 const SentimentChart = lazy(() => import('@/components/dashboard/DashboardCharts').then(m => ({ default: m.SentimentChart })));
-const DailyInsightsWidget = lazy(() => import('@/components/dashboard/widgets/DailyInsightsWidget'));
+const DailyInsightsWidget = lazy(() => import('@/components/dashboard/widgets/DailyInsightsWidget').then(m => ({ default: m.DailyInsightsWidget })));
 
 
 type PeriodFilter = '7d' | '30d' | '90d';
