@@ -83,8 +83,7 @@ export function ContactOverviewTab({ contact, company, insights, alerts, interac
             currentStage={contact.relationship_stage as RelationshipStage || 'unknown'} 
             isEditable 
             onStageChange={(stage) => {
-              // This update should ideally call updateContact from useContactDetail
-              // We'll need to pass it or use it if available in context
+              updateContact({ relationship_stage: stage });
             }}
           />
         </CardContent>
