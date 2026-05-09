@@ -154,12 +154,14 @@ describe('Dashboard Layout Improvements Validation', () => {
       expect(scrollToTopComponent).toContain('window.scrollTo');
     });
 
-    it('should be imported in App.tsx', () => {
-      expect(appContent).toContain('ScrollToTop');
+    it('should be imported in AppProviders.tsx', () => {
+      const appProviders = readFile('src/app/AppProviders.tsx');
+      expect(appProviders).toContain('ScrollToTop');
     });
 
-    it('should be rendered inside BrowserRouter in App.tsx', () => {
-      expect(appContent).toContain('<ScrollToTop');
+    it('should be rendered inside BrowserRouter in AppProviders.tsx', () => {
+      const appProviders = readFile('src/app/AppProviders.tsx');
+      expect(appProviders).toContain('<ScrollToTop');
     });
   });
 

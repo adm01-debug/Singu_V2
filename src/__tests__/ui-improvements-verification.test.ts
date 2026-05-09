@@ -582,7 +582,8 @@ describe('CompanyCardWithContext Improvements', () => {
   });
 
   it('uses Link for navigation', () => {
-    expect(content).toContain('Link');
+    const listContent = readSrc('components/companies/CompanyListItem.tsx');
+    expect(listContent).toContain('Link');
   });
 
   it('shows company status info', () => {
