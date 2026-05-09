@@ -13,6 +13,7 @@ import { DealRiskBadge } from '@/components/pipeline/DealRiskBadge';
 import { DealRiskDrawer } from '@/components/pipeline/DealRiskDrawer';
 import { DealDetailDrawer } from '@/components/pipeline/DealDetailDrawer';
 import { DealDialog } from '@/components/pipeline/DealDialog';
+import { PipelineFilterBar } from '@/components/pipeline/PipelineFilterBar';
 import { DealConfidenceBadge } from '@/components/pipeline/DealConfidenceBadge';
 import { ForecastConfidencePanel } from '@/components/pipeline/ForecastConfidencePanel';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
@@ -300,17 +301,26 @@ export default function Pipeline() {
   const [riskDeal, setRiskDeal] = useState<PipelineDeal | null>(null);
   const [editDeal, setEditDeal] = useState<PipelineDeal | null>(null);
   const [isDealDialogOpen, setIsDealDialogOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredDeals = useMemo(() => {
+    if (!deals) return [];
+    return deals.filter(d => 
+      d.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      d.company_name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [deals, searchTerm]);
 
   const dealsByStage = useMemo(() => {
     const map: Record<string, PipelineDeal[]> = {};
     STAGES.forEach((s) => (map[s.id] = []));
-    (deals || []).forEach((deal) => {
+    filteredDeals.forEach((deal) => {
       const stage = deal.pipeline_stage || 'lead';
       if (!map[stage]) map[stage] = [];
       map[stage].push(deal);
     });
     return map;
-  }, [deals]);
+  }, [filteredDeals]);
 
   const handleDrop = useCallback(
     (dealId: string, stageId: string) => {
@@ -345,27 +355,27 @@ export default function Pipeline() {
       </AppLayout>
     );
   }
-        <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
-          <PipelineFilterBar 
-            search={searchTerm} 
-            onSearchChange={setSearchTerm} 
-            onFilterChange={() => {}} 
-          />
-        </div>
 
   return (
     <AppLayout title="Pipeline">
       <SEOHead title="Pipeline de Vendas" description="Gerencie seus deals com drag & drop" />
       <div className="space-y-6 p-4 md:p-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Pipeline de Vendas</h1>
             <p className="text-muted-foreground text-sm">Gerencie seus deals com drag & drop</p>
           </div>
-          <Button onClick={() => setIsDealDialogOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" />
-            Novo Deal
-          </Button>
+          <div className="flex items-center gap-2">
+            <PipelineFilterBar 
+              search={searchTerm} 
+              onSearchChange={setSearchTerm} 
+              onFilterChange={() => {}} 
+            />
+            <Button onClick={() => setIsDealDialogOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Novo Deal
+            </Button>
+          </div>
         </div>
 
         <DashboardErrorBoundary sectionName="Resumo do Pipeline">
