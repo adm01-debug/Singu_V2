@@ -30,7 +30,7 @@ export function AIApprovalsWidget() {
             <Brain className="h-4 w-4" />
             Aprovação de Follow-ups IA
           </div>
-          <Badge variant="primary" className="bg-primary text-primary-foreground">
+          <Badge variant="default" className="bg-primary text-primary-foreground">
             {approvals.length}
           </Badge>
         </CardTitle>
