@@ -483,6 +483,42 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_recommendation_logs: {
+        Row: {
+          action_timestamp: string | null
+          contact_id: string
+          created_at: string | null
+          id: string
+          input_data_snapshot: Json
+          recommendation_reasons: Json
+          recommendation_score: number
+          user_action: string | null
+          user_id: string
+        }
+        Insert: {
+          action_timestamp?: string | null
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          input_data_snapshot: Json
+          recommendation_reasons: Json
+          recommendation_score: number
+          user_action?: string | null
+          user_id: string
+        }
+        Update: {
+          action_timestamp?: string | null
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          input_data_snapshot?: Json
+          recommendation_reasons?: Json
+          recommendation_score?: number
+          user_action?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       alerts: {
         Row: {
           action_url: string | null
@@ -4278,6 +4314,45 @@ export type Database = {
           interactions_analyzed?: number
           model?: string
           summary?: Json
+          user_id?: string
+        }
+        Relationships: []
+      }
+      follow_up_approvals: {
+        Row: {
+          approved_at: string | null
+          channel: string
+          contact_id: string
+          content: string
+          created_at: string | null
+          id: string
+          scheduled_for: string | null
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          approved_at?: string | null
+          channel: string
+          contact_id: string
+          content: string
+          created_at?: string | null
+          id?: string
+          scheduled_for?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          approved_at?: string | null
+          channel?: string
+          contact_id?: string
+          content?: string
+          created_at?: string | null
+          id?: string
+          scheduled_for?: string | null
+          status?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
