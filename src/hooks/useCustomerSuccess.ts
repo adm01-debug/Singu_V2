@@ -274,9 +274,10 @@ export function useUpsertQBR() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const payload: any = { ...input, user_id: user.id };
       const { data, error } = input.id
-        ? await supabase.from("cs_qbrs").update(payload).eq("id", input.id).select().single()
-        : await supabase.from("cs_qbrs").insert(payload).select().single();
+        ? await supabase.from("cs_qbrs").update(payload).eq("id", input.id).select().maybeSingle()
+        : await supabase.from("cs_qbrs").insert(payload).select().maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao salvar QBR");
       return data as QBR;
     },
     onSuccess: () => {
