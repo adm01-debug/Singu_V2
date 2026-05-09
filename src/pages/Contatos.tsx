@@ -267,6 +267,8 @@ const Contatos = () => {
           onSetIsFormOpen={setIsFormOpen} updateContact={updateContact}
           getCompanyName={getCompanyName} getLastInteractionDate={getLastInteractionDate}
           onRefresh={handleRefresh}
+          hasMore={hasMore}
+          onLoadMore={loadMore}
         />
 
         <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
