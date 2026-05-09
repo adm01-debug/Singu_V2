@@ -115,8 +115,8 @@ export function OverviewTab({
             <SmartRemindersPanel compact />
           </Suspense>
         </DashboardErrorBoundary>
+      </div>
 
-      {/* 3. Pre-Contact Briefing */}
       <DashboardErrorBoundary sectionName="Briefing">
         <Collapsible open={briefingOpen} onOpenChange={setBriefingOpen}>
           <CollapsibleTrigger asChild>
