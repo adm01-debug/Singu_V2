@@ -50,7 +50,7 @@ export function ViewModeSwitcher({ value, onChange, gridColumns = 3, onGridColum
           variant="outline"
           size="sm"
           className={cn(
-            'gap-2 text-xs font-medium h-9 px-3 border-border/60 bg-card hover:bg-muted/60',
+            'gap-2 text-xs font-medium h-11 px-4 md:h-9 md:px-3 border-border/60 bg-card hover:bg-muted/60',
             className
           )}
         >
