@@ -39,8 +39,8 @@ export function PipelineFilterBar({ search, onSearchChange, onFilterChange }: Pr
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuLabel>Filtrar por</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuCheckboxItem checked>Alta Probabilidade (>70%)</DropdownMenuCheckboxItem>
-          <DropdownMenuCheckboxItem>Tickets Altos (> R$ 10k)</DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem checked>Alta Probabilidade ({'>'}70%)</DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem>Tickets Altos ({'>'} R$ 10k)</DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem>Deals do Mês</DropdownMenuCheckboxItem>
           <DropdownMenuSeparator />
           <Button variant="ghost" size="sm" className="w-full justify-start font-normal px-2 text-xs">
