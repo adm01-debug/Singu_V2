@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const INFLUENCE: Record<string, { label: string; variant: any }> = {
+const INFLUENCE: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
   champion: { label: "Champion", variant: "default" },
   decision_maker: { label: "Decisor", variant: "default" },
   influencer: { label: "Influenciador", variant: "secondary" },
@@ -22,9 +22,11 @@ export function StakeholderList({ roomId }: { roomId: string }) {
   const upsert = useUpsertStakeholder(roomId);
   const del = useDeleteStakeholder(roomId);
   const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState<any>(null);
-
-  const grouped = { seller: data.filter((s: any) => s.side === "seller"), buyer: data.filter((s: any) => s.side === "buyer") };
+  const [editing, setEditing] = useState<DealRoomStakeholder | null>(null);
+  const grouped = { 
+    seller: data.filter((s) => s.side === "seller"), 
+    buyer: data.filter((s) => s.side === "buyer") 
+  };
 
   return (
     <div className="space-y-4">
