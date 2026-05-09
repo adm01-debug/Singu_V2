@@ -89,7 +89,7 @@ function StakeholderDialog({ editing, onSave }: { editing: DealRoomStakeholder |
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label>Lado</Label>
-            <Select value={form.side} onValueChange={(v) => setForm({ ...form, side: v as any })}>
+            <Select value={form.side} onValueChange={(v) => setForm({ ...form, side: v as Side })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="buyer">Comprador</SelectItem>
