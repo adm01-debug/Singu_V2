@@ -208,41 +208,53 @@ export function DealDialog({ open, onOpenChange, initialStage = 'lead' }: Props)
             <FormField
               control={form.control}
               name="company_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Empresa</FormLabel>
-                  <FormControl>
-                    <SearchableSelect
-                      options={companies}
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      placeholder="Buscar empresa..."
-                      emptyMessage="Nenhuma empresa encontrada."
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const selectedLabel = companies.find(c => c.value === field.value)?.label || '';
+                return (
+                  <FormItem>
+                    <FormLabel>Empresa</FormLabel>
+                    <FormControl>
+                      <SearchableSelect
+                        options={companies.map(c => c.label)}
+                        value={selectedLabel}
+                        onValueChange={(label) => {
+                          const comp = companies.find(c => c.label === label);
+                          if (comp) field.onChange(comp.value);
+                        }}
+                        placeholder="Buscar empresa..."
+                        emptyMessage="Nenhuma empresa encontrada."
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
 
             <FormField
               control={form.control}
               name="contact_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contato (Opcional)</FormLabel>
-                  <FormControl>
-                    <SearchableSelect
-                      options={contacts}
-                      value={field.value || ''}
-                      onValueChange={field.onChange}
-                      placeholder="Buscar contato..."
-                      emptyMessage="Nenhum contato encontrado."
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const selectedLabel = contacts.find(c => c.value === field.value)?.label || '';
+                return (
+                  <FormItem>
+                    <FormLabel>Contato (Opcional)</FormLabel>
+                    <FormControl>
+                      <SearchableSelect
+                        options={contacts.map(c => c.label)}
+                        value={selectedLabel}
+                        onValueChange={(label) => {
+                          const cont = contacts.find(c => c.label === label);
+                          if (cont) field.onChange(cont.value);
+                        }}
+                        placeholder="Buscar contato..."
+                        emptyMessage="Nenhum contato encontrado."
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
 
             <div className="grid grid-cols-2 gap-4">
