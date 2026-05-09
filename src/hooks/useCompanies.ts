@@ -264,7 +264,7 @@ export function useCompanies(options?: { enabled?: boolean }) {
 
   const queryKey = ['companies', searchTerm || '__all__'];
 
-  const { data, isLoading: loading } = useQuery({
+  const { data, isLoading: loading, isFetching } = useQuery({
     queryKey,
     queryFn: () => fetchCompaniesPage(searchTerm || undefined),
     enabled: !!user && externalEnabled,

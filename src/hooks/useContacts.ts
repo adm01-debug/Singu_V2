@@ -94,7 +94,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   const queryKey = ['contacts', companyId ?? '__all__'];
   const externalEnabled = options?.enabled ?? true;
 
-  const { data: contacts = [], isLoading: loading } = useQuery({
+  const { data: contacts = [], isLoading: loading, isFetching } = useQuery({
     queryKey,
     queryFn: () => fetchContactsPage(companyId),
     enabled: !!user && externalEnabled,
@@ -226,5 +226,5 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     }
   };
 
-  return { contacts, loading, hasMore, fetchContacts, loadMore, createContact, updateContact, deleteContact };
+  return { contacts, loading, isFetching, hasMore, fetchContacts, loadMore, createContact, updateContact, deleteContact };
 }

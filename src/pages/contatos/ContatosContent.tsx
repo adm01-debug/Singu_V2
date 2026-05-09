@@ -122,7 +122,7 @@ export function ContatosContent(props: Props) {
                     <ContactCardWithContext key={contact.id} contact={contact} companyName={getCompanyName(contact.company_id)} lastInteraction={getLastInteractionDate(contact.id)} index={index} isSelected={selectedIds.has(contact.id)} isHighlighted={selectedIndex === index} selectionMode={selectionMode} onSelect={onSelect} onEdit={onSetEditingContact} onDelete={onSetDeletingContact} onUpdate={updateContact} viewMode="grid" />
                   ))}
                 </div>
-                {hasMoreContacts && <div ref={sentinelRef} className="flex items-center justify-center py-6 text-sm text-muted-foreground">Carregando mais contatos...</div>}
+                {hasMoreContacts && <div ref={sentinelRef} className="flex items-center justify-center py-6 text-sm text-muted-foreground animate-pulse">Carregando mais contatos...</div>}
               </>
             )}
 
