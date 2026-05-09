@@ -223,7 +223,28 @@ export function BulkActionsBar({
                   </DropdownMenu>
                 )}
 
-                {/* Favorite */}
+                {/* Update Stage */}
+                {entityType === 'contacts' && onUpdateStage && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" disabled={isProcessing}>
+                        <Layers className="w-4 h-4 mr-1" />
+                        Estágio
+                        <ChevronDown className="w-3 h-3 ml-1" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="center" className="max-h-[300px] overflow-y-auto">
+                      {relationshipStages.map(stage => (
+                        <DropdownMenuItem 
+                          key={stage.value}
+                          onClick={() => handleUpdateStage(stage.value)}
+                        >
+                          {stage.label}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
                 {onToggleFavorite && (
                   <Button 
                     variant="ghost" 
