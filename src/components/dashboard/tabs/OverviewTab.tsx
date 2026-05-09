@@ -125,7 +125,12 @@ export function OverviewTab({
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Melhores Contatos">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
-            <TopContactsCard contacts={stats.topContacts} compact />
+            <TopContactsCard contacts={stats.topContacts} animations={topContactAnimations} compact />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Smart Reminders">
+          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+            <SmartRemindersPanel compact contacts={contacts} interactions={interactions} />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Smart Reminders">
