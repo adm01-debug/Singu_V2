@@ -60,12 +60,14 @@ export function useUpsertBattleCard() {
       if (!user) throw new Error("not authenticated");
       const payload: any = { ...input, user_id: user.id, last_updated_by: user.id };
       if (input.id) {
-        const { data, error } = await supabase.from("battle_cards").update(payload).eq("id", input.id).select().single();
+        const { data, error } = await supabase.from("battle_cards").update(payload).eq("id", input.id).select().maybeSingle();
         if (error) throw error;
+        if (!data) throw new Error("Battle card não encontrado");
         return data;
       }
-      const { data, error } = await supabase.from("battle_cards").insert(payload).select().single();
+      const { data, error } = await supabase.from("battle_cards").insert(payload).select().maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao criar battle card");
       return data;
     },
     onSuccess: () => {
