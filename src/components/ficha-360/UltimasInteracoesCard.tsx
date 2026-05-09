@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { MessageSquare, Phone, Mail, Calendar, FileText, ArrowRight, X, Clock } from 'lucide-react';
+import { MessageSquare, Phone, Mail, Calendar, FileText, ArrowRight, X, Clock, Search, Filter } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { useFicha360Filters } from '@/hooks/useFicha360Filters';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -64,7 +65,13 @@ function formatDate(iso?: string | null): string {
 }
 
 export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtra, filtersActive, isLoading, days, channels, q }: Props) => {
-  const { setQ } = useFicha360Filters();
+  const { setQ, setChannels } = useFicha360Filters();
+  const [localSearch, setLocalSearch] = useState(q || '');
+  
+  useEffect(() => {
+    setLocalSearch(q || '');
+  }, [q]);
+
   const items = Array.isArray(interactions) ? interactions : [];
   const channelsKey = Array.isArray(channels) ? [...channels].map((c) => c.toLowerCase()).sort().join(',') : '';
   const qKey = q ? hashString(q.trim().toLowerCase()) : 'noq';
@@ -121,7 +128,7 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
 
   return (
     <Card>
-      <CardHeader className="pb-3 space-y-2">
+      <CardHeader className="pb-3 space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
             <CardTitle className="text-base flex items-center gap-2">
@@ -130,19 +137,7 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
             </CardTitle>
             {items.length > 0 && (
               <Badge variant="secondary" className="text-xs font-normal tabular-nums">
-                {visible.length < items.length
-                  ? `Mostrando ${visible.length} de ${items.length}`
-                  : `${items.length}`}
-              </Badge>
-            )}
-            {q && (
-              <Badge 
-                variant="info" 
-                closeable 
-                onClose={clearSearch}
-                className="text-[10px] h-5 animate-in fade-in zoom-in duration-200"
-              >
-                Filtro: {q}
+                {items.length}
               </Badge>
             )}
           </div>
@@ -152,6 +147,61 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
             </Link>
           </Button>
         </div>
+
+        <div className="flex flex-col gap-2">
+          <div className="relative">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Buscar em mensagens e transcrições..."
+              value={localSearch}
+              onChange={(e) => {
+                setLocalSearch(e.target.value);
+                setQ(e.target.value);
+              }}
+              className="pl-9 h-9 text-sm bg-muted/30 border-none"
+            />
+            {localSearch && (
+              <button 
+                onClick={() => { setLocalSearch(''); setQ(''); }}
+                className="absolute right-2.5 top-2.5 text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            {[
+              { id: 'whatsapp', label: 'WhatsApp', icon: MessageSquare },
+              { id: 'call', label: 'Ligações', icon: Phone },
+              { id: 'email', label: 'E-mail', icon: Mail },
+              { id: 'meeting', label: 'Reuniões', icon: Calendar },
+            ].map((ch) => {
+              const isActive = channels?.includes(ch.id);
+              return (
+                <Button
+                  key={ch.id}
+                  variant={isActive ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => {
+                    const next = isActive 
+                      ? channels?.filter(c => c !== ch.id) 
+                      : [...(channels || []), ch.id];
+                    setChannels(next || []);
+                  }}
+                  className={cn(
+                    "h-7 px-2 text-[10px] gap-1.5 shrink-0",
+                    isActive ? "bg-primary text-primary-foreground" : "text-muted-foreground border-muted-foreground/20"
+                  )}
+                >
+                  <ch.icon className="h-3 w-3" />
+                  {ch.label}
+                </Button>
+              );
+            })}
+          </div>
+        </div>
+
         {headerExtra}
       </CardHeader>
       <CardContent>

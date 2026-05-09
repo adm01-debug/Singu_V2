@@ -1,5 +1,7 @@
-import { memo, useState, useEffect } from 'react';
-import { Cake, Heart, Sparkles, Users, Edit2, Check, X, Loader2, Plus, Trash2, Baby } from 'lucide-react';
+import { memo, useState, useEffect, useCallback } from 'react';
+import { Cake, Heart, Sparkles, Users, Edit2, Check, X, Loader2, Plus, Trash2, Baby, RefreshCw, Zap, Star } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { InlineEmptyState } from '@/components/ui/empty-state';
@@ -31,10 +33,15 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
   const [familyInfo, setFamilyInfo] = useState(rapportIntel?.family_info || '');
   const [spouseName, setSpouseName] = useState('');
   const [children, setChildren] = useState<string[]>([]);
+  const [hobbies, setHobbies] = useState<string[]>(Array.isArray(rapportIntel?.hobbies) ? rapportIntel.hobbies : []);
+  const [interests, setInterests] = useState<string[]>(Array.isArray(rapportIntel?.interests) ? rapportIntel.interests : []);
   const [birthday, setBirthday] = useState(rapportIntel?.birthday || '');
   const [anchors, setAnchors] = useState<string[]>(Array.isArray(rapportIntel?.positive_anchors) ? rapportIntel.positive_anchors : []);
   const [newAnchor, setNewAnchor] = useState('');
   const [newChild, setNewChild] = useState('');
+  const [newHobby, setNewHobby] = useState('');
+  const [newInterest, setNewInterest] = useState('');
+  const [isSyncing, setIsSyncing] = useState(false);
 
   // Parse family_info if it's JSON or string
   useEffect(() => {
@@ -62,6 +69,8 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
       family_info: updatedFamilyInfo,
       birthday: birthday || null,
       positive_anchors: anchors,
+      hobbies: hobbies,
+      interests: interests,
     });
     setIsEditing(false);
   };
@@ -81,6 +90,49 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
     setIsEditing(false);
   };
 
+  const handleSocialSync = async () => {
+    if (!rapportIntel?.contact_id) return;
+    setIsSyncing(true);
+    try {
+      // Get profile URLs if available
+      const { data: contact } = await supabase
+        .from('contacts')
+        .select('linkedin, twitter, instagram')
+        .eq('id', rapportIntel.contact_id)
+        .single();
+
+      const platforms = [
+        { key: 'linkedin', url: contact?.linkedin },
+        { key: 'twitter', url: contact?.twitter },
+        { key: 'instagram', url: contact?.instagram },
+      ].filter(p => p.url);
+
+      if (platforms.length === 0) {
+        toast.error('Nenhum link de rede social encontrado para sincronizar.');
+        return;
+      }
+
+      for (const p of platforms) {
+        const { error } = await supabase.functions.invoke('social-profile-scraper', {
+          body: {
+            contactId: rapportIntel.contact_id,
+            platform: p.key,
+            profileUrl: p.url
+          }
+        });
+        if (error) throw error;
+      }
+
+      toast.success('Sincronização social concluída! Recarregando dados...');
+      window.location.reload(); // Refresh to show new data
+    } catch (error) {
+      console.error('Social sync error:', error);
+      toast.error('Erro na sincronização social. Verifique as configurações.');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
   const addAnchor = () => {
     if (newAnchor.trim()) {
       setAnchors(prev => [...prev, newAnchor.trim()]);
@@ -97,7 +149,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
   const currentAnchors = Array.isArray(rapportIntel?.positive_anchors) ? rapportIntel.positive_anchors : [];
   const events = Array.isArray(rapportIntel?.upcoming_events) ? rapportIntel.upcoming_events : [];
 
-  const isEmpty = !birthdayFormatted && !family && currentAnchors.length === 0 && events.length === 0 && !isEditing;
+  const isEmpty = !birthdayFormatted && !family && currentAnchors.length === 0 && events.length === 0 && hobbies.length === 0 && interests.length === 0 && !isEditing;
 
   return (
     <Card className={cn("transition-all", isEditing && "ring-2 ring-primary/20 shadow-lg")}>
@@ -138,10 +190,22 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
               </Button>
             </div>
           )}
+          {!isEditing && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-2 ml-2 text-xs"
+              onClick={handleSocialSync}
+              disabled={isSyncing}
+            >
+              {isSyncing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+              Social Sync
+            </Button>
+          )}
         </div>
       </CardHeader>
       <CardContent>
-        {isEmpty ? (
+        {isEmpty && !isEditing ? (
           <InlineEmptyState
             icon={Heart}
             title="Sem dados pessoais"
@@ -244,6 +308,110 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                       </div>
                     )}
                     {!spouseName && children.length === 0 && (
+                      <p className="text-sm text-muted-foreground italic">Não informado</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Hobbies */}
+            <div className="flex items-start gap-2">
+              <Star className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+              <div className="flex-1">
+                <p className="text-xs text-muted-foreground">Hobbies</p>
+                {isEditing ? (
+                  <div className="space-y-2 mt-1">
+                    <div className="flex flex-wrap gap-1.5">
+                      {hobbies.map((hobby, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-amber-50 text-amber-700 border-amber-100">
+                          {hobby}
+                          <button onClick={() => setHobbies(prev => prev.filter((_, idx) => idx !== i))}>
+                            <X className="h-3 w-3" />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="flex gap-1">
+                      <Input 
+                        value={newHobby} 
+                        onChange={(e) => setNewHobby(e.target.value)}
+                        placeholder="Novo hobby..."
+                        className="h-8 text-sm"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && newHobby.trim()) {
+                            e.preventDefault();
+                            setHobbies(prev => [...prev, newHobby.trim()]);
+                            setNewHobby('');
+                          }
+                        }}
+                      />
+                      <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => { if (newHobby.trim()) { setHobbies(prev => [...prev, newHobby.trim()]); setNewHobby(''); } }}>
+                        <Plus className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {hobbies.length > 0 ? (
+                      hobbies.map((hobby, i) => (
+                        <Badge key={i} variant="secondary" className="text-[10px] font-normal bg-amber-50 text-amber-700 border-amber-100/50">
+                          {hobby}
+                        </Badge>
+                      ))
+                    ) : (
+                      <p className="text-sm text-muted-foreground italic">Não informado</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Interesses */}
+            <div className="flex items-start gap-2">
+              <Zap className="h-4 w-4 text-purple-500 mt-0.5 shrink-0" />
+              <div className="flex-1">
+                <p className="text-xs text-muted-foreground">Interesses</p>
+                {isEditing ? (
+                  <div className="space-y-2 mt-1">
+                    <div className="flex flex-wrap gap-1.5">
+                      {interests.map((interest, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-purple-50 text-purple-700 border-purple-100">
+                          {interest}
+                          <button onClick={() => setInterests(prev => prev.filter((_, idx) => idx !== i))}>
+                            <X className="h-3 w-3" />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="flex gap-1">
+                      <Input 
+                        value={newInterest} 
+                        onChange={(e) => setNewInterest(e.target.value)}
+                        placeholder="Novo interesse..."
+                        className="h-8 text-sm"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && newInterest.trim()) {
+                            e.preventDefault();
+                            setInterests(prev => [...prev, newInterest.trim()]);
+                            setNewInterest('');
+                          }
+                        }}
+                      />
+                      <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => { if (newInterest.trim()) { setInterests(prev => [...prev, newInterest.trim()]); setNewInterest(''); } }}>
+                        <Plus className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {interests.length > 0 ? (
+                      interests.map((interest, i) => (
+                        <Badge key={i} variant="secondary" className="text-[10px] font-normal bg-purple-50 text-purple-700 border-purple-100/50">
+                          {interest}
+                        </Badge>
+                      ))
+                    ) : (
                       <p className="text-sm text-muted-foreground italic">Não informado</p>
                     )}
                   </div>
