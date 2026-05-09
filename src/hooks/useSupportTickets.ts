@@ -82,8 +82,8 @@ export function useSupportTickets() {
       
       if ('created_at' in updateData) delete (updateData as Record<string, any>).created_at;
       
-      const { error } = await (supabase.from('support_tickets') as any)
-        .update(updateData)
+      const { error } = await supabase.from('support_tickets')
+        .update(updateData as any)
         .eq('id', id);
       if (error) throw error;
     },
