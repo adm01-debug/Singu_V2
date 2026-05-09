@@ -23,6 +23,7 @@ export function CollapsibleSection({
   defaultOpen = false,
   children,
   className,
+  headerAction,
 }: CollapsibleSectionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
@@ -49,12 +50,15 @@ export function CollapsibleSection({
             </span>
           )}
         </div>
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <ChevronDown className="h-4 w-4 text-muted-foreground" />
-        </motion.div>
+        <div className="flex items-center gap-2">
+          {headerAction && <div onClick={(e) => e.stopPropagation()}>{headerAction}</div>}
+          <motion.div
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+          </motion.div>
+        </div>
       </button>
 
       <AnimatePresence initial={false}>
