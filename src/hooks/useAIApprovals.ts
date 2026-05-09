@@ -9,7 +9,7 @@ export interface SuggestedRapportIntel {
   contact_name?: string;
   type: 'hobby' | 'interest';
   value: string;
-  source: 'whatsapp' | 'call' | 'linkedin' | 'instagram' | 'twitter';
+  source: 'whatsapp' | 'call' | 'linkedin' | 'instagram' | 'twitter' | 'other';
   status: 'pending' | 'approved' | 'rejected';
   created_at: string;
 }
