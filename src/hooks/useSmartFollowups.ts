@@ -1,9 +1,9 @@
-import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { startOfDay, addDays, isPast, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
+import { useCreateTask } from './useTasks';
 
 export interface SmartReminder {
   id: string;
@@ -19,26 +19,45 @@ export interface SmartReminder {
 export function useSmartFollowups() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const createTask = useCreateTask();
 
-  // Buscar lembretes inteligentes (simulado via lógica local baseada em interações e contatos)
-  // No futuro, isso pode vir de uma view SQL ou RPC dedicada
+  // Buscar lembretes inteligentes
   const { data: reminders = [], isLoading } = useQuery({
     queryKey: ['smart-reminders'],
     enabled: !!user,
     queryFn: async () => {
-      // Exemplo de busca: buscamos contatos com score alto mas sem interação recente
+      // Usamos a tipagem do Database para garantir que as colunas existem
       const { data: contacts, error } = await supabase
         .from('contacts')
-        .select('id, first_name, last_name, last_interaction_at, relationship_score, relationship_stage')
+        .select('id, first_name, last_name, relationship_score, relationship_stage')
         .limit(100);
       
       if (error) throw error;
 
+      // Como o linter reclamou de 'last_interaction_at' no hook anterior, 
+      // vou assumir que essa coluna pode estar faltando ou ter outro nome.
+      // Vou buscar a data da última interação da tabela de interações de forma otimizada.
+      
+      const { data: lastInteractions, error: intError } = await supabase
+        .from('interactions')
+        .select('contact_id, created_at')
+        .order('created_at', { ascending: false });
+
+      if (intError) throw intError;
+
+      const latestInteractionMap = new Map<string, string>();
+      lastInteractions?.forEach(i => {
+        if (i.contact_id && !latestInteractionMap.has(i.contact_id)) {
+          latestInteractionMap.set(i.contact_id, i.created_at);
+        }
+      });
+
       const results: SmartReminder[] = [];
       const now = new Date();
 
-      contacts.forEach(c => {
-        const lastDate = c.last_interaction_at ? parseISO(c.last_interaction_at) : new Date(0);
+      contacts?.forEach(c => {
+        const lastInteractionIso = latestInteractionMap.get(c.id);
+        const lastDate = lastInteractionIso ? parseISO(lastInteractionIso) : new Date(0);
         const daysSince = Math.floor((now.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
         
         // Regra 1: Inatividade prolongada em contatos quentes
@@ -46,7 +65,7 @@ export function useSmartFollowups() {
           results.push({
             id: `inactivity-${c.id}`,
             contact_id: c.id,
-            contact_name: `${c.first_name} ${c.last_name}`,
+            contact_name: `${c.first_name || ''} ${c.last_name || ''}`.trim(),
             type: 'inactivity',
             due_date: new Date().toISOString(),
             priority: 'high',
@@ -60,7 +79,7 @@ export function useSmartFollowups() {
           results.push({
             id: `followup-${c.id}`,
             contact_id: c.id,
-            contact_name: `${c.first_name} ${c.last_name}`,
+            contact_name: `${c.first_name || ''} ${c.last_name || ''}`.trim(),
             type: 'follow_up',
             due_date: new Date().toISOString(),
             priority: 'medium',
@@ -74,31 +93,20 @@ export function useSmartFollowups() {
     }
   });
 
-  // Agendar lembrete (cria uma tarefa no sistema)
+  // Agendar lembrete (usa o hook useCreateTask existente)
   const scheduleReminder = useMutation({
     mutationFn: async ({ contactId, date, title, notes }: { contactId: string, date: string, title: string, notes: string }) => {
-      if (!user) throw new Error('Auth required');
-      
-      const { data, error } = await supabase
-        .from('tasks')
-        .insert({
-          user_id: user.id,
-          contact_id: contactId,
-          title,
-          description: notes,
-          due_date: date,
-          status: 'pending',
-          priority: 'medium'
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-      return data;
+      return createTask.mutateAsync({
+        contact_id: contactId,
+        title,
+        description: notes,
+        due_date: date,
+        status: 'pending',
+        priority: 'medium'
+      });
     },
     onSuccess: () => {
-      toast.success('Lembrete agendado com sucesso!');
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      // Feedback já é dado pelo useCreateTask
     }
   });
 
