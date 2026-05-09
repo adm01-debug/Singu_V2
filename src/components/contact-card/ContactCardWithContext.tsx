@@ -228,31 +228,29 @@ function ContactCardWithContextImpl({
                   </div>
                 </AnimatePresence>
 
-                {/* Hobbies & Interests Badges for quick rapport */}
-                {(contact.hobbies?.length > 0 || contact.interests?.length > 0) && (
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {contact.hobbies?.slice(0, 3).map((hobby, i) => (
-                      <Badge 
-                        key={`hobby-${i}`} 
-                        variant="secondary" 
-                        className="text-[9px] h-4 px-1.5 bg-amber-50 text-amber-700 border-amber-100/50 font-medium"
-                      >
-                        <Star className="w-2 h-2 mr-0.5" />
-                        {hobby}
-                      </Badge>
-                    ))}
-                    {contact.interests?.slice(0, 3).map((interest, i) => (
-                      <Badge 
-                        key={`interest-${i}`} 
-                        variant="secondary" 
-                        className="text-[9px] h-4 px-1.5 bg-purple-50 text-purple-700 border-purple-100/50 font-medium"
-                      >
-                        <Zap className="w-2 h-2 mr-0.5" />
-                        {interest}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
+                {/* Rapport Badges for quick rapport */}
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {contact.hobbies?.slice(0, 2).map((hobby, i) => (
+                    <Badge 
+                      key={`hobby-${i}`} 
+                      variant="secondary" 
+                      className="text-[9px] h-4 px-1.5 bg-amber-50 text-amber-700 border-amber-100/50 font-medium"
+                    >
+                      <Star className="w-2 h-2 mr-0.5" />
+                      {hobby}
+                    </Badge>
+                  ))}
+                  {contact.interests?.slice(0, 2).map((interest, i) => (
+                    <Badge 
+                      key={`interest-${i}`} 
+                      variant="secondary" 
+                      className="text-[9px] h-4 px-1.5 bg-purple-50 text-purple-700 border-purple-100/50 font-medium"
+                    >
+                      <Zap className="w-2 h-2 mr-0.5" />
+                      {interest}
+                    </Badge>
+                  ))}
+                </div>
 
                 {/* Footer: Stage + Time */}
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/20">
@@ -341,23 +339,21 @@ function ContactCardWithContextImpl({
                     )}
                   </div>
                   
-                  {/* Hobbies & Interests Badges in List View */}
-                  {(contact.hobbies?.length > 0 || contact.interests?.length > 0) && (
-                    <div className="hidden lg:flex flex-wrap gap-1 mt-1">
-                      {contact.hobbies?.slice(0, 2).map((hobby, i) => (
-                        <Badge key={`hobby-${i}`} variant="secondary" className="text-[9px] h-4 px-1.5 bg-amber-50 text-amber-700 border-amber-100/50 font-medium">
-                          <Star className="w-2 h-2 mr-0.5" />
-                          {hobby}
-                        </Badge>
-                      ))}
-                      {contact.interests?.slice(0, 2).map((interest, i) => (
-                        <Badge key={`interest-${i}`} variant="secondary" className="text-[9px] h-4 px-1.5 bg-purple-50 text-purple-700 border-purple-100/50 font-medium">
-                          <Zap className="w-2 h-2 mr-0.5" />
-                          {interest}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
+                  {/* Rapport Badges in List View */}
+                  <div className="hidden lg:flex flex-wrap gap-1 mt-1">
+                    {contact.hobbies?.slice(0, 2).map((hobby, i) => (
+                      <Badge key={`hobby-${i}`} variant="secondary" className="text-[9px] h-4 px-1.5 bg-amber-50 text-amber-700 border-amber-100/50 font-medium">
+                        <Star className="w-2 h-2 mr-0.5" />
+                        {hobby}
+                      </Badge>
+                    ))}
+                    {contact.interests?.slice(0, 2).map((interest, i) => (
+                      <Badge key={`interest-${i}`} variant="secondary" className="text-[9px] h-4 px-1.5 bg-purple-50 text-purple-700 border-purple-100/50 font-medium">
+                        <Zap className="w-2 h-2 mr-0.5" />
+                        {interest}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Score */}

@@ -30,7 +30,7 @@ export type InteractionChannel = (typeof INTERACTION_CHANNELS)[number];
 export const INTERACTION_CHANNELS_SET: ReadonlySet<string> = new Set(INTERACTION_CHANNELS);
 
 /** Whitelist do filtro da Ficha 360 — não expõe `video_call` na UI. */
-export const FICHA360_CHANNELS = ['whatsapp', 'call', 'email', 'meeting', 'note'] as const;
+export const FICHA360_CHANNELS = ['whatsapp', 'call', 'email', 'meeting', 'note', 'audio', 'transcription'] as const;
 export type Ficha360Channel = (typeof FICHA360_CHANNELS)[number];
 export const FICHA360_CHANNELS_SET: ReadonlySet<string> = new Set(FICHA360_CHANNELS);
 

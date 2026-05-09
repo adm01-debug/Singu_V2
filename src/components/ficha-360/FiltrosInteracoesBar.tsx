@@ -18,6 +18,8 @@ const CHANNEL_OPTIONS: Array<{ value: string; label: string; icon: typeof Messag
   { value: 'email', label: 'Email', icon: Mail },
   { value: 'meeting', label: 'Reunião', icon: Calendar },
   { value: 'note', label: 'Nota', icon: FileText },
+  { value: 'audio', label: 'Áudio', icon: Clock },
+  { value: 'transcription', label: 'Texto', icon: FileText },
 ];
 
 interface Props {
