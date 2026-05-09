@@ -248,6 +248,7 @@ export function ContatosContent(props: Props) {
         onClearSelection={() => onSelect('__clear__', false)} 
         onDelete={onBulkDelete} 
         onAddTag={onBulkAddTag}
+        onUpdateStage={onBulkUpdateStage}
         onExport={handleBulkExport}
       />
     </div>
