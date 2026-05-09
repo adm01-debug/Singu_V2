@@ -30,12 +30,14 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
 
       // 1. Log the override
       const { error: logError } = await supabase.from('crm_metric_overrides').insert({
+        user_id: (await supabase.auth.getUser()).data.user?.id,
         contact_id: contactId,
         metric_type: metricType,
         old_value: metricType === 'score' ? currentScore.toString() : currentSentiment,
         new_value: newValue,
         reason: reason
-      });
+      } as any);
+
       if (logError) throw logError;
 
       // 2. Update the contact

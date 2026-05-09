@@ -22,9 +22,12 @@ export function ScoreExplicabilityPanel({ contactId }: Props) {
   });
 
   if (isLoading) return <Skeleton className="h-64 w-full" />;
-  if (!data) return null;
+  if (!data || typeof data !== 'object') return null;
 
-  const { factors, current_score } = data;
+  const explicability = data as any;
+  const factors = explicability.factors;
+  const current_score = explicability.current_score;
+
 
   const factorConfig = [
     {

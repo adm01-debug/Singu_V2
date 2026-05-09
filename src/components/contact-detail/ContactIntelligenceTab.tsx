@@ -37,9 +37,12 @@ interface Props {
   contactName?: string;
   linkedinUrl?: string | null;
   websiteUrl?: string | null;
+  currentScore?: number;
+  currentSentiment?: string;
 }
 
-export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, websiteUrl }: Props) {
+
+export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, websiteUrl, currentScore = 0, currentSentiment = 'neutral' }: Props) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
@@ -271,10 +274,12 @@ export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, we
         <ScoreExplicabilityPanel contactId={contactId} />
         <MetricOverrideFlow 
           contactId={contactId} 
-          currentScore={data?.objections?.[0]?.contact?.relationship_score || 0} 
-          currentSentiment={data?.objections?.[0]?.contact?.sentiment || 'neutral'} 
+          currentScore={currentScore} 
+          currentSentiment={currentSentiment} 
         />
       </div>
+
+
 
       {/* Social Intelligence */}
 
