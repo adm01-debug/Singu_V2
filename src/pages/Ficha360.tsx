@@ -152,15 +152,34 @@ const Ficha360 = () => {
     const norm = (s: string) =>
       s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const needle = term ? norm(term) : '';
+    
     return recentInteractions.filter((it) => {
+      // Channel filtering (including virtual channels)
+      if (channels.length > 0) {
+        const hasMatch = channels.some(ch => {
+          if (ch === 'audio') return !!it.audio_url || it.channel === 'call';
+          if (ch === 'transcription') return !!it.transcription;
+          return it.channel?.toLowerCase() === ch.toLowerCase();
+        });
+        if (!hasMatch) return false;
+      }
+
       if (tags.length > 0 && !interactionMatchesTags(it, tags)) return false;
+      
       if (!needle) return true;
+      
       const haystack = norm(
-        [it.assunto ?? '', it.resumo ?? '', it.channel ?? '', it.direction ?? ''].join(' '),
+        [
+          it.assunto ?? '', 
+          it.resumo ?? '', 
+          it.channel ?? '', 
+          it.direction ?? '',
+          (it as any).transcription ?? ''
+        ].join(' '),
       );
       return haystack.includes(needle);
     });
-  }, [recentInteractions, q, tags]);
+  }, [recentInteractions, q, tags, channels]);
 
   const { sort, setSort } = useFicha360Sort();
 
