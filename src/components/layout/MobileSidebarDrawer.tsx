@@ -19,7 +19,19 @@ import {
   Zap,
   Workflow,
   MapPin,
-  Trophy
+  Trophy,
+  Activity,
+  Shield,
+  BrainCircuit,
+  LifeBuoy,
+  Star,
+  Globe,
+  Target,
+  Gauge,
+  Sparkles,
+  Brain,
+  BookOpen,
+  Kanban
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
@@ -33,19 +45,35 @@ interface MobileSidebarDrawerProps {
 
 const navItems = [
   { icon: Home, label: 'Dashboard', path: '/', section: 'Principal' },
-  { icon: Users, label: 'Contatos', path: '/contatos', section: 'Principal' },
   { icon: Building2, label: 'Empresas', path: '/empresas', section: 'Principal' },
-  { icon: MapPin, label: 'Mapa', path: '/mapa-empresas', section: 'Principal' },
-  { icon: MessageSquare, label: 'Interações', path: '/interacoes', section: 'Principal' },
-  { icon: BarChart3, label: 'Pipeline', path: '/pipeline', section: 'Principal' },
-  { icon: BarChart3, label: 'Analytics', path: '/analytics', section: 'Análise' },
+  { icon: Users, label: 'Contatos', path: '/contatos', section: 'Principal' },
+  { icon: Kanban, label: 'Pipeline', path: '/pipeline', section: 'Principal' },
+  { icon: MessageSquare, label: 'Conversas', path: '/interacoes', section: 'Principal' },
+  { icon: Calendar, label: 'Calendário', path: '/calendario', section: 'Principal' },
+
+  { icon: Network, label: 'Network', path: '/network', section: 'Análise' },
+  { icon: Activity, label: 'Intelligence', path: '/intelligence', section: 'Análise' },
+  { icon: Shield, label: 'Auditoria IA', path: '/intelligence/auditoria', section: 'Análise' },
   { icon: Lightbulb, label: 'Insights', path: '/insights', section: 'Análise' },
-  { icon: Calendar, label: 'Calendário', path: '/calendario', section: 'Ferramentas' },
-  { icon: Bell, label: 'Notificações', path: '/notificacoes', section: 'Ferramentas' },
-  { icon: Network, label: 'Network', path: '/network', section: 'Ferramentas' },
-  { icon: Workflow, label: 'Automações', path: '/automacoes', section: 'Ferramentas' },
-  { icon: Trophy, label: 'Metas', path: '/metas', section: 'Ferramentas' },
-  { icon: Settings, label: 'Configurações', path: '/configuracoes', section: 'Sistema' },
+  { icon: BarChart3, label: 'Analytics', path: '/analytics', section: 'Análise' },
+  { icon: Zap, label: 'Performance', path: '/performance', section: 'Análise' },
+  { icon: BrainCircuit, label: 'BI Avançado', path: '/bi', section: 'Análise' },
+  { icon: LifeBuoy, label: 'Suporte', path: '/suporte', section: 'Análise' },
+  { icon: Star, label: 'NPS & Satisfação', path: '/nps', section: 'Análise' },
+
+  { icon: MapPin, label: 'Mapa', path: '/mapa-empresas', section: 'Operacional' },
+  { icon: Globe, label: 'Territórios', path: '/territorios', section: 'Operacional' },
+  { icon: Target, label: 'ABM', path: '/abm', section: 'Operacional' },
+  { icon: Gauge, label: 'Lead Scoring', path: '/lead-scoring', section: 'Operacional' },
+  { icon: Sparkles, label: 'Enriquecimento', path: '/enrichment', section: 'Operacional' },
+  { icon: Brain, label: 'Conversation Intel', path: '/conversation-intelligence', section: 'Operacional' },
+  { icon: Workflow, label: 'Automações', path: '/automacoes', section: 'Operacional' },
+  { icon: Trophy, label: 'Metas', path: '/metas', section: 'Operacional' },
+  { icon: BookOpen, label: 'Documentos', path: '/documentos', section: 'Operacional' },
+
+  { icon: Bell, label: 'Notificações', path: '/notificacoes', section: 'Configuração' },
+  { icon: Shield, label: 'Segurança', path: '/seguranca', section: 'Configuração' },
+  { icon: Settings, label: 'Configurações', path: '/configuracoes', section: 'Configuração' },
 ];
 
 export function MobileSidebarDrawer({ open, onClose, onSearchClick }: MobileSidebarDrawerProps) {

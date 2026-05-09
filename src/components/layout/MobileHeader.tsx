@@ -30,7 +30,7 @@ const SUB_PAGES = [
 const ROUTE_TITLES: Record<string, string> = {
   '/contatos': 'Contatos',
   '/empresas': 'Empresas',
-  '/interacoes': 'Interações',
+  '/interacoes': 'Conversas',
   '/analytics': 'Analytics',
   '/insights': 'Insights',
   '/calendario': 'Calendário',
