@@ -100,7 +100,7 @@ export function MobileSidebarDrawer({ open, onClose, onSearchClick }: MobileSide
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed left-0 top-0 bottom-0 z-50 flex w-[280px] flex-col bg-[linear-gradient(180deg,hsl(var(--sidebar-background))_0%,hsl(var(--surface-0))_100%)] shadow-[20px_0_60px_-28px_hsl(var(--foreground)/0.85)] md:hidden"
+            className="fixed left-0 top-0 bottom-0 z-50 flex w-[280px] flex-col bg-sidebar-background shadow-[20px_0_60px_-28px_hsl(var(--foreground)/0.85)] md:hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
