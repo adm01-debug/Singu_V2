@@ -74,6 +74,7 @@ export function BulkActionsBar({
   onSelectAll,
   onDelete,
   onAddTag,
+  onUpdateStage,
   onExport,
   onSendEmail,
   onToggleFavorite,
