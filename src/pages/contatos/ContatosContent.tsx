@@ -59,6 +59,8 @@ interface Props {
   getCompanyName: (companyId: string | null) => string | null;
   getLastInteractionDate: (contactId: string) => string | null;
   onRefresh: () => Promise<void>;
+  hasMore?: boolean;
+  onLoadMore?: () => void;
 }
 
 export function ContatosContent(props: Props) {
@@ -71,6 +73,7 @@ export function ContatosContent(props: Props) {
     onToggleSelectionMode, onSelect, onSelectAll, onBulkDelete, onBulkAddTag,
     onSetEditingContact, onSetDeletingContact, onSetIsFormOpen,
     updateContact, getCompanyName, getLastInteractionDate, onRefresh,
+    hasMore, onLoadMore,
   } = props;
 
   const { isAdmin } = useIsAdmin();
@@ -111,10 +114,23 @@ export function ContatosContent(props: Props) {
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) startTransition(() => setVisibleCount(prev => prev + RENDER_BATCH)); }, { rootMargin: '400px' });
+    const observer = new IntersectionObserver(([entry]) => { 
+      if (entry.isIntersecting) {
+        startTransition(() => {
+          setVisibleCount(prev => {
+            const next = prev + RENDER_BATCH;
+            // Se chegamos perto do fim do que temos em memória, e há mais no servidor, carrega mais.
+            if (next >= filteredAndSortedContacts.length && hasMore && onLoadMore) {
+              onLoadMore();
+            }
+            return next;
+          });
+        });
+      }
+    }, { rootMargin: '400px' });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [filteredAndSortedContacts.length]);
+  }, [filteredAndSortedContacts.length, hasMore, onLoadMore]);
 
   const visibleContacts = useMemo(() => filteredAndSortedContacts.slice(0, visibleCount), [filteredAndSortedContacts, visibleCount]);
   const hasMoreContacts = visibleCount < filteredAndSortedContacts.length;

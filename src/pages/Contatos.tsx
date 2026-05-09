@@ -63,7 +63,7 @@ const Contatos = () => {
   usePageTitle('Contatos');
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { contacts, loading, createContact, updateContact, deleteContact, fetchContacts } = useContacts();
+  const { contacts, loading, createContact, updateContact, deleteContact, fetchContacts, hasMore, loadMore } = useContacts();
 
   const dynamicFilterConfigs = useMemo(() => {
     const configs = [...filterConfigs];
@@ -267,6 +267,8 @@ const Contatos = () => {
           onSetIsFormOpen={setIsFormOpen} updateContact={updateContact}
           getCompanyName={getCompanyName} getLastInteractionDate={getLastInteractionDate}
           onRefresh={handleRefresh}
+          hasMore={hasMore}
+          onLoadMore={loadMore}
         />
 
         <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>

@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useMemo } from 'react';
+import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useActivityLogger } from '@/hooks/useActivityLogger';
@@ -92,7 +92,7 @@ const CONTACT_LISTING_SELECT = [
   'notes'
 ].join(',');
 
-async function fetchContactsPage(companyId?: string) {
+async function fetchContactsPage(companyId?: string, page = 0) {
   const filters = companyId
     ? [{ type: 'eq' as const, column: 'company_id', value: companyId }]
     : undefined;
@@ -101,7 +101,7 @@ async function fetchContactsPage(companyId?: string) {
     table: 'contacts',
     select: CONTACT_LISTING_SELECT,
     order: { column: 'updated_at', ascending: false },
-    range: { from: 0, to: PAGE_SIZE - 1 },
+    range: { from: page * PAGE_SIZE, to: (page + 1) * PAGE_SIZE - 1 },
     filters,
   });
 
@@ -118,28 +118,35 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   const queryKey = ['contacts', companyId ?? '__all__'];
   const externalEnabled = options?.enabled ?? true;
 
-  const { data: contacts = [], isLoading: loading, isFetching } = useQuery({
+  const { 
+    data, 
+    isLoading: loading, 
+    isFetching, 
+    fetchNextPage, 
+    hasNextPage, 
+    isFetchingNextPage 
+  } = useInfiniteQuery({
     queryKey,
-    queryFn: () => fetchContactsPage(companyId),
+    queryFn: ({ pageParam = 0 }) => fetchContactsPage(companyId, pageParam as number),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length === PAGE_SIZE ? allPages.length : undefined;
+    },
     enabled: !!user && externalEnabled,
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
-    placeholderData: (prev) => prev,
   });
+
+  const contacts = useMemo(() => data?.pages.flat() ?? [], [data]);
 
   const fetchContacts = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey });
   }, [queryClient, queryKey]);
 
-  // loadMore / hasMore
-  const hasMore = contacts.length >= PAGE_SIZE;
   const loadMore = useCallback(async () => {
-    if (!hasMore || isFetching) return;
-    
-    // In a real implementation with infinite scroll, we would append data.
-    // Here we invalidate to trigger a refresh as requested to ensure consistency.
-    await queryClient.invalidateQueries({ queryKey });
-  }, [hasMore, isFetching, queryClient, queryKey]);
+    if (!hasNextPage || isFetchingNextPage) return;
+    await fetchNextPage();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const prefetchContactDetails = (id: string) => {
     queryClient.prefetchQuery({
@@ -304,5 +311,5 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     }
   };
 
-  return { contacts, loading, isFetching, hasMore, fetchContacts, loadMore, createContact, updateContact, deleteContact, prefetchContactDetails };
+  return { contacts, loading, isFetching, hasMore: hasNextPage, fetchContacts, loadMore, createContact, updateContact, deleteContact, prefetchContactDetails };
 }

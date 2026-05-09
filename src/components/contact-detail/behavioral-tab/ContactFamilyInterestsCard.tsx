@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Users, Heart, Star, Info, Pencil, Check, X, Loader2, Sparkles } from 'lucide-react';
+import { Users, Heart, Star, Info, Pencil, Check, X, Loader2, Sparkles, MessageSquare, Phone, Linkedin, Instagram, Twitter, Globe } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { FamilyHistoryDialog } from './FamilyHistoryDialog';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -12,11 +13,12 @@ interface Props {
   hobbies?: string[];
   interests?: string[];
   familyInfo?: string;
+  metadata?: any;
   onUpdate?: (data: { family_info?: string; hobbies?: string[]; interests?: string[] }) => Promise<any>;
   className?: string;
 }
 
-export function ContactFamilyInterestsCard({ contactId, hobbies, interests, familyInfo, onUpdate, className }: Props) {
+export function ContactFamilyInterestsCard({ contactId, hobbies, interests, familyInfo, metadata, onUpdate, className }: Props) {
   const [isEditingFamily, setIsEditingFamily] = useState(false);
   const [familyValue, setFamilyValue] = useState(familyInfo || '');
   const [isSaving, setIsSaving] = useState(false);
@@ -31,6 +33,19 @@ export function ContactFamilyInterestsCard({ contactId, hobbies, interests, fami
       setIsSaving(false);
     }
   };
+
+  const getSourceIcon = (source?: string) => {
+    if (!source) return null;
+    switch (source.toLowerCase()) {
+      case 'whatsapp': return <MessageSquare className="h-3 w-3 text-green-500" />;
+      case 'call': return <Phone className="h-3 w-3 text-blue-500" />;
+      case 'linkedin': return <Linkedin className="h-3 w-3 text-blue-600" />;
+      case 'instagram': return <Instagram className="h-3 w-3 text-pink-500" />;
+      case 'twitter': return <Twitter className="h-3 w-3 text-sky-400" />;
+      default: return <Globe className="h-3 w-3 text-muted-foreground" />;
+    }
+  };
+
   const hasHobbies = hobbies && hobbies.length > 0;
   const hasInterests = interests && interests.length > 0;
   const hasFamily = !!familyInfo;
@@ -68,14 +83,17 @@ export function ContactFamilyInterestsCard({ contactId, hobbies, interests, fami
               Família & Contexto
             </h4>
             {!isEditingFamily && onUpdate && (
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-6 w-6 text-muted-foreground hover:text-primary"
-                onClick={() => setIsEditingFamily(true)}
-              >
-                <Pencil className="h-3 w-3" />
-              </Button>
+              <div className="flex items-center gap-1">
+                <FamilyHistoryDialog contactId={contactId} />
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-6 w-6 text-muted-foreground hover:text-primary"
+                  onClick={() => setIsEditingFamily(true)}
+                >
+                  <Pencil className="h-3 w-3" />
+                </Button>
+              </div>
             )}
           </div>
           
@@ -135,15 +153,19 @@ export function ContactFamilyInterestsCard({ contactId, hobbies, interests, fami
               Hobbies
             </h4>
             <div className="flex flex-wrap gap-1.5 min-h-[24px]">
-              {hobbies && hobbies.length > 0 ? hobbies.map((hobby, i) => (
-                <Badge 
-                  key={i} 
-                  variant="secondary" 
-                  className="text-[10px] bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200/50"
-                >
-                  {hobby}
-                </Badge>
-              )) : (
+              {hobbies && hobbies.length > 0 ? hobbies.map((hobby, i) => {
+                const source = metadata?.hobbies?.[hobby];
+                return (
+                  <Badge 
+                    key={i} 
+                    variant="secondary" 
+                    className="text-[10px] bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200/50 gap-1"
+                  >
+                    {source && getSourceIcon(source)}
+                    {hobby}
+                  </Badge>
+                );
+              }) : (
                 <span className="text-[10px] text-muted-foreground italic">Nenhum registrado</span>
               )}
             </div>
@@ -155,15 +177,19 @@ export function ContactFamilyInterestsCard({ contactId, hobbies, interests, fami
               Interesses
             </h4>
             <div className="flex flex-wrap gap-1.5 min-h-[24px]">
-              {interests && interests.length > 0 ? interests.map((interest, i) => (
-                <Badge 
-                  key={i} 
-                  variant="secondary" 
-                  className="text-[10px] bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200/50"
-                >
-                  {interest}
-                </Badge>
-              )) : (
+              {interests && interests.length > 0 ? interests.map((interest, i) => {
+                const source = metadata?.interests?.[interest];
+                return (
+                  <Badge 
+                    key={i} 
+                    variant="secondary" 
+                    className="text-[10px] bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200/50 gap-1"
+                  >
+                    {source && getSourceIcon(source)}
+                    {interest}
+                  </Badge>
+                );
+              }) : (
                 <span className="text-[10px] text-muted-foreground italic">Nenhum registrado</span>
               )}
             </div>

@@ -130,6 +130,7 @@ export function ContactBehavioralTab({ contact }: Props) {
         hobbies={contact.hobbies as string[]}
         interests={contact.interests as string[]}
         familyInfo={contact.family_info || undefined}
+        metadata={contact.rapport_metadata}
         onUpdate={async (data) => {
           // Trigger the local update state via supabase
           const { error } = await supabase.from('contacts').update(data).eq('id', contact.id);
