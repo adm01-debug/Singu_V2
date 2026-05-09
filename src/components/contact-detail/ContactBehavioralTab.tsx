@@ -17,6 +17,7 @@ import { MotivationsSubTab } from './behavioral-tab/MotivationsSubTab';
 import { DecisionMakingSubTab } from './behavioral-tab/DecisionMakingSubTab';
 import { InfluencersSubTab } from './behavioral-tab/InfluencersSubTab';
 import { BusinessContextSubTab } from './behavioral-tab/BusinessContextSubTab';
+import { BehavioralAuditSubTab } from '../crm/behavior/BehavioralAuditSubTab';
 import { BehavioralExecutiveSummary } from './behavioral-tab/BehavioralExecutiveSummary';
 import { ContactFamilyInterestsCard } from './behavioral-tab/ContactFamilyInterestsCard';
 const CommunicationIntelWidget = lazy(() => import('./CommunicationIntelWidget'));
