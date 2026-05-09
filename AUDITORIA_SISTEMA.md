@@ -289,7 +289,9 @@ Todas as 40+ tabelas possuem políticas RLS com `auth.uid() = user_id` para SELE
 
 3. **Alertas de segurança de plataforma (warnings)**
    - `Leaked Password Protection Disabled`.
-   - `Extension in Public`.
+   - `Extension in Public` (pg_net).
+   - `SECURITY DEFINER functions in public` (Hardenizadas: `execute_readonly_query`, `handle_new_user`, etc.).
+   - `Public storage policies` (Hardenizada bucket `documents`).
 
 4. **Finding antigo sobre `trigger_bundles`**
    - A policy atual de INSERT já contém proteção: `COALESCE(is_system_bundle, false) = false`.
