@@ -236,8 +236,9 @@ export function useUpsertCompetitor() {
         .from('competitors')
         .upsert({ ...c, user_id: user.id }, { onConflict: 'user_id,name' })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao salvar competidor");
       return data as Competitor;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['competitors'] }),
