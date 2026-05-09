@@ -31,6 +31,7 @@ const DailyInsightsWidget = lazy(() => import('@/components/dashboard/widgets/Da
 const ChurnRiskReportWidget = lazy(() => import('@/components/dashboard/widgets/ChurnRiskReportWidget'));
 const SmartRemindersPanel = lazy(() => import('@/components/smart-reminders/SmartRemindersPanel').then(m => ({ default: m.SmartRemindersPanel })));
 const StrategicNextStepsCard = lazy(() => import('@/components/dashboard/StrategicNextStepsCard').then(m => ({ default: m.StrategicNextStepsCard })));
+const AIApprovalsWidget = lazy(() => import('@/components/dashboard/widgets/AIApprovalsWidget').then(m => ({ default: m.AIApprovalsWidget })));
 
 interface StaggerAnimation {
   initial: TargetAndTransition;
