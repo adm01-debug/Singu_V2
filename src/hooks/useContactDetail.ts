@@ -98,7 +98,7 @@ export function useContactDetail(contactId: string | undefined) {
       let interactionsData: Interaction[] = [];
       const { data: localInteractions, error: interactionsError } = await supabase
         .from('interactions')
-        .select('id, type, title, content, sentiment, tags, duration, attachments, audio_url, transcription, key_insights, initiated_by, response_time, follow_up_required, follow_up_date, emotion_analysis, created_at, contact_id, company_id, user_id')
+        .select('*')
         .eq('contact_id', contactId)
         .order('created_at', { ascending: false })
         .limit(50);
@@ -125,7 +125,7 @@ export function useContactDetail(contactId: string | undefined) {
       let insightsData: Insight[] = [];
       const { data: localInsights, error: insightsError } = await supabase
         .from('insights')
-        .select('id, category, title, description, confidence, source, actionable, action_suggestion, expires_at, dismissed, created_at, contact_id, user_id')
+        .select('*')
         .eq('contact_id', contactId)
         .eq('dismissed', false)
         .order('created_at', { ascending: false })
@@ -156,7 +156,7 @@ export function useContactDetail(contactId: string | undefined) {
       let alertsData: Alert[] = [];
       const { data: localAlerts, error: alertsError } = await supabase
         .from('alerts')
-        .select('id, type, priority, title, description, action_url, dismissed, expires_at, created_at, contact_id, user_id')
+        .select('*')
         .eq('contact_id', contactId)
         .eq('dismissed', false)
         .order('created_at', { ascending: false })
