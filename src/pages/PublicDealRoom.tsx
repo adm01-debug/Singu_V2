@@ -117,7 +117,7 @@ export default function PublicDealRoom() {
           <Card variant="outlined">
             <CardHeader><CardTitle className="text-base flex items-center gap-2"><Users className="h-4 w-4" />Equipe</CardTitle></CardHeader>
             <CardContent className="space-y-2">
-              {stakeholders.map((s: any) => (
+              {stakeholders.map((s) => (
                 <div key={s.id} className="flex items-center gap-2 text-sm">
                   <span className="font-medium">{s.name}</span>
                   {s.role_title && <span className="text-muted-foreground text-xs">— {s.role_title}</span>}
@@ -131,7 +131,7 @@ export default function PublicDealRoom() {
           <Card variant="outlined">
             <CardHeader><CardTitle className="text-base flex items-center gap-2"><FileText className="h-4 w-4" />Documentos</CardTitle></CardHeader>
             <CardContent className="space-y-2">
-              {documents.map((d: any) => (
+              {documents.map((d) => (
                 <div key={d.id} className="flex items-center gap-2 text-sm">
                   <FileText className="h-4 w-4 text-muted-foreground" />
                   <span className="flex-1 truncate">{d.title}</span>
@@ -146,7 +146,7 @@ export default function PublicDealRoom() {
         <Card variant="outlined">
           <CardHeader><CardTitle className="text-base flex items-center gap-2"><MessageSquare className="h-4 w-4" />Conversa</CardTitle></CardHeader>
           <CardContent className="space-y-3">
-            {comments.map((c: any) => (
+            {comments.map((c) => (
               <div key={c.id} className="border border-border/60 rounded p-2">
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <span className="font-medium text-foreground">{c.author_label}</span>
