@@ -483,6 +483,50 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_recommendation_audit_logs: {
+        Row: {
+          contact_id: string
+          created_at: string | null
+          data_used: Json | null
+          id: string
+          reasons: string[]
+          recommendation_type: string
+          score: number
+          user_action: string | null
+          user_id: string
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string | null
+          data_used?: Json | null
+          id?: string
+          reasons?: string[]
+          recommendation_type: string
+          score: number
+          user_action?: string | null
+          user_id: string
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string | null
+          data_used?: Json | null
+          id?: string
+          reasons?: string[]
+          recommendation_type?: string
+          score?: number
+          user_action?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_recommendation_audit_logs_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_recommendation_logs: {
         Row: {
           action_timestamp: string | null
@@ -10182,6 +10226,44 @@ export type Database = {
             columns: ["contact_id"]
             isOneToOne: false
             referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      whatsapp_transcriptions: {
+        Row: {
+          confidence: number | null
+          content: string
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          provider: string | null
+          whatsapp_message_id: string
+        }
+        Insert: {
+          confidence?: number | null
+          content: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          provider?: string | null
+          whatsapp_message_id: string
+        }
+        Update: {
+          confidence?: number | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          provider?: string | null
+          whatsapp_message_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_transcriptions_whatsapp_message_id_fkey"
+            columns: ["whatsapp_message_id"]
+            isOneToOne: false
+            referencedRelation: "whatsapp_messages"
             referencedColumns: ["id"]
           },
         ]

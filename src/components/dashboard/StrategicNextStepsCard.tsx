@@ -23,6 +23,7 @@ import { Link } from 'react-router-dom';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useRegisterPassoFeedback } from '@/hooks/useProximoPassoFeedback';
+import { useRecommendationAudit } from '@/hooks/useRecommendationAudit';
 import { toast } from '@/hooks/use-toast';
 import { 
   DropdownMenu, 
@@ -66,6 +67,7 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
   const { mutate: registerFeedback, isPending } = useRegisterPassoFeedback();
+  const { mutate: logAudit } = useRecommendationAudit();
 
   const nextSteps = useMemo(() => {
     return [...contacts]
@@ -93,6 +95,21 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
     }, {
       onSuccess: () => {
         setCompletedIds(prev => new Set(prev).add(contactId));
+        
+        // Log auditoria
+        const contact = contacts.find(c => c.id === contactId);
+        logAudit({
+          contactId,
+          score: contact?.relationship_score || 0,
+          recommendationType: 'next_step',
+          reasons: ['Ação do usuário registrada via Próximos Passos'],
+          userAction: outcome,
+          dataUsed: {
+            score: contact?.relationship_score,
+            last_interaction: contact?.last_interaction_at
+          }
+        });
+
         toast({
           title: "Ação registrada",
           description: "A recomendação foi atualizada com sucesso.",
@@ -129,7 +146,16 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
                   exit={{ opacity: 0, x: 20, scale: 0.95 }}
                   transition={{ duration: 0.2 }}
                   className="group flex items-center justify-between gap-4 rounded-xl border border-transparent hover:border-border/50 hover:bg-muted/50 p-2 transition-all cursor-pointer"
-                  onClick={() => setSelectedContactId(contact.id)}
+                  onClick={() => {
+                    setSelectedContactId(contact.id);
+                    logAudit({
+                      contactId: contact.id,
+                      score: contact.relationship_score || 0,
+                      recommendationType: 'next_step_view',
+                      reasons: ['Usuário visualizou detalhes da recomendação'],
+                      userAction: 'viewed'
+                    });
+                  }}
                 >
                   <div className="flex items-center gap-3 min-w-0 flex-1">
                     <Avatar className="h-10 w-10 border-2 border-background shadow-sm shrink-0">
