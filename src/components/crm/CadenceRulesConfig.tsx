@@ -160,7 +160,7 @@ export function CadenceRulesConfig() {
                   </TableCell>
                   <TableCell className="text-center">
                     <Badge variant="secondary" className="text-[9px]">
-                      {rule.cadence_steps?.length || 0} passos
+                      {Array.isArray(rule.cadence_steps) ? rule.cadence_steps.length : 0} passos
                     </Badge>
                   </TableCell>
                   <TableCell className="text-center">
