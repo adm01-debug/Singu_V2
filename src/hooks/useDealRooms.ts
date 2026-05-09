@@ -78,7 +78,7 @@ export interface DealRoomActivity {
   activity_type: string;
   actor_side: Side;
   actor_label: string;
-  payload: any;
+  payload: unknown;
   created_at: string;
 }
 

@@ -146,7 +146,7 @@ export function useRecommendPlaybooks() {
     }) => {
       const { data, error } = await supabase.functions.invoke("playbook-recommender", { body: input });
       if (error) throw error;
-      return data as { recommendations: Array<{ playbook: SalesPlaybook; score: number; reasons: string[] }>; battle_card: any };
+      return data as { recommendations: Array<{ playbook: SalesPlaybook; score: number; reasons: string[] }>; battle_card: unknown };
     },
   });
 }

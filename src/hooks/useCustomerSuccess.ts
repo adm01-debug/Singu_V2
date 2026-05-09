@@ -272,7 +272,7 @@ export function useUpsertQBR() {
     mutationFn: async (input: Partial<QBR> & { account_id: string; title: string; scheduled_at: string }) => {
       if (!user?.id) throw new Error("Não autenticado");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const payload: any = { ...input, user_id: user.id };
+      const payload: Record<string, unknown> = { ...input, user_id: user.id };
       const { data, error } = input.id
         ? await supabase.from("cs_qbrs").update(payload).eq("id", input.id).select().maybeSingle()
         : await supabase.from("cs_qbrs").insert(payload).select().maybeSingle();

@@ -188,6 +188,6 @@ export function useTriggerRevOpsSnapshot() {
       qc.invalidateQueries({ queryKey: ["revops-alerts"] });
       toast.success("Snapshot gerado");
     },
-    onError: (e: any) => toast.error(e.message || "Erro ao gerar snapshot"),
+    onError: (e: Error) => toast.error(e.message || "Erro ao gerar snapshot"),
   });
 }
