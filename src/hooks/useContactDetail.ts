@@ -27,64 +27,40 @@ export interface ContactDetailData {
 export function useContactDetail(contactId: string | undefined) {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [data, setData] = useState<ContactDetailData>({
-    contact: null,
-    company: null,
-    interactions: [],
-    insights: [],
-    alerts: [],
-  });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
-  const fetchContactDetail = useCallback(async () => {
-    if (!user || !contactId) {
-      setLoading(false);
-      return;
-    }
+  const queryKey = ['contact', contactId];
 
-    setLoading(true);
-    setError(null);
-
-    try {
-      // Fetch contact from local database, fallback to external database (prevents false "Contato não encontrado")
-      let contactData: Contact | null = null;
-
+  const { data, isLoading: loading, error: queryError, refetch } = useQuery({
+    queryKey,
+    enabled: !!user && !!contactId,
+    queryFn: async (): Promise<ContactDetailData> => {
+      // 1. Fetch contact
       const { data: localContact, error: contactError } = await supabase
         .from('contacts')
         .select('*')
-        .eq('id', contactId)
+        .eq('id', contactId!)
         .maybeSingle();
 
       if (contactError) throw contactError;
 
+      let contactData: Contact | null = null;
       if (localContact) {
         contactData = normalizeExternalContact(localContact as unknown as Record<string, unknown>);
       } else {
-        const { data: externalContacts, error: externalContactError } = await queryExternalData<Contact>({
+        const { data: externalContacts } = await queryExternalData<Contact>({
           table: 'contacts',
-          filters: [{ type: 'eq', column: 'id', value: contactId }],
+          filters: [{ type: 'eq', column: 'id', value: contactId! }],
         });
-
-        if (externalContactError) throw externalContactError;
         contactData = externalContacts?.[0] ? normalizeExternalContact(externalContacts[0] as unknown as Record<string, unknown>) : null;
       }
 
-      if (!contactData) {
-        setError('Contato não encontrado');
-        setLoading(false);
-        return;
-      }
+      if (!contactData) throw new Error('Contato não encontrado');
 
-      // Fetch company - try local first, then external
+      // 2. Fetch company
       let companyData: Company | null = null;
-      if (contactData?.company_id) {
-        const { data: localCompany } = await supabase
-          .from('companies')
-          .select('*')
-          .eq('id', contactData.company_id)
-          .maybeSingle();
-
+      if (contactData.company_id) {
+        const { data: localCompany } = await supabase.from('companies').select('*').eq('id', contactData.company_id).maybeSingle();
         if (localCompany) {
           companyData = localCompany;
         } else {
@@ -92,123 +68,30 @@ export function useContactDetail(contactId: string | undefined) {
             table: 'companies',
             filters: [{ type: 'eq', column: 'id', value: contactData.company_id }],
           });
-          if (companyResult && companyResult.length > 0) {
-            companyData = companyResult[0];
-          }
+          companyData = companyResult?.[0] || null;
         }
       }
 
-      // Fetch interactions for this contact - try local first, then external
-      let interactionsData: Interaction[] = [];
-      const { data: localInteractions, error: interactionsError } = await supabase
-        .from('interactions')
-        .select('*')
-        .eq('contact_id', contactId)
-        .order('created_at', { ascending: false })
-        .limit(50);
+      // 3. Parallel secondary data
+      const [interactionsRes, insightsRes, alertsRes] = await Promise.all([
+        supabase.from('interactions').select('*').eq('contact_id', contactId!).order('created_at', { ascending: false }).limit(50),
+        supabase.from('insights').select('*').eq('contact_id', contactId!).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
+        supabase.from('alerts').select('*').eq('contact_id', contactId!).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
+      ]);
 
-      if (interactionsError) {
-        logger.error('Error fetching local interactions:', interactionsError);
-      }
-
-      if (localInteractions && localInteractions.length > 0) {
-        interactionsData = localInteractions;
-      } else {
-        const { data: extInteractions } = await queryExternalData<Interaction>({
-          table: 'interactions',
-          filters: [{ type: 'eq', column: 'contact_id', value: contactId }],
-          order: { column: 'created_at', ascending: false },
-          range: { from: 0, to: 49 },
-        });
-        if (extInteractions && extInteractions.length > 0) {
-          interactionsData = extInteractions;
-        }
-      }
-
-      // Fetch insights for this contact - try local first, then external
-      let insightsData: Insight[] = [];
-      const { data: localInsights, error: insightsError } = await supabase
-        .from('insights')
-        .select('*')
-        .eq('contact_id', contactId)
-        .eq('dismissed', false)
-        .order('created_at', { ascending: false })
-        .limit(20);
-
-      if (insightsError) {
-        logger.error('Error fetching local insights:', insightsError);
-      }
-
-      if (localInsights && localInsights.length > 0) {
-        insightsData = localInsights;
-      } else {
-        const { data: extInsights } = await queryExternalData<Insight>({
-          table: 'insights',
-          filters: [
-            { type: 'eq', column: 'contact_id', value: contactId },
-            { type: 'eq', column: 'dismissed', value: false },
-          ],
-          order: { column: 'created_at', ascending: false },
-          range: { from: 0, to: 19 },
-        });
-        if (extInsights && extInsights.length > 0) {
-          insightsData = extInsights;
-        }
-      }
-
-      // Fetch alerts for this contact - try local first, then external
-      let alertsData: Alert[] = [];
-      const { data: localAlerts, error: alertsError } = await supabase
-        .from('alerts')
-        .select('*')
-        .eq('contact_id', contactId)
-        .eq('dismissed', false)
-        .order('created_at', { ascending: false })
-        .limit(10);
-
-      if (alertsError) {
-        logger.error('Error fetching local alerts:', alertsError);
-      }
-
-      if (localAlerts && localAlerts.length > 0) {
-        alertsData = localAlerts;
-      } else {
-        const { data: extAlerts } = await queryExternalData<Alert>({
-          table: 'alerts',
-          filters: [
-            { type: 'eq', column: 'contact_id', value: contactId },
-          ],
-          order: { column: 'created_at', ascending: false },
-          range: { from: 0, to: 9 },
-        });
-        if (extAlerts && extAlerts.length > 0) {
-          alertsData = extAlerts;
-        }
-      }
-
-      setData({
+      return {
         contact: contactData,
         company: companyData,
-        interactions: interactionsData || [],
-        insights: insightsData || [],
-        alerts: alertsData || [],
-      });
-    } catch (err) {
-      logger.error('Error fetching contact detail:', err);
-      setError('Erro ao carregar dados do contato');
-      toast({
-        title: 'Erro ao carregar contato',
-        description: 'Tente novamente mais tarde.',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, [user, contactId, toast]);
+        interactions: interactionsRes.data || [],
+        insights: insightsRes.data || [],
+        alerts: alertsRes.data || [],
+      };
+    },
+    staleTime: 5 * 60 * 1000,
+  });
 
-  useEffect(() => {
-    fetchContactDetail();
-  }, [fetchContactDetail]);
+  const error = queryError instanceof Error ? queryError.message : null;
+
 
   // Set up realtime subscription for updates
   useEffect(() => {
