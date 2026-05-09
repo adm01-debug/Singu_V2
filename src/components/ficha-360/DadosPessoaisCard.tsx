@@ -67,6 +67,8 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
       family_info: updatedFamilyInfo,
       birthday: birthday || null,
       positive_anchors: anchors,
+      hobbies: hobbies,
+      interests: interests,
     });
     setIsEditing(false);
   };
