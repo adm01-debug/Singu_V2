@@ -116,6 +116,7 @@ export const BattleCardDetailPage = lazy(() => import("@/pages/BattleCardDetail"
 export const CustomerSuccessPage = lazy(() => import("@/pages/CustomerSuccess"));
 export const CustomerSuccessAccountPage = lazy(() => import("@/pages/CustomerSuccessAccount"));
 export const Intelligence = lazy(() => import("@/pages/Intelligence"));
+export const RecommendationAudit = lazy(() => import("@/pages/RecommendationAudit"));
 
 // Non-critical shell components
 export const PWAShell = lazy(() =>
