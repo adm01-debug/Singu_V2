@@ -186,7 +186,22 @@ const EmpresaDetalhe = () => {
 
         <div className="relative z-10 px-4 md:px-6 -mt-12 md:-mt-16 pb-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <CompanyProfileCard company={company} contactCount={contacts.length} totalInteractions={stats.total} avgRelationshipScore={stats.avgScore} phones={phonesHook.data} emails={emailsHook.data} addresses={addressesHook.data} socialMedia={socialMediaHook.data} />
+            <div className="space-y-6">
+              <CompanyProfileCard company={company} contactCount={contacts.length} totalInteractions={stats.total} avgRelationshipScore={stats.avgScore} phones={phonesHook.data} emails={emailsHook.data} addresses={addressesHook.data} socialMedia={socialMediaHook.data} />
+              
+              <DashboardErrorBoundary sectionName="Resumo Executivo">
+                <CompanyExecutiveSummary 
+                  companyId={id!} 
+                  data={{
+                    healthScore: companySummary?.health_score,
+                    rfmSegment: companySummary?.rfm_segment,
+                    leadScore: companySummary?.lead_score,
+                    leadStatus: companySummary?.lead_status,
+                    growthPropensity: 72 // Mock for now, would come from predictive hook
+                  }}
+                />
+              </DashboardErrorBoundary>
+            </div>
 
             <div className="lg:col-span-2 space-y-6">
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
