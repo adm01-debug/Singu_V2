@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Users, Heart, Star, Info, Pencil, Check, X, Loader2, Sparkles } from 'lucide-react';
+import { Users, Heart, Star, Info, Pencil, Check, X, Loader2, Sparkles, MessageSquare, Phone, Linkedin, Instagram, Twitter, Globe } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { FamilyHistoryDialog } from './FamilyHistoryDialog';
 import { cn } from '@/lib/utils';
 
 interface Props {
