@@ -81,8 +81,9 @@ export function useSentimentAnnotations(contactId: string | undefined) {
           description: input.description ?? null,
         })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao criar anotação');
       return data as SentimentAnnotation;
     },
     onSuccess: invalidate,
@@ -96,8 +97,9 @@ export function useSentimentAnnotations(contactId: string | undefined) {
         .update(patch)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao atualizar anotação');
       return data as SentimentAnnotation;
     },
     onSuccess: invalidate,

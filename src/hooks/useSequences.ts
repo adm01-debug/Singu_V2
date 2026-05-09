@@ -87,8 +87,9 @@ export function useSequences() {
         .from('sequences')
         .insert({ ...seqData, user_id: userId })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!seq) throw new Error('Falha ao criar sequência');
 
       if (steps.length > 0) {
         const stepsToInsert = steps.map((s, i) => ({

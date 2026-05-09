@@ -158,9 +158,10 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
           profile_summary: summary
         })
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error('Falha ao salvar análise DISC');
 
       const record: DISCAnalysisRecord = {
         id: data.id,
@@ -394,9 +395,10 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
           behavior_indicators: []
         })
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error('Falha ao salvar perfil DISC manual');
 
       toast.success('Perfil DISC salvo com sucesso');
       await fetchAnalysisHistory();

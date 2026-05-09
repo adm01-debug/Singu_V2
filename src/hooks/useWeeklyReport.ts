@@ -141,8 +141,9 @@ export function useWeeklyReport() {
         .from('weekly_report_settings')
         .upsert(toSave, { onConflict: 'user_id' })
         .select()
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Falha ao salvar configurações');
       setSettings(data as WeeklyReportSettings);
       toast.success('Configurações salvas com sucesso');
     } catch (error) {

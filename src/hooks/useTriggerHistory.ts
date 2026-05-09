@@ -166,9 +166,10 @@ export function useTriggerHistory(contactId?: string) {
           notes: input.notes || null,
         })
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error('Falha ao registrar uso de gatilho');
 
       await fetchHistory();
       return data as TriggerUsageEntry;
