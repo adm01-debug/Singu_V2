@@ -260,14 +260,16 @@ export const useContactBehavior = (contactId: string) => {
     decision,
     influence,
     businessContext,
+    personality,
     gaps,
     auditLogs,
     consistency,
-    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit,
+    isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit || isLoadingPersonality,
     updateBehavior: updateBehaviorMutation.mutate,
     updateDecision: updateDecisionMutation.mutate,
     updateInfluence: updateInfluenceMutation.mutate,
     updateBusiness: updateBusinessMutation.mutate,
+    updatePersonality: updatePersonalityMutation.mutate,
     checkConsistency,
   };
 };
