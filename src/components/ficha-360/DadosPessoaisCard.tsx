@@ -315,6 +315,110 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
               </div>
             </div>
 
+            {/* Hobbies */}
+            <div className="flex items-start gap-2">
+              <Star className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+              <div className="flex-1">
+                <p className="text-xs text-muted-foreground">Hobbies</p>
+                {isEditing ? (
+                  <div className="space-y-2 mt-1">
+                    <div className="flex flex-wrap gap-1.5">
+                      {hobbies.map((hobby, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-amber-50 text-amber-700 border-amber-100">
+                          {hobby}
+                          <button onClick={() => setHobbies(prev => prev.filter((_, idx) => idx !== i))}>
+                            <X className="h-3 w-3" />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="flex gap-1">
+                      <Input 
+                        value={newHobby} 
+                        onChange={(e) => setNewHobby(e.target.value)}
+                        placeholder="Novo hobby..."
+                        className="h-8 text-sm"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && newHobby.trim()) {
+                            e.preventDefault();
+                            setHobbies(prev => [...prev, newHobby.trim()]);
+                            setNewHobby('');
+                          }
+                        }}
+                      />
+                      <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => { if (newHobby.trim()) { setHobbies(prev => [...prev, newHobby.trim()]); setNewHobby(''); } }}>
+                        <Plus className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {hobbies.length > 0 ? (
+                      hobbies.map((hobby, i) => (
+                        <Badge key={i} variant="secondary" className="text-[10px] font-normal bg-amber-50 text-amber-700 border-amber-100/50">
+                          {hobby}
+                        </Badge>
+                      ))
+                    ) : (
+                      <p className="text-sm text-muted-foreground italic">Não informado</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Interesses */}
+            <div className="flex items-start gap-2">
+              <Zap className="h-4 w-4 text-purple-500 mt-0.5 shrink-0" />
+              <div className="flex-1">
+                <p className="text-xs text-muted-foreground">Interesses</p>
+                {isEditing ? (
+                  <div className="space-y-2 mt-1">
+                    <div className="flex flex-wrap gap-1.5">
+                      {interests.map((interest, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-purple-50 text-purple-700 border-purple-100">
+                          {interest}
+                          <button onClick={() => setInterests(prev => prev.filter((_, idx) => idx !== i))}>
+                            <X className="h-3 w-3" />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="flex gap-1">
+                      <Input 
+                        value={newInterest} 
+                        onChange={(e) => setNewInterest(e.target.value)}
+                        placeholder="Novo interesse..."
+                        className="h-8 text-sm"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && newInterest.trim()) {
+                            e.preventDefault();
+                            setInterests(prev => [...prev, newInterest.trim()]);
+                            setNewInterest('');
+                          }
+                        }}
+                      />
+                      <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => { if (newInterest.trim()) { setInterests(prev => [...prev, newInterest.trim()]); setNewInterest(''); } }}>
+                        <Plus className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {interests.length > 0 ? (
+                      interests.map((interest, i) => (
+                        <Badge key={i} variant="secondary" className="text-[10px] font-normal bg-purple-50 text-purple-700 border-purple-100/50">
+                          {interest}
+                        </Badge>
+                      ))
+                    ) : (
+                      <p className="text-sm text-muted-foreground italic">Não informado</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* Âncoras */}
             <div>
               <p className="text-xs text-muted-foreground mb-1.5 flex items-center gap-1.5">
