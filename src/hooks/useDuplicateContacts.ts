@@ -20,7 +20,10 @@ export function useDuplicateContacts(enabled = true) {
     enabled,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<DuplicateContact[]>('get_duplicate_contacts', {});
-      if (error) throw error;
+      if (error) {
+        console.warn('[useDuplicateContacts] RPC error (resilience):', error);
+        return [];
+      }
       return (Array.isArray(data) ? data : []) as DuplicateContact[];
     },
     staleTime: 30 * 60 * 1000,
