@@ -362,19 +362,55 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
   };
 
   const scheduleReminder = async () => {
-    toast({
-      title: "Lembrete Agendado",
-      description: "Sincronizado com seu calendário para amanhã às 09:00.",
-    });
+    if (!contact || !user) return;
     
-    // Log do agendamento para auditoria
-    if (contactId) {
+    try {
+      // 1. Create Internal Reminder (Interaction)
+      const { error } = await supabase.from('interactions').insert({
+        user_id: user.id,
+        contact_id: contact.id,
+        company_id: contact.company_id,
+        type: 'note',
+        title: `Lembrete: Follow-up com ${contact.first_name}`,
+        content: `Agendado via recomendação da IA. Próximo passo sugerido: Fortalecer relacionamento.`,
+        follow_up_required: true,
+        follow_up_date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // Tomorrow
+        sentiment: 'neutral'
+      });
+
+      if (error) throw error;
+
+      // 2. Generate Google Calendar Link
+      const title = encodeURIComponent(`Follow-up: ${contact.first_name} ${contact.last_name}`);
+      const details = encodeURIComponent(`Links e contexto no Singu CRM: ${window.location.origin}/contatos/${contact.id}`);
+      const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${new Date().toISOString().replace(/-|:|\.\d\d\d/g, '')}/${new Date(Date.now() + 30 * 60 * 1000).toISOString().replace(/-|:|\.\d\d\d/g, '')}`;
+      
+      window.open(googleCalendarUrl, '_blank');
+
+      toast({
+        title: "Lembrete Agendado",
+        description: "Sincronizado internamente e aberto no seu Google Agenda.",
+      });
+      
+      // Log do agendamento para auditoria
       logAudit({
-        contactId,
-        score: contact?.relationship_score || 0,
+        contactId: contact.id,
+        score: contact.relationship_score || 0,
         recommendationType: 'calendar_schedule',
         reasons: ['Usuário agendou lembrete no calendário'],
-        userAction: 'scheduled'
+        userAction: 'scheduled',
+        dataUsed: { provider: 'google_calendar' }
+      });
+      
+      queryClient.invalidateQueries({ queryKey: ['your-day'] });
+      queryClient.invalidateQueries({ queryKey: ['calendario-followups'] });
+      
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "Erro ao agendar",
+        description: "Não foi possível criar o lembrete interno.",
+        variant: "destructive"
       });
     }
   };
