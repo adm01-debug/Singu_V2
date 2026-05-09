@@ -297,8 +297,9 @@ export function useUploadDocument(roomId: string) {
       const { data, error } = await supabase.from("deal_room_documents").insert({
         room_id: roomId, user_id: user.id, title: file.name, file_path: path,
         file_type: file.type, file_size: file.size, uploaded_by_side: "seller",
-      }).select("*").single();
+      }).select("*").maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("Falha ao salvar metadados do documento");
       return data as DealRoomDocument;
     },
     onSuccess: () => {
