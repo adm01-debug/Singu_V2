@@ -26,9 +26,9 @@ const buttonVariants = cva(
         glass: "bg-card/60 backdrop-blur-md border border-border/60 text-foreground hover:bg-card/80 hover:border-primary/30",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
+        default: "h-11 md:h-10 px-4 py-2",
+        sm: "h-10 md:h-9 rounded-md px-3",
+        lg: "h-12 md:h-11 rounded-md px-8",
         icon: "h-11 w-11", // Mínimo de 44x44px conforme WCAG para melhor touch target mobile
         xs: "h-7 px-2 text-xs rounded",
         xl: "h-12 px-10 text-lg rounded-lg",
