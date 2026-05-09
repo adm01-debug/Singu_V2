@@ -39,6 +39,8 @@ import { getChannelCountsCached } from '@/lib/channelCountsCache';
 import { computeIsolatedFilterCounts } from '@/lib/computeIsolatedFilterCounts';
 import { preserveScroll } from '@/lib/preserveScroll';
 import { groupInteractions } from '@/lib/groupInteractions';
+import { IncrementalLoadStickyBar } from '@/components/interactions/IncrementalLoadStickyBar';
+import { InfiniteScrollSentinel } from '@/components/interactions/InfiniteScrollSentinel';
 import { TimelineGroupCard } from '@/components/interactions/TimelineGroupCard';
 
 function normalize(s: string): string {
@@ -61,9 +63,17 @@ interface Props {
   onSetDeletingInteraction: (interaction: Interaction | null) => void;
   filterConfigs: FilterConfig[];
   sortOptions: SortOption[];
+  hasMore?: boolean;
+  loadMore?: () => void;
+  isFetchingNextPage?: boolean;
+  totalCount?: number;
 }
 
-export function InteracoesContent({ interactions, loading, contactMap, stats, onSetIsFormOpen, onSetEditingInteraction, onSetDeletingInteraction, filterConfigs, sortOptions }: Props) {
+export function InteracoesContent({ 
+  interactions, loading, contactMap, stats, onSetIsFormOpen, 
+  onSetEditingInteraction, onSetDeletingInteraction, filterConfigs, 
+  sortOptions, hasMore, loadMore, isFetchingNextPage, totalCount 
+}: Props) {
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
   const [sortBy, setSortBy] = useState('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -236,7 +246,7 @@ export function InteracoesContent({ interactions, loading, contactMap, stats, on
   );
 
   // Paginação derivada (URL-driven). Defaults: page=1, perPage=25.
-  const total = isGrouped ? groups.length : sortedForView.length;
+  const total = isGrouped ? groups.length : (totalCount || sortedForView.length);
   const totalPages = Math.max(1, Math.ceil(total / adv.perPage));
   const safePage = Math.min(adv.page, totalPages);
   const start = (safePage - 1) * adv.perPage;
@@ -363,6 +373,17 @@ export function InteracoesContent({ interactions, loading, contactMap, stats, on
     window.addEventListener('scroll-interactions-top', handler);
     return () => window.removeEventListener('scroll-interactions-top', handler);
   }, []);
+
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!hasMore || isFetchingNextPage || !sentinelRef.current) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) loadMore?.();
+    }, { rootMargin: '400px' });
+    obs.observe(sentinelRef.current);
+    return () => obs.disconnect();
+  }, [hasMore, isFetchingNextPage, loadMore]);
 
   return (
     <div className="p-6 space-y-6">
@@ -506,7 +527,14 @@ export function InteracoesContent({ interactions, loading, contactMap, stats, on
       {/* Âncora para auto-scroll após aplicar preset */}
       <div ref={listTopRef} aria-hidden="true" className="scroll-mt-24" />
 
-      {loading ? <InteractionsListSkeleton /> : (
+      <IncrementalLoadStickyBar 
+        hasMore={!!hasMore} 
+        totalLoaded={interactions.length} 
+        total={totalCount || interactions.length} 
+        className="top-24"
+      />
+
+      {loading && interactions.length === 0 ? <InteractionsListSkeleton /> : (
         <>
           {isGrouped ? (
             <div className="space-y-3">
@@ -594,6 +622,18 @@ export function InteracoesContent({ interactions, loading, contactMap, stats, on
             </div>
             );
           })()}
+
+          {hasMore && (
+            <InfiniteScrollSentinel 
+              sentinelRef={sentinelRef}
+              hasMore={!!hasMore}
+              totalLoaded={interactions.length}
+              total={totalCount || interactions.length}
+              onLoadMore={loadMore}
+              density={adv.density}
+            />
+          )}
+
           <PaginationBar
             page={safePage}
             perPage={adv.perPage}

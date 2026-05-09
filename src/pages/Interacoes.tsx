@@ -44,7 +44,7 @@ const sortOptions: SortOption[] = [
 
 const Interacoes = () => {
   usePageTitle('Interações');
-  const { interactions, loading, createInteraction, updateInteraction, deleteInteraction } = useInteractions();
+  const { interactions, loading, hasMore, loadMore, isFetchingNextPage, totalCount, createInteraction, updateInteraction, deleteInteraction } = useInteractions();
   const { contacts } = useContacts();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingInteraction, setEditingInteraction] = useState<Interaction | null>(null);
@@ -163,7 +163,7 @@ const Interacoes = () => {
           <TabsTrigger value="insights" className="gap-2"><Sparkles className="w-4 h-4" />Insights</TabsTrigger>
         </TabsList>
         <TabsContent value="lista" className="mt-0">
-          <InteracoesContent interactions={interactions} loading={loading} contactMap={contactMap} stats={stats} onSetIsFormOpen={setIsFormOpen} onSetEditingInteraction={setEditingInteraction} onSetDeletingInteraction={setDeletingInteraction} filterConfigs={filterConfigs} sortOptions={sortOptions} />
+          <InteracoesContent interactions={interactions} loading={loading} hasMore={hasMore} loadMore={loadMore} isFetchingNextPage={isFetchingNextPage} totalCount={totalCount} contactMap={contactMap} stats={stats} onSetIsFormOpen={setIsFormOpen} onSetEditingInteraction={setEditingInteraction} onSetDeletingInteraction={setDeletingInteraction} filterConfigs={filterConfigs} sortOptions={sortOptions} />
         </TabsContent>
         <TabsContent value="timeline" className="mt-0 p-6">
           <UnifiedTimelineView />

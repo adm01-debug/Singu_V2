@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useMemo } from 'react';
+import { useQuery, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -14,19 +14,23 @@ export type InteractionUpdate = TablesUpdate<'interactions'>;
 
 const PAGE_SIZE = 50;
 
-async function fetchInteractionsPage(contactId?: string, companyId?: string) {
+async function fetchInteractionsPage(
+  contactId?: string, 
+  companyId?: string, 
+  pageParam = 0
+) {
   let query = supabase
     .from('interactions')
     .select('*', { count: 'exact' })
     .order('created_at', { ascending: false })
-    .range(0, PAGE_SIZE - 1);
+    .range(pageParam * PAGE_SIZE, (pageParam + 1) * PAGE_SIZE - 1);
 
   if (contactId) query = query.eq('contact_id', contactId);
   if (companyId) query = query.eq('company_id', companyId);
 
-  const { data, error } = await query;
+  const { data, error, count } = await query;
   if (error) throw error;
-  return data || [];
+  return { data: data || [], nextCursor: data.length === PAGE_SIZE ? pageParam + 1 : undefined, total: count || 0 };
 }
 
 export function useInteractions(contactId?: string, companyId?: string, options?: { enabled?: boolean }) {
@@ -39,17 +43,35 @@ export function useInteractions(contactId?: string, companyId?: string, options?
   const queryKey = ['interactions', contactId ?? '__all__', companyId ?? '__all__'];
   const externalEnabled = options?.enabled ?? true;
 
-  const { data: interactions = [], isLoading: loading } = useQuery({
+  const { 
+    data, 
+    isLoading: loading, 
+    fetchNextPage, 
+    hasNextPage, 
+    isFetchingNextPage 
+  } = useInfiniteQuery({
     queryKey,
-    queryFn: () => fetchInteractionsPage(contactId, companyId),
+    queryFn: ({ pageParam = 0 }) => fetchInteractionsPage(contactId, companyId, pageParam as number),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastCursor(lastPage),
     enabled: !!user && externalEnabled,
-    staleTime: 10 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
-    placeholderData: (prev) => prev,
+    staleTime: 5 * 60 * 1000,
   });
 
-  const hasMore = interactions.length >= PAGE_SIZE;
-  const loadMore = useCallback(() => {}, []);
+  const interactions = useMemo(() => data?.pages.flatMap(page => page.data) ?? [], [data]);
+  const totalCount = data?.pages[0]?.total ?? 0;
+
+  const hasMore = hasNextPage;
+  const loadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  // Helper to extract next cursor safely
+  function lastCursor(lastPage: any) {
+    return lastPage.nextCursor;
+  }
 
   const fetchInteractions = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey });
@@ -210,6 +232,8 @@ export function useInteractions(contactId?: string, companyId?: string, options?
     interactions,
     loading,
     hasMore,
+    isFetchingNextPage,
+    totalCount,
     fetchInteractions,
     loadMore,
     createInteraction,
