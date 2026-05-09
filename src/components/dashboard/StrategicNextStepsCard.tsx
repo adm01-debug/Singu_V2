@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,9 @@ import {
   Info,
   Download,
   Send,
-  Eye
+  Eye,
+  MessageSquare,
+  Clock
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { format, formatDistanceToNow } from 'date-fns';
@@ -46,6 +48,7 @@ import { supabase } from '@/integrations/supabase/client';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { useAuth } from '@/hooks/useAuth';
+import { useQueryClient } from '@tanstack/react-query';
 
 
 interface Contact {
@@ -56,6 +59,7 @@ interface Contact {
   relationship_score?: number | null;
   last_interaction_at?: string | null;
   role_title?: string | null;
+  notes?: string | null;
 }
 
 interface StrategicNextStepsCardProps {
@@ -68,6 +72,13 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
   const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
   const { mutate: registerFeedback, isPending } = useRegisterPassoFeedback();
   const { mutate: logAudit } = useRecommendationAudit();
+  const queryClient = useQueryClient();
+
+  // Optimistic update effect: automatically re-sort when a feedback is registered
+  // and invalidate contacts to get fresh scores
+  const triggerRefresh = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['contacts'] });
+  }, [queryClient]);
 
   const nextSteps = useMemo(() => {
     return [...contacts]
@@ -110,9 +121,11 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
           }
         });
 
+        triggerRefresh();
+
         toast({
           title: "Ação registrada",
-          description: "A recomendação foi atualizada com sucesso.",
+          description: "A pontuação e as recomendações foram atualizadas.",
         });
       }
     });
@@ -166,13 +179,24 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
                     </Avatar>
                     <div className="min-w-0 flex-1">
                       <h4 className="text-sm font-semibold truncate leading-tight group-hover:text-primary transition-colors">
-                        {contact.first_name} {contact.last_name}
+                      {contact.first_name} {contact.last_name}
                       </h4>
                       <p className="text-[11px] text-muted-foreground truncate mt-0.5">
                         {contact.role_title || 'Contato Estratégico'}
                       </p>
+                      
+                      {/* Dashboard "Resumo da Última Interação" mini-display */}
+                      {contact.notes && (
+                        <div className="mt-1 flex items-start gap-1.5 max-w-full">
+                          <MessageSquare className="h-3 w-3 text-primary/40 shrink-0 mt-0.5" />
+                          <p className="text-[10px] text-muted-foreground italic truncate">
+                            {contact.notes.slice(0, 60)}...
+                          </p>
+                        </div>
+                      )}
+
                       <div className="flex items-center gap-1.5 mt-1">
-                        <Calendar className="h-3 w-3 text-muted-foreground/60" />
+                        <Clock className="h-3 w-3 text-muted-foreground/60" />
                         <span className="text-[10px] text-muted-foreground/70">
                           {contact.last_interaction_at 
                             ? `Último contato ${formatDistanceToNow(new Date(contact.last_interaction_at), { addSuffix: true, locale: ptBR })}`
