@@ -10,9 +10,12 @@ interface Props {
   contactName: string;
   linkedinUrl?: string | null;
   websiteUrl?: string | null;
+  currentScore?: number;
+  currentSentiment?: string;
 }
 
-export function AIActionsPanel({ contactId, contactName, linkedinUrl, websiteUrl }: Props) {
+
+export function AIActionsPanel({ contactId, contactName, linkedinUrl, websiteUrl, currentScore = 0, currentSentiment = 'neutral' }: Props) {
   const {
     loading,
     generateOfferSuggestions,

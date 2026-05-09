@@ -3,15 +3,22 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Header } from '@/components/layout/Header';
-import { Zap, Power, History } from 'lucide-react';
+import { Zap, Power, History, LayoutDashboard, Search, CalendarClock } from 'lucide-react';
+
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAutomationRules, type CreateRuleData } from '@/hooks/useAutomationRules';
 import { AutomationTemplates } from '@/components/automation/AutomationTemplates';
 import { RuleFormDialog } from './automacoes/RuleFormDialog';
 import { AutomacoesRulesList } from './automacoes/AutomacoesRulesList';
+import { CRMAutomationAuditLog } from '@/components/crm/CRMAutomationAuditLog';
+import { RelationshipKPIsDashboard } from '@/components/crm/RelationshipKPIsDashboard';
+
+
+import { CadenceRulesConfig } from '@/components/crm/CadenceRulesConfig';
 
 export default function Automacoes() {
+
   usePageTitle('Automações');
   const { rules, logs, loading, createRule, updateRule, deleteRule, toggleRule, fetchLogs } = useAutomationRules();
   const [formOpen, setFormOpen] = useState(false);
@@ -53,10 +60,25 @@ export default function Automacoes() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList>
-            <TabsTrigger value="rules">Minhas Regras</TabsTrigger>
-            <TabsTrigger value="templates">📦 Templates Prontos</TabsTrigger>
+          <TabsList className="bg-muted/50 p-1 h-auto flex flex-wrap gap-1">
+            <TabsTrigger value="rules" className="gap-2"><Zap className="h-3.5 w-3.5" />Regras de Negócio</TabsTrigger>
+            <TabsTrigger value="cadences" className="gap-2"><CalendarClock className="h-3.5 w-3.5" />Cadências CRM</TabsTrigger>
+            <TabsTrigger value="crm-audit" className="gap-2"><Search className="h-3.5 w-3.5" />Auditoria CRM</TabsTrigger>
+            <TabsTrigger value="kpis" className="gap-2"><LayoutDashboard className="h-3.5 w-3.5" />KPIs de Relacionamento</TabsTrigger>
+            <TabsTrigger value="templates">📦 Templates</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="cadences" className="mt-4">
+            <CadenceRulesConfig />
+          </TabsContent>
+
+          <TabsContent value="crm-audit" className="mt-4">
+            <CRMAutomationAuditLog />
+          </TabsContent>
+          <TabsContent value="kpis" className="mt-4">
+            <RelationshipKPIsDashboard />
+          </TabsContent>
+
           <TabsContent value="templates" className="mt-4">
             <AutomationTemplates onUseTemplate={handleUseTemplate} />
           </TabsContent>

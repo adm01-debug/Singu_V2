@@ -28,15 +28,21 @@ const CRMAlertsWidget = lazy(() => import('./CRMAlertsWidget').then(m => ({ defa
 const LocalChurnRiskPanel = lazy(() => import('@/components/churn-risk/ChurnRiskPanel'));
 
 import { LeadScoreWidget } from '@/components/lead-score/LeadScoreWidget';
+import { ScoreExplicabilityPanel } from './ScoreExplicabilityPanel';
+import { MetricOverrideFlow } from './MetricOverrideFlow';
+
 
 interface Props {
   contactId: string;
   contactName?: string;
   linkedinUrl?: string | null;
   websiteUrl?: string | null;
+  currentScore?: number;
+  currentSentiment?: string;
 }
 
-export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, websiteUrl }: Props) {
+
+export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, websiteUrl, currentScore = 0, currentSentiment = 'neutral' }: Props) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
@@ -263,7 +269,21 @@ export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, we
       </Card>
       </div>
 
+      {/* Explicability & Control */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <ScoreExplicabilityPanel contactId={contactId} />
+        <MetricOverrideFlow 
+          contactId={contactId} 
+          currentScore={currentScore} 
+          currentSentiment={currentSentiment} 
+        />
+      </div>
+
+
+
+
       {/* Social Intelligence */}
+
       <SocialIntelligencePanel contactId={contactId} />
 
       {/* Communication Preferences + Score History */}
@@ -299,7 +319,10 @@ export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, we
         contactName={contactName || 'Contato'}
         linkedinUrl={linkedinUrl}
         websiteUrl={websiteUrl}
+        currentScore={currentScore}
+        currentSentiment={currentSentiment}
       />
+
     </div>
   );
 }
