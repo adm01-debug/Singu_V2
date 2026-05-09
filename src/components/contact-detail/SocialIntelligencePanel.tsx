@@ -26,7 +26,7 @@ export function SocialIntelligencePanel({ contactId }: Props) {
   if (!hasData) return null;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" id="social-intelligence-section">
       {/* Social Profiles */}
       {profiles.length > 0 && (
         <Card>
