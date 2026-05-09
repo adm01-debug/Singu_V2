@@ -51,10 +51,12 @@ export function RelationshipStageBadge({ stage, className }: RelationshipStageBa
 
 interface RelationshipFunnelProps {
   currentStage: RelationshipStage;
+  onStageChange?: (stage: RelationshipStage) => void;
   className?: string;
+  isEditable?: boolean;
 }
 
-export function RelationshipFunnel({ currentStage, className }: RelationshipFunnelProps) {
+export function RelationshipFunnel({ currentStage, onStageChange, className, isEditable = false }: RelationshipFunnelProps) {
   const currentIndex = stageOrder.indexOf(currentStage);
 
   return (
