@@ -52,6 +52,7 @@ interface Props {
   onSelectAll: () => void;
   onBulkDelete: (ids: string[]) => Promise<void>;
   onBulkAddTag: (ids: string[], tag: string) => Promise<void>;
+  onBulkUpdateStage: (ids: string[], stage: string) => Promise<void>;
   onSetEditingContact: (contact: Contact | null) => void;
   onSetDeletingContact: (contact: Contact | null) => void;
   onSetIsFormOpen: (open: boolean) => void;
