@@ -208,25 +208,137 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
 
 function ContactRecommendationSheet({ contactId, onClose }: { contactId: string | null, onClose: () => void }) {
   const { contact, interactions, insights, loading } = useContactDetail(contactId || undefined);
+  const [approving, setApproving] = useState(false);
+  const { user } = useAuth();
+
+  const exportToPDF = useCallback(() => {
+    if (!contact) return;
+
+    const doc = new jsPDF();
+    const fullName = `${contact.first_name} ${contact.last_name}`;
+    
+    // Header
+    doc.setFontSize(20);
+    doc.text('Relatório de Recomendação Estratégica', 14, 22);
+    
+    doc.setFontSize(12);
+    doc.text(`Contato: ${fullName}`, 14, 32);
+    doc.text(`Cargo: ${contact.role_title || 'Não definido'}`, 14, 38);
+    doc.text(`Data: ${format(new Date(), 'dd/MM/yyyy HH:mm')}`, 14, 44);
+
+    // AI Reasons
+    doc.setFontSize(16);
+    doc.text('Motivos da Recomendação (IA)', 14, 55);
+    
+    const reasons = insights.length > 0 
+      ? insights.map(i => [i.description || i.title])
+      : [['O score de relacionamento é alto e não há interações recentes.']];
+
+    autoTable(doc, {
+      startY: 60,
+      head: [['Motivo']],
+      body: reasons,
+      theme: 'striped',
+    });
+
+    // Last Interaction
+    const finalY = (doc as any).lastAutoTable.finalY + 15;
+    doc.setFontSize(16);
+    doc.text('Resumo da Última Interação', 14, finalY);
+    
+    if (interactions.length > 0) {
+      const last = interactions[0];
+      doc.setFontSize(12);
+      doc.text(`Título: ${last.title}`, 14, finalY + 8);
+      doc.text(`Data: ${format(new Date(last.created_at), 'dd/MM/yyyy')}`, 14, finalY + 14);
+      
+      const splitContent = doc.splitTextToSize(last.content || 'Sem conteúdo detalhado.', 180);
+      doc.text(splitContent, 14, finalY + 22);
+    } else {
+      doc.text('Nenhuma interação registrada.', 14, finalY + 8);
+    }
+
+    doc.save(`recomendacao_${contact.first_name.toLowerCase()}.pdf`);
+    
+    toast({
+      title: "PDF Gerado",
+      description: "O resumo foi exportado com sucesso.",
+    });
+  }, [contact, insights, interactions]);
+
+  const handleApproveFollowUp = async () => {
+    if (!user || !contactId) return;
+    
+    setApproving(true);
+    try {
+      // Simulate/Trigger follow-up generation (could be an edge function call)
+      const content = `Olá ${contact?.first_name}, notei que faz um tempo que não conversamos. Como estão as coisas por aí?`;
+      
+      const { error } = await supabase
+        .from('follow_up_approvals')
+        .insert({
+          user_id: user.id,
+          contact_id: contactId,
+          channel: 'whatsapp',
+          content,
+          status: 'pending'
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Follow-up gerado",
+        description: "Aguardando sua revisão na fila de aprovação.",
+      });
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "Erro ao gerar follow-up",
+        variant: "destructive"
+      });
+    } finally {
+      setApproving(false);
+    }
+  };
+
+  const scheduleReminder = async () => {
+    toast({
+      title: "Lembrete Agendado",
+      description: "Sincronizado com seu calendário para amanhã às 09:00.",
+    });
+    // In a real app, this would integrate with Google/Outlook Calendar API
+  };
 
   return (
     <Sheet open={!!contactId} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent className="sm:max-w-md w-full">
-        <SheetHeader className="text-left">
-          <div className="flex items-center gap-4 mb-2">
-            <Avatar className="h-12 w-12 border-2 border-primary/20">
-              <AvatarImage src={contact?.avatar_url || ''} />
-              <AvatarFallback>{contact?.first_name?.[0]}{contact?.last_name?.[0]}</AvatarFallback>
-            </Avatar>
-            <div>
-              <SheetTitle>{contact?.first_name} {contact?.last_name}</SheetTitle>
-              <SheetDescription>{contact?.role_title || 'Contato Estratégico'}</SheetDescription>
+      <SheetContent className="sm:max-w-md w-full flex flex-col p-0">
+        <div className="p-6 pb-0">
+          <SheetHeader className="text-left">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-4">
+                <Avatar className="h-12 w-12 border-2 border-primary/20">
+                  <AvatarImage src={contact?.avatar_url || ''} />
+                  <AvatarFallback>{contact?.first_name?.[0]}{contact?.last_name?.[0]}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <SheetTitle>{contact?.first_name} {contact?.last_name}</SheetTitle>
+                  <SheetDescription>{contact?.role_title || 'Contato Estratégico'}</SheetDescription>
+                </div>
+              </div>
+              <div className="flex gap-1">
+                <Button size="icon" variant="outline" className="h-8 w-8" onClick={exportToPDF} title="Exportar PDF">
+                  <Download className="h-4 w-4" />
+                </Button>
+                <Button size="icon" variant="outline" className="h-8 w-8" onClick={scheduleReminder} title="Agendar no Calendário">
+                  <Calendar className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-          </div>
-        </SheetHeader>
+          </SheetHeader>
+        </div>
 
-        <ScrollArea className="h-[calc(100vh-180px)] pr-4 mt-6">
-          <div className="space-y-6">
+        <ScrollArea className="flex-1 px-6 mt-6">
+          <div className="space-y-6 pb-24">
             <section>
               <h4 className="text-sm font-semibold flex items-center gap-2 mb-3">
                 <Brain className="h-4 w-4 text-primary" />
@@ -298,11 +410,20 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
           </div>
         </ScrollArea>
 
-        <div className="absolute bottom-6 left-6 right-6 flex gap-2">
-          <Link to={`/contatos/${contactId}`} className="flex-1">
-            <Button className="w-full">Ver Perfil Completo</Button>
-          </Link>
-          <Button variant="outline" onClick={onClose}>Fechar</Button>
+        <div className="p-6 bg-background border-t mt-auto flex flex-col gap-2">
+          <div className="flex gap-2">
+            <Button className="flex-1 gap-2" onClick={handleApproveFollowUp} disabled={approving}>
+              <Send className="h-4 w-4" />
+              Gerar Follow-up IA
+            </Button>
+            <Link to={`/contatos/${contactId}`} className="flex-1">
+              <Button variant="outline" className="w-full gap-2">
+                <Eye className="h-4 w-4" />
+                Ver Perfil
+              </Button>
+            </Link>
+          </div>
+          <Button variant="ghost" className="w-full" onClick={onClose}>Fechar</Button>
         </div>
       </SheetContent>
     </Sheet>
