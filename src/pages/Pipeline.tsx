@@ -35,9 +35,11 @@ const formatCurrency = (value: number) =>
 const DealCard = React.memo(function DealCard({
   deal,
   onOpenRisk,
+  onEdit,
 }: {
   deal: PipelineDeal;
   onOpenRisk: (deal: PipelineDeal) => void;
+  onEdit: (deal: PipelineDeal) => void;
 }) {
   const risk = useDealSlipRisk(deal);
   const conf = useDealForecastConfidence(deal);
@@ -45,7 +47,8 @@ const DealCard = React.memo(function DealCard({
     <div
       draggable
       onDragStart={(e) => e.dataTransfer.setData('dealId', deal.id)}
-      className="p-3 rounded-lg border bg-card cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow"
+      onClick={() => onEdit(deal)}
+      className="p-3 rounded-lg border bg-card cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow group relative"
     >
       <div className="flex items-start justify-between gap-2">
         <p className="font-medium text-sm truncate flex-1">{deal.titulo}</p>
@@ -289,6 +292,7 @@ export default function Pipeline() {
   const { data: forecast } = useWeightedForecast();
   const moveDeal = useMoveDeal();
   const [riskDeal, setRiskDeal] = useState<PipelineDeal | null>(null);
+  const [editDeal, setEditDeal] = useState<PipelineDeal | null>(null);
   const [isDealDialogOpen, setIsDealDialogOpen] = useState(false);
 
   const dealsByStage = useMemo(() => {
@@ -394,6 +398,12 @@ export default function Pipeline() {
       <DealDialog 
         open={isDealDialogOpen}
         onOpenChange={setIsDealDialogOpen}
+      />
+
+      <DealDetailDrawer
+        deal={editDeal}
+        open={!!editDeal}
+        onOpenChange={(o) => !o && setEditDeal(null)}
       />
     </AppLayout>
   );
