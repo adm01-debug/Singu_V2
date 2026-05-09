@@ -275,7 +275,7 @@ function ContactCardWithContextImpl({
           isHighlighted && "ring-1 ring-primary/50",
           isSelected && "bg-primary/5 border-primary/30"
         )}>
-          <Link to={`/contatos/${contact.id}`}>
+          <Link to={`/contatos/${contact.id}`} onMouseEnter={() => prefetchFn()}>
             <CardContent className="px-4 py-3">
               <div className="flex items-center gap-4">
                 {selectionMode && (
