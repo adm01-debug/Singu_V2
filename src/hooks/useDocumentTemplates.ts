@@ -90,16 +90,16 @@ export function useDocumentTemplates() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const merge_fields = extractMergeFields(input.content_html || '');
-      const { error } = await (supabase.from('document_templates') as any).insert({
+      const { error } = await supabase.from('document_templates').insert({
         user_id: user.id,
-        name: input.name,
+        name: input.name!,
         description: input.description ?? null,
         document_type: input.document_type ?? 'contract',
-        content_html: input.content_html,
+        content_html: input.content_html!,
         merge_fields,
         category: input.category ?? null,
         is_active: input.is_active ?? true,
-      });
+      } as any);
       if (error) throw error;
     },
     onSuccess: () => {
