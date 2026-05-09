@@ -11,6 +11,7 @@ import { useDealSlipRisk } from '@/hooks/useDealSlipRisk';
 import { useDealForecastConfidence } from '@/hooks/useDealForecastConfidence';
 import { DealRiskBadge } from '@/components/pipeline/DealRiskBadge';
 import { DealRiskDrawer } from '@/components/pipeline/DealRiskDrawer';
+import { DealDetailDrawer } from '@/components/pipeline/DealDetailDrawer';
 import { DealDialog } from '@/components/pipeline/DealDialog';
 import { DealConfidenceBadge } from '@/components/pipeline/DealConfidenceBadge';
 import { ForecastConfidencePanel } from '@/components/pipeline/ForecastConfidencePanel';
@@ -55,7 +56,10 @@ const DealCard = React.memo(function DealCard({
         <DealRiskBadge
           score={risk.score}
           level={risk.level}
-          onClick={() => onOpenRisk(deal)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenRisk(deal);
+          }}
           dealId={deal.id}
           dealTitle={deal.titulo}
           factors={risk.factors}
@@ -95,11 +99,13 @@ function PipelineColumn({
   deals,
   onDrop,
   onOpenRisk,
+  onEditDeal,
 }: {
   stage: typeof STAGES[number];
   deals: PipelineDeal[];
   onDrop: (dealId: string, stageId: string) => void;
   onOpenRisk: (deal: PipelineDeal) => void;
+  onEditDeal: (deal: PipelineDeal) => void;
 }) {
   const totalValue = deals.reduce((sum, d) => sum + (d.valor || 0), 0);
 
@@ -124,7 +130,7 @@ function PipelineColumn({
       </div>
       <div className="space-y-2 p-2 bg-muted/30 rounded-b-lg min-h-[200px] border border-t-0">
         {deals.map((deal) => (
-          <DealCard key={deal.id} deal={deal} onOpenRisk={onOpenRisk} />
+          <DealCard key={deal.id} deal={deal} onOpenRisk={onOpenRisk} onEdit={onEditDeal} />
         ))}
         {deals.length === 0 && (
           <p className="text-xs text-muted-foreground text-center py-8">
@@ -373,6 +379,7 @@ export default function Pipeline() {
                 deals={dealsByStage[stage.id] || []}
                 onDrop={handleDrop}
                 onOpenRisk={setRiskDeal}
+                onEditDeal={setEditDeal}
               />
             ))}
           </div>
