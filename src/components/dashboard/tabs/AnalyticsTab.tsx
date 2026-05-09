@@ -15,6 +15,9 @@ const ContactDistributionChart = lazy(() => import('@/components/dashboard/Dashb
 const RelationshipScoreChart = lazy(() => import('@/components/dashboard/DashboardCharts').then(m => ({ default: m.RelationshipScoreChart })));
 const SentimentChart = lazy(() => import('@/components/dashboard/DashboardCharts').then(m => ({ default: m.SentimentChart })));
 const DailyInsightsWidget = lazy(() => import('@/components/dashboard/widgets/DailyInsightsWidget').then(m => ({ default: m.DailyInsightsWidget })));
+const ChurnPredictionPanel = lazy(() => import('@/components/analytics/ChurnPredictionPanel').then(m => ({ default: m.ChurnPredictionPanel })));
+const BestTimeToContactPanel = lazy(() => import('@/components/analytics/BestTimeToContactPanel').then(m => ({ default: m.BestTimeToContactPanel })));
+const DealVelocityPanel = lazy(() => import('@/components/analytics/DealVelocityPanel').then(m => ({ default: m.DealVelocityPanel })));
 
 
 type PeriodFilter = '7d' | '30d' | '90d';
@@ -109,6 +112,24 @@ export function AnalyticsTab({ contacts, companies, interactions, prefersReduced
           <TriggerAnalyticsPanel />
         </Suspense>
       </DashboardErrorBoundary>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <DashboardErrorBoundary sectionName="Previsão de Churn">
+          <Suspense fallback={<div className="animate-pulse h-64 bg-muted rounded-lg" />}>
+            <ChurnPredictionPanel compact />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Melhor Horário">
+          <Suspense fallback={<div className="animate-pulse h-64 bg-muted rounded-lg" />}>
+            <BestTimeToContactPanel compact />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Velocidade de Negócio">
+          <Suspense fallback={<div className="animate-pulse h-64 bg-muted rounded-lg" />}>
+            <DealVelocityPanel compact />
+          </Suspense>
+        </DashboardErrorBoundary>
+      </div>
     </motion.div>
   );
 }
