@@ -200,6 +200,7 @@ const ContatoDetalhe = () => {
             <TabsTrigger value="comercial" className="text-xs sm:text-sm">Comercial</TabsTrigger>
             <TabsTrigger value="lux" className="text-xs sm:text-sm">Lux Intelligence</TabsTrigger>
             <TabsTrigger value="touchpoints" className="text-xs sm:text-sm">Touchpoints</TabsTrigger>
+            <TabsTrigger value="life-events" className="text-xs sm:text-sm">Marcos de Vida</TabsTrigger>
           </TabsList>
 
           <TabsContent value="resumo">
