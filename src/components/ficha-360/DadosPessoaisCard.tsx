@@ -1,9 +1,14 @@
-import { memo } from 'react';
-import { Cake, Heart, Sparkles, Users } from 'lucide-react';
+import { memo, useState } from 'react';
+import { Cake, Heart, Sparkles, Users, Edit2, Check, X, Loader2, Plus, Trash2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { InlineEmptyState } from '@/components/ui/empty-state';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import type { RapportIntel } from '@/hooks/useRapportIntelView';
+import { useRapportIntelMutation } from '@/hooks/useRapportIntelMutation';
+import { cn } from '@/lib/utils';
 
 interface Props {
   rapportIntel: RapportIntel | null;
@@ -21,20 +26,88 @@ function formatBirthday(date?: string | null): string | null {
 }
 
 export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
-  const birthday = formatBirthday(rapportIntel?.birthday);
+  const [isEditing, setIsEditing] = useState(false);
+  const [familyInfo, setFamilyInfo] = useState(rapportIntel?.family_info || '');
+  const [birthday, setBirthday] = useState(rapportIntel?.birthday || '');
+  const [anchors, setAnchors] = useState<string[]>(Array.isArray(rapportIntel?.positive_anchors) ? rapportIntel.positive_anchors : []);
+  const [newAnchor, setNewAnchor] = useState('');
+
+  const mutation = useRapportIntelMutation(rapportIntel?.contact_id);
+
+  const handleSave = async () => {
+    await mutation.mutateAsync({
+      family_info: familyInfo,
+      birthday: birthday || null,
+      positive_anchors: anchors,
+    });
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setFamilyInfo(rapportIntel?.family_info || '');
+    setBirthday(rapportIntel?.birthday || '');
+    setAnchors(Array.isArray(rapportIntel?.positive_anchors) ? rapportIntel.positive_anchors : []);
+    setIsEditing(false);
+  };
+
+  const addAnchor = () => {
+    if (newAnchor.trim()) {
+      setAnchors(prev => [...prev, newAnchor.trim()]);
+      setNewAnchor('');
+    }
+  };
+
+  const removeAnchor = (index: number) => {
+    setAnchors(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const birthdayFormatted = formatBirthday(rapportIntel?.birthday);
   const family = rapportIntel?.family_info;
-  const anchors = Array.isArray(rapportIntel?.positive_anchors) ? rapportIntel.positive_anchors : [];
+  const currentAnchors = Array.isArray(rapportIntel?.positive_anchors) ? rapportIntel.positive_anchors : [];
   const events = Array.isArray(rapportIntel?.upcoming_events) ? rapportIntel.upcoming_events : [];
 
-  const isEmpty = !birthday && !family && anchors.length === 0 && events.length === 0;
+  const isEmpty = !birthdayFormatted && !family && currentAnchors.length === 0 && events.length === 0 && !isEditing;
 
   return (
-    <Card>
+    <Card className={cn("transition-all", isEditing && "ring-2 ring-primary/20 shadow-lg")}>
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-base">
-          <Heart className="h-4 w-4 text-primary" />
-          Dados Pessoais Relevantes
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Heart className="h-4 w-4 text-primary" />
+            Rapport & Dados Pessoais
+          </CardTitle>
+          {!isEditing ? (
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8 text-muted-foreground hover:text-primary"
+              onClick={() => setIsEditing(true)}
+            >
+              <Edit2 className="h-3.5 w-3.5" />
+            </Button>
+          ) : (
+            <div className="flex items-center gap-1">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 text-destructive"
+                onClick={handleCancel}
+                disabled={mutation.isPending}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 text-success"
+                onClick={handleSave}
+                disabled={mutation.isPending}
+              >
+                {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+              </Button>
+            </div>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         {isEmpty ? (
@@ -44,46 +117,95 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
             description="Aniversário, família e âncoras positivas ajudam a personalizar a abordagem."
           />
         ) : (
-          <div className="space-y-3">
-            {birthday && (
-              <div className="flex items-start gap-2">
-                <Cake className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                <div>
-                  <p className="text-xs text-muted-foreground">Aniversário</p>
-                  <p className="text-sm font-medium">{birthday}</p>
-                </div>
+          <div className="space-y-4">
+            {/* Aniversário */}
+            <div className="flex items-start gap-2">
+              <Cake className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+              <div className="flex-1">
+                <p className="text-xs text-muted-foreground">Aniversário</p>
+                {isEditing ? (
+                  <Input 
+                    type="date" 
+                    value={birthday} 
+                    onChange={(e) => setBirthday(e.target.value)}
+                    className="h-8 mt-1 text-sm"
+                  />
+                ) : (
+                  <p className="text-sm font-medium">{birthdayFormatted || 'Não informado'}</p>
+                )}
               </div>
-            )}
-            {family && (
-              <div className="flex items-start gap-2">
-                <Users className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                <div>
-                  <p className="text-xs text-muted-foreground">Família</p>
-                  <p className="text-sm">{family}</p>
-                </div>
+            </div>
+
+            {/* Família */}
+            <div className="flex items-start gap-2">
+              <Users className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+              <div className="flex-1">
+                <p className="text-xs text-muted-foreground">Família (Cônjuge e Filhos)</p>
+                {isEditing ? (
+                  <Textarea 
+                    value={familyInfo} 
+                    onChange={(e) => setFamilyInfo(e.target.value)}
+                    placeholder="Ex: Esposa Maria, filhos Pedro (10) e Ana (7)"
+                    className="mt-1 text-sm min-h-[60px]"
+                  />
+                ) : (
+                  <p className="text-sm whitespace-pre-wrap">{family || 'Não informado'}</p>
+                )}
               </div>
-            )}
-            {anchors.length > 0 && (
-              <div>
-                <p className="text-xs text-muted-foreground mb-1.5 flex items-center gap-1.5">
-                  <Sparkles className="h-3.5 w-3.5" /> Âncoras positivas
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {anchors.slice(0, 8).map((a, i) => (
-                    <Badge key={`anchor-${i}`} variant="secondary" className="text-xs font-normal">
-                      {a}
-                    </Badge>
-                  ))}
-                </div>
+            </div>
+
+            {/* Âncoras */}
+            <div>
+              <p className="text-xs text-muted-foreground mb-1.5 flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5" /> Âncoras positivas
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {(isEditing ? anchors : currentAnchors).map((a, i) => (
+                  <Badge 
+                    key={`anchor-${i}`} 
+                    variant="secondary" 
+                    className={cn("text-xs font-normal", isEditing && "pr-1 gap-1")}
+                  >
+                    {a}
+                    {isEditing && (
+                      <button 
+                        onClick={() => removeAnchor(i)}
+                        className="hover:text-destructive rounded-full p-0.5 transition-colors"
+                      >
+                        <Trash2 className="h-2.5 w-2.5" />
+                      </button>
+                    )}
+                  </Badge>
+                ))}
+                {isEditing && (
+                  <div className="flex items-center gap-1 mt-1 w-full">
+                    <Input 
+                      placeholder="Nova âncora..." 
+                      value={newAnchor}
+                      onChange={(e) => setNewAnchor(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addAnchor())}
+                      className="h-7 text-xs flex-1"
+                    />
+                    <Button size="icon" variant="outline" className="h-7 w-7" onClick={addAnchor}>
+                      <Plus className="h-3 w-3" />
+                    </Button>
+                  </div>
+                )}
+                {!isEditing && currentAnchors.length === 0 && (
+                  <span className="text-xs text-muted-foreground italic">Nenhuma registrada</span>
+                )}
               </div>
-            )}
+            </div>
+
+            {/* Eventos (Somente Leitura por enquanto conforme plano) */}
             {events.length > 0 && (
               <div>
-                <p className="text-xs text-muted-foreground mb-1.5">Próximos eventos</p>
+                <p className="text-xs text-muted-foreground mb-1.5">Próximos eventos (Agenda)</p>
                 <ul className="space-y-1">
                   {events.slice(0, 5).map((e, i) => (
-                    <li key={`event-${i}`} className="text-sm text-foreground">
-                      • {e}
+                    <li key={`event-${i}`} className="text-sm text-foreground flex items-center gap-2">
+                      <div className="w-1 h-1 bg-primary rounded-full shrink-0" />
+                      {e}
                     </li>
                   ))}
                 </ul>

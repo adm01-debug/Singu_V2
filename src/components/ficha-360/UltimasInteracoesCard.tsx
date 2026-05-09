@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { MessageSquare, Phone, Mail, Calendar, FileText, ArrowRight } from 'lucide-react';
+import { MessageSquare, Phone, Mail, Calendar, FileText, ArrowRight, X, Clock } from 'lucide-react';
+import { useFicha360Filters } from '@/hooks/useFicha360Filters';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -63,6 +64,7 @@ function formatDate(iso?: string | null): string {
 }
 
 export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtra, filtersActive, isLoading, days, channels, q }: Props) => {
+  const { setQ } = useFicha360Filters();
   const items = Array.isArray(interactions) ? interactions : [];
   const channelsKey = Array.isArray(channels) ? [...channels].map((c) => c.toLowerCase()).sort().join(',') : '';
   const qKey = q ? hashString(q.trim().toLowerCase()) : 'noq';
@@ -113,17 +115,34 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
     'interações',
   );
 
+  const clearSearch = () => {
+    setQ('');
+  };
+
   return (
     <Card>
       <CardHeader className="pb-3 space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
-            <CardTitle className="text-base">Últimas Interações</CardTitle>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Clock className="h-4 w-4 text-primary" />
+              Atividades & Rapport
+            </CardTitle>
             {items.length > 0 && (
               <Badge variant="secondary" className="text-xs font-normal tabular-nums">
                 {visible.length < items.length
                   ? `Mostrando ${visible.length} de ${items.length}`
                   : `${items.length}`}
+              </Badge>
+            )}
+            {q && (
+              <Badge 
+                variant="info" 
+                closeable 
+                onClose={clearSearch}
+                className="text-[10px] h-5 animate-in fade-in zoom-in duration-200"
+              >
+                Filtro: {q}
               </Badge>
             )}
           </div>

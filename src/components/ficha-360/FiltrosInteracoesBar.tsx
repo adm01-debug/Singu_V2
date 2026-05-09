@@ -155,7 +155,7 @@ export const FiltrosInteracoesBar = memo(function FiltrosInteracoesBar({
             aria-label="Mostrar todos os canais"
             title="Mostrar todos os canais"
           >
-            <Layers className="h-3 w-3" /> Todos os canais
+            <Layers className="h-3 w-3" /> Todos
           </Button>
         )}
 
