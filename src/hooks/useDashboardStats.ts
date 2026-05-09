@@ -169,6 +169,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
           sentiment: contact.sentiment || 'neutral',
           interactionCount: interactionCountByContact.get(contact.id) || 0,
           lastInteraction: latestDate ? new Date(latestDate) : null,
+          lastInteractionSummary: interactionSummariesByContact.get(contact.id) || contact.notes || '',
         };
       });
 
