@@ -221,6 +221,19 @@ export const useContactBehavior = (contactId: string) => {
     },
   });
 
+  const updateMetaprogramsMutation = useMutation({
+    mutationFn: async (updates: Partial<ContactMetaprograms>) => {
+      const { error } = await supabase
+        .from("contact_metaprograms")
+        .upsert({ contact_id: contactId, ...updates }, { onConflict: 'contact_id' });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contact-metaprograms", contactId] });
+      toast.success("Metaprogramas atualizados");
+    },
+  });
+
   const { data: gaps, isLoading: isLoadingGaps } = useQuery({
     queryKey: ["contact-behavior-gaps", contactId],
     queryFn: async () => {
