@@ -301,6 +301,7 @@ export function useCompanies(options?: { enabled?: boolean }) {
   const fetchCompanies = useCallback(async (search?: string) => {
     if (search !== undefined) setSearchTerm(search);
     await queryClient.invalidateQueries({ queryKey: ['companies'] });
+    await queryClient.invalidateQueries({ queryKey: ['companies-remaining'] });
   }, [queryClient]);
 
   const createCompany = async (company: Omit<CompanyInsert, 'user_id'>) => {
