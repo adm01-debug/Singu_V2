@@ -308,6 +308,17 @@ async function handleMessageUpsert(supabase: any, payload: any, instance: string
       .select('id')
       .single();
 
+    if (!msgError && upsertedMsg) {
+       await supabase.from('whatsapp_ingestion_logs').insert({
+        user_id: userId,
+        contact_id: contactId,
+        message_id: messageId,
+        event_type: 'message',
+        status: 'success',
+        details: { dbMessageId: upsertedMsg.id, source }
+      });
+    }
+
     if (msgError) {
       console.error('Error upserting whatsapp_message:', msgError.message);
       // If upsert fails (e.g. duplicate from parallel request), try simple insert or select
@@ -319,11 +330,32 @@ async function handleMessageUpsert(supabase: any, payload: any, instance: string
 
     // Ingestão automática: Se for áudio, disparar transcrição
     if (messageType === 'audio' && dbMessageId) {
+      // Log start of transcription
+      await supabase.from('whatsapp_ingestion_logs').insert({
+        user_id: userId,
+        contact_id: contactId,
+        message_id: messageId,
+        event_type: 'transcription',
+        status: 'pending',
+        details: { dbMessageId }
+      });
+
       supabase.functions.invoke('voice-to-text', {
         body: {
           whatsappMessageId: dbMessageId,
           userId,
         },
+      }).then(async ({ data: resp, error }) => {
+        if (!error && resp?.success) {
+           await supabase.from('whatsapp_ingestion_logs').insert({
+            user_id: userId,
+            contact_id: contactId,
+            message_id: messageId,
+            event_type: 'transcription',
+            status: 'success',
+            details: { dbMessageId, text: resp.text }
+          });
+        }
       }).catch((err: any) => console.error('Transcription trigger error:', err));
     }
   }
