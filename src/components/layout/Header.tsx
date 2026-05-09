@@ -84,9 +84,10 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
           <div className="hidden md:inline-flex items-center gap-4">
             <SystemStatusBadge />
             <div className="flex items-center gap-1">
-            <GlobalDensityToggle />
-            <SmartNotificationsBell />
-            <UnifiedNotificationsBell />
+              <GlobalDensityToggle />
+              <SmartNotificationsBell />
+              <UnifiedNotificationsBell />
+            </div>
           </div>
 
           {/* Trigger ⌘K visível em mobile como ícone */}
