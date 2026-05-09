@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Users, ArrowUpDown, Banknote, Network } from 'lucide-react';
+import { MapPin, Users, ArrowUpDown, Banknote, Network, AlertCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -143,6 +143,10 @@ export const CompaniesTableView = React.memo(function CompaniesTableView({
             const capital = formatCapitalSocial(company.capital_social);
             const cnpjFormatted = formatCnpj(company.cnpj);
             
+            // Check for potential duplicate similarity
+            const duplicateSimilarity = (company as any).similarity;
+            const isHighSimilarity = duplicateSimilarity && duplicateSimilarity >= 90;
+
             return (
               <TableRow
                 key={company.id}
@@ -178,8 +182,22 @@ export const CompaniesTableView = React.memo(function CompaniesTableView({
                       )}
                     </div>
                     <div className="min-w-0">
-                      <span className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                      <span className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1 flex items-center gap-2">
                         {toTitleCase(company.name)}
+                        {isHighSimilarity && (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <div className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-warning/20 text-warning shrink-0 animate-pulse">
+                                  <AlertCircle className="w-3 h-3" />
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p className="text-xs">Possível duplicata detectada ({duplicateSimilarity}%)</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
                       </span>
                       <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                         <Badge
