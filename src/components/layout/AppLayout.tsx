@@ -18,6 +18,8 @@ const OnboardingTourWrapper = lazy(() => import('@/components/onboarding/Onboard
 const KeyboardShortcutsCheatsheet = lazy(() => import('@/components/keyboard/KeyboardShortcutsCheatsheet').then(m => ({ default: m.KeyboardShortcutsCheatsheet })));
 const GlobalCommandBar = lazy(() => import('@/components/command/GlobalCommandBar').then(m => ({ default: m.GlobalCommandBar })));
 const GlobalSearch = lazy(() => import('@/components/search/GlobalSearch').then(m => ({ default: m.GlobalSearch })));
+const GlobalCommandBar = lazy(() => import('@/components/command/GlobalCommandBar').then(m => ({ default: m.GlobalCommandBar })));
+const GlobalSearch = lazy(() => import('@/components/search/GlobalSearch').then(m => ({ default: m.GlobalSearch })));
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useKeyboardShortcutsEnhanced } from '@/hooks/useKeyboardShortcutsEnhanced';
 import { SkipToContent, SmartBreadcrumbs } from '@/components/navigation/NavigationPatterns';
