@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Database, Json } from "@/integrations/supabase/types";
+import { type BattleCard } from "@/hooks/useBattleCards";
 
 export type PlaybookScenario =
   | "discovery" | "demo" | "negotiation" | "objection"
