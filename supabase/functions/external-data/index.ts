@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
-import { withAuth, jsonError, jsonOk, handleCorsAndMethod, withAuthOrServiceRole } from "../_shared/auth.ts";
+import { withAuth, jsonError, jsonOk, handleCorsAndMethod } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { assertVersionMatch } from "../_shared/version-guard.ts";
@@ -205,7 +205,7 @@ Deno.serve(async (req) => {
   if (limited) return limited;
 
   // ── Auth guard ──
-  const authResult = await withAuthOrServiceRole(req);
+  const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
 
   const startTime = performance.now();
@@ -421,12 +421,8 @@ Deno.serve(async (req) => {
         const clamped = clampRange(range);
         query = query.range(clamped.from, clamped.to);
 
-        log.info("executing_query", { table, select: select || '*', filters, search, range });
         const { data, error, count } = await query as unknown as { data: unknown[]; error: { message: string } | null; count: number };
-        if (error) {
-          log.error("query_failed", { table, error: error.message });
-          throw new Error(`Select failed: ${error.message}`);
-        }
+        if (error) throw new Error(`Select failed: ${error.message}`);
         return { data: data || [], count };
       });
 
