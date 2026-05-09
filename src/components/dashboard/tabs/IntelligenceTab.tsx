@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
-import { ShoppingBag, Target, Clock, AlertTriangle, TrendingUp, Sparkles } from 'lucide-react';
+import { ShoppingBag, Target, Clock, AlertTriangle, TrendingUp, Sparkles, Brain } from 'lucide-react';
 import { Typography } from '@/components/ui/typography';
 import { LazySection } from '@/components/dashboard/LazySection';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
@@ -10,6 +10,9 @@ import { ChannelPerformanceMatrixCard } from '@/components/dashboard/ChannelPerf
 import { TouchpointSequenceCard } from '@/components/dashboard/TouchpointSequenceCard';
 import { DealsAtRiskCard } from '@/components/dashboard/DealsAtRiskCard';
 import { StrategicNextStepsCard } from '@/components/dashboard/StrategicNextStepsCard';
+import { DailyInsightsWidget } from '@/components/dashboard/widgets/DailyInsightsWidget';
+import { Surface } from '@/components/ui/surface';
+
 
 const ChurnPredictionPanel = lazy(() => import('@/components/analytics/ChurnPredictionPanel').then(m => ({ default: m.ChurnPredictionPanel })));
 const BestTimeToContactPanel = lazy(() => import('@/components/analytics/BestTimeToContactPanel').then(m => ({ default: m.BestTimeToContactPanel })));
