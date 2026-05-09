@@ -126,7 +126,7 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
           <div className="flex items-center gap-2 min-w-0">
             <CardTitle className="text-base flex items-center gap-2">
               <Clock className="h-4 w-4 text-primary" />
-              Linha do Tempo de Atividades
+              Atividades & Rapport
             </CardTitle>
             {items.length > 0 && (
               <Badge variant="secondary" className="text-xs font-normal tabular-nums">
