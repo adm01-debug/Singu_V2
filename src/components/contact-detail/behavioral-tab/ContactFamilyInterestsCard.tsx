@@ -83,14 +83,17 @@ export function ContactFamilyInterestsCard({ contactId, hobbies, interests, fami
               Família & Contexto
             </h4>
             {!isEditingFamily && onUpdate && (
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-6 w-6 text-muted-foreground hover:text-primary"
-                onClick={() => setIsEditingFamily(true)}
-              >
-                <Pencil className="h-3 w-3" />
-              </Button>
+              <div className="flex items-center gap-1">
+                <FamilyHistoryDialog contactId={contactId} />
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-6 w-6 text-muted-foreground hover:text-primary"
+                  onClick={() => setIsEditingFamily(true)}
+                >
+                  <Pencil className="h-3 w-3" />
+                </Button>
+              </div>
             )}
           </div>
           
