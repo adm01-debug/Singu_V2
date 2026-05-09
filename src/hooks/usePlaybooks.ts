@@ -205,7 +205,7 @@ export function useRecommendPlaybooks() {
       
       return data as { 
         recommendations: Array<{ playbook: SalesPlaybook; score: number; reasons: string[] }>; 
-        battle_card: unknown; 
+        battle_card?: BattleCard; 
       };
     },
   });
