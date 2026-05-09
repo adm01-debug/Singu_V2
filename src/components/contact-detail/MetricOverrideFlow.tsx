@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Settings2, Save, History, RefreshCcw } from 'lucide-react';
+import { Settings2, Save, Calendar, UserCheck } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }: Props) {
-  const [metricType, setMetricType] = useState<'score' | 'sentiment'>('score');
+  const [metricType, setMetricType] = useState<'score' | 'sentiment' | 'last_contact'>('score');
   const [newValue, setNewValue] = useState('');
   const [reason, setReason] = useState('');
   const queryClient = useQueryClient();
@@ -25,28 +25,41 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
   const overrideMutation = useMutation({
     mutationFn: async () => {
       const updates: any = {};
-      if (metricType === 'score') updates.relationship_score = parseInt(newValue);
-      else updates.sentiment = newValue;
+      let valToStore = newValue;
 
-      // 1. Log the override
+      if (metricType === 'score') {
+        updates.relationship_score = parseInt(newValue);
+      } else if (metricType === 'sentiment') {
+        updates.sentiment = newValue;
+      } else if (metricType === 'last_contact') {
+        updates.last_interaction_at = new Date(newValue).toISOString();
+        valToStore = updates.last_interaction_at;
+      }
+
+      // 1. Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Usuário não autenticado');
+
+      // 2. Log the override
       const { error: logError } = await supabase.from('crm_metric_overrides').insert({
-        user_id: (await supabase.auth.getUser()).data.user?.id,
+        user_id: user.id,
         contact_id: contactId,
         metric_type: metricType,
         old_value: metricType === 'score' ? currentScore.toString() : currentSentiment,
-        new_value: newValue,
+        new_value: valToStore,
         reason: reason
       } as any);
 
       if (logError) throw logError;
 
-      // 2. Update the contact
+      // 3. Update the contact
       const { error: updateError } = await supabase.from('contacts').update(updates).eq('id', contactId);
       if (updateError) throw updateError;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contact', contactId] });
-      toast.success('Métrica corrigida manualmente');
+      queryClient.invalidateQueries({ queryKey: ['contact-intelligence', contactId] });
+      toast.success('Métrica corrigida e sincronizada com cadências');
       setNewValue('');
       setReason('');
     },
@@ -58,20 +71,25 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
       <CardHeader className="pb-3 border-b border-amber-100">
         <CardTitle className="text-sm font-bold flex items-center gap-2 text-amber-700">
           <Settings2 className="h-4 w-4" />
-          Ajuste Manual de Inteligência
+          Ajuste Manual e Sincronização
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-4 space-y-4">
+        <p className="text-[10px] text-amber-700/70 leading-relaxed italic">
+          Use este painel para corrigir discrepâncias detectadas pela IA. As alterações impactam imediatamente as cadências de acompanhamento.
+        </p>
+        
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5">
             <Label className="text-[10px] uppercase font-bold text-muted-foreground">Métrica</Label>
-            <Select value={metricType} onValueChange={(val: any) => setMetricType(val)}>
+            <Select value={metricType} onValueChange={(val: any) => { setMetricType(val); setNewValue(''); }}>
               <SelectTrigger className="h-8 text-xs">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="score">Relationship Score</SelectItem>
                 <SelectItem value="sentiment">Sentimento</SelectItem>
+                <SelectItem value="last_contact">Data Último Contato</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -88,7 +106,7 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
                 className="h-8 text-xs"
                 placeholder="0-100"
               />
-            ) : (
+            ) : metricType === 'sentiment' ? (
               <Select value={newValue} onValueChange={setNewValue}>
                 <SelectTrigger className="h-8 text-xs">
                   <SelectValue placeholder="Selecione..." />
@@ -99,6 +117,13 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
                   <SelectItem value="negative">Negativo</SelectItem>
                 </SelectContent>
               </Select>
+            ) : (
+              <Input 
+                type="date" 
+                value={newValue} 
+                onChange={(e) => setNewValue(e.target.value)}
+                className="h-8 text-xs"
+              />
             )}
           </div>
         </div>
@@ -108,8 +133,8 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
           <Textarea 
             value={reason} 
             onChange={(e) => setReason(e.target.value)}
-            className="text-xs min-h-[60px] resize-none"
-            placeholder="Por que você está corrigindo este valor?"
+            className="text-xs min-h-[50px] resize-none"
+            placeholder="Ex: Interação manual não registrada pelo sistema..."
           />
         </div>
 
@@ -118,11 +143,11 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
             variant="outline" 
             size="sm" 
             className="h-8 text-xs font-bold text-amber-700 border-amber-200 hover:bg-amber-100"
-            disabled={overrideMutation.isPending}
+            disabled={overrideMutation.isPending || !newValue || !reason}
             onClick={() => overrideMutation.mutate()}
           >
-            <Save className="h-3 w-3 mr-1.5" />
-            Salvar Correção
+            <UserCheck className="h-3 w-3 mr-1.5" />
+            Salvar e Sincronizar
           </Button>
         </div>
       </CardContent>
