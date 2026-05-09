@@ -22,6 +22,7 @@ interface HeaderProps {
   hideBack?: boolean;
   showSearch?: boolean;
   onSearchChange?: (val: string) => void;
+  className?: string;
 }
 
 const PARENT_ROUTES: Record<string, string> = {
