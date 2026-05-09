@@ -161,32 +161,27 @@ export function ContactBehavioralTab({ contact }: Props) {
       </div>
 
       <TabsContent value="disc" className="space-y-4">
-        <DiscSubTab
-          contactId={contact.id}
-          discProfile={discProfile}
-          discConfidence={discConfidence}
-          discHistory={discHistory}
-        />
+        <DiscSubTab contactId={contact.id} />
       </TabsContent>
 
       <TabsContent value="vak">
-        <VakSubTab vakProfile={vakProfile} />
+        <VakSubTab contactId={contact.id} />
       </TabsContent>
       
       <TabsContent value="motivations">
-        <MotivationsSubTab behavior={behavior} />
+        <MotivationsSubTab contactId={contact.id} />
       </TabsContent>
 
       <TabsContent value="decision">
-        <DecisionMakingSubTab behavior={behavior} />
+        <DecisionMakingSubTab contactId={contact.id} />
       </TabsContent>
 
       <TabsContent value="influence">
-        <InfluencersSubTab behavior={behavior} />
+        <InfluencersSubTab contactId={contact.id} />
       </TabsContent>
 
       <TabsContent value="business">
-        <BusinessContextSubTab behavior={behavior} />
+        <BusinessContextSubTab contactId={contact.id} />
       </TabsContent>
 
       <TabsContent value="eq">
