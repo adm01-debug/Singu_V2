@@ -2570,6 +2570,130 @@ export type Database = {
           },
         ]
       }
+      crm_automation_logs: {
+        Row: {
+          automation_name: string
+          contact_id: string | null
+          created_at: string | null
+          execution_time_ms: number | null
+          id: string
+          payload: Json | null
+          result: Json | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          automation_name: string
+          contact_id?: string | null
+          created_at?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          payload?: Json | null
+          result?: Json | null
+          status: string
+          user_id: string
+        }
+        Update: {
+          automation_name?: string
+          contact_id?: string | null
+          created_at?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          payload?: Json | null
+          result?: Json | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_automation_logs_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_cadence_rules: {
+        Row: {
+          created_at: string | null
+          frequency_days: number
+          id: string
+          is_active: boolean | null
+          priority: string | null
+          relationship_stage: string
+          suggested_actions: string[] | null
+          updated_at: string | null
+          user_id: string
+          version: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          frequency_days: number
+          id?: string
+          is_active?: boolean | null
+          priority?: string | null
+          relationship_stage: string
+          suggested_actions?: string[] | null
+          updated_at?: string | null
+          user_id: string
+          version?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          frequency_days?: number
+          id?: string
+          is_active?: boolean | null
+          priority?: string | null
+          relationship_stage?: string
+          suggested_actions?: string[] | null
+          updated_at?: string | null
+          user_id?: string
+          version?: number | null
+        }
+        Relationships: []
+      }
+      crm_metric_overrides: {
+        Row: {
+          contact_id: string
+          created_at: string | null
+          id: string
+          metric_type: string
+          new_value: string
+          old_value: string | null
+          reason: string
+          user_id: string
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          metric_type: string
+          new_value: string
+          old_value?: string | null
+          reason: string
+          user_id: string
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          metric_type?: string
+          new_value?: string
+          old_value?: string | null
+          reason?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_metric_overrides_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cs_accounts: {
         Row: {
           account_name: string
@@ -10955,6 +11079,7 @@ export type Database = {
         }[]
       }
       get_deal_room_by_token: { Args: { _token: string }; Returns: Json }
+      get_score_explicability: { Args: { p_contact_id: string }; Returns: Json }
       get_team_member_ids: {
         Args: { _manager_user_id: string }
         Returns: string[]
