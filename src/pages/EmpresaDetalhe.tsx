@@ -11,11 +11,13 @@ import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useLuxIntelligence } from '@/hooks/useLuxIntelligence';
 import { useCompanyPhones, useCompanyEmails, useCompanyAddresses, useCompanySocialMedia, useCompanyCnaes, useCompanyRfmScores, useCompanyStakeholders } from '@/hooks/useCompanyRelatedData';
 import { useCompanySummaryView } from '@/hooks/useCompanyViews';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Building2, Users, Edit, Plus, MessageSquare,
   Network, BarChart3, Sparkles, Database, ShoppingCart,
-  AlertTriangle, RotateCcw, Target,
+  AlertTriangle, RotateCcw, Target, Zap, Globe, MapPin, 
+  Phone, Mail, Calendar, ExternalLink, ChevronRight, Activity, 
+  TrendingUp, ShieldCheck, UserCheck, Star
 } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { EntityDetailPageSkeleton } from '@/components/skeletons/PageSkeletons';
