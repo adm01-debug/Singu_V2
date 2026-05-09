@@ -123,7 +123,7 @@ export function OverviewTab({
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Smart Reminders">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
-            <SmartRemindersPanel compact />
+            <SmartRemindersPanel compact contacts={contacts} interactions={interactions} />
           </Suspense>
         </DashboardErrorBoundary>
       </div>
@@ -224,12 +224,12 @@ export function OverviewTab({
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Insights Diários">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-28 w-full" />}>
-            <DailyInsightsWidget />
+            <DailyInsightsWidget contacts={contacts} interactions={interactions} />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Relatório Churn">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-28 w-full" />}>
-            <ChurnRiskReportWidget />
+            <ChurnRiskReportWidget contacts={contacts} interactions={interactions} />
           </Suspense>
         </DashboardErrorBoundary>
       </div>
