@@ -25,6 +25,7 @@ import type { SearchPreset } from '@/hooks/useSearchPresets';
 import type { Contact } from '@/hooks/useContacts';
 
 const DuplicateContactsPanel = lazy(() => import('@/components/contacts/DuplicateContactsPanel'));
+const ExternalContactLookupDialog = lazy(() => import('@/components/contacts/ExternalContactLookupDialog').then(m => ({ default: m.ExternalContactLookupDialog })));
 
 interface Props {
   contacts: Contact[];
