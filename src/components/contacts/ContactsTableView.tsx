@@ -36,6 +36,7 @@ interface ContactsTableViewProps {
   selectedIds: Set<string>;
   onSelect: (id: string, selected: boolean) => void;
   getCompanyName: (id: string | null) => string | null;
+  getLastInteractionDate: (contactId: string) => string | null;
   sortBy: string;
   sortOrder: 'asc' | 'desc';
   onSortChange: (field: string) => void;
