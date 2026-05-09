@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 
-type EmailVerifyResult = {
+export type EmailVerifyResult = {
   email: string;
   status: "valid" | "invalid" | "risky" | "unknown" | "catchall";
   score: number;
