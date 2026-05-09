@@ -68,7 +68,7 @@ export function AnalyticsTab({ contacts, companies, interactions, prefersReduced
       <DashboardErrorBoundary sectionName="Insights da IA">
         <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
           <div className="mb-5">
-            <DailyInsightsWidget />
+            <DailyInsightsWidget contacts={contacts} interactions={interactions} />
           </div>
         </Suspense>
       </DashboardErrorBoundary>
