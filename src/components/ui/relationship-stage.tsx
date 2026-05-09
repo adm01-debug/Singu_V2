@@ -4,18 +4,17 @@ import { motion } from 'framer-motion';
 
 const stageColors: Record<RelationshipStage, string> = {
   unknown: 'bg-muted/60 text-muted-foreground border-border/50',
-  prospect: 'bg-muted/50 text-muted-foreground border-border/40',
-  qualified_lead: 'bg-primary/12 text-primary border-primary/20',
-  opportunity: 'bg-accent/12 text-accent border-accent/20',
-  negotiation: 'bg-secondary/12 text-secondary border-secondary/20',
-  customer: 'bg-success/12 text-success border-success/20',
-  loyal_customer: 'bg-success/18 text-success border-success/30',
-  advocate: 'bg-success/22 text-success border-success/35',
-  best_friend_forever: 'bg-primary/25 text-primary border-primary/40',
-  fan_club: 'bg-primary/35 text-primary border-primary/50',
-  at_risk: 'bg-warning/12 text-warning border-warning/20',
-  lost: 'bg-destructive/12 text-destructive border-destructive/20',
+  prospect: 'bg-slate-500/10 text-slate-600 border-slate-200',
+  qualified_lead: 'bg-blue-500/10 text-blue-600 border-blue-200',
+  opportunity: 'bg-indigo-500/10 text-indigo-600 border-indigo-200',
+  negotiation: 'bg-amber-500/10 text-amber-600 border-amber-200',
+  customer: 'bg-emerald-500/10 text-emerald-600 border-emerald-200',
+  loyal_customer: 'bg-emerald-600/15 text-emerald-700 border-emerald-300',
+  advocate: 'bg-purple-500/10 text-purple-600 border-purple-200',
+  at_risk: 'bg-red-500/10 text-red-600 border-red-200',
+  lost: 'bg-gray-500/10 text-gray-600 border-gray-200',
 };
+
 
 const stageOrder: RelationshipStage[] = [
   'unknown',
@@ -26,9 +25,10 @@ const stageOrder: RelationshipStage[] = [
   'customer',
   'loyal_customer',
   'advocate',
-  'best_friend_forever',
-  'fan_club',
+  'at_risk',
+  'lost'
 ];
+
 
 interface RelationshipStageBadgeProps {
   stage: RelationshipStage;
@@ -91,12 +91,13 @@ export function RelationshipFunnel({ currentStage, onStageChange, className, isE
           );
         })}
       </div>
-      <div className="flex justify-between text-xs text-muted-foreground">
+      <div className="flex justify-between text-[10px] text-muted-foreground uppercase tracking-tighter">
         <span>Prospect</span>
-        <span>Cliente</span>
-        <span>BFF</span>
-        <span>Fã Clube</span>
+        <span>Negociação</span>
+        <span>Fiel</span>
+        <span>Perdido</span>
       </div>
+
     </div>
   );
 }

@@ -35,6 +35,7 @@ import { useContactDetail } from '@/hooks/useContactDetail';
 import type { RelationshipStage } from '@/types';
 
 import { Interaction } from '@/hooks/useContactDetail';
+import { CRMAlertsWidget } from './CRMAlertsWidget';
 
 interface Props {
   contact: Contact & { interactions?: Interaction[] };
@@ -70,7 +71,11 @@ export function ContactOverviewTab({ contact, company, insights, alerts, interac
 
   return (
     <div className="space-y-4">
+      {/* CRM Health Alerts */}
+      <CRMAlertsWidget contactId={contact.id} />
+
       {/* Relationship Stage Funnel */}
+
       <Card>
         <CardHeader className="pb-3 flex flex-row items-center justify-between space-y-0">
           <CardTitle className="text-sm font-medium flex items-center gap-2">

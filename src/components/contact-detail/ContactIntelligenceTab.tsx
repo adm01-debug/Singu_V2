@@ -24,7 +24,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 const ChurnRiskWidget = lazy(() => import('./ChurnRiskWidget'));
 const ChurnPredictionsWidget = lazy(() => import('./ChurnPredictionsWidget'));
 const ContactDaysWithoutWidget = lazy(() => import('./ContactDaysWithoutWidget'));
+const CRMAlertsWidget = lazy(() => import('./CRMAlertsWidget').then(m => ({ default: m.CRMAlertsWidget })));
 const LocalChurnRiskPanel = lazy(() => import('@/components/churn-risk/ChurnRiskPanel'));
+
 import { LeadScoreWidget } from '@/components/lead-score/LeadScoreWidget';
 
 interface Props {
@@ -83,6 +85,10 @@ export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, we
 
   return (
     <div className="space-y-4">
+      <Suspense fallback={<Skeleton className="h-20" />}>
+        <CRMAlertsWidget contactId={contactId} />
+      </Suspense>
+
       <div className="flex justify-end">
         <ModuleHelp {...moduleHelpContent.neuromarketing} />
       </div>

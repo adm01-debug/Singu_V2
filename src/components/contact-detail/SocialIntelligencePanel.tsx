@@ -1,4 +1,4 @@
-import { Globe, Linkedin, Instagram, Twitter, Bell, TrendingUp, Users, X } from 'lucide-react';
+import { Globe, Linkedin, Instagram, Twitter, Bell, TrendingUp, Users, X, Heart, ShieldCheck } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -26,7 +26,7 @@ export function SocialIntelligencePanel({ contactId }: Props) {
   if (!hasData) return null;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" id="social-intelligence-section">
       {/* Social Profiles */}
       {profiles.length > 0 && (
         <Card>
@@ -76,15 +76,16 @@ export function SocialIntelligencePanel({ contactId }: Props) {
         </Card>
       )}
 
-      {/* Behavior Analysis */}
+      {/* Negotiation Intelligence & Behavior */}
       {behaviorAnalysis && (
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-sm">
-              <TrendingUp className="h-4 w-4 text-info" />
-              Análise Comportamental Social
+        <Card className="border-primary/20 bg-primary/5 shadow-sm">
+          <CardHeader className="pb-3 border-b border-primary/10">
+            <CardTitle className="flex items-center gap-2 text-sm text-primary">
+              <TrendingUp className="h-4 w-4" />
+              Insights para Negociação (Social Intel)
             </CardTitle>
           </CardHeader>
+
           <CardContent className="space-y-3">
             {behaviorAnalysis.executive_summary && (
               <p className="text-sm text-foreground">{behaviorAnalysis.executive_summary}</p>
@@ -104,15 +105,21 @@ export function SocialIntelligencePanel({ contactId }: Props) {
               )}
             </div>
             {behaviorAnalysis.interests && (behaviorAnalysis.interests as string[]).length > 0 && (
-              <div>
-                <p className="text-xs font-medium text-muted-foreground mb-1">Interesses</p>
-                <div className="flex flex-wrap gap-1">
-                  {(behaviorAnalysis.interests as string[]).slice(0, 8).map(i => (
-                    <Badge key={i} variant="secondary" className="text-xs">{i}</Badge>
+              <div className="bg-background/60 p-3 rounded-lg border border-border/50">
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <Heart className="h-3.5 w-3.5 text-red-500" />
+                  Interesses & Hobbies para Rapport
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {(behaviorAnalysis.interests as string[]).map(i => (
+                    <Badge key={i} variant="secondary" className="text-xs px-2 py-0.5 bg-primary/10 text-primary border-primary/20">
+                      {i}
+                    </Badge>
                   ))}
                 </div>
               </div>
             )}
+
             {behaviorAnalysis.confidence != null && (
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground">Confiança</span>

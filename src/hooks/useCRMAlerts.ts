@@ -1,0 +1,56 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
+
+export interface CRMAlert {
+  id: string;
+  type: 'at_risk' | 'no_contact' | 'follow_up';
+  severity: 'low' | 'medium' | 'high';
+  message: string;
+  suggested_action: string;
+  is_resolved: boolean;
+  created_at: string;
+  resolved_at: string | null;
+}
+
+export function useCRMAlerts(contactId: string) {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const { data: alerts = [], isLoading } = useQuery({
+    queryKey: ['crm-alerts', contactId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('crm_alerts')
+        .select('*')
+        .eq('contact_id', contactId)
+        .eq('is_resolved', false)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      return data as CRMAlert[];
+    },
+    enabled: !!user && !!contactId,
+  });
+
+  const resolveAlert = useMutation({
+    mutationFn: async (alertId: string) => {
+      const { error } = await supabase
+        .from('crm_alerts')
+        .update({ is_resolved: true, resolved_at: new Date().toISOString() })
+        .eq('id', alertId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['crm-alerts', contactId] });
+      toast.success('Alerta resolvido');
+    },
+  });
+
+  return {
+    alerts,
+    isLoading,
+    resolveAlert: resolveAlert.mutate,
+  };
+}

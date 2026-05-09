@@ -18,9 +18,8 @@ export const STAGE_TRIGGER_PRIORITY: Record<RelationshipStage, TriggerType[]> = 
   negotiation: ['scarcity', 'urgency', 'concession', 'guarantee', 'commitment'],
   customer: ['personalization', 'belonging', 'gift', 'consistency'],
   loyal_customer: ['exclusivity', 'public_commitment', 'anticipation'],
-  advocate: ['belonging', 'public_commitment', 'gift'],
-  best_friend_forever: ['exclusivity', 'personalization', 'belonging', 'gift'],
-  fan_club: ['public_commitment', 'exclusivity', 'anticipation', 'belonging'],
+  advocate: ['belonging', 'public_commitment', 'gift', 'exclusivity', 'personalization'],
+
   at_risk: ['empathy', 'gift', 'guarantee', 'concession'],
   lost: ['empathy', 'gift', 'storytelling', 'social_proof'],
 };
