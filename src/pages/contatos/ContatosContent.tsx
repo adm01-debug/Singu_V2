@@ -19,6 +19,7 @@ import { ContactsTableView } from '@/components/contacts/ContactsTableView';
 import { RecentlyViewedSection } from '@/components/recently-viewed/RecentlyViewedSection';
 import { SearchPresetsMenu } from '@/components/search/SearchPresetsMenu';
 import { ViewModeSwitcher, type ViewMode, type GridColumns } from '@/components/ui/view-mode-switcher';
+import { Header } from '@/components/layout/Header';
 import type { SearchPreset } from '@/hooks/useSearchPresets';
 import type { Contact } from '@/hooks/useContacts';
 
