@@ -89,21 +89,33 @@ export function OverviewTab({
         </DashboardErrorBoundary>
       </div>
 
-      {/* 2. Your Day + Pending Followups */}
+      {/* 2. Your Day + AI Followups */}
       <div className="grid gap-4 md:grid-cols-3">
         <DashboardErrorBoundary sectionName="Seu Dia">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
             <YourDaySection />
           </Suspense>
         </DashboardErrorBoundary>
-        <DashboardErrorBoundary sectionName="Resumo Diário">
+        <DashboardErrorBoundary sectionName="Próximos Passos (IA)">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
-            <DailySummaryWidget />
+            <StrategicNextStepsCard contacts={stats.topContacts.map(c => ({
+              id: c.id,
+              first_name: c.firstName,
+              last_name: c.lastName,
+              avatar_url: c.avatar,
+              relationship_score: c.relationshipScore,
+              last_interaction_at: c.lastInteraction?.toISOString() || null,
+              role_title: c.role
+            }))} />
           </Suspense>
         </DashboardErrorBoundary>
-        <DashboardErrorBoundary sectionName="Follow-ups">
+        <DashboardErrorBoundary sectionName="Smart Reminders">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
-            <PendingFollowupsWidget />
+            <SmartRemindersPanel compact />
+          </Suspense>
+        </DashboardErrorBoundary>
+      </div>
+
           </Suspense>
         </DashboardErrorBoundary>
       </div>
