@@ -118,10 +118,10 @@ const EmpresaDetalhe = () => {
 
   const stats = useMemo(() => {
     const avgScore = contacts.length > 0 ? Math.round(contacts.reduce((sum, c) => sum + (c.relationship_score || 0), 0) / contacts.length) : 0;
-    const total = interactions.length;
-    const positive = interactions.filter(i => i.sentiment === 'positive').length;
-    const pending = interactions.filter(i => i.follow_up_required && !i.follow_up_date).length;
-    const lastDate = total > 0 ? new Date(interactions[0]?.created_at || Date.now()) : null;
+    const total = hookInteractions.length;
+    const positive = hookInteractions.filter(i => i.sentiment === 'positive').length;
+    const pending = hookInteractions.filter(i => i.follow_up_required && !i.follow_up_date).length;
+    const lastDate = total > 0 ? new Date(hookInteractions[0]?.created_at || Date.now()) : null;
     const daysSince = lastDate ? Math.floor((Date.now() - lastDate.getTime()) / (1000 * 60 * 60 * 24)) : undefined;
     return { avgScore, total, positive, positiveRatio: total > 0 ? positive / total : 0, pending, daysSince };
   }, [contacts, hookInteractions]);
