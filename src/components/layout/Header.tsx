@@ -8,6 +8,7 @@ import { UnifiedNotificationsBell } from '@/components/notifications/UnifiedNoti
 import { SmartNotificationsBell } from '@/components/notifications/SmartNotificationsBell';
 import { GlobalDensityToggle } from '@/components/ui/global-density-toggle';
 import { SystemStatusBadge } from '@/components/ui/SystemStatusBadge';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 interface HeaderProps {
@@ -19,6 +20,8 @@ interface HeaderProps {
   onAddClick?: () => void;
   backTo?: string;
   hideBack?: boolean;
+  showSearch?: boolean;
+  onSearchChange?: (val: string) => void;
 }
 
 const PARENT_ROUTES: Record<string, string> = {
