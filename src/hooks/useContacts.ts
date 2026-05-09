@@ -149,6 +149,8 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
 
   const updateContact = async (id: string, updates: ContactUpdate, expectedVersion?: number) => {
     const previous = queryClient.getQueryData<Contact[]>(queryKey);
+    const targetContact = previous?.find(c => c.id === id);
+    const versionToUse = expectedVersion ?? targetContact?.version;
     
     // Optimistic Update
     queryClient.setQueryData<Contact[]>(queryKey, prev =>
@@ -167,7 +169,20 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
         cleanUpdates.cargo = updates.role_title;
       }
 
-      const { data, error } = await updateExternalData<Contact>('contacts', id, cleanUpdates);
+      let data: Contact | null = null;
+      let error: Error | null = null;
+
+      if (versionToUse !== undefined) {
+        // Use versioned update for optimistic locking
+        const result = await updateExternalDataWithVersion<Contact>('contacts', id, versionToUse, cleanUpdates);
+        data = result.data;
+        error = result.error;
+      } else {
+        // Fallback to regular update if version is missing
+        const result = await updateExternalData<Contact>('contacts', id, cleanUpdates);
+        data = result.data;
+        error = result.error;
+      }
         
       if (error) throw error;
       
