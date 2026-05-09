@@ -40,6 +40,7 @@ interface BulkActionsBarProps {
   onSelectAll: () => void;
   onDelete?: (ids: string[]) => Promise<void>;
   onAddTag?: (ids: string[], tag: string) => Promise<void>;
+  onUpdateStage?: (ids: string[], stage: string) => Promise<void>;
   onExport?: (ids: string[]) => Promise<void>;
   onSendEmail?: (ids: string[]) => void;
   onToggleFavorite?: (ids: string[]) => Promise<void>;
