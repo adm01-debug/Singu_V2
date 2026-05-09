@@ -53,7 +53,7 @@ export function RelationshipScore({ score, previousScore, size = 'md', showLabel
 
   const scorePill = (
     <div className={cn(
-      'inline-flex items-center gap-1 rounded-md font-semibold tabular-nums',
+      'inline-flex items-center gap-1 rounded-md font-semibold tabular-nums min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 justify-center',
       sizes.pill,
       getScoreBg(score)
     )}>

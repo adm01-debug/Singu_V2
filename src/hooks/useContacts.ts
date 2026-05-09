@@ -67,7 +67,7 @@ const CONTACT_LISTING_SELECT = [
   'birthday', 'source',
   'updated_at', 'created_at', 'user_id',
   'bitrix_contact_id', 'is_duplicate', 'duplicate_of',
-  'notes' // Removed version as it's missing in external DB
+  'notes', 'version'
 ].join(',');
 
 async function fetchContactsPage(companyId?: string) {
@@ -115,6 +115,21 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     // pagination can be added later if needed
   }, []);
 
+  const prefetchContactDetails = (id: string) => {
+    queryClient.prefetchQuery({
+      queryKey: ['contact', id],
+      queryFn: async () => {
+        const { data, error } = await queryExternalData<Record<string, unknown>>({
+          table: 'contacts',
+          filters: [{ type: 'eq', column: 'id', value: id }]
+        });
+        if (error) throw error;
+        return data?.[0] ? normalizeExternalContact(data[0]) : null;
+      },
+      staleTime: 5 * 60 * 1000,
+    });
+  };
+
   const createContact = async (contact: Omit<ContactInsert, 'user_id'>) => {
     if (!user) return null;
     try {
@@ -149,6 +164,8 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
 
   const updateContact = async (id: string, updates: ContactUpdate, expectedVersion?: number) => {
     const previous = queryClient.getQueryData<Contact[]>(queryKey);
+    const targetContact = previous?.find(c => c.id === id);
+    const versionToUse = expectedVersion ?? targetContact?.version;
     
     // Optimistic Update
     queryClient.setQueryData<Contact[]>(queryKey, prev =>
@@ -167,7 +184,20 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
         cleanUpdates.cargo = updates.role_title;
       }
 
-      const { data, error } = await updateExternalData<Contact>('contacts', id, cleanUpdates);
+      let data: Contact | null = null;
+      let error: Error | null = null;
+
+      if (versionToUse !== undefined) {
+        // Use versioned update for optimistic locking
+        const result = await updateExternalDataWithVersion<Contact>('contacts', id, versionToUse, cleanUpdates);
+        data = result.data;
+        error = result.error;
+      } else {
+        // Fallback to regular update if version is missing
+        const result = await updateExternalData<Contact>('contacts', id, cleanUpdates);
+        data = result.data;
+        error = result.error;
+      }
         
       if (error) throw error;
       
@@ -225,5 +255,5 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     }
   };
 
-  return { contacts, loading, isFetching, hasMore, fetchContacts, loadMore, createContact, updateContact, deleteContact };
+  return { contacts, loading, isFetching, hasMore, fetchContacts, loadMore, createContact, updateContact, deleteContact, prefetchContactDetails };
 }

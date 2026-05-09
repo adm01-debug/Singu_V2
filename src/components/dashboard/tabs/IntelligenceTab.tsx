@@ -46,8 +46,9 @@ export function IntelligenceTab({ contacts, prefersReducedMotion, tabDirection }
               avatar_url: c.avatar_url,
               relationship_score: c.relationship_score,
               last_interaction_at: c.last_interaction_at,
-              role_title: c.role_title
-            }))} 
+              role_title: c.role_title,
+              notes: c.last_interaction_summary || c.notes
+            }))}
             className="h-full shadow-md border-primary/10" 
           />
         </DashboardErrorBoundary>

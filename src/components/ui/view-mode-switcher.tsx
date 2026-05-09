@@ -50,7 +50,7 @@ export function ViewModeSwitcher({ value, onChange, gridColumns = 3, onGridColum
           variant="outline"
           size="sm"
           className={cn(
-            'gap-2 text-xs font-medium h-9 px-3 border-border/60 bg-card hover:bg-muted/60',
+            'gap-2 text-xs font-medium h-11 px-4 md:h-9 md:px-3 border-border/60 bg-card hover:bg-muted/60',
             className
           )}
         >
@@ -77,7 +77,7 @@ export function ViewModeSwitcher({ value, onChange, gridColumns = 3, onGridColum
                   key={mode.value}
                   onClick={() => onChange(mode.value)}
                   className={cn(
-                    'flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-medium transition-colors flex-1 justify-center whitespace-nowrap',
+                    'flex items-center gap-1.5 h-11 px-3 md:h-8 rounded-md text-xs font-medium transition-colors flex-1 justify-center whitespace-nowrap',
                     isActive
                       ? 'bg-primary text-primary-foreground'
                       : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60'
@@ -105,7 +105,7 @@ export function ViewModeSwitcher({ value, onChange, gridColumns = 3, onGridColum
                     key={cols}
                     onClick={() => onGridColumnsChange(cols)}
                     className={cn(
-                      'flex items-center justify-center h-9 flex-1 rounded-lg transition-colors',
+                      'flex items-center justify-center h-11 md:h-9 flex-1 rounded-lg transition-colors',
                       isActive
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-secondary/40 text-muted-foreground hover:text-foreground hover:bg-secondary/60'

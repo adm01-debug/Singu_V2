@@ -100,7 +100,7 @@ function ContactCardWithContextImpl({
     prefetchInteractions(contact.id);
   }, [contact.id, prefetchContact, prefetchInteractions]);
   
-  const hoverProps = usePrefetchOnHover(prefetchFn, 150);
+  const hoverProps = usePrefetchOnHover(prefetchFn, 100);
 
   const handleInlineSave = async (field: string, value: string): Promise<boolean> => {
     try {
@@ -170,7 +170,7 @@ function ContactCardWithContextImpl({
               onDelete={() => onDelete(contact)}
             />
 
-            <Link to={`/contatos/${contact.id}`}>
+            <Link to={`/contatos/${contact.id}`} onMouseEnter={() => prefetchFn()}>
               <CardContent className="p-4">
                 {/* Header: Avatar + Name + Score */}
                 <div className="flex items-center gap-3">
@@ -275,7 +275,7 @@ function ContactCardWithContextImpl({
           isHighlighted && "ring-1 ring-primary/50",
           isSelected && "bg-primary/5 border-primary/30"
         )}>
-          <Link to={`/contatos/${contact.id}`}>
+          <Link to={`/contatos/${contact.id}`} onMouseEnter={() => prefetchFn()}>
             <CardContent className="px-4 py-3">
               <div className="flex items-center gap-4">
                 {selectionMode && (

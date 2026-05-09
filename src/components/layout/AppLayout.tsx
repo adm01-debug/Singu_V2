@@ -19,7 +19,7 @@ const OnboardingTourWrapper = lazy(() => import('@/components/onboarding/Onboard
 const KeyboardShortcutsCheatsheet = lazy(() => import('@/components/keyboard/KeyboardShortcutsCheatsheet').then(m => ({ default: m.KeyboardShortcutsCheatsheet })));
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useKeyboardShortcutsEnhanced } from '@/hooks/useKeyboardShortcutsEnhanced';
-import { SkipToContent } from '@/components/navigation/NavigationPatterns';
+import { SkipToContent, SmartBreadcrumbs } from '@/components/navigation/NavigationPatterns';
 import { PageTransition } from '@/components/navigation/PageTransition';
 import { SwipeBackIndicator } from '@/components/navigation/SwipeBackIndicator';
 import { RouteProgressBar } from '@/components/navigation/RouteProgressBar';
@@ -156,20 +156,10 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
           {/* Left: sidebar trigger + breadcrumb */}
           <div className="flex items-center gap-2 sm:gap-3 min-w-0 w-[200px] shrink-0">
             <SidebarTrigger className="text-muted-foreground hover:text-foreground hover:bg-secondary/60 rounded-lg transition-colors shrink-0" aria-label="Alternar sidebar" />
-            <nav className="flex items-center gap-1 text-sm text-muted-foreground" aria-label="Breadcrumb">
-              {breadcrumbs.map((crumb, idx) => (
-                <span key={idx} className="flex items-center gap-1">
-                  {idx > 0 && <ChevronRight className="h-3 w-3 text-muted-foreground/50" aria-hidden="true" />}
-                  {crumb.path ? (
-                    <Link to={crumb.path} className="hover:text-foreground transition-colors">
-                      {crumb.label}
-                    </Link>
-                  ) : (
-                    <span className="font-medium text-foreground">{crumb.label}</span>
-                  )}
-                </span>
-              ))}
-            </nav>
+            <SmartBreadcrumbs 
+              items={breadcrumbs.map(c => ({ label: c.label, path: c.path || '#' }))} 
+              className="px-2"
+            />
           </div>
 
           {/* Center: search bar + mic */}

@@ -17,6 +17,7 @@ interface TopContact {
   sentiment: string;
   interactionCount: number;
   lastInteraction: Date | null;
+  lastInteractionSummary?: string;
 }
 
 interface RecentActivity {
@@ -112,16 +113,23 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
       ? Math.round(scoresWithValue.reduce((sum, c) => sum + (c.relationship_score || 0), 0) / scoresWithValue.length)
       : 0;
 
-    const companyMap = new Map(companies.map(c => [c.id, c]));
-
-    // Pre-build interaction counts by contact for O(1) lookup
     const interactionCountByContact = new Map<string, number>();
     const latestInteractionByContact = new Map<string, string>();
+    const interactionSummariesByContact = new Map<string, string>();
+
     for (const i of interactions) {
+      if (!i.contact_id) continue;
       interactionCountByContact.set(i.contact_id, (interactionCountByContact.get(i.contact_id) || 0) + 1);
       const current = latestInteractionByContact.get(i.contact_id);
-      if (!current || i.created_at > current) latestInteractionByContact.set(i.contact_id, i.created_at);
+      if (!current || i.created_at > current) {
+        latestInteractionByContact.set(i.contact_id, i.created_at);
+        if (i.content || i.title) {
+          interactionSummariesByContact.set(i.contact_id, i.content || i.title);
+        }
+      }
     }
+
+    const companyMap = new Map(companies.map(c => [c.id, c]));
 
     const topContacts = [...contacts]
       .filter(c => {
@@ -161,6 +169,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
           sentiment: contact.sentiment || 'neutral',
           interactionCount: interactionCountByContact.get(contact.id) || 0,
           lastInteraction: latestDate ? new Date(latestDate) : null,
+          lastInteractionSummary: interactionSummariesByContact.get(contact.id) || contact.notes || '',
         };
       });
 
