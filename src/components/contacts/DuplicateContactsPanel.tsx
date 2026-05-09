@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 import { useDuplicateContacts } from '@/hooks/useDuplicateContacts';
-import { AlertTriangle, Users } from 'lucide-react';
+import { MergeContactsDialog } from './MergeContactsDialog';
+import { AlertTriangle, Users, GitMerge } from 'lucide-react';
 
 export const DuplicateContactsPanel = React.memo(function DuplicateContactsPanel() {
   const { data: duplicates, isLoading } = useDuplicateContacts();
