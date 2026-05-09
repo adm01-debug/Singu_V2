@@ -233,7 +233,7 @@ export function ContatosContent(props: Props) {
             )}
 
             {viewMode === 'table' && (
-              <ContactsTableView contacts={filteredAndSortedContacts} selectionMode={selectionMode} selectedIds={selectedIds} onSelect={onSelect} getCompanyName={getCompanyName} sortBy={sortBy} sortOrder={sortOrder} onSortChange={(field) => { if (sortBy === field) onSortChange(field, sortOrder === 'asc' ? 'desc' : 'asc'); else onSortChange(field, 'asc'); }} />
+              <ContactsTableView contacts={filteredAndSortedContacts} selectionMode={selectionMode} selectedIds={selectedIds} onSelect={onSelect} getCompanyName={getCompanyName} getLastInteractionDate={getLastInteractionDate} sortBy={sortBy} sortOrder={sortOrder} onSortChange={(field) => { if (sortBy === field) onSortChange(field, sortOrder === 'asc' ? 'desc' : 'asc'); else onSortChange(field, 'asc'); }} />
             )}
 
             {filteredAndSortedContacts.length === 0 && !loading && (
