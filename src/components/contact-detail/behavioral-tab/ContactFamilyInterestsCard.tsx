@@ -13,11 +13,12 @@ interface Props {
   hobbies?: string[];
   interests?: string[];
   familyInfo?: string;
+  metadata?: any;
   onUpdate?: (data: { family_info?: string; hobbies?: string[]; interests?: string[] }) => Promise<any>;
   className?: string;
 }
 
-export function ContactFamilyInterestsCard({ contactId, hobbies, interests, familyInfo, onUpdate, className }: Props) {
+export function ContactFamilyInterestsCard({ contactId, hobbies, interests, familyInfo, metadata, onUpdate, className }: Props) {
   const [isEditingFamily, setIsEditingFamily] = useState(false);
   const [familyValue, setFamilyValue] = useState(familyInfo || '');
   const [isSaving, setIsSaving] = useState(false);
