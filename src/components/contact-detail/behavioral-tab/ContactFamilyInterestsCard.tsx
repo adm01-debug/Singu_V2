@@ -12,7 +12,7 @@ interface Props {
   hobbies?: string[];
   interests?: string[];
   familyInfo?: string;
-  onUpdate?: (data: { family_info?: string }) => Promise<any>;
+  onUpdate?: (data: { family_info?: string; hobbies?: string[]; interests?: string[] }) => Promise<any>;
   className?: string;
 }
 
@@ -48,10 +48,13 @@ export function ContactFamilyInterestsCard({ contactId, hobbies, interests, fami
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Info className="h-3 w-3 text-muted-foreground cursor-help" />
+                <div className="flex items-center gap-1.5 cursor-help">
+                  <Info className="h-3 w-3 text-muted-foreground" />
+                  <Sparkles className="h-3 w-3 text-secondary animate-pulse" />
+                </div>
               </TooltipTrigger>
-              <TooltipContent>
-                <p className="text-xs">Use estas informações para criar conexão e empatia (rapport).</p>
+              <TooltipContent className="max-w-xs">
+                <p className="text-xs">Use estas informações para criar conexão e empatia (rapport). Hobbies e interesses podem ser sugeridos via Lux Intelligence.</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

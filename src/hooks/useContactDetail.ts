@@ -342,7 +342,11 @@ export function useContactDetail(contactId: string | undefined) {
   };
 
   const updateBehavior = async (behavior: Record<string, unknown>) => {
-    return updateContact({ behavior: behavior as Json });
+    // Merge new behavior data with existing to prevent losing fields like discProfile
+    const currentBehavior = (data.contact?.behavior as Record<string, unknown>) || {};
+    return updateContact({ 
+      behavior: { ...currentBehavior, ...behavior } as Json 
+    });
   };
 
   const addInteraction = async (interaction: Omit<Tables<'interactions'>, 'id' | 'created_at' | 'user_id'>) => {
