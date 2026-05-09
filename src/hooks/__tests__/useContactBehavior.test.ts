@@ -79,4 +79,18 @@ describe("Behavioral Data Integration Tests", () => {
 
     expect(data.toward_score).toBe(80);
   });
+
+  test("should handle life events and triggers", async () => {
+    const { error } = await supabase
+      .from("life_events")
+      .insert({ 
+        contact_id: testContactId, 
+        event_type: 'birthday',
+        title: 'Aniversário de Teste',
+        event_date: new Date().toISOString(),
+        user_id: (await supabase.auth.getUser()).data.user?.id
+      });
+    
+    expect(error).toBeNull();
+  });
 });
