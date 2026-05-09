@@ -39,6 +39,14 @@ export const TAG_DICTIONARY = {
     label: 'Suporte',
     keywords: ['suporte', 'problema', 'erro', 'bug', 'reclamação', 'reclamacao'],
   },
+  familia: {
+    label: 'Família',
+    keywords: ['família', 'familia', 'esposa', 'marido', 'filho', 'filha', 'crianças', 'aniversário', 'aniversario', 'casa', 'viagem'],
+  },
+  hobbies: {
+    label: 'Hobbies & Lazer',
+    keywords: ['futebol', 'leitura', 'viagem', 'vinho', 'restaurante', 'corrida', 'tênis', 'tenis', 'academia', 'musica', 'música', 'hobby', 'hobbies'],
+  },
 } as const;
 
 export type InteractionTag = keyof typeof TAG_DICTIONARY;
