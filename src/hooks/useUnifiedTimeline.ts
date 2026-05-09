@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useInteractions } from './useInteractions';
 import { useContactTasks } from './useContactTasks';
 import { useContactMeetings } from './useContactMeetings';
+import { useAuth } from '@/hooks/useAuth';
 import { useMemo } from 'react';
 
 export type UnifiedEventType = 'message' | 'call' | 'meeting' | 'note' | 'task' | 'event';
@@ -18,9 +19,24 @@ export interface UnifiedTimelineEvent {
 }
 
 export function useUnifiedTimeline(contactId: string) {
+  const { user } = useAuth();
   const { interactions, loading: interactionsLoading } = useInteractions(contactId);
   const { data: tasks, isLoading: tasksLoading } = useContactTasks(contactId);
   const { data: meetings, isLoading: meetingsLoading } = useContactMeetings(contactId);
+
+  // Fetch life events
+  const { data: lifeEvents, isLoading: lifeEventsLoading } = useQuery({
+    queryKey: ['life-events', contactId],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('life_events')
+        .select('*')
+        .eq('contact_id', contactId)
+        .order('event_date', { ascending: false });
+      return data || [];
+    },
+    enabled: !!user && !!contactId,
+  });
 
   const unifiedEvents = useMemo(() => {
     const events: UnifiedTimelineEvent[] = [];
@@ -79,11 +95,26 @@ export function useUnifiedTimeline(contactId: string) {
       });
     });
 
+    // Map Life Events
+    (lifeEvents || []).forEach((le) => {
+      events.push({
+        id: le.id,
+        type: 'event',
+        subType: le.event_type,
+        title: le.title,
+        content: le.description || undefined,
+        timestamp: le.event_date,
+        metadata: {
+          recurring: le.recurring,
+        },
+      });
+    });
+
     return events.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-  }, [interactions, tasks, meetings]);
+  }, [interactions, tasks, meetings, lifeEvents]);
 
   return {
     events: unifiedEvents,
-    loading: interactionsLoading || tasksLoading || meetingsLoading,
+    loading: interactionsLoading || tasksLoading || meetingsLoading || lifeEventsLoading,
   };
 }

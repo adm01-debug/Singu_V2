@@ -30,6 +30,7 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
   const { events, loading } = useUnifiedTimeline(contactId);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState<UnifiedEventType | 'all'>('all');
+  const [dateFilter, setDateFilter] = useState<'all' | 'today' | 'week' | 'month'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const filteredEvents = useMemo(() => {
@@ -39,10 +40,25 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
         event.content?.toLowerCase().includes(searchTerm.toLowerCase());
       
       const matchesType = selectedType === 'all' || event.type === selectedType;
+
+      let matchesDate = true;
+      if (dateFilter !== 'all') {
+        const eventDate = new Date(event.timestamp);
+        const now = new Date();
+        if (dateFilter === 'today') {
+          matchesDate = isWithinInterval(eventDate, { start: startOfDay(now), end: endOfDay(now) });
+        } else if (dateFilter === 'week') {
+          const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          matchesDate = eventDate >= weekAgo;
+        } else if (dateFilter === 'month') {
+          const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+          matchesDate = eventDate >= monthAgo;
+        }
+      }
       
-      return matchesSearch && matchesType;
+      return matchesSearch && matchesType && matchesDate;
     });
-  }, [events, searchTerm, selectedType]);
+  }, [events, searchTerm, selectedType, dateFilter]);
 
   if (loading && events.length === 0) {
     return <div className="p-8 text-center text-muted-foreground">Carregando timeline...</div>;
@@ -50,7 +66,7 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col md:flex-row gap-3 items-center justify-between bg-muted/30 p-3 rounded-lg border">
+      <div className="flex flex-col md:flex-row gap-4 md:items-center justify-between bg-muted/30 p-4 rounded-lg border">
         <div className="relative w-full md:w-64">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input 
@@ -61,63 +77,65 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
           />
         </div>
         
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge variant="outline" className="text-[10px] uppercase font-bold text-muted-foreground mr-1">Tipo:</Badge>
-          <Button 
-            variant={selectedType === 'all' ? 'default' : 'outline'} 
-            size="sm" 
-            onClick={() => setSelectedType('all')}
-            className="h-8 text-xs px-3"
-          >
-            Tudo
-          </Button>
-          {(Object.keys(TYPE_CONFIG) as UnifiedEventType[]).map(type => (
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="outline" className="text-[10px] uppercase font-bold text-muted-foreground mr-1">Tipo:</Badge>
             <Button 
-              key={type}
-              variant={selectedType === type ? 'default' : 'outline'} 
+              variant={selectedType === 'all' ? 'default' : 'outline'} 
               size="sm" 
-              onClick={() => setSelectedType(type)}
+              onClick={() => setSelectedType('all')}
               className="h-8 text-xs px-3"
             >
-              {TYPE_CONFIG[type].label}
+              Tudo
             </Button>
-          ))}
-        </div>
+            {(Object.keys(TYPE_CONFIG) as UnifiedEventType[]).map(type => (
+              <Button 
+                key={type}
+                variant={selectedType === type ? 'default' : 'outline'} 
+                size="sm" 
+                onClick={() => setSelectedType(type)}
+                className="h-8 text-xs px-3"
+              >
+                {TYPE_CONFIG[type].label}
+              </Button>
+            ))}
+          </div>
 
-        <div className="flex flex-wrap items-center gap-2 border-t pt-3 md:border-t-0 md:pt-0">
-          <Badge variant="outline" className="text-[10px] uppercase font-bold text-muted-foreground mr-1">Período:</Badge>
-          <Button 
-            variant={dateFilter === 'all' ? 'secondary' : 'ghost'} 
-            size="sm" 
-            onClick={() => setDateFilter('all')}
-            className="h-8 text-xs px-3"
-          >
-            Sempre
-          </Button>
-          <Button 
-            variant={dateFilter === 'today' ? 'secondary' : 'ghost'} 
-            size="sm" 
-            onClick={() => setDateFilter('today')}
-            className="h-8 text-xs px-3"
-          >
-            Hoje
-          </Button>
-          <Button 
-            variant={dateFilter === 'week' ? 'secondary' : 'ghost'} 
-            size="sm" 
-            onClick={() => setDateFilter('week')}
-            className="h-8 text-xs px-3"
-          >
-            7 dias
-          </Button>
-          <Button 
-            variant={dateFilter === 'month' ? 'secondary' : 'ghost'} 
-            size="sm" 
-            onClick={() => setDateFilter('month')}
-            className="h-8 text-xs px-3"
-          >
-            30 dias
-          </Button>
+          <div className="flex flex-wrap items-center gap-2 border-t pt-3 md:border-t-0 md:pt-0">
+            <Badge variant="outline" className="text-[10px] uppercase font-bold text-muted-foreground mr-1">Período:</Badge>
+            <Button 
+              variant={dateFilter === 'all' ? 'secondary' : 'ghost'} 
+              size="sm" 
+              onClick={() => setDateFilter('all')}
+              className="h-8 text-xs px-3"
+            >
+              Sempre
+            </Button>
+            <Button 
+              variant={dateFilter === 'today' ? 'secondary' : 'ghost'} 
+              size="sm" 
+              onClick={() => setDateFilter('today')}
+              className="h-8 text-xs px-3"
+            >
+              Hoje
+            </Button>
+            <Button 
+              variant={dateFilter === 'week' ? 'secondary' : 'ghost'} 
+              size="sm" 
+              onClick={() => setDateFilter('week')}
+              className="h-8 text-xs px-3"
+            >
+              7 dias
+            </Button>
+            <Button 
+              variant={dateFilter === 'month' ? 'secondary' : 'ghost'} 
+              size="sm" 
+              onClick={() => setDateFilter('month')}
+              className="h-8 text-xs px-3"
+            >
+              30 dias
+            </Button>
+          </div>
         </div>
       </div>
 
