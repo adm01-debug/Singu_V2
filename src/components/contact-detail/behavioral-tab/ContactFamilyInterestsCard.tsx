@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Users, Heart, Star, Info, Pencil, Check, X, Loader2 } from 'lucide-react';
+import { Users, Heart, Star, Info, Pencil, Check, X, Loader2, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -35,7 +35,7 @@ export function ContactFamilyInterestsCard({ contactId, hobbies, interests, fami
   const hasInterests = interests && interests.length > 0;
   const hasFamily = !!familyInfo;
 
-  if (!hasHobbies && !hasInterests && !hasFamily) {
+  if (!hasHobbies && !hasInterests && !hasFamily && !onUpdate) {
     return null;
   }
 
