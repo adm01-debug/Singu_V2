@@ -7088,6 +7088,7 @@ export type Database = {
           event_type: string
           id: string
           last_reminded_at: string | null
+          metadata: Json | null
           recurring: boolean | null
           reminder_days_before: number | null
           title: string
@@ -7102,6 +7103,7 @@ export type Database = {
           event_type: string
           id?: string
           last_reminded_at?: string | null
+          metadata?: Json | null
           recurring?: boolean | null
           reminder_days_before?: number | null
           title: string
@@ -7116,6 +7118,7 @@ export type Database = {
           event_type?: string
           id?: string
           last_reminded_at?: string | null
+          metadata?: Json | null
           recurring?: boolean | null
           reminder_days_before?: number | null
           title?: string
