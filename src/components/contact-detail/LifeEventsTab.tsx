@@ -87,10 +87,14 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
 
   const handleCreateEvent = () => {
     if (!user || !newEvent.title || !newEvent.event_date) return;
+    
+    const { reason, ...eventData } = newEvent;
+    
     createEventMutation.mutate({
-      ...newEvent as TablesInsert<'life_events'>,
+      ...eventData as TablesInsert<'life_events'>,
       contact_id: contactId,
-      user_id: user.id
+      user_id: user.id,
+      metadata: { reason: reason || 'Interação manual' }
     });
   };
 
