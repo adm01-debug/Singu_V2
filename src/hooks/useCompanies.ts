@@ -55,7 +55,6 @@ const LISTING_SELECT = [
   'lead_score', 'lead_status', 'lead_score_updated_at',
   'bitrix_created_at', 'bitrix_updated_at', 'created_by_id',
   'deleted_at', 'deleted_by',
-  'similarity',
 ].join(',');
 const COMPANY_SEARCH_COLUMNS = [
   'nome_crm',
