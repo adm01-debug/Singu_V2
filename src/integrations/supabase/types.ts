@@ -7088,6 +7088,7 @@ export type Database = {
           event_type: string
           id: string
           last_reminded_at: string | null
+          metadata: Json | null
           recurring: boolean | null
           reminder_days_before: number | null
           title: string
@@ -7102,6 +7103,7 @@ export type Database = {
           event_type: string
           id?: string
           last_reminded_at?: string | null
+          metadata?: Json | null
           recurring?: boolean | null
           reminder_days_before?: number | null
           title: string
@@ -7116,6 +7118,7 @@ export type Database = {
           event_type?: string
           id?: string
           last_reminded_at?: string | null
+          metadata?: Json | null
           recurring?: boolean | null
           reminder_days_before?: number | null
           title?: string
@@ -7131,6 +7134,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      life_events_history: {
+        Row: {
+          change_type: string
+          changed_at: string | null
+          contact_id: string
+          event_date: string
+          event_type: string
+          id: string
+          life_event_id: string
+          reason: string | null
+          recurring: boolean | null
+          reminder_days_before: number | null
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          change_type: string
+          changed_at?: string | null
+          contact_id: string
+          event_date: string
+          event_type: string
+          id?: string
+          life_event_id: string
+          reason?: string | null
+          recurring?: boolean | null
+          reminder_days_before?: number | null
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          change_type?: string
+          changed_at?: string | null
+          contact_id?: string
+          event_date?: string
+          event_type?: string
+          id?: string
+          life_event_id?: string
+          reason?: string | null
+          recurring?: boolean | null
+          reminder_days_before?: number | null
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
       login_attempts: {
         Row: {
@@ -11553,6 +11601,23 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      v_life_events_audit: {
+        Row: {
+          change_type: string | null
+          changed_at: string | null
+          contact_id: string | null
+          event_date: string | null
+          event_type: string | null
+          id: string | null
+          life_event_id: string | null
+          reason: string | null
+          recurring: boolean | null
+          reminder_days_before: number | null
+          title: string | null
+          user_name: string | null
+        }
+        Relationships: []
       }
     }
     Functions: {
