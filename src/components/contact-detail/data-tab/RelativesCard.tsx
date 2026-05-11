@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
-  Users, Phone, Mail, Building2, AlertTriangle,
-  Plus, Trash2,
+   Users, Phone, Mail, Building2, AlertTriangle,
+   Plus, Trash2, Edit2
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -15,46 +15,64 @@ import type { Tables } from '@/integrations/supabase/types';
 interface Props {
   relatives: Tables<'contact_relatives'>[];
   contactId: string;
-  onAdd: (data: Record<string, unknown>) => void;
-  onDelete: (id: string) => void;
+   onAdd: (data: any) => void;
+   onUpdate: (id: string, updates: any) => void;
+   onDelete: (id: string) => void;
 }
 
 const RELATIONSHIP_TYPES = ['conjuge', 'filho', 'filha', 'pai', 'mae', 'irmao', 'irma', 'socio', 'assistente', 'outro'];
 
-function AddRelativeDialog({ onAdd }: { onAdd: (data: Record<string, unknown>) => void }) {
-  const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({
-    name: '', relationship_type: 'conjuge', phone: '', email: '',
-    occupation: '', company: '', notes: '', is_decision_influencer: false,
-    age: '' as string, birthday: '',
-  });
+ function RelativeDialog({ 
+   onSave, 
+   initialData, 
+   trigger 
+ }: { 
+   onSave: (data: any) => void, 
+   initialData?: Partial<Tables<'contact_relatives'>>,
+   trigger: React.ReactNode
+ }) {
+   const [open, setOpen] = useState(false);
+   const [form, setForm] = useState({
+     name: initialData?.name || '',
+     relationship_type: initialData?.relationship_type || 'conjuge',
+     phone: initialData?.phone || '',
+     email: initialData?.email || '',
+     occupation: initialData?.occupation || '',
+     company: initialData?.company || '',
+     notes: initialData?.notes || '',
+     is_decision_influencer: initialData?.is_decision_influencer || false,
+     age: initialData?.age?.toString() || '',
+     birthday: initialData?.birthday || '',
+   });
 
-  const handleSubmit = () => {
-    if (!form.name.trim()) return;
-    onAdd({
-      ...form,
-      name: form.name.trim(),
-      phone: form.phone || undefined,
-      email: form.email || undefined,
-      occupation: form.occupation || undefined,
-      company: form.company || undefined,
-      notes: form.notes || undefined,
-      age: form.age ? parseInt(form.age, 10) : undefined,
-      birthday: form.birthday || undefined,
-    });
-    setForm({ name: '', relationship_type: 'conjuge', phone: '', email: '', occupation: '', company: '', notes: '', is_decision_influencer: false, age: '', birthday: '' });
-    setOpen(false);
-  };
+   const handleSubmit = () => {
+     if (!form.name.trim()) return;
+     onSave({
+       ...form,
+       name: form.name.trim(),
+       phone: form.phone || null,
+       email: form.email || null,
+       occupation: form.occupation || null,
+       company: form.company || null,
+       notes: form.notes || null,
+       age: form.age ? parseInt(form.age, 10) : null,
+       birthday: form.birthday || null,
+     });
+     if (!initialData) {
+       setForm({ name: '', relationship_type: 'conjuge', phone: '', email: '', occupation: '', company: '', notes: '', is_decision_influencer: false, age: '', birthday: '' });
+     }
+     setOpen(false);
+   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">
-          <Plus className="h-3 w-3 mr-1" />Adicionar
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-md">
-        <DialogHeader><DialogTitle className="text-sm">Novo Relacionado</DialogTitle></DialogHeader>
+       <DialogTrigger asChild>{trigger}</DialogTrigger>
+       <DialogContent className="max-w-md">
+         <DialogHeader>
+           <DialogTitle className="text-sm">
+             {initialData ? 'Editar Relacionado' : 'Novo Relacionado'}
+           </DialogTitle>
+         </DialogHeader>
         <div className="grid gap-3">
           <Input placeholder="Nome *" aria-label="Nome do relacionado" value={form.name} onChange={(e) => setForm(p => ({ ...p, name: e.target.value }))} />
           <Select value={form.relationship_type} onValueChange={(v) => setForm(p => ({ ...p, relationship_type: v }))}>
@@ -89,18 +107,25 @@ function AddRelativeDialog({ onAdd }: { onAdd: (data: Record<string, unknown>) =
   );
 }
 
-export function RelativesCard({ relatives, onAdd, onDelete }: Props) {
-  return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center justify-between text-sm font-medium">
-          <div className="flex items-center gap-2">
-            <Users className="h-4 w-4 text-warning" />
-            Relacionados ({relatives.length})
-          </div>
-          <AddRelativeDialog onAdd={onAdd} />
-        </CardTitle>
-      </CardHeader>
+ export function RelativesCard({ relatives, onAdd, onUpdate, onDelete }: Props) {
+   return (
+     <Card>
+       <CardHeader className="pb-3">
+         <CardTitle className="flex items-center justify-between text-sm font-medium">
+           <div className="flex items-center gap-2">
+             <Users className="h-4 w-4 text-warning" />
+             Relacionados ({relatives.length})
+           </div>
+           <RelativeDialog 
+             onSave={onAdd} 
+             trigger={
+               <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">
+                 <Plus className="h-3 w-3 mr-1" />Adicionar
+               </Button>
+             } 
+           />
+         </CardTitle>
+       </CardHeader>
       <CardContent className="space-y-2">
         {relatives.length > 0 ? relatives.map((rel) => (
           <div key={rel.id} className="rounded-lg border p-2.5 text-sm space-y-1">
@@ -113,16 +138,27 @@ export function RelativesCard({ relatives, onAdd, onDelete }: Props) {
                   </Badge>
                 )}
               </div>
-              <div className="flex items-center gap-1">
-                <Badge variant="secondary" className="text-[10px] capitalize">{rel.relationship_type}</Badge>
-                <button
-                  onClick={() => onDelete(rel.id)}
-                  aria-label={`Remover ${rel.name}`}
-                  className="rounded p-0.5 text-muted-foreground hover:text-destructive transition-colors"
-                >
-                  <Trash2 className="h-3 w-3" />
-                </button>
-              </div>
+               <div className="flex items-center gap-1">
+                 <Badge variant="secondary" className="text-[10px] capitalize">{rel.relationship_type}</Badge>
+                 <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                   <RelativeDialog 
+                     onSave={(updates) => onUpdate(rel.id, updates)} 
+                     initialData={rel}
+                     trigger={
+                       <button className="rounded p-0.5 text-muted-foreground hover:text-primary transition-colors">
+                         <Edit2 className="h-3 w-3" />
+                       </button>
+                     }
+                   />
+                   <button
+                     onClick={() => onDelete(rel.id)}
+                     aria-label={`Remover ${rel.name}`}
+                     className="rounded p-0.5 text-muted-foreground hover:text-destructive transition-colors"
+                   >
+                     <Trash2 className="h-3 w-3" />
+                   </button>
+                 </div>
+               </div>
             </div>
             <div className="grid grid-cols-2 gap-1 text-xs text-muted-foreground">
               {rel.age != null && <span>Idade: {rel.age}</span>}
