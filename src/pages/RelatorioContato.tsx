@@ -3,13 +3,16 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { queryExternalData } from "@/lib/externalData";
 import { Button } from "@/components/ui/button";
-import { Printer } from "lucide-react";
+ import { Printer, FileJson, FileSpreadsheet, Edit3, Save, ShieldCheck } from "lucide-react";
 import { BackButton } from "@/components/navigation/BackButton";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { logger } from "@/lib/logger";
  import { ReportScriptsSection } from "./relatorio/ReportScriptsSection";
- import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+  import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+  import { Textarea } from "@/components/ui/textarea";
+  import { Input } from "@/components/ui/input";
+  import { toast } from "sonner";
  import { Badge } from "@/components/ui/badge";
   import { 
     Brain, Target, Shield, Lightbulb, Zap, UserPlus, 
@@ -39,7 +42,9 @@ interface ContactBehavior {
 
 const RelatorioContato = () => {
   const { id } = useParams<{ id: string }>();
-  const [data, setData] = useState<ContactReport | null>(null);
+   const [data, setData] = useState<ContactReport | null>(null);
+   const [editingInsights, setEditingInsights] = useState(false);
+   const [editedInsights, setEditedInsights] = useState<ContactReport['insights'] | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -84,21 +89,18 @@ const RelatorioContato = () => {
            .map(i => i.content)
            .slice(0, 3);
  
-         setData({ 
-           contact, 
-           interactions, 
-           discHistory,
-           insights: {
-             recurringObjections,
-             topPreferences,
-             preferredTone: behavior.preferredChannel === 'WhatsApp' ? 'Casual e Rápido' : 'Formal e Detalhado',
-             communicationRecommendations: [
-               "Focar em benefícios de longo prazo e estabilidade.",
-               "Utilizar gatilhos de Prova Social e Autoridade.",
-               "Evitar pressão excessiva por fechamento imediato."
-             ]
-           }
-         });
+          const defaultInsights = {
+            recurringObjections,
+            topPreferences,
+            preferredTone: behavior.preferredChannel === 'WhatsApp' ? 'Casual e Rápido' : 'Formal e Detalhado',
+            communicationRecommendations: [
+              "Focar em benefícios de longo prazo e estabilidade.",
+              "Utilizar gatilhos de Prova Social e Autoridade.",
+              "Evitar pressão excessiva por fechamento imediato."
+            ]
+          };
+          setData({ contact, interactions, discHistory, insights: defaultInsights });
+          setEditedInsights(defaultInsights);
       } catch (error) {
         const msg = error instanceof Error ? error.message : 'Unknown error';
         logger.error('Error fetching report data:', { error: msg });
@@ -111,9 +113,30 @@ const RelatorioContato = () => {
     fetchData();
   }, [id]);
 
-  const handlePrint = () => {
-    window.print();
-  };
+   const handlePrint = () => window.print();
+ 
+   const handleExportCSV = () => {
+     if (!data) return;
+     const rows = [
+       ["Campo", "Valor"],
+       ["Nome", contactName],
+       ["WhatsApp", data.contact.whatsapp || ""],
+       ["Email", data.contact.email || ""],
+       ["Relationship Score", data.contact.relationship_score || ""],
+       ["Tom Preferido", editedInsights?.preferredTone || ""],
+       ["Objeções Recorrentes", editedInsights?.recurringObjections.join(" | ") || ""],
+       ["Preferências", editedInsights?.topPreferences.join(" | ") || ""],
+     ];
+     const csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+     const encodedUri = encodeURI(csvContent);
+     const link = document.createElement("a");
+     link.setAttribute("href", encodedUri);
+     link.setAttribute("download", `relatorio_${id}.csv`);
+     document.body.appendChild(link);
+     link.click();
+     document.body.removeChild(link);
+     toast.success("CSV exportado com sucesso");
+   };
 
   if (loading) {
     return (
