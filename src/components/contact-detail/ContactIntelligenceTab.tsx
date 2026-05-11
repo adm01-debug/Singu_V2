@@ -17,7 +17,7 @@ import { AIActionsPanel } from '@/components/contact-detail/AIActionsPanel';
 import { SocialIntelligencePanel } from '@/components/contact-detail/SocialIntelligencePanel';
 import { ScoreHistoryPanel } from '@/components/contact-detail/ScoreHistoryPanel';
 import { ContactTimeHeatmap } from '@/components/contact-detail/ContactTimeHeatmap';
-import { CommunicationPreferencesCard } from '@/components/contact-detail/CommunicationPreferencesCard';
+ import { CadencePreferencesCard } from '@/components/contact-detail/data-tab/CadencePreferencesCard';
 import { WorkspaceAccountsCard } from '@/components/contact-detail/WorkspaceAccountsCard';
 import type { Tables } from '@/integrations/supabase/types';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -289,12 +289,14 @@ export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, we
 
       <SocialIntelligencePanel contactId={contactId} />
 
-      {/* Communication Preferences + Score History */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <CommunicationPreferencesCard contactId={contactId} />
-        <ScoreHistoryPanel contactId={contactId} />
-        <WorkspaceAccountsCard contactId={contactId} />
-      </div>
+       {/* Communication Preferences + Score History */}
+       <div className="grid gap-4 md:grid-cols-2">
+         <div className="space-y-4">
+           <ScoreHistoryPanel contactId={contactId} />
+           <WorkspaceAccountsCard contactId={contactId} />
+         </div>
+         <ScoreHistoryPanel contactId={contactId} />
+       </div>
 
       {/* New panels: Emotional Anchors, Best Time, AI Actions */}
       <div className="grid gap-4 md:grid-cols-2">
