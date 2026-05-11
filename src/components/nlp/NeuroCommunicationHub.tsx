@@ -89,7 +89,7 @@ export const NeuroCommunicationHub = () => {
                     <Waves className="h-6 w-6 text-indigo-500 mb-2" />
                     <h5 className="font-black text-indigo-900 text-xs uppercase mb-1">{info.namePt}</h5>
                     <span className="text-[10px] text-indigo-600/70 font-medium mb-3 uppercase tracking-tighter">
-                      {info.rolePt.split(' ')[0]}
+                      {info.effectPt.split(' ')[0]}
                     </span>
                     <div className="text-2xl font-black text-indigo-600">95%</div>
                     <p className="text-[9px] text-muted-foreground mt-2 leading-tight">Engenharia de {id} ativada com precisão cirúrgica.</p>
