@@ -2112,6 +2112,42 @@ export type Database = {
           },
         ]
       }
+      contact_cadence_audit: {
+        Row: {
+          cadence_id: string
+          changed_by: string | null
+          contact_id: string
+          created_at: string | null
+          id: string
+          new_data: Json | null
+          old_data: Json | null
+          operation: string
+          user_id: string
+        }
+        Insert: {
+          cadence_id: string
+          changed_by?: string | null
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation: string
+          user_id: string
+        }
+        Update: {
+          cadence_id?: string
+          changed_by?: string | null
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_decision_making: {
         Row: {
           approver_id: string | null
