@@ -125,7 +125,19 @@ ${interaction.content.slice(0, 12000)}`;
                     objection: { type: "string" },
                     category: { type: "string", enum: ["price","timing","authority","need","competition","trust","other"] },
                     handled: { type: "boolean" },
-                    suggested_response: { type: "string" },
+                     suggested_response: { type: "string" },
+                     reframing_suggestions: {
+                       type: "array",
+                       items: {
+                         type: "object",
+                         properties: {
+                           pattern: { type: "string", enum: ["intention", "redefinition", "consequence", "chunk_up", "chunk_down", "counter_example", "analogy", "apply_to_self", "another_outcome", "hierarchy_criteria", "change_frame_size", "meta_frame", "model_of_world", "reality_strategy"] },
+                           response: { type: "string" }
+                         },
+                         required: ["pattern", "response"]
+                       },
+                       maxItems: 3
+                     }
                   },
                   required: ["objection","category","handled"],
                 },
@@ -267,6 +279,31 @@ ${interaction.content.slice(0, 12000)}`;
           : []
       })
       .eq("id", interactionId);
+ 
+    // Handle Sleight of Mouth reframing suggestions
+    if (analysis.objections && Array.isArray(analysis.objections)) {
+      const reframings: any[] = [];
+      analysis.objections.forEach((obj: any) => {
+        if (obj.reframing_suggestions && Array.isArray(obj.reframing_suggestions)) {
+          obj.reframing_suggestions.forEach((ref: any) => {
+            reframings.push({
+              user_id: userId,
+              contact_id: interaction.contact_id,
+              interaction_id: interactionId,
+              objection: obj.objection,
+              objection_category: obj.category,
+              pattern_used: ref.pattern,
+              suggested_response: ref.response,
+              confidence_score: 90
+            });
+          });
+        }
+      });
+ 
+      if (reframings.length > 0) {
+        await supabase.from('reframing_analysis').insert(reframings);
+      }
+    }
 
     // Handle relatives mentioned (Módulo 2.5 AI)
     if (analysis.relatives_mentioned && Array.isArray(analysis.relatives_mentioned)) {

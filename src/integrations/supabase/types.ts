@@ -8588,6 +8588,84 @@ export type Database = {
           },
         ]
       }
+      reframing_analysis: {
+        Row: {
+          confidence_score: number | null
+          contact_id: string
+          created_at: string | null
+          id: string
+          interaction_id: string | null
+          objection: string
+          objection_category: string | null
+          pattern_used: string
+          status: string | null
+          suggested_response: string
+          user_id: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          interaction_id?: string | null
+          objection: string
+          objection_category?: string | null
+          pattern_used: string
+          status?: string | null
+          suggested_response: string
+          user_id: string
+        }
+        Update: {
+          confidence_score?: number | null
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          interaction_id?: string | null
+          objection?: string
+          objection_category?: string | null
+          pattern_used?: string
+          status?: string | null
+          suggested_response?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reframing_analysis_audit: {
+        Row: {
+          analysis_id: string
+          changed_by: string | null
+          contact_id: string
+          created_at: string | null
+          id: string
+          new_data: Json | null
+          old_data: Json | null
+          operation: string
+          user_id: string
+        }
+        Insert: {
+          analysis_id: string
+          changed_by?: string | null
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation: string
+          user_id: string
+        }
+        Update: {
+          analysis_id?: string
+          changed_by?: string | null
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       revops_alerts: {
         Row: {
           created_at: string

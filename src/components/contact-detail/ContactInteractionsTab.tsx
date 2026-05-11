@@ -24,7 +24,8 @@ import { toast } from 'sonner';
 import type { Interaction, Contact as ContactType } from '@/hooks/useContactDetail';
 import { logger } from "@/lib/logger";
 import { MeetingSummaryCard } from '@/components/meeting-summary/MeetingSummaryCard';
-import { ConversationAnalysisCard } from '@/components/conversation-intel/ConversationAnalysisCard';
+ import { ConversationAnalysisCard } from '@/components/conversation-intel/ConversationAnalysisCard';
+ import { SleightOfMouthPanel } from '@/components/nlp/SleightOfMouthPanel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const TYPE_CONFIG: Record<string, { icon: typeof Phone; label: string; color: string }> = {
@@ -315,10 +316,13 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
                                   interactionId={interaction.id}
                                   hasContent={!!(interaction.content && interaction.content.length >= 30)}
                                 />
-                                <ConversationAnalysisCard
-                                  interactionId={interaction.id}
-                                  hasContent={!!(interaction.content && interaction.content.length >= 80)}
-                                />
+                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                   <ConversationAnalysisCard
+                                     interactionId={interaction.id}
+                                     hasContent={!!(interaction.content && interaction.content.length >= 80)}
+                                   />
+                                   <SleightOfMouthPanel contactId={contact.id} interactionId={interaction.id} />
+                                 </div>
                               </div>
                             </motion.div>
                           )}
