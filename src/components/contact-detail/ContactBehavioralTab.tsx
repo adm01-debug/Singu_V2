@@ -170,12 +170,15 @@ async function fetchWithFallback<T>(
           <TabsTrigger value="biases" className="text-xs">Vieses</TabsTrigger>
            <TabsTrigger value="metaprograms" className="text-xs">Meta</TabsTrigger>
            <TabsTrigger value="reframing" className="text-xs">Sleight of Mouth</TabsTrigger>
-           <TabsTrigger value="personality" className="text-xs">Big Five/MBTI</TabsTrigger>
+            <TabsTrigger value="personality" className="text-xs">Big Five/MBTI</TabsTrigger>
+            <TabsTrigger value="reframing" className="text-xs">Sleight of Mouth</TabsTrigger>
+         </TabsList>
+         <ModuleHelp {...moduleHelpContent.disc} />
+       </div>
+ 
        <TabsContent value="reframing" className="space-y-4">
          <SleightOfMouthPanel contactId={contact.id} />
        </TabsContent>
- 
-        </TabsList>
         <ModuleHelp {...moduleHelpContent.disc} />
       </div>
 
