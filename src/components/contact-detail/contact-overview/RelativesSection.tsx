@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { CollapsibleSection } from '@/components/ui/collapsible-section';
 import { InlineEmptyState } from '@/components/ui/empty-state';
-import { InlineEdit } from '@/components/inline-edit/InlineEdit';
+ import { InlineEdit, InlineDateEdit } from '@/components/inline-edit/InlineEdit';
 import { Button } from '@/components/ui/button';
 import { useRelativeMutations } from '@/hooks/useContactRelationalData';
-import { format } from 'date-fns';
+ import { format, differenceInYears } from 'date-fns';
 import type { Tables } from '@/integrations/supabase/types';
 
 interface RelativesSectionProps {
@@ -17,14 +17,24 @@ interface RelativesSectionProps {
 export function RelativesSection({ contactId, relatives }: RelativesSectionProps) {
   const { addRelative, updateRelative, deleteRelative } = useRelativeMutations(contactId);
 
-  const handleUpdate = async (id: string, field: string, value: any) => {
-    try {
-      await updateRelative.mutateAsync({ id, updates: { [field]: value } });
-      return true;
-    } catch {
-      return false;
-    }
-  };
+   const handleUpdate = async (id: string, field: string, value: any, rel?: Tables<'contact_relatives'>) => {
+     try {
+       const updates: any = { [field]: value };
+       
+       // If updating birthday, also update age if it exists or should be calculated
+       if (field === 'birthday' && value) {
+         const birthDate = new Date(value);
+         if (!isNaN(birthDate.getTime())) {
+           updates.age = differenceInYears(new Date(), birthDate);
+         }
+       }
+ 
+       await updateRelative.mutateAsync({ id, updates });
+       return true;
+     } catch {
+       return false;
+     }
+   };
 
   const handleAdd = () => {
     addRelative.mutate({
@@ -114,12 +124,17 @@ export function RelativesSection({ contactId, relatives }: RelativesSectionProps
                   />
                   {rel.age && <span>anos</span>}
                 </div>
-                {rel.birthday && (
-                  <span className="flex items-center gap-0.5">
-                    <Cake className="h-3 w-3" />
-                    {format(new Date(rel.birthday), "dd/MM")}
-                  </span>
-                )}
+                 <div className="flex items-center gap-0.5">
+                   <Cake className="h-3 w-3" />
+                   <InlineDateEdit
+                     value={rel.birthday}
+                     onSave={(v) => handleUpdate(rel.id, 'birthday', v)}
+                     placeholder="Nasc"
+                     emptyText="Data"
+                     formatDisplay={(v) => format(new Date(v), "dd/MM")}
+                     displayClassName="py-0 px-0 -mx-0 hover:bg-transparent"
+                   />
+                 </div>
                 <div className="flex items-center gap-0.5">
                   <Phone className="h-3 w-3" />
                   <InlineEdit
