@@ -243,48 +243,48 @@ ${interaction.content.slice(0, 12000)}`;
      return jsonError("Falha ao persistir análise", 500, req);
    }
 
-   // Handle detected life events and relatives
-   if (analysis.life_events_detected && Array.isArray(analysis.life_events_detected)) {
-   // Handle relatives mentioned (Módulo 2.5 AI)
-   if (analysis.relatives_mentioned && Array.isArray(analysis.relatives_mentioned)) {
-     const relativesSuggestions = analysis.relatives_mentioned.map((rel: any) => ({
-       user_id: userId,
-       contact_id: interaction.contact_id,
-       event_type: 'other', // We use suggested_life_events as a generic suggestion queue or we could create suggested_relatives
-       title: `Novo Relacionado Detectado: ${rel.name}`,
-       description: `${rel.name} (${rel.relationship_type})${rel.occupation ? ` - ${rel.occupation}` : ''}. ${rel.notes || ''}`,
-       source_type: 'conversation',
-       confidence: 0.8,
-       status: 'pending',
-       metadata: { 
-         interaction_id: interactionId, 
-         type: 'relative_suggestion',
-         relative_data: rel
-       }
-     }));
+    // Handle relatives mentioned (Módulo 2.5 AI)
+    if (analysis.relatives_mentioned && Array.isArray(analysis.relatives_mentioned)) {
+      const relativesSuggestions = analysis.relatives_mentioned.map((rel: any) => ({
+        user_id: userId,
+        contact_id: interaction.contact_id,
+        event_type: 'other',
+        title: `Novo Relacionado Detectado: ${rel.name}`,
+        description: `${rel.name} (${rel.relationship_type})${rel.occupation ? ` - ${rel.occupation}` : ''}. ${rel.notes || ''}`,
+        source_type: 'conversation',
+        confidence: 0.8,
+        status: 'pending',
+        metadata: { 
+          interaction_id: interactionId, 
+          type: 'relative_suggestion',
+          relative_data: rel
+        }
+      }));
 
-     if (relativesSuggestions.length > 0) {
-       await supabase.from('suggested_life_events').insert(relativesSuggestions);
-     }
-   }
+      if (relativesSuggestions.length > 0) {
+        await supabase.from('suggested_life_events').insert(relativesSuggestions);
+      }
+    }
 
-     const lifeEvents = analysis.life_events_detected.map((ev: any) => ({
-       user_id: userId,
-       contact_id: interaction.contact_id,
-       event_type: ev.event_type,
-       title: ev.title,
-       description: ev.description,
-       event_date: ev.event_date || null,
-       source_type: 'conversation',
-       confidence: ev.confidence,
-       status: 'pending',
-       metadata: { interaction_id: interactionId }
-     }));
+    // Handle detected life events (Módulo 2.4 AI)
+    if (analysis.life_events_detected && Array.isArray(analysis.life_events_detected)) {
+      const lifeEvents = analysis.life_events_detected.map((ev: any) => ({
+        user_id: userId,
+        contact_id: interaction.contact_id,
+        event_type: ev.event_type,
+        title: ev.title,
+        description: ev.description,
+        event_date: ev.event_date || null,
+        source_type: 'conversation',
+        confidence: ev.confidence,
+        status: 'pending',
+        metadata: { interaction_id: interactionId }
+      }));
 
-     if (lifeEvents.length > 0) {
-       await supabase.from('suggested_life_events').insert(lifeEvents);
-     }
-   }
+      if (lifeEvents.length > 0) {
+        await supabase.from('suggested_life_events').insert(lifeEvents);
+      }
+    }
 
    return jsonOk({ ok: true, id: saved.id, analysis }, req);
 });
