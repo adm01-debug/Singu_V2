@@ -9,28 +9,32 @@ import {
   Copy, 
   Sparkles, 
   ThumbsUp, 
-  ThumbsDown,
-  ArrowRight,
-  Zap
+   ThumbsDown,
+   ArrowRight,
+   Zap,
+   Activity,
+   Users,
+   Wand2
 } from 'lucide-react';
+ import { Progress } from '@/components/ui/progress';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useVAKAnalysis } from '@/hooks/useVAKAnalysis';
 import { useMetaprogramAnalysis } from '@/hooks/useMetaprogramAnalysis';
-import { VAK_LABELS, VAK_COMMUNICATION_TIPS, type VAKType } from '@/types/vak';
+ import { VAK_LABELS, VAK_COMMUNICATION_TIPS, VAK_PREDICATES, type VAKType } from '@/types/vak';
 import { METAPROGRAM_LABELS } from '@/types/metaprograms';
 import { SLEIGHT_TEMPLATES } from '@/data/sleightOfMouth';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 
-interface Suggestion {
-  id: string;
-  type: 'rapport' | 'reframing' | 'vak' | 'metaprogram';
-  text: string;
-  fullContent?: string;
-  icon: React.ReactNode;
-  color: string;
-}
+ interface Suggestion {
+   id: string;
+   type: 'rapport' | 'reframing' | 'vak' | 'metaprogram' | 'milton';
+   text: string;
+   fullContent?: string;
+   icon: React.ReactNode;
+   color: string;
+ }
 
 interface Props {
   content: string;
@@ -43,13 +47,30 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
   const { analyzeText: analyzeVAK } = useVAKAnalysis();
   const { analyzeText: analyzeMeta } = useMetaprogramAnalysis();
   
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const [detectedVAK, setDetectedVAK] = useState<any>(null);
-  const [detectedMeta, setDetectedMeta] = useState<any>(null);
+   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+   const [detectedVAK, setDetectedVAK] = useState<any>(null);
+   const [detectedMeta, setDetectedMeta] = useState<any>(null);
+   const [rapportScore, setRapportScore] = useState(0);
+   const [contactVAK, setContactVAK] = useState<VAKType | null>(null);
   const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down'>>({});
   
-  useEffect(() => {
-    if (content.length > 15) {
+   useEffect(() => {
+     const fetchContactVAK = async () => {
+       if (contactId) {
+         const { data } = await supabase.from('contacts').select('behavior').eq('id', contactId).single();
+         if (data?.behavior) {
+           const behavior = data.behavior as any;
+           if (behavior.vakProfile?.primary) {
+             setContactVAK(behavior.vakProfile.primary);
+           }
+         }
+       }
+     };
+     fetchContactVAK();
+   }, [contactId]);
+
+   useEffect(() => {
+     if (content.length > 10) {
       const vak = analyzeVAK(content);
       const meta = analyzeMeta(content);
       setDetectedVAK(vak);
@@ -83,29 +104,62 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
         });
       }
       
-      // 3. Sleight of Mouth (Objection Detection)
-      const matchingTemplate = SLEIGHT_TEMPLATES.find(t => 
-        content.toLowerCase().includes(t.objection.toLowerCase().substring(0, 12))
-      );
+       // 3. Rapport Calculation & Feedback
+       if (contactVAK) {
+         const predicates = VAK_PREDICATES[contactVAK] || [];
+         const lowerContent = content.toLowerCase();
+         let matches = 0;
+         predicates.forEach(p => {
+           if (lowerContent.includes(p)) matches++;
+         });
+         
+         const score = Math.min(100, (matches * 25));
+         setRapportScore(score);
 
-      if (matchingTemplate) {
-        newSuggestions.push({
-          id: `reframing-${matchingTemplate.id}`,
-          type: 'reframing',
-          text: `Objeção detectada: "${matchingTemplate.objectionCategory}".`,
-          fullContent: matchingTemplate.response,
-          icon: <RefreshCcw className="h-3 w-3" />,
-          color: 'text-primary'
-        });
-      }
-      
-      setSuggestions(newSuggestions);
-    } else {
-      setSuggestions([]);
-      setDetectedVAK(null);
-      setDetectedMeta(null);
-    }
-  }, [content, analyzeVAK, analyzeMeta]);
+         if (score < 50 && content.length > 30) {
+           newSuggestions.push({
+             id: 'rapport-low',
+             type: 'rapport',
+             text: `Baixo alinhamento com perfil ${VAK_LABELS[contactVAK].name}. Use mais predicados como: ${VAK_COMMUNICATION_TIPS[contactVAK].useWords.slice(0, 3).join(', ')}.`,
+             icon: <Activity className="h-3 w-3" />,
+             color: 'text-destructive'
+           });
+         } else if (score >= 70) {
+            newSuggestions.push({
+              id: 'rapport-high',
+              type: 'milton',
+              text: "Rapport excelente detectado! Agora é o momento de usar um Comando Embutido.",
+              fullContent: `Você já deve ter percebido que...`,
+              icon: <Wand2 className="h-3 w-3" />,
+              color: 'text-success'
+            });
+         }
+       }
+
+       // 4. Sleight of Mouth (Objection Detection)
+       const matchingTemplate = SLEIGHT_TEMPLATES.find(t => 
+         content.toLowerCase().includes(t.objection.toLowerCase().substring(0, 12))
+       );
+
+       if (matchingTemplate) {
+         newSuggestions.push({
+           id: `reframing-${matchingTemplate.id}`,
+           type: 'reframing',
+           text: `Objeção detectada: "${matchingTemplate.objectionCategory}".`,
+           fullContent: matchingTemplate.response,
+           icon: <RefreshCcw className="h-3 w-3" />,
+           color: 'text-primary'
+         });
+       }
+       
+       setSuggestions(newSuggestions);
+     } else {
+       setSuggestions([]);
+       setDetectedVAK(null);
+       setDetectedMeta(null);
+       setRapportScore(0);
+     }
+   }, [content, analyzeVAK, analyzeMeta, contactVAK]);
 
   const handleFeedback = async (suggestionId: string, type: 'up' | 'down') => {
     setFeedbackGiven(prev => ({ ...prev, [suggestionId]: type }));
@@ -140,16 +194,29 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
       >
         <Card className="border-primary/30 bg-primary/5 shadow-lg overflow-hidden border-l-4 border-l-primary">
           <CardContent className="p-4 space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-wider">
-                <Sparkles className="h-3 w-3 animate-pulse" /> Coach NLP Proativo
-              </div>
-            {detectedVAK?.dominantSystem && (
-              <Badge variant="secondary" className="text-[9px] h-5 px-2 bg-primary/10 text-primary border-primary/20">
-                SISTEMA: {VAK_LABELS[detectedVAK.dominantSystem as VAKType].name}
-              </Badge>
-            )}
-            </div>
+             <div className="flex items-center justify-between gap-4">
+               <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-wider">
+                 <Sparkles className="h-3 w-3 animate-pulse" /> Coach NLP Proativo
+               </div>
+               
+               {contactVAK && (
+                 <div className="flex-1 max-w-[150px] space-y-1">
+                   <div className="flex justify-between items-center text-[9px] text-muted-foreground uppercase font-semibold">
+                     <span>Rapport</span>
+                     <span className={rapportScore >= 70 ? 'text-success' : rapportScore >= 40 ? 'text-warning' : 'text-destructive'}>
+                       {rapportScore}%
+                     </span>
+                   </div>
+                   <Progress value={rapportScore} className="h-1" />
+                 </div>
+               )}
+
+               {detectedVAK?.dominantSystem && (
+                 <Badge variant="secondary" className="text-[9px] h-5 px-2 bg-primary/10 text-primary border-primary/20">
+                   VOCÊ: {VAK_LABELS[detectedVAK.dominantSystem as VAKType].name}
+                 </Badge>
+               )}
+             </div>
             
             <div className="space-y-3">
               {suggestions.map((s) => (
