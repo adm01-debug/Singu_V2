@@ -154,11 +154,23 @@ const NLPAnalytics = () => {
                </TabsContent>
                
                <TabsContent value="coherence" className="mt-6">
-                 <CommunicationCoherencePanel />
+                 {selectedContact ? (
+                   <CommunicationCoherencePanel contact={selectedContact} />
+                 ) : (
+                   <Card className="p-12 text-center border-dashed">
+                     <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para analisar a coerência.</p>
+                   </Card>
+                 )}
                </TabsContent>
                
                <TabsContent value="tools" className="mt-6">
-                 <UnifiedScriptGenerator />
+                 {selectedContact ? (
+                   <UnifiedScriptGenerator contact={selectedContact} />
+                 ) : (
+                   <Card className="p-12 text-center border-dashed">
+                     <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para gerar scripts personalizados.</p>
+                   </Card>
+                 )}
                </TabsContent>
              </Tabs>
            </div>
