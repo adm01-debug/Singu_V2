@@ -22,7 +22,7 @@ import {
   FormMessage,
   FormDescription,
 } from '@/components/ui/form';
-import { MessageSquare, Loader2, Mic } from 'lucide-react';
+ import { MessageSquare, Loader2, Mic, Tag, Lightbulb, Paperclip } from 'lucide-react';
 import { VoiceInput } from '@/components/voice/VoiceInput';
 import type { Interaction } from '@/hooks/useInteractions';
 import type { Contact } from '@/hooks/useContacts';
@@ -99,7 +99,12 @@ export function InteractionForm({
       initiated_by: interaction?.initiated_by || 'us',
       duration: interaction?.duration || null,
       follow_up_required: interaction?.follow_up_required || false,
-      follow_up_date: interaction?.follow_up_date || '',
+       follow_up_date: interaction?.follow_up_date || '',
+       tags: (interaction?.tags as string[]) || [],
+       key_insights: (interaction?.key_insights as string[]) || [],
+       audio_url: interaction?.audio_url || null,
+       transcription: interaction?.transcription || null,
+       attachments: (interaction?.attachments as string[]) || [],
     },
   });
 
@@ -229,8 +234,18 @@ export function InteractionForm({
                       const newContent = currentContent 
                         ? `${currentContent}\n\n${text}` 
                         : text;
-                      field.onChange(newContent);
-                    }}
+                       field.onChange(newContent);
+                     }}
+                     uploadAudio
+                     onTranscription={(text, audioUrl) => {
+                       const currentContent = field.value || '';
+                       const newContent = currentContent 
+                         ? `${currentContent}\n\n${text}` 
+                         : text;
+                       field.onChange(newContent);
+                       if (audioUrl) form.setValue('audio_url', audioUrl);
+                       form.setValue('transcription', text);
+                     }}
                     placeholder="Gravar por voz"
                     className="text-xs"
                   />
