@@ -42,7 +42,6 @@ export function useVAKAnalysis() {
 
   // Analyze text and detect VAK predicates
   const analyzeText = useCallback((text: string): VAKAnalysisResult => {
-  const { triggerAnalysis } = useNLPAutoAnalysis();
     const normalizedText = normalizeText(text);
     const words = normalizedText.split(' ');
     
@@ -136,10 +135,6 @@ export function useVAKAnalysis() {
       dominantSystem,
       secondarySystem,
       confidence: Math.round(confidence),
-      // Auto-trigger aggregated analysis update
-      if (user && contactId) {
-        triggerAnalysis(contactId, interactionId || "", text, null, "whatsapp", false);
-      }
     };
   }, []);
 
@@ -166,8 +161,8 @@ export function useVAKAnalysis() {
           auditory_words: analysis.auditory.words,
           kinesthetic_words: analysis.kinesthetic.words,
           digital_words: analysis.digital.words,
-           analyzed_text: text.substring(0, 1000), // Limit stored text
-           is_validated: false
+          analyzed_text: text.substring(0, 1000), // Limit stored text
+          is_validated: false
         });
 
       if (error) throw error;
