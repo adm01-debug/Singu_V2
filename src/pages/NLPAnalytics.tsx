@@ -4,16 +4,18 @@ import { SEOHead } from '@/components/seo/SEOHead';
 import { Header } from '@/components/layout/Header';
  import { useState } from 'react';
  import { 
-   NLPConversionMetrics, 
-   NLPMasteryScore, 
+   NLPConversionMetrics,
+   NLPMasteryScore,
    NLPEvolutionTimeline,
    NLPInsightsDashboard,
    CommunicationCoherencePanel,
    UnifiedScriptGenerator,
-   CopywritingSalesTools
+   CopywritingSalesTools,
+   NLPTrainingMode,
+   PerceptualPositions
  } from '@/components/nlp';
  import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
- import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2 } from 'lucide-react';
+ import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope } from 'lucide-react';
  import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
  import { Input } from '@/components/ui/input';
  import { Button } from '@/components/ui/button';
@@ -101,7 +103,7 @@ const NLPAnalytics = () => {
              <NLPMasteryScore />
              
              <Tabs defaultValue="overview" className="w-full">
-               <TabsList className="grid w-full grid-cols-4">
+                 <TabsList className="grid w-full grid-cols-6">
                  <TabsTrigger value="overview" className="gap-2">
                    <Activity className="h-4 w-4" /> Geral
                  </TabsTrigger>
@@ -114,8 +116,28 @@ const NLPAnalytics = () => {
                  <TabsTrigger value="tools" className="gap-2">
                    <Wand2 className="h-4 w-4" /> Ferramentas
                  </TabsTrigger>
+                  <TabsTrigger value="positions" className="gap-2">
+                    <Telescope className="h-4 w-4" /> Posições
+                  </TabsTrigger>
+                  <TabsTrigger value="training" className="gap-2">
+                    <GraduationCap className="h-4 w-4" /> Treino
+                  </TabsTrigger>
                </TabsList>
                
+                <TabsContent value="positions" className="mt-6 space-y-6">
+                  {selectedContact ? (
+                    <PerceptualPositions contact={selectedContact} />
+                  ) : (
+                    <Card className="p-12 text-center border-dashed">
+                      <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para analisar posições perceptuais.</p>
+                    </Card>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="training" className="mt-6 space-y-6">
+                  <NLPTrainingMode />
+                </TabsContent>
+
                <TabsContent value="overview" className="mt-6 space-y-6">
                  <NLPConversionMetrics />
                </TabsContent>
