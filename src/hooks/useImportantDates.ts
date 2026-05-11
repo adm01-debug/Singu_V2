@@ -35,6 +35,20 @@ export interface DateReminders {
    const { user } = useAuth();
 
    const { data: lifeEvents = [] } = useQuery({
+   const { data: relatives = [] } = useQuery({
+     queryKey: ['all-relatives', user?.id],
+     queryFn: async () => {
+       if (!user) return [];
+       const { data, error } = await supabase
+         .from('contact_relatives')
+         .select('*')
+         .eq('user_id', user.id);
+       if (error) throw error;
+       return data;
+     },
+     enabled: !!user,
+   });
+
      queryKey: ['all-life-events', user?.id],
      queryFn: async () => {
        if (!user) return [];
@@ -231,8 +245,44 @@ export interface DateReminders {
              reminderDays: [event.reminder_days_before || 7, 0]
            });
          }
+        });
+
+       // 6. Relatives Birthdays
+       const contactRelatives = relatives.filter(r => r.contact_id === contact.id && r.birthday);
+       contactRelatives.forEach(rel => {
+         const bday = new Date(rel.birthday!);
+         let nextBday = new Date(bday);
+         nextBday.setFullYear(now.getFullYear());
+         
+         if (isBefore(nextBday, now)) {
+           nextBday = addYears(nextBday, 1);
+         }
+         
+         const daysUntil = differenceInDays(nextBday, now);
+         
+         if (daysUntil <= 60) {
+           let urgency: ImportantDate['urgency'] = 'future';
+           if (daysUntil === 0) urgency = 'today';
+           else if (daysUntil <= 7) urgency = 'urgent';
+           else urgency = 'upcoming';
+
+           allDates.push({
+             id: `relative-bday-${rel.id}`,
+             contactId: contact.id,
+             contactName,
+             type: 'birthday',
+             title: `Aniversário de ${rel.name} (${rel.relationship_type})`,
+             date: nextBday,
+             daysUntil,
+             isPast: false,
+             urgency,
+             suggestedAction: `Dê os parabéns ao ${rel.relationship_type} do contato`,
+             messageTemplate: `Olá ${contact.firstName}! Vi que o(a) ${rel.name} está fazendo aniversário. Mande um abraço por mim!`,
+             reminderDays: [1, 0]
+           });
+         }
        });
-    });
+     });
 
     // Sort all dates by urgency and then by days until
     const urgencyOrder = { overdue: 0, today: 1, urgent: 2, upcoming: 3, future: 4 };
