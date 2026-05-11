@@ -10,8 +10,8 @@ export const NLPMasteryScore = () => {
     { label: 'Flexibilidade de Resposta', score: 85, icon: <Star className="h-4 w-4" /> },
     { label: 'Rapport Subconsciente', score: 88, icon: <CheckCircle2 className="h-4 w-4" /> },
     { label: 'Eficácia de Reenquadramento', score: 88, icon: <Trophy className="h-4 w-4" /> },
-    { label: 'Maestria de Submodalidades', score: 91, icon: <Focus className="h-4 w-4" /> },
-    { label: 'Eliciação de Estados', score: 87, icon: <Zap className="h-4 w-4" /> },
+    { label: 'Maestria de Submodalidades', score: 94, icon: <Focus className="h-4 w-4" /> },
+    { label: 'Eliciação de Estados', score: 93, icon: <Zap className="h-4 w-4" /> },
   ];
 
   const totalScore = Math.round(metrics.reduce((acc, m) => acc + m.score, 0) / metrics.length);

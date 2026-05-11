@@ -46,28 +46,50 @@ export function CopywritingAnalyzerTab({ analyzeText, onTextChange, analysisResu
     <div className="space-y-4">
       <div>
         <label className="text-sm font-medium mb-2 block">Cole seu texto para análise:</label>
-        <Textarea
-          placeholder="Cole aqui o texto que deseja analisar (mínimo 20 caracteres)..."
-          value={analyzeText}
-          onChange={(e) => onTextChange(e.target.value)}
-          className="min-h-[120px]"
-        />
+        <div className="relative group">
+          <Textarea
+            placeholder="Cole aqui o texto que deseja analisar (mínimo 20 caracteres)..."
+            value={analyzeText}
+            onChange={(e) => onTextChange(e.target.value)}
+            className="min-h-[150px] border-primary/20 focus:border-primary transition-all pr-12 font-mono text-sm leading-relaxed"
+          />
+          <div className="absolute top-3 right-3 flex flex-col gap-2">
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={() => onTextChange('')}
+              title="Limpar texto"
+            >
+              <span className="text-[10px] font-bold">CLR</span>
+            </Button>
+          </div>
+        </div>
         <p className="text-xs text-muted-foreground mt-1">{analyzeText.length} caracteres</p>
       </div>
 
       {analysisResult && (
         <div className="space-y-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { label: 'Persuasão', score: analysisResult.persuasionScore },
-              { label: 'Clareza', score: analysisResult.clarityScore },
-              { label: 'Emocional', score: analysisResult.emotionalScore },
-              { label: 'CTA', score: analysisResult.ctaStrength },
-            ].map(({ label, score }) => (
-              <div key={label} className="bg-muted/50 rounded-lg p-3 text-center">
-                <span className={cn("text-2xl font-bold", getScoreColor(score))}>{score}</span>
-                <p className="text-xs text-muted-foreground">{label}</p>
-                <Progress value={score} className="h-1 mt-1" />
+              { label: 'Persuasão', score: analysisResult.persuasionScore, icon: <Zap className="h-3 w-3" /> },
+              { label: 'Clareza', score: analysisResult.clarityScore, icon: <BookOpen className="h-3 w-3" /> },
+              { label: 'Emocional', score: analysisResult.emotionalScore, icon: <Smile className="h-3 w-3" /> },
+              { label: 'CTA Strength', score: analysisResult.ctaStrength, icon: <Target className="h-3 w-3" /> },
+            ].map(({ label, score, icon }) => (
+              <div key={label} className="bg-gradient-to-br from-background to-muted/30 rounded-xl p-4 border border-primary/10 shadow-sm relative overflow-hidden group hover:border-primary/30 transition-all">
+                <div className="absolute top-0 left-0 w-1 h-full bg-primary/20 group-hover:bg-primary transition-colors" />
+                <div className="flex items-center gap-2 mb-2">
+                  <div className={cn("p-1 rounded bg-muted text-muted-foreground", getScoreColor(score).replace('text-', 'bg-').replace('success', 'success/20').replace('warning', 'warning/20').replace('destructive', 'destructive/20'))}>
+                    {icon}
+                  </div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{label}</p>
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className={cn("text-2xl font-black", getScoreColor(score))}>{score}</span>
+                  <span className="text-[10px] text-muted-foreground font-medium">/100</span>
+                </div>
+                <Progress value={score} className="h-1 mt-2 bg-muted" />
               </div>
             ))}
           </div>
