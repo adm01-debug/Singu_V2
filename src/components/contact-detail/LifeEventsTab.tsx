@@ -19,7 +19,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import type { Tables, TablesInsert } from '@/integrations/supabase/types';
 import { LifeEventsGapChecklist } from './life-events/LifeEventsGapChecklist';
 import { LifeEventsAuditTrail } from './life-events/LifeEventsAuditTrail';
-import { LifeEventsTimeline } from './life-events/LifeEventsTimeline';
+ import { LifeEventsTimeline } from './life-events/LifeEventsTimeline';
+ import { Sparkles, Check, X } from 'lucide-react';
 
  import { LifeEventsVisualSummary } from './life-events/LifeEventsVisualSummary';
  
@@ -41,7 +42,49 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     reason: 'Interação manual via painel'
   });
 
-  const { data: lifeEvents = [], isLoading } = useQuery({
+   const { data: lifeEvents = [], isLoading } = useQuery({
+   const { data: suggestions = [], refetch: refetchSuggestions } = useQuery({
+     queryKey: ['suggested-life-events', contactId],
+     queryFn: async () => {
+       const { data, error } = await supabase
+         .from('suggested_life_events')
+         .select('*')
+         .eq('contact_id', contactId)
+         .eq('status', 'pending')
+         .order('confidence', { ascending: false });
+       if (error) throw error;
+       return data;
+     },
+     enabled: !!contactId,
+   });
+
+   const handleAcceptSuggestion = async (suggestion: any) => {
+     const { error } = await supabase.from('life_events').insert({
+       contact_id: contactId,
+       user_id: user?.id,
+       event_type: suggestion.event_type as any,
+       title: suggestion.title,
+       description: suggestion.description,
+       event_date: suggestion.event_date || new Date().toISOString(),
+       recurring: suggestion.event_type === 'birthday' || suggestion.event_type === 'anniversary',
+       metadata: { source: suggestion.source_type, suggestion_id: suggestion.id }
+     });
+
+     if (!error) {
+       await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id);
+       queryClient.invalidateQueries({ queryKey: ['life-events', contactId] });
+       refetchSuggestions();
+       toast({ title: "Sugestão aceita", description: "O marco foi adicionado à linha do tempo." });
+     } else {
+       toast({ title: "Erro ao aceitar", description: error.message, variant: "destructive" });
+     }
+   };
+
+   const handleRejectSuggestion = async (id: string) => {
+     const { error } = await supabase.from('suggested_life_events').update({ status: 'rejected' }).eq('id', id);
+     if (!error) refetchSuggestions();
+   };
+
     queryKey: ['life-events', contactId],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -269,7 +312,50 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
         </Dialog>
       </div>
 
-      <Tabs defaultValue="list" className="w-full">
+       {suggestions.length > 0 && (
+         <div className="space-y-4 mb-6 animate-in fade-in slide-in-from-top-4">
+           <h4 className="text-sm font-semibold flex items-center gap-2 text-primary">
+             <Sparkles className="h-4 w-4" /> Sugestões Detectadas pela IA
+           </h4>
+           <div className="grid gap-4 sm:grid-cols-2">
+             {suggestions.map((sug) => (
+               <Card key={sug.id} className="border-primary/20 bg-primary/5 shadow-sm">
+                 <CardContent className="p-4">
+                   <div className="flex justify-between items-start mb-2">
+                     <Badge variant="outline" className="bg-background text-[10px] h-5">
+                       {sug.source_type === 'conversation' ? 'Da Conversa' : 'Social'}
+                     </Badge>
+                     <Badge variant="secondary" className="text-[10px] h-5">
+                       {Math.round((sug.confidence || 0) * 100)}% Confiança
+                     </Badge>
+                   </div>
+                   <h5 className="font-bold text-sm mb-1">{sug.title}</h5>
+                   <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{sug.description}</p>
+                   <div className="flex gap-2">
+                     <Button 
+                       size="sm" 
+                       className="h-7 px-3 text-[11px] gap-1" 
+                       onClick={() => handleAcceptSuggestion(sug)}
+                     >
+                       <Check className="h-3 w-3" /> Confirmar
+                     </Button>
+                     <Button 
+                       size="sm" 
+                       variant="ghost" 
+                       className="h-7 px-2 text-[11px] gap-1 text-muted-foreground" 
+                       onClick={() => handleRejectSuggestion(sug.id)}
+                     >
+                       <X className="h-3 w-3" /> Ignorar
+                     </Button>
+                   </div>
+                 </CardContent>
+               </Card>
+             ))}
+           </div>
+         </div>
+       )}
+
+       <Tabs defaultValue="list" className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-4">
           <TabsTrigger value="list" className="gap-2">
             <Gift className="h-4 w-4" /> Marcos
