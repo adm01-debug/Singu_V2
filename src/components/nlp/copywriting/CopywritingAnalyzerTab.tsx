@@ -2,7 +2,9 @@ import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
-import { BookOpen, Zap, AlertTriangle, CheckCircle, Smile, Target } from 'lucide-react';
+ import { BookOpen, Zap, AlertTriangle, CheckCircle, Smile, Target, Brain, Waves, Activity } from 'lucide-react';
+ import { useNeuromarketing } from '@/hooks/useNeuromarketing';
+ import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -42,7 +44,108 @@ function getScoreColor(score: number) {
   return 'text-destructive';
 }
 
-export function CopywritingAnalyzerTab({ analyzeText, onTextChange, analysisResult }: Props) {
+ export function CopywritingAnalyzerTab({ analyzeText, onTextChange, analysisResult }: Props) {
+   const { analyzeText: analyzeNeuro } = useNeuromarketing();
+ 
+   const neuroAnalysis = useMemo(() => {
+     if (!analyzeText || analyzeText.length < 20) return null;
+     return analyzeNeuro(analyzeText);
+   }, [analyzeText, analyzeNeuro]);
+ 
+   const neuroDominance = useMemo(() => {
+     if (!neuroAnalysis) return null;
+     const scores = neuroAnalysis.brainSystemScores;
+     const dominant = neuroAnalysis.detectedBrainSystem;
+     
+     const labels: Record<string, string> = {
+       reptilian: 'Reptiliano (Instintivo)',
+       limbic: 'Límbico (Emocional)',
+       neocortex: 'Neocórtex (Racional)'
+     };
+ 
+     return {
+       label: labels[dominant],
+       scores
+     };
+   }, [neuroAnalysis]);
+ 
+           {/* Neuro-Análise Section */}
+           {neuroAnalysis && (
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               <div className="bg-gradient-to-br from-indigo-500/5 to-purple-500/5 border border-indigo-500/20 rounded-xl p-4">
+                 <h4 className="font-bold text-xs uppercase tracking-widest text-indigo-600 mb-3 flex items-center gap-2">
+                   <Brain className="h-4 w-4" /> Dominância Cerebral
+                 </h4>
+                 <div className="space-y-3">
+                   <div className="flex items-center justify-between">
+                     <span className="text-sm font-medium">{neuroDominance?.label}</span>
+                     <Badge className="bg-indigo-500">{neuroAnalysis.confidence}% Confiança</Badge>
+                   </div>
+                   <div className="space-y-2">
+                     {Object.entries(neuroAnalysis.brainSystemScores).map(([system, score]) => (
+                       <div key={system} className="space-y-1">
+                         <div className="flex justify-between text-[10px] uppercase font-bold text-muted-foreground">
+                           <span>{system === 'reptilian' ? 'Sobrevivência' : system === 'limbic' ? 'Emoção' : 'Lógica'}</span>
+                           <span>{score}%</span>
+                         </div>
+                         <Progress value={score} className={cn(
+                           "h-1.5",
+                           system === 'reptilian' ? "bg-red-100" : system === 'limbic' ? "bg-blue-100" : "bg-green-100"
+                         )}>
+                           <div 
+                             className={cn(
+                               "h-full transition-all",
+                               system === 'reptilian' ? "bg-red-500" : system === 'limbic' ? "bg-blue-500" : "bg-green-500"
+                             )} 
+                             style={{ width: `${score}%` }} 
+                           />
+                         </Progress>
+                       </div>
+                     ))}
+                   </div>
+                 </div>
+               </div>
+ 
+               <div className="bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border border-emerald-500/20 rounded-xl p-4">
+                 <h4 className="font-bold text-xs uppercase tracking-widest text-emerald-600 mb-3 flex items-center gap-2">
+                   <Waves className="h-4 w-4" /> Assinatura Neuroquímica
+                 </h4>
+                 <div className="grid grid-cols-2 gap-2">
+                   {neuroAnalysis.neurochemicalProfile.map((neuro, idx) => (
+                     <div key={idx} className="bg-white/50 border border-emerald-500/10 rounded-lg p-2 flex flex-col items-center text-center">
+                       <Activity className="h-3 w-3 text-emerald-500 mb-1" />
+                       <span className="text-[10px] font-bold uppercase">{neuro.chemical}</span>
+                       <div className="text-lg font-black text-emerald-700">{neuro.intensity}%</div>
+                       <span className="text-[9px] text-muted-foreground leading-tight">{neuro.indicators[0]}</span>
+                     </div>
+                   ))}
+                   {neuroAnalysis.neurochemicalProfile.length === 0 && (
+                     <div className="col-span-2 flex items-center justify-center h-full text-muted-foreground text-xs italic">
+                       Nenhuma assinatura neuroquímica dominante detectada.
+                     </div>
+                   )}
+                 </div>
+               </div>
+             </div>
+           )}
+ 
+           {/* Neuro-Recommendations */}
+           {neuroAnalysis && neuroAnalysis.recommendations.length > 0 && (
+             <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-4">
+               <h4 className="font-bold text-xs uppercase tracking-widest text-indigo-700 mb-3 flex items-center gap-2">
+                 <Sparkles className="h-4 w-4" /> Sugestões de Otimização Neuro-Persuasiva
+               </h4>
+               <div className="flex flex-wrap gap-2">
+                 {neuroAnalysis.recommendations.map((rec, idx) => (
+                   <div key={idx} className="flex items-center gap-2 bg-white/80 border border-indigo-200 rounded-full px-3 py-1.5 text-xs text-indigo-900 font-medium">
+                     <CheckCircle className="h-3 w-3 text-indigo-500" />
+                     {rec}
+                   </div>
+                 ))}
+               </div>
+             </div>
+           )}
+ 
   return (
     <div className="space-y-4">
       <div>
