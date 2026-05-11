@@ -8,9 +8,9 @@ import { Header } from '@/components/layout/Header';
    NLPMasteryScore,
    NLPEvolutionTimeline,
    NLPInsightsDashboard,
-   CommunicationCoherencePanel,
-   UnifiedScriptGenerator,
-   CopywritingSalesTools,
+    CommunicationCoherencePanel,
+    UnifiedScriptGenerator,
+    CopywritingSalesTools,
     NLPTrainingMode,
     PerceptualPositions,
     MetaProgramsProfiler,
@@ -21,7 +21,8 @@ import { Header } from '@/components/layout/Header';
     AnchorTrackingSystem,
     StateElicitationToolkit,
     SubmodalityModifier,
-    SwishPatternGenerator
+    SwishPatternGenerator,
+    NLPCalibrationCard
  } from '@/components/nlp';
   import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
    import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope, Fingerprint, Workflow, ListOrdered, RefreshCcw, Anchor, Zap, Focus, SwatchBook } from 'lucide-react';
@@ -112,7 +113,7 @@ const NLPAnalytics = () => {
              <NLPMasteryScore />
              
              <Tabs defaultValue="overview" className="w-full">
-                  <TabsList className="grid w-full grid-cols-11">
+                <TabsList className="grid w-full grid-cols-12">
                  <TabsTrigger value="overview" className="gap-2">
                    <Activity className="h-4 w-4" /> Geral
                  </TabsTrigger>
@@ -148,6 +149,9 @@ const NLPAnalytics = () => {
                    </TabsTrigger>
                    <TabsTrigger value="swish" title="Swish" className="p-2">
                      <SwatchBook className="h-4 w-4" />
+                   </TabsTrigger>
+                   <TabsTrigger value="calibration" title="Calibração" className="p-2">
+                     <Brain className="h-4 w-4" />
                    </TabsTrigger>
                    <TabsTrigger value="training" className="gap-2">
                      <GraduationCap className="h-4 w-4" /> Treino
@@ -220,6 +224,22 @@ const NLPAnalytics = () => {
                    ) : (
                      <Card className="p-12 text-center border-dashed">
                        <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para gerar Swish Patterns.</p>
+                     </Card>
+                   )}
+                 </TabsContent>
+ 
+                 <TabsContent value="calibration" className="mt-6">
+                   {selectedContact ? (
+                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                       <NLPCalibrationCard 
+                         contactId={selectedContact.id} 
+                         latestVAK={selectedContact.behavior?.vakProfile} 
+                       />
+                       <NLPInsightsDashboard contactId={selectedContact.id} />
+                     </div>
+                   ) : (
+                     <Card className="p-12 text-center border-dashed">
+                       <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para ver a calibração.</p>
                      </Card>
                    )}
                  </TabsContent>
