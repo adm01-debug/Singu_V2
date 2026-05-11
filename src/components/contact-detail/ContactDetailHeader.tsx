@@ -2,12 +2,12 @@ import { useState, useCallback } from 'react';
 import { DuplicateManagementPanel } from './DuplicateManagementPanel';
 import { SoftDeletePanel } from './SoftDeletePanel';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Mail, Phone, MessageSquare, Linkedin, Instagram, Twitter,
-  Building2, Briefcase, Calendar, Edit2, ExternalLink, Copy, Check,
-  MapPin, Globe, AlertTriangle, Trash2, Brain, Target, Shield, Bell,
-  ChevronRight, ArrowRight, Zap
-} from 'lucide-react';
+  import {
+    Mail, Phone, MessageSquare, Linkedin, Instagram, Twitter,
+    Building2, Briefcase, Calendar, Edit2, ExternalLink, Copy, Check,
+    MapPin, Globe, AlertTriangle, Trash2, Brain, Target, Shield, Bell,
+    ChevronRight, ArrowRight, Zap, FlaskConical
+  } from 'lucide-react';
 import { OptimizedAvatar } from '@/components/ui/optimized-avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -329,6 +329,10 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
                   Cadência: {view360.cadence_days}d
                 </Badge>
               )}
+              <Badge variant="secondary" className="text-[10px] gap-1 bg-purple-500/10 text-purple-600 border-purple-200">
+                <FlaskConical className="h-3 w-3" />
+                Neuromarketing: Límbico Dominante
+              </Badge>
             </div>
           )}
 
