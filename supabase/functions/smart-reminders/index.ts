@@ -89,46 +89,97 @@ Deno.serve(async (req) => {
       }
     }
 
-    // 2. Get Birthdays (today and next 7 days)
-    const { data: contacts, error: contactsError } = await supabaseClient
-      .from('contacts')
-      .select('id, first_name, last_name, birthday, relationship_score')
-      .eq('user_id', userId)
-      .not('birthday', 'is', null);
+   // 2. Get Life Events (Birthdays, Anniversaries, etc.)
+   // We combine legacy contact.birthday and the new life_events table
+   
+   // 2a. Legacy Contact Birthdays
+   const { data: contactsWithBirthday, error: birthdayError } = await supabaseClient
+     .from('contacts')
+     .select('id, first_name, last_name, birthday, relationship_score')
+     .eq('user_id', userId)
+     .not('birthday', 'is', null);
 
-    if (contactsError) {
-      console.error('Error fetching contacts:', contactsError);
-    } else if (contacts) {
-      for (const contact of contacts) {
-        if (!contact.birthday) continue;
-        const birthday = new Date(contact.birthday);
-        const birthMonth = birthday.getMonth() + 1;
-        const birthDay = birthday.getDate();
-        
-        for (let i = 0; i <= 7; i++) {
-          const checkDate = new Date(today);
-          checkDate.setDate(checkDate.getDate() + i);
-          if (birthday.getMonth() === checkDate.getMonth() && birthDay === checkDate.getDate()) {
-            const contactName = `${contact.first_name} ${contact.last_name}`;
-            reminders.push({
-              id: `birthday-${contact.id}`,
-              type: 'birthday',
-              priority: i <= 1 ? 'high' : 'medium',
-              title: i === 0 ? `🎂 Aniversário Hoje: ${contactName}` :
-                     i === 1 ? `🎂 Aniversário Amanhã: ${contactName}` :
-                     `🎂 Aniversário em ${i} dias: ${contactName}`,
-              description: i === 0 ? 'Não esqueça de enviar uma mensagem de parabéns!' :
-                `Prepare-se para parabenizar ${contact.first_name}!`,
-              contactId: contact.id,
-              contactName,
-              dueDate: checkDate.toISOString().split('T')[0],
-              metadata: { daysUntil: i, relationshipScore: contact.relationship_score }
-            });
-            break;
-          }
-        }
-      }
-    }
+   if (!birthdayError && contactsWithBirthday) {
+     for (const contact of contactsWithBirthday) {
+       if (!contact.birthday) continue;
+       const bday = new Date(contact.birthday);
+       const checkDate = new Date(today);
+       
+       for (let i = 0; i <= 7; i++) {
+         const currentCheck = new Date(checkDate);
+         if (bday.getMonth() === currentCheck.getMonth() && bday.getDate() === currentCheck.getDate()) {
+           const contactName = `${contact.first_name} ${contact.last_name}`;
+           reminders.push({
+             id: `legacy-bday-${contact.id}`,
+             type: 'birthday',
+             priority: i <= 1 ? 'high' : 'medium',
+             title: i === 0 ? `🎂 Aniversário Hoje: ${contactName}` : `🎂 Aniversário em breve: ${contactName}`,
+             description: i === 0 ? 'Envie os parabéns!' : `Aniversário em ${i} dias.`,
+             contactId: contact.id,
+             contactName,
+             dueDate: currentCheck.toISOString().split('T')[0],
+             metadata: { daysUntil: i, relationshipScore: contact.relationship_score }
+           });
+         }
+         checkDate.setDate(checkDate.getDate() + 1);
+       }
+     }
+   }
+
+   // 2b. Life Events Table (The "10/10" implementation)
+   const { data: lifeEvents, error: lifeEventsError } = await supabaseClient
+     .from('life_events')
+     .select(`
+       id, title, event_date, event_type, contact_id, recurring, reminder_days_before,
+       contacts:contact_id (first_name, last_name, relationship_score)
+     `)
+     .eq('user_id', userId);
+
+   if (!lifeEventsError && lifeEvents) {
+     for (const event of lifeEvents) {
+       const contactData = Array.isArray(event.contacts) ? event.contacts[0] : event.contacts;
+       if (!contactData) continue;
+       
+       const contactName = `${contactData.first_name} ${contactData.last_name}`;
+       const eventDate = new Date(event.event_date);
+       const reminderDays = event.reminder_days_before || 7;
+       
+       // Calculate next occurrence if recurring
+       let nextDate = new Date(eventDate);
+       if (event.recurring) {
+         nextDate.setFullYear(today.getFullYear());
+         if (nextDate < today) {
+           nextDate.setFullYear(today.getFullYear() + 1);
+         }
+       }
+
+       const diffMs = nextDate.getTime() - today.getTime();
+       const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+       if (diffDays >= 0 && diffDays <= reminderDays) {
+         const emojiMap: Record<string, string> = {
+           birthday: '🎂', anniversary: '💍', promotion: '📈', 
+           travel: '✈️', family: '👨‍👩‍👧‍👦', achievement: '🏆', other: '✨'
+         };
+         
+         reminders.push({
+           id: `life-event-${event.id}`,
+           type: 'milestone',
+           priority: diffDays <= 1 ? 'high' : (diffDays <= 3 ? 'medium' : 'low'),
+           title: `${emojiMap[event.event_type] || '📅'} ${event.title}: ${contactName}`,
+           description: diffDays === 0 ? 'Acontece hoje!' : `Em ${diffDays} dias.`,
+           contactId: event.contact_id,
+           contactName,
+           dueDate: nextDate.toISOString().split('T')[0],
+           metadata: { 
+             eventType: event.event_type, 
+             daysUntil: diffDays, 
+             relationshipScore: contactData.relationship_score 
+           }
+         });
+       }
+     }
+   }
 
     // 3. Detect Relationship Decay
     const { data: allContacts, error: allContactsError } = await supabaseClient
