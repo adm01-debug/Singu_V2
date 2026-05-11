@@ -1,5 +1,5 @@
-import { memo } from 'react';
-import { Brain } from 'lucide-react';
+ import { memo, useMemo } from 'react';
+ import { Brain, Eye, Ear, Hand, Info } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -17,9 +17,17 @@ const DISC_LABELS: Record<string, string> = {
   C: 'Conformista',
 };
 
-export const PerfilComportamentalCard = memo(({ profile }: Props) => {
-  const hasDisc = profile?.disc_primary;
-  const confidence = profile?.disc_confidence ?? 0;
+ export const PerfilComportamentalCard = memo(({ profile }: Props) => {
+   const hasDisc = profile?.disc_primary;
+   const confidence = profile?.disc_confidence ?? 0;
+ 
+   const vakIcon = useMemo(() => {
+     const vak = (profile as any)?.vak_dominant?.toLowerCase();
+     if (vak === 'visual') return <Eye className="h-3 w-3" />;
+     if (vak === 'auditivo') return <Ear className="h-3 w-3" />;
+     if (vak === 'cinestesico') return <Hand className="h-3 w-3" />;
+     return <Brain className="h-3 w-3" />;
+   }, [profile]);
 
   return (
     <Card>
@@ -62,23 +70,26 @@ export const PerfilComportamentalCard = memo(({ profile }: Props) => {
               <Progress value={confidence * 100} className="h-2" />
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-border/50">
-              <div>
-                <p className="text-xs text-muted-foreground">EQ Level</p>
-                <p className="text-sm font-medium">
-                  {profile?.eq_level ?? '—'}{' '}
-                  {profile?.eq_score != null && (
-                    <span className="text-muted-foreground">({profile.eq_score})</span>
-                  )}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Sentimento</p>
-                <p className="text-sm font-medium capitalize">
-                  {profile?.sentiment ?? '—'}
-                </p>
-              </div>
-            </div>
+             <div className="grid grid-cols-2 gap-3 pt-2 border-t border-border/50">
+               <div>
+                 <p className="text-xs text-muted-foreground">VAK Dominante</p>
+                 <div className="flex items-center gap-1.5 mt-0.5">
+                   {vakIcon}
+                   <p className="text-sm font-medium capitalize">
+                     {(profile as any)?.vak_dominant || 'Não analisado'}
+                   </p>
+                 </div>
+               </div>
+               <div>
+                 <p className="text-xs text-muted-foreground">Motivação</p>
+                 <div className="flex items-center gap-1.5 mt-0.5">
+                   <Info className="h-3 w-3 text-muted-foreground" />
+                   <p className="text-sm font-medium capitalize">
+                     {(profile as any)?.motivation_direction === 'toward' ? 'Ganhos' : (profile as any)?.motivation_direction === 'away_from' ? 'Riscos' : 'Equilibrado'}
+                   </p>
+                 </div>
+               </div>
+             </div>
           </div>
         )}
       </CardContent>

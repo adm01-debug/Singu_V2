@@ -12476,32 +12476,16 @@ export type Database = {
       }
       v_contact_behavior_audit: {
         Row: {
-          change_source: string | null
+          analysis_type: string | null
+          analyzed_text: string | null
           contact_id: string | null
-          field_name: string | null
           id: string | null
-          new_value: string | null
-          old_value: string | null
-          reason: string | null
+          is_validated: boolean | null
           timestamp: string | null
-          user_email: string | null
+          user_feedback: string | null
+          user_id: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "crm_relationship_audit_logs_contact_id_fkey"
-            columns: ["contact_id"]
-            isOneToOne: false
-            referencedRelation: "contacts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "crm_relationship_audit_logs_contact_id_fkey"
-            columns: ["contact_id"]
-            isOneToOne: false
-            referencedRelation: "vw_contacts_nlp"
-            referencedColumns: ["contact_id"]
-          },
-        ]
+        Relationships: []
       }
       v_contact_personality_audit: {
         Row: {

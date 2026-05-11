@@ -206,8 +206,9 @@ export function useMetaprogramAnalysis() {
           options_score: analysisResult.scores.options,
           procedures_score: analysisResult.scores.procedures,
           options_words: analysisResult.detectedWords.options,
-          procedures_words: analysisResult.detectedWords.procedures,
-          analyzed_text: analyzedText.substring(0, 1000)
+           procedures_words: analysisResult.detectedWords.procedures,
+           analyzed_text: analyzedText.substring(0, 1000),
+           is_validated: false
         })
         .select()
         .maybeSingle();
