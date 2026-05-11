@@ -227,11 +227,8 @@ const ContatoDetalhe = () => {
                   />
                 </div>
                 <RelationshipTimeline
+                  interactions={interactions}
                   contact={contact}
-                  company={company}
-                  insights={insights}
-                  alerts={alerts}
-                  interactionCount={interactions.length}
                 />
                 <RelationshipTimeline
                   interactions={interactions}
