@@ -185,14 +185,27 @@ ${interaction.content.slice(0, 12000)}`;
                    },
                    required: ["event_type", "title", "confidence"]
                  }
+               },
+               emotion_analysis: {
+                 type: "object",
+                 properties: {
+                   joy: { type: "number", description: "0-1" },
+                   fear: { type: "number", description: "0-1" },
+                   anger: { type: "number", description: "0-1" },
+                   sadness: { type: "number", description: "0-1" },
+                   confidence: { type: "number", description: "0-1" },
+                   hesitation: { type: "number", description: "0-1" },
+                   urgency: { type: "number", description: "0-1" }
+                 },
+                 required: ["joy", "fear", "anger", "sadness", "confidence", "hesitation", "urgency"]
                }
              },
-             required: ["talk_ratio_rep","talk_ratio_customer","sentiment_overall","topics","objections","action_items","coaching_score","coaching_tips","next_best_action"],
+             required: ["talk_ratio_rep","talk_ratio_customer","sentiment_overall","topics","objections","action_items","coaching_score","coaching_tips","next_best_action", "emotion_analysis"],
             additionalProperties: false,
-          },
-        },
-      }],
-      tool_choice: { type: "function", function: { name: "submit_conversation_analysis" } },
+           },
+         },
+       }],
+       tool_choice: { type: "function", function: { name: "submit_conversation_analysis" } },
     }),
   });
 
