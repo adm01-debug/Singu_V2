@@ -276,7 +276,7 @@ const NLPAnalytics = () => {
                     <div className="pt-2 border-t space-y-3">
                       <div>
                         <p className="font-bold text-primary mb-1">Padrão de Fechamento:</p>
-                        <p className="text-muted-foreground italic">"Baseado na sua preferência por {selectedContact.behavior?.vak || 'VAK'}, eu sugiro..."</p>
+                        <p className="text-muted-foreground italic">"Baseado na sua preferência por {selectedContact.behavior?.vakProfile?.primary || 'VAK'}, eu sugiro..."</p>
                       </div>
                       <div className="p-2 bg-success/10 rounded border border-success/20">
                         <p className="font-bold text-success text-[10px] uppercase">Predição de Rapport:</p>
