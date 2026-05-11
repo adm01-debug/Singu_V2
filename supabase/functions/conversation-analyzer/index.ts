@@ -155,10 +155,24 @@ ${interaction.content.slice(0, 12000)}`;
                 },
               },
               coaching_score: { type: "integer", minimum: 0, maximum: 100 },
-              coaching_tips: { type: "array", items: { type: "string" }, maxItems: 6 },
-              next_best_action: { type: "string" },
-            },
-            required: ["talk_ratio_rep","talk_ratio_customer","sentiment_overall","topics","objections","action_items","coaching_score","coaching_tips","next_best_action"],
+               coaching_tips: { type: "array", items: { type: "string" }, maxItems: 6 },
+               next_best_action: { type: "string" },
+               life_events_detected: {
+                 type: "array",
+                 items: {
+                   type: "object",
+                   properties: {
+                     event_type: { type: "string", enum: ["birthday", "anniversary", "promotion", "travel", "family", "achievement", "other"] },
+                     title: { type: "string" },
+                     description: { type: "string" },
+                     event_date: { type: "string", description: "ISO date if mentioned, otherwise null" },
+                     confidence: { type: "number" }
+                   },
+                   required: ["event_type", "title", "confidence"]
+                 }
+               }
+             },
+             required: ["talk_ratio_rep","talk_ratio_customer","sentiment_overall","topics","objections","action_items","coaching_score","coaching_tips","next_best_action"],
             additionalProperties: false,
           },
         },
@@ -209,10 +223,30 @@ ${interaction.content.slice(0, 12000)}`;
     .select("id")
     .single();
 
-  if (saveErr) {
-    console.error("Save error:", saveErr);
-    return jsonError("Falha ao persistir análise", 500, req);
-  }
+   if (saveErr) {
+     console.error("Save error:", saveErr);
+     return jsonError("Falha ao persistir análise", 500, req);
+   }
 
-  return jsonOk({ ok: true, id: saved.id, analysis }, req);
+   // Handle detected life events
+   if (analysis.life_events_detected && Array.isArray(analysis.life_events_detected)) {
+     const lifeEvents = analysis.life_events_detected.map((ev: any) => ({
+       user_id: userId,
+       contact_id: interaction.contact_id,
+       event_type: ev.event_type,
+       title: ev.title,
+       description: ev.description,
+       event_date: ev.event_date || null,
+       source_type: 'conversation',
+       confidence: ev.confidence,
+       status: 'pending',
+       metadata: { interaction_id: interactionId }
+     }));
+
+     if (lifeEvents.length > 0) {
+       await supabase.from('suggested_life_events').insert(lifeEvents);
+     }
+   }
+
+   return jsonOk({ ok: true, id: saved.id, analysis }, req);
 });
