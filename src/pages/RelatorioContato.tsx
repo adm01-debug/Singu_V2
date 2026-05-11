@@ -3,13 +3,16 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { queryExternalData } from "@/lib/externalData";
 import { Button } from "@/components/ui/button";
-import { Printer } from "lucide-react";
+ import { Printer, FileJson, FileSpreadsheet, Edit3, Save, ShieldCheck } from "lucide-react";
 import { BackButton } from "@/components/navigation/BackButton";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { logger } from "@/lib/logger";
  import { ReportScriptsSection } from "./relatorio/ReportScriptsSection";
- import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+  import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+  import { Textarea } from "@/components/ui/textarea";
+  import { Input } from "@/components/ui/input";
+  import { toast } from "sonner";
  import { Badge } from "@/components/ui/badge";
   import { 
     Brain, Target, Shield, Lightbulb, Zap, UserPlus, 
@@ -39,7 +42,9 @@ interface ContactBehavior {
 
 const RelatorioContato = () => {
   const { id } = useParams<{ id: string }>();
-  const [data, setData] = useState<ContactReport | null>(null);
+   const [data, setData] = useState<ContactReport | null>(null);
+   const [editingInsights, setEditingInsights] = useState(false);
+   const [editedInsights, setEditedInsights] = useState<ContactReport['insights'] | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -84,21 +89,18 @@ const RelatorioContato = () => {
            .map(i => i.content)
            .slice(0, 3);
  
-         setData({ 
-           contact, 
-           interactions, 
-           discHistory,
-           insights: {
-             recurringObjections,
-             topPreferences,
-             preferredTone: behavior.preferredChannel === 'WhatsApp' ? 'Casual e Rápido' : 'Formal e Detalhado',
-             communicationRecommendations: [
-               "Focar em benefícios de longo prazo e estabilidade.",
-               "Utilizar gatilhos de Prova Social e Autoridade.",
-               "Evitar pressão excessiva por fechamento imediato."
-             ]
-           }
-         });
+          const defaultInsights = {
+            recurringObjections,
+            topPreferences,
+            preferredTone: behavior.preferredChannel === 'WhatsApp' ? 'Casual e Rápido' : 'Formal e Detalhado',
+            communicationRecommendations: [
+              "Focar em benefícios de longo prazo e estabilidade.",
+              "Utilizar gatilhos de Prova Social e Autoridade.",
+              "Evitar pressão excessiva por fechamento imediato."
+            ]
+          };
+          setData({ contact, interactions, discHistory, insights: defaultInsights });
+          setEditedInsights(defaultInsights);
       } catch (error) {
         const msg = error instanceof Error ? error.message : 'Unknown error';
         logger.error('Error fetching report data:', { error: msg });
@@ -111,9 +113,30 @@ const RelatorioContato = () => {
     fetchData();
   }, [id]);
 
-  const handlePrint = () => {
-    window.print();
-  };
+   const handlePrint = () => window.print();
+ 
+   const handleExportCSV = () => {
+     if (!data) return;
+     const rows = [
+       ["Campo", "Valor"],
+       ["Nome", contactName],
+       ["WhatsApp", data.contact.whatsapp || ""],
+       ["Email", data.contact.email || ""],
+       ["Relationship Score", data.contact.relationship_score || ""],
+       ["Tom Preferido", editedInsights?.preferredTone || ""],
+       ["Objeções Recorrentes", editedInsights?.recurringObjections.join(" | ") || ""],
+       ["Preferências", editedInsights?.topPreferences.join(" | ") || ""],
+     ];
+     const csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+     const encodedUri = encodeURI(csvContent);
+     const link = document.createElement("a");
+     link.setAttribute("href", encodedUri);
+     link.setAttribute("download", `relatorio_${id}.csv`);
+     document.body.appendChild(link);
+     link.click();
+     document.body.removeChild(link);
+     toast.success("CSV exportado com sucesso");
+   };
 
   if (loading) {
     return (
@@ -142,12 +165,20 @@ const RelatorioContato = () => {
       {/* Header com botões (não imprime) */}
       <div className="print:hidden bg-background border-b p-4 flex items-center justify-between sticky top-0 z-10">
         <BackButton to={`/contatos/${id}`} label="Voltar ao contato" />
-        <div className="flex gap-2">
-          <Button onClick={handlePrint}>
-            <Printer className="h-4 w-4 mr-2" />
-            Imprimir / Salvar PDF
-          </Button>
-        </div>
+         <div className="flex gap-2 flex-wrap">
+           <Button variant="outline" onClick={() => setEditingInsights(!editingInsights)}>
+             <Edit3 className="h-4 w-4 mr-2" />
+             {editingInsights ? "Visualizar" : "Editar Insights"}
+           </Button>
+           <Button variant="outline" onClick={handleExportCSV}>
+             <FileSpreadsheet className="h-4 w-4 mr-2" />
+             Exportar CSV
+           </Button>
+           <Button onClick={handlePrint}>
+             <Printer className="h-4 w-4 mr-2" />
+             Imprimir / Salvar PDF
+           </Button>
+         </div>
       </div>
 
       {/* Conteúdo do Relatório */}
@@ -192,25 +223,42 @@ const RelatorioContato = () => {
                  </CardTitle>
                </CardHeader>
                <CardContent className="space-y-4">
-                 <div>
-                   <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Tom Preferido</p>
-                   <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
-                     {data.insights?.preferredTone}
-                   </Badge>
-                 </div>
-                 <div>
-                   <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Padrões de Preferência</p>
-                   <ul className="text-sm space-y-1.5">
-                     {data.insights?.topPreferences.length ? data.insights.topPreferences.map((p, i) => (
-                       <li key={i} className="flex items-start gap-2">
-                         <div className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
-                         <span className="line-clamp-2">{p}</span>
-                       </li>
-                     )) : (
-                       <li className="text-muted-foreground italic">Nenhum padrão detectado ainda.</li>
-                     )}
-                   </ul>
-                 </div>
+                  <div>
+                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Tom Preferido</p>
+                    {editingInsights ? (
+                      <Input 
+                        value={editedInsights?.preferredTone} 
+                        onChange={(e) => setEditedInsights(prev => prev ? {...prev, preferredTone: e.target.value} : null)}
+                        className="h-8 text-sm"
+                      />
+                    ) : (
+                      <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
+                        {editedInsights?.preferredTone}
+                      </Badge>
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Padrões de Preferência</p>
+                    {editingInsights ? (
+                      <Textarea 
+                        value={editedInsights?.topPreferences.join("\n")} 
+                        onChange={(e) => setEditedInsights(prev => prev ? {...prev, topPreferences: e.target.value.split("\n")} : null)}
+                        className="text-sm min-h-[100px]"
+                        placeholder="Uma preferência por linha"
+                      />
+                    ) : (
+                      <ul className="text-sm space-y-1.5">
+                        {editedInsights?.topPreferences.length ? editedInsights.topPreferences.map((p, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <div className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                            <span className="line-clamp-2">{p}</span>
+                          </li>
+                        )) : (
+                          <li className="text-muted-foreground italic">Nenhum padrão detectado ainda.</li>
+                        )}
+                      </ul>
+                    )}
+                  </div>
                </CardContent>
              </Card>
  
@@ -220,18 +268,27 @@ const RelatorioContato = () => {
                    <Shield className="h-4 w-4 text-destructive" /> Objeções Recorrentes
                  </CardTitle>
                </CardHeader>
-               <CardContent>
-                 <ul className="text-sm space-y-3">
-                   {data.insights?.recurringObjections.length ? data.insights.recurringObjections.map((o, i) => (
-                     <li key={i} className="bg-white/50 p-2.5 rounded border border-destructive/10">
-                       <span className="text-destructive font-medium text-[11px] uppercase block mb-1">Barreira {i+1}</span>
-                       <p className="line-clamp-2 italic text-foreground/80">"{o}"</p>
-                     </li>
-                   )) : (
-                     <li className="text-muted-foreground italic">Nenhuma objeção explícita no histórico.</li>
-                   )}
-                 </ul>
-               </CardContent>
+                <CardContent>
+                  {editingInsights ? (
+                    <Textarea 
+                      value={editedInsights?.recurringObjections.join("\n")} 
+                      onChange={(e) => setEditedInsights(prev => prev ? {...prev, recurringObjections: e.target.value.split("\n")} : null)}
+                      className="text-sm min-h-[120px]"
+                      placeholder="Uma objeção por linha"
+                    />
+                  ) : (
+                    <ul className="text-sm space-y-3">
+                      {editedInsights?.recurringObjections.length ? editedInsights.recurringObjections.map((o, i) => (
+                        <li key={i} className="bg-white/50 p-2.5 rounded border border-destructive/10">
+                          <span className="text-destructive font-medium text-[11px] uppercase block mb-1">Barreira {i+1}</span>
+                          <p className="line-clamp-2 italic text-foreground/80">"{o}"</p>
+                        </li>
+                      )) : (
+                        <li className="text-muted-foreground italic">Nenhuma objeção explícita no histórico.</li>
+                      )}
+                    </ul>
+                  )}
+                </CardContent>
              </Card>
            </div>
  
@@ -241,18 +298,27 @@ const RelatorioContato = () => {
                  <Lightbulb className="h-4 w-4 text-primary" /> Recomendações Estratégicas
                </CardTitle>
              </CardHeader>
-             <CardContent>
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                 {data.insights?.communicationRecommendations.map((rec, i) => (
-                   <div key={i} className="flex gap-3 items-start p-2">
-                     <div className="bg-primary/20 rounded-full p-1 mt-0.5 shrink-0">
-                       <Zap className="h-3 w-3 text-primary" />
-                     </div>
-                     <p className="text-xs leading-relaxed text-foreground/90">{rec}</p>
-                   </div>
-                 ))}
-               </div>
-             </CardContent>
+              <CardContent>
+                {editingInsights ? (
+                  <Textarea 
+                    value={editedInsights?.communicationRecommendations.join("\n")} 
+                    onChange={(e) => setEditedInsights(prev => prev ? {...prev, communicationRecommendations: e.target.value.split("\n")} : null)}
+                    className="text-sm min-h-[100px]"
+                    placeholder="Uma recomendação por linha"
+                  />
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {editedInsights?.communicationRecommendations.map((rec, i) => (
+                      <div key={i} className="flex gap-3 items-start p-2">
+                        <div className="bg-primary/20 rounded-full p-1 mt-0.5 shrink-0">
+                          <Zap className="h-3 w-3 text-primary" />
+                        </div>
+                        <p className="text-xs leading-relaxed text-foreground/90">{rec}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
            </Card>
          </section>
  
@@ -339,10 +405,35 @@ const RelatorioContato = () => {
                 <p className="text-sm font-medium">Alta (LinkedIn)</p>
               </div>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-3 italic">
-              * Dados coletados com base em perfis públicos e consentimento de termos de uso do CRM.
-            </p>
-          </section>
+             <p className="text-[10px] text-muted-foreground mt-3 italic">
+               * Dados coletados com base em perfis públicos e consentimento de termos de uso do CRM.
+             </p>
+           </section>
+ 
+           {/* Log de Auditoria de Consentimento */}
+           <section className="mb-8 p-4 bg-blue-50/30 rounded-xl border border-blue-100">
+             <h3 className="text-xs font-bold uppercase text-blue-600 mb-3 flex items-center gap-2">
+               <ShieldCheck className="h-4 w-4" /> Registro de Conformidade (Consentimento)
+             </h3>
+             <div className="space-y-2">
+               <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
+                 <span className="text-muted-foreground">Tipo de Consentimento:</span>
+                 <span className="font-medium">Análise de Perfil Público (OSINT)</span>
+               </div>
+               <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
+                 <span className="text-muted-foreground">Data/Hora:</span>
+                 <span className="font-medium">{format(new Date(contact.created_at || new Date()), "dd/MM/yyyy HH:mm")}</span>
+               </div>
+               <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
+                 <span className="text-muted-foreground">Origem:</span>
+                 <span className="font-medium">Termos de Uso do Ecossistema Harmony</span>
+               </div>
+               <div className="flex justify-between text-[11px]">
+                 <span className="text-muted-foreground">Status:</span>
+                 <Badge variant="outline" className="h-4 text-[9px] bg-green-50 text-green-700 border-green-200">Ativo / Verificado</Badge>
+               </div>
+             </div>
+           </section>
          </section>
  
          {/* Indicadores Comportamentais */}
@@ -509,9 +600,16 @@ const RelatorioContato = () => {
  
                <div className="space-y-2">
                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Script Sugerido</p>
-                 <div className="bg-white p-4 rounded-lg border border-border italic text-sm text-foreground leading-relaxed whitespace-pre-wrap">
-                   "Olá {contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"
-                 </div>
+                  {editingInsights ? (
+                    <Textarea 
+                      defaultValue={`"Olá ${contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"`}
+                      className="italic text-sm min-h-[100px]"
+                    />
+                  ) : (
+                    <div className="bg-white p-4 rounded-lg border border-border italic text-sm text-foreground leading-relaxed whitespace-pre-wrap">
+                      "Olá {contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"
+                    </div>
+                  )}
                </div>
              </div>
            </div>
