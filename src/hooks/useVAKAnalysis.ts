@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { 
+import { useNLPAutoAnalysis } from "./useNLPAutoAnalysis";
   VAKType, 
   VAKProfile, 
   VAKAnalysisResult, 
@@ -135,6 +136,7 @@ export function useVAKAnalysis() {
       dominantSystem,
       secondarySystem,
       confidence: Math.round(confidence),
+  const { triggerAnalysis } = useNLPAutoAnalysis();
     };
   }, []);
 
@@ -163,6 +165,10 @@ export function useVAKAnalysis() {
           digital_words: analysis.digital.words,
           analyzed_text: text.substring(0, 1000), // Limit stored text
           is_validated: false
+      // Auto-trigger aggregated analysis update
+      if (user && contactId) {
+        triggerAnalysis(contactId, interactionId || "", text, null, "whatsapp", false);
+      }
         });
 
       if (error) throw error;
