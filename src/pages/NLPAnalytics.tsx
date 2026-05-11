@@ -231,9 +231,16 @@ const NLPAnalytics = () => {
                  <TabsContent value="calibration" className="mt-6">
                    {selectedContact ? (
                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                       <NLPCalibrationCard 
-                         contactId={selectedContact.id} 
-                         latestVAK={selectedContact.behavior?.vakProfile} 
+                       <NLPCalibrationCard
+                         contactId={selectedContact.id}
+                         latestVAK={selectedContact.behavior?.vakProfile ? {
+                           visual: selectedContact.behavior.vakProfile.visual || 0,
+                           auditory: selectedContact.behavior.vakProfile.auditory || 0,
+                           kinesthetic: selectedContact.behavior.vakProfile.kinesthetic || 0,
+                           digital: 0,
+                           dominant: selectedContact.behavior.vakProfile.primary || 'V',
+                           words: []
+                         } : undefined}
                        />
                        <NLPInsightsDashboard contactId={selectedContact.id} />
                      </div>
