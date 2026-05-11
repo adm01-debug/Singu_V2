@@ -2962,10 +2962,13 @@ export type Database = {
       }
       contacts: {
         Row: {
+          action_filter: string | null
           avatar_url: string | null
           behavior: Json | null
           birthday: string | null
+          chunk_size: string | null
           company_id: string | null
+          comparison_style: string | null
           created_at: string
           email: string | null
           external_id: string | null
@@ -2980,11 +2983,13 @@ export type Database = {
           last_name: string
           life_events: Json | null
           linkedin: string | null
+          most_frequent_objection: string | null
           motivation_direction: string | null
           notes: string | null
           personal_notes: string | null
           phone: string | null
           rapport_metadata: Json | null
+          reference_frame: string | null
           relationship_score: number | null
           relationship_stage: string | null
           role: string | null
@@ -3000,10 +3005,13 @@ export type Database = {
           working_style: string | null
         }
         Insert: {
+          action_filter?: string | null
           avatar_url?: string | null
           behavior?: Json | null
           birthday?: string | null
+          chunk_size?: string | null
           company_id?: string | null
+          comparison_style?: string | null
           created_at?: string
           email?: string | null
           external_id?: string | null
@@ -3018,11 +3026,13 @@ export type Database = {
           last_name: string
           life_events?: Json | null
           linkedin?: string | null
+          most_frequent_objection?: string | null
           motivation_direction?: string | null
           notes?: string | null
           personal_notes?: string | null
           phone?: string | null
           rapport_metadata?: Json | null
+          reference_frame?: string | null
           relationship_score?: number | null
           relationship_stage?: string | null
           role?: string | null
@@ -3038,10 +3048,13 @@ export type Database = {
           working_style?: string | null
         }
         Update: {
+          action_filter?: string | null
           avatar_url?: string | null
           behavior?: Json | null
           birthday?: string | null
+          chunk_size?: string | null
           company_id?: string | null
+          comparison_style?: string | null
           created_at?: string
           email?: string | null
           external_id?: string | null
@@ -3056,11 +3069,13 @@ export type Database = {
           last_name?: string
           life_events?: Json | null
           linkedin?: string | null
+          most_frequent_objection?: string | null
           motivation_direction?: string | null
           notes?: string | null
           personal_notes?: string | null
           phone?: string | null
           rapport_metadata?: Json | null
+          reference_frame?: string | null
           relationship_score?: number | null
           relationship_stage?: string | null
           role?: string | null
