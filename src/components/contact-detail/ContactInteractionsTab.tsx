@@ -97,13 +97,26 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
  
        // Trigger AI Analysis if content is sufficient
        if (insertData.content && insertData.content.length >= 80) {
-         toast.info('IA analisando conversa...', { duration: 3000 });
-         supabase.functions.invoke('conversation-analyzer', {
-           body: { interaction_id: interaction.id }
-         }).then(({ error: aiError }) => {
-           if (!aiError) {
-             toast.success('Análise de IA concluída');
+         toast.info('IA analisando conversa e comportamento...', { duration: 3000 });
+         
+         // Call both analysis functions
+         Promise.all([
+           supabase.functions.invoke('conversation-analyzer', {
+             body: { interaction_id: interaction.id }
+           }),
+           supabase.functions.invoke('disc-analyzer', {
+             body: { 
+               texts: [insertData.content], 
+               contactId: contact.id,
+               interactionId: interaction.id 
+             }
+           })
+         ]).then(([convRes, discRes]) => {
+           if (!convRes.error && !discRes.error) {
+             toast.success('Análises de IA e comportamental concluídas');
              onInteractionAdded?.();
+           } else if (convRes.error || discRes.error) {
+             logger.error('AI Analysis partial failure', { conv: convRes.error, disc: discRes.error });
            }
          });
        }
