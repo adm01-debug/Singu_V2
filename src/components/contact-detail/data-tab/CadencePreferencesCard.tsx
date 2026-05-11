@@ -343,12 +343,32 @@ export const CadencePreferencesCard = memo(function CadencePreferencesCard({ cad
                     </div>
                   </div>
                 )}
-                {preferences.restrictions && (
-                  <div>
-                    <span className="text-xs text-muted-foreground">Restrições</span>
-                    <p className="text-xs text-foreground">{preferences.restrictions}</p>
-                  </div>
-                )}
+                 {preferences.preferred_times && preferences.preferred_times.length > 0 && (
+                   <div>
+                     <span className="text-xs text-muted-foreground">Horários preferidos</span>
+                     <div className="mt-0.5 flex gap-1 flex-wrap">
+                       {preferences.preferred_times.map(t => (
+                         <Badge key={t} variant="secondary" className="text-[10px]">{t}</Badge>
+                       ))}
+                     </div>
+                   </div>
+                 )}
+                 {preferences.avoid_times && preferences.avoid_times.length > 0 && (
+                   <div>
+                     <span className="text-xs text-muted-foreground">Horários a evitar</span>
+                     <div className="mt-0.5 flex gap-1 flex-wrap">
+                       {preferences.avoid_times.map(t => (
+                         <Badge key={t} variant="outline" className="text-[10px] border-destructive/30 text-destructive">{t}</Badge>
+                       ))}
+                     </div>
+                   </div>
+                 )}
+                 {preferences.restrictions && (
+                   <div>
+                     <span className="text-xs text-muted-foreground">Restrições</span>
+                     <p className="text-xs text-foreground">{preferences.restrictions}</p>
+                   </div>
+                 )}
                 {preferences.communication_tips && (
                   <div>
                     <span className="text-xs text-muted-foreground">Dicas de comunicação</span>
