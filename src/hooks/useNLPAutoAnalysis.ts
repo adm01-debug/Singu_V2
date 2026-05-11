@@ -12,6 +12,8 @@ import { useEmotionalStates } from './useEmotionalStates';
 import { toast } from 'sonner';
 import { logger } from "@/lib/logger";
 
+import { SLEIGHT_TEMPLATES } from '@/data/sleightOfMouth';
+
 interface NLPAnalysisResult {
   vak: {
     primary: string | null;
@@ -107,7 +109,23 @@ export function useNLPAutoAnalysis() {
 
       if (emotionalInsertError) throw emotionalInsertError;
 
-      // 4. Calculate overall confidence
+      // 4. Update the contact record with aggregated behavioral data
+      const mostFrequentObjection = SLEIGHT_TEMPLATES.find(t => 
+        text.toLowerCase().includes(t.objection.toLowerCase().substring(0, 15))
+      )?.objectionCategory;
+
+      await supabase.from('contacts').update({
+        vak_dominant: vakResult.dominantSystem,
+        motivation_direction: metaResult.scores.toward >= metaResult.scores.awayFrom ? 'toward' : 'away_from',
+        working_style: metaResult.scores.options >= metaResult.scores.procedures ? 'options' : 'procedures',
+        reference_frame: metaResult.scores.internal >= metaResult.scores.external ? 'internal' : 'external',
+        chunk_size: metaResult.scores.general >= metaResult.scores.specific ? 'general' : 'specific',
+        action_filter: metaResult.scores.proactive >= metaResult.scores.reactive ? 'proactive' : 'reactive',
+        comparison_style: metaResult.scores.sameness >= metaResult.scores.difference ? 'sameness' : 'difference',
+        ...(mostFrequentObjection && { most_frequent_objection: mostFrequentObjection })
+      }).eq('id', contactId);
+
+      // 5. Calculate overall confidence
       const overallConfidence = Math.round(
         (vakResult.confidence + emotionalResult.confidence + 50) / 3
       );

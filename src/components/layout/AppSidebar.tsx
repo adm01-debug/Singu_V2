@@ -38,6 +38,7 @@ const navSections = [
       { title: "Intelligence", url: "/intelligence", icon: Activity },
       { title: "Auditoria IA", url: "/intelligence/auditoria", icon: Shield },
       { title: "Insights", url: "/insights", icon: Lightbulb },
+      { title: "Análise PNL", url: "/nlp-analytics", icon: Brain },
       { title: "Analytics", url: "/analytics", icon: BarChart3 },
       { title: "Performance", url: "/performance", icon: Zap },
       { title: "BI Avançado", url: "/bi", icon: BrainCircuit },

@@ -77,6 +77,7 @@ export const AppRoutes = () => {
       <Route path="/inbox" element={<Protected><P.Inbox /></Protected>} />
       <Route path="/pipeline" element={<Protected><P.PipelinePage /></Protected>} />
       <Route path="/insights" element={<Protected fallback={<InsightsPageSkeleton />}><P.Insights /></Protected>} />
+      <Route path="/nlp-analytics" element={<Protected fallback={<AnalyticsPageSkeleton />}><P.NLPAnalytics /></Protected>} />
       <Route path="/analytics" element={<Protected fallback={<AnalyticsPageSkeleton />}><P.Analytics /></Protected>} />
       <Route path="/configuracoes" element={<Protected fallback={<SettingsPageSkeleton />}><P.Configuracoes /></Protected>} />
       <Route path="/calendario" element={<Protected fallback={<CalendarPageSkeleton />}><P.Calendario /></Protected>} />

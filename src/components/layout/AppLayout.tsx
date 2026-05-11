@@ -47,6 +47,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/calendario': 'Calendário',
   '/network': 'Network',
   '/insights': 'Insights',
+  '/nlp-analytics': 'Análise PNL',
   '/analytics': 'Analytics',
   '/mapa-empresas': 'Mapa',
   '/automacoes': 'Automações',

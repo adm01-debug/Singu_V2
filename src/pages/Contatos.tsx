@@ -54,12 +54,30 @@ const filterConfigs = [
      { value: 'K', label: 'Cinestésico' },
      { value: 'D', label: 'Auditivo Digital' }
    ] },
-   { key: 'motivation_direction', label: 'Motivação', multiple: true, options: [
-     { value: 'toward', label: 'Em Direção A' },
-     { value: 'away_from', label: 'Afastar-se De' },
-     { value: 'balanced', label: 'Equilibrado' }
-   ] },
-   { key: 'hobbies', label: 'Hobbies', multiple: true, options: [] },
+    { key: 'motivation_direction', label: 'Motivação', multiple: true, options: [
+      { value: 'toward', label: 'Em Direção A (Ganhos)' },
+      { value: 'away_from', label: 'Afastar-se De (Riscos)' },
+      { value: 'balanced', label: 'Equilibrado' }
+    ] },
+    { key: 'working_style', label: 'Estilo de Trabalho', multiple: true, options: [
+      { value: 'options', label: 'Opções (Criativo)' },
+      { value: 'procedures', label: 'Procedimentos (Metódico)' },
+      { value: 'balanced', label: 'Equilibrado' }
+    ] },
+    { key: 'reference_frame', label: 'Referência', multiple: true, options: [
+      { value: 'internal', label: 'Interna (Decide Só)' },
+      { value: 'external', label: 'Externa (Busca Feedback)' },
+      { value: 'balanced', label: 'Equilibrado' }
+    ] },
+    { key: 'most_frequent_objection', label: 'Objeção Comum', multiple: true, options: [
+      { value: 'price', label: 'Preço' },
+      { value: 'timing', label: 'Momento' },
+      { value: 'trust', label: 'Confiança' },
+      { value: 'need', label: 'Necessidade' },
+      { value: 'authority', label: 'Autoridade' },
+      { value: 'competition', label: 'Concorrência' }
+    ] },
+    { key: 'hobbies', label: 'Hobbies', multiple: true, options: [] },
    { key: 'interests', label: 'Interesses', multiple: true, options: [] },
 ];
 
