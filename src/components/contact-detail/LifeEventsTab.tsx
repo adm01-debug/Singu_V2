@@ -387,7 +387,14 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                    <CardDescription>Identificação de lacunas de dados.</CardDescription>
                  </CardHeader>
                  <CardContent>
-                   <LifeEventsGapChecklist lifeEvents={lifeEvents} />
+                  <LifeEventsGapChecklist 
+                    lifeEvents={lifeEvents} 
+                    onAddGap={(type) => {
+                      resetForm();
+                      setNewEvent(prev => ({ ...prev, event_type: type as any }));
+                      setIsDialogOpen(true);
+                    }} 
+                  />
                  </CardContent>
                </Card>
              </div>
