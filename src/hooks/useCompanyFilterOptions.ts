@@ -5,6 +5,8 @@ import { useExternalBatchLookup } from '@/hooks/useExternalLookup';
 
 const MAX_LOOKUP_OPTIONS = 60;
 
+ import { Brain, Target, Zap } from 'lucide-react';
+ 
 const LOOKUP_COLUMNS = [
   'ramo_atividade',
   'nicho_cliente',
@@ -217,15 +219,36 @@ export function useCompanyFilterOptions(options?: { enabled?: boolean }) {
           { value: 'false', label: 'Não', icon: Truck },
         ],
       },
-      {
-        key: 'is_matriz',
-        label: 'Estrutura',
-        multiple: false,
-        options: [
-          { value: 'true', label: 'Matriz', icon: Landmark },
-          { value: 'false', label: 'Filial', icon: Building2 },
-        ],
-      },
+       {
+         key: 'is_matriz',
+         label: 'Estrutura',
+         multiple: false,
+         options: [
+           { value: 'true', label: 'Matriz', icon: Landmark },
+           { value: 'false', label: 'Filial', icon: Building2 },
+         ],
+       },
+       {
+         key: 'vak_dominant',
+         label: 'VAK Dominante',
+         multiple: true,
+         options: [
+           { value: 'V', label: 'Visual' },
+           { value: 'A', label: 'Auditivo' },
+           { value: 'K', label: 'Cinestésico' },
+           { value: 'D', label: 'Auditivo Digital' }
+         ],
+       },
+       {
+         key: 'motivation_direction',
+         label: 'Motivação',
+         multiple: true,
+         options: [
+           { value: 'toward', label: 'Em Direção A', icon: Target },
+           { value: 'away_from', label: 'Afastar-se De', icon: Zap },
+           { value: 'balanced', label: 'Equilibrado', icon: Brain }
+         ],
+       },
     ];
 
     return filters.filter((filter) => filter.options.length > 0);
