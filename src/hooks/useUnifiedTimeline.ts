@@ -39,7 +39,7 @@ export function useUnifiedTimeline(contactId: string) {
   });
 
   // Fetch CRM Alerts
-  const { data: crmAlerts, isLoading: alertsLoading } = useQuery({
+   const { data: crmAlerts, isLoading: alertsLoading } = useQuery({
     queryKey: ['crm-alerts', contactId],
     queryFn: async () => {
       const { data } = await supabase
@@ -52,7 +52,20 @@ export function useUnifiedTimeline(contactId: string) {
     enabled: !!user && !!contactId,
   });
 
-  const unifiedEvents = useMemo(() => {
+   const { data: neuroHistory } = useQuery({
+     queryKey: ['neuro-history-timeline', contactId],
+     queryFn: async () => {
+       const { data } = await supabase
+         .from('neuro_behavioral_history')
+         .select('*')
+         .eq('contact_id', contactId)
+         .order('created_at', { ascending: false });
+       return data || [];
+     },
+     enabled: !!contactId
+   });
+ 
+   const unifiedEvents = useMemo(() => {
     const events: UnifiedTimelineEvent[] = [];
 
     // Map Interactions
@@ -125,7 +138,22 @@ export function useUnifiedTimeline(contactId: string) {
     });
 
     // Map CRM Alerts
-    (crmAlerts || []).forEach((alert) => {
+     (crmAlerts || []).forEach((alert) => {
+     // Map Neuro Updates
+     (neuroHistory || []).forEach((nh) => {
+       events.push({
+         id: nh.id,
+         type: 'neuro_update',
+         title: 'Evolução de Neuromarketing',
+         content: `Análise neurocomportamental registrada. Empatia: ${nh.empathy_score}/100.`,
+         timestamp: nh.created_at,
+         metadata: {
+           dominance: nh.dominance_data,
+           empathy: nh.empathy_score,
+         },
+       });
+     });
+ 
       events.push({
         id: alert.id,
         type: 'alert',
