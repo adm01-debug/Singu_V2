@@ -2076,6 +2076,57 @@ export type Database = {
           },
         ]
       }
+      contact_automation_settings: {
+        Row: {
+          contact_id: string
+          created_at: string | null
+          delay_hours: number | null
+          escalation_enabled: boolean | null
+          escalation_role: string | null
+          id: string
+          reminder_enabled: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string | null
+          delay_hours?: number | null
+          escalation_enabled?: boolean | null
+          escalation_role?: string | null
+          id?: string
+          reminder_enabled?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string | null
+          delay_hours?: number | null
+          escalation_enabled?: boolean | null
+          escalation_role?: string | null
+          id?: string
+          reminder_enabled?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_automation_settings_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: true
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_automation_settings_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: true
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
       contact_behavior: {
         Row: {
           best_contact_window: string | null
@@ -2523,6 +2574,8 @@ export type Database = {
         Row: {
           action: string
           channel: string
+          completed_at: string | null
+          completion_notes: string | null
           contact_id: string
           created_at: string
           expected_outcome: string | null
@@ -2532,6 +2585,7 @@ export type Database = {
           reason: string
           script_context: Json | null
           signals_snapshot: Json
+          status: string | null
           suggested_date: string | null
           suggested_script: string | null
           updated_at: string
@@ -2541,6 +2595,8 @@ export type Database = {
         Insert: {
           action: string
           channel: string
+          completed_at?: string | null
+          completion_notes?: string | null
           contact_id: string
           created_at?: string
           expected_outcome?: string | null
@@ -2550,6 +2606,7 @@ export type Database = {
           reason: string
           script_context?: Json | null
           signals_snapshot?: Json
+          status?: string | null
           suggested_date?: string | null
           suggested_script?: string | null
           updated_at?: string
@@ -2559,6 +2616,8 @@ export type Database = {
         Update: {
           action?: string
           channel?: string
+          completed_at?: string | null
+          completion_notes?: string | null
           contact_id?: string
           created_at?: string
           expected_outcome?: string | null
@@ -2568,6 +2627,7 @@ export type Database = {
           reason?: string
           script_context?: Json | null
           signals_snapshot?: Json
+          status?: string | null
           suggested_date?: string | null
           suggested_script?: string | null
           updated_at?: string
