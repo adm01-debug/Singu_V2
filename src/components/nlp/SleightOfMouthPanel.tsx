@@ -57,9 +57,13 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
         query = query.eq('interaction_id', interactionId);
       }
 
-      const { data, error } = await query;
+      const { data, error } = await query.select('*, contacts(first_name, last_name)');
       if (error) throw error;
-      return data as ReframingItem[];
+      return (data || []).map(item => ({
+        ...item,
+        suggested_response: item.suggested_response
+          .replace(/{nome}/g, (item as any).contacts?.first_name || 'Fulano')
+      })) as ReframingItem[];
     },
     enabled: !!user && !!contactId,
   });

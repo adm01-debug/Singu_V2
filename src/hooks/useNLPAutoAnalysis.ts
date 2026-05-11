@@ -109,12 +109,12 @@ export function useNLPAutoAnalysis() {
 
       if (emotionalInsertError) throw emotionalInsertError;
 
-      // 4. Update the contact record with aggregated behavioral data
+      // 4. Update the contact record and related company with aggregated behavioral data
       const mostFrequentObjection = SLEIGHT_TEMPLATES.find(t => 
         text.toLowerCase().includes(t.objection.toLowerCase().substring(0, 15))
       )?.objectionCategory;
 
-      await supabase.from('contacts').update({
+      const behavioralUpdates = {
         vak_dominant: vakResult.dominantSystem,
         motivation_direction: metaResult.scores.toward >= metaResult.scores.awayFrom ? 'toward' : 'away_from',
         working_style: metaResult.scores.options >= metaResult.scores.procedures ? 'options' : 'procedures',
@@ -123,7 +123,19 @@ export function useNLPAutoAnalysis() {
         action_filter: metaResult.scores.proactive >= metaResult.scores.reactive ? 'proactive' : 'reactive',
         comparison_style: metaResult.scores.sameness >= metaResult.scores.difference ? 'sameness' : 'difference',
         ...(mostFrequentObjection && { most_frequent_objection: mostFrequentObjection })
-      }).eq('id', contactId);
+      };
+
+      const { data: contactData } = await supabase
+        .from('contacts')
+        .update(behavioralUpdates)
+        .eq('id', contactId)
+        .select('company_id')
+        .single();
+
+      // Sync to company if linked
+      if (contactData?.company_id) {
+        await supabase.from('companies').update(behavioralUpdates).eq('id', contactData.company_id);
+      }
 
       // 5. Calculate overall confidence
       const overallConfidence = Math.round(
