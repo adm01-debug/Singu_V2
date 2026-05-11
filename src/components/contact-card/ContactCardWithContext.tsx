@@ -23,8 +23,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+   DropdownMenuTrigger,
+ } from '@/components/ui/dropdown-menu';
+ import { VAK_LABELS, type VAKType } from '@/types/vak';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import type { Contact } from '@/hooks/useContacts';
@@ -116,7 +117,10 @@ function ContactCardWithContextImpl({
     }
   };
 
-  const displayName = formatContactName(contact.first_name, contact.last_name);
+   const displayName = formatContactName(contact.first_name, contact.last_name);
+   const vakProfile = (contact.behavior as any)?.vakProfile;
+   const dominantVAK = vakProfile?.primary as VAKType;
+   const vakConfig = dominantVAK ? VAK_LABELS[dominantVAK] : null;
   const isGenericName = displayName === 'Contato';
   const cargoOrTitle = contact.role_title || (contact as Record<string, unknown>).cargo as string | undefined;
   const subtitle = cargoOrTitle && companyName 
@@ -213,15 +217,21 @@ function ContactCardWithContextImpl({
                   <RelationshipScore score={contact.relationship_score || 0} size="sm" />
                 </div>
 
-                {/* Badges row: Sentiment + DISC + Role */}
-                <AnimatePresence>
-                  <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-                    {contact.sentiment && (
-                      <SentimentIndicator sentiment={contact.sentiment as 'positive' | 'neutral' | 'negative'} size="sm" />
-                    )}
-                    {(contact.behavior as Record<string, unknown>)?.discProfile && (
-                      <DISCBadge profile={(contact.behavior as Record<string, unknown>).discProfile as DISCProfile} size="sm" showLabel={false} />
-                    )}
+                 {/* Badges row: Sentiment + DISC + VAK + Role */}
+                 <AnimatePresence>
+                   <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                     {contact.sentiment && (
+                       <SentimentIndicator sentiment={contact.sentiment as 'positive' | 'neutral' | 'negative'} size="sm" />
+                     )}
+                     {vakConfig && (
+                       <Badge variant="outline" className={cn("text-[10px] h-5 px-1.5 gap-1", vakConfig.bgColor, vakConfig.color)}>
+                         <span className="text-[10px]">{vakConfig.icon}</span>
+                         {vakConfig.name}
+                       </Badge>
+                     )}
+                     {(contact.behavior as Record<string, unknown>)?.discProfile && (
+                       <DISCBadge profile={(contact.behavior as Record<string, unknown>).discProfile as DISCProfile} size="sm" showLabel={false} />
+                     )}
                     {contact.role && (
                       <RoleBadge role={contact.role as 'contact' | 'owner' | 'manager' | 'buyer' | 'decision_maker' | 'influencer'} />
                     )}
