@@ -26,11 +26,12 @@ AÇÕES DISPONÍVEIS:
 - navigate: Navegar para uma página
 - answer: Responder uma pergunta geral
 - create_interaction: Sugerir criar uma interação
-- create_reminder: Sugerir criar um lembrete
+ - create_reminder: Sugerir criar um lembrete
+ - create_relative: Sugerir adicionar um familiar/relacionado
 
 Responda SEMPRE em JSON com esta estrutura:
 {
-  "action": "search" | "navigate" | "answer" | "create_interaction" | "create_reminder",
+   "action": "search" | "navigate" | "answer" | "create_interaction" | "create_reminder" | "create_relative",
   "response": "texto curto e amigável para falar de volta ao usuário (max 2 frases)",
   "data": {
     "query": "termo de busca (se action=search)",
@@ -56,10 +57,18 @@ const TOOL_SCHEMA = {
     parameters: {
       type: "object",
       properties: {
-        action: {
-          type: "string",
-          enum: ["search", "navigate", "answer", "create_interaction", "create_reminder"],
-        },
+         action: {
+           type: "string",
+           enum: ["search", "navigate", "answer", "create_interaction", "create_reminder", "create_relative"],
+         },
+             relative: {
+               type: "object",
+               properties: {
+                 name: { type: "string" },
+                 relationship: { type: "string", enum: ["conjuge", "filho", "filha", "pai", "mae", "irmao", "irma", "socio", "assistente", "outro"] },
+                 occupation: { type: "string" }
+               }
+             },
         response: { type: "string", description: "Friendly response to speak back (max 2 sentences)" },
         data: {
           type: "object",

@@ -1,7 +1,7 @@
 import { voiceFetch } from "./voiceFetch";
 import type { VoiceAgentAction } from "./types";
 
-const VALID_ACTIONS = new Set(["search", "navigate", "answer", "create_interaction", "create_reminder"]);
+ const VALID_ACTIONS = new Set(["search", "navigate", "answer", "create_interaction", "create_reminder", "create_relative"]);
 
 /**
  * processVoiceTranscript — Sends a voice transcript to the AI edge function

@@ -4,7 +4,7 @@
  */
 export interface VoiceAgentAction {
   /** The type of action to execute */
-  action: "search" | "navigate" | "answer" | "create_interaction" | "create_reminder";
+   action: "search" | "navigate" | "answer" | "create_interaction" | "create_reminder" | "create_relative";
   /** Friendly response text to speak back to the user via TTS */
   response: string;
   /** Additional data payload for the action */
@@ -14,7 +14,13 @@ export interface VoiceAgentAction {
     /** Navigation route path (for action="navigate") */
     route?: string;
     /** Contact name referenced in the command */
-    contactName?: string;
+     contactName?: string;
+     /** Relative info (for action="create_relative") */
+     relative?: {
+       name?: string;
+       relationship?: string;
+       occupation?: string;
+     };
     /** Optional search filters */
     filters?: {
       tag?: string;

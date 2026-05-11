@@ -488,7 +488,14 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
             if (action.action === 'navigate' && action.data?.route) navigate(action.data.route);
             else if (action.action === 'search') { const sq = action.data?.query || action.data?.contactName || action.data?.filters?.company || action.data?.filters?.tag || action.data?.filters?.sentiment || ''; if (sq) { setVoiceOpen(false); onOpenChange(true); setQuery(sq); } }
             else if (action.action === 'create_interaction' && action.data?.contactName) { setVoiceOpen(false); toast.info(`Para registrar interação com ${action.data.contactName}, abra o contato e clique em "Nova Interação".`); onOpenChange(true); setQuery(action.data.contactName); }
-            else if (action.action === 'create_reminder' && action.data?.contactName) { setVoiceOpen(false); toast.info(`Lembrete sugerido: ${action.response}`); onOpenChange(true); setQuery(action.data.contactName); }
+             else if (action.action === 'create_reminder' && action.data?.contactName) { setVoiceOpen(false); toast.info(`Lembrete sugerido: ${action.response}`); onOpenChange(true); setQuery(action.data.contactName); }
+             else if (action.action === 'create_relative' && action.data?.contactName) {
+               setVoiceOpen(false);
+               const relInfo = action.data.relative?.name || action.data.relative?.relationship || 'familiar';
+               toast.info(`Sugestão de novo relacionado (${relInfo}) para ${action.data.contactName}`);
+               onOpenChange(true);
+               setQuery(action.data.contactName);
+             }
           }} />
         </Suspense>
       )}

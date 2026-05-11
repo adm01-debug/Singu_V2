@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, KeyboardEvent, RefObject, RefCallback } from 'react';
+import { useState, useRef, useEffect, KeyboardEvent, RefObject, RefCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -6,11 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Check, X, Pencil, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// Type-safe ref helper for input/textarea
-type InputRefType = RefObject<HTMLInputElement> | RefCallback<HTMLInputElement>;
-type TextareaRefType = RefObject<HTMLTextAreaElement> | RefCallback<HTMLTextAreaElement>;
-
-interface InlineEditProps {
+export interface InlineEditProps {
   value: string;
   onSave: (value: string) => Promise<boolean>;
   placeholder?: string;
@@ -18,11 +14,12 @@ interface InlineEditProps {
   inputClassName?: string;
   displayClassName?: string;
   multiline?: boolean;
+  type?: string;
   maxLength?: number;
   disabled?: boolean;
   showEditIcon?: boolean;
   emptyText?: string;
-  validate?: (value: string) => string | null; // Returns error message or null
+  validate?: (value: string) => string | null;
 }
 
 export function InlineEdit({
@@ -33,6 +30,7 @@ export function InlineEdit({
   inputClassName,
   displayClassName,
   multiline = false,
+  type = "text",
   maxLength,
   disabled = false,
   showEditIcon = true,
@@ -45,20 +43,20 @@ export function InlineEdit({
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
 
-  // Update edit value when prop changes
   useEffect(() => {
     if (!isEditing) {
       setEditValue(value);
     }
   }, [value, isEditing]);
 
-  // Focus input when entering edit mode
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus();
-      inputRef.current.select();
+      if (!multiline && type !== 'date') {
+        inputRef.current.select();
+      }
     }
-  }, [isEditing]);
+  }, [isEditing, multiline, type]);
 
   const handleStartEdit = () => {
     if (disabled) return;
@@ -74,7 +72,6 @@ export function InlineEdit({
   };
 
   const handleSave = async () => {
-    // Validate if provided
     if (validate) {
       const validationError = validate(editValue);
       if (validationError) {
@@ -83,7 +80,6 @@ export function InlineEdit({
       }
     }
 
-    // Don't save if unchanged
     if (editValue === value) {
       setIsEditing(false);
       return;
@@ -114,8 +110,6 @@ export function InlineEdit({
       handleCancel();
     }
   };
-
-  const InputComponent = multiline ? Textarea : Input;
 
   return (
     <div className={cn('group relative', className)}>
@@ -153,12 +147,15 @@ export function InlineEdit({
               ) : (
                 <Input
                   ref={inputRef as RefObject<HTMLInputElement>}
+                  type={type}
                   value={editValue}
                   onChange={(e) => setEditValue(e.target.value)}
                   onKeyDown={handleKeyDown}
                   onBlur={() => {
                     setTimeout(() => {
-                      if (!isSaving) handleCancel();
+                      if (!isSaving && document.activeElement !== inputRef.current) {
+                        handleCancel();
+                      }
                     }, 150);
                   }}
                   placeholder={placeholder}
@@ -235,7 +232,6 @@ export function InlineEdit({
   );
 }
 
-// Specialized inline edit for numbers
 interface InlineNumberEditProps extends Omit<InlineEditProps, 'value' | 'onSave' | 'validate'> {
   value: number;
   onSave: (value: number) => Promise<boolean>;
@@ -268,10 +264,6 @@ export function InlineNumberEdit({
     return onSave(num);
   };
 
-  const displayValue = value !== undefined && value !== null
-    ? `${prefix || ''}${value}${suffix || ''}`
-    : '';
-
   return (
     <InlineEdit
       {...props}
@@ -279,6 +271,37 @@ export function InlineNumberEdit({
       onSave={handleSave}
       validate={validate}
       emptyText={`${prefix || ''}0${suffix || ''}`}
+    />
+  );
+}
+
+interface InlineDateEditProps extends Omit<InlineEditProps, 'value' | 'onSave' | 'type'> {
+  value: string | null | undefined;
+  onSave: (value: string | null) => Promise<boolean>;
+  formatDisplay?: (value: string) => string;
+}
+
+export function InlineDateEdit({
+  value,
+  onSave,
+  formatDisplay,
+  ...props
+}: InlineDateEditProps) {
+  const displayValue = useMemo(() => {
+    if (!value) return '';
+    return formatDisplay ? formatDisplay(value) : value;
+  }, [value, formatDisplay]);
+
+  const handleSave = async (strValue: string): Promise<boolean> => {
+    return onSave(strValue || null);
+  };
+
+  return (
+    <InlineEdit
+      {...props}
+      type="date"
+      value={value || ''}
+      onSave={handleSave}
     />
   );
 }
