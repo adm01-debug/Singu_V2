@@ -7,19 +7,21 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from "@/lib/logger";
 
-interface VoiceInputProps {
-  onTranscription: (text: string) => void;
-  className?: string;
-  placeholder?: string;
-  disabled?: boolean;
-}
+ interface VoiceInputProps {
+   onTranscription: (text: string, audioUrl?: string) => void;
+   className?: string;
+   placeholder?: string;
+   disabled?: boolean;
+   uploadAudio?: boolean;
+ }
 
-export function VoiceInput({ 
-  onTranscription, 
-  className,
-  placeholder = "Clique para gravar",
-  disabled = false 
-}: VoiceInputProps) {
+ export function VoiceInput({ 
+   onTranscription, 
+   className,
+   placeholder = "Clique para gravar",
+   disabled = false,
+   uploadAudio = false
+ }: VoiceInputProps) {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -115,15 +117,32 @@ export function VoiceInput({
 
       if (error) throw error;
       
-      if (data?.text) {
-        onTranscription(data.text);
-        toast({
-          title: 'Transcrição concluída',
-          description: 'Áudio convertido em texto com sucesso'
-        });
-      } else {
-        throw new Error('Nenhum texto reconhecido');
-      }
+       let audioUrl: string | undefined;
+       if (uploadAudio) {
+         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.webm`;
+         const { data: uploadData, error: uploadError } = await supabase.storage
+           .from('interaction-audios')
+           .upload(`${(await supabase.auth.getUser()).data.user?.id}/${fileName}`, audioBlob);
+ 
+         if (uploadError) {
+           logger.error('Error uploading audio:', uploadError);
+         } else if (uploadData) {
+           const { data: urlData } = supabase.storage
+             .from('interaction-audios')
+             .getPublicUrl(uploadData.path);
+           audioUrl = urlData.publicUrl;
+         }
+       }
+ 
+       if (data?.text) {
+         onTranscription(data.text, audioUrl);
+         toast({
+           title: 'Transcrição concluída',
+           description: audioUrl ? 'Áudio salvo e convertido em texto' : 'Áudio convertido em texto'
+         });
+       } else {
+         throw new Error('Nenhum texto reconhecido');
+       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
       logger.error('Error processing audio:', { error: msg });

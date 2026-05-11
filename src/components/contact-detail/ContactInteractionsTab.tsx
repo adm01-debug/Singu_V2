@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Phone, Mail, MessageSquare, Users, Video, FileText,
   Clock, AlertCircle, ArrowUpRight, ArrowDownLeft,
-  ChevronDown, ChevronUp, Plus, Search
+   ChevronDown, ChevronUp, Plus, Search, Play, File
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -90,9 +90,24 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
         company_id: companyId,
         user_id: user.id,
       } as unknown as import('@/integrations/supabase/types').Database['public']['Tables']['interactions']['Insert'];
-      const { error } = await supabase.from('interactions').insert(insertData);
-      if (error) throw error;
-      toast.success('Interação registrada');
+       const { data: interaction, error } = await supabase.from('interactions').insert(insertData).select().single();
+       if (error) throw error;
+       
+       toast.success('Interação registrada');
+ 
+       // Trigger AI Analysis if content is sufficient
+       if (insertData.content && insertData.content.length >= 80) {
+         toast.info('IA analisando conversa...', { duration: 3000 });
+         supabase.functions.invoke('conversation-analyzer', {
+           body: { interaction_id: interaction.id }
+         }).then(({ error: aiError }) => {
+           if (!aiError) {
+             toast.success('Análise de IA concluída');
+             onInteractionAdded?.();
+           }
+         });
+       }
+ 
       setShowForm(false);
       onInteractionAdded?.();
     } catch (err) {
@@ -227,9 +242,39 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
                               className="overflow-hidden"
                             >
                               <div className="mt-3 space-y-2 border-t pt-3">
-                                {interaction.content && (
-                                  <p className="text-sm text-foreground whitespace-pre-wrap">{interaction.content}</p>
-                                )}
+                                 {interaction.content && (
+                                   <p className="text-sm text-foreground whitespace-pre-wrap">{interaction.content}</p>
+                                 )}
+ 
+                                 {interaction.audio_url && (
+                                   <div className="flex items-center gap-3 p-2 bg-primary/5 rounded-lg border border-primary/10">
+                                     <Play className="w-4 h-4 text-primary" />
+                                     <audio controls className="h-8 flex-1">
+                                       <source src={interaction.audio_url} type="audio/webm" />
+                                       Seu navegador não suporta o player de áudio.
+                                     </audio>
+                                   </div>
+                                 )}
+ 
+                                 {interaction.attachments && (interaction.attachments as string[]).length > 0 && (
+                                   <div className="space-y-1.5">
+                                     <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Anexos:</span>
+                                     <div className="flex flex-wrap gap-2">
+                                       {(interaction.attachments as string[]).map((url, idx) => (
+                                         <a 
+                                           key={idx} 
+                                           href={url} 
+                                           target="_blank" 
+                                           rel="noopener noreferrer" 
+                                           className="flex items-center gap-1.5 px-2 py-1 bg-muted rounded text-[10px] hover:bg-muted/80 transition-colors"
+                                         >
+                                           <File className="w-3 h-3" />
+                                           {url.split('/').pop()?.split('-').slice(1).join('-') || 'Arquivo'}
+                                         </a>
+                                       ))}
+                                     </div>
+                                   </div>
+                                 )}
                                 {interaction.key_insights && interaction.key_insights.length > 0 && (
                                   <div>
                                     <span className="text-xs font-medium text-muted-foreground">Insights-chave:</span>

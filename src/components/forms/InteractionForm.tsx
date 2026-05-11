@@ -22,7 +22,10 @@ import {
   FormMessage,
   FormDescription,
 } from '@/components/ui/form';
-import { MessageSquare, Loader2, Mic } from 'lucide-react';
+ import { MessageSquare, Loader2, Mic, Tag, Lightbulb, Paperclip, X as CloseIcon } from 'lucide-react';
+ import { supabase } from '@/integrations/supabase/client';
+ import { logger } from '@/lib/logger';
+ import { toast } from 'sonner';
 import { VoiceInput } from '@/components/voice/VoiceInput';
 import type { Interaction } from '@/hooks/useInteractions';
 import type { Contact } from '@/hooks/useContacts';
@@ -32,12 +35,17 @@ const interactionSchema = z.object({
   company_id: z.string().uuid().optional().nullable(),
   type: z.string().min(1, 'Tipo é obrigatório'),
   title: z.string().trim().min(1, 'Título é obrigatório').max(200, 'Máximo 200 caracteres'),
-  content: z.string().trim().max(5000, 'Máximo 5000 caracteres').optional(),
+   content: z.string().trim().max(5000, 'Máximo 5000 caracteres').optional().nullable(),
   sentiment: z.string().optional(),
   initiated_by: z.string().optional(),
   duration: z.number().min(0).optional().nullable(),
   follow_up_required: z.boolean().optional(),
-  follow_up_date: z.string().optional(),
+   follow_up_date: z.string().optional().nullable(),
+   tags: z.array(z.string()).optional(),
+   key_insights: z.array(z.string()).optional(),
+   audio_url: z.string().optional().nullable(),
+   transcription: z.string().optional().nullable(),
+   attachments: z.array(z.string()).optional(),
 });
 
 type InteractionFormData = z.infer<typeof interactionSchema>;
@@ -94,7 +102,12 @@ export function InteractionForm({
       initiated_by: interaction?.initiated_by || 'us',
       duration: interaction?.duration || null,
       follow_up_required: interaction?.follow_up_required || false,
-      follow_up_date: interaction?.follow_up_date || '',
+       follow_up_date: interaction?.follow_up_date || '',
+       tags: (interaction?.tags as string[]) || [],
+       key_insights: (interaction?.key_insights as string[]) || [],
+       audio_url: interaction?.audio_url || null,
+       transcription: interaction?.transcription || null,
+       attachments: (interaction?.attachments as string[]) || [],
     },
   });
 
@@ -105,8 +118,35 @@ export function InteractionForm({
     enabled: !interaction,
   });
 
-  const selectedContactId = form.watch('contact_id');
-  const followUpRequired = form.watch('follow_up_required');
+   const selectedContactId = form.watch('contact_id');
+   const followUpRequired = form.watch('follow_up_required');
+   const attachments = form.watch('attachments') || [];
+ 
+   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+     const file = e.target.files?.[0];
+     if (!file) return;
+ 
+     try {
+       const fileName = `${Date.now()}-${file.name}`;
+       const { data: uploadData, error: uploadError } = await supabase.storage
+         .from('interaction-attachments')
+         .upload(`${(await supabase.auth.getUser()).data.user?.id}/${fileName}`, file);
+ 
+       if (uploadError) throw uploadError;
+ 
+       if (uploadData) {
+         const { data: urlData } = supabase.storage
+           .from('interaction-attachments')
+           .getPublicUrl(uploadData.path);
+         const currentAttachments = form.getValues('attachments') || [];
+         form.setValue('attachments', [...currentAttachments, urlData.publicUrl]);
+         toast.success('Anexo enviado com sucesso');
+       }
+     } catch (error) {
+       logger.error('Error uploading attachment:', error);
+       toast.error('Erro ao enviar anexo');
+     }
+   };
 
   // Update company_id when contact changes
   const handleContactChange = (contactId: string) => {
@@ -218,17 +258,20 @@ export function InteractionForm({
               <FormItem className="md:col-span-2">
                 <div className="flex items-center justify-between">
                   <FormLabel>Detalhes</FormLabel>
-                  <VoiceInput
-                    onTranscription={(text) => {
-                      const currentContent = field.value || '';
-                      const newContent = currentContent 
-                        ? `${currentContent}\n\n${text}` 
-                        : text;
-                      field.onChange(newContent);
-                    }}
-                    placeholder="Gravar por voz"
-                    className="text-xs"
-                  />
+                   <VoiceInput
+                     uploadAudio
+                     onTranscription={(text, audioUrl) => {
+                       const currentContent = field.value || '';
+                       const newContent = currentContent 
+                         ? `${currentContent}\n\n${text}` 
+                         : text;
+                       field.onChange(newContent);
+                       if (audioUrl) form.setValue('audio_url', audioUrl);
+                       form.setValue('transcription', text);
+                     }}
+                     placeholder="Gravar por voz"
+                     className="text-xs"
+                   />
                 </div>
                 <FormControl>
                   <Textarea 
@@ -337,22 +380,90 @@ export function InteractionForm({
             )}
           />
 
-          {followUpRequired && (
-            <FormField
-              control={form.control}
-              name="follow_up_date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Data do Follow-up</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-        </div>
+           {followUpRequired && (
+             <FormField
+               control={form.control}
+               name="follow_up_date"
+               render={({ field }) => (
+                 <FormItem>
+                   <FormLabel>Data do Follow-up</FormLabel>
+                   <FormControl>
+                     <Input type="date" {...field} value={field.value || ''} />
+                   </FormControl>
+                   <FormMessage />
+                 </FormItem>
+               )}
+             />
+           )}
+ 
+           <FormField
+             control={form.control}
+             name="tags"
+             render={({ field }) => (
+               <FormItem>
+                 <FormLabel className="flex items-center gap-1">
+                   <Tag className="w-3 h-3" /> Tags
+                 </FormLabel>
+                 <FormControl>
+                   <Input 
+                     placeholder="venda, proposta, suporte (separe por vírgula)" 
+                     value={(field.value || []).join(', ')} 
+                     onChange={(e) => field.onChange(e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+                   />
+                 </FormControl>
+                 <FormMessage />
+               </FormItem>
+             )}
+           />
+ 
+           <FormField
+             control={form.control}
+             name="key_insights"
+             render={({ field }) => (
+               <FormItem className="md:col-span-2">
+                 <FormLabel className="flex items-center gap-1">
+                   <Lightbulb className="w-3 h-3" /> Insights-chave
+                 </FormLabel>
+                 <FormControl>
+                   <Input 
+                     placeholder="Digite os principais aprendizados (separe por vírgula)" 
+                     value={(field.value || []).join(', ')} 
+                     onChange={(e) => field.onChange(e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+                   />
+                 </FormControl>
+                 <FormMessage />
+               </FormItem>
+             )}
+           />
+ 
+           <div className="md:col-span-2 space-y-3">
+             <FormLabel className="flex items-center gap-1">
+               <Paperclip className="w-3 h-3" /> Anexos
+             </FormLabel>
+             <div className="flex flex-wrap gap-2">
+               {attachments.map((url, i) => (
+                 <div key={i} className="flex items-center gap-2 bg-muted px-2 py-1 rounded text-xs">
+                   <a href={url} target="_blank" rel="noopener noreferrer" className="hover:underline truncate max-w-[150px]">
+                     {url.split('/').pop()}
+                   </a>
+                   <button 
+                     type="button" 
+                     onClick={() => form.setValue('attachments', attachments.filter((_, idx) => idx !== i))}
+                     className="text-muted-foreground hover:text-destructive"
+                   >
+                     <CloseIcon className="w-3 h-3" />
+                   </button>
+                 </div>
+               ))}
+               <label className="cursor-pointer">
+                 <div className="flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs hover:bg-primary/20 transition-colors">
+                   <Paperclip className="w-3 h-3" /> Adicionar anexo
+                 </div>
+                 <input type="file" className="hidden" onChange={handleFileUpload} />
+               </label>
+             </div>
+           </div>
+         </div>
 
         <div className="flex justify-end gap-3 pt-4 border-t border-border">
           <Button type="button" variant="outline" onClick={onCancel}>
