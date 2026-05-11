@@ -19,15 +19,17 @@ Deno.serve(async (req) => {
     if (!contactId) return jsonError("contactId is required", 400);
 
     // 1. Gather Rich Context
-    const [contactRes, interactionsRes, socialRes] = await Promise.all([
+    const [contactRes, interactionsRes, socialRes, neuroRes] = await Promise.all([
       supabase.from('contacts').select('*').eq('id', contactId).single(),
       supabase.from('interactions').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(5),
-      supabase.from('social_behavior_analysis').select('*').eq('contact_id', contactId).order('analysis_date', { ascending: false }).limit(1)
+      supabase.from('social_behavior_analysis').select('*').eq('contact_id', contactId).order('analysis_date', { ascending: false }).limit(1),
+      supabase.from('neuro_behavioral_history').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(3)
     ]);
 
     const contact = contactRes.data;
     const interactions = interactionsRes.data || [];
     const social = socialRes.data?.[0];
+    const neuroHistory = neuroRes.data || [];
 
     if (!contact) return jsonError("Contact not found", 404);
 
@@ -41,22 +43,27 @@ Seja específico, prático e persuasivo.`;
 
     const userPrompt = `
 CONTATO: ${contact.first_name} ${contact.last_name}
-ESTÁGIO ATUAL: ${contact.relationship_stage}
+ESTÁGIO ATUAL (NEGOCIAÇÃO): ${contact.relationship_stage}
 SCORE: ${contact.relationship_score}/100
-SENTIMENTO: ${contact.sentiment}
+SENTIMENTO ATUAL: ${contact.sentiment}
 
 PERFIL COMPORTAMENTAL (DISC): ${JSON.stringify(contact.behavior || {})}
+HISTÓRICO NEUROMARKETING (Evolução):
+${neuroHistory.map(n => `- ${new Date(n.created_at).toLocaleDateString()}: Empatia=${n.empathy_score}, Domínio=${JSON.stringify(n.dominance_data)}`).join('\n')}
+
 INSIGHTS SOCIAIS: ${social?.executive_summary || 'Nenhum dado social disponível'}
 
-ÚLTIMAS INTERAÇÕES:
-${interactions.map(i => `- ${i.type}: ${i.title} (${i.sentiment})`).join('\n')}
+ÚLTIMAS INTERAÇÕES DA TIMELINE:
+${interactions.map(i => `- ${i.type}: ${i.resumo || i.title} (${i.sentiment || 'neutral'})`).join('\n')}
+
+INSTRUÇÃO: Gere a Próxima Melhor Ação considerando o contexto de neuromarketing e o estágio da negociação. Se a empatia está caindo, sugira uma abordagem mais humana. Se a dominância é alta, seja mais direto.
 
 Por favor, gere:
-1. Uma ação clara (ex: "Enviar Mensagem de Reaquecimento")
-2. O motivo estratégico (baseado nos dados)
-3. Um script/template sugerido pronto para uso
-4. O canal ideal (whatsapp, email, call, etc)
-5. Urgência (low, medium, high)
+1. Uma ação clara e estratégica
+2. O motivo (explicando a correlação com o neuromarketing/estágio)
+3. Um script sugerido personalizado
+4. O canal ideal
+5. Urgência
 `;
 
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
