@@ -90,26 +90,72 @@ interface Props {
     },
   ];
 
-  return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between pb-3">
-        <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase">
-          <Target className="h-4 w-4 text-primary" />
-          Metaprogramas NLP & Filtros Mentais
-        </CardTitle>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Info className="h-4 w-4 text-muted-foreground cursor-help" />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p className="max-w-xs text-xs">Os metaprogramas são os filtros que as pessoas usam para processar informações e tomar decisões.</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="grid gap-6 md:grid-cols-2">
+   return (
+     <div className="space-y-6">
+       {latestMeta && (
+         <Card className="border-primary/20 bg-primary/5">
+           <CardHeader className="pb-2">
+             <CardTitle className="text-xs font-bold uppercase flex items-center gap-2 text-primary">
+               <Wand2 className="h-3.5 w-3.5" /> Última Detecção IA
+             </CardTitle>
+           </CardHeader>
+           <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4 py-3">
+             <div className="space-y-1">
+               <p className="text-[10px] text-muted-foreground uppercase font-bold">Direção</p>
+               <Badge variant="outline" className="text-[10px] bg-card">
+                 {latestMeta.toward_score > latestMeta.away_from_score ? 'Toward' : 'Away-From'}
+               </Badge>
+             </div>
+             <div className="space-y-1">
+               <p className="text-[10px] text-muted-foreground uppercase font-bold">Referência</p>
+               <Badge variant="outline" className="text-[10px] bg-card">
+                 {latestMeta.internal_score > latestMeta.external_score ? 'Interno' : 'Externo'}
+               </Badge>
+             </div>
+             <div className="space-y-1">
+               <p className="text-[10px] text-muted-foreground uppercase font-bold">Estilo</p>
+               <Badge variant="outline" className="text-[10px] bg-card">
+                 {latestMeta.options_score > latestMeta.procedures_score ? 'Opções' : 'Procedimentos'}
+               </Badge>
+             </div>
+             {latestMeta.toward_words?.length > 0 && (
+               <div className="col-span-full mt-2">
+                 <p className="text-[10px] text-muted-foreground uppercase font-bold mb-1">Palavras-chave detectadas</p>
+                 <div className="flex flex-wrap gap-1">
+                   {[...latestMeta.toward_words, ...latestMeta.away_from_words, ...latestMeta.internal_words, ...latestMeta.external_words].slice(0, 10).map((w: string, i: number) => (
+                     <span key={i} className="text-[10px] px-1.5 py-0.5 bg-card border rounded italic">"{w}"</span>
+                   ))}
+                 </div>
+               </div>
+             )}
+           </CardContent>
+         </Card>
+       )}
+ 
+       <Card>
+         <CardHeader className="flex flex-row items-center justify-between pb-3">
+           <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase">
+             <Target className="h-4 w-4 text-primary" />
+             Metaprogramas & Filtros Mentais
+           </CardTitle>
+           <div className="flex items-center gap-2">
+             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => queryClient.invalidateQueries({ queryKey: ['meta-history', contactId] })}>
+               <RefreshCw className="h-4 w-4 text-muted-foreground" />
+             </Button>
+             <TooltipProvider>
+               <Tooltip>
+                 <TooltipTrigger asChild>
+                   <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                 </TooltipTrigger>
+                 <TooltipContent>
+                   <p className="max-w-xs text-xs">Os metaprogramas são os filtros que as pessoas usam para processar informações e tomar decisões.</p>
+                 </TooltipContent>
+               </Tooltip>
+             </TooltipProvider>
+           </div>
+         </CardHeader>
+         <CardContent className="space-y-6">
+           <div className="grid gap-6 md:grid-cols-2">
           {sliders.map((s) => {
             const leftVal = formData[s.leftKey] || 0;
             const rightVal = formData[s.rightKey] || 0;
