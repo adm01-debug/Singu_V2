@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import { useUpcomingLifeEvents } from '@/hooks/useUpcomingLifeEvents';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -64,6 +65,7 @@ export function DailyBriefingCard({
   weeklyAverage = 0,
   className,
 }: Props) {
+  const { data: upcomingEvents = [] } = useUpcomingLifeEvents(7);
   const key = STORAGE_PREFIX + todayKey();
   const [dismissed, setDismissed] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
@@ -105,15 +107,29 @@ export function DailyBriefingCard({
         tone: 'opportunity',
       });
     }
+    // Add life events to priorities
+    upcomingEvents.forEach(event => {
+      priorities.push({
+        label: event.days_until === 0 
+          ? `Hoje: ${event.title} (${event.contact_name})` 
+          : `Em ${event.days_until}d: ${event.title} (${event.contact_name})`,
+        href: `/contatos/${event.contact_id}`,
+        tone: event.days_until === 0 ? 'urgent' : 'opportunity'
+      });
+    });
+
     return {
       interactionsToday,
       interactionsYesterday,
       newContactsToday,
       trend,
       vsAverage,
-      priorities: priorities.slice(0, 3),
+      priorities: priorities.sort((a, b) => {
+        const tones = { urgent: 0, opportunity: 1, normal: 2 };
+        return tones[a.tone] - tones[b.tone];
+      }).slice(0, 3),
     };
-  }, [contacts, interactions, totalDealsAtRisk, weeklyInteractions, weeklyAverage]);
+  }, [contacts, interactions, totalDealsAtRisk, weeklyInteractions, weeklyAverage, upcomingEvents]);
 
   if (dismissed) return null;
 
