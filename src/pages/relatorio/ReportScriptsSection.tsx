@@ -1,16 +1,54 @@
-import { format } from "date-fns";
+  import { format, addDays } from "date-fns";
+  import { ptBR } from "date-fns/locale";
+  import { 
+    ClipboardCheck, MessageSquare, ArrowRight, Zap, 
+    Calendar, Target, Shield, LayoutList 
+  } from "lucide-react";
 import type { Tables } from '@/integrations/supabase/types';
 
 interface ReportScriptsSectionProps {
   interactions: Tables<'interactions'>[];
 }
 
-export function ReportScriptsSection({ interactions }: ReportScriptsSectionProps) {
+  export function ReportScriptsSection({ interactions }: ReportScriptsSectionProps) {
+    const nextSteps = [
+      { task: 'Follow-up de Conexão', date: addDays(new Date(), 2), priority: 'Alta' },
+      { task: 'Apresentação de Estudo de Caso', date: addDays(new Date(), 5), priority: 'Média' },
+      { task: 'Check-in de Satisfação', date: addDays(new Date(), 15), priority: 'Média' },
+    ];
+
+    return (
+      <>
+        {/* Próximos Passos Gerados por IA */}
+        <section className="mb-8">
+          <h2 className="text-xl font-bold text-foreground border-b-2 border-primary pb-2 mb-4 flex items-center gap-2">
+            <ClipboardCheck className="h-5 w-5 text-primary" /> Próximos Passos Recomendados
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {nextSteps.map((step, i) => (
+              <div key={i} className="p-4 bg-primary/5 rounded-xl border border-primary/10 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-1">
+                  <Badge variant={step.priority === 'Alta' ? 'destructive' : 'secondary'} className="text-[9px] uppercase">
+                    {step.priority}
+                  </Badge>
+                </div>
+                <p className="text-sm font-bold text-foreground mb-1">{step.task}</p>
+                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Calendar className="h-3 w-3" />
+                  {format(step.date, "dd/MM/yy")}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
   return (
     <>
-      {/* Scripts de Vendas */}
+      {/* Estratégia de Abordagem Personalizada */}
       <section className="mb-8 page-break-before">
-        <h2 className="text-xl font-bold text-foreground border-b-2 border-primary pb-2 mb-4">
+        <h2 className="text-xl font-bold text-foreground border-b-2 border-primary pb-2 mb-6 flex items-center gap-2">
+          <Zap className="h-5 w-5 text-primary" /> Scripts de Abordagem (Neuro-PNL)
+        </h2>
+        <div className="space-y-6">
           📜 Scripts de Vendas Recomendados
         </h2>
         <div className="space-y-6">
