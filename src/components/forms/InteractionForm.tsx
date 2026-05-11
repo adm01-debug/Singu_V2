@@ -32,12 +32,17 @@ const interactionSchema = z.object({
   company_id: z.string().uuid().optional().nullable(),
   type: z.string().min(1, 'Tipo é obrigatório'),
   title: z.string().trim().min(1, 'Título é obrigatório').max(200, 'Máximo 200 caracteres'),
-  content: z.string().trim().max(5000, 'Máximo 5000 caracteres').optional(),
+   content: z.string().trim().max(5000, 'Máximo 5000 caracteres').optional().nullable(),
   sentiment: z.string().optional(),
   initiated_by: z.string().optional(),
   duration: z.number().min(0).optional().nullable(),
   follow_up_required: z.boolean().optional(),
-  follow_up_date: z.string().optional(),
+   follow_up_date: z.string().optional().nullable(),
+   tags: z.array(z.string()).optional(),
+   key_insights: z.array(z.string()).optional(),
+   audio_url: z.string().optional().nullable(),
+   transcription: z.string().optional().nullable(),
+   attachments: z.array(z.string()).optional(),
 });
 
 type InteractionFormData = z.infer<typeof interactionSchema>;
