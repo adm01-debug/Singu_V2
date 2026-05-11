@@ -15,6 +15,9 @@ export interface NextBestAction {
   expected_outcome: string | null;
   generated_at: string;
   model: string | null;
+  status?: string;
+  completed_at?: string;
+  completion_notes?: string;
 }
 
 const STALE_24H = 24 * 60 * 60 * 1000;
@@ -78,14 +81,14 @@ export function useNextBestAction(contactId: string | undefined) {
 
       // Also create an interaction entry to reflect this completion in history
       const currentAction = query.data;
-      if (currentAction) {
-        await supabase.from('interactions').insert({
+      if (currentAction && user?.id && contactId) {
+        const { error: intError } = await supabase.from('interactions').insert([{
           contact_id: contactId,
-          user_id: user?.id,
-          type: currentAction.channel as any,
+          user_id: user.id,
+          type: currentAction.channel,
           content: `Próxima ação concluída: ${currentAction.action}. ${notes || ''}`,
-          direction: 'outbound'
-        });
+        }]);
+        if (intError) logger.error('Error creating completion interaction', intError);
       }
     },
     onSuccess: () => {
