@@ -1,10 +1,11 @@
- import { Globe, Linkedin, Instagram, Twitter, Bell, TrendingUp, Users, X, Heart, ShieldCheck, Lock, Info } from 'lucide-react';
+ import { Globe, Linkedin, Instagram, Twitter, Bell, TrendingUp, Users, X, Heart, ShieldCheck, Lock, Info, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
-import { useSocialIntelligence } from '@/hooks/useSocialIntelligence';
+ import { useSocialIntelligence } from '@/hooks/useSocialIntelligence';
+ import { useSocialInsights } from '@/hooks/useSocialInsights';
 import { format } from 'date-fns';
 
 const PLATFORM_ICONS: Record<string, typeof Globe> = {
@@ -17,12 +18,13 @@ interface Props {
   contactId: string;
 }
 
-export function SocialIntelligencePanel({ contactId }: Props) {
-  const { profiles, behaviorAnalysis, lifeEvents, loading, dismissEvent } = useSocialIntelligence(contactId);
+ export function SocialIntelligencePanel({ contactId }: Props) {
+   const { profiles, behaviorAnalysis, lifeEvents, loading: loadingBase, dismissEvent } = useSocialIntelligence(contactId);
+   const { data: historyInsights, isLoading: loadingInsights } = useSocialInsights(contactId);
+ 
+   if (loadingBase) return null;
 
-  if (loading) return null;
-
-  const hasData = profiles.length > 0 || behaviorAnalysis || lifeEvents.length > 0;
+   const hasData = profiles.length > 0 || behaviorAnalysis || lifeEvents.length > 0 || (historyInsights && historyInsights.length > 0);
   if (!hasData) return null;
 
    return (
@@ -169,7 +171,52 @@ export function SocialIntelligencePanel({ contactId }: Props) {
         </Card>
       )}
 
-      {/* Life Events */}
+       {/* Social Performance Indicators (Captured Data) */}
+       {historyInsights && historyInsights.length > 0 && (
+         <Card className="border-indigo-500/10">
+           <CardHeader className="pb-3 bg-indigo-50/30">
+             <CardTitle className="flex items-center gap-2 text-sm text-indigo-950">
+               <Activity className="h-4 w-4 text-indigo-600" />
+               Indicadores de Perfil Social (Monitoramento)
+             </CardTitle>
+           </CardHeader>
+           <CardContent className="pt-4">
+             <div className="space-y-3">
+               {historyInsights.map(insight => (
+                 <div key={insight.id} className="p-2.5 rounded-lg border bg-white/50 space-y-2">
+                   <div className="flex items-center justify-between">
+                     <div className="flex items-center gap-2">
+                       <Badge variant="outline" className="text-[9px] uppercase h-4">
+                         {insight.platform}
+                       </Badge>
+                       <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
+                         {insight.insight_type.replace(/_/g, ' ')}
+                       </span>
+                     </div>
+                     <div className="flex items-center gap-1.5">
+                       {insight.sentiment === 'positive' ? (
+                         <CheckCircle2 className="h-3 w-3 text-emerald-500" />
+                       ) : insight.sentiment === 'negative' ? (
+                         <AlertCircle className="h-3 w-3 text-rose-500" />
+                       ) : null}
+                       <span className="text-[10px] font-black text-indigo-600">{insight.indicator_score}%</span>
+                     </div>
+                   </div>
+                   <p className="text-xs text-foreground leading-snug">{insight.content}</p>
+                   <div className="h-1 w-full bg-muted rounded-full overflow-hidden">
+                     <div 
+                       className="h-full bg-indigo-500 transition-all" 
+                       style={{ width: `${insight.indicator_score}%` }} 
+                     />
+                   </div>
+                 </div>
+               ))}
+             </div>
+           </CardContent>
+         </Card>
+       )}
+ 
+       {/* Life Events */}
       {lifeEvents.length > 0 && (
         <Card>
           <CardHeader className="pb-3">
