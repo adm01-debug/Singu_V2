@@ -435,6 +435,34 @@ export function InteractionForm({
                </FormItem>
              )}
            />
+ 
+           <div className="md:col-span-2 space-y-3">
+             <FormLabel className="flex items-center gap-1">
+               <Paperclip className="w-3 h-3" /> Anexos
+             </FormLabel>
+             <div className="flex flex-wrap gap-2">
+               {attachments.map((url, i) => (
+                 <div key={i} className="flex items-center gap-2 bg-muted px-2 py-1 rounded text-xs">
+                   <a href={url} target="_blank" rel="noopener noreferrer" className="hover:underline truncate max-w-[150px]">
+                     {url.split('/').pop()}
+                   </a>
+                   <button 
+                     type="button" 
+                     onClick={() => form.setValue('attachments', attachments.filter((_, idx) => idx !== i))}
+                     className="text-muted-foreground hover:text-destructive"
+                   >
+                     <CloseIcon className="w-3 h-3" />
+                   </button>
+                 </div>
+               ))}
+               <label className="cursor-pointer">
+                 <div className="flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs hover:bg-primary/20 transition-colors">
+                   <Paperclip className="w-3 h-3" /> Adicionar anexo
+                 </div>
+                 <input type="file" className="hidden" onChange={handleFileUpload} />
+               </label>
+             </div>
+           </div>
          </div>
 
         <div className="flex justify-end gap-3 pt-4 border-t border-border">
