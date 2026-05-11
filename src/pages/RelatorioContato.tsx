@@ -8,7 +8,8 @@ import { BackButton } from "@/components/navigation/BackButton";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { logger } from "@/lib/logger";
- import { ReportScriptsSection } from "./relatorio/ReportScriptsSection";
+import { ReportScriptsSection } from "./relatorio/ReportScriptsSection";
+import { NeuromarketingTimeline } from "@/components/crm/behavior/NeuromarketingTimeline";
   import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
   import { Textarea } from "@/components/ui/textarea";
   import { Input } from "@/components/ui/input";
@@ -322,6 +323,14 @@ const RelatorioContato = () => {
            </Card>
          </section>
  
+          {/* Neuromarketing Timeline & Evolução */}
+          <section className="mb-8 print:break-before-page">
+            <h2 className="text-xl font-bold text-foreground border-b-2 border-primary pb-2 mb-6 flex items-center gap-2">
+              <Brain className="h-5 w-5 text-primary" /> Histórico Temporal de Neuromarketing & Empatia
+            </h2>
+            <NeuromarketingTimeline contactId={id!} />
+          </section>
+
           {/* Perfil de Dominância Cerebral & DISC */}
           <section className="mb-8">
            <h2 className="text-xl font-bold text-foreground border-b-2 border-primary pb-2 mb-6 flex items-center gap-2">
