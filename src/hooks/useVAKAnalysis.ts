@@ -42,6 +42,7 @@ export function useVAKAnalysis() {
 
   // Analyze text and detect VAK predicates
   const analyzeText = useCallback((text: string): VAKAnalysisResult => {
+  const { triggerAnalysis } = useNLPAutoAnalysis();
     const normalizedText = normalizeText(text);
     const words = normalizedText.split(' ');
     
@@ -135,6 +136,10 @@ export function useVAKAnalysis() {
       dominantSystem,
       secondarySystem,
       confidence: Math.round(confidence),
+      // Auto-trigger aggregated analysis update
+      if (user && contactId) {
+        triggerAnalysis(contactId, interactionId || "", text, null, "whatsapp", false);
+      }
     };
   }, []);
 
