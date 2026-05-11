@@ -1,3 +1,4 @@
+ export { NLPInsightsDashboard } from './NLPInsightsDashboard';
 // ==============================================
 // NLP Components - Enterprise Module Export
 // ==============================================
