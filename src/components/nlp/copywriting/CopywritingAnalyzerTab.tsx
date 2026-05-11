@@ -2,7 +2,7 @@ import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
- import { BookOpen, Zap, AlertTriangle, CheckCircle, Smile, Target, Brain, Waves, Activity } from 'lucide-react';
+ import { BookOpen, Zap, AlertTriangle, CheckCircle, Smile, Target, Brain, Waves, Activity, Sparkles } from 'lucide-react';
  import { useNeuromarketing } from '@/hooks/useNeuromarketing';
  import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
