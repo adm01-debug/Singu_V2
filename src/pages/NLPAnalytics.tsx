@@ -13,10 +13,13 @@ import { Header } from '@/components/layout/Header';
    CopywritingSalesTools,
     NLPTrainingMode,
     PerceptualPositions,
-    MetaProgramsProfiler
+    MetaProgramsProfiler,
+    MiltonianCalibration,
+    TOTEModelMapper,
+    HierarchyOfCriteria
  } from '@/components/nlp';
   import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-  import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope, Fingerprint } from 'lucide-react';
+  import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope, Fingerprint, Workflow, ListOrdered } from 'lucide-react';
  import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
  import { Input } from '@/components/ui/input';
  import { Button } from '@/components/ui/button';
@@ -114,9 +117,12 @@ const NLPAnalytics = () => {
                  <TabsTrigger value="coherence" className="gap-2">
                    <Sparkles className="h-4 w-4" /> Coerência
                  </TabsTrigger>
-                 <TabsTrigger value="tools" className="gap-2">
-                   <Wand2 className="h-4 w-4" /> Ferramentas
-                 </TabsTrigger>
+                  <TabsTrigger value="persuasion" className="gap-2">
+                    <Wand2 className="h-4 w-4" /> Persuasão
+                  </TabsTrigger>
+                  <TabsTrigger value="strategy" className="gap-2">
+                    <Workflow className="h-4 w-4" /> Estratégia
+                  </TabsTrigger>
                   <TabsTrigger value="positions" className="gap-2">
                     <Telescope className="h-4 w-4" /> Posições
                   </TabsTrigger>
@@ -223,15 +229,31 @@ const NLPAnalytics = () => {
                  )}
                </TabsContent>
                
-               <TabsContent value="tools" className="mt-6 space-y-6">
+                <TabsContent value="persuasion" className="mt-6 space-y-6">
                  {selectedContact ? (
                    <>
-                     <UnifiedScriptGenerator contact={selectedContact} />
-                     <CopywritingSalesTools contact={selectedContact} />
+                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                        <UnifiedScriptGenerator contact={selectedContact} />
+                        <MiltonianCalibration contact={selectedContact} />
+                      </div>
+                      <CopywritingSalesTools contact={selectedContact} />
                    </>
                  ) : (
                    <Card className="p-12 text-center border-dashed">
-                     <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para acessar as ferramentas de PNL.</p>
+                      <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para acessar ferramentas de persuasão.</p>
+                    </Card>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="strategy" className="mt-6 space-y-6">
+                  {selectedContact ? (
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                      <TOTEModelMapper contact={selectedContact} />
+                      <HierarchyOfCriteria contact={selectedContact} />
+                    </div>
+                  ) : (
+                    <Card className="p-12 text-center border-dashed">
+                      <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para mapear estratégias.</p>
                    </Card>
                  )}
                </TabsContent>
