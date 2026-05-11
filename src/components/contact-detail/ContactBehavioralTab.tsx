@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { PersonalityExecutiveSummary } from './behavioral-tab/PersonalityExecutiveSummary';
+ import { PersonalityExecutiveSummary } from './behavioral-tab/PersonalityExecutiveSummary';
+ import { NeuroEvolutionChart } from './NeuroEvolutionChart';
 import { RelationshipScoreChart } from './behavioral-tab/RelationshipScoreChart';
 import { DiscCompatibilityCard } from './behavioral-tab/DiscCompatibilityCard';
 import { RapportCard } from './behavioral-tab/RapportCard';
@@ -35,26 +36,26 @@ import type { Tables } from '@/integrations/supabase/types';
 import { ModuleHelp, moduleHelpContent } from '@/components/ui/module-help';
 import type { Contact } from '@/hooks/useContactDetail';
 
-interface Props {
-  contact: Contact;
-}
-
-async function fetchWithFallback<T>(
-  localFn: () => Promise<{ data: T | null; error: unknown }>,
-  extTable: string,
-  filters: Array<{ type: 'eq'; column: string; value: string }>,
-  options?: { order?: { column: string; ascending?: boolean }; range?: { from: number; to: number } },
-): Promise<T | null> {
-  const { data: local } = await localFn();
-  if (local && (Array.isArray(local) ? local.length > 0 : true)) return local;
-  const { data: ext } = await queryExternalData<T>({ table: extTable, filters, ...options });
-  if (Array.isArray(ext) && ext.length > 0) return ext as unknown as T;
-  if (ext && !Array.isArray(ext)) return ext as unknown as T;
-  return Array.isArray(local) ? ([] as unknown as T) : null;
-}
-
-export function ContactBehavioralTab({ contact }: Props) {
-  const { user } = useAuth();
+ interface Props {
+   contact: Contact;
+ }
+ 
+ async function fetchWithFallback<T>(
+   localFn: () => Promise<{ data: T | null; error: unknown }>,
+   extTable: string,
+   filters: Array<{ type: 'eq'; column: string; value: string }>,
+   options?: { order?: { column: string; ascending?: boolean }; range?: { from: number; to: number } },
+ ): Promise<T | null> {
+   const { data: local } = await localFn();
+   if (local && (Array.isArray(local) ? local.length > 0 : true)) return local;
+   const { data: ext } = await queryExternalData<T>({ table: extTable, filters, ...options });
+   if (Array.isArray(ext) && ext.length > 0) return ext as unknown as T;
+   if (ext && !Array.isArray(ext)) return ext as unknown as T;
+   return Array.isArray(local) ? ([] as unknown as T) : null;
+ }
+ 
+ export function ContactBehavioralTab({ contact }: Props) {
+   const { user } = useAuth();
   const behavior = contact.behavior as Record<string, unknown> | null;
 
   const { data: behavioralData } = useQuery({
@@ -117,9 +118,16 @@ export function ContactBehavioralTab({ contact }: Props) {
   const discConfidence = (behavior?.discConfidence as number) || 0;
   const vakProfile = behavior?.vakProfile as Record<string, number> | null;
 
-  return (
-    <div className="space-y-6">
-      <PersonalityExecutiveSummary contactId={contact.id} />
+   return (
+     <div className="space-y-6">
+       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+         <div className="lg:col-span-2">
+           <PersonalityExecutiveSummary contactId={contact.id} />
+         </div>
+         <div className="lg:col-span-1">
+           <NeuroEvolutionChart contactId={contact.id} />
+         </div>
+       </div>
       <BehavioralExecutiveSummary 
         contactId={contact.id} 
         data={{
@@ -155,22 +163,18 @@ export function ContactBehavioralTab({ contact }: Props) {
           <TabsTrigger value="vak" className="text-xs">VAK</TabsTrigger>
           <TabsTrigger value="motivations" className="text-xs">Motivadores</TabsTrigger>
           <TabsTrigger value="rapport" className="text-xs">Rapport & NLP</TabsTrigger>
-          <TabsTrigger value="decision" className="text-xs">Decisão</TabsTrigger>
-          <TabsTrigger value="influence" className="text-xs">Influência</TabsTrigger>
-          <TabsTrigger value="business" className="text-xs">Contexto Business</TabsTrigger>
-          <TabsTrigger value="audit" className="text-xs">Auditoria & Gaps</TabsTrigger>
-          <TabsTrigger value="eq" className="text-xs">Int. Emocional</TabsTrigger>
-          <TabsTrigger value="biases" className="text-xs">Vieses</TabsTrigger>
+           <TabsTrigger value="decision" className="text-xs">Decisão</TabsTrigger>
+           <TabsTrigger value="influence" className="text-xs">Influência</TabsTrigger>
+           <TabsTrigger value="business" className="text-xs">Contexto Business</TabsTrigger>
+           <TabsTrigger value="audit" className="text-xs">Auditoria & Gaps</TabsTrigger>
+           <TabsTrigger value="eq" className="text-xs">Int. Emocional</TabsTrigger>
+           <TabsTrigger value="biases" className="text-xs">Vieses</TabsTrigger>
            <TabsTrigger value="metaprograms" className="text-xs">Meta</TabsTrigger>
            <TabsTrigger value="reframing" className="text-xs">Sleight of Mouth</TabsTrigger>
            <TabsTrigger value="personality" className="text-xs">Big Five/MBTI</TabsTrigger>
-       <TabsContent value="reframing" className="space-y-4">
-         <SleightOfMouthPanel contactId={contact.id} />
-       </TabsContent>
- 
-        </TabsList>
-        <ModuleHelp {...moduleHelpContent.disc} />
-      </div>
+         </TabsList>
+         <ModuleHelp {...moduleHelpContent.disc} />
+       </div>
 
       <TabsContent value="disc" className="space-y-4">
         <DiscSubTab contactId={contact.id} />
@@ -221,6 +225,10 @@ export function ContactBehavioralTab({ contact }: Props) {
 
       <TabsContent value="personality">
         <PersonalitySubTab contactId={contact.id} />
+      </TabsContent>
+
+      <TabsContent value="reframing">
+        <SleightOfMouthPanel contactId={contact.id} />
       </TabsContent>
     </Tabs>
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sparkles, Copy, RefreshCw, CheckCircle2, Mail, MessageCircle, Phone, Linkedin, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
+ import { Sparkles, Copy, RefreshCw, CheckCircle2, Mail, MessageCircle, Phone, Linkedin, Calendar, ChevronDown, ChevronUp, AlarmClock } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -45,16 +45,19 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
     }
   };
 
-  const handleMarkDone = () => {
-    if (!nextAction) return;
-    createTask.mutate({
-      title: nextAction.action,
-      description: nextAction.reason,
-      contact_id: contactId,
-      priority: nextAction.urgency === 'high' ? 'high' : nextAction.urgency === 'low' ? 'low' : 'medium',
-      task_type: nextAction.channel,
-    });
-  };
+   const handleCreateTask = (suggestedDate?: Date) => {
+     if (!nextAction) return;
+     createTask.mutate({
+       title: nextAction.action,
+       description: nextAction.reason,
+       contact_id: contactId,
+       priority: nextAction.urgency === 'high' ? 'high' : nextAction.urgency === 'low' ? 'low' : 'medium',
+       task_type: nextAction.channel,
+       due_date: suggestedDate?.toISOString(),
+       nba_id: nextAction.id,
+       script_context: nextAction.suggested_script
+     });
+   };
 
   if (isLoading) {
     return (
@@ -153,22 +156,38 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
           <span className="text-[10px] text-muted-foreground">
             Gerado {formatDistanceToNow(new Date(nextAction.generated_at), { addSuffix: true, locale: ptBR })}
           </span>
-          <div className="flex items-center gap-2">
-            <LoadingButton
-              isLoading={isGenerating}
-              loadingText="Gerando..."
-              onClick={() => generate()}
-              variant="ghost"
-              size="sm"
-            >
-              <RefreshCw className="w-3 h-3" />
-              Regenerar
-            </LoadingButton>
-            <Button onClick={handleMarkDone} variant="default" size="sm" disabled={createTask.isPending}>
-              <CheckCircle2 className="w-3 h-3" />
-              Criar tarefa
-            </Button>
-          </div>
+           <div className="flex items-center gap-2">
+             <LoadingButton
+               isLoading={isGenerating}
+               loadingText="Gerando..."
+               onClick={() => generate()}
+               variant="ghost"
+               size="sm"
+             >
+               <RefreshCw className="w-3 h-3" />
+               Regenerar
+             </LoadingButton>
+             <div className="flex items-center gap-1">
+               <Button onClick={() => handleCreateTask()} variant="default" size="sm" disabled={createTask.isPending}>
+                 <CheckCircle2 className="w-3 h-3" />
+                 Criar tarefa
+               </Button>
+               <Button 
+                 onClick={() => {
+                   const tomorrow = new Date();
+                   tomorrow.setDate(tomorrow.getDate() + 1);
+                   tomorrow.setHours(9, 0, 0, 0);
+                   handleCreateTask(tomorrow);
+                 }} 
+                 variant="outline" 
+                 size="sm" 
+                 disabled={createTask.isPending}
+                 title="Agendar para amanhã"
+               >
+                 <AlarmClock className="w-3 h-3" />
+               </Button>
+             </div>
+           </div>
         </div>
       </CardContent>
     </Card>

@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Share2, EyeOff, ShieldCheck, Globe, Linkedin, Instagram, Twitter } from 'lucide-react';
+ import { Share2, EyeOff, ShieldCheck, Globe, Linkedin, Instagram, Twitter, History } from 'lucide-react';
+ import { supabase } from '@/integrations/supabase/client';
+ import { useAuth } from '@/hooks/useAuth';
+ import { toast } from 'sonner';
 
 interface SocialMediaIntelligenceCardProps {
   contactId: string;
@@ -12,8 +15,29 @@ interface SocialMediaIntelligenceCardProps {
   twitter?: string;
 }
 
-export const SocialMediaIntelligenceCard = ({ contactId, linkedin, instagram, twitter }: SocialMediaIntelligenceCardProps) => {
-  const [allowPublicData, setAllowPublicData] = useState(true);
+ export const SocialMediaIntelligenceCard = ({ contactId, linkedin, instagram, twitter }: SocialMediaIntelligenceCardProps) => {
+   const [allowPublicData, setAllowPublicData] = useState(true);
+   const { user } = useAuth();
+ 
+   const logConsent = async (network: string, source: string) => {
+     if (!user) return;
+     const { error } = await supabase.from('social_consent_audit').insert({
+       contact_id: contactId,
+       user_id: user.id,
+       network,
+       source_url: source,
+       consent_type: 'public_data_osint'
+     });
+     if (error) console.error('Error logging consent:', error);
+   };
+ 
+   useEffect(() => {
+     if (allowPublicData) {
+       if (linkedin) logConsent('linkedin', linkedin);
+       if (instagram) logConsent('instagram', instagram);
+       if (twitter) logConsent('twitter', twitter);
+     }
+   }, [allowPublicData]);
 
   if (!allowPublicData) {
     return (
@@ -69,22 +93,40 @@ export const SocialMediaIntelligenceCard = ({ contactId, linkedin, instagram, tw
 
         <div className="space-y-2">
           <h4 className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider">Conexões Detectadas</h4>
-          <div className="flex items-center gap-3">
-            {linkedin && (
-              <a href={linkedin} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-blue-100 text-blue-700 hover:scale-110 transition-transform">
-                <Linkedin className="h-4 w-4" />
-              </a>
-            )}
-            {instagram && (
-              <a href={instagram} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-pink-100 text-pink-700 hover:scale-110 transition-transform">
-                <Instagram className="h-4 w-4" />
-              </a>
-            )}
-            {twitter && (
-              <a href={twitter} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-sky-100 text-sky-700 hover:scale-110 transition-transform">
-                <Twitter className="h-4 w-4" />
-              </a>
-            )}
+           <div className="flex items-center gap-3">
+             {linkedin && (
+               <a 
+                 href={linkedin} 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 className="p-2 rounded-full bg-blue-100 text-blue-700 hover:scale-110 transition-transform"
+                 onClick={() => logConsent('linkedin', linkedin)}
+               >
+                 <Linkedin className="h-4 w-4" />
+               </a>
+             )}
+             {instagram && (
+               <a 
+                 href={instagram} 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 className="p-2 rounded-full bg-pink-100 text-pink-700 hover:scale-110 transition-transform"
+                 onClick={() => logConsent('instagram', instagram)}
+               >
+                 <Instagram className="h-4 w-4" />
+               </a>
+             )}
+             {twitter && (
+               <a 
+                 href={twitter} 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 className="p-2 rounded-full bg-sky-100 text-sky-700 hover:scale-110 transition-transform"
+                 onClick={() => logConsent('twitter', twitter)}
+               >
+                 <Twitter className="h-4 w-4" />
+               </a>
+             )}
             {!linkedin && !instagram && !twitter && (
               <p className="text-xs text-muted-foreground italic">Nenhum perfil público vinculado.</p>
             )}
