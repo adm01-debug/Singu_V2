@@ -447,7 +447,7 @@ const Ficha360 = () => {
         description={`Visão consolidada de ${fullName}: perfil, interesses, frequência de contato e conversas relacionadas.`}
       />
       <AplicarFavoritoCompartilhadoDialog onApply={applyFavoriteFilters} />
-      <div className="min-h-screen p-4 md:p-6 space-y-4">
+       <div className="min-h-screen p-4 md:p-6 space-y-4 print:p-0 print:space-y-6">
         <PageHeader
           backTo="/contatos"
           backLabel="Contatos"
