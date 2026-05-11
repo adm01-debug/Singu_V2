@@ -34,33 +34,33 @@ export interface DateReminders {
  export function useImportantDates(contacts: Contact[], interactions: Interaction[]) {
    const { user } = useAuth();
 
-   const { data: lifeEvents = [] } = useQuery({
-   const { data: relatives = [] } = useQuery({
-     queryKey: ['all-relatives', user?.id],
-     queryFn: async () => {
-       if (!user) return [];
-       const { data, error } = await supabase
-         .from('contact_relatives')
-         .select('*')
-         .eq('user_id', user.id);
-       if (error) throw error;
-       return data;
-     },
-     enabled: !!user,
-   });
+  const { data: lifeEvents = [] } = useQuery({
+    queryKey: ['all-life-events', user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data, error } = await supabase
+        .from('life_events')
+        .select('*')
+        .eq('user_id', user.id);
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user,
+  });
 
-     queryKey: ['all-life-events', user?.id],
-     queryFn: async () => {
-       if (!user) return [];
-       const { data, error } = await supabase
-         .from('life_events')
-         .select('*')
-         .eq('user_id', user.id);
-       if (error) throw error;
-       return data;
-     },
-     enabled: !!user,
-   });
+  const { data: relatives = [] } = useQuery({
+    queryKey: ['all-relatives', user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data, error } = await supabase
+        .from('contact_relatives')
+        .select('*')
+        .eq('user_id', user.id);
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user,
+  });
 
    const reminders = useMemo<DateReminders>(() => {
     const now = new Date();
