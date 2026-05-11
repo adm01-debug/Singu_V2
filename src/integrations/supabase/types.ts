@@ -2971,6 +2971,7 @@ export type Database = {
           last_name: string
           life_events: Json | null
           linkedin: string | null
+          motivation_direction: string | null
           notes: string | null
           personal_notes: string | null
           phone: string | null
@@ -2984,8 +2985,10 @@ export type Database = {
           twitter: string | null
           updated_at: string
           user_id: string
+          vak_dominant: string | null
           version: number
           whatsapp: string | null
+          working_style: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -3006,6 +3009,7 @@ export type Database = {
           last_name: string
           life_events?: Json | null
           linkedin?: string | null
+          motivation_direction?: string | null
           notes?: string | null
           personal_notes?: string | null
           phone?: string | null
@@ -3019,8 +3023,10 @@ export type Database = {
           twitter?: string | null
           updated_at?: string
           user_id: string
+          vak_dominant?: string | null
           version?: number
           whatsapp?: string | null
+          working_style?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -3041,6 +3047,7 @@ export type Database = {
           last_name?: string
           life_events?: Json | null
           linkedin?: string | null
+          motivation_direction?: string | null
           notes?: string | null
           personal_notes?: string | null
           phone?: string | null
@@ -3054,8 +3061,10 @@ export type Database = {
           twitter?: string | null
           updated_at?: string
           user_id?: string
+          vak_dominant?: string | null
           version?: number
           whatsapp?: string | null
+          working_style?: string | null
         }
         Relationships: [
           {
