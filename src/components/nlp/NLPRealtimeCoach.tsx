@@ -16,7 +16,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useVAKAnalysis } from '@/hooks/useVAKAnalysis';
 import { useMetaprogramAnalysis } from '@/hooks/useMetaprogramAnalysis';
-import { VAK_LABELS, VAK_COMMUNICATION_TIPS, type VAKSystem } from '@/types/vak';
+import { VAK_LABELS, VAK_COMMUNICATION_TIPS, type VAKType } from '@/types/vak';
 import { METAPROGRAM_LABELS } from '@/types/metaprograms';
 import { SLEIGHT_TEMPLATES } from '@/data/sleightOfMouth';
 import { toast } from 'sonner';
@@ -59,19 +59,19 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
 
       // 1. VAK Proactive Suggestions
       if (vak.dominantSystem) {
-        const tips = VAK_COMMUNICATION_TIPS[vak.dominantSystem as VAKSystem];
+        const tips = VAK_COMMUNICATION_TIPS[vak.dominantSystem as VAKType];
         newSuggestions.push({
           id: `vak-${vak.dominantSystem}`,
           type: 'vak',
-          text: `Tom de voz ${VAK_LABELS[vak.dominantSystem as VAKSystem].name} detectado. Use: ${tips.useWords.slice(0, 3).join(', ')}.`,
+          text: `Tom de voz ${VAK_LABELS[vak.dominantSystem as VAKType].name} detectado. Use: ${tips.useWords.slice(0, 3).join(', ')}.`,
           icon: <MessageSquare className="h-3 w-3" />,
           color: 'text-blue-500'
         });
       }
       
       // 2. Metaprogram Insights
-      if (meta.motivation?.direction) {
-        const isToward = meta.motivation.direction === 'toward';
+      if (meta.scores.toward > 0 || meta.scores.awayFrom > 0) {
+        const isToward = meta.scores.toward >= meta.scores.awayFrom;
         newSuggestions.push({
           id: `meta-motivation`,
           type: 'metaprogram',
@@ -110,14 +110,14 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
   const handleFeedback = async (suggestionId: string, type: 'up' | 'down') => {
     setFeedbackGiven(prev => ({ ...prev, [suggestionId]: type }));
     
-    if (user && contactId) {
+    if (user) {
       try {
+        const suggestion = suggestions.find(s => s.id === suggestionId);
         await supabase.from('objection_example_feedback').insert({
-          contact_id: contactId,
           user_id: user.id,
-          is_helpful: type === 'up',
-          objection_text: content.substring(0, 200),
-          suggested_response: suggestions.find(s => s.id === suggestionId)?.fullContent || suggestions.find(s => s.id === suggestionId)?.text
+          is_useful: type === 'up',
+          objection: content.substring(0, 500),
+          category: suggestion?.type || 'general'
         });
       } catch (e) {
         console.error("Error saving feedback:", e);
@@ -143,11 +143,11 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
               <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-wider">
                 <Sparkles className="h-3 w-3 animate-pulse" /> Coach NLP Proativo
               </div>
-              {detectedVAK?.dominantSystem && (
-                <Badge variant="secondary" className="text-[9px] h-5 px-2 bg-primary/10 text-primary border-primary/20">
-                  SISTEMA: {VAK_LABELS[detectedVAK.dominantSystem as VAKSystem].name}
-                </Badge>
-              )}
+            {detectedVAK?.dominantSystem && (
+              <Badge variant="secondary" className="text-[9px] h-5 px-2 bg-primary/10 text-primary border-primary/20">
+                SISTEMA: {VAK_LABELS[detectedVAK.dominantSystem as VAKType].name}
+              </Badge>
+            )}
             </div>
             
             <div className="space-y-3">
@@ -209,13 +209,13 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
               ))}
             </div>
 
-            {detectedMeta?.motivation?.direction && (
+            {(detectedMeta?.scores?.toward > 0 || detectedMeta?.scores?.awayFrom > 0) && (
               <div className="pt-2 border-t border-primary/10 flex flex-wrap gap-2">
                 <Badge variant="outline" className="text-[9px] font-normal text-muted-foreground bg-white/50">
-                  🎯 Motivação: {detectedMeta.motivation.direction === 'toward' ? 'Em direção a' : 'Afastar-se de'}
+                  🎯 Motivação: {detectedMeta.scores.toward >= detectedMeta.scores.awayFrom ? 'Em direção a' : 'Afastar-se de'}
                 </Badge>
                 <Badge variant="outline" className="text-[9px] font-normal text-muted-foreground bg-white/50">
-                  📊 Escopo: {detectedMeta.informationProcessing?.scope === 'global' ? 'Global (Big Picture)' : 'Detalhado'}
+                  📊 Escopo: {detectedMeta.scores.general >= detectedMeta.scores.specific ? 'Global (Big Picture)' : 'Detalhado'}
                 </Badge>
               </div>
             )}
