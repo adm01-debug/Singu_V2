@@ -175,8 +175,86 @@ const RelatorioContato = () => {
           </div>
         </section>
 
-        {/* Perfil DISC */}
-        <section className="mb-8">
+         {/* Insights Automáticos do Histórico */}
+         <section className="mb-8">
+           <h2 className="text-xl font-bold text-foreground border-b-2 border-primary pb-2 mb-6 flex items-center gap-2">
+             <Brain className="h-5 w-5 text-primary" /> Insights Inteligentes do Histórico
+           </h2>
+           
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+             <Card className="bg-muted/30 border-none shadow-none">
+               <CardHeader className="pb-2">
+                 <CardTitle className="text-sm flex items-center gap-2">
+                   <Target className="h-4 w-4 text-primary" /> Preferências e Tom
+                 </CardTitle>
+               </CardHeader>
+               <CardContent className="space-y-4">
+                 <div>
+                   <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Tom Preferido</p>
+                   <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
+                     {data.insights?.preferredTone}
+                   </Badge>
+                 </div>
+                 <div>
+                   <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Padrões de Preferência</p>
+                   <ul className="text-sm space-y-1.5">
+                     {data.insights?.topPreferences.length ? data.insights.topPreferences.map((p, i) => (
+                       <li key={i} className="flex items-start gap-2">
+                         <div className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                         <span className="line-clamp-2">{p}</span>
+                       </li>
+                     )) : (
+                       <li className="text-muted-foreground italic">Nenhum padrão detectado ainda.</li>
+                     )}
+                   </ul>
+                 </div>
+               </CardContent>
+             </Card>
+ 
+             <Card className="bg-muted/30 border-none shadow-none">
+               <CardHeader className="pb-2">
+                 <CardTitle className="text-sm flex items-center gap-2">
+                   <Shield className="h-4 w-4 text-destructive" /> Objeções Recorrentes
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <ul className="text-sm space-y-3">
+                   {data.insights?.recurringObjections.length ? data.insights.recurringObjections.map((o, i) => (
+                     <li key={i} className="bg-white/50 p-2.5 rounded border border-destructive/10">
+                       <span className="text-destructive font-medium text-[11px] uppercase block mb-1">Barreira {i+1}</span>
+                       <p className="line-clamp-2 italic text-foreground/80">"{o}"</p>
+                     </li>
+                   )) : (
+                     <li className="text-muted-foreground italic">Nenhuma objeção explícita no histórico.</li>
+                   )}
+                 </ul>
+               </CardContent>
+             </Card>
+           </div>
+ 
+           <Card className="mt-6 border-primary/20 bg-primary/5">
+             <CardHeader className="pb-2">
+               <CardTitle className="text-sm flex items-center gap-2">
+                 <Lightbulb className="h-4 w-4 text-primary" /> Recomendações Estratégicas
+               </CardTitle>
+             </CardHeader>
+             <CardContent>
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                 {data.insights?.communicationRecommendations.map((rec, i) => (
+                   <div key={i} className="flex gap-3 items-start p-2">
+                     <div className="bg-primary/20 rounded-full p-1 mt-0.5 shrink-0">
+                       <Zap className="h-3 w-3 text-primary" />
+                     </div>
+                     <p className="text-xs leading-relaxed text-foreground/90">{rec}</p>
+                   </div>
+                 ))}
+               </div>
+             </CardContent>
+           </Card>
+         </section>
+ 
+         {/* Perfil DISC */}
+         <section className="mb-8">
           <h2 className="text-xl font-bold text-foreground border-b-2 border-primary pb-2 mb-4">
             🎯 Perfil DISC
           </h2>
