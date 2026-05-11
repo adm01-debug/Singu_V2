@@ -268,18 +268,27 @@ const RelatorioContato = () => {
                    <Shield className="h-4 w-4 text-destructive" /> Objeções Recorrentes
                  </CardTitle>
                </CardHeader>
-               <CardContent>
-                 <ul className="text-sm space-y-3">
-                   {data.insights?.recurringObjections.length ? data.insights.recurringObjections.map((o, i) => (
-                     <li key={i} className="bg-white/50 p-2.5 rounded border border-destructive/10">
-                       <span className="text-destructive font-medium text-[11px] uppercase block mb-1">Barreira {i+1}</span>
-                       <p className="line-clamp-2 italic text-foreground/80">"{o}"</p>
-                     </li>
-                   )) : (
-                     <li className="text-muted-foreground italic">Nenhuma objeção explícita no histórico.</li>
-                   )}
-                 </ul>
-               </CardContent>
+                <CardContent>
+                  {editingInsights ? (
+                    <Textarea 
+                      value={editedInsights?.recurringObjections.join("\n")} 
+                      onChange={(e) => setEditedInsights(prev => prev ? {...prev, recurringObjections: e.target.value.split("\n")} : null)}
+                      className="text-sm min-h-[120px]"
+                      placeholder="Uma objeção por linha"
+                    />
+                  ) : (
+                    <ul className="text-sm space-y-3">
+                      {editedInsights?.recurringObjections.length ? editedInsights.recurringObjections.map((o, i) => (
+                        <li key={i} className="bg-white/50 p-2.5 rounded border border-destructive/10">
+                          <span className="text-destructive font-medium text-[11px] uppercase block mb-1">Barreira {i+1}</span>
+                          <p className="line-clamp-2 italic text-foreground/80">"{o}"</p>
+                        </li>
+                      )) : (
+                        <li className="text-muted-foreground italic">Nenhuma objeção explícita no histórico.</li>
+                      )}
+                    </ul>
+                  )}
+                </CardContent>
              </Card>
            </div>
  
@@ -289,18 +298,27 @@ const RelatorioContato = () => {
                  <Lightbulb className="h-4 w-4 text-primary" /> Recomendações Estratégicas
                </CardTitle>
              </CardHeader>
-             <CardContent>
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                 {data.insights?.communicationRecommendations.map((rec, i) => (
-                   <div key={i} className="flex gap-3 items-start p-2">
-                     <div className="bg-primary/20 rounded-full p-1 mt-0.5 shrink-0">
-                       <Zap className="h-3 w-3 text-primary" />
-                     </div>
-                     <p className="text-xs leading-relaxed text-foreground/90">{rec}</p>
-                   </div>
-                 ))}
-               </div>
-             </CardContent>
+              <CardContent>
+                {editingInsights ? (
+                  <Textarea 
+                    value={editedInsights?.communicationRecommendations.join("\n")} 
+                    onChange={(e) => setEditedInsights(prev => prev ? {...prev, communicationRecommendations: e.target.value.split("\n")} : null)}
+                    className="text-sm min-h-[100px]"
+                    placeholder="Uma recomendação por linha"
+                  />
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {editedInsights?.communicationRecommendations.map((rec, i) => (
+                      <div key={i} className="flex gap-3 items-start p-2">
+                        <div className="bg-primary/20 rounded-full p-1 mt-0.5 shrink-0">
+                          <Zap className="h-3 w-3 text-primary" />
+                        </div>
+                        <p className="text-xs leading-relaxed text-foreground/90">{rec}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
            </Card>
          </section>
  
