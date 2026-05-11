@@ -120,7 +120,7 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
            newSuggestions.push({
              id: 'rapport-low',
              type: 'rapport',
-             text: `Baixo alinhamento com perfil ${VAK_LABELS[contactVAK].name}. Use mais predicados como: ${VAK_COMMUNICATION_TIPS[contactVAK].useWords.slice(0, 3).join(', ')}.`,
+             text: `Baixo alinhamento com perfil ${VAK_LABELS[contactVAK as VAKType].name}. Use mais predicados como: ${VAK_COMMUNICATION_TIPS[contactVAK as VAKType].useWords.slice(0, 3).join(', ')}.`,
              icon: <Activity className="h-3 w-3" />,
              color: 'text-destructive'
            });
@@ -256,7 +256,7 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
                           <Button 
                             variant="ghost" 
                             size="icon" 
-                            className={`h-7 w-7 rounded-full ${feedbackGiven[s.id] === 'up' ? 'text-success bg-success/10' : 'text-muted-foreground hover:text-success'}`}
+                            className={`h-7 w-7 rounded-full ${feedbackGiven[s.id] === "up" ? 'text-success bg-success/10' : 'text-muted-foreground hover:text-success'}`}
                             onClick={() => handleFeedback(s.id, 'up')}
                           >
                             <ThumbsUp className="h-3 w-3" />
@@ -264,7 +264,7 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
                           <Button 
                             variant="ghost" 
                             size="icon" 
-                            className={`h-7 w-7 rounded-full ${feedbackGiven[s.id] === 'down' ? 'text-destructive bg-destructive/10' : 'text-muted-foreground hover:text-destructive'}`}
+                            className={`h-7 w-7 rounded-full ${feedbackGiven[s.id] === "down" ? 'text-destructive bg-destructive/10' : 'text-muted-foreground hover:text-destructive'}`}
                             onClick={() => handleFeedback(s.id, 'down')}
                           >
                             <ThumbsDown className="h-3 w-3" />
