@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from '@/hooks/use-toast';
+import { useNLPAutoAnalysis } from "./useNLPAutoAnalysis";
 import {
   MetaprogramScores,
   MetaprogramProfile,
@@ -18,6 +19,7 @@ import { logger } from "@/lib/logger";
 
 export function useMetaprogramAnalysis() {
   const { user } = useAuth();
+  const { triggerAnalysis } = useNLPAutoAnalysis();
   const [loading, setLoading] = useState(false);
 
   // Analyze text for metaprogram patterns
@@ -210,6 +212,10 @@ export function useMetaprogramAnalysis() {
            analyzed_text: analyzedText.substring(0, 1000),
            is_validated: false
         })
+      // Auto-trigger aggregated analysis update
+      if (user && contactId) {
+        triggerAnalysis(contactId, interactionId || "", analyzedText, null, "whatsapp", false);
+      }
         .select()
         .maybeSingle();
 
