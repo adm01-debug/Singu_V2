@@ -28,7 +28,7 @@
            .order('created_at', { ascending: false });
          
          if (error) throw error;
-         return data as SocialInsight[];
+         return (data as any) as SocialInsight[];
        } catch (e) {
          // Mock data if table doesn't exist yet for demonstration
          return [
