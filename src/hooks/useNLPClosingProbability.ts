@@ -20,7 +20,7 @@ export function useNLPClosingProbability(deal: PipelineDeal) {
       // Simulamos uma análise profunda baseada em logs de interação
       // Em um cenário real, consultaríamos tabelas de análise de sentimentos e rapport
       
-      const baseProb = deal.probability || 20;
+      const baseProb = deal.probabilidade || 20;
       
       // Fatores determinísticos simulados para demonstração de inteligência
       const factors = [
