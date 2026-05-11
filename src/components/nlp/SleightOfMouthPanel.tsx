@@ -18,7 +18,18 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { SLEIGHT_OF_MOUTH_PATTERNS } from '@/data/sleightOfMouth';
+ import { SLEIGHT_OF_MOUTH_PATTERNS, SLEIGHT_TEMPLATES } from '@/data/sleightOfMouth';
+   const { data: interaction } = useQuery({
+     queryKey: ['interaction', interactionId],
+     queryFn: async () => {
+       if (!interactionId) return null;
+       const { data, error } = await supabase.from('interactions').select('*').eq('id', interactionId).single();
+       if (error) throw error;
+       return data;
+     },
+     enabled: !!interactionId
+   });
+ 
 
 interface ReframingItem {
   id: string;
