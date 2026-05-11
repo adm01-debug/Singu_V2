@@ -1,4 +1,4 @@
-import { MessageCircle, Wifi, WifiOff, Send, Inbox, Eye, Clock, Users } from 'lucide-react';
+ import { MessageCircle, Wifi, WifiOff, Send, Inbox, Eye, Clock, Users, FileAudio, FileText, Brain } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -18,8 +18,82 @@ export function WhatsAppDashboard({ contactId }: Props) {
   const hasData = instances.length > 0 || messages.length > 0 || kpis;
   if (!hasData) return null;
 
-  return (
-    <div className="space-y-4">
+   const { data: indexedMessages } = useQuery({
+     queryKey: ['whatsapp-indexed', contactId],
+     queryFn: async () => {
+       if (!contactId) return [];
+       const { data, error } = await supabase
+         .from('whatsapp_messages_index')
+         .select('*')
+         .eq('contact_id', contactId)
+         .order('received_at', { ascending: false });
+       if (error) throw error;
+       return data;
+     },
+     enabled: !!contactId
+   });
+ 
+   return (
+     <div className="space-y-4 animate-in fade-in duration-500">
+       {/* Indexed Profile Messages (WhatsApp Capture & Indexing) */}
+       {indexedMessages && indexedMessages.length > 0 && (
+         <Card className="border-indigo-500/20 bg-gradient-to-br from-indigo-50/50 to-white">
+           <CardHeader className="pb-3">
+             <CardTitle className="flex items-center gap-2 text-sm">
+               <Brain className="h-4 w-4 text-indigo-500" />
+               Captura & Indexação de Perfil (WhatsApp)
+             </CardTitle>
+           </CardHeader>
+           <CardContent>
+             <div className="space-y-3">
+               {indexedMessages.map(msg => (
+                 <div key={msg.id} className="rounded-lg border bg-white p-3 text-xs shadow-sm hover:border-indigo-300 transition-colors">
+                   <div className="flex items-center justify-between mb-2">
+                     <Badge variant="outline" className="text-[10px] uppercase font-bold">
+                       {msg.message_type === 'audio' ? <><FileAudio className="h-3 w-3 mr-1 inline" /> Áudio</> : <><FileText className="h-3 w-3 mr-1 inline" /> Texto</>}
+                     </Badge>
+                     <span className="text-[10px] text-muted-foreground">{format(new Date(msg.received_at), 'dd/MM HH:mm')}</span>
+                   </div>
+                   
+                   {msg.content && <p className="mb-2 italic text-muted-foreground">"{msg.content}"</p>}
+                   
+                   {msg.transcription && (
+                     <div className="bg-indigo-50/50 p-2 rounded border border-indigo-100 mb-2">
+                       <p className="font-semibold text-indigo-900 mb-1 flex items-center gap-1">
+                         <FileAudio className="h-3 w-3" /> Transcrição:
+                       </p>
+                       <p className="text-indigo-800/80">{msg.transcription}</p>
+                     </div>
+                   )}
+ 
+                   <div className="flex flex-wrap gap-1 mt-2">
+                     {msg.sentiment && (
+                       <Badge variant="secondary" className={cn(
+                         "text-[9px] uppercase font-bold",
+                         msg.sentiment === 'positive' ? "bg-emerald-100 text-emerald-700" : 
+                         msg.sentiment === 'negative' ? "bg-rose-100 text-rose-700" : "bg-slate-100"
+                       )}>
+                         Sentimento: {msg.sentiment}
+                       </Badge>
+                     )}
+                     {msg.intent && (
+                       <Badge variant="outline" className="text-[9px] uppercase font-bold text-indigo-600 border-indigo-200">
+                         Intento: {msg.intent}
+                       </Badge>
+                     )}
+                     {(msg.neuro_tags as string[])?.map((tag: string) => (
+                       <Badge key={tag} className="text-[9px] bg-primary/10 text-primary border-none">
+                         #{tag}
+                       </Badge>
+                     ))}
+                   </div>
+                 </div>
+               ))}
+             </div>
+           </CardContent>
+         </Card>
+       )}
+ 
       {/* Instances */}
       {instances.length > 0 && (
         <Card>
