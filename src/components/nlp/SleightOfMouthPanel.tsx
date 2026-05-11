@@ -20,6 +20,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { SLEIGHT_OF_MOUTH_PATTERNS, SLEIGHT_TEMPLATES } from '@/data/sleightOfMouth';
+import { useNLPAnalysisValidation } from "@/hooks/useNLPAnalysisValidation";
+import { ThumbsUp, ThumbsDown } from "lucide-react";
 
 interface ReframingItem {
   id: string;
@@ -38,6 +40,7 @@ interface SleightOfMouthPanelProps {
 
 export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouthPanelProps) {
   const { user } = useAuth();
+  const { addReframingFeedback } = useNLPAnalysisValidation();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<'detected' | 'templates'>('detected');
 
