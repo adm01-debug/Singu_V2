@@ -2983,9 +2983,11 @@ export type Database = {
           last_name: string
           life_events: Json | null
           linkedin: string | null
+          metaprogram_profile: Json | null
           most_frequent_objection: string | null
           motivation_direction: string | null
           notes: string | null
+          objection_patterns: Json | null
           personal_notes: string | null
           phone: string | null
           rapport_metadata: Json | null
@@ -3000,6 +3002,7 @@ export type Database = {
           updated_at: string
           user_id: string
           vak_dominant: string | null
+          vak_profile: Json | null
           version: number
           whatsapp: string | null
           working_style: string | null
@@ -3026,9 +3029,11 @@ export type Database = {
           last_name: string
           life_events?: Json | null
           linkedin?: string | null
+          metaprogram_profile?: Json | null
           most_frequent_objection?: string | null
           motivation_direction?: string | null
           notes?: string | null
+          objection_patterns?: Json | null
           personal_notes?: string | null
           phone?: string | null
           rapport_metadata?: Json | null
@@ -3043,6 +3048,7 @@ export type Database = {
           updated_at?: string
           user_id: string
           vak_dominant?: string | null
+          vak_profile?: Json | null
           version?: number
           whatsapp?: string | null
           working_style?: string | null
@@ -3069,9 +3075,11 @@ export type Database = {
           last_name?: string
           life_events?: Json | null
           linkedin?: string | null
+          metaprogram_profile?: Json | null
           most_frequent_objection?: string | null
           motivation_direction?: string | null
           notes?: string | null
+          objection_patterns?: Json | null
           personal_notes?: string | null
           phone?: string | null
           rapport_metadata?: Json | null
@@ -3086,6 +3094,7 @@ export type Database = {
           updated_at?: string
           user_id?: string
           vak_dominant?: string | null
+          vak_profile?: Json | null
           version?: number
           whatsapp?: string | null
           working_style?: string | null
@@ -6719,6 +6728,7 @@ export type Database = {
           id: string
           initiated_by: string | null
           key_insights: string[] | null
+          nlp_analysis: Json | null
           response_time: number | null
           sentiment: string | null
           tags: string[] | null
@@ -6742,6 +6752,7 @@ export type Database = {
           id?: string
           initiated_by?: string | null
           key_insights?: string[] | null
+          nlp_analysis?: Json | null
           response_time?: number | null
           sentiment?: string | null
           tags?: string[] | null
@@ -6765,6 +6776,7 @@ export type Database = {
           id?: string
           initiated_by?: string | null
           key_insights?: string[] | null
+          nlp_analysis?: Json | null
           response_time?: number | null
           sentiment?: string | null
           tags?: string[] | null
@@ -8175,6 +8187,67 @@ export type Database = {
         }
         Relationships: []
       }
+      nlp_feedback: {
+        Row: {
+          adjusted_value: Json | null
+          analysis_type: string
+          contact_id: string | null
+          created_at: string | null
+          feedback_notes: string | null
+          id: string
+          interaction_id: string | null
+          is_correct: boolean | null
+          original_detection: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          adjusted_value?: Json | null
+          analysis_type: string
+          contact_id?: string | null
+          created_at?: string | null
+          feedback_notes?: string | null
+          id?: string
+          interaction_id?: string | null
+          is_correct?: boolean | null
+          original_detection?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          adjusted_value?: Json | null
+          analysis_type?: string
+          contact_id?: string | null
+          created_at?: string | null
+          feedback_notes?: string | null
+          id?: string
+          interaction_id?: string | null
+          is_correct?: boolean | null
+          original_detection?: Json | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nlp_feedback_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "nlp_feedback_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+          {
+            foreignKeyName: "nlp_feedback_interaction_id_fkey"
+            columns: ["interaction_id"]
+            isOneToOne: false
+            referencedRelation: "interactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notification_preferences: {
         Row: {
           created_at: string
@@ -9005,6 +9078,7 @@ export type Database = {
           status: string | null
           suggested_response: string
           user_id: string
+          validation_feedback: Json | null
         }
         Insert: {
           confidence_score?: number | null
@@ -9019,6 +9093,7 @@ export type Database = {
           status?: string | null
           suggested_response: string
           user_id: string
+          validation_feedback?: Json | null
         }
         Update: {
           confidence_score?: number | null
@@ -9033,6 +9108,7 @@ export type Database = {
           status?: string | null
           suggested_response?: string
           user_id?: string
+          validation_feedback?: Json | null
         }
         Relationships: []
       }
