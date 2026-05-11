@@ -2,7 +2,8 @@ import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
-import { BookOpen, Zap, AlertTriangle, CheckCircle } from 'lucide-react';
+import { BookOpen, Zap, AlertTriangle, CheckCircle, Smile, Target } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface AnalysisResult {
