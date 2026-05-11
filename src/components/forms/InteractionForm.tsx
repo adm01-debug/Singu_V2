@@ -228,14 +228,7 @@ export function InteractionForm({
               <FormItem className="md:col-span-2">
                 <div className="flex items-center justify-between">
                   <FormLabel>Detalhes</FormLabel>
-                  <VoiceInput
-                    onTranscription={(text) => {
-                      const currentContent = field.value || '';
-                      const newContent = currentContent 
-                        ? `${currentContent}\n\n${text}` 
-                        : text;
-                       field.onChange(newContent);
-                     }}
+                   <VoiceInput
                      uploadAudio
                      onTranscription={(text, audioUrl) => {
                        const currentContent = field.value || '';
@@ -246,9 +239,9 @@ export function InteractionForm({
                        if (audioUrl) form.setValue('audio_url', audioUrl);
                        form.setValue('transcription', text);
                      }}
-                    placeholder="Gravar por voz"
-                    className="text-xs"
-                  />
+                     placeholder="Gravar por voz"
+                     className="text-xs"
+                   />
                 </div>
                 <FormControl>
                   <Textarea 
