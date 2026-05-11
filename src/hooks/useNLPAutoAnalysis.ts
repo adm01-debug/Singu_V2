@@ -125,12 +125,37 @@ export function useNLPAutoAnalysis() {
         ...(mostFrequentObjection && { most_frequent_objection: mostFrequentObjection })
       };
 
-      const { data: contactData } = await supabase
-        .from('contacts')
-        .update(behavioralUpdates)
-        .eq('id', contactId)
-        .select('company_id')
-        .single();
+       // Prepare detailed profile blobs for JSONB columns
+       const vak_profile = {
+         primary: vakResult.dominantSystem,
+         scores: {
+           visual: vakResult.visual.score,
+           auditory: vakResult.auditory.score,
+           kinesthetic: vakResult.kinesthetic.score,
+           digital: vakResult.digital.score
+         },
+         confidence: vakResult.confidence,
+         last_updated: new Date().toISOString()
+       };
+
+       const metaprogram_profile = {
+         motivation: metaResult.scores.toward >= metaResult.scores.awayFrom ? 'toward' : 'away_from',
+         working_style: metaResult.scores.options >= metaResult.scores.procedures ? 'options' : 'procedures',
+         reference_frame: metaResult.scores.internal >= metaResult.scores.external ? 'internal' : 'external',
+         confidence: 75, // Simplified confidence
+         last_updated: new Date().toISOString()
+       };
+
+       const { data: contactData } = await supabase
+         .from('contacts')
+         .update({
+           ...behavioralUpdates,
+           vak_profile,
+           metaprogram_profile
+         })
+         .eq('id', contactId)
+         .select('company_id')
+         .single();
 
       // Sync to company if linked
       if (contactData?.company_id) {
