@@ -4,7 +4,13 @@
  */
 export interface VoiceAgentAction {
   /** The type of action to execute */
-   action: "search" | "navigate" | "answer" | "create_interaction" | "create_reminder" | "create_relative";
+    action: "search" | "navigate" | "answer" | "create_interaction" | "create_reminder" | "create_relative" | "update_preferences";
+     /** Preferences info (for action="update_preferences") */
+     preferences?: {
+       channel?: string;
+       preferredDays?: string[];
+       preferredTimes?: string[];
+     };
   /** Friendly response text to speak back to the user via TTS */
   response: string;
   /** Additional data payload for the action */
