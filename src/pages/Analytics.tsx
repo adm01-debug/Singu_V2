@@ -37,7 +37,7 @@ const DISCAnalyticsPanel = lazy(() => import('@/components/analytics/DISCAnalyti
 const NeuroPortfolioDashboard = lazy(() => import('@/components/analytics/NeuroPortfolioDashboard'));
 const AdvancedAnalyticsTab = lazy(() => import('@/components/analytics/AdvancedAnalyticsTab'));
 const ReportsTab = lazy(() => import('@/components/analytics/ReportsTab'));
-import { DISCTrainingMode, DISCConversionMetrics } from '@/components/disc';
+ import { DISCTrainingMode, DISCConversionMetrics, DISCCompatibilityAlerts } from '@/components/disc';
 import {
   NLPTrainingMode, NLPConversionMetrics,
   RapportRealtimeCoach, IncongruenceDetector, MiltonianCalibration,
@@ -212,15 +212,18 @@ const Analytics = () => {
             </motion.div>
           </TabsContent>
 
-          <TabsContent value="disc" className="space-y-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-                <DISCAnalyticsPanel />
-              </Suspense>
-              <DISCTrainingMode />
-              <DISCConversionMetrics />
-            </motion.div>
-          </TabsContent>
+           <TabsContent value="disc" className="space-y-6">
+             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+               <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                 <DISCAnalyticsPanel />
+               </Suspense>
+               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                 <DISCCompatibilityAlerts />
+                 <DISCConversionMetrics />
+               </div>
+               <DISCTrainingMode />
+             </motion.div>
+           </TabsContent>
 
           <TabsContent value="rfm" className="space-y-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
