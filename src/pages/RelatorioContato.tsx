@@ -165,12 +165,20 @@ const RelatorioContato = () => {
       {/* Header com botões (não imprime) */}
       <div className="print:hidden bg-background border-b p-4 flex items-center justify-between sticky top-0 z-10">
         <BackButton to={`/contatos/${id}`} label="Voltar ao contato" />
-        <div className="flex gap-2">
-          <Button onClick={handlePrint}>
-            <Printer className="h-4 w-4 mr-2" />
-            Imprimir / Salvar PDF
-          </Button>
-        </div>
+         <div className="flex gap-2 flex-wrap">
+           <Button variant="outline" onClick={() => setEditingInsights(!editingInsights)}>
+             <Edit3 className="h-4 w-4 mr-2" />
+             {editingInsights ? "Visualizar" : "Editar Insights"}
+           </Button>
+           <Button variant="outline" onClick={handleExportCSV}>
+             <FileSpreadsheet className="h-4 w-4 mr-2" />
+             Exportar CSV
+           </Button>
+           <Button onClick={handlePrint}>
+             <Printer className="h-4 w-4 mr-2" />
+             Imprimir / Salvar PDF
+           </Button>
+         </div>
       </div>
 
       {/* Conteúdo do Relatório */}
@@ -215,25 +223,42 @@ const RelatorioContato = () => {
                  </CardTitle>
                </CardHeader>
                <CardContent className="space-y-4">
-                 <div>
-                   <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Tom Preferido</p>
-                   <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
-                     {data.insights?.preferredTone}
-                   </Badge>
-                 </div>
-                 <div>
-                   <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Padrões de Preferência</p>
-                   <ul className="text-sm space-y-1.5">
-                     {data.insights?.topPreferences.length ? data.insights.topPreferences.map((p, i) => (
-                       <li key={i} className="flex items-start gap-2">
-                         <div className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
-                         <span className="line-clamp-2">{p}</span>
-                       </li>
-                     )) : (
-                       <li className="text-muted-foreground italic">Nenhum padrão detectado ainda.</li>
-                     )}
-                   </ul>
-                 </div>
+                  <div>
+                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Tom Preferido</p>
+                    {editingInsights ? (
+                      <Input 
+                        value={editedInsights?.preferredTone} 
+                        onChange={(e) => setEditedInsights(prev => prev ? {...prev, preferredTone: e.target.value} : null)}
+                        className="h-8 text-sm"
+                      />
+                    ) : (
+                      <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
+                        {editedInsights?.preferredTone}
+                      </Badge>
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Padrões de Preferência</p>
+                    {editingInsights ? (
+                      <Textarea 
+                        value={editedInsights?.topPreferences.join("\n")} 
+                        onChange={(e) => setEditedInsights(prev => prev ? {...prev, topPreferences: e.target.value.split("\n")} : null)}
+                        className="text-sm min-h-[100px]"
+                        placeholder="Uma preferência por linha"
+                      />
+                    ) : (
+                      <ul className="text-sm space-y-1.5">
+                        {editedInsights?.topPreferences.length ? editedInsights.topPreferences.map((p, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <div className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                            <span className="line-clamp-2">{p}</span>
+                          </li>
+                        )) : (
+                          <li className="text-muted-foreground italic">Nenhum padrão detectado ainda.</li>
+                        )}
+                      </ul>
+                    )}
+                  </div>
                </CardContent>
              </Card>
  
