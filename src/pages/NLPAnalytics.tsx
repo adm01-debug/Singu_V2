@@ -65,7 +65,7 @@ const NLPAnalytics = () => {
          tags: data.tags || [],
          relationshipStage: (data.relationship_stage as any) || 'prospect',
          relationshipScore: data.relationship_score || 0,
-         interactionCount: data.interaction_count || 0,
+         interactionCount: (data as any).interactions_count || 0,
          sentiment: (data.sentiment as any) || 'neutral',
          behavior: (data.behavior as any) || {},
          hobbies: data.hobbies || [],
@@ -240,5 +240,3 @@ const NLPAnalytics = () => {
   };
  
  export default NLPAnalytics;
-
-export default NLPAnalytics;
