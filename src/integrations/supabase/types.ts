@@ -2609,6 +2609,42 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_relatives_audit: {
+        Row: {
+          change_type: string
+          changed_at: string
+          contact_id: string
+          id: string
+          new_data: Json | null
+          old_data: Json | null
+          reason: string | null
+          relative_id: string
+          user_id: string
+        }
+        Insert: {
+          change_type: string
+          changed_at?: string
+          contact_id: string
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          reason?: string | null
+          relative_id: string
+          user_id: string
+        }
+        Update: {
+          change_type?: string
+          changed_at?: string
+          contact_id?: string
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          reason?: string | null
+          relative_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_time_analysis: {
         Row: {
           avg_response_time_minutes: number | null
@@ -11657,6 +11693,20 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      v_contact_relatives_audit: {
+        Row: {
+          change_type: string | null
+          changed_at: string | null
+          contact_id: string | null
+          id: string | null
+          relationship_type: string | null
+          relative_id: string | null
+          relative_name: string | null
+          user_id: string | null
+          user_name: string | null
+        }
+        Relationships: []
       }
       v_life_events_audit: {
         Row: {
