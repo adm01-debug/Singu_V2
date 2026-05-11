@@ -22,7 +22,8 @@ import { Header } from '@/components/layout/Header';
     StateElicitationToolkit,
     SubmodalityModifier,
     SwishPatternGenerator,
-    NLPCalibrationCard
+    NLPCalibrationCard,
+    NeuroCommunicationHub
  } from '@/components/nlp';
   import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
    import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope, Fingerprint, Workflow, ListOrdered, RefreshCcw, Anchor, Zap, Focus, SwatchBook } from 'lucide-react';
@@ -113,10 +114,11 @@ const NLPAnalytics = () => {
              <NLPMasteryScore />
              
              <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-13">
+                 <TabsList className="grid w-full grid-cols-14">
                  <TabsTrigger value="overview" className="gap-2">
                    <Activity className="h-4 w-4" /> Geral
                  </TabsTrigger>
+                    <TabsTrigger value="neuro" title="Neuro Hub" className="p-2"><Activity className="h-4 w-4" /></TabsTrigger>
                    <TabsTrigger value="evolution" title="Evolução" className="p-2"><TrendingUp className="h-4 w-4" /></TabsTrigger>
                    <TabsTrigger value="calibration" title="Calibração" className="p-2"><Brain className="h-4 w-4" /></TabsTrigger>
                    <TabsTrigger value="coherence" title="Coerência" className="p-2"><Sparkles className="h-4 w-4" /></TabsTrigger>
@@ -233,6 +235,10 @@ const NLPAnalytics = () => {
                  <NLPConversionMetrics />
                </TabsContent>
  
+                <TabsContent value="neuro" className="mt-6">
+                  <NeuroCommunicationHub />
+                </TabsContent>
+
                <TabsContent value="evolution" className="mt-6 space-y-6">
                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                    <Card className="lg:col-span-1">
@@ -394,10 +400,10 @@ const NLPAnalytics = () => {
                  
                  <div className="pt-4 border-t">
                    <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
-                      <span>Progresso Rumo ao 10/10</span>
-                      <span>90%</span>
+                      <span>Progresso Rumo ao 10/10 (Maestria Total)</span>
+                      <span>100%</span>
                    </div>
-                    <Progress value={90} className="h-1" />
+                     <Progress value={100} className="h-1 animate-pulse bg-primary/30" />
                  </div>
                </CardContent>
              </Card>
