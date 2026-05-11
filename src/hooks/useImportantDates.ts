@@ -1,6 +1,9 @@
-import { useMemo } from 'react';
-import { Contact, Interaction } from '@/types';
-import { differenceInDays, addYears, isBefore, addMonths } from 'date-fns';
+ import { useMemo } from 'react';
+ import { Contact, Interaction } from '@/types';
+ import { differenceInDays, addYears, isBefore, addMonths } from 'date-fns';
+ import { useQuery } from '@tanstack/react-query';
+ import { supabase } from '@/integrations/supabase/client';
+ import { useAuth } from './useAuth';
 
 export interface ImportantDate {
   id: string;
@@ -28,8 +31,24 @@ export interface DateReminders {
   summary: string;
 }
 
-export function useImportantDates(contacts: Contact[], interactions: Interaction[]) {
-  const reminders = useMemo<DateReminders>(() => {
+ export function useImportantDates(contacts: Contact[], interactions: Interaction[]) {
+   const { user } = useAuth();
+
+   const { data: lifeEvents = [] } = useQuery({
+     queryKey: ['all-life-events', user?.id],
+     queryFn: async () => {
+       if (!user) return [];
+       const { data, error } = await supabase
+         .from('life_events')
+         .select('*')
+         .eq('user_id', user.id);
+       if (error) throw error;
+       return data;
+     },
+     enabled: !!user,
+   });
+
+   const reminders = useMemo<DateReminders>(() => {
     const now = new Date();
     const allDates: ImportantDate[] = [];
 
@@ -175,43 +194,44 @@ export function useImportantDates(contacts: Contact[], interactions: Interaction
         });
       }
 
-      // 5. Life events from contact
-      if (contact.lifeEvents && contact.lifeEvents.length > 0) {
-        contact.lifeEvents.forEach(event => {
-          const eventDate = new Date(event.date);
-          let nextEventDate = new Date(eventDate);
-          nextEventDate.setFullYear(now.getFullYear());
-          
-          if (isBefore(nextEventDate, now) && event.type !== 'promotion' && event.type !== 'achievement') {
-            nextEventDate = addYears(nextEventDate, 1);
-          }
-          
-          const daysUntil = differenceInDays(nextEventDate, now);
-          
-          if (Math.abs(daysUntil) <= 30) {
-            let urgency: ImportantDate['urgency'] = 'future';
-            if (daysUntil === 0) urgency = 'today';
-            else if (daysUntil < 0) urgency = 'overdue';
-            else if (daysUntil <= 7) urgency = 'urgent';
-            else urgency = 'upcoming';
+       // 5. Unified Life events from separate table
+       const contactEvents = lifeEvents.filter(le => le.contact_id === contact.id);
+       contactEvents.forEach(event => {
+         const eventDate = new Date(event.event_date);
+         let nextEventDate = new Date(eventDate);
+         
+         if (event.recurring) {
+           nextEventDate.setFullYear(now.getFullYear());
+           if (isBefore(nextEventDate, now)) {
+             nextEventDate = addYears(nextEventDate, 1);
+           }
+         }
+         
+         const daysUntil = differenceInDays(nextEventDate, now);
+         
+         if (Math.abs(daysUntil) <= 90) { // Show up to 90 days out in calendar
+           let urgency: ImportantDate['urgency'] = 'future';
+           if (daysUntil === 0) urgency = 'today';
+           else if (daysUntil < 0) urgency = 'overdue';
+           else if (daysUntil <= 7) urgency = 'urgent';
+           else urgency = 'upcoming';
 
-            allDates.push({
-              id: `event-${event.id}`,
-              contactId: contact.id,
-              contactName,
-              type: 'custom',
-              title: event.title,
-              date: nextEventDate,
-              daysUntil,
-              isPast: daysUntil < 0,
-              urgency,
-              suggestedAction: event.notes || 'Envie uma mensagem de reconhecimento',
-              messageTemplate: `Olá ${contact.firstName}! Lembrei que hoje é um dia especial. ${event.title}. Espero que esteja tudo bem!`,
-              reminderDays: [7, 1, 0]
-            });
-          }
-        });
-      }
+           allDates.push({
+             id: `event-${event.id}`,
+             contactId: contact.id,
+             contactName,
+             type: 'custom',
+             title: event.title,
+             date: nextEventDate,
+             daysUntil,
+             isPast: daysUntil < 0,
+             urgency,
+             suggestedAction: event.description || 'Envie uma mensagem de reconhecimento',
+             messageTemplate: `Olá ${contact.firstName}! Lembrei que em breve é um dia especial: ${event.title}. Espero que esteja tudo bem!`,
+             reminderDays: [event.reminder_days_before || 7, 0]
+           });
+         }
+       });
     });
 
     // Sort all dates by urgency and then by days until
