@@ -36,13 +36,19 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
   const createTask = useCreateTask();
    const [scriptOpen, setScriptOpen] = useState(false);
    const [isEditingScript, setIsEditingScript] = useState(false);
-   const [editedScript, setEditedScript] = useState('');
+   const [editedScript, setEditedScript] = useState(nextAction?.suggested_script || '');
  
-   useState(() => {
-     if (nextAction?.suggested_script) {
-       setEditedScript(nextAction.suggested_script);
-     }
-   });
+   const handleSmartSchedule = () => {
+     if (!nextAction) return;
+     // Logic for smart date: if urgent, tomorrow; otherwise 3 days from now
+     const suggestedDate = new Date();
+     const daysToAdd = nextAction.urgency === 'high' ? 1 : nextAction.urgency === 'medium' ? 3 : 7;
+     suggestedDate.setDate(suggestedDate.getDate() + daysToAdd);
+     suggestedDate.setHours(10, 0, 0, 0);
+     
+     handleCreateTask(suggestedDate);
+     toast.success(`Tarefa agendada para ${formatDistanceToNow(suggestedDate, { addSuffix: true, locale: ptBR })}`);
+   };
  
    const displayScript = editedScript || nextAction?.suggested_script || '';
 
@@ -200,20 +206,16 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
                  <CheckCircle2 className="w-3 h-3" />
                  Criar tarefa
                </Button>
-               <Button 
-                 onClick={() => {
-                   const tomorrow = new Date();
-                   tomorrow.setDate(tomorrow.getDate() + 1);
-                   tomorrow.setHours(9, 0, 0, 0);
-                   handleCreateTask(tomorrow);
-                 }} 
-                 variant="outline" 
-                 size="sm" 
-                 disabled={createTask.isPending}
-                 title="Agendar para amanhã"
-               >
-                 <AlarmClock className="w-3 h-3" />
-               </Button>
+                <Button 
+                  onClick={handleSmartSchedule}
+                  variant="outline" 
+                  size="sm" 
+                  disabled={createTask.isPending}
+                  className="gap-2"
+                >
+                  <AlarmClock className="w-3 h-3" />
+                  Agendamento Inteligente
+                </Button>
              </div>
            </div>
         </div>
