@@ -22,7 +22,7 @@ export const CommunicationSubTab = ({ contactId, data }: CommunicationSubTabProp
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Preferências de Comunicação</CardTitle>
+        <CardTitle>Comunicação e Estilo</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-4">
@@ -82,7 +82,7 @@ export const CommunicationSubTab = ({ contactId, data }: CommunicationSubTabProp
           </div>
           <Button className="w-full mt-4" onClick={handleSave}>
             <Save className="h-4 w-4 mr-2" />
-            Salvar Preferências
+            Salvar PNL
           </Button>
         </div>
       </CardContent>
