@@ -2530,7 +2530,9 @@ export type Database = {
           id: string
           model: string | null
           reason: string
+          script_context: Json | null
           signals_snapshot: Json
+          suggested_date: string | null
           suggested_script: string | null
           updated_at: string
           urgency: string
@@ -2546,7 +2548,9 @@ export type Database = {
           id?: string
           model?: string | null
           reason: string
+          script_context?: Json | null
           signals_snapshot?: Json
+          suggested_date?: string | null
           suggested_script?: string | null
           updated_at?: string
           urgency?: string
@@ -2562,7 +2566,9 @@ export type Database = {
           id?: string
           model?: string | null
           reason?: string
+          script_context?: Json | null
           signals_snapshot?: Json
+          suggested_date?: string | null
           suggested_script?: string | null
           updated_at?: string
           urgency?: string
@@ -8244,6 +8250,51 @@ export type Database = {
         }
         Relationships: []
       }
+      neuro_behavioral_history: {
+        Row: {
+          contact_id: string
+          created_at: string | null
+          dominance_data: Json | null
+          empathy_score: number | null
+          id: string
+          neuromarketing_data: Json | null
+          recommendations: string[] | null
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string | null
+          dominance_data?: Json | null
+          empathy_score?: number | null
+          id?: string
+          neuromarketing_data?: Json | null
+          recommendations?: string[] | null
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string | null
+          dominance_data?: Json | null
+          empathy_score?: number | null
+          id?: string
+          neuromarketing_data?: Json | null
+          recommendations?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "neuro_behavioral_history_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "neuro_behavioral_history_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
       neuro_pnl_sessions: {
         Row: {
           anchors_installed: Json | null
@@ -10795,6 +10846,57 @@ export type Database = {
           },
           {
             foreignKeyName: "social_behavior_analysis_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
+      social_consent_audit: {
+        Row: {
+          consent_type: string | null
+          contact_id: string
+          created_at: string | null
+          id: string
+          ip_address: string | null
+          network: string
+          source_url: string | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          consent_type?: string | null
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          network: string
+          source_url?: string | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          consent_type?: string | null
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          network?: string
+          source_url?: string | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_consent_audit_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "social_consent_audit_contact_id_fkey"
             columns: ["contact_id"]
             isOneToOne: false
             referencedRelation: "vw_contacts_nlp"
