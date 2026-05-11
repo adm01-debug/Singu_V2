@@ -44,35 +44,37 @@ export function NLPInsightsDashboard({ contactId, className }: Props) {
 
   const { data: insights, isLoading } = useQuery({
     queryKey: ['nlp-insights-actionable', contactId],
-    queryFn: async () => {
-      const { data: behavior } = await supabase.from('contacts').select('vak_profile, metaprogram_profile, objection_patterns').eq('id', contactId).single();
-      
-      const items: any[] = [];
-      
-      if (behavior?.vak_profile?.primary) {
-        items.push({
-          category: 'preference',
-          title: `Comunicação ${behavior.vak_profile.primary}`,
-          description: `O cliente processa melhor informações via canal ${behavior.vak_profile.primary}.`,
-          action: `Adapte sua próxima mensagem usando predicados ${behavior.vak_profile.primary}.`,
-          priority: 'medium',
-          icon: <Target className="w-4 h-4" />
-        });
-      }
-
-      if (behavior?.metaprogram_profile?.motivation === 'away_from') {
-        items.push({
-          category: 'risk',
-          title: 'Foco em Segurança',
-          description: 'Detectado padrão de afastamento de riscos (Away-From).',
-          action: 'Enfatize garantias, provas sociais e redução de riscos na proposta.',
-          priority: 'high',
-          icon: <AlertTriangle className="w-4 h-4" />
-        });
-      }
-
-      return items;
-    },
+     queryFn: async () => {
+       const { data: behavior } = await supabase.from('contacts').select('vak_profile, metaprogram_profile, objection_patterns').eq('id', contactId).single();
+       
+       const vak = (behavior?.vak_profile as unknown as NLPProfile) || {};
+       const meta = (behavior?.metaprogram_profile as unknown as NLPProfile) || {};
+       const items: any[] = [];
+       
+       if (vak.primary) {
+         items.push({
+           category: 'preference',
+           title: `Comunicação ${vak.primary}`,
+           description: `O cliente processa melhor informações via canal ${vak.primary}.`,
+           action: `Adapte sua próxima mensagem usando predicados ${vak.primary}.`,
+           priority: 'medium',
+           icon: <Target className="w-4 h-4" />
+         });
+       }
+ 
+       if (meta.motivation === 'away_from') {
+         items.push({
+           category: 'risk',
+           title: 'Foco em Segurança',
+           description: 'Detectado padrão de afastamento de riscos (Away-From).',
+           action: 'Enfatize garantias, provas sociais e redução de riscos na proposta.',
+           priority: 'high',
+           icon: <AlertTriangle className="w-4 h-4" />
+         });
+       }
+ 
+       return items;
+     },
     enabled: !!contactId
   });
 
