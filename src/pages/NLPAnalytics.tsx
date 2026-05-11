@@ -16,7 +16,8 @@ import { Header } from '@/components/layout/Header';
     MetaProgramsProfiler,
     MiltonianCalibration,
     TOTEModelMapper,
-    HierarchyOfCriteria
+    HierarchyOfCriteria,
+    SleightOfMouthPanel
  } from '@/components/nlp';
   import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
   import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope, Fingerprint, Workflow, ListOrdered } from 'lucide-react';
@@ -107,7 +108,7 @@ const NLPAnalytics = () => {
              <NLPMasteryScore />
              
              <Tabs defaultValue="overview" className="w-full">
-                 <TabsList className="grid w-full grid-cols-6">
+                  <TabsList className="grid w-full grid-cols-7">
                  <TabsTrigger value="overview" className="gap-2">
                    <Activity className="h-4 w-4" /> Geral
                  </TabsTrigger>
@@ -129,9 +130,12 @@ const NLPAnalytics = () => {
                   <TabsTrigger value="metaprograms" className="gap-2">
                     <Fingerprint className="h-4 w-4" /> Metaprogramas
                   </TabsTrigger>
-                  <TabsTrigger value="training" className="gap-2">
-                    <GraduationCap className="h-4 w-4" /> Treino
-                  </TabsTrigger>
+                   <TabsTrigger value="reframing" className="gap-2">
+                     <RefreshCcw className="h-4 w-4" /> Reenquadrar
+                   </TabsTrigger>
+                   <TabsTrigger value="training" className="gap-2">
+                     <GraduationCap className="h-4 w-4" /> Treino
+                   </TabsTrigger>
                </TabsList>
                
                 <TabsContent value="positions" className="mt-6 space-y-6">
@@ -154,7 +158,17 @@ const NLPAnalytics = () => {
                    )}
                  </TabsContent>
 
-                <TabsContent value="training" className="mt-6 space-y-6">
+                 <TabsContent value="reframing" className="mt-6 space-y-6">
+                   {selectedContact ? (
+                     <SleightOfMouthPanel contactId={selectedContact.id} />
+                   ) : (
+                     <Card className="p-12 text-center border-dashed">
+                       <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para lidar com objeções.</p>
+                     </Card>
+                   )}
+                 </TabsContent>
+ 
+                 <TabsContent value="training" className="mt-6 space-y-6">
                   <NLPTrainingMode />
                 </TabsContent>
 
