@@ -6420,6 +6420,42 @@ export type Database = {
           },
         ]
       }
+      interactions_audit: {
+        Row: {
+          changed_by: string | null
+          contact_id: string
+          created_at: string | null
+          id: string
+          interaction_id: string
+          new_data: Json | null
+          old_data: Json | null
+          operation: string
+          user_id: string
+        }
+        Insert: {
+          changed_by?: string | null
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          interaction_id: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation: string
+          user_id: string
+        }
+        Update: {
+          changed_by?: string | null
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          interaction_id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ip_whitelist: {
         Row: {
           created_at: string | null
