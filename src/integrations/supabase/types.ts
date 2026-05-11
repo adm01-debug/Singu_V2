@@ -4349,6 +4349,42 @@ export type Database = {
           },
         ]
       }
+      disc_analysis_history_audit: {
+        Row: {
+          analysis_id: string
+          changed_by: string | null
+          contact_id: string
+          created_at: string | null
+          id: string
+          new_data: Json | null
+          old_data: Json | null
+          operation: string
+          user_id: string
+        }
+        Insert: {
+          analysis_id: string
+          changed_by?: string | null
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation: string
+          user_id: string
+        }
+        Update: {
+          analysis_id?: string
+          changed_by?: string | null
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       disc_communication_logs: {
         Row: {
           adaptation_tips_shown: Json | null
