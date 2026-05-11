@@ -151,13 +151,31 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
                           </div>
                         </div>
                         
-                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center bg-muted/50 rounded-full px-1">
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-6 w-6 rounded-full text-muted-foreground hover:text-success"
+                              onClick={() => addReframingFeedback(item.id, "positive")}
+                            >
+                              <ThumbsUp className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-6 w-6 rounded-full text-muted-foreground hover:text-destructive"
+                              onClick={() => addReframingFeedback(item.id, "negative")}
+                            >
+                              <ThumbsDown className="h-3.5 w-3.5" />
+                            </Button>
+                          </div>
                           <Button 
                             variant="ghost" 
                             size="icon" 
                             className="h-7 w-7 text-success"
-                            onClick={() => updateStatus.mutate({ id: item.id, status: 'used' })}
-                            disabled={item.status === 'used'}
+                            onClick={() => updateStatus.mutate({ id: item.id, status: "used" })}
+                            disabled={item.status === "used"}
                           >
                             <Check className="h-4 w-4" />
                           </Button>
