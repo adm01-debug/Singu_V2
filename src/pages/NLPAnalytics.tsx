@@ -117,45 +117,19 @@ const NLPAnalytics = () => {
                  <TabsTrigger value="overview" className="gap-2">
                    <Activity className="h-4 w-4" /> Geral
                  </TabsTrigger>
-                 <TabsTrigger value="evolution" className="gap-2">
-                   <TrendingUp className="h-4 w-4" /> Evolução
-                 </TabsTrigger>
-                 <TabsTrigger value="coherence" className="gap-2">
-                   <Sparkles className="h-4 w-4" /> Coerência
-                 </TabsTrigger>
-                  <TabsTrigger value="persuasion" className="gap-2">
-                    <Wand2 className="h-4 w-4" /> Persuasão
-                  </TabsTrigger>
-                  <TabsTrigger value="strategy" className="gap-2">
-                    <Workflow className="h-4 w-4" /> Estratégia
-                  </TabsTrigger>
-                  <TabsTrigger value="positions" className="gap-2">
-                    <Telescope className="h-4 w-4" /> Posições
-                  </TabsTrigger>
-                  <TabsTrigger value="metaprograms" className="gap-2">
-                    <Fingerprint className="h-4 w-4" /> Metaprogramas
-                  </TabsTrigger>
-                   <TabsTrigger value="reframing" title="Reenquadrar" className="p-2">
-                     <RefreshCcw className="h-4 w-4" />
-                   </TabsTrigger>
-                   <TabsTrigger value="anchors" title="Âncoras" className="p-2">
-                     <Anchor className="h-4 w-4" />
-                   </TabsTrigger>
-                   <TabsTrigger value="states" title="Estados" className="p-2">
-                     <Zap className="h-4 w-4" />
-                   </TabsTrigger>
-                   <TabsTrigger value="submodalities" title="Submodalidades" className="p-2">
-                     <Focus className="h-4 w-4" />
-                   </TabsTrigger>
-                   <TabsTrigger value="swish" title="Swish" className="p-2">
-                     <SwatchBook className="h-4 w-4" />
-                   </TabsTrigger>
-                   <TabsTrigger value="calibration" title="Calibração" className="p-2">
-                     <Brain className="h-4 w-4" />
-                   </TabsTrigger>
-                   <TabsTrigger value="training" className="gap-2">
-                     <GraduationCap className="h-4 w-4" /> Treino
-                   </TabsTrigger>
+                   <TabsTrigger value="evolution" title="Evolução" className="p-2"><TrendingUp className="h-4 w-4" /></TabsTrigger>
+                   <TabsTrigger value="calibration" title="Calibração" className="p-2"><Brain className="h-4 w-4" /></TabsTrigger>
+                   <TabsTrigger value="coherence" title="Coerência" className="p-2"><Sparkles className="h-4 w-4" /></TabsTrigger>
+                   <TabsTrigger value="persuasion" title="Persuasão" className="p-2"><Wand2 className="h-4 w-4" /></TabsTrigger>
+                   <TabsTrigger value="strategy" title="Estratégia" className="p-2"><Workflow className="h-4 w-4" /></TabsTrigger>
+                   <TabsTrigger value="positions" title="Posições" className="p-2"><Telescope className="h-4 w-4" /></TabsTrigger>
+                   <TabsTrigger value="metaprograms" title="Metaprogramas" className="p-2"><Fingerprint className="h-4 w-4" /></TabsTrigger>
+                   <TabsTrigger value="reframing" title="Reenquadrar" className="p-2"><RefreshCcw className="h-4 w-4" /></TabsTrigger>
+                   <TabsTrigger value="anchors" title="Âncoras" className="p-2"><Anchor className="h-4 w-4" /></TabsTrigger>
+                   <TabsTrigger value="states" title="Estados" className="p-2"><Zap className="h-4 w-4" /></TabsTrigger>
+                   <TabsTrigger value="submodalities" title="Submodalidades" className="p-2"><Focus className="h-4 w-4" /></TabsTrigger>
+                   <TabsTrigger value="swish" title="Swish" className="p-2"><SwatchBook className="h-4 w-4" /></TabsTrigger>
+                   <TabsTrigger value="training" title="Treino" className="p-2"><GraduationCap className="h-4 w-4" /></TabsTrigger>
                </TabsList>
                
                 <TabsContent value="positions" className="mt-6 space-y-6">
