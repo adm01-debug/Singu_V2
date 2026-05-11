@@ -299,10 +299,11 @@ const NLPAnalytics = () => {
                <CardContent className="space-y-4">
                  {[
                    { label: 'Calibrar 5 novos leads', done: true },
-                   { label: 'Aplicar Sleight of Mouth', done: false },
-                   { label: 'Padrão Milton em E-mails', done: true },
-                   { label: 'Coerência VAK > 90%', done: false },
-                   { label: 'Mapear Metaprogramas', done: true },
+                    { label: 'Mapear Metaprogramas', done: true },
+                    { label: 'Padrão Milton em E-mails', done: true },
+                    { label: 'Mapear TOTE e Critérios', done: true },
+                    { label: 'Coerência VAK > 90%', done: true },
+                    { label: 'Aplicar Sleight of Mouth', done: false },
                  ].map((task, i) => (
                    <div key={i} className="flex items-center gap-3 group cursor-pointer">
                      <div className={cn(
@@ -322,10 +323,10 @@ const NLPAnalytics = () => {
                  
                  <div className="pt-4 border-t">
                    <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
-                     <span>Progresso 10/10</span>
-                     <span>60%</span>
+                      <span>Progresso Rumo ao 10/10</span>
+                      <span>90%</span>
                    </div>
-                   <Progress value={60} className="h-1" />
+                    <Progress value={90} className="h-1" />
                  </div>
                </CardContent>
              </Card>
