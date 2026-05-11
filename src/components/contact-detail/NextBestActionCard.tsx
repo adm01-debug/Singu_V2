@@ -1,8 +1,9 @@
 import { useState } from 'react';
- import { Sparkles, Copy, RefreshCw, CheckCircle2, Mail, MessageCircle, Phone, Linkedin, Calendar, ChevronDown, ChevronUp, AlarmClock } from 'lucide-react';
+ import { Sparkles, Copy, RefreshCw, CheckCircle2, Mail, MessageCircle, Phone, Linkedin, Calendar, ChevronDown, ChevronUp, AlarmClock, Edit3, Save } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+ import { Button } from '@/components/ui/button';
+ import { Textarea } from '@/components/ui/textarea';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useNextBestAction } from '@/hooks/useNextBestAction';
@@ -33,12 +34,22 @@ const urgencyMeta: Record<string, { label: string; variant: 'default' | 'destruc
 export function NextBestActionCard({ contactId, contactName }: Props) {
   const { nextAction, isLoading, isGenerating, generate } = useNextBestAction(contactId);
   const createTask = useCreateTask();
-  const [scriptOpen, setScriptOpen] = useState(false);
+   const [scriptOpen, setScriptOpen] = useState(false);
+   const [isEditingScript, setIsEditingScript] = useState(false);
+   const [editedScript, setEditedScript] = useState('');
+ 
+   useState(() => {
+     if (nextAction?.suggested_script) {
+       setEditedScript(nextAction.suggested_script);
+     }
+   });
+ 
+   const displayScript = editedScript || nextAction?.suggested_script || '';
 
-  const handleCopyScript = async () => {
-    if (!nextAction?.suggested_script) return;
-    try {
-      await navigator.clipboard.writeText(nextAction.suggested_script);
+   const handleCopyScript = async () => {
+     if (!displayScript) return;
+     try {
+       await navigator.clipboard.writeText(displayScript);
       toast.success('Script copiado');
     } catch {
       toast.error('Não foi possível copiar');
@@ -126,7 +137,7 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
           <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{nextAction.reason}</p>
         </div>
 
-        {nextAction.suggested_script && (
+        {nextAction && (
           <Collapsible open={scriptOpen} onOpenChange={setScriptOpen}>
             <CollapsibleTrigger asChild>
               <Button variant="ghost" size="sm" className="w-full justify-between -ml-2">
@@ -136,11 +147,28 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
             </CollapsibleTrigger>
             <CollapsibleContent>
               <div className="bg-muted/40 border border-border/50 rounded-md p-3 mt-1">
-                <p className="text-sm whitespace-pre-wrap leading-relaxed">{nextAction.suggested_script}</p>
-                <Button variant="ghost" size="sm" onClick={handleCopyScript} className="mt-2 -ml-2">
-                  <Copy className="w-3 h-3" />
-                  Copiar script
-                </Button>
+                {isEditingScript ? (
+                  <Textarea 
+                    value={editedScript} 
+                    onChange={(e) => setEditedScript(e.target.value)}
+                    className="text-sm min-h-[120px] mb-2"
+                  />
+                ) : (
+                  <p className="text-sm whitespace-pre-wrap leading-relaxed">{displayScript}</p>
+                )}
+                <div className="flex items-center gap-2 mt-2">
+                  <Button variant="ghost" size="sm" onClick={handleCopyScript} className="-ml-2">
+                    <Copy className="w-3 h-3 mr-2" />
+                    Copiar
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => setIsEditingScript(!isEditingScript)}>
+                    {isEditingScript ? (
+                      <><Save className="w-3 h-3 mr-2" /> Salvar</>
+                    ) : (
+                      <><Edit3 className="w-3 h-3 mr-2" /> Editar</>
+                    )}
+                  </Button>
+                </div>
               </div>
             </CollapsibleContent>
           </Collapsible>
