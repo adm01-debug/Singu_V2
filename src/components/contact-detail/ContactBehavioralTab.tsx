@@ -226,6 +226,10 @@ import type { Contact } from '@/hooks/useContactDetail';
       <TabsContent value="personality">
         <PersonalitySubTab contactId={contact.id} />
       </TabsContent>
+
+      <TabsContent value="reframing">
+        <SleightOfMouthPanel contactId={contact.id} />
+      </TabsContent>
     </Tabs>
 
     {/* Intelligence from external views */}
