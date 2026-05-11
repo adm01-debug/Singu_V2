@@ -7656,12 +7656,14 @@ export type Database = {
           interaction_id: string | null
           internal_score: number | null
           internal_words: string[] | null
+          is_validated: boolean | null
           options_score: number | null
           options_words: string[] | null
           procedures_score: number | null
           procedures_words: string[] | null
           toward_score: number | null
           toward_words: string[] | null
+          user_feedback: string | null
           user_id: string
         }
         Insert: {
@@ -7676,12 +7678,14 @@ export type Database = {
           interaction_id?: string | null
           internal_score?: number | null
           internal_words?: string[] | null
+          is_validated?: boolean | null
           options_score?: number | null
           options_words?: string[] | null
           procedures_score?: number | null
           procedures_words?: string[] | null
           toward_score?: number | null
           toward_words?: string[] | null
+          user_feedback?: string | null
           user_id: string
         }
         Update: {
@@ -7696,12 +7700,14 @@ export type Database = {
           interaction_id?: string | null
           internal_score?: number | null
           internal_words?: string[] | null
+          is_validated?: boolean | null
           options_score?: number | null
           options_words?: string[] | null
           procedures_score?: number | null
           procedures_words?: string[] | null
           toward_score?: number | null
           toward_words?: string[] | null
+          user_feedback?: string | null
           user_id?: string
         }
         Relationships: []
@@ -8593,6 +8599,7 @@ export type Database = {
           confidence_score: number | null
           contact_id: string
           created_at: string | null
+          feedback: string | null
           id: string
           interaction_id: string | null
           objection: string
@@ -8606,6 +8613,7 @@ export type Database = {
           confidence_score?: number | null
           contact_id: string
           created_at?: string | null
+          feedback?: string | null
           id?: string
           interaction_id?: string | null
           objection: string
@@ -8619,6 +8627,7 @@ export type Database = {
           confidence_score?: number | null
           contact_id?: string
           created_at?: string | null
+          feedback?: string | null
           id?: string
           interaction_id?: string | null
           objection?: string
@@ -11074,8 +11083,10 @@ export type Database = {
           digital_words: string[] | null
           id: string
           interaction_id: string | null
+          is_validated: boolean | null
           kinesthetic_score: number | null
           kinesthetic_words: string[] | null
+          user_feedback: string | null
           user_id: string
           visual_score: number | null
           visual_words: string[] | null
@@ -11090,8 +11101,10 @@ export type Database = {
           digital_words?: string[] | null
           id?: string
           interaction_id?: string | null
+          is_validated?: boolean | null
           kinesthetic_score?: number | null
           kinesthetic_words?: string[] | null
+          user_feedback?: string | null
           user_id: string
           visual_score?: number | null
           visual_words?: string[] | null
@@ -11106,8 +11119,10 @@ export type Database = {
           digital_words?: string[] | null
           id?: string
           interaction_id?: string | null
+          is_validated?: boolean | null
           kinesthetic_score?: number | null
           kinesthetic_words?: string[] | null
+          user_feedback?: string | null
           user_id?: string
           visual_score?: number | null
           visual_words?: string[] | null
