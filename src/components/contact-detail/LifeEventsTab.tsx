@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Gift, Calendar, Plus, Trash2, RefreshCw, Bell, History, CheckSquare, BarChart3 } from 'lucide-react';
+import { Gift, Calendar, Plus, Trash2, RefreshCw, Bell, History, CheckSquare, BarChart3, Edit2, Briefcase, Plane, Users, Trophy, Star } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -32,6 +32,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [newEvent, setNewEvent] = useState<Partial<TablesInsert<'life_events'>> & { reason?: string }>({
     event_type: 'birthday',
     event_date: new Date().toISOString().split('T')[0],
@@ -64,15 +65,27 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
       queryClient.invalidateQueries({ queryKey: ['life-events', contactId] });
       toast({ title: "Evento criado", description: "O marco de vida foi registrado com sucesso." });
       setIsDialogOpen(false);
-      setNewEvent({
-        event_type: 'birthday',
-        event_date: new Date().toISOString().split('T')[0],
-        recurring: true,
-        reminder_days_before: 7
-      });
+      resetForm();
     },
     onError: (error) => {
       toast({ title: "Erro ao criar evento", description: error.message, variant: "destructive" });
+    }
+  });
+
+  const updateEventMutation = useMutation({
+    mutationFn: async ({ id, ...event }: Partial<Tables<'life_events'>> & { id: string }) => {
+      const { data, error } = await supabase.from('life_events').update(event).eq('id', id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['life-events', contactId] });
+      toast({ title: "Evento atualizado", description: "As alterações foram salvas." });
+      setIsDialogOpen(false);
+      resetForm();
+    },
+    onError: (error) => {
+      toast({ title: "Erro ao atualizar", description: error.message, variant: "destructive" });
     }
   });
 
@@ -87,27 +100,61 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     }
   });
 
-  const handleCreateEvent = () => {
+  const resetForm = () => {
+    setNewEvent({
+      event_type: 'birthday',
+      event_date: new Date().toISOString().split('T')[0],
+      recurring: true,
+      reminder_days_before: 7,
+      reason: 'Interação manual via painel'
+    });
+    setEditingId(null);
+  };
+
+  const handleSaveEvent = () => {
     if (!user || !newEvent.title || !newEvent.event_date) return;
     
     const { reason, ...eventData } = newEvent;
+    const metadata = { reason: reason || (editingId ? 'Atualização manual' : 'Interação manual') };
     
-    createEventMutation.mutate({
-      ...eventData as TablesInsert<'life_events'>,
-      contact_id: contactId,
-      user_id: user.id,
-      metadata: { reason: reason || 'Interação manual' }
-    });
+    if (editingId) {
+      updateEventMutation.mutate({
+        id: editingId,
+        ...eventData,
+        metadata
+      });
+    } else {
+      createEventMutation.mutate({
+        ...eventData as TablesInsert<'life_events'>,
+        contact_id: contactId,
+        user_id: user.id,
+        metadata
+      });
+    }
   };
 
-  const eventTypeLabels: Record<string, string> = {
-    birthday: 'Aniversário',
-    anniversary: 'Bodas/Aniversário Rel.',
-    promotion: 'Promoção',
-    travel: 'Viagem',
-    family: 'Família',
-    achievement: 'Conquista',
-    other: 'Outro'
+  const startEditing = (event: Tables<'life_events'>) => {
+    setNewEvent({
+      title: event.title,
+      event_type: event.event_type,
+      event_date: event.event_date.split('T')[0],
+      description: event.description,
+      recurring: event.recurring,
+      reminder_days_before: event.reminder_days_before,
+      reason: (event.metadata as any)?.reason || ''
+    });
+    setEditingId(event.id);
+    setIsDialogOpen(true);
+  };
+
+  const eventTypeConfigs: Record<string, { label: string, icon: any, color: string }> = {
+    birthday: { label: 'Aniversário', icon: Gift, color: 'text-pink-500' },
+    anniversary: { label: 'Bodas/Relacionamento', icon: Calendar, color: 'text-red-500' },
+    promotion: { label: 'Promoção', icon: Briefcase, color: 'text-blue-500' },
+    travel: { label: 'Viagem', icon: Plane, color: 'text-teal-500' },
+    family: { label: 'Família', icon: Users, color: 'text-purple-500' },
+    achievement: { label: 'Conquista', icon: Trophy, color: 'text-yellow-500' },
+    other: { label: 'Outro', icon: Star, color: 'text-gray-500' }
   };
 
   return (
@@ -122,13 +169,13 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button size="sm" className="gap-2">
+            <Button size="sm" className="gap-2" onClick={() => resetForm()}>
               <Plus className="h-4 w-4" /> Novo Evento
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Registrar Novo Marco</DialogTitle>
+              <DialogTitle>{editingId ? 'Editar Marco de Vida' : 'Registrar Novo Marco'}</DialogTitle>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
@@ -151,8 +198,13 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.entries(eventTypeLabels).map(([val, label]) => (
-                        <SelectItem key={val} value={val}>{label}</SelectItem>
+                      {Object.entries(eventTypeConfigs).map(([val, config]) => (
+                        <SelectItem key={val} value={val}>
+                          <div className="flex items-center gap-2">
+                            <config.icon className={`h-4 w-4 ${config.color}`} />
+                            {config.label}
+                          </div>
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -208,8 +260,10 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>
-              <Button onClick={handleCreateEvent} disabled={createEventMutation.isPending}>Salvar Evento</Button>
+              <Button variant="outline" onClick={() => { setIsDialogOpen(false); resetForm(); }}>Cancelar</Button>
+              <Button onClick={handleSaveEvent} disabled={createEventMutation.isPending || updateEventMutation.isPending}>
+                {editingId ? 'Salvar Alterações' : 'Salvar Evento'}
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -242,6 +296,10 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                   <CardHeader className="pb-2 flex flex-row items-start justify-between space-y-0">
                     <div className="space-y-1">
                       <CardTitle className="text-sm font-bold flex items-center gap-2">
+                        {(() => {
+                          const Icon = eventTypeConfigs[event.event_type]?.icon || Gift;
+                          return <Icon className={`h-4 w-4 ${eventTypeConfigs[event.event_type]?.color || 'text-primary'}`} />;
+                        })()}
                         {event.title}
                       </CardTitle>
                       <CardDescription className="text-[10px] uppercase font-semibold text-muted-foreground flex items-center gap-1">
@@ -251,7 +309,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                       </CardDescription>
                     </div>
                     <Badge variant="secondary" className="text-[9px] h-5">
-                      {eventTypeLabels[event.event_type] || event.event_type}
+                      {eventTypeConfigs[event.event_type]?.label || event.event_type}
                     </Badge>
                   </CardHeader>
                   <CardContent className="pt-0">
@@ -267,14 +325,24 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                           Aviso {event.reminder_days_before}d antes
                         </div>
                       )}
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-7 w-7 text-destructive opacity-0 group-hover:opacity-100 transition-opacity ml-auto"
-                        onClick={() => deleteEventMutation.mutate(event.id)}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
+                      <div className="flex items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-7 w-7 text-muted-foreground"
+                          onClick={() => startEditing(event)}
+                        >
+                          <Edit2 className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-7 w-7 text-destructive"
+                          onClick={() => deleteEventMutation.mutate(event.id)}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -319,7 +387,14 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                    <CardDescription>Identificação de lacunas de dados.</CardDescription>
                  </CardHeader>
                  <CardContent>
-                   <LifeEventsGapChecklist lifeEvents={lifeEvents} />
+                  <LifeEventsGapChecklist 
+                    lifeEvents={lifeEvents} 
+                    onAddGap={(type) => {
+                      resetForm();
+                      setNewEvent(prev => ({ ...prev, event_type: type as any }));
+                      setIsDialogOpen(true);
+                    }} 
+                  />
                  </CardContent>
                </Card>
              </div>

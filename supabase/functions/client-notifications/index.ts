@@ -220,47 +220,56 @@ Deno.serve(async (req) => {
         }
       }
 
-      // 4. Check for upcoming life events
-      const { data: lifeEvents } = await supabase
-        .from('life_events')
-        .select(`
-          id, title, event_date, event_type, reminder_days_before, last_reminded_at, contact_id,
-          contacts!inner (first_name, last_name)
-        `)
-        .eq('user_id', userId)
-        .gte('event_date', today.toISOString())
-        .lte('event_date', sevenDaysFromNow.toISOString());
+       // 4. Check for upcoming life events (including recurring ones)
+       const { data: lifeEvents } = await supabase
+         .from('life_events')
+         .select(`
+           id, title, event_date, event_type, reminder_days_before, last_reminded_at, contact_id, recurring,
+           contacts!inner (first_name, last_name)
+         `)
+         .eq('user_id', userId);
 
-      for (const event of lifeEvents || []) {
-        const contact = event.contacts as unknown as { first_name: string; last_name: string };
-        const eventDate = new Date(event.event_date);
-        const daysUntil = Math.ceil((eventDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-        const reminderDays = event.reminder_days_before || 7;
+       for (const event of lifeEvents || []) {
+         const contact = event.contacts as unknown as { first_name: string; last_name: string };
+         let eventDate = new Date(event.event_date);
+         
+         // Handle recurring events by adjusting the year
+         if (event.recurring) {
+           const nextOccurrence = new Date(today.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+           if (nextOccurrence < today) {
+             nextOccurrence.setFullYear(today.getFullYear() + 1);
+           }
+           eventDate = nextOccurrence;
+         }
 
-        if (daysUntil <= reminderDays) {
-          if (event.last_reminded_at) {
-            const lastReminded = new Date(event.last_reminded_at);
-            const daysSinceReminder = (today.getTime() - lastReminded.getTime()) / (1000 * 60 * 60 * 24);
-            if (daysSinceReminder < 1) continue;
-          }
+         const daysUntil = Math.ceil((eventDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+         const reminderDays = event.reminder_days_before || 7;
 
-          const alert: AlertData = {
-            type: 'life_event',
-            title: daysUntil === 0 ? `📅 Evento Hoje!` : `📅 Evento em ${daysUntil} dia(s)`,
-            body: `${event.title} - ${contact.first_name} ${contact.last_name}`,
-            url: `/contatos/${event.contact_id}`,
-            contactId: event.contact_id,
-            userId,
-          };
-          await sendPushToUser(supabase, userId, alert, log, traceId);
-          alertsSent.push(alert);
+         // Only notify if the date is within the reminder window and is in the future or today
+         if (daysUntil >= 0 && daysUntil <= reminderDays) {
+           if (event.last_reminded_at) {
+             const lastReminded = new Date(event.last_reminded_at);
+             const daysSinceReminder = (today.getTime() - lastReminded.getTime()) / (1000 * 60 * 60 * 24);
+             if (daysSinceReminder < 1) continue;
+           }
 
-          await supabase
-            .from('life_events')
-            .update({ last_reminded_at: now.toISOString() })
-            .eq('id', event.id);
-        }
-      }
+           const alert: AlertData = {
+             type: 'life_event',
+             title: daysUntil === 0 ? `📅 Evento Hoje!` : `📅 Evento em ${daysUntil} dia(s)`,
+             body: `${event.title} - ${contact.first_name} ${contact.last_name}`,
+             url: `/contatos/${event.contact_id}`,
+             contactId: event.contact_id,
+             userId,
+           };
+           await sendPushToUser(supabase, userId, alert, log, traceId);
+           alertsSent.push(alert);
+
+           await supabase
+             .from('life_events')
+             .update({ last_reminded_at: now.toISOString() })
+             .eq('id', event.id);
+         }
+       }
     }
 
     log.info('check_complete', { alertsSent: alertsSent.length });
