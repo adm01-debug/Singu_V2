@@ -2493,6 +2493,42 @@ export type Database = {
           },
         ]
       }
+      contact_preferences_audit: {
+        Row: {
+          changed_by: string | null
+          contact_id: string
+          created_at: string | null
+          id: string
+          new_data: Json | null
+          old_data: Json | null
+          operation: string
+          preference_id: string
+          user_id: string
+        }
+        Insert: {
+          changed_by?: string | null
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation: string
+          preference_id: string
+          user_id: string
+        }
+        Update: {
+          changed_by?: string | null
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation?: string
+          preference_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_rapport_strategy: {
         Row: {
           auditory_preference_score: number | null
