@@ -17,10 +17,14 @@ import { Header } from '@/components/layout/Header';
     MiltonianCalibration,
     TOTEModelMapper,
     HierarchyOfCriteria,
-    SleightOfMouthPanel
+    SleightOfMouthPanel,
+    AnchorTrackingSystem,
+    StateElicitationToolkit,
+    SubmodalityModifier,
+    SwishPatternGenerator
  } from '@/components/nlp';
   import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-   import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope, Fingerprint, Workflow, ListOrdered, RefreshCcw } from 'lucide-react';
+   import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope, Fingerprint, Workflow, ListOrdered, RefreshCcw, Anchor, Zap, Focus, SwatchBook } from 'lucide-react';
  import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
  import { Input } from '@/components/ui/input';
  import { Button } from '@/components/ui/button';
@@ -108,7 +112,7 @@ const NLPAnalytics = () => {
              <NLPMasteryScore />
              
              <Tabs defaultValue="overview" className="w-full">
-                  <TabsList className="grid w-full grid-cols-7">
+                  <TabsList className="grid w-full grid-cols-11">
                  <TabsTrigger value="overview" className="gap-2">
                    <Activity className="h-4 w-4" /> Geral
                  </TabsTrigger>
@@ -130,8 +134,20 @@ const NLPAnalytics = () => {
                   <TabsTrigger value="metaprograms" className="gap-2">
                     <Fingerprint className="h-4 w-4" /> Metaprogramas
                   </TabsTrigger>
-                   <TabsTrigger value="reframing" className="gap-2">
-                     <RefreshCcw className="h-4 w-4" /> Reenquadrar
+                   <TabsTrigger value="reframing" title="Reenquadrar" className="p-2">
+                     <RefreshCcw className="h-4 w-4" />
+                   </TabsTrigger>
+                   <TabsTrigger value="anchors" title="Âncoras" className="p-2">
+                     <Anchor className="h-4 w-4" />
+                   </TabsTrigger>
+                   <TabsTrigger value="states" title="Estados" className="p-2">
+                     <Zap className="h-4 w-4" />
+                   </TabsTrigger>
+                   <TabsTrigger value="submodalities" title="Submodalidades" className="p-2">
+                     <Focus className="h-4 w-4" />
+                   </TabsTrigger>
+                   <TabsTrigger value="swish" title="Swish" className="p-2">
+                     <SwatchBook className="h-4 w-4" />
                    </TabsTrigger>
                    <TabsTrigger value="training" className="gap-2">
                      <GraduationCap className="h-4 w-4" /> Treino
@@ -158,12 +174,52 @@ const NLPAnalytics = () => {
                    )}
                  </TabsContent>
 
-                 <TabsContent value="reframing" className="mt-6 space-y-6">
+                 <TabsContent value="reframing" className="mt-6">
                    {selectedContact ? (
                      <SleightOfMouthPanel contactId={selectedContact.id} />
                    ) : (
                      <Card className="p-12 text-center border-dashed">
                        <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para lidar com objeções.</p>
+                     </Card>
+                   )}
+                 </TabsContent>
+ 
+                 <TabsContent value="anchors" className="mt-6">
+                   {selectedContact ? (
+                     <AnchorTrackingSystem contact={selectedContact} />
+                   ) : (
+                     <Card className="p-12 text-center border-dashed">
+                       <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para rastrear âncoras.</p>
+                     </Card>
+                   )}
+                 </TabsContent>
+ 
+                 <TabsContent value="states" className="mt-6">
+                   {selectedContact ? (
+                     <StateElicitationToolkit contact={selectedContact} />
+                   ) : (
+                     <Card className="p-12 text-center border-dashed">
+                       <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para eliciar estados.</p>
+                     </Card>
+                   )}
+                 </TabsContent>
+ 
+                 <TabsContent value="submodalities" className="mt-6">
+                   {selectedContact ? (
+                     <SubmodalityModifier contact={selectedContact} />
+                   ) : (
+                     <Card className="p-12 text-center border-dashed">
+                       <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para modificar submodalidades.</p>
+                     </Card>
+                   )}
+                 </TabsContent>
+ 
+                 <TabsContent value="swish" className="mt-6">
+                   {selectedContact ? (
+                     <SwishPatternGenerator contact={selectedContact} />
+                   ) : (
+                     <Card className="p-12 text-center border-dashed">
+                       <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para gerar Swish Patterns.</p>
                      </Card>
                    )}
                  </TabsContent>
