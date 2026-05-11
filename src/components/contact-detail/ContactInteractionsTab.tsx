@@ -90,9 +90,24 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
         company_id: companyId,
         user_id: user.id,
       } as unknown as import('@/integrations/supabase/types').Database['public']['Tables']['interactions']['Insert'];
-      const { error } = await supabase.from('interactions').insert(insertData);
-      if (error) throw error;
-      toast.success('Interação registrada');
+       const { data: interaction, error } = await supabase.from('interactions').insert(insertData).select().single();
+       if (error) throw error;
+       
+       toast.success('Interação registrada');
+ 
+       // Trigger AI Analysis if content is sufficient
+       if (insertData.content && insertData.content.length >= 80) {
+         toast.info('IA analisando conversa...', { duration: 3000 });
+         supabase.functions.invoke('conversation-analyzer', {
+           body: { interaction_id: interaction.id }
+         }).then(({ error: aiError }) => {
+           if (!aiError) {
+             toast.success('Análise de IA concluída');
+             onInteractionAdded?.();
+           }
+         });
+       }
+ 
       setShowForm(false);
       onInteractionAdded?.();
     } catch (err) {
