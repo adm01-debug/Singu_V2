@@ -142,16 +142,16 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
         lowerContent.includes(t.objection.toLowerCase().substring(0, 12))
       ).slice(0, 2);
 
-      matchingTemplates.forEach(t => {
-        newSuggestions.push({
-          id: `reframing-${t.id}`,
-          type: 'reframing',
-          text: `Objeção: "${t.objectionCategory}". Próximo passo sugerido.`,
-          fullContent: t.response,
-          icon: <RefreshCcw className="h-3 w-3" />,
-          color: 'text-primary'
-        });
-      });
+       matchingTemplates.forEach(t => {
+         newSuggestions.push({
+           id: `reframing-${t.id}`,
+           type: 'reframing',
+           text: `Objeção: "${t.objectionCategory}". Padrão: ${t.pattern}.`,
+           fullContent: t.response,
+           icon: <RefreshCcw className="h-3 w-3" />,
+           color: 'text-primary'
+         });
+       });
 
       // 5. Next Steps / Action recommendations
       if (lowerContent.includes('valor') || lowerContent.includes('preço') || lowerContent.includes('investimento')) {

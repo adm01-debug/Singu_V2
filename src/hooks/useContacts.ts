@@ -27,10 +27,13 @@ const LOCAL_ONLY_FIELDS = new Set([
   'tags', 'interests', 'hobbies',                                // local schema uses array fields; external uses array columns
   'twitter', 'avatar_url',                                        // not columns in external contacts table
   'email', 'phone', 'whatsapp', 'linkedin', 'instagram',         // live in contact_phones / contact_emails / contact_social_media
-  'id',                                                           // never send id on updates
-  'role_title',                                                   // local-only; external uses 'cargo'
-  'family_info',                                                  // mapped later
-]);
+   'id',                                                           // never send id on updates
+   'role_title',                                                   // local-only; external uses 'cargo'
+   'family_info',                                                  // mapped later
+   'vak_profile',                                                  // local-only JSON blob
+   'metaprogram_profile',                                          // local-only JSON blob
+   'objection_patterns',                                           // local-only JSON blob
+ ]);
 
 /**
  * Normalize external DB column names to local schema names.

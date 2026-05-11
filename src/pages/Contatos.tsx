@@ -48,12 +48,15 @@ const filterConfigs = [
   { key: 'role', label: 'Papel', multiple: true, options: [{ value: 'owner', label: 'Proprietário', icon: Crown }, { value: 'manager', label: 'Gerente', icon: Briefcase }, { value: 'buyer', label: 'Comprador', icon: ShoppingCart }, { value: 'contact', label: 'Contato', icon: User }] },
   { key: 'sentiment', label: 'Sentimento', multiple: false, options: [{ value: 'positive', label: 'Positivo' }, { value: 'neutral', label: 'Neutro' }, { value: 'negative', label: 'Negativo' }] },
   { key: 'relationship_stage', label: 'Estágio', multiple: true, options: [{ value: 'lead', label: 'Lead' }, { value: 'prospect', label: 'Prospect' }, { value: 'negotiation', label: 'Negociação' }, { value: 'client', label: 'Cliente' }, { value: 'partner', label: 'Parceiro' }, { value: 'churned', label: 'Inativo' }, { value: 'unknown', label: 'Desconhecido' }] },
-   { key: 'vak_dominant', label: 'VAK Dominante', multiple: true, options: [
-     { value: 'V', label: 'Visual' },
-     { value: 'A', label: 'Auditivo' },
-     { value: 'K', label: 'Cinestésico' },
-     { value: 'D', label: 'Auditivo Digital' }
-   ] },
+      { key: 'vak_dominant', label: 'VAK Dominante', multiple: true, options: [
+      { value: 'V', label: 'Visual' },
+      { value: 'A', label: 'Auditivo' },
+      { value: 'K', label: 'Cinestésico' },
+      { value: 'D', label: 'Auditivo Digital' },
+      { value: 'visual', label: 'Visual (Alt)' },
+      { value: 'auditivo', label: 'Auditivo (Alt)' },
+      { value: 'cinestesico', label: 'Cinestésico (Alt)' }
+    ] },
     { key: 'motivation_direction', label: 'Motivação', multiple: true, options: [
       { value: 'toward', label: 'Em Direção A (Ganhos)' },
       { value: 'away_from', label: 'Afastar-se De (Riscos)' },

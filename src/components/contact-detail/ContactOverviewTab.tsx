@@ -37,13 +37,15 @@ import type { RelationshipStage } from '@/types';
 import { Interaction } from '@/hooks/useContactDetail';
 import { CRMAlertsWidget } from './CRMAlertsWidget';
 
-interface Props {
-  contact: Contact & { interactions?: Interaction[] };
-  company: Company | null;
-  insights: Insight[];
-  alerts: Alert[];
-  interactionCount?: number;
-}
+ import { NLPInsightsDashboard } from '@/components/nlp/NLPInsightsDashboard';
+ 
+ interface Props {
+   contact: Contact & { interactions?: Interaction[] };
+   company: Company | null;
+   insights: Insight[];
+   alerts: Alert[];
+   interactionCount?: number;
+ }
 
 export function ContactOverviewTab({ contact, company, insights, alerts, interactionCount = 0 }: Props) {
   const { user } = useAuth();
@@ -71,31 +73,38 @@ export function ContactOverviewTab({ contact, company, insights, alerts, interac
 
   return (
     <div className="space-y-4">
-      {/* CRM Health Alerts */}
-      <CRMAlertsWidget contactId={contact.id} />
-
-      {/* Relationship Stage Funnel */}
-
-      <Card>
-        <CardHeader className="pb-3 flex flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-sm font-medium flex items-center gap-2">
-            <Layers className="h-4 w-4 text-primary" />
-            Estágio do Relacionamento
-          </CardTitle>
-          <Badge variant="secondary" className="text-[10px] capitalize">
-            {(contact.relationship_stage || 'unknown').replace('_', ' ')}
-          </Badge>
-        </CardHeader>
-        <CardContent>
-          <RelationshipFunnel 
-            currentStage={contact.relationship_stage as RelationshipStage || 'unknown'} 
-            isEditable 
-            onStageChange={(stage) => {
-              updateContact({ relationship_stage: stage });
-            }}
-          />
-        </CardContent>
-      </Card>
+       {/* CRM Health Alerts */}
+       <CRMAlertsWidget contactId={contact.id} />
+ 
+       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+         <div className="lg:col-span-2">
+           {/* NLP Insights Dashboard (Actionable insights and PDF export) */}
+           <NLPInsightsDashboard contactId={contact.id} className="mb-4" />
+         </div>
+         <div>
+           <Card>
+             <CardHeader className="pb-3 flex flex-row items-center justify-between space-y-0">
+               <CardTitle className="text-sm font-medium flex items-center gap-2">
+                 <Layers className="h-4 w-4 text-primary" />
+                 Estágio
+               </CardTitle>
+               <Badge variant="secondary" className="text-[10px] capitalize">
+                 {(contact.relationship_stage || 'unknown').replace('_', ' ')}
+               </Badge>
+             </CardHeader>
+             <CardContent>
+               <RelationshipFunnel 
+                 currentStage={contact.relationship_stage as RelationshipStage || 'unknown'} 
+                 isEditable 
+                 onStageChange={(stage) => {
+                   updateContact({ relationship_stage: stage });
+                 }}
+               />
+             </CardContent>
+           </Card>
+         </div>
+       </div>
+ 
       {/* Active Insights */}
       {insights.length > 0 && (
         <Card className="border-warning/30 bg-warning/5">
