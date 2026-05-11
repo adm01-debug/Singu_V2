@@ -11,7 +11,7 @@ import { useUnifiedCommunicationHistory, type InteractionHistoryItem } from '@/h
 import { 
   MessageSquare, Phone, Mail, Globe, Users, Edit, 
   Search, Filter, Calendar as CalendarIcon, ArrowUpRight, ArrowDownLeft,
-  Headphones, FileJson
+   Headphones, FileJson, Smile, Frown, Meh
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -25,8 +25,21 @@ const channelIcons: Record<string, any> = {
   note: Edit,
   social: Globe,
   audio: Headphones,
-  transcript: FileJson,
+   transcript: FileJson,
+   sentiment: Smile,
 };
+const sentimentIcons: Record<string, any> = {
+  positive: Smile,
+  negative: Frown,
+  neutral: Meh,
+};
+
+const sentimentColors: Record<string, string> = {
+  positive: 'text-success',
+  negative: 'text-destructive',
+  neutral: 'text-muted-foreground',
+};
+
 
 const channelColors: Record<string, string> = {
   whatsapp: 'bg-success/10 text-success border-success/20',
@@ -148,8 +161,13 @@ export const UnifiedCommunicationHistory = React.memo(function UnifiedCommunicat
               const Icon = channelIcons[channel] || MessageSquare;
               const colorClass = channelColors[channel] || channelColors.note;
               
-              return (
-                <div key={item.id} className="flex items-start gap-3 p-3 rounded-xl hover:bg-muted/30 transition-all border border-border/30 group">
+               const sentiment = (item as any).sentiment_label || 'neutral';
+               const SentimentIcon = sentimentIcons[sentiment] || Meh;
+               const sentimentColor = sentimentColors[sentiment];
+
+               return (
+                 <div key={item.id} className="flex flex-col gap-2 p-3 rounded-xl hover:bg-muted/30 transition-all border border-border/30 group">
+                   <div className="flex items-start gap-3">
                   <div className={cn(
                     "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border shadow-sm transition-transform group-hover:scale-105",
                     colorClass
@@ -192,10 +210,30 @@ export const UnifiedCommunicationHistory = React.memo(function UnifiedCommunicat
                     </div>
 
                     {item.resumo && item.resumo.length > 50 && (
-                      <p className="text-xs text-muted-foreground mt-2 line-clamp-2 italic leading-relaxed">
-                        "{item.resumo}"
-                      </p>
-                    )}
+                     {item.resumo && (
+                       <p className="text-xs text-muted-foreground mt-2 line-clamp-3 italic leading-relaxed">
+                         "{item.resumo}"
+                       </p>
+                     )}
+
+                     <div className="flex items-center gap-3 mt-2 border-t border-border/30 pt-2">
+                        <div className="flex items-center gap-1">
+                          <SentimentIcon className={cn("h-3 w-3", sentimentColor)} />
+                          <span className={cn("text-[10px] font-medium", sentimentColor)}>
+                            {sentiment === 'positive' ? 'Positivo' : sentiment === 'negative' ? 'Negativo' : 'Neutro'}
+                          </span>
+                        </div>
+                        {(item as any).emotions && (
+                          <div className="flex items-center gap-1 overflow-hidden">
+                            {((item as any).emotions as string[]).slice(0, 2).map((emo, idx) => (
+                              <Badge key={idx} variant="secondary" className="text-[8px] h-3 px-1 py-0 bg-primary/5 text-primary/70 border-none">
+                                {emo}
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
+                     </div>
+                   </div>
                   </div>
                 </div>
               );
