@@ -2,8 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X, Play, Pause, RotateCcw, Phone, MessageSquare, AlertTriangle,
-  Brain, Target, Heart, Zap, Clock, ChevronRight, Minimize2,
+   Brain, Target, Heart, Zap, Clock, ChevronRight, Minimize2, MessageCircle
 } from 'lucide-react';
+ import { Textarea } from '@/components/ui/textarea';
+ import { NLPRealtimeCoach } from '@/components/nlp/NLPRealtimeCoach';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -63,7 +65,8 @@ function useTimer() {
 }
 
 export function MeetingMode({ contact, interactions, open, onClose }: MeetingModeProps) {
-  const timer = useTimer();
+   const timer = useTimer();
+   const [liveNotes, setLiveNotes] = useState('');
   const behavior = contact.behavior as Record<string, unknown> | null;
   const discProfile = (behavior?.discProfile as string) || null;
   const discConfig = discProfile ? DISC_CONFIG[discProfile] : null;
@@ -227,8 +230,31 @@ export function MeetingMode({ contact, interactions, open, onClose }: MeetingMod
             </Card>
           </div>
 
-          {/* Center Column: Key Insights + Follow-ups */}
-          <div className="space-y-4">
+           {/* Center Column: NLP Coach + Live Notes */}
+           <div className="space-y-4 lg:col-span-1">
+             <Card className="border-primary/20 bg-primary/5">
+               <CardHeader className="pb-2">
+                 <CardTitle className="text-sm flex items-center gap-2">
+                   <MessageCircle className="w-4 h-4 text-primary" />
+                   Roteiro / Notas em Tempo Real
+                 </CardTitle>
+               </CardHeader>
+               <CardContent className="space-y-4">
+                 <Textarea 
+                   placeholder="Digite o que pretende falar ou notas da conversa..."
+                   className="min-h-[150px] bg-background/50 border-primary/20"
+                   value={liveNotes}
+                   onChange={(e) => setLiveNotes(e.target.value)}
+                 />
+                 
+                 <NLPRealtimeCoach 
+                   content={liveNotes} 
+                   contactId={contact.id}
+                   onApplySuggestion={(text) => setLiveNotes(prev => prev ? `${prev}\n\n${text}` : text)}
+                 />
+               </CardContent>
+             </Card>
+
             {/* Key Insights */}
             <Card className="h-fit">
               <CardHeader className="pb-2">
