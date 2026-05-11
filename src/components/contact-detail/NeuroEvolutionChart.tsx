@@ -37,7 +37,7 @@
    });
  
    if (isLoading) return <div className="h-48 animate-pulse bg-muted rounded-lg" />;
-   if (!history || history.length < 2) {
+   if (!history || history.length < 1) {
      return (
        <Card className="border-dashed bg-muted/20">
          <CardContent className="pt-6 text-center py-10">
@@ -53,7 +53,7 @@
        <CardHeader className="pb-2">
          <CardTitle className="text-sm font-bold flex items-center gap-2">
            <Brain className="h-4 w-4 text-primary" />
-           Evolução da Dominância Cerebral
+            Timeline de Neuromarketing & Evolução
          </CardTitle>
        </CardHeader>
        <CardContent>
@@ -77,7 +77,7 @@
                  contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
                  labelStyle={{ fontWeight: 'bold', marginBottom: '4px' }}
                />
-               <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', paddingTop: '10px' }} />
+                <Legend iconType="circle" verticalAlign="top" align="right" wrapperStyle={{ fontSize: '10px', paddingBottom: '20px' }} />
                <Line 
                  type="monotone" 
                  name="Reptiliano" 

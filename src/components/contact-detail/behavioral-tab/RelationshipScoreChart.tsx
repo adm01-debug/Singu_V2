@@ -90,8 +90,9 @@ export function RelationshipScoreChart({ contactId }: Props) {
                 }}
                 labelStyle={{ color: 'hsl(var(--foreground))' }}
               />
-              <Area type="monotone" dataKey="score" stroke="hsl(var(--primary))" fill="url(#scoreGradient)" strokeWidth={2} name="Score" />
-              <Area type="monotone" dataKey="engagement" stroke="hsl(var(--success))" fill="url(#engagementGradient)" strokeWidth={1.5} name="Engajamento" strokeDasharray="4 2" />
+               <Area type="monotone" dataKey="score" stroke="hsl(var(--primary))" fill="url(#scoreGradient)" strokeWidth={2} name="Score" />
+               <Area type="monotone" dataKey="engagement" stroke="hsl(var(--success))" fill="url(#engagementGradient)" strokeWidth={1.5} name="Engajamento" strokeDasharray="4 2" />
+               <Area type="monotone" dataKey="sentiment" stroke="#f59e0b" fill="transparent" strokeWidth={1} name="Sentimento" strokeDasharray="3 3" />
             </AreaChart>
           </ResponsiveContainer>
         </CardContent>

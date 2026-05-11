@@ -2,8 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { useUnifiedTimeline, type UnifiedTimelineEvent, type UnifiedEventType } from '@/hooks/useUnifiedTimeline';
 import { 
   MessageSquare, Phone, Users, FileText, CheckCircle2, 
-  Calendar, Search, Filter, Clock, ArrowUpRight, ArrowDownLeft,
-   AlertCircle, TrendingUp, Zap, Smile, Frown, Meh
+   Calendar, Search, Filter, Clock, ArrowUpRight, ArrowDownLeft,
+    AlertCircle, TrendingUp, Zap, Smile, Frown, Meh, Brain
 } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
@@ -24,7 +24,8 @@ const TYPE_CONFIG: Record<UnifiedEventType, { icon: any; label: string; color: s
   event: { icon: Calendar, label: 'Evento', color: 'bg-rose-500/10 text-rose-600 border-rose-200' },
   alert: { icon: AlertCircle, label: 'Alerta', color: 'bg-red-500/10 text-red-600 border-red-200' },
   score_change: { icon: TrendingUp, label: 'Score', color: 'bg-cyan-500/10 text-cyan-600 border-cyan-200' },
-  stage_change: { icon: Zap, label: 'Estágio', color: 'bg-indigo-500/10 text-indigo-600 border-indigo-200' },
+   stage_change: { icon: Zap, label: 'Estágio', color: 'bg-indigo-500/10 text-indigo-600 border-indigo-200' },
+   neuro_update: { icon: Brain, label: 'Neuromarketing', color: 'bg-violet-500/10 text-violet-600 border-violet-200' },
 };
 
 

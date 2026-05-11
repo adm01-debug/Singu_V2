@@ -1,3 +1,6 @@
+ import { useQuery } from '@tanstack/react-query';
+ import { supabase } from '@/integrations/supabase/client';
+ import { StepForward, MapPin } from 'lucide-react';
 import { useState } from 'react';
  import { Sparkles, Copy, RefreshCw, CheckCircle2, Mail, MessageCircle, Phone, Linkedin, Calendar, ChevronDown, ChevronUp, AlarmClock, Edit3, Save } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -32,7 +35,21 @@ const urgencyMeta: Record<string, { label: string; variant: 'default' | 'destruc
 };
 
 export function NextBestActionCard({ contactId, contactName }: Props) {
-  const { nextAction, isLoading, isGenerating, generate } = useNextBestAction(contactId);
+   const { nextAction, isLoading, isGenerating, generate } = useNextBestAction(contactId);
+ 
+   // Fetch current deal stage and recent context
+   const { data: contactContext } = useQuery({
+     queryKey: ['contact-nba-context', contactId],
+     queryFn: async () => {
+       const { data: contact } = await supabase
+         .from('contacts')
+          .select('relationship_stage, last_interaction_at')
+         .eq('id', contactId)
+         .single();
+       return contact;
+     },
+     enabled: !!contactId
+   });
   const createTask = useCreateTask();
    const [scriptOpen, setScriptOpen] = useState(false);
    const [isEditingScript, setIsEditingScript] = useState(false);
@@ -124,7 +141,7 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
     <Card variant="outlined">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-3 flex-wrap">
-          <CardTitle className="flex items-center gap-2">
+           <CardTitle className="flex items-center gap-2 text-primary font-bold">
             <Sparkles className="w-4 h-4 text-primary" />
             Próxima Melhor Ação
           </CardTitle>
@@ -138,11 +155,23 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
-        <div>
-          <p className="text-base font-semibold leading-snug">{nextAction.action}</p>
-          <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{nextAction.reason}</p>
-        </div>
-
+         <div className="space-y-3">
+           {contactContext?.relationship_stage && (
+             <div className="flex items-center gap-2 bg-primary/5 p-2 rounded-md border border-primary/10">
+               <MapPin className="w-3.5 h-3.5 text-primary" />
+               <span className="text-xs font-medium">Estágio Atual: <span className="capitalize">{contactContext.relationship_stage.replace('_', ' ')}</span></span>
+             </div>
+           )}
+           
+           <div className="bg-muted/30 p-3 rounded-lg border border-border/50">
+             <div className="flex items-center gap-2 mb-1">
+               <StepForward className="w-3.5 h-3.5 text-primary" />
+               <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Estratégia de Abordagem</span>
+             </div>
+             <p className="text-base font-bold leading-snug text-foreground">{nextAction.action}</p>
+              <p className="text-sm text-muted-foreground mt-2 leading-relaxed italic border-l-2 border-primary/20 pl-3">"{nextAction.reason}"</p>
+            </div>
+          </div>
         {nextAction && (
           <Collapsible open={scriptOpen} onOpenChange={setScriptOpen}>
             <CollapsibleTrigger asChild>
