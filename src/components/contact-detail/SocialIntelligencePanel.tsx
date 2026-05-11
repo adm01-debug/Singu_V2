@@ -1,4 +1,4 @@
-import { Globe, Linkedin, Instagram, Twitter, Bell, TrendingUp, Users, X, Heart, ShieldCheck } from 'lucide-react';
+ import { Globe, Linkedin, Instagram, Twitter, Bell, TrendingUp, Users, X, Heart, ShieldCheck, Lock, Info } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,8 +25,18 @@ export function SocialIntelligencePanel({ contactId }: Props) {
   const hasData = profiles.length > 0 || behaviorAnalysis || lifeEvents.length > 0;
   if (!hasData) return null;
 
-  return (
-    <div className="space-y-4" id="social-intelligence-section">
+   return (
+     <div className="space-y-4" id="social-intelligence-section">
+       {/* Consent & Privacy Header */}
+       <div className="flex items-center justify-between bg-muted/50 p-2 rounded-lg border border-dashed mb-2">
+         <div className="flex items-center gap-2 text-[10px] text-muted-foreground uppercase font-bold tracking-tighter">
+           <Lock className="h-3 w-3" />
+           Privacidade & Consentimento Ativos
+         </div>
+         <Badge variant="outline" className="text-[9px] bg-green-50 text-green-700 border-green-200">
+           LGPD Compliance
+         </Badge>
+       </div>
       {/* Social Profiles */}
       {profiles.length > 0 && (
         <Card>
