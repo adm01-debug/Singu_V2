@@ -350,22 +350,62 @@ export function InteractionForm({
             )}
           />
 
-          {followUpRequired && (
-            <FormField
-              control={form.control}
-              name="follow_up_date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Data do Follow-up</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-        </div>
+           {followUpRequired && (
+             <FormField
+               control={form.control}
+               name="follow_up_date"
+               render={({ field }) => (
+                 <FormItem>
+                   <FormLabel>Data do Follow-up</FormLabel>
+                   <FormControl>
+                     <Input type="date" {...field} value={field.value || ''} />
+                   </FormControl>
+                   <FormMessage />
+                 </FormItem>
+               )}
+             />
+           )}
+ 
+           <FormField
+             control={form.control}
+             name="tags"
+             render={({ field }) => (
+               <FormItem>
+                 <FormLabel className="flex items-center gap-1">
+                   <Tag className="w-3 h-3" /> Tags
+                 </FormLabel>
+                 <FormControl>
+                   <Input 
+                     placeholder="venda, proposta, suporte (separe por vírgula)" 
+                     value={(field.value || []).join(', ')} 
+                     onChange={(e) => field.onChange(e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+                   />
+                 </FormControl>
+                 <FormMessage />
+               </FormItem>
+             )}
+           />
+ 
+           <FormField
+             control={form.control}
+             name="key_insights"
+             render={({ field }) => (
+               <FormItem className="md:col-span-2">
+                 <FormLabel className="flex items-center gap-1">
+                   <Lightbulb className="w-3 h-3" /> Insights-chave
+                 </FormLabel>
+                 <FormControl>
+                   <Input 
+                     placeholder="Digite os principais aprendizados (separe por vírgula)" 
+                     value={(field.value || []).join(', ')} 
+                     onChange={(e) => field.onChange(e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+                   />
+                 </FormControl>
+                 <FormMessage />
+               </FormItem>
+             )}
+           />
+         </div>
 
         <div className="flex justify-end gap-3 pt-4 border-t border-border">
           <Button type="button" variant="outline" onClick={onCancel}>
