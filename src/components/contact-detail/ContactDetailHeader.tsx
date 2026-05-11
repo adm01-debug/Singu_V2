@@ -94,7 +94,8 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
   const isDuplicate = contactExt.is_duplicate === true;
   const isDeleted = !!contactExt.deleted_at;
 
-  const fullName = formatContactName(contact.first_name, contact.last_name);
+   const fullName = formatContactName(contact.first_name, contact.last_name);
+   const companyName = company?.name || 'Empresa';
   const stage = STAGE_CONFIG[contact.relationship_stage || 'unknown'] || STAGE_CONFIG.unknown;
   const behavior = contact.behavior as Record<string, unknown> | null;
   const discProfile = behavior?.discProfile as string | null;
@@ -273,12 +274,21 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
                   {contact.relationship_stage || 'unknown'}
                 </Badge>
               </div>
-              <RelationshipFunnel 
-                currentStage={(contact.relationship_stage as RelationshipStage) || 'unknown'} 
-                onStageChange={handleStageChange}
-                isEditable
-              />
-            </div>
+               <RelationshipFunnel 
+                 currentStage={(contact.relationship_stage as RelationshipStage) || 'unknown'} 
+                 onStageChange={handleStageChange}
+                 isEditable
+               />
+             </div>
+ 
+             {/* Next Best Action Dashboard Integration */}
+             <div className="md:col-span-2 lg:col-span-3">
+               <NextBestActionCard 
+                 contactId={contact.id} 
+                 contactName={fullName} 
+               />
+             </div>
+           </div>
           </div>
 
           {/* 360° Intelligence Strip */}
