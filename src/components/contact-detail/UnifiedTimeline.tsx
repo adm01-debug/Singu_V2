@@ -2,8 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { useUnifiedTimeline, type UnifiedTimelineEvent, type UnifiedEventType } from '@/hooks/useUnifiedTimeline';
 import { 
   MessageSquare, Phone, Users, FileText, CheckCircle2, 
-  Calendar, Search, Filter, Clock, ArrowUpRight, ArrowDownLeft,
-   AlertCircle, TrendingUp, Zap, Smile, Frown, Meh
+   Calendar, Search, Filter, Clock, ArrowUpRight, ArrowDownLeft,
+    AlertCircle, TrendingUp, Zap, Smile, Frown, Meh, Brain
 } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';

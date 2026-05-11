@@ -6,7 +6,7 @@ import { useContactMeetings } from './useContactMeetings';
 import { useAuth } from '@/hooks/useAuth';
 import { useMemo } from 'react';
 
-export type UnifiedEventType = 'message' | 'call' | 'meeting' | 'note' | 'task' | 'event' | 'score_change' | 'stage_change' | 'alert';
+export type UnifiedEventType = 'message' | 'call' | 'meeting' | 'note' | 'task' | 'event' | 'score_change' | 'stage_change' | 'alert' | 'neuro_update';
 
 export interface UnifiedTimelineEvent {
   id: string;

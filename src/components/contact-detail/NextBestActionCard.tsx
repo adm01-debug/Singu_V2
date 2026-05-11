@@ -43,7 +43,7 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
      queryFn: async () => {
        const { data: contact } = await supabase
          .from('contacts')
-         .select('deal_stage, last_interaction_at')
+          .select('relationship_stage, last_interaction_at')
          .eq('id', contactId)
          .single();
        return contact;
@@ -156,10 +156,10 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
       </CardHeader>
       <CardContent className="space-y-3">
          <div className="space-y-3">
-           {contactContext?.deal_stage && (
+           {contactContext?.relationship_stage && (
              <div className="flex items-center gap-2 bg-primary/5 p-2 rounded-md border border-primary/10">
                <MapPin className="w-3.5 h-3.5 text-primary" />
-               <span className="text-xs font-medium">Estágio Atual: <span className="capitalize">{contactContext.deal_stage.replace('_', ' ')}</span></span>
+               <span className="text-xs font-medium">Estágio Atual: <span className="capitalize">{contactContext.relationship_stage.replace('_', ' ')}</span></span>
              </div>
            )}
            
