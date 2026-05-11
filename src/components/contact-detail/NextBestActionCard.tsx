@@ -170,9 +170,7 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
              </div>
              <p className="text-base font-bold leading-snug text-foreground">{nextAction.action}</p>
              <p className="text-sm text-muted-foreground mt-2 leading-relaxed italic border-l-2 border-primary/20 pl-3">"{nextAction.reason}"</p>
-           </div>
-         </div>
-        </div>
+          </div>
 
         {nextAction && (
           <Collapsible open={scriptOpen} onOpenChange={setScriptOpen}>
