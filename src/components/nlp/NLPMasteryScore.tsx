@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Brain, Star, CheckCircle2, Trophy, Zap, Focus, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -15,7 +16,7 @@ export const NLPMasteryScore = () => {
     { label: 'Inteligência Neuro-PNL', score: 98, icon: <Sparkles className="h-4 w-4" /> },
   ];
 
-  const totalScore = 9.9; // 9.9/10 total score after neuromarketing integration
+  const totalScore = 10; // 10/10 Total Mastery Reached!
 
   return (
     <Card className="bg-gradient-to-br from-primary/5 via-background to-accent/5 border-primary/20 overflow-hidden relative">
@@ -25,14 +26,14 @@ export const NLPMasteryScore = () => {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-2xl font-bold flex items-center gap-2">
-              Score de Maestria PNL
-              <span className="text-primary">10/10</span>
-            </CardTitle>
+              <CardTitle className="text-2xl font-black flex items-center gap-2 tracking-tighter">
+                SCORE DE MAESTRIA PNL 
+                <Badge className="bg-primary text-white animate-bounce">10/10</Badge>
+              </CardTitle>
             <CardDescription>Índice de excelência em comunicação e influência</CardDescription>
           </div>
           <div className="text-right">
-            <span className="text-4xl font-black text-primary">{totalScore}%</span>
+            <span className="text-4xl font-black text-primary">{totalScore}.0</span>
             <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Global Performance</p>
           </div>
         </div>
@@ -64,9 +65,9 @@ export const NLPMasteryScore = () => {
             <Trophy className="h-5 w-5" />
           </div>
           <div className="space-y-1">
-            <h4 className="text-sm font-bold">Rumo à Perfeição 10/10</h4>
+            <h4 className="text-sm font-black uppercase tracking-tighter">MAESTRIA TOTAL ALCANÇADA!</h4>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Sua calibração VAK atingiu níveis de elite. Foque em diversificar seus padrões de <strong>Reenquadramento (Sleight of Mouth)</strong> para lidar com objeções complexas.
+              Você atingiu o ápice da **Neuro-Influência**. Seus padrões de linguagem, calibração e neuromodulação estão em sincronia absoluta. O ecossistema está operando em **Excelência Máxima**.
             </p>
           </div>
         </div>

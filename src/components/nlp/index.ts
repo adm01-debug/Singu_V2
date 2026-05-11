@@ -1,6 +1,7 @@
  export { NLPInsightsDashboard } from './NLPInsightsDashboard';
   export { NLPMasteryScore } from './NLPMasteryScore';
-  export { NLPCalibrationCard } from './NLPCalibrationCard';
+ export { NLPCalibrationCard } from './NLPCalibrationCard';
+ export { NeuroCommunicationHub } from './NeuroCommunicationHub';
 // ==============================================
 // NLP Components - Enterprise Module Export
 // ==============================================
