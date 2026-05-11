@@ -605,7 +605,16 @@ const Ficha360 = () => {
             {/* Grid 2 colunas */}
             <div className="grid gap-4 lg:grid-cols-2">
               <div className="space-y-4">
-                <PerfilComportamentalCard profile={profile} />
+                <div className="space-y-4">
+                  <PerfilComportamentalCard profile={profile} />
+                  <NLPAnalysisCard 
+                    contactId={id!} 
+                    vakProfile={vakProfile} 
+                    metaprogramProfile={metaprogramProfile} 
+                    reframings={latestReframings}
+                    onRefetch={refetchNLP}
+                  />
+                </div>
                 <TagsInteresseCard rapportIntel={rapportIntel} rapportPoints={rapportPoints} />
                 <HistoricoTagsCard contactId={id} />
                 <DadosPessoaisCard rapportIntel={rapportIntel} />
