@@ -9,7 +9,8 @@ import { Header } from '@/components/layout/Header';
    NLPEvolutionTimeline,
    NLPInsightsDashboard,
    CommunicationCoherencePanel,
-   UnifiedScriptGenerator
+   UnifiedScriptGenerator,
+   CopywritingSalesTools
  } from '@/components/nlp';
  import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
  import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity } from 'lucide-react';
@@ -184,12 +185,15 @@ const NLPAnalytics = () => {
                  )}
                </TabsContent>
                
-               <TabsContent value="tools" className="mt-6">
+               <TabsContent value="tools" className="mt-6 space-y-6">
                  {selectedContact ? (
-                   <UnifiedScriptGenerator contact={selectedContact} />
+                   <>
+                     <UnifiedScriptGenerator contact={selectedContact} />
+                     <CopywritingSalesTools contact={selectedContact} />
+                   </>
                  ) : (
                    <Card className="p-12 text-center border-dashed">
-                     <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para gerar scripts personalizados.</p>
+                     <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para acessar as ferramentas de PNL.</p>
                    </Card>
                  )}
                </TabsContent>
