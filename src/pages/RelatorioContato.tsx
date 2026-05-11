@@ -600,9 +600,16 @@ const RelatorioContato = () => {
  
                <div className="space-y-2">
                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Script Sugerido</p>
-                 <div className="bg-white p-4 rounded-lg border border-border italic text-sm text-foreground leading-relaxed whitespace-pre-wrap">
-                   "Olá {contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"
-                 </div>
+                  {editingInsights ? (
+                    <Textarea 
+                      defaultValue={`"Olá ${contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"`}
+                      className="italic text-sm min-h-[100px]"
+                    />
+                  ) : (
+                    <div className="bg-white p-4 rounded-lg border border-border italic text-sm text-foreground leading-relaxed whitespace-pre-wrap">
+                      "Olá {contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"
+                    </div>
+                  )}
                </div>
              </div>
            </div>
