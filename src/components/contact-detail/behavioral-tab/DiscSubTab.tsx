@@ -103,7 +103,7 @@ export function DiscSubTab({ contactId }: Props) {
              </CardTitle>
            </CardHeader>
            <CardContent>
-             <DISCSalesScriptGenerator contact={{ id: contactId, behavior: formData }} />
+             <DISCSalesScriptGenerator contact={{ id: contactId, behavior: formData, firstName: 'Contato' } as any} />
            </CardContent>
          </Card>
        </div>
