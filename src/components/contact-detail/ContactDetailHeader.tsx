@@ -13,7 +13,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { RelationshipScore } from '@/components/ui/relationship-score';
 import { SentimentIndicator } from '@/components/ui/sentiment-indicator';
-import { RelationshipFunnel, RelationshipStageBadge } from '@/components/ui/relationship-stage';
+ import { RelationshipFunnel, RelationshipStageBadge } from '@/components/ui/relationship-stage';
+ import { NextBestActionCard } from './NextBestActionCard';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -94,7 +95,8 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
   const isDuplicate = contactExt.is_duplicate === true;
   const isDeleted = !!contactExt.deleted_at;
 
-  const fullName = formatContactName(contact.first_name, contact.last_name);
+   const fullName = formatContactName(contact.first_name, contact.last_name);
+   const companyName = company?.name || 'Empresa';
   const stage = STAGE_CONFIG[contact.relationship_stage || 'unknown'] || STAGE_CONFIG.unknown;
   const behavior = contact.behavior as Record<string, unknown> | null;
   const discProfile = behavior?.discProfile as string | null;
@@ -269,18 +271,24 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
                   <Target className="h-3 w-3" />
                   Funil de Relacionamento (Clique para alterar)
                 </span>
-                <Badge variant="outline" className="text-[9px] h-4">
-                  {contact.relationship_stage || 'unknown'}
-                </Badge>
-              </div>
-              <RelationshipFunnel 
-                currentStage={(contact.relationship_stage as RelationshipStage) || 'unknown'} 
-                onStageChange={handleStageChange}
-                isEditable
-              />
-            </div>
-          </div>
-
+               <Badge variant="outline" className="text-[9px] h-4">
+                 {contact.relationship_stage || 'unknown'}
+               </Badge>
+             </div>
+             <RelationshipFunnel 
+               currentStage={(contact.relationship_stage as RelationshipStage) || 'unknown'} 
+               onStageChange={handleStageChange}
+               isEditable
+             />
+           </div>
+ 
+           {/* Next Best Action Dashboard Integration */}
+           <NextBestActionCard 
+             contactId={contact.id} 
+             contactName={fullName} 
+           />
+         </div>
+ 
           {/* 360° Intelligence Strip */}
           {view360 && (
             <div className="mt-3 flex flex-wrap gap-2">
