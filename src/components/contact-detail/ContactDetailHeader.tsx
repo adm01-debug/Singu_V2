@@ -270,24 +270,23 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
                   <Target className="h-3 w-3" />
                   Funil de Relacionamento (Clique para alterar)
                 </span>
-                <Badge variant="outline" className="text-[9px] h-4">
-                  {contact.relationship_stage || 'unknown'}
-                </Badge>
-              </div>
-                <RelationshipFunnel 
-                  currentStage={(contact.relationship_stage as RelationshipStage) || 'unknown'} 
-                  onStageChange={handleStageChange}
-                  isEditable
-                />
-              </div>
-            </div>
+               <Badge variant="outline" className="text-[9px] h-4">
+                 {contact.relationship_stage || 'unknown'}
+               </Badge>
+             </div>
+             <RelationshipFunnel 
+               currentStage={(contact.relationship_stage as RelationshipStage) || 'unknown'} 
+               onStageChange={handleStageChange}
+               isEditable
+             />
+           </div>
  
-            {/* Next Best Action Dashboard Integration */}
-            <NextBestActionCard 
-              contactId={contact.id} 
-              contactName={fullName} 
-            />
-          </div>
+           {/* Next Best Action Dashboard Integration */}
+           <NextBestActionCard 
+             contactId={contact.id} 
+             contactName={fullName} 
+           />
+         </div>
  
           {/* 360° Intelligence Strip */}
           {view360 && (
