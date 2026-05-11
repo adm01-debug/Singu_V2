@@ -11,11 +11,12 @@ import { Header } from '@/components/layout/Header';
    CommunicationCoherencePanel,
    UnifiedScriptGenerator,
    CopywritingSalesTools,
-   NLPTrainingMode,
-   PerceptualPositions
+    NLPTrainingMode,
+    PerceptualPositions,
+    MetaProgramsProfiler
  } from '@/components/nlp';
- import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
- import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope } from 'lucide-react';
+  import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+  import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope, Fingerprint } from 'lucide-react';
  import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
  import { Input } from '@/components/ui/input';
  import { Button } from '@/components/ui/button';
@@ -119,6 +120,9 @@ const NLPAnalytics = () => {
                   <TabsTrigger value="positions" className="gap-2">
                     <Telescope className="h-4 w-4" /> Posições
                   </TabsTrigger>
+                  <TabsTrigger value="metaprograms" className="gap-2">
+                    <Fingerprint className="h-4 w-4" /> Metaprogramas
+                  </TabsTrigger>
                   <TabsTrigger value="training" className="gap-2">
                     <GraduationCap className="h-4 w-4" /> Treino
                   </TabsTrigger>
@@ -133,6 +137,16 @@ const NLPAnalytics = () => {
                     </Card>
                   )}
                 </TabsContent>
+
+                 <TabsContent value="metaprograms" className="mt-6 space-y-6">
+                   {selectedContact ? (
+                     <MetaProgramsProfiler contact={selectedContact} />
+                   ) : (
+                     <Card className="p-12 text-center border-dashed">
+                       <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para analisar metaprogramas.</p>
+                     </Card>
+                   )}
+                 </TabsContent>
 
                 <TabsContent value="training" className="mt-6 space-y-6">
                   <NLPTrainingMode />
