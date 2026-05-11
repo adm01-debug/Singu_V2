@@ -29,10 +29,11 @@ import {
   ContactInteractionsTab,
   ContactBehavioralTab,
   ContactIntelligenceTab,
-  ContactCommercialTab,
-  ContactDataTab,
-  LifeEventsTab,
-} from '@/components/contact-detail';
+   ContactCommercialTab,
+   ContactDataTab,
+   LifeEventsTab,
+ } from '@/components/contact-detail';
+ import { NeuromarketingTimeline } from '@/components/crm/behavior/NeuromarketingTimeline';
 import { RelationshipTimeline } from '@/components/contact-detail/RelationshipTimeline';
 import { MeetingMode } from '@/components/contact-detail/MeetingMode';
 import { ValidateAllButton } from '@/components/enrichment/ValidateAllButton';
