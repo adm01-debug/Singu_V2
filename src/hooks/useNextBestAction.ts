@@ -86,6 +86,7 @@ export function useNextBestAction(contactId: string | undefined) {
           contact_id: contactId,
           user_id: user.id,
           type: currentAction.channel,
+          title: 'Ação Concluída',
           content: `Próxima ação concluída: ${currentAction.action}. ${notes || ''}`,
         }]);
         if (intError) logger.error('Error creating completion interaction', intError);
