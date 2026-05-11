@@ -23,8 +23,8 @@ interface Props {
 }
 
 export function ContactDataTab({ contact }: Props) {
-  const { data, isLoading, error, refetch } = useContactRelationalData(contact.id);
-  const { addRelative, deleteRelative } = useRelativeMutations(contact.id);
+   const { data, isLoading, error, refetch } = useContactRelationalData(contact.id);
+   const { addRelative, updateRelative, deleteRelative } = useRelativeMutations(contact.id);
   const phoneMutations = useExternalRelationalMutations(contact.id, 'contact_phones', 'Telefone');
   const emailMutations = useExternalRelationalMutations(contact.id, 'contact_emails', 'Email');
   const addressMutations = useExternalRelationalMutations(contact.id, 'contact_addresses', 'Endereço');
@@ -119,12 +119,13 @@ export function ContactDataTab({ contact }: Props) {
           onAdd={(d) => socialMutations.add.mutate(d)}
           onDelete={(id) => socialMutations.remove.mutate(id)}
         />
-        <RelativesCard
-          relatives={relatives}
-          contactId={contact.id}
-          onAdd={(d) => addRelative.mutate(d as Parameters<typeof addRelative.mutate>[0])}
-          onDelete={(id) => deleteRelative.mutate(id)}
-        />
+         <RelativesCard
+           relatives={relatives}
+           contactId={contact.id}
+           onAdd={(d) => addRelative.mutate(d as any)}
+           onUpdate={(id, updates) => updateRelative.mutate({ id, updates })}
+           onDelete={(id) => deleteRelative.mutate(id)}
+         />
         <CadencePreferencesCard
           cadence={cadence}
           preferences={preferences}
