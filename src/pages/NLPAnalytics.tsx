@@ -181,10 +181,9 @@ const NLPAnalytics = () => {
          </div>
        </div>
      </AppLayout>
-   );
- };
-    </AppLayout>
-  );
-};
+    );
+  };
+ 
+ export default NLPAnalytics;
 
 export default NLPAnalytics;
