@@ -4,12 +4,16 @@ import { AlertCircle, CheckCircle2, AlertTriangle, Clock, User } from "lucide-re
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { useContactBehavior } from "@/hooks/useContactBehavior";
+import { useNLPAnalysisValidation } from "@/hooks/useNLPAnalysisValidation";
+import { ThumbsUp, ThumbsDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 interface BehavioralAuditSubTabProps {
   contactId: string;
 }
+  const { validateVAK, validateMetaprogram } = useNLPAnalysisValidation();
 
 export const BehavioralAuditSubTab = ({ contactId }: BehavioralAuditSubTabProps) => {
   const { auditLogs, gaps, consistency, isLoading } = useContactBehavior(contactId);
@@ -107,6 +111,27 @@ export const BehavioralAuditSubTab = ({ contactId }: BehavioralAuditSubTabProps)
                         {log.user_email || 'Sistema/IA'}
                       </div>
                       <p className="text-sm mt-1">{log.reason}</p>
+                      {log.analysis_type && !log.is_validated && (
+                        <div className="flex items-center gap-2 mt-2">
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold">Validar Análise:</span>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-6 w-6 rounded-full hover:text-success"
+                            onClick={() => log.analysis_type === "vak" ? validateVAK(log.id, true) : validateMetaprogram(log.id, true)}
+                          >
+                            <ThumbsUp className="h-3 w-3" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-6 w-6 rounded-full hover:text-destructive"
+                            onClick={() => log.analysis_type === "vak" ? validateVAK(log.id, false) : validateMetaprogram(log.id, false)}
+                          >
+                            <ThumbsDown className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      )}
                       <div className="grid grid-cols-2 gap-2 mt-2 p-2 bg-muted/30 rounded text-xs">
                         <div>
                           <span className="text-muted-foreground block mb-1">De:</span>
