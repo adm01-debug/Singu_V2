@@ -1498,6 +1498,7 @@ export type Database = {
           lng: number | null
           logo_url: string | null
           matriz_id: string | null
+          motivation_direction: string | null
           name: string
           natureza_juridica: string | null
           natureza_juridica_desc: string | null
@@ -1522,8 +1523,10 @@ export type Database = {
           twitter: string | null
           updated_at: string
           user_id: string
+          vak_dominant: string | null
           version: number
           website: string | null
+          working_style: string | null
           youtube: string | null
         }
         Insert: {
@@ -1563,6 +1566,7 @@ export type Database = {
           lng?: number | null
           logo_url?: string | null
           matriz_id?: string | null
+          motivation_direction?: string | null
           name: string
           natureza_juridica?: string | null
           natureza_juridica_desc?: string | null
@@ -1587,8 +1591,10 @@ export type Database = {
           twitter?: string | null
           updated_at?: string
           user_id: string
+          vak_dominant?: string | null
           version?: number
           website?: string | null
+          working_style?: string | null
           youtube?: string | null
         }
         Update: {
@@ -1628,6 +1634,7 @@ export type Database = {
           lng?: number | null
           logo_url?: string | null
           matriz_id?: string | null
+          motivation_direction?: string | null
           name?: string
           natureza_juridica?: string | null
           natureza_juridica_desc?: string | null
@@ -1652,8 +1659,10 @@ export type Database = {
           twitter?: string | null
           updated_at?: string
           user_id?: string
+          vak_dominant?: string | null
           version?: number
           website?: string | null
+          working_style?: string | null
           youtube?: string | null
         }
         Relationships: []
@@ -12558,6 +12567,10 @@ export type Database = {
     }
     Functions: {
       _connection_encryption_key: { Args: never; Returns: string }
+      aggregate_nlp_to_company: {
+        Args: { p_company_id: string }
+        Returns: undefined
+      }
       buyer_add_comment: {
         Args: { _body: string; _label?: string; _token: string }
         Returns: string
