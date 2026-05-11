@@ -272,10 +272,23 @@ const NLPAnalytics = () => {
                  <p className="leading-relaxed">
                    Hoje, sua base está <strong>42% Visiva</strong>. Priorize o envio de propostas visuais para aumentar o engajamento subconsciente.
                  </p>
-                 <div className="pt-2 border-t">
-                   <p className="font-bold text-primary mb-1">Gatilho Recomendado:</p>
-                   <p className="text-muted-foreground italic">"Veja como isso se encaixa perfeitamente na sua visão..."</p>
-                 </div>
+                  {selectedContact ? (
+                    <div className="pt-2 border-t space-y-3">
+                      <div>
+                        <p className="font-bold text-primary mb-1">Padrão de Fechamento:</p>
+                        <p className="text-muted-foreground italic">"Baseado na sua preferência por {selectedContact.behavior?.vak || 'VAK'}, eu sugiro..."</p>
+                      </div>
+                      <div className="p-2 bg-success/10 rounded border border-success/20">
+                        <p className="font-bold text-success text-[10px] uppercase">Predição de Rapport:</p>
+                        <p className="text-[11px]">Alta probabilidade de conversão se usar <strong>Padrão Milton</strong> agora.</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="pt-2 border-t">
+                      <p className="font-bold text-primary mb-1">Gatilho Recomendado:</p>
+                      <p className="text-muted-foreground italic">"Veja como isso se encaixa perfeitamente na sua visão..."</p>
+                    </div>
+                  )}
                </CardContent>
              </Card>
  
