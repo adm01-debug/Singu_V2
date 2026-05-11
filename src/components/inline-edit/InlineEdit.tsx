@@ -171,12 +171,13 @@ export function InlineEdit({
                    placeholder={placeholder}
                    maxLength={maxLength}
                    disabled={isSaving}
-                   className={cn(
-                     'pr-16',
-                     error && 'border-destructive focus-visible:ring-destructive',
-                     inputClassName
-                   )}
-                 />
+                    className={cn(
+                      'pr-16',
+                      error && 'border-destructive focus-visible:ring-destructive',
+                      inputClassName
+                    )}
+                  />
+               )}
  // Specialized inline edit for Dates
  interface InlineDateEditProps extends Omit<InlineEditProps, 'value' | 'onSave' | 'type'> {
    value: string | null | undefined;
@@ -205,17 +206,9 @@ export function InlineEdit({
        type="date"
        value={value || ''}
        onSave={handleSave}
-     >
-       {/* We override the display part if formatDisplay is provided */}
-       {displayValue && !props.disabled && (
-         <div className={cn('flex items-center gap-2', props.displayClassName)}>
-           <span>{displayValue}</span>
-         </div>
-       )}
-     </InlineEdit>
+     />
    );
  }
-              )}
               {maxLength && (
                 <span className="absolute right-2 bottom-1 text-xs text-muted-foreground">
                   {editValue.length}/{maxLength}
