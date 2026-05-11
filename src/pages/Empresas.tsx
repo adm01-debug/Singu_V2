@@ -107,7 +107,12 @@ const Empresas = () => {
       for (const [key, values] of Object.entries(activeFilters)) {
         if (values.length === 0) continue;
         const companyValue = company[key as keyof Company];
-        if (key === 'is_customer' || key === 'is_supplier' || key === 'is_carrier' || key === 'is_matriz') { if (!values.includes(String(companyValue ?? false))) return false; continue; }
+         if (key === 'is_customer' || key === 'is_supplier' || key === 'is_carrier' || key === 'is_matriz') { if (!values.includes(String(companyValue ?? false))) return false; continue; }
+         
+         if (key === 'vak_dominant' || key === 'motivation_direction' || key === 'working_style') {
+           if (!companyValue || !values.includes(String(companyValue))) return false;
+           continue;
+         }
         if (typeof companyValue === 'boolean') { if (!values.includes(String(companyValue))) return false; continue; }
         if (companyValue === null || companyValue === undefined || companyValue === '') return false;
         if (!values.includes(String(companyValue))) return false;
