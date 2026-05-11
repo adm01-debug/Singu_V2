@@ -21,7 +21,7 @@ export const MotivationsSubTab = ({ contactId, data }: MotivationsSubTabProps) =
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Motivações e Objetivos</CardTitle>
+        <CardTitle>Metaprogramas (Motivação)</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-4">
@@ -69,7 +69,7 @@ export const MotivationsSubTab = ({ contactId, data }: MotivationsSubTabProps) =
           </div>
           <Button className="w-full" onClick={handleSave}>
             <Save className="h-4 w-4 mr-2" />
-            Salvar Motivações
+            Salvar Metaprogramas
           </Button>
         </div>
       </CardContent>

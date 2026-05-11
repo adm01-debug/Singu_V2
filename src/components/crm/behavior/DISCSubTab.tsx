@@ -93,7 +93,7 @@ export const DISCSubTab = ({ contactId, data }: DISCSubTabProps) => {
           </div>
           <Button className="w-full mt-4" onClick={handleSave}>
             <Save className="h-4 w-4 mr-2" />
-            Salvar Alterações
+            Salvar VAK
           </Button>
         </CardContent>
       </Card>
