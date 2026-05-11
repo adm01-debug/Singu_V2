@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { PersonalityExecutiveSummary } from './behavioral-tab/PersonalityExecutiveSummary';
+ import { PersonalityExecutiveSummary } from './behavioral-tab/PersonalityExecutiveSummary';
+ import { NeuroEvolutionChart } from './NeuroEvolutionChart';
 import { RelationshipScoreChart } from './behavioral-tab/RelationshipScoreChart';
 import { DiscCompatibilityCard } from './behavioral-tab/DiscCompatibilityCard';
 import { RapportCard } from './behavioral-tab/RapportCard';
@@ -53,7 +54,6 @@ async function fetchWithFallback<T>(
   return Array.isArray(local) ? ([] as unknown as T) : null;
 }
 
-export function ContactBehavioralTab({ contact }: Props) {
   const { user } = useAuth();
   const behavior = contact.behavior as Record<string, unknown> | null;
 
@@ -117,9 +117,16 @@ export function ContactBehavioralTab({ contact }: Props) {
   const discConfidence = (behavior?.discConfidence as number) || 0;
   const vakProfile = behavior?.vakProfile as Record<string, number> | null;
 
-  return (
-    <div className="space-y-6">
-      <PersonalityExecutiveSummary contactId={contact.id} />
+   return (
+     <div className="space-y-6">
+       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+         <div className="lg:col-span-2">
+           <PersonalityExecutiveSummary contactId={contact.id} />
+         </div>
+         <div className="lg:col-span-1">
+           <NeuroEvolutionChart contactId={contact.id} />
+         </div>
+       </div>
       <BehavioralExecutiveSummary 
         contactId={contact.id} 
         data={{
