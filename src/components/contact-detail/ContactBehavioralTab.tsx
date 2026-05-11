@@ -13,7 +13,8 @@ import { VakSubTab } from './behavioral-tab/VakSubTab';
 import { EqSubTab } from './behavioral-tab/EqSubTab';
 import { BiasesSubTab } from './behavioral-tab/BiasesSubTab';
 import { MetaprogramsSubTab } from './behavioral-tab/MetaprogramsSubTab';
-import { PersonalitySubTab } from './behavioral-tab/PersonalitySubTab';
+ import { PersonalitySubTab } from './behavioral-tab/PersonalitySubTab';
+ import { SleightOfMouthPanel } from '@/components/nlp/SleightOfMouthPanel';
 import { MotivationsSubTab } from './behavioral-tab/MotivationsSubTab';
 import { DecisionMakingSubTab } from './behavioral-tab/DecisionMakingSubTab';
 import { InfluencersSubTab } from './behavioral-tab/InfluencersSubTab';
@@ -160,8 +161,13 @@ export function ContactBehavioralTab({ contact }: Props) {
           <TabsTrigger value="audit" className="text-xs">Auditoria & Gaps</TabsTrigger>
           <TabsTrigger value="eq" className="text-xs">Int. Emocional</TabsTrigger>
           <TabsTrigger value="biases" className="text-xs">Vieses</TabsTrigger>
-          <TabsTrigger value="metaprograms" className="text-xs">Meta</TabsTrigger>
-          <TabsTrigger value="personality" className="text-xs">Big Five/MBTI</TabsTrigger>
+           <TabsTrigger value="metaprograms" className="text-xs">Meta</TabsTrigger>
+           <TabsTrigger value="reframing" className="text-xs">Sleight of Mouth</TabsTrigger>
+           <TabsTrigger value="personality" className="text-xs">Big Five/MBTI</TabsTrigger>
+       <TabsContent value="reframing" className="space-y-4">
+         <SleightOfMouthPanel contactId={contact.id} />
+       </TabsContent>
+ 
         </TabsList>
         <ModuleHelp {...moduleHelpContent.disc} />
       </div>
