@@ -90,7 +90,7 @@ export function useMetaprogramAnalysis() {
 
       // Auto-trigger aggregated analysis update
       if (contactId) {
-        triggerAnalysis(contactId, interactionId || "", analyzedText, null, "whatsapp", false);
+        triggerAnalysis(contactId, interactionId || "manual", analyzedText, null, "whatsapp", false);
       }
 
       return data;

@@ -88,7 +88,7 @@ export function useVAKAnalysis() {
       });
       if (error) throw error;
       if (contactId) {
-        triggerAnalysis(contactId, interactionId || "", text, null, "whatsapp", false);
+        triggerAnalysis(contactId, interactionId || "manual", text, null, "whatsapp", false);
       }
       return true;
     } catch (error) {
