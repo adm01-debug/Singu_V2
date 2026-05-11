@@ -29,12 +29,34 @@ const NLPAnalytics = () => {
        if (searchTerm.length < 2) return [];
        const { data } = await supabase
          .from('contacts')
-         .select('id, name')
-         .ilike('name', `%${searchTerm}%`)
+         .select('id, first_name, last_name')
+         .or(`first_name.ilike.%${searchTerm}%,last_name.ilike.%${searchTerm}%`)
          .limit(5);
-       return data || [];
+       return data?.map(c => ({ ...c, name: `${c.first_name} ${c.last_name}` })) || [];
      },
      enabled: searchTerm.length >= 2
+   });
+ 
+   const { data: selectedContact } = useQuery({
+     queryKey: ['selected-contact-nlp', selectedContactId],
+     queryFn: async () => {
+       if (!selectedContactId) return null;
+       const { data } = await supabase
+         .from('contacts')
+         .select('*')
+         .eq('id', selectedContactId)
+         .single();
+       
+       if (data) {
+         return {
+           ...data,
+           firstName: data.first_name,
+           lastName: data.last_name
+         };
+       }
+       return data;
+     },
+     enabled: !!selectedContactId
    });
  
   return (
