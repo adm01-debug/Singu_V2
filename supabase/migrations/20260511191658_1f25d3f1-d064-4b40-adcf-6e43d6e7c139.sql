@@ -1,0 +1,1 @@
+ALTER TABLE public.objection_example_feedback ALTER COLUMN interaction_id DROP NOT NULL;

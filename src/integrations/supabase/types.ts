@@ -8369,7 +8369,7 @@ export type Database = {
           category: string | null
           created_at: string
           id: string
-          interaction_id: string
+          interaction_id: string | null
           is_useful: boolean
           objection: string
           updated_at: string
@@ -8379,7 +8379,7 @@ export type Database = {
           category?: string | null
           created_at?: string
           id?: string
-          interaction_id: string
+          interaction_id?: string | null
           is_useful?: boolean
           objection: string
           updated_at?: string
@@ -8389,7 +8389,7 @@ export type Database = {
           category?: string | null
           created_at?: string
           id?: string
-          interaction_id?: string
+          interaction_id?: string | null
           is_useful?: boolean
           objection?: string
           updated_at?: string
