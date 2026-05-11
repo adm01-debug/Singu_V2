@@ -1,10 +1,17 @@
  import { memo, useMemo, useState } from 'react';
- import { MessageSquare, Phone, Mail, Users, FileText, Search, Clock, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
+  import { 
+    MessageSquare, Phone, Mail, Users, FileText, Search, Clock, 
+    ArrowUpRight, ArrowDownLeft, Filter, Calendar as CalendarIcon,
+    User, Headphones, FileJson 
+  } from 'lucide-react';
  import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
  import { Badge } from '@/components/ui/badge';
  import { Input } from '@/components/ui/input';
  import { Button } from '@/components/ui/button';
- import { ScrollArea } from '@/components/ui/scroll-area';
+  import { ScrollArea } from '@/components/ui/scroll-area';
+  import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+  import { Calendar } from '@/components/ui/calendar';
+  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
  import { format } from 'date-fns';
  import { ptBR } from 'date-fns/locale';
  import { cn } from '@/lib/utils';
@@ -14,13 +21,15 @@
    companyId: string;
  }
  
- const channelIcons: Record<string, typeof MessageSquare> = {
-   whatsapp: MessageSquare,
-   call: Phone,
-   email: Mail,
-   meeting: Users,
-   note: FileText,
- };
+  const channelIcons: Record<string, any> = {
+    whatsapp: MessageSquare,
+    call: Phone,
+    email: Mail,
+    meeting: Users,
+    note: FileText,
+    audio: Headphones,
+    transcript: FileJson,
+  };
  
  const channelColors: Record<string, string> = {
    whatsapp: 'bg-success/10 text-success border-success/20',
@@ -30,39 +39,117 @@
    note: 'bg-muted text-muted-foreground border-border/50',
  };
  
- export const UnifiedTimelineSection = memo(({ companyId }: Props) => {
-   const [searchTerm, setSearchTerm] = useState('');
-   const { data: history, isLoading } = useUnifiedCommunicationHistory(companyId, 100, 'company');
- 
-   const filteredHistory = useMemo(() => {
-     if (!history) return [];
-     if (!searchTerm.trim()) return history;
-     const lower = searchTerm.toLowerCase();
-     return history.filter(item => 
-       (item.resumo?.toLowerCase().includes(lower)) ||
-       (item.contact_name?.toLowerCase().includes(lower)) ||
-       (item.type?.toLowerCase().includes(lower))
-     );
-   }, [history, searchTerm]);
+  export const UnifiedTimelineSection = memo(({ companyId }: Props) => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterType, setFilterType] = useState<string>('all');
+    const [filterPerson, setFilterPerson] = useState<string>('all');
+    const [date, setDate] = useState<Date | undefined>(undefined);
+    const { data: history, isLoading } = useUnifiedCommunicationHistory(companyId, 100, 'company');
+  
+    const uniqueContacts = useMemo(() => {
+      if (!history) return [];
+      const names = history
+        .map(item => item.contact_name)
+        .filter((name): name is string => !!name);
+      return Array.from(new Set(names));
+    }, [history]);
+  
+    const filteredHistory = useMemo(() => {
+      if (!history) return [];
+      return history.filter(item => {
+        const matchesSearch = !searchTerm.trim() || 
+          (item.resumo?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (item.contact_name?.toLowerCase().includes(searchTerm.toLowerCase()));
+        
+        const matchesType = filterType === 'all' || item.channel === filterType || item.type === filterType;
+        const matchesPerson = filterPerson === 'all' || item.contact_name === filterPerson;
+        
+        const matchesDate = !date || 
+          format(new Date(item.data_interacao), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd');
+  
+        return matchesSearch && matchesType && matchesPerson && matchesDate;
+      });
+    }, [history, searchTerm, filterType, filterPerson, date]);
  
    return (
      <Card className="flex flex-col h-[500px]">
        <CardHeader className="pb-3 border-b border-border/50 shrink-0">
-         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-           <CardTitle className="text-sm font-bold flex items-center gap-2">
-             <Clock className="h-4 w-4 text-primary" />
-             Timeline Unificada
-           </CardTitle>
-           <div className="relative w-full sm:w-64">
-             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-             <Input
-               placeholder="Buscar no histórico..."
-               value={searchTerm}
-               onChange={(e) => setSearchTerm(e.target.value)}
-               className="pl-8 h-8 text-xs"
-             />
-           </div>
-         </div>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-sm font-bold flex items-center gap-2">
+              <Clock className="h-4 w-4 text-primary" />
+              Timeline Unificada
+            </CardTitle>
+            <Badge variant="outline" className="text-[10px]">
+              {filteredHistory.length} interações
+            </Badge>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+              <Input
+                placeholder="Palavra-chave..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-8 h-8 text-[11px]"
+              />
+            </div>
+            
+            <Select value={filterType} onValueChange={setFilterType}>
+              <SelectTrigger className="h-8 text-[11px]">
+                <div className="flex items-center gap-2">
+                  <Filter className="h-3 w-3" />
+                  <SelectValue placeholder="Tipo" />
+                </div>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos os Tipos</SelectItem>
+                <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                <SelectItem value="call">Ligações</SelectItem>
+                <SelectItem value="email">Emails</SelectItem>
+                <SelectItem value="audio">Áudios</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={filterPerson} onValueChange={setFilterPerson}>
+              <SelectTrigger className="h-8 text-[11px]">
+                <div className="flex items-center gap-2">
+                  <User className="h-3 w-3" />
+                  <SelectValue placeholder="Pessoa" />
+                </div>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas as Pessoas</SelectItem>
+                {uniqueContacts.map(name => (
+                  <SelectItem key={name} value={name}>{name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="h-8 text-[11px] justify-start px-2 font-normal">
+                  <CalendarIcon className="mr-2 h-3 w-3" />
+                  {date ? format(date, "dd/MM/yy") : "Filtrar por data"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  initialFocus
+                />
+                {date && (
+                  <div className="p-2 border-t flex justify-end">
+                    <Button variant="ghost" size="sm" onClick={() => setDate(undefined)} className="h-7 text-[10px]">Limpar</Button>
+                  </div>
+                )}
+              </PopoverContent>
+            </Popover>
+          </div>
+        </div>
        </CardHeader>
        <CardContent className="p-0 flex-1 overflow-hidden">
          {isLoading ? (

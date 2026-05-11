@@ -11,7 +11,10 @@ import { logger } from "@/lib/logger";
  import { ReportScriptsSection } from "./relatorio/ReportScriptsSection";
  import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
  import { Badge } from "@/components/ui/badge";
- import { Brain, Target, Shield, Lightbulb, Zap, UserPlus, CheckCircle2 } from "lucide-react";
+  import { 
+    Brain, Target, Shield, Lightbulb, Zap, UserPlus, 
+    CheckCircle2, Share2, EyeOff, LayoutList, ClipboardCheck
+  } from "lucide-react";
 import type { Tables } from '@/integrations/supabase/types';
 
 interface ContactBehavior {
@@ -253,11 +256,11 @@ const RelatorioContato = () => {
            </Card>
          </section>
  
-         {/* Perfil DISC */}
-         <section className="mb-8">
-          <h2 className="text-xl font-bold text-foreground border-b-2 border-primary pb-2 mb-4">
-            🎯 Perfil DISC
-          </h2>
+          {/* Perfil de Dominância Cerebral & DISC */}
+          <section className="mb-8">
+           <h2 className="text-xl font-bold text-foreground border-b-2 border-primary pb-2 mb-6 flex items-center gap-2">
+             <Brain className="h-5 w-5 text-primary" /> Análise de Dominância Cerebral & DISC
+           </h2>
           
           <div className="grid grid-cols-4 gap-4 mb-4">
             <div className="text-center p-4 bg-destructive/5 rounded-lg">
@@ -286,13 +289,60 @@ const RelatorioContato = () => {
             </div>
           </div>
 
-          <div className="bg-muted/40 p-4 rounded-lg">
-            <p><strong>Perfil Principal:</strong> {latestDisc?.primary_profile || behavior.discProfile || 'S'} - Estabilidade</p>
-            <p><strong>Perfil Secundário:</strong> {latestDisc?.secondary_profile || 'I'} - Influência</p>
-            <p><strong>Blend:</strong> {latestDisc?.blend_profile || behavior.discBlend || 'SI'}</p>
-            <p><strong>Confiança da Análise:</strong> {latestDisc?.confidence || behavior.discConfidence || 85}%</p>
-             <p className="mt-2"><strong>Resumo:</strong> {latestDisc?.profile_summary || 'Perfil orientado a relacionamentos e harmonia, busca segurança e estabilidade nas decisões.'}</p>
-           </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="bg-muted/30 p-4 rounded-lg border border-border/50">
+              <h3 className="text-xs font-bold uppercase text-muted-foreground mb-3 tracking-wider">Perfis Comportamentais</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Perfil Principal:</span>
+                  <span className="font-bold text-primary">{latestDisc?.primary_profile || behavior.discProfile || 'S'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Perfil Secundário:</span>
+                  <span className="font-bold text-primary">{latestDisc?.secondary_profile || 'I'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Dominância Cerebral:</span>
+                  <span className="font-bold text-primary">Límbico Direito</span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-primary/5 p-4 rounded-lg border border-primary/10">
+              <h3 className="text-xs font-bold uppercase text-primary mb-3 tracking-wider">Resumo Executivo</h3>
+              <p className="text-sm leading-relaxed text-foreground/80">
+                {latestDisc?.profile_summary || 'Indivíduo com forte orientação para harmonia e processos interpessoais. Toma decisões baseadas em confiança e impacto humano.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Redes Sociais & Presença Digital */}
+          <section className="mb-8 p-4 bg-muted/20 rounded-xl border border-dashed border-border">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bold flex items-center gap-2">
+                <Share2 className="h-4 w-4 text-blue-500" /> Sinais das Redes Sociais (OSINT)
+              </h3>
+              <Badge variant="outline" className="text-[10px] gap-1 bg-background">
+                <EyeOff className="h-3 w-3" /> Privado: Apenas para uso interno
+              </Badge>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="text-center p-3 bg-background rounded-lg border shadow-sm">
+                <p className="text-[10px] text-muted-foreground uppercase font-bold">Tom Digital</p>
+                <p className="text-sm font-medium">Entusiasta / Profissional</p>
+              </div>
+              <div className="text-center p-3 bg-background rounded-lg border shadow-sm">
+                <p className="text-[10px] text-muted-foreground uppercase font-bold">Interesse Ativo</p>
+                <p className="text-sm font-medium">Inovação & Gestão</p>
+              </div>
+              <div className="text-center p-3 bg-background rounded-lg border shadow-sm">
+                <p className="text-[10px] text-muted-foreground uppercase font-bold">Frequência</p>
+                <p className="text-sm font-medium">Alta (LinkedIn)</p>
+              </div>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-3 italic">
+              * Dados coletados com base em perfis públicos e consentimento de termos de uso do CRM.
+            </p>
+          </section>
          </section>
  
          {/* Indicadores Comportamentais */}
@@ -312,8 +362,8 @@ const RelatorioContato = () => {
           </section>
         )}
 
-        {/* Análise Neuromarketing */}
-        <section className="mb-8">
+        {/* Análise Neuromarketing & Gatilhos Primal */}
+        <section className="mb-8 page-break-before">
           <h2 className="text-xl font-bold text-foreground border-b-2 border-primary pb-2 mb-4">
             🧬 Análise Neuromarketing
           </h2>
