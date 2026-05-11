@@ -1,5 +1,6 @@
  import { Brain, Target, Zap, Waves, Sparkles, MessageSquare, ShieldCheck, Trophy } from 'lucide-react';
  import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+ import { Button } from '@/components/ui/button';
  import { Progress } from '@/components/ui/progress';
  import { Badge } from '@/components/ui/badge';
  import { motion } from 'framer-motion';
