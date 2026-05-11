@@ -37,13 +37,15 @@ import type { RelationshipStage } from '@/types';
 import { Interaction } from '@/hooks/useContactDetail';
 import { CRMAlertsWidget } from './CRMAlertsWidget';
 
-interface Props {
-  contact: Contact & { interactions?: Interaction[] };
-  company: Company | null;
-  insights: Insight[];
-  alerts: Alert[];
-  interactionCount?: number;
-}
+ import { NLPInsightsDashboard } from '@/components/nlp/NLPInsightsDashboard';
+ 
+ interface Props {
+   contact: Contact & { interactions?: Interaction[] };
+   company: Company | null;
+   insights: Insight[];
+   alerts: Alert[];
+   interactionCount?: number;
+ }
 
 export function ContactOverviewTab({ contact, company, insights, alerts, interactionCount = 0 }: Props) {
   const { user } = useAuth();
@@ -71,10 +73,21 @@ export function ContactOverviewTab({ contact, company, insights, alerts, interac
 
   return (
     <div className="space-y-4">
-      {/* CRM Health Alerts */}
-      <CRMAlertsWidget contactId={contact.id} />
-
-      {/* Relationship Stage Funnel */}
+       {/* CRM Health Alerts */}
+       <CRMAlertsWidget contactId={contact.id} />
+ 
+       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+         <div className="lg:col-span-2">
+           {/* NLP Insights Dashboard (Actionable insights and PDF export) */}
+           <NLPInsightsDashboard contactId={contact.id} className="mb-4" />
+         </div>
+         <div>
+           {/* Stage Funnel Move next to insights in large screens */}
+           <RelationshipStageCard contact={contact} updateContact={updateContact} />
+         </div>
+       </div>
+ 
+       {/* Relationship Stage Funnel (Old position, now moved) */}
 
       <Card>
         <CardHeader className="pb-3 flex flex-row items-center justify-between space-y-0">
