@@ -179,11 +179,11 @@ const RelatorioContato = () => {
             <p><strong>Perfil Secundário:</strong> {latestDisc?.secondary_profile || 'I'} - Influência</p>
             <p><strong>Blend:</strong> {latestDisc?.blend_profile || behavior.discBlend || 'SI'}</p>
             <p><strong>Confiança da Análise:</strong> {latestDisc?.confidence || behavior.discConfidence || 85}%</p>
-            <p className="mt-2"><strong>Resumo:</strong> {latestDisc?.profile_summary || 'Perfil orientado a relacionamentos e harmonia, busca segurança e estabilidade nas decisões.'}</p>
-          </div>
-        </section>
-
-        {/* Indicadores Comportamentais */}
+             <p className="mt-2"><strong>Resumo:</strong> {latestDisc?.profile_summary || 'Perfil orientado a relacionamentos e harmonia, busca segurança e estabilidade nas decisões.'}</p>
+           </div>
+         </section>
+ 
+         {/* Indicadores Comportamentais */}
         {latestDisc?.behavior_indicators && (
           <section className="mb-8">
             <h2 className="text-xl font-bold text-foreground border-b-2 border-primary pb-2 mb-4">
