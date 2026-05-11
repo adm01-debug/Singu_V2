@@ -3,7 +3,7 @@ import { useUnifiedTimeline, type UnifiedTimelineEvent, type UnifiedEventType } 
 import { 
   MessageSquare, Phone, Users, FileText, CheckCircle2, 
   Calendar, Search, Filter, Clock, ArrowUpRight, ArrowDownLeft,
-  AlertCircle, TrendingUp, Zap
+   AlertCircle, TrendingUp, Zap, Smile, Frown, Meh
 } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
@@ -203,13 +203,27 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
                               )}
                             </div>
                           </div>
-                          {event.metadata?.sentiment && (
-                             <div className={cn(
-                               "w-2 h-2 rounded-full",
-                               event.metadata.sentiment === 'positive' ? 'bg-green-500' :
-                               event.metadata.sentiment === 'negative' ? 'bg-red-500' : 'bg-yellow-500'
-                             )} />
-                          )}
+                           {event.metadata?.sentiment && (
+                             <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-muted/50 border">
+                               {event.metadata.sentiment === 'positive' ? (
+                                 <Smile className="h-3 w-3 text-green-500" />
+                               ) : event.metadata.sentiment === 'negative' ? (
+                                 <Frown className="h-3 w-3 text-red-500" />
+                               ) : (
+                                 <Meh className="h-3 w-3 text-yellow-500" />
+                               )}
+                               <span className={cn(
+                                 "text-[10px] font-medium",
+                                 event.metadata.sentiment === 'positive' ? 'text-green-600' :
+                                 event.metadata.sentiment === 'negative' ? 'text-red-600' : 'text-yellow-600'
+                               )}>
+                                 {event.metadata.emotion || (
+                                   event.metadata.sentiment === 'positive' ? 'Positivo' :
+                                   event.metadata.sentiment === 'negative' ? 'Negativo' : 'Neutro'
+                                 )}
+                               </span>
+                             </div>
+                           )}
                         </div>
 
                         <AnimatePresence>
