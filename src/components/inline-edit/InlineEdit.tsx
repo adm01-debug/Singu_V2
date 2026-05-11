@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, KeyboardEvent, RefObject, RefCallback } from 'react';
+ import { useState, useRef, useEffect, KeyboardEvent, RefObject, RefCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -10,20 +10,21 @@ import { cn } from '@/lib/utils';
 type InputRefType = RefObject<HTMLInputElement> | RefCallback<HTMLInputElement>;
 type TextareaRefType = RefObject<HTMLTextAreaElement> | RefCallback<HTMLTextAreaElement>;
 
-interface InlineEditProps {
-  value: string;
-  onSave: (value: string) => Promise<boolean>;
-  placeholder?: string;
-  className?: string;
-  inputClassName?: string;
-  displayClassName?: string;
-  multiline?: boolean;
-  maxLength?: number;
-  disabled?: boolean;
-  showEditIcon?: boolean;
-  emptyText?: string;
-  validate?: (value: string) => string | null; // Returns error message or null
-}
+ export interface InlineEditProps {
+   value: string;
+   onSave: (value: string) => Promise<boolean>;
+   placeholder?: string;
+   className?: string;
+   inputClassName?: string;
+   displayClassName?: string;
+   multiline?: boolean;
+   type?: string;
+   maxLength?: number;
+   disabled?: boolean;
+   showEditIcon?: boolean;
+   emptyText?: string;
+   validate?: (value: string) => string | null; // Returns error message or null
+ }
 
 export function InlineEdit({
   value,
@@ -32,9 +33,10 @@ export function InlineEdit({
   className,
   inputClassName,
   displayClassName,
-  multiline = false,
-  maxLength,
-  disabled = false,
+   multiline = false,
+   type = "text",
+   maxLength,
+   disabled = false,
   showEditIcon = true,
   emptyText = 'Clique para adicionar',
   validate,
@@ -151,25 +153,68 @@ export function InlineEdit({
                   )}
                 />
               ) : (
-                <Input
-                  ref={inputRef as RefObject<HTMLInputElement>}
-                  value={editValue}
-                  onChange={(e) => setEditValue(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  onBlur={() => {
-                    setTimeout(() => {
-                      if (!isSaving) handleCancel();
-                    }, 150);
-                  }}
-                  placeholder={placeholder}
-                  maxLength={maxLength}
-                  disabled={isSaving}
-                  className={cn(
-                    'pr-16',
-                    error && 'border-destructive focus-visible:ring-destructive',
-                    inputClassName
-                  )}
-                />
+                 <Input
+                   ref={inputRef as RefObject<HTMLInputElement>}
+                   type={type}
+                   value={editValue}
+                   onChange={(e) => setEditValue(e.target.value)}
+                   onKeyDown={handleKeyDown}
+                   onBlur={(e) => {
+                     // For date/time inputs, blurs can happen during picker interaction
+                     // We use a small delay and check focus to avoid accidental cancels
+                     setTimeout(() => {
+                       if (!isSaving && document.activeElement !== inputRef.current) {
+                         handleCancel();
+                       }
+                     }, 150);
+                   }}
+                   placeholder={placeholder}
+                   maxLength={maxLength}
+                   disabled={isSaving}
+                   className={cn(
+                     'pr-16',
+                     error && 'border-destructive focus-visible:ring-destructive',
+                     inputClassName
+                   )}
+                 />
+ // Specialized inline edit for Dates
+ interface InlineDateEditProps extends Omit<InlineEditProps, 'value' | 'onSave' | 'type'> {
+   value: string | null | undefined;
+   onSave: (value: string | null) => Promise<boolean>;
+   formatDisplay?: (value: string) => string;
+ }
+ 
+ export function InlineDateEdit({
+   value,
+   onSave,
+   formatDisplay,
+   ...props
+ }: InlineDateEditProps) {
+   const displayValue = useMemo(() => {
+     if (!value) return '';
+     return formatDisplay ? formatDisplay(value) : value;
+   }, [value, formatDisplay]);
+ 
+   const handleSave = async (strValue: string): Promise<boolean> => {
+     return onSave(strValue || null);
+   };
+ 
+   return (
+     <InlineEdit
+       {...props}
+       type="date"
+       value={value || ''}
+       onSave={handleSave}
+     >
+       {/* We override the display part if formatDisplay is provided */}
+       {displayValue && !props.disabled && (
+         <div className={cn('flex items-center gap-2', props.displayClassName)}>
+           <span>{displayValue}</span>
+         </div>
+       )}
+     </InlineEdit>
+   );
+ }
               )}
               {maxLength && (
                 <span className="absolute right-2 bottom-1 text-xs text-muted-foreground">
