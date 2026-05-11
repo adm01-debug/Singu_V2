@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Gift, Calendar, Plus, Trash2, RefreshCw, Bell, History, CheckSquare, BarChart3, Edit2 } from 'lucide-react';
+import { Gift, Calendar, Plus, Trash2, RefreshCw, Bell, History, CheckSquare, BarChart3, Edit2, Briefcase, Plane, Users, Trophy, Star } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -147,14 +147,14 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     setIsDialogOpen(true);
   };
 
-  const eventTypeLabels: Record<string, string> = {
-    birthday: 'Aniversário',
-    anniversary: 'Bodas/Aniversário Rel.',
-    promotion: 'Promoção',
-    travel: 'Viagem',
-    family: 'Família',
-    achievement: 'Conquista',
-    other: 'Outro'
+  const eventTypeConfigs: Record<string, { label: string, icon: any, color: string }> = {
+    birthday: { label: 'Aniversário', icon: Gift, color: 'text-pink-500' },
+    anniversary: { label: 'Bodas/Relacionamento', icon: Calendar, color: 'text-red-500' },
+    promotion: { label: 'Promoção', icon: Briefcase, color: 'text-blue-500' },
+    travel: { label: 'Viagem', icon: Plane, color: 'text-teal-500' },
+    family: { label: 'Família', icon: Users, color: 'text-purple-500' },
+    achievement: { label: 'Conquista', icon: Trophy, color: 'text-yellow-500' },
+    other: { label: 'Outro', icon: Star, color: 'text-gray-500' }
   };
 
   return (
@@ -198,8 +198,13 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.entries(eventTypeLabels).map(([val, label]) => (
-                        <SelectItem key={val} value={val}>{label}</SelectItem>
+                      {Object.entries(eventTypeConfigs).map(([val, config]) => (
+                        <SelectItem key={val} value={val}>
+                          <div className="flex items-center gap-2">
+                            <config.icon className={`h-4 w-4 ${config.color}`} />
+                            {config.label}
+                          </div>
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -291,6 +296,10 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                   <CardHeader className="pb-2 flex flex-row items-start justify-between space-y-0">
                     <div className="space-y-1">
                       <CardTitle className="text-sm font-bold flex items-center gap-2">
+                        {(() => {
+                          const Icon = eventTypeConfigs[event.event_type]?.icon || Gift;
+                          return <Icon className={`h-4 w-4 ${eventTypeConfigs[event.event_type]?.color || 'text-primary'}`} />;
+                        })()}
                         {event.title}
                       </CardTitle>
                       <CardDescription className="text-[10px] uppercase font-semibold text-muted-foreground flex items-center gap-1">
@@ -300,7 +309,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                       </CardDescription>
                     </div>
                     <Badge variant="secondary" className="text-[9px] h-5">
-                      {eventTypeLabels[event.event_type] || event.event_type}
+                      {eventTypeConfigs[event.event_type]?.label || event.event_type}
                     </Badge>
                   </CardHeader>
                   <CardContent className="pt-0">
