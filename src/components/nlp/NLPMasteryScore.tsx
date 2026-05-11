@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Brain, Star, CheckCircle2, Trophy, Zap, Focus } from 'lucide-react';
+import { Brain, Star, CheckCircle2, Trophy, Zap, Focus, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const NLPMasteryScore = () => {
