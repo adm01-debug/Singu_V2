@@ -82,7 +82,8 @@ const PAGE_SIZE = 50;
 
 /** Lean select for listing — excludes heavy JSON blobs (behavior, life_events, extra_data) */
 const CONTACT_LISTING_SELECT = [
-  'id', 'first_name', 'last_name', 'full_name', 'nome_tratamento', 'apelido',
+   'id', 'first_name', 'last_name', 'full_name', 'nome_tratamento', 'apelido',
+   'vak_dominant', 'motivation_direction', 'working_style',
   'cargo', 'departamento', 'sexo',
   'company_id', 'relationship_score', 'relationship_stage', 'sentiment',
   'tags_array', 'interests_array', 'hobbies',
