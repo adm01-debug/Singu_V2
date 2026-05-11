@@ -22,7 +22,10 @@ import {
   FormMessage,
   FormDescription,
 } from '@/components/ui/form';
- import { MessageSquare, Loader2, Mic, Tag, Lightbulb, Paperclip } from 'lucide-react';
+ import { MessageSquare, Loader2, Mic, Tag, Lightbulb, Paperclip, X as CloseIcon } from 'lucide-react';
+ import { supabase } from '@/integrations/supabase/client';
+ import { logger } from '@/lib/logger';
+ import { toast } from 'sonner';
 import { VoiceInput } from '@/components/voice/VoiceInput';
 import type { Interaction } from '@/hooks/useInteractions';
 import type { Contact } from '@/hooks/useContacts';
@@ -115,8 +118,35 @@ export function InteractionForm({
     enabled: !interaction,
   });
 
-  const selectedContactId = form.watch('contact_id');
-  const followUpRequired = form.watch('follow_up_required');
+   const selectedContactId = form.watch('contact_id');
+   const followUpRequired = form.watch('follow_up_required');
+   const attachments = form.watch('attachments') || [];
+ 
+   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+     const file = e.target.files?.[0];
+     if (!file) return;
+ 
+     try {
+       const fileName = `${Date.now()}-${file.name}`;
+       const { data: uploadData, error: uploadError } = await supabase.storage
+         .from('interaction-attachments')
+         .upload(`${(await supabase.auth.getUser()).data.user?.id}/${fileName}`, file);
+ 
+       if (uploadError) throw uploadError;
+ 
+       if (uploadData) {
+         const { data: urlData } = supabase.storage
+           .from('interaction-attachments')
+           .getPublicUrl(uploadData.path);
+         const currentAttachments = form.getValues('attachments') || [];
+         form.setValue('attachments', [...currentAttachments, urlData.publicUrl]);
+         toast.success('Anexo enviado com sucesso');
+       }
+     } catch (error) {
+       logger.error('Error uploading attachment:', error);
+       toast.error('Erro ao enviar anexo');
+     }
+   };
 
   // Update company_id when contact changes
   const handleContactChange = (contactId: string) => {
