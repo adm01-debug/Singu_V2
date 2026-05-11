@@ -42,49 +42,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     reason: 'Interação manual via painel'
   });
 
-   const { data: lifeEvents = [], isLoading } = useQuery({
-   const { data: suggestions = [], refetch: refetchSuggestions } = useQuery({
-     queryKey: ['suggested-life-events', contactId],
-     queryFn: async () => {
-       const { data, error } = await supabase
-         .from('suggested_life_events')
-         .select('*')
-         .eq('contact_id', contactId)
-         .eq('status', 'pending')
-         .order('confidence', { ascending: false });
-       if (error) throw error;
-       return data;
-     },
-     enabled: !!contactId,
-   });
-
-   const handleAcceptSuggestion = async (suggestion: any) => {
-     const { error } = await supabase.from('life_events').insert({
-       contact_id: contactId,
-       user_id: user?.id,
-       event_type: suggestion.event_type as any,
-       title: suggestion.title,
-       description: suggestion.description,
-       event_date: suggestion.event_date || new Date().toISOString(),
-       recurring: suggestion.event_type === 'birthday' || suggestion.event_type === 'anniversary',
-       metadata: { source: suggestion.source_type, suggestion_id: suggestion.id }
-     });
-
-     if (!error) {
-       await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id);
-       queryClient.invalidateQueries({ queryKey: ['life-events', contactId] });
-       refetchSuggestions();
-       toast({ title: "Sugestão aceita", description: "O marco foi adicionado à linha do tempo." });
-     } else {
-       toast({ title: "Erro ao aceitar", description: error.message, variant: "destructive" });
-     }
-   };
-
-   const handleRejectSuggestion = async (id: string) => {
-     const { error } = await supabase.from('suggested_life_events').update({ status: 'rejected' }).eq('id', id);
-     if (!error) refetchSuggestions();
-   };
-
+  const { data: lifeEvents = [], isLoading } = useQuery({
     queryKey: ['life-events', contactId],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -97,6 +55,48 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     },
     enabled: !!contactId,
   });
+
+  const { data: suggestions = [], refetch: refetchSuggestions } = useQuery({
+    queryKey: ['suggested-life-events', contactId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('suggested_life_events')
+        .select('*')
+        .eq('contact_id', contactId)
+        .eq('status', 'pending')
+        .order('confidence', { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!contactId,
+  });
+
+  const handleAcceptSuggestion = async (suggestion: any) => {
+    const { error } = await supabase.from('life_events').insert({
+      contact_id: contactId,
+      user_id: user?.id,
+      event_type: suggestion.event_type as any,
+      title: suggestion.title,
+      description: suggestion.description,
+      event_date: suggestion.event_date || new Date().toISOString(),
+      recurring: suggestion.event_type === 'birthday' || suggestion.event_type === 'anniversary',
+      metadata: { source: suggestion.source_type, suggestion_id: suggestion.id }
+    });
+
+    if (!error) {
+      await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id);
+      queryClient.invalidateQueries({ queryKey: ['life-events', contactId] });
+      refetchSuggestions();
+      toast({ title: "Sugestão aceita", description: "O marco foi adicionado à linha do tempo." });
+    } else {
+      toast({ title: "Erro ao aceitar", description: error.message, variant: "destructive" });
+    }
+  };
+
+  const handleRejectSuggestion = async (id: string) => {
+    const { error } = await supabase.from('suggested_life_events').update({ status: 'rejected' }).eq('id', id);
+    if (!error) refetchSuggestions();
+  };
 
   const createEventMutation = useMutation({
     mutationFn: async (event: TablesInsert<'life_events'>) => {
