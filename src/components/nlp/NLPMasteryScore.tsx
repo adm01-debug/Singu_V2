@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Brain, Star, CheckCircle2, Trophy } from 'lucide-react';
+import { Brain, Star, CheckCircle2, Trophy, Zap, Focus } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const NLPMasteryScore = () => {
@@ -9,7 +9,9 @@ export const NLPMasteryScore = () => {
     { label: 'Calibração VAK', score: 92, icon: <Brain className="h-4 w-4" /> },
     { label: 'Flexibilidade de Resposta', score: 85, icon: <Star className="h-4 w-4" /> },
     { label: 'Rapport Subconsciente', score: 88, icon: <CheckCircle2 className="h-4 w-4" /> },
-    { label: 'Eficácia de Reenquadramento', score: 79, icon: <Trophy className="h-4 w-4" /> },
+    { label: 'Eficácia de Reenquadramento', score: 88, icon: <Trophy className="h-4 w-4" /> },
+    { label: 'Maestria de Submodalidades', score: 91, icon: <Focus className="h-4 w-4" /> },
+    { label: 'Eliciação de Estados', score: 87, icon: <Zap className="h-4 w-4" /> },
   ];
 
   const totalScore = Math.round(metrics.reduce((acc, m) => acc + m.score, 0) / metrics.length);
