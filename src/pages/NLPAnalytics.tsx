@@ -11,11 +11,15 @@ import { Header } from '@/components/layout/Header';
    CommunicationCoherencePanel,
    UnifiedScriptGenerator,
    CopywritingSalesTools,
-   NLPTrainingMode,
-   PerceptualPositions
+    NLPTrainingMode,
+    PerceptualPositions,
+    MetaProgramsProfiler,
+    MiltonianCalibration,
+    TOTEModelMapper,
+    HierarchyOfCriteria
  } from '@/components/nlp';
- import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
- import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope } from 'lucide-react';
+  import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+  import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope, Fingerprint, Workflow, ListOrdered } from 'lucide-react';
  import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
  import { Input } from '@/components/ui/input';
  import { Button } from '@/components/ui/button';
@@ -113,11 +117,17 @@ const NLPAnalytics = () => {
                  <TabsTrigger value="coherence" className="gap-2">
                    <Sparkles className="h-4 w-4" /> Coerência
                  </TabsTrigger>
-                 <TabsTrigger value="tools" className="gap-2">
-                   <Wand2 className="h-4 w-4" /> Ferramentas
-                 </TabsTrigger>
+                  <TabsTrigger value="persuasion" className="gap-2">
+                    <Wand2 className="h-4 w-4" /> Persuasão
+                  </TabsTrigger>
+                  <TabsTrigger value="strategy" className="gap-2">
+                    <Workflow className="h-4 w-4" /> Estratégia
+                  </TabsTrigger>
                   <TabsTrigger value="positions" className="gap-2">
                     <Telescope className="h-4 w-4" /> Posições
+                  </TabsTrigger>
+                  <TabsTrigger value="metaprograms" className="gap-2">
+                    <Fingerprint className="h-4 w-4" /> Metaprogramas
                   </TabsTrigger>
                   <TabsTrigger value="training" className="gap-2">
                     <GraduationCap className="h-4 w-4" /> Treino
@@ -133,6 +143,16 @@ const NLPAnalytics = () => {
                     </Card>
                   )}
                 </TabsContent>
+
+                 <TabsContent value="metaprograms" className="mt-6 space-y-6">
+                   {selectedContact ? (
+                     <MetaProgramsProfiler contact={selectedContact} />
+                   ) : (
+                     <Card className="p-12 text-center border-dashed">
+                       <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para analisar metaprogramas.</p>
+                     </Card>
+                   )}
+                 </TabsContent>
 
                 <TabsContent value="training" className="mt-6 space-y-6">
                   <NLPTrainingMode />
@@ -209,15 +229,31 @@ const NLPAnalytics = () => {
                  )}
                </TabsContent>
                
-               <TabsContent value="tools" className="mt-6 space-y-6">
+                <TabsContent value="persuasion" className="mt-6 space-y-6">
                  {selectedContact ? (
                    <>
-                     <UnifiedScriptGenerator contact={selectedContact} />
-                     <CopywritingSalesTools contact={selectedContact} />
+                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                        <UnifiedScriptGenerator contact={selectedContact} />
+                        <MiltonianCalibration contact={selectedContact} />
+                      </div>
+                      <CopywritingSalesTools contact={selectedContact} />
                    </>
                  ) : (
                    <Card className="p-12 text-center border-dashed">
-                     <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para acessar as ferramentas de PNL.</p>
+                      <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para acessar ferramentas de persuasão.</p>
+                    </Card>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="strategy" className="mt-6 space-y-6">
+                  {selectedContact ? (
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                      <TOTEModelMapper contact={selectedContact} />
+                      <HierarchyOfCriteria contact={selectedContact} />
+                    </div>
+                  ) : (
+                    <Card className="p-12 text-center border-dashed">
+                      <p className="text-muted-foreground">Selecione um contato na aba "Evolução" para mapear estratégias.</p>
                    </Card>
                  )}
                </TabsContent>
@@ -236,10 +272,23 @@ const NLPAnalytics = () => {
                  <p className="leading-relaxed">
                    Hoje, sua base está <strong>42% Visiva</strong>. Priorize o envio de propostas visuais para aumentar o engajamento subconsciente.
                  </p>
-                 <div className="pt-2 border-t">
-                   <p className="font-bold text-primary mb-1">Gatilho Recomendado:</p>
-                   <p className="text-muted-foreground italic">"Veja como isso se encaixa perfeitamente na sua visão..."</p>
-                 </div>
+                  {selectedContact ? (
+                    <div className="pt-2 border-t space-y-3">
+                      <div>
+                        <p className="font-bold text-primary mb-1">Padrão de Fechamento:</p>
+                        <p className="text-muted-foreground italic">"Baseado na sua preferência por {selectedContact.behavior?.vakProfile?.primary || 'VAK'}, eu sugiro..."</p>
+                      </div>
+                      <div className="p-2 bg-success/10 rounded border border-success/20">
+                        <p className="font-bold text-success text-[10px] uppercase">Predição de Rapport:</p>
+                        <p className="text-[11px]">Alta probabilidade de conversão se usar <strong>Padrão Milton</strong> agora.</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="pt-2 border-t">
+                      <p className="font-bold text-primary mb-1">Gatilho Recomendado:</p>
+                      <p className="text-muted-foreground italic">"Veja como isso se encaixa perfeitamente na sua visão..."</p>
+                    </div>
+                  )}
                </CardContent>
              </Card>
  
@@ -250,10 +299,11 @@ const NLPAnalytics = () => {
                <CardContent className="space-y-4">
                  {[
                    { label: 'Calibrar 5 novos leads', done: true },
-                   { label: 'Aplicar Sleight of Mouth', done: false },
-                   { label: 'Padrão Milton em E-mails', done: true },
-                   { label: 'Coerência VAK > 90%', done: false },
-                   { label: 'Mapear Metaprogramas', done: true },
+                    { label: 'Mapear Metaprogramas', done: true },
+                    { label: 'Padrão Milton em E-mails', done: true },
+                    { label: 'Mapear TOTE e Critérios', done: true },
+                    { label: 'Coerência VAK > 90%', done: true },
+                    { label: 'Aplicar Sleight of Mouth', done: false },
                  ].map((task, i) => (
                    <div key={i} className="flex items-center gap-3 group cursor-pointer">
                      <div className={cn(
@@ -273,10 +323,10 @@ const NLPAnalytics = () => {
                  
                  <div className="pt-4 border-t">
                    <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
-                     <span>Progresso 10/10</span>
-                     <span>60%</span>
+                      <span>Progresso Rumo ao 10/10</span>
+                      <span>90%</span>
                    </div>
-                   <Progress value={60} className="h-1" />
+                    <Progress value={90} className="h-1" />
                  </div>
                </CardContent>
              </Card>

@@ -11,6 +11,7 @@ export { default as CommunicationCoherencePanel } from './CommunicationCoherence
 export { default as NLPConversionMetrics } from './NLPConversionMetrics';
 
 // Advanced NLP Rapport & Communication
+export { default as MetaProgramsProfiler } from './MetaProgramsProfiler';
 export { default as RapportRealtimeCoach } from './RapportRealtimeCoach';
 export { default as IncongruenceDetector } from './IncongruenceDetector';
 export { default as MiltonianCalibration } from './MiltonianCalibration';
