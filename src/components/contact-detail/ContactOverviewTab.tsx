@@ -82,8 +82,26 @@ export function ContactOverviewTab({ contact, company, insights, alerts, interac
            <NLPInsightsDashboard contactId={contact.id} className="mb-4" />
          </div>
          <div>
-           {/* Stage Funnel Move next to insights in large screens */}
-           <RelationshipStageCard contact={contact} updateContact={updateContact} />
+           <Card>
+             <CardHeader className="pb-3 flex flex-row items-center justify-between space-y-0">
+               <CardTitle className="text-sm font-medium flex items-center gap-2">
+                 <Layers className="h-4 w-4 text-primary" />
+                 Estágio
+               </CardTitle>
+               <Badge variant="secondary" className="text-[10px] capitalize">
+                 {(contact.relationship_stage || 'unknown').replace('_', ' ')}
+               </Badge>
+             </CardHeader>
+             <CardContent>
+               <RelationshipFunnel 
+                 currentStage={contact.relationship_stage as RelationshipStage || 'unknown'} 
+                 isEditable 
+                 onStageChange={(stage) => {
+                   updateContact({ relationship_stage: stage });
+                 }}
+               />
+             </CardContent>
+           </Card>
          </div>
        </div>
  
