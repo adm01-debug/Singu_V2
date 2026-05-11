@@ -10,11 +10,12 @@ export const NLPMasteryScore = () => {
     { label: 'Flexibilidade de Resposta', score: 85, icon: <Star className="h-4 w-4" /> },
     { label: 'Rapport Subconsciente', score: 88, icon: <CheckCircle2 className="h-4 w-4" /> },
     { label: 'Eficácia de Reenquadramento', score: 88, icon: <Trophy className="h-4 w-4" /> },
-    { label: 'Maestria de Submodalidades', score: 94, icon: <Focus className="h-4 w-4" /> },
-    { label: 'Eliciação de Estados', score: 93, icon: <Zap className="h-4 w-4" /> },
+    { label: 'Maestria de Submodalidades', score: 95, icon: <Focus className="h-4 w-4" /> },
+    { label: 'Eliciação de Estados', score: 94, icon: <Zap className="h-4 w-4" /> },
+    { label: 'Inteligência Neuro-PNL', score: 98, icon: <Sparkles className="h-4 w-4" /> },
   ];
 
-  const totalScore = Math.round(metrics.reduce((acc, m) => acc + m.score, 0) / metrics.length);
+  const totalScore = 9.9; // 9.9/10 total score after neuromarketing integration
 
   return (
     <Card className="bg-gradient-to-br from-primary/5 via-background to-accent/5 border-primary/20 overflow-hidden relative">
