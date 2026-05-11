@@ -127,8 +127,8 @@ const RELATIONSHIP_TYPES = ['conjuge', 'filho', 'filha', 'pai', 'mae', 'irmao', 
          </CardTitle>
        </CardHeader>
       <CardContent className="space-y-2">
-        {relatives.length > 0 ? relatives.map((rel) => (
-          <div key={rel.id} className="rounded-lg border p-2.5 text-sm space-y-1">
+         {relatives.length > 0 ? relatives.map((rel) => (
+           <div key={rel.id} className="rounded-lg border p-2.5 text-sm space-y-1 group">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 <span className="font-medium text-foreground">{rel.name}</span>

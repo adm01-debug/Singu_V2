@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Users, Building2, Cake, Phone, Mail, Plus } from 'lucide-react';
+ import { Users, Building2, Cake, Phone, Mail, Plus, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { CollapsibleSection } from '@/components/ui/collapsible-section';
 import { InlineEmptyState } from '@/components/ui/empty-state';
@@ -50,20 +50,30 @@ export function RelativesSection({ contactId, relatives }: RelativesSectionProps
         <div className="space-y-2">
           {relatives.map((rel) => (
             <div key={rel.id} className="rounded-lg border p-2.5 text-sm space-y-1 relative group">
-              <div className="flex items-center justify-between">
-                <div className="flex-1 min-w-0">
+               <div className="flex items-center justify-between gap-2">
+                 <div className="flex-1 min-w-0 flex items-center gap-2">
+                   <Button
+                     variant="ghost"
+                     size="icon"
+                     className={`h-5 w-5 flex-shrink-0 ${rel.is_decision_influencer ? 'text-warning' : 'text-muted-foreground/30 hover:text-warning'}`}
+                     onClick={() => handleUpdate(rel.id, 'is_decision_influencer', !rel.is_decision_influencer)}
+                   >
+                     <AlertTriangle className="h-3 w-3" />
+                   </Button>
+                   <div className="flex-1 min-w-0">
                   <InlineEdit
                     value={rel.name}
                     onSave={(v) => handleUpdate(rel.id, 'name', v)}
                     className="font-medium text-foreground"
                     displayClassName="py-0 px-0 -mx-0 hover:bg-transparent"
                   />
-                  <InlineEdit
-                    value={rel.relationship_type}
-                    onSave={(v) => handleUpdate(rel.id, 'relationship_type', v)}
-                    className="text-xs text-muted-foreground capitalize"
-                    displayClassName="py-0 px-0 -mx-0 hover:bg-transparent"
-                  />
+                     <InlineEdit
+                       value={rel.relationship_type}
+                       onSave={(v) => handleUpdate(rel.id, 'relationship_type', v)}
+                       className="text-xs text-muted-foreground capitalize"
+                       displayClassName="py-0 px-0 -mx-0 hover:bg-transparent"
+                     />
+                   </div>
                 </div>
                 <div className="text-right text-xs text-muted-foreground space-y-0.5">
                   <InlineEdit
