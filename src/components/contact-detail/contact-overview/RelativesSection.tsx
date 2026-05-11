@@ -1,5 +1,6 @@
 import { useState } from 'react';
- import { Users, Building2, Cake, Phone, Mail, Plus, AlertTriangle } from 'lucide-react';
+  import { Users, Building2, Cake, Phone, Mail, Plus, AlertTriangle, Edit2 } from 'lucide-react';
+ import { RelativeDialog } from '../data-tab/RelativeDialog';
 import { Badge } from '@/components/ui/badge';
 import { CollapsibleSection } from '@/components/ui/collapsible-section';
 import { InlineEmptyState } from '@/components/ui/empty-state';
@@ -36,12 +37,6 @@ export function RelativesSection({ contactId, relatives }: RelativesSectionProps
      }
    };
 
-  const handleAdd = () => {
-    addRelative.mutate({
-      name: 'Novo Familiar',
-      relationship_type: 'other',
-    });
-  };
 
   return (
     <CollapsibleSection
@@ -50,11 +45,18 @@ export function RelativesSection({ contactId, relatives }: RelativesSectionProps
       iconColor="text-secondary"
       badge={relatives.length}
       defaultOpen={relatives.length > 0}
-      headerAction={
-        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={(e) => { e.stopPropagation(); handleAdd(); }}>
-          <Plus className="h-3.5 w-3.5" />
-        </Button>
-      }
+       headerAction={
+         <div onClick={(e) => e.stopPropagation()}>
+           <RelativeDialog
+             onSave={(data) => addRelative.mutate(data)}
+             trigger={
+               <Button variant="ghost" size="icon" className="h-7 w-7">
+                 <Plus className="h-3.5 w-3.5" />
+               </Button>
+             }
+           />
+         </div>
+       }
     >
       {relatives.length > 0 ? (
         <div className="space-y-2">
@@ -166,14 +168,29 @@ export function RelativesSection({ contactId, relatives }: RelativesSectionProps
                 className="text-xs text-muted-foreground italic"
                 displayClassName="py-0 px-0 -mx-0 hover:bg-transparent"
               />
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6 absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive hover:bg-destructive/10"
-                onClick={() => deleteRelative.mutate(rel.id)}
-              >
-                <Plus className="h-3 w-3 rotate-45" />
-              </Button>
+               <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity flex gap-0.5">
+                 <RelativeDialog
+                   initialData={rel}
+                   onSave={(updates) => updateRelative.mutate({ id: rel.id, updates })}
+                   trigger={
+                     <Button
+                       variant="ghost"
+                       size="icon"
+                       className="h-6 w-6 text-muted-foreground hover:text-primary hover:bg-primary/10"
+                     >
+                       <Edit2 className="h-3 w-3" />
+                     </Button>
+                   }
+                 />
+                 <Button
+                   variant="ghost"
+                   size="icon"
+                   className="h-6 w-6 text-destructive hover:text-destructive hover:bg-destructive/10"
+                   onClick={() => deleteRelative.mutate(rel.id)}
+                 >
+                   <Plus className="h-3 w-3 rotate-45" />
+                 </Button>
+               </div>
             </div>
           ))}
         </div>
