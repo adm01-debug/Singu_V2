@@ -36,7 +36,10 @@ import { sortInteractions } from '@/lib/sortInteractions';
 import { AplicarFavoritoCompartilhadoDialog } from '@/components/ficha-360/AplicarFavoritoCompartilhadoDialog';
 import { useFicha360DeeplinkToast } from '@/hooks/useFicha360DeeplinkToast';
 import { useFicha360FilterFavorites, suggestFavoriteName, type FilterFavorite } from '@/hooks/useFicha360FilterFavorites';
-import { RelatoriosFixosBar } from '@/components/ficha-360/RelatoriosFixosBar';
+ import { RelatoriosFixosBar } from '@/components/ficha-360/RelatoriosFixosBar';
+ import { NLPAnalysisCard } from '@/components/ficha-360/NLPAnalysisCard';
+ import { useFicha360NLP } from '@/hooks/useFicha360NLP';
+ import { FileText, Printer } from 'lucide-react';
 import type { Ficha360Period } from '@/hooks/useFicha360Filters';
 import { ScoreProntidaoCard } from '@/components/ficha-360/ScoreProntidaoCard';
 import { ProximaAcaoCTA } from '@/components/ficha-360/ProximaAcaoCTA';
@@ -332,6 +335,12 @@ const Ficha360 = () => {
     ready: !isLoading && !!profile,
   });
 
+   const { vakProfile, metaprogramProfile, latestReframings, refetch: refetchNLP } = useFicha360NLP(id);
+ 
+   const handleExportPDF = () => {
+     window.print();
+   };
+ 
   const weights = useEffectiveProntidaoWeights(id);
   const simEnabled = useSimulationStore((s) => s.enabled);
   const simOverrides = useSimulationStore((s) => s.overrides);
@@ -443,14 +452,20 @@ const Ficha360 = () => {
           backTo="/contatos"
           backLabel="Contatos"
           title="Ficha 360"
-          actions={
-            <Button asChild variant="outline" size="sm">
-              <Link to={`/contatos/${id}`}>
-                <ExternalLink className="h-4 w-4 mr-1.5" />
-                Detalhe completo
-              </Link>
-            </Button>
-          }
+           actions={
+             <div className="flex gap-2 print:hidden">
+               <Button variant="outline" size="sm" onClick={handleExportPDF}>
+                 <Printer className="h-4 w-4 mr-1.5" />
+                 Exportar PDF
+               </Button>
+               <Button asChild variant="outline" size="sm">
+                 <Link to={`/contatos/${id}`}>
+                   <ExternalLink className="h-4 w-4 mr-1.5" />
+                   Detalhe completo
+                 </Link>
+               </Button>
+             </div>
+           }
         />
 
         {isLoading ? (
