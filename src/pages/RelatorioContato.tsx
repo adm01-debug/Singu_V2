@@ -8,7 +8,10 @@ import { BackButton } from "@/components/navigation/BackButton";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { logger } from "@/lib/logger";
-import { ReportScriptsSection } from "./relatorio/ReportScriptsSection";
+ import { ReportScriptsSection } from "./relatorio/ReportScriptsSection";
+ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+ import { Badge } from "@/components/ui/badge";
+ import { Brain, Target, Shield, Lightbulb, Zap } from "lucide-react";
 import type { Tables } from '@/integrations/supabase/types';
 
 interface ContactBehavior {
@@ -19,11 +22,17 @@ interface ContactBehavior {
   [key: string]: unknown;
 }
 
-interface ContactReport {
-  contact: Tables<'contacts'>;
-  interactions: Tables<'interactions'>[];
-  discHistory: Tables<'disc_analysis_history'>[];
-}
+ interface ContactReport {
+   contact: Tables<'contacts'>;
+   interactions: Tables<'interactions'>[];
+   discHistory: Tables<'disc_analysis_history'>[];
+   insights?: {
+     recurringObjections: (string | null)[];
+     topPreferences: (string | null)[];
+     preferredTone: string;
+     communicationRecommendations: string[];
+   };
+ }
 
 const RelatorioContato = () => {
   const { id } = useParams<{ id: string }>();
@@ -61,7 +70,32 @@ const RelatorioContato = () => {
           discHistory = extDisc || [];
         }
 
-        setData({ contact, interactions, discHistory });
+         const behavior = (contact.behavior || {}) as ContactBehavior;
+         const recurringObjections = interactions
+           .filter(i => i.content?.toLowerCase().includes('objeção') || i.content?.toLowerCase().includes('não gostou'))
+           .map(i => i.content)
+           .slice(0, 3);
+ 
+         const topPreferences = interactions
+           .filter(i => i.content?.toLowerCase().includes('preferência') || i.content?.toLowerCase().includes('gosta'))
+           .map(i => i.content)
+           .slice(0, 3);
+ 
+         setData({ 
+           contact, 
+           interactions, 
+           discHistory,
+           insights: {
+             recurringObjections,
+             topPreferences,
+             preferredTone: behavior.preferredChannel === 'WhatsApp' ? 'Casual e Rápido' : 'Formal e Detalhado',
+             communicationRecommendations: [
+               "Focar em benefícios de longo prazo e estabilidade.",
+               "Utilizar gatilhos de Prova Social e Autoridade.",
+               "Evitar pressão excessiva por fechamento imediato."
+             ]
+           }
+         });
       } catch (error) {
         const msg = error instanceof Error ? error.message : 'Unknown error';
         logger.error('Error fetching report data:', { error: msg });
