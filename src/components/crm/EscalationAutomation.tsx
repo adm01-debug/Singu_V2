@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -9,13 +12,67 @@ import { Bell, Mail, MessageSquare, AlertTriangle, ShieldCheck, Clock } from 'lu
 import { toast } from 'sonner';
 
 export function EscalationAutomation({ contactId }: { contactId: string }) {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [escalationEnabled, setEscalationEnabled] = useState(false);
   const [delay, setDelay] = useState('24');
+  const [escalationRole, setEscalationRole] = useState('supervisor');
 
-  const handleSave = () => {
-    toast.success('Configurações de automação e escalonamento salvas para este contato');
-  };
+  const { data: settings, isLoading } = useQuery({
+    queryKey: ['contact-automation-settings', contactId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('contact_automation_settings')
+        .select('*')
+        .eq('contact_id', contactId)
+        .maybeSingle();
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!contactId
+  });
+
+  useEffect(() => {
+    if (settings) {
+      setNotificationsEnabled(settings.reminder_enabled ?? true);
+      setEscalationEnabled(settings.escalation_enabled ?? false);
+      setDelay(String(settings.delay_hours ?? 24));
+      setEscalationRole(settings.escalation_role ?? 'supervisor');
+    }
+  }, [settings]);
+
+  const saveMutation = useMutation({
+    mutationFn: async () => {
+      if (!user) throw new Error('User not authenticated');
+      
+      const payload = {
+        contact_id: contactId,
+        user_id: user.id,
+        reminder_enabled: notificationsEnabled,
+        escalation_enabled: escalationEnabled,
+        delay_hours: parseInt(delay),
+        escalation_role: escalationRole,
+        updated_at: new Date().toISOString()
+      };
+
+      const { error } = await supabase
+        .from('contact_automation_settings')
+        .upsert(payload, { onConflict: 'contact_id' });
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contact-automation-settings', contactId] });
+      toast.success('Configurações de automação e escalonamento salvas');
+    },
+    onError: (error) => {
+      toast.error('Erro ao salvar configurações: ' + error.message);
+    }
+  });
+
+  if (isLoading) return <div className="h-48 animate-pulse bg-muted/40 rounded-lg" />;
 
   return (
     <Card className="border-primary/20 bg-primary/5">
@@ -62,7 +119,7 @@ export function EscalationAutomation({ contactId }: { contactId: string }) {
             </div>
             <div className="space-y-1.5">
               <Label className="text-[10px]">Escalar para</Label>
-              <Select defaultValue="supervisor">
+              <Select value={escalationRole} onValueChange={setEscalationRole}>
                 <SelectTrigger className="h-8 text-xs">
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
@@ -76,8 +133,13 @@ export function EscalationAutomation({ contactId }: { contactId: string }) {
           </div>
         )}
 
-        <Button onClick={handleSave} className="w-full h-8 text-xs" variant="outline">
-          Salvar Configurações de Fluxo
+        <Button 
+          onClick={() => saveMutation.mutate()} 
+          disabled={saveMutation.isPending}
+          className="w-full h-8 text-xs" 
+          variant="outline"
+        >
+          {saveMutation.isPending ? 'Salvando...' : 'Salvar Configurações de Fluxo'}
         </Button>
       </CardContent>
     </Card>
