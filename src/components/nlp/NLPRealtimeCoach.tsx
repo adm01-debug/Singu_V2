@@ -77,6 +77,7 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
       setDetectedMeta(meta);
       
       const newSuggestions: Suggestion[] = [];
+      const lowerContent = content.toLowerCase();
 
       // 1. VAK Proactive Suggestions
       if (vak.dominantSystem) {
@@ -136,21 +137,32 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
          }
        }
 
-       // 4. Sleight of Mouth (Objection Detection)
-       const matchingTemplate = SLEIGHT_TEMPLATES.find(t => 
-         content.toLowerCase().includes(t.objection.toLowerCase().substring(0, 12))
-       );
+      // 4. Sleight of Mouth (Objection Detection)
+      const matchingTemplates = SLEIGHT_TEMPLATES.filter(t => 
+        lowerContent.includes(t.objection.toLowerCase().substring(0, 12))
+      ).slice(0, 2);
 
-       if (matchingTemplate) {
-         newSuggestions.push({
-           id: `reframing-${matchingTemplate.id}`,
-           type: 'reframing',
-           text: `Objeção detectada: "${matchingTemplate.objectionCategory}".`,
-           fullContent: matchingTemplate.response,
-           icon: <RefreshCcw className="h-3 w-3" />,
-           color: 'text-primary'
-         });
-       }
+      matchingTemplates.forEach(t => {
+        newSuggestions.push({
+          id: `reframing-${t.id}`,
+          type: 'reframing',
+          text: `Objeção: "${t.objectionCategory}". Próximo passo sugerido.`,
+          fullContent: t.response,
+          icon: <RefreshCcw className="h-3 w-3" />,
+          color: 'text-primary'
+        });
+      });
+
+      // 5. Next Steps / Action recommendations
+      if (lowerContent.includes('valor') || lowerContent.includes('preço') || lowerContent.includes('investimento')) {
+        newSuggestions.push({
+          id: 'next-step-price',
+          type: 'milton',
+          text: "Mencionado valor. Sugestão: Enquadre como investimento estratégico.",
+          icon: <ArrowRight className="h-3 w-3" />,
+          color: 'text-info'
+        });
+      }
        
        setSuggestions(newSuggestions);
      } else {
