@@ -113,7 +113,7 @@ const NLPAnalytics = () => {
              <NLPMasteryScore />
              
              <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-12">
+                <TabsList className="grid w-full grid-cols-13">
                  <TabsTrigger value="overview" className="gap-2">
                    <Activity className="h-4 w-4" /> Geral
                  </TabsTrigger>
