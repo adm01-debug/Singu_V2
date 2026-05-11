@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { format } from 'date-fns';
+ import { format, differenceInYears } from 'date-fns';
 import type { Tables } from '@/integrations/supabase/types';
 
 interface Props {
@@ -45,24 +45,42 @@ const RELATIONSHIP_TYPES = ['conjuge', 'filho', 'filha', 'pai', 'mae', 'irmao', 
      birthday: initialData?.birthday || '',
    });
 
-   const handleSubmit = () => {
-     if (!form.name.trim()) return;
-     onSave({
-       ...form,
-       name: form.name.trim(),
-       phone: form.phone || null,
-       email: form.email || null,
-       occupation: form.occupation || null,
-       company: form.company || null,
-       notes: form.notes || null,
-       age: form.age ? parseInt(form.age, 10) : null,
-       birthday: form.birthday || null,
-     });
-     if (!initialData) {
-       setForm({ name: '', relationship_type: 'conjuge', phone: '', email: '', occupation: '', company: '', notes: '', is_decision_influencer: false, age: '', birthday: '' });
-     }
-     setOpen(false);
-   };
+    const handleBirthdayChange = (dateStr: string) => {
+      const updates: any = { birthday: dateStr };
+      if (dateStr) {
+        const birthDate = new Date(dateStr);
+        if (!isNaN(birthDate.getTime())) {
+          updates.age = differenceInYears(new Date(), birthDate).toString();
+        }
+      }
+      setForm(p => ({ ...p, ...updates }));
+    };
+ 
+    const handleSubmit = () => {
+      if (!form.name.trim()) return;
+      
+      // Basic validation
+      if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+        alert('Por favor, insira um e-mail válido');
+        return;
+      }
+ 
+      onSave({
+        ...form,
+        name: form.name.trim(),
+        phone: form.phone || null,
+        email: form.email || null,
+        occupation: form.occupation || null,
+        company: form.company || null,
+        notes: form.notes || null,
+        age: form.age ? parseInt(form.age, 10) : null,
+        birthday: form.birthday || null,
+      });
+      if (!initialData) {
+        setForm({ name: '', relationship_type: 'conjuge', phone: '', email: '', occupation: '', company: '', notes: '', is_decision_influencer: false, age: '', birthday: '' });
+      }
+      setOpen(false);
+    };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -93,7 +111,13 @@ const RELATIONSHIP_TYPES = ['conjuge', 'filho', 'filha', 'pai', 'mae', 'irmao', 
           </div>
           <div className="grid grid-cols-2 gap-2">
             <Input type="number" placeholder="Idade" min={0} max={150} value={form.age} onChange={(e) => setForm(p => ({ ...p, age: e.target.value }))} />
-            <Input type="date" placeholder="Data Nascimento" value={form.birthday} onChange={(e) => setForm(p => ({ ...p, birthday: e.target.value }))} />
+             <Input 
+               type="date" 
+               placeholder="Data Nascimento" 
+               value={form.birthday} 
+               onChange={(e) => handleBirthdayChange(e.target.value)} 
+               aria-label="Data de nascimento"
+             />
           </div>
           <Input placeholder="Notas" value={form.notes} onChange={(e) => setForm(p => ({ ...p, notes: e.target.value }))} />
           <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer">
