@@ -18,6 +18,7 @@ import { Header } from '@/components/layout/Header';
  import { Button } from '@/components/ui/button';
  import { useQuery } from '@tanstack/react-query';
  import { supabase } from '@/integrations/supabase/client';
+ import { Contact } from '@/types';
 
 const NLPAnalytics = () => {
    const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
@@ -41,20 +42,40 @@ const NLPAnalytics = () => {
      queryKey: ['selected-contact-nlp', selectedContactId],
      queryFn: async () => {
        if (!selectedContactId) return null;
-       const { data } = await supabase
+       const { data, error } = await supabase
          .from('contacts')
-         .select('*')
+         .select('*, companies(name)')
          .eq('id', selectedContactId)
          .single();
        
-       if (data) {
-         return {
-           ...data,
-           firstName: data.first_name,
-           lastName: data.last_name
-         };
-       }
-       return data;
+       if (error) throw error;
+ 
+       const contact: Contact = {
+         id: data.id,
+         companyId: data.company_id || '',
+         companyName: (data.companies as any)?.name || 'Empresa desconhecida',
+         firstName: data.first_name || '',
+         lastName: data.last_name || '',
+         role: (data.role as any) || 'contact',
+         roleTitle: data.role_title || '',
+         email: data.email || undefined,
+         phone: data.phone || undefined,
+         whatsapp: data.whatsapp || undefined,
+         linkedin: data.linkedin || undefined,
+         tags: data.tags || [],
+         relationshipStage: (data.relationship_stage as any) || 'prospect',
+         relationshipScore: data.relationship_score || 0,
+         interactionCount: data.interaction_count || 0,
+         sentiment: (data.sentiment as any) || 'neutral',
+         behavior: (data.behavior as any) || {},
+         hobbies: data.hobbies || [],
+         interests: data.interests || [],
+         lifeEvents: [],
+         createdAt: new Date(data.created_at),
+         updatedAt: new Date(data.updated_at)
+       };
+ 
+       return contact;
      },
      enabled: !!selectedContactId
    });
