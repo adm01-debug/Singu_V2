@@ -28,10 +28,11 @@ AÇÕES DISPONÍVEIS:
 - create_interaction: Sugerir criar uma interação
  - create_reminder: Sugerir criar um lembrete
  - create_relative: Sugerir adicionar um familiar/relacionado
+ - update_preferences: Sugerir atualizar preferências de contato (canal, dias, horários)
 
 Responda SEMPRE em JSON com esta estrutura:
 {
-   "action": "search" | "navigate" | "answer" | "create_interaction" | "create_reminder" | "create_relative",
+   "action": "search" | "navigate" | "answer" | "create_interaction" | "create_reminder" | "create_relative" | "update_preferences",
   "response": "texto curto e amigável para falar de volta ao usuário (max 2 frases)",
   "data": {
     "query": "termo de busca (se action=search)",
@@ -59,7 +60,15 @@ const TOOL_SCHEMA = {
       properties: {
          action: {
            type: "string",
-           enum: ["search", "navigate", "answer", "create_interaction", "create_reminder", "create_relative"],
+           enum: ["search", "navigate", "answer", "create_interaction", "create_reminder", "create_relative", "update_preferences"],
+             preferences: {
+               type: "object",
+               properties: {
+                 channel: { type: "string" },
+                 preferredDays: { type: "array", items: { type: "string" } },
+                 preferredTimes: { type: "array", items: { type: "string" } }
+               }
+             },
          },
              relative: {
                type: "object",
