@@ -17,7 +17,10 @@ export { default as IncongruenceDetector } from './IncongruenceDetector';
 export { default as MiltonianCalibration } from './MiltonianCalibration';
 export { default as PerceptualPositions } from './PerceptualPositions';
 
-// Decision Strategies
+ // Reframing & Persuasion
+ export { SleightOfMouthPanel } from './SleightOfMouthPanel';
+ 
+ // Decision Strategies
 export { default as TOTEModelMapper } from './TOTEModelMapper';
 export { default as HierarchyOfCriteria } from './HierarchyOfCriteria';
 export { default as WellFormedOutcomeBuilder } from './WellFormedOutcomeBuilder';
