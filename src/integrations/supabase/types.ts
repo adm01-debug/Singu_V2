@@ -2112,6 +2112,42 @@ export type Database = {
           },
         ]
       }
+      contact_cadence_audit: {
+        Row: {
+          cadence_id: string
+          changed_by: string | null
+          contact_id: string
+          created_at: string | null
+          id: string
+          new_data: Json | null
+          old_data: Json | null
+          operation: string
+          user_id: string
+        }
+        Insert: {
+          cadence_id: string
+          changed_by?: string | null
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation: string
+          user_id: string
+        }
+        Update: {
+          cadence_id?: string
+          changed_by?: string | null
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_decision_making: {
         Row: {
           approver_id: string | null
@@ -2493,6 +2529,42 @@ export type Database = {
           },
         ]
       }
+      contact_preferences_audit: {
+        Row: {
+          changed_by: string | null
+          contact_id: string
+          created_at: string | null
+          id: string
+          new_data: Json | null
+          old_data: Json | null
+          operation: string
+          preference_id: string
+          user_id: string
+        }
+        Insert: {
+          changed_by?: string | null
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation: string
+          preference_id: string
+          user_id: string
+        }
+        Update: {
+          changed_by?: string | null
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation?: string
+          preference_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_rapport_strategy: {
         Row: {
           auditory_preference_score: number | null
@@ -2688,6 +2760,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      contact_time_analysis_audit: {
+        Row: {
+          analysis_id: string
+          changed_by: string | null
+          contact_id: string
+          created_at: string | null
+          id: string
+          new_data: Json | null
+          old_data: Json | null
+          operation: string
+          user_id: string
+        }
+        Insert: {
+          analysis_id: string
+          changed_by?: string | null
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation: string
+          user_id: string
+        }
+        Update: {
+          analysis_id?: string
+          changed_by?: string | null
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          operation?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       contacts: {
         Row: {
