@@ -21,6 +21,8 @@ import { LifeEventsGapChecklist } from './life-events/LifeEventsGapChecklist';
 import { LifeEventsAuditTrail } from './life-events/LifeEventsAuditTrail';
 import { LifeEventsTimeline } from './life-events/LifeEventsTimeline';
 
+ import { LifeEventsVisualSummary } from './life-events/LifeEventsVisualSummary';
+ 
 interface LifeEventsTabProps {
   contactId: string;
 }
@@ -290,20 +292,39 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
           )}
         </TabsContent>
 
-        <TabsContent value="analysis" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-md flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-primary" />
-                Diagnóstico de Marcos
-              </CardTitle>
-              <CardDescription>Análise automatizada de cobertura de marcos comportamentais.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <LifeEventsGapChecklist lifeEvents={lifeEvents} />
-            </CardContent>
-          </Card>
-        </TabsContent>
+         <TabsContent value="analysis" className="space-y-6">
+           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+             <div className="lg:col-span-2 space-y-6">
+               <Card>
+                 <CardHeader>
+                   <CardTitle className="text-md flex items-center gap-2">
+                     <BarChart3 className="h-5 w-5 text-primary" />
+                     Resumo Visual de Marcos
+                   </CardTitle>
+                   <CardDescription>Visualização analítica da distribuição e histórico de eventos.</CardDescription>
+                 </CardHeader>
+                 <CardContent>
+                   <LifeEventsVisualSummary lifeEvents={lifeEvents} />
+                 </CardContent>
+               </Card>
+             </div>
+             
+             <div className="space-y-6">
+               <Card>
+                 <CardHeader>
+                   <CardTitle className="text-md flex items-center gap-2">
+                     <CheckSquare className="h-5 w-5 text-primary" />
+                     Checklist de Cobertura
+                   </CardTitle>
+                   <CardDescription>Identificação de lacunas de dados.</CardDescription>
+                 </CardHeader>
+                 <CardContent>
+                   <LifeEventsGapChecklist lifeEvents={lifeEvents} />
+                 </CardContent>
+               </Card>
+             </div>
+           </div>
+         </TabsContent>
 
         <TabsContent value="audit">
           <Card>

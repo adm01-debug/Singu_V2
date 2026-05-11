@@ -11,29 +11,46 @@ export function LifeEventsGapChecklist({ lifeEvents }: LifeEventsGapChecklistPro
   const hasAnniversary = lifeEvents.some(e => e.event_type === 'anniversary');
   const hasProfessional = lifeEvents.some(e => e.event_type === 'promotion' || e.event_type === 'achievement');
   
-  const gaps = [
-    {
-      id: 'birthday',
-      label: 'Aniversário',
-      description: 'Essencial para ações de reciprocidade e lembrança pessoal.',
-      missing: !hasBirthday,
-      severity: 'high'
-    },
-    {
-      id: 'anniversary',
-      label: 'Bodas/Aniversário Relacional',
-      description: 'Importante para contatos de alto valor (HVC) e networking profundo.',
-      missing: !hasAnniversary,
-      severity: 'medium'
-    },
-    {
-      id: 'professional',
-      label: 'Marcos Profissionais',
-      description: 'Promoções ou conquistas ajudam a validar o sucesso do contato.',
-      missing: !hasProfessional,
-      severity: 'low'
-    }
-  ];
+   const hasFamily = lifeEvents.some(e => e.event_type === 'family');
+   const hasTravel = lifeEvents.some(e => e.event_type === 'travel');
+ 
+   const gaps = [
+     {
+       id: 'birthday',
+       label: 'Aniversário',
+       description: 'Essencial para ações de reciprocidade e lembrança pessoal.',
+       missing: !hasBirthday,
+       severity: 'high'
+     },
+     {
+       id: 'anniversary',
+       label: 'Bodas/Aniversário Relacional',
+       description: 'Importante para contatos de alto valor (HVC) e networking profundo.',
+       missing: !hasAnniversary,
+       severity: 'medium'
+     },
+     {
+       id: 'professional',
+       label: 'Marcos Profissionais',
+       description: 'Promoções ou conquistas ajudam a validar o sucesso do contato.',
+       missing: !hasProfessional,
+       severity: 'medium'
+     },
+     {
+       id: 'family',
+       label: 'Contexto Familiar',
+       description: 'Conhecer a dinâmica familiar humaniza o relacionamento.',
+       missing: !hasFamily,
+       severity: 'low'
+     },
+     {
+       id: 'travel',
+       label: 'Eventos de Lazer/Viagem',
+       description: 'Viagens são excelentes ganchos para conversas informais.',
+       missing: !hasTravel,
+       severity: 'low'
+     }
+   ];
 
   const missingCount = gaps.filter(g => g.missing).length;
 

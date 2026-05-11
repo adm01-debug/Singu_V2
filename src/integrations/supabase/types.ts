@@ -11615,6 +11615,7 @@ export type Database = {
           recurring: boolean | null
           reminder_days_before: number | null
           title: string | null
+          user_id: string | null
           user_name: string | null
         }
         Relationships: []
