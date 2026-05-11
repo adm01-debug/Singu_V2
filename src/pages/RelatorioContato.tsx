@@ -11,7 +11,7 @@ import { logger } from "@/lib/logger";
  import { ReportScriptsSection } from "./relatorio/ReportScriptsSection";
  import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
  import { Badge } from "@/components/ui/badge";
- import { Brain, Target, Shield, Lightbulb, Zap } from "lucide-react";
+ import { Brain, Target, Shield, Lightbulb, Zap, UserPlus, CheckCircle2 } from "lucide-react";
 import type { Tables } from '@/integrations/supabase/types';
 
 interface ContactBehavior {
@@ -128,7 +128,7 @@ const RelatorioContato = () => {
     );
   }
 
-  const { contact, interactions, discHistory } = data;
+   const { contact, interactions, discHistory, insights } = data;
   const behavior = (contact.behavior || {}) as ContactBehavior;
   const latestDisc = discHistory[0];
 
@@ -436,7 +436,38 @@ const RelatorioContato = () => {
           </div>
         </section>
 
-        <ReportScriptsSection interactions={interactions} />
+         <section className="mb-8 page-break-before">
+           <h2 className="text-xl font-bold text-foreground border-b-2 border-primary pb-2 mb-6 flex items-center gap-2">
+             <UserPlus className="h-5 w-5 text-primary" /> Próximos Passos & Scripts (IA)
+           </h2>
+           
+           <div className="bg-primary/5 rounded-xl border border-primary/20 p-6 mb-6">
+             <div className="flex items-center justify-between mb-4">
+               <h3 className="font-bold text-primary flex items-center gap-2">
+                 <Target className="h-4 w-4" /> Ação Prioritária Recomendada
+               </h3>
+               <Badge className="bg-primary text-white">Alta Prioridade</Badge>
+             </div>
+             
+             <div className="space-y-4">
+               <div className="bg-white/80 p-4 rounded-lg border border-primary/10 shadow-sm">
+                 <p className="text-sm font-bold text-foreground mb-1">Follow-up Estratégico de Valor</p>
+                 <p className="text-xs text-muted-foreground italic leading-relaxed">
+                   "O histórico mostra que {contact.first_name} valoriza estabilidade e prova social. Sugerimos um contato via WhatsApp reforçando cases de sucesso similares para quebrar a última barreira de confiança detectada."
+                 </p>
+               </div>
+ 
+               <div className="space-y-2">
+                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Script Sugerido</p>
+                 <div className="bg-white p-4 rounded-lg border border-border italic text-sm text-foreground leading-relaxed whitespace-pre-wrap">
+                   "Olá {contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"
+                 </div>
+               </div>
+             </div>
+           </div>
+         </section>
+ 
+         <ReportScriptsSection interactions={interactions} />
 
         {/* Rodapé */}
         <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground">
