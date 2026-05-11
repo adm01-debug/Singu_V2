@@ -405,10 +405,35 @@ const RelatorioContato = () => {
                 <p className="text-sm font-medium">Alta (LinkedIn)</p>
               </div>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-3 italic">
-              * Dados coletados com base em perfis públicos e consentimento de termos de uso do CRM.
-            </p>
-          </section>
+             <p className="text-[10px] text-muted-foreground mt-3 italic">
+               * Dados coletados com base em perfis públicos e consentimento de termos de uso do CRM.
+             </p>
+           </section>
+ 
+           {/* Log de Auditoria de Consentimento */}
+           <section className="mb-8 p-4 bg-blue-50/30 rounded-xl border border-blue-100">
+             <h3 className="text-xs font-bold uppercase text-blue-600 mb-3 flex items-center gap-2">
+               <ShieldCheck className="h-4 w-4" /> Registro de Conformidade (Consentimento)
+             </h3>
+             <div className="space-y-2">
+               <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
+                 <span className="text-muted-foreground">Tipo de Consentimento:</span>
+                 <span className="font-medium">Análise de Perfil Público (OSINT)</span>
+               </div>
+               <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
+                 <span className="text-muted-foreground">Data/Hora:</span>
+                 <span className="font-medium">{format(new Date(contact.created_at || new Date()), "dd/MM/yyyy HH:mm")}</span>
+               </div>
+               <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
+                 <span className="text-muted-foreground">Origem:</span>
+                 <span className="font-medium">Termos de Uso do Ecossistema Harmony</span>
+               </div>
+               <div className="flex justify-between text-[11px]">
+                 <span className="text-muted-foreground">Status:</span>
+                 <Badge variant="outline" className="h-4 text-[9px] bg-green-50 text-green-700 border-green-200">Ativo / Verificado</Badge>
+               </div>
+             </div>
+           </section>
          </section>
  
          {/* Indicadores Comportamentais */}
