@@ -13,10 +13,12 @@ import { Header } from '@/components/layout/Header';
    CopywritingSalesTools
  } from '@/components/nlp';
  import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
- import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity } from 'lucide-react';
+ import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2 } from 'lucide-react';
  import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
  import { Input } from '@/components/ui/input';
  import { Button } from '@/components/ui/button';
+ import { Progress } from '@/components/ui/progress';
+ import { cn } from '@/lib/utils';
  import { useQuery } from '@tanstack/react-query';
  import { supabase } from '@/integrations/supabase/client';
  import { Contact } from '@/types';
