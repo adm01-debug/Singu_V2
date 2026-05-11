@@ -19,6 +19,7 @@ export const Calendario = lazy(() => import("@/pages/Calendario"));
 export const Notificacoes = lazy(() => import("@/pages/Notificacoes"));
 export const NotificacoesConfig = lazy(() => import("@/pages/NotificacoesConfig"));
 export const Network = lazy(() => import("@/pages/Network"));
+export const NLPAnalytics = lazy(() => import("@/pages/NLPAnalytics"));
 export const Auth = lazy(() => import("@/pages/Auth"));
 export const Onboarding = lazy(() => import("@/pages/Onboarding"));
 export const NotFound = lazy(() => import("@/pages/NotFound"));
