@@ -61,13 +61,13 @@
      }
    ];
  
-   const recommendations = analysis?.recommendations || [
+   const recommendations = (analysis?.recommendations as string[]) || [
      "Mantenha uma comunicação clara e direta.",
      "Reforce os benefícios lógicos da proposta.",
      "Valide as preocupações de segurança do cliente."
    ];
  
-   const negotiationTips = analysis?.negotiation_tips || [
+   const negotiationTips = (analysis?.negotiation_tips as string[]) || [
      "Não pressione por uma decisão emocional imediata.",
      "Forneça um roadmap detalhado dos próximos passos.",
      "Use dados comparativos para sustentar o valor."
