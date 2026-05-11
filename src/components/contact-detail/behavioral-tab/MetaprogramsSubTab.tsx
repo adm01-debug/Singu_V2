@@ -1,4 +1,4 @@
-import { Target, Save, Info } from 'lucide-react';
+ import { Target, Save, Info, Wand2, RefreshCw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,9 +13,28 @@ interface Props {
   contactId: string;
 }
 
-export function MetaprogramsSubTab({ contactId }: Props) {
-  const { metaprograms, updateMetaprograms, isLoading } = useContactBehavior(contactId);
-  const [formData, setFormData] = useState<any>({});
+ export function MetaprogramsSubTab({ contactId }: Props) {
+   const { metaprograms, updateMetaprograms, isLoading } = useContactBehavior(contactId);
+   const [formData, setFormData] = useState<any>({});
+   const { user } = useAuth();
+   const queryClient = useQueryClient();
+   const { data: metaHistory, isLoading: loadingHistory } = useQuery({
+     queryKey: ['meta-history', contactId, user?.id],
+     queryFn: async () => {
+       const { data, error } = await supabase
+         .from('metaprogram_analysis')
+         .select('*')
+         .eq('contact_id', contactId)
+         .order('created_at', { ascending: false })
+         .limit(1);
+       if (error) throw error;
+       return data;
+     },
+     enabled: !!user && !!contactId
+   });
+ 
+   const latestMeta = metaHistory?.[0];
+ 
 
   useEffect(() => {
     if (metaprograms) setFormData(metaprograms);
