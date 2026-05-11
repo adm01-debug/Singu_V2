@@ -290,9 +290,17 @@ export function InteractionForm({
             )}
           />
 
-           <div className="md:col-span-2">
-             <NLPRealtimeCoach content={form.watch('content') || ''} contactId={selectedContactId} />
-           </div>
+            <div className="md:col-span-2">
+              <NLPRealtimeCoach 
+                content={form.watch('content') || ''} 
+                contactId={selectedContactId} 
+                onApplySuggestion={(suggestion) => {
+                  const currentContent = form.getValues('content') || '';
+                  form.setValue('content', currentContent ? `${currentContent}\n\n${suggestion}` : suggestion);
+                  toast.success('Sugestão aplicada à interação!');
+                }}
+              />
+            </div>
  
           <FormField
             control={form.control}
