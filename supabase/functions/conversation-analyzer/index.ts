@@ -251,10 +251,22 @@ ${interaction.content.slice(0, 12000)}`;
     .select("id")
     .single();
 
-   if (saveErr) {
-     console.error("Save error:", saveErr);
-     return jsonError("Falha ao persistir análise", 500, req);
-   }
+    if (saveErr) {
+      console.error("Save error:", saveErr);
+      return jsonError("Falha ao persistir análise", 500, req);
+    }
+ 
+    // Update interactions table with summary data
+    await supabase
+      .from("interactions")
+      .update({
+        sentiment: analysis.sentiment_overall,
+        emotion_analysis: analysis.emotion_analysis,
+        key_insights: analysis.action_items && Array.isArray(analysis.action_items) 
+          ? (analysis.action_items as any[]).map(i => i.task) 
+          : []
+      })
+      .eq("id", interactionId);
 
     // Handle relatives mentioned (Módulo 2.5 AI)
     if (analysis.relatives_mentioned && Array.isArray(analysis.relatives_mentioned)) {
