@@ -10119,6 +10119,62 @@ export type Database = {
           },
         ]
       }
+      suggested_life_events: {
+        Row: {
+          confidence: number | null
+          contact_id: string
+          created_at: string
+          description: string | null
+          event_date: string | null
+          event_type: string
+          id: string
+          metadata: Json | null
+          source_type: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          confidence?: number | null
+          contact_id: string
+          created_at?: string
+          description?: string | null
+          event_date?: string | null
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          source_type: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          confidence?: number | null
+          contact_id?: string
+          created_at?: string
+          description?: string | null
+          event_date?: string | null
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          source_type?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "suggested_life_events_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       suggested_rapport_intel: {
         Row: {
           contact_id: string
