@@ -56,10 +56,12 @@ export const CadencePreferencesCard = memo(function CadencePreferencesCard({ cad
     preferred_channel: preferences?.preferred_channel ?? 'whatsapp',
     preferred_days: preferences?.preferred_days ?? [],
     avoid_days: preferences?.avoid_days ?? [],
-    communication_tips: preferences?.communication_tips ?? '',
-    personal_notes: preferences?.personal_notes ?? '',
-    restrictions: preferences?.restrictions ?? '',
-  });
+     communication_tips: preferences?.communication_tips ?? '',
+     personal_notes: preferences?.personal_notes ?? '',
+     restrictions: preferences?.restrictions ?? '',
+     preferred_times: preferences?.preferred_times ?? [],
+     avoid_times: preferences?.avoid_times ?? [],
+   });
 
   const DAYS_LIST = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   const DAY_LABELS: Record<string, string> = { monday: 'Seg', tuesday: 'Ter', wednesday: 'Qua', thursday: 'Qui', friday: 'Sex', saturday: 'Sáb', sunday: 'Dom' };
@@ -85,10 +87,12 @@ export const CadencePreferencesCard = memo(function CadencePreferencesCard({ cad
         preferred_channel: prefsForm.preferred_channel || null,
         preferred_days: prefsForm.preferred_days.length ? prefsForm.preferred_days : null,
         avoid_days: prefsForm.avoid_days.length ? prefsForm.avoid_days : null,
-        communication_tips: prefsForm.communication_tips || null,
-        personal_notes: prefsForm.personal_notes || null,
-        restrictions: prefsForm.restrictions || null,
-      });
+         communication_tips: prefsForm.communication_tips || null,
+         personal_notes: prefsForm.personal_notes || null,
+         restrictions: prefsForm.restrictions || null,
+         preferred_times: prefsForm.preferred_times.length ? prefsForm.preferred_times : null,
+         avoid_times: prefsForm.avoid_times.length ? prefsForm.avoid_times : null,
+       });
     }
     setEditingPrefs(false);
   };
@@ -98,10 +102,32 @@ export const CadencePreferencesCard = memo(function CadencePreferencesCard({ cad
       preferred_channel: preferences?.preferred_channel ?? 'whatsapp',
       preferred_days: preferences?.preferred_days ?? [],
       avoid_days: preferences?.avoid_days ?? [],
-      communication_tips: preferences?.communication_tips ?? '',
-      personal_notes: preferences?.personal_notes ?? '',
-      restrictions: preferences?.restrictions ?? '',
-    });
+       communication_tips: preferences?.communication_tips ?? '',
+       personal_notes: preferences?.personal_notes ?? '',
+       restrictions: preferences?.restrictions ?? '',
+       preferred_times: preferences?.preferred_times ?? [],
+       avoid_times: preferences?.avoid_times ?? [],
+     });
+             <div className="grid grid-cols-2 gap-2">
+               <div>
+                 <label className="text-[10px] text-muted-foreground">Horários preferidos</label>
+                 <Input 
+                   placeholder="Ex: Manhã, 14:00 (separe por vírgula)" 
+                   value={prefsForm.preferred_times.join(', ')} 
+                   onChange={e => setPrefsForm(p => ({ ...p, preferred_times: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))} 
+                   className="h-7 text-xs" 
+                 />
+               </div>
+               <div>
+                 <label className="text-[10px] text-muted-foreground">Horários a evitar</label>
+                 <Input 
+                   placeholder="Ex: Noite, 18:00+" 
+                   value={prefsForm.avoid_times.join(', ')} 
+                   onChange={e => setPrefsForm(p => ({ ...p, avoid_times: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))} 
+                   className="h-7 text-xs" 
+                 />
+               </div>
+             </div>
     setEditingPrefs(true);
   };
 
