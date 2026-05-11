@@ -40,7 +40,10 @@ import { CompanyCommercialTab } from '@/components/company-detail/CompanyCommerc
 import { CompanyEnrichedCard } from '@/components/company-detail/CompanyEnrichedCard';
 import { CompanyDuplicatesPanel } from '@/components/company-detail/CompanyDuplicatesPanel';
 import { CompanyErpProposalsWidget } from '@/components/erp/CompanyErpProposalsWidget';
-import { ContactsTabContent } from './empresa-detalhe/ContactsTabContent';
+ import { ContactsTabContent } from './empresa-detalhe/ContactsTabContent';
+ import { RelatedContactsSection } from '@/components/company-detail/contacts/RelatedContactsSection';
+ import { UnifiedTimelineSection } from '@/components/company-detail/timeline/UnifiedTimelineSection';
+ import { QuickFollowUpGenerator } from '@/components/company-detail/QuickFollowUpGenerator';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import type { Tables } from '@/integrations/supabase/types';
@@ -152,7 +155,8 @@ const EmpresaDetalhe = () => {
   if (loading) return (<AppLayout><EntityDetailPageSkeleton /></AppLayout>);
   if (!company) return (<AppLayout><div className="p-6 text-center"><Building2 className="w-16 h-16 text-muted-foreground mx-auto mb-4" /><h2 className="text-xl font-semibold mb-2">Empresa não encontrada</h2><p className="text-muted-foreground mb-4">A empresa que você procura não existe ou foi removida.</p><Link to="/empresas"><Button>Voltar para Empresas</Button></Link></div></AppLayout>);
 
-  const healthStatus = (company.financial_health as HealthStatus) || 'unknown';
+   const healthStatus = (company.financial_health as HealthStatus) || 'unknown';
+   const companyName = company.name || 'Empresa';
 
   return (
     <>
@@ -191,27 +195,50 @@ const EmpresaDetalhe = () => {
 
         <div className="relative z-10 px-4 md:px-6 -mt-12 md:-mt-16 pb-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="space-y-6">
-              <CompanyProfileCard company={company} contactCount={contacts.length} totalInteractions={stats.total} avgRelationshipScore={stats.avgScore} phones={phonesHook.data} emails={emailsHook.data} addresses={addressesHook.data} socialMedia={socialMediaHook.data} />
-              
-              <DashboardErrorBoundary sectionName="Resumo Executivo">
-                <CompanyExecutiveSummary 
-                  companyId={id!} 
-                  data={{
-                    healthScore: companySummary?.health_score,
-                    rfmSegment: companySummary?.rfm_segment,
-                    leadScore: companySummary?.lead_score,
-                    leadStatus: companySummary?.lead_status,
-                    growthPropensity: 72 // Mock for now, would come from predictive hook
-                  }}
-                />
-              </DashboardErrorBoundary>
-            </div>
+             <div className="space-y-4">
+               <CompanyProfileCard 
+                 company={company} 
+                 contactCount={contacts.length} 
+                 totalInteractions={stats.total} 
+                 avgRelationshipScore={stats.avgScore} 
+                 phones={phonesHook.data} 
+                 emails={emailsHook.data} 
+                 addresses={addressesHook.data} 
+                 socialMedia={socialMediaHook.data} 
+               />
+               
+               <DashboardErrorBoundary sectionName="Pessoas Relacionadas">
+                 <RelatedContactsSection contacts={contacts} companyId={id!} />
+               </DashboardErrorBoundary>
+ 
+               <DashboardErrorBoundary sectionName="Próximos Passos IA">
+                 <QuickFollowUpGenerator companyId={id!} companyName={companyName} />
+               </DashboardErrorBoundary>
+ 
+               <DashboardErrorBoundary sectionName="Resumo Executivo">
+                 <CompanyExecutiveSummary 
+                   companyId={id!} 
+                   data={{
+                     healthScore: companySummary?.health_score,
+                     rfmSegment: companySummary?.rfm_segment,
+                     leadScore: companySummary?.lead_score,
+                     leadStatus: companySummary?.lead_status,
+                     growthPropensity: 72 
+                   }}
+                 />
+               </DashboardErrorBoundary>
+             </div>
 
-            <div className="lg:col-span-2 space-y-6">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
-                <CompanyHealthScore financialHealth={healthStatus} contactCount={contacts.length} avgRelationshipScore={stats.avgScore} totalInteractions={stats.total} positiveInteractionsRatio={stats.positiveRatio} pendingFollowUps={stats.pending} daysSinceLastInteraction={stats.daysSince} />
-              </motion.div>
+             <div className="lg:col-span-2 space-y-4">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
+                   <CompanyHealthScore financialHealth={healthStatus} contactCount={contacts.length} avgRelationshipScore={stats.avgScore} totalInteractions={stats.total} positiveInteractionsRatio={stats.positiveRatio} pendingFollowUps={stats.pending} daysSinceLastInteraction={stats.daysSince} />
+                 </motion.div>
+                 
+                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
+                   <UnifiedTimelineSection companyId={id!} />
+                 </motion.div>
+               </div>
 
               <Tabs defaultValue="contacts" className="w-full">
                 <TabsList className="flex w-full overflow-x-auto gap-1">
