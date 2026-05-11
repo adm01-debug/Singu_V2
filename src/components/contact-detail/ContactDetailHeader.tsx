@@ -274,23 +274,21 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
                   {contact.relationship_stage || 'unknown'}
                 </Badge>
               </div>
-               <RelationshipFunnel 
-                 currentStage={(contact.relationship_stage as RelationshipStage) || 'unknown'} 
-                 onStageChange={handleStageChange}
-                 isEditable
-               />
-             </div>
+                <RelationshipFunnel 
+                  currentStage={(contact.relationship_stage as RelationshipStage) || 'unknown'} 
+                  onStageChange={handleStageChange}
+                  isEditable
+                />
+              </div>
+            </div>
  
-             {/* Next Best Action Dashboard Integration */}
-             <div className="md:col-span-2 lg:col-span-3">
-               <NextBestActionCard 
-                 contactId={contact.id} 
-                 contactName={fullName} 
-               />
-             </div>
-           </div>
+            {/* Next Best Action Dashboard Integration */}
+            <NextBestActionCard 
+              contactId={contact.id} 
+              contactName={fullName} 
+            />
           </div>
-
+ 
           {/* 360° Intelligence Strip */}
           {view360 && (
             <div className="mt-3 flex flex-wrap gap-2">
