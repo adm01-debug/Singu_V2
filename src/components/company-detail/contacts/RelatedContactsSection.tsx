@@ -50,13 +50,13 @@
                    <p className="text-sm font-semibold truncate group-hover:text-primary transition-colors">
                      {contact.first_name} {contact.last_name}
                    </p>
-                   <RelationshipScore score={contact.relationship_score || 0} size="xs" />
+                   <RelationshipScore score={contact.relationship_score || 0} size="sm" />
                  </div>
                  <div className="flex items-center gap-2 mt-0.5">
                    <span className="text-[10px] text-muted-foreground truncate flex-1">
                      {contact.role_title || 'Contato'}
                    </span>
-                   <RelationshipStageBadge stage={contact.relationship_stage as RelationshipStage || 'unknown'} size="xs" />
+                   <RelationshipStageBadge stage={contact.relationship_stage as RelationshipStage || 'unknown'} />
                  </div>
                </div>
              </Link>
