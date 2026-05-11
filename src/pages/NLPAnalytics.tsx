@@ -221,19 +221,39 @@ const NLPAnalytics = () => {
  
              <Card>
                <CardHeader>
-                 <CardTitle className="text-sm">Próximos Passos</CardTitle>
+                 <CardTitle className="text-sm">Checklist de Maestria</CardTitle>
                </CardHeader>
-               <CardContent className="space-y-3">
+               <CardContent className="space-y-4">
                  {[
-                   'Calibrar 5 novos leads',
-                   'Testar Reenquadramento em Objeções',
-                   'Revisar Scripts de Rapport'
+                   { label: 'Calibrar 5 novos leads', done: true },
+                   { label: 'Aplicar Sleight of Mouth', done: false },
+                   { label: 'Padrão Milton em E-mails', done: true },
+                   { label: 'Coerência VAK > 90%', done: false },
+                   { label: 'Mapear Metaprogramas', done: true },
                  ].map((task, i) => (
-                   <div key={i} className="flex items-center gap-2 text-xs">
-                     <div className="h-1 w-1 rounded-full bg-primary" />
-                     {task}
+                   <div key={i} className="flex items-center gap-3 group cursor-pointer">
+                     <div className={cn(
+                       "h-4 w-4 rounded border flex items-center justify-center transition-colors",
+                       task.done ? "bg-success border-success text-white" : "border-muted-foreground group-hover:border-primary"
+                     )}>
+                       {task.done && <CheckCircle2 className="h-3 w-3" />}
+                     </div>
+                     <span className={cn(
+                       "text-xs",
+                       task.done ? "text-muted-foreground line-through" : "text-foreground"
+                     )}>
+                       {task.label}
+                     </span>
                    </div>
                  ))}
+                 
+                 <div className="pt-4 border-t">
+                   <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
+                     <span>Progresso 10/10</span>
+                     <span>60%</span>
+                   </div>
+                   <Progress value={60} className="h-1" />
+                 </div>
                </CardContent>
              </Card>
            </div>
