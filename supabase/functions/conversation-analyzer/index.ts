@@ -125,7 +125,19 @@ ${interaction.content.slice(0, 12000)}`;
                     objection: { type: "string" },
                     category: { type: "string", enum: ["price","timing","authority","need","competition","trust","other"] },
                     handled: { type: "boolean" },
-                    suggested_response: { type: "string" },
+                     suggested_response: { type: "string" },
+                     reframing_suggestions: {
+                       type: "array",
+                       items: {
+                         type: "object",
+                         properties: {
+                           pattern: { type: "string", enum: ["intention", "redefinition", "consequence", "chunk_up", "chunk_down", "counter_example", "analogy", "apply_to_self", "another_outcome", "hierarchy_criteria", "change_frame_size", "meta_frame", "model_of_world", "reality_strategy"] },
+                           response: { type: "string" }
+                         },
+                         required: ["pattern", "response"]
+                       },
+                       maxItems: 3
+                     }
                   },
                   required: ["objection","category","handled"],
                 },
