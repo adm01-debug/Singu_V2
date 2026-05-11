@@ -1,12 +1,14 @@
-import { AlertTriangle, CheckCircle2, Info } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Info, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { Tables } from '@/integrations/supabase/types';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface LifeEventsGapChecklistProps {
   lifeEvents: Tables<'life_events'>[];
+  onAddGap?: (type: string) => void;
 }
 
-export function LifeEventsGapChecklist({ lifeEvents }: LifeEventsGapChecklistProps) {
+export function LifeEventsGapChecklist({ lifeEvents, onAddGap }: LifeEventsGapChecklistProps) {
   const hasBirthday = lifeEvents.some(e => e.event_type === 'birthday');
   const hasAnniversary = lifeEvents.some(e => e.event_type === 'anniversary');
   const hasProfessional = lifeEvents.some(e => e.event_type === 'promotion' || e.event_type === 'achievement');
@@ -15,41 +17,46 @@ export function LifeEventsGapChecklist({ lifeEvents }: LifeEventsGapChecklistPro
    const hasTravel = lifeEvents.some(e => e.event_type === 'travel');
  
    const gaps = [
-     {
-       id: 'birthday',
-       label: 'Aniversário',
-       description: 'Essencial para ações de reciprocidade e lembrança pessoal.',
-       missing: !hasBirthday,
-       severity: 'high'
-     },
-     {
-       id: 'anniversary',
-       label: 'Bodas/Aniversário Relacional',
-       description: 'Importante para contatos de alto valor (HVC) e networking profundo.',
-       missing: !hasAnniversary,
-       severity: 'medium'
-     },
-     {
-       id: 'professional',
-       label: 'Marcos Profissionais',
-       description: 'Promoções ou conquistas ajudam a validar o sucesso do contato.',
-       missing: !hasProfessional,
-       severity: 'medium'
-     },
-     {
-       id: 'family',
-       label: 'Contexto Familiar',
-       description: 'Conhecer a dinâmica familiar humaniza o relacionamento.',
-       missing: !hasFamily,
-       severity: 'low'
-     },
-     {
-       id: 'travel',
-       label: 'Eventos de Lazer/Viagem',
-       description: 'Viagens são excelentes ganchos para conversas informais.',
-       missing: !hasTravel,
-       severity: 'low'
-     }
+    {
+      id: 'birthday',
+      type: 'birthday',
+      label: 'Aniversário',
+      description: 'Essencial para ações de reciprocidade e lembrança pessoal.',
+      missing: !hasBirthday,
+      severity: 'high'
+    },
+    {
+      id: 'anniversary',
+      type: 'anniversary',
+      label: 'Bodas/Aniversário Relacional',
+      description: 'Importante para contatos de alto valor (HVC) e networking profundo.',
+      missing: !hasAnniversary,
+      severity: 'medium'
+    },
+    {
+      id: 'professional',
+      type: 'promotion',
+      label: 'Marcos Profissionais',
+      description: 'Promoções ou conquistas ajudam a validar o sucesso do contato.',
+      missing: !hasProfessional,
+      severity: 'medium'
+    },
+    {
+      id: 'family',
+      type: 'family',
+      label: 'Contexto Familiar',
+      description: 'Conhecer a dinâmica familiar humaniza o relacionamento.',
+      missing: !hasFamily,
+      severity: 'low'
+    },
+    {
+      id: 'travel',
+      type: 'travel',
+      label: 'Eventos de Lazer/Viagem',
+      description: 'Viagens são excelentes ganchos para conversas informais.',
+      missing: !hasTravel,
+      severity: 'low'
+    }
    ];
 
   const missingCount = gaps.filter(g => g.missing).length;
@@ -89,7 +96,7 @@ export function LifeEventsGapChecklist({ lifeEvents }: LifeEventsGapChecklistPro
             ) : (
               <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-success" />
             )}
-            <div>
+            <div className="flex-1">
               <p className={`text-xs font-bold ${gap.missing ? 'text-foreground' : 'text-muted-foreground'}`}>
                 {gap.label} {gap.missing && <span className="text-[10px] font-normal opacity-70">(Ausente)</span>}
               </p>
@@ -97,6 +104,16 @@ export function LifeEventsGapChecklist({ lifeEvents }: LifeEventsGapChecklistPro
                 {gap.description}
               </p>
             </div>
+            {gap.missing && onAddGap && (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-7 w-7 text-primary hover:text-primary hover:bg-primary/10"
+                onClick={() => onAddGap(gap.type)}
+              >
+                <Plus className="h-3.5 w-3.5" />
+              </Button>
+            )}
           </div>
         ))}
       </div>
