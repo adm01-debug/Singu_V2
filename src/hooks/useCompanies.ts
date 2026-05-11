@@ -41,7 +41,8 @@ const INITIAL_FAST_LOAD = 100;
 
 /** Columns needed for listing — avoids SELECT * which is slow on wide tables */
 const LISTING_SELECT = [
-  'id', 'nome_crm', 'nome_fantasia', 'razao_social', 'cnpj', 'cnpj_base',
+   'id', 'nome_crm', 'nome_fantasia', 'razao_social', 'cnpj', 'cnpj_base',
+   'vak_dominant', 'motivation_direction', 'working_style',
   'ramo_atividade', 'nicho_cliente', 'tags_array', 'status',
   'is_customer', 'is_carrier', 'is_supplier', 'is_matriz',
   'grupo_economico', 'grupo_economico_id', 'tipo_cooperativa', 'numero_cooperativa',

@@ -22,7 +22,8 @@ import {
   FormMessage,
   FormDescription,
 } from '@/components/ui/form';
- import { MessageSquare, Loader2, Mic, Tag, Lightbulb, Paperclip, X as CloseIcon } from 'lucide-react';
+  import { MessageSquare, Loader2, Mic, Tag, Lightbulb, Paperclip, X as CloseIcon, Sparkles } from 'lucide-react';
+ import { NLPRealtimeCoach } from '@/components/nlp/NLPRealtimeCoach';
  import { supabase } from '@/integrations/supabase/client';
  import { logger } from '@/lib/logger';
  import { toast } from 'sonner';
@@ -289,6 +290,10 @@ export function InteractionForm({
             )}
           />
 
+           <div className="md:col-span-2">
+             <NLPRealtimeCoach content={form.watch('content') || ''} contactId={selectedContactId} />
+           </div>
+ 
           <FormField
             control={form.control}
             name="sentiment"
