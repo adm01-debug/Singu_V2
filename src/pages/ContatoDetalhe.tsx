@@ -38,8 +38,9 @@ import { MeetingMode } from '@/components/contact-detail/MeetingMode';
 import { ValidateAllButton } from '@/components/enrichment/ValidateAllButton';
 import { PeopleIntelTimeline } from '@/components/enrichment/PeopleIntelTimeline';
 import { ContactEmailThreadsSection } from '@/components/contact-detail/ContactEmailThreadsSection';
-import { SentimentTrendChart } from '@/components/contact-detail/SentimentTrendChart';
-import { NextBestActionCard } from '@/components/contact-detail/NextBestActionCard';
+  import { SentimentTrendChart } from '@/components/contact-detail/SentimentTrendChart';
+  import { NextBestActionCard } from '@/components/contact-detail/NextBestActionCard';
+  import { SocialMediaIntelligenceCard } from '@/components/contact-detail/SocialMediaIntelligenceCard';
 
 const ContactTimelineWidget = lazy(() => import('@/components/contact-detail/ContactTimelineWidget'));
 const UnifiedCommunicationHistory = lazy(() => import('@/components/interactions/UnifiedCommunicationHistory'));
@@ -210,7 +211,22 @@ const ContatoDetalhe = () => {
                   contactId={contact.id}
                   contactName={formatContactName(contact.first_name, contact.last_name)}
                 />
-                <ContactOverviewTab
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <ContactOverviewTab
+                    contact={contact}
+                    company={company}
+                    insights={insights}
+                    alerts={alerts}
+                    interactionCount={interactions.length}
+                  />
+                  <SocialMediaIntelligenceCard 
+                    contactId={contact.id} 
+                    linkedin={contact.linkedin}
+                    instagram={contact.instagram}
+                    twitter={contact.twitter}
+                  />
+                </div>
+                <RelationshipTimeline
                   contact={contact}
                   company={company}
                   insights={insights}
