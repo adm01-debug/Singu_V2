@@ -974,6 +974,63 @@ export type Database = {
         }
         Relationships: []
       }
+      brain_dominance_analysis: {
+        Row: {
+          analyzed_at: string | null
+          contact_id: string | null
+          created_at: string | null
+          dominant_system: string | null
+          id: string
+          limbic_score: number | null
+          negotiation_tips: Json | null
+          neocortex_score: number | null
+          recommendations: Json | null
+          reptilian_score: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          analyzed_at?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          dominant_system?: string | null
+          id?: string
+          limbic_score?: number | null
+          negotiation_tips?: Json | null
+          neocortex_score?: number | null
+          recommendations?: Json | null
+          reptilian_score?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          analyzed_at?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          dominant_system?: string | null
+          id?: string
+          limbic_score?: number | null
+          negotiation_tips?: Json | null
+          neocortex_score?: number | null
+          recommendations?: Json | null
+          reptilian_score?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "brain_dominance_analysis_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "brain_dominance_analysis_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
       call_logs: {
         Row: {
           audio_url: string | null
@@ -8187,6 +8244,76 @@ export type Database = {
         }
         Relationships: []
       }
+      neuro_pnl_sessions: {
+        Row: {
+          anchors_installed: Json | null
+          company_id: string | null
+          contact_id: string | null
+          conversation_id: string | null
+          created_at: string | null
+          emotional_state_after: string | null
+          emotional_state_before: string | null
+          id: string
+          next_steps: string | null
+          results_summary: string | null
+          session_date: string | null
+          technique_used: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          anchors_installed?: Json | null
+          company_id?: string | null
+          contact_id?: string | null
+          conversation_id?: string | null
+          created_at?: string | null
+          emotional_state_after?: string | null
+          emotional_state_before?: string | null
+          id?: string
+          next_steps?: string | null
+          results_summary?: string | null
+          session_date?: string | null
+          technique_used?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          anchors_installed?: Json | null
+          company_id?: string | null
+          contact_id?: string | null
+          conversation_id?: string | null
+          created_at?: string | null
+          emotional_state_after?: string | null
+          emotional_state_before?: string | null
+          id?: string
+          next_steps?: string | null
+          results_summary?: string | null
+          session_date?: string | null
+          technique_used?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "neuro_pnl_sessions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "neuro_pnl_sessions_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "neuro_pnl_sessions_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
       nlp_feedback: {
         Row: {
           adjusted_value: Json | null
@@ -12209,6 +12336,63 @@ export type Database = {
           },
           {
             foreignKeyName: "whatsapp_messages_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
+      whatsapp_messages_index: {
+        Row: {
+          contact_id: string | null
+          content: string | null
+          created_at: string | null
+          id: string
+          intent: string | null
+          message_sid: string | null
+          message_type: string | null
+          neuro_tags: Json | null
+          received_at: string | null
+          sentiment: string | null
+          transcription: string | null
+        }
+        Insert: {
+          contact_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          intent?: string | null
+          message_sid?: string | null
+          message_type?: string | null
+          neuro_tags?: Json | null
+          received_at?: string | null
+          sentiment?: string | null
+          transcription?: string | null
+        }
+        Update: {
+          contact_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          intent?: string | null
+          message_sid?: string | null
+          message_type?: string | null
+          neuro_tags?: Json | null
+          received_at?: string | null
+          sentiment?: string | null
+          transcription?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_messages_index_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "whatsapp_messages_index_contact_id_fkey"
             columns: ["contact_id"]
             isOneToOne: false
             referencedRelation: "vw_contacts_nlp"

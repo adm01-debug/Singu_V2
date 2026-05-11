@@ -47,7 +47,9 @@ const interactionSchema = z.object({
    audio_url: z.string().optional().nullable(),
    transcription: z.string().optional().nullable(),
    attachments: z.array(z.string()).optional(),
-});
+   neuro_pnl_technique: z.string().optional().nullable(),
+   neuro_pnl_result: z.string().optional().nullable(),
+ });
 
 type InteractionFormData = z.infer<typeof interactionSchema>;
 
@@ -107,9 +109,11 @@ export function InteractionForm({
        tags: (interaction?.tags as string[]) || [],
        key_insights: (interaction?.key_insights as string[]) || [],
        audio_url: interaction?.audio_url || null,
-       transcription: interaction?.transcription || null,
-       attachments: (interaction?.attachments as string[]) || [],
-    },
+        transcription: interaction?.transcription || null,
+        attachments: (interaction?.attachments as string[]) || [],
+        neuro_pnl_technique: (interaction as any)?.neuro_pnl_technique || '',
+        neuro_pnl_result: (interaction as any)?.neuro_pnl_result || '',
+     },
   });
 
   // Auto-save draft (only for new interactions)
@@ -448,6 +452,49 @@ export function InteractionForm({
                </FormItem>
              )}
            />
+ 
+           <div className="md:col-span-2 p-4 border-2 border-dashed border-indigo-200 rounded-xl bg-indigo-50/30 space-y-4">
+             <div className="flex items-center gap-2 text-indigo-700 font-bold uppercase text-xs">
+               <Sparkles className="h-4 w-4" /> Sessão de Neuro-PNL
+             </div>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               <FormField
+                 control={form.control}
+                 name="neuro_pnl_technique"
+                 render={({ field }) => (
+                   <FormItem>
+                     <FormLabel className="text-[10px] uppercase text-indigo-600">Técnica Utilizada</FormLabel>
+                     <Select onValueChange={field.onChange} defaultValue={field.value || ''}>
+                       <FormControl>
+                         <SelectTrigger className="h-8 text-xs border-indigo-200">
+                           <SelectValue placeholder="Selecione a técnica" />
+                         </SelectTrigger>
+                       </FormControl>
+                       <SelectContent>
+                         <SelectItem value="swish">Padrão Swish</SelectItem>
+                         <SelectItem value="reframing">Ressignificação</SelectItem>
+                         <SelectItem value="anchoring">Ancoragem</SelectItem>
+                         <SelectItem value="meta_model">Meta-Modelo</SelectItem>
+                         <SelectItem value="milton_model">Modelo Milton</SelectItem>
+                       </SelectContent>
+                     </Select>
+                   </FormItem>
+                 )}
+               />
+               <FormField
+                 control={form.control}
+                 name="neuro_pnl_result"
+                 render={({ field }) => (
+                   <FormItem>
+                     <FormLabel className="text-[10px] uppercase text-indigo-600">Resultado da Sessão</FormLabel>
+                     <FormControl>
+                       <Input {...field} value={field.value || ''} placeholder="Ex: Quebra de objeção limitante" className="h-8 text-xs border-indigo-200" />
+                     </FormControl>
+                   </FormItem>
+                 )}
+               />
+             </div>
+           </div>
  
            <div className="md:col-span-2 space-y-3">
              <FormLabel className="flex items-center gap-1">
