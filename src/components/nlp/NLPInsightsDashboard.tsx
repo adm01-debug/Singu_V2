@@ -22,10 +22,12 @@ import { logger } from "@/lib/logger";
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-interface Props {
-  contactId: string;
-  className?: string;
-}
+ interface Props {
+   contactId: string;
+   className?: string;
+ }
+ 
+ interface NLPProfile { primary?: string; motivation?: string; [key: string]: any; }
 
 export function NLPInsightsDashboard({ contactId, className }: Props) {
   const { user } = useAuth();
