@@ -209,12 +209,11 @@ export const UnifiedCommunicationHistory = React.memo(function UnifiedCommunicat
                       )}
                     </div>
 
-                    {item.resumo && item.resumo.length > 50 && (
-                     {item.resumo && (
-                       <p className="text-xs text-muted-foreground mt-2 line-clamp-3 italic leading-relaxed">
-                         "{item.resumo}"
-                       </p>
-                     )}
+                    {item.resumo && (
+                      <p className="text-xs text-muted-foreground mt-2 line-clamp-3 italic leading-relaxed">
+                        "{item.resumo}"
+                      </p>
+                    )}
 
                      <div className="flex items-center gap-3 mt-2 border-t border-border/30 pt-2">
                         <div className="flex items-center gap-1">
@@ -234,8 +233,8 @@ export const UnifiedCommunicationHistory = React.memo(function UnifiedCommunicat
                         )}
                      </div>
                    </div>
-                  </div>
-                </div>
+                 </div>
+               </div>
               );
             })}
           </div>
