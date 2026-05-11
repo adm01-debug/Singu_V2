@@ -2,7 +2,7 @@
  import { supabase } from '@/integrations/supabase/client';
  import { StepForward, MapPin } from 'lucide-react';
 import { useState } from 'react';
- import { Sparkles, Copy, RefreshCw, CheckCircle2, Mail, MessageCircle, Phone, Linkedin, Calendar, ChevronDown, ChevronUp, AlarmClock, Edit3, Save } from 'lucide-react';
+import { Sparkles, Copy, RefreshCw, CheckCircle2, Mail, MessageCircle, Phone, Linkedin, Calendar, ChevronDown, ChevronUp, AlarmClock, Edit3, Save, Check } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
  import { Button } from '@/components/ui/button';
@@ -35,7 +35,7 @@ const urgencyMeta: Record<string, { label: string; variant: 'default' | 'destruc
 };
 
 export function NextBestActionCard({ contactId, contactName }: Props) {
-   const { nextAction, isLoading, isGenerating, generate } = useNextBestAction(contactId);
+   const { nextAction, isLoading, isGenerating, isCompleting, generate, complete } = useNextBestAction(contactId);
  
    // Fetch current deal stage and recent context
    const { data: contactContext } = useQuery({
@@ -230,22 +230,32 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
                <RefreshCw className="w-3 h-3" />
                Regenerar
              </LoadingButton>
-             <div className="flex items-center gap-1">
-               <Button onClick={() => handleCreateTask()} variant="default" size="sm" disabled={createTask.isPending}>
-                 <CheckCircle2 className="w-3 h-3" />
-                 Criar tarefa
-               </Button>
-                <Button 
-                  onClick={handleSmartSchedule}
-                  variant="outline" 
-                  size="sm" 
-                  disabled={createTask.isPending}
-                  className="gap-2"
+              <div className="flex items-center gap-1">
+                <LoadingButton
+                  isLoading={isCompleting}
+                  onClick={() => complete({ id: nextAction.id })}
+                  variant="default"
+                  size="sm"
+                  className="bg-success hover:bg-success/90"
                 >
-                  <AlarmClock className="w-3 h-3" />
-                  Agendamento Inteligente
+                  <Check className="w-3 h-3" />
+                  Concluir
+                </LoadingButton>
+                <Button onClick={() => handleCreateTask()} variant="outline" size="sm" disabled={createTask.isPending}>
+                  <CheckCircle2 className="w-3 h-3" />
+                  Criar tarefa
                 </Button>
-             </div>
+                 <Button 
+                   onClick={handleSmartSchedule}
+                   variant="ghost" 
+                   size="sm" 
+                   disabled={createTask.isPending}
+                   className="gap-2"
+                 >
+                   <AlarmClock className="w-3 h-3" />
+                   Agendar
+                 </Button>
+              </div>
            </div>
         </div>
       </CardContent>

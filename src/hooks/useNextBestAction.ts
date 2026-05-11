@@ -15,6 +15,9 @@ export interface NextBestAction {
   expected_outcome: string | null;
   generated_at: string;
   model: string | null;
+  status?: string;
+  completed_at?: string;
+  completion_notes?: string;
 }
 
 const STALE_24H = 24 * 60 * 60 * 1000;
@@ -63,11 +66,50 @@ export function useNextBestAction(contactId: string | undefined) {
     },
   });
 
+  const complete = useMutation({
+    mutationFn: async ({ id, notes }: { id: string; notes?: string }) => {
+      const { error } = await supabase
+        .from('contact_next_actions')
+        .update({ 
+          status: 'completed', 
+          completed_at: new Date().toISOString(),
+          completion_notes: notes 
+        })
+        .eq('id', id);
+      
+      if (error) throw error;
+
+      // Also create an interaction entry to reflect this completion in history
+      const currentAction = query.data;
+      if (currentAction && user?.id && contactId) {
+        const { error: intError } = await supabase.from('interactions').insert([{
+          contact_id: contactId,
+          user_id: user.id,
+          type: currentAction.channel,
+          title: 'Ação Concluída',
+          content: `Próxima ação concluída: ${currentAction.action}. ${notes || ''}`,
+        }]);
+        if (intError) logger.error('Error creating completion interaction', intError);
+      }
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['next-best-action', user?.id, contactId] });
+      qc.invalidateQueries({ queryKey: ['contact-interactions', contactId] });
+      toast.success('Tarefa marcada como concluída');
+    },
+    onError: (err) => {
+      logger.error('complete NBA error', err);
+      toast.error('Erro ao concluir tarefa');
+    }
+  });
+
   return {
-    nextAction: query.data ?? null,
+    nextAction: query.data && query.data.status !== 'completed' ? query.data : null,
     isLoading: query.isLoading,
     isGenerating: generate.isPending,
+    isCompleting: complete.isPending,
     generate: generate.mutate,
+    complete: complete.mutate,
     refetch: query.refetch,
   };
 }

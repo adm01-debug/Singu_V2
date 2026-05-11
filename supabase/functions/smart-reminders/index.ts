@@ -3,7 +3,7 @@ import { withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, corsHead
 
 interface SmartReminder {
   id: string;
-  type: 'follow_up' | 'birthday' | 'decay' | 'milestone';
+  type: 'follow_up' | 'birthday' | 'decay' | 'milestone' | 'nba_escalation';
   priority: 'high' | 'medium' | 'low';
   title: string;
   description: string;
@@ -244,7 +244,69 @@ Deno.serve(async (req) => {
       }
     }
 
-    // 4. Milestones
+    // 4. Next Best Action Escalations
+    const { data: pendingNBA, error: nbaError } = await supabaseClient
+      .from('contact_next_actions')
+      .select(`
+        id, action, urgency, generated_at, contact_id,
+        contacts:contact_id (id, first_name, last_name)
+      `)
+      .eq('user_id', userId)
+      .eq('status', 'pending');
+
+    if (!nbaError && pendingNBA) {
+      for (const action of pendingNBA) {
+        const { data: settings } = await supabaseClient
+          .from('contact_automation_settings')
+          .select('escalation_enabled, delay_hours, reminder_enabled')
+          .eq('contact_id', action.contact_id)
+          .maybeSingle();
+
+        if (!settings) continue;
+
+        const generatedAt = new Date(action.generated_at);
+        const delayHours = settings.delay_hours || 24;
+        const deadline = new Date(generatedAt.getTime() + (delayHours * 60 * 60 * 1000));
+        const isOverdue = today > deadline;
+
+        if (isOverdue && settings.escalation_enabled) {
+          const contactData = Array.isArray(action.contacts) ? action.contacts[0] : action.contacts;
+          const contactName = contactData ? `${(contactData as any).first_name} ${(contactData as any).last_name}` : 'Contato';
+          
+          reminders.push({
+            id: `nba-esc-${action.id}`,
+            type: 'nba_escalation',
+            priority: 'high',
+            title: `🚨 ESCALONADO: ${action.action}`,
+            description: `Ação sugerida para ${contactName} está atrasada há mais de ${delayHours}h.`,
+            contactId: action.contact_id,
+            contactName,
+            dueDate: deadline.toISOString(),
+            metadata: { nbaId: action.id, delayHours, urgency: action.urgency }
+          });
+        } else if (settings.reminder_enabled) {
+           // Regular reminder logic if not yet overdue but close or just reminder active
+           // For simplicity, we show high urgency pending NBAs
+           if (action.urgency === 'high') {
+             const contactData = Array.isArray(action.contacts) ? action.contacts[0] : action.contacts;
+             const contactName = contactData ? `${(contactData as any).first_name} ${(contactData as any).last_name}` : 'Contato';
+             reminders.push({
+               id: `nba-rem-${action.id}`,
+               type: 'follow_up',
+               priority: 'medium',
+               title: `⚡ Lembrete: ${action.action}`,
+               description: `Próximo passo recomendado para ${contactName}`,
+               contactId: action.contact_id,
+               contactName,
+               dueDate: generatedAt.toISOString(),
+               metadata: { nbaId: action.id }
+             });
+           }
+        }
+      }
+    }
+
+    // 5. Milestones
     const { data: recentInteractions, error: recentError } = await supabaseClient
       .from('interactions')
       .select(`id, title, type, contact_id, created_at, contacts:contact_id (id, first_name, last_name, relationship_score)`)

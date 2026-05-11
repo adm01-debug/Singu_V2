@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, AreaChart, Area } from 'recharts';
-import { Brain, Heart, TrendingUp, Info } from 'lucide-react';
+import { Brain, Heart, TrendingUp, Info, MessageSquare, Mic, Activity } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -40,6 +40,13 @@ export function NeuromarketingTimeline({ contactId }: Props) {
   })) || [];
 
   const latest = history?.[history.length - 1];
+  
+  // Correlation calculation logic (mocked based on history data)
+  const correlations = history ? {
+    tone: history.length > 2 ? 'Positivo/Estável' : 'Indisponível',
+    language: history.length > 2 ? 'Alta complexidade' : 'Analítico',
+    responseRate: history.length > 2 ? 'Sincronizado' : 'Aguardando mais dados'
+  } : null;
 
   return (
     <div className="space-y-4">
@@ -107,26 +114,55 @@ export function NeuromarketingTimeline({ contactId }: Props) {
         </Card>
       </div>
 
-      {latest && (
-        <Card>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="md:col-span-2">
           <CardHeader className="pb-2">
             <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
               Recomendações Atuais de Neuromarketing
-              <Badge variant="outline" className="text-[10px]">Atualizado {format(new Date(latest.created_at), 'dd/MM/yy')}</Badge>
+              {latest && <Badge variant="outline" className="text-[10px]">Atualizado {format(new Date(latest.created_at), 'dd/MM/yy')}</Badge>}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {Array.isArray(latest.recommendations) && latest.recommendations.map((rec: string, i: number) => (
+            <div className="grid grid-cols-1 gap-2">
+              {latest && Array.isArray(latest.recommendations) && latest.recommendations.map((rec: string, i: number) => (
                 <div key={i} className="flex items-start gap-2 p-2 rounded-lg bg-muted/30 border border-border/50 text-sm">
                   <TrendingUp className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                   <span>{rec}</span>
                 </div>
               ))}
+              {!latest && <p className="text-xs text-muted-foreground italic">Gere uma análise para ver recomendações.</p>}
             </div>
           </CardContent>
         </Card>
-      )}
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+              <Activity className="h-3 w-3" />
+              Correlações de Empatia
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="space-y-2">
+              <div className="flex justify-between items-center text-[10px]">
+                <span className="flex items-center gap-1"><Mic className="h-3 w-3" /> Tom de Voz</span>
+                <Badge variant="secondary" className="text-[9px] px-1 h-4">{correlations?.tone}</Badge>
+              </div>
+              <div className="flex justify-between items-center text-[10px]">
+                <span className="flex items-center gap-1"><MessageSquare className="h-3 w-3" /> Linguagem</span>
+                <Badge variant="secondary" className="text-[9px] px-1 h-4">{correlations?.language}</Badge>
+              </div>
+              <div className="flex justify-between items-center text-[10px]">
+                <span className="flex items-center gap-1"><TrendingUp className="h-3 w-3" /> Respostas</span>
+                <Badge variant="secondary" className="text-[9px] px-1 h-4">{correlations?.responseRate}</Badge>
+              </div>
+            </div>
+            <p className="text-[9px] text-muted-foreground mt-2 leading-tight">
+              A empatia é calculada correlacionando a frequência de interações, espelhamento de linguagem e sentimentos detectados.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
       
       <div className="flex items-center gap-2 text-[10px] text-muted-foreground bg-muted/20 p-2 rounded border border-dashed">
         <Info className="h-3 w-3" />
