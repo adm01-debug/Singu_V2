@@ -72,6 +72,32 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
   });
 
   const handleAcceptSuggestion = async (suggestion: any) => {
+    const isRelative = suggestion.metadata?.type === 'relative_suggestion';
+    
+    if (isRelative) {
+      const relData = suggestion.metadata.relative_data;
+      const { error } = await supabase.from('contact_relatives').insert({
+        contact_id: contactId,
+        user_id: user?.id,
+        name: relData.name,
+        relationship_type: relData.relationship_type,
+        occupation: relData.occupation,
+        company: relData.company,
+        is_decision_influencer: relData.is_decision_influencer,
+        notes: relData.notes
+      });
+
+      if (!error) {
+        await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id);
+        queryClient.invalidateQueries({ queryKey: ['contact-relational-data', contactId] });
+        refetchSuggestions();
+        toast({ title: "Relacionado adicionado", description: `${relData.name} foi adicionado aos contatos relacionados.` });
+      } else {
+        toast({ title: "Erro ao adicionar", description: error.message, variant: "destructive" });
+      }
+      return;
+    }
+
     const { error } = await supabase.from('life_events').insert({
       contact_id: contactId,
       user_id: user?.id,
