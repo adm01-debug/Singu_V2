@@ -15,6 +15,7 @@ import { DealDetailDrawer } from '@/components/pipeline/DealDetailDrawer';
 import { DealDialog } from '@/components/pipeline/DealDialog';
 import { PipelineFilterBar } from '@/components/pipeline/PipelineFilterBar';
 import { DealConfidenceBadge } from '@/components/pipeline/DealConfidenceBadge';
+import { NLPProbabilityBadge } from '@/components/pipeline/NLPProbabilityBadge';
 import { ForecastConfidencePanel } from '@/components/pipeline/ForecastConfidencePanel';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { toast } from 'sonner';
@@ -72,14 +73,17 @@ const DealCard = React.memo(function DealCard({
       )}
       <div className="flex items-center justify-between mt-2 gap-2">
         <span className="text-sm font-semibold text-primary">{formatCurrency(deal.valor)}</span>
-        <DealConfidenceBadge
-          confidence={conf.confidence}
-          level={conf.level}
-          expectedValue={conf.expectedCloseValue}
-          dealId={deal.id}
-          dealTitle={deal.titulo}
-          factors={conf.factors}
-        />
+        <div className="flex items-center gap-1.5">
+          <NLPProbabilityBadge deal={deal} />
+          <DealConfidenceBadge
+            confidence={conf.confidence}
+            level={conf.level}
+            expectedValue={conf.expectedCloseValue}
+            dealId={deal.id}
+            dealTitle={deal.titulo}
+            factors={conf.factors}
+          />
+        </div>
       </div>
       {(deal.dias_no_estagio_atual ?? 0) > 7 && (
         <div className="flex justify-end mt-1.5">
