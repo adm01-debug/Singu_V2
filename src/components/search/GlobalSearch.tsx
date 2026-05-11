@@ -496,6 +496,12 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
                onOpenChange(true);
                setQuery(action.data.contactName);
              }
+             else if (action.action === 'update_preferences' && action.data?.contactName) {
+               setVoiceOpen(false);
+               toast.info(`Sugestão de atualização de preferências para ${action.data.contactName}: ${action.response}`);
+               onOpenChange(true);
+               setQuery(action.data.contactName);
+             }
           }} />
         </Suspense>
       )}
