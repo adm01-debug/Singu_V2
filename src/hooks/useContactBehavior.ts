@@ -36,16 +36,20 @@ export interface ContactBehaviorGap {
   priority: 'high' | 'medium' | 'low';
 }
 
-export interface BehavioralAuditLog {
-  id: string;
-  timestamp: string;
-  user_email: string;
-  change_source: string;
-  field_name: string;
-  old_value: any;
-  new_value: any;
-  reason: string;
-}
+ export interface BehavioralAuditLog {
+   id: string;
+   timestamp: string;
+   user_email?: string;
+   change_source?: string;
+   field_name?: string;
+   old_value?: any;
+   new_value?: any;
+   reason?: string;
+   analysis_type?: string;
+   analyzed_text?: string;
+   is_validated?: boolean;
+   user_feedback?: string;
+ }
 
 export interface ContactDecisionMaking {
   decision_speed?: string;
