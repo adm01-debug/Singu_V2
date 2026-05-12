@@ -5,13 +5,15 @@ import type { Tables } from '@/integrations/supabase/types';
 export type GroupBy = 'company' | 'contact';
 
 export interface TimelineEventItem {
-  id: string;
-  type: string;
-  title: string;
-  content: string | null;
-  created_at: string;
-  sentiment: string | null;
-  follow_up_required: boolean | null;
+   id: string;
+   type: string;
+   title: string;
+   content: string | null;
+   created_at: string;
+   sentiment: string | null;
+   follow_up_required: boolean | null;
+   transcription?: string | null;
+   transcription_metadata?: any;
 }
 
 export interface TimelineGroup {
@@ -44,11 +46,11 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
     ],
     queryFn: async (): Promise<TimelineGroup[]> => {
       // Build base query (client-side fallback — sempre funciona)
-      let query = supabase
-        .from('interactions')
-        .select('id, type, title, content, created_at, sentiment, follow_up_required, contact_id, company_id')
-        .order('created_at', { ascending: false })
-        .limit(500);
+       let query = supabase
+         .from('interactions')
+         .select('id, type, title, content, created_at, sentiment, follow_up_required, contact_id, company_id, transcription, transcription_metadata')
+         .order('created_at', { ascending: false })
+         .limit(500);
 
       if (dateFrom) query = query.gte('created_at', dateFrom.toISOString());
       if (dateTo) query = query.lte('created_at', dateTo.toISOString());
@@ -99,15 +101,17 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
         const entityId = groupBy === 'company' ? it.company_id : it.contact_id;
         if (!entityId) continue;
         const existing = groupsMap.get(entityId);
-        const event: TimelineEventItem = {
-          id: it.id,
-          type: it.type,
-          title: it.title,
-          content: it.content,
-          created_at: it.created_at,
-          sentiment: it.sentiment,
-          follow_up_required: it.follow_up_required,
-        };
+         const event: TimelineEventItem = {
+           id: it.id,
+           type: it.type,
+           title: it.title,
+           content: it.content,
+           created_at: it.created_at,
+           sentiment: it.sentiment,
+           follow_up_required: it.follow_up_required,
+           transcription: (it as any).transcription,
+           transcription_metadata: (it as any).transcription_metadata,
+         };
         if (existing) {
           existing.events.push(event);
           if (it.created_at > existing.last_event_at) existing.last_event_at = it.created_at;
