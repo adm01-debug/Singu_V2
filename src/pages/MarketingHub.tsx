@@ -326,96 +326,13 @@ export default function MarketingHub() {
           </div>
         </TabsContent>
 
-        {/* MQL */}
-        <TabsContent value="mql" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Critérios MQL</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-end gap-2">
-                <div className="flex-1 space-y-1">
-                  <Label className="text-xs">Nome</Label>
-                  <Input placeholder="Ex: Score >= 60 + intent forte" value={newCriteriaName} onChange={(e) => setNewCriteriaName(e.target.value)} />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Score mínimo</Label>
-                  <Input type="number" min={0} max={100} value={newCriteriaScore} onChange={(e) => setNewCriteriaScore(Number(e.target.value))} className="w-24" />
-                </div>
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="gap-1"
-                  disabled={!newCriteriaName.trim()}
-                  onClick={() => {
-                    upsertCriteria.mutate(
-                      { name: newCriteriaName, conditions: { min_score: newCriteriaScore }, is_active: true, auto_handoff: false, handoff_to_role: 'sdr' },
-                      { onSuccess: () => setNewCriteriaName('') }
-                    );
-                  }}
-                >
-                  <Plus className="w-4 h-4" /> Adicionar
-                </Button>
-              </div>
-              <div className="space-y-2">
-                {criteria.map((c) => (
-                  <div key={c.id} className="flex items-center justify-between p-2 rounded border border-border/60 text-xs">
-                    <div className="flex items-center gap-3">
-                      <Badge variant={c.is_active ? 'default' : 'secondary'} className="text-[10px]">{c.is_active ? 'Ativo' : 'Off'}</Badge>
-                      <span className="font-medium">{c.name}</span>
-                      <span className="text-muted-foreground">score ≥ {c.conditions?.min_score ?? '—'} · {c.handoff_to_role}</span>
-                    </div>
-                    <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive" onClick={() => removeCriteria.mutate(c.id)}>
-                      <Trash2 className="w-3 h-3" />
-                    </Button>
-                  </div>
-                ))}
-                {criteria.length === 0 && <p className="text-xs text-muted-foreground italic">Nenhum critério configurado.</p>}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Contatos qualificados</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {classifications.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-6">Nenhuma classificação ainda.</p>
-              ) : (
-                <div className="space-y-1.5">
-                  {classifications.map((cls) => (
-                    <div key={cls.id} className="flex items-center justify-between p-2 rounded border border-border/60 text-xs">
-                      <div className="flex items-center gap-3">
-                        <Badge
-                          variant={cls.status === 'sql' ? 'default' : cls.status === 'mql' ? 'secondary' : 'outline'}
-                          className="text-[10px] uppercase"
-                        >
-                          {cls.status}
-                        </Badge>
-                        <Link to={`/contatos/${cls.contact_id}`} className="font-mono text-[11px] hover:underline truncate max-w-[200px]">
-                          {cls.contact_id.slice(0, 8)}...
-                        </Link>
-                        <span className="text-muted-foreground">score {cls.score_snapshot ?? '—'}</span>
-                        <span className="text-muted-foreground">{new Date(cls.qualified_at).toLocaleDateString('pt-BR')}</span>
-                      </div>
-                      {cls.status === 'mql' && (
-                        <div className="flex gap-1">
-                          <Button size="sm" variant="default" className="text-[11px] h-7" onClick={() => handoff.mutate({ id: cls.id, status: 'sql' })}>
-                            Promover SQL
-                          </Button>
-                          <Button size="sm" variant="ghost" className="text-[11px] h-7 text-destructive" onClick={() => handoff.mutate({ id: cls.id, status: 'disqualified' })}>
-                            Desqualificar
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
+          <TabsContent value="mql" className="space-y-6">
+            <MQLManager 
+              criteria={criteria}
+              classifications={classifications}
+              onHandoff={(id) => handoff.mutate({ id, status: 'sql' })}
+            />
+          </TabsContent>
 
         {/* ATTRIBUTION */}
         <TabsContent value="attribution" className="space-y-4">
