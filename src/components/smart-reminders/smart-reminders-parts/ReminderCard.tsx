@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Calendar, Cake, Thermometer, Star, X, Clock, ChevronRight,
-  MessageSquare, CheckCircle2
+  MessageSquare, CheckCircle2, AlertTriangle, Zap
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,10 +12,19 @@ import {
 import { SmartReminder } from '@/hooks/useSmartReminders';
 import { cn } from '@/lib/utils';
 
-const typeIcons = { follow_up: Calendar, birthday: Cake, decay: Thermometer, milestone: Star };
+const typeIcons = { 
+  follow_up: Calendar, 
+  birthday: Cake, 
+  decay: Thermometer, 
+  milestone: Star,
+  nba_escalation: AlertTriangle
+};
 const typeColors = {
-  follow_up: 'text-info bg-info/10', birthday: 'text-warning bg-warning/10',
-  decay: 'text-destructive bg-destructive/10', milestone: 'text-success bg-success/10',
+  follow_up: 'text-info bg-info/10', 
+  birthday: 'text-warning bg-warning/10',
+  decay: 'text-destructive bg-destructive/10', 
+  milestone: 'text-success bg-success/10',
+  nba_escalation: 'text-red-600 bg-red-100',
 };
 const priorityColors = {
   high: 'border-l-destructive bg-destructive/5', medium: 'border-l-warning bg-warning/5', low: 'border-l-success bg-success/5',
