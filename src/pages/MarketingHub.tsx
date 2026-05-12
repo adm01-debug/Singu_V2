@@ -15,7 +15,7 @@ import { useNurturingWorkflows } from '@/hooks/useNurturingWorkflows';
 import { useNurturingExecutions, useRunNurturing } from '@/hooks/useNurturingExecutions';
 import { useMQLCriteria, useMQLClassifications, useHandoffMQL } from '@/hooks/useMQL';
  import { useAttribution, type AttributionModel } from '@/hooks/useAttribution';
- import { useMarketingFunnel } from '@/hooks/useMarketingInsights';
+  import { useMarketingFunnel, useMarketingBehavioralInsights } from '@/hooks/useMarketingInsights';
  import { AttributionBreakdownChart } from '@/components/marketing/AttributionBreakdownChart';
  import { MarketingStats } from '@/components/crm/marketing/components/MarketingStats';
  import { FormList } from '@/components/crm/marketing/components/FormList';
@@ -49,7 +49,76 @@ export default function MarketingHub() {
   const [attModel, setAttModel] = useState<AttributionModel>('linear');
   const [attValue, setAttValue] = useState(10000);
    const { data: attribution } = useAttribution(attDealId || undefined, attModel, attValue);
-   const { data: funnel = [] } = useMarketingFunnel();
+    const { data: funnel = [] } = useMarketingFunnel();
+    const { data: behaviorInsights } = useMarketingBehavioralInsights();
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <Card>
+                 <CardHeader className="pb-2">
+                   <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                     <Sparkles className="w-4 h-4 text-primary" />
+                     Distribuição DISC do Público
+                   </CardTitle>
+                 </CardHeader>
+                 <CardContent>
+                   <div className="flex items-end gap-2 h-24 pt-4">
+                     {['D', 'I', 'S', 'C'].map(type => {
+                       const count = behaviorInsights?.disc[type] || 0;
+                       const max = Math.max(...Object.values(behaviorInsights?.disc || { x: 1 })) || 1;
+                       const height = (count / max) * 100;
+                       return (
+                         <div key={type} className="flex-1 flex flex-col items-center gap-2">
+                           <div className="w-full bg-primary/10 rounded-t-sm relative group">
+                             <motion.div 
+                               initial={{ height: 0 }}
+                               animate={{ height: `${height}%` }}
+                               className="w-full bg-primary rounded-t-sm"
+                             />
+                             <div className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 text-[10px] font-bold bg-primary text-white px-1 rounded transition-opacity">
+                               {count}
+                             </div>
+                           </div>
+                           <span className="text-[10px] font-bold text-muted-foreground">{type}</span>
+                         </div>
+                       );
+                     })}
+                   </div>
+                 </CardContent>
+               </Card>
+ 
+               <Card>
+                 <CardHeader className="pb-2">
+                   <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                     <Eye className="w-4 h-4 text-primary" />
+                     Canais de Aprendizagem (VAK)
+                   </CardTitle>
+                 </CardHeader>
+                 <CardContent>
+                   <div className="space-y-3 pt-2">
+                     {['visual', 'auditivo', 'cinestesico'].map(type => {
+                       const count = behaviorInsights?.vak[type] || 0;
+                       const total = Object.values(behaviorInsights?.vak || {}).reduce((a: any, b: any) => a + b, 0) || 1;
+                       const percentage = (count / total) * 100;
+                       return (
+                         <div key={type} className="space-y-1">
+                           <div className="flex justify-between text-[10px] uppercase font-bold tracking-wider">
+                             <span>{type}</span>
+                             <span className="text-primary">{percentage.toFixed(0)}%</span>
+                           </div>
+                           <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                             <motion.div 
+                               initial={{ width: 0 }}
+                               animate={{ width: `${percentage}%` }}
+                               className="h-full bg-primary"
+                             />
+                           </div>
+                         </div>
+                       );
+                     })}
+                   </div>
+                 </CardContent>
+               </Card>
+             </div>
+ 
 
    const copyUrl = (slug: string, prefix: 'f' | 'lm' | 'lp') => {
     const url = `${window.location.origin}/${prefix}/${slug}`;
