@@ -1,4 +1,5 @@
-import { useState } from 'react';
+ import { useState } from 'react';
+ import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -171,13 +172,22 @@ export default function MarketingHub() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle className="text-base font-semibold">Atribuição por Canal</CardTitle>
-                  <BarChart3 className="w-4 h-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <AttributionBreakdownChart attribution={attribution || { breakdown: [] }} />
-                </CardContent>
+               <CardHeader className="flex flex-row items-center justify-between">
+                 <CardTitle className="text-base font-semibold">Atribuição por Canal</CardTitle>
+                 <BarChart3 className="w-4 h-4 text-muted-foreground" />
+               </CardHeader>
+               <CardContent>
+                 {attribution ? (
+                   <AttributionBreakdownChart 
+                     allocations={attribution.allocations} 
+                     totalValue={attribution.total_value} 
+                   />
+                 ) : (
+                   <div className="h-[200px] flex items-center justify-center text-muted-foreground text-sm border-2 border-dashed rounded-lg">
+                     Selecione um Deal na aba Attribution para ver dados reais.
+                   </div>
+                 )}
+               </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between">

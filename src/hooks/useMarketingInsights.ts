@@ -37,8 +37,11 @@
          _end_date: end
        });
  
-       if (error) throw error;
-       return data as FunnelStat[];
+       if (error) {
+         console.error('Error fetching marketing funnel:', error);
+         throw error;
+       }
+       return (data || []) as unknown as FunnelStat[];
      },
    });
  }
@@ -55,8 +58,11 @@
          .select('*')
          .order('date', { ascending: false });
  
-       if (error) throw error;
-       return data as CampaignStat[];
+       if (error) {
+         console.error('Error fetching campaign stats:', error);
+         throw error;
+       }
+       return (data || []) as unknown as CampaignStat[];
      },
    });
  }
