@@ -30,6 +30,20 @@ export interface ContactBehavior {
   response_time_avg?: string;
   best_contact_window?: string;
   formality_level?: number;
+  decision_speed?: string;
+  decision_criteria?: string[];
+  needs_approval?: boolean;
+  approver_id?: string;
+  budget_authority?: boolean;
+  decision_role?: string;
+  decision_power?: number;
+  support_level?: number;
+  influencer_ids?: string[];
+  company_financial_health?: string;
+  current_challenges?: string[];
+  current_competitors?: string[];
+  best_time_to_approach?: string;
+  seasonal_notes?: string;
 }
 
 export interface ContactBehaviorGap {
