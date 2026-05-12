@@ -106,41 +106,52 @@ export function PersonalitySubTab({ contactId }: Props) {
         </Card>
 
         {/* MBTI */}
-        <Card>
-          <CardHeader>
+        <Card className="border-accent/20">
+          <CardHeader className="pb-3">
             <CardTitle className="text-sm font-bold uppercase flex items-center gap-2">
               <Brain className="h-4 w-4 text-accent" />
               MBTI (16 Personalidades)
             </CardTitle>
+            <CardDescription className="text-[10px]">Preferências psicológicas e tomada de decisão.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label>Tipo MBTI</Label>
-              <Input 
-                value={formData.mbti_type || ""} 
-                onChange={(e) => setFormData({ ...formData, mbti_type: e.target.value.toUpperCase() })}
-                placeholder="Ex: INTJ, ENFP..."
-                maxLength={4}
-                className="font-bold tracking-widest"
-              />
+              <Label className="text-[10px] uppercase font-bold text-muted-foreground">Tipo Resultante</Label>
+              <div className="relative">
+                <Input 
+                  value={formData.mbti_type || ""} 
+                  onChange={(e) => setFormData({ ...formData, mbti_type: e.target.value.toUpperCase() })}
+                  placeholder="Ex: INTJ, ENFP..."
+                  maxLength={4}
+                  className="font-black text-xl tracking-[0.2em] text-center h-12 border-2 border-accent/20 bg-accent/5 uppercase"
+                />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-accent/40"><Brain className="h-5 w-5" /></div>
+              </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <Label className="text-[10px]">E vs I ({formData.mbti_e_i_score || 0}%)</Label>
-                <Progress value={formData.mbti_e_i_score || 0} className="h-1.5" />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-[10px]">S vs N ({formData.mbti_s_n_score || 0}%)</Label>
-                <Progress value={formData.mbti_s_n_score || 0} className="h-1.5" />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-[10px]">T vs F ({formData.mbti_t_f_score || 0}%)</Label>
-                <Progress value={formData.mbti_t_f_score || 0} className="h-1.5" />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-[10px]">J vs P ({formData.mbti_j_p_score || 0}%)</Label>
-                <Progress value={formData.mbti_j_p_score || 0} className="h-1.5" />
-              </div>
+            
+            <div className="space-y-4 pt-2">
+              <TooltipProvider>
+                {mbtiDimensions.map((dim) => (
+                  <div key={dim.key} className="space-y-2">
+                    <div className="flex justify-between items-center text-[10px] font-bold">
+                      <span className={formData[dim.key] < 50 ? "text-accent" : "text-muted-foreground"}>{dim.left}</span>
+                      <Tooltip>
+                        <TooltipTrigger asChild><Info className="h-3 w-3 text-muted-foreground/30 cursor-help" /></TooltipTrigger>
+                        <TooltipContent><p className="text-[10px]">{dim.desc}</p></TooltipContent>
+                      </Tooltip>
+                      <span className={formData[dim.key] > 50 ? "text-accent" : "text-muted-foreground"}>{dim.right}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Input 
+                        type="range" min="0" max="100" 
+                        value={formData[dim.key] || 50}
+                        onChange={(e) => setFormData({ ...formData, [dim.key]: parseInt(e.target.value) })}
+                        className="h-4 flex-1 accent-accent"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </TooltipProvider>
             </div>
           </CardContent>
         </Card>
