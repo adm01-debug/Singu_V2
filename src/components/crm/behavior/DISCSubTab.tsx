@@ -117,10 +117,10 @@ export const DISCSubTab = ({ contactId, data }: DISCSubTabProps) => {
              {formData.vak_primary === 'auditivo' && "Dominância Auditiva: Prefere chamadas, discussões verbais e clareza no tom."}
              {formData.vak_primary === 'cinestesico' && "Dominância Cinestésica: Valoriza o 'toque', demonstrações e confiança."}
           </div>
-          <Button className="w-full mt-4" onClick={handleSave}>
-            <Save className="h-4 w-4 mr-2" />
-            Salvar VAK
-          </Button>
+           <Button className="w-full mt-4" onClick={handleSave} variant="outline">
+             <Save className="h-4 w-4 mr-2" />
+             Salvar Perfil DISC & VAK
+           </Button>
         </CardContent>
       </Card>
     </div>
