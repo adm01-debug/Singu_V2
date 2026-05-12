@@ -17,7 +17,8 @@ import { useMQLCriteria, useMQLClassifications, useHandoffMQL } from '@/hooks/us
  import { AttributionBreakdownChart } from '@/components/marketing/AttributionBreakdownChart';
  import { MarketingStats } from '@/components/crm/marketing/components/MarketingStats';
  import { FormList } from '@/components/crm/marketing/components/FormList';
- import { LeadMagnetList } from '@/components/crm/marketing/components/LeadMagnetList';
+  import { LeadMagnetList } from '@/components/crm/marketing/components/LeadMagnetList';
+  import { MQLManager } from '@/components/crm/marketing/components/MQLManager';
  import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
