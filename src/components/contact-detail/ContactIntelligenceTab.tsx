@@ -34,17 +34,25 @@ import { MetricOverrideFlow } from './MetricOverrideFlow';
  import { EmotionalIntelligencePanel } from '@/components/analytics/EmotionalIntelligencePanel';
 
 
-interface Props {
-  contactId: string;
-  contactName?: string;
-  linkedinUrl?: string | null;
-  websiteUrl?: string | null;
-  currentScore?: number;
-  currentSentiment?: string;
-}
-
-
-export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, websiteUrl, currentScore = 0, currentSentiment = 'neutral' }: Props) {
+ interface Props {
+   contactId: string;
+   contactName?: string;
+   linkedinUrl?: string | null;
+   websiteUrl?: string | null;
+   currentScore?: number;
+   currentSentiment?: string;
+   interactions?: any[];
+ }
+ 
+ export function ContactIntelligenceTab({ 
+   contactId, 
+   contactName, 
+   linkedinUrl, 
+   websiteUrl, 
+   currentScore = 0, 
+   currentSentiment = 'neutral',
+   interactions = []
+ }: Props) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
@@ -101,7 +109,10 @@ export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, we
         <ModuleHelp {...moduleHelpContent.neuromarketing} />
       </div>
        <div className="grid gap-4 md:grid-cols-2">
-         <EmotionalIntelligencePanel contact={{ id: contactId, firstName: contactName || 'Contato' } as any} interactions={[]} />
+         <EmotionalIntelligencePanel 
+           contact={{ id: contactId, firstName: contactName || 'Contato' } as any} 
+           interactions={interactions} 
+         />
       {/* Hidden Objections */}
       <Card className={cn(unresolvedObjections.length > 0 && 'border-accent/30 dark:border-accent/30')}>
         <CardHeader className="pb-3">
