@@ -3637,6 +3637,60 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_consent_audit_logs: {
+        Row: {
+          consent_type: string
+          contact_id: string
+          created_at: string
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          platform: string | null
+          source: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          consent_type: string
+          contact_id: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          platform?: string | null
+          source: string
+          status: string
+          user_id: string
+        }
+        Update: {
+          consent_type?: string
+          contact_id?: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          platform?: string | null
+          source?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_consent_audit_logs_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_consent_audit_logs_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
       crm_metric_overrides: {
         Row: {
           contact_id: string

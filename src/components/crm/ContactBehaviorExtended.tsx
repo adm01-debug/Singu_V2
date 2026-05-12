@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Brain, MessageSquare, ShieldCheck, Users, Briefcase, Activity } from "lucide-react";
+import { Brain, MessageSquare, ShieldCheck, Users, Briefcase, Activity, Shield, FileText } from "lucide-react";
 import { useContactBehavior } from "@/hooks/useContactBehavior";
 import { DISCSubTab } from "./behavior/DISCSubTab";
 import { MotivationsSubTab } from "./behavior/MotivationsSubTab";
@@ -9,6 +9,9 @@ import { CommunicationSubTab } from "./behavior/CommunicationSubTab";
 import { DecisionMakingSubTab } from "./behavior/DecisionMakingSubTab";
 import { InfluencePowerSubTab } from "./behavior/InfluencePowerSubTab";
 import { BusinessContextSubTab } from "./behavior/BusinessContextSubTab";
+import { ConsentAuditLog } from "./consent/ConsentAuditLog";
+import { RelationshipReportExport } from "./relationship/RelationshipReportExport";
+import { NeuromarketingTimeline } from "./behavior/NeuromarketingTimeline";
 
 interface ContactBehaviorExtendedProps {
   contactId: string;
@@ -29,7 +32,30 @@ export const ContactBehaviorExtended = ({ contactId }: ContactBehaviorExtendedPr
       </div>
 
       <Tabs defaultValue="disc" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-8">
+        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9 mb-8">
+          <TabsTrigger value="neuro" className="flex items-center gap-2">
+            <Activity className="h-4 w-4" />
+            <span className="hidden sm:inline">Neuro</span>
+          </TabsTrigger>
+        <TabsContent value="neuro">
+          <NeuromarketingTimeline contactId={contactId} />
+        </TabsContent>
+          <TabsTrigger value="export" className="flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            <span className="hidden sm:inline">Exportar</span>
+          </TabsTrigger>
+        <TabsContent value="export">
+          <div className="max-w-md mx-auto py-8">
+            <RelationshipReportExport contactId={contactId} contactName="Relatório de Contato" />
+          </div>
+        </TabsContent>
+          <TabsTrigger value="consent" className="flex items-center gap-2">
+            <Shield className="h-4 w-4" />
+            <span className="hidden sm:inline">Consentimento</span>
+          </TabsTrigger>
+        <TabsContent value="consent">
+          <ConsentAuditLog contactId={contactId} />
+        </TabsContent>
           <TabsTrigger value="disc" className="flex items-center gap-2">
             <Activity className="h-4 w-4" />
             <span className="hidden sm:inline">DISC & VAK</span>
