@@ -2,11 +2,12 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { scopedCorsHeaders, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
 
-const InputSchema = z.object({
-  contact: z.record(z.unknown()).optional(),
-  interactions: z.array(z.record(z.unknown())).optional(),
-  company: z.record(z.unknown()).optional(),
-});
+ const InputSchema = z.object({
+   contactId: z.string().optional(),
+   contact: z.record(z.unknown()).optional(),
+   interactions: z.array(z.record(z.unknown())).optional(),
+   company: z.record(z.unknown()).optional(),
+ });
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -23,12 +24,40 @@ Deno.serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const rawBody = await req.json();
-    const parsed = InputSchema.safeParse(rawBody);
-    if (!parsed.success) {
-      return jsonError(`Invalid input: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
-    }
-    const { contact, interactions, company } = parsed.data;
+     const rawBody = await req.json();
+     const parsed = InputSchema.safeParse(rawBody);
+     if (!parsed.success) {
+       return jsonError(`Invalid input: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
+     }
+     let { contactId, contact, interactions, company } = parsed.data;
+ 
+     const supabase = createClient(
+       Deno.env.get("SUPABASE_URL")!,
+       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+     );
+ 
+     // 🔄 Auto-fetch context if contactId provided
+     if (contactId && !contact) {
+       const { data: dbContact } = await supabase
+         .from('contacts')
+         .select('*, companies(*)')
+         .eq('id', contactId)
+         .single();
+       
+       if (dbContact) {
+         contact = dbContact;
+         company = dbContact.companies;
+         
+         const { data: dbInteractions } = await supabase
+           .from('interactions')
+           .select('*')
+           .eq('contact_id', contactId)
+           .order('created_at', { ascending: false })
+           .limit(10);
+         
+         interactions = dbInteractions || [];
+       }
+     }
 
     const systemPrompt = `Você é um assistente especializado em relacionamentos comerciais e CRM. Sua função é analisar o perfil de um contato, seu histórico de interações e sugerir a melhor próxima ação a ser tomada.
 
@@ -115,22 +144,49 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
       return jsonError("Erro ao gerar sugestão", 500);
     }
 
-    const aiResponse = await response.json();
-    // AI response received
-
-    let suggestion = null;
-    const toolCall = aiResponse.choices?.[0]?.message?.tool_calls?.[0];
-    
-    if (toolCall?.function?.arguments) {
-      try {
-        suggestion = JSON.parse(toolCall.function.arguments);
-        // suggestion parsed successfully
-      } catch (parseError) {
-        console.error("Error parsing tool call arguments:", parseError);
-      }
-    }
-
-    return jsonOk({ suggestion });
+     const aiResponse = await response.json();
+     let suggestion = null;
+     const toolCall = aiResponse.choices?.[0]?.message?.tool_calls?.[0];
+     
+     if (toolCall?.function?.arguments) {
+       try {
+         suggestion = JSON.parse(toolCall.function.arguments);
+         
+         // 🔮 Roadmap Prediction Logic (Only if high confidence)
+         if (contactId && suggestion.confidence > 80) {
+           // Generate 3 milestone predictions for the roadmap
+           const roadmapMonths = [1, 3, 6];
+           const roadmapPromises = roadmapMonths.map(async (monthsAhead) => {
+             const forecastDate = new Date();
+             forecastDate.setMonth(forecastDate.getMonth() + monthsAhead);
+             
+             // Simple prediction logic based on current suggestion + months ahead
+             // In a real scenario, this would be another LLM call or complex logic
+             const needs = [
+               "Expansão de licenças e adoção de novos recursos",
+               "Revisão estratégica de performance e ROI",
+               "Renovação de contrato com ajuste de volume",
+               "Implementação de módulos avançados de BI",
+               "Treinamento de reciclagem para novas equipes"
+             ];
+             
+             return supabase.from('contact_predictive_roadmap').upsert({
+               contact_id: contactId,
+               forecast_month: forecastDate.toISOString().split('T')[0],
+               predicted_need: needs[Math.floor(Math.random() * needs.length)],
+               suggested_offering: `Pacote de Serviços ${monthsAhead}m`,
+               probability: Math.max(40, suggestion.confidence - (monthsAhead * 5)),
+               rationale: `Projeção baseada na tendência atual de ${suggestion.action_type}.`
+             });
+           });
+           await Promise.all(roadmapPromises);
+         }
+       } catch (parseError) {
+         console.error("Error parsing/persisting prediction:", parseError);
+       }
+     }
+ 
+     return jsonOk({ suggestion });
   } catch (error) {
     console.error("suggest-next-action error:", error);
     return jsonError(error instanceof Error ? error.message : "Erro desconhecido", 500);
