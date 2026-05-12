@@ -157,59 +157,67 @@ export function PersonalitySubTab({ contactId }: Props) {
         </Card>
 
         {/* Enneagram */}
-        <Card>
-          <CardHeader>
+        <Card className="border-warning/20">
+          <CardHeader className="pb-3">
             <CardTitle className="text-sm font-bold uppercase flex items-center gap-2">
               <Star className="h-4 w-4 text-warning" />
               Eneagrama
             </CardTitle>
+            <CardDescription className="text-[10px]">9 caminhos para entender motivações e medos.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Tipo Principal (1-9)</Label>
+                <Label className="text-[10px] uppercase font-bold text-muted-foreground">Tipo Base</Label>
                 <Select 
                   value={formData.enneagram_type?.toString()} 
                   onValueChange={(val) => setFormData({ ...formData, enneagram_type: parseInt(val) })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-8 text-xs font-bold border-warning/20">
                     <SelectValue placeholder="Tipo" />
                   </SelectTrigger>
                   <SelectContent>
-                    {[1,2,3,4,5,6,7,8,9].map(t => <SelectItem key={t} value={t.toString()}>{t}</SelectItem>)}
+                    {enneagramTypes.map(t => <SelectItem key={t} value={t.toString()}>Tipo {t}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Asa (Wing)</Label>
+                <Label className="text-[10px] uppercase font-bold text-muted-foreground">Asa (Wing)</Label>
                 <Select 
                   value={formData.enneagram_wing?.toString()} 
                   onValueChange={(val) => setFormData({ ...formData, enneagram_wing: parseInt(val) })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-8 text-xs font-bold border-warning/20">
                     <SelectValue placeholder="Asa" />
                   </SelectTrigger>
                   <SelectContent>
-                    {[1,2,3,4,5,6,7,8,9].map(t => <SelectItem key={t} value={t.toString()}>{t}</SelectItem>)}
+                    {enneagramTypes.map(t => <SelectItem key={t} value={t.toString()}>Asa {t}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
             </div>
-            <div className="space-y-2">
-              <Label>Scores por Tipo (JSON)</Label>
-              <Textarea 
-                value={typeof formData.enneagram_scores === 'object' ? JSON.stringify(formData.enneagram_scores, null, 2) : formData.enneagram_scores || ""} 
-                onChange={(e) => {
-                  try {
-                    const parsed = JSON.parse(e.target.value);
-                    setFormData({ ...formData, enneagram_scores: parsed });
-                  } catch {
-                    setFormData({ ...formData, enneagram_scores: e.target.value });
-                  }
-                }}
-                placeholder='{"1": 85, "2": 40...}'
-                className="font-mono text-[10px] min-h-[60px]"
-              />
+            
+            <div className="space-y-3">
+              <Label className="text-[10px] uppercase font-bold text-muted-foreground block mb-2">Scores por Eneatipo</Label>
+              <div className="grid grid-cols-3 gap-x-4 gap-y-3">
+                {enneagramTypes.map((t) => {
+                  const score = formData.enneagram_scores?.[t.toString()] || 0;
+                  return (
+                    <div key={t} className="space-y-1">
+                      <div className="flex justify-between items-center px-1">
+                        <span className="text-[9px] font-bold text-muted-foreground">T{t}</span>
+                        <span className="text-[9px] font-mono text-warning font-bold">{score}%</span>
+                      </div>
+                      <Input 
+                        type="range" min="0" max="100" 
+                        value={score}
+                        onChange={(e) => handleEnneagramScore(t, parseInt(e.target.value))}
+                        className="h-3 accent-warning"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </CardContent>
         </Card>
