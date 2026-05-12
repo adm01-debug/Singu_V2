@@ -2203,7 +2203,10 @@ export type Database = {
           professional_goals: string | null
           response_time_avg: string | null
           updated_at: string
+          vak_auditory: number | null
+          vak_kinesthetic: number | null
           vak_primary: string | null
+          vak_visual: number | null
         }
         Insert: {
           best_contact_window?: string | null
@@ -2223,7 +2226,10 @@ export type Database = {
           professional_goals?: string | null
           response_time_avg?: string | null
           updated_at?: string
+          vak_auditory?: number | null
+          vak_kinesthetic?: number | null
           vak_primary?: string | null
+          vak_visual?: number | null
         }
         Update: {
           best_contact_window?: string | null
@@ -2243,7 +2249,10 @@ export type Database = {
           professional_goals?: string | null
           response_time_avg?: string | null
           updated_at?: string
+          vak_auditory?: number | null
+          vak_kinesthetic?: number | null
           vak_primary?: string | null
+          vak_visual?: number | null
         }
         Relationships: [
           {
