@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { 
   Target, 
   Loader2, 
@@ -19,6 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Label } from '@/components/ui/label';
 import { useEdgeFunctionActions } from '@/hooks/useEdgeFunctionActions';
+import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
@@ -29,6 +30,7 @@ interface Props {
 }
 
 export function NextBestAction({ contactId }: Props) {
+  const { user } = useAuth();
   const { loading, suggestNextAction } = useEdgeFunctionActions();
   const [suggestion, setSuggestion] = useState<any>(null);
   const [script, setScript] = useState('');
@@ -44,7 +46,7 @@ export function NextBestAction({ contactId }: Props) {
   }, [contactId, suggestNextAction]);
 
   const handleComplete = async () => {
-    if (!suggestion) return;
+    if (!suggestion || !user) return;
     setIsSubmitting(true);
     try {
       // Save feedback and mark as completed
@@ -52,12 +54,12 @@ export function NextBestAction({ contactId }: Props) {
         .from('proximo_passo_feedback')
         .insert([{
           contact_id: contactId,
-          action_type: suggestion.action_type,
-          title: suggestion.title,
-          feedback_text: feedback,
-          script_used: script,
-          was_successful: true,
-          created_at: new Date().toISOString()
+          user_id: user.id,
+          passo_id: suggestion.passo_id || 'ai-suggested',
+          outcome: 'respondeu_positivo',
+          notes: `Feedback: ${feedback}\nScript: ${script}`,
+          channel_used: suggestion.action_type || 'other',
+          executed_at: new Date().toISOString()
         }]);
 
       if (error) throw error;
@@ -67,6 +69,7 @@ export function NextBestAction({ contactId }: Props) {
         .from('interactions')
         .insert([{
           contact_id: contactId,
+          user_id: user.id,
           title: `Concluído: ${suggestion.title}`,
           content: `Ação sugerida pela IA concluída.\nFeedback: ${feedback}\nScript utilizado: ${script}`,
           type: suggestion.action_type === 'whatsapp' ? 'message' : (['call', 'email', 'meeting'].includes(suggestion.action_type) ? suggestion.action_type : 'other'),
