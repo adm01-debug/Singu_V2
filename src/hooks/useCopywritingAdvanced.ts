@@ -278,6 +278,45 @@ export function useCopywritingAdvanced(contact?: Contact) {
       (text.match(/agora|hoje|imediato/gi) ? 90 : 60) : 0;
 
     const highlightedTriggers: any[] = [];
+    const longSentences: any[] = [];
+    const complexWords: any[] = [];
+
+    // Identify long sentences and complex words
+    let currentPos = 0;
+    const sentences = text.split(/([.!?]+\s*)/);
+    
+    sentences.forEach(s => {
+      if (s.trim().length > 0) {
+        const wordCount = s.split(/\s+/).filter(w => w.length > 0).length;
+        if (wordCount > 25) {
+          longSentences.push({
+            text: s,
+            startIndex: currentPos,
+            endIndex: currentPos + s.length
+          });
+        }
+        
+        // Check for complex words in this sentence
+        const wordsInSentence = s.split(/\s+/).filter(w => w.length > 0);
+        let wordPos = currentPos;
+        wordsInSentence.forEach(w => {
+          const vowelGroups = w.toLowerCase().match(/[aeiouáéíóúâêîôûãõàèìòù]+/gi) || [];
+          if (vowelGroups.length >= 4) {
+            const wordStart = text.indexOf(w, wordPos);
+            if (wordStart !== -1) {
+              complexWords.push({
+                text: w,
+                startIndex: wordStart,
+                endIndex: wordStart + w.length
+              });
+            }
+          }
+          wordPos += w.length + 1;
+        });
+      }
+      currentPos += s.length;
+    });
+
     Object.entries(TRIGGER_DETECTION_WORDS).forEach(([category, words]) => {
       words.forEach(word => {
         const regex = new RegExp(`\\b${word}\\b`, 'gi');
@@ -307,7 +346,11 @@ export function useCopywritingAdvanced(contact?: Contact) {
       highlightedTriggers: highlightedTriggers.sort((a, b) => a.startIndex - b.startIndex),
       issues,
       strengths,
-      generatedAt: new Date().toISOString()
+      generatedAt: new Date().toISOString(),
+      complexity: {
+        longSentences,
+        complexWords
+      }
     };
   }, [analyzeReadability, analyzeTriggerDensity, analyzeSentiment, analyzeEmotionalProfile]);
 
