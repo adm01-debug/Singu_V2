@@ -295,4 +295,3 @@ ${interactionContext}
  - Use gatilhos mentais apropriados.
  - Maximize a legibilidade e o impacto emocional.`;
  }
-}
