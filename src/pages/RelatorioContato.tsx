@@ -32,7 +32,8 @@ interface ContactBehavior {
  interface ContactReport {
    contact: Tables<'contacts'>;
    interactions: Tables<'interactions'>[];
-   discHistory: Tables<'disc_analysis_history'>[];
+    discHistory: Tables<'disc_analysis_history'>[];
+    consentLogs: Tables<'social_consent_audit'>[];
     insights: {
       recurringObjections: string[];
       topPreferences: string[];
@@ -120,10 +121,18 @@ const RelatorioContato = () => {
           ...savedInsights
         } : defaultInsights;
 
+        // Fetch consent logs
+        const { data: consentLogs } = await supabase
+          .from("social_consent_audit")
+          .select("*")
+          .eq("contact_id", id)
+          .order("created_at", { ascending: false });
+
         setData({ 
           contact, 
           interactions, 
           discHistory, 
+          consentLogs: consentLogs || [],
           insights: defaultInsights,
           overrides: overrides || undefined 
         });
@@ -480,30 +489,47 @@ const RelatorioContato = () => {
              </p>
            </section>
  
-           {/* Log de Auditoria de Consentimento */}
-           <section className="mb-8 p-4 bg-blue-50/30 rounded-xl border border-blue-100">
-             <h3 className="text-xs font-bold uppercase text-blue-600 mb-3 flex items-center gap-2">
-               <ShieldCheck className="h-4 w-4" /> Registro de Conformidade (Consentimento)
-             </h3>
-             <div className="space-y-2">
-               <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
-                 <span className="text-muted-foreground">Tipo de Consentimento:</span>
-                 <span className="font-medium">Análise de Perfil Público (OSINT)</span>
-               </div>
-               <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
-                 <span className="text-muted-foreground">Data/Hora:</span>
-                 <span className="font-medium">{format(new Date(contact.created_at || new Date()), "dd/MM/yyyy HH:mm")}</span>
-               </div>
-               <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
-                 <span className="text-muted-foreground">Origem:</span>
-                 <span className="font-medium">Termos de Uso do Ecossistema Harmony</span>
-               </div>
-               <div className="flex justify-between text-[11px]">
-                 <span className="text-muted-foreground">Status:</span>
-                 <Badge variant="outline" className="h-4 text-[9px] bg-green-50 text-green-700 border-green-200">Ativo / Verificado</Badge>
-               </div>
-             </div>
-           </section>
+          {/* Log de Auditoria de Consentimento */}
+          <section className="mb-8 p-4 bg-blue-50/30 rounded-xl border border-blue-100">
+            <h3 className="text-xs font-bold uppercase text-blue-600 mb-3 flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4" /> Registro de Conformidade (Audit Log)
+            </h3>
+            <div className="space-y-3">
+              {data.consentLogs.length > 0 ? (
+                data.consentLogs.map((log) => (
+                  <div key={log.id} className="text-[11px] border-b border-blue-100 pb-2 last:border-0 last:pb-0">
+                    <div className="flex justify-between mb-1">
+                      <span className="text-muted-foreground">Rede/Fonte:</span>
+                      <span className="font-medium uppercase">{log.network || 'Geral'}</span>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                      <span className="text-muted-foreground">Tipo:</span>
+                      <span className="font-medium">{log.consent_type || 'Análise OSINT'}</span>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                      <span className="text-muted-foreground">Data:</span>
+                      <span className="font-medium">{format(new Date(log.created_at), "dd/MM/yyyy HH:mm")}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">IP de Registro:</span>
+                      <span className="font-mono text-[9px]">{log.ip_address || 'Sistema'}</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
+                    <span className="text-muted-foreground">Consentimento Base:</span>
+                    <span className="font-medium">Termos de Uso do CRM</span>
+                  </div>
+                  <div className="flex justify-between text-[11px]">
+                    <span className="text-muted-foreground">Status:</span>
+                    <Badge variant="outline" className="h-4 text-[9px] bg-green-50 text-green-700 border-green-200">Ativo / Implícito</Badge>
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
          </section>
  
          {/* Indicadores Comportamentais */}
