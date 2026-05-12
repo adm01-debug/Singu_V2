@@ -2996,6 +2996,48 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_report_overrides: {
+        Row: {
+          contact_id: string
+          created_at: string
+          custom_scripts: Json | null
+          id: string
+          insights_data: Json | null
+          updated_at: string
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string
+          custom_scripts?: Json | null
+          id?: string
+          insights_data?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string
+          custom_scripts?: Json | null
+          id?: string
+          insights_data?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_report_overrides_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: true
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_report_overrides_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: true
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
       contact_time_analysis: {
         Row: {
           avg_response_time_minutes: number | null
