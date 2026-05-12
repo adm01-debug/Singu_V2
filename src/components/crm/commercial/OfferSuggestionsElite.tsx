@@ -184,10 +184,10 @@ export function OfferSuggestionsElite({ contactId }: Props) {
                       <p className="text-xs text-muted-foreground leading-relaxed italic">
                         "{offer.reason}"
                       </p>
-                      <SocialMatchPanel 
-                        contactId={contactId} 
-                        offerName={offer.offer_name} 
-                        metadata={offer.metadata} 
+                      <SocialMatchPanel
+                        contactId={contactId}
+                        offerName={offer.offer_name}
+                        metadata={offer.metadata as any}
                       />
                     </div>
                     <div className="text-right shrink-0">
