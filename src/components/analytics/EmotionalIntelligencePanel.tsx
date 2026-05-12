@@ -159,19 +159,19 @@
              <div className="grid grid-cols-1 gap-3">
                <div className="p-3 rounded-lg border bg-primary/5 border-primary/10">
                  <h4 className="text-sm font-bold text-primary mb-1">Estratégia de Persuasão</h4>
-                 <p className="text-xs text-muted-foreground">{analysisResult.sales_implications.persuasionApproach}</p>
+                 <p className="text-xs text-muted-foreground">{analysisResult.salesImplications.persuasionApproach}</p>
                </div>
                <div className="p-3 rounded-lg border bg-info/5 border-info/10">
                  <h4 className="text-sm font-bold text-info mb-1">Estilo de Decisão</h4>
-                 <p className="text-xs text-muted-foreground">{analysisResult.sales_implications.decisionMakingStyle}</p>
+                 <p className="text-xs text-muted-foreground">{analysisResult.salesImplications.decisionMakingStyle}</p>
                </div>
                <div className="p-3 rounded-lg border bg-warning/5 border-warning/10">
                  <h4 className="text-sm font-bold text-warning mb-1">Tratamento de Objeções</h4>
-                 <p className="text-xs text-muted-foreground">{analysisResult.sales_implications.objectionHandling}</p>
+                 <p className="text-xs text-muted-foreground">{analysisResult.salesImplications.objectionHandling}</p>
                </div>
                <div className="p-3 rounded-lg border bg-success/5 border-success/10">
                  <h4 className="text-sm font-bold text-success mb-1">Fechamento Recomendado</h4>
-                 <p className="text-xs text-muted-foreground">{analysisResult.sales_implications.closingStrategy}</p>
+                 <p className="text-xs text-muted-foreground">{analysisResult.salesImplications.closingStrategy}</p>
                </div>
              </div>
            </TabsContent>
