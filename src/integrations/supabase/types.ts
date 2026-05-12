@@ -2079,6 +2079,54 @@ export type Database = {
           },
         ]
       }
+      contact_analytical_profiles: {
+        Row: {
+          communication_style: string | null
+          contact_id: string | null
+          id: string
+          last_updated_at: string | null
+          preferences: Json | null
+          recurrent_topics: Json | null
+          sentiment_trend: string | null
+          user_id: string | null
+        }
+        Insert: {
+          communication_style?: string | null
+          contact_id?: string | null
+          id?: string
+          last_updated_at?: string | null
+          preferences?: Json | null
+          recurrent_topics?: Json | null
+          sentiment_trend?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          communication_style?: string | null
+          contact_id?: string | null
+          id?: string
+          last_updated_at?: string | null
+          preferences?: Json | null
+          recurrent_topics?: Json | null
+          sentiment_trend?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_analytical_profiles_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_analytical_profiles_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
       contact_automation_settings: {
         Row: {
           contact_id: string
@@ -7114,6 +7162,77 @@ export type Database = {
         }
         Relationships: []
       }
+      interaction_summaries: {
+        Row: {
+          company_id: string | null
+          contact_id: string | null
+          created_at: string | null
+          id: string
+          key_takeaways: Json | null
+          last_interaction_id: string | null
+          negotiation_stage_summary: string | null
+          next_steps: string | null
+          summary: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          company_id?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          id?: string
+          key_takeaways?: Json | null
+          last_interaction_id?: string | null
+          negotiation_stage_summary?: string | null
+          next_steps?: string | null
+          summary?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          company_id?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          id?: string
+          key_takeaways?: Json | null
+          last_interaction_id?: string | null
+          negotiation_stage_summary?: string | null
+          next_steps?: string | null
+          summary?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interaction_summaries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "interaction_summaries_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "interaction_summaries_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+          {
+            foreignKeyName: "interaction_summaries_last_interaction_id_fkey"
+            columns: ["last_interaction_id"]
+            isOneToOne: false
+            referencedRelation: "interactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       interactions: {
         Row: {
           attachments: string[] | null
@@ -7136,6 +7255,7 @@ export type Database = {
           tags: string[] | null
           title: string
           transcription: string | null
+          transcription_metadata: Json | null
           type: string
           user_id: string
         }
@@ -7160,6 +7280,7 @@ export type Database = {
           tags?: string[] | null
           title: string
           transcription?: string | null
+          transcription_metadata?: Json | null
           type: string
           user_id: string
         }
@@ -7184,6 +7305,7 @@ export type Database = {
           tags?: string[] | null
           title?: string
           transcription?: string | null
+          transcription_metadata?: Json | null
           type?: string
           user_id?: string
         }
