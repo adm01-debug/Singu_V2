@@ -13,24 +13,26 @@
       emotions: { joy: 0, urgency: 0, trust: 0, fear: 0, cognitive_ease: 0 },
       triggers: [] as string[],
       score: 0,
-      tips: [] as string[],
-      storytelling_arc: 'Linear',
-      objections: [] as string[]
+       tips: [] as { text: string; severity: 'warning' | 'info' | 'success' }[],
+       storytelling_arc: 'Linear',
+       objections: [] as string[],
+       emotional_tone: 'Neutro'
     });
  
    useEffect(() => {
-     if (!text) {
-       setAnalysis({ 
-         readability: 0, 
-         emotions: { joy: 0, urgency: 0, trust: 0, fear: 0, cognitive_ease: 0 }, 
-         triggers: [], 
-         score: 0, 
-         tips: [],
-         storytelling_arc: 'Linear',
-         objections: []
-       });
-       return;
-     }
+      if (!text) {
+        setAnalysis({ 
+          readability: 0, 
+          emotions: { joy: 0, urgency: 0, trust: 0, fear: 0, cognitive_ease: 0 }, 
+          triggers: [], 
+          score: 0, 
+          tips: [],
+          storytelling_arc: 'Linear',
+          objections: [],
+          emotional_tone: 'Neutro'
+        });
+        return;
+      }
  
      // Mock analysis engine for real-time feedback
      const words = text.split(/\s+/).filter(w => w.length > 0);
@@ -47,10 +49,15 @@
      if (text.toLowerCase().includes('você')) triggersFound.push('Personalização');
      if (text.toLowerCase().includes('limitado')) triggersFound.push('Escassez');
  
-     const tips = [];
-     if (avgWordsPerSentence > 20) tips.push('Sentenças longas detectadas. Tente encurtar para melhor fluidez.');
-     if (triggersFound.length < 2) tips.push('Adicione mais gatilhos mentais para aumentar a conversão.');
-     if (readability < 60) tips.push('Texto complexo. Use palavras mais simples para atingir um público maior.');
+      const tips: { text: string; severity: 'warning' | 'info' | 'success' }[] = [];
+      if (avgWordsPerSentence > 20) tips.push({ text: 'Sentenças longas detectadas (Média: ' + Math.round(avgWordsPerSentence) + ' palavras). Tente encurtar para melhor fluidez.', severity: 'warning' });
+      if (triggersFound.length < 2) tips.push({ text: 'Baixa densidade de gatilhos mentais. Adicione elementos de Escassez ou Prova Social.', severity: 'info' });
+      if (readability < 60) tips.push({ text: 'Texto com alta barreira cognitiva (Score: ' + Math.round(readability) + '). Use vocabulário mais acessível.', severity: 'warning' });
+
+      let tone = 'Neutro';
+      if (text.includes('!')) tone = 'Entusiasmado';
+      if (text.toLowerCase().includes('perigo') || text.toLowerCase().includes('urgente')) tone = 'Urgente/Alerta';
+      if (text.toLowerCase().includes('obrigado') || text.toLowerCase().includes('ajudar')) tone = 'Empático';
  
       const cognitiveEase = Math.round(readability * 0.8 + (triggersFound.length * 4));
 
@@ -64,10 +71,11 @@
           cognitive_ease: cognitiveEase
         },
         triggers: triggersFound,
-        score: Math.round((readability + (triggersFound.length * 20) + cognitiveEase) / 3),
-       tips,
-       storytelling_arc: text.length > 200 ? 'Jornada do Herói' : 'Pitch Direto',
-       objections: text.toLowerCase().includes('caro') || text.toLowerCase().includes('preço') ? ['Preço/Valor'] : []
+        score: Math.min(100, Math.round((readability + (triggersFound.length * 20) + cognitiveEase) / 3)),
+        tips,
+        storytelling_arc: text.length > 250 ? 'Jornada do Herói (Problema -> Conflito -> Triunfo)' : 'Arco Linear (Pitch Direto)',
+        objections: text.toLowerCase().includes('caro') || text.toLowerCase().includes('preço') ? ['Preço/Valor'] : text.toLowerCase().includes('tempo') ? ['Falta de Tempo'] : [],
+        emotional_tone: tone
      });
    }, [text]);
  
@@ -174,12 +182,20 @@
              </CardTitle>
            </CardHeader>
            <CardContent className="space-y-6">
-             <div className="flex items-center justify-between">
-               <div className="text-4xl font-bold text-primary">{analysis.score}%</div>
-               <Badge variant={analysis.score > 70 ? 'default' : 'secondary'}>
-                 {analysis.score > 70 ? 'Alta Conversão' : 'Melhoria Necessária'}
-               </Badge>
-             </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <div className="text-4xl font-bold text-primary">{analysis.score}%</div>
+                  <Badge variant={analysis.score > 70 ? 'default' : 'secondary'} className="text-[10px]">
+                    {analysis.score > 70 ? 'Alta Conversão' : 'Melhoria Necessária'}
+                  </Badge>
+                </div>
+                <div className="space-y-1 text-right">
+                  <div className="text-xs font-bold uppercase text-muted-foreground">Tom Emocional</div>
+                  <div className="text-sm font-medium text-primary flex items-center justify-end gap-1">
+                    <Sparkles className="w-3 h-3" /> {analysis.emotional_tone}
+                  </div>
+                </div>
+              </div>
  
              <div className="space-y-4">
                <div className="space-y-1.5">
@@ -250,13 +266,16 @@
            <CardHeader>
              <CardTitle className="text-sm font-medium">Sugestões de Otimização</CardTitle>
            </CardHeader>
-           <CardContent className="space-y-3">
-             {analysis.tips.map((tip, i) => (
-               <div key={i} className="flex gap-3 text-xs bg-amber-50 p-3 rounded-md border border-amber-100">
-                 <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
-                 <p className="text-amber-800">{tip}</p>
-               </div>
-             ))}
+            <CardContent className="space-y-2">
+              {analysis.tips.map((tip, i) => {
+                const isWarning = tip.severity === 'warning';
+                return (
+                  <div key={i} className={`flex gap-3 text-[11px] p-2.5 rounded-md border ${isWarning ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'}`}>
+                    {isWarning ? <AlertTriangle className="w-3.5 h-3.5 text-amber-500 shrink-0" /> : <Brain className="w-3.5 h-3.5 text-blue-500 shrink-0" />}
+                    <p className={isWarning ? 'text-amber-800' : 'text-blue-800'}>{tip.text}</p>
+                  </div>
+                );
+              })}
              {analysis.tips.length === 0 && text && (
                <div className="flex gap-3 text-xs bg-green-50 p-3 rounded-md border border-green-100">
                  <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />

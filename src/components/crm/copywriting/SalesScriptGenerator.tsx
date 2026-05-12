@@ -11,6 +11,7 @@
    const [persona, setPersona] = useState('disc-d');
    const [vakPreference, setVakPreference] = useState('visual');
    const [stage, setStage] = useState('prospecting');
+   const [trigger, setTrigger] = useState('none');
    const [channel, setChannel] = useState('whatsapp');
    const [isGenerating, setIsGenerating] = useState(false);
    const [script, setScript] = useState('');
@@ -34,9 +35,15 @@
            content = `Oi [Nome]! Tudo ótimo? ${vakPrefix}: adorei sua postagem sobre [Tema]. Me lembrou um desafio que resolvemos. Adoraria trocar uma ideia sobre como estamos ajudando líderes a brilharem. Topa um café?`;
          } else if (persona === 'disc-s') {
            content = `Olá [Nome], espero que esteja bem. ${vakPrefix}: nossa metodologia foca em segurança e previsibilidade operacional. Temos casos de sucesso em [Setor] com resultados consistentes. Gostaria de conhecer nosso processo?`;
-         } else {
-           content = `Prezado [Nome], analisando os dados de [Setor], ${vakPrefix}: identificamos uma oportunidade de otimização baseada em [Métrica]. Segue análise técnica anexa para sua validação de precisão. Qual sua disponibilidade?`;
-         }
+          } else {
+            content = `Prezado [Nome], analisando os dados de [Setor], ${vakPrefix}: identificamos uma oportunidade de otimização baseada em [Métrica]. Segue análise técnica anexa para sua validação de precisão. Qual sua disponibilidade?`;
+          }
+
+          if (trigger === 'novelty') {
+            content = `[NOVIDADE EXCLUSIVA] ` + content;
+          } else if (trigger === 'exclusivity') {
+            content = `[ACESSO RESTRITO] ` + content;
+          }
        
        setScript(content);
        setIsGenerating(false);
@@ -105,20 +112,36 @@
              </Select>
            </div>
  
-           <div className="space-y-2">
-             <Label>Etapa do Funil</Label>
-             <Select value={stage} onValueChange={setStage}>
-               <SelectTrigger>
-                 <SelectValue />
-               </SelectTrigger>
-               <SelectContent>
-                 <SelectItem value="prospecting">Prospecção Fria</SelectItem>
-                 <SelectItem value="followup">Follow-up</SelectItem>
-                 <SelectItem value="objection">Tratamento de Objeção</SelectItem>
-                 <SelectItem value="closing">Fechamento</SelectItem>
-               </SelectContent>
-             </Select>
-           </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Etapa do Funil</Label>
+                <Select value={stage} onValueChange={setStage}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="prospecting">Prospecção</SelectItem>
+                    <SelectItem value="followup">Follow-up</SelectItem>
+                    <SelectItem value="objection">Objeção</SelectItem>
+                    <SelectItem value="closing">Fechamento</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Gatilho Mental</Label>
+                <Select value={trigger} onValueChange={setTrigger}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Nenhum</SelectItem>
+                    <SelectItem value="novelty">Novidade</SelectItem>
+                    <SelectItem value="exclusivity">Exclusividade</SelectItem>
+                    <SelectItem value="authority">Autoridade</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
  
            <Button 
              className="w-full gap-2 mt-4" 
