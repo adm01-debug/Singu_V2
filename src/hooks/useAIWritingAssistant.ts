@@ -3,7 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { logger } from '@/lib/logger';
 
-type MessageType = 'follow_up' | 'introduction' | 'proposal' | 'check_in' | 'thank_you' | 'meeting_request' | 'custom';
+ type MessageType = 'follow_up' | 'introduction' | 'proposal' | 'check_in' | 'thank_you' | 'meeting_request' | 'custom';
+ type PersuasionFramework = 'AIDA' | 'PAS' | 'FAB' | '4Ps' | 'Storytelling' | 'None';
 
 interface ContactProfile {
   firstName: string;
@@ -33,13 +34,14 @@ interface UseAIWritingAssistantResult {
   suggestions: AISuggestion[];
   loading: boolean;
   error: string | null;
-  generateSuggestions: (params: {
-    contact: ContactProfile;
-    recentInteractions?: InteractionSummary[];
-    messageType: MessageType;
-    customContext?: string;
-    tone?: 'formal' | 'casual' | 'friendly';
-  }) => Promise<void>;
+   generateSuggestions: (params: {
+     contact: ContactProfile;
+     recentInteractions?: InteractionSummary[];
+     messageType: MessageType;
+     customContext?: string;
+     tone?: 'formal' | 'casual' | 'friendly';
+     framework?: PersuasionFramework;
+   }) => Promise<void>;
   clearSuggestions: () => void;
 }
 
@@ -49,13 +51,14 @@ export function useAIWritingAssistant(): UseAIWritingAssistantResult {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const generateSuggestions = useCallback(async (params: {
-    contact: ContactProfile;
-    recentInteractions?: InteractionSummary[];
-    messageType: MessageType;
-    customContext?: string;
-    tone?: 'formal' | 'casual' | 'friendly';
-  }) => {
+   const generateSuggestions = useCallback(async (params: {
+     contact: ContactProfile;
+     recentInteractions?: InteractionSummary[];
+     messageType: MessageType;
+     customContext?: string;
+     tone?: 'formal' | 'casual' | 'friendly';
+     framework?: PersuasionFramework;
+   }) => {
     if (!session?.access_token) {
       setError('Autenticação necessária');
       return;
@@ -65,15 +68,16 @@ export function useAIWritingAssistant(): UseAIWritingAssistantResult {
     setError(null);
 
     try {
-      const { data, error: fnError } = await supabase.functions.invoke('ai-writing-assistant', {
-        body: {
-          contact: params.contact,
-          recentInteractions: params.recentInteractions || [],
-          messageType: params.messageType,
-          customContext: params.customContext,
-          tone: params.tone || 'friendly',
-        },
-      });
+       const { data, error: fnError } = await supabase.functions.invoke('ai-writing-assistant', {
+         body: {
+           contact: params.contact,
+           recentInteractions: params.recentInteractions || [],
+           messageType: params.messageType,
+           customContext: params.customContext,
+           tone: params.tone || 'friendly',
+           framework: params.framework || 'None',
+         },
+       });
 
       if (fnError) throw fnError;
 

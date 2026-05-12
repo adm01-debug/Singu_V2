@@ -51,10 +51,11 @@ const WritingInput = z.object({
     content: z.string().optional(),
     createdAt: z.string(),
   })).default([]),
-  messageType: z.enum(['follow_up', 'introduction', 'proposal', 'check_in', 'thank_you', 'meeting_request', 'custom']),
-  customContext: z.string().max(2000).optional(),
-  tone: z.enum(['formal', 'casual', 'friendly']).optional(),
-});
+   messageType: z.enum(['follow_up', 'introduction', 'proposal', 'check_in', 'thank_you', 'meeting_request', 'custom']),
+   customContext: z.string().max(2000).optional(),
+   tone: z.enum(['formal', 'casual', 'friendly']).optional(),
+   framework: z.enum(['AIDA', 'PAS', 'FAB', '4Ps', 'Storytelling', 'None']).optional().default('None'),
+ });
 
 const DISC_COMMUNICATION_STYLES = {
   D: {
@@ -107,7 +108,7 @@ Deno.serve(async (req) => {
     if (!parsed.success) {
       return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
     }
-    const { contact, recentInteractions, messageType, customContext, tone } = parsed.data;
+     const { contact, recentInteractions, messageType, customContext, tone, framework } = parsed.data;
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
@@ -128,8 +129,20 @@ Deno.serve(async (req) => {
     if (contact.primaryMotivation) personalContext.push(`Motivação principal: ${contact.primaryMotivation}`);
     if (contact.primaryFear) personalContext.push(`Preocupação/Medo: ${contact.primaryFear}`);
 
-    const systemPrompt = `Você é um assistente especializado em comunicação empresarial e relacionamento com clientes.
-Sua função é gerar sugestões de mensagens personalizadas para o usuário enviar ao seu contato.
+     const systemPrompt = `Você é um Copywriter Sênior e Estrategista de Vendas de elite, especialista em neurovendas e persuasão.
+ Sua função é gerar 3 variações de mensagens personalizadas, utilizando técnicas avançadas de copywriting e frameworks de persuasão.
+ 
+ ## Framework Solicitado: ${framework !== 'None' ? framework : 'Natural/Contextual'}
+ ${framework === 'AIDA' ? '- AIDA: Atenção (Gancho), Interesse (Benefício), Desejo (Prova/Valor), Ação (CTA).' : ''}
+ ${framework === 'PAS' ? '- PAS: Problema (Dor), Agitação (Consequência), Solução (Oferta).' : ''}
+ ${framework === 'FAB' ? '- FAB: Feature (Recurso), Advantage (Vantagem), Benefit (Benefício real para o cliente).' : ''}
+ ${framework === '4Ps' ? '- 4Ps: Promise (Promessa), Picture (Visualização do sucesso), Proof (Prova social/lógica), Push (Empurrão para ação).' : ''}
+ ${framework === 'Storytelling' ? '- Storytelling: Use uma mini-narrativa ou arco de jornada do herói focado no sucesso do cliente.' : ''}
+ 
+ ## Regras de Ouro:
+ 1. Analisador de Copy Interno: Garanta alta legibilidade (Flesch PT-BR simplificado).
+ 2. Gatilhos Mentais: Use de forma elegante (Novidade, Escassez, Reciprocidade, Autoridade).
+ 3. Análise de Emoção: A mensagem deve evocar a emoção correta para o perfil DISC.
 
 ## Informações do Contato:
 - Nome: ${contact.firstName} ${contact.lastName}
@@ -162,7 +175,7 @@ ${interactionContext}
 7. Escreva em português brasileiro
 8. Formato esperado de resposta: JSON com array de sugestões`;
 
-    const userPrompt = buildUserPrompt(messageType, customContext, tone, contact);
+     const userPrompt = buildUserPrompt(messageType, customContext, tone, contact, framework);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -245,12 +258,13 @@ ${interactionContext}
   }
 });
 
-function buildUserPrompt(
-  messageType: RequestPayload['messageType'],
-  customContext: string | undefined,
-  tone: string | undefined,
-  contact: ContactProfile
-): string {
+ function buildUserPrompt(
+   messageType: any,
+   customContext: string | undefined,
+   tone: string | undefined,
+   contact: any,
+   framework: string | undefined
+ ): string {
   const typeDescriptions: Record<string, string> = {
     follow_up: "uma mensagem de follow-up para retomar o contato ou dar continuidade a uma conversa anterior",
     introduction: "uma mensagem de apresentação inicial para estabelecer primeiro contato",
@@ -267,17 +281,18 @@ function buildUserPrompt(
     ? 'Use um tom mais descontraído e casual.'
     : 'Use um tom amigável mas profissional.';
 
-  return `Gere 3 sugestões de mensagem para ${contact.firstName}.
-
-Tipo de mensagem: ${typeDescriptions[messageType]}
-
-${customContext ? `Contexto adicional fornecido pelo usuário: ${customContext}` : ''}
-
-Tom desejado: ${toneDescription}
-
-Lembre-se:
-- Adapte ao perfil DISC e preferências do contato
-- Seja autêntico e natural
-- Considere o histórico de interações
-- Cada sugestão deve ter uma abordagem ligeiramente diferente`;
+   return `Gere 3 variações de mensagens para ${contact.firstName}.
+ 
+ Objetivo: ${typeDescriptions[messageType]}
+ ${framework !== 'None' ? `Aplique rigorosamente o framework: ${framework}` : ''}
+ 
+ ${customContext ? `Contexto do usuário: ${customContext}` : ''}
+ 
+ Estilo/Tom: ${toneDescription}
+ 
+ Lembre-se:
+ - Considere o perfil comportamental ${contact.discProfile || 'não especificado'}.
+ - Use gatilhos mentais apropriados.
+ - Maximize a legibilidade e o impacto emocional.`;
+ }
 }
