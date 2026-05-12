@@ -11,18 +11,27 @@ import { CompanyIntelligence } from './CompanyIntelligence';
 import { ContactIntelligence } from './ContactIntelligence';
 import type { LuxIntelligenceRecord } from '@/hooks/useLuxIntelligence';
 
-interface LuxIntelligencePanelProps {
-  record: LuxIntelligenceRecord | null;
-  records?: LuxIntelligenceRecord[];
-  entityType: 'contact' | 'company';
-  loading?: boolean;
-  onTrigger?: () => void;
-  triggering?: boolean;
-}
-
-export function LuxIntelligencePanel({ 
-  record, records = [], entityType, loading, onTrigger, triggering 
-}: LuxIntelligencePanelProps) {
+ import type { LuxStakeholder } from '@/hooks/useLuxIntelligence';
+ 
+ interface LuxIntelligencePanelProps {
+   record: LuxIntelligenceRecord | null;
+   records?: LuxIntelligenceRecord[];
+   entityType: 'contact' | 'company';
+   loading?: boolean;
+   onTrigger?: () => void;
+   triggering?: boolean;
+   onAddContact?: (s: LuxStakeholder) => Promise<void>;
+ }
+ 
+ export function LuxIntelligencePanel({ 
+   record, 
+   records = [], 
+   entityType, 
+   loading, 
+   onTrigger, 
+   triggering,
+   onAddContact
+ }: LuxIntelligencePanelProps) {
   const [selectedRecord, setSelectedRecord] = useState<LuxIntelligenceRecord | null>(record);
   const displayRecord = selectedRecord || record;
   const allRecords = records.length > 0 ? records : (record ? [record] : []);
@@ -123,7 +132,10 @@ export function LuxIntelligencePanel({
             <LuxHistoryTimeline records={allRecords} selectedId={displayRecord.id} onSelect={(r) => setSelectedRecord(r)} />
           </div>
           <div className="lg:col-span-3">
-            {entityType === 'company' ? <CompanyIntelligence record={displayRecord} /> : <ContactIntelligence record={displayRecord} />}
+           {entityType === 'company' 
+             ? <CompanyIntelligence record={displayRecord} onAddContact={onAddContact} /> 
+             : <ContactIntelligence record={displayRecord} />
+           }
           </div>
         </div>
       )}
