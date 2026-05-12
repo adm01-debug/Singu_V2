@@ -143,12 +143,48 @@ export function useCopywritingAdvanced(contact?: Contact) {
     };
   }, []);
 
+  const analyzeSentiment = useCallback((text: string): 'positive' | 'neutral' | 'negative' => {
+    const positiveWords = ['excelente', 'ótimo', 'incrível', 'sucesso', 'crescimento', 'benefício', 'fácil', 'bom', 'ajuda', 'resolvido'];
+    const negativeWords = ['problema', 'difícil', 'ruim', 'erro', 'perda', 'falha', 'custo', 'caro', 'risco', 'atraso'];
+    
+    const textLower = text.toLowerCase();
+    let posCount = 0;
+    let negCount = 0;
+
+    positiveWords.forEach(w => { if (textLower.includes(w)) posCount++; });
+    negativeWords.forEach(w => { if (textLower.includes(w)) negCount++; });
+
+    if (posCount > negCount + 1) return 'positive';
+    if (negCount > posCount) return 'negative';
+    return 'neutral';
+  }, []);
+
+  const analyzeEmotionalProfile = useCallback((text: string): any => {
+    const textLower = text.toLowerCase();
+    const profile = {
+      joy: (textLower.match(/alegria|feliz|contente|maravilhoso|sucesso|conquista/g) || []).length * 15,
+      trust: (textLower.match(/confiança|seguro|garantido|comprovado|transparente|parceiro/g) || []).length * 15,
+      fear: (textLower.match(/medo|perigo|risco|perda|evite|cuidado/g) || []).length * 15,
+      urgency: (textLower.match(/agora|rápido|imediato|hoje|última|acabando/g) || []).length * 20,
+      anticipation: (textLower.match(/em breve|próximo|novidade|lançamento|descubra/g) || []).length * 15,
+    };
+
+    // Normalize to 0-100
+    Object.keys(profile).forEach(k => {
+      profile[k as keyof typeof profile] = Math.min(100, profile[k as keyof typeof profile]);
+    });
+
+    return profile;
+  }, []);
+
   // ============================================
   // FULL COPY ANALYSIS
   // ============================================
   const analyzeCopy = useCallback((text: string): CopyAnalysis => {
     const readability = analyzeReadability(text);
     const triggerDensity = analyzeTriggerDensity(text);
+    const sentiment = analyzeSentiment(text);
+    const emotionalProfile = analyzeEmotionalProfile(text);
     
     const issues: CopyAnalysis['issues'] = [];
     const strengths: string[] = [];
@@ -221,20 +257,39 @@ export function useCopywritingAdvanced(contact?: Contact) {
     const ctaStrength = hasCTA ? 
       (text.match(/agora|hoje|imediato/gi) ? 90 : 60) : 0;
 
+    const highlightedTriggers: any[] = [];
+    Object.entries(TRIGGER_DETECTION_WORDS).forEach(([category, words]) => {
+      words.forEach(word => {
+        const regex = new RegExp(`\\b${word}\\b`, 'gi');
+        let match;
+        while ((match = regex.exec(text)) !== null) {
+          highlightedTriggers.push({
+            text: match[0],
+            category,
+            startIndex: match.index,
+            endIndex: match.index + match[0].length
+          });
+        }
+      });
+    });
+
     return {
       id: `analysis-${Date.now()}`,
       originalText: text,
       readability,
       triggerDensity,
+      sentiment,
+      emotionalProfile,
       persuasionScore,
       emotionalScore,
       clarityScore,
       ctaStrength,
+      highlightedTriggers: highlightedTriggers.sort((a, b) => a.startIndex - b.startIndex),
       issues,
       strengths,
       generatedAt: new Date().toISOString()
     };
-  }, [analyzeReadability, analyzeTriggerDensity]);
+  }, [analyzeReadability, analyzeTriggerDensity, analyzeSentiment, analyzeEmotionalProfile]);
 
   // ============================================
   // PAS GENERATION
