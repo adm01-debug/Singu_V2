@@ -8528,6 +8528,48 @@ export type Database = {
           },
         ]
       }
+      notification_logs: {
+        Row: {
+          channel: string
+          contact_id: string | null
+          id: string
+          reminder_id: string
+          sent_at: string
+          user_id: string | null
+        }
+        Insert: {
+          channel: string
+          contact_id?: string | null
+          id?: string
+          reminder_id: string
+          sent_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          channel?: string
+          contact_id?: string | null
+          id?: string
+          reminder_id?: string
+          sent_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_logs_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_logs_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
       notification_preferences: {
         Row: {
           created_at: string
