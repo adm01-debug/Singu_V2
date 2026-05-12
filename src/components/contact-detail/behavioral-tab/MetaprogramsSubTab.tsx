@@ -254,10 +254,10 @@ export function MetaprogramsSubTab({ contactId }: Props) {
             />
           </div>
 
-          <div className="flex justify-end pt-4">
-            <Button onClick={handleSave} className="gap-2">
+          <div className="flex justify-end pt-6 border-t mt-6">
+            <Button onClick={handleSave} className="gap-2 px-8 h-11 font-bold uppercase tracking-wider shadow-lg hover:shadow-primary/20 transition-all">
               <Save className="h-4 w-4" />
-              Salvar Metaprogramas
+              Salvar Metaprogramas 10/10
             </Button>
           </div>
         </CardContent>
