@@ -1574,6 +1574,7 @@ export type Database = {
           situacao_rf_data: string | null
           state: string | null
           status: string | null
+          strategic_roadmap: Json | null
           tags: string[] | null
           tiktok: string | null
           tipo_cooperativa: string | null
@@ -1642,6 +1643,7 @@ export type Database = {
           situacao_rf_data?: string | null
           state?: string | null
           status?: string | null
+          strategic_roadmap?: Json | null
           tags?: string[] | null
           tiktok?: string | null
           tipo_cooperativa?: string | null
@@ -1710,6 +1712,7 @@ export type Database = {
           situacao_rf_data?: string | null
           state?: string | null
           status?: string | null
+          strategic_roadmap?: Json | null
           tags?: string[] | null
           tiktok?: string | null
           tipo_cooperativa?: string | null
@@ -3262,6 +3265,7 @@ export type Database = {
           external_id: string | null
           family_info: string | null
           first_name: string
+          future_needs_forecast: Json | null
           hobbies: string[] | null
           id: string
           instagram: string | null
@@ -3278,6 +3282,7 @@ export type Database = {
           objection_patterns: Json | null
           personal_notes: string | null
           phone: string | null
+          predictive_roadmap: Json | null
           rapport_metadata: Json | null
           reference_frame: string | null
           relationship_score: number | null
@@ -3308,6 +3313,7 @@ export type Database = {
           external_id?: string | null
           family_info?: string | null
           first_name: string
+          future_needs_forecast?: Json | null
           hobbies?: string[] | null
           id?: string
           instagram?: string | null
@@ -3324,6 +3330,7 @@ export type Database = {
           objection_patterns?: Json | null
           personal_notes?: string | null
           phone?: string | null
+          predictive_roadmap?: Json | null
           rapport_metadata?: Json | null
           reference_frame?: string | null
           relationship_score?: number | null
@@ -3354,6 +3361,7 @@ export type Database = {
           external_id?: string | null
           family_info?: string | null
           first_name?: string
+          future_needs_forecast?: Json | null
           hobbies?: string[] | null
           id?: string
           instagram?: string | null
@@ -3370,6 +3378,7 @@ export type Database = {
           objection_patterns?: Json | null
           personal_notes?: string | null
           phone?: string | null
+          predictive_roadmap?: Json | null
           rapport_metadata?: Json | null
           reference_frame?: string | null
           relationship_score?: number | null
@@ -3855,6 +3864,57 @@ export type Database = {
           },
           {
             foreignKeyName: "crm_metric_overrides_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
+      crm_objection_intelligence: {
+        Row: {
+          behavioral_profile: string | null
+          contact_id: string | null
+          created_at: string | null
+          id: string
+          objection_type: string
+          script_content: string | null
+          success_rate: number | null
+          suggested_strategy: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          behavioral_profile?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          id?: string
+          objection_type: string
+          script_content?: string | null
+          success_rate?: number | null
+          suggested_strategy?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          behavioral_profile?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          id?: string
+          objection_type?: string
+          script_content?: string | null
+          success_rate?: number | null
+          suggested_strategy?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_objection_intelligence_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_objection_intelligence_contact_id_fkey"
             columns: ["contact_id"]
             isOneToOne: false
             referencedRelation: "vw_contacts_nlp"
