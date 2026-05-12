@@ -5,7 +5,9 @@ import {
   Settings, 
   AlertCircle,
   ArrowRight,
-  ChevronRight
+   ChevronRight,
+   Tag,
+   Eye
 } from 'lucide-react';
 import {
   Sheet,
@@ -71,13 +73,33 @@ export function AuditLogDrawer({ logs }: Props) {
                     </div>
 
                     <div className="p-3 rounded-xl bg-muted/30 border border-muted/50 space-y-3">
-                      <div className="flex flex-wrap gap-1.5">
-                        {log.changed_fields?.map((field: string) => (
-                          <Badge key={field} variant="secondary" className="text-[9px] h-4 bg-primary/10 text-primary border-none">
-                            {field}
-                          </Badge>
-                        ))}
-                      </div>
+                       <div className="flex flex-wrap gap-1.5 mb-2">
+                         {log.changed_fields?.map((field: string) => (
+                           <Badge key={field} variant="secondary" className="text-[9px] h-4 bg-primary/10 text-primary border-none gap-1">
+                             <Tag className="h-2.5 w-2.5 opacity-50" />
+                             {field}
+                           </Badge>
+                         ))}
+                       </div>
+
+                       {log.new_values && (
+                         <div className="mb-3">
+                           <div className="flex items-center gap-1.5 mb-1 text-[10px] font-bold text-slate-500 uppercase tracking-tight">
+                             <Eye className="h-3 w-3" />
+                             Preview de Interesses
+                           </div>
+                           <div className="flex flex-wrap gap-1">
+                             {(log.new_values.interests || log.new_values.keywords || []).slice(0, 5).map((item: string, i: number) => (
+                               <span key={i} className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                 {item}
+                               </span>
+                             ))}
+                             {(log.new_values.interests?.length > 5 || log.new_values.keywords?.length > 5) && (
+                               <span className="text-[10px] text-slate-400 font-medium">...</span>
+                             )}
+                           </div>
+                         </div>
+                       )}
 
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1">
