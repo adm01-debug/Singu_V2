@@ -23,6 +23,10 @@ interface AnalysisResult {
     anticipation: number;
   };
   highlightedTriggers?: Array<{ text: string; category: string; startIndex: number; endIndex: number }>;
+  complexity?: {
+    longSentences: Array<{ text: string; startIndex: number; endIndex: number }>;
+    complexWords: Array<{ text: string; startIndex: number; endIndex: number }>;
+  };
   readability: {
     fleschScore: number;
     level: string;
@@ -157,37 +161,66 @@ function getScoreColor(score: number) {
            )}
  
   const renderHighlightedText = () => {
-    if (!analysisResult?.highlightedTriggers || analysisResult.highlightedTriggers.length === 0) {
-      return <p className="whitespace-pre-wrap">{analyzeText}</p>;
-    }
-
-    let lastIndex = 0;
-    const elements = [];
     const text = analyzeText;
+    if (!text) return null;
 
-    analysisResult.highlightedTriggers.forEach((trigger, idx) => {
-      if (trigger.startIndex > lastIndex) {
-        elements.push(text.substring(lastIndex, trigger.startIndex));
+    // Create a map of character indices to decorations
+    const decorations = new Array(text.length).fill(null).map(() => ({
+      trigger: null as string | null,
+      complex: false,
+      longSentence: false
+    }));
+
+    analysisResult?.highlightedTriggers?.forEach(t => {
+      for (let i = t.startIndex; i < t.endIndex; i++) {
+        if (i < decorations.length) decorations[i].trigger = t.category;
       }
-      
-      elements.push(
-        <span 
-          key={idx} 
-          className="bg-yellow-200 border-b-2 border-yellow-500 font-bold px-0.5 rounded-sm"
-          title={trigger.category}
-        >
-          {text.substring(trigger.startIndex, trigger.endIndex)}
-        </span>
-      );
-      
-      lastIndex = trigger.endIndex;
     });
 
-    if (lastIndex < text.length) {
-      elements.push(text.substring(lastIndex));
-    }
+    analysisResult?.complexity?.complexWords?.forEach(w => {
+      for (let i = w.startIndex; i < w.endIndex; i++) {
+        if (i < decorations.length) decorations[i].complex = true;
+      }
+    });
 
-    return <div className="whitespace-pre-wrap leading-relaxed">{elements}</div>;
+    analysisResult?.complexity?.longSentences?.forEach(s => {
+      for (let i = s.startIndex; i < s.endIndex; i++) {
+        if (i < decorations.length) decorations[i].longSentence = true;
+      }
+    });
+
+    const elements = [];
+    let currentChunk = "";
+    let currentDecor = JSON.stringify(decorations[0] || {});
+
+    for (let i = 0; i < text.length; i++) {
+      const decor = JSON.stringify(decorations[i]);
+      if (decor !== currentDecor) {
+        elements.push(renderChunk(currentChunk, JSON.parse(currentDecor), i));
+        currentChunk = text[i];
+        currentDecor = decor;
+      } else {
+        currentChunk += text[i];
+      }
+    }
+    elements.push(renderChunk(currentChunk, JSON.parse(currentDecor), text.length));
+
+    return <div className="whitespace-pre-wrap leading-relaxed text-sm">{elements}</div>;
+  };
+
+  const renderChunk = (text: string, decor: any, key: number) => {
+    if (!text) return null;
+    const classes = cn(
+      decor.trigger ? "bg-yellow-200 font-bold" : "",
+      decor.complex ? "underline decoration-dashed decoration-primary/50" : "",
+      decor.longSentence ? "bg-destructive/5" : ""
+    );
+
+    return (
+      <span key={key} className={classes} title={decor.trigger || (decor.complex ? "Palavra complexa" : decor.longSentence ? "Frase longa" : "")}>
+        {text}
+      </span>
+    );
   };
 
   const getSentimentIcon = () => {
