@@ -114,9 +114,10 @@ const RelatorioContato = () => {
           ]
         };
 
-        const mergedInsights = overrides?.insights_data ? {
+        const savedInsights = overrides?.insights_data as any;
+        const mergedInsights = savedInsights ? {
           ...defaultInsights,
-          ...overrides.insights_data
+          ...savedInsights
         } : defaultInsights;
 
         setData({ 
@@ -128,7 +129,7 @@ const RelatorioContato = () => {
         });
         
         setEditedInsights(mergedInsights);
-        setCustomScripts(overrides?.custom_scripts || {
+        setCustomScripts((overrides?.custom_scripts as Record<string, string>) || {
           main_script: `"Olá ${contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"`
         });
       } catch (error) {
