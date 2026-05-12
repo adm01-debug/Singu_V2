@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ShieldCheck, Zap, ListCheck, Save } from 'lucide-react';
+import { ShieldCheck, Zap, ListCheck, Save, DollarSign, UserCheck } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -19,7 +19,7 @@ export function DecisionMakingSubTab({ contactId }: Props) {
     if (decision) setFormData(decision);
   }, [decision]);
 
-  if (isLoading) return <div>Carregando...</div>;
+  if (isLoading) return <div className="p-4 text-center">Carregando processo de decisão...</div>;
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
@@ -32,20 +32,21 @@ export function DecisionMakingSubTab({ contactId }: Props) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Velocidade de Decisão</Label>
+            <Label className="text-xs">Velocidade de Decisão</Label>
             <Input 
               value={formData.decision_speed || ""} 
               onChange={(e) => setFormData({ ...formData, decision_speed: e.target.value })}
               placeholder="Ex: Rápida, Analítica..."
+              className="h-8 text-xs"
             />
           </div>
-          <div className="space-y-2">
-            <Label>Autoridade de Orçamento</Label>
-            <Input 
-              value={formData.budget_authority || ""} 
-              onChange={(e) => setFormData({ ...formData, budget_authority: e.target.value })}
-              placeholder="Ex: Integral, Parcial..."
+          <div className="flex items-center space-x-2 py-2">
+            <Checkbox 
+              id="budget-authority" 
+              checked={formData.budget_authority} 
+              onCheckedChange={(val) => setFormData({ ...formData, budget_authority: !!val })}
             />
+            <Label htmlFor="budget-authority" className="text-xs font-medium">Possui Autoridade de Orçamento</Label>
           </div>
           <div className="flex items-center space-x-2">
             <Checkbox 
@@ -53,8 +54,19 @@ export function DecisionMakingSubTab({ contactId }: Props) {
               checked={formData.needs_approval} 
               onCheckedChange={(val) => setFormData({ ...formData, needs_approval: !!val })}
             />
-            <Label htmlFor="needs-approval-dec">Necessita Aprovação Superior</Label>
+            <Label htmlFor="needs-approval-dec" className="text-xs font-medium">Necessita Aprovação Superior</Label>
           </div>
+          {formData.needs_approval && (
+            <div className="space-y-2 pt-2">
+              <Label className="text-xs italic text-muted-foreground">ID do Aprovador (opcional)</Label>
+              <Input 
+                value={formData.approver_id || ""} 
+                onChange={(e) => setFormData({ ...formData, approver_id: e.target.value })}
+                placeholder="UUID do aprovador..."
+                className="h-7 text-[10px]"
+              />
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -67,14 +79,15 @@ export function DecisionMakingSubTab({ contactId }: Props) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Critérios (Vem separados por vírgula)</Label>
+            <Label className="text-xs">Critérios (separados por vírgula)</Label>
             <Input 
               value={formData.decision_criteria?.join(", ") || ""} 
               onChange={(e) => setFormData({ ...formData, decision_criteria: e.target.value.split(",").map(i => i.trim()).filter(i => i) })}
               placeholder="Ex: ROI, Preço, Suporte..."
+              className="h-8 text-xs"
             />
           </div>
-          <Button className="w-full gap-2 mt-4" onClick={() => updateDecision(formData)}>
+          <Button className="w-full gap-2 mt-4 h-9 text-xs" onClick={() => updateDecision(formData)}>
             <Save className="h-4 w-4" />
             Salvar Critérios
           </Button>
