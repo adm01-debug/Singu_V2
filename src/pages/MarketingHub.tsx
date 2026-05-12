@@ -62,8 +62,8 @@ export default function MarketingHub() {
                  <CardContent>
                    <div className="flex items-end gap-2 h-24 pt-4">
                      {['D', 'I', 'S', 'C'].map(type => {
-                       const count = behaviorInsights?.disc[type] || 0;
-                       const max = Math.max(...Object.values(behaviorInsights?.disc || { x: 1 })) || 1;
+                        const count = (behaviorInsights?.disc as any)?.[type] || 0;
+                        const max = Math.max(...Object.values(behaviorInsights?.disc || { x: 1 }).map(v => Number(v))) || 1;
                        const height = (count / max) * 100;
                        return (
                          <div key={type} className="flex-1 flex flex-col items-center gap-2">
@@ -95,8 +95,8 @@ export default function MarketingHub() {
                  <CardContent>
                    <div className="space-y-3 pt-2">
                      {['visual', 'auditivo', 'cinestesico'].map(type => {
-                       const count = behaviorInsights?.vak[type] || 0;
-                       const total = Object.values(behaviorInsights?.vak || {}).reduce((a: any, b: any) => a + b, 0) || 1;
+                        const count = (behaviorInsights?.vak as any)?.[type] || 0;
+                        const total = Object.values(behaviorInsights?.vak || {}).reduce((a: number, b: any) => a + (Number(b) || 0), 0) || 1;
                        const percentage = (count / total) * 100;
                        return (
                          <div key={type} className="space-y-1">
