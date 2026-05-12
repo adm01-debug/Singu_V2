@@ -22,7 +22,8 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 // Sub-components
- import { CopywritingAiGeneratorTab } from './copywriting/CopywritingAiGeneratorTab';
+  import { CopywritingAiGeneratorTab } from './copywriting/CopywritingAiGeneratorTab';
+  import { CopywritingObjectionTab } from './copywriting/CopywritingObjectionTab';
  import { CopywritingAnalyzerTab } from './copywriting/CopywritingAnalyzerTab';
 import { CopywritingTemplateTab } from './copywriting/CopywritingTemplateTab';
 import { CopywritingPreviewTab } from './copywriting/CopywritingPreviewTab';
