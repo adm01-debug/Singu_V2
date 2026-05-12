@@ -22,23 +22,36 @@ Deno.serve(async (req) => {
     // 1. Gather Profile and Context
     const { data: contact } = await supabase
       .from('contacts')
-      .select('*, contact_behavior(*)')
+      .select('*, contact_behavior(*), contact_personality(*)')
       .eq('id', contactId)
       .single();
 
     if (!contact) return jsonError("Contact not found", 404, req);
 
+    const behavior = contact.contact_behavior?.[0] || {};
+    const personality = contact.contact_personality?.[0] || {};
+
     // 2. AI Intelligence for Objection Handling
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    const systemPrompt = `Você é um mestre em Negociação e Psicologia Comportamental.
-Sua especialidade é contornar objeções usando o perfil DISC do cliente.
-Objeção atual: ${objectionId}
-Perfil DISC: ${JSON.stringify(contact.behavior || {})}
+    const systemPrompt = `Você é um mestre em Negociação, Neurovendas e Psicologia Comportamental de elite.
+Sua especialidade é contornar objeções usando o perfil comportamental e sensorial do cliente.
 
-Gere um script altamente persuasivo que:
-1. Valide a preocupação do cliente (Empatia)
-2. Requadre o problema (Ponto de vista lógico/DISC)
-3. Chame para uma ação específica.`;
+Objeção atual: ${objectionId}
+
+## Perfil do Cliente:
+- DISC: ${behavior.dominant_style || 'Não identificado'}
+- VAK: ${personality.vak_profile || 'Equilibrado'}
+- Tom preferido: ${behavior.communication_style || 'Neutro'}
+
+## Estratégias a Incorporar:
+1. Dale Carnegie: Demonstre interesse genuíno e valide o ponto de vista do outro.
+2. PNL: Sincronize o vocabulário com o sistema VAK dominante.
+3. Feel-Felt-Found: "Entendo como se sente, outros sentiram o mesmo, e o que eles descobriram foi..."
+
+Gere um script que:
+1. Valide a objeção com empatia sincera.
+2. Requadre o problema para focar em benefício ou custo de oportunidade.
+3. CTA clara e de baixo atrito.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
