@@ -53,7 +53,17 @@
       const tips: { text: string; severity: 'warning' | 'info' | 'success' }[] = [];
       if (avgWordsPerSentence > 20) tips.push({ text: 'Sentenças longas detectadas (Média: ' + Math.round(avgWordsPerSentence) + ' palavras). Tente encurtar para melhor fluidez.', severity: 'warning' });
       if (triggersFound.length < 2) tips.push({ text: 'Baixa densidade de gatilhos mentais. Adicione elementos de Escassez ou Prova Social.', severity: 'info' });
-      if (readability < 60) tips.push({ text: 'Texto com alta barreira cognitiva (Score: ' + Math.round(readability) + '). Use vocabulário mais acessível.', severity: 'warning' });
+       if (readability < 60) tips.push({ text: 'Texto com alta barreira cognitiva (Score: ' + Math.round(readability) + '). Use vocabulário mais acessível.', severity: 'warning' });
+ 
+       // Hero's Journey detection
+       const hasHero = text.toLowerCase().includes('imagine') || text.toLowerCase().includes('conheça') || text.toLowerCase().includes('história');
+       const hasConflict = text.toLowerCase().includes('mas') || text.toLowerCase().includes('desafio') || text.toLowerCase().includes('obstáculo');
+       const hasResolution = text.toLowerCase().includes('solução') || text.toLowerCase().includes('resultado') || text.toLowerCase().includes('sucesso');
+ 
+       let arc = 'Arco Linear (Pitch Direto)';
+       if (hasHero && hasConflict && hasResolution) arc = 'Jornada do Herói (Completa)';
+       else if (hasHero && hasConflict) arc = 'Arco de Tensão (Incompleto)';
+       else if (text.length > 250) arc = 'Narrativa Expandida';
 
       let tone = 'Neutro';
       if (text.includes('!')) tone = 'Entusiasmado';
@@ -74,7 +84,7 @@
         triggers: triggersFound,
         score: Math.min(100, Math.round((readability + (triggersFound.length * 20) + cognitiveEase) / 3)),
         tips,
-        storytelling_arc: text.length > 250 ? 'Jornada do Herói (Problema -> Conflito -> Triunfo)' : 'Arco Linear (Pitch Direto)',
+         storytelling_arc: arc,
         objections: text.toLowerCase().includes('caro') || text.toLowerCase().includes('preço') ? ['Preço/Valor'] : text.toLowerCase().includes('tempo') ? ['Falta de Tempo'] : [],
         emotional_tone: tone
      });
