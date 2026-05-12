@@ -59,10 +59,10 @@ export const InfluencePowerSubTab = ({ contactId, data }: InfluencePowerSubTabPr
               placeholder="Cole os UUIDs dos contatos influenciadores"
             />
           </div>
-          <Button className="w-full mt-4" onClick={handleSave}>
-            <Save className="h-4 w-4 mr-2" />
-            Salvar Influência
-          </Button>
+           <Button className="w-full mt-4" onClick={handleSave} variant="outline">
+             <Save className="h-4 w-4 mr-2" />
+             Salvar Influência e Poder
+           </Button>
         </div>
       </CardContent>
     </Card>
