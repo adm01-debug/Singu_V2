@@ -34,11 +34,12 @@ const eventLabels: Record<string, string> = {
  * `LocalTimelineGroup` (groupInteractions) — evita acoplamento.
  */
 interface MinimalEvent {
-  id: string;
-  type: string;
-  title: string;
-  content: string | null;
-  created_at: string;
+   id: string;
+   type: string;
+   title: string;
+   content: string | null;
+   created_at: string;
+   transcription?: string | null;
 }
 interface MinimalGroup {
   entity_id: string;
@@ -236,9 +237,19 @@ export const TimelineGroupCard = React.memo(function TimelineGroupCard({
                         )}
                       </div>
                     </div>
-                    {event.content && (
-                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{event.content}</p>
-                    )}
+                     {event.transcription && (
+                       <div className="mt-1.5 p-2 bg-primary/5 rounded border border-primary/10">
+                         <p className="text-[10px] font-bold text-primary uppercase flex items-center gap-1 mb-1">
+                           <Sparkles className="w-3 h-3" /> Transcrição IA
+                         </p>
+                         <p className="text-xs text-muted-foreground line-clamp-3 italic">
+                           "{event.transcription}"
+                         </p>
+                       </div>
+                     )}
+                     {event.content && !event.transcription && (
+                       <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{event.content}</p>
+                     )}
                   </div>
                 </div>
               );

@@ -19,17 +19,21 @@ Deno.serve(async (req) => {
     if (!contactId) return jsonError("contactId is required", 400);
 
     // 1. Gather Rich Context
-    const [contactRes, interactionsRes, socialRes, neuroRes] = await Promise.all([
-      supabase.from('contacts').select('*').eq('id', contactId).single(),
-      supabase.from('interactions').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(5),
-      supabase.from('social_behavior_analysis').select('*').eq('contact_id', contactId).order('analysis_date', { ascending: false }).limit(1),
-      supabase.from('neuro_behavioral_history').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(3)
-    ]);
+     const [contactRes, interactionsRes, socialRes, neuroRes, analyticalRes, whatsappRes] = await Promise.all([
+       supabase.from('contacts').select('*').eq('id', contactId).single(),
+       supabase.from('interactions').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(10),
+       supabase.from('social_behavior_analysis').select('*').eq('contact_id', contactId).order('analysis_date', { ascending: false }).limit(1),
+       supabase.from('neuro_behavioral_history').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(5),
+       supabase.from('contact_analytical_profiles').select('*').eq('contact_id', contactId).maybeSingle(),
+       supabase.from('whatsapp_messages').select('content, message_type').eq('contact_id', contactId).order('timestamp', { ascending: false }).limit(5)
+     ]);
 
     const contact = contactRes.data;
     const interactions = interactionsRes.data || [];
-    const social = socialRes.data?.[0];
-    const neuroHistory = neuroRes.data || [];
+     const social = socialRes.data?.[0];
+     const neuroHistory = neuroRes.data || [];
+     const analytical = analyticalRes.data;
+     const recentWhatsApp = whatsappRes.data || [];
 
     if (!contact) return jsonError("Contact not found", 404);
 
@@ -42,19 +46,21 @@ Sua missão é sugerir a "Próxima Melhor Ação" para um contato no CRM, basean
 Seja específico, prático e persuasivo.`;
 
     const userPrompt = `
-CONTATO: ${contact.first_name} ${contact.last_name}
-ESTÁGIO ATUAL (NEGOCIAÇÃO): ${contact.relationship_stage}
-SCORE: ${contact.relationship_score}/100
-SENTIMENTO ATUAL: ${contact.sentiment}
-
-PERFIL COMPORTAMENTAL (DISC): ${JSON.stringify(contact.behavior || {})}
-HISTÓRICO NEUROMARKETING (Evolução):
-${neuroHistory.map(n => `- ${new Date(n.created_at).toLocaleDateString()}: Empatia=${n.empathy_score}, Domínio=${JSON.stringify(n.dominance_data)}`).join('\n')}
-
-INSIGHTS SOCIAIS: ${social?.executive_summary || 'Nenhum dado social disponível'}
-
-ÚLTIMAS INTERAÇÕES DA TIMELINE:
-${interactions.map(i => `- ${i.type}: ${i.resumo || i.title} (${i.sentiment || 'neutral'})`).join('\n')}
+ CONTATO: ${contact.first_name} ${contact.last_name}
+ ESTÁGIO ATUAL: ${contact.relationship_stage}
+ PERFIL ANALÍTICO (IA):
+ - Preferências: ${JSON.stringify(analytical?.preferences || [])}
+ - Tópicos Recorrentes: ${JSON.stringify(analytical?.recurrent_topics || [])}
+ - Estilo de Comunicação: ${analytical?.communication_style || 'Neutro'}
+ 
+ HISTÓRICO NEUROMARKETING (Tendências):
+ ${neuroHistory.map(n => `- Empatia=${n.empathy_score}, Domínio=${JSON.stringify(n.dominance_data)}`).join('\n')}
+ 
+ ÚLTIMAS MENSAGENS WHATSAPP:
+ ${recentWhatsApp.map(m => `- [${m.message_type}] ${m.content?.substring(0, 100)}`).join('\n')}
+ 
+ TIMELINE RECENTE:
+ ${interactions.map(i => `- ${i.type}: ${i.title} (${i.sentiment}). Transcrição: ${i.transcription?.substring(0, 100) || 'N/A'}`).join('\n')}
 
 INSTRUÇÃO: Gere a Próxima Melhor Ação considerando o contexto de neuromarketing e o estágio da negociação. Se a empatia está caindo, sugira uma abordagem mais humana. Se a dominância é alta, seja mais direto.
 
