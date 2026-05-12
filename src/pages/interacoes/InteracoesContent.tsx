@@ -78,7 +78,18 @@ interface Props {
  }: Props) {
    const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
    const [selectedIds, setSelectedIds] = useState<string[]>([]);
-   const [isSelectionMode, setIsSelectionMode] = useState(false);
+    const [isSelectionMode, setIsSelectionMode] = useState(false);
+
+    const handleToggleSelection = (id: string) => {
+      setSelectedIds(prev => 
+        prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+      );
+    };
+
+    const handleClearSelection = () => {
+      setSelectedIds([]);
+      setIsSelectionMode(false);
+    };
   const [sortBy, setSortBy] = useState('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
