@@ -18,6 +18,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Label } from '@/components/ui/label';
@@ -194,11 +195,17 @@ export function NextBestAction({ contactId }: Props) {
               </Badge>
             </div>
 
-            <div className="bg-muted/30 rounded-lg p-3 border border-dashed space-y-2">
+            <div className="bg-muted/30 rounded-lg p-3 border border-dashed space-y-3">
               <div className="flex items-center justify-between">
-                <Label className="text-[10px] font-bold uppercase text-muted-foreground flex items-center gap-1">
-                  <MessageSquare className="h-3 w-3" /> Script Sugerido (Editável)
-                </Label>
+                <div className="space-y-0.5">
+                  <Label className="text-[10px] font-bold uppercase text-muted-foreground flex items-center gap-1">
+                    <MessageSquare className="h-3 w-3" /> Script Sugerido
+                  </Label>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[8px] text-primary font-bold uppercase">Neuro-Sync</span>
+                    <Progress value={suggestion.confidence || 85} className="h-1 w-16" />
+                  </div>
+                </div>
                 <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(script)}>
                   <Copy className="h-3 w-3" />
                 </Button>
