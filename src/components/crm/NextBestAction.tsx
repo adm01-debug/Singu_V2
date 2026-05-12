@@ -210,91 +210,93 @@ export function NextBestAction({ contactId }: Props) {
  
              {suggestion ? (
                <div className="animate-in fade-in slide-in-from-top-2 duration-300 space-y-4">
-            <div className="flex items-start justify-between">
-              <div className="space-y-1">
-                <h4 className="text-sm font-bold text-primary flex items-center gap-2">
-                  {suggestion.title}
-                  <Badge variant={suggestion.urgency === 'high' || suggestion.urgency === 'critical' ? 'destructive' : 'secondary'} className="text-[9px] px-1.5 h-4 uppercase">
-                    {suggestion.urgency}
-                  </Badge>
-                </h4>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  {suggestion.description}
-                </p>
-              </div>
-              <Badge variant="outline" className="text-[10px] gap-1 shrink-0">
-                <Brain className="h-2.5 w-2.5" /> {suggestion.confidence}% match
-              </Badge>
-            </div>
-
-            <div className="bg-muted/30 rounded-lg p-3 border border-dashed space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label className="text-[10px] font-bold uppercase text-muted-foreground flex items-center gap-1">
-                    <MessageSquare className="h-3 w-3" /> Script Sugerido
-                  </Label>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[8px] text-primary font-bold uppercase">Neuro-Sync</span>
-                    <Progress value={suggestion.confidence || 85} className="h-1 w-16" />
-                  </div>
-                </div>
-                <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(script)}>
-                  <Copy className="h-3 w-3" />
-                </Button>
-              </div>
-              <Textarea 
-                value={script}
-                onChange={(e) => setScript(e.target.value)}
-                className="text-xs bg-background min-h-[80px] focus-visible:ring-primary/30"
-                placeholder="O script aparecerá aqui..."
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 text-[10px]">
-              <div className="space-y-1">
-                <span className="font-bold text-muted-foreground uppercase flex items-center gap-1">
-                  <Clock className="h-3 w-3" /> Melhor Momento
-                </span>
-                <p className="font-medium text-foreground">{suggestion.best_time || 'Imediato'}</p>
-              </div>
-              <div className="space-y-1">
-                <span className="font-bold text-muted-foreground uppercase flex items-center gap-1">
-                  <AlertTriangle className="h-3 w-3" /> Raciocínio IA
-                </span>
-                <p className="font-medium text-foreground line-clamp-2" title={suggestion.reasoning}>
-                  {suggestion.reasoning}
-                </p>
-              </div>
-            </div>
-
-            <div className="pt-2 border-t space-y-3">
-              <Label className="text-[10px] font-bold uppercase text-muted-foreground">Observações da Conclusão</Label>
-              <Textarea 
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                className="text-xs min-h-[60px]"
-                placeholder="Como foi o contato? O cliente reagiu bem? Isso alimenta nossa IA..."
-              />
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  className="flex-1 h-9 text-xs" 
-                  onClick={() => setSuggestion(null)}
-                >
-                  Descartar
-                </Button>
-                <Button 
-                  className="flex-[2] h-9 text-xs gap-2" 
-                  onClick={handleComplete}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  ) : (
-                    <CheckCircle2 className="h-3 w-3" />
-                  )}
-                  Marcar como Concluído
-                </Button>
+                 <div className="flex items-start justify-between">
+                   <div className="space-y-1">
+                     <h4 className="text-sm font-bold text-primary flex items-center gap-2">
+                       {suggestion.title}
+                       <Badge variant={suggestion.urgency === 'high' || suggestion.urgency === 'critical' ? 'destructive' : 'secondary'} className="text-[9px] px-1.5 h-4 uppercase">
+                         {suggestion.urgency}
+                       </Badge>
+                     </h4>
+                     <p className="text-xs text-muted-foreground leading-relaxed">
+                       {suggestion.description}
+                     </p>
+                   </div>
+                   <Badge variant="outline" className="text-[10px] gap-1 shrink-0">
+                     <Brain className="h-2.5 w-2.5" /> {suggestion.confidence}% match
+                   </Badge>
+                 </div>
+ 
+                 <div className="bg-muted/30 rounded-lg p-3 border border-dashed space-y-3">
+                   <div className="flex items-center justify-between">
+                     <div className="space-y-0.5">
+                       <Label className="text-[10px] font-bold uppercase text-muted-foreground flex items-center gap-1">
+                         <MessageSquare className="h-3 w-3" /> Script Sugerido
+                       </Label>
+                       <div className="flex items-center gap-2">
+                         <span className="text-[8px] text-primary font-bold uppercase">Neuro-Sync</span>
+                         <Progress value={suggestion.confidence || 85} className="h-1 w-16" />
+                       </div>
+                     </div>
+                     <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(script)}>
+                       <Copy className="h-3 w-3" />
+                     </Button>
+                   </div>
+                   <Textarea 
+                     value={script}
+                     onChange={(e) => setScript(e.target.value)}
+                     className="text-xs bg-background min-h-[80px] focus-visible:ring-primary/30"
+                     placeholder="O script aparecerá aqui..."
+                   />
+                 </div>
+ 
+                 <div className="grid grid-cols-2 gap-3 text-[10px]">
+                   <div className="space-y-1">
+                     <span className="font-bold text-muted-foreground uppercase flex items-center gap-1">
+                       <Clock className="h-3 w-3" /> Melhor Momento
+                     </span>
+                     <p className="font-medium text-foreground">{suggestion.best_time || 'Imediato'}</p>
+                   </div>
+                   <div className="space-y-1">
+                     <span className="font-bold text-muted-foreground uppercase flex items-center gap-1">
+                       <AlertTriangle className="h-3 w-3" /> Raciocínio IA
+                     </span>
+                     <p className="font-medium text-foreground line-clamp-2" title={suggestion.reasoning}>
+                       {suggestion.reasoning}
+                     </p>
+                   </div>
+                 </div>
+ 
+                 <div className="pt-2 border-t space-y-3">
+                   <Label className="text-[10px] font-bold uppercase text-muted-foreground">Observações da Conclusão</Label>
+                   <Textarea 
+                     value={feedback}
+                     onChange={(e) => setFeedback(e.target.value)}
+                     className="text-xs min-h-[60px]"
+                     placeholder="Como foi o contato? O cliente reagiu bem? Isso alimenta nossa IA..."
+                   />
+                   <div className="flex gap-2">
+                     <Button 
+                       variant="outline" 
+                       className="flex-1 h-9 text-xs" 
+                       onClick={() => setSuggestion(null)}
+                     >
+                       Descartar
+                     </Button>
+                     <Button 
+                       className="flex-[2] h-9 text-xs gap-2" 
+                       onClick={handleComplete}
+                       disabled={isSubmitting}
+                     >
+                       {isSubmitting ? (
+                         <Loader2 className="h-3 w-3 animate-spin" />
+                       ) : (
+                         <CheckCircle2 className="h-3 w-3" />
+                       )}
+                       Marcar como Concluído
+                     </Button>
+                   </div>
+                 </div>
                </div>
              ) : (
                <div className="py-8 flex flex-col items-center justify-center text-center space-y-3">
