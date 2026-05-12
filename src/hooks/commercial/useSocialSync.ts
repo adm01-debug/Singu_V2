@@ -51,9 +51,37 @@ export function useSocialSync(contactId: string) {
 
       if (queueError) throw queueError;
 
-      const { error: funcError } = await supabase.functions.invoke('sync-social-interests', {
-        body: { contactId, queueId: queueItem.id }
-      });
+      // Retry logic for function invocation
+      let funcError = null;
+      let attempts = 0;
+      const maxRetries = 3;
+
+      while (attempts < maxRetries) {
+        const { error } = await supabase.functions.invoke('sync-social-interests', {
+          body: { contactId, queueId: queueItem.id }
+        });
+        
+        if (!error) {
+          funcError = null;
+          break;
+        }
+        
+        funcError = error;
+        attempts++;
+        
+        if (attempts < maxRetries) {
+          await supabase.from('social_sync_queue')
+            .update({ 
+              retry_count: attempts,
+              error_log: `Falha na tentativa ${attempts}: ${error.message}`,
+              last_attempt: new Date().toISOString()
+            })
+            .eq('id', queueItem.id);
+            
+          // Exponential backoff wait (simple version)
+          await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempts) * 1000));
+        }
+      }
 
       if (funcError) {
         await supabase.from('social_sync_queue')
