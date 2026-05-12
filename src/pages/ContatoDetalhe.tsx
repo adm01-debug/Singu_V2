@@ -298,14 +298,15 @@ const ContatoDetalhe = () => {
 
           <TabsContent value="inteligencia">
             <DashboardErrorBoundary sectionName="Inteligência">
-              <ContactIntelligenceTab
-                contactId={contact.id}
-                contactName={formatContactName(contact.first_name, contact.last_name)}
-                linkedinUrl={contact.linkedin}
-                websiteUrl={company?.website}
-                currentScore={contact.relationship_score || 0}
-                currentSentiment={contact.sentiment || 'neutral'}
-              />
+               <ContactIntelligenceTab
+                 contactId={contact.id}
+                 contactName={formatContactName(contact.first_name, contact.last_name)}
+                 linkedinUrl={contact.linkedin}
+                 websiteUrl={company?.website}
+                 currentScore={contact.relationship_score || 0}
+                 currentSentiment={contact.sentiment || 'neutral'}
+                 interactions={interactions}
+               />
 
             </DashboardErrorBoundary>
           </TabsContent>
