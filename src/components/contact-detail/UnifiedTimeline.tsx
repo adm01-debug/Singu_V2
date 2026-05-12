@@ -3,7 +3,7 @@ import { useUnifiedTimeline, type UnifiedTimelineEvent, type UnifiedEventType } 
 import {
   MessageSquare, Phone, Users, FileText, CheckCircle2,
   Calendar, Search, Filter, Clock, ArrowUpRight, ArrowDownLeft,
-  AlertCircle, TrendingUp, Zap, Smile, Frown, Meh, Brain, Activity, TrendingDown
+  AlertCircle, TrendingUp, Zap, Smile, Frown, Meh, Brain, Activity, TrendingDown, Heart
 } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
@@ -85,11 +85,23 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
     if (positiveCount > negativeCount) trend = 'Melhorando';
     if (negativeCount > positiveCount) trend = 'Atenção';
 
+    const neuroEvents = events.filter(e => e.type === 'neuro_update');
+    const lastEmpathy = neuroEvents[0]?.metadata?.empathy;
+    const prevEmpathy = neuroEvents[1]?.metadata?.empathy;
+    
+    let empathyTrend = 'Estável';
+    if (lastEmpathy && prevEmpathy) {
+      if (lastEmpathy > prevEmpathy) empathyTrend = 'Subindo';
+      else if (lastEmpathy < prevEmpathy) empathyTrend = 'Caindo';
+    }
+
     return {
       trend,
       positiveCount,
       negativeCount,
-      total: lastSentiments.length
+      total: lastSentiments.length,
+      empathy: lastEmpathy,
+      empathyTrend
     };
   }, [events]);
 
@@ -117,7 +129,19 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
                 </p>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-4">
+              {sentimentSummary.empathy !== undefined && (
+                <div className="text-center px-3 border-r">
+                  <p className="text-[10px] text-muted-foreground uppercase flex items-center gap-1 justify-center">
+                    <Heart className="h-2 w-2 text-red-500" /> Empatia
+                  </p>
+                  <div className="flex items-center gap-1 justify-center">
+                    <p className="text-sm font-bold text-foreground">{sentimentSummary.empathy}</p>
+                    {sentimentSummary.empathyTrend === 'Subindo' ? <TrendingUp className="h-3 w-3 text-green-500" /> :
+                     sentimentSummary.empathyTrend === 'Caindo' ? <TrendingDown className="h-3 w-3 text-red-500" /> : null}
+                  </div>
+                </div>
+              )}
               <div className="text-center px-3 border-r">
                 <p className="text-[10px] text-muted-foreground uppercase">Positivas</p>
                 <p className="text-sm font-bold text-green-600">{sentimentSummary.positiveCount}</p>
