@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { 
+ import { 
   Gift, 
   Zap, 
   CheckCircle2, 
@@ -11,7 +11,8 @@ import {
   Copy,
   ChevronRight,
   Star,
-  Target
+   Target,
+   Globe
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -137,11 +138,19 @@ export function OfferSuggestionsElite({ contactId }: Props) {
                         <h4 className="text-sm font-bold group-hover:text-primary transition-colors">
                           {offer.offer_name}
                         </h4>
-                        {offer.offer_category && (
-                          <Badge variant="outline" className="text-[9px] h-4">
-                            {offer.offer_category}
-                          </Badge>
-                        )}
+                         <div className="flex items-center gap-1.5">
+                           {offer.offer_category && (
+                             <Badge variant="outline" className="text-[9px] h-4">
+                               {offer.offer_category}
+                             </Badge>
+                           )}
+                           {offer.reason?.toLowerCase().includes('interesses sociais') && (
+                             <Badge variant="secondary" className="text-[9px] h-4 bg-indigo-50 text-indigo-600 border-indigo-100 gap-1 px-1.5">
+                               <Globe className="h-2.5 w-2.5" />
+                               Social Match
+                             </Badge>
+                           )}
+                         </div>
                       </div>
                       <p className="text-xs text-muted-foreground leading-relaxed italic">
                         "{offer.reason}"

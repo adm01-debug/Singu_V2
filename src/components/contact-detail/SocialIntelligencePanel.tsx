@@ -1,4 +1,4 @@
- import { Globe, Linkedin, Instagram, Twitter, Bell, TrendingUp, Users, X, Heart, ShieldCheck, Lock, Info, CheckCircle2, AlertCircle, Activity } from 'lucide-react';
+ import { Globe, Linkedin, Instagram, Twitter, Bell, TrendingUp, Users, X, Heart, ShieldCheck, Lock, Info, CheckCircle2, AlertCircle, Activity, RefreshCw, Zap, BrainCircuit } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -18,8 +18,16 @@ interface Props {
   contactId: string;
 }
 
- export function SocialIntelligencePanel({ contactId }: Props) {
-   const { profiles, behaviorAnalysis, lifeEvents, loading: loadingBase, dismissEvent } = useSocialIntelligence(contactId);
+  export function SocialIntelligencePanel({ contactId }: Props) {
+    const { 
+      profiles, 
+      behaviorAnalysis, 
+      lifeEvents, 
+      loading: loadingBase, 
+      dismissEvent, 
+      syncToPsychographic, 
+      isSyncing 
+    } = useSocialIntelligence(contactId);
    const { data: historyInsights, isLoading: loadingInsights } = useSocialInsights(contactId);
  
    if (loadingBase) return null;
@@ -27,17 +35,48 @@ interface Props {
    const hasData = profiles.length > 0 || behaviorAnalysis || lifeEvents.length > 0 || (historyInsights && historyInsights.length > 0);
   if (!hasData) return null;
 
-   return (
-     <div className="space-y-4" id="social-intelligence-section">
-       {/* Consent & Privacy Header */}
-       <div className="flex items-center justify-between bg-muted/50 p-2 rounded-lg border border-dashed mb-2">
+    return (
+      <div className="space-y-4" id="social-intelligence-section">
+        {/* Intelligence Actions Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 mb-2">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-[10px] text-indigo-700 uppercase font-bold tracking-tighter">
+              <Zap className="h-3 w-3 fill-indigo-500" />
+              Inteligência Social Ativa
+            </div>
+            <p className="text-[11px] text-indigo-600/70">Sincronize interesses sociais com o perfil de vendas.</p>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className={cn(
+                "h-8 text-[10px] font-bold uppercase tracking-tighter gap-1.5 border-indigo-200 hover:bg-indigo-100 hover:text-indigo-700",
+                isSyncing && "animate-pulse"
+              )}
+              onClick={() => syncToPsychographic()}
+              disabled={isSyncing || !behaviorAnalysis}
+            >
+              {isSyncing ? (
+                <RefreshCw className="h-3 w-3 animate-spin" />
+              ) : (
+                <BrainCircuit className="h-3.5 w-3.5" />
+              )}
+              {isSyncing ? "Sincronizando..." : "Sincronizar Perfil Psicográfico"}
+            </Button>
+            <Badge variant="outline" className="text-[9px] bg-white text-green-700 border-green-200 font-bold uppercase">
+              LGPD OK
+            </Badge>
+          </div>
+        </div>
+
+        {/* Consent & Privacy Header - Compacted */}
+        <div className="flex items-center justify-between bg-muted/30 p-1.5 px-3 rounded-lg border border-dashed mb-2 opacity-60">
          <div className="flex items-center gap-2 text-[10px] text-muted-foreground uppercase font-bold tracking-tighter">
            <Lock className="h-3 w-3" />
-           Privacidade & Consentimento Ativos
-         </div>
-         <Badge variant="outline" className="text-[9px] bg-green-50 text-green-700 border-green-200">
-           LGPD Compliance
-         </Badge>
+            Processamento Seguro e Anonimizado
+          </div>
        </div>
       {/* Social Profiles */}
       {profiles.length > 0 && (
