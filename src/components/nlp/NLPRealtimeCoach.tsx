@@ -14,7 +14,12 @@ import {
    Zap,
    Activity,
    Users,
-   Wand2
+   Wand2,
+   Target,
+   Shield,
+   Smile,
+   Scale,
+   AlertTriangle
 } from 'lucide-react';
  import { Progress } from '@/components/ui/progress';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -22,14 +27,16 @@ import { useVAKAnalysis } from '@/hooks/useVAKAnalysis';
 import { useMetaprogramAnalysis } from '@/hooks/useMetaprogramAnalysis';
  import { VAK_LABELS, VAK_COMMUNICATION_TIPS, VAK_PREDICATES, type VAKType } from '@/types/vak';
 import { METAPROGRAM_LABELS } from '@/types/metaprograms';
-import { SLEIGHT_TEMPLATES } from '@/data/sleightOfMouth';
+ import { SLEIGHT_TEMPLATES } from '@/data/sleightOfMouth';
+ import { DISC_DETECTION_PATTERNS, DISC_PROFILES } from '@/data/discAdvancedData';
+ import type { DISCProfile } from '@/types';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 
  interface Suggestion {
    id: string;
-   type: 'rapport' | 'reframing' | 'vak' | 'metaprogram' | 'milton';
+    type: 'rapport' | 'reframing' | 'vak' | 'metaprogram' | 'milton' | 'disc';
    text: string;
    fullContent?: string;
    icon: React.ReactNode;
@@ -51,22 +58,24 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
    const [detectedVAK, setDetectedVAK] = useState<any>(null);
    const [detectedMeta, setDetectedMeta] = useState<any>(null);
    const [rapportScore, setRapportScore] = useState(0);
-   const [contactVAK, setContactVAK] = useState<VAKType | null>(null);
-  const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down'>>({});
+    const [contactVAK, setContactVAK] = useState<VAKType | null>(null);
+    const [contactDISC, setContactDISC] = useState<DISCProfile | null>(null);
+    const [discRapport, setDiscRapport] = useState(0);
+    const [detectedDISC, setDetectedDISC] = useState<DISCProfile | null>(null);
+    const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down'>>({});
   
    useEffect(() => {
-     const fetchContactVAK = async () => {
+     const fetchContactBehavior = async () => {
        if (contactId) {
-         const { data } = await supabase.from('contacts').select('behavior').eq('id', contactId).single();
+         const { data } = await supabase.from('contacts').select('behavior').eq('id', contactId).maybeSingle();
          if (data?.behavior) {
            const behavior = data.behavior as any;
-           if (behavior.vakProfile?.primary) {
-             setContactVAK(behavior.vakProfile.primary);
-           }
+           if (behavior.vakProfile?.primary) setContactVAK(behavior.vakProfile.primary);
+           if (behavior.discProfile) setContactDISC(behavior.discProfile as DISCProfile);
          }
        }
      };
-     fetchContactVAK();
+     fetchContactBehavior();
    }, [contactId]);
 
    useEffect(() => {
@@ -164,9 +173,63 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
         });
       }
        
-       setSuggestions(newSuggestions);
-     } else {
-       setSuggestions([]);
+        // 6. DISC Realtime Analysis & Rapport
+        let currentDISC: DISCProfile = 'I';
+        let maxDiscScore = 0;
+        const discScores = { D: 0, I: 0, S: 0, C: 0 };
+        
+        for (const pattern of DISC_DETECTION_PATTERNS) {
+          const pKey = pattern.profile as keyof typeof discScores;
+          for (const regex of pattern.patterns) {
+            const matches = content.match(regex);
+            if (matches) discScores[pKey] += matches.length * 10;
+          }
+        }
+        
+        Object.entries(discScores).forEach(([p, score]) => {
+          if (score > maxDiscScore) {
+            maxDiscScore = score;
+            currentDISC = p as DISCProfile;
+          }
+        });
+ 
+        if (maxDiscScore > 0) {
+          setDetectedDISC(currentDISC);
+          const profileInfo = DISC_PROFILES[currentDISC];
+          newSuggestions.push({
+            id: `disc-self-${currentDISC}`,
+            type: 'disc',
+            text: `Você está soando como um perfil ${profileInfo?.name || currentDISC}.`,
+            icon: <Target className="h-3 w-3" />,
+            color: 'text-indigo-500'
+          });
+ 
+          if (contactDISC) {
+            const isMatch = contactDISC === currentDISC;
+            const rapport = isMatch ? 100 : 40;
+            setDiscRapport(rapport);
+ 
+            if (!isMatch) {
+              const targetInfo = DISC_PROFILES[contactDISC];
+              newSuggestions.push({
+                id: 'disc-mismatch',
+                type: 'disc',
+                text: `Alerta de Atrito: O contato é ${targetInfo?.name}. Tente ser mais ${
+                  contactDISC === 'D' ? 'direto e focado em resultados' : 
+                  contactDISC === 'I' ? 'entusiasta e focado em pessoas' :
+                  contactDISC === 'S' ? 'calmo e focado em segurança' :
+                  'analítico e focado em detalhes'
+                }.`,
+                icon: <AlertTriangle className="h-3 w-3" />,
+                color: 'text-orange-500'
+              });
+            }
+          }
+        }
+ 
+        setSuggestions(newSuggestions);
+      } else {
+        setSuggestions([]);
        setDetectedVAK(null);
        setDetectedMeta(null);
        setRapportScore(0);
@@ -211,23 +274,44 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
                  <Sparkles className="h-3 w-3 animate-pulse" /> Coach NLP Proativo
                </div>
                
-               {contactVAK && (
-                 <div className="flex-1 max-w-[150px] space-y-1">
-                   <div className="flex justify-between items-center text-[9px] text-muted-foreground uppercase font-semibold">
-                     <span>Rapport</span>
-                     <span className={rapportScore >= 70 ? 'text-success' : rapportScore >= 40 ? 'text-warning' : 'text-destructive'}>
-                       {rapportScore}%
-                     </span>
-                   </div>
-                   <Progress value={rapportScore} className="h-1" />
-                 </div>
-               )}
+                <div className="flex gap-4 flex-1 max-w-[300px]">
+                  {contactVAK && (
+                    <div className="flex-1 space-y-1">
+                      <div className="flex justify-between items-center text-[9px] text-muted-foreground uppercase font-semibold">
+                        <span>VAK Rapport</span>
+                        <span className={rapportScore >= 70 ? 'text-success' : rapportScore >= 40 ? 'text-warning' : 'text-destructive'}>
+                          {rapportScore}%
+                        </span>
+                      </div>
+                      <Progress value={rapportScore} className="h-1" />
+                    </div>
+                  )}
+                  
+                  {contactDISC && (
+                    <div className="flex-1 space-y-1">
+                      <div className="flex justify-between items-center text-[9px] text-muted-foreground uppercase font-semibold">
+                        <span>DISC Rapport</span>
+                        <span className={discRapport >= 70 ? 'text-success' : discRapport >= 40 ? 'text-warning' : 'text-destructive'}>
+                          {discRapport}%
+                        </span>
+                      </div>
+                      <Progress value={discRapport} className="h-1" />
+                    </div>
+                  )}
+                </div>
 
-               {detectedVAK?.dominantSystem && (
-                 <Badge variant="secondary" className="text-[9px] h-5 px-2 bg-primary/10 text-primary border-primary/20">
-                   VOCÊ: {VAK_LABELS[detectedVAK.dominantSystem as VAKType].name}
-                 </Badge>
-               )}
+                <div className="flex gap-2">
+                  {detectedVAK?.dominantSystem && (
+                    <Badge variant="secondary" className="text-[9px] h-5 px-2 bg-blue-50 text-blue-600 border-blue-100">
+                      VAK: {VAK_LABELS[detectedVAK.dominantSystem as VAKType].name}
+                    </Badge>
+                  )}
+                  {detectedDISC && (
+                    <Badge variant="secondary" className="text-[9px] h-5 px-2 bg-indigo-50 text-indigo-600 border-indigo-100">
+                      DISC: {detectedDISC}
+                    </Badge>
+                  )}
+                </div>
              </div>
             
             <div className="space-y-3">
