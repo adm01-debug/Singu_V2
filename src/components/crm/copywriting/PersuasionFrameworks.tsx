@@ -5,7 +5,7 @@
  import { Layers, Copy, Check, Info } from 'lucide-react';
  import { toast } from 'sonner';
  
- const FRAMEWORKS = [
+ export const FRAMEWORKS = [
    {
      id: 'aida',
      name: 'AIDA',
@@ -55,6 +55,19 @@
        { label: 'Empurrão', placeholder: 'O CTA final com urgência ou escassez.' }
      ],
      example: 'Promessa: Vamos dobrar sua taxa de conversão em 90 dias.\\nImagem: Imagine sua equipe focada apenas em leads que já estão prontos para comprar.\\nProva: A Empresa X aumentou sua receita em 140% usando nossa tecnologia.\\nEmpurrão: Restam apenas 3 vagas para o programa de aceleração deste mês. Clique aqui.'
+   },
+   {
+     id: 'storytelling',
+     name: 'Storytelling',
+     fullName: 'Hero\'s Journey (Jornada do Herói)',
+     description: 'Cria conexão emocional profunda através de um arco narrativo de transformação.',
+     structure: [
+       { label: 'Mundo Comum', placeholder: 'Contexto inicial do lead antes do problema.' },
+       { label: 'O Chamado', placeholder: 'O problema que obriga a mudança.' },
+       { label: 'O Mentor', placeholder: 'Sua empresa guiando o lead com a solução.' },
+       { label: 'A Recompensa', placeholder: 'O novo estado de sucesso alcançado.' }
+     ],
+     example: 'Mundo Comum: Você construiu sua empresa do zero com suor e planilhas.\\nO Chamado: Mas o crescimento parou. O caos dos dados fragmentados começou a custar caro.\\nO Mentor: Foi quando o Nexus CRM entrou como seu aliado estratégico, trazendo ordem ao caos.\\nA Recompensa: Hoje, sua equipe fecha negócios no automático e você recuperou a liberdade que sonhava.'
    }
  ];
  
