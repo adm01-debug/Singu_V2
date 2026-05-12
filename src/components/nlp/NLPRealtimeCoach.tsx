@@ -173,29 +173,29 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
         });
       }
        
-        // 6. DISC Realtime Analysis & Rapport
-        let currentDISC: DISCProfile = 'I';
+        // 6. DISC Realtime Analysis & Rapport (Unified Behavioral Coach)
+        let currentDISC: 'D' | 'I' | 'S' | 'C' = 'I';
         let maxDiscScore = 0;
-        const discScores = { D: 0, I: 0, S: 0, C: 0 };
+        const discScores: Record<string, number> = { D: 0, I: 0, S: 0, C: 0 };
         
         for (const pattern of DISC_DETECTION_PATTERNS) {
-          const pKey = pattern.profile as keyof typeof discScores;
+          const pKey = pattern.profile as string;
           for (const regex of pattern.patterns) {
             const matches = content.match(regex);
-            if (matches) discScores[pKey] += matches.length * 10;
+            if (matches) discScores[pKey] = (discScores[pKey] || 0) + (matches.length * 10);
           }
         }
         
         Object.entries(discScores).forEach(([p, score]) => {
           if (score > maxDiscScore) {
             maxDiscScore = score;
-            currentDISC = p as DISCProfile;
+            currentDISC = p as 'D' | 'I' | 'S' | 'C';
           }
         });
  
         if (maxDiscScore > 0) {
           setDetectedDISC(currentDISC);
-          const profileInfo = DISC_PROFILES[currentDISC];
+          const profileInfo = DISC_PROFILES[currentDISC as keyof typeof DISC_PROFILES];
           newSuggestions.push({
             id: `disc-self-${currentDISC}`,
             type: 'disc',
