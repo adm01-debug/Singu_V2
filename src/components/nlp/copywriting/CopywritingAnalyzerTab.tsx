@@ -2,7 +2,7 @@ import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
- import { BookOpen, Zap, AlertTriangle, CheckCircle, Smile, Target, Brain, Waves, Activity, Sparkles } from 'lucide-react';
+  import { BookOpen, Zap, AlertTriangle, CheckCircle, Smile, Target, Brain, Waves, Activity, Sparkles, ThumbsUp, ThumbsDown, Minus } from 'lucide-react';
  import { useNeuromarketing } from '@/hooks/useNeuromarketing';
  import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,15 @@ interface AnalysisResult {
   clarityScore: number;
   emotionalScore: number;
   ctaStrength: number;
+  sentiment: 'positive' | 'neutral' | 'negative';
+  emotionalProfile?: {
+    joy: number;
+    trust: number;
+    fear: number;
+    urgency: number;
+    anticipation: number;
+  };
+  highlightedTriggers?: Array<{ text: string; category: string; startIndex: number; endIndex: number }>;
   readability: {
     fleschScore: number;
     level: string;
@@ -146,6 +155,48 @@ function getScoreColor(score: number) {
              </div>
            )}
  
+  const renderHighlightedText = () => {
+    if (!analysisResult?.highlightedTriggers || analysisResult.highlightedTriggers.length === 0) {
+      return <p className="whitespace-pre-wrap">{analyzeText}</p>;
+    }
+
+    let lastIndex = 0;
+    const elements = [];
+    const text = analyzeText;
+
+    analysisResult.highlightedTriggers.forEach((trigger, idx) => {
+      if (trigger.startIndex > lastIndex) {
+        elements.push(text.substring(lastIndex, trigger.startIndex));
+      }
+      
+      elements.push(
+        <span 
+          key={idx} 
+          className="bg-yellow-200 border-b-2 border-yellow-500 font-bold px-0.5 rounded-sm"
+          title={trigger.category}
+        >
+          {text.substring(trigger.startIndex, trigger.endIndex)}
+        </span>
+      );
+      
+      lastIndex = trigger.endIndex;
+    });
+
+    if (lastIndex < text.length) {
+      elements.push(text.substring(lastIndex));
+    }
+
+    return <div className="whitespace-pre-wrap leading-relaxed">{elements}</div>;
+  };
+
+  const getSentimentIcon = () => {
+    switch(analysisResult?.sentiment) {
+      case 'positive': return <ThumbsUp className="h-4 w-4 text-success" />;
+      case 'negative': return <ThumbsDown className="h-4 w-4 text-destructive" />;
+      default: return <Minus className="h-4 w-4 text-muted-foreground" />;
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div>
@@ -172,8 +223,20 @@ function getScoreColor(score: number) {
         <p className="text-xs text-muted-foreground mt-1">{analyzeText.length} caracteres</p>
       </div>
 
-      {analysisResult && (
+      {analysisResult && analysisResult.originalText.length > 0 && (
         <div className="space-y-4">
+          {/* Highlighted Text Panel */}
+          <div className="bg-white border rounded-xl p-6 shadow-inner overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-2">
+              <Badge variant="outline" className="bg-white/80 backdrop-blur-sm text-[10px] flex items-center gap-1">
+                <Sparkles className="h-3 w-3 text-primary" /> Visualização de Gatilhos
+              </Badge>
+            </div>
+            <div className="max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted">
+              {renderHighlightedText()}
+            </div>
+          </div>
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { label: 'Persuasão', score: analysisResult.persuasionScore, icon: <Zap className="h-3 w-3" /> },
@@ -198,40 +261,67 @@ function getScoreColor(score: number) {
             ))}
           </div>
 
-          {/* Readability */}
-          <div className="bg-muted/50 rounded-lg p-4">
-            <h4 className="font-medium mb-2 flex items-center gap-2">
-              <BookOpen className="h-4 w-4" />
-              Legibilidade (Flesch PT-BR)
-            </h4>
-            <div className="flex items-center gap-4">
-              <div className={cn("text-3xl font-bold", getScoreColor(analysisResult.readability.fleschScore))}>
-                {analysisResult.readability.fleschScore}
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="bg-muted/50 rounded-lg p-4">
+              <h4 className="font-medium mb-2 flex items-center gap-2">
+                <BookOpen className="h-4 w-4" />
+                Legibilidade (Flesch PT-BR)
+              </h4>
+              <div className="flex items-center gap-4">
+                <div className={cn("text-3xl font-bold", getScoreColor(analysisResult.readability.fleschScore))}>
+                  {analysisResult.readability.fleschScore}
+                </div>
+                <div>
+                  <Badge className={cn(
+                    analysisResult.readability.level === 'muito_facil' || analysisResult.readability.level === 'facil' ? 'bg-success' :
+                    analysisResult.readability.level === 'medio' ? 'bg-warning' :
+                    analysisResult.readability.level === 'dificil' ? 'bg-accent' : 'bg-destructive'
+                  )}>
+                    {analysisResult.readability.level.replace('_', ' ').toUpperCase()}
+                  </Badge>
+                  <p className="text-sm text-muted-foreground mt-1">{analysisResult.readability.recommendation}</p>
+                </div>
               </div>
-              <div>
-                <Badge className={cn(
-                  analysisResult.readability.level === 'muito_facil' || analysisResult.readability.level === 'facil' ? 'bg-success' :
-                  analysisResult.readability.level === 'medio' ? 'bg-warning' :
-                  analysisResult.readability.level === 'dificil' ? 'bg-accent' : 'bg-destructive'
-                )}>
-                  {analysisResult.readability.level.replace('_', ' ').toUpperCase()}
-                </Badge>
-                <p className="text-sm text-muted-foreground mt-1">{analysisResult.readability.recommendation}</p>
+              <div className="grid grid-cols-3 gap-2 mt-3 text-xs">
+                <div className="bg-background rounded p-2">
+                  <span className="font-medium">{analysisResult.readability.avgSentenceLength}</span>
+                  <span className="text-muted-foreground ml-1">pal/frase</span>
+                </div>
+                <div className="bg-background rounded p-2">
+                  <span className="font-medium">{analysisResult.readability.avgWordLength}</span>
+                  <span className="text-muted-foreground ml-1">let/pal</span>
+                </div>
+                <div className="bg-background rounded p-2">
+                  <span className="font-medium">{analysisResult.readability.complexWordPercentage}%</span>
+                  <span className="text-muted-foreground ml-1">complexas</span>
+                </div>
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-2 mt-3 text-xs">
-              <div className="bg-background rounded p-2">
-                <span className="font-medium">{analysisResult.readability.avgSentenceLength}</span>
-                <span className="text-muted-foreground ml-1">palavras/frase</span>
-              </div>
-              <div className="bg-background rounded p-2">
-                <span className="font-medium">{analysisResult.readability.avgWordLength}</span>
-                <span className="text-muted-foreground ml-1">letras/palavra</span>
-              </div>
-              <div className="bg-background rounded p-2">
-                <span className="font-medium">{analysisResult.readability.complexWordPercentage}%</span>
-                <span className="text-muted-foreground ml-1">palavras complexas</span>
-              </div>
+
+            <div className="bg-muted/50 rounded-lg p-4">
+              <h4 className="font-medium mb-2 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Activity className="h-4 w-4" />
+                  Sentimento & Emoção
+                </div>
+                <Badge variant="outline" className="capitalize flex items-center gap-1">
+                  {getSentimentIcon()} {analysisResult.sentiment}
+                </Badge>
+              </h4>
+              
+              {analysisResult.emotionalProfile && (
+                <div className="space-y-2 mt-2">
+                  {Object.entries(analysisResult.emotionalProfile).map(([emotion, value]) => (
+                    <div key={emotion} className="space-y-1">
+                      <div className="flex justify-between text-[10px] uppercase font-bold text-muted-foreground">
+                        <span>{emotion === 'joy' ? 'Alegria' : emotion === 'trust' ? 'Confiança' : emotion === 'fear' ? 'Medo' : emotion === 'urgency' ? 'Urgência' : 'Antecipação'}</span>
+                        <span>{value}%</span>
+                      </div>
+                      <Progress value={value} className="h-1" />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
