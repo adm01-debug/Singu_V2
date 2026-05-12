@@ -223,64 +223,84 @@ export function PersonalitySubTab({ contactId }: Props) {
         </Card>
 
         {/* Temperament */}
-        <Card>
-          <CardHeader>
+        <Card className="border-success/20">
+          <CardHeader className="pb-3">
             <CardTitle className="text-sm font-bold uppercase flex items-center gap-2">
               <Shield className="h-4 w-4 text-success" />
               Temperamento
             </CardTitle>
+            <CardDescription className="text-[10px]">A base biológica e emocional do comportamento.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Primário</Label>
+                <Label className="text-[10px] uppercase font-bold text-muted-foreground">Primário</Label>
                 <Select 
                   value={formData.temperament_primary} 
                   onValueChange={(val) => setFormData({ ...formData, temperament_primary: val })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-9 border-success/20">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="colerico">Colérico</SelectItem>
-                    <SelectItem value="sanguineo">Sanguíneo</SelectItem>
-                    <SelectItem value="fleumatico">Fleumático</SelectItem>
-                    <SelectItem value="melancolico">Melancólico</SelectItem>
+                    {Object.entries(TEMPERAMENT_TYPES).map(([id, info]) => (
+                      <SelectItem key={id} value={id}>
+                        <span className="flex items-center gap-2">
+                          <span>{info.icon}</span> {info.name}
+                        </span>
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Secundário</Label>
+                <Label className="text-[10px] uppercase font-bold text-muted-foreground">Secundário</Label>
                 <Select 
                   value={formData.temperament_secondary} 
                   onValueChange={(val) => setFormData({ ...formData, temperament_secondary: val })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-9 border-success/20">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="colerico">Colérico</SelectItem>
-                    <SelectItem value="sanguineo">Sanguíneo</SelectItem>
-                    <SelectItem value="fleumatico">Fleumático</SelectItem>
-                    <SelectItem value="melancolico">Melancólico</SelectItem>
+                    {Object.entries(TEMPERAMENT_TYPES).map(([id, info]) => (
+                      <SelectItem key={id} value={id}>
+                        <span className="flex items-center gap-2">
+                          <span>{info.icon}</span> {info.name}
+                        </span>
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
             </div>
+            
+            {formData.temperament_primary && TEMPERAMENT_TYPES[formData.temperament_primary as TemperamentType] && (
+              <div className={`p-3 rounded-lg border ${TEMPERAMENT_TYPES[formData.temperament_primary as TemperamentType].bgColor} border-success/10`}>
+                <p className="text-[10px] font-bold uppercase mb-1 flex items-center gap-1.5">
+                  <Target className="h-3 w-3" /> Core: {TEMPERAMENT_TYPES[formData.temperament_primary as TemperamentType].nickname}
+                </p>
+                <p className="text-[10px] leading-relaxed italic text-muted-foreground">
+                  "{TEMPERAMENT_TYPES[formData.temperament_primary as TemperamentType].description}"
+                </p>
+              </div>
+            )}
+
             <div className="space-y-2">
-              <Label>Notas de Temperamento</Label>
-              <Input 
+              <Label className="text-[10px] uppercase font-bold text-muted-foreground">Notas de Temperamento</Label>
+              <Textarea 
                 value={formData.temperament_notes || ""} 
                 onChange={(e) => setFormData({ ...formData, temperament_notes: e.target.value })}
                 placeholder="Observações adicionais..."
+                className="min-h-[60px] text-xs"
               />
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <div className="flex justify-end">
-        <Button onClick={handleSave} className="gap-2">
+      <div className="flex justify-end pt-4 border-t">
+        <Button onClick={handleSave} className="gap-2 px-8 h-11 font-bold uppercase tracking-wider shadow-lg hover:shadow-primary/20 transition-all">
           <Save className="h-4 w-4" />
           Salvar Frameworks de Personalidade
         </Button>
