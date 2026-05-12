@@ -321,17 +321,42 @@ export function InteractionForm({
             )}
           />
 
-            <div className="md:col-span-2">
+            <div className="md:col-span-2 space-y-4">
+              {/* Impact Predictor UI */}
+              {content && content.length > 10 && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 5 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  className="p-3 bg-muted/40 rounded-xl border border-dashed border-border flex items-center justify-between gap-4"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={cn("p-2 rounded-full bg-background shadow-sm", impactPrediction.color)}>
+                      <impactPrediction.icon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-tight">Impacto Estimado</p>
+                      <p className={cn("text-sm font-semibold", impactPrediction.color)}>{impactPrediction.label}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className={cn("text-lg font-mono font-bold", impactPrediction.color)}>
+                      {impactPrediction.impact > 0 ? '+' : ''}{impactPrediction.impact}
+                    </span>
+                    <p className="text-[10px] text-muted-foreground">pontos score</p>
+                  </div>
+                </motion.div>
+              )}
+
               <NLPRealtimeCoach 
                 content={form.watch('content') || ''} 
                 contactId={selectedContactId} 
                 onApplySuggestion={(suggestion) => {
-                  const currentContent = form.getValues('content') || '';
-                  form.setValue('content', currentContent ? `${currentContent}\n\n${suggestion}` : suggestion);
-                  toast.success('Sugestão aplicada à interação!');
-                }}
-              />
-            </div>
+                   const currentContent = form.getValues('content') || '';
+                   form.setValue('content', currentContent ? `${currentContent}\n\n${suggestion}` : suggestion);
+                   toast.success('Sugestão aplicada à interação!');
+                 }}
+               />
+             </div>
  
           <FormField
             control={form.control}
