@@ -54,7 +54,11 @@ export function CopywritingPreviewTab({ analyzeText, onTextChange, channelPrevie
                 </Badge>
               </div>
 
-                 {preview.channel === 'linkedin' ? (
+              <div
+                className="p-3"
+                style={{ backgroundColor: preview.preview.backgroundColor || 'transparent' }}
+              >
+                {preview.channel === 'linkedin' ? (
                    <div className="bg-white border rounded shadow-sm overflow-hidden">
                      <div className="p-3 flex items-center gap-2 border-b">
                        <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-700">VOCÊ</div>
