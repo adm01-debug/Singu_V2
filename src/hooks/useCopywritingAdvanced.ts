@@ -245,8 +245,16 @@ export function useCopywritingAdvanced(contact?: Contact) {
       strengths.push('Boa densidade de gatilhos mentais');
     }
 
-    // Check for power words
-    const powerWordsFound = text.match(/\b(grátis|garantido|exclusivo|limitado|novo|comprovado|resultado|transformação)\b/gi) || [];
+    // Check for power words (Enterprise set)
+    const powerWordsList = [
+      'grátis', 'garantido', 'exclusivo', 'limitado', 'novo', 'comprovado', 'resultado', 
+      'transformação', 'segredo', 'lucro', 'fácil', 'rápido', 'especial', 'agora', 
+      'urgente', 'oportunidade', 'vagas', 'desconto', 'imperdível', 'autoridade', 
+      'seguro', 'vitalício', 'imediato', 'vanguarda', 'inovação', 'elite', 'premium',
+      'estratégico', 'mensurável', 'escalável'
+    ];
+    const powerWordsRegex = new RegExp(`\\b(${powerWordsList.join('|')})\\b`, 'gi');
+    const powerWordsFound = text.match(powerWordsRegex) || [];
     if (powerWordsFound.length === 0) {
       issues.push({
         issue: 'Sem power words',
