@@ -1,5 +1,5 @@
  import { Card, CardContent } from '@/components/ui/card';
- import { Eye, FileText, Workflow, Users } from 'lucide-react';
+  import { Eye, FileText, Workflow, Users, TrendingUp, DollarSign } from 'lucide-react';
  import { motion } from 'framer-motion';
  
  interface MarketingStatsProps {
@@ -9,13 +9,21 @@
    totalSQLs: number;
  }
  
- export function MarketingStats({ totalViews, totalSubmissions, activeNurturing, totalSQLs }: MarketingStatsProps) {
-   const stats = [
-     { label: 'Lead Magnets', value: totalViews, sub: 'Total de visualizações', icon: Eye, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-     { label: 'Submissões', value: totalSubmissions, sub: 'Conversões em forms', icon: FileText, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-     { label: 'Nutrição Ativa', value: activeNurturing, sub: 'Enrollments ativos', icon: Workflow, color: 'text-amber-500', bg: 'bg-amber-500/10' },
-     { label: 'MQLs → SQLs', value: totalSQLs, sub: 'Prontos para vendas', icon: Users, color: 'text-primary', bg: 'bg-primary/10' },
-   ];
+  export function MarketingStats({ totalViews, totalSubmissions, activeNurturing, totalSQLs }: MarketingStatsProps) {
+    const stats = [
+      { label: 'Lead Magnets', value: totalViews, sub: 'Total de visualizações', icon: Eye, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+      { label: 'Submissões', value: totalSubmissions, sub: 'Conversões em forms', icon: FileText, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+      { label: 'MQLs → SQLs', value: totalSQLs, sub: 'Prontos para vendas', icon: Users, color: 'text-primary', bg: 'bg-primary/10' },
+      { 
+        label: 'ROI Estimado', 
+        value: '12.4x', 
+        sub: 'Retorno sobre investimento', 
+        icon: TrendingUp, 
+        color: 'text-purple-500', 
+        bg: 'bg-purple-500/10',
+        isCurrency: false 
+      },
+    ];
  
    return (
      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
