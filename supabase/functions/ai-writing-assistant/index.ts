@@ -54,7 +54,7 @@ const WritingInput = z.object({
    messageType: z.enum(['follow_up', 'introduction', 'proposal', 'check_in', 'thank_you', 'meeting_request', 'custom']),
    customContext: z.string().max(2000).optional(),
    tone: z.enum(['formal', 'casual', 'friendly']).optional(),
-   framework: z.enum(['AIDA', 'PAS', 'FAB', '4Ps', 'Storytelling', 'None']).optional().default('None'),
+    framework: z.enum(['AIDA', 'PAS', 'FAB', '4Ps', 'Storytelling', 'Carnegie', 'None']).optional().default('None'),
  });
 
 const DISC_COMMUNICATION_STYLES = {
@@ -137,7 +137,8 @@ Deno.serve(async (req) => {
  ${framework === 'PAS' ? '- PAS: Problema (Dor), Agitação (Consequência), Solução (Oferta).' : ''}
  ${framework === 'FAB' ? '- FAB: Feature (Recurso), Advantage (Vantagem), Benefit (Benefício real para o cliente).' : ''}
  ${framework === '4Ps' ? '- 4Ps: Promise (Promessa), Picture (Visualização do sucesso), Proof (Prova social/lógica), Push (Empurrão para ação).' : ''}
- ${framework === 'Storytelling' ? '- Storytelling: Use uma mini-narrativa ou arco de jornada do herói focado no sucesso do cliente.' : ''}
+  ${framework === 'Storytelling' ? '- Storytelling: Use uma mini-narrativa ou arco de jornada do herói focado no sucesso do cliente.' : ''}
+  ${framework === 'Carnegie' ? '- Carnegie (Dale Carnegie): Demonstre interesse genuíno, fale em termos dos interesses do outro, faça-o sentir-se importante, seja amigável e evite críticas.' : ''}
  
  ## Regras de Ouro:
  1. Analisador de Copy Interno: Garanta alta legibilidade (Flesch PT-BR simplificado).

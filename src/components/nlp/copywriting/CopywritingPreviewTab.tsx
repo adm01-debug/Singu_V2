@@ -1,7 +1,7 @@
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { Smartphone, Mail, MessageSquare } from 'lucide-react';
+ import { Smartphone, Mail, MessageSquare, CheckCircle } from 'lucide-react';
 
 interface ChannelPreview {
   channel: string;
@@ -58,19 +58,43 @@ export function CopywritingPreviewTab({ analyzeText, onTextChange, channelPrevie
                 className="p-3"
                 style={{ backgroundColor: preview.preview.backgroundColor || 'transparent' }}
               >
-                {preview.channel === 'whatsapp' ? (
-                  <div className="bg-card rounded-lg p-3 max-w-[250px] ml-auto">
-                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                      {preview.formattedText.substring(0, 200)}
-                      {preview.formattedText.length > 200 && '...'}
-                    </p>
-                  </div>
-                ) : (
-                  <p className="text-sm whitespace-pre-wrap">
-                    {preview.formattedText.substring(0, 200)}
-                    {preview.formattedText.length > 200 && '...'}
-                  </p>
-                )}
+                 {preview.channel === 'whatsapp' ? (
+                   <div className="relative p-4 bg-[#e5ddd5] rounded-md min-h-[120px]">
+                     <div className="bg-[#dcf8c6] rounded-lg p-3 max-w-[85%] ml-auto shadow-sm relative">
+                       <p className="text-[13px] text-gray-800 whitespace-pre-wrap leading-relaxed">
+                         {preview.formattedText}
+                       </p>
+                       <div className="text-[10px] text-gray-500 text-right mt-1 flex items-center justify-end gap-1">
+                         <span>10:45</span>
+                         <div className="flex -space-x-1">
+                           <CheckCircle className="h-3 w-3 text-blue-500 fill-blue-500" />
+                           <CheckCircle className="h-3 w-3 text-blue-500 fill-blue-500" />
+                         </div>
+                       </div>
+                       {/* WhatsApp Tail */}
+                       <div className="absolute top-0 -right-2 w-0 h-0 border-t-[10px] border-t-[#dcf8c6] border-r-[10px] border-r-transparent"></div>
+                     </div>
+                   </div>
+                 ) : preview.channel === 'email' ? (
+                   <div className="bg-white border rounded shadow-sm p-4">
+                     <div className="border-b pb-2 mb-3 text-xs text-muted-foreground">
+                       <div className="flex justify-between mb-1">
+                         <span>De: Você</span>
+                         <span>Agora</span>
+                       </div>
+                       <div className="font-bold text-foreground">Assunto: [Script Sugerido]</div>
+                     </div>
+                     <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                       {preview.formattedText}
+                     </p>
+                   </div>
+                 ) : (
+                   <div className="bg-muted/20 p-4 rounded border border-dashed">
+                     <p className="text-sm whitespace-pre-wrap">
+                       {preview.formattedText}
+                     </p>
+                   </div>
+                 )}
               </div>
 
               {preview.suggestions.length > 0 && (
