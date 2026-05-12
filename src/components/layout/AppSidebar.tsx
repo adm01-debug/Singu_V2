@@ -58,8 +58,9 @@ const navSections = [
       { title: "Conversation Intel", url: "/conversation-intelligence", icon: Brain },
       { title: "Tarefas", url: "/tarefas", icon: CheckSquare },
       { title: "Automações", url: "/automacoes", icon: Workflow },
-      { title: "Metas", url: "/metas", icon: Trophy },
-      { title: "Documentos", url: "/documentos", icon: BookOpen },
+       { title: "Metas", url: "/metas", icon: Trophy },
+       { title: "Copywriting", url: "/crm/copywriting", icon: Copy },
+       { title: "Documentos", url: "/documentos", icon: BookOpen },
     ],
   },
   {
