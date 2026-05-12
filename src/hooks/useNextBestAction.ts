@@ -109,7 +109,8 @@ export function useNextBestAction(contactId: string | undefined) {
     isGenerating: generate.isPending,
     isCompleting: complete.isPending,
     generate: generate.mutate,
-    complete: complete.mutate,
+     complete: complete.mutate,
+     updateScript: updateScript.mutate,
     refetch: query.refetch,
   };
 }
