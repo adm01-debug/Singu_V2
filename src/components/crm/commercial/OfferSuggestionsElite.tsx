@@ -6,8 +6,10 @@ import {
   TrendingUp, 
   Copy, 
   Star,
-  RefreshCw,
-  Clock,
+   RefreshCw,
+   Clock,
+   Settings,
+   History,
   AlertTriangle,
   Globe
 } from 'lucide-react';
@@ -101,11 +103,27 @@ export function OfferSuggestionsElite({ contactId }: Props) {
             <p className="text-[10px] text-muted-foreground">Neuro-Match Engine v4.0</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <AuditLogDrawer logs={auditLogs || []} />
-          <Button 
-            variant="outline" 
-            size="sm" 
+         <div className="flex items-center gap-2">
+           <div className="hidden sm:flex items-center gap-1.5 mr-2">
+             <TooltipProvider>
+               <Tooltip>
+                 <TooltipTrigger asChild>
+                   <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-slate-100 border border-slate-200 cursor-help">
+                     <Settings className="h-3 w-3 text-slate-500" />
+                     <span className="text-[10px] font-bold text-slate-600 uppercase">Auto-Pilot</span>
+                     <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                   </div>
+                 </TooltipTrigger>
+                 <TooltipContent>
+                   <p className="text-[10px]">Rotina agendada ativa: Sincronização automática a cada 24h.</p>
+                 </TooltipContent>
+               </Tooltip>
+             </TooltipProvider>
+           </div>
+           <AuditLogDrawer logs={auditLogs || []} />
+           <Button 
+             variant="outline" 
+             size="sm" 
             className={cn(
               "h-8 gap-2 text-[10px] font-bold uppercase tracking-wider",
               queueStatus?.status === 'pending' || queueStatus?.status === 'processing' ? "animate-pulse border-amber-500/50 text-amber-600" : ""

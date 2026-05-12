@@ -4,9 +4,15 @@
  
  export interface SocialInsight {
    id: string;
-   platform: string;
-   insight_type: string;
-   content: string;
+ platform: 'linkedin' | 'instagram' | 'twitter' | 'facebook' | 'youtube';
+ insight_type: 'career_move' | 'interest' | 'post' | 'like' | 'comment';
+ content: string;
+ source_url?: string;
+ metadata?: {
+   post_id?: string;
+   keywords?: string[];
+   engagement_type?: string;
+ };
    indicator_score: number;
    sentiment: 'positive' | 'neutral' | 'negative';
    created_at: string;
@@ -42,15 +48,30 @@
              created_at: new Date().toISOString()
            },
            {
-             id: '2',
-             platform: 'instagram',
-             insight_type: 'interest',
-             content: 'Engajamento com tópicos de sustentabilidade e ESG corporativo.',
-             indicator_score: 70,
-             sentiment: 'positive',
-             created_at: new Date(Date.now() - 86400000 * 2).toISOString()
-           }
-         ] as SocialInsight[];
+              id: '2',
+              platform: 'instagram',
+              insight_type: 'like',
+              content: 'Curtiu post sobre automação industrial e eficiência energética.',
+              indicator_score: 75,
+              sentiment: 'positive',
+              created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+              metadata: {
+                keywords: ['automação', 'eficiência']
+              }
+            },
+            {
+              id: '3',
+              platform: 'linkedin',
+              insight_type: 'post',
+              content: 'Publicou: "O futuro da produtividade está na integração de sistemas legados com IA".',
+              indicator_score: 95,
+              sentiment: 'positive',
+              created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
+              metadata: {
+                keywords: ['integração', 'produtividade', 'IA']
+              }
+            }
+          ] as SocialInsight[];
        }
      },
      enabled: !!contactId && !!user,
