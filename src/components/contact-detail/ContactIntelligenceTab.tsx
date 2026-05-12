@@ -30,7 +30,8 @@ const LocalChurnRiskPanel = lazy(() => import('@/components/churn-risk/ChurnRisk
 import { LeadScoreWidget } from '@/components/lead-score/LeadScoreWidget';
 import { ScoreExplicabilityPanel } from './ScoreExplicabilityPanel';
 import { MetricOverrideFlow } from './MetricOverrideFlow';
-import { RelationshipAuditPanel } from '../crm/relationship/RelationshipAuditPanel';
+ import { RelationshipAuditPanel } from '../crm/relationship/RelationshipAuditPanel';
+ import { EmotionalIntelligencePanel } from '@/components/analytics/EmotionalIntelligencePanel';
 
 
 interface Props {
@@ -99,7 +100,8 @@ export function ContactIntelligenceTab({ contactId, contactName, linkedinUrl, we
       <div className="flex justify-end">
         <ModuleHelp {...moduleHelpContent.neuromarketing} />
       </div>
-      <div className="grid gap-4 md:grid-cols-2">
+       <div className="grid gap-4 md:grid-cols-2">
+         <EmotionalIntelligencePanel contact={{ id: contactId, firstName: contactName || 'Contato' } as any} interactions={[]} />
       {/* Hidden Objections */}
       <Card className={cn(unresolvedObjections.length > 0 && 'border-accent/30 dark:border-accent/30')}>
         <CardHeader className="pb-3">
