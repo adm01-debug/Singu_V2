@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -105,6 +105,24 @@ export function CadenceRulesConfig() {
     }
     setIsDialogOpen(true);
   };
+
+  // Sincronização automática para novas regras ou mudanças de estágio
+  useEffect(() => {
+    const channel = supabase
+      .channel('cadence-updates')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'crm_cadence_rules' },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['crm-cadence-rules'] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
 
   const handleAddStep = () => {
     const steps = [...(editingRule.cadence_steps || [])];
