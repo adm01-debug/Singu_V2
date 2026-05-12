@@ -412,9 +412,26 @@ interface Props {
 
       <Suspense fallback={<Card className="border-border/50"><CardContent className="p-4"><div className="h-48 animate-pulse bg-muted/30 rounded-lg" /></CardContent></Card>}><ActivityHeatmapChart /></Suspense>
 
-      <div className="flex items-center justify-end">
-        <SavedViewsMenu scope="interacoes" />
-      </div>
+       <div className="flex items-center justify-between">
+         <div className="flex items-center gap-2">
+           <Button 
+             variant={isSelectionMode ? "secondary" : "outline"} 
+             size="sm" 
+             onClick={() => setIsSelectionMode(!isSelectionMode)}
+             className="gap-2"
+           >
+             {isSelectionMode ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4" />}
+             {isSelectionMode ? "Sair da Seleção" : "Selecionar"}
+           </Button>
+         </div>
+         <SavedViewsMenu scope="interacoes" />
+       </div>
+
+       <InteractionBatchActions 
+         selectedIds={selectedIds} 
+         interactions={interactions} 
+         onClearSelection={handleClearSelection} 
+       />
 
       <AdvancedSearchBar
         filters={adv}
