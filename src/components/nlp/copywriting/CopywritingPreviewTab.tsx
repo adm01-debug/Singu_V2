@@ -1,7 +1,7 @@
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { Smartphone, Mail, MessageSquare } from 'lucide-react';
+ import { Smartphone, Mail, MessageSquare, CheckCircle } from 'lucide-react';
 
 interface ChannelPreview {
   channel: string;
