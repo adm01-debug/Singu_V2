@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Brain, MessageSquare, ShieldCheck, Users, Briefcase, Activity, Shield, FileText } from "lucide-react";
+import { Brain, MessageSquare, ShieldCheck, Users, Briefcase, Activity, Shield, FileText, Compass } from "lucide-react";
 import { useContactBehavior } from "@/hooks/useContactBehavior";
 import { DISCSubTab } from "./behavior/DISCSubTab";
 import { MotivationsSubTab } from "./behavior/MotivationsSubTab";
@@ -12,6 +12,7 @@ import { BusinessContextSubTab } from "./behavior/BusinessContextSubTab";
 import { ConsentAuditLog } from "./consent/ConsentAuditLog";
 import { RelationshipReportExport } from "./relationship/RelationshipReportExport";
 import { NeuromarketingTimeline } from "./behavior/NeuromarketingTimeline";
+import { PredictiveRoadmap } from "./behavior/PredictiveRoadmap";
 
 interface ContactBehaviorExtendedProps {
   contactId: string;
@@ -24,21 +25,21 @@ export const ContactBehaviorExtended = ({ contactId }: ContactBehaviorExtendedPr
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <Brain className="h-6 w-6 text-primary" />
-          Perfil Comportamental Estendido
-        </h2>
-      </div>
-
       <Tabs defaultValue="disc" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9 mb-8">
+        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-10 mb-8">
+          <TabsTrigger value="roadmap" className="flex items-center gap-2">
+            <Compass className="h-4 w-4" />
+            <span className="hidden sm:inline">Roadmap</span>
+          </TabsTrigger>
           <TabsTrigger value="neuro" className="flex items-center gap-2">
             <Activity className="h-4 w-4" />
             <span className="hidden sm:inline">Neuro</span>
           </TabsTrigger>
         <TabsContent value="neuro">
           <NeuromarketingTimeline contactId={contactId} />
+        </TabsContent>
+        <TabsContent value="roadmap">
+          <PredictiveRoadmap contactId={contactId} />
         </TabsContent>
           <TabsTrigger value="export" className="flex items-center gap-2">
             <FileText className="h-4 w-4" />
