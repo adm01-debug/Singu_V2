@@ -220,24 +220,24 @@ export function MetaprogramsSubTab({ contactId }: Props) {
                     </div>
                   </div>
 
-                  <div className="relative h-2 rounded-full bg-muted/50 overflow-hidden mt-2">
+                  <div className="relative h-2.5 rounded-full bg-muted/50 overflow-hidden mt-2">
                     <div 
-                      className="absolute h-full bg-primary transition-all duration-500 ease-in-out"
+                      className="absolute h-full bg-primary transition-all duration-700 ease-out shadow-[0_0_8px_rgba(var(--primary),0.4)]"
                       style={{ 
                         left: '0', 
                         width: `${leftPct}%`,
-                        opacity: 0.7
+                        opacity: 0.8
                       }}
                     />
                     <div 
-                      className="absolute h-full bg-accent transition-all duration-500 ease-in-out"
+                      className="absolute h-full bg-accent transition-all duration-700 ease-out shadow-[0_0_8px_rgba(var(--accent),0.4)]"
                       style={{ 
                         right: '0', 
                         width: `${100 - leftPct}%`,
-                        opacity: 0.7
+                        opacity: 0.8
                       }}
                     />
-                    <div className="absolute left-1/2 top-0 h-full w-0.5 bg-background z-10" />
+                    <div className="absolute left-1/2 top-0 h-full w-0.5 bg-background z-10 shadow-sm" />
                   </div>
                 </div>
               );
