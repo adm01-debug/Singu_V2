@@ -95,9 +95,9 @@ export default function MarketingHub() {
                  <CardContent>
                    <div className="space-y-3 pt-2">
                      {['visual', 'auditivo', 'cinestesico'].map(type => {
-                        const count = (behaviorInsights?.vak as any)?.[type] || 0;
-                        const total = Object.values(behaviorInsights?.vak || {}).reduce((a: number, b: any) => a + (Number(b) || 0), 0) || 1;
-                       const percentage = (count / total) * 100;
+                         const vCount = Number((behaviorInsights?.vak as any)?.[type] || 0);
+                         const vTotal = Number(Object.values(behaviorInsights?.vak || {}).reduce((a: number, b: any) => a + (Number(b) || 0), 0) || 1);
+                        const percentage = (vCount / vTotal) * 100;
                        return (
                          <div key={type} className="space-y-1">
                            <div className="flex justify-between text-[10px] uppercase font-bold tracking-wider">
