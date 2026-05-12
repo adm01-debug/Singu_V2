@@ -4,21 +4,31 @@
  import { Badge } from '@/components/ui/badge';
  import { Progress } from '@/components/ui/progress';
  import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
- import { Brain, Sparkles, AlertTriangle, CheckCircle2, MessageSquare, Mail, Smartphone } from 'lucide-react';
+   import { Brain, Sparkles, AlertTriangle, CheckCircle2, MessageSquare, Mail, Smartphone, Target } from 'lucide-react';
  
  export const CopyAnalyzer = () => {
    const [text, setText] = useState('');
    const [analysis, setAnalysis] = useState({
-     readability: 0,
-     emotions: { joy: 0, urgency: 0, trust: 0, fear: 0 },
-     triggers: [] as string[],
-     score: 0,
-     tips: [] as string[]
-   });
+      readability: 0,
+      emotions: { joy: 0, urgency: 0, trust: 0, fear: 0, cognitive_ease: 0 },
+      triggers: [] as string[],
+      score: 0,
+      tips: [] as string[],
+      storytelling_arc: 'Linear',
+      objections: [] as string[]
+    });
  
    useEffect(() => {
      if (!text) {
-       setAnalysis({ readability: 0, emotions: { joy: 0, urgency: 0, trust: 0, fear: 0 }, triggers: [], score: 0, tips: [] });
+       setAnalysis({ 
+         readability: 0, 
+         emotions: { joy: 0, urgency: 0, trust: 0, fear: 0, cognitive_ease: 0 }, 
+         triggers: [], 
+         score: 0, 
+         tips: [],
+         storytelling_arc: 'Linear',
+         objections: []
+       });
        return;
      }
  
@@ -42,17 +52,22 @@
      if (triggersFound.length < 2) tips.push('Adicione mais gatilhos mentais para aumentar a conversão.');
      if (readability < 60) tips.push('Texto complexo. Use palavras mais simples para atingir um público maior.');
  
-     setAnalysis({
-       readability: Math.round(readability),
-       emotions: {
-         joy: text.includes('!') ? 80 : 40,
-         urgency: triggersFound.includes('Urgência') ? 90 : 30,
-         trust: triggersFound.includes('Segurança') ? 85 : 50,
-         fear: text.toLowerCase().includes('perca') ? 70 : 10,
-       },
-       triggers: triggersFound,
-       score: Math.round((readability + (triggersFound.length * 20)) / 2),
-       tips
+      const cognitiveEase = Math.round(readability * 0.8 + (triggersFound.length * 4));
+
+      setAnalysis({
+        readability: Math.round(readability),
+        emotions: {
+          joy: text.includes('!') ? 80 : 40,
+          urgency: triggersFound.includes('Urgência') ? 90 : 30,
+          trust: triggersFound.includes('Segurança') ? 85 : 50,
+          fear: text.toLowerCase().includes('perca') ? 70 : 10,
+          cognitive_ease: cognitiveEase
+        },
+        triggers: triggersFound,
+        score: Math.round((readability + (triggersFound.length * 20) + cognitiveEase) / 3),
+       tips,
+       storytelling_arc: text.length > 200 ? 'Jornada do Herói' : 'Pitch Direto',
+       objections: text.toLowerCase().includes('caro') || text.toLowerCase().includes('preço') ? ['Preço/Valor'] : []
      });
    }, [text]);
  
@@ -92,7 +107,8 @@
                <TabsList className="grid w-full grid-cols-3">
                  <TabsTrigger value="whatsapp"><Smartphone className="w-4 h-4 mr-2" /> WhatsApp</TabsTrigger>
                  <TabsTrigger value="email"><Mail className="w-4 h-4 mr-2" /> Email</TabsTrigger>
-                 <TabsTrigger value="social"><Sparkles className="w-4 h-4 mr-2" /> Redes</TabsTrigger>
+                     <TabsTrigger value="social"><Sparkles className="w-4 h-4 mr-2" /> Redes</TabsTrigger>
+                     <TabsTrigger value="objections"><Target className="w-4 h-4 mr-2" /> Objeções</TabsTrigger>
                </TabsList>
                <TabsContent value="whatsapp" className="mt-4">
                  <div className="bg-[#e5ddd5] p-4 rounded-lg min-h-[200px] relative overflow-hidden">
@@ -101,7 +117,25 @@
                      <span className="text-[10px] text-muted-foreground float-right mt-1">12:00</span>
                    </div>
                  </div>
-               </TabsContent>
+                 </TabsContent>
+                 <TabsContent value="objections" className="mt-4">
+                   <div className="border rounded-lg p-4 bg-red-50/30 border-red-100">
+                     <h4 className="text-sm font-bold flex items-center gap-2 text-red-700 mb-3">
+                       <Target className="w-4 h-4" /> Radar de Resistência
+                     </h4>
+                     {analysis.objections.length > 0 ? (
+                       <div className="space-y-3">
+                         <p className="text-xs text-red-800">Detectamos gatilhos de resistência sobre: <strong>{analysis.objections.join(', ')}</strong></p>
+                         <div className="bg-white p-3 rounded border border-red-200 text-xs">
+                           <p className="font-bold text-red-700 mb-1">Dica de Reenquadramento:</p>
+                           <p className="text-muted-foreground italic">"Em vez de focar no preço, foque no custo de não resolver o problema agora."</p>
+                         </div>
+                       </div>
+                     ) : (
+                       <p className="text-xs text-muted-foreground italic text-center py-8">Nenhuma objeção explícita detectada. O texto parece fluir sem barreiras de preço ou autoridade.</p>
+                     )}
+                   </div>
+                 </TabsContent>
                <TabsContent value="email" className="mt-4">
                  <div className="border rounded-md p-4 bg-white min-h-[200px] shadow-inner">
                    <div className="border-b pb-2 mb-2 text-xs text-muted-foreground">
@@ -169,11 +203,27 @@
                    <span className="text-[10px] uppercase text-muted-foreground font-bold">Alegria/Entusiasmo</span>
                    <Progress value={analysis.emotions.joy} className="h-1 bg-green-100" />
                  </div>
-                 <div className="space-y-1.5">
-                   <span className="text-[10px] uppercase text-muted-foreground font-bold">FOMO (Medo)</span>
-                   <Progress value={analysis.emotions.fear} className="h-1 bg-red-100" />
-                 </div>
-               </div>
+                  <div className="space-y-1.5">
+                    <span className="text-[10px] uppercase text-muted-foreground font-bold">FOMO (Medo)</span>
+                    <Progress value={analysis.emotions.fear} className="h-1 bg-red-100" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <span className="text-[10px] uppercase text-muted-foreground font-bold">Facilidade Cognitiva</span>
+                    <Progress value={analysis.emotions.cognitive_ease} className="h-1 bg-indigo-100" />
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-primary/10">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs font-medium">Arco Narrativo</span>
+                    <Badge variant="outline" className="text-[10px]">{analysis.storytelling_arc}</Badge>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground leading-tight italic">
+                    {analysis.storytelling_arc === 'Jornada do Herói' 
+                      ? 'Detectada estrutura de transformação: Problema -> Conflito -> Resolução.' 
+                      : 'Estrutura focada em clareza e velocidade de processamento.'}
+                  </p>
+                </div>
              </div>
            </CardContent>
          </Card>

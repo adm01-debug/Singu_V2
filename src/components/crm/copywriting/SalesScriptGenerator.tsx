@@ -9,6 +9,7 @@
  
  export const SalesScriptGenerator = () => {
    const [persona, setPersona] = useState('disc-d');
+   const [vakPreference, setVakPreference] = useState('visual');
    const [stage, setStage] = useState('prospecting');
    const [channel, setChannel] = useState('whatsapp');
    const [isGenerating, setIsGenerating] = useState(false);
@@ -17,18 +18,25 @@
  
    const generateScript = () => {
      setIsGenerating(true);
-     // Simulation of AI generation logic based on behavior profiles
-     setTimeout(() => {
-       let content = "";
-       if (persona === 'disc-d') { // Dominant: Quick, direct, results-oriented
-         content = channel === 'whatsapp' 
-           ? "Olá [Nome], direto ao ponto: vi que sua empresa busca [Resultado]. Temos uma solução que aumenta [Métrica] em [X]%. Pode falar amanhã às 10h?" 
-           : "Assunto: ROI de [X]% em [Métrica]\n\n[Nome],\n\nNotei que sua operação está focada em [Meta]. Implementamos um sistema que corta custos em [X]% em 30 dias. Os números estão em anexo. Vamos falar?";
-       } else if (persona === 'disc-i') { // Influential: Friendly, social, enthusiastic
-         content = "Oi [Nome]! Tudo ótimo? Adorei sua última postagem sobre [Tema]. Me lembrou muito um desafio que resolvemos recentemente. Adoraria trocar uma ideia sobre como estamos ajudando líderes como você a brilharem em [Área]. Topa um café virtual?";
-       } else {
-         content = "Prezado [Nome], espero que esteja bem. Analisando os dados de [Setor], identificamos uma oportunidade de otimização em [Processo]. Gostaria de agendar uma breve reunião técnica para apresentar nossa metodologia fundamentada em [Prova Social]. Qual sua disponibilidade?";
-       }
+       setTimeout(() => {
+         let content = "";
+         const vakPrefix = {
+           visual: "Veja bem",
+           auditory: "Ouça o que tenho a dizer",
+           kinesthetic: "Sinta o impacto"
+         }[vakPreference as 'visual'|'auditory'|'kinesthetic'] || "Veja";
+
+         if (persona === 'disc-d') {
+           content = channel === 'whatsapp' 
+             ? `Olá [Nome], direto ao ponto. ${vakPrefix}: temos uma solução que aumenta [Métrica] em [X]%. Pode falar amanhã às 10h?` 
+             : `Assunto: ROI de [X]% em [Métrica]\n\n[Nome],\n\nNotei sua meta. ${vakPrefix}: implementamos um sistema que corta custos em [X]% em 30 dias. Vamos falar?`;
+         } else if (persona === 'disc-i') {
+           content = `Oi [Nome]! Tudo ótimo? ${vakPrefix}: adorei sua postagem sobre [Tema]. Me lembrou um desafio que resolvemos. Adoraria trocar uma ideia sobre como estamos ajudando líderes a brilharem. Topa um café?`;
+         } else if (persona === 'disc-s') {
+           content = `Olá [Nome], espero que esteja bem. ${vakPrefix}: nossa metodologia foca em segurança e previsibilidade operacional. Temos casos de sucesso em [Setor] com resultados consistentes. Gostaria de conhecer nosso processo?`;
+         } else {
+           content = `Prezado [Nome], analisando os dados de [Setor], ${vakPrefix}: identificamos uma oportunidade de otimização baseada em [Métrica]. Segue análise técnica anexa para sua validação de precisão. Qual sua disponibilidade?`;
+         }
        
        setScript(content);
        setIsGenerating(false);
@@ -52,20 +60,35 @@
            </CardTitle>
          </CardHeader>
          <CardContent className="space-y-4">
-           <div className="space-y-2">
-             <Label>Perfil Comportamental (DISC)</Label>
-             <Select value={persona} onValueChange={setPersona}>
-               <SelectTrigger>
-                 <SelectValue />
-               </SelectTrigger>
-               <SelectContent>
-                 <SelectItem value="disc-d">Dominante (Direto/Resultados)</SelectItem>
-                 <SelectItem value="disc-i">Influente (Relacional/Social)</SelectItem>
-                 <SelectItem value="disc-s">Estável (Segurança/Processo)</SelectItem>
-                 <SelectItem value="disc-c">Analítico (Dados/Precisão)</SelectItem>
-               </SelectContent>
-             </Select>
-           </div>
+             <div className="grid grid-cols-2 gap-4">
+               <div className="space-y-2">
+                 <Label>Perfil DISC</Label>
+                 <Select value={persona} onValueChange={setPersona}>
+                   <SelectTrigger>
+                     <SelectValue />
+                   </SelectTrigger>
+                   <SelectContent>
+                     <SelectItem value="disc-d">Dominante</SelectItem>
+                     <SelectItem value="disc-i">Influente</SelectItem>
+                     <SelectItem value="disc-s">Estável</SelectItem>
+                     <SelectItem value="disc-c">Analítico</SelectItem>
+                   </SelectContent>
+                 </Select>
+               </div>
+               <div className="space-y-2">
+                 <Label>Sistema VAK</Label>
+                 <Select value={vakPreference} onValueChange={setVakPreference}>
+                   <SelectTrigger>
+                     <SelectValue />
+                   </SelectTrigger>
+                   <SelectContent>
+                     <SelectItem value="visual">Visual</SelectItem>
+                     <SelectItem value="auditory">Auditivo</SelectItem>
+                     <SelectItem value="kinesthetic">Cinestésico</SelectItem>
+                   </SelectContent>
+                 </Select>
+               </div>
+             </div>
  
            <div className="space-y-2">
              <Label>Canal de Comunicação</Label>
