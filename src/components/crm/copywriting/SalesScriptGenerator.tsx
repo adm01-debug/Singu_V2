@@ -12,6 +12,7 @@
    const [vakPreference, setVakPreference] = useState('visual');
    const [stage, setStage] = useState('prospecting');
    const [trigger, setTrigger] = useState('none');
+   const [objectionType, setObjectionType] = useState('price');
    const [channel, setChannel] = useState('whatsapp');
    const [isGenerating, setIsGenerating] = useState(false);
    const [script, setScript] = useState('');
@@ -39,9 +40,15 @@
              content = `Prezado [Nome], analisando os dados de [Setor], ${vakPrefix}: identificamos uma oportunidade de otimização baseada em [Métrica]. Segue análise técnica anexa para sua validação de precisão. Qual sua disponibilidade?`;
            }
 
-          if (stage === 'objection') {
-            content += `\n\n[TRATAMENTO DE OBJEÇÃO]: Entendo perfeitamente sua preocupação com o investimento. No entanto, se olharmos para o custo de inação, ${vakPrefix} que o prejuízo pode ser maior que o aporte inicial.`;
-          }
+           if (stage === 'objection') {
+             const objectionScripts = {
+               price: `\n\n[TRATAMENTO DE OBJEÇÃO - PREÇO]: Entendo perfeitamente sua preocupação com o investimento. No entanto, se olharmos para o custo de inação, ${vakPrefix} que o prejuízo pode ser maior que o aporte inicial.`,
+               time: `\n\n[TRATAMENTO DE OBJEÇÃO - TEMPO]: Comprendo que sua agenda está lotada. Justamente por isso, nossa solução foi desenhada para automatizar tarefas que hoje consomem 40% do seu dia. ${vakPrefix} o tempo que você recuperará.`,
+               trust: `\n\n[TRATAMENTO DE OBJEÇÃO - CONFIANÇA]: É natural ter cautela com novas tecnologias. ${vakPrefix}: temos mais de 500 clientes enterprise e 98% de retenção. Nossa implementação é acompanhada por especialistas.`,
+               authority: `\n\n[TRATAMENTO DE OBJEÇÃO - AUTORIDADE]: Entendo que precise validar com outros decisores. ${vakPrefix}: preparei este sumário executivo com foco em ROI para facilitar essa apresentação interna.`
+             };
+             content += objectionScripts[objectionType as keyof typeof objectionScripts] || objectionScripts.price;
+           }
 
           if (trigger === 'novelty') {
             content = `[NOVIDADE EXCLUSIVA] ` + content;
@@ -117,20 +124,37 @@
            </div>
  
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Etapa do Funil</Label>
-                <Select value={stage} onValueChange={setStage}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="prospecting">Prospecção</SelectItem>
-                    <SelectItem value="followup">Follow-up</SelectItem>
-                    <SelectItem value="objection">Objeção</SelectItem>
-                    <SelectItem value="closing">Fechamento</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+               <div className="space-y-2">
+                 <Label>Etapa do Funil</Label>
+                 <Select value={stage} onValueChange={setStage}>
+                   <SelectTrigger>
+                     <SelectValue />
+                   </SelectTrigger>
+                   <SelectContent>
+                     <SelectItem value="prospecting">Prospecção</SelectItem>
+                     <SelectItem value="followup">Follow-up</SelectItem>
+                     <SelectItem value="objection">Objeção</SelectItem>
+                     <SelectItem value="closing">Fechamento</SelectItem>
+                   </SelectContent>
+                 </Select>
+               </div>
+ 
+               {stage === 'objection' && (
+                 <div className="space-y-2 animate-in slide-in-from-top-2 duration-300">
+                   <Label>Tipo de Objeção</Label>
+                   <Select value={objectionType} onValueChange={setObjectionType}>
+                     <SelectTrigger>
+                       <SelectValue />
+                     </SelectTrigger>
+                     <SelectContent>
+                       <SelectItem value="price">Preço / Orçamento</SelectItem>
+                       <SelectItem value="time">Falta de Tempo</SelectItem>
+                       <SelectItem value="trust">Falta de Confiança / Risco</SelectItem>
+                       <SelectItem value="authority">Precisa de Aprovação</SelectItem>
+                     </SelectContent>
+                   </Select>
+                 </div>
+               )}
               <div className="space-y-2">
                 <Label>Gatilho Mental</Label>
                 <Select value={trigger} onValueChange={setTrigger}>
