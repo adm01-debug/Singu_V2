@@ -13,6 +13,7 @@ interface AnalysisResult {
   clarityScore: number;
   emotionalScore: number;
   ctaStrength: number;
+  originalText: string;
   sentiment: 'positive' | 'neutral' | 'negative';
   emotionalProfile?: {
     joy: number;
