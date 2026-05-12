@@ -79,7 +79,14 @@ const ContatoDetalhe = () => {
   const { id } = useParams();
   const { contact, company, interactions, insights, alerts, loading, error, refetch, dismissAlert, dismissInsight } = useContactDetail(id);
   const { trackView } = useRecentlyViewed();
-  const { records: luxRecords, latestRecord, loading: luxLoading, triggering, triggerLux } = useLuxIntelligence('contact', id);
+   const { 
+     records: luxRecords, 
+     latestRecord, 
+     loading: luxLoading, 
+     triggering, 
+     triggerLux,
+     createStakeholderContact
+   } = useLuxIntelligence('contact', id);
   const proactiveIntelligence = useProactiveIntelligence(contact, interactions);
   const [meetingMode, setMeetingMode] = useState(false);
 
@@ -317,14 +324,17 @@ const ContatoDetalhe = () => {
             <DashboardErrorBoundary sectionName="Lux Intelligence">
               <Card>
                 <CardContent className="pt-6">
-                  <LuxIntelligencePanel
-                    record={latestRecord}
-                    records={luxRecords}
-                    entityType="contact"
-                    loading={luxLoading}
-                    onTrigger={handleTriggerLux}
-                    triggering={triggering}
-                  />
+                   <LuxIntelligencePanel
+                     record={latestRecord}
+                     records={luxRecords}
+                     entityType="contact"
+                     loading={luxLoading}
+                     onTrigger={handleTriggerLux}
+                     triggering={triggering}
+                     onAddContact={async (s) => {
+                       await createStakeholderContact(s);
+                     }}
+                   />
                 </CardContent>
               </Card>
             </DashboardErrorBoundary>
