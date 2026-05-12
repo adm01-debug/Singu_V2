@@ -9,24 +9,26 @@
  export const CopyAnalyzer = () => {
    const [text, setText] = useState('');
    const [analysis, setAnalysis] = useState({
-     readability: 0,
-     emotions: { joy: 0, urgency: 0, trust: 0, fear: 0, cognitive_ease: 0 },
-     triggers: [] as string[],
-     score: 0,
-     tips: [] as string[],
-     storytelling_arc: 'Linear'
-   });
+      readability: 0,
+      emotions: { joy: 0, urgency: 0, trust: 0, fear: 0, cognitive_ease: 0 },
+      triggers: [] as string[],
+      score: 0,
+      tips: [] as string[],
+      storytelling_arc: 'Linear',
+      objections: [] as string[]
+    });
  
    useEffect(() => {
      if (!text) {
-      setAnalysis({ 
-        readability: 0, 
-        emotions: { joy: 0, urgency: 0, trust: 0, fear: 0, cognitive_ease: 0 }, 
-        triggers: [], 
-        score: 0, 
-        tips: [],
-        storytelling_arc: 'Linear'
-      });
+       setAnalysis({ 
+         readability: 0, 
+         emotions: { joy: 0, urgency: 0, trust: 0, fear: 0, cognitive_ease: 0 }, 
+         triggers: [], 
+         score: 0, 
+         tips: [],
+         storytelling_arc: 'Linear',
+         objections: []
+       });
        return;
      }
  
