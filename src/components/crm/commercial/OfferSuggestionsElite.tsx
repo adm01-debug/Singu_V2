@@ -137,9 +137,11 @@ export function OfferSuggestionsElite({ contactId }: Props) {
                         <h4 className="text-sm font-bold group-hover:text-primary transition-colors">
                           {offer.offer_name}
                         </h4>
-                        <Badge variant="outline" className="text-[9px] h-4">
-                          {offer.category}
-                        </Badge>
+                        {offer.offer_category && (
+                          <Badge variant="outline" className="text-[9px] h-4">
+                            {offer.offer_category}
+                          </Badge>
+                        )}
                       </div>
                       <p className="text-xs text-muted-foreground leading-relaxed italic">
                         "{offer.reason}"
