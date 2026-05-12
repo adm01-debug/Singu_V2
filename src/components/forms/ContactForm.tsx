@@ -36,9 +36,9 @@ const contactSchema = z.object({
   notes: z.string().trim().max(2000).optional(),
   personal_notes: z.string().trim().max(2000).optional().or(z.literal('')),
   assinatura_contato: z.string().trim().max(500).optional().or(z.literal('')),
-  tags_array: z.string().trim().max(500).optional().or(z.literal('')),
-  interests_array: z.string().trim().max(500).optional().or(z.literal('')),
-  hobbies: z.string().trim().max(500).optional().or(z.literal('')),
+   tags_array: z.array(z.string()).optional().default([]),
+   interests_array: z.array(z.string()).optional().default([]),
+   hobbies: z.array(z.string()).optional().default([]),
   family_info: z.string().trim().max(2000).optional().or(z.literal('')),
 });
 
@@ -81,9 +81,9 @@ export function ContactForm({ contact, companies, defaultCompanyId, onSubmit, on
       linkedin: getField(c, 'linkedin'), instagram: getField(c, 'instagram'), twitter: getField(c, 'twitter'),
       notes: getField(c, 'notes'), personal_notes: getField(c, 'personal_notes'),
       assinatura_contato: getField(c, 'assinatura_contato'),
-      tags_array: Array.isArray(c?.tags_array) ? (c.tags_array as string[]).join(', ') : '',
-      interests_array: Array.isArray(c?.interests_array) ? (c.interests_array as string[]).join(', ') : '',
-      hobbies: Array.isArray(c?.hobbies) ? (c.hobbies as string[]).join(', ') : (c?.hobbies_array ? (c.hobbies_array as string[]).join(', ') : ''),
+       tags_array: Array.isArray(c?.tags_array) ? c.tags_array : [],
+       interests_array: Array.isArray(c?.interests_array) ? c.interests_array : [],
+       hobbies: Array.isArray(c?.hobbies) ? c.hobbies : (Array.isArray(c?.hobbies_array) ? c.hobbies_array : []),
       family_info: getField(c, 'family_info'), avatar_url: getField(c, 'avatar_url'),
     },
   });
@@ -108,15 +108,20 @@ export function ContactForm({ contact, companies, defaultCompanyId, onSubmit, on
   const selectedRole = useWatch({ control: form.control, name: 'role' });
   useEffect(() => { if (!contact && selectedRole === 'buyer') form.setValue('relationship_stage', 'qualified_lead', { shouldDirty: false }); }, [selectedRole, contact, form]);
 
-  const handleSubmit = async (data: ContactFormData) => {
-    const cleaned: Record<string, unknown> = {};
-    for (const [key, value] of Object.entries(data)) { cleaned[key] = value === '' || value === undefined ? null : value; }
-    cleaned.tags_array = parseCommaSeparated(data.tags_array);
-    cleaned.interests_array = parseCommaSeparated(data.interests_array);
-    cleaned.hobbies = parseCommaSeparated(data.hobbies);
-    await onSubmit(cleaned);
-    clearDraft();
-  };
+   const handleSubmit = async (data: ContactFormData) => {
+     const cleaned: Record<string, unknown> = {};
+     for (const [key, value] of Object.entries(data)) { 
+       cleaned[key] = value === '' || value === undefined ? null : value; 
+     }
+     
+     // The fields are already arrays thanks to TagInput
+     cleaned.tags_array = data.tags_array;
+     cleaned.interests_array = data.interests_array;
+     cleaned.hobbies = data.hobbies;
+     
+     await onSubmit(cleaned);
+     clearDraft();
+   };
 
   return (
     <Form {...form}>
