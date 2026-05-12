@@ -10,7 +10,7 @@ import { ptBR } from "date-fns/locale";
 import { logger } from "@/lib/logger";
 import { ReportScriptsSection } from "./relatorio/ReportScriptsSection";
 import { NeuromarketingTimeline } from "@/components/crm/behavior/NeuromarketingTimeline";
-  import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+  import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
   import { Textarea } from "@/components/ui/textarea";
   import { Input } from "@/components/ui/input";
   import { toast } from "sonner";
@@ -33,20 +33,26 @@ interface ContactBehavior {
    contact: Tables<'contacts'>;
    interactions: Tables<'interactions'>[];
    discHistory: Tables<'disc_analysis_history'>[];
-   insights?: {
-     recurringObjections: (string | null)[];
-     topPreferences: (string | null)[];
-     preferredTone: string;
-     communicationRecommendations: string[];
-   };
+    insights: {
+      recurringObjections: string[];
+      topPreferences: string[];
+      preferredTone: string;
+      communicationRecommendations: string[];
+    };
+    overrides?: {
+      insights_data: any;
+      custom_scripts: any;
+    };
  }
 
 const RelatorioContato = () => {
   const { id } = useParams<{ id: string }>();
-   const [data, setData] = useState<ContactReport | null>(null);
-   const [editingInsights, setEditingInsights] = useState(false);
-   const [editedInsights, setEditedInsights] = useState<ContactReport['insights'] | null>(null);
+  const [data, setData] = useState<ContactReport | null>(null);
+  const [editingInsights, setEditingInsights] = useState(false);
+  const [editedInsights, setEditedInsights] = useState<ContactReport['insights'] | null>(null);
+  const [customScripts, setCustomScripts] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,18 +96,41 @@ const RelatorioContato = () => {
            .map(i => i.content)
            .slice(0, 3);
  
-          const defaultInsights = {
-            recurringObjections,
-            topPreferences,
-            preferredTone: behavior.preferredChannel === 'WhatsApp' ? 'Casual e Rápido' : 'Formal e Detalhado',
-            communicationRecommendations: [
-              "Focar em benefícios de longo prazo e estabilidade.",
-              "Utilizar gatilhos de Prova Social e Autoridade.",
-              "Evitar pressão excessiva por fechamento imediato."
-            ]
-          };
-          setData({ contact, interactions, discHistory, insights: defaultInsights });
-          setEditedInsights(defaultInsights);
+        // Fetch overrides
+        const { data: overrides } = await supabase
+          .from("contact_report_overrides")
+          .select("*")
+          .eq("contact_id", id)
+          .maybeSingle();
+
+        const defaultInsights = {
+          recurringObjections: recurringObjections.filter((o): o is string => o !== null),
+          topPreferences: topPreferences.filter((p): p is string => p !== null),
+          preferredTone: behavior.preferredChannel === 'WhatsApp' ? 'Casual e Rápido' : 'Formal e Detalhado',
+          communicationRecommendations: [
+            "Focar em benefícios de longo prazo e estabilidade.",
+            "Utilizar gatilhos de Prova Social e Autoridade.",
+            "Evitar pressão excessiva por fechamento imediato."
+          ]
+        };
+
+        const mergedInsights = overrides?.insights_data ? {
+          ...defaultInsights,
+          ...overrides.insights_data
+        } : defaultInsights;
+
+        setData({ 
+          contact, 
+          interactions, 
+          discHistory, 
+          insights: defaultInsights,
+          overrides: overrides || undefined 
+        });
+        
+        setEditedInsights(mergedInsights);
+        setCustomScripts(overrides?.custom_scripts || {
+          main_script: `"Olá ${contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"`
+        });
       } catch (error) {
         const msg = error instanceof Error ? error.message : 'Unknown error';
         logger.error('Error fetching report data:', { error: msg });
@@ -116,7 +145,31 @@ const RelatorioContato = () => {
 
    const handlePrint = () => window.print();
  
-   const handleExportCSV = () => {
+  const handleSaveOverrides = async () => {
+    if (!id || !editedInsights) return;
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from("contact_report_overrides")
+        .upsert({
+          contact_id: id,
+          insights_data: editedInsights,
+          custom_scripts: customScripts,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'contact_id' });
+
+      if (error) throw error;
+      toast.success("Alterações salvas com sucesso");
+      setEditingInsights(false);
+    } catch (error) {
+      console.error('Error saving overrides:', error);
+      toast.error("Erro ao salvar alterações");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleExportCSV = () => {
      if (!data) return;
      const rows = [
        ["Campo", "Valor"],
@@ -167,10 +220,17 @@ const RelatorioContato = () => {
       <div className="print:hidden bg-background border-b p-4 flex items-center justify-between sticky top-0 z-10">
         <BackButton to={`/contatos/${id}`} label="Voltar ao contato" />
          <div className="flex gap-2 flex-wrap">
-           <Button variant="outline" onClick={() => setEditingInsights(!editingInsights)}>
-             <Edit3 className="h-4 w-4 mr-2" />
-             {editingInsights ? "Visualizar" : "Editar Insights"}
-           </Button>
+          {editingInsights ? (
+            <Button variant="default" onClick={handleSaveOverrides} disabled={saving}>
+              <Save className="h-4 w-4 mr-2" />
+              {saving ? "Salvando..." : "Salvar Alterações"}
+            </Button>
+          ) : (
+            <Button variant="outline" onClick={() => setEditingInsights(true)}>
+              <Edit3 className="h-4 w-4 mr-2" />
+              Editar Insights & Scripts
+            </Button>
+          )}
            <Button variant="outline" onClick={handleExportCSV}>
              <FileSpreadsheet className="h-4 w-4 mr-2" />
              Exportar CSV
@@ -611,12 +671,13 @@ const RelatorioContato = () => {
                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Script Sugerido</p>
                   {editingInsights ? (
                     <Textarea 
-                      defaultValue={`"Olá ${contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"`}
+                      value={customScripts.main_script}
+                      onChange={(e) => setCustomScripts(prev => ({...prev, main_script: e.target.value}))}
                       className="italic text-sm min-h-[100px]"
                     />
                   ) : (
                     <div className="bg-white p-4 rounded-lg border border-border italic text-sm text-foreground leading-relaxed whitespace-pre-wrap">
-                      "Olá {contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"
+                      {customScripts.main_script}
                     </div>
                   )}
                </div>
