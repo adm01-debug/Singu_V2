@@ -26,7 +26,9 @@ import { AdvancedSearchBar } from '@/components/interactions/AdvancedSearchBar';
 import { ActiveFiltersBar } from '@/components/interactions/ActiveFiltersBar';
 import { SavedViewsMenu } from '@/components/interactions/SavedViewsMenu';
 import { ChannelShortcutsHelpOverlay } from '@/components/interactions/ChannelShortcutsHelpOverlay';
-import { PaginationBar } from '@/components/interactions/PaginationBar';
+ import { PaginationBar } from '@/components/interactions/PaginationBar';
+ import { InteractionBatchActions } from '@/components/interactions/InteractionBatchActions';
+ import { CheckSquare, Square } from 'lucide-react';
 import { useNextPagePrefetch } from '@/hooks/useNextPagePrefetch';
 import { useScopedShortcut } from '@/lib/keyboardShortcutRegistry';
 import { VALID_PER_PAGE } from '@/hooks/useInteractionsAdvancedFilter';
@@ -69,12 +71,14 @@ interface Props {
   totalCount?: number;
 }
 
-export function InteracoesContent({ 
-  interactions, loading, contactMap, stats, onSetIsFormOpen, 
-  onSetEditingInteraction, onSetDeletingInteraction, filterConfigs, 
-  sortOptions, hasMore, loadMore, isFetchingNextPage, totalCount 
-}: Props) {
-  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
+ export function InteracoesContent({ 
+   interactions, loading, contactMap, stats, onSetIsFormOpen, 
+   onSetEditingInteraction, onSetDeletingInteraction, filterConfigs, 
+   sortOptions, hasMore, loadMore, isFetchingNextPage, totalCount 
+ }: Props) {
+   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
+   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [sortBy, setSortBy] = useState('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
