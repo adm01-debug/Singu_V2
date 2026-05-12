@@ -22,7 +22,8 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 // Sub-components
-import { CopywritingAnalyzerTab } from './copywriting/CopywritingAnalyzerTab';
+ import { CopywritingAiGeneratorTab } from './copywriting/CopywritingAiGeneratorTab';
+ import { CopywritingAnalyzerTab } from './copywriting/CopywritingAnalyzerTab';
 import { CopywritingTemplateTab } from './copywriting/CopywritingTemplateTab';
 import { CopywritingPreviewTab } from './copywriting/CopywritingPreviewTab';
 import { CopywritingEmojiTab } from './copywriting/CopywritingEmojiTab';
@@ -54,7 +55,7 @@ const AIDA_STAGES: Record<string, { label: string; colorClass: string }> = {
 
 export default function CopywritingSalesTools({ contact }: CopywritingSalesToolsProps) {
   const safeContact = contact || DEMO_CONTACT as unknown as Contact;
-  const [activeTab, setActiveTab] = useState('analyzer');
+   const [activeTab, setActiveTab] = useState('ai-generator');
   const [analyzeText, setAnalyzeText] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -104,8 +105,9 @@ export default function CopywritingSalesTools({ contact }: CopywritingSalesTools
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-5 lg:grid-cols-10 gap-1 mb-4 h-auto flex-wrap">
-            <TabsTrigger value="analyzer" className="text-xs px-2 py-1.5"><BarChart3 className="h-3 w-3 mr-1" />Analisador</TabsTrigger>
+           <TabsList className="grid grid-cols-5 lg:grid-cols-11 gap-1 mb-4 h-auto flex-wrap">
+             <TabsTrigger value="ai-generator" className="text-xs px-2 py-1.5 bg-primary/10 text-primary hover:bg-primary/20 transition-colors"><Sparkles className="h-3 w-3 mr-1" />Gerador IA</TabsTrigger>
+             <TabsTrigger value="analyzer" className="text-xs px-2 py-1.5"><BarChart3 className="h-3 w-3 mr-1" />Analisador</TabsTrigger>
             <TabsTrigger value="pas" className="text-xs px-2 py-1.5"><AlertTriangle className="h-3 w-3 mr-1" />PAS</TabsTrigger>
             <TabsTrigger value="4ps" className="text-xs px-2 py-1.5"><Target className="h-3 w-3 mr-1" />4Ps</TabsTrigger>
             <TabsTrigger value="story" className="text-xs px-2 py-1.5"><BookOpen className="h-3 w-3 mr-1" />Story</TabsTrigger>
@@ -117,7 +119,11 @@ export default function CopywritingSalesTools({ contact }: CopywritingSalesTools
             <TabsTrigger value="headlines" className="text-xs px-2 py-1.5"><Quote className="h-3 w-3 mr-1" />Headlines</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="analyzer" className="space-y-4">
+           <TabsContent value="ai-generator" className="space-y-4">
+             <CopywritingAiGeneratorTab contact={safeContact} />
+           </TabsContent>
+ 
+           <TabsContent value="analyzer" className="space-y-4">
             <CopywritingAnalyzerTab
               analyzeText={analyzeText}
               onTextChange={setAnalyzeText}
