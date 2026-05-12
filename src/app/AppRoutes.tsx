@@ -135,7 +135,8 @@ export const AppRoutes = () => {
       <Route path="/landing-pages" element={<Protected><P.LandingPagesPage /></Protected>} />
       <Route path="/marketing" element={<Protected><P.MarketingHub /></Protected>} />
       <Route path="/marketing/forms/:id" element={<Protected><P.MarketingFormDetail /></Protected>} />
-      <Route path="/marketing/lead-magnets/:id" element={<Protected><P.MarketingMagnetDetail /></Protected>} />
+       <Route path="/marketing/lead-magnets/:id" element={<Protected><P.MarketingMagnetDetail /></Protected>} />
+       <Route path="/crm/copywriting" element={<Protected><P.CopywritingEnterprise /></Protected>} />
       <Route path="/deduplicacao" element={<Protected><P.Deduplicacao /></Protected>} />
       <Route path="/erp" element={<Protected><P.ErpViewer /></Protected>} />
       <Route path="/documentos" element={<Protected><P.Documentos /></Protected>} />
