@@ -1,11 +1,13 @@
-import { Shield, Brain, Star, Activity, Save } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Shield, Brain, Star, Activity, Save, Info, TrendingUp, Target } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { TEMPERAMENT_TYPES, TemperamentType } from '@/types/temperament';
 import { Button } from '@/components/ui/button';
 import { useContactBehavior } from '@/hooks/useContactBehavior';
 import { useState, useEffect } from 'react';
@@ -27,12 +29,27 @@ export function PersonalitySubTab({ contactId }: Props) {
   const handleSave = () => updatePersonality(formData);
 
   const bigFiveFields = [
-    { key: 'big_five_openness', label: 'Abertura (Openness)' },
-    { key: 'big_five_conscientiousness', label: 'Conscienciosidade' },
-    { key: 'big_five_extraversion', label: 'Extroversão' },
-    { key: 'big_five_agreeableness', label: 'Amabilidade' },
-    { key: 'big_five_neuroticism', label: 'Neuroticismo' },
+    { key: 'big_five_openness', label: 'Abertura (Openness)', desc: 'Curiosidade, criatividade e novas experiências.' },
+    { key: 'big_five_conscientiousness', label: 'Conscienciosidade', desc: 'Disciplina, organização e foco em objetivos.' },
+    { key: 'big_five_extraversion', label: 'Extroversão', desc: 'Energia social, assertividade e busca por estímulos.' },
+    { key: 'big_five_agreeableness', label: 'Amabilidade', desc: 'Confiança, altruísmo e cooperação.' },
+    { key: 'big_five_neuroticism', label: 'Neuroticismo', desc: 'Sensibilidade emocional e resposta ao estresse.' },
   ];
+
+  const mbtiDimensions = [
+    { key: 'mbti_e_i_score', left: 'E (Extroversão)', right: 'I (Introversão)', desc: 'Como o contato recarrega energias.' },
+    { key: 'mbti_s_n_score', left: 'S (Sensação)', right: 'N (Intuição)', desc: 'Como o contato processa informações.' },
+    { key: 'mbti_t_f_score', left: 'T (Pensamento)', right: 'F (Sentimento)', desc: 'Como o contato toma decisões.' },
+    { key: 'mbti_j_p_score', left: 'J (Julgamento)', right: 'P (Percepção)', desc: 'Como o contato se organiza.' },
+  ];
+
+  const enneagramTypes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+  const handleEnneagramScore = (type: number, score: number) => {
+    const currentScores = typeof formData.enneagram_scores === 'object' ? { ...formData.enneagram_scores } : {};
+    currentScores[type.toString()] = score;
+    setFormData({ ...formData, enneagram_scores: currentScores });
+  };
 
   return (
     <div className="space-y-6">
