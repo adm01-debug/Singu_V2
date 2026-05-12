@@ -1,5 +1,5 @@
-import { Target, Save, Info, Wand2, RefreshCw } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Target, Save, Info, Wand2, RefreshCw, Layers, Zap, Search, Box, ArrowRightLeft } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -55,7 +55,8 @@ export function MetaprogramsSubTab({ contactId }: Props) {
       right: 'Away-From (Afastamento)', 
       leftKey: 'toward_score', 
       rightKey: 'away_from_score',
-      tooltip: 'Toward foca em objetivos; Away-From foca em evitar problemas.'
+      icon: Target,
+      tooltip: 'Toward foca em objetivos e recompensas; Away-From foca em evitar problemas e riscos.'
     },
     { 
       label: 'Fonte de Autoridade', 
@@ -63,7 +64,8 @@ export function MetaprogramsSubTab({ contactId }: Props) {
       right: 'Externo (Others)', 
       leftKey: 'internal_score', 
       rightKey: 'external_score',
-      tooltip: 'Interno decide por si; Externo precisa de validação de terceiros.'
+      icon: Layers,
+      tooltip: 'Interno decide baseado em critérios próprios; Externo precisa de validação e feedback de terceiros.'
     },
     { 
       label: 'Estilo de Decisão', 
@@ -71,7 +73,8 @@ export function MetaprogramsSubTab({ contactId }: Props) {
       right: 'Procedimentos (Rules)', 
       leftKey: 'options_score', 
       rightKey: 'procedures_score',
-      tooltip: 'Opções gosta de criar novos caminhos; Procedimentos segue passos definidos.'
+      icon: Zap,
+      tooltip: 'Opções gosta de criar novos caminhos e quebrar regras; Procedimentos prefere seguir passos e processos definidos.'
     },
     { 
       label: 'Estilo de Ação', 
@@ -79,7 +82,8 @@ export function MetaprogramsSubTab({ contactId }: Props) {
       right: 'Reativo (Wait)', 
       leftKey: 'proactive_score', 
       rightKey: 'reactive_score',
-      tooltip: 'Proativo toma a iniciativa; Reativo analisa antes de agir.'
+      icon: Search,
+      tooltip: 'Proativo toma a iniciativa imediatamente; Reativo analisa, espera e responde às situações.'
     },
     { 
       label: 'Tamanho do Chunk', 
@@ -87,7 +91,17 @@ export function MetaprogramsSubTab({ contactId }: Props) {
       right: 'Detalhe (Specific)', 
       leftKey: 'global_score', 
       rightKey: 'detail_score',
-      tooltip: 'Global foca na visão geral; Detalhe foca na minúcia dos dados.'
+      icon: Box,
+      tooltip: 'Global foca na visão geral e conceitos; Detalhe foca na minúcia, sequências e dados precisos.'
+    },
+    { 
+      label: 'Base de Comparação', 
+      left: 'Igualdade (Sameness)', 
+      right: 'Diferença (Difference)', 
+      leftKey: 'sameness_score', 
+      rightKey: 'difference_score',
+      icon: ArrowRightLeft,
+      tooltip: 'Igualdade busca o que é comum e estável; Diferença busca inovação, mudança e o que é único.'
     },
   ];
 
