@@ -210,4 +210,3 @@ export function useLuxIntelligence(entityType: 'contact' | 'company', entityId?:
      isProcessing: latestRecord?.status === 'processing',
    };
  }
-}
