@@ -51,12 +51,12 @@ export default function MarketingHub() {
    const { data: attribution } = useAttribution(attDealId || undefined, attModel, attValue);
     const { data: funnel = [] } = useMarketingFunnel();
     const { data: behaviorInsights } = useMarketingBehavioralInsights();
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                <Card>
                  <CardHeader className="pb-2">
                    <CardTitle className="text-sm font-semibold flex items-center gap-2">
                      <Sparkles className="w-4 h-4 text-primary" />
-                     Distribuição DISC do Público
+                     Distribuição DISC
                    </CardTitle>
                  </CardHeader>
                  <CardContent>
@@ -73,9 +73,6 @@ export default function MarketingHub() {
                                animate={{ height: `${height}%` }}
                                className="w-full bg-primary rounded-t-sm"
                              />
-                             <div className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 text-[10px] font-bold bg-primary text-white px-1 rounded transition-opacity">
-                               {count}
-                             </div>
                            </div>
                            <span className="text-[10px] font-bold text-muted-foreground">{type}</span>
                          </div>
@@ -89,7 +86,7 @@ export default function MarketingHub() {
                  <CardHeader className="pb-2">
                    <CardTitle className="text-sm font-semibold flex items-center gap-2">
                      <Eye className="w-4 h-4 text-primary" />
-                     Canais de Aprendizagem (VAK)
+                     Canais VAK
                    </CardTitle>
                  </CardHeader>
                  <CardContent>
@@ -114,6 +111,32 @@ export default function MarketingHub() {
                          </div>
                        );
                      })}
+                   </div>
+                 </CardContent>
+               </Card>
+
+               <Card>
+                 <CardHeader className="pb-2">
+                   <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                     <Target className="w-4 h-4 text-primary" />
+                     Principais Motivações
+                   </CardTitle>
+                 </CardHeader>
+                 <CardContent>
+                   <div className="space-y-2 pt-2">
+                     {behaviorInsights?.motivation && Object.entries(behaviorInsights.motivation).length > 0 ? (
+                       Object.entries(behaviorInsights.motivation)
+                         .sort((a: any, b: any) => b[1] - a[1])
+                         .slice(0, 3)
+                         .map(([key, value]: [string, any]) => (
+                           <div key={key} className="flex items-center justify-between p-2 rounded bg-muted/30">
+                             <span className="text-[11px] font-medium truncate max-w-[120px]">{key}</span>
+                             <Badge variant="secondary" className="text-[9px] h-4 px-1">{value} leads</Badge>
+                           </div>
+                         ))
+                     ) : (
+                       <p className="text-[10px] text-muted-foreground italic text-center py-4">Sem dados de motivação.</p>
+                     )}
                    </div>
                  </CardContent>
                </Card>
