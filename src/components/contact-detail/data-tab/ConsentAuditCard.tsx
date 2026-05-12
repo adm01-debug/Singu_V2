@@ -51,12 +51,12 @@ export function ConsentAuditCard({ contactId }: { contactId: string }) {
                   <div className="flex items-center gap-1.5">
                     <Network className="h-3 w-3 text-primary" />
                     <span className="font-semibold">Rede:</span>
-                    <span>{log.platform || 'N/A'}</span>
+                    <span>{log.network || 'N/A'}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Globe className="h-3 w-3 text-primary" />
                     <span className="font-semibold">Origem:</span>
-                    <span className="truncate">{log.origin_source || 'Dashboard'}</span>
+                    <span className="truncate">{log.source_url || 'Dashboard'}</span>
                   </div>
                 </div>
 
