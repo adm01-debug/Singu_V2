@@ -369,7 +369,13 @@ export interface EmotionalProfile {
   urgency: number;
 }
 
+ export interface TextComplexity {
+   longSentences: Array<{ text: string; startIndex: number; endIndex: number }>;
+   complexWords: Array<{ text: string; startIndex: number; endIndex: number }>;
+ }
+ 
 export interface CopyAnalysis {
+   complexity?: TextComplexity;
   id: string;
   originalText: string;
   readability: ReadabilityMetrics;
