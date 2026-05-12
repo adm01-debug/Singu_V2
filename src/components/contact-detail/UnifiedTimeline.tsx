@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { useUnifiedTimeline, type UnifiedTimelineEvent, type UnifiedEventType } from '@/hooks/useUnifiedTimeline';
-import { 
-  MessageSquare, Phone, Users, FileText, CheckCircle2, 
-   Calendar, Search, Filter, Clock, ArrowUpRight, ArrowDownLeft,
-    AlertCircle, TrendingUp, Zap, Smile, Frown, Meh, Brain
+import {
+  MessageSquare, Phone, Users, FileText, CheckCircle2,
+  Calendar, Search, Filter, Clock, ArrowUpRight, ArrowDownLeft,
+  AlertCircle, TrendingUp, Zap, Smile, Frown, Meh, Brain, Activity, TrendingDown, Heart
 } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
@@ -71,8 +71,89 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
     return <div className="p-8 text-center text-muted-foreground">Carregando timeline...</div>;
   }
 
+  const sentimentSummary = useMemo(() => {
+    if (events.length === 0) return null;
+    
+    const sentimentEvents = events.filter(e => e.metadata?.sentiment);
+    if (sentimentEvents.length === 0) return null;
+
+    const lastSentiments = sentimentEvents.slice(0, 5);
+    const positiveCount = lastSentiments.filter(e => e.metadata?.sentiment === 'positive').length;
+    const negativeCount = lastSentiments.filter(e => e.metadata?.sentiment === 'negative').length;
+
+    let trend = 'Estável';
+    if (positiveCount > negativeCount) trend = 'Melhorando';
+    if (negativeCount > positiveCount) trend = 'Atenção';
+
+    const neuroEvents = events.filter(e => e.type === 'neuro_update');
+    const lastEmpathy = neuroEvents[0]?.metadata?.empathy;
+    const prevEmpathy = neuroEvents[1]?.metadata?.empathy;
+    
+    let empathyTrend = 'Estável';
+    if (lastEmpathy && prevEmpathy) {
+      if (lastEmpathy > prevEmpathy) empathyTrend = 'Subindo';
+      else if (lastEmpathy < prevEmpathy) empathyTrend = 'Caindo';
+    }
+
+    return {
+      trend,
+      positiveCount,
+      negativeCount,
+      total: lastSentiments.length,
+      empathy: lastEmpathy,
+      empathyTrend
+    };
+  }, [events]);
+
   return (
     <div className="space-y-4">
+      {sentimentSummary && (
+        <Card className="bg-gradient-to-r from-background to-muted/30 border-primary/10">
+          <CardContent className="p-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className={cn(
+                "p-2 rounded-full",
+                sentimentSummary.trend === 'Melhorando' ? "bg-green-500/10 text-green-600" :
+                sentimentSummary.trend === 'Atenção' ? "bg-red-500/10 text-red-600" : "bg-blue-500/10 text-blue-600"
+              )}>
+                {sentimentSummary.trend === 'Melhorando' ? <TrendingUp className="h-4 w-4" /> :
+                 sentimentSummary.trend === 'Atenção' ? <TrendingDown className="h-4 w-4" /> : <Activity className="h-4 w-4" />}
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Clima das Interações</p>
+                <p className="text-sm font-semibold">
+                  Status: <span className={cn(
+                    sentimentSummary.trend === 'Melhorando' ? "text-green-600" :
+                    sentimentSummary.trend === 'Atenção' ? "text-red-600" : "text-blue-600"
+                  )}>{sentimentSummary.trend}</span>
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              {sentimentSummary.empathy !== undefined && (
+                <div className="text-center px-3 border-r">
+                  <p className="text-[10px] text-muted-foreground uppercase flex items-center gap-1 justify-center">
+                    <Heart className="h-2 w-2 text-red-500" /> Empatia
+                  </p>
+                  <div className="flex items-center gap-1 justify-center">
+                    <p className="text-sm font-bold text-foreground">{sentimentSummary.empathy}</p>
+                    {sentimentSummary.empathyTrend === 'Subindo' ? <TrendingUp className="h-3 w-3 text-green-500" /> :
+                     sentimentSummary.empathyTrend === 'Caindo' ? <TrendingDown className="h-3 w-3 text-red-500" /> : null}
+                  </div>
+                </div>
+              )}
+              <div className="text-center px-3 border-r">
+                <p className="text-[10px] text-muted-foreground uppercase">Positivas</p>
+                <p className="text-sm font-bold text-green-600">{sentimentSummary.positiveCount}</p>
+              </div>
+              <div className="text-center px-3">
+                <p className="text-[10px] text-muted-foreground uppercase">Negativas</p>
+                <p className="text-sm font-bold text-red-600">{sentimentSummary.negativeCount}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
       <div className="flex flex-col md:flex-row gap-4 md:items-center justify-between bg-muted/30 p-4 rounded-lg border">
         <div className="relative w-full md:w-64">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -215,14 +296,19 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
                                )}
                                <span className={cn(
                                  "text-[10px] font-medium",
-                                 event.metadata.sentiment === 'positive' ? 'text-green-600' :
-                                 event.metadata.sentiment === 'negative' ? 'text-red-600' : 'text-yellow-600'
-                               )}>
-                                 {event.metadata.emotion || (
-                                   event.metadata.sentiment === 'positive' ? 'Positivo' :
-                                   event.metadata.sentiment === 'negative' ? 'Negativo' : 'Neutro'
-                                 )}
-                               </span>
+                                  event.metadata.sentiment === 'positive' ? 'text-green-600' :
+                                  event.metadata.sentiment === 'negative' ? 'text-red-600' : 'text-yellow-600'
+                                )}>
+                                  <span className="capitalize">
+                                    {event.metadata.sentiment === 'positive' ? 'Conexão Positiva' :
+                                     event.metadata.sentiment === 'negative' ? 'Atenção Necessária' : 'Tom Neutro'}
+                                  </span>
+                                  {event.metadata.emotion && (
+                                    <span className="ml-1 opacity-70 border-l pl-1 border-current">
+                                      {event.metadata.emotion}
+                                    </span>
+                                  )}
+                                </span>
                              </div>
                            )}
                         </div>

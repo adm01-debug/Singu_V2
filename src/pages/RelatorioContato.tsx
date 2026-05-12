@@ -10,7 +10,7 @@ import { ptBR } from "date-fns/locale";
 import { logger } from "@/lib/logger";
 import { ReportScriptsSection } from "./relatorio/ReportScriptsSection";
 import { NeuromarketingTimeline } from "@/components/crm/behavior/NeuromarketingTimeline";
-  import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+  import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
   import { Textarea } from "@/components/ui/textarea";
   import { Input } from "@/components/ui/input";
   import { toast } from "sonner";
@@ -32,21 +32,28 @@ interface ContactBehavior {
  interface ContactReport {
    contact: Tables<'contacts'>;
    interactions: Tables<'interactions'>[];
-   discHistory: Tables<'disc_analysis_history'>[];
-   insights?: {
-     recurringObjections: (string | null)[];
-     topPreferences: (string | null)[];
-     preferredTone: string;
-     communicationRecommendations: string[];
-   };
+    discHistory: Tables<'disc_analysis_history'>[];
+    consentLogs: Tables<'social_consent_audit'>[];
+    insights: {
+      recurringObjections: string[];
+      topPreferences: string[];
+      preferredTone: string;
+      communicationRecommendations: string[];
+    };
+    overrides?: {
+      insights_data: any;
+      custom_scripts: any;
+    };
  }
 
 const RelatorioContato = () => {
   const { id } = useParams<{ id: string }>();
-   const [data, setData] = useState<ContactReport | null>(null);
-   const [editingInsights, setEditingInsights] = useState(false);
-   const [editedInsights, setEditedInsights] = useState<ContactReport['insights'] | null>(null);
+  const [data, setData] = useState<ContactReport | null>(null);
+  const [editingInsights, setEditingInsights] = useState(false);
+  const [editedInsights, setEditedInsights] = useState<ContactReport['insights'] | null>(null);
+  const [customScripts, setCustomScripts] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,18 +97,50 @@ const RelatorioContato = () => {
            .map(i => i.content)
            .slice(0, 3);
  
-          const defaultInsights = {
-            recurringObjections,
-            topPreferences,
-            preferredTone: behavior.preferredChannel === 'WhatsApp' ? 'Casual e Rápido' : 'Formal e Detalhado',
-            communicationRecommendations: [
-              "Focar em benefícios de longo prazo e estabilidade.",
-              "Utilizar gatilhos de Prova Social e Autoridade.",
-              "Evitar pressão excessiva por fechamento imediato."
-            ]
-          };
-          setData({ contact, interactions, discHistory, insights: defaultInsights });
-          setEditedInsights(defaultInsights);
+        // Fetch overrides
+        const { data: overrides } = await supabase
+          .from("contact_report_overrides")
+          .select("*")
+          .eq("contact_id", id)
+          .maybeSingle();
+
+        const defaultInsights = {
+          recurringObjections: recurringObjections.filter((o): o is string => o !== null),
+          topPreferences: topPreferences.filter((p): p is string => p !== null),
+          preferredTone: behavior.preferredChannel === 'WhatsApp' ? 'Casual e Rápido' : 'Formal e Detalhado',
+          communicationRecommendations: [
+            "Focar em benefícios de longo prazo e estabilidade.",
+            "Utilizar gatilhos de Prova Social e Autoridade.",
+            "Evitar pressão excessiva por fechamento imediato."
+          ]
+        };
+
+        const savedInsights = overrides?.insights_data as any;
+        const mergedInsights = savedInsights ? {
+          ...defaultInsights,
+          ...savedInsights
+        } : defaultInsights;
+
+        // Fetch consent logs
+        const { data: consentLogs } = await supabase
+          .from("social_consent_audit")
+          .select("*")
+          .eq("contact_id", id)
+          .order("created_at", { ascending: false });
+
+        setData({ 
+          contact, 
+          interactions, 
+          discHistory, 
+          consentLogs: consentLogs || [],
+          insights: defaultInsights,
+          overrides: overrides || undefined 
+        });
+        
+        setEditedInsights(mergedInsights);
+        setCustomScripts((overrides?.custom_scripts as Record<string, string>) || {
+          main_script: `"Olá ${contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"`
+        });
       } catch (error) {
         const msg = error instanceof Error ? error.message : 'Unknown error';
         logger.error('Error fetching report data:', { error: msg });
@@ -116,7 +155,31 @@ const RelatorioContato = () => {
 
    const handlePrint = () => window.print();
  
-   const handleExportCSV = () => {
+  const handleSaveOverrides = async () => {
+    if (!id || !editedInsights) return;
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from("contact_report_overrides")
+        .upsert({
+          contact_id: id,
+          insights_data: editedInsights,
+          custom_scripts: customScripts,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'contact_id' });
+
+      if (error) throw error;
+      toast.success("Alterações salvas com sucesso");
+      setEditingInsights(false);
+    } catch (error) {
+      console.error('Error saving overrides:', error);
+      toast.error("Erro ao salvar alterações");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleExportCSV = () => {
      if (!data) return;
      const rows = [
        ["Campo", "Valor"],
@@ -167,10 +230,17 @@ const RelatorioContato = () => {
       <div className="print:hidden bg-background border-b p-4 flex items-center justify-between sticky top-0 z-10">
         <BackButton to={`/contatos/${id}`} label="Voltar ao contato" />
          <div className="flex gap-2 flex-wrap">
-           <Button variant="outline" onClick={() => setEditingInsights(!editingInsights)}>
-             <Edit3 className="h-4 w-4 mr-2" />
-             {editingInsights ? "Visualizar" : "Editar Insights"}
-           </Button>
+          {editingInsights ? (
+            <Button variant="default" onClick={handleSaveOverrides} disabled={saving}>
+              <Save className="h-4 w-4 mr-2" />
+              {saving ? "Salvando..." : "Salvar Alterações"}
+            </Button>
+          ) : (
+            <Button variant="outline" onClick={() => setEditingInsights(true)}>
+              <Edit3 className="h-4 w-4 mr-2" />
+              Editar Insights & Scripts
+            </Button>
+          )}
            <Button variant="outline" onClick={handleExportCSV}>
              <FileSpreadsheet className="h-4 w-4 mr-2" />
              Exportar CSV
@@ -419,30 +489,47 @@ const RelatorioContato = () => {
              </p>
            </section>
  
-           {/* Log de Auditoria de Consentimento */}
-           <section className="mb-8 p-4 bg-blue-50/30 rounded-xl border border-blue-100">
-             <h3 className="text-xs font-bold uppercase text-blue-600 mb-3 flex items-center gap-2">
-               <ShieldCheck className="h-4 w-4" /> Registro de Conformidade (Consentimento)
-             </h3>
-             <div className="space-y-2">
-               <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
-                 <span className="text-muted-foreground">Tipo de Consentimento:</span>
-                 <span className="font-medium">Análise de Perfil Público (OSINT)</span>
-               </div>
-               <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
-                 <span className="text-muted-foreground">Data/Hora:</span>
-                 <span className="font-medium">{format(new Date(contact.created_at || new Date()), "dd/MM/yyyy HH:mm")}</span>
-               </div>
-               <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
-                 <span className="text-muted-foreground">Origem:</span>
-                 <span className="font-medium">Termos de Uso do Ecossistema Harmony</span>
-               </div>
-               <div className="flex justify-between text-[11px]">
-                 <span className="text-muted-foreground">Status:</span>
-                 <Badge variant="outline" className="h-4 text-[9px] bg-green-50 text-green-700 border-green-200">Ativo / Verificado</Badge>
-               </div>
-             </div>
-           </section>
+          {/* Log de Auditoria de Consentimento */}
+          <section className="mb-8 p-4 bg-blue-50/30 rounded-xl border border-blue-100">
+            <h3 className="text-xs font-bold uppercase text-blue-600 mb-3 flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4" /> Registro de Conformidade (Audit Log)
+            </h3>
+            <div className="space-y-3">
+              {data.consentLogs.length > 0 ? (
+                data.consentLogs.map((log) => (
+                  <div key={log.id} className="text-[11px] border-b border-blue-100 pb-2 last:border-0 last:pb-0">
+                    <div className="flex justify-between mb-1">
+                      <span className="text-muted-foreground">Rede/Fonte:</span>
+                      <span className="font-medium uppercase">{log.network || 'Geral'}</span>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                      <span className="text-muted-foreground">Tipo:</span>
+                      <span className="font-medium">{log.consent_type || 'Análise OSINT'}</span>
+                    </div>
+                    <div className="flex justify-between mb-1">
+                      <span className="text-muted-foreground">Data:</span>
+                      <span className="font-medium">{format(new Date(log.created_at), "dd/MM/yyyy HH:mm")}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">IP de Registro:</span>
+                      <span className="font-mono text-[9px]">{log.ip_address || 'Sistema'}</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex justify-between text-[11px] border-b border-blue-100 pb-1">
+                    <span className="text-muted-foreground">Consentimento Base:</span>
+                    <span className="font-medium">Termos de Uso do CRM</span>
+                  </div>
+                  <div className="flex justify-between text-[11px]">
+                    <span className="text-muted-foreground">Status:</span>
+                    <Badge variant="outline" className="h-4 text-[9px] bg-green-50 text-green-700 border-green-200">Ativo / Implícito</Badge>
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
          </section>
  
          {/* Indicadores Comportamentais */}
@@ -611,12 +698,13 @@ const RelatorioContato = () => {
                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Script Sugerido</p>
                   {editingInsights ? (
                     <Textarea 
-                      defaultValue={`"Olá ${contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"`}
+                      value={customScripts.main_script}
+                      onChange={(e) => setCustomScripts(prev => ({...prev, main_script: e.target.value}))}
                       className="italic text-sm min-h-[100px]"
                     />
                   ) : (
                     <div className="bg-white p-4 rounded-lg border border-border italic text-sm text-foreground leading-relaxed whitespace-pre-wrap">
-                      "Olá {contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"
+                      {customScripts.main_script}
                     </div>
                   )}
                </div>
