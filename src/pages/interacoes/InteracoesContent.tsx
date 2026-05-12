@@ -1,3 +1,14 @@
+   const handleToggleSelection = (id: string) => {
+     setSelectedIds(prev => 
+       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+     );
+   };
+
+   const handleClearSelection = () => {
+     setSelectedIds([]);
+     setIsSelectionMode(false);
+   };
+
 import { useState, useMemo, useEffect, useRef, lazy, Suspense, startTransition } from 'react';
 import { motion } from 'framer-motion';
 import {
