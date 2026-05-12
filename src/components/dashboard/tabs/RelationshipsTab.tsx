@@ -1,9 +1,10 @@
-import { lazy, Suspense } from 'react';
+ import { lazy, Suspense, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { LazySection } from '@/components/dashboard/LazySection';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import type { Contact, Interaction } from '@/types';
 
+ const RelationshipKPIsDashboard = lazy(() => import('@/components/crm/RelationshipKPIsDashboard').then(m => ({ default: m.RelationshipKPIsDashboard })));
 const SmartRemindersPanel = lazy(() => import('@/components/smart-reminders/SmartRemindersPanel').then(m => ({ default: m.SmartRemindersPanel })));
 const RelationshipStatsPanel = lazy(() => import('@/components/dashboard/RelationshipStatsPanel').then(m => ({ default: m.RelationshipStatsPanel })));
 const PortfolioHealthDashboard = lazy(() => import('@/components/dashboard/PortfolioHealthDashboard').then(m => ({ default: m.PortfolioHealthDashboard })));
@@ -22,6 +23,15 @@ interface RelationshipsTabProps {
 }
 
 export function RelationshipsTab({ contacts, interactions, prefersReducedMotion, tabDirection }: RelationshipsTabProps) {
+   // Memoize sections to prevent unnecessary re-renders during tab transitions
+   const livePulseSection = useMemo(() => (
+     <DashboardErrorBoundary sectionName="Live Pulse & Gestão de Relacionamento">
+       <Suspense fallback={<div className="animate-pulse h-[500px] bg-muted rounded-lg" />}>
+         <RelationshipKPIsDashboard />
+       </Suspense>
+     </DashboardErrorBoundary>
+   ), []);
+ 
   const animVariants = {
     initial: { opacity: 0, x: prefersReducedMotion ? 0 : tabDirection * 20 },
     animate: { opacity: 1, x: 0 },
@@ -30,6 +40,9 @@ export function RelationshipsTab({ contacts, interactions, prefersReducedMotion,
 
   return (
     <motion.div key={`relationships-${tabDirection}`} initial={animVariants.initial} animate={animVariants.animate} transition={animVariants.transition} className="space-y-5">
+       {/* Live Pulse Dashboard (Tempo Real) */}
+       {livePulseSection}
+ 
       {/* Smart Reminders + Compatibility */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <DashboardErrorBoundary sectionName="Lembretes">
