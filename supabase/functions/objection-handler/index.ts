@@ -30,20 +30,20 @@ Deno.serve(async (req) => {
 
     // 2. AI Intelligence for Objection Handling
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    const systemPrompt = \`Você é um mestre em Negociação e Psicologia Comportamental.
+    const systemPrompt = `Você é um mestre em Negociação e Psicologia Comportamental.
 Sua especialidade é contornar objeções usando o perfil DISC do cliente.
-Objeção atual: \${objectionId}
-Perfil DISC: \${JSON.stringify(contact.behavior || {})}
+Objeção atual: ${objectionId}
+Perfil DISC: ${JSON.stringify(contact.behavior || {})}
 
 Gere um script altamente persuasivo que:
 1. Valide a preocupação do cliente (Empatia)
 2. Requadre o problema (Ponto de vista lógico/DISC)
-3. Chame para uma ação específica.\`;
+3. Chame para uma ação específica.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: \`Bearer \${LOVABLE_API_KEY}\`,
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
