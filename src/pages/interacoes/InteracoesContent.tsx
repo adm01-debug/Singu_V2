@@ -620,8 +620,17 @@ interface Props {
                        className={`relative ${isCompact ? 'pl-12' : 'pl-16'} group cursor-pointer`}
                        onClick={() => isSelectionMode && handleToggleSelection(interaction.id)}
                      >
-                      <div className={`absolute ${isCompact ? 'left-3 top-3 w-7 h-7' : 'left-2 top-4 w-10 h-10'} rounded-full flex items-center justify-center ${interactionColors[interaction.type]} border-4 border-background z-10`}><Icon className={isCompact ? 'w-3 h-3' : 'w-4 h-4'} /></div>
-                      <Card className="card-hover"><CardContent className={isCompact ? 'p-2.5' : 'p-4'}>
+                       <div className={`absolute ${isCompact ? 'left-3 top-3 w-7 h-7' : 'left-2 top-4 w-10 h-10'} rounded-full flex items-center justify-center ${interactionColors[interaction.type]} border-4 border-background z-10`}>
+                         {isSelectionMode ? (
+                           selectedIds.includes(interaction.id) 
+                             ? <CheckSquare className="w-5 h-5 text-primary fill-primary-foreground" />
+                             : <Square className="w-5 h-5 text-muted-foreground" />
+                         ) : (
+                           <Icon className={isCompact ? 'w-3 h-3' : 'w-4 h-4'} />
+                         )}
+                       </div>
+                       <Card className={cn("card-hover", selectedIds.includes(interaction.id) && "ring-2 ring-primary bg-primary/5")}>
+                         <CardContent className={isCompact ? 'p-2.5' : 'p-4'}>
                         <div className={`flex items-start justify-between ${isCompact ? 'mb-1.5' : 'mb-3'}`}>
                           <div className="flex-1">
                             <div className={`flex items-center gap-2 ${isCompact ? 'mb-0.5' : 'mb-1'} flex-wrap`}>
