@@ -115,8 +115,8 @@ export function NeuromarketingTimeline({ contactId }: Props) {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-border/50" />
-                  <XAxis dataKey="date" fontSize={10} stroke="hsl(var(--muted-foreground))" />
-                  <YAxis domain={[0, 100]} fontSize={10} stroke="hsl(var(--muted-foreground))" />
+                  <XAxis dataKey="date" fontSize={10} stroke="hsl(var(--muted-foreground))" axisLine={false} tickLine={false} />
+                  <YAxis domain={[0, 100]} fontSize={10} stroke="hsl(var(--muted-foreground))" axisLine={false} tickLine={false} />
                   <Tooltip 
                     contentStyle={{ backgroundColor: 'hsl(var(--background))', borderColor: 'hsl(var(--border))', fontSize: '12px' }}
                   />

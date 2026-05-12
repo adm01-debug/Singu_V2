@@ -212,7 +212,7 @@ export function RelationshipKPIsDashboard() {
                <div className="flex items-center justify-between">
                  <div>
                    <p className="text-[10px] font-bold text-muted-foreground uppercase">Precisão IA</p>
-                   <h3 className="text-2xl font-bold text-violet-600">94.2%</h3>
+                  <h3 className="text-2xl font-bold text-violet-600 animate-pulse">94.2%</h3>
                  </div>
                  <Brain className="h-6 w-6 text-violet-500/40" />
                </div>
