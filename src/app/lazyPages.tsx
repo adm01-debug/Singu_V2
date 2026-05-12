@@ -118,7 +118,8 @@ export const CustomerSuccessPage = lazy(() => import("@/pages/CustomerSuccess"))
 export const CustomerSuccessAccountPage = lazy(() => import("@/pages/CustomerSuccessAccount"));
 export const Intelligence = lazy(() => import("@/pages/Intelligence"));
 export const RecommendationAudit = lazy(() => import("@/pages/RecommendationAudit"));
-export const CRMRelationshipAudit = lazy(() => import("@/pages/CRMRelationshipAuditPage"));
+ export const CRMRelationshipAudit = lazy(() => import("@/pages/CRMRelationshipAuditPage"));
+ export const CopywritingEnterprise = lazy(() => import("@/pages/crm/CopywritingEnterprise"));
 
 // Non-critical shell components
 export const PWAShell = lazy(() =>
