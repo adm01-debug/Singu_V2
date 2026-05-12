@@ -44,6 +44,7 @@ const WritingInput = z.object({
     communicationStyle: z.string().optional(),
     hobbies: z.array(z.string()).optional(),
     interests: z.array(z.string()).optional(),
+  vakProfile: z.enum(['V', 'A', 'K']).nullable().optional(),
   }),
   recentInteractions: z.array(z.object({
     type: z.string(),
@@ -55,6 +56,7 @@ const WritingInput = z.object({
    customContext: z.string().max(2000).optional(),
    tone: z.enum(['formal', 'casual', 'friendly']).optional(),
     framework: z.enum(['AIDA', 'PAS', 'FAB', '4Ps', 'Storytelling', 'Carnegie', 'None']).optional().default('None'),
+   storyArc: z.string().optional(),
  });
 
 const DISC_COMMUNICATION_STYLES = {
@@ -88,6 +90,24 @@ const DISC_COMMUNICATION_STYLES = {
   },
 };
 
+const VAK_STYLES = {
+  V: {
+    name: "Visual",
+    keywords: ["ver", "olhar", "imagem", "claro", "visão", "foco", "perspectiva", "mostrar"],
+    advice: "Use palavras visuais. 'Veja como isso funciona', 'Para você ter uma visão clara'."
+  },
+  A: {
+    name: "Auditivo",
+    keywords: ["ouvir", "escutar", "soar", "dizer", "pergunta", "conversa", "ritmo", "harmonia"],
+    advice: "Use palavras auditivas. 'Isso soa bem para você?', 'Como essa proposta ressoa?'"
+  },
+  K: {
+    name: "Cinestésico",
+    keywords: ["sentir", "tocar", "pegar", "concreto", "sólido", "pressão", "base", "fluxo"],
+    advice: "Use palavras ligadas a sensações e movimento. 'Sinta a diferença', 'Construir algo sólido'."
+  }
+};
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -108,7 +128,7 @@ Deno.serve(async (req) => {
     if (!parsed.success) {
       return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
     }
-     const { contact, recentInteractions, messageType, customContext, tone, framework } = parsed.data;
+     const { contact, recentInteractions, messageType, customContext, tone, framework, storyArc } = parsed.data;
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
@@ -116,6 +136,7 @@ Deno.serve(async (req) => {
     }
 
     const discStyle = contact.discProfile ? DISC_COMMUNICATION_STYLES[contact.discProfile] : null;
+    const vakStyle = contact.vakProfile ? VAK_STYLES[contact.vakProfile] : null;
     
     const interactionContext = recentInteractions.length > 0 
       ? recentInteractions.slice(0, 5).map(i => 
@@ -137,7 +158,7 @@ Deno.serve(async (req) => {
  ${framework === 'PAS' ? '- PAS: Problema (Dor), Agitação (Consequência), Solução (Oferta).' : ''}
  ${framework === 'FAB' ? '- FAB: Feature (Recurso), Advantage (Vantagem), Benefit (Benefício real para o cliente).' : ''}
  ${framework === '4Ps' ? '- 4Ps: Promise (Promessa), Picture (Visualização do sucesso), Proof (Prova social/lógica), Push (Empurrão para ação).' : ''}
-  ${framework === 'Storytelling' ? '- Storytelling: Use uma mini-narrativa ou arco de jornada do herói focado no sucesso do cliente.' : ''}
+  ${framework === 'Storytelling' ? `- Storytelling: Use uma mini-narrativa focada no arco: ${storyArc || 'Jornada do Herói'}.` : ''}
   ${framework === 'Carnegie' ? '- Carnegie (Dale Carnegie): Demonstre interesse genuíno, fale em termos dos interesses do outro, faça-o sentir-se importante, seja amigável e evite críticas.' : ''}
  
  ## Regras de Ouro:
@@ -167,7 +188,9 @@ ${personalContext.join('\n')}
 ${interactionContext}
 
 ## Regras para geração de mensagens:
-1. SEMPRE gere 3 variações de mensagem para o usuário escolher
+1. SEMPRE gere 3 variações de mensagem para o usuário escolher.
+2. Adapte o vocabulário ao perfil sensorial VAK: ${vakStyle ? `${vakStyle.name} (Use: ${vakStyle.keywords.slice(0, 5).join(', ')})` : 'Equilibrado'}.
+${vakStyle ? `3. Conselho VAK: ${vakStyle.advice}` : ''}
 2. Adapte o tom e estilo ao perfil DISC do contato
 3. Considere o histórico de interações para contextualizar
 4. Seja natural e autêntico, evite linguagem robótica
@@ -176,7 +199,7 @@ ${interactionContext}
 7. Escreva em português brasileiro
 8. Formato esperado de resposta: JSON com array de sugestões`;
 
-     const userPrompt = buildUserPrompt(messageType, customContext, tone, contact, framework);
+      const userPrompt = buildUserPrompt(messageType, customContext, tone, contact, framework, storyArc);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -264,7 +287,8 @@ ${interactionContext}
    customContext: string | undefined,
    tone: string | undefined,
    contact: any,
-   framework: string | undefined
+   framework: string | undefined,
+   storyArc: string | undefined
  ): string {
   const typeDescriptions: Record<string, string> = {
     follow_up: "uma mensagem de follow-up para retomar o contato ou dar continuidade a uma conversa anterior",
@@ -285,7 +309,7 @@ ${interactionContext}
    return `Gere 3 variações de mensagens para ${contact.firstName}.
  
  Objetivo: ${typeDescriptions[messageType]}
- ${framework !== 'None' ? `Aplique rigorosamente o framework: ${framework}` : ''}
+  ${framework !== 'None' ? `Aplique rigorosamente o framework: ${framework}${storyArc ? ` (Arco: ${storyArc})` : ''}` : ''}
  
  ${customContext ? `Contexto do usuário: ${customContext}` : ''}
  

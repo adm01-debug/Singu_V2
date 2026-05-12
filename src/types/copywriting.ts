@@ -357,6 +357,18 @@ export interface TriggerDensity {
   recommendation: string;
 }
 
+export interface EmotionalProfile {
+  joy: number;
+  trust: number;
+  fear: number;
+  surprise: number;
+  sadness: number;
+  disgust: number;
+  anger: number;
+  anticipation: number;
+  urgency: number;
+}
+
 export interface CopyAnalysis {
   id: string;
   originalText: string;
@@ -364,8 +376,11 @@ export interface CopyAnalysis {
   triggerDensity: TriggerDensity;
   persuasionScore: number;        // 0-100
   emotionalScore: number;         // 0-100
+  emotionalProfile?: EmotionalProfile;
+  sentiment: 'positive' | 'neutral' | 'negative';
   clarityScore: number;           // 0-100
   ctaStrength: number;            // 0-100
+  highlightedTriggers?: Array<{ text: string; category: string; startIndex: number; endIndex: number }>;
   issues: {
     issue: string;
     severity: 'low' | 'medium' | 'high';

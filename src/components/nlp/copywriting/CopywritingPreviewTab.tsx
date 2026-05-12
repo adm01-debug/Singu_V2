@@ -1,7 +1,7 @@
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
- import { Smartphone, Mail, MessageSquare, CheckCircle } from 'lucide-react';
+  import { Smartphone, Mail, MessageSquare, CheckCircle, Linkedin, Instagram, Heart, Send, MessageCircle, Bookmark, ThumbsUp } from 'lucide-react';
 
 interface ChannelPreview {
   channel: string;
@@ -22,8 +22,8 @@ interface Props {
 const channelIcons: Record<string, React.ReactNode> = {
   whatsapp: <Smartphone className="h-4 w-4 text-success" />,
   email: <Mail className="h-4 w-4 text-info" />,
-  instagram: <Smartphone className="h-4 w-4 text-primary" />,
-  linkedin: <Smartphone className="h-4 w-4 text-info" />,
+  instagram: <Instagram className="h-4 w-4 text-pink-600" />,
+  linkedin: <Linkedin className="h-4 w-4 text-blue-700" />,
   sms: <MessageSquare className="h-4 w-4 text-muted-foreground" />,
 };
 
@@ -58,7 +58,53 @@ export function CopywritingPreviewTab({ analyzeText, onTextChange, channelPrevie
                 className="p-3"
                 style={{ backgroundColor: preview.preview.backgroundColor || 'transparent' }}
               >
-                 {preview.channel === 'whatsapp' ? (
+                {preview.channel === 'linkedin' ? (
+                   <div className="bg-white border rounded shadow-sm overflow-hidden">
+                     <div className="p-3 flex items-center gap-2 border-b">
+                       <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-700">VOCÊ</div>
+                       <div>
+                         <div className="text-xs font-bold">Seu Nome</div>
+                         <div className="text-[10px] text-muted-foreground">Estrategista de Vendas Elite</div>
+                       </div>
+                     </div>
+                     <div className="p-3">
+                       <p className="text-xs whitespace-pre-wrap leading-relaxed">
+                         {preview.formattedText}
+                       </p>
+                       <div className="mt-3 flex gap-4 text-muted-foreground">
+                         <ThumbsUp className="h-4 w-4" />
+                         <MessageSquare className="h-4 w-4" />
+                         <Send className="h-4 w-4" />
+                       </div>
+                     </div>
+                   </div>
+                 ) : preview.channel === 'instagram' ? (
+                   <div className="bg-white border rounded shadow-sm overflow-hidden">
+                     <div className="p-2 flex items-center gap-2">
+                       <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-[1.5px]">
+                         <div className="h-full w-full rounded-full bg-white flex items-center justify-center text-[10px] font-bold">ME</div>
+                       </div>
+                       <span className="text-xs font-bold">seuperfil_oficial</span>
+                     </div>
+                     <div className="bg-muted aspect-square flex items-center justify-center text-muted-foreground italic text-xs">
+                       [Espaço para Imagem/Vídeo]
+                     </div>
+                     <div className="p-3">
+                       <div className="flex justify-between mb-2">
+                         <div className="flex gap-3">
+                           <Heart className="h-5 w-5" />
+                           <MessageCircle className="h-5 w-5" />
+                           <Send className="h-5 w-5" />
+                         </div>
+                         <Bookmark className="h-5 w-5" />
+                       </div>
+                       <p className="text-xs whitespace-pre-wrap">
+                         <span className="font-bold mr-1">seuperfil_oficial</span>
+                         {preview.formattedText}
+                       </p>
+                     </div>
+                   </div>
+                 ) : preview.channel === 'whatsapp' ? (
                    <div className="relative p-4 bg-[#e5ddd5] rounded-md min-h-[120px]">
                      <div className="bg-[#dcf8c6] rounded-lg p-3 max-w-[85%] ml-auto shadow-sm relative">
                        <p className="text-[13px] text-gray-800 whitespace-pre-wrap leading-relaxed">

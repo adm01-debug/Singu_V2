@@ -23,7 +23,8 @@
  export function CopywritingAiGeneratorTab({ contact }: Props) {
    const [loading, setLoading] = useState(false);
    const [messageType, setMessageType] = useState('introduction');
-   const [framework, setFramework] = useState('None');
+    const [framework, setFramework] = useState('None');
+    const [storyArc, setStoryArc] = useState('hero_journey');
    const [tone, setTone] = useState('friendly');
    const [customContext, setCustomContext] = useState('');
    const [suggestions, setSuggestions] = useState<AiSuggestion[]>([]);
@@ -48,7 +49,8 @@
            messageType,
            customContext,
            tone,
-           framework,
+            framework,
+            storyArc: framework === 'Storytelling' ? storyArc : undefined,
          }
        });
  
@@ -131,6 +133,24 @@
            </div>
          </div>
  
+          {framework === 'Storytelling' && (
+            <div className="space-y-2 mb-4 animate-in fade-in slide-in-from-top-1">
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Arco Narrativo</label>
+              <Select value={storyArc} onValueChange={setStoryArc}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o arco" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="hero_journey">Jornada do Herói (Desafio → Transformação)</SelectItem>
+                  <SelectItem value="before_after">Antes e Depois (Cenário A → Ponte → Cenário B)</SelectItem>
+                  <SelectItem value="problem_solution">Problema → Agitação → Solução</SelectItem>
+                  <SelectItem value="rags_to_riches">Da Lama ao Luxo (Superação Financeira)</SelectItem>
+                  <SelectItem value="overcoming_monster">Superando o Monstro (Vencendo Grande Obstáculo)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
          <div className="space-y-2 mb-6">
            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Contexto Adicional (Opcional)</label>
            <Textarea 
