@@ -245,14 +245,10 @@ const ContatoDetalhe = () => {
                     twitter={contact.twitter}
                   />
                 </div>
-                <RelationshipTimeline
-                  interactions={interactions}
-                  contact={contact}
-                />
-                <RelationshipTimeline
-                  interactions={interactions}
-                  contact={contact}
-                />
+                 <RelationshipTimeline
+                   interactions={interactions}
+                   contact={contact}
+                 />
                 <Suspense fallback={<Skeleton className="h-48 rounded-lg" />}>
                   <ContactTimelineWidget contactId={contact.id} />
                 </Suspense>
