@@ -14,31 +14,57 @@ export interface SegmentDefinition {
   logic: 'and' | 'or';
 }
 
-const AVAILABLE_FIELDS = [
-  { key: 'relationship_score', label: 'Score de Relacionamento', type: 'number' },
-  { key: 'sentiment', label: 'Sentimento', type: 'select', options: ['positive', 'neutral', 'negative'] },
-  { key: 'relationship_stage', label: 'Estágio', type: 'select', options: ['lead', 'prospect', 'customer', 'partner', 'churned'] },
-  { key: 'tags', label: 'Tags', type: 'array' },
-  { key: 'company_id', label: 'Tem Empresa', type: 'exists' },
-  { key: 'email', label: 'Tem Email', type: 'exists' },
-  { key: 'whatsapp', label: 'Tem WhatsApp', type: 'exists' },
-  { key: 'birthday', label: 'Tem Aniversário', type: 'exists' },
-];
+ const AVAILABLE_FIELDS = [
+   { key: 'relationship_score', label: 'Score de Relacionamento', type: 'number' },
+   { key: 'sentiment', label: 'Sentimento', type: 'select', options: ['positive', 'neutral', 'negative'] },
+   { key: 'relationship_stage', label: 'Estágio', type: 'select', options: ['lead', 'prospect', 'customer', 'partner', 'churned'] },
+   { key: 'tags', label: 'Tags', type: 'array' },
+   { key: 'company_id', label: 'Tem Empresa', type: 'exists' },
+   { key: 'email', label: 'Tem Email', type: 'exists' },
+   { key: 'whatsapp', label: 'Tem WhatsApp', type: 'exists' },
+   { key: 'birthday', label: 'Tem Aniversário', type: 'exists' },
+   // Behavioral fields (from contact_behavior table)
+   { key: 'disc_primary', label: 'DISC Primário', type: 'select', options: ['D', 'I', 'S', 'C'] },
+   { key: 'vak_primary', label: 'VAK Primário', type: 'select', options: ['visual', 'auditivo', 'cinestesico'] },
+   { key: 'motivation_primary', label: 'Motivação Primária', type: 'text' },
+   { key: 'preferred_channel', label: 'Canal Preferido', type: 'text' },
+   { key: 'formality_level', label: 'Nível de Formalidade', type: 'number' },
+ ];
 
 export function useContactSegmentation() {
   const [segment, setSegment] = useState<SegmentDefinition>({ name: '', filters: [], logic: 'and' });
 
-  const { data: allContacts = [] } = useQuery({
-    queryKey: ['contacts-for-segmentation'],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return [];
-      const { data, error } = await supabase.from('contacts').select('id, first_name, last_name, email, whatsapp, phone, relationship_score, sentiment, relationship_stage, tags, company_id, birthday').eq('user_id', user.id);
-      if (error) throw error;
-      return data || [];
-    },
-    staleTime: 5 * 60_000,
-  });
+   const { data: allContacts = [] } = useQuery({
+     queryKey: ['contacts-for-segmentation'],
+     queryFn: async () => {
+       const { data: { user } } = await supabase.auth.getUser();
+       if (!user) return [];
+       
+       // Join with contact_behavior to get behavioral data
+       const { data, error } = await supabase
+         .from('contacts')
+         .select(`
+           id, first_name, last_name, email, whatsapp, phone, relationship_score, sentiment, relationship_stage, tags, company_id, birthday,
+           contact_behavior (
+             disc_primary, vak_primary, motivation_primary, preferred_channel, formality_level
+           )
+         `)
+         .eq('user_id', user.id);
+         
+       if (error) throw error;
+       
+       // Flatten the data for easier filtering
+       return (data || []).map((c: any) => ({
+         ...c,
+         disc_primary: c.contact_behavior?.[0]?.disc_primary || null,
+         vak_primary: c.contact_behavior?.[0]?.vak_primary || null,
+         motivation_primary: c.contact_behavior?.[0]?.motivation_primary || null,
+         preferred_channel: c.contact_behavior?.[0]?.preferred_channel || null,
+         formality_level: c.contact_behavior?.[0]?.formality_level || null,
+       }));
+     },
+     staleTime: 5 * 60_000,
+   });
 
   const matchesFilter = useCallback((contact: Record<string, any>, filter: SegmentFilter): boolean => {
     const val = contact[filter.field];
