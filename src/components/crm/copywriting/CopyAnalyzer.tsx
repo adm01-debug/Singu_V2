@@ -4,7 +4,7 @@
  import { Badge } from '@/components/ui/badge';
  import { Progress } from '@/components/ui/progress';
  import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
- import { Brain, Sparkles, AlertTriangle, CheckCircle2, MessageSquare, Mail, Smartphone } from 'lucide-react';
+   import { Brain, Sparkles, AlertTriangle, CheckCircle2, MessageSquare, Mail, Smartphone, Target } from 'lucide-react';
  
  export const CopyAnalyzer = () => {
    const [text, setText] = useState('');
@@ -63,9 +63,10 @@
         },
         triggers: triggersFound,
         score: Math.round((readability + (triggersFound.length * 20) + cognitiveEase) / 3),
-        tips,
-        storytelling_arc: text.length > 200 ? 'Jornada do Herói' : 'Pitch Direto'
-      });
+       tips,
+       storytelling_arc: text.length > 200 ? 'Jornada do Herói' : 'Pitch Direto',
+       objections: text.toLowerCase().includes('caro') || text.toLowerCase().includes('preço') ? ['Preço/Valor'] : []
+     });
    }, [text]);
  
    return (
@@ -104,7 +105,8 @@
                <TabsList className="grid w-full grid-cols-3">
                  <TabsTrigger value="whatsapp"><Smartphone className="w-4 h-4 mr-2" /> WhatsApp</TabsTrigger>
                  <TabsTrigger value="email"><Mail className="w-4 h-4 mr-2" /> Email</TabsTrigger>
-                 <TabsTrigger value="social"><Sparkles className="w-4 h-4 mr-2" /> Redes</TabsTrigger>
+                     <TabsTrigger value="social"><Sparkles className="w-4 h-4 mr-2" /> Redes</TabsTrigger>
+                     <TabsTrigger value="objections"><Target className="w-4 h-4 mr-2" /> Objeções</TabsTrigger>
                </TabsList>
                <TabsContent value="whatsapp" className="mt-4">
                  <div className="bg-[#e5ddd5] p-4 rounded-lg min-h-[200px] relative overflow-hidden">
@@ -113,7 +115,25 @@
                      <span className="text-[10px] text-muted-foreground float-right mt-1">12:00</span>
                    </div>
                  </div>
-               </TabsContent>
+                 </TabsContent>
+                 <TabsContent value="objections" className="mt-4">
+                   <div className="border rounded-lg p-4 bg-red-50/30 border-red-100">
+                     <h4 className="text-sm font-bold flex items-center gap-2 text-red-700 mb-3">
+                       <Target className="w-4 h-4" /> Radar de Resistência
+                     </h4>
+                     {analysis.objections.length > 0 ? (
+                       <div className="space-y-3">
+                         <p className="text-xs text-red-800">Detectamos gatilhos de resistência sobre: <strong>{analysis.objections.join(', ')}</strong></p>
+                         <div className="bg-white p-3 rounded border border-red-200 text-xs">
+                           <p className="font-bold text-red-700 mb-1">Dica de Reenquadramento:</p>
+                           <p className="text-muted-foreground italic">"Em vez de focar no preço, foque no custo de não resolver o problema agora."</p>
+                         </div>
+                       </div>
+                     ) : (
+                       <p className="text-xs text-muted-foreground italic text-center py-8">Nenhuma objeção explícita detectada. O texto parece fluir sem barreiras de preço ou autoridade.</p>
+                     )}
+                   </div>
+                 </TabsContent>
                <TabsContent value="email" className="mt-4">
                  <div className="border rounded-md p-4 bg-white min-h-[200px] shadow-inner">
                    <div className="border-b pb-2 mb-2 text-xs text-muted-foreground">
