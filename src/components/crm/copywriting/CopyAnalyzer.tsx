@@ -1,3 +1,4 @@
+ import { FRAMEWORKS } from './PersuasionFrameworks';
  import { useState, useEffect } from 'react';
  import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
  import { Textarea } from '@/components/ui/textarea';
@@ -79,6 +80,10 @@
      });
    }, [text]);
  
+   const applyTemplate = (example: string) => {
+     setText(example);
+   };
+
    return (
      <div className="grid lg:grid-cols-2 gap-6">
        <div className="space-y-4">
@@ -97,9 +102,14 @@
                onChange={(e) => setText(e.target.value)}
              />
              <div className="mt-4 flex flex-wrap gap-2">
-               {['FAB', 'AIDA', 'PAS', '4Ps'].map(f => (
-                 <Badge key={f} variant="outline" className="cursor-pointer hover:bg-primary/10">
-                   Template {f}
+               {FRAMEWORKS.map(f => (
+                 <Badge 
+                   key={f.id} 
+                   variant="outline" 
+                   className="cursor-pointer hover:bg-primary/10"
+                   onClick={() => applyTemplate(f.example)}
+                 >
+                   Template {f.name}
                  </Badge>
                ))}
              </div>
