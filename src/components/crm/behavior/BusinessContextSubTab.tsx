@@ -67,10 +67,10 @@ export const BusinessContextSubTab = ({ contactId, data }: BusinessContextSubTab
               placeholder="Ex: Férias em Janeiro, Budget renova em Março..."
             />
           </div>
-          <Button className="w-full" onClick={handleSave}>
-            <Save className="h-4 w-4 mr-2" />
-            Salvar Contexto
-          </Button>
+           <Button className="w-full mt-auto" onClick={handleSave} variant="outline">
+             <Save className="h-4 w-4 mr-2" />
+             Salvar Contexto Empresarial
+           </Button>
         </div>
       </CardContent>
     </Card>

@@ -86,15 +86,41 @@ export const DISCSubTab = ({ contactId, data }: DISCSubTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          <div className="p-4 bg-muted rounded-md text-sm text-muted-foreground">
-            {formData.vak_primary === 'visual' && "Prefere gráficos, apresentações visuais e e-mails estruturados."}
-            {formData.vak_primary === 'auditivo' && "Prefere chamadas de áudio, discussões verbais e clareza no tom de voz."}
-            {formData.vak_primary === 'cinestesico' && "Valoriza o 'toque', demonstrações práticas e a sensação de confiança."}
+           <div className="space-y-4">
+             <div className="space-y-2">
+               <Label>Pontuação Visual ({formData.vak_visual || 0}%)</Label>
+               <Slider 
+                 value={[formData.vak_visual || 0]} 
+                 min={0} max={100} step={1}
+                 onValueChange={(val) => setFormData({ ...formData, vak_visual: val[0] })}
+               />
+             </div>
+             <div className="space-y-2">
+               <Label>Pontuação Auditiva ({formData.vak_auditory || 0}%)</Label>
+               <Slider 
+                 value={[formData.vak_auditory || 0]} 
+                 min={0} max={100} step={1}
+                 onValueChange={(val) => setFormData({ ...formData, vak_auditory: val[0] })}
+               />
+             </div>
+             <div className="space-y-2">
+               <Label>Pontuação Cinestésica ({formData.vak_kinesthetic || 0}%)</Label>
+               <Slider 
+                 value={[formData.vak_kinesthetic || 0]} 
+                 min={0} max={100} step={1}
+                 onValueChange={(val) => setFormData({ ...formData, vak_kinesthetic: val[0] })}
+               />
+             </div>
+           </div>
+           <div className="p-4 bg-muted/50 rounded-md text-sm text-muted-foreground mt-4">
+             {formData.vak_primary === 'visual' && "Dominância Visual: Prefere gráficos, apresentações e e-mails estruturados."}
+             {formData.vak_primary === 'auditivo' && "Dominância Auditiva: Prefere chamadas, discussões verbais e clareza no tom."}
+             {formData.vak_primary === 'cinestesico' && "Dominância Cinestésica: Valoriza o 'toque', demonstrações e confiança."}
           </div>
-          <Button className="w-full mt-4" onClick={handleSave}>
-            <Save className="h-4 w-4 mr-2" />
-            Salvar VAK
-          </Button>
+           <Button className="w-full mt-4" onClick={handleSave} variant="outline">
+             <Save className="h-4 w-4 mr-2" />
+             Salvar Perfil DISC & VAK
+           </Button>
         </CardContent>
       </Card>
     </div>

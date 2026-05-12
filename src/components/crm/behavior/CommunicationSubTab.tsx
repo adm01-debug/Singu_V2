@@ -80,10 +80,10 @@ export const CommunicationSubTab = ({ contactId, data }: CommunicationSubTabProp
               />
             </div>
           </div>
-          <Button className="w-full mt-4" onClick={handleSave}>
-            <Save className="h-4 w-4 mr-2" />
-            Salvar PNL
-          </Button>
+           <Button className="w-full mt-4" onClick={handleSave} variant="outline">
+             <Save className="h-4 w-4 mr-2" />
+             Salvar Comunicação
+           </Button>
         </div>
       </CardContent>
     </Card>

@@ -67,10 +67,10 @@ export const DecisionMakingSubTab = ({ contactId, data }: DecisionMakingSubTabPr
               placeholder="Cole o ID do contato aprovador"
             />
           </div>
-          <Button className="w-full" onClick={handleSave}>
-            <Save className="h-4 w-4 mr-2" />
-            Salvar Critérios
-          </Button>
+           <Button className="w-full" onClick={handleSave} variant="outline">
+             <Save className="h-4 w-4 mr-2" />
+             Salvar Critérios de Decisão
+           </Button>
         </div>
       </CardContent>
     </Card>
