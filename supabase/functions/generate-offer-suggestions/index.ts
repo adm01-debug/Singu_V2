@@ -66,7 +66,18 @@ Deno.serve(async (req) => {
       .order('created_at', { ascending: false })
       .limit(100);
 
-    // Get existing offer suggestions to avoid duplicates
+     // Get psychographic data and social analysis
+     const { data: analyticalProfiles } = await supabase
+       .from('contact_analytical_profiles')
+       .select('*')
+       .in('contact_id', contactIds);
+ 
+     const { data: socialAnalysis } = await supabase
+       .from('social_behavior_analysis')
+       .select('*')
+       .in('contact_id', contactIds);
+ 
+     // Get existing offer suggestions to avoid duplicates
     const { data: existingOffers } = await supabase
       .from('offer_suggestions')
       .select('contact_id, offer_name')
@@ -93,11 +104,19 @@ Deno.serve(async (req) => {
     for (const contact of contacts) {
       const contactPurchases = (purchases || []).filter(p => p.contact_id === contact.id);
       const contactInteractions = (interactions || []).filter(i => i.contact_id === contact.id);
+     const contactAnalytical = (analyticalProfiles || []).find(ap => ap.contact_id === contact.id);
+     const contactSocial = (socialAnalysis || []).find(sa => sa.contact_id === contact.id);
       
       const interactionText = contactInteractions
         .map(i => `${i.content || ''} ${i.transcription || ''}`)
         .join(' ')
         .toLowerCase();
+ 
+     const socialInterests = (contactSocial?.interests || []).join(' ').toLowerCase();
+     const socialKeywords = (contactSocial?.keywords || []).join(' ').toLowerCase();
+     const analyticalTopics = (contactAnalytical?.recurrent_topics || []).join(' ').toLowerCase();
+     
+     const combinedContext = `${interactionText} ${socialInterests} ${socialKeywords} ${analyticalTopics}`;
 
       const now = new Date();
       const upcomingRenewals = contactPurchases.filter(p => {
@@ -120,10 +139,17 @@ Deno.serve(async (req) => {
           reasons.push(`Bom score de relacionamento (${score})`);
         }
 
-        const matchedKeywords = offer.keywords.filter(kw => interactionText.includes(kw));
+       const matchedKeywords = offer.keywords.filter(kw => combinedContext.includes(kw.toLowerCase()));
         if (matchedKeywords.length > 0) {
           confidence += matchedKeywords.length * 10;
-          reasons.push(`Interesse detectado: ${matchedKeywords.join(', ')}`);
+         
+         const socialMatch = matchedKeywords.some(kw => socialInterests.includes(kw.toLowerCase()) || socialKeywords.includes(kw.toLowerCase()));
+         if (socialMatch) {
+           reasons.push(`Alinhamento com interesses sociais: ${matchedKeywords.join(', ')}`);
+           confidence += 5; // Extra boost for social relevance
+         } else {
+           reasons.push(`Interesse detectado: ${matchedKeywords.join(', ')}`);
+         }
         }
 
         if (contactPurchases.length > 0) {
