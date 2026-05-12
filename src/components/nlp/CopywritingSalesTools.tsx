@@ -121,7 +121,11 @@ export default function CopywritingSalesTools({ contact }: CopywritingSalesTools
             <TabsTrigger value="headlines" className="text-xs px-2 py-1.5"><Quote className="h-3 w-3 mr-1" />Headlines</TabsTrigger>
           </TabsList>
 
-           <TabsContent value="ai-generator" className="space-y-4">
+            <TabsContent value="objection" className="space-y-4">
+              <CopywritingObjectionTab contact={safeContact} />
+            </TabsContent>
+
+            <TabsContent value="ai-generator" className="space-y-4">
              <CopywritingAiGeneratorTab contact={safeContact} />
            </TabsContent>
  
