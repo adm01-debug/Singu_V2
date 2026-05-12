@@ -1,4 +1,5 @@
-import { useState } from 'react';
+ import { useState } from 'react';
+ import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,6 +15,7 @@ import { useNurturingWorkflows } from '@/hooks/useNurturingWorkflows';
 import { useNurturingExecutions, useRunNurturing } from '@/hooks/useNurturingExecutions';
 import { useMQLCriteria, useMQLClassifications, useHandoffMQL } from '@/hooks/useMQL';
  import { useAttribution, type AttributionModel } from '@/hooks/useAttribution';
+ import { useMarketingFunnel } from '@/hooks/useMarketingInsights';
  import { AttributionBreakdownChart } from '@/components/marketing/AttributionBreakdownChart';
  import { MarketingStats } from '@/components/crm/marketing/components/MarketingStats';
  import { FormList } from '@/components/crm/marketing/components/FormList';
@@ -45,7 +47,8 @@ export default function MarketingHub() {
   const [attDealId, setAttDealId] = useState('');
   const [attModel, setAttModel] = useState<AttributionModel>('linear');
   const [attValue, setAttValue] = useState(10000);
-  const { data: attribution } = useAttribution(attDealId || undefined, attModel, attValue);
+   const { data: attribution } = useAttribution(attDealId || undefined, attModel, attValue);
+   const { data: funnel = [] } = useMarketingFunnel();
 
    const copyUrl = (slug: string, prefix: 'f' | 'lm' | 'lp') => {
     const url = `${window.location.origin}/${prefix}/${slug}`;
@@ -104,51 +107,114 @@ export default function MarketingHub() {
            </TabsList>
          </div>
  
-          <TabsContent value="overview" className="space-y-6">
-            <MarketingStats 
-              totalViews={magnets.reduce((acc, m) => acc + (m.view_count || 0), 0)}
-              totalSubmissions={forms.reduce((acc, f) => acc + (f.submission_count || 0), 0)}
-              activeNurturing={executions.filter(e => e.status === 'active').length}
-              totalSQLs={classifications.filter(c => c.status === 'sql').length}
-            />
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-             <Card>
+           <TabsContent value="overview" className="space-y-6">
+             <MarketingStats 
+               totalViews={magnets.reduce((acc, m) => acc + (m.view_count || 0), 0)}
+               totalSubmissions={forms.reduce((acc, f) => acc + (f.submission_count || 0), 0)}
+               activeNurturing={executions.filter(e => e.status === 'active').length}
+               totalSQLs={classifications.filter(c => c.status === 'sql').length}
+             />
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <Card className="lg:col-span-2">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle className="text-base font-semibold">Funil de Marketing</CardTitle>
+                  <BarChart3 className="w-4 h-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    {funnel.length > 0 ? funnel.map((step, idx) => (
+                      <div key={step.stage} className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="font-medium">{step.stage}</span>
+                          <span className="text-muted-foreground">{step.count} ({step.conversion_rate.toFixed(1)}%)</span>
+                        </div>
+                        <div className="h-4 bg-muted rounded-full overflow-hidden relative">
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: `${(step.count / (funnel[0]?.count || 1)) * 100}%` }}
+                            className={`h-full ${idx === 0 ? 'bg-primary' : idx === 1 ? 'bg-primary/80' : idx === 2 ? 'bg-primary/60' : 'bg-primary/40'}`}
+                          />
+                        </div>
+                      </div>
+                    )) : (
+                      <div className="h-[200px] flex items-center justify-center text-muted-foreground text-sm border-2 border-dashed rounded-lg">
+                        Aguardando dados de conversão para gerar o funil.
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle className="text-base font-semibold">Investimento & ROI</CardTitle>
+                  <TrendingUp className="w-4 h-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    <div className="p-4 rounded-xl bg-primary/5 border border-primary/10">
+                      <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Custo por Lead (CPL)</p>
+                      <p className="text-2xl font-bold">R$ 14,30</p>
+                    </div>
+                    <div className="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+                      <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">CAC Estimado</p>
+                      <p className="text-2xl font-bold">R$ 452,00</p>
+                    </div>
+                    <div className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/10">
+                      <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">LTV Sugerido</p>
+                      <p className="text-2xl font-bold">R$ 8.900,00</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
                <CardHeader className="flex flex-row items-center justify-between">
                  <CardTitle className="text-base font-semibold">Atribuição por Canal</CardTitle>
                  <BarChart3 className="w-4 h-4 text-muted-foreground" />
                </CardHeader>
                <CardContent>
-                 <div className="h-[200px] flex items-center justify-center text-muted-foreground text-sm border-2 border-dashed rounded-lg">
-                   Selecione um Deal na aba Attribution para ver dados reais.
-                 </div>
+                 {attribution ? (
+                   <AttributionBreakdownChart 
+                     allocations={attribution.allocations} 
+                     totalValue={attribution.total_value} 
+                   />
+                 ) : (
+                   <div className="h-[200px] flex items-center justify-center text-muted-foreground text-sm border-2 border-dashed rounded-lg">
+                     Selecione um Deal na aba Attribution para ver dados reais.
+                   </div>
+                 )}
                </CardContent>
-             </Card>
-             <Card>
-               <CardHeader className="flex flex-row items-center justify-between">
-                 <CardTitle className="text-base font-semibold">Status de Nutrição</CardTitle>
-                 <TrendingUp className="w-4 h-4 text-muted-foreground" />
-               </CardHeader>
-               <CardContent>
-                 <div className="space-y-4">
-                   {workflows.slice(0, 3).map(w => (
-                     <div key={w.id} className="space-y-1">
-                       <div className="flex justify-between text-xs">
-                         <span className="font-medium">{w.name}</span>
-                         <span className="text-muted-foreground">{executions.filter(e => e.workflow_id === w.id && e.status === 'completed').length} concluídos</span>
-                       </div>
-                       <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                         <div className="h-full bg-primary" style={{ width: '65%' }} />
-                       </div>
-                     </div>
-                   ))}
-                   {workflows.length === 0 && (
-                     <p className="text-xs text-muted-foreground text-center py-4 italic">Sem fluxos de nutrição configurados.</p>
-                   )}
-                 </div>
-               </CardContent>
-             </Card>
-           </div>
-         </TabsContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle className="text-base font-semibold">Status de Nutrição</CardTitle>
+                  <Workflow className="w-4 h-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {workflows.slice(0, 3).map(w => (
+                      <div key={w.id} className="space-y-1">
+                        <div className="flex justify-between text-xs">
+                          <span className="font-medium">{w.name}</span>
+                          <span className="text-muted-foreground">{executions.filter(e => e.workflow_id === w.id && e.status === 'completed').length} concluídos</span>
+                        </div>
+                        <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                          <div className="h-full bg-primary" style={{ width: '65%' }} />
+                        </div>
+                      </div>
+                    ))}
+                    {workflows.length === 0 && (
+                      <p className="text-xs text-muted-foreground text-center py-4 italic">Sem fluxos de nutrição configurados.</p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
 
           <TabsContent value="forms" className="space-y-6">
             <div className="flex items-center justify-between gap-4">

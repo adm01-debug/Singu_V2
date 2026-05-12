@@ -5584,7 +5584,9 @@ export type Database = {
           content_text: string | null
           created_at: string
           id: string
+          investment: number | null
           name: string
+          revenue: number | null
           scheduled_at: string | null
           segment_filter: Json | null
           sent_at: string | null
@@ -5603,7 +5605,9 @@ export type Database = {
           content_text?: string | null
           created_at?: string
           id?: string
+          investment?: number | null
           name: string
+          revenue?: number | null
           scheduled_at?: string | null
           segment_filter?: Json | null
           sent_at?: string | null
@@ -5622,7 +5626,9 @@ export type Database = {
           content_text?: string | null
           created_at?: string
           id?: string
+          investment?: number | null
           name?: string
+          revenue?: number | null
           scheduled_at?: string | null
           segment_filter?: Json | null
           sent_at?: string | null
@@ -8447,6 +8453,93 @@ export type Database = {
           timeout_ms?: number | null
           updated_at?: string | null
           webhook_url?: string
+        }
+        Relationships: []
+      }
+      marketing_campaign_stats: {
+        Row: {
+          campaign_id: string | null
+          clicks: number | null
+          conversions: number | null
+          created_at: string | null
+          date: string
+          entity_id: string
+          entity_type: string
+          id: string
+          revenue: number | null
+          spend: number | null
+          submissions: number | null
+          user_id: string
+          views: number | null
+        }
+        Insert: {
+          campaign_id?: string | null
+          clicks?: number | null
+          conversions?: number | null
+          created_at?: string | null
+          date?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          revenue?: number | null
+          spend?: number | null
+          submissions?: number | null
+          user_id: string
+          views?: number | null
+        }
+        Update: {
+          campaign_id?: string | null
+          clicks?: number | null
+          conversions?: number | null
+          created_at?: string | null
+          date?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          revenue?: number | null
+          spend?: number | null
+          submissions?: number | null
+          user_id?: string
+          views?: number | null
+        }
+        Relationships: []
+      }
+      marketing_roi_data: {
+        Row: {
+          channel: string
+          created_at: string | null
+          customers_acquired: number | null
+          id: string
+          investment: number
+          leads_generated: number | null
+          period_end: string
+          period_start: string
+          revenue_generated: number | null
+          user_id: string
+        }
+        Insert: {
+          channel: string
+          created_at?: string | null
+          customers_acquired?: number | null
+          id?: string
+          investment?: number
+          leads_generated?: number | null
+          period_end: string
+          period_start: string
+          revenue_generated?: number | null
+          user_id: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string | null
+          customers_acquired?: number | null
+          id?: string
+          investment?: number
+          leads_generated?: number | null
+          period_end?: string
+          period_start?: string
+          revenue_generated?: number | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -13665,6 +13758,15 @@ export type Database = {
         }[]
       }
       get_deal_room_by_token: { Args: { _token: string }; Returns: Json }
+      get_marketing_funnel_stats: {
+        Args: { _end_date: string; _start_date: string; _user_id: string }
+        Returns: {
+          conversion_rate: number
+          count: number
+          previous_stage_count: number
+          stage: string
+        }[]
+      }
       get_score_explicability: { Args: { p_contact_id: string }; Returns: Json }
       get_team_member_ids: {
         Args: { _manager_user_id: string }
