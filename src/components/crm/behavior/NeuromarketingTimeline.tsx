@@ -44,15 +44,24 @@ export function NeuromarketingTimeline({ contactId }: Props) {
 
   if (isLoading) return <Skeleton className="h-[400px] w-full" />;
 
-  const chartData = history?.map(item => ({
-    date: format(new Date(item.created_at), 'dd/MM', { locale: ptBR }),
-    empathy: Number(item.empathy_score) || 0,
-    dominance: (item.dominance_data as any)?.dominance || 0,
-    influence: (item.dominance_data as any)?.influence || 0,
-    steadiness: (item.dominance_data as any)?.steadiness || 0,
-    compliance: (item.dominance_data as any)?.compliance || 0,
-    timestamp: item.created_at
-  })) || [];
+   const chartData = history?.map(item => {
+     const dominance = (item.dominance_data as any)?.dominance || 0;
+     const influence = (item.dominance_data as any)?.influence || 0;
+     const steadiness = (item.dominance_data as any)?.steadiness || 0;
+     const compliance = (item.dominance_data as any)?.compliance || 0;
+     
+     return {
+       date: format(new Date(item.created_at), 'dd/MM', { locale: ptBR }),
+       empathy: Number(item.empathy_score) || 0,
+       dominance,
+       influence,
+       steadiness,
+       compliance,
+       complexity: item.language_complexity_score || 0,
+       sync: item.response_synchronicity || 0,
+       timestamp: item.created_at
+     };
+   }) || [];
 
   const latest = history?.[history?.length - 1];
   
@@ -111,8 +120,10 @@ export function NeuromarketingTimeline({ contactId }: Props) {
                   <Tooltip 
                     contentStyle={{ backgroundColor: 'hsl(var(--background))', borderColor: 'hsl(var(--border))', fontSize: '12px' }}
                   />
-                  <Area type="monotone" dataKey="dominance" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#colorDom)" name="Dominância" />
-                  <Area type="monotone" dataKey="influence" stroke="#f59e0b" fill="transparent" name="Influência" />
+                   <Area type="monotone" dataKey="dominance" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#colorDom)" name="Dominância" />
+                   <Area type="monotone" dataKey="influence" stroke="#f59e0b" fill="transparent" name="Influência" />
+                   <Area type="monotone" dataKey="steadiness" stroke="#10b981" fill="transparent" name="Estabilidade" />
+                   <Area type="monotone" dataKey="compliance" stroke="#3b82f6" fill="transparent" name="Conformidade" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -181,18 +192,18 @@ export function NeuromarketingTimeline({ contactId }: Props) {
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="space-y-2">
-              <div className="flex justify-between items-center text-[10px]">
-                <span className="flex items-center gap-1"><Mic className="h-3 w-3" /> Tom de Voz</span>
-                <Badge variant="secondary" className="text-[9px] px-1 h-4">{correlations?.tone}</Badge>
-              </div>
-              <div className="flex justify-between items-center text-[10px]">
-                <span className="flex items-center gap-1"><MessageSquare className="h-3 w-3" /> Linguagem</span>
-                <Badge variant="secondary" className="text-[9px] px-1 h-4">{correlations?.language}</Badge>
-              </div>
-              <div className="flex justify-between items-center text-[10px]">
-                <span className="flex items-center gap-1"><TrendingUp className="h-3 w-3" /> Respostas</span>
-                <Badge variant="secondary" className="text-[9px] px-1 h-4">{correlations?.responseRate}</Badge>
-              </div>
+               <div className="flex justify-between items-center text-[10px]">
+                 <span className="flex items-center gap-1"><Mic className="h-3 w-3" /> Tom de Voz</span>
+                 <Badge variant="secondary" className="text-[9px] px-1 h-4">{correlations?.tone}</Badge>
+               </div>
+               <div className="flex justify-between items-center text-[10px]">
+                 <span className="flex items-center gap-1"><MessageSquare className="h-3 w-3" /> Complexidade IA</span>
+                 <Badge variant="secondary" className="text-[9px] px-1 h-4">{(latest?.language_complexity_score || 0) > 0.7 ? 'Alta' : 'Moderada'}</Badge>
+               </div>
+               <div className="flex justify-between items-center text-[10px]">
+                 <span className="flex items-center gap-1"><TrendingUp className="h-3 w-3" /> Sincronia</span>
+                 <Badge variant="secondary" className="text-[9px] px-1 h-4">{Math.round((latest?.response_synchronicity || 0) * 100)}%</Badge>
+               </div>
             </div>
             <p className="text-[9px] text-muted-foreground mt-2 leading-tight">
               A empatia é calculada correlacionando a frequência de interações, espelhamento de linguagem e sentimentos detectados.

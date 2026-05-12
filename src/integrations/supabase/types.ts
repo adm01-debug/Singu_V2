@@ -2084,7 +2084,9 @@ export type Database = {
           escalation_enabled: boolean | null
           escalation_role: string | null
           id: string
+          last_escalation_at: string | null
           reminder_enabled: boolean | null
+          resolution_summary: string | null
           updated_at: string | null
           user_id: string
         }
@@ -2095,7 +2097,9 @@ export type Database = {
           escalation_enabled?: boolean | null
           escalation_role?: string | null
           id?: string
+          last_escalation_at?: string | null
           reminder_enabled?: boolean | null
+          resolution_summary?: string | null
           updated_at?: string | null
           user_id: string
         }
@@ -2106,7 +2110,9 @@ export type Database = {
           escalation_enabled?: boolean | null
           escalation_role?: string | null
           id?: string
+          last_escalation_at?: string | null
           reminder_enabled?: boolean | null
+          resolution_summary?: string | null
           updated_at?: string | null
           user_id?: string
         }
@@ -2575,9 +2581,12 @@ export type Database = {
           action: string
           channel: string
           completed_at: string | null
+          completion_date: string | null
           completion_notes: string | null
           contact_id: string
+          contextual_tone: string | null
           created_at: string
+          edited_script: string | null
           expected_outcome: string | null
           generated_at: string
           id: string
@@ -2591,14 +2600,18 @@ export type Database = {
           updated_at: string
           urgency: string
           user_id: string
+          was_successful: boolean | null
         }
         Insert: {
           action: string
           channel: string
           completed_at?: string | null
+          completion_date?: string | null
           completion_notes?: string | null
           contact_id: string
+          contextual_tone?: string | null
           created_at?: string
+          edited_script?: string | null
           expected_outcome?: string | null
           generated_at?: string
           id?: string
@@ -2612,14 +2625,18 @@ export type Database = {
           updated_at?: string
           urgency?: string
           user_id: string
+          was_successful?: boolean | null
         }
         Update: {
           action?: string
           channel?: string
           completed_at?: string | null
+          completion_date?: string | null
           completion_notes?: string | null
           contact_id?: string
+          contextual_tone?: string | null
           created_at?: string
+          edited_script?: string | null
           expected_outcome?: string | null
           generated_at?: string
           id?: string
@@ -2633,6 +2650,7 @@ export type Database = {
           updated_at?: string
           urgency?: string
           user_id?: string
+          was_successful?: boolean | null
         }
         Relationships: [
           {
@@ -8412,27 +8430,36 @@ export type Database = {
           created_at: string | null
           dominance_data: Json | null
           empathy_score: number | null
+          empathy_trend: Json | null
           id: string
+          language_complexity_score: number | null
           neuromarketing_data: Json | null
           recommendations: string[] | null
+          response_synchronicity: number | null
         }
         Insert: {
           contact_id: string
           created_at?: string | null
           dominance_data?: Json | null
           empathy_score?: number | null
+          empathy_trend?: Json | null
           id?: string
+          language_complexity_score?: number | null
           neuromarketing_data?: Json | null
           recommendations?: string[] | null
+          response_synchronicity?: number | null
         }
         Update: {
           contact_id?: string
           created_at?: string | null
           dominance_data?: Json | null
           empathy_score?: number | null
+          empathy_trend?: Json | null
           id?: string
+          language_complexity_score?: number | null
           neuromarketing_data?: Json | null
           recommendations?: string[] | null
+          response_synchronicity?: number | null
         }
         Relationships: [
           {

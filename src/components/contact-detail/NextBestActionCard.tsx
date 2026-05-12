@@ -42,8 +42,8 @@ const urgencyMeta: Record<string, { label: string; variant: 'default' | 'destruc
   low: { label: 'Baixa urgência', variant: 'secondary' },
 };
 
-export function NextBestActionCard({ contactId, contactName }: Props) {
-    const { nextAction, isLoading, isGenerating, isCompleting, generate, complete } = useNextBestAction(contactId);
+ export function NextBestActionCard({ contactId, contactName }: Props) {
+     const { nextAction, isLoading, isGenerating, isCompleting, generate, complete, updateScript } = useNextBestAction(contactId);
     const [completeDialogOpen, setCompleteDialogOpen] = useState(false);
     const [completionNotes, setCompletionNotes] = useState('');
     const [completionDate, setCompletionDate] = useState(new Date().toISOString().split('T')[0]);
@@ -63,8 +63,8 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
    });
   const createTask = useCreateTask();
    const [scriptOpen, setScriptOpen] = useState(false);
-   const [isEditingScript, setIsEditingScript] = useState(false);
-   const [editedScript, setEditedScript] = useState(nextAction?.suggested_script || '');
+    const [isEditingScript, setIsEditingScript] = useState(false);
+    const [editedScript, setEditedScript] = useState(nextAction?.edited_script || nextAction?.suggested_script || '');
  
    const handleSmartSchedule = () => {
      if (!nextAction) return;
@@ -78,7 +78,7 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
      toast.success(`Tarefa agendada para ${formatDistanceToNow(suggestedDate, { addSuffix: true, locale: ptBR })}`);
    };
  
-   const displayScript = editedScript || nextAction?.suggested_script || '';
+    const displayScript = editedScript || nextAction?.edited_script || nextAction?.suggested_script || '';
 
    const handleCopyScript = async () => {
      if (!displayScript) return;
@@ -207,13 +207,22 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
                     <Copy className="w-3 h-3 mr-2" />
                     Copiar
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => setIsEditingScript(!isEditingScript)}>
-                    {isEditingScript ? (
-                      <><Save className="w-3 h-3 mr-2" /> Salvar</>
-                    ) : (
-                      <><Edit3 className="w-3 h-3 mr-2" /> Editar</>
-                    )}
-                  </Button>
+                   <Button 
+                     variant="ghost" 
+                     size="sm" 
+                     onClick={() => {
+                       if (isEditingScript && nextAction) {
+                         updateScript({ id: nextAction.id, script: editedScript });
+                       }
+                       setIsEditingScript(!isEditingScript);
+                     }}
+                   >
+                     {isEditingScript ? (
+                       <><Save className="w-3 h-3 mr-2" /> Salvar</>
+                     ) : (
+                       <><Edit3 className="w-3 h-3 mr-2" /> Editar</>
+                     )}
+                   </Button>
                 </div>
               </div>
             </CollapsibleContent>

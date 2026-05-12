@@ -17,7 +17,10 @@ export interface NextBestAction {
   model: string | null;
   status?: string;
   completed_at?: string;
-  completion_notes?: string;
+   completion_notes?: string;
+   edited_script?: string | null;
+   contextual_tone?: string | null;
+   was_successful?: boolean;
 }
 
 const STALE_24H = 24 * 60 * 60 * 1000;
@@ -26,25 +29,27 @@ export function useNextBestAction(contactId: string | undefined) {
   const { user } = useAuth();
   const qc = useQueryClient();
 
-  const query = useQuery({
-    queryKey: ['next-best-action', user?.id, contactId],
-    enabled: !!user?.id && !!contactId,
-    staleTime: STALE_24H,
-    queryFn: async (): Promise<NextBestAction | null> => {
-      if (!user?.id || !contactId) return null;
-      const { data, error } = await supabase
-        .from('contact_next_actions')
-        .select('id, contact_id, action, reason, channel, urgency, suggested_script, expected_outcome, generated_at, model')
-        .eq('user_id', user.id)
-        .eq('contact_id', contactId)
-        .maybeSingle();
-      if (error) {
-        logger.error('useNextBestAction fetch error', error);
-        return null;
-      }
-      return (data as NextBestAction | null) ?? null;
-    },
-  });
+   const query = useQuery({
+     queryKey: ['next-best-action', user?.id, contactId],
+     enabled: !!user?.id && !!contactId,
+     staleTime: STALE_24H,
+     queryFn: async (): Promise<NextBestAction | null> => {
+       if (!user?.id || !contactId) return null;
+       const { data, error } = await supabase
+         .from('contact_next_actions')
+         .select('*')
+         .eq('user_id', user.id)
+         .eq('contact_id', contactId)
+         .order('generated_at', { ascending: false })
+         .limit(1)
+         .maybeSingle();
+       if (error) {
+         logger.error('useNextBestAction fetch error', error);
+         return null;
+       }
+       return (data as NextBestAction | null) ?? null;
+     },
+   });
 
   const generate = useMutation({
     mutationFn: async () => {
@@ -66,16 +71,31 @@ export function useNextBestAction(contactId: string | undefined) {
     },
   });
 
-  const complete = useMutation({
-    mutationFn: async ({ id, notes, completed_at }: { id: string; notes?: string; completed_at?: string }) => {
-      const { error } = await supabase
-        .from('contact_next_actions')
-        .update({ 
-          status: 'completed', 
-          completed_at: completed_at || new Date().toISOString(),
-          completion_notes: notes 
-        })
-        .eq('id', id);
+   const updateScript = useMutation({
+     mutationFn: async ({ id, script }: { id: string; script: string }) => {
+       const { error } = await supabase
+         .from('contact_next_actions')
+         .update({ edited_script: script })
+         .eq('id', id);
+       if (error) throw error;
+     },
+     onSuccess: () => {
+       qc.invalidateQueries({ queryKey: ['next-best-action', user?.id, contactId] });
+       toast.success('Script atualizado');
+     }
+   });
+
+   const complete = useMutation({
+     mutationFn: async ({ id, notes, completed_at, was_successful }: { id: string; notes?: string; completed_at?: string; was_successful?: boolean }) => {
+       const { error } = await supabase
+         .from('contact_next_actions')
+         .update({ 
+           status: 'completed', 
+           completed_at: completed_at || new Date().toISOString(),
+           completion_notes: notes,
+           was_successful: was_successful ?? true
+         })
+         .eq('id', id);
       
       if (error) throw error;
 
@@ -109,7 +129,8 @@ export function useNextBestAction(contactId: string | undefined) {
     isGenerating: generate.isPending,
     isCompleting: complete.isPending,
     generate: generate.mutate,
-    complete: complete.mutate,
+     complete: complete.mutate,
+     updateScript: updateScript.mutate,
     refetch: query.refetch,
   };
 }
