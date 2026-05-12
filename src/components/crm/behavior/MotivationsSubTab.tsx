@@ -67,10 +67,10 @@ export const MotivationsSubTab = ({ contactId, data }: MotivationsSubTabProps) =
               placeholder="Onde ele quer chegar no próximo ano?"
             />
           </div>
-          <Button className="w-full" onClick={handleSave}>
-            <Save className="h-4 w-4 mr-2" />
-            Salvar Metaprogramas
-          </Button>
+           <Button className="w-full mt-auto" onClick={handleSave} variant="outline">
+             <Save className="h-4 w-4 mr-2" />
+             Salvar Motivações
+           </Button>
         </div>
       </CardContent>
     </Card>
