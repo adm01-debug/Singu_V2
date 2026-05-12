@@ -1,8 +1,9 @@
  import { Helmet } from 'react-helmet-async';
  import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
- import { Sparkles, Wand2, BarChart3, History, Layers } from 'lucide-react';
+ import { Sparkles, Wand2, BarChart3, History, Layers, MessageSquare } from 'lucide-react';
  import { CopyAnalyzer } from '@/components/crm/copywriting/CopyAnalyzer';
  import { SalesScriptGenerator } from '@/components/crm/copywriting/SalesScriptGenerator';
+ import { PersuasionFrameworks } from '@/components/crm/copywriting/PersuasionFrameworks';
  
  export default function CopywritingEnterprise() {
    return (
@@ -52,13 +53,9 @@
            <SalesScriptGenerator />
          </TabsContent>
  
-         <TabsContent value="frameworks" className="text-center py-20 border-2 border-dashed rounded-lg">
-           <Layers className="w-12 h-12 mx-auto mb-4 text-muted-foreground/20" />
-           <h3 className="text-lg font-medium">Biblioteca de Frameworks</h3>
-           <p className="text-muted-foreground max-w-sm mx-auto">
-             Acesse FAB, AIDA, PAS e outras estruturas clássicas validadas por cientistas de dados.
-           </p>
-         </TabsContent>
+          <TabsContent value="frameworks" className="space-y-4 animate-in fade-in-50 duration-500">
+            <PersuasionFrameworks />
+          </TabsContent>
  
          <TabsContent value="history" className="text-center py-20 border-2 border-dashed rounded-lg">
            <History className="w-12 h-12 mx-auto mb-4 text-muted-foreground/20" />

@@ -10,15 +10,23 @@
    const [text, setText] = useState('');
    const [analysis, setAnalysis] = useState({
      readability: 0,
-     emotions: { joy: 0, urgency: 0, trust: 0, fear: 0 },
+     emotions: { joy: 0, urgency: 0, trust: 0, fear: 0, cognitive_ease: 0 },
      triggers: [] as string[],
      score: 0,
-     tips: [] as string[]
+     tips: [] as string[],
+     storytelling_arc: 'Linear'
    });
  
    useEffect(() => {
      if (!text) {
-       setAnalysis({ readability: 0, emotions: { joy: 0, urgency: 0, trust: 0, fear: 0 }, triggers: [], score: 0, tips: [] });
+      setAnalysis({ 
+        readability: 0, 
+        emotions: { joy: 0, urgency: 0, trust: 0, fear: 0, cognitive_ease: 0 }, 
+        triggers: [], 
+        score: 0, 
+        tips: [],
+        storytelling_arc: 'Linear'
+      });
        return;
      }
  
@@ -42,18 +50,22 @@
      if (triggersFound.length < 2) tips.push('Adicione mais gatilhos mentais para aumentar a conversão.');
      if (readability < 60) tips.push('Texto complexo. Use palavras mais simples para atingir um público maior.');
  
-     setAnalysis({
-       readability: Math.round(readability),
-       emotions: {
-         joy: text.includes('!') ? 80 : 40,
-         urgency: triggersFound.includes('Urgência') ? 90 : 30,
-         trust: triggersFound.includes('Segurança') ? 85 : 50,
-         fear: text.toLowerCase().includes('perca') ? 70 : 10,
-       },
-       triggers: triggersFound,
-       score: Math.round((readability + (triggersFound.length * 20)) / 2),
-       tips
-     });
+      const cognitiveEase = Math.round(readability * 0.8 + (triggersFound.length * 4));
+
+      setAnalysis({
+        readability: Math.round(readability),
+        emotions: {
+          joy: text.includes('!') ? 80 : 40,
+          urgency: triggersFound.includes('Urgência') ? 90 : 30,
+          trust: triggersFound.includes('Segurança') ? 85 : 50,
+          fear: text.toLowerCase().includes('perca') ? 70 : 10,
+          cognitive_ease: cognitiveEase
+        },
+        triggers: triggersFound,
+        score: Math.round((readability + (triggersFound.length * 20) + cognitiveEase) / 3),
+        tips,
+        storytelling_arc: text.length > 200 ? 'Jornada do Herói' : 'Pitch Direto'
+      });
    }, [text]);
  
    return (
@@ -169,11 +181,27 @@
                    <span className="text-[10px] uppercase text-muted-foreground font-bold">Alegria/Entusiasmo</span>
                    <Progress value={analysis.emotions.joy} className="h-1 bg-green-100" />
                  </div>
-                 <div className="space-y-1.5">
-                   <span className="text-[10px] uppercase text-muted-foreground font-bold">FOMO (Medo)</span>
-                   <Progress value={analysis.emotions.fear} className="h-1 bg-red-100" />
-                 </div>
-               </div>
+                  <div className="space-y-1.5">
+                    <span className="text-[10px] uppercase text-muted-foreground font-bold">FOMO (Medo)</span>
+                    <Progress value={analysis.emotions.fear} className="h-1 bg-red-100" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <span className="text-[10px] uppercase text-muted-foreground font-bold">Facilidade Cognitiva</span>
+                    <Progress value={analysis.emotions.cognitive_ease} className="h-1 bg-indigo-100" />
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-primary/10">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs font-medium">Arco Narrativo</span>
+                    <Badge variant="outline" className="text-[10px]">{analysis.storytelling_arc}</Badge>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground leading-tight italic">
+                    {analysis.storytelling_arc === 'Jornada do Herói' 
+                      ? 'Detectada estrutura de transformação: Problema -> Conflito -> Resolução.' 
+                      : 'Estrutura focada em clareza e velocidade de processamento.'}
+                  </p>
+                </div>
              </div>
            </CardContent>
          </Card>
