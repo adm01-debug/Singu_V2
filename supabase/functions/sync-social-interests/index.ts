@@ -34,37 +34,46 @@ serve(async (req) => {
 
     if (insightsError) throw insightsError
 
-    // 3. Simulate processing/enrichment logic
-    // In a real scenario, this would call Firecrawl/LinkedIn API etc.
-    const mockPreviousValues = { interests: ['tech', 'gadgets'] }
-    const mockNewValues = { 
-      interests: ['AI', 'Productivity', 'Sustainability'],
-      keywords: ['automation', 'efficiency', 'ESG']
-    }
+    // 3. Get latest analysis to compare for audit log
+    const { data: currentAnalysis } = await supabaseClient
+      .from('social_behavior_analysis')
+      .select('*')
+      .eq('contact_id', contactId)
+      .maybeSingle();
 
-    // 4. Log the audit
+    // 4. Simulate processing/enrichment logic (In a real scenario, call Firecrawl/LinkedIn API)
+    const enrichedData = { 
+      interests: [...(currentAnalysis?.interests || []), 'AI', 'Productivity'],
+      keywords: [...(currentAnalysis?.keywords || []), 'automation', 'efficiency'],
+      last_sync_at: new Date().toISOString()
+    };
+
+    // 5. Update social behavior analysis
+    await supabaseClient
+      .from('social_behavior_analysis')
+      .upsert({
+        contact_id: contactId,
+        ...enrichedData
+      });
+
+    // 6. Log the audit with change tracking
     await supabaseClient
       .from('psychographic_audit_log')
       .insert({
         contact_id: contactId,
         change_type: 'automation',
-        previous_values: mockPreviousValues,
-        new_values: mockNewValues,
-        changed_fields: ['interests', 'keywords']
-      })
+        previous_values: currentAnalysis || {},
+        new_values: enrichedData,
+        changed_fields: ['interests', 'keywords', 'last_sync_at']
+      });
 
-    // 5. Update offers with Social Match metadata
-    // Example: Update existing offers or generate new ones
-    await supabaseClient
-      .from('offer_suggestions')
-      .update({ 
-        metadata: { 
-          sources: ['LinkedIn Profile', 'Recent Post'], 
-          keywords: ['automation', 'productivity'] 
-        } 
-      })
-      .eq('contact_id', contactId)
-      .eq('offer_category', 'Software')
+    // 7. Trigger offer regeneration to use new social data
+    // We use service role key for the invoke if possible, or just call it
+    const { error: invokeError } = await supabaseClient.functions.invoke('generate-offer-suggestions', {
+      body: { contactId }
+    });
+
+    if (invokeError) console.error('Error triggering offer regeneration:', invokeError);
 
     // 6. Complete queue
     await supabaseClient
