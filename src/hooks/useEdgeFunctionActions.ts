@@ -51,6 +51,7 @@ export function useEdgeFunctionActions() {
 
   return {
     loading,
+    invoke,
     generateOfferSuggestions,
     runRFMAnalyzer,
     suggestNextAction,
