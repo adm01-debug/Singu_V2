@@ -3,7 +3,7 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Header } from '@/components/layout/Header';
- import { ListFilter, Play, Users, Zap, RefreshCw, BarChart3, Layout, Megaphone } from 'lucide-react';
+ import { ListFilter, Play, Users, Zap, RefreshCw, BarChart3, Layout, Megaphone, Plus } from 'lucide-react';
  import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
