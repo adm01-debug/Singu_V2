@@ -1,5 +1,5 @@
-import { Target, Save, Info, Wand2, RefreshCw } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Target, Save, Info, Wand2, RefreshCw, Layers, Zap, Search, Box, ArrowRightLeft } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -55,7 +55,8 @@ export function MetaprogramsSubTab({ contactId }: Props) {
       right: 'Away-From (Afastamento)', 
       leftKey: 'toward_score', 
       rightKey: 'away_from_score',
-      tooltip: 'Toward foca em objetivos; Away-From foca em evitar problemas.'
+      icon: Target,
+      tooltip: 'Toward foca em objetivos e recompensas; Away-From foca em evitar problemas e riscos.'
     },
     { 
       label: 'Fonte de Autoridade', 
@@ -63,7 +64,8 @@ export function MetaprogramsSubTab({ contactId }: Props) {
       right: 'Externo (Others)', 
       leftKey: 'internal_score', 
       rightKey: 'external_score',
-      tooltip: 'Interno decide por si; Externo precisa de validação de terceiros.'
+      icon: Layers,
+      tooltip: 'Interno decide baseado em critérios próprios; Externo precisa de validação e feedback de terceiros.'
     },
     { 
       label: 'Estilo de Decisão', 
@@ -71,7 +73,8 @@ export function MetaprogramsSubTab({ contactId }: Props) {
       right: 'Procedimentos (Rules)', 
       leftKey: 'options_score', 
       rightKey: 'procedures_score',
-      tooltip: 'Opções gosta de criar novos caminhos; Procedimentos segue passos definidos.'
+      icon: Zap,
+      tooltip: 'Opções gosta de criar novos caminhos e quebrar regras; Procedimentos prefere seguir passos e processos definidos.'
     },
     { 
       label: 'Estilo de Ação', 
@@ -79,7 +82,8 @@ export function MetaprogramsSubTab({ contactId }: Props) {
       right: 'Reativo (Wait)', 
       leftKey: 'proactive_score', 
       rightKey: 'reactive_score',
-      tooltip: 'Proativo toma a iniciativa; Reativo analisa antes de agir.'
+      icon: Search,
+      tooltip: 'Proativo toma a iniciativa imediatamente; Reativo analisa, espera e responde às situações.'
     },
     { 
       label: 'Tamanho do Chunk', 
@@ -87,7 +91,17 @@ export function MetaprogramsSubTab({ contactId }: Props) {
       right: 'Detalhe (Specific)', 
       leftKey: 'global_score', 
       rightKey: 'detail_score',
-      tooltip: 'Global foca na visão geral; Detalhe foca na minúcia dos dados.'
+      icon: Box,
+      tooltip: 'Global foca na visão geral e conceitos; Detalhe foca na minúcia, sequências e dados precisos.'
+    },
+    { 
+      label: 'Base de Comparação', 
+      left: 'Igualdade (Sameness)', 
+      right: 'Diferença (Difference)', 
+      leftKey: 'sameness_score', 
+      rightKey: 'difference_score',
+      icon: ArrowRightLeft,
+      tooltip: 'Igualdade busca o que é comum e estável; Diferença busca inovação, mudança e o que é único.'
     },
   ];
 
@@ -206,24 +220,24 @@ export function MetaprogramsSubTab({ contactId }: Props) {
                     </div>
                   </div>
 
-                  <div className="relative h-2 rounded-full bg-muted/50 overflow-hidden mt-2">
+                  <div className="relative h-2.5 rounded-full bg-muted/50 overflow-hidden mt-2">
                     <div 
-                      className="absolute h-full bg-primary transition-all duration-500 ease-in-out"
+                      className="absolute h-full bg-primary transition-all duration-700 ease-out shadow-[0_0_8px_rgba(var(--primary),0.4)]"
                       style={{ 
                         left: '0', 
                         width: `${leftPct}%`,
-                        opacity: 0.7
+                        opacity: 0.8
                       }}
                     />
                     <div 
-                      className="absolute h-full bg-accent transition-all duration-500 ease-in-out"
+                      className="absolute h-full bg-accent transition-all duration-700 ease-out shadow-[0_0_8px_rgba(var(--accent),0.4)]"
                       style={{ 
                         right: '0', 
                         width: `${100 - leftPct}%`,
-                        opacity: 0.7
+                        opacity: 0.8
                       }}
                     />
-                    <div className="absolute left-1/2 top-0 h-full w-0.5 bg-background z-10" />
+                    <div className="absolute left-1/2 top-0 h-full w-0.5 bg-background z-10 shadow-sm" />
                   </div>
                 </div>
               );
@@ -240,10 +254,10 @@ export function MetaprogramsSubTab({ contactId }: Props) {
             />
           </div>
 
-          <div className="flex justify-end pt-4">
-            <Button onClick={handleSave} className="gap-2">
+          <div className="flex justify-end pt-6 border-t mt-6">
+            <Button onClick={handleSave} className="gap-2 px-8 h-11 font-bold uppercase tracking-wider shadow-lg hover:shadow-primary/20 transition-all">
               <Save className="h-4 w-4" />
-              Salvar Metaprogramas
+              Salvar Metaprogramas 10/10
             </Button>
           </div>
         </CardContent>
