@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { 
   BarChart3, 
@@ -12,7 +12,9 @@ import {
   ArrowDownRight,
   Target,
   Clock,
-  Zap
+  Zap,
+  Bell,
+  Sparkles
 } from 'lucide-react';
 import { 
   ResponsiveContainer, 
@@ -32,6 +34,12 @@ import {
 } from 'recharts';
 import { Skeleton } from '@/components/ui/skeleton';
 import { RELATIONSHIP_STAGE_LABELS } from '@/types';
+import { motion, AnimatePresence } from 'framer-motion';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { toast } from 'sonner';
 
 const STAGE_COLORS: Record<string, string> = {
   prospect: '#94a3b8',
@@ -46,6 +54,9 @@ const STAGE_COLORS: Record<string, string> = {
 };
 
 export function RelationshipKPIsDashboard() {
+  const queryClient = useQueryClient();
+  const [liveEvents, setLiveEvents] = useState<any[]>([]);
+
   const { data: stats, isLoading } = useQuery({
     queryKey: ['relationship-kpis'],
     queryFn: async () => {
@@ -103,12 +114,65 @@ export function RelationshipKPIsDashboard() {
     }
   });
 
+  useEffect(() => {
+    const channel = supabase
+      .channel('crm-pulse')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'interactions' },
+        async (payload) => {
+          const { data: contact } = await supabase
+            .from('contacts')
+            .select('first_name, last_name')
+            .eq('id', payload.new.contact_id)
+            .single();
+          
+          const newEvent = {
+            id: payload.new.id,
+            type: 'interaction',
+            title: payload.new.title,
+            contact: contact ? `${contact.first_name} ${contact.last_name}` : 'Contato Desconhecido',
+            sentiment: payload.new.sentiment,
+            timestamp: new Date().toISOString()
+          };
+          
+          setLiveEvents(prev => [newEvent, ...prev].slice(0, 5));
+          toast.info(`Nova interação: ${newEvent.contact}`, {
+            description: payload.new.title,
+            icon: <Bell className="h-4 w-4 text-primary" />
+          });
+          
+          queryClient.invalidateQueries({ queryKey: ['relationship-kpis'] });
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'neuro_behavioral_history' },
+        (payload) => {
+          const newEvent = {
+            id: payload.new.id,
+            type: 'behavior',
+            title: 'Análise de Comportamento Atualizada',
+            contact: 'Inteligência Artificial',
+            timestamp: new Date().toISOString()
+          };
+          setLiveEvents(prev => [newEvent, ...prev].slice(0, 5));
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
+
   if (isLoading) return <Skeleton className="h-[400px] w-full" />;
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-primary/5 border-primary/10">
+    <div className="space-y-6 animate-in fade-in duration-700">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="bg-primary/5 border-primary/10 hover:shadow-md transition-all">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -123,7 +187,7 @@ export function RelationshipKPIsDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-red-500/5 border-red-200/50">
+          <Card className="bg-red-500/5 border-red-200/50 hover:shadow-md transition-all">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -138,33 +202,63 @@ export function RelationshipKPIsDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-emerald-500/5 border-emerald-200/50">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[10px] font-bold text-muted-foreground uppercase">Taxa de Retorno</p>
-                <h3 className="text-2xl font-bold text-emerald-600">68%</h3>
+          <Card className="bg-emerald-500/5 border-emerald-200/50 hover:shadow-md transition-all">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase">Taxa de Retorno</p>
+                  <h3 className="text-2xl font-bold text-emerald-600">68%</h3>
+                </div>
+                <TrendingUp className="h-6 w-6 text-emerald-500/40" />
               </div>
-              <TrendingUp className="h-6 w-6 text-emerald-500/40" />
-            </div>
-            <p className="text-[10px] text-emerald-600/60 mt-1 flex items-center gap-1">
-              <ArrowUpRight className="h-3 w-3" /> +12% eficácia cadência
-            </p>
-          </CardContent>
-        </Card>
+              <p className="text-[10px] text-emerald-600/60 mt-1 flex items-center gap-1">
+                <ArrowUpRight className="h-3 w-3" /> +12% eficácia cadência
+              </p>
+            </CardContent>
+          </Card>
+        </div>
 
-        <Card className="bg-amber-500/5 border-amber-200/50">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[10px] font-bold text-muted-foreground uppercase">Cadências Ativas</p>
-                <h3 className="text-2xl font-bold text-amber-600">142</h3>
+        <Card className="border-primary/20 bg-gradient-to-br from-background to-primary/5 overflow-hidden">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs font-bold flex items-center gap-2 uppercase text-primary">
+              <Activity className="h-3.5 w-3.5 animate-pulse" />
+              Live Pulse (Tempo Real)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-[105px] pr-4">
+              <div className="space-y-2">
+                <AnimatePresence initial={false}>
+                  {liveEvents.length > 0 ? (
+                    liveEvents.map((event) => (
+                      <motion.div
+                        key={event.id}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        className="p-2 rounded bg-background border border-border/50 shadow-sm space-y-0.5"
+                      >
+                        <div className="flex items-center justify-between">
+                          <Badge variant="outline" className="text-[7px] h-3 px-1 uppercase leading-none">
+                            {event.type}
+                          </Badge>
+                          <span className="text-[7px] text-muted-foreground">
+                            {format(new Date(event.timestamp), 'HH:mm:ss')}
+                          </span>
+                        </div>
+                        <p className="text-[9px] font-bold truncate leading-tight">{event.title}</p>
+                        <p className="text-[8px] text-muted-foreground truncate leading-tight">{event.contact}</p>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-6 text-center opacity-30">
+                      <Sparkles className="h-5 w-5 mb-1" />
+                      <p className="text-[8px]">Monitorando sinais...</p>
+                    </div>
+                  )}
+                </AnimatePresence>
               </div>
-              <Zap className="h-6 w-6 text-amber-500/40" />
-            </div>
-            <p className="text-[10px] text-amber-600/60 mt-1 flex items-center gap-1">
-              <Target className="h-3 w-3" /> 85% prioridade alta
-            </p>
+            </ScrollArea>
           </CardContent>
         </Card>
       </div>
