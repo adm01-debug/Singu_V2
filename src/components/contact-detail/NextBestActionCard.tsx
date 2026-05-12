@@ -2,13 +2,21 @@
  import { supabase } from '@/integrations/supabase/client';
  import { StepForward, MapPin } from 'lucide-react';
 import { useState } from 'react';
-import { Sparkles, Copy, RefreshCw, CheckCircle2, Mail, MessageCircle, Phone, Linkedin, Calendar, ChevronDown, ChevronUp, AlarmClock, Edit3, Save, Check } from 'lucide-react';
+import { Sparkles, Copy, RefreshCw, CheckCircle2, Mail, MessageCircle, Phone, Linkedin, Calendar, ChevronDown, ChevronUp, AlarmClock, Edit3, Save, Check, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
  import { Button } from '@/components/ui/button';
  import { Textarea } from '@/components/ui/textarea';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { useNextBestAction } from '@/hooks/useNextBestAction';
 import { useCreateTask } from '@/hooks/useTasks';
 import { toast } from 'sonner';
@@ -35,7 +43,10 @@ const urgencyMeta: Record<string, { label: string; variant: 'default' | 'destruc
 };
 
 export function NextBestActionCard({ contactId, contactName }: Props) {
-   const { nextAction, isLoading, isGenerating, isCompleting, generate, complete } = useNextBestAction(contactId);
+    const { nextAction, isLoading, isGenerating, isCompleting, generate, complete } = useNextBestAction(contactId);
+    const [completeDialogOpen, setCompleteDialogOpen] = useState(false);
+    const [completionNotes, setCompletionNotes] = useState('');
+    const [completionDate, setCompletionDate] = useState(new Date().toISOString().split('T')[0]);
  
    // Fetch current deal stage and recent context
    const { data: contactContext } = useQuery({
@@ -231,16 +242,61 @@ export function NextBestActionCard({ contactId, contactName }: Props) {
                Regenerar
              </LoadingButton>
               <div className="flex items-center gap-1">
-                <LoadingButton
-                  isLoading={isCompleting}
-                  onClick={() => complete({ id: nextAction.id })}
+                <Button
+                  onClick={() => setCompleteDialogOpen(true)}
                   variant="default"
                   size="sm"
                   className="bg-success hover:bg-success/90"
                 >
                   <Check className="w-3 h-3" />
                   Concluir
-                </LoadingButton>
+                </Button>
+      <Dialog open={completeDialogOpen} onOpenChange={setCompleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Concluir Ação: {nextAction.action}</DialogTitle>
+            <DialogDescription>
+              Registre os detalhes da conclusão para melhorar as futuras recomendações.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Data da Conclusão</label>
+              <input 
+                type="date" 
+                value={completionDate} 
+                onChange={(e) => setCompletionDate(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Observações e Resultado</label>
+              <Textarea 
+                placeholder="Como foi o contato? Algum insight importante?" 
+                value={completionNotes}
+                onChange={(e) => setCompletionNotes(e.target.value)}
+                className="min-h-[100px]"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setCompleteDialogOpen(false)}>Cancelar</Button>
+            <LoadingButton 
+              isLoading={isCompleting}
+              onClick={() => {
+                complete({ 
+                  id: nextAction.id, 
+                  notes: completionNotes,
+                  completed_at: completionDate
+                });
+                setCompleteDialogOpen(false);
+              }}
+            >
+              Confirmar Conclusão
+            </LoadingButton>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
                 <Button onClick={() => handleCreateTask()} variant="outline" size="sm" disabled={createTask.isPending}>
                   <CheckCircle2 className="w-3 h-3" />
                   Criar tarefa
