@@ -211,15 +211,16 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
  
             if (!isMatch) {
               const targetInfo = DISC_PROFILES[contactDISC];
+              const discTips: Record<string, string> = {
+                D: 'direto e focado em resultados',
+                I: 'entusiasta e focado em pessoas',
+                S: 'calmo e focado em segurança',
+                C: 'analítico e focado em detalhes'
+              };
               newSuggestions.push({
                 id: 'disc-mismatch',
                 type: 'disc',
-                text: `Alerta de Atrito: O contato é ${targetInfo?.name}. Tente ser mais ${
-                  contactDISC === 'D' ? 'direto e focado em resultados' : 
-                  contactDISC === 'I' ? 'entusiasta e focado em pessoas' :
-                  contactDISC === 'S' ? 'calmo e focado em segurança' :
-                  'analítico e focado em detalhes'
-                }.`,
+                text: `Alerta de Atrito: O contato é ${targetInfo?.name}. Tente ser mais ${discTips[contactDISC as string] || 'adaptável'}.`,
                 icon: <AlertTriangle className="h-3 w-3" />,
                 color: 'text-orange-500'
               });
