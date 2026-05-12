@@ -13,6 +13,11 @@ interface OfferSuggestion {
   offerCategory: string;
   reason: string;
   confidenceScore: number;
+  metadata?: {
+    sources?: string[];
+    keywords?: string[];
+    social_insight_ids?: string[];
+  };
 }
 
 Deno.serve(async (req) => {
@@ -126,12 +131,17 @@ Deno.serve(async (req) => {
         return daysUntil > 0 && daysUntil <= 60;
       });
 
+      const contactSocialInsights = (socialAnalysis || []).filter(sa => sa.contact_id === contact.id);
+
       for (const offer of offerCatalog) {
         const key = `${contact.id}-${offer.name}`;
         if (existingOffersSet.has(key)) continue;
 
         let confidence = 30;
         const reasons: string[] = [];
+        const matchedInsightIds: string[] = [];
+        const matchedSources: string[] = [];
+        const matchedKeywordsList: string[] = [];
 
         const score = contact.relationship_score || 50;
         if (score >= offer.targetScore) {
@@ -139,17 +149,35 @@ Deno.serve(async (req) => {
           reasons.push(`Bom score de relacionamento (${score})`);
         }
 
-       const matchedKeywords = offer.keywords.filter(kw => combinedContext.includes(kw.toLowerCase()));
+        const matchedKeywords = offer.keywords.filter(kw => combinedContext.includes(kw.toLowerCase()));
         if (matchedKeywords.length > 0) {
           confidence += matchedKeywords.length * 10;
-         
-         const socialMatch = matchedKeywords.some(kw => socialInterests.includes(kw.toLowerCase()) || socialKeywords.includes(kw.toLowerCase()));
-         if (socialMatch) {
-           reasons.push(`Alinhamento com interesses sociais: ${matchedKeywords.join(', ')}`);
-           confidence += 5; // Extra boost for social relevance
-         } else {
-           reasons.push(`Interesse detectado: ${matchedKeywords.join(', ')}`);
-         }
+          
+          // Identify which social insights caused the match
+          const { data: insights } = await supabase
+            .from('social_insights')
+            .select('id, platform, content')
+            .eq('contact_id', contact.id);
+
+          if (insights) {
+            for (const insight of insights) {
+              const matches = offer.keywords.filter(kw => insight.content.toLowerCase().includes(kw.toLowerCase()));
+              if (matches.length > 0) {
+                matchedInsightIds.push(insight.id);
+                if (!matchedSources.includes(insight.platform)) matchedSources.push(insight.platform);
+                matches.forEach(m => {
+                  if (!matchedKeywordsList.includes(m)) matchedKeywordsList.push(m);
+                });
+              }
+            }
+          }
+
+          if (matchedInsightIds.length > 0) {
+            reasons.push(`Alinhamento com interesses sociais: ${matchedKeywords.join(', ')}`);
+            confidence += 5; 
+          } else {
+            reasons.push(`Interesse detectado: ${matchedKeywords.join(', ')}`);
+          }
         }
 
         if (contactPurchases.length > 0) {
@@ -191,6 +219,11 @@ Deno.serve(async (req) => {
             offerCategory: offer.category,
             reason: reasons.slice(0, 3).join('. ') + '.',
             confidenceScore: Math.min(100, confidence),
+            metadata: matchedInsightIds.length > 0 ? {
+              sources: matchedSources,
+              keywords: matchedKeywordsList,
+              social_insight_ids: matchedInsightIds
+            } : undefined
           });
         }
       }
@@ -208,6 +241,7 @@ Deno.serve(async (req) => {
         reason: s.reason,
         confidence_score: s.confidenceScore,
         status: 'pending',
+        metadata: s.metadata,
         expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
       }));
 
