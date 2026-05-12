@@ -6,7 +6,8 @@ import { PhoneInput } from '@/components/ui/masked-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User, Briefcase, Tag, FileText } from 'lucide-react';
+ import { User, Briefcase, Tag, FileText, Heart, Palette, Target } from 'lucide-react';
+ import { TagInput } from '@/components/ui/tag-input';
 import type { Company } from '@/hooks/useCompanies';
 
 const roleOptions = [
@@ -83,9 +84,66 @@ export function ContactFormTabs({ form, companies, suggestedRoleTitle, contact }
 
       <TabsContent value="detalhes" className="space-y-4 mt-0">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField control={form.control} name="tags_array" render={({ field }) => (<FormItem className="md:col-span-2"><FormLabel>Tags</FormLabel><FormControl><Input placeholder="Ex: VIP, Decisor, Agro (separadas por vírgula)" {...field} value={field.value ?? ''} /></FormControl><FormDescription>Separar por vírgula</FormDescription><FormMessage /></FormItem>)} />
-          <FormField control={form.control} name="interests_array" render={({ field }) => (<FormItem className="md:col-span-2"><FormLabel>Interesses</FormLabel><FormControl><Input placeholder="Ex: Tecnologia, Inovação, Sustentabilidade (vírgula)" {...field} value={field.value ?? ''} /></FormControl><FormDescription>Separar por vírgula</FormDescription><FormMessage /></FormItem>)} />
-          <FormField control={form.control} name="hobbies" render={({ field }) => (<FormItem className="md:col-span-2"><FormLabel>Hobbies</FormLabel><FormControl><Input placeholder="Ex: Futebol, Leitura, Viagens (separadas por vírgula)" {...field} value={field.value ?? ''} /></FormControl><FormDescription>Separar por vírgula</FormDescription><FormMessage /></FormItem>)} />
+           <FormField 
+             control={form.control} 
+             name="tags_array" 
+             render={({ field }) => (
+               <FormItem className="md:col-span-2">
+                 <FormLabel className="flex items-center gap-2">
+                   <Target className="w-3.5 h-3.5" /> Tags Personalizadas
+                 </FormLabel>
+                 <FormControl>
+                   <TagInput 
+                     value={field.value || []} 
+                     onChange={field.onChange} 
+                     placeholder="Adicione tags (Enter ou vírgula)..."
+                   />
+                 </FormControl>
+                 <FormDescription>Pressione Enter ou use vírgula para adicionar múltiplas</FormDescription>
+                 <FormMessage />
+               </FormItem>
+             )} 
+           />
+           
+           <FormField 
+             control={form.control} 
+             name="interests_array" 
+             render={({ field }) => (
+               <FormItem className="md:col-span-2">
+                 <FormLabel className="flex items-center gap-2">
+                   <Palette className="w-3.5 h-3.5" /> Interesses
+                 </FormLabel>
+                 <FormControl>
+                   <TagInput 
+                     value={field.value || []} 
+                     onChange={field.onChange} 
+                     placeholder="Tecnologia, Inovação, Vinhos..."
+                   />
+                 </FormControl>
+                 <FormMessage />
+               </FormItem>
+             )} 
+           />
+           
+           <FormField 
+             control={form.control} 
+             name="hobbies" 
+             render={({ field }) => (
+               <FormItem className="md:col-span-2">
+                 <FormLabel className="flex items-center gap-2">
+                   <Heart className="w-3.5 h-3.5" /> Hobbies
+                 </FormLabel>
+                 <FormControl>
+                   <TagInput 
+                     value={field.value || []} 
+                     onChange={field.onChange} 
+                     placeholder="Futebol, Tênis, Viagens..."
+                   />
+                 </FormControl>
+                 <FormMessage />
+               </FormItem>
+             )} 
+           />
           <FormField control={form.control} name="notes" render={({ field }) => (<FormItem className="md:col-span-2"><FormLabel>Notas</FormLabel><FormControl><Textarea placeholder="Observações sobre o contato..." className="min-h-[80px]" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
           <FormField control={form.control} name="personal_notes" render={({ field }) => (<FormItem className="md:col-span-2"><FormLabel>Notas Pessoais</FormLabel><FormControl><Textarea placeholder="Preferências pessoais, observações privadas..." className="min-h-[80px]" {...field} value={field.value ?? ''} /></FormControl><FormDescription>Informações pessoais para rapport</FormDescription><FormMessage /></FormItem>)} />
           <FormField control={form.control} name="family_info" render={({ field }) => (<FormItem className="md:col-span-2"><FormLabel>Informações Familiares</FormLabel><FormControl><Textarea placeholder="Cônjuge, filhos, aniversários da família..." className="min-h-[60px]" {...field} value={field.value ?? ''} /></FormControl><FormDescription>Informações sobre família para rapport e lembretes</FormDescription><FormMessage /></FormItem>)} />
