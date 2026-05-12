@@ -272,14 +272,19 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
                                )}
                                <span className={cn(
                                  "text-[10px] font-medium",
-                                 event.metadata.sentiment === 'positive' ? 'text-green-600' :
-                                 event.metadata.sentiment === 'negative' ? 'text-red-600' : 'text-yellow-600'
-                               )}>
-                                 {event.metadata.emotion || (
-                                   event.metadata.sentiment === 'positive' ? 'Positivo' :
-                                   event.metadata.sentiment === 'negative' ? 'Negativo' : 'Neutro'
-                                 )}
-                               </span>
+                                  event.metadata.sentiment === 'positive' ? 'text-green-600' :
+                                  event.metadata.sentiment === 'negative' ? 'text-red-600' : 'text-yellow-600'
+                                )}>
+                                  <span className="capitalize">
+                                    {event.metadata.sentiment === 'positive' ? 'Conexão Positiva' :
+                                     event.metadata.sentiment === 'negative' ? 'Atenção Necessária' : 'Tom Neutro'}
+                                  </span>
+                                  {event.metadata.emotion && (
+                                    <span className="ml-1 opacity-70 border-l pl-1 border-current">
+                                      {event.metadata.emotion}
+                                    </span>
+                                  )}
+                                </span>
                              </div>
                            )}
                         </div>
