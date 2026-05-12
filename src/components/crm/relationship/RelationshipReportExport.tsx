@@ -33,9 +33,8 @@ export function RelationshipReportExport({ contactId, contactName }: Props) {
         Data: format(new Date(i.created_at), 'dd/MM/yyyy HH:mm', { locale: ptBR }),
         Titulo: i.title,
         Tipo: i.type,
-        Conteudo: i.content,
-        Sentimento: i.sentiment,
-        Urgencia: i.urgency
+        Conteudo: i.content || '',
+        Sentimento: i.sentiment || 'neutral'
       }));
 
       exportToCSV(exportData, `Relatorio_Timeline_${contactName.replace(/\s+/g, '_')}`);
