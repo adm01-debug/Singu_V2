@@ -20,18 +20,19 @@
     });
  
    useEffect(() => {
-     if (!text) {
-       setAnalysis({ 
-         readability: 0, 
-         emotions: { joy: 0, urgency: 0, trust: 0, fear: 0, cognitive_ease: 0 }, 
-         triggers: [], 
-         score: 0, 
-         tips: [],
-         storytelling_arc: 'Linear',
-         objections: []
-       });
-       return;
-     }
+      if (!text) {
+        setAnalysis({ 
+          readability: 0, 
+          emotions: { joy: 0, urgency: 0, trust: 0, fear: 0, cognitive_ease: 0 }, 
+          triggers: [], 
+          score: 0, 
+          tips: [],
+          storytelling_arc: 'Linear',
+          objections: [],
+          emotional_tone: 'Neutro'
+        });
+        return;
+      }
  
      // Mock analysis engine for real-time feedback
      const words = text.split(/\s+/).filter(w => w.length > 0);
