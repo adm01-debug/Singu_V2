@@ -19,8 +19,9 @@ import { useMQLCriteria, useMQLClassifications, useHandoffMQL } from '@/hooks/us
  import { AttributionBreakdownChart } from '@/components/marketing/AttributionBreakdownChart';
  import { MarketingStats } from '@/components/crm/marketing/components/MarketingStats';
  import { FormList } from '@/components/crm/marketing/components/FormList';
-  import { LeadMagnetList } from '@/components/crm/marketing/components/LeadMagnetList';
-  import { MQLManager } from '@/components/crm/marketing/components/MQLManager';
+ import { LeadMagnetList } from '@/components/crm/marketing/components/LeadMagnetList';
+ import { MQLManager } from '@/components/crm/marketing/components/MQLManager';
+ import { BehavioralSegmentation } from '@/components/crm/marketing/components/BehavioralSegmentation';
  import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -102,8 +103,13 @@ export default function MarketingHub() {
              <TabsTrigger value="forms" className="gap-2 px-4"><Target className="w-4 h-4" /> Formulários</TabsTrigger>
              <TabsTrigger value="magnets" className="gap-2 px-4"><Eye className="w-4 h-4" /> Lead Magnets</TabsTrigger>
              <TabsTrigger value="nurturing" className="gap-2 px-4"><Workflow className="w-4 h-4" /> Nurturing</TabsTrigger>
-             <TabsTrigger value="mql" className="gap-2 px-4"><Users className="w-4 h-4" /> MQL → SQL</TabsTrigger>
-             <TabsTrigger value="attribution" className="gap-2 px-4"><BarChart3 className="w-4 h-4" /> Attribution</TabsTrigger>
+              <TabsTrigger value="segmentation" className="gap-2 px-4"><Users className="w-4 h-4" /> Segmentação</TabsTrigger>
+              <TabsTrigger value="mql" className="gap-2 px-4"><Target className="w-4 h-4" /> MQL → SQL</TabsTrigger>
+              <TabsTrigger value="attribution" className="gap-2 px-4"><BarChart3 className="w-4 h-4" /> Attribution</TabsTrigger>
+           <TabsContent value="segmentation" className="space-y-6">
+             <BehavioralSegmentation />
+           </TabsContent>
+ 
            </TabsList>
          </div>
  
