@@ -17,6 +17,9 @@ export interface ContactBehavior {
   disc_confidence?: number;
   disc_notes?: string;
   vak_primary?: 'visual' | 'auditivo' | 'cinestesico';
+  vak_visual?: number;
+  vak_auditory?: number;
+  vak_kinesthetic?: number;
   motivation_primary?: string;
   main_fear?: string;
   career_stage?: string;
