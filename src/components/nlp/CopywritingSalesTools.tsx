@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   Target, Zap, Sparkles, ArrowRight, Copy, CheckCircle,
-  LayoutList, Quote, BarChart3, BookOpen, AlertTriangle, Smile, Eye, PenTool
+   LayoutList, Quote, BarChart3, BookOpen, AlertTriangle, Smile, Eye, PenTool, ShieldAlert
 } from 'lucide-react';
 import { Contact } from '@/types';
 import { useCopywritingTools } from '@/hooks/useCopywritingTools';
