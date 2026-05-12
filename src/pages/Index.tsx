@@ -27,6 +27,7 @@ import { useDashboardMappedData } from '@/hooks/useDashboardMappedData';
 import { OverviewTab } from '@/components/dashboard/tabs/OverviewTab';
 import { AnalyticsTab } from '@/components/dashboard/tabs/AnalyticsTab';
 import { RelationshipsTab } from '@/components/dashboard/tabs/RelationshipsTab';
+import { CRMAutomationAuditLog } from '@/components/crm/CRMAutomationAuditLog';
 import { IntelligenceTab } from '@/components/dashboard/tabs/IntelligenceTab';
 import { CRMJsonLd } from '@/components/seo/JsonLd';
 
@@ -171,6 +172,7 @@ const Dashboard = () => {
                 prefersReducedMotion={prefersReducedMotion}
                 tabDirection={tabDirection}
               />
+              <CRMAutomationAuditLog />
             </TabsContent>
 
             <TabsContent value="intelligence" className="mt-4">
