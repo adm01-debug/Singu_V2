@@ -6,7 +6,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAIWritingAssistant } from '@/hooks/useAIWritingAssistant';
 import { useToast } from '@/hooks/use-toast';
-import { Sparkles, Copy, CheckCircle, Loader2, Wand2 } from 'lucide-react';
+ import { Sparkles, Copy, CheckCircle, Loader2, Wand2, BookOpen, Quote } from 'lucide-react';
+ const FRAMEWORKS = [
+   { value: 'None', label: 'Sem Framework' },
+   { value: 'AIDA', label: 'AIDA (Atenção/Interesse)' },
+   { value: 'PAS', label: 'PAS (Problema/Solução)' },
+   { value: 'FAB', label: 'FAB (Vantagem/Benefício)' },
+   { value: '4Ps', label: '4Ps (Promessa/Prova)' },
+   { value: 'Storytelling', label: 'Storytelling' },
+ ] as const;
+ 
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Contact } from '@/hooks/useContacts';
 
@@ -35,8 +44,9 @@ const TONES = [
 export function AIMessageGenerator({ contact, companyName, discProfile }: AIMessageGeneratorProps) {
   const { suggestions, loading, error, generateSuggestions, clearSuggestions } = useAIWritingAssistant();
   const { toast } = useToast();
-  const [messageType, setMessageType] = useState<string>('follow_up');
-  const [tone, setTone] = useState<string>('friendly');
+   const [messageType, setMessageType] = useState<string>('follow_up');
+   const [tone, setTone] = useState<string>('friendly');
+   const [framework, setFramework] = useState<string>('None');
   const [context, setContext] = useState('');
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
 
@@ -51,10 +61,11 @@ export function AIMessageGenerator({ contact, companyName, discProfile }: AIMess
         hobbies: contact.hobbies || undefined,
         interests: contact.interests || undefined,
       },
-      messageType: messageType as 'follow_up',
-      tone: tone as 'formal',
-      customContext: context || undefined,
-    });
+       messageType: messageType as any,
+       tone: tone as any,
+       framework: framework as any,
+       customContext: context || undefined,
+     });
   };
 
   const copyMessage = async (text: string, idx: number) => {
@@ -78,7 +89,7 @@ export function AIMessageGenerator({ contact, companyName, discProfile }: AIMess
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 gap-3">
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div>
             <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Tipo de Mensagem</label>
             <Select value={messageType} onValueChange={setMessageType}>
@@ -92,20 +103,33 @@ export function AIMessageGenerator({ contact, companyName, discProfile }: AIMess
               </SelectContent>
             </Select>
           </div>
-          <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Tom</label>
-            <Select value={tone} onValueChange={setTone}>
-              <SelectTrigger className="h-9">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {TONES.map(t => (
-                  <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+           <div>
+             <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Tom</label>
+             <Select value={tone} onValueChange={setTone}>
+               <SelectTrigger className="h-9">
+                 <SelectValue />
+               </SelectTrigger>
+               <SelectContent>
+                 {TONES.map(t => (
+                   <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                 ))}
+               </SelectContent>
+             </Select>
+           </div>
+           <div>
+             <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Framework</label>
+             <Select value={framework} onValueChange={setFramework}>
+               <SelectTrigger className="h-9">
+                 <SelectValue />
+               </SelectTrigger>
+               <SelectContent>
+                 {FRAMEWORKS.map(f => (
+                   <SelectItem key={f.value} value={f.value}>{f.label}</SelectItem>
+                 ))}
+               </SelectContent>
+             </Select>
+           </div>
+         </div>
 
         {messageType === 'custom' && (
           <Textarea
