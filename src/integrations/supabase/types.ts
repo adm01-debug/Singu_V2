@@ -2186,22 +2186,36 @@ export type Database = {
       }
       contact_behavior: {
         Row: {
+          approver_id: string | null
           best_contact_window: string | null
+          best_time_to_approach: string | null
+          budget_authority: boolean | null
           career_stage: string | null
+          company_financial_health: string | null
           contact_id: string
           created_at: string
+          current_challenges: string[] | null
+          current_competitors: string[] | null
           current_pressure: string | null
+          decision_criteria: string[] | null
+          decision_power: number | null
+          decision_role: string | null
+          decision_speed: string | null
           disc_confidence: number | null
           disc_notes: string | null
           disc_primary: string | null
           formality_level: number | null
           id: string
+          influencer_ids: string[] | null
           main_fear: string | null
           message_style: string | null
           motivation_primary: string | null
+          needs_approval: boolean | null
           preferred_channel: string | null
           professional_goals: string | null
           response_time_avg: string | null
+          seasonal_notes: string | null
+          support_level: number | null
           updated_at: string
           vak_auditory: number | null
           vak_kinesthetic: number | null
@@ -2209,22 +2223,36 @@ export type Database = {
           vak_visual: number | null
         }
         Insert: {
+          approver_id?: string | null
           best_contact_window?: string | null
+          best_time_to_approach?: string | null
+          budget_authority?: boolean | null
           career_stage?: string | null
+          company_financial_health?: string | null
           contact_id: string
           created_at?: string
+          current_challenges?: string[] | null
+          current_competitors?: string[] | null
           current_pressure?: string | null
+          decision_criteria?: string[] | null
+          decision_power?: number | null
+          decision_role?: string | null
+          decision_speed?: string | null
           disc_confidence?: number | null
           disc_notes?: string | null
           disc_primary?: string | null
           formality_level?: number | null
           id?: string
+          influencer_ids?: string[] | null
           main_fear?: string | null
           message_style?: string | null
           motivation_primary?: string | null
+          needs_approval?: boolean | null
           preferred_channel?: string | null
           professional_goals?: string | null
           response_time_avg?: string | null
+          seasonal_notes?: string | null
+          support_level?: number | null
           updated_at?: string
           vak_auditory?: number | null
           vak_kinesthetic?: number | null
@@ -2232,22 +2260,36 @@ export type Database = {
           vak_visual?: number | null
         }
         Update: {
+          approver_id?: string | null
           best_contact_window?: string | null
+          best_time_to_approach?: string | null
+          budget_authority?: boolean | null
           career_stage?: string | null
+          company_financial_health?: string | null
           contact_id?: string
           created_at?: string
+          current_challenges?: string[] | null
+          current_competitors?: string[] | null
           current_pressure?: string | null
+          decision_criteria?: string[] | null
+          decision_power?: number | null
+          decision_role?: string | null
+          decision_speed?: string | null
           disc_confidence?: number | null
           disc_notes?: string | null
           disc_primary?: string | null
           formality_level?: number | null
           id?: string
+          influencer_ids?: string[] | null
           main_fear?: string | null
           message_style?: string | null
           motivation_primary?: string | null
+          needs_approval?: boolean | null
           preferred_channel?: string | null
           professional_goals?: string | null
           response_time_avg?: string | null
+          seasonal_notes?: string | null
+          support_level?: number | null
           updated_at?: string
           vak_auditory?: number | null
           vak_kinesthetic?: number | null
@@ -2255,6 +2297,20 @@ export type Database = {
           vak_visual?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "contact_behavior_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_behavior_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
           {
             foreignKeyName: "contact_behavior_contact_id_fkey"
             columns: ["contact_id"]
