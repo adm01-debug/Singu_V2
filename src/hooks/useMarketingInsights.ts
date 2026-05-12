@@ -60,12 +60,15 @@
  
        if (error) throw error;
  
-       const stats = (data || []).reduce((acc: any, curr: any) => {
-         const behavior = curr.contact_behavior?.[0];
-         if (behavior?.disc_primary) acc.disc[behavior.disc_primary] = (acc.disc[behavior.disc_primary] || 0) + 1;
-         if (behavior?.vak_primary) acc.vak[behavior.vak_primary] = (acc.vak[behavior.vak_primary] || 0) + 1;
-         return acc;
-       }, { disc: {}, vak: {} });
+        const stats = (data || []).reduce((acc: any, curr: any) => {
+          const behavior = curr.contact_behavior?.[0];
+          if (behavior?.disc_primary) acc.disc[behavior.disc_primary] = (acc.disc[behavior.disc_primary] || 0) + 1;
+          if (behavior?.vak_primary) acc.vak[behavior.vak_primary] = (acc.vak[behavior.vak_primary] || 0) + 1;
+          if (behavior?.motivation_primary) {
+            acc.motivation[behavior.motivation_primary] = (acc.motivation[behavior.motivation_primary] || 0) + 1;
+          }
+          return acc;
+        }, { disc: {}, vak: {}, motivation: {} });
  
        return stats;
      },

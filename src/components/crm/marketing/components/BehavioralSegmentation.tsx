@@ -13,27 +13,40 @@
      filteredContacts, availableFields 
    } = useContactSegmentation();
  
-   const getMessageRecommendation = (contact: any) => {
-     const disc = contact.disc_primary || 'Desconhecido';
-     const vak = contact.vak_primary || 'Desconhecido';
-     const stage = contact.relationship_stage || 'lead';
- 
-     const recommendations: Record<string, string> = {
-       'D': 'Foco em resultados e eficiência. Seja direto e breve.',
-       'I': 'Foco em entusiasmo e reconhecimento. Use linguagem positiva e social.',
-       'S': 'Foco em estabilidade e suporte. Seja calmo e demonstre confiabilidade.',
-       'C': 'Foco em precisão e dados. Use evidências, tabelas e lógica.',
-       'visual': 'Use imagens, diagramas e termos como "veja", "claro", "perspectiva".',
-       'auditivo': 'Use áudios, chamadas e termos como "ouça", "soar", "harmonia".',
-       'cinestesico': 'Foco em experiência e termos como "sinta", "toque", "concreto".',
-     };
- 
-     return {
-       disc: recommendations[disc] || 'Sem recomendação DISC disponível.',
-       vak: recommendations[vak] || 'Sem recomendação VAK disponível.',
-       strategy: stage === 'lead' ? 'Conscientização & Educação' : stage === 'prospect' ? 'Prova Social & Comparação' : 'Retenção & Up-sell'
-     };
-   };
+  const getMessageRecommendation = (contact: any) => {
+    const disc = contact.disc_primary;
+    const vak = contact.vak_primary;
+    const motivation = contact.motivation_primary;
+    const stage = contact.relationship_stage || 'lead';
+
+    const discRecs: Record<string, string> = {
+      'D': 'Direct & Brief: Foco em ROI, eficiência e resultados rápidos. Evite rodeios.',
+      'I': 'Social & Enthusiastic: Use depoimentos, linguagem positiva e foque no prestígio.',
+      'S': 'Stable & Sincere: Demonstre segurança, suporte contínuo e processos garantidos.',
+      'C': 'Analytical & Detailed: Envie whitepapers, dados estatísticos e lógica rigorosa.'
+    };
+
+    const vakRecs: Record<string, string> = {
+      'visual': 'Visual Appeal: Use infográficos, cores vibrantes e palavras como "veja o impacto".',
+      'auditivo': 'Auditory Connection: Sugira uma call curta ou envie áudios. Use "isso soa bem".',
+      'cinestesico': 'Hands-on: Ofereça trials, amostras ou fale sobre a "experiência prática".'
+    };
+
+    const stageStrategies: Record<string, string> = {
+      'lead': 'Education: Foque em dor e solução básica.',
+      'prospect': 'Proof: Use cases de sucesso e comparativos.',
+      'customer': 'Success: Foque em expansão e parcerias.',
+      'partner': 'Collaboration: Estratégias de longo prazo.',
+      'churned': 'Re-engagement: Foque no que mudou.'
+    };
+
+    return {
+      disc: disc ? discRecs[disc] : 'Analise o perfil DISC para recomendações precisas.',
+      vak: vak ? vakRecs[vak] : 'Identifique o canal VAK para otimizar o criativo.',
+      motivation: motivation ? `Aposte em: ${motivation}` : 'Motive com base nos drivers pessoais.',
+      strategy: stageStrategies[stage] || 'Personalização avançada necessária.'
+    };
+  };
  
    return (
      <div className="space-y-6">
@@ -183,23 +196,29 @@
                    Estratégia de Mensagem (IA)
                  </CardTitle>
                </CardHeader>
-               <CardContent>
-                 {filteredContacts.length > 0 ? (
-                   <div className="space-y-3">
-                     <div className="p-2 rounded bg-white/80 border border-emerald-100 text-[11px] text-emerald-900 leading-relaxed">
-                       {getMessageRecommendation(filteredContacts[0]).disc}
-                     </div>
-                     <div className="p-2 rounded bg-white/80 border border-emerald-100 text-[11px] text-emerald-900 leading-relaxed">
-                       {getMessageRecommendation(filteredContacts[0]).vak}
-                     </div>
-                     <Badge className="bg-emerald-600 text-white border-none text-[9px] uppercase tracking-tighter">
-                       Foco: {getMessageRecommendation(filteredContacts[0]).strategy}
-                     </Badge>
-                   </div>
-                 ) : (
-                   <p className="text-[11px] text-muted-foreground italic">Selecione um público para ver recomendações.</p>
-                 )}
-               </CardContent>
+              <CardContent>
+                {filteredContacts.length > 0 ? (
+                  <div className="space-y-3">
+                    <div className="p-2 rounded bg-white/80 border border-emerald-100 text-[11px] text-emerald-900 leading-relaxed flex items-start gap-2">
+                      <Badge variant="outline" className="h-4 px-1 text-[8px] border-emerald-300 text-emerald-700">DISC</Badge>
+                      {getMessageRecommendation(filteredContacts[0]).disc}
+                    </div>
+                    <div className="p-2 rounded bg-white/80 border border-emerald-100 text-[11px] text-emerald-900 leading-relaxed flex items-start gap-2">
+                      <Badge variant="outline" className="h-4 px-1 text-[8px] border-emerald-300 text-emerald-700">VAK</Badge>
+                      {getMessageRecommendation(filteredContacts[0]).vak}
+                    </div>
+                    <div className="p-2 rounded bg-white/80 border border-emerald-100 text-[11px] text-emerald-900 leading-relaxed flex items-start gap-2">
+                      <Badge variant="outline" className="h-4 px-1 text-[8px] border-emerald-300 text-emerald-700">DRIVE</Badge>
+                      {getMessageRecommendation(filteredContacts[0]).motivation}
+                    </div>
+                    <Badge className="bg-emerald-600 text-white border-none text-[9px] uppercase tracking-tighter w-full justify-center py-1">
+                      {getMessageRecommendation(filteredContacts[0]).strategy}
+                    </Badge>
+                  </div>
+                ) : (
+                  <p className="text-[11px] text-muted-foreground italic">Selecione um público para ver recomendações.</p>
+                )}
+              </CardContent>
              </Card>
  
              <Card className="border-primary/20 bg-primary/[0.02] shadow-sm">
