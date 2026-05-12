@@ -16,7 +16,13 @@ interface LuxAudienceData {
   [key: string]: unknown;
 }
 
-export function CompanyIntelligence({ record }: { record: LuxIntelligenceRecord }) {
+ export function CompanyIntelligence({ 
+   record, 
+   onAddContact 
+ }: { 
+   record: LuxIntelligenceRecord;
+   onAddContact?: (s: LuxStakeholder) => Promise<void>;
+ }) {
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const fiscal = (record.fiscal_data || {}) as LuxFiscalData;
   const audience = (record.audience_analysis || {}) as LuxAudienceData;
@@ -136,9 +142,18 @@ export function CompanyIntelligence({ record }: { record: LuxIntelligenceRecord 
 
       <TabsContent value="stakeholders" className="space-y-4">
         {stakeholders.length > 0 ? (
-          <DataCard title={`Stakeholders Identificados (${stakeholders.length})`} icon={Users} iconColor="bg-primary dark:bg-primary/30 text-primary">
-            <div className="space-y-2">{stakeholders.map((s: LuxStakeholder, i: number) => <StakeholderCard key={i} stakeholder={s} index={i} />)}</div>
-          </DataCard>
+           <DataCard title={`Stakeholders Identificados (${stakeholders.length})`} icon={Users} iconColor="bg-primary dark:bg-primary/30 text-primary">
+             <div className="space-y-2">
+               {stakeholders.map((s: LuxStakeholder, i: number) => (
+                 <StakeholderCard 
+                   key={i} 
+                   stakeholder={s} 
+                   index={i} 
+                   onAddContact={onAddContact}
+                 />
+               ))}
+             </div>
+           </DataCard>
         ) : (
           <div className="text-center py-8 text-muted-foreground"><Users className="w-12 h-12 mx-auto mb-3 text-muted-foreground/30" /><p className="text-sm">Nenhum stakeholder identificado</p></div>
         )}

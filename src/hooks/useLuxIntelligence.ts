@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -170,8 +170,43 @@ export function useLuxIntelligence(entityType: 'contact' | 'company', entityId?:
     latestRecord,
     loading,
     triggering,
-    triggerLux,
-    refresh: fetchRecords,
-    isProcessing: latestRecord?.status === 'processing',
-  };
-}
+     triggerLux,
+     createStakeholderContact: async (stakeholder: LuxStakeholder, companyId?: string) => {
+       if (!user) return null;
+       try {
+         const names = stakeholder.name?.split(' ') || [];
+         const firstName = stakeholder.first_name || names[0] || 'Unknown';
+         const lastName = stakeholder.last_name || names.slice(1).join(' ') || 'Unknown';
+ 
+         const { data, error } = await supabase
+           .from('contacts')
+           .insert({
+             user_id: user.id,
+             company_id: companyId || (entityType === 'company' ? entityId : undefined),
+             first_name: firstName,
+             last_name: lastName,
+             email: stakeholder.email,
+             phone: stakeholder.phone,
+             linkedin: stakeholder.linkedin,
+             role_title: stakeholder.role_title || stakeholder.position,
+             notes: `Adicionado via Lux Intelligence`,
+             relationship_stage: 'prospect',
+             relationship_score: 10,
+           })
+           .select()
+           .single();
+ 
+         if (error) throw error;
+         toast.success(`Contato ${firstName} adicionado com sucesso!`);
+         return data;
+       } catch (err) {
+         const msg = err instanceof Error ? err.message : 'Unknown error';
+         logger.error('Error creating stakeholder contact:', { error: msg });
+         toast.error('Erro ao adicionar contato');
+         return null;
+       }
+     },
+     refresh: fetchRecords,
+     isProcessing: latestRecord?.status === 'processing',
+   };
+ }

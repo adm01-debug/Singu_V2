@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Globe, Linkedin, Instagram, Twitter, ExternalLink, Share2,
-  Clock, AlertCircle, CheckCircle2, Loader2, Brain,
+   Globe, Linkedin, Instagram, Twitter, ExternalLink, Share2, UserPlus,
+   Clock, AlertCircle, CheckCircle2, Loader2, Brain, Check
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -74,35 +74,70 @@ export const SocialProfileCard = ({ profile }: { profile: LuxSocialProfile }) =>
   );
 };
 
-export const StakeholderCard = ({ stakeholder, index }: { stakeholder: LuxStakeholder; index: number }) => (
-  <motion.div
-    initial={{ opacity: 0, x: -10 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ delay: index * 0.05 }}
-    className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-primary/50 to-secondary/50 dark:from-primary/20 dark:to-secondary/20 border border-primary/50 dark:border-primary/30"
-  >
-    <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-semibold text-sm shadow-md">
-      {(stakeholder.first_name || stakeholder.name || '?').charAt(0)}
-    </div>
-    <div className="flex-1 min-w-0">
-      <p className="text-sm font-medium truncate">
-        {stakeholder.name || `${stakeholder.first_name || ''} ${stakeholder.last_name || ''}`.trim() || 'Nome não disponível'}
-      </p>
-      <p className="text-xs text-muted-foreground truncate">
-        {stakeholder.role_title || stakeholder.position || 'Cargo não identificado'}
-      </p>
-    </div>
-    <div className="flex items-center gap-1">
-      {stakeholder.email && (
-        <Button variant="ghost" size="icon" className="h-7 w-7" asChild>
-          <a href={`mailto:${stakeholder.email}`}><Share2 className="w-3.5 h-3.5" /></a>
-        </Button>
-      )}
-      {stakeholder.linkedin && (
-        <Button variant="ghost" size="icon" className="h-7 w-7" asChild>
-          <a href={stakeholder.linkedin} target="_blank" rel="noopener noreferrer"><Linkedin className="w-3.5 h-3.5" /></a>
-        </Button>
-      )}
-    </div>
-  </motion.div>
-);
+ export const StakeholderCard = ({ 
+   stakeholder, 
+   index, 
+   onAddContact 
+ }: { 
+   stakeholder: LuxStakeholder; 
+   index: number;
+   onAddContact?: (s: LuxStakeholder) => Promise<void>;
+ }) => {
+   const [adding, setAdding] = useState(false);
+   const [added, setAdded] = useState(false);
+ 
+   const handleAdd = async () => {
+     if (!onAddContact) return;
+     setAdding(true);
+     try {
+       await onAddContact(stakeholder);
+       setAdded(true);
+     } finally {
+       setAdding(false);
+     }
+   };
+ 
+   return (
+     <motion.div
+       initial={{ opacity: 0, x: -10 }}
+       animate={{ opacity: 1, x: 0 }}
+       transition={{ delay: index * 0.05 }}
+       className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-primary/50 to-secondary/50 dark:from-primary/20 dark:to-secondary/20 border border-primary/50 dark:border-primary/30"
+     >
+       <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-semibold text-sm shadow-md">
+         {(stakeholder.first_name || stakeholder.name || '?').charAt(0)}
+       </div>
+       <div className="flex-1 min-w-0">
+         <p className="text-sm font-medium truncate">
+           {stakeholder.name || `${stakeholder.first_name || ''} ${stakeholder.last_name || ''}`.trim() || 'Nome não disponível'}
+         </p>
+         <p className="text-xs text-muted-foreground truncate">
+           {stakeholder.role_title || stakeholder.position || 'Cargo não identificado'}
+         </p>
+       </div>
+       <div className="flex items-center gap-1">
+         {onAddContact && (
+           <Button 
+             variant="ghost" 
+             size="icon" 
+             className="h-7 w-7 text-primary" 
+             onClick={handleAdd}
+             disabled={adding || added}
+           >
+             {adding ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : added ? <Check className="w-3.5 h-3.5" /> : <UserPlus className="w-3.5 h-3.5" />}
+           </Button>
+         )}
+         {stakeholder.email && (
+           <Button variant="ghost" size="icon" className="h-7 w-7" asChild>
+             <a href={`mailto:${stakeholder.email}`}><Share2 className="w-3.5 h-3.5" /></a>
+           </Button>
+         )}
+         {stakeholder.linkedin && (
+           <Button variant="ghost" size="icon" className="h-7 w-7" asChild>
+             <a href={stakeholder.linkedin} target="_blank" rel="noopener noreferrer"><Linkedin className="w-3.5 h-3.5" /></a>
+           </Button>
+         )}
+       </div>
+     </motion.div>
+   );
+ };

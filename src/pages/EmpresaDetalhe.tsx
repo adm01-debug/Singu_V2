@@ -65,7 +65,14 @@ const EmpresaDetalhe = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const { trackView } = useRecentlyViewed();
-  const { records: luxRecords, latestRecord: luxRecord, loading: luxLoading, triggering: luxTriggering, triggerLux } = useLuxIntelligence('company', id);
+   const { 
+     records: luxRecords, 
+     latestRecord: luxRecord, 
+     loading: luxLoading, 
+     triggering: luxTriggering, 
+     triggerLux,
+     createStakeholderContact
+   } = useLuxIntelligence('company', id);
   const { interactions: hookInteractions, loading: interactionsLoading } = useInteractions(undefined, id);
   const [company, setCompany] = useState<Company | null>(null);
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -257,7 +264,27 @@ const EmpresaDetalhe = () => {
                 <TabsContent value="interactions" className="mt-4"><DashboardErrorBoundary sectionName="Interações"><CompanyInteractionsTab interactions={hookInteractions} contacts={contacts} /></DashboardErrorBoundary></TabsContent>
                 <TabsContent value="commercial" className="mt-4 space-y-4"><DashboardErrorBoundary sectionName="Comercial"><CompanyCommercialTab companyId={id!} /></DashboardErrorBoundary><DashboardErrorBoundary sectionName="Propostas ERP"><CompanyErpProposalsWidget companyId={id!} /></DashboardErrorBoundary></TabsContent>
                 <TabsContent value="insights" className="mt-4"><DashboardErrorBoundary sectionName="Insights"><CompanyInsightsTab companyId={company.id} contacts={contacts} avgRelationshipScore={stats.avgScore} totalInteractions={stats.total} positiveInteractions={stats.positive} pendingFollowUps={stats.pending} /></DashboardErrorBoundary></TabsContent>
-                <TabsContent value="lux" className="mt-4"><DashboardErrorBoundary sectionName="Lux Intelligence"><motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}><Card><CardContent className="pt-6"><LuxIntelligencePanel record={luxRecord} records={luxRecords} entityType="company" loading={luxLoading} onTrigger={() => triggerLux({ name: company.name, cnpj: company.cnpj, website: company.website, industry: company.industry })} triggering={luxTriggering} /></CardContent></Card></motion.div></DashboardErrorBoundary></TabsContent>
+                 <TabsContent value="lux" className="mt-4">
+                   <DashboardErrorBoundary sectionName="Lux Intelligence">
+                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+                       <Card>
+                         <CardContent className="pt-6">
+                           <LuxIntelligencePanel 
+                             record={luxRecord} 
+                             records={luxRecords} 
+                             entityType="company" 
+                             loading={luxLoading} 
+                             onTrigger={() => triggerLux({ name: company.name, cnpj: company.cnpj, website: company.website, industry: company.industry })} 
+                             triggering={luxTriggering}
+                             onAddContact={async (s) => {
+                               await createStakeholderContact(s);
+                             }}
+                           />
+                         </CardContent>
+                       </Card>
+                     </motion.div>
+                   </DashboardErrorBoundary>
+                 </TabsContent>
               </Tabs>
 
               {company.notes && (
