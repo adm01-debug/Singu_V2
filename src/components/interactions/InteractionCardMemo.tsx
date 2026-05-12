@@ -17,8 +17,13 @@ import {
   MoreVertical,
   Edit2,
   Trash2,
-  Clock,
-  Tag
+   Clock,
+   Tag,
+   ArrowUpRight,
+   ArrowDownLeft,
+   Zap,
+   Lightbulb,
+   Activity
 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -80,19 +85,27 @@ function arePropsEqual(
       prev.content !== next.content ||
       prev.sentiment !== next.sentiment ||
       prev.created_at !== next.created_at ||
-      prev.duration !== next.duration ||
+       prev.duration !== next.duration ||
+       prev.response_time !== next.response_time ||
+       prev.initiated_by !== next.initiated_by ||
       prev.follow_up_required !== next.follow_up_required ||
       prev.follow_up_date !== next.follow_up_date
     ) {
       return false;
     }
     
-    // Comparar arrays de tags
-    const prevTags = prev.tags ?? [];
-    const nextTags = next.tags ?? [];
-    if (prevTags.length !== nextTags.length || !prevTags.every((t, i) => t === nextTags[i])) {
-      return false;
-    }
+     // Comparar arrays de tags e insights
+     const prevTags = prev.tags ?? [];
+     const nextTags = next.tags ?? [];
+     if (prevTags.length !== nextTags.length || !prevTags.every((t, i) => t === nextTags[i])) {
+       return false;
+     }
+
+     const prevInsights = prev.key_insights ?? [];
+     const nextInsights = next.key_insights ?? [];
+     if (prevInsights.length !== nextInsights.length || !prevInsights.every((t, i) => t === nextInsights[i])) {
+       return false;
+     }
   }
 
   return true;
@@ -155,17 +168,32 @@ export const InteractionCardMemo = memo(function InteractionCardMemo({
                   <SentimentIndicator sentiment={interaction.sentiment as SentimentType} size="sm" />
                 )}
               </div>
-              <p className="text-xs text-muted-foreground truncate">
-                {contactName}{companyName ? ` · ${companyName}` : ''} · {formattedDate}
-              </p>
+               <div className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
+                 {interaction.initiated_by === 'us' ? (
+                   <ArrowUpRight className="w-3 h-3 text-blue-500" />
+                 ) : (
+                   <ArrowDownLeft className="w-3 h-3 text-green-500" />
+                 )}
+                 <span>{contactName}{companyName ? ` · ${companyName}` : ''}</span>
+                 <span>·</span>
+                 <span>{formattedDate}</span>
+               </div>
             </div>
 
-            {interaction.duration && (
-              <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0">
-                <Clock className="w-3 h-3" />
-                {interaction.duration}min
-              </div>
-            )}
+             <div className="flex items-center gap-2 shrink-0">
+               {interaction.response_time && (
+                 <Badge variant="outline" className="h-5 px-1.5 text-[10px] gap-1 font-normal border-amber-200 bg-amber-50 text-amber-700">
+                   <Zap className="w-2.5 h-2.5" />
+                   {interaction.response_time}m
+                 </Badge>
+               )}
+               {interaction.duration && (
+                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                   <Clock className="w-3 h-3" />
+                   {Math.round(interaction.duration / 60)}m
+                 </div>
+               )}
+             </div>
 
             {(onEdit || onDelete) && (
               <DropdownMenu>
@@ -246,16 +274,29 @@ export const InteractionCardMemo = memo(function InteractionCardMemo({
                 </p>
               )}
               
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <div className="flex items-center gap-3">
-                  <span>{formattedDate}</span>
-                  {interaction.duration && (
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {interaction.duration}min
-                    </span>
-                  )}
-                </div>
+               <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+                 <div className="flex items-center gap-3 flex-wrap">
+                   <div className="flex items-center gap-1.5">
+                     {interaction.initiated_by === 'us' ? (
+                       <ArrowUpRight className="w-3.5 h-3.5 text-blue-500" />
+                     ) : (
+                       <ArrowDownLeft className="w-3.5 h-3.5 text-green-500" />
+                     )}
+                     <span>{formattedDate}</span>
+                   </div>
+                   {interaction.duration && (
+                     <span className="flex items-center gap-1">
+                       <Clock className="w-3 h-3" />
+                       {Math.round(interaction.duration / 60)}min
+                     </span>
+                   )}
+                   {interaction.response_time && (
+                     <span className="flex items-center gap-1 text-amber-600 font-medium">
+                       <Zap className="w-3 h-3" />
+                       {interaction.response_time}min resposta
+                     </span>
+                   )}
+                 </div>
                 
                 {interaction.follow_up_required && (
                   <Badge variant="outline" className="text-xs">
@@ -264,21 +305,40 @@ export const InteractionCardMemo = memo(function InteractionCardMemo({
                 )}
               </div>
 
-              {interaction.tags && interaction.tags.length > 0 && (
-                <div className="flex items-center gap-1 flex-wrap">
-                  <Tag className="w-3 h-3 text-muted-foreground" />
-                  {interaction.tags.slice(0, 3).map((tag) => (
-                    <Badge key={tag} variant="secondary" className="text-xs">
-                      {tag}
-                    </Badge>
-                  ))}
-                  {interaction.tags.length > 3 && (
-                    <span className="text-xs text-muted-foreground">
-                      +{interaction.tags.length - 3}
-                    </span>
-                  )}
-                </div>
-              )}
+               <div className="flex flex-wrap gap-2 pt-1">
+                 {interaction.key_insights && (interaction.key_insights as string[]).length > 0 && (
+                   <div className="flex items-center gap-1.5 w-full mb-1">
+                     <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
+                     <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700/70">Insights:</span>
+                     <span className="text-xs text-muted-foreground italic line-clamp-1">
+                       {(interaction.key_insights as string[]).join(' · ')}
+                     </span>
+                   </div>
+                 )}
+                 
+                 {interaction.tags && (interaction.tags as string[]).length > 0 && (
+                   <div className="flex items-center gap-1.5 flex-wrap">
+                     <Tag className="w-3 h-3 text-muted-foreground" />
+                     {(interaction.tags as string[]).slice(0, 5).map((tag) => (
+                       <Badge key={tag} variant="secondary" className="text-[10px] h-5 px-2 bg-slate-100 text-slate-600 hover:bg-slate-200 border-none">
+                         {tag}
+                       </Badge>
+                     ))}
+                     {(interaction.tags as string[]).length > 5 && (
+                       <span className="text-[10px] text-muted-foreground">
+                         +{(interaction.tags as string[]).length - 5}
+                       </span>
+                     )}
+                   </div>
+                 )}
+
+                 {(interaction as any).emotion_analysis && (
+                   <div className="ml-auto flex items-center gap-1 text-[10px] text-indigo-600/80 font-medium">
+                     <Activity className="w-3 h-3" />
+                     EQ Analisado
+                   </div>
+                 )}
+               </div>
             </CardContent>
           </>
         )}
