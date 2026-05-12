@@ -1,4 +1,4 @@
-import { TrendingUp, TrendingDown, Minus, ShoppingBag, BarChart3, AlertCircle } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, ShoppingBag, BarChart3, AlertCircle, Gift } from 'lucide-react';
 import { BestClosingMomentsCard } from './commercial-tab/BestClosingMomentsCard';
 import { ChurnRiskCard } from './commercial-tab/ChurnRiskCard';
 import { ClosingScoreCard } from './commercial-tab/ClosingScoreCard';
@@ -14,6 +14,8 @@ import { EmailLogsCard } from './commercial-tab/EmailLogsCard';
 import { NpsCard } from './commercial-tab/NpsCard';
 import { CadenceEnrollmentsCard } from './commercial-tab/CadenceEnrollmentsCard';
 import { InactivityAlertsCard } from './commercial-tab/InactivityAlertsCard';
+import { PurchaseHistoryElite } from '@/components/crm/commercial/PurchaseHistoryElite';
+import { OfferSuggestionsElite } from '@/components/crm/commercial/OfferSuggestionsElite';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -237,48 +239,11 @@ export function ContactCommercialTab({ contactId }: Props) {
         </CardContent>
       </Card>
 
-      {/* Purchase History */}
-      <Card className="md:col-span-2">
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-sm">
-            <ShoppingBag className="h-4 w-4 text-success" />
-            Histórico de Compras ({purchases.length})
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {purchases.length > 0 ? (
-            <div className="space-y-2">
-              {purchases.map((p) => (
-                <div key={p.id} className="flex items-center justify-between rounded-lg border p-2.5 text-sm">
-                  <div>
-                    <p className="font-medium text-foreground">{p.product_name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {p.product_category && `${p.product_category} · `}
-                      {p.purchase_date && format(new Date(p.purchase_date), 'dd/MM/yyyy')}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-foreground">
-                      R$ {Number(p.amount || 0).toLocaleString('pt-BR')}
-                    </p>
-                    {p.renewal_date && (
-                      <p className="text-xs text-muted-foreground">
-                        Renova: {format(new Date(p.renewal_date), 'dd/MM/yyyy')}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <InlineEmptyState
-              icon={ShoppingBag}
-              title="Sem histórico de compras"
-              description="O histórico aparecerá automaticamente quando compras forem registradas"
-            />
-          )}
-        </CardContent>
-      </Card>
+      {/* Advanced Commercial Intelligence */}
+      <div className="md:col-span-2 grid gap-4 lg:grid-cols-2">
+        <OfferSuggestionsElite contactId={contactId} />
+        <PurchaseHistoryElite contactId={contactId} />
+      </div>
     </div>
   );
 }
