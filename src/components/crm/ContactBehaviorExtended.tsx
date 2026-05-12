@@ -10,6 +10,7 @@ import { DecisionMakingSubTab } from "./behavior/DecisionMakingSubTab";
 import { InfluencePowerSubTab } from "./behavior/InfluencePowerSubTab";
 import { BusinessContextSubTab } from "./behavior/BusinessContextSubTab";
 import { ConsentAuditLog } from "./consent/ConsentAuditLog";
+import { RelationshipReportExport } from "./relationship/RelationshipReportExport";
 
 interface ContactBehaviorExtendedProps {
   contactId: string;
@@ -30,7 +31,16 @@ export const ContactBehaviorExtended = ({ contactId }: ContactBehaviorExtendedPr
       </div>
 
       <Tabs defaultValue="disc" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 mb-8">
+        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-8 mb-8">
+          <TabsTrigger value="export" className="flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            <span className="hidden sm:inline">Exportar</span>
+          </TabsTrigger>
+        <TabsContent value="export">
+          <div className="max-w-md mx-auto py-8">
+            <RelationshipReportExport contactId={contactId} contactName="Relatório de Contato" />
+          </div>
+        </TabsContent>
           <TabsTrigger value="consent" className="flex items-center gap-2">
             <Shield className="h-4 w-4" />
             <span className="hidden sm:inline">Consentimento</span>
