@@ -106,7 +106,8 @@ export default function CopywritingSalesTools({ contact }: CopywritingSalesTools
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-           <TabsList className="grid grid-cols-5 lg:grid-cols-11 gap-1 mb-4 h-auto flex-wrap">
+            <TabsList className="grid grid-cols-5 lg:grid-cols-12 gap-1 mb-4 h-auto flex-wrap">
+              <TabsTrigger value="objection" className="text-xs px-2 py-1.5 bg-destructive/5 text-destructive hover:bg-destructive/10"><ShieldAlert className="h-3 w-3 mr-1" />Objeções</TabsTrigger>
              <TabsTrigger value="ai-generator" className="text-xs px-2 py-1.5 bg-primary/10 text-primary hover:bg-primary/20 transition-colors"><Sparkles className="h-3 w-3 mr-1" />Gerador IA</TabsTrigger>
              <TabsTrigger value="analyzer" className="text-xs px-2 py-1.5"><BarChart3 className="h-3 w-3 mr-1" />Analisador</TabsTrigger>
             <TabsTrigger value="pas" className="text-xs px-2 py-1.5"><AlertTriangle className="h-3 w-3 mr-1" />PAS</TabsTrigger>
