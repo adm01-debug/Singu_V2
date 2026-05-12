@@ -27,16 +27,20 @@
            kinesthetic: "Sinta o impacto"
          }[vakPreference as 'visual'|'auditory'|'kinesthetic'] || "Veja";
 
-         if (persona === 'disc-d') {
-           content = channel === 'whatsapp' 
-             ? `Olá [Nome], direto ao ponto. ${vakPrefix}: temos uma solução que aumenta [Métrica] em [X]%. Pode falar amanhã às 10h?` 
-             : `Assunto: ROI de [X]% em [Métrica]\n\n[Nome],\n\nNotei sua meta. ${vakPrefix}: implementamos um sistema que corta custos em [X]% em 30 dias. Vamos falar?`;
-         } else if (persona === 'disc-i') {
-           content = `Oi [Nome]! Tudo ótimo? ${vakPrefix}: adorei sua postagem sobre [Tema]. Me lembrou um desafio que resolvemos. Adoraria trocar uma ideia sobre como estamos ajudando líderes a brilharem. Topa um café?`;
-         } else if (persona === 'disc-s') {
-           content = `Olá [Nome], espero que esteja bem. ${vakPrefix}: nossa metodologia foca em segurança e previsibilidade operacional. Temos casos de sucesso em [Setor] com resultados consistentes. Gostaria de conhecer nosso processo?`;
-          } else {
-            content = `Prezado [Nome], analisando os dados de [Setor], ${vakPrefix}: identificamos uma oportunidade de otimização baseada em [Métrica]. Segue análise técnica anexa para sua validação de precisão. Qual sua disponibilidade?`;
+          if (persona === 'disc-d') {
+            content = channel === 'whatsapp' 
+              ? `Olá [Nome], direto ao ponto. ${vakPrefix}: temos uma solução que aumenta [Métrica] em [X]%. Pode falar amanhã às 10h?` 
+              : `Assunto: ROI de [X]% em [Métrica]\n\n[Nome],\n\nNotei sua meta. ${vakPrefix}: implementamos um sistema que corta custos em [X]% em 30 dias. Vamos falar?`;
+          } else if (persona === 'disc-i') {
+            content = `Oi [Nome]! Tudo ótimo? ${vakPrefix}: adorei sua postagem sobre [Tema]. Me lembrou um desafio que resolvemos. Adoraria trocar uma ideia sobre como estamos ajudando líderes a brilharem. Topa um café?`;
+          } else if (persona === 'disc-s') {
+            content = `Olá [Nome], espero que esteja bem. ${vakPrefix}: nossa metodologia foca em segurança e previsibilidade operacional. Temos casos de sucesso em [Setor] com resultados consistentes. Gostaria de conhecer nosso processo?`;
+           } else {
+             content = `Prezado [Nome], analisando os dados de [Setor], ${vakPrefix}: identificamos uma oportunidade de otimização baseada em [Métrica]. Segue análise técnica anexa para sua validação de precisão. Qual sua disponibilidade?`;
+           }
+
+          if (stage === 'objection') {
+            content += `\n\n[TRATAMENTO DE OBJEÇÃO]: Entendo perfeitamente sua preocupação com o investimento. No entanto, se olharmos para o custo de inação, ${vakPrefix} que o prejuízo pode ser maior que o aporte inicial.`;
           }
 
           if (trigger === 'novelty') {
@@ -182,12 +186,18 @@
                  <Badge variant="outline" className="text-amber-600 bg-amber-50 border-amber-200">
                    <Zap className="w-3 h-3 mr-1" /> Gatilho: Reciprocidade
                  </Badge>
-                 <Badge variant="outline" className="text-purple-600 bg-purple-50 border-purple-200">
-                   <UserCheck className="w-3 h-3 mr-1" /> Ajuste VAK: Visual
-                 </Badge>
-               </div>
-             </div>
-           ) : (
+                  <Badge variant="outline" className="text-purple-600 bg-purple-50 border-purple-200">
+                    <UserCheck className="w-3 h-3 mr-1" /> Ajuste VAK: {vakPreference}
+                  </Badge>
+                  <Badge variant="outline" className="text-green-600 bg-green-50 border-green-200">
+                    <Check className="w-3 h-3 mr-1" /> Carnegie: Ativo
+                  </Badge>
+                </div>
+                <div className="mt-4 p-3 bg-indigo-50 border border-indigo-100 rounded text-[11px] text-indigo-800 italic">
+                  <strong>Insight Dale Carnegie:</strong> {persona === 'disc-i' ? "Seja um bom ouvinte. Incentive os outros a falarem sobre si mesmos." : persona === 'disc-d' ? "A única maneira de ganhar uma discussão é evitá-la." : "Faça a outra pessoa sentir-se importante."}
+                </div>
+              </div>
+            ) : (
              <div className="h-64 flex flex-col items-center justify-center text-muted-foreground border-2 border-dashed rounded-lg">
                <Wand2 className="w-12 h-12 mb-2 opacity-20" />
                <p>Configure as opções ao lado para gerar seu roteiro de vendas.</p>
