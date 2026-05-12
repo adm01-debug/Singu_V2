@@ -9182,6 +9182,7 @@ export type Database = {
           created_at: string
           expires_at: string | null
           id: string
+          metadata: Json | null
           offer_category: string | null
           offer_name: string
           presented_at: string | null
@@ -9196,6 +9197,7 @@ export type Database = {
           created_at?: string
           expires_at?: string | null
           id?: string
+          metadata?: Json | null
           offer_category?: string | null
           offer_name: string
           presented_at?: string | null
@@ -9210,6 +9212,7 @@ export type Database = {
           created_at?: string
           expires_at?: string | null
           id?: string
+          metadata?: Json | null
           offer_category?: string | null
           offer_name?: string
           presented_at?: string | null
@@ -9558,6 +9561,54 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      psychographic_audit_log: {
+        Row: {
+          change_type: string
+          changed_by: string | null
+          changed_fields: string[] | null
+          contact_id: string | null
+          created_at: string | null
+          id: string
+          new_values: Json | null
+          previous_values: Json | null
+        }
+        Insert: {
+          change_type: string
+          changed_by?: string | null
+          changed_fields?: string[] | null
+          contact_id?: string | null
+          created_at?: string | null
+          id?: string
+          new_values?: Json | null
+          previous_values?: Json | null
+        }
+        Update: {
+          change_type?: string
+          changed_by?: string | null
+          changed_fields?: string[] | null
+          contact_id?: string | null
+          created_at?: string | null
+          id?: string
+          new_values?: Json | null
+          previous_values?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "psychographic_audit_log_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "psychographic_audit_log_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
       }
       purchase_history: {
         Row: {
@@ -11640,6 +11691,57 @@ export type Database = {
           },
           {
             foreignKeyName: "social_scraping_schedule_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
+      social_sync_queue: {
+        Row: {
+          contact_id: string | null
+          created_at: string | null
+          error_log: string | null
+          id: string
+          last_attempt: string | null
+          max_retries: number | null
+          retry_count: number | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          contact_id?: string | null
+          created_at?: string | null
+          error_log?: string | null
+          id?: string
+          last_attempt?: string | null
+          max_retries?: number | null
+          retry_count?: number | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          contact_id?: string | null
+          created_at?: string | null
+          error_log?: string | null
+          id?: string
+          last_attempt?: string | null
+          max_retries?: number | null
+          retry_count?: number | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_sync_queue_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "social_sync_queue_contact_id_fkey"
             columns: ["contact_id"]
             isOneToOne: false
             referencedRelation: "vw_contacts_nlp"
