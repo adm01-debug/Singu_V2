@@ -6,16 +6,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
- import { Plus, ExternalLink, Copy, Trash2, Eye, Users, TrendingUp, Workflow, Target, BarChart3, Megaphone, Layout, ListFilter, FileText } from 'lucide-react';
+ import { Plus, ExternalLink, Copy, Trash2, Eye, Users, TrendingUp, Workflow, Target, BarChart3, Megaphone, Layout, ListFilter, FileText, Sparkles, Filter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useForms } from '@/hooks/useForms';
 import { useLeadMagnets } from '@/hooks/useLeadMagnets';
 import { useNurturingWorkflows } from '@/hooks/useNurturingWorkflows';
 import { useNurturingExecutions, useRunNurturing } from '@/hooks/useNurturingExecutions';
 import { useMQLCriteria, useMQLClassifications, useHandoffMQL } from '@/hooks/useMQL';
-import { useAttribution, type AttributionModel } from '@/hooks/useAttribution';
-import { AttributionBreakdownChart } from '@/components/marketing/AttributionBreakdownChart';
-import { toast } from 'sonner';
+ import { useAttribution, type AttributionModel } from '@/hooks/useAttribution';
+ import { AttributionBreakdownChart } from '@/components/marketing/AttributionBreakdownChart';
+ import { MarketingStats } from '@/components/crm/marketing/components/MarketingStats';
+ import { FormList } from '@/components/crm/marketing/components/FormList';
+  import { LeadMagnetList } from '@/components/crm/marketing/components/LeadMagnetList';
+  import { MQLManager } from '@/components/crm/marketing/components/MQLManager';
+ import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
@@ -43,7 +47,7 @@ export default function MarketingHub() {
   const [attValue, setAttValue] = useState(10000);
   const { data: attribution } = useAttribution(attDealId || undefined, attModel, attValue);
 
-  const copyUrl = (slug: string, prefix: 'f' | 'lm') => {
+   const copyUrl = (slug: string, prefix: 'f' | 'lm' | 'lp') => {
     const url = `${window.location.origin}/${prefix}/${slug}`;
     navigator.clipboard.writeText(url);
     toast.success('URL copiada!');
@@ -100,51 +104,13 @@ export default function MarketingHub() {
            </TabsList>
          </div>
  
-         {/* OVERVIEW */}
-         <TabsContent value="overview" className="space-y-6">
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-             <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/10">
-               <CardContent className="pt-6">
-                 <div className="flex items-center justify-between mb-2">
-                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Lead Magnets</p>
-                   <Eye className="w-4 h-4 text-primary opacity-60" />
-                 </div>
-                 <p className="text-2xl font-bold">{magnets.reduce((acc, m) => acc + (m.view_count || 0), 0)}</p>
-                 <p className="text-[10px] text-muted-foreground mt-1">Total de visualizações capturadas</p>
-               </CardContent>
-             </Card>
-             <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/10">
-               <CardContent className="pt-6">
-                 <div className="flex items-center justify-between mb-2">
-                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Submissões</p>
-                   <FileText className="w-4 h-4 text-primary opacity-60" />
-                 </div>
-                 <p className="text-2xl font-bold">{forms.reduce((acc, f) => acc + (f.submission_count || 0), 0)}</p>
-                 <p className="text-[10px] text-muted-foreground mt-1">Conversões em formulários ativos</p>
-               </CardContent>
-             </Card>
-             <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/10">
-               <CardContent className="pt-6">
-                 <div className="flex items-center justify-between mb-2">
-                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Nutrição Ativa</p>
-                   <Workflow className="w-4 h-4 text-primary opacity-60" />
-                 </div>
-                 <p className="text-2xl font-bold">{executions.filter(e => e.status === 'active').length}</p>
-                 <p className="text-[10px] text-muted-foreground mt-1">Enrollments processando agora</p>
-               </CardContent>
-             </Card>
-             <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/10">
-               <CardContent className="pt-6">
-                 <div className="flex items-center justify-between mb-2">
-                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">MQLs → SQLs</p>
-                   <Users className="w-4 h-4 text-primary opacity-60" />
-                 </div>
-                 <p className="text-2xl font-bold">{classifications.filter(c => c.status === 'sql').length}</p>
-                 <p className="text-[10px] text-muted-foreground mt-1">Leads qualificados para vendas</p>
-               </CardContent>
-             </Card>
-           </div>
- 
+          <TabsContent value="overview" className="space-y-6">
+            <MarketingStats 
+              totalViews={magnets.reduce((acc, m) => acc + (m.view_count || 0), 0)}
+              totalSubmissions={forms.reduce((acc, f) => acc + (f.submission_count || 0), 0)}
+              activeNurturing={executions.filter(e => e.status === 'active').length}
+              totalSQLs={classifications.filter(c => c.status === 'sql').length}
+            />
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
              <Card>
                <CardHeader className="flex flex-row items-center justify-between">
@@ -184,147 +150,139 @@ export default function MarketingHub() {
            </div>
          </TabsContent>
 
-        {/* FORMS */}
-        <TabsContent value="forms" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center justify-between">
-                <span>Novo formulário</span>
-                <Button
-                  size="sm"
-                  variant="default"
-                  className="gap-1"
-                  disabled={!newFormName.trim()}
-                  onClick={() => {
-                    upsertForm.mutate(
-                      { name: newFormName, slug: `${slugify(newFormName)}-${Date.now().toString(36).slice(-4)}`, fields: [] },
-                      { onSuccess: () => setNewFormName('') }
-                    );
-                  }}
-                >
-                  <Plus className="w-4 h-4" /> Criar
-                </Button>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Input placeholder="Nome do formulário" value={newFormName} onChange={(e) => setNewFormName(e.target.value)} />
-            </CardContent>
-          </Card>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {forms.map((f) => (
-              <Card key={f.id} variant="outlined" className="hover:border-primary/40 transition">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-0.5 min-w-0">
-                      <CardTitle className="text-sm truncate">{f.name}</CardTitle>
-                      <p className="text-xs text-muted-foreground font-mono truncate">/f/{f.slug}</p>
+          <TabsContent value="forms" className="space-y-6">
+            <div className="flex items-center justify-between gap-4">
+              <div className="relative flex-1 max-w-sm">
+                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input placeholder="Filtrar formulários..." className="pl-9" />
+              </div>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="gap-2 shadow-sm">
+                    <Plus className="w-4 h-4" /> Novo Formulário
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Criar Novo Formulário</DialogTitle>
+                  </DialogHeader>
+                  <div className="py-4 space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="form-name">Nome do Formulário</Label>
+                      <Input 
+                        id="form-name" 
+                        placeholder="Ex: Newsletter Site Principal" 
+                        value={newFormName} 
+                        onChange={(e) => setNewFormName(e.target.value)} 
+                      />
                     </div>
-                    <Switch checked={f.is_published} onCheckedChange={(v) => togglePF.mutate({ id: f.id, is_published: v })} />
                   </div>
-                </CardHeader>
-                <CardContent className="space-y-2 text-xs">
-                  <div className="flex items-center gap-3 text-muted-foreground">
-                    <span>{f.fields.length} campos</span>
-                    <span>·</span>
-                    <span>{f.view_count} views</span>
-                    <span>·</span>
-                    <span>{f.submission_count} envios</span>
-                  </div>
-                  <div className="flex gap-1.5 pt-1">
-                    <Button asChild size="sm" variant="outline" className="flex-1 text-xs gap-1">
-                      <Link to={`/marketing/forms/${f.id}`}>Editar</Link>
+                  <DialogFooter>
+                    <Button
+                      disabled={!newFormName.trim()}
+                      onClick={() => {
+                        upsertForm.mutate(
+                          { name: newFormName, slug: `${slugify(newFormName)}-${Date.now().toString(36).slice(-4)}`, fields: [] },
+                          { onSuccess: () => setNewFormName('') }
+                        );
+                      }}
+                    >
+                      Criar Formulário
                     </Button>
-                    <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => copyUrl(f.slug, 'f')} title="Copiar URL">
-                      <Copy className="w-3.5 h-3.5" />
-                    </Button>
-                    {f.is_published && (
-                      <Button asChild size="icon" variant="ghost" className="h-8 w-8">
-                        <a href={`/f/${f.slug}`} target="_blank" rel="noreferrer"><ExternalLink className="w-3.5 h-3.5" /></a>
-                      </Button>
-                    )}
-                    <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive" onClick={() => removeForm.mutate(f.id)}>
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+ 
+            <FormList 
+              forms={forms}
+              onTogglePublish={(id, is_published) => togglePF.mutate({ id, is_published })}
+              onCopyUrl={(slug) => copyUrl(slug, 'f')}
+              onRemove={(id) => removeForm.mutate(id)}
+            />
+            
             {forms.length === 0 && (
-              <p className="text-sm text-muted-foreground col-span-full text-center py-8">Nenhum formulário ainda.</p>
-            )}
-          </div>
-        </TabsContent>
-
-        {/* MAGNETS */}
-        <TabsContent value="magnets" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center justify-between">
-                <span>Novo lead magnet</span>
-                <Button
-                  size="sm"
-                  variant="default"
-                  className="gap-1"
-                  disabled={!newMagnetTitle.trim()}
-                  onClick={() => {
-                    upsertMagnet.mutate(
-                      { title: newMagnetTitle, slug: `${slugify(newMagnetTitle)}-${Date.now().toString(36).slice(-4)}`, type: 'ebook' },
-                      { onSuccess: () => setNewMagnetTitle('') }
-                    );
-                  }}
-                >
-                  <Plus className="w-4 h-4" /> Criar
+              <div className="flex flex-col items-center justify-center py-24 text-center border-2 border-dashed rounded-xl bg-muted/20">
+                <div className="p-4 rounded-full bg-primary/10 mb-4">
+                  <Target className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold">Nenhum formulário ainda</h3>
+                <p className="text-sm text-muted-foreground max-w-xs mx-auto mt-2">
+                  Comece capturando leads de alto valor criando seu primeiro formulário de conversão.
+                </p>
+                <Button variant="outline" className="mt-6" onClick={() => document.querySelector<HTMLButtonElement>('[data-state="closed"]')?.click()}>
+                  Criar primeiro formulário
                 </Button>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Input placeholder="Título (ex: Ebook ROI 2026)" value={newMagnetTitle} onChange={(e) => setNewMagnetTitle(e.target.value)} />
-            </CardContent>
-          </Card>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {magnets.map((m) => (
-              <Card key={m.id} variant="outlined" className="hover:border-primary/40 transition">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="space-y-0.5 min-w-0">
-                      <CardTitle className="text-sm truncate">{m.title}</CardTitle>
-                      <Badge variant="secondary" className="text-[10px] capitalize mt-1">{m.type}</Badge>
-                    </div>
-                    <Switch checked={m.is_published} onCheckedChange={(v) => togglePM.mutate({ id: m.id, is_published: v })} />
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-2 text-xs">
-                  <div className="flex items-center gap-3 text-muted-foreground">
-                    <span>{m.view_count} views</span>
-                    <span>·</span>
-                    <span>{m.download_count} downloads</span>
-                  </div>
-                  <div className="flex gap-1.5 pt-1">
-                    <Button asChild size="sm" variant="outline" className="flex-1 text-xs gap-1">
-                      <Link to={`/marketing/lead-magnets/${m.id}`}>Editar</Link>
-                    </Button>
-                    <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => copyUrl(m.slug, 'lm')}>
-                      <Copy className="w-3.5 h-3.5" />
-                    </Button>
-                    {m.is_published && (
-                      <Button asChild size="icon" variant="ghost" className="h-8 w-8">
-                        <a href={`/lm/${m.slug}`} target="_blank" rel="noreferrer"><ExternalLink className="w-3.5 h-3.5" /></a>
-                      </Button>
-                    )}
-                    <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive" onClick={() => removeMagnet.mutate(m.id)}>
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-            {magnets.length === 0 && (
-              <p className="text-sm text-muted-foreground col-span-full text-center py-8">Nenhum lead magnet ainda.</p>
+              </div>
             )}
-          </div>
-        </TabsContent>
+          </TabsContent>
+
+          <TabsContent value="magnets" className="space-y-6">
+            <div className="flex items-center justify-between gap-4">
+              <div className="relative flex-1 max-w-sm">
+                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input placeholder="Filtrar lead magnets..." className="pl-9" />
+              </div>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="gap-2 shadow-sm">
+                    <Plus className="w-4 h-4" /> Novo Magnet
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Criar Novo Lead Magnet</DialogTitle>
+                  </DialogHeader>
+                  <div className="py-4 space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="magnet-title">Título do Lead Magnet</Label>
+                      <Input 
+                        id="magnet-title" 
+                        placeholder="Ex: Ebook Tendências CRM 2026" 
+                        value={newMagnetTitle} 
+                        onChange={(e) => setNewMagnetTitle(e.target.value)} 
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button
+                      disabled={!newMagnetTitle.trim()}
+                      onClick={() => {
+                        upsertMagnet.mutate(
+                          { title: newMagnetTitle, slug: `${slugify(newMagnetTitle)}-${Date.now().toString(36).slice(-4)}`, type: 'ebook' },
+                          { onSuccess: () => setNewMagnetTitle('') }
+                        );
+                      }}
+                    >
+                      Criar Lead Magnet
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+ 
+            <LeadMagnetList 
+              magnets={magnets}
+              onTogglePublish={(id, is_published) => togglePM.mutate({ id, is_published })}
+              onCopyUrl={(slug) => copyUrl(slug, 'lm')}
+              onRemove={(id) => removeMagnet.mutate(id)}
+            />
+            
+            {magnets.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-24 text-center border-2 border-dashed rounded-xl bg-muted/20">
+                <div className="p-4 rounded-full bg-primary/10 mb-4">
+                  <Sparkles className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold">Crie sua primeira isca digital</h3>
+                <p className="text-sm text-muted-foreground max-w-xs mx-auto mt-2">
+                  Ebooks, templates e checklists são a melhor forma de gerar leads qualificados.
+                </p>
+                <Button variant="outline" className="mt-6">
+                  Ver modelos recomendados
+                </Button>
+              </div>
+            )}
+          </TabsContent>
 
         {/* NURTURING */}
         <TabsContent value="nurturing" className="space-y-4">
@@ -369,96 +327,13 @@ export default function MarketingHub() {
           </div>
         </TabsContent>
 
-        {/* MQL */}
-        <TabsContent value="mql" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Critérios MQL</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-end gap-2">
-                <div className="flex-1 space-y-1">
-                  <Label className="text-xs">Nome</Label>
-                  <Input placeholder="Ex: Score >= 60 + intent forte" value={newCriteriaName} onChange={(e) => setNewCriteriaName(e.target.value)} />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Score mínimo</Label>
-                  <Input type="number" min={0} max={100} value={newCriteriaScore} onChange={(e) => setNewCriteriaScore(Number(e.target.value))} className="w-24" />
-                </div>
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="gap-1"
-                  disabled={!newCriteriaName.trim()}
-                  onClick={() => {
-                    upsertCriteria.mutate(
-                      { name: newCriteriaName, conditions: { min_score: newCriteriaScore }, is_active: true, auto_handoff: false, handoff_to_role: 'sdr' },
-                      { onSuccess: () => setNewCriteriaName('') }
-                    );
-                  }}
-                >
-                  <Plus className="w-4 h-4" /> Adicionar
-                </Button>
-              </div>
-              <div className="space-y-2">
-                {criteria.map((c) => (
-                  <div key={c.id} className="flex items-center justify-between p-2 rounded border border-border/60 text-xs">
-                    <div className="flex items-center gap-3">
-                      <Badge variant={c.is_active ? 'default' : 'secondary'} className="text-[10px]">{c.is_active ? 'Ativo' : 'Off'}</Badge>
-                      <span className="font-medium">{c.name}</span>
-                      <span className="text-muted-foreground">score ≥ {c.conditions?.min_score ?? '—'} · {c.handoff_to_role}</span>
-                    </div>
-                    <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive" onClick={() => removeCriteria.mutate(c.id)}>
-                      <Trash2 className="w-3 h-3" />
-                    </Button>
-                  </div>
-                ))}
-                {criteria.length === 0 && <p className="text-xs text-muted-foreground italic">Nenhum critério configurado.</p>}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Contatos qualificados</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {classifications.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-6">Nenhuma classificação ainda.</p>
-              ) : (
-                <div className="space-y-1.5">
-                  {classifications.map((cls) => (
-                    <div key={cls.id} className="flex items-center justify-between p-2 rounded border border-border/60 text-xs">
-                      <div className="flex items-center gap-3">
-                        <Badge
-                          variant={cls.status === 'sql' ? 'default' : cls.status === 'mql' ? 'secondary' : 'outline'}
-                          className="text-[10px] uppercase"
-                        >
-                          {cls.status}
-                        </Badge>
-                        <Link to={`/contatos/${cls.contact_id}`} className="font-mono text-[11px] hover:underline truncate max-w-[200px]">
-                          {cls.contact_id.slice(0, 8)}...
-                        </Link>
-                        <span className="text-muted-foreground">score {cls.score_snapshot ?? '—'}</span>
-                        <span className="text-muted-foreground">{new Date(cls.qualified_at).toLocaleDateString('pt-BR')}</span>
-                      </div>
-                      {cls.status === 'mql' && (
-                        <div className="flex gap-1">
-                          <Button size="sm" variant="default" className="text-[11px] h-7" onClick={() => handoff.mutate({ id: cls.id, status: 'sql' })}>
-                            Promover SQL
-                          </Button>
-                          <Button size="sm" variant="ghost" className="text-[11px] h-7 text-destructive" onClick={() => handoff.mutate({ id: cls.id, status: 'disqualified' })}>
-                            Desqualificar
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
+          <TabsContent value="mql" className="space-y-6">
+            <MQLManager 
+              criteria={criteria}
+              classifications={classifications}
+              onHandoff={(id) => handoff.mutate({ id, status: 'sql' })}
+            />
+          </TabsContent>
 
         {/* ATTRIBUTION */}
         <TabsContent value="attribution" className="space-y-4">
