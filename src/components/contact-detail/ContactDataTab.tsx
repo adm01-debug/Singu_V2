@@ -17,6 +17,7 @@ import { TimeHeatmapCard } from './data-tab/TimeHeatmapCard';
 import { SocialMediaExternalCard } from './data-tab/SocialMediaExternalCard';
 import { ContactEnrichedCard } from './data-tab/ContactEnrichedCard';
 import { ExtraDataCard, BitrixIntegrationCard } from './data-tab/ExtraDataCards';
+import { ConsentAuditCard } from './data-tab/ConsentAuditCard';
 
 interface Props {
   contact: Contact;
@@ -139,6 +140,7 @@ export function ContactDataTab({ contact }: Props) {
         <ContactEnrichedCard contactId={contact.id} />
         <ExtraDataCard contact={contact} />
         <BitrixIntegrationCard contact={contact} />
+        <ConsentAuditCard contactId={contact.id} />
       </div>
     </div>
   );

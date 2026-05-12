@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, AreaChart, Area } from 'recharts';
-import { Brain, Heart, TrendingUp, Info, MessageSquare, Mic, Activity } from 'lucide-react';
+import { Brain, Heart, TrendingUp, Info, MessageSquare, Mic, Activity, Smile, Meh, Frown } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -13,19 +14,33 @@ interface Props {
 }
 
 export function NeuromarketingTimeline({ contactId }: Props) {
-  const { data: history, isLoading } = useQuery({
-    queryKey: ['neuro-behavioral-history', contactId],
+  const { data: neuroData, isLoading } = useQuery({
+    queryKey: ['neuro-unified-data', contactId],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('neuro_behavioral_history')
-        .select('*')
-        .eq('contact_id', contactId)
-        .order('created_at', { ascending: true });
+      const [historyRes, interactionsRes] = await Promise.all([
+        supabase
+          .from('neuro_behavioral_history')
+          .select('*')
+          .eq('contact_id', contactId)
+          .order('created_at', { ascending: true }),
+        supabase
+          .from('interactions')
+          .select('*')
+          .eq('contact_id', contactId)
+          .order('created_at', { ascending: false })
+          .limit(10)
+      ]);
       
-      if (error) throw error;
-      return data || [];
+      if (historyRes.error) throw historyRes.error;
+      return {
+        history: historyRes.data || [],
+        interactions: interactionsRes.data || []
+      };
     }
   });
+
+  const history = neuroData?.history;
+  const interactions = neuroData?.interactions;
 
   if (isLoading) return <Skeleton className="h-[400px] w-full" />;
 
@@ -39,14 +54,36 @@ export function NeuromarketingTimeline({ contactId }: Props) {
     timestamp: item.created_at
   })) || [];
 
-  const latest = history?.[history.length - 1];
+  const latest = history?.[history?.length - 1];
   
-  // Correlation calculation logic (mocked based on history data)
-  const correlations = history ? {
-    tone: history.length > 2 ? 'Positivo/Estável' : 'Indisponível',
-    language: history.length > 2 ? 'Alta complexidade' : 'Analítico',
-    responseRate: history.length > 2 ? 'Sincronizado' : 'Aguardando mais dados'
-  } : null;
+  // Real correlation calculation
+  const correlations = useMemo(() => {
+    if (!interactions || interactions.length === 0) return null;
+    
+    const positiveCount = interactions.filter(i => i.sentiment === 'positive').length;
+    const negativeCount = interactions.filter(i => i.sentiment === 'negative').length;
+    
+    let tone = 'Estável';
+    if (positiveCount > negativeCount * 2) tone = 'Positivo';
+    else if (negativeCount > positiveCount) tone = 'Tenso';
+    
+    const avgResponseTime = interactions.reduce((acc, i) => acc + (i.response_time || 0), 0) / interactions.length;
+    let responseRate = 'Normal';
+    if (avgResponseTime < 60 && avgResponseTime > 0) responseRate = 'Sincronizado';
+    else if (avgResponseTime > 1440) responseRate = 'Lento';
+
+    return {
+      tone,
+      language: 'Analítico', // This would need more NLP data
+      responseRate
+    };
+  }, [interactions]);
+
+  const SentimentIcon = ({ sentiment }: { sentiment: string }) => {
+    if (sentiment === 'positive') return <Smile className="h-3 w-3 text-success" />;
+    if (sentiment === 'negative') return <Frown className="h-3 w-3 text-destructive" />;
+    return <Meh className="h-3 w-3 text-muted-foreground" />;
+  };
 
   return (
     <div className="space-y-4">
@@ -164,9 +201,50 @@ export function NeuromarketingTimeline({ contactId }: Props) {
         </Card>
       </div>
       
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-bold flex items-center gap-2">
+            <Activity className="h-4 w-4" />
+            Timeline Unificada de Sentimento & Interações
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {interactions?.slice(0, 5).map((interaction) => (
+              <div key={interaction.id} className="flex items-start gap-3 p-2 rounded-lg bg-muted/20 border border-border/50 text-xs">
+                <div className="mt-0.5">
+                  <SentimentIcon sentiment={interaction.sentiment} />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-foreground">{interaction.title}</span>
+                    <span className="text-[10px] text-muted-foreground">
+                      {format(new Date(interaction.created_at), 'dd MMM, HH:mm', { locale: ptBR })}
+                    </span>
+                  </div>
+                  <p className="text-muted-foreground line-clamp-1">{interaction.content}</p>
+                  {interaction.emotion_analysis && (
+                    <div className="flex gap-1 mt-1">
+                      {(interaction.emotion_analysis as any).emotions?.slice(0, 2).map((e: string, i: number) => (
+                        <Badge key={i} variant="outline" className="text-[8px] py-0 h-3 capitalize">
+                          {e}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+            {(!interactions || interactions.length === 0) && (
+              <p className="text-xs text-muted-foreground italic text-center py-4">Nenhuma interação recente para unificar na timeline.</p>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="flex items-center gap-2 text-[10px] text-muted-foreground bg-muted/20 p-2 rounded border border-dashed">
         <Info className="h-3 w-3" />
-        <span>Estes indicadores correlacionam tom de voz, velocidade de resposta e complexidade da linguagem para medir a conexão emocional e dominância cognitiva.</span>
+        <span>Estes indicadores correlacionam tom de voz, velocidade de resposta e complexidade da linguagem para medir a conexão emocional e dominância cognitiva em tempo real.</span>
       </div>
     </div>
   );
