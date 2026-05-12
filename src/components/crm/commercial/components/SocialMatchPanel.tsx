@@ -1,8 +1,11 @@
-import { Info, Globe, Hash, ExternalLink } from 'lucide-react';
+import { Info, Globe, Hash, ExternalLink, ListFilter } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { SocialMatchDetails } from './SocialMatchDetails';
 
 interface Props {
+  contactId: string;
+  offerName: string;
   metadata: {
     sources?: string[];
     keywords?: string[];
@@ -10,7 +13,7 @@ interface Props {
   };
 }
 
-export function SocialMatchPanel({ metadata }: Props) {
+export function SocialMatchPanel({ contactId, offerName, metadata }: Props) {
   if (!metadata || (!metadata.sources && !metadata.keywords)) return null;
 
   return (
@@ -55,6 +58,8 @@ export function SocialMatchPanel({ metadata }: Props) {
           </div>
         )}
       </div>
+
+      <SocialMatchDetails contactId={contactId} metadata={metadata} offerName={offerName} />
     </div>
   );
 }
