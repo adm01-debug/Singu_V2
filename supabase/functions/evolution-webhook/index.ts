@@ -277,7 +277,7 @@ async function handleMessageUpsert(supabase: any, payload: any, instance: string
   // Find contact using enhanced search (local -> external -> create)
   const { contactId, userId, companyId, source } = await findContactByPhone(supabase, phoneNumber || '');
 
-  // Save WhatsApp message
+  // Enhanced automated ingestion: WhatsApp messages, company link and audio handling
   let dbMessageId = null;
   if (userId) {
     const messageData = {
@@ -299,6 +299,7 @@ async function handleMessageUpsert(supabase: any, payload: any, instance: string
         participant: data.participant,
         instanceId: data.instanceId,
         contactSource: source,
+        company_id: companyId, // Explicitly link to company
       },
     };
 
@@ -315,48 +316,53 @@ async function handleMessageUpsert(supabase: any, payload: any, instance: string
         message_id: messageId,
         event_type: 'message',
         status: 'success',
-        details: { dbMessageId: upsertedMsg.id, source }
+        details: { dbMessageId: upsertedMsg.id, source, companyId }
       });
-    }
-
-    if (msgError) {
-      console.error('Error upserting whatsapp_message:', msgError.message);
-      // If upsert fails (e.g. duplicate from parallel request), try simple insert or select
-      const { data: insertedMsg, error: insertError } = await supabase.from('whatsapp_messages').insert(messageData).select('id').single();
-      if (!insertError) dbMessageId = insertedMsg.id;
-    } else {
       dbMessageId = upsertedMsg.id;
+    } else if (msgError) {
+      console.error('Error upserting whatsapp_message:', msgError.message);
+      // Retry for parallel edge cases
+      const { data: fallbackMsg } = await supabase.from('whatsapp_messages').select('id').eq('message_id', messageId).single();
+      if (fallbackMsg) dbMessageId = fallbackMsg.id;
     }
 
-    // Ingestão automática: Se for áudio, disparar transcrição
+    // Automated transcription for voice messages/attachments
     if (messageType === 'audio' && dbMessageId) {
-      // Log start of transcription
-      await supabase.from('whatsapp_ingestion_logs').insert({
+       await supabase.from('whatsapp_ingestion_logs').insert({
         user_id: userId,
         contact_id: contactId,
         message_id: messageId,
-        event_type: 'transcription',
+        event_type: 'transcription_init',
         status: 'pending',
         details: { dbMessageId }
       });
 
+      // Invoke voice-to-text with auto-save to interaction
       supabase.functions.invoke('voice-to-text', {
         body: {
           whatsappMessageId: dbMessageId,
           userId,
+          autoSave: true, // New flag for server-side persistence
+          contactId,
+          companyId
         },
       }).then(async ({ data: resp, error }) => {
         if (!error && resp?.success) {
-           await supabase.from('whatsapp_ingestion_logs').insert({
+          await supabase.from('whatsapp_ingestion_logs').insert({
             user_id: userId,
             contact_id: contactId,
             message_id: messageId,
-            event_type: 'transcription',
+            event_type: 'transcription_complete',
             status: 'success',
-            details: { dbMessageId, text: resp.text }
+            details: { dbMessageId, transcription: resp.text, interactionId: resp.interactionId }
           });
+          
+          // Trigger analytical profile update after new data
+          supabase.functions.invoke('social-behavior-analyzer', {
+            body: { contactId, userId, companyId }
+          }).catch(console.error);
         }
-      }).catch((err: any) => console.error('Transcription trigger error:', err));
+      }).catch(err => console.error('Transcription async error:', err));
     }
   }
 
