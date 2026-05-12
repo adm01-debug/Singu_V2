@@ -17,6 +17,7 @@ import { useMQLCriteria, useMQLClassifications, useHandoffMQL } from '@/hooks/us
  import { AttributionBreakdownChart } from '@/components/marketing/AttributionBreakdownChart';
  import { MarketingStats } from '@/components/crm/marketing/components/MarketingStats';
  import { FormList } from '@/components/crm/marketing/components/FormList';
+ import { LeadMagnetList } from '@/components/crm/marketing/components/LeadMagnetList';
  import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -215,75 +216,72 @@ export default function MarketingHub() {
             )}
           </TabsContent>
 
-        {/* MAGNETS */}
-        <TabsContent value="magnets" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center justify-between">
-                <span>Novo lead magnet</span>
-                <Button
-                  size="sm"
-                  variant="default"
-                  className="gap-1"
-                  disabled={!newMagnetTitle.trim()}
-                  onClick={() => {
-                    upsertMagnet.mutate(
-                      { title: newMagnetTitle, slug: `${slugify(newMagnetTitle)}-${Date.now().toString(36).slice(-4)}`, type: 'ebook' },
-                      { onSuccess: () => setNewMagnetTitle('') }
-                    );
-                  }}
-                >
-                  <Plus className="w-4 h-4" /> Criar
-                </Button>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Input placeholder="Título (ex: Ebook ROI 2026)" value={newMagnetTitle} onChange={(e) => setNewMagnetTitle(e.target.value)} />
-            </CardContent>
-          </Card>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {magnets.map((m) => (
-              <Card key={m.id} variant="outlined" className="hover:border-primary/40 transition">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="space-y-0.5 min-w-0">
-                      <CardTitle className="text-sm truncate">{m.title}</CardTitle>
-                      <Badge variant="secondary" className="text-[10px] capitalize mt-1">{m.type}</Badge>
+          <TabsContent value="magnets" className="space-y-6">
+            <div className="flex items-center justify-between gap-4">
+              <div className="relative flex-1 max-w-sm">
+                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input placeholder="Filtrar lead magnets..." className="pl-9" />
+              </div>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="gap-2 shadow-sm">
+                    <Plus className="w-4 h-4" /> Novo Magnet
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Criar Novo Lead Magnet</DialogTitle>
+                  </DialogHeader>
+                  <div className="py-4 space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="magnet-title">Título do Lead Magnet</Label>
+                      <Input 
+                        id="magnet-title" 
+                        placeholder="Ex: Ebook Tendências CRM 2026" 
+                        value={newMagnetTitle} 
+                        onChange={(e) => setNewMagnetTitle(e.target.value)} 
+                      />
                     </div>
-                    <Switch checked={m.is_published} onCheckedChange={(v) => togglePM.mutate({ id: m.id, is_published: v })} />
                   </div>
-                </CardHeader>
-                <CardContent className="space-y-2 text-xs">
-                  <div className="flex items-center gap-3 text-muted-foreground">
-                    <span>{m.view_count} views</span>
-                    <span>·</span>
-                    <span>{m.download_count} downloads</span>
-                  </div>
-                  <div className="flex gap-1.5 pt-1">
-                    <Button asChild size="sm" variant="outline" className="flex-1 text-xs gap-1">
-                      <Link to={`/marketing/lead-magnets/${m.id}`}>Editar</Link>
+                  <DialogFooter>
+                    <Button
+                      disabled={!newMagnetTitle.trim()}
+                      onClick={() => {
+                        upsertMagnet.mutate(
+                          { title: newMagnetTitle, slug: `${slugify(newMagnetTitle)}-${Date.now().toString(36).slice(-4)}`, type: 'ebook' },
+                          { onSuccess: () => setNewMagnetTitle('') }
+                        );
+                      }}
+                    >
+                      Criar Lead Magnet
                     </Button>
-                    <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => copyUrl(m.slug, 'lm')}>
-                      <Copy className="w-3.5 h-3.5" />
-                    </Button>
-                    {m.is_published && (
-                      <Button asChild size="icon" variant="ghost" className="h-8 w-8">
-                        <a href={`/lm/${m.slug}`} target="_blank" rel="noreferrer"><ExternalLink className="w-3.5 h-3.5" /></a>
-                      </Button>
-                    )}
-                    <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive" onClick={() => removeMagnet.mutate(m.id)}>
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+ 
+            <LeadMagnetList 
+              magnets={magnets}
+              onTogglePublish={(id, is_published) => togglePM.mutate({ id, is_published })}
+              onCopyUrl={(slug) => copyUrl(slug, 'lm')}
+              onRemove={(id) => removeMagnet.mutate(id)}
+            />
+            
             {magnets.length === 0 && (
-              <p className="text-sm text-muted-foreground col-span-full text-center py-8">Nenhum lead magnet ainda.</p>
+              <div className="flex flex-col items-center justify-center py-24 text-center border-2 border-dashed rounded-xl bg-muted/20">
+                <div className="p-4 rounded-full bg-primary/10 mb-4">
+                  <Sparkles className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold">Crie sua primeira isca digital</h3>
+                <p className="text-sm text-muted-foreground max-w-xs mx-auto mt-2">
+                  Ebooks, templates e checklists são a melhor forma de gerar leads qualificados.
+                </p>
+                <Button variant="outline" className="mt-6">
+                  Ver modelos recomendados
+                </Button>
+              </div>
             )}
-          </div>
-        </TabsContent>
+          </TabsContent>
 
         {/* NURTURING */}
         <TabsContent value="nurturing" className="space-y-4">
