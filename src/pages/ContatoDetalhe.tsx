@@ -40,7 +40,7 @@ import { ValidateAllButton } from '@/components/enrichment/ValidateAllButton';
 import { PeopleIntelTimeline } from '@/components/enrichment/PeopleIntelTimeline';
 import { ContactEmailThreadsSection } from '@/components/contact-detail/ContactEmailThreadsSection';
    import { SentimentTrendChart } from '@/components/contact-detail/SentimentTrendChart';
-   import { NextBestActionCard } from '@/components/contact-detail/NextBestActionCard';
+   import { NextBestAction } from '@/components/crm/NextBestAction';
    import { SocialMediaIntelligenceCard } from '@/components/contact-detail/SocialMediaIntelligenceCard';
    import { EscalationAutomation } from '@/components/crm/EscalationAutomation';
 
@@ -215,17 +215,14 @@ const ContatoDetalhe = () => {
           <TabsContent value="resumo">
             <DashboardErrorBoundary sectionName="Resumo">
               <div className="space-y-4">
-                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-                   <div className="xl:col-span-2">
-                     <NextBestActionCard
-                       contactId={contact.id}
-                       contactName={formatContactName(contact.first_name, contact.last_name)}
-                     />
-                   </div>
-                   <div className="xl:col-span-1">
-                     <EscalationAutomation contactId={contact.id} />
-                   </div>
-                 </div>
+                  <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+                    <div className="xl:col-span-2">
+                      <NextBestAction contactId={contact.id} />
+                    </div>
+                    <div className="xl:col-span-1">
+                      <EscalationAutomation contactId={contact.id} />
+                    </div>
+                  </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   <ContactOverviewTab
                     contact={contact}
