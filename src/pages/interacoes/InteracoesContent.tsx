@@ -612,7 +612,14 @@ interface Props {
                   const delayCap = isCompact ? 0.15 : 0.3;
                   const delayStep = isCompact ? 0.015 : 0.03;
                   return (
-                    <motion.div key={interaction.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.2, delay: Math.min(index * delayStep, delayCap) }} className={`relative ${isCompact ? 'pl-12' : 'pl-16'} group`}>
+                     <motion.div 
+                       key={interaction.id} 
+                       initial={{ opacity: 0, x: -20 }} 
+                       animate={{ opacity: 1, x: 0 }} 
+                       transition={{ duration: 0.2, delay: Math.min(index * delayStep, delayCap) }} 
+                       className={`relative ${isCompact ? 'pl-12' : 'pl-16'} group cursor-pointer`}
+                       onClick={() => isSelectionMode && handleToggleSelection(interaction.id)}
+                     >
                       <div className={`absolute ${isCompact ? 'left-3 top-3 w-7 h-7' : 'left-2 top-4 w-10 h-10'} rounded-full flex items-center justify-center ${interactionColors[interaction.type]} border-4 border-background z-10`}><Icon className={isCompact ? 'w-3 h-3' : 'w-4 h-4'} /></div>
                       <Card className="card-hover"><CardContent className={isCompact ? 'p-2.5' : 'p-4'}>
                         <div className={`flex items-start justify-between ${isCompact ? 'mb-1.5' : 'mb-3'}`}>
