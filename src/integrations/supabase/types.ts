@@ -2669,6 +2669,57 @@ export type Database = {
           },
         ]
       }
+      contact_objection_scripts: {
+        Row: {
+          contact_id: string
+          created_at: string | null
+          effectiveness_score: number | null
+          id: string
+          neurological_bias: string | null
+          objection_type: string
+          script_content: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string | null
+          effectiveness_score?: number | null
+          id?: string
+          neurological_bias?: string | null
+          objection_type: string
+          script_content: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string | null
+          effectiveness_score?: number | null
+          id?: string
+          neurological_bias?: string | null
+          objection_type?: string
+          script_content?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_objection_scripts_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_objection_scripts_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
       contact_personality: {
         Row: {
           big_five_agreeableness: number | null
@@ -2751,6 +2802,60 @@ export type Database = {
             foreignKeyName: "contact_personality_contact_id_fkey"
             columns: ["contact_id"]
             isOneToOne: true
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
+      contact_predictive_roadmap: {
+        Row: {
+          contact_id: string
+          created_at: string | null
+          forecast_month: string
+          id: string
+          predicted_need: string
+          probability: number | null
+          rationale: string | null
+          suggested_offering: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string | null
+          forecast_month: string
+          id?: string
+          predicted_need: string
+          probability?: number | null
+          rationale?: string | null
+          suggested_offering?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string | null
+          forecast_month?: string
+          id?: string
+          predicted_need?: string
+          probability?: number | null
+          rationale?: string | null
+          suggested_offering?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_predictive_roadmap_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_predictive_roadmap_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
             referencedRelation: "vw_contacts_nlp"
             referencedColumns: ["contact_id"]
           },

@@ -1,8 +1,13 @@
-import React from 'react';
+ import React, { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { TrendingUp, ArrowRight, ShieldCheck, Zap, AlertTriangle, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
+ import { useQuery } from '@tanstack/react-query';
+ import { supabase } from '@/integrations/supabase/client';
+ import { format } from 'date-fns';
+ import { ptBR } from 'date-fns/locale';
+ import { Skeleton } from '@/components/ui/skeleton';
 
 interface RoadmapItem {
   month: string;
@@ -14,33 +19,34 @@ interface RoadmapItem {
 }
 
 export function PredictiveRoadmap({ contactId }: { contactId: string }) {
-  // In a real app, this would be fetched from an AI-powered endpoint
-  const steps: RoadmapItem[] = [
-    {
-      month: 'Mês 1',
-      title: 'Consolidação de Confiança',
-      probability: 85,
-      risk: 'low',
-      action: 'Manter cadência de valor quinzenal',
-      insight: 'Contato valoriza consistência técnica antes de decisões.'
-    },
-    {
-      month: 'Mês 3',
-      title: 'Janela de Decisão Estratégica',
-      probability: 65,
-      risk: 'medium',
-      action: 'Apresentar ROI e Prova Social',
-      insight: 'Aprovação orçamentária costuma ocorrer neste ciclo.'
-    },
-    {
-      month: 'Mês 6',
-      title: 'Expansão de Relacionamento',
-      probability: 40,
-      risk: 'high',
-      action: 'Indicação e Upsell',
-      insight: 'Potencial de se tornar um evangelista da marca se o onboarding for perfeito.'
-    }
-  ];
+   const { data: roadmapData, isLoading } = useQuery({
+     queryKey: ['contact-predictive-roadmap', contactId],
+     queryFn: async () => {
+       const { data, error } = await supabase
+         .from('contact_predictive_roadmap')
+         .select('*')
+         .eq('contact_id', contactId)
+         .order('forecast_month', { ascending: true });
+       
+       if (error) throw error;
+       return data;
+     }
+   });
+ 
+   const steps: RoadmapItem[] = useMemo(() => {
+     if (!roadmapData || roadmapData.length === 0) return [];
+     
+     return roadmapData.map((item: any) => ({
+       month: format(new Date(item.forecast_month), 'MMMM yyyy', { locale: ptBR }),
+       title: item.predicted_need,
+       probability: item.probability,
+       risk: item.probability < 50 ? 'high' : item.probability < 75 ? 'medium' : 'low',
+       action: item.suggested_offering,
+       insight: item.rationale
+     }));
+   }, [roadmapData]);
+ 
+   if (isLoading) return <div className="space-y-4"><Skeleton className="h-[120px] w-full" /><Skeleton className="h-[120px] w-full" /></div>;
 
   return (
     <div className="space-y-6">
@@ -60,7 +66,7 @@ export function PredictiveRoadmap({ contactId }: { contactId: string }) {
       <div className="relative">
         <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/50 via-primary/20 to-transparent" />
         <div className="space-y-8">
-          {steps.map((step, index) => (
+           {steps.length > 0 ? steps.map((step, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, x: -20 }}
@@ -115,7 +121,15 @@ export function PredictiveRoadmap({ contactId }: { contactId: string }) {
                 </CardContent>
               </Card>
             </motion.div>
-          ))}
+           )) : (
+             <div className="py-12 flex flex-col items-center justify-center text-center space-y-3 opacity-50">
+               <div className="h-12 w-12 rounded-full bg-primary/5 flex items-center justify-center">
+                 <Target className="h-6 w-6 text-primary/40" />
+               </div>
+               <p className="text-sm font-medium">Nenhum roadmap gerado ainda</p>
+               <p className="text-[10px] max-w-[200px]">A IA precisa de mais interações para projetar o futuro deste contato.</p>
+             </div>
+           )}
         </div>
       </div>
 
