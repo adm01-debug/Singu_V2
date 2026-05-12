@@ -8,7 +8,11 @@ import {
   ThumbsUp,
   MessageSquare,
   Calendar,
-  ArrowUpRight
+   ArrowUpRight,
+   Heart,
+   FileText,
+   Briefcase,
+   HelpCircle
 } from 'lucide-react';
 import {
   Dialog,
@@ -98,15 +102,25 @@ export function SocialMatchDetails({ contactId, metadata, offerName }: Props) {
                       matchedInsights.map((insight) => (
                         <div key={insight.id} className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-3 hover:border-indigo-300 transition-colors">
                           <div className="flex items-center justify-between">
-                            <Badge variant="outline" className={cn(
-                              "text-[10px] uppercase font-bold gap-1",
-                              insight.platform === 'linkedin' ? "border-blue-200 text-blue-700 bg-blue-50" :
-                              insight.platform === 'instagram' ? "border-pink-200 text-pink-700 bg-pink-50" :
-                              "border-slate-200 text-slate-700 bg-slate-50"
-                            )}>
-                              <ExternalLink className="h-2.5 w-2.5" />
-                              {insight.platform}
-                            </Badge>
+                             <div className="flex items-center gap-2">
+                               <Badge variant="outline" className={cn(
+                                 "text-[10px] uppercase font-bold gap-1",
+                                 insight.platform === 'linkedin' ? "border-blue-200 text-blue-700 bg-blue-50" :
+                                 insight.platform === 'instagram' ? "border-pink-200 text-pink-700 bg-pink-50" :
+                                 "border-slate-200 text-slate-700 bg-slate-50"
+                               )}>
+                                 <ExternalLink className="h-2.5 w-2.5" />
+                                 {insight.platform}
+                               </Badge>
+                               <Badge variant="secondary" className="text-[10px] uppercase font-bold bg-slate-100 text-slate-600 border-none gap-1 px-1.5 h-5">
+                                 {insight.insight_type === 'like' && <Heart className="h-2.5 w-2.5" />}
+                                 {insight.insight_type === 'post' && <FileText className="h-2.5 w-2.5" />}
+                                 {insight.insight_type === 'career_move' && <Briefcase className="h-2.5 w-2.5" />}
+                                 {insight.insight_type === 'interest' && <ThumbsUp className="h-2.5 w-2.5" />}
+                                 {(!insight.insight_type || (insight.insight_type !== 'like' && insight.insight_type !== 'post' && insight.insight_type !== 'career_move' && insight.insight_type !== 'interest')) && <HelpCircle className="h-2.5 w-2.5" />}
+                                 {insight.insight_type || 'interação'}
+                               </Badge>
+                             </div>
                             <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
                               <Calendar className="h-3 w-3" />
                               {format(new Date(insight.created_at), "dd MMM yyyy", { locale: ptBR })}
