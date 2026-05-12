@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { 
   Target, 
   Loader2, 
@@ -10,7 +10,10 @@ import {
   Copy,
   ChevronRight,
   MessageSquare,
-  Zap
+  Zap,
+  ShieldAlert,
+  RefreshCw,
+  ChevronDown
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,6 +21,12 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Label } from '@/components/ui/label';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu';
 import { useEdgeFunctionActions } from '@/hooks/useEdgeFunctionActions';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -31,11 +40,20 @@ interface Props {
 
 export function NextBestAction({ contactId }: Props) {
   const { user } = useAuth();
-  const { loading, suggestNextAction } = useEdgeFunctionActions();
+  const { loading, suggestNextAction, invoke } = useEdgeFunctionActions();
   const [suggestion, setSuggestion] = useState<any>(null);
   const [script, setScript] = useState('');
   const [feedback, setFeedback] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isHandlingObjection, setIsHandlingObjection] = useState(false);
+
+  const commonObjections = useMemo(() => [
+    { id: 'price', label: 'Preço / Orçamento', icon: '💰' },
+    { id: 'timing', label: 'Não é o momento', icon: '⏳' },
+    { id: 'competitor', label: 'Já usa concorrente', icon: '🥊' },
+    { id: 'authority', label: 'Preciso falar com chefe', icon: '👨‍💼' },
+    { id: 'value', label: 'Não entendi o valor', icon: '❓' },
+  ], []);
 
   const handleSuggest = useCallback(async () => {
     const result = await suggestNextAction(contactId);
@@ -44,6 +62,21 @@ export function NextBestAction({ contactId }: Props) {
       setScript(result.suggestion.suggested_message || '');
     }
   }, [contactId, suggestNextAction]);
+
+  const handleObjection = async (objectionId: string) => {
+    setIsHandlingObjection(true);
+    try {
+      const result = await (invoke as any)('objection-handler', { contactId, objectionId });
+      if (result && result.suggestion) {
+        setSuggestion(result.suggestion);
+        setScript(result.suggestion.suggested_message || '');
+      }
+    } catch (error) {
+      toast.error('Erro ao processar objeção');
+    } finally {
+      setIsHandlingObjection(false);
+    }
+  };
 
   const handleComplete = async () => {
     if (!suggestion || !user) return;
@@ -106,19 +139,38 @@ export function NextBestAction({ contactId }: Props) {
             </div>
           </div>
           {!suggestion && (
-            <Button 
-              size="sm" 
-              className="h-8 gap-2 text-xs" 
-              onClick={handleSuggest}
-              disabled={loading['suggest-next-action']}
-            >
-              {loading['suggest-next-action'] ? (
-                <Loader2 className="h-3 w-3 animate-spin" />
-              ) : (
-                <Zap className="h-3 w-3" />
-              )}
-              Analisar Contexto
-            </Button>
+            <div className="flex gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="h-8 gap-2 text-xs">
+                    {isHandlingObjection ? <Loader2 className="h-3 w-3 animate-spin" /> : <ShieldAlert className="h-3 w-3" />}
+                    Contornar Objeção
+                    <ChevronDown className="h-3 w-3 opacity-50" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  {commonObjections.map((obj) => (
+                    <DropdownMenuItem key={obj.id} onClick={() => handleObjection(obj.id)} className="text-xs gap-2">
+                      <span>{obj.icon}</span> {obj.label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Button 
+                size="sm" 
+                className="h-8 gap-2 text-xs" 
+                onClick={handleSuggest}
+                disabled={loading['suggest-next-action']}
+              >
+                {loading['suggest-next-action'] ? (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                ) : (
+                  <Zap className="h-3 w-3" />
+                )}
+                Analisar Contexto
+              </Button>
+            </div>
           )}
         </div>
       </CardHeader>
