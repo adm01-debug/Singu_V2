@@ -39,7 +39,8 @@ const interactionSchema = z.object({
    content: z.string().trim().max(5000, 'Máximo 5000 caracteres').optional().nullable(),
   sentiment: z.string().optional(),
   initiated_by: z.string().optional(),
-  duration: z.number().min(0).optional().nullable(),
+   duration: z.number().min(0).optional().nullable(),
+   response_time: z.number().min(0).optional().nullable(),
   follow_up_required: z.boolean().optional(),
    follow_up_date: z.string().optional().nullable(),
    tags: z.array(z.string()).optional(),
@@ -103,7 +104,8 @@ export function InteractionForm({
       content: interaction?.content || '',
       sentiment: interaction?.sentiment || 'neutral',
       initiated_by: interaction?.initiated_by || 'us',
-      duration: interaction?.duration || null,
+       duration: interaction?.duration || null,
+       response_time: interaction?.response_time || null,
       follow_up_required: interaction?.follow_up_required || false,
        follow_up_date: interaction?.follow_up_date || '',
        tags: (interaction?.tags as string[]) || [],
@@ -166,7 +168,8 @@ export function InteractionForm({
     const cleanedData = {
       ...data,
       content: data.content || null,
-      duration: data.duration || null,
+       duration: data.duration || null,
+       response_time: data.response_time || null,
       follow_up_date: data.follow_up_required && data.follow_up_date ? data.follow_up_date : null,
       company_id: data.company_id || null,
     };
@@ -356,25 +359,46 @@ export function InteractionForm({
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="duration"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Duração (minutos)</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="number" 
-                    placeholder="15" 
-                    {...field}
-                    value={field.value || ''}
-                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) * 60 : null)}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+           <div className="grid grid-cols-2 gap-4">
+             <FormField
+               control={form.control}
+               name="duration"
+               render={({ field }) => (
+                 <FormItem>
+                   <FormLabel>Duração (min)</FormLabel>
+                   <FormControl>
+                     <Input 
+                       type="number" 
+                       placeholder="15" 
+                       {...field}
+                       value={field.value ? field.value / 60 : ''}
+                       onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) * 60 : null)}
+                     />
+                   </FormControl>
+                   <FormMessage />
+                 </FormItem>
+               )}
+             />
+             <FormField
+               control={form.control}
+               name="response_time"
+               render={({ field }) => (
+                 <FormItem>
+                   <FormLabel>Tempo Resposta (min)</FormLabel>
+                   <FormControl>
+                     <Input 
+                       type="number" 
+                       placeholder="10" 
+                       {...field}
+                       value={field.value || ''}
+                       onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                     />
+                   </FormControl>
+                   <FormMessage />
+                 </FormItem>
+               )}
+             />
+           </div>
 
           <FormField
             control={form.control}
