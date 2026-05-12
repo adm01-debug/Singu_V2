@@ -120,52 +120,67 @@ export function RelationshipKPIsDashboard() {
     }
   });
 
-  useEffect(() => {
-    const channel = supabase
-      .channel('crm-pulse')
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'interactions' },
-        async (payload) => {
-          const { data: contact } = await supabase
-            .from('contacts')
-            .select('first_name, last_name')
-            .eq('id', payload.new.contact_id)
-            .single();
-          
-          const newEvent = {
-            id: payload.new.id,
-            type: 'interaction',
-            title: payload.new.title,
-            contact: contact ? `${contact.first_name} ${contact.last_name}` : 'Contato Desconhecido',
-            sentiment: payload.new.sentiment,
-            timestamp: new Date().toISOString()
-          };
-          
-          setLiveEvents(prev => [newEvent, ...prev].slice(0, 5));
-          toast.info(`Nova interação: ${newEvent.contact}`, {
-            description: payload.new.title,
-            icon: <Bell className="h-4 w-4 text-primary" />
-          });
-          
-          queryClient.invalidateQueries({ queryKey: ['relationship-kpis'] });
-        }
-      )
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'neuro_behavioral_history' },
-        (payload) => {
-          const newEvent = {
-            id: payload.new.id,
-            type: 'behavior',
-            title: 'Análise de Comportamento Atualizada',
-            contact: 'Inteligência Artificial',
-            timestamp: new Date().toISOString()
-          };
-          setLiveEvents(prev => [newEvent, ...prev].slice(0, 5));
-        }
-      )
-      .subscribe();
+   useEffect(() => {
+     const channel = supabase
+       .channel('crm-pulse')
+       .on(
+         'postgres_changes',
+         { event: 'INSERT', schema: 'public', table: 'interactions' },
+         async (payload) => {
+           const { data: contact } = await supabase
+             .from('contacts')
+             .select('first_name, last_name')
+             .eq('id', payload.new.contact_id)
+             .single();
+           
+           const newEvent = {
+             id: payload.new.id,
+             type: 'interaction',
+             title: payload.new.title,
+             contact: contact ? `${contact.first_name} ${contact.last_name}` : 'Contato Desconhecido',
+             sentiment: payload.new.sentiment,
+             timestamp: new Date().toISOString()
+           };
+           
+           setLiveEvents(prev => [newEvent, ...prev].slice(0, 5));
+           toast.info(`Nova interação: ${newEvent.contact}`, {
+             description: payload.new.title,
+             icon: <Bell className="h-4 w-4 text-primary" />
+           });
+           
+           queryClient.invalidateQueries({ queryKey: ['relationship-kpis'] });
+         }
+       )
+       .on(
+         'postgres_changes',
+         { event: 'INSERT', schema: 'public', table: 'crm_objection_intelligence' },
+         (payload) => {
+           const newEvent = {
+             id: payload.new.id,
+             type: 'objection',
+             title: `Objeção: ${payload.new.objection_type}`,
+             contact: 'Inteligência de Vendas',
+             timestamp: new Date().toISOString()
+           };
+           setLiveEvents(prev => [newEvent, ...prev].slice(0, 5));
+           queryClient.invalidateQueries({ queryKey: ['crm-intelligence-summary'] });
+         }
+       )
+       .on(
+         'postgres_changes',
+         { event: 'INSERT', schema: 'public', table: 'neuro_behavioral_history' },
+         (payload) => {
+           const newEvent = {
+             id: payload.new.id,
+             type: 'behavior',
+             title: 'Análise de Comportamento Atualizada',
+             contact: 'IA Neuro-Sync',
+             timestamp: new Date().toISOString()
+           };
+           setLiveEvents(prev => [newEvent, ...prev].slice(0, 5));
+         }
+       )
+       .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
