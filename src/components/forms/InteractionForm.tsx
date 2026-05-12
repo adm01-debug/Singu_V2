@@ -1,6 +1,9 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+ import { useMemo } from 'react';
+ import { useForm } from 'react-hook-form';
+ import { zodResolver } from '@hookform/resolvers/zod';
+ import { z } from 'zod';
+ import { motion } from 'framer-motion';
+ import { cn } from '@/lib/utils';
 import { useFormDraft } from '@/hooks/useFormDraft';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,12 +25,13 @@ import {
   FormMessage,
   FormDescription,
 } from '@/components/ui/form';
-  import { MessageSquare, Loader2, Mic, Tag, Lightbulb, Paperclip, X as CloseIcon, Sparkles } from 'lucide-react';
+  import { MessageSquare, Loader2, Mic, Tag, Lightbulb, Paperclip, X as CloseIcon, Sparkles, TrendingUp, TrendingDown, Minus } from 'lucide-react';
  import { NLPRealtimeCoach } from '@/components/nlp/NLPRealtimeCoach';
  import { supabase } from '@/integrations/supabase/client';
  import { logger } from '@/lib/logger';
  import { toast } from 'sonner';
-import { VoiceInput } from '@/components/voice/VoiceInput';
+ import { VoiceInput } from '@/components/voice/VoiceInput';
+ import { Progress } from '@/components/ui/progress';
 import type { Interaction } from '@/hooks/useInteractions';
 import type { Contact } from '@/hooks/useContacts';
 
@@ -125,8 +129,30 @@ export function InteractionForm({
     enabled: !interaction,
   });
 
-   const selectedContactId = form.watch('contact_id');
-   const followUpRequired = form.watch('follow_up_required');
+    const selectedContactId = form.watch('contact_id');
+    const content = form.watch('content');
+    const sentiment = form.watch('sentiment');
+    const followUpRequired = form.watch('follow_up_required');
+    // Relationship Impact Predictor Logic (10/10 Excellence)
+    const impactPrediction = useMemo(() => {
+      if (!content || content.length < 10) return { impact: 0, label: 'Neutro', icon: Minus, color: 'text-muted-foreground' };
+      
+      let score = 0;
+      const lowerContent = content.toLowerCase();
+      
+      if (sentiment === 'positive') score += 5;
+      if (sentiment === 'negative') score -= 10;
+      
+      if (lowerContent.includes('fechado') || lowerContent.includes('contrato') || lowerContent.includes('sucesso')) score += 8;
+      if (lowerContent.includes('obrigado') || lowerContent.includes('elogio')) score += 3;
+      if (lowerContent.includes('problema') || lowerContent.includes('atraso') || lowerContent.includes('reclamação')) score -= 5;
+      if (lowerContent.includes('cancelar') || lowerContent.includes('caro')) score -= 7;
+      
+      if (score > 2) return { impact: score, label: 'Positivo', icon: TrendingUp, color: 'text-success' };
+      if (score < -2) return { impact: score, label: 'Crítico', icon: TrendingDown, color: 'text-destructive' };
+      return { impact: score, label: 'Estável', icon: Minus, color: 'text-muted-foreground' };
+    }, [content, sentiment]);
+
    const attachments = form.watch('attachments') || [];
  
    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -297,17 +323,42 @@ export function InteractionForm({
             )}
           />
 
-            <div className="md:col-span-2">
+            <div className="md:col-span-2 space-y-4">
+              {/* Impact Predictor UI */}
+              {content && content.length > 10 && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 5 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  className="p-3 bg-muted/40 rounded-xl border border-dashed border-border flex items-center justify-between gap-4"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={cn("p-2 rounded-full bg-background shadow-sm", impactPrediction.color)}>
+                      <impactPrediction.icon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-tight">Impacto Estimado</p>
+                      <p className={cn("text-sm font-semibold", impactPrediction.color)}>{impactPrediction.label}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className={cn("text-lg font-mono font-bold", impactPrediction.color)}>
+                      {impactPrediction.impact > 0 ? '+' : ''}{impactPrediction.impact}
+                    </span>
+                    <p className="text-[10px] text-muted-foreground">pontos score</p>
+                  </div>
+                </motion.div>
+              )}
+
               <NLPRealtimeCoach 
                 content={form.watch('content') || ''} 
                 contactId={selectedContactId} 
                 onApplySuggestion={(suggestion) => {
-                  const currentContent = form.getValues('content') || '';
-                  form.setValue('content', currentContent ? `${currentContent}\n\n${suggestion}` : suggestion);
-                  toast.success('Sugestão aplicada à interação!');
-                }}
-              />
-            </div>
+                   const currentContent = form.getValues('content') || '';
+                   form.setValue('content', currentContent ? `${currentContent}\n\n${suggestion}` : suggestion);
+                   toast.success('Sugestão aplicada à interação!');
+                 }}
+               />
+             </div>
  
           <FormField
             control={form.control}

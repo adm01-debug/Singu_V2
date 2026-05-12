@@ -17,7 +17,8 @@ import { AdvancedFilters, type FilterConfig, type SortOption } from '@/component
 import { MorphingNumber } from '@/components/micro-interactions/MorphingNumber';
 import { SmartBreadcrumbs } from '@/components/navigation/SmartBreadcrumbs';
 import { sortArray } from '@/lib/sorting-utils';
-import { sortInteractions } from '@/lib/sortInteractions';
+ import { sortInteractions } from '@/lib/sortInteractions';
+ import { cn } from '@/lib/utils';
 import type { Interaction } from '@/hooks/useInteractions';
 import type { SentimentType } from '@/types';
 import { format, formatDistanceToNow } from 'date-fns';
@@ -26,7 +27,9 @@ import { AdvancedSearchBar } from '@/components/interactions/AdvancedSearchBar';
 import { ActiveFiltersBar } from '@/components/interactions/ActiveFiltersBar';
 import { SavedViewsMenu } from '@/components/interactions/SavedViewsMenu';
 import { ChannelShortcutsHelpOverlay } from '@/components/interactions/ChannelShortcutsHelpOverlay';
-import { PaginationBar } from '@/components/interactions/PaginationBar';
+ import { PaginationBar } from '@/components/interactions/PaginationBar';
+ import { InteractionBatchActions } from '@/components/interactions/InteractionBatchActions';
+ import { CheckSquare, Square } from 'lucide-react';
 import { useNextPagePrefetch } from '@/hooks/useNextPagePrefetch';
 import { useScopedShortcut } from '@/lib/keyboardShortcutRegistry';
 import { VALID_PER_PAGE } from '@/hooks/useInteractionsAdvancedFilter';
@@ -69,12 +72,25 @@ interface Props {
   totalCount?: number;
 }
 
-export function InteracoesContent({ 
-  interactions, loading, contactMap, stats, onSetIsFormOpen, 
-  onSetEditingInteraction, onSetDeletingInteraction, filterConfigs, 
-  sortOptions, hasMore, loadMore, isFetchingNextPage, totalCount 
-}: Props) {
-  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
+ export function InteracoesContent({ 
+   interactions, loading, contactMap, stats, onSetIsFormOpen, 
+   onSetEditingInteraction, onSetDeletingInteraction, filterConfigs, 
+   sortOptions, hasMore, loadMore, isFetchingNextPage, totalCount 
+ }: Props) {
+   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
+   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+    const [isSelectionMode, setIsSelectionMode] = useState(false);
+
+    const handleToggleSelection = (id: string) => {
+      setSelectedIds(prev => 
+        prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+      );
+    };
+
+    const handleClearSelection = () => {
+      setSelectedIds([]);
+      setIsSelectionMode(false);
+    };
   const [sortBy, setSortBy] = useState('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
@@ -397,9 +413,26 @@ export function InteracoesContent({
 
       <Suspense fallback={<Card className="border-border/50"><CardContent className="p-4"><div className="h-48 animate-pulse bg-muted/30 rounded-lg" /></CardContent></Card>}><ActivityHeatmapChart /></Suspense>
 
-      <div className="flex items-center justify-end">
-        <SavedViewsMenu scope="interacoes" />
-      </div>
+       <div className="flex items-center justify-between">
+         <div className="flex items-center gap-2">
+           <Button 
+             variant={isSelectionMode ? "secondary" : "outline"} 
+             size="sm" 
+             onClick={() => setIsSelectionMode(!isSelectionMode)}
+             className="gap-2"
+           >
+             {isSelectionMode ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4" />}
+             {isSelectionMode ? "Sair da Seleção" : "Selecionar"}
+           </Button>
+         </div>
+         <SavedViewsMenu scope="interacoes" />
+       </div>
+
+       <InteractionBatchActions 
+         selectedIds={selectedIds} 
+         interactions={interactions} 
+         onClearSelection={handleClearSelection} 
+       />
 
       <AdvancedSearchBar
         filters={adv}
@@ -580,9 +613,25 @@ export function InteracoesContent({
                   const delayCap = isCompact ? 0.15 : 0.3;
                   const delayStep = isCompact ? 0.015 : 0.03;
                   return (
-                    <motion.div key={interaction.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.2, delay: Math.min(index * delayStep, delayCap) }} className={`relative ${isCompact ? 'pl-12' : 'pl-16'} group`}>
-                      <div className={`absolute ${isCompact ? 'left-3 top-3 w-7 h-7' : 'left-2 top-4 w-10 h-10'} rounded-full flex items-center justify-center ${interactionColors[interaction.type]} border-4 border-background z-10`}><Icon className={isCompact ? 'w-3 h-3' : 'w-4 h-4'} /></div>
-                      <Card className="card-hover"><CardContent className={isCompact ? 'p-2.5' : 'p-4'}>
+                     <motion.div 
+                       key={interaction.id} 
+                       initial={{ opacity: 0, x: -20 }} 
+                       animate={{ opacity: 1, x: 0 }} 
+                       transition={{ duration: 0.2, delay: Math.min(index * delayStep, delayCap) }} 
+                       className={`relative ${isCompact ? 'pl-12' : 'pl-16'} group cursor-pointer`}
+                       onClick={() => isSelectionMode && handleToggleSelection(interaction.id)}
+                     >
+                       <div className={`absolute ${isCompact ? 'left-3 top-3 w-7 h-7' : 'left-2 top-4 w-10 h-10'} rounded-full flex items-center justify-center ${interactionColors[interaction.type]} border-4 border-background z-10`}>
+                         {isSelectionMode ? (
+                           selectedIds.includes(interaction.id) 
+                             ? <CheckSquare className="w-5 h-5 text-primary fill-primary-foreground" />
+                             : <Square className="w-5 h-5 text-muted-foreground" />
+                         ) : (
+                           <Icon className={isCompact ? 'w-3 h-3' : 'w-4 h-4'} />
+                         )}
+                       </div>
+                       <Card className={cn("card-hover", selectedIds.includes(interaction.id) && "ring-2 ring-primary bg-primary/5")}>
+                         <CardContent className={isCompact ? 'p-2.5' : 'p-4'}>
                         <div className={`flex items-start justify-between ${isCompact ? 'mb-1.5' : 'mb-3'}`}>
                           <div className="flex-1">
                             <div className={`flex items-center gap-2 ${isCompact ? 'mb-0.5' : 'mb-1'} flex-wrap`}>
