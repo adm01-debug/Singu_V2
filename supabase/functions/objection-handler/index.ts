@@ -74,14 +74,24 @@ Gere um script altamente persuasivo que:
     const aiJson = await response.json();
     const result = JSON.parse(aiJson.choices[0].message.tool_calls[0].function.arguments);
 
-    // 3. Persist for Audit
-    await supabase.from('contact_objection_scripts').insert({
-      contact_id: contactId,
-      user_id: userId,
-      objection_type: objectionId,
-      script_content: result.suggested_message,
-      neurological_bias: result.reasoning
-    });
+     // 3. Persist for Audit and Intelligence Dashboard
+     await supabase.from('crm_objection_intelligence').insert({
+       contact_id: contactId,
+       objection_type: objectionId,
+       behavioral_profile: contact.behavior?.dominant_style || 'Não Identificado',
+       suggested_strategy: result.title,
+       script_content: result.suggested_message,
+       success_rate: result.confidence
+     });
+ 
+     // Also log in the older table for backward compatibility
+     await supabase.from('contact_objection_scripts').insert({
+       contact_id: contactId,
+       user_id: userId,
+       objection_type: objectionId,
+       script_content: result.suggested_message,
+       neurological_bias: result.reasoning
+     }).catch(e => console.error("Compatible log failed", e));
 
     return jsonOk({ suggestion: result });
 
