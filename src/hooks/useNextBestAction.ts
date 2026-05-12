@@ -67,12 +67,12 @@ export function useNextBestAction(contactId: string | undefined) {
   });
 
   const complete = useMutation({
-    mutationFn: async ({ id, notes }: { id: string; notes?: string }) => {
+    mutationFn: async ({ id, notes, completed_at }: { id: string; notes?: string; completed_at?: string }) => {
       const { error } = await supabase
         .from('contact_next_actions')
         .update({ 
           status: 'completed', 
-          completed_at: new Date().toISOString(),
+          completed_at: completed_at || new Date().toISOString(),
           completion_notes: notes 
         })
         .eq('id', id);
