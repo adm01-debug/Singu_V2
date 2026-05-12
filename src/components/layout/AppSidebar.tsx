@@ -22,6 +22,7 @@ const navSections = [
     label: "Principal",
     key: "principal",
     items: [
+      { title: "Marketing & Campanhas", url: "/marketing", icon: Megaphone },
       { title: "Dashboard", url: "/", icon: LayoutDashboard },
       { title: "Empresas", url: "/empresas", icon: Building2 },
       { title: "Contatos", url: "/contatos", icon: Users },
@@ -60,6 +61,8 @@ const navSections = [
       { title: "Automações", url: "/automacoes", icon: Workflow },
        { title: "Metas", url: "/metas", icon: Trophy },
        { title: "Copywriting", url: "/crm/copywriting", icon: Copy },
+       { title: "Landing Pages", url: "/landing-pages", icon: Globe },
+       { title: "Sequências", url: "/sequencias", icon: ListFilter },
        { title: "Documentos", url: "/documentos", icon: BookOpen },
     ],
   },

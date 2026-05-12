@@ -3,7 +3,8 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Header } from '@/components/layout/Header';
-import { ListFilter, Play, Users, Zap, RefreshCw } from 'lucide-react';
+ import { ListFilter, Play, Users, Zap, RefreshCw, BarChart3, Layout, Megaphone, Plus } from 'lucide-react';
+ import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useSequences } from '@/hooks/useSequences';
@@ -37,12 +38,30 @@ export default function Sequencias() {
   return (
     <AppLayout title="Sequências">
       <SEOHead title="Sequências Multi-canal" description="Cadências automáticas: Email → WhatsApp → Ligação com pause-on-reply" />
-      <Header
-        title="Sequências Multi-canal"
-        subtitle="Cadências automáticas com etapas progressivas e pause-on-reply"
-        hideBack showAddButton addButtonLabel="Nova Sequência"
-        onAddClick={() => setFormOpen(true)}
-      />
+       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/40 pb-6 p-4 md:p-6 mb-2">
+         <div className="space-y-1">
+           <div className="flex items-center gap-2 mb-1">
+             <div className="p-1.5 rounded-lg bg-primary/10">
+               <ListFilter className="w-5 h-5 text-primary" />
+             </div>
+             <h1 className="text-2xl font-bold tracking-tight">Sequências Multi-canal</h1>
+           </div>
+           <p className="text-sm text-muted-foreground max-w-2xl">
+             Cadências automáticas com etapas progressivas: Email → WhatsApp → Ligação.
+             Pause automático ao receber resposta.
+           </p>
+         </div>
+         <div className="flex items-center gap-2">
+           <Button asChild variant="outline" size="sm" className="gap-2 h-9">
+             <Link to="/marketing">
+               <BarChart3 className="w-4 h-4" /> Marketing Hub
+             </Link>
+           </Button>
+           <Button onClick={() => setFormOpen(true)} size="sm" className="gap-2 h-9">
+             <Plus className="w-4 h-4" /> Nova Sequência
+           </Button>
+         </div>
+       </div>
 
       <div className="p-4 md:p-6 space-y-6">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

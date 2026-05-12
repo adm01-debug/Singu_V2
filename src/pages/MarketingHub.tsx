@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { Plus, ExternalLink, Copy, Trash2, Eye, Users, TrendingUp, Workflow, Target, BarChart3 } from 'lucide-react';
+ import { Plus, ExternalLink, Copy, Trash2, Eye, Users, TrendingUp, Workflow, Target, BarChart3, Megaphone, Layout, ListFilter, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useForms } from '@/hooks/useForms';
 import { useLeadMagnets } from '@/hooks/useLeadMagnets';
@@ -56,21 +56,133 @@ export default function MarketingHub() {
         <meta name="description" content="Forms, lead magnets, nurturing, MQL e attribution multi-touch em um só lugar." />
       </Helmet>
 
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Marketing Automation</h1>
-        <p className="text-sm text-muted-foreground">
-          Forms com routing, lead magnets, nurturing comportamental, MQL→SQL handoff e attribution multi-touch.
-        </p>
-      </div>
+       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/40 pb-6">
+         <div className="space-y-1">
+           <div className="flex items-center gap-2 mb-1">
+             <div className="p-1.5 rounded-lg bg-primary/10">
+               <Megaphone className="w-5 h-5 text-primary" />
+             </div>
+             <h1 className="text-2xl font-bold tracking-tight">Marketing & Campanhas</h1>
+           </div>
+           <p className="text-sm text-muted-foreground max-w-2xl">
+             Ecossistema integrado para geração de demanda, automação de nutrição e análise multi-touch.
+             Converta leads em SQLs com precisão cirúrgica.
+           </p>
+         </div>
+         <div className="flex items-center gap-2">
+           <Button asChild variant="outline" size="sm" className="gap-2 h-9">
+             <Link to="/campanhas">
+               <Megaphone className="w-4 h-4" /> Email Marketing
+             </Link>
+           </Button>
+           <Button asChild variant="outline" size="sm" className="gap-2 h-9">
+             <Link to="/landing-pages">
+               <Layout className="w-4 h-4" /> Landing Pages
+             </Link>
+           </Button>
+           <Button asChild variant="outline" size="sm" className="gap-2 h-9">
+             <Link to="/sequencias">
+               <ListFilter className="w-4 h-4" /> Sequências
+             </Link>
+           </Button>
+         </div>
+       </div>
 
-      <Tabs defaultValue="forms" className="space-y-4">
-        <TabsList className="flex-wrap">
-          <TabsTrigger value="forms" className="gap-2"><Target className="w-4 h-4" /> Formulários</TabsTrigger>
-          <TabsTrigger value="magnets" className="gap-2"><Eye className="w-4 h-4" /> Lead Magnets</TabsTrigger>
-          <TabsTrigger value="nurturing" className="gap-2"><Workflow className="w-4 h-4" /> Nurturing</TabsTrigger>
-          <TabsTrigger value="mql" className="gap-2"><Users className="w-4 h-4" /> MQL → SQL</TabsTrigger>
-          <TabsTrigger value="attribution" className="gap-2"><BarChart3 className="w-4 h-4" /> Attribution</TabsTrigger>
-        </TabsList>
+       <Tabs defaultValue="overview" className="space-y-6">
+         <div className="flex overflow-x-auto pb-1 -mx-2 px-2 scrollbar-none">
+           <TabsList className="flex-nowrap bg-muted/50 p-1">
+             <TabsTrigger value="overview" className="gap-2 px-4"><Layout className="w-4 h-4" /> Overview</TabsTrigger>
+             <TabsTrigger value="forms" className="gap-2 px-4"><Target className="w-4 h-4" /> Formulários</TabsTrigger>
+             <TabsTrigger value="magnets" className="gap-2 px-4"><Eye className="w-4 h-4" /> Lead Magnets</TabsTrigger>
+             <TabsTrigger value="nurturing" className="gap-2 px-4"><Workflow className="w-4 h-4" /> Nurturing</TabsTrigger>
+             <TabsTrigger value="mql" className="gap-2 px-4"><Users className="w-4 h-4" /> MQL → SQL</TabsTrigger>
+             <TabsTrigger value="attribution" className="gap-2 px-4"><BarChart3 className="w-4 h-4" /> Attribution</TabsTrigger>
+           </TabsList>
+         </div>
+ 
+         {/* OVERVIEW */}
+         <TabsContent value="overview" className="space-y-6">
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+             <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/10">
+               <CardContent className="pt-6">
+                 <div className="flex items-center justify-between mb-2">
+                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Lead Magnets</p>
+                   <Eye className="w-4 h-4 text-primary opacity-60" />
+                 </div>
+                 <p className="text-2xl font-bold">{magnets.reduce((acc, m) => acc + (m.view_count || 0), 0)}</p>
+                 <p className="text-[10px] text-muted-foreground mt-1">Total de visualizações capturadas</p>
+               </CardContent>
+             </Card>
+             <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/10">
+               <CardContent className="pt-6">
+                 <div className="flex items-center justify-between mb-2">
+                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Submissões</p>
+                   <FileText className="w-4 h-4 text-primary opacity-60" />
+                 </div>
+                 <p className="text-2xl font-bold">{forms.reduce((acc, f) => acc + (f.submission_count || 0), 0)}</p>
+                 <p className="text-[10px] text-muted-foreground mt-1">Conversões em formulários ativos</p>
+               </CardContent>
+             </Card>
+             <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/10">
+               <CardContent className="pt-6">
+                 <div className="flex items-center justify-between mb-2">
+                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Nutrição Ativa</p>
+                   <Workflow className="w-4 h-4 text-primary opacity-60" />
+                 </div>
+                 <p className="text-2xl font-bold">{executions.filter(e => e.status === 'active').length}</p>
+                 <p className="text-[10px] text-muted-foreground mt-1">Enrollments processando agora</p>
+               </CardContent>
+             </Card>
+             <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/10">
+               <CardContent className="pt-6">
+                 <div className="flex items-center justify-between mb-2">
+                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">MQLs → SQLs</p>
+                   <Users className="w-4 h-4 text-primary opacity-60" />
+                 </div>
+                 <p className="text-2xl font-bold">{classifications.filter(c => c.status === 'sql').length}</p>
+                 <p className="text-[10px] text-muted-foreground mt-1">Leads qualificados para vendas</p>
+               </CardContent>
+             </Card>
+           </div>
+ 
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+             <Card>
+               <CardHeader className="flex flex-row items-center justify-between">
+                 <CardTitle className="text-base font-semibold">Atribuição por Canal</CardTitle>
+                 <BarChart3 className="w-4 h-4 text-muted-foreground" />
+               </CardHeader>
+               <CardContent>
+                 <div className="h-[200px] flex items-center justify-center text-muted-foreground text-sm border-2 border-dashed rounded-lg">
+                   Selecione um Deal na aba Attribution para ver dados reais.
+                 </div>
+               </CardContent>
+             </Card>
+             <Card>
+               <CardHeader className="flex flex-row items-center justify-between">
+                 <CardTitle className="text-base font-semibold">Status de Nutrição</CardTitle>
+                 <TrendingUp className="w-4 h-4 text-muted-foreground" />
+               </CardHeader>
+               <CardContent>
+                 <div className="space-y-4">
+                   {workflows.slice(0, 3).map(w => (
+                     <div key={w.id} className="space-y-1">
+                       <div className="flex justify-between text-xs">
+                         <span className="font-medium">{w.name}</span>
+                         <span className="text-muted-foreground">{executions.filter(e => e.workflow_id === w.id && e.status === 'completed').length} concluídos</span>
+                       </div>
+                       <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                         <div className="h-full bg-primary" style={{ width: '65%' }} />
+                       </div>
+                     </div>
+                   ))}
+                   {workflows.length === 0 && (
+                     <p className="text-xs text-muted-foreground text-center py-4 italic">Sem fluxos de nutrição configurados.</p>
+                   )}
+                 </div>
+               </CardContent>
+             </Card>
+           </div>
+         </TabsContent>
 
         {/* FORMS */}
         <TabsContent value="forms" className="space-y-4">

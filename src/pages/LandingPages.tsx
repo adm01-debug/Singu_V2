@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react';
+ import { useState, useMemo } from 'react';
+ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Plus, Globe, Eye, Trash2, ExternalLink, Copy, BarChart3, FileText } from 'lucide-react';
+ import { Plus, Globe, Eye, Trash2, ExternalLink, Copy, BarChart3, FileText, Layout, Megaphone, Workflow } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { PageHeader } from '@/components/navigation/PageHeader';
 import { Card, CardContent } from '@/components/ui/card';
@@ -63,8 +64,33 @@ export default function LandingPages() {
         <title>Landing Pages | SINGU</title>
         <meta name="description" content="Crie landing pages com formulários para capturar leads." />
       </Helmet>
-      <div className="min-h-screen p-4 md:p-6 space-y-4">
-        <PageHeader backTo="/" backLabel="Dashboard" title="Landing Pages" />
+       <div className="min-h-screen p-4 md:p-6 space-y-6">
+         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/40 pb-6">
+           <div className="space-y-1">
+             <div className="flex items-center gap-2 mb-1">
+               <div className="p-1.5 rounded-lg bg-primary/10">
+                 <Layout className="w-5 h-5 text-primary" />
+               </div>
+               <h1 className="text-2xl font-bold tracking-tight">Landing Pages</h1>
+             </div>
+             <p className="text-sm text-muted-foreground max-w-2xl">
+               Crie páginas de alta conversão integradas ao ecossistema SINGU.
+               Capture leads e acione automações instantaneamente.
+             </p>
+           </div>
+           <div className="flex items-center gap-2">
+             <Button asChild variant="outline" size="sm" className="gap-2 h-9">
+               <Link to="/marketing">
+                 <BarChart3 className="w-4 h-4" /> Marketing Hub
+               </Link>
+             </Button>
+             <Button asChild variant="outline" size="sm" className="gap-2 h-9 text-primary border-primary/20 bg-primary/5">
+               <Link to="/landing-pages">
+                 <Layout className="w-4 h-4" /> Landing Pages
+               </Link>
+             </Button>
+           </div>
+         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[

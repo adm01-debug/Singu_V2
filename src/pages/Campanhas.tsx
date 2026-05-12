@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Mail, Plus, Send, FileEdit, Trash2, Eye, Clock, CheckCircle2, Search, BarChart3 } from 'lucide-react';
+ import { Mail, Plus, Send, FileEdit, Trash2, Eye, Clock, CheckCircle2, Search, BarChart3, Megaphone, Layout, ListFilter } from 'lucide-react';
+ import { Link } from 'react-router-dom';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { PageHeader } from '@/components/navigation/PageHeader';
 import { Card, CardContent } from '@/components/ui/card';
@@ -69,8 +70,33 @@ export default function Campanhas() {
         <title>Campanhas | SINGU</title>
         <meta name="description" content="Gerencie campanhas de email marketing com segmentação e métricas." />
       </Helmet>
-      <div className="min-h-screen p-4 md:p-6 space-y-4">
-        <PageHeader backTo="/" backLabel="Dashboard" title="Email Marketing & Campanhas" />
+       <div className="min-h-screen p-4 md:p-6 space-y-6">
+         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/40 pb-6">
+           <div className="space-y-1">
+             <div className="flex items-center gap-2 mb-1">
+               <div className="p-1.5 rounded-lg bg-primary/10">
+                 <Megaphone className="w-5 h-5 text-primary" />
+               </div>
+               <h1 className="text-2xl font-bold tracking-tight">Email Marketing & Campanhas</h1>
+             </div>
+             <p className="text-sm text-muted-foreground max-w-2xl">
+               Crie, dispare e analise campanhas de email de alto impacto.
+               Use segmentação avançada para atingir o lead certo.
+             </p>
+           </div>
+           <div className="flex items-center gap-2">
+             <Button asChild variant="outline" size="sm" className="gap-2 h-9">
+               <Link to="/marketing">
+                 <BarChart3 className="w-4 h-4" /> Marketing Hub
+               </Link>
+             </Button>
+             <Button asChild variant="outline" size="sm" className="gap-2 h-9 text-primary border-primary/20 bg-primary/5">
+               <Link to="/campanhas">
+                 <Megaphone className="w-4 h-4" /> Email Marketing
+               </Link>
+             </Button>
+           </div>
+         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
