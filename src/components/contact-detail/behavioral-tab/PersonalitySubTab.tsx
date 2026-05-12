@@ -55,39 +55,51 @@ export function PersonalitySubTab({ contactId }: Props) {
     <div className="space-y-6">
       <div className="grid gap-6 md:grid-cols-2">
         {/* Big Five */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-bold uppercase flex items-center gap-2">
-              <Activity className="h-4 w-4 text-primary" />
-              Big Five (OCEAN)
+        <Card className="border-primary/20">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-bold uppercase flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Activity className="h-4 w-4 text-primary" />
+                Big Five (OCEAN)
+              </div>
+              <Badge variant="outline" className="text-[10px] font-normal">
+                Confiança: {formData.big_five_confidence || 0}%
+              </Badge>
             </CardTitle>
+            <CardDescription className="text-[10px]">As 5 dimensões universais da personalidade humana.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {bigFiveFields.map((field) => (
-              <div key={field.key} className="space-y-1">
-                <div className="flex justify-between text-xs">
-                  <Label className="text-[10px] uppercase text-muted-foreground">{field.label}</Label>
-                  <span>{formData[field.key] || 0}%</span>
+            <TooltipProvider>
+              {bigFiveFields.map((field) => (
+                <div key={field.key} className="space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-1.5">
+                      <Label className="text-[10px] uppercase font-bold text-muted-foreground">{field.label}</Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild><Info className="h-3 w-3 text-muted-foreground/50 cursor-help" /></TooltipTrigger>
+                        <TooltipContent><p className="text-[10px] max-w-[200px]">{field.desc}</p></TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <span className="text-[10px] font-mono font-bold text-primary">{formData[field.key] || 0}%</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Input 
+                      type="range" min="0" max="100" 
+                      value={formData[field.key] || 0}
+                      onChange={(e) => setFormData({ ...formData, [field.key]: parseInt(e.target.value) })}
+                      className="h-4 flex-1 accent-primary"
+                    />
+                  </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Input 
-                    type="range" 
-                    min="0" max="100" 
-                    value={formData[field.key] || 0}
-                    onChange={(e) => setFormData({ ...formData, [field.key]: parseInt(e.target.value) })}
-                    className="h-4 flex-1 accent-primary"
-                  />
-                </div>
-              </div>
-            ))}
-            <div className="pt-2">
-              <Label className="text-xs">Confiança da Análise ({formData.big_five_confidence || 0}%)</Label>
+              ))}
+            </TooltipProvider>
+            <div className="pt-2 border-t mt-4">
+              <Label className="text-[10px] uppercase font-bold text-muted-foreground">Calibração de Confiança</Label>
               <Input 
-                type="range" 
-                min="0" max="100" 
+                type="range" min="0" max="100" 
                 value={formData.big_five_confidence || 0}
                 onChange={(e) => setFormData({ ...formData, big_five_confidence: parseInt(e.target.value) })}
-                className="h-4 w-full accent-primary"
+                className="h-4 w-full accent-primary mt-2"
               />
             </div>
           </CardContent>
