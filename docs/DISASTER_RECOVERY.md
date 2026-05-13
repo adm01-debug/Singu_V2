@@ -79,8 +79,8 @@
 
 | Tipo | Frequência | Retenção | Local |
 |------|-----------|----------|-------|
-| **Full DB snapshot** | Diário | 7 dias | Lovable Cloud (automático) |
-| **PITR** | Contínuo (WAL) | 7 dias | Lovable Cloud (automático) |
+ | **Full DB snapshot** | Diário | 7 dias | Lovable Cloud (automático, Cross-Region) |
+ | **PITR** | Contínuo (WAL) | 7 dias | Lovable Cloud (automático, Cross-Region) |
 | **Storage objects** | Replicação automática | Indefinido | Lovable Cloud |
 | **Code (Git)** | A cada commit | Indefinido | GitHub + Lovable |
 
