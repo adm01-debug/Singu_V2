@@ -19,7 +19,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Contact, DISCProfile } from '@/types';
 import { getDISCProfile, getContactBehavior } from '@/lib/contact-utils';
-import { DEMO_CONTACT } from '@/lib/demo-contact';
+import { DEMO_CONTACT } from '@/domain/demoEntities';
 
 interface Incongruence {
   id: string;

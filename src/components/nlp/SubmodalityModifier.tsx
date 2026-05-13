@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils';
 import { Contact } from '@/types';
 import { VAKType } from '@/types/vak';
 import { getDominantVAK } from '@/lib/contact-utils';
-import { DEMO_CONTACT } from '@/lib/demo-contact';
+import { DEMO_CONTACT } from '@/domain/demoEntities';
 
 interface Submodality {
   id: string;

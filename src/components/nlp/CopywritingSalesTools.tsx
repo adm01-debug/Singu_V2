@@ -17,7 +17,7 @@ import {
 import { Contact } from '@/types';
 import { useCopywritingTools } from '@/hooks/useCopywritingTools';
 import { useCopywritingAdvanced } from '@/hooks/useCopywritingAdvanced';
-import { DEMO_CONTACT } from '@/lib/demo-contact';
+import { DEMO_CONTACT } from '@/domain/demoEntities';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 

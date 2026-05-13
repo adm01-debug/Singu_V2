@@ -17,7 +17,7 @@ import { Contact, DISCProfile } from '@/types';
 import { VAKType } from '@/types/vak';
 import { getDominantVAK, getDISCProfile } from '@/lib/contact-utils';
 import { toast } from '@/hooks/use-toast';
-import { DEMO_CONTACT } from '@/lib/demo-contact';
+import { DEMO_CONTACT } from '@/domain/demoEntities';
 import { EMOTIONAL_STATES_DATA } from '@/data/stateElicitationData';
 
 const ICON_MAP: Record<string, React.ReactNode> = {
