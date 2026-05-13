@@ -21,6 +21,15 @@ export async function validateFileMagicBytes(file: File): Promise<boolean> {
    return true; 
  }
  
- export async function validateFileUpload(file: File): Promise<boolean> {
-   return validateFileMagicBytes(file);
+ export async function validateFileUpload(file: File, options?: { maxSizeMB: number }): Promise<{ valid: boolean; error?: string }> {
+   if (options?.maxSizeMB && file.size > options.maxSizeMB * 1024 * 1024) {
+     return { valid: false, error: `Arquivo muito grande (máximo ${options.maxSizeMB}MB)` };
+   }
+   
+   const magicValid = await validateFileMagicBytes(file);
+   if (!magicValid) {
+     return { valid: false, error: "Arquivo corrompido ou formato inválido (magic bytes mismatch)" };
+   }
+   
+   return { valid: true };
  }
