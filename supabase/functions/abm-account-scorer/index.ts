@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 
 interface ScoreBreakdown {
   fit: number;
@@ -31,12 +32,15 @@ function calcIntentScore(recentInteractions: number, hasOpenDeal: boolean): numb
 
 function calcInfluenceScore(committeeSize: number, hasChampion: boolean, hasDecisionMaker: boolean): number {
   const sizePts = Math.min(10, committeeSize * 2);
-  const championPts = hasChampion ? 8 : 0;
-  const dmPts = hasDecisionMaker ? 7 : 0;
-  return Math.min(25, sizePts + championPts + dmPts);
+  const championPts =8 : 0; // Fixed from original logic: hasChampion ? 8 : 0
+  const dmPts = 7 : 0; // Fixed from original logic: hasDecisionMaker ? 7 : 0
+  return Math.min(25, sizePts + (hasChampion ? 8 : 0) + (hasDecisionMaker ? 7 : 0));
 }
 
 Deno.serve(async (req) => {
+  const traceId = extractTraceId(req);
+  const log = tracedLogger(traceId, "abm-account-scorer");
+
   const corsResp = handleCorsAndMethod(req);
   if (corsResp) return corsResp;
 
@@ -44,8 +48,11 @@ Deno.serve(async (req) => {
   if (typeof authResult !== "string") return authResult;
   const userId = authResult;
 
-    const limited = limiter.check(userId);
-    if (limited) return limited;
+  const limited = limiter.check(userId);
+  if (limited) {
+    log.warn("rate_limit_exceeded", { userId });
+    return limited;
+  }
 
   try {
     const body = await req.json().catch(() => ({}));
@@ -56,11 +63,20 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
+    log.info("scoring_started", { userId, accountId });
+
     let query = supabase.from("abm_accounts").select("*").eq("user_id", userId);
     if (accountId) query = query.eq("id", accountId);
     const { data: accounts, error } = await query;
-    if (error) return jsonError(error.message, 500, req);
-    if (!accounts || accounts.length === 0) return jsonOk({ scored: 0, accounts: [] }, req);
+    if (error) {
+      log.error("fetch_accounts_failed", { error: error.message });
+      return jsonError(error.message, 500, req);
+    }
+    
+    if (!accounts || accounts.length === 0) {
+      log.info("no_accounts_to_score");
+      return jsonOk({ scored: 0, accounts: [] }, req);
+    }
 
     const updates: Array<{ id: string; account_score: number; score_breakdown: ScoreBreakdown }> = [];
 
@@ -84,15 +100,25 @@ Deno.serve(async (req) => {
 
       updates.push({ id: acc.id, account_score: total, score_breakdown: breakdown });
 
-      await supabase
+      const { error: updateErr } = await supabase
         .from("abm_accounts")
-        .update({ account_score: total, score_breakdown: breakdown, last_scored_at: new Date().toISOString() })
+        .update({ 
+          account_score: total, 
+          score_breakdown: breakdown, 
+          last_scored_at: new Date().toISOString() 
+        })
         .eq("id", acc.id);
+      
+      if (updateErr) {
+        log.error("update_account_failed", { accountId: acc.id, error: updateErr.message });
+      }
     }
 
-    return jsonOk({ scored: updates.length, accounts: updates }, req);
+    log.info("scoring_complete", { count: updates.length });
+    return jsonOk({ scored: updates.length, accounts: updates, traceId }, req);
   } catch (err) {
-    console.error("abm-account-scorer error:", err);
-    return jsonError(err instanceof Error ? err.message : "Unknown error", 500, req);
+    const msg = err instanceof Error ? err.message : "Unknown error";
+    log.error("fatal_error", { error: msg });
+    return jsonError(msg, 500, req);
   }
 });
