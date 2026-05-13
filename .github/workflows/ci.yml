@@ -1,3 +1,6 @@
+      - name: Check for circular dependencies
+        run: npx depcruise src --config .dependency-cruiser.cjs
+
 name: CI
 
 on:
