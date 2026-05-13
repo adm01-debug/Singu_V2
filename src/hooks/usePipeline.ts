@@ -176,8 +176,9 @@ export function useMoveDeal() {
          p_new_probability: probability
       });
       if (error) throw error;
-       if (data && data.success === false) {
-         throw new Error(data.error || 'Failed to move deal');
+       const result = data as any;
+       if (result && result.success === false) {
+         throw new Error(result.error || 'Failed to move deal');
        }
        return data;
     },
