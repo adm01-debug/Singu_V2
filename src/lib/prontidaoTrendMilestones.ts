@@ -9,7 +9,7 @@
  * Os marcos são alinhados às semanas existentes em `points` (ProntidaoTrendPoint).
  */
 import type { ExternalInteraction } from '@/hooks/useExternalInteractions';
-import type { ProntidaoTrendPoint } from './churnRisk';
+import type { ProntidaoTrendPoint } from '@/domain/churnRisk';
 
 export type MilestoneKind = 'first-call' | 'first-whatsapp' | 'first-email' | 'first-meeting' | 'peak';
 
