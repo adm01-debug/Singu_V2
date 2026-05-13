@@ -131,7 +131,7 @@ export function RelationshipKPIsDashboard() {
              .from('contacts')
              .select('first_name, last_name')
              .eq('id', payload.new.contact_id)
-             .single();
+              .maybeSingle();
            
            const newEvent = {
              id: payload.new.id,
