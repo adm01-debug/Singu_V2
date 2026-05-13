@@ -1,45 +1,49 @@
+import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  const traceId = extractTraceId(req);
+  const log = tracedLogger(traceId, "attribution-calculator");
+
+  const corsResp = handleCorsAndMethod(req);
+  if (corsResp) return corsResp;
+
+  const authResult = await withAuth(req);
+  if (typeof authResult !== "string") return authResult;
+  const userId = authResult;
 
   try {
-    const auth = req.headers.get("Authorization");
-    if (!auth) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
+    const { deal_id, model = "linear", deal_value = 0 } = await req.json();
+    if (!deal_id) {
+      log.warn("missing_deal_id");
+      return jsonError("deal_id required", 400, req);
+    }
+
+    log.info("calculation_started", { userId, dealId: deal_id, model });
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: auth } } },
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
-
-    const { deal_id, model = "linear", deal_value = 0 } = await req.json();
-    if (!deal_id) {
-      return new Response(JSON.stringify({ error: "deal_id required" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
 
     const { data, error } = await supabase.rpc("compute_attribution", {
       _deal_id: deal_id,
       _model: model,
       _deal_value: deal_value,
     });
-    if (error) throw error;
+    
+    if (error) {
+      log.error("rpc_compute_failed", { error: error.message });
+      throw error;
+    }
 
-    return new Response(JSON.stringify({ ok: true, result: data }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  } catch (e) {
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    log.info("calculation_complete", { dealId: deal_id });
+
+    return jsonOk({ ok: true, result: data, traceId }, req);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Unknown error";
+    log.error("fatal_error", { error: msg });
+    return jsonError(msg, 500, req);
   }
 });

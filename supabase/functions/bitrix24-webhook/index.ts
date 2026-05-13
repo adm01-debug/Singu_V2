@@ -1,18 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-
-function getScopedOrigin(req: Request): string {
-  const origin = req.headers.get("Origin") || "";
-  if (origin.endsWith(".lovable.app")) return origin;
-  return "https://dialogue-diamond.lovable.app";
-}
-
-function makeCors(req: Request) {
-  return {
-    "Access-Control-Allow-Origin": getScopedOrigin(req),
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-    "Vary": "Origin",
-  };
-}
+import { handleCorsAndMethod, jsonError, jsonOk } from "../_shared/auth.ts";
+import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 
 interface BitrixCallEvent {
   event: string;
@@ -36,10 +24,11 @@ interface BitrixCallEvent {
 }
 
 Deno.serve(async (req) => {
-  const corsHeaders = makeCors(req);
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
+  const traceId = extractTraceId(req);
+  const log = tracedLogger(traceId, "bitrix24-webhook");
+
+  const corsResp = handleCorsAndMethod(req);
+  if (corsResp) return corsResp;
 
   try {
     const supabase = createClient(
@@ -72,18 +61,17 @@ Deno.serve(async (req) => {
       };
     }
 
-    // Bitrix24 webhook received
+    log.info("webhook_received", { event: payload.event });
 
     // Handle call finish events
     const validEvents = ['ONVOXIMPLANTCALLEND', 'ONEXTERNALCALLFINISH', 'ONCRMCALLEND'];
     if (!validEvents.includes(payload.event?.toUpperCase())) {
-      return new Response(JSON.stringify({ 
+      log.info("event_ignored", { event: payload.event });
+      return jsonOk({ 
         status: 'ignored', 
         reason: 'not a call end event',
         event: payload.event 
-      }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      }, req);
     }
 
     const { data } = payload;
@@ -106,19 +94,17 @@ Deno.serve(async (req) => {
       .limit(1);
 
     if (contactError) {
-      console.error('Error finding contact:', contactError);
+      log.error("find_contact_failed", { error: contactError.message, phone: phoneNumber });
       throw contactError;
     }
 
     if (!contacts || contacts.length === 0) {
-      // No contact found for phone;
-      return new Response(JSON.stringify({ 
+      log.info("contact_not_found", { phone: phoneNumber });
+      return jsonOk({ 
         status: 'skipped', 
         reason: 'contact not found',
         phone: phoneNumber 
-      }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      }, req);
     }
 
     const contact = contacts[0];
@@ -160,27 +146,23 @@ Deno.serve(async (req) => {
       .single();
 
     if (interactionError) {
-      console.error('Error creating interaction:', interactionError);
+      log.error("create_interaction_failed", { error: interactionError.message, contactId: contact.id });
       throw interactionError;
     }
 
-    // Call interaction created;
+    log.info("interaction_created", { interactionId: interaction.id, contactId: contact.id });
 
-    return new Response(JSON.stringify({ 
+    return jsonOk({ 
       status: 'success', 
       interactionId: interaction.id,
       contactId: contact.id,
-      duration: durationFormatted
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+      duration: durationFormatted,
+      traceId
+    }, req);
 
   } catch (error) {
-    console.error('Bitrix24 webhook error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return new Response(JSON.stringify({ error: errorMessage }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    const msg = error instanceof Error ? error.message : "Unknown error";
+    log.error("fatal_error", { error: msg });
+    return jsonError(msg, 500, req);
   }
 });

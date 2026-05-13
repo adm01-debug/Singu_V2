@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { RequireAuth } from '@/hooks/useAuth';
+ import { RequireAuth } from '@/hooks/useAuth';
+ import { MFAGuard } from '@/components/auth/MFAGuard';
 import { ErrorBoundary } from '@/components/feedback/ErrorBoundary';
 import { PageLoadingFallback } from '@/components/feedback/PageLoadingFallback';
 import { useWebVitals } from '@/hooks/useWebVitals';
@@ -27,11 +28,13 @@ const LazyPage = ({ children, fallback }: { children: React.ReactNode; fallback?
   </ErrorBoundary>
 );
 
-const Protected = ({ children, fallback }: { children: React.ReactNode; fallback?: React.ReactNode }) => (
-  <RequireAuth>
-    <LazyPage fallback={fallback}>{children}</LazyPage>
-  </RequireAuth>
-);
+ const Protected = ({ children, fallback }: { children: React.ReactNode; fallback?: React.ReactNode }) => (
+   <RequireAuth>
+     <MFAGuard>
+       <LazyPage fallback={fallback}>{children}</LazyPage>
+     </MFAGuard>
+   </RequireAuth>
+ );
 
 const Admin = ({ children }: { children: React.ReactNode }) => (
   <RequireAuth>
