@@ -120,7 +120,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
         .from('contacts')
         .select('linkedin, twitter, instagram')
         .eq('id', rapportIntel.contact_id)
-        .single();
+        .maybeSingle();
 
       const platforms = [
         { key: 'linkedin', url: contact?.linkedin },
