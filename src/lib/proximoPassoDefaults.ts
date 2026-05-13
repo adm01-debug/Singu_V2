@@ -5,7 +5,7 @@
  * Função pura, determinística, testável.
  */
 
-import type { ProximoPasso, ProximoPassoChannel, ProximoPassoPriority } from './proximosPassos';
+import type { ProximoPasso, ProximoPassoChannel, ProximoPassoPriority } from '@/domain/nextStepLogic';
 
 export interface BestTimeHint {
   day_of_week?: number | null;
