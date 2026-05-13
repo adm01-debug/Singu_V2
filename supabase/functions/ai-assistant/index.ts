@@ -6,6 +6,7 @@ import {
   jsonOk,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { z } from "npm:zod@3.23.8";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
@@ -36,25 +37,35 @@ REGRAS:
 - Sugira ações concretas sempre que possível`;
 
 Deno.serve(async (req) => {
+  const traceId = extractTraceId(req);
+  const log = tracedLogger(traceId, "ai-assistant");
+
   const guard = handleCorsAndMethod(req);
   if (guard) return guard;
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const limited = limiter.check(ip);
-  if (limited) return limited;
+  if (limited) {
+    log.warn("rate_limit_exceeded", { ip });
+    return limited;
+  }
 
   const authResult = await withAuth(req);
-  if (authResult instanceof Response) return authResult;
-  const userId = authResult.userId;
+  if (typeof authResult !== "string") return authResult;
+  const userId = authResult;
 
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) return jsonError("LOVABLE_API_KEY not configured", 500);
+    if (!LOVABLE_API_KEY) {
+      log.error("lovable_key_missing");
+      return jsonError("LOVABLE_API_KEY not configured", 500, req);
+    }
 
     const body = await req.json().catch(() => null);
     const parsed = InputSchema.safeParse(body);
     if (!parsed.success) {
-      return jsonError(`Invalid input: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
+      log.warn("invalid_input", { errors: parsed.error.flatten().fieldErrors });
+      return jsonError(`Invalid input: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
     }
     const { thread_id, message, context_entity_type, context_entity_id } = parsed.data;
 
@@ -62,6 +73,8 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
+
+    log.info("chat_started", { userId, threadId: thread_id });
 
     // Verify thread ownership
     const { data: thread, error: threadErr } = await supabase
@@ -72,7 +85,8 @@ Deno.serve(async (req) => {
       .maybeSingle();
 
     if (threadErr || !thread) {
-      return jsonError("Thread not found or access denied", 404);
+      log.warn("thread_not_found", { threadId: thread_id });
+      return jsonError("Thread not found or access denied", 404, req);
     }
 
     // Save user message
@@ -125,6 +139,7 @@ Deno.serve(async (req) => {
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
+        "x-trace-id": traceId
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
@@ -135,9 +150,17 @@ Deno.serve(async (req) => {
     });
 
     if (!aiResponse.ok) {
-      if (aiResponse.status === 429) return jsonError("Limite de requisições atingido. Aguarde alguns minutos.", 429);
-      if (aiResponse.status === 402) return jsonError("Créditos esgotados. Adicione créditos em Configurações.", 402);
-      return jsonError("Falha ao gerar resposta", 500);
+      if (aiResponse.status === 429) {
+        log.warn("ai_gateway_rate_limited");
+        return jsonError("Limite de requisições atingido. Aguarde alguns minutos.", 429, req);
+      }
+      if (aiResponse.status === 402) {
+        log.warn("insufficient_credits");
+        return jsonError("Créditos esgotados. Adicione créditos em Configurações.", 402, req);
+      }
+      const errText = await aiResponse.text();
+      log.error("ai_gateway_failed", { status: aiResponse.status, error: errText });
+      return jsonError("Falha ao gerar resposta", 500, req);
     }
 
     const aiData = await aiResponse.json();
@@ -164,9 +187,12 @@ Deno.serve(async (req) => {
     }
     await supabase.from("ai_chat_threads").update(updates).eq("id", thread_id);
 
-    return jsonOk({ message: savedMsg, reply, tokens });
+    log.info("chat_complete", { threadId: thread_id, tokens });
+
+    return jsonOk({ message: savedMsg, reply, tokens, traceId }, req);
   } catch (error) {
-    console.error("ai-assistant error:", error);
-    return jsonError(error instanceof Error ? error.message : "Erro desconhecido", 500);
+    const msg = error instanceof Error ? error.message : "Erro desconhecido";
+    log.error("fatal_error", { error: msg });
+    return jsonError(msg, 500, req);
   }
 });
