@@ -38,9 +38,11 @@ const LazyPage = ({ children, fallback }: { children: React.ReactNode; fallback?
 
 const Admin = ({ children }: { children: React.ReactNode }) => (
   <RequireAuth>
-    <LazyPage>
-      <P.RequireAdminLazy>{children}</P.RequireAdminLazy>
-    </LazyPage>
+    <MFAGuard>
+      <LazyPage>
+        <P.RequireAdminLazy>{children}</P.RequireAdminLazy>
+      </LazyPage>
+    </MFAGuard>
   </RequireAuth>
 );
 

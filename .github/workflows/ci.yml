@@ -1,3 +1,6 @@
+      - name: Check for circular dependencies
+        run: npx depcruise src --config .dependency-cruiser.cjs
+
 name: CI
 
 on:
@@ -25,10 +28,13 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Lint (ESLint)
-        run: npx eslint . --max-warnings=0 || echo "::warning::ESLint found issues (non-blocking until strict mode complete)"
+        run: npx eslint . --max-warnings=0
 
       - name: Security audit (high+ severity)
-        run: npm audit --omit=dev --audit-level=high || echo "::warning::npm audit found vulnerabilities (non-blocking; review manually)"
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Playwright Smoke Tests
+        run: npx playwright test --grep @smoke
 
       - name: Run unit tests with coverage
         run: npx vitest run --coverage --reporter=default

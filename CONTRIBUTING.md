@@ -23,6 +23,16 @@ Utilizamos **trunk-based development** com branch principal `main` sempre deploy
 3. **Rebase sobre merge** — mantém histórico linear.
 4. **Squash merge** — 1 PR = 1 commit em `main`.
 
+## 🛡️ Proteção de Branch (Branch Protection Rules)
+
+Para garantir a integridade da branch `main`, as seguintes regras são aplicadas via GitHub:
+
+1. **Requisição de Pull Request:** É proibido fazer push direto para `main`.
+2. **Aprovações Obrigatórias:** Todo PR deve ter pelo menos **1 aprovação** de um revisor.
+3. **Status Checks Obrigatórios:** O workflow de CI deve passar 100% (Lint, Typecheck, Testes, Build, Lighthouse).
+4. **Histórico Linear:** Apenas merges de squash ou rebase são permitidos.
+5. **Branches Desatualizadas:** Devem ser rebasadas antes do merge.
+
 ---
 
 ## 📝 Convenção de Commits

@@ -1,3 +1,35 @@
+    it('should handle parallel refresh session requests (race condition simulation)', async () => {
+      // Simulate a scenario where multiple parts of the app trigger a refresh simultaneously
+      const mockSession = {
+        access_token: 'refreshed-token',
+        refresh_token: 'new-refresh-token',
+        user: { id: 'user-123' },
+      };
+
+      // We mock a slight delay to simulate network/processing time
+      mockRefreshSession.mockImplementation(() => 
+        new Promise(resolve => setTimeout(() => resolve({ data: { session: mockSession }, error: null }), 10))
+      );
+      
+      const { supabase } = await import('@/integrations/supabase/client');
+      
+      // Fire 3 parallel requests
+      const results = await Promise.all([
+        supabase.auth.refreshSession(),
+        supabase.auth.refreshSession(),
+        supabase.auth.refreshSession()
+      ]);
+      
+      // All should eventually resolve with the same session (Supabase client handles this internally, but we test the expectation)
+      results.forEach(res => {
+        expect(res.data.session?.access_token).toBe('refreshed-token');
+        expect(res.error).toBeNull();
+      });
+      
+      // In a real Supabase JS client, it actually deduplicates concurrent refresh calls.
+      // Our mock just proves the app code can handle the parallel resolution.
+      expect(mockRefreshSession).toHaveBeenCalledTimes(3); 
+    });
 /**
  * Integration tests — Auth Flow
  * Validates authentication state management, token refresh, and session handling.

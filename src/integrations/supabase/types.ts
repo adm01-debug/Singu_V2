@@ -9687,6 +9687,55 @@ export type Database = {
           },
         ]
       }
+      pipeline_stage_transitions: {
+        Row: {
+          created_at: string | null
+          from_stage_id: string | null
+          id: string
+          is_allowed: boolean | null
+          pipeline_id: string | null
+          to_stage_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          from_stage_id?: string | null
+          id?: string
+          is_allowed?: boolean | null
+          pipeline_id?: string | null
+          to_stage_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          from_stage_id?: string | null
+          id?: string
+          is_allowed?: boolean | null
+          pipeline_id?: string | null
+          to_stage_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pipeline_stage_transitions_from_stage_id_fkey"
+            columns: ["from_stage_id"]
+            isOneToOne: false
+            referencedRelation: "pipeline_stages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pipeline_stage_transitions_pipeline_id_fkey"
+            columns: ["pipeline_id"]
+            isOneToOne: false
+            referencedRelation: "pipelines"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pipeline_stage_transitions_to_stage_id_fkey"
+            columns: ["to_stage_id"]
+            isOneToOne: false
+            referencedRelation: "pipeline_stages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pipeline_stages: {
         Row: {
           created_at: string
@@ -13769,6 +13818,16 @@ export type Database = {
           endpoint?: string | null
           id?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      slow_queries_audit: {
+        Row: {
+          calls: number | null
+          mean_exec_ms: number | null
+          query: string | null
+          rows: number | null
+          total_exec_seconds: number | null
         }
         Relationships: []
       }
