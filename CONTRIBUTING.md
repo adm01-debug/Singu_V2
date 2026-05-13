@@ -92,8 +92,7 @@ security(auth): restringe INSERT em login_attempts a service_role
 
 ### SLA
 
-- **Primeira resposta:** em até **4 horas úteis**.
-- **Aprovação/ajustes:** em até **1 dia útil** para PRs <200 linhas.
+ - **SLA de Code Review**: Em até **24 horas úteis**.
 - **PRs grandes (>500 linhas):** quebrar em PRs menores.
 
 ### Quem revisa
