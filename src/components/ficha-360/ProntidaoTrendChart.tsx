@@ -41,7 +41,7 @@ import {
   classifyTrend,
   computeTrendSlope,
   type ProntidaoTrendPoint,
-} from '@/lib/prontidaoTrend';
+} from '@/domain/churnRisk';
 import {
   useProntidaoTargetStore,
   PRONTIDAO_TARGET_DEFAULT,

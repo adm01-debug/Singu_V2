@@ -5,7 +5,7 @@
  */
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { DEFAULT_PRONTIDAO_WEIGHTS, type ProntidaoWeights } from '@/lib/prontidaoScore';
+import { DEFAULT_PRONTIDAO_WEIGHTS, type ProntidaoWeights } from '@/domain/leadScoring';
 
 interface SessionOverride {
   contactId: string;
