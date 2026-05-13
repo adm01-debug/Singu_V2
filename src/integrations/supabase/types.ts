@@ -14072,14 +14072,23 @@ export type Database = {
           isSetofReturn: false
         }
       }
-      move_deal_atomic: {
-        Args: {
-          p_deal_id: string
-          p_new_probability?: number
-          p_new_stage: string
-        }
-        Returns: Json
-      }
+      move_deal_atomic:
+        | {
+            Args: {
+              p_deal_id: string
+              p_new_probability?: number
+              p_new_stage: string
+            }
+            Returns: Json
+          }
+        | {
+            Args: {
+              p_deal_id: string
+              p_new_probability?: number
+              p_new_stage: string
+            }
+            Returns: Json
+          }
       record_buyer_view: {
         Args: { _label?: string; _token: string }
         Returns: boolean
