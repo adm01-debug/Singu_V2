@@ -22,7 +22,7 @@ export function useSocialIntelligence(contactId: string) {
 
       // Sincronização Automática de Hobbies/Interesses baseada no enriquecimento social
       if (behaviorAnalysis?.interests && Array.isArray(behaviorAnalysis.interests)) {
-        const { data: contact } = await supabase.from('contacts').select('interests, hobbies').eq('id', contactId).single();
+        const { data: contact } = await supabase.from('contacts').select('interests, hobbies').eq('id', contactId).maybeSingle();
         if (contact) {
           const currentInterests = contact.interests || [];
           const suggestedInterests = behaviorAnalysis.interests.filter(i => !currentInterests.includes(i));
@@ -86,8 +86,8 @@ export function useSocialIntelligence(contactId: string) {
          .select('*')
          .eq('contact_id', contactId)
          .order('analysis_date', { ascending: false })
-         .limit(1)
-         .single();
+          .limit(1)
+          .maybeSingle();
  
        if (!analysis) {
          throw new Error('Nenhuma análise de comportamento social disponível para sincronização.');

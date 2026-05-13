@@ -35,7 +35,7 @@ export function NLPInsightsDashboard({ contactId, className }: Props) {
   const { data: contact } = useQuery({
     queryKey: ['contact-insights-header', contactId],
     queryFn: async () => {
-      const { data, error } = await supabase.from('contacts').select('*, companies(name)').eq('id', contactId).single();
+      const { data, error } = await supabase.from('contacts').select('*, companies(name)').eq('id', contactId).maybeSingle();
       if (error) throw error;
       return data;
     },
@@ -45,7 +45,7 @@ export function NLPInsightsDashboard({ contactId, className }: Props) {
   const { data: insights, isLoading } = useQuery({
     queryKey: ['nlp-insights-actionable', contactId],
      queryFn: async () => {
-       const { data: behavior } = await supabase.from('contacts').select('vak_profile, metaprogram_profile, objection_patterns').eq('id', contactId).single();
+        const { data: behavior } = await supabase.from('contacts').select('vak_profile, metaprogram_profile, objection_patterns').eq('id', contactId).maybeSingle();
        
        const vak = (behavior?.vak_profile as unknown as NLPProfile) || {};
        const meta = (behavior?.metaprogram_profile as unknown as NLPProfile) || {};

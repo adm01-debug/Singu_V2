@@ -19,10 +19,16 @@ export function useDISCAutoAnalysis(): UseDISCAutoAnalysisReturn {
 
     setAnalyzing(true);
     try {
+      const { data: interaction } = await supabase
+        .from('interactions')
+        .select('contact_id')
+        .eq('id', interactionId)
+        .maybeSingle();
+
       const { data, error } = await supabase.functions.invoke('disc-analyzer', {
         body: { 
           texts: [text], 
-          contactId: (await supabase.from('interactions').select('contact_id').eq('id', interactionId).single()).data?.contact_id,
+          contactId: interaction?.contact_id,
           interactionId 
         }
       });

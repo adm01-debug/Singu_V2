@@ -56,7 +56,7 @@ const urgencyMeta: Record<string, { label: string; variant: 'default' | 'destruc
          .from('contacts')
           .select('relationship_stage, last_interaction_at')
          .eq('id', contactId)
-         .single();
+          .maybeSingle();
        return contact;
      },
      enabled: !!contactId

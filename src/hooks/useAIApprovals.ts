@@ -64,7 +64,7 @@ export function useAIApprovals(contactId?: string) {
         .from('contacts')
         .select(`hobbies, interests, rapport_metadata`)
         .eq('id', suggestion.contact_id)
-        .single();
+        .maybeSingle();
 
       if (contactError) throw contactError;
 

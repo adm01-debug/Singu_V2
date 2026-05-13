@@ -62,7 +62,7 @@ const NLPAnalytics = () => {
          .from('contacts')
          .select('*, companies(name)')
          .eq('id', selectedContactId)
-         .single();
+          .maybeSingle();
        
        if (error) throw error;
  

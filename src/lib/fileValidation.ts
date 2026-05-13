@@ -11,15 +11,24 @@ export async function validateFileMagicBytes(file: File): Promise<boolean> {
   // Exemplos de headers:
   // PNG: 89504E47
   // PDF: 25504446
-  // JPEG: FFD8FFE0
-  
-  const validHeaders = ['89504E47', '25504446', 'FFD8FFE0', 'FFD8FFE1', 'FFD8FFE2'];
-  
-  if (validHeaders.includes(header)) return true;
-  
-   // Fallback para tipos não mapeados (aumentar lista conforme necessário)
-   return true; 
- }
+  // Headers mapping
+  const magicNumbers: Record<string, string[]> = {
+    'image/png': ['89504E47'],
+    'application/pdf': ['25504446'],
+    'image/jpeg': ['FFD8FFE0', 'FFD8FFE1', 'FFD8FFE2', 'FFD8FFDB'],
+    'image/gif': ['47494638'],
+    'application/zip': ['504B0304', '504B0506', '504B0708'],
+  };
+
+  const fileType = file.type;
+  if (!magicNumbers[fileType]) {
+    // If we don't have the magic number for this type, we allow it but log a warning in dev
+    if (import.meta.env.DEV) console.warn(`Magic bytes validation skipped for unknown type: ${fileType}`);
+    return true; 
+  }
+
+  return magicNumbers[fileType].some(m => header.startsWith(m));
+}
  
  export async function validateFileUpload(file: File, options?: { maxSizeMB: number }): Promise<{ valid: boolean; error?: string }> {
    if (options?.maxSizeMB && file.size > options.maxSizeMB * 1024 * 1024) {
