@@ -179,14 +179,14 @@ export function useMoveDeal() {
       return data;
     },
     // Optimistic update: aplica imediatamente no cache antes do servidor confirmar
-    onMutate: async ({ dealId, newStage, probability }) => {
+    onMutate: async ({ dealId, newStageId, probability }) => {
       await queryClient.cancelQueries({ queryKey: ['deals-pipeline'] });
       const previous = queryClient.getQueriesData<PipelineDeal[]>({ queryKey: ['deals-pipeline'] });
       queryClient.setQueriesData<PipelineDeal[]>({ queryKey: ['deals-pipeline'] }, (old) => {
         if (!old) return old;
         return old.map((d) =>
           d.id === dealId
-            ? { ...d, pipeline_stage: newStage, ...(probability !== undefined ? { probabilidade: probability } : {}) }
+            ? { ...d, pipeline_stage: newStageId, ...(probability !== undefined ? { probabilidade: probability } : {}) }
             : d
         );
       });
