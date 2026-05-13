@@ -170,13 +170,16 @@ export function useMoveDeal() {
       newStageId: string;
       probability?: number;
     }) => {
-      const { data, error } = await supabase.rpc('move_deal', {
-        p_deal_id: dealId,
-        p_new_stage_id: newStageId,
-        p_new_probability: probability
+       const { data, error } = await supabase.rpc('move_deal_atomic', {
+         p_deal_id: dealId,
+         p_new_stage: newStageId,
+         p_new_probability: probability
       });
       if (error) throw error;
-      return data;
+       if (data && data.success === false) {
+         throw new Error(data.error || 'Failed to move deal');
+       }
+       return data;
     },
     // Optimistic update: aplica imediatamente no cache antes do servidor confirmar
     onMutate: async ({ dealId, newStageId, probability }) => {
