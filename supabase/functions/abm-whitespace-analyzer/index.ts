@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 5, message: "Análise de whitespace muito frequente. Aguarde." });
 
@@ -12,7 +13,7 @@ interface AIOpportunity {
   rationale: string;
 }
 
-async function callLovableAI(account: Record<string, unknown>, committee: unknown[]): Promise<AIOpportunity[]> {
+async function callLovableAI(account: Record<string, unknown>, committee: unknown[], traceId: string): Promise<AIOpportunity[]> {
   const apiKey = Deno.env.get("LOVABLE_API_KEY");
   if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
 
@@ -33,6 +34,7 @@ Para cada oportunidade, retorne tipo, categoria de produto/serviço, valor estim
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
+      "x-trace-id": traceId
     },
     body: JSON.stringify({
       model: "google/gemini-3-flash-preview",
@@ -75,8 +77,8 @@ Para cada oportunidade, retorne tipo, categoria de produto/serviço, valor estim
     }),
   });
 
-  if (response.status === 429) throw new Error("Rate limit do Lovable AI atingido. Tente novamente em alguns instantes.");
-  if (response.status === 402) throw new Error("Créditos do Lovable AI esgotados. Adicione créditos na workspace.");
+  if (response.status === 429) throw new Error("ai_gateway_rate_limited");
+  if (response.status === 402) throw new Error("insufficient_credits");
   if (!response.ok) throw new Error(`Lovable AI error: ${response.status}`);
 
   const data = await response.json();
@@ -88,6 +90,9 @@ Para cada oportunidade, retorne tipo, categoria de produto/serviço, valor estim
 }
 
 Deno.serve(async (req) => {
+  const traceId = extractTraceId(req);
+  const log = tracedLogger(traceId, "abm-whitespace-analyzer");
+
   const corsResp = handleCorsAndMethod(req);
   if (corsResp) return corsResp;
 
@@ -95,8 +100,11 @@ Deno.serve(async (req) => {
   if (typeof authResult !== "string") return authResult;
   const userId = authResult;
 
-    const limited = limiter.check(userId);
-    if (limited) return limited;
+  const limited = limiter.check(userId);
+  if (limited) {
+    log.warn("rate_limit_exceeded", { userId });
+    return limited;
+  }
 
   try {
     const { account_id } = await req.json();
@@ -107,20 +115,26 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
+    log.info("analysis_started", { accountId: account_id, userId });
+
     const { data: account, error: accErr } = await supabase
       .from("abm_accounts")
       .select("*")
       .eq("id", account_id)
       .eq("user_id", userId)
       .single();
-    if (accErr || !account) return jsonError("Conta não encontrada", 404, req);
+    
+    if (accErr || !account) {
+      log.warn("account_not_found", { accountId: account_id });
+      return jsonError("Conta não encontrada", 404, req);
+    }
 
     const { data: committee } = await supabase
       .from("abm_buying_committee")
       .select("*")
       .eq("account_id", account_id);
 
-    const opportunities = await callLovableAI(account, committee ?? []);
+    const opportunities = await callLovableAI(account, committee ?? [], traceId);
 
     const inserts = opportunities.map((opp) => ({
       account_id,
@@ -133,17 +147,26 @@ Deno.serve(async (req) => {
       status: "identified",
     }));
 
-    if (inserts.length === 0) return jsonOk({ generated: 0, opportunities: [] }, req);
+    if (inserts.length === 0) {
+      log.info("no_opportunities_identified");
+      return jsonOk({ generated: 0, opportunities: [], traceId }, req);
+    }
 
     const { data: created, error: insErr } = await supabase
       .from("abm_whitespace_opportunities")
       .insert(inserts)
       .select();
-    if (insErr) return jsonError(insErr.message, 500, req);
+    
+    if (insErr) {
+      log.error("insert_opportunities_failed", { error: insErr.message });
+      return jsonError(insErr.message, 500, req);
+    }
 
-    return jsonOk({ generated: created?.length ?? 0, opportunities: created ?? [] }, req);
+    log.info("analysis_complete", { count: created?.length });
+    return jsonOk({ generated: created?.length ?? 0, opportunities: created ?? [], traceId }, req);
   } catch (err) {
-    console.error("abm-whitespace-analyzer error:", err);
-    return jsonError(err instanceof Error ? err.message : "Unknown error", 500, req);
+    const msg = err instanceof Error ? err.message : "Unknown error";
+    log.error("fatal_error", { error: msg });
+    return jsonError(msg, 500, req);
   }
 });
