@@ -5,6 +5,7 @@ import {
   Phone, Mail, Globe, MapPin, ExternalLink,
   Instagram, Linkedin, Facebook, Youtube, MessageCircle
 } from 'lucide-react';
+import { OptimizedImage } from '@/components/ui/optimized-image';
 import { FiscalDataCard } from './profile/FiscalDataCard';
 import { BusinessInfoCard } from './profile/BusinessInfoCard';
 import { motion } from 'framer-motion';
@@ -79,7 +80,12 @@ export function CompanyProfileCard({
           <div className="flex flex-col items-center -mt-8">
             <div className="w-24 h-24 rounded-2xl bg-gradient-primary flex items-center justify-center text-primary-foreground font-bold text-3xl shadow-strong border-4 border-card">
               {company.logo_url ? (
-                <img src={company.logo_url} alt={company.name} className="w-full h-full object-cover rounded-xl" loading="lazy" decoding="async" />
+                <OptimizedImage 
+                  src={company.logo_url} 
+                  alt={company.name} 
+                  className="w-full h-full object-cover rounded-xl" 
+                  containerClassName="w-full h-full"
+                />
               ) : (
                 safeInitial(company.name, 'E')
               )}
