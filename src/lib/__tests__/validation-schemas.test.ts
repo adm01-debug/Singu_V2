@@ -7,8 +7,8 @@ import {
   emailSchema,
   phoneSchema,
   cnpjSchema,
-  urlSchema,
-} from "@/lib/validationSchemas";
+   urlSchema,
+ } from "@/domain/validationSchemas";
 
 // ─── UUID ───
 describe("uuidSchema", () => {
