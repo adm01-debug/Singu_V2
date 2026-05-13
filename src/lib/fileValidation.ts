@@ -2,10 +2,15 @@
  * Validação de magic bytes para garantir a integridade dos arquivos enviados.
  */
 export async function validateFileMagicBytes(file: File): Promise<boolean> {
-  const slice = file.slice(0, 4);
-  const buffer = await slice.arrayBuffer();
-  const view = new Uint8Array(buffer);
+  // More compatible way to read first bytes
+  const buffer = await new Promise<ArrayBuffer>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as ArrayBuffer);
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file.slice(0, 8)); // Read first 8 bytes
+  });
   
+  const view = new Uint8Array(buffer);
   const header = Array.from(view).map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
   
   // Exemplos de headers:
