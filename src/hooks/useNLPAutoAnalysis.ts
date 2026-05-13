@@ -155,7 +155,7 @@ export function useNLPAutoAnalysis() {
          })
          .eq('id', contactId)
          .select('company_id')
-         .single();
+          .maybeSingle();
 
       // Sync to company if linked
       if (contactData?.company_id) {
