@@ -1,3 +1,21 @@
+## 📦 Migrations de Banco de Dados
+
+Seguimos o padrão Supabase/Postgres. Toda migration deve ser idempotente e incluir scripts de rollback comentados.
+
+```sql
+-- UP MIGRATION
+-- Descrição: O que a migration faz
+CREATE TABLE IF NOT EXISTS ...
+
+-- DOWN MIGRATION (Rollback)
+-- DROP TABLE IF EXISTS ...
+```
+
+**Regras:**
+1. Use `IF NOT EXISTS` e `DROP IF EXISTS`.
+2. Mutações críticas devem ser encapsuladas em funções `SECURITY DEFINER`.
+3. Sempre habilitar RLS para novas tabelas.
+
 # Guia de Contribuição — SINGU CRM
 
 Obrigado por contribuir! Este documento define o processo de desenvolvimento, revisão e entrega do SINGU CRM.
