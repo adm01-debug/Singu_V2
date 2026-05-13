@@ -49,7 +49,7 @@ import { ProntidaoFactorBreakdownChart } from '@/components/ficha-360/ProntidaoF
 import { SimulationModePanel } from '@/components/ficha-360/SimulationModePanel';
 import { computeProntidaoScore } from '@/domain/leadScoring';
 import { computeProntidaoTrend } from '@/domain/churnRisk';
-import { computeProximosPassos } from '@/lib/proximosPassos';
+import { computeProximosPassos } from '@/domain/nextStepLogic';
 import { useProximoPassoFeedbacks } from '@/hooks/useProximoPassoFeedback';
 import { applySimulation } from '@/domain/forecastSimulation';
 import { useEffectiveProntidaoWeights } from '@/stores/useProntidaoWeightsStore';

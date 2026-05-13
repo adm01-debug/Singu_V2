@@ -22,7 +22,7 @@ import type {
   ProximoPasso,
   ProximoPassoChannel,
   ProximoPassoPriority,
-} from '@/lib/proximosPassos';
+} from '@/domain/nextStepLogic';
 
 interface Props {
   passo: ProximoPasso;

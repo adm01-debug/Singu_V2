@@ -1,4 +1,4 @@
-import type { ProximoPasso, ProximoPassoPriority, ProximoPassoChannel } from '@/lib/proximosPassos';
+import type { ProximoPasso, ProximoPassoPriority, ProximoPassoChannel } from '@/domain/nextStepLogic';
 import type { NbaPriority, NbaSort } from '@/hooks/useProximosPassosFilters';
 import type { PassoFeedback } from '@/hooks/useProximoPassoFeedback';
 
