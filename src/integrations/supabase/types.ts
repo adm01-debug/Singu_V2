@@ -14062,6 +14062,38 @@ export type Database = {
       increment_form_view: { Args: { _slug: string }; Returns: undefined }
       increment_magnet_view: { Args: { _slug: string }; Returns: undefined }
       increment_webhook_quota: { Args: { _webhook_id: string }; Returns: Json }
+      move_deal: {
+        Args: {
+          p_deal_id: string
+          p_new_probability?: number
+          p_new_stage_id: string
+        }
+        Returns: {
+          company_id: string | null
+          contact_id: string | null
+          created_at: string
+          expected_closing_date: string | null
+          id: string
+          loss_reason: string | null
+          notes: string | null
+          pipeline_id: string | null
+          priority: string | null
+          probability: number | null
+          stage_id: string | null
+          status: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+          value: number | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "deals"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       record_buyer_view: {
         Args: { _label?: string; _token: string }
         Returns: boolean
@@ -14232,6 +14264,34 @@ export type Database = {
       track_magnet_download: {
         Args: { _email: string; _name?: string; _slug: string; _utms?: Json }
         Returns: Json
+      }
+      update_deal_amount: {
+        Args: { p_deal_id: string; p_new_value: number }
+        Returns: {
+          company_id: string | null
+          contact_id: string | null
+          created_at: string
+          expected_closing_date: string | null
+          id: string
+          loss_reason: string | null
+          notes: string | null
+          pipeline_id: string | null
+          priority: string | null
+          probability: number | null
+          stage_id: string | null
+          status: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+          value: number | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "deals"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       validate_behavioral_consistency: {
         Args: { p_contact_id: string }

@@ -36,7 +36,13 @@ export default function BattleCardDetail() {
         <Card>
           <CardContent className="p-6 flex items-center gap-4">
             {card.competitor_logo_url ? (
-              <img src={card.competitor_logo_url} alt={card.competitor_name} className="size-16 rounded-lg object-contain bg-muted/30 p-2" />
+              <img 
+                src={card.competitor_logo_url} 
+                alt={card.competitor_name} 
+                className="size-16 rounded-lg object-contain bg-muted/30 p-2" 
+                loading="lazy" 
+                decoding="async" 
+              />
             ) : (
               <div className="size-16 rounded-lg bg-destructive/10 text-destructive flex items-center justify-center">
                 <Swords className="size-8" />

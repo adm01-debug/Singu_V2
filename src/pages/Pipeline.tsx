@@ -331,7 +331,7 @@ export default function Pipeline() {
       const stage = STAGES.find((s) => s.id === stageId);
       if (!stage) return;
       moveDeal.mutate(
-        { dealId, newStage: stageId, probability: stage.probability },
+        { dealId, newStageId: stageId, probability: stage.probability },
         {
           onSuccess: () => toast.success(`Deal movido para ${stage.name}`),
           onError: () => toast.error('Erro ao mover deal'),

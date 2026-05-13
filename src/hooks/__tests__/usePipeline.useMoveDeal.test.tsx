@@ -43,7 +43,7 @@ describe('useMoveDeal — snapshot e restore', () => {
     updateExternalDataMock.mockResolvedValue({ data: null, error: null });
 
     const { result } = renderHook(() => useMoveDeal(), { wrapper });
-    result.current.mutate({ dealId: 'd1', newStage: 'Qualified', probability: 30 });
+    result.current.mutate({ dealId: 'd1', newStageId: 'Qualified', probability: 30 });
 
     await waitFor(() => {
       const cached = qc.getQueryData<PipelineDeal[]>(['deals-pipeline']);
@@ -58,7 +58,7 @@ describe('useMoveDeal — snapshot e restore', () => {
     updateExternalDataMock.mockResolvedValue({ data: null, error: new Error('boom') });
 
     const { result } = renderHook(() => useMoveDeal(), { wrapper });
-    result.current.mutate({ dealId: 'd1', newStage: 'Won' });
+    result.current.mutate({ dealId: 'd1', newStageId: 'Won' });
 
     await waitFor(() => expect(result.current.isError).toBe(true));
     const cached = qc.getQueryData<PipelineDeal[]>(['deals-pipeline']);

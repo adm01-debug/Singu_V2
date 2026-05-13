@@ -1,3 +1,7 @@
+      - name: Validate PR Title (Conventional Commits)
+        if: github.event_name == 'pull_request'
+        run: echo "${{ github.event.pull_request.title }}" | npx commitlint
+
       - name: Check for circular dependencies
         run: npx depcruise src --config .dependency-cruiser.cjs
 
