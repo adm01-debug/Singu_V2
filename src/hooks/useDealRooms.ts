@@ -1,3 +1,4 @@
+import { validateFileUpload } from "@/lib/fileValidation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -310,6 +311,9 @@ export function useUploadDocument(roomId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (file: File) => {
+      const validation = await validateFileUpload(file, { maxSizeMB: 50 });
+      if (!validation.valid) throw new Error(validation.error);
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const path = `deal-rooms/${roomId}/${Date.now()}-${file.name}`;
