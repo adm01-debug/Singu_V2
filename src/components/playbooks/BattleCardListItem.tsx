@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Swords, ChevronRight, Trophy, AlertTriangle } from "lucide-react";
+ import { Swords, ChevronRight, Trophy, AlertTriangle } from "lucide-react";
+ import { OptimizedImage } from "@/components/ui/optimized-image";
 import { Link } from "react-router-dom";
 import type { BattleCard } from "@/hooks/useBattleCards";
 
@@ -9,9 +10,13 @@ export function BattleCardListItem({ card }: { card: BattleCard }) {
   return (
     <Card variant="interactive">
       <CardHeader className="flex flex-row items-center gap-3 space-y-0">
-        {card.competitor_logo_url ? (
-          <img src={card.competitor_logo_url} alt={card.competitor_name} className="size-10 rounded-md object-contain bg-muted/30 p-1" />
-        ) : (
+         {card.competitor_logo_url ? (
+           <OptimizedImage 
+             src={card.competitor_logo_url} 
+             alt={card.competitor_name} 
+             className="size-10 rounded-md object-contain bg-muted/30 p-1" 
+           />
+         ) : (
           <div className="size-10 rounded-md bg-destructive/10 text-destructive flex items-center justify-center">
             <Swords className="size-5" />
           </div>
