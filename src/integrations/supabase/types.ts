@@ -13821,6 +13821,16 @@ export type Database = {
         }
         Relationships: []
       }
+      slow_queries_audit: {
+        Row: {
+          calls: number | null
+          mean_exec_ms: number | null
+          query: string | null
+          rows: number | null
+          total_exec_seconds: number | null
+        }
+        Relationships: []
+      }
       v_contact_behavior_audit: {
         Row: {
           analysis_type: string | null
