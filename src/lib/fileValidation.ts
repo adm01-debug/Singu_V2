@@ -17,6 +17,10 @@ export async function validateFileMagicBytes(file: File): Promise<boolean> {
   
   if (validHeaders.includes(header)) return true;
   
-  // Fallback para tipos não mapeados (aumentar lista conforme necessário)
-  return true; 
-}
+   // Fallback para tipos não mapeados (aumentar lista conforme necessário)
+   return true; 
+ }
+ 
+ export async function validateFileUpload(file: File): Promise<boolean> {
+   return validateFileMagicBytes(file);
+ }
