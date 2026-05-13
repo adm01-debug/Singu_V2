@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Users, Banknote, Network } from 'lucide-react';
+import { OptimizedImage } from '@/components/ui/optimized-image';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { formatDistanceToNow } from 'date-fns';
@@ -47,7 +48,11 @@ export const CompanyListItem = React.memo(function CompanyListItem({
       <div className="relative w-10 h-10 shrink-0">
         <div className="w-10 h-10 rounded-lg bg-muted/40 flex items-center justify-center text-sm font-semibold text-muted-foreground">
           {company.logo_url ? (
-            <img src={company.logo_url} alt={company.name} className="w-10 h-10 rounded-lg object-cover" loading="lazy" decoding="async" />
+            <OptimizedImage 
+              src={company.logo_url} 
+              alt={company.name} 
+              className="w-10 h-10 rounded-lg object-cover" 
+            />
           ) : (
             ((company.name || 'E').replace(/^\d+\s*[-–—]\s*/, '')[0] || 'E').toUpperCase()
           )}
