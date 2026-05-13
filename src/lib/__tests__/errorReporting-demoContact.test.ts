@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { DEMO_CONTACT, DEMO_TEMPERAMENT_PROFILE } from '@/lib/demo-contact';
+import { DEMO_CONTACT, DEMO_TEMPERAMENT_PROFILE } from '@/domain/demoEntities';
 
 describe('Demo Contact Integrity', () => {
   it('has required identity fields', () => {

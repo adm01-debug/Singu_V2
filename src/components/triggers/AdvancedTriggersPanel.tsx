@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 import { Contact } from '@/types';
 import { useAdvancedTriggers } from '@/hooks/useAdvancedTriggers';
 import { MENTAL_TRIGGERS } from '@/types/triggers';
-import { DEMO_CONTACT } from '@/lib/demo-contact';
+import { DEMO_CONTACT } from '@/domain/demoEntities';
 import { ChainsTab, SaturationTab } from './advanced-triggers/AdvancedTriggersTabContent';
 
 interface AdvancedTriggersPanelProps {

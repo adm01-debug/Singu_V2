@@ -648,7 +648,7 @@ describe('Sanitize — Security Stress', () => {
 // ═══════════════════════════════════════════════════
 // 7. VALIDATION SCHEMAS — Zod parsing stress
 // ═══════════════════════════════════════════════════
-import { contactFormSchema, companyFormSchema, interactionFormSchema, emailSchema, phoneSchema, cnpjSchema, urlSchema } from '@/lib/validationSchemas';
+import { contactFormSchema, companyFormSchema, interactionFormSchema, emailSchema, phoneSchema, cnpjSchema, urlSchema } from '@/domain/validationSchemas';
 
 describe('Validation Schemas — Performance & Edge Cases', () => {
   it('valida 5.000 contatos em < 500ms', () => {

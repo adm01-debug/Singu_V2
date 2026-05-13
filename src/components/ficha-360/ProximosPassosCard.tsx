@@ -18,7 +18,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useNextBestAction } from '@/hooks/useNextBestAction';
-import type { ProximoPasso, ProximoPassoChannel, ProximoPassoPriority } from '@/lib/proximosPassos';
+import type { ProximoPasso, ProximoPassoChannel, ProximoPassoPriority } from '@/domain/nextStepLogic';
 import type { BestTimeHint } from '@/lib/proximoPassoDefaults';
 import { ProximoPassoQuickForm } from './ProximoPassoQuickForm';
 import { AgendarReuniaoForm } from './AgendarReuniaoForm';

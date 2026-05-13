@@ -23,7 +23,7 @@ import { cn } from '@/lib/utils';
 import { Contact, DISCProfile } from '@/types';
 import { VAKType } from '@/types/vak';
 import { getDominantVAK, getDISCProfile } from '@/lib/contact-utils';
-import { DEMO_CONTACT } from '@/lib/demo-contact';
+import { DEMO_CONTACT } from '@/domain/demoEntities';
 
 interface RapportSuggestion {
   category: 'mirroring' | 'pacing' | 'leading' | 'language';

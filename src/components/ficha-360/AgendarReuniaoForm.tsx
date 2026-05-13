@@ -15,7 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { useCreateMeeting, type MeetingModality } from '@/hooks/useCreateMeeting';
 import { generateMeetingInvite, type SentimentTone } from '@/lib/scriptGenerator';
-import type { ProximoPasso } from '@/lib/proximosPassos';
+import type { ProximoPasso } from '@/domain/nextStepLogic';
 import type { BestTimeHint } from '@/lib/proximoPassoDefaults';
 
 interface Props {

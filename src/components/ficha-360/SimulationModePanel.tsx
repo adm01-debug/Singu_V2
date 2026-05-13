@@ -31,7 +31,7 @@ import {
   type SimulationSentiment,
 } from '@/stores/useSimulationStore';
 import { useCustomSimulationPresetsStore } from '@/stores/useCustomSimulationPresetsStore';
-import { SIMULATION_PRESETS, hasActiveOverrides } from '@/lib/prontidaoSimulation';
+import { SIMULATION_PRESETS, hasActiveOverrides } from '@/domain/forecastSimulation';
 
 interface Props {
   realScore: number;

@@ -6,7 +6,7 @@ import {
   computeProntidaoScore,
   type ProntidaoLevel,
   type ProntidaoWeights,
-} from './prontidaoScore';
+} from './leadScoring';
 import type { ExternalInteraction } from '@/hooks/useExternalInteractions';
 
 interface ProfileLike {

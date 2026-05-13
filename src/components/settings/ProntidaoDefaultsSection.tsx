@@ -13,7 +13,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useProntidaoWeightsStore } from '@/stores/useProntidaoWeightsStore';
-import type { ProntidaoWeights } from '@/lib/prontidaoScore';
+import type { ProntidaoWeights } from '@/domain/leadScoring';
 import { evaluateWeightsHealth } from '@/lib/prontidaoWeightsHealth';
 
 const FACTORS: Array<{

@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import { WhyScoreDrawer, type WhyScoreFactor } from '@/components/intelligence/WhyScoreDrawer';
 import { ProntidaoWeightsEditor } from '@/components/ficha-360/ProntidaoWeightsEditor';
-import type { ProntidaoResult, ProntidaoLevel, ProntidaoStatus } from '@/lib/prontidaoScore';
+import type { ProntidaoResult, ProntidaoLevel, ProntidaoStatus } from '@/domain/leadScoring';
 
 interface Props {
   data: ProntidaoResult;

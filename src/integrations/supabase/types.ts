@@ -9689,52 +9689,30 @@ export type Database = {
       }
       pipeline_stage_transitions: {
         Row: {
+          allowed: boolean | null
           created_at: string | null
-          from_stage_id: string | null
+          description: string | null
+          from_stage: string
           id: string
-          is_allowed: boolean | null
-          pipeline_id: string | null
-          to_stage_id: string | null
+          to_stage: string
         }
         Insert: {
+          allowed?: boolean | null
           created_at?: string | null
-          from_stage_id?: string | null
+          description?: string | null
+          from_stage: string
           id?: string
-          is_allowed?: boolean | null
-          pipeline_id?: string | null
-          to_stage_id?: string | null
+          to_stage: string
         }
         Update: {
+          allowed?: boolean | null
           created_at?: string | null
-          from_stage_id?: string | null
+          description?: string | null
+          from_stage?: string
           id?: string
-          is_allowed?: boolean | null
-          pipeline_id?: string | null
-          to_stage_id?: string | null
+          to_stage?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "pipeline_stage_transitions_from_stage_id_fkey"
-            columns: ["from_stage_id"]
-            isOneToOne: false
-            referencedRelation: "pipeline_stages"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "pipeline_stage_transitions_pipeline_id_fkey"
-            columns: ["pipeline_id"]
-            isOneToOne: false
-            referencedRelation: "pipelines"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "pipeline_stage_transitions_to_stage_id_fkey"
-            columns: ["to_stage_id"]
-            isOneToOne: false
-            referencedRelation: "pipeline_stages"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       pipeline_stages: {
         Row: {
@@ -14093,6 +14071,14 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      move_deal_atomic: {
+        Args: {
+          p_deal_id: string
+          p_new_probability?: number
+          p_new_stage: string
+        }
+        Returns: Json
       }
       record_buyer_view: {
         Args: { _label?: string; _token: string }

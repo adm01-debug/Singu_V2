@@ -5,7 +5,7 @@
  * Função pura, sem efeitos colaterais, totalmente testável.
  */
 
-import type { ProntidaoResult } from './prontidaoScore';
+import type { ProntidaoResult } from './leadScoring';
 
 export type ProximoPassoChannel = 'whatsapp' | 'email' | 'call' | 'meeting' | 'linkedin';
 export type ProximoPassoPriority = 'alta' | 'media' | 'baixa';

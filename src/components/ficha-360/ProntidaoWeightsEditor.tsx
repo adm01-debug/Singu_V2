@@ -17,7 +17,7 @@ import {
   useProntidaoWeightsStore,
   useEffectiveProntidaoWeights,
 } from '@/stores/useProntidaoWeightsStore';
-import type { ProntidaoWeights } from '@/lib/prontidaoScore';
+import type { ProntidaoWeights } from '@/domain/leadScoring';
 import { evaluateWeightsHealth } from '@/lib/prontidaoWeightsHealth';
 
 const FACTORS: Array<{ key: keyof ProntidaoWeights; label: string }> = [

@@ -2,7 +2,7 @@
  * Avalia a "saúde" do conjunto de pesos do Score de Prontidão.
  * Função pura, sem dependências externas.
  */
-import type { ProntidaoWeights } from './prontidaoScore';
+import type { ProntidaoWeights } from '@/domain/leadScoring';
 
 export type WeightsHealth = 'zero' | 'low' | 'ok';
 

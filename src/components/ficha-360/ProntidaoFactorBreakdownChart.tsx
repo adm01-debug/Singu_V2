@@ -13,7 +13,7 @@ import { Layers } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AccessibleChart } from '@/components/ui/accessible-chart';
-import type { ProntidaoTrendPoint } from '@/lib/prontidaoTrend';
+import type { ProntidaoTrendPoint } from '@/domain/churnRisk';
 
 interface Props {
   data: ProntidaoTrendPoint[];
