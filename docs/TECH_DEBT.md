@@ -1,21 +1,23 @@
-# 🛠️ Technical Debt Backlog — SINGU CRM
-
-Este documento consolida os débitos técnicos identificados durante as auditorias e rodadas de desenvolvimento.
-
-## 1. Arquitetura & Domínio
-- [ ] **DDD Core Extraction**: Mover lógica de `src/lib/` para `src/domain/` (Parcialmente iniciado na Rodada P).
-- [ ] **Circular Dependencies**: Corrigir dependências circulares remanescentes identificadas pelo `dependency-cruiser`.
-- [ ] **Query N+1**: Auditar `external-data` proxy para evitar queries N+1 latentes em listas grandes.
-
-## 2. Banco de Dados & Performance
-- [ ] **Atomic Transitions**: Migrar mutações críticas de deals/leads para RPCs (Iniciado com `move_deal`).
-- [ ] **Image Optimization**: Implementar pipeline de AVIF/WebP automático para logos e avatares.
-- [ ] **Index Audit**: Analisar planos de execução das top 20 queries usando `pg_stat_statements`.
-
-## 3. Segurança
-- [ ] **Pen-Test Externo**: Realizar e documentar resultados de teste de intrusão profissional.
-- [ ] **MFA Enforcement**: Expandir obrigatoriedade de MFA para todas as roles com acesso a dados sensíveis (PII).
-
-## 4. Manutenibilidade
-- [ ] **Conventional Commits**: Enforçar via `commitlint` (Implementado Rodada P).
-- [ ] **Cognitive Complexity**: Manter limite de 15 por função via ESLint SonarJS.
+ # 🚩 TECH DEBT BACKLOG — SINGU CRM
+ 
+ Este documento centraliza o débito técnico identificado durante as rodadas de auditoria e desenvolvimento.
+ 
+ ## 🏗️ Arquitetura
+ - [ ] **Consolidação de Provedores**: `lint-providers.cjs` detecta excesso de nesting; planejar `Composition Root`.
+ - [ ] **Edge Functions Isolation**: Migrar lógica de `generate-insights` para um worker dedicado se o tempo de execução exceder 5s.
+ 
+ ## 🛡️ Segurança
+ - [ ] **Hardening de MFA**: Tornar MFA obrigatório para todos os usuários (atualmente apenas admins).
+ - [ ] **Security Invoker Views**: Migrar views legadas de `SECURITY DEFINER` para `SECURITY INVOKER` onde possível.
+ 
+ ## 💾 Banco de Dados
+ - [ ] **Audit Trail Storage**: Implementar particionamento na tabela `audit_log` por mês.
+ - [ ] **Queries N+1**: Auditar `useContactTimeline` para garantir que sub-entidades sejam buscadas em batch.
+ 
+ ## ⚡ Performance
+ - [ ] **Image Optimization**: Adotar `<picture>` com AVIF em toda a galeria de assets.
+ - [ ] **React Server Components**: Avaliar migração parcial se o bundle size ultrapassar 400KB.
+ 
+ ## 🛠️ Infraestrutura
+ - [ ] **Lighthouse CI**: Integrar ao workflow de PR para evitar regressões de UX.
+ - [ ] **Cross-Region Replication**: Validar latência de réplicas em US-East para redundância.

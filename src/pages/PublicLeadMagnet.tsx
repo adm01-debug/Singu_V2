@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
-import { Download, CheckCircle2 } from 'lucide-react';
+ import { Download, CheckCircle2 } from 'lucide-react';
+ import { OptimizedImage } from '@/components/ui/optimized-image';
 import { toast } from 'sonner';
 import type { LeadMagnet } from '@/hooks/useLeadMagnets';
 
@@ -66,9 +67,13 @@ export default function PublicLeadMagnet() {
       <Helmet><title>{magnet.title}</title><meta name="description" content={magnet.description ?? magnet.title} /></Helmet>
 
       <Card className="w-full max-w-2xl">
-        {magnet.thumbnail_url && (
-          <img src={magnet.thumbnail_url} alt={magnet.title} className="w-full h-48 object-cover rounded-t-lg" />
-        )}
+         {magnet.thumbnail_url && (
+           <OptimizedImage 
+             src={magnet.thumbnail_url} 
+             alt={magnet.title} 
+             className="w-full h-48 object-cover rounded-t-lg" 
+           />
+         )}
         <CardHeader>
           <Badge variant="secondary" className="w-fit text-[10px] capitalize">{magnet.type}</Badge>
           <CardTitle className="text-2xl">{magnet.title}</CardTitle>
