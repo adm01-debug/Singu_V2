@@ -4,14 +4,14 @@ import { z } from "zod";
 
 export const uuidSchema = z.string().uuid("ID inválido");
 
-export const emailSchema = z
-  .string()
-  .email("E-mail inválido")
-  .max(255, "E-mail muito longo")
-  .transform((v) => v.trim().toLowerCase())
-  .or(z.literal(""))
-  .optional()
-  .nullable();
+ export const emailSchema = z
+   .preprocess(
+     (v) => (typeof v === "string" ? v.trim().toLowerCase() : v),
+     z.string().email("E-mail inválido").max(255, "E-mail muito longo")
+   )
+   .or(z.literal(""))
+   .optional()
+   .nullable();
 
 export const phoneSchema = z
   .string()
