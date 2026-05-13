@@ -1,3 +1,4 @@
+export const AdminObservability = lazy(() => import("@/pages/admin/Observability"));
 import { lazy } from 'react';
 
 /**
