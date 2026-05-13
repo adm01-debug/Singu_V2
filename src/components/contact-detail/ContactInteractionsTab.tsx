@@ -91,7 +91,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
         company_id: companyId,
         user_id: user.id,
       } as unknown as import('@/integrations/supabase/types').Database['public']['Tables']['interactions']['Insert'];
-       const { data: interaction, error } = await supabase.from('interactions').insert(insertData).select().single();
+       const { data: interaction, error } = await supabase.from('interactions').insert(insertData).select().maybeSingle();
        if (error) throw error;
        
        toast.success('Interação registrada');

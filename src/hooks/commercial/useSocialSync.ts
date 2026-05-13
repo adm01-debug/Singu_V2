@@ -47,7 +47,7 @@ export function useSocialSync(contactId: string) {
           retry_count: 0
         })
         .select()
-        .single();
+        .maybeSingle();
 
       if (queueError) throw queueError;
 

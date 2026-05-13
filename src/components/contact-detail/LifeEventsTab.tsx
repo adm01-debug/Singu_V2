@@ -126,7 +126,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
 
   const createEventMutation = useMutation({
     mutationFn: async (event: TablesInsert<'life_events'>) => {
-      const { data, error } = await supabase.from('life_events').insert(event).select().single();
+      const { data, error } = await supabase.from('life_events').insert(event).select().maybeSingle();
       if (error) throw error;
       return data;
     },
@@ -143,7 +143,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
 
   const updateEventMutation = useMutation({
     mutationFn: async ({ id, ...event }: Partial<Tables<'life_events'>> & { id: string }) => {
-      const { data, error } = await supabase.from('life_events').update(event).eq('id', id).select().single();
+      const { data, error } = await supabase.from('life_events').update(event).eq('id', id).select().maybeSingle();
       if (error) throw error;
       return data;
     },

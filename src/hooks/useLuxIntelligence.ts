@@ -193,8 +193,8 @@ export function useLuxIntelligence(entityType: 'contact' | 'company', entityId?:
              relationship_stage: 'prospect',
              relationship_score: 10,
            })
-           .select()
-           .single();
+            .select()
+            .maybeSingle();
  
          if (error) throw error;
          toast.success(`Contato ${firstName} adicionado com sucesso!`);
