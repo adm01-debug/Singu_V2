@@ -144,12 +144,23 @@ async function findContactByPhone(supabase: any, phoneNumber: string): Promise<{
         // Found contact in external DB;
 
         // Get the default user (first user in profiles) to assign interaction
-        const { data: profiles } = await supabase
-          .from('profiles')
-          .select('id')
-          .limit(1);
-
-        const defaultUserId = profiles?.[0]?.id || null;
+         // Try to find the user associated with this instance first
+         const { data: instanceData } = await supabase
+           .from('whatsapp_instances')
+           .select('user_id')
+           .eq('instance_name', instance)
+           .maybeSingle();
+ 
+         let defaultUserId = instanceData?.user_id;
+ 
+         if (!defaultUserId) {
+           // Fallback to first user in profiles as last resort
+           const { data: profiles } = await supabase
+             .from('profiles')
+             .select('id')
+             .limit(1);
+           defaultUserId = profiles?.[0]?.id || null;
+         }
 
         if (!defaultUserId) {
           console.error('No user found in profiles to assign interaction');
