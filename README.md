@@ -71,7 +71,15 @@ npm run dev
 | `npm run lint` | Roda ESLint |
 | `npm run preview` | Preview do build de produção |
 
-## 🗂️ Estrutura do projeto
+ ## 📋 Auditoria Enterprise
+
+ O sistema passa por processos rigorosos de auditoria técnica e funcional para garantir a excelência 10/10.
+
+ - **Relatório Completo (Markdown)**: [audit_report.md](./audit_report.md)
+ - **Relatório Completo (PDF)**: [audit_report.pdf](./audit_report.pdf)
+ - **Arquivo de Backup**: Disponível na pasta `docs/`
+
+ ## 🗂️ Estrutura do projeto
 
 ```
 singu/
