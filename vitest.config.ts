@@ -5,16 +5,13 @@
    test: {
      globals: true,
      environment: 'jsdom',
-     alias: {
-       '@': path.resolve(__dirname, './src'),
-       'npm:@supabase/supabase-js@2': path.resolve(__dirname, './node_modules/@supabase/supabase-js/dist/main/index.js'),
-     },
      include: ['tests/**/*.{test,spec}.{ts,tsx}', 'src/**/*.{test,spec}.{ts,tsx}'],
      exclude: ['node_modules', 'dist', '.idea', '.git', '.cache'],
    },
    resolve: {
-     alias: {
-       '@': path.resolve(__dirname, './src'),
-     },
+     alias: [
+       { find: '@', replacement: path.resolve(__dirname, './src') },
+       { find: /^npm:(.*)@(.*)$/, replacement: '$1' }
+     ]
    },
  });
