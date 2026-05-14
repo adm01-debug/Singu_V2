@@ -46,8 +46,15 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Check bundle size budget
-        run: node scripts/check-bundle-size.mjs
+       - name: Check bundle size budget
+         run: node scripts/check-bundle-size.mjs
+
+       - name: Generate Audit PDF
+         run: |
+           npm install -g md-to-pdf
+           npx md-to-pdf audit_report.md --no-sandbox
+           mv audit_report.pdf docs/audit_report.pdf
+           cp docs/audit_report.pdf audit_report.pdf
 
       - name: Lighthouse CI (performance budgets)
         run: npx --yes @lhci/cli@0.13.x autorun || echo "::warning::Lighthouse-CI assertions failed (non-blocking)"
