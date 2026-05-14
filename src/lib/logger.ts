@@ -31,7 +31,7 @@ async function persistError(message: string, severity: 'info' | 'warning' | 'err
     // Converte para string para garantir compatibilidade com o tipo Json do Supabase
     const contextStr = JSON.stringify(args.filter(a => !(a instanceof Error)));
 
-    await supabase.from('error_logs').insert([{
+     await supabase.from?.('error_logs').insert([{
       message,
       severity,
       stack: errorObj?.stack || null,
