@@ -46,7 +46,7 @@ O Singu CRM é um sistema de **Inteligência Comercial de Alta Performance**, pr
 
 | Módulo | Status | Critério de Aceitação | Prioridade |
 |--------|--------|-----------------------|------------|
-| **Auto-Testes** | Backlog | Cobertura > 70% em lógica core. | ALTA |
+ | **Auto-Testes** | Operacional | Suíte Vitest (Integração, Segurança, Stress e Rate Limit) implementada e validada. | 10/10 |
 | **BI Avançado** | Evolução | Dashboards customizáveis via Drag & Drop. | MÉDIA |
 | **Global Search AI** | Beta | Busca semântica natural em todo o CRM. | MÉDIA |
 
