@@ -1,3 +1,6 @@
+ 
+ ## 📄 Documentação Estratégica
+ - [Estratégia de UX e Navegação](docs/ux_improvement_strategy.md) - Guia completo de melhorias de interface e fluxos.
 # SINGU CRM
 
 > **Sistema de Inteligência Relacional** — CRM enterprise com módulos avançados de análise comportamental, PNL, neuromarketing e automação de relacionamento.

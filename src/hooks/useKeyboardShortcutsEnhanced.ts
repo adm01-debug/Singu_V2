@@ -74,14 +74,21 @@ export function useKeyboardShortcutsEnhanced(options: UseKeyboardShortcutsOption
     { key: 'n', alt: true, action: () => navigate('/network'), description: 'Network', category: 'navigation' },
     { key: 'a', alt: true, action: () => navigate('/analytics'), description: 'Analytics', category: 'navigation' },
     { key: ',', alt: true, action: () => navigate('/configuracoes'), description: 'Configurações', category: 'navigation' },
-    { 
-      key: 'ArrowLeft', 
-      alt: true, 
-      action: () => window.dispatchEvent(new CustomEvent('navigate-back')),
-      description: 'Voltar',
-      category: 'navigation',
-      global: true
-    },
+     { 
+       key: 'ArrowLeft', 
+       alt: true, 
+       action: () => window.dispatchEvent(new CustomEvent('navigate-back')),
+       description: 'Voltar',
+       category: 'navigation',
+       global: true
+     },
+     { 
+       key: 'Backspace', 
+       action: () => window.dispatchEvent(new CustomEvent('navigate-back')),
+       description: 'Voltar (Backspace)',
+       category: 'navigation',
+       global: false // Don't trigger in inputs
+     },
 
     // Quick actions (Ctrl/Cmd + letter)
     { 

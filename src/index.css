@@ -1,3 +1,17 @@
+   /* Micro-interactions globals */
+   button:active:not(:disabled), 
+   [role="button"]:active:not(:disabled),
+   .clickable:active {
+     transform: scale(0.97);
+     transition: transform 0.1s var(--ease-out);
+   }
+ 
+   button, 
+   [role="button"],
+   .clickable {
+     transition: transform 0.2s var(--ease-spring), background-color 0.2s var(--ease-out), opacity 0.2s var(--ease-out);
+   }
+ 
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
