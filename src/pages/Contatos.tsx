@@ -266,7 +266,7 @@ const Contatos = () => {
     <>
       <AppLayout>
         <SEOHead title="Contatos" description="Gestão inteligente de contatos e relacionamentos" />
-        <Header title="Contatos" subtitle={`${filteredAndSortedContacts.length} de ${contacts.length} pessoas`} showAddButton addButtonLabel="Novo Contato" onAddClick={() => setIsFormOpen(true)} hideBack />
+         <Header title="Contatos" subtitle={`${filteredAndSortedContacts.length} de ${contacts.length} pessoas`} showAddButton addButtonLabel="Novo Contato" onAddClick={() => setIsFormOpen(true)} />
 
         <div className="px-4 md:px-6 -mt-2 mb-3">
           <ContatosSavedViews
