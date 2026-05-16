@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Copy, Check, MessageSquare, HelpCircle, Shield, ListChecks, Library } from "lucide-react";
+import { MessageSquare, HelpCircle, Shield, ListChecks, Library, Copy, Check } from "lucide-react";
+import { sanitizeHtml } from "@/lib/sanitize";
 import { toast } from "sonner";
 import { SECTION_LABELS, type PlaybookSection } from "@/hooks/usePlaybooks";
 
@@ -50,7 +51,12 @@ export function PlaybookSectionRenderer({ section }: { section: PlaybookSection 
             {section.items.map((item, i) => (
               <li key={i} className="flex gap-2 text-sm">
                 <span className="text-primary font-semibold mt-0.5 shrink-0">{i + 1}.</span>
-                <span className="text-foreground/90 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: item.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>") }} />
+                <span 
+                  className="text-foreground/90 whitespace-pre-line" 
+                  dangerouslySetInnerHTML={{ 
+                    __html: sanitizeHtml(item.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")) 
+                  }} 
+                />
               </li>
             ))}
           </ul>
