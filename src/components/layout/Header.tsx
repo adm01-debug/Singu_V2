@@ -58,7 +58,10 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
   const resolvedBackTo = backTo || PARENT_ROUTES[location.pathname] || '/';
 
   return (
-    <header ref={ref} className="sticky top-0 z-30 border-b border-border/40 bg-[linear-gradient(180deg,hsl(var(--surface-1))/0.94_0%,hsl(var(--card))/0.88_100%)] backdrop-blur-md px-4 md:px-6 py-3">
+    <header 
+      ref={ref} 
+      className="sticky top-0 z-30 border-b border-border/60 bg-[linear-gradient(180deg,hsl(var(--surface-1))/0.95_0%,hsl(var(--card))/0.9_100%)] backdrop-blur-xl px-4 md:px-6 py-3 shadow-sm shadow-black/5"
+    >
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
           {showBack && (

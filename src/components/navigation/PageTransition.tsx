@@ -18,8 +18,8 @@ export function PageTransition({ children, className }: PageTransitionProps) {
     return <div className={className}>{children}</div>;
   }
 
-  const slideOffset = direction === 'back' ? -10 : 10;
-  const exitOffset = direction === 'back' ? 10 : -10;
+  const slideOffset = direction === 'back' ? -16 : 16;
+  const exitOffset = direction === 'back' ? 16 : -16;
 
   return (
     <AnimatePresence mode="wait" initial={false}>
@@ -29,8 +29,8 @@ export function PageTransition({ children, className }: PageTransitionProps) {
         animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
         exit={{ opacity: 0, x: exitOffset, filter: 'blur(2px)' }}
         transition={{
-          duration: 0.15,
-          ease: [0.22, 1, 0.36, 1],
+          duration: 0.25,
+          ease: [0.23, 1, 0.32, 1],
         }}
         className={className}
       >

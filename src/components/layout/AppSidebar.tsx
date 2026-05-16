@@ -143,7 +143,11 @@ function AppSidebarInner() {
   }, [user?.user_metadata?.first_name, user?.user_metadata?.last_name, user?.user_metadata?.full_name, user?.email]);
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-border" aria-label="Navegação principal">
+    <Sidebar 
+      collapsible="icon" 
+      className="border-r border-border/60 bg-sidebar/80 backdrop-blur-xl" 
+      aria-label="Navegação principal Nexus"
+    >
       {/* ─── Header ─── */}
       <SidebarHeader className="p-3">
         <Link to="/" className="flex items-center gap-2.5 min-w-0">
