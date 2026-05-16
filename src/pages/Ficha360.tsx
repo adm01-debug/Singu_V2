@@ -29,7 +29,7 @@ import { CopiarLinkFiltrosButton } from '@/components/ficha-360/CopiarLinkFiltro
 import { OrdenacaoToggle } from '@/components/ficha-360/OrdenacaoToggle';
 import { FiltroTagsDropdown } from '@/components/ficha-360/FiltroTagsDropdown';
 import { GerarResumoIAButton } from '@/components/ficha-360/GerarResumoIAButton';
-import { ResumoConversaIADialog } from '@/components/ficha-360/ResumoConversaIADialog';
+import { Ficha360Dialogs } from '@/components/ficha-360/Ficha360Dialogs';
 import { countByTag, interactionMatchesTags } from '@/lib/interactionTags';
 import { useFicha360Sort } from '@/hooks/useFicha360Sort';
 import { sortInteractions } from '@/lib/sortInteractions';
@@ -61,10 +61,6 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Search, X as XIcon } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 
 const sentimentClass = (s?: string | null) => {
@@ -747,53 +743,18 @@ const Ficha360 = () => {
           </>
         )}
       </div>
-      {id && (
-        <ResumoConversaIADialog
-          open={resumoIAOpen}
-          onOpenChange={setResumoIAOpen}
-          contactId={id}
-          interactions={sortedInteractions.map((it) => ({
-            id: it.id,
-            channel: it.channel ?? null,
-            direction: it.direction ?? null,
-            data_interacao: it.data_interacao ?? null,
-            assunto: it.assunto ?? null,
-            resumo: it.resumo ?? null,
-          }))}
-          contactSnapshot={{
-            full_name: fullName,
-            role_title: profile?.cargo ?? null,
-            company_name: profile?.company_name ?? null,
-            disc_profile: null,
-            hobbies: [],
-            interests: [],
-          }}
-          filtersSummary={{
-            period_days: days,
-            channels,
-            tags,
-            query: q,
-          }}
-        />
-      )}
-      <AlertDialog open={confirmClearOpen} onOpenChange={setConfirmClearOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Limpar todos os filtros?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Isso vai desativar {channels.length > 0 ? `${channels.length} canal${channels.length === 1 ? '' : 'is'}` : 'os canais'}
-              {tags.length > 0 ? `, remover ${tags.length} tag${tags.length === 1 ? '' : 's'}` : ''}
-              {q ? ', limpar a busca' : ''}
-              {days !== 90 ? ' e voltar o período para 90 dias' : ''}.
-              Os parâmetros serão removidos da URL — links já compartilhados continuam funcionando.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={performClearAll}>Limpar tudo</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <Ficha360Dialogs
+        id={id}
+        resumoIAOpen={resumoIAOpen}
+        onResumoIAOpenChange={setResumoIAOpen}
+        confirmClearOpen={confirmClearOpen}
+        onConfirmClearOpenChange={setConfirmClearOpen}
+        performClearAll={performClearAll}
+        sortedInteractions={sortedInteractions}
+        fullName={fullName}
+        profile={profile}
+        filters={{ days, channels, tags, q }}
+      />
     </AppLayout>
   );
 };
