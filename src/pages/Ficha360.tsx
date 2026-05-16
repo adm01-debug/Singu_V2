@@ -21,10 +21,8 @@ import { DadosPessoaisCard } from '@/components/ficha-360/DadosPessoaisCard';
 import { FrequenciaContatoCard } from '@/components/ficha-360/FrequenciaContatoCard';
 import { UltimasInteracoesCard } from '@/components/ficha-360/UltimasInteracoesCard';
 import { ConversasRelacionadasCard } from '@/components/ficha-360/ConversasRelacionadasCard';
-import { FiltrosInteracoesBar } from '@/components/ficha-360/FiltrosInteracoesBar';
-import { FiltrosAtivosChips } from '@/components/ficha-360/FiltrosAtivosChips';
+import { Ficha360FilterPanel } from '@/components/ficha-360/Ficha360FilterPanel';
 import { FavoritosFiltrosMenu } from '@/components/ficha-360/FavoritosFiltrosMenu';
-import { ContagemPorTipoBar } from '@/components/ficha-360/ContagemPorTipoBar';
 import { CopiarLinkFiltrosButton } from '@/components/ficha-360/CopiarLinkFiltrosButton';
 import { OrdenacaoToggle } from '@/components/ficha-360/OrdenacaoToggle';
 import { FiltroTagsDropdown } from '@/components/ficha-360/FiltroTagsDropdown';
@@ -696,34 +694,27 @@ const Ficha360 = () => {
                           )}
                         </div>
                       </div>
-                      <FiltrosInteracoesBar
-                        days={draftDays}
-                        channels={draftChannels}
-                        onDaysChange={setDraftDays}
-                        onChannelsChange={setDraftChannels}
-                        onClear={clearDraftFilters}
+                      <Ficha360FilterPanel
+                        draftDays={draftDays}
+                        draftChannels={draftChannels}
+                        setDraftDays={setDraftDays}
+                        setDraftChannels={setDraftChannels}
+                        clearDraftFilters={clearDraftFilters}
                         activeCount={activeCount}
-                        shownCount={filteredInteractions.length}
+                        filteredCount={filteredInteractions.length}
                         totalCount={channelCounts.total}
-                        channelCounts={potentialChannelCounts}
+                        potentialChannelCounts={potentialChannelCounts}
                         channelCountsReady={channelCountsReady}
-                        isDirty={filtersDirty}
-                        onApply={applyDraftFilters}
-                        onDiscard={resetDraft}
-                      />
-                      <ContagemPorTipoBar
-                        totals={tipoTotals}
-                        filtered={tipoFiltered}
-                        isLoading={channelCountsLoading}
-                      />
-                      <FiltrosAtivosChips
+                        filtersDirty={filtersDirty}
+                        applyDraftFilters={applyDraftFilters}
+                        resetDraft={resetDraft}
+                        tipoTotals={tipoTotals}
+                        tipoFiltered={tipoFiltered}
+                        channelCountsLoading={channelCountsLoading}
                         days={days}
                         channels={channels}
                         tags={tags}
-                        shownCount={filteredInteractions.length}
-                        totalCount={channelCounts.total}
                         searchTerm={q}
-                        searchMatchCount={filteredInteractions.length}
                         onRemoveDays={() => setDays(90)}
                         onRemoveChannel={(c) => setChannels(channels.filter((x) => x !== c))}
                         onRemoveTag={(t) => setTags(tags.filter((x) => x !== t))}
