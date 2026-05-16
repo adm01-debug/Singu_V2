@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+ import { useEffect, useCallback } from 'react';
+ import { unstable_useBlocker as useBlocker } from 'react-router-dom';
 
 /**
  * Hook that warns users before navigating away when there are unsaved changes.
@@ -22,7 +23,25 @@ export function useUnsavedChangesGuard(hasUnsavedChanges: boolean, message?: str
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [hasUnsavedChanges, warningMessage]);
 
-  return {
-    isBlocked: false,
-  };
+   // Handle client-side navigation (React Router)
+   // Note: unstable_useBlocker is the current way to handle this in v6.4+
+   const blocker = useBlocker(
+     useCallback(
+       ({ currentLocation, nextLocation }) =>
+         hasUnsavedChanges && currentLocation.pathname !== nextLocation.pathname,
+       [hasUnsavedChanges]
+     )
+   );
+ 
+   useEffect(() => {
+     if (blocker.state === 'blocked' && !hasUnsavedChanges) {
+       blocker.reset();
+     }
+   }, [blocker, hasUnsavedChanges]);
+ 
+   return {
+     isBlocked: blocker.state === 'blocked',
+     proceed: () => blocker.proceed?.(),
+     reset: () => blocker.reset?.(),
+   };
 }

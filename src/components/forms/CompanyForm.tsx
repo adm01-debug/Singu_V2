@@ -1,3 +1,16 @@
+ import { useUnsavedChangesGuard } from '@/hooks/useUnsavedChangesGuard';
+ import {
+   AlertDialog,
+   AlertDialogAction,
+   AlertDialogCancel,
+   AlertDialogContent,
+   AlertDialogDescription,
+   AlertDialogFooter,
+   AlertDialogHeader,
+   AlertDialogTitle,
+ } from '@/components/ui/alert-dialog';
+   const { isDirty } = form.formState;
+   const { isBlocked, proceed, reset } = useUnsavedChangesGuard(isDirty && !isSubmitting);
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -136,8 +149,9 @@ export function CompanyForm({ company, onSubmit, onCancel, isSubmitting }: Compa
     allTabs[7], // networks
   ] : createTabs;
 
-  return (
-    <Form {...form}>
+   return (
+     <>
+     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col max-h-[calc(90vh-2rem)]">
         <div className="pb-4 mb-1 shrink-0 border-b border-border">
           <div className="flex items-center gap-3">
@@ -225,6 +239,24 @@ export function CompanyForm({ company, onSubmit, onCancel, isSubmitting }: Compa
           </Button>
         </div>
       </form>
-    </Form>
+     </Form>
+ 
+     <AlertDialog open={isBlocked} onOpenChange={(open) => !open && reset()}>
+       <AlertDialogContent>
+         <AlertDialogHeader>
+           <AlertDialogTitle>Alterações não salvas</AlertDialogTitle>
+           <AlertDialogDescription>
+             Você tem alterações pendentes nesta empresa. Se sair agora, essas alterações serão perdidas (ou mantidas apenas como rascunho local). Deseja realmente sair?
+           </AlertDialogDescription>
+         </AlertDialogHeader>
+         <AlertDialogFooter>
+           <AlertDialogCancel onClick={reset}>Ficar e Salvar</AlertDialogCancel>
+           <AlertDialogAction onClick={proceed} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+             Sair sem Salvar
+           </AlertDialogAction>
+         </AlertDialogFooter>
+       </AlertDialogContent>
+     </AlertDialog>
+     </>
   );
 }
