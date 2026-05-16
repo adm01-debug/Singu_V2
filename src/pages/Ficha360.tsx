@@ -1,3 +1,4 @@
+import { Ficha360ProfileHeader } from '@/components/ficha-360/Ficha360ProfileHeader';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, AlertCircle, User, FlaskConical } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
@@ -21,15 +22,13 @@ import { DadosPessoaisCard } from '@/components/ficha-360/DadosPessoaisCard';
 import { FrequenciaContatoCard } from '@/components/ficha-360/FrequenciaContatoCard';
 import { UltimasInteracoesCard } from '@/components/ficha-360/UltimasInteracoesCard';
 import { ConversasRelacionadasCard } from '@/components/ficha-360/ConversasRelacionadasCard';
-import { FiltrosInteracoesBar } from '@/components/ficha-360/FiltrosInteracoesBar';
-import { FiltrosAtivosChips } from '@/components/ficha-360/FiltrosAtivosChips';
+import { Ficha360FilterPanel } from '@/components/ficha-360/Ficha360FilterPanel';
 import { FavoritosFiltrosMenu } from '@/components/ficha-360/FavoritosFiltrosMenu';
-import { ContagemPorTipoBar } from '@/components/ficha-360/ContagemPorTipoBar';
 import { CopiarLinkFiltrosButton } from '@/components/ficha-360/CopiarLinkFiltrosButton';
 import { OrdenacaoToggle } from '@/components/ficha-360/OrdenacaoToggle';
 import { FiltroTagsDropdown } from '@/components/ficha-360/FiltroTagsDropdown';
 import { GerarResumoIAButton } from '@/components/ficha-360/GerarResumoIAButton';
-import { ResumoConversaIADialog } from '@/components/ficha-360/ResumoConversaIADialog';
+import { Ficha360Dialogs } from '@/components/ficha-360/Ficha360Dialogs';
 import { countByTag, interactionMatchesTags } from '@/lib/interactionTags';
 import { useFicha360Sort } from '@/hooks/useFicha360Sort';
 import { sortInteractions } from '@/lib/sortInteractions';
@@ -47,11 +46,8 @@ import { ProximosPassosCard } from '@/components/ficha-360/ProximosPassosCard';
 import { ProntidaoTrendChart } from '@/components/ficha-360/ProntidaoTrendChart';
 import { ProntidaoFactorBreakdownChart } from '@/components/ficha-360/ProntidaoFactorBreakdownChart';
 import { SimulationModePanel } from '@/components/ficha-360/SimulationModePanel';
-import { computeProntidaoScore } from '@/domain/leadScoring';
-import { computeProntidaoTrend } from '@/domain/churnRisk';
-import { computeProximosPassos } from '@/domain/nextStepLogic';
 import { useProximoPassoFeedbacks } from '@/hooks/useProximoPassoFeedback';
-import { applySimulation } from '@/domain/forecastSimulation';
+import { useFicha360Domain } from '@/hooks/useFicha360Domain';
 import { useEffectiveProntidaoWeights } from '@/stores/useProntidaoWeightsStore';
 import { useSimulationStore } from '@/stores/useSimulationStore';
 import { useBestContactTime } from '@/hooks/useBestContactTime';
@@ -61,10 +57,6 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Search, X as XIcon } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 
 const sentimentClass = (s?: string | null) => {
@@ -347,72 +339,30 @@ const Ficha360 = () => {
   // Reaproveita cache do ProximaAcaoCTA — zero query nova
   const { data: bestTime } = useBestContactTime(id ?? '', !!id);
 
-  // Score real (sem simulação) — sempre calculado para comparativo no painel
-  const realProntidao = useMemo(
-    () => computeProntidaoScore({ profile, intelligence, weights }),
-    [profile, intelligence, weights],
-  );
-
-  // Profile/intel "efetivos" (com simulação aplicada quando ligada)
-  const { profile: effectiveProfile, intelligence: effectiveIntel } = useMemo(() => {
-    if (!simEnabled) return { profile, intelligence };
-    return applySimulation(profile, intelligence, simOverrides);
-  }, [simEnabled, simOverrides, profile, intelligence]);
-
-  const prontidao = useMemo(
-    () =>
-      computeProntidaoScore({
-        profile: effectiveProfile,
-        intelligence: effectiveIntel,
-        weights,
-      }),
-    [effectiveProfile, effectiveIntel, weights],
-  );
-
+  const { data: passoFeedbacks = [] } = useProximoPassoFeedbacks(id);
   const [trendWeeks, setTrendWeeks] = useState<4 | 8 | 12 | 24>(8);
+
+  const {
+    realProntidao,
+    effectiveProfile,
+    effectiveIntel,
+    prontidao,
+    trend,
+    passos
+  } = useFicha360Domain({
+    profile,
+    intelligence,
+    weights,
+    simEnabled,
+    simOverrides,
+    recentInteractions,
+    trendWeeks,
+    rapportIntel,
+    passoFeedbacks
+  });
+
   const [showFactorBreakdown, setShowFactorBreakdown] = useState(false);
   const [breakdownAsPercent, setBreakdownAsPercent] = useState(false);
-
-  const trend = useMemo(
-    () =>
-      computeProntidaoTrend({
-        interactions: recentInteractions,
-        profile: effectiveProfile,
-        intelligence: effectiveIntel,
-        weights,
-        weeks: trendWeeks,
-      }),
-    [recentInteractions, effectiveProfile, effectiveIntel, weights, trendWeeks],
-  );
-
-  const { data: passoFeedbacks = [] } = useProximoPassoFeedbacks(id);
-
-  const feedbackHints = useMemo(() => {
-    const seen = new Set<string>();
-    const hints: { passoId: string; lastOutcome: 'respondeu_positivo' | 'respondeu_neutro' | 'nao_respondeu' | 'nao_atendeu' | 'pulou'; daysAgo: number }[] = [];
-    for (const f of passoFeedbacks) {
-      if (seen.has(f.passo_id)) continue;
-      seen.add(f.passo_id);
-      const daysAgo = Math.max(0, Math.floor((Date.now() - new Date(f.executed_at).getTime()) / 86400000));
-      hints.push({ passoId: f.passo_id, lastOutcome: f.outcome, daysAgo });
-    }
-    return hints;
-  }, [passoFeedbacks]);
-
-  const passos = useMemo(
-    () =>
-      computeProximosPassos({
-        profile: effectiveProfile,
-        intelligence: effectiveIntel,
-        recentInteractions,
-        prontidao,
-        birthday: rapportIntel?.birthday ?? null,
-        email:
-          typeof effectiveIntel?.email === 'string' ? (effectiveIntel.email as string) : null,
-        feedbackHints,
-      }),
-    [effectiveProfile, effectiveIntel, recentInteractions, prontidao, rapportIntel, feedbackHints],
-  );
 
   if (!id) {
     return (
@@ -490,47 +440,12 @@ const Ficha360 = () => {
               </div>
             )}
 
-            {/* Header sticky */}
-            <Card className="sticky top-0 z-10">
-              <CardContent className="p-4 md:p-5">
-                <div className="flex items-start gap-4 flex-wrap">
-                  <Avatar className="h-16 w-16">
-                    <AvatarImage src={undefined} alt={fullName} />
-                    <AvatarFallback className="bg-primary/10 text-primary text-lg">
-                      {initials || <User className="h-6 w-6" />}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <h1 className="text-xl md:text-2xl font-semibold tracking-tight truncate">
-                      {fullName}
-                    </h1>
-                    <p className="text-sm text-muted-foreground truncate">
-                      {profile?.cargo ? `${profile.cargo}` : 'Cargo não informado'}
-                      {profile?.company_name ? ` · ${profile.company_name}` : ''}
-                    </p>
-                    <div className="flex flex-wrap items-center gap-2 mt-3">
-                      <Badge variant="default" className="text-xs">
-                        Score: {profile?.relationship_score ?? '—'}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs capitalize">
-                        Estágio: {profile?.relationship_stage ?? '—'}
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className={cn('text-xs capitalize', sentimentClass(profile?.sentiment))}
-                      >
-                        {profile?.sentiment ?? 'Sentimento —'}
-                      </Badge>
-                      {profile?.company_id && (
-                        <Button asChild variant="ghost" size="sm" className="h-6 px-2 text-xs">
-                          <Link to={`/empresas/${profile.company_id}`}>Ver empresa</Link>
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <Ficha360ProfileHeader
+              fullName={fullName}
+              initials={initials}
+              profile={profile}
+              sentimentClass={sentimentClass}
+            />
 
             <div className="grid gap-4 lg:grid-cols-2">
               <ScoreProntidaoCard
@@ -700,34 +615,27 @@ const Ficha360 = () => {
                           )}
                         </div>
                       </div>
-                      <FiltrosInteracoesBar
-                        days={draftDays}
-                        channels={draftChannels}
-                        onDaysChange={setDraftDays}
-                        onChannelsChange={setDraftChannels}
-                        onClear={clearDraftFilters}
+                      <Ficha360FilterPanel
+                        draftDays={draftDays}
+                        draftChannels={draftChannels}
+                        setDraftDays={setDraftDays}
+                        setDraftChannels={setDraftChannels}
+                        clearDraftFilters={clearDraftFilters}
                         activeCount={activeCount}
-                        shownCount={filteredInteractions.length}
+                        filteredCount={filteredInteractions.length}
                         totalCount={channelCounts.total}
-                        channelCounts={potentialChannelCounts}
+                        potentialChannelCounts={potentialChannelCounts}
                         channelCountsReady={channelCountsReady}
-                        isDirty={filtersDirty}
-                        onApply={applyDraftFilters}
-                        onDiscard={resetDraft}
-                      />
-                      <ContagemPorTipoBar
-                        totals={tipoTotals}
-                        filtered={tipoFiltered}
-                        isLoading={channelCountsLoading}
-                      />
-                      <FiltrosAtivosChips
+                        filtersDirty={filtersDirty}
+                        applyDraftFilters={applyDraftFilters}
+                        resetDraft={resetDraft}
+                        tipoTotals={tipoTotals}
+                        tipoFiltered={tipoFiltered}
+                        channelCountsLoading={channelCountsLoading}
                         days={days}
                         channels={channels}
                         tags={tags}
-                        shownCount={filteredInteractions.length}
-                        totalCount={channelCounts.total}
                         searchTerm={q}
-                        searchMatchCount={filteredInteractions.length}
                         onRemoveDays={() => setDays(90)}
                         onRemoveChannel={(c) => setChannels(channels.filter((x) => x !== c))}
                         onRemoveTag={(t) => setTags(tags.filter((x) => x !== t))}
@@ -747,53 +655,18 @@ const Ficha360 = () => {
           </>
         )}
       </div>
-      {id && (
-        <ResumoConversaIADialog
-          open={resumoIAOpen}
-          onOpenChange={setResumoIAOpen}
-          contactId={id}
-          interactions={sortedInteractions.map((it) => ({
-            id: it.id,
-            channel: it.channel ?? null,
-            direction: it.direction ?? null,
-            data_interacao: it.data_interacao ?? null,
-            assunto: it.assunto ?? null,
-            resumo: it.resumo ?? null,
-          }))}
-          contactSnapshot={{
-            full_name: fullName,
-            role_title: profile?.cargo ?? null,
-            company_name: profile?.company_name ?? null,
-            disc_profile: null,
-            hobbies: [],
-            interests: [],
-          }}
-          filtersSummary={{
-            period_days: days,
-            channels,
-            tags,
-            query: q,
-          }}
-        />
-      )}
-      <AlertDialog open={confirmClearOpen} onOpenChange={setConfirmClearOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Limpar todos os filtros?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Isso vai desativar {channels.length > 0 ? `${channels.length} canal${channels.length === 1 ? '' : 'is'}` : 'os canais'}
-              {tags.length > 0 ? `, remover ${tags.length} tag${tags.length === 1 ? '' : 's'}` : ''}
-              {q ? ', limpar a busca' : ''}
-              {days !== 90 ? ' e voltar o período para 90 dias' : ''}.
-              Os parâmetros serão removidos da URL — links já compartilhados continuam funcionando.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={performClearAll}>Limpar tudo</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <Ficha360Dialogs
+        id={id}
+        resumoIAOpen={resumoIAOpen}
+        onResumoIAOpenChange={setResumoIAOpen}
+        confirmClearOpen={confirmClearOpen}
+        onConfirmClearOpenChange={setConfirmClearOpen}
+        performClearAll={performClearAll}
+        sortedInteractions={sortedInteractions}
+        fullName={fullName}
+        profile={profile}
+        filters={{ days, channels, tags, q }}
+      />
     </AppLayout>
   );
 };

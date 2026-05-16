@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { CheckCircle2, XCircle, Loader2, FileText, Clock } from 'lucide-react';
+import { sanitizeHtml } from '@/lib/sanitize';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -141,9 +142,9 @@ export default function PublicSignaturePage() {
 
         <Card>
           <CardContent className="p-6">
-            <div
-              className="prose prose-sm max-w-none dark:prose-invert"
-              dangerouslySetInnerHTML={{ __html: signature.rendered_html }}
+            <div 
+              className="prose prose-sm max-w-none dark:prose-invert" 
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(signature.rendered_html) }} 
             />
           </CardContent>
         </Card>

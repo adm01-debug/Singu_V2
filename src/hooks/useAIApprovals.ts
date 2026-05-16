@@ -39,10 +39,13 @@ export function useAIApprovals(contactId?: string) {
       const { data, error } = await query.order('created_at', { ascending: false });
 
       if (error) throw error;
-      return (data || []).map(item => ({
-        ...item,
-        contact_name: (item.contacts as any)?.full_name || 'Contato'
-      })) as SuggestedRapportIntel[];
+      return (data || []).map(item => {
+        const contact = item.contacts as unknown as { full_name: string } | null;
+        return {
+          ...item,
+          contact_name: contact?.full_name || 'Contato'
+        };
+      }) as SuggestedRapportIntel[];
     },
     enabled: !!user,
   });
@@ -68,8 +71,9 @@ export function useAIApprovals(contactId?: string) {
 
       if (contactError) throw contactError;
 
-      const currentValues = (contact as any)[field] || [];
-      const currentMetadata = (contact as any).rapport_metadata || {};
+      const contactData = contact as { hobbies: string[] | null, interests: string[] | null, rapport_metadata: any } | null;
+      const currentValues = (contactData?.[field as keyof typeof contactData] || []) as string[];
+      const currentMetadata = (contactData?.rapport_metadata || {}) as Record<string, any>;
       
       // Ensure metadata has the correct structure for hobby/interest
       const updatedMetadata = { ...currentMetadata };
