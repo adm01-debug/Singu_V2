@@ -46,11 +46,8 @@ import { ProximosPassosCard } from '@/components/ficha-360/ProximosPassosCard';
 import { ProntidaoTrendChart } from '@/components/ficha-360/ProntidaoTrendChart';
 import { ProntidaoFactorBreakdownChart } from '@/components/ficha-360/ProntidaoFactorBreakdownChart';
 import { SimulationModePanel } from '@/components/ficha-360/SimulationModePanel';
-import { computeProntidaoScore } from '@/domain/leadScoring';
-import { computeProntidaoTrend } from '@/domain/churnRisk';
-import { computeProximosPassos } from '@/domain/nextStepLogic';
 import { useProximoPassoFeedbacks } from '@/hooks/useProximoPassoFeedback';
-import { applySimulation } from '@/domain/forecastSimulation';
+import { useFicha360Domain } from '@/hooks/useFicha360Domain';
 import { useEffectiveProntidaoWeights } from '@/stores/useProntidaoWeightsStore';
 import { useSimulationStore } from '@/stores/useSimulationStore';
 import { useBestContactTime } from '@/hooks/useBestContactTime';
@@ -342,72 +339,30 @@ const Ficha360 = () => {
   // Reaproveita cache do ProximaAcaoCTA — zero query nova
   const { data: bestTime } = useBestContactTime(id ?? '', !!id);
 
-  // Score real (sem simulação) — sempre calculado para comparativo no painel
-  const realProntidao = useMemo(
-    () => computeProntidaoScore({ profile, intelligence, weights }),
-    [profile, intelligence, weights],
-  );
-
-  // Profile/intel "efetivos" (com simulação aplicada quando ligada)
-  const { profile: effectiveProfile, intelligence: effectiveIntel } = useMemo(() => {
-    if (!simEnabled) return { profile, intelligence };
-    return applySimulation(profile, intelligence, simOverrides);
-  }, [simEnabled, simOverrides, profile, intelligence]);
-
-  const prontidao = useMemo(
-    () =>
-      computeProntidaoScore({
-        profile: effectiveProfile,
-        intelligence: effectiveIntel,
-        weights,
-      }),
-    [effectiveProfile, effectiveIntel, weights],
-  );
-
+  const { data: passoFeedbacks = [] } = useProximoPassoFeedbacks(id);
   const [trendWeeks, setTrendWeeks] = useState<4 | 8 | 12 | 24>(8);
+
+  const {
+    realProntidao,
+    effectiveProfile,
+    effectiveIntel,
+    prontidao,
+    trend,
+    passos
+  } = useFicha360Domain({
+    profile,
+    intelligence,
+    weights,
+    simEnabled,
+    simOverrides,
+    recentInteractions,
+    trendWeeks,
+    rapportIntel,
+    passoFeedbacks
+  });
+
   const [showFactorBreakdown, setShowFactorBreakdown] = useState(false);
   const [breakdownAsPercent, setBreakdownAsPercent] = useState(false);
-
-  const trend = useMemo(
-    () =>
-      computeProntidaoTrend({
-        interactions: recentInteractions,
-        profile: effectiveProfile,
-        intelligence: effectiveIntel,
-        weights,
-        weeks: trendWeeks,
-      }),
-    [recentInteractions, effectiveProfile, effectiveIntel, weights, trendWeeks],
-  );
-
-  const { data: passoFeedbacks = [] } = useProximoPassoFeedbacks(id);
-
-  const feedbackHints = useMemo(() => {
-    const seen = new Set<string>();
-    const hints: { passoId: string; lastOutcome: 'respondeu_positivo' | 'respondeu_neutro' | 'nao_respondeu' | 'nao_atendeu' | 'pulou'; daysAgo: number }[] = [];
-    for (const f of passoFeedbacks) {
-      if (seen.has(f.passo_id)) continue;
-      seen.add(f.passo_id);
-      const daysAgo = Math.max(0, Math.floor((Date.now() - new Date(f.executed_at).getTime()) / 86400000));
-      hints.push({ passoId: f.passo_id, lastOutcome: f.outcome, daysAgo });
-    }
-    return hints;
-  }, [passoFeedbacks]);
-
-  const passos = useMemo(
-    () =>
-      computeProximosPassos({
-        profile: effectiveProfile,
-        intelligence: effectiveIntel,
-        recentInteractions,
-        prontidao,
-        birthday: rapportIntel?.birthday ?? null,
-        email:
-          typeof effectiveIntel?.email === 'string' ? (effectiveIntel.email as string) : null,
-        feedbackHints,
-      }),
-    [effectiveProfile, effectiveIntel, recentInteractions, prontidao, rapportIntel, feedbackHints],
-  );
 
   if (!id) {
     return (
