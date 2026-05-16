@@ -10,11 +10,11 @@
  - **Benefícios**: Redução da carga cognitiva e prevenção de erros de navegação.
  - **Impacto vs. Esforço**: Alto Impacto / Baixo Esforço.
  
- ### 1.2. Breadcrumbs Interativos (Rastro de Navegação)
- - **Descrição**: Evoluir os breadcrumbs atuais para permitir saltos rápidos entre níveis hierárquicos superiores.
- - **Exemplo Prático**: Exibir `Empresas > Nexus Corp > Detalhes`. Cada segmento é clicável e possui um hover state indicando interatividade.
- - **Benefícios**: Facilita a localização espacial do usuário dentro de fluxos complexos.
- - **Impacto vs. Esforço**: Médio Impacto / Baixo Esforço.
+ ### 1.2. Breadcrumbs Interativos e Histórico Contextual
+ - **Descrição**: Evoluir os breadcrumbs atuais e o botão voltar com um menu de histórico rápido (clique longo ou botão secundário).
+ - **Status**: Implementado no `BackButton.tsx` com menu de histórico recente.
+ - **Benefícios**: Facilita a navegação não-linear e saltos rápidos.
+ - **Impacto vs. Esforço**: Alto Impacto / Médio Esforço.
  
  ### 1.3. Transições de Tela Direcionais
  - **Descrição**: Animações de entrada e saída que reforçam a direção do fluxo (slide da direita para esquerda ao avançar, esquerda para direita ao voltar).
@@ -58,10 +58,10 @@
  - **Benefícios**: Reduz o abandono de tarefas longas.
  - **Impacto vs. Esforço**: Alto Impacto / Médio Esforço.
  
- ### 4.2. Confirmações de Saída em Dados Não Salvos
- - **Descrição**: Guardrails para evitar perda acidental de dados ao clicar em "Voltar" ou fechar abas.
- - **Exemplo Prático**: Modal de confirmação se o estado do formulário for `dirty`.
- - **Benefícios**: Integridade dos dados e confiança do usuário.
+ ### 4.2. Guardrails de Navegação (Unsaved Changes)
+ - **Descrição**: Implementação de bloqueio de navegação reativo quando há alterações pendentes em formulários.
+ - **Status**: Implementado no `CompanyForm.tsx` via `useUnsavedChangesGuard`.
+ - **Benefícios**: Previne perda de trabalho acidental e aumenta a segurança do usuário.
  - **Impacto vs. Esforço**: Alto Impacto / Médio Esforço.
  
  ## 5. Métricas e Validação Continuada

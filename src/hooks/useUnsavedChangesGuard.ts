@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+  import { useEffect } from 'react';
 
 /**
  * Hook that warns users before navigating away when there are unsaved changes.
@@ -22,7 +22,7 @@ export function useUnsavedChangesGuard(hasUnsavedChanges: boolean, message?: str
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [hasUnsavedChanges, warningMessage]);
 
-  return {
-    isBlocked: false,
-  };
+    return {
+      isBlocked: false,
+    };
 }

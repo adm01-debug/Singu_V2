@@ -56,7 +56,7 @@ const navSections = [
       { title: "ABM", url: "/abm", icon: Target },
       { title: "Lead Scoring", url: "/lead-scoring", icon: Gauge },
       { title: "Enriquecimento", url: "/enrichment", icon: Sparkles },
-      { title: "Conversation Intel", url: "/conversation-intelligence", icon: Brain },
+       { title: "Conversation Intel", url: "/conversation-intelligence", icon: Brain, prefetch: () => import('@/pages/ConversationIntelligence') },
       { title: "Tarefas", url: "/tarefas", icon: CheckSquare },
       { title: "Automações", url: "/automacoes", icon: Workflow },
        { title: "Metas", url: "/metas", icon: Trophy },

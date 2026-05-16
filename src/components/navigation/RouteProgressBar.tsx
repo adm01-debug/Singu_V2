@@ -85,7 +85,7 @@ export function RouteProgressBar() {
           transition={{ duration: 0.15 }}
         >
           <motion.div
-            className="h-full bg-gradient-to-r from-primary via-primary to-primary/60 rounded-r-full shadow-[0_0_10px_hsl(var(--primary)/0.4)]"
+             className="h-full bg-gradient-to-r from-primary via-nexus-cyan to-accent rounded-r-full shadow-[0_0_10px_hsl(var(--nexus-glow)/0.4)]"
             style={{ width: `${progress}%` }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
           />
