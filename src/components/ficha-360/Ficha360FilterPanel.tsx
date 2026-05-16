@@ -8,7 +8,7 @@ import { InteractionTag } from '@/lib/interactionTags';
 interface Ficha360FilterPanelProps {
   draftDays: number;
   draftChannels: string[];
-  setDraftDays: (days: number) => void;
+  setDraftDays: (days: any) => void;
   setDraftChannels: (channels: string[]) => void;
   clearDraftFilters: () => void;
   activeCount: number;
