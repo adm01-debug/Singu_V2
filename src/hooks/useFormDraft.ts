@@ -1,3 +1,4 @@
+ import { toast } from 'sonner';
 import { useEffect, useCallback, useRef } from 'react';
 import type { UseFormReturn, FieldValues } from 'react-hook-form';
 
@@ -52,9 +53,13 @@ export function useFormDraft<T extends FieldValues>(
             }
           }
           
-          if (Object.keys(mergedValues).length > 0) {
-            form.reset({ ...currentValues, ...mergedValues } as T);
-          }
+           if (Object.keys(mergedValues).length > 0) {
+             form.reset({ ...currentValues, ...mergedValues } as T);
+             toast.info('Rascunho restaurado automaticamente', {
+               description: 'Continuando de onde você parou.',
+               duration: 3000,
+             });
+           }
         }
       }
     } catch {
