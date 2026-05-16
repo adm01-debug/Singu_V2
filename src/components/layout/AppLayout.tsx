@@ -1,4 +1,5 @@
-import { ReactNode, useMemo, useState, useEffect, lazy, Suspense } from 'react';
+import { ReactNode, useMemo, useState, useEffect, lazy, Suspense, useRef } from 'react';
+import { useRageClickDetector } from '@/hooks/useRageClickDetector';
 import { useLocation, Link } from 'react-router-dom';
 import { Search, Command, Settings, LogOut, ChevronRight, Mic } from 'lucide-react';
 import { AppSidebar } from './AppSidebar';
@@ -81,6 +82,7 @@ function getBreadcrumbs(pathname: string, pageTitle: string): { label: string; p
 }
 
 function AppLayoutInner({ children, title }: AppLayoutProps) {
+  useRageClickDetector();
   const { isOpen, setIsOpen } = useGlobalSearch();
   const [cmdBarOpen, setCmdBarOpen] = useState(false);
   const [legacySearchOpen, setLegacySearchOpen] = useState(false);
