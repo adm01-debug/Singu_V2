@@ -2,6 +2,9 @@ import { FiltrosInteracoesBar } from './FiltrosInteracoesBar';
 import { ContagemPorTipoBar } from './ContagemPorTipoBar';
 import { FiltrosAtivosChips } from './FiltrosAtivosChips';
 
+import { Ficha360Period } from '@/hooks/useFicha360Filters';
+import { InteractionTag } from '@/lib/interactionTags';
+
 interface Ficha360FilterPanelProps {
   draftDays: number;
   draftChannels: string[];
@@ -19,9 +22,9 @@ interface Ficha360FilterPanelProps {
   tipoTotals: any;
   tipoFiltered: any;
   channelCountsLoading: boolean;
-  days: number;
+  days: Ficha360Period;
   channels: string[];
-  tags: string[];
+  tags: InteractionTag[];
   searchTerm: string;
   onRemoveDays: () => void;
   onRemoveChannel: (channel: string) => void;
@@ -60,7 +63,7 @@ export function Ficha360FilterPanel({
   return (
     <>
       <FiltrosInteracoesBar
-        days={draftDays}
+        days={draftDays as Ficha360Period}
         channels={draftChannels}
         onDaysChange={setDraftDays}
         onChannelsChange={setDraftChannels}
@@ -80,9 +83,9 @@ export function Ficha360FilterPanel({
         isLoading={channelCountsLoading}
       />
       <FiltrosAtivosChips
-        days={days}
+        days={days as Ficha360Period}
         channels={channels}
-        tags={tags}
+        tags={tags as any}
         shownCount={filteredCount}
         totalCount={totalCount}
         searchTerm={searchTerm}
