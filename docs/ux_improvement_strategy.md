@@ -16,19 +16,14 @@
  - **Benefícios**: Facilita a navegação não-linear e saltos rápidos.
  - **Impacto vs. Esforço**: Alto Impacto / Médio Esforço.
  
- ### 1.3. Transições de Tela Direcionais
- - **Descrição**: Animações de entrada e saída que reforçam a direção do fluxo (slide da direita para esquerda ao avançar, esquerda para direita ao voltar).
- - **Exemplo Prático**: Uso de `framer-motion` no componente `PageTransition` com detecção automática da direção da stack.
- - **Benefícios**: Cria uma sensação de continuidade física e fluidez "enterprise".
- - **Impacto vs. Esforço**: Alto Impacto / Médio Esforço.
+  ### 1.3. Transições de Tela Direcionais ✅
+  - **Status**: Implementado no `PageTransition.tsx`.
+  - **Descrição**: Animações de entrada e saída premium com `framer-motion`.
  
  ## 2. Consistência e Padrões de UI/UX
  
- ### 2.1. Micro-interações de Feedback
- - **Descrição**: Adicionar feedback visual e tátil imediato em todas as ações de navegação.
- - **Exemplo Prático**: Efeito de "ripple" ou leve escala (0.98x) ao clicar em botões; loaders integrados no próprio botão durante transições pesadas.
- - **Benefícios**: Confirmação instantânea da intenção do usuário, aumentando a percepção de performance.
- - **Impacto vs. Esforço**: Médio Impacto / Médio Esforço.
+  ### 2.1. Micro-interações de Feedback ✅
+  - **Status**: Implementado escala ativa global nos botões e animações de entrada.
  
  ### 2.2. Padronização de Contrastes e Hierarquia
  - **Descrição**: Garantir que elementos de controle (Header, Sidebar) tenham separação visual clara do conteúdo (Canvas).
@@ -44,11 +39,8 @@
  - **Benefícios**: Inclusividade total e aumento de produtividade.
  - **Impacto vs. Esforço**: Médio Impacto / Médio Esforço.
  
- ### 3.2. Descrições ARIA Exaustivas
- - **Descrição**: Garantir que todos os ícones de navegação sejam interpretáveis por leitores de tela.
- - **Exemplo Prático**: `aria-label="Voltar para a lista de empresas"` em vez de apenas "Voltar".
- - **Benefícios**: Acessibilidade para usuários com deficiência visual.
- - **Impacto vs. Esforço**: Médio Impacto / Baixo Esforço.
+  ### 3.2. Descrições ARIA Exaustivas ✅
+  - **Status**: Auditoria completa realizada em Sidebar e Header.
  
  ## 4. Otimização de Fluxos Complexos
  
@@ -66,9 +58,8 @@
  
  ## 5. Métricas e Validação Continuada
  
- ### 5.1. Monitoramento de "Rage Clicks"
- - **Descrição**: Identificar áreas onde a navegação falha ou é confusa através de telemetria.
- - **KPIs**: Tempo de conclusão de tarefa (TCT), Taxa de Erro de Navegação, Heatmaps de cliques no botão "Voltar".
+  ### 5.1. Monitoramento de "Rage Clicks" ✅
+  - **Status**: Hook `useRageClickDetector` implementado e ativo no layout global.
  
  ---
  
