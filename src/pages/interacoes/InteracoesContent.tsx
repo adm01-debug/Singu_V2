@@ -80,6 +80,13 @@ interface Props {
    const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
    const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [isSelectionMode, setIsSelectionMode] = useState(false);
+    
+    // Auto-toggle selection mode
+    useEffect(() => {
+      if (selectedIds.length > 0 && !isSelectionMode) {
+        setIsSelectionMode(true);
+      }
+    }, [selectedIds.length, isSelectionMode]);
 
     const handleToggleSelection = (id: string) => {
       setSelectedIds(prev => 
@@ -413,8 +420,8 @@ interface Props {
           >
             <InteractionBatchActions
               selectedIds={selectedIds}
+              interactions={interactions}
               onClearSelection={handleClearSelection}
-              onInteractionAction={() => {}}
             />
           </motion.div>
         )}
