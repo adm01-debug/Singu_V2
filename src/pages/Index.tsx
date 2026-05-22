@@ -30,6 +30,7 @@ import { RelationshipsTab } from '@/components/dashboard/tabs/RelationshipsTab';
 import { CRMAutomationAuditLog } from '@/components/crm/CRMAutomationAuditLog';
 import { IntelligenceTab } from '@/components/dashboard/tabs/IntelligenceTab';
 import { CRMJsonLd } from '@/components/seo/JsonLd';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 
 const TAB_ORDER = ['overview', 'analytics', 'relationships', 'intelligence'];
 
@@ -140,43 +141,55 @@ const Dashboard = () => {
             </div>
 
             <TabsContent value="overview" className="space-y-5 mt-4">
-              <OverviewTab
-                stats={dashboardStats}
-                contacts={contacts}
-                companies={companies}
-                interactions={interactions}
-                briefingOpen={briefingOpen}
-                setBriefingOpen={setBriefingOpen}
-                prefersReducedMotion={prefersReducedMotion}
-                recentActivityAnimations={recentActivityAnimations}
-                topContactAnimations={topContactAnimations}
-                tabDirection={tabDirection}
-              />
-              <TeamDashboardPanel />
+              <DashboardErrorBoundary sectionName="Visão geral">
+                <OverviewTab
+                  stats={dashboardStats}
+                  contacts={contacts}
+                  companies={companies}
+                  interactions={interactions}
+                  briefingOpen={briefingOpen}
+                  setBriefingOpen={setBriefingOpen}
+                  prefersReducedMotion={prefersReducedMotion}
+                  recentActivityAnimations={recentActivityAnimations}
+                  topContactAnimations={topContactAnimations}
+                  tabDirection={tabDirection}
+                />
+              </DashboardErrorBoundary>
+              <DashboardErrorBoundary sectionName="Performance do time">
+                <TeamDashboardPanel />
+              </DashboardErrorBoundary>
             </TabsContent>
 
             <TabsContent value="analytics" className="mt-4">
-              <AnalyticsTab 
-                contacts={contacts} 
-                companies={companies} 
-                interactions={interactions} 
-                prefersReducedMotion={prefersReducedMotion} 
-                tabDirection={tabDirection} 
-              />
+              <DashboardErrorBoundary sectionName="Analytics">
+                <AnalyticsTab 
+                  contacts={contacts} 
+                  companies={companies} 
+                  interactions={interactions} 
+                  prefersReducedMotion={prefersReducedMotion} 
+                  tabDirection={tabDirection} 
+                />
+              </DashboardErrorBoundary>
             </TabsContent>
 
             <TabsContent value="relationships" className="mt-4">
-              <RelationshipsTab
-                contacts={mappedContacts}
-                interactions={mappedInteractions}
-                prefersReducedMotion={prefersReducedMotion}
-                tabDirection={tabDirection}
-              />
-              <CRMAutomationAuditLog />
+              <DashboardErrorBoundary sectionName="Relações">
+                <RelationshipsTab
+                  contacts={mappedContacts}
+                  interactions={mappedInteractions}
+                  prefersReducedMotion={prefersReducedMotion}
+                  tabDirection={tabDirection}
+                />
+              </DashboardErrorBoundary>
+              <DashboardErrorBoundary sectionName="Auditoria de automações">
+                <CRMAutomationAuditLog />
+              </DashboardErrorBoundary>
             </TabsContent>
 
             <TabsContent value="intelligence" className="mt-4">
-              <IntelligenceTab contacts={contacts} prefersReducedMotion={prefersReducedMotion} tabDirection={tabDirection} />
+              <DashboardErrorBoundary sectionName="Inteligência">
+                <IntelligenceTab contacts={contacts} prefersReducedMotion={prefersReducedMotion} tabDirection={tabDirection} />
+              </DashboardErrorBoundary>
             </TabsContent>
           </Tabs>
         </div>
