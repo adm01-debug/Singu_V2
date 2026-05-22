@@ -1,11 +1,19 @@
- import { memo, useState } from 'react';
- import { Sparkles, MessageSquare, Phone, Mail, CheckCircle2, ChevronRight, Loader2, Copy } from 'lucide-react';
- import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
- import { Button } from '@/components/ui/button';
- import { Badge } from '@/components/ui/badge';
- import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
- import { toast } from 'sonner';
- import { cn } from '@/lib/utils';
+import { memo, useState } from 'react';
+import { Sparkles, MessageSquare, Phone, Mail, CheckCircle2, ChevronRight, Loader2, Copy, Zap, Coffee, Briefcase } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+import { PromptChips, type PromptChip } from '@/components/ui/prompt-chips';
+
+const TONE_CHIPS: PromptChip[] = [
+  { id: 'prof', label: 'Profissional', icon: <Briefcase className="h-3 w-3 mr-1.5" /> },
+  { id: 'casual', label: 'Casual', icon: <Coffee className="h-3 w-3 mr-1.5" /> },
+  { id: 'urgent', label: 'Urgente', icon: <Zap className="h-3 w-3 mr-1.5" /> },
+];
+
  
  interface Props {
    companyId: string;
