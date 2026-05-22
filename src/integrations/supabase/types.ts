@@ -13832,7 +13832,7 @@ export type Database = {
           old_value: string | null
           reason: string | null
           timestamp: string | null
-          user_email: string | null
+          user_name: string | null
         }
         Relationships: [
           {
@@ -13885,16 +13885,31 @@ export type Database = {
       }
       vw_contacts_nlp: {
         Row: {
-          auditory_score: number | null
           contact_id: string | null
-          digital_score: number | null
-          full_name: string | null
-          kinesthetic_score: number | null
+          first_name: string | null
+          last_name: string | null
           motivation_direction: string | null
-          reference_frame: string | null
+          user_id: string | null
           vak_dominant: string | null
-          visual_score: number | null
           working_style: string | null
+        }
+        Insert: {
+          contact_id?: string | null
+          first_name?: string | null
+          last_name?: string | null
+          motivation_direction?: string | null
+          user_id?: string | null
+          vak_dominant?: string | null
+          working_style?: string | null
+        }
+        Update: {
+          contact_id?: string | null
+          first_name?: string | null
+          last_name?: string | null
+          motivation_direction?: string | null
+          user_id?: string | null
+          vak_dominant?: string | null
+          working_style?: string | null
         }
         Relationships: []
       }
@@ -14128,15 +14143,12 @@ export type Database = {
           p_working_style?: string
         }
         Returns: {
-          auditory_score: number | null
           contact_id: string | null
-          digital_score: number | null
-          full_name: string | null
-          kinesthetic_score: number | null
+          first_name: string | null
+          last_name: string | null
           motivation_direction: string | null
-          reference_frame: string | null
+          user_id: string | null
           vak_dominant: string | null
-          visual_score: number | null
           working_style: string | null
         }[]
         SetofOptions: {
