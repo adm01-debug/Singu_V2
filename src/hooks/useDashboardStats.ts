@@ -179,7 +179,9 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         const scoreB = b.relationship_score || 0;
         // Estratégia: Priorizar Score Alto > Score Médio com Inatividade > Recência
         if (Math.abs(scoreB - scoreA) > 10) return scoreB - scoreA;
-        return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+        const timeB = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+        const timeA = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+        return timeB - timeA;
       })
       .slice(0, 10) // Aumentado para 10 para alimentar melhor os widgets compactos
       .map(contact => {
