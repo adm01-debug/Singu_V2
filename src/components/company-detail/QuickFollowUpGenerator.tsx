@@ -21,28 +21,35 @@ const TONE_CHIPS: PromptChip[] = [
  }
  
  export const QuickFollowUpGenerator = memo(({ companyId, companyName }: Props) => {
-   const [generating, setGenerating] = useState(false);
-   const [suggestion, setSuggestion] = useState<{
-     task: string;
-     script: string;
-     reason: string;
-     channel: 'whatsapp' | 'call' | 'email';
-   } | null>(null);
- 
-   const handleGenerate = () => {
-     setGenerating(true);
-     // Simulate IA analysis based on history
-     setTimeout(() => {
-       setSuggestion({
-         task: `Follow-up estratégico com a diretoria da ${companyName}`,
-         reason: 'Última interação demonstrou interesse em expansão de licenças, mas parou no processo de aprovação interna.',
-         channel: 'whatsapp',
-         script: `Olá Beatriz, tudo bem? Revisitando nossos pontos da semana passada sobre o upgrade das licenças. Conseguiu alinhar com o financeiro? Caso precise de algum detalhamento extra do ROI para facilitar a aprovação, me avise! 😊`
-       });
-       setGenerating(false);
-       toast.success('Próximo passo gerado com IA!');
-     }, 1500);
-   };
+  const [generating, setGenerating] = useState(false);
+  const [selectedTone, setSelectedTone] = useState('Profissional');
+  const [suggestion, setSuggestion] = useState<{
+    task: string;
+    script: string;
+    reason: string;
+    channel: 'whatsapp' | 'call' | 'email';
+  } | null>(null);
+
+  const handleGenerate = (tone = selectedTone) => {
+    setGenerating(true);
+    // Simulate IA analysis based on history and selected tone
+    setTimeout(() => {
+      const scripts: Record<string, string> = {
+        'Profissional': `Olá Beatriz, tudo bem? Revisitando nossos pontos da semana passada sobre o upgrade das licenças da ${companyName}. Conseguiu alinhar com o financeiro? Caso precise de algum detalhamento extra do ROI para facilitar a aprovação, me avise!`,
+        'Casual': `Oi Beatriz! Tudo certo? Passando pra ver se você conseguiu ver aquele assunto das licenças. Se precisar de uma ajuda pra explicar o valor pro time, conta comigo! 😉`,
+        'Urgente': `Olá Beatriz, tudo bem? Notei que o prazo para a oferta especial das licenças está expirando. Conseguimos avançar com a aprovação hoje para garantir as condições atuais?`
+      };
+
+      setSuggestion({
+        task: `Follow-up ${tone.toLowerCase()} com a diretoria da ${companyName}`,
+        reason: 'Última interação demonstrou interesse em expansão de licenças, mas parou no processo de aprovação interna.',
+        channel: tone === 'Urgente' ? 'call' : 'whatsapp',
+        script: scripts[tone] || scripts['Profissional']
+      });
+      setGenerating(false);
+      toast.success(`Próximo passo gerado com tom ${tone}!`);
+    }, 1200);
+  };
  
    return (
      <Card className="border-primary/20 bg-primary/5">
