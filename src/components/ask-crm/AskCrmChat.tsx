@@ -1,17 +1,19 @@
 import { useState, useRef, useEffect, memo } from 'react';
-import { MessageSquare, X, Send, Trash2, Sparkles, ChevronDown } from 'lucide-react';
+import { MessageSquare, X, Send, Trash2, Sparkles, ChevronDown, Database, Users, TrendingUp, History, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAskCrm, type AskCrmMessage } from '@/hooks/useAskCrm';
 import { cn } from '@/lib/utils';
+import { PromptChips, type PromptChip } from '@/components/ui/prompt-chips';
 
-const SUGGESTIONS = [
-  'Quantos contatos tenho no total?',
-  'Quais contatos não falo há mais de 30 dias?',
-  'Top 5 contatos por relationship_score',
-  'Quantos deals estão no estágio negotiation?',
-  'Contatos com sentimento negativo',
+const SUGGESTIONS: PromptChip[] = [
+  { id: 'total', label: 'Quantos contatos tenho no total?', icon: <Users className="h-3 w-3 mr-1.5" /> },
+  { id: 'dormant', label: 'Contatos sem papo há 30 dias', icon: <History className="h-3 w-3 mr-1.5" /> },
+  { id: 'top-score', label: 'Top 5 por relationship_score', icon: <TrendingUp className="h-3 w-3 mr-1.5" /> },
+  { id: 'negotiation', label: 'Deals em negotiation', icon: <Database className="h-3 w-3 mr-1.5" /> },
+  { id: 'negative', label: 'Sentimento negativo', icon: <AlertCircle className="h-3 w-3 mr-1.5" /> },
 ];
+
 
 const MessageBubble = memo(({ msg }: { msg: AskCrmMessage }) => {
   const isUser = msg.role === 'user';
