@@ -1,12 +1,21 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Brain, Zap, Activity, Sparkles, Target, Waves, Sliders, ShieldCheck } from 'lucide-react';
+import { Brain, Zap, Activity, Sparkles, Target, Waves, Sliders, ShieldCheck, MessageSquare, ZapIcon, Lightbulb } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
 import { useNeuromarketing } from '@/hooks/useNeuromarketing';
 import { cn } from '@/lib/utils';
+import { PromptChips, type PromptChip } from '@/components/ui/prompt-chips';
+import { toast } from 'sonner';
+
+const NEURO_STYLE_CHIPS: PromptChip[] = [
+  { id: 'logic', label: 'Foco Neocórtex (Lógico)', icon: <Brain className="h-3 w-3 mr-1.5" />, color: "hover:border-blue-500/40 hover:bg-blue-50/50 hover:text-blue-600" },
+  { id: 'emotion', label: 'Foco Límbico (Emocional)', icon: <Activity className="h-3 w-3 mr-1.5" />, color: "hover:border-pink-500/40 hover:bg-pink-50/50 hover:text-pink-600" },
+  { id: 'reptile', label: 'Foco Reptiliano (Urgência)', icon: <Zap className="h-3 w-3 mr-1.5" />, color: "hover:border-orange-500/40 hover:bg-orange-50/50 hover:text-orange-600" },
+];
+
 
 export const NeuroCommunicationHub = () => {
   const { BRAIN_SYSTEM_INFO, NEUROCHEMICAL_INFO } = useNeuromarketing();
