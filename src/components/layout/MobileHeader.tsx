@@ -79,7 +79,7 @@ export function MobileHeader({ onSearchClick, title }: MobileHeaderProps) {
 
   const handleLeftAction = () => {
     if (showBackButton) {
-      goBack('/');
+      goBack();
     } else {
       setDrawerOpen(true);
     }

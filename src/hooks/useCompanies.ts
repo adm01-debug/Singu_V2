@@ -288,11 +288,7 @@ export function useCompanies(options?: { enabled?: boolean }) {
   const remainingKey = ['companies-remaining', searchTerm || '__all__'];
   const { data: remainingCompanies } = useQuery({
     queryKey: remainingKey,
-    queryFn: async () => {
-      // Wait 2s before starting background fetch to prioritize initial render
-      await new Promise(r => setTimeout(r, 2000));
-      return fetchRemainingCompanies(searchTerm || undefined);
-    },
+    queryFn: () => fetchRemainingCompanies(searchTerm || undefined),
     enabled: !!user && externalEnabled && !!data && data.count > INITIAL_FAST_LOAD,
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
