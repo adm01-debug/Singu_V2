@@ -217,7 +217,9 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
     };
 
     const recentActivities = interactions
+      .slice() // avoid mutating the memoized array from useInteractions
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .slice(0, 50) // cap before heavy per-item processing
       .map(interaction => {
         const contact = contactMap.get(interaction.contact_id);
         const rawName = contact
@@ -233,9 +235,18 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         // Clean description: extract channel/type instead of repeating name
         const title = interaction.title || '';
         const channelMatch = title.match(/\(([^)]+)\)/)?.[1]; // e.g. "WhatsApp", "Email"
-        const cleanDesc = channelMatch 
-          ? `${interaction.type === 'message' ? 'Mensagem' : interaction.type === 'call' ? 'Ligação' : interaction.type === 'meeting' ? 'Reunião' : 'Interação'} via ${channelMatch}`
-          : title.replace(new RegExp(`de\\s+${displayName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*`, 'i'), '').trim() || title;
+        let cleanDesc: string;
+        if (channelMatch) {
+          const typeLabel = interaction.type === 'message' ? 'Mensagem' : interaction.type === 'call' ? 'Ligação' : interaction.type === 'meeting' ? 'Reunião' : 'Interação';
+          cleanDesc = `${typeLabel} via ${channelMatch}`;
+        } else {
+          try {
+            const safeName = displayName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            cleanDesc = title.replace(new RegExp(`de\\s+${safeName}\\s*`, 'i'), '').trim() || title;
+          } catch {
+            cleanDesc = title;
+          }
+        }
         return {
           id: interaction.id,
           contactId: interaction.contact_id,
