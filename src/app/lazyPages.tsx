@@ -1,5 +1,6 @@
-export const AdminObservability = lazy(() => import("@/pages/admin/Observability"));
 import { lazy } from 'react';
+
+export const AdminObservability = lazy(() => import("@/pages/admin/Observability"));
 
 /**
  * Lazy-loaded pages — code splitting per route.
