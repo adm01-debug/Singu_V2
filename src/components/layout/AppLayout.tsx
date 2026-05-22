@@ -116,13 +116,29 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
 
   // Defer heavy chrome until browser is idle to keep route transitions snappy
   useEffect(() => {
-    const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number };
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    
+    let handle: number;
+    let isMounted = true;
+
     const schedule = w.requestIdleCallback
       ? (cb: () => void) => w.requestIdleCallback!(cb, { timeout: 2000 })
       : (cb: () => void) => window.setTimeout(cb, 800);
-    const id = schedule(() => setDeferredReady(true));
+      
+    const cancel = w.cancelIdleCallback
+      ? (h: number) => w.cancelIdleCallback!(h)
+      : (h: number) => window.clearTimeout(h);
+
+    handle = schedule(() => {
+      if (isMounted) setDeferredReady(true);
+    });
+
     return () => {
-      if (typeof id === 'number') window.clearTimeout(id);
+      isMounted = false;
+      if (handle !== undefined) cancel(handle);
     };
   }, []);
 
@@ -158,7 +174,7 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
         {/* Desktop Header Bar */}
         <header className="hidden md:flex h-14 items-center border-b border-border/50 px-3 sm:px-5 bg-background/80 backdrop-blur-md sticky top-0 z-30" role="banner">
           {/* Left: sidebar trigger + breadcrumb */}
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0 w-[200px] shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 md:flex-initial md:min-w-[280px]">
             <SidebarTrigger className="text-muted-foreground hover:text-foreground hover:bg-secondary/60 rounded-lg transition-colors shrink-0" aria-label="Alternar sidebar" />
             <SmartBreadcrumbs 
               items={breadcrumbs.map(c => ({ label: c.label, path: c.path || '#' }))} 

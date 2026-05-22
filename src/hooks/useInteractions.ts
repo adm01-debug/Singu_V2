@@ -55,7 +55,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastCursor(lastPage),
     enabled: !!user && externalEnabled,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 30 * 1000,
   });
 
   const interactions = useMemo(() => data?.pages.flatMap(page => page.data) ?? [], [data]);

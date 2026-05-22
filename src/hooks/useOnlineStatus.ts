@@ -26,7 +26,7 @@ interface UseOnlineStatusReturn {
 export function useOnlineStatus(options: UseOnlineStatusOptions = {}): UseOnlineStatusReturn {
   const { onOffline, onOnline, pingInterval } = options;
   
-  const [isOnline, setIsOnline] = useState<boolean>(
+  const [isOnline, setIsOnline] = useState<boolean>(() => 
     typeof navigator !== 'undefined' ? navigator.onLine : true
   );
   const [isChecking, setIsChecking] = useState(false);

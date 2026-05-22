@@ -137,8 +137,8 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       return lastPage.length === PAGE_SIZE ? allPages.length : undefined;
     },
     enabled: !!user && externalEnabled,
-    staleTime: 10 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
+    staleTime: 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   const contacts = useMemo(() => data?.pages.flat() ?? [], [data]);
