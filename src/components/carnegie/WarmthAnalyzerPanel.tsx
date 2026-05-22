@@ -221,24 +221,32 @@ export function WarmthAnalyzerPanel({
 
             {/* Suggestions */}
             {warmthScore.improvementSuggestions.length > 0 && (
-              <div className="space-y-2">
-                <h4 className="text-sm font-medium flex items-center gap-1">
-                  <Lightbulb className="h-3 w-3 text-warning" />
-                  Sugestões de Melhoria
+              <div className="space-y-3">
+                <h4 className="text-sm font-medium flex items-center gap-1 text-warning">
+                  <Lightbulb className="h-3 w-3" />
+                  Aplicar Melhorias Rápidas
                 </h4>
-                <div className="space-y-2">
-                  {warmthScore.improvementSuggestions.slice(0, 3).map((suggestion, idx) => (
+                <PromptChips 
+                  chips={warmthScore.improvementSuggestions.slice(0, 4).map((s, i) => ({
+                    id: `warmth-${i}`,
+                    label: s.area,
+                    icon: <Plus className="h-3 w-3 mr-1.5" />,
+                    color: "hover:border-warning/40 hover:bg-warning/5 hover:text-warning"
+                  }))}
+                  onSelect={(label) => {
+                    const sugg = warmthScore.improvementSuggestions.find(s => s.area === label);
+                    if (sugg?.template) {
+                      setText(prev => prev ? `${prev}\n\n${sugg.template}` : sugg.template);
+                    }
+                  }}
+                />
+                <div className="grid gap-2 mt-2">
+                  {warmthScore.improvementSuggestions.slice(0, 2).map((suggestion, idx) => (
                     <div 
                       key={idx}
                       className="p-2 rounded bg-warning/5 border border-warning/20"
                     >
-                      <p className="text-xs font-medium">{suggestion.area}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{suggestion.suggestion}</p>
-                      {suggestion.template && (
-                        <p className="text-xs italic mt-1 text-primary">
-                          Exemplo: "{suggestion.template}"
-                        </p>
-                      )}
+                      <p className="text-[11px] text-muted-foreground">{suggestion.suggestion}</p>
                     </div>
                   ))}
                 </div>
