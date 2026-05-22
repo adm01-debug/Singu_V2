@@ -3,7 +3,7 @@
 // Real-time warmth score analysis
 // ==============================================
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,12 +17,15 @@ import {
   Lightbulb,
   RefreshCw,
   Check,
-  X
+  X,
+  Plus
 } from 'lucide-react';
 import { WarmthScore } from '@/types/carnegie';
 import { useCarnegieAnalysis } from '@/hooks/useCarnegieAnalysis';
 import { cn } from '@/lib/utils';
 import { Contact } from '@/types';
+import { PromptChips, type PromptChip } from '@/components/ui/prompt-chips';
+
 
 interface WarmthAnalyzerPanelProps {
   contact?: Contact | null;
