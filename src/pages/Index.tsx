@@ -100,18 +100,24 @@ const Dashboard = () => {
       <ScrollProgressBar />
 
       <div className="p-4 md:p-6 space-y-5 md:space-y-6">
-        <WelcomeGreetingPopup />
-        <DailyBriefingCard
-          contacts={contacts}
-          interactions={interactions}
-          weeklyInteractions={dashboardStats.weeklyInteractions}
-        />
-        <OnboardingChecklist
-          hasProfile={hasProfile}
-          hasContacts={hasContacts}
-          hasCompanies={hasCompanies}
-          hasInteractions={hasInteractions}
-        />
+        <DashboardErrorBoundary sectionName="Boas-vindas">
+          <WelcomeGreetingPopup />
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Briefing diário">
+          <DailyBriefingCard
+            contacts={contacts}
+            interactions={interactions}
+            weeklyInteractions={dashboardStats.weeklyInteractions}
+          />
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Onboarding">
+          <OnboardingChecklist
+            hasProfile={hasProfile}
+            hasContacts={hasContacts}
+            hasCompanies={hasCompanies}
+            hasInteractions={hasInteractions}
+          />
+        </DashboardErrorBoundary>
 
         {/* Dashboard Tabs */}
         <div ref={tabsRef}>
