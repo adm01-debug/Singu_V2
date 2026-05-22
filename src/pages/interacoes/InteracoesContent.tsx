@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect, useRef, lazy, Suspense, startTransition } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useMemo, useEffect, useRef, lazy, Suspense, startTransition, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   MessageSquare, Phone, Mail, Users, Edit, Search, Calendar, MoreVertical,
   Trash2, Video, FileText, Clock, AlertCircle, Plus, X,
@@ -403,6 +403,22 @@ interface Props {
 
   return (
     <div className="p-6 space-y-6">
+      <AnimatePresence>
+        {isSelectionMode && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mb-4 overflow-hidden"
+          >
+            <InteractionBatchActions
+              selectedIds={selectedIds}
+              onClearSelection={handleClearSelection}
+              onInteractionAction={() => {}}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <ChannelShortcutsHelpOverlay appliedCanais={adv.canais} channelCounts={channelCounts} />
       <SmartBreadcrumbs />
       <div className="grid grid-cols-3 gap-4 max-w-lg">
