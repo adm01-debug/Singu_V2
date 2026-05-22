@@ -1,35 +1,43 @@
- import React, { useState } from 'react';
- import { Button } from '@/components/ui/button';
- import { Textarea } from '@/components/ui/textarea';
- import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
- import { Card, CardContent } from '@/components/ui/card';
- import { Badge } from '@/components/ui/badge';
- import { Sparkles, Loader2, Copy, CheckCircle, Brain, Target, MessageSquare } from 'lucide-react';
- import { supabase } from '@/integrations/supabase/client';
- import { Contact } from '@/types';
- import { toast } from 'sonner';
- 
- interface Props {
-   contact: Contact;
- }
- 
- interface AiSuggestion {
-   id: string;
-   label: string;
-   message: string;
-   reasoning: string;
- }
- 
- export function CopywritingAiGeneratorTab({ contact }: Props) {
-   const [loading, setLoading] = useState(false);
-   const [messageType, setMessageType] = useState('introduction');
-    const [framework, setFramework] = useState('None');
-    const [storyArc, setStoryArc] = useState('hero_journey');
-   const [tone, setTone] = useState('friendly');
-   const [customContext, setCustomContext] = useState('');
-   const [suggestions, setSuggestions] = useState<AiSuggestion[]>([]);
-   const [tips, setTips] = useState<string[]>([]);
-   const [copiedId, setCopiedId] = useState<string | null>(null);
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Sparkles, Loader2, Copy, CheckCircle, Brain, Target, MessageSquare, Save } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { Contact } from '@/types';
+import { toast } from 'sonner';
+import { useTonePersistence, ToneType } from '@/hooks/useTonePersistence';
+
+interface Props {
+  contact: Contact;
+}
+
+interface AiSuggestion {
+  id: string;
+  label: string;
+  message: string;
+  reasoning: string;
+}
+
+export function CopywritingAiGeneratorTab({ contact }: Props) {
+  const { preferredTone, saveTone, isLoading: loadingPrefs } = useTonePersistence(contact.companyId);
+  const [loading, setLoading] = useState(false);
+  const [messageType, setMessageType] = useState('introduction');
+  const [framework, setFramework] = useState('None');
+  const [storyArc, setStoryArc] = useState('hero_journey');
+  const [tone, setTone] = useState<ToneType>('friendly');
+  const [customContext, setCustomContext] = useState('');
+  const [suggestions, setSuggestions] = useState<AiSuggestion[]>([]);
+  const [tips, setTips] = useState<string[]>([]);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (preferredTone) {
+      setTone(preferredTone);
+    }
+  }, [preferredTone]);
  
    const generateAiScripts = async () => {
      setLoading(true);
@@ -118,19 +126,30 @@
              </Select>
            </div>
  
-           <div className="space-y-2">
-             <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Tom de Voz</label>
-             <Select value={tone} onValueChange={setTone}>
-               <SelectTrigger>
-                 <SelectValue placeholder="Selecione o tom" />
-               </SelectTrigger>
-               <SelectContent>
-                 <SelectItem value="friendly">Amigável Profissional</SelectItem>
-                 <SelectItem value="formal">Executivo/Formal</SelectItem>
-                 <SelectItem value="casual">Casual/Descontraído</SelectItem>
-               </SelectContent>
-             </Select>
-           </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Tom de Voz</label>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-4 w-4 text-muted-foreground hover:text-primary" 
+                  title="Salvar como preferência"
+                  onClick={() => saveTone(tone)}
+                >
+                  <Save className="h-3 w-3" />
+                </Button>
+              </div>
+              <Select value={tone} onValueChange={(val: ToneType) => setTone(val)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o tom" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="friendly">Amigável Profissional</SelectItem>
+                  <SelectItem value="formal">Executivo/Formal</SelectItem>
+                  <SelectItem value="casual">Casual/Descontraído</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
          </div>
  
           {framework === 'Storytelling' && (
