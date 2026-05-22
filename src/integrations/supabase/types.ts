@@ -13832,7 +13832,7 @@ export type Database = {
           old_value: string | null
           reason: string | null
           timestamp: string | null
-          user_email: string | null
+          user_name: string | null
         }
         Relationships: [
           {
