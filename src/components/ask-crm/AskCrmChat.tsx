@@ -156,17 +156,11 @@ export function AskCrmChat() {
               <p className="text-sm font-medium text-foreground">Pergunte qualquer coisa</p>
               <p className="text-xs text-muted-foreground mt-1">Consulte seus dados do CRM em linguagem natural</p>
             </div>
-            <div className="flex flex-wrap gap-1.5 justify-center">
-              {SUGGESTIONS.map(s => (
-                <button
-                  key={s}
-                  onClick={() => handleSuggestion(s)}
-                  className="text-[11px] px-2.5 py-1.5 rounded-full border border-border/50 bg-secondary/40 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
+            <PromptChips 
+              chips={SUGGESTIONS} 
+              onSelect={handleSuggestion} 
+              className="justify-center px-4"
+            />
           </div>
         ) : (
           messages.map(msg => <MessageBubble key={msg.id} msg={msg} />)
