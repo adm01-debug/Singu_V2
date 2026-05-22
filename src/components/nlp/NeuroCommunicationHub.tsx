@@ -118,6 +118,17 @@ export const NeuroCommunicationHub = () => {
                     <p className="text-sm text-muted-foreground">Sintonização dinâmica de gatilhos baseada em ressonância límbica.</p>
                   </div>
                 </div>
+                
+                <div className="mb-6">
+                  <p className="text-[11px] font-bold text-indigo-900/60 uppercase mb-3 tracking-widest flex items-center gap-2">
+                    <Sliders className="h-3 w-3" /> Selecionar Perfil de Neuromodulação
+                  </p>
+                  <PromptChips 
+                    chips={NEURO_STYLE_CHIPS} 
+                    onSelect={(style) => toast.success(`Perfil ${style} ativado para a próxima interação.`)}
+                  />
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[
                     { label: 'Ressonância Límbica', value: 94, icon: <Activity className="h-4 w-4" /> },
