@@ -3,8 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { logger } from '@/lib/logger';
 
-type EntityType = 'contact' | 'company' | 'interaction' | 'automation' | 'alert';
-type ActivityType = 'created' | 'updated' | 'deleted' | 'viewed' | 'exported' | 'imported' | 'archived';
+type EntityType = 'contact' | 'company' | 'interaction' | 'automation' | 'alert' | 'user' | 'system';
+type ActivityType = 'created' | 'updated' | 'deleted' | 'viewed' | 'exported' | 'imported' | 'archived' | 'cleared' | 'access';
 
 interface LogActivityParams {
   type: ActivityType;
@@ -12,6 +12,8 @@ interface LogActivityParams {
   entityId: string;
   entityName?: string;
   description?: string;
+  reason?: string;
+  metadata?: Record<string, any>;
 }
 
 export function useActivityLogger() {
@@ -28,6 +30,8 @@ export function useActivityLogger() {
         entity_id: params.entityId,
         entity_name: params.entityName ?? null,
         description: params.description ?? null,
+        reason: params.reason ?? null,
+        metadata: params.metadata ?? null,
       });
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
