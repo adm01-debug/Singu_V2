@@ -105,7 +105,7 @@ export function useSearchPresets(context: string = 'contacts') {
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
     };
-    setPresets(prev => [newPreset, ...prev].slice(0, 10)); // max 10 presets
+    setPresets(prev => [newPreset, ...prev].slice(0, 50)); // max 50 presets
     return newPreset;
   }, []);
 
@@ -143,7 +143,7 @@ export function useSearchPresets(context: string = 'contacts') {
   const duplicatePreset = useCallback((id: string): SearchPreset | null => {
     let created: SearchPreset | null = null;
     setPresets(prev => {
-      if (prev.length >= 10) return prev;
+      if (prev.length >= 50) return prev;
       const original = prev.find(p => p.id === id);
       if (!original) return prev;
       const existingNames = new Set(prev.map(p => p.name));
@@ -161,7 +161,7 @@ export function useSearchPresets(context: string = 'contacts') {
         createdAt: new Date().toISOString(),
         updatedAt: undefined,
       };
-      return [created, ...prev].slice(0, 10);
+      return [created, ...prev].slice(0, 50);
     });
     return created;
   }, []);
@@ -179,7 +179,7 @@ export function useSearchPresets(context: string = 'contacts') {
       const next = [...prev];
       const existingNames = new Set(next.map(p => p.name));
       for (const item of items) {
-        if (next.length >= 10) {
+        if (next.length >= 50) {
           skipped++;
           continue;
         }
@@ -201,7 +201,7 @@ export function useSearchPresets(context: string = 'contacts') {
         existingNames.add(finalName);
         added++;
       }
-      return next.slice(0, 10);
+      return next.slice(0, 50);
     });
     return { added, skipped, renamed, renamedDetails };
   }, []);
