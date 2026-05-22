@@ -1,17 +1,19 @@
 import { useState, useRef, useEffect, memo } from 'react';
-import { MessageSquare, X, Send, Trash2, Sparkles, ChevronDown } from 'lucide-react';
+import { MessageSquare, X, Send, Trash2, Sparkles, ChevronDown, Database, Users, TrendingUp, History, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAskCrm, type AskCrmMessage } from '@/hooks/useAskCrm';
 import { cn } from '@/lib/utils';
+import { PromptChips, type PromptChip } from '@/components/ui/prompt-chips';
 
-const SUGGESTIONS = [
-  'Quantos contatos tenho no total?',
-  'Quais contatos não falo há mais de 30 dias?',
-  'Top 5 contatos por relationship_score',
-  'Quantos deals estão no estágio negotiation?',
-  'Contatos com sentimento negativo',
+const SUGGESTIONS: PromptChip[] = [
+  { id: 'total', label: 'Quantos contatos tenho no total?', icon: <Users className="h-3 w-3 mr-1.5" /> },
+  { id: 'dormant', label: 'Contatos sem papo há 30 dias', icon: <History className="h-3 w-3 mr-1.5" /> },
+  { id: 'top-score', label: 'Top 5 por relationship_score', icon: <TrendingUp className="h-3 w-3 mr-1.5" /> },
+  { id: 'negotiation', label: 'Deals em negotiation', icon: <Database className="h-3 w-3 mr-1.5" /> },
+  { id: 'negative', label: 'Sentimento negativo', icon: <AlertCircle className="h-3 w-3 mr-1.5" /> },
 ];
+
 
 const MessageBubble = memo(({ msg }: { msg: AskCrmMessage }) => {
   const isUser = msg.role === 'user';
@@ -154,17 +156,11 @@ export function AskCrmChat() {
               <p className="text-sm font-medium text-foreground">Pergunte qualquer coisa</p>
               <p className="text-xs text-muted-foreground mt-1">Consulte seus dados do CRM em linguagem natural</p>
             </div>
-            <div className="flex flex-wrap gap-1.5 justify-center">
-              {SUGGESTIONS.map(s => (
-                <button
-                  key={s}
-                  onClick={() => handleSuggestion(s)}
-                  className="text-[11px] px-2.5 py-1.5 rounded-full border border-border/50 bg-secondary/40 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
+            <PromptChips 
+              chips={SUGGESTIONS} 
+              onSelect={handleSuggestion} 
+              className="justify-center px-4"
+            />
           </div>
         ) : (
           messages.map(msg => <MessageBubble key={msg.id} msg={msg} />)

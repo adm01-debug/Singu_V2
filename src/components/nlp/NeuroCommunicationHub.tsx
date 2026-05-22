@@ -1,12 +1,21 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Brain, Zap, Activity, Sparkles, Target, Waves, Sliders, ShieldCheck } from 'lucide-react';
+import { Brain, Zap, Activity, Sparkles, Target, Waves, Sliders, ShieldCheck, MessageSquare, ZapIcon, Lightbulb } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
 import { useNeuromarketing } from '@/hooks/useNeuromarketing';
 import { cn } from '@/lib/utils';
+import { PromptChips, type PromptChip } from '@/components/ui/prompt-chips';
+import { toast } from 'sonner';
+
+const NEURO_STYLE_CHIPS: PromptChip[] = [
+  { id: 'logic', label: 'Foco Neocórtex (Lógico)', icon: <Brain className="h-3 w-3 mr-1.5" />, color: "hover:border-blue-500/40 hover:bg-blue-50/50 hover:text-blue-600" },
+  { id: 'emotion', label: 'Foco Límbico (Emocional)', icon: <Activity className="h-3 w-3 mr-1.5" />, color: "hover:border-pink-500/40 hover:bg-pink-50/50 hover:text-pink-600" },
+  { id: 'reptile', label: 'Foco Reptiliano (Urgência)', icon: <Zap className="h-3 w-3 mr-1.5" />, color: "hover:border-orange-500/40 hover:bg-orange-50/50 hover:text-orange-600" },
+];
+
 
 export const NeuroCommunicationHub = () => {
   const { BRAIN_SYSTEM_INFO, NEUROCHEMICAL_INFO } = useNeuromarketing();
@@ -109,6 +118,17 @@ export const NeuroCommunicationHub = () => {
                     <p className="text-sm text-muted-foreground">Sintonização dinâmica de gatilhos baseada em ressonância límbica.</p>
                   </div>
                 </div>
+                
+                <div className="mb-6">
+                  <p className="text-[11px] font-bold text-indigo-900/60 uppercase mb-3 tracking-widest flex items-center gap-2">
+                    <Sliders className="h-3 w-3" /> Selecionar Perfil de Neuromodulação
+                  </p>
+                  <PromptChips 
+                    chips={NEURO_STYLE_CHIPS} 
+                    onSelect={(style) => toast.success(`Perfil ${style} ativado para a próxima interação.`)}
+                  />
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[
                     { label: 'Ressonância Límbica', value: 94, icon: <Activity className="h-4 w-4" /> },
