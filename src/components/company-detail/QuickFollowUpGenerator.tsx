@@ -69,27 +69,45 @@ const TONE_CHIPS: PromptChip[] = [
        </CardHeader>
        <CardContent className="pt-4">
          {!suggestion ? (
-           <div className="py-4 text-center">
-             <p className="text-xs text-muted-foreground mb-4">Analise o histórico recente para obter recomendações de follow-up.</p>
-             <Button 
-               onClick={handleGenerate} 
-               disabled={generating}
-               className="w-full h-9 bg-primary hover:bg-primary/90 text-white gap-2 font-bold shadow-sm"
-             >
-               {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-               Gerar Próximo Passo IA
-             </Button>
-           </div>
-         ) : (
-           <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
-             <div className="p-3 rounded-lg bg-background border border-border/50 shadow-xs">
-               <div className="flex items-center justify-between mb-2">
-                 <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Ação Sugerida</span>
-                 <Badge variant="secondary" className="text-[9px] h-4 uppercase">
-                   {suggestion.channel === 'whatsapp' ? <MessageSquare className="h-3 w-3 mr-1" /> : suggestion.channel === 'call' ? <Phone className="h-3 w-3 mr-1" /> : <Mail className="h-3 w-3 mr-1" />}
-                   {suggestion.channel}
-                 </Badge>
-               </div>
+            <div className="py-2 text-center">
+              <p className="text-[11px] text-muted-foreground mb-3">Escolha o tom da comunicação:</p>
+              <PromptChips 
+                chips={TONE_CHIPS} 
+                onSelect={(tone) => {
+                  setSelectedTone(tone);
+                  handleGenerate(tone);
+                }} 
+                className="justify-center mb-5"
+              />
+              <Button 
+                onClick={() => handleGenerate(selectedTone)} 
+                disabled={generating}
+                className="w-full h-9 bg-primary hover:bg-primary/90 text-white gap-2 font-bold shadow-sm"
+              >
+                {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                Gerar com tom {selectedTone}
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="p-3 rounded-lg bg-background border border-border/50 shadow-xs">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Ação Sugerida</span>
+                  <div className="flex gap-1.5">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-5 px-1.5 text-[9px] text-muted-foreground hover:text-primary"
+                      onClick={() => setSuggestion(null)}
+                    >
+                      Trocar tom
+                    </Button>
+                    <Badge variant="secondary" className="text-[9px] h-4 uppercase">
+                      {suggestion.channel === 'whatsapp' ? <MessageSquare className="h-3 w-3 mr-1" /> : suggestion.channel === 'call' ? <Phone className="h-3 w-3 mr-1" /> : <Mail className="h-3 w-3 mr-1" />}
+                      {suggestion.channel}
+                    </Badge>
+                  </div>
+                </div>
                <p className="text-sm font-bold text-foreground leading-tight">{suggestion.task}</p>
                <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed italic border-l-2 border-primary/20 pl-2">
                  "{suggestion.reason}"
