@@ -22,8 +22,10 @@ describe('Provider Guard & Hierarchy', () => {
     ];
     
     const violations = validateProviderOrder(invalidOrder);
-    expect(violations).toHaveLength(1);
-    expect(violations[0]).toContain('AuthProvider requer BrowserRouter');
+    // Deve detectar que AuthProvider requer BrowserRouter E QueryClientProvider (pois ambos faltam na lista)
+    expect(violations).toHaveLength(2);
+    expect(violations.some(v => v.includes('AuthProvider requer BrowserRouter'))).toBe(true);
+    expect(violations.some(v => v.includes('AuthProvider requer QueryClientProvider'))).toBe(true);
   });
 
   it('deve detectar violação quando AuthProvider vem antes de QueryClientProvider', () => {
