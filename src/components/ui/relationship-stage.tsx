@@ -12,7 +12,7 @@ const stageColors: Record<RelationshipStage, string> = {
   loyal_customer: 'bg-emerald-600/15 text-emerald-700 border-emerald-300',
   advocate: 'bg-purple-500/10 text-purple-600 border-purple-200',
   at_risk: 'bg-red-500/10 text-red-600 border-red-200',
-  lost: 'bg-gray-500/10 text-gray-600 border-gray-200',
+  lost: 'bg-muted text-muted-foreground border-border',
 };
 
 

@@ -2,6 +2,8 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
+  // These directories hold Vitest unit/integration tests, not Playwright e2e specs.
+  testIgnore: ['**/integration/**', '**/security/**', '**/stress/**', '**/load/**', '**/rls/**'],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

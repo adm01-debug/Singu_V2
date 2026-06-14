@@ -174,9 +174,9 @@
                <h4 className="font-bold text-lg mb-1">Engenharia de Empatia Recomendada</h4>
                <p className="text-sm text-indigo-200/80 mb-4 max-w-2xl">
                  Com base na dominância cerebral detectada, o estilo de comunicação recomendado para o próximo contato é 
-                 <span className="text-white font-bold mx-1">Analítico-Consultivo</span> com ênfase em benefícios futuros.
+                 <span className="text-primary-foreground font-bold mx-1">Analítico-Consultivo</span> com ênfase em benefícios futuros.
                </p>
-               <Button variant="outline" className="bg-white/5 border-white/20 hover:bg-white/10 text-white gap-2">
+               <Button variant="outline" className="bg-white/5 border-white/20 hover:bg-white/10 text-primary-foreground gap-2">
                  <MessageSquare className="h-4 w-4" />
                  Gerar Script de Rapport
                </Button>

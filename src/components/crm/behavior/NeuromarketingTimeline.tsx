@@ -42,8 +42,6 @@ export function NeuromarketingTimeline({ contactId }: Props) {
   const history = neuroData?.history;
   const interactions = neuroData?.interactions;
 
-  if (isLoading) return <Skeleton className="h-[400px] w-full" />;
-
    const chartData = history?.map(item => {
      const dominance = (item.dominance_data as any)?.dominance || 0;
      const influence = (item.dominance_data as any)?.influence || 0;
@@ -87,6 +85,8 @@ export function NeuromarketingTimeline({ contactId }: Props) {
       responseRate
     };
   }, [interactions]);
+
+  if (isLoading) return <Skeleton className="h-[400px] w-full" />;
 
   const SentimentIcon = ({ sentiment }: { sentiment: string }) => {
     if (sentiment === 'positive') return <Smile className="h-3 w-3 text-success" />;

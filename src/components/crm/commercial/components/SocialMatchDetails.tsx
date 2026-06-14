@@ -67,16 +67,16 @@ export function SocialMatchDetails({ contactId, metadata, offerName }: Props) {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[85vh] flex flex-col p-0 overflow-hidden border-indigo-200">
-        <div className="bg-indigo-600 p-6 text-white">
+        <div className="bg-indigo-600 p-6 text-primary-foreground">
           <DialogHeader>
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-xl bg-white/20 backdrop-blur-sm">
-                <Globe className="h-5 w-5 text-white" />
+                <Globe className="h-5 w-5 text-primary-foreground" />
               </div>
-              <DialogTitle className="text-xl font-bold text-white">Explicação do Social Match</DialogTitle>
+              <DialogTitle className="text-xl font-bold text-primary-foreground">Explicação do Social Match</DialogTitle>
             </div>
             <DialogDescription className="text-indigo-100 text-sm">
-              Rastreabilidade de fontes e comportamentos sociais que validaram a oferta: <span className="font-bold text-white">{offerName}</span>
+              Rastreabilidade de fontes e comportamentos sociais que validaram a oferta: <span className="font-bold text-primary-foreground">{offerName}</span>
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -187,7 +187,7 @@ export function SocialMatchDetails({ contactId, metadata, offerName }: Props) {
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-slate-900 text-white space-y-2">
+              <div className="p-4 rounded-xl bg-slate-900 text-primary-foreground space-y-2">
                 <div className="flex items-center gap-2 text-amber-400">
                   <Info className="h-3.5 w-3.5" />
                   <span className="text-[10px] font-bold uppercase tracking-tighter">Neuro-Analytic Insight</span>

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MemoryRouter, useLocation } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SortChips } from '../SortChips';
 import { useInteractionsAdvancedFilter } from '@/hooks/useInteractionsAdvancedFilter';
 
@@ -124,25 +125,28 @@ function Harness() {
   );
 }
 
+function renderHarness(initialEntries: string[]) {
+  const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  return render(
+    <QueryClientProvider client={qc}>
+      <MemoryRouter initialEntries={initialEntries}>
+        <Harness />
+      </MemoryRouter>
+    </QueryClientProvider>,
+  );
+}
+
 describe('SortChips · integração com useInteractionsAdvancedFilter', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('hidrata o chip ativo a partir do parâmetro ?sort= da URL', () => {
-    render(
-      <MemoryRouter initialEntries={['/interacoes?sort=oldest']}>
-        <Harness />
-      </MemoryRouter>,
-    );
+    renderHarness(['/interacoes?sort=oldest']);
     expect(screen.getByLabelText('Mais antigas')).toHaveAttribute('aria-pressed', 'true');
     expect(screen.getByLabelText('Mais recentes')).toHaveAttribute('aria-pressed', 'false');
   });
 
   it('clicar em outro chip grava ?sort= na URL (omitindo default "recent")', () => {
-    render(
-      <MemoryRouter initialEntries={['/interacoes?sort=oldest']}>
-        <Harness />
-      </MemoryRouter>,
-    );
+    renderHarness(['/interacoes?sort=oldest']);
     expect(screen.getByTestId('search').textContent).toContain('sort=oldest');
 
     // voltar ao default remove o parâmetro
@@ -155,11 +159,7 @@ describe('SortChips · integração com useInteractionsAdvancedFilter', () => {
   });
 
   it('trocar o sort reseta page=1 (remove ?page= da URL) preservando demais filtros', () => {
-    render(
-      <MemoryRouter initialEntries={['/interacoes?canais=whatsapp&page=4&sort=oldest']}>
-        <Harness />
-      </MemoryRouter>,
-    );
+    renderHarness(['/interacoes?canais=whatsapp&page=4&sort=oldest']);
     expect(screen.getByTestId('page').textContent).toBe('4');
 
     act(() => { fireEvent.click(screen.getByLabelText('Por pessoa/empresa')); });
@@ -172,11 +172,7 @@ describe('SortChips · integração com useInteractionsAdvancedFilter', () => {
   });
 
   it('compatibilidade: sort=relevance sem q efetivo cai para "Mais recentes" visualmente', () => {
-    render(
-      <MemoryRouter initialEntries={['/interacoes?sort=relevance']}>
-        <Harness />
-      </MemoryRouter>,
-    );
+    renderHarness(['/interacoes?sort=relevance']);
     expect(screen.getByLabelText('Melhor correspondência')).toBeDisabled();
     expect(screen.getByLabelText('Mais recentes')).toHaveAttribute('aria-pressed', 'true');
   });

@@ -22,8 +22,6 @@ export function VakSubTab({ contactId }: Props) {
     if (behavior) setFormData(behavior);
   }, [behavior]);
 
-  if (isLoading) return <div>Carregando...</div>;
-
    const { user } = useAuth();
    const { data: vakHistory } = useQuery({
      queryKey: ['vak-history', contactId, user?.id],
@@ -59,7 +57,9 @@ export function VakSubTab({ contactId }: Props) {
        words: (latest.visual_words as string[]) || []
      };
    }, [vakHistory]);
- 
+
+   if (isLoading) return <div>Carregando...</div>;
+
    return (
      <div className="grid gap-6 md:grid-cols-2">
        <NLPCalibrationCard contactId={contactId} latestVAK={latestVAK} />

@@ -211,7 +211,7 @@
                       <Badge variant="outline" className="h-4 px-1 text-[8px] border-emerald-300 text-emerald-700">DRIVE</Badge>
                       {getMessageRecommendation(filteredContacts[0]).motivation}
                     </div>
-                    <Badge className="bg-emerald-600 text-white border-none text-[9px] uppercase tracking-tighter w-full justify-center py-1">
+                    <Badge className="bg-emerald-600 text-primary-foreground border-none text-[9px] uppercase tracking-tighter w-full justify-center py-1">
                       {getMessageRecommendation(filteredContacts[0]).strategy}
                     </Badge>
                   </div>

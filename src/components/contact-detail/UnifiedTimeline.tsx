@@ -19,7 +19,7 @@ const TYPE_CONFIG: Record<UnifiedEventType, { icon: any; label: string; color: s
   message: { icon: MessageSquare, label: 'Mensagem', color: 'bg-blue-500/10 text-blue-600 border-blue-200' },
   call: { icon: Phone, label: 'Ligação', color: 'bg-green-500/10 text-green-600 border-green-200' },
   meeting: { icon: Users, label: 'Reunião', color: 'bg-purple-500/10 text-purple-600 border-purple-200' },
-  note: { icon: FileText, label: 'Nota', color: 'bg-gray-500/10 text-gray-600 border-gray-200' },
+  note: { icon: FileText, label: 'Nota', color: 'bg-muted text-muted-foreground border-border' },
   task: { icon: CheckCircle2, label: 'Tarefa', color: 'bg-amber-500/10 text-amber-600 border-amber-200' },
   event: { icon: Calendar, label: 'Evento', color: 'bg-rose-500/10 text-rose-600 border-rose-200' },
   alert: { icon: AlertCircle, label: 'Alerta', color: 'bg-red-500/10 text-red-600 border-red-200' },
@@ -67,10 +67,6 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
     });
   }, [events, searchTerm, selectedType, dateFilter]);
 
-  if (loading && events.length === 0) {
-    return <div className="p-8 text-center text-muted-foreground">Carregando timeline...</div>;
-  }
-
   const sentimentSummary = useMemo(() => {
     if (events.length === 0) return null;
     
@@ -104,6 +100,10 @@ export const UnifiedTimeline: React.FC<UnifiedTimelineProps> = ({ contactId }) =
       empathyTrend
     };
   }, [events]);
+
+  if (loading && events.length === 0) {
+    return <div className="p-8 text-center text-muted-foreground">Carregando timeline...</div>;
+  }
 
   return (
     <div className="space-y-4">

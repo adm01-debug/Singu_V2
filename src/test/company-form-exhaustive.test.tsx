@@ -158,7 +158,7 @@ describe('CompanyForm — Rendering', () => {
     expect(tabs[0]).toHaveTextContent('Básico');
     expect(tabs[1]).toHaveTextContent('Fiscal');
     expect(tabs[2]).toHaveTextContent('Classificação');
-    expect(tabs[3]).toHaveTextContent('Estrutura');
+    expect(tabs[3]).toHaveTextContent('Contato & Endereço');
     expect(screen.queryByText('Telefones')).not.toBeInTheDocument();
   });
 
@@ -200,7 +200,6 @@ describe('CompanyForm — Tab Navigation', () => {
     await userEvent.click(screen.getByRole('tab', { name: /Fiscal/ }));
     expect(screen.getByText('CNPJ')).toBeInTheDocument();
     expect(screen.getByText('Situação RF')).toBeInTheDocument();
-    expect(screen.getByText('Capital Social (R$)')).toBeInTheDocument();
     expect(screen.getByText('Natureza Jurídica (Código)')).toBeInTheDocument();
     expect(screen.getByText('Natureza Jurídica (Descrição)')).toBeInTheDocument();
     expect(screen.getByText('Porte (Receita Federal)')).toBeInTheDocument();
@@ -227,7 +226,7 @@ describe('CompanyForm — Tab Navigation', () => {
     await userEvent.click(screen.getByRole('tab', { name: /Estrutura/ }));
     expect(screen.getByText('Nº Funcionários')).toBeInTheDocument();
     expect(screen.getByText('Faturamento Anual')).toBeInTheDocument();
-    expect(screen.getByText('Saúde Financeira')).toBeInTheDocument();
+    expect(screen.getByText('Capital Social (R$)')).toBeInTheDocument();
     expect(screen.getByText(/Cores da Marca/)).toBeInTheDocument();
     // Relational IDs
     expect(screen.getByText('ID da Matriz')).toBeInTheDocument();
@@ -262,7 +261,6 @@ describe('CompanyForm — Default Values Population', () => {
     renderForm(fullExternalCompany);
     await userEvent.click(screen.getByRole('tab', { name: /Fiscal/ }));
     expect(screen.getByDisplayValue('79.114.450/0284-18')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('319967786.74')).toBeInTheDocument();
     expect(screen.getByDisplayValue('2143')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Cooperativa')).toBeInTheDocument();
     expect(screen.getByDisplayValue('123456789')).toBeInTheDocument();

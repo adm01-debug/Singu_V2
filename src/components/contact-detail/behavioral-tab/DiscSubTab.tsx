@@ -27,10 +27,10 @@ export function DiscSubTab({ contactId }: Props) {
     if (behavior) setFormData(behavior);
   }, [behavior]);
 
+   const { analyzing, analyzeLatestInteractions } = useDISCAutoAnalysis();
+
   if (isLoading) return <div>Carregando...</div>;
 
-   const { analyzing, analyzeLatestInteractions } = useDISCAutoAnalysis();
- 
    return (
      <div className="space-y-6">
        <div className="grid gap-6 md:grid-cols-2">

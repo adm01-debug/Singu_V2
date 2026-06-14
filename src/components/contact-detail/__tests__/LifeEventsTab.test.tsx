@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { LifeEventsTab } from '../LifeEventsTab';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -51,21 +52,21 @@ describe('LifeEventsTab', () => {
     expect(screen.getByText(/Eventos de Vida & Marcos/i)).toBeInTheDocument();
   });
 
-  it('displays the gap checklist tab', () => {
+  it('displays the gap checklist tab', async () => {
     render(<LifeEventsTab contactId="test-contact-id" />, { wrapper });
     const analysisTab = screen.getByRole('tab', { name: /Gaps & Análise/i });
     expect(analysisTab).toBeInTheDocument();
-    
-    fireEvent.click(analysisTab);
-    expect(screen.getByText(/Diagnóstico de Marcos/i)).toBeInTheDocument();
+
+    await userEvent.click(analysisTab);
+    expect(await screen.findByText(/Checklist de Cobertura/i)).toBeInTheDocument();
   });
 
-  it('displays the audit trail tab', () => {
+  it('displays the audit trail tab', async () => {
     render(<LifeEventsTab contactId="test-contact-id" />, { wrapper });
     const auditTab = screen.getByRole('tab', { name: /Auditoria/i });
     expect(auditTab).toBeInTheDocument();
-    
-    fireEvent.click(auditTab);
-    expect(screen.getByText(/Histórico de Governança/i)).toBeInTheDocument();
+
+    await userEvent.click(auditTab);
+    expect(await screen.findByText(/Histórico de Governança/i)).toBeInTheDocument();
   });
 });

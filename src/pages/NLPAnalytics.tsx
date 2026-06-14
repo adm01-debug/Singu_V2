@@ -385,7 +385,7 @@ const NLPAnalytics = () => {
                    <div key={i} className="flex items-center gap-3 group cursor-pointer">
                      <div className={cn(
                        "h-4 w-4 rounded border flex items-center justify-center transition-colors",
-                       task.done ? "bg-success border-success text-white" : "border-muted-foreground group-hover:border-primary"
+                       task.done ? "bg-success border-success text-primary-foreground" : "border-muted-foreground group-hover:border-primary"
                      )}>
                        {task.done && <CheckCircle2 className="h-3 w-3" />}
                      </div>

@@ -82,7 +82,7 @@ const TONE_CHIPS: PromptChip[] = [
               <Button 
                 onClick={() => handleGenerate(selectedTone)} 
                 disabled={generating}
-                className="w-full h-9 bg-primary hover:bg-primary/90 text-white gap-2 font-bold shadow-sm"
+                className="w-full h-9 bg-primary hover:bg-primary/90 text-primary-foreground gap-2 font-bold shadow-sm"
               >
                 {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
                 Gerar com tom {selectedTone}

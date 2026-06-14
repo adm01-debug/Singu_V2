@@ -67,7 +67,7 @@ export const NeuroCommunicationHub = () => {
                     className="p-4 rounded-xl bg-white border border-indigo-100 shadow-sm group hover:border-indigo-500/50 transition-all"
                   >
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-600 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
+                      <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-600 group-hover:bg-indigo-500 group-hover:text-primary-foreground transition-colors">
                         <Activity className="h-4 w-4" />
                       </div>
                       <h4 className="font-bold text-sm uppercase tracking-wider">{info.namePt}</h4>
@@ -110,7 +110,7 @@ export const NeuroCommunicationHub = () => {
             <TabsContent value="optimization" className="pt-4">
               <div className="bg-white rounded-xl border border-indigo-100 p-6">
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="p-3 rounded-full bg-indigo-500 text-white shadow-lg shadow-indigo-200">
+                  <div className="p-3 rounded-full bg-indigo-500 text-primary-foreground shadow-lg shadow-indigo-200">
                     <Sparkles className="h-6 w-6" />
                   </div>
                   <div>
@@ -152,7 +152,7 @@ export const NeuroCommunicationHub = () => {
 
             <TabsContent value="security" className="pt-4">
               <div className="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20 flex items-center gap-4">
-                <div className="p-3 rounded-full bg-emerald-500 text-white">
+                <div className="p-3 rounded-full bg-emerald-500 text-primary-foreground">
                   <ShieldCheck className="h-6 w-6" />
                 </div>
                 <div>

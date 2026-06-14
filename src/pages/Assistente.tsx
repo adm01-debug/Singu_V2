@@ -54,7 +54,7 @@ export default function Assistente() {
     }
   };
 
-  const usePrompt = (prompt: string) => {
+  const applyPrompt = (prompt: string) => {
     setInput(prompt.replace(/^[^\s]+\s/, ''));
   };
 
@@ -121,7 +121,7 @@ export default function Assistente() {
                       variant="outline"
                       size="sm"
                       className="text-xs h-auto py-2 justify-start"
-                      onClick={() => usePrompt(p)}
+                      onClick={() => applyPrompt(p)}
                     >
                       {p}
                     </Button>
