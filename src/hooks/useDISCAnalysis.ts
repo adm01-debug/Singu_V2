@@ -131,8 +131,9 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
       const behaviorIndicators = profileInfo?.salesApproach.presentation.slice(0, 3) || [];
 
       // Generate summary
-      const summary = profileInfo 
-        ? `Perfil ${profileInfo.name} (${primary}${secondary ? `/${secondary}` : ''}): ${profileInfo.shortDescription}`
+      const secondarySuffix = secondary ? `/${secondary}` : '';
+      const summary = profileInfo
+        ? `Perfil ${profileInfo.name} (${primary}${secondarySuffix}): ${profileInfo.shortDescription}`
         : `Perfil primário identificado: ${primary}`;
 
       // Save to database

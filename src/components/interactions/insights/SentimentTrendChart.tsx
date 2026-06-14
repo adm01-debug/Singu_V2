@@ -716,9 +716,10 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
                     const { cx, cy } = props as { cx: number; cy: number };
                     if (cx == null || cy == null) return null;
                     const radius = 9;
+                    const countSuffix = d.count > 1 ? ` (+${d.count - 1})` : "";
                     return (
                       <g>
-                        <title>{`${d.label}: ${d.title}${d.count > 1 ? ` (+${d.count - 1})` : ""}`}</title>
+                        <title>{`${d.label}: ${d.title}${countSuffix}`}</title>
                         <circle cx={cx} cy={cy} r={radius} fill={d.color} stroke="hsl(var(--background))" strokeWidth={1.5} />
                         <foreignObject x={cx - 6} y={cy - 6} width={12} height={12} style={{ pointerEvents: "none" }}>
                           <div style={{ width: 12, height: 12, display: "flex", alignItems: "center", justifyContent: "center", color: "hsl(var(--background))" }}>

@@ -101,7 +101,8 @@ const Intelligence = () => {
     params.forEach((v, k) => {
       if (k !== 'snap') paramsObj[k] = v;
     });
-    const label = `${tab.toUpperCase()}${current ? ` · ${current.name}` : ''}`;
+    const currentNameSuffix = current ? ` · ${current.name}` : '';
+    const label = `${tab.toUpperCase()}${currentNameSuffix}`;
     const hash = createSnapshot(
       { tab, params: paramsObj, entity: current, ts: Date.now() },
       label,

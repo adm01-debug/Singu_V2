@@ -116,6 +116,7 @@ export function ChannelPerformanceMatrixCard() {
                       const total = cell?.total ?? 0;
                       const rate = cell?.rate ?? 0;
                       const avgDays = cell?.avgDays ?? null;
+                      const avgDaysSuffix = avgDays !== null ? ` · ~${avgDays}d` : '';
                       return (
                         <td key={stage} className="p-1">
                           <div
@@ -124,7 +125,7 @@ export function ChannelPerformanceMatrixCard() {
                               intensityClass(rate, total),
                               isWinner && 'ring-2 ring-primary ring-offset-1 ring-offset-background',
                             )}
-                            title={`${CHANNEL_LABELS[channel]} em ${STAGE_LABELS[stage as Stage]}\n${total} interações · ${rate}% avanço${avgDays !== null ? ` · ~${avgDays}d` : ''}`}
+                            title={`${CHANNEL_LABELS[channel]} em ${STAGE_LABELS[stage as Stage]}\n${total} interações · ${rate}% avanço${avgDaysSuffix}`}
                           >
                             {isWinner && (
                               <Trophy className="w-3 h-3 text-primary absolute top-0.5 right-0.5" aria-label="Top" />

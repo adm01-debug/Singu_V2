@@ -58,7 +58,8 @@ function formatArgs(level: string, args: unknown[]): unknown[] {
     level,
   };
   if (_requestId) meta.rid = _requestId;
-  return [`[${meta.ts}] [${level.toUpperCase()}]${_requestId ? ` [${_requestId}]` : ''}`, ...args];
+  const requestIdTag = _requestId ? ` [${_requestId}]` : '';
+  return [`[${meta.ts}] [${level.toUpperCase()}]${requestIdTag}`, ...args];
 }
 
 export const logger = {

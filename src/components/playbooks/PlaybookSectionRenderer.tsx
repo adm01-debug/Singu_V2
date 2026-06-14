@@ -20,7 +20,8 @@ export function PlaybookSectionRenderer({ section }: { section: PlaybookSection 
   const Icon = ICONS[section.type] || MessageSquare;
 
   const handleCopy = async () => {
-    const text = `${section.title}\n\n${section.body}\n\n${section.items?.map((i) => `• ${i}`).join("\n") || ""}`;
+    const itemsList = section.items?.map((i) => `• ${i}`).join("\n") || "";
+    const text = `${section.title}\n\n${section.body}\n\n${itemsList}`;
     await navigator.clipboard.writeText(text);
     setCopied(true);
     toast.success("Bloco copiado");

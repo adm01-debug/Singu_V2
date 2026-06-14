@@ -140,17 +140,18 @@ function buildRecommendation(
 
   let nextActionHint = `Contatar${timeHint} ${channelHint}`.trim();
   let recommendation = '';
+  const timeParen = timeHint ? ` (${time})` : '';
 
   if (level === 'pronto') {
-    recommendation = `Contato pronto para avançar. Aproveite o momentum: agende a próxima etapa ${channelHint}${timeHint ? ` (${time})` : ''}.`;
+    recommendation = `Contato pronto para avançar. Aproveite o momentum: agende a próxima etapa ${channelHint}${timeParen}.`;
     nextActionHint = `Agendar próxima reunião ${channelHint}`;
   } else if (level === 'quente') {
-    recommendation = `Contato quente. Mantenha o ritmo com uma mensagem de acompanhamento ${channelHint}${timeHint ? ` (${time})` : ''}.`;
+    recommendation = `Contato quente. Mantenha o ritmo com uma mensagem de acompanhamento ${channelHint}${timeParen}.`;
   } else if (weakest === 'cadence') {
-    recommendation = `${breakdown.cadence.detail}. Reabra a conversa ${channelHint}${timeHint ? ` (${time})` : ''}, recapitulando o último ponto discutido.`;
+    recommendation = `${breakdown.cadence.detail}. Reabra a conversa ${channelHint}${timeParen}, recapitulando o último ponto discutido.`;
     nextActionHint = `Reabrir conversa ${channelHint}`;
   } else if (weakest === 'recency') {
-    recommendation = `${breakdown.recency.detail} sem contato. Envie uma mensagem leve de check-in ${channelHint}${timeHint ? ` (${time})` : ''} para reaquecer.`;
+    recommendation = `${breakdown.recency.detail} sem contato. Envie uma mensagem leve de check-in ${channelHint}${timeParen} para reaquecer.`;
     nextActionHint = `Check-in ${channelHint}`;
   } else if (weakest === 'sentiment') {
     recommendation = `Sentimento ${breakdown.sentiment.detail.toLowerCase()}. Aborde com escuta ativa ${channelHint}, valide preocupações antes de avançar.`;

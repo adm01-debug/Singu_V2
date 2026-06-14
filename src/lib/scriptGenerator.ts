@@ -63,12 +63,24 @@ function templatesFor(passoId: string, ctx: ScriptContext): Templates {
   const btSuffix = bt ? ` Posso te ligar ${bt}?` : '';
   const days = ctx.daysSinceLast ?? null;
   const cadence = ctx.cadenceDays ?? null;
+  const cadenceSuffix = cadence ? ` (cadência usual de ${cadence} dias)` : '';
+  const dayPlural = days === 1 ? '' : 's';
   const ctxLine = days != null
-    ? `Vi que faz ${days} dia${days === 1 ? '' : 's'} desde nosso último contato${cadence ? ` (cadência usual de ${cadence} dias)` : ''}.`
+    ? `Vi que faz ${days} dia${dayPlural} desde nosso último contato${cadenceSuffix}.`
     : 'Faz um tempo desde nosso último contato.';
 
+  const bestTimeBullet = bt ? `\n• Melhor horário sugerido: ${bt}` : '';
   const callBullets = (abertura: string, pergunta: string, proximo: string) =>
-    `• Abertura: ${abertura}\n• Pergunta-chave: ${pergunta}\n• Próximo passo: ${proximo}${bt ? `\n• Melhor horário sugerido: ${bt}` : ''}`;
+    `• Abertura: ${abertura}\n• Pergunta-chave: ${pergunta}\n• Próximo passo: ${proximo}${bestTimeBullet}`;
+
+  // Frases condicionais baseadas no melhor horário (extraídas para evitar template aninhado).
+  const btDisponibilidadeFrase = bt ? `Tenho disponibilidade ${bt}.` : 'Me diga um horário que funciona para você.';
+  const btSuffixEspaco = bt ? ` ${bt}` : '';
+  const btDisponibilidadeOuHorarios = bt ? `Tenho disponibilidade ${bt}.` : 'Me passe 2 ou 3 horários e eu confirmo.';
+  const btDisponibilidadeAgenda = bt ? `Tenho disponibilidade ${bt}` : 'Me diga 2 horários que funcionam para você';
+  const btHorarioEmpatico = bt ? `Tenho um horário ${bt}` : 'Qualquer horário que funcione para você';
+  const btLigarFrase = bt ? `Posso te ligar ${bt} para alinharmos.` : 'Me avise o melhor canal e horário.';
+  const btCallFrase = bt ? `uma call ${bt}` : 'uma call de 20 min na próxima semana';
 
   switch (passoId) {
     case 'reabrir-conversa':
@@ -85,8 +97,8 @@ function templatesFor(passoId: string, ctx: ScriptContext): Templates {
             empatico: `${name}, tudo bem por aí?`,
           },
           body: {
-            direto: `Olá ${name},\n\n${ctxLine} Queria retomar o ponto onde paramos e propor um próximo passo claro.\n\nFaz sentido marcarmos 20 minutos esta semana para alinharmos? ${bt ? `Tenho disponibilidade ${bt}.` : 'Me diga um horário que funciona para você.'}\n\nFico no aguardo.\nAbraço`,
-            cordial: `Olá ${name},\n\nEspero que esteja tudo bem. ${ctxLine} Queria retomar nossa conversa e entender como você está vendo o cenário neste momento.\n\nSe fizer sentido, posso propor uma rápida conversa para alinharmos próximos passos${bt ? ` ${bt}` : ''}.\n\nQualquer coisa, é só me avisar.\nAbraço`,
+            direto: `Olá ${name},\n\n${ctxLine} Queria retomar o ponto onde paramos e propor um próximo passo claro.\n\nFaz sentido marcarmos 20 minutos esta semana para alinharmos? ${btDisponibilidadeFrase}\n\nFico no aguardo.\nAbraço`,
+            cordial: `Olá ${name},\n\nEspero que esteja tudo bem. ${ctxLine} Queria retomar nossa conversa e entender como você está vendo o cenário neste momento.\n\nSe fizer sentido, posso propor uma rápida conversa para alinharmos próximos passos${btSuffixEspaco}.\n\nQualquer coisa, é só me avisar.\nAbraço`,
             empatico: `Olá ${name},\n\n${ctxLine} Não quero ser inconveniente — entendo que prioridades mudam.\n\nQueria apenas reabrir o canal e saber se algo mudou no seu lado, ou se faz sentido conversarmos novamente em outro momento.\n\nFico à disposição quando for melhor para você.\nAbraço`,
           },
         },
@@ -123,9 +135,9 @@ function templatesFor(passoId: string, ctx: ScriptContext): Templates {
             empatico: `${name}, se fizer sentido — uma conversa rápida`,
           },
           body: {
-            direto: `Olá ${name},\n\nNosso último contato foi positivo e quero avançar. Proponho 30 minutos esta semana para fecharmos os próximos passos.\n\n${bt ? `Tenho disponibilidade ${bt}.` : 'Me passe 2 ou 3 horários e eu confirmo.'}\n\nAbraço`,
-            cordial: `Olá ${name},\n\nGostaria de propor uma conversa de 30 minutos para alinharmos os próximos passos com calma.\n\n${bt ? `Tenho disponibilidade ${bt}` : 'Me diga 2 horários que funcionam para você'} e fechamos a agenda.\n\nAbraço`,
-            empatico: `Olá ${name},\n\nSei que sua agenda é cheia. Se fizer sentido, podemos reservar 30 minutos para conversarmos — sem pressão, só para entendermos juntos o melhor caminho.\n\n${bt ? `Tenho um horário ${bt}` : 'Qualquer horário que funcione para você'} está ótimo.\n\nAbraço`,
+            direto: `Olá ${name},\n\nNosso último contato foi positivo e quero avançar. Proponho 30 minutos esta semana para fecharmos os próximos passos.\n\n${btDisponibilidadeOuHorarios}\n\nAbraço`,
+            cordial: `Olá ${name},\n\nGostaria de propor uma conversa de 30 minutos para alinharmos os próximos passos com calma.\n\n${btDisponibilidadeAgenda} e fechamos a agenda.\n\nAbraço`,
+            empatico: `Olá ${name},\n\nSei que sua agenda é cheia. Se fizer sentido, podemos reservar 30 minutos para conversarmos — sem pressão, só para entendermos juntos o melhor caminho.\n\n${btHorarioEmpatico} está ótimo.\n\nAbraço`,
           },
         },
         call: {
@@ -157,7 +169,7 @@ function templatesFor(passoId: string, ctx: ScriptContext): Templates {
         email: {
           subject: { direto: `Retomando minha última mensagem`, cordial: `Confirmando recebimento, ${name}`, empatico: `${name}, sem pressa` },
           body: {
-            direto: `Olá ${name},\n\nQueria confirmar se você viu minha última mensagem no WhatsApp e seguir com o próximo passo.\n\n${bt ? `Posso te ligar ${bt} para alinharmos.` : 'Me avise o melhor canal e horário.'}\n\nAbraço`,
+            direto: `Olá ${name},\n\nQueria confirmar se você viu minha última mensagem no WhatsApp e seguir com o próximo passo.\n\n${btLigarFrase}\n\nAbraço`,
             cordial: `Olá ${name},\n\nSó passando para garantir que minha mensagem chegou. Se fizer sentido, posso retomar por aqui ou onde for mais prático para você.\n\nAbraço`,
             empatico: `Olá ${name},\n\nSem pressa — só queria deixar registrado por e-mail também, caso o WhatsApp não tenha sido o melhor canal.\n\nQuando for um bom momento, retomamos.\n\nAbraço`,
           },
@@ -179,7 +191,7 @@ function templatesFor(passoId: string, ctx: ScriptContext): Templates {
         email: {
           subject: { direto: `Resumo + próximos passos`, cordial: `Retomando nossa conversa, ${name}`, empatico: `${name}, sem pressa — resumo do que vimos` },
           body: {
-            direto: `Olá ${name},\n\n${ctxLine} Para facilitar a retomada, segue um resumo curto do que vimos por último e o próximo passo que proponho.\n\n[resumo do contexto]\n\nProponho ${bt ? `uma call ${bt}` : 'uma call de 20 min na próxima semana'} para fecharmos. Topa?\n\nAbraço`,
+            direto: `Olá ${name},\n\n${ctxLine} Para facilitar a retomada, segue um resumo curto do que vimos por último e o próximo passo que proponho.\n\n[resumo do contexto]\n\nProponho ${btCallFrase} para fecharmos. Topa?\n\nAbraço`,
             cordial: `Olá ${name},\n\nEspero que esteja tudo bem. ${ctxLine} Queria retomar nossa conversa de uma forma fácil para você.\n\nSegue abaixo um resumo do que vimos por último, para você relembrar sem precisar voltar no histórico.\n\n[resumo]\n\nQuando puder, me diga o que faz mais sentido como próximo passo.\nAbraço`,
             empatico: `Olá ${name},\n\n${ctxLine} Imagino que sua rotina esteja corrida — por isso preferi mandar tudo escrito, para você ler quando for melhor.\n\n[resumo do que conversamos]\n\nNão precisa responder agora. Quando fizer sentido, retomamos.\nAbraço`,
           },

@@ -196,9 +196,10 @@ const DISCSalesScriptGenerator: React.FC<DISCSalesScriptGeneratorProps> = ({ con
   };
 
   const exportScript = () => {
-    const fullScript = salesStages.map(stage => 
-      `## ${stage.name}\n\n${stage.script}\n\n### Dicas:\n${stage.tips.map(t => `- ${t}`).join('\n')}\n`
-    ).join('\n---\n\n');
+    const fullScript = salesStages.map(stage => {
+      const tipsList = stage.tips.map(t => `- ${t}`).join('\n');
+      return `## ${stage.name}\n\n${stage.script}\n\n### Dicas:\n${tipsList}\n`;
+    }).join('\n---\n\n');
 
     const blob = new Blob([fullScript], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);

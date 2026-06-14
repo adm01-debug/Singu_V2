@@ -25,7 +25,10 @@ function describeFilters(days: number, channels: string[], q: string): string {
     const labels = channels.map((c) => CHANNEL_LABELS[c] ?? c).join(', ');
     parts.push(labels);
   }
-  if (q) parts.push(`"${q.length > 24 ? `${q.slice(0, 24)}…` : q}"`);
+  if (q) {
+    const qTrimmed = q.length > 24 ? `${q.slice(0, 24)}…` : q;
+    parts.push(`"${qTrimmed}"`);
+  }
   return parts.join(' · ');
 }
 

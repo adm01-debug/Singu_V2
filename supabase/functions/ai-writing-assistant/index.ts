@@ -306,10 +306,12 @@ ${vakStyle ? `3. Conselho VAK: ${vakStyle.advice}` : ''}
     ? 'Use um tom mais descontraído e casual.'
     : 'Use um tom amigável mas profissional.';
 
+   const storyArcSuffix = storyArc ? ` (Arco: ${storyArc})` : '';
+   const frameworkLine = framework !== 'None' ? `Aplique rigorosamente o framework: ${framework}${storyArcSuffix}` : '';
    return `Gere 3 variações de mensagens para ${contact.firstName}.
  
  Objetivo: ${typeDescriptions[messageType]}
-  ${framework !== 'None' ? `Aplique rigorosamente o framework: ${framework}${storyArc ? ` (Arco: ${storyArc})` : ''}` : ''}
+  ${frameworkLine}
  
  ${customContext ? `Contexto do usuário: ${customContext}` : ''}
  
