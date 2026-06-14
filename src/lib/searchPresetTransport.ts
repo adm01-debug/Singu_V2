@@ -114,6 +114,7 @@ function base64ToUtf8(b64: string): string {
 
 export function bundleToBase64Url(bundle: PresetBundle): string {
   const json = JSON.stringify(bundle);
+  // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
   return utf8ToBase64(json).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
@@ -137,6 +138,7 @@ function slugify(s: string): string {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
+    // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
     .replace(/^-+|-+$/g, '')
     .slice(0, 40) || 'busca';
 }

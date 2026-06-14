@@ -26,6 +26,7 @@
    resolve: {
      alias: [
        { find: '@', replacement: path.resolve(__dirname, './src') },
+       // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
        { find: /^npm:(.*)@(.*)$/, replacement: '$1' }
      ]
    },

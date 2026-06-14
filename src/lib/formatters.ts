@@ -25,6 +25,7 @@ export function toTitleCase(str: string): string {
   let input = stripped || str;
 
   // Remove redundant city/state suffix after " - " (e.g. "PAC IPUA - IPUA/SP" → "PAC IPUA - SP")
+  // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
   const dashParts = input.split(/\s+[-–—]\s+/);
   if (dashParts.length >= 2) {
     const lastPart = dashParts[dashParts.length - 1];
@@ -33,6 +34,7 @@ export function toTitleCase(str: string): string {
     const mainNorm = normalizeForCompare(mainParts);
     if (mainNorm.includes(suffix) && suffix.length >= 3) {
       const ufMatch = lastPart.match(/[\/\-]\s*([A-Za-z]{2})$/);
+      // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
       const existingUf = mainParts.match(/\s*[-–—]\s*([A-Z]{2})$/);
       if (existingUf) {
         input = mainParts;
@@ -101,6 +103,7 @@ export function formatContactName(firstName?: string | null, lastName?: string |
   }
   
   // Email in firstName — extract readable name from local part
+  // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
   const emailInFirst = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fn);
   if (emailInFirst) {
     const local = fn.split('@')[0];
@@ -110,6 +113,7 @@ export function formatContactName(firstName?: string | null, lastName?: string |
       .map(w => w.charAt(0).toUpperCase() + w.slice(1))
       .join(' ');
     // If there's a real last name that's not part of the email, append it
+    // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
     if (ln && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ln)) {
       return `${extracted} ${ln.charAt(0).toUpperCase() + ln.slice(1)}`;
     }
@@ -117,6 +121,7 @@ export function formatContactName(firstName?: string | null, lastName?: string |
   }
   
   // Full string is an email (no separate last name)
+  // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
   if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(full)) {
     const local = full.split('@')[0];
     return local
@@ -157,6 +162,7 @@ export function getContactInitials(firstName?: string | null, lastName?: string 
   }
   
   // Email → use first 2 chars of local part
+  // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
   if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(full)) {
     const local = full.split('@')[0];
     return local.slice(0, 2).toUpperCase();

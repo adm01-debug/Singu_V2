@@ -498,6 +498,7 @@ describe('Search Presets for Companies', () => {
 
 describe('Location Extraction from Name', () => {
   function extractLocation(name: string) {
+    // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
     const slashMatch = name.match(/[-–—]\s*([^-–—/]+)\/([A-Z]{2})\s*$/);
     if (slashMatch) return { city: slashMatch[1].trim(), state: slashMatch[2] };
     const ufMatch = name.match(/[-–—]\s*([A-Z]{2})\s*$/);

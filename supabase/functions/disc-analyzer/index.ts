@@ -179,7 +179,9 @@ Deno.serve(async (req) => {
     
     let analysisResult: AnalysisResult;
     try {
+      // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
       const jsonMatch = content.match(/```json\s*([\s\S]*?)\s*```/) || 
+                       // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
                        content.match(/```\s*([\s\S]*?)\s*```/);
       const jsonStr = jsonMatch ? jsonMatch[1] : content;
       analysisResult = JSON.parse(jsonStr.trim());

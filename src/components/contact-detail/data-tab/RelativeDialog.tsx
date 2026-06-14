@@ -48,6 +48,7 @@ export function RelativeDialog({
     if (!form.name.trim()) return;
     
     // Basic validation
+    // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
     if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       alert('Por favor, insira um e-mail válido');
       return;

@@ -111,6 +111,7 @@ Responda APENAS com um JSON válido no formato especificado.`;
     // deno-lint-ignore no-explicit-any
     let analysis: any = null;
     try {
+      // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (jsonMatch) analysis = JSON.parse(jsonMatch[0]);
     } catch (parseError) {

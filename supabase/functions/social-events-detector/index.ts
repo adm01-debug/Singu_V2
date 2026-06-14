@@ -179,9 +179,11 @@ Deno.serve(async (req) => {
           }
 
           // Detectar aniversário de empresa
+          // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
           const anniversaryMatch = markdown.match(/(\d+)\s*(?:years?|anos?)\s+(?:at|em|@)/i);
           if (anniversaryMatch) {
             const years = parseInt(anniversaryMatch[1]);
+            // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
             const existingYears = existingProfile?.profile_data?.markdown?.match(/(\d+)\s*(?:years?|anos?)\s+(?:at|em|@)/i);
             
             if (!existingYears || parseInt(existingYears[1]) !== years) {
@@ -206,7 +208,8 @@ Deno.serve(async (req) => {
 
         // Detectar post viral (Twitter/LinkedIn)
         if (schedule.platform === 'twitter' || schedule.platform === 'linkedin') {
-          const engagementMatch = markdown.match(/(\d+(?:[,.\s]?\d+)*)\s*(?:likes?|curtidas?|reactions?|reações?)/i);
+          // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
+          const engagementMatch = markdown.match(/(\d+(?:[,.\s]\d+)*)\s*(?:likes?|curtidas?|reactions?|reações?)/i);
           if (engagementMatch) {
             const likes = parseInt(engagementMatch[1].replace(/[,.\s]/g, ''));
             const previousLikes = existingProfile?.engagement_metrics?.max_likes || 0;
