@@ -5,10 +5,7 @@
 
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Brain, 
-  AlertTriangle, 
-  Heart,
+import {
   Zap,
   Target,
   CheckCircle

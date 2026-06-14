@@ -19,7 +19,7 @@ import { motion } from 'framer-motion';
 import { Contact, DISCProfile } from '@/types';
 import { VAKType } from '@/types/vak';
 import { DISC_PROFILES } from '@/data/discAdvancedData';
-import { getContactBehavior, getDominantVAK, getDISCProfile } from '@/lib/contact-utils';
+import { getDominantVAK, getDISCProfile } from '@/lib/contact-utils';
 
 interface SalesStage {
   id: string;

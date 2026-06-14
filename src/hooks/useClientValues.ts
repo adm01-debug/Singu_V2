@@ -2,7 +2,6 @@ import { useState, useCallback, useMemo } from 'react';
 import { ValuesMap, ClientValue, DecisionCriterion, ValueCategory } from '@/types/nlp-advanced';
 import { VALUE_CATEGORY_INFO } from '@/data/nlpAdvancedData';
 import { Contact } from '@/types';
-import { getMetaprogramProfile } from '@/lib/contact-utils';
 
 interface Interaction {
   id: string;

@@ -1,5 +1,4 @@
 import { useState, useMemo, useRef, useEffect, startTransition } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Search, Plus, CheckSquare, X } from 'lucide-react';
 import { CompaniesGridSkeleton } from '@/components/skeletons/PageSkeletons';

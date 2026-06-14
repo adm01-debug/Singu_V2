@@ -19,7 +19,6 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useAuth } from '@/hooks/useAuth';
 import { TriggerAnalytics } from '@/components/triggers/TriggerAnalytics';
 import { AdvancedTriggersPanel } from '@/components/triggers/AdvancedTriggersPanel';
 import { ChurnPredictionPanel } from '@/components/analytics/ChurnPredictionPanel';

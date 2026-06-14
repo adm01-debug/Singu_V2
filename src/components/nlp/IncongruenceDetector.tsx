@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Contact, DISCProfile } from '@/types';
-import { getDISCProfile, getContactBehavior } from '@/lib/contact-utils';
+import { getDISCProfile } from '@/lib/contact-utils';
 import { DEMO_CONTACT } from '@/domain/demoEntities';
 
 interface Incongruence {
