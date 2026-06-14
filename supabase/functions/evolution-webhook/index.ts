@@ -283,7 +283,7 @@ async function handleMessageUpsert(supabase: any, payload: any, instance: string
   else if (data.status === 'PLAYED') status = 'played';
   else if (data.status === 'ERROR') status = 'error';
   else if (data.status === 'PENDING') status = 'pending';
-  else if (data.status === 'SERVER_ACK') status = 'sent';
+  // SERVER_ACK mantém o valor inicial 'sent'
 
   // Find contact using enhanced search (local -> external -> create)
   const { contactId, userId, companyId, source } = await findContactByPhone(supabase, phoneNumber || '');

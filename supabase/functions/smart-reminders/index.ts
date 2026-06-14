@@ -219,7 +219,7 @@ Deno.serve(async (req) => {
           } else if (daysSinceLastInteraction >= decayThreshold) {
             decayLevel = 'cooling'; priority = 'medium'; shouldAlert = true;
           } else if (daysSinceLastInteraction >= decayThreshold * 0.75 && relationshipScore >= 70) {
-            decayLevel = 'warming'; shouldAlert = true;
+            shouldAlert = true; // decayLevel mantém 'warming' (valor inicial)
           }
 
           if (shouldAlert) {

@@ -293,7 +293,6 @@ export function useAdvancedTriggers(contact: Contact | null | undefined) {
     if (discProfile === 'D') baseIntensity = 4;
     else if (discProfile === 'I') baseIntensity = 3;
     else if (discProfile === 'S') baseIntensity = 1;
-    else if (discProfile === 'C') baseIntensity = 2;
 
     // Adjust for saturation
     if (exposure?.saturationLevel === 'high') baseIntensity = Math.max(1, baseIntensity - 2);
@@ -334,7 +333,6 @@ export function useAdvancedTriggers(contact: Contact | null | undefined) {
       neurochemicalReason = 'Influenciadores têm dopamina alta à tarde (entusiasmo)';
     } else if (discProfile === 'S') {
       optimalHours = [10, 15];
-      optimalDay = 'quarta';
       neurochemicalReason = 'Estáveis preferem oxitocina estável (conexão calma)';
     } else if (discProfile === 'C') {
       optimalHours = [10, 14];

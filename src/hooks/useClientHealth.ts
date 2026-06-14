@@ -71,7 +71,7 @@ export function useClientHealth(contact: Contact | null, interactions: Interacti
     let recencyStatus: 'healthy' | 'warning' | 'critical' = 'healthy';
     if (lastContactDays > 60) { recencyScore = 20; recencyStatus = 'critical'; }
     else if (lastContactDays > 30) { recencyScore = 50; recencyStatus = 'warning'; }
-    else if (lastContactDays > 14) { recencyScore = 75; recencyStatus = 'healthy'; }
+    else if (lastContactDays > 14) { recencyScore = 75; }
     
     indicators.push({
       name: 'Recência de Contato',

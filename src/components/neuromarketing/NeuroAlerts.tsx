@@ -96,7 +96,6 @@ const NeuroAlerts = ({
         description = `${contactName.split(' ')[0]} está saindo do modo de alerta para um estado mais emocional e aberto.`;
         actionSuggestion = 'Aproveite para construir rapport e conexão emocional.';
       } else if (toBrain === 'neocortex') {
-        severity = 'medium';
         description = `${contactName.split(' ')[0]} está em modo analítico. Espere questionamentos e pedidos de dados.`;
         actionSuggestion = 'Prepare evidências, estatísticas e comparações detalhadas.';
       } else {

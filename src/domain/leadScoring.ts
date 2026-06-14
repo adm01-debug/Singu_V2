@@ -85,7 +85,7 @@ function scoreCadence(cadence: number | null | undefined, lastDays: number | nul
   let detail = `Atrasado (${lastDays}d / cadência ${cadence}d)`;
   if (ratio <= 1.0) { score = 100; status = 'good'; detail = `Em dia (${lastDays}d / ${cadence}d)`; }
   else if (ratio <= 1.5) { score = 60; status = 'warn'; detail = `Próximo do limite (${lastDays}d / ${cadence}d)`; }
-  else if (ratio <= 2.0) { score = 30; status = 'bad'; detail = `Atrasado (${lastDays}d / ${cadence}d)`; }
+  else if (ratio <= 2.0) { score = 30; detail = `Atrasado (${lastDays}d / ${cadence}d)`; }
   return { score, weight, label: 'Cadência', status, detail };
 }
 
@@ -98,7 +98,7 @@ function scoreRecency(lastDays: number | null, weight: number): ProntidaoFactor 
   else if (lastDays <= 7) { score = 80; status = 'good'; }
   else if (lastDays <= 14) { score = 60; status = 'warn'; }
   else if (lastDays <= 30) { score = 40; status = 'warn'; }
-  else if (lastDays <= 60) { score = 20; status = 'bad'; }
+  else if (lastDays <= 60) { score = 20; }
   return { score, weight, label: 'Recência', status, detail };
 }
 

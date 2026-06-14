@@ -127,9 +127,8 @@ Deno.serve(async (req) => {
         status = "healthy";
       } else if (diffHours < 24) {
         status = "degraded";
-      } else {
-        status = "offline";
       }
+      // else: status permanece "offline" (valor inicial)
     }
 
     const result = {
