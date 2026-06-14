@@ -48,7 +48,9 @@ function saveStack(stack: string[]) {
 function saveDirection(direction: 'forward' | 'back' | 'replace') {
   try {
     sessionStorage.setItem(DIRECTION_KEY, direction);
-  } catch {}
+  } catch {
+    // ignora falhas de acesso ao sessionStorage (ex.: modo privado)
+  }
 }
 
 export function NavigationStackProvider({ children }: { children: ReactNode }) {

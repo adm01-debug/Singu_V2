@@ -25,7 +25,9 @@ export function useTableDensity() {
     setDensityState(d);
     try {
       localStorage.setItem(STORAGE_KEY, d);
-    } catch {}
+    } catch {
+      // ignora falhas de acesso ao localStorage (ex.: modo privado)
+    }
     notifyDensityChange();
   }, []);
 

@@ -134,7 +134,7 @@ export function RuleFormDialog({ open, onOpenChange, onSubmit, initialData }: Ru
                   <Select
                     value={(() => { try { return JSON.parse(triggerConfig)?.direction || 'decrease'; } catch { return 'decrease'; } })()}
                     onValueChange={v => {
-                      let cfg = {}; try { cfg = JSON.parse(triggerConfig); } catch {}
+                      let cfg = {}; try { cfg = JSON.parse(triggerConfig); } catch { /* JSON inválido: mantém cfg vazio */ }
                       setTriggerConfig(JSON.stringify({ ...cfg, direction: v }));
                     }}
                   >
@@ -151,7 +151,7 @@ export function RuleFormDialog({ open, onOpenChange, onSubmit, initialData }: Ru
                     type="number" className="text-xs h-8 w-24"
                     value={(() => { try { return JSON.parse(triggerConfig)?.threshold || ''; } catch { return ''; } })()}
                     onChange={e => {
-                      let cfg = {}; try { cfg = JSON.parse(triggerConfig); } catch {}
+                      let cfg = {}; try { cfg = JSON.parse(triggerConfig); } catch { /* JSON inválido: mantém cfg vazio */ }
                       setTriggerConfig(JSON.stringify({ ...cfg, threshold: Number(e.target.value) }));
                     }}
                     placeholder="10"
