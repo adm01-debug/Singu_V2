@@ -1,6 +1,5 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain, MessageSquare, ShieldCheck, Users, Briefcase, Activity, Shield, FileText, Compass } from "lucide-react";
 import { useContactBehavior } from "@/hooks/useContactBehavior";
 import { DISCSubTab } from "./behavior/DISCSubTab";

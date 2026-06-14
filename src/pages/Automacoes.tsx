@@ -33,7 +33,11 @@ export default function Automacoes() {
     if (editingRule?.id) { await updateRule(editingRule.id, data); } else { await createRule(data); }
     setEditingRule(null);
   };
-  const handleDelete = async () => { if (!deleteId) return; await deleteRule(deleteId); setDeleteId(null); };
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    await deleteRule(deleteId);
+    setDeleteId(null);
+  };
   const handleViewLogs = (ruleId: string) => { setLogsRuleId(ruleId); fetchLogs(ruleId); };
 
   const activeCount = rules.filter(r => r.is_active).length;

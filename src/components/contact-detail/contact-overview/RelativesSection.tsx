@@ -1,7 +1,5 @@
-import { useState } from 'react';
-  import { Users, Building2, Cake, Phone, Mail, Plus, AlertTriangle, Edit2 } from 'lucide-react';
+import { Users, Building2, Cake, Phone, Mail, Plus, AlertTriangle, Edit2 } from 'lucide-react';
  import { RelativeDialog } from '../data-tab/RelativeDialog';
-import { Badge } from '@/components/ui/badge';
 import { CollapsibleSection } from '@/components/ui/collapsible-section';
 import { InlineEmptyState } from '@/components/ui/empty-state';
  import { InlineEdit, InlineDateEdit } from '@/components/inline-edit/InlineEdit';

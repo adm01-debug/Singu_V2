@@ -47,7 +47,7 @@ export function useInfiniteList<T>(
   const isFirstResetRef = useRef(true);
 
   // Reset quando deps mudam (filtros, sort, etc.) e limpa cache de profundidade.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   useEffect(() => {
     // No primeiro mount, NÃO sobrescreve o count hidratado do sessionStorage.
     if (isFirstResetRef.current) {

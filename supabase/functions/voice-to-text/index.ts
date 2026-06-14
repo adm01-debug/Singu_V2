@@ -1,4 +1,4 @@
-import { withAuth, jsonError, jsonOk, corsHeaders } from "../_shared/auth.ts";
+import { jsonError, jsonOk, corsHeaders } from "../_shared/auth.ts";
 
 function processBase64Chunks(base64String: string, chunkSize = 32768) {
   const chunks: Uint8Array[] = [];
@@ -57,8 +57,7 @@ function processBase64Chunks(base64String: string, chunkSize = 32768) {
      );
  
      let audioData = audio;
-     let fileName = 'audio.mp3';
- 
+
      // If whatsappMessageId is provided, we need to fetch the message content
      // Note: In real production, this would involve fetching from Evolution API if not cached
      // For now, we expect 'audio' to be passed or we simulate the fetch
@@ -73,8 +72,6 @@ function processBase64Chunks(base64String: string, chunkSize = 32768) {
        return jsonError('Audio content could not be retrieved', 400);
      }
  
-     const binaryAudio = processBase64Chunks(audioData.includes(',') ? audioData.split(',')[1] : audioData);
-     
      const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
      if (!LOVABLE_API_KEY) {
        throw new Error('LOVABLE_API_KEY is not configured');

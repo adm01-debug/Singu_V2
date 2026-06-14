@@ -67,7 +67,8 @@ export function computeIsolatedFilterCounts(
       const hay = normalize(`${i.title ?? ''} ${i.content ?? ''} ${(i.tags ?? []).join(' ')}`);
       if (hay.includes(q)) n += 1;
     }
-    out.push({ key: 'q', label: `Busca “${qTrim.length > 20 ? `${qTrim.slice(0, 20)}…` : qTrim}”`, count: n });
+    const qTrimmed = qTrim.length > 20 ? `${qTrim.slice(0, 20)}…` : qTrim;
+    out.push({ key: 'q', label: `Busca “${qTrimmed}”`, count: n });
   }
 
   if (filters.contact) {

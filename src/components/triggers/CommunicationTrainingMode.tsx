@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  GraduationCap, Brain, Target, Eye, BookOpen,
-  Play, Trophy, Star, RefreshCw,
+  GraduationCap, Brain, BookOpen,
+  Play, Trophy,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

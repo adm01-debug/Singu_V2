@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useActivityLogger } from '@/hooks/useActivityLogger';
@@ -298,7 +298,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     queryClient.setQueryData<Contact[]>(queryKey, prev => prev?.filter(c => c.id !== id) ?? []);
 
     try {
-      const { success, error } = await deleteExternalData('contacts', id);
+      const { error } = await deleteExternalData('contacts', id);
       if (error) throw error;
       
       const deleted = previous?.find(c => c.id === id);

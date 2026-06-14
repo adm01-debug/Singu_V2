@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useCreateQuickInteraction } from '@/hooks/useInteractionsRpc';
-import { useCompleteFollowup } from '@/hooks/useInteractionsRpc';
-import { Zap, CheckCircle, Loader2 } from 'lucide-react';
+import { Zap, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const QuickActionsWidget = React.memo(function QuickActionsWidget({ companyId }: { companyId: string }) {

@@ -23,12 +23,6 @@ export function TagInput({
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const addTag = useCallback((tag: string) => {
-    const trimmed = tag.trim();
-    if (!trimmed || value.includes(trimmed) || value.length >= maxTags) return;
-    onChange([...value, trimmed]);
-  }, [value, onChange, maxTags]);
-
   const removeTag = useCallback((index: number) => {
     onChange(value.filter((_, i) => i !== index));
   }, [value, onChange]);

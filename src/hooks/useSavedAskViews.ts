@@ -42,6 +42,7 @@ export function useSavedAskViews() {
   const save = useCallback((name: string, query: string) => {
     const trimmed = name.trim() || query.slice(0, 40);
     setItems((prev) => {
+      // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
       const id = `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
       const next = [{ id, name: trimmed, query, savedAt: Date.now() }, ...prev].slice(0, MAX);
       write(next);

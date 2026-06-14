@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ShieldCheck, CheckCircle, XCircle, Clock, UserCog } from 'lucide-react';
+import { UserCog } from 'lucide-react';
 import { usePasswordResetRequests } from '@/hooks/usePasswordResetRequests';
 
 export function PasswordResetApproval() {

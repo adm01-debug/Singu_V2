@@ -113,7 +113,7 @@ export function useHealthAlerts() {
   const userId = user?.id;
 
   const { alerts, setAlerts, loading, fetchAlerts } = useHealthAlertsFetch(userId);
-  const { settings, setSettings, loading: settingsLoading, fetchSettings } = useHealthAlertSettingsFetch(userId);
+  const { settings, setSettings, loading: settingsLoading } = useHealthAlertSettingsFetch(userId);
 
   const dismissAlert = useCallback(async (alertId: string) => {
     if (!userId) return;

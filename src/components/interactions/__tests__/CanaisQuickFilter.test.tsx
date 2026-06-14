@@ -136,7 +136,7 @@ describe('CanaisQuickFilter', () => {
 
   it('counts: shows number next to chip and applies opacity-50 to zero-count chips', () => {
     const onChange = vi.fn();
-    const { container } = render(
+    render(
       <CanaisQuickFilter canais={[]} onChange={onChange} counts={{ email: 12, whatsapp: 0 }} />
     );
     expect(screen.getByText('12')).toBeInTheDocument();

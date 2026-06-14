@@ -203,6 +203,7 @@ export const greetingMessages = {
 
 // Helper functions
 export function getRandomMessage<T>(messages: T[]): T {
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   return messages[Math.floor(Math.random() * messages.length)];
 }
 

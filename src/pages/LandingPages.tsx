@@ -1,9 +1,8 @@
  import { useState, useMemo } from 'react';
  import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
- import { Plus, Globe, Eye, Trash2, ExternalLink, Copy, BarChart3, FileText, Layout, Megaphone, Workflow } from 'lucide-react';
+ import { Plus, Globe, Eye, Trash2, ExternalLink, Copy, BarChart3, FileText, Layout } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
-import { PageHeader } from '@/components/navigation/PageHeader';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';

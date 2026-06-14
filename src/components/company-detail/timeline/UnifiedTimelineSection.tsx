@@ -15,7 +15,7 @@
  import { format } from 'date-fns';
  import { ptBR } from 'date-fns/locale';
  import { cn } from '@/lib/utils';
- import { useUnifiedCommunicationHistory, type InteractionHistoryItem } from '@/hooks/useInteractionsRpc';
+ import { useUnifiedCommunicationHistory } from '@/hooks/useInteractionsRpc';
  
  interface Props {
    companyId: string;

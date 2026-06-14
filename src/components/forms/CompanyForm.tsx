@@ -8,7 +8,7 @@ import { useCompanyPhones, useCompanyEmails, useCompanyAddresses, useCompanySoci
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Building2, Loader2, FileText, Users, Landmark, Share2, MapPin, Phone, Sparkles } from 'lucide-react';
+import { Building2, Loader2, FileText, Users, Landmark, Share2, MapPin, Phone } from 'lucide-react';
 import type { Company } from '@/hooks/useCompanies';
 import { CompanyPhonesForm } from '@/components/forms/company/CompanyPhonesForm';
 import { CompanyEmailsForm } from '@/components/forms/company/CompanyEmailsForm';

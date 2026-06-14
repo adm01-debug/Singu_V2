@@ -3,14 +3,12 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 import { AnalyticsEngagementTab } from './analytics/AnalyticsEngagementTab';
 import { AnalyticsSentimentTab } from './analytics/AnalyticsSentimentTab';
 import { motion } from 'framer-motion';
-import {
-  AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
+import { Area, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  Legend, ComposedChart, RadarChart, PolarGrid, PolarAngleAxis,
-  PolarRadiusAxis, Radar,
+  Legend, ComposedChart,
 } from 'recharts';
 import {
-  TrendingUp, TrendingDown, Minus, BarChart3, Activity, Users,
+  TrendingUp, BarChart3, Users,
   MessageSquare, Heart, Target, Zap, Calendar, Download, RefreshCw, Brain,
 } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
@@ -21,7 +19,6 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useAuth } from '@/hooks/useAuth';
 import { TriggerAnalytics } from '@/components/triggers/TriggerAnalytics';
 import { AdvancedTriggersPanel } from '@/components/triggers/AdvancedTriggersPanel';
 import { ChurnPredictionPanel } from '@/components/analytics/ChurnPredictionPanel';
@@ -67,16 +64,15 @@ const TagExplorerWidget = lazy(() => import('@/components/analytics/TagExplorerW
 
 // Extracted data & shared components
 import {
-  periodOptions, calcChange, getMetricsStats,
+  periodOptions, getMetricsStats,
   getRelationshipEvolutionData, getSentimentDistributionData,
   getSentimentColors, getEngagementByChannelData,
   getEngagementRadarData, getTopPerformersData,
 } from '@/data/analyticsData';
-import { CustomTooltip, PieTooltip, ComparisonBadge, StatCard } from '@/components/analytics/AnalyticsShared';
+import { CustomTooltip, StatCard } from '@/components/analytics/AnalyticsShared';
 
 const Analytics = () => {
   usePageTitle('Analytics');
-  const { user } = useAuth();
   const [period, setPeriod] = useState<PeriodFilter>('30d');
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');

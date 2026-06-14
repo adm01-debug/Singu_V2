@@ -3,6 +3,8 @@
 // Based on "How to Win Friends and Influence People"
 // ==============================================
 
+export type LowMedHigh = 'low' | 'medium' | 'high';
+
 // ============================================
 // NOBLE CAUSE TRIGGER
 // ============================================
@@ -139,7 +141,7 @@ export interface AppreciationSuggestion {
   type: AppreciationType;
   reason: string;
   template: string;
-  urgency: 'low' | 'medium' | 'high';
+  urgency: LowMedHigh;
   daysSinceLastAppreciation: number;
 }
 
@@ -226,7 +228,7 @@ export interface WarmthSuggestion {
   currentState: string;
   suggestion: string;
   template: string;
-  impact: 'low' | 'medium' | 'high';
+  impact: LowMedHigh;
 }
 
 // ============================================
@@ -398,7 +400,7 @@ export interface ProgressTracker {
 export interface ProgressCelebrationSuggestion {
   progress: ClientProgress;
   celebration: ProgressCelebration;
-  urgency: 'low' | 'medium' | 'high';
+  urgency: LowMedHigh;
   script: string;
 }
 
@@ -435,8 +437,8 @@ export interface CarnegieRecommendation {
   area: string;
   action: string;
   template: string;
-  impact: 'low' | 'medium' | 'high';
-  effort: 'low' | 'medium' | 'high';
+  impact: LowMedHigh;
+  effort: LowMedHigh;
 }
 
 // ============================================

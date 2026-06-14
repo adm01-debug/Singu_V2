@@ -5,6 +5,8 @@
 
 import { InterestIndicator } from '@/types/carnegie-extended';
 
+type InterestLevel = 'low' | 'moderate' | 'high' | 'exceptional';
+
 // ============================================
 // INTEREST INDICATORS
 // ============================================
@@ -187,7 +189,7 @@ export const INTEREST_SCORING = {
 // ============================================
 // SUGGESTIONS BY LEVEL
 // ============================================
-export const INTEREST_SUGGESTIONS: Record<'low' | 'moderate' | 'high' | 'exceptional', string[]> = {
+export const INTEREST_SUGGESTIONS: Record<InterestLevel, string[]> = {
   low: [
     'Comece cada interação com uma pergunta pessoal genuína',
     'Anote pelo menos 3 detalhes pessoais sobre cada cliente',
@@ -258,13 +260,13 @@ export function calculateInterestScore(counts: Record<string, number>): number {
   return Math.round(score);
 }
 
-export function getInterestLevel(score: number): 'low' | 'moderate' | 'high' | 'exceptional' {
+export function getInterestLevel(score: number): InterestLevel {
   if (score >= 86) return 'exceptional';
   if (score >= 61) return 'high';
   if (score >= 31) return 'moderate';
   return 'low';
 }
 
-export function getInterestSuggestions(level: 'low' | 'moderate' | 'high' | 'exceptional'): string[] {
+export function getInterestSuggestions(level: InterestLevel): string[] {
   return INTEREST_SUGGESTIONS[level];
 }

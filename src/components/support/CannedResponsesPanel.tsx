@@ -20,7 +20,7 @@ export function CannedResponsesPanel({ onSelect }: Props) {
   const [search, setSearch] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState('geral');
+  const [category] = useState('geral');
 
   const filtered = responses.filter(r =>
     !search || r.title.toLowerCase().includes(search.toLowerCase()) || r.content.toLowerCase().includes(search.toLowerCase())

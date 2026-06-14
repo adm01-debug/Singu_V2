@@ -15,7 +15,6 @@ test.describe('Contact Management', () => {
     
     // Test Rapport Badges visibility
     // We expect some badges to be visible if data exists
-    const badges = page.locator('.badge');
     // Note: This is a simplified test for illustration
   });
 

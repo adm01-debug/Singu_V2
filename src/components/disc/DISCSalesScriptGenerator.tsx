@@ -19,7 +19,7 @@ import { motion } from 'framer-motion';
 import { Contact, DISCProfile } from '@/types';
 import { VAKType } from '@/types/vak';
 import { DISC_PROFILES } from '@/data/discAdvancedData';
-import { getContactBehavior, getDominantVAK, getDISCProfile } from '@/lib/contact-utils';
+import { getDominantVAK, getDISCProfile } from '@/lib/contact-utils';
 
 interface SalesStage {
   id: string;
@@ -39,7 +39,6 @@ const DISCSalesScriptGenerator: React.FC<DISCSalesScriptGeneratorProps> = ({ con
   const { toast } = useToast();
   const [activeStage, setActiveStage] = useState('opening');
   
-  const behavior = getContactBehavior(contact);
   const discProfile = (getDISCProfile(contact) || 'I') as Exclude<DISCProfile, null>;
   const vakType = (getDominantVAK(contact) || 'V') as VAKType;
   const profileInfo = DISC_PROFILES[discProfile];
@@ -197,9 +196,10 @@ const DISCSalesScriptGenerator: React.FC<DISCSalesScriptGeneratorProps> = ({ con
   };
 
   const exportScript = () => {
-    const fullScript = salesStages.map(stage => 
-      `## ${stage.name}\n\n${stage.script}\n\n### Dicas:\n${stage.tips.map(t => `- ${t}`).join('\n')}\n`
-    ).join('\n---\n\n');
+    const fullScript = salesStages.map(stage => {
+      const tipsList = stage.tips.map(t => `- ${t}`).join('\n');
+      return `## ${stage.name}\n\n${stage.script}\n\n### Dicas:\n${tipsList}\n`;
+    }).join('\n---\n\n');
 
     const blob = new Blob([fullScript], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);

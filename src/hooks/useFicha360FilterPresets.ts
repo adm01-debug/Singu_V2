@@ -106,6 +106,7 @@ export function useFicha360FilterPresets() {
     // Substitui se já existir com mesmo nome (case-insensitive), senão adiciona
     const existing = presets.find((p) => p.name.toLowerCase() === name.toLowerCase());
     const newPreset: FilterPreset = {
+      // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
       id: existing?.id ?? `preset_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
       name,
       priorities: [...input.priorities],

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Star, Send, MessageSquare, TrendingUp, BarChart3 } from 'lucide-react';
+import { Star, Send, MessageSquare } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -18,7 +18,7 @@ interface Props {
 export function CSATPanel({ contactId, interactionId }: Props) {
   const { surveys, send, answer, stats } = useCSATSurveys(contactId);
   const [pendingScore, setPendingScore] = useState<Record<string, number>>({});
-  const [pendingFeedback, setPendingFeedback] = useState<Record<string, string>>({});
+  const [pendingFeedback] = useState<Record<string, string>>({});
 
   return (
     <Card>

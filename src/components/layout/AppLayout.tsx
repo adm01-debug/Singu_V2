@@ -1,7 +1,7 @@
-import { ReactNode, useMemo, useState, useEffect, lazy, Suspense, useRef } from 'react';
+import { ReactNode, useMemo, useState, useEffect, lazy, Suspense } from 'react';
 import { useRageClickDetector } from '@/hooks/useRageClickDetector';
-import { useLocation, Link } from 'react-router-dom';
-import { Search, Command, Settings, LogOut, ChevronRight, Mic } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import { Search, Command, Settings, LogOut, Mic } from 'lucide-react';
 import { AppSidebar } from './AppSidebar';
 import { MobileHeader } from './MobileHeader';
 import { MobileBottomNav } from './MobileBottomNav';
@@ -26,7 +26,7 @@ import { PageTransition } from '@/components/navigation/PageTransition';
 import { SwipeBackIndicator } from '@/components/navigation/SwipeBackIndicator';
 import { RouteProgressBar } from '@/components/navigation/RouteProgressBar';
 import { ScrollToTopButton } from '@/components/navigation/ScrollToTopButton';
-import { SidebarProvider, SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import {
@@ -97,7 +97,6 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
       setCmdBarOpen(true);
     }
   }, [isOpen, setIsOpen]);
-  const { state } = useSidebar();
   const location = useLocation();
   const { user, signOut } = useAuth();
 

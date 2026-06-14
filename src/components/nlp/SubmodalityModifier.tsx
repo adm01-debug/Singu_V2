@@ -8,11 +8,6 @@ import {
   Eye, 
   Ear, 
   Hand,
-  Sun,
-  Move,
-  Volume2,
-  Maximize,
-  ZoomIn,
   Focus,
   Lightbulb
 } from 'lucide-react';
@@ -93,13 +88,6 @@ const SubmodalityModifier: React.FC<SubmodalityModifierProps> = ({
       case 'K': return 'kinesthetic';
       default: return 'visual';
     }
-  };
-
-  const getModificationScript = (submodality: Submodality) => {
-    const direction = submodality.currentValue > 50 ? 'intensificar' : 'reduzir';
-    const value = submodality.currentValue > 50 ? submodality.toValue : submodality.fromValue;
-    
-    return `Para ${direction} ${submodality.name.toLowerCase()}: "${submodality.script}"`;
   };
 
   return (

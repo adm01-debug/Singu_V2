@@ -15,7 +15,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BrainSystem } from '@/types/neuromarketing';
 import { BRAIN_SYSTEM_INFO } from '@/data/neuromarketingData';
 import { cn } from '@/lib/utils';
-import { TRAINING_QUESTIONS, type TrainingQuestion } from '@/data/neuroTrainingQuestions';
+import { TRAINING_QUESTIONS } from '@/data/neuroTrainingQuestions';
 
 interface NeuroTrainingModeProps {
   className?: string;

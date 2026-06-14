@@ -1,5 +1,5 @@
 import { z } from "npm:zod@3.23.8";
-import { handleCorsAndMethod, withAuth, jsonError, jsonOk, corsHeaders } from "../_shared/auth.ts";
+import { withAuth, jsonError, jsonOk, corsHeaders } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20, message: "Rate limit exceeded for AI writing. Please wait." });
@@ -145,10 +145,10 @@ Deno.serve(async (req) => {
       : 'Sem interações recentes registradas.';
 
     const personalContext: string[] = [];
-    if (contact.hobbies?.length) personalContext.push(`Hobbies: ${contact.hobbies.join(', ')}`);
-    if (contact.interests?.length) personalContext.push(`Interesses: ${contact.interests.join(', ')}`);
-    if (contact.primaryMotivation) personalContext.push(`Motivação principal: ${contact.primaryMotivation}`);
-    if (contact.primaryFear) personalContext.push(`Preocupação/Medo: ${contact.primaryFear}`);
+    if (contact.hobbies?.length) { personalContext.push(`Hobbies: ${contact.hobbies.join(', ')}`); }
+    if (contact.interests?.length) { personalContext.push(`Interesses: ${contact.interests.join(', ')}`); }
+    if (contact.primaryMotivation) { personalContext.push(`Motivação principal: ${contact.primaryMotivation}`); }
+    if (contact.primaryFear) { personalContext.push(`Preocupação/Medo: ${contact.primaryFear}`); }
 
      const systemPrompt = `Você é um Copywriter Sênior e Estrategista de Vendas de elite, especialista em neurovendas e persuasão.
  Sua função é gerar 3 variações de mensagens personalizadas, utilizando técnicas avançadas de copywriting e frameworks de persuasão.
@@ -306,10 +306,12 @@ ${vakStyle ? `3. Conselho VAK: ${vakStyle.advice}` : ''}
     ? 'Use um tom mais descontraído e casual.'
     : 'Use um tom amigável mas profissional.';
 
+   const storyArcSuffix = storyArc ? ` (Arco: ${storyArc})` : '';
+   const frameworkLine = framework !== 'None' ? `Aplique rigorosamente o framework: ${framework}${storyArcSuffix}` : '';
    return `Gere 3 variações de mensagens para ${contact.firstName}.
  
  Objetivo: ${typeDescriptions[messageType]}
-  ${framework !== 'None' ? `Aplique rigorosamente o framework: ${framework}${storyArc ? ` (Arco: ${storyArc})` : ''}` : ''}
+  ${frameworkLine}
  
  ${customContext ? `Contexto do usuário: ${customContext}` : ''}
  

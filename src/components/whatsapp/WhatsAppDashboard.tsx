@@ -15,11 +15,6 @@ interface Props {
 export function WhatsAppDashboard({ contactId }: Props) {
   const { instances, messages, kpis, loading } = useWhatsAppData(contactId);
 
-  if (loading) return null;
-
-  const hasData = instances.length > 0 || messages.length > 0 || kpis;
-  if (!hasData) return null;
-
    const { data: indexedMessages } = useQuery({
      queryKey: ['whatsapp-indexed', contactId],
      queryFn: async () => {
@@ -34,7 +29,12 @@ export function WhatsAppDashboard({ contactId }: Props) {
      },
      enabled: !!contactId
    });
- 
+
+  if (loading) return null;
+
+  const hasData = instances.length > 0 || messages.length > 0 || kpis;
+  if (!hasData) { return null; }
+
    return (
      <div className="space-y-4 animate-in fade-in duration-500">
        {/* Indexed Profile Messages (WhatsApp Capture & Indexing) */}

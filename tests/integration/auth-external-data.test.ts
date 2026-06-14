@@ -1,8 +1,7 @@
  import { describe, it, expect, vi, beforeEach } from 'vitest';
  import { queryExternalData, insertExternalData } from '../../src/lib/externalData';
- import { supabase } from '../../src/integrations/supabase/client';
  
- vi.mock('../../src/lib/logger', () => ({
+vi.mock('../../src/lib/logger', () => ({
    logger: {
      error: vi.fn(),
      warn: vi.fn(),

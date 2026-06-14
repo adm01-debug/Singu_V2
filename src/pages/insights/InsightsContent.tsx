@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Target, Brain, TrendingUp, Search, AlertTriangle, Heart, Lightbulb, Zap, CheckCircle2, Clock, User, ArrowRight, X } from 'lucide-react';
+import { Sparkles, Target, Brain, TrendingUp, Search, AlertTriangle, Heart, Lightbulb, Zap, CheckCircle2, User, ArrowRight, X } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -40,7 +40,11 @@ export function InsightsContent({ insights, contacts, loading, generating, searc
   const categories = Object.keys(categoryLabels);
 
   const filteredInsights = useMemo(() => fuzzyResults.filter(i => !selectedCategory || i.category === selectedCategory), [fuzzyResults, selectedCategory]);
-  const getContactName = (contactId?: string) => { if (!contactId) return null; const c = contacts.find(ct => ct.id === contactId); return c ? `${c.first_name} ${c.last_name}` : null; };
+  const getContactName = (contactId?: string) => {
+    if (!contactId) return null;
+    const c = contacts.find(ct => ct.id === contactId);
+    return c ? `${c.first_name} ${c.last_name}` : null;
+  };
 
   return (
     <div className="space-y-6">

@@ -37,7 +37,7 @@ interface ProfileData {
 const Configuracoes = () => {
   usePageTitle('Configurações');
   const { user } = useAuth();
-  const { theme, setTheme } = useTheme();
+  useTheme();
   const accessibleToast = useAccessibleToast();
   const [loading, setLoading] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);

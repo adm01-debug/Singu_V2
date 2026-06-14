@@ -14,7 +14,6 @@ import {
   ChevronUp,
   Check,
   X,
-  AlertTriangle,
   Sparkles
 } from 'lucide-react';
 import { FaceSavingTechnique } from '@/types/carnegie';

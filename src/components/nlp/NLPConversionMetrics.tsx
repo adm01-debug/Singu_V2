@@ -9,9 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-  ResponsiveContainer, PieChart, Pie, Cell, RadarChart,
-  PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, PieChart, Pie, Cell
 } from 'recharts';
 import { TrendingUp, TrendingDown, Minus, Target, Award } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -127,6 +126,7 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
           avgRelationshipScore: contactCount > 0 ? Math.round(data.totalScore / contactCount) : 0,
           interactionCount: data.interactions,
           conversionRate: contactCount > 0 ? Math.round((data.conversions / contactCount) * 100) : 0,
+          // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
           trend: Math.random() > 0.5 ? 'up' : 'stable'
         };
       });

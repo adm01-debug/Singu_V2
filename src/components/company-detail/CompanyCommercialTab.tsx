@@ -14,14 +14,16 @@ interface Props {
 const formatCurrency = (v?: number) => v != null ? `R$ ${v.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : '—';
 const formatDate = (d?: string) => d ? format(new Date(d), 'dd/MM/yy', { locale: ptBR }) : '—';
 
-const dealStatusConfig: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
+type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline';
+
+const dealStatusConfig: Record<string, { label: string; variant: BadgeVariant }> = {
   open: { label: 'Aberto', variant: 'outline' },
   won: { label: 'Ganho', variant: 'default' },
   lost: { label: 'Perdido', variant: 'destructive' },
   negotiation: { label: 'Negociação', variant: 'secondary' },
 };
 
-const proposalStatusConfig: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
+const proposalStatusConfig: Record<string, { label: string; variant: BadgeVariant }> = {
   draft: { label: 'Rascunho', variant: 'outline' },
   sent: { label: 'Enviada', variant: 'secondary' },
   viewed: { label: 'Visualizada', variant: 'secondary' },
@@ -29,7 +31,7 @@ const proposalStatusConfig: Record<string, { label: string; variant: 'default' |
   rejected: { label: 'Rejeitada', variant: 'destructive' },
 };
 
-const taskStatusConfig: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
+const taskStatusConfig: Record<string, { label: string; variant: BadgeVariant }> = {
   pending: { label: 'Pendente', variant: 'outline' },
   in_progress: { label: 'Em Progresso', variant: 'secondary' },
   completed: { label: 'Concluída', variant: 'default' },

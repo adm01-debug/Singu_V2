@@ -1,7 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { toast } from 'sonner';
 import { parseISO } from 'date-fns';
 import { useCreateTask } from './useTasks';
 
@@ -18,7 +17,6 @@ export interface SmartReminder {
 
 export function useSmartFollowups() {
   const { user } = useAuth();
-  const queryClient = useQueryClient();
   const createTask = useCreateTask();
 
   // Buscar lembretes inteligentes

@@ -1,8 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { format, parseISO, isToday, isPast } from 'date-fns';
+import { parseISO, isToday, isPast } from 'date-fns';
 import type { Tables } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
 
@@ -84,7 +84,10 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
 
         const companyIds = new Set<string>();
         const contactIds = new Set<string>();
-        followUpInteractions.forEach(i => { if (i.company_id) companyIds.add(i.company_id); contactIds.add(i.contact_id); });
+        followUpInteractions.forEach(i => {
+          if (i.company_id) { companyIds.add(i.company_id); }
+          contactIds.add(i.contact_id);
+        });
         birthdayContacts.forEach(c => { if (c.company_id) companyIds.add(c.company_id); });
         attentionContacts.forEach(c => { if (c.company_id) companyIds.add(c.company_id); });
 

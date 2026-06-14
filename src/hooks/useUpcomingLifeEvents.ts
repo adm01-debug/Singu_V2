@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
-import { differenceInDays, isBefore, addDays } from 'date-fns';
+import { differenceInDays, isBefore } from 'date-fns';
 
 export interface UpcomingLifeEvent {
   id: string;

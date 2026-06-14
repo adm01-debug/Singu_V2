@@ -94,11 +94,6 @@ export function SequenceFormDialog({ open, onOpenChange, onSubmit, loading }: Pr
     onOpenChange(false);
   };
 
-  const ChannelIcon = (ch: string) => {
-    const found = CHANNELS.find(c => c.value === ch);
-    return found ? found.icon : Mail;
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
@@ -136,7 +131,6 @@ export function SequenceFormDialog({ open, onOpenChange, onSubmit, loading }: Pr
             </div>
 
             {steps.map((step, idx) => {
-              const Icon = ChannelIcon(step.channel);
               return (
                 <div key={idx} className="border border-border/50 rounded-lg p-3 space-y-2 bg-secondary/20">
                   <div className="flex items-center gap-2">

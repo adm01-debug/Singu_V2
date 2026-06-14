@@ -1,4 +1,4 @@
- import { Download, Trash2, Tag, FileText, CheckCircle2 } from 'lucide-react';
+ import { Download, Trash2, Tag, CheckCircle2 } from 'lucide-react';
  import { Button } from '@/components/ui/button';
  import { Badge } from '@/components/ui/badge';
  import { motion, AnimatePresence } from 'framer-motion';

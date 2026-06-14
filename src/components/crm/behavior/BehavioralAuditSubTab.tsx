@@ -13,10 +13,10 @@ import { ptBR } from "date-fns/locale";
 interface BehavioralAuditSubTabProps {
   contactId: string;
 }
-  const { validateVAK, validateMetaprogram } = useNLPAnalysisValidation();
 
 export const BehavioralAuditSubTab = ({ contactId }: BehavioralAuditSubTabProps) => {
   const { auditLogs, gaps, consistency, isLoading } = useContactBehavior(contactId);
+  const { validateVAK, validateMetaprogram } = useNLPAnalysisValidation();
 
   if (isLoading) return <div className="p-8 text-center">Carregando auditoria...</div>;
 

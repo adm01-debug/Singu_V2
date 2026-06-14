@@ -46,7 +46,7 @@ export function BirthdayWidget() {
                 to={`/contatos/${contact.id || contact.contact_id}`}
                 className="flex-shrink-0 flex items-center gap-3 p-2 rounded-lg bg-background border border-border/50 hover:border-primary/50 transition-colors group min-w-[200px]"
               >
-                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                   <Gift className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">

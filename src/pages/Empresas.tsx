@@ -98,22 +98,32 @@ const Empresas = () => {
 
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const isSearching = localSearch.length > 0;
-  useEffect(() => { if (debounceRef.current) clearTimeout(debounceRef.current); debounceRef.current = setTimeout(() => triggerSearch(localSearch), 400); return () => { if (debounceRef.current) clearTimeout(debounceRef.current); }; }, [localSearch]);
+  useEffect(() => {
+    if (debounceRef.current) { clearTimeout(debounceRef.current); }
+    debounceRef.current = setTimeout(() => triggerSearch(localSearch), 400);
+    return () => { if (debounceRef.current) { clearTimeout(debounceRef.current); } };
+  }, [localSearch]);
 
   const clearSearch = useCallback(() => { setLocalSearch(''); triggerSearch(''); }, [triggerSearch]);
 
   const filteredAndSortedCompanies = useMemo(() => {
-    let result = companies.filter(company => {
+    const result = companies.filter(company => {
       for (const [key, values] of Object.entries(activeFilters)) {
         if (values.length === 0) continue;
         const companyValue = company[key as keyof Company];
-         if (key === 'is_customer' || key === 'is_supplier' || key === 'is_carrier' || key === 'is_matriz') { if (!values.includes(String(companyValue ?? false))) return false; continue; }
+         if (key === 'is_customer' || key === 'is_supplier' || key === 'is_carrier' || key === 'is_matriz') {
+           if (!values.includes(String(companyValue ?? false))) { return false; }
+           continue;
+         }
          
          if (key === 'vak_dominant' || key === 'motivation_direction' || key === 'working_style') {
            if (!companyValue || !values.includes(String(companyValue))) return false;
            continue;
          }
-        if (typeof companyValue === 'boolean') { if (!values.includes(String(companyValue))) return false; continue; }
+        if (typeof companyValue === 'boolean') {
+          if (!values.includes(String(companyValue))) { return false; }
+          continue;
+        }
         if (companyValue === null || companyValue === undefined || companyValue === '') return false;
         if (!values.includes(String(companyValue))) return false;
       }
@@ -138,7 +148,13 @@ const Empresas = () => {
   const { celebrate } = useSuccessCelebration();
 
   const handleCreate = async (data: Parameters<typeof createCompany>[0]) => { setIsSubmitting(true); const result = await createCompany(data); setIsSubmitting(false); if (result) { setIsFormOpen(false); hapticSuccess(); if (companies.length === 0) celebrate('confetti'); } };
-  const handleUpdate = async (data: Parameters<typeof updateCompany>[1]) => { if (!editingCompany) return; setIsSubmitting(true); const result = await updateCompany(editingCompany.id, data, editingCompany.version); setIsSubmitting(false); if (result) setEditingCompany(null); };
+  const handleUpdate = async (data: Parameters<typeof updateCompany>[1]) => {
+    if (!editingCompany) return;
+    setIsSubmitting(true);
+    const result = await updateCompany(editingCompany.id, data, editingCompany.version);
+    setIsSubmitting(false);
+    if (result) { setEditingCompany(null); }
+  };
   const handleDelete = async () => {
     if (!deletingCompany) return;
     const cp = deletingCompany; setDeletingCompany(null); hapticHeavy();
@@ -153,9 +169,22 @@ const Empresas = () => {
     }
   };
 
-  const handleSelect = (id: string, selected: boolean) => { if (id === '__clear__') { setSelectedIds(new Set()); return; } setSelectedIds(prev => { const next = new Set(prev); if (selected) next.add(id); else next.delete(id); return next; }); };
+  const handleSelect = (id: string, selected: boolean) => {
+    if (id === '__clear__') { setSelectedIds(new Set()); return; }
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (selected) { next.add(id); } else { next.delete(id); }
+      return next;
+    });
+  };
   const handleSelectAll = () => { setSelectedIds(selectedIds.size === filteredAndSortedCompanies.length ? new Set() : new Set(filteredAndSortedCompanies.map(c => c.id))); };
-  const handleBulkDelete = async (ids: string[]) => { for (const id of ids) await deleteCompany(id); setSelectedIds(new Set()); setSelectionMode(false); toast.success(`${ids.length} empresa${ids.length > 1 ? 's' : ''} excluída${ids.length > 1 ? 's' : ''}`); };
+  const handleBulkDelete = async (ids: string[]) => {
+    for (const id of ids) { await deleteCompany(id); }
+    setSelectedIds(new Set());
+    setSelectionMode(false);
+    const plural = ids.length > 1 ? 's' : '';
+    toast.success(`${ids.length} empresa${plural} excluída${plural}`);
+  };
   const handleBulkAddTag = async (ids: string[], tag: string) => { for (const id of ids) { const company = companies.find(c => c.id === id); if (company) { const currentTags = company.tags || []; if (!currentTags.includes(tag)) await updateCompany(id, { tags: [...currentTags, tag] }); } } setSelectedIds(new Set()); toast.success(`Tag "${tag}" adicionada a ${ids.length} empresa${ids.length > 1 ? 's' : ''}`); };
 
   return (

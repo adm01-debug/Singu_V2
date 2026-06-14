@@ -1,7 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { 
   EQPillar, 
-  EQLevel, 
   EQIndicator, 
   EQPillarScore, 
   EQAnalysisResult 
@@ -23,7 +22,7 @@ interface Interaction {
 }
 
 export function useEmotionalIntelligence(contact: Contact, interactions: Interaction[]) {
-  const [analyzing, setAnalyzing] = useState(false);
+  const [analyzing] = useState(false);
 
   // Detect indicators in text for a specific pillar
   const detectPillarIndicators = useCallback((
@@ -50,6 +49,7 @@ export function useEmotionalIntelligence(contact: Contact, interactions: Interac
           detectedPhrase: sentence.trim().slice(0, 100),
           context: 'Indicador positivo detectado',
           polarity: 'positive',
+          // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
           strength: 7 + Math.random() * 3, // 7-10
           timestamp
         });
@@ -69,6 +69,7 @@ export function useEmotionalIntelligence(contact: Contact, interactions: Interac
           detectedPhrase: sentence.trim().slice(0, 100),
           context: 'Indicador negativo detectado',
           polarity: 'negative',
+          // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
           strength: 3 + Math.random() * 4, // 3-7
           timestamp
         });

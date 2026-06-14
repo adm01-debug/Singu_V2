@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Play, Pause, Trash2, Users, Mail, MessageSquare, Phone, Linkedin } from 'lucide-react';
+import { Play, Pause, Trash2, Mail, MessageSquare, Phone, Linkedin } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';

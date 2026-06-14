@@ -65,7 +65,11 @@ export function StakeholderSelector({ stakeholder, isSelected, currentChange, on
 export function SimulationResultPanel({ result }: { result: SimulationResult }) {
   const getEffortColor = () => { switch (result.effortRequired) { case 'low': return 'text-success bg-success/10'; case 'medium': return 'text-warning bg-warning/10'; case 'high': return 'text-destructive bg-destructive/10'; } };
   const getEffortLabel = () => { switch (result.effortRequired) { case 'low': return 'Baixo'; case 'medium': return 'Médio'; case 'high': return 'Alto'; } };
-  const getProbabilityColor = () => { if (result.successProbability >= 70) return 'text-success'; if (result.successProbability >= 50) return 'text-warning'; return 'text-destructive'; };
+  const getProbabilityColor = () => {
+    if (result.successProbability >= 70) { return 'text-success'; }
+    if (result.successProbability >= 50) { return 'text-warning'; }
+    return 'text-destructive';
+  };
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">

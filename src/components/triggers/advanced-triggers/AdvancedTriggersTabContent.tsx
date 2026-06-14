@@ -9,12 +9,10 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import {
-  Brain, Link2, AlertTriangle, Clock, Shield,
-  Sparkles, ChevronRight, Target, Gauge
+  Brain, Link2, Clock, ChevronRight, Target, Gauge
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MENTAL_TRIGGERS } from '@/types/triggers';
-import type { AllTriggerTypes } from '@/types/triggers-advanced';
 
 interface ChainsTabProps {
   recommendedChains: Array<{

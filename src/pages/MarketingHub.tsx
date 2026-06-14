@@ -6,8 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
- import { Plus, ExternalLink, Copy, Trash2, Eye, Users, TrendingUp, Workflow, Target, BarChart3, Megaphone, Layout, ListFilter, FileText, Sparkles, Filter } from 'lucide-react';
+import { Plus, Eye, Users, TrendingUp, Workflow, Target, BarChart3, Megaphone, Layout, ListFilter, Sparkles, Filter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useForms } from '@/hooks/useForms';
 import { useLeadMagnets } from '@/hooks/useLeadMagnets';
@@ -36,14 +35,12 @@ export default function MarketingHub() {
   const { workflows } = useNurturingWorkflows();
   const { data: executions = [] } = useNurturingExecutions();
   const runNurturing = useRunNurturing();
-  const { criteria, upsert: upsertCriteria, remove: removeCriteria } = useMQLCriteria();
+  const { criteria } = useMQLCriteria();
   const { data: classifications = [] } = useMQLClassifications();
   const handoff = useHandoffMQL();
 
   const [newFormName, setNewFormName] = useState('');
   const [newMagnetTitle, setNewMagnetTitle] = useState('');
-  const [newCriteriaName, setNewCriteriaName] = useState('');
-  const [newCriteriaScore, setNewCriteriaScore] = useState(60);
 
   const [attDealId, setAttDealId] = useState('');
   const [attModel, setAttModel] = useState<AttributionModel>('linear');
@@ -545,6 +542,3 @@ export default function MarketingHub() {
     </div>
   );
 }
-
-// Suprimir warnings de imports não usados (usados em handlers acima)
-void Dialog; void DialogContent; void DialogHeader; void DialogTitle; void DialogTrigger; void DialogFooter;

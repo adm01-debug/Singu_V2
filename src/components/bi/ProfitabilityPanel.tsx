@@ -1,9 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { DollarSign, TrendingUp, Users, AlertTriangle } from 'lucide-react';
+import { DollarSign, Users, AlertTriangle } from 'lucide-react';
 import { useProfitabilityByContact } from '@/hooks/useBIAdvanced';
 import { cn } from '@/lib/utils';
 

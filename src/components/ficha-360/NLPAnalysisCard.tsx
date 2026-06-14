@@ -6,13 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Brain, 
-  Target, 
-  Search, 
-  MessageSquare, 
-  Zap, 
   Lightbulb,
-  ThumbsUp,
-  ThumbsDown,
   ChevronRight,
   RefreshCcw,
   ShieldCheck
@@ -20,7 +14,6 @@ import {
 import { VAK_LABELS } from '@/types/vak';
 import { METAPROGRAM_LABELS } from '@/types/metaprograms';
 import { useNLPAnalysisValidation } from '@/hooks/useNLPAnalysisValidation';
-import { motion } from 'framer-motion';
 
 interface Props {
   contactId: string;
@@ -31,8 +24,8 @@ interface Props {
 }
 
 export function NLPAnalysisCard({ contactId, vakProfile, metaprogramProfile, reframings, onRefetch }: Props) {
-  const { validateVAK, validateMetaprogram } = useNLPAnalysisValidation();
-  const [feedbackMode, setFeedbackMode] = useState<string | null>(null);
+  useNLPAnalysisValidation();
+  useState<string | null>(null);
 
   const renderVAK = () => {
     if (!vakProfile) return <div className="py-8 text-center text-muted-foreground text-sm">Nenhuma análise VAK disponível.</div>;

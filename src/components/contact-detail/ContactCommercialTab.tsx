@@ -1,4 +1,4 @@
-import { TrendingUp, TrendingDown, Minus, ShoppingBag, BarChart3, AlertCircle, Gift } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, BarChart3, AlertCircle } from 'lucide-react';
 import { BestClosingMomentsCard } from './commercial-tab/BestClosingMomentsCard';
 import { ChurnRiskCard } from './commercial-tab/ChurnRiskCard';
 import { ClosingScoreCard } from './commercial-tab/ClosingScoreCard';
@@ -21,7 +21,6 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { InlineEmptyState } from '@/components/ui/empty-state';
 import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -80,7 +79,6 @@ export function ContactCommercialTab({ contactId }: Props) {
   });
 
   const rfm = data?.rfm || null;
-  const purchases = data?.purchases || [];
 
   if (error) {
     return (

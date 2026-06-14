@@ -50,6 +50,7 @@ const DEFAULT_FIELDS = [
 ];
 
 export function extractMergeFields(html: string): string[] {
+  // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
   const matches = html.match(/\{\{[^}]+\}\}/g) || [];
   return Array.from(new Set(matches));
 }

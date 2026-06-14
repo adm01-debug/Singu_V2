@@ -4,8 +4,7 @@
 // ==============================================
 
 import { 
-  AdvancedMentalTrigger, 
-  AdvancedTriggerType,
+  AdvancedMentalTrigger,
   TriggerConflict,
   TriggerSynergy,
   TriggerFallback

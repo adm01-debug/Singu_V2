@@ -66,6 +66,7 @@ export function readRecentSnapshots(): RecentSnapshot[] {
 export function pushRecentSnapshot(entry: Omit<RecentSnapshot, 'id' | 'savedAt'>): RecentSnapshot[] {
   const next: RecentSnapshot = {
     ...entry,
+    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     savedAt: Date.now(),
   };

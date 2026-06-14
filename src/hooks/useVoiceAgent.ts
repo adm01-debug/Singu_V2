@@ -152,7 +152,7 @@ export function useVoiceAgent({ onAction, onError }: UseVoiceAgentOptions = {}) 
     isStartingRef.current = false;
     clearResetPhaseTimer();
     clearSessionStartTimer();
-    try { scribe.disconnect(); } catch {}
+    try { scribe.disconnect(); } catch { /* desconexão best-effort */ }
 
     if (phase === "listening") {
       if (partialTranscript.trim()) {
@@ -166,7 +166,7 @@ export function useVoiceAgent({ onAction, onError }: UseVoiceAgentOptions = {}) 
   }, [clearResetPhaseTimer, clearSessionStartTimer, partialTranscript, phase, processTranscript, scribe, setPhase, isStartingRef]);
 
   const reset = useCallback(() => {
-    try { scribe.disconnect(); } catch {}
+    try { scribe.disconnect(); } catch { /* desconexão best-effort */ }
     stopSpeakingRef.current?.();
     stopSpeakingRef.current = null;
     resetAll();
@@ -176,7 +176,7 @@ export function useVoiceAgent({ onAction, onError }: UseVoiceAgentOptions = {}) 
     return () => {
       clearResetPhaseTimer();
       clearSessionStartTimer();
-      try { disconnectScribeRef.current(); } catch {}
+      try { disconnectScribeRef.current(); } catch { /* desconexão best-effort */ }
       stopSpeakingRef.current?.();
       stopSpeakingRef.current = null;
     };

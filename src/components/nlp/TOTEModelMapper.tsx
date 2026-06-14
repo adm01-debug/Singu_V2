@@ -11,7 +11,6 @@ import {
   CheckCircle2, 
   LogOut,
   ArrowRight,
-  Lightbulb,
   Plus,
   Play,
   RotateCcw

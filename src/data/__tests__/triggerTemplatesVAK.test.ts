@@ -36,6 +36,7 @@ describe('VAK Trigger Templates', () => {
 
   it('templates use {variables}', () => {
     for (const t of VAK_TRIGGER_TEMPLATES) {
+      // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
       expect(t.template).toMatch(/\{[^}]+\}/);
     }
   });

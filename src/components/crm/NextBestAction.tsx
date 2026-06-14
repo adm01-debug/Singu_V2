@@ -3,20 +3,16 @@ import {
   Target, 
   Loader2, 
   Brain, 
-  Send, 
   Clock, 
   CheckCircle2, 
   AlertTriangle,
   Copy,
   ArrowUpRight,
-  ChevronRight,
   MessageSquare,
   Zap,
   ShieldAlert,
-   RefreshCw,
    ChevronDown,
-   LineChart as LineChartIcon,
-   Calendar
+   LineChart as LineChartIcon
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -92,7 +88,7 @@ export function NextBestAction({ contactId }: Props) {
         setSuggestion(result.suggestion);
         setScript(result.suggestion.suggested_message || '');
       }
-    } catch (error) {
+    } catch {
       toast.error('Erro ao processar objeção');
     } finally {
       setIsHandlingObjection(false);

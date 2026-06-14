@@ -58,17 +58,21 @@ function summaryToMarkdown(s: ConversationSummary, ctxLabel: string): string {
   lines.push(`_${ctxLabel}_\n`);
   lines.push(`## 👤 Perfil resumido\n${s.perfil_resumido}\n`);
   lines.push(`## 💬 Estilo de comunicação\n${s.estilo_comunicacao}\n`);
-  lines.push(`## 📌 Tópicos principais\n${s.topicos_principais.map((t) => `- ${t}`).join('\n')}\n`);
-  lines.push(`## ✅ Decisões & acordos\n${s.decisoes_acordos.map((t) => `- ${t}`).join('\n')}\n`);
-  lines.push(
-    `## ⏳ Pendências\n${s.pendencias.map((p) => `- ${p.item}${p.prazo_estimado ? ` _(prazo: ${p.prazo_estimado})_` : ''}`).join('\n')}\n`,
-  );
-  lines.push(
-    `## 🚦 Sinais de relacionamento\n${s.sinais_relacionamento.map((sig) => `- **${sig.tipo}**: ${sig.descricao}`).join('\n')}\n`,
-  );
-  lines.push(
-    `## 🎯 Próximos passos sugeridos\n${s.proximos_passos_sugeridos.map((t) => `- ${t}`).join('\n')}\n`,
-  );
+  const topicosList = s.topicos_principais.map((t) => `- ${t}`).join('\n');
+  lines.push(`## 📌 Tópicos principais\n${topicosList}\n`);
+  const decisoesList = s.decisoes_acordos.map((t) => `- ${t}`).join('\n');
+  lines.push(`## ✅ Decisões & acordos\n${decisoesList}\n`);
+  const pendenciasList = s.pendencias
+    .map((p) => {
+      const prazo = p.prazo_estimado ? ` _(prazo: ${p.prazo_estimado})_` : '';
+      return `- ${p.item}${prazo}`;
+    })
+    .join('\n');
+  lines.push(`## ⏳ Pendências\n${pendenciasList}\n`);
+  const sinaisList = s.sinais_relacionamento.map((sig) => `- **${sig.tipo}**: ${sig.descricao}`).join('\n');
+  lines.push(`## 🚦 Sinais de relacionamento\n${sinaisList}\n`);
+  const proximosList = s.proximos_passos_sugeridos.map((t) => `- ${t}`).join('\n');
+  lines.push(`## 🎯 Próximos passos sugeridos\n${proximosList}\n`);
   lines.push(`## 📊 Risco de churn: **${s.risco_churn}** · Confiança: ${s.confianca_analise}%`);
   return lines.join('\n');
 }

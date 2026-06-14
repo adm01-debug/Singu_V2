@@ -37,12 +37,8 @@ const allFiles = [...allTsx, ...allTs];
 // ============================================
 describe('File Size Limits', () => {
   const MAX_COMPONENT_LINES = 1200;
-  const MAX_HOOK_LINES = 600;
-  const MAX_DATA_LINES = 500;
 
   const components = allTsx.filter(f => f.includes('/components/') || f.includes('/pages/'));
-  const hooks = allTs.filter(f => f.includes('/hooks/'));
-  const dataFiles = allTs.filter(f => f.includes('/data/') && !f.includes('__tests__'));
 
   it(`no component file exceeds ${MAX_COMPONENT_LINES} lines`, () => {
     const violations: string[] = [];
@@ -90,7 +86,7 @@ describe('Import Hygiene', () => {
     allTsx.forEach(f => {
       const content = readFile(f);
       const basename = path.basename(f, '.tsx');
-      const selfImportRegex = new RegExp(`from\\s+['\"].*/${basename}['\"]`);
+      const selfImportRegex = new RegExp(`from\\s+['"].*/${basename}['"]`);
       const lines = content.split('\n');
       const importLines = lines.filter(l => l.startsWith('import') && selfImportRegex.test(l));
       expect(importLines).toHaveLength(0);

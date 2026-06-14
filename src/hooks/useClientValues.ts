@@ -2,7 +2,6 @@ import { useState, useCallback, useMemo } from 'react';
 import { ValuesMap, ClientValue, DecisionCriterion, ValueCategory } from '@/types/nlp-advanced';
 import { VALUE_CATEGORY_INFO } from '@/data/nlpAdvancedData';
 import { Contact } from '@/types';
-import { getMetaprogramProfile } from '@/lib/contact-utils';
 
 interface Interaction {
   id: string;
@@ -11,7 +10,7 @@ interface Interaction {
 }
 
 export function useClientValues(contact: Contact, interactions: Interaction[]) {
-  const [analyzing, setAnalyzing] = useState(false);
+  const [analyzing] = useState(false);
 
   const detectValues = useCallback((text: string): { category: ValueCategory; matches: string[] }[] => {
     const lowerText = text.toLowerCase();
@@ -85,10 +84,6 @@ export function useClientValues(contact: Contact, interactions: Interaction[]) {
       benefit: `Benefício alinhado a ${VALUE_CATEGORY_INFO[value.category].name.toLowerCase()}`,
       template: `${contact.firstName}, ${VALUE_CATEGORY_INFO[value.category].benefitFraming.replace('...', ' [seu benefício específico]')}`
     }));
-
-    // Determine motivational and fear drivers using type-safe utility
-    const metaprogramProfile = getMetaprogramProfile(contact);
-    const motivationDirection = metaprogramProfile?.motivationDirection;
 
     const motivationalDrivers = coreValues
       .filter(v => ['growth', 'achievement', 'recognition', 'freedom', 'innovation'].includes(v.category))

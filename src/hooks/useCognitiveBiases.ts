@@ -7,8 +7,7 @@ import {
 } from '@/types/cognitive-biases';
 import { 
   COGNITIVE_BIAS_INFO, 
-  BIAS_CATEGORY_INFO,
-  getBiasesByCategory
+  BIAS_CATEGORY_INFO
 } from '@/data/cognitiveBiasesData';
 import { Contact } from '@/types';
 
@@ -20,7 +19,7 @@ interface Interaction {
 }
 
 export function useCognitiveBiases(contact: Contact, interactions: Interaction[]) {
-  const [analyzing, setAnalyzing] = useState(false);
+  const [analyzing] = useState(false);
 
   // Detect biases in text
   const detectBiases = useCallback((
@@ -75,6 +74,7 @@ export function useCognitiveBiases(contact: Contact, interactions: Interaction[]
               category: biasInfo.category,
               indicator,
               context: sentence.trim().slice(0, 150),
+              // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
               confidence: 60 + Math.random() * 30, // 60-90%
               polarity,
               detectedAt: timestamp,

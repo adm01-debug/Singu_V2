@@ -39,21 +39,18 @@ const NeuroScore = ({
   compact = false,
   className
 }: NeuroScoreProps) => {
-  const { 
-    analyzeText, 
-    generateNeuroProfileFromDISC,
-    BRAIN_SYSTEM_INFO,
-    PRIMAL_STIMULUS_INFO,
-    NEUROCHEMICAL_INFO
+  const {
+    analyzeText,
+    generateNeuroProfileFromDISC
   } = useNeuromarketing();
 
   // Calculate comprehensive neuro score
-  const { score, breakdown, analysis, trend } = useMemo(() => {
+  const { score, breakdown, trend } = useMemo(() => {
     const allText = interactions
       .map(i => `${i.content || ''} ${i.transcription || ''}`)
       .join('\n\n');
     
-    let analysis = allText.length >= 50 ? analyzeText(allText) : null;
+    const analysis = allText.length >= 50 ? analyzeText(allText) : null;
     const discBasedProfile = discProfile ? generateNeuroProfileFromDISC(discProfile as 'D' | 'I' | 'S' | 'C') : null;
 
     // Score components

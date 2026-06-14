@@ -3,10 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
 import { QRCodeSVG } from 'qrcode.react';
-import { Shield, ShieldCheck, ShieldOff, Trash2 } from 'lucide-react';
+import { Shield, ShieldCheck, ShieldOff } from 'lucide-react';
 import { use2FA } from '@/hooks/use2FA';
 
 export function TwoFactorSetup() {

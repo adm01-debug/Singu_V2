@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, KeyboardEvent, RefObject, RefCallback, useMemo } from 'react';
+import { useState, useRef, useEffect, KeyboardEvent, RefObject } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -95,7 +95,7 @@ export function InlineEdit({
       } else {
         setError('Erro ao salvar');
       }
-    } catch (err) {
+    } catch {
       setError('Erro ao salvar');
     } finally {
       setIsSaving(false);
@@ -287,11 +287,6 @@ export function InlineDateEdit({
   formatDisplay,
   ...props
 }: InlineDateEditProps) {
-  const displayValue = useMemo(() => {
-    if (!value) return '';
-    return formatDisplay ? formatDisplay(value) : value;
-  }, [value, formatDisplay]);
-
   const handleSave = async (strValue: string): Promise<boolean> => {
     return onSave(strValue || null);
   };

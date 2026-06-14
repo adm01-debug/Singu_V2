@@ -1,6 +1,5 @@
 import { useParams, Link } from "react-router-dom";
 import { useDealRoom, useMilestones, useStakeholders } from "@/hooks/useDealRooms";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";

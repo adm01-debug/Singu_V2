@@ -2,6 +2,10 @@ import { useState, useCallback } from 'react';
 import { logger } from '@/lib/logger';
 
 async function sha1(text: string): Promise<string> {
+  // SHA-1 is mandated by the HaveIBeenPwned range API for k-anonymity (only the
+  // first 5 hash chars are sent over the network). It is not used to store or
+  // protect secrets, so the weak-hash warning does not apply here.
+  // eslint-disable-next-line sonarjs/hashing
   const buffer = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(text));
   return Array.from(new Uint8Array(buffer))
     .map(b => b.toString(16).padStart(2, '0'))

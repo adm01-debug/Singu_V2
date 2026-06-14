@@ -85,7 +85,7 @@ function scoreCadence(cadence: number | null | undefined, lastDays: number | nul
   let detail = `Atrasado (${lastDays}d / cadência ${cadence}d)`;
   if (ratio <= 1.0) { score = 100; status = 'good'; detail = `Em dia (${lastDays}d / ${cadence}d)`; }
   else if (ratio <= 1.5) { score = 60; status = 'warn'; detail = `Próximo do limite (${lastDays}d / ${cadence}d)`; }
-  else if (ratio <= 2.0) { score = 30; status = 'bad'; detail = `Atrasado (${lastDays}d / ${cadence}d)`; }
+  else if (ratio <= 2.0) { score = 30; detail = `Atrasado (${lastDays}d / ${cadence}d)`; }
   return { score, weight, label: 'Cadência', status, detail };
 }
 
@@ -93,12 +93,12 @@ function scoreRecency(lastDays: number | null, weight: number): ProntidaoFactor 
   if (lastDays == null) {
     return { score: 30, weight, label: 'Recência', status: 'unknown', detail: 'Sem registro de contato' };
   }
-  let score = 5; let status: ProntidaoStatus = 'bad'; let detail = `Há ${lastDays} dias`;
+  let score = 5; let status: ProntidaoStatus = 'bad'; const detail = `Há ${lastDays} dias`;
   if (lastDays <= 3) { score = 100; status = 'good'; }
   else if (lastDays <= 7) { score = 80; status = 'good'; }
   else if (lastDays <= 14) { score = 60; status = 'warn'; }
   else if (lastDays <= 30) { score = 40; status = 'warn'; }
-  else if (lastDays <= 60) { score = 20; status = 'bad'; }
+  else if (lastDays <= 60) { score = 20; }
   return { score, weight, label: 'Recência', status, detail };
 }
 
@@ -140,17 +140,18 @@ function buildRecommendation(
 
   let nextActionHint = `Contatar${timeHint} ${channelHint}`.trim();
   let recommendation = '';
+  const timeParen = timeHint ? ` (${time})` : '';
 
   if (level === 'pronto') {
-    recommendation = `Contato pronto para avançar. Aproveite o momentum: agende a próxima etapa ${channelHint}${timeHint ? ` (${time})` : ''}.`;
+    recommendation = `Contato pronto para avançar. Aproveite o momentum: agende a próxima etapa ${channelHint}${timeParen}.`;
     nextActionHint = `Agendar próxima reunião ${channelHint}`;
   } else if (level === 'quente') {
-    recommendation = `Contato quente. Mantenha o ritmo com uma mensagem de acompanhamento ${channelHint}${timeHint ? ` (${time})` : ''}.`;
+    recommendation = `Contato quente. Mantenha o ritmo com uma mensagem de acompanhamento ${channelHint}${timeParen}.`;
   } else if (weakest === 'cadence') {
-    recommendation = `${breakdown.cadence.detail}. Reabra a conversa ${channelHint}${timeHint ? ` (${time})` : ''}, recapitulando o último ponto discutido.`;
+    recommendation = `${breakdown.cadence.detail}. Reabra a conversa ${channelHint}${timeParen}, recapitulando o último ponto discutido.`;
     nextActionHint = `Reabrir conversa ${channelHint}`;
   } else if (weakest === 'recency') {
-    recommendation = `${breakdown.recency.detail} sem contato. Envie uma mensagem leve de check-in ${channelHint}${timeHint ? ` (${time})` : ''} para reaquecer.`;
+    recommendation = `${breakdown.recency.detail} sem contato. Envie uma mensagem leve de check-in ${channelHint}${timeParen} para reaquecer.`;
     nextActionHint = `Check-in ${channelHint}`;
   } else if (weakest === 'sentiment') {
     recommendation = `Sentimento ${breakdown.sentiment.detail.toLowerCase()}. Aborde com escuta ativa ${channelHint}, valide preocupações antes de avançar.`;

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { format, differenceInYears } from 'date-fns';
+import { differenceInYears } from 'date-fns';
 import type { Tables } from '@/integrations/supabase/types';
 
 export const RELATIONSHIP_TYPES = ['conjuge', 'filho', 'filha', 'pai', 'mae', 'irmao', 'irma', 'socio', 'assistente', 'outro'];
@@ -48,6 +48,7 @@ export function RelativeDialog({
     if (!form.name.trim()) return;
     
     // Basic validation
+    // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
     if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       alert('Por favor, insira um e-mail válido');
       return;

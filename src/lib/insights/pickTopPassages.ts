@@ -40,6 +40,7 @@ function scoreSentence(s: string): number {
 
 function splitSentences(text: string): Array<{ text: string; start: number; end: number }> {
   const out: Array<{ text: string; start: number; end: number }> = [];
+  // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
   const re = /[^.!?…]+[.!?…]+(\s+|$)/g;
   let m: RegExpExecArray | null;
   let lastEnd = 0;

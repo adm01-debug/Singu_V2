@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Activity, ShieldCheck, Zap, Info } from "lucide-react";
+import { ShieldCheck, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Tooltip,

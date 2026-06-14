@@ -1,18 +1,10 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Building2, 
   ArrowUpDown, 
   Star, 
-  Zap, 
-  Brain, 
-  MessageSquare, 
-  Phone, 
-  Linkedin, 
-  Instagram, 
-  Twitter,
-  Activity,
-  Heart
+  Zap
 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
@@ -20,7 +12,6 @@ import { OptimizedAvatar } from '@/components/ui/optimized-avatar';
 import { RelationshipScore } from '@/components/ui/relationship-score';
 import { RelationshipStageBadge } from '@/components/ui/relationship-stage';
 import { SentimentIndicator } from '@/components/ui/sentiment-indicator';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 import {
   Table,

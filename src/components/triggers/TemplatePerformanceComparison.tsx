@@ -1,8 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  BarChart3, TrendingUp, TrendingDown, Minus, Trophy, Target,
-  Users, Star, ChevronDown, ChevronUp, Sparkles,
+  BarChart3, TrendingUp, TrendingDown, Minus, Trophy, Star, ChevronDown, ChevronUp,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -59,14 +58,6 @@ export function TemplatePerformanceComparison({ contact, className }: TemplatePe
     if (trend === 'up') return <TrendingUp className="w-4 h-4 text-success" />;
     if (trend === 'down') return <TrendingDown className="w-4 h-4 text-destructive" />;
     return <Minus className="w-4 h-4 text-muted-foreground" />;
-  };
-
-  const formatDate = (date: string | null) => {
-    if (!date) return 'Nunca usado';
-    return new Date(date).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: 'short',
-    });
   };
 
   return (

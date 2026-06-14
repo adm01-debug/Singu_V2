@@ -55,7 +55,7 @@ export default function PublicLandingPage() {
       setPage(data as unknown as PublicPage);
       setLoading(false);
       // Increment view count (fire-and-forget)
-      void supabase.from('landing_pages').update({ view_count: (data.view_count ?? 0) + 1 }).eq('id', data.id);
+      supabase.from('landing_pages').update({ view_count: (data.view_count ?? 0) + 1 }).eq('id', data.id).then(() => {}, () => {});
     })();
     return () => { alive = false; };
   }, [slug]);

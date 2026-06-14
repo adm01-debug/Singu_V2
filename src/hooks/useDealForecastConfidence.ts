@@ -98,7 +98,7 @@ export function useDealForecastConfidence(
     // 3) Momentum
     const recent = momentum?.recentCount ?? 0;
     const previous = momentum?.previousCount ?? 0;
-    let momentumScore = 50;
+    let momentumScore: number;
     if (recent === 0 && previous === 0) momentumScore = 30;
     else if (previous === 0) momentumScore = clamp(60 + recent * 8);
     else {

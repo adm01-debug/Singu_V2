@@ -3,6 +3,8 @@
 // 14 Additional Principles from "How to Win Friends"
 // ==============================================
 
+export type DiscProfileKey = 'D' | 'I' | 'S' | 'C';
+
 // ============================================
 // 1. CRITICISM DETECTOR
 // "Don't criticize, condemn, or complain"
@@ -55,7 +57,7 @@ export interface EagerWant {
   description: string;
   detectionKeywords: string[];
   arousalTechniques: EagerWantTechnique[];
-  discAlignment: Record<'D' | 'I' | 'S' | 'C', number>;
+  discAlignment: Record<DiscProfileKey, number>;
 }
 
 export interface EagerWantTechnique {
@@ -137,7 +139,7 @@ export interface NamePersonalizationTechnique {
   name: string;
   context: string;
   template: string;
-  discVariation: Record<'D' | 'I' | 'S' | 'C', string>;
+  discVariation: Record<DiscProfileKey, string>;
 }
 
 // ============================================
@@ -186,7 +188,7 @@ export interface ArgumentAvoidanceTechnique {
   scenario: string;
   principle: string;
   script: string;
-  discVariation: Record<'D' | 'I' | 'S' | 'C', string>;
+  discVariation: Record<DiscProfileKey, string>;
 }
 
 // ============================================
@@ -226,7 +228,7 @@ export interface YesLadderTemplate {
   context: string;
   steps: YesLadderStep[];
   finalAsk: string;
-  discVariation: Record<'D' | 'I' | 'S' | 'C', YesLadderStep[]>;
+  discVariation: Record<DiscProfileKey, YesLadderStep[]>;
 }
 
 export interface YesLadderAnalysis {
@@ -299,7 +301,7 @@ export interface EmpathyTemplate {
   structure: string;
   examples: string[];
   whenToUse: string[];
-  discVariation: Record<'D' | 'I' | 'S' | 'C', string>;
+  discVariation: Record<DiscProfileKey, string>;
 }
 
 export interface EmpathyAnalysis {
@@ -358,7 +360,7 @@ export interface ChallengeTechnique {
   challengePhrase: string;
   motivationPhrase: string;
   fullScript: string;
-  discEffectiveness: Record<'D' | 'I' | 'S' | 'C', number>;
+  discEffectiveness: Record<DiscProfileKey, number>;
   warnings: string[];
 }
 
@@ -408,7 +410,7 @@ export interface EncouragementTemplate {
   encouragePhrase: string;
   confidencePhrase: string;
   fullScript: string;
-  discVariation: Record<'D' | 'I' | 'S' | 'C', string>;
+  discVariation: Record<DiscProfileKey, string>;
 }
 
 export interface EncouragementAnalysis {

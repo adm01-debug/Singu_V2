@@ -71,7 +71,7 @@ export function useChurnPrediction() {
         return daysAgo > 30 && daysAgo <= 60;
       }).length;
 
-      let interactionTrend: 'increasing' | 'stable' | 'decreasing' | 'none' = 'none';
+      let interactionTrend: 'increasing' | 'stable' | 'decreasing' | 'none';
       if (last30Days === 0 && previous30Days === 0) {
         interactionTrend = 'none';
         riskScore += 15;

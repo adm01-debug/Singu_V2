@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { WhatsAppDashboard } from '@/components/whatsapp/WhatsAppDashboard';
 import { ExternalInteractionsTimeline } from './interactions-tab/ExternalInteractionsTimeline';
 import { UnifiedTimeline } from './UnifiedTimeline';

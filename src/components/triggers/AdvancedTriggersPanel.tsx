@@ -9,10 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Brain, Zap, Link2, AlertTriangle, Clock, TrendingUp,
-  Shield, Sparkles, ChevronRight, Activity, Target,
-  BarChart3, Gauge, FlaskConical,
+import { Link2, AlertTriangle, Clock,
+  Shield, Sparkles, Activity, Gauge, FlaskConical,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Contact } from '@/types';
@@ -31,7 +29,7 @@ export function AdvancedTriggersPanel({ contact: contactProp, className }: Advan
   const {
     advancedTriggers, exposureAnalysis, resistanceProfile,
     resistanceScore, fullAnalysis, recommendedChains,
-    intensityLevels, getSynergies, getFallbacks, getRecommendedIntensity,
+    getRecommendedIntensity,
   } = useAdvancedTriggers(contact);
 
   const [activeTab, setActiveTab] = useState<'chains' | 'saturation' | 'timing' | 'advanced'>('chains');
@@ -182,7 +180,6 @@ export function AdvancedTriggersPanel({ contact: contactProp, className }: Advan
                 <div className="grid grid-cols-2 gap-3">
                   {Object.entries(advancedTriggers).map(([id, trigger], index) => {
                     const recommendedIntensity = getRecommendedIntensity(id as import('@/types/triggers-advanced').AllTriggerTypes);
-                    const intensityInfo = intensityLevels[recommendedIntensity - 1];
 
                     return (
                       <motion.div

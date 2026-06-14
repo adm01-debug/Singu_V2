@@ -131,9 +131,10 @@ export function AIEmailComposer() {
   };
 
   const handleCopy = async (item: SuggestionState) => {
+    const ctaSuffix = item.callToAction ? `\n\n${item.callToAction}` : '';
     const text = item.subject
-      ? `Assunto: ${item.subject}\n\n${item.message}${item.callToAction ? `\n\n${item.callToAction}` : ''}`
-      : `${item.message}${item.callToAction ? `\n\n${item.callToAction}` : ''}`;
+      ? `Assunto: ${item.subject}\n\n${item.message}${ctaSuffix}`
+      : `${item.message}${ctaSuffix}`;
     try {
       await navigator.clipboard.writeText(text);
       setItems((prev) => prev.map((i) => (i.id === item.id ? { ...i, copied: true } : i)));

@@ -44,6 +44,9 @@ export const FiltroTagsDropdown = memo(function FiltroTagsDropdown({
     else onChange([...selected, tag]);
   };
 
+  const selectedCountSuffix = selected.length ? ` (${selected.length} selecionadas)` : '';
+  const tagsAriaLabel = `Filtrar por tags${selectedCountSuffix}`;
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
@@ -51,7 +54,7 @@ export const FiltroTagsDropdown = memo(function FiltroTagsDropdown({
           variant="outline"
           size="sm"
           className="h-8 gap-1.5 text-xs"
-          aria-label={`Filtrar por tags${selected.length ? ` (${selected.length} selecionadas)` : ''}`}
+          aria-label={tagsAriaLabel}
           title="Filtrar por tags temáticas (Shift + T)"
         >
           <Tag className="h-3.5 w-3.5" />

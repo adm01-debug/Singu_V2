@@ -1,4 +1,4 @@
-import { ShieldCheck, Shield, ShieldAlert, HelpCircle } from "lucide-react";
+import { HelpCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip as UITooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Users, Heart, AlertTriangle, CheckCircle2, Sparkles, ArrowRight,
+  Users, AlertTriangle, CheckCircle2, Sparkles, ArrowRight,
   Brain, Eye, Zap, Target, Compass, GitBranch, TrendingUp, Info,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';

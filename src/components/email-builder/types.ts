@@ -1,5 +1,7 @@
 export type EmailBlockType = 'heading' | 'text' | 'button' | 'image' | 'divider' | 'spacer';
 
+export type EmailBlockAlign = 'left' | 'center' | 'right';
+
 export interface EmailBlockBase {
   id: string;
   type: EmailBlockType;
@@ -9,20 +11,20 @@ export interface HeadingBlock extends EmailBlockBase {
   type: 'heading';
   text: string;
   level: 1 | 2 | 3;
-  align: 'left' | 'center' | 'right';
+  align: EmailBlockAlign;
 }
 
 export interface TextBlock extends EmailBlockBase {
   type: 'text';
   text: string;
-  align: 'left' | 'center' | 'right';
+  align: EmailBlockAlign;
 }
 
 export interface ButtonBlock extends EmailBlockBase {
   type: 'button';
   label: string;
   href: string;
-  align: 'left' | 'center' | 'right';
+  align: EmailBlockAlign;
 }
 
 export interface ImageBlock extends EmailBlockBase {

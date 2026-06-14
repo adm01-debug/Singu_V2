@@ -4,7 +4,7 @@
 // Enterprise Level Component
 // ==============================================
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -12,9 +12,7 @@ import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  CheckCircle, XCircle, AlertTriangle, Target, Eye, Ear, Hand, Brain,
-  MessageSquare, Zap, RefreshCw, Copy, Check, Lightbulb, TrendingUp
+import { XCircle, AlertTriangle, Target, Eye, Ear, Hand, Brain, Zap, Copy, Check, Lightbulb, TrendingUp
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -89,6 +87,7 @@ const CommunicationCoherencePanel: React.FC<CommunicationCoherencePanelProps> = 
       VAK_PREDICATES[wrongType].slice(0, 15).forEach(word => {
         if (lowerMessage.includes(word.toLowerCase())) {
           wrongVakMatches++;
+          // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
           const replacement = vakWords[Math.floor(Math.random() * Math.min(5, vakWords.length))];
           issues.push({
             type: 'vak',
@@ -150,6 +149,7 @@ const CommunicationCoherencePanel: React.FC<CommunicationCoherencePanelProps> = 
     wrongMetaKeywords.forEach(word => {
       if (lowerMessage.includes(word.toLowerCase())) {
         wrongMetaMatches++;
+        // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
         const replacement = metaKeywords[Math.floor(Math.random() * Math.min(5, metaKeywords.length))];
         issues.push({
           type: 'metaprogram',

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar as CalendarIcon, Clock, User, Building2, Phone, Mail, MessageSquare, Video, Users, ChevronLeft, ChevronRight, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, User, Building2, Phone, Mail, MessageSquare, Video, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format, eachDayOfInterval, startOfMonth, endOfMonth, isSameMonth, isSameDay, isToday, parseISO, isPast } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

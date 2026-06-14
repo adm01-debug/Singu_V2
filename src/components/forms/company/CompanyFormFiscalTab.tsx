@@ -53,13 +53,6 @@ export function CompanyFormFiscalTab({ form }: CompanyFormFiscalTabProps) {
       <div className="h-px bg-border/50" />
 
       <FormSection icon={Landmark} title="Dados Legais">
-        <FormField control={form.control} name="annual_revenue" render={({ field }) => (
-          <FormItem>
-            <FormLabel>Faturamento Anual</FormLabel>
-            <FormControl><Input placeholder="Ex: R$ 1-5M" {...field} value={field.value ?? ''} /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
         <FormField control={form.control} name="natureza_juridica" render={({ field }) => (
           <FormItem>
             <FormLabel>Natureza Jurídica (Código)</FormLabel>

@@ -60,7 +60,6 @@ const RapportRealtimeCoach: React.FC<RapportRealtimeCoachProps> = ({
   onSuggestionApply,
   className
 }) => {
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const contact = providedContact || DEMO_CONTACT;

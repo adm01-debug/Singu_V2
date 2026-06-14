@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Shield, ShieldCheck, Globe, Key, Fingerprint, Monitor } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import { useAccessSecurity } from '@/hooks/useAccessSecurity';
 import { use2FA } from '@/hooks/use2FA';
 import { useWebAuthn } from '@/hooks/useWebAuthn';

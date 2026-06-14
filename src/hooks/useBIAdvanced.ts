@@ -1,6 +1,5 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { queryExternalData, callExternalRpc } from '@/lib/externalData';
 import { toast } from 'sonner';
 
 // ── Demand Forecast ──

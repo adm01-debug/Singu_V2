@@ -14,15 +14,6 @@ interface LuxButtonProps {
 export function LuxButton({ onClick, loading, processing, variant = 'default', className }: LuxButtonProps) {
   const isDisabled = loading || processing;
 
-  const pulseAnimation = {
-    scale: [1, 1.05, 1],
-    boxShadow: [
-      '0 0 0 0 rgba(139, 92, 246, 0.4)',
-      '0 0 0 10px rgba(139, 92, 246, 0)',
-      '0 0 0 0 rgba(139, 92, 246, 0)',
-    ],
-  };
-
   if (variant === 'compact') {
     return (
       <motion.div

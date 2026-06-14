@@ -1,10 +1,9 @@
-import { Brain, Check, X, MessageSquare, Mail, Loader2 } from 'lucide-react';
+import { Brain, Check, X, MessageSquare, Mail } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAIApprovals } from '@/hooks/useAIApprovals';
-import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 

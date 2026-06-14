@@ -5,7 +5,7 @@ import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { supabase } from '@/integrations/supabase/client';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { AuditDiffViewer } from '@/components/admin/AuditDiffViewer';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -86,7 +86,6 @@ export default function AdminAuditTrail() {
       if (auditError) throw auditError;
 
       // Query external sync logs if relevant
-      let syncData: any[] = [];
       if (actionFilter === 'all' || actionFilter === 'EXTERNAL_SYNC') {
         // Query some other table that logs external syncs or just return auditData
         // For now, we assume external_sync is a type of action in audit_log too

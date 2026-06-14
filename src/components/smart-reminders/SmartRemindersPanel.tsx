@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import {
-  Bell, Sparkles, RefreshCw, Filter, EyeOff, ChevronRight,
+  Bell, Sparkles, RefreshCw, EyeOff, ChevronRight,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

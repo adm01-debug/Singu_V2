@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, AreaChart, Area } from 'recharts';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, AreaChart, Area } from 'recharts';
 import { Brain, Heart, TrendingUp, Info, MessageSquare, Mic, Activity, Smile, Meh, Frown } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -41,8 +41,6 @@ export function NeuromarketingTimeline({ contactId }: Props) {
 
   const history = neuroData?.history;
   const interactions = neuroData?.interactions;
-
-  if (isLoading) return <Skeleton className="h-[400px] w-full" />;
 
    const chartData = history?.map(item => {
      const dominance = (item.dominance_data as any)?.dominance || 0;
@@ -87,6 +85,8 @@ export function NeuromarketingTimeline({ contactId }: Props) {
       responseRate
     };
   }, [interactions]);
+
+  if (isLoading) return <Skeleton className="h-[400px] w-full" />;
 
   const SentimentIcon = ({ sentiment }: { sentiment: string }) => {
     if (sentiment === 'positive') return <Smile className="h-3 w-3 text-success" />;

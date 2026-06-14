@@ -1,7 +1,6 @@
  import { z } from "zod";
- import { uuidSchema } from "./validationSchemas";
  
- /**
+/**
   * Pure domain logic for deal state transitions and forecasting.
   */
  

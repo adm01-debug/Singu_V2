@@ -95,7 +95,7 @@ function computeConfidence(
     if (t >= cutoff) recent += 1;
     else previous += 1;
   });
-  let momentumScore = 50;
+  let momentumScore: number;
   if (recent === 0 && previous === 0) momentumScore = 30;
   else if (previous === 0) momentumScore = clamp(60 + recent * 8);
   else momentumScore = clamp((recent / previous) * 50);

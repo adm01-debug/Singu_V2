@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, FileSpreadsheet, FileJson, FileText, FileCheck, Loader2, Settings, Calendar, Filter, CheckCircle } from 'lucide-react';
+import { Download, FileSpreadsheet, FileJson, FileText, Loader2, Settings, Calendar, Filter, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -53,7 +53,14 @@ export function AdvancedDataExporter({ entityType, className }: AdvancedDataExpo
         content = JSON.stringify(data, null, 2); mimeType = 'application/json'; filename = `${entityType}_${timestamp}.json`;
       } else {
         const headers = selectedColumns.join(',');
-        const rows = data.map(row => selectedColumns.map(col => { const value = row[col]; if (value === null || value === undefined) return ''; if (Array.isArray(value)) return `"${value.join('; ')}"`; if (typeof value === 'object') return `"${JSON.stringify(value)}"`; if (typeof value === 'string' && value.includes(',')) return `"${value}"`; return String(value); }).join(',')).join('\n');
+        const rows = data.map(row => selectedColumns.map(col => {
+          const value = row[col];
+          if (value === null || value === undefined) { return ''; }
+          if (Array.isArray(value)) { return `"${value.join('; ')}"`; }
+          if (typeof value === 'object') { return `"${JSON.stringify(value)}"`; }
+          if (typeof value === 'string' && value.includes(',')) { return `"${value}"`; }
+          return String(value);
+        }).join(',')).join('\n');
         content = `${headers}\n${rows}`; mimeType = 'text/csv'; filename = `${entityType}_${timestamp}.csv`;
       }
 

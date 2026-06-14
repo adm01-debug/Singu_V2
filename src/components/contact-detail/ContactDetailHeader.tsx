@@ -1,12 +1,11 @@
 import { useState, useCallback } from 'react';
 import { DuplicateManagementPanel } from './DuplicateManagementPanel';
 import { SoftDeletePanel } from './SoftDeletePanel';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
   import {
     Mail, Phone, MessageSquare, Linkedin, Instagram, Twitter,
     Building2, Briefcase, Calendar, Edit2, ExternalLink, Copy, Check,
-    MapPin, Globe, AlertTriangle, Trash2, Brain, Target, Shield, Bell,
-    ChevronRight, ArrowRight, Zap, FlaskConical
+    MapPin, Globe, AlertTriangle, Trash2, Brain, Target, Shield, Bell, FlaskConical
   } from 'lucide-react';
 import { OptimizedAvatar } from '@/components/ui/optimized-avatar';
 import { Badge } from '@/components/ui/badge';
@@ -74,7 +73,7 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
     try {
       await updateContact(contact.id, { relationship_stage: newStage });
       toast.success(`Estágio atualizado para ${newStage}`);
-    } catch (error) {
+    } catch {
       toast.error('Erro ao atualizar estágio');
     } finally {
       setIsChangingStage(false);
@@ -96,8 +95,6 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
   const isDeleted = !!contactExt.deleted_at;
 
    const fullName = formatContactName(contact.first_name, contact.last_name);
-   const companyName = company?.name || 'Empresa';
-  const stage = STAGE_CONFIG[contact.relationship_stage || 'unknown'] || STAGE_CONFIG.unknown;
   const behavior = contact.behavior as Record<string, unknown> | null;
   const discProfile = behavior?.discProfile as string | null;
 

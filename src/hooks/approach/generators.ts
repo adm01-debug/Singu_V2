@@ -1,4 +1,4 @@
-import { DISCProfile, DISC_LABELS } from '@/types';
+import { DISC_LABELS } from '@/types';
 import { VAK_LABELS } from '@/types/vak';
 import type {
   ApproachPhase, CommunicationChannel, PersonalizedMessage, ApproachContext,

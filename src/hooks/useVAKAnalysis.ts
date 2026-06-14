@@ -143,7 +143,7 @@ export function useVAKAnalysis() {
     try {
       const { error } = await supabase.from('vak_analysis_history').delete().eq('contact_id', contactId).eq('user_id', user.id);
       return !error;
-    } catch (error) {
+    } catch {
       return false;
     }
   }, [user]);

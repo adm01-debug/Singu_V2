@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, useMemo, lazy } from 'react';
 import { CustomFieldsDisplay } from '@/components/custom-fields/CustomFieldsDisplay';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
 import { useParams, Link } from 'react-router-dom';
@@ -11,13 +11,11 @@ import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useLuxIntelligence } from '@/hooks/useLuxIntelligence';
 import { useCompanyPhones, useCompanyEmails, useCompanyAddresses, useCompanySocialMedia, useCompanyCnaes, useCompanyRfmScores, useCompanyStakeholders } from '@/hooks/useCompanyRelatedData';
 import { useCompanySummaryView } from '@/hooks/useCompanyViews';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Building2, Users, Edit, Plus, MessageSquare,
   Network, BarChart3, Sparkles, Database, ShoppingCart,
-  AlertTriangle, RotateCcw, Target, Zap, Globe, MapPin, 
-  Phone, Mail, Calendar, ExternalLink, ChevronRight, Activity, 
-  TrendingUp, ShieldCheck, UserCheck, Star, HeartPulse, Brain
+  AlertTriangle, RotateCcw, Target
 } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { EntityDetailPageSkeleton } from '@/components/skeletons/PageSkeletons';
@@ -50,7 +48,6 @@ import type { Tables } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
 import { useToast } from '@/hooks/use-toast';
 import { CompanyExecutiveSummary } from '@/components/company-detail/CompanyExecutiveSummary';
-import { Skeleton } from '@/components/ui/skeleton';
 
 const ContactTimelineWidget = lazy(() => import('@/components/contact-detail/ContactTimelineWidget'));
 const UnifiedCommunicationHistory = lazy(() => import('@/components/interactions/UnifiedCommunicationHistory'));
@@ -73,7 +70,7 @@ const EmpresaDetalhe = () => {
      triggerLux,
      createStakeholderContact
    } = useLuxIntelligence('company', id);
-  const { interactions: hookInteractions, loading: interactionsLoading } = useInteractions(undefined, id);
+  const { interactions: hookInteractions } = useInteractions(undefined, id);
   const [company, setCompany] = useState<Company | null>(null);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
@@ -160,7 +157,7 @@ const EmpresaDetalhe = () => {
   };
 
   if (loading) return (<AppLayout><EntityDetailPageSkeleton /></AppLayout>);
-  if (!company) return (<AppLayout><div className="p-6 text-center"><Building2 className="w-16 h-16 text-muted-foreground mx-auto mb-4" /><h2 className="text-xl font-semibold mb-2">Empresa não encontrada</h2><p className="text-muted-foreground mb-4">A empresa que você procura não existe ou foi removida.</p><Link to="/empresas"><Button>Voltar para Empresas</Button></Link></div></AppLayout>);
+  if (!company) { return (<AppLayout><div className="p-6 text-center"><Building2 className="w-16 h-16 text-muted-foreground mx-auto mb-4" /><h2 className="text-xl font-semibold mb-2">Empresa não encontrada</h2><p className="text-muted-foreground mb-4">A empresa que você procura não existe ou foi removida.</p><Link to="/empresas"><Button>Voltar para Empresas</Button></Link></div></AppLayout>); }
 
    const healthStatus = (company.financial_health as HealthStatus) || 'unknown';
    const companyName = company.name || 'Empresa';

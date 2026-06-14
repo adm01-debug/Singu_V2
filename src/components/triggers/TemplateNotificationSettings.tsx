@@ -2,10 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Bell,
-  BellOff,
-  Settings,
   Target,
-  Users,
   Check,
   Loader2,
 } from 'lucide-react';

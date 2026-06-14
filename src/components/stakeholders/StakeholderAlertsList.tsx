@@ -165,10 +165,7 @@ export function StakeholderAlertsList({
           <AnimatePresence mode="popLayout">
             {displayedAlerts.map((alert) => {
               const styles = getAlertStyles(alert.severity);
-              const contactName = alert.contact 
-                ? `${alert.contact.first_name} ${alert.contact.last_name}` 
-                : 'Contato';
-              
+
               return (
                 <motion.div
                   key={alert.id}

@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import {
   Bell,
   AlertTriangle,
-  Settings,
   Save,
   Users,
   Target,

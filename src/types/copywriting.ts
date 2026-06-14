@@ -3,6 +3,9 @@
 // Enterprise-grade copywriting framework types
 // ==============================================
 
+export type IntensityLevel = 1 | 2 | 3 | 4 | 5;
+export type LowMedHigh = 'low' | 'medium' | 'high';
+
 // ============================================
 // 1. FAB - FEATURE, ADVANTAGE, BENEFIT
 // ============================================
@@ -100,7 +103,7 @@ export interface CTATemplate {
   verb: CTAVerb;
   template: string;
   example: string;
-  urgencyLevel: 1 | 2 | 3 | 4 | 5;
+  urgencyLevel: IntensityLevel;
   bestFor: string[];
   avoidFor: string[];
   discCompatibility: {
@@ -197,7 +200,7 @@ export interface PersuasiveConnector {
   example: string;
   bestAfter: TransitionCategory[];
   bestBefore: TransitionCategory[];
-  emotionalImpact: 'low' | 'medium' | 'high';
+  emotionalImpact: LowMedHigh;
 }
 
 // ============================================
@@ -249,7 +252,7 @@ export interface CopywritingGenerationOptions {
   tone: 'formal' | 'casual' | 'urgent' | 'friendly' | 'professional';
   length: 'short' | 'medium' | 'long';
   includeEmoji: boolean;
-  urgencyLevel: 1 | 2 | 3 | 4 | 5;
+  urgencyLevel: IntensityLevel;
   targetDisc?: string;
   targetVak?: string;
   productOrService?: string;
@@ -265,7 +268,7 @@ export interface PASSection {
   title: string;
   content: string;
   techniques: string[];
-  emotionalIntensity: 1 | 2 | 3 | 4 | 5;
+  emotionalIntensity: IntensityLevel;
   tips: string[];
 }
 
@@ -389,7 +392,7 @@ export interface CopyAnalysis {
   highlightedTriggers?: Array<{ text: string; category: string; startIndex: number; endIndex: number }>;
   issues: {
     issue: string;
-    severity: 'low' | 'medium' | 'high';
+    severity: LowMedHigh;
     suggestion: string;
     location?: string;
   }[];
@@ -413,7 +416,7 @@ export interface EmojiSuggestion {
   position: 'start' | 'middle' | 'end' | 'inline';
   emoji: string;
   context: string;
-  impact: 'low' | 'medium' | 'high';
+  impact: LowMedHigh;
 }
 
 // ============================================

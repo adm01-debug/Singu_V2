@@ -3,7 +3,6 @@ import { AlertTriangle, TrendingDown, Clock, RefreshCw, Shield, ArrowDown, Minus
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { useLocalChurnRisks, useAnalyzeChurnRisk, type LocalChurnRisk } from "@/hooks/useChurnRisk";
 
 const RISK_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {

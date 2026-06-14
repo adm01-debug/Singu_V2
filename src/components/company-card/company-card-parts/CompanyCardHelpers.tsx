@@ -1,6 +1,5 @@
 import React from 'react';
-import {
-  Building2, Factory, Briefcase, ShoppingCart, Landmark, Cpu, HeartPulse, GraduationCap,
+import { Factory, Briefcase, ShoppingCart, Landmark, Cpu, HeartPulse, GraduationCap,
   Globe, Banknote, Network, Truck, Package,
 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';

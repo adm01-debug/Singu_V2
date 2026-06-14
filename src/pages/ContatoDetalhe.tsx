@@ -7,7 +7,7 @@ import { Link, useParams } from 'react-router-dom';
 import { AlertCircle, ArrowLeft, Video, LayoutGrid, FileText } from 'lucide-react';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { SEOHead } from '@/components/seo/SEOHead';
-import { formatContactName, pluralize } from '@/lib/formatters';
+import { formatContactName } from '@/lib/formatters';
 import { PageHeader } from '@/components/navigation/PageHeader';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { AIEmailComposerTrigger } from '@/components/ai/AIEmailComposerTrigger';
@@ -77,7 +77,7 @@ const ContactDetailSkeleton = () => (
 
 const ContatoDetalhe = () => {
   const { id } = useParams();
-  const { contact, company, interactions, insights, alerts, loading, error, refetch, dismissAlert, dismissInsight } = useContactDetail(id);
+  const { contact, company, interactions, insights, alerts, loading, error, refetch } = useContactDetail(id);
   const { trackView } = useRecentlyViewed();
    const { 
      records: luxRecords, 

@@ -4,7 +4,7 @@ import { base64UrlToBundle, type PresetBundle } from '@/lib/searchPresetTranspor
 import { useSearchPresets } from '@/hooks/useSearchPresets';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { SEOHead } from '@/components/seo/SEOHead';
-import { MessageSquare, Phone, Mail, Users, Video, FileText, AlertCircle, Plus } from 'lucide-react';
+import { MessageSquare, Phone, Mail, Users, Video, FileText, AlertCircle } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Header } from '@/components/layout/Header';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
@@ -54,7 +54,11 @@ const Interacoes = () => {
   const { triggerAnalysis } = useNLPAutoAnalysis();
   const { logActivity } = useActivityLogger();
 
-  const contactMap = useMemo(() => { const map = new Map<string, typeof contacts[0]>(); for (const c of contacts) map.set(c.id, c); return map; }, [contacts]);
+  const contactMap = useMemo(() => {
+    const map = new Map<string, typeof contacts[0]>();
+    for (const c of contacts) { map.set(c.id, c); }
+    return map;
+  }, [contacts]);
 
   const stats = useMemo(() => {
     const followUpCount = interactions.filter(i => i.follow_up_required).length;
@@ -83,7 +87,11 @@ const Interacoes = () => {
     if (result) { setEditingInteraction(null); const pos = event || { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 }; celebration.trigger(pos, { variant: 'star', message: 'Atualizado!' }); }
   };
 
-  const handleDelete = async () => { if (!deletingInteraction) return; await deleteInteraction(deletingInteraction.id); setDeletingInteraction(null); };
+  const handleDelete = async () => {
+    if (!deletingInteraction) return;
+    await deleteInteraction(deletingInteraction.id);
+    setDeletingInteraction(null);
+  };
 
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get('tab');

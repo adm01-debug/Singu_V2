@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import { TrendingUp, TrendingDown, Minus, Brain, Sparkles, BarChart3 } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, Brain, Sparkles } from 'lucide-react';
 import { useDemandForecast, type DemandForecast } from '@/hooks/useBIAdvanced';
-import { cn } from '@/lib/utils';
 
 const trendIcon = (trend: string) => {
   if (trend === 'up') return <TrendingUp className="h-3 w-3 text-emerald-500" />;

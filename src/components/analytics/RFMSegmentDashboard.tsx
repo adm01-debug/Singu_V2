@@ -1,7 +1,5 @@
-import { PieChart, BarChart3, Settings } from 'lucide-react';
+import { BarChart3, Settings } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { useRFMSegmentConfig } from '@/hooks/useRFMSegmentConfig';
 
 export function RFMSegmentDashboard() {

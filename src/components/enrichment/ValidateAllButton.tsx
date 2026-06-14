@@ -39,7 +39,8 @@ export function ValidateAllButton({ contactId, fallbackEmail, fallbackPhone }: P
     const fail = results.length - ok;
     setRunning(false);
 
-    toast.success(`Validação concluída: ${ok} ok${fail > 0 ? ` · ${fail} falhas` : ''}`);
+    const failSuffix = fail > 0 ? ` · ${fail} falhas` : '';
+    toast.success(`Validação concluída: ${ok} ok${failSuffix}`);
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import { useModalHistory } from '@/hooks/useModalHistory';
 import {
@@ -124,18 +124,27 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
     [convAsk, resetConversational, convLoading, convInterpretation, convItems, convHistory],
   );
   const navigate = useNavigate();
-  const location = useLocation();
   const { user } = useAuth();
 
   useModalHistory(open, () => onOpenChange(false), 'global-search');
 
   const navigationFuse = useMemo(() => new Fuse(navigationItems, {
     keys: ['label', 'description'], threshold: 0.4, ignoreLocation: true,
-    getFn: (obj, path) => { const value = Fuse.config.getFn(obj, path); if (typeof value === 'string') return normalizeText(value); if (Array.isArray(value)) return value.map(v => typeof v === 'string' ? normalizeText(v) : v); return value; },
+    getFn: (obj, path) => {
+      const value = Fuse.config.getFn(obj, path);
+      if (typeof value === 'string') { return normalizeText(value); }
+      if (Array.isArray(value)) { return value.map(v => typeof v === 'string' ? normalizeText(v) : v); }
+      return value;
+    },
   }), []);
   const quickActionsFuse = useMemo(() => new Fuse(quickActions, {
     keys: ['label', 'description'], threshold: 0.4, ignoreLocation: true,
-    getFn: (obj, path) => { const value = Fuse.config.getFn(obj, path); if (typeof value === 'string') return normalizeText(value); if (Array.isArray(value)) return value.map(v => typeof v === 'string' ? normalizeText(v) : v); return value; },
+    getFn: (obj, path) => {
+      const value = Fuse.config.getFn(obj, path);
+      if (typeof value === 'string') { return normalizeText(value); }
+      if (Array.isArray(value)) { return value.map(v => typeof v === 'string' ? normalizeText(v) : v); }
+      return value;
+    },
   }), []);
 
   const filteredNavigation = useMemo(() => query.trim() ? navigationFuse.search(normalizeText(query)).map(r => r.item) : navigationItems, [query, navigationFuse]);
@@ -154,7 +163,19 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
     setRecentItems(getRecentItems());
   }, [open]);
 
-  useEffect(() => { if (!open) return; const handleKeyDown = (e: KeyboardEvent) => { if (e.altKey && !e.ctrlKey && !e.metaKey) { const action = quickActions.find(a => a.shortcut.toLowerCase() === e.key.toLowerCase()); if (action) { e.preventDefault(); handleQuickAction(action); return; } const navItem = navigationItems.find(n => n.key === e.key); if (navItem) { e.preventDefault(); handleNavigate(navItem.path, navItem.label); } } }; document.addEventListener('keydown', handleKeyDown); return () => document.removeEventListener('keydown', handleKeyDown); }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey && !e.ctrlKey && !e.metaKey) {
+        const action = quickActions.find(a => a.shortcut.toLowerCase() === e.key.toLowerCase());
+        if (action) { e.preventDefault(); handleQuickAction(action); return; }
+        const navItem = navigationItems.find(n => n.key === e.key);
+        if (navItem) { e.preventDefault(); handleNavigate(navItem.path, navItem.label); }
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [open]);
 
   const performSearch = useCallback(async (searchQuery: string) => {
     if (!searchQuery.trim() || !user) { setResults({ contacts: [], companies: [], interactions: [] }); return; }

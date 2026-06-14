@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FlaskConical, Play, RotateCcw, Save, Trash2, Sparkles, FolderOpen, X, UserX, Users, Zap } from 'lucide-react';
+import { FlaskConical, Play, RotateCcw, Save, Trash2, Sparkles, FolderOpen, UserX, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

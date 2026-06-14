@@ -118,7 +118,9 @@ export function SwipeBackIndicator() {
         }, 1500);
         return () => clearTimeout(timer);
       }
-    } catch {}
+    } catch {
+      // ignora falhas de acesso ao storage (ex.: modo privado)
+    }
   }, [isRoot]);
 
   if (isRoot) return null;

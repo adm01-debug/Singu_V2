@@ -73,10 +73,10 @@ describe('Accessibility Improvements', () => {
     expect(src).toContain('focus:not-sr-only');
   });
 
-  it('SkipNav is included in App.tsx', () => {
-    const app = read('src/App.tsx');
+  it('SkipNav is included in the app composition root', () => {
+    const app = read('src/app/AppProviders.tsx');
     expect(app).toContain('SkipNav');
-    expect(app).toContain("from \"@/components/navigation/SkipNav\"");
+    expect(app).toContain('@/components/navigation/SkipNav');
   });
 
   it('main content has id="main-content" and tabIndex', () => {
@@ -95,13 +95,13 @@ describe('Accessibility Improvements', () => {
     expect(src).toContain('aria-label="Lista de contatos"');
   });
 
-  it('AriaLiveProvider is in App.tsx', () => {
-    const app = read('src/App.tsx');
+  it('AriaLiveProvider is in the app composition root', () => {
+    const app = read('src/app/AppProviders.tsx');
     expect(app).toContain('AriaLiveProvider');
   });
 
-  it('RouteAnnouncer is in App.tsx', () => {
-    const app = read('src/App.tsx');
+  it('RouteAnnouncer is in the app composition root', () => {
+    const app = read('src/app/AppProviders.tsx');
     expect(app).toContain('RouteAnnouncer');
   });
 });

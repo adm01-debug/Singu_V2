@@ -31,8 +31,7 @@ import {
  import { logger } from '@/lib/logger';
  import { toast } from 'sonner';
  import { VoiceInput } from '@/components/voice/VoiceInput';
- import { Progress } from '@/components/ui/progress';
-import type { Interaction } from '@/hooks/useInteractions';
+ import type { Interaction } from '@/hooks/useInteractions';
 import type { Contact } from '@/hooks/useContacts';
 
 const interactionSchema = z.object({

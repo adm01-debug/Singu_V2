@@ -242,7 +242,7 @@ export function AdvancedFilters({
                             return;
                           }
 
-                          let newSort = [...multiSort];
+                          const newSort = [...multiSort];
                           if (isSorted) {
                             if (order === 'asc') {
                               newSort[criteriaIndex] = { ...newSort[criteriaIndex], order: 'desc' };

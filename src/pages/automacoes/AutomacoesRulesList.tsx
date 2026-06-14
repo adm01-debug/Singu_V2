@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Plus, Zap, Power, Trash2, Edit2, History,
+  Plus, Zap, Trash2, Edit2, History,
   ChevronRight, AlertTriangle, CheckCircle2, XCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';

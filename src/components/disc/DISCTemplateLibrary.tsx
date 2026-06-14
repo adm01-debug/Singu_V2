@@ -141,9 +141,6 @@ const DISCTemplateLibrary: React.FC<DISCTemplateLibraryProps> = ({ filterProfile
                   </h3>
                   <div className="space-y-2">
                     {categoryTemplates.map(template => {
-                      const profileInfo = template.discProfiles.length === 1 
-                        ? DISC_PROFILES[template.discProfiles[0]]
-                        : null;
                       const isCopied = copiedId === template.id;
 
                       return (

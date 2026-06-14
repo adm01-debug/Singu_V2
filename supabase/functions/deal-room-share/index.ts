@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { handleCorsAndMethod, withAuth, jsonError, jsonOk, scopedCorsHeaders } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
 
 Deno.serve(async (req) => {
   const pre = handleCorsAndMethod(req);

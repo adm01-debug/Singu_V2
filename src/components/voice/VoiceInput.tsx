@@ -115,10 +115,11 @@ import { logger } from "@/lib/logger";
         body: { audio: base64Audio }
       });
 
-      if (error) throw error;
-      
+      if (error) { throw error; }
+
        let audioUrl: string | undefined;
        if (uploadAudio) {
+         // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
          const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.webm`;
          const { data: uploadData, error: uploadError } = await supabase.storage
            .from('interaction-audios')

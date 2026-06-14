@@ -47,7 +47,7 @@ export function useNLPAutoAnalysis() {
   const { user } = useAuth();
   const { analyzeText: analyzeVAK, saveAnalysis: saveVAKAnalysis } = useVAKAnalysis();
   const { analyzeText: analyzeMetaprograms, saveAnalysis: saveMetaprogramAnalysis } = useMetaprogramAnalysis();
-  const { detectEmotionalState, analyzeEmotionalHistory } = useEmotionalStates();
+  const { detectEmotionalState } = useEmotionalStates();
   
   const analysisQueue = useRef<Set<string>>(new Set());
 

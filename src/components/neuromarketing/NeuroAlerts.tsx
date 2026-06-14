@@ -6,16 +6,10 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  AlertTriangle, 
-  Brain, 
-  Heart, 
-  Lightbulb, 
   X, 
   Bell,
   ArrowRight,
   Zap,
-  TrendingUp,
-  TrendingDown,
   CheckCircle
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -56,10 +50,9 @@ const NeuroAlerts = ({
   className
 }: NeuroAlertsProps) => {
   const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
-  const { 
-    analyzeText, 
-    BRAIN_SYSTEM_INFO,
-    NEUROCHEMICAL_INFO
+  const {
+    analyzeText,
+    BRAIN_SYSTEM_INFO
   } = useNeuromarketing();
 
   // Generate alerts based on analyzing current interactions
@@ -74,8 +67,7 @@ const NeuroAlerts = ({
     // Split interactions into current (last 50%) and previous (first 50%) for comparison
     const midPoint = Math.floor(interactions.length / 2);
     const previousInteractions = interactions.slice(0, midPoint);
-    const currentInteractions = interactions.slice(midPoint);
-    
+
     const previousText = previousInteractions
       .map(i => `${i.content || ''} ${i.transcription || ''}`)
       .join('\n\n');
@@ -104,7 +96,6 @@ const NeuroAlerts = ({
         description = `${contactName.split(' ')[0]} está saindo do modo de alerta para um estado mais emocional e aberto.`;
         actionSuggestion = 'Aproveite para construir rapport e conexão emocional.';
       } else if (toBrain === 'neocortex') {
-        severity = 'medium';
         description = `${contactName.split(' ')[0]} está em modo analítico. Espere questionamentos e pedidos de dados.`;
         actionSuggestion = 'Prepare evidências, estatísticas e comparações detalhadas.';
       } else {

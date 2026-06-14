@@ -6,12 +6,12 @@ import {
   PROGRESS_CELEBRATIONS, CELEBRATION_INTENSITY_GUIDELINES, PROGRESS_DETECTION_PATTERNS, CELEBRATION_BY_DISC
 } from '../carnegieProgressCelebration';
 import {
-  STORY_TEMPLATES, STORY_ELEMENTS, STORY_BY_DISC,
+  STORY_TEMPLATES, STORY_ELEMENTS,
   getStoryTemplateByType, getStoriesForDISC, analyzeStorytellingInText, generateStoryOutline
 } from '../carnegieStorytelling';
 import {
-  ORDER_TO_QUESTION, QUESTION_TYPES, QUESTION_BY_DISC,
-  detectOrders, countQuestionsVsOrders, getQuestionAlternative, suggestQuestions, analyzeQuestionInfluence
+  ORDER_TO_QUESTION,
+  detectOrders, countQuestionsVsOrders, suggestQuestions, analyzeQuestionInfluence
 } from '../carnegieQuestionInfluence';
 
 // ══════════════════ PROGRESS CELEBRATION ══════════════════

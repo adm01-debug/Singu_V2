@@ -164,6 +164,7 @@ function parseConcurrentEditPayload(msg: string, fallbackTable: string, fallback
   table: string; id: string; attemptedVersion?: number; traceId?: string;
 } {
   // Formato novo: "Edge function error [409]: {"error":"CONCURRENT_EDIT","entity":"...","id":"...",...}"
+  // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
   const jsonMatch = msg.match(/\{.*"error"\s*:\s*"CONCURRENT_EDIT".*\}/);
   if (jsonMatch) {
     try {

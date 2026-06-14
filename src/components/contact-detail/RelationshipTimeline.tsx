@@ -2,8 +2,7 @@ import { useMemo } from 'react';
 import { formatDistanceToNow, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import {
-  Phone, Mail, MessageSquare, Video, Calendar, Star, TrendingUp,
-  TrendingDown, AlertTriangle, Gift, Heart, Briefcase, Zap,
+  Phone, Mail, MessageSquare, Video, Calendar, Star,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';

@@ -2,6 +2,7 @@ import React from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MemoryRouter, useSearchParams } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DateRangePopover } from '@/components/interactions/DateRangePopover';
 import { useInteractionsAdvancedFilter } from '@/hooks/useInteractionsAdvancedFilter';
 
@@ -34,10 +35,13 @@ function Harness() {
 }
 
 function renderWith(initialUrl: string) {
+  const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
-    <MemoryRouter initialEntries={[initialUrl]}>
-      <Harness />
-    </MemoryRouter>,
+    <QueryClientProvider client={qc}>
+      <MemoryRouter initialEntries={[initialUrl]}>
+        <Harness />
+      </MemoryRouter>
+    </QueryClientProvider>,
   );
 }
 

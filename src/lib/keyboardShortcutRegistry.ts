@@ -50,6 +50,7 @@ export function subscribeShortcuts(listener: () => void): () => void {
 /** Hook utilitário para registrar atalho escopado dentro de uma página. */
 export function useScopedShortcut(opts: Omit<ScopedShortcut, 'id'> & { id?: string }) {
   useEffect(() => {
+    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
     const id = opts.id ?? `${opts.scope}:${opts.keys}:${Math.random().toString(36).slice(2, 9)}`;
     const unregister = registerShortcut({ ...opts, id });
 

@@ -1,14 +1,13 @@
-import { useState, useMemo, useEffect, useRef, lazy, Suspense, startTransition, useCallback } from 'react';
+import { useState, useMemo, useEffect, useRef, lazy, Suspense, startTransition } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  MessageSquare, Phone, Mail, Users, Edit, Search, Calendar, MoreVertical,
+  MessageSquare, Phone, Mail, Users, Edit, Calendar, MoreVertical,
   Trash2, Video, FileText, Clock, AlertCircle, Plus, X,
 } from 'lucide-react';
 import { InteractionsListSkeleton } from '@/components/skeletons/PageSkeletons';
 import { EmptyState, SearchEmptyState } from '@/components/ui/empty-state';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { OptimizedAvatar } from '@/components/ui/optimized-avatar';
 import { SentimentIndicator } from '@/components/ui/sentiment-indicator';
@@ -202,7 +201,10 @@ interface Props {
       for (const [key, values] of Object.entries(activeFilters)) {
         if (values.length === 0) continue;
         const val = interaction[key as keyof Interaction];
-        if (key === 'follow_up_required') { if (!values.includes(String(val))) return false; continue; }
+        if (key === 'follow_up_required') {
+          if (!values.includes(String(val))) { return false; }
+          continue;
+        }
         if (val === null || val === undefined) return false;
         if (!values.includes(String(val))) return false;
       }

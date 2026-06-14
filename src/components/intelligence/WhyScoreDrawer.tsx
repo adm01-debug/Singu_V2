@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 export type WhyScoreDirection = 'positive' | 'negative' | 'neutral';
+export type ScoreBand = 'low' | 'mid' | 'high';
 
 export interface WhyScoreFactor {
   key: string;
@@ -68,7 +69,7 @@ interface WhyScoreDrawerProps {
   factors: WhyScoreFactor[];
   recommendations?: string[];
   /** Banda qualitativa: 'low' | 'mid' | 'high' (auto se ausente). */
-  band?: 'low' | 'mid' | 'high';
+  band?: ScoreBand;
 }
 
 const FEEDBACK_KEY = 'singu-score-feedback-v1';
@@ -119,26 +120,25 @@ function writeExplanationFeedback(map: Record<string, ExplanationFeedbackEntry>)
   }
 }
 
-function deriveBand(score: number): 'low' | 'mid' | 'high' {
+function deriveBand(score: number): ScoreBand {
   if (score >= 70) return 'high';
   if (score >= 40) return 'mid';
   return 'low';
 }
 
-const BAND_META: Record<'low' | 'mid' | 'high', { label: string; cls: string; indicator: string }> = {
+const BAND_META: Record<ScoreBand, { label: string; cls: string; indicator: string }> = {
   low: { label: 'Baixo', cls: 'text-destructive', indicator: 'bg-destructive' },
   mid: { label: 'Médio', cls: 'text-warning', indicator: 'bg-warning' },
   high: { label: 'Alto', cls: 'text-success', indicator: 'bg-success' },
 };
 
 /** Banda por fator (0-100), alinhada com inferDirection: <35 baixa, 35-65 média, >65 alta. */
-type FactorBand = 'low' | 'mid' | 'high';
-function getFactorBand(score: number): FactorBand {
+function getFactorBand(score: number): ScoreBand {
   if (score >= 65) return 'high';
   if (score <= 35) return 'low';
   return 'mid';
 }
-const FACTOR_BAND_META: Record<FactorBand, { label: string; range: string; badgeClass: string }> = {
+const FACTOR_BAND_META: Record<ScoreBand, { label: string; range: string; badgeClass: string }> = {
   low: {
     label: 'baixa',
     range: 'até 35',

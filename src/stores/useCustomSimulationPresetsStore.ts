@@ -25,6 +25,7 @@ interface State {
 }
 
 function makeId(): string {
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   return `preset_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
 }
 

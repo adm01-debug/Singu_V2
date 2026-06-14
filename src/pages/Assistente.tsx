@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Plus, Send, Sparkles, Pin, Trash2, MessageSquare, Loader2 } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { PageHeader } from '@/components/navigation/PageHeader';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -54,7 +54,7 @@ export default function Assistente() {
     }
   };
 
-  const usePrompt = (prompt: string) => {
+  const applyPrompt = (prompt: string) => {
     setInput(prompt.replace(/^[^\s]+\s/, ''));
   };
 
@@ -121,7 +121,7 @@ export default function Assistente() {
                       variant="outline"
                       size="sm"
                       className="text-xs h-auto py-2 justify-start"
-                      onClick={() => usePrompt(p)}
+                      onClick={() => applyPrompt(p)}
                     >
                       {p}
                     </Button>

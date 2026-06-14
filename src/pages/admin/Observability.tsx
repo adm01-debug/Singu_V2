@@ -6,7 +6,7 @@ import { Activity, Zap, ShieldCheck, AlertCircle } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function Observability() {
-  const { data: snapshots, isLoading } = useQuery({
+  const { data: snapshots } = useQuery({
     queryKey: ['system-health-snapshots'],
     queryFn: async () => {
       const { data, error } = await supabase

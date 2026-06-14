@@ -1,4 +1,4 @@
- import { Globe, Linkedin, Instagram, Twitter, Bell, TrendingUp, Users, X, Heart, ShieldCheck, Lock, Info, CheckCircle2, AlertCircle, Activity, RefreshCw, Zap, BrainCircuit } from 'lucide-react';
+ import { Globe, Linkedin, Instagram, Twitter, Bell, TrendingUp, Users, X, Heart, ShieldCheck, Lock, CheckCircle2, AlertCircle, Activity, RefreshCw, Zap, BrainCircuit } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -28,12 +28,12 @@ interface Props {
       syncToPsychographic, 
       isSyncing 
     } = useSocialIntelligence(contactId);
-   const { data: historyInsights, isLoading: loadingInsights } = useSocialInsights(contactId);
+   const { data: historyInsights } = useSocialInsights(contactId);
  
    if (loadingBase) return null;
 
    const hasData = profiles.length > 0 || behaviorAnalysis || lifeEvents.length > 0 || (historyInsights && historyInsights.length > 0);
-  if (!hasData) return null;
+  if (!hasData) { return null; }
 
     return (
       <div className="space-y-4" id="social-intelligence-section">

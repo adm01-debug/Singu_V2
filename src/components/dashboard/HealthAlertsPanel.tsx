@@ -19,7 +19,6 @@ import {
   Heart,
   Mail,
   Smartphone,
-  User,
   ArrowRight
 } from 'lucide-react';
 import { useHealthAlerts, HealthAlert } from '@/hooks/useHealthAlerts';
@@ -31,8 +30,6 @@ import { ptBR } from 'date-fns/locale';
 export function HealthAlertsPanel() {
   const {
     alerts,
-    criticalAlerts,
-    warningAlerts,
     settings,
     loading,
     settingsLoading,
@@ -65,18 +62,6 @@ export function HealthAlertsPanel() {
 
   const handleSaveSettings = () => {
     saveSettings(localSettings);
-  };
-
-  const getAlertColor = (type: string) => {
-    return type === 'critical' ? 'destructive' : 'secondary';
-  };
-
-  const getAlertIcon = (type: string) => {
-    return type === 'critical' ? (
-      <AlertTriangle className="h-4 w-4 text-destructive" />
-    ) : (
-      <Bell className="h-4 w-4 text-warning" />
-    );
   };
 
   if (loading || settingsLoading) {

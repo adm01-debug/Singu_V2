@@ -9,8 +9,6 @@ import {
   Eye, 
   MessageSquare, 
   TrendingDown,
-  TrendingUp,
-  Minus,
   Search,
   Lightbulb,
   ChevronDown,
@@ -18,7 +16,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Contact, DISCProfile } from '@/types';
-import { getDISCProfile, getContactBehavior } from '@/lib/contact-utils';
+import { getDISCProfile } from '@/lib/contact-utils';
 import { DEMO_CONTACT } from '@/domain/demoEntities';
 
 interface Incongruence {
@@ -76,7 +74,6 @@ const IncongruenceDetector: React.FC<IncongruenceDetectorProps> = ({
   const contact = providedContact || DEMO_CONTACT;
 
   const discProfile = (getDISCProfile(contact) as DISCProfile) || 'D';
-  const behavior = getContactBehavior(contact);
 
   // Detect incongruences based on patterns
   const detectedIncongruences = useMemo((): Incongruence[] => {

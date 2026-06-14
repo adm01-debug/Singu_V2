@@ -1,18 +1,16 @@
-import { useState, useMemo, useCallback, useEffect, useRef, startTransition, lazy, Suspense } from 'react';
+import { useState, useMemo, useEffect, useRef, startTransition, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { List as VirtualList } from 'react-window';
-import { Search, UserPlus, Upload, CheckSquare, Download, Globe } from 'lucide-react';
+import { UserPlus, Upload, CheckSquare, Globe } from 'lucide-react';
 import { ContactsGridSkeleton, ContactsListSkeleton } from '@/components/skeletons/PageSkeletons';
 import { EmptyState, SearchEmptyState } from '@/components/ui/empty-state';
 import { PullToRefresh } from '@/components/ui/pull-to-refresh';
 import { SwipeableListItem } from '@/components/ui/swipeable-list-item';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { AdvancedFilters, type FilterConfig, type SortOption } from '@/components/filters/AdvancedFilters';
 import { ContactCardWithContext } from '@/components/contact-card/ContactCardWithContext';
 import { ContactsStatsBar } from '@/components/contacts/ContactsStatsBar';
 import { BulkActionsBar } from '@/components/bulk-actions/BulkActionsBar';
-import { KeyboardListHint } from '@/components/ui/keyboard-list-hint';
 import { BulkImportDialog } from '@/components/import/BulkImportDialog';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { ContactsTableView } from '@/components/contacts/ContactsTableView';
@@ -222,7 +220,11 @@ export function ContatosContent(props: Props) {
             {viewMode === 'list' && (
               filteredAndSortedContacts.length > 50 ? (
                 <VirtualList rowCount={filteredAndSortedContacts.length} rowHeight={88} rowProps={{ contacts: filteredAndSortedContacts, getCompanyName, getLastInteractionDate, selectedIds, selectedIndex, selectionMode, handleSelect: onSelect, setEditingContact: onSetEditingContact, setDeletingContact: onSetDeletingContact, updateContact }} style={{ height: Math.min(filteredAndSortedContacts.length * 88, 600) }}
-                  rowComponent={({ index, style, ...rp }) => { const c = rp.contacts[index]; if (!c) return null; return (<div style={style} className="pb-2"><ContactCardWithContext contact={c} companyName={rp.getCompanyName(c.company_id)} lastInteraction={rp.getLastInteractionDate(c.id)} index={index} isSelected={rp.selectedIds.has(c.id)} isHighlighted={rp.selectedIndex === index} selectionMode={rp.selectionMode} onSelect={rp.handleSelect} onEdit={rp.setEditingContact} onDelete={rp.setDeletingContact} onUpdate={rp.updateContact} viewMode="list" /></div>); }} />
+                  rowComponent={({ index, style, ...rp }) => {
+                    const c = rp.contacts[index];
+                    if (!c) { return null; }
+                    return (<div style={style} className="pb-2"><ContactCardWithContext contact={c} companyName={rp.getCompanyName(c.company_id)} lastInteraction={rp.getLastInteractionDate(c.id)} index={index} isSelected={rp.selectedIds.has(c.id)} isHighlighted={rp.selectedIndex === index} selectionMode={rp.selectionMode} onSelect={rp.handleSelect} onEdit={rp.setEditingContact} onDelete={rp.setDeletingContact} onUpdate={rp.updateContact} viewMode="list" /></div>);
+                  }} />
               ) : (
                 <div className="space-y-2">
                   {filteredAndSortedContacts.map((contact, index) => (

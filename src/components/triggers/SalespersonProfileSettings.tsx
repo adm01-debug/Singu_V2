@@ -2,16 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {
   Brain,
   Eye,
-  Ear,
-  Hand,
   Target,
-  Shield,
   Compass,
   GitBranch,
   Zap,
   Search,
   Rocket,
-  Clock,
   Link,
   Save,
   Sparkles,
@@ -101,7 +97,7 @@ export function SalespersonProfileSettings() {
       toast.success('Perfil PNL salvo com sucesso!', {
         description: 'Sua compatibilidade com clientes será calculada automaticamente.',
       });
-    } catch (err) {
+    } catch {
       toast.error('Erro ao salvar perfil');
     } finally {
       setSaving(false);

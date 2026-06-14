@@ -17,8 +17,8 @@ import { ptBR } from 'date-fns/locale';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { 
-  TrendingUp, TrendingDown, Minus, Calendar, 
-  Activity, Target, Zap, RefreshCw, ChevronRight
+  TrendingUp, TrendingDown, Minus, 
+  Activity, Zap, ChevronRight
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { DISC_PROFILES } from '@/data/discAdvancedData';
@@ -55,7 +55,7 @@ const DISCEvolutionTimeline: React.FC<DISCEvolutionTimelineProps> = ({
   const { user } = useAuth();
   const [data, setData] = useState<TimelineDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPoint, setSelectedPoint] = useState<TimelineDataPoint | null>(null);
+  const [, setSelectedPoint] = useState<TimelineDataPoint | null>(null);
   const [viewMode, setViewMode] = useState<'line' | 'area'>('area');
 
   useEffect(() => {

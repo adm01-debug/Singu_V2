@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { MessageSquare, Phone, Mail, Calendar, FileText, ArrowRight, X, Clock, Search, Filter } from 'lucide-react';
+import { MessageSquare, Phone, Mail, Calendar, FileText, ArrowRight, X, Clock, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useFicha360Filters } from '@/hooks/useFicha360Filters';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -122,10 +122,6 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
     'interações',
   );
 
-  const clearSearch = () => {
-    setQ('');
-  };
-
   return (
     <Card>
       <CardHeader className="pb-3 space-y-3">
@@ -179,7 +175,6 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
               { id: 'audio', label: 'Áudio', icon: Clock },
               { id: 'transcription', label: 'Texto', icon: FileText },
             ].map((ch) => {
-              const isType = ['whatsapp', 'call', 'email', 'meeting'].includes(ch.id);
               const isActive = channels?.includes(ch.id);
               
               return (

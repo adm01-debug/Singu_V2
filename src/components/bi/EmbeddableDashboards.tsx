@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, Copy, Check, ExternalLink, Code2, Eye } from 'lucide-react';
+import { LayoutDashboard, Check, Code2, Eye } from 'lucide-react';
 import { useEmbeddableDashboards } from '@/hooks/useBIAdvanced';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';

@@ -25,6 +25,8 @@ export function EmailThreadSummaryCard({ contactId, subject, interactionId, thre
 
   if (loading) return <Skeleton className="h-24 w-full" />;
 
+  const threadCountSuffix = threadCount ? ` (${threadCount} msgs)` : '';
+
   if (!summary) {
     return (
       <Button
@@ -35,7 +37,7 @@ export function EmailThreadSummaryCard({ contactId, subject, interactionId, thre
         className="gap-1.5"
       >
         <Sparkles className="h-3.5 w-3.5" />
-        {generating ? 'Resumindo thread…' : `Resumir thread${threadCount ? ` (${threadCount} msgs)` : ''} com IA`}
+        {generating ? 'Resumindo thread…' : `Resumir thread${threadCountSuffix} com IA`}
       </Button>
     );
   }

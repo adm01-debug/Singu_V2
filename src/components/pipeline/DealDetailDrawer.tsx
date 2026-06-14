@@ -6,8 +6,7 @@ import {
   Sheet, 
   SheetContent, 
   SheetHeader, 
-  SheetTitle, 
-  SheetFooter,
+  SheetTitle,
   SheetDescription 
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
@@ -28,14 +27,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { SearchableSelect } from '@/components/ui/searchable-select';
-import { useMoveDeal, type PipelineDeal } from '@/hooks/usePipeline';
+import { type PipelineDeal } from '@/hooks/usePipeline';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Loader2, DollarSign, Calendar as CalendarIcon, Trash2, Trophy, Frown } from 'lucide-react';
-import { format } from 'date-fns';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+import { Loader2, DollarSign, Trash2, Trophy, Frown } from 'lucide-react';
 import { updateExternalData, deleteExternalData } from '@/lib/externalData';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -71,7 +66,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [companies, setCompanies] = useState<{ value: string; label: string }[]>([]);
-  const [contacts, setContacts] = useState<{ value: string; label: string }[]>([]);
+  const [, setContacts] = useState<{ value: string; label: string }[]>([]);
 
   const form = useForm<DealFormValues>({
     resolver: zodResolver(dealSchema),
@@ -128,7 +123,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
       toast.success('Deal atualizado!');
       queryClient.invalidateQueries({ queryKey: ['deals-pipeline'] });
       onOpenChange(false);
-    } catch (error) {
+    } catch {
       toast.error('Erro ao atualizar deal');
     } finally {
       setIsSaving(false);
@@ -144,7 +139,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
       toast.success('Deal excluído');
       queryClient.invalidateQueries({ queryKey: ['deals-pipeline'] });
       onOpenChange(false);
-    } catch (error) {
+    } catch {
       toast.error('Erro ao excluir deal');
     } finally {
       setIsDeleting(false);
@@ -164,7 +159,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
       toast.success(status === 'won' ? 'Parabéns! Deal Ganho! 🏆' : 'Deal marcado como perdido.');
       queryClient.invalidateQueries({ queryKey: ['deals-pipeline'] });
       onOpenChange(false);
-    } catch (error) {
+    } catch {
       toast.error('Erro ao atualizar status');
     } finally {
       setIsSaving(false);

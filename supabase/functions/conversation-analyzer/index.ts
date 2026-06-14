@@ -307,12 +307,14 @@ ${interaction.content.slice(0, 12000)}`;
 
     // Handle relatives mentioned (Módulo 2.5 AI)
     if (analysis.relatives_mentioned && Array.isArray(analysis.relatives_mentioned)) {
-      const relativesSuggestions = analysis.relatives_mentioned.map((rel: any) => ({
+      const relativesSuggestions = analysis.relatives_mentioned.map((rel: any) => {
+        const occupationSuffix = rel.occupation ? ` - ${rel.occupation}` : '';
+        return {
         user_id: userId,
         contact_id: interaction.contact_id,
         event_type: 'other',
         title: `Novo Relacionado Detectado: ${rel.name}`,
-        description: `${rel.name} (${rel.relationship_type})${rel.occupation ? ` - ${rel.occupation}` : ''}. ${rel.notes || ''}`,
+        description: `${rel.name} (${rel.relationship_type})${occupationSuffix}. ${rel.notes || ''}`,
         source_type: 'conversation',
         confidence: 0.8,
         status: 'pending',
@@ -321,7 +323,8 @@ ${interaction.content.slice(0, 12000)}`;
           type: 'relative_suggestion',
           relative_data: rel
         }
-      }));
+      };
+      });
 
       if (relativesSuggestions.length > 0) {
         await supabase.from('suggested_life_events').insert(relativesSuggestions);

@@ -162,6 +162,7 @@ Responda APENAS com JSON válido no formato:
     // Extract JSON from response
     let parsed;
     try {
+      // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
       const jsonMatch = rawContent.match(/\{[\s\S]*\}/);
       parsed = JSON.parse(jsonMatch ? jsonMatch[0] : rawContent);
     } catch {

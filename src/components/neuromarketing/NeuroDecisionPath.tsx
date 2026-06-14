@@ -8,15 +8,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Brain, 
-  Heart, 
-  Lightbulb, 
-  AlertTriangle,
+import {
+  Brain,
+  Lightbulb,
   CheckCircle,
-  Target,
-  Zap,
-  Info
+  Target
 } from 'lucide-react';
 import { useNeuromarketing } from '@/hooks/useNeuromarketing';
 import { BrainSystem, Neurochemical, PrimalStimulus } from '@/types/neuromarketing';
@@ -41,8 +37,7 @@ const NeuroDecisionPath = ({
     generateNeuroProfileFromDISC,
     BRAIN_SYSTEM_INFO,
     PRIMAL_STIMULUS_INFO,
-    NEUROCHEMICAL_INFO,
-    DISC_BRAIN_CORRELATION
+    NEUROCHEMICAL_INFO
   } = useNeuromarketing();
 
   // Analyze all interactions
@@ -73,25 +68,6 @@ const NeuroDecisionPath = ({
   };
 
   const dominantBrain = neuroAnalysis?.detectedBrainSystem || discBasedProfile?.dominantBrain || 'limbic';
-
-  const getBrainIcon = (system: BrainSystem) => {
-    switch (system) {
-      case 'reptilian': return <AlertTriangle className="h-5 w-5" />;
-      case 'limbic': return <Heart className="h-5 w-5" />;
-      case 'neocortex': return <Brain className="h-5 w-5" />;
-    }
-  };
-
-  const getNeurochemicalIcon = (chemical: Neurochemical) => {
-    switch (chemical) {
-      case 'dopamine': return '🎁';
-      case 'oxytocin': return '🤝';
-      case 'cortisol': return '⚡';
-      case 'serotonin': return '👑';
-      case 'endorphin': return '😊';
-      case 'adrenaline': return '🔥';
-    }
-  };
 
   return (
     <Card className="w-full">

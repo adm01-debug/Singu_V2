@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Play, Save, Download, FolderOpen, Trash2, FileBarChart2 } from 'lucide-react';
+import { Play, Save, Download, FolderOpen, Trash2 } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { PageHeader } from '@/components/navigation/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

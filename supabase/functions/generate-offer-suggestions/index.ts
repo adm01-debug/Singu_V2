@@ -1,6 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import {
-  corsHeaders,
   handleCorsAndMethod,
   withAuth,
   jsonError,
@@ -130,8 +129,6 @@ Deno.serve(async (req) => {
         const daysUntil = Math.ceil((renewalDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
         return daysUntil > 0 && daysUntil <= 60;
       });
-
-      const contactSocialInsights = (socialAnalysis || []).filter(sa => sa.contact_id === contact.id);
 
       for (const offer of offerCatalog) {
         const key = `${contact.id}-${offer.name}`;

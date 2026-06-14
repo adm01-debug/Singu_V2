@@ -1,5 +1,7 @@
 // Advanced NLP Types for Sales Intelligence
 
+export type LowMedHigh = 'low' | 'medium' | 'high';
+
 // ============================================
 // 1. EMOTIONAL STATES & ANCHORS
 // ============================================
@@ -113,7 +115,7 @@ export interface HiddenObjection {
   type: ObjectionType;
   indicator: string; // The phrase/pattern that indicated this
   probability: number; // 0-100%
-  severity: 'low' | 'medium' | 'high';
+  severity: LowMedHigh;
   possibleRealObjection: string;
   suggestedProbe: string; // Question to uncover the real objection
   resolutionTemplates: string[];
@@ -189,7 +191,7 @@ export interface NegotiationPath {
     counterStrategy: string;
   }[];
   successProbability: number;
-  riskLevel: 'low' | 'medium' | 'high';
+  riskLevel: LowMedHigh;
   recommendedSequence: string[];
 }
 
@@ -221,7 +223,7 @@ export interface MessageAnalysis {
   };
   issues: {
     issue: string;
-    severity: 'low' | 'medium' | 'high';
+    severity: LowMedHigh;
     suggestion: string;
     location?: string;
   }[];

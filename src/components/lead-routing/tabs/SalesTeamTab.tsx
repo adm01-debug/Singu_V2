@@ -9,7 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
-import { Plus, Trash2, Edit, UserCircle, Palmtree, Shield, AlertTriangle, Users } from 'lucide-react';
+import { Plus, Trash2, Edit, UserCircle, Palmtree, AlertTriangle, Users } from 'lucide-react';
 import { useSalesTeam, useCreateTeamMember, useUpdateTeamMember, useDeleteTeamMember } from '@/hooks/useSalesTeam';
 import { ROLE_LABELS, ROLE_COLORS } from '@/types/leadRouting';
 import type { SalesTeamMember, SalesRole } from '@/types/leadRouting';

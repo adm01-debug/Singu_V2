@@ -1,8 +1,7 @@
 import { format, addDays } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { 
-  ClipboardCheck, MessageSquare, ArrowRight, Zap, 
-  Calendar, Target, Shield, LayoutList 
+  ClipboardCheck, MessageSquare, Zap, 
+  Calendar, LayoutList 
 } from "lucide-react";
 import type { Tables } from '@/integrations/supabase/types';
 import { Badge } from "@/components/ui/badge";

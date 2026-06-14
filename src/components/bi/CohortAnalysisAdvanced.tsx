@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 function retentionColor(rate: number): string {
-  if (rate >= 80) return 'bg-emerald-500/80 text-white';
+  if (rate >= 80) return 'bg-emerald-500/80 text-primary-foreground';
   if (rate >= 60) return 'bg-emerald-500/50 text-foreground';
   if (rate >= 40) return 'bg-warning/50 text-foreground';
   if (rate >= 20) return 'bg-warning/30 text-foreground';

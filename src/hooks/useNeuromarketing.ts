@@ -20,8 +20,7 @@ import {
   TRIGGER_BRAIN_MAPPING,
   BIAS_BRAIN_MAPPING,
   DISC_BRAIN_CORRELATION,
-  PAIN_KEYWORDS,
-  GAIN_KEYWORDS
+  PAIN_KEYWORDS
 } from '@/data/neuromarketingData';
 
 type DISCProfile = 'D' | 'I' | 'S' | 'C';

@@ -61,7 +61,7 @@ export default function CopywritingSalesTools({ contact }: CopywritingSalesTools
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const {
-    fabTemplates, aidaTemplates, ctaTemplates, getRecommendedCTAs,
+    fabTemplates, aidaTemplates, getRecommendedCTAs,
     headlineFormulas, discProfile, vakType
   } = useCopywritingTools(safeContact);
 

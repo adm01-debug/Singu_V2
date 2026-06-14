@@ -22,6 +22,7 @@ export function setLogUser(id: string | null) {
 
 /** Generate a short unique request ID */
 export function generateRequestId(): string {
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   return `req_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`;
 }
 
@@ -57,7 +58,8 @@ function formatArgs(level: string, args: unknown[]): unknown[] {
     level,
   };
   if (_requestId) meta.rid = _requestId;
-  return [`[${meta.ts}] [${level.toUpperCase()}]${_requestId ? ` [${_requestId}]` : ''}`, ...args];
+  const requestIdTag = _requestId ? ` [${_requestId}]` : '';
+  return [`[${meta.ts}] [${level.toUpperCase()}]${requestIdTag}`, ...args];
 }
 
 export const logger = {

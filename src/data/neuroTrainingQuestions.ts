@@ -1,4 +1,3 @@
-import { BrainSystem } from '@/types/neuromarketing';
 
 export interface TrainingQuestion {
   id: string;

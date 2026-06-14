@@ -24,7 +24,10 @@ function describe(days: number, channels: string[], q: string): string {
   if (channels.length > 0) {
     parts.push(channels.map((c) => CHANNEL_LABELS[c] ?? c).join(', '));
   }
-  if (q) parts.push(`busca "${q.length > 24 ? `${q.slice(0, 24)}…` : q}"`);
+  if (q) {
+    const qTrimmed = q.length > 24 ? `${q.slice(0, 24)}…` : q;
+    parts.push(`busca "${qTrimmed}"`);
+  }
   return parts.join(' · ');
 }
 

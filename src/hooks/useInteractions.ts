@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useQuery, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import { useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';

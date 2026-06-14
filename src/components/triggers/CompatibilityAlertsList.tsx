@@ -7,8 +7,6 @@ import {
   X,
   ChevronRight,
   RefreshCw,
-  Users,
-  TrendingDown,
   CheckCircle2,
   Trash2,
 } from 'lucide-react';
@@ -96,7 +94,7 @@ export function CompatibilityAlertsList({
 
       setAlerts(prev => prev.filter(a => a.id !== alertId));
       toast.success('Alerta dispensado');
-    } catch (err) {
+    } catch {
       toast.error('Erro ao dispensar alerta');
     }
   };
@@ -115,7 +113,7 @@ export function CompatibilityAlertsList({
 
       setAlerts([]);
       toast.success('Todos os alertas foram dispensados');
-    } catch (err) {
+    } catch {
       toast.error('Erro ao dispensar alertas');
     }
   };

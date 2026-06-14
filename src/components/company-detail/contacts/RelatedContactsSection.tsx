@@ -2,7 +2,6 @@
  import { Link } from 'react-router-dom';
  import { Users, User, ArrowRight } from 'lucide-react';
  import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
- import { Badge } from '@/components/ui/badge';
  import { OptimizedAvatar } from '@/components/ui/optimized-avatar';
  import { RelationshipScore } from '@/components/ui/relationship-score';
  import { RelationshipStageBadge } from '@/components/ui/relationship-stage';

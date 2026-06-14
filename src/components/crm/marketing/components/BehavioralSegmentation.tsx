@@ -1,10 +1,9 @@
  import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
  import { Button } from '@/components/ui/button';
  import { Badge } from '@/components/ui/badge';
- import { Input } from '@/components/ui/input';
  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
  import { useContactSegmentation } from '@/hooks/useContactSegmentation';
- import { Filter, Plus, Trash2, Users, Sparkles, MessageSquare, Target, Zap } from 'lucide-react';
+ import { Filter, Trash2, Users, Sparkles, MessageSquare, Target, Zap } from 'lucide-react';
  import { motion, AnimatePresence } from 'framer-motion';
  
  export function BehavioralSegmentation() {
@@ -211,7 +210,7 @@
                       <Badge variant="outline" className="h-4 px-1 text-[8px] border-emerald-300 text-emerald-700">DRIVE</Badge>
                       {getMessageRecommendation(filteredContacts[0]).motivation}
                     </div>
-                    <Badge className="bg-emerald-600 text-white border-none text-[9px] uppercase tracking-tighter w-full justify-center py-1">
+                    <Badge className="bg-emerald-600 text-primary-foreground border-none text-[9px] uppercase tracking-tighter w-full justify-center py-1">
                       {getMessageRecommendation(filteredContacts[0]).strategy}
                     </Badge>
                   </div>

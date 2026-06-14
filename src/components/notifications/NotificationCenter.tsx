@@ -49,7 +49,7 @@ const groupConfig = {
 function NotificationCenterInner() {
   const navigate = useNavigate();
   const { notifications, unreadCount, clearUnread, dismissNotification } = useRealtimeNotifications();
-  const { transition } = useMotionSafe();
+  useMotionSafe();
 
   // Map realtime notifications to NotificationItem format
   const groupedItems: NotificationItem[] = notifications.map(n => ({

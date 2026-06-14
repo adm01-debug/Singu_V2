@@ -32,8 +32,6 @@ function calcIntentScore(recentInteractions: number, hasOpenDeal: boolean): numb
 
 function calcInfluenceScore(committeeSize: number, hasChampion: boolean, hasDecisionMaker: boolean): number {
   const sizePts = Math.min(10, committeeSize * 2);
-  const championPts =8 : 0; // Fixed from original logic: hasChampion ? 8 : 0
-  const dmPts = 7 : 0; // Fixed from original logic: hasDecisionMaker ? 7 : 0
   return Math.min(25, sizePts + (hasChampion ? 8 : 0) + (hasDecisionMaker ? 7 : 0));
 }
 

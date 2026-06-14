@@ -321,6 +321,8 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
     return { level, marginPp, stdDev, n: pcts.length, ...meta[level] };
   }, [sortedData, evolutionStats]);
 
+  const validWeekSet = useMemo(() => new Set(sortedData.map((p) => p.week)), [sortedData]);
+
   if (sortedData.length < 2) {
     return (
       <p className="text-sm text-muted-foreground text-center py-12">
@@ -332,7 +334,6 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
   const Icon = summary ? DIRECTION_ICON[summary.direction] : Minus;
   const deltaSign = summary && summary.deltaPct > 0 ? "+" : "";
 
-  const validWeekSet = useMemo(() => new Set(sortedData.map((p) => p.week)), [sortedData]);
   const bestWeekNorm = summary?.bestWeek ? normalizeWeek(summary.bestWeek.week) : undefined;
   const worstWeekNorm = summary?.worstWeek ? normalizeWeek(summary.worstWeek.week) : undefined;
   const bestWeekValid = !!bestWeekNorm && validWeekSet.has(bestWeekNorm);
@@ -715,9 +716,10 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
                     const { cx, cy } = props as { cx: number; cy: number };
                     if (cx == null || cy == null) return null;
                     const radius = 9;
+                    const countSuffix = d.count > 1 ? ` (+${d.count - 1})` : "";
                     return (
                       <g>
-                        <title>{`${d.label}: ${d.title}${d.count > 1 ? ` (+${d.count - 1})` : ""}`}</title>
+                        <title>{`${d.label}: ${d.title}${countSuffix}`}</title>
                         <circle cx={cx} cy={cy} r={radius} fill={d.color} stroke="hsl(var(--background))" strokeWidth={1.5} />
                         <foreignObject x={cx - 6} y={cy - 6} width={12} height={12} style={{ pointerEvents: "none" }}>
                           <div style={{ width: 12, height: 12, display: "flex", alignItems: "center", justifyContent: "center", color: "hsl(var(--background))" }}>

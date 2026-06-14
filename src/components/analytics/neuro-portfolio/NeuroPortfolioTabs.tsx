@@ -4,12 +4,12 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Brain, Heart, AlertTriangle, Zap, Target, TrendingUp, Lightbulb, Activity } from 'lucide-react';
+import { Brain, Heart, AlertTriangle, Zap, Target, Lightbulb, Activity } from 'lucide-react';
 import {
   ResponsiveContainer, PieChart as RechartsPie, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, Legend, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
 } from 'recharts';
-import type { BrainSystem, Neurochemical } from '@/types/neuromarketing';
+import type { BrainSystem } from '@/types/neuromarketing';
 
 interface Props {
   activeTab: string;

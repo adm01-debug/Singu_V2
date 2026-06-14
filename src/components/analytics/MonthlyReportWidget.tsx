@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useMonthlyReport } from '@/hooks/useReportsAnalytics';
@@ -19,7 +17,7 @@ export const MonthlyReportWidget = React.memo(function MonthlyReportWidget() {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth() + 1);
-  const { data: report, isLoading, refetch } = useMonthlyReport(year, month);
+  const { data: report, isLoading } = useMonthlyReport(year, month);
 
   return (
     <Card>

@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCompanyHealthScore } from '@/hooks/useCompanyIntelligence';
-import { HeartPulse, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { HeartPulse } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const LEVEL_CONFIG: Record<string, { color: string; badge: string }> = {

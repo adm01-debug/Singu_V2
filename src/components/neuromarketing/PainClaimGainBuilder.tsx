@@ -19,7 +19,6 @@ import {
   Trash2,
   Copy,
   Sparkles,
-  CheckCircle,
   Lightbulb
 } from 'lucide-react';
 import { PainPoint, ClaimStatement, GainProof } from '@/types/neuromarketing';
@@ -114,8 +113,6 @@ const PainClaimGainBuilder = ({
     }
 
     const dominantPain = pains.sort((a, b) => b.intensity - a.intensity)[0];
-    const bestClaim = claims[0];
-    const bestGain = gains[0];
 
     const script = `
 🎯 SCRIPT NEURO-OTIMIZADO PARA ${contactName.toUpperCase()}

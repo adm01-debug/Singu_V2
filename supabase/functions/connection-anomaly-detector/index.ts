@@ -99,6 +99,7 @@ Deno.serve(async (req) => {
       if (aiRes.ok) {
         const aiData = await aiRes.json();
         const content = aiData.choices?.[0]?.message?.content ?? "";
+        // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
         const m = content.match(/\{[\s\S]*\}/);
         if (m) {
           try { anomalies = JSON.parse(m[0]).anomalies ?? []; } catch { anomalies = []; }

@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { AlertTriangle, Target, Heart, Gift, Sparkles } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -9,7 +9,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ModuleHelp, moduleHelpContent } from '@/components/ui/module-help';
 import { EmotionalAnchorsPanel } from '@/components/contact-detail/EmotionalAnchorsPanel';
 import { BestTimeToContactCard } from '@/components/contact-detail/BestTimeToContactCard';
@@ -17,9 +16,7 @@ import { AIActionsPanel } from '@/components/contact-detail/AIActionsPanel';
 import { SocialIntelligencePanel } from '@/components/contact-detail/SocialIntelligencePanel';
 import { ScoreHistoryPanel } from '@/components/contact-detail/ScoreHistoryPanel';
 import { ContactTimeHeatmap } from '@/components/contact-detail/ContactTimeHeatmap';
- import { CadencePreferencesCard } from '@/components/contact-detail/data-tab/CadencePreferencesCard';
-import { WorkspaceAccountsCard } from '@/components/contact-detail/WorkspaceAccountsCard';
-import type { Tables } from '@/integrations/supabase/types';
+ import { WorkspaceAccountsCard } from '@/components/contact-detail/WorkspaceAccountsCard';
 import { Skeleton } from '@/components/ui/skeleton';
 const ChurnRiskWidget = lazy(() => import('./ChurnRiskWidget'));
 const ChurnPredictionsWidget = lazy(() => import('./ChurnPredictionsWidget'));
@@ -80,7 +77,7 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
     gcTime: 10 * 60 * 1000,
   });
 
-  const updateOfferStatus = useMutation({
+  useMutation({
     mutationFn: async ({ offerId, status }: { offerId: string; status: string }) => {
       const { error } = await supabase
         .from('offer_suggestions')
@@ -96,9 +93,6 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
   });
 
   const objections = data?.objections || [];
-  const criteria = data?.criteria || [];
-  const values = data?.values || [];
-  const offers = data?.offers || [];
   const unresolvedObjections = objections.filter(o => !o.resolved);
 
   return (

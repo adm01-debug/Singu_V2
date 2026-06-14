@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { corsHeaders, requireCronSecret, jsonError, jsonOk } from "../_shared/auth.ts";
+import { corsHeaders, requireCronSecret } from "../_shared/auth.ts";
 
 interface WeeklyDigestData {
   userId: string;

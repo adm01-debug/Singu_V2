@@ -13,14 +13,12 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import {
-  Inbox as InboxIcon, Mail, MessageSquare, Phone, CheckSquare, Bell,
+import { Mail, MessageSquare, Phone, CheckSquare, Bell,
   AlertTriangle, ArrowRight, Trophy, Filter,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
-import { toast } from 'sonner';
 
 type ChannelFilter = 'all' | 'task' | 'email' | 'whatsapp' | 'call';
 

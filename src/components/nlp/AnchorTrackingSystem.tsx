@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -20,13 +20,15 @@ import { cn } from '@/lib/utils';
 import { Contact } from '@/types';
 import { DEMO_CONTACT } from '@/domain/demoEntities';
 
+type AnchorStrength = 1 | 2 | 3;
+
 interface AnchorRecord {
   id: string;
   type: 'positive' | 'negative';
   trigger: string;
   emotionalState: string;
   context: string;
-  strength: 1 | 2 | 3;
+  strength: AnchorStrength;
   detectedAt: string;
   howToActivate?: string;
 }
@@ -103,36 +105,13 @@ const AnchorTrackingSystem: React.FC<AnchorTrackingSystemProps> = ({
     onAnchorsChange?.(updated);
   };
 
-  const updateStrength = (id: string, strength: 1 | 2 | 3) => {
+  const updateStrength = (id: string, strength: AnchorStrength) => {
     const updated = anchors.map(a => a.id === id ? { ...a, strength } : a);
     setAnchors(updated);
     onAnchorsChange?.(updated);
   };
 
-  const getStrengthLabel = (strength: number) => {
-    switch (strength) {
-      case 1: return 'Fraca';
-      case 2: return 'Moderada';
-      case 3: return 'Forte';
-      default: return 'Moderada';
-    }
-  };
 
-  const getStrengthColor = (strength: number, type: string) => {
-    if (type === 'positive') {
-      switch (strength) {
-        case 1: return 'bg-success/20';
-        case 2: return 'bg-success/40';
-        case 3: return 'bg-success/60';
-      }
-    } else {
-      switch (strength) {
-        case 1: return 'bg-destructive/20';
-        case 2: return 'bg-destructive/40';
-        case 3: return 'bg-destructive/60';
-      }
-    }
-  };
 
   return (
     <Card className={cn("border-accent/20 bg-card", className)}>
@@ -276,7 +255,7 @@ const AnchorTrackingSystem: React.FC<AnchorTrackingSystemProps> = ({
                         {[1, 2, 3].map(s => (
                           <button
                             key={s}
-                            onClick={() => updateStrength(anchor.id, s as 1 | 2 | 3)}
+                            onClick={() => updateStrength(anchor.id, s as AnchorStrength)}
                             className={cn(
                               "w-2 h-4 rounded-sm transition-colors",
                               s <= anchor.strength ? 'bg-success' : 'bg-muted/50'
@@ -355,7 +334,7 @@ const AnchorTrackingSystem: React.FC<AnchorTrackingSystemProps> = ({
                         {[1, 2, 3].map(s => (
                           <button
                             key={s}
-                            onClick={() => updateStrength(anchor.id, s as 1 | 2 | 3)}
+                            onClick={() => updateStrength(anchor.id, s as AnchorStrength)}
                             className={cn(
                               "w-2 h-4 rounded-sm transition-colors",
                               s <= anchor.strength ? 'bg-destructive' : 'bg-muted/50'

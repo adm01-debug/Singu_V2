@@ -110,14 +110,11 @@ import type { Contact } from '@/hooks/useContactDetail';
     gcTime: 10 * 60 * 1000,
   });
 
-  const discHistory = behavioralData?.discHistory || [];
   const eqAnalysis = behavioralData?.eqAnalysis || null;
   const biases = behavioralData?.biases || null;
-  const metaprograms = behavioralData?.metaprograms || null;
 
   const discProfile = behavior?.discProfile as string | null;
   const discConfidence = (behavior?.discConfidence as number) || 0;
-  const vakProfile = behavior?.vakProfile as Record<string, number> | null;
 
    return (
      <div className="space-y-6">

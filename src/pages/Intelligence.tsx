@@ -47,6 +47,7 @@ const Intelligence = () => {
   const [params, setParams] = useSearchParams();
   const tabFromUrl = params.get('tab');
   const tab: TabValue = isValidTab(tabFromUrl) ? tabFromUrl : 'graph';
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   const [sessionId] = useState(() => Math.random().toString(36).slice(2, 10).toUpperCase());
   const [contextEntity, setContextEntity] = useState<HistoryEntry | null>(null);
   const { log } = useIntelTelemetry();
@@ -100,7 +101,8 @@ const Intelligence = () => {
     params.forEach((v, k) => {
       if (k !== 'snap') paramsObj[k] = v;
     });
-    const label = `${tab.toUpperCase()}${current ? ` · ${current.name}` : ''}`;
+    const currentNameSuffix = current ? ` · ${current.name}` : '';
+    const label = `${tab.toUpperCase()}${currentNameSuffix}`;
     const hash = createSnapshot(
       { tab, params: paramsObj, entity: current, ts: Date.now() },
       label,

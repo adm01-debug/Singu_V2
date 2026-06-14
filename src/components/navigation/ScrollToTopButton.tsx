@@ -111,11 +111,6 @@ export function ScrollToTopButton({
   // Tooltip enriquecido quando há progresso de infinite scroll publicado.
   // Fallback para "Voltar ao topo" simples quando nenhuma lista publicou.
   const itemLabel = progress?.itemLabel ?? 'itens';
-  const tooltipLabel = progress
-    ? progress.hasMore
-      ? `Voltar ao topo · ${progress.totalLoaded} de ${progress.total} ${itemLabel} carregados`
-      : `Voltar ao topo · ${progress.total} ${itemLabel} carregados`
-    : 'Voltar ao topo';
 
   return (
     <AnimatePresence>

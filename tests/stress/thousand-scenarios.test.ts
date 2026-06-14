@@ -1,4 +1,4 @@
- import { describe, it, expect, vi } from 'vitest';
+ import { describe, it, expect } from 'vitest';
  import { rateLimit } from '../../supabase/functions/_shared/rate-limit.ts';
  
  describe('Meticulous Audit: Thousands of Scenarios', () => {

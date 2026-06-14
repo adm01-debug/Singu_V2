@@ -28,7 +28,7 @@ export const NLPMasteryScore = () => {
           <div>
               <CardTitle className="text-2xl font-black flex items-center gap-2 tracking-tighter">
                 SCORE DE MAESTRIA PNL 
-                <Badge className="bg-primary text-white animate-bounce">10/10</Badge>
+                <Badge className="bg-primary text-primary-foreground animate-bounce">10/10</Badge>
               </CardTitle>
             <CardDescription>Índice de excelência em comunicação e influência</CardDescription>
           </div>

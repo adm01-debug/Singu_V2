@@ -34,9 +34,7 @@ const NeuroCompatibilityAnalysis = ({
   const { 
     generateNeuroProfileFromDISC,
     calculateNeuroCompatibility,
-    BRAIN_SYSTEM_INFO,
-    NEUROCHEMICAL_INFO,
-    DISC_BRAIN_CORRELATION
+    BRAIN_SYSTEM_INFO
   } = useNeuromarketing();
 
   // Generate profiles

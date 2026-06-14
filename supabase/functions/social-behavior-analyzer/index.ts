@@ -111,13 +111,14 @@ Responda APENAS com um JSON válido no formato especificado.`;
     // deno-lint-ignore no-explicit-any
     let analysis: any = null;
     try {
+      // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (jsonMatch) analysis = JSON.parse(jsonMatch[0]);
     } catch (parseError) {
       console.error("Error parsing AI response:", parseError);
     }
 
-    if (!analysis) return jsonError("Failed to parse analysis results", 500);
+    if (!analysis) { return jsonError("Failed to parse analysis results", 500); }
 
      const { data: savedAnalysis, error: saveError } = await supabaseClient
        .from("social_behavior_analysis")

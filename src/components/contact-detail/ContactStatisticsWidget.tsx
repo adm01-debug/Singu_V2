@@ -1,4 +1,4 @@
-import { BarChart3, Users, Calendar, FileText, CheckSquare, DollarSign, Clock, AlertCircle } from 'lucide-react';
+import { BarChart3, Users, Calendar, FileText, CheckSquare, DollarSign, Clock } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ExternalDataCard } from '@/components/ui/external-data-card';

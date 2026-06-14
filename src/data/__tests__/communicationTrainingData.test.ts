@@ -4,8 +4,6 @@ import {
   VAK_TRAINING,
   generateScenarios,
   SalespersonProfile,
-  TrainingTip,
-  TrainingScenario,
 } from '@/data/communicationTrainingData';
 import { DISCProfile } from '@/types';
 import { VAKType } from '@/types/vak';

@@ -4,7 +4,6 @@
 import { describe, it, expect } from 'vitest';
 import {
   ENCOURAGEMENT_TEMPLATES, MINIMIZATION_PHRASES, CONFIDENCE_BOOSTERS,
-  DISCOURAGEMENT_PATTERNS,
   getEncouragementForContext, detectDiscouragement, generateEncouragementScript, calculateEncouragementScore
 } from '../carnegieEncouragement';
 import {

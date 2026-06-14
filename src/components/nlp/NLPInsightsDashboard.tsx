@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -9,16 +9,11 @@ import {
   Target, 
   AlertTriangle,
   ArrowRight,
-  Download,
-  Share2,
-  Brain,
-  MessageSquare
+  Brain
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
-import { logger } from "@/lib/logger";
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -30,18 +25,6 @@ import { ptBR } from 'date-fns/locale';
  interface NLPProfile { primary?: string; motivation?: string; [key: string]: any; }
 
 export function NLPInsightsDashboard({ contactId, className }: Props) {
-  const { user } = useAuth();
-
-  const { data: contact } = useQuery({
-    queryKey: ['contact-insights-header', contactId],
-    queryFn: async () => {
-      const { data, error } = await supabase.from('contacts').select('*, companies(name)').eq('id', contactId).maybeSingle();
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!contactId
-  });
-
   const { data: insights, isLoading } = useQuery({
     queryKey: ['nlp-insights-actionable', contactId],
      queryFn: async () => {

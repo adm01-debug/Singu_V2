@@ -3,11 +3,11 @@
  */
 import { describe, it, expect } from 'vitest';
 import {
-  CRITICAL_PATTERNS, POSITIVE_ALTERNATIVES, CRITICISM_PRINCIPLES,
+  CRITICAL_PATTERNS, POSITIVE_ALTERNATIVES,
   detectCriticalLanguage, calculateCriticismScore, rewriteWithoutCriticism, getCriticismTone
 } from '../carnegieCriticismDetector';
 import {
-  EMPATHY_TEMPLATES, EMPATHY_PHRASES, EMPATHY_DETECTION,
+  EMPATHY_TEMPLATES, EMPATHY_PHRASES,
   getEmpathyTemplatesByType, getEmpathyForSituation, analyzeEmpathyInText, getEmpathyTemplateForDISC
 } from '../carnegieEmpathyTemplates';
 

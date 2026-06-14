@@ -61,7 +61,6 @@ export function useCarnegieAnalysis(contact: Contact | null) {
     const questionCount = (text.match(questionPatterns) || []).length;
     const statementCount = (text.match(statementPatterns) || []).length;
     
-    const totalSentences = questionCount + statementCount || 1;
     const speakerRatio = isUserSpeaking ? 60 : 40; // Simplified
     const idealRatio = 35;
     const deviation = Math.abs(speakerRatio - idealRatio);

@@ -65,12 +65,16 @@ export const TimeHeatmapCard = memo(function TimeHeatmapCard({ data }: Props) {
                 <div className="w-8 flex-shrink-0 text-[10px] text-muted-foreground flex items-center">{day}</div>
                 {hours.map((hour) => {
                   const cell = dataMap.get(`${dayIdx}-${hour}`);
+                  const respSuffix = cell?.avgResp != null ? ` · ${cell.avgResp}min resp.` : '';
+                  const cellTitle = cell
+                    ? `${day} ${hour}h: ${cell.rate}% sucesso (${cell.attempts} tentativas)${respSuffix}`
+                    : `${day} ${hour}h: sem dados`;
                   return (
                     <div
                       key={hour}
                       className="flex-1 aspect-square rounded-sm border border-border/50 relative group cursor-default"
                       style={{ backgroundColor: cell ? getColor(cell.rate, cell.attempts) : undefined }}
-                      title={cell ? `${day} ${hour}h: ${cell.rate}% sucesso (${cell.attempts} tentativas)${cell.avgResp != null ? ` · ${cell.avgResp}min resp.` : ''}` : `${day} ${hour}h: sem dados`}
+                      title={cellTitle}
                     />
                   );
                 })}

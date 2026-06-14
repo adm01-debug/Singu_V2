@@ -9,7 +9,7 @@ interface Interaction {
 }
 
 export function useHiddenObjections(interactions: Interaction[]) {
-  const [analyzing, setAnalyzing] = useState(false);
+  const [analyzing] = useState(false);
 
   const detectObjections = useCallback((text: string): {
     type: ObjectionType;
@@ -26,6 +26,7 @@ export function useHiddenObjections(interactions: Interaction[]) {
             detected.push({
               type,
               indicator,
+              // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
               probability: 60 + Math.random() * 30 // 60-90%
             });
           }

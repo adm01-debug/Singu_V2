@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { useUnifiedCommunicationHistory, type InteractionHistoryItem } from '@/hooks/useInteractionsRpc';
+import { useUnifiedCommunicationHistory } from '@/hooks/useInteractionsRpc';
 import { 
   MessageSquare, Phone, Mail, Globe, Users, Edit, 
   Search, Filter, Calendar as CalendarIcon, ArrowUpRight, ArrowDownLeft,

@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  X, Play, Pause, RotateCcw, Phone, MessageSquare, AlertTriangle,
+import { Play, Pause, RotateCcw, Phone, MessageSquare, AlertTriangle,
    Brain, Target, Heart, Zap, Clock, ChevronRight, Minimize2, MessageCircle
 } from 'lucide-react';
  import { Textarea } from '@/components/ui/textarea';

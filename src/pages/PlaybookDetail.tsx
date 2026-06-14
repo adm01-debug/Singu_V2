@@ -27,7 +27,10 @@ export default function PlaybookDetail() {
       `# ${playbook.name}`,
       playbook.description || "",
       "",
-      ...playbook.content.sections.map((s) => `## ${s.title}\n\n${s.body}\n${s.items.map((i) => `• ${i}`).join("\n")}`),
+      ...playbook.content.sections.map((s) => {
+        const itemsList = s.items.map((i) => `• ${i}`).join("\n");
+        return `## ${s.title}\n\n${s.body}\n${itemsList}`;
+      }),
     ].join("\n\n");
     await navigator.clipboard.writeText(text);
     toast.success("Playbook completo copiado");

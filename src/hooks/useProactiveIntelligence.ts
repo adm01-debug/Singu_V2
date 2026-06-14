@@ -125,7 +125,6 @@ export function useProactiveIntelligence(
       const discProfile = getDISCProfile(behavior) || 'S';
       const vakPrimary = getVAKPrimary(behavior) || 'kinesthetic';
       const relationshipScore = contact.relationship_score || 0;
-      const sentiment = contact.sentiment || 'neutral';
       const stage = contact.relationship_stage || 'unknown';
 
       // Analyze interaction patterns
@@ -150,7 +149,6 @@ export function useProactiveIntelligence(
         negativeSentiments > positiveSentiments ? 'declining' : 'stable';
 
       // Pending follow-ups
-      const pendingFollowUps = interactions.filter(i => i.follow_up_required && !i.follow_up_date);
       const overdueFollowUps = interactions.filter(i =>
         i.follow_up_date && new Date(i.follow_up_date) < new Date() && i.follow_up_required
       );
@@ -323,11 +321,16 @@ export function useProactiveIntelligence(
       const scripts: ApproachScript[] = [];
 
       // Script 1: Opening script
+      const openingByDisc =
+        discProfile === 'D' ? `${contact.first_name}, tenho algo importante pra compartilhar.`
+        : discProfile === 'I' ? `${contact.first_name}! Que bom falar com você! ✨`
+        : discProfile === 'C' ? `Olá ${contact.first_name}, preparei uma análise relevante.`
+        : `Olá ${contact.first_name}, espero que esteja tudo bem com você e sua família.`;
       scripts.push({
         id: 'opening',
         title: 'Abertura Personalizada',
         scenario: 'Primeiro contato após período sem comunicação',
-        opening: `${discProfile === 'D' ? `${contact.first_name}, tenho algo importante pra compartilhar.` : discProfile === 'I' ? `${contact.first_name}! Que bom falar com você! ✨` : discProfile === 'C' ? `Olá ${contact.first_name}, preparei uma análise relevante.` : `Olá ${contact.first_name}, espero que esteja tudo bem com você e sua família.`}`,
+        opening: openingByDisc,
         body: `${vakLang.hook} ${discStyle.focus.toLowerCase()}. ${neuroHook.approach}.`,
         closing: `${discProfile === 'D' ? 'Quando podemos conversar? Posso na terça ou quinta.' : discProfile === 'I' ? 'Vai ser incrível! Me diz quando podemos conversar!' : discProfile === 'C' ? 'Posso enviar um material mais detalhado antes da conversa?' : 'Sem pressão, me avisa quando for melhor pra você.'}`,
         channel: discProfile === 'D' ? 'Ligação' : 'WhatsApp',

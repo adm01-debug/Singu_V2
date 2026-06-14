@@ -111,6 +111,7 @@ export function useEasterEggs() {
           particleCount: 30,
           angle: 270,
           spread: 180,
+          // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
           origin: { x: Math.random(), y: 0 },
           colors: ['#00ff00'],
           gravity: 0.5,
@@ -125,7 +126,7 @@ export function useEasterEggs() {
   // Developer mode
   const devAction = useCallback(() => {
     if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console -- intentional styled dev-mode console output
+       
       console.log('%c🛠️ Developer Mode Activated!\n%cWelcome, fellow developer! 👨‍💻',
         'font-size: 24px; color: #00ff00;', 'font-size: 16px; color: #00ccff;');
     }

@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { SearchableSelect } from '@/components/ui/searchable-select';
-import { useCreateDeal, type PipelineDeal } from '@/hooks/usePipeline';
+import { useCreateDeal } from '@/hooks/usePipeline';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Loader2, DollarSign, Calendar as CalendarIcon } from 'lucide-react';
@@ -68,7 +68,7 @@ export function DealDialog({ open, onOpenChange, initialStage = 'lead' }: Props)
   const createDeal = useCreateDeal();
   const [companies, setCompanies] = useState<{ value: string; label: string }[]>([]);
   const [contacts, setContacts] = useState<{ value: string; label: string }[]>([]);
-  const [isLoadingEntities, setIsLoadingEntities] = useState(false);
+  const [, setIsLoadingEntities] = useState(false);
 
   const form = useForm<DealFormValues>({
     resolver: zodResolver(dealSchema),

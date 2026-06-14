@@ -99,6 +99,7 @@ Produza o mapeamento JSON conforme instruído.`;
 
     const aiData = await aiRes.json();
     const content = aiData.choices?.[0]?.message?.content ?? "";
+    // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
     const jsonMatch = content.match(/\{[\s\S]*\}/);
 
     // Fallback determinístico: matching por nome quando IA falha

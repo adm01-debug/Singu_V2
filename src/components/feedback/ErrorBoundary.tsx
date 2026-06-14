@@ -78,6 +78,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
       const empathicMessage = getErrorMessage('generic');
       const canRetry = retryCount < this.maxRetries;
+      const retryCountSuffix = retryCount > 0 ? ` (${retryCount}/${this.maxRetries})` : '';
 
       return (
         <div className="min-h-[400px] flex items-center justify-center p-6">
@@ -112,8 +113,8 @@ export class ErrorBoundary extends Component<Props, State> {
                   variant={canRetry ? "default" : "secondary"}
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  {canRetry 
-                    ? `Tentar novamente${retryCount > 0 ? ` (${retryCount}/${this.maxRetries})` : ''}`
+                  {canRetry
+                    ? `Tentar novamente${retryCountSuffix}`
                     : 'Recarregar página'
                   }
                 </Button>

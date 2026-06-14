@@ -35,7 +35,7 @@
          
          if (error) throw error;
          return (data as any) as SocialInsight[];
-       } catch (e) {
+       } catch {
          // Mock data if table doesn't exist yet for demonstration
          return [
            {

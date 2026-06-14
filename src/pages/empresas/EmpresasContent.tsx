@@ -1,19 +1,17 @@
 import { useState, useMemo, useRef, useEffect, startTransition } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Search, Plus, CheckSquare, X, Upload } from 'lucide-react';
+import { Search, Plus, CheckSquare, X } from 'lucide-react';
 import { CompaniesGridSkeleton } from '@/components/skeletons/PageSkeletons';
 import { CompaniesStatsBar } from '@/components/companies/CompaniesStatsBar';
 import { EmptyState, SearchEmptyState } from '@/components/ui/empty-state';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { AdvancedFilters, type FilterConfig, type SortOption } from '@/components/filters/AdvancedFilters';
+import { AdvancedFilters, type FilterConfig } from '@/components/filters/AdvancedFilters';
 import { CompanyCardWithContext } from '@/components/company-card/CompanyCardWithContext';
 import { CompanyListItem } from '@/components/companies/CompanyListItem';
 import { CompaniesTableView } from '@/components/companies/CompaniesTableView';
 import { ViewModeSwitcher, type ViewMode, type GridColumns } from '@/components/ui/view-mode-switcher';
 import { BulkActionsBar } from '@/components/bulk-actions/BulkActionsBar';
-import { KeyboardListHint } from '@/components/ui/keyboard-list-hint';
 import { SearchPresetsMenu } from '@/components/search/SearchPresetsMenu';
 import { BulkImportDialog } from '@/components/import/BulkImportDialog';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
@@ -72,7 +70,6 @@ export function EmpresasContent(props: Props) {
   } = props;
 
   const { isAdmin } = useIsAdmin();
-  const navigate = useNavigate();
   const RENDER_BATCH = 60;
   const [visibleCount, setVisibleCount] = useState(RENDER_BATCH);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -150,7 +147,10 @@ export function EmpresasContent(props: Props) {
               {(hasGroups ? groups : [{ name: '', companies: visibleCompanies }]).map((group) => {
                 const expanded = isGroupExpanded(group.name);
                 let indexOffset = 0;
-                for (const g of groups) { if (g.name === group.name) break; indexOffset += g.companies.length; }
+                for (const g of groups) {
+                  if (g.name === group.name) break;
+                  indexOffset += g.companies.length;
+                }
                 return (
                   <div key={group.name || '__ungrouped'}>
                     {group.name && <GroupHeader name={group.name} count={group.companies.length} isExpanded={expanded} onToggle={() => toggleGroup(group.name)} />}

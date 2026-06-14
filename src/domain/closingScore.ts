@@ -1,6 +1,5 @@
- import { Contact, ContactBehavior } from '@/types';
  
- export const EMOTIONAL_SCORES: Record<string, number> = {
+export const EMOTIONAL_SCORES: Record<string, number> = {
    'entusiasmado': 100, 'empolgado': 95, 'interessado': 85, 'positivo': 80,
    'curioso': 75, 'neutro': 50, 'cauteloso': 40, 'hesitante': 35,
    'preocupado': 30, 'cético': 25, 'resistente': 20, 'negativo': 15, 'frustrado': 10

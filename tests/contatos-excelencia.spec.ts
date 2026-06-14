@@ -101,8 +101,6 @@ test.describe('Contatos e Rapport (Meta 10/10)', () => {
       await expect(page.locator('text=Sugestão aprovada')).toBeVisible();
     }
     
-    // Verifica se existe algum badge com ícone (SVG dentro do badge)
-    const badgeWithIcon = page.locator('.badge-hobby svg, .badge-interest svg').first();
     // Como nem todas têm, apenas validamos se o fluxo de aprovação reflete no UI
     await expect(page.locator('text=Tags de Interesse')).toBeVisible();
   });

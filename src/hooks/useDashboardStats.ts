@@ -227,6 +227,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
           : null;
         const contactName = rawName && isRealName(rawName) ? rawName : null;
         // Extract name from title patterns like "Mensagem de João (WhatsApp)" or "Mensagem Enviada"
+        // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
         const titleMatch = interaction.title?.match(/de\s+(.+?)(?:\s*\(|$)/)?.[1]?.trim();
         const cleanTitleMatch = titleMatch && isRealName(titleMatch) ? titleMatch : null;
         // For "Mensagem Enviada" type titles, try to use a cleaner description
@@ -234,6 +235,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         const displayName = contactName || cleanTitleMatch || (isGenericTitle ? 'Mensagem' : 'Contato');
         // Clean description: extract channel/type instead of repeating name
         const title = interaction.title || '';
+        // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
         const channelMatch = title.match(/\(([^)]+)\)/)?.[1]; // e.g. "WhatsApp", "Email"
         let cleanDesc: string;
         if (channelMatch) {

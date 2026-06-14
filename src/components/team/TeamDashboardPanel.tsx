@@ -1,4 +1,4 @@
-import { Users, UserCheck, UserX, MessageSquare, TrendingUp, Building2, DollarSign, Trophy } from 'lucide-react';
+import { Users, UserCheck, MessageSquare, TrendingUp, DollarSign, Trophy } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -11,7 +11,6 @@ export function TeamDashboardPanel() {
   if (isLoading) return <Skeleton className="h-64 rounded-lg" />;
   if (!data?.isManager || !data.members.length) return null;
 
-  const totalContacts = data.members.reduce((s, m) => s + m.contacts_count, 0);
   const totalInteractions = data.members.reduce((s, m) => s + m.interactions_this_month, 0);
   const totalPipeline = data.members.reduce((s, m) => s + m.pipeline_value, 0);
   const totalWon = data.members.reduce((s, m) => s + m.won_deals_value, 0);

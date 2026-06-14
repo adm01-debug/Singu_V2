@@ -145,7 +145,7 @@ Deno.serve(async (req) => {
        const reminderDays = event.reminder_days_before || 7;
        
        // Calculate next occurrence if recurring
-       let nextDate = new Date(eventDate);
+       const nextDate = new Date(eventDate);
        if (event.recurring) {
          nextDate.setFullYear(today.getFullYear());
          if (nextDate < today) {
@@ -219,7 +219,7 @@ Deno.serve(async (req) => {
           } else if (daysSinceLastInteraction >= decayThreshold) {
             decayLevel = 'cooling'; priority = 'medium'; shouldAlert = true;
           } else if (daysSinceLastInteraction >= decayThreshold * 0.75 && relationshipScore >= 70) {
-            decayLevel = 'warming'; shouldAlert = true;
+            shouldAlert = true; // decayLevel mantém 'warming' (valor inicial)
           }
 
           if (shouldAlert) {
@@ -354,7 +354,8 @@ Deno.serve(async (req) => {
       const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
       if (LOVABLE_API_KEY) {
         try {
-          const prompt = `Analise estes relacionamentos que estão esfriando e sugira ações específicas:\n\n${decayReminders.slice(0, 5).map(r => `- ${r.contactName}: ${r.description}\n  - Score: ${r.metadata.relationshipScore}\n  - Dias sem contato: ${r.metadata.daysSinceLastInteraction}`).join('\n')}`;
+          const reminderLines = decayReminders.slice(0, 5).map(r => `- ${r.contactName}: ${r.description}\n  - Score: ${r.metadata.relationshipScore}\n  - Dias sem contato: ${r.metadata.daysSinceLastInteraction}`).join('\n');
+          const prompt = `Analise estes relacionamentos que estão esfriando e sugira ações específicas:\n\n${reminderLines}`;
           const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { ENTITIES, getValue, type EntityKey, type ReportResult, type ReportConfig } from '@/lib/reports/reportEngine';
+import { ENTITIES, getValue, type ReportResult, type ReportConfig } from '@/lib/reports/reportEngine';
 
 interface Props {
   config: ReportConfig;

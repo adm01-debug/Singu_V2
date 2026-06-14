@@ -433,5 +433,6 @@ export function getNobleCausesByDISC(discProfile: 'D' | 'I' | 'S' | 'C'): NobleC
 export function getRandomTemplate(causeId: string): NobleCauseTemplate | null {
   const cause = NOBLE_CAUSES.find(c => c.id === causeId);
   if (!cause || cause.templates.length === 0) return null;
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   return cause.templates[Math.floor(Math.random() * cause.templates.length)];
 }

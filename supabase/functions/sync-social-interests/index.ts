@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+import { createClient } from "npm:@supabase/supabase-js@2"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -27,7 +27,7 @@ serve(async (req) => {
       .eq('id', queueId)
 
     // 2. Fetch social insights (mocking external social api call)
-    const { data: insights, error: insightsError } = await supabaseClient
+    const { error: insightsError } = await supabaseClient
       .from('social_insights')
       .select('*')
       .eq('contact_id', contactId)

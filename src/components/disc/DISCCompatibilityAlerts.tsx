@@ -14,8 +14,8 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import {
   AlertTriangle, Bell, BellOff, Settings, Check,
-  X, ChevronRight, Users, TrendingDown, Zap,
-  Shield, Target, RefreshCw, ExternalLink
+  X, Zap,
+  Shield, RefreshCw, ExternalLink
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
@@ -151,12 +151,6 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
       description: 'Você pode configurar os limiares nas configurações'
     });
   }, [toast]);
-
-  const getScoreColor = (score: number) => {
-    if (score >= 70) return 'text-success';
-    if (score >= 50) return 'text-warning';
-    return 'text-destructive';
-  };
 
   const getScoreBadge = (score: number) => {
     if (score >= 70) return 'bg-success/10 text-success border-success/30';
