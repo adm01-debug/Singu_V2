@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Play, FlaskConical } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 interface Props {
@@ -31,7 +30,6 @@ export function WebhookReplayButton({ webhookToken, payload }: Props) {
       toast.error(`Falha: ${e instanceof Error ? e.message : 'erro desconhecido'}`);
     } finally {
       setBusy(false);
-      void supabase; // referência para tree-shaking ficar feliz
     }
   }
 

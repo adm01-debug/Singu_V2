@@ -60,13 +60,13 @@ export function useWebVitals() {
       }
     };
 
-    void import('web-vitals').then(({ onCLS, onINP, onLCP, onFCP, onTTFB }) => {
+    import('web-vitals').then(({ onCLS, onINP, onLCP, onFCP, onTTFB }) => {
       onCLS(reportMetric);
       onINP(reportMetric);
       onLCP(reportMetric);
       onFCP(reportMetric);
       onTTFB(reportMetric);
-    });
+    }).catch(() => {});
   }, []);
 }
 

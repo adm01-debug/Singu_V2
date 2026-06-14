@@ -28,10 +28,10 @@ export function showConcurrentEditToast({ entity, queryClient, queryKey }: Concu
     action: {
       label: 'Recarregar',
       onClick: () => {
-        void queryClient.invalidateQueries({ queryKey });
+        queryClient.invalidateQueries({ queryKey }).catch(() => {});
       },
     },
   });
   // Invalidação automática em background mesmo se usuário ignorar a ação
-  void queryClient.invalidateQueries({ queryKey });
+  queryClient.invalidateQueries({ queryKey }).catch(() => {});
 }

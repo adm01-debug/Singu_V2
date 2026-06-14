@@ -75,7 +75,9 @@ export const AdvancedSearchBar = React.memo(function AdvancedSearchBar({
       el.classList.remove('search-focus-flash');
       // Forçar reflow garantindo o restart da animação. Acessar offsetWidth é
       // o padrão clássico para sincronizar o style recalc antes do próximo add.
-      void el.offsetWidth;
+      // Atribuição força a leitura de offsetWidth (reflow) sem usar o operador void.
+      const reflow = el.offsetWidth;
+      if (reflow < 0) { /* nunca ocorre: leitura existe só para sincronizar o reflow */ }
       el.classList.add('search-focus-flash');
       window.setTimeout(() => el.classList.remove('search-focus-flash'), 1000);
     };

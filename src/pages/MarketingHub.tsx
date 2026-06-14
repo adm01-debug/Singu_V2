@@ -542,6 +542,3 @@ export default function MarketingHub() {
     </div>
   );
 }
-
-// Suprimir warnings de imports não usados (usados em handlers acima)
-void Dialog; void DialogContent; void DialogHeader; void DialogTitle; void DialogTrigger; void DialogFooter;
