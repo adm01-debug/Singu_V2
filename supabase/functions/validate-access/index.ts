@@ -66,7 +66,7 @@ Deno.serve(async (req) => {
     }
 
     return jsonOk({ allowed: true }, req);
-  } catch (err) {
+  } catch {
     return jsonError("Internal error", 500, req);
   }
 });

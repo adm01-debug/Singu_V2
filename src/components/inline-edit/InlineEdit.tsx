@@ -95,7 +95,7 @@ export function InlineEdit({
       } else {
         setError('Erro ao salvar');
       }
-    } catch (err) {
+    } catch {
       setError('Erro ao salvar');
     } finally {
       setIsSaving(false);

@@ -88,7 +88,7 @@ export function NextBestAction({ contactId }: Props) {
         setSuggestion(result.suggestion);
         setScript(result.suggestion.suggested_message || '');
       }
-    } catch (error) {
+    } catch {
       toast.error('Erro ao processar objeção');
     } finally {
       setIsHandlingObjection(false);

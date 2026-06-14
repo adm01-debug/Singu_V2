@@ -294,7 +294,7 @@ Deno.serve(async (req) => {
           const rpcData = await rpcResp.json();
           functions = Array.isArray(rpcData) ? rpcData : Object.keys(rpcData || {});
         }
-      } catch (_) { /* ignore */ }
+      } catch { /* ignore */ }
 
       return jsonOk({ tableCount: Object.keys(tables).length, tables, functions }, req);
     }

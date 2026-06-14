@@ -61,7 +61,7 @@ Deno.serve(async (req) => {
     }
 
     return jsonOk({ is_new: true, is_trusted: false }, req);
-  } catch (err) {
+  } catch {
     return jsonError("Internal error", 500, req);
   }
 });

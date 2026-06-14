@@ -75,7 +75,7 @@ export function useIPMaskingPreference() {
       try {
         window.removeEventListener('storage', onStorage);
         window.removeEventListener(CUSTOM_EVENT_KEY, onCustomChange);
-      } catch (err) {
+      } catch {
         // Ignored
       }
     };

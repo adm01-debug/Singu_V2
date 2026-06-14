@@ -97,7 +97,7 @@ export function SalespersonProfileSettings() {
       toast.success('Perfil PNL salvo com sucesso!', {
         description: 'Sua compatibilidade com clientes será calculada automaticamente.',
       });
-    } catch (err) {
+    } catch {
       toast.error('Erro ao salvar perfil');
     } finally {
       setSaving(false);

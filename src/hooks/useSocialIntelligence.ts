@@ -137,7 +137,7 @@ export function useSocialIntelligence(contactId: string) {
          await supabase.functions.invoke('generate-offer-suggestions', { 
            body: { contactId, userId: user.id, enriched: true } 
          });
-       } catch (e) {
+       } catch {
          logger.warn('Failed to auto-trigger offer suggestions, but psychographics were updated');
        }
  

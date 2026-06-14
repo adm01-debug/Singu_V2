@@ -33,7 +33,7 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
       if (error) throw error;
       setSent(true);
       toast.success('Email de recuperação enviado! Verifique sua caixa de entrada.');
-    } catch (err) {
+    } catch {
       toast.error('Erro ao enviar email de recuperação.');
     } finally {
       setIsLoading(false);

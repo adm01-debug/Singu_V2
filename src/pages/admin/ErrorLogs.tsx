@@ -46,7 +46,7 @@ export default function ErrorLogsAdmin() {
     try {
       await clearLogs();
       toast.success('Logs excluídos com sucesso');
-    } catch (err) {
+    } catch {
       toast.error('Erro ao excluir logs');
     }
   };

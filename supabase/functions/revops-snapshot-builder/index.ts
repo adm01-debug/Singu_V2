@@ -30,7 +30,7 @@ Deno.serve(async (req: Request) => {
   try {
     const body = await req.json().catch(() => ({}));
     if (body?.user_id) targetUserId = body.user_id;
-  } catch (_) { /* noop */ }
+  } catch { /* noop */ }
 
   // Discover active users (those with mql_classifications or deal_forecasts)
   let userIds: string[] = [];

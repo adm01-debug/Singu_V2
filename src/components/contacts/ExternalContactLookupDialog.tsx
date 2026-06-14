@@ -29,7 +29,7 @@ export function ExternalContactLookupDialog({ open, onOpenChange }: { open: bool
 
       if (error) throw error;
       setResults(data || []);
-    } catch (error) {
+    } catch {
       toast.error('Falha ao buscar na base externa');
     } finally {
       setIsSearching(false);
@@ -50,7 +50,7 @@ export function ExternalContactLookupDialog({ open, onOpenChange }: { open: bool
       await createContact(contactToCreate as any);
       toast.success('Contato importado com sucesso!');
       onOpenChange(false);
-    } catch (error) {
+    } catch {
       toast.error('Erro ao importar contato');
     }
   };

@@ -187,7 +187,7 @@ Deno.serve(async (req) => {
       total_latency_ms: response.total_latency_ms,
       components,
     });
-  } catch (_) {
+  } catch {
     // Não bloqueia resposta se persistência falhar
   }
 

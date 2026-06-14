@@ -35,7 +35,7 @@ export function use2FA() {
       if (error) throw error;
       setState(s => ({ ...s, isEnrolling: false, factorId: data.id, qrUri: data.totp.uri }));
       return data;
-    } catch (err) {
+    } catch {
       toast.error('Erro ao configurar 2FA.');
       setState(s => ({ ...s, isEnrolling: false }));
       return null;

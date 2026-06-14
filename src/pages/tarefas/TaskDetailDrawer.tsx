@@ -116,7 +116,7 @@ export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
         },
       });
       onOpenChange(false);
-    } catch (error) {
+    } catch {
       // toast handled in hook
     }
   };
@@ -126,7 +126,7 @@ export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
     try {
       await deleteTask.mutateAsync(task.id);
       onOpenChange(false);
-    } catch (error) {
+    } catch {
       // toast handled in hook
     }
   };
