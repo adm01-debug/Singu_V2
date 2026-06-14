@@ -4,6 +4,7 @@
 // ==============================================
 
 import { AppreciationType, AppreciationSuggestion } from '@/types/carnegie';
+import type { DiscProfileKey } from '@/types/carnegie-extended';
 
 // ============================================
 // APPRECIATION TEMPLATES BY TYPE
@@ -197,7 +198,7 @@ export const APPRECIATION_TIMING = {
 // ============================================
 // APPRECIATION BY DISC PROFILE
 // ============================================
-export const APPRECIATION_BY_DISC: Record<'D' | 'I' | 'S' | 'C', {
+export const APPRECIATION_BY_DISC: Record<DiscProfileKey, {
   preferredTypes: AppreciationType[];
   toneGuidelines: string[];
   examples: string[];
@@ -369,7 +370,7 @@ export function getAppreciationTemplates(type: AppreciationType): string[] {
   return APPRECIATION_TEMPLATES[type]?.examples || [];
 }
 
-export function getAppreciationForDISC(discProfile: 'D' | 'I' | 'S' | 'C'): {
+export function getAppreciationForDISC(discProfile: DiscProfileKey): {
   preferredTypes: AppreciationType[];
   examples: string[];
 } {
@@ -382,7 +383,7 @@ export function getAppreciationForDISC(discProfile: 'D' | 'I' | 'S' | 'C'): {
 
 export function generateAppreciationSuggestion(
   contactName: string,
-  discProfile: 'D' | 'I' | 'S' | 'C',
+  discProfile: DiscProfileKey,
   daysSinceLast: number
 ): AppreciationSuggestion | null {
   const profile = APPRECIATION_BY_DISC[discProfile];

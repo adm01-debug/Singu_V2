@@ -1,13 +1,15 @@
 import { createContext, useContext, useCallback, useRef, useEffect, type ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+type NavigationDirection = 'forward' | 'back' | 'replace';
+
 interface NavigationStackContextType {
   /** Navigate back smartly: uses internal stack, deduplicates loops */
   goBack: (fallback?: string) => void;
   /** The previous route in the internal stack (or null) */
   previousPath: string | null;
-  /** Navigation direction: 'forward' | 'back' | 'replace' */
-  direction: 'forward' | 'back' | 'replace';
+  /** Navigation direction: NavigationDirection */
+  direction: NavigationDirection;
   /** Full internal stack for debugging */
   stack: string[];
 }
@@ -27,7 +29,7 @@ function loadStack(): string[] {
   }
 }
 
-function loadDirection(): 'forward' | 'back' | 'replace' {
+function loadDirection(): NavigationDirection {
   try {
     const stored = sessionStorage.getItem(DIRECTION_KEY);
     if (stored === 'back' || stored === 'replace') return stored;
@@ -45,7 +47,7 @@ function saveStack(stack: string[]) {
   }
 }
 
-function saveDirection(direction: 'forward' | 'back' | 'replace') {
+function saveDirection(direction: NavigationDirection) {
   try {
     sessionStorage.setItem(DIRECTION_KEY, direction);
   } catch {
@@ -57,7 +59,7 @@ export function NavigationStackProvider({ children }: { children: ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
   const stackRef = useRef<string[]>(loadStack());
-  const directionRef = useRef<'forward' | 'back' | 'replace'>(loadDirection());
+  const directionRef = useRef<NavigationDirection>(loadDirection());
   const isGoingBackRef = useRef(false);
 
   // Track route changes

@@ -2,9 +2,11 @@ import { useMemo } from 'react';
 import { Contact, Interaction } from '@/types';
 import { differenceInDays, subDays } from 'date-fns';
 
+export type HealthStatus = 'healthy' | 'warning' | 'critical';
+
 export interface PortfolioHealthMetrics {
   overallScore: number;
-  overallStatus: 'healthy' | 'warning' | 'critical';
+  overallStatus: HealthStatus;
   totalClients: number;
   activeClients: number;
   atRiskClients: number;
@@ -43,7 +45,7 @@ export interface ClientHealthSummary {
   contactName: string;
   companyName: string;
   healthScore: number;
-  status: 'healthy' | 'warning' | 'critical';
+  status: HealthStatus;
   lastContactDays: number;
   sentiment: string;
   trend: 'up' | 'down' | 'stable';
@@ -126,7 +128,7 @@ export function usePortfolioHealth(contacts: Contact[], interactions: Interactio
       healthScore = Math.max(0, Math.min(100, healthScore));
       
       // Determine status
-      let status: 'healthy' | 'warning' | 'critical' = 'healthy';
+      let status: HealthStatus = 'healthy';
       if (healthScore < 40 || contact.relationshipStage === 'at_risk' || contact.sentiment === 'negative') {
         status = 'critical';
       } else if (healthScore < 60 || lastContactDays > 30) {
@@ -170,7 +172,7 @@ export function usePortfolioHealth(contacts: Contact[], interactions: Interactio
       ? Math.round(clientHealths.reduce((acc, c) => acc + c.healthScore, 0) / totalClients)
       : 0;
     
-    let overallStatus: 'healthy' | 'warning' | 'critical' = 'healthy';
+    let overallStatus: HealthStatus = 'healthy';
     if (criticalClients.length > totalClients * 0.2 || overallScore < 40) {
       overallStatus = 'critical';
     } else if (warningClients.length + criticalClients.length > totalClients * 0.3 || overallScore < 60) {

@@ -6,6 +6,7 @@
 import { AllTriggerTypes } from '@/types/triggers-advanced';
 import { PersuasionScenario } from '@/types/triggers';
 import { BrainSystem, Neurochemical } from '@/types/neuromarketing';
+import type { DiscProfileKey } from '@/types/carnegie-extended';
 
 // ============================================
 // BUNDLE TYPE DEFINITION
@@ -18,7 +19,7 @@ export interface TriggerBundle {
   description: string;
   
   // Multi-framework targeting
-  discProfiles: ('D' | 'I' | 'S' | 'C')[];
+  discProfiles: DiscProfileKey[];
   vakProfiles: ('V' | 'A' | 'K')[];
   metaprograms: string[];
   
@@ -463,7 +464,7 @@ export function getBundlesForProfile(
   vakProfile?: string
 ): TriggerBundle[] {
   return TRIGGER_BUNDLES.filter(bundle => {
-    if (discProfile && !bundle.discProfiles.includes(discProfile as 'D' | 'I' | 'S' | 'C')) {
+    if (discProfile && !bundle.discProfiles.includes(discProfile as DiscProfileKey)) {
       return false;
     }
     if (vakProfile && !bundle.vakProfiles.includes(vakProfile as 'V' | 'A' | 'K')) {
@@ -485,7 +486,7 @@ export function getRecommendedBundle(
   const scenarioBundle = getBundleByScenario(scenario);
   if (scenarioBundle) {
     // Check if profile matches
-    if (discProfile && !scenarioBundle.discProfiles.includes(discProfile as 'D' | 'I' | 'S' | 'C')) {
+    if (discProfile && !scenarioBundle.discProfiles.includes(discProfile as DiscProfileKey)) {
       // Find alternative bundle for the profile
       const alternatives = getBundlesForProfile(discProfile, vakProfile);
       return alternatives[0] || scenarioBundle;

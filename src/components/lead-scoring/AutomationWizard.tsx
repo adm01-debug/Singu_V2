@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useUpsertAutomation, type ScoreAutomation, type AutomationTrigger, type AutomationAction } from '@/hooks/useScoreAutomations';
 import type { AutomationTemplate } from './automation-templates';
 
+type GradeTarget = 'A' | 'B' | 'C' | 'D';
+
 interface Props {
   open: boolean;
   onOpenChange: (v: boolean) => void;
@@ -21,7 +23,7 @@ export function AutomationWizard({ open, onOpenChange, initial }: Props) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [triggerType, setTriggerType] = useState<AutomationTrigger>('grade_reached');
-  const [gradeTarget, setGradeTarget] = useState<'A' | 'B' | 'C' | 'D'>('A');
+  const [gradeTarget, setGradeTarget] = useState<GradeTarget>('A');
   const [scoreTarget, setScoreTarget] = useState<number>(80);
   const [actionType, setActionType] = useState<AutomationAction>('notify');
   const [actionConfig, setActionConfig] = useState<Record<string, string>>({});
@@ -34,7 +36,7 @@ export function AutomationWizard({ open, onOpenChange, initial }: Props) {
       setName(initial.name);
       setDescription(('description' in initial ? initial.description : '') ?? '');
       setTriggerType(initial.trigger_type);
-      setGradeTarget((initial.grade_target as 'A' | 'B' | 'C' | 'D') ?? 'A');
+      setGradeTarget((initial.grade_target as GradeTarget) ?? 'A');
       setScoreTarget(initial.score_target ?? 80);
       setActionType(initial.action_type);
       setActionConfig(Object.fromEntries(
@@ -90,7 +92,7 @@ export function AutomationWizard({ open, onOpenChange, initial }: Props) {
             {isGradeBased ? (
               <div>
                 <Label>Grade alvo</Label>
-                <Select value={gradeTarget} onValueChange={(v) => setGradeTarget(v as 'A' | 'B' | 'C' | 'D')}>
+                <Select value={gradeTarget} onValueChange={(v) => setGradeTarget(v as GradeTarget)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {(['A','B','C','D'] as const).map(g => <SelectItem key={g} value={g}>Grade {g}</SelectItem>)}

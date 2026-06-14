@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useConversationAnalyses, type ConversationAnalysis, type SentimentOverall } from "./useConversationIntel";
 
 export type Period = "7d" | "30d" | "90d";
+export type TrendDirection = "up" | "stable" | "down";
 
 export interface ThemeAggregate {
   label: string;
@@ -43,7 +44,7 @@ export interface SentimentTrendSummary {
   bestWeek: { week: string; positivePct: number } | null;
   worstWeek: { week: string; positivePct: number } | null;
   deltaPct: number;
-  direction: "up" | "stable" | "down";
+  direction: TrendDirection;
   totalInteractions: number;
 }
 
@@ -62,7 +63,7 @@ export interface ObjectionsTrendPoint {
 export interface ObjectionsTrendSummary {
   /** Variação em pp do riskPct entre 2ª e 1ª metade do período. */
   deltaRiskPp: number;
-  direction: "up" | "stable" | "down";
+  direction: TrendDirection;
   peakWeek: { week: string; critical: number } | null;
   lowWeek: { week: string; critical: number } | null;
   totalCritical: number;
@@ -169,7 +170,7 @@ export function useInteractionsInsights(period: Period = "30d") {
       const avg = (arr: SentimentTrendPoint[]) =>
         arr.length ? arr.reduce((a, p) => a + p.positivePct, 0) / arr.length : 0;
       const delta = Math.round(avg(secondHalf) - avg(firstHalf));
-      const direction: "up" | "stable" | "down" = delta >= 5 ? "up" : delta <= -5 ? "down" : "stable";
+      const direction: TrendDirection = delta >= 5 ? "up" : delta <= -5 ? "down" : "stable";
       sentimentTrendSummary = {
         bestWeek: { week: best.week, positivePct: best.positivePct },
         worstWeek: { week: worst.week, positivePct: worst.positivePct },
@@ -267,7 +268,7 @@ export function useInteractionsInsights(period: Period = "30d") {
         totA += p.attention;
       }
       let delta = 0;
-      let direction: "up" | "stable" | "down" = "stable";
+      let direction: TrendDirection = "stable";
       if (objectionsTrend.length >= 2) {
         const mid = Math.floor(objectionsTrend.length / 2);
         const first = objectionsTrend.slice(0, mid);

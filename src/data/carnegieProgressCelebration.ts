@@ -4,6 +4,7 @@
 // ==============================================
 
 import { ProgressCelebration, ProgressType } from '@/types/carnegie';
+import type { DiscProfileKey } from '@/types/carnegie-extended';
 
 export const PROGRESS_CELEBRATIONS: ProgressCelebration[] = [
   // ============================================
@@ -347,7 +348,7 @@ export const PROGRESS_DETECTION_PATTERNS: Record<ProgressType, string[]> = {
 // ============================================
 // CELEBRATION BY DISC
 // ============================================
-export const CELEBRATION_BY_DISC: Record<'D' | 'I' | 'S' | 'C', {
+export const CELEBRATION_BY_DISC: Record<DiscProfileKey, {
   preferredIntensity: 'micro' | 'standard' | 'major';
   style: string;
   examples: string[];
@@ -437,7 +438,7 @@ export function detectProgressType(text: string): ProgressType | null {
 
 export function getCelebrationForDISC(
   type: ProgressType,
-  discProfile: 'D' | 'I' | 'S' | 'C'
+  discProfile: DiscProfileKey
 ): { celebration: ProgressCelebration; adaptedScript: string } | null {
   const celebration = getCelebrationTemplate(type);
   if (!celebration) return null;
@@ -455,7 +456,7 @@ export function getCelebrationForDISC(
 
 export function selectCelebrationIntensity(
   progressSignificance: 'small' | 'medium' | 'large',
-  discProfile: 'D' | 'I' | 'S' | 'C'
+  discProfile: DiscProfileKey
 ): 'micro' | 'standard' | 'major' {
   const baseIntensity = 
     progressSignificance === 'small' ? 0 :

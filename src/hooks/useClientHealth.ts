@@ -2,10 +2,12 @@ import { useMemo } from 'react';
 import { Contact, Interaction } from '@/types';
 import { differenceInDays, subDays } from 'date-fns';
 
+export type HealthStatus = 'healthy' | 'warning' | 'critical';
+
 export interface HealthIndicator {
   name: string;
   score: number; // 0-100
-  status: 'healthy' | 'warning' | 'critical';
+  status: HealthStatus;
   description: string;
   trend: 'up' | 'down' | 'stable';
   details: string;
@@ -13,7 +15,7 @@ export interface HealthIndicator {
 
 export interface ClientHealth {
   overallScore: number; // 0-100
-  overallStatus: 'healthy' | 'warning' | 'critical';
+  overallStatus: HealthStatus;
   indicators: HealthIndicator[];
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   riskFactors: string[];
@@ -68,7 +70,7 @@ export function useClientHealth(contact: Contact | null, interactions: Interacti
 
     // 1. Contact Recency
     let recencyScore = 100;
-    let recencyStatus: 'healthy' | 'warning' | 'critical' = 'healthy';
+    let recencyStatus: HealthStatus = 'healthy';
     if (lastContactDays > 60) { recencyScore = 20; recencyStatus = 'critical'; }
     else if (lastContactDays > 30) { recencyScore = 50; recencyStatus = 'warning'; }
     else if (lastContactDays > 14) { recencyScore = 75; }
@@ -86,7 +88,7 @@ export function useClientHealth(contact: Contact | null, interactions: Interacti
 
     // 2. Contact Frequency
     const frequencyScore = Math.min(100, contactFrequency * 20);
-    const frequencyStatus: 'healthy' | 'warning' | 'critical' = 
+    const frequencyStatus: HealthStatus = 
       contactFrequency >= 4 ? 'healthy' : contactFrequency >= 2 ? 'warning' : 'critical';
     
     indicators.push({
@@ -172,7 +174,7 @@ export function useClientHealth(contact: Contact | null, interactions: Interacti
     // Determine overall status
     const criticalCount = indicators.filter(i => i.status === 'critical').length;
     const warningCount = indicators.filter(i => i.status === 'warning').length;
-    let overallStatus: 'healthy' | 'warning' | 'critical' = 'healthy';
+    let overallStatus: HealthStatus = 'healthy';
     if (criticalCount >= 2 || overallScore < 40) overallStatus = 'critical';
     else if (criticalCount >= 1 || warningCount >= 2 || overallScore < 60) overallStatus = 'warning';
 

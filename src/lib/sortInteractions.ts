@@ -1,9 +1,11 @@
 export type SortKey = 'recent' | 'oldest' | 'relevance' | 'entity' | 'channel';
 
+type DateLike = string | Date | null;
+
 interface SortableItem {
-  date?: string | Date | null;
-  created_at?: string | Date | null;
-  data_interacao?: string | Date | null;
+  date?: DateLike;
+  created_at?: DateLike;
+  data_interacao?: DateLike;
   title?: string | null;
   content?: string | null;
   tags?: string[] | null;

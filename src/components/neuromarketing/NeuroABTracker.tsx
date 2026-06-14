@@ -24,6 +24,8 @@ import { BrainSystem, PrimalStimulus, Neurochemical } from '@/types/neuromarketi
 import { BRAIN_SYSTEM_INFO, PRIMAL_STIMULUS_INFO, NEUROCHEMICAL_INFO } from '@/data/neuromarketingData';
 import { cn } from '@/lib/utils';
 
+type TrendDirection = 'up' | 'down' | 'stable';
+
 interface ApproachResult {
   id: string;
   approachType: 'brain' | 'stimulus' | 'chemical';
@@ -53,7 +55,7 @@ interface ApproachStats {
   neutralCount: number;
   failureCount: number;
   successRate: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: TrendDirection;
   avgConversionValue: number;
 }
 
@@ -87,7 +89,7 @@ const NeuroABTracker = ({
         const previous = brainResults.slice(-6, -3);
         const recentSuccess = recent.filter(r => r.outcome === 'success').length / Math.max(1, recent.length);
         const prevSuccess = previous.filter(r => r.outcome === 'success').length / Math.max(1, previous.length);
-        const trend: 'up' | 'down' | 'stable' = recentSuccess > prevSuccess ? 'up' : recentSuccess < prevSuccess ? 'down' : 'stable';
+        const trend: TrendDirection = recentSuccess > prevSuccess ? 'up' : recentSuccess < prevSuccess ? 'down' : 'stable';
 
         const avgConversionValue = brainResults
           .filter(r => r.conversionValue)
@@ -126,7 +128,7 @@ const NeuroABTracker = ({
         const previous = stimulusResults.slice(-6, -3);
         const recentSuccess = recent.filter(r => r.outcome === 'success').length / Math.max(1, recent.length);
         const prevSuccess = previous.filter(r => r.outcome === 'success').length / Math.max(1, previous.length);
-        const trend: 'up' | 'down' | 'stable' = recentSuccess > prevSuccess ? 'up' : recentSuccess < prevSuccess ? 'down' : 'stable';
+        const trend: TrendDirection = recentSuccess > prevSuccess ? 'up' : recentSuccess < prevSuccess ? 'down' : 'stable';
 
         const avgConversionValue = stimulusResults
           .filter(r => r.conversionValue)
@@ -165,7 +167,7 @@ const NeuroABTracker = ({
         const previous = chemicalResults.slice(-6, -3);
         const recentSuccess = recent.filter(r => r.outcome === 'success').length / Math.max(1, recent.length);
         const prevSuccess = previous.filter(r => r.outcome === 'success').length / Math.max(1, previous.length);
-        const trend: 'up' | 'down' | 'stable' = recentSuccess > prevSuccess ? 'up' : recentSuccess < prevSuccess ? 'down' : 'stable';
+        const trend: TrendDirection = recentSuccess > prevSuccess ? 'up' : recentSuccess < prevSuccess ? 'down' : 'stable';
 
         const avgConversionValue = chemicalResults
           .filter(r => r.conversionValue)

@@ -7,6 +7,8 @@ import { useNeuromarketing } from '@/hooks/useNeuromarketing';
 import { BrainSystem, Neurochemical, PrimalStimulus } from '@/types/neuromarketing';
 import { NeuroPortfolioTabs } from './neuro-portfolio/NeuroPortfolioTabs';
 
+type DiscProfile = 'D' | 'I' | 'S' | 'C';
+
 const NeuroPortfolioDashboard = () => {
   const { contacts } = useContacts();
   const { BRAIN_SYSTEM_INFO, NEUROCHEMICAL_INFO, PRIMAL_STIMULUS_INFO, DISC_BRAIN_CORRELATION } = useNeuromarketing();
@@ -14,7 +16,7 @@ const NeuroPortfolioDashboard = () => {
 
   const brainDistribution = useMemo(() => {
     const dist: Record<BrainSystem, { count: number; contacts: string[] }> = { reptilian: { count: 0, contacts: [] }, limbic: { count: 0, contacts: [] }, neocortex: { count: 0, contacts: [] } };
-    contacts.forEach(c => { const b = c.behavior as { discProfile?: string } | null; const d = b?.discProfile as 'D' | 'I' | 'S' | 'C' | null; if (d && DISC_BRAIN_CORRELATION[d]) { const bs = DISC_BRAIN_CORRELATION[d].primaryBrain; dist[bs].count++; dist[bs].contacts.push(`${c.first_name} ${c.last_name}`); } });
+    contacts.forEach(c => { const b = c.behavior as { discProfile?: string } | null; const d = b?.discProfile as DiscProfile | null; if (d && DISC_BRAIN_CORRELATION[d]) { const bs = DISC_BRAIN_CORRELATION[d].primaryBrain; dist[bs].count++; dist[bs].contacts.push(`${c.first_name} ${c.last_name}`); } });
     return dist;
   }, [contacts, DISC_BRAIN_CORRELATION]);
 
@@ -26,13 +28,13 @@ const NeuroPortfolioDashboard = () => {
 
   const neurochemicalBarData = useMemo(() => {
     const dist: Record<Neurochemical, number> = { dopamine: 0, oxytocin: 0, cortisol: 0, serotonin: 0, endorphin: 0, adrenaline: 0 };
-    contacts.forEach(c => { const b = c.behavior as { discProfile?: string } | null; const d = b?.discProfile as 'D' | 'I' | 'S' | 'C' | null; if (d && DISC_BRAIN_CORRELATION[d]) dist[DISC_BRAIN_CORRELATION[d].dominantNeurochemical]++; });
+    contacts.forEach(c => { const b = c.behavior as { discProfile?: string } | null; const d = b?.discProfile as DiscProfile | null; if (d && DISC_BRAIN_CORRELATION[d]) dist[DISC_BRAIN_CORRELATION[d].dominantNeurochemical]++; });
     return Object.entries(dist).map(([chem, count]) => ({ name: NEUROCHEMICAL_INFO[chem as Neurochemical].namePt, count, icon: NEUROCHEMICAL_INFO[chem as Neurochemical].icon })).sort((a, b) => b.count - a.count);
   }, [contacts, DISC_BRAIN_CORRELATION, NEUROCHEMICAL_INFO]);
 
   const portfolioStimuli = useMemo(() => {
     const sc: Record<PrimalStimulus, number> = { self_centered: 0, contrast: 0, tangible: 0, memorable: 0, visual: 0, emotional: 0 };
-    contacts.forEach(c => { const b = c.behavior as { discProfile?: string } | null; const d = b?.discProfile as 'D' | 'I' | 'S' | 'C' | null; if (d && DISC_BRAIN_CORRELATION[d]) DISC_BRAIN_CORRELATION[d].responsiveStimuli.forEach(s => { sc[s]++; }); });
+    contacts.forEach(c => { const b = c.behavior as { discProfile?: string } | null; const d = b?.discProfile as DiscProfile | null; if (d && DISC_BRAIN_CORRELATION[d]) DISC_BRAIN_CORRELATION[d].responsiveStimuli.forEach(s => { sc[s]++; }); });
     return Object.entries(sc).map(([stim, count]) => ({ stimulus: stim, count, info: PRIMAL_STIMULUS_INFO[stim as PrimalStimulus] })).sort((a, b) => b.count - a.count);
   }, [contacts, DISC_BRAIN_CORRELATION, PRIMAL_STIMULUS_INFO]);
 
