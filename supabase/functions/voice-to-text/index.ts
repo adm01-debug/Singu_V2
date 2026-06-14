@@ -57,7 +57,7 @@ function processBase64Chunks(base64String: string, chunkSize = 32768) {
      );
  
      let audioData = audio;
-     let fileName = 'audio.mp3';
+     const fileName = 'audio.mp3';
  
      // If whatsappMessageId is provided, we need to fetch the message content
      // Note: In real production, this would involve fetching from Evolution API if not cached

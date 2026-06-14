@@ -145,7 +145,7 @@ Deno.serve(async (req) => {
        const reminderDays = event.reminder_days_before || 7;
        
        // Calculate next occurrence if recurring
-       let nextDate = new Date(eventDate);
+       const nextDate = new Date(eventDate);
        if (event.recurring) {
          nextDate.setFullYear(today.getFullYear());
          if (nextDate < today) {

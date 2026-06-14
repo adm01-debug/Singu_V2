@@ -49,7 +49,7 @@ export function useCopywritingAdvanced(contact?: Contact) {
       // Count vowel clusters as potential syllables
       // Handling common Portuguese diphthongs and triphthongs
       let count = 0;
-      let vowels = "aeiouáéíóúâêîôûãõàèìòù";
+      const vowels = "aeiouáéíóúâêîôûãõàèìòù";
       let isPrevVowel = false;
       
       for (let i = 0; i < w.length; i++) {
@@ -442,7 +442,7 @@ export function useCopywritingAdvanced(contact?: Contact) {
     const previews: ChannelPreview[] = [];
 
     (Object.entries(CHANNEL_LIMITS) as [keyof typeof CHANNEL_LIMITS, typeof CHANNEL_LIMITS[keyof typeof CHANNEL_LIMITS]][]).forEach(([channel, limits]) => {
-      let formattedText = text;
+      const formattedText = text;
       const suggestions: string[] = [];
 
       // WhatsApp formatting

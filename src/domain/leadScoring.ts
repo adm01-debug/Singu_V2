@@ -93,7 +93,7 @@ function scoreRecency(lastDays: number | null, weight: number): ProntidaoFactor 
   if (lastDays == null) {
     return { score: 30, weight, label: 'Recência', status: 'unknown', detail: 'Sem registro de contato' };
   }
-  let score = 5; let status: ProntidaoStatus = 'bad'; let detail = `Há ${lastDays} dias`;
+  let score = 5; let status: ProntidaoStatus = 'bad'; const detail = `Há ${lastDays} dias`;
   if (lastDays <= 3) { score = 100; status = 'good'; }
   else if (lastDays <= 7) { score = 80; status = 'good'; }
   else if (lastDays <= 14) { score = 60; status = 'warn'; }

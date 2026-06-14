@@ -125,7 +125,7 @@ export function useEasterEggs() {
   // Developer mode
   const devAction = useCallback(() => {
     if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console -- intentional styled dev-mode console output
+       
       console.log('%c🛠️ Developer Mode Activated!\n%cWelcome, fellow developer! 👨‍💻',
         'font-size: 24px; color: #00ff00;', 'font-size: 16px; color: #00ccff;');
     }

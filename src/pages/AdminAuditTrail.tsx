@@ -86,7 +86,7 @@ export default function AdminAuditTrail() {
       if (auditError) throw auditError;
 
       // Query external sync logs if relevant
-      let syncData: any[] = [];
+      const syncData: any[] = [];
       if (actionFilter === 'all' || actionFilter === 'EXTERNAL_SYNC') {
         // Query some other table that logs external syncs or just return auditData
         // For now, we assume external_sync is a type of action in audit_log too

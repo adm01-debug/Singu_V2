@@ -56,8 +56,8 @@ Deno.serve(async (req) => {
           let message = '';
           let subject = '';
           let reminderId = '';
-          let recipientPhone = user.phone;
-          let recipientEmail = user.email;
+          const recipientPhone = user.phone;
+          const recipientEmail = user.email;
 
           if (isOverdue && settings.escalation_enabled) {
             reminderId = `nba-esc-${action.id}`;

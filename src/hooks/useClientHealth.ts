@@ -85,8 +85,8 @@ export function useClientHealth(contact: Contact | null, interactions: Interacti
     });
 
     // 2. Contact Frequency
-    let frequencyScore = Math.min(100, contactFrequency * 20);
-    let frequencyStatus: 'healthy' | 'warning' | 'critical' = 
+    const frequencyScore = Math.min(100, contactFrequency * 20);
+    const frequencyStatus: 'healthy' | 'warning' | 'critical' = 
       contactFrequency >= 4 ? 'healthy' : contactFrequency >= 2 ? 'warning' : 'critical';
     
     indicators.push({

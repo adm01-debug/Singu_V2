@@ -103,7 +103,7 @@ const Empresas = () => {
   const clearSearch = useCallback(() => { setLocalSearch(''); triggerSearch(''); }, [triggerSearch]);
 
   const filteredAndSortedCompanies = useMemo(() => {
-    let result = companies.filter(company => {
+    const result = companies.filter(company => {
       for (const [key, values] of Object.entries(activeFilters)) {
         if (values.length === 0) continue;
         const companyValue = company[key as keyof Company];
