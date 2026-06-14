@@ -33,7 +33,7 @@ interface Props {
    if (loadingBase) return null;
 
    const hasData = profiles.length > 0 || behaviorAnalysis || lifeEvents.length > 0 || (historyInsights && historyInsights.length > 0);
-  if (!hasData) return null;
+  if (!hasData) { return null; }
 
     return (
       <div className="space-y-4" id="social-intelligence-section">

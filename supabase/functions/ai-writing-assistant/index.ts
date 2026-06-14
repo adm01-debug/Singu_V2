@@ -145,10 +145,10 @@ Deno.serve(async (req) => {
       : 'Sem interações recentes registradas.';
 
     const personalContext: string[] = [];
-    if (contact.hobbies?.length) personalContext.push(`Hobbies: ${contact.hobbies.join(', ')}`);
-    if (contact.interests?.length) personalContext.push(`Interesses: ${contact.interests.join(', ')}`);
-    if (contact.primaryMotivation) personalContext.push(`Motivação principal: ${contact.primaryMotivation}`);
-    if (contact.primaryFear) personalContext.push(`Preocupação/Medo: ${contact.primaryFear}`);
+    if (contact.hobbies?.length) { personalContext.push(`Hobbies: ${contact.hobbies.join(', ')}`); }
+    if (contact.interests?.length) { personalContext.push(`Interesses: ${contact.interests.join(', ')}`); }
+    if (contact.primaryMotivation) { personalContext.push(`Motivação principal: ${contact.primaryMotivation}`); }
+    if (contact.primaryFear) { personalContext.push(`Preocupação/Medo: ${contact.primaryFear}`); }
 
      const systemPrompt = `Você é um Copywriter Sênior e Estrategista de Vendas de elite, especialista em neurovendas e persuasão.
  Sua função é gerar 3 variações de mensagens personalizadas, utilizando técnicas avançadas de copywriting e frameworks de persuasão.

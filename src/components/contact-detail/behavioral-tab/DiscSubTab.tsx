@@ -29,7 +29,7 @@ export function DiscSubTab({ contactId }: Props) {
 
    const { analyzing, analyzeLatestInteractions } = useDISCAutoAnalysis();
 
-  if (isLoading) return <div>Carregando...</div>;
+  if (isLoading) { return <div>Carregando...</div>; }
 
    return (
      <div className="space-y-6">

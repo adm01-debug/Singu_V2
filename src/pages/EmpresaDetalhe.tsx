@@ -157,7 +157,7 @@ const EmpresaDetalhe = () => {
   };
 
   if (loading) return (<AppLayout><EntityDetailPageSkeleton /></AppLayout>);
-  if (!company) return (<AppLayout><div className="p-6 text-center"><Building2 className="w-16 h-16 text-muted-foreground mx-auto mb-4" /><h2 className="text-xl font-semibold mb-2">Empresa não encontrada</h2><p className="text-muted-foreground mb-4">A empresa que você procura não existe ou foi removida.</p><Link to="/empresas"><Button>Voltar para Empresas</Button></Link></div></AppLayout>);
+  if (!company) { return (<AppLayout><div className="p-6 text-center"><Building2 className="w-16 h-16 text-muted-foreground mx-auto mb-4" /><h2 className="text-xl font-semibold mb-2">Empresa não encontrada</h2><p className="text-muted-foreground mb-4">A empresa que você procura não existe ou foi removida.</p><Link to="/empresas"><Button>Voltar para Empresas</Button></Link></div></AppLayout>); }
 
    const healthStatus = (company.financial_health as HealthStatus) || 'unknown';
    const companyName = company.name || 'Empresa';

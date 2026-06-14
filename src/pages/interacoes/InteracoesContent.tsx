@@ -201,7 +201,10 @@ interface Props {
       for (const [key, values] of Object.entries(activeFilters)) {
         if (values.length === 0) continue;
         const val = interaction[key as keyof Interaction];
-        if (key === 'follow_up_required') { if (!values.includes(String(val))) return false; continue; }
+        if (key === 'follow_up_required') {
+          if (!values.includes(String(val))) { return false; }
+          continue;
+        }
         if (val === null || val === undefined) return false;
         if (!values.includes(String(val))) return false;
       }

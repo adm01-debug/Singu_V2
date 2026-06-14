@@ -16,7 +16,7 @@ Deno.serve(async (req) => {
 
   try {
     const { contactId } = await req.json();
-    if (!contactId) return jsonError("contactId is required", 400);
+    if (!contactId) { return jsonError("contactId is required", 400); }
 
     // 1. Gather Rich Context
      const [contactRes, interactionsRes, , neuroRes, analyticalRes, whatsappRes] = await Promise.all([

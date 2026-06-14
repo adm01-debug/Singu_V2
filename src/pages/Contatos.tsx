@@ -202,7 +202,11 @@ const Contatos = () => {
 
   useKeyboardShortcutsEnhanced();
 
-  const companyNameMap = useMemo(() => { const map = new Map<string, string>(); for (const c of companies) map.set(c.id, c.name); return map; }, [companies]);
+  const companyNameMap = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const c of companies) { map.set(c.id, c.name); }
+    return map;
+  }, [companies]);
   const lastInteractionMap = useMemo(() => { const map = new Map<string, string>(); for (const i of interactions) { const existing = map.get(i.contact_id); if (!existing || i.created_at > existing) map.set(i.contact_id, i.created_at); } return map; }, [interactions]);
   const getCompanyName = useCallback((companyId: string | null) => companyId ? companyNameMap.get(companyId) || null : null, [companyNameMap]);
   const getLastInteractionDate = useCallback((contactId: string): string | null => lastInteractionMap.get(contactId) || null, [lastInteractionMap]);
@@ -249,12 +253,22 @@ const Contatos = () => {
 
   const handleSelect = (id: string, selected: boolean) => {
     if (id === '__clear__') { setSelectedIds(new Set()); return; }
-    setSelectedIds(prev => { const next = new Set(prev); if (selected) next.add(id); else next.delete(id); return next; });
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (selected) { next.add(id); } else { next.delete(id); }
+      return next;
+    });
   };
 
   const handleSelectAll = () => { setSelectedIds(selectedIds.size === filteredAndSortedContacts.length ? new Set() : new Set(filteredAndSortedContacts.map(c => c.id))); };
 
-  const handleBulkDelete = async (ids: string[]) => { for (const id of ids) await deleteContact(id); setSelectedIds(new Set()); setSelectionMode(false); accessibleToast.success(`${ids.length} contato${ids.length > 1 ? 's' : ''} excluído${ids.length > 1 ? 's' : ''}`); };
+  const handleBulkDelete = async (ids: string[]) => {
+    for (const id of ids) { await deleteContact(id); }
+    setSelectedIds(new Set());
+    setSelectionMode(false);
+    const plural = ids.length > 1 ? 's' : '';
+    accessibleToast.success(`${ids.length} contato${plural} excluído${plural}`);
+  };
   const handleBulkAddTag = async (ids: string[], tag: string) => { for (const id of ids) { const contact = contacts.find(c => c.id === id); if (contact) { const currentTags = contact.tags || []; if (!currentTags.includes(tag)) await updateContact(id, { tags: [...currentTags, tag] }); } } setSelectedIds(new Set()); accessibleToast.success(`Tag "${tag}" adicionada a ${ids.length} contato${ids.length > 1 ? 's' : ''}`); };
   const handleBulkUpdateStage = async (ids: string[], stage: any) => { for (const id of ids) { await updateContact(id, { relationship_stage: stage }); } setSelectedIds(new Set()); accessibleToast.success(`Estágio atualizado para ${ids.length} contato${ids.length > 1 ? 's' : ''}`); };
 

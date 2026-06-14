@@ -44,16 +44,16 @@
      const readability = Math.min(100, Math.max(0, 100 - (avgWordsPerSentence * 2)));
  
      const triggersFound = [];
-     if (text.toLowerCase().includes('agora')) triggersFound.push('Urgência');
-     if (text.toLowerCase().includes('exclusivo')) triggersFound.push('Exclusividade');
-     if (text.toLowerCase().includes('garantido')) triggersFound.push('Segurança');
-     if (text.toLowerCase().includes('você')) triggersFound.push('Personalização');
-     if (text.toLowerCase().includes('limitado')) triggersFound.push('Escassez');
+     if (text.toLowerCase().includes('agora')) { triggersFound.push('Urgência'); }
+     if (text.toLowerCase().includes('exclusivo')) { triggersFound.push('Exclusividade'); }
+     if (text.toLowerCase().includes('garantido')) { triggersFound.push('Segurança'); }
+     if (text.toLowerCase().includes('você')) { triggersFound.push('Personalização'); }
+     if (text.toLowerCase().includes('limitado')) { triggersFound.push('Escassez'); }
  
       const tips: { text: string; severity: 'warning' | 'info' | 'success' }[] = [];
-      if (avgWordsPerSentence > 20) tips.push({ text: 'Sentenças longas detectadas (Média: ' + Math.round(avgWordsPerSentence) + ' palavras). Tente encurtar para melhor fluidez.', severity: 'warning' });
-      if (triggersFound.length < 2) tips.push({ text: 'Baixa densidade de gatilhos mentais. Adicione elementos de Escassez ou Prova Social.', severity: 'info' });
-       if (readability < 60) tips.push({ text: 'Texto com alta barreira cognitiva (Score: ' + Math.round(readability) + '). Use vocabulário mais acessível.', severity: 'warning' });
+      if (avgWordsPerSentence > 20) { tips.push({ text: 'Sentenças longas detectadas (Média: ' + Math.round(avgWordsPerSentence) + ' palavras). Tente encurtar para melhor fluidez.', severity: 'warning' }); }
+      if (triggersFound.length < 2) { tips.push({ text: 'Baixa densidade de gatilhos mentais. Adicione elementos de Escassez ou Prova Social.', severity: 'info' }); }
+      if (readability < 60) { tips.push({ text: 'Texto com alta barreira cognitiva (Score: ' + Math.round(readability) + '). Use vocabulário mais acessível.', severity: 'warning' }); }
  
        // Hero's Journey detection
        const hasHero = text.toLowerCase().includes('imagine') || text.toLowerCase().includes('conheça') || text.toLowerCase().includes('história');

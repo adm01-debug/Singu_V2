@@ -220,7 +220,11 @@ export function ContatosContent(props: Props) {
             {viewMode === 'list' && (
               filteredAndSortedContacts.length > 50 ? (
                 <VirtualList rowCount={filteredAndSortedContacts.length} rowHeight={88} rowProps={{ contacts: filteredAndSortedContacts, getCompanyName, getLastInteractionDate, selectedIds, selectedIndex, selectionMode, handleSelect: onSelect, setEditingContact: onSetEditingContact, setDeletingContact: onSetDeletingContact, updateContact }} style={{ height: Math.min(filteredAndSortedContacts.length * 88, 600) }}
-                  rowComponent={({ index, style, ...rp }) => { const c = rp.contacts[index]; if (!c) return null; return (<div style={style} className="pb-2"><ContactCardWithContext contact={c} companyName={rp.getCompanyName(c.company_id)} lastInteraction={rp.getLastInteractionDate(c.id)} index={index} isSelected={rp.selectedIds.has(c.id)} isHighlighted={rp.selectedIndex === index} selectionMode={rp.selectionMode} onSelect={rp.handleSelect} onEdit={rp.setEditingContact} onDelete={rp.setDeletingContact} onUpdate={rp.updateContact} viewMode="list" /></div>); }} />
+                  rowComponent={({ index, style, ...rp }) => {
+                    const c = rp.contacts[index];
+                    if (!c) { return null; }
+                    return (<div style={style} className="pb-2"><ContactCardWithContext contact={c} companyName={rp.getCompanyName(c.company_id)} lastInteraction={rp.getLastInteractionDate(c.id)} index={index} isSelected={rp.selectedIds.has(c.id)} isHighlighted={rp.selectedIndex === index} selectionMode={rp.selectionMode} onSelect={rp.handleSelect} onEdit={rp.setEditingContact} onDelete={rp.setDeletingContact} onUpdate={rp.updateContact} viewMode="list" /></div>);
+                  }} />
               ) : (
                 <div className="space-y-2">
                   {filteredAndSortedContacts.map((contact, index) => (

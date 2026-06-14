@@ -76,7 +76,12 @@ const Calendario = () => {
 
   const followUpsByDate = useMemo(() => {
     const grouped: Record<string, FollowUp[]> = {};
-    followUps.forEach(f => { if (f.follow_up_date) { if (!grouped[f.follow_up_date]) grouped[f.follow_up_date] = []; grouped[f.follow_up_date].push(f); } });
+    followUps.forEach(f => {
+      if (f.follow_up_date) {
+        if (!grouped[f.follow_up_date]) { grouped[f.follow_up_date] = []; }
+        grouped[f.follow_up_date].push(f);
+      }
+    });
     return grouped;
   }, [followUps]);
 

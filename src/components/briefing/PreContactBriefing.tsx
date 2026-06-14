@@ -24,7 +24,13 @@ export function PreContactBriefing({ className, compact = false }: PreContactBri
   const [copiedText, setCopiedText] = useState<string | null>(null);
 
   const handleCopy = (text: string, id: string) => { navigator.clipboard.writeText(text); setCopiedText(id); setTimeout(() => setCopiedText(null), 2000); };
-  const toggleSection = (section: string) => { setExpandedSections(prev => { const next = new Set(prev); if (next.has(section)) next.delete(section); else next.add(section); return next; }); };
+  const toggleSection = (section: string) => {
+    setExpandedSections(prev => {
+      const next = new Set(prev);
+      if (next.has(section)) { next.delete(section); } else { next.add(section); }
+      return next;
+    });
+  };
 
   if (loading || (upcomingBriefings.length === 0 && !activeBriefing)) return null;
 

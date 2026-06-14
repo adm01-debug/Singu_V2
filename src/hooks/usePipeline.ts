@@ -175,7 +175,7 @@ export function useMoveDeal() {
          p_new_stage: newStageId,
          p_new_probability: probability
       });
-      if (error) throw error;
+      if (error) { throw error; }
        const result = data as any;
        if (result && result.success === false) {
          throw new Error(result.error || 'Failed to move deal');

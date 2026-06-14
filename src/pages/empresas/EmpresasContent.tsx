@@ -147,7 +147,10 @@ export function EmpresasContent(props: Props) {
               {(hasGroups ? groups : [{ name: '', companies: visibleCompanies }]).map((group) => {
                 const expanded = isGroupExpanded(group.name);
                 let indexOffset = 0;
-                for (const g of groups) { if (g.name === group.name) break; indexOffset += g.companies.length; }
+                for (const g of groups) {
+                  if (g.name === group.name) break;
+                  indexOffset += g.companies.length;
+                }
                 return (
                   <div key={group.name || '__ungrouped'}>
                     {group.name && <GroupHeader name={group.name} count={group.companies.length} isExpanded={expanded} onToggle={() => toggleGroup(group.name)} />}

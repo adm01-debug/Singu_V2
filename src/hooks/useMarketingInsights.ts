@@ -58,8 +58,8 @@
          .select('id, contact_behavior(disc_primary, vak_primary, motivation_primary)')
          .eq('user_id', user.id);
  
-       if (error) throw error;
- 
+       if (error) { throw error; }
+
         const stats = (data || []).reduce((acc: any, curr: any) => {
           const behavior = curr.contact_behavior?.[0];
           if (behavior?.disc_primary) acc.disc[behavior.disc_primary] = (acc.disc[behavior.disc_primary] || 0) + 1;

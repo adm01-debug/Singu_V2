@@ -33,7 +33,7 @@ export function WhatsAppDashboard({ contactId }: Props) {
   if (loading) return null;
 
   const hasData = instances.length > 0 || messages.length > 0 || kpis;
-  if (!hasData) return null;
+  if (!hasData) { return null; }
 
    return (
      <div className="space-y-4 animate-in fade-in duration-500">

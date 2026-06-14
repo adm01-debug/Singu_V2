@@ -40,7 +40,11 @@ export function InsightsContent({ insights, contacts, loading, generating, searc
   const categories = Object.keys(categoryLabels);
 
   const filteredInsights = useMemo(() => fuzzyResults.filter(i => !selectedCategory || i.category === selectedCategory), [fuzzyResults, selectedCategory]);
-  const getContactName = (contactId?: string) => { if (!contactId) return null; const c = contacts.find(ct => ct.id === contactId); return c ? `${c.first_name} ${c.last_name}` : null; };
+  const getContactName = (contactId?: string) => {
+    if (!contactId) return null;
+    const c = contacts.find(ct => ct.id === contactId);
+    return c ? `${c.first_name} ${c.last_name}` : null;
+  };
 
   return (
     <div className="space-y-6">

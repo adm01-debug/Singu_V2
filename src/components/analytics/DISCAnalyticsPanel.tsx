@@ -43,7 +43,10 @@ const DISCAnalyticsPanel = () => {
 
       const profileCounts: Record<string, number> = { D: 0, I: 0, S: 0, C: 0 };
       let totalConfidence = 0, confidenceCount = 0;
-      mappedContacts.forEach(c => { if (c.discProfile && c.discProfile in profileCounts) profileCounts[c.discProfile]++; if (c.discConfidence) { totalConfidence += c.discConfidence; confidenceCount++; } });
+      mappedContacts.forEach(c => {
+        if (c.discProfile && c.discProfile in profileCounts) { profileCounts[c.discProfile]++; }
+        if (c.discConfidence) { totalConfidence += c.discConfidence; confidenceCount++; }
+      });
       const mostCommon = (Object.entries(profileCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'I') as DISCProfile;
       const { count: recentCount } = await supabase.from('disc_analysis_history').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('analyzed_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
       setStats({ totalProfiled: mappedContacts.length, avgConfidence: confidenceCount > 0 ? Math.round(totalConfidence / confidenceCount) : 0, mostCommon, recentAnalyses: recentCount || 0 });

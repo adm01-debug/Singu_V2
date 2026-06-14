@@ -118,7 +118,7 @@ Responda APENAS com um JSON válido no formato especificado.`;
       console.error("Error parsing AI response:", parseError);
     }
 
-    if (!analysis) return jsonError("Failed to parse analysis results", 500);
+    if (!analysis) { return jsonError("Failed to parse analysis results", 500); }
 
      const { data: savedAnalysis, error: saveError } = await supabaseClient
        .from("social_behavior_analysis")
