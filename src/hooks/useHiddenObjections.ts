@@ -9,7 +9,7 @@ interface Interaction {
 }
 
 export function useHiddenObjections(interactions: Interaction[]) {
-  const [analyzing, setAnalyzing] = useState(false);
+  const [analyzing] = useState(false);
 
   const detectObjections = useCallback((text: string): {
     type: ObjectionType;

@@ -83,7 +83,7 @@ export function useCopywritingAdvanced(contact?: Contact) {
     });
     const complexWordPercentage = (complexWords.length / Math.max(1, words.length)) * 100;
 
-    let level: ReadabilityMetrics['level'] = 'medio';
+    let level: ReadabilityMetrics['level'];
     let recommendation = '';
 
     if (fleschScore >= 75) {

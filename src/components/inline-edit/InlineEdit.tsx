@@ -287,11 +287,6 @@ export function InlineDateEdit({
   formatDisplay,
   ...props
 }: InlineDateEditProps) {
-  const displayValue = useMemo(() => {
-    if (!value) return '';
-    return formatDisplay ? formatDisplay(value) : value;
-  }, [value, formatDisplay]);
-
   const handleSave = async (strValue: string): Promise<boolean> => {
     return onSave(strValue || null);
   };

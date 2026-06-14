@@ -74,7 +74,6 @@ const IncongruenceDetector: React.FC<IncongruenceDetectorProps> = ({
   const contact = providedContact || DEMO_CONTACT;
 
   const discProfile = (getDISCProfile(contact) as DISCProfile) || 'D';
-  const behavior = getContactBehavior(contact);
 
   // Detect incongruences based on patterns
   const detectedIncongruences = useMemo((): Incongruence[] => {

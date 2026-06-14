@@ -76,7 +76,6 @@ export const GeoSalesHeatmap = React.memo(function GeoSalesHeatmap() {
 
   const maxInteractions = Math.max(...cityData.map(c => c.interactions), 1);
   const totalInteractions = data.reduce((a, b) => a + b.interaction_count, 0);
-  const totalContacts = data.reduce((a, b) => a + b.contact_count, 0);
 
   return (
     <Card>

@@ -125,7 +125,6 @@ export function useProactiveIntelligence(
       const discProfile = getDISCProfile(behavior) || 'S';
       const vakPrimary = getVAKPrimary(behavior) || 'kinesthetic';
       const relationshipScore = contact.relationship_score || 0;
-      const sentiment = contact.sentiment || 'neutral';
       const stage = contact.relationship_stage || 'unknown';
 
       // Analyze interaction patterns
@@ -150,7 +149,6 @@ export function useProactiveIntelligence(
         negativeSentiments > positiveSentiments ? 'declining' : 'stable';
 
       // Pending follow-ups
-      const pendingFollowUps = interactions.filter(i => i.follow_up_required && !i.follow_up_date);
       const overdueFollowUps = interactions.filter(i =>
         i.follow_up_date && new Date(i.follow_up_date) < new Date() && i.follow_up_required
       );

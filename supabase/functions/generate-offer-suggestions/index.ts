@@ -130,8 +130,6 @@ Deno.serve(async (req) => {
         return daysUntil > 0 && daysUntil <= 60;
       });
 
-      const contactSocialInsights = (socialAnalysis || []).filter(sa => sa.contact_id === contact.id);
-
       for (const offer of offerCatalog) {
         const key = `${contact.id}-${offer.name}`;
         if (existingOffersSet.has(key)) continue;

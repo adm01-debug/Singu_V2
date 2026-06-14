@@ -179,7 +179,6 @@ const MiltonianCalibration: React.FC<MiltonianCalibrationProps> = ({
   const activeContact = contact || DEMO_CONTACT;
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [selectedPattern, setSelectedPattern] = useState<MiltonPattern | null>(null);
 
   const vakType = getDominantVAK(activeContact) as VAKType || 'V';
   const discProfile = (getDISCProfile(activeContact) as DISCProfile) || 'D';

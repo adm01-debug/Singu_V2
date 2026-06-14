@@ -102,7 +102,6 @@ function clusterStakeholders(stakeholders: StakeholderData[]): Coalition[] {
       (a.metrics.power * a.metrics.influence) > (b.metrics.power * b.metrics.influence) ? a : b
     );
     
-    const avgSupport = members.reduce((sum, m) => sum + m.metrics.support, 0) / members.length;
     const cohesion = Math.max(0, 100 - (Math.max(...members.map(m => m.metrics.support)) - Math.min(...members.map(m => m.metrics.support))) * 10);
     
     coalitions.push({

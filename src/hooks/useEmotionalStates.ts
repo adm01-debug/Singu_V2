@@ -10,7 +10,7 @@ interface Interaction {
 }
 
 export function useEmotionalStates() {
-  const [analyzing, setAnalyzing] = useState(false);
+  const [analyzing] = useState(false);
 
   const detectEmotionalState = useCallback((text: string): { 
     state: EmotionalState; 

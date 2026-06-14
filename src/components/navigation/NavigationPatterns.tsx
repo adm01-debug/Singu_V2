@@ -42,7 +42,7 @@ interface SmartBreadcrumbsProps {
 }
 
 export function SmartBreadcrumbs({ items, className, maxItems = 4 }: SmartBreadcrumbsProps) {
-  const [isCollapsed, setIsCollapsed] = useState(items.length > maxItems);
+  const [isCollapsed] = useState(items.length > maxItems);
   
   const visibleItems = isCollapsed 
     ? [items[0], { label: '...', path: '', isEllipsis: true }, ...items.slice(-2)]

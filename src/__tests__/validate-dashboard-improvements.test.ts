@@ -10,7 +10,6 @@ describe('Dashboard Layout Improvements Validation', () => {
   const portfolioContent = readFile('src/components/dashboard/PortfolioHealthDashboard.tsx');
   const scrollToTopBtn = readFile('src/components/navigation/ScrollToTopButton.tsx');
   const scrollToTopComponent = readFile('src/components/ScrollToTop.tsx');
-  const appContent = readFile('src/App.tsx');
   const appLayoutContent = readFile('src/components/layout/AppLayout.tsx');
 
   // After refactor, many dashboard features moved to sub-components

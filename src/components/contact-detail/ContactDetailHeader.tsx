@@ -95,8 +95,6 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
   const isDeleted = !!contactExt.deleted_at;
 
    const fullName = formatContactName(contact.first_name, contact.last_name);
-   const companyName = company?.name || 'Empresa';
-  const stage = STAGE_CONFIG[contact.relationship_stage || 'unknown'] || STAGE_CONFIG.unknown;
   const behavior = contact.behavior as Record<string, unknown> | null;
   const discProfile = behavior?.discProfile as string | null;
 

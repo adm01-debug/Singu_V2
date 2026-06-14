@@ -136,7 +136,6 @@ export function SequenceFormDialog({ open, onOpenChange, onSubmit, loading }: Pr
             </div>
 
             {steps.map((step, idx) => {
-              const Icon = ChannelIcon(step.channel);
               return (
                 <div key={idx} className="border border-border/50 rounded-lg p-3 space-y-2 bg-secondary/20">
                   <div className="flex items-center gap-2">

@@ -71,7 +71,6 @@ export function EmpresasContent(props: Props) {
   } = props;
 
   const { isAdmin } = useIsAdmin();
-  const navigate = useNavigate();
   const RENDER_BATCH = 60;
   const [visibleCount, setVisibleCount] = useState(RENDER_BATCH);
   const sentinelRef = useRef<HTMLDivElement>(null);

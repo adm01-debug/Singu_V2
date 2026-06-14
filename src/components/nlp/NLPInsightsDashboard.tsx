@@ -26,18 +26,6 @@ import { ptBR } from 'date-fns/locale';
  interface NLPProfile { primary?: string; motivation?: string; [key: string]: any; }
 
 export function NLPInsightsDashboard({ contactId, className }: Props) {
-  const { user } = useAuth();
-
-  const { data: contact } = useQuery({
-    queryKey: ['contact-insights-header', contactId],
-    queryFn: async () => {
-      const { data, error } = await supabase.from('contacts').select('*, companies(name)').eq('id', contactId).maybeSingle();
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!contactId
-  });
-
   const { data: insights, isLoading } = useQuery({
     queryKey: ['nlp-insights-actionable', contactId],
      queryFn: async () => {

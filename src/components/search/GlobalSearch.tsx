@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import { useModalHistory } from '@/hooks/useModalHistory';
 import {
@@ -124,7 +124,6 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
     [convAsk, resetConversational, convLoading, convInterpretation, convItems, convHistory],
   );
   const navigate = useNavigate();
-  const location = useLocation();
   const { user } = useAuth();
 
   useModalHistory(open, () => onOpenChange(false), 'global-search');

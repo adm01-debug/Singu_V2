@@ -97,7 +97,6 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
       setCmdBarOpen(true);
     }
   }, [isOpen, setIsOpen]);
-  const { state } = useSidebar();
   const location = useLocation();
   const { user, signOut } = useAuth();
 

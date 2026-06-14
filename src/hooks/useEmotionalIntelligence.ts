@@ -22,7 +22,7 @@ interface Interaction {
 }
 
 export function useEmotionalIntelligence(contact: Contact, interactions: Interaction[]) {
-  const [analyzing, setAnalyzing] = useState(false);
+  const [analyzing] = useState(false);
 
   // Detect indicators in text for a specific pillar
   const detectPillarIndicators = useCallback((

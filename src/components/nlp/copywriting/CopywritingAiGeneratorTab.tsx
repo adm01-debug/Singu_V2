@@ -22,7 +22,7 @@ interface AiSuggestion {
 }
 
 export function CopywritingAiGeneratorTab({ contact }: Props) {
-  const { preferredTone, saveTone, isLoading: loadingPrefs } = useTonePersistence(contact.companyId);
+  const { preferredTone, saveTone } = useTonePersistence(contact.companyId);
   const [loading, setLoading] = useState(false);
   const [messageType, setMessageType] = useState('introduction');
   const [framework, setFramework] = useState('None');

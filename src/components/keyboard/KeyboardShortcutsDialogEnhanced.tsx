@@ -18,8 +18,6 @@ export function KeyboardShortcutsDialogEnhanced() {
   const [searchQuery, setSearchQuery] = useState('');
   
   const { groupedShortcuts, formatShortcut } = useKeyboardShortcutsEnhanced({ enabled: false });
-  
-  const isMac = typeof navigator !== 'undefined' && navigator.platform.includes('Mac');
 
   useEffect(() => {
     const handleShowShortcuts = () => setIsOpen(true);

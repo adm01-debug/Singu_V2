@@ -15,7 +15,7 @@ Deno.serve(async (req) => {
   );
 
   try {
-    const { contactId, force = false } = await req.json();
+    const { contactId } = await req.json();
     if (!contactId) return jsonError("contactId is required", 400);
 
     // 1. Gather Rich Context
@@ -30,7 +30,6 @@ Deno.serve(async (req) => {
 
     const contact = contactRes.data;
     const interactions = interactionsRes.data || [];
-     const social = socialRes.data?.[0];
      const neuroHistory = neuroRes.data || [];
      const analytical = analyticalRes.data;
      const recentWhatsApp = whatsappRes.data || [];

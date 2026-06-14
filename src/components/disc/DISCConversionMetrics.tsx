@@ -42,17 +42,7 @@ const DISCConversionMetrics: React.FC = () => {
     })),
   [metrics]);
 
-  const radarData = useMemo(() => 
-    metrics.map(m => ({
-      profile: m.profile,
-      conversao: m.conversionRate,
-      relacionamento: m.avgRelationshipScore,
-      velocidade: Math.max(0, 100 - m.avgCycleDays), // Inverse: faster = better
-      volume: Math.min(100, m.totalContacts * 5)
-    })),
-  [metrics]);
-
-  const pieData = useMemo(() => 
+  const pieData = useMemo(() =>
     metrics.map(m => ({
       name: m.profile,
       value: m.conversions,

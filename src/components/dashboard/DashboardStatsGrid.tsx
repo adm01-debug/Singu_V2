@@ -24,7 +24,6 @@ function getInteractionLabel(count: number): string {
 
 export const DashboardStatsGrid = React.memo(function DashboardStatsGrid({ stats, prefersReducedMotion }: DashboardStatsGridProps) {
   const companyChangeType = stats.companyChange?.startsWith('+') && stats.companyChange !== '+0' ? 'positive' as const : 'neutral' as const;
-  const contactChangeType = stats.contactChange?.startsWith('+') && stats.contactChange !== '+0' ? 'positive' as const : 'neutral' as const;
   const interactionChangeType = stats.weeklyInteractions > 0 ? 'positive' as const : 'neutral' as const;
   const scoreChangeType = stats.averageScore > 50 ? 'positive' as const : stats.averageScore > 25 ? 'neutral' as const : 'negative' as const;
 

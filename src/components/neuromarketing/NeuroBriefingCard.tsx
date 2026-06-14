@@ -74,16 +74,7 @@ const NeuroBriefingCard = ({
     return { dominantBrain, brainScores, topStimuli, keyTips };
   }, [interactions, discProfile, analyzeText, generateNeuroProfileFromDISC, BRAIN_SYSTEM_INFO]);
 
-  const firstName = contactName.split(' ')[0];
   const brainInfo = BRAIN_SYSTEM_INFO[dominantBrain];
-
-  const getBrainIcon = (brain: BrainSystem) => {
-    switch (brain) {
-      case 'reptilian': return <AlertTriangle className="h-4 w-4" />;
-      case 'limbic': return <Heart className="h-4 w-4" />;
-      case 'neocortex': return <Brain className="h-4 w-4" />;
-    }
-  };
 
   return (
     <motion.div

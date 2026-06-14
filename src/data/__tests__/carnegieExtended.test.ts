@@ -85,8 +85,6 @@ describe('Carnegie Yes-Ladder Templates', () => {
 });
 
 describe('Carnegie Storytelling Templates', () => {
-  const validTypes = ['hero_journey', 'before_after', 'problem_solution', 'testimonial', 'analogy', 'contrast', 'metaphor', 'personal', 'client_success'];
-
   it('has at least 4 story templates', () => {
     expect(STORY_TEMPLATES.length).toBeGreaterThanOrEqual(4);
   });

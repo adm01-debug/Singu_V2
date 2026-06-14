@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState, useMemo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // ============================================
 // ENHANCED KEYBOARD SHORTCUTS - Pilar 5 & 7
@@ -35,7 +35,6 @@ interface UseKeyboardShortcutsOptions {
 export function useKeyboardShortcutsEnhanced(options: UseKeyboardShortcutsOptions = {}) {
   const { enabled = true, onShortcutTriggered } = options;
   const navigate = useNavigate();
-  const location = useLocation();
   const [keySequence, setKeySequence] = useState<string[]>([]);
   const [lastKeyTime, setLastKeyTime] = useState(0);
 

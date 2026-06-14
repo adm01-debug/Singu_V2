@@ -24,8 +24,8 @@ interface Props {
 }
 
 export function NLPAnalysisCard({ contactId, vakProfile, metaprogramProfile, reframings, onRefetch }: Props) {
-  const { validateVAK, validateMetaprogram } = useNLPAnalysisValidation();
-  const [feedbackMode, setFeedbackMode] = useState<string | null>(null);
+  useNLPAnalysisValidation();
+  useState<string | null>(null);
 
   const renderVAK = () => {
     if (!vakProfile) return <div className="py-8 text-center text-muted-foreground text-sm">Nenhuma análise VAK disponível.</div>;

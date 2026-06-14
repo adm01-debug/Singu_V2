@@ -32,7 +32,7 @@ export function ClosingScoreAlertsList({
   showHeader = true,
   compact = false
 }: ClosingScoreAlertsListProps) {
-  const { alerts, loading, dismissAlert, dismissAllAlerts, refreshAlerts, probabilityLabels } = useClosingScoreAlerts();
+  const { alerts, loading, dismissAlert, dismissAllAlerts, refreshAlerts } = useClosingScoreAlerts();
   const navigate = useNavigate();
 
   const displayedAlerts = alerts.slice(0, maxItems);

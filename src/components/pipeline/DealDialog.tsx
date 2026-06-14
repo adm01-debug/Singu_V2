@@ -68,7 +68,7 @@ export function DealDialog({ open, onOpenChange, initialStage = 'lead' }: Props)
   const createDeal = useCreateDeal();
   const [companies, setCompanies] = useState<{ value: string; label: string }[]>([]);
   const [contacts, setContacts] = useState<{ value: string; label: string }[]>([]);
-  const [isLoadingEntities, setIsLoadingEntities] = useState(false);
+  const [, setIsLoadingEntities] = useState(false);
 
   const form = useForm<DealFormValues>({
     resolver: zodResolver(dealSchema),

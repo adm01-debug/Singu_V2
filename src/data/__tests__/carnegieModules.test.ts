@@ -30,7 +30,7 @@ describe('Carnegie Criticism Detector', () => {
   });
 
   it('all types have valid severity', () => {
-    for (const [key, val] of Object.entries(CRITICAL_PATTERNS)) {
+    for (const [, val] of Object.entries(CRITICAL_PATTERNS)) {
       expect(['low', 'medium', 'high']).toContain(val.severity);
     }
   });

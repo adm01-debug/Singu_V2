@@ -61,9 +61,6 @@ export function AdminSidebar() {
 /** Mobile nav dropdown for admin */
 export function AdminMobileNav() {
   const location = useLocation();
-  const current = ADMIN_LINKS.find(l =>
-    l.exact ? location.pathname === l.to : location.pathname.startsWith(l.to)
-  );
 
   return (
     <div className="lg:hidden border-b border-border/60 bg-card/50 px-4 py-2 overflow-x-auto">

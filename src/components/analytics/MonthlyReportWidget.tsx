@@ -17,7 +17,7 @@ export const MonthlyReportWidget = React.memo(function MonthlyReportWidget() {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth() + 1);
-  const { data: report, isLoading, refetch } = useMonthlyReport(year, month);
+  const { data: report, isLoading } = useMonthlyReport(year, month);
 
   return (
     <Card>

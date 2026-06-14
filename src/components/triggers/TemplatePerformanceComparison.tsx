@@ -60,14 +60,6 @@ export function TemplatePerformanceComparison({ contact, className }: TemplatePe
     return <Minus className="w-4 h-4 text-muted-foreground" />;
   };
 
-  const formatDate = (date: string | null) => {
-    if (!date) return 'Nunca usado';
-    return new Date(date).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: 'short',
-    });
-  };
-
   return (
     <Card className={cn('', className)}>
       <CardHeader className="pb-4">

@@ -34,7 +34,7 @@ async function sendPushToUser(supabase: any, userId: string, alert: AlertData, l
 
   let sentCount = 0;
 
-  for (const _sub of subscriptions) {
+  for (let i = 0; i < subscriptions.length; i++) {
     try {
       const { error: insertError } = await supabase.from('alerts').insert({
         user_id: userId,

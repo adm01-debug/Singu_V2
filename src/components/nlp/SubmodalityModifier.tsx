@@ -90,13 +90,6 @@ const SubmodalityModifier: React.FC<SubmodalityModifierProps> = ({
     }
   };
 
-  const getModificationScript = (submodality: Submodality) => {
-    const direction = submodality.currentValue > 50 ? 'intensificar' : 'reduzir';
-    const value = submodality.currentValue > 50 ? submodality.toValue : submodality.fromValue;
-    
-    return `Para ${direction} ${submodality.name.toLowerCase()}: "${submodality.script}"`;
-  };
-
   return (
     <Card className={cn("border-accent/30 bg-card", className)}>
       <CardHeader className="pb-3">

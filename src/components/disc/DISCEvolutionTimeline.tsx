@@ -55,7 +55,7 @@ const DISCEvolutionTimeline: React.FC<DISCEvolutionTimelineProps> = ({
   const { user } = useAuth();
   const [data, setData] = useState<TimelineDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPoint, setSelectedPoint] = useState<TimelineDataPoint | null>(null);
+  const [, setSelectedPoint] = useState<TimelineDataPoint | null>(null);
   const [viewMode, setViewMode] = useState<'line' | 'area'>('area');
 
   useEffect(() => {

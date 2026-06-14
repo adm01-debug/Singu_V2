@@ -79,7 +79,6 @@ export function ContactCommercialTab({ contactId }: Props) {
   });
 
   const rfm = data?.rfm || null;
-  const purchases = data?.purchases || [];
 
   if (error) {
     return (

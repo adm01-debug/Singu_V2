@@ -298,7 +298,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     queryClient.setQueryData<Contact[]>(queryKey, prev => prev?.filter(c => c.id !== id) ?? []);
 
     try {
-      const { success, error } = await deleteExternalData('contacts', id);
+      const { error } = await deleteExternalData('contacts', id);
       if (error) throw error;
       
       const deleted = previous?.find(c => c.id === id);

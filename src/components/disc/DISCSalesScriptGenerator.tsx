@@ -39,7 +39,6 @@ const DISCSalesScriptGenerator: React.FC<DISCSalesScriptGeneratorProps> = ({ con
   const { toast } = useToast();
   const [activeStage, setActiveStage] = useState('opening');
   
-  const behavior = getContactBehavior(contact);
   const discProfile = (getDISCProfile(contact) || 'I') as Exclude<DISCProfile, null>;
   const vakType = (getDominantVAK(contact) || 'V') as VAKType;
   const profileInfo = DISC_PROFILES[discProfile];

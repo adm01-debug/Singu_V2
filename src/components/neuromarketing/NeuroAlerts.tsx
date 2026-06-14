@@ -50,10 +50,9 @@ const NeuroAlerts = ({
   className
 }: NeuroAlertsProps) => {
   const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
-  const { 
-    analyzeText, 
-    BRAIN_SYSTEM_INFO,
-    NEUROCHEMICAL_INFO
+  const {
+    analyzeText,
+    BRAIN_SYSTEM_INFO
   } = useNeuromarketing();
 
   // Generate alerts based on analyzing current interactions
@@ -68,8 +67,7 @@ const NeuroAlerts = ({
     // Split interactions into current (last 50%) and previous (first 50%) for comparison
     const midPoint = Math.floor(interactions.length / 2);
     const previousInteractions = interactions.slice(0, midPoint);
-    const currentInteractions = interactions.slice(midPoint);
-    
+
     const previousText = previousInteractions
       .map(i => `${i.content || ''} ${i.transcription || ''}`)
       .join('\n\n');

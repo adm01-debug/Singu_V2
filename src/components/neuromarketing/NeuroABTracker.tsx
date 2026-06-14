@@ -65,7 +65,6 @@ const NeuroABTracker = ({
   className
 }: NeuroABTrackerProps) => {
   const [activeTab, setActiveTab] = useState<'brain' | 'stimulus' | 'chemical'>('brain');
-  const [showRecordForm, setShowRecordForm] = useState(false);
 
   // Calculate stats for each approach
   const approachStats = useMemo(() => {

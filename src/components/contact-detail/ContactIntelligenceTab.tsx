@@ -77,7 +77,7 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
     gcTime: 10 * 60 * 1000,
   });
 
-  const updateOfferStatus = useMutation({
+  useMutation({
     mutationFn: async ({ offerId, status }: { offerId: string; status: string }) => {
       const { error } = await supabase
         .from('offer_suggestions')
@@ -93,9 +93,6 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
   });
 
   const objections = data?.objections || [];
-  const criteria = data?.criteria || [];
-  const values = data?.values || [];
-  const offers = data?.offers || [];
   const unresolvedObjections = objections.filter(o => !o.resolved);
 
   return (

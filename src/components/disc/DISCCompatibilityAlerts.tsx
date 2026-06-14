@@ -152,12 +152,6 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
     });
   }, [toast]);
 
-  const getScoreColor = (score: number) => {
-    if (score >= 70) return 'text-success';
-    if (score >= 50) return 'text-warning';
-    return 'text-destructive';
-  };
-
   const getScoreBadge = (score: number) => {
     if (score >= 70) return 'bg-success/10 text-success border-success/30';
     if (score >= 50) return 'bg-warning/10 text-warning border-warning/30';

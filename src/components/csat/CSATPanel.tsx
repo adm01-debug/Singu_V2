@@ -18,7 +18,7 @@ interface Props {
 export function CSATPanel({ contactId, interactionId }: Props) {
   const { surveys, send, answer, stats } = useCSATSurveys(contactId);
   const [pendingScore, setPendingScore] = useState<Record<string, number>>({});
-  const [pendingFeedback, setPendingFeedback] = useState<Record<string, string>>({});
+  const [pendingFeedback] = useState<Record<string, string>>({});
 
   return (
     <Card>

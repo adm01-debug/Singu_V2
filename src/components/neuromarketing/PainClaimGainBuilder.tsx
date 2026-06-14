@@ -113,8 +113,6 @@ const PainClaimGainBuilder = ({
     }
 
     const dominantPain = pains.sort((a, b) => b.intensity - a.intensity)[0];
-    const bestClaim = claims[0];
-    const bestGain = gains[0];
 
     const script = `
 🎯 SCRIPT NEURO-OTIMIZADO PARA ${contactName.toUpperCase()}

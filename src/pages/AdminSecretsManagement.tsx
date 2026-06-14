@@ -35,7 +35,7 @@ function SecretHealthBadge({ daysSinceRotation }: { daysSinceRotation: number | 
 
 export default function AdminSecretsManagement() {
   const { isAdmin, isLoading: adminLoading } = useIsAdmin();
-  const { rotationLogs, isLoading, logRotation, getLastRotation, getHistory } = useSecretRotation();
+  const { isLoading, logRotation, getLastRotation, getHistory } = useSecretRotation();
   const [rotateDialog, setRotateDialog] = useState<string | null>(null);
   const [generatedSecret, setGeneratedSecret] = useState('');
   const [reason, setReason] = useState('Rotação periódica');

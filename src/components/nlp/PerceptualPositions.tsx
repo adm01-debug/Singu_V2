@@ -87,7 +87,6 @@ const PerceptualPositions: React.FC<PerceptualPositionsProps> = ({
   const [currentPosition, setCurrentPosition] = useState<'first' | 'second' | 'third'>('first');
   const [analyses, setAnalyses] = useState<Record<string, PositionAnalysis>>({});
   const [currentNotes, setCurrentNotes] = useState('');
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const saveAnalysis = () => {
     if (!currentNotes.trim()) return;

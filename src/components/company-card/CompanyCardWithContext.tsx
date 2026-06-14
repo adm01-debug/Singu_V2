@@ -41,7 +41,6 @@ function CompanyCardWithContextImpl({
   contactCount = 0, compact = false,
   onSelect, onEdit, onDelete, onUpdate,
 }: CompanyCardWithContextProps) {
-  const IndustryIcon = industryIcons[company.industry || ''] || Building2;
   const [isInlineEditing, setIsInlineEditing] = useState(false);
   const [interactionsOpen, setInteractionsOpen] = useState(false);
   const navigate = useNavigate();

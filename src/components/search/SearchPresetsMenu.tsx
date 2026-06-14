@@ -82,8 +82,6 @@ export function SearchPresetsMenu({
     }
   }, [editingId]);
 
-  const activeFilterCount = Object.values(currentFilters).flat().length + (currentSearchTerm ? 1 : 0);
-
   const hasActiveFilters = Object.keys(currentFilters).some(k => currentFilters[k]?.length > 0)
     || currentSearchTerm;
 

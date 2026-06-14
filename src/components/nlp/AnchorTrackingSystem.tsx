@@ -109,30 +109,7 @@ const AnchorTrackingSystem: React.FC<AnchorTrackingSystemProps> = ({
     onAnchorsChange?.(updated);
   };
 
-  const getStrengthLabel = (strength: number) => {
-    switch (strength) {
-      case 1: return 'Fraca';
-      case 2: return 'Moderada';
-      case 3: return 'Forte';
-      default: return 'Moderada';
-    }
-  };
 
-  const getStrengthColor = (strength: number, type: string) => {
-    if (type === 'positive') {
-      switch (strength) {
-        case 1: return 'bg-success/20';
-        case 2: return 'bg-success/40';
-        case 3: return 'bg-success/60';
-      }
-    } else {
-      switch (strength) {
-        case 1: return 'bg-destructive/20';
-        case 2: return 'bg-destructive/40';
-        case 3: return 'bg-destructive/60';
-      }
-    }
-  };
 
   return (
     <Card className={cn("border-accent/20 bg-card", className)}>

@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { SEOHead } from '@/components/seo/SEOHead';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { sortArray } from '@/lib/sorting-utils';
 import { Crown, Briefcase, ShoppingCart, User } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
@@ -90,7 +90,6 @@ const sortOptions = [
 
 const Contatos = () => {
   usePageTitle('Contatos');
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { contacts, loading, createContact, updateContact, deleteContact, fetchContacts, hasMore, loadMore } = useContacts();
 

@@ -29,7 +29,7 @@ interface ParsedContact {
 const ImportStep = ({ onImport, onNext, onBack }: ImportStepProps) => {
   const { user } = useAuth();
   const [isDragging, setIsDragging] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
+  const [, setFile] = useState<File | null>(null);
   const [importing, setImporting] = useState(false);
   const [importProgress, setImportProgress] = useState(0);
   const [importedCount, setImportedCount] = useState(0);

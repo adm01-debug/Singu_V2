@@ -55,14 +55,12 @@ const NeuroScriptGenerator = ({
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['opening']));
   const [scriptGoal, setScriptGoal] = useState<'discovery' | 'presentation' | 'closing' | 'objection'>('presentation');
-  const [customContext, setCustomContext] = useState('');
-  
-  const { 
-    analyzeText, 
+
+  const {
+    analyzeText,
     generateNeuroProfileFromDISC,
     BRAIN_SYSTEM_INFO,
-    PRIMAL_STIMULUS_INFO,
-    NEUROCHEMICAL_INFO
+    PRIMAL_STIMULUS_INFO
   } = useNeuromarketing();
 
   // Analyze contact profile

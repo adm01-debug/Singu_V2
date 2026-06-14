@@ -87,8 +87,7 @@ export function useNetworkGraph() {
 
       // Count interactions per contact
       const contactInteractions = new Map<string, number>();
-      const contactPairs = new Map<string, number>();
-      
+
       interactions?.forEach(interaction => {
         const count = contactInteractions.get(interaction.contact_id) || 0;
         contactInteractions.set(interaction.contact_id, count + 1);

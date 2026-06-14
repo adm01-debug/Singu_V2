@@ -122,10 +122,6 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
     'interações',
   );
 
-  const clearSearch = () => {
-    setQ('');
-  };
-
   return (
     <Card>
       <CardHeader className="pb-3 space-y-3">
@@ -179,7 +175,6 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
               { id: 'audio', label: 'Áudio', icon: Clock },
               { id: 'transcription', label: 'Texto', icon: FileText },
             ].map((ch) => {
-              const isType = ['whatsapp', 'call', 'email', 'meeting'].includes(ch.id);
               const isActive = channels?.includes(ch.id);
               
               return (

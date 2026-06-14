@@ -28,7 +28,7 @@ interface Props {
       syncToPsychographic, 
       isSyncing 
     } = useSocialIntelligence(contactId);
-   const { data: historyInsights, isLoading: loadingInsights } = useSocialInsights(contactId);
+   const { data: historyInsights } = useSocialInsights(contactId);
  
    if (loadingBase) return null;
 

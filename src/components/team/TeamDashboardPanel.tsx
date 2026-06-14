@@ -11,7 +11,6 @@ export function TeamDashboardPanel() {
   if (isLoading) return <Skeleton className="h-64 rounded-lg" />;
   if (!data?.isManager || !data.members.length) return null;
 
-  const totalContacts = data.members.reduce((s, m) => s + m.contacts_count, 0);
   const totalInteractions = data.members.reduce((s, m) => s + m.interactions_this_month, 0);
   const totalPipeline = data.members.reduce((s, m) => s + m.pipeline_value, 0);
   const totalWon = data.members.reduce((s, m) => s + m.won_deals_value, 0);

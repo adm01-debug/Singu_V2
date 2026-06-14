@@ -217,7 +217,7 @@ const RelatorioContato = () => {
     );
   }
 
-   const { contact, interactions, discHistory, insights } = data;
+   const { contact, interactions, discHistory } = data;
   const behavior = (contact.behavior || {}) as ContactBehavior;
   const latestDisc = discHistory[0];
 

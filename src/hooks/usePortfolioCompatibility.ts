@@ -135,7 +135,7 @@ export function usePortfolioCompatibility() {
         const scores = [discScore, vakScore, metaprogramScore].filter(s => s > 0);
         const compatibilityScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
 
-        let level: ContactWithCompatibility['level'] = 'moderate';
+        let level: ContactWithCompatibility['level'];
         if (compatibilityScore >= 80) level = 'excellent';
         else if (compatibilityScore >= 65) level = 'good';
         else if (compatibilityScore >= 45) level = 'moderate';

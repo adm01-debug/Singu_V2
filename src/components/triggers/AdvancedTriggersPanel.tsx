@@ -29,7 +29,7 @@ export function AdvancedTriggersPanel({ contact: contactProp, className }: Advan
   const {
     advancedTriggers, exposureAnalysis, resistanceProfile,
     resistanceScore, fullAnalysis, recommendedChains,
-    intensityLevels, getSynergies, getFallbacks, getRecommendedIntensity,
+    getRecommendedIntensity,
   } = useAdvancedTriggers(contact);
 
   const [activeTab, setActiveTab] = useState<'chains' | 'saturation' | 'timing' | 'advanced'>('chains');
@@ -180,7 +180,6 @@ export function AdvancedTriggersPanel({ contact: contactProp, className }: Advan
                 <div className="grid grid-cols-2 gap-3">
                   {Object.entries(advancedTriggers).map(([id, trigger], index) => {
                     const recommendedIntensity = getRecommendedIntensity(id as import('@/types/triggers-advanced').AllTriggerTypes);
-                    const intensityInfo = intensityLevels[recommendedIntensity - 1];
 
                     return (
                       <motion.div

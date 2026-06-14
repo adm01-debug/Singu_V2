@@ -66,7 +66,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [companies, setCompanies] = useState<{ value: string; label: string }[]>([]);
-  const [contacts, setContacts] = useState<{ value: string; label: string }[]>([]);
+  const [, setContacts] = useState<{ value: string; label: string }[]>([]);
 
   const form = useForm<DealFormValues>({
     resolver: zodResolver(dealSchema),

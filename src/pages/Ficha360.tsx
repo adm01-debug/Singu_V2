@@ -341,7 +341,6 @@ const Ficha360 = () => {
   const {
     realProntidao,
     effectiveProfile,
-    effectiveIntel,
     prontidao,
     trend,
     passos

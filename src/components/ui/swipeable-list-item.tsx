@@ -29,7 +29,7 @@ export function SwipeableListItem({
   className,
   disabled = false,
 }: SwipeableListItemProps) {
-  const [isRevealed, setIsRevealed] = useState(false);
+  const [, setIsRevealed] = useState(false);
   const constraintsRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   

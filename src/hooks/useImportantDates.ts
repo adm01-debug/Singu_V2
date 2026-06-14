@@ -224,7 +224,7 @@ export interface DateReminders {
          const daysUntil = differenceInDays(nextEventDate, now);
          
          if (Math.abs(daysUntil) <= 90) { // Show up to 90 days out in calendar
-           let urgency: ImportantDate['urgency'] = 'future';
+           let urgency: ImportantDate['urgency'];
            if (daysUntil === 0) urgency = 'today';
            else if (daysUntil < 0) urgency = 'overdue';
            else if (daysUntil <= 7) urgency = 'urgent';
@@ -261,7 +261,7 @@ export interface DateReminders {
          const daysUntil = differenceInDays(nextBday, now);
          
          if (daysUntil <= 60) {
-           let urgency: ImportantDate['urgency'] = 'future';
+           let urgency: ImportantDate['urgency'];
            if (daysUntil === 0) urgency = 'today';
            else if (daysUntil <= 7) urgency = 'urgent';
            else urgency = 'upcoming';

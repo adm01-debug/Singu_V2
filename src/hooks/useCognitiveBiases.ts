@@ -19,7 +19,7 @@ interface Interaction {
 }
 
 export function useCognitiveBiases(contact: Contact, interactions: Interaction[]) {
-  const [analyzing, setAnalyzing] = useState(false);
+  const [analyzing] = useState(false);
 
   // Detect biases in text
   const detectBiases = useCallback((

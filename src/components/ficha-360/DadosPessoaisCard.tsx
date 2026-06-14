@@ -35,7 +35,7 @@ function formatBirthday(date?: string | null): string | null {
 
 export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [familyInfo, setFamilyInfo] = useState(rapportIntel?.family_info || '');
+  const [, setFamilyInfo] = useState(rapportIntel?.family_info || '');
   const [spouseName, setSpouseName] = useState('');
   const [children, setChildren] = useState<string[]>([]);
   const [hobbies, setHobbies] = useState<string[]>(Array.isArray(rapportIntel?.hobbies) ? rapportIntel.hobbies : []);
