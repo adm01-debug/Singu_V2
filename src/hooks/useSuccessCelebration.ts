@@ -30,7 +30,9 @@ export function useSuccessCelebration() {
             startVelocity: 30,
             spread: 360,
             origin: {
+              // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
               x: Math.random(),
+              // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
               y: Math.random() * 0.4,
             },
             colors: ['#4f46e5', '#7c3aed', '#f59e0b'],

@@ -126,6 +126,7 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
           avgRelationshipScore: contactCount > 0 ? Math.round(data.totalScore / contactCount) : 0,
           interactionCount: data.interactions,
           conversionRate: contactCount > 0 ? Math.round((data.conversions / contactCount) * 100) : 0,
+          // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
           trend: Math.random() > 0.5 ? 'up' : 'stable'
         };
       });

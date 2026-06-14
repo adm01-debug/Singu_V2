@@ -38,17 +38,25 @@ export const FloatingParticles: React.FC<FloatingParticlesProps> = React.memo(({
   const configKey = isBooting ? "booting" : phase;
 
   const createParticle = useCallback((w: number, h: number, cfg: typeof PHASE_CONFIG["idle"]): Particle => {
+    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
     const angle = Math.random() * Math.PI * 2;
+    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
     const speed = (Math.random() * 0.5 + 0.5) * cfg.speed;
     return {
+      // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
       x: Math.random() * w,
+      // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
       y: Math.random() * h,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
+      // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
       size: lerp(cfg.sizeRange[0], cfg.sizeRange[1], Math.random()),
+      // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
       opacity: Math.random() * 0.4 + 0.1,
+      // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
       hue: lerp(cfg.hueRange[0], cfg.hueRange[1], Math.random()),
       life: 0,
+      // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
       maxLife: 200 + Math.random() * 300,
     };
   }, []);
@@ -94,7 +102,9 @@ export const FloatingParticles: React.FC<FloatingParticlesProps> = React.memo(({
         p.life++;
         p.x += p.vx;
         p.y += p.vy;
+        // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
         p.vx += (Math.random() - 0.5) * 0.02;
+        // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
         p.vy += (Math.random() - 0.5) * 0.02;
 
         const lifeRatio = p.life / p.maxLife;

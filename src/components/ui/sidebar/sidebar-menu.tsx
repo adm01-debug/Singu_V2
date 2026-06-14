@@ -170,6 +170,7 @@ export const SidebarMenuSkeleton = React.forwardRef<
   }
 >(({ className, showIcon = false, ...props }, ref) => {
   const width = React.useMemo(() => {
+    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
     return `${Math.floor(Math.random() * 40) + 50}%`;
   }, []);
 

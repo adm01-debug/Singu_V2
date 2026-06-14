@@ -409,6 +409,7 @@ export function generateEagerWantScript(category: DesireCategory, context?: stri
   if (!want) return '';
   
   const techniques = want.arousalTechniques;
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   const tech = techniques[Math.floor(Math.random() * techniques.length)];
   
   return `${tech.technique}\n\nExemplo: "${tech.example}"`;

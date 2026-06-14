@@ -74,6 +74,7 @@ export function useCognitiveBiases(contact: Contact, interactions: Interaction[]
               category: biasInfo.category,
               indicator,
               context: sentence.trim().slice(0, 150),
+              // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
               confidence: 60 + Math.random() * 30, // 60-90%
               polarity,
               detectedAt: timestamp,

@@ -111,6 +111,7 @@ export function useEasterEggs() {
           particleCount: 30,
           angle: 270,
           spread: 180,
+          // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
           origin: { x: Math.random(), y: 0 },
           colors: ['#00ff00'],
           gravity: 0.5,

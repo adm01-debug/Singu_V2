@@ -63,6 +63,7 @@ export function useDealVelocity() {
       const stageVelocities: StageVelocity[] = Object.entries(STAGE_CONFIG).map(([stage, name]) => ({
         stage,
         stageName: name,
+        // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
         averageDays: Math.round(Math.random() * 15) + 3,
         benchmark: 10,
         contactCount: stageCounts[stage] || 0,

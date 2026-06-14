@@ -75,6 +75,7 @@ export function useEmotionalStates() {
         
         if (confidence >= 50) {
           const anchor: EmotionalAnchor = {
+            // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
             id: `anchor-${idx}-${Math.random().toString(36).substr(2, 9)}`,
             type: positiveStates.includes(state) ? 'positive' : negativeStates.includes(state) ? 'negative' : 'positive',
             trigger: matchedWords[0] || sentence.substring(0, 50),

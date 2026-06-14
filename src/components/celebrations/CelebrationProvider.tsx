@@ -89,10 +89,15 @@ interface ConfettiPieceProps {
 }
 
 const ConfettiPiece = ({ color, delay, startX }: ConfettiPieceProps) => {
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   const isCircle = Math.random() > 0.5;
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   const size = 8 + Math.random() * 8;
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   const rotation = Math.random() * 360;
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   const duration = 2 + Math.random() * 1.5;
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   const endX = startX + (Math.random() - 0.5) * 200;
   
   return (
@@ -107,6 +112,7 @@ const ConfettiPiece = ({ color, delay, startX }: ConfettiPieceProps) => {
       animate={{ 
         y: window.innerHeight + 50,
         x: endX,
+        // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
         rotate: rotation + 720 * (Math.random() > 0.5 ? 1 : -1),
         opacity: [1, 1, 0],
         scale: [0, 1, 1, 0.5],
@@ -146,7 +152,9 @@ const CelebrationOverlay = ({ config, onComplete }: CelebrationOverlayProps) => 
     return Array.from({ length: 60 }, (_, i) => ({
       id: i,
       color: style.confettiColors[i % style.confettiColors.length],
+      // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
       delay: Math.random() * 0.3,
+      // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
       startX: Math.random() * window.innerWidth,
     }));
   }, [style.confettiColors]);

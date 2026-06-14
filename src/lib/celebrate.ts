@@ -37,9 +37,13 @@ function spawnConfetti(rootEl: HTMLElement, pieces = 28) {
   for (let i = 0; i < pieces; i++) {
     const piece = document.createElement('span');
     piece.className = 'celebrate-confetti-piece';
+    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
     const rotate = Math.random() * 360;
+    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
     const x = (Math.random() * 2 - 1) * 220;
+    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
     const y = -120 - Math.random() * 200;
+    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
     const delay = Math.random() * 120;
     piece.style.setProperty('--cx', `${x}px`);
     piece.style.setProperty('--cy', `${y}px`);

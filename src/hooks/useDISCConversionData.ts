@@ -62,6 +62,7 @@ export function useDISCConversionData(period: ConversionPeriod) {
           if (stage === 'fechado' || stage === 'cliente') {
             profileData[discProfile].conversions++;
             profileData[discProfile].closedCount++;
+            // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
             profileData[discProfile].totalValue += Math.random() * 50000 + 10000;
           }
 
@@ -81,6 +82,7 @@ export function useDISCConversionData(period: ConversionPeriod) {
           const avgCycleDays = data.closedCount > 0 ? Math.round(data.totalCycleDays / data.closedCount) : 0;
           const avgRelationshipScore = data.contacts > 0 ? Math.round(data.totalRelationshipScore / data.contacts) : 0;
           const trends: ('up' | 'down' | 'stable')[] = ['up', 'down', 'stable'];
+          // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
           const trend = trends[Math.floor(Math.random() * 3)];
           return { profile, totalContacts: data.contacts, opportunities: data.opportunities, conversions: data.conversions, conversionRate, avgDealValue, avgCycleDays, avgRelationshipScore, trend };
         });

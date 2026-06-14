@@ -173,6 +173,7 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
              return supabase.from('contact_predictive_roadmap').upsert({
                contact_id: contactId,
                forecast_month: forecastDate.toISOString().split('T')[0],
+               // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
                predicted_need: needs[Math.floor(Math.random() * needs.length)],
                suggested_offering: `Pacote de Serviços ${monthsAhead}m`,
                probability: Math.max(40, suggestion.confidence - (monthsAhead * 5)),

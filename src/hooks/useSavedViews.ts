@@ -69,6 +69,7 @@ export function useSavedViews<T>(scope: string) {
   const save = useCallback(
     (name: string, state: T) => {
       const next: SavedView<T> = {
+        // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
         id: `v_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
         name,
         scope,

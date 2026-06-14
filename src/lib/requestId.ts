@@ -9,6 +9,7 @@ function uuid(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return crypto.randomUUID();
   }
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   return `trace_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
 }
 

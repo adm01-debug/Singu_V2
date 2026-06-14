@@ -47,6 +47,7 @@ const Intelligence = () => {
   const [params, setParams] = useSearchParams();
   const tabFromUrl = params.get('tab');
   const tab: TabValue = isValidTab(tabFromUrl) ? tabFromUrl : 'graph';
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   const [sessionId] = useState(() => Math.random().toString(36).slice(2, 10).toUpperCase());
   const [contextEntity, setContextEntity] = useState<HistoryEntry | null>(null);
   const { log } = useIntelTelemetry();

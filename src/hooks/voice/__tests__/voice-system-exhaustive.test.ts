@@ -840,6 +840,7 @@ describe("Concurrent Scenarios", () => {
 
   it("parallel token refreshes resolve independently", async () => {
     const refreshes = Array.from({ length: 5 }, () =>
+      // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
       Promise.resolve({ token: `token-${Math.random()}` })
     );
     const results = await Promise.all(refreshes);

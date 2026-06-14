@@ -100,6 +100,7 @@ export const ChartCardSkeleton = ({ className }: { className?: string }) => (
           <div key={i} className="flex-1 flex flex-col items-center gap-2">
             <Skeleton 
               className="w-full rounded-t-md" 
+              // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
               style={{ height: `${Math.random() * 60 + 40}%` }} 
               variant="shimmer"
             />

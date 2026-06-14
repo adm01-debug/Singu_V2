@@ -123,7 +123,9 @@ export function DISCChart({ profile, className }: DISCChartProps) {
   
   // Simulate scores based on primary profile
   const getScore = (p: DISCProfile): number => {
+    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
     if (p === profile) return 85 + Math.random() * 15;
+    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
     return 20 + Math.random() * 40;
   };
 

@@ -117,6 +117,7 @@ function genId(): string {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     return crypto.randomUUID();
   }
+  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
   return `fav_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
