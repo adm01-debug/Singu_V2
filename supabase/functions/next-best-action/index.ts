@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
     if (!contactId) return jsonError("contactId is required", 400);
 
     // 1. Gather Rich Context
-     const [contactRes, interactionsRes, socialRes, neuroRes, analyticalRes, whatsappRes] = await Promise.all([
+     const [contactRes, interactionsRes, , neuroRes, analyticalRes, whatsappRes] = await Promise.all([
        supabase.from('contacts').select('*').eq('id', contactId).single(),
        supabase.from('interactions').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(10),
        supabase.from('social_behavior_analysis').select('*').eq('contact_id', contactId).order('analysis_date', { ascending: false }).limit(1),

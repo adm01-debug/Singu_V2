@@ -76,7 +76,6 @@ Deno.serve(async (req) => {
     if (cErr) throw cErr;
 
     const contactList = (contacts ?? []) as ContactRow[];
-    const contactById = new Map(contactList.map((c) => [c.id, c]));
 
     const emailItems: Array<{ contactId: string; value: string }> = [];
     const phoneItems: Array<{ contactId: string; value: string }> = [];

@@ -77,7 +77,7 @@ const ContactDetailSkeleton = () => (
 
 const ContatoDetalhe = () => {
   const { id } = useParams();
-  const { contact, company, interactions, insights, alerts, loading, error, refetch, dismissAlert, dismissInsight } = useContactDetail(id);
+  const { contact, company, interactions, insights, alerts, loading, error, refetch } = useContactDetail(id);
   const { trackView } = useRecentlyViewed();
    const { 
      records: luxRecords, 

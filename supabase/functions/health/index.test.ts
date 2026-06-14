@@ -27,7 +27,7 @@ Deno.test("health endpoint returns 200 with status", async () => {
 
 Deno.test("health endpoint handles OPTIONS (CORS preflight)", async () => {
   const res = await fetch(HEALTH_URL, { method: "OPTIONS" });
-  const text = await res.text();
+  await res.text();
   assertEquals(res.status, 200);
   const origin = res.headers.get("Access-Control-Allow-Origin");
   assertEquals(typeof origin, "string");

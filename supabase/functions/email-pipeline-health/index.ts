@@ -22,9 +22,6 @@ Deno.serve(async (req) => {
 
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-    const localClient = createClient(supabaseUrl, supabaseKey);
-
     // Use external-data edge function to query email_logs
     const authHeader = req.headers.get("Authorization") || "";
     const edgeUrl = `${supabaseUrl}/functions/v1/external-data`;

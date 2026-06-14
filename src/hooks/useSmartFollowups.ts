@@ -17,7 +17,6 @@ export interface SmartReminder {
 
 export function useSmartFollowups() {
   const { user } = useAuth();
-  const queryClient = useQueryClient();
   const createTask = useCreateTask();
 
   // Buscar lembretes inteligentes

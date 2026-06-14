@@ -70,7 +70,7 @@ const EmpresaDetalhe = () => {
      triggerLux,
      createStakeholderContact
    } = useLuxIntelligence('company', id);
-  const { interactions: hookInteractions, loading: interactionsLoading } = useInteractions(undefined, id);
+  const { interactions: hookInteractions } = useInteractions(undefined, id);
   const [company, setCompany] = useState<Company | null>(null);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);

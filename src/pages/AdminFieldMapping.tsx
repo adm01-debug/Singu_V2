@@ -1,5 +1,4 @@
 import { useState, useMemo } from 'react';
-import { useAuth } from '@/hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { AppLayout } from '@/components/layout/AppLayout';
@@ -80,7 +79,6 @@ interface Discrepancy {
 
 export default function FieldMappingDocs() {
   const [search, setSearch] = useState('');
-  const { user } = useAuth();
 
   // Fetch external schema
   const { data: schema, isLoading: schemaLoading, refetch: refetchSchema } = useQuery<SchemaResult | null>({

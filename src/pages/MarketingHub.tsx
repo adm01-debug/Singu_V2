@@ -35,14 +35,12 @@ export default function MarketingHub() {
   const { workflows } = useNurturingWorkflows();
   const { data: executions = [] } = useNurturingExecutions();
   const runNurturing = useRunNurturing();
-  const { criteria, upsert: upsertCriteria, remove: removeCriteria } = useMQLCriteria();
+  const { criteria } = useMQLCriteria();
   const { data: classifications = [] } = useMQLClassifications();
   const handoff = useHandoffMQL();
 
   const [newFormName, setNewFormName] = useState('');
   const [newMagnetTitle, setNewMagnetTitle] = useState('');
-  const [newCriteriaName, setNewCriteriaName] = useState('');
-  const [newCriteriaScore, setNewCriteriaScore] = useState(60);
 
   const [attDealId, setAttDealId] = useState('');
   const [attModel, setAttModel] = useState<AttributionModel>('linear');

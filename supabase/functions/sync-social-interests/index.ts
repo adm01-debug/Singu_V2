@@ -27,7 +27,7 @@ serve(async (req) => {
       .eq('id', queueId)
 
     // 2. Fetch social insights (mocking external social api call)
-    const { data: insights, error: insightsError } = await supabaseClient
+    const { error: insightsError } = await supabaseClient
       .from('social_insights')
       .select('*')
       .eq('contact_id', contactId)
