@@ -22,7 +22,7 @@ function parseLinkedInProfile(markdown: string, metadata: any) {
   if (experienceSection) {
     const jobs = experienceSection[0].match(/(?:\*\*|##)\s*([^*\n]+)/g);
     if (jobs) {
-      profile.experience = jobs.slice(0, 5).map((job: string) => ({ title: job.replace(/[\*#]/g, "").trim() }));
+      profile.experience = jobs.slice(0, 5).map((job: string) => ({ title: job.replace(/[*#]/g, "").trim() }));
       if (profile.experience.length > 0) {
         const firstJob = profile.experience[0].title;
         // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)

@@ -86,7 +86,7 @@ describe('Import Hygiene', () => {
     allTsx.forEach(f => {
       const content = readFile(f);
       const basename = path.basename(f, '.tsx');
-      const selfImportRegex = new RegExp(`from\\s+['\"].*/${basename}['\"]`);
+      const selfImportRegex = new RegExp(`from\\s+['"].*/${basename}['"]`);
       const lines = content.split('\n');
       const importLines = lines.filter(l => l.startsWith('import') && selfImportRegex.test(l));
       expect(importLines).toHaveLength(0);

@@ -30,10 +30,10 @@ export function toTitleCase(str: string): string {
   if (dashParts.length >= 2) {
     const lastPart = dashParts[dashParts.length - 1];
     const mainParts = dashParts.slice(0, -1).join(' - ');
-    const suffix = normalizeForCompare(lastPart.replace(/[\/\-]\s*[A-Za-z]{2}$/, '').trim());
+    const suffix = normalizeForCompare(lastPart.replace(/[/-]\s*[A-Za-z]{2}$/, '').trim());
     const mainNorm = normalizeForCompare(mainParts);
     if (mainNorm.includes(suffix) && suffix.length >= 3) {
-      const ufMatch = lastPart.match(/[\/\-]\s*([A-Za-z]{2})$/);
+      const ufMatch = lastPart.match(/[/-]\s*([A-Za-z]{2})$/);
       // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
       const existingUf = mainParts.match(/\s*[-–—]\s*([A-Z]{2})$/);
       if (existingUf) {
@@ -52,7 +52,7 @@ export function toTitleCase(str: string): string {
       const upperWord = word.toUpperCase();
       
       // Keep separators as-is
-      if (/^[\s\-\/]+$/.test(word)) return word;
+      if (/^[\s\-/]+$/.test(word)) return word;
       
       // Keep known uppercase words
       if (UPPERCASE_WORDS.has(upperWord)) return upperWord;
