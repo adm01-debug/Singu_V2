@@ -10,13 +10,10 @@ import {
   Copy, 
   Check, 
   RefreshCw,
-  Target,
   Sparkles,
   MessageSquare,
   AlertTriangle,
   Heart,
-  Lightbulb,
-  Zap,
   ChevronDown,
   ChevronUp
 } from 'lucide-react';

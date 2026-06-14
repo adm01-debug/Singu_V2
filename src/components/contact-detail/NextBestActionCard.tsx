@@ -2,7 +2,7 @@
  import { supabase } from '@/integrations/supabase/client';
  import { StepForward, MapPin } from 'lucide-react';
 import { useState } from 'react';
-import { Sparkles, Copy, RefreshCw, CheckCircle2, Mail, MessageCircle, Phone, Linkedin, Calendar, ChevronDown, ChevronUp, AlarmClock, Edit3, Save, Check, X } from 'lucide-react';
+import { Sparkles, Copy, RefreshCw, CheckCircle2, Mail, MessageCircle, Phone, Linkedin, Calendar, ChevronDown, ChevronUp, AlarmClock, Edit3, Save, Check } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
  import { Button } from '@/components/ui/button';

@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { queryExternalData } from '@/lib/externalData';
 import { Search, Loader2, UserPlus, Globe, Building2, Mail, Phone } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import { useContacts } from '@/hooks/useContacts';

@@ -1,24 +1,18 @@
 import { 
   Target, 
   Zap, 
-  ArrowRight, 
   Shield, 
   TrendingUp, 
   Clock, 
   Award,
-  ChevronRight,
   Scale,
   BrainCircuit
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
-  TooltipTrigger 
-} from '@/components/ui/tooltip';
+
+
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';

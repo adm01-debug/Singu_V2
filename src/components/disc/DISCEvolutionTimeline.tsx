@@ -17,8 +17,8 @@ import { ptBR } from 'date-fns/locale';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { 
-  TrendingUp, TrendingDown, Minus, Calendar, 
-  Activity, Target, Zap, RefreshCw, ChevronRight
+  TrendingUp, TrendingDown, Minus, 
+  Activity, Zap, ChevronRight
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { DISC_PROFILES } from '@/data/discAdvancedData';

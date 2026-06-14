@@ -9,8 +9,6 @@ import {
   Eye, 
   MessageSquare, 
   TrendingDown,
-  TrendingUp,
-  Minus,
   Search,
   Lightbulb,
   ChevronDown,

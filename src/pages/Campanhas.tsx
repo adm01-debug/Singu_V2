@@ -1,9 +1,8 @@
 import { useState, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
- import { Mail, Plus, Send, FileEdit, Trash2, Eye, Clock, CheckCircle2, Search, BarChart3, Megaphone, Layout, ListFilter } from 'lucide-react';
+ import { Mail, Plus, Send, FileEdit, Trash2, Eye, Clock, CheckCircle2, Search, BarChart3, Megaphone } from 'lucide-react';
  import { Link } from 'react-router-dom';
 import { AppLayout } from '@/components/layout/AppLayout';
-import { PageHeader } from '@/components/navigation/PageHeader';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,8 +18,6 @@ import { CampaignDetailDrawer } from '@/components/campaigns/CampaignDetailDrawe
 import { EmailBuilder } from '@/components/email-builder/EmailBuilder';
 import type { EmailBlock } from '@/components/email-builder/types';
 import { renderBlocksToHtml, renderBlocksToText } from '@/lib/emailBuilderRenderer';
-import { formatDistanceToNow } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 
 const STATUS_CONFIG = {
   draft: { label: 'Rascunho', icon: FileEdit, color: 'text-muted-foreground' },

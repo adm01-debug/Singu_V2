@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { Mic, MicOff, Play, Loader2, Clock } from 'lucide-react';
+import { Mic, MicOff, Loader2, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';

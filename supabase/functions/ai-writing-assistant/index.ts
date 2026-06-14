@@ -1,5 +1,5 @@
 import { z } from "npm:zod@3.23.8";
-import { handleCorsAndMethod, withAuth, jsonError, jsonOk, corsHeaders } from "../_shared/auth.ts";
+import { withAuth, jsonError, jsonOk, corsHeaders } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20, message: "Rate limit exceeded for AI writing. Please wait." });

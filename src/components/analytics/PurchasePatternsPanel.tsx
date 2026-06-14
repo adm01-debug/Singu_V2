@@ -4,10 +4,8 @@ import { Link } from 'react-router-dom';
 import {
   ShoppingCart,
   TrendingUp,
-  Clock,
   AlertCircle,
   Calendar,
-  ChevronRight,
   Package,
   RefreshCw,
   BarChart3,

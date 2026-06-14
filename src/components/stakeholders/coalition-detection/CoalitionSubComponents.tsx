@@ -1,7 +1,6 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
-  Users, Crown, Shield, AlertTriangle, TrendingUp, TrendingDown, Minus,
+  Users, Crown, Minus,
   ChevronRight, Target, Zap, UserCheck, UserX, Scale, Lightbulb, Link2, X, Info,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';

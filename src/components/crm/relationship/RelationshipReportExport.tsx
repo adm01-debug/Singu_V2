@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileText, Download, Loader2, FileSpreadsheet, Brain, Sparkles } from 'lucide-react';
+import { FileText, Download, Loader2, FileSpreadsheet, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { exportToCSV } from '@/lib/export-utils';
 import { supabase } from '@/integrations/supabase/client';

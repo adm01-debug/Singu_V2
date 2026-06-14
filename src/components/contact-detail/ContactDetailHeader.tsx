@@ -1,12 +1,11 @@
 import { useState, useCallback } from 'react';
 import { DuplicateManagementPanel } from './DuplicateManagementPanel';
 import { SoftDeletePanel } from './SoftDeletePanel';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
   import {
     Mail, Phone, MessageSquare, Linkedin, Instagram, Twitter,
     Building2, Briefcase, Calendar, Edit2, ExternalLink, Copy, Check,
-    MapPin, Globe, AlertTriangle, Trash2, Brain, Target, Shield, Bell,
-    ChevronRight, ArrowRight, Zap, FlaskConical
+    MapPin, Globe, AlertTriangle, Trash2, Brain, Target, Shield, Bell, FlaskConical
   } from 'lucide-react';
 import { OptimizedAvatar } from '@/components/ui/optimized-avatar';
 import { Badge } from '@/components/ui/badge';

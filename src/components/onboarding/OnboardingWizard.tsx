@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Zap, ArrowRight, ArrowLeft, Check, Sparkles,
-  User, Building2, Upload, Settings, PartyPopper
+  Zap, Check, Sparkles,
+  User, Upload, Settings, PartyPopper
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/hooks/useAuth';

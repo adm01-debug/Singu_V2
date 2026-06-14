@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { AlertTriangle, Merge, Search } from 'lucide-react';
+import { AlertTriangle, Merge } from 'lucide-react';
 import { useMergeCompanies } from '@/hooks/useCompanyActions';
 
 interface MergeCompaniesDialogProps {

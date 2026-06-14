@@ -4,7 +4,7 @@
 // Enterprise Level Component
 // ==============================================
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -12,9 +12,7 @@ import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  CheckCircle, XCircle, AlertTriangle, Target, Eye, Ear, Hand, Brain,
-  MessageSquare, Zap, RefreshCw, Copy, Check, Lightbulb, TrendingUp
+import { XCircle, AlertTriangle, Target, Eye, Ear, Hand, Brain, Zap, Copy, Check, Lightbulb, TrendingUp
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';

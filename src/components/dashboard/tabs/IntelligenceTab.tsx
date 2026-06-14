@@ -1,6 +1,6 @@
 import { lazy, Suspense, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { ShoppingBag, Target, Clock, AlertTriangle, TrendingUp, Sparkles, Brain } from 'lucide-react';
+import { ShoppingBag, Target, Clock, AlertTriangle, TrendingUp } from 'lucide-react';
 import { Typography } from '@/components/ui/typography';
 import { LazySection } from '@/components/dashboard/LazySection';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';

@@ -26,7 +26,7 @@ import { Header } from '@/components/layout/Header';
     NeuroCommunicationHub
  } from '@/components/nlp';
   import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-   import { Brain, TrendingUp, Users, Target, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope, Fingerprint, Workflow, ListOrdered, RefreshCcw, Anchor, Zap, Focus, SwatchBook } from 'lucide-react';
+   import { Brain, TrendingUp, Users, Search, Sparkles, Wand2, Activity, CheckCircle2, GraduationCap, Telescope, Fingerprint, Workflow, RefreshCcw, Anchor, Zap, Focus, SwatchBook } from 'lucide-react';
  import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
  import { Input } from '@/components/ui/input';
  import { Button } from '@/components/ui/button';

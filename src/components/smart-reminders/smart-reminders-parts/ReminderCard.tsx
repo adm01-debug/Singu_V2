@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Calendar, Cake, Thermometer, Star, X, Clock, ChevronRight,
-  MessageSquare, CheckCircle2, AlertTriangle, Zap
+  MessageSquare, CheckCircle2, AlertTriangle
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

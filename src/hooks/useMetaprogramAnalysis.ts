@@ -4,15 +4,8 @@ import { useAuth } from './useAuth';
 import { toast } from '@/hooks/use-toast';
 import { useNLPAutoAnalysis } from "./useNLPAutoAnalysis";
 import {
-  MetaprogramScores,
   MetaprogramProfile,
   MetaprogramAnalysisResult,
-  MotivationDirection,
-  ReferenceFrame,
-  WorkingStyle,
-  ChunkSize,
-  ActionFilter,
-  ComparisonStyle,
   METAPROGRAM_KEYWORDS
 } from '@/types/metaprograms';
 import { logger } from "@/lib/logger";

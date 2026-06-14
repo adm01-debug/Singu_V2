@@ -1,11 +1,11 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { queryExternalData } from '@/lib/externalData';
 import { normalizeExternalContact } from '@/hooks/useContacts';
-import { useContacts } from '@/hooks/useContacts'; // To reuse normalization logic if possible, but let's define it or import it properly.
+// To reuse normalization logic if possible, but let's define it or import it properly.
 // Wait, useContacts is a hook. I should probably move normalizeExternalContact to a lib file.
 import type { Tables, TablesUpdate, Json } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";

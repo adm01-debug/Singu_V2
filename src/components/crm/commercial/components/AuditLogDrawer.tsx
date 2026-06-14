@@ -2,10 +2,7 @@ import {
   History, 
   Clock, 
   User, 
-  Settings, 
-  AlertCircle,
-  ArrowRight,
-   ChevronRight,
+  Settings,
    Tag,
    Eye
 } from 'lucide-react';

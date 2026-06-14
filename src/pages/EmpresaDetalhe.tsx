@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, useMemo, lazy } from 'react';
 import { CustomFieldsDisplay } from '@/components/custom-fields/CustomFieldsDisplay';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
 import { useParams, Link } from 'react-router-dom';
@@ -11,13 +11,11 @@ import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useLuxIntelligence } from '@/hooks/useLuxIntelligence';
 import { useCompanyPhones, useCompanyEmails, useCompanyAddresses, useCompanySocialMedia, useCompanyCnaes, useCompanyRfmScores, useCompanyStakeholders } from '@/hooks/useCompanyRelatedData';
 import { useCompanySummaryView } from '@/hooks/useCompanyViews';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Building2, Users, Edit, Plus, MessageSquare,
   Network, BarChart3, Sparkles, Database, ShoppingCart,
-  AlertTriangle, RotateCcw, Target, Zap, Globe, MapPin, 
-  Phone, Mail, Calendar, ExternalLink, ChevronRight, Activity, 
-  TrendingUp, ShieldCheck, UserCheck, Star, HeartPulse, Brain
+  AlertTriangle, RotateCcw, Target
 } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { EntityDetailPageSkeleton } from '@/components/skeletons/PageSkeletons';
@@ -50,7 +48,6 @@ import type { Tables } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
 import { useToast } from '@/hooks/use-toast';
 import { CompanyExecutiveSummary } from '@/components/company-detail/CompanyExecutiveSummary';
-import { Skeleton } from '@/components/ui/skeleton';
 
 const ContactTimelineWidget = lazy(() => import('@/components/contact-detail/ContactTimelineWidget'));
 const UnifiedCommunicationHistory = lazy(() => import('@/components/interactions/UnifiedCommunicationHistory'));

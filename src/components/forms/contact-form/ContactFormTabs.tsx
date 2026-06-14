@@ -1,10 +1,9 @@
 import { UseFormReturn } from 'react-hook-form';
-import { ContactAvatarUpload } from '@/components/forms/ContactAvatarUpload';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { PhoneInput } from '@/components/ui/masked-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
  import { User, Briefcase, Tag, FileText, Heart, Palette, Target } from 'lucide-react';
  import { TagInput } from '@/components/ui/tag-input';

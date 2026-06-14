@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { useUnifiedTimeline, type UnifiedTimelineEvent, type UnifiedEventType } from '@/hooks/useUnifiedTimeline';
+import { useUnifiedTimeline, type UnifiedEventType } from '@/hooks/useUnifiedTimeline';
 import {
   MessageSquare, Phone, Users, FileText, CheckCircle2,
-  Calendar, Search, Filter, Clock, ArrowUpRight, ArrowDownLeft,
+  Calendar, Search, Clock, ArrowUpRight, ArrowDownLeft,
   AlertCircle, TrendingUp, Zap, Smile, Frown, Meh, Brain, Activity, TrendingDown, Heart
 } from 'lucide-react';
 
@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { format, isWithinInterval, startOfDay, endOfDay, parseISO } from 'date-fns';
+import { format, isWithinInterval, startOfDay, endOfDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';

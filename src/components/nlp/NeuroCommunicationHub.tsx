@@ -1,12 +1,11 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Brain, Zap, Activity, Sparkles, Target, Waves, Sliders, ShieldCheck, MessageSquare, ZapIcon, Lightbulb } from 'lucide-react';
+import { Brain, Zap, Activity, Sparkles, Target, Waves, Sliders, ShieldCheck } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
 import { useNeuromarketing } from '@/hooks/useNeuromarketing';
-import { cn } from '@/lib/utils';
 import { PromptChips, type PromptChip } from '@/components/ui/prompt-chips';
 import { toast } from 'sonner';
 

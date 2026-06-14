@@ -1,12 +1,10 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCommunicationIntelList } from '@/hooks/useCommunicationIntelView';
 import { useEmotionalTrendList } from '@/hooks/useEmotionalTrendView';
 import { useRapportIntelList } from '@/hooks/useRapportIntelView';
 import { Radio, Heart, Handshake, TrendingUp, TrendingDown, Minus } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 const TREND_ICON = { rising: TrendingUp, stable: Minus, declining: TrendingDown } as const;
 const TREND_COLOR: Record<string, string> = { rising: 'text-success', stable: 'text-muted-foreground', declining: 'text-destructive' };

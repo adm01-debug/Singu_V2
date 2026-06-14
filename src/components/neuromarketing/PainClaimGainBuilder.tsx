@@ -19,7 +19,6 @@ import {
   Trash2,
   Copy,
   Sparkles,
-  CheckCircle,
   Lightbulb
 } from 'lucide-react';
 import { PainPoint, ClaimStatement, GainProof } from '@/types/neuromarketing';

@@ -1,10 +1,9 @@
  import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
  import { Button } from '@/components/ui/button';
  import { Badge } from '@/components/ui/badge';
- import { Input } from '@/components/ui/input';
  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
  import { useContactSegmentation } from '@/hooks/useContactSegmentation';
- import { Filter, Plus, Trash2, Users, Sparkles, MessageSquare, Target, Zap } from 'lucide-react';
+ import { Filter, Trash2, Users, Sparkles, MessageSquare, Target, Zap } from 'lucide-react';
  import { motion, AnimatePresence } from 'framer-motion';
  
  export function BehavioralSegmentation() {

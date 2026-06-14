@@ -7,8 +7,7 @@ import {
 } from '@/types/cognitive-biases';
 import { 
   COGNITIVE_BIAS_INFO, 
-  BIAS_CATEGORY_INFO,
-  getBiasesByCategory
+  BIAS_CATEGORY_INFO
 } from '@/data/cognitiveBiasesData';
 import { Contact } from '@/types';
 

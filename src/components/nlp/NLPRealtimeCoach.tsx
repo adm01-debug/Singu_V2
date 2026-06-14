@@ -1,24 +1,18 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
-  Lightbulb, 
   MessageSquare, 
   RefreshCcw, 
-  Copy, 
   Sparkles, 
   ThumbsUp, 
    ThumbsDown,
    ArrowRight,
    Zap,
    Activity,
-   Users,
    Wand2,
    Target,
-   Shield,
-   Smile,
-   Scale,
    AlertTriangle
 } from 'lucide-react';
  import { Progress } from '@/components/ui/progress';
@@ -26,8 +20,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useVAKAnalysis } from '@/hooks/useVAKAnalysis';
 import { useMetaprogramAnalysis } from '@/hooks/useMetaprogramAnalysis';
  import { VAK_LABELS, VAK_COMMUNICATION_TIPS, VAK_PREDICATES, type VAKType } from '@/types/vak';
-import { METAPROGRAM_LABELS } from '@/types/metaprograms';
- import { SLEIGHT_TEMPLATES } from '@/data/sleightOfMouth';
+import { SLEIGHT_TEMPLATES } from '@/data/sleightOfMouth';
  import { DISC_DETECTION_PATTERNS, DISC_PROFILES } from '@/data/discAdvancedData';
  import type { DISCProfile } from '@/types';
 import { toast } from 'sonner';

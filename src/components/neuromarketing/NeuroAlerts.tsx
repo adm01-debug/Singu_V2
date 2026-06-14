@@ -6,16 +6,10 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  AlertTriangle, 
-  Brain, 
-  Heart, 
-  Lightbulb, 
   X, 
   Bell,
   ArrowRight,
   Zap,
-  TrendingUp,
-  TrendingDown,
   CheckCircle
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

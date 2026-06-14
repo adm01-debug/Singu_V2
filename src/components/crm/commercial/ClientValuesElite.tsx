@@ -3,9 +3,7 @@ import {
   Quote, 
   Star, 
   Activity, 
-  Sparkles,
-  Calendar,
-  CheckCircle2
+  Sparkles
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

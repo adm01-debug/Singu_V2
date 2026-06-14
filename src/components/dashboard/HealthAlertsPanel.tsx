@@ -19,7 +19,6 @@ import {
   Heart,
   Mail,
   Smartphone,
-  User,
   ArrowRight
 } from 'lucide-react';
 import { useHealthAlerts, HealthAlert } from '@/hooks/useHealthAlerts';

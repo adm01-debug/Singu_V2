@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { queryExternalData } from "@/lib/externalData";
 import { Button } from "@/components/ui/button";
- import { Printer, FileJson, FileSpreadsheet, Edit3, Save, ShieldCheck } from "lucide-react";
+ import { Printer, FileSpreadsheet, Edit3, Save, ShieldCheck } from "lucide-react";
 import { BackButton } from "@/components/navigation/BackButton";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -16,8 +16,7 @@ import { NeuromarketingTimeline } from "@/components/crm/behavior/Neuromarketing
   import { toast } from "sonner";
  import { Badge } from "@/components/ui/badge";
   import { 
-    Brain, Target, Shield, Lightbulb, Zap, UserPlus, 
-    CheckCircle2, Share2, EyeOff, LayoutList, ClipboardCheck
+    Brain, Target, Shield, Lightbulb, Zap, UserPlus, Share2, EyeOff
   } from "lucide-react";
 import type { Tables } from '@/integrations/supabase/types';
 

@@ -8,7 +8,7 @@ import { useAccountChurnPrediction } from '@/hooks/useAccountChurnPrediction';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { ChurnSingleAccountView } from './churn/ChurnSingleAccountView';
-import { getRiskColor, getRiskBgColor, getRiskBadgeColor, getRiskLabel, getHealthIcon, getTrendIcon, getStakeholderIcon } from './churn/ChurnHelpers';
+import { getRiskColor, getRiskBgColor, getRiskBadgeColor, getRiskLabel, getHealthIcon, getTrendIcon } from './churn/ChurnHelpers';
 import { ShieldCheck } from 'lucide-react';
 
 interface AccountChurnPredictionPanelProps {

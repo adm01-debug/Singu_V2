@@ -1,14 +1,13 @@
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
-import {
-  AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis,
+import { Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis,
   CartesianGrid, Tooltip, ResponsiveContainer, Legend, ComposedChart, Line,
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TrendingUp, Activity, PieChart as PieChartIcon, BarChart3 } from 'lucide-react';
 import { AccessibleChart } from '@/components/ui/accessible-chart';
 import {
-  type PeriodFilter, calcChange,
+  type PeriodFilter,
   getActivityData, getActivityStats, getEvolutionData, getEvolutionStats,
   getRelationshipData, contactsByRole, getSentimentData, getSentimentStats,
   getRelationshipStats,

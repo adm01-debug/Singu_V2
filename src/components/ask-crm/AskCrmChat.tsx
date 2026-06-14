@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, memo } from 'react';
-import { MessageSquare, X, Send, Trash2, Sparkles, ChevronDown, Database, Users, TrendingUp, History, AlertCircle } from 'lucide-react';
+import { MessageSquare, Send, Trash2, Sparkles, ChevronDown, Database, Users, TrendingUp, History, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAskCrm, type AskCrmMessage } from '@/hooks/useAskCrm';

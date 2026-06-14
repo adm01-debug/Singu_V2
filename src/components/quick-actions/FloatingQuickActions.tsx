@@ -8,7 +8,6 @@ import {
   MessageSquare, 
   CalendarPlus,
   Search,
-  Mic,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';

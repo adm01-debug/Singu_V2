@@ -1,8 +1,7 @@
  import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
  import { Button } from '@/components/ui/button';
  import { Switch } from '@/components/ui/switch';
- import { Badge } from '@/components/ui/badge';
- import { Copy, Trash2, ExternalLink, Settings2, BarChart3 } from 'lucide-react';
+ import { Copy, Trash2, ExternalLink, Settings2 } from 'lucide-react';
  import { Link } from 'react-router-dom';
  import { MarketingForm } from '@/hooks/useForms';
  import { motion, AnimatePresence } from 'framer-motion';

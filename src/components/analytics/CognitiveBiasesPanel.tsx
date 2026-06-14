@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Brain, BarChart3, Target, History, Info, Save, CheckCircle2, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { Brain, BarChart3, Target, History, Info, Save, CheckCircle2, TrendingUp } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';

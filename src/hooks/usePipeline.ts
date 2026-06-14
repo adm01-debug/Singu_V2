@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { callExternalRpc, queryExternalData, updateExternalData } from '@/lib/externalData';
+import { callExternalRpc } from '@/lib/externalData';
 import { supabase } from '@/integrations/supabase/client';
 
 // ── Types ──────────────────────────────────────────

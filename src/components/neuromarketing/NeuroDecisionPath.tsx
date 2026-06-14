@@ -14,9 +14,7 @@ import {
   Lightbulb, 
   AlertTriangle,
   CheckCircle,
-  Target,
-  Zap,
-  Info
+  Target
 } from 'lucide-react';
 import { useNeuromarketing } from '@/hooks/useNeuromarketing';
 import { BrainSystem, Neurochemical, PrimalStimulus } from '@/types/neuromarketing';

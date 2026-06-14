@@ -1,10 +1,9 @@
-import { motion } from 'framer-motion';
 import {
   PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis,
   PolarRadiusAxis, Radar,
 } from 'recharts';
-import { Users, Target, Award, CheckCircle2, AlertCircle, Lightbulb, ArrowRight } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Lightbulb, ArrowRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';

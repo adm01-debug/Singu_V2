@@ -3,7 +3,7 @@ import { ptBR } from 'date-fns/locale';
 import { motion } from 'framer-motion';
 import {
   Clock, CheckCircle2, AlertCircle, Loader2,
-  ChevronRight, Eye, History, Sparkles
+  ChevronRight, History
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { logger, setRequestId, setLogUser, generateRequestId } from '@/lib/logger';
 import { supabase } from "@/integrations/supabase/client";
 

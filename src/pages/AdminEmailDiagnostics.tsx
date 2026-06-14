@@ -1,10 +1,8 @@
-import { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Mail, RefreshCw, CheckCircle2, AlertTriangle, XCircle, Clock, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useEmailPipelineHealth, useRefreshPipelineHealth } from '@/hooks/useEmailPipelineHealth';
-import { useContactEmailLogs } from '@/hooks/useContactEmailLogs';
 import { formatDistanceToNow, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';

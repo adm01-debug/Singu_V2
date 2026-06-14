@@ -1,5 +1,5 @@
  import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
- import { Eye, Volume2, Fingerprint, Save, Wand2 } from 'lucide-react';
+ import { Eye, Volume2, Fingerprint, Save } from 'lucide-react';
  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
  import { Label } from '@/components/ui/label';
  import { Button } from '@/components/ui/button';

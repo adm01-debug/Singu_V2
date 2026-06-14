@@ -7,7 +7,7 @@ import { IPRestrictionManager } from '@/components/security/IPRestrictionManager
 import { GeoBlockingManager } from '@/components/security/GeoBlockingManager';
 import { SecuritySettings } from '@/components/security/SecuritySettings';
 import { PushNotificationSettings } from '@/components/security/PushNotificationSettings';
-import { Shield, Key, Globe, Settings } from 'lucide-react';
+import { Key, Globe, Settings } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useIPMaskingPreference } from '@/hooks/useIPMaskingPreference';

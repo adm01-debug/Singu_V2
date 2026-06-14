@@ -2,7 +2,7 @@ import { useContactProposals } from '@/hooks/useContactProposals';
 import { ExternalDataCard } from '@/components/ui/external-data-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { FileText, Eye, Check, X } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface Props { contactId: string; }

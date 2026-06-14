@@ -4,7 +4,7 @@ import { base64UrlToBundle, type PresetBundle } from '@/lib/searchPresetTranspor
 import { useSearchPresets } from '@/hooks/useSearchPresets';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { SEOHead } from '@/components/seo/SEOHead';
-import { MessageSquare, Phone, Mail, Users, Video, FileText, AlertCircle, Plus } from 'lucide-react';
+import { MessageSquare, Phone, Mail, Users, Video, FileText, AlertCircle } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Header } from '@/components/layout/Header';
 import { Dialog, DialogContent } from '@/components/ui/dialog';

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Contact, DISCProfile } from '@/types';
-import { PersuasionTemplate, PersuasionScenario, MENTAL_TRIGGERS } from '@/types/triggers';
+import { PersuasionTemplate, PersuasionScenario } from '@/types/triggers';
 import { useClientTriggers } from '@/hooks/useClientTriggers';
 import { useTriggerHistory, TriggerUsageEntry } from '@/hooks/useTriggerHistory';
 

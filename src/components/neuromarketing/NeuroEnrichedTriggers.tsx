@@ -11,12 +11,11 @@ import {
   Brain,
   Heart,
   AlertTriangle,
-  Sparkles,
-  Zap
+  Sparkles
 } from 'lucide-react';
 import { useNeuromarketing } from '@/hooks/useNeuromarketing';
 import { MENTAL_TRIGGERS } from '@/types/triggers';
-import { BrainSystem, Neurochemical } from '@/types/neuromarketing';
+import { BrainSystem } from '@/types/neuromarketing';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface NeuroEnrichedTriggersProps {

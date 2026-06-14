@@ -24,7 +24,6 @@ import {
   StarOff,
   ExternalLink,
   Share2,
-  MoreHorizontal,
 } from 'lucide-react';
 import { toast } from 'sonner';
 

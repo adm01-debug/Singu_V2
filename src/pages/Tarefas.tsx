@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion';
-import { CheckSquare, Clock, AlertTriangle, Filter, CheckCircle2, ArrowUpDown, Search } from 'lucide-react';
+import { CheckSquare, Clock, AlertTriangle, CheckCircle2, ArrowUpDown, Search } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';

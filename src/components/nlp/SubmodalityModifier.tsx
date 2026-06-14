@@ -8,11 +8,6 @@ import {
   Eye, 
   Ear, 
   Hand,
-  Sun,
-  Move,
-  Volume2,
-  Maximize,
-  ZoomIn,
   Focus,
   Lightbulb
 } from 'lucide-react';

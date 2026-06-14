@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { OptimizedAvatar } from '@/components/ui/optimized-avatar';
 import { DISCBadge } from '@/components/ui/disc-badge';
@@ -8,7 +8,7 @@ import { ExternalDataCard } from '@/components/ui/external-data-card';
 import { AccountChurnPredictionPanel } from '@/components/analytics/AccountChurnPredictionPanel';
 import { useCompanyTimeline, useCompany360, useNextBestAction, useTouchpointSummary, useKeyContacts, useChurnRisk } from '@/hooks/useCompanyIntelligence';
 import { motion } from 'framer-motion';
-import { Users, TrendingUp, BarChart3, Clock, Activity, Brain, AlertTriangle, Lightbulb, Phone } from 'lucide-react';
+import { Users, TrendingUp, BarChart3, Clock, Brain, AlertTriangle, Lightbulb, Phone } from 'lucide-react';
 import { Company360Card } from './insights/Company360Card';
 import { CompanyTimelineCard } from './insights/CompanyTimelineCard';
 import type { Tables } from '@/integrations/supabase/types';

@@ -1,15 +1,11 @@
 import { Ficha360ProfileHeader } from '@/components/ficha-360/Ficha360ProfileHeader';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, AlertCircle, User, FlaskConical } from 'lucide-react';
+import { ArrowLeft, ExternalLink, AlertCircle, FlaskConical } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { PageHeader } from '@/components/navigation/PageHeader';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
 import { useFicha360 } from '@/hooks/useFicha360';
 import { useFicha360Filters } from '@/hooks/useFicha360Filters';
 import { useFicha360DraftFilters } from '@/hooks/useFicha360DraftFilters';
@@ -38,7 +34,7 @@ import { useFicha360FilterFavorites, suggestFavoriteName, type FilterFavorite } 
  import { RelatoriosFixosBar } from '@/components/ficha-360/RelatoriosFixosBar';
  import { NLPAnalysisCard } from '@/components/ficha-360/NLPAnalysisCard';
  import { useFicha360NLP } from '@/hooks/useFicha360NLP';
- import { FileText, Printer } from 'lucide-react';
+ import { Printer } from 'lucide-react';
 import type { Ficha360Period } from '@/hooks/useFicha360Filters';
 import { ScoreProntidaoCard } from '@/components/ficha-360/ScoreProntidaoCard';
 import { ProximaAcaoCTA } from '@/components/ficha-360/ProximaAcaoCTA';

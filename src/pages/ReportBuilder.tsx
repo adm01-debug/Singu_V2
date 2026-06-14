@@ -1,13 +1,11 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { LayoutGrid, Plus, X, GripVertical, BarChart3, Users, Building2, TrendingUp, Clock, Target, Activity, PieChart } from 'lucide-react';
+import { LayoutGrid, Plus, X, BarChart3, Users, Building2, TrendingUp, Clock, Target, Activity, PieChart } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { PageHeader } from '@/components/navigation/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 
 const AVAILABLE_WIDGETS = [

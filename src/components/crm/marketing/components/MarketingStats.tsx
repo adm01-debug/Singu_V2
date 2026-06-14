@@ -1,5 +1,5 @@
  import { Card, CardContent } from '@/components/ui/card';
-  import { Eye, FileText, Workflow, Users, TrendingUp, DollarSign } from 'lucide-react';
+  import { Eye, FileText, Users, TrendingUp } from 'lucide-react';
  import { motion } from 'framer-motion';
  
  interface MarketingStatsProps {

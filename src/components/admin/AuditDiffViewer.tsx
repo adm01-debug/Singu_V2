@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ChevronDown, ChevronRight, Copy, Check } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { toast } from 'sonner';
 
 interface AuditDiffViewerProps {
   oldData: Record<string, unknown> | null;

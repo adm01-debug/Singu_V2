@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { ROLE_LABELS } from '@/types/leadRouting';
-import type { SalesTeamMember } from '@/types/leadRouting';
 
 const TYPE_LABELS: Record<string, string> = {
   auto_round_robin: 'Round-Robin',

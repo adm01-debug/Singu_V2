@@ -7,8 +7,6 @@ import {
   X,
   ChevronRight,
   RefreshCw,
-  Users,
-  TrendingDown,
   CheckCircle2,
   Trash2,
 } from 'lucide-react';

@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Loader2, Play, ListChecks } from "lucide-react";
 import { useValidationQueueStats, useTriggerQueueWorker } from "@/hooks/useValidationQueue";
 import { useIsAdmin } from "@/hooks/useIsAdmin";

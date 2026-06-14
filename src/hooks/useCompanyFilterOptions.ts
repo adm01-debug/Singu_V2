@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Building2, HeartPulse, Landmark, MapPin, Package, Truck, Users } from 'lucide-react';
+import { Building2, Landmark, Package, Truck, Users } from 'lucide-react';
 import type { FilterConfig, SortOption } from '@/components/filters/AdvancedFilters';
 import { useExternalBatchLookup } from '@/hooks/useExternalLookup';
 

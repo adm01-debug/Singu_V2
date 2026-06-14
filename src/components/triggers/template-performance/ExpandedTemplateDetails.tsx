@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { TrendingDown, Minus, Target, Users, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { TableRow, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { DISCProfile } from '@/types';
 

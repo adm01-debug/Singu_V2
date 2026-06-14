@@ -9,7 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
-  BookOpen, Download, FileJson, Printer, Search, Copy, Check, FileText,
+  BookOpen, FileJson, Printer, Search, Copy, Check, FileText,
 } from 'lucide-react';
 import { toast } from 'sonner';
 

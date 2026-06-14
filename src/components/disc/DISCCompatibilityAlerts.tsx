@@ -14,8 +14,8 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import {
   AlertTriangle, Bell, BellOff, Settings, Check,
-  X, ChevronRight, Users, TrendingDown, Zap,
-  Shield, Target, RefreshCw, ExternalLink
+  X, Zap,
+  Shield, RefreshCw, ExternalLink
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';

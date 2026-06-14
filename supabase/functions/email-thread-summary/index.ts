@@ -5,7 +5,6 @@ import {
   withAuth,
   jsonError,
   jsonOk,
-  scopedCorsHeaders,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 

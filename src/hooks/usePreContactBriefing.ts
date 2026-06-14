@@ -5,7 +5,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { addMinutes, isWithinInterval, parseISO, format } from 'date-fns';
 import type { Tables } from '@/integrations/supabase/types';
 import { getContactBehavior } from '@/lib/contact-utils';
-import { logger } from "@/lib/logger";
 
 type Contact = Tables<'contacts'>;
 type Interaction = Tables<'interactions'>;

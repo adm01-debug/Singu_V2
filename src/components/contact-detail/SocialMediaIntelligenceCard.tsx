@@ -3,11 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
- import { Share2, EyeOff, ShieldCheck, Globe, Linkedin, Instagram, Twitter, History } from 'lucide-react';
+ import { Share2, EyeOff, ShieldCheck, Linkedin, Instagram, Twitter } from 'lucide-react';
  import { supabase } from '@/integrations/supabase/client';
  import { useAuth } from '@/hooks/useAuth';
- import { toast } from 'sonner';
-
+ 
 interface SocialMediaIntelligenceCardProps {
   contactId: string;
   linkedin?: string;

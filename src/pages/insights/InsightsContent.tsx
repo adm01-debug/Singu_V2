@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Target, Brain, TrendingUp, Search, AlertTriangle, Heart, Lightbulb, Zap, CheckCircle2, Clock, User, ArrowRight, X } from 'lucide-react';
+import { Sparkles, Target, Brain, TrendingUp, Search, AlertTriangle, Heart, Lightbulb, Zap, CheckCircle2, User, ArrowRight, X } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { Navigate } from 'react-router-dom';
-import { useErrorLogs, type ErrorLog } from '@/hooks/useErrorLogs';
+import { useErrorLogs } from '@/hooks/useErrorLogs';
 import { Trash2, RefreshCw, AlertTriangle, User, Globe, Code } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';

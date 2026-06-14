@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { MapPinned, RefreshCw, Sparkles, Target, Users, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTerritoryOptimization } from '@/hooks/useTerritoryOptimization';
 import { TerritoryHealthBanner } from '@/components/territory-optimization/TerritoryHealthBanner';

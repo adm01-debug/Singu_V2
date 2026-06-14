@@ -6,8 +6,7 @@ import {
   Sheet, 
   SheetContent, 
   SheetHeader, 
-  SheetTitle, 
-  SheetFooter,
+  SheetTitle,
   SheetDescription 
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
@@ -31,8 +30,7 @@ import {
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useUpdateTask, useDeleteTask, type Task } from '@/hooks/useTasks';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-import { Loader2, Trash2, Calendar as CalendarIcon, Clock } from 'lucide-react';
+import { Loader2, Trash2, Calendar as CalendarIcon } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';

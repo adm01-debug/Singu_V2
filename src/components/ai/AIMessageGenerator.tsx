@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAIWritingAssistant } from '@/hooks/useAIWritingAssistant';
 import { useToast } from '@/hooks/use-toast';
- import { Sparkles, Copy, CheckCircle, Loader2, Wand2, BookOpen, Quote } from 'lucide-react';
+ import { Sparkles, Copy, CheckCircle, Loader2, Wand2 } from 'lucide-react';
  const FRAMEWORKS = [
    { value: 'None', label: 'Sem Framework' },
    { value: 'AIDA', label: 'AIDA (Atenção/Interesse)' },

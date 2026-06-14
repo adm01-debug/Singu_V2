@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { queryExternalData, callExternalRpc } from '@/lib/externalData';
+import { queryExternalData } from '@/lib/externalData';
 import { logger } from '@/lib/logger';
 
 export interface ErpProduct {

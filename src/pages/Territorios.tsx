@@ -3,7 +3,6 @@ import { MapPin, Plus, Search, LayoutGrid, Map } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTerritories, useTerritoryPerformance } from '@/hooks/useTerritories';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { TerritoryCard } from '@/components/territories/TerritoryCard';

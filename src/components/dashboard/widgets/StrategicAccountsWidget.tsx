@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Building2, DollarSign, Target, AlertTriangle, Crown } from 'lucide-react';
+import { Building2, Target, Crown } from 'lucide-react';
 import { useStrategicAccounts } from '@/hooks/useCompanyIntelligence';
 import { cn } from '@/lib/utils';
 

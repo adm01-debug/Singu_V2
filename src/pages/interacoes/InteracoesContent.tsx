@@ -1,14 +1,13 @@
-import { useState, useMemo, useEffect, useRef, lazy, Suspense, startTransition, useCallback } from 'react';
+import { useState, useMemo, useEffect, useRef, lazy, Suspense, startTransition } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  MessageSquare, Phone, Mail, Users, Edit, Search, Calendar, MoreVertical,
+  MessageSquare, Phone, Mail, Users, Edit, Calendar, MoreVertical,
   Trash2, Video, FileText, Clock, AlertCircle, Plus, X,
 } from 'lucide-react';
 import { InteractionsListSkeleton } from '@/components/skeletons/PageSkeletons';
 import { EmptyState, SearchEmptyState } from '@/components/ui/empty-state';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { OptimizedAvatar } from '@/components/ui/optimized-avatar';
 import { SentimentIndicator } from '@/components/ui/sentiment-indicator';

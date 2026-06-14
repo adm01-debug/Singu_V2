@@ -1,8 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { SEOHead } from '@/components/seo/SEOHead';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { sortArray } from '@/lib/sorting-utils';
 import { Crown, Briefcase, ShoppingCart, User } from 'lucide-react';
@@ -23,7 +21,6 @@ import { useCompanies } from '@/hooks/useCompanies';
 import { useInteractions } from '@/hooks/useInteractions';
 import { useMiniCelebration } from '@/components/celebrations/MiniCelebration';
 import { useKeyboardShortcutsEnhanced } from '@/hooks/useKeyboardShortcutsEnhanced';
-import { logger } from '@/lib/logger';
 import { hapticHeavy, hapticSuccess } from '@/lib/haptics';
 import { useSuccessCelebration } from '@/hooks/useSuccessCelebration';
 import { useActivityLogger } from '@/hooks/useActivityLogger';

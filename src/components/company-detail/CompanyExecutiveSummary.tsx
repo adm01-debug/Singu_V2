@@ -1,5 +1,4 @@
-import { motion } from 'framer-motion';
-import { Target, TrendingUp, BarChart3, AlertCircle, Info, Zap } from 'lucide-react';
+import { Target, TrendingUp, AlertCircle, Zap } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';

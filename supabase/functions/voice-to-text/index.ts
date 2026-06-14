@@ -1,4 +1,4 @@
-import { withAuth, jsonError, jsonOk, corsHeaders } from "../_shared/auth.ts";
+import { jsonError, jsonOk, corsHeaders } from "../_shared/auth.ts";
 
 function processBase64Chunks(base64String: string, chunkSize = 32768) {
   const chunks: Uint8Array[] = [];

@@ -16,7 +16,6 @@ import {
   Sparkles,
   Users,
   Star,
-  ChevronRight,
   Zap
 } from 'lucide-react';
 import { CarnegieScore } from '@/types/carnegie';

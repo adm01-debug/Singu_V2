@@ -13,9 +13,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import {
-  FileText, Zap, Copy, Check, Target, Eye, Brain,
-  MessageSquare, Handshake, Award, AlertTriangle,
-  ChevronRight, Sparkles, RefreshCw
+  FileText, Copy, Check, AlertTriangle,
+  ChevronRight, Sparkles
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';

@@ -13,7 +13,7 @@ import {
 import { usePerformanceMetrics } from '@/hooks/usePerformanceMetrics';
 import {
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid,
-  PieChart, Pie, Cell, BarChart, Bar,
+  PieChart, Pie, Cell,
 } from 'recharts';
 
 const CHANNEL_COLORS = ['hsl(var(--primary))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];

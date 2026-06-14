@@ -11,8 +11,7 @@ import {
   MessageSquare,
   Clock,
   CheckCircle2,
-  AlertCircle,
-  User
+  AlertCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { OptimizedAvatar } from '@/components/ui/optimized-avatar';

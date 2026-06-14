@@ -11,8 +11,6 @@ import {
   Sparkles,
   ArrowRight
 } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useVAKAnalysis } from '@/hooks/useVAKAnalysis';
 import { VAK_LABELS } from '@/types/vak';
 
 interface NLPCalibrationCardProps {

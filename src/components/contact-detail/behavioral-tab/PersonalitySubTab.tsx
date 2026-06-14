@@ -1,7 +1,6 @@
-import { Shield, Brain, Star, Activity, Save, Info, TrendingUp, Target } from 'lucide-react';
+import { Shield, Brain, Star, Activity, Save, Info, Target } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';

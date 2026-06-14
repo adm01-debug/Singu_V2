@@ -6,13 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Brain, 
-  Target, 
-  Search, 
-  MessageSquare, 
-  Zap, 
   Lightbulb,
-  ThumbsUp,
-  ThumbsDown,
   ChevronRight,
   RefreshCcw,
   ShieldCheck
@@ -20,7 +14,6 @@ import {
 import { VAK_LABELS } from '@/types/vak';
 import { METAPROGRAM_LABELS } from '@/types/metaprograms';
 import { useNLPAnalysisValidation } from '@/hooks/useNLPAnalysisValidation';
-import { motion } from 'framer-motion';
 
 interface Props {
   contactId: string;

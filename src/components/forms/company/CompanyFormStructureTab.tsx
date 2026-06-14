@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { FormSection } from './CompanyFormSection';
-import { employeeCountOptions, financialHealthOptions, type CompanyFormData } from './CompanyFormSchema';
+import { employeeCountOptions, type CompanyFormData } from './CompanyFormSchema';
 
 interface CompanyFormStructureTabProps {
   form: UseFormReturn<CompanyFormData>;

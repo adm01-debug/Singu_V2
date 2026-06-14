@@ -1,6 +1,6 @@
-import { useState, lazy, Suspense, useMemo } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Lightbulb } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { DISCConversionMetricsPanel } from '@/components/analytics/DISCConversionMetricsPanel';
 import { TriggerAnalyticsPanel } from '@/components/analytics/TriggerAnalyticsPanel';
 import { RFMSegmentDashboard } from '@/components/analytics/RFMSegmentDashboard';

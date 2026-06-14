@@ -7,14 +7,10 @@ import {
   MessageCircle, 
   Quote, 
   RefreshCcw, 
-  Zap, 
-  Check, 
-  X,
-  Copy,
-  Lightbulb,
-  Plus
+  Check,
+  Copy
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';

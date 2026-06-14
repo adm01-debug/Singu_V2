@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { SearchableSelect } from '@/components/ui/searchable-select';
-import { useCreateDeal, type PipelineDeal } from '@/hooks/usePipeline';
+import { useCreateDeal } from '@/hooks/usePipeline';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Loader2, DollarSign, Calendar as CalendarIcon } from 'lucide-react';

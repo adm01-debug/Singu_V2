@@ -8,8 +8,7 @@ import { motion } from 'framer-motion';
 import { 
   Brain, 
   AlertTriangle, 
-  Heart, 
-  Lightbulb,
+  Heart,
   Zap,
   Target,
   CheckCircle

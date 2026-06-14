@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, KeyboardEvent, RefObject, RefCallback, useMemo } from 'react';
+import { useState, useRef, useEffect, KeyboardEvent, RefObject, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';

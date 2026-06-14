@@ -1,5 +1,5 @@
 import { Tables } from '@/integrations/supabase/types';
-import { format, differenceInDays, isBefore, startOfYear, endOfYear, addYears } from 'date-fns';
+import { format, isBefore } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { CalendarDays, Star, Award, TrendingUp } from 'lucide-react';
 

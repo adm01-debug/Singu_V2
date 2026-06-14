@@ -1,16 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-  Clock,
   MessageSquare,
   TrendingUp,
   TrendingDown,
   Minus,
-  Users,
   Calendar,
   BarChart3,
-  ArrowUpRight,
-  ArrowDownRight,
   Timer,
   Zap,
   Target,

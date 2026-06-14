@@ -1,8 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { format, parseISO, isToday, isPast } from 'date-fns';
+import { parseISO, isToday, isPast } from 'date-fns';
 import type { Tables } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
 

@@ -1,4 +1,3 @@
-import { Progress } from "@/components/ui/progress";
 import { Card, CardContent } from "@/components/ui/card";
 
 export function QuotaProgressBar({ commit, won, quota }: { commit: number; won: number; quota: number }) {

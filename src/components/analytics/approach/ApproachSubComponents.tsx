@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
-import { CheckCircle2, XCircle, AlertTriangle, Clock, Copy, Check, ChevronDown, ChevronRight, ArrowRight, Star, Heart, TrendingUp, Zap, Shield, Brain, Award, Target, Lightbulb, ThumbsUp, ThumbsDown, MessageCircle, Phone, Mail, Video, Users, MessageSquare } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CheckCircle2, XCircle, AlertTriangle, Clock, Copy, Check, ChevronDown, ChevronRight, ArrowRight, Star, Heart, TrendingUp, Zap, Shield, Brain, Award, Target, ThumbsUp, ThumbsDown, MessageCircle, Phone, Mail, Video, Users, MessageSquare } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';

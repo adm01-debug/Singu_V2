@@ -17,7 +17,6 @@ import {
   Target, Award
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { DISCProfile } from '@/types';
 import { DISC_PROFILES } from '@/data/discAdvancedData';
 import { useDISCConversionData, type ConversionPeriod } from '@/hooks/useDISCConversionData';
 import { useState } from 'react';

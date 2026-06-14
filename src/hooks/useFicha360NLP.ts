@@ -1,8 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
-import type { VAKProfile } from '@/types/vak';
-import type { MetaprogramProfile } from '@/types/metaprograms';
 import { useVAKAnalysis } from './useVAKAnalysis';
 import { useMetaprogramAnalysis } from './useMetaprogramAnalysis';
 

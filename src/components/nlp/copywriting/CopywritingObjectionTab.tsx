@@ -2,7 +2,7 @@
  import { Button } from '@/components/ui/button';
  import { Card, CardContent } from '@/components/ui/card';
  import { Badge } from '@/components/ui/badge';
- import { ShieldAlert, Loader2, Copy, CheckCircle, Brain, MessageSquare, AlertCircle } from 'lucide-react';
+ import { ShieldAlert, Loader2, Copy, CheckCircle, Brain, AlertCircle } from 'lucide-react';
  import { supabase } from '@/integrations/supabase/client';
  import { Contact } from '@/types';
  import { toast } from 'sonner';

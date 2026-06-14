@@ -2,22 +2,18 @@ import {
   ShoppingBag, 
   ArrowUpRight, 
   Calendar, 
-  Package, 
-  CreditCard,
+  Package,
   ChevronRight,
   TrendingUp,
-  History,
-  Tag
+  History
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { cn } from '@/lib/utils';
 
 interface Props {
   contactId: string;

@@ -4,7 +4,6 @@
  import { Badge } from '@/components/ui/badge';
  import { Progress } from '@/components/ui/progress';
  import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
- import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
  import { cn } from '@/lib/utils';
  import { useEmotionalIntelligence } from '@/hooks/useEmotionalIntelligence';
  import { Contact } from '@/types';

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { 
   Gift, 
   Zap, 
@@ -9,7 +9,6 @@ import {
    RefreshCw,
    Clock,
    Settings,
-   History,
   AlertTriangle,
   Globe
 } from 'lucide-react';

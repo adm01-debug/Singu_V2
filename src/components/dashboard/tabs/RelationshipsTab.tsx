@@ -2,9 +2,8 @@
 import { motion } from 'framer-motion';
 import { LazySection } from '@/components/dashboard/LazySection';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
-import type { Contact, Interaction } from '@/types';
 
- const RelationshipKPIsDashboard = lazy(() => import('@/components/crm/RelationshipKPIsDashboard').then(m => ({ default: m.RelationshipKPIsDashboard })));
+const RelationshipKPIsDashboard = lazy(() => import('@/components/crm/RelationshipKPIsDashboard').then(m => ({ default: m.RelationshipKPIsDashboard })));
 const SmartRemindersPanel = lazy(() => import('@/components/smart-reminders/SmartRemindersPanel').then(m => ({ default: m.SmartRemindersPanel })));
 const RelationshipStatsPanel = lazy(() => import('@/components/dashboard/RelationshipStatsPanel').then(m => ({ default: m.RelationshipStatsPanel })));
 const PortfolioHealthDashboard = lazy(() => import('@/components/dashboard/PortfolioHealthDashboard').then(m => ({ default: m.PortfolioHealthDashboard })));

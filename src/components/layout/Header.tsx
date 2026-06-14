@@ -9,7 +9,6 @@ import { SmartNotificationsBell } from '@/components/notifications/SmartNotifica
 import { GlobalDensityToggle } from '@/components/ui/global-density-toggle';
 import { SystemStatusBadge } from '@/components/ui/SystemStatusBadge';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
 
 interface HeaderProps {
   title: string;

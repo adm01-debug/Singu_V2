@@ -1,6 +1,6 @@
  import { Helmet } from 'react-helmet-async';
  import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
- import { Sparkles, Wand2, BarChart3, History, Layers, MessageSquare } from 'lucide-react';
+ import { Sparkles, Wand2, BarChart3, History, Layers } from 'lucide-react';
  import { CopyAnalyzer } from '@/components/crm/copywriting/CopyAnalyzer';
  import { SalesScriptGenerator } from '@/components/crm/copywriting/SalesScriptGenerator';
  import { PersuasionFrameworks } from '@/components/crm/copywriting/PersuasionFrameworks';

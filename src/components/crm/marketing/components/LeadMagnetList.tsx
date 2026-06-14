@@ -2,7 +2,7 @@
  import { Button } from '@/components/ui/button';
  import { Switch } from '@/components/ui/switch';
  import { Badge } from '@/components/ui/badge';
- import { Copy, Trash2, ExternalLink, Settings2, Download, Eye } from 'lucide-react';
+ import { Copy, Trash2, ExternalLink, Settings2 } from 'lucide-react';
  import { Link } from 'react-router-dom';
  import { LeadMagnet } from '@/hooks/useLeadMagnets';
  import { motion, AnimatePresence } from 'framer-motion';

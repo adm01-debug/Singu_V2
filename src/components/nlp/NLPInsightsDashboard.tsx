@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -9,16 +9,12 @@ import {
   Target, 
   AlertTriangle,
   ArrowRight,
-  Download,
-  Share2,
-  Brain,
-  MessageSquare
+  Brain
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { logger } from "@/lib/logger";
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
