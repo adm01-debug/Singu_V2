@@ -74,7 +74,8 @@ button,
 
     /* Muted */
     --muted: 220 28% 95%;
-    --muted-foreground: 222 15% 42%;
+    /* WCAG AA: contraste ≥ 4.5:1 sobre --background (0 0% 100%) */
+    --muted-foreground: 222 16% 35%;
 
     /* Accent — DataHub Orange #E67E22 */
     --accent: 28 80% 52%;
@@ -269,7 +270,8 @@ button,
 
     /* Muted — navy-tinted */
     --muted: 232 25% 15%;
-    --muted-foreground: 220 20% 58%;
+    /* WCAG AA: contraste ≥ 4.5:1 sobre --background dark */
+    --muted-foreground: 220 18% 72%;
 
     /* Accent — Cyan/teal */
     --accent: 172 66% 50%;
@@ -388,7 +390,7 @@ button,
     --secondary-foreground: 0 0% 100%;
 
     --muted: 232 25% 15%;
-    --muted-foreground: 220 20% 58%;
+    --muted-foreground: 220 18% 72%;
 
     --accent: 172 66% 50%;
     --accent-foreground: 0 0% 100%;
