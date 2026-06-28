@@ -1,0 +1,17 @@
+ALTER FUNCTION public.calculate_relationship_metrics() SET search_path = public;
+ALTER FUNCTION public.calculate_relationship_metrics_for_contact(uuid) SET search_path = public;
+ALTER FUNCTION public.calculate_relationship_metrics_internal(uuid) SET search_path = public;
+ALTER FUNCTION public.check_mbti_consistency() SET search_path = public;
+ALTER FUNCTION public.check_relationship_consistency(uuid) SET search_path = public;
+ALTER FUNCTION public.enqueue_crm_reprocess() SET search_path = public;
+ALTER FUNCTION public.fn_validate_deal_stage_transition() SET search_path = public;
+ALTER FUNCTION public.get_contact_behavior_gaps(uuid) SET search_path = public;
+ALTER FUNCTION public.get_contact_framework_gaps(uuid) SET search_path = public;
+ALTER FUNCTION public.get_contact_life_event_gaps(uuid) SET search_path = public;
+ALTER FUNCTION public.handle_recurring_life_event() SET search_path = public;
+ALTER FUNCTION public.handle_updated_at() SET search_path = public;
+ALTER FUNCTION public.increment_contact_version() SET search_path = public;
+ALTER FUNCTION public.log_contact_relationship_changes() SET search_path = public;
+ALTER FUNCTION public.save_contact_family_history() SET search_path = public;
+ALTER FUNCTION public.update_updated_at_column() SET search_path = public;
+ALTER FUNCTION public.validate_behavioral_consistency(uuid) SET search_path = public;
