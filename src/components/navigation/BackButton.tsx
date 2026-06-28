@@ -120,7 +120,7 @@ interface BackButtonProps {
              <Button
                variant="ghost"
                size="icon"
-               className="h-8 w-8 text-muted-foreground/50 hover:text-foreground rounded-lg"
+               className="h-8 w-8 text-muted-foreground/70 hover:text-foreground rounded-lg"
                aria-label="Histórico de navegação"
              >
                <History className="h-3.5 w-3.5" />

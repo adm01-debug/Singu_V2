@@ -171,7 +171,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
           {filteredInteractions.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-                <MessageSquare className="mb-3 h-10 w-10 text-muted-foreground/50" />
+                <MessageSquare className="mb-3 h-10 w-10 text-muted-foreground/70" />
                 <p className="text-sm font-medium text-muted-foreground">Nenhuma interação registrada</p>
                 <p className="text-xs text-muted-foreground/70">Registre a primeira interação com este contato</p>
               </CardContent>
@@ -345,7 +345,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
             {filteredInteractions.filter(i => i.type === 'call').length === 0 ? (
               <Card>
                 <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-                  <Phone className="mb-3 h-10 w-10 text-muted-foreground/50" />
+                  <Phone className="mb-3 h-10 w-10 text-muted-foreground/70" />
                   <p className="text-sm font-medium text-muted-foreground">Nenhuma ligação encontrada</p>
                 </CardContent>
               </Card>

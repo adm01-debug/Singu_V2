@@ -197,7 +197,7 @@ function ContactCardWithContextImpl({
                       />
                     ) : isGenericName ? (
                       <span 
-                        className="text-sm text-muted-foreground/60 italic cursor-pointer hover:text-primary/70 transition-colors"
+                        className="text-sm text-muted-foreground/70 italic cursor-pointer hover:text-primary/70 transition-colors"
                         onDoubleClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsInlineEditing(true); }}
                       >
                         Adicionar nome
@@ -337,7 +337,7 @@ function ContactCardWithContextImpl({
                 {/* Name + subtitle */}
                 <div className="min-w-0 flex-1">
                   <h3 className="font-semibold text-sm truncate text-foreground">
-                    {isGenericName ? <span className="text-muted-foreground/60 italic">Adicionar nome</span> : displayName}
+                    {isGenericName ? <span className="text-muted-foreground/70 italic">Adicionar nome</span> : displayName}
                   </h3>
                   <div className="flex items-center gap-2 mt-0.5">
                     <RelationshipStageBadge stage={(contact.relationship_stage as RelationshipStage) || 'unknown'} />

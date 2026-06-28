@@ -149,14 +149,14 @@ export function CompatibilityScore({ contact, vakProfile, metaprogramProfile, cl
   if (!salespersonProfile?.vakProfile && !salespersonProfile?.discProfile) {
     return (
       <Card className={className}><CardHeader className="pb-3"><CardTitle className="flex items-center gap-2 text-base"><Users className="w-5 h-5 text-primary" />Compatibilidade Vendedor-Cliente</CardTitle></CardHeader>
-        <CardContent><div className="text-center py-6"><Brain className="w-10 h-10 mx-auto text-muted-foreground/50 mb-3" /><p className="text-sm text-muted-foreground mb-3">Configure seu perfil PNL para ver a compatibilidade</p><Button variant="outline" size="sm" asChild><a href="/configuracoes">Configurar Meu Perfil</a></Button></div></CardContent></Card>
+        <CardContent><div className="text-center py-6"><Brain className="w-10 h-10 mx-auto text-muted-foreground/70 mb-3" /><p className="text-sm text-muted-foreground mb-3">Configure seu perfil PNL para ver a compatibilidade</p><Button variant="outline" size="sm" asChild><a href="/configuracoes">Configurar Meu Perfil</a></Button></div></CardContent></Card>
     );
   }
 
   if (!vakProfile?.primary && !contactDISC && !metaprogramProfile) {
     return (
       <Card className={className}><CardHeader className="pb-3"><CardTitle className="flex items-center gap-2 text-base"><Users className="w-5 h-5 text-primary" />Compatibilidade Vendedor-Cliente</CardTitle></CardHeader>
-        <CardContent><div className="text-center py-6"><Target className="w-10 h-10 mx-auto text-muted-foreground/50 mb-3" /><p className="text-sm text-muted-foreground">Analise o perfil do contato para calcular compatibilidade</p></div></CardContent></Card>
+        <CardContent><div className="text-center py-6"><Target className="w-10 h-10 mx-auto text-muted-foreground/70 mb-3" /><p className="text-sm text-muted-foreground">Analise o perfil do contato para calcular compatibilidade</p></div></CardContent></Card>
     );
   }
 

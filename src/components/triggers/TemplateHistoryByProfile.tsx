@@ -51,7 +51,7 @@ export function TemplateHistoryByProfile({ className }: TemplateHistoryByProfile
       <CardContent>
         {!hasData ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <Users className="w-12 h-12 text-muted-foreground/50 mb-4" />
+            <Users className="w-12 h-12 text-muted-foreground/70 mb-4" />
             <p className="text-sm text-muted-foreground mb-2">Nenhum dado de histórico com perfil DISC</p>
             <p className="text-xs text-muted-foreground">Configure o perfil DISC dos seus contatos para ver métricas por perfil</p>
           </div>

@@ -93,7 +93,7 @@ export function WelcomeGreetingPopup() {
             {/* Close button */}
             <button
               onClick={() => setVisible(false)}
-              className="absolute top-2 right-2 p-1 rounded-lg text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 transition-colors"
+              className="absolute top-2 right-2 p-1 rounded-lg text-muted-foreground/70 hover:text-foreground hover:bg-muted/50 transition-colors"
               aria-label="Fechar"
             >
               <X className="w-3.5 h-3.5" />

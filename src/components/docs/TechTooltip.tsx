@@ -31,7 +31,7 @@ export function TechTooltip({ content, title, className, side = 'top' }: TechToo
           type="button"
           className={cn(
             'inline-flex items-center justify-center rounded-full',
-            'text-muted-foreground/60 hover:text-muted-foreground transition-colors',
+            'text-muted-foreground/70 hover:text-muted-foreground transition-colors',
             'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
             'w-4 h-4',
             className

@@ -15,7 +15,7 @@ export function TemplateByProfileView({ templateMetrics }: { templateMetrics: Te
   if (templateMetrics.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
-        <BarChart3 className="w-12 h-12 text-muted-foreground/50 mb-4" />
+        <BarChart3 className="w-12 h-12 text-muted-foreground/70 mb-4" />
         <p className="text-sm text-muted-foreground">Nenhum dado de template encontrado</p>
       </div>
     );

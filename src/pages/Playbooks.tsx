@@ -73,7 +73,7 @@ export default function Playbooks() {
               <p className="text-muted-foreground text-sm">Carregando…</p>
             ) : (playbooks.data?.length || 0) === 0 ? (
               <Card><CardContent className="py-12 text-center">
-                <BookOpen className="size-10 mx-auto text-muted-foreground/50 mb-3" />
+                <BookOpen className="size-10 mx-auto text-muted-foreground/70 mb-3" />
                 <p className="text-sm text-muted-foreground mb-3">Nenhum playbook ainda. Gere o primeiro com IA.</p>
                 <GeneratePlaybookDialog />
               </CardContent></Card>
@@ -97,7 +97,7 @@ export default function Playbooks() {
               <p className="text-muted-foreground text-sm">Carregando…</p>
             ) : (battleCards.data?.length || 0) === 0 ? (
               <Card><CardContent className="py-12 text-center">
-                <Swords className="size-10 mx-auto text-muted-foreground/50 mb-3" />
+                <Swords className="size-10 mx-auto text-muted-foreground/70 mb-3" />
                 <p className="text-sm text-muted-foreground">Nenhum battle card cadastrado.</p>
               </CardContent></Card>
             ) : (

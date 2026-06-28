@@ -176,7 +176,7 @@ function AppSidebarInner() {
                   aria-expanded={!isCollapsedSection}
                   aria-controls={`nav-section-${section.key}`}
                 >
-                  <SidebarGroupLabel className="text-[10px] uppercase tracking-widest text-muted-foreground/50 pointer-events-none p-0 h-auto font-medium">
+                  <SidebarGroupLabel className="text-[10px] uppercase tracking-widest text-muted-foreground/70 pointer-events-none p-0 h-auto font-medium">
                     {section.label}
                   </SidebarGroupLabel>
                   <ChevronDown
@@ -274,7 +274,7 @@ function AppSidebarInner() {
           variant="ghost"
           size="sm"
           onClick={toggleSidebar}
-          className="w-full justify-start gap-2 text-muted-foreground/50 hover:text-foreground text-xs h-8"
+          className="w-full justify-start gap-2 text-muted-foreground/70 hover:text-foreground text-xs h-8"
           aria-label={collapsed ? "Expandir sidebar" : "Recolher sidebar"}
         >
           {collapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}

@@ -50,7 +50,7 @@ export function PortfolioCompatibilityReport({ className }: PortfolioCompatibili
         <CardHeader><CardTitle className="flex items-center gap-2"><Briefcase className="w-5 h-5 text-primary" />Relatório de Compatibilidade da Carteira</CardTitle></CardHeader>
         <CardContent>
           <div className="text-center py-8">
-            <Brain className="w-12 h-12 mx-auto text-muted-foreground/50 mb-3" />
+            <Brain className="w-12 h-12 mx-auto text-muted-foreground/70 mb-3" />
             <p className="text-sm text-muted-foreground mb-4">Configure seu perfil PNL para ver a compatibilidade com seus clientes</p>
             <Button variant="outline" asChild><Link to="/configuracoes">Configurar Meu Perfil<ArrowRight className="w-4 h-4 ml-2" /></Link></Button>
           </div>
@@ -132,7 +132,7 @@ export function PortfolioCompatibilityReport({ className }: PortfolioCompatibili
         <ScrollArea className="h-[400px] pr-4">
           {filteredContacts.length === 0 ? (
             <div className="text-center py-8">
-              <Users className="w-10 h-10 mx-auto text-muted-foreground/50 mb-3" />
+              <Users className="w-10 h-10 mx-auto text-muted-foreground/70 mb-3" />
               <p className="text-sm text-muted-foreground">{searchTerm || filterLevel !== 'all' ? 'Nenhum cliente encontrado com os filtros aplicados' : 'Nenhum cliente com perfil PNL configurado'}</p>
             </div>
           ) : (

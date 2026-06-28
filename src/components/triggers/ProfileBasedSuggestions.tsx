@@ -97,7 +97,7 @@ export function ProfileBasedSuggestions({ contact, vakProfile, metaprogramProfil
   const filteredSuggestions = useMemo(() => activeCategory === 'all' ? suggestions : suggestions.filter(s => s.category === activeCategory), [suggestions, activeCategory]);
 
   if (!vakProfile && !metaprogramProfile) {
-    return <Card className={className}><CardContent className="pt-6"><div className="text-center py-8"><Brain className="w-12 h-12 mx-auto text-muted-foreground/50 mb-3" /><p className="text-sm text-muted-foreground">Analise o perfil do contato para receber sugestões personalizadas</p></div></CardContent></Card>;
+    return <Card className={className}><CardContent className="pt-6"><div className="text-center py-8"><Brain className="w-12 h-12 mx-auto text-muted-foreground/70 mb-3" /><p className="text-sm text-muted-foreground">Analise o perfil do contato para receber sugestões personalizadas</p></div></CardContent></Card>;
   }
 
   return (

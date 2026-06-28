@@ -524,7 +524,7 @@ export function ThemeExamplesDrawer({ theme, onClose }: Props) {
               title={`Janela atual: ~${getExcerptWindow(preset)} caracteres por excerto · ~${getFallbackWindow(preset)} no modo fallback`}
             >
               ≈ {getExcerptWindow(preset)} chars
-              <span className="text-muted-foreground/60"> · fallback ~{getFallbackWindow(preset)}</span>
+              <span className="text-muted-foreground/70"> · fallback ~{getFallbackWindow(preset)}</span>
             </span>
             {preset !== DEFAULT_EXCERPT_PRESET && (
               <Button

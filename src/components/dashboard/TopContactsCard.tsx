@@ -123,7 +123,7 @@ export function TopContactsCard({ contacts, animations = [], compact = false }: 
                                 className={cn("w-10 h-10 border-2 transition-colors", avatarRing, "group-hover:border-primary/50")}
                               />
                               {/* Position indicator dot */}
-                              <span className="absolute -top-0.5 -right-0.5 text-[10px] font-bold text-muted-foreground/60">
+                              <span className="absolute -top-0.5 -right-0.5 text-[10px] font-bold text-muted-foreground/70">
                                 {index + 1}
                               </span>
                             </div>

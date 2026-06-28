@@ -80,7 +80,7 @@ export function SmartBreadcrumbs({ items, className, maxItems = 4 }: SmartBreadc
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <ChevronRight className="w-4 h-4 text-muted-foreground/50" aria-hidden />
+                <ChevronRight className="w-4 h-4 text-muted-foreground/70" aria-hidden />
               </li>
             );
           }
@@ -135,7 +135,7 @@ export function SmartBreadcrumbs({ items, className, maxItems = 4 }: SmartBreadc
                 </Link>
               )}
               {!isLast && (
-                <ChevronRight className="w-4 h-4 text-muted-foreground/50" aria-hidden />
+                <ChevronRight className="w-4 h-4 text-muted-foreground/70" aria-hidden />
               )}
             </li>
           );

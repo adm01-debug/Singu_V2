@@ -121,7 +121,7 @@ export function MobileHeader({ onSearchClick, title }: MobileHeaderProps) {
                   >
                     {parentSegment.label}
                   </Link>
-                  <ChevronRight className="w-3 h-3 text-muted-foreground/50 shrink-0" aria-hidden="true" />
+                  <ChevronRight className="w-3 h-3 text-muted-foreground/70 shrink-0" aria-hidden="true" />
                   <h1 className="text-sm font-semibold text-foreground truncate">{resolvedTitle}</h1>
                 </div>
               ) : resolvedTitle ? (

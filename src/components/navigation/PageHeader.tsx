@@ -66,7 +66,7 @@ export function PageHeader({
           <ol className="hidden sm:flex items-center gap-1 text-sm text-muted-foreground">
             {breadcrumbs.map((segment, index) => (
               <li key={segment.path || index} className="flex items-center gap-1">
-                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/50 shrink-0" aria-hidden="true" />
+                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/70 shrink-0" aria-hidden="true" />
                 {segment.path ? (
                   <Link
                     to={segment.path}
@@ -80,7 +80,7 @@ export function PageHeader({
               </li>
             ))}
             <li className="flex items-center gap-1">
-              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/50 shrink-0" aria-hidden="true" />
+              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/70 shrink-0" aria-hidden="true" />
               <span className="font-medium text-foreground truncate max-w-[250px]" aria-current="page">
                 {title}
               </span>
@@ -91,7 +91,7 @@ export function PageHeader({
         {/* Mobile breadcrumbs — collapsed with dropdown for intermediate segments */}
         {breadcrumbs.length > 0 && (
           <div className="sm:hidden flex items-center gap-1 text-sm min-w-0">
-            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/50 shrink-0" aria-hidden="true" />
+            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/70 shrink-0" aria-hidden="true" />
             
             {breadcrumbs.length > 1 && (
               <>
@@ -114,7 +114,7 @@ export function PageHeader({
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/50 shrink-0" aria-hidden="true" />
+                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/70 shrink-0" aria-hidden="true" />
               </>
             )}
 

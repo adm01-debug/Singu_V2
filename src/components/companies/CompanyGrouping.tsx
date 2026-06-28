@@ -78,7 +78,7 @@ export function GroupHeader({ name, count, isExpanded, onToggle }: GroupHeaderPr
       )}
       <Network className="w-3.5 h-3.5 text-primary/60 shrink-0" />
       <span className="font-medium text-foreground/80">{name}</span>
-      <span className="text-[11px] text-muted-foreground/60 tabular-nums">
+      <span className="text-[11px] text-muted-foreground/70 tabular-nums">
         ({count} {count === 1 ? 'empresa' : 'empresas'})
       </span>
     </button>

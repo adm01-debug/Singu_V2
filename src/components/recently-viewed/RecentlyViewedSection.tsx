@@ -54,7 +54,7 @@ export function RecentlyViewedSection({ type }: RecentlyViewedSectionProps) {
                 {item.subtitle && (
                   <p className="text-xs text-muted-foreground truncate">{item.subtitle}</p>
                 )}
-                <p className="text-[10px] text-muted-foreground/60">
+                <p className="text-[10px] text-muted-foreground/70">
                   {formatDistanceToNow(new Date(item.viewedAt), { addSuffix: true, locale: ptBR })}
                 </p>
               </div>

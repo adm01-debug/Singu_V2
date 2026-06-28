@@ -145,7 +145,7 @@ export function TemplatePerformanceComparison({ contact, className }: TemplatePe
         <ScrollArea className="h-[400px]">
           {performanceData.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <BarChart3 className="w-12 h-12 text-muted-foreground/50 mb-4" />
+              <BarChart3 className="w-12 h-12 text-muted-foreground/70 mb-4" />
               <p className="text-sm text-muted-foreground">
                 Nenhum template encontrado para este cenário
               </p>

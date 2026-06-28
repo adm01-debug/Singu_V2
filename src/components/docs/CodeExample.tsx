@@ -28,7 +28,7 @@ export function CodeExample({ code, language = 'typescript', title, className }:
       {title && (
         <div className="flex items-center justify-between px-4 py-2 border-b bg-muted/50">
           <span className="text-xs font-medium text-muted-foreground">{title}</span>
-          <span className="text-[10px] text-muted-foreground/60 uppercase">{language}</span>
+          <span className="text-[10px] text-muted-foreground/70 uppercase">{language}</span>
         </div>
       )}
       <div className="relative group">

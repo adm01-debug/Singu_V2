@@ -315,11 +315,11 @@ export function InlineEmptyState({
   return (
     <div className="flex flex-col items-center justify-center py-6 px-3 text-center">
       <div className="h-10 w-10 rounded-xl bg-muted/50 flex items-center justify-center mb-2.5">
-        <Icon className="h-5 w-5 text-muted-foreground/50" />
+        <Icon className="h-5 w-5 text-muted-foreground/70" />
       </div>
       <p className="text-sm font-medium text-muted-foreground">{title}</p>
       {description && (
-        <p className="text-xs text-muted-foreground/60 mt-0.5 max-w-[220px]">{description}</p>
+        <p className="text-xs text-muted-foreground/70 mt-0.5 max-w-[220px]">{description}</p>
       )}
       {action && (
         <Button

@@ -21,7 +21,7 @@ export function SearchIllustration({ className }: IllustrationProps) {
     <svg viewBox="0 0 200 200" className={cn('w-full h-full', className)}>
       <circle cx="85" cy="85" r="40" fill="none" stroke="currentColor" strokeWidth="8" className="text-muted-foreground/30" />
       <line x1="115" y1="115" x2="155" y2="155" stroke="currentColor" strokeWidth="10" strokeLinecap="round" className="text-muted-foreground/30" />
-      <text x="85" y="95" textAnchor="middle" fontSize="40" fill="currentColor" className="text-muted-foreground/50">?</text>
+      <text x="85" y="95" textAnchor="middle" fontSize="40" fill="currentColor" className="text-muted-foreground/70">?</text>
     </svg>
   );
 }

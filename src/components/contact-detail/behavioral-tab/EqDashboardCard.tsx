@@ -133,7 +133,7 @@ export function EqDashboardCard({ contactId }: Props) {
         )}
 
         {data.last_analyzed_at && (
-          <p className="text-[10px] text-muted-foreground/60 text-right">
+          <p className="text-[10px] text-muted-foreground/70 text-right">
             Última análise: {new Date(data.last_analyzed_at).toLocaleDateString('pt-BR')}
           </p>
         )}

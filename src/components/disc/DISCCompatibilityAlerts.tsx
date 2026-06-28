@@ -162,7 +162,7 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
     return (
       <Card className="border-border/50">
         <CardContent className="py-8 text-center">
-          <BellOff className="w-10 h-10 mx-auto mb-3 text-muted-foreground/50" />
+          <BellOff className="w-10 h-10 mx-auto mb-3 text-muted-foreground/70" />
           <h3 className="font-medium mb-2">Alertas Desativados</h3>
           <p className="text-sm text-muted-foreground mb-4">
             Ative os alertas de compatibilidade para receber notificações proativas

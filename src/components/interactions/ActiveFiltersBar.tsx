@@ -183,7 +183,7 @@ export const ActiveFiltersBar = React.memo(function ActiveFiltersBar({
                   <span className="inline-flex items-center gap-1">
                     {top.map((c, i) => (
                       <React.Fragment key={c.key}>
-                        {i > 0 && <span aria-hidden="true" className="text-muted-foreground/60">·</span>}
+                        {i > 0 && <span aria-hidden="true" className="text-muted-foreground/70">·</span>}
                         <span className="inline-flex items-center gap-1 max-w-[140px]">
                           <span className="truncate">{c.label}</span>
                           <span className="tabular-nums text-foreground/70">({c.count})</span>

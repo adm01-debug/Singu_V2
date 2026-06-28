@@ -64,7 +64,7 @@ export function ContextualHelpTooltip({
     <button
       type="button"
       className={cn(
-        'inline-flex items-center justify-center text-muted-foreground/60 hover:text-muted-foreground',
+        'inline-flex items-center justify-center text-muted-foreground/70 hover:text-muted-foreground',
         'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:rounded',
         'transition-colors cursor-help',
         position === 'inline' && 'ml-1',
