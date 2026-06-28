@@ -145,11 +145,11 @@ export function CompanyProfileCard({
                   {phones.slice(1, 4).map(p => (
                     <div key={p.id} className="flex items-center gap-2 text-xs text-muted-foreground">
                       <span>{formatPhone(p.numero)}</span>
-                      <span className="text-muted-foreground/60">({p.phone_type?.replace('_', ' ')})</span>
+                      <span className="text-muted-foreground/70">({p.phone_type?.replace('_', ' ')})</span>
                     </div>
                   ))}
                   {phones.length > 4 && (
-                    <span className="text-xs text-muted-foreground/60">+{phones.length - 4} mais</span>
+                    <span className="text-xs text-muted-foreground/70">+{phones.length - 4} mais</span>
                   )}
                 </div>
               )}
@@ -165,7 +165,7 @@ export function CompanyProfileCard({
                   {emails.slice(1, 3).map(e => (
                     <div key={e.id} className="flex items-center gap-2 text-xs text-muted-foreground">
                       <span className="truncate">{e.email}</span>
-                      <span className="text-muted-foreground/60">({e.email_type})</span>
+                      <span className="text-muted-foreground/70">({e.email_type})</span>
                     </div>
                   ))}
                 </div>

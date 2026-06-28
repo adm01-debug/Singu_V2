@@ -379,7 +379,7 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
                   <span key={i} className="inline-flex items-center gap-1 text-xs text-muted-foreground bg-muted/50 rounded-md px-2 py-1">
                     <MapPin className="h-3 w-3 flex-shrink-0" />
                     <span className="truncate max-w-[250px]">{parts}</span>
-                    {addr.cep && <span className="text-muted-foreground/60">CEP {addr.cep}</span>}
+                    {addr.cep && <span className="text-muted-foreground/70">CEP {addr.cep}</span>}
                   </span>
                 ) : null;
               })}

@@ -58,7 +58,7 @@ export const ContactsTableView = React.memo(function ContactsTableView({
       className="flex items-center gap-1 hover:text-foreground transition-colors"
     >
       {children}
-      <ArrowUpDown className={cn('w-3 h-3', sortBy === field ? 'text-primary' : 'text-muted-foreground/50')} />
+      <ArrowUpDown className={cn('w-3 h-3', sortBy === field ? 'text-primary' : 'text-muted-foreground/70')} />
     </button>
   );
 
@@ -156,7 +156,7 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                   {contact.relationship_score != null ? (
                     <RelationshipScore score={contact.relationship_score} size="sm" />
                   ) : (
-                    <span className="text-muted-foreground/50">—</span>
+                    <span className="text-muted-foreground/70">—</span>
                   )}
                 </TableCell>
                 <TableCell className="hidden md:table-cell text-center">

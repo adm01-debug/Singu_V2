@@ -171,7 +171,7 @@ const DISCEvolutionTimeline: React.FC<DISCEvolutionTimelineProps> = ({
     return (
       <Card className="border-border/50">
         <CardContent className="py-12 text-center">
-          <Activity className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
+          <Activity className="w-12 h-12 mx-auto mb-4 text-muted-foreground/70" />
           <h3 className="text-lg font-medium text-foreground mb-2">
             Sem Histórico de Evolução
           </h3>

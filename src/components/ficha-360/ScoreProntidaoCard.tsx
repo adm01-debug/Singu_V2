@@ -129,7 +129,7 @@ export const ScoreProntidaoCard = memo(({ data, contactId, simulated, realData }
               <div className="flex items-center justify-between rounded-md border border-warning/30 bg-warning/5 px-2.5 py-1.5 text-[11px]">
                 <span className="text-muted-foreground">
                   Real: <span className="font-semibold tabular-nums text-foreground">{realData?.score}</span>
-                  <span className="mx-1.5 text-muted-foreground/60">·</span>
+                  <span className="mx-1.5 text-muted-foreground/70">·</span>
                   Simulado: <span className="font-semibold tabular-nums text-foreground">{data.score}</span>
                 </span>
                 <Badge

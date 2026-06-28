@@ -90,7 +90,7 @@ export function InboundActivityHeatmapCard() {
       <CardContent className="space-y-4">
         {!data.hasEnoughData ? (
           <div className="text-center py-10 px-4 border border-dashed border-border rounded-lg">
-            <Inbox className="w-10 h-10 mx-auto mb-3 text-muted-foreground/50" />
+            <Inbox className="w-10 h-10 mx-auto mb-3 text-muted-foreground/70" />
             <p className="text-sm font-medium mb-1">Sem dados suficientes</p>
             <p className="text-xs text-muted-foreground mb-1">
               Precisamos de pelo menos 10 interações inbound nos últimos 90 dias.

@@ -95,7 +95,7 @@ export function CalendarioContent({ currentMonth, selectedDate, followUps, follo
               <AnimatePresence mode="popLayout">
                 {selectedDateFollowUps.length === 0 ? (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-12 text-center">
-                    <CalendarIcon className="w-12 h-12 text-muted-foreground/50 mb-4" /><p className="text-muted-foreground">Nenhum follow-up para esta data</p>
+                    <CalendarIcon className="w-12 h-12 text-muted-foreground/70 mb-4" /><p className="text-muted-foreground">Nenhum follow-up para esta data</p>
                   </motion.div>
                 ) : (
                   <div className="space-y-3">

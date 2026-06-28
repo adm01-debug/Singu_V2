@@ -127,7 +127,7 @@ export function CommunicationTrainingMode() {
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
-            <Brain className="w-12 h-12 mx-auto text-muted-foreground/50 mb-4" />
+            <Brain className="w-12 h-12 mx-auto text-muted-foreground/70 mb-4" />
             <p className="text-muted-foreground mb-4">
               Configure seu perfil PNL para acessar o treinamento personalizado
             </p>

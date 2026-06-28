@@ -75,7 +75,7 @@ export function PersonalitySubTab({ contactId }: Props) {
                     <div className="flex items-center gap-1.5">
                       <Label className="text-[10px] uppercase font-bold text-muted-foreground">{field.label}</Label>
                       <Tooltip>
-                        <TooltipTrigger asChild><Info className="h-3 w-3 text-muted-foreground/50 cursor-help" /></TooltipTrigger>
+                        <TooltipTrigger asChild><Info className="h-3 w-3 text-muted-foreground/70 cursor-help" /></TooltipTrigger>
                         <TooltipContent><p className="text-[10px] max-w-[200px]">{field.desc}</p></TooltipContent>
                       </Tooltip>
                     </div>

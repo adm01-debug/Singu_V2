@@ -728,7 +728,7 @@ function ObjectionExamplesModalImpl({ objection, onClose }: Props) {
 
           {!isLoading && !isError && filtered.length === 0 && (
             <div className="text-center py-10 space-y-2">
-              <Search className="h-8 w-8 text-muted-foreground/60 mx-auto" />
+              <Search className="h-8 w-8 text-muted-foreground/70 mx-auto" />
               <p className="text-sm text-muted-foreground">
                 {hasFilters
                   ? "Nenhuma conversa encontrada no intervalo selecionado."

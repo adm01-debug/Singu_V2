@@ -112,7 +112,7 @@ export function CustomFieldsManager({ entityType }: Props) {
         {fields.map(field => (
           <div key={field.id} className="flex items-center justify-between border rounded-md px-3 py-2">
             <div className="flex items-center gap-2">
-              <GripVertical className="h-3.5 w-3.5 text-muted-foreground/50" />
+              <GripVertical className="h-3.5 w-3.5 text-muted-foreground/70" />
               <span className="text-xs font-medium">{field.field_label}</span>
               <Badge variant="secondary" className="text-[10px] h-4">{FIELD_TYPE_LABELS[field.field_type as FieldType]}</Badge>
               {field.is_required && <Badge variant="destructive" className="text-[10px] h-4">Obrigatório</Badge>}

@@ -214,7 +214,7 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
                       </div>
 
                       <div className="flex items-center gap-1.5 mt-1">
-                        <Clock className="h-3 w-3 text-muted-foreground/60" />
+                        <Clock className="h-3 w-3 text-muted-foreground/70" />
                         <span className="text-[10px] text-muted-foreground/70">
                           {contact.last_interaction_at 
                             ? `Último contato ${formatDistanceToNow(new Date(contact.last_interaction_at), { addSuffix: true, locale: ptBR })}`

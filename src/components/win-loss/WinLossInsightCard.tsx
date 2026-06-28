@@ -58,7 +58,7 @@ export function WinLossInsightCard({ insight }: Props) {
         </div>
         <h4 className="font-semibold text-sm mb-1">{insight.title}</h4>
         <p className="text-sm text-muted-foreground leading-relaxed">{insight.description}</p>
-        <p className="text-[10px] text-muted-foreground/60 mt-2">
+        <p className="text-[10px] text-muted-foreground/70 mt-2">
           {new Date(insight.generated_at).toLocaleString('pt-BR')}
         </p>
       </CardContent>

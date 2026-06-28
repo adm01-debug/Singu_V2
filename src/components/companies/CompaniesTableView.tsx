@@ -99,7 +99,7 @@ export const CompaniesTableView = React.memo(function CompaniesTableView({
       className="flex items-center gap-1 hover:text-foreground transition-colors"
     >
       {children}
-      <ArrowUpDown className={cn('w-3 h-3', sortBy === field ? 'text-primary' : 'text-muted-foreground/50')} />
+      <ArrowUpDown className={cn('w-3 h-3', sortBy === field ? 'text-primary' : 'text-muted-foreground/70')} />
     </button>
   );
 
@@ -218,7 +218,7 @@ export const CompaniesTableView = React.memo(function CompaniesTableView({
                           </Badge>
                         )}
                         {cnpjFormatted && (
-                          <span className="text-[10px] text-muted-foreground/50 tabular-nums hidden xl:inline">
+                          <span className="text-[10px] text-muted-foreground/70 tabular-nums hidden xl:inline">
                             {cnpjFormatted}
                           </span>
                         )}
@@ -230,7 +230,7 @@ export const CompaniesTableView = React.memo(function CompaniesTableView({
                   <div className="min-w-0">
                     <span className="line-clamp-1">{company.ramo_atividade || company.nicho_cliente || '—'}</span>
                     {company.ramo_atividade && company.nicho_cliente && company.nicho_cliente !== company.ramo_atividade && (
-                      <span className="text-[10px] text-muted-foreground/50 line-clamp-1">{company.nicho_cliente}</span>
+                      <span className="text-[10px] text-muted-foreground/70 line-clamp-1">{company.nicho_cliente}</span>
                     )}
                   </div>
                 </TableCell>
@@ -272,7 +272,7 @@ export const CompaniesTableView = React.memo(function CompaniesTableView({
                       {porteLabel[company.porte_rf.toUpperCase()].label}
                     </span>
                   ) : (
-                    <span className="text-sm text-muted-foreground/50">—</span>
+                    <span className="text-sm text-muted-foreground/70">—</span>
                   )}
                 </TableCell>
                 <TableCell className="hidden md:table-cell">

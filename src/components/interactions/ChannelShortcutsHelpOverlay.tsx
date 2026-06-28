@@ -215,7 +215,7 @@ export const ChannelShortcutsHelpOverlay = React.memo(function ChannelShortcutsH
                   {channelCounts && (
                     <span className={cn(
                       'text-[11px] tabular-nums',
-                      noData ? 'text-muted-foreground/60' : 'text-muted-foreground',
+                      noData ? 'text-muted-foreground/70' : 'text-muted-foreground',
                     )}>
                       {count}
                     </span>
@@ -261,7 +261,7 @@ export const ChannelShortcutsHelpOverlay = React.memo(function ChannelShortcutsH
               <div className="flex items-center justify-between gap-2 px-2 py-1.5 rounded-md border border-border bg-card text-sm">
                 <div className="flex items-center gap-2 flex-wrap">
                   <KeyChip>Alt+Enter</KeyChip>
-                  <span className="text-muted-foreground/60">ou</span>
+                  <span className="text-muted-foreground/70">ou</span>
                   <KeyChip>Ctrl/⌘+Enter</KeyChip>
                   <Check className="w-4 h-4 text-muted-foreground" />
                   <span className="text-muted-foreground">Aplicar canais pendentes</span>

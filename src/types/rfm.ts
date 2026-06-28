@@ -278,7 +278,7 @@ export const RFM_SEGMENTS: Record<RFMSegment, {
   lost: {
     name: 'Perdidos',
     description: 'Menor recência, frequência e valor monetário',
-    color: 'text-muted-foreground/60',
+    color: 'text-muted-foreground/70',
     bgColor: 'bg-muted/50',
     icon: 'x-circle',
     priority: 11,
