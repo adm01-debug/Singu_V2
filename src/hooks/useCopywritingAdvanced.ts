@@ -179,7 +179,7 @@ export function useCopywritingAdvanced(contact?: Contact) {
     return 'neutral';
   }, []);
 
-  const analyzeEmotionalProfile = useCallback((text: string): any => {
+  const analyzeEmotionalProfile = useCallback((text: string) => {
     const textLower = text.toLowerCase();
     const profile = {
       joy: (textLower.match(/alegria|feliz|contente|maravilhoso|sucesso|conquista/g) || []).length * 15,
@@ -285,9 +285,11 @@ export function useCopywritingAdvanced(contact?: Contact) {
     const ctaStrength = hasCTA ? 
       (text.match(/agora|hoje|imediato/gi) ? 90 : 60) : 0;
 
-    const highlightedTriggers: any[] = [];
-    const longSentences: any[] = [];
-    const complexWords: any[] = [];
+    type TextSpan = { text: string; startIndex: number; endIndex: number };
+    type HighlightedTrigger = TextSpan & { category: string };
+    const highlightedTriggers: HighlightedTrigger[] = [];
+    const longSentences: TextSpan[] = [];
+    const complexWords: TextSpan[] = [];
 
     // Identify long sentences and complex words
     let currentPos = 0;
