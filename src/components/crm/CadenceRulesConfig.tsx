@@ -105,7 +105,7 @@ export function CadenceRulesConfig() {
     }
   });
 
-  const handleOpenDialog = (rule?: Partial<CadenceRule> & { id?: string; relationship_stage?: string }) => {
+  const handleOpenDialog = (rule?: { id?: string; relationship_stage?: string; frequency_days?: number; priority?: string; cadence_steps?: unknown }) => {
     if (rule) {
       setEditingRule({
         id: rule.id,
