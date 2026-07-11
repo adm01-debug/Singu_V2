@@ -23,7 +23,16 @@ describe('determineRFMSegment', () => {
   });
 
   it('classifica R=2 F=2 M=2 como hibernating', () => {
+    // Após reordenar (lost/hibernating antes de about_to_sleep) — R=2 F=2 é low+low.
     expect(determineRFMSegment(2, 2, 2)).toBe('hibernating');
+  });
+
+  it('classifica R=2 F=1 M=3 como hibernating (low freq)', () => {
+    expect(determineRFMSegment(2, 1, 3)).toBe('hibernating');
+  });
+
+  it('classifica R=2 F=3 M=2 como about_to_sleep', () => {
+    expect(determineRFMSegment(2, 3, 2)).toBe('about_to_sleep');
   });
 
   it('classifica R=3 F=3 M=3 como needing_attention', () => {
