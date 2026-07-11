@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
 
-interface ContactIntelligence {
+export interface ContactIntelligence {
   contact_id?: string;
   full_name?: string;
   relationship_score?: number;
