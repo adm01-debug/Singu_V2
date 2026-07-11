@@ -137,9 +137,11 @@ const Empresas = () => {
       _last_interaction_days: companyMetrics.lastInteractionMap.get(c.id) ?? 9999,
     }));
 
-    return sortArray(enriched, multiSort as any, undefined, { 
-      dateFields: ['updated_at', 'created_at', 'data_fundacao', 'situacao_rf_data'] as any[],
-      numericFields: ['capital_social', 'lead_score', '_contact_count', '_last_interaction_days'] as any[]
+    type EnrichedCompany = Company & { _contact_count: number; _last_interaction_days: number };
+    const criteria = multiSort.map(m => ({ column: m.column as keyof EnrichedCompany, order: m.order }));
+    return sortArray<EnrichedCompany>(enriched as EnrichedCompany[], criteria, undefined, {
+      dateFields: ['updated_at', 'created_at', 'data_fundacao', 'situacao_rf_data'] as (keyof EnrichedCompany)[],
+      numericFields: ['capital_social', 'lead_score', '_contact_count', '_last_interaction_days'] as (keyof EnrichedCompany)[],
     }) as unknown as Company[];
   }, [companies, activeFilters, multiSort, companyMetrics]);
 
