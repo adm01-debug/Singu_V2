@@ -312,7 +312,11 @@ export function useCompanies(options?: { enabled?: boolean }) {
     await queryClient.invalidateQueries({ queryKey: ['companies-remaining'] });
   }, [queryClient]);
 
-  const createCompany = async (company: Omit<CompanyInsert, 'user_id'> & { phones?: any[], emails?: any[], addresses?: any[] }) => {
+  const createCompany = async (company: Omit<CompanyInsert, 'user_id'> & {
+    phones?: Array<Record<string, unknown>>;
+    emails?: Array<Record<string, unknown>>;
+    addresses?: Array<Record<string, unknown>>;
+  }) => {
     if (!user) return null;
     try {
       const { phones, emails, addresses, ...companyData } = company;
@@ -329,7 +333,7 @@ export function useCompanies(options?: { enabled?: boolean }) {
       if (error) throw error;
       
       if (data) {
-        const companyId = (data as any).id;
+        const companyId = (data as unknown as { id: string }).id;
         
         // Parallel insertion of related data if provided
         const relatedPromises = [];
