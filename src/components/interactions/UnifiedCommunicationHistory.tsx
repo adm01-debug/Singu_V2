@@ -16,8 +16,14 @@ import {
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import type { LucideIcon } from 'lucide-react';
 
-const channelIcons: Record<string, any> = {
+type ItemWithSentiment = {
+  sentiment_label?: string | null;
+  emotions?: string[] | null;
+};
+
+const channelIcons: Record<string, LucideIcon> = {
   whatsapp: MessageSquare,
   call: Phone,
   email: Mail,
@@ -28,7 +34,7 @@ const channelIcons: Record<string, any> = {
    transcript: FileJson,
    sentiment: Smile,
 };
-const sentimentIcons: Record<string, any> = {
+const sentimentIcons: Record<string, LucideIcon> = {
   positive: Smile,
   negative: Frown,
   neutral: Meh,
@@ -161,7 +167,8 @@ export const UnifiedCommunicationHistory = React.memo(function UnifiedCommunicat
               const Icon = channelIcons[channel] || MessageSquare;
               const colorClass = channelColors[channel] || channelColors.note;
               
-               const sentiment = (item as any).sentiment_label || 'neutral';
+               const extra = item as unknown as ItemWithSentiment;
+               const sentiment = extra.sentiment_label || 'neutral';
                const SentimentIcon = sentimentIcons[sentiment] || Meh;
                const sentimentColor = sentimentColors[sentiment];
 
@@ -222,9 +229,9 @@ export const UnifiedCommunicationHistory = React.memo(function UnifiedCommunicat
                             {sentiment === 'positive' ? 'Positivo' : sentiment === 'negative' ? 'Negativo' : 'Neutro'}
                           </span>
                         </div>
-                        {(item as any).emotions && (
+                        {extra.emotions && (
                           <div className="flex items-center gap-1 overflow-hidden">
-                            {((item as any).emotions as string[]).slice(0, 2).map((emo, idx) => (
+                            {extra.emotions.slice(0, 2).map((emo, idx) => (
                               <Badge key={idx} variant="secondary" className="text-[8px] h-3 px-1 py-0 bg-primary/5 text-primary/70 border-none">
                                 {emo}
                               </Badge>
