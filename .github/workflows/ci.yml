@@ -59,6 +59,19 @@ jobs:
       - name: Run unit tests with coverage
         run: npm run test:unit -- --coverage --reporter=default
 
+      - name: Run RLS matrix tests (anon / user_a / user_b / user_admin)
+        if: ${{ secrets.PGHOST != '' }}
+        env:
+          PGHOST: ${{ secrets.PGHOST }}
+          PGPORT: ${{ secrets.PGPORT }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+          RLS_USER_A: ${{ secrets.RLS_USER_A }}
+          RLS_USER_B: ${{ secrets.RLS_USER_B }}
+          RLS_USER_ADMIN: ${{ secrets.RLS_USER_ADMIN }}
+        run: bash tests/rls/run.sh
+
       - name: Build
         run: npm run build
 
