@@ -13,7 +13,7 @@ export interface TimelineEventItem {
    sentiment: string | null;
    follow_up_required: boolean | null;
    transcription?: string | null;
-   transcription_metadata?: any;
+   transcription_metadata?: Record<string, unknown> | null;
 }
 
 export interface TimelineGroup {
@@ -109,8 +109,8 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
            created_at: it.created_at,
            sentiment: it.sentiment,
            follow_up_required: it.follow_up_required,
-           transcription: (it as any).transcription,
-           transcription_metadata: (it as any).transcription_metadata,
+           transcription: it.transcription,
+           transcription_metadata: (it.transcription_metadata ?? null) as Record<string, unknown> | null,
          };
         if (existing) {
           existing.events.push(event);
