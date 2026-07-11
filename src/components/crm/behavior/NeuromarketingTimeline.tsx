@@ -13,6 +13,17 @@ interface Props {
   contactId: string;
 }
 
+interface DominanceData {
+  dominance?: number;
+  influence?: number;
+  steadiness?: number;
+  compliance?: number;
+}
+
+interface EmotionAnalysis {
+  emotions?: string[];
+}
+
 export function NeuromarketingTimeline({ contactId }: Props) {
   const { data: neuroData, isLoading } = useQuery({
     queryKey: ['neuro-unified-data', contactId],
@@ -43,10 +54,11 @@ export function NeuromarketingTimeline({ contactId }: Props) {
   const interactions = neuroData?.interactions;
 
    const chartData = history?.map(item => {
-     const dominance = (item.dominance_data as any)?.dominance || 0;
-     const influence = (item.dominance_data as any)?.influence || 0;
-     const steadiness = (item.dominance_data as any)?.steadiness || 0;
-     const compliance = (item.dominance_data as any)?.compliance || 0;
+     const dom = (item.dominance_data ?? {}) as DominanceData;
+     const dominance = dom.dominance || 0;
+     const influence = dom.influence || 0;
+     const steadiness = dom.steadiness || 0;
+     const compliance = dom.compliance || 0;
      
      return {
        date: format(new Date(item.created_at), 'dd/MM', { locale: ptBR }),
@@ -236,7 +248,7 @@ export function NeuromarketingTimeline({ contactId }: Props) {
                   <p className="text-muted-foreground line-clamp-1">{interaction.content}</p>
                   {interaction.emotion_analysis && (
                     <div className="flex gap-1 mt-1">
-                      {(interaction.emotion_analysis as any).emotions?.slice(0, 2).map((e: string, i: number) => (
+                      {((interaction.emotion_analysis as EmotionAnalysis | null)?.emotions)?.slice(0, 2).map((e: string, i: number) => (
                         <Badge key={i} variant="outline" className="text-[8px] py-0 h-3 capitalize">
                           {e}
                         </Badge>
