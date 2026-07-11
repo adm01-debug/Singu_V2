@@ -1,9 +1,10 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDealRoom, useMilestones, useStakeholders } from "@/hooks/useDealRooms";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, DollarSign, Eye, Target, type LucideIcon } from "lucide-react";
+import { SmartBackButton } from "@/components/navigation/SmartBackButton";
 import { MilestoneKanban } from "@/components/deal-rooms/MilestoneKanban";
 import { StakeholderList } from "@/components/deal-rooms/StakeholderList";
 import { DocumentsList } from "@/components/deal-rooms/DocumentsList";
@@ -31,9 +32,7 @@ export default function DealRoomDetail() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <Link to="/deal-rooms" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="h-4 w-4" />Voltar
-      </Link>
+      <SmartBackButton fallback="/deal-rooms" label="Voltar para Deal Rooms" />
 
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
