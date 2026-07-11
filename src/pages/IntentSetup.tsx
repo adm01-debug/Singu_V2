@@ -1,8 +1,7 @@
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Radar } from "lucide-react";
+import { Radar } from "lucide-react";
+import { SmartBackButton } from "@/components/navigation/SmartBackButton";
 import { PixelSetupCard } from "@/components/intent/PixelSetupCard";
 
 export default function IntentSetupPage() {
@@ -14,9 +13,7 @@ export default function IntentSetupPage() {
       </Helmet>
 
       <div className="container py-6 space-y-6 max-w-3xl">
-        <Button variant="ghost" size="sm" asChild>
-          <Link to="/intent"><ArrowLeft className="h-4 w-4 mr-1" /> Voltar</Link>
-        </Button>
+        <SmartBackButton fallback="/intent" label="Voltar para Intent" />
 
         <header>
           <h1 className="text-2xl font-semibold tracking-tight flex items-center gap-2">
