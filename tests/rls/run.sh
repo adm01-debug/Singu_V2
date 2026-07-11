@@ -9,13 +9,26 @@ if [ -z "$PGHOST" ]; then
   exit 0
 fi
 
+# Fixtures obrigatórias — UUIDs de usuários criados no ambiente de teste
+: "${RLS_USER_A:=00000000-0000-0000-0000-00000000000a}"
+: "${RLS_USER_B:=00000000-0000-0000-0000-00000000000b}"
+: "${RLS_USER_ADMIN:=00000000-0000-0000-0000-00000000000c}"
+export RLS_USER_A RLS_USER_B RLS_USER_ADMIN
+
+PSQL_VARS=(
+  -v "ON_ERROR_STOP=1"
+  -v "user_a=${RLS_USER_A}"
+  -v "user_b=${RLS_USER_B}"
+  -v "user_admin=${RLS_USER_ADMIN}"
+)
+
 cd "$(dirname "$0")"
 FAILED=0
 
 for f in *.sql; do
   [ "$f" = "schema.sql" ] && continue
   echo "▶️  Rodando $f..."
-  if psql -v ON_ERROR_STOP=1 -f "$f" > /tmp/rls-${f}.out 2>&1; then
+  if psql "${PSQL_VARS[@]}" -f "$f" > /tmp/rls-${f}.out 2>&1; then
     echo "✅ $f OK"
   else
     echo "❌ $f FALHOU"
