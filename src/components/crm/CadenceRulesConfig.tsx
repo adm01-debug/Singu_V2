@@ -34,10 +34,28 @@ import {
 } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
+type CadenceStepType = 'message' | 'call' | 'email' | 'task';
+type CadencePriority = 'low' | 'medium' | 'high' | 'urgent';
+
+interface CadenceStep {
+  type: CadenceStepType;
+  delay_days: number;
+  content: string;
+}
+
+interface CadenceRule {
+  id?: string;
+  relationship_stage: string;
+  frequency_days: number;
+  priority: CadencePriority;
+  cadence_steps: CadenceStep[];
+  is_active?: boolean;
+}
+
 export function CadenceRulesConfig() {
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingRule, setEditingRule] = useState<any>(null);
+  const [editingRule, setEditingRule] = useState<CadenceRule | null>(null);
 
   const { data: rules, isLoading } = useQuery({
     queryKey: ['crm-cadence-rules'],
@@ -53,17 +71,17 @@ export function CadenceRulesConfig() {
   });
 
   const saveRule = useMutation({
-    mutationFn: async (ruleData: any) => {
+    mutationFn: async (ruleData: CadenceRule) => {
       if (ruleData.id) {
         const { error } = await supabase
           .from('crm_cadence_rules')
-          .update(ruleData)
+          .update(ruleData as never)
           .eq('id', ruleData.id);
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('crm_cadence_rules')
-          .insert([ruleData]);
+          .insert([ruleData as never]);
         if (error) throw error;
       }
     },
@@ -73,7 +91,7 @@ export function CadenceRulesConfig() {
       setIsDialogOpen(false);
       setEditingRule(null);
     },
-    onError: (error: any) => toast.error(`Erro ao salvar regra: ${error.message}`)
+    onError: (error: Error) => toast.error(`Erro ao salvar regra: ${error.message}`)
   });
 
   const deleteRule = useMutation({
@@ -87,11 +105,14 @@ export function CadenceRulesConfig() {
     }
   });
 
-  const handleOpenDialog = (rule?: any) => {
+  const handleOpenDialog = (rule?: { id?: string; relationship_stage?: string; frequency_days?: number; priority?: string; cadence_steps?: unknown }) => {
     if (rule) {
       setEditingRule({
-        ...rule,
-        cadence_steps: rule.cadence_steps || []
+        id: rule.id,
+        relationship_stage: rule.relationship_stage ?? 'prospect',
+        frequency_days: rule.frequency_days ?? 7,
+        priority: (rule.priority as CadencePriority) ?? 'medium',
+        cadence_steps: (rule.cadence_steps as CadenceStep[] | undefined) ?? []
       });
     } else {
       setEditingRule({
@@ -125,18 +146,21 @@ export function CadenceRulesConfig() {
   }, [queryClient]);
 
   const handleAddStep = () => {
+    if (!editingRule) return;
     const steps = [...(editingRule.cadence_steps || [])];
     steps.push({ type: 'message', delay_days: 2, content: 'Próximo passo da cadência' });
     setEditingRule({ ...editingRule, cadence_steps: steps });
   };
 
-  const handleUpdateStep = (index: number, field: string, value: any) => {
+  const handleUpdateStep = <K extends keyof CadenceStep>(index: number, field: K, value: CadenceStep[K]) => {
+    if (!editingRule) return;
     const steps = [...(editingRule.cadence_steps || [])];
     steps[index] = { ...steps[index], [field]: value };
     setEditingRule({ ...editingRule, cadence_steps: steps });
   };
 
   const handleRemoveStep = (index: number) => {
+    if (!editingRule) return;
     const steps = [...(editingRule.cadence_steps || [])];
     steps.splice(index, 1);
     setEditingRule({ ...editingRule, cadence_steps: steps });
@@ -171,7 +195,7 @@ export function CadenceRulesConfig() {
               {rules?.map((rule) => (
                 <TableRow key={rule.id}>
                   <TableCell className="text-xs font-semibold">
-                    {RELATIONSHIP_STAGE_LABELS[rule.relationship_stage as any] || rule.relationship_stage}
+                    {RELATIONSHIP_STAGE_LABELS[rule.relationship_stage as keyof typeof RELATIONSHIP_STAGE_LABELS] || rule.relationship_stage}
                   </TableCell>
                   <TableCell className="text-xs text-center">
                     Cada {rule.frequency_days} dias
@@ -243,7 +267,7 @@ export function CadenceRulesConfig() {
                       <Label className="text-xs uppercase font-bold text-muted-foreground">Estágio do Funil</Label>
                       <Select 
                         value={editingRule.relationship_stage} 
-                        onValueChange={(val) => setEditingRule({...editingRule, relationship_stage: val})}
+                        onValueChange={(val) => setEditingRule({...editingRule!, relationship_stage: val})}
                       >
                         <SelectTrigger className="h-9">
                           <SelectValue />
@@ -259,7 +283,7 @@ export function CadenceRulesConfig() {
                       <Label className="text-xs uppercase font-bold text-muted-foreground">Prioridade da Fila</Label>
                       <Select 
                         value={editingRule.priority} 
-                        onValueChange={(val) => setEditingRule({...editingRule, priority: val})}
+                        onValueChange={(val) => setEditingRule({...editingRule!, priority: val as CadencePriority})}
                       >
                         <SelectTrigger className="h-9">
                           <SelectValue />
@@ -277,7 +301,7 @@ export function CadenceRulesConfig() {
                       <Input 
                         type="number" 
                         value={editingRule.frequency_days} 
-                        onChange={(e) => setEditingRule({...editingRule, frequency_days: parseInt(e.target.value)})}
+                        onChange={(e) => setEditingRule({...editingRule!, frequency_days: parseInt(e.target.value)})}
                         className="h-9"
                       />
                     </div>
@@ -295,7 +319,7 @@ export function CadenceRulesConfig() {
                     </div>
 
                     <div className="space-y-3">
-                      {editingRule.cadence_steps?.map((step: any, index: number) => (
+                      {editingRule.cadence_steps?.map((step: CadenceStep, index: number) => (
                         <div key={index} className="group relative bg-muted/30 rounded-lg p-3 border border-dashed hover:border-primary/30 transition-colors">
                           <Button 
                             variant="ghost" 
@@ -311,7 +335,7 @@ export function CadenceRulesConfig() {
                               <Label className="text-[10px] uppercase font-bold text-muted-foreground">Tipo</Label>
                               <Select 
                                 value={step.type} 
-                                onValueChange={(val) => handleUpdateStep(index, 'type', val)}
+                                onValueChange={(val) => handleUpdateStep(index, 'type', val as CadenceStepType)}
                               >
                                 <SelectTrigger className="h-8 text-xs">
                                   <SelectValue />
