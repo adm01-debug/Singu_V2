@@ -40,10 +40,30 @@ interface Props {
   contactId: string;
 }
 
+interface NextActionSuggestion {
+  passo_id?: string;
+  title: string;
+  suggested_message?: string;
+  action_type?: string;
+  urgency?: string;
+  confidence?: number;
+  rationale?: string;
+  [key: string]: unknown;
+}
+
+interface PredictiveRoadmapItem {
+  id: string;
+  forecast_month: string;
+  probability: number;
+  predicted_need: string;
+  suggested_offering: string;
+  rationale: string;
+}
+
 export function NextBestAction({ contactId }: Props) {
   const { user } = useAuth();
   const { loading, suggestNextAction, invoke } = useEdgeFunctionActions();
-  const [suggestion, setSuggestion] = useState<any>(null);
+  const [suggestion, setSuggestion] = useState<NextActionSuggestion | null>(null);
   const [script, setScript] = useState('');
   const [feedback, setFeedback] = useState('');
    const [isSubmitting, setIsSubmitting] = useState(false);
@@ -83,7 +103,7 @@ export function NextBestAction({ contactId }: Props) {
   const handleObjection = async (objectionId: string) => {
     setIsHandlingObjection(true);
     try {
-      const result = await (invoke as any)('objection-handler', { contactId, objectionId });
+      const result = await invoke('objection-handler', { contactId, objectionId });
       if (result && result.suggestion) {
         setSuggestion(result.suggestion);
         setScript(result.suggestion.suggested_message || '');
@@ -132,8 +152,9 @@ export function NextBestAction({ contactId }: Props) {
       setSuggestion(null);
       setFeedback('');
       setScript('');
-    } catch (error: any) {
-      toast.error('Erro ao concluir ação: ' + error.message);
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      toast.error('Erro ao concluir ação: ' + msg);
     } finally {
       setIsSubmitting(false);
     }
@@ -324,7 +345,7 @@ export function NextBestAction({ contactId }: Props) {
                      <Loader2 className="h-6 w-6 animate-spin text-primary" />
                    </div>
                  ) : roadmap && roadmap.length > 0 ? (
-                   roadmap.map((item: any, idx: number) => (
+                    (roadmap as PredictiveRoadmapItem[]).map((item) => (
                      <div key={item.id} className="relative pl-6 pb-4 border-l border-primary/20 last:pb-0">
                        <div className="absolute left-[-5px] top-0 h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_8px_rgba(var(--primary),0.5)]" />
                        <div className="bg-muted/30 rounded-lg p-3 border space-y-2">
