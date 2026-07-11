@@ -1,6 +1,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { GlobalSyncIndicator } from '@/components/feedback/GlobalSyncIndicator';
 import {
   PWAShell,
   SchemaDriftBannerLazy,
@@ -43,6 +44,7 @@ export const DeferredAppChrome = () => {
 
   return (
     <>
+      <GlobalSyncIndicator />
       {shouldLoadShell && (
         <Suspense fallback={null}>
           <PWAShell />
