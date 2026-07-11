@@ -34,8 +34,7 @@ import { Header } from '@/components/layout/Header';
  import { cn } from '@/lib/utils';
  import { useQuery } from '@tanstack/react-query';
  import { supabase } from '@/integrations/supabase/client';
-import { Contact, ContactRole, RelationshipStage, SentimentType } from '@/types';
-import type { ContactBehavior } from '@/types/behavior';
+import { Contact, ContactRole, RelationshipStage, SentimentType, ContactBehavior } from '@/types';
 
 const NLPAnalytics = () => {
    const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
