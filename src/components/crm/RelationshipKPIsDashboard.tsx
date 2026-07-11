@@ -148,7 +148,7 @@ export function RelationshipKPIsDashboard() {
              .eq('id', payload.new.contact_id)
               .maybeSingle();
            
-           const newEvent = {
+           const newEvent: LiveEvent = {
              id: payload.new.id,
              type: 'interaction',
              title: payload.new.title,
@@ -170,7 +170,7 @@ export function RelationshipKPIsDashboard() {
          'postgres_changes',
          { event: 'INSERT', schema: 'public', table: 'crm_objection_intelligence' },
          (payload) => {
-           const newEvent = {
+           const newEvent: LiveEvent = {
              id: payload.new.id,
              type: 'objection',
              title: `Objeção: ${payload.new.objection_type}`,
@@ -185,7 +185,7 @@ export function RelationshipKPIsDashboard() {
          'postgres_changes',
          { event: 'INSERT', schema: 'public', table: 'neuro_behavioral_history' },
          (payload) => {
-           const newEvent = {
+           const newEvent: LiveEvent = {
              id: payload.new.id,
              type: 'behavior',
              title: 'Análise de Comportamento Atualizada',
@@ -337,7 +337,7 @@ export function RelationshipKPIsDashboard() {
            </CardHeader>
            <CardContent>
              <div className="space-y-4">
-                {(intelligenceData as ObjectionRow[] | undefined)?.map((obj) => (
+                {(intelligenceData as unknown as ObjectionRow[] | undefined)?.map((obj) => (
                  <div key={obj.id} className="p-3 rounded-lg border bg-muted/30 space-y-2">
                    <div className="flex items-center justify-between">
                      <Badge variant="secondary" className="text-[9px] uppercase">{obj.objection_type}</Badge>
