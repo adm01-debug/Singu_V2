@@ -7,7 +7,7 @@ import { EmptyState, SearchEmptyState } from '@/components/ui/empty-state';
 import { PullToRefresh } from '@/components/ui/pull-to-refresh';
 import { SwipeableListItem } from '@/components/ui/swipeable-list-item';
 import { Button } from '@/components/ui/button';
-import { AdvancedFilters, type FilterConfig, type SortOption } from '@/components/filters/AdvancedFilters';
+import { AdvancedFilters, type FilterConfig, type SortOption, type SortCriteria } from '@/components/filters/AdvancedFilters';
 import { ContactCardWithContext } from '@/components/contact-card/ContactCardWithContext';
 import { ContactsStatsBar } from '@/components/contacts/ContactsStatsBar';
 import { BulkActionsBar } from '@/components/bulk-actions/BulkActionsBar';
@@ -41,8 +41,8 @@ interface Props {
   sortBy: string;
   sortOrder: 'asc' | 'desc';
   onSortChange: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
-  multiSort?: any[];
-  onMultiSortChange?: (criteria: any[]) => void;
+  multiSort?: SortCriteria[];
+  onMultiSortChange?: (criteria: SortCriteria[]) => void;
   filterConfigs: FilterConfig[];
   sortOptions: SortOption[];
   selectionMode: boolean;
@@ -88,8 +88,8 @@ export function ContatosContent(props: Props) {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   
   useEffect(() => {
-    const handleNavigate = (e: any) => {
-      const direction = e.detail;
+    const handleNavigate = (e: Event) => {
+      const direction = (e as CustomEvent<'next' | 'prev'>).detail;
       setSelectedIndex(prev => {
         let next = direction === 'next' ? prev + 1 : prev - 1;
         if (next < 0) next = filteredAndSortedContacts.length - 1;
@@ -142,12 +142,14 @@ export function ContatosContent(props: Props) {
       Nome: `${c.first_name} ${c.last_name}`,
       Empresa: getCompanyName(c.company_id) || '',
       Cargo: c.role_title || '',
-      Email: (c as any).email || '',
-      Telefone: (c as any).phone || '',
+      Email: (c as Contact & { email?: string }).email || '',
+      Telefone: (c as Contact & { phone?: string }).phone || '',
       Score: c.relationship_score || 0,
       Estagio: c.relationship_stage || '',
       Sentimento: c.sentiment || '',
-      Tags: Array.isArray((c as any).tags) ? ((c as any).tags as string[]).join('; ') : ''
+      Tags: Array.isArray((c as Contact & { tags?: string[] }).tags)
+        ? ((c as Contact & { tags?: string[] }).tags as string[]).join('; ')
+        : ''
     }));
     exportToCSV(dataToExport, 'contatos_export');
   };
