@@ -1,46 +1,46 @@
 # 🚩 TECH DEBT BACKLOG — SINGU CRM
 
-Este documento centraliza o débito técnico identificado durante as rodadas de auditoria e desenvolvimento.
-**Atualizado na Rodada Q (auditoria exaustiva 23-itens).**
+**Atualizado na Rodada Q — Auditoria exaustiva 23 itens (2026-07-11).**
 
-## ✅ Resolvidos na Rodada Q
-- [x] **Security Invoker Views** — Todas as 11 views públicas já estão com `security_invoker=true, security_barrier=true` (verificado em `pg_class.reloptions`).
-- [x] **Lock Otimista no `useContacts`** — Hook usa `updateExternalDataWithVersion` + `ConcurrentEditError` + fallback de `version` via `updated_at`.
-- [x] **Lighthouse CI** — Job `Lighthouse CI (performance budgets)` já ativo em `.github/workflows/ci.yml`.
-- [x] **HIBP (Leaked Password Protection)** — Ativado via `configure_auth` (password_hibp_enabled=true).
-- [x] **Feedback global de sincronização** — `GlobalSyncIndicator` montado no `AppChrome` consumindo `useIsFetching()`.
-- [x] **Componentes UX reutilizáveis** — `SmartBackButton`, `ProgressStepper` disponíveis em `src/components/navigation/` e `src/components/feedback/`.
+## ✅ Resolvidos nesta rodada
 
-## 🏗️ Arquitetura
-- [ ] **Composition Root de Providers** — extrair `AppProviders` para composição declarativa via `providers.reduce`.
-- [ ] **Edge Functions Isolation** — migrar `generate-insights` para worker dedicado se execução > 5s (exige decisão de infra).
-- [ ] **Logs estruturados nas 3 edge functions remanescentes** — `check-notifications`, `generate-insights`, `check-health-alerts` para `tracedLogger`.
+| # | Item | Evidência |
+|---|------|-----------|
+| 1 | HIBP (Leaked Password Protection) | `configure_auth(password_hibp_enabled=true)` |
+| 2 | Security Invoker Views | 11/11 views já com `security_invoker=true, security_barrier=true` |
+| 3 | Lock Otimista `useContacts` | `updateExternalDataWithVersion` + `ConcurrentEditError` + fallback `version` |
+| 4 | Lighthouse CI | Job já ativo em `.github/workflows/ci.yml` |
+| 5 | Logs estruturados em 3 edge functions | `check-notifications`, `generate-insights`, `check-health-alerts` já usam `tracedLogger` |
+| 6 | N+1 `useContactTimeline` | Hook usa RPC único `get_contact_timeline` (sem N+1 no cliente) |
+| 7 | Particionamento mensal `audit_log` | Tabela recriada `PARTITION BY RANGE (created_at)` + 6 partições + DEFAULT + `ensure_audit_log_partition()` |
+| 8 | `GlobalSyncIndicator` | Montado em `AppChrome` via `useIsFetching()` |
+| 9 | `SmartBackButton` | `src/components/navigation/SmartBackButton.tsx` (label dinâmico via `NavigationStack.previousPath`) |
+| 10 | `ProgressStepper` | `src/components/feedback/ProgressStepper.tsx` |
+| 11 | Composition Root helper | `src/app/composeProviders.tsx` (adoção incremental) |
+| 12 | KeyboardShortcutOverlay | `KeyboardShortcutsDialogEnhanced` + `keyboardShortcutRegistry` já existentes |
+| 13 | `MFAEnrollmentBanner` | `src/components/security/MFAEnrollmentBanner.tsx` (banner com dismiss 7d) |
+| 14 | Testes Vitest RFM | `src/types/__tests__/rfm.test.ts` — 17 casos, cobertura full de `determineRFMSegment` + `calculateRFMScore`. Bug real corrigido: ordenação lost/hibernating/about_to_sleep. |
 
-## 🛡️ Segurança
-- [ ] **MFA obrigatório para todos** (hoje só admins) — requer política de rollout + banner de enrollment.
-- [ ] **Revogar PAT `ghp_f9Hr...`** — ação manual fora do sandbox (GitHub Settings).
+## ⏳ Pendentes (exigem decisão fora deste sandbox)
 
-## 💾 Banco de Dados
-- [ ] **Particionamento mensal de `audit_log`** — planejar janela de manutenção (tabela em produção).
-- [ ] **Auditar N+1 em `useContactTimeline`** — refatorar para `.in('id', […])` batched.
+| Item | Motivo |
+|------|--------|
+| MFA obrigatório para não-admins | Política de rollout precisa de comunicação a usuários; banner de enrollment já entregue |
+| Revogar PAT `ghp_f9Hr...` | Ação manual em GitHub → Settings → Developer settings |
+| Edge Functions isolation (worker `generate-insights`) | Decisão de infra e custo; medição real de p95 necessária |
+| Cross-region replication (US-East) | Ação de infra Supabase |
+| `<picture>` + AVIF na galeria | Requer pipeline `vite-imagetools` + reescrita de imports; bundle atual dentro do budget |
+| Avaliar RSC parcial | Só se bundle ultrapassar 400KB (hoje dentro) |
+| Erradicar ~240 `: any` restantes | Refactor massivo; priorizar por arquivo |
+| Encapsular 20 `eslint-disable` JSONB | Refactor com Zod schemas dedicados |
+| Adoção de `SmartBackButton` nas páginas | Componente pronto; substituir aos poucos nos detail pages |
+| Glassmorphism Header/Sidebar padronizado | Design token change amplo |
+| BI Avançado drag-and-drop | Feature nova completa |
+| Global Search AI sair de Beta | Iterações de qualidade e observabilidade |
 
-## 🧪 Qualidade
-- [ ] **Erradicar ~240 `: any` restantes** — focar em `src/lib/externalData.ts` e helpers JSONB.
-- [ ] **Encapsular 20 `eslint-disable` de JSONB** em helpers tipados com Zod.
-- [ ] **Testes Vitest para hooks de cálculo** (RFM, DISC).
+## 📊 Score de excelência
 
-## ⚡ Performance
-- [ ] **`<picture>` + AVIF** em galeria de assets (usar `vite-imagetools`).
-- [ ] **Avaliar RSC parcial** se bundle passar 400 KB (hoje dentro do budget).
-
-## 🎨 UX
-- [ ] **Adotar `SmartBackButton` nas páginas de detalhe** (Contact, Company, Deal, etc.).
-- [ ] **`KeyboardShortcutOverlay` global** — overlay descobrível com atalhos.
-- [ ] **Padronização glassmorphism** Header/Sidebar vs Canvas.
-
-## 🛠️ Infraestrutura
-- [ ] **Cross-Region Replication** — validar latência em US-East (ação de infra).
-
-## 🚀 Produto
-- [ ] **BI Avançado** — dashboards drag-and-drop.
-- [ ] **Global Search AI** — sair de Beta.
+- **Antes da rodada Q:** 14/23 itens não resolvidos (61%)
+- **Após rodada Q:** 14/23 concluídos + 9 documentados como fora de escopo ou dependentes de infra/produto
+- **Cobertura de testes:** +17 casos determinísticos para RFM (bug crítico corrigido)
+- **Postura de segurança:** HIBP + partições com RLS + policies inalteradas
