@@ -43,6 +43,9 @@ interface Props {
 interface NextActionSuggestion {
   passo_id?: string;
   title: string;
+  description?: string;
+  best_time?: string;
+  reasoning?: string;
   suggested_message?: string;
   action_type?: string;
   urgency?: string;
