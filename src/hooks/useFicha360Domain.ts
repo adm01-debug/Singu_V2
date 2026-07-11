@@ -4,6 +4,7 @@ import { applySimulation } from '@/domain/forecastSimulation';
 import { computeProntidaoTrend } from '@/domain/churnRisk';
 import { computeProximosPassos, type FeedbackHint, type PassoFeedbackOutcomeHint } from '@/domain/nextStepLogic';
 import type { ContactView360 } from './useContactView360';
+import type { ContactIntelligence } from './useContactIntelligence';
 import type { ExternalInteraction } from './useExternalInteractions';
 import type { SimulationOverrides } from '@/stores/useSimulationStore';
 
@@ -17,7 +18,7 @@ interface PassoFeedback {
 
 interface UseFicha360DomainProps {
   profile: ContactView360 | null | undefined;
-  intelligence: ContactView360 | null | undefined;
+  intelligence: ContactIntelligence | null | undefined;
   weights: ProntidaoWeights;
   simEnabled: boolean;
   simOverrides: SimulationOverrides;
