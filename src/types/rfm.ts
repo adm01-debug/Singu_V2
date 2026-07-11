@@ -320,16 +320,16 @@ export function determineRFMSegment(r: RFMScore, f: RFMScore, m: RFMScore): RFMS
   
   // Needing Attention: Average in everything
   if (r === 3 && f === 3 && m === 3) return 'needing_attention';
-  
-  // About to Sleep: Below average, declining
-  if (r === 2 && f <= 3 && m <= 3) return 'about_to_sleep';
-  
+
+  // Lost: Lowest scores (mais específico primeiro para não ser eclipsado por hibernating)
+  if (r === 1 && f === 1 && m === 1) return 'lost';
+
   // Hibernating: Low recency and frequency
   if (r <= 2 && f <= 2) return 'hibernating';
-  
-  // Lost: Lowest scores
-  if (r === 1 && f === 1 && m === 1) return 'lost';
-  
+
+  // About to Sleep: Below average, declining
+  if (r === 2 && f <= 3 && m <= 3) return 'about_to_sleep';
+
   // Default to needing attention
   return 'needing_attention';
 }
