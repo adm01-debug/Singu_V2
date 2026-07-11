@@ -58,8 +58,8 @@ export default function MarketingHub() {
                  </CardHeader>
                  <CardContent>
                    <div className="flex items-end gap-2 h-24 pt-4">
-                     {['D', 'I', 'S', 'C'].map(type => {
-                        const count = (behaviorInsights?.disc as any)?.[type] || 0;
+                      {['D', 'I', 'S', 'C'].map(type => {
+                        const count = behaviorInsights?.disc?.[type] || 0;
                         const max = Math.max(...Object.values(behaviorInsights?.disc || { x: 1 }).map(v => Number(v))) || 1;
                        const height = (count / max) * 100;
                        return (
@@ -88,9 +88,9 @@ export default function MarketingHub() {
                  </CardHeader>
                  <CardContent>
                    <div className="space-y-3 pt-2">
-                     {['visual', 'auditivo', 'cinestesico'].map(type => {
-                         const vCount = Number((behaviorInsights?.vak as any)?.[type] || 0);
-                         const vTotal = Number(Object.values(behaviorInsights?.vak || {}).reduce((a: number, b: any) => a + (Number(b) || 0), 0) || 1);
+                      {['visual', 'auditivo', 'cinestesico'].map(type => {
+                         const vCount = Number(behaviorInsights?.vak?.[type] || 0);
+                         const vTotal = Number(Object.values(behaviorInsights?.vak || {}).reduce<number>((a, b) => a + (Number(b) || 0), 0) || 1);
                         const percentage = (vCount / vTotal) * 100;
                        return (
                          <div key={type} className="space-y-1">
@@ -122,10 +122,10 @@ export default function MarketingHub() {
                  <CardContent>
                    <div className="space-y-2 pt-2">
                      {behaviorInsights?.motivation && Object.entries(behaviorInsights.motivation).length > 0 ? (
-                       Object.entries(behaviorInsights.motivation)
-                         .sort((a: any, b: any) => b[1] - a[1])
-                         .slice(0, 3)
-                         .map(([key, value]: [string, any]) => (
+                        Object.entries(behaviorInsights.motivation)
+                          .sort((a, b) => Number(b[1]) - Number(a[1]))
+                          .slice(0, 3)
+                          .map(([key, value]) => (
                            <div key={key} className="flex items-center justify-between p-2 rounded bg-muted/30">
                              <span className="text-[11px] font-medium truncate max-w-[120px]">{key}</span>
                              <Badge variant="secondary" className="text-[9px] h-4 px-1">{value} leads</Badge>
