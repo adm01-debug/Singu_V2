@@ -11,7 +11,8 @@ import {
   CopyAnalysis,
   EmojiSuggestion,
   ChannelPreview,
-  PASScript
+  PASScript,
+  EmotionalProfile
 } from '@/types/copywriting';
 import {
   PAS_TEMPLATES,
