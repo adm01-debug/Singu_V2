@@ -34,7 +34,7 @@ import { Header } from '@/components/layout/Header';
  import { cn } from '@/lib/utils';
  import { useQuery } from '@tanstack/react-query';
  import { supabase } from '@/integrations/supabase/client';
- import { Contact } from '@/types';
+import { Contact, ContactRole, RelationshipStage, SentimentType, ContactBehavior } from '@/types';
 
 const NLPAnalytics = () => {
    const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
@@ -64,26 +64,31 @@ const NLPAnalytics = () => {
          .eq('id', selectedContactId)
           .maybeSingle();
        
-       if (error) throw error;
- 
-       const contact: Contact = {
+        if (error) throw error;
+
+        const row = data as typeof data & {
+          companies?: { name?: string | null } | null;
+          interactions_count?: number | null;
+        };
+
+        const contact: Contact = {
          id: data.id,
          companyId: data.company_id || '',
-         companyName: (data.companies as any)?.name || 'Empresa desconhecida',
+          companyName: row.companies?.name || 'Empresa desconhecida',
          firstName: data.first_name || '',
          lastName: data.last_name || '',
-         role: (data.role as any) || 'contact',
+          role: (data.role as ContactRole) || 'contact',
          roleTitle: data.role_title || '',
          email: data.email || undefined,
          phone: data.phone || undefined,
          whatsapp: data.whatsapp || undefined,
          linkedin: data.linkedin || undefined,
          tags: data.tags || [],
-         relationshipStage: (data.relationship_stage as any) || 'prospect',
+          relationshipStage: (data.relationship_stage as RelationshipStage) || 'prospect',
          relationshipScore: data.relationship_score || 0,
-         interactionCount: (data as any).interactions_count || 0,
-         sentiment: (data.sentiment as any) || 'neutral',
-         behavior: (data.behavior as any) || {},
+          interactionCount: row.interactions_count || 0,
+          sentiment: (data.sentiment as SentimentType) || 'neutral',
+          behavior: (data.behavior as unknown as ContactBehavior) || ({} as ContactBehavior),
          hobbies: data.hobbies || [],
          interests: data.interests || [],
          lifeEvents: [],
