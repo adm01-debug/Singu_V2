@@ -11,7 +11,8 @@ import {
   CopyAnalysis,
   EmojiSuggestion,
   ChannelPreview,
-  PASScript
+  PASScript,
+  EmotionalProfile
 } from '@/types/copywriting';
 import {
   PAS_TEMPLATES,
@@ -179,14 +180,18 @@ export function useCopywritingAdvanced(contact?: Contact) {
     return 'neutral';
   }, []);
 
-  const analyzeEmotionalProfile = useCallback((text: string): any => {
+  const analyzeEmotionalProfile = useCallback((text: string): EmotionalProfile => {
     const textLower = text.toLowerCase();
-    const profile = {
+    const profile: EmotionalProfile = {
       joy: (textLower.match(/alegria|feliz|contente|maravilhoso|sucesso|conquista/g) || []).length * 15,
       trust: (textLower.match(/confiança|seguro|garantido|comprovado|transparente|parceiro/g) || []).length * 15,
       fear: (textLower.match(/medo|perigo|risco|perda|evite|cuidado/g) || []).length * 15,
       urgency: (textLower.match(/agora|rápido|imediato|hoje|última|acabando/g) || []).length * 20,
       anticipation: (textLower.match(/em breve|próximo|novidade|lançamento|descubra/g) || []).length * 15,
+      surprise: 0,
+      sadness: 0,
+      disgust: 0,
+      anger: 0,
     };
 
     // Normalize to 0-100
@@ -285,9 +290,11 @@ export function useCopywritingAdvanced(contact?: Contact) {
     const ctaStrength = hasCTA ? 
       (text.match(/agora|hoje|imediato/gi) ? 90 : 60) : 0;
 
-    const highlightedTriggers: any[] = [];
-    const longSentences: any[] = [];
-    const complexWords: any[] = [];
+    type TextSpan = { text: string; startIndex: number; endIndex: number };
+    type HighlightedTrigger = TextSpan & { category: string };
+    const highlightedTriggers: HighlightedTrigger[] = [];
+    const longSentences: TextSpan[] = [];
+    const complexWords: TextSpan[] = [];
 
     // Identify long sentences and complex words
     let currentPos = 0;
