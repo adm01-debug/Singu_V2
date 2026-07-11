@@ -1,31 +1,27 @@
 import { useMemo } from 'react';
-import { computeProntidaoScore } from '@/domain/leadScoring';
+import { computeProntidaoScore, type ProntidaoWeights } from '@/domain/leadScoring';
 import { applySimulation } from '@/domain/forecastSimulation';
 import { computeProntidaoTrend } from '@/domain/churnRisk';
-import { computeProximosPassos } from '@/domain/nextStepLogic';
+import { computeProximosPassos, type FeedbackHint, type PassoFeedbackOutcomeHint } from '@/domain/nextStepLogic';
+import type { ContactView360 } from './useContactView360';
+import type { ExternalInteraction } from './useExternalInteractions';
+import type { SimulationOverrides } from '@/stores/useSimulationStore';
 
-type UnknownRecord = Record<string, unknown>;
 type TrendWeeks = 4 | 8 | 12;
 
 interface PassoFeedback {
   passo_id: string;
-  outcome: string;
+  outcome: PassoFeedbackOutcomeHint;
   executed_at: string;
 }
 
-interface FeedbackHint {
-  passoId: string;
-  lastOutcome: string;
-  daysAgo: number;
-}
-
 interface UseFicha360DomainProps {
-  profile: UnknownRecord | null | undefined;
-  intelligence: UnknownRecord | null | undefined;
-  weights: UnknownRecord | null | undefined;
+  profile: ContactView360 | null | undefined;
+  intelligence: ContactView360 | null | undefined;
+  weights: ProntidaoWeights;
   simEnabled: boolean;
-  simOverrides: UnknownRecord | null | undefined;
-  recentInteractions: UnknownRecord[];
+  simOverrides: SimulationOverrides;
+  recentInteractions: ExternalInteraction[];
   trendWeeks: number;
   rapportIntel: { birthday?: string | null } | null | undefined;
   passoFeedbacks: PassoFeedback[];
