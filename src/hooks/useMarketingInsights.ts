@@ -60,8 +60,20 @@
  
        if (error) { throw error; }
 
-        const stats = (data || []).reduce((acc: any, curr: any) => {
-          const behavior = curr.contact_behavior?.[0];
+       type BehavioralStats = {
+         disc: Record<string, number>;
+         vak: Record<string, number>;
+         motivation: Record<string, number>;
+       };
+       type ContactRow = {
+         contact_behavior?: Array<{
+           disc_primary?: string | null;
+           vak_primary?: string | null;
+           motivation_primary?: string | null;
+         }> | null;
+       };
+       const stats = (data || []).reduce<BehavioralStats>((acc, curr: ContactRow) => {
+         const behavior = curr.contact_behavior?.[0];
           if (behavior?.disc_primary) acc.disc[behavior.disc_primary] = (acc.disc[behavior.disc_primary] || 0) + 1;
           if (behavior?.vak_primary) acc.vak[behavior.vak_primary] = (acc.vak[behavior.vak_primary] || 0) + 1;
           if (behavior?.motivation_primary) {
