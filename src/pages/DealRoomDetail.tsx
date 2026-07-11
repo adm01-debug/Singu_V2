@@ -3,7 +3,7 @@ import { useDealRoom, useMilestones, useStakeholders } from "@/hooks/useDealRoom
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Calendar, DollarSign, Eye, Target, type LucideIcon } from "lucide-react";
+import { Calendar, DollarSign, Eye, Target, type LucideIcon } from "lucide-react";
 import { SmartBackButton } from "@/components/navigation/SmartBackButton";
 import { MilestoneKanban } from "@/components/deal-rooms/MilestoneKanban";
 import { StakeholderList } from "@/components/deal-rooms/StakeholderList";
