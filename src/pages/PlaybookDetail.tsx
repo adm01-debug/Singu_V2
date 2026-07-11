@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, BookOpen, Trash2, Copy, Loader2 } from "lucide-react";
+import { SmartBackButton } from "@/components/navigation/SmartBackButton";
 import { usePlaybook, useDeletePlaybook, useLogPlaybookUsage, SCENARIO_LABELS } from "@/hooks/usePlaybooks";
 import { PlaybookSectionRenderer } from "@/components/playbooks/PlaybookSectionRenderer";
 import { toast } from "sonner";
@@ -50,7 +51,7 @@ export default function PlaybookDetail() {
   if (!playbook) {
     return <div className="container mx-auto px-4 py-12 text-center">
       <p className="text-muted-foreground mb-4">Playbook não encontrado</p>
-      <Button asChild variant="outline"><Link to="/playbooks"><ArrowLeft className="size-4" /> Voltar</Link></Button>
+      <SmartBackButton fallback="/playbooks" label="Voltar para Playbooks" />
     </div>;
   }
 
@@ -60,7 +61,7 @@ export default function PlaybookDetail() {
 
       <div className="container mx-auto px-4 py-6 space-y-6 max-w-4xl">
         <div className="flex items-center justify-between gap-4">
-          <Button asChild variant="ghost" size="sm"><Link to="/playbooks"><ArrowLeft className="size-4" /> Playbooks</Link></Button>
+          <SmartBackButton fallback="/playbooks" label="Playbooks" />
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={handleCopyAll}><Copy className="size-4" /> Copiar tudo</Button>
             <Button variant="ghost" size="sm" onClick={handleDelete}><Trash2 className="size-4 text-destructive" /></Button>

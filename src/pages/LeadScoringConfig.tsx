@@ -1,7 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { SmartBackButton } from '@/components/navigation/SmartBackButton';
 import { useScoreRules, useScoreThresholds } from '@/hooks/useLeadScoring';
 import { ScoreRulesEditor } from '@/components/lead-scoring/ScoreRulesEditor';
 import { ThresholdsEditor } from '@/components/lead-scoring/ThresholdsEditor';
@@ -18,9 +16,7 @@ export default function LeadScoringConfigPage() {
       </Helmet>
       <div className="space-y-6 p-4 md:p-6 max-w-5xl mx-auto">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/lead-scoring"><ArrowLeft className="h-4 w-4 mr-1" />Voltar</Link>
-          </Button>
+          <SmartBackButton fallback="/lead-scoring" label="Voltar para Lead Scoring" />
         </div>
         <div>
           <h1 className="text-2xl font-heading font-bold">Configuração de Lead Scoring</h1>

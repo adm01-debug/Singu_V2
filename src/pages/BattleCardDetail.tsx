@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Swords, Loader2 } from "lucide-react";
+import { SmartBackButton } from "@/components/navigation/SmartBackButton";
 import { useBattleCard } from "@/hooks/useBattleCards";
 import { BattleCardView } from "@/components/playbooks/BattleCardView";
 import { useLogPlaybookUsage } from "@/hooks/usePlaybooks";
@@ -21,7 +22,7 @@ export default function BattleCardDetail() {
   if (isLoading) return <div className="container mx-auto px-4 py-12 flex justify-center"><Loader2 className="size-6 animate-spin text-muted-foreground" /></div>;
   if (!card) return <div className="container mx-auto px-4 py-12 text-center">
     <p className="text-muted-foreground mb-4">Battle card não encontrado</p>
-    <Button asChild variant="outline"><Link to="/playbooks"><ArrowLeft className="size-4" /> Voltar</Link></Button>
+    <SmartBackButton fallback="/playbooks" label="Voltar para Playbooks" />
   </div>;
 
   return (
@@ -30,7 +31,7 @@ export default function BattleCardDetail() {
 
       <div className="container mx-auto px-4 py-6 space-y-6 max-w-5xl">
         <div className="flex items-center justify-between gap-4">
-          <Button asChild variant="ghost" size="sm"><Link to="/playbooks"><ArrowLeft className="size-4" /> Voltar</Link></Button>
+          <SmartBackButton fallback="/playbooks" />
         </div>
 
         <Card>

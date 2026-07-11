@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,7 +13,8 @@ import { HealthSignalTimeline } from "@/components/customer-success/HealthSignal
 import { NPSDistributionChart } from "@/components/customer-success/NPSDistributionChart";
 import { NPSResponseDialog } from "@/components/customer-success/NPSResponseDialog";
 import { QBRTimeline } from "@/components/customer-success/QBRTimeline";
-import { ArrowLeft, RefreshCw, Star, CalendarClock, DollarSign } from "lucide-react";
+import { RefreshCw, Star, CalendarClock, DollarSign } from "lucide-react";
+import { SmartBackButton } from "@/components/navigation/SmartBackButton";
 
 export default function CustomerSuccessAccount() {
   const { id } = useParams();
@@ -32,7 +33,7 @@ export default function CustomerSuccessAccount() {
       <Helmet><title>{account.account_name} | Customer Success</title></Helmet>
       <div className="container mx-auto p-6 space-y-6">
         <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm"><Link to="/customer-success"><ArrowLeft className="h-4 w-4 mr-1" />Voltar</Link></Button>
+          <SmartBackButton fallback="/customer-success" label="Voltar para Customer Success" />
         </div>
 
         <Card>

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Plus, Zap } from 'lucide-react';
+import { Plus, Zap } from 'lucide-react';
+import { SmartBackButton } from '@/components/navigation/SmartBackButton';
 import { useScoreAutomations, useAutomationLog, type ScoreAutomation } from '@/hooks/useScoreAutomations';
 import { AutomationCard } from '@/components/lead-scoring/AutomationCard';
 import { AutomationWizard } from '@/components/lead-scoring/AutomationWizard';
@@ -31,9 +31,7 @@ export default function LeadScoringAutomationsPage() {
       <div className="space-y-6 p-4 md:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <Button variant="ghost" size="sm" asChild className="mb-2">
-              <Link to="/lead-scoring"><ArrowLeft className="h-3.5 w-3.5 mr-1" />Voltar para Lead Scoring</Link>
-            </Button>
+            <SmartBackButton fallback="/lead-scoring" label="Voltar para Lead Scoring" className="mb-2" />
             <h1 className="text-2xl font-heading font-bold flex items-center gap-2">
               <Zap className="h-6 w-6 text-primary" /> Automações de Score
             </h1>
