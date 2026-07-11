@@ -16,7 +16,23 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import type { LucideIcon } from 'lucide-react';
 import type { Tables, TablesInsert } from '@/integrations/supabase/types';
+
+type SuggestedLifeEvent = Tables<'suggested_life_events'>;
+type LifeEventMetadata = { reason?: string; source?: string; suggestion_id?: string };
+type RelativeSuggestionData = {
+  name: string;
+  relationship_type: string;
+  occupation?: string | null;
+  company?: string | null;
+  is_decision_influencer?: boolean | null;
+  notes?: string | null;
+};
+type SuggestionMetadata = {
+  type?: string;
+  relative_data?: RelativeSuggestionData;
+};
 import { LifeEventsGapChecklist } from './life-events/LifeEventsGapChecklist';
 import { LifeEventsAuditTrail } from './life-events/LifeEventsAuditTrail';
  import { LifeEventsTimeline } from './life-events/LifeEventsTimeline';
@@ -71,11 +87,12 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     enabled: !!contactId,
   });
 
-  const handleAcceptSuggestion = async (suggestion: any) => {
-    const isRelative = suggestion.metadata?.type === 'relative_suggestion';
+  const handleAcceptSuggestion = async (suggestion: SuggestedLifeEvent) => {
+    const meta = (suggestion.metadata ?? {}) as SuggestionMetadata;
+    const isRelative = meta.type === 'relative_suggestion';
     
-    if (isRelative) {
-      const relData = suggestion.metadata.relative_data;
+    if (isRelative && meta.relative_data) {
+      const relData = meta.relative_data;
       const { error } = await supabase.from('contact_relatives').insert({
         contact_id: contactId,
         user_id: user?.id,
@@ -101,7 +118,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     const { error } = await supabase.from('life_events').insert({
       contact_id: contactId,
       user_id: user?.id,
-      event_type: suggestion.event_type as any,
+      event_type: suggestion.event_type,
       title: suggestion.title,
       description: suggestion.description,
       event_date: suggestion.event_date || new Date().toISOString(),
@@ -210,13 +227,13 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
       description: event.description,
       recurring: event.recurring,
       reminder_days_before: event.reminder_days_before,
-      reason: (event.metadata as any)?.reason || ''
+      reason: (event.metadata as LifeEventMetadata | null)?.reason || ''
     });
     setEditingId(event.id);
     setIsDialogOpen(true);
   };
 
-  const eventTypeConfigs: Record<string, { label: string, icon: any, color: string }> = {
+  const eventTypeConfigs: Record<string, { label: string; icon: LucideIcon; color: string }> = {
     birthday: { label: 'Aniversário', icon: Gift, color: 'text-pink-500' },
     anniversary: { label: 'Bodas/Relacionamento', icon: Calendar, color: 'text-red-500' },
     promotion: { label: 'Promoção', icon: Briefcase, color: 'text-blue-500' },
@@ -261,7 +278,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                   <Label htmlFor="type">Tipo</Label>
                   <Select 
                     value={newEvent.event_type} 
-                    onValueChange={(val: any) => setNewEvent({...newEvent, event_type: val})}
+                    onValueChange={(val: string) => setNewEvent({...newEvent, event_type: val})}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -503,7 +520,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                     lifeEvents={lifeEvents} 
                     onAddGap={(type) => {
                       resetForm();
-                      setNewEvent(prev => ({ ...prev, event_type: type as any }));
+                       setNewEvent(prev => ({ ...prev, event_type: type }));
                       setIsDialogOpen(true);
                     }} 
                   />
