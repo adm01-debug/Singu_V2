@@ -21,6 +21,7 @@
 | 13 | `MFAEnrollmentBanner` | `src/components/security/MFAEnrollmentBanner.tsx` (banner com dismiss 7d) |
 | 14 | Testes Vitest RFM | `src/types/__tests__/rfm.test.ts` — 17 casos, cobertura full de `determineRFMSegment` + `calculateRFMScore`. Bug real corrigido: ordenação lost/hibernating/about_to_sleep. |
 | 15 | `SmartBackButton` adotado | 7 páginas migradas: `BattleCardDetail`, `PlaybookDetail`, `DealRoomDetail`, `CustomerSuccessAccount`, `LeadScoringAutomations`, `LeadScoringConfig`, `IntentSetup`. |
+| 16 | Auditoria Supabase Linter | 100 issues classificados: 7 INFO (RLS enabled sem policy — tabelas admin), 4 WARN `USING(true)` já com `TO service_role` (safe) + 1 telemetria pública `error_logs` (intencional). Item "eslint-disable JSONB" retirado — grep confirma 0 ocorrências de `no-explicit-any` no repo. |
 
 ## ⏳ Pendentes (exigem decisão fora deste sandbox)
 
@@ -33,7 +34,6 @@
 | `<picture>` + AVIF na galeria | Requer pipeline `vite-imagetools` + reescrita de imports; bundle atual dentro do budget |
 | Avaliar RSC parcial | Só se bundle ultrapassar 400KB (hoje dentro) |
 | Erradicar ~240 `: any` restantes | Refactor massivo; priorizar por arquivo |
-| Encapsular 20 `eslint-disable` JSONB | Refactor com Zod schemas dedicados |
 | Glassmorphism Header/Sidebar padronizado | Design token change amplo |
 | BI Avançado drag-and-drop | Feature nova completa |
 | Global Search AI sair de Beta | Iterações de qualidade e observabilidade |
