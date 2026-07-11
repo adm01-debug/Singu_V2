@@ -8,19 +8,19 @@ import { InteractionTag } from '@/lib/interactionTags';
 interface Ficha360FilterPanelProps {
   draftDays: number;
   draftChannels: string[];
-  setDraftDays: (days: any) => void;
+  setDraftDays: (days: Ficha360Period) => void;
   setDraftChannels: (channels: string[]) => void;
   clearDraftFilters: () => void;
   activeCount: number;
   filteredCount: number;
   totalCount: number;
-  potentialChannelCounts: any;
+  potentialChannelCounts: Record<string, number>;
   channelCountsReady: boolean;
   filtersDirty: boolean;
   applyDraftFilters: () => void;
   resetDraft: () => void;
-  tipoTotals: any;
-  tipoFiltered: any;
+  tipoTotals: Record<string, number>;
+  tipoFiltered: Record<string, number>;
   channelCountsLoading: boolean;
   days: Ficha360Period;
   channels: string[];
@@ -85,7 +85,7 @@ export function Ficha360FilterPanel({
       <FiltrosAtivosChips
         days={days as Ficha360Period}
         channels={channels}
-        tags={tags as any}
+        tags={tags}
         shownCount={filteredCount}
         totalCount={totalCount}
         searchTerm={searchTerm}
