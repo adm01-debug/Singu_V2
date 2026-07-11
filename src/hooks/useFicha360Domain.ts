@@ -1,19 +1,31 @@
 import { useMemo } from 'react';
-import { computeProntidaoScore } from '@/domain/leadScoring';
+import { computeProntidaoScore, type ProntidaoWeights } from '@/domain/leadScoring';
 import { applySimulation } from '@/domain/forecastSimulation';
 import { computeProntidaoTrend } from '@/domain/churnRisk';
-import { computeProximosPassos } from '@/domain/nextStepLogic';
+import { computeProximosPassos, type FeedbackHint, type PassoFeedbackOutcomeHint } from '@/domain/nextStepLogic';
+import type { ContactView360 } from './useContactView360';
+import type { ContactIntelligence } from './useContactIntelligence';
+import type { ExternalInteraction } from './useExternalInteractions';
+import type { SimulationOverrides } from '@/stores/useSimulationStore';
+
+type TrendWeeks = 4 | 8 | 12;
+
+interface PassoFeedback {
+  passo_id: string;
+  outcome: PassoFeedbackOutcomeHint;
+  executed_at: string;
+}
 
 interface UseFicha360DomainProps {
-  profile: any;
-  intelligence: any;
-  weights: any;
+  profile: ContactView360 | null | undefined;
+  intelligence: ContactIntelligence | null | undefined;
+  weights: ProntidaoWeights;
   simEnabled: boolean;
-  simOverrides: any;
-  recentInteractions: any[];
+  simOverrides: SimulationOverrides;
+  recentInteractions: ExternalInteraction[];
   trendWeeks: number;
-  rapportIntel: any;
-  passoFeedbacks: any[];
+  rapportIntel: { birthday?: string | null } | null | undefined;
+  passoFeedbacks: PassoFeedback[];
 }
 
 export function useFicha360Domain({
@@ -54,14 +66,14 @@ export function useFicha360Domain({
         profile: effectiveProfile,
         intelligence: effectiveIntel,
         weights,
-        weeks: trendWeeks as any,
+        weeks: trendWeeks as TrendWeeks,
       }),
     [recentInteractions, effectiveProfile, effectiveIntel, weights, trendWeeks]
   );
 
   const feedbackHints = useMemo(() => {
     const seen = new Set<string>();
-    const hints: any[] = [];
+    const hints: FeedbackHint[] = [];
     for (const f of passoFeedbacks) {
       if (seen.has(f.passo_id)) continue;
       seen.add(f.passo_id);
