@@ -20,6 +20,7 @@
 | 12 | KeyboardShortcutOverlay | `KeyboardShortcutsDialogEnhanced` + `keyboardShortcutRegistry` já existentes |
 | 13 | `MFAEnrollmentBanner` | `src/components/security/MFAEnrollmentBanner.tsx` (banner com dismiss 7d) |
 | 14 | Testes Vitest RFM | `src/types/__tests__/rfm.test.ts` — 17 casos, cobertura full de `determineRFMSegment` + `calculateRFMScore`. Bug real corrigido: ordenação lost/hibernating/about_to_sleep. |
+| 15 | `SmartBackButton` adotado | 7 páginas migradas: `BattleCardDetail`, `PlaybookDetail`, `DealRoomDetail`, `CustomerSuccessAccount`, `LeadScoringAutomations`, `LeadScoringConfig`, `IntentSetup`. |
 
 ## ⏳ Pendentes (exigem decisão fora deste sandbox)
 
@@ -33,7 +34,6 @@
 | Avaliar RSC parcial | Só se bundle ultrapassar 400KB (hoje dentro) |
 | Erradicar ~240 `: any` restantes | Refactor massivo; priorizar por arquivo |
 | Encapsular 20 `eslint-disable` JSONB | Refactor com Zod schemas dedicados |
-| Adoção de `SmartBackButton` nas páginas | Componente pronto; substituir aos poucos nos detail pages |
 | Glassmorphism Header/Sidebar padronizado | Design token change amplo |
 | BI Avançado drag-and-drop | Feature nova completa |
 | Global Search AI sair de Beta | Iterações de qualidade e observabilidade |
