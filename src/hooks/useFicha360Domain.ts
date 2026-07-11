@@ -4,16 +4,31 @@ import { applySimulation } from '@/domain/forecastSimulation';
 import { computeProntidaoTrend } from '@/domain/churnRisk';
 import { computeProximosPassos } from '@/domain/nextStepLogic';
 
+type UnknownRecord = Record<string, unknown>;
+type TrendWeeks = 4 | 8 | 12;
+
+interface PassoFeedback {
+  passo_id: string;
+  outcome: string;
+  executed_at: string;
+}
+
+interface FeedbackHint {
+  passoId: string;
+  lastOutcome: string;
+  daysAgo: number;
+}
+
 interface UseFicha360DomainProps {
-  profile: any;
-  intelligence: any;
-  weights: any;
+  profile: UnknownRecord | null | undefined;
+  intelligence: UnknownRecord | null | undefined;
+  weights: UnknownRecord | null | undefined;
   simEnabled: boolean;
-  simOverrides: any;
-  recentInteractions: any[];
+  simOverrides: UnknownRecord | null | undefined;
+  recentInteractions: UnknownRecord[];
   trendWeeks: number;
-  rapportIntel: any;
-  passoFeedbacks: any[];
+  rapportIntel: { birthday?: string | null } | null | undefined;
+  passoFeedbacks: PassoFeedback[];
 }
 
 export function useFicha360Domain({
@@ -54,14 +69,14 @@ export function useFicha360Domain({
         profile: effectiveProfile,
         intelligence: effectiveIntel,
         weights,
-        weeks: trendWeeks as any,
+        weeks: trendWeeks as TrendWeeks,
       }),
     [recentInteractions, effectiveProfile, effectiveIntel, weights, trendWeeks]
   );
 
   const feedbackHints = useMemo(() => {
     const seen = new Set<string>();
-    const hints: any[] = [];
+    const hints: FeedbackHint[] = [];
     for (const f of passoFeedbacks) {
       if (seen.has(f.passo_id)) continue;
       seen.add(f.passo_id);
