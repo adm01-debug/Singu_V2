@@ -14,6 +14,32 @@ export interface SegmentDefinition {
   logic: 'and' | 'or';
 }
 
+interface ContactBehaviorRow {
+  disc_primary: string | null;
+  vak_primary: string | null;
+  motivation_primary: string | null;
+  preferred_channel: string | null;
+  formality_level: number | null;
+}
+
+interface RawContactRow {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+  whatsapp: string | null;
+  phone: string | null;
+  relationship_score: number | null;
+  sentiment: string | null;
+  relationship_stage: string | null;
+  tags: string[] | null;
+  company_id: string | null;
+  birthday: string | null;
+  contact_behavior: ContactBehaviorRow[] | null;
+}
+
+type FlattenedContact = Omit<RawContactRow, 'contact_behavior'> & ContactBehaviorRow;
+
  const AVAILABLE_FIELDS = [
    { key: 'relationship_score', label: 'Score de Relacionamento', type: 'number' },
    { key: 'sentiment', label: 'Sentimento', type: 'select', options: ['positive', 'neutral', 'negative'] },
@@ -54,7 +80,7 @@ export function useContactSegmentation() {
        if (error) throw error;
        
        // Flatten the data for easier filtering
-       return (data || []).map((c: any) => ({
+        return ((data || []) as RawContactRow[]).map((c): FlattenedContact => ({
          ...c,
          disc_primary: c.contact_behavior?.[0]?.disc_primary || null,
          vak_primary: c.contact_behavior?.[0]?.vak_primary || null,
@@ -66,14 +92,16 @@ export function useContactSegmentation() {
      staleTime: 5 * 60_000,
    });
 
-  const matchesFilter = useCallback((contact: Record<string, any>, filter: SegmentFilter): boolean => {
-    const val = contact[filter.field];
+  const matchesFilter = useCallback((contact: FlattenedContact, filter: SegmentFilter): boolean => {
+    const val = (contact as unknown as Record<string, unknown>)[filter.field];
     switch (filter.operator) {
       case 'eq': return String(val) === filter.value;
       case 'neq': return String(val) !== filter.value;
       case 'gt': return Number(val) > Number(filter.value);
       case 'lt': return Number(val) < Number(filter.value);
-      case 'contains': return Array.isArray(val) ? val.some((v: string) => v.toLowerCase().includes(filter.value.toLowerCase())) : String(val || '').toLowerCase().includes(filter.value.toLowerCase());
+      case 'contains': return Array.isArray(val)
+        ? val.some((v) => String(v).toLowerCase().includes(filter.value.toLowerCase()))
+        : String(val ?? '').toLowerCase().includes(filter.value.toLowerCase());
       case 'in': return filter.value.split(',').map(s => s.trim()).includes(String(val));
       case 'is_null': return val === null || val === undefined || val === '';
       case 'is_not_null': return val !== null && val !== undefined && val !== '';
