@@ -41,6 +41,27 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 
+interface LiveEvent {
+  id: string;
+  type: 'interaction' | 'objection' | 'behavior';
+  title: string;
+  contact: string;
+  sentiment?: string | null;
+  timestamp: string;
+}
+
+interface StageAcc { total: number; count: number }
+
+interface ObjectionRow {
+  id: string;
+  objection_type: string;
+  success_rate: number | string;
+  suggested_strategy: string;
+}
+
+interface PieDatum { name: string; value: number; originalName: string }
+interface AvgScoreDatum { stage: string; avg: number; originalStage: string }
+
 const STAGE_COLORS: Record<string, string> = {
   prospect: '#94a3b8',
   qualified_lead: '#3b82f6',
@@ -55,7 +76,7 @@ const STAGE_COLORS: Record<string, string> = {
 
 export function RelationshipKPIsDashboard() {
   const queryClient = useQueryClient();
-  const [liveEvents, setLiveEvents] = useState<any[]>([]);
+  const [liveEvents, setLiveEvents] = useState<LiveEvent[]>([]);
 
   const { data: stats, isLoading } = useQuery({
     queryKey: ['relationship-kpis'],
@@ -67,14 +88,14 @@ export function RelationshipKPIsDashboard() {
       if (error) throw error;
 
       // Group by stage
-      const stageDistribution = contacts.reduce((acc: any, curr) => {
+      const stageDistribution = contacts.reduce<Record<string, number>>((acc, curr) => {
         const stage = curr.relationship_stage || 'unknown';
         acc[stage] = (acc[stage] || 0) + 1;
         return acc;
       }, {});
 
       // Avg score by stage
-      const stageScores = contacts.reduce((acc: any, curr) => {
+      const stageScores = contacts.reduce<Record<string, StageAcc>>((acc, curr) => {
         const stage = curr.relationship_stage || 'unknown';
         if (!acc[stage]) acc[stage] = { total: 0, count: 0 };
         acc[stage].total += curr.relationship_score || 0;
@@ -82,14 +103,14 @@ export function RelationshipKPIsDashboard() {
         return acc;
       }, {});
 
-      const avgScoreByStage = Object.entries(stageScores).map(([stage, data]: any) => ({
-        stage: RELATIONSHIP_STAGE_LABELS[stage as any] || stage,
+      const avgScoreByStage: AvgScoreDatum[] = Object.entries(stageScores).map(([stage, data]) => ({
+        stage: RELATIONSHIP_STAGE_LABELS[stage as keyof typeof RELATIONSHIP_STAGE_LABELS] || stage,
         avg: Math.round(data.total / data.count),
         originalStage: stage
       }));
 
-      const pieData = Object.entries(stageDistribution).map(([name, value]) => ({ 
-        name: RELATIONSHIP_STAGE_LABELS[name as any] || name, 
+      const pieData: PieDatum[] = Object.entries(stageDistribution).map(([name, value]) => ({
+        name: RELATIONSHIP_STAGE_LABELS[name as keyof typeof RELATIONSHIP_STAGE_LABELS] || name,
         value,
         originalName: name
       }));
@@ -316,7 +337,7 @@ export function RelationshipKPIsDashboard() {
            </CardHeader>
            <CardContent>
              <div className="space-y-4">
-               {intelligenceData?.map((obj: any) => (
+                {(intelligenceData as ObjectionRow[] | undefined)?.map((obj) => (
                  <div key={obj.id} className="p-3 rounded-lg border bg-muted/30 space-y-2">
                    <div className="flex items-center justify-between">
                      <Badge variant="secondary" className="text-[9px] uppercase">{obj.objection_type}</Badge>
@@ -384,7 +405,7 @@ export function RelationshipKPIsDashboard() {
                    paddingAngle={5}
                    dataKey="value"
                  >
-                   {stats?.pieData.map((entry: any, index: number) => (
+                    {stats?.pieData.map((entry, index: number) => (
                      <Cell key={`cell-${index}`} fill={STAGE_COLORS[entry.originalName] || '#cbd5e1'} />
                    ))}
                  </Pie>
@@ -409,7 +430,7 @@ export function RelationshipKPIsDashboard() {
                  <YAxis fontSize={9} axisLine={false} tickLine={false} />
                  <Tooltip />
                  <Bar dataKey="avg" radius={[4, 4, 0, 0]} barSize={30}>
-                   {stats?.avgScoreByStage.map((entry: any, index: number) => (
+                    {stats?.avgScoreByStage.map((entry, index: number) => (
                      <Cell key={`cell-${index}`} fill={STAGE_COLORS[entry.originalStage] || '#3b82f6'} />
                    ))}
                  </Bar>
