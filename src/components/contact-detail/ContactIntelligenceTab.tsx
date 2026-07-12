@@ -33,7 +33,7 @@ import { ClientValuesElite } from '@/components/crm/commercial/ClientValuesElite
 import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCriteriaElite';
 
 
- import type { Contact, Interaction } from '@/types';
+ import type { Contact } from '@/types';
  import type { Tables } from '@/integrations/supabase/types';
 
  interface Props {
@@ -110,7 +110,7 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
        <div className="grid gap-4 md:grid-cols-2">
          <EmotionalIntelligencePanel 
            contact={{ id: contactId, firstName: contactName || 'Contato' } as unknown as Contact} 
-           interactions={interactions as unknown as Interaction[]} 
+           interactions={interactions as never} 
          />
       {/* Hidden Objections */}
       <Card className={cn(unresolvedObjections.length > 0 && 'border-accent/30 dark:border-accent/30')}>
