@@ -12,7 +12,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { toast } from 'sonner';
 import { InsightFeedbackTrendChart } from '@/components/admin/InsightFeedbackTrendChart';
 
@@ -351,18 +350,24 @@ export default function InsightFeedbackAnalytics() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <ToggleGroup
-            type="single"
-            value={period}
-            onValueChange={(v) => v && setPeriod(v as typeof period)}
-            variant="outline"
-            size="sm"
-          >
-            <ToggleGroupItem value="7d">7d</ToggleGroupItem>
-            <ToggleGroupItem value="30d">30d</ToggleGroupItem>
-            <ToggleGroupItem value="90d">90d</ToggleGroupItem>
-            <ToggleGroupItem value="all">Tudo</ToggleGroupItem>
-          </ToggleGroup>
+          <div className="inline-flex overflow-hidden rounded-md border border-border" role="group" aria-label="Período">
+            {(['7d', '30d', '90d', 'all'] as const).map((p) => (
+              <button
+                key={p}
+                type="button"
+                onClick={() => setPeriod(p)}
+                aria-pressed={period === p}
+                className={
+                  'px-3 py-1 text-xs transition-colors ' +
+                  (period === p
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-transparent text-muted-foreground hover:bg-muted')
+                }
+              >
+                {p === 'all' ? 'Tudo' : p}
+              </button>
+            ))}
+          </div>
           <Button size="sm" variant="outline" onClick={exportCsv} className="gap-1.5">
             <Download className="h-3.5 w-3.5" /> CSV
           </Button>
