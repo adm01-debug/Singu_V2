@@ -133,7 +133,12 @@ const RelatorioContato = () => {
           discHistory, 
           consentLogs: consentLogs || [],
           insights: defaultInsights,
-          overrides: overrides || undefined 
+          overrides: overrides
+            ? {
+                insights_data: (overrides.insights_data ?? null) as Partial<ContactReport['insights']> | null,
+                custom_scripts: (overrides.custom_scripts ?? null) as Record<string, string> | null,
+              }
+            : undefined
         });
         
         setEditedInsights(mergedInsights);
