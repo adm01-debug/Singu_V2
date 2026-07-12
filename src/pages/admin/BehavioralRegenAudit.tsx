@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +16,7 @@ import {
   User,
   FileText,
   MessageSquare,
+  RotateCw,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
@@ -57,6 +58,7 @@ function csvEscape(value: string): string {
 }
 
 export default function BehavioralRegenAudit() {
+  const queryClient = useQueryClient();
   const [period, setPeriod] = useState<PeriodKey>("7d");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [search, setSearch] = useState("");
@@ -99,6 +101,55 @@ export default function BehavioralRegenAudit() {
     getNextPageParam: (last) => {
       if (!last || last.length < PAGE_SIZE) return undefined;
       return last[last.length - 1]?.updated_at ?? undefined;
+    },
+  });
+
+  // ---- Mutation: reenfileirar manualmente uma reanálise ----
+  const requeueMutation = useMutation({
+    mutationFn: async (contactId: string) => {
+      const { data: userRes } = await supabase.auth.getUser();
+      const uid = userRes.user?.id ?? "unknown";
+      const triggerSource = `manual_retry:${uid.slice(0, 8)}`;
+      const nowIso = new Date().toISOString();
+
+      // 1) Reseta erro e agenda para execução imediata
+      const { error: updErr } = await supabase
+        .from("behavioral_profile_regen_queue")
+        .update({
+          next_run_at: nowIso,
+          last_error: null,
+          trigger_source: triggerSource,
+          updated_at: nowIso,
+        })
+        .eq("contact_id", contactId);
+      if (updErr) throw updErr;
+
+      // 2) Dispara execução imediata da função de reanálise
+      const { data: invokeData, error: invokeErr } = await supabase.functions.invoke(
+        "auto-regen-behavioral-profiles",
+        { body: { contact_id: contactId, source: triggerSource } },
+      );
+      if (invokeErr) {
+        // Registra o erro na própria fila para aparecer na auditoria
+        await supabase
+          .from("behavioral_profile_regen_queue")
+          .update({
+            last_error: `manual_retry_invoke_failed: ${invokeErr.message}`,
+            last_processed_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          })
+          .eq("contact_id", contactId);
+        throw invokeErr;
+      }
+      return invokeData;
+    },
+    onSuccess: (_data, contactId) => {
+      toast.success(`Reanálise reenfileirada (${contactId.slice(0, 8)})`);
+      queryClient.invalidateQueries({ queryKey: ["behavioral-regen-audit"] });
+      queryClient.invalidateQueries({ queryKey: ["behavioral-regen-stats"] });
+    },
+    onError: (err: Error) => {
+      toast.error(`Falha ao reenfileirar: ${err.message}`);
     },
   });
 
@@ -460,6 +511,32 @@ export default function BehavioralRegenAudit() {
                                 </TooltipTrigger>
                                 <TooltipContent>
                                   Interações (±3 dias em torno do evento)
+                                </TooltipContent>
+                              </Tooltip>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <button
+                                    type="button"
+                                    onClick={() => requeueMutation.mutate(r.contact_id)}
+                                    disabled={
+                                      requeueMutation.isPending &&
+                                      requeueMutation.variables === r.contact_id
+                                    }
+                                    className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border hover:bg-muted disabled:opacity-50"
+                                    aria-label="Reenfileirar reanálise deste contato"
+                                  >
+                                    <RotateCw
+                                      className={`h-3.5 w-3.5 ${
+                                        requeueMutation.isPending &&
+                                        requeueMutation.variables === r.contact_id
+                                          ? "animate-spin"
+                                          : ""
+                                      }`}
+                                    />
+                                  </button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  Reenfileirar reanálise (manual_retry)
                                 </TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
