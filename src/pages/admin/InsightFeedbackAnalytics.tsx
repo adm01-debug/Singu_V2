@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { ThumbsUp, ThumbsDown, TrendingDown, AlertTriangle, ExternalLink, RefreshCcw, Loader2 } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, TrendingDown, AlertTriangle, ExternalLink, RefreshCcw, Loader2, Download } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { toast } from 'sonner';
 import { InsightFeedbackTrendChart } from '@/components/admin/InsightFeedbackTrendChart';
 
@@ -260,7 +261,15 @@ function ContactsWithMostDownvotes({ rows }: { rows: Row[] }) {
 }
 
 export default function InsightFeedbackAnalytics() {
-  const { data: rows = [], isLoading, error } = useFeedbackData();
+  const { data: allRows = [], isLoading, error } = useFeedbackData();
+  const [period, setPeriod] = useState<'7d' | '30d' | '90d' | 'all'>('30d');
+
+  const rows = useMemo(() => {
+    if (period === 'all') return allRows;
+    const days = period === '7d' ? 7 : period === '30d' ? 30 : 90;
+    const cutoff = Date.now() - days * 86400_000;
+    return allRows.filter((r) => new Date(r.created_at).getTime() >= cutoff);
+  }, [allRows, period]);
 
   const stats = useMemo(() => {
     const up = rows.filter((r) => r.vote === 1).length;
@@ -273,6 +282,40 @@ export default function InsightFeedbackAnalytics() {
   }, [rows]);
 
   const byLabel = useMemo(() => aggregateByLabel(rows), [rows]);
+
+  function exportCsv() {
+    if (rows.length === 0) {
+      toast.info('Nada para exportar no período selecionado.');
+      return;
+    }
+    const header = ['created_at', 'contact_id', 'insight_kind', 'insight_label', 'vote', 'note'];
+    const escape = (v: string | null) => {
+      const s = (v ?? '').replace(/"/g, '""');
+      return /[",\n;]/.test(s) ? `"${s}"` : s;
+    };
+    const lines = [
+      header.join(','),
+      ...rows.map((r) => [
+        r.created_at,
+        r.contact_id,
+        r.insight_kind,
+        escape(r.insight_label),
+        r.vote,
+        escape(r.note),
+      ].join(',')),
+    ];
+    const csv = '\uFEFF' + lines.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `feedback-insights-${period}-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success(`${rows.length} registros exportados.`);
+  }
 
   if (isLoading) {
     return (
@@ -300,12 +343,30 @@ export default function InsightFeedbackAnalytics() {
 
   return (
     <div className="space-y-4 p-4 md:p-6">
-      <div>
-        <h1 className="text-2xl font-semibold">Qualidade dos insights comportamentais</h1>
-        <p className="text-sm text-muted-foreground">
-          Métricas agregadas do feedback (👍/👎) dos usuários. Insights com muita reprovação são automaticamente
-          suprimidos nas próximas regenerações.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold">Qualidade dos insights comportamentais</h1>
+          <p className="text-sm text-muted-foreground">
+            Métricas agregadas do feedback (👍/👎). Insights com muita reprovação são suprimidos nas próximas regenerações.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <ToggleGroup
+            type="single"
+            value={period}
+            onValueChange={(v) => v && setPeriod(v as typeof period)}
+            variant="outline"
+            size="sm"
+          >
+            <ToggleGroupItem value="7d">7d</ToggleGroupItem>
+            <ToggleGroupItem value="30d">30d</ToggleGroupItem>
+            <ToggleGroupItem value="90d">90d</ToggleGroupItem>
+            <ToggleGroupItem value="all">Tudo</ToggleGroupItem>
+          </ToggleGroup>
+          <Button size="sm" variant="outline" onClick={exportCsv} className="gap-1.5">
+            <Download className="h-3.5 w-3.5" /> CSV
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -363,7 +424,7 @@ export default function InsightFeedbackAnalytics() {
       </Card>
 
       <p className="text-xs text-muted-foreground">
-        Última atualização: {format(new Date(), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })} · {rows.length} registros
+        Última atualização: {format(new Date(), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })} · {rows.length} de {allRows.length} registros no período
       </p>
     </div>
   );
