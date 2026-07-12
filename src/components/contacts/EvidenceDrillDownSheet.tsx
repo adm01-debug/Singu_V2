@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEvidenceForLabel, type EvidenceHit } from '@/hooks/useEvidenceForLabel';
+import { InsightFeedbackControls } from './InsightFeedbackControls';
 
 export type EvidenceKind = 'preference' | 'hobby' | 'tone';
 
@@ -108,6 +109,16 @@ export function EvidenceDrillDownSheet({ contactId, context, onOpenChange }: Pro
               <Quote className="h-3 w-3" /> Justificativa da IA
             </div>
             <p className="mt-1 text-sm text-foreground/90">{context.aiEvidence}</p>
+          </div>
+        )}
+
+        {context && (
+          <div className="mt-3">
+            <InsightFeedbackControls
+              contactId={contactId}
+              kind={context.kind}
+              label={context.label}
+            />
           </div>
         )}
 
