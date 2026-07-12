@@ -16,15 +16,17 @@ interface Props {
   currentSentiment: string;
 }
 
+type MetricType = 'score' | 'sentiment' | 'last_contact' | 'stage';
+
 export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }: Props) {
-  const [metricType, setMetricType] = useState<'score' | 'sentiment' | 'last_contact' | 'stage'>('score');
+  const [metricType, setMetricType] = useState<MetricType>('score');
   const [newValue, setNewValue] = useState('');
   const [reason, setReason] = useState('');
   const queryClient = useQueryClient();
 
   const overrideMutation = useMutation({
     mutationFn: async () => {
-      const updates: any = {};
+      const updates: Record<string, string | number> = {};
       let valToStore = newValue;
 
       if (metricType === 'score') {
@@ -47,8 +49,8 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
         metric_type: metricType,
         old_value: metricType === 'score' ? currentScore.toString() : currentSentiment,
         new_value: valToStore,
-        reason: reason
-      } as any);
+        reason: reason,
+      });
 
       if (logError) throw logError;
 
@@ -62,7 +64,7 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
       setNewValue('');
       setReason('');
     },
-    onError: (err: any) => toast.error(`Erro ao corrigir: ${err.message}`)
+    onError: (err: Error) => toast.error(`Erro ao corrigir: ${err.message}`)
   });
 
   return (
@@ -81,7 +83,7 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5">
             <Label className="text-[10px] uppercase font-bold text-muted-foreground">Métrica</Label>
-            <Select value={metricType} onValueChange={(val: any) => { setMetricType(val); setNewValue(''); }}>
+            <Select value={metricType} onValueChange={(val) => { setMetricType(val as MetricType); setNewValue(''); }}>
               <SelectTrigger className="h-8 text-xs">
                 <SelectValue />
               </SelectTrigger>
