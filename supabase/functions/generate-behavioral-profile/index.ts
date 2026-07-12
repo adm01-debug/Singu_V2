@@ -50,21 +50,38 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
 
   try {
-    const authHeader = req.headers.get('Authorization') ?? '';
-    if (!authHeader) return json({ error: 'Não autenticado' }, 401);
+    const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const internalKey = req.headers.get('x-internal-key') ?? '';
+    const isInternal = internalKey && internalKey === SERVICE_KEY;
 
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_ANON_KEY')!,
-      { global: { headers: { Authorization: authHeader } } },
-    );
-
-    const { data: userData } = await supabase.auth.getUser();
-    if (!userData?.user) return json({ error: 'Não autenticado' }, 401);
-
-    const body = (await req.json().catch(() => ({}))) as Partial<Body>;
+    const body = (await req.json().catch(() => ({}))) as Partial<Body> & { user_id?: string };
     if (!body.contact_id || typeof body.contact_id !== 'string') {
       return json({ error: 'contact_id obrigatório' }, 400);
+    }
+
+    let userId: string | null = null;
+    let supabase;
+
+    if (isInternal) {
+      supabase = createClient(Deno.env.get('SUPABASE_URL')!, SERVICE_KEY);
+      if (body.user_id) {
+        userId = body.user_id;
+      } else {
+        const { data: c } = await supabase.from('contacts').select('user_id').eq('id', body.contact_id).maybeSingle();
+        userId = (c as { user_id?: string } | null)?.user_id ?? null;
+      }
+      if (!userId) return json({ error: 'contato não encontrado' }, 404);
+    } else {
+      const authHeader = req.headers.get('Authorization') ?? '';
+      if (!authHeader) return json({ error: 'Não autenticado' }, 401);
+      supabase = createClient(
+        Deno.env.get('SUPABASE_URL')!,
+        Deno.env.get('SUPABASE_ANON_KEY')!,
+        { global: { headers: { Authorization: authHeader } } },
+      );
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData?.user) return json({ error: 'Não autenticado' }, 401);
+      userId = userData.user.id;
     }
 
     // Coleta histórico (RLS aplica escopo do usuário)
@@ -150,7 +167,7 @@ Deno.serve(async (req) => {
 
     const row = {
       contact_id: body.contact_id,
-      user_id: userData.user.id,
+      user_id: userId,
       preferences: parsed.preferences ?? [],
       hobbies: parsed.hobbies ?? [],
       recurrent_topics: parsed.recurrent_topics ?? [],
