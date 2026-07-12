@@ -17,6 +17,7 @@ import {
   FileText,
   MessageSquare,
   RotateCw,
+  Trash2,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
@@ -138,6 +139,35 @@ export default function BehavioralRegenAudit() {
       } else {
         toast.error(`Falha ao reenfileirar: ${err.message}`);
       }
+    },
+  });
+
+  // ---- Mutation: housekeeping (limpa antigos + dead-letter) ----
+  const cleanupMutation = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.rpc("cleanup_behavioral_regen_queue", {
+        _retention_days: 30,
+        _max_attempts: 5,
+        _dead_letter_backoff_days: 7,
+      });
+      if (error) throw error;
+      const row = Array.isArray(data) ? data[0] : data;
+      return row as {
+        deleted_success: number;
+        parked_dead_letter: number;
+      } | null;
+    },
+    onSuccess: (row) => {
+      const del = row?.deleted_success ?? 0;
+      const park = row?.parked_dead_letter ?? 0;
+      toast.success(
+        `Fila limpa · ${del} sucessos antigos removidos · ${park} dead-letter adiados`,
+      );
+      queryClient.invalidateQueries({ queryKey: ["behavioral-regen-audit"] });
+      queryClient.invalidateQueries({ queryKey: ["behavioral-regen-stats"] });
+    },
+    onError: (err: Error) => {
+      toast.error(`Falha na limpeza: ${err.message}`);
     },
   });
 
@@ -318,6 +348,28 @@ export default function BehavioralRegenAudit() {
           <Button size="sm" variant="outline" onClick={exportCsv} disabled={filtered.length === 0}>
             <Download className="h-4 w-4 mr-1" />
             CSV
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              if (
+                window.confirm(
+                  "Limpar a fila?\n\n• Remove itens processados com sucesso há mais de 30 dias\n• Adia por 7 dias itens que falharam 5+ vezes (dead-letter)",
+                )
+              ) {
+                cleanupMutation.mutate();
+              }
+            }}
+            disabled={cleanupMutation.isPending}
+            title="Housekeeping: retenção 30d + dead-letter"
+          >
+            {cleanupMutation.isPending ? (
+              <RotateCw className="h-4 w-4 mr-1 animate-spin" />
+            ) : (
+              <Trash2 className="h-4 w-4 mr-1" />
+            )}
+            Limpar fila
           </Button>
         </div>
       </header>
