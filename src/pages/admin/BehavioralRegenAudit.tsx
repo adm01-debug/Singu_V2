@@ -17,6 +17,7 @@ import {
   FileText,
   MessageSquare,
   RotateCw,
+  Trash2,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
