@@ -1,6 +1,20 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { ResumoConversaIADialog } from './ResumoConversaIADialog';
 
+interface Ficha360Interaction {
+  id: string;
+  channel?: string | null;
+  direction?: string | null;
+  data_interacao?: string | null;
+  assunto?: string | null;
+  resumo?: string | null;
+}
+
+interface Ficha360Profile {
+  cargo?: string | null;
+  company_name?: string | null;
+}
+
 interface Ficha360DialogsProps {
   id: string | undefined;
   resumoIAOpen: boolean;
@@ -8,9 +22,9 @@ interface Ficha360DialogsProps {
   confirmClearOpen: boolean;
   onConfirmClearOpenChange: (open: boolean) => void;
   performClearAll: () => void;
-  sortedInteractions: any[];
+  sortedInteractions: Ficha360Interaction[];
   fullName: string;
-  profile: any;
+  profile: Ficha360Profile | null;
   filters: {
     days: number;
     channels: string[];
