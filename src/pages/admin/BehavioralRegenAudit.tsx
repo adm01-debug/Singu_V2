@@ -472,6 +472,29 @@ export default function BehavioralRegenAudit() {
               </table>
             </div>
           )}
+          {/* Sentinel + botão manual para carregamento incremental */}
+          {!isLoading && !error && filtered.length > 0 && (
+            <div className="flex flex-col items-center gap-2 border-t p-3">
+              <div ref={loadMoreRef} className="h-1 w-full" aria-hidden />
+              {hasNextPage ? (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => fetchNextPage()}
+                  disabled={isFetchingNextPage}
+                >
+                  {isFetchingNextPage ? (
+                    <RefreshCcw className="h-4 w-4 mr-1 animate-spin" />
+                  ) : null}
+                  Carregar mais {PAGE_SIZE}
+                </Button>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  Fim dos resultados ({data.length} de {stats.total || data.length})
+                </p>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
