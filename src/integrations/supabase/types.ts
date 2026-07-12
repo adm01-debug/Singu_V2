@@ -2399,6 +2399,85 @@ export type Database = {
           },
         ]
       }
+      contact_analytical_profile_versions: {
+        Row: {
+          based_on_count: number
+          communication_style: string | null
+          contact_id: string
+          created_at: string
+          generated_at: string
+          hobbies: Json
+          id: string
+          model: string | null
+          preferences: Json
+          profile_id: string | null
+          recurrent_topics: Json
+          sentiment_trend: string | null
+          summary: string | null
+          tone: string | null
+          trigger_source: string | null
+          user_id: string
+        }
+        Insert: {
+          based_on_count?: number
+          communication_style?: string | null
+          contact_id: string
+          created_at?: string
+          generated_at?: string
+          hobbies?: Json
+          id?: string
+          model?: string | null
+          preferences?: Json
+          profile_id?: string | null
+          recurrent_topics?: Json
+          sentiment_trend?: string | null
+          summary?: string | null
+          tone?: string | null
+          trigger_source?: string | null
+          user_id: string
+        }
+        Update: {
+          based_on_count?: number
+          communication_style?: string | null
+          contact_id?: string
+          created_at?: string
+          generated_at?: string
+          hobbies?: Json
+          id?: string
+          model?: string | null
+          preferences?: Json
+          profile_id?: string | null
+          recurrent_topics?: Json
+          sentiment_trend?: string | null
+          summary?: string | null
+          tone?: string | null
+          trigger_source?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_analytical_profile_versions_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_analytical_profile_versions_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+          {
+            foreignKeyName: "contact_analytical_profile_versions_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "contact_analytical_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_analytical_profiles: {
         Row: {
           based_on_count: number

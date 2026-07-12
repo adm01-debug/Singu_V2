@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useBehavioralProfile, useGenerateBehavioralProfile } from '@/hooks/useBehavioralProfile';
+import { BehavioralVersionsDialog } from '@/components/contacts/BehavioralVersionsDialog';
 
 interface Props { contactId: string }
 
@@ -31,10 +32,13 @@ export function BehavioralInsightsCard({ contactId }: Props) {
             Insights gerados por IA a partir do histórico de interações.
           </CardDescription>
         </div>
-        <Button size="sm" variant="outline" disabled={isBusy} onClick={() => generate.mutate(contactId)}>
-          {isBusy ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="mr-1.5 h-3.5 w-3.5" />}
-          {profile ? 'Reanalisar' : 'Gerar perfil'}
-        </Button>
+        <div className="flex items-center gap-2">
+          <BehavioralVersionsDialog contactId={contactId} />
+          <Button size="sm" variant="outline" disabled={isBusy} onClick={() => generate.mutate(contactId)}>
+            {isBusy ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="mr-1.5 h-3.5 w-3.5" />}
+            {profile ? 'Reanalisar' : 'Gerar perfil'}
+          </Button>
+        </div>
       </CardHeader>
 
       <CardContent className="space-y-4">
