@@ -171,6 +171,80 @@ export default function BehavioralRegenAudit() {
     },
   });
 
+  // ---- Mutation: batch retry (todos os erros carregados) ----
+  // Executa sequencialmente com 600ms entre chamadas para não estourar rate limit.
+  // Se o backend responder cooldown (429), contabiliza como "pulado" e segue.
+  const [batchProgress, setBatchProgress] = useState<{
+    running: boolean;
+    done: number;
+    total: number;
+    ok: number;
+    failed: number;
+    skipped: number;
+  } | null>(null);
+
+  const batchRetryMutation = useMutation({
+    mutationFn: async (contactIds: string[]) => {
+      let ok = 0;
+      let failed = 0;
+      let skipped = 0;
+      setBatchProgress({
+        running: true,
+        done: 0,
+        total: contactIds.length,
+        ok: 0,
+        failed: 0,
+        skipped: 0,
+      });
+      for (let i = 0; i < contactIds.length; i++) {
+        const id = contactIds[i];
+        try {
+          const { data, error } = await supabase.functions.invoke(
+            "retry-behavioral-profile",
+            { body: { contact_id: id } },
+          );
+          const payload = (data ?? null) as
+            | { error?: string; cooldown?: boolean }
+            | null;
+          if (payload?.cooldown) {
+            skipped++;
+          } else if (error || payload?.error) {
+            failed++;
+          } else {
+            ok++;
+          }
+        } catch {
+          failed++;
+        }
+        setBatchProgress({
+          running: true,
+          done: i + 1,
+          total: contactIds.length,
+          ok,
+          failed,
+          skipped,
+        });
+        // Pausa entre chamadas para respirar (rate limit + LLM cost).
+        if (i < contactIds.length - 1) {
+          await new Promise((r) => setTimeout(r, 600));
+        }
+      }
+      return { ok, failed, skipped, total: contactIds.length };
+    },
+    onSuccess: (res) => {
+      setBatchProgress((p) => (p ? { ...p, running: false } : null));
+      toast.success(
+        `Batch retry concluído · ${res.ok} OK · ${res.failed} falhas · ${res.skipped} em cooldown`,
+      );
+      queryClient.invalidateQueries({ queryKey: ["behavioral-regen-audit"] });
+      queryClient.invalidateQueries({ queryKey: ["behavioral-regen-stats"] });
+    },
+    onError: (err: Error) => {
+      setBatchProgress((p) => (p ? { ...p, running: false } : null));
+      toast.error(`Batch retry abortado: ${err.message}`);
+    },
+  });
+
   const data = useMemo(() => (pages?.pages ?? []).flat(), [pages]);
 
   // ---- Stats agregados server-side (independem da paginação) ----
@@ -371,8 +445,56 @@ export default function BehavioralRegenAudit() {
             )}
             Limpar fila
           </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              const errorIds = filtered
+                .filter((r) => Boolean(r.last_error))
+                .map((r) => r.contact_id);
+              if (errorIds.length === 0) {
+                toast.info("Nenhum item com erro no filtro atual");
+                return;
+              }
+              if (
+                window.confirm(
+                  `Reprocessar ${errorIds.length} contato(s) com erro?\n\nExecuta em série (~600ms entre cada).\nItens em cooldown serão pulados.`,
+                )
+              ) {
+                batchRetryMutation.mutate(errorIds);
+              }
+            }}
+            disabled={batchRetryMutation.isPending || batchProgress?.running}
+            title="Reprocessa todos os itens com erro visíveis"
+          >
+            {batchRetryMutation.isPending ? (
+              <RotateCw className="h-4 w-4 mr-1 animate-spin" />
+            ) : (
+              <RotateCw className="h-4 w-4 mr-1" />
+            )}
+            Retry todos c/ erro
+          </Button>
         </div>
       </header>
+
+      {batchProgress && (
+        <div
+          className="rounded-md border bg-muted/40 px-3 py-2 text-sm flex items-center justify-between gap-4"
+          role="status"
+          aria-live="polite"
+        >
+          <span>
+            {batchProgress.running ? "Reprocessando" : "Concluído"} ·{" "}
+            <strong>{batchProgress.done}</strong>/{batchProgress.total} · ✅{" "}
+            {batchProgress.ok} · ❌ {batchProgress.failed} · ⏸ {batchProgress.skipped}
+          </span>
+          {!batchProgress.running && (
+            <Button size="sm" variant="ghost" onClick={() => setBatchProgress(null)}>
+              Fechar
+            </Button>
+          )}
+        </div>
+      )}
 
       <div className="grid gap-4 md:grid-cols-4">
         <StatCard label="Total no período" value={stats.total} />
