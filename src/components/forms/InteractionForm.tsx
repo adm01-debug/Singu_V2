@@ -116,8 +116,8 @@ export function InteractionForm({
        audio_url: interaction?.audio_url || null,
         transcription: interaction?.transcription || null,
         attachments: (interaction?.attachments as string[]) || [],
-        neuro_pnl_technique: (interaction as any)?.neuro_pnl_technique || '',
-        neuro_pnl_result: (interaction as any)?.neuro_pnl_result || '',
+         neuro_pnl_technique: (interaction as { neuro_pnl_technique?: string } | undefined)?.neuro_pnl_technique || '',
+         neuro_pnl_result: (interaction as { neuro_pnl_result?: string } | undefined)?.neuro_pnl_result || '',
      },
   });
 
