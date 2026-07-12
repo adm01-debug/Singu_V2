@@ -59,8 +59,8 @@ export interface ContactBehaviorGap {
    user_email?: string;
    change_source?: string;
    field_name?: string;
-   old_value?: any;
-   new_value?: any;
+   old_value?: unknown;
+   new_value?: unknown;
    reason?: string;
    analysis_type?: string;
    analyzed_text?: string;

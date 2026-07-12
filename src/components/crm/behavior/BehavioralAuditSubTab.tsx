@@ -135,11 +135,11 @@ export const BehavioralAuditSubTab = ({ contactId }: BehavioralAuditSubTabProps)
                       <div className="grid grid-cols-2 gap-2 mt-2 p-2 bg-muted/30 rounded text-xs">
                         <div>
                           <span className="text-muted-foreground block mb-1">De:</span>
-                          <code className="block truncate">{log.old_value || '-'}</code>
+                           <code className="block truncate">{log.old_value != null ? String(log.old_value) : '-'}</code>
                         </div>
                         <div>
                           <span className="text-muted-foreground block mb-1">Para:</span>
-                          <code className="block truncate">{log.new_value || '-'}</code>
+                           <code className="block truncate">{log.new_value != null ? String(log.new_value) : '-'}</code>
                         </div>
                       </div>
                     </div>
