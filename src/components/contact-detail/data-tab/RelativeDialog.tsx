@@ -8,7 +8,18 @@ import type { Tables } from '@/integrations/supabase/types';
 
 export const RELATIONSHIP_TYPES = ['conjuge', 'filho', 'filha', 'pai', 'mae', 'irmao', 'irma', 'socio', 'assistente', 'outro'];
 
-export type RelativeInput = Partial<Tables<'contact_relatives'>>;
+export interface RelativeInput {
+  name: string;
+  relationship_type: string;
+  age?: number | null;
+  birthday?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  occupation?: string | null;
+  company?: string | null;
+  notes?: string | null;
+  is_decision_influencer?: boolean;
+}
 
 interface RelativeDialogProps {
   onSave: (data: RelativeInput) => void;
