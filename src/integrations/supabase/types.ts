@@ -14490,6 +14490,19 @@ export type Database = {
         Args: { p_contact_id: string }
         Returns: Json
       }
+      cleanup_behavioral_regen_queue: {
+        Args: {
+          _dead_letter_backoff_days?: number
+          _max_attempts?: number
+          _retention_days?: number
+        }
+        Returns: {
+          deleted_success: number
+          max_attempts: number
+          parked_dead_letter: number
+          retention_days: number
+        }[]
+      }
       cleanup_old_health_snapshots: { Args: never; Returns: number }
       compute_account_health: { Args: { _account_id: string }; Returns: Json }
       compute_attribution: {
