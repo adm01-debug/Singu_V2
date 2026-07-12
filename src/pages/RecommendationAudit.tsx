@@ -8,11 +8,22 @@ import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Header } from '@/components/layout/Header';
 
+interface AuditLog {
+  id: string;
+  created_at: string;
+  recommendation_type: string;
+  score: number | null;
+  user_action: string | null;
+  reasons?: string[] | null;
+  data_used?: Record<string, unknown> | null;
+  contacts?: { first_name?: string | null; last_name?: string | null; avatar_url?: string | null } | null;
+}
+
 export default function RecommendationAudit() {
-  const { data: logs = [], isLoading } = useQuery({
+  const { data: logs = [], isLoading } = useQuery<AuditLog[]>({
     queryKey: ['ai-recommendation-audit-logs'],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('ai_recommendation_audit_logs_v2')
         .select(`
           *,
@@ -22,7 +33,7 @@ export default function RecommendationAudit() {
         .limit(100);
 
       if (error) throw error;
-      return data;
+      return (data ?? []) as unknown as AuditLog[];
     }
   });
 
@@ -46,7 +57,7 @@ export default function RecommendationAudit() {
           </div>
         ) : (
           <div className="space-y-4">
-            {logs.map((log: any) => (
+            {logs.map((log) => (
               <Card key={log.id} className="overflow-hidden border-border/50 hover:border-primary/30 transition-colors shadow-sm">
                 <CardHeader className="pb-3 bg-muted/20">
                   <div className="flex items-center justify-between">
@@ -114,7 +125,7 @@ export default function RecommendationAudit() {
                         <Info className="w-3 h-3" /> Dados processados:
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        {Object.entries(log.data_used).map(([key, val]: [string, any]) => (
+                        {Object.entries(log.data_used).map(([key, val]) => (
                           <span key={key} className="text-[10px] bg-muted px-1.5 py-0.5 rounded border border-border/50 text-muted-foreground">
                             {key}: {String(val)}
                           </span>
