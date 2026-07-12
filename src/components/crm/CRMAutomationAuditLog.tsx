@@ -32,7 +32,7 @@ interface AutomationLog {
   status: string;
   created_at: string;
   error_message?: string | null;
-  audit_context?: Record<string, unknown> | null;
+  audit_context?: unknown;
   contact?: { first_name?: string | null; last_name?: string | null } | null;
 }
 
@@ -141,7 +141,7 @@ export function CRMAutomationAuditLog() {
                     {formatDistanceToNow(new Date(log.created_at), { addSuffix: true, locale: ptBR })}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleViewDetails(log)}>
+                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleViewDetails(log as AutomationLog)}>
                       <Eye className="h-3.5 w-3.5" />
                     </Button>
                   </TableCell>
