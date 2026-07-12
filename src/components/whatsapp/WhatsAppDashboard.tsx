@@ -211,14 +211,14 @@ export function WhatsAppDashboard({ contactId }: Props) {
                   key={msg.id}
                   className={cn(
                     'rounded-lg p-2.5 text-sm max-w-[85%]',
-                    msg.direction === 'outbound'
+                    msg.from_me
                       ? 'ml-auto bg-primary/10 border border-primary/20'
                       : 'bg-muted border'
                   )}
                 >
                   <div className="flex items-center justify-between gap-2 mb-0.5">
                     <span className="text-xs font-medium text-foreground">
-                      {msg.direction === 'outbound' ? 'Você' : 'Contato'}
+                      {msg.from_me ? 'Você' : 'Contato'}
                     </span>
                     <span className="text-xs text-muted-foreground">
                       {format(new Date(msg.created_at), 'dd/MM HH:mm')}
@@ -227,9 +227,9 @@ export function WhatsAppDashboard({ contactId }: Props) {
                   {msg.content && (
                     <p className="text-xs text-foreground whitespace-pre-wrap">{msg.content}</p>
                   )}
-                  {msg.metadata?.message_type && msg.metadata.message_type !== 'text' && (
+                  {msg.message_type && msg.message_type !== 'text' && (
                     <Badge variant="secondary" className="text-xs mt-1 capitalize">
-                      {msg.metadata.message_type}
+                      {msg.message_type}
                     </Badge>
                   )}
                 </div>
