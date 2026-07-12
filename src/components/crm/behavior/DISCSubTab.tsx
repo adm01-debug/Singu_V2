@@ -32,7 +32,7 @@ export const DISCSubTab = ({ contactId, data }: DISCSubTabProps) => {
             <Label>Perfil Primário</Label>
             <Select 
               value={formData.disc_primary} 
-              onValueChange={(val: any) => setFormData({ ...formData, disc_primary: val })}
+              onValueChange={(val) => setFormData({ ...formData, disc_primary: val as ContactBehavior['disc_primary'] })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecione o perfil" />
@@ -73,7 +73,7 @@ export const DISCSubTab = ({ contactId, data }: DISCSubTabProps) => {
             <Label>Canal Primário</Label>
             <Select 
               value={formData.vak_primary} 
-              onValueChange={(val: any) => setFormData({ ...formData, vak_primary: val })}
+              onValueChange={(val) => setFormData({ ...formData, vak_primary: val as ContactBehavior['vak_primary'] })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecione o canal" />
