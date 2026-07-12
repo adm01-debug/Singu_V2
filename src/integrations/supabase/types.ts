@@ -6360,6 +6360,57 @@ export type Database = {
           },
         ]
       }
+      entity_relationships: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          ended_at: string | null
+          from_id: string
+          from_type: Database["public"]["Enums"]["entity_type"]
+          id: string
+          is_primary: boolean
+          metadata: Json
+          notes: string | null
+          role: Database["public"]["Enums"]["entity_relationship_role"]
+          started_at: string | null
+          to_id: string
+          to_type: Database["public"]["Enums"]["entity_type"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          ended_at?: string | null
+          from_id: string
+          from_type: Database["public"]["Enums"]["entity_type"]
+          id?: string
+          is_primary?: boolean
+          metadata?: Json
+          notes?: string | null
+          role: Database["public"]["Enums"]["entity_relationship_role"]
+          started_at?: string | null
+          to_id: string
+          to_type: Database["public"]["Enums"]["entity_type"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          ended_at?: string | null
+          from_id?: string
+          from_type?: Database["public"]["Enums"]["entity_type"]
+          id?: string
+          is_primary?: boolean
+          metadata?: Json
+          notes?: string | null
+          role?: Database["public"]["Enums"]["entity_relationship_role"]
+          started_at?: string | null
+          to_id?: string
+          to_type?: Database["public"]["Enums"]["entity_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       eq_analysis_history: {
         Row: {
           analyzed_at: string
@@ -14131,6 +14182,18 @@ export type Database = {
         }
         Relationships: []
       }
+      v_entities: {
+        Row: {
+          created_at: string | null
+          display_name: string | null
+          email: string | null
+          entity_type: Database["public"]["Enums"]["entity_type"] | null
+          id: string | null
+          phone: string | null
+          updated_at: string | null
+        }
+        Relationships: []
+      }
       v_life_events_audit: {
         Row: {
           change_type: string | null
@@ -14577,6 +14640,21 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      entity_relationship_role:
+        | "buyer"
+        | "manager"
+        | "owner"
+        | "decision_maker"
+        | "influencer"
+        | "user"
+        | "sponsor"
+        | "partner"
+        | "supplier"
+        | "subsidiary"
+        | "parent"
+        | "employee_of"
+        | "other"
+      entity_type: "company" | "contact"
       error_severity: "info" | "warning" | "error" | "critical"
       passo_outcome:
         | "respondeu_positivo"
@@ -14714,6 +14792,22 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      entity_relationship_role: [
+        "buyer",
+        "manager",
+        "owner",
+        "decision_maker",
+        "influencer",
+        "user",
+        "sponsor",
+        "partner",
+        "supplier",
+        "subsidiary",
+        "parent",
+        "employee_of",
+        "other",
+      ],
+      entity_type: ["company", "contact"],
       error_severity: ["info", "warning", "error", "critical"],
       passo_outcome: [
         "respondeu_positivo",
