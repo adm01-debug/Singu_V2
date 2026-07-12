@@ -118,8 +118,8 @@ function ContactCardWithContextImpl({
   };
 
    const displayName = formatContactName(contact.first_name, contact.last_name);
-   const vakProfile = (contact.behavior as any)?.vakProfile;
-   const dominantVAK = vakProfile?.primary as VAKType;
+   const vakProfile = (contact.behavior as { vakProfile?: { primary?: VAKType } } | null)?.vakProfile;
+   const dominantVAK = vakProfile?.primary as VAKType | undefined;
    const vakConfig = dominantVAK ? VAK_LABELS[dominantVAK] : null;
   const isGenericName = displayName === 'Contato';
   const cargoOrTitle = contact.role_title || (contact as Record<string, unknown>).cargo as string | undefined;
