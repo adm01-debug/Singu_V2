@@ -65,6 +65,10 @@ export function useEvidenceForLabel(
           .limit(perSourceLimit),
       ]);
 
+      // Falha explícita: preferimos surfacing de erro no useQuery a "sem resultados" silencioso
+      const firstError = wa.error ?? calls.error ?? ints.error;
+      if (firstError) throw firstError;
+
       const hits: EvidenceHit[] = [];
 
       for (const m of (wa.data ?? []) as Array<{
