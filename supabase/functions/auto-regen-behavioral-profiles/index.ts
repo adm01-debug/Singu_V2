@@ -1,7 +1,12 @@
 // Cron job: reanalisa perfis comportamentais de contatos com 3+ reprovações
 // SLA: não reprocessa o mesmo contato mais de 1x a cada 24h
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-internal-key",
+};
 
 const SLA_HOURS = 24;
 const MIN_DOWNVOTES = 3;
@@ -107,7 +112,10 @@ Deno.serve(async (req) => {
       try {
         const { error: invokeError } = await admin.functions.invoke(
           "generate-behavioral-profile",
-          { body: { contact_id: item.contactId, trigger: "auto_regen_sla" } },
+          {
+            body: { contact_id: item.contactId, trigger: "auto_regen_sla" },
+            headers: { "x-internal-key": serviceKey },
+          },
         );
         if (invokeError) throw invokeError;
         processed += 1;

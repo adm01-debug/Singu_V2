@@ -181,14 +181,41 @@ function ContactsWithMostDownvotes({ rows }: { rows: Row[] }) {
     let fail = 0;
     // Sequencial + delay pequeno para evitar rate-limit da IA
     for (const contactId of eligibleForRebatch) {
+      const nowIso = new Date().toISOString();
+      // Registra tentativa na fila de auditoria antes de invocar
+      const { data: sessionRes } = await supabase.auth.getUser();
+      const userId = sessionRes?.user?.id ?? null;
+      await supabase
+        .from('behavioral_profile_regen_queue')
+        .upsert(
+          {
+            contact_id: contactId,
+            user_id: userId,
+            enqueued_at: nowIso,
+            next_run_at: nowIso,
+            trigger_source: 'admin_manual_batch',
+            last_processed_at: nowIso,
+          },
+          { onConflict: 'contact_id' },
+        );
       try {
         const { error } = await supabase.functions.invoke('generate-behavioral-profile', {
-          body: { contact_id: contactId },
+          body: { contact_id: contactId, trigger: 'admin_manual_batch' },
         });
         if (error) throw error;
         ok += 1;
-      } catch (_e) {
+        await supabase
+          .from('behavioral_profile_regen_queue')
+          .update({ last_error: null })
+          .eq('contact_id', contactId);
+      } catch (e) {
         fail += 1;
+        const msg = e instanceof Error ? e.message : String(e);
+        console.error('[runBatch] falha ao reanalisar', contactId, msg);
+        await supabase
+          .from('behavioral_profile_regen_queue')
+          .update({ last_error: msg })
+          .eq('contact_id', contactId);
       }
       await new Promise((r) => setTimeout(r, 800));
     }

@@ -29,7 +29,7 @@ export function InsightFeedbackControls({ contactId, kind, label }: Props) {
   useEffect(() => {
     setNote(existing?.note ?? '');
     setShowNote(false);
-  }, [existing?.id, contactId, kind, label]);
+  }, [existing?.id, existing?.note, contactId, kind, label]);
 
   const currentVote = existing?.vote ?? null;
 
