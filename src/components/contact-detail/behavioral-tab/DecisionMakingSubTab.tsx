@@ -44,8 +44,8 @@ export function DecisionMakingSubTab({ contactId }: Props) {
           <div className="flex items-center space-x-2 py-2">
             <Checkbox 
               id="budget-authority" 
-              checked={formData.budget_authority} 
-              onCheckedChange={(val) => setFormData({ ...formData, budget_authority: !!val })}
+              checked={!!formData.budget_authority}
+              onCheckedChange={(val) => setFormData({ ...formData, budget_authority: val ? 'yes' : '' })}
             />
             <Label htmlFor="budget-authority" className="text-xs font-medium">Possui Autoridade de Orçamento</Label>
           </div>
