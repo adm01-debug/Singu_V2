@@ -87,7 +87,7 @@ export function useAIApprovals(contactId?: string) {
           .from('contacts')
           .update({ 
             [field]: newValues,
-            rapport_metadata: updatedMetadata
+            rapport_metadata: updatedMetadata as unknown as Record<string, unknown>
           })
           .eq('id', suggestion.contact_id);
         
