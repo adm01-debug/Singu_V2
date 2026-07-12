@@ -145,7 +145,7 @@ import type { Contact } from '@/hooks/useContactDetail';
         hobbies={contact.hobbies as string[]}
         interests={contact.interests as string[]}
         familyInfo={contact.family_info || undefined}
-        metadata={contact.rapport_metadata}
+        metadata={(contact.rapport_metadata ?? undefined) as { hobbies?: Record<string, string>; interests?: Record<string, string> } | undefined}
         onUpdate={async (data) => {
           // Trigger the local update state via supabase
           const { error } = await supabase.from('contacts').update(data).eq('id', contact.id);
