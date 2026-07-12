@@ -445,8 +445,56 @@ export default function BehavioralRegenAudit() {
             )}
             Limpar fila
           </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              const errorIds = filtered
+                .filter((r) => Boolean(r.last_error))
+                .map((r) => r.contact_id);
+              if (errorIds.length === 0) {
+                toast.info("Nenhum item com erro no filtro atual");
+                return;
+              }
+              if (
+                window.confirm(
+                  `Reprocessar ${errorIds.length} contato(s) com erro?\n\nExecuta em série (~600ms entre cada).\nItens em cooldown serão pulados.`,
+                )
+              ) {
+                batchRetryMutation.mutate(errorIds);
+              }
+            }}
+            disabled={batchRetryMutation.isPending || batchProgress?.running}
+            title="Reprocessa todos os itens com erro visíveis"
+          >
+            {batchRetryMutation.isPending ? (
+              <RotateCw className="h-4 w-4 mr-1 animate-spin" />
+            ) : (
+              <RotateCw className="h-4 w-4 mr-1" />
+            )}
+            Retry todos c/ erro
+          </Button>
         </div>
       </header>
+
+      {batchProgress && (
+        <div
+          className="rounded-md border bg-muted/40 px-3 py-2 text-sm flex items-center justify-between gap-4"
+          role="status"
+          aria-live="polite"
+        >
+          <span>
+            {batchProgress.running ? "Reprocessando" : "Concluído"} ·{" "}
+            <strong>{batchProgress.done}</strong>/{batchProgress.total} · ✅{" "}
+            {batchProgress.ok} · ❌ {batchProgress.failed} · ⏸ {batchProgress.skipped}
+          </span>
+          {!batchProgress.running && (
+            <Button size="sm" variant="ghost" onClick={() => setBatchProgress(null)}>
+              Fechar
+            </Button>
+          )}
+        </div>
+      )}
 
       <div className="grid gap-4 md:grid-cols-4">
         <StatCard label="Total no período" value={stats.total} />
