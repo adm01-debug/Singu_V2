@@ -88,8 +88,21 @@ Deno.serve(async (req) => {
     const failures: Array<{ contactId: string; error: string }> = [];
 
     // 3. Enfileirar + disparar reanálise sequencialmente (evita rate limit)
+    // Pré-carrega attempts atuais para incremento correto (não reset).
+    const { data: existingAttemptsRows } = await admin
+      .from("behavioral_profile_regen_queue")
+      .select("contact_id, attempts")
+      .in("contact_id", toProcess.map((t) => t.contactId));
+    const attemptsMap = new Map<string, number>(
+      (existingAttemptsRows ?? []).map((r: { contact_id: string; attempts: number | null }) => [
+        r.contact_id,
+        r.attempts ?? 0,
+      ]),
+    );
+
     for (const item of toProcess) {
       const nowIso = new Date().toISOString();
+      // Marca enfileiramento sem tocar em last_processed_at (só após sucesso/falha real).
       const { error: upsertError } = await admin
         .from("behavioral_profile_regen_queue")
         .upsert(
@@ -99,7 +112,6 @@ Deno.serve(async (req) => {
             enqueued_at: nowIso,
             next_run_at: nowIso,
             trigger_source: "cron_auto_regen_downvotes",
-            last_processed_at: nowIso,
           },
           { onConflict: "contact_id" },
         );
@@ -119,12 +131,25 @@ Deno.serve(async (req) => {
         );
         if (invokeError) throw invokeError;
         processed += 1;
+        // Sucesso: registra last_processed_at e limpa erro anterior.
+        await admin
+          .from("behavioral_profile_regen_queue")
+          .update({
+            last_processed_at: new Date().toISOString(),
+            last_error: null,
+          })
+          .eq("contact_id", item.contactId);
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         failures.push({ contactId: item.contactId, error: msg });
+        const prevAttempts = attemptsMap.get(item.contactId) ?? 0;
         await admin
           .from("behavioral_profile_regen_queue")
-          .update({ last_error: msg, attempts: 1 })
+          .update({
+            last_error: msg.slice(0, 500),
+            attempts: prevAttempts + 1,
+            last_processed_at: new Date().toISOString(),
+          })
           .eq("contact_id", item.contactId);
       }
 
