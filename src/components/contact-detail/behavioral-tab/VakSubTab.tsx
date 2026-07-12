@@ -83,7 +83,7 @@ export function VakSubTab({ contactId }: Props) {
              ].map((item) => (
                <div 
                  key={item.id}
-                 onClick={() => setFormData({ ...formData, vak_primary: item.id })}
+                 onClick={() => setFormData({ ...formData, vak_primary: item.id as 'visual' | 'auditivo' | 'cinestesico' })}
                  className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.vak_primary === item.id ? 'border-primary bg-primary/5' : 'border-transparent bg-muted/50 hover:bg-muted'}`}
                >
                  <div className="flex items-center gap-2 mb-1">
@@ -99,7 +99,7 @@ export function VakSubTab({ contactId }: Props) {
              <Label className="text-xs">Confirmar Canal Primário</Label>
              <Select 
                value={formData.vak_primary} 
-               onValueChange={(val) => setFormData({ ...formData, vak_primary: val })}
+               onValueChange={(val) => setFormData({ ...formData, vak_primary: val as 'visual' | 'auditivo' | 'cinestesico' })}
              >
                <SelectTrigger className="h-8 text-xs">
                  <SelectValue placeholder="Selecione o canal" />
