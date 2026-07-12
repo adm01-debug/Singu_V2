@@ -24,7 +24,12 @@ export function ScoreExplicabilityPanel({ contactId }: Props) {
   if (isLoading) return <Skeleton className="h-64 w-full" />;
   if (!data || typeof data !== 'object') return null;
 
-  const explicability = data as any;
+  interface FactorEntry { value: number; impact: number; days?: number }
+  interface Explicability {
+    current_score: number;
+    factors: { volume: FactorEntry; sentiment: FactorEntry; recency: FactorEntry; risk: FactorEntry };
+  }
+  const explicability = data as unknown as Explicability;
   const factors = explicability.factors;
   const current_score = explicability.current_score;
 

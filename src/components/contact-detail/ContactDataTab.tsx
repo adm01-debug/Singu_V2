@@ -123,7 +123,7 @@ export function ContactDataTab({ contact }: Props) {
          <RelativesCard
            relatives={relatives}
            contactId={contact.id}
-           onAdd={(d) => addRelative.mutate(d as any)}
+           onAdd={(d) => addRelative.mutate(d as Parameters<typeof addRelative.mutate>[0])}
            onUpdate={(id, updates) => updateRelative.mutate({ id, updates })}
            onDelete={(id) => deleteRelative.mutate(id)}
          />
