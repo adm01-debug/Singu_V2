@@ -8,9 +8,18 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import { useContacts } from '@/hooks/useContacts';
 
+interface ExternalContactRow {
+  id?: string;
+  first_name?: string | null;
+  last_name?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  cargo?: string | null;
+}
+
 export function ExternalContactLookupDialog({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<ExternalContactRow[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const { createContact } = useContacts();
 
@@ -18,7 +27,7 @@ export function ExternalContactLookupDialog({ open, onOpenChange }: { open: bool
     if (!searchTerm.trim()) return;
     setIsSearching(true);
     try {
-      const { data, error } = await queryExternalData({
+      const { data, error } = await queryExternalData<ExternalContactRow>({
         table: 'contacts',
         search: {
           term: searchTerm,
@@ -36,18 +45,18 @@ export function ExternalContactLookupDialog({ open, onOpenChange }: { open: bool
     }
   };
 
-  const handleImport = async (externalContact: any) => {
+  const handleImport = async (externalContact: ExternalContactRow) => {
     try {
       const contactToCreate = {
-        first_name: externalContact.first_name,
-        last_name: externalContact.last_name,
+        first_name: externalContact.first_name ?? '',
+        last_name: externalContact.last_name ?? '',
         email: externalContact.email,
         phone: externalContact.phone,
         role_title: externalContact.cargo,
         notes: `Importado da base externa via Busca Global.`,
       };
 
-      await createContact(contactToCreate as any);
+      await createContact(contactToCreate);
       toast.success('Contato importado com sucesso!');
       onOpenChange(false);
     } catch {
