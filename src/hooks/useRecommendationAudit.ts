@@ -26,7 +26,7 @@ export function useRecommendationAudit() {
           score: payload.score,
           recommendation_type: payload.recommendationType,
           reasons: payload.reasons,
-          data_used: payload.dataUsed || {},
+          data_used: (payload.dataUsed ?? {}) as never,
           user_action: payload.userAction,
         }]);
 
