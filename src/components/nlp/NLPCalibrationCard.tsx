@@ -11,7 +11,7 @@ import {
   Sparkles,
   ArrowRight
 } from 'lucide-react';
-import { VAK_LABELS } from '@/types/vak';
+import { VAK_LABELS, type VAKType } from '@/types/vak';
 
 interface NLPCalibrationCardProps {
   contactId: string;
@@ -74,8 +74,8 @@ export function NLPCalibrationCard({ contactId, latestVAK }: NLPCalibrationCardP
             <Sparkles className="h-4 w-4 text-warning" />
             <span className="text-xs font-medium">Canal Primário:</span>
           </div>
-          <Badge className={VAK_LABELS[latestVAK.dominant as any]?.bgColor || 'bg-muted'}>
-            {VAK_LABELS[latestVAK.dominant as any]?.name || latestVAK.dominant}
+          <Badge className={VAK_LABELS[latestVAK.dominant as VAKType]?.bgColor || 'bg-muted'}>
+            {VAK_LABELS[latestVAK.dominant as VAKType]?.name || latestVAK.dominant}
           </Badge>
         </div>
 
