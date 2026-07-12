@@ -5,7 +5,7 @@
 /**
  * Exports an array of objects to a CSV file and triggers a download
  */
-export function exportToCSV(data: any[], fileName: string) {
+export function exportToCSV(data: Array<Record<string, unknown>>, fileName: string) {
   if (!data || !data.length) return;
 
   // Extract headers

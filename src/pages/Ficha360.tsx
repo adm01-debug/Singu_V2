@@ -165,7 +165,7 @@ const Ficha360 = () => {
           it.resumo ?? '', 
           it.channel ?? '', 
           it.direction ?? '',
-          (it as any).transcription ?? ''
+          (it as { transcription?: string }).transcription ?? ''
         ].join(' '),
       );
       return haystack.includes(needle);
