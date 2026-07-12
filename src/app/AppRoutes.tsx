@@ -173,6 +173,7 @@ export const AppRoutes = () => {
       <Route path="/admin/docs" element={<Admin><P.DocsPage /></Admin>} />
       <Route path="/admin/feature-flags" element={<Admin><P.AdminFeatureFlagsPage /></Admin>} />
       <Route path="/admin/error-budget" element={<Admin><P.AdminErrorBudget /></Admin>} />
+      <Route path="/admin/insight-feedback" element={<Admin><P.AdminInsightFeedback /></Admin>} />
 
       {/* Catch-all */}
       <Route path="*" element={<LazyPage><P.NotFound /></LazyPage>} />
