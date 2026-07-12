@@ -40,8 +40,8 @@ interface ContactBehavior {
       communicationRecommendations: string[];
     };
     overrides?: {
-      insights_data: any;
-      custom_scripts: any;
+      insights_data: Partial<ContactReport['insights']> | null;
+      custom_scripts: Record<string, string> | null;
     };
  }
 
@@ -114,7 +114,7 @@ const RelatorioContato = () => {
           ]
         };
 
-        const savedInsights = overrides?.insights_data as any;
+        const savedInsights = overrides?.insights_data as Partial<ContactReport['insights']> | null;
         const mergedInsights = savedInsights ? {
           ...defaultInsights,
           ...savedInsights
