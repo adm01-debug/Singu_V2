@@ -12,7 +12,7 @@ import { DealsAtRiskCard } from '@/components/dashboard/DealsAtRiskCard';
 import { StrategicNextStepsCard } from '@/components/dashboard/StrategicNextStepsCard';
 import { DailyInsightsWidget } from '@/components/dashboard/widgets/DailyInsightsWidget';
 import { Surface } from '@/components/ui/surface';
-import type { Contact } from '@/types';
+import type { Contact } from '@/hooks/useContacts';
 
 
 const ChurnPredictionPanel = lazy(() => import('@/components/analytics/ChurnPredictionPanel').then(m => ({ default: m.ChurnPredictionPanel })));
