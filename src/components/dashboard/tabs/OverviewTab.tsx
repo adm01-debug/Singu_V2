@@ -63,7 +63,8 @@ export function OverviewTab({
   recentActivityAnimations,
   topContactAnimations,
   tabDirection,
-}: OverviewTabProps & { contacts: Array<Record<string, unknown>>; companies: Array<Record<string, unknown>>; interactions: Array<Record<string, unknown>> }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contact/Interaction TS types diverge from raw supabase rows in child components; keeping any to avoid a broader refactor
+}: OverviewTabProps & { contacts: any[]; companies: any[]; interactions: any[] }) {
   const animVariants = {
     initial: { opacity: 0, x: prefersReducedMotion ? 0 : tabDirection * 20 },
     animate: { opacity: 1, x: 0 },
