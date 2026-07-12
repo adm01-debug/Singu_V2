@@ -59,7 +59,7 @@ export function DiscSubTab({ contactId }: Props) {
                <Label>Perfil Primário</Label>
                <Select 
                  value={formData.disc_primary} 
-                 onValueChange={(val) => setFormData({ ...formData, disc_primary: val })}
+                 onValueChange={(val) => setFormData({ ...formData, disc_primary: val as 'D' | 'I' | 'S' | 'C' })}
                >
                  <SelectTrigger>
                    <SelectValue placeholder="Selecione" />
