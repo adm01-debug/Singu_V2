@@ -20,7 +20,7 @@ export function useRecommendationAudit() {
 
       const { error } = await supabase
         .from('ai_recommendation_audit_logs_v2')
-        .insert({
+        .insert([{
           user_id: auth.user.id,
           contact_id: payload.contactId,
           score: payload.score,
@@ -28,7 +28,7 @@ export function useRecommendationAudit() {
           reasons: payload.reasons,
           data_used: payload.dataUsed || {},
           user_action: payload.userAction,
-        });
+        }]);
 
       if (error) throw error;
     },
