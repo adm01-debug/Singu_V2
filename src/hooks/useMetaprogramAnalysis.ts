@@ -110,7 +110,15 @@ export function useMetaprogramAnalysis() {
       if (error) throw error;
       if (!data || data.length === 0) return null;
 
-      const totals = data.reduce((acc, record: any) => ({
+      type MetaprogramRecord = {
+        toward_score?: number | null; away_from_score?: number | null;
+        internal_score?: number | null; external_score?: number | null;
+        options_score?: number | null; procedures_score?: number | null;
+        general_score?: number | null; specific_score?: number | null;
+        proactive_score?: number | null; reactive_score?: number | null;
+        sameness_score?: number | null; difference_score?: number | null;
+      };
+      const totals = (data as MetaprogramRecord[]).reduce((acc, record) => ({
         toward: acc.toward + (record.toward_score || 0),
         awayFrom: acc.awayFrom + (record.away_from_score || 0),
         internal: acc.internal + (record.internal_score || 0),
@@ -168,7 +176,7 @@ export function useMetaprogramAnalysis() {
     }
   }, [user]);
 
-  const analyzeContactInteractions = useCallback(async (contactId: string, interactions: any[]) => {
+  const analyzeContactInteractions = useCallback(async (contactId: string, interactions: Array<{ id: string; transcription?: string | null; content?: string | null }>) => {
     if (!user) return;
     setLoading(true);
     try {
