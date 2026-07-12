@@ -19,7 +19,7 @@ interface Props {
 
 export function MetaprogramsSubTab({ contactId }: Props) {
   const { metaprograms, updateMetaprograms, isLoading } = useContactBehavior(contactId);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<Partial<ContactBehavior>>({});
   const { user } = useAuth();
   const queryClient = useQueryClient();
 

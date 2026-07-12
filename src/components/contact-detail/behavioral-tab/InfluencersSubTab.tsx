@@ -14,7 +14,7 @@ interface Props {
 
 export function InfluencersSubTab({ contactId }: Props) {
   const { influence, updateInfluence, isLoading } = useContactBehavior(contactId);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<Partial<ContactBehavior>>({});
 
   useEffect(() => {
     if (influence) setFormData(influence);

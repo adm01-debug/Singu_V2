@@ -13,7 +13,7 @@ interface Props {
 
 export function DecisionMakingSubTab({ contactId }: Props) {
   const { decision, updateDecision, isLoading } = useContactBehavior(contactId);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<Partial<ContactBehavior>>({});
 
   useEffect(() => {
     if (decision) setFormData(decision);

@@ -13,7 +13,7 @@ interface Props {
 
 export function BusinessContextSubTab({ contactId }: Props) {
   const { businessContext, updateBusiness, isLoading } = useContactBehavior(contactId);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<Partial<ContactBehavior>>({});
 
   useEffect(() => {
     if (businessContext) setFormData(businessContext);

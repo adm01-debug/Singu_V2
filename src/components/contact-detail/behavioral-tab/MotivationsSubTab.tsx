@@ -13,7 +13,7 @@ interface Props {
 
 export function MotivationsSubTab({ contactId }: Props) {
   const { behavior, updateBehavior, isLoading } = useContactBehavior(contactId);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<Partial<ContactBehavior>>({});
 
   useEffect(() => {
     if (behavior) {

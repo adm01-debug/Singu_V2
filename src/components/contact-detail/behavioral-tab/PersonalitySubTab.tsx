@@ -17,7 +17,7 @@ interface Props {
 
 export function PersonalitySubTab({ contactId }: Props) {
   const { personality, updatePersonality, isLoading } = useContactBehavior(contactId);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<Partial<ContactBehavior>>({});
 
   useEffect(() => {
     if (personality) setFormData(personality);

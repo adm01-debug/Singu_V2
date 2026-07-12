@@ -14,7 +14,7 @@ interface Props {
 
 export function RapportStrategySubTab({ contactId }: Props) {
   const { rapport, updateRapport, isLoading } = useContactBehavior(contactId);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<Partial<ContactBehavior>>({});
 
   useEffect(() => {
     if (rapport) setFormData(rapport);
