@@ -73,7 +73,7 @@ export interface ContactDecisionMaking {
   decision_criteria?: string[];
   needs_approval?: boolean;
   approver_id?: string;
-  budget_authority?: string;
+  budget_authority?: boolean;
 }
 
 export interface ContactInfluence {
