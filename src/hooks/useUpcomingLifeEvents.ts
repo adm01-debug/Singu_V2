@@ -37,7 +37,7 @@ export function useUpcomingLifeEvents(daysThreshold: number = 7) {
 
       return (data || [])
         .map(event => {
-          const contact = event.contacts as any;
+          const contact = event.contacts as { first_name?: string | null; last_name?: string | null } | null;
           let eventDate = new Date(event.event_date);
           
           if (event.recurring) {

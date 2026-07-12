@@ -69,7 +69,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   // Helper to extract next cursor safely
-  function lastCursor(lastPage: any) {
+  function lastCursor(lastPage: Awaited<ReturnType<typeof fetchInteractionsPage>>) {
     return lastPage.nextCursor;
   }
 
