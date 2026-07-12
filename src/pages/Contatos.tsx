@@ -197,7 +197,7 @@ const Contatos = () => {
       } 
       return true; 
     });
-    return sortArray(result, multiSort as any, undefined, { dateFields: ['created_at', 'updated_at', 'birthday'], numericFields: ['relationship_score'] });
+    return sortArray(result, multiSort as Array<{ column: keyof Contact, order: 'asc' | 'desc' }>, undefined, { dateFields: ['created_at', 'updated_at', 'birthday'], numericFields: ['relationship_score'] });
   }, [contacts, fuzzyResults, searchTerm, activeFilters, multiSort]);
 
   useKeyboardShortcutsEnhanced();
@@ -270,7 +270,7 @@ const Contatos = () => {
     accessibleToast.success(`${ids.length} contato${plural} excluído${plural}`);
   };
   const handleBulkAddTag = async (ids: string[], tag: string) => { for (const id of ids) { const contact = contacts.find(c => c.id === id); if (contact) { const currentTags = contact.tags || []; if (!currentTags.includes(tag)) await updateContact(id, { tags: [...currentTags, tag] }); } } setSelectedIds(new Set()); accessibleToast.success(`Tag "${tag}" adicionada a ${ids.length} contato${ids.length > 1 ? 's' : ''}`); };
-  const handleBulkUpdateStage = async (ids: string[], stage: any) => { for (const id of ids) { await updateContact(id, { relationship_stage: stage }); } setSelectedIds(new Set()); accessibleToast.success(`Estágio atualizado para ${ids.length} contato${ids.length > 1 ? 's' : ''}`); };
+  const handleBulkUpdateStage = async (ids: string[], stage: Contact['relationship_stage']) => { for (const id of ids) { await updateContact(id, { relationship_stage: stage }); } setSelectedIds(new Set()); accessibleToast.success(`Estágio atualizado para ${ids.length} contato${ids.length > 1 ? 's' : ''}`); };
 
   return (
     <>
