@@ -6,6 +6,17 @@ import { ShieldCheck, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 
+interface AuditIssue {
+  type: string;
+  expected: string | number;
+  actual: string | number;
+}
+
+interface AuditResult {
+  consistent: boolean;
+  issues: AuditIssue[];
+}
+
 export default function CRMRelationshipAuditPage() {
   const { data: contacts, isLoading } = useQuery({
     queryKey: ['global-relationship-audit'],
@@ -21,7 +32,7 @@ export default function CRMRelationshipAuditPage() {
       const auditResults = await Promise.all(
         data.map(async (contact) => {
           const { data: result } = await supabase.rpc('check_relationship_consistency', { p_contact_id: contact.id });
-          return { contact, audit: result as any };
+          return { contact, audit: (result as unknown as AuditResult) ?? { consistent: true, issues: [] } };
         })
       );
 
@@ -85,7 +96,7 @@ export default function CRMRelationshipAuditPage() {
                     <div className="flex-1">
                       <p className="text-xs font-bold text-foreground">{c.contact.first_name} {c.contact.last_name}</p>
                       <div className="mt-2 space-y-1">
-                        {c.audit.issues.map((issue: any, idx: number) => (
+                        {c.audit.issues.map((issue, idx) => (
                           <div key={idx} className="text-[10px] text-destructive-foreground bg-destructive/10 p-1.5 rounded">
                             <span className="font-bold">Mismatched {issue.type}:</span> Esperado {issue.expected}, Encontrado {issue.actual}
                           </div>
