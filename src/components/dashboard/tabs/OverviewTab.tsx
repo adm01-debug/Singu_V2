@@ -245,7 +245,7 @@ export function OverviewTab({
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Insights Diários">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-28 w-full" />}>
-            <DailyInsightsWidget contacts={contacts} interactions={interactions} />
+            <DailyInsightsWidget />
           </Suspense>
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Relatório Churn">
