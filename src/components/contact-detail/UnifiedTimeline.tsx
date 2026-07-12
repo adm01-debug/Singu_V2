@@ -15,7 +15,7 @@ import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const TYPE_CONFIG: Record<UnifiedEventType, { icon: any; label: string; color: string }> = {
+const TYPE_CONFIG: Record<UnifiedEventType, { icon: React.ComponentType<{ className?: string }>; label: string; color: string }> = {
   message: { icon: MessageSquare, label: 'Mensagem', color: 'bg-blue-500/10 text-blue-600 border-blue-200' },
   call: { icon: Phone, label: 'Ligação', color: 'bg-green-500/10 text-green-600 border-green-200' },
   meeting: { icon: Users, label: 'Reunião', color: 'bg-purple-500/10 text-purple-600 border-purple-200' },

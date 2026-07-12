@@ -377,7 +377,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
                               </div>
                               <p className="text-xs text-muted-foreground mt-1">{format(new Date(interaction.created_at), "dd/MM/yy HH:mm", { locale: ptBR })}</p>
                             </div>
-                            <SentimentIndicator sentiment={(interaction.sentiment as any) || 'neutral'} size="sm" />
+                            <SentimentIndicator sentiment={((interaction.sentiment as import('@/types').SentimentType) || 'neutral')} size="sm" />
                           </div>
                           <AnimatePresence>
                             {isExpanded && (
