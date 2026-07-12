@@ -4,10 +4,19 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from "@/lib/logger";
 
+interface DISCAnalysisResult {
+  primary?: string;
+  secondary?: string;
+  scores?: Record<string, number>;
+  confidence?: number;
+  reasoning?: string;
+  [key: string]: unknown;
+}
+
 interface UseDISCAutoAnalysisReturn {
   analyzing: boolean;
-  analyzeInteraction: (interactionId: string, text: string) => Promise<any>;
-  analyzeLatestInteractions: (contactId: string) => Promise<any>;
+  analyzeInteraction: (interactionId: string, text: string) => Promise<DISCAnalysisResult | null>;
+  analyzeLatestInteractions: (contactId: string) => Promise<DISCAnalysisResult | null>;
 }
 
 export function useDISCAutoAnalysis(): UseDISCAutoAnalysisReturn {
