@@ -2,7 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
   LayoutDashboard, Activity, AlertTriangle, Mail, Mic, Sparkles,
-  Shield, BookOpen, Map, FileText, Plug, Flag, Gauge, ThumbsUp,
+  Shield, BookOpen, Map, FileText, Plug, Flag, Gauge, ThumbsUp, RefreshCcw,
 } from 'lucide-react';
 
 const ADMIN_LINKS: { to: string; label: string; icon: React.ElementType; exact?: boolean }[] = [
@@ -19,6 +19,7 @@ const ADMIN_LINKS: { to: string; label: string; icon: React.ElementType; exact?:
   { to: '/admin/feature-flags', label: 'Feature Flags', icon: Flag },
   { to: '/admin/audit-trail', label: 'Audit Trail', icon: FileText },
   { to: '/admin/insight-feedback', label: 'Feedback de Insights', icon: ThumbsUp },
+  { to: '/admin/behavioral-regen-audit', label: 'Auditoria de Reanálises', icon: RefreshCcw },
   { to: '/admin/knowledge-export', label: 'Knowledge Export', icon: BookOpen },
   { to: '/admin/docs', label: 'Documentação', icon: BookOpen },
 ];
