@@ -63,7 +63,7 @@ export function OverviewTab({
   recentActivityAnimations,
   topContactAnimations,
   tabDirection,
-}: OverviewTabProps & { contacts: import('@/types').Contact[]; companies: unknown[]; interactions: import('@/types').Interaction[] }) {
+}: OverviewTabProps & { contacts: Array<Record<string, unknown>>; companies: Array<Record<string, unknown>>; interactions: Array<Record<string, unknown>> }) {
   const animVariants = {
     initial: { opacity: 0, x: prefersReducedMotion ? 0 : tabDirection * 20 },
     animate: { opacity: 1, x: 0 },
