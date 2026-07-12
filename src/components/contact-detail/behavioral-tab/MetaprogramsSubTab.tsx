@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { useContactBehavior } from '@/hooks/useContactBehavior';
+import type { ContactBehavior } from '@/hooks/useContactBehavior';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -19,7 +20,7 @@ interface Props {
 
 export function MetaprogramsSubTab({ contactId }: Props) {
   const { metaprograms, updateMetaprograms, isLoading } = useContactBehavior(contactId);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<Partial<ContactBehavior>>({});
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
