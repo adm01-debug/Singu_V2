@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,6 +35,9 @@ type QueueRow = {
 };
 
 type PeriodKey = "24h" | "7d" | "30d" | "all";
+type StatusFilter = "all" | "success" | "error";
+
+const PAGE_SIZE = 50;
 
 const PERIODS: Array<{ key: PeriodKey; label: string; hours: number | null }> = [
   { key: "24h", label: "24h", hours: 24 },
@@ -55,31 +58,94 @@ function csvEscape(value: string): string {
 
 export default function BehavioralRegenAudit() {
   const [period, setPeriod] = useState<PeriodKey>("7d");
-  const [statusFilter, setStatusFilter] = useState<"all" | "success" | "error">("all");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [search, setSearch] = useState("");
+  const periodCutoffIso = useMemo(() => {
+    const conf = PERIODS.find((p) => p.key === period);
+    if (!conf?.hours) return null;
+    return new Date(Date.now() - conf.hours * 3600 * 1000).toISOString();
+  }, [period]);
 
-  const { data, isLoading, error, refetch, isFetching } = useQuery({
-    queryKey: ["behavioral-regen-audit", period],
-    queryFn: async () => {
+  // ---- Paginação keyset server-side ----
+  const {
+    data: pages,
+    isLoading,
+    error,
+    refetch,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<QueueRow[]>({
+    queryKey: ["behavioral-regen-audit", period, statusFilter],
+    initialPageParam: null as string | null,
+    staleTime: 30_000,
+    queryFn: async ({ pageParam }) => {
       let q = supabase
         .from("behavioral_profile_regen_queue")
         .select(
           "contact_id, user_id, enqueued_at, next_run_at, attempts, last_error, last_processed_at, trigger_source, created_at, updated_at",
         )
         .order("updated_at", { ascending: false })
-        .limit(500);
-
-      const conf = PERIODS.find((p) => p.key === period);
-      if (conf?.hours) {
-        const cutoff = new Date(Date.now() - conf.hours * 3600 * 1000).toISOString();
-        q = q.gte("updated_at", cutoff);
-      }
+        .limit(PAGE_SIZE);
+      if (periodCutoffIso) q = q.gte("updated_at", periodCutoffIso);
+      if (statusFilter === "error") q = q.not("last_error", "is", null);
+      if (statusFilter === "success") q = q.is("last_error", null);
+      if (pageParam) q = q.lt("updated_at", pageParam);
       const { data, error } = await q;
       if (error) throw error;
       return (data ?? []) as QueueRow[];
     },
-    staleTime: 30_000,
+    getNextPageParam: (last) => {
+      if (!last || last.length < PAGE_SIZE) return undefined;
+      return last[last.length - 1]?.updated_at ?? undefined;
+    },
   });
+
+  const data = useMemo(() => (pages?.pages ?? []).flat(), [pages]);
+
+  // ---- Stats agregados server-side (independem da paginação) ----
+  const { data: aggStats } = useQuery({
+    queryKey: ["behavioral-regen-stats", period, statusFilter],
+    staleTime: 30_000,
+    queryFn: async () => {
+      const buildBase = () => {
+        let q = supabase
+          .from("behavioral_profile_regen_queue")
+          .select("contact_id", { count: "exact", head: true });
+        if (periodCutoffIso) q = q.gte("updated_at", periodCutoffIso);
+        return q;
+      };
+      const [totalRes, errorRes] = await Promise.all([
+        buildBase(),
+        buildBase().not("last_error", "is", null),
+      ]);
+      if (totalRes.error) throw totalRes.error;
+      if (errorRes.error) throw errorRes.error;
+      const total = totalRes.count ?? 0;
+      const errors = errorRes.count ?? 0;
+      const success = Math.max(total - errors, 0);
+      const rate = total > 0 ? Math.round((success / total) * 100) : 0;
+      return { total, errors, success, rate };
+    },
+  });
+
+  // ---- Infinite scroll: sentinel próximo ao fim da tabela ----
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const el = loadMoreRef.current;
+    if (!el || !hasNextPage) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting) && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const contactIds = useMemo(
     () => Array.from(new Set((data ?? []).map((r) => r.contact_id))).slice(0, 200),
@@ -121,14 +187,10 @@ export default function BehavioralRegenAudit() {
   }, [data, statusFilter, search, contactMap]);
 
   const stats = useMemo(() => {
-    const rows = data ?? [];
-    const total = rows.length;
-    const errors = rows.filter((r) => r.last_error).length;
-    const success = total - errors;
-    const rate = total > 0 ? Math.round((success / total) * 100) : 0;
-    const totalAttempts = rows.reduce((sum, r) => sum + (r.attempts ?? 0), 0);
-    return { total, errors, success, rate, totalAttempts };
-  }, [data]);
+    return (
+      aggStats ?? { total: 0, errors: 0, success: 0, rate: 0 }
+    );
+  }, [aggStats]);
 
   const triggerBreakdown = useMemo(() => {
     const map = new Map<string, number>();
@@ -249,7 +311,10 @@ export default function BehavioralRegenAudit() {
 
       <Card>
         <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-3">
-          <CardTitle className="text-base">Eventos ({filtered.length})</CardTitle>
+          <CardTitle className="text-base">
+            Eventos ({filtered.length} carregados
+            {stats.total ? ` · ${stats.total} no total` : ""})
+          </CardTitle>
           <div className="flex flex-wrap items-center gap-2">
             <div className="relative">
               <Search className="pointer-events-none absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -405,6 +470,29 @@ export default function BehavioralRegenAudit() {
                   })}
                 </tbody>
               </table>
+            </div>
+          )}
+          {/* Sentinel + botão manual para carregamento incremental */}
+          {!isLoading && !error && filtered.length > 0 && (
+            <div className="flex flex-col items-center gap-2 border-t p-3">
+              <div ref={loadMoreRef} className="h-1 w-full" aria-hidden />
+              {hasNextPage ? (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => fetchNextPage()}
+                  disabled={isFetchingNextPage}
+                >
+                  {isFetchingNextPage ? (
+                    <RefreshCcw className="h-4 w-4 mr-1 animate-spin" />
+                  ) : null}
+                  Carregar mais {PAGE_SIZE}
+                </Button>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  Fim dos resultados ({data.length} de {stats.total || data.length})
+                </p>
+              )}
             </div>
           )}
         </CardContent>
