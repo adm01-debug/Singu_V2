@@ -77,6 +77,7 @@ export const AdminAuditTrail = lazy(() => import("@/pages/AdminAuditTrail"));
 export const AdminErrorLogs = lazy(() => import("@/pages/admin/ErrorLogs"));
 export const AdminComponentGallery = lazy(() => import("@/pages/admin/ComponentGallery"));
 export const AdminInsightFeedback = lazy(() => import("@/pages/admin/InsightFeedbackAnalytics"));
+export const AdminBehavioralRegenAudit = lazy(() => import("@/pages/admin/BehavioralRegenAudit"));
 export const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
 export const AdminSegurancaPage = lazy(() => import("@/pages/admin/AdminSegurancaPage"));
 export const AdminFeatureFlagsPage = lazy(() => import("@/pages/admin/FeatureFlagsPage"));
