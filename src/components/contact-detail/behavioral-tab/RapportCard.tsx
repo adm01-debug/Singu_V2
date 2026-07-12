@@ -113,7 +113,7 @@ export function RapportCard({ contactId }: Props) {
                 <p className="text-xs font-medium text-muted-foreground mb-1">Interesses Compartilhados</p>
                   <div className="flex flex-wrap gap-1">
                     {data.shared_interests.map((i, idx) => {
-                      const source = (rapportIntel?.rapport_metadata as any)?.interests?.[i];
+                      const source = (rapportIntel?.rapport_metadata as { interests?: Record<string, string>; top_values?: Record<string, string> } | null | undefined)?.interests?.[i];
                       return (
                         <Badge key={idx} variant="outline" className="text-[10px] gap-1">
                           {source && getSourceIcon(source)}
@@ -145,7 +145,7 @@ export function RapportCard({ contactId }: Props) {
                 {rapportIntel.top_values && rapportIntel.top_values.length > 0 && (
                   <div className="flex flex-wrap gap-1">
                     {rapportIntel.top_values.map((v, i) => {
-                      const source = (rapportIntel?.rapport_metadata as any)?.top_values?.[v];
+                      const source = (rapportIntel?.rapport_metadata as { interests?: Record<string, string>; top_values?: Record<string, string> } | null | undefined)?.top_values?.[v];
                       return (
                         <Badge key={i} variant="secondary" className="text-[10px] gap-1">
                           {source && getSourceIcon(source)}
