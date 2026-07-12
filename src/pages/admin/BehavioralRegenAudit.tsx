@@ -112,7 +112,7 @@ export default function BehavioralRegenAudit() {
       const triggerSource = `manual_retry:${uid.slice(0, 8)}`;
       const nowIso = new Date().toISOString();
 
-      // 1) Reseta erro e agenda para execução imediata
+      // 1) Marca a fila como retry manual em andamento
       const { error: updErr } = await supabase
         .from("behavioral_profile_regen_queue")
         .update({
@@ -124,23 +124,39 @@ export default function BehavioralRegenAudit() {
         .eq("contact_id", contactId);
       if (updErr) throw updErr;
 
-      // 2) Dispara execução imediata da função de reanálise
+      // 2) Invoca DIRETAMENTE o gerador para este contato (a função de cron
+      //    ignora o body e roda o loop completo, então usar a função unitária
+      //    é a única forma confiável de reprocessar 1 contato específico).
       const { data: invokeData, error: invokeErr } = await supabase.functions.invoke(
-        "auto-regen-behavioral-profiles",
-        { body: { contact_id: contactId, source: triggerSource } },
+        "generate-behavioral-profile",
+        { body: { contact_id: contactId, trigger: triggerSource } },
       );
-      if (invokeErr) {
-        // Registra o erro na própria fila para aparecer na auditoria
+      const finishedIso = new Date().toISOString();
+      const invokePayloadError =
+        (invokeData as { error?: string } | null)?.error ?? null;
+      if (invokeErr || invokePayloadError) {
+        const msg = invokeErr?.message ?? invokePayloadError ?? "erro desconhecido";
         await supabase
           .from("behavioral_profile_regen_queue")
           .update({
-            last_error: `manual_retry_invoke_failed: ${invokeErr.message}`,
-            last_processed_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
+            last_error: `manual_retry_failed: ${msg}`,
+            last_processed_at: finishedIso,
+            updated_at: finishedIso,
           })
           .eq("contact_id", contactId);
-        throw invokeErr;
+        throw new Error(msg);
       }
+
+      // 3) Registra sucesso do retry manual na fila (aparece na auditoria)
+      await supabase
+        .from("behavioral_profile_regen_queue")
+        .update({
+          last_error: null,
+          last_processed_at: finishedIso,
+          updated_at: finishedIso,
+        })
+        .eq("contact_id", contactId);
+
       return invokeData;
     },
     onSuccess: (_data, contactId) => {
