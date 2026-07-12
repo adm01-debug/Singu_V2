@@ -142,6 +142,35 @@ export default function BehavioralRegenAudit() {
     },
   });
 
+  // ---- Mutation: housekeeping (limpa antigos + dead-letter) ----
+  const cleanupMutation = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.rpc("cleanup_behavioral_regen_queue", {
+        _retention_days: 30,
+        _max_attempts: 5,
+        _dead_letter_backoff_days: 7,
+      });
+      if (error) throw error;
+      const row = Array.isArray(data) ? data[0] : data;
+      return row as {
+        deleted_success: number;
+        parked_dead_letter: number;
+      } | null;
+    },
+    onSuccess: (row) => {
+      const del = row?.deleted_success ?? 0;
+      const park = row?.parked_dead_letter ?? 0;
+      toast.success(
+        `Fila limpa · ${del} sucessos antigos removidos · ${park} dead-letter adiados`,
+      );
+      queryClient.invalidateQueries({ queryKey: ["behavioral-regen-audit"] });
+      queryClient.invalidateQueries({ queryKey: ["behavioral-regen-stats"] });
+    },
+    onError: (err: Error) => {
+      toast.error(`Falha na limpeza: ${err.message}`);
+    },
+  });
+
   const data = useMemo(() => (pages?.pages ?? []).flat(), [pages]);
 
   // ---- Stats agregados server-side (independem da paginação) ----
