@@ -5,7 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useDailyInsights } from '@/hooks/useReportsAnalytics';
 import { Lightbulb, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
-export const DailyInsightsWidget = React.memo(function DailyInsightsWidget({ contacts, interactions }: { contacts?: any[]; interactions?: any[] }) {
+export const DailyInsightsWidget = React.memo(function DailyInsightsWidget() {
   const { data, isLoading } = useDailyInsights();
 
   if (isLoading) return <Card><CardHeader className="pb-2"><CardTitle className="text-sm">Insights do Dia</CardTitle></CardHeader><CardContent><Skeleton className="h-28" /></CardContent></Card>;
