@@ -332,7 +332,7 @@ export const InteractionCardMemo = memo(function InteractionCardMemo({
                    </div>
                  )}
 
-                 {(interaction as any).emotion_analysis && (
+                 {(interaction as { emotion_analysis?: unknown }).emotion_analysis && (
                    <div className="ml-auto flex items-center gap-1 text-[10px] text-indigo-600/80 font-medium">
                      <Activity className="w-3 h-3" />
                      EQ Analisado

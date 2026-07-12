@@ -13,7 +13,7 @@ import {
 interface Props {
   search: string;
   onSearchChange: (val: string) => void;
-  onFilterChange: (filters: any) => void;
+  onFilterChange: (filters: Record<string, unknown>) => void;
 }
 
 export function PipelineFilterBar({ search, onSearchChange, onFilterChange }: Props) {

@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils';
 import { ReminderCard } from './smart-reminders-parts/ReminderCard';
 import { motion } from 'framer-motion';
 
-interface SmartRemindersPanelProps { className?: string; compact?: boolean; contacts?: any[]; interactions?: any[]; }
+interface SmartRemindersPanelProps { className?: string; compact?: boolean; contacts?: unknown[]; interactions?: unknown[]; }
 
 const typeLabels = { follow_up: 'Follow-up', birthday: 'Aniversário', decay: 'Esfriando', milestone: 'Marco' };
 
