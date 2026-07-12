@@ -81,11 +81,14 @@ export default function BehavioralRegenAudit() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("contacts")
-        .select("id, name")
+        .select("id, first_name, last_name")
         .in("id", contactIds);
       if (error) throw error;
       const map = new Map<string, string>();
-      for (const c of data ?? []) map.set(c.id as string, (c.name as string) ?? "—");
+      for (const c of data ?? []) {
+        const full = [c.first_name, c.last_name].filter(Boolean).join(" ").trim();
+        map.set(c.id as string, full || "—");
+      }
       return map;
     },
   });
