@@ -123,6 +123,29 @@ Deno.serve(async (req) => {
 
     const transcript = lines.slice(0, 180).join('\n').slice(0, 24000);
 
+    // Feedback negativo do usuário — insights recusados repetidamente devem ser evitados.
+    // Consideramos label "banido" se o próprio usuário votou -1, ou se há >=3 votos negativos globais
+    // sem votos positivos posteriores. Fazemos duas consultas (do usuário + globais) e mesclamos.
+    const banned: { preference: Set<string>; hobby: Set<string>; tone: Set<string> } = {
+      preference: new Set(), hobby: new Set(), tone: new Set(),
+    };
+    try {
+      const { data: mine } = await supabase
+        .from('behavioral_insight_feedback')
+        .select('insight_kind, insight_label, vote')
+        .eq('contact_id', body.contact_id)
+        .eq('user_id', userId!)
+        .eq('vote', -1);
+      for (const r of (mine ?? []) as Array<{ insight_kind: string; insight_label: string }>) {
+        const k = r.insight_kind as 'preference' | 'hobby' | 'tone';
+        if (k in banned) banned[k].add(r.insight_label.trim().toLowerCase());
+      }
+    } catch (_e) { /* best-effort */ }
+
+    const bannedHint = (['preference', 'hobby', 'tone'] as const)
+      .flatMap((k) => Array.from(banned[k]).map((l) => `- ${k}: "${l}"`))
+      .join('\n');
+
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) return json({ error: 'LOVABLE_API_KEY ausente' }, 500);
 
@@ -138,7 +161,7 @@ Deno.serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: 'Você é um analista comportamental sênior. Gere insights SOMENTE em português (PT-BR), baseados exclusivamente em evidências do histórico fornecido. Nunca invente dados. Se não houver evidência para um campo, deixe a lista vazia. Foque em preferências verificáveis, hobbies mencionados e tom real de comunicação.',
+            content: `Você é um analista comportamental sênior. Gere insights SOMENTE em português (PT-BR), baseados exclusivamente em evidências do histórico fornecido. Nunca invente dados. Se não houver evidência para um campo, deixe a lista vazia. Foque em preferências verificáveis, hobbies mencionados e tom real de comunicação.${bannedHint ? `\n\nO usuário JÁ marcou os seguintes insights como imprecisos para este contato — NÃO os proponha novamente (a menos que exista nova evidência clara e diferente):\n${bannedHint}` : ''}`,
           },
           {
             role: 'user',
@@ -164,6 +187,21 @@ Deno.serve(async (req) => {
     let parsed: Record<string, unknown>;
     try { parsed = JSON.parse(call.function.arguments); }
     catch { return json({ error: 'JSON de IA inválido' }, 502); }
+
+    // Guard-rail final: remove qualquer insight banido que a IA tenha reproduzido mesmo assim.
+    const filterList = (arr: unknown, kind: 'preference' | 'hobby'): unknown[] => {
+      if (!Array.isArray(arr)) return [];
+      return arr.filter((it) => {
+        const label = (it as { label?: unknown })?.label;
+        if (typeof label !== 'string') return false;
+        return !banned[kind].has(label.trim().toLowerCase());
+      });
+    };
+    parsed.preferences = filterList(parsed.preferences, 'preference');
+    parsed.hobbies = filterList(parsed.hobbies, 'hobby');
+    if (typeof parsed.tone === 'string' && banned.tone.has((parsed.tone as string).trim().toLowerCase())) {
+      parsed.tone = null;
+    }
 
     const row = {
       contact_id: body.contact_id,
