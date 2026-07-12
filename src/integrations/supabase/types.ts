@@ -1240,6 +1240,42 @@ export type Database = {
         }
         Relationships: []
       }
+      behavioral_insight_feedback: {
+        Row: {
+          contact_id: string
+          created_at: string
+          id: string
+          insight_kind: string
+          insight_label: string
+          note: string | null
+          updated_at: string
+          user_id: string
+          vote: number
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string
+          id?: string
+          insight_kind: string
+          insight_label: string
+          note?: string | null
+          updated_at?: string
+          user_id: string
+          vote: number
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string
+          id?: string
+          insight_kind?: string
+          insight_label?: string
+          note?: string | null
+          updated_at?: string
+          user_id?: string
+          vote?: number
+        }
+        Relationships: []
+      }
       behavioral_profile_regen_queue: {
         Row: {
           attempts: number
