@@ -1,12 +1,14 @@
+import { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Sparkles, Heart, MessageCircle, Palette, TrendingUp, RefreshCw, Loader2 } from 'lucide-react';
+import { Sparkles, Heart, MessageCircle, Palette, TrendingUp, RefreshCw, Loader2, Search } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useBehavioralProfile, useGenerateBehavioralProfile } from '@/hooks/useBehavioralProfile';
 import { BehavioralVersionsDialog } from '@/components/contacts/BehavioralVersionsDialog';
+import { EvidenceDrillDownSheet, type EvidenceContext } from '@/components/contacts/EvidenceDrillDownSheet';
 
 interface Props { contactId: string }
 
@@ -17,6 +19,7 @@ const SENTIMENT_LABEL: Record<string, string> = {
 export function BehavioralInsightsCard({ contactId }: Props) {
   const { data: profile, isLoading } = useBehavioralProfile(contactId);
   const generate = useGenerateBehavioralProfile();
+  const [drill, setDrill] = useState<EvidenceContext | null>(null);
 
   const isBusy = generate.isPending;
 
@@ -62,9 +65,17 @@ export function BehavioralInsightsCard({ contactId }: Props) {
 
             <div className="flex flex-wrap gap-2">
               {profile.tone && (
-                <Badge variant="secondary" className="gap-1">
-                  <MessageCircle className="h-3 w-3" /> Tom: {profile.tone}
-                </Badge>
+                <button
+                  type="button"
+                  onClick={() => setDrill({ kind: 'tone', label: profile.tone!, aiEvidence: null })}
+                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full"
+                  aria-label={`Ver evidências do tom ${profile.tone}`}
+                >
+                  <Badge variant="secondary" className="gap-1 cursor-pointer hover:bg-secondary/80">
+                    <MessageCircle className="h-3 w-3" /> Tom: {profile.tone}
+                    <Search className="ml-1 h-3 w-3 opacity-60" />
+                  </Badge>
+                </button>
               )}
               {profile.communication_style && (
                 <Badge variant="secondary" className="gap-1">
@@ -87,9 +98,18 @@ export function BehavioralInsightsCard({ contactId }: Props) {
                 </h4>
                 <ul className="space-y-1.5">
                   {profile.preferences.map((p, i) => (
-                    <li key={i} className="rounded-md border border-border bg-muted/30 px-3 py-2 text-sm">
-                      <span className="font-medium">{p.label}</span>
-                      {p.evidence && <p className="mt-0.5 text-xs text-muted-foreground">{p.evidence}</p>}
+                    <li key={i}>
+                      <button
+                        type="button"
+                        onClick={() => setDrill({ kind: 'preference', label: p.label, aiEvidence: p.evidence ?? null })}
+                        className="group flex w-full items-start justify-between gap-2 rounded-md border border-border bg-muted/30 px-3 py-2 text-left text-sm transition-colors hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      >
+                        <div className="min-w-0">
+                          <span className="font-medium">{p.label}</span>
+                          {p.evidence && <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{p.evidence}</p>}
+                        </div>
+                        <Search className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -103,9 +123,18 @@ export function BehavioralInsightsCard({ contactId }: Props) {
                 </h4>
                 <ul className="space-y-1.5">
                   {profile.hobbies.map((h, i) => (
-                    <li key={i} className="rounded-md border border-border bg-muted/30 px-3 py-2 text-sm">
-                      <span className="font-medium">{h.label}</span>
-                      {h.evidence && <p className="mt-0.5 text-xs text-muted-foreground">{h.evidence}</p>}
+                    <li key={i}>
+                      <button
+                        type="button"
+                        onClick={() => setDrill({ kind: 'hobby', label: h.label, aiEvidence: h.evidence ?? null })}
+                        className="group flex w-full items-start justify-between gap-2 rounded-md border border-border bg-muted/30 px-3 py-2 text-left text-sm transition-colors hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      >
+                        <div className="min-w-0">
+                          <span className="font-medium">{h.label}</span>
+                          {h.evidence && <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{h.evidence}</p>}
+                        </div>
+                        <Search className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -131,6 +160,11 @@ export function BehavioralInsightsCard({ contactId }: Props) {
           </>
         )}
       </CardContent>
+      <EvidenceDrillDownSheet
+        contactId={contactId}
+        context={drill}
+        onOpenChange={(o) => { if (!o) setDrill(null); }}
+      />
     </Card>
   );
 }
