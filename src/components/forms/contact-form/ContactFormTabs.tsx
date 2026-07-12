@@ -29,6 +29,7 @@ const sexoOptions = [
 ];
 
 interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Form schema varies across usages; typed at call sites
   form: UseFormReturn<any>;
   companies: Company[];
   suggestedRoleTitle: string | null;
