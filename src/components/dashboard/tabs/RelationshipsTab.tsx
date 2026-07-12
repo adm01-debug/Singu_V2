@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { LazySection } from '@/components/dashboard/LazySection';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
+import type { Contact, Interaction } from '@/types';
 
 const RelationshipKPIsDashboard = lazy(() => import('@/components/crm/RelationshipKPIsDashboard').then(m => ({ default: m.RelationshipKPIsDashboard })));
 const SmartRemindersPanel = lazy(() => import('@/components/smart-reminders/SmartRemindersPanel').then(m => ({ default: m.SmartRemindersPanel })));
@@ -15,8 +16,8 @@ const ClosingScoreRanking = lazy(() => import('@/components/analytics/ClosingSco
 const RFMAnalysisPanel = lazy(() => import('@/components/analytics/RFMAnalysisPanel').then(m => ({ default: m.RFMAnalysisPanel })));
 
 interface RelationshipsTabProps {
-  contacts: any[];
-  interactions: any[];
+  contacts: Contact[];
+  interactions: Interaction[];
   prefersReducedMotion: boolean;
   tabDirection: number;
 }
