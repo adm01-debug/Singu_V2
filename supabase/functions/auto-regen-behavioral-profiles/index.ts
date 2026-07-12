@@ -139,6 +139,7 @@ Deno.serve(async (req) => {
       skipped: eligible.length - toProcess.length,
       failures,
       elapsedMs: Date.now() - startedAt,
+      alert: await maybeRaiseErrorRateAlert(admin, requestId),
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
@@ -152,4 +153,73 @@ function json(body: unknown, status = 200) {
     status,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
+}
+
+const ERROR_RATE_THRESHOLD = 10; // percentual
+const MIN_SAMPLE = 5; // ignora janelas com pouquíssimas execuções para evitar falso positivo
+
+// deno-lint-ignore no-explicit-any
+async function maybeRaiseErrorRateAlert(admin: any, requestId: string) {
+  try {
+    const sinceIso = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { data: recentRuns, error: runsError } = await admin
+      .from("behavioral_profile_regen_queue")
+      .select("last_error, last_processed_at, trigger_source")
+      .gte("last_processed_at", sinceIso);
+    if (runsError) throw runsError;
+
+    const rows = recentRuns ?? [];
+    const total = rows.length;
+    if (total < MIN_SAMPLE) return { raised: false, reason: "sample_too_small", total };
+
+    const errors = rows.filter((r: { last_error: string | null }) => Boolean(r.last_error)).length;
+    const rate = (errors / total) * 100;
+    if (rate <= ERROR_RATE_THRESHOLD) {
+      return { raised: false, rate, total };
+    }
+
+    // Deduplicação: se já existe alerta não reconhecido da mesma categoria na última hora, não duplica
+    const { data: existing } = await admin
+      .from("system_alerts")
+      .select("id")
+      .eq("alert_type", "behavioral_regen_error_rate")
+      .is("acknowledged_at", null)
+      .gte("created_at", sinceIso)
+      .limit(1);
+
+    if (existing && existing.length > 0) {
+      return { raised: false, rate, total, reason: "already_open", existing: existing[0].id };
+    }
+
+    const { data: inserted, error: insertError } = await admin
+      .from("system_alerts")
+      .insert({
+        alert_type: "behavioral_regen_error_rate",
+        severity: rate >= 30 ? "critical" : "warning",
+        threshold_pct: ERROR_RATE_THRESHOLD,
+        consumed_pct: Number(rate.toFixed(2)),
+        message: `Taxa de erro do cron de reanálise em ${rate.toFixed(1)}% na última hora (${errors}/${total} execuções falharam)`,
+        metadata: {
+          request_id: requestId,
+          window_hours: 1,
+          total_runs: total,
+          failed_runs: errors,
+          source: "auto-regen-behavioral-profiles",
+        },
+      })
+      .select("id")
+      .single();
+    if (insertError) throw insertError;
+
+    console.warn(
+      "[auto-regen-behavioral-profiles] alert raised",
+      requestId,
+      { rate, errors, total, alertId: inserted?.id },
+    );
+    return { raised: true, rate, total, errors, alertId: inserted?.id };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[auto-regen-behavioral-profiles] alert check failed", requestId, msg);
+    return { raised: false, error: msg };
+  }
 }
