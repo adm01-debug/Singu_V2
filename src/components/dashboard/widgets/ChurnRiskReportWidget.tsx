@@ -11,7 +11,7 @@ const RISK_COLORS: Record<string, string> = {
   medium: 'text-warning', low: 'text-success',
 };
 
-export const ChurnRiskReportWidget = React.memo(function ChurnRiskReportWidget({ contacts, interactions }: { contacts?: any[]; interactions?: any[] }) {
+export const ChurnRiskReportWidget = React.memo(function ChurnRiskReportWidget() {
   const { data: report, isLoading } = useChurnRiskReport();
 
   if (isLoading) return <Card><CardHeader className="pb-2"><CardTitle className="text-sm">Relatório Churn</CardTitle></CardHeader><CardContent><Skeleton className="h-28" /></CardContent></Card>;
