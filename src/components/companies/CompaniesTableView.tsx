@@ -130,7 +130,7 @@ export const CompaniesTableView = React.memo(function CompaniesTableView({
             const cnpjFormatted = formatCnpj(company.cnpj);
             
             // Check for potential duplicate similarity
-            const duplicateSimilarity = (company as any).similarity;
+            const duplicateSimilarity = (company as { similarity?: number }).similarity;
             const isHighSimilarity = duplicateSimilarity && duplicateSimilarity >= 90;
 
             return (
