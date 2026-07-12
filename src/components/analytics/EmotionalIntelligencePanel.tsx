@@ -76,7 +76,7 @@
          </div>
        </CardHeader>
        <CardContent>
-         <Tabs value={activeTab} onValueChange={(v: any) => setActiveTab(v)}>
+         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'overview' | 'pillars' | 'sales')}>
            <TabsList className="grid w-full grid-cols-3">
              <TabsTrigger value="overview">Visão Geral</TabsTrigger>
              <TabsTrigger value="pillars">Pilares</TabsTrigger>
