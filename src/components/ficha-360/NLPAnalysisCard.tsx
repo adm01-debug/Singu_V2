@@ -15,11 +15,32 @@ import { VAK_LABELS } from '@/types/vak';
 import { METAPROGRAM_LABELS } from '@/types/metaprograms';
 import { useNLPAnalysisValidation } from '@/hooks/useNLPAnalysisValidation';
 
+interface VAKProfile {
+  primary: string;
+  confidence: number;
+  scores: Record<string, number>;
+}
+
+interface MetaprogramProfile {
+  motivationDirection: string;
+  motivationConfidence: number;
+  referenceFrame: string;
+  referenceConfidence: number;
+  workingStyle: string;
+  workingConfidence: number;
+  [key: string]: string | number;
+}
+
+interface Reframing {
+  objection: string;
+  suggested_response: string;
+}
+
 interface Props {
   contactId: string;
-  vakProfile: any;
-  metaprogramProfile: any;
-  reframings: any[];
+  vakProfile: VAKProfile | null;
+  metaprogramProfile: MetaprogramProfile | null;
+  reframings: Reframing[];
   onRefetch?: () => void;
 }
 
@@ -47,7 +68,7 @@ export function NLPAnalysisCard({ contactId, vakProfile, metaprogramProfile, ref
         </div>
 
         <div className="space-y-3">
-          {Object.entries(vakProfile.scores).map(([key, score]: [string, any]) => {
+          {Object.entries(vakProfile.scores).map(([key, score]) => {
             const label = VAK_LABELS[key[0].toUpperCase() as keyof typeof VAK_LABELS];
             return (
               <div key={key} className="space-y-1">
@@ -85,8 +106,8 @@ export function NLPAnalysisCard({ contactId, vakProfile, metaprogramProfile, ref
     return (
       <div className="space-y-4">
         {programs.map((p) => {
-          const labels = (METAPROGRAM_LABELS as any)[p.key];
-          const current = labels[p.value];
+          const labels = (METAPROGRAM_LABELS as Record<string, Record<string, { icon: string; name: string; description: string }>>)[p.key];
+          const current = labels[String(p.value)];
           
           return (
             <div key={p.key} className="p-3 rounded-lg bg-muted/30 border border-border/50">
