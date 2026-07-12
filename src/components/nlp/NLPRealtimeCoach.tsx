@@ -20,6 +20,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useVAKAnalysis } from '@/hooks/useVAKAnalysis';
 import { useMetaprogramAnalysis } from '@/hooks/useMetaprogramAnalysis';
  import { VAK_LABELS, VAK_COMMUNICATION_TIPS, VAK_PREDICATES, type VAKType } from '@/types/vak';
+import type { VAKAnalysisResult } from '@/types/vak';
+import type { MetaprogramAnalysisResult } from '@/types/metaprograms';
 import { SLEIGHT_TEMPLATES } from '@/data/sleightOfMouth';
  import { DISC_DETECTION_PATTERNS, DISC_PROFILES } from '@/data/discAdvancedData';
  import type { DISCProfile } from '@/types';
@@ -48,8 +50,8 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
   const { analyzeText: analyzeMeta } = useMetaprogramAnalysis();
   
    const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-   const [detectedVAK, setDetectedVAK] = useState<any>(null);
-   const [detectedMeta, setDetectedMeta] = useState<any>(null);
+   const [detectedVAK, setDetectedVAK] = useState<VAKAnalysisResult | null>(null);
+   const [detectedMeta, setDetectedMeta] = useState<MetaprogramAnalysisResult | null>(null);
    const [rapportScore, setRapportScore] = useState(0);
     const [contactVAK, setContactVAK] = useState<VAKType | null>(null);
     const [contactDISC, setContactDISC] = useState<DISCProfile | null>(null);
@@ -62,9 +64,12 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
        if (contactId) {
          const { data } = await supabase.from('contacts').select('behavior').eq('id', contactId).maybeSingle();
          if (data?.behavior) {
-           const behavior = data.behavior as any;
+           const behavior = data.behavior as {
+             vakProfile?: { primary?: VAKType };
+             discProfile?: DISCProfile;
+           };
            if (behavior.vakProfile?.primary) setContactVAK(behavior.vakProfile.primary);
-           if (behavior.discProfile) setContactDISC(behavior.discProfile as DISCProfile);
+           if (behavior.discProfile) setContactDISC(behavior.discProfile);
          }
        }
      };
@@ -241,7 +246,7 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
           is_useful: type === 'up',
           objection: content.substring(0, 500),
           category: suggestion?.type || 'general',
-          interaction_id: null as any
+          interaction_id: null as unknown as string
         });
       } catch (e) {
         console.error("Error saving feedback:", e);

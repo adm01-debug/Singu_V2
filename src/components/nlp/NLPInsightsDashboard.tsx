@@ -22,7 +22,22 @@ import { ptBR } from 'date-fns/locale';
    className?: string;
  }
  
- interface NLPProfile { primary?: string; motivation?: string; [key: string]: any; }
+interface NLPProfile {
+  primary?: string;
+  motivation?: string;
+}
+
+type InsightPriority = 'high' | 'medium' | 'low';
+type InsightCategory = 'preference' | 'risk' | 'opportunity' | 'action';
+
+interface InsightItem {
+  category: InsightCategory;
+  title: string;
+  description: string;
+  action: string;
+  priority: InsightPriority;
+  icon: React.ReactNode;
+}
 
 export function NLPInsightsDashboard({ contactId, className }: Props) {
   const { data: insights, isLoading } = useQuery({
@@ -32,7 +47,7 @@ export function NLPInsightsDashboard({ contactId, className }: Props) {
        
        const vak = (behavior?.vak_profile as unknown as NLPProfile) || {};
        const meta = (behavior?.metaprogram_profile as unknown as NLPProfile) || {};
-       const items: any[] = [];
+       const items: InsightItem[] = [];
        
        if (vak.primary) {
          items.push({
