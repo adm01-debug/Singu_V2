@@ -39,8 +39,8 @@ export function RelationshipReportExport({ contactId, contactName }: Props) {
 
       exportToCSV(exportData, `Relatorio_Timeline_${contactName.replace(/\s+/g, '_')}`);
       toast.success('CSV exportado com sucesso');
-    } catch (err: any) {
-      toast.error('Erro ao exportar CSV: ' + err.message);
+    } catch (err) {
+      toast.error('Erro ao exportar CSV: ' + (err instanceof Error ? err.message : String(err)));
     } finally {
       setIsExportingCSV(false);
     }
@@ -61,8 +61,8 @@ export function RelationshipReportExport({ contactId, contactName }: Props) {
       window.print();
       
       toast.success('Relatório PDF pronto para download/impressão');
-    } catch (err: any) {
-      toast.error('Erro ao gerar PDF: ' + err.message);
+    } catch (err) {
+      toast.error('Erro ao gerar PDF: ' + (err instanceof Error ? err.message : String(err)));
     } finally {
       setIsExportingPDF(false);
     }
