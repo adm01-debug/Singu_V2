@@ -6,6 +6,11 @@ import { Progress } from '@/components/ui/progress';
 import { InlineEmptyState } from '@/components/ui/empty-state';
 import type { ContactView360 } from '@/hooks/useContactView360';
 
+type ExtendedProfile = ContactView360 & {
+  vak_dominant?: string | null;
+  motivation_direction?: 'toward' | 'away_from' | string | null;
+};
+
 interface Props {
   profile: ContactView360 | null;
 }
@@ -18,16 +23,17 @@ const DISC_LABELS: Record<string, string> = {
 };
 
  export const PerfilComportamentalCard = memo(({ profile }: Props) => {
-   const hasDisc = profile?.disc_primary;
-   const confidence = profile?.disc_confidence ?? 0;
+   const p = profile as ExtendedProfile | null;
+   const hasDisc = p?.disc_primary;
+   const confidence = p?.disc_confidence ?? 0;
  
    const vakIcon = useMemo(() => {
-     const vak = (profile as any)?.vak_dominant?.toLowerCase();
+     const vak = p?.vak_dominant?.toLowerCase();
      if (vak === 'visual') return <Eye className="h-3 w-3" />;
      if (vak === 'auditivo') return <Ear className="h-3 w-3" />;
      if (vak === 'cinestesico') return <Hand className="h-3 w-3" />;
      return <Brain className="h-3 w-3" />;
-   }, [profile]);
+   }, [p]);
 
   return (
     <Card>
@@ -76,7 +82,7 @@ const DISC_LABELS: Record<string, string> = {
                  <div className="flex items-center gap-1.5 mt-0.5">
                    {vakIcon}
                    <p className="text-sm font-medium capitalize">
-                     {(profile as any)?.vak_dominant || 'Não analisado'}
+                     {p?.vak_dominant || 'Não analisado'}
                    </p>
                  </div>
                </div>
@@ -85,7 +91,7 @@ const DISC_LABELS: Record<string, string> = {
                  <div className="flex items-center gap-1.5 mt-0.5">
                    <Info className="h-3 w-3 text-muted-foreground" />
                    <p className="text-sm font-medium capitalize">
-                     {(profile as any)?.motivation_direction === 'toward' ? 'Ganhos' : (profile as any)?.motivation_direction === 'away_from' ? 'Riscos' : 'Equilibrado'}
+                     {p?.motivation_direction === 'toward' ? 'Ganhos' : p?.motivation_direction === 'away_from' ? 'Riscos' : 'Equilibrado'}
                    </p>
                  </div>
                </div>
