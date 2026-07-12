@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type SVGProps } from 'react';
 import { Users, Heart, Star, Info, Pencil, Check, X, Loader2, Sparkles, MessageSquare, Phone, Linkedin, Instagram, Twitter, Globe } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -8,13 +8,18 @@ import { Textarea } from '@/components/ui/textarea';
 import { FamilyHistoryDialog } from './FamilyHistoryDialog';
 import { cn } from '@/lib/utils';
 
+interface FamilyInterestsMetadata {
+  hobbies?: Record<string, string>;
+  interests?: Record<string, string>;
+}
+
 interface Props {
   contactId: string;
   hobbies?: string[];
   interests?: string[];
   familyInfo?: string;
-  metadata?: any;
-  onUpdate?: (data: { family_info?: string; hobbies?: string[]; interests?: string[] }) => Promise<any>;
+  metadata?: FamilyInterestsMetadata;
+  onUpdate?: (data: { family_info?: string; hobbies?: string[]; interests?: string[] }) => Promise<unknown>;
   className?: string;
 }
 
@@ -201,7 +206,7 @@ export function ContactFamilyInterestsCard({ contactId, hobbies, interests, fami
 }
 
 // Helper icons needed by the component
-function Zap(props: any) {
+function Zap(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
