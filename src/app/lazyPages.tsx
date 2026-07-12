@@ -12,6 +12,7 @@ export const Empresas = lazy(() => import("@/pages/Empresas"));
 export const Cadastro = lazy(() => import("@/pages/Cadastro"));
 export const WhatsAppImport = lazy(() => import("@/pages/WhatsAppImport"));
 export const Historico = lazy(() => import("@/pages/Historico"));
+export const PerfisComportamentais = lazy(() => import("@/pages/PerfisComportamentais"));
 export const EmpresaDetalhe = lazy(() => import("@/pages/EmpresaDetalhe"));
 export const Contatos = lazy(() => import("@/pages/Contatos"));
 export const ContatoDetalhe = lazy(() => import("@/pages/ContatoDetalhe"));
