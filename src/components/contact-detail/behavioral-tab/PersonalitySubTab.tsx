@@ -9,6 +9,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { TEMPERAMENT_TYPES, TemperamentType } from '@/types/temperament';
 import { Button } from '@/components/ui/button';
 import { useContactBehavior } from '@/hooks/useContactBehavior';
+import type { ContactBehavior } from '@/hooks/useContactBehavior';
 import { useState, useEffect } from 'react';
 
 interface Props {

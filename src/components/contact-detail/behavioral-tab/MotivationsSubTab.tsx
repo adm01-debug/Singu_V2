@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Target, Briefcase, Goal, Save, MessageSquare, UserCheck } from 'lucide-react';
 import { useContactBehavior } from '@/hooks/useContactBehavior';
+import type { ContactBehavior } from '@/hooks/useContactBehavior';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
