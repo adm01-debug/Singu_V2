@@ -39,6 +39,7 @@ import { MeetingMode } from '@/components/contact-detail/MeetingMode';
 import { ValidateAllButton } from '@/components/enrichment/ValidateAllButton';
 import { PeopleIntelTimeline } from '@/components/enrichment/PeopleIntelTimeline';
 import { ContactEmailThreadsSection } from '@/components/contact-detail/ContactEmailThreadsSection';
+import { BehavioralInsightsCard } from '@/components/contacts/BehavioralInsightsCard';
    import { SentimentTrendChart } from '@/components/contact-detail/SentimentTrendChart';
    import { NextBestAction } from '@/components/crm/NextBestAction';
    import { SocialMediaIntelligenceCard } from '@/components/contact-detail/SocialMediaIntelligenceCard';
@@ -249,6 +250,7 @@ const ContatoDetalhe = () => {
                    interactions={interactions}
                    contact={contact}
                  />
+                <BehavioralInsightsCard contactId={contact.id} />
                 <Suspense fallback={<Skeleton className="h-48 rounded-lg" />}>
                   <ContactTimelineWidget contactId={contact.id} />
                 </Suspense>

@@ -2347,33 +2347,48 @@ export type Database = {
       }
       contact_analytical_profiles: {
         Row: {
+          based_on_count: number
           communication_style: string | null
           contact_id: string | null
+          hobbies: Json
           id: string
           last_updated_at: string | null
+          model: string | null
           preferences: Json | null
           recurrent_topics: Json | null
           sentiment_trend: string | null
+          summary: string | null
+          tone: string | null
           user_id: string | null
         }
         Insert: {
+          based_on_count?: number
           communication_style?: string | null
           contact_id?: string | null
+          hobbies?: Json
           id?: string
           last_updated_at?: string | null
+          model?: string | null
           preferences?: Json | null
           recurrent_topics?: Json | null
           sentiment_trend?: string | null
+          summary?: string | null
+          tone?: string | null
           user_id?: string | null
         }
         Update: {
+          based_on_count?: number
           communication_style?: string | null
           contact_id?: string | null
+          hobbies?: Json
           id?: string
           last_updated_at?: string | null
+          model?: string | null
           preferences?: Json | null
           recurrent_topics?: Json | null
           sentiment_trend?: string | null
+          summary?: string | null
+          tone?: string | null
           user_id?: string | null
         }
         Relationships: [
