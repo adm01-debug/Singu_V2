@@ -16,6 +16,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { SLEIGHT_OF_MOUTH_PATTERNS, SLEIGHT_TEMPLATES } from '@/data/sleightOfMouth';
+import type { SleightOfMouthPattern } from '@/data/sleightOfMouth';
 import { useNLPAnalysisValidation } from "@/hooks/useNLPAnalysisValidation";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 
@@ -55,10 +56,11 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
 
       const { data, error } = await query.select('*, contacts(first_name, last_name)');
       if (error) throw error;
-      return (data || []).map(item => ({
+      type Row = ReframingItem & { contacts?: { first_name?: string | null; last_name?: string | null } | null };
+      return ((data || []) as Row[]).map(item => ({
         ...item,
         suggested_response: item.suggested_response
-          .replace(/{nome}/g, (item as any).contacts?.first_name || 'Fulano')
+          .replace(/{nome}/g, item.contacts?.first_name || 'Fulano')
       })) as ReframingItem[];
     },
     enabled: !!user && !!contactId,
@@ -123,7 +125,7 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
                 </div>
               ) : (
                 reframings.map((item) => {
-                  const pattern = SLEIGHT_OF_MOUTH_PATTERNS[item.pattern_used as any];
+                  const pattern = SLEIGHT_OF_MOUTH_PATTERNS[item.pattern_used as SleightOfMouthPattern];
                   return (
                     <motion.div
                       key={item.id}
@@ -204,7 +206,7 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
             ) : (
               <div className="space-y-3">
                 {SLEIGHT_TEMPLATES.slice(0, 10).map((tpl) => {
-                  const pattern = SLEIGHT_OF_MOUTH_PATTERNS[tpl.pattern as any];
+                  const pattern = SLEIGHT_OF_MOUTH_PATTERNS[tpl.pattern as SleightOfMouthPattern];
                   return (
                     <div key={tpl.id} className="p-3 border rounded-lg bg-card hover:border-primary/30 transition-all cursor-pointer group">
                       <div className="flex items-center justify-between mb-2">
