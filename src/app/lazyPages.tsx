@@ -9,6 +9,7 @@ export const AdminObservability = lazy(() => import("@/pages/admin/Observability
 
 export const Analytics = lazy(() => import("@/pages/Analytics"));
 export const Empresas = lazy(() => import("@/pages/Empresas"));
+export const Cadastro = lazy(() => import("@/pages/Cadastro"));
 export const EmpresaDetalhe = lazy(() => import("@/pages/EmpresaDetalhe"));
 export const Contatos = lazy(() => import("@/pages/Contatos"));
 export const ContatoDetalhe = lazy(() => import("@/pages/ContatoDetalhe"));
