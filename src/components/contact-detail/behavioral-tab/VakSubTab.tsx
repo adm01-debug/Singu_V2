@@ -4,7 +4,6 @@
  import { Label } from '@/components/ui/label';
  import { Button } from '@/components/ui/button';
  import { useContactBehavior } from '@/hooks/useContactBehavior';
-import type { ContactBehavior } from '@/hooks/useContactBehavior';
  import { useState, useEffect, useMemo } from 'react';
  import { NLPCalibrationCard } from '@/components/nlp/NLPCalibrationCard';
  import { useQuery } from '@tanstack/react-query';
@@ -17,7 +16,7 @@ interface Props {
 
 export function VakSubTab({ contactId }: Props) {
   const { behavior, updateBehavior, isLoading } = useContactBehavior(contactId);
-  const [formData, setFormData] = useState<Partial<ContactBehavior>>({});
+  const [formData, setFormData] = useState<Record<string, any>>({});
 
   useEffect(() => {
     if (behavior) setFormData(behavior);

@@ -6,7 +6,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useContactBehavior } from '@/hooks/useContactBehavior';
-import type { ContactBehavior } from '@/hooks/useContactBehavior';
 import { useState, useEffect } from 'react';
 
 interface Props {
@@ -15,7 +14,7 @@ interface Props {
 
 export function RapportStrategySubTab({ contactId }: Props) {
   const { rapport, updateRapport, isLoading } = useContactBehavior(contactId);
-  const [formData, setFormData] = useState<Partial<ContactBehavior>>({});
+  const [formData, setFormData] = useState<Record<string, any>>({});
 
   useEffect(() => {
     if (rapport) setFormData(rapport);
