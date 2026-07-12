@@ -2,8 +2,7 @@
 import { motion } from 'framer-motion';
 import { LazySection } from '@/components/dashboard/LazySection';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
-import type { Contact } from '@/hooks/useContacts';
-import type { Interaction } from '@/hooks/useInteractions';
+import type { Contact, Interaction } from '@/types';
 
 const RelationshipKPIsDashboard = lazy(() => import('@/components/crm/RelationshipKPIsDashboard').then(m => ({ default: m.RelationshipKPIsDashboard })));
 const SmartRemindersPanel = lazy(() => import('@/components/smart-reminders/SmartRemindersPanel').then(m => ({ default: m.SmartRemindersPanel })));
