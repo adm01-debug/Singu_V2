@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { ThumbsUp, ThumbsDown, TrendingDown, AlertTriangle, ExternalLink } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, TrendingDown, AlertTriangle, ExternalLink, RefreshCcw, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +11,9 @@ import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { InsightFeedbackTrendChart } from '@/components/admin/InsightFeedbackTrendChart';
 
 type Kind = 'preference' | 'hobby' | 'tone';
 
@@ -150,6 +153,8 @@ function RankingTable({ items, sort }: { items: LabelAgg[]; sort: 'down' | 'up' 
 }
 
 function ContactsWithMostDownvotes({ rows }: { rows: Row[] }) {
+  const [batchRunning, setBatchRunning] = useState(false);
+
   const agg = useMemo(() => {
     const m = new Map<string, { down: number; up: number }>();
     for (const r of rows) {
@@ -164,6 +169,34 @@ function ContactsWithMostDownvotes({ rows }: { rows: Row[] }) {
       .slice(0, 15);
   }, [rows]);
 
+  const eligibleForRebatch = useMemo(
+    () => agg.filter((c) => c.down >= 3).map((c) => c.contact_id),
+    [agg],
+  );
+
+  async function runBatch() {
+    if (eligibleForRebatch.length === 0) return;
+    setBatchRunning(true);
+    let ok = 0;
+    let fail = 0;
+    // Sequencial + delay pequeno para evitar rate-limit da IA
+    for (const contactId of eligibleForRebatch) {
+      try {
+        const { error } = await supabase.functions.invoke('generate-behavioral-profile', {
+          body: { contact_id: contactId },
+        });
+        if (error) throw error;
+        ok += 1;
+      } catch (_e) {
+        fail += 1;
+      }
+      await new Promise((r) => setTimeout(r, 800));
+    }
+    setBatchRunning(false);
+    if (fail === 0) toast.success(`${ok} perfis reanalisados com sucesso`);
+    else toast.warning(`${ok} reanalisados · ${fail} falharam`);
+  }
+
   if (agg.length === 0) {
     return (
       <p className="p-6 text-center text-sm text-muted-foreground">
@@ -173,7 +206,27 @@ function ContactsWithMostDownvotes({ rows }: { rows: Row[] }) {
   }
 
   return (
-    <Table>
+    <>
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <p className="text-xs text-muted-foreground">
+          {eligibleForRebatch.length} contato(s) com 3+ reprovações elegíveis para reanálise.
+        </p>
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={batchRunning || eligibleForRebatch.length === 0}
+          onClick={runBatch}
+          className="gap-1.5"
+        >
+          {batchRunning ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <RefreshCcw className="h-3.5 w-3.5" />
+          )}
+          Reanalisar em lote
+        </Button>
+      </div>
+      <Table>
       <TableHeader>
         <TableRow>
           <TableHead>Contato</TableHead>
@@ -201,7 +254,8 @@ function ContactsWithMostDownvotes({ rows }: { rows: Row[] }) {
           </TableRow>
         ))}
       </TableBody>
-    </Table>
+      </Table>
+    </>
   );
 }
 
@@ -260,6 +314,18 @@ export default function InsightFeedbackAnalytics() {
         <StatCard title="Taxa de aprovação" value={`${stats.approval.toFixed(1)}%`} icon={TrendingDown} tone={stats.approval >= 70 ? 'positive' : stats.approval >= 40 ? 'neutral' : 'negative'} />
         <StatCard title="Últimos 30 dias" value={stats.last30} icon={AlertTriangle} tone="neutral" />
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Tendência de aprovação (12 semanas)</CardTitle>
+          <CardDescription>
+            Percentual de votos positivos sobre o total, agrupado por semana.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <InsightFeedbackTrendChart rows={rows} />
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
