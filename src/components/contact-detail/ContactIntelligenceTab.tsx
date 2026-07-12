@@ -33,6 +33,8 @@ import { ClientValuesElite } from '@/components/crm/commercial/ClientValuesElite
 import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCriteriaElite';
 
 
+ import type { Contact, Interaction } from '@/types';
+
  interface Props {
    contactId: string;
    contactName?: string;
@@ -40,7 +42,7 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
    websiteUrl?: string | null;
    currentScore?: number;
    currentSentiment?: string;
-   interactions?: any[];
+   interactions?: Interaction[];
  }
  
  export function ContactIntelligenceTab({ 
@@ -106,7 +108,7 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
       </div>
        <div className="grid gap-4 md:grid-cols-2">
          <EmotionalIntelligencePanel 
-           contact={{ id: contactId, firstName: contactName || 'Contato' } as any} 
+           contact={{ id: contactId, firstName: contactName || 'Contato' } as unknown as Contact} 
            interactions={interactions} 
          />
       {/* Hidden Objections */}
