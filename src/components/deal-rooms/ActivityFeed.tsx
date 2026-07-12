@@ -2,7 +2,7 @@ import { useRoomActivities, type DealRoomActivity } from "@/hooks/useDealRooms";
 import { Card, CardContent } from "@/components/ui/card";
 import { Eye, CheckCircle2, MessageSquare, Upload } from "lucide-react";
 
-const ICONS: Record<string, React.ComponentType<any>> = {
+const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   view: Eye,
   milestone_completed: CheckCircle2,
   milestone_reopened: CheckCircle2,
