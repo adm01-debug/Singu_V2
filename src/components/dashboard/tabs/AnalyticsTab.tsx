@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Typography } from '@/components/ui/typography';
 import { Surface } from '@/components/ui/surface';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
+import type { ChartContact, ChartInteraction } from '@/components/dashboard/DashboardCharts';
 
 const ActivityChart = lazy(() => import('@/components/dashboard/DashboardCharts').then(m => ({ default: m.ActivityChart })));
 const RelationshipEvolutionChart = lazy(() => import('@/components/dashboard/DashboardCharts').then(m => ({ default: m.RelationshipEvolutionChart })));
@@ -29,9 +30,9 @@ const periodOptions: { value: PeriodFilter; label: string }[] = [
 ];
 
 interface AnalyticsTabProps {
-  contacts: any[];
-  companies: any[];
-  interactions: any[];
+  contacts: ChartContact[];
+  companies: Array<Record<string, unknown>>;
+  interactions: ChartInteraction[];
   prefersReducedMotion: boolean;
   tabDirection: number;
 }
