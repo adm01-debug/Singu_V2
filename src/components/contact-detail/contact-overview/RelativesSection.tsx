@@ -16,13 +16,17 @@ interface RelativesSectionProps {
 export function RelativesSection({ contactId, relatives }: RelativesSectionProps) {
   const { addRelative, updateRelative, deleteRelative } = useRelativeMutations(contactId);
 
-   const handleUpdate = async (id: string, field: string, value: any, rel?: Tables<'contact_relatives'>) => {
+   const handleUpdate = async (
+     id: string,
+     field: keyof Tables<'contact_relatives'>,
+     value: string | number | boolean | null,
+   ) => {
      try {
-       const updates: any = { [field]: value };
+       const updates: Partial<Tables<'contact_relatives'>> = { [field]: value } as Partial<Tables<'contact_relatives'>>;
        
        // If updating birthday, also update age if it exists or should be calculated
        if (field === 'birthday' && value) {
-         const birthDate = new Date(value);
+          const birthDate = new Date(value as string);
          if (!isNaN(birthDate.getTime())) {
            updates.age = differenceInYears(new Date(), birthDate);
          }
