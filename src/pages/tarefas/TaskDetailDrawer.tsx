@@ -80,7 +80,7 @@ export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
       form.reset({
         title: task.title,
         description: task.description || '',
-        priority: (task.priority as any) || 'medium',
+        priority: (task.priority as 'urgent' | 'high' | 'medium' | 'low' | null) || 'medium',
         status: task.status || 'pending',
         due_date: task.due_date ? parseISO(task.due_date) : null,
         task_type: task.task_type || 'other',

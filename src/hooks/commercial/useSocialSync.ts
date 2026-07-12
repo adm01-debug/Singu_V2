@@ -98,7 +98,7 @@ export function useSocialSync(contactId: string) {
       queryClient.invalidateQueries({ queryKey: ['psychographic-audit-log', contactId] });
       toast.success('Sincronização agendada com sucesso');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(`Falha ao iniciar sincronização: ${error.message}`);
     }
   });

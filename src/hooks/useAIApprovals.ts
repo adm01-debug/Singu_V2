@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import type { Json } from '@/integrations/supabase/types';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
@@ -71,9 +72,9 @@ export function useAIApprovals(contactId?: string) {
 
       if (contactError) throw contactError;
 
-      const contactData = contact as { hobbies: string[] | null, interests: string[] | null, rapport_metadata: any } | null;
+      const contactData = contact as { hobbies: string[] | null, interests: string[] | null, rapport_metadata: Record<string, Record<string, unknown>> | null } | null;
       const currentValues = (contactData?.[field as keyof typeof contactData] || []) as string[];
-      const currentMetadata = (contactData?.rapport_metadata || {}) as Record<string, any>;
+      const currentMetadata = (contactData?.rapport_metadata || {}) as Record<string, Record<string, unknown>>;
       
       // Ensure metadata has the correct structure for hobby/interest
       const updatedMetadata = { ...currentMetadata };
@@ -87,7 +88,7 @@ export function useAIApprovals(contactId?: string) {
           .from('contacts')
           .update({ 
             [field]: newValues,
-            rapport_metadata: updatedMetadata
+            rapport_metadata: updatedMetadata as unknown as Json
           })
           .eq('id', suggestion.contact_id);
         
