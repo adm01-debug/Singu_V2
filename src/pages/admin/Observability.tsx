@@ -5,6 +5,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { Activity, Zap, ShieldCheck, AlertCircle } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
+interface SlowQuery {
+  query: string;
+  calls: number;
+  mean_exec_ms?: number;
+}
+
 export default function Observability() {
   const { data: snapshots } = useQuery({
     queryKey: ['system-health-snapshots'],
@@ -19,7 +25,7 @@ export default function Observability() {
     },
   });
 
-  const { data: slowQueries } = useQuery({
+  const { data: slowQueries } = useQuery<SlowQuery[]>({
     queryKey: ['slow-queries-audit'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -27,7 +33,7 @@ export default function Observability() {
         .select('*')
         .limit(10);
       if (error) return []; // Fallback if extension not enabled
-      return data;
+      return (data || []) as unknown as SlowQuery[];
     },
   });
 
@@ -78,7 +84,7 @@ export default function Observability() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4 overflow-y-auto max-h-[300px]">
-              {slowQueries?.map((q: any, i: number) => (
+              {slowQueries?.map((q, i) => (
                 <div key={i} className="p-3 rounded-lg bg-muted/30 border text-xs font-mono">
                   <div className="flex justify-between mb-1">
                     <span className="text-primary">Calls: {q.calls}</span>
