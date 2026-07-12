@@ -107,57 +107,17 @@ export default function BehavioralRegenAudit() {
   // ---- Mutation: reenfileirar manualmente uma reanálise ----
   const requeueMutation = useMutation({
     mutationFn: async (contactId: string) => {
-      const { data: userRes } = await supabase.auth.getUser();
-      const uid = userRes.user?.id ?? "unknown";
-      const triggerSource = `manual_retry:${uid.slice(0, 8)}`;
-      const nowIso = new Date().toISOString();
-
-      // 1) Marca a fila como retry manual em andamento
-      const { error: updErr } = await supabase
-        .from("behavioral_profile_regen_queue")
-        .update({
-          next_run_at: nowIso,
-          last_error: null,
-          trigger_source: triggerSource,
-          updated_at: nowIso,
-        })
-        .eq("contact_id", contactId);
-      if (updErr) throw updErr;
-
-      // 2) Invoca DIRETAMENTE o gerador para este contato (a função de cron
-      //    ignora o body e roda o loop completo, então usar a função unitária
-      //    é a única forma confiável de reprocessar 1 contato específico).
-      const { data: invokeData, error: invokeErr } = await supabase.functions.invoke(
-        "generate-behavioral-profile",
-        { body: { contact_id: contactId, trigger: triggerSource } },
-      );
-      const finishedIso = new Date().toISOString();
-      const invokePayloadError =
-        (invokeData as { error?: string } | null)?.error ?? null;
-      if (invokeErr || invokePayloadError) {
-        const msg = invokeErr?.message ?? invokePayloadError ?? "erro desconhecido";
-        await supabase
-          .from("behavioral_profile_regen_queue")
-          .update({
-            last_error: `manual_retry_failed: ${msg}`,
-            last_processed_at: finishedIso,
-            updated_at: finishedIso,
-          })
-          .eq("contact_id", contactId);
-        throw new Error(msg);
+      // Usa proxy service-role — admin não precisa de RLS sobre o histórico do contato.
+      // A função valida a role 'admin', invoca o gerador com bypass RLS, incrementa
+      // attempts em falha e registra last_processed_at corretamente.
+      const { data, error } = await supabase.functions.invoke("retry-behavioral-profile", {
+        body: { contact_id: contactId },
+      });
+      const payloadError = (data as { error?: string } | null)?.error ?? null;
+      if (error || payloadError) {
+        throw new Error(error?.message ?? payloadError ?? "erro desconhecido");
       }
-
-      // 3) Registra sucesso do retry manual na fila (aparece na auditoria)
-      await supabase
-        .from("behavioral_profile_regen_queue")
-        .update({
-          last_error: null,
-          last_processed_at: finishedIso,
-          updated_at: finishedIso,
-        })
-        .eq("contact_id", contactId);
-
-      return invokeData;
+      return data;
     },
     onSuccess: (_data, contactId) => {
       toast.success(`Reanálise reenfileirada (${contactId.slice(0, 8)})`);
