@@ -133,11 +133,11 @@ import type { Contact } from '@/hooks/useContactDetail';
           discConfidence: discConfidence,
           eqScore: eqAnalysis?.overall_score,
           eqLevel: eqAnalysis?.overall_level,
-          primaryVak: (behavior?.vakProfile as any)?.primary || 'Auditivo',
+          primaryVak: (behavior?.vakProfile as { primary?: string } | null | undefined)?.primary || 'Auditivo',
           summary: eqAnalysis?.profile_summary || biases?.profile_summary,
           strengths: eqAnalysis?.strengths,
           riskFactors: biases?.resistances,
-          approachStrategy: (biases?.sales_strategies as any)?.primary_approach
+          approachStrategy: (biases?.sales_strategies as { primary_approach?: string } | null | undefined)?.primary_approach
         }}
       />
       <ContactFamilyInterestsCard 
