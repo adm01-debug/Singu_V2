@@ -3,8 +3,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { logger } from '@/lib/logger';
 
- type MessageType = 'follow_up' | 'introduction' | 'proposal' | 'check_in' | 'thank_you' | 'meeting_request' | 'custom';
- type PersuasionFramework = 'AIDA' | 'PAS' | 'FAB' | '4Ps' | 'Storytelling' | 'None';
+export type MessageType = 'follow_up' | 'introduction' | 'proposal' | 'check_in' | 'thank_you' | 'meeting_request' | 'custom';
+export type MessageTone = 'formal' | 'casual' | 'friendly';
+export type PersuasionFramework = 'AIDA' | 'PAS' | 'FAB' | '4Ps' | 'Storytelling' | 'None';
 
 interface ContactProfile {
   firstName: string;
