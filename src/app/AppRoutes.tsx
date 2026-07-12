@@ -75,6 +75,7 @@ export const AppRoutes = () => {
       <Route path="/" element={<Protected><Index /></Protected>} />
       <Route path="/empresas" element={<Protected fallback={<CompaniesPageSkeleton />}><P.Empresas /></Protected>} />
       <Route path="/cadastro" element={<Protected><P.Cadastro /></Protected>} />
+      <Route path="/whatsapp/importar" element={<Protected><P.WhatsAppImport /></Protected>} />
       <Route path="/empresas/:id" element={<Protected fallback={<CompaniesPageSkeleton />}><P.EmpresaDetalhe /></Protected>} />
       <Route path="/contatos" element={<Protected fallback={<ContactsPageSkeleton />}><P.Contatos /></Protected>} />
       <Route path="/contatos/:id" element={<Protected fallback={<ContactsPageSkeleton />}><P.ContatoDetalhe /></Protected>} />

@@ -13640,10 +13640,12 @@ export type Database = {
       }
       whatsapp_messages: {
         Row: {
+          company_id: string | null
           contact_id: string | null
           content: string | null
           created_at: string
           delivered_at: string | null
+          duration_seconds: number | null
           from_me: boolean
           id: string
           instance_name: string
@@ -13659,14 +13661,17 @@ export type Database = {
           sender_name: string | null
           status: string | null
           timestamp: string
+          transcription_status: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          company_id?: string | null
           contact_id?: string | null
           content?: string | null
           created_at?: string
           delivered_at?: string | null
+          duration_seconds?: number | null
           from_me?: boolean
           id?: string
           instance_name: string
@@ -13682,14 +13687,17 @@ export type Database = {
           sender_name?: string | null
           status?: string | null
           timestamp?: string
+          transcription_status?: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          company_id?: string | null
           contact_id?: string | null
           content?: string | null
           created_at?: string
           delivered_at?: string | null
+          duration_seconds?: number | null
           from_me?: boolean
           id?: string
           instance_name?: string
@@ -13705,6 +13713,7 @@ export type Database = {
           sender_name?: string | null
           status?: string | null
           timestamp?: string
+          transcription_status?: string
           updated_at?: string
           user_id?: string
         }
