@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAIWritingAssistant } from '@/hooks/useAIWritingAssistant';
+import type { MessageType, MessageTone, PersuasionFramework } from '@/hooks/useAIWritingAssistant';
 import { useToast } from '@/hooks/use-toast';
  import { Sparkles, Copy, CheckCircle, Loader2, Wand2 } from 'lucide-react';
  const FRAMEWORKS = [
@@ -44,9 +45,9 @@ const TONES = [
 export function AIMessageGenerator({ contact, companyName, discProfile }: AIMessageGeneratorProps) {
   const { suggestions, loading, error, generateSuggestions, clearSuggestions } = useAIWritingAssistant();
   const { toast } = useToast();
-   const [messageType, setMessageType] = useState<string>('follow_up');
-   const [tone, setTone] = useState<string>('friendly');
-   const [framework, setFramework] = useState<string>('None');
+   const [messageType, setMessageType] = useState<MessageType>('follow_up');
+   const [tone, setTone] = useState<MessageTone>('friendly');
+   const [framework, setFramework] = useState<PersuasionFramework>('None');
   const [context, setContext] = useState('');
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
 
@@ -61,9 +62,9 @@ export function AIMessageGenerator({ contact, companyName, discProfile }: AIMess
         hobbies: contact.hobbies || undefined,
         interests: contact.interests || undefined,
       },
-       messageType: messageType as any,
-       tone: tone as any,
-       framework: framework as any,
+       messageType,
+       tone,
+       framework,
        customContext: context || undefined,
      });
   };
@@ -92,7 +93,7 @@ export function AIMessageGenerator({ contact, companyName, discProfile }: AIMess
          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div>
             <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Tipo de Mensagem</label>
-            <Select value={messageType} onValueChange={setMessageType}>
+            <Select value={messageType} onValueChange={(v) => setMessageType(v as MessageType)}>
               <SelectTrigger className="h-9">
                 <SelectValue />
               </SelectTrigger>
@@ -105,7 +106,7 @@ export function AIMessageGenerator({ contact, companyName, discProfile }: AIMess
           </div>
            <div>
              <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Tom</label>
-             <Select value={tone} onValueChange={setTone}>
+             <Select value={tone} onValueChange={(v) => setTone(v as MessageTone)}>
                <SelectTrigger className="h-9">
                  <SelectValue />
                </SelectTrigger>
@@ -118,7 +119,7 @@ export function AIMessageGenerator({ contact, companyName, discProfile }: AIMess
            </div>
            <div>
              <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Framework</label>
-             <Select value={framework} onValueChange={setFramework}>
+             <Select value={framework} onValueChange={(v) => setFramework(v as PersuasionFramework)}>
                <SelectTrigger className="h-9">
                  <SelectValue />
                </SelectTrigger>
