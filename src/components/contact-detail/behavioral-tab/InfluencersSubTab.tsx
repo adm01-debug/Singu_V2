@@ -6,7 +6,6 @@ import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useContactBehavior } from '@/hooks/useContactBehavior';
-import type { ContactBehavior } from '@/hooks/useContactBehavior';
 import { useState, useEffect } from 'react';
 
 interface Props {
@@ -15,7 +14,7 @@ interface Props {
 
 export function InfluencersSubTab({ contactId }: Props) {
   const { influence, updateInfluence, isLoading } = useContactBehavior(contactId);
-  const [formData, setFormData] = useState<Partial<ContactBehavior>>({});
+  const [formData, setFormData] = useState<Record<string, any>>({});
 
   useEffect(() => {
     if (influence) setFormData(influence);
