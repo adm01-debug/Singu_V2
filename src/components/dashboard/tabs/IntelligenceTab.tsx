@@ -12,6 +12,7 @@ import { DealsAtRiskCard } from '@/components/dashboard/DealsAtRiskCard';
 import { StrategicNextStepsCard } from '@/components/dashboard/StrategicNextStepsCard';
 import { DailyInsightsWidget } from '@/components/dashboard/widgets/DailyInsightsWidget';
 import { Surface } from '@/components/ui/surface';
+import type { Contact } from '@/types';
 
 
 const ChurnPredictionPanel = lazy(() => import('@/components/analytics/ChurnPredictionPanel').then(m => ({ default: m.ChurnPredictionPanel })));
@@ -22,7 +23,7 @@ const BehaviorAlertsPanel = lazy(() => import('@/components/analytics/BehaviorAl
 const RFMAnalysisPanel = lazy(() => import('@/components/analytics/RFMAnalysisPanel').then(m => ({ default: m.RFMAnalysisPanel })));
 
 interface IntelligenceTabProps {
-  contacts: any[];
+  contacts: Contact[];
   prefersReducedMotion: boolean;
   tabDirection: number;
 }
@@ -39,7 +40,7 @@ export function IntelligenceTab({ contacts, prefersReducedMotion, tabDirection }
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DashboardErrorBoundary sectionName="Próximos Passos">
           <StrategicNextStepsCard 
-            contacts={useMemo(() => contacts.map((c: any) => ({
+            contacts={useMemo(() => contacts.map((c) => ({
               id: c.id,
               first_name: c.first_name,
               last_name: c.last_name,
