@@ -7,7 +7,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AlertCircle, CheckCircle2, RefreshCcw, Search, Download } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle2,
+  RefreshCcw,
+  Search,
+  Download,
+  User,
+  FileText,
+  MessageSquare,
+} from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { BehavioralRegenAlertBanner } from "@/components/admin/BehavioralRegenAlertBanner";
 
@@ -291,12 +301,27 @@ export default function BehavioralRegenAudit() {
                     <th className="text-left px-4 py-2">Tentativas</th>
                     <th className="text-left px-4 py-2">Processado em</th>
                     <th className="text-left px-4 py-2">Detalhe</th>
+                    <th className="text-right px-4 py-2">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.map((r) => {
                     const isError = Boolean(r.last_error);
                     const name = contactMap?.get(r.contact_id) ?? r.contact_id.slice(0, 8);
+                    const iso = r.last_processed_at ?? r.enqueued_at ?? r.updated_at ?? null;
+                    // Janela de ±3 dias em torno do evento para filtrar interações relacionadas
+                    const eventTime = iso ? new Date(iso) : null;
+                    const fromIso = eventTime
+                      ? new Date(eventTime.getTime() - 3 * 24 * 3600 * 1000).toISOString().slice(0, 10)
+                      : null;
+                    const toIso = eventTime
+                      ? new Date(eventTime.getTime() + 3 * 24 * 3600 * 1000).toISOString().slice(0, 10)
+                      : null;
+                    const interacoesQuery = new URLSearchParams({
+                      contactId: r.contact_id,
+                      ...(fromIso ? { from: fromIso } : {}),
+                      ...(toIso ? { to: toIso } : {}),
+                    }).toString();
                     return (
                       <tr key={r.contact_id} className="border-t hover:bg-muted/30">
                         <td className="px-4 py-2">
@@ -330,6 +355,50 @@ export default function BehavioralRegenAudit() {
                         </td>
                         <td className="px-4 py-2 text-xs text-muted-foreground max-w-md truncate">
                           {r.last_error ?? `Enfileirado ${formatDate(r.enqueued_at)}`}
+                        </td>
+                        <td className="px-4 py-2">
+                          <div className="flex items-center justify-end gap-1">
+                            <TooltipProvider delayDuration={300}>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Link
+                                    to={`/contatos/${r.contact_id}`}
+                                    className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border hover:bg-muted"
+                                    aria-label="Abrir perfil do contato"
+                                  >
+                                    <User className="h-3.5 w-3.5" />
+                                  </Link>
+                                </TooltipTrigger>
+                                <TooltipContent>Perfil do contato</TooltipContent>
+                              </Tooltip>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Link
+                                    to={`/contatos/${r.contact_id}/ficha-360`}
+                                    className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border hover:bg-muted"
+                                    aria-label="Abrir ficha 360 do contato"
+                                  >
+                                    <FileText className="h-3.5 w-3.5" />
+                                  </Link>
+                                </TooltipTrigger>
+                                <TooltipContent>Ficha 360 (perfil comportamental)</TooltipContent>
+                              </Tooltip>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Link
+                                    to={`/interacoes?${interacoesQuery}`}
+                                    className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border hover:bg-muted"
+                                    aria-label="Ver interações relacionadas ao evento"
+                                  >
+                                    <MessageSquare className="h-3.5 w-3.5" />
+                                  </Link>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  Interações (±3 dias em torno do evento)
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
                         </td>
                       </tr>
                     );
