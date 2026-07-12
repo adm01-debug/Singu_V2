@@ -96,6 +96,7 @@ export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
       const wantInt = !channels || channels.some(c => ['email', 'meeting', 'note', 'social'].includes(c));
 
       const tasks: Array<Promise<HistoryItem[]>> = [];
+      const run = async <T,>(p: PromiseLike<T>): Promise<T> => await p;
 
       if (wantWA) {
         let q = supabase
@@ -108,9 +109,9 @@ export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
         if (filters.from) q = q.gte('timestamp', filters.from);
         if (filters.to) q = q.lte('timestamp', filters.to);
         if (filters.search) q = q.ilike('content', `%${filters.search}%`);
-        tasks.push(q.then(({ data, error }) => {
+        tasks.push(run(q).then(({ data, error }) => {
           if (error) throw error;
-          return (data ?? []).map(toItemFromWhatsapp);
+          return (data ?? []).map(r => toItemFromWhatsapp(r as Record<string, unknown>));
         }));
       }
 
@@ -125,9 +126,9 @@ export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
         if (filters.from) q = q.gte('created_at', filters.from);
         if (filters.to) q = q.lte('created_at', filters.to);
         if (filters.search) q = q.or(`transcription.ilike.%${filters.search}%,summary.ilike.%${filters.search}%`);
-        tasks.push(q.then(({ data, error }) => {
+        tasks.push(run(q).then(({ data, error }) => {
           if (error) throw error;
-          return (data ?? []).map(toItemFromCall);
+          return (data ?? []).map(r => toItemFromCall(r as Record<string, unknown>));
         }));
       }
 
@@ -146,9 +147,9 @@ export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
         if (filters.from) q = q.gte('created_at', filters.from);
         if (filters.to) q = q.lte('created_at', filters.to);
         if (filters.search) q = q.or(`title.ilike.%${filters.search}%,content.ilike.%${filters.search}%`);
-        tasks.push(q.then(({ data, error }) => {
+        tasks.push(run(q).then(({ data, error }) => {
           if (error) throw error;
-          return (data ?? []).map(toItemFromInteraction);
+          return (data ?? []).map(r => toItemFromInteraction(r as Record<string, unknown>));
         }));
       }
 
