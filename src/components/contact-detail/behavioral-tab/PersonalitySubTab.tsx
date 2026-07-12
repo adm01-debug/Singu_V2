@@ -9,6 +9,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { TEMPERAMENT_TYPES, TemperamentType } from '@/types/temperament';
 import { Button } from '@/components/ui/button';
 import { useContactBehavior } from '@/hooks/useContactBehavior';
+import type { ContactPersonality } from '@/hooks/useContactBehavior';
 import { useState, useEffect } from 'react';
 
 interface Props {
@@ -17,7 +18,7 @@ interface Props {
 
 export function PersonalitySubTab({ contactId }: Props) {
   const { personality, updatePersonality, isLoading } = useContactBehavior(contactId);
-  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [formData, setFormData] = useState<Partial<ContactPersonality>>({});
 
   useEffect(() => {
     if (personality) setFormData(personality);
