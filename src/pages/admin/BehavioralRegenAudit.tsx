@@ -349,6 +349,28 @@ export default function BehavioralRegenAudit() {
             <Download className="h-4 w-4 mr-1" />
             CSV
           </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              if (
+                window.confirm(
+                  "Limpar a fila?\n\n• Remove itens processados com sucesso há mais de 30 dias\n• Adia por 7 dias itens que falharam 5+ vezes (dead-letter)",
+                )
+              ) {
+                cleanupMutation.mutate();
+              }
+            }}
+            disabled={cleanupMutation.isPending}
+            title="Housekeeping: retenção 30d + dead-letter"
+          >
+            {cleanupMutation.isPending ? (
+              <RotateCw className="h-4 w-4 mr-1 animate-spin" />
+            ) : (
+              <Trash2 className="h-4 w-4 mr-1" />
+            )}
+            Limpar fila
+          </Button>
         </div>
       </header>
 
