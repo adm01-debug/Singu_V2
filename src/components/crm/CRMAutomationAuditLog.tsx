@@ -26,9 +26,19 @@ import {
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
+interface AutomationLog {
+  id: string;
+  automation_name: string;
+  status: string;
+  created_at: string;
+  error_message?: string | null;
+  audit_context?: unknown;
+  contact?: { first_name?: string | null; last_name?: string | null } | null;
+}
+
 export function CRMAutomationAuditLog() {
   const queryClient = useQueryClient();
-  const [selectedLog, setSelectedLog] = useState<any>(null);
+  const [selectedLog, setSelectedLog] = useState<AutomationLog | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   const { data: logs, isLoading, refetch } = useQuery({
@@ -60,7 +70,7 @@ export function CRMAutomationAuditLog() {
       // 2. Update log status to show it was re-queued
       const { error: logUpdateError } = await supabase
         .from('crm_automation_logs')
-        .update({ status: 'reprocessing' as any })
+        .update({ status: 'reprocessing' } as never)
         .eq('id', logId);
       
       if (logUpdateError) throw logUpdateError;
@@ -70,10 +80,10 @@ export function CRMAutomationAuditLog() {
       toast.success('Evento enfileirado para reprocessamento');
       setIsDetailsOpen(false);
     },
-    onError: (error: any) => toast.error(`Erro ao reprocessar: ${error.message}`)
+    onError: (error: Error) => toast.error(`Erro ao reprocessar: ${error.message}`)
   });
 
-  const handleViewDetails = (log: any) => {
+  const handleViewDetails = (log: AutomationLog) => {
     setSelectedLog(log);
     setIsDetailsOpen(true);
   };
@@ -131,7 +141,7 @@ export function CRMAutomationAuditLog() {
                     {formatDistanceToNow(new Date(log.created_at), { addSuffix: true, locale: ptBR })}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleViewDetails(log)}>
+                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleViewDetails(log as AutomationLog)}>
                       <Eye className="h-3.5 w-3.5" />
                     </Button>
                   </TableCell>

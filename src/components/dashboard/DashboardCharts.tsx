@@ -18,10 +18,22 @@ import { CustomTooltip, PieTooltip, ComparisonBadge } from './charts/ChartCompon
 
 export type { PeriodFilter };
 
-interface ChartProps { 
-  period: PeriodFilter; 
-  contacts?: any[];
-  interactions?: any[];
+export interface ChartContact {
+  role?: string | null;
+  relationship_score?: number | null;
+  [key: string]: unknown;
+}
+
+export interface ChartInteraction {
+  created_at: string;
+  type?: string | null;
+  [key: string]: unknown;
+}
+
+interface ChartProps {
+  period: PeriodFilter;
+  contacts?: ChartContact[];
+  interactions?: ChartInteraction[];
 }
 
 export const ActivityChart = ({ period, interactions = [] }: ChartProps) => {
@@ -133,7 +145,7 @@ export const RelationshipEvolutionChart = ({ period }: ChartProps) => {
   );
 };
 
-export const ContactDistributionChart = ({ contacts }: { contacts?: any[] }) => {
+export const ContactDistributionChart = ({ contacts }: { contacts?: ChartContact[] }) => {
   const data = useMemo(() => {
     if (!contacts?.length) return contactsByRole;
     const counts: Record<string, number> = {};
