@@ -4,13 +4,14 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
  import { format } from 'date-fns';
  import { RelativeDialog } from './RelativeDialog';
+import type { RelativeInput } from './RelativeDialog';
 import type { Tables } from '@/integrations/supabase/types';
 
 interface Props {
   relatives: Tables<'contact_relatives'>[];
   contactId: string;
-   onAdd: (data: any) => void;
-   onUpdate: (id: string, updates: any) => void;
+   onAdd: (data: RelativeInput) => void;
+   onUpdate: (id: string, updates: Partial<Tables<'contact_relatives'>>) => void;
    onDelete: (id: string) => void;
 }
 
