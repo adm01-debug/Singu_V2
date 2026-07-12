@@ -6,7 +6,7 @@ export interface AuditLogPayload {
   score: number;
   recommendationType: string;
   reasons: string[];
-  dataUsed?: any;
+  dataUsed?: Record<string, unknown>;
   userAction?: string;
 }
 
@@ -18,7 +18,7 @@ export function useRecommendationAudit() {
       const { data: auth } = await supabase.auth.getUser();
       if (!auth.user) throw new Error('Not authenticated');
 
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('ai_recommendation_audit_logs_v2')
         .insert({
           user_id: auth.user.id,
