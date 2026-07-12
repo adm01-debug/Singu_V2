@@ -39,11 +39,20 @@ Deno.serve(async (req) => {
     // Autorização: service role no header interno OU chave de cron
     const cronKey = req.headers.get('x-cron-key') ?? '';
     const internalKey = req.headers.get('x-internal-key') ?? '';
-    const expectedCronKey = Deno.env.get('BEHAVIORAL_CRON_KEY') ?? SERVICE_KEY;
-    const authorized = internalKey === SERVICE_KEY || cronKey === expectedCronKey;
-    if (!authorized) return json({ error: 'Não autorizado' }, 401);
+    let authorized = internalKey === SERVICE_KEY;
 
     const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
+
+    if (!authorized && cronKey) {
+      const { data: sec } = await supabase
+        .from('cron_secrets')
+        .select('value')
+        .eq('name', 'behavioral_rebatch')
+        .maybeSingle();
+      const expected = (sec as { value?: string } | null)?.value;
+      if (expected && cronKey === expected) authorized = true;
+    }
+    if (!authorized) return json({ error: 'Não autorizado' }, 401);
 
     // 1) Buscar feedback negativo dos últimos 30 dias
     const cutoff = new Date(Date.now() - 30 * 86400_000).toISOString();
