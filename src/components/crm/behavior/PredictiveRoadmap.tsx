@@ -36,7 +36,13 @@ export function PredictiveRoadmap({ contactId }: { contactId: string }) {
    const steps: RoadmapItem[] = useMemo(() => {
      if (!roadmapData || roadmapData.length === 0) return [];
      
-     return roadmapData.map((item: any) => ({
+     return roadmapData.map((item: {
+       forecast_month: string;
+       predicted_need: string;
+       probability: number;
+       suggested_offering: string;
+       rationale: string;
+     }) => ({
        month: format(new Date(item.forecast_month), 'MMMM yyyy', { locale: ptBR }),
        title: item.predicted_need,
        probability: item.probability,

@@ -206,7 +206,7 @@ export function RelationshipKPIsDashboard() {
      queryKey: ['crm-intelligence-summary'],
      queryFn: async () => {
        const { data, error } = await supabase
-         .from('crm_objection_intelligence' as any)
+        .from('crm_objection_intelligence')
          .select('*')
          .order('created_at', { ascending: false })
          .limit(5);

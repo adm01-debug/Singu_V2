@@ -12,7 +12,12 @@
      filteredContacts, availableFields 
    } = useContactSegmentation();
  
-  const getMessageRecommendation = (contact: any) => {
+  const getMessageRecommendation = (contact: {
+    disc_primary?: string;
+    vak_primary?: string;
+    motivation_primary?: string;
+    relationship_stage?: string;
+  }) => {
     const disc = contact.disc_primary;
     const vak = contact.vak_primary;
     const motivation = contact.motivation_primary;

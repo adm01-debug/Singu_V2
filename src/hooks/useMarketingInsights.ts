@@ -95,7 +95,7 @@
        if (!user) return [];
  
        const { data, error } = await supabase
-         .from('marketing_campaign_stats' as any)
+        .from('marketing_campaign_stats')
          .select('*')
          .order('date', { ascending: false });
  

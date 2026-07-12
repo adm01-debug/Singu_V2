@@ -20,8 +20,17 @@ import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
+interface AuditLogEntry {
+  id: string;
+  change_type: string;
+  created_at: string;
+  changed_fields?: string[];
+  new_values?: { interests?: string[]; keywords?: string[] } & Record<string, unknown>;
+  previous_values?: Record<string, unknown>;
+}
+
 interface Props {
-  logs: any[];
+  logs: AuditLogEntry[];
 }
 
 export function AuditLogDrawer({ logs }: Props) {
