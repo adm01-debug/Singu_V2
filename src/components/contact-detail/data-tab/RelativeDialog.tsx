@@ -8,8 +8,10 @@ import type { Tables } from '@/integrations/supabase/types';
 
 export const RELATIONSHIP_TYPES = ['conjuge', 'filho', 'filha', 'pai', 'mae', 'irmao', 'irma', 'socio', 'assistente', 'outro'];
 
+export type RelativeInput = Partial<Tables<'contact_relatives'>>;
+
 interface RelativeDialogProps {
-  onSave: (data: any) => void;
+  onSave: (data: RelativeInput) => void;
   initialData?: Partial<Tables<'contact_relatives'>>;
   trigger: React.ReactNode;
 }
@@ -34,7 +36,7 @@ export function RelativeDialog({
   });
 
   const handleBirthdayChange = (dateStr: string) => {
-    const updates: any = { birthday: dateStr };
+    const updates: { birthday: string; age?: string } = { birthday: dateStr };
     if (dateStr) {
       const birthDate = new Date(dateStr);
       if (!isNaN(birthDate.getTime())) {
