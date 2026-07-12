@@ -6,10 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
+interface Ficha360Profile {
+  cargo?: string | null;
+  company_name?: string | null;
+  company_id?: string | null;
+  relationship_score?: number | null;
+  relationship_stage?: string | null;
+  sentiment?: string | null;
+}
+
 interface Ficha360ProfileHeaderProps {
   fullName: string;
   initials: string;
-  profile: any;
+  profile: Ficha360Profile | null;
   sentimentClass: (s?: string | null) => string;
 }
 

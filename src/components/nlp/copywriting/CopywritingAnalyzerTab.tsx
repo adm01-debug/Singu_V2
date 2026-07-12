@@ -208,7 +208,7 @@ function getScoreColor(score: number) {
     return <div className="whitespace-pre-wrap leading-relaxed text-sm">{elements}</div>;
   };
 
-  const renderChunk = (text: string, decor: any, key: number) => {
+  const renderChunk = (text: string, decor: { trigger?: string; complex?: boolean; longSentence?: boolean }, key: number) => {
     if (!text) return null;
     const classes = cn(
       decor.trigger ? "bg-yellow-200 font-bold" : "",

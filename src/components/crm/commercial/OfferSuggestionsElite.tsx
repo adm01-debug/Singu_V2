@@ -204,7 +204,7 @@ export function OfferSuggestionsElite({ contactId }: Props) {
                       <SocialMatchPanel
                         contactId={contactId}
                         offerName={offer.offer_name}
-                        metadata={offer.metadata as any}
+                        metadata={(offer.metadata as { sources?: string[]; keywords?: string[]; social_insight_ids?: string[] } | null) ?? {}}
                       />
                     </div>
                     <div className="text-right shrink-0">

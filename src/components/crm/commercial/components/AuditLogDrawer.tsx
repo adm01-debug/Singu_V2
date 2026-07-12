@@ -20,8 +20,19 @@ import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
+import type { Json } from '@/integrations/supabase/types';
+
+interface AuditLogEntry {
+  id: string;
+  change_type: string;
+  created_at: string;
+  changed_fields?: string[] | null;
+  new_values?: Json;
+  previous_values?: Json;
+}
+
 interface Props {
-  logs: any[];
+  logs: AuditLogEntry[];
 }
 
 export function AuditLogDrawer({ logs }: Props) {
@@ -79,19 +90,19 @@ export function AuditLogDrawer({ logs }: Props) {
                          ))}
                        </div>
 
-                       {log.new_values && (
+                       {log.new_values && typeof log.new_values === 'object' && !Array.isArray(log.new_values) && (
                          <div className="mb-3">
                            <div className="flex items-center gap-1.5 mb-1 text-[10px] font-bold text-slate-500 uppercase tracking-tight">
                              <Eye className="h-3 w-3" />
                              Preview de Interesses
                            </div>
                            <div className="flex flex-wrap gap-1">
-                             {(log.new_values.interests || log.new_values.keywords || []).slice(0, 5).map((item: string, i: number) => (
+                             {((log.new_values as { interests?: string[]; keywords?: string[] }).interests || (log.new_values as { interests?: string[]; keywords?: string[] }).keywords || []).slice(0, 5).map((item: string, i: number) => (
                                <span key={i} className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-100">
                                  {item}
                                </span>
                              ))}
-                             {(log.new_values.interests?.length > 5 || log.new_values.keywords?.length > 5) && (
+                             {(((log.new_values as { interests?: string[]; keywords?: string[] }).interests?.length ?? 0) > 5 || ((log.new_values as { interests?: string[]; keywords?: string[] }).keywords?.length ?? 0) > 5) && (
                                <span className="text-[10px] text-slate-400 font-medium">...</span>
                              )}
                            </div>
