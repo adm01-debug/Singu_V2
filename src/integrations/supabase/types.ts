@@ -1240,6 +1240,60 @@ export type Database = {
         }
         Relationships: []
       }
+      behavioral_profile_regen_queue: {
+        Row: {
+          attempts: number
+          contact_id: string
+          created_at: string
+          enqueued_at: string
+          last_error: string | null
+          last_processed_at: string | null
+          next_run_at: string
+          trigger_source: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          attempts?: number
+          contact_id: string
+          created_at?: string
+          enqueued_at?: string
+          last_error?: string | null
+          last_processed_at?: string | null
+          next_run_at?: string
+          trigger_source?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          attempts?: number
+          contact_id?: string
+          created_at?: string
+          enqueued_at?: string
+          last_error?: string | null
+          last_processed_at?: string | null
+          next_run_at?: string
+          trigger_source?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "behavioral_profile_regen_queue_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: true
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "behavioral_profile_regen_queue_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: true
+            referencedRelation: "vw_contacts_nlp"
+            referencedColumns: ["contact_id"]
+          },
+        ]
+      }
       brain_dominance_analysis: {
         Row: {
           analyzed_at: string | null
