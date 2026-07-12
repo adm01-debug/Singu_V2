@@ -250,7 +250,7 @@ export function OverviewTab({
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Relatório Churn">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-28 w-full" />}>
-            <ChurnRiskReportWidget contacts={contacts} interactions={interactions} />
+            <ChurnRiskReportWidget />
           </Suspense>
         </DashboardErrorBoundary>
       </div>
