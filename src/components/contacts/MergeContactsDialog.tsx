@@ -20,7 +20,7 @@ interface Props {
 
 export function MergeContactsDialog({ primaryId, secondaryId, open, onOpenChange, onSuccess }: Props) {
   const merge = useMergeRecords();
-  const [overrides, setOverrides] = useState<Record<string, any>>({});
+  const [overrides, setOverrides] = useState<Record<string, unknown>>({});
 
   const { data: records, isLoading } = useQuery({
     queryKey: ['merge-details', primaryId, secondaryId],
@@ -63,7 +63,7 @@ export function MergeContactsDialog({ primaryId, secondaryId, open, onOpenChange
     onSuccess?.();
   };
 
-  const getDisplayValue = (val: any, fieldKey: string) => {
+  const getDisplayValue = (val: unknown, fieldKey: string) => {
     if (val === null || val === undefined || val === '') return <span className="text-muted-foreground italic">Vazio</span>;
     if (fieldKey === 'company_id') return <span className="text-[10px] truncate max-w-[100px]">{val as string}</span>;
     return val as string;
@@ -100,8 +100,8 @@ export function MergeContactsDialog({ primaryId, secondaryId, open, onOpenChange
 
               <div className="space-y-4">
                 {fields.map((field) => {
-                  const pVal = (records.primary as any)[field.key];
-                  const sVal = (records.secondary as any)[field.key];
+                  const pVal = (records.primary as Record<string, unknown>)[field.key];
+                  const sVal = (records.secondary as Record<string, unknown>)[field.key];
                   
                   // Only show field if values are different and secondary has a value
                   if (pVal === sVal || (sVal === null || sVal === '')) return null;
