@@ -57,9 +57,14 @@ interface RawProfileRow {
   } | null;
 }
 
+export interface BehavioralProfilesListResult {
+  all: BehavioralProfileListItem[];
+  filtered: BehavioralProfileListItem[];
+}
+
 export function useBehavioralProfilesList(filters: BehavioralProfilesFilters) {
   return useQuery({
-    queryKey: ['behavioral-profiles-list', filters],
+    queryKey: ['behavioral-profiles-list', filters.period ?? 'all'],
     staleTime: 60_000,
     queryFn: async (): Promise<BehavioralProfileListItem[]> => {
       const fromDate = periodToDate(filters.period);
@@ -75,13 +80,12 @@ export function useBehavioralProfilesList(filters: BehavioralProfilesFilters) {
         .limit(500);
 
       if (fromDate) q = q.gte('last_updated_at', fromDate);
-      if (filters.tone) q = q.eq('tone', filters.tone);
 
       const { data, error } = await q;
       if (error) throw error;
 
       const rows = (data ?? []) as unknown as RawProfileRow[];
-      let mapped: BehavioralProfileListItem[] = rows.map((r) => ({
+      return rows.map((r) => ({
         id: r.id,
         contact_id: r.contact_id,
         contact_name: r.contacts?.name ?? null,
@@ -99,22 +103,27 @@ export function useBehavioralProfilesList(filters: BehavioralProfilesFilters) {
         model: r.model,
         last_updated_at: r.last_updated_at,
       }));
-
-      if (filters.companyId) {
-        mapped = mapped.filter((m) => m.company_id === filters.companyId);
-      }
-      if (filters.search?.trim()) {
-        const q = filters.search.trim().toLowerCase();
-        mapped = mapped.filter(
-          (m) =>
-            (m.contact_name ?? '').toLowerCase().includes(q) ||
-            (m.company_name ?? '').toLowerCase().includes(q) ||
-            (m.summary ?? '').toLowerCase().includes(q),
-        );
-      }
-      return mapped;
     },
   });
+}
+
+export function applyBehavioralFilters(
+  items: BehavioralProfileListItem[],
+  filters: BehavioralProfilesFilters,
+): BehavioralProfileListItem[] {
+  let out = items;
+  if (filters.companyId) out = out.filter((m) => m.company_id === filters.companyId);
+  if (filters.tone) out = out.filter((m) => (m.tone ?? '') === filters.tone);
+  if (filters.search?.trim()) {
+    const q = filters.search.trim().toLowerCase();
+    out = out.filter(
+      (m) =>
+        (m.contact_name ?? '').toLowerCase().includes(q) ||
+        (m.company_name ?? '').toLowerCase().includes(q) ||
+        (m.summary ?? '').toLowerCase().includes(q),
+    );
+  }
+  return out;
 }
 
 export function useBehavioralProfilesFacets(items: BehavioralProfileListItem[]) {
