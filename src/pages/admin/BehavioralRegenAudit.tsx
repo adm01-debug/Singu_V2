@@ -113,9 +113,17 @@ export default function BehavioralRegenAudit() {
       const { data, error } = await supabase.functions.invoke("retry-behavioral-profile", {
         body: { contact_id: contactId },
       });
-      const payloadError = (data as { error?: string } | null)?.error ?? null;
-      if (error || payloadError) {
-        throw new Error(error?.message ?? payloadError ?? "erro desconhecido");
+      const payload = (data ?? null) as
+        | { error?: string; cooldown?: boolean; retry_in_seconds?: number }
+        | null;
+      if (payload?.cooldown) {
+        // cooldown não é erro real — sinaliza para o onError tratar como aviso.
+        const err = new Error(payload.error ?? "Em cooldown");
+        (err as Error & { cooldown?: boolean }).cooldown = true;
+        throw err;
+      }
+      if (error || payload?.error) {
+        throw new Error(error?.message ?? payload?.error ?? "erro desconhecido");
       }
       return data;
     },
@@ -124,8 +132,12 @@ export default function BehavioralRegenAudit() {
       queryClient.invalidateQueries({ queryKey: ["behavioral-regen-audit"] });
       queryClient.invalidateQueries({ queryKey: ["behavioral-regen-stats"] });
     },
-    onError: (err: Error) => {
-      toast.error(`Falha ao reenfileirar: ${err.message}`);
+    onError: (err: Error & { cooldown?: boolean }) => {
+      if (err.cooldown) {
+        toast.warning(err.message);
+      } else {
+        toast.error(`Falha ao reenfileirar: ${err.message}`);
+      }
     },
   });
 

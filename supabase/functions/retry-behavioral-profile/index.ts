@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
     }
     const triggerSource = body.trigger || `manual_retry:${callerId.slice(0, 8)}`;
 
-    // 4) Busca user_id dono do contato
+    // 4) Busca user_id dono do contato + estado atual da fila (cooldown)
     const { data: contactRow, error: contactErr } = await admin
       .from("contacts")
       .select("user_id")
@@ -67,6 +67,32 @@ Deno.serve(async (req) => {
       return json({ error: "Contato não encontrado", requestId }, 404);
     }
     const ownerId = contactRow.user_id as string;
+
+    // 4.1) Cooldown: 5 min entre retries manuais do mesmo contato
+    //      Evita cliques repetidos, race entre admins e custo de LLM.
+    const COOLDOWN_MS = 5 * 60 * 1000;
+    const { data: queueRow } = await admin
+      .from("behavioral_profile_regen_queue")
+      .select("last_processed_at, trigger_source")
+      .eq("contact_id", body.contact_id)
+      .maybeSingle();
+    if (queueRow?.last_processed_at) {
+      const lastMs = new Date(queueRow.last_processed_at as string).getTime();
+      const ageMs = Date.now() - lastMs;
+      const wasManual = String(queueRow.trigger_source ?? "").startsWith("manual_retry");
+      if (wasManual && ageMs < COOLDOWN_MS) {
+        const retryInSec = Math.ceil((COOLDOWN_MS - ageMs) / 1000);
+        return json(
+          {
+            error: `Aguarde ${retryInSec}s antes de reenfileirar este contato novamente.`,
+            requestId,
+            cooldown: true,
+            retry_in_seconds: retryInSec,
+          },
+          429,
+        );
+      }
+    }
 
     // 5) Marca fila como retry em andamento (sem tocar last_processed_at ainda)
     const enqueuedIso = new Date().toISOString();
