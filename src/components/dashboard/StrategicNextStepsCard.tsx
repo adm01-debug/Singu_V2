@@ -312,7 +312,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
     });
 
     // Last Interaction
-    const finalY = (doc as any).lastAutoTable.finalY + 15;
+    const finalY = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
     doc.setFontSize(16);
     doc.text('Resumo da Última Interação', 14, finalY);
     
@@ -358,7 +358,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       
       // 2. Save to approvals table
       const { error } = await supabase
-        .from('follow_up_approvals_v2' as any)
+        .from('follow_up_approvals_v2')
         .insert({
           user_id: user.id,
           contact_id: contactId,
