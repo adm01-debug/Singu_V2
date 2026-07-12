@@ -71,9 +71,9 @@ export function useAIApprovals(contactId?: string) {
 
       if (contactError) throw contactError;
 
-      const contactData = contact as { hobbies: string[] | null, interests: string[] | null, rapport_metadata: any } | null;
+      const contactData = contact as { hobbies: string[] | null, interests: string[] | null, rapport_metadata: Record<string, Record<string, unknown>> | null } | null;
       const currentValues = (contactData?.[field as keyof typeof contactData] || []) as string[];
-      const currentMetadata = (contactData?.rapport_metadata || {}) as Record<string, any>;
+      const currentMetadata = (contactData?.rapport_metadata || {}) as Record<string, Record<string, unknown>>;
       
       // Ensure metadata has the correct structure for hobby/interest
       const updatedMetadata = { ...currentMetadata };
