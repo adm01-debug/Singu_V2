@@ -188,6 +188,28 @@ Deno.serve(async (req) => {
 
     if (upErr) return json({ error: `Falha ao salvar: ${upErr.message}` }, 500);
 
+    // Snapshot de versão (best-effort — não falha a chamada se a inserção do histórico der erro)
+    try {
+      await supabase.from('contact_analytical_profile_versions').insert({
+        contact_id: body.contact_id,
+        user_id: userId,
+        profile_id: (saved as { id?: string } | null)?.id ?? null,
+        summary: row.summary,
+        tone: row.tone,
+        communication_style: row.communication_style,
+        sentiment_trend: row.sentiment_trend,
+        preferences: row.preferences,
+        hobbies: row.hobbies,
+        recurrent_topics: row.recurrent_topics,
+        based_on_count: row.based_on_count,
+        model: row.model,
+        trigger_source: isInternal ? 'auto' : 'manual',
+        generated_at: row.last_updated_at,
+      });
+    } catch (_snapErr) {
+      // ignora — snapshot é auxiliar
+    }
+
     return json({ profile: saved });
   } catch (e) {
     return json({ error: (e as Error).message }, 500);
