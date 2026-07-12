@@ -12,6 +12,7 @@ import { OptimizedAvatar } from '@/components/ui/optimized-avatar';
 import { RelationshipScore } from '@/components/ui/relationship-score';
 import { RelationshipStageBadge } from '@/components/ui/relationship-stage';
 import { SentimentIndicator } from '@/components/ui/sentiment-indicator';
+import type { RelationshipStage, SentimentType } from '@/types';
 
 import {
   Table,
@@ -150,7 +151,7 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                   </div>
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
-                  <RelationshipStageBadge stage={contact.relationship_stage as any || 'unknown'} />
+                  <RelationshipStageBadge stage={(contact.relationship_stage as RelationshipStage) || 'unknown'} />
                 </TableCell>
                 <TableCell className="hidden md:table-cell text-center">
                   {contact.relationship_score != null ? (
@@ -160,7 +161,7 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                   )}
                 </TableCell>
                 <TableCell className="hidden md:table-cell text-center">
-                   <SentimentIndicator sentiment={contact.sentiment as any || 'neutral'} size="sm" />
+                   <SentimentIndicator sentiment={(contact.sentiment as SentimentType) || 'neutral'} size="sm" />
                 </TableCell>
                 <TableCell className="hidden lg:table-cell text-muted-foreground text-sm truncate max-w-[150px]">
                   {contact.role_title || '—'}
