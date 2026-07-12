@@ -469,7 +469,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {hobbies.length > 0 ? (
                       hobbies.map((hobby, i) => {
-                        const source = (rapportIntel?.rapport_metadata as any)?.hobbies?.[hobby];
+                        const source = (rapportIntel?.rapport_metadata as { hobbies?: Record<string, string> } | null | undefined)?.hobbies?.[hobby];
                         return (
                           <Badge key={i} variant="secondary" className="text-[10px] font-normal bg-amber-50 text-amber-700 border-amber-100/50 gap-1">
                             {source && getSourceIcon(source)}
@@ -525,7 +525,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {interests.length > 0 ? (
                       interests.map((interest, i) => {
-                        const source = (rapportIntel?.rapport_metadata as any)?.interests?.[interest];
+                        const source = (rapportIntel?.rapport_metadata as { interests?: Record<string, string> } | null | undefined)?.interests?.[interest];
                         return (
                           <Badge key={i} variant="secondary" className="text-[10px] font-normal bg-purple-50 text-purple-700 border-purple-100/50 gap-1">
                             {source && getSourceIcon(source)}
