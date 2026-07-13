@@ -23,6 +23,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { toast } from "sonner";
 import { BehavioralRegenAlertBanner } from "@/components/admin/BehavioralRegenAlertBanner";
 import { BehavioralRegenCronHealth } from "@/components/admin/BehavioralRegenCronHealth";
+import { BehavioralRegenAlertsStats } from "@/components/admin/BehavioralRegenAlertsStats";
 
 type QueueRow = {
   contact_id: string;
