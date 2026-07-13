@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 
 interface AlertRow {
   id: string;
+  alert_type: string;
   severity: string;
   threshold_pct: number;
   consumed_pct: number;
@@ -19,20 +20,19 @@ interface AlertRow {
 export function BehavioralRegenAlertBanner() {
   const qc = useQueryClient();
 
-  const { data: activeAlert, isLoading } = useQuery({
-    queryKey: ["behavioral-regen-active-alert"],
+  const { data: alerts, isLoading } = useQuery({
+    queryKey: ["behavioral-regen-active-alerts"],
     refetchInterval: 60_000,
-    queryFn: async (): Promise<AlertRow | null> => {
+    queryFn: async (): Promise<AlertRow[]> => {
       const { data, error } = await supabase
         .from("system_alerts")
-        .select("id, severity, threshold_pct, consumed_pct, message, created_at, metadata")
-        .eq("alert_type", "behavioral_regen_error_rate")
+        .select("id, alert_type, severity, threshold_pct, consumed_pct, message, created_at, metadata")
+        .in("alert_type", ["behavioral_regen_error_rate", "behavioral_regen_cron_stale"])
         .is("acknowledged_at", null)
         .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
+        .limit(10);
       if (error) throw error;
-      return (data as AlertRow | null) ?? null;
+      return (data as AlertRow[] | null) ?? [];
     },
   });
 
@@ -50,55 +50,61 @@ export function BehavioralRegenAlertBanner() {
     },
     onSuccess: () => {
       toast.success("Alerta reconhecido");
-      qc.invalidateQueries({ queryKey: ["behavioral-regen-active-alert"] });
+      qc.invalidateQueries({ queryKey: ["behavioral-regen-active-alerts"] });
     },
     onError: (err: Error) => {
       toast.error("Falha ao reconhecer alerta", { description: err.message });
     },
   });
 
-  if (isLoading || !activeAlert) return null;
+  if (isLoading || !alerts?.length) return null;
 
-  const isCritical = activeAlert.severity === "critical";
-  const meta = (activeAlert.metadata ?? {}) as Record<string, unknown>;
-  const failed = typeof meta.failed_runs === "number" ? meta.failed_runs : null;
-  const total = typeof meta.total_runs === "number" ? meta.total_runs : null;
+  const titleFor = (a: AlertRow): string => {
+    if (a.alert_type === "behavioral_regen_cron_stale") {
+      const job = (a.metadata as Record<string, unknown> | null)?.jobname;
+      return `Cron travado${job ? `: ${String(job)}` : ""}`;
+    }
+    return `Taxa de erro do cron acima do limite (${Number(a.consumed_pct).toFixed(1)}% › ${Number(a.threshold_pct).toFixed(0)}%)`;
+  };
 
   return (
-    <Alert
-      variant={isCritical ? "destructive" : "default"}
-      className={cn(
-        !isCritical && "border-amber-500/50 bg-amber-500/10 text-amber-900 dark:text-amber-200",
-      )}
-    >
-      <AlertTriangle className="h-4 w-4" />
-      <AlertTitle className="flex items-center justify-between gap-4">
-        <span>
-          Taxa de erro do cron acima do limite ({Number(activeAlert.consumed_pct).toFixed(1)}% ›{" "}
-          {Number(activeAlert.threshold_pct).toFixed(0)}%)
-        </span>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => ack.mutate(activeAlert.id)}
-          disabled={ack.isPending}
-        >
-          {ack.isPending ? (
-            <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-          ) : (
-            <CheckCircle2 className="mr-1 h-3 w-3" />
-          )}
-          Reconhecer
-        </Button>
-      </AlertTitle>
-      <AlertDescription className="mt-1 text-sm">
-        {activeAlert.message}
-        {failed !== null && total !== null && (
-          <span className="ml-1 opacity-80">
-            · Detectado em {new Date(activeAlert.created_at).toLocaleString("pt-BR")}
-          </span>
-        )}
-      </AlertDescription>
-    </Alert>
+    <div className="space-y-2">
+      {alerts.map((a) => {
+        const isCritical = a.severity === "critical";
+        return (
+          <Alert
+            key={a.id}
+            variant={isCritical ? "destructive" : "default"}
+            className={cn(
+              !isCritical && "border-amber-500/50 bg-amber-500/10 text-amber-900 dark:text-amber-200",
+            )}
+          >
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle className="flex items-center justify-between gap-4">
+              <span>{titleFor(a)}</span>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => ack.mutate(a.id)}
+                disabled={ack.isPending}
+              >
+                {ack.isPending ? (
+                  <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                ) : (
+                  <CheckCircle2 className="mr-1 h-3 w-3" />
+                )}
+                Reconhecer
+              </Button>
+            </AlertTitle>
+            <AlertDescription className="mt-1 text-sm">
+              {a.message}
+              <span className="ml-1 opacity-80">
+                · Detectado em {new Date(a.created_at).toLocaleString("pt-BR")}
+              </span>
+            </AlertDescription>
+          </Alert>
+        );
+      })}
+    </div>
   );
 }
