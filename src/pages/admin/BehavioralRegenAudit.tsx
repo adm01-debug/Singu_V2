@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { BehavioralRegenAlertBanner } from "@/components/admin/BehavioralRegenAlertBanner";
 import { BehavioralRegenCronHealth } from "@/components/admin/BehavioralRegenCronHealth";
 import { BehavioralRegenAlertsStats } from "@/components/admin/BehavioralRegenAlertsStats";
+import { BehavioralRegenAlertsTrend } from "@/components/admin/BehavioralRegenAlertsTrend";
 
 type QueueRow = {
   contact_id: string;
@@ -399,6 +400,7 @@ export default function BehavioralRegenAudit() {
     <div className="container mx-auto py-6 space-y-6">
       <BehavioralRegenAlertBanner />
       <BehavioralRegenAlertsStats />
+      <BehavioralRegenAlertsTrend />
       <BehavioralRegenCronHealth />
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
