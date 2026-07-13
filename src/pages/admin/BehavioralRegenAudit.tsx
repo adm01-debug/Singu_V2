@@ -398,6 +398,7 @@ export default function BehavioralRegenAudit() {
   return (
     <div className="container mx-auto py-6 space-y-6">
       <BehavioralRegenAlertBanner />
+      <BehavioralRegenAlertsStats />
       <BehavioralRegenCronHealth />
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
