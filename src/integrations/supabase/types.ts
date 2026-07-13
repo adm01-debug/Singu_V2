@@ -14485,6 +14485,14 @@ export type Database = {
         Returns: undefined
       }
       check_at_risk_contacts: { Args: never; Returns: undefined }
+      check_behavioral_regen_cron_staleness: {
+        Args: never
+        Returns: {
+          alert_created: boolean
+          job: string
+          minutes_since_last_run: number
+        }[]
+      }
       check_contact_health_alerts: { Args: never; Returns: undefined }
       check_relationship_consistency: {
         Args: { p_contact_id: string }
