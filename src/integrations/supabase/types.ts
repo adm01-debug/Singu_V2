@@ -12901,6 +12901,7 @@ export type Database = {
           consumed_pct: number
           created_at: string
           id: string
+          is_simulated: boolean | null
           message: string
           metadata: Json
           severity: string
@@ -12913,6 +12914,7 @@ export type Database = {
           consumed_pct: number
           created_at?: string
           id?: string
+          is_simulated?: boolean | null
           message: string
           metadata?: Json
           severity: string
@@ -12925,6 +12927,7 @@ export type Database = {
           consumed_pct?: number
           created_at?: string
           id?: string
+          is_simulated?: boolean | null
           message?: string
           metadata?: Json
           severity?: string
