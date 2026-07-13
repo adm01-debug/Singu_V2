@@ -22,6 +22,7 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { BehavioralRegenAlertBanner } from "@/components/admin/BehavioralRegenAlertBanner";
+import { BehavioralRegenCronHealth } from "@/components/admin/BehavioralRegenCronHealth";
 
 type QueueRow = {
   contact_id: string;
@@ -396,6 +397,7 @@ export default function BehavioralRegenAudit() {
   return (
     <div className="container mx-auto py-6 space-y-6">
       <BehavioralRegenAlertBanner />
+      <BehavioralRegenCronHealth />
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold">Auditoria de Reanálises</h1>

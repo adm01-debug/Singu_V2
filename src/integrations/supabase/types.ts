@@ -14547,6 +14547,20 @@ export type Database = {
       }
       evaluate_mql: { Args: { _contact_id: string }; Returns: Json }
       execute_readonly_query: { Args: { query_text: string }; Returns: Json }
+      get_behavioral_regen_cron_health: {
+        Args: never
+        Returns: {
+          active: boolean
+          failures_24h: number
+          jobname: string
+          last_duration_ms: number
+          last_run_at: string
+          last_status: string
+          runs_24h: number
+          schedule: string
+          success_rate_pct: number
+        }[]
+      }
       get_buyer_document_path: {
         Args: { _document_id: string; _token: string }
         Returns: string
