@@ -14515,6 +14515,7 @@ export type Database = {
         }[]
       }
       cleanup_old_health_snapshots: { Args: never; Returns: number }
+      cleanup_simulated_alerts: { Args: never; Returns: number }
       compute_account_health: { Args: { _account_id: string }; Returns: Json }
       compute_attribution: {
         Args: { _deal_id: string; _deal_value?: number; _model?: string }
