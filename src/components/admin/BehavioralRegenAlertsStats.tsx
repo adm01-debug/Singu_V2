@@ -3,13 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Activity, FlaskConical, ShieldAlert, Timer } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-
-interface Row {
-  is_simulated: boolean;
-  severity: string;
-  created_at: string;
-  acknowledged_at: string | null;
-}
+import { computeAlertStats, formatMtta, type AlertRowLike } from "@/lib/behavioralAlertStats";
 
 export function BehavioralRegenAlertsStats() {
   const { data, isLoading, error } = useQuery({
@@ -24,25 +18,7 @@ export function BehavioralRegenAlertsStats() {
         .gte("created_at", since)
         .limit(5000);
       if (error) throw error;
-      const rows = (data ?? []) as Row[];
-      const real = rows.filter((r) => !r.is_simulated);
-      const sim = rows.filter((r) => r.is_simulated);
-      const acked = real.filter((r) => r.acknowledged_at);
-      const mttaMs = acked.length
-        ? acked.reduce(
-            (sum, r) =>
-              sum +
-              (new Date(r.acknowledged_at as string).getTime() -
-                new Date(r.created_at).getTime()),
-            0,
-          ) / acked.length
-        : null;
-      return {
-        realTotal: real.length,
-        realCritical: real.filter((r) => r.severity === "critical").length,
-        simulated: sim.length,
-        mttaMinutes: mttaMs !== null ? Math.round(mttaMs / 60_000) : null,
-      };
+      return computeAlertStats((data ?? []) as AlertRowLike[]);
     },
   });
 
@@ -66,15 +42,6 @@ export function BehavioralRegenAlertsStats() {
 
   const stats = data ?? { realTotal: 0, realCritical: 0, simulated: 0, mttaMinutes: null };
 
-  const fmtMtta = (m: number | null): string => {
-    if (m === null) return "—";
-    if (m < 1) return "<1 min";
-    if (m < 60) return `${m} min`;
-    const h = Math.floor(m / 60);
-    if (h < 24) return `${h}h ${m % 60}min`;
-    return `${Math.floor(h / 24)}d ${h % 24}h`;
-  };
-
   const items = [
     {
       label: "Alertas reais (30d)",
@@ -90,7 +57,7 @@ export function BehavioralRegenAlertsStats() {
     },
     {
       label: "MTTA (30d)",
-      value: fmtMtta(stats.mttaMinutes),
+      value: formatMtta(stats.mttaMinutes),
       icon: Timer,
       tone:
         stats.mttaMinutes !== null && stats.mttaMinutes > 60
