@@ -1,9 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AlertTriangle, CheckCircle2, Clock, Pause } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Clock, Loader2, Pause, Zap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 interface CronHealthRow {
@@ -33,6 +35,7 @@ function formatAgo(mins: number | null): string {
 }
 
 export function BehavioralRegenCronHealth() {
+  const qc = useQueryClient();
   const { data, isLoading, error } = useQuery({
     queryKey: ["behavioral-regen-cron-health"],
     refetchInterval: 60_000,
@@ -47,12 +50,54 @@ export function BehavioralRegenCronHealth() {
     },
   });
 
+  const simulate = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await (supabase.rpc as unknown as (
+        fn: string,
+        args: Record<string, unknown>,
+      ) => Promise<{ data: string | null; error: Error | null }>)(
+        "simulate_behavioral_regen_alert",
+        { _alert_type: "behavioral_regen_cron_stale", _severity: "critical" },
+      );
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Alerta simulado disparado", {
+        description: "Verifique o banner e o sino de notificações.",
+      });
+      qc.invalidateQueries({ queryKey: ["behavioral-regen-active-alerts"] });
+    },
+    onError: (err: Error) => {
+      toast.error("Falha ao simular alerta", { description: err.message });
+    },
+  });
+
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-sm flex items-center gap-2">
-          <Clock className="w-4 h-4" /> Saúde dos jobs agendados
-        </CardTitle>
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle className="text-sm flex items-center gap-2">
+            <Clock className="w-4 h-4" /> Saúde dos jobs agendados
+          </CardTitle>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              if (window.confirm("Disparar alerta crítico simulado para testar o fluxo?")) {
+                simulate.mutate();
+              }
+            }}
+            disabled={simulate.isPending}
+          >
+            {simulate.isPending ? (
+              <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+            ) : (
+              <Zap className="mr-1 h-3 w-3" />
+            )}
+            Testar alerta
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="space-y-3">
         {isLoading ? (

@@ -14840,6 +14840,10 @@ export type Database = {
       }
       seed_playbook_defaults: { Args: { _user_id: string }; Returns: undefined }
       seed_win_loss_defaults: { Args: { _user_id: string }; Returns: undefined }
+      simulate_behavioral_regen_alert: {
+        Args: { _alert_type?: string; _severity?: string }
+        Returns: string
+      }
       submit_public_form: {
         Args: {
           _data: Json
