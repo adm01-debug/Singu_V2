@@ -37,7 +37,11 @@ export function BehavioralRegenCronHealth() {
     queryKey: ["behavioral-regen-cron-health"],
     refetchInterval: 60_000,
     queryFn: async (): Promise<CronHealthRow[]> => {
-      const { data, error } = await supabase.rpc("get_behavioral_regen_cron_health");
+      const { data, error } = await (supabase.rpc as unknown as (
+        fn: string,
+      ) => Promise<{ data: CronHealthRow[] | null; error: Error | null }>)(
+        "get_behavioral_regen_cron_health",
+      );
       if (error) throw error;
       return (data ?? []) as CronHealthRow[];
     },
