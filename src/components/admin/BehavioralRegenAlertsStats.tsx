@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Activity, FlaskConical, ShieldAlert, Timer, TimerReset } from "lucide-react";
+import { Activity, FlaskConical, ShieldAlert, Timer } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { computeAlertStats, formatMtta, type AlertRowLike } from "@/lib/behavioralAlertStats";
 
