@@ -12935,6 +12935,30 @@ export type Database = {
         }
         Relationships: []
       }
+      system_config: {
+        Row: {
+          description: string | null
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: number
+        }
+        Insert: {
+          description?: string | null
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value: number
+        }
+        Update: {
+          description?: string | null
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: number
+        }
+        Relationships: []
+      }
       system_health_snapshots: {
         Row: {
           components: Json
@@ -14627,6 +14651,10 @@ export type Database = {
         }[]
       }
       get_score_explicability: { Args: { p_contact_id: string }; Returns: Json }
+      get_system_config_num: {
+        Args: { _default: number; _key: string }
+        Returns: number
+      }
       get_team_member_ids: {
         Args: { _manager_user_id: string }
         Returns: string[]
