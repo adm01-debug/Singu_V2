@@ -27,6 +27,7 @@ import { BehavioralRegenAlertBanner } from "@/components/admin/BehavioralRegenAl
 import { BehavioralRegenCronHealth } from "@/components/admin/BehavioralRegenCronHealth";
 import { BehavioralRegenAlertsStats } from "@/components/admin/BehavioralRegenAlertsStats";
 import { BehavioralRegenAlertsTrend } from "@/components/admin/BehavioralRegenAlertsTrend";
+import { useUiPreferencesSync } from "@/hooks/useUiPreferencesSync";
 
 type QueueRow = {
   contact_id: string;
@@ -66,13 +67,32 @@ function csvEscape(value: string): string {
 export default function BehavioralRegenAudit() {
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
+  const hasUrlOverride = searchParams.has("hide_sim");
   const hideSimulations = searchParams.get("hide_sim") === "1";
   const toggleHideSimulations = () => {
     const next = new URLSearchParams(searchParams);
-    if (hideSimulations) next.delete("hide_sim");
-    else next.set("hide_sim", "1");
+    // Sempre grava explicitamente para que a preferência seja persistida
+    // cross-device via user_ui_preferences (URL > backend > default).
+    next.set("hide_sim", hideSimulations ? "0" : "1");
     setSearchParams(next, { replace: true });
   };
+
+  // Sincronia cross-device: hidrata do backend se a URL não trouxer override.
+  useUiPreferencesSync<{ hide_sim: boolean }>({
+    scope: "behavioral_regen_audit",
+    current: { hide_sim: hideSimulations },
+    defaults: { hide_sim: false },
+    sanitize: (raw) => {
+      const obj = (raw ?? {}) as Record<string, unknown>;
+      return { hide_sim: obj.hide_sim === true };
+    },
+    hydrate: (prefs) => {
+      const next = new URLSearchParams(searchParams);
+      next.set("hide_sim", prefs.hide_sim ? "1" : "0");
+      setSearchParams(next, { replace: true });
+    },
+    hasUrlOverride,
+  });
   const [period, setPeriod] = useState<PeriodKey>("7d");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [search, setSearch] = useState("");
