@@ -12,6 +12,8 @@ describe("computeAlertStats", () => {
       simulated: 0,
       mttaMinutes: null,
       mttaP95Minutes: null,
+      mttaCriticalMinutes: null,
+      mttaWarningMinutes: null,
     });
   });
 
@@ -41,6 +43,8 @@ describe("computeAlertStats", () => {
     ]);
     expect(stats.mttaMinutes).toBe(20);
     expect(stats.mttaP95Minutes).toBe(29);
+    expect(stats.mttaCriticalMinutes).toBe(30);
+    expect(stats.mttaWarningMinutes).toBe(10);
   });
 
   it("nunca retorna MTTA negativo se ack < created (clock skew)", () => {
