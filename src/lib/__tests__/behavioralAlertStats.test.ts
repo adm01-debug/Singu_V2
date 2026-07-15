@@ -8,8 +8,10 @@ describe("computeAlertStats", () => {
     expect(computeAlertStats([])).toEqual({
       realTotal: 0,
       realCritical: 0,
+      realWarning: 0,
       simulated: 0,
       mttaMinutes: null,
+      mttaP95Minutes: null,
     });
   });
 
@@ -21,8 +23,10 @@ describe("computeAlertStats", () => {
     ]);
     expect(stats.realTotal).toBe(2);
     expect(stats.realCritical).toBe(1);
+    expect(stats.realWarning).toBe(1);
     expect(stats.simulated).toBe(1);
     expect(stats.mttaMinutes).toBeNull();
+    expect(stats.mttaP95Minutes).toBeNull();
   });
 
   it("calcula MTTA médio apenas de alertas reais reconhecidos", () => {
@@ -36,6 +40,7 @@ describe("computeAlertStats", () => {
       { is_simulated: true, severity: "warning", created_at: created, acknowledged_at: ack10 },
     ]);
     expect(stats.mttaMinutes).toBe(20);
+    expect(stats.mttaP95Minutes).toBe(29);
   });
 
   it("nunca retorna MTTA negativo se ack < created (clock skew)", () => {
@@ -45,6 +50,22 @@ describe("computeAlertStats", () => {
       { is_simulated: false, severity: "warning", created_at: created, acknowledged_at: ack },
     ]);
     expect(stats.mttaMinutes).toBe(0);
+    expect(stats.mttaP95Minutes).toBe(0);
+  });
+});
+
+describe("computeAlertStats — MTTA p95", () => {
+  it("calcula p95 por interpolação em amostra maior", () => {
+    const base = new Date("2026-01-01T00:00:00Z").getTime();
+    // deltas em minutos: 1..20 → p95 esperado ≈ 19.05 → 19 min
+    const rows = Array.from({ length: 20 }, (_, i) => ({
+      is_simulated: false,
+      severity: "warning",
+      created_at: new Date(base).toISOString(),
+      acknowledged_at: new Date(base + (i + 1) * 60_000).toISOString(),
+    }));
+    const stats = computeAlertStats(rows);
+    expect(stats.mttaP95Minutes).toBe(19);
   });
 });
 

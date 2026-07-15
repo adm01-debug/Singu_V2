@@ -40,12 +40,24 @@ export function BehavioralRegenAlertsStats() {
     );
   }
 
-  const stats = data ?? { realTotal: 0, realCritical: 0, simulated: 0, mttaMinutes: null };
+  const stats =
+    data ?? {
+      realTotal: 0,
+      realCritical: 0,
+      realWarning: 0,
+      simulated: 0,
+      mttaMinutes: null,
+      mttaP95Minutes: null,
+    };
 
   const items = [
     {
       label: "Alertas reais (30d)",
       value: String(stats.realTotal),
+      hint:
+        stats.realTotal > 0
+          ? `${stats.realCritical} críticos · ${stats.realWarning} warnings`
+          : undefined,
       icon: Activity,
       tone: "text-foreground",
     },
@@ -58,6 +70,10 @@ export function BehavioralRegenAlertsStats() {
     {
       label: "MTTA (30d)",
       value: formatMtta(stats.mttaMinutes),
+      hint:
+        stats.mttaP95Minutes !== null
+          ? `p95: ${formatMtta(stats.mttaP95Minutes)}`
+          : undefined,
       icon: Timer,
       tone:
         stats.mttaMinutes !== null && stats.mttaMinutes > 60
@@ -83,6 +99,9 @@ export function BehavioralRegenAlertsStats() {
           </CardHeader>
           <CardContent>
             <p className={`text-2xl font-semibold tabular-nums ${it.tone}`}>{it.value}</p>
+            {it.hint && (
+              <p className="text-[10px] text-muted-foreground mt-1 tabular-nums">{it.hint}</p>
+            )}
           </CardContent>
         </Card>
       ))}

@@ -8,8 +8,10 @@ export interface AlertRowLike {
 export interface AlertStats {
   realTotal: number;
   realCritical: number;
+  realWarning: number;
   simulated: number;
   mttaMinutes: number | null;
+  mttaP95Minutes: number | null;
 }
 
 /**
@@ -26,20 +28,42 @@ export function computeAlertStats(rows: readonly AlertRowLike[]): AlertStats {
   const sim = rows.filter((r) => r.is_simulated);
   const acked = real.filter((r) => r.acknowledged_at);
 
-  const mttaMs = acked.length
-    ? acked.reduce((sum, r) => {
-        const created = new Date(r.created_at).getTime();
-        const ack = new Date(r.acknowledged_at as string).getTime();
-        return sum + Math.max(0, ack - created);
-      }, 0) / acked.length
+  const ackDeltasMs = acked.map((r) => {
+    const created = new Date(r.created_at).getTime();
+    const ack = new Date(r.acknowledged_at as string).getTime();
+    return Math.max(0, ack - created);
+  });
+
+  const mttaMs = ackDeltasMs.length
+    ? ackDeltasMs.reduce((s, v) => s + v, 0) / ackDeltasMs.length
     : null;
+
+  const p95Ms = percentile(ackDeltasMs, 0.95);
+  const realCritical = real.filter((r) => r.severity === "critical").length;
 
   return {
     realTotal: real.length,
-    realCritical: real.filter((r) => r.severity === "critical").length,
+    realCritical,
+    realWarning: real.length - realCritical,
     simulated: sim.length,
     mttaMinutes: mttaMs !== null ? Math.round(mttaMs / 60_000) : null,
+    mttaP95Minutes: p95Ms !== null ? Math.round(p95Ms / 60_000) : null,
   };
+}
+
+/**
+ * Percentil por interpolação linear (nearest-rank). Retorna null para lista vazia.
+ * Usado para MTTA p95 — detecta caudas longas de reconhecimento.
+ */
+function percentile(values: readonly number[], p: number): number | null {
+  if (!values.length) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  if (sorted.length === 1) return sorted[0];
+  const rank = p * (sorted.length - 1);
+  const lo = Math.floor(rank);
+  const hi = Math.ceil(rank);
+  if (lo === hi) return sorted[lo];
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (rank - lo);
 }
 
 export function formatMtta(minutes: number | null): string {
