@@ -6,6 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Activity, ShieldCheck, AlertTriangle, OctagonAlert, Info, Bell, TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UptimeSparkline } from '@/components/admin/UptimeSparkline';
+import { MttaSlaBreachHistoryCard } from '@/components/admin/MttaSlaBreachHistoryCard';
 
 function StatCard({
   title,
@@ -185,6 +186,8 @@ export default function ErrorBudget() {
           </CardContent>
         </Card>
       )}
+
+      <MttaSlaBreachHistoryCard />
 
       <Card>
         <CardHeader>
