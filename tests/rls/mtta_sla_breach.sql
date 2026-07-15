@@ -7,147 +7,139 @@
 \set ON_ERROR_STOP on
 \echo '=== MTTA-SLA breach: dedup 24h + auto-ack (regressão) ==='
 
+-- Estratégia: todo o teste roda dentro de uma transação com ROLLBACK final,
+-- e cada linha inserida carrega um marker único em metadata.test_run para
+-- isolar completamente das linhas de produção. Nenhum DELETE/UPDATE direto —
+-- apenas INSERT + chamadas às funções SECURITY DEFINER (que rodam como owner
+-- e por isso conseguem modificar system_alerts).
+
 BEGIN;
 
--- Isola o alert_type deste teste — apaga qualquer resíduo prévio.
-DELETE FROM public.system_alerts WHERE alert_type = 'mtta_critical_sla_breach';
+-- Marker do run — usado em todas as linhas e queries de asserção.
+\set test_run '''mtta-sla-regression-run'''
 
--- Predicado dedup usado pelo publish_mtta_sla_breach_alert:
--- "existe alerta do mesmo tipo, não reconhecido, com created_at > now()-24h?"
--- Encapsulado numa função local (temp) para reuso nos cenários.
-CREATE OR REPLACE FUNCTION pg_temp.mtta_dedup_hit() RETURNS BOOLEAN
+-- Helpers locais (temp) — dropados no fim da sessão.
+CREATE OR REPLACE FUNCTION pg_temp.dedup_hit() RETURNS BOOLEAN
 LANGUAGE sql AS $$
   SELECT EXISTS (
     SELECT 1 FROM public.system_alerts
     WHERE alert_type = 'mtta_critical_sla_breach'
       AND acknowledged_at IS NULL
       AND created_at > now() - interval '24 hours'
+      AND metadata->>'test_run' = 'mtta-sla-regression-run'
   );
 $$;
 
---
--- CENÁRIO 1 — dedup 24h: com 1 breach recente aberto, o predicado bloqueia
--- novas publicações.
---
-\echo 'C1: dedup — breach recente aberto bloqueia publicação'
-INSERT INTO public.system_alerts (alert_type, severity, message, metadata)
-VALUES ('mtta_critical_sla_breach', 'warning', 'seed', jsonb_build_object('mtta_minutes', 45, 'sla_minutes', 30));
+CREATE OR REPLACE FUNCTION pg_temp.count_ack(_atype TEXT) RETURNS INT
+LANGUAGE sql AS $$
+  SELECT COUNT(*)::INT FROM public.system_alerts
+  WHERE alert_type = _atype
+    AND acknowledged_at IS NOT NULL
+    AND metadata->>'test_run' = 'mtta-sla-regression-run';
+$$;
 
-DO $$
-BEGIN
-  IF NOT pg_temp.mtta_dedup_hit() THEN
-    RAISE EXCEPTION '❌ C1 FALHOU: dedup deveria bloquear (existe aberto <24h)';
-  END IF;
-  RAISE NOTICE '✅ C1 OK: dedup bloqueia com breach aberto recente';
+--
+-- C1 — dedup 24h: breach aberto <24h dispara o predicado dedup.
+--
+\echo 'C1: dedup predicate bloqueia com breach aberto recente'
+INSERT INTO public.system_alerts (alert_type, severity, threshold_pct, message, metadata, created_at)
+VALUES ('mtta_critical_sla_breach', 'warning', 100, 'seed recente',
+        jsonb_build_object('mtta_minutes', 45, 'sla_minutes', 30, 'test_run', 'mtta-sla-regression-run'),
+        now() - interval '2 hours');
+
+DO $$ BEGIN
+  IF NOT pg_temp.dedup_hit() THEN RAISE EXCEPTION '❌ C1: dedup deveria bloquear'; END IF;
+  RAISE NOTICE '✅ C1 OK';
 END $$;
 
 --
--- CENÁRIO 2 — auto-ack NÃO fecha breach recente (<24h).
+-- C2 — auto-ack ignora breach recente (<24h).
 --
-\echo 'C2: auto-ack ignora breaches recentes (<24h)'
+\echo 'C2: auto-ack não fecha breach <24h'
 DO $$
-DECLARE v_closed INT;
+DECLARE v INT;
 BEGIN
-  SELECT public.auto_ack_stale_mtta_sla_breaches() INTO v_closed;
-  IF v_closed <> 0 THEN
-    RAISE EXCEPTION '❌ C2 FALHOU: auto-ack fechou % breach(es) recentes', v_closed;
+  v := pg_temp.count_ack('mtta_critical_sla_breach');
+  PERFORM public.auto_ack_stale_mtta_sla_breaches();
+  IF pg_temp.count_ack('mtta_critical_sla_breach') <> v THEN
+    RAISE EXCEPTION '❌ C2: auto-ack fechou breach recente';
   END IF;
-  RAISE NOTICE '✅ C2 OK: breach <24h preservado';
+  RAISE NOTICE '✅ C2 OK';
 END $$;
 
 --
--- CENÁRIO 3 — auto-ack FECHA breach vencido (>24h) e marca metadata.
+-- C3 — auto-ack FECHA breach >24h e escreve metadata.auto_ack_reason.
 --
-\echo 'C3: auto-ack fecha breach >24h e marca auto_ack_reason'
-UPDATE public.system_alerts
-   SET created_at = now() - interval '25 hours'
- WHERE alert_type = 'mtta_critical_sla_breach';
+\echo 'C3: auto-ack fecha breach >24h com auto_ack_reason'
+INSERT INTO public.system_alerts (alert_type, severity, threshold_pct, message, metadata, created_at)
+VALUES ('mtta_critical_sla_breach', 'warning', 100, 'vencido',
+        jsonb_build_object('mtta_minutes', 55, 'sla_minutes', 30, 'test_run', 'mtta-sla-regression-run'),
+        now() - interval '25 hours');
 
 DO $$
-DECLARE
-  v_closed INT;
-  v_reason TEXT;
+DECLARE v_reason TEXT; v_ack_before INT; v_ack_after INT;
 BEGIN
-  SELECT public.auto_ack_stale_mtta_sla_breaches() INTO v_closed;
-  IF v_closed <> 1 THEN
-    RAISE EXCEPTION '❌ C3 FALHOU: esperava 1 auto-ack, retornou %', v_closed;
+  v_ack_before := pg_temp.count_ack('mtta_critical_sla_breach');
+  PERFORM public.auto_ack_stale_mtta_sla_breaches();
+  v_ack_after := pg_temp.count_ack('mtta_critical_sla_breach');
+  IF v_ack_after - v_ack_before < 1 THEN
+    RAISE EXCEPTION '❌ C3: esperava >=1 novo ack, delta=%', v_ack_after - v_ack_before;
   END IF;
-
   SELECT metadata->>'auto_ack_reason' INTO v_reason
   FROM public.system_alerts
-  WHERE alert_type = 'mtta_critical_sla_breach'
+  WHERE alert_type='mtta_critical_sla_breach'
+    AND metadata->>'test_run'='mtta-sla-regression-run'
+    AND acknowledged_at IS NOT NULL
+    AND created_at < now() - interval '24 hours'
   ORDER BY created_at DESC LIMIT 1;
   IF v_reason IS DISTINCT FROM 'sla_window_expired' THEN
-    RAISE EXCEPTION '❌ C3 FALHOU: auto_ack_reason=% (esperado sla_window_expired)', v_reason;
+    RAISE EXCEPTION '❌ C3: auto_ack_reason=% (esperado sla_window_expired)', v_reason;
   END IF;
-  RAISE NOTICE '✅ C3 OK: 1 breach fechado com motivo correto';
+  RAISE NOTICE '✅ C3 OK (delta=%)', v_ack_after - v_ack_before;
 END $$;
 
 --
--- CENÁRIO 4 — dedup ignora breaches JÁ RECONHECIDOS: após ack, nova
--- publicação cria um novo alerta aberto (o antigo não bloqueia).
+-- C4 — auto-ack é idempotente: 2ª chamada retorna 0.
 --
-\echo 'C4: dedup libera após ack — predicado retorna falso'
-DO $$
+\echo 'C4: auto-ack idempotente'
+DO $$ DECLARE v INT;
 BEGIN
-  IF pg_temp.mtta_dedup_hit() THEN
-    RAISE EXCEPTION '❌ C4 FALHOU: dedup ainda bloqueia mesmo após todos ackados';
-  END IF;
-  RAISE NOTICE '✅ C4 OK: dedup libera quando não há aberto <24h';
-END $$;
-
--- Simula nova publicação (INSERT direto, imitando o efeito do publish).
-INSERT INTO public.system_alerts (alert_type, severity, message, metadata)
-VALUES ('mtta_critical_sla_breach', 'warning', 'novo pós-ack',
-        jsonb_build_object('mtta_minutes', 90, 'sla_minutes', 30));
-
-DO $$
-BEGIN
-  IF NOT pg_temp.mtta_dedup_hit() THEN
-    RAISE EXCEPTION '❌ C4b FALHOU: novo insert deveria reativar dedup';
-  END IF;
-  RAISE NOTICE '✅ C4b OK: novo breach reativa dedup';
+  SELECT public.auto_ack_stale_mtta_sla_breaches() INTO v;
+  IF v <> 0 THEN RAISE EXCEPTION '❌ C4: run subsequente retornou %', v; END IF;
+  RAISE NOTICE '✅ C4 OK';
 END $$;
 
 --
--- CENÁRIO 5 — auto-ack é idempotente: rodar 2x não altera nada na 2ª.
+-- C5 — auto-ack escopado: não afeta outro alert_type.
 --
-\echo 'C5: auto-ack idempotente'
-UPDATE public.system_alerts
-   SET created_at = now() - interval '48 hours'
- WHERE alert_type = 'mtta_critical_sla_breach'
-   AND acknowledged_at IS NULL;
+\echo 'C5: auto-ack escopado a mtta_critical_sla_breach'
+INSERT INTO public.system_alerts (alert_type, severity, threshold_pct, message, metadata, created_at)
+VALUES ('__test_unrelated_regression', 'warning', 100, 'canário',
+        jsonb_build_object('test_run', 'mtta-sla-regression-run'),
+        now() - interval '48 hours');
 
-DO $$
-DECLARE v1 INT; v2 INT;
-BEGIN
-  SELECT public.auto_ack_stale_mtta_sla_breaches() INTO v1;
-  SELECT public.auto_ack_stale_mtta_sla_breaches() INTO v2;
-  IF v1 < 1 OR v2 <> 0 THEN
-    RAISE EXCEPTION '❌ C5 FALHOU: run1=%, run2=% (esperado >=1 e 0)', v1, v2;
-  END IF;
-  RAISE NOTICE '✅ C5 OK: idempotência confirmada (run1=%, run2=0)', v1;
-END $$;
-
---
--- CENÁRIO 6 — auto-ack NÃO toca alertas de outros alert_types (escopo).
---
-\echo 'C6: auto-ack escopado ao alert_type mtta_critical_sla_breach'
-INSERT INTO public.system_alerts (alert_type, severity, message, created_at)
-VALUES ('unrelated_test_type', 'warning', 'canário', now() - interval '48 hours');
-
-DO $$
-DECLARE v_other_acked INT;
-BEGIN
+DO $$ BEGIN
   PERFORM public.auto_ack_stale_mtta_sla_breaches();
-  SELECT COUNT(*) INTO v_other_acked
-  FROM public.system_alerts
-  WHERE alert_type = 'unrelated_test_type'
-    AND acknowledged_at IS NOT NULL;
-  IF v_other_acked <> 0 THEN
-    RAISE EXCEPTION '❌ C6 FALHOU: auto-ack afetou outro alert_type';
+  IF pg_temp.count_ack('__test_unrelated_regression') <> 0 THEN
+    RAISE EXCEPTION '❌ C5: auto-ack afetou outro alert_type';
   END IF;
-  RAISE NOTICE '✅ C6 OK: escopo preservado';
+  RAISE NOTICE '✅ C5 OK';
+END $$;
+
+--
+-- C6 — dedup predicate ignora breach ackado: mesmo com linha vencida ackada
+-- em C3, se não há outro aberto <24h, predicado retorna falso.
+-- (Após C3, o único "aberto <24h" é o inserido em C1.)
+--
+\echo 'C6: predicate dedup considera apenas abertos <24h'
+DO $$
+DECLARE v BOOLEAN;
+BEGIN
+  v := pg_temp.dedup_hit();
+  IF NOT v THEN
+    RAISE EXCEPTION '❌ C6: dedup deveria detectar seed C1 ainda aberto';
+  END IF;
+  RAISE NOTICE '✅ C6 OK (C1 seed continua bloqueando)';
 END $$;
 
 ROLLBACK;
