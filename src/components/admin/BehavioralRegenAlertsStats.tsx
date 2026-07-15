@@ -1,13 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Activity, FlaskConical, ShieldAlert, Timer } from "lucide-react";
+import { Activity, AlertTriangle, FlaskConical, ShieldAlert, Timer } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { computeAlertStats, formatMtta, type AlertRowLike } from "@/lib/behavioralAlertStats";
 
 interface Props {
   hideSimulations?: boolean;
 }
+
+/** SLA alvo para MTTA crítico (minutos). Acima disso, sinaliza breach visual. */
+const MTTA_CRITICAL_SLA_MIN = 30;
 
 export function BehavioralRegenAlertsStats({ hideSimulations = false }: Props = {}) {
   const { data, isLoading, error } = useQuery({
@@ -90,11 +93,20 @@ export function BehavioralRegenAlertsStats({ hideSimulations = false }: Props = 
         ]
           .filter(Boolean)
           .join(" · ") || undefined,
-      icon: Timer,
+      icon:
+        stats.mttaCriticalMinutes !== null && stats.mttaCriticalMinutes > MTTA_CRITICAL_SLA_MIN
+          ? AlertTriangle
+          : Timer,
       tone:
-        stats.mttaMinutes !== null && stats.mttaMinutes > 60
+        stats.mttaCriticalMinutes !== null && stats.mttaCriticalMinutes > MTTA_CRITICAL_SLA_MIN
+          ? "text-destructive"
+          : stats.mttaMinutes !== null && stats.mttaMinutes > 60
           ? "text-amber-600 dark:text-amber-400"
           : "text-foreground",
+      breach:
+        stats.mttaCriticalMinutes !== null && stats.mttaCriticalMinutes > MTTA_CRITICAL_SLA_MIN
+          ? `SLA ${MTTA_CRITICAL_SLA_MIN}min excedido`
+          : undefined,
     },
     {
       label: "Simulações (30d)",
@@ -117,6 +129,9 @@ export function BehavioralRegenAlertsStats({ hideSimulations = false }: Props = 
             <p className={`text-2xl font-semibold tabular-nums ${it.tone}`}>{it.value}</p>
             {it.hint && (
               <p className="text-[10px] text-muted-foreground mt-1 tabular-nums">{it.hint}</p>
+            )}
+            {"breach" in it && it.breach && (
+              <p className="text-[10px] text-destructive mt-1 font-medium">⚠ {it.breach}</p>
             )}
           </CardContent>
         </Card>
