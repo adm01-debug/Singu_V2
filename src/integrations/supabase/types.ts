@@ -14690,6 +14690,10 @@ export type Database = {
             }
             Returns: Json
           }
+      publish_mtta_sla_breach_alert: {
+        Args: { _mtta_minutes: number; _sla_minutes: number }
+        Returns: string
+      }
       record_buyer_view: {
         Args: { _label?: string; _token: string }
         Returns: boolean
