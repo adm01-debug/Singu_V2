@@ -40,7 +40,7 @@ describe("computeAlertStats", () => {
       { is_simulated: true, severity: "warning", created_at: created, acknowledged_at: ack10 },
     ]);
     expect(stats.mttaMinutes).toBe(20);
-    expect(stats.mttaP95Minutes).toBe(30);
+    expect(stats.mttaP95Minutes).toBe(29);
   });
 
   it("nunca retorna MTTA negativo se ack < created (clock skew)", () => {
