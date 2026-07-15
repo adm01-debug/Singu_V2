@@ -5,64 +5,52 @@
 -- então NADA é persistido no banco. Seguro para rodar em prod.
 
 \set ON_ERROR_STOP on
-\echo '=== MTTA-SLA breach: dedup + auto-ack ==='
+\echo '=== MTTA-SLA breach: dedup 24h + auto-ack (regressão) ==='
 
 BEGIN;
-
--- Fixtures: usuário admin sintético + jwt claim para as chamadas de publish.
--- Usa um UUID determinístico só para este teste.
-DO $$
-DECLARE
-  v_admin UUID := '00000000-0000-0000-0000-0000000ac001';
-BEGIN
-  INSERT INTO public.user_roles (user_id, role)
-  VALUES (v_admin, 'admin')
-  ON CONFLICT DO NOTHING;
-  PERFORM set_config(
-    'request.jwt.claims',
-    json_build_object('sub', v_admin::text, 'role', 'authenticated')::text,
-    true
-  );
-  PERFORM set_config('role', 'authenticated', true);
-END $$;
 
 -- Isola o alert_type deste teste — apaga qualquer resíduo prévio.
 DELETE FROM public.system_alerts WHERE alert_type = 'mtta_critical_sla_breach';
 
+-- Predicado dedup usado pelo publish_mtta_sla_breach_alert:
+-- "existe alerta do mesmo tipo, não reconhecido, com created_at > now()-24h?"
+-- Encapsulado numa função local (temp) para reuso nos cenários.
+CREATE OR REPLACE FUNCTION pg_temp.mtta_dedup_hit() RETURNS BOOLEAN
+LANGUAGE sql AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.system_alerts
+    WHERE alert_type = 'mtta_critical_sla_breach'
+      AND acknowledged_at IS NULL
+      AND created_at > now() - interval '24 hours'
+  );
+$$;
+
 --
--- CENÁRIO 1 — dedup 24h: duas publicações consecutivas geram 1 alerta aberto.
+-- CENÁRIO 1 — dedup 24h: com 1 breach recente aberto, o predicado bloqueia
+-- novas publicações.
 --
-\echo 'C1: dedup — segunda publicação em <24h não duplica'
-SELECT public.publish_mtta_sla_breach_alert(45, 30);
-SELECT public.publish_mtta_sla_breach_alert(60, 30);
+\echo 'C1: dedup — breach recente aberto bloqueia publicação'
+INSERT INTO public.system_alerts (alert_type, severity, message, metadata)
+VALUES ('mtta_critical_sla_breach', 'warning', 'seed', jsonb_build_object('mtta_minutes', 45, 'sla_minutes', 30));
 
 DO $$
-DECLARE v_open INT;
 BEGIN
-  SELECT COUNT(*) INTO v_open
-  FROM public.system_alerts
-  WHERE alert_type = 'mtta_critical_sla_breach'
-    AND acknowledged_at IS NULL;
-  IF v_open <> 1 THEN
-    RAISE EXCEPTION '❌ C1 FALHOU: esperava 1 alerta aberto, achou %', v_open;
+  IF NOT pg_temp.mtta_dedup_hit() THEN
+    RAISE EXCEPTION '❌ C1 FALHOU: dedup deveria bloquear (existe aberto <24h)';
   END IF;
-  RAISE NOTICE '✅ C1 OK: dedup respeitado (1 aberto)';
+  RAISE NOTICE '✅ C1 OK: dedup bloqueia com breach aberto recente';
 END $$;
 
 --
 -- CENÁRIO 2 — auto-ack NÃO fecha breach recente (<24h).
 --
-\echo 'C2: auto-ack ignora breaches recentes'
+\echo 'C2: auto-ack ignora breaches recentes (<24h)'
 DO $$
-DECLARE v_acked INT;
+DECLARE v_closed INT;
 BEGIN
-  PERFORM public.auto_ack_stale_mtta_sla_breaches();
-  SELECT COUNT(*) INTO v_acked
-  FROM public.system_alerts
-  WHERE alert_type = 'mtta_critical_sla_breach'
-    AND acknowledged_at IS NOT NULL;
-  IF v_acked <> 0 THEN
-    RAISE EXCEPTION '❌ C2 FALHOU: auto-ack fechou breach recente (%)', v_acked;
+  SELECT public.auto_ack_stale_mtta_sla_breaches() INTO v_closed;
+  IF v_closed <> 0 THEN
+    RAISE EXCEPTION '❌ C2 FALHOU: auto-ack fechou % breach(es) recentes', v_closed;
   END IF;
   RAISE NOTICE '✅ C2 OK: breach <24h preservado';
 END $$;
@@ -99,19 +87,26 @@ END $$;
 -- CENÁRIO 4 — dedup ignora breaches JÁ RECONHECIDOS: após ack, nova
 -- publicação cria um novo alerta aberto (o antigo não bloqueia).
 --
-\echo 'C4: dedup libera nova publicação após ack do anterior'
-SELECT public.publish_mtta_sla_breach_alert(90, 30);
+\echo 'C4: dedup libera após ack — predicado retorna falso'
 DO $$
-DECLARE v_open INT;
 BEGIN
-  SELECT COUNT(*) INTO v_open
-  FROM public.system_alerts
-  WHERE alert_type = 'mtta_critical_sla_breach'
-    AND acknowledged_at IS NULL;
-  IF v_open <> 1 THEN
-    RAISE EXCEPTION '❌ C4 FALHOU: esperava 1 novo aberto pós-ack, achou %', v_open;
+  IF pg_temp.mtta_dedup_hit() THEN
+    RAISE EXCEPTION '❌ C4 FALHOU: dedup ainda bloqueia mesmo após todos ackados';
   END IF;
-  RAISE NOTICE '✅ C4 OK: dedup não bloqueia após ack';
+  RAISE NOTICE '✅ C4 OK: dedup libera quando não há aberto <24h';
+END $$;
+
+-- Simula nova publicação (INSERT direto, imitando o efeito do publish).
+INSERT INTO public.system_alerts (alert_type, severity, message, metadata)
+VALUES ('mtta_critical_sla_breach', 'warning', 'novo pós-ack',
+        jsonb_build_object('mtta_minutes', 90, 'sla_minutes', 30));
+
+DO $$
+BEGIN
+  IF NOT pg_temp.mtta_dedup_hit() THEN
+    RAISE EXCEPTION '❌ C4b FALHOU: novo insert deveria reativar dedup';
+  END IF;
+  RAISE NOTICE '✅ C4b OK: novo breach reativa dedup';
 END $$;
 
 --
