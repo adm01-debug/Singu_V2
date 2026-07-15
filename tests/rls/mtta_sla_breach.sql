@@ -42,8 +42,8 @@ $$;
 -- C1 — dedup 24h: breach aberto <24h dispara o predicado dedup.
 --
 \echo 'C1: dedup predicate bloqueia com breach aberto recente'
-INSERT INTO public.system_alerts (alert_type, severity, threshold_pct, message, metadata, created_at)
-VALUES ('mtta_critical_sla_breach', 'warning', 100, 'seed recente',
+INSERT INTO public.system_alerts (alert_type, severity, threshold_pct, consumed_pct, message, metadata, created_at)
+VALUES ('mtta_critical_sla_breach', 'warning', 100, 100, 'seed recente',
         jsonb_build_object('mtta_minutes', 45, 'sla_minutes', 30, 'test_run', 'mtta-sla-regression-run'),
         now() - interval '2 hours');
 
@@ -71,8 +71,8 @@ END $$;
 -- C3 — auto-ack FECHA breach >24h e escreve metadata.auto_ack_reason.
 --
 \echo 'C3: auto-ack fecha breach >24h com auto_ack_reason'
-INSERT INTO public.system_alerts (alert_type, severity, threshold_pct, message, metadata, created_at)
-VALUES ('mtta_critical_sla_breach', 'warning', 100, 'vencido',
+INSERT INTO public.system_alerts (alert_type, severity, threshold_pct, consumed_pct, message, metadata, created_at)
+VALUES ('mtta_critical_sla_breach', 'warning', 100, 100, 'vencido',
         jsonb_build_object('mtta_minutes', 55, 'sla_minutes', 30, 'test_run', 'mtta-sla-regression-run'),
         now() - interval '25 hours');
 
@@ -113,8 +113,8 @@ END $$;
 -- C5 — auto-ack escopado: não afeta outro alert_type.
 --
 \echo 'C5: auto-ack escopado a mtta_critical_sla_breach'
-INSERT INTO public.system_alerts (alert_type, severity, threshold_pct, message, metadata, created_at)
-VALUES ('__test_unrelated_regression', 'warning', 100, 'canário',
+INSERT INTO public.system_alerts (alert_type, severity, threshold_pct, consumed_pct, message, metadata, created_at)
+VALUES ('__test_unrelated_regression', 'warning', 100, 100, 'canário',
         jsonb_build_object('test_run', 'mtta-sla-regression-run'),
         now() - interval '48 hours');
 
