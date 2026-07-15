@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Activity, AlertTriangle, FlaskConical, ShieldAlert, Timer } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { computeAlertStats, formatMtta, type AlertRowLike } from "@/lib/behavioralAlertStats";
+import { useMttaSlaBreachSnapshot } from "@/hooks/useMttaSlaBreachSnapshot";
 
 interface Props {
   hideSimulations?: boolean;
@@ -30,6 +31,10 @@ export function BehavioralRegenAlertsStats({ hideSimulations = false }: Props = 
       return computeAlertStats((data ?? []) as AlertRowLike[]);
     },
   });
+
+  // Trilha de auditoria: registra snapshot em system_health_snapshots quando
+  // o SLA de MTTA crítico é excedido (dedup por dia via localStorage).
+  useMttaSlaBreachSnapshot(data?.mttaCriticalMinutes ?? null);
 
   if (isLoading) {
     return (
