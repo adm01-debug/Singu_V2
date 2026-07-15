@@ -5,18 +5,24 @@ import { Activity, FlaskConical, ShieldAlert, Timer } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { computeAlertStats, formatMtta, type AlertRowLike } from "@/lib/behavioralAlertStats";
 
-export function BehavioralRegenAlertsStats() {
+interface Props {
+  hideSimulations?: boolean;
+}
+
+export function BehavioralRegenAlertsStats({ hideSimulations = false }: Props = {}) {
   const { data, isLoading, error } = useQuery({
-    queryKey: ["behavioral-regen-alerts-stats-30d"],
+    queryKey: ["behavioral-regen-alerts-stats-30d", hideSimulations],
     refetchInterval: 5 * 60_000,
     queryFn: async () => {
       const since = new Date(Date.now() - 30 * 24 * 60 * 60_000).toISOString();
-      const { data, error } = await supabase
+      let q = supabase
         .from("system_alerts")
         .select("is_simulated, severity, created_at, acknowledged_at")
         .in("alert_type", ["behavioral_regen_error_rate", "behavioral_regen_cron_stale"])
         .gte("created_at", since)
         .limit(5000);
+      if (hideSimulations) q = q.eq("is_simulated", false);
+      const { data, error } = await q;
       if (error) throw error;
       return computeAlertStats((data ?? []) as AlertRowLike[]);
     },
