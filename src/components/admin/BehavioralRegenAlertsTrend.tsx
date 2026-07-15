@@ -29,18 +29,24 @@ function dayKey(iso: string): string {
   return iso.slice(0, 10);
 }
 
-export function BehavioralRegenAlertsTrend() {
+interface Props {
+  hideSimulations?: boolean;
+}
+
+export function BehavioralRegenAlertsTrend({ hideSimulations = false }: Props = {}) {
   const { data, isLoading, error } = useQuery({
-    queryKey: ["behavioral-regen-alerts-trend-30d"],
+    queryKey: ["behavioral-regen-alerts-trend-30d", hideSimulations],
     refetchInterval: 5 * 60_000,
     queryFn: async (): Promise<DayPoint[]> => {
       const since = new Date(Date.now() - 30 * 24 * 60 * 60_000);
-      const { data, error } = await supabase
+      let q = supabase
         .from("system_alerts")
         .select("created_at, is_simulated")
         .in("alert_type", ["behavioral_regen_error_rate", "behavioral_regen_cron_stale"])
         .gte("created_at", since.toISOString())
         .limit(5000);
+      if (hideSimulations) q = q.eq("is_simulated", false);
+      const { data, error } = await q;
       if (error) throw error;
 
       const buckets = new Map<string, DayPoint>();

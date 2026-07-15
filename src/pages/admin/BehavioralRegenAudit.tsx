@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,8 @@ import {
   MessageSquare,
   RotateCw,
   Trash2,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
@@ -63,6 +65,14 @@ function csvEscape(value: string): string {
 
 export default function BehavioralRegenAudit() {
   const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const hideSimulations = searchParams.get("hide_sim") === "1";
+  const toggleHideSimulations = () => {
+    const next = new URLSearchParams(searchParams);
+    if (hideSimulations) next.delete("hide_sim");
+    else next.set("hide_sim", "1");
+    setSearchParams(next, { replace: true });
+  };
   const [period, setPeriod] = useState<PeriodKey>("7d");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [search, setSearch] = useState("");
@@ -399,8 +409,28 @@ export default function BehavioralRegenAudit() {
   return (
     <div className="container mx-auto py-6 space-y-6">
       <BehavioralRegenAlertBanner />
-      <BehavioralRegenAlertsStats />
-      <BehavioralRegenAlertsTrend />
+      <div className="flex items-center justify-end">
+        <Button
+          size="sm"
+          variant={hideSimulations ? "default" : "outline"}
+          onClick={toggleHideSimulations}
+          aria-pressed={hideSimulations}
+          title={
+            hideSimulations
+              ? "Mostrando apenas alertas reais"
+              : "Incluindo simulações nas métricas"
+          }
+        >
+          {hideSimulations ? (
+            <EyeOff className="h-4 w-4 mr-1" />
+          ) : (
+            <Eye className="h-4 w-4 mr-1" />
+          )}
+          {hideSimulations ? "Ocultando simulações" : "Ocultar simulações"}
+        </Button>
+      </div>
+      <BehavioralRegenAlertsStats hideSimulations={hideSimulations} />
+      <BehavioralRegenAlertsTrend hideSimulations={hideSimulations} />
       <BehavioralRegenCronHealth />
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
