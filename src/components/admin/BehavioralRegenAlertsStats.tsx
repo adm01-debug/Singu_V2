@@ -5,15 +5,14 @@ import { Activity, AlertTriangle, FlaskConical, ShieldAlert, Timer } from "lucid
 import { supabase } from "@/integrations/supabase/client";
 import { computeAlertStats, formatMtta, type AlertRowLike } from "@/lib/behavioralAlertStats";
 import { useMttaSlaBreachSnapshot } from "@/hooks/useMttaSlaBreachSnapshot";
+import { useMttaSlaThreshold } from "@/hooks/useMttaSlaThreshold";
 
 interface Props {
   hideSimulations?: boolean;
 }
 
-/** SLA alvo para MTTA crítico (minutos). Acima disso, sinaliza breach visual. */
-const MTTA_CRITICAL_SLA_MIN = 30;
-
 export function BehavioralRegenAlertsStats({ hideSimulations = false }: Props = {}) {
+  const MTTA_CRITICAL_SLA_MIN = useMttaSlaThreshold();
   const { data, isLoading, error } = useQuery({
     queryKey: ["behavioral-regen-alerts-stats-30d", hideSimulations],
     refetchInterval: 5 * 60_000,
