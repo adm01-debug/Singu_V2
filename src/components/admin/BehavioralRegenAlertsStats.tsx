@@ -54,6 +54,8 @@ export function BehavioralRegenAlertsStats({ hideSimulations = false }: Props = 
       simulated: 0,
       mttaMinutes: null,
       mttaP95Minutes: null,
+      mttaCriticalMinutes: null,
+      mttaWarningMinutes: null,
     };
 
   const items = [
@@ -77,9 +79,17 @@ export function BehavioralRegenAlertsStats({ hideSimulations = false }: Props = 
       label: "MTTA (30d)",
       value: formatMtta(stats.mttaMinutes),
       hint:
-        stats.mttaP95Minutes !== null
-          ? `p95: ${formatMtta(stats.mttaP95Minutes)}`
-          : undefined,
+        [
+          stats.mttaP95Minutes !== null ? `p95: ${formatMtta(stats.mttaP95Minutes)}` : null,
+          stats.mttaCriticalMinutes !== null
+            ? `crít: ${formatMtta(stats.mttaCriticalMinutes)}`
+            : null,
+          stats.mttaWarningMinutes !== null
+            ? `warn: ${formatMtta(stats.mttaWarningMinutes)}`
+            : null,
+        ]
+          .filter(Boolean)
+          .join(" · ") || undefined,
       icon: Timer,
       tone:
         stats.mttaMinutes !== null && stats.mttaMinutes > 60
