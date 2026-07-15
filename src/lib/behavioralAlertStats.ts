@@ -12,6 +12,8 @@ export interface AlertStats {
   simulated: number;
   mttaMinutes: number | null;
   mttaP95Minutes: number | null;
+  mttaCriticalMinutes: number | null;
+  mttaWarningMinutes: number | null;
 }
 
 /**
@@ -41,6 +43,20 @@ export function computeAlertStats(rows: readonly AlertRowLike[]): AlertStats {
   const p95Ms = percentile(ackDeltasMs, 0.95);
   const realCritical = real.filter((r) => r.severity === "critical").length;
 
+  const meanBySeverity = (sev: string): number | null => {
+    const deltas = acked
+      .filter((r) => r.severity === sev)
+      .map((r) => {
+        const created = new Date(r.created_at).getTime();
+        const ack = new Date(r.acknowledged_at as string).getTime();
+        return Math.max(0, ack - created);
+      });
+    if (!deltas.length) return null;
+    return deltas.reduce((s, v) => s + v, 0) / deltas.length;
+  };
+  const mttaCriticalMs = meanBySeverity("critical");
+  const mttaWarningMs = meanBySeverity("warning");
+
   return {
     realTotal: real.length,
     realCritical,
@@ -48,6 +64,8 @@ export function computeAlertStats(rows: readonly AlertRowLike[]): AlertStats {
     simulated: sim.length,
     mttaMinutes: mttaMs !== null ? Math.round(mttaMs / 60_000) : null,
     mttaP95Minutes: p95Ms !== null ? Math.round(p95Ms / 60_000) : null,
+    mttaCriticalMinutes: mttaCriticalMs !== null ? Math.round(mttaCriticalMs / 60_000) : null,
+    mttaWarningMinutes: mttaWarningMs !== null ? Math.round(mttaWarningMs / 60_000) : null,
   };
 }
 
