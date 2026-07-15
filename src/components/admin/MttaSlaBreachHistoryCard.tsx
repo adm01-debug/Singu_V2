@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlarmClock, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useMemo } from "react";
 
 interface BreachRow {
   id: string;
@@ -38,6 +39,21 @@ export function MttaSlaBreachHistoryCard() {
     },
   });
 
+  const monthly = useMemo(() => {
+    const rows = data ?? [];
+    const buckets = new Map<string, { total: number; open: number }>();
+    for (const r of rows) {
+      const key = r.created_at.slice(0, 7); // YYYY-MM
+      const b = buckets.get(key) ?? { total: 0, open: 0 };
+      b.total += 1;
+      if (!r.acknowledged_at) b.open += 1;
+      buckets.set(key, b);
+    }
+    return Array.from(buckets.entries())
+      .sort((a, b) => (a[0] < b[0] ? 1 : -1))
+      .slice(0, 6);
+  }, [data]);
+
   return (
     <Card>
       <CardHeader className="pb-3">
@@ -60,6 +76,7 @@ export function MttaSlaBreachHistoryCard() {
             Nenhum breach de SLA MTTA nos últimos 30 dias. ✓
           </p>
         ) : (
+          <>
           <ul className="divide-y">
             {data.map((b) => {
               const meta = (b.metadata ?? {}) as {
@@ -95,6 +112,27 @@ export function MttaSlaBreachHistoryCard() {
               );
             })}
           </ul>
+          {monthly.length > 0 && (
+            <div className="mt-4 pt-3 border-t">
+              <p className="text-[11px] text-muted-foreground mb-1.5 font-medium">
+                Agregado mensal
+              </p>
+              <ul className="grid grid-cols-2 md:grid-cols-3 gap-1.5 text-[11px] tabular-nums">
+                {monthly.map(([month, b]) => (
+                  <li key={month} className="flex justify-between gap-2">
+                    <span className="text-muted-foreground">{month}</span>
+                    <span>
+                      {b.total} total{" "}
+                      {b.open > 0 && (
+                        <span className="text-destructive">· {b.open} abertos</span>
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          </>
         )}
       </CardContent>
     </Card>
