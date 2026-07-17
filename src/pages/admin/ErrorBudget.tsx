@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { UptimeSparkline } from '@/components/admin/UptimeSparkline';
 import { MttaSlaBreachHistoryCard } from '@/components/admin/MttaSlaBreachHistoryCard';
 import { MttaSlaThresholdEditor } from '@/components/admin/MttaSlaThresholdEditor';
+import { MttaAutoAckHeartbeatCard } from '@/components/admin/MttaAutoAckHeartbeatCard';
 
 function StatCard({
   title,
@@ -191,6 +192,8 @@ export default function ErrorBudget() {
       <MttaSlaBreachHistoryCard />
 
       <MttaSlaThresholdEditor />
+
+      <MttaAutoAckHeartbeatCard />
 
       <Card>
         <CardHeader>
