@@ -14522,6 +14522,7 @@ export type Database = {
         }[]
       }
       check_contact_health_alerts: { Args: never; Returns: undefined }
+      check_mtta_auto_ack_heartbeat: { Args: never; Returns: undefined }
       check_relationship_consistency: {
         Args: { p_contact_id: string }
         Returns: Json
