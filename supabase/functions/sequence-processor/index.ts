@@ -1,11 +1,8 @@
 // Sequence Processor — cron a cada 5min
 // Avança enrollments, avalia branching condicional, envia emails e respeita pause-on-reply
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
 
 interface Step {
   id: string;
@@ -36,7 +33,11 @@ interface Enrollment {
 }
 
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
+  const cors = scopedCorsHeaders(req);
+  if (req.method === 'OPTIONS') return new Response(null, { headers: cors });
+
+  const cronCheck = requireCronSecret(req);
+  if (cronCheck) return cronCheck;
 
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
@@ -58,7 +59,7 @@ Deno.serve(async (req) => {
     if (enrErr) throw enrErr;
     if (!enrollments || enrollments.length === 0) {
       return new Response(JSON.stringify({ ok: true, message: 'Nada a processar', stats }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...cors, 'Content-Type': 'application/json' },
       });
     }
 
@@ -190,13 +191,13 @@ Deno.serve(async (req) => {
     }
 
     return new Response(JSON.stringify({ ok: true, stats }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...cors, 'Content-Type': 'application/json' },
     });
   } catch (e) {
     console.error('Sequence processor fatal:', e);
     return new Response(JSON.stringify({ ok: false, error: String(e), stats }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...cors, 'Content-Type': 'application/json' },
     });
   }
 });

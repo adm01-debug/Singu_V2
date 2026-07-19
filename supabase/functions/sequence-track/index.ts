@@ -1,10 +1,7 @@
 // Pixel de tracking + redirect de cliques para sequências
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': '*',
-};
 
 // 1x1 GIF transparente
 const PIXEL = Uint8Array.from([
@@ -14,7 +11,8 @@ const PIXEL = Uint8Array.from([
 ]);
 
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
+  const cors = scopedCorsHeaders(req);
+  if (req.method === 'OPTIONS') return new Response(null, { headers: cors });
 
   const url = new URL(req.url);
   const action = url.searchParams.get('a'); // 'open' | 'click'
@@ -22,7 +20,7 @@ Deno.serve(async (req) => {
   const target = url.searchParams.get('u');
 
   if (!token || !action) {
-    return new Response('Missing params', { status: 400, headers: corsHeaders });
+    return new Response('Missing params', { status: 400, headers: cors });
   }
 
   const supabase = createClient(
@@ -64,16 +62,25 @@ Deno.serve(async (req) => {
   }
 
   if (action === 'click' && target) {
+    // Block open redirect: only allow https:// URLs — reject javascript:, data:, etc.
+    let safeTarget: string;
+    try {
+      const parsed = new URL(target);
+      if (parsed.protocol !== 'https:') throw new Error('non-https');
+      safeTarget = parsed.toString();
+    } catch {
+      return new Response('Invalid redirect target', { status: 400, headers: cors });
+    }
     return new Response(null, {
       status: 302,
-      headers: { ...corsHeaders, Location: target },
+      headers: { ...cors, Location: safeTarget },
     });
   }
 
   return new Response(PIXEL, {
     status: 200,
     headers: {
-      ...corsHeaders,
+      ...cors,
       'Content-Type': 'image/gif',
       'Cache-Control': 'no-store, no-cache, must-revalidate',
     },
