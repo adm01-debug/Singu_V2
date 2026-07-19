@@ -1,9 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
 
 const CACHE_TTL_MINUTES = 10;
 
@@ -90,8 +87,9 @@ const RPC_BY_ENTITY: Record<EntityKey, string> = {
 };
 
 Deno.serve(async (req) => {
+  const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: cors });
   }
 
   try {
@@ -99,7 +97,7 @@ Deno.serve(async (req) => {
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Missing authorization" }), {
         status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
@@ -113,7 +111,7 @@ Deno.serve(async (req) => {
     if (userError || !user) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
@@ -130,7 +128,7 @@ Deno.serve(async (req) => {
     if (!query || query.length < 2) {
       return new Response(JSON.stringify({ error: "Query must be at least 2 characters" }), {
         status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
@@ -148,7 +146,7 @@ Deno.serve(async (req) => {
     if (cached) {
       return new Response(
         JSON.stringify({ results: cached.results, cached: true, query }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        { headers: { ...cors, "Content-Type": "application/json" } },
       );
     }
 
@@ -209,13 +207,13 @@ Deno.serve(async (req) => {
 
     return new Response(
       JSON.stringify({ results, cached: false, query, variations, entities: requested }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      { headers: { ...cors, "Content-Type": "application/json" } },
     );
   } catch (e) {
     console.error("semantic-search error:", e);
     return new Response(
       JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      { status: 500, headers: { ...cors, "Content-Type": "application/json" } },
     );
   }
 });

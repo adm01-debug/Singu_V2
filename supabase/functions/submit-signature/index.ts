@@ -1,13 +1,11 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
 
 Deno.serve(async (req) => {
+  const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: cors });
   }
 
   try {
@@ -22,7 +20,7 @@ Deno.serve(async (req) => {
     if (!token || typeof token !== "string") {
       return new Response(JSON.stringify({ error: "Invalid token" }), {
         status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
@@ -35,21 +33,21 @@ Deno.serve(async (req) => {
     if (!existing) {
       return new Response(JSON.stringify({ error: "Documento não encontrado" }), {
         status: 404,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
     if (existing.status === "signed") {
       return new Response(JSON.stringify({ error: "Documento já assinado" }), {
         status: 409,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
     if (existing.expires_at && new Date(existing.expires_at) < new Date()) {
       return new Response(JSON.stringify({ error: "Documento expirado" }), {
         status: 410,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
@@ -60,7 +58,7 @@ Deno.serve(async (req) => {
       if (!signature_typed && !signature_image) {
         return new Response(JSON.stringify({ error: "Assinatura ausente" }), {
           status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          headers: { ...cors, "Content-Type": "application/json" },
         });
       }
       const { error } = await supabase
@@ -88,18 +86,18 @@ Deno.serve(async (req) => {
     } else {
       return new Response(JSON.stringify({ error: "Ação inválida" }), {
         status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
     return new Response(JSON.stringify({ success: true }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   } catch (e) {
     console.error("submit-signature error:", e);
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown" }), {
       status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 });

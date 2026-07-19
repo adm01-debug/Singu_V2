@@ -1,17 +1,14 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Rate limit excedido para meeting-summary." });
 
 Deno.serve(async (req) => {
+  const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response("ok", { headers: cors });
   }
 
   const requestId = crypto.randomUUID();
@@ -24,7 +21,7 @@ Deno.serve(async (req) => {
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Não autorizado" }), {
         status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
@@ -40,7 +37,7 @@ Deno.serve(async (req) => {
     if (!user) {
       return new Response(JSON.stringify({ error: "Não autenticado" }), {
         status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
@@ -52,7 +49,7 @@ Deno.serve(async (req) => {
         JSON.stringify({ error: "interaction_id é obrigatório" }),
         {
           status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          headers: { ...cors, "Content-Type": "application/json" },
         }
       );
     }
@@ -70,7 +67,7 @@ Deno.serve(async (req) => {
         JSON.stringify({ error: "Interação não encontrada" }),
         {
           status: 404,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          headers: { ...cors, "Content-Type": "application/json" },
         }
       );
     }
@@ -86,7 +83,7 @@ Deno.serve(async (req) => {
         }),
         {
           status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          headers: { ...cors, "Content-Type": "application/json" },
         }
       );
     }
@@ -97,7 +94,7 @@ Deno.serve(async (req) => {
         JSON.stringify({ error: "API key não configurada" }),
         {
           status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          headers: { ...cors, "Content-Type": "application/json" },
         }
       );
     }
@@ -150,7 +147,7 @@ Responda APENAS com JSON válido no formato:
         JSON.stringify({ error: "Erro ao processar com IA" }),
         {
           status: 502,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          headers: { ...cors, "Content-Type": "application/json" },
         }
       );
     }
@@ -171,7 +168,7 @@ Responda APENAS com JSON válido no formato:
         JSON.stringify({ error: "Erro ao interpretar resposta da IA" }),
         {
           status: 502,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          headers: { ...cors, "Content-Type": "application/json" },
         }
       );
     }
@@ -206,13 +203,13 @@ Responda APENAS com JSON válido no formato:
         JSON.stringify({ error: "Erro ao salvar resumo" }),
         {
           status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          headers: { ...cors, "Content-Type": "application/json" },
         }
       );
     }
 
     return new Response(JSON.stringify(summary), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   } catch (err) {
     console.error(JSON.stringify({ requestId, level: "error", fn: "meeting-summary", err: String(err) }));
@@ -220,7 +217,7 @@ Responda APENAS com JSON válido no formato:
       JSON.stringify({ error: "Erro interno", requestId }),
       {
         status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       }
     );
   }

@@ -1,7 +1,4 @@
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 
 interface ServiceCheck {
   service: string;
@@ -121,8 +118,9 @@ async function checkGeminiNLU(): Promise<ServiceCheck> {
 }
 
 Deno.serve(async (req) => {
+  const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response("ok", { headers: cors });
   }
 
   try {
@@ -145,12 +143,12 @@ Deno.serve(async (req) => {
         services: checks,
         total_latency_ms: checks.reduce((s, c) => s + c.latency_ms, 0),
       }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
+      { headers: { ...cors, "Content-Type": "application/json" }, status: 200 }
     );
   } catch (err) {
     return new Response(
       JSON.stringify({ error: err instanceof Error ? err.message : "Unknown error" }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500 }
+      { headers: { ...cors, "Content-Type": "application/json" }, status: 500 }
     );
   }
 });

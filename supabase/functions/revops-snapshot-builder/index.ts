@@ -1,16 +1,13 @@
 // Edge function: revops-snapshot-builder
 // Cron diário 04:00 UTC. Consolida funil ponta-a-ponta por usuário ativo, gera snapshots e alertas.
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-cron-secret",
-};
 
 const STAGES = ["visitor", "lead", "mql", "sql", "opportunity", "customer"] as const;
 
 Deno.serve(async (req: Request) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method === "OPTIONS") return new Response(null, { headers: cors });
 
   // Auth: cron secret OR service role
   const cronSecret = Deno.env.get("CRON_SECRET");
@@ -19,7 +16,7 @@ Deno.serve(async (req: Request) => {
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
   const isAuthorized = (cronSecret && provided === cronSecret) || auth === `Bearer ${serviceKey}`;
   if (!isAuthorized) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
   }
 
   const supabase = createClient(Deno.env.get("SUPABASE_URL")!, serviceKey);
@@ -135,6 +132,6 @@ Deno.serve(async (req: Request) => {
   }
 
   return new Response(JSON.stringify({ processed: results.length, results }), {
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
+    headers: { ...cors, "Content-Type": "application/json" },
   });
 });

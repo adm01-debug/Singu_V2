@@ -1,8 +1,5 @@
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 
 const EXTERNAL_URL = Deno.env.get("SUPABASE_DB_URL")
   ? undefined
@@ -16,8 +13,9 @@ function getExternalClient() {
 }
 
 Deno.serve(async (req) => {
+  const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response("ok", { headers: cors });
   }
 
   try {
@@ -139,13 +137,13 @@ Deno.serve(async (req) => {
     };
 
     return new Response(JSON.stringify(result), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
       status: 200,
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     return new Response(JSON.stringify({ error: message }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
       status: 500,
     });
   }

@@ -1,10 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
 
 const limiter = rateLimit({ windowMs: 60_000, max: 12 });
 const BATCH_SIZE = 50;
@@ -20,7 +17,8 @@ interface QueueItem {
 }
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  const cors = scopedCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "worker";
   const limited = limiter.check(ip);
@@ -45,7 +43,7 @@ Deno.serve(async (req) => {
 
     if (queue.length === 0) {
       return new Response(JSON.stringify({ processed: 0, message: "Fila vazia" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
@@ -102,12 +100,12 @@ Deno.serve(async (req) => {
 
     return new Response(
       JSON.stringify({ processed: queue.length, ok: okCount, errors: errCount }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { headers: { ...cors, "Content-Type": "application/json" } }
     );
   } catch (err) {
     return new Response(JSON.stringify({ error: String(err) }), {
       status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 });

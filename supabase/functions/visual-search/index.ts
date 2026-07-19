@@ -1,9 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
 
 async function analyzeImageWithAI(imageDataUrl: string): Promise<{
   description: string;
@@ -85,8 +82,9 @@ async function analyzeImageWithAI(imageDataUrl: string): Promise<{
 }
 
 Deno.serve(async (req) => {
+  const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: cors });
   }
 
   try {
@@ -94,7 +92,7 @@ Deno.serve(async (req) => {
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Missing authorization" }), {
         status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
@@ -108,7 +106,7 @@ Deno.serve(async (req) => {
     if (userError || !user) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
@@ -119,7 +117,7 @@ Deno.serve(async (req) => {
     if (!imageDataUrl.startsWith("data:image/")) {
       return new Response(JSON.stringify({ error: "Invalid image. Send a data URL (data:image/...;base64,...)" }), {
         status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
@@ -161,7 +159,7 @@ Deno.serve(async (req) => {
 
     return new Response(
       JSON.stringify({ analysis, results, searchTerms }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { headers: { ...cors, "Content-Type": "application/json" } }
     );
   } catch (e) {
     console.error("visual-search error:", e);
@@ -169,7 +167,7 @@ Deno.serve(async (req) => {
     const status = msg.includes("Rate limit") ? 429 : msg.includes("Créditos") ? 402 : 500;
     return new Response(JSON.stringify({ error: msg }), {
       status,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 });
