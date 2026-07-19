@@ -1,5 +1,21 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
+/**
+ * Constant-time string comparison to prevent timing attacks.
+ * Uses XOR over UTF-8 bytes so the loop always runs the full length.
+ */
+function timingSafeStringEqual(a: string, b: string): boolean {
+  const enc = new TextEncoder();
+  const aBytes = enc.encode(a);
+  const bBytes = enc.encode(b);
+  const len = Math.max(aBytes.length, bBytes.length);
+  let diff = aBytes.length ^ bBytes.length; // non-zero when lengths differ
+  for (let i = 0; i < len; i++) {
+    diff |= (aBytes[i] ?? 0) ^ (bBytes[i] ?? 0);
+  }
+  return diff === 0;
+}
+
 // Allowed origins for CORS — restrict to known app domains
 const ALLOWED_ORIGINS = [
   "https://dialogue-diamond.lovable.app",
@@ -149,7 +165,7 @@ export async function withAuthOrServiceRole(req: Request): Promise<string | Resp
   }
   const token = authHeader.replace("Bearer ", "");
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  if (serviceRoleKey && token === serviceRoleKey) {
+  if (serviceRoleKey && timingSafeStringEqual(token, serviceRoleKey)) {
     return SERVICE_ROLE_SENTINEL;
   }
   return withAuth(req);
@@ -165,8 +181,8 @@ export function requireCronSecret(req: Request): Response | null {
     console.error("CRON_SECRET not configured");
     return jsonError("Server misconfigured", 500);
   }
-  const provided = req.headers.get("x-cron-secret");
-  if (provided !== secret) {
+  const provided = req.headers.get("x-cron-secret") ?? "";
+  if (!timingSafeStringEqual(provided, secret)) {
     return jsonError("Unauthorized", 401);
   }
   return null;
@@ -189,8 +205,8 @@ export function requireWebhookSecret(
     console.error(`${envName} not configured`);
     return jsonError("Server misconfigured", 500);
   }
-  const provided = req.headers.get(headerName);
-  if (provided !== secret) {
+  const provided = req.headers.get(headerName) ?? "";
+  if (!timingSafeStringEqual(provided, secret)) {
     return jsonError("Unauthorized", 401);
   }
   return null;
