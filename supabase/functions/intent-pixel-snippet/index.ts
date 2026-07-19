@@ -1,6 +1,7 @@
 import { scopedCorsHeaders } from "../_shared/auth.ts";
 
 Deno.serve((req) => {
+  const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "GET") {
     return new Response("Method not allowed", { status: 405, headers: cors });
