@@ -1,4 +1,5 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { requireWebhookSecret } from '../_shared/auth.ts';
 
 function getScopedOrigin(req: Request): string {
   const origin = req.headers.get("Origin") || "";
@@ -19,6 +20,10 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // Reject requests that don't carry the shared Evolution API secret
+  const authCheck = requireWebhookSecret(req, 'EVOLUTION_API_SECRET', 'apikey');
+  if (authCheck) return authCheck;
 
   try {
     const supabase = createClient(
