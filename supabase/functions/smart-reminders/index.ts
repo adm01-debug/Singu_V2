@@ -1,5 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, corsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Muitas solicitações de lembretes. Aguarde antes de tentar novamente." });
 
 interface SmartReminder {
   id: string;
@@ -15,12 +18,18 @@ interface SmartReminder {
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: scopedCorsHeaders(req) });
   }
 
   // 🔒 Dual auth: user JWT or service-role
   const authResult = await withAuthOrServiceRole(req);
   if (authResult instanceof Response) return authResult;
+
+  // Rate limit non-service-role callers
+  if (!isServiceRoleCaller(authResult)) {
+    const limited = limiter.check(authResult);
+    if (limited) return limited;
+  }
 
   try {
     let body: Record<string, unknown> = {};
@@ -393,10 +402,10 @@ Deno.serve(async (req) => {
       }
     };
 
-    return jsonOk({ success: true, reminders, summary, aiInsights });
+    return jsonOk({ success: true, reminders, summary, aiInsights }, req);
 
   } catch (error: unknown) {
     console.error('Smart Reminders Error:', error);
-    return jsonError(error instanceof Error ? error.message : 'Unknown error', 500);
+    return jsonError(error instanceof Error ? error.message : 'Unknown error', 500, req);
   }
 });
