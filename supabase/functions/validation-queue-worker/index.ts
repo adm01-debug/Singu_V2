@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
 
 const limiter = rateLimit({ windowMs: 60_000, max: 12 });
@@ -19,6 +19,9 @@ interface QueueItem {
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+
+  const cronCheck = requireCronSecret(req);
+  if (cronCheck) return cronCheck;
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "worker";
   const limited = limiter.check(ip);

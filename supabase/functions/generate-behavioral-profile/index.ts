@@ -1,5 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
 
 interface Body { contact_id: string }
@@ -45,6 +45,9 @@ const SCHEMA = {
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
+
+  const cronCheck = requireCronSecret(req);
+  if (cronCheck) return cronCheck;
 
   try {
     const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;

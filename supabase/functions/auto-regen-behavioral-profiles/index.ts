@@ -1,7 +1,7 @@
 // Cron job: reanalisa perfis comportamentais de contatos com 3+ reprovações
 // SLA: não reprocessa o mesmo contato mais de 1x a cada 24h
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
 
 const SLA_HOURS = 24;
@@ -11,6 +11,9 @@ const MAX_BATCH = 25; // limita por execução para evitar timeout
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") {
+
+  const cronCheck = requireCronSecret(req);
+  if (cronCheck) return cronCheck;
     return new Response("ok", { headers: cors });
   }
 

@@ -1,4 +1,4 @@
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "npm:@supabase/supabase-js@2"
 
@@ -9,6 +9,9 @@ const corsHeaders = {
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
+
+  const cronCheck = requireCronSecret(req);
+  if (cronCheck) return cronCheck;
     return new Response('ok', { headers: cors })
   }
 

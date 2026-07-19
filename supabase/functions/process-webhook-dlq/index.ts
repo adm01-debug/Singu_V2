@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
 
 interface DlqRow {
@@ -22,6 +22,9 @@ const TABLE_MAP: Record<string, string> = {
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
+
+  const cronCheck = requireCronSecret(req);
+  if (cronCheck) return cronCheck;
 
   const admin = createClient(
     Deno.env.get("SUPABASE_URL")!,

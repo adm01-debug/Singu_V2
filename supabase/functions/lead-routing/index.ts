@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
 
 /* ─── Schemas ──────────────────────────────────────────────── */
@@ -215,6 +215,9 @@ async function handleResetDaily(supabase: ReturnType<typeof createClient>) {
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
+
+  const cronCheck = requireCronSecret(req);
+  if (cronCheck) return cronCheck;
     return new Response("ok", { headers: cors });
   }
 
