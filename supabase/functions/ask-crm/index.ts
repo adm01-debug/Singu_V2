@@ -112,11 +112,24 @@ Deno.serve(async (req) => {
       return jsonOk({ answer: parsed_ai.explanation, data: null, display_type: "text", sql: null }, req);
     }
 
-    // Security: validate SQL is SELECT only
-    const sqlUpper = parsed_ai.sql.trim().toUpperCase();
-    const forbidden = ["INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE", "TRUNCATE", "GRANT", "REVOKE"];
-    if (!sqlUpper.startsWith("SELECT") || forbidden.some(kw => sqlUpper.includes(kw + " "))) {
+    // Security: validate SQL is SELECT-only (defence-in-depth; DB function also validates)
+    const sql = parsed_ai.sql.trim();
+    const sqlUpper = sql.toUpperCase();
+
+    // Block semicolons — multi-statement injection
+    if (sql.includes(";")) {
+      return jsonError("Consulta inválida: múltiplos statements não são permitidos.", 403, req);
+    }
+
+    // Must start with SELECT
+    const forbidden = /\b(INSERT|UPDATE|DELETE|DROP|ALTER|CREATE|TRUNCATE|GRANT|REVOKE|EXECUTE|COPY|CALL|DO)\b/i;
+    if (!sqlUpper.startsWith("SELECT") || forbidden.test(sql)) {
       return jsonError("Consulta não permitida. Apenas leituras são aceitas.", 403, req);
+    }
+
+    // Block access to system schemas
+    if (/\b(auth\.|pg_|information_schema|supabase_)/i.test(sql)) {
+      return jsonError("Acesso a schemas do sistema não é permitido.", 403, req);
     }
 
     // Tabelas de integrações são globais (admin) — não exigem filtro user_id
