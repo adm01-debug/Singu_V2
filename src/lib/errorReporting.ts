@@ -80,51 +80,69 @@ function createErrorReport(
   };
 }
 
-// Envia batch de erros para o servidor
+// Maps internal severity to the DB enum
+const SEVERITY_MAP: Record<ErrorReport['severity'], string> = {
+  low: 'info',
+  medium: 'warning',
+  high: 'error',
+  critical: 'critical',
+};
+
+// Envia batch de erros para a tabela error_logs via Supabase REST API
 async function flushErrorBuffer(): Promise<void> {
   if (errorBuffer.length === 0) return;
-  
+
   const batch: ErrorBatch = {
     errors: [...errorBuffer],
     sessionId,
     appVersion: import.meta.env.VITE_APP_VERSION || '1.0.0',
   };
-  
-  // Limpa buffer antes de enviar
+
+  // Limpa buffer antes de enviar para evitar duplo envio em caso de erro
   errorBuffer.length = 0;
-  
+
+  if (import.meta.env.DEV) {
+    logger.group('Error Report Batch');
+    batch.errors.forEach(err => {
+      logger.error(`[${err.severity.toUpperCase()}] ${err.message}`, err);
+    });
+    logger.groupEnd();
+    return;
+  }
+
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) return;
+
+  const rows = batch.errors.map(e => ({
+    message: e.message.slice(0, 1000),
+    stack: e.stack?.slice(0, 4000) ?? null,
+    context: {
+      componentStack: e.componentStack?.slice(0, 2000),
+      fingerprint: e.fingerprint,
+      sessionId: batch.sessionId,
+      appVersion: batch.appVersion,
+      ...e.metadata,
+    },
+    user_id: e.userId ?? null,
+    severity: SEVERITY_MAP[e.severity] ?? 'error',
+    url: e.url.slice(0, 500),
+    user_agent: e.userAgent.slice(0, 500),
+  }));
+
   try {
-    // Em produção, enviar para edge function ou serviço externo
-    if (import.meta.env.PROD) {
-      // Exemplo: enviar para endpoint de logging
-      // await fetch('/api/errors', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(batch),
-      // });
-      
-      // Por enquanto, salvar no localStorage para debug
-      const existingLogs = JSON.parse(localStorage.getItem('error_logs') || '[]');
-      existingLogs.push(...batch.errors);
-      
-      // Manter apenas os últimos 100 erros
-      if (existingLogs.length > 100) {
-        existingLogs.splice(0, existingLogs.length - 100);
-      }
-      
-      localStorage.setItem('error_logs', JSON.stringify(existingLogs));
-    }
-    
-    // Log no console em dev
-    if (import.meta.env.DEV) {
-      logger.group('🐛 Error Report Batch');
-      batch.errors.forEach(err => {
-        logger.error(`[${err.severity.toUpperCase()}] ${err.message}`, err);
-      });
-      logger.groupEnd();
-    }
+    await fetch(`${supabaseUrl}/rest/v1/error_logs`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': supabaseKey,
+        'Authorization': `Bearer ${supabaseKey}`,
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify(rows),
+    });
   } catch {
-    // Silenciar erros do próprio sistema de logging — noop em produção
+    // Never throw from error reporter — silently discard on network failure
   }
 }
 
@@ -177,9 +195,27 @@ export function initGlobalErrorHandlers(): void {
   // Flush periódico
   setInterval(flushErrorBuffer, FLUSH_INTERVAL);
   
-  // Flush ao sair da página
+  // sendBeacon is more reliable on page unload than fetch
   window.addEventListener('beforeunload', () => {
-    flushErrorBuffer();
+    if (errorBuffer.length === 0) return;
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    if (supabaseUrl && supabaseKey && import.meta.env.PROD) {
+      const rows = errorBuffer.map(e => ({
+        message: e.message.slice(0, 1000),
+        stack: e.stack?.slice(0, 4000) ?? null,
+        context: { fingerprint: e.fingerprint, sessionId },
+        user_id: e.userId ?? null,
+        severity: SEVERITY_MAP[e.severity] ?? 'error',
+        url: e.url.slice(0, 500),
+        user_agent: e.userAgent.slice(0, 500),
+      }));
+      navigator.sendBeacon(
+        `${supabaseUrl}/rest/v1/error_logs?apikey=${supabaseKey}`,
+        new Blob([JSON.stringify(rows)], { type: 'application/json' }),
+      );
+    }
+    errorBuffer.length = 0;
   });
   
   // Flush ao visibility change (mobile)
@@ -203,18 +239,5 @@ export function useErrorReporter() {
   };
 }
 
-// Recupera logs de erro salvos (para debug)
-export function getErrorLogs(): ErrorReport[] {
-  try {
-    return JSON.parse(localStorage.getItem('error_logs') || '[]');
-  } catch {
-    return [];
-  }
-}
-
-// Limpa logs de erro
-export function clearErrorLogs(): void {
-  localStorage.removeItem('error_logs');
-}
 
 export type { ErrorReport, ErrorBatch };
