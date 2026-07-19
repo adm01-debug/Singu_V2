@@ -4,6 +4,7 @@ import {
   withAuth,
   jsonError,
 } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
 const VOICE_ID_REGEX = /^[a-zA-Z0-9]{10,30}$/;
 
