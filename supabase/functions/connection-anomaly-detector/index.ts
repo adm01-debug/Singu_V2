@@ -1,6 +1,9 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, jsonError, jsonOk, withAuth } from "../_shared/auth.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 5, message: "Muitas análises de anomalia. Aguarde antes de tentar novamente." });
 
 interface DailyAgg {
   date: string;
@@ -44,10 +47,14 @@ Deno.serve(async (req) => {
   const expectedSecret = Deno.env.get("CRON_SECRET");
   const isCron = !!expectedSecret && cronSecret === expectedSecret;
 
+  let userId: string | undefined;
   if (!isCron) {
     // Fall back to JWT auth for non-cron callers (admin dashboard)
     const authResult = await withAuth(req);
     if (authResult instanceof Response) return authResult;
+    userId = authResult;
+    const limited = limiter.check(userId);
+    if (limited) return limited;
   }
 
   log.info("request_received", { method: req.method, isCron });

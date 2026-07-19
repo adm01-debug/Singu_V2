@@ -1,17 +1,67 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 /**
- * Constant-time string comparison to prevent timing attacks.
- * Uses XOR over UTF-8 bytes so the loop always runs the full length.
+ * Timing-safe string comparison using crypto.subtle HMAC-SHA-256.
+ *
+ * Design rationale
+ * ─────────────────
+ * • A new ephemeral HMAC key is generated on every call, so an attacker
+ *   cannot pre-compute target digests offline.
+ * • Both inputs are zero-padded to the same byte length before signing,
+ *   so the underlying cryptographic operation always processes identical-size
+ *   buffers regardless of input length.
+ * • Both HMAC-SHA-256 digests are exactly 32 bytes, so the constant-time
+ *   XOR accumulator loop runs exactly 32 iterations on every call — it
+ *   never short-circuits.
+ * • A raw byte-length XOR is OR-ed into the accumulator *before* the loop;
+ *   this ensures strings of different byte lengths never compare as equal
+ *   without leaking which side is longer through early termination.
+ *
+ * NOTE: This function is async because crypto.subtle.sign() returns a
+ * Promise.  All callers (requireCronSecret, requireWebhookSecret,
+ * withAuthOrServiceRole) have been updated to await it accordingly.
+ *
+ * @param a - First string (typically the value extracted from the request)
+ * @param b - Second string (typically the expected secret from env)
+ * @returns Promise resolving to true iff `a` and `b` are byte-for-byte equal
  */
-function timingSafeStringEqual(a: string, b: string): boolean {
+export async function timingSafeStringEqual(a: string, b: string): Promise<boolean> {
   const enc = new TextEncoder();
-  const aBytes = enc.encode(a);
-  const bBytes = enc.encode(b);
-  const len = Math.max(aBytes.length, bBytes.length);
-  let diff = aBytes.length ^ bBytes.length; // non-zero when lengths differ
-  for (let i = 0; i < len; i++) {
-    diff |= (aBytes[i] ?? 0) ^ (bBytes[i] ?? 0);
+  const aBytes: Uint8Array = enc.encode(a);
+  const bBytes: Uint8Array = enc.encode(b);
+
+  // Pad both to the same length so sign() always receives identical-size input.
+  // Zero-padding is safe: the raw length difference is captured separately below.
+  const maxLen = Math.max(aBytes.length, bBytes.length);
+  const aPadded = new Uint8Array(maxLen);
+  const bPadded = new Uint8Array(maxLen);
+  aPadded.set(aBytes);
+  bPadded.set(bBytes);
+
+  // Generate a fresh ephemeral key on every call.
+  // Non-extractable, sign-only — prevents any key-reuse or extraction attack.
+  const key: CryptoKey = await crypto.subtle.generateKey(
+    { name: "HMAC", hash: "SHA-256" },
+    false,     // non-extractable
+    ["sign"],
+  );
+
+  // Sign both padded buffers concurrently for efficiency.
+  // Each resulting MAC is exactly 32 bytes (SHA-256 output size).
+  const [macA, macB]: [ArrayBuffer, ArrayBuffer] = await Promise.all([
+    crypto.subtle.sign("HMAC", key, aPadded),
+    crypto.subtle.sign("HMAC", key, bPadded),
+  ]);
+
+  const macABytes = new Uint8Array(macA); // always 32 bytes
+  const macBBytes = new Uint8Array(macB); // always 32 bytes
+
+  // Seed the accumulator with the raw byte-length difference so that strings
+  // of unequal length can never pass even if the padded MACs somehow collide
+  // (astronomically unlikely, but defence-in-depth).
+  let diff: number = aBytes.length ^ bBytes.length;
+  for (let i = 0; i < macABytes.length; i++) {
+    diff |= macABytes[i]! ^ macBBytes[i]!;
   }
   return diff === 0;
 }
@@ -165,7 +215,7 @@ export async function withAuthOrServiceRole(req: Request): Promise<string | Resp
   }
   const token = authHeader.replace("Bearer ", "");
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  if (serviceRoleKey && timingSafeStringEqual(token, serviceRoleKey)) {
+  if (serviceRoleKey && await timingSafeStringEqual(token, serviceRoleKey)) {
     return SERVICE_ROLE_SENTINEL;
   }
   return withAuth(req);
@@ -174,15 +224,18 @@ export async function withAuthOrServiceRole(req: Request): Promise<string | Resp
 /**
  * requireCronSecret — Validates `x-cron-secret` header against CRON_SECRET env.
  * Returns a 401 Response on failure, or null to continue.
+ *
+ * Async because the underlying secret comparison uses crypto.subtle.
+ * Callers must await this function.
  */
-export function requireCronSecret(req: Request): Response | null {
+export async function requireCronSecret(req: Request): Promise<Response | null> {
   const secret = Deno.env.get("CRON_SECRET");
   if (!secret) {
     console.error("CRON_SECRET not configured");
     return jsonError("Server misconfigured", 500);
   }
   const provided = req.headers.get("x-cron-secret") ?? "";
-  if (!timingSafeStringEqual(provided, secret)) {
+  if (!await timingSafeStringEqual(provided, secret)) {
     return jsonError("Unauthorized", 401);
   }
   return null;
@@ -194,19 +247,22 @@ export function requireCronSecret(req: Request): Response | null {
  * @param envName    Name of the env var holding the secret (e.g. "EVOLUTION_API_SECRET")
  * @param headerName Name of the header to check (e.g. "x-evolution-secret")
  * Returns a 401 Response on failure, or null to continue.
+ *
+ * Async because the underlying secret comparison uses crypto.subtle.
+ * Callers must await this function.
  */
-export function requireWebhookSecret(
+export async function requireWebhookSecret(
   req: Request,
   envName: string,
   headerName: string,
-): Response | null {
+): Promise<Response | null> {
   const secret = Deno.env.get(envName);
   if (!secret) {
     console.error(`${envName} not configured`);
     return jsonError("Server misconfigured", 500);
   }
   const provided = req.headers.get(headerName) ?? "";
-  if (!timingSafeStringEqual(provided, secret)) {
+  if (!await timingSafeStringEqual(provided, secret)) {
     return jsonError("Unauthorized", 401);
   }
   return null;
