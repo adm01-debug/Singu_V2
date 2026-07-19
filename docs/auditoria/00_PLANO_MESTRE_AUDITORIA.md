@@ -154,14 +154,26 @@ A missão — *"encontrar todas as falhas e gaps do sistema, módulo a módulo, 
 
 ---
 
-## 4. Artefatos desta Auditoria
+## 4. Artefatos desta Auditoria — ✅ CONCLUÍDOS (fase de descoberta)
 
 - `docs/auditoria/00_PLANO_MESTRE_AUDITORIA.md` — este documento (missão em 30 etapas + plano em 50).
-- `docs/auditoria/01_ACHADOS_SEGURANCA.md`
-- `docs/auditoria/02_ACHADOS_EDGE_FUNCTIONS.md`
-- `docs/auditoria/03_ACHADOS_FRONTEND.md`
-- `docs/auditoria/04_ACHADOS_BANCO.md`
-- `docs/auditoria/05_ACHADOS_TESTES_BUILD_DOCS.md`
-- `docs/auditoria/99_MATRIZ_DE_RISCO.md` — consolidação severizada.
+- `docs/auditoria/01_ACHADOS_SEGURANCA.md` — 7 achados (1 CRÍTICO, 3 ALTOS).
+- `docs/auditoria/02_ACHADOS_EDGE_FUNCTIONS.md` — 17 achados (2 CRÍTICOS de quebra de função).
+- `docs/auditoria/03_ACHADOS_FRONTEND.md` — 11 achados (119 `any`, 72 fetch-em-useEffect, 65 arquivos >400 linhas).
+- `docs/auditoria/04_ACHADOS_BANCO.md` — 11 achados (drift, DROP CASCADE, search_path, idempotência).
+- `docs/auditoria/05_ACHADOS_TESTES_BUILD_DOCS.md` — 13 achados (5.494 testes reais, 1.306 erros de lint, CSP inexistente, CI quebrada).
+- `docs/auditoria/99_MATRIZ_DE_RISCO.md` — consolidação severizada + Top 10 + ondas de remediação.
 
-> **Escopo desta entrega:** apenas descoberta e documentação. Nenhuma correção de código é aplicada.
+## 5. Status de Execução
+
+| Fase | Etapas | Status |
+|---|---|---|
+| I — Preparação e Mapeamento | 1–8 | ✅ Concluída |
+| II — Descoberta por Dimensão | 9–30 | ✅ Concluída (5 frentes) |
+| III — Verificação Dinâmica e Testes | 31–34 | ✅ Concluída (vitest/tsc/eslint executados; E2E inventariado) |
+| IV — Consolidação e Documentação | 35–36 | ✅ Concluída (matriz de risco + PR) |
+| V — Remediação | 37–50 | ⏸️ **PLANEJADA — não executada** (aguarda decisão do usuário) |
+
+**Achados totais: 3 CRÍTICOS · 12 ALTOS · 20 MÉDIOS · 15+ BAIXOS.**
+
+> **Escopo desta entrega:** apenas descoberta e documentação. Nenhuma correção de código é aplicada — conforme instrução "de início apenas descubra as falhas e documente".
