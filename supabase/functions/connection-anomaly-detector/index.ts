@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, jsonError, jsonOk } from "../_shared/auth.ts";
+import { scopedCorsHeaders, jsonError, jsonOk, withAuth } from "../_shared/auth.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 
 interface DailyAgg {
@@ -39,10 +39,16 @@ Deno.serve(async (req) => {
   const traceId = extractTraceId(req);
   const log = tracedLogger(traceId, "connection-anomaly-detector");
 
-  // Aceita POST com header secreto (cron) ou admin autenticado
+  // Aceita POST com header secreto (cron) ou admin autenticado via JWT
   const cronSecret = req.headers.get("x-cron-secret");
   const expectedSecret = Deno.env.get("CRON_SECRET");
   const isCron = !!expectedSecret && cronSecret === expectedSecret;
+
+  if (!isCron) {
+    // Fall back to JWT auth for non-cron callers (admin dashboard)
+    const authResult = await withAuth(req);
+    if (authResult instanceof Response) return authResult;
+  }
 
   log.info("request_received", { method: req.method, isCron });
 

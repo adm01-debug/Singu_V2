@@ -1,19 +1,18 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { corsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
 
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
+  const cors = scopedCorsHeaders(req);
+  if (req.method === 'OPTIONS') return new Response(null, { headers: cors });
 
-  const cronSecret = req.headers.get("x-cron-secret");
-  if (cronSecret !== Deno.env.get("CRON_SECRET")) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-  }
+  const cronCheck = requireCronSecret(req);
+  if (cronCheck) return cronCheck;
 
   const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 
   try {
     const { data: periods } = await admin.from("forecast_periods").select("id, user_id").eq("status", "open");
-    if (!periods?.length) return new Response(JSON.stringify({ snapshots: 0 }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    if (!periods?.length) return new Response(JSON.stringify({ snapshots: 0 }), { headers: { ...cors, "Content-Type": "application/json" } });
 
     let count = 0;
     const today = new Date().toISOString().split("T")[0];
@@ -32,8 +31,8 @@ Deno.serve(async (req) => {
       }, { onConflict: "period_id,snapshot_date" });
       count++;
     }
-    return new Response(JSON.stringify({ snapshots: count }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ snapshots: count }), { headers: { ...cors, "Content-Type": "application/json" } });
   } catch (e) {
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "error" }), { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
   }
 });

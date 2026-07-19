@@ -1,7 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuth } from "../_shared/auth.ts";
 
 
 /**
@@ -36,27 +36,13 @@ Deno.serve(async (req) => {
   if (limited) return limited;
 
   try {
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401, headers: { ...cors, "Content-Type": "application/json" },
-      });
-    }
+    // withAuth calls getUser() (server-side verification), not getClaims() (local decode)
+    const authResult = await withAuth(req);
+    if (authResult instanceof Response) return authResult;
+    const userId = authResult;
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const anonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-
-    const userClient = createClient(supabaseUrl, anonKey, {
-      global: { headers: { Authorization: authHeader } },
-    });
-    const { data: claims, error: claimsErr } = await userClient.auth.getClaims(authHeader.replace("Bearer ", ""));
-    if (claimsErr || !claims?.claims) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401, headers: { ...cors, "Content-Type": "application/json" },
-      });
-    }
-    const userId = claims.claims.sub;
 
     const admin = createClient(supabaseUrl, serviceKey);
     const { data: roleCheck } = await admin.rpc("has_role", { _user_id: userId, _role: "admin" });
