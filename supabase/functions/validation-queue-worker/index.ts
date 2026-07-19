@@ -20,7 +20,7 @@ Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
 
-  const cronCheck = requireCronSecret(req);
+  const cronCheck = await requireCronSecret(req);
   if (cronCheck) return cronCheck;
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "worker";

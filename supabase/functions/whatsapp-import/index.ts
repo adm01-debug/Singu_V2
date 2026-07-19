@@ -1,6 +1,6 @@
-import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { z } from 'npm:zod@3.23.8';
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 
 const messageSchema = z.object({
   contact_id: z.string().uuid().optional().nullable(),
@@ -26,14 +26,14 @@ const bodySchema = z.object({
 });
 
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: scopedCorsHeaders(req) });
   if (req.method !== 'POST') {
-    return json({ error: 'Method not allowed' }, 405);
+    return json(req, { error: 'Method not allowed' }, 405);
   }
 
   const authHeader = req.headers.get('Authorization') ?? '';
   const jwt = authHeader.replace(/^Bearer\s+/i, '');
-  if (!jwt) return json({ error: 'Unauthorized' }, 401);
+  if (!jwt) return json(req, { error: 'Unauthorized' }, 401);
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
   const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -43,16 +43,16 @@ Deno.serve(async (req) => {
     global: { headers: { Authorization: `Bearer ${jwt}` } },
   });
   const { data: userData, error: userErr } = await authed.auth.getUser();
-  if (userErr || !userData.user) return json({ error: 'Invalid token' }, 401);
+  if (userErr || !userData.user) return json(req, { error: 'Invalid token' }, 401);
   const userId = userData.user.id;
 
   let parsed;
   try {
     parsed = bodySchema.safeParse(await req.json());
   } catch {
-    return json({ error: 'Invalid JSON' }, 400);
+    return json(req, { error: 'Invalid JSON' }, 400);
   }
-  if (!parsed.success) return json({ error: parsed.error.flatten() }, 400);
+  if (!parsed.success) return json(req, { error: parsed.error.flatten() }, 400);
 
   const admin = createClient(supabaseUrl, serviceKey);
   const inserted: string[] = [];
@@ -126,12 +126,12 @@ Deno.serve(async (req) => {
     }
   }
 
-  return json({ inserted_count: inserted.length, failed_count: failed.length, inserted, failed }, 200);
+  return json(req, { inserted_count: inserted.length, failed_count: failed.length, inserted, failed }, 200);
 });
 
-function json(body: unknown, status: number) {
+function json(req: Request, body: unknown, status: number) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    headers: { ...scopedCorsHeaders(req), 'Content-Type': 'application/json' },
   });
 }

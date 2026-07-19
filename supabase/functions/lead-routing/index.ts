@@ -234,7 +234,7 @@ Deno.serve(async (req: Request) => {
     const body = parsed.data;
 
     if (body.action === "reset_daily") {
-      const cronCheck = requireCronSecret(req);
+      const cronCheck = await requireCronSecret(req);
       if (cronCheck) return cronCheck;
       return await handleResetDaily(supabase, cors);
     }

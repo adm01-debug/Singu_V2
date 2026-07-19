@@ -7,7 +7,7 @@ Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: scopedCorsHeaders(req) });
   if (req.method !== 'POST') return jsonError('Method not allowed', 405, req);
 
-  const guard = requireCronSecret(req);
+  const guard = await requireCronSecret(req);
   if (guard) return guard;
 
   const supabase = createClient(

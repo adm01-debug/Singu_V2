@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { corsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
@@ -12,14 +12,14 @@ interface AggregateRow {
 }
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (req.method === "OPTIONS") return new Response("ok", { headers: scopedCorsHeaders(req) });
 
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Missing authorization" }), {
         status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
@@ -33,7 +33,7 @@ Deno.serve(async (req) => {
     if (userErr || !userData?.user) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
@@ -112,14 +112,14 @@ Deno.serve(async (req) => {
     if (!apiKey) {
       return new Response(
         JSON.stringify({ aggregate, insights: [], warning: "LOVABLE_API_KEY not configured" }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        { headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" } },
       );
     }
 
     if (list.length < 3) {
       return new Response(
         JSON.stringify({ aggregate, insights: [], message: "Dados insuficientes para gerar insights (mínimo 3 registros)" }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        { headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" } },
       );
     }
 
@@ -173,11 +173,11 @@ Deno.serve(async (req) => {
       if (status === 429 || status === 402) {
         return new Response(
           JSON.stringify({ error: status === 429 ? "Rate limit AI" : "AI credits exhausted" }),
-          { status, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+          { status, headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" } },
         );
       }
       return new Response(JSON.stringify({ aggregate, insights: [], error: "AI error" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
@@ -202,13 +202,13 @@ Deno.serve(async (req) => {
     }
 
     return new Response(JSON.stringify({ aggregate, insights }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
     });
   } catch (e) {
     console.error("win-loss-analyzer error:", e);
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown" }), {
       status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
     });
   }
 });

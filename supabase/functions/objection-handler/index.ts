@@ -6,12 +6,12 @@ const limiter = rateLimit({ windowMs: 60_000, max: 20 });
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
+    return new Response(null, { headers: scopedCorsHeaders(req) });
+  }
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   const limited = limiter.check(ip);
   if (limited) return limited;
-    return new Response(null, { headers: scopedCorsHeaders(req) });
-  }
 
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;

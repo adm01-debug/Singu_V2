@@ -2,8 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import {
-  corsHeaders,
-  withAuthOrServiceRole,
+  scopedCorsHeaders, withAuthOrServiceRole,
   isServiceRoleCaller,
   jsonError,
   jsonOk,
@@ -28,12 +27,12 @@ const limiter = rateLimit({ windowMs: 60_000, max: 15 });
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
+    return new Response(null, { headers: scopedCorsHeaders(req) });
+  }
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   const limited = limiter.check(ip);
   if (limited) return limited;
-    return new Response(null, { headers: corsHeaders });
-  }
 
   const authResult = await withAuthOrServiceRole(req);
   if (authResult instanceof Response) return authResult;

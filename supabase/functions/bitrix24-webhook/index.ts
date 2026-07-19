@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
   const corsResp = handleCorsAndMethod(req);
   if (corsResp) return corsResp;
 
-  const authCheck = requireWebhookSecret(req, 'BITRIX24_WEBHOOK_SECRET', 'x-bitrix24-secret');
+  const authCheck = await requireWebhookSecret(req, 'BITRIX24_WEBHOOK_SECRET', 'x-bitrix24-secret');
   if (authCheck) return authCheck;
 
   try {

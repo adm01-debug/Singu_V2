@@ -1,14 +1,14 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { corsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { scopedCorsHeaders(req), requireCronSecret } from "../_shared/auth.ts";
 
 // Esta função processa todos os contatos agendados e detecta eventos
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: scopedCorsHeaders(req) });
   }
 
   // 🔒 Cron secret validation
-  const cronError = requireCronSecret(req);
+  const cronError = await requireCronSecret(req);
   if (cronError) return cronError;
 
   try {
@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
         message: "No pending scrapes",
         processed: 0 
       }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
@@ -316,7 +316,7 @@ Deno.serve(async (req) => {
       processed: results.length,
       results,
     }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
     });
 
   } catch (error) {
@@ -325,7 +325,7 @@ Deno.serve(async (req) => {
       error: error instanceof Error ? error.message : "Unknown error" 
     }), {
       status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
     });
   }
 });

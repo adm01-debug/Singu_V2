@@ -1,6 +1,5 @@
 import {
-  corsHeaders,
-  handleCorsAndMethod,
+  scopedCorsHeaders, handleCorsAndMethod,
   withAuth,
   jsonError,
 } from "../_shared/auth.ts";
@@ -83,8 +82,7 @@ Deno.serve(async (req) => {
 
     return new Response(audioBuffer, {
       headers: {
-        ...corsHeaders,
-        "Content-Type": "audio/mpeg",
+        ...scopedCorsHeaders, "Content-Type": "audio/mpeg",
         "Cache-Control": "private, max-age=3600",
       },
     });

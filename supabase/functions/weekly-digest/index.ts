@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { corsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { scopedCorsHeaders(req), requireCronSecret } from "../_shared/auth.ts";
 
 interface WeeklyDigestData {
   userId: string;
@@ -18,11 +18,11 @@ interface WeeklyDigestData {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: scopedCorsHeaders(req) });
   }
 
   // 🔒 Cron secret validation
-  const cronError = requireCronSecret(req);
+  const cronError = await requireCronSecret(req);
   if (cronError) return cronError;
 
   try {
@@ -91,7 +91,7 @@ Deno.serve(async (req) => {
         }),
         { 
           status: 200, 
-          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+          headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" } 
         }
       );
     }
@@ -250,7 +250,7 @@ Deno.serve(async (req) => {
       }),
       { 
         status: 200, 
-        headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" } 
       }
     );
 
@@ -261,7 +261,7 @@ Deno.serve(async (req) => {
       JSON.stringify({ error: errorMessage }),
       { 
         status: 500, 
-        headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" } 
       }
     );
   }

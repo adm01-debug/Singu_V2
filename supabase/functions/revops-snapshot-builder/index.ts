@@ -9,7 +9,7 @@ const STAGES = ["visitor", "lead", "mql", "sql", "opportunity", "customer"] as c
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
 
-  const cronCheck = requireCronSecret(req);
+  const cronCheck = await requireCronSecret(req);
   if (cronCheck) return cronCheck;
 
   // Auth: cron secret OR service role
