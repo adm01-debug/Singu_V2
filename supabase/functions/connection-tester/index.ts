@@ -308,7 +308,7 @@ Deno.serve(async (req) => {
           last_test_status: "success",
           last_test_latency_ms: result.latency_ms,
           last_test_message: result.message,
-        }).eq("id", payload.connection_id),
+        }).eq("id", payload.connection_id).eq("user_id", userId),
         admin.from("connection_test_logs").insert({
           connection_id: payload.connection_id,
           status: "success",
@@ -336,7 +336,7 @@ Deno.serve(async (req) => {
             last_tested_at: new Date().toISOString(),
             last_test_status: "error",
             last_test_message: message,
-          }).eq("id", body.connection_id),
+          }).eq("id", body.connection_id).eq("user_id", userId),
           admin.from("connection_test_logs").insert({
             connection_id: body.connection_id,
             status: "error",

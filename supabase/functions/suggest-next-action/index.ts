@@ -24,6 +24,7 @@ Deno.serve(async (req) => {
   // 🔒 Authenticate — userId from JWT
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
+  const userId = authResult;
 
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
@@ -43,25 +44,27 @@ Deno.serve(async (req) => {
        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
      );
  
-     // 🔄 Auto-fetch context if contactId provided
+     // 🔄 Auto-fetch context if contactId provided — verify ownership with user_id filter
      if (contactId && !contact) {
        const { data: dbContact } = await supabase
          .from('contacts')
          .select('*, companies(*)')
          .eq('id', contactId)
+         .eq('user_id', userId)
          .single();
-       
+
        if (dbContact) {
          contact = dbContact;
          company = dbContact.companies;
-         
+
          const { data: dbInteractions } = await supabase
            .from('interactions')
            .select('*')
            .eq('contact_id', contactId)
+           .eq('user_id', userId)
            .order('created_at', { ascending: false })
            .limit(10);
-         
+
          interactions = dbInteractions || [];
        }
      }
@@ -179,6 +182,7 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
              
              return supabase.from('contact_predictive_roadmap').upsert({
                contact_id: contactId,
+               user_id: userId,
                forecast_month: forecastDate.toISOString().split('T')[0],
                // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
                predicted_need: needs[Math.floor(Math.random() * needs.length)],

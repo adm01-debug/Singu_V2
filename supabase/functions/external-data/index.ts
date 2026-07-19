@@ -198,14 +198,14 @@ Deno.serve(async (req) => {
   const traceId = extractTraceId(req);
   const log = tracedLogger(traceId, "external-data");
 
-  // ── Rate limit guard ──
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const limited = limiter.check(ip);
-  if (limited) return limited;
-
   // ── Auth guard ──
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
+  const userId = authResult;
+
+  // ── Rate limit guard (per user, not IP) ──
+  const limited = limiter.check(userId);
+  if (limited) return limited;
 
   const startTime = performance.now();
 
@@ -438,7 +438,9 @@ Deno.serve(async (req) => {
       const { record } = body;
       if (!record || typeof record !== 'object') return jsonError('Missing or invalid "record" for insert', 400, req);
 
-      const { data, error } = await client.from(table).insert(record).select().single();
+      // Inject user_id so records are always tenant-scoped
+      const safeRecord = { ...(record as Record<string, unknown>), user_id: userId };
+      const { data, error } = await client.from(table).insert(safeRecord).select().single();
       if (error) throw new Error(`Insert failed: ${error.message}`);
       return jsonOk({ data }, req);
     }
@@ -448,12 +450,12 @@ Deno.serve(async (req) => {
       const id = body.id;
       const updates = body.updates;
       if (!id || typeof id !== 'string') return jsonError('Missing or invalid "id" for update', 400, req);
-      // Validate UUID format
       const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       if (!uuidRegex.test(id)) return jsonError('Invalid UUID format for "id"', 400, req);
       if (!updates || typeof updates !== 'object') return jsonError('Missing or invalid "updates" for update', 400, req);
 
-      const { data, error } = await client.from(table).update(updates).eq('id', id).select().single();
+      // user_id filter prevents updating another tenant's record
+      const { data, error } = await client.from(table).update(updates).eq('id', id).eq('user_id', userId).select().single();
       if (error) throw new Error(`Update failed: ${error.message}`);
       return jsonOk({ data }, req);
     }
@@ -468,12 +470,13 @@ Deno.serve(async (req) => {
       if (version === undefined || !Number.isFinite(version)) return jsonError('Missing or invalid "version" (number) for update_with_version', 400, req);
       if (!updates || typeof updates !== 'object') return jsonError('Missing or invalid "updates" for update_with_version', 400, req);
 
-      // Conditional update: only succeeds if version matches.
+      // Conditional update: only succeeds if version matches AND record belongs to this user.
       // The DB trigger increments version automatically on UPDATE.
       const { data, error } = await client
         .from(table)
         .update(updates)
         .eq('id', id)
+        .eq('user_id', userId)
         .eq('version', version)
         .select();
 
@@ -495,7 +498,8 @@ Deno.serve(async (req) => {
       const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       if (!uuidRegex.test(id as string)) return jsonError('Invalid UUID format for "id"', 400, req);
 
-      const { error } = await client.from(table).delete().eq('id', id);
+      // user_id filter prevents deleting another tenant's record
+      const { error } = await client.from(table).delete().eq('id', id).eq('user_id', userId);
       if (error) throw new Error(`Delete failed: ${error.message}`);
       return jsonOk({ success: true }, req);
     }

@@ -68,11 +68,13 @@ Deno.serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) return jsonError("LOVABLE_API_KEY missing", 500, req);
 
-    // Buscar webhooks ativos
-    const { data: webhooks, error: whErr } = await supabase
+    // Buscar webhooks ativos — scope by user when called via JWT (not cron)
+    let webhookQuery = supabase
       .from("incoming_webhooks")
       .select("id, name")
       .eq("is_active", true);
+    if (!isCron && userId) webhookQuery = webhookQuery.eq("user_id", userId);
+    const { data: webhooks, error: whErr } = await webhookQuery;
     if (whErr) throw whErr;
     if (!webhooks?.length) return jsonOk({ message: "Nenhum webhook ativo", inserted: 0 }, req);
 

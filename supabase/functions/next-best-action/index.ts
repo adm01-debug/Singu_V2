@@ -25,23 +25,24 @@ Deno.serve(async (req) => {
     const { contactId } = await req.json();
     if (!contactId) { return jsonError("contactId is required", 400); }
 
-    // 1. Gather Rich Context
-     const [contactRes, interactionsRes, , neuroRes, analyticalRes, whatsappRes] = await Promise.all([
-       supabase.from('contacts').select('*').eq('id', contactId).single(),
-       supabase.from('interactions').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(10),
+    // Verify contact ownership before fetching any related data
+    const { data: contact, error: contactErr } = await supabase
+      .from('contacts').select('*').eq('id', contactId).eq('user_id', userId).single();
+    if (contactErr || !contact) return jsonError("Contact not found", 404);
+
+    // 1. Gather Rich Context (ownership already verified above)
+     const [interactionsRes, , neuroRes, analyticalRes, whatsappRes] = await Promise.all([
+       supabase.from('interactions').select('*').eq('contact_id', contactId).eq('user_id', userId).order('created_at', { ascending: false }).limit(10),
        supabase.from('social_behavior_analysis').select('*').eq('contact_id', contactId).order('analysis_date', { ascending: false }).limit(1),
        supabase.from('neuro_behavioral_history').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(5),
        supabase.from('contact_analytical_profiles').select('*').eq('contact_id', contactId).maybeSingle(),
-       supabase.from('whatsapp_messages').select('content, message_type').eq('contact_id', contactId).order('timestamp', { ascending: false }).limit(5)
+       supabase.from('whatsapp_messages').select('content, message_type').eq('contact_id', contactId).eq('user_id', userId).order('timestamp', { ascending: false }).limit(5)
      ]);
 
-    const contact = contactRes.data;
     const interactions = interactionsRes.data || [];
      const neuroHistory = neuroRes.data || [];
      const analytical = analyticalRes.data;
      const recentWhatsApp = whatsappRes.data || [];
-
-    if (!contact) return jsonError("Contact not found", 404);
 
     // 2. Call AI Gateway for Intelligent Suggestion
     const apiKey = Deno.env.get("LOVABLE_API_KEY");

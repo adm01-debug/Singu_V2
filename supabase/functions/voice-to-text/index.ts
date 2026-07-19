@@ -58,7 +58,7 @@ Deno.serve(async (req) => {
     let audioData = audio;
 
     if (whatsappMessageId && !audio) {
-      const { data: msg } = await supabase.from('whatsapp_messages').select('content, metadata').eq('id', whatsappMessageId).single();
+      const { data: msg } = await supabase.from('whatsapp_messages').select('content, metadata').eq('id', whatsappMessageId).eq('user_id', userId).single();
       if (msg?.content?.startsWith('data:audio')) audioData = msg.content;
     }
 
@@ -123,7 +123,7 @@ Deno.serve(async (req) => {
       if (!intError) interactionId = interaction?.id ?? null;
 
       if (whatsappMessageId) {
-        await supabase.from('whatsapp_messages').update({ content: transcribedText }).eq('id', whatsappMessageId);
+        await supabase.from('whatsapp_messages').update({ content: transcribedText }).eq('id', whatsappMessageId).eq('user_id', userId);
       }
     }
 

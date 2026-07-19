@@ -26,11 +26,12 @@ Deno.serve(async (req) => {
     const { contactId, objectionId } = await req.json();
     if (!contactId || !objectionId) return jsonError("Missing parameters", 400, req);
 
-    // 1. Gather Profile and Context
+    // 1. Gather Profile and Context — verify ownership with user_id filter
     const { data: contact } = await supabase
       .from('contacts')
       .select('*, contact_behavior(*), contact_personality(*)')
       .eq('id', contactId)
+      .eq('user_id', userId)
       .single();
 
     if (!contact) return jsonError("Contact not found", 404, req);
@@ -97,6 +98,7 @@ Gere um script que:
      // 3. Persist for Audit and Intelligence Dashboard
      await supabase.from('crm_objection_intelligence').insert({
        contact_id: contactId,
+       user_id: userId,
        objection_type: objectionId,
        behavioral_profile: contact.behavior?.dominant_style || 'Não Identificado',
        suggested_strategy: result.title,

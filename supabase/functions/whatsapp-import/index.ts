@@ -58,6 +58,22 @@ Deno.serve(async (req) => {
   const inserted: string[] = [];
   const failed: Array<{ index: number; error: string }> = [];
 
+  // Batch-verify contact and company ownership before processing
+  const contactIds = [...new Set(parsed.data.messages.map(m => m.contact_id).filter(Boolean) as string[])];
+  const companyIds = [...new Set(parsed.data.messages.map(m => m.company_id).filter(Boolean) as string[])];
+
+  const allowedContactIds = new Set<string>();
+  const allowedCompanyIds = new Set<string>();
+
+  if (contactIds.length > 0) {
+    const { data: ownedContacts } = await admin.from('contacts').select('id').in('id', contactIds).eq('user_id', userId);
+    (ownedContacts ?? []).forEach(c => allowedContactIds.add(c.id));
+  }
+  if (companyIds.length > 0) {
+    const { data: ownedCompanies } = await admin.from('companies').select('id').in('id', companyIds).eq('user_id', userId);
+    (ownedCompanies ?? []).forEach(c => allowedCompanyIds.add(c.id));
+  }
+
   for (let i = 0; i < parsed.data.messages.length; i++) {
     const m = parsed.data.messages[i];
     try {
@@ -67,10 +83,14 @@ Deno.serve(async (req) => {
         ? hasTranscription ? 'done' : 'pending'
         : 'not_applicable';
 
+      // Only attach to contacts/companies that belong to this user
+      const safeContactId = m.contact_id && allowedContactIds.has(m.contact_id) ? m.contact_id : null;
+      const safeCompanyId = m.company_id && allowedCompanyIds.has(m.company_id) ? m.company_id : null;
+
       const row = {
         user_id: userId,
-        contact_id: m.contact_id ?? null,
-        company_id: m.company_id ?? null,
+        contact_id: safeContactId,
+        company_id: safeCompanyId,
         instance_name: m.instance_name,
         remote_jid: m.remote_jid,
         message_id: m.message_id ?? null,
@@ -104,11 +124,11 @@ Deno.serve(async (req) => {
 
       await admin.from('whatsapp_ingestion_logs').insert({
         user_id: userId,
-        contact_id: m.contact_id ?? null,
+        contact_id: safeContactId,
         message_id: m.message_id ?? null,
         event_type: 'import',
         status: 'ok',
-        details: { message_type: m.message_type, company_id: m.company_id ?? null },
+        details: { message_type: m.message_type, company_id: safeCompanyId },
       });
 
       inserted.push(msg.id);

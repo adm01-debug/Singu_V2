@@ -26,7 +26,13 @@ Deno.serve(async (req) => {
 
   try {
     const { contact_id } = await req.json();
-    
+    if (!contact_id) return jsonError("contact_id required", 400, req);
+
+    // Verify contact ownership before triggering RPC
+    const { data: owned, error: ownerErr } = await supabase
+      .from('contacts').select('id').eq('id', contact_id).eq('user_id', userId).maybeSingle();
+    if (ownerErr || !owned) return jsonError("Contact not found", 404, req);
+
     // Call the original score calculation
     const { data: scoreResult, error: scoreError } = await supabase.rpc('calculate_relationship_metrics_for_contact', { p_contact_id: contact_id });
     if (scoreError) throw scoreError;
