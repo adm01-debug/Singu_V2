@@ -1,12 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-mcp-token",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 
 /**
  * MCP Server v1.2.0 (Streamable HTTP, JSON-RPC 2.0).
@@ -45,19 +40,29 @@ async function callTool(name: string, args: Record<string, unknown>, admin: Admi
   const limit = Math.min(Number(args.limit ?? 10), 100);
 
   if (name === "search_contacts") {
-    const q = String(args.query ?? "").slice(0, 200);
-    const { data } = await admin.from("contacts").select("id,first_name,last_name,email,phone")
-      .or(`first_name.ilike.%${q}%,last_name.ilike.%${q}%,email.ilike.%${q}%`).limit(limit);
+    // Escape ilike wildcards to prevent query manipulation
+    const q = String(args.query ?? "").slice(0, 200).replace(/%/g, "\\%").replace(/_/g, "\\_");
+    const { data } = await admin.from("contacts")
+      .select("id,first_name,last_name,email,phone")
+      .eq("user_id", ownerUserId)
+      .or(`first_name.ilike.%${q}%,last_name.ilike.%${q}%,email.ilike.%${q}%`)
+      .limit(limit);
     return { content: [{ type: "text", text: JSON.stringify(data ?? [], null, 2) }] };
   }
   if (name === "search_companies") {
-    const q = String(args.query ?? "").slice(0, 200);
-    const { data } = await admin.from("companies").select("id,name,cnpj,industry").ilike("name", `%${q}%`).limit(limit);
+    const q = String(args.query ?? "").slice(0, 200).replace(/%/g, "\\%").replace(/_/g, "\\_");
+    const { data } = await admin.from("companies")
+      .select("id,name,cnpj,industry")
+      .eq("user_id", ownerUserId)
+      .ilike("name", `%${q}%`)
+      .limit(limit);
     return { content: [{ type: "text", text: JSON.stringify(data ?? [], null, 2) }] };
   }
   if (name === "list_deals") {
     const stage = args.stage ? String(args.stage).slice(0, 64) : null;
-    let q = admin.from("deals").select("id,title,value,stage,company_id").limit(limit);
+    let q = admin.from("deals").select("id,title,value,stage,company_id")
+      .eq("user_id", ownerUserId)
+      .limit(limit);
     if (stage) q = q.eq("stage", stage);
     const { data } = await q;
     return { content: [{ type: "text", text: JSON.stringify(data ?? [], null, 2) }] };
@@ -78,6 +83,7 @@ async function callTool(name: string, args: Record<string, unknown>, admin: Admi
     const { data, error } = await admin.from("deals")
       .update({ stage: String(args.stage).slice(0, 64) })
       .eq("id", String(args.deal_id))
+      .eq("user_id", ownerUserId) // prevent cross-tenant mutation
       .select("id,stage").maybeSingle();
     if (error) throw new Error(error.message);
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
@@ -96,12 +102,14 @@ async function callTool(name: string, args: Record<string, unknown>, admin: Admi
   if (name === "search_companies_by_intent") {
     const min = Math.min(Math.max(Number(args.min_score ?? 70), 0), 100);
     const { data } = await admin.from("companies")
-      .select("id,name,industry").limit(limit).order("name");
+      .select("id,name,industry")
+      .eq("user_id", ownerUserId)
+      .limit(limit).order("name");
     // Best-effort: se houver coluna intent_score; senão retorna lista
     return { content: [{ type: "text", text: JSON.stringify({ min_score: min, results: data ?? [] }, null, 2) }] };
   }
   if (name === "get_pipeline_summary") {
-    const { data } = await admin.from("deals").select("stage,value");
+    const { data } = await admin.from("deals").select("stage,value").eq("user_id", ownerUserId);
     const summary: Record<string, { count: number; total_value: number }> = {};
     for (const d of (data ?? []) as { stage: string; value: number | null }[]) {
       const s = d.stage ?? "unknown";
@@ -115,12 +123,13 @@ async function callTool(name: string, args: Record<string, unknown>, admin: Admi
 }
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  const cors = scopedCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response(null, { headers: cors });
 
   const token = req.headers.get("x-mcp-token");
   if (!token) {
     return new Response(JSON.stringify({ jsonrpc: "2.0", error: { code: -32001, message: "Missing X-MCP-Token" }, id: null }), {
-      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 401, headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 
@@ -139,7 +148,7 @@ Deno.serve(async (req) => {
 
   if (!conn) {
     return new Response(JSON.stringify({ jsonrpc: "2.0", error: { code: -32001, message: "Token MCP inválido" }, id: null }), {
-      status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 403, headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 
@@ -147,7 +156,7 @@ Deno.serve(async (req) => {
   try { rawBody = await req.json(); }
   catch {
     return new Response(JSON.stringify({ jsonrpc: "2.0", error: { code: -32700, message: "Parse error" }, id: null }), {
-      status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 400, headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 
@@ -156,7 +165,7 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({
       jsonrpc: "2.0", id: null,
       error: { code: -32600, message: "Invalid Request", data: parsed.error.flatten() },
-    }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
   }
   const body = parsed.data;
 
@@ -175,7 +184,7 @@ Deno.serve(async (req) => {
           return new Response(JSON.stringify({
             jsonrpc: "2.0", id: body.id ?? null,
             error: { code: -32602, message: "Invalid params", data: callParsed.error.flatten() },
-          }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+          }), { headers: { ...cors, "Content-Type": "application/json" } });
         }
         const startedAt = Date.now();
         try {
@@ -206,16 +215,16 @@ Deno.serve(async (req) => {
         break;
       default:
         return new Response(JSON.stringify({ jsonrpc: "2.0", error: { code: -32601, message: `Método ${body.method} não suportado` }, id: body.id ?? null }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          headers: { ...cors, "Content-Type": "application/json" },
         });
     }
     return new Response(JSON.stringify({ jsonrpc: "2.0", id: body.id ?? null, result }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Erro";
     return new Response(JSON.stringify({ jsonrpc: "2.0", id: body.id ?? null, error: { code: -32000, message } }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 });
