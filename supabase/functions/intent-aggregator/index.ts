@@ -1,5 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, handleCorsAndMethod } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
 interface SignalRow {
   contact_id: string | null;
@@ -15,6 +18,11 @@ Deno.serve(async (req) => {
 
   const auth = await withAuthOrServiceRole(req);
   if (auth instanceof Response) return auth;
+
+  if (!isServiceRoleCaller(auth)) {
+    const rl = limiter.check(auth);
+    if (rl) return rl;
+  }
 
   let targetUserId: string;
   if (isServiceRoleCaller(auth)) {

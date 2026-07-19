@@ -26,6 +26,9 @@ import {
   handleCorsAndMethod,
   withAuth,
 } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
 // ─── SSRF Guard ───────────────────────────────────────────────────────────────
 
@@ -278,6 +281,9 @@ Deno.serve(async (req) => {
     if (authResult instanceof Response) return authResult; // 401
 
     const userId: string = authResult;
+
+    const rl = limiter.check(userId);
+    if (rl) return rl;
 
     const payload = (await req.json()) as TestPayload;
     let result: TestResult;

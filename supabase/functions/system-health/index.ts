@@ -1,5 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { withAuth, scopedCorsHeaders } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
 interface ComponentCheck {
   status: "up" | "degraded" | "down" | "not_configured";
@@ -135,6 +138,9 @@ Deno.serve(async (req) => {
 
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
+
+  const rl = limiter.check(authResult);
+  if (rl) return rl;
 
   const startTime = Date.now();
 
