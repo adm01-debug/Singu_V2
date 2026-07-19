@@ -4,6 +4,7 @@ import {
   jsonError,
   jsonOk,
 } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 

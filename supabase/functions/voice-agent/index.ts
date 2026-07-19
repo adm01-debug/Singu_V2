@@ -1,3 +1,4 @@
+import { rateLimit } from "../_shared/rate-limit.ts";
 import {
   handleCorsAndMethod,
   withAuth,
