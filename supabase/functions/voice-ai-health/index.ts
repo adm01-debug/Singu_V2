@@ -1,7 +1,7 @@
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { scopedCorsHeaders, withAuth } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
 interface ServiceCheck {
   service: string;
@@ -121,9 +121,16 @@ async function checkGeminiNLU(): Promise<ServiceCheck> {
 }
 
 Deno.serve(async (req) => {
+  const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response("ok", { headers: cors });
   }
+
+  const authResult = await withAuth(req);
+  if (authResult instanceof Response) return authResult;
+
+  const limited = limiter.check(authResult, req);
+  if (limited) return limited;
 
   try {
     const [stt, tts, nlu] = await Promise.all([
@@ -145,12 +152,12 @@ Deno.serve(async (req) => {
         services: checks,
         total_latency_ms: checks.reduce((s, c) => s + c.latency_ms, 0),
       }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
+      { headers: { ...cors, "Content-Type": "application/json" }, status: 200 }
     );
   } catch (err) {
     return new Response(
       JSON.stringify({ error: err instanceof Error ? err.message : "Unknown error" }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500 }
+      { headers: { ...cors, "Content-Type": "application/json" }, status: 500 }
     );
   }
 });

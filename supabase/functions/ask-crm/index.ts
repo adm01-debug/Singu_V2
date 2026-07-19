@@ -47,13 +47,12 @@ Deno.serve(async (req) => {
   const traceId = extractTraceId(req);
   const log = tracedLogger(traceId, "ask-crm");
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const limited = limiter.check(ip);
-  if (limited) return limited;
-
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
   const userId = authResult;
+
+  const limited = limiter.check(userId, req);
+  if (limited) return limited;
 
   log.info("request_received", { method: req.method, userId });
 
@@ -112,18 +111,51 @@ Deno.serve(async (req) => {
       return jsonOk({ answer: parsed_ai.explanation, data: null, display_type: "text", sql: null }, req);
     }
 
-    // Security: validate SQL is SELECT only
-    const sqlUpper = parsed_ai.sql.trim().toUpperCase();
-    const forbidden = ["INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE", "TRUNCATE", "GRANT", "REVOKE"];
-    if (!sqlUpper.startsWith("SELECT") || forbidden.some(kw => sqlUpper.includes(kw + " "))) {
+    // Security: validate SQL is SELECT-only (defence-in-depth; DB function also validates)
+    const sql = parsed_ai.sql.trim();
+    const sqlUpper = sql.toUpperCase();
+
+    // Block excessively long queries — prevents deeply nested subquery DoS against the planner
+    if (sql.length > 2000) {
+      return jsonError("Consulta muito complexa. Tente uma pergunta mais simples.", 400, req);
+    }
+
+    // Block semicolons — multi-statement injection
+    if (sql.includes(";")) {
+      return jsonError("Consulta inválida: múltiplos statements não são permitidos.", 403, req);
+    }
+
+    // Block SQL comments — prevents keyword/predicate bypass via -- or /* */
+    if (/--/.test(sql) || /\/\*/.test(sql)) {
+      return jsonError("Consulta inválida: comentários SQL não são permitidos.", 403, req);
+    }
+
+    // Must start with SELECT
+    const forbidden = /\b(INSERT|UPDATE|DELETE|DROP|ALTER|CREATE|TRUNCATE|GRANT|REVOKE|EXECUTE|COPY|CALL|DO|VACUUM|ANALYZE|CLUSTER|LISTEN|NOTIFY|RECURSIVE)\b/i;
+    if (!sqlUpper.startsWith("SELECT") || forbidden.test(sql)) {
       return jsonError("Consulta não permitida. Apenas leituras são aceitas.", 403, req);
+    }
+
+    // Block access to system schemas
+    if (/\b(auth\.|pg_|information_schema|supabase_)/i.test(sql)) {
+      return jsonError("Acesso a schemas do sistema não é permitido.", 403, req);
     }
 
     // Tabelas de integrações são globais (admin) — não exigem filtro user_id
     const sqlLower = parsed_ai.sql.toLowerCase();
     const isAdminQuery = CONNECTION_TABLES.some(t => sqlLower.includes(t));
-    if (!isAdminQuery && !parsed_ai.sql.includes(userId)) {
-      return jsonError("Consulta deve filtrar por usuário autenticado.", 403, req);
+
+    // Require userId to appear as an actual WHERE/AND predicate (not just in a comment/literal)
+    if (!isAdminQuery) {
+      const userIdEscaped = userId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      // eslint-disable-next-line sonarjs/slow-regex -- bounded quantifiers, UUID is fixed-length 36 chars
+      const userIdInPredicate = new RegExp(
+        `(?:where|and|on)\\s+(?:[\\w.]+\\.)?user_id\\s*=\\s*'${userIdEscaped}'`,
+        "i",
+      );
+      if (!userIdInPredicate.test(parsed_ai.sql)) {
+        return jsonError("Consulta deve filtrar por usuário autenticado.", 403, req);
+      }
     }
 
     // Se for query admin, valida papel

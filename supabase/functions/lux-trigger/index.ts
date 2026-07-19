@@ -1,22 +1,9 @@
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Rate limit exceeded for Lux Intelligence. Please wait." });
-
-function getScopedOrigin(req: Request): string {
-  const origin = req.headers.get("Origin") || "";
-  if (origin.endsWith(".lovable.app")) return origin;
-  return "https://dialogue-diamond.lovable.app";
-}
-
-function makeCors(req: Request) {
-  return {
-    "Access-Control-Allow-Origin": getScopedOrigin(req),
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-    "Vary": "Origin",
-  };
-}
 
 const LuxTriggerSchema = z.object({
   entityType: z.enum(['contact', 'company']),
@@ -65,18 +52,18 @@ async function retryFetch(
 }
 
 Deno.serve(async (req) => {
-  const corsHeaders = makeCors(req);
+  const cors = scopedCorsHeaders(req);
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: cors });
   }
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const limited = limiter.check(ip);
+  const limited = limiter.check(ip, req);
   if (limited) return limited;
 
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 405, headers: { ...cors, 'Content-Type': 'application/json' },
     });
   }
 
@@ -84,7 +71,7 @@ Deno.serve(async (req) => {
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 401, headers: { ...cors, 'Content-Type': 'application/json' },
       });
     }
 
@@ -98,7 +85,7 @@ Deno.serve(async (req) => {
     const { data: { user }, error: authError } = await userClient.auth.getUser();
     if (authError || !user) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 401, headers: { ...cors, 'Content-Type': 'application/json' },
       });
     }
 
@@ -109,7 +96,7 @@ Deno.serve(async (req) => {
         error: 'Invalid input',
         details: parsed.error.flatten().fieldErrors,
       }), {
-        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400, headers: { ...cors, 'Content-Type': 'application/json' },
       });
     }
 
@@ -135,7 +122,7 @@ Deno.serve(async (req) => {
         error: 'not_configured',
         message: 'Webhook não configurado para este tipo de entidade',
       }), {
-        status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 422, headers: { ...cors, 'Content-Type': 'application/json' },
       });
     }
 
@@ -155,7 +142,7 @@ Deno.serve(async (req) => {
     if (insertError) {
       console.error('[lux-trigger] Insert error:', insertError);
       return new Response(JSON.stringify({ error: 'Failed to create intelligence record' }), {
-        status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 500, headers: { ...cors, 'Content-Type': 'application/json' },
       });
     }
 
@@ -197,12 +184,12 @@ Deno.serve(async (req) => {
       webhookStatus: result.ok ? 'sent' : 'failed',
       message: result.ok ? 'Lux intelligence scan started' : 'Scan criado mas webhook falhou',
     }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...cors, 'Content-Type': 'application/json' },
     });
   } catch (error) {
     console.error('[lux-trigger] Error:', error);
     return new Response(JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }), {
-      status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 500, headers: { ...cors, 'Content-Type': 'application/json' },
     });
   }
 });

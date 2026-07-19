@@ -1,18 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { scopedCorsHeaders, withAuth } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
-function getScopedOrigin(req: Request): string {
-  const origin = req.headers.get("Origin") || "";
-  if (origin.endsWith(".lovable.app")) return origin;
-  return "https://dialogue-diamond.lovable.app";
-}
-
-function makeCors(req: Request) {
-  return {
-    "Access-Control-Allow-Origin": getScopedOrigin(req),
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-    "Vary": "Origin",
-  };
-}
+const limiter = rateLimit({ windowMs: 60_000, max: 3, message: "Muitas verificações de saúde. Aguarde antes de tentar novamente." });
 
 interface Check {
   status: "up" | "degraded" | "down" | "not_configured";
@@ -177,8 +167,14 @@ async function checkConnectionsModule(): Promise<ConnectionsHealth> {
 }
 
 Deno.serve(async (req) => {
-  const cors = makeCors(req);
+  const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+
+  const authResult = await withAuth(req);
+  if (authResult instanceof Response) return authResult;
+
+  const limited = limiter.check(authResult, req);
+  if (limited) return limited;
 
   const start = Date.now();
   const [database_local, database_external, whatsapp, voice_ai, email_pipeline, connections, alerts_count] =

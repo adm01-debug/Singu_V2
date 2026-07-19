@@ -1,6 +1,9 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
- import { corsHeaders, withAuthOrServiceRole, jsonError, jsonOk, isServiceRoleCaller } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuthOrServiceRole, jsonError, jsonOk, isServiceRoleCaller } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
 const SocialBehaviorInput = z.object({
   contactId: z.string().uuid('contactId deve ser UUID válido'),
@@ -8,12 +11,17 @@ const SocialBehaviorInput = z.object({
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: scopedCorsHeaders(req) });
   }
 
    // 🔒 Authenticate — userId from JWT or Service Role
    const authResult = await withAuthOrServiceRole(req);
    if (authResult instanceof Response) return authResult;
+
+   if (!isServiceRoleCaller(authResult)) {
+     const rl = limiter.check(authResult, req);
+     if (rl) return rl;
+   }
 
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");

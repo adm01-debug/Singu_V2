@@ -1,20 +1,25 @@
 // Cron job: reanalisa perfis comportamentais de contatos com 3+ reprovações
 // SLA: não reprocessa o mesmo contato mais de 1x a cada 24h
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-internal-key",
-};
 
 const SLA_HOURS = 24;
 const MIN_DOWNVOTES = 3;
 const MAX_BATCH = 25; // limita por execução para evitar timeout
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+  const cors = scopedCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+
+  const cronCheck = await requireCronSecret(req);
+  if (cronCheck) return cronCheck;
+
+  function json(body: unknown, status = 200) {
+    return new Response(JSON.stringify(body), {
+      status,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
   }
 
   const requestId = crypto.randomUUID();
@@ -172,13 +177,6 @@ Deno.serve(async (req) => {
     return json({ requestId, error: message }, 500);
   }
 });
-
-function json(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-  });
-}
 
 const ERROR_RATE_THRESHOLD = 10; // percentual
 const MIN_SAMPLE = 5; // ignora janelas com pouquíssimas execuções para evitar falso positivo

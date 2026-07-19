@@ -1,9 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
 interface Step {
   type: "email" | "whatsapp" | "task" | "wait";
@@ -13,8 +9,18 @@ interface Step {
   template_id?: string;
 }
 
+interface WorkflowRow {
+  id: string;
+  steps: unknown;
+  completed_count?: number;
+}
+
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  const cors = scopedCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response(null, { headers: cors });
+
+  const cronCheck = await requireCronSecret(req);
+  if (cronCheck) return cronCheck;
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -32,16 +38,27 @@ Deno.serve(async (req) => {
       .limit(100);
 
     if (error) throw error;
+    if (!execs || execs.length === 0) {
+      return new Response(JSON.stringify({ ok: true, stats }), {
+        headers: { ...cors, "Content-Type": "application/json" },
+      });
+    }
 
-    for (const exec of execs || []) {
+    // Pre-batch: fetch all unique workflows in one query instead of N individual fetches
+    const workflowIds = [...new Set(execs.map((e: { workflow_id: string }) => e.workflow_id))];
+    const { data: workflowRows } = await supabase
+      .from("nurturing_workflows")
+      .select("id, steps, completed_count")
+      .in("id", workflowIds);
+
+    const workflowMap = new Map(
+      (workflowRows ?? []).map((w: WorkflowRow) => [w.id, w])
+    );
+
+    for (const exec of execs) {
       stats.processed++;
       try {
-        const { data: wf } = await supabase
-          .from("nurturing_workflows")
-          .select("steps")
-          .eq("id", exec.workflow_id)
-          .maybeSingle();
-
+        const wf = workflowMap.get(exec.workflow_id) as WorkflowRow | undefined;
         const steps: Step[] = Array.isArray(wf?.steps) ? (wf!.steps as unknown as Step[]) : [];
         const step = steps[exec.current_step];
 
@@ -51,12 +68,13 @@ Deno.serve(async (req) => {
             completed_at: new Date().toISOString(),
           }).eq("id", exec.id);
           await supabase.rpc("increment_workflow_completed" as never, { _id: exec.workflow_id }).catch(() => {});
-          await supabase.from("nurturing_workflows").update({ completed_count: (((wf as { completed_count?: number })?.completed_count) ?? 0) + 1 } as never).eq("id", exec.workflow_id).catch(() => {});
+          await supabase.from("nurturing_workflows")
+            .update({ completed_count: ((wf?.completed_count) ?? 0) + 1 } as never)
+            .eq("id", exec.workflow_id).catch(() => {});
           stats.completed++;
           continue;
         }
 
-        // Execute step (log task; email/whatsapp left to integration layer)
         if (step.type === "task") {
           await supabase.from("tasks").insert({
             user_id: exec.user_id,
@@ -101,12 +119,12 @@ Deno.serve(async (req) => {
     }
 
     return new Response(JSON.stringify({ ok: true, stats }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   } catch (e) {
     return new Response(JSON.stringify({ error: (e as Error).message, stats }), {
       status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 });

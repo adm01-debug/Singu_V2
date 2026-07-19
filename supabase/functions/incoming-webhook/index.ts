@@ -2,13 +2,8 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-webhook-token, x-lovable-signature, x-lovable-timestamp",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
 
 const limiter = rateLimit({
   windowMs: 60_000,
@@ -53,7 +48,8 @@ async function verifyHmac(
 }
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  const cors = scopedCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response(null, { headers: cors });
   const t0 = Date.now();
 
   const traceId = extractTraceId(req);
@@ -65,7 +61,7 @@ Deno.serve(async (req) => {
     "unknown";
   const userAgent = req.headers.get("user-agent") ?? "unknown";
 
-  const limited = limiter.check(sourceIp);
+  const limited = limiter.check(sourceIp, req);
   if (limited) return limited;
 
   log.info("request_received", { method: req.method, sourceIp, userAgent });
@@ -92,7 +88,7 @@ Deno.serve(async (req) => {
   if (!parsed.success) {
     return new Response(
       JSON.stringify({ error: "Payload inválido", details: parsed.error.flatten() }),
-      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      { status: 400, headers: { ...cors, "Content-Type": "application/json" } },
     );
   }
   const payload = parsed.data;
@@ -100,7 +96,7 @@ Deno.serve(async (req) => {
   if (!token) {
     return new Response(JSON.stringify({ error: "Token obrigatório" }), {
       status: 401,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 
@@ -114,7 +110,7 @@ Deno.serve(async (req) => {
   if (whErr || !webhook) {
     return new Response(JSON.stringify({ error: "Webhook inválido ou inativo" }), {
       status: 404,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 
@@ -127,7 +123,7 @@ Deno.serve(async (req) => {
     if (!sig || !ts || !Number.isFinite(tsNum) || Math.abs(Date.now() - tsNum) > window) {
       return new Response(JSON.stringify({ error: "Timestamp ausente ou expirado" }), {
         status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
     const ok = webhook.webhook_secret
@@ -146,7 +142,7 @@ Deno.serve(async (req) => {
       });
       return new Response(JSON.stringify({ error: "Assinatura inválida" }), {
         status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
   }
@@ -168,7 +164,7 @@ Deno.serve(async (req) => {
       });
       return new Response(JSON.stringify({ error: "Origem não permitida" }), {
         status: 403,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
   }
@@ -192,7 +188,7 @@ Deno.serve(async (req) => {
       });
       return new Response(JSON.stringify({ error: "Quota mensal excedida", quota: q }), {
         status: 429,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
   }
@@ -274,7 +270,7 @@ Deno.serve(async (req) => {
     }),
     {
       status: httpStatus,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     },
   );
 });

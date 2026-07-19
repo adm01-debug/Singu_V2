@@ -1,7 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import {
-  corsHeaders,
-  requireCronSecret,
+  scopedCorsHeaders, requireCronSecret,
   jsonError,
   jsonOk,
 } from "../_shared/auth.ts";
@@ -120,11 +119,11 @@ Deno.serve(async (req) => {
   const log = tracedLogger(traceId, "check-health-alerts");
 
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: scopedCorsHeaders(req) });
   }
 
   // 🔒 Cron secret validation
-  const cronError = requireCronSecret(req);
+  const cronError = await requireCronSecret(req);
   if (cronError) {
     log.warn("unauthorized_cron_access");
     return cronError;

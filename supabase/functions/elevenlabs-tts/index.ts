@@ -1,15 +1,21 @@
 import {
-  corsHeaders,
-  handleCorsAndMethod,
+  scopedCorsHeaders, handleCorsAndMethod,
   withAuth,
   jsonError,
 } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
 const VOICE_ID_REGEX = /^[a-zA-Z0-9]{10,30}$/;
+
+const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
 Deno.serve(async (req) => {
   const guard = handleCorsAndMethod(req);
   if (guard) return guard;
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip, req);
+  if (limited) return limited;
+
 
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
@@ -76,8 +82,7 @@ Deno.serve(async (req) => {
 
     return new Response(audioBuffer, {
       headers: {
-        ...corsHeaders,
-        "Content-Type": "audio/mpeg",
+        ...scopedCorsHeaders, "Content-Type": "audio/mpeg",
         "Cache-Control": "private, max-age=3600",
       },
     });

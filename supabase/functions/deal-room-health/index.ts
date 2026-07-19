@@ -1,7 +1,9 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY")!;
+const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Muitas análises. Aguarde antes de tentar novamente." });
 
 Deno.serve(async (req) => {
   const pre = handleCorsAndMethod(req);
@@ -9,6 +11,9 @@ Deno.serve(async (req) => {
   const auth = await withAuth(req);
   if (auth instanceof Response) return auth;
   const userId = auth as string;
+
+  const limited = limiter.check(userId, req);
+  if (limited) return limited;
 
   try {
     const { room_id } = await req.json();

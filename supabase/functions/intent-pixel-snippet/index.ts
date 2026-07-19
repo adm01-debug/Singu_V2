@@ -1,20 +1,24 @@
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "content-type",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
-};
+import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 30 });
 
 Deno.serve((req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  const cors = scopedCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "GET") {
-    return new Response("Method not allowed", { status: 405, headers: corsHeaders });
+    return new Response("Method not allowed", { status: 405, headers: cors });
   }
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip, req);
+  if (limited) return limited;
 
   const url = new URL(req.url);
   const pixelKey = url.searchParams.get("k") ?? "";
   if (!pixelKey || pixelKey.length < 8) {
     return new Response("// invalid pixel key", {
-      status: 400, headers: { ...corsHeaders, "Content-Type": "application/javascript" },
+      status: 400, headers: { ...cors, "Content-Type": "application/javascript" },
     });
   }
 
@@ -31,7 +35,7 @@ if(/pric|plan|valor/i.test(location.pathname))s("pricing_view");})();`;
   return new Response(js, {
     status: 200,
     headers: {
-      ...corsHeaders,
+      ...cors,
       "Content-Type": "application/javascript; charset=utf-8",
       "Cache-Control": "public, max-age=300",
     },

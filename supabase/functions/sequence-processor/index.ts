@@ -1,11 +1,7 @@
 // Sequence Processor — cron a cada 5min
 // Avança enrollments, avalia branching condicional, envia emails e respeita pause-on-reply
 import { createClient } from 'npm:@supabase/supabase-js@2';
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
 
 interface Step {
   id: string;
@@ -35,8 +31,27 @@ interface Enrollment {
   last_step_sent_at: string | null;
 }
 
+interface SendLogEntry {
+  enrollment_id: string;
+  step_order: number;
+  sent_at: string;
+  opened_at: string | null;
+  clicked_at: string | null;
+}
+
+interface Contact {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
+  const cors = scopedCorsHeaders(req);
+  if (req.method === 'OPTIONS') return new Response(null, { headers: cors });
+
+  const cronCheck = await requireCronSecret(req);
+  if (cronCheck) return cronCheck;
 
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
@@ -58,30 +73,67 @@ Deno.serve(async (req) => {
     if (enrErr) throw enrErr;
     if (!enrollments || enrollments.length === 0) {
       return new Response(JSON.stringify({ ok: true, message: 'Nada a processar', stats }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...cors, 'Content-Type': 'application/json' },
       });
     }
 
-    for (const enr of enrollments as Enrollment[]) {
+    // Pre-batch: eliminate N+1 — fetch all needed data in 5 queries instead of up to 500
+    const enrList = enrollments as Enrollment[];
+    const enrollmentIds = enrList.map(e => e.id);
+    const sequenceIds = [...new Set(enrList.map(e => e.sequence_id))];
+    const contactIds = [...new Set(enrList.map(e => e.contact_id))];
+
+    const [
+      { data: sequenceRows },
+      { data: allStepsRows },
+      { data: replyEventRows },
+      { data: sendLogRows },
+      { data: contactRows },
+    ] = await Promise.all([
+      supabase.from('sequences').select('id, pause_on_reply, pause_on_meeting').in('id', sequenceIds),
+      supabase.from('sequence_steps').select('*').in('sequence_id', sequenceIds).order('step_order'),
+      supabase.from('sequence_events').select('enrollment_id').in('enrollment_id', enrollmentIds).eq('event_type', 'replied'),
+      supabase.from('sequence_send_log').select('enrollment_id, step_order, sent_at, opened_at, clicked_at').in('enrollment_id', enrollmentIds),
+      supabase.from('contacts').select('id, first_name, last_name, email').in('id', contactIds),
+    ]);
+
+    // Build in-memory lookup structures
+    const sequenceMap = new Map(
+      (sequenceRows ?? []).map((s: { id: string; pause_on_reply: boolean; pause_on_meeting: boolean }) => [s.id, s])
+    );
+
+    const stepsBySeqId = new Map<string, Step[]>();
+    for (const step of (allStepsRows ?? []) as Step[]) {
+      const arr = stepsBySeqId.get(step.sequence_id) ?? [];
+      arr.push(step);
+      stepsBySeqId.set(step.sequence_id, arr);
+    }
+
+    // Set of enrollment IDs that have a replied event
+    const enrollmentsWithReply = new Set(
+      (replyEventRows ?? []).map((e: { enrollment_id: string }) => e.enrollment_id)
+    );
+
+    // enrollment_id -> step_order -> send log entry
+    const sendLogByEnrollment = new Map<string, Map<number, SendLogEntry>>();
+    for (const log of (sendLogRows ?? []) as SendLogEntry[]) {
+      const inner = sendLogByEnrollment.get(log.enrollment_id) ?? new Map<number, SendLogEntry>();
+      inner.set(log.step_order, log);
+      sendLogByEnrollment.set(log.enrollment_id, inner);
+    }
+
+    const contactMap = new Map(
+      (contactRows ?? []).map((c: Contact) => [c.id, c])
+    );
+
+    for (const enr of enrList) {
       stats.processed++;
       try {
-        // 2. Pause-on-reply: se contato respondeu, pausa
-        const { data: seq } = await supabase
-          .from('sequences')
-          .select('pause_on_reply, pause_on_meeting')
-          .eq('id', enr.sequence_id)
-          .single();
+        const seq = sequenceMap.get(enr.sequence_id);
 
+        // 2. Pause-on-reply: se contato respondeu, pausa (Map lookup, no DB call)
         if (seq?.pause_on_reply) {
-          const { data: replyEvent } = await supabase
-            .from('sequence_events')
-            .select('id')
-            .eq('enrollment_id', enr.id)
-            .eq('event_type', 'replied')
-            .limit(1)
-            .maybeSingle();
-
-          if (replyEvent || enr.replied_at) {
+          if (enrollmentsWithReply.has(enr.id) || enr.replied_at) {
             await supabase
               .from('sequence_enrollments')
               .update({ status: 'replied', replied_at: enr.replied_at ?? now.toISOString() })
@@ -91,15 +143,10 @@ Deno.serve(async (req) => {
           }
         }
 
-        // 3. Buscar próximo step
-        const nextStepOrder = enr.current_step + 1;
-        const { data: steps } = await supabase
-          .from('sequence_steps')
-          .select('*')
-          .eq('sequence_id', enr.sequence_id)
-          .order('step_order');
+        // 3. Steps from Map — no DB call
+        const steps = stepsBySeqId.get(enr.sequence_id) ?? [];
 
-        if (!steps || steps.length === 0) {
+        if (steps.length === 0) {
           await supabase
             .from('sequence_enrollments')
             .update({ status: 'completed', completed_at: now.toISOString() })
@@ -108,15 +155,16 @@ Deno.serve(async (req) => {
           continue;
         }
 
-        let targetStep = (steps as Step[]).find((s) => s.step_order === nextStepOrder);
+        const nextStepOrder = enr.current_step + 1;
+        let targetStep = steps.find((s) => s.step_order === nextStepOrder);
 
-        // 4. Avaliar branching do step ANTERIOR (se houver)
+        // 4. Avaliar branching do step ANTERIOR — in-memory, no DB call
         if (enr.current_step > 0) {
-          const prevStep = (steps as Step[]).find((s) => s.step_order === enr.current_step);
+          const prevStep = steps.find((s) => s.step_order === enr.current_step);
           if (prevStep && prevStep.condition_type !== 'always') {
-            const conditionMet = await evaluateCondition(supabase, enr.id, prevStep);
+            const sendLog = sendLogByEnrollment.get(enr.id)?.get(prevStep.step_order);
+            const conditionMet = evaluateConditionInMemory(enr.id, prevStep, sendLog, enrollmentsWithReply);
             if (conditionMet === null) {
-              // ainda esperando janela de avaliação
               const waitUntil = new Date(
                 new Date(enr.last_step_sent_at ?? enr.enrolled_at).getTime() +
                   prevStep.condition_wait_hours * 3600_000,
@@ -129,7 +177,7 @@ Deno.serve(async (req) => {
             }
             const branchTo = conditionMet ? prevStep.branch_on_yes_step : prevStep.branch_on_no_step;
             if (branchTo !== null && branchTo !== undefined) {
-              targetStep = (steps as Step[]).find((s) => s.step_order === branchTo);
+              targetStep = steps.find((s) => s.step_order === branchTo);
             }
           }
         }
@@ -143,13 +191,13 @@ Deno.serve(async (req) => {
           continue;
         }
 
-        // 5. Enviar email se canal = email
+        // 5. Enviar email — contact from Map, no extra DB call
         if (targetStep.channel === 'email') {
-          const sent = await sendEmailStep(supabase, enr, targetStep);
+          const contact = contactMap.get(enr.contact_id) ?? null;
+          const sent = await sendEmailStep(supabase, enr, targetStep, contact);
           if (sent) stats.sent++;
           else stats.errors++;
         } else {
-          // outros canais: registra evento "sent" sem envio real (placeholder p/ tarefa manual)
           await supabase.from('sequence_events').insert({
             enrollment_id: enr.id,
             sequence_id: enr.sequence_id,
@@ -161,8 +209,8 @@ Deno.serve(async (req) => {
           });
         }
 
-        // 6. Calcular próximo next_action_at baseado no delay do PRÓXIMO step
-        const upcomingStep = (steps as Step[]).find((s) => s.step_order === targetStep.step_order + 1);
+        // 6. Calcular próximo next_action_at
+        const upcomingStep = steps.find((s) => s.step_order === targetStep!.step_order + 1);
         let nextAction: string | null = null;
         if (upcomingStep) {
           const delayMs =
@@ -190,68 +238,45 @@ Deno.serve(async (req) => {
     }
 
     return new Response(JSON.stringify({ ok: true, stats }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...cors, 'Content-Type': 'application/json' },
     });
   } catch (e) {
     console.error('Sequence processor fatal:', e);
     return new Response(JSON.stringify({ ok: false, error: String(e), stats }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...cors, 'Content-Type': 'application/json' },
     });
   }
 });
 
-async function evaluateCondition(
-  supabase: any,
+// Pure in-memory condition evaluation — no DB calls, uses pre-fetched Maps
+function evaluateConditionInMemory(
   enrollmentId: string,
   step: Step,
-): Promise<boolean | null> {
-  // Janela: precisa ter passado condition_wait_hours desde o envio do step
-  const { data: sendLog } = await supabase
-    .from('sequence_send_log')
-    .select('sent_at, opened_at, clicked_at')
-    .eq('enrollment_id', enrollmentId)
-    .eq('step_order', step.step_order)
-    .maybeSingle();
-
+  sendLog: SendLogEntry | undefined,
+  enrollmentsWithReply: Set<string>,
+): boolean | null {
   if (!sendLog) return false;
-  const sentTime = new Date(sendLog.sent_at).getTime();
-  const elapsed = (Date.now() - sentTime) / 3600_000;
-  if (elapsed < step.condition_wait_hours) return null; // ainda esperando
-
-  const { data: replied } = await supabase
-    .from('sequence_events')
-    .select('id')
-    .eq('enrollment_id', enrollmentId)
-    .eq('event_type', 'replied')
-    .limit(1)
-    .maybeSingle();
+  const elapsed = (Date.now() - new Date(sendLog.sent_at).getTime()) / 3600_000;
+  if (elapsed < step.condition_wait_hours) return null;
 
   switch (step.condition_type) {
-    case 'if_opened':
-      return !!sendLog.opened_at;
-    case 'if_not_opened':
-      return !sendLog.opened_at;
-    case 'if_clicked':
-      return !!sendLog.clicked_at;
-    case 'if_replied':
-      return !!replied;
-    case 'if_not_replied':
-      return !replied;
-    default:
-      return true;
+    case 'if_opened':     return !!sendLog.opened_at;
+    case 'if_not_opened': return !sendLog.opened_at;
+    case 'if_clicked':    return !!sendLog.clicked_at;
+    case 'if_replied':    return enrollmentsWithReply.has(enrollmentId);
+    case 'if_not_replied':return !enrollmentsWithReply.has(enrollmentId);
+    default:              return true;
   }
 }
 
-async function sendEmailStep(supabase: any, enr: Enrollment, step: Step): Promise<boolean> {
+async function sendEmailStep(
+  supabase: ReturnType<typeof createClient>,
+  enr: Enrollment,
+  step: Step,
+  contact: Contact | null,
+): Promise<boolean> {
   try {
-    // Buscar email do contato
-    const { data: contact } = await supabase
-      .from('contacts')
-      .select('first_name, last_name, email')
-      .eq('id', enr.contact_id)
-      .maybeSingle();
-
     if (!contact?.email) {
       await supabase.from('sequence_send_log').insert({
         enrollment_id: enr.id,
@@ -267,14 +292,12 @@ async function sendEmailStep(supabase: any, enr: Enrollment, step: Step): Promis
       return false;
     }
 
-    // Render template (substituições simples)
     const body = (step.message_template ?? '')
       .replaceAll('{{first_name}}', contact.first_name ?? '')
       .replaceAll('{{last_name}}', contact.last_name ?? '');
     const subject = (step.subject ?? 'Mensagem')
       .replaceAll('{{first_name}}', contact.first_name ?? '');
 
-    // Registrar log com tracking_token gerado pelo default
     const { data: log } = await supabase
       .from('sequence_send_log')
       .insert({
@@ -290,7 +313,6 @@ async function sendEmailStep(supabase: any, enr: Enrollment, step: Step): Promis
       .select('id, tracking_token')
       .single();
 
-    // Tentar enviar via send-transactional-email se existir
     try {
       await supabase.functions.invoke('send-transactional-email', {
         body: {
@@ -314,7 +336,6 @@ async function sendEmailStep(supabase: any, enr: Enrollment, step: Step): Promis
       metadata: { channel: 'email', subject, tracking_token: log?.tracking_token },
     });
 
-    // Atualizar total_enrolled stats
     await supabase.rpc('increment', { table_name: 'sequences' }).catch(() => {});
 
     return true;

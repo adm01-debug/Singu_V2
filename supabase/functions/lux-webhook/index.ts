@@ -1,24 +1,15 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-
-function getScopedOrigin(req: Request): string {
-  const origin = req.headers.get("Origin") || "";
-  if (origin.endsWith(".lovable.app")) return origin;
-  return "https://dialogue-diamond.lovable.app";
-}
-
-function makeCors(req: Request) {
-  return {
-    "Access-Control-Allow-Origin": getScopedOrigin(req),
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-    "Vary": "Origin",
-  };
-}
+import { requireWebhookSecret, scopedCorsHeaders } from "../_shared/auth.ts";
 
 Deno.serve(async (req) => {
-  const corsHeaders = makeCors(req);
+  const cors = scopedCorsHeaders(req);
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: cors });
   }
+
+  // Reject unauthenticated requests before touching any data
+  const authCheck = await requireWebhookSecret(req, 'LUX_WEBHOOK_SECRET', 'x-lux-secret');
+  if (authCheck) return authCheck;
 
   try {
     const payload = await req.json();
@@ -42,7 +33,7 @@ Deno.serve(async (req) => {
 
     if (!luxRecordId) {
       return new Response(JSON.stringify({ error: 'luxRecordId is required' }), {
-        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400, headers: { ...cors, 'Content-Type': 'application/json' },
       });
     }
 
@@ -77,7 +68,7 @@ Deno.serve(async (req) => {
     if (updateError) {
       console.error('Error updating lux record:', updateError);
       return new Response(JSON.stringify({ error: 'Failed to update record' }), {
-        status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 500, headers: { ...cors, 'Content-Type': 'application/json' },
       });
     }
 
@@ -128,12 +119,12 @@ Deno.serve(async (req) => {
 
     console.log(`Lux record ${luxRecordId} updated successfully`);
     return new Response(JSON.stringify({ success: true }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...cors, 'Content-Type': 'application/json' },
     });
   } catch (error) {
     console.error('Error in lux-webhook:', error);
     return new Response(JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }), {
-      status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 500, headers: { ...cors, 'Content-Type': 'application/json' },
     });
   }
 });

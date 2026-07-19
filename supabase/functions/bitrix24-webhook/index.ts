@@ -1,5 +1,5 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { handleCorsAndMethod, jsonError, jsonOk } from "../_shared/auth.ts";
+import { handleCorsAndMethod, jsonError, jsonOk, requireWebhookSecret } from "../_shared/auth.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 
 interface BitrixCallEvent {
@@ -29,6 +29,9 @@ Deno.serve(async (req) => {
 
   const corsResp = handleCorsAndMethod(req);
   if (corsResp) return corsResp;
+
+  const authCheck = await requireWebhookSecret(req, 'BITRIX24_WEBHOOK_SECRET', 'x-bitrix24-secret');
+  if (authCheck) return authCheck;
 
   try {
     const supabase = createClient(

@@ -1,10 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
 
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
 
@@ -23,12 +19,16 @@ function normalizePhone(raw: string): string | null {
 }
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  const cors = scopedCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response(null, { headers: cors });
+
+  const cronCheck = await requireCronSecret(req);
+  if (cronCheck) return cronCheck;
 
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
     const supabase = createClient(
@@ -38,12 +38,12 @@ Deno.serve(async (req) => {
     );
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
     const { campaignId } = (await req.json()) as Body;
     if (!campaignId) {
-      return new Response(JSON.stringify({ error: "campaignId required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ error: "campaignId required" }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
     const admin = createClient(
@@ -54,10 +54,10 @@ Deno.serve(async (req) => {
     const { data: campaign, error: cErr } = await admin
       .from("sms_campaigns").select("*").eq("id", campaignId).eq("user_id", user.id).single();
     if (cErr || !campaign) {
-      return new Response(JSON.stringify({ error: "Campaign not found" }), { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ error: "Campaign not found" }), { status: 404, headers: { ...cors, "Content-Type": "application/json" } });
     }
     if (campaign.status === "sent" || campaign.status === "sending") {
-      return new Response(JSON.stringify({ error: "Campaign already processed" }), { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ error: "Campaign already processed" }), { status: 409, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
     // Materialize recipients from contacts with phone, excluding opt-outs
@@ -88,7 +88,7 @@ Deno.serve(async (req) => {
 
     if (recipientRows.length === 0) {
       await admin.from("sms_campaigns").update({ status: "failed", total_recipients: 0 }).eq("id", campaignId);
-      return new Response(JSON.stringify({ error: "No valid recipients" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ error: "No valid recipients" }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
     await admin.from("sms_campaign_recipients").upsert(recipientRows, { onConflict: "campaign_id,contact_id", ignoreDuplicates: true });
@@ -166,12 +166,12 @@ Deno.serve(async (req) => {
     }).eq("id", campaignId);
 
     return new Response(JSON.stringify({ success: true, sent, failed, total: recipientRows.length, providerConfigured: canSend }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   } catch (e) {
     console.error("send-sms-campaign error:", e);
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Internal error" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500, headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 });

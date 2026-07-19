@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { corsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { z } from "npm:zod@3.23.8";
 
@@ -14,14 +14,14 @@ const BodySchema = z.object({
 });
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (req.method === "OPTIONS") return new Response("ok", { headers: scopedCorsHeaders(req) });
 
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Missing authorization" }), {
         status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
@@ -35,19 +35,19 @@ Deno.serve(async (req) => {
     if (!userData?.user) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
     const userId = userData.user.id;
-    const limited = limiter.check(userId);
+    const limited = limiter.check(userId, req);
     if (limited) return limited;
 
     const parsed = BodySchema.safeParse(await req.json());
     if (!parsed.success) {
       return new Response(JSON.stringify({ error: parsed.error.flatten().fieldErrors }), {
         status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
@@ -73,13 +73,13 @@ Deno.serve(async (req) => {
     if (error) throw error;
 
     return new Response(JSON.stringify({ record: data }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
     });
   } catch (e) {
     console.error("win-loss-record-deal error:", e);
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown" }), {
       status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
     });
   }
 });

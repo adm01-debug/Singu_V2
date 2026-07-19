@@ -1,20 +1,7 @@
 // Edge function: error-budget — agrega janela de 30d de system_health_snapshots,
 // retorna série temporal diária e dispara alertas em 50/75/100% do consumo.
 import { createClient } from "npm:@supabase/supabase-js@2";
-
-function getScopedOrigin(req: Request): string {
-  const origin = req.headers.get("Origin") || "";
-  if (origin.endsWith(".lovable.app")) return origin;
-  return "https://dialogue-diamond.lovable.app";
-}
-
-function makeCors(req: Request) {
-  return {
-    "Access-Control-Allow-Origin": getScopedOrigin(req),
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-    "Vary": "Origin",
-  };
-}
+import { withAuth, scopedCorsHeaders } from "../_shared/auth.ts";
 
 const SLO_TARGET = 99.5; // %
 const WINDOW_HOURS = 720; // 30 dias
@@ -109,8 +96,11 @@ async function maybeFireAlerts(
 }
 
 Deno.serve(async (req) => {
-  const corsHeaders = makeCors(req);
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  const cors = scopedCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+
+  const authResult = await withAuth(req);
+  if (authResult instanceof Response) return authResult;
 
   try {
     const supabase = createClient(
@@ -129,7 +119,7 @@ Deno.serve(async (req) => {
     if (error) {
       return new Response(JSON.stringify({ error: error.message }), {
         status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
@@ -186,12 +176,12 @@ Deno.serve(async (req) => {
     };
 
     return new Response(JSON.stringify(response), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   } catch (e) {
     return new Response(JSON.stringify({ error: String(e) }), {
       status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 });

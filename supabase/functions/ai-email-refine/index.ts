@@ -45,7 +45,7 @@ Deno.serve(async (req) => {
   const userId = await withAuth(req);
   if (typeof userId !== 'string') return userId;
 
-  const limited = limiter.check(userId);
+  const limited = limiter.check(userId, req);
   if (limited) return limited;
 
   let payload: unknown;

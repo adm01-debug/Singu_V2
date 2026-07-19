@@ -102,7 +102,7 @@ Deno.serve(async (req) => {
   const auth = await withAuth(req);
   if (auth instanceof Response) return auth;
   const userId = auth;
-  const limited = limiter.check(userId);
+  const limited = limiter.check(userId, req);
   if (limited) return limited;
 
   let raw: unknown;

@@ -1,6 +1,9 @@
 import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
 Deno.serve(async (req) => {
   const traceId = extractTraceId(req);
@@ -12,6 +15,9 @@ Deno.serve(async (req) => {
   const authResult = await withAuth(req);
   if (typeof authResult !== "string") return authResult;
   const userId = authResult;
+
+  const rl = limiter.check(userId, req);
+  if (rl) return rl;
 
   try {
     const { deal_id, model = "linear", deal_value = 0 } = await req.json();

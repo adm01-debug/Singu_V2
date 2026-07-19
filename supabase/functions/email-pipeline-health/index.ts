@@ -1,8 +1,8 @@
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { scopedCorsHeaders, withAuth } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
 const EXTERNAL_URL = Deno.env.get("SUPABASE_DB_URL")
   ? undefined
@@ -16,9 +16,16 @@ function getExternalClient() {
 }
 
 Deno.serve(async (req) => {
+  const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response("ok", { headers: cors });
   }
+
+  const authResult = await withAuth(req);
+  if (authResult instanceof Response) return authResult;
+
+  const limited = limiter.check(authResult, req);
+  if (limited) return limited;
 
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
@@ -139,13 +146,13 @@ Deno.serve(async (req) => {
     };
 
     return new Response(JSON.stringify(result), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
       status: 200,
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     return new Response(JSON.stringify({ error: message }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...cors, "Content-Type": "application/json" },
       status: 500,
     });
   }

@@ -1,18 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { withAuth, scopedCorsHeaders } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
-function getScopedOrigin(req: Request): string {
-  const origin = req.headers.get("Origin") || "";
-  if (origin.endsWith(".lovable.app")) return origin;
-  return "https://dialogue-diamond.lovable.app";
-}
-
-function makeCors(req: Request) {
-  return {
-    "Access-Control-Allow-Origin": getScopedOrigin(req),
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-    "Vary": "Origin",
-  };
-}
+const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
 interface ComponentCheck {
   status: "up" | "degraded" | "down" | "not_configured";
@@ -141,10 +131,16 @@ async function getActiveAlerts(): Promise<number> {
 }
 
 Deno.serve(async (req) => {
-  const corsHeaders = makeCors(req);
+  const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response("ok", { headers: cors });
   }
+
+  const authResult = await withAuth(req);
+  if (authResult instanceof Response) return authResult;
+
+  const rl = limiter.check(authResult, req);
+  if (rl) return rl;
 
   const startTime = Date.now();
 
@@ -193,6 +189,6 @@ Deno.serve(async (req) => {
 
   return new Response(JSON.stringify(response), {
     status: overallStatus === "unhealthy" ? 503 : 200,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
+    headers: { ...cors, "Content-Type": "application/json" },
   });
 });

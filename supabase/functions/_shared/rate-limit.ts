@@ -19,7 +19,7 @@
  *   });
  */
 
-import { corsHeaders } from "./auth.ts";
+import { corsHeaders, scopedCorsHeaders } from "./auth.ts";
 
 interface RateLimitOptions {
   /** Time window in milliseconds (default: 60 000 = 1 min) */
@@ -61,8 +61,9 @@ export function rateLimit(options: RateLimitOptions = {}) {
     /**
      * Check if a key has exceeded the rate limit.
      * Returns a 429 Response if limited, or null if allowed.
+     * Pass `req` to use scoped (origin-specific) CORS headers on the 429 response.
      */
-    check(key: string): Response | null {
+    check(key: string, req?: Request): Response | null {
       cleanup();
 
       const now = Date.now();
@@ -78,12 +79,13 @@ export function rateLimit(options: RateLimitOptions = {}) {
 
       if (entry.count > max) {
         const retryAfter = Math.ceil((entry.resetAt - now) / 1000);
+        const baseHeaders = req ? scopedCorsHeaders(req) : corsHeaders;
         return new Response(
           JSON.stringify({ error: message }),
           {
             status: 429,
             headers: {
-              ...corsHeaders,
+              ...baseHeaders,
               "Content-Type": "application/json",
               "Retry-After": String(retryAfter),
               "X-RateLimit-Limit": String(max),

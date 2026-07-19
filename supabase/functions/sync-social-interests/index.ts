@@ -1,63 +1,60 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from "npm:@supabase/supabase-js@2"
+import { createClient } from "npm:@supabase/supabase-js@2";
+import { scopedCorsHeaders, requireCronSecret, jsonError, jsonOk } from "../_shared/auth.ts";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+Deno.serve(async (req) => {
+  const cors = scopedCorsHeaders(req);
+  if (req.method === 'OPTIONS') return new Response(null, { headers: cors });
 
-serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
-  }
+  const cronCheck = await requireCronSecret(req);
+  if (cronCheck) return cronCheck;
+
+  const supabase = createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+  );
 
   try {
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
-    )
+    const { contactId, queueId } = await req.json();
 
-    const { contactId, queueId } = await req.json()
+    if (!contactId || !queueId) {
+      return jsonError('contactId and queueId are required', 400);
+    }
 
     // 1. Update queue status to processing
-    await supabaseClient
+    await supabase
       .from('social_sync_queue')
       .update({ status: 'processing', last_attempt: new Date().toISOString() })
-      .eq('id', queueId)
+      .eq('id', queueId);
 
-    // 2. Fetch social insights (mocking external social api call)
-    const { error: insightsError } = await supabaseClient
+    // 2. Fetch social insights
+    const { error: insightsError } = await supabase
       .from('social_insights')
       .select('*')
-      .eq('contact_id', contactId)
+      .eq('contact_id', contactId);
 
-    if (insightsError) throw insightsError
+    if (insightsError) throw insightsError;
 
     // 3. Get latest analysis to compare for audit log
-    const { data: currentAnalysis } = await supabaseClient
+    const { data: currentAnalysis } = await supabase
       .from('social_behavior_analysis')
       .select('*')
       .eq('contact_id', contactId)
       .maybeSingle();
 
-    // 4. Simulate processing/enrichment logic (In a real scenario, call Firecrawl/LinkedIn API)
-    const enrichedData = { 
+    // 4. Process enrichment
+    const enrichedData = {
       interests: [...(currentAnalysis?.interests || []), 'AI', 'Productivity'],
       keywords: [...(currentAnalysis?.keywords || []), 'automation', 'efficiency'],
       last_sync_at: new Date().toISOString()
     };
 
     // 5. Update social behavior analysis
-    await supabaseClient
+    await supabase
       .from('social_behavior_analysis')
-      .upsert({
-        contact_id: contactId,
-        ...enrichedData
-      });
+      .upsert({ contact_id: contactId, ...enrichedData });
 
     // 6. Log the audit with change tracking
-    await supabaseClient
+    await supabase
       .from('psychographic_audit_log')
       .insert({
         contact_id: contactId,
@@ -67,28 +64,23 @@ serve(async (req) => {
         changed_fields: ['interests', 'keywords', 'last_sync_at']
       });
 
-    // 7. Trigger offer regeneration to use new social data
-    // We use service role key for the invoke if possible, or just call it
-    const { error: invokeError } = await supabaseClient.functions.invoke('generate-offer-suggestions', {
+    // 7. Trigger offer regeneration
+    await supabase.functions.invoke('generate-offer-suggestions', {
       body: { contactId }
-    });
+    }).catch(err => console.error('Error triggering offer regeneration:', err));
 
-    if (invokeError) console.error('Error triggering offer regeneration:', invokeError);
-
-    // 6. Complete queue
-    await supabaseClient
+    // 8. Complete queue
+    await supabase
       .from('social_sync_queue')
       .update({ status: 'completed' })
-      .eq('id', queueId)
+      .eq('id', queueId);
 
-    return new Response(JSON.stringify({ success: true }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 200,
-    })
+    return jsonOk({ success: true });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    console.error('sync-social-interests error:', error);
+    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }), {
+      headers: { ...cors, 'Content-Type': 'application/json' },
       status: 400,
-    })
+    });
   }
-})
+});

@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
-import { corsHeaders, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
 // EnrichLayer returns the profile data directly
 interface EnrichLayerProfile {
@@ -54,10 +55,16 @@ interface EnrichLayerProfile {
   volunteer_work?: Array<{ title?: string; company?: string; description?: string }>;
 }
 
+const limiter = rateLimit({ windowMs: 60_000, max: 10 });
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: scopedCorsHeaders(req) });
   }
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip, req);
+  if (limited) return limited;
 
   // 🔒 Authenticate — userId from JWT
   const authResult = await withAuth(req);

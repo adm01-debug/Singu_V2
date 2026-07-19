@@ -1,29 +1,16 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-
-function getScopedOrigin(req: Request): string {
-  const origin = req.headers.get("Origin") || "";
-  if (origin.endsWith(".lovable.app")) return origin;
-  return "https://dialogue-diamond.lovable.app";
-}
-
-function makeCors(req: Request) {
-  return {
-    "Access-Control-Allow-Origin": getScopedOrigin(req),
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-    "Vary": "Origin",
-  };
-}
+import { scopedCorsHeaders, withAuth } from "../_shared/auth.ts";
 
 Deno.serve(async (req) => {
-  const corsHeaders = makeCors(req);
-  if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
-  }
+  const cors = scopedCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+
+  const authResult = await withAuth(req);
+  if (authResult instanceof Response) return authResult;
 
   const startTime = Date.now();
   const checks: Record<string, { status: string; latencyMs?: number; error?: string }> = {};
 
-  // Check 1: Database connectivity
   try {
     const dbStart = Date.now();
     const supabase = createClient(
@@ -40,14 +27,8 @@ Deno.serve(async (req) => {
     checks.database = { status: "unhealthy", error: String(e) };
   }
 
-  // Check 2: Memory
-  try {
-    checks.runtime = { status: "healthy" };
-  } catch (e) {
-    checks.runtime = { status: "unhealthy", error: String(e) };
-  }
+  checks.runtime = { status: "healthy" };
 
-  // Check 3: External DB connectivity
   try {
     const extUrl = Deno.env.get("EXTERNAL_SUPABASE_URL");
     const extKey = Deno.env.get("EXTERNAL_SUPABASE_SERVICE_ROLE_KEY");
@@ -71,16 +52,14 @@ Deno.serve(async (req) => {
     (c) => c.status === "healthy" || c.status === "not_configured"
   );
 
-  const response = {
+  return new Response(JSON.stringify({
     status: allHealthy ? "healthy" : "degraded",
     timestamp: new Date().toISOString(),
     totalLatencyMs: Date.now() - startTime,
     checks,
     version: "1.0.0",
-  };
-
-  return new Response(JSON.stringify(response), {
+  }), {
     status: allHealthy ? 200 : 503,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
+    headers: { ...cors, "Content-Type": "application/json" },
   });
 });

@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useActivityLogger } from '@/hooks/useActivityLogger';
@@ -198,7 +198,10 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       if (error) throw error;
       if (data) {
         const normalized = normalizeExternalContact(data as unknown as Record<string, unknown>);
-        queryClient.setQueryData<Contact[]>(queryKey, prev => prev ? [normalized, ...prev] : [normalized]);
+        queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, prev => {
+          if (!prev) return { pages: [[normalized]], pageParams: [0] };
+          return { ...prev, pages: [[normalized, ...prev.pages[0]], ...prev.pages.slice(1)] };
+        });
         toast({ title: 'Contato criado', description: `${normalized.first_name} ${normalized.last_name} foi adicionado com sucesso.` });
         logActivity({ type: 'created', entityType: 'contact', entityId: normalized.id, entityName: `${normalized.first_name} ${normalized.last_name}`.trim(), description: 'Contato criado' });
         return normalized;
@@ -213,14 +216,20 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   };
 
   const updateContact = async (id: string, updates: ContactUpdate, expectedVersion?: number) => {
-    const previous = queryClient.getQueryData<Contact[]>(queryKey);
-    const targetContact = previous?.find(c => c.id === id);
+    const previous = queryClient.getQueryData<InfiniteData<Contact[]>>(queryKey);
+    const targetContact = previous?.pages.flat().find(c => c.id === id);
     const versionToUse = expectedVersion ?? targetContact?.version;
-    
-    // Optimistic Update
-    queryClient.setQueryData<Contact[]>(queryKey, prev =>
-      prev?.map(c => c.id === id ? { ...c, ...updates } as Contact : c) ?? []
-    );
+
+    // Optimistic Update — must update within paginated InfiniteData structure
+    queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        pages: prev.pages.map(page =>
+          page.map(c => c.id === id ? { ...c, ...updates } as Contact : c)
+        ),
+      };
+    });
 
     try {
       // Strip local-only fields
@@ -263,21 +272,27 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       
       if (data) {
         const normalized = normalizeExternalContact(data as unknown as Record<string, unknown>);
-        queryClient.setQueryData<Contact[]>(queryKey, prev =>
-          prev?.map(c => c.id === id ? normalized : c) ?? []
-        );
+        queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, prev => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            pages: prev.pages.map(page =>
+              page.map(c => c.id === id ? normalized : c)
+            ),
+          };
+        });
         logActivity({ type: 'updated', entityType: 'contact', entityId: id, entityName: `${normalized.first_name} ${normalized.last_name}`.trim(), description: 'Contato atualizado' });
-        
+
         // Track score changes
         if (updates.relationship_score !== undefined && user) {
-          const prev = previous?.find(c => c.id === id);
+          const prev = previous?.pages.flat().find(c => c.id === id);
           trackScoreChange({ userId: user.id, contactId: id, scoreType: 'relationship', newValue: updates.relationship_score ?? 0, previousValue: prev?.relationship_score });
         }
       }
       return data;
     } catch (error) {
       // Automatic Rollback on error
-      if (previous) queryClient.setQueryData<Contact[]>(queryKey, previous);
+      if (previous) queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, previous);
       
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error updating contact:', { error: msg });
@@ -292,21 +307,24 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   };
 
   const deleteContact = async (id: string) => {
-    const previous = queryClient.getQueryData<Contact[]>(queryKey);
-    
-    // Optimistic Delete
-    queryClient.setQueryData<Contact[]>(queryKey, prev => prev?.filter(c => c.id !== id) ?? []);
+    const previous = queryClient.getQueryData<InfiniteData<Contact[]>>(queryKey);
+
+    // Optimistic Delete — filter across all InfiniteQuery pages
+    queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, prev => {
+      if (!prev) return prev;
+      return { ...prev, pages: prev.pages.map(page => page.filter(c => c.id !== id)) };
+    });
 
     try {
       const { error } = await deleteExternalData('contacts', id);
       if (error) throw error;
-      
-      const deleted = previous?.find(c => c.id === id);
+
+      const deleted = previous?.pages.flat().find(c => c.id === id);
       logActivity({ type: 'deleted', entityType: 'contact', entityId: id, entityName: deleted ? `${deleted.first_name} ${deleted.last_name}`.trim() : undefined, description: 'Contato excluído' });
       return true;
     } catch (error) {
       // Automatic Rollback on error
-      if (previous) queryClient.setQueryData<Contact[]>(queryKey, previous);
+      if (previous) queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, previous);
       
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error deleting contact:', { error: msg });

@@ -44,16 +44,31 @@ async function computeForContact(
   thresholds: Threshold[],
 ) {
   const now = Date.now();
+  const since60d = new Date(now - 60 * DAY_MS).toISOString();
   const ruleMap = new Map(rules.filter(r => r.active).map(r => [`${r.dimension}:${r.signal_key}`, r]));
   const dimScores: Record<string, number> = { fit: 0, engagement: 0, intent: 0, relationship: 0 };
 
-  // 1. Contact attributes (fit)
-  const { data: contact } = await supabase
-    .from('contacts')
-    .select('id, email, phone, role_title, company_id, relationship_score')
-    .eq('id', contactId).eq('user_id', userId).maybeSingle();
+  // Parallelize all 4 independent reads
+  const [
+    { data: contact },
+    { data: interactions },
+    { data: signals },
+    { data: prev },
+  ] = await Promise.all([
+    supabase.from('contacts')
+      .select('id, email, phone, role_title, company_id, relationship_score')
+      .eq('id', contactId).eq('user_id', userId).maybeSingle(),
+    supabase.from('interactions').select('id, created_at')
+      .eq('contact_id', contactId).eq('user_id', userId).gte('created_at', since60d),
+    supabase.from('intent_signals').select('signal_type, weight, occurred_at')
+      .eq('contact_id', contactId).eq('user_id', userId).gte('occurred_at', since60d),
+    supabase.from('lead_scores').select('total_score, grade')
+      .eq('user_id', userId).eq('contact_id', contactId).maybeSingle(),
+  ]);
+
   if (!contact) return null;
 
+  // 1. Contact attributes (fit)
   const fitChecks: Array<[string, boolean]> = [
     ['company_present', !!contact.company_id],
     ['role_present', !!contact.role_title],
@@ -66,12 +81,7 @@ async function computeForContact(
     if (r) dimScores.fit += Number(r.weight);
   }
 
-  // 2. Interactions (engagement) com decay
-  const sinceEng = new Date(now - 60 * DAY_MS).toISOString();
-  const { data: interactions } = await supabase
-    .from('interactions').select('id, created_at')
-    .eq('contact_id', contactId).eq('user_id', userId)
-    .gte('created_at', sinceEng);
+  // 2. Interactions (engagement) with decay
   const intRule = ruleMap.get('engagement:interaction');
   const recentRule = ruleMap.get('engagement:recent_interaction_7d');
   for (const i of interactions ?? []) {
@@ -81,11 +91,6 @@ async function computeForContact(
   }
 
   // 3. Intent signals
-  const sinceIntent = new Date(now - 60 * DAY_MS).toISOString();
-  const { data: signals } = await supabase
-    .from('intent_signals').select('signal_type, weight, occurred_at')
-    .eq('contact_id', contactId).eq('user_id', userId)
-    .gte('occurred_at', sinceIntent);
   for (const s of signals ?? []) {
     const r = ruleMap.get(`intent:${s.signal_type}`);
     if (!r) continue;
@@ -99,22 +104,16 @@ async function computeForContact(
     dimScores.relationship = Number(contact.relationship_score) * Number(relRule.weight);
   }
 
-  // Cap por dimensão a 100, total = média ponderada simples (já refletida nos pesos)
+  // Cap per dimension at 100
   for (const k of Object.keys(dimScores)) dimScores[k] = Math.min(100, Math.max(0, dimScores[k]));
   const total = Math.round(((dimScores.fit + dimScores.engagement + dimScores.intent + dimScores.relationship) / 4) * 100) / 100;
   const grade = gradeFor(total, thresholds);
 
-  // Buscar score anterior
-  const { data: prev } = await supabase
-    .from('lead_scores').select('total_score, grade')
-    .eq('user_id', userId).eq('contact_id', contactId).maybeSingle();
-
   const prevScore = Number(prev?.total_score ?? 0);
   const change = total - prevScore;
 
-  // Upsert
   const nowIso = new Date().toISOString();
-  await supabase.from('lead_scores').upsert({
+  const upsertData = {
     user_id: userId,
     contact_id: contactId,
     fit_score: dimScores.fit,
@@ -128,22 +127,27 @@ async function computeForContact(
     last_calculated_at: nowIso,
     computed_at: nowIso,
     decay_applied_at: nowIso,
-  }, { onConflict: 'user_id,contact_id' });
+  };
 
-  // Snapshot histórico se grade mudou ou ±10 pontos
-  if (!prev || prev.grade !== grade || Math.abs(change) >= 10) {
-    await supabase.from('lead_score_history').insert({
-      user_id: userId,
-      contact_id: contactId,
-      total_score: total,
-      grade,
-      engagement_score: dimScores.engagement,
-      fit_score: dimScores.fit,
-      intent_score: dimScores.intent,
-      relationship_score: dimScores.relationship,
-      breakdown: { dimensions: dimScores, signals_count: signals?.length ?? 0, interactions_count: interactions?.length ?? 0 },
-    });
-  }
+  const shouldSnapshot = !prev || prev.grade !== grade || Math.abs(change) >= 10;
+
+  // Parallelize upsert + optional history insert
+  await Promise.all([
+    supabase.from('lead_scores').upsert(upsertData, { onConflict: 'user_id,contact_id' }),
+    shouldSnapshot
+      ? supabase.from('lead_score_history').insert({
+          user_id: userId,
+          contact_id: contactId,
+          total_score: total,
+          grade,
+          engagement_score: dimScores.engagement,
+          fit_score: dimScores.fit,
+          intent_score: dimScores.intent,
+          relationship_score: dimScores.relationship,
+          breakdown: { dimensions: dimScores, signals_count: signals?.length ?? 0, interactions_count: interactions?.length ?? 0 },
+        })
+      : Promise.resolve(),
+  ]);
 
   // Disparar threshold runner se grade mudou OU score cruzou múltiplo de 10
   const crossedScore = Math.floor(prevScore / 10) !== Math.floor(total / 10);
@@ -171,13 +175,12 @@ Deno.serve(async (req: Request) => {
   const cors = handleCorsAndMethod(req);
   if (cors) return cors;
 
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
-  const limited = limiter.check(ip);
-  if (limited) return limited;
-
   const auth = await withAuth(req);
   if (auth instanceof Response) return auth;
   const userId = auth;
+
+  const limited = limiter.check(userId, req);
+  if (limited) return limited;
 
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,

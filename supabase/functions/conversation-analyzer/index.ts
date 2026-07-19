@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
   if (auth instanceof Response) return auth;
   const userId = auth;
 
-  const limited = limiter.check(userId);
+  const limited = limiter.check(userId, req);
   if (limited) return limited;
 
   let body: { interaction_id?: string; force?: boolean };

@@ -1,10 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
 
 interface DlqRow {
   id: string;
@@ -24,7 +20,11 @@ const TABLE_MAP: Record<string, string> = {
  * Cron: a cada 5 minutos. Aceita também trigger manual via POST { id }.
  */
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  const cors = scopedCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response(null, { headers: cors });
+
+  const cronCheck = await requireCronSecret(req);
+  if (cronCheck) return cronCheck;
 
   const admin = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -49,7 +49,7 @@ Deno.serve(async (req) => {
 
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500, headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 
@@ -121,6 +121,6 @@ Deno.serve(async (req) => {
   }
 
   return new Response(JSON.stringify({ processed: results.length, results }), {
-    status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    status: 200, headers: { ...cors, "Content-Type": "application/json" },
   });
 });

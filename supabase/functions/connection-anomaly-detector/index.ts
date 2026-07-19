@@ -1,6 +1,9 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, jsonError, jsonOk } from "../_shared/auth.ts";
+import { scopedCorsHeaders, jsonError, jsonOk, withAuth } from "../_shared/auth.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 5, message: "Muitas análises de anomalia. Aguarde antes de tentar novamente." });
 
 interface DailyAgg {
   date: string;
@@ -39,10 +42,20 @@ Deno.serve(async (req) => {
   const traceId = extractTraceId(req);
   const log = tracedLogger(traceId, "connection-anomaly-detector");
 
-  // Aceita POST com header secreto (cron) ou admin autenticado
+  // Aceita POST com header secreto (cron) ou admin autenticado via JWT
   const cronSecret = req.headers.get("x-cron-secret");
   const expectedSecret = Deno.env.get("CRON_SECRET");
   const isCron = !!expectedSecret && cronSecret === expectedSecret;
+
+  let userId: string | undefined;
+  if (!isCron) {
+    // Fall back to JWT auth for non-cron callers (admin dashboard)
+    const authResult = await withAuth(req);
+    if (authResult instanceof Response) return authResult;
+    userId = authResult;
+    const limited = limiter.check(userId, req);
+    if (limited) return limited;
+  }
 
   log.info("request_received", { method: req.method, isCron });
 
@@ -55,11 +68,13 @@ Deno.serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) return jsonError("LOVABLE_API_KEY missing", 500, req);
 
-    // Buscar webhooks ativos
-    const { data: webhooks, error: whErr } = await supabase
+    // Buscar webhooks ativos — scope by user when called via JWT (not cron)
+    let webhookQuery = supabase
       .from("incoming_webhooks")
       .select("id, name")
       .eq("is_active", true);
+    if (!isCron && userId) webhookQuery = webhookQuery.eq("user_id", userId);
+    const { data: webhooks, error: whErr } = await webhookQuery;
     if (whErr) throw whErr;
     if (!webhooks?.length) return jsonOk({ message: "Nenhum webhook ativo", inserted: 0 }, req);
 

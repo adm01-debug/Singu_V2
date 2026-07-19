@@ -1,5 +1,5 @@
 import { z } from "npm:zod@3.23.8";
-import { withAuth, jsonError, jsonOk, corsHeaders } from "../_shared/auth.ts";
+import { withAuth, jsonError, jsonOk, scopedCorsHeaders } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20, message: "Rate limit exceeded for AI writing. Please wait." });
@@ -110,12 +110,12 @@ const VAK_STYLES = {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: scopedCorsHeaders(req) });
   }
 
   // ── Rate limit ──
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const limited = limiter.check(ip);
+  const limited = limiter.check(ip, req);
   if (limited) return limited;
 
   // ── Auth guard ──

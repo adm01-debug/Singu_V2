@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import { useQueryClient, useInfiniteQuery, type InfiniteData } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -14,9 +14,12 @@ export type InteractionUpdate = TablesUpdate<'interactions'>;
 
 const PAGE_SIZE = 50;
 
+type InteractionPage = { data: Interaction[]; nextCursor: number | undefined; total: number };
+type InteractionInfiniteData = InfiniteData<InteractionPage>;
+
 async function fetchInteractionsPage(
-  contactId?: string, 
-  companyId?: string, 
+  contactId?: string,
+  companyId?: string,
   pageParam = 0
 ) {
   let query = supabase
@@ -30,7 +33,7 @@ async function fetchInteractionsPage(
 
   const { data, error, count } = await query;
   if (error) throw error;
-  return { data: data || [], nextCursor: data.length === PAGE_SIZE ? pageParam + 1 : undefined, total: count || 0 };
+  return { data: data || [], nextCursor: data.length === PAGE_SIZE ? pageParam + 1 : undefined, total: count || 0 } as InteractionPage;
 }
 
 export function useInteractions(contactId?: string, companyId?: string, options?: { enabled?: boolean }) {
@@ -43,17 +46,17 @@ export function useInteractions(contactId?: string, companyId?: string, options?
   const queryKey = ['interactions', contactId ?? '__all__', companyId ?? '__all__'];
   const externalEnabled = options?.enabled ?? true;
 
-  const { 
-    data, 
-    isLoading: loading, 
-    fetchNextPage, 
-    hasNextPage, 
-    isFetchingNextPage 
+  const {
+    data,
+    isLoading: loading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
   } = useInfiniteQuery({
     queryKey,
     queryFn: ({ pageParam = 0 }) => fetchInteractionsPage(contactId, companyId, pageParam as number),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => lastCursor(lastPage),
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
     enabled: !!user && externalEnabled,
     staleTime: 30 * 1000,
   });
@@ -67,11 +70,6 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       fetchNextPage();
     }
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  // Helper to extract next cursor safely
-  function lastCursor(lastPage: Awaited<ReturnType<typeof fetchInteractionsPage>>) {
-    return lastPage.nextCursor;
-  }
 
   const fetchInteractions = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey });
@@ -93,7 +91,17 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       if (error) throw error;
       if (!data) throw new Error('Falha ao criar interação: nenhum dado retornado.');
 
-      queryClient.setQueryData<Interaction[]>(queryKey, prev => prev ? [data, ...prev] : [data]);
+      // Optimistic prepend to the first page of the InfiniteData cache
+      queryClient.setQueryData<InteractionInfiniteData>(queryKey, prev => {
+        if (!prev) return { pages: [{ data: [data], nextCursor: undefined, total: 1 }], pageParams: [0] };
+        return {
+          ...prev,
+          pages: [
+            { ...prev.pages[0], data: [data, ...prev.pages[0].data], total: prev.pages[0].total + 1 },
+            ...prev.pages.slice(1),
+          ],
+        };
+      });
       toast({
         title: 'Interação registrada',
         description: 'A interação foi salva com sucesso.',
@@ -104,7 +112,6 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       if (options?.triggerDISCAnalysis !== false && data.contact_id) {
         const fullText = [data.content, data.transcription].filter(Boolean).join('\n\n');
         if (fullText.length >= 100) {
-          // Call DISC analyzer in background (non-blocking)
           supabase.functions.invoke('disc-analyzer', {
             body: {
               texts: [fullText],
@@ -115,7 +122,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
           }).then(({ data: discResult }) => {
             if (discResult?.success) {
               toast({
-                title: `🎯 Perfil DISC Atualizado`,
+                title: `Perfil DISC Atualizado`,
                 description: `Perfil: ${discResult.analysis?.blendProfile || discResult.analysis?.primaryProfile}`,
               });
             }
@@ -130,14 +137,13 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       if (options?.triggerNLPAnalysis !== false && data.contact_id) {
         const fullText = [data.content, data.transcription].filter(Boolean).join('\n\n');
         if (fullText.length >= 100) {
-          // Call NLP analyzer in background (non-blocking)
           triggerAnalysis(
             data.contact_id,
             data.id,
             data.content,
             data.transcription,
             data.type,
-            true // showToast
+            true
           ).catch(err => {
             const msg = err instanceof Error ? err.message : 'Unknown error';
             logger.error('NLP analysis error:', { error: msg });
@@ -159,10 +165,19 @@ export function useInteractions(contactId?: string, companyId?: string, options?
   };
 
   const updateInteraction = async (id: string, updates: InteractionUpdate) => {
-    const previous = queryClient.getQueryData<Interaction[]>(queryKey);
-    queryClient.setQueryData<Interaction[]>(queryKey, prev =>
-      prev?.map(i => i.id === id ? { ...i, ...updates } as Interaction : i) ?? []
-    );
+    const previous = queryClient.getQueryData<InteractionInfiniteData>(queryKey);
+
+    // Optimistic update across all pages
+    queryClient.setQueryData<InteractionInfiniteData>(queryKey, prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        pages: prev.pages.map(page => ({
+          ...page,
+          data: page.data.map(i => i.id === id ? { ...i, ...updates } as Interaction : i),
+        })),
+      };
+    });
 
     try {
       const { data, error } = await supabase
@@ -175,16 +190,24 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       if (error) throw error;
       if (!data) throw new Error('Interação não encontrada ou permissão insuficiente para atualizar.');
 
-      queryClient.setQueryData<Interaction[]>(queryKey, prev =>
-        prev?.map(i => i.id === id ? data : i) ?? []
-      );
+      // Confirm with server data
+      queryClient.setQueryData<InteractionInfiniteData>(queryKey, prev => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          pages: prev.pages.map(page => ({
+            ...page,
+            data: page.data.map(i => i.id === id ? data : i),
+          })),
+        };
+      });
       toast({
         title: 'Interação atualizada',
         description: 'As alterações foram salvas.',
       });
       return data;
     } catch (error) {
-      if (previous) queryClient.setQueryData<Interaction[]>(queryKey, previous);
+      if (previous) queryClient.setQueryData<InteractionInfiniteData>(queryKey, previous);
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error updating interaction:', { error: msg });
       toast({
@@ -197,8 +220,20 @@ export function useInteractions(contactId?: string, companyId?: string, options?
   };
 
   const deleteInteraction = async (id: string) => {
-    const previous = queryClient.getQueryData<Interaction[]>(queryKey);
-    queryClient.setQueryData<Interaction[]>(queryKey, prev => prev?.filter(i => i.id !== id) ?? []);
+    const previous = queryClient.getQueryData<InteractionInfiniteData>(queryKey);
+
+    // Optimistic delete across all pages
+    queryClient.setQueryData<InteractionInfiniteData>(queryKey, prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        pages: prev.pages.map(page => ({
+          ...page,
+          data: page.data.filter(i => i.id !== id),
+          total: page.total > 0 ? page.total - 1 : 0,
+        })),
+      };
+    });
 
     try {
       const { error } = await supabase
@@ -208,7 +243,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
 
       if (error) throw error;
 
-      const deleted = previous?.find(i => i.id === id);
+      const deleted = previous?.pages.flatMap(p => p.data).find(i => i.id === id);
       logActivity({ type: 'deleted', entityType: 'interaction', entityId: id, entityName: deleted?.title, description: 'Interação excluída' });
       toast({
         title: 'Interação removida',
@@ -216,7 +251,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       });
       return true;
     } catch (error) {
-      if (previous) queryClient.setQueryData<Interaction[]>(queryKey, previous);
+      if (previous) queryClient.setQueryData<InteractionInfiniteData>(queryKey, previous);
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error deleting interaction:', { error: msg });
       toast({

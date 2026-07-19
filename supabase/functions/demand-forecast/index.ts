@@ -1,20 +1,35 @@
-import { withAuth, jsonError, jsonOk, corsHeaders } from "../_shared/auth.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
+import { withAuth, jsonError, jsonOk, scopedCorsHeaders } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: scopedCorsHeaders(req) });
   }
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip, req);
+  if (limited) return limited;
 
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
-  const { user, supabaseClient } = authResult;
+  const userId = authResult; // withAuth returns the user ID string
+
+  const authHeader = req.headers.get("Authorization")!;
+  const supabase = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_ANON_KEY")!,
+    { global: { headers: { Authorization: authHeader } } },
+  );
 
   try {
     // Fetch recent deals for forecast context
-    const { data: deals, error: dealsErr } = await supabaseClient
+    const { data: deals, error: dealsErr } = await supabase
       .from('interactions')
       .select('type, created_at, sentiment')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(500);
 
