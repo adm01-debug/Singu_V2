@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { requireWebhookSecret } from "../_shared/auth.ts";
 
 function getScopedOrigin(req: Request): string {
   const origin = req.headers.get("Origin") || "";
@@ -19,6 +20,10 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // Reject unauthenticated requests before touching any data
+  const authCheck = requireWebhookSecret(req, 'LUX_WEBHOOK_SECRET', 'x-lux-secret');
+  if (authCheck) return authCheck;
 
   try {
     const payload = await req.json();
