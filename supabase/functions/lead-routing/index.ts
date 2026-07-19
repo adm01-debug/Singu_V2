@@ -155,7 +155,7 @@ async function handleRedistribute(
 
   const { data: stale, error: staleErr } = await supabase
     .from("lead_assignments")
-    .select("*")
+    .select("id, assigned_to, contact_id, company_id")
     .eq("status", "active")
     .is("first_contact_at", null)
     .lt("created_at", cutoff)
@@ -166,45 +166,49 @@ async function handleRedistribute(
     return json({ redistributed: 0, message: "Nenhum lead inativo encontrado" }, 200, cors);
   }
 
-  let redistributed = 0;
+  // Batch-expire all assignments in one query (was N individual updates)
+  const staleIds = stale.map((a: { id: string }) => a.id);
+  await supabase.from("lead_assignments").update({ status: "expired" }).in("id", staleIds);
 
-  for (const assignment of stale) {
-    await supabase
-      .from("lead_assignments")
-      .update({ status: "expired" })
-      .eq("id", assignment.id);
-
-    if (assignment.assigned_to) {
-      const { data: oldMember } = await supabase
-        .from("sales_team_members")
-        .select("current_lead_count")
-        .eq("id", assignment.assigned_to)
-        .single();
-
-      if (oldMember) {
-        await supabase
-          .from("sales_team_members")
-          .update({
-            current_lead_count: Math.max(0, (oldMember.current_lead_count ?? 0) - 1),
-          })
-          .eq("id", assignment.assigned_to);
-      }
+  // Aggregate decrements per unique member to avoid N fetches + N updates
+  const decrementByMember = new Map<string, number>();
+  for (const a of stale as Array<{ id: string; assigned_to: string | null; contact_id: string; company_id: string }>) {
+    if (a.assigned_to) {
+      decrementByMember.set(a.assigned_to, (decrementByMember.get(a.assigned_to) ?? 0) + 1);
     }
+  }
 
-    await supabase.from("redistribution_log").insert({
+  const memberIds = [...decrementByMember.keys()];
+  if (memberIds.length > 0) {
+    // One batch fetch + one update per unique member (not per assignment)
+    const { data: memberRows } = await supabase
+      .from("sales_team_members")
+      .select("id, current_lead_count")
+      .in("id", memberIds);
+
+    await Promise.all(
+      (memberRows ?? []).map((m: { id: string; current_lead_count: number | null }) =>
+        supabase.from("sales_team_members").update({
+          current_lead_count: Math.max(0, (m.current_lead_count ?? 0) - (decrementByMember.get(m.id) ?? 0)),
+        }).eq("id", m.id)
+      )
+    );
+  }
+
+  // Batch-insert all redistribution logs in one query (was N inserts)
+  await supabase.from("redistribution_log").insert(
+    (stale as Array<{ id: string; assigned_to: string | null; contact_id: string; company_id: string }>).map(a => ({
       user_id: userId,
-      contact_id: assignment.contact_id,
-      company_id: assignment.company_id,
-      from_member_id: assignment.assigned_to,
+      contact_id: a.contact_id,
+      company_id: a.company_id,
+      from_member_id: a.assigned_to,
       reason: "inactivity",
       auto_triggered: true,
       inactivity_days: inactivityDays,
-    });
+    }))
+  );
 
-    redistributed++;
-  }
-
-  return json({ redistributed, message: `${redistributed} leads redistribuídos` }, 200, cors);
+  return json({ redistributed: stale.length, message: `${stale.length} leads redistribuídos` }, 200, cors);
 }
 
 async function handleResetDaily(supabase: ReturnType<typeof createClient>, cors: Record<string, string>) {

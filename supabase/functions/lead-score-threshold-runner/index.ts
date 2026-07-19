@@ -185,15 +185,29 @@ Deno.serve(async (req: Request) => {
   const list = (automations ?? []) as Automation[];
   const fired: unknown[] = [];
   const now = Date.now();
+  const nowIso = new Date().toISOString();
 
-  for (const a of list) {
-    if (!shouldFire(a, body)) continue;
+  // Filter which automations should fire (pure in-memory)
+  const toFire = list.filter(a => {
+    if (!shouldFire(a, body)) return false;
     if (a.last_fired_at) {
       const since = (now - new Date(a.last_fired_at).getTime()) / 3600_000;
-      if (since < a.cooldown_hours) continue;
+      if (since < a.cooldown_hours) return false;
     }
+    return true;
+  });
+
+  // Execute all actions (inherently sequential due to side-effects per automation)
+  const results: Array<{ a: Automation; success: boolean; result: Record<string, unknown> }> = [];
+  for (const a of toFire) {
     const { success, result } = await executeAction(supabase, a, body);
-    await supabase.from('lead_score_threshold_log').insert({
+    results.push({ a, success, result });
+    fired.push({ automation_id: a.id, name: a.name, success });
+  }
+
+  // Batch-insert all logs in one query + parallel update fired automations
+  if (results.length > 0) {
+    const logRows = results.map(({ a, success, result }) => ({
       user_id: a.user_id,
       automation_id: a.id,
       contact_id: body.contact_id,
@@ -203,14 +217,19 @@ Deno.serve(async (req: Request) => {
       to_score: body.to_score,
       action_result: result,
       success,
-    });
-    if (success) {
-      await supabase.from('lead_score_threshold_automations').update({
-        last_fired_at: new Date().toISOString(),
-        fired_count: ((a as unknown as { fired_count?: number }).fired_count ?? 0) + 1,
-      }).eq('id', a.id);
-    }
-    fired.push({ automation_id: a.id, name: a.name, success });
+    }));
+
+    const successfulAutomations = results.filter(r => r.success);
+
+    await Promise.all([
+      supabase.from('lead_score_threshold_log').insert(logRows),
+      ...successfulAutomations.map(({ a }) =>
+        supabase.from('lead_score_threshold_automations').update({
+          last_fired_at: nowIso,
+          fired_count: ((a as unknown as { fired_count?: number }).fired_count ?? 0) + 1,
+        }).eq('id', a.id)
+      ),
+    ]);
   }
 
   return jsonOk({ ok: true, fired_count: fired.length, fired }, req);
