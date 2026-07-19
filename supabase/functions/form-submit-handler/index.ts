@@ -1,29 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
-// Simple in-memory rate limiter: max 5 submissions per IP per minute
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT = 5;
-const RATE_WINDOW_MS = 60_000;
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
-    return false;
-  }
-  entry.count++;
-  return entry.count > RATE_LIMIT;
-}
-
-function getClientIp(req: Request): string {
-  return (
-    req.headers.get("cf-connecting-ip") ??
-    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
-    "unknown"
-  );
-}
+const limiter = rateLimit({ windowMs: 60_000, max: 5, message: "Too many form submissions. Please wait before trying again." });
 
 const MAX_BODY_BYTES = 32_768; // 32 KB guard against payload bombs
 
@@ -32,14 +11,13 @@ Deno.serve(async (req) => {
 
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
 
-  // Rate limiting
-  const ip = getClientIp(req);
-  if (isRateLimited(ip)) {
-    return new Response(JSON.stringify({ error: "Too many requests" }), {
-      status: 429,
-      headers: { ...cors, "Content-Type": "application/json", "Retry-After": "60" },
-    });
-  }
+  // IP-based rate limiting for public form endpoint
+  const ip =
+    req.headers.get("cf-connecting-ip") ??
+    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
+    "unknown";
+  const limited = limiter.check(ip);
+  if (limited) return limited;
 
   // Size guard
   const contentLength = parseInt(req.headers.get("content-length") ?? "0", 10);
