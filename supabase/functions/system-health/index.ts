@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { withAuth } from "../_shared/auth.ts";
 
 function getScopedOrigin(req: Request): string {
   const origin = req.headers.get("Origin") || "";
@@ -145,6 +146,9 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
+
+  const authResult = await withAuth(req);
+  if (authResult instanceof Response) return authResult;
 
   const startTime = Date.now();
 

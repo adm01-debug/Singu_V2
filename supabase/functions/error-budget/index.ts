@@ -1,6 +1,7 @@
 // Edge function: error-budget — agrega janela de 30d de system_health_snapshots,
 // retorna série temporal diária e dispara alertas em 50/75/100% do consumo.
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { withAuth } from "../_shared/auth.ts";
 
 function getScopedOrigin(req: Request): string {
   const origin = req.headers.get("Origin") || "";
@@ -111,6 +112,9 @@ async function maybeFireAlerts(
 Deno.serve(async (req) => {
   const corsHeaders = makeCors(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  const authResult = await withAuth(req);
+  if (authResult instanceof Response) return authResult;
 
   try {
     const supabase = createClient(
