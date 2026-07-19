@@ -6,6 +6,9 @@ import {
   jsonError,
   jsonOk,
 } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
 interface PushPayload {
   userId?: string;
@@ -69,6 +72,11 @@ Deno.serve(async (req) => {
 
   const authResult = await withAuthOrServiceRole(req);
   if (authResult instanceof Response) return authResult;
+
+  if (!isServiceRoleCaller(authResult)) {
+    const rl = limiter.check(authResult);
+    if (rl) return rl;
+  }
 
   try {
     const supabaseClient = createClient(

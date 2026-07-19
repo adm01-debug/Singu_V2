@@ -1,4 +1,7 @@
 import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 30 });
 
 Deno.serve((req) => {
   const cors = scopedCorsHeaders(req);
@@ -6,6 +9,10 @@ Deno.serve((req) => {
   if (req.method !== "GET") {
     return new Response("Method not allowed", { status: 405, headers: cors });
   }
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip);
+  if (limited) return limited;
 
   const url = new URL(req.url);
   const pixelKey = url.searchParams.get("k") ?? "";

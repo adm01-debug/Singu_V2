@@ -1,6 +1,9 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
 
 const BodySchema = z.object({
@@ -80,6 +83,9 @@ Deno.serve(async (req) => {
     const { data: userData } = await supabase.auth.getUser();
     const user = userData?.user;
     if (!user) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
+
+    const rl = limiter.check(user.id);
+    if (rl) return rl;
 
     const body = await req.json();
     const parsed = BodySchema.safeParse(body);

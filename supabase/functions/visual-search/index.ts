@@ -1,5 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
 
 async function analyzeImageWithAI(imageDataUrl: string): Promise<{
@@ -109,6 +112,9 @@ Deno.serve(async (req) => {
         headers: { ...cors, "Content-Type": "application/json" },
       });
     }
+
+    const rl = limiter.check(user.id);
+    if (rl) return rl;
 
     const body = await req.json().catch(() => ({}));
     const imageDataUrl = String(body?.image ?? "");

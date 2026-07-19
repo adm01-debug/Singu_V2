@@ -1,7 +1,9 @@
 // Pixel de tracking + redirect de cliques para sequências
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
+const limiter = rateLimit({ windowMs: 60_000, max: 120 });
 
 // 1x1 GIF transparente
 const PIXEL = Uint8Array.from([
@@ -13,6 +15,10 @@ const PIXEL = Uint8Array.from([
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === 'OPTIONS') return new Response(null, { headers: cors });
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip);
+  if (limited) return limited;
 
   const url = new URL(req.url);
   const action = url.searchParams.get('a'); // 'open' | 'click'

@@ -1,4 +1,7 @@
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuth } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
 interface ServiceCheck {
   service: string;
@@ -122,6 +125,12 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: cors });
   }
+
+  const authResult = await withAuth(req);
+  if (authResult instanceof Response) return authResult;
+
+  const limited = limiter.check(authResult);
+  if (limited) return limited;
 
   try {
     const [stt, tts, nlu] = await Promise.all([

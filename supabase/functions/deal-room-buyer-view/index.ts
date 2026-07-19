@@ -1,10 +1,17 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 30 });
 
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
   if (req.method !== "POST") return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: { ...cors, "Content-Type": "application/json" } });
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip);
+  if (limited) return limited;
 
   try {
     const { token, label } = await req.json();
