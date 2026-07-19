@@ -40,8 +40,10 @@ async function callTool(name: string, args: Record<string, unknown>, admin: Admi
   const limit = Math.min(Number(args.limit ?? 10), 100);
 
   if (name === "search_contacts") {
-    // Escape ilike wildcards to prevent query manipulation
-    const q = String(args.query ?? "").slice(0, 200).replace(/%/g, "\\%").replace(/_/g, "\\_");
+    // Escape ilike wildcards AND PostgREST .or() syntax chars to prevent query manipulation
+    const q = String(args.query ?? "").slice(0, 200)
+      .replace(/%/g, "\\%").replace(/_/g, "\\_")
+      .replace(/[(),]/g, "");
     const { data } = await admin.from("contacts")
       .select("id,first_name,last_name,email,phone")
       .eq("user_id", ownerUserId)
@@ -50,7 +52,9 @@ async function callTool(name: string, args: Record<string, unknown>, admin: Admi
     return { content: [{ type: "text", text: JSON.stringify(data ?? [], null, 2) }] };
   }
   if (name === "search_companies") {
-    const q = String(args.query ?? "").slice(0, 200).replace(/%/g, "\\%").replace(/_/g, "\\_");
+    const q = String(args.query ?? "").slice(0, 200)
+      .replace(/%/g, "\\%").replace(/_/g, "\\_")
+      .replace(/[(),]/g, "");
     const { data } = await admin.from("companies")
       .select("id,name,cnpj,industry")
       .eq("user_id", ownerUserId)
@@ -89,8 +93,13 @@ async function callTool(name: string, args: Record<string, unknown>, admin: Admi
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
   }
   if (name === "add_interaction") {
+    const contactId = String(args.contact_id);
+    // Verify contact ownership to prevent cross-tenant interaction writes
+    const { data: ownedContact } = await admin.from("contacts")
+      .select("id").eq("id", contactId).eq("user_id", ownerUserId).maybeSingle();
+    if (!ownedContact) throw new Error("Contact not found or access denied");
     const payload = {
-      contact_id: String(args.contact_id),
+      contact_id: contactId,
       type: String(args.type).slice(0, 32),
       content: String(args.summary).slice(0, 4000),
       user_id: ownerUserId,
@@ -101,11 +110,12 @@ async function callTool(name: string, args: Record<string, unknown>, admin: Admi
   }
   if (name === "search_companies_by_intent") {
     const min = Math.min(Math.max(Number(args.min_score ?? 70), 0), 100);
-    const { data } = await admin.from("companies")
-      .select("id,name,industry")
+    const { data, error } = await admin.from("companies")
+      .select("id,name,industry,intent_score")
       .eq("user_id", ownerUserId)
-      .limit(limit).order("name");
-    // Best-effort: se houver coluna intent_score; senão retorna lista
+      .gte("intent_score", min)
+      .limit(limit).order("intent_score", { ascending: false });
+    if (error) throw new Error(error.message);
     return { content: [{ type: "text", text: JSON.stringify({ min_score: min, results: data ?? [] }, null, 2) }] };
   }
   if (name === "get_pipeline_summary") {
@@ -152,6 +162,16 @@ Deno.serve(async (req) => {
     });
   }
 
+  // Null guard: created_by must exist — system-created configs without an owner cannot execute tools
+  if (!conn.created_by) {
+    return new Response(JSON.stringify({ jsonrpc: "2.0", error: { code: -32001, message: "Token configuration invalid" }, id: null }), {
+      status: 403, headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+
+  // Optional per-connection tool allowlist from config (null = all tools permitted)
+  const allowedTools: string[] | null = Array.isArray(conn.config?.allowed_tools) ? conn.config.allowed_tools as string[] : null;
+
   let rawBody: unknown;
   try { rawBody = await req.json(); }
   catch {
@@ -185,6 +205,13 @@ Deno.serve(async (req) => {
             jsonrpc: "2.0", id: body.id ?? null,
             error: { code: -32602, message: "Invalid params", data: callParsed.error.flatten() },
           }), { headers: { ...cors, "Content-Type": "application/json" } });
+        }
+        // Enforce per-connection tool allowlist
+        if (allowedTools !== null && !allowedTools.includes(callParsed.data.name)) {
+          return new Response(JSON.stringify({
+            jsonrpc: "2.0", id: body.id ?? null,
+            error: { code: -32601, message: "Tool not permitted for this connection" },
+          }), { status: 403, headers: { ...cors, "Content-Type": "application/json" } });
         }
         const startedAt = Date.now();
         try {

@@ -115,6 +115,11 @@ Deno.serve(async (req) => {
     const sql = parsed_ai.sql.trim();
     const sqlUpper = sql.toUpperCase();
 
+    // Block excessively long queries — prevents deeply nested subquery DoS against the planner
+    if (sql.length > 2000) {
+      return jsonError("Consulta muito complexa. Tente uma pergunta mais simples.", 400, req);
+    }
+
     // Block semicolons — multi-statement injection
     if (sql.includes(";")) {
       return jsonError("Consulta inválida: múltiplos statements não são permitidos.", 403, req);
