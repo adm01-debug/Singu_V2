@@ -103,106 +103,76 @@ Deno.serve(async (req) => {
     for (const settings of eligibleSettings) {
       const userId = settings.user_id;
 
-      // Get user profile
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('id, first_name, last_name')
-        .eq('id', userId)
-        .single();
+      try {
+      // Parallelize all reads for this user — turns 7 sequential round-trips into 1 batch
+      const today = new Date();
+      const nextWeek = new Date(today.getTime() + 7 * 86_400_000);
+      const thirtyDaysAgo = new Date(today.getTime() - 30 * 86_400_000);
 
-      if (!profile) continue;
+      const [
+        { data: profile },
+        { data: userData },
+        { count: totalInteractions },
+        { count: newContactsCount },
+        { data: birthdayContacts },
+        { count: pendingFollowUpsCount },
+        { data: recentInteractionContacts },
+        { count: totalContacts },
+      ] = await Promise.all([
+        supabase.from('profiles').select('id, first_name, last_name').eq('id', userId).single(),
+        supabase.auth.admin.getUserById(userId),
+        supabase.from('interactions').select('*', { count: 'exact', head: true })
+          .eq('user_id', userId).gte('created_at', oneWeekAgo.toISOString()),
+        supabase.from('contacts').select('*', { count: 'exact', head: true })
+          .eq('user_id', userId).gte('created_at', oneWeekAgo.toISOString()),
+        supabase.from('contacts').select('id, birthday').eq('user_id', userId).not('birthday', 'is', null),
+        supabase.from('interactions').select('*', { count: 'exact', head: true })
+          .eq('user_id', userId).eq('follow_up_required', true)
+          .lte('follow_up_date', today.toISOString()),
+        supabase.from('interactions').select('contact_id')
+          .eq('user_id', userId).gte('created_at', thirtyDaysAgo.toISOString()),
+        supabase.from('contacts').select('*', { count: 'exact', head: true }).eq('user_id', userId),
+      ]);
 
-      // Get user's email from auth
-      const { data: userData } = await supabase.auth.admin.getUserById(userId);
-      
-      if (!userData?.user?.email) continue;
-
-      // Get interactions from last week
-      const { data: interactions } = await supabase
-        .from('interactions')
-        .select('*')
-        .eq('user_id', userId)
-        .gte('created_at', oneWeekAgo.toISOString());
-
-      // Get new contacts from last week
-      const { data: newContacts } = await supabase
-        .from('contacts')
-        .select('*')
-        .eq('user_id', userId)
-        .gte('created_at', oneWeekAgo.toISOString());
-
-      // Get all contacts for analysis
-      const { data: allContacts } = await supabase
-        .from('contacts')
-        .select('*')
-        .eq('user_id', userId);
+      if (!profile || !userData?.user?.email) continue;
 
       // Check for upcoming birthdays (next 7 days)
-      const today = new Date();
-      const nextWeek = new Date();
-      nextWeek.setDate(nextWeek.getDate() + 7);
-      
-      const upcomingBirthdays = (allContacts || []).filter(contact => {
-        if (!contact.birthday) return false;
+      const upcomingBirthdayCount = (birthdayContacts || []).filter(contact => {
         const birthday = new Date(contact.birthday);
-        const thisYearBirthday = new Date(
-          today.getFullYear(),
-          birthday.getMonth(),
-          birthday.getDate()
-        );
+        const thisYearBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
         return thisYearBirthday >= today && thisYearBirthday <= nextWeek;
-      });
-
-      // Get pending follow-ups
-      const { data: pendingFollowUps } = await supabase
-        .from('interactions')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('follow_up_required', true)
-        .lte('follow_up_date', new Date().toISOString());
+      }).length;
 
       // Calculate at-risk contacts (no interaction in 30+ days)
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      
-      const { data: recentInteractions } = await supabase
-        .from('interactions')
-        .select('contact_id')
-        .eq('user_id', userId)
-        .gte('created_at', thirtyDaysAgo.toISOString());
-
       const contactsWithRecentInteraction = new Set(
-        recentInteractions?.map(i => i.contact_id) || []
+        recentInteractionContacts?.map((i: { contact_id: string }) => i.contact_id) || []
       );
-      
-      const atRiskContacts = (allContacts || []).filter(
-        c => !contactsWithRecentInteraction.has(c.id)
-      );
+      const atRiskCount = Math.max(0, (totalContacts ?? 0) - contactsWithRecentInteraction.size);
 
       // Generate highlights based on user settings
       const highlights: string[] = [];
       if (settings.include_performance_metrics !== false) {
-        if ((interactions?.length || 0) > 10) {
-          highlights.push(`Semana produtiva! Você teve ${interactions?.length} interações.`);
+        if ((totalInteractions ?? 0) > 10) {
+          highlights.push(`Semana produtiva! Você teve ${totalInteractions} interações.`);
         }
-        if ((newContacts?.length || 0) > 0) {
-          highlights.push(`${newContacts?.length} novo(s) contato(s) adicionado(s).`);
+        if ((newContactsCount ?? 0) > 0) {
+          highlights.push(`${newContactsCount} novo(s) contato(s) adicionado(s).`);
         }
       }
-      if (settings.include_upcoming_dates !== false && upcomingBirthdays.length > 0) {
-        highlights.push(`${upcomingBirthdays.length} aniversário(s) esta semana.`);
+      if (settings.include_upcoming_dates !== false && upcomingBirthdayCount > 0) {
+        highlights.push(`${upcomingBirthdayCount} aniversário(s) esta semana.`);
       }
 
       // Generate recommendations
       const recommendations: string[] = [];
-      if (settings.include_at_risk_clients !== false && atRiskContacts.length > 5) {
-        recommendations.push(`Atenção: ${atRiskContacts.length} contatos sem interação há mais de 30 dias.`);
+      if (settings.include_at_risk_clients !== false && atRiskCount > 5) {
+        recommendations.push(`Atenção: ${atRiskCount} contatos sem interação há mais de 30 dias.`);
       }
       if (settings.include_recommendations !== false) {
-        if ((pendingFollowUps?.length || 0) > 0) {
-          recommendations.push(`Você tem ${pendingFollowUps?.length} follow-up(s) pendente(s).`);
+        if ((pendingFollowUpsCount ?? 0) > 0) {
+          recommendations.push(`Você tem ${pendingFollowUpsCount} follow-up(s) pendente(s).`);
         }
-        if ((interactions?.length || 0) < 5) {
+        if ((totalInteractions ?? 0) < 5) {
           recommendations.push('Considere aumentar a frequência de contato esta semana.');
         }
       }
@@ -212,11 +182,11 @@ Deno.serve(async (req) => {
         email: settings.email_address || userData.user.email,
         firstName: profile.first_name || 'Usuário',
         stats: {
-          totalInteractions: interactions?.length || 0,
-          newContacts: newContacts?.length || 0,
-          upcomingBirthdays: upcomingBirthdays.length,
-          atRiskContacts: atRiskContacts.length,
-          pendingFollowUps: pendingFollowUps?.length || 0,
+          totalInteractions: totalInteractions ?? 0,
+          newContacts: newContactsCount ?? 0,
+          upcomingBirthdays: upcomingBirthdayCount,
+          atRiskContacts: atRiskCount,
+          pendingFollowUps: pendingFollowUpsCount ?? 0,
         },
         highlights,
         recommendations,
@@ -224,20 +194,23 @@ Deno.serve(async (req) => {
 
       digests.push(digestData);
 
-      // Save the report to history
-      await supabase.from('weekly_reports').insert({
-        user_id: userId,
-        report_data: digestData,
-        sent_via: ['system'],
-      });
-
-      // Update last_sent_at
-      await supabase
-        .from('weekly_report_settings')
-        .update({ last_sent_at: new Date().toISOString() })
-        .eq('user_id', userId);
+      // Parallelize the two writes
+      await Promise.all([
+        supabase.from('weekly_reports').insert({
+          user_id: userId,
+          report_data: digestData,
+          sent_via: ['system'],
+        }),
+        supabase.from('weekly_report_settings')
+          .update({ last_sent_at: new Date().toISOString() })
+          .eq('user_id', userId),
+      ]);
 
       console.log(`Generated and saved report for user ${userId}`);
+      } catch (userErr) {
+        console.error(`weekly-digest error for user ${userId}:`, userErr);
+        // Continue processing other users rather than failing the whole run
+      }
     }
 
     console.log(`Generated ${digests.length} digests`);

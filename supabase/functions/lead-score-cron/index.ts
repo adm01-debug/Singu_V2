@@ -10,32 +10,41 @@ Deno.serve(async (req: Request) => {
   const guard = await requireCronSecret(req);
   if (guard) return guard;
 
-  const supabase = createClient(
-    Deno.env.get('SUPABASE_URL')!,
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
-  );
+  try {
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
 
-  // Contatos com qualquer atividade nos últimos 60d → enfileira
-  const since = new Date(Date.now() - 60 * 86_400_000).toISOString();
-  const { data: actives } = await supabase
-    .from('interactions').select('contact_id, user_id')
-    .gte('created_at', since).limit(5000);
+    // Contatos com qualquer atividade nos últimos 60d → enfileira
+    const since = new Date(Date.now() - 60 * 86_400_000).toISOString();
+    const { data: actives, error: fetchError } = await supabase
+      .from('interactions').select('contact_id, user_id')
+      .gte('created_at', since).limit(5000);
 
-  const seen = new Set<string>();
-  const rows: Array<{ user_id: string; contact_id: string; reason: string }> = [];
-  for (const a of actives ?? []) {
-    const k = `${a.user_id}:${a.contact_id}`;
-    if (seen.has(k) || !a.contact_id) continue;
-    seen.add(k);
-    rows.push({ user_id: a.user_id as string, contact_id: a.contact_id as string, reason: 'cron_daily' });
-  }
+    if (fetchError) throw fetchError;
 
-  if (rows.length > 0) {
-    // Insere em lotes de 500
-    for (let i = 0; i < rows.length; i += 500) {
-      await supabase.from('lead_score_recompute_queue').insert(rows.slice(i, i + 500));
+    const seen = new Set<string>();
+    const rows: Array<{ user_id: string; contact_id: string; reason: string }> = [];
+    for (const a of actives ?? []) {
+      const k = `${a.user_id}:${a.contact_id}`;
+      if (seen.has(k) || !a.contact_id) continue;
+      seen.add(k);
+      rows.push({ user_id: a.user_id as string, contact_id: a.contact_id as string, reason: 'cron_daily' });
     }
-  }
 
-  return jsonOk({ ok: true, enqueued: rows.length }, req);
+    if (rows.length > 0) {
+      // Insere em lotes de 500
+      for (let i = 0; i < rows.length; i += 500) {
+        const { error: insertError } = await supabase
+          .from('lead_score_recompute_queue').insert(rows.slice(i, i + 500));
+        if (insertError) throw insertError;
+      }
+    }
+
+    return jsonOk({ ok: true, enqueued: rows.length }, req);
+  } catch (err) {
+    console.error('lead-score-cron error:', err);
+    return jsonError(err instanceof Error ? err.message : 'Unknown error', 500, req);
+  }
 });
