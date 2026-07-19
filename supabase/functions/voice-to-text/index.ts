@@ -1,4 +1,5 @@
 import { jsonError, jsonOk, corsHeaders } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
 function processBase64Chunks(base64String: string, chunkSize = 32768) {
   const chunks: Uint8Array[] = [];
@@ -34,6 +35,10 @@ function processBase64Chunks(base64String: string, chunkSize = 32768) {
  
  Deno.serve(async (req) => {
    if (req.method === 'OPTIONS') {
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip);
+  if (limited) return limited;
      return new Response(null, { headers: corsHeaders });
    }
  

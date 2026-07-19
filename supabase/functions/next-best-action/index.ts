@@ -1,9 +1,16 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 20 });
 
 Deno.serve(async (req) => {
   const pre = handleCorsAndMethod(req);
   if (pre) return pre;
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip);
+  if (limited) return limited;
 
   const auth = await withAuth(req);
   if (auth instanceof Response) return auth;

@@ -7,9 +7,15 @@ import {
 
 const VOICE_ID_REGEX = /^[a-zA-Z0-9]{10,30}$/;
 
+const limiter = rateLimit({ windowMs: 60_000, max: 10 });
+
 Deno.serve(async (req) => {
   const guard = handleCorsAndMethod(req);
   if (guard) return guard;
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip);
+  if (limited) return limited;
+
 
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
