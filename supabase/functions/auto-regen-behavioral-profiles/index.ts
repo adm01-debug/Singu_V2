@@ -10,11 +10,16 @@ const MAX_BATCH = 25; // limita por execução para evitar timeout
 
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
-  if (req.method === "OPTIONS") {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
 
   const cronCheck = requireCronSecret(req);
   if (cronCheck) return cronCheck;
-    return new Response("ok", { headers: cors });
+
+  function json(body: unknown, status = 200) {
+    return new Response(JSON.stringify(body), {
+      status,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
   }
 
   const requestId = crypto.randomUUID();
@@ -172,13 +177,6 @@ Deno.serve(async (req) => {
     return json({ requestId, error: message }, 500);
   }
 });
-
-function json(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...cors, "Content-Type": "application/json" },
-  });
-}
 
 const ERROR_RATE_THRESHOLD = 10; // percentual
 const MIN_SAMPLE = 5; // ignora janelas com pouquíssimas execuções para evitar falso positivo

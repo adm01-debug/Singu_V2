@@ -30,7 +30,7 @@ const RequestSchema = z.discriminatedUnion("action", [
 
 /* ─── Helpers ──────────────────────────────────────────────── */
 
-function json(data: Record<string, unknown>, status = 200) {
+function json(data: Record<string, unknown>, status = 200, cors: Record<string, string> = {}) {
   return new Response(JSON.stringify(data), {
     status,
     headers: { ...cors, "Content-Type": "application/json" },
@@ -61,6 +61,7 @@ async function handleDistribute(
   supabase: ReturnType<typeof createClient>,
   userId: string,
   body: z.infer<typeof DistributeSchema>,
+  cors: Record<string, string>,
 ) {
   const roleFilter = body.role_filter;
 
@@ -76,9 +77,9 @@ async function handleDistribute(
   const { data: members, error: mErr } = await query
     .order("last_assigned_at", { ascending: true, nullsFirst: true });
 
-  if (mErr) return json({ error: mErr.message }, 500);
+  if (mErr) return json({ error: mErr.message }, 500, cors);
   if (!members?.length) {
-    return json({ error: "Nenhum vendedor elegível disponível" }, 400);
+    return json({ error: "Nenhum vendedor elegível disponível" }, 400, cors);
   }
 
   const now = new Date();
@@ -125,7 +126,7 @@ async function handleDistribute(
       sla_deadline: new Date(Date.now() + 4 * 3600_000).toISOString(),
     });
 
-  if (assignErr) return json({ error: assignErr.message }, 500);
+  if (assignErr) return json({ error: assignErr.message }, 500, cors);
 
   await supabase
     .from("sales_team_members")
@@ -140,13 +141,14 @@ async function handleDistribute(
     success: true,
     assigned_to: selectedId,
     member_name: selected.name as string,
-  });
+  }, 200, cors);
 }
 
 async function handleRedistribute(
   supabase: ReturnType<typeof createClient>,
   userId: string,
   body: z.infer<typeof RedistributeSchema>,
+  cors: Record<string, string>,
 ) {
   const inactivityDays = body.inactivity_days;
   const cutoff = new Date(Date.now() - inactivityDays * 86400_000).toISOString();
@@ -159,9 +161,9 @@ async function handleRedistribute(
     .lt("created_at", cutoff)
     .limit(50);
 
-  if (staleErr) return json({ error: staleErr.message }, 500);
+  if (staleErr) return json({ error: staleErr.message }, 500, cors);
   if (!stale?.length) {
-    return json({ redistributed: 0, message: "Nenhum lead inativo encontrado" });
+    return json({ redistributed: 0, message: "Nenhum lead inativo encontrado" }, 200, cors);
   }
 
   let redistributed = 0;
@@ -202,28 +204,23 @@ async function handleRedistribute(
     redistributed++;
   }
 
-  return json({ redistributed, message: `${redistributed} leads redistribuídos` });
+  return json({ redistributed, message: `${redistributed} leads redistribuídos` }, 200, cors);
 }
 
-async function handleResetDaily(supabase: ReturnType<typeof createClient>) {
+async function handleResetDaily(supabase: ReturnType<typeof createClient>, cors: Record<string, string>) {
   const { data, error } = await supabase.rpc("reset_daily_lead_counts");
-  if (error) return json({ error: error.message }, 500);
-  return json({ success: true, reset_count: data });
+  if (error) return json({ error: error.message }, 500, cors);
+  return json({ success: true, reset_count: data }, 200, cors);
 }
 
 /* ─── Main ─────────────────────────────────────────────────── */
 
 Deno.serve(async (req: Request) => {
-  if (req.method === "OPTIONS") {
-
-  const cronCheck = requireCronSecret(req);
-  if (cronCheck) return cronCheck;
-    return new Response("ok", { headers: cors });
-  }
+  const cors = scopedCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response(null, { headers: cors });
 
   try {
     const supabase = createSupabaseAdmin();
-    const user = await authenticateUser(supabase, req.headers.get("Authorization"));
     const rawBody = await req.json();
 
     const parsed = RequestSchema.safeParse(rawBody);
@@ -231,23 +228,29 @@ Deno.serve(async (req: Request) => {
       return json({
         error: "Dados inválidos",
         details: parsed.error.flatten().fieldErrors,
-      }, 400);
+      }, 400, cors);
     }
 
     const body = parsed.data;
 
+    if (body.action === "reset_daily") {
+      const cronCheck = requireCronSecret(req);
+      if (cronCheck) return cronCheck;
+      return await handleResetDaily(supabase, cors);
+    }
+
+    const user = await authenticateUser(supabase, req.headers.get("Authorization"));
+
     switch (body.action) {
       case "distribute":
-        return await handleDistribute(supabase, user.id, body);
+        return await handleDistribute(supabase, user.id, body, cors);
       case "redistribute":
-        return await handleRedistribute(supabase, user.id, body);
-      case "reset_daily":
-        return await handleResetDaily(supabase);
+        return await handleRedistribute(supabase, user.id, body, cors);
     }
   } catch (e) {
     const message = e instanceof Error ? e.message : "Erro interno";
     const status = message.includes("autorizado") || message.includes("Token") ? 401 : 500;
     console.error("[lead-routing] Error:", e);
-    return json({ error: message }, status);
+    return json({ error: message }, status, cors);
   }
 });
