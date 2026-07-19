@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders(req), requireCronSecret } from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
 
 // Esta função processa todos os contatos agendados e detecta eventos
 Deno.serve(async (req) => {

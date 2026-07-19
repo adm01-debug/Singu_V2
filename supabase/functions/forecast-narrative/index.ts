@@ -6,20 +6,19 @@ const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: scopedCorsHeaders(req) });
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-  const limited = limiter.check(ip);
-  if (limited) return limited;
-
   const auth = await withAuth(req);
   if (auth instanceof Response) return auth;
-  const { user } = auth;
+  const userId = auth;
+
+  const limited = limiter.check(userId);
+  if (limited) return limited;
 
   try {
     const { period_id } = await req.json();
     if (!period_id) return jsonError("period_id required", 400);
 
     const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-    const { data: period } = await admin.from("forecast_periods").select("*").eq("id", period_id).eq("user_id", user.id).maybeSingle();
+    const { data: period } = await admin.from("forecast_periods").select("*").eq("id", period_id).eq("user_id", userId).maybeSingle();
     if (!period) return jsonError("Período não encontrado", 404);
     const { data: forecasts } = await admin.from("deal_forecasts").select("*").eq("period_id", period_id).order("forecasted_amount", { ascending: false }).limit(50);
 
