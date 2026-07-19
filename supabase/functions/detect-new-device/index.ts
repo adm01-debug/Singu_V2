@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
   if (authResult instanceof Response) return authResult;
   const userId = authResult;
 
-  const rl = limiter.check(userId);
+  const rl = limiter.check(userId, req);
   if (rl) return rl;
 
   try {

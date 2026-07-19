@@ -143,7 +143,7 @@ Deno.serve(async (req) => {
     });
   }
 
-  const limited = limiter.check(`mcp:${token}`);
+  const limited = limiter.check(`mcp:${token}`, req);
   if (limited) return limited;
 
   const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);

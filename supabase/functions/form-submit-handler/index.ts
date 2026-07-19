@@ -16,7 +16,7 @@ Deno.serve(async (req) => {
     req.headers.get("cf-connecting-ip") ??
     req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
     "unknown";
-  const limited = limiter.check(ip);
+  const limited = limiter.check(ip, req);
   if (limited) return limited;
 
   // Size guard

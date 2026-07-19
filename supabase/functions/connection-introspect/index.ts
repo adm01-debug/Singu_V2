@@ -32,7 +32,7 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  const limited = limiter.check(`introspect:${ip}`);
+  const limited = limiter.check(`introspect:${ip}`, req);
   if (limited) return limited;
 
   try {

@@ -113,7 +113,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const rl = limiter.check(user.id);
+    const rl = limiter.check(user.id, req);
     if (rl) return rl;
 
     const body = await req.json().catch(() => ({}));

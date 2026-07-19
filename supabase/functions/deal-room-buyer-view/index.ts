@@ -10,7 +10,7 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: { ...cors, "Content-Type": "application/json" } });
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  const limited = limiter.check(ip);
+  const limited = limiter.check(ip, req);
   if (limited) return limited;
 
   try {

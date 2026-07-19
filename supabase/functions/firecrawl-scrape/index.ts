@@ -8,7 +8,7 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: cors });
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  const limited = limiter.check(ip);
+  const limited = limiter.check(ip, req);
   if (limited) return limited;
 
   // ── Auth guard ──

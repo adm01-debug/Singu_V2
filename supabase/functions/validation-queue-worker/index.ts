@@ -24,7 +24,7 @@ Deno.serve(async (req) => {
   if (cronCheck) return cronCheck;
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "worker";
-  const limited = limiter.check(ip);
+  const limited = limiter.check(ip, req);
   if (limited) return limited;
 
   try {

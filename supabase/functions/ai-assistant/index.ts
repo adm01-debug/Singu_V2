@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
   if (guard) return guard;
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const limited = limiter.check(ip);
+  const limited = limiter.check(ip, req);
   if (limited) {
     log.warn("rate_limit_exceeded", { ip });
     return limited;

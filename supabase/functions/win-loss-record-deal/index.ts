@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
     }
 
     const userId = userData.user.id;
-    const limited = limiter.check(userId);
+    const limited = limiter.check(userId, req);
     if (limited) return limited;
 
     const parsed = BodySchema.safeParse(await req.json());

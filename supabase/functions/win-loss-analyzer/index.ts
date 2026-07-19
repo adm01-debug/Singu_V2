@@ -38,7 +38,7 @@ Deno.serve(async (req) => {
     }
 
     const userId = userData.user.id;
-    const limited = limiter.check(userId);
+    const limited = limiter.check(userId, req);
     if (limited) return limited;
 
     const { period_days = 90 } = await req.json().catch(() => ({}));

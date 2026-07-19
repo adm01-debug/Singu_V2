@@ -129,7 +129,7 @@ Deno.serve(async (req) => {
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
 
-  const limited = limiter.check(authResult);
+  const limited = limiter.check(authResult, req);
   if (limited) return limited;
 
   try {

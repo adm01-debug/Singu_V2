@@ -204,7 +204,7 @@ Deno.serve(async (req) => {
   const userId = authResult;
 
   // ── Rate limit guard (per user, not IP) ──
-  const limited = limiter.check(userId);
+  const limited = limiter.check(userId, req);
   if (limited) return limited;
 
   const startTime = performance.now();

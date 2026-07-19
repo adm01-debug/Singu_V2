@@ -36,7 +36,7 @@ Deno.serve(async (req) => {
 
   // Rate limit por IP
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const limited = limiter.check(ip);
+  const limited = limiter.check(ip, req);
   if (limited) return limited;
 
   // Auth

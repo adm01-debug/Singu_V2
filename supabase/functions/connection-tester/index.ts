@@ -282,7 +282,7 @@ Deno.serve(async (req) => {
 
     const userId: string = authResult;
 
-    const rl = limiter.check(userId);
+    const rl = limiter.check(userId, req);
     if (rl) return rl;
 
     const payload = (await req.json()) as TestPayload;

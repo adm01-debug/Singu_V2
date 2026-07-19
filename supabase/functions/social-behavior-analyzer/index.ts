@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
    if (authResult instanceof Response) return authResult;
 
    if (!isServiceRoleCaller(authResult)) {
-     const rl = limiter.check(authResult);
+     const rl = limiter.check(authResult, req);
      if (rl) return rl;
    }
 

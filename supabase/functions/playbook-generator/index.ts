@@ -64,7 +64,7 @@ Deno.serve(async (req) => {
     const user = userData?.user;
     if (!user) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
 
-    const rl = limiter.check(user.id);
+    const rl = limiter.check(user.id, req);
     if (rl) return rl;
 
     const parsed = BodySchema.safeParse(await req.json());

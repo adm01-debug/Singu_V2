@@ -139,7 +139,7 @@ Deno.serve(async (req) => {
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
 
-  const rl = limiter.check(authResult);
+  const rl = limiter.check(authResult, req);
   if (rl) return rl;
 
   const startTime = Date.now();

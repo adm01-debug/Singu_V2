@@ -203,7 +203,7 @@ Deno.serve(async (req) => {
   if (typeof authResult !== "string") return authResult;
   const userId = authResult;
 
-  const limited = limiter.check(userId);
+  const limited = limiter.check(userId, req);
   if (limited) return limited;
 
   try {

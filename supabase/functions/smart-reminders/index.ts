@@ -27,7 +27,7 @@ Deno.serve(async (req) => {
 
   // Rate limit non-service-role callers
   if (!isServiceRoleCaller(authResult)) {
-    const limited = limiter.check(authResult);
+    const limited = limiter.check(authResult, req);
     if (limited) return limited;
   }
 

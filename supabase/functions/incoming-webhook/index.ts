@@ -61,7 +61,7 @@ Deno.serve(async (req) => {
     "unknown";
   const userAgent = req.headers.get("user-agent") ?? "unknown";
 
-  const limited = limiter.check(sourceIp);
+  const limited = limiter.check(sourceIp, req);
   if (limited) return limited;
 
   log.info("request_received", { method: req.method, sourceIp, userAgent });
