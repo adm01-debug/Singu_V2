@@ -105,11 +105,15 @@ Deno.serve(async (req) => {
     // Battle card if competitor mentioned
     let battleCard = null;
     if (ctx.competitor_mentioned) {
+      const escapedCompetitor = ctx.competitor_mentioned
+        .replace(/\\/g, "\\\\")
+        .replace(/%/g, "\\%")
+        .replace(/_/g, "\\_");
       const { data: bc } = await supabase
         .from("battle_cards")
         .select("*")
         .eq("active", true)
-        .ilike("competitor_name", `%${ctx.competitor_mentioned}%`)
+        .ilike("competitor_name", `%${escapedCompetitor}%`)
         .limit(1)
         .maybeSingle();
       battleCard = bc;
