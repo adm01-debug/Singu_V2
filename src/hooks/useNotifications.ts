@@ -223,7 +223,7 @@ export const useNotifications = () => {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error checking follow-up alerts:', { error: msg });
     }
-  }, [permissionState.permission, showNotification]);
+  }, [permissionState.permission, showNotification, user]);
 
   // Check for contact birthdays
   const checkBirthdayAlerts = useCallback(async () => {
@@ -271,7 +271,7 @@ export const useNotifications = () => {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error checking birthday alerts:', { error: msg });
     }
-  }, [permissionState.permission, showNotification]);
+  }, [permissionState.permission, showNotification, user]);
 
   // Check for critical stakeholder alerts
   const checkStakeholderAlerts = useCallback(async () => {
@@ -330,7 +330,7 @@ export const useNotifications = () => {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error checking stakeholder alerts:', { error: msg });
     }
-  }, [permissionState.permission, showNotification]);
+  }, [permissionState.permission, showNotification, user]);
 
   // Schedule periodic checks
   useEffect(() => {

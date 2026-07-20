@@ -152,7 +152,7 @@ export function useStakeholderAlerts(companyId?: string) {
     } finally {
       setLoading(false);
     }
-  }, [companyId]);
+  }, [companyId, user]);
 
   useEffect(() => {
     fetchAlerts();
@@ -232,8 +232,7 @@ export function useStakeholderAlerts(companyId?: string) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error creating stakeholder alert:', { error: msg });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchAlerts]);
+  }, [fetchAlerts, user]);
 
   const checkForChanges = useCallback(async (
     contactId: string,
@@ -456,7 +455,7 @@ export function useStakeholderAlerts(companyId?: string) {
       logger.error('Error dismissing all alerts:', { error: msg });
       toast.error('Erro ao dispensar alertas', { description: msg });
     }
-  }, [companyId, alerts]);
+  }, [companyId, alerts, user]);
 
   return {
     alerts,
