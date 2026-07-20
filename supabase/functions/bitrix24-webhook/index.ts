@@ -40,37 +40,44 @@ Deno.serve(async (req) => {
   const authCheck = await requireWebhookSecret(req, 'BITRIX24_WEBHOOK_SECRET', 'x-bitrix24-secret');
   if (authCheck) return authCheck;
 
-  const { body: rawBody, error: bodyError } = await guardBody(req, 512 * 1024);
-  if (bodyError) return bodyError;
-
   try {
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    // Bitrix24 sends data as form-urlencoded or JSON
+    // Bitrix24 sends data as form-urlencoded or JSON.
+    // guardBody always calls req.json() so it must not be used for form-urlencoded:
+    // check content-type first and parse accordingly.
+    const MAX_BYTES = 512 * 1024;
+    const cl = parseInt(req.headers.get('content-length') ?? '0', 10);
+    if (cl > MAX_BYTES) return jsonError("Payload too large", 413, req);
+
     let payload: BitrixCallEvent;
     const contentType = req.headers.get('content-type') || '';
-    
+
     if (contentType.includes('application/json')) {
+      const { body: rawBody, error: bodyError } = await guardBody(req, MAX_BYTES);
+      if (bodyError) return bodyError;
       payload = rawBody as BitrixCallEvent;
     } else {
-      // Handle form-urlencoded data
-      const formData = await req.formData();
+      // form-urlencoded: read raw text then parse with URLSearchParams
+      const text = await req.text();
+      if (text.length > MAX_BYTES) return jsonError("Payload too large", 413, req);
+      const params = new URLSearchParams(text);
       payload = {
-        event: formData.get('event') as string || '',
+        event: params.get('event') || '',
         data: {
-          CALL_ID: formData.get('data[CALL_ID]') as string,
-          PHONE_NUMBER: formData.get('data[PHONE_NUMBER]') as string,
-          CALL_TYPE: parseInt(formData.get('data[CALL_TYPE]') as string) || undefined,
-          CALL_DURATION: parseInt(formData.get('data[CALL_DURATION]') as string) || undefined,
-          CALL_START_DATE: formData.get('data[CALL_START_DATE]') as string,
-          CALL_RECORD_URL: formData.get('data[CALL_RECORD_URL]') as string,
-          PORTAL_USER_ID: formData.get('data[PORTAL_USER_ID]') as string,
-          CRM_ENTITY_TYPE: formData.get('data[CRM_ENTITY_TYPE]') as string,
-          CRM_ENTITY_ID: formData.get('data[CRM_ENTITY_ID]') as string,
-        }
+          CALL_ID: params.get('data[CALL_ID]') ?? undefined,
+          PHONE_NUMBER: params.get('data[PHONE_NUMBER]') ?? undefined,
+          CALL_TYPE: parseInt(params.get('data[CALL_TYPE]') ?? '') || undefined,
+          CALL_DURATION: parseInt(params.get('data[CALL_DURATION]') ?? '') || undefined,
+          CALL_START_DATE: params.get('data[CALL_START_DATE]') ?? undefined,
+          CALL_RECORD_URL: params.get('data[CALL_RECORD_URL]') ?? undefined,
+          PORTAL_USER_ID: params.get('data[PORTAL_USER_ID]') ?? undefined,
+          CRM_ENTITY_TYPE: params.get('data[CRM_ENTITY_TYPE]') ?? undefined,
+          CRM_ENTITY_ID: params.get('data[CRM_ENTITY_ID]') ?? undefined,
+        },
       };
     }
 
@@ -174,8 +181,7 @@ Deno.serve(async (req) => {
     }, req);
 
   } catch (error) {
-    const msg = error instanceof Error ? error.message : "Unknown error";
-    log.error("fatal_error", { error: msg });
-    return jsonError(msg, 500, req);
+    log.error("fatal_error", { error: error instanceof Error ? error.message : String(error) });
+    return jsonError("Internal server error", 500, req);
   }
 });
