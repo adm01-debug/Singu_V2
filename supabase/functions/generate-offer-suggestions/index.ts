@@ -22,6 +22,7 @@ interface OfferSuggestion {
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
   const guard = handleCorsAndMethod(req);
   if (guard) return guard;

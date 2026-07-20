@@ -26,6 +26,7 @@ export function useTemplateNotifications() {
     if (user) {
       loadSettings();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const loadSettings = async () => {

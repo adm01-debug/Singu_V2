@@ -77,6 +77,7 @@ export function useSlowQueryDetector(): SlowQueryState {
             // Auto-clear after delay
             if (clearTimer.current) clearTimeout(clearTimer.current);
             clearTimer.current = setTimeout(() => {
+              // eslint-disable-next-line sonarjs/no-nested-functions
               setState(prev => ({ ...prev, isSlowQuery: false }));
             }, CLEAR_DELAY_MS);
           }

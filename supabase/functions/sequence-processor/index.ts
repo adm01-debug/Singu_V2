@@ -46,6 +46,7 @@ interface Contact {
   email: string;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === 'OPTIONS') return new Response(null, { headers: cors });

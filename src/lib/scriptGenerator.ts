@@ -347,7 +347,7 @@ export function generateMeetingInvite(ctx: MeetingInviteContext): {
 
 /**
  * Constrói um assunto de e-mail contextual e personalizado por passo + sentimento.
- * Garante que todo script de e-mail tenha um subject preenchido, mesmo para passoIds desconhecidos.
+ * Garante que cada script de e-mail tenha um subject preenchido, mesmo para passoIds desconhecidos.
  */
 export function buildEmailSubject(passoId: string, firstName: string, sentiment: SentimentTone): string {
   const name = nameOrDefault(firstName);

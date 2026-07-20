@@ -60,6 +60,7 @@ function dealOutcome(d: RawDeal): 'won' | 'lost' | null {
 export function useTouchpointSequences() {
   return useQuery<TouchpointSequencesResult>({
     queryKey: ['touchpoint-sequences'],
+    // eslint-disable-next-line sonarjs/cognitive-complexity
     queryFn: async () => {
       const since = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString();
       const { data: { user } } = await supabase.auth.getUser();

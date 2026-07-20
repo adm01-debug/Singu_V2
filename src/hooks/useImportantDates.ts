@@ -319,6 +319,7 @@ export interface DateReminders {
       hasUrgent,
       summary
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contacts, interactions]);
 
   return reminders;

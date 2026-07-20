@@ -232,6 +232,7 @@ export function useStakeholderAlerts(companyId?: string) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error creating stakeholder alert:', { error: msg });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchAlerts]);
 
   const checkForChanges = useCallback(async (

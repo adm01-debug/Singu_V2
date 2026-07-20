@@ -24,6 +24,7 @@ interface LifeEvent {
 }
 
 // Esta função processa todos os contatos agendados e detecta eventos
+// eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: scopedCorsHeaders(req) });

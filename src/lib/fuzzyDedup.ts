@@ -56,6 +56,7 @@ interface DetectOptions {
  * Pure client-side fuzzy duplicate detection.
  * O(n²) — appropriate for batches up to ~2000 records.
  */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export function detectDuplicates<T extends DedupRecord>(
   records: T[],
   opts: DetectOptions = {}

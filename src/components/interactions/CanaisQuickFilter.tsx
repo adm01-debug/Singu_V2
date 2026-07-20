@@ -221,6 +221,7 @@ export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais,
     } else {
       setPending(next);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, pending, safe, onChange]);
 
   const apply = useCallback(() => {
@@ -238,6 +239,7 @@ export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais,
     setJustReverted(true);
     window.setTimeout(() => setJustReverted(false), 1400);
     toast.success('Alterações pendentes descartadas');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [safe]);
 
   const handleToggleMode = useCallback(() => {

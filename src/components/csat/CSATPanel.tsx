@@ -89,6 +89,7 @@ export function CSATPanel({ contactId, interactionId }: Props) {
                       {[1, 2, 3, 4, 5].map(s => (
                         <button
                           key={s}
+                          // eslint-disable-next-line sonarjs/no-nested-functions
                           onClick={() => setPendingScore(prev => ({ ...prev, [survey.id]: s }))}
                           className="p-0.5"
                         >

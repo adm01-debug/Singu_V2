@@ -126,7 +126,7 @@ const EmpresaDetalhe = () => {
         // Isso remove o fetch manual e garante resiliência e cache via React Query.
       }
     } catch (error) { logger.error('Error fetching company data:', error); } finally { setLoading(false); }
-  }, [id, user, trackView]);
+  }, [id, trackView]);
 
   useEffect(() => { if (id && user) fetchCompanyData(); }, [id, user, fetchCompanyData]);
 

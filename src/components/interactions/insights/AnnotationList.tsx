@@ -52,11 +52,10 @@ export function AnnotationList({ api, onEdit, categoryFilter }: Props) {
   const { user } = useAuth();
   const { isAdmin } = useIsAdmin();
   const { toast } = useToast();
-  const allItems = api.list.data ?? [];
-  const items = useMemo(
-    () => (categoryFilter ? allItems.filter((a) => categoryFilter.has(a.category)) : allItems),
-    [allItems, categoryFilter]
-  );
+  const items = useMemo(() => {
+    const all = api.list.data ?? [];
+    return categoryFilter ? all.filter((a) => categoryFilter.has(a.category)) : all;
+  }, [api.list.data, categoryFilter]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, SentimentAnnotation[]>();

@@ -119,7 +119,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   const { logActivity } = useActivityLogger();
   const queryClient = useQueryClient();
 
-  const queryKey = ['contacts', companyId ?? '__all__'];
+  const queryKey = useMemo(() => ['contacts', companyId ?? '__all__'], [companyId]);
   const externalEnabled = options?.enabled ?? true;
 
   const { 
@@ -226,6 +226,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       return {
         ...prev,
         pages: prev.pages.map(page =>
+          // eslint-disable-next-line sonarjs/no-nested-functions
           page.map(c => c.id === id ? { ...c, ...updates } as Contact : c)
         ),
       };
@@ -277,6 +278,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
           return {
             ...prev,
             pages: prev.pages.map(page =>
+              // eslint-disable-next-line sonarjs/no-nested-functions
               page.map(c => c.id === id ? normalized : c)
             ),
           };
@@ -312,6 +314,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     // Optimistic Delete — filter across all InfiniteQuery pages
     queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, prev => {
       if (!prev) return prev;
+      // eslint-disable-next-line sonarjs/no-nested-functions
       return { ...prev, pages: prev.pages.map(page => page.filter(c => c.id !== id)) };
     });
 

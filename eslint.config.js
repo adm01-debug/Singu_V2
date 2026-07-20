@@ -57,4 +57,22 @@ export default tseslint.config(
       "sonarjs/no-empty-test-file": "off",
     },
   },
+  {
+    // shadcn/ui files intentionally export cva() variant functions (e.g. buttonVariants,
+    // badgeVariants) alongside their React components. These are stable design-system
+    // helpers, not random utilities, so co-location is the right pattern here.
+    files: ["src/components/ui/**/*.{ts,tsx}"],
+    rules: {
+      "react-refresh/only-export-components": "off",
+    },
+  },
+  {
+    // Context files export both the React Provider component and the corresponding
+    // context object / selector hook. Splitting these would break the single-import
+    // ergonomics consumers expect (import { useX, XProvider } from '@/contexts/X').
+    files: ["src/contexts/**/*.{ts,tsx}"],
+    rules: {
+      "react-refresh/only-export-components": "off",
+    },
+  },
 );

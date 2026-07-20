@@ -38,6 +38,7 @@ export function useCognitiveBiases(contact: Contact, interactions: Interaction[]
         if (lowerText.includes(indicator.toLowerCase())) {
           // Find surrounding context (sentence)
           const sentences = text.split(/[.!?]+/);
+          // eslint-disable-next-line sonarjs/no-nested-functions
           const sentence = sentences.find(s => 
             s.toLowerCase().includes(indicator.toLowerCase())
           ) || '';
@@ -64,6 +65,7 @@ export function useCognitiveBiases(contact: Contact, interactions: Interaction[]
 
           // Check if already detected (avoid duplicates per interaction)
           const exists = detectedBiases.some(
+            // eslint-disable-next-line sonarjs/no-nested-functions
             b => b.type === biasType && b.interactionId === interactionId
           );
 

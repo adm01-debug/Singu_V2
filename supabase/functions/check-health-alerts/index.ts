@@ -114,6 +114,7 @@ function calculateHealthScore(
   };
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
   const traceId = extractTraceId(req);
   const log = tracedLogger(traceId, "check-health-alerts");

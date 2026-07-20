@@ -19,6 +19,7 @@ import { RFM_SEGMENTS, RFMSegment, RFMAnalysis } from '@/types/rfm';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const SEGMENT_ICONS: Record<RFMSegment, React.ReactNode> = {
   champions: <span className="text-base">🏆</span>,
   loyal_customers: <span className="text-base">❤️</span>,
@@ -33,6 +34,7 @@ export const SEGMENT_ICONS: Record<RFMSegment, React.ReactNode> = {
   lost: <span className="text-base">❌</span>,
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const SEGMENT_COLORS: Record<RFMSegment, string> = {
   champions: '#10b981',
   loyal_customers: '#22c55e',

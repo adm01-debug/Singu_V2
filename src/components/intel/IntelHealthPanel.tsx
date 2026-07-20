@@ -30,12 +30,13 @@ interface HookStatus {
 /**
  * Painel diagnóstico do Intelligence Hub — acessível via ?diag=1.
  * Mostra status de hooks críticos, contagem de itens em localStorage, schema version
- * e botão para resetar todo o estado intel-*.
+ * e botão para resetar o estado completo intel-*.
  */
 export const IntelHealthPanel = () => {
   const qc = useQueryClient();
   const [refreshTick, setRefreshTick] = useState(0);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const stats: IntelStorageStat[] = useMemo(() => inspectIntelStorage(), [refreshTick]);
 
   const hooks: HookStatus[] = useMemo(() => {

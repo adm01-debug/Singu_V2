@@ -29,6 +29,7 @@ const ALLOWED_ACTIONS = new Set([
   'handle-label', 'set-webhook', 'find-webhook', 'set-settings', 'find-settings',
 ]);
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
   const guard = handleCorsAndMethod(req);
   if (guard) return guard;

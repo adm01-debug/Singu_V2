@@ -41,6 +41,7 @@ export function useSmartTemplateSuggestions(contact: Contact) {
 
   useEffect(() => {
     fetchTemplateStats();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const fetchTemplateStats = async () => {

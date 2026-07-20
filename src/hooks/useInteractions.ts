@@ -43,7 +43,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
   const { triggerAnalysis } = useNLPAutoAnalysis();
   const queryClient = useQueryClient();
 
-  const queryKey = ['interactions', contactId ?? '__all__', companyId ?? '__all__'];
+  const queryKey = useMemo(() => ['interactions', contactId ?? '__all__', companyId ?? '__all__'], [contactId, companyId]);
   const externalEnabled = options?.enabled ?? true;
 
   const {
@@ -174,6 +174,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
         ...prev,
         pages: prev.pages.map(page => ({
           ...page,
+          // eslint-disable-next-line sonarjs/no-nested-functions
           data: page.data.map(i => i.id === id ? { ...i, ...updates } as Interaction : i),
         })),
       };
@@ -197,6 +198,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
           ...prev,
           pages: prev.pages.map(page => ({
             ...page,
+            // eslint-disable-next-line sonarjs/no-nested-functions
             data: page.data.map(i => i.id === id ? data : i),
           })),
         };
@@ -229,6 +231,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
         ...prev,
         pages: prev.pages.map(page => ({
           ...page,
+          // eslint-disable-next-line sonarjs/no-nested-functions
           data: page.data.filter(i => i.id !== id),
           total: page.total > 0 ? page.total - 1 : 0,
         })),

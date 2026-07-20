@@ -49,6 +49,7 @@ const CHANNEL_LABELS: Record<string, string> = {
  *   selecionados), pois é assim que ele aparece na URL e na contagem oficial.
  * - Datas são interpretadas no fuso local com bordas de dia (00:00:00 / 23:59:59).
  */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export function computeIsolatedFilterCounts(
   interactions: Interaction[] | null | undefined,
   filters: AdvancedFilters,

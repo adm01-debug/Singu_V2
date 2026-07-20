@@ -126,6 +126,7 @@ export function useLuxIntelligence(entityType: 'contact' | 'company', entityId?:
     if (!latestRecord || latestRecord.status !== 'processing') return;
     const interval = setInterval(fetchRecords, 5000);
     return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [latestRecord?.status, fetchRecords]);
 
   const triggerLux = useCallback(async (entityData: Record<string, unknown>) => {

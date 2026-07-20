@@ -13,6 +13,7 @@ const AriaLiveContext = createContext<AriaLiveContextValue | null>(null);
 /**
  * Hook to access the aria-live announcement functions
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAriaLiveRegion() {
   const context = useContext(AriaLiveContext);
   if (!context) {
@@ -84,6 +85,7 @@ export function AriaLiveProvider({ children }: AriaLiveProviderProps) {
 /**
  * Pre-defined announcement messages for common actions
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const liveAnnouncements = {
   // CRUD Operations
   saving: 'Salvando...',

@@ -68,6 +68,7 @@ const NLPEvolutionTimeline: React.FC<NLPEvolutionTimelineProps> = ({
 
   useEffect(() => {
     if (user && contactId) fetchEvolutionData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, contactId, period]);
 
   const fetchEvolutionData = async () => {

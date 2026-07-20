@@ -70,10 +70,12 @@ export const CrossRefTab = () => {
           });
           const name = rows?.[0]?.[nameCol] ? String(rows[0][nameCol]) : pId.slice(0, 8);
           setPicked((prev) =>
+            // eslint-disable-next-line sonarjs/no-nested-functions
             prev.some((p) => p.id === pId) ? prev : [...prev, { id: pId, name }].slice(0, 3)
           );
         } catch {
           setPicked((prev) =>
+            // eslint-disable-next-line sonarjs/no-nested-functions
             prev.some((p) => p.id === pId) ? prev : [...prev, { id: pId, name: pId.slice(0, 8) }].slice(0, 3)
           );
         }

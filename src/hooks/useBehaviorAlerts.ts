@@ -88,7 +88,7 @@ export function useBehaviorAlerts() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const queryKey = ['behavior-alerts', user?.id];
+  const queryKey = useMemo(() => ['behavior-alerts', user?.id], [user?.id]);
 
   const { data: alerts = [], isLoading: loading } = useQuery({
     queryKey,

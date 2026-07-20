@@ -56,7 +56,7 @@ function sameCombo(a: string[], b: string[]): boolean {
  *
  * - `record(combo)`: registra uma combinação não vazia, deduplicada e movida ao topo.
  * - `remove(combo)`: remove uma combinação específica do histórico.
- * - `clear()`: limpa todo o histórico.
+ * - `clear()`: apaga o histórico inteiro.
  */
 export function useChannelHistory() {
   const [history, setHistory] = useState<string[][]>(() => read());

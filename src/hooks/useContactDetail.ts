@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -29,7 +29,7 @@ export function useContactDetail(contactId: string | undefined) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const queryKey = ['contact', contactId];
+  const queryKey = useMemo(() => ['contact', contactId], [contactId]);
 
   const { data, isLoading: loading, error: queryError, refetch } = useQuery({
     queryKey,

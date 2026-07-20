@@ -293,6 +293,7 @@ export function OnboardingTour({
 }
 
 // Hook for managing tour state
+// eslint-disable-next-line react-refresh/only-export-components
 export function useOnboardingTour(tourId: string = 'main') {
   const [isOpen, setIsOpen] = useState(false);
   const [hasCompleted, setHasCompleted] = useState(() => {

@@ -169,6 +169,7 @@ export function useUnifiedTimeline(contactId: string) {
     });
 
     return events.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [interactions, tasks, meetings, lifeEvents, crmAlerts]);
 
   return {

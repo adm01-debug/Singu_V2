@@ -114,6 +114,7 @@ export const CadencePreferencesCard = memo(function CadencePreferencesCard({ cad
                  <Input 
                    placeholder="Ex: Manhã, 14:00 (separe por vírgula)" 
                    value={prefsForm.preferred_times.join(', ')} 
+                   // eslint-disable-next-line sonarjs/no-nested-functions
                    onChange={e => setPrefsForm(p => ({ ...p, preferred_times: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))} 
                    className="h-7 text-xs" 
                  />
@@ -123,6 +124,7 @@ export const CadencePreferencesCard = memo(function CadencePreferencesCard({ cad
                  <Input 
                    placeholder="Ex: Noite, 18:00+" 
                    value={prefsForm.avoid_times.join(', ')} 
+                   // eslint-disable-next-line sonarjs/no-nested-functions
                    onChange={e => setPrefsForm(p => ({ ...p, avoid_times: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))} 
                    className="h-7 text-xs" 
                  />

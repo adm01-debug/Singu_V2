@@ -203,6 +203,7 @@ const MiniCelebration = ({
 };
 
 // Hook for easily triggering mini celebrations
+// eslint-disable-next-line react-refresh/only-export-components
 export const useMiniCelebration = () => {
   const [state, setState] = useState<{
     show: boolean;

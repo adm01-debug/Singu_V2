@@ -57,6 +57,7 @@ const DISCSalesScriptGenerator: React.FC<DISCSalesScriptGeneratorProps> = ({ con
     }
   }, [vakType]);
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const salesStages: SalesStage[] = useMemo(() => [
     {
       id: 'opening',

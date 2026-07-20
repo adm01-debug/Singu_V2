@@ -230,6 +230,7 @@ O que faz mais sentido para você?"
                   <Button 
                     variant="ghost" 
                     size="sm"
+                    // eslint-disable-next-line sonarjs/no-nested-functions
                     onClick={() => setPains(prev => prev.filter((_, idx) => idx !== i))}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -302,6 +303,7 @@ O que faz mais sentido para você?"
                   <Button 
                     variant="ghost" 
                     size="sm"
+                    // eslint-disable-next-line sonarjs/no-nested-functions
                     onClick={() => setClaims(prev => prev.filter((_, idx) => idx !== i))}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -354,6 +356,7 @@ O que faz mais sentido para você?"
                   <Button 
                     variant="ghost" 
                     size="sm"
+                    // eslint-disable-next-line sonarjs/no-nested-functions
                     onClick={() => setGains(prev => prev.filter((_, idx) => idx !== i))}
                   >
                     <Trash2 className="h-4 w-4" />

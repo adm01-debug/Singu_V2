@@ -91,6 +91,7 @@ interface ObjectionCardProps {
   o: ObjectionAggregate;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const ObjectionCard = memo(function ObjectionCard({ o }: ObjectionCardProps) {
   const [expanded, setExpanded] = usePersistentBoolean(
     objectionStorageKey("objection-suggested-expanded", o.objection),

@@ -42,9 +42,11 @@ const BADGE_VARIANTS: Record<SentimentOverall, "default" | "secondary" | "destru
 const MAX_EXAMPLES = 20;
 
 function SentimentExamplesDrawerImpl({ bucket, interactionIds, onClose }: Props) {
-  const ids = Array.isArray(interactionIds) ? interactionIds : [];
-  const totalCount = ids.length;
-  const limitedIds = useMemo(() => ids.slice(0, MAX_EXAMPLES), [ids]);
+  const totalCount = Array.isArray(interactionIds) ? interactionIds.length : 0;
+  const limitedIds = useMemo(
+    () => (Array.isArray(interactionIds) ? interactionIds : []).slice(0, MAX_EXAMPLES),
+    [interactionIds]
+  );
   const idsKey = limitedIds.join(",");
 
   // TanStack Query: cache 5min por (bucket, idsKey). Evita refetch ao reabrir o mesmo recorte.

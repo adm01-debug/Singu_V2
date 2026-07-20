@@ -74,5 +74,5 @@ export function useApproachRecommendation({
       decisionAccelerators: generateDecisionAccelerators(ctx),
       keyMetrics,
     };
-  }, [contact, vakProfile, metaprogramProfile, eqResult, biasResult, emotionalState, topValues, activeTriggers, hiddenObjections, rapportScore]);
+  }, [contact, vakProfile, metaprogramProfile, eqResult, biasResult, topValues, activeTriggers, hiddenObjections, rapportScore]);
 }

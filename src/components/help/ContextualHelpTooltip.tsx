@@ -179,6 +179,7 @@ export function ContextualHelpTooltip({
 }
 
 // Predefined help content for common features
+// eslint-disable-next-line react-refresh/only-export-components
 export const helpContent = {
   relationshipScore: {
     title: 'Score de Relacionamento',

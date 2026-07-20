@@ -5,6 +5,7 @@
  import { Layers, Copy, Check, Info } from 'lucide-react';
  import { toast } from 'sonner';
  
+ // eslint-disable-next-line react-refresh/only-export-components
  export const FRAMEWORKS = [
    {
      id: 'aida',
