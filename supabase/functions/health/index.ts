@@ -16,44 +16,41 @@ Deno.serve(async (req) => {
   if (limited) return limited;
 
   const startTime = Date.now();
-  const checks: Record<string, { status: string; latencyMs?: number; error?: string }> = {};
 
-  try {
-    const dbStart = Date.now();
+  const checkLocalDb = async () => {
+    const t = Date.now();
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
-    const { error } = await supabase.from("profiles").select("id").limit(1);
-    checks.database = {
-      status: error ? "degraded" : "healthy",
-      latencyMs: Date.now() - dbStart,
-      ...(error && { error: error.message }),
-    };
-  } catch (e) {
-    checks.database = { status: "unhealthy", error: String(e) };
-  }
+    try {
+      const { error } = await supabase.from("profiles").select("id").limit(1);
+      return { status: error ? "degraded" : "healthy", latencyMs: Date.now() - t, ...(error && { error: error.message }) };
+    } catch (e) {
+      return { status: "unhealthy", error: String(e) };
+    }
+  };
 
-  checks.runtime = { status: "healthy" };
-
-  try {
+  const checkExternalDb = async () => {
     const extUrl = Deno.env.get("EXTERNAL_SUPABASE_URL");
     const extKey = Deno.env.get("EXTERNAL_SUPABASE_SERVICE_ROLE_KEY");
-    if (extUrl && extKey) {
-      const extStart = Date.now();
+    if (!extUrl || !extKey) return { status: "not_configured" };
+    const t = Date.now();
+    try {
       const extClient = createClient(extUrl, extKey);
       const { error } = await extClient.from("companies").select("id").limit(1);
-      checks.external_database = {
-        status: error ? "degraded" : "healthy",
-        latencyMs: Date.now() - extStart,
-        ...(error && { error: error.message }),
-      };
-    } else {
-      checks.external_database = { status: "not_configured" };
+      return { status: error ? "degraded" : "healthy", latencyMs: Date.now() - t, ...(error && { error: error.message }) };
+    } catch (e) {
+      return { status: "unhealthy", error: String(e) };
     }
-  } catch (e) {
-    checks.external_database = { status: "unhealthy", error: String(e) };
-  }
+  };
+
+  const [dbResult, extResult] = await Promise.all([checkLocalDb(), checkExternalDb()]);
+  const checks: Record<string, { status: string; latencyMs?: number; error?: string }> = {
+    database: dbResult,
+    runtime: { status: "healthy" },
+    external_database: extResult,
+  };
 
   const allHealthy = Object.values(checks).every(
     (c) => c.status === "healthy" || c.status === "not_configured"
