@@ -121,7 +121,7 @@ const Contatos = () => {
   // Defer secondary data (companies, interactions) until contacts are loaded — reduces initial concurrent requests
   const [secondaryReady, setSecondaryReady] = useState(false);
   useEffect(() => {
-    if (!loading && contacts.length >= 0) {
+    if (!loading && contacts.length > 0) {
       const t = setTimeout(() => setSecondaryReady(true), 300);
       return () => clearTimeout(t);
     }
