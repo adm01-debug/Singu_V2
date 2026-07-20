@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { queryExternalData } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface RapportIntel {
   contact_id?: string;
@@ -36,8 +37,10 @@ export function useRapportIntel(contactId?: string) {
 }
 
 export function useRapportIntelList() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['rapport-intel-list'],
+    queryKey: ['rapport-intel-list', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await queryExternalData<RapportIntel>({
         table: 'vw_singu_rapport_intel',

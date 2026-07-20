@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 export type HistoryChannel = 'whatsapp' | 'call' | 'email' | 'meeting' | 'note' | 'social';
 
@@ -85,9 +86,11 @@ function toItemFromInteraction(r: Record<string, unknown>): HistoryItem {
 }
 
 export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
+  const { user } = useAuth();
   const limit = filters.limit ?? 200;
   return useQuery({
-    queryKey: ['unified-history', filters],
+    queryKey: ['unified-history', filters, user?.id],
+    enabled: !!user,
     staleTime: 30_000,
     queryFn: async (): Promise<HistoryItem[]> => {
       const channels = filters.channels && filters.channels.length > 0 ? filters.channels : null;
