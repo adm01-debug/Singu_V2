@@ -28,6 +28,7 @@ import { logger } from '@/lib/logger';
    return useQuery({
      queryKey: ['marketing-funnel', startDate, endDate, user?.id],
      enabled: !!user,
+     staleTime: 10 * 60_000,
      queryFn: async () => {
        if (!user) return [];
 
@@ -54,6 +55,7 @@ import { logger } from '@/lib/logger';
    return useQuery({
      queryKey: ['marketing-behavioral-insights', user?.id],
      enabled: !!user,
+     staleTime: 10 * 60_000,
      queryFn: async () => {
        if (!user) return null;
 
@@ -96,6 +98,7 @@ import { logger } from '@/lib/logger';
    return useQuery({
      queryKey: ['marketing-campaign-stats', user?.id],
      enabled: !!user,
+     staleTime: 10 * 60_000,
      queryFn: async () => {
        if (!user) return [];
 

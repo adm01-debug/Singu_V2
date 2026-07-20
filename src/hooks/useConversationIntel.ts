@@ -51,6 +51,7 @@ export function useConversationAnalysis(interactionId: string | undefined) {
   return useQuery({
     queryKey: ["conversation-analysis", interactionId],
     enabled: !!interactionId,
+    staleTime: 10 * 60_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("conversation_analyses")
@@ -68,6 +69,7 @@ export function useConversationAnalyses(filters?: { sentiment?: SentimentOverall
   return useQuery({
     queryKey: ["conversation-analyses", user?.id, filters],
     enabled: !!user?.id,
+    staleTime: 10 * 60_000,
     queryFn: async () => {
       let q = supabase
         .from("conversation_analyses")

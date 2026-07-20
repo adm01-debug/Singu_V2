@@ -20,6 +20,7 @@ export function useCRMAlerts(contactId: string) {
 
   const { data: alerts = [], isLoading } = useQuery({
     queryKey: ['crm-alerts', contactId, user?.id],
+    staleTime: 5 * 60_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('crm_alerts')

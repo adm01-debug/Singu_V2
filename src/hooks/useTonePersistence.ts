@@ -12,6 +12,8 @@ export function useTonePersistence(companyId?: string) {
 
   const { data: preferredTone, isLoading } = useQuery({
     queryKey: ['ai-tone-preferences', companyId, user?.id],
+    enabled: !!user,
+    staleTime: 30 * 60_000,
     queryFn: async () => {
       if (!user) return null;
 

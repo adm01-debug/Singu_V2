@@ -54,7 +54,7 @@ export function useSmartNotifications() {
   const query = useQuery({
     queryKey: ['smart-notifications', user?.id],
     enabled: !!user?.id,
-    staleTime: 15_000,
+    staleTime: 5 * 60_000,
     queryFn: async (): Promise<SmartNotification[]> => {
       const { data, error } = await supabase
         .from('smart_notifications')

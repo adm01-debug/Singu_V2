@@ -41,6 +41,7 @@ export function useConnections() {
   const { data: connections = [], isLoading } = useQuery({
     queryKey: ['connection_configs', user?.id],
     enabled: !!user,
+    staleTime: 10 * 60_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('connection_configs')
@@ -130,6 +131,7 @@ export function useConnectionTestLogs(connectionId: string | undefined) {
   return useQuery({
     queryKey: ['connection_test_logs', connectionId],
     enabled: !!connectionId,
+    staleTime: 5 * 60_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('connection_test_logs')
