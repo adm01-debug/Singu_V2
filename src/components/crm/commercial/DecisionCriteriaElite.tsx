@@ -22,7 +22,7 @@ interface Props {
   contactId: string;
 }
 
-const CRITERIA_ICONS: Record<string, any> = {
+const CRITERIA_ICONS: Record<string, typeof Target> = {
   price: Scale,
   quality: Award,
   speed: Clock,

@@ -317,6 +317,7 @@ Deno.serve(async (req) => {
 
       if (error) throw new Error(`Distinct failed: ${error.message}`);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic DB query result shape not statically typed
       const unique = [...new Set((data as any[] || []).map((r: any) => r[column]).filter(Boolean))].sort();
       return jsonOk({ values: unique, count: unique.length }, req);
     }
@@ -344,6 +345,7 @@ Deno.serve(async (req) => {
             log.warn("batch_distinct column failed", { col, error: error.message });
             return { col, values: [] };
           }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic DB query result shape not statically typed
           const unique = [...new Set((data as any[] || []).map((r: any) => r[col]).filter(Boolean))].sort();
           return { col, values: unique };
         } catch (err) {
@@ -389,8 +391,8 @@ Deno.serve(async (req) => {
       const { filters, select, order, range, search, countMethod } = body;
 
       const result = await withRetry(async () => {
-        // Use 'any' for dynamic external DB queries to avoid TS2589 deep type instantiation
         const countMode = countMethod === 'planned' ? 'planned' : 'exact';
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TS2589 deep type instantiation with dynamic Supabase queries
         let query: any = client.from(table).select(select || '*', { count: countMode });
 
         if (search?.term && typeof search.term === 'string' && search.term.trim()) {

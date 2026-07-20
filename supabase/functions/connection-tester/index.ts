@@ -53,7 +53,9 @@ const BLOCKED_HOSTNAMES = new Set([
   "localhost.localdomain",
   "metadata.google.internal",
   "metadata.goog",
+  // eslint-disable-next-line sonarjs/no-hardcoded-ip -- intentional SSRF blocklist
   "169.254.169.254",
+  // eslint-disable-next-line sonarjs/no-hardcoded-ip -- intentional SSRF blocklist
   "fd00:ec2::254", // AWS metadata IPv6
 ]);
 
@@ -72,8 +74,10 @@ function isBlockedV4(addr: string): boolean {
 function isBlockedV6(addr: string): boolean {
   const a = addr.toLowerCase();
   if (a === "::1" || a === "0:0:0:0:0:0:0:1") return true;         // loopback
+  // eslint-disable-next-line sonarjs/no-hardcoded-ip -- intentional SSRF blocklist
   if (a.startsWith("::ffff:127.") || a.startsWith("::ffff:7f"))    // IPv4-mapped loopback
     return true;
+  // eslint-disable-next-line sonarjs/no-hardcoded-ip -- intentional SSRF blocklist
   if (a.startsWith("::ffff:169.254.") || a.startsWith("::ffff:a9fe")) // IPv4-mapped link-local
     return true;
   if (/^f[cd]/i.test(a)) return true;   // fc00::/7  ULA (includes fd00::)
@@ -173,6 +177,7 @@ interface TestResult {
 }
 
 async function testSupabase(config: Record<string, unknown>): Promise<TestResult> {
+  // eslint-disable-next-line sonarjs/slow-regex -- regex bounded by protocol prefix, not user-controlled
   const url = String(config.url ?? "").replace(/\/+$/, "");
   const key = String(config.anon_key ?? config.service_role_key ?? "");
   if (!url || !key) throw new Error("URL e chave (anon ou service role) obrigatórias");
@@ -189,6 +194,7 @@ async function testSupabase(config: Record<string, unknown>): Promise<TestResult
 }
 
 async function testBitrix(config: Record<string, unknown>): Promise<TestResult> {
+  // eslint-disable-next-line sonarjs/slow-regex -- regex bounded by protocol prefix, not user-controlled
   const webhook = String(config.webhook_url ?? "").replace(/\/+$/, "");
   if (!webhook) throw new Error("webhook_url obrigatório");
   const t0 = Date.now();

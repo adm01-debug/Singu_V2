@@ -282,7 +282,7 @@ describe('Empathy Templates: Functions', () => {
   });
 
   it('getEmpathyTemplateForDISC returns empty for invalid type', () => {
-    const text = getEmpathyTemplateForDISC('nonexistent' as any, 'D');
+    const text = getEmpathyTemplateForDISC('nonexistent' as never, 'D');
     expect(text).toBe('');
   });
 });

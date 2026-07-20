@@ -88,8 +88,7 @@ export function useSmartNotifications() {
         if (!n.snoozed_until) return false;
         return new Date(n.snoozed_until).getTime() <= now;
       }
-      if (new Date(n.scheduled_for).getTime() > now) return false;
-      return true;
+      return new Date(n.scheduled_for).getTime() <= now;
     });
   }, [query.data, now]);
 

@@ -9,8 +9,10 @@ interface ScrapeRequest {
 }
 
 // deno-lint-ignore no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- scraped web metadata shape not typed
 function parseLinkedInProfile(markdown: string, metadata: any) {
   // deno-lint-ignore no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- profile shape varies by platform
   const profile: any = {
     headline: "", current_company: "", current_position: "",
     location: "", skills: [], certifications: [], experience: [], education: [],
@@ -63,8 +65,10 @@ function parseLinkedInProfile(markdown: string, metadata: any) {
 }
 
 // deno-lint-ignore no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- scraped web metadata shape not typed
 function parseTwitterProfile(markdown: string, metadata: any) {
   // deno-lint-ignore no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- profile shape varies by platform
   const profile: any = { headline: "", followers_count: 0, following_count: 0, recent_posts: [] };
   const bioMatch = markdown.match(/(?:Bio|Sobre)[\s\S]*?([^\n]+)/i);
   if (bioMatch) profile.headline = bioMatch[1].trim();
@@ -85,8 +89,10 @@ function parseTwitterProfile(markdown: string, metadata: any) {
 }
 
 // deno-lint-ignore no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- scraped web metadata shape not typed
 function parseInstagramProfile(markdown: string, metadata: any) {
   // deno-lint-ignore no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- profile shape varies by platform
   const profile: any = { headline: "", followers_count: 0, following_count: 0, posts_count: 0, recent_posts: [] };
   const bioMatch = markdown.match(/(?:Bio|Sobre)[\s\S]*?([^\n]+)/i);
   if (bioMatch) profile.headline = bioMatch[1].trim();
@@ -160,6 +166,7 @@ Deno.serve(async (req) => {
     const metadata = scrapeData.data?.metadata || scrapeData.metadata || {};
 
     // deno-lint-ignore no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- parsed profile shape depends on platform
     let parsedProfile: any;
     switch (platform) {
       case "linkedin": parsedProfile = parseLinkedInProfile(markdown, metadata); break;
@@ -172,6 +179,7 @@ Deno.serve(async (req) => {
       .from("social_profiles").select("*").eq("contact_id", contactId).eq("platform", platform).maybeSingle();
 
     // deno-lint-ignore no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- life event shape depends on dynamic parsedProfile
     const lifeEvents: any[] = [];
     if (existingProfile && platform === "linkedin") {
       if (existingProfile.current_company && parsedProfile.current_company &&

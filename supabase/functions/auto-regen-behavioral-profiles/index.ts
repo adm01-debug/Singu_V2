@@ -181,8 +181,7 @@ Deno.serve(async (req) => {
 const ERROR_RATE_THRESHOLD = 10; // percentual
 const MIN_SAMPLE = 5; // ignora janelas com pouquíssimas execuções para evitar falso positivo
 
-// deno-lint-ignore no-explicit-any
-async function maybeRaiseErrorRateAlert(admin: any, requestId: string) {
+async function maybeRaiseErrorRateAlert(admin: ReturnType<typeof createClient>, requestId: string) {
   try {
     const sinceIso = new Date(Date.now() - 60 * 60 * 1000).toISOString();
     const { data: recentRuns, error: runsError } = await admin

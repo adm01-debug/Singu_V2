@@ -14,6 +14,15 @@ const BodySchema = z.object({
 
 const limiter = rateLimit({ windowMs: 60_000, max: 60 });
 
+type PhoneValidationResult = {
+  status: "valid" | "invalid" | "unreachable";
+  line_type: string;
+  country: string | null;
+  country_code: string | null;
+  phone_e164: string | null;
+  reasons: string[];
+};
+
 function mapType(type: string | undefined): string {
   if (!type) return "unknown";
   const t = type.toLowerCase();
@@ -50,9 +59,10 @@ Deno.serve(async (req) => {
 
     const { phone, defaultCountry, contactId, persist } = parsed.data;
     const reasons: string[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- libphonenumber-js CountryCode not re-exported from this Deno path
     const parsedPhone = parsePhoneNumberFromString(phone, defaultCountry as any);
 
-    let result: any;
+    let result: PhoneValidationResult;
     if (!parsedPhone) {
       result = { status: "invalid", line_type: "unknown", country: null, country_code: null, phone_e164: null, reasons: ["unparseable"] };
     } else {

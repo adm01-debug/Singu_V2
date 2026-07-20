@@ -87,21 +87,21 @@ describe('Rate Limiter Pattern', () => {
 });
 
 // ─── Retry Pattern Tests ───
+const retryFn = async <T>(fn: () => Promise<T>, retries: number): Promise<T> => {
+  for (let i = 0; i <= retries; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (i === retries) throw e;
+    }
+  }
+  throw new Error('Unreachable');
+};
+
 describe('Retry Pattern', () => {
   it('should retry on failure up to maxRetries', async () => {
     let attempts = 0;
     const maxRetries = 3;
-
-    const retryFn = async <T>(fn: () => Promise<T>, retries: number): Promise<T> => {
-      for (let i = 0; i <= retries; i++) {
-        try {
-          return await fn();
-        } catch (e) {
-          if (i === retries) throw e;
-        }
-      }
-      throw new Error('Unreachable');
-    };
 
     const result = await retryFn(async () => {
       attempts++;
@@ -114,17 +114,6 @@ describe('Retry Pattern', () => {
   });
 
   it('should throw after exhausting retries', async () => {
-    const retryFn = async <T>(fn: () => Promise<T>, retries: number): Promise<T> => {
-      for (let i = 0; i <= retries; i++) {
-        try {
-          return await fn();
-        } catch (e) {
-          if (i === retries) throw e;
-        }
-      }
-      throw new Error('Unreachable');
-    };
-
     await expect(
       retryFn(async () => { throw new Error('Permanent failure'); }, 2)
     ).rejects.toThrow('Permanent failure');

@@ -1,8 +1,7 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Swords, Loader2 } from "lucide-react";
+import { Swords, Loader2 } from "lucide-react";
 import { SmartBackButton } from "@/components/navigation/SmartBackButton";
 import { useBattleCard } from "@/hooks/useBattleCards";
 import { BattleCardView } from "@/components/playbooks/BattleCardView";

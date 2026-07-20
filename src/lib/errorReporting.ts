@@ -161,9 +161,7 @@ export function captureError(
   }
   
   // Flush imediato para erros críticos
-  if (report.severity === 'critical') {
-    flushErrorBuffer();
-  } else if (errorBuffer.length >= MAX_BUFFER_SIZE) {
+  if (report.severity === 'critical' || errorBuffer.length >= MAX_BUFFER_SIZE) {
     flushErrorBuffer();
   }
 }

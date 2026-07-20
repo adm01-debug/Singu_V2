@@ -1,6 +1,28 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
 
+interface ScrapeResult {
+  contactId: string;
+  platform: string;
+  success: boolean;
+  error?: string;
+  eventsDetected?: number;
+}
+
+interface LifeEvent {
+  contact_id: string;
+  user_id: string;
+  platform: string;
+  event_type: string;
+  event_title: string;
+  event_description: string;
+  previous_value?: string;
+  new_value?: string;
+  confidence: number;
+  event_date: string;
+  metadata?: Record<string, unknown>;
+}
+
 // Esta função processa todos os contatos agendados e detecta eventos
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -57,7 +79,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const results: any[] = [];
+    const results: ScrapeResult[] = [];
 
     for (const schedule of pendingSchedules) {
       try {
@@ -111,7 +133,7 @@ Deno.serve(async (req) => {
           .single();
 
         // Detectar eventos baseado na plataforma
-        const lifeEvents: any[] = [];
+        const lifeEvents: LifeEvent[] = [];
 
         if (schedule.platform === 'linkedin') {
           // Detectar mudanças no headline/título

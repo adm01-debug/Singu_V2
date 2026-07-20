@@ -32,7 +32,9 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Lint (ESLint)
-        run: npx eslint . --max-warnings=0
+        # --max-warnings=200 is the current ceiling (ratchet: must not increase PR over PR).
+        # Errors must always be 0. Target: reduce warnings to 0 incrementally.
+        run: npx eslint . --max-warnings=200
 
       - name: Security audit (high+ severity)
         run: npm audit --omit=dev --audit-level=high

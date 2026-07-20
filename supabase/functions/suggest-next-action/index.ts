@@ -37,7 +37,8 @@ Deno.serve(async (req) => {
      if (!parsed.success) {
        return jsonError(`Invalid input: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
      }
-     let { contactId, contact, interactions, company } = parsed.data;
+     const { contactId } = parsed.data;
+     let { contact, interactions, company } = parsed.data;
  
      const supabase = createClient(
        Deno.env.get("SUPABASE_URL")!,

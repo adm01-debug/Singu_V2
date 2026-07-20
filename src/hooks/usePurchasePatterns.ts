@@ -66,7 +66,8 @@ export function usePurchasePatterns() {
       if (purchaseError) throw purchaseError;
 
       // Group purchases by contact
-      const purchasesByContact = new Map<string, any[]>();
+      type PurchaseRow = NonNullable<typeof purchases>[number];
+      const purchasesByContact = new Map<string, PurchaseRow[]>();
       purchases?.forEach(purchase => {
         const contactId = purchase.contact_id;
         if (!purchasesByContact.has(contactId)) {

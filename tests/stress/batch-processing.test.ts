@@ -3,7 +3,7 @@
  describe('Stress: Batch Processing Simulation', () => {
    it('should handle large batches without memory overflow (simulated)', async () => {
      const largeBatch = Array.from({ length: 1000 }, (_, i) => ({ id: i, data: 'test' }));
-     const processItem = async (item: any) => {
+     const processItem = async (item: { id: number; data: string }) => {
        return new Promise(resolve => setTimeout(resolve, 1));
      };
  

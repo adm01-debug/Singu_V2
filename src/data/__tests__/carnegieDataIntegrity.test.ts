@@ -236,7 +236,7 @@ describe('Progress Celebration', () => {
   });
 
   it('getCelebrationTemplate returns null for invalid type', () => {
-    const template = getCelebrationTemplate('nonexistent' as any);
+    const template = getCelebrationTemplate('nonexistent' as never);
     expect(template).toBeNull();
   });
 

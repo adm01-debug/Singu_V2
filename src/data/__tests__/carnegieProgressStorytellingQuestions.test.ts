@@ -131,7 +131,7 @@ describe('getStoryTemplateByType', () => {
   });
 
   it('returns undefined for unknown', () => {
-    expect(getStoryTemplateByType('nonexistent' as any)).toBeUndefined();
+    expect(getStoryTemplateByType('nonexistent' as never)).toBeUndefined();
   });
 });
 
@@ -184,7 +184,7 @@ describe('generateStoryOutline', () => {
   });
 
   it('returns empty for unknown type', () => {
-    expect(generateStoryOutline('unknown' as any, { problem: '', solution: '', result: '' })).toBe('');
+    expect(generateStoryOutline('unknown' as never, { problem: '', solution: '', result: '' })).toBe('');
   });
 });
 

@@ -101,8 +101,7 @@
    // Can jump forward, but usually not backward in a healthy pipeline
    // We allow 1 step backward for "negotiation -> proposal" but not further
    if (toIdx < fromIdx) {
-     if (from === "negotiation" && to === "proposal") return true;
-     return false;
+     return from === "negotiation" && to === "proposal";
    }
  
    return true;

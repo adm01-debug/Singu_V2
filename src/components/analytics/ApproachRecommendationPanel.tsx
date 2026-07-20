@@ -78,7 +78,7 @@ export function ApproachRecommendationPanel({ contact, interactions, className }
   const recommendation = useApproachRecommendation({ contact, vakProfile, metaprogramProfile, eqResult, biasResult, emotionalState: currentEmotionalState, topValues, activeTriggers, hiddenObjections, rapportScore });
 
   const togglePhase = (phaseId: string) => {
-    setExpandedPhases(prev => { const next = new Set(prev); next.has(phaseId) ? next.delete(phaseId) : next.add(phaseId); return next; });
+    setExpandedPhases(prev => { const next = new Set(prev); if (next.has(phaseId)) { next.delete(phaseId); } else { next.add(phaseId); } return next; });
   };
 
   const copyToClipboard = (text: string, id: string) => {

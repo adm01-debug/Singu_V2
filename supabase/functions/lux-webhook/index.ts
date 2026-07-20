@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
     const supabase = createClient(supabaseUrl, key);
 
     // Update the lux_intelligence record
-    const updateData: Record<string, any> = {
+    const updateData: Record<string, unknown> = {
       status: status || 'completed',
       completed_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),

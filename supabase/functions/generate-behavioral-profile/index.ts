@@ -140,7 +140,7 @@ Deno.serve(async (req) => {
         const k = r.insight_kind as 'preference' | 'hobby' | 'tone';
         if (k in banned) banned[k].add(r.insight_label.trim().toLowerCase());
       }
-    } catch (_e) { /* best-effort */ }
+    } catch (e) { console.warn('Failed to load banned insights (non-critical):', (e as Error).message); }
 
     const bannedHint = (['preference', 'hobby', 'tone'] as const)
       .flatMap((k) => Array.from(banned[k]).map((l) => `- ${k}: "${l}"`))
@@ -161,7 +161,12 @@ Deno.serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: `Você é um analista comportamental sênior. Gere insights SOMENTE em português (PT-BR), baseados exclusivamente em evidências do histórico fornecido. Nunca invente dados. Se não houver evidência para um campo, deixe a lista vazia. Foque em preferências verificáveis, hobbies mencionados e tom real de comunicação.${bannedHint ? `\n\nO usuário JÁ marcou os seguintes insights como imprecisos para este contato — NÃO os proponha novamente (a menos que exista nova evidência clara e diferente):\n${bannedHint}` : ''}`,
+            content: (() => {
+              const bannedNote = bannedHint
+                ? '\n\nO usuário JÁ marcou os seguintes insights como imprecisos para este contato — NÃO os proponha novamente (a menos que exista nova evidência clara e diferente):\n' + bannedHint
+                : '';
+              return `Você é um analista comportamental sênior. Gere insights SOMENTE em português (PT-BR), baseados exclusivamente em evidências do histórico fornecido. Nunca invente dados. Se não houver evidência para um campo, deixe a lista vazia. Foque em preferências verificáveis, hobbies mencionados e tom real de comunicação.${bannedNote}`;
+            })(),
           },
           {
             role: 'user',
@@ -244,8 +249,8 @@ Deno.serve(async (req) => {
         trigger_source: isInternal ? 'auto' : 'manual',
         generated_at: row.last_updated_at,
       });
-    } catch (_snapErr) {
-      // ignora — snapshot é auxiliar
+    } catch (e) {
+      console.warn('Snapshot save failed (non-critical):', (e as Error).message);
     }
 
     return json({ profile: saved });

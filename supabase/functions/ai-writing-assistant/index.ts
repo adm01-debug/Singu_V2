@@ -283,10 +283,10 @@ ${vakStyle ? `3. Conselho VAK: ${vakStyle.advice}` : ''}
 });
 
  function buildUserPrompt(
-   messageType: any,
+   messageType: string,
    customContext: string | undefined,
    tone: string | undefined,
-   contact: any,
+   contact: ContactProfile,
    framework: string | undefined,
    storyArc: string | undefined
  ): string {

@@ -116,7 +116,7 @@ export const CRITICAL_PATTERNS: Record<CriticalLanguageType, {
     patterns: [
       /diferente de você/i, /ao contrário de você/i, /melhor que você/i,
       /você deveria ser como/i, /por que você não é como/i,
-      /até (a|o) \w+ consegue/i
+      /até [ao] \w+ consegue/i
     ],
     examples: [
       'Ao contrário de você, ele faz direito',

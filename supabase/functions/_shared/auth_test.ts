@@ -49,8 +49,10 @@ Deno.test("timingSafeStringEqual: string with trailing null bytes vs shorter str
 });
 
 Deno.test("timingSafeStringEqual: long realistic secret strings match → true", async () => {
+  // eslint-disable-next-line sonarjs/no-hardcoded-secrets -- test fixture, not a real secret
   const secret = "sk_live_abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGH";
-  assertEquals(await timingSafeStringEqual(secret, secret), false === false); // true
+  const matchResult = await timingSafeStringEqual(secret, secret);
+  assertEquals(matchResult, true);
   assertEquals(await timingSafeStringEqual(secret, secret), true);
 });
 

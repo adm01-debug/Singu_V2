@@ -21,7 +21,7 @@
    companyId: string;
  }
  
-  const channelIcons: Record<string, any> = {
+  const channelIcons: Record<string, typeof MessageSquare> = {
     whatsapp: MessageSquare,
     call: Phone,
     email: Mail,

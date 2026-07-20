@@ -182,7 +182,7 @@ function ProntidaoFactorBreakdownChartImpl({ data, asPercent = false }: Props) {
                       axisLine={false}
                     />
                     <YAxis
-                      domain={asPercent ? [0, 100] : [0, 100]}
+                      domain={[0, 100]}
                       tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
                       tickLine={false}
                       axisLine={false}

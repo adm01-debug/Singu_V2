@@ -311,11 +311,7 @@ export function useOnboardingTour(tourId: string = 'main') {
     localStorage.setItem(`tour-completed-${tourId}`, 'true');
   };
 
-  const skipTour = () => {
-    setIsOpen(false);
-    setHasCompleted(true);
-    localStorage.setItem(`tour-completed-${tourId}`, 'true');
-  };
+  const skipTour = completeTour;
 
   const resetTour = () => {
     setHasCompleted(false);

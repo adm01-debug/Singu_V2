@@ -133,9 +133,7 @@ export const RelatoriosFixosBar = memo(function RelatoriosFixosBar({
 
   const openCreate = () => {
     if (saveDisabledReason) {
-      if (saveDisabledReason !== `Já salvo como "${activeMatch?.name}"`) {
-        toast.info(saveDisabledReason, { duration: 1800 });
-      } else if (activeMatch) {
+      if (saveDisabledReason !== `Já salvo como "${activeMatch?.name}"` || activeMatch) {
         toast.info(saveDisabledReason, { duration: 1800 });
       }
       return;

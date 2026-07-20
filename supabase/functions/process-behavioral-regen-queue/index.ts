@@ -20,15 +20,11 @@ Deno.serve(async (req) => {
   const admin = createClient(SUPABASE_URL, SERVICE_KEY);
 
   const batchSize = 10;
-  const now = new Date().toISOString();
 
+  // Atomically claim a batch: pushes next_run_at forward (15-min lock) with
+  // FOR UPDATE SKIP LOCKED, preventing double-processing on concurrent cron invocations.
   const { data: due, error: readErr } = await admin
-    .from('behavioral_profile_regen_queue')
-    .select('contact_id, user_id, attempts')
-    .lte('next_run_at', now)
-    .lt('attempts', 5)
-    .order('next_run_at', { ascending: true })
-    .limit(batchSize);
+    .rpc('claim_regen_batch', { p_batch_size: batchSize, p_lock_minutes: 15 });
 
   if (readErr) {
     return json({ error: readErr.message }, 500);

@@ -72,8 +72,7 @@ export function AdvancedTriggersPanel({ contact: contactProp, className }: Advan
           >
             <Shield className={cn(
               'h-5 w-5',
-              resistanceScore > 70 ? 'text-destructive' :
-              resistanceScore > 50 ? 'text-warning' : 'text-warning'
+              resistanceScore > 70 ? 'text-destructive' : 'text-warning'
             )} />
             <div className="flex-1">
               <div className="flex items-center justify-between">

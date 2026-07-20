@@ -121,7 +121,7 @@ export function useProactiveIntelligence(
     }
 
     try {
-      const behavior = contact.behavior as Record<string, any> | null;
+      const behavior = contact.behavior as Record<string, unknown> | null;
       const discProfile = getDISCProfile(behavior) || 'S';
       const vakPrimary = getVAKPrimary(behavior) || 'kinesthetic';
       const relationshipScore = contact.relationship_score || 0;

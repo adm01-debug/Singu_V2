@@ -24,7 +24,8 @@ function ScoreRulesEditorInner({ rules }: Props) {
   const [drafts, setDrafts] = useState<Record<string, Partial<LeadScoreRule>>>({});
 
   const grouped = rules.reduce<Record<string, LeadScoreRule[]>>((acc, r) => {
-    (acc[r.dimension] = acc[r.dimension] ?? []).push(r);
+    if (!acc[r.dimension]) acc[r.dimension] = [];
+    acc[r.dimension].push(r);
     return acc;
   }, {});
 

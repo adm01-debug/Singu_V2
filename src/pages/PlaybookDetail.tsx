@@ -1,9 +1,9 @@
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, BookOpen, Trash2, Copy, Loader2 } from "lucide-react";
+import { BookOpen, Trash2, Copy, Loader2 } from "lucide-react";
 import { SmartBackButton } from "@/components/navigation/SmartBackButton";
 import { usePlaybook, useDeletePlaybook, useLogPlaybookUsage, SCENARIO_LABELS } from "@/hooks/usePlaybooks";
 import { PlaybookSectionRenderer } from "@/components/playbooks/PlaybookSectionRenderer";

@@ -77,7 +77,9 @@ export function useContactSegmentation() {
          `)
          .eq('user_id', user.id);
          
-       if (error) throw error;
+       if (error) {
+         throw error;
+       }
        
        // Flatten the data for easier filtering
         return ((data || []) as RawContactRow[]).map((c): FlattenedContact => ({

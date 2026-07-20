@@ -10,7 +10,7 @@ export interface EmailCampaign {
   content_html: string | null;
   content_text: string | null;
   status: 'draft' | 'scheduled' | 'sending' | 'sent' | 'cancelled';
-  segment_filter: Record<string, any>;
+  segment_filter: Record<string, unknown>;
   tags: string[];
   scheduled_at: string | null;
   sent_at: string | null;

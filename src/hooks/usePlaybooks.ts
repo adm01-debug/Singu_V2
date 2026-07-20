@@ -44,7 +44,7 @@ export interface PlaybookUsageLog {
   contact_id: string | null;
   deal_id: string | null;
   action: "opened" | "copied" | "shared" | "recommended" | "used_in_deal";
-  context: Record<string, any> | null;
+  context: Record<string, unknown> | null;
   opened_at: string;
 }
 

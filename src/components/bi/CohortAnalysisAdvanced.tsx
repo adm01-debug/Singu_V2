@@ -94,7 +94,7 @@ export const CohortAnalysisAdvanced = React.memo(function CohortAnalysisAdvanced
                   <tr key={cohort.cohort_month} className="border-b border-border/20 hover:bg-muted/30 transition-colors">
                     <td className="p-2 font-medium whitespace-nowrap sticky left-0 bg-card z-10">{cohort.cohort_month}</td>
                     <td className="p-2 text-center text-muted-foreground">
-                      {cohort.months?.[0]?.retention_rate ? '—' : '—'}
+                      {'—'}
                     </td>
                     {Array.from({ length: maxMonths }).map((_, i) => {
                       const m = cohort.months?.[i];

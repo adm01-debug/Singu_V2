@@ -22,7 +22,7 @@ export function useWebVitals() {
     if (import.meta.env.DEV) return;
 
     const reportMetric = (metric: Metric) => {
-      const value = metric.name === 'CLS' ? metric.value : metric.value;
+      const value = metric.value;
       const entry = {
         name: metric.name,
         value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
