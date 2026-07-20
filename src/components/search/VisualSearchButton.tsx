@@ -165,6 +165,7 @@ export function VisualSearchButton({
                     variant="secondary"
                     className="absolute top-2 right-2 h-8 w-8"
                     onClick={reset}
+                    aria-label="Limpar pesquisa"
                   >
                     <X className="h-4 w-4" />
                   </Button>

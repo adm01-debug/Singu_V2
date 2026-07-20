@@ -114,15 +114,16 @@ export function AutomacoesRulesList({
                         )}
                       </div>
                       <div className="flex items-center gap-1">
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onViewLogs(rule.id)}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onViewLogs(rule.id)}
+                          aria-label="Ver logs">
                           <History className="w-4 h-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onEditRule(rule)}>
+                        <Button variant="ghost" size="icon" aria-label="Editar" className="h-8 w-8" onClick={() => onEditRule(rule)}>
                           <Edit2 className="w-4 h-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => onDeleteRequest(rule.id)}>
+    <Button variant="ghost" size="icon" aria-label="Remover" className="h-8 w-8 text-destructive" onClick={() => onDeleteRequest(rule.id)}>
                           <Trash2 className="w-4 h-4" />
-                        </Button>
+                        </Button>           </Button>
                       </div>
                     </div>
                   </CardContent>

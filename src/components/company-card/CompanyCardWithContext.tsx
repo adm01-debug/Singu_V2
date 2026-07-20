@@ -97,7 +97,7 @@ function CompanyCardWithContextImpl({
             <div className="absolute top-3 right-3 z-20">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition-opacity h-7 w-7" onClick={(e) => e.stopPropagation()}>
+                  <Button variant="ghost" size="icon" aria-label="Mais opções" className="opacity-0 group-hover:opacity-100 transition-opacity h-7 w-7" onClick={(e) => e.stopPropagation()}>
                     <MoreVertical className="w-4 h-4" />
                   </Button>
                 </DropdownMenuTrigger>

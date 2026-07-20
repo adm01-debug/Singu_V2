@@ -82,7 +82,7 @@ interface LuxAudienceData {
                   <span className="text-sm text-muted-foreground">{label}</span>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium">{String(fiscal[key as keyof LuxFiscalData])}</span>
-                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(String(fiscal[key as keyof LuxFiscalData]), key)}>
+                    <Button variant="ghost" size="icon" aria-label="Confirmar" className="h-6 w-6" onClick={() => copyToClipboard(String(fiscal[key as keyof LuxFiscalData]), key)}>
                       {copiedField === key ? <Check className="w-3 h-3 text-success" /> : <Copy className="w-3 h-3 text-muted-foreground" />}
                     </Button>
                   </div>

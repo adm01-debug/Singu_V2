@@ -323,7 +323,7 @@ export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
               <Button 
                 type="button" 
                 variant="ghost" 
-                size="icon" 
+                size="icon" aria-label="Remover" 
                 className="text-destructive"
                 onClick={handleDelete}
                 disabled={deleteTask.isPending}

@@ -288,7 +288,7 @@ export function BehaviorAlertsPanel({ compact = false }: BehaviorAlertsPanelProp
                         <div className="flex flex-col gap-1">
                           <Button
                             variant="ghost"
-                            size="icon"
+                            size="icon" aria-label="Confirmar"
                             className="h-8 w-8 text-success hover:text-success hover:bg-success/10"
                             onClick={() => markActionTaken(alert.id)}
                             title="Marcar como resolvido"
@@ -300,19 +300,20 @@ export function BehaviorAlertsPanel({ compact = false }: BehaviorAlertsPanelProp
                             size="icon"
                             className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                             onClick={() => dismissAlert(alert.id)}
+                            aria-label="Dispensar"
                             title="Dispensar"
                           >
                             <X className="w-4 h-4" />
                           </Button>
                           <Link to={`/contatos/${alert.contactId}`}>
-                            <Button
+     <Button
                               variant="ghost"
-                              size="icon"
+                              size="icon" aria-label="Ver contato"
                               className="h-8 w-8"
                               title="Ver contato"
                             >
                               <ChevronRight className="w-4 h-4" />
-                            </Button>
+                            </Button>              </Button>
                           </Link>
                         </div>
                       </div>

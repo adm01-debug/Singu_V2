@@ -76,18 +76,17 @@ export const SequenceCard = memo(({ sequence, onToggle, onDelete, onClick }: Pro
           </div>
           <div className="flex items-center gap-1" onClick={e => e.stopPropagation()}>
             <Button
-              variant="ghost" size="icon" className="h-7 w-7"
+              variant="ghost" size="icon" aria-label="Pausar" className="h-7 w-7"
               onClick={() => onToggle(sequence.id, sequence.status)}
               disabled={sequence.status === 'archived'}
             >
               {sequence.status === 'active' ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
-            </Button>
-            <Button
-              variant="ghost" size="icon" className="h-7 w-7 text-destructive"
+            </<Button
+              variant="ghost" size="icon" aria-label="Remover" className="h-7 w-7 text-destructive"
               onClick={() => onDelete(sequence.id)}
             >
               <Trash2 className="h-3.5 w-3.5" />
-            </Button>
+            </Button>           </Button>
           </div>
         </div>
       </CardContent>

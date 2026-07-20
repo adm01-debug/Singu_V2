@@ -193,7 +193,7 @@ export function AskCrmChat() {
           />
           <Button
             type="submit"
-            size="icon"
+            size="icon" aria-label="Enviar"
             className="h-9 w-9 rounded-full shrink-0"
             disabled={loading || !input.trim()}
           >

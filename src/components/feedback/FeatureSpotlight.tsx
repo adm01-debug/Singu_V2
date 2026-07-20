@@ -90,6 +90,7 @@ export function FeatureSpotlight({
                   size="icon"
                   className="h-5 w-5 text-primary-foreground/70 hover:text-primary-foreground hover:bg-primary-foreground/10 flex-shrink-0"
                   onClick={dismiss}
+                  aria-label="Fechar"
                 >
                   <X className="w-3 h-3" />
                 </Button>

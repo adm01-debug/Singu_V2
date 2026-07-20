@@ -91,17 +91,17 @@ export function BuyingCommitteeBoard({ accountId }: { accountId: string }) {
                             <p className="text-[10px] mt-1">Influência: {m.influence_level}/10</p>
                           </div>
                           <div className="flex gap-1">
-                            <Button size="icon" variant="ghost" className="h-5 w-5" onClick={() => setEditing(m)}>
+                            <Button size="icon" aria-label="Editar" variant="ghost" className="h-5 w-5" onClick={() => setEditing(m)}>
                               <Pencil className="h-3 w-3" />
                             </Button>
-                            <Button
-                              size="icon"
+        <Button
+                              size="icon" aria-label="Remover"
                               variant="ghost"
                               className="h-5 w-5"
                               onClick={() => del.mutate({ id: m.id, account_id: accountId })}
                             >
                               <Trash2 className="h-3 w-3" />
-                            </Button>
+                            </Button>           </Button>
                           </div>
                         </div>
                       </div>

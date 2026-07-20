@@ -335,22 +335,22 @@ export function SearchPresetsMenu({
                       <>
                         <Button
                           variant="ghost"
-                          size="icon"
+                          size="icon" aria-label="Confirmar"
                           className="h-6 w-6"
                           title="Confirmar"
                           onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); commitRename(); }}
                         >
                           <Check className="w-3 h-3 text-muted-foreground" />
                         </Button>
-                        <Button
+ <Button
                           variant="ghost"
-                          size="icon"
+                          size="icon" aria-label="Cancelar"
                           className="h-6 w-6"
                           title="Cancelar"
                           onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); cancelRename(); }}
                         >
                           <X className="w-3 h-3 text-muted-foreground" />
-                        </Button>
+                        </Button>              </Button>
                       </>
                     ) : (
                       <>
@@ -394,10 +394,9 @@ export function SearchPresetsMenu({
                           }}
                         >
                           <Copy className="w-3 h-3 text-muted-foreground" />
-                        </Button>
-                        <Button
+             <Button
                           variant="ghost"
-                          size="icon"
+                          size="icon" aria-label="Remover"
                           className="h-6 w-6"
                           title="Remover"
                           onClick={(e) => {
@@ -407,6 +406,7 @@ export function SearchPresetsMenu({
                           }}
                         >
                           <Trash2 className="w-3 h-3 text-muted-foreground" />
+                        </Button>eground" />
                         </Button>
                       </>
                     )}

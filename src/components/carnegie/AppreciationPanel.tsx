@@ -128,7 +128,7 @@ export function AppreciationPanel({ contact = null, className }: AppreciationPan
                     >
                       <span className="text-xs italic flex-1 mr-2">"{template}"</span>
                       <Button
-                        size="icon"
+                        size="icon" aria-label="Copiar"
                         variant="ghost"
                         className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
                         onClick={() => copyToClipboard(template, 'Template')}

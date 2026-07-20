@@ -172,7 +172,7 @@ export function SequenceFormDialog({ open, onOpenChange, onSubmit, loading }: Pr
                     <span className="text-xs text-muted-foreground">h</span>
 
                     {steps.length > 1 && (
-                      <Button variant="ghost" size="icon" className="h-7 w-7 ml-auto" onClick={() => removeStep(idx)}>
+                      <Button variant="ghost" size="icon" aria-label="Remover" className="h-7 w-7 ml-auto" onClick={() => removeStep(idx)}>
                         <Trash2 className="h-3.5 w-3.5 text-destructive" />
                       </Button>
                     )}

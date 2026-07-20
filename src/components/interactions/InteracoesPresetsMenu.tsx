@@ -595,22 +595,22 @@ export const InteracoesPresetsMenu = React.memo(function InteracoesPresetsMenu({
                         <>
                           <Button
                             variant="ghost"
-                            size="icon"
+                            size="icon" aria-label="Confirmar"
                             className="h-6 w-6"
                             title="Confirmar"
                             onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); commitRename(); }}
                           >
                             <Check className="w-3 h-3 text-muted-foreground" />
                           </Button>
-                          <Button
+   <Button
                             variant="ghost"
-                            size="icon"
+                            size="icon" aria-label="Cancelar"
                             className="h-6 w-6"
                             title="Cancelar"
                             onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); cancelRename(); }}
                           >
                             <X className="w-3 h-3 text-muted-foreground" />
-                          </Button>
+                          </Button>              </Button>
                         </>
                       ) : (
                         <>
@@ -670,28 +670,25 @@ export const InteracoesPresetsMenu = React.memo(function InteracoesPresetsMenu({
                             }}
                           >
                             <Copy className="w-3 h-3 text-muted-foreground" />
-                          </Button>
-                          <Button
+                 <Button
                             variant="ghost"
-                            size="icon"
+                            size="icon" aria-label="Baixar JSON"
                             className="h-6 w-6"
                             title="Baixar JSON"
                             onClick={(e) => { e.stopPropagation(); exportOne(preset); }}
                           >
                             <Download className="w-3 h-3 text-muted-foreground" />
-                          </Button>
-                          <Button
+                          </Button>ro<Button
                             variant="ghost"
-                            size="icon"
+                            size="icon" aria-label="Copiar link"
                             className="h-6 w-6"
                             title="Copiar link"
                             onClick={(e) => { e.stopPropagation(); copyLink(preset); }}
                           >
                             <Link2 className="w-3 h-3 text-muted-foreground" />
-                          </Button>
-                          <Button
+                          </Button>"w<Button
                             variant="ghost"
-                            size="icon"
+                            size="icon" aria-label="Remover"
                             className="h-6 w-6"
                             title="Remover"
                             onClick={(e) => {
@@ -701,6 +698,7 @@ export const InteracoesPresetsMenu = React.memo(function InteracoesPresetsMenu({
                             }}
                           >
                             <Trash2 className="w-3 h-3 text-muted-foreground" />
+                          </Button>       <Trash2 className="w-3 h-3 text-muted-foreground" />
                           </Button>
                         </>
                       )}

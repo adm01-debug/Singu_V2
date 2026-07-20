@@ -105,7 +105,7 @@ export function NotificationGroup({
             Limpar todos
           </Button>
           {hasMore && (
-            <Button variant="ghost" size="icon" className="h-6 w-6">
+            <Button variant="ghost" size="icon" aria-label="Subir" className="h-6 w-6">
               {isExpanded ? (
                 <ChevronUp className="w-4 h-4" />
               ) : (
@@ -193,6 +193,7 @@ export function NotificationGroup({
                     e.stopPropagation();
                     onDismiss(notification.id);
                   }}
+                  aria-label="Dispensar notificação"
                 >
                   <X className="h-3 w-3" />
                 </Button>

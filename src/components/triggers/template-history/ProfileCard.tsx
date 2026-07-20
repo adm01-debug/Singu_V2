@@ -44,7 +44,7 @@ export function ProfileCard({ metrics, isExpanded, onToggle }: {
               </div>
               <p className="text-xs text-muted-foreground">Taxa de sucesso</p>
             </div>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Button variant="ghost" size="icon" aria-label="Subir" className="h-8 w-8">
               {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </Button>
           </div>

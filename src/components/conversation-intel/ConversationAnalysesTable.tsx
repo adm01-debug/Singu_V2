@@ -69,7 +69,7 @@ export function ConversationAnalysesTable({ rows }: { rows: Row[] }) {
                 {format(new Date(r.analyzed_at), "dd/MM HH:mm", { locale: ptBR })}
               </TableCell>
               <TableCell>
-                <Button variant="ghost" size="icon" className="h-7 w-7"><Eye className="h-3.5 w-3.5" /></Button>
+                <Button variant="ghost" size="icon" aria-label="Visualizar" className="h-7 w-7"><Eye className="h-3.5 w-3.5" /></Button>
               </TableCell>
             </TableRow>
           ))}

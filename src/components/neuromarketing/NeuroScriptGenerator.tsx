@@ -211,7 +211,7 @@ const NeuroScriptGenerator = ({
                         <p className="pr-8">{section.content}</p>
                         <Button
                           variant="ghost"
-                          size="icon"
+                          size="icon" aria-label="Confirmar"
                           className="absolute top-2 right-2 h-6 w-6"
                           onClick={() => handleCopy(section.content, section.name)}
                         >

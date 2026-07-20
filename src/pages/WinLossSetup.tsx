@@ -14,7 +14,7 @@ export default function WinLossSetup() {
       </Helmet>
       <div className="container mx-auto p-4 md:p-6 space-y-4 max-w-5xl">
         <header className="flex items-center gap-3">
-          <Button asChild variant="ghost" size="icon">
+          <Button asChild variant="ghost" size="icon" aria-label="Voltar">
             <Link to="/win-loss"><ArrowLeft className="h-4 w-4" /></Link>
           </Button>
           <div>

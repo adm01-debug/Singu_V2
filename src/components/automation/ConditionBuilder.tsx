@@ -88,7 +88,7 @@ export function ConditionBuilder({ conditions, onChange }: ConditionBuilderProps
             onChange={e => updateCondition(i, { value: e.target.value })}
           />
 
-          <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => removeCondition(i)}>
+          <Button variant="ghost" size="icon" aria-label="Remover" className="h-7 w-7 text-destructive" onClick={() => removeCondition(i)}>
             <Trash2 className="w-3 h-3" />
           </Button>
         </div>

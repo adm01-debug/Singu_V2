@@ -104,14 +104,13 @@ export function EmailBuilder({ blocks, onBlocksChange }: Props) {
                   >
                     <BlockPreview block={b} />
                     <div className="absolute top-1 right-1 hidden group-hover:flex gap-0.5">
-                      <Button size="icon" variant="ghost" className="h-6 w-6" onClick={(e) => { e.stopPropagation(); move(b.id, -1); }}>
+                      <Button size="icon" aria-label="Mover para cima" variant="ghost" className="h-6 w-6" onClick={(e) => { e.stopPropagation(); move(b.id, -1); }}>
                         <ArrowUp className="w-3 h-3" />
-                      </Button>
-                      <Button size="icon" variant="ghost" className="h-6 w-6" onClick={(e) => { e.stopPropagation(); move(b.id, 1); }}>
+                      </B<Button size="icon" aria-label="Mover para baixo" variant="ghost" className="h-6 w-6" onClick={(e) => { e.stopPropagation(); move(b.id, 1); }}>
                         <ArrowDown className="w-3 h-3" />
-                      </Button>
-                      <Button size="icon" variant="ghost" className="h-6 w-6 text-destructive" onClick={(e) => { e.stopPropagation(); remove(b.id); }}>
+                      </<Button size="icon" aria-label="Remover" variant="ghost" className="h-6 w-6 text-destructive" onClick={(e) => { e.stopPropagation(); remove(b.id); }}>
                         <Trash2 className="w-3 h-3" />
+                      </Button>ash2 className="w-3 h-3" />
                       </Button>
                     </div>
                   </div>

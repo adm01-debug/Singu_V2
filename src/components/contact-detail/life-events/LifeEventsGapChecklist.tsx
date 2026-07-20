@@ -107,7 +107,7 @@ export function LifeEventsGapChecklist({ lifeEvents, onAddGap }: LifeEventsGapCh
             {gap.missing && onAddGap && (
               <Button 
                 variant="ghost" 
-                size="icon" 
+                size="icon" aria-label="Adicionar" 
                 className="h-7 w-7 text-primary hover:text-primary hover:bg-primary/10"
                 onClick={() => onAddGap(gap.type)}
               >

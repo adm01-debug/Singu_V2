@@ -83,7 +83,7 @@ export function PortfolioContactCard({
               <p className="text-xs text-muted-foreground">{levelConfig.label}</p>
             </div>
 
-            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
+            <Button variant="ghost" size="icon" aria-label="Subir" className="h-8 w-8 shrink-0">
               {expanded ? (
                 <ChevronUp className="w-4 h-4" />
               ) : (

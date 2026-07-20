@@ -58,7 +58,7 @@ export default function LeadRoutingModule() {
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="h-8 w-8">
+              <Button variant="outline" size="icon" aria-label="Mais opções" className="h-8 w-8">
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>

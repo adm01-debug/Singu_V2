@@ -109,6 +109,7 @@ export function ContextualHelp({
               size="icon"
               className="h-6 w-6 -mr-1 -mt-1"
               onClick={() => setIsOpen(false)}
+              aria-label="Fechar"
             >
               <X className="w-3 h-3" />
             </Button>

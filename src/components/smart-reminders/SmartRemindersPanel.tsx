@@ -86,7 +86,7 @@ export const SmartRemindersPanel = ({ className, compact = false, contacts, inte
           </div>
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger asChild><Button size="icon" variant="ghost" onClick={() => fetchReminders(true)} disabled={isLoading}><RefreshCw className={cn('w-4 h-4', isLoading && 'animate-spin')} /></Button></TooltipTrigger>
+              <TooltipTrigger asChild><Button size="icon" aria-label="Atualizar" variant="ghost" onClick={() => fetchReminders(true)} disabled={isLoading}><RefreshCw className={cn('w-4 h-4', isLoading && 'animate-spin')} /></Button></TooltipTrigger>
               <TooltipContent>Atualizar com insights IA</TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -112,8 +112,7 @@ export const SmartRemindersPanel = ({ className, compact = false, contacts, inte
                     <div className="flex items-start gap-3">
                       <div className="p-2 bg-primary/10 rounded-lg shrink-0"><Sparkles className="w-4 h-4 text-primary" /></div>
                       <div><h4 className="font-medium text-sm text-foreground mb-1">Insights da IA</h4><p className="text-xs text-muted-foreground whitespace-pre-wrap">{aiInsights}</p></div>
-                    </div>
-                    <Button size="icon" variant="ghost" className="h-6 w-6 shrink-0" onClick={() => setShowInsights(false)}><EyeOff className="w-3 h-3" /></Button>
+                    </di<Button size="icon" aria-label="Ocultar" variant="ghost" className="h-6 w-6 shrink-0" onClick={() => setShowInsights(false)}><EyeOff className="w-3 h-3" /></Button>e="w-3 h-3" /></Button>
                   </div>
                 </CardContent>
               </Card>

@@ -239,6 +239,7 @@ export function OnboardingTour({
               size="icon"
               className="h-6 w-6 -mr-2 -mt-2"
               onClick={onSkip}
+              aria-label="Pular tour"
             >
               <X className="h-4 w-4" />
             </Button>

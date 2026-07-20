@@ -37,7 +37,7 @@ export function PhaseCard({
               <Separator />
               <div><h5 className="text-xs font-medium text-muted-foreground uppercase mb-2">Ações</h5><ul className="space-y-1">{phase.actions.map((action, idx) => (<li key={idx} className="flex items-start gap-2 text-sm"><ArrowRight className="w-3 h-3 text-primary shrink-0 mt-1" /><span>{action}</span></li>))}</ul></div>
               <div><h5 className="text-xs font-medium text-muted-foreground uppercase mb-2">Técnicas</h5><div className="flex flex-wrap gap-1">{phase.techniques.map((tech, idx) => (<Badge key={idx} variant="secondary" className="text-xs">{tech}</Badge>))}</div></div>
-              {phase.scripts.length > 0 && (<div><h5 className="text-xs font-medium text-muted-foreground uppercase mb-2">Scripts Sugeridos</h5><div className="space-y-2">{phase.scripts.map((script, idx) => (<div key={idx} className="flex items-start gap-2 p-2 rounded-lg bg-muted/50"><p className="text-sm flex-1 italic">"{script}"</p><Button variant="ghost" size="icon" className="h-6 w-6 shrink-0" onClick={() => onCopy(script)}>{copiedItem === `phase-${phase.id}` ? <Check className="w-3 h-3 text-success" /> : <Copy className="w-3 h-3" />}</Button></div>))}</div></div>)}
+              {phase.scripts.length > 0 && (<div><h5 className="text-xs font-medium text-muted-foreground uppercase mb-2">Scripts Sugeridos</h5><div className="space-y-2">{phase.scripts.map((script, idx) => (<div key={idx} className="flex items-start gap-2 p-2 rounded-lg bg-muted/50"><p className="text-sm flex-1 italic">"{script}"</p><Button variant="ghost" size="icon" aria-label="Confirmar" className="h-6 w-6 shrink-0" onClick={() => onCopy(script)}>{copiedItem === `phase-${phase.id}` ? <Check className="w-3 h-3 text-success" /> : <Copy className="w-3 h-3" />}</Button></div>))}</div></div>)}
               {phase.warnings.length > 0 && (<div className="p-2 rounded-lg bg-warning/10 border border-warning/30"><div className="flex items-start gap-2"><AlertTriangle className="w-4 h-4 text-warning shrink-0 mt-0.5" /><div className="text-sm">{phase.warnings.map((warning, idx) => (<p key={idx}>{warning}</p>))}</div></div></div>)}
               <div><h5 className="text-xs font-medium text-muted-foreground uppercase mb-2">Indicadores de Sucesso</h5><div className="flex flex-wrap gap-1">{phase.successIndicators.map((indicator, idx) => (<Badge key={idx} variant="outline" className="text-xs bg-success/5 border-success/30"><CheckCircle2 className="w-3 h-3 mr-1 text-success" />{indicator}</Badge>))}</div></div>
             </div>
@@ -61,10 +61,9 @@ export function MessagesTab({ personalizedMessages, objectionHandling, copyToCli
         {personalizedMessages.map((msg, idx) => (
           <motion.div key={idx} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.1 }} className="p-4 rounded-xl bg-muted/50 border hover:border-primary/50 transition-colors">
             <div className="flex items-start justify-between gap-3 mb-2">
-              <Badge variant="outline">{msg.context}</Badge>
-              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => copyToClipboard(msg.message, `msg-${idx}`)}>
+              <Badge variant="outline">{msg.context}<Button variant="ghost" size="icon" aria-label="Confirmar" className="h-8 w-8" onClick={() => copyToClipboard(msg.message, `msg-${idx}`)}>
                 {copiedItem === `msg-${idx}` ? <Check className="w-4 h-4 text-success" /> : <Copy className="w-4 h-4" />}
-              </Button>
+              </Button>              </Button>
             </div>
             <p className="text-sm mb-3 leading-relaxed">"{msg.message}"</p>
             <div className="flex items-center gap-2 flex-wrap">

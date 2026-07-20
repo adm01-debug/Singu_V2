@@ -141,7 +141,7 @@ export function CRMAutomationAuditLog() {
                     {formatDistanceToNow(new Date(log.created_at), { addSuffix: true, locale: ptBR })}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleViewDetails(log as AutomationLog)}>
+                    <Button variant="ghost" size="icon" aria-label="Visualizar" className="h-7 w-7" onClick={() => handleViewDetails(log as AutomationLog)}>
                       <Eye className="h-3.5 w-3.5" />
                     </Button>
                   </TableCell>

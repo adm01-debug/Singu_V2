@@ -132,7 +132,7 @@ export function CopywritingAiGeneratorTab({ contact }: Props) {
                 <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Tom de Voz</label>
                 <Button 
                   variant="ghost" 
-                  size="icon" 
+                  size="icon" aria-label="Salvar como preferência" 
                   className="h-4 w-4 text-muted-foreground hover:text-primary" 
                   title="Salvar como preferência"
                   onClick={() => saveTone(tone)}
@@ -217,9 +217,9 @@ export function CopywritingAiGeneratorTab({ contact }: Props) {
                <div className="flex items-center gap-2">
                  <Badge className="bg-primary">{sug.label}</Badge>
                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-tighter">Sugestão {sug.id}</span>
-               </div>
-               <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => copyToClipboard(sug.message, sug.id)}>
+<Button size="icon" aria-label="Confirmar" variant="ghost" className="h-8 w-8" onClick={() => copyToClipboard(sug.message, sug.id)}>
                  {copiedId === sug.id ? <CheckCircle className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
+               </Button>h-4 w-4" />}
                </Button>
              </div>
              <CardContent className="p-4">

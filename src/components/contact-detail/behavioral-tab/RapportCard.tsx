@@ -61,7 +61,7 @@ export function RapportCard({ contactId }: Props) {
                       </div>
                       <div className="flex gap-1 ml-2">
                         <Button 
-                          size="icon" 
+                          size="icon" aria-label="Confirmar" 
                           variant="ghost" 
                           className="h-6 w-6 text-green-500 hover:bg-green-50" 
                           onClick={() => approve.mutate(s)}
@@ -72,7 +72,8 @@ export function RapportCard({ contactId }: Props) {
                         <Button 
                           size="icon" 
                           variant="ghost" 
-                          className="h-6 w-6 text-destructive hover:bg-red-50" 
+                          className="h-6 w-6 text-destructive hover:bg-red-50"
+                          aria-label="Rejeitar"
                           onClick={() => reject.mutate(s.id)}
                           disabled={reject.isPending}
                         >

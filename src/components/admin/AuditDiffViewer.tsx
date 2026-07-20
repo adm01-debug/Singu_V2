@@ -44,7 +44,7 @@ function CopyButton({ text }: { text: string }) {
     setTimeout(() => setCopied(false), 2000);
   };
   return (
-    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleCopy}>
+    <Button variant="ghost" size="icon" aria-label="Confirmar" className="h-6 w-6" onClick={handleCopy}>
       {copied ? <Check className="w-3 h-3 text-success" /> : <Copy className="w-3 h-3" />}
     </Button>
   );

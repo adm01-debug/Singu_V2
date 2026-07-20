@@ -292,7 +292,7 @@ export default function RoutingRulesTab() {
                         />
                       </DialogContent>
                     </Dialog>
-                    <Button variant="ghost" size="icon" onClick={() => setDeleteId(r.id)}>
+                    <Button variant="ghost" size="icon" aria-label="Remover" onClick={() => setDeleteId(r.id)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

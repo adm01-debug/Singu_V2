@@ -188,18 +188,18 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
             <Badge variant="outline">{alerts.length} alertas</Badge>
             <Button
               variant="ghost"
-              size="icon"
+              size="icon" aria-label="Configurações"
               onClick={() => setShowSettings(!showSettings)}
             >
               <Settings className="w-4 h-4" />
-            </Button>
-            <Button
+       <Button
               variant="ghost"
-              size="icon"
+              size="icon" aria-label="Atualizar"
               onClick={fetchAlerts}
               disabled={loading}
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            </Button>`} />
             </Button>
           </div>
         </div>
@@ -383,6 +383,7 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
                         variant="ghost"
                         size="icon"
                         onClick={() => dismissAlert(alert.id)}
+                        aria-label="Dispensar"
                         className="shrink-0"
                       >
                         <X className="w-4 h-4" />

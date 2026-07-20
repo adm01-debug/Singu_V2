@@ -265,7 +265,7 @@ export function NextBestAction({ contactId }: Props) {
                          <Progress value={suggestion.confidence || 85} className="h-1 w-16" />
                        </div>
                      </div>
-                     <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(script)}>
+                     <Button variant="ghost" size="icon" aria-label="Copiar" className="h-6 w-6" onClick={() => copyToClipboard(script)}>
                        <Copy className="h-3 w-3" />
                      </Button>
                    </div>

@@ -130,7 +130,7 @@ export function WeeklyReportSettingsTab({
                   />
                   <Button
                     variant="outline"
-                    size="icon"
+                    size="icon" aria-label="Enviar"
                     onClick={onSendTest}
                     disabled={!localSettings.email_address}
                   >

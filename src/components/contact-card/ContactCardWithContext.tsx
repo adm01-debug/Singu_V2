@@ -56,7 +56,7 @@ function ContactDropdownActions({ contact, onEdit, onDelete }: { contact: Contac
       <DropdownMenuTrigger asChild>
         <Button 
           variant="ghost" 
-          size="icon" 
+          size="icon" aria-label="Mais opções" 
           className="opacity-0 group-hover:opacity-100 transition-opacity h-11 w-11 md:h-7 md:w-7" // 44px em mobile para touch target (WCAG)
           onClick={(e) => e.stopPropagation()}
         >

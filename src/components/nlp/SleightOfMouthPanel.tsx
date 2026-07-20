@@ -156,17 +156,19 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
                         
                         <div className="flex items-center gap-2">
                           <div className="flex items-center bg-muted/50 rounded-full px-1">
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label="Útil"
                               className="h-6 w-6 rounded-full text-muted-foreground hover:text-success"
                               onClick={() => addReframingFeedback(item.id, "positive")}
                             >
                               <ThumbsUp className="h-3.5 w-3.5" />
                             </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label="Não útil"
                               className="h-6 w-6 rounded-full text-muted-foreground hover:text-destructive"
                               onClick={() => addReframingFeedback(item.id, "negative")}
                             >
@@ -175,7 +177,7 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
                           </div>
                           <Button 
                             variant="ghost" 
-                            size="icon" 
+                            size="icon" aria-label="Confirmar" 
                             className="h-7 w-7 text-success"
                             onClick={() => updateStatus.mutate({ id: item.id, status: "used" })}
                             disabled={item.status === "used"}

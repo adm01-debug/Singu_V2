@@ -177,7 +177,7 @@ const NLPEvolutionTimeline: React.FC<NLPEvolutionTimelineProps> = ({
                 <SelectItem value="180d">6 meses</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="icon" onClick={() => setRefreshCounter(c => c + 1)}><RefreshCw className="w-4 h-4" /></Button>
+            <Button variant="outline" size="icon" aria-label="Atualizar" onClick={() => setRefreshCounter(c => c + 1)}><RefreshCw className="w-4 h-4" /></Button>
           </div>
         </div>
       </CardHeader>

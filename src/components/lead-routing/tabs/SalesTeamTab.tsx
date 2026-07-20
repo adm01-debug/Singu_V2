@@ -116,7 +116,7 @@ function DeleteConfirmDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+        <Button variant="ghost" size="icon" aria-label="Remover"><Trash2 className="h-4 w-4 text-destructive" /></Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -248,7 +248,7 @@ export default function SalesTeamTab() {
                     />
                     <Dialog open={editingId === m.id} onOpenChange={(o) => setEditingId(o ? m.id : null)}>
                       <DialogTrigger asChild>
-                        <Button variant="ghost" size="icon"><Edit className="h-4 w-4" /></Button>
+   <Button variant="ghost" size="icon" aria-label="Editar"><Edit className="h-4 w-4" /></Button>"h-4 w-4" /></Button>
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader><DialogTitle>Editar {m.name}</DialogTitle></DialogHeader>

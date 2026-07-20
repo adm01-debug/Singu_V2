@@ -113,7 +113,7 @@ export function EmpresasContent(props: Props) {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input placeholder="Buscar empresa, segmento ou cidade..." value={localSearch} onChange={(e) => onSearchChange(e.target.value)} className={`pl-10 ${isSearching ? 'pr-10' : ''}`} />
-          {isSearching && <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" onClick={clearSearch}><X className="h-4 w-4" /></Button>}
+          {isSearching && <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" aria-label="Limpar pesquisa" onClick={clearSearch}><X className="h-4 w-4" /></Button>}
         </div>
         <div className="flex items-center gap-2">
           <SearchPresetsMenu context="companies" buttonLabel="Listas" title="Listas salvas" description="Salve combinações de filtros para segmentar empresas em um clique."

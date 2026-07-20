@@ -164,7 +164,7 @@ export default function AdminSecretsManagement() {
                   value={generatedSecret}
                   className="font-mono text-xs"
                 />
-                <Button size="icon" variant="outline" onClick={handleCopy}>
+                <Button size="icon" aria-label="Confirmar" variant="outline" onClick={handleCopy}>
                   {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 </Button>
               </div>

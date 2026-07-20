@@ -37,7 +37,7 @@ export function SelectedNodePanel({ node, onClose }: SelectedNodePanelProps) {
             {node.role && <p className="text-xs text-muted-foreground truncate">{node.role}</p>}
           </div>
         </div>
-        <Button size="icon" variant="ghost" className="h-6 w-6" onClick={onClose}>
+        <Button size="icon" variant="ghost" aria-label="Fechar" className="h-6 w-6" onClick={onClose}>
           <X className="w-4 h-4" />
         </Button>
       </div>

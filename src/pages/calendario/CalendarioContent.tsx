@@ -56,9 +56,8 @@ export function CalendarioContent({ currentMonth, selectedDate, followUps, follo
             <div className="flex items-center justify-between">
               <CardTitle className="text-xl capitalize">{format(currentMonth, 'MMMM yyyy', { locale: ptBR })}</CardTitle>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="icon" onClick={onPrevMonth}><ChevronLeft className="w-4 h-4" /></Button>
-                <Button variant="outline" size="sm" onClick={onToday}>Hoje</Button>
-                <Button variant="outline" size="icon" onClick={onNextMonth}><ChevronRight className="w-4 h-4" /></Button>
+                <Button variant="outline" size="icon" aria-label="Anterior" onClick={onPrevMonth}><ChevronLeft className="w-4 h-4" /></Button>
+                <Button variant="outline" size="sm" onClick={onToday}>Hoje</Bu<Button variant="outline" size="icon" aria-label="Próximo" onClick={onNextMonth}><ChevronRight className="w-4 h-4" /></Button>="w-4 h-4" /></Button>
               </div>
             </div>
           </CardHeader>

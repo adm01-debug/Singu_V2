@@ -182,7 +182,7 @@ import { logger } from "@/lib/logger";
       <Button
         type="button"
         variant={isRecording ? "destructive" : "outline"}
-        size="icon"
+        size="icon" aria-label="Carregando"
         onClick={handleClick}
         disabled={disabled || isProcessing}
         className={cn(

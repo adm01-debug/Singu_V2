@@ -462,20 +462,20 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                       <div className="flex items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                         <Button 
                           variant="ghost" 
-                          size="icon" 
+                          size="icon" aria-label="Editar" 
                           className="h-7 w-7 text-muted-foreground"
                           onClick={() => startEditing(event)}
                         >
                           <Edit2 className="h-3.5 w-3.5" />
                         </Button>
-                        <Button 
+    <Button 
                           variant="ghost" 
-                          size="icon" 
+                          size="icon" aria-label="Remover" 
                           className="h-7 w-7 text-destructive"
                           onClick={() => deleteEventMutation.mutate(event.id)}
                         >
                           <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
+                        </Button>           </Button>
                       </div>
                     </div>
                   </CardContent>

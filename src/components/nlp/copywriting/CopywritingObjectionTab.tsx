@@ -124,7 +124,7 @@
                  "{response.suggested_message}"
                </div>
                <Button 
-                 size="icon" 
+                 size="icon" aria-label="Confirmar" 
                  variant="outline" 
                  className="absolute top-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
                  onClick={() => copyToClipboard(response.suggested_message)}

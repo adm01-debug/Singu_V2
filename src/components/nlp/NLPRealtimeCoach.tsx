@@ -356,7 +356,7 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
                             variant="ghost" 
                             size="icon" 
                             className={`h-7 w-7 rounded-full ${feedbackGiven[s.id] === "up" ? 'text-success bg-success/10' : 'text-muted-foreground hover:text-success'}`}
-                            onClick={() => handleFeedback(s.id, 'up')}
+                            aria-label="Útil" onClick={() => handleFeedback(s.id, 'up')}
                           >
                             <ThumbsUp className="h-3 w-3" />
                           </Button>
@@ -364,7 +364,7 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
                             variant="ghost" 
                             size="icon" 
                             className={`h-7 w-7 rounded-full ${feedbackGiven[s.id] === "down" ? 'text-destructive bg-destructive/10' : 'text-muted-foreground hover:text-destructive'}`}
-                            onClick={() => handleFeedback(s.id, 'down')}
+                            aria-label="Não útil" onClick={() => handleFeedback(s.id, 'down')}
                           >
                             <ThumbsDown className="h-3 w-3" />
                           </Button>

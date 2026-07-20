@@ -11,7 +11,7 @@ export default function ConversationIntelligenceSetup() {
     <AppLayout>
       <div className="space-y-6 p-4 md:p-6">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={() => nav("/conversation-intelligence")}><ArrowLeft className="h-4 w-4" /></Button>
+          <Button variant="ghost" size="icon" aria-label="Voltar" onClick={() => nav("/conversation-intelligence")}><ArrowLeft className="h-4 w-4" /></Button>
           <div>
             <h1 className="text-2xl font-bold">Setup — Conversation Intelligence</h1>
             <p className="text-sm text-muted-foreground">Configure o catálogo de tópicos e os scorecards de coaching.</p>

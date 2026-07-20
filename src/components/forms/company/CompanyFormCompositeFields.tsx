@@ -113,7 +113,7 @@ export function CompanyFormCompositeFields({ form }: Props) {
               <Button
                 type="button"
                 variant="ghost"
-                size="icon"
+                size="icon" aria-label="Remover"
                 className="h-8 w-8 text-destructive"
                 onClick={() => removePhone(index)}
               >
@@ -202,16 +202,15 @@ export function CompanyFormCompositeFields({ form }: Props) {
                 )}
               />
             </div>
-            <div className="md:col-span-1 flex justify-end">
-              <Button
+            <div className="md:col-span-1 flex justify<Button
                 type="button"
                 variant="ghost"
-                size="icon"
+                size="icon" aria-label="Remover"
                 className="h-8 w-8 text-destructive"
                 onClick={() => removeEmail(index)}
               >
                 <Trash2 className="w-4 h-4" />
-              </Button>
+              </Button>            </Button>
             </div>
           </div>
         ))}
@@ -238,15 +237,15 @@ export function CompanyFormCompositeFields({ form }: Props) {
         )}
 
         {addressFields.map((field, index) => (
-          <div key={field.id} className="space-y-3 border border-border/50 p-4 rounded-lg bg-muted/5 relative">
-            <Button
+          <div key={field.id} className="space-y-3 border border-border/50 p-4 rou<Button
               type="button"
               variant="ghost"
-              size="icon"
+              size="icon" aria-label="Remover"
               className="absolute top-2 right-2 h-8 w-8 text-destructive"
               onClick={() => removeAddress(index)}
             >
               <Trash2 className="w-4 h-4" />
+            </Button>assName="w-4 h-4" />
             </Button>
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3">

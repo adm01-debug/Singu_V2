@@ -66,7 +66,7 @@ export function EmailThreadSummaryCard({ contactId, subject, interactionId, thre
             </span>
             <Button
               variant="ghost"
-              size="icon"
+              size="icon" aria-label="Regenerar"
               className="h-6 w-6"
               onClick={handleGenerate}
               disabled={generating}

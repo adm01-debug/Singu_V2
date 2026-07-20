@@ -154,7 +154,7 @@ export function IdentityLabelingPanel({ contact = null, className }: IdentityLab
                     >
                       <span className="text-xs italic">"{phrase}"</span>
                       <Button
-                        size="icon"
+                        size="icon" aria-label="Copiar"
                         variant="ghost"
                         className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
                         onClick={() => copyToClipboard(phrase, 'Frase')}

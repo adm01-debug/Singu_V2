@@ -189,7 +189,7 @@
        <Card className="lg:col-span-2 relative overflow-hidden">
          <div className="absolute top-0 right-0 p-4">
            {script && (
-             <Button size="icon" variant="ghost" onClick={handleCopy}>
+             <Button size="icon" aria-label="Confirmar" variant="ghost" onClick={handleCopy}>
                {copied ? <Check className="w-4 h-4 text-green-500" /> : <CopyIcon className="w-4 h-4" />}
              </Button>
            )}

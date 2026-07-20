@@ -83,7 +83,7 @@ export function PreContactBriefing({ className, compact = false }: PreContactBri
                 </div>
                 <div className="flex items-center gap-2">
                   <Link to={`/contatos/${briefing.contact.id}`}><Button variant="ghost" size="sm"><User className="w-4 h-4 mr-1" />Perfil</Button></Link>
-                  <Button variant="ghost" size="icon" onClick={() => dismissBriefing(briefing.interaction.id)} className="text-muted-foreground hover:text-foreground"><X className="w-5 h-5" /></Button>
+                  <Button variant="ghost" size="icon" onClick={() => dismissBriefing(briefing.interaction.id)} aria-label="Dispensar" className="text-muted-foreground hover:text-foreground"><X className="w-5 h-5" /></Button>
                 </div>
               </div>
             </CardHeader>

@@ -118,6 +118,7 @@ export const BehavioralAuditSubTab = ({ contactId }: BehavioralAuditSubTabProps)
                             variant="ghost" 
                             size="icon" 
                             className="h-6 w-6 rounded-full hover:text-success"
+                            aria-label="Aprovar análise"
                             onClick={() => log.analysis_type === "vak" ? validateVAK(log.id, true) : validateMetaprogram(log.id, true)}
                           >
                             <ThumbsUp className="h-3 w-3" />
@@ -126,6 +127,7 @@ export const BehavioralAuditSubTab = ({ contactId }: BehavioralAuditSubTabProps)
                             variant="ghost" 
                             size="icon" 
                             className="h-6 w-6 rounded-full hover:text-destructive"
+                            aria-label="Rejeitar análise"
                             onClick={() => log.analysis_type === "vak" ? validateVAK(log.id, false) : validateMetaprogram(log.id, false)}
                           >
                             <ThumbsDown className="h-3 w-3" />

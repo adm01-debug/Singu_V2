@@ -86,7 +86,7 @@ export function PixelSetupCard() {
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <Switch checked={p.active} onCheckedChange={(v) => toggle.mutate({ id: p.id, active: v })} />
-                    <Button variant="ghost" size="icon" onClick={() => remove.mutate(p.id)}>
+                    <Button variant="ghost" size="icon" aria-label="Remover" onClick={() => remove.mutate(p.id)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>

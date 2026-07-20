@@ -65,7 +65,7 @@ export const SocialProfileCard = ({ profile }: { profile: LuxSocialProfile }) =>
           </Badge>
         )}
         {profile.url && (
-          <Button variant="ghost" size="icon" className="h-7 w-7" asChild>
+          <Button variant="ghost" size="icon" aria-label="Abrir em nova aba" className="h-7 w-7" asChild>
             <a href={profile.url} target="_blank" rel="noopener noreferrer"><ExternalLink className="w-3.5 h-3.5" /></a>
           </Button>
         )}
@@ -116,24 +116,23 @@ export const SocialProfileCard = ({ profile }: { profile: LuxSocialProfile }) =>
          </p>
        </div>
        <div className="flex items-center gap-1">
-         {onAddContact && (
-           <Button 
+        <Button 
              variant="ghost" 
-             size="icon" 
+             size="icon" aria-label="Carregando" 
              className="h-7 w-7 text-primary" 
              onClick={handleAdd}
              disabled={adding || added}
            >
              {adding ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : added ? <Check className="w-3.5 h-3.5" /> : <UserPlus className="w-3.5 h-3.5" />}
+           </Button>h-3.5" />}
            </Button>
-         )}
-         {stakeholder.email && (
-           <Button variant="ghost" size="icon" className="h-7 w-7" asChild>
+ <Button variant="ghost" size="icon" aria-label="Compartilhar" className="h-7 w-7" asChild>
              <a href={`mailto:${stakeholder.email}`}><Share2 className="w-3.5 h-3.5" /></a>
+           </Button>re2 className="w-3.5 h-3.5" /></a>
            </Button>
          )}
          {stakeholder.linkedin && (
-           <Button variant="ghost" size="icon" className="h-7 w-7" asChild>
+           <Button variant="ghost" size="icon" aria-label="Abrir perfil no LinkedIn" className="h-7 w-7" asChild>
              <a href={stakeholder.linkedin} target="_blank" rel="noopener noreferrer"><Linkedin className="w-3.5 h-3.5" /></a>
            </Button>
          )}
