@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { Settings2, UserCheck } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -19,6 +20,7 @@ interface Props {
 type MetricType = 'score' | 'sentiment' | 'last_contact' | 'stage';
 
 export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }: Props) {
+  const { user } = useAuth();
   const [metricType, setMetricType] = useState<MetricType>('score');
   const [newValue, setNewValue] = useState('');
   const [reason, setReason] = useState('');
@@ -40,7 +42,6 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
         updates.relationship_stage = newValue;
       }
 
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Usuário não autenticado');
 
       const { error: logError } = await supabase.from('crm_metric_overrides').insert({

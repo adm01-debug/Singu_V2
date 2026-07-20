@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { ThumbsUp, ThumbsDown, TrendingDown, AlertTriangle, ExternalLink, RefreshCcw, Loader2, Download } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -153,6 +154,7 @@ function RankingTable({ items, sort }: { items: LabelAgg[]; sort: 'down' | 'up' 
 }
 
 function ContactsWithMostDownvotes({ rows }: { rows: Row[] }) {
+  const { user } = useAuth();
   const [batchRunning, setBatchRunning] = useState(false);
 
   const agg = useMemo(() => {
@@ -177,14 +179,12 @@ function ContactsWithMostDownvotes({ rows }: { rows: Row[] }) {
   async function runBatch() {
     if (eligibleForRebatch.length === 0) return;
     setBatchRunning(true);
+    const userId = user?.id ?? null;
     let ok = 0;
     let fail = 0;
     // Sequencial + delay pequeno para evitar rate-limit da IA
     for (const contactId of eligibleForRebatch) {
       const nowIso = new Date().toISOString();
-      // Registra tentativa na fila de auditoria antes de invocar
-      const { data: sessionRes } = await supabase.auth.getUser();
-      const userId = sessionRes?.user?.id ?? null;
       await supabase
         .from('behavioral_profile_regen_queue')
         .upsert(

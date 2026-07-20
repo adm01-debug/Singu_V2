@@ -91,7 +91,8 @@ export async function unsubscribeFromPush(): Promise<boolean> {
 }
 
 async function saveSubscription(subscription: PushSubscription): Promise<void> {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
   if (!user) throw new Error('User not authenticated');
 
   const subscriptionJSON = subscription.toJSON();
@@ -116,7 +117,8 @@ async function saveSubscription(subscription: PushSubscription): Promise<void> {
 }
 
 async function removeSubscription(endpoint: string): Promise<void> {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
   if (!user) return;
 
   const { error } = await supabase
