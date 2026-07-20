@@ -138,7 +138,11 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
 
   const handleRejectSuggestion = async (id: string) => {
     const { error } = await supabase.from('suggested_life_events').update({ status: 'rejected' }).eq('id', id);
-    if (!error) refetchSuggestions();
+    if (error) {
+      toast({ title: "Erro ao rejeitar", description: error.message, variant: "destructive" });
+    } else {
+      refetchSuggestions();
+    }
   };
 
   const createEventMutation = useMutation({
