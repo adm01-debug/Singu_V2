@@ -172,10 +172,11 @@ Deno.serve(async (req) => {
 
     if (!result.ok) {
       console.error(`[lux-trigger] Webhook failed after retries: ${result.error}`);
-      await serviceClient
+      serviceClient
         .from('lux_intelligence')
         .update({ status: 'error', error_message: `Webhook failed: ${result.error}` })
-        .eq('id', luxRecord.id);
+        .eq('id', luxRecord.id)
+        .catch((e: unknown) => console.error('lux_intelligence error update error:', e));
     } else {
       console.log(`[lux-trigger] Webhook triggered successfully (status=${result.status})`);
     }
