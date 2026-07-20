@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export type ConnectionType = 'supabase_external' | 'bitrix24' | 'n8n' | 'mcp_claude' | 'custom';
@@ -34,6 +35,7 @@ export interface ConnectionTestLog {
 }
 
 export function useConnections() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   const { data: connections = [], isLoading } = useQuery({
@@ -50,7 +52,6 @@ export function useConnections() {
 
   const upsert = useMutation({
     mutationFn: async (input: Partial<ConnectionConfig> & { name: string; connection_type: ConnectionType }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
 
       if (input.id) {

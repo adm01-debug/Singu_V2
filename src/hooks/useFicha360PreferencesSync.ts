@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import type { NbaPriority, NbaSort } from './useProximosPassosFilters';
 
 const SCOPE = 'ficha360';
@@ -56,6 +57,7 @@ const QK = ['user-ui-preferences', SCOPE] as const;
  * - Salva (debounced) sempre que mudarem.
  */
 export function useFicha360PreferencesSync(opts: {
+  const { user } = useAuth();
   current: Ficha360Preferences;
   hydrate: (prefs: Ficha360Preferences) => void;
   hasUrlOverride: boolean;
@@ -69,12 +71,11 @@ export function useFicha360PreferencesSync(opts: {
   const { data: remote } = useQuery({
     queryKey: QK,
     queryFn: async (): Promise<Ficha360Preferences> => {
-      const { data: auth } = await supabase.auth.getUser();
-      if (!auth?.user?.id) return { ...DEFAULTS };
+      if (!user?.id) return { ...DEFAULTS };
       const { data, error } = await supabase
         .from('user_ui_preferences')
         .select('preferences')
-        .eq('user_id', auth.user.id)
+        .eq('user_id', user!.id)
         .eq('scope', SCOPE)
         .maybeSingle();
       if (error) throw error;
@@ -85,8 +86,7 @@ export function useFicha360PreferencesSync(opts: {
 
   const upsert = useMutation({
     mutationFn: async (prefs: Ficha360Preferences) => {
-      const { data: auth } = await supabase.auth.getUser();
-      const userId = auth?.user?.id;
+      const userId = user?.id;
       if (!userId) return;
       const { error } = await supabase
         .from('user_ui_preferences')

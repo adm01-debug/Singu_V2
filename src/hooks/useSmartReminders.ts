@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { logger } from "@/lib/logger";
 
@@ -80,7 +81,6 @@ export const useSmartReminders = (autoFetch = true) => {
     }, 5000);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         setError('Usuário não autenticado');
         return;

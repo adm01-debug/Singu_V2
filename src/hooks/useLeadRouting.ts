@@ -152,10 +152,8 @@ export function useDistributeLead() {
 
       const selected = sorted[0];
 
-      // Create assignment
-      const { error: assignError } = await supabase
-        .from('lead_assignments')
-        .insert({
+      const [{ error: assignError }, { error: updateError }] = await Promise.all([
+        supabase.from('lead_assignments').insert({
           user_id: user.id,
           contact_id: contactId ?? null,
           company_id: companyId ?? null,
@@ -165,18 +163,14 @@ export function useDistributeLead() {
           status: 'active',
           routing_rule_id: ruleId ?? null,
           sla_deadline: new Date(Date.now() + 4 * 3600_000).toISOString(),
-        } as never);
-      if (assignError) throw assignError;
-
-      // Update member counts
-      const { error: updateError } = await supabase
-        .from('sales_team_members')
-        .update({
+        } as never),
+        supabase.from('sales_team_members').update({
           current_lead_count: selected.current_lead_count + 1,
           leads_today: selected.leads_today + 1,
           last_assigned_at: new Date().toISOString(),
-        } as never)
-        .eq('id', selected.id);
+        } as never).eq('id', selected.id),
+      ]);
+      if (assignError) throw assignError;
       if (updateError) logger.error('Erro ao atualizar contadores:', updateError);
 
       return selected;

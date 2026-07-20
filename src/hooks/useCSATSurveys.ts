@@ -19,13 +19,13 @@ export interface CSATSurvey {
 }
 
 export function useCSATSurveys(contactId?: string) {
+  const { user } = useAuth();
   const qc = useQueryClient();
   const key = ['csat-surveys', contactId];
 
   const { data: surveys = [], isLoading } = useQuery({
     queryKey: key,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       let query = supabase.from('csat_surveys').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
       if (contactId) query = query.eq('contact_id', contactId);
@@ -38,7 +38,6 @@ export function useCSATSurveys(contactId?: string) {
 
   const send = useMutation({
     mutationFn: async (input: { contactId: string; interactionId?: string; ticketId?: string; channel?: string }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('csat_surveys').insert({
         user_id: user.id,

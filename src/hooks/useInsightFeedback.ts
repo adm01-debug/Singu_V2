@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import type { EvidenceKind } from '@/components/contacts/EvidenceDrillDownSheet';
 
 export type InsightVote = 1 | -1;
@@ -20,13 +21,13 @@ export function useInsightFeedback(
   kind: EvidenceKind | null | undefined,
   label: string | null | undefined,
 ) {
+  const { user } = useAuth();
   return useQuery({
     queryKey: key(contactId ?? '', kind ?? 'preference', label ?? ''),
     enabled: !!contactId && !!kind && !!label && label.trim().length > 0,
     staleTime: 30_000,
     queryFn: async (): Promise<InsightFeedbackRow | null> => {
-      const { data: auth } = await supabase.auth.getUser();
-      const uid = auth.user?.id;
+      const uid = user?.id;
       if (!uid) return null;
       const { data, error } = await supabase
         .from('behavioral_insight_feedback')
@@ -43,6 +44,7 @@ export function useInsightFeedback(
 }
 
 export function useSubmitInsightFeedback() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: {
@@ -52,8 +54,7 @@ export function useSubmitInsightFeedback() {
       vote: InsightVote;
       note?: string | null;
     }) => {
-      const { data: auth } = await supabase.auth.getUser();
-      const uid = auth.user?.id;
+      const uid = user?.id;
       if (!uid) throw new Error('Você precisa estar autenticado para enviar feedback.');
       const payload = {
         user_id: uid,
@@ -78,11 +79,11 @@ export function useSubmitInsightFeedback() {
 }
 
 export function useRemoveInsightFeedback() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { contactId: string; kind: EvidenceKind; label: string }) => {
-      const { data: auth } = await supabase.auth.getUser();
-      const uid = auth.user?.id;
+      const uid = user?.id;
       if (!uid) throw new Error('Você precisa estar autenticado.');
       const { error } = await supabase
         .from('behavioral_insight_feedback')

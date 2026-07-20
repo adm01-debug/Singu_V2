@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export type FieldType = 'text' | 'number' | 'date' | 'select' | 'boolean' | 'url' | 'email' | 'phone';
@@ -27,13 +28,13 @@ export interface CustomFieldValue {
 }
 
 export function useCustomFields(entityType: EntityType) {
+  const { user } = useAuth();
   const qc = useQueryClient();
   const key = ['custom-fields', entityType];
 
   const { data: fields = [], isLoading } = useQuery({
     queryKey: key,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase
         .from('custom_fields')
@@ -49,7 +50,6 @@ export function useCustomFields(entityType: EntityType) {
 
   const createField = useMutation({
     mutationFn: async (input: Omit<CustomField, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from('custom_fields')
@@ -98,6 +98,7 @@ export function useCustomFields(entityType: EntityType) {
 }
 
 export function useCustomFieldValues(entityType: EntityType, entityId?: string) {
+  const { user } = useAuth();
   const qc = useQueryClient();
   const key = ['custom-field-values', entityType, entityId];
 
@@ -105,7 +106,6 @@ export function useCustomFieldValues(entityType: EntityType, entityId?: string) 
     queryKey: key,
     queryFn: async () => {
       if (!entityId) return [];
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
 
       const { data: fields } = await supabase
@@ -133,7 +133,6 @@ export function useCustomFieldValues(entityType: EntityType, entityId?: string) 
   const saveValue = useMutation({
     mutationFn: async ({ fieldId, value }: { fieldId: string; value: string | null }) => {
       if (!entityId) throw new Error('Entity ID required');
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
 
       const { error } = await supabase

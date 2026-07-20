@@ -55,21 +55,14 @@ export function useAIApprovals(contactId?: string) {
     mutationFn: async (suggestion: SuggestedRapportIntel) => {
       if (!user) throw new Error('Usuário não autenticado');
 
-      const { error: updateError } = await supabase
-        .from('suggested_rapport_intel')
-        .update({ status: 'approved' })
-        .eq('id', suggestion.id);
+      const field = suggestion.type === 'hobby' ? 'hobbies' : 'interests';
+
+      const [{ error: updateError }, { data: contact, error: contactError }] = await Promise.all([
+        supabase.from('suggested_rapport_intel').update({ status: 'approved' }).eq('id', suggestion.id),
+        supabase.from('contacts').select('hobbies, interests, rapport_metadata').eq('id', suggestion.contact_id).maybeSingle(),
+      ]);
 
       if (updateError) throw updateError;
-
-      const field = suggestion.type === 'hobby' ? 'hobbies' : 'interests';
-      
-      const { data: contact, error: contactError } = await supabase
-        .from('contacts')
-        .select(`hobbies, interests, rapport_metadata`)
-        .eq('id', suggestion.contact_id)
-        .maybeSingle();
-
       if (contactError) throw contactError;
 
       const contactData = contact as { hobbies: string[] | null, interests: string[] | null, rapport_metadata: Record<string, Record<string, unknown>> | null } | null;

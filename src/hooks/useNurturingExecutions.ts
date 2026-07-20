@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export interface NurturingExecution {
@@ -16,10 +17,10 @@ export interface NurturingExecution {
 }
 
 export function useNurturingExecutions(workflowId?: string) {
+  const { user } = useAuth();
   return useQuery({
     queryKey: ['nurturing-executions', workflowId],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       let q = supabase.from('nurturing_executions').select('*').eq('user_id', user.id).order('started_at', { ascending: false }).limit(200);
       if (workflowId) q = q.eq('workflow_id', workflowId);

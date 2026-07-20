@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export interface LandingPageBlock {
@@ -38,13 +39,13 @@ export interface LandingPageSubmission {
 }
 
 export function useLandingPages() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   const key = ['landing-pages'];
 
   const { data: pages = [], isLoading } = useQuery({
     queryKey: key,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase
         .from('landing_pages')
@@ -59,7 +60,6 @@ export function useLandingPages() {
 
   const create = useMutation({
     mutationFn: async (input: Partial<LandingPage>) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const slug = (input.slug || `lp-${Date.now()}`).toLowerCase().replace(/[^a-z0-9-]/g, '-').slice(0, 60);
       const { data, error } = await supabase

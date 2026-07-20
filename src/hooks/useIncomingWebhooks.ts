@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export type WebhookTargetEntity = 'contact' | 'company' | 'deal' | 'interaction' | 'note' | 'custom';
@@ -44,6 +45,7 @@ function genToken() {
 }
 
 export function useIncomingWebhooks() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   const { data: webhooks = [], isLoading } = useQuery({
@@ -60,7 +62,6 @@ export function useIncomingWebhooks() {
 
   const upsert = useMutation({
     mutationFn: async (input: Partial<IncomingWebhook> & { name: string; target_entity: WebhookTargetEntity }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
 
       if (input.id) {

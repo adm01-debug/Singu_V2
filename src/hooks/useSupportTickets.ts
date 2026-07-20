@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export interface SupportTicket {
@@ -31,13 +32,13 @@ export interface TicketComment {
 }
 
 export function useSupportTickets() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   const key = ['support-tickets'];
 
   const { data: tickets = [], isLoading } = useQuery({
     queryKey: key,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase
         .from('support_tickets')
@@ -52,7 +53,6 @@ export function useSupportTickets() {
 
   const create = useMutation({
     mutationFn: async (input: Partial<SupportTicket>) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       
       const insertData = {
@@ -104,6 +104,7 @@ export function useSupportTickets() {
 }
 
 export function useTicketComments(ticketId?: string) {
+  const { user } = useAuth();
   const qc = useQueryClient();
   const key = ['ticket-comments', ticketId];
 
@@ -125,7 +126,6 @@ export function useTicketComments(ticketId?: string) {
   const addComment = useMutation({
     mutationFn: async ({ content, isInternal }: { content: string; isInternal?: boolean }) => {
       if (!ticketId) throw new Error('Ticket ID required');
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('ticket_comments').insert({
         ticket_id: ticketId,

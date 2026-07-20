@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 
 export interface CompleteDashboardData {
   overview: {
@@ -28,10 +29,10 @@ export interface CompleteDashboardData {
 }
 
 export function useCompleteDashboard() {
+  const { user } = useAuth();
   return useQuery({
     queryKey: ['complete-dashboard'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
       const { data, error } = await callExternalRpc<CompleteDashboardData>(

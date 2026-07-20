@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 
 export interface InteractionHistoryItem {
   id: string;
@@ -60,10 +61,10 @@ export function useInteractionHistory(companyId?: string, tipo?: string, limit =
 }
 
 export function usePendingFollowups(limit = 20) {
+  const { user } = useAuth();
   return useQuery({
     queryKey: ['pending-followups', limit],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<PendingFollowup[]>(
         'get_pending_followups',

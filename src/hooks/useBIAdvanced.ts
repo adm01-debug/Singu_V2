@@ -1,5 +1,6 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 // ── Demand Forecast ──
@@ -34,10 +35,10 @@ export interface ProfitabilityItem {
 }
 
 export function useProfitabilityByContact() {
+  const { user } = useAuth();
   return useQuery({
     queryKey: ['bi-profitability-contacts'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
       // Both queries are independent — run in parallel
@@ -87,10 +88,10 @@ export interface GeoSalesPoint {
 }
 
 export function useGeoSalesData() {
+  const { user } = useAuth();
   return useQuery({
     queryKey: ['bi-geo-sales'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
       const { data: companies } = await supabase

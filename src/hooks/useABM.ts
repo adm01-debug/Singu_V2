@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
+import { useAuth } from './useAuth';
 
 export type AccountTier = "strategic" | "enterprise" | "mid" | "smb";
 export type AccountStatus = "active" | "nurture" | "closed_won" | "closed_lost" | "paused";
@@ -114,6 +115,7 @@ export function useABMAccount(id: string | undefined) {
 }
 
 export function useCreateABMAccount() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: {
@@ -124,7 +126,6 @@ export function useCreateABMAccount() {
       parent_account_id?: string | null;
       notes?: string;
     }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const { data, error } = await supabase
         .from("abm_accounts")
@@ -214,12 +215,12 @@ export function useBuyingCommittee(accountId: string | undefined) {
 }
 
 export function useUpsertCommitteeMember() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (
       input: Partial<BuyingCommitteeMember> & { account_id: string; contact_name: string; committee_role: CommitteeRole }
     ) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       if (input.id) {
         const { id, ...updates } = input;
@@ -334,10 +335,10 @@ export function useABMAccountPlans(accountId: string | undefined) {
 }
 
 export function useUpsertAccountPlan() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: Partial<ABMAccountPlan> & { account_id: string }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       if (input.id) {
         const { id, ...updates } = input;
@@ -380,10 +381,10 @@ export function useABMCampaigns() {
 }
 
 export function useUpsertCampaign() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: Partial<ABMCampaign> & { name: string; campaign_type: CampaignType }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       if (input.id) {
         const { id, metrics, ...rest } = input;

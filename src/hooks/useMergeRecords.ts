@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export type MergeEntity = 'contacts' | 'companies';
@@ -17,6 +18,7 @@ interface MergeArgs {
  * Related rows referencing the secondary (contacts.company_id, etc.) are repointed.
  */
 export function useMergeRecords() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ entity, primaryId, secondaryId, fieldOverrides }: MergeArgs) => {
@@ -45,10 +47,9 @@ export function useMergeRecords() {
       if (delErr) throw delErr;
 
       // 4. Audit log entry
-      const { data: userData } = await supabase.auth.getUser();
-      if (userData.user?.id) {
+      if (user?.id) {
         await supabase.from('audit_log').insert([{
-          user_id: userData.user.id,
+          user_id: user!.id,
           action: 'merge',
           entity_type: entity,
           entity_id: primaryId,

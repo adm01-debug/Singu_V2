@@ -1,5 +1,6 @@
  import { useQuery } from '@tanstack/react-query';
  import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
  
  export interface FunnelStat {
    stage: string;
@@ -25,7 +26,6 @@
    return useQuery({
      queryKey: ['marketing-funnel', startDate, endDate],
      queryFn: async () => {
-       const { data: { user } } = await supabase.auth.getUser();
        if (!user) return [];
  
        const start = startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
@@ -50,7 +50,6 @@
    return useQuery({
      queryKey: ['marketing-behavioral-insights'],
      queryFn: async () => {
-       const { data: { user } } = await supabase.auth.getUser();
        if (!user) return null;
  
        const { data, error } = await supabase
@@ -91,7 +90,6 @@
    return useQuery({
      queryKey: ['marketing-campaign-stats'],
      queryFn: async () => {
-       const { data: { user } } = await supabase.auth.getUser();
        if (!user) return [];
  
        const { data, error } = await supabase

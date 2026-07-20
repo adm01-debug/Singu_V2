@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 
 /**
  * Hook genérico para sincronizar preferências de UI por escopo no perfil do
@@ -78,12 +79,11 @@ export function useUiPreferencesSync<T extends Record<string, unknown>>(
   const { data: remote } = useQuery({
     queryKey: QK,
     queryFn: async (): Promise<T> => {
-      const { data: auth } = await supabase.auth.getUser();
-      if (!auth?.user?.id) return { ...defaults };
+      if (!user?.id) return { ...defaults };
       const { data, error } = await supabase
         .from('user_ui_preferences')
         .select('preferences')
-        .eq('user_id', auth.user.id)
+        .eq('user_id', user!.id)
         .eq('scope', scope)
         .maybeSingle();
       if (error) throw error;
@@ -94,8 +94,7 @@ export function useUiPreferencesSync<T extends Record<string, unknown>>(
 
   const upsert = useMutation({
     mutationFn: async (prefs: T) => {
-      const { data: auth } = await supabase.auth.getUser();
-      const userId = auth?.user?.id;
+      const userId = user?.id;
       if (!userId) return;
       const { error } = await supabase
         .from('user_ui_preferences')

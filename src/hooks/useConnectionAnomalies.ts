@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export type AnomalyType =
@@ -31,6 +32,7 @@ export interface ConnectionAnomaly {
 }
 
 export function useConnectionAnomalies(opts?: { onlyOpen?: boolean }) {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   const { data: anomalies = [], isLoading } = useQuery({
@@ -50,7 +52,6 @@ export function useConnectionAnomalies(opts?: { onlyOpen?: boolean }) {
 
   const acknowledge = useMutation({
     mutationFn: async (id: string) => {
-      const { data: { user } } = await supabase.auth.getUser();
       const { error } = await supabase
         .from('connection_anomalies')
         .update({ acknowledged_at: new Date().toISOString(), acknowledged_by: user?.id ?? null })

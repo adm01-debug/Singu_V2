@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export interface EmailCampaign {
@@ -22,13 +23,13 @@ export interface EmailCampaign {
 }
 
 export function useEmailCampaigns() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   const key = ['email-campaigns'];
 
   const { data: campaigns = [], isLoading } = useQuery({
     queryKey: key,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase
         .from('email_campaigns')
@@ -43,7 +44,6 @@ export function useEmailCampaigns() {
 
   const create = useMutation({
     mutationFn: async (input: Partial<EmailCampaign>) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase.from('email_campaigns')
         .insert({ ...input, user_id: user.id } as never)
@@ -82,7 +82,6 @@ export function useEmailCampaigns() {
    */
   const sendCampaign = useMutation({
     mutationFn: async (campaignId: string) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
 
       // Buscar contatos elegíveis (com email)
@@ -113,19 +112,17 @@ export function useEmailCampaigns() {
           sent_at: new Date().toISOString(),
         }));
 
-      if (toInsert.length > 0) {
-        const { error: insError } = await supabase.from('campaign_recipients').insert(toInsert);
-        if (insError) throw insError;
-      }
-
-      const { error: updError } = await supabase
-        .from('email_campaigns')
-        .update({
+      const [{ error: insError }, { error: updError }] = await Promise.all([
+        toInsert.length > 0
+          ? supabase.from('campaign_recipients').insert(toInsert)
+          : Promise.resolve({ error: null }),
+        supabase.from('email_campaigns').update({
           status: 'sent',
           sent_at: new Date().toISOString(),
           total_recipients: eligible.length,
-        } as never)
-        .eq('id', campaignId);
+        } as never).eq('id', campaignId),
+      ]);
+      if (insError) throw insError;
       if (updError) throw updError;
 
       return { recipientsCount: eligible.length, newlyAdded: toInsert.length };

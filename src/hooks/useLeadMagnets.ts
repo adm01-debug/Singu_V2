@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export interface LeadMagnet {
@@ -33,12 +34,12 @@ export interface MagnetDownload {
 const KEY = ['lead-magnets'];
 
 export function useLeadMagnets() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   const { data: magnets = [], isLoading } = useQuery({
     queryKey: KEY,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase
         .from('lead_magnets')
@@ -53,7 +54,6 @@ export function useLeadMagnets() {
 
   const upsert = useMutation({
     mutationFn: async (input: Partial<LeadMagnet> & { title: string; slug: string; type: LeadMagnet['type'] }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       if (input.id) {
         const { error } = await supabase.from('lead_magnets').update(input as never).eq('id', input.id);

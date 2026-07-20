@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 
 // ── Types ──────────────────────────────────────────
 
@@ -109,10 +110,10 @@ export function useWinLossRecordByDeal(dealId: string | null | undefined) {
 }
 
 export function useUpsertWinLossRecord() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (payload: Partial<WinLossRecord> & { deal_id: string; outcome: WinLossOutcome }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await supabase
         .from('win_loss_records')
@@ -166,10 +167,10 @@ export function useWinLossReasons(outcome?: ReasonOutcomeType) {
 }
 
 export function useUpsertReason() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (r: Partial<WinLossReason> & { category: ReasonCategory; label: string; outcome_type: ReasonOutcomeType }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await supabase
         .from('win_loss_reasons')
@@ -196,10 +197,10 @@ export function useDeleteReason() {
 }
 
 export function useSeedReasons() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { error } = await (supabase.rpc as unknown as (fn: string, args: Record<string, unknown>) => Promise<{ error: Error | null }>)('seed_win_loss_defaults', { _user_id: user.id });
       if (error) throw error;
@@ -227,10 +228,10 @@ export function useCompetitors() {
 }
 
 export function useUpsertCompetitor() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (c: Partial<Competitor> & { name: string }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await supabase
         .from('competitors')

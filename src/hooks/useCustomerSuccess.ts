@@ -231,27 +231,27 @@ export function useSubmitNPS() {
       if (!user?.id) throw new Error("Não autenticado");
       const category = input.score >= 9 ? "promoter" : input.score >= 7 ? "passive" : "detractor";
       
-      const { error: npsError } = await supabase.from("cs_nps_responses").insert({
-        user_id: user.id,
-        account_id: input.account_id,
-        contact_id: input.contact_id ?? null,
-        score: input.score,
-        category,
-        comment: input.comment ?? null,
-      });
+      const signalScore = input.score * 10;
+      const [{ error: npsError }, { error: signalError }] = await Promise.all([
+        supabase.from("cs_nps_responses").insert({
+          user_id: user.id,
+          account_id: input.account_id,
+          contact_id: input.contact_id ?? null,
+          score: input.score,
+          category,
+          comment: input.comment ?? null,
+        }),
+        supabase.from("cs_health_signals").insert({
+          user_id: user.id,
+          account_id: input.account_id,
+          signal_type: "nps",
+          score: signalScore,
+          weight: 2,
+          source: "nps_response",
+          metadata: { score: input.score, category } as unknown as Json,
+        }),
+      ]);
       if (npsError) throw npsError;
-
-      // Registrar como signal para influenciar o health score
-      const signalScore = input.score * 10; // 0-10 → 0-100
-      const { error: signalError } = await supabase.from("cs_health_signals").insert({
-        user_id: user.id,
-        account_id: input.account_id,
-        signal_type: "nps",
-        score: signalScore,
-        weight: 2,
-        source: "nps_response",
-        metadata: { score: input.score, category } as unknown as Json,
-      });
       if (signalError) throw signalError;
     },
     onSuccess: (_, vars) => {

@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 
 // ── Types ──────────────────────────────────────────
 
@@ -69,10 +70,10 @@ export interface VelocityMetrics {
 // ── Hooks ──────────────────────────────────────────
 
 export function useDealsPipeline() {
+  const { user } = useAuth();
   return useQuery({
     queryKey: ['deals-pipeline'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<PipelineDeal[]>(
         'get_deals_pipeline',
@@ -86,10 +87,10 @@ export function useDealsPipeline() {
 }
 
 export function usePipelineSummary() {
+  const { user } = useAuth();
   return useQuery({
     queryKey: ['pipeline-summary'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<PipelineSummary>(
         'get_pipeline_summary',

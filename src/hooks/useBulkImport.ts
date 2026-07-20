@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import Papa from 'papaparse';
 
@@ -45,6 +46,7 @@ function normalizeHeaders(headers: string[]): string[] {
 export type ImportEntityType = 'contacts' | 'companies';
 
 export function useBulkImport(entityType: ImportEntityType) {
+  const { user } = useAuth();
   const qc = useQueryClient();
   const [preview, setPreview] = useState<Record<string, string>[]>([]);
   const [headers, setHeaders] = useState<string[]>([]);
@@ -93,7 +95,6 @@ export function useBulkImport(entityType: ImportEntityType) {
             const errors: { row: number; message: string }[] = [];
             let success = 0;
 
-            const { data: { user } } = await supabase.auth.getUser();
             if (!user) { reject(new Error('Não autenticado')); return; }
 
             const BATCH_SIZE = 50;

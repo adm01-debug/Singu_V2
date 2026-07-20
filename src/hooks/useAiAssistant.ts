@@ -145,9 +145,7 @@ export function useAiAssistant() {
       }
 
       const result = await response.json();
-      // Reload to get persisted messages
-      await fetchMessages(activeThreadId);
-      await fetchThreads();
+      await Promise.all([fetchMessages(activeThreadId), fetchThreads()]);
       return result;
     } catch (e) {
       logger.error('Failed to send message', e);

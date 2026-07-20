@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAuth } from './useAuth';
 
 export type ForecastCategory = "commit" | "best_case" | "pipeline" | "omitted";
 
@@ -90,10 +91,10 @@ export function useCurrentPeriod(type: "month" | "quarter" = "month") {
 }
 
 export function useCreatePeriod() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (type: "month" | "quarter") => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const { data, error } = await supabase.rpc("seed_forecast_period", { _user_id: user.id, _type: type });
       if (error) throw error;
@@ -230,10 +231,10 @@ export function useQuotaSettings() {
 }
 
 export function useUpsertQuotaSettings() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (s: Partial<QuotaSettings>) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const { error } = await supabase.from("forecast_quota_settings")
         .upsert({ user_id: user.id, ...s }, { onConflict: "user_id" });

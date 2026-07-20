@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export interface NurturingStep {
@@ -35,13 +36,13 @@ export interface NurturingEnrollment {
 }
 
 export function useNurturingWorkflows() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   const key = ['nurturing-workflows'];
 
   const { data: workflows = [], isLoading } = useQuery({
     queryKey: key,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase.from('nurturing_workflows').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
       if (error) throw error;
@@ -52,7 +53,6 @@ export function useNurturingWorkflows() {
 
   const create = useMutation({
     mutationFn: async (input: { name: string; description?: string; trigger_type?: string; steps?: NurturingStep[] }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('nurturing_workflows').insert({
         user_id: user.id, name: input.name, description: input.description || null,

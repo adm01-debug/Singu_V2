@@ -87,30 +87,26 @@ export function useNextBestAction(contactId: string | undefined) {
 
    const complete = useMutation({
      mutationFn: async ({ id, notes, completed_at, was_successful }: { id: string; notes?: string; completed_at?: string; was_successful?: boolean }) => {
-       const { error } = await supabase
-         .from('contact_next_actions')
-         .update({ 
-           status: 'completed', 
-           completed_at: completed_at || new Date().toISOString(),
-           completion_notes: notes,
-           was_successful: was_successful ?? true
-         })
-         .eq('id', id);
-      
-      if (error) throw error;
-
-      // Also create an interaction entry to reflect this completion in history
       const currentAction = query.data;
-      if (currentAction && user?.id && contactId) {
-        const { error: intError } = await supabase.from('interactions').insert([{
-          contact_id: contactId,
-          user_id: user.id,
-          type: currentAction.channel,
-          title: 'Ação Concluída',
-          content: `Próxima ação concluída: ${currentAction.action}. ${notes || ''}`,
-        }]);
-        if (intError) logger.error('Error creating completion interaction', intError);
-      }
+      const [{ error }, { error: intError }] = await Promise.all([
+        supabase.from('contact_next_actions').update({
+          status: 'completed',
+          completed_at: completed_at || new Date().toISOString(),
+          completion_notes: notes,
+          was_successful: was_successful ?? true
+        }).eq('id', id),
+        (currentAction && user?.id && contactId)
+          ? supabase.from('interactions').insert([{
+              contact_id: contactId,
+              user_id: user.id,
+              type: currentAction.channel,
+              title: 'Ação Concluída',
+              content: `Próxima ação concluída: ${currentAction.action}. ${notes || ''}`,
+            }])
+          : Promise.resolve({ error: null }),
+      ]);
+      if (error) throw error;
+      if (intError) logger.error('Error creating completion interaction', intError);
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['next-best-action', user?.id, contactId] });

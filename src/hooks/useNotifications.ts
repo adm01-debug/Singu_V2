@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { 
   isPushSupported, 
@@ -166,7 +167,6 @@ export const useNotifications = () => {
     if (permissionState.permission !== 'granted') return;
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       const today = new Date();
@@ -230,7 +230,6 @@ export const useNotifications = () => {
     if (permissionState.permission !== 'granted') return;
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       const today = new Date();
@@ -279,7 +278,6 @@ export const useNotifications = () => {
     if (permissionState.permission !== 'granted') return;
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       // Fetch recent critical stakeholder alerts (last 24 hours)

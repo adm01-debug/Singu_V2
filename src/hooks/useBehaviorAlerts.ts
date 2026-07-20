@@ -265,28 +265,33 @@ export function useBehaviorAlerts() {
         }
       }
 
-      // Store new alerts
-      for (const alert of newAlerts) {
-        // Check if similar alert already exists
+      // Store new alerts — batch-check existing then bulk-insert
+      if (newAlerts.length > 0) {
+        const contactIds = [...new Set(newAlerts.map(a => a.contactId))];
+        const types = [...new Set(newAlerts.map(a => a.type))];
         const { data: existing } = await supabase
           .from('alerts')
-          .select('id')
-          .eq('contact_id', alert.contactId)
-          .eq('type', alert.type)
-          .eq('dismissed', false)
-          .limit(1);
-
-        if (!existing || existing.length === 0) {
-          await supabase.from('alerts').insert({
+          .select('contact_id, type')
+          .in('contact_id', contactIds)
+          .in('type', types)
+          .eq('dismissed', false);
+        const existingSet = new Set(
+          (existing || []).map(e => `${e.contact_id}::${e.type}`)
+        );
+        const toInsert = newAlerts
+          .filter(a => !existingSet.has(`${a.contactId}::${a.type}`))
+          .map(a => ({
             user_id: user.id,
-            contact_id: alert.contactId,
-            type: alert.type,
-            priority: alert.severity,
-            title: alert.title,
-            description: alert.description,
-            action_url: `/contatos/${alert.contactId}`,
-            dismissed: false
-          });
+            contact_id: a.contactId,
+            type: a.type,
+            priority: a.severity,
+            title: a.title,
+            description: a.description,
+            action_url: `/contatos/${a.contactId}`,
+            dismissed: false,
+          }));
+        if (toInsert.length > 0) {
+          await supabase.from('alerts').insert(toInsert);
         }
       }
 

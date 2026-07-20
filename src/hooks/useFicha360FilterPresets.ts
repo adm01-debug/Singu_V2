@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import type { NbaPriority, NbaSort } from './useProximosPassosFilters';
 
 const SCOPE = 'ficha360:presets';
@@ -54,17 +55,17 @@ function sanitizePayload(raw: unknown): PresetsPayload {
 const QK = ['user-ui-preferences', SCOPE] as const;
 
 export function useFicha360FilterPresets() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   const { data, isLoading } = useQuery({
     queryKey: QK,
     queryFn: async (): Promise<PresetsPayload> => {
-      const { data: auth } = await supabase.auth.getUser();
-      if (!auth?.user?.id) return { presets: [] };
+      if (!user?.id) return { presets: [] };
       const { data, error } = await supabase
         .from('user_ui_preferences')
         .select('preferences')
-        .eq('user_id', auth.user.id)
+        .eq('user_id', user!.id)
         .eq('scope', SCOPE)
         .maybeSingle();
       if (error) throw error;
@@ -75,8 +76,7 @@ export function useFicha360FilterPresets() {
 
   const persist = useMutation({
     mutationFn: async (next: PresetsPayload) => {
-      const { data: auth } = await supabase.auth.getUser();
-      const userId = auth?.user?.id;
+      const userId = user?.id;
       if (!userId) return next;
       const { error } = await supabase
         .from('user_ui_preferences')

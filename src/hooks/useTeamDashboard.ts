@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 
 export interface TeamMemberStats {
   id: string;
@@ -14,10 +15,10 @@ export interface TeamMemberStats {
 }
 
 export function useTeamDashboard() {
+  const { user } = useAuth();
   return useQuery({
     queryKey: ['team-dashboard'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return { members: [] as TeamMemberStats[], isManager: false };
 
       const { data: allMembers } = await supabase
