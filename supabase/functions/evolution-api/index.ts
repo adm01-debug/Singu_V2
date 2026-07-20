@@ -6,6 +6,9 @@ import {
   jsonOk,
 } from "../_shared/auth.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 30 });
 
 interface EvolutionRequest {
   action: string;
@@ -34,6 +37,10 @@ const ALLOWED_ACTIONS = new Set([
 Deno.serve(async (req) => {
   const guard = handleCorsAndMethod(req);
   if (guard) return guard;
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip, req);
+  if (limited) return limited;
 
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
