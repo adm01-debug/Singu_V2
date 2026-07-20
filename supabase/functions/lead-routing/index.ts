@@ -249,9 +249,11 @@ Deno.serve(async (req: Request) => {
         return await handleRedistribute(supabase, user.id, body, cors);
     }
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Erro interno";
-    const status = message.includes("autorizado") || message.includes("Token") ? 401 : 500;
     console.error("[lead-routing] Error:", e);
-    return json({ error: message }, status, cors);
+    const message = e instanceof Error ? e.message : "";
+    if (message === "Não autorizado" || message === "Token inválido") {
+      return json({ error: message }, 401, cors);
+    }
+    return json({ error: "Erro interno" }, 500, cors);
   }
 });

@@ -66,24 +66,23 @@ Deno.serve(async (req) => {
       .from('contacts')
       .select('id, first_name, last_name, company_id')
       .eq('user_id', userId);
-    
+
     if (contactId && contactId !== 'all') {
       contactsQuery = contactsQuery.eq('id', contactId);
     }
 
-    const { data: contacts, error: contactsError } = await contactsQuery;
+    // All three reads are independent — parallelize to cut 2/3 of wall-clock latency
+    const [
+      { data: contacts, error: contactsError },
+      { data: purchases, error: purchasesError },
+      { data: interactions, error: interactionsError },
+    ] = await Promise.all([
+      contactsQuery,
+      supabase.from('purchase_history').select('*').eq('user_id', userId),
+      supabase.from('interactions').select('id, contact_id, created_at').eq('user_id', userId),
+    ]);
     if (contactsError) throw contactsError;
-
-    const { data: purchases, error: purchasesError } = await supabase
-      .from('purchase_history')
-      .select('*')
-      .eq('user_id', userId);
     if (purchasesError) throw purchasesError;
-
-    const { data: interactions, error: interactionsError } = await supabase
-      .from('interactions')
-      .select('id, contact_id, created_at')
-      .eq('user_id', userId);
     if (interactionsError) throw interactionsError;
 
     const now = new Date();
