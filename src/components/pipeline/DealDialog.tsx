@@ -119,15 +119,16 @@ export function DealDialog({ open, onOpenChange, initialStage = 'lead' }: Props)
 
   const onSubmit = async (values: DealFormValues) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Usuário não autenticado');
-
       await createDeal.mutateAsync({
-        ...values,
-        user_id: user.id,
-        previsao_fechamento: values.previsao_fechamento?.toISOString(),
+        p_company_id:          values.company_id,
+        p_titulo:              values.titulo,
+        p_valor:               values.valor,
+        p_pipeline_stage:      values.pipeline_stage,
+        p_contact_id:          values.contact_id ?? null,
+        p_previsao_fechamento: values.previsao_fechamento
+          ? values.previsao_fechamento.toISOString().split('T')[0]
+          : null,
       });
-      
       toast.success('Deal criado com sucesso!');
       onOpenChange(false);
       form.reset();

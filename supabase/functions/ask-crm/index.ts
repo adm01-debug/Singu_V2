@@ -148,7 +148,6 @@ Deno.serve(async (req) => {
     // Require userId to appear as an actual WHERE/AND predicate (not just in a comment/literal)
     if (!isAdminQuery) {
       const userIdEscaped = userId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      // eslint-disable-next-line sonarjs/slow-regex -- bounded quantifiers, UUID is fixed-length 36 chars
       const userIdInPredicate = new RegExp(
         `(?:where|and|on)\\s+(?:[\\w.]+\\.)?user_id\\s*=\\s*'${userIdEscaped}'`,
         "i",
