@@ -33,7 +33,8 @@ async function fetchInteractionsPage(
 
   const { data, error, count } = await query;
   if (error) throw error;
-  return { data: data || [], nextCursor: data.length === PAGE_SIZE ? pageParam + 1 : undefined, total: count || 0 } as InteractionPage;
+  const rows = data ?? [];
+  return { data: rows, nextCursor: rows.length === PAGE_SIZE ? pageParam + 1 : undefined, total: count || 0 } as InteractionPage;
 }
 
 export function useInteractions(contactId?: string, companyId?: string, options?: { enabled?: boolean }) {

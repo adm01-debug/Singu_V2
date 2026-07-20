@@ -86,7 +86,7 @@ export function useEmailVerifications(contactId?: string) {
       let q = supabase
         .from("email_verifications")
         .select("*")
-        .eq("user_id", user!.id)
+        .eq("user_id", user?.id ?? '')
         .order("verified_at", { ascending: false })
         .limit(50);
       
@@ -109,7 +109,7 @@ export function usePhoneValidations(contactId?: string) {
       let q = supabase
         .from("phone_validations")
         .select("*")
-        .eq("user_id", user!.id)
+        .eq("user_id", user?.id ?? '')
         .order("validated_at", { ascending: false })
         .limit(50);
       
@@ -132,7 +132,7 @@ export function useEmailFinderResults() {
       const { data, error } = await supabase
         .from("email_finder_results")
         .select("*")
-        .eq("user_id", user!.id)
+        .eq("user_id", user?.id ?? '')
         .order("found_at", { ascending: false })
         .limit(30);
       
@@ -152,7 +152,7 @@ export function usePeopleIntelligenceEvents(contactId?: string) {
       let q = supabase
         .from("people_intelligence_events")
         .select("*")
-        .eq("user_id", user!.id)
+        .eq("user_id", user?.id ?? '')
         .order("detected_at", { ascending: false })
         .limit(50);
       

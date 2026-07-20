@@ -20,7 +20,7 @@ export function useEmotionalAnchors(contactId?: string) {
         .from('emotional_anchors')
         .select('*')
         .eq('contact_id', contactId!)
-        .eq('user_id', user!.id)
+        .eq('user_id', user?.id ?? '')
         .order('strength', { ascending: false });
       if (error) throw error;
       return data || [];

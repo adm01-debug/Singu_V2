@@ -34,7 +34,7 @@ export function useCompleteDashboard() {
     queryKey: ['complete-dashboard', user?.id],
     enabled: !!user,
     queryFn: async () => {
-
+      if (!user) return null;
       const { data, error } = await callExternalRpc<CompleteDashboardData>(
         'get_complete_dashboard',
         { p_user_id: user.id }

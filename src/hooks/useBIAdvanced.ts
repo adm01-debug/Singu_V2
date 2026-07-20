@@ -40,7 +40,7 @@ export function useProfitabilityByContact() {
     queryKey: ['bi-profitability-contacts', user?.id],
     enabled: !!user,
     queryFn: async () => {
-
+      if (!user) return [];
       // Both queries are independent — run in parallel
       const [{ data: contacts }, { data: interactions }] = await Promise.all([
         supabase.from('contacts').select('id, first_name, last_name, relationship_score, sentiment').eq('user_id', user.id).limit(100),
@@ -93,7 +93,7 @@ export function useGeoSalesData() {
     queryKey: ['bi-geo-sales', user?.id],
     enabled: !!user,
     queryFn: async () => {
-
+      if (!user) return [];
       const { data: companies } = await supabase
         .from('companies')
         .select('id, name, lat, lng, city, state')
