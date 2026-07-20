@@ -17,7 +17,11 @@ const CHANNELS = [
   { value: 'sms', label: 'SMS', icon: MessageCircle },
 ] as const;
 
+let _seqStepCounter = 0;
+const nextSeqStepId = () => `seqstep-${++_seqStepCounter}`;
+
 type StepDraft = {
+  _id: string;
   channel: string;
   delay_days: number;
   delay_hours: number;
@@ -31,6 +35,7 @@ type StepDraft = {
 };
 
 const emptyStep = (): StepDraft => ({
+  _id: nextSeqStepId(),
   channel: 'email',
   delay_days: 1,
   delay_hours: 0,
@@ -79,7 +84,7 @@ export function SequenceFormDialog({ open, onOpenChange, onSubmit, loading }: Pr
       description: description.trim() || undefined,
       pause_on_reply: pauseOnReply,
       pause_on_meeting: pauseOnMeeting,
-      steps: steps.map(s => ({
+      steps: steps.map(({ _id: _, ...s }) => ({
         ...s,
         step_order: 0,
         channel: s.channel as 'email' | 'whatsapp' | 'call' | 'linkedin' | 'sms',
@@ -132,7 +137,7 @@ export function SequenceFormDialog({ open, onOpenChange, onSubmit, loading }: Pr
 
             {steps.map((step, idx) => {
               return (
-                <div key={idx} className="border border-border/50 rounded-lg p-3 space-y-2 bg-secondary/20">
+                <div key={step._id} className="border border-border/50 rounded-lg p-3 space-y-2 bg-secondary/20">
                   <div className="flex items-center gap-2">
                     <GripVertical className="h-4 w-4 text-muted-foreground shrink-0" />
                     <span className="text-xs font-bold text-primary w-5">{idx + 1}</span>

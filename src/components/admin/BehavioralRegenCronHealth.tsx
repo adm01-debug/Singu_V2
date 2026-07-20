@@ -39,6 +39,7 @@ export function BehavioralRegenCronHealth() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["behavioral-regen-cron-health"],
     refetchInterval: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<CronHealthRow[]> => {
       const { data, error } = await (supabase.rpc as unknown as (
         fn: string,

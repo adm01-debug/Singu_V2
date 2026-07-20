@@ -42,6 +42,7 @@ export function useSchemaDriftAlerts(onlyUnresolved = true) {
     enabled: !!user && isAdmin,
     staleTime: 5 * 60_000,
     refetchInterval: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -63,6 +64,7 @@ export function useUnresolvedDriftCount() {
     enabled: !!user && isAdmin,
     staleTime: 5 * 60_000,
     refetchInterval: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 

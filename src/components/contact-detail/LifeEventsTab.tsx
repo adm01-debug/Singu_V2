@@ -340,7 +340,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                     type="number" 
                     className="w-16 h-8 text-xs" 
                     value={newEvent.reminder_days_before || 0}
-                    onChange={(e) => setNewEvent({...newEvent, reminder_days_before: parseInt(e.target.value)})}
+                    onChange={(e) => setNewEvent({...newEvent, reminder_days_before: parseInt(e.target.value) || 0})}
                   />
                   <span className="text-xs text-muted-foreground">dias antes</span>
                 </div>

@@ -18,6 +18,7 @@ export function useValidationQueueStats() {
     queryKey: ["validation-queue-stats", user?.id],
     enabled: !!user,
     refetchInterval: 30_000,
+    refetchOnWindowFocus: false,
     staleTime: 25_000,
     queryFn: async (): Promise<QueueStats> => {
       const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();

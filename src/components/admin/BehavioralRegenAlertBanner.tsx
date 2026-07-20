@@ -31,6 +31,7 @@ export function BehavioralRegenAlertBanner() {
   const { data: allAlerts, isLoading } = useQuery({
     queryKey: ["behavioral-regen-active-alerts"],
     refetchInterval: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<AlertRow[]> => {
       const { data, error } = await supabase
         .from("system_alerts")

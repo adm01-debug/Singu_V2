@@ -310,7 +310,7 @@ export function CadenceRulesConfig() {
                       <Input 
                         type="number" 
                         value={editingRule.frequency_days} 
-                        onChange={(e) => setEditingRule({...editingRule!, frequency_days: parseInt(e.target.value)})}
+                        onChange={(e) => setEditingRule({...editingRule!, frequency_days: parseInt(e.target.value) || 1})}
                         className="h-9"
                       />
                     </div>
@@ -363,7 +363,7 @@ export function CadenceRulesConfig() {
                                 <Input 
                                   type="number" 
                                   value={step.delay_days} 
-                                  onChange={(e) => handleUpdateStep(index, 'delay_days', parseInt(e.target.value))}
+                                  onChange={(e) => handleUpdateStep(index, 'delay_days', parseInt(e.target.value) || 0)}
                                   className="h-8 text-xs pr-6"
                                 />
                                 <span className="absolute right-2 top-1.5 text-[9px] text-muted-foreground">d</span>

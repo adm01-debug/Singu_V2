@@ -43,6 +43,7 @@ export function useErrorBudget() {
       return data as ErrorBudgetData;
     },
     refetchInterval: 5 * 60_000,
+    refetchOnWindowFocus: false,
     staleTime: 4 * 60_000,
   });
 }

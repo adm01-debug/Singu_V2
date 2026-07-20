@@ -79,6 +79,7 @@ export function SystemHealthWidget() {
       return data;
     },
     refetchInterval: 60_000,
+    refetchOnWindowFocus: false,
     staleTime: 30_000,
     enabled: isAdmin,
   });

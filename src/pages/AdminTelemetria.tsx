@@ -69,6 +69,7 @@ export default function AdminTelemetriaPage() {
       return (data as unknown as TelemetryRow[]) || [];
     },
     refetchInterval: 30000,
+    refetchOnWindowFocus: false,
     staleTime: 10000,
   });
 

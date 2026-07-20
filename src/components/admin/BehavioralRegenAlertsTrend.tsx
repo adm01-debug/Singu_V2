@@ -37,6 +37,7 @@ export function BehavioralRegenAlertsTrend({ hideSimulations = false }: Props = 
   const { data, isLoading, error } = useQuery({
     queryKey: ["behavioral-regen-alerts-trend-30d", hideSimulations],
     refetchInterval: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<DayPoint[]> => {
       const since = new Date(Date.now() - 30 * 24 * 60 * 60_000);
       let q = supabase
