@@ -146,7 +146,9 @@ Deno.serve(async (req) => {
   // Origem (opcional)
   if (webhook.allowed_origins?.length) {
     const origin = req.headers.get("origin") ?? "";
-    const ok = webhook.allowed_origins.some((o: string) => origin.includes(o));
+    // Exact-match only — substring matching (includes) would allow evil-trusted.com to
+    // bypass a whitelist entry of trusted.com.
+    const ok = webhook.allowed_origins.some((o: string) => origin === o);
     if (!ok) {
       await admin.from("incoming_webhook_logs").insert({
         webhook_id: webhook.id,
@@ -219,8 +221,9 @@ Deno.serve(async (req) => {
     const row = { ...finalRow, user_id: webhook.created_by };
     const { data, error } = await admin.from(targetTable).insert(row).select().maybeSingle();
     if (error) {
+      console.error("incoming-webhook insert error:", error);
       httpStatus = 500;
-      errorMessage = error.message;
+      errorMessage = "Falha ao processar webhook";
       await admin.from("incoming_webhook_dlq").insert({
         webhook_id: webhook.id,
         payload,
