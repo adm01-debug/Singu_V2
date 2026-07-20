@@ -1,7 +1,10 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { z } from "npm:zod@3.23.8";
+
+const bodySchema = z.object({ room_id: z.string().uuid() });
 
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY")!;
 const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Muitas análises. Aguarde antes de tentar novamente." });
@@ -17,8 +20,14 @@ Deno.serve(async (req) => {
   if (limited) return limited;
 
   try {
-    const { room_id } = await req.json();
-    if (!room_id) return jsonError("room_id required", 400, req);
+    const { body: rawBody, error: bodyError } = await guardBody(req);
+    if (bodyError) return bodyError;
+
+    const parsed = bodySchema.safeParse(rawBody);
+    if (!parsed.success) {
+      return jsonError(parsed.error.issues[0]?.message ?? "Invalid request body", 400, req);
+    }
+    const { room_id } = parsed.data;
 
     const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
     const { data: room } = await supabase.from("deal_rooms").select("*").eq("id", room_id).maybeSingle();

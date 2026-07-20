@@ -1,7 +1,14 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { z } from "npm:zod@3.23.8";
+
+const bodySchema = z.object({
+  contactId:    z.string().uuid(),
+  // objectionId is interpolated into AI system prompt — cap at 200 chars to prevent prompt injection
+  objectionId:  z.string().min(1).max(200),
+});
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
 
@@ -24,8 +31,14 @@ Deno.serve(async (req) => {
   );
 
   try {
-    const { contactId, objectionId } = await req.json();
-    if (!contactId || !objectionId) return jsonError("Missing parameters", 400, req);
+    const { body: rawBody, error: bodyError } = await guardBody(req);
+    if (bodyError) return bodyError;
+
+    const parsed = bodySchema.safeParse(rawBody);
+    if (!parsed.success) {
+      return jsonError(parsed.error.issues[0]?.message ?? "Invalid request body", 400, req);
+    }
+    const { contactId, objectionId } = parsed.data;
 
     // 1. Gather Profile and Context — verify ownership with user_id filter
     const { data: contact } = await supabase
@@ -120,6 +133,6 @@ Gere um script que:
 
   } catch (error) {
     console.error("Objection Handler Error:", error);
-    return jsonError(error.message, 500, req);
+    return jsonError("Internal server error", 500, req);
   }
 });
