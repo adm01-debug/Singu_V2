@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { CanaisQuickFilter } from '@/components/interactions/CanaisQuickFilter';
 
@@ -12,8 +12,14 @@ vi.mock('sonner', () => ({
 
 describe('CanaisQuickFilter', () => {
   beforeEach(() => {
+    vi.useFakeTimers();
     localStorage.clear();
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.runAllTimers();
+    vi.useRealTimers();
   });
 
   it('auto mode: clicking a chip calls onChange immediately', () => {
