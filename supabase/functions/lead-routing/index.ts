@@ -180,19 +180,18 @@ async function handleRedistribute(
 
   const memberIds = [...decrementByMember.keys()];
   if (memberIds.length > 0) {
-    // One batch fetch + one update per unique member (not per assignment)
     const { data: memberRows } = await supabase
       .from("sales_team_members")
       .select("id, current_lead_count")
       .in("id", memberIds);
 
-    await Promise.all(
-      (memberRows ?? []).map((m: { id: string; current_lead_count: number | null }) =>
-        supabase.from("sales_team_members").update({
-          current_lead_count: Math.max(0, (m.current_lead_count ?? 0) - (decrementByMember.get(m.id) ?? 0)),
-        }).eq("id", m.id)
-      )
-    );
+    const upsertRows = (memberRows ?? []).map((m: { id: string; current_lead_count: number | null }) => ({
+      id: m.id,
+      current_lead_count: Math.max(0, (m.current_lead_count ?? 0) - (decrementByMember.get(m.id) ?? 0)),
+    }));
+    if (upsertRows.length > 0) {
+      await supabase.from("sales_team_members").upsert(upsertRows, { onConflict: "id" });
+    }
   }
 
   // Batch-insert all redistribution logs in one query (was N inserts)
