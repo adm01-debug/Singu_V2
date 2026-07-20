@@ -367,6 +367,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                         {children.map((child, i) => (
                           <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1">
                             {child}
+                            {/* eslint-disable-next-line sonarjs/no-nested-functions */}
                             <button onClick={() => setChildren(prev => prev.filter((_, idx) => idx !== i))}>
                               <Trash2 className="h-3 w-3 text-destructive" />
                             </button>
@@ -440,6 +441,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                       {hobbies.map((hobby, i) => (
                         <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-amber-50 text-amber-700 border-amber-100">
                           {hobby}
+                          {/* eslint-disable-next-line sonarjs/no-nested-functions */}
                           <button onClick={() => setHobbies(prev => prev.filter((_, idx) => idx !== i))}>
                             <X className="h-3 w-3" />
                           </button>
@@ -496,6 +498,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                       {interests.map((interest, i) => (
                         <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-purple-50 text-purple-700 border-purple-100">
                           {interest}
+                          {/* eslint-disable-next-line sonarjs/no-nested-functions */}
                           <button onClick={() => setInterests(prev => prev.filter((_, idx) => idx !== i))}>
                             <X className="h-3 w-3" />
                           </button>

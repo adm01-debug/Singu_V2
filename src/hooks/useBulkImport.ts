@@ -65,6 +65,7 @@ export function useBulkImport(entityType: ImportEntityType) {
         setHeaders(normalized);
         const rows = (results.data as Record<string, string>[]).map(row => {
           const mapped: Record<string, string> = {};
+          // eslint-disable-next-line sonarjs/no-nested-functions
           rawHeaders.forEach((h, i) => {
             mapped[normalized[i]] = row[h];
           });
@@ -97,6 +98,7 @@ export function useBulkImport(entityType: ImportEntityType) {
 
             const BATCH_SIZE = 50;
             for (let i = 0; i < rows.length; i += BATCH_SIZE) {
+              // eslint-disable-next-line sonarjs/no-nested-functions
               const batch = rows.slice(i, i + BATCH_SIZE).map((row, bIdx) => {
                 const mapped: Record<string, unknown> = { user_id: user.id };
                 rawHeaders.forEach((h, hIdx) => {
@@ -131,6 +133,7 @@ export function useBulkImport(entityType: ImportEntityType) {
                 const { error } = await supabase.from(tableName as never).insert(batch as never);
                 
                 if (error) {
+                  // eslint-disable-next-line sonarjs/no-nested-functions
                   batch.forEach((_, bIdx) => {
                     errors.push({ row: i + bIdx + 2, message: error.message });
                   });

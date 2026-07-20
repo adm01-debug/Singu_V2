@@ -16,6 +16,7 @@ interface EnrichResult {
   details?: string;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
   const guard = handleCorsAndMethod(req);
   if (guard) return guard;

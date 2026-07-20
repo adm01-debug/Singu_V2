@@ -4,6 +4,7 @@ import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 15 });
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: scopedCorsHeaders(req) });

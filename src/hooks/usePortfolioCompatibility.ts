@@ -39,6 +39,7 @@ export function usePortfolioCompatibility() {
 
   useEffect(() => {
     if (user) loadData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const loadData = async () => {

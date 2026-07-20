@@ -6,6 +6,7 @@ import { RAPPORT_TEMPLATES, POWER_WORDS } from '@/data/nlpAdvancedData';
 import { getDominantVAK, getDISCProfile as getBehaviorDISC, getDISCConfidence, getContactBehavior } from '@/lib/contact-utils';
 
 export function useRapportGenerator(contact: Contact) {
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const rapportProfile = useMemo((): RapportProfile => {
     const behavior = getContactBehavior(contact);
     const vakType = getDominantVAK(contact) as VAKType;

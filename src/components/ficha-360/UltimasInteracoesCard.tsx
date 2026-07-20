@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { MessageSquare, Phone, Mail, Calendar, FileText, ArrowRight, X, Clock, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -72,7 +72,7 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
     setLocalSearch(q || '');
   }, [q]);
 
-  const items = Array.isArray(interactions) ? interactions : [];
+  const items = useMemo(() => Array.isArray(interactions) ? interactions : [], [interactions]);
   const channelsKey = Array.isArray(channels) ? [...channels].map((c) => c.toLowerCase()).sort().join(',') : '';
   const qKey = q ? hashString(q.trim().toLowerCase()) : 'noq';
   const filterKey = `${days ?? 'all'}-${channelsKey || 'all'}-${qKey}`;

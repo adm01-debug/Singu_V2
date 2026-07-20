@@ -11,6 +11,7 @@ import { normalizeWeek, parseWeekLocal } from "./weekUtils";
 
 export type SentimentKey = "positive" | "neutral" | "negative" | "mixed";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const SENTIMENT_TOKENS: Record<SentimentKey, { label: string; swatch: string; text: string; bar: string }> = {
   positive: { label: "Positivo", swatch: "bg-success", text: "text-success", bar: "bg-success/70" },
   neutral: { label: "Neutro", swatch: "bg-muted-foreground", text: "text-muted-foreground", bar: "bg-muted-foreground/70" },
@@ -18,6 +19,7 @@ export const SENTIMENT_TOKENS: Record<SentimentKey, { label: string; swatch: str
   mixed: { label: "Misto", swatch: "bg-warning", text: "text-warning", bar: "bg-warning/70" },
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const SENTIMENT_ORDER: SentimentKey[] = ["positive", "neutral", "negative", "mixed"];
 
 export interface TooltipExtra {

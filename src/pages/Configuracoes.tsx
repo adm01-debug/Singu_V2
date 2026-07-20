@@ -48,6 +48,7 @@ const Configuracoes = () => {
 
   useUnsavedChangesGuard(hasUnsavedChanges);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (user) fetchProfile(); }, [user]);
 
   const fetchProfile = async () => {

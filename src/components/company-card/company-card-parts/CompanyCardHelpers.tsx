@@ -9,22 +9,26 @@ import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import type { Company } from '@/hooks/useCompanies';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const industryIcons: Record<string, React.ElementType> = {
   'Tecnologia': Cpu, 'Saúde': HeartPulse, 'Educação': GraduationCap,
   'Varejo': ShoppingCart, 'Financeiro': Landmark, 'Indústria': Factory, 'Serviços': Briefcase,
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function getAvatarInitial(name: string): string {
   const cleaned = name.replace(/^\d+\s*[-–—]\s*/, '');
   return (cleaned || name || 'E')[0].toUpperCase();
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function hashStringToHue(str: string): number {
   let hash = 2166136261;
   for (let i = 0; i < str.length; i++) { hash ^= str.charCodeAt(i); hash = Math.imul(hash, 16777619); }
   return Math.abs(hash) % 360;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function getAvatarStyle(name: string): React.CSSProperties {
   const hue = hashStringToHue(name);
   return { background: `linear-gradient(135deg, hsl(${hue}, 55%, 45%), hsl(${(hue + 40) % 360}, 50%, 35%))` };

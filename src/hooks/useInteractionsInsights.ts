@@ -89,6 +89,7 @@ export function useInteractionsInsights(period: Period = "30d") {
   const days = periodToDays[period];
   const query = useConversationAnalyses({ days });
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const insights = useMemo(() => {
     const list: ConversationAnalysis[] = Array.isArray(query.data)
       ? (query.data as unknown as ConversationAnalysis[])

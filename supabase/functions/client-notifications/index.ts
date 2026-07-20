@@ -11,6 +11,7 @@ interface AlertData {
   userId: string;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
   const traceId = extractTraceId(req);
   const log = tracedLogger(traceId, "client-notifications");

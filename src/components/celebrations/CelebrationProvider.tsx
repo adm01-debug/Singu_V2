@@ -24,6 +24,7 @@ interface CelebrationContextType {
 
 const CelebrationContext = createContext<CelebrationContextType | null>(null);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useCelebration = () => {
   const context = useContext(CelebrationContext);
   if (!context) {

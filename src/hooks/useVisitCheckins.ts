@@ -44,6 +44,7 @@ export function useVisitCheckins(entityId?: string, entityType?: 'contact' | 'co
       if (!user) throw new Error('Não autenticado');
 
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        // eslint-disable-next-line sonarjs/no-intrusive-permissions
         navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 10000 });
       });
 

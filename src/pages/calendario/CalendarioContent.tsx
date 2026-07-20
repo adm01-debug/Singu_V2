@@ -20,6 +20,7 @@ const interactionTypeIcons: Record<string, React.ReactNode> = {
   call: <Phone className="w-4 h-4" />, email: <Mail className="w-4 h-4" />, meeting: <Users className="w-4 h-4" />,
   video_call: <Video className="w-4 h-4" />, whatsapp: <MessageSquare className="w-4 h-4" />, other: <MessageSquare className="w-4 h-4" />,
 };
+// eslint-disable-next-line react-refresh/only-export-components
 export const interactionTypeLabels: Record<string, string> = { call: 'Ligação', email: 'Email', meeting: 'Reunião', video_call: 'Videochamada', whatsapp: 'WhatsApp', other: 'Outro' };
 const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 

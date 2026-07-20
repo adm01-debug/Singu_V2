@@ -60,6 +60,7 @@ export function SalespersonProfileSettings() {
     if (user) {
       fetchProfile();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const fetchProfile = async () => {

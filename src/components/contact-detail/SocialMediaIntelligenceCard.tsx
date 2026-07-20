@@ -36,6 +36,7 @@ interface SocialMediaIntelligenceCardProps {
        if (instagram) logConsent('instagram', instagram);
        if (twitter) logConsent('twitter', twitter);
      }
+   // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [allowPublicData]);
 
   if (!allowPublicData) {

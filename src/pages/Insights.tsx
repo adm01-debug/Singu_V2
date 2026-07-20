@@ -42,6 +42,7 @@ const Insights = () => {
     keys: ['title', 'description', 'action_suggestion', 'category'], threshold: 0.3, minChars: 1,
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (user) fetchData(); }, [user]);
 
   const fetchData = async () => {

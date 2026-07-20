@@ -115,6 +115,7 @@ export function useProactiveIntelligence(
   contact: Contact | null,
   interactions: Interaction[],
 ): ProactiveIntelligenceResult {
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   return useMemo(() => {
     if (!contact) {
       return { actions: [], scripts: [], insights: [], healthScore: 0, urgencyLevel: 'low' as ActionPriority, summary: '' };

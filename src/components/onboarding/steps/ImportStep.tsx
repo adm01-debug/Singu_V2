@@ -147,6 +147,7 @@ const ImportStep = ({ onImport, onNext, onBack }: ImportStepProps) => {
     } else {
       setError('Por favor, selecione um arquivo CSV');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {

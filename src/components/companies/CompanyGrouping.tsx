@@ -12,6 +12,7 @@ interface CompanyGroup {
  * Groups companies by grupo_economico. Companies without a group go into "Sem grupo".
  * Only creates groups when there are 2+ companies in a group.
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function useCompanyGroups(companies: Company[]): {
   groups: CompanyGroup[];
   hasGroups: boolean;
@@ -85,6 +86,7 @@ export function GroupHeader({ name, count, isExpanded, onToggle }: GroupHeaderPr
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useGroupExpansion(groups: CompanyGroup[]) {
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 

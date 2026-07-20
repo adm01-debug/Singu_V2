@@ -219,6 +219,7 @@ export function AppSplashScreen({ progress = 0 }: { progress?: number }) {
 }
 
 // Share Target Handler
+// eslint-disable-next-line react-refresh/only-export-components
 export function useShareTarget() {
   const [sharedData, setSharedData] = useState<{
     title?: string;

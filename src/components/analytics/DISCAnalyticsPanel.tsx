@@ -57,6 +57,7 @@ const DISCAnalyticsPanel = () => {
     } finally { setLoading(false); }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { loadData(); }, [user]);
 
   if (loading) return (<div className="space-y-6"><div className="grid grid-cols-2 md:grid-cols-4 gap-4">{[1,2,3,4].map(i => <Skeleton key={i} className="h-28" />)}</div><div className="grid grid-cols-1 lg:grid-cols-2 gap-6">{[1,2,3,4].map(i => <Skeleton key={i} className="h-80" />)}</div></div>);

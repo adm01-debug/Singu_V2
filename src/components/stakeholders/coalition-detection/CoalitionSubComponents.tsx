@@ -12,6 +12,7 @@ import { Progress } from '@/components/ui/progress';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import type { Coalition, InfluenceCluster, CoalitionAnalysis } from '@/hooks/useCoalitionDetection';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const COALITION_TYPE_CONFIG = {
   support: { icon: UserCheck, color: 'text-success', bgColor: 'bg-success/10', borderColor: 'border-success/30', label: 'Apoio' },
   opposition: { icon: UserX, color: 'text-destructive', bgColor: 'bg-destructive/10', borderColor: 'border-destructive/30', label: 'Oposição' },
@@ -19,6 +20,7 @@ export const COALITION_TYPE_CONFIG = {
   mixed: { icon: Scale, color: 'text-info', bgColor: 'bg-info/10', borderColor: 'border-info/30', label: 'Misto' },
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const RISK_CONFIG = {
   low: { color: 'text-success', bgColor: 'bg-success/10', label: 'Baixo' },
   medium: { color: 'text-warning', bgColor: 'bg-warning/10', label: 'Médio' },

@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import type { ImportantDate } from '@/hooks/useImportantDates';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function getEventColor(type: ImportantDate['type']) {
   switch (type) {
     case 'birthday': return 'bg-primary';
@@ -16,6 +17,7 @@ export function getEventColor(type: ImportantDate['type']) {
   }
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function getEventIcon(type: ImportantDate['type']) {
   switch (type) {
     case 'birthday': return <Cake className="h-3 w-3" />;
@@ -27,6 +29,7 @@ export function getEventIcon(type: ImportantDate['type']) {
   }
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function getUrgencyColor(urgency: ImportantDate['urgency']) {
   switch (urgency) {
     case 'overdue': return 'text-destructive';

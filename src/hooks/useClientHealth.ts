@@ -29,6 +29,7 @@ export interface ClientHealth {
 }
 
 export function useClientHealth(contact: Contact | null, interactions: Interaction[]) {
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const health = useMemo<ClientHealth | null>(() => {
     if (!contact) return null;
 

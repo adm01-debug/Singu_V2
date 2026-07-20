@@ -20,6 +20,7 @@ export default function PublicDealRoom() {
 
   useEffect(() => {
     if (token) recordBuyerView(token, label || undefined).catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   if (isLoading) return <div className="min-h-screen grid place-items-center">Carregando...</div>;

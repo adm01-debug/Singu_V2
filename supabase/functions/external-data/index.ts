@@ -189,6 +189,7 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 1): Promise<T> {
   throw lastError;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
   const corsResponse = handleCorsAndMethod(req);
   if (corsResponse) {

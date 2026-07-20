@@ -80,6 +80,7 @@ export function useFormDraft<T extends FieldValues>(
       timeoutRef.current = setTimeout(() => {
         try {
           // Only save if there's meaningful data
+          // eslint-disable-next-line sonarjs/no-nested-functions
           const hasData = Object.values(data).some(v => v !== '' && v !== null && v !== undefined);
           if (hasData) {
             localStorage.setItem(storageKey, JSON.stringify(data));

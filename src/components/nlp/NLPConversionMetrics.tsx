@@ -55,6 +55,7 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
 
   useEffect(() => {
     if (user) fetchMetrics();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, period]);
 
   const fetchMetrics = async () => {

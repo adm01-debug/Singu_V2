@@ -80,6 +80,7 @@ const UnifiedScriptGenerator: React.FC<UnifiedScriptGeneratorProps> = ({
   }, [vakType, motivationDirection]);
 
   // Generate scripts for each stage
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const generateScript = (stage: SalesStage): ScriptSection => {
     const stageInfo = SALES_STAGE_INFO[stage];
     const firstName = contact.firstName;

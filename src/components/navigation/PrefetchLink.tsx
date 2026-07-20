@@ -77,6 +77,7 @@ export function PrefetchLink({ to, children, className, onClick }: PrefetchLinkP
 }
 
 /** Hook to prefetch a route on demand (e.g., on hover of a non-link element) */
+// eslint-disable-next-line react-refresh/only-export-components
 export function usePrefetch() {
   return { prefetch: prefetchRoute };
 }

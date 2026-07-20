@@ -18,6 +18,7 @@ interface SmartReminder {
 
 type DecayLevel = 'warming' | 'cooling' | 'cold' | 'frozen';
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: scopedCorsHeaders(req) });

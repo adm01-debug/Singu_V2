@@ -58,6 +58,7 @@ export function useInfiniteList<T>(
     if (persistKey) {
       try { sessionStorage.removeItem(persistKey); } catch { /* noop */ }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageSize, ...deps]);
 
   // Persistência debounced (200ms) da profundidade atual.

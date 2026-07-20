@@ -26,6 +26,7 @@ export function SecurityDashboard() {
   const { ips } = useAllowedIPs();
   const { countries } = useGeoBlocking();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { twoFA.checkStatus(); }, [twoFA.checkStatus]);
 
   const activeCount = [

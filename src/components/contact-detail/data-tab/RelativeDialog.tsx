@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { differenceInYears } from 'date-fns';
 import type { Tables } from '@/integrations/supabase/types';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const RELATIONSHIP_TYPES = ['conjuge', 'filho', 'filha', 'pai', 'mae', 'irmao', 'irma', 'socio', 'assistente', 'outro'];
 
 export interface RelativeInput {

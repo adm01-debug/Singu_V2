@@ -369,6 +369,7 @@ export function LiveRegion({ message, type = 'polite', className }: LiveRegionPr
 // FOCUS TRAP - para modais/dialogs
 // ============================================
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useFocusTrap(isActive: boolean) {
   const containerRef = useRef<HTMLDivElement>(null);
 

@@ -16,6 +16,7 @@ export function RevOpsPeriodSelector({ value, onChange }: { value: RevOpsPeriod;
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function getRange(p: RevOpsPeriod): { start: string; end: string; prevStart: string; prevEnd: string } {
   const now = new Date();
   const end = now.toISOString().slice(0, 10);

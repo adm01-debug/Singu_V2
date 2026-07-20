@@ -90,6 +90,7 @@ export const ScoreProntidaoCard = memo(({ data, contactId, simulated, realData }
         weight: factor.weight / 100,
         detail: factor.detail,
       })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],
   );
 

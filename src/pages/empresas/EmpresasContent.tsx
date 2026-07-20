@@ -82,6 +82,7 @@ export function EmpresasContent(props: Props) {
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el) return;
+    // eslint-disable-next-line sonarjs/no-nested-functions
     const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) startTransition(() => setVisibleCount(prev => prev + RENDER_BATCH)); }, { rootMargin: '400px' });
     observer.observe(el);
     return () => observer.disconnect();

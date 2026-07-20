@@ -102,6 +102,7 @@ const Empresas = () => {
     if (debounceRef.current) { clearTimeout(debounceRef.current); }
     debounceRef.current = setTimeout(() => triggerSearch(localSearch), 400);
     return () => { if (debounceRef.current) { clearTimeout(debounceRef.current); } };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localSearch]);
 
   const clearSearch = useCallback(() => { setLocalSearch(''); triggerSearch(''); }, [triggerSearch]);

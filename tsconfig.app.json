@@ -15,9 +15,9 @@
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "strict": true,
-    "noImplicitAny": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "useUnknownInCatchVariables": true,
     "paths": {
       "@/*": [

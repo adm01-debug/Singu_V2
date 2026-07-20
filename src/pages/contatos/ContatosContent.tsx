@@ -119,6 +119,7 @@ export function ContatosContent(props: Props) {
     const observer = new IntersectionObserver(([entry]) => { 
       if (entry.isIntersecting) {
         startTransition(() => {
+          // eslint-disable-next-line sonarjs/no-nested-functions
           setVisibleCount(prev => {
             const next = prev + RENDER_BATCH;
             // Se chegamos perto do fim do que temos em memória, e há mais no servidor, carrega mais.

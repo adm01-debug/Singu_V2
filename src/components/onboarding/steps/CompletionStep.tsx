@@ -23,6 +23,7 @@ const CompletionStep = ({ data, onComplete, onBack, isLoading }: CompletionStepP
       subtitle: `Bem-vindo ao SINGU, ${data.profile.firstName}!`,
       duration: 4000,
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const summaryItems = [

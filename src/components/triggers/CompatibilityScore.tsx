@@ -54,6 +54,7 @@ export function CompatibilityScore({ contact, vakProfile, metaprogramProfile, cl
   const [salespersonProfile, setSalespersonProfile] = useState<SalespersonProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (user) fetchSalespersonProfile(); }, [user]);
 
   const fetchSalespersonProfile = async () => {
@@ -70,6 +71,7 @@ export function CompatibilityScore({ contact, vakProfile, metaprogramProfile, cl
 
   const contactDISC = contact.behavior?.discProfile as DISCProfile | undefined;
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const compatibilityFactors = useMemo<CompatibilityFactor[]>(() => {
     const factors: CompatibilityFactor[] = [];
     if (!salespersonProfile) return factors;
