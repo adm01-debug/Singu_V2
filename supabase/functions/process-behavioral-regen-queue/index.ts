@@ -35,6 +35,15 @@ Deno.serve(async (req) => {
   const items = (due ?? []) as QueueRow[];
   const results: Array<{ contact_id: string; ok: boolean; error?: string }> = [];
 
+  const toDelete: string[] = [];
+  const toUpdate: Array<{
+    contact_id: string;
+    attempts: number;
+    last_error: string;
+    last_processed_at: string;
+    next_run_at: string;
+  }> = [];
+
   for (const item of items) {
     try {
       const resp = await fetchAPI(`${SUPABASE_URL}/functions/v1/generate-behavioral-profile`, {
@@ -52,31 +61,39 @@ Deno.serve(async (req) => {
         const txt = await resp.text();
         // 422 = sem histórico ainda; remove da fila para não reprocessar em loop
         if (resp.status === 422) {
-          await admin.from('behavioral_profile_regen_queue').delete().eq('contact_id', item.contact_id);
+          toDelete.push(item.contact_id);
           results.push({ contact_id: item.contact_id, ok: false, error: 'sem histórico' });
           continue;
         }
         throw new Error(`[${resp.status}] ${txt.slice(0, 200)}`);
       }
 
-      await admin.from('behavioral_profile_regen_queue').delete().eq('contact_id', item.contact_id);
+      toDelete.push(item.contact_id);
       results.push({ contact_id: item.contact_id, ok: true });
     } catch (e) {
       const msg = (e as Error).message;
       const nextAttempts = item.attempts + 1;
       const backoffMin = Math.min(60, 5 * Math.pow(2, item.attempts));
-      await admin
-        .from('behavioral_profile_regen_queue')
-        .update({
-          attempts: nextAttempts,
-          last_error: msg.slice(0, 500),
-          last_processed_at: new Date().toISOString(),
-          next_run_at: new Date(Date.now() + backoffMin * 60_000).toISOString(),
-        })
-        .eq('contact_id', item.contact_id);
+      toUpdate.push({
+        contact_id: item.contact_id,
+        attempts: nextAttempts,
+        last_error: msg.slice(0, 500),
+        last_processed_at: new Date().toISOString(),
+        next_run_at: new Date(Date.now() + backoffMin * 60_000).toISOString(),
+      });
       results.push({ contact_id: item.contact_id, ok: false, error: msg });
     }
   }
+
+  // Batch all DB writes after the loop
+  await Promise.all([
+    toDelete.length > 0
+      ? admin.from('behavioral_profile_regen_queue').delete().in('contact_id', toDelete)
+      : Promise.resolve(),
+    toUpdate.length > 0
+      ? admin.from('behavioral_profile_regen_queue').upsert(toUpdate, { onConflict: 'contact_id' })
+      : Promise.resolve(),
+  ]);
 
   return json({ processed: items.length, results });
 });
