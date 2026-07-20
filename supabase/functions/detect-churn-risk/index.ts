@@ -136,12 +136,9 @@ Deno.serve(async (req) => {
     risks.sort((a, b) => (b.risk_score as number) - (a.risk_score as number));
     const top = risks.slice(0, 50);
 
-    // Upsert results
+    // Upsert results (fire-and-forget — response uses in-memory `top`)
     if (top.length > 0) {
-      // Delete old for these contacts
       const riskContactIds = top.map((r) => r.contact_id as string);
-      await supabase.from("churn_risk_scores").delete().eq("user_id", userId).in("contact_id", riskContactIds);
-
       const rows = top.map((r) => ({
         user_id: userId,
         contact_id: r.contact_id,
@@ -155,7 +152,9 @@ Deno.serve(async (req) => {
         analyzed_at: new Date().toISOString(),
         expires_at: new Date(Date.now() + 7 * 86400000).toISOString(),
       }));
-      await supabase.from("churn_risk_scores").insert(rows);
+      supabase.from("churn_risk_scores").delete().eq("user_id", userId).in("contact_id", riskContactIds)
+        .then(() => supabase.from("churn_risk_scores").insert(rows))
+        .catch((e: unknown) => console.error("churn_risk_scores upsert error:", e));
     }
 
     return jsonOk({ success: true, analyzed: contacts.length, risks: top }, req);

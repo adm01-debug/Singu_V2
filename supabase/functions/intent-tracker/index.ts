@@ -115,11 +115,12 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Update pixel stats (best-effort)
-    await admin
+    // Update pixel stats (best-effort, fire-and-forget)
+    admin
       .from("intent_tracking_pixels")
-      .update({ signal_count: (await getCount(admin, pixel.user_id, data.pixel_key)) , last_signal_at: new Date().toISOString() })
-      .eq("pixel_key", data.pixel_key);
+      .update({ last_signal_at: new Date().toISOString() })
+      .eq("pixel_key", data.pixel_key)
+      .catch((e: unknown) => console.error("intent_tracking_pixels update error:", e));
 
     return new Response(JSON.stringify({ ok: true }), {
       status: 200, headers: { ...cors, "Content-Type": "application/json" },
@@ -131,12 +132,3 @@ Deno.serve(async (req) => {
     });
   }
 });
-
-async function getCount(admin: ReturnType<typeof createClient>, userId: string, pixelKey: string): Promise<number> {
-  const { count } = await admin
-    .from("intent_signals")
-    .select("id", { count: "exact", head: true })
-    .eq("user_id", userId)
-    .eq("signal_source", pixelKey);
-  return count ?? 0;
-}
