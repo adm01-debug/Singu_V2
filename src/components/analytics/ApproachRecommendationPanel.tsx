@@ -60,19 +60,24 @@ export function ApproachRecommendationPanel({ contact, interactions, className }
   const activeTriggers = triggerAnalysis?.primaryTriggers || [];
 
   useEffect(() => {
+    let cancelled = false;
     const fetchProfiles = async () => {
       setLoading(true);
       try {
         const [vak, meta] = await Promise.all([getContactVAKProfile(contact.id), getContactMetaprogramProfile(contact.id)]);
+        if (cancelled) return;
         setVakProfile(vak);
         setMetaprogramProfile(meta);
-      } catch (error) { 
+      } catch (error) {
+        if (cancelled) return;
         const msg = error instanceof Error ? error.message : 'Unknown error';
-        logger.error('Error fetching profiles:', { error: msg }); 
+        logger.error('Error fetching profiles:', { error: msg });
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-      finally { setLoading(false); }
     };
     fetchProfiles();
+    return () => { cancelled = true; };
   }, [contact.id, getContactVAKProfile, getContactMetaprogramProfile]);
 
   const recommendation = useApproachRecommendation({ contact, vakProfile, metaprogramProfile, eqResult, biasResult, emotionalState: currentEmotionalState, topValues, activeTriggers, hiddenObjections, rapportScore });

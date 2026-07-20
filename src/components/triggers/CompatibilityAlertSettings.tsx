@@ -41,36 +41,38 @@ export function CompatibilityAlertSettings() {
   });
 
   useEffect(() => {
-    if (user) {
-      fetchSettings();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  const fetchSettings = async () => {
     if (!user) return;
-    
-    try {
-      const { data, error } = await supabase
-        .from('compatibility_settings')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
+    const currentUser = user;
+    let cancelled = false;
 
-      if (!error && data) {
-        setSettings({
-          alert_threshold: data.alert_threshold,
-          alert_only_important: data.alert_only_important ?? true,
-          important_min_relationship_score: data.important_min_relationship_score ?? 70,
-          email_notifications: data.email_notifications ?? false,
-        });
+    const fetchSettings = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('compatibility_settings')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .maybeSingle();
+
+        if (cancelled) return;
+        if (!error && data) {
+          setSettings({
+            alert_threshold: data.alert_threshold,
+            alert_only_important: data.alert_only_important ?? true,
+            important_min_relationship_score: data.important_min_relationship_score ?? 70,
+            email_notifications: data.email_notifications ?? false,
+          });
+        }
+      } catch (err) {
+        if (cancelled) return;
+        logger.error('Error fetching settings:', err);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-    } catch (err) {
-      logger.error('Error fetching settings:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchSettings();
+    return () => { cancelled = true; };
+  }, [user]);
 
   const handleSave = async () => {
     if (!user) return;

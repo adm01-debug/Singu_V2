@@ -55,20 +55,28 @@ export function CompatibilityScore({ contact, vakProfile, metaprogramProfile, cl
   const [salespersonProfile, setSalespersonProfile] = useState<SalespersonProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { if (user) fetchSalespersonProfile(); }, [user]);
-
-  const fetchSalespersonProfile = async () => {
+  useEffect(() => {
     if (!user) return;
-    try {
-      const { data, error } = await supabase.from('profiles').select('nlp_profile').eq('id', user.id).maybeSingle();
-      if (!error && data?.nlp_profile) setSalespersonProfile(data.nlp_profile as unknown as SalespersonProfile);
-    } catch (err) {
-      logger.error('Error fetching salesperson profile:', { error: err instanceof Error ? err.message : String(err) });
-      toast.error('Não foi possível carregar seu perfil de compatibilidade');
-    }
-    finally { setLoading(false); }
-  };
+    const currentUser = user;
+    let cancelled = false;
+
+    const fetchSalespersonProfile = async () => {
+      try {
+        const { data, error } = await supabase.from('profiles').select('nlp_profile').eq('id', currentUser.id).maybeSingle();
+        if (cancelled) return;
+        if (!error && data?.nlp_profile) setSalespersonProfile(data.nlp_profile as unknown as SalespersonProfile);
+      } catch (err) {
+        if (cancelled) return;
+        logger.error('Error fetching salesperson profile:', { error: err instanceof Error ? err.message : String(err) });
+        toast.error('Não foi possível carregar seu perfil de compatibilidade');
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    fetchSalespersonProfile();
+    return () => { cancelled = true; };
+  }, [user]);
 
   const contactDISC = contact.behavior?.discProfile as DISCProfile | undefined;
 

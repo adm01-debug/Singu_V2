@@ -57,31 +57,33 @@ export function SalespersonProfileSettings() {
   });
 
   useEffect(() => {
-    if (user) {
-      fetchProfile();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  const fetchProfile = async () => {
     if (!user) return;
-    
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('nlp_profile')
-        .eq('id', user.id)
-        .maybeSingle();
+    const currentUser = user;
+    let cancelled = false;
 
-      if (!error && data?.nlp_profile) {
-        setProfile(data.nlp_profile as unknown as SalespersonNLPProfile);
+    const fetchProfile = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('nlp_profile')
+          .eq('id', currentUser.id)
+          .maybeSingle();
+
+        if (cancelled) return;
+        if (!error && data?.nlp_profile) {
+          setProfile(data.nlp_profile as unknown as SalespersonNLPProfile);
+        }
+      } catch (err) {
+        if (cancelled) return;
+        logger.error('Error fetching profile:', err);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-    } catch (err) {
-      logger.error('Error fetching profile:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchProfile();
+    return () => { cancelled = true; };
+  }, [user]);
 
   const handleSave = async () => {
     if (!user) return;

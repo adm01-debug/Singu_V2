@@ -66,6 +66,7 @@ const NLPEvolutionTimeline: React.FC<NLPEvolutionTimelineProps> = ({
   const [activeTab, setActiveTab] = useState<AnalysisType>('all');
   const [vakData, setVakData] = useState<VAKDataPoint[]>([]);
   const [emotionalData, setEmotionalData] = useState<EmotionalDataPoint[]>([]);
+  const [refreshCounter, setRefreshCounter] = useState(0);
 
   useEffect(() => {
     if (!user || !contactId) return;
@@ -117,7 +118,7 @@ const NLPEvolutionTimeline: React.FC<NLPEvolutionTimelineProps> = ({
     };
     fetchEvolutionData();
     return () => { cancelled = true; };
-  }, [user, contactId, period]);
+  }, [user, contactId, period, refreshCounter]);
 
   const vakTrend = useMemo(() => {
     if (vakData.length < 2) return null;
@@ -176,7 +177,7 @@ const NLPEvolutionTimeline: React.FC<NLPEvolutionTimelineProps> = ({
                 <SelectItem value="180d">6 meses</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="icon" onClick={fetchEvolutionData}><RefreshCw className="w-4 h-4" /></Button>
+            <Button variant="outline" size="icon" onClick={() => setRefreshCounter(c => c + 1)}><RefreshCw className="w-4 h-4" /></Button>
           </div>
         </div>
       </CardHeader>

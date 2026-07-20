@@ -119,14 +119,15 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
       const processedVak: ProfileMetrics[] = (['V', 'A', 'K', 'D'] as VAKType[]).map(type => {
         const data = vakData[type];
         const contactCount = data.contacts.size;
+        const conversionRate = contactCount > 0 ? Math.round((data.conversions / contactCount) * 100) : 0;
         return {
           profile: VAK_LABELS[type].name,
           profileType: 'vak',
           totalContacts: contactCount,
           avgRelationshipScore: contactCount > 0 ? Math.round(data.totalScore / contactCount) : 0,
           interactionCount: data.interactions,
-          conversionRate: contactCount > 0 ? Math.round((data.conversions / contactCount) * 100) : 0,
-            trend: conversionRate >= 50 ? 'up' : conversionRate >= 25 ? 'stable' : 'down'
+          conversionRate,
+          trend: conversionRate >= 50 ? 'up' : conversionRate >= 25 ? 'stable' : 'down'
         };
       });
 

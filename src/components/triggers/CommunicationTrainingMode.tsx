@@ -35,28 +35,33 @@ export function CommunicationTrainingMode() {
   const [completedScenarios, setCompletedScenarios] = useState<string[]>([]);
 
   useEffect(() => {
-    if (user) fetchProfile();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  const fetchProfile = async () => {
     if (!user) return;
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('nlp_profile')
-        .eq('id', user.id)
-        .maybeSingle();
-      if (!error && data?.nlp_profile) {
-        setSalespersonProfile(data.nlp_profile as unknown as SalespersonProfile);
+    const currentUser = user;
+    let cancelled = false;
+
+    const fetchProfile = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('nlp_profile')
+          .eq('id', currentUser.id)
+          .maybeSingle();
+        if (cancelled) return;
+        if (!error && data?.nlp_profile) {
+          setSalespersonProfile(data.nlp_profile as unknown as SalespersonProfile);
+        }
+      } catch (err) {
+        if (cancelled) return;
+        logger.error('Error fetching profile:', err);
+        toast.error('Não foi possível carregar seu perfil de comunicação');
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-    } catch (err) {
-      logger.error('Error fetching profile:', err);
-      toast.error('Não foi possível carregar seu perfil de comunicação');
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchProfile();
+    return () => { cancelled = true; };
+  }, [user]);
 
   const scenarios = useMemo(() => {
     return generateScenarios(salespersonProfile?.discProfile || null);
