@@ -205,22 +205,23 @@ export function useGeneratePlaybook() {
 export function useRecommendPlaybooks() {
   return useMutation({
     mutationFn: async (input: {
-      contact_id?: string; 
-      deal_id?: string; 
+      contact_id?: string;
+      deal_id?: string;
       current_stage?: string;
-      recent_topics?: string[]; 
-      industry?: string; 
+      recent_topics?: string[];
+      industry?: string;
       persona?: string;
       competitor_mentioned?: string;
     }) => {
       const { data, error } = await supabase.functions.invoke("playbook-recommender", { body: input });
       if (error) throw error;
-      
-      return data as { 
-        recommendations: Array<{ playbook: SalesPlaybook; score: number; reasons: string[] }>; 
-        battle_card?: BattleCard; 
+
+      return data as {
+        recommendations: Array<{ playbook: SalesPlaybook; score: number; reasons: string[] }>;
+        battle_card?: BattleCard;
       };
     },
+    onError: (e: Error) => toast.error(e.message || "Erro ao recomendar playbooks"),
   });
 }
 
