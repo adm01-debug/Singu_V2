@@ -171,7 +171,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("send-sms-campaign error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Internal error" }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500, headers: { ...cors, "Content-Type": "application/json" },
     });
   }

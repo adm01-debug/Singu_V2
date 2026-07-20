@@ -207,7 +207,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("win-loss-analyzer error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown" }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
     });

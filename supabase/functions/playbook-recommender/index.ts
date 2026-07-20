@@ -144,6 +144,6 @@ Deno.serve(async (req) => {
     }), { headers: { ...cors, "Content-Type": "application/json" } });
   } catch (e) {
     console.error("playbook-recommender error", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : String(e) }), { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
   }
 });

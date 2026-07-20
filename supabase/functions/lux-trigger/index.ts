@@ -188,7 +188,7 @@ Deno.serve(async (req) => {
     });
   } catch (error) {
     console.error('[lux-trigger] Error:', error);
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }), {
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500, headers: { ...cors, 'Content-Type': 'application/json' },
     });
   }

@@ -80,7 +80,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("get-signature error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown" }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { ...cors, "Content-Type": "application/json" },
     });

@@ -117,7 +117,8 @@ Deno.serve(async (req) => {
       .limit(10000);
 
     if (error) {
-      return new Response(JSON.stringify({ error: error.message }), {
+      console.error("error-budget query error:", error);
+      return new Response(JSON.stringify({ error: "Internal server error" }), {
         status: 500,
         headers: { ...cors, "Content-Type": "application/json" },
       });

@@ -140,6 +140,6 @@ Gere o playbook chamando a function create_playbook.`;
     return new Response(JSON.stringify({ generated: args, playbook_draft: playbook }), { headers: { ...cors, "Content-Type": "application/json" } });
   } catch (e) {
     console.error("playbook-generator error", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : String(e) }), { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
   }
 });

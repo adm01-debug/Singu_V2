@@ -78,9 +78,9 @@ Deno.serve(async (req) => {
     return jsonOk({ success: true });
   } catch (error) {
     console.error('sync-social-interests error:', error);
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }), {
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       headers: { ...cors, 'Content-Type': 'application/json' },
-      status: 400,
+      status: 500,
     });
   }
 });

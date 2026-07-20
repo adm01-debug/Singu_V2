@@ -48,7 +48,8 @@ Deno.serve(async (req) => {
     : await query.lte("next_retry_at", new Date().toISOString()).limit(20);
 
   if (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+    console.error("process-webhook-dlq query error:", error);
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500, headers: { ...cors, "Content-Type": "application/json" },
     });
   }
