@@ -23,38 +23,38 @@ export function useTemplateNotifications() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      loadSettings();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  const loadSettings = async () => {
     if (!user) return;
+    const currentUser = user;
+    let cancelled = false;
+    const loadSettings = async () => {
+      try {
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('preferences')
+          .eq('id', currentUser.id)
+          .maybeSingle();
 
-    try {
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('preferences')
-        .eq('id', user.id)
-        .maybeSingle();
+        if (cancelled) return;
+        if (error) throw error;
 
-      if (error) throw error;
-
-      const preferences = profile?.preferences as Record<string, unknown> | null;
-      if (preferences?.templateNotifications) {
-        setSettings({
-          ...DEFAULT_SETTINGS,
-          ...(preferences.templateNotifications as Partial<TemplateNotificationSettings>),
-        });
+        const preferences = profile?.preferences as Record<string, unknown> | null;
+        if (preferences?.templateNotifications) {
+          setSettings({
+            ...DEFAULT_SETTINGS,
+            ...(preferences.templateNotifications as Partial<TemplateNotificationSettings>),
+          });
+        }
+      } catch (error) {
+        if (cancelled) return;
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error loading notification settings:', { error: msg });
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-    } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error loading notification settings:', { error: msg });
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+    loadSettings();
+    return () => { cancelled = true; };
+  }, [user]);
 
   const updateSettings = async (newSettings: Partial<TemplateNotificationSettings>) => {
     if (!user) return false;

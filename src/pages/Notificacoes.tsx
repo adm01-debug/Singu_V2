@@ -72,23 +72,27 @@ const Notificacoes = () => {
   };
 
   useEffect(() => {
+    let cancelled = false;
     const loadSettings = async () => {
       try {
         const saved = localStorage.getItem('notificationSettings');
         if (saved) setNotificationSettings(JSON.parse(saved));
         if (user) {
           const { data: profile } = await supabase.from('profiles').select('preferences').eq('id', user.id).maybeSingle();
+          if (cancelled) return;
           if (profile?.preferences) {
             const prefs = profile.preferences as { notifications?: typeof notificationSettings };
             if (prefs.notifications) { setNotificationSettings(prefs.notifications); localStorage.setItem('notificationSettings', JSON.stringify(prefs.notifications)); }
           }
         }
-      } catch (error) { 
+      } catch (error) {
+        if (cancelled) return;
         const msg = error instanceof Error ? error.message : 'Unknown error';
-        logger.error('Error loading notification settings:', { error: msg }); 
+        logger.error('Error loading notification settings:', { error: msg });
       }
     };
     loadSettings();
+    return () => { cancelled = true; };
   }, []);
 
   return (
