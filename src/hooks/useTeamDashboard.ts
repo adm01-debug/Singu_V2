@@ -17,7 +17,7 @@ export interface TeamMemberStats {
 export function useTeamDashboard() {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['team-dashboard'],
+    queryKey: ['team-dashboard', user?.id],
     queryFn: async () => {
       if (!user) return { members: [] as TeamMemberStats[], isManager: false };
 

@@ -61,7 +61,7 @@ function dealOutcome(d: RawDeal): 'won' | 'lost' | null {
 export function useTouchpointSequences() {
   const { user } = useAuth();
   return useQuery<TouchpointSequencesResult>({
-    queryKey: ['touchpoint-sequences'],
+    queryKey: ['touchpoint-sequences', user?.id],
     // eslint-disable-next-line sonarjs/cognitive-complexity
     queryFn: async () => {
       const since = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString();

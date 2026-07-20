@@ -51,7 +51,7 @@ export function useCognitiveBiasPersistence(contactId: string) {
 
   // Fetch bias history for a contact
   const { data: history, isLoading, error } = useQuery({
-    queryKey: ['bias-history', contactId],
+    queryKey: ['bias-history', contactId, user?.id],
     queryFn: async (): Promise<BiasHistoryRecord[]> => {
       if (!user?.id) return [];
 
@@ -109,7 +109,7 @@ export function useCognitiveBiasPersistence(contactId: string) {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['bias-history', contactId] });
+      queryClient.invalidateQueries({ queryKey: ['bias-history', contactId, user?.id] });
     }
   });
 
