@@ -217,9 +217,6 @@ Gere o resumo do contexto.`;
     });
   } catch (err) {
     console.error("objection-context-summary error:", err);
-    return jsonError(
-      err instanceof Error ? err.message : "Erro inesperado",
-      500,
-    );
+    return jsonError("Internal server error", 500);
   }
 });
