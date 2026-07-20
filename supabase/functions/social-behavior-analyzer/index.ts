@@ -48,23 +48,24 @@ Deno.serve(async (req) => {
  
      if (!userId) return jsonError("User ID required", 400);
 
-     const { data: socialProfiles, error: profilesError } = await supabaseClient
-       .from("social_profiles").select("*").eq("contact_id", contactId);
-     
-     // Fetch interactions and messages for broader analysis
-     const { data: interactions } = await supabaseClient
-       .from("interactions")
-       .select("content, type, sentiment, transcription")
-       .eq("contact_id", contactId)
-       .order("created_at", { ascending: false })
-       .limit(10);
+    // All three reads are independent — fetch in parallel
+    const [
+      { data: socialProfiles, error: profilesError },
+      { data: interactions },
+      { data: contact },
+    ] = await Promise.all([
+      supabaseClient.from("social_profiles").select("*").eq("contact_id", contactId),
+      supabaseClient.from("interactions")
+        .select("content, type, sentiment, transcription")
+        .eq("contact_id", contactId)
+        .order("created_at", { ascending: false })
+        .limit(10),
+      supabaseClient.from("contacts").select("*").eq("id", contactId).single(),
+    ]);
 
     if (profilesError || !socialProfiles || socialProfiles.length === 0) {
       return jsonError("No social profiles found for this contact", 404);
     }
-
-    const { data: contact } = await supabaseClient
-      .from("contacts").select("*").eq("id", contactId).single();
 
     const profilesSummary = socialProfiles.map(p => ({
       platform: p.platform, headline: p.headline, current_company: p.current_company,
@@ -166,7 +167,6 @@ Responda APENAS com um JSON válido no formato especificado.`;
 
     return jsonOk({ success: true, analysis, savedId: savedAnalysis?.id });
   } catch (error) {
-    console.error("social-behavior-analyzer error:", error);
     console.error("social-behavior-analyzer error:", error);
     return jsonError("Internal server error", 500);
   }
