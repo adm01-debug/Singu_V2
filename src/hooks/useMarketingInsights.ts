@@ -1,14 +1,14 @@
  import { useQuery } from '@tanstack/react-query';
  import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
- 
+
  export interface FunnelStat {
    stage: string;
    count: number;
    previous_stage_count: number;
    conversion_rate: number;
  }
- 
+
  export interface CampaignStat {
    id: string;
    entity_type: string;
@@ -21,22 +21,24 @@ import { useAuth } from './useAuth';
    spend: number;
    revenue: number;
  }
- 
+
  export function useMarketingFunnel(startDate?: string, endDate?: string) {
+   const { user } = useAuth();
    return useQuery({
-     queryKey: ['marketing-funnel', startDate, endDate],
+     queryKey: ['marketing-funnel', startDate, endDate, user?.id],
+     enabled: !!user,
      queryFn: async () => {
        if (!user) return [];
- 
+
        const start = startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
        const end = endDate || new Date().toISOString().split('T')[0];
- 
+
        const { data, error } = await supabase.rpc('get_marketing_funnel_stats', {
          _user_id: user.id,
          _start_date: start,
          _end_date: end
        });
- 
+
        if (error) {
          console.error('Error fetching marketing funnel:', error);
          throw error;
@@ -45,18 +47,20 @@ import { useAuth } from './useAuth';
      },
    });
  }
- 
+
  export function useMarketingBehavioralInsights() {
+   const { user } = useAuth();
    return useQuery({
-     queryKey: ['marketing-behavioral-insights'],
+     queryKey: ['marketing-behavioral-insights', user?.id],
+     enabled: !!user,
      queryFn: async () => {
        if (!user) return null;
- 
+
        const { data, error } = await supabase
          .from('contacts')
          .select('id, contact_behavior(disc_primary, vak_primary, motivation_primary)')
          .eq('user_id', user.id);
- 
+
        if (error) { throw error; }
 
        type BehavioralStats = {
@@ -80,23 +84,25 @@ import { useAuth } from './useAuth';
           }
           return acc;
         }, { disc: {}, vak: {}, motivation: {} });
- 
+
        return stats;
      },
    });
  }
- 
+
  export function useMarketingCampaignStats() {
+   const { user } = useAuth();
    return useQuery({
-     queryKey: ['marketing-campaign-stats'],
+     queryKey: ['marketing-campaign-stats', user?.id],
+     enabled: !!user,
      queryFn: async () => {
        if (!user) return [];
- 
+
        const { data, error } = await supabase
         .from('marketing_campaign_stats')
          .select('*')
          .order('date', { ascending: false });
- 
+
        if (error) {
          console.error('Error fetching campaign stats:', error);
          throw error;

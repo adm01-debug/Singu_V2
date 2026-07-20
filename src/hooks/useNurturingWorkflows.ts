@@ -38,10 +38,11 @@ export interface NurturingEnrollment {
 export function useNurturingWorkflows() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['nurturing-workflows'];
+  const key = ['nurturing-workflows', user?.id];
 
   const { data: workflows = [], isLoading } = useQuery({
     queryKey: key,
+    enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase.from('nurturing_workflows').select('*').eq('user_id', user.id).order('created_at', { ascending: false });

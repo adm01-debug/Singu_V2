@@ -25,10 +25,11 @@ export interface EmailCampaign {
 export function useEmailCampaigns() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['email-campaigns'];
+  const key = ['email-campaigns', user?.id];
 
   const { data: campaigns = [], isLoading } = useQuery({
     queryKey: key,
+    enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase

@@ -32,10 +32,11 @@ export interface MQLClassification {
 export function useMQLCriteria() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const KEY = ['mql-criteria'];
+  const KEY = ['mql-criteria', user?.id];
 
   const { data: criteria = [], isLoading } = useQuery({
     queryKey: KEY,
+    enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase.from('mql_criteria').select('*').eq('user_id', user.id).order('priority', { ascending: false });
@@ -74,7 +75,8 @@ export function useMQLCriteria() {
 export function useMQLClassifications() {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['mql-classifications'],
+    queryKey: ['mql-classifications', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase

@@ -20,10 +20,11 @@ export interface KBArticle {
 export function useKnowledgeBase() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['knowledge-base'];
+  const key = ['knowledge-base', user?.id];
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: key,
+    enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase

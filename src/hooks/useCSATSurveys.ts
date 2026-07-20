@@ -21,10 +21,11 @@ export interface CSATSurvey {
 export function useCSATSurveys(contactId?: string) {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['csat-surveys', contactId];
+  const key = ['csat-surveys', contactId, user?.id];
 
   const { data: surveys = [], isLoading } = useQuery({
     queryKey: key,
+    enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
       let query = supabase.from('csat_surveys').select('*').eq('user_id', user.id).order('created_at', { ascending: false });

@@ -49,16 +49,19 @@ Deno.serve(async (req) => {
     const periodStart = new Date(Date.now() - period_days * 86400 * 1000).toISOString();
     const periodEnd = new Date().toISOString();
 
-    // Fetch records in period
+    // Fetch records with reason labels joined — eliminates a second round-trip
     const { data: records, error: recErr } = await supabase
       .from("win_loss_records")
-      .select("outcome, deal_value, sales_cycle_days, competitor_id, primary_reason_id")
+      .select("outcome, deal_value, sales_cycle_days, competitor_id, primary_reason_id, win_loss_reasons(id, label, category)")
       .eq("user_id", userId)
       .gte("recorded_at", periodStart);
 
     if (recErr) throw recErr;
 
-    const list = records ?? [];
+    type Record = typeof records extends (infer T)[] | null ? T : never;
+    type ReasonJoin = { id: string; label: string; category: string } | null;
+
+    const list = (records ?? []) as (Omit<Record, 'win_loss_reasons'> & { win_loss_reasons: ReasonJoin })[];
     const won = list.filter((r) => r.outcome === "won");
     const lost = list.filter((r) => r.outcome === "lost");
     const totalDecided = won.length + lost.length;
@@ -67,25 +70,19 @@ Deno.serve(async (req) => {
       ? won.reduce((s, r) => s + Number(r.deal_value || 0), 0) / won.length
       : 0;
 
-    // Top reasons
-    const reasonCounts = new Map<string, { won: number; lost: number }>();
+    // Top reasons — labels come from the joined win_loss_reasons row
+    const reasonCounts = new Map<string, { won: number; lost: number; label: string }>();
     list.forEach((r) => {
       if (!r.primary_reason_id) return;
-      const cur = reasonCounts.get(r.primary_reason_id) ?? { won: 0, lost: 0 };
+      const label = r.win_loss_reasons?.label ?? "?";
+      const cur = reasonCounts.get(r.primary_reason_id) ?? { won: 0, lost: 0, label };
       if (r.outcome === "won") cur.won++;
       if (r.outcome === "lost") cur.lost++;
       reasonCounts.set(r.primary_reason_id, cur);
     });
 
-    // Resolve reason labels
-    const reasonIds = [...reasonCounts.keys()];
-    const { data: reasons } = reasonIds.length > 0
-      ? await supabase.from("win_loss_reasons").select("id, label, category").in("id", reasonIds)
-      : { data: [] };
-    const reasonMap = new Map((reasons ?? []).map((r: { id: string; label: string; category: string }) => [r.id, r]));
-
     const topLossReasons = [...reasonCounts.entries()]
-      .map(([id, c]) => ({ id, label: reasonMap.get(id)?.label ?? "?", count: c.lost }))
+      .map(([id, c]) => ({ id, label: c.label, count: c.lost }))
       .filter((r) => r.count > 0)
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);

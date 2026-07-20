@@ -62,6 +62,7 @@ export function useTouchpointSequences() {
   const { user } = useAuth();
   return useQuery<TouchpointSequencesResult>({
     queryKey: ['touchpoint-sequences', user?.id],
+    enabled: !!user,
     // eslint-disable-next-line sonarjs/cognitive-complexity
     queryFn: async () => {
       const since = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString();

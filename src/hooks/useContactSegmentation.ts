@@ -63,7 +63,8 @@ export function useContactSegmentation() {
   const [segment, setSegment] = useState<SegmentDefinition>({ name: '', filters: [], logic: 'and' });
 
    const { data: allContacts = [] } = useQuery({
-     queryKey: ['contacts-for-segmentation'],
+     queryKey: ['contacts-for-segmentation', user?.id],
+     enabled: !!user,
      queryFn: async () => {
        if (!user) return [];
        

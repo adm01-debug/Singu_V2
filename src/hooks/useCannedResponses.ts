@@ -16,10 +16,11 @@ export interface CannedResponse {
 export function useCannedResponses() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['canned-responses'];
+  const key = ['canned-responses', user?.id];
 
   const { data: responses = [], isLoading } = useQuery({
     queryKey: key,
+    enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase

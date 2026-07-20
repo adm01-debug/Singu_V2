@@ -70,7 +70,8 @@ const STAGE_ORDER: Record<Stage, number> = {
 export function useChannelPerformanceMatrix() {
   const { user } = useAuth();
   return useQuery<MatrixResult>({
-    queryKey: ['channel-performance-matrix'],
+    queryKey: ['channel-performance-matrix', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const since = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString();
       if (!user) return { cells: [], winnerByStage: {}, totalInteractions: 0, bestInsight: null };

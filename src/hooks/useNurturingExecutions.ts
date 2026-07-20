@@ -19,7 +19,8 @@ export interface NurturingExecution {
 export function useNurturingExecutions(workflowId?: string) {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['nurturing-executions', workflowId],
+    queryKey: ['nurturing-executions', workflowId, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
       let q = supabase.from('nurturing_executions').select('*').eq('user_id', user.id).order('started_at', { ascending: false }).limit(200);
