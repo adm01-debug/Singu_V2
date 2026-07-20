@@ -44,46 +44,63 @@ Deno.serve(async (req) => {
 
     for (const uid of userIds) {
       if (user_id_override && uid !== user_id_override) continue;
-      const { data: contacts } = await supabase
-        .from("contacts")
-        .select("id, lead_score")
-        .eq("user_id", uid)
-        .gte("lead_score", 40)
-        .limit(500);
 
-      for (const c of contacts || []) {
-        evaluated++;
-        const { data: existing } = await supabase
-          .from("mql_classifications")
-          .select("id")
-          .eq("contact_id", c.id)
+      // Pre-fetch contacts AND the user's active criteria in parallel (2 queries, not N)
+      const [{ data: contacts }, { data: crit }] = await Promise.all([
+        supabase
+          .from("contacts")
+          .select("id, lead_score")
           .eq("user_id", uid)
-          .in("status", ["mql", "sql"])
-          .maybeSingle();
-        if (existing?.id) continue;
-
-        // Re-evaluate via direct insert (RPC uses auth.uid which may be null in cron)
-        const { data: crit } = await supabase
+          .gte("lead_score", 40)
+          .limit(500),
+        supabase
           .from("mql_criteria")
           .select("id, conditions")
           .eq("user_id", uid)
           .eq("is_active", true)
           .order("priority", { ascending: false })
           .limit(1)
-          .maybeSingle();
-        if (!crit) continue;
-        const minScore = (crit.conditions as { min_score?: number })?.min_score ?? 50;
+          .maybeSingle(),
+      ]);
+
+      if (!crit || !contacts?.length) continue;
+
+      const minScore = (crit.conditions as { min_score?: number })?.min_score ?? 50;
+      const contactIds = contacts.map((c: { id: string }) => c.id);
+
+      // Batch-fetch existing MQL/SQL classifications for ALL contacts at once (1 query, not N)
+      const { data: existingRows } = await supabase
+        .from("mql_classifications")
+        .select("contact_id")
+        .eq("user_id", uid)
+        .in("contact_id", contactIds)
+        .in("status", ["mql", "sql"]);
+
+      const alreadyClassified = new Set(
+        (existingRows ?? []).map((r: { contact_id: string }) => r.contact_id)
+      );
+
+      // Pure in-memory pass — accumulate new rows, zero additional DB calls
+      const newClassifications: Record<string, unknown>[] = [];
+      for (const c of contacts) {
+        evaluated++;
+        if (alreadyClassified.has(c.id)) continue;
         if ((c.lead_score ?? 0) >= minScore) {
-          await supabase.from("mql_classifications").insert({
+          newClassifications.push({
             user_id: uid,
             contact_id: c.id,
             criteria_id: crit.id,
             status: "mql",
             score_snapshot: c.lead_score,
             reason: "Cron auto-evaluation",
-          } as never);
-          qualified++;
+          });
         }
+      }
+
+      // Bulk insert all new classifications in one call (1 query, not N)
+      if (newClassifications.length > 0) {
+        await supabase.from("mql_classifications").insert(newClassifications as never[]);
+        qualified += newClassifications.length;
       }
     }
 
