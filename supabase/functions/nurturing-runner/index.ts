@@ -55,6 +55,16 @@ Deno.serve(async (req) => {
       (workflowRows ?? []).map((w: WorkflowRow) => [w.id, w])
     );
 
+    const now = new Date().toISOString();
+
+    // Accumulators for bulk writes after the loop
+    const taskRows: never[] = [];
+    const interactionRows: never[] = [];
+    const completedExecIds: string[] = [];
+    const advanceExecRows: Array<{ id: string; current_step: number; last_action_at: string; next_action_at: string | null; status: string; completed_at: string | null }> = [];
+    const failedExecRows: Array<{ id: string; status: string; error_message: string }> = [];
+    const completedWorkflowIds: string[] = [];
+
     for (const exec of execs) {
       stats.processed++;
       try {
@@ -63,36 +73,30 @@ Deno.serve(async (req) => {
         const step = steps[exec.current_step];
 
         if (!step) {
-          await supabase.from("nurturing_executions").update({
-            status: "completed",
-            completed_at: new Date().toISOString(),
-          }).eq("id", exec.id);
-          await supabase.rpc("increment_workflow_completed" as never, { _id: exec.workflow_id }).catch(() => {});
-          await supabase.from("nurturing_workflows")
-            .update({ completed_count: ((wf?.completed_count) ?? 0) + 1 } as never)
-            .eq("id", exec.workflow_id).catch(() => {});
+          completedExecIds.push(exec.id);
+          completedWorkflowIds.push(exec.workflow_id);
           stats.completed++;
           continue;
         }
 
         if (step.type === "task") {
-          await supabase.from("tasks").insert({
+          taskRows.push({
             user_id: exec.user_id,
             contact_id: exec.contact_id,
             title: step.subject || "Tarefa de nurturing",
             description: step.content || null,
             status: "pending",
             priority: "medium",
-          } as never).catch(() => {});
+          } as never);
         } else if (step.type === "email" || step.type === "whatsapp") {
-          await supabase.from("interactions").insert({
+          interactionRows.push({
             user_id: exec.user_id,
             contact_id: exec.contact_id,
             type: step.type === "email" ? "email" : "whatsapp",
             title: step.subject || `Nurturing ${step.type}`,
             content: step.content || "",
             initiated_by: "user",
-          } as never).catch(() => {});
+          } as never);
         }
 
         const nextStep = exec.current_step + 1;
@@ -100,23 +104,47 @@ Deno.serve(async (req) => {
         const delayDays = nextStepDef?.delay_days ?? 1;
         const nextAt = new Date(Date.now() + delayDays * 86_400_000).toISOString();
 
-        await supabase.from("nurturing_executions").update({
+        advanceExecRows.push({
+          id: exec.id,
           current_step: nextStep,
-          last_action_at: new Date().toISOString(),
+          last_action_at: now,
           next_action_at: nextStepDef ? nextAt : null,
           status: nextStepDef ? "active" : "completed",
-          completed_at: nextStepDef ? null : new Date().toISOString(),
-        }).eq("id", exec.id);
-
+          completed_at: nextStepDef ? null : now,
+        });
         stats.advanced++;
       } catch (stepErr) {
         stats.failed++;
-        await supabase.from("nurturing_executions").update({
+        failedExecRows.push({
+          id: exec.id,
           status: "failed",
           error_message: (stepErr as Error).message,
-        }).eq("id", exec.id);
+        });
       }
     }
+
+    // Flush all accumulated writes in parallel
+    await Promise.all([
+      taskRows.length > 0
+        ? supabase.from("tasks").insert(taskRows).catch(() => {})
+        : Promise.resolve(),
+      interactionRows.length > 0
+        ? supabase.from("interactions").insert(interactionRows).catch(() => {})
+        : Promise.resolve(),
+      completedExecIds.length > 0
+        ? supabase.from("nurturing_executions").update({ status: "completed", completed_at: now }).in("id", completedExecIds)
+        : Promise.resolve(),
+      advanceExecRows.length > 0
+        ? supabase.from("nurturing_executions").upsert(advanceExecRows, { onConflict: "id" })
+        : Promise.resolve(),
+      failedExecRows.length > 0
+        ? supabase.from("nurturing_executions").upsert(failedExecRows, { onConflict: "id" })
+        : Promise.resolve(),
+      // Workflow completion RPCs run in parallel (one per completed workflow)
+      ...completedWorkflowIds.map(wfId =>
+        supabase.rpc("increment_workflow_completed" as never, { _id: wfId }).catch(() => {})
+      ),
+    ]);
 
     return new Response(JSON.stringify({ ok: true, stats }), {
       headers: { ...cors, "Content-Type": "application/json" },
