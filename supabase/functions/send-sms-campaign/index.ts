@@ -64,14 +64,11 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "Campaign already processed" }), { status: 409, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
-    // Materialize recipients from contacts with phone, excluding opt-outs
-    const { data: contacts } = await admin
-      .from("contacts")
-      .select("id, first_name, last_name, phone, whatsapp")
-      .eq("user_id", user.id);
-
-    const { data: optOuts } = await admin
-      .from("sms_opt_outs").select("phone").eq("user_id", user.id);
+    // Materialize recipients from contacts with phone, excluding opt-outs (parallel reads)
+    const [{ data: contacts }, { data: optOuts }] = await Promise.all([
+      admin.from("contacts").select("id, first_name, last_name, phone, whatsapp").eq("user_id", user.id),
+      admin.from("sms_opt_outs").select("phone").eq("user_id", user.id),
+    ]);
     const optedOut = new Set((optOuts || []).map(o => o.phone));
 
     const recipientRows: Array<{ campaign_id: string; contact_id: string; phone: string; status: string }> = [];
