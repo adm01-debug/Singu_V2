@@ -28,14 +28,11 @@ export function useDISCConversionData(period: ConversionPeriod) {
       if (!user) return;
       setLoading(true);
       try {
-        const { data: contacts } = await supabase
-          .from('contacts')
-          .select('id, behavior, relationship_score, relationship_stage, created_at');
-
-        const { data: interactions } = await supabase
-          .from('interactions')
-          .select('contact_id, type, created_at')
-          .order('created_at', { ascending: true });
+        // Both queries are independent — run in parallel
+        const [{ data: contacts }, { data: interactions }] = await Promise.all([
+          supabase.from('contacts').select('id, behavior, relationship_score, relationship_stage, created_at').eq('user_id', user.id),
+          supabase.from('interactions').select('contact_id, type, created_at').eq('user_id', user.id).order('created_at', { ascending: true }),
+        ]);
 
         const profileData: Record<string, {
           contacts: number; opportunities: number; conversions: number;

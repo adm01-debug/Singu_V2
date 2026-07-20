@@ -415,19 +415,11 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
     if (!user) return;
 
     try {
-      // Fetch all contacts with behavior
-      const { data: contacts } = await supabase
-        .from('contacts')
-        .select('id, behavior, relationship_score')
-        .eq('user_id', user.id);
-
-      // Fetch recent analyses
-      const { data: recentAnalyses } = await supabase
-        .from('disc_analysis_history')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('analyzed_at', { ascending: false })
-        .limit(10);
+      // Both queries are independent — fetch in parallel
+      const [{ data: contacts }, { data: recentAnalyses }] = await Promise.all([
+        supabase.from('contacts').select('id, behavior, relationship_score').eq('user_id', user.id),
+        supabase.from('disc_analysis_history').select('*').eq('user_id', user.id).order('analyzed_at', { ascending: false }).limit(10),
+      ]);
 
       // Calculate distributions
       const profileCounts = { D: 0, I: 0, S: 0, C: 0 };
