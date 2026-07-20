@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 
 export type PassoOutcome =
   | 'respondeu_positivo'
@@ -83,6 +84,7 @@ export function useRegisterPassoFeedback() {
       // Sinais de prontidão e timeline derivada
       qc.invalidateQueries({ queryKey: ['contact-view-360', vars.contactId] });
     },
+    onError: () => toast.error('Erro ao registrar feedback do passo'),
   });
 }
 

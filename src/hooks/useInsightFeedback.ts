@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 import type { EvidenceKind } from '@/components/contacts/EvidenceDrillDownSheet';
 
 export type InsightVote = 1 | -1;
@@ -75,6 +76,7 @@ export function useSubmitInsightFeedback() {
     onSuccess: (row, vars) => {
       qc.setQueryData(key(vars.contactId, vars.kind, vars.label), row);
     },
+    onError: () => toast.error('Erro ao registrar feedback'),
   });
 }
 
@@ -97,5 +99,6 @@ export function useRemoveInsightFeedback() {
     onSuccess: (_v, vars) => {
       qc.setQueryData(key(vars.contactId, vars.kind, vars.label), null);
     },
+    onError: () => toast.error('Erro ao remover feedback'),
   });
 }
