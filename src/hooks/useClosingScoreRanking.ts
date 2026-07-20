@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -32,8 +33,10 @@ function getScoreProbability(score: number): 'high' | 'medium' | 'low' | 'very_l
 export function useClosingScoreRanking(probabilityFilter: ProbabilityFilter = 'all', _periodFilter: PeriodFilter = '30d') {
   const { user } = useAuth();
 
+  // probabilityFilter excluded from queryKey — filtering is pure client-side derivation.
+  // All filter values are served from a single cached response.
   const { data, isLoading: loading, refetch, isFetching: refreshing } = useQuery({
-    queryKey: ['closing-score-ranking', user?.id, probabilityFilter],
+    queryKey: ['closing-score-ranking', user?.id],
     queryFn: async () => {
       if (!user) return { rankings: [], stats: defaultStats() };
 
@@ -63,10 +66,6 @@ export function useClosingScoreRanking(probabilityFilter: ProbabilityFilter = 'a
         };
       });
 
-      const filtered = probabilityFilter === 'all'
-        ? rankings
-        : rankings.filter(r => r.probability === probabilityFilter);
-
       const stats = {
         totalContacts: rankings.length,
         averageScore: Math.round(rankings.reduce((s, r) => s + r.score, 0) / (rankings.length || 1)),
@@ -76,14 +75,19 @@ export function useClosingScoreRanking(probabilityFilter: ProbabilityFilter = 'a
         veryLowProbability: rankings.filter(r => r.probability === 'very_low').length,
       };
 
-      return { rankings: filtered, stats };
+      return { rankings, stats };
     },
     enabled: !!user,
     staleTime: 5 * 60 * 1000,
   });
 
+  const filteredRankings = useMemo(() => {
+    const all = data?.rankings ?? [];
+    return probabilityFilter === 'all' ? all : all.filter(r => r.probability === probabilityFilter);
+  }, [data?.rankings, probabilityFilter]);
+
   return {
-    rankings: data?.rankings || [],
+    rankings: filteredRankings,
     loading,
     refreshing,
     stats: data?.stats || defaultStats(),

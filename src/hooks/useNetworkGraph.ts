@@ -64,25 +64,19 @@ export function useNetworkGraph() {
     setError(null);
 
     try {
-      // Fetch companies
-      const { data: companies, error: companiesError } = await supabase
-        .from('companies')
-        .select('id, name, industry, logo_url');
+      // All 3 queries are independent — fetch in parallel
+      const [
+        { data: companies, error: companiesError },
+        { data: contacts, error: contactsError },
+        { data: interactions, error: interactionsError },
+      ] = await Promise.all([
+        supabase.from('companies').select('id, name, industry, logo_url'),
+        supabase.from('contacts').select('id, first_name, last_name, company_id, relationship_score, role, avatar_url'),
+        supabase.from('interactions').select('id, contact_id, company_id, created_at'),
+      ]);
 
       if (companiesError) throw companiesError;
-
-      // Fetch contacts with company info
-      const { data: contacts, error: contactsError } = await supabase
-        .from('contacts')
-        .select('id, first_name, last_name, company_id, relationship_score, role, avatar_url');
-
       if (contactsError) throw contactsError;
-
-      // Fetch interactions to determine connection strength
-      const { data: interactions, error: interactionsError } = await supabase
-        .from('interactions')
-        .select('id, contact_id, company_id, created_at');
-
       if (interactionsError) throw interactionsError;
 
       // Count interactions per contact

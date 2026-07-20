@@ -132,16 +132,14 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
         return;
       }
 
-      for (const p of platforms) {
-        const { error } = await supabase.functions.invoke('social-profile-scraper', {
-          body: {
-            contactId: rapportIntel.contact_id,
-            platform: p.key,
-            profileUrl: p.url
-          }
-        });
-        if (error) throw error;
-      }
+      // Invoke all social scrapers in parallel instead of sequentially
+      const results = await Promise.all(
+        platforms.map(p => supabase.functions.invoke('social-profile-scraper', {
+          body: { contactId: rapportIntel.contact_id, platform: p.key, profileUrl: p.url }
+        }))
+      );
+      const firstError = results.find(r => r.error)?.error;
+      if (firstError) throw firstError;
 
       toast.success('Sincronização social concluída! Recarregando dados...');
       window.location.reload(); // Refresh to show new data

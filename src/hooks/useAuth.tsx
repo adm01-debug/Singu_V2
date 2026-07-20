@@ -126,16 +126,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session: existingSession } }) => {
-      setSession(existingSession);
-      setUser(existingSession?.user ?? null);
-      setLoading(false);
-      
-      if (existingSession) {
-        scheduleTokenRefresh(existingSession);
-      }
-    });
+    // Check for existing session — always call setLoading(false) so app never stays stuck
+    supabase.auth.getSession()
+      .then(({ data: { session: existingSession } }) => {
+        setSession(existingSession);
+        setUser(existingSession?.user ?? null);
+        setLoading(false);
+        if (existingSession) {
+          scheduleTokenRefresh(existingSession);
+        }
+      })
+      .catch((err: unknown) => {
+        logger.error('Failed to retrieve session:', err);
+        setLoading(false);
+      });
 
     // Cleanup
     return () => {

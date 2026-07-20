@@ -144,14 +144,20 @@ export function useRFMAnalysis(contactId?: string) {
           communication_priority: communicationPriority, analyzed_at: new Date().toISOString()
         });
       }
-      for (const result of rfmResults) {
-        const { error } = await supabase.from('rfm_analysis').upsert(result, { onConflict: 'user_id,contact_id' });
-        if (error) logger.error('Error upserting RFM:', error);
-        await supabase.from('rfm_history').insert({
-          user_id: user.id, contact_id: result.contact_id, recency_score: result.recency_score,
-          frequency_score: result.frequency_score, monetary_score: result.monetary_score,
-          segment: result.segment, total_monetary_value: result.total_monetary_value
-        });
+      // Bulk upsert all results in two queries instead of 2N sequential writes
+      if (rfmResults.length > 0) {
+        const { error: upsertError } = await supabase
+          .from('rfm_analysis')
+          .upsert(rfmResults, { onConflict: 'user_id,contact_id' });
+        if (upsertError) logger.error('Error upserting RFM:', upsertError);
+
+        const historyRows = rfmResults.map(r => ({
+          user_id: user.id, contact_id: r.contact_id, recency_score: r.recency_score,
+          frequency_score: r.frequency_score, monetary_score: r.monetary_score,
+          segment: r.segment, total_monetary_value: r.total_monetary_value,
+        }));
+        void supabase.from('rfm_history').insert(historyRows)
+          .catch((e: unknown) => logger.error('rfm_history bulk insert error:', e));
       }
       await queryClient.invalidateQueries({ queryKey: ['rfm-analysis'] });
       await queryClient.invalidateQueries({ queryKey: ['rfm-history'] });

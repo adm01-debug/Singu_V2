@@ -46,18 +46,16 @@ export function useSmartTemplateSuggestions(contact: Contact) {
     }
 
     try {
-      const { data: usageHistory, error } = await supabase
-        .from('trigger_usage_history')
-        .select('id, trigger_type, template_id, template_title, scenario, result, effectiveness_rating, contact_id')
-        .eq('user_id', user.id);
+      // Both queries are independent — fetch in parallel
+      const [
+        { data: usageHistory, error },
+        { data: contacts, error: contactsError },
+      ] = await Promise.all([
+        supabase.from('trigger_usage_history').select('id, trigger_type, template_id, template_title, scenario, result, effectiveness_rating, contact_id').eq('user_id', user.id),
+        supabase.from('contacts').select('id, behavior').eq('user_id', user.id),
+      ]);
 
       if (error) throw error;
-
-      const { data: contacts, error: contactsError } = await supabase
-        .from('contacts')
-        .select('id, behavior')
-        .eq('user_id', user.id);
-
       if (contactsError) throw contactsError;
 
       const contactDISCMap = new Map<string, DISCProfile | null>();

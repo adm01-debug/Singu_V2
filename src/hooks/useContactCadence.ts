@@ -77,19 +77,11 @@ export function useContactCadence() {
         )
       );
 
-      const companyEntries = await Promise.all(
-        companyIds.map(async (companyId) => {
-          const { data: companyData } = await supabase
-            .from('companies')
-            .select('name')
-            .eq('id', companyId)
-            .maybeSingle();
-
-          return [companyId, companyData] as const;
-        })
-      );
-
-      const companyMap = new Map(companyEntries);
+      // Fetch all companies in a single .in() query instead of N individual requests
+      const { data: companiesData } = companyIds.length > 0
+        ? await supabase.from('companies').select('id, name').in('id', companyIds)
+        : { data: [] };
+      const companyMap = new Map((companiesData || []).map(c => [c.id, { name: c.name }]));
 
       const cadencesWithCompanies: ContactCadence[] = baseCadences.map((cadence) => ({
         ...cadence,
