@@ -48,19 +48,24 @@ const Configuracoes = () => {
 
   useUnsavedChangesGuard(hasUnsavedChanges);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { if (user) fetchProfile(); }, [user]);
-
-  const fetchProfile = async () => {
+  useEffect(() => {
     if (!user) return;
-    try {
-      const { data, error } = await supabase.from('profiles').select('first_name, last_name, avatar_url').eq('id', user.id).maybeSingle();
-      if (data && !error) setProfile({ first_name: data.first_name || '', last_name: data.last_name || '', avatar_url: data.avatar_url });
-    } catch (error) { 
-      const msg = error instanceof Error ? error.message : 'Erro ao buscar perfil';
-      logger.error('Error fetching profile:', { error: msg }); 
-    }
-  };
+    const currentUser = user;
+    let cancelled = false;
+    const fetchProfile = async () => {
+      try {
+        const { data, error } = await supabase.from('profiles').select('first_name, last_name, avatar_url').eq('id', currentUser.id).maybeSingle();
+        if (cancelled) return;
+        if (data && !error) setProfile({ first_name: data.first_name || '', last_name: data.last_name || '', avatar_url: data.avatar_url });
+      } catch (error) {
+        if (cancelled) return;
+        const msg = error instanceof Error ? error.message : 'Erro ao buscar perfil';
+        logger.error('Error fetching profile:', { error: msg });
+      }
+    };
+    fetchProfile();
+    return () => { cancelled = true; };
+  }, [user]);
 
   const handleSaveProfile = async () => {
     if (!user) return;
