@@ -24,15 +24,19 @@ export function useDISCConversionData(period: ConversionPeriod) {
   const [metrics, setMetrics] = useState<ProfileMetrics[]>([]);
 
   useEffect(() => {
+    if (!user) return;
+    const currentUser = user;
+    let cancelled = false;
     const fetchMetrics = async () => {
-      if (!user) return;
       setLoading(true);
       try {
         // Both queries are independent — run in parallel
         const [{ data: contacts }, { data: interactions }] = await Promise.all([
-          supabase.from('contacts').select('id, behavior, relationship_score, relationship_stage, created_at').eq('user_id', user.id),
-          supabase.from('interactions').select('contact_id, type, created_at').eq('user_id', user.id).order('created_at', { ascending: true }),
+          supabase.from('contacts').select('id, behavior, relationship_score, relationship_stage, created_at').eq('user_id', currentUser.id),
+          supabase.from('interactions').select('contact_id, type, created_at').eq('user_id', currentUser.id).order('created_at', { ascending: true }),
         ]);
+
+        if (cancelled) return;
 
         const profileData: Record<string, {
           contacts: number; opportunities: number; conversions: number;
@@ -83,13 +87,15 @@ export function useDISCConversionData(period: ConversionPeriod) {
 
         setMetrics(calculatedMetrics);
       } catch (error) {
+        if (cancelled) return;
         const msg = error instanceof Error ? error.message : 'Unknown error';
         logger.error('Error fetching conversion metrics:', { error: msg });
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
     fetchMetrics();
+    return () => { cancelled = true; };
   }, [user, period]);
 
   const bestProfile = useMemo(() =>
