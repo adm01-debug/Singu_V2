@@ -237,28 +237,27 @@ Deno.serve(async (req) => {
     insertResult = { received: true, payload: finalRow };
   }
 
-  if (!dryRun) {
-    await admin
-      .from("incoming_webhooks")
-      .update({
-        total_calls: (webhook.total_calls ?? 0) + 1,
-        total_errors: (webhook.total_errors ?? 0) + (errorMessage ? 1 : 0),
-        last_called_at: new Date().toISOString(),
-      })
-      .eq("id", webhook.id);
-  }
-
-  await admin.from("incoming_webhook_logs").insert({
-    webhook_id: webhook.id,
-    status: errorMessage ? "error" : "success",
-    http_status: httpStatus,
-    payload,
-    response: insertResult,
-    error_message: errorMessage,
-    source_ip: sourceIp,
-    user_agent: userAgent,
-    latency_ms: Date.now() - t0,
-  });
+  // Flush stats update and audit log in parallel (both independent)
+  await Promise.all([
+    dryRun
+      ? Promise.resolve()
+      : admin.from("incoming_webhooks").update({
+          total_calls: (webhook.total_calls ?? 0) + 1,
+          total_errors: (webhook.total_errors ?? 0) + (errorMessage ? 1 : 0),
+          last_called_at: new Date().toISOString(),
+        }).eq("id", webhook.id),
+    admin.from("incoming_webhook_logs").insert({
+      webhook_id: webhook.id,
+      status: errorMessage ? "error" : "success",
+      http_status: httpStatus,
+      payload,
+      response: insertResult,
+      error_message: errorMessage,
+      source_ip: sourceIp,
+      user_agent: userAgent,
+      latency_ms: Date.now() - t0,
+    }),
+  ]);
 
   return new Response(
     JSON.stringify({

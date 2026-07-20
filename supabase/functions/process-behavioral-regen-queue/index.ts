@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
 
   if (readErr) {
     console.error("process-behavioral-regen-queue fetch error:", readErr);
-    return json({ error: "Internal server error" }, 500);
+    return json({ error: "Internal server error" }, 500, cors);
   }
 
   const items = (due ?? []) as QueueRow[];
@@ -95,12 +95,12 @@ Deno.serve(async (req) => {
       : Promise.resolve(),
   ]);
 
-  return json({ processed: items.length, results });
+  return json({ processed: items.length, results }, 200, cors);
 });
 
-function json(body: unknown, status = 200) {
+function json(body: unknown, status = 200, corsHeaders: Record<string, string> = {}) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { ...cors, 'Content-Type': 'application/json' },
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 }
