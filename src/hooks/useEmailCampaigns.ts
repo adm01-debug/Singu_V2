@@ -96,14 +96,11 @@ export function useEmailCampaigns() {
       const eligible = (contacts ?? []).filter(c => c.email && c.email.includes('@'));
       if (eligible.length === 0) throw new Error('Nenhum contato com email válido foi encontrado');
 
-      // Marcar como enviando
-      await supabase.from('email_campaigns').update({ status: 'sending' } as never).eq('id', campaignId);
-
-      // Materializar destinatários (idempotente — só insere os que ainda não existem)
-      const { data: existing } = await supabase
-        .from('campaign_recipients')
-        .select('contact_id')
-        .eq('campaign_id', campaignId);
+      // Marcar como enviando + buscar destinatários já existentes em paralelo
+      const [, { data: existing }] = await Promise.all([
+        supabase.from('email_campaigns').update({ status: 'sending' } as never).eq('id', campaignId),
+        supabase.from('campaign_recipients').select('contact_id').eq('campaign_id', campaignId),
+      ]);
       const existingIds = new Set((existing ?? []).map(r => r.contact_id));
 
       const toInsert = eligible

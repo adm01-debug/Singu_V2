@@ -150,23 +150,18 @@ export function useBehaviorAlerts() {
     if (!user) return;
 
     try {
-      // Get all contacts with their recent data
-      const { data: contacts, error: contactsError } = await supabase
-        .from('contacts')
-        .select('*')
-        .order('updated_at', { ascending: false });
-
-      if (contactsError) throw contactsError;
-
-      // Get recent interactions
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-      const { data: recentInteractions, error: interactionsError } = await supabase
-        .from('interactions')
-        .select('*')
-        .gte('created_at', thirtyDaysAgo.toISOString());
+      const [
+        { data: contacts, error: contactsError },
+        { data: recentInteractions, error: interactionsError },
+      ] = await Promise.all([
+        supabase.from('contacts').select('*').order('updated_at', { ascending: false }),
+        supabase.from('interactions').select('*').gte('created_at', thirtyDaysAgo.toISOString()),
+      ]);
 
+      if (contactsError) throw contactsError;
       if (interactionsError) throw interactionsError;
 
       const newAlerts: Omit<BehaviorAlert, 'id'>[] = [];

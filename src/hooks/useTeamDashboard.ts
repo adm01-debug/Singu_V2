@@ -40,38 +40,31 @@ export function useTeamDashboard() {
         teamMembers = allMembers;
       }
 
-      // Enrich with counts
-      const enriched: TeamMemberStats[] = [];
-      for (const m of teamMembers) {
+      // Enrich with counts — all members processed concurrently, 3 queries per member in parallel
+      const monthAgo = new Date(); monthAgo.setMonth(monthAgo.getMonth() - 1);
+      const enriched = await Promise.all(teamMembers.map(async (m) => {
         const uid = m.user_id;
-        if (!uid) { 
-          enriched.push({ 
-            id: m.id, name: m.name, role: m.role || 'vendedor', 
-            contacts_count: 0, interactions_this_month: 0, deals_count: 0, 
-            pipeline_value: 0, won_deals_value: 0,
-            is_on_vacation: !!(m.vacation_end && new Date(m.vacation_end) > new Date()) 
-          }); 
-          continue; 
+        const isOnVacation = !!(m.vacation_end && new Date(m.vacation_end) > new Date());
+        if (!uid) {
+          return { id: m.id, name: m.name, role: m.role || 'vendedor', contacts_count: 0, interactions_this_month: 0, deals_count: 0, pipeline_value: 0, won_deals_value: 0, is_on_vacation: isOnVacation };
         }
 
-        const { count: cc } = await supabase.from('contacts').select('*', { count: 'exact', head: true }).eq('user_id', uid);
-        const monthAgo = new Date(); monthAgo.setMonth(monthAgo.getMonth() - 1);
-        const { count: ic } = await supabase.from('interactions').select('*', { count: 'exact', head: true }).eq('user_id', uid).gte('created_at', monthAgo.toISOString());
-        
-        // Fetch deals and pipeline with controlled casting for dynamic queries
-        const { data: deals } = await supabase.from('deals' as never).select('value, stage').eq('user_id', uid);
-        const dealList = (deals as Array<{ value: number; stage: string }>) || [];
-        const dc = dealList.length;
-        const pv = dealList.reduce((s, d) => s + (Number(d.value) || 0), 0);
-        const wv = dealList.filter(d => d.stage === 'won').reduce((s, d) => s + (Number(d.value) || 0), 0);
+        const [{ count: cc }, { count: ic }, { data: deals }] = await Promise.all([
+          supabase.from('contacts').select('*', { count: 'exact', head: true }).eq('user_id', uid),
+          supabase.from('interactions').select('*', { count: 'exact', head: true }).eq('user_id', uid).gte('created_at', monthAgo.toISOString()),
+          supabase.from('deals' as never).select('value, stage').eq('user_id', uid),
+        ]);
 
-        enriched.push({
+        const dealList = (deals as Array<{ value: number; stage: string }>) || [];
+        return {
           id: m.id, name: m.name, role: m.role || 'vendedor',
-          contacts_count: cc || 0, interactions_this_month: ic || 0, 
-          deals_count: dc, pipeline_value: pv, won_deals_value: wv,
-          is_on_vacation: !!(m.vacation_end && new Date(m.vacation_end) > new Date()),
-        });
-      }
+          contacts_count: cc || 0, interactions_this_month: ic || 0,
+          deals_count: dealList.length,
+          pipeline_value: dealList.reduce((s, d) => s + (Number(d.value) || 0), 0),
+          won_deals_value: dealList.filter(d => d.stage === 'won').reduce((s, d) => s + (Number(d.value) || 0), 0),
+          is_on_vacation: isOnVacation,
+        };
+      }));
 
       return { members: enriched, isManager: true };
     },

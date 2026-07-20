@@ -304,14 +304,6 @@ export function useWinLossMetrics(periodDays = 90) {
         reasonMap.set(r.primary_reason_id, cur);
       });
       const reasonIds = [...reasonMap.keys()];
-      const { data: reasons } = reasonIds.length > 0
-        ? await supabase.from('win_loss_reasons').select('id, label').in('id', reasonIds)
-        : { data: [] };
-      const reasonLabels = new Map((reasons ?? []).map((r: { id: string; label: string }) => [r.id, r.label]));
-      const reasonDist = [...reasonMap.entries()].map(([id, c]) => ({
-        id, label: reasonLabels.get(id) ?? '?', won: c.won, lost: c.lost,
-      })).sort((a, b) => (b.won + b.lost) - (a.won + a.lost));
-      const topLoss = reasonDist.filter(r => r.lost > 0).sort((a, b) => b.lost - a.lost)[0];
 
       // Competitor distribution
       const compMap = new Map<string, { won: number; lost: number }>();
@@ -323,9 +315,17 @@ export function useWinLossMetrics(periodDays = 90) {
         compMap.set(r.competitor_id, cur);
       });
       const compIds = [...compMap.keys()];
-      const { data: comps } = compIds.length > 0
-        ? await supabase.from('competitors').select('id, name').in('id', compIds)
-        : { data: [] };
+
+      const [{ data: reasons }, { data: comps }] = await Promise.all([
+        reasonIds.length > 0 ? supabase.from('win_loss_reasons').select('id, label').in('id', reasonIds) : Promise.resolve({ data: [] }),
+        compIds.length > 0 ? supabase.from('competitors').select('id, name').in('id', compIds) : Promise.resolve({ data: [] }),
+      ]);
+
+      const reasonLabels = new Map((reasons ?? []).map((r: { id: string; label: string }) => [r.id, r.label]));
+      const reasonDist = [...reasonMap.entries()].map(([id, c]) => ({
+        id, label: reasonLabels.get(id) ?? '?', won: c.won, lost: c.lost,
+      })).sort((a, b) => (b.won + b.lost) - (a.won + a.lost));
+      const topLoss = reasonDist.filter(r => r.lost > 0).sort((a, b) => b.lost - a.lost)[0];
       const compNames = new Map((comps ?? []).map((c: { id: string; name: string }) => [c.id, c.name]));
       const compDist = [...compMap.entries()].map(([id, c]) => {
         const total = c.won + c.lost;
