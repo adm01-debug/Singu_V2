@@ -63,8 +63,10 @@ export interface QuotaSettings {
 }
 
 export function useForecastPeriods() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["forecast-periods"],
+    queryKey: ["forecast-periods", user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase.from("forecast_periods").select("*").order("period_start", { ascending: false });
       if (error) throw error;
@@ -75,8 +77,10 @@ export function useForecastPeriods() {
 }
 
 export function useCurrentPeriod(type: "month" | "quarter" = "month") {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["forecast-current-period", type],
+    queryKey: ["forecast-current-period", type, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const today = new Date().toISOString().split("T")[0];
       const { data, error } = await supabase.from("forecast_periods").select("*")

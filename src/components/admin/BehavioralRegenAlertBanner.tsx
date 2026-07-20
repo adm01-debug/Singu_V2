@@ -5,6 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ interface AlertRow {
 }
 
 export function BehavioralRegenAlertBanner() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   const [showSimulated, setShowSimulated] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
@@ -65,12 +67,11 @@ export function BehavioralRegenAlertBanner() {
 
   const ack = useMutation({
     mutationFn: async (alertId: string) => {
-      const { data: userRes } = await supabase.auth.getUser();
       const { error } = await supabase
         .from("system_alerts")
         .update({
           acknowledged_at: new Date().toISOString(),
-          acknowledged_by: userRes?.user?.id ?? null,
+          acknowledged_by: user?.id ?? null,
         })
         .eq("id", alertId);
       if (error) throw error;

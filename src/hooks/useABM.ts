@@ -86,8 +86,10 @@ export interface ABMCampaign {
 /* ───────────── Accounts ───────────── */
 
 export function useABMAccounts() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["abm", "accounts"],
+    queryKey: ["abm", "accounts", user?.id],
+    enabled: !!user,
     queryFn: async (): Promise<ABMAccount[]> => {
       const { data, error } = await supabase
         .from("abm_accounts")
