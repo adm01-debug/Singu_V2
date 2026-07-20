@@ -15,7 +15,7 @@ import { SentimentIndicator } from '@/components/ui/sentiment-indicator';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { InteractionForm } from '@/components/forms/InteractionForm';
-import { cn } from '@/lib/utils';
+import { cn, safehref } from '@/lib/utils';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { supabase } from '@/integrations/supabase/client';
@@ -279,9 +279,9 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
                                        {(interaction.attachments as string[]).map((url, idx) => (
                                          <a 
                                            key={idx} 
-                                           href={url} 
-                                           target="_blank" 
-                                           rel="noopener noreferrer" 
+                                           href={safehref(url)}
+                                           target="_blank"
+                                           rel="noopener noreferrer"
                                            className="flex items-center gap-1.5 px-2 py-1 bg-muted rounded text-[10px] hover:bg-muted/80 transition-colors"
                                          >
                                            <File className="w-3 h-3" />

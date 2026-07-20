@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
  import { zodResolver } from '@hookform/resolvers/zod';
  import { z } from 'zod';
  import { motion } from 'framer-motion';
- import { cn } from '@/lib/utils';
+ import { cn, safehref } from '@/lib/utils';
 import { useFormDraft } from '@/hooks/useFormDraft';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -579,7 +579,7 @@ export function InteractionForm({
              <div className="flex flex-wrap gap-2">
                {attachments.map((url, i) => (
                  <div key={i} className="flex items-center gap-2 bg-muted px-2 py-1 rounded text-xs">
-                   <a href={url} target="_blank" rel="noopener noreferrer" className="hover:underline truncate max-w-[150px]">
+                   <a href={safehref(url)} target="_blank" rel="noopener noreferrer" className="hover:underline truncate max-w-[150px]">
                      {url.split('/').pop()}
                    </a>
                    <button 
