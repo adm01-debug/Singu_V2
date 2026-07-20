@@ -30,10 +30,11 @@ export interface CustomFieldValue {
 export function useCustomFields(entityType: EntityType) {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['custom-fields', entityType];
+  const key = ['custom-fields', entityType, user?.id];
 
   const { data: fields = [], isLoading } = useQuery({
     queryKey: key,
+    enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase

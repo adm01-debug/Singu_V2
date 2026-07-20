@@ -43,7 +43,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
   const { triggerAnalysis } = useNLPAutoAnalysis();
   const queryClient = useQueryClient();
 
-  const queryKey = useMemo(() => ['interactions', contactId ?? '__all__', companyId ?? '__all__'], [contactId, companyId]);
+  const queryKey = useMemo(() => ['interactions', contactId ?? '__all__', companyId ?? '__all__', user?.id], [contactId, companyId, user?.id]);
   const externalEnabled = options?.enabled ?? true;
 
   const {

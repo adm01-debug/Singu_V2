@@ -73,8 +73,10 @@ interface RecordsFilter {
 // ── Records ──────────────────────────────────────────
 
 export function useWinLossRecords(filters: RecordsFilter = {}) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['win-loss-records', filters],
+    queryKey: ['win-loss-records', filters, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       let q = supabase
         .from('win_loss_records')
@@ -149,8 +151,10 @@ export function useDeleteWinLossRecord() {
 // ── Reasons ──────────────────────────────────────────
 
 export function useWinLossReasons(outcome?: ReasonOutcomeType) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['win-loss-reasons', outcome],
+    queryKey: ['win-loss-reasons', outcome, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       let q = supabase
         .from('win_loss_reasons')
@@ -274,8 +278,10 @@ export interface WinLossMetrics {
 }
 
 export function useWinLossMetrics(periodDays = 90) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['win-loss-metrics', periodDays],
+    queryKey: ['win-loss-metrics', periodDays, user?.id],
+    enabled: !!user,
     queryFn: async (): Promise<WinLossMetrics> => {
       const fromDate = new Date(Date.now() - periodDays * 86400_000).toISOString();
       const { data: records, error } = await supabase

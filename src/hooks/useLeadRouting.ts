@@ -9,12 +9,13 @@ import type {
   SalesTeamMember,
 } from '@/types/leadRouting';
 
-const RULES_KEY = ['lead-routing-rules'];
-const ASSIGNMENTS_KEY = ['lead-assignments'];
+const RULES_KEY_BASE = ['lead-routing-rules'];
+const ASSIGNMENTS_KEY_BASE = ['lead-assignments'];
 
 // ── Routing Rules ──
 export function useRoutingRules() {
   const { user } = useAuth();
+  const RULES_KEY = [...RULES_KEY_BASE, user?.id];
   return useQuery({
     queryKey: RULES_KEY,
     queryFn: async (): Promise<LeadRoutingRule[]> => {
@@ -47,7 +48,7 @@ export function useCreateRoutingRule() {
       return data;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: RULES_KEY });
+      qc.invalidateQueries({ queryKey: RULES_KEY_BASE });
       toast.success('Regra criada');
     },
     onError: () => toast.error('Erro ao criar regra'),
@@ -69,7 +70,7 @@ export function useUpdateRoutingRule() {
       return data;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: RULES_KEY });
+      qc.invalidateQueries({ queryKey: RULES_KEY_BASE });
       toast.success('Regra atualizada');
     },
     onError: () => toast.error('Erro ao atualizar regra'),
@@ -87,7 +88,7 @@ export function useDeleteRoutingRule() {
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: RULES_KEY });
+      qc.invalidateQueries({ queryKey: RULES_KEY_BASE });
       toast.success('Regra removida');
     },
     onError: () => toast.error('Erro ao remover regra'),
@@ -98,7 +99,7 @@ export function useDeleteRoutingRule() {
 export function useLeadAssignments(status?: string) {
   const { user } = useAuth();
   return useQuery({
-    queryKey: [...ASSIGNMENTS_KEY, status],
+    queryKey: [...ASSIGNMENTS_KEY_BASE, status, user?.id],
     queryFn: async (): Promise<LeadAssignment[]> => {
       if (!user) return [];
       let query = supabase
@@ -176,7 +177,7 @@ export function useDistributeLead() {
       return selected;
     },
     onSuccess: (member) => {
-      qc.invalidateQueries({ queryKey: ASSIGNMENTS_KEY });
+      qc.invalidateQueries({ queryKey: ASSIGNMENTS_KEY_BASE });
       qc.invalidateQueries({ queryKey: ['sales-team-members'] });
       toast.success(`Lead distribuído para ${member.name}`);
     },

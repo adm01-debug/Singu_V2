@@ -119,7 +119,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   const { logActivity } = useActivityLogger();
   const queryClient = useQueryClient();
 
-  const queryKey = useMemo(() => ['contacts', companyId ?? '__all__'], [companyId]);
+  const queryKey = useMemo(() => ['contacts', companyId ?? '__all__', user?.id], [companyId, user?.id]);
   const externalEnabled = options?.enabled ?? true;
 
   const { 

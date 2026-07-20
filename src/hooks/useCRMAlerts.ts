@@ -19,7 +19,7 @@ export function useCRMAlerts(contactId: string) {
   const queryClient = useQueryClient();
 
   const { data: alerts = [], isLoading } = useQuery({
-    queryKey: ['crm-alerts', contactId],
+    queryKey: ['crm-alerts', contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('crm_alerts')
@@ -43,7 +43,7 @@ export function useCRMAlerts(contactId: string) {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['crm-alerts', contactId] });
+      queryClient.invalidateQueries({ queryKey: ['crm-alerts', contactId, user?.id] });
       toast.success('Alerta resolvido');
     },
   });

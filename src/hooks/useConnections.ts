@@ -39,7 +39,8 @@ export function useConnections() {
   const qc = useQueryClient();
 
   const { data: connections = [], isLoading } = useQuery({
-    queryKey: ['connection_configs'],
+    queryKey: ['connection_configs', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('connection_configs')

@@ -44,14 +44,16 @@ export interface FormSubmission {
   created_at: string;
 }
 
-const KEY = ['marketing-forms'];
+const KEY_BASE = ['marketing-forms'];
 
 export function useForms() {
   const { user } = useAuth();
   const qc = useQueryClient();
+  const KEY = [...KEY_BASE, user?.id];
 
   const { data: forms = [], isLoading } = useQuery({
     queryKey: KEY,
+    enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase

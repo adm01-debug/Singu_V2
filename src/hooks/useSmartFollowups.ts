@@ -21,7 +21,7 @@ export function useSmartFollowups() {
 
   // Buscar lembretes inteligentes
   const { data: reminders = [], isLoading } = useQuery({
-    queryKey: ['smart-reminders'],
+    queryKey: ['smart-reminders', user?.id],
     enabled: !!user,
     queryFn: async () => {
       const [

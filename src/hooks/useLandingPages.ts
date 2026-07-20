@@ -41,10 +41,11 @@ export interface LandingPageSubmission {
 export function useLandingPages() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['landing-pages'];
+  const key = ['landing-pages', user?.id];
 
   const { data: pages = [], isLoading } = useQuery({
     queryKey: key,
+    enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase

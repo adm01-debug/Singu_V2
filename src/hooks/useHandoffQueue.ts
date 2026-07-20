@@ -11,7 +11,7 @@ const HANDOFF_KEY = ['handoff-requests'];
 export function useHandoffQueue(status?: HandoffStatus) {
   const { user } = useAuth();
   return useQuery({
-    queryKey: [...HANDOFF_KEY, status],
+    queryKey: [...HANDOFF_KEY, status, user?.id],
     queryFn: async (): Promise<HandoffRequest[]> => {
       if (!user) return [];
       let query = supabase
@@ -109,7 +109,7 @@ export function useRespondHandoff() {
 export function usePendingHandoffCount() {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['handoff-pending-count'],
+    queryKey: ['handoff-pending-count', user?.id],
     queryFn: async (): Promise<number> => {
       if (!user) return 0;
       const { count, error } = await supabase
@@ -143,7 +143,7 @@ export function useHandoffRealtime() {
         (payload) => {
           logger.info('[Handoff Realtime]', payload.eventType);
           qc.invalidateQueries({ queryKey: HANDOFF_KEY });
-          qc.invalidateQueries({ queryKey: ['handoff-pending-count'] });
+          qc.invalidateQueries({ queryKey: ['handoff-pending-count'] }); // prefix-match invalidates all users
 
           if (payload.eventType === 'INSERT') {
             toast.info('Novo handoff recebido', {

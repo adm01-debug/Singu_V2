@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import type { BehavioralInsightItem } from '@/hooks/useBehavioralProfile';
 
 export interface BehavioralProfileListItem {
@@ -63,8 +64,10 @@ export interface BehavioralProfilesListResult {
 }
 
 export function useBehavioralProfilesList(filters: BehavioralProfilesFilters) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['behavioral-profiles-list', filters.period ?? 'all'],
+    queryKey: ['behavioral-profiles-list', filters.period ?? 'all', user?.id],
+    enabled: !!user,
     staleTime: 60_000,
     queryFn: async (): Promise<BehavioralProfileListItem[]> => {
       const fromDate = periodToDate(filters.period);

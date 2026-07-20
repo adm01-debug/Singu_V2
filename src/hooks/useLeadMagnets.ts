@@ -31,14 +31,14 @@ export interface MagnetDownload {
   downloaded_at: string;
 }
 
-const KEY = ['lead-magnets'];
-
 export function useLeadMagnets() {
   const { user } = useAuth();
   const qc = useQueryClient();
+  const KEY = ['lead-magnets', user?.id];
 
   const { data: magnets = [], isLoading } = useQuery({
     queryKey: KEY,
+    enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase

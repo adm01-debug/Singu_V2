@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface DailySummary {
   date: string;
@@ -15,10 +16,12 @@ export interface DailySummary {
 }
 
 export function useDailySummary(date?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['daily-summary', date],
+    queryKey: ['daily-summary', date, user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      // Always pass p_date to disambiguate the overloaded function
+      if (!user) throw new Error('Not authenticated');
       const targetDate = date || new Date().toISOString().split('T')[0];
       const { data, error } = await callExternalRpc<DailySummary>(
         'get_daily_summary',

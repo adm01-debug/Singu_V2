@@ -34,10 +34,11 @@ export interface TicketComment {
 export function useSupportTickets() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['support-tickets'];
+  const key = ['support-tickets', user?.id];
 
   const { data: tickets = [], isLoading } = useQuery({
     queryKey: key,
+    enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase
