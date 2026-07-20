@@ -103,6 +103,9 @@ export function useAIApprovals(contactId?: string) {
       queryClient.invalidateQueries({ queryKey: ['contact'] });
       toast.success('Sugestão aprovada e adicionada ao perfil');
     },
+    onError: () => {
+      toast.error('Erro ao aprovar sugestão. Tente novamente.');
+    },
   });
 
   const rejectMutation = useMutation({
@@ -117,6 +120,9 @@ export function useAIApprovals(contactId?: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['suggested-rapport'] });
       toast.info('Sugestão ignorada');
+    },
+    onError: () => {
+      toast.error('Erro ao ignorar sugestão. Tente novamente.');
     },
   });
 

@@ -17,9 +17,14 @@ export function ShareDialog({ room }: { room: DealRoom }) {
   const url = `${window.location.origin}/dr/${token}`;
 
   const toggle = async (v: boolean) => {
+    const prev = enabled;
     setEnabled(v);
-    const r = await share.mutateAsync({ room_id: room.id, enabled: v });
-    setToken(r.token);
+    try {
+      const r = await share.mutateAsync({ room_id: room.id, enabled: v });
+      setToken(r.token);
+    } catch {
+      setEnabled(prev);
+    }
   };
 
   const rotate = async () => {

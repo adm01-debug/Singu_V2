@@ -40,15 +40,19 @@ export default function DealRooms() {
             </div>
             <DialogFooter>
               <Button disabled={!form.title || create.isPending} onClick={async () => {
-                const r = await create.mutateAsync({
-                  title: form.title,
-                  deal_name: form.deal_name || undefined,
-                  description: form.description || undefined,
-                  target_close_date: form.target_close_date || undefined,
-                  deal_value: form.deal_value ? Number(form.deal_value) : undefined,
-                });
-                setOpen(false);
-                navigate(`/deal-rooms/${r.id}`);
+                try {
+                  const r = await create.mutateAsync({
+                    title: form.title,
+                    deal_name: form.deal_name || undefined,
+                    description: form.description || undefined,
+                    target_close_date: form.target_close_date || undefined,
+                    deal_value: form.deal_value ? Number(form.deal_value) : undefined,
+                  });
+                  setOpen(false);
+                  navigate(`/deal-rooms/${r.id}`);
+                } catch {
+                  // mutation onError handles the toast; dialog stays open so user can retry
+                }
               }}>Criar</Button>
             </DialogFooter>
           </DialogContent>

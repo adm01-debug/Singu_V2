@@ -127,7 +127,7 @@ export function RelationshipKPIsDashboard() {
       return {
         total: contacts.length,
         atRiskCount: contacts.filter(c => c.relationship_stage === 'at_risk').length,
-        avgGlobalScore: Math.round(contacts.reduce((a, b) => a + (b.relationship_score || 0), 0) / contacts.length),
+        avgGlobalScore: contacts.length > 0 ? Math.round(contacts.reduce((a, b) => a + (b.relationship_score || 0), 0) / contacts.length) : 0,
         pieData,
         avgScoreByStage,
         trendData

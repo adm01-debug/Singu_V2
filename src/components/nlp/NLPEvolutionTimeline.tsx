@@ -19,6 +19,7 @@ import { EmotionalState } from '@/types/nlp-advanced';
 import { format, subDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { logger } from "@/lib/logger";
+import { toast } from "sonner";
 import { NLPEvolutionCharts } from './nlp-evolution/NLPEvolutionCharts';
 
 interface NLPEvolutionTimelineProps {
@@ -107,8 +108,8 @@ const NLPEvolutionTimeline: React.FC<NLPEvolutionTimelineProps> = ({
       setVakData(processedVak);
       setEmotionalData(processedEmotional);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Erro ao carregar histórico';
-      logger.error('Error fetching evolution data:', { error: msg });
+      logger.error('Error fetching evolution data:', { error: error instanceof Error ? error.message : String(error) });
+      toast.error('Erro ao carregar histórico de evolução');
     } finally {
       setLoading(false);
     }

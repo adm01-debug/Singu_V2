@@ -35,7 +35,7 @@ export function StakeholderList({ roomId }: { roomId: string }) {
           <DialogTrigger asChild>
             <Button size="sm" onClick={() => setEditing(null)}><Plus className="h-4 w-4" />Novo stakeholder</Button>
           </DialogTrigger>
-          <StakeholderDialog editing={editing} onSave={async (s) => { await upsert.mutateAsync(s); setOpen(false); setEditing(null); }} />
+          <StakeholderDialog editing={editing} onSave={async (s) => { try { await upsert.mutateAsync(s); setOpen(false); setEditing(null); } catch { /* mutation onError handles toast */ } }} />
         </Dialog>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

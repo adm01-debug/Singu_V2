@@ -33,7 +33,7 @@ export function CommentsThread({ roomId }: { roomId: string }) {
         <CardContent className="p-3 space-y-2">
           <Textarea placeholder="Escreva um comentário..." value={body} onChange={(e) => setBody(e.target.value)} rows={2} />
           <div className="flex justify-end">
-            <Button size="sm" onClick={async () => { if (body.trim()) { await add.mutateAsync(body); setBody(""); } }} disabled={add.isPending || !body.trim()}>
+            <Button size="sm" onClick={async () => { if (body.trim()) { try { await add.mutateAsync(body); setBody(""); } catch { /* mutation onError handles toast */ } } }} disabled={add.isPending || !body.trim()}>
               Comentar
             </Button>
           </div>

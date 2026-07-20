@@ -17,6 +17,7 @@ import { MetaprogramProfile } from '@/types/metaprograms';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { logger } from "@/lib/logger";
+import { toast } from "sonner";
 import { DISC_COMPATIBILITY, VAK_COMPATIBILITY, getDISCTip } from './compatibility/compatibilityData';
 
 interface CompatibilityScoreProps {
@@ -62,9 +63,9 @@ export function CompatibilityScore({ contact, vakProfile, metaprogramProfile, cl
     try {
       const { data, error } = await supabase.from('profiles').select('nlp_profile').eq('id', user.id).maybeSingle();
       if (!error && data?.nlp_profile) setSalespersonProfile(data.nlp_profile as unknown as SalespersonProfile);
-    } catch (err) { 
-      const msg = err instanceof Error ? err.message : 'Unknown error';
-      logger.error('Error fetching salesperson profile:', { error: msg }); 
+    } catch (err) {
+      logger.error('Error fetching salesperson profile:', { error: err instanceof Error ? err.message : String(err) });
+      toast.error('Não foi possível carregar seu perfil de compatibilidade');
     }
     finally { setLoading(false); }
   };
