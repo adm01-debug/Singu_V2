@@ -52,14 +52,14 @@ function sanitizePayload(raw: unknown): PresetsPayload {
   return { presets };
 }
 
-const QK = ['user-ui-preferences', SCOPE] as const;
-
 export function useFicha360FilterPresets() {
   const { user } = useAuth();
   const qc = useQueryClient();
+  const QK = ['user-ui-preferences', SCOPE, user?.id] as const;
 
   const { data, isLoading } = useQuery({
     queryKey: QK,
+    enabled: !!user,
     queryFn: async (): Promise<PresetsPayload> => {
       if (!user?.id) return { presets: [] };
       const { data, error } = await supabase

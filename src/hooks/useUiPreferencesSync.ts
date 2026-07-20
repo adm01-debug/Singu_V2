@@ -70,11 +70,12 @@ export function useUiPreferencesSync<T extends Record<string, unknown>>(
   opts: UseUiPreferencesSyncOptions<T>,
 ) {
   const { scope, current, defaults, sanitize, hydrate, hasUrlOverride, debounceMs = 600 } = opts;
+  const { user } = useAuth();
   const qc = useQueryClient();
   const hydratedRef = useRef(false);
   const lastSavedRef = useRef<T | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const QK = ['user-ui-preferences', scope] as const;
+  const QK = ['user-ui-preferences', scope, user?.id] as const;
 
   const { data: remote } = useQuery({
     queryKey: QK,

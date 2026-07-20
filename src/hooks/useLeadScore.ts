@@ -267,7 +267,7 @@ export function useLeadScoreConfig() {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ['lead-score-config'],
+    queryKey: ['lead-score-config', user?.id],
     queryFn: async () => {
       if (!user?.id) return null;
       const { data, error } = await supabase

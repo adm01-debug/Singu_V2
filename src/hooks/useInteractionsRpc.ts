@@ -63,7 +63,7 @@ export function useInteractionHistory(companyId?: string, tipo?: string, limit =
 export function usePendingFollowups(limit = 20) {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['pending-followups', limit],
+    queryKey: ['pending-followups', limit, user?.id],
     queryFn: async () => {
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<PendingFollowup[]>(
@@ -121,8 +121,10 @@ export function useCreateQuickInteraction() {
 }
 
 export function useActivityHeatmap(days = 30) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['activity-heatmap', days],
+    queryKey: ['activity-heatmap', days, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<ActivityHeatmapData[]>(
         'get_activity_heatmap',

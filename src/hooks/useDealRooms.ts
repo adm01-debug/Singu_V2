@@ -110,8 +110,10 @@ const KEYS = {
 };
 
 export function useDealRooms(filters?: { status?: DealRoomStatus | "all" }) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: [...KEYS.rooms, filters?.status ?? "all"],
+    queryKey: [...KEYS.rooms, filters?.status ?? "all", user?.id],
+    enabled: !!user,
     queryFn: async () => {
       let q = supabase.from("deal_rooms").select("*").order("updated_at", { ascending: false });
       if (filters?.status && filters.status !== "all") {

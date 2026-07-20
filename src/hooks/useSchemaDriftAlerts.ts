@@ -22,7 +22,7 @@ export function useSchemaDriftAlerts(onlyUnresolved = true) {
   const { isAdmin } = useIsAdmin();
 
   return useQuery({
-    queryKey: ['schema-drift-alerts', onlyUnresolved],
+    queryKey: ['schema-drift-alerts', onlyUnresolved, user?.id],
     queryFn: async () => {
       let query = supabase
         .from('schema_drift_alerts')
@@ -49,7 +49,7 @@ export function useUnresolvedDriftCount() {
   const { isAdmin } = useIsAdmin();
 
   return useQuery({
-    queryKey: ['schema-drift-count'],
+    queryKey: ['schema-drift-count', user?.id],
     queryFn: async () => {
       const { count, error } = await supabase
         .from('schema_drift_alerts')

@@ -7,7 +7,7 @@ export function useRoutingMetrics() {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ['routing-metrics'],
+    queryKey: ['routing-metrics', user?.id],
     queryFn: async (): Promise<RoutingMetrics> => {
       if (!user) return emptyMetrics();
 
