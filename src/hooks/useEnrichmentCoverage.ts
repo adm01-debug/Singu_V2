@@ -19,8 +19,8 @@ export function useEnrichmentCoverage() {
   return useQuery({
     queryKey: ["enrichment-coverage", user?.id],
     enabled: !!user,
-    staleTime: 60_000,
-    refetchInterval: 60_000,
+    staleTime: 5 * 60_000,
+    refetchInterval: 5 * 60_000,
     queryFn: async (): Promise<EnrichmentCoverage> => {
       const uid = user!.id;
 
