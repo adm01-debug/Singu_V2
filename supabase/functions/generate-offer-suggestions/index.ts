@@ -95,6 +95,19 @@ Deno.serve(async (req) => {
       .in('contact_id', contactIds)
       .eq('status', 'pending');
 
+    // Pre-fetch all social_insights for all contacts to avoid N+1 in inner loop
+    const { data: allSocialInsights } = await supabase
+      .from('social_insights')
+      .select('id, contact_id, platform, content')
+      .in('contact_id', contactIds);
+
+    const socialInsightsByContact = new Map<string, Array<{ id: string; platform: string; content: string }>>();
+    for (const si of allSocialInsights ?? []) {
+      const arr = socialInsightsByContact.get(si.contact_id) ?? [];
+      arr.push({ id: si.id, platform: si.platform, content: si.content });
+      socialInsightsByContact.set(si.contact_id, arr);
+    }
+
     const existingOffersSet = new Set(
       (existingOffers || []).map(o => `${o.contact_id}-${o.offer_name}`)
     );
@@ -157,11 +170,8 @@ Deno.serve(async (req) => {
         if (matchedKeywords.length > 0) {
           confidence += matchedKeywords.length * 10;
           
-          // Identify which social insights caused the match
-          const { data: insights } = await supabase
-            .from('social_insights')
-            .select('id, platform, content')
-            .eq('contact_id', contact.id);
+          // Identify which social insights caused the match (Map lookup — no DB call)
+          const insights = socialInsightsByContact.get(contact.id);
 
           if (insights) {
             for (const insight of insights) {
