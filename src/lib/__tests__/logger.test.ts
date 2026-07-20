@@ -42,7 +42,7 @@ describe('Logger Utility', () => {
   it('deve persistir erros no banco de dados', async () => {
     const mockInsert = vi.fn().mockResolvedValue({ error: null });
     const mockFrom = vi.fn(() => ({ insert: mockInsert }));
-    (supabase.from as any).mockImplementation(mockFrom);
+    vi.mocked(supabase.from).mockImplementation(mockFrom);
     
     setLogUser('user-123');
     setRequestId('req-123');

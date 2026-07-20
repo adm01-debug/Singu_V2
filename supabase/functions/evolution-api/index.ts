@@ -76,6 +76,7 @@ Deno.serve(async (req) => {
     let method = 'GET';
     let body: string | undefined;
 
+    // eslint-disable-next-line sonarjs/max-switch-cases -- API proxy dispatches 43 action types (product requirement; each is a distinct WhatsApp API endpoint)
     switch (action) {
       case 'list-instances':
         endpoint = '/instance/fetchInstances';

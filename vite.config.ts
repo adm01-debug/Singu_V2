@@ -57,19 +57,11 @@ export default defineConfig(({ mode }) => ({
         workbox: {
           globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-          runtimeCaching: [
-            {
-              urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
-              handler: "NetworkFirst",
-              options: {
-                cacheName: "supabase-cache",
-                expiration: {
-                  maxEntries: 100,
-                  maxAgeSeconds: 60 * 60 * 24,
-                },
-              },
-            },
-          ],
+          // TQ-8: Supabase API responses contain PII (contacts, interactions, etc.).
+          // Runtime caching them would persist PII in the browser's Cache Storage
+          // even after logout — a privacy risk on shared devices.
+          // Static assets are pre-cached above; API calls are always network-only.
+          runtimeCaching: [],
         },
       }),
   ].filter(Boolean),

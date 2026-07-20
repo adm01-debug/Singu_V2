@@ -5,6 +5,7 @@ import DOMPurify from 'dompurify';
  * Usa DOMPurify com configuração restritiva por padrão.
  */
 export function sanitizeHtml(dirty: string, options?: Record<string, unknown>): string {
+  // eslint-disable-next-line sonarjs/dompurify-unsafe-config -- TrustedTypes API not available in this environment; RETURN_TRUSTED_TYPE has no effect without a TrustedTypes policy
   const clean = DOMPurify.sanitize(dirty, {
     ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'span'],
     ALLOWED_ATTR: ['href', 'target', 'rel', 'class'],
@@ -30,6 +31,7 @@ export function sanitizeHtml(dirty: string, options?: Record<string, unknown>): 
  * Sanitiza texto puro removendo qualquer HTML.
  */
 export function sanitizeText(dirty: string): string {
+  // eslint-disable-next-line sonarjs/dompurify-unsafe-config -- TrustedTypes API not available in this environment; RETURN_TRUSTED_TYPE has no effect without a TrustedTypes policy
   return DOMPurify.sanitize(dirty, {
     ALLOWED_TAGS: [],
     ALLOWED_ATTR: [],

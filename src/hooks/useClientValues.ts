@@ -70,7 +70,7 @@ export function useClientValues(contact: Contact, interactions: Interaction[]) {
       id: `criteria-${value.category}`,
       name: VALUE_CATEGORY_INFO[value.category].name,
       priority: index + 1,
-      type: index === 0 ? 'must_have' : index < 3 ? 'nice_to_have' : 'nice_to_have',
+      type: index === 0 ? 'must_have' : 'nice_to_have',
       detectedFrom: value.detectedPhrases.join(', '),
       howToAddress: VALUE_CATEGORY_INFO[value.category].benefitFraming
     }));

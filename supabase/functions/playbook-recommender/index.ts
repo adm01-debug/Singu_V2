@@ -16,7 +16,19 @@ const BodySchema = z.object({
   competitor_mentioned: z.string().optional(),
 });
 
-function scorePlaybook(pb: any, ctx: any): { score: number; reasons: string[] } {
+interface Playbook {
+  stage_target?: string;
+  scenario?: string;
+  industry_target?: string;
+  persona_target?: string;
+  tags?: string[];
+  usage_count?: number;
+  [key: string]: unknown;
+}
+
+type PlaybookContext = z.infer<typeof BodySchema>;
+
+function scorePlaybook(pb: Playbook, ctx: PlaybookContext): { score: number; reasons: string[] } {
   let score = 0;
   const reasons: string[] = [];
 

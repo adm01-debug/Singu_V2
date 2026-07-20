@@ -117,7 +117,7 @@ describe("Request validation", () => {
   });
 
   it("should reject non-array filters", () => {
-    expect(validateRequest({ table: "contacts", filters: "bad" as any })).toBe("Filters must be an array");
+    expect(validateRequest({ table: "contacts", filters: "bad" as never })).toBe("Filters must be an array");
   });
 
   it("should accept empty filters array", () => {
@@ -125,11 +125,11 @@ describe("Request validation", () => {
   });
 
   it("should reject range without numeric from", () => {
-    expect(validateRequest({ table: "contacts", range: { from: "a" as any, to: 10 } })).toContain("Range must have numeric");
+    expect(validateRequest({ table: "contacts", range: { from: "a" as never, to: 10 } })).toContain("Range must have numeric");
   });
 
   it("should reject range without numeric to", () => {
-    expect(validateRequest({ table: "contacts", range: { from: 0, to: "b" as any } })).toContain("Range must have numeric");
+    expect(validateRequest({ table: "contacts", range: { from: 0, to: "b" as never } })).toContain("Range must have numeric");
   });
 
   it("should accept valid range", () => {

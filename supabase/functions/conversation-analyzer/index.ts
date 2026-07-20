@@ -274,18 +274,18 @@ ${interaction.content.slice(0, 12000)}`;
       .update({
         sentiment: analysis.sentiment_overall,
         emotion_analysis: analysis.emotion_analysis,
-        key_insights: analysis.action_items && Array.isArray(analysis.action_items) 
-          ? (analysis.action_items as any[]).map(i => i.task) 
+        key_insights: analysis.action_items && Array.isArray(analysis.action_items)
+          ? (analysis.action_items as Array<{ task: string }>).map(i => i.task)
           : []
       })
       .eq("id", interactionId);
  
     // Handle Sleight of Mouth reframing suggestions
     if (analysis.objections && Array.isArray(analysis.objections)) {
-      const reframings: any[] = [];
-      analysis.objections.forEach((obj: any) => {
+      const reframings: Array<Record<string, unknown>> = [];
+      analysis.objections.forEach((obj: { objection: string; category: string; reframing_suggestions?: Array<{ pattern: string; response: string }> }) => {
         if (obj.reframing_suggestions && Array.isArray(obj.reframing_suggestions)) {
-          obj.reframing_suggestions.forEach((ref: any) => {
+          obj.reframing_suggestions.forEach((ref: { pattern: string; response: string }) => {
             reframings.push({
               user_id: userId,
               contact_id: interaction.contact_id,
@@ -307,7 +307,7 @@ ${interaction.content.slice(0, 12000)}`;
 
     // Handle relatives mentioned (Módulo 2.5 AI)
     if (analysis.relatives_mentioned && Array.isArray(analysis.relatives_mentioned)) {
-      const relativesSuggestions = analysis.relatives_mentioned.map((rel: any) => {
+      const relativesSuggestions = analysis.relatives_mentioned.map((rel: { name: string; relationship_type: string; occupation?: string; notes?: string }) => {
         const occupationSuffix = rel.occupation ? ` - ${rel.occupation}` : '';
         return {
         user_id: userId,
@@ -333,7 +333,7 @@ ${interaction.content.slice(0, 12000)}`;
 
     // Handle detected life events (Módulo 2.4 AI)
     if (analysis.life_events_detected && Array.isArray(analysis.life_events_detected)) {
-      const lifeEvents = analysis.life_events_detected.map((ev: any) => ({
+      const lifeEvents = analysis.life_events_detected.map((ev: { event_type: string; title: string; description: string; event_date?: string; confidence: number }) => ({
         user_id: userId,
         contact_id: interaction.contact_id,
         event_type: ev.event_type,

@@ -233,7 +233,7 @@ describe('getEmpathyTemplatesByType', () => {
   });
 
   it('returns empty for unknown type', () => {
-    const result = getEmpathyTemplatesByType('nonexistent' as any);
+    const result = getEmpathyTemplatesByType('nonexistent' as never);
     expect(result.length).toBe(0);
   });
 });
@@ -308,7 +308,7 @@ describe('getEmpathyTemplateForDISC', () => {
   });
 
   it('returns empty string for unknown type', () => {
-    const result = getEmpathyTemplateForDISC('nonexistent' as any, 'D');
+    const result = getEmpathyTemplateForDISC('nonexistent' as never, 'D');
     expect(result).toBe('');
   });
 });

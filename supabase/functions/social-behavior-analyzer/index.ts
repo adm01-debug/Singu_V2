@@ -117,6 +117,7 @@ Responda APENAS com um JSON válido no formato especificado.`;
     const content = aiResponse.choices?.[0]?.message?.content;
 
     // deno-lint-ignore no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI response JSON shape not statically typed
     let analysis: any = null;
     try {
       // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)

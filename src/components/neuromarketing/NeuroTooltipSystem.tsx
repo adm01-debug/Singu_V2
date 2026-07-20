@@ -200,7 +200,7 @@ const NeuroTooltip = ({
                 className="p-1.5 rounded-md text-primary-foreground text-sm"
                 style={{ backgroundColor: content.color }}
               >
-                {typeof content.icon === 'string' ? content.icon : content.icon}
+                {content.icon}
               </div>
               <span className="font-semibold text-sm">{content.title}</span>
               <Badge variant="outline" className="text-[10px] ml-auto">

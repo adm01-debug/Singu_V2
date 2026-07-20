@@ -120,7 +120,6 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
       cancelIdleCallback?: (handle: number) => void;
     };
     
-    let handle: number;
     let isMounted = true;
 
     const schedule = w.requestIdleCallback
@@ -131,7 +130,7 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
       ? (h: number) => w.cancelIdleCallback!(h)
       : (h: number) => window.clearTimeout(h);
 
-    handle = schedule(() => {
+    const handle = schedule(() => {
       if (isMounted) setDeferredReady(true);
     });
 

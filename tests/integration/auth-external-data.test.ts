@@ -29,10 +29,10 @@ vi.mock('../../src/lib/logger', () => ({
    });
  
    it('should include auth token in external data calls', async () => {
-     (global.fetch as any).mockResolvedValue({
+     vi.mocked(global.fetch).mockResolvedValue({
        ok: true,
        json: () => Promise.resolve({ data: [] })
-     });
+     } as Response);
  
      await queryExternalData({ table: 'contacts' });
  
@@ -47,7 +47,7 @@ vi.mock('../../src/lib/logger', () => ({
    });
  
    it('should handle concurrent edit errors (409) correctly', async () => {
-     (global.fetch as any).mockResolvedValue({
+     vi.mocked(global.fetch).mockResolvedValue({
        ok: false,
        status: 409,
        text: () => Promise.resolve(JSON.stringify({
@@ -56,7 +56,7 @@ vi.mock('../../src/lib/logger', () => ({
          id: '123',
          attemptedVersion: 1
        }))
-     });
+     } as Response);
  
      const { error } = await insertExternalData('contacts', { name: 'Test' });
      expect(error?.message).toContain('CONCURRENT_EDIT');

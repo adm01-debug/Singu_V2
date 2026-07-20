@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
     // Verify contact ownership before fetching any related data
     const { data: contact, error: contactErr } = await supabase
       .from('contacts').select('*').eq('id', contactId).eq('user_id', userId).single();
-    if (contactErr || !contact) return jsonError("Contact not found", 404);
+    if (contactErr || !contact) { return jsonError("Contact not found", 404); }
 
     // 1. Gather Rich Context (ownership already verified above)
      const [interactionsRes, , neuroRes, analyticalRes, whatsappRes] = await Promise.all([

@@ -13,7 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useNurturingWorkflows, NurturingStep } from '@/hooks/useNurturingWorkflows';
 
-const STEP_ICONS: Record<string, any> = { email: Mail, whatsapp: MessageSquare, task: CheckSquare, wait: Clock };
+const STEP_ICONS: Record<string, typeof Mail> = { email: Mail, whatsapp: MessageSquare, task: CheckSquare, wait: Clock };
 const STEP_LABELS: Record<string, string> = { email: 'Email', whatsapp: 'WhatsApp', task: 'Tarefa', wait: 'Aguardar' };
 const TRIGGER_LABELS: Record<string, string> = { manual: 'Manual', tag_added: 'Tag adicionada', stage_changed: 'Estágio mudou', score_below: 'Score abaixo de', score_above: 'Score acima de' };
 

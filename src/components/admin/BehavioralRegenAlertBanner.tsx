@@ -90,7 +90,8 @@ export function BehavioralRegenAlertBanner() {
   const titleFor = (a: AlertRow): string => {
     if (a.alert_type === "behavioral_regen_cron_stale") {
       const job = (a.metadata as Record<string, unknown> | null)?.jobname;
-      return `Cron travado${job ? `: ${String(job)}` : ""}`;
+      const suffix = job ? `: ${String(job)}` : "";
+      return `Cron travado${suffix}`;
     }
     return `Taxa de erro do cron acima do limite (${Number(a.consumed_pct).toFixed(1)}% › ${Number(a.threshold_pct).toFixed(0)}%)`;
   };

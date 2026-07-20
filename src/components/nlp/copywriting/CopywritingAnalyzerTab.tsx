@@ -84,7 +84,7 @@ function getScoreColor(score: number) {
    }, [neuroAnalysis]);
  
            {/* Neuro-Análise Section */}
-           {neuroAnalysis && (
+           if (neuroAnalysis) {
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                <div className="bg-gradient-to-br from-indigo-500/5 to-purple-500/5 border border-indigo-500/20 rounded-xl p-4">
                  <h4 className="font-bold text-xs uppercase tracking-widest text-indigo-600 mb-3 flex items-center gap-2">
@@ -141,10 +141,10 @@ function getScoreColor(score: number) {
                  </div>
                </div>
              </div>
-           )}
- 
+           }
+
            {/* Neuro-Recommendations */}
-           {neuroAnalysis && neuroAnalysis.recommendations.length > 0 && (
+           if (neuroAnalysis && neuroAnalysis.recommendations.length > 0) {
              <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-4">
                <h4 className="font-bold text-xs uppercase tracking-widest text-indigo-700 mb-3 flex items-center gap-2">
                  <Sparkles className="h-4 w-4" /> Sugestões de Otimização Neuro-Persuasiva
@@ -158,8 +158,8 @@ function getScoreColor(score: number) {
                  ))}
                </div>
              </div>
-           )}
- 
+           }
+
   const renderHighlightedText = () => {
     const text = analyzeText;
     if (!text) return null;

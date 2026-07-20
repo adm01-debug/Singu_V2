@@ -14,7 +14,7 @@ export interface RapportIntel {
   positive_anchors?: string[];
   upcoming_events?: string[];
    relatives?: Record<string, unknown>[];
-  rapport_metadata?: Record<string, any>;
+  rapport_metadata?: Record<string, unknown>;
 }
 
 export function useRapportIntel(contactId?: string) {

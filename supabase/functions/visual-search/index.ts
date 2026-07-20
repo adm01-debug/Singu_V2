@@ -5,6 +5,12 @@ import { rateLimit } from "../_shared/rate-limit.ts";
 const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
 
+interface ProductSearchResult {
+  id: string;
+  similarity: number;
+  [key: string]: unknown;
+}
+
 async function analyzeImageWithAI(imageDataUrl: string): Promise<{
   description: string;
   keywords: string[];
@@ -134,7 +140,7 @@ Deno.serve(async (req) => {
     const searchTerms = [analysis.category, ...analysis.keywords].filter(Boolean).join(" ");
 
     // 3. Search products using semantic RPC for each keyword
-    const merged = new Map<string, any>();
+    const merged = new Map<string, ProductSearchResult>();
     const searches = [
       analysis.category,
       ...analysis.keywords.slice(0, 5),

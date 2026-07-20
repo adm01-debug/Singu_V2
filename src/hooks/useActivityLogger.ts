@@ -13,7 +13,7 @@ interface LogActivityParams {
   entityName?: string;
   description?: string;
   reason?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export function useActivityLogger() {

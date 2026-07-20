@@ -36,7 +36,9 @@ type SupabaseWithDynamicTables = {
    return useQuery({
      queryKey: ['social-insights-history', contactId],
      queryFn: async () => {
-       if (!contactId) return [];
+       if (!contactId) {
+         return [];
+       }
        // Using a fallback for missing table/data
         try {
           const client = supabase as unknown as SupabaseWithDynamicTables;

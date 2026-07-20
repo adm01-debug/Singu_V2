@@ -8,7 +8,7 @@ export function useRapportIntelMutation(contactId: string | undefined) {
   const { user } = useAuth();
 
   return useMutation({
-    mutationFn: async (updates: Record<string, any>) => {
+    mutationFn: async (updates: Record<string, unknown>) => {
       if (!contactId || !user) throw new Error('ID do contato ou usuário ausente');
       
       // We update the contact table which usually contains these rapport fields in this system's architecture

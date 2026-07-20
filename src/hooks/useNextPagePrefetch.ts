@@ -1,21 +1,20 @@
 import { useEffect, useRef, useCallback } from 'react';
 
-type IdleCallbackHandle = number;
 type IdleDeadline = { didTimeout: boolean; timeRemaining: () => number };
 type IdleCallback = (deadline: IdleDeadline) => void;
 
 interface IdleWindow {
-  requestIdleCallback?: (cb: IdleCallback, opts?: { timeout?: number }) => IdleCallbackHandle;
-  cancelIdleCallback?: (handle: IdleCallbackHandle) => void;
+  requestIdleCallback?: (cb: IdleCallback, opts?: { timeout?: number }) => number;
+  cancelIdleCallback?: (handle: number) => void;
 }
 
-function scheduleIdle(cb: IdleCallback, timeout = 200): IdleCallbackHandle {
+function scheduleIdle(cb: IdleCallback, timeout = 200): number {
   const w = (typeof window !== 'undefined' ? window : undefined) as IdleWindow | undefined;
   if (w?.requestIdleCallback) return w.requestIdleCallback(cb, { timeout });
-  return (setTimeout(() => cb({ didTimeout: false, timeRemaining: () => 0 }), 1) as unknown) as IdleCallbackHandle;
+  return (setTimeout(() => cb({ didTimeout: false, timeRemaining: () => 0 }), 1) as unknown) as number;
 }
 
-function cancelIdle(handle: IdleCallbackHandle): void {
+function cancelIdle(handle: number): void {
   const w = (typeof window !== 'undefined' ? window : undefined) as IdleWindow | undefined;
   if (w?.cancelIdleCallback) {
     w.cancelIdleCallback(handle);

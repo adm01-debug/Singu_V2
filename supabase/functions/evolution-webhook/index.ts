@@ -1,6 +1,8 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { requireWebhookSecret, scopedCorsHeaders } from "../_shared/auth.ts";
 
+type SupabaseAdminClient = ReturnType<typeof createClient>;
+
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === 'OPTIONS') {
@@ -69,7 +71,7 @@ function jsonResponse(data: unknown, status = 200) {
 }
 
 // Helper: Find contact by phone number - searches local DB first, then external DB
-async function findContactByPhone(supabase: any, phoneNumber: string): Promise<{
+async function findContactByPhone(supabase: SupabaseAdminClient, phoneNumber: string): Promise<{
   contactId: string | null;
   userId: string | null;
   companyId: string | null;
@@ -218,7 +220,8 @@ async function findContactByPhone(supabase: any, phoneNumber: string): Promise<{
 // ========================
 // MESSAGES.UPSERT - New message received/sent
 // ========================
-async function handleMessageUpsert(supabase: any, payload: any, instance: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Evolution API payload shape not statically typed
+async function handleMessageUpsert(supabase: SupabaseAdminClient, payload: any, instance: string) {
   const { data } = payload;
   const phoneNumber = data.key?.remoteJid?.replace('@s.whatsapp.net', '').replace('@g.us', '');
   const isFromMe = data.key?.fromMe;
@@ -410,8 +413,8 @@ async function handleMessageUpsert(supabase: any, payload: any, instance: string
     } else {
       // Interaction created: ${interaction.id} (contact source: ${source})`);
 
-      // Trigger DISC analysis for long messages
-      if (messageContent.length >= 100 && contactId) {
+      // Trigger DISC analysis for long messages (contactId is always truthy inside this block)
+      if (messageContent.length >= 100) {
         supabase.functions.invoke('disc-analyzer', {
           body: {
             texts: [messageContent],
@@ -419,7 +422,7 @@ async function handleMessageUpsert(supabase: any, payload: any, instance: string
             interactionId: interaction.id,
             userId,
           },
-        }).catch((err: any) => console.error('DISC analyzer error:', err));
+        }).catch((err: unknown) => console.error('DISC analyzer error:', err));
       }
     }
   }
@@ -436,14 +439,15 @@ async function handleMessageUpsert(supabase: any, payload: any, instance: string
 // ========================
 // MESSAGES.UPDATE - Message status update (delivered, read, etc.)
 // ========================
-async function handleMessageUpdate(supabase: any, payload: any, instance: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Evolution API payload shape not statically typed
+async function handleMessageUpdate(supabase: SupabaseAdminClient, payload: any, instance: string) {
   const { data } = payload;
 
   if (!data?.key?.id) {
     return jsonResponse({ status: 'ignored', reason: 'no message key' });
   }
 
-  const updates: Record<string, any> = {};
+  const updates: Record<string, unknown> = {};
 
   if (data.update?.status === 3 || data.update?.status === 'DELIVERY_ACK') {
     updates.status = 'delivered';
@@ -475,13 +479,14 @@ async function handleMessageUpdate(supabase: any, payload: any, instance: string
 // ========================
 // CONNECTION.UPDATE - Instance connection state changed
 // ========================
-async function handleConnectionUpdate(supabase: any, payload: any, instance: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Evolution API payload shape not statically typed
+async function handleConnectionUpdate(supabase: SupabaseAdminClient, payload: any, instance: string) {
   const { data } = payload;
   const state = data?.state; // open, close, connecting
 
   // Instance ${instance} connection: ${state}`);
 
-  const updates: Record<string, any> = {
+  const updates: Record<string, unknown> = {
     status: state === 'open' ? 'connected' : state === 'close' ? 'disconnected' : 'connecting',
     updated_at: new Date().toISOString(),
   };
@@ -505,7 +510,8 @@ async function handleConnectionUpdate(supabase: any, payload: any, instance: str
 // ========================
 // CONTACTS.UPSERT - WhatsApp contact synced
 // ========================
-async function handleContactsUpsert(supabase: any, payload: any, instance: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Evolution API payload shape not statically typed
+async function handleContactsUpsert(supabase: SupabaseAdminClient, payload: any, instance: string) {
   const { data } = payload;
 
   if (!data?.id) {
@@ -537,7 +543,8 @@ async function handleContactsUpsert(supabase: any, payload: any, instance: strin
 // ========================
 // PRESENCE.UPDATE - Online/offline/typing status
 // ========================
-async function handlePresenceUpdate(supabase: any, payload: any, instance: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Evolution API payload shape not statically typed
+async function handlePresenceUpdate(supabase: SupabaseAdminClient, payload: any, instance: string) {
   const { data } = payload;
   // Presence updates are ephemeral - we log but don't persist them heavily
   // Presence update: ${data?.id} -> ${JSON.stringify(data?.presences)}`);
@@ -547,7 +554,8 @@ async function handlePresenceUpdate(supabase: any, payload: any, instance: strin
 // ========================
 // CALL - Voice/video call received
 // ========================
-async function handleCall(supabase: any, payload: any, instance: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Evolution API payload shape not statically typed
+async function handleCall(supabase: SupabaseAdminClient, payload: any, instance: string) {
   const { data } = payload;
   const phoneNumber = data?.from?.replace('@s.whatsapp.net', '');
 
@@ -578,7 +586,8 @@ async function handleCall(supabase: any, payload: any, instance: string) {
 // ========================
 // SEND.MESSAGE - Outgoing message confirmation
 // ========================
-async function handleSendMessage(supabase: any, payload: any, instance: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Evolution API payload shape not statically typed
+async function handleSendMessage(supabase: SupabaseAdminClient, payload: any, instance: string) {
   const { data } = payload;
 
   if (data?.key?.id) {

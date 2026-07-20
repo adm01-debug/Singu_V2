@@ -16,7 +16,7 @@ export interface NurturingWorkflow {
   name: string;
   description: string | null;
   trigger_type: string;
-  trigger_config: Record<string, any>;
+  trigger_config: Record<string, unknown>;
   is_active: boolean;
   steps: NurturingStep[];
   enrolled_count: number;

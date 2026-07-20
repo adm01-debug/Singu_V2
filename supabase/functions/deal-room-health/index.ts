@@ -31,10 +31,10 @@ Deno.serve(async (req) => {
     const milestones = ms ?? [];
     const stakeholders = sh ?? [];
     const total = milestones.length || 1;
-    const done = milestones.filter((m: any) => m.status === "done").length;
-    const overdue = milestones.filter((m: any) => m.due_date && m.status !== "done" && new Date(m.due_date) < new Date()).length;
-    const buyerEng = stakeholders.filter((s: any) => s.side === "buyer").reduce((a: number, s: any) => a + (s.engagement_score || 0), 0) /
-      Math.max(1, stakeholders.filter((s: any) => s.side === "buyer").length);
+    const done = milestones.filter((m: { status: string }) => m.status === "done").length;
+    const overdue = milestones.filter((m: { status: string; due_date?: string | null }) => m.due_date && m.status !== "done" && new Date(m.due_date) < new Date()).length;
+    const buyerEng = stakeholders.filter((s: { side: string; engagement_score?: number | null }) => s.side === "buyer").reduce((a: number, s: { side: string; engagement_score?: number | null }) => a + (s.engagement_score || 0), 0) /
+      Math.max(1, stakeholders.filter((s: { side: string }) => s.side === "buyer").length);
     const lastView = room.last_buyer_view_at ? (Date.now() - new Date(room.last_buyer_view_at).getTime()) / 86400000 : 999;
 
     const baseHealth = Math.round(

@@ -22,7 +22,7 @@ Deno.serve(async (req) => {
 
   const start = Date.now();
   let status = 'success';
-  let result: any = {};
+  let result: Record<string, unknown> = {};
 
   try {
     const { contact_id } = await req.json();

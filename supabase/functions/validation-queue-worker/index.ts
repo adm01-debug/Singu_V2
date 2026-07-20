@@ -32,14 +32,10 @@ Deno.serve(async (req) => {
     const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const admin = createClient(SUPABASE_URL, SERVICE_KEY);
 
-    // Pega lote pendente
+    // Atomically claim a batch: UPDATE+RETURNING with FOR UPDATE SKIP LOCKED prevents
+    // two concurrent cron invocations from processing the same rows.
     const { data: items, error: fetchErr } = await admin
-      .from("validation_queue")
-      .select("id, user_id, contact_id, kind, value, attempts")
-      .eq("status", "pending")
-      .lt("attempts", MAX_ATTEMPTS)
-      .order("created_at", { ascending: true })
-      .limit(BATCH_SIZE);
+      .rpc("claim_validation_batch", { p_batch_size: BATCH_SIZE, p_max_attempts: MAX_ATTEMPTS });
 
     if (fetchErr) throw fetchErr;
     const queue = (items ?? []) as QueueItem[];
@@ -49,10 +45,6 @@ Deno.serve(async (req) => {
         headers: { ...cors, "Content-Type": "application/json" },
       });
     }
-
-    // Marca como processing
-    const ids = queue.map((q) => q.id);
-    await admin.from("validation_queue").update({ status: "processing" }).in("id", ids);
 
     let okCount = 0;
     let errCount = 0;

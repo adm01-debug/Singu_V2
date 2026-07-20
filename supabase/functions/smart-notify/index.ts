@@ -53,6 +53,7 @@ Deno.serve(async (req) => {
           const deadline = new Date(generatedAt.getTime() + (delayHours * 60 * 60 * 1000));
           const isOverdue = now > deadline;
           const contactData = Array.isArray(action.contacts) ? action.contacts[0] : action.contacts;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase joined relation type not fully typed
           const contactName = contactData ? `${(contactData as any).first_name} ${(contactData as any).last_name}` : 'Contato';
 
           let message = '';

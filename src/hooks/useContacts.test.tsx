@@ -54,7 +54,7 @@ describe('useContacts CRUD & Pagination', () => {
       updated_at: new Date().toISOString(),
     }));
 
-    (externalData.queryExternalData as any).mockResolvedValue({
+    vi.mocked(externalData.queryExternalData).mockResolvedValue({
       data: mockData,
       count: 100,
       error: null,
@@ -80,14 +80,14 @@ describe('useContacts CRUD & Pagination', () => {
       family_info: 'Married with 2 kids'
     };
 
-    (externalData.insertExternalData as any).mockResolvedValue({
+    vi.mocked(externalData.insertExternalData).mockResolvedValue({
       data: { ...newContact, id: 'new-id', updated_at: new Date().toISOString() },
       error: null,
     });
 
     const { result } = renderHook(() => useContacts(), { wrapper });
     
-    await result.current.createContact(newContact as any);
+    await result.current.createContact(newContact as unknown as Parameters<typeof result.current.createContact>[0]);
 
     expect(externalData.insertExternalData).toHaveBeenCalledWith(
       'contacts',

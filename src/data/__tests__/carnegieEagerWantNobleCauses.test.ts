@@ -129,7 +129,7 @@ describe('Eager Wants: Functions', () => {
   });
 
   it('getEagerWantByCategory returns undefined for invalid', () => {
-    const want = getEagerWantByCategory('nonexistent' as any);
+    const want = getEagerWantByCategory('nonexistent' as never);
     expect(want).toBeUndefined();
   });
 
@@ -139,7 +139,7 @@ describe('Eager Wants: Functions', () => {
   });
 
   it('getTechniquesForWant returns empty for invalid', () => {
-    const techs = getTechniquesForWant('nonexistent' as any);
+    const techs = getTechniquesForWant('nonexistent' as never);
     expect(techs).toEqual([]);
   });
 
@@ -168,7 +168,7 @@ describe('Eager Wants: Functions', () => {
   });
 
   it('generateEagerWantScript returns empty for invalid', () => {
-    expect(generateEagerWantScript('nonexistent' as any)).toBe('');
+    expect(generateEagerWantScript('nonexistent' as never)).toBe('');
   });
 });
 
@@ -262,7 +262,7 @@ describe('Noble Causes: Functions', () => {
   });
 
   it('getNobleCausesByCategory returns empty for invalid', () => {
-    const result = getNobleCausesByCategory('nonexistent' as any);
+    const result = getNobleCausesByCategory('nonexistent' as never);
     expect(result).toEqual([]);
   });
 

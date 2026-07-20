@@ -148,7 +148,6 @@ export function useRecomputeLead() {
       qc.invalidateQueries({ queryKey: ['lead-scores-top'] });
       qc.invalidateQueries({ queryKey: ['lead-scores-distribution'] });
       qc.invalidateQueries({ queryKey: ['lead-score-history-srv', contactId] });
-      return;
     },
     onError: (e) => toast.error(`Erro: ${(e as Error).message}`),
   });

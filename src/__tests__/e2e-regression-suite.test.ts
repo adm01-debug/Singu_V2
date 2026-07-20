@@ -139,6 +139,7 @@ describe('Data Module Integrity', () => {
   });
 
   it('data files do not import React', () => {
+    expect(dataFiles.length).toBeGreaterThan(0);
     dataFiles.forEach(f => {
       const content = fs.readFileSync(f, 'utf-8');
       const hasReactImport = content.includes("from 'react'") || content.includes('from "react"');

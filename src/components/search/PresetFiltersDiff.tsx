@@ -60,7 +60,7 @@ export const PresetFiltersDiff = React.memo(function PresetFiltersDiff({
       let status: DiffRow['status'];
       if (b.length === 0 && a.length > 0) status = 'added';
       else if (b.length > 0 && a.length === 0) status = 'removed';
-      else if (arraysEqual(b, a)) status = 'unchanged';
+      else if (arraysEqual(a, b)) status = 'unchanged';
       else status = 'changed';
       if (status === 'unchanged' && !includeUnchanged) continue;
       out.push({

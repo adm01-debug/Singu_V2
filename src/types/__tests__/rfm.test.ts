@@ -44,10 +44,11 @@ describe('determineRFMSegment', () => {
   });
 
   it('nunca retorna undefined para qualquer combinação válida', () => {
+    type RfmScore = 1 | 2 | 3 | 4 | 5;
     for (let r = 1 as const; r <= 5; r++) {
       for (let f = 1 as const; f <= 5; f++) {
         for (let m = 1 as const; m <= 5; m++) {
-          const seg = determineRFMSegment(r as 1|2|3|4|5, f as 1|2|3|4|5, m as 1|2|3|4|5);
+          const seg = determineRFMSegment(r as RfmScore, f as RfmScore, m as RfmScore);
           expect(typeof seg).toBe('string');
           expect(seg.length).toBeGreaterThan(0);
         }

@@ -11,14 +11,14 @@ beforeAll(() => {
     observe() {}
     unobserve() {}
     disconnect() {}
-  } as any;
+  } as unknown as typeof ResizeObserver;
 });
 
 // ─── Helpers ────────────────────────────────────────────────────
 const mockSubmit = vi.fn().mockResolvedValue(undefined);
 const mockCancel = vi.fn();
 
-function renderForm(company?: any) {
+function renderForm(company?: Record<string, unknown>) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
@@ -638,6 +638,7 @@ describe('CompanyForm — Stress & Boundary', () => {
 
   it('handles CNPJ with special characters', () => {
     renderForm({ ...minimalCompany, cnpj: '79.114.450/0284-18' });
+    expect(screen.getByDisplayValue('79.114.450/0284-18')).toBeInTheDocument();
   });
 
   it('handles rapid tab switching', async () => {
@@ -659,7 +660,7 @@ describe('CompanyForm — Stress & Boundary', () => {
           {Array.from({ length: 10 }, (_, i) => (
             <CompanyForm
               key={i}
-              company={{ ...fullExternalCompany, id: `id-${i}` } as any}
+              company={{ ...fullExternalCompany, id: `id-${i}` } as unknown as Record<string, unknown>}
               onSubmit={mockSubmit}
               onCancel={mockCancel}
             />
@@ -674,5 +675,6 @@ describe('CompanyForm — Stress & Boundary', () => {
   it('handles tags_array as empty array', () => {
     renderForm({ ...minimalCompany, tags_array: [] });
     // tags input should be empty, no crash
+    expect(screen.getByText(/Nome no CRM/)).toBeInTheDocument();
   });
 });

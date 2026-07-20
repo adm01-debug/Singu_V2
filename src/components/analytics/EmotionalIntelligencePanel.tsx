@@ -48,7 +48,7 @@
      return <Badge variant="outline" className={cn("text-xs font-medium", cfg.color)}>{cfg.label}</Badge>;
    };
  
-   const pillarIcons: Record<EQPillar, any> = {
+   const pillarIcons: Record<EQPillar, typeof Target> = {
      self_awareness: Target,
      self_regulation: ShieldCheck,
      motivation: TrendingUp,
