@@ -70,7 +70,8 @@ export function OfferSuggestionsElite({ contactId }: Props) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['offer-suggestions-elite', contactId] });
       toast.success('Status da oferta atualizado');
-    }
+    },
+    onError: () => toast.error('Erro ao atualizar status da oferta'),
   });
 
   useEffect(() => {

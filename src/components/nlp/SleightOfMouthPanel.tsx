@@ -77,6 +77,7 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reframing-analysis', contactId] });
     },
+    onError: () => toast.error('Erro ao atualizar status da análise'),
   });
 
   const copyToClipboard = (text: string) => {

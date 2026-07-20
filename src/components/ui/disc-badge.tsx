@@ -118,15 +118,19 @@ interface DISCChartProps {
   className?: string;
 }
 
+const DISC_TYPICAL_SCORES: Record<Exclude<DISCProfile, null>, Record<Exclude<DISCProfile, null>, number>> = {
+  D: { D: 90, I: 35, S: 20, C: 45 },
+  I: { D: 30, I: 90, S: 40, C: 25 },
+  S: { D: 20, I: 35, S: 90, C: 40 },
+  C: { D: 40, I: 25, S: 35, C: 90 },
+};
+
 export function DISCChart({ profile, className }: DISCChartProps) {
   const profiles: DISCProfile[] = ['D', 'I', 'S', 'C'];
-  
-  // Simulate scores based on primary profile
+
   const getScore = (p: DISCProfile): number => {
-    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
-    if (p === profile) return 85 + Math.random() * 15;
-    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
-    return 20 + Math.random() * 40;
+    if (!profile || !p) return 25;
+    return DISC_TYPICAL_SCORES[profile]?.[p] ?? 25;
   };
 
   return (
