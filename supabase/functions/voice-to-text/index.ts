@@ -141,7 +141,8 @@ Deno.serve(async (req) => {
       if (!intError) interactionId = interaction?.id ?? null;
 
       if (whatsappMessageId) {
-        await supabase.from('whatsapp_messages').update({ content: transcribedText }).eq('id', whatsappMessageId).eq('user_id', userId);
+        supabase.from('whatsapp_messages').update({ content: transcribedText }).eq('id', whatsappMessageId).eq('user_id', userId)
+          .catch((e: unknown) => console.error('whatsapp_messages update error:', e));
       }
     }
 

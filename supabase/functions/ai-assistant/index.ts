@@ -183,12 +183,13 @@ Deno.serve(async (req) => {
       .select()
       .single();
 
-    // Update thread timestamp + auto-title if first message
+    // Update thread timestamp + auto-title (fire-and-forget — not used in response)
     const updates: Record<string, unknown> = { last_message_at: new Date().toISOString() };
     if ((history || []).length <= 1 && thread.title === "Nova conversa") {
       updates.title = message.slice(0, 60);
     }
-    await supabase.from("ai_chat_threads").update(updates).eq("id", thread_id);
+    supabase.from("ai_chat_threads").update(updates).eq("id", thread_id)
+      .catch((e: unknown) => console.error("ai_chat_threads update error:", e));
 
     log.info("chat_complete", { threadId: thread_id, tokens });
 

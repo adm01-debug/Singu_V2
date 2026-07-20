@@ -128,10 +128,11 @@ Deno.serve(async (req) => {
 
     const schemaJson = { tables, discovered_at: new Date().toISOString(), table_count: tables.length };
 
-    await admin
+    admin
       .from("connection_configs")
       .update({ discovered_schema: schemaJson, discovered_at: new Date().toISOString() })
-      .eq("id", conn.id);
+      .eq("id", conn.id)
+      .catch((e: unknown) => console.error("connection_configs schema update error:", e));
 
     return new Response(JSON.stringify({ success: true, schema: schemaJson }), {
       headers: { ...cors, "Content-Type": "application/json" },
