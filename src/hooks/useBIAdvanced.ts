@@ -37,7 +37,7 @@ export interface ProfitabilityItem {
 export function useProfitabilityByContact() {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['bi-profitability-contacts'],
+    queryKey: ['bi-profitability-contacts', user?.id],
     queryFn: async () => {
       if (!user) throw new Error('Not authenticated');
 
@@ -90,7 +90,7 @@ export interface GeoSalesPoint {
 export function useGeoSalesData() {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['bi-geo-sales'],
+    queryKey: ['bi-geo-sales', user?.id],
     queryFn: async () => {
       if (!user) throw new Error('Not authenticated');
 

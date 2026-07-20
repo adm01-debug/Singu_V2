@@ -49,7 +49,7 @@ function prefsEqual(a: Ficha360Preferences, b: Ficha360Preferences) {
   return arraysEqual(a.priorities, b.priorities) && arraysEqual(a.channels, b.channels) && a.sort === b.sort;
 }
 
-const QK = ['user-ui-preferences', SCOPE] as const;
+/** @internal — computed inside the hook so it includes user?.id */
 
 /**
  * Sincroniza preferências de filtros/ordenação da Ficha 360 com o perfil do usuário.
@@ -57,19 +57,21 @@ const QK = ['user-ui-preferences', SCOPE] as const;
  * - Salva (debounced) sempre que mudarem.
  */
 export function useFicha360PreferencesSync(opts: {
-  const { user } = useAuth();
   current: Ficha360Preferences;
   hydrate: (prefs: Ficha360Preferences) => void;
   hasUrlOverride: boolean;
 }) {
+  const { user } = useAuth();
   const { current, hydrate, hasUrlOverride } = opts;
   const qc = useQueryClient();
+  const QK = ['user-ui-preferences', SCOPE, user?.id] as const;
   const hydratedRef = useRef(false);
   const lastSavedRef = useRef<Ficha360Preferences | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { data: remote } = useQuery({
     queryKey: QK,
+    enabled: !!user,
     queryFn: async (): Promise<Ficha360Preferences> => {
       if (!user?.id) return { ...DEFAULTS };
       const { data, error } = await supabase

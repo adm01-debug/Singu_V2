@@ -23,7 +23,7 @@ export interface VisitCheckin {
 export function useVisitCheckins(entityId?: string, entityType?: 'contact' | 'company') {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['visit-checkins', entityId, entityType];
+  const key = ['visit-checkins', entityId, entityType, user?.id];
 
   const { data: checkins = [], isLoading } = useQuery({
     queryKey: key,

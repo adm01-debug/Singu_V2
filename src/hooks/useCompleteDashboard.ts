@@ -31,7 +31,7 @@ export interface CompleteDashboardData {
 export function useCompleteDashboard() {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['complete-dashboard'],
+    queryKey: ['complete-dashboard', user?.id],
     queryFn: async () => {
       if (!user) throw new Error('Not authenticated');
 

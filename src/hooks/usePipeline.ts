@@ -72,7 +72,8 @@ export interface VelocityMetrics {
 export function useDealsPipeline() {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['deals-pipeline'],
+    queryKey: ['deals-pipeline', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<PipelineDeal[]>(
@@ -89,7 +90,8 @@ export function useDealsPipeline() {
 export function usePipelineSummary() {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['pipeline-summary'],
+    queryKey: ['pipeline-summary', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<PipelineSummary>(

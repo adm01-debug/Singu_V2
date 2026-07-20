@@ -10,7 +10,7 @@ export function useTonePersistence(companyId?: string) {
   const queryClient = useQueryClient();
 
   const { data: preferredTone, isLoading } = useQuery({
-    queryKey: ['ai-tone-preferences', companyId],
+    queryKey: ['ai-tone-preferences', companyId, user?.id],
     queryFn: async () => {
       if (!user) return null;
 
