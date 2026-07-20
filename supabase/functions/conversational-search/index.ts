@@ -225,8 +225,8 @@ Deno.serve(async (req) => {
       cached: false,
     };
 
-    // 3) Persist cache (upsert)
-    await supabase
+    // 3) Persist cache (fire-and-forget — response uses in-memory responsePayload)
+    supabase
       .from("conversational_search_cache")
       .upsert({
         user_id: userId,
@@ -235,7 +235,8 @@ Deno.serve(async (req) => {
         response: responsePayload,
         model: "google/gemini-2.5-flash",
         expires_at: new Date(Date.now() + 5 * 60_000).toISOString(),
-      }, { onConflict: "user_id,query_hash" });
+      }, { onConflict: "user_id,query_hash" })
+      .catch((e: unknown) => console.error("conversational_search_cache upsert error:", e));
 
     return jsonOk(responsePayload, req);
   } catch (error) {

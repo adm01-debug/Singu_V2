@@ -82,45 +82,41 @@ Deno.serve(async (req) => {
       });
     }
 
-    // If there are entity updates, apply them
-    if (entityUpdates) {
-      const { data: luxRecord } = await supabase
+    // Single pre-fetch for both entityUpdates and stakeholders blocks (eliminates duplicate read)
+    const needsLuxRecord = !!(entityUpdates || (stakeholders && Array.isArray(stakeholders) && stakeholders.length > 0));
+    let luxRecord: { entity_type: string; entity_id: string; user_id: string } | null = null;
+    if (needsLuxRecord) {
+      const { data } = await supabase
         .from('lux_intelligence')
         .select('entity_type, entity_id, user_id')
         .eq('id', luxRecordId)
         .single();
+      luxRecord = data as typeof luxRecord;
+    }
 
-      if (luxRecord) {
-        const table = luxRecord.entity_type === 'company' ? 'companies' : 'contacts';
-        await supabase
-          .from(table)
-          .update(entityUpdates)
-          .eq('id', luxRecord.entity_id);
-      }
+    // If there are entity updates, apply them
+    if (entityUpdates && luxRecord) {
+      const table = luxRecord.entity_type === 'company' ? 'companies' : 'contacts';
+      await supabase
+        .from(table)
+        .update(entityUpdates)
+        .eq('id', luxRecord.entity_id);
     }
 
     // If stakeholders were found, auto-create contacts
-    if (stakeholders && Array.isArray(stakeholders) && stakeholders.length > 0) {
-      const { data: luxRecord } = await supabase
-        .from('lux_intelligence')
-        .select('entity_id, user_id')
-        .eq('id', luxRecordId)
-        .single();
-
-      if (luxRecord) {
-        const contactRows = stakeholders.map((stakeholder: Record<string, unknown>) => ({
-          user_id: luxRecord.user_id,
-          company_id: luxRecord.entity_id,
-          first_name: stakeholder.first_name || (stakeholder.name as string)?.split(' ')[0] || 'Unknown',
-          last_name: stakeholder.last_name || (stakeholder.name as string)?.split(' ').slice(1).join(' ') || '',
-          role_title: stakeholder.role_title || stakeholder.position || null,
-          email: stakeholder.email || null,
-          phone: stakeholder.phone || null,
-          linkedin: stakeholder.linkedin || null,
-        }));
-        supabase.from('contacts').insert(contactRows)
-          .catch((e: unknown) => console.error('Error creating stakeholder contacts:', e));
-      }
+    if (stakeholders && Array.isArray(stakeholders) && stakeholders.length > 0 && luxRecord) {
+      const contactRows = stakeholders.map((stakeholder: Record<string, unknown>) => ({
+        user_id: luxRecord!.user_id,
+        company_id: luxRecord!.entity_id,
+        first_name: stakeholder.first_name || (stakeholder.name as string)?.split(' ')[0] || 'Unknown',
+        last_name: stakeholder.last_name || (stakeholder.name as string)?.split(' ').slice(1).join(' ') || '',
+        role_title: stakeholder.role_title || stakeholder.position || null,
+        email: stakeholder.email || null,
+        phone: stakeholder.phone || null,
+        linkedin: stakeholder.linkedin || null,
+      }));
+      supabase.from('contacts').insert(contactRows)
+        .catch((e: unknown) => console.error('Error creating stakeholder contacts:', e));
     }
 
     console.log(`Lux record ${luxRecordId} updated successfully`);
