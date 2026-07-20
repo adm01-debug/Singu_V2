@@ -158,9 +158,9 @@ O que faz mais sentido para você?"
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 `.trim();
 
-    navigator.clipboard.writeText(script);
-    toast.success('Script copiado para a área de transferência!');
-    onGenerate?.(script);
+    navigator.clipboard.writeText(script)
+      .then(() => { toast.success('Script copiado para a área de transferência!'); onGenerate?.(script); })
+      .catch(() => toast.error('Não foi possível copiar'));
   };
 
   const getGainIcon = (type: string) => {

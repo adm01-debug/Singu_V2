@@ -22,10 +22,14 @@ export function PlaybookSectionRenderer({ section }: { section: PlaybookSection 
   const handleCopy = async () => {
     const itemsList = section.items?.map((i) => `• ${i}`).join("\n") || "";
     const text = `${section.title}\n\n${section.body}\n\n${itemsList}`;
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    toast.success("Bloco copiado");
-    setTimeout(() => setCopied(false), 1800);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      toast.success("Bloco copiado");
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      toast.error("Não foi possível copiar");
+    }
   };
 
   return (

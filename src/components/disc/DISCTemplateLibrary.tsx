@@ -69,13 +69,17 @@ const DISCTemplateLibrary: React.FC<DISCTemplateLibraryProps> = ({ filterProfile
   }, [filteredTemplates]);
 
   const copyToClipboard = async (template: Template) => {
-    await navigator.clipboard.writeText(template.template);
-    setCopiedId(template.id);
-    setTimeout(() => setCopiedId(null), 2000);
-    toast({
-      title: '📋 Template Copiado!',
-      description: `${template.category} - ${template.context}`
-    });
+    try {
+      await navigator.clipboard.writeText(template.template);
+      setCopiedId(template.id);
+      setTimeout(() => setCopiedId(null), 2000);
+      toast({
+        title: '📋 Template Copiado!',
+        description: `${template.category} - ${template.context}`
+      });
+    } catch {
+      toast({ title: 'Erro', description: 'Não foi possível copiar', variant: 'destructive' });
+    }
   };
 
   return (

@@ -164,9 +164,13 @@ export function NextBestAction({ contactId }: Props) {
     }
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success('Copiado para a área de transferência');
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success('Copiado para a área de transferência');
+    } catch {
+      toast.error('Não foi possível copiar');
+    }
   };
 
    return (

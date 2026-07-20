@@ -125,13 +125,13 @@ const SwishPatternGenerator: React.FC<SwishPatternGeneratorProps> = ({
   };
 
   const copyScript = (script: string) => {
-    navigator.clipboard.writeText(script);
-    setCopiedScript(script);
-    setTimeout(() => setCopiedScript(null), 2000);
-    toast({
-      title: "Copiado!",
-      description: "Script Swish Pattern copiado"
-    });
+    navigator.clipboard.writeText(script)
+      .then(() => {
+        setCopiedScript(script);
+        setTimeout(() => setCopiedScript(null), 2000);
+        toast({ title: "Copiado!", description: "Script Swish Pattern copiado" });
+      })
+      .catch(() => toast({ title: "Erro", description: "Não foi possível copiar", variant: "destructive" }));
   };
 
   const steps = [

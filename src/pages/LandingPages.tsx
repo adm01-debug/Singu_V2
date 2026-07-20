@@ -53,8 +53,9 @@ export default function LandingPages() {
 
   const copyUrl = (slug: string) => {
     const url = `${window.location.origin}/lp/${slug}`;
-    navigator.clipboard.writeText(url);
-    toast.success('URL copiada!');
+    navigator.clipboard.writeText(url)
+      .then(() => toast.success('URL copiada!'))
+      .catch(() => toast.error('Não foi possível copiar'));
   };
 
   return (

@@ -237,8 +237,9 @@ export const Entity360Tab = forwardRef<Entity360Handle>((_props, ref) => {
                 <button
                   type="button"
                   onClick={() => {
-                    navigator.clipboard.writeText(current.id);
-                    toast.success('ID copiado.');
+                    navigator.clipboard.writeText(current.id)
+                      .then(() => toast.success('ID copiado.'))
+                      .catch(() => toast.error('Não foi possível copiar'));
                   }}
                   className="intel-mono text-[10px] text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
                   aria-label="Copiar ID"

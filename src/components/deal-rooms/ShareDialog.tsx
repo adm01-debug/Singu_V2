@@ -34,8 +34,12 @@ export function ShareDialog({ room }: { room: DealRoom }) {
   };
 
   const copy = async () => {
-    await navigator.clipboard.writeText(url);
-    toast.success("Link copiado");
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("Link copiado");
+    } catch {
+      toast.error("Não foi possível copiar");
+    }
   };
 
   return (

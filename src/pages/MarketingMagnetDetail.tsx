@@ -59,7 +59,7 @@ export default function MarketingMagnetDetail() {
       <div className="flex items-center justify-between">
         <Button asChild variant="ghost" size="sm" className="gap-1"><Link to="/marketing"><ArrowLeft className="w-4 h-4" /> Marketing</Link></Button>
         <div className="flex items-center gap-2">
-          <Button size="sm" variant="outline" className="gap-1" onClick={() => { navigator.clipboard.writeText(url); toast.success('URL copiada'); }}>
+          <Button size="sm" variant="outline" className="gap-1" onClick={() => { navigator.clipboard.writeText(url).then(() => toast.success('URL copiada')).catch(() => toast.error('Não foi possível copiar')); }}>
             <Copy className="w-4 h-4" /> URL
           </Button>
           {draft.is_published && (

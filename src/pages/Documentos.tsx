@@ -144,8 +144,9 @@ export default function Documentos() {
 
   const copyLink = (token: string) => {
     const url = `${window.location.origin}/signature/${token}`;
-    navigator.clipboard.writeText(url);
-    toast.success('Link copiado!');
+    navigator.clipboard.writeText(url)
+      .then(() => toast.success('Link copiado!'))
+      .catch(() => toast.error('Não foi possível copiar'));
   };
 
   return (

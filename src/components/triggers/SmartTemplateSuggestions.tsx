@@ -150,11 +150,9 @@ function TemplatePreview({ suggestion, contact, onUse }: { suggestion: SmartSugg
   const allFilled = template.variables.every(v => variables[v]?.trim());
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(filledTemplate);
-    setCopied(true);
-    toast.success('Mensagem copiada!');
-    onUse(template);
-    setTimeout(() => setCopied(false), 2000);
+    navigator.clipboard.writeText(filledTemplate)
+      .then(() => { setCopied(true); toast.success('Mensagem copiada!'); onUse(template); setTimeout(() => setCopied(false), 2000); })
+      .catch(() => toast.error('Não foi possível copiar'));
   };
 
   return (

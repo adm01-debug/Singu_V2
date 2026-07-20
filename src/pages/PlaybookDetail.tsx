@@ -33,9 +33,13 @@ export default function PlaybookDetail() {
         return `## ${s.title}\n\n${s.body}\n${itemsList}`;
       }),
     ].join("\n\n");
-    await navigator.clipboard.writeText(text);
-    toast.success("Playbook completo copiado");
-    log.mutate({ playbook_id: playbook.id, action: "copied" });
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Playbook completo copiado");
+      log.mutate({ playbook_id: playbook.id, action: "copied" });
+    } catch {
+      toast.error("Não foi possível copiar");
+    }
   };
 
   const handleDelete = async () => {

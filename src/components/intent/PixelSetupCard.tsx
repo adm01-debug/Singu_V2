@@ -25,10 +25,9 @@ export function PixelSetupCard() {
   }
 
   function copy(key: string) {
-    navigator.clipboard.writeText(snippet(key));
-    setCopiedKey(key);
-    toast.success("Snippet copiado");
-    setTimeout(() => setCopiedKey(null), 2000);
+    navigator.clipboard.writeText(snippet(key))
+      .then(() => { setCopiedKey(key); toast.success("Snippet copiado"); setTimeout(() => setCopiedKey(null), 2000); })
+      .catch(() => toast.error("Não foi possível copiar"));
   }
 
   return (

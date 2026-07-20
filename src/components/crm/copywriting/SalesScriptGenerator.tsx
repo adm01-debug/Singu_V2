@@ -61,11 +61,15 @@
      }, 800);
    };
  
-   const handleCopy = () => {
-     navigator.clipboard.writeText(script);
-     setCopied(true);
-     toast.success('Script copiado!');
-     setTimeout(() => setCopied(false), 2000);
+   const handleCopy = async () => {
+     try {
+       await navigator.clipboard.writeText(script);
+       setCopied(true);
+       toast.success('Script copiado!');
+       setTimeout(() => setCopied(false), 2000);
+     } catch {
+       toast.error('Não foi possível copiar');
+     }
    };
  
    return (

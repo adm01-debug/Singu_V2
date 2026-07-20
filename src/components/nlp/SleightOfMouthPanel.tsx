@@ -82,8 +82,9 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
   });
 
   const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success('Copiado para a área de transferência');
+    navigator.clipboard.writeText(text)
+      .then(() => toast.success('Copiado para a área de transferência'))
+      .catch(() => toast.error('Não foi possível copiar'));
   };
 
   if (isLoading) return <div className="h-40 animate-pulse bg-muted rounded-lg" />;

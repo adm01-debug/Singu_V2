@@ -211,10 +211,9 @@ const CommunicationCoherencePanel: React.FC<CommunicationCoherencePanelProps> = 
 
   const copyOptimized = () => {
     if (analysis?.optimizedMessage) {
-      navigator.clipboard.writeText(analysis.optimizedMessage);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-      toast.success('Mensagem copiada!');
+      navigator.clipboard.writeText(analysis.optimizedMessage)
+        .then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); toast.success('Mensagem copiada!'); })
+        .catch(() => toast.error('Não foi possível copiar'));
     }
   };
 

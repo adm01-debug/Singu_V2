@@ -23,7 +23,7 @@ export function PreContactBriefing({ className, compact = false }: PreContactBri
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['tips', 'words']));
   const [copiedText, setCopiedText] = useState<string | null>(null);
 
-  const handleCopy = (text: string, id: string) => { navigator.clipboard.writeText(text); setCopiedText(id); setTimeout(() => setCopiedText(null), 2000); };
+  const handleCopy = (text: string, id: string) => { navigator.clipboard.writeText(text).then(() => { setCopiedText(id); setTimeout(() => setCopiedText(null), 2000); }).catch(() => {}); };
   const toggleSection = (section: string) => {
     setExpandedSections(prev => {
       const next = new Set(prev);

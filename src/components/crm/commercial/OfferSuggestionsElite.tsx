@@ -244,8 +244,9 @@ export function OfferSuggestionsElite({ contactId }: Props) {
 
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" className="h-8 w-8 p-0" onClick={() => {
-                        navigator.clipboard.writeText(`Oferta: ${offer.offer_name}\nMotivo: ${offer.reason}`);
-                        toast.success('Copiado!');
+                        navigator.clipboard.writeText(`Oferta: ${offer.offer_name}\nMotivo: ${offer.reason}`)
+                          .then(() => toast.success('Copiado!'))
+                          .catch(() => toast.error('Não foi possível copiar'));
                       }}>
                         <Copy className="h-3.5 w-3.5" />
                       </Button>

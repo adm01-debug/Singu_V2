@@ -60,10 +60,9 @@ import { logger } from "@/lib/logger";
    };
  
    const copyToClipboard = (text: string) => {
-     navigator.clipboard.writeText(text);
-     setCopied(true);
-     toast.success('Copiado!');
-     setTimeout(() => setCopied(false), 2000);
+     navigator.clipboard.writeText(text)
+       .then(() => { setCopied(true); toast.success('Copiado!'); setTimeout(() => setCopied(false), 2000); })
+       .catch(() => toast.error('Não foi possível copiar'));
    };
  
    return (

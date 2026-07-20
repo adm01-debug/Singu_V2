@@ -70,10 +70,14 @@ export function AIMessageGenerator({ contact, companyName, discProfile }: AIMess
   };
 
   const copyMessage = async (text: string, idx: number) => {
-    await navigator.clipboard.writeText(text);
-    setCopiedIdx(idx);
-    toast({ title: 'Copiado!', description: 'Mensagem copiada para a área de transferência.' });
-    setTimeout(() => setCopiedIdx(null), 2000);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedIdx(idx);
+      toast({ title: 'Copiado!', description: 'Mensagem copiada para a área de transferência.' });
+      setTimeout(() => setCopiedIdx(null), 2000);
+    } catch {
+      toast({ title: 'Erro', description: 'Não foi possível copiar', variant: 'destructive' });
+    }
   };
 
   return (

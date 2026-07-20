@@ -30,10 +30,9 @@ interface LuxAudienceData {
   const socialProfiles = record.social_profiles || [];
 
   const copyToClipboard = (text: string, field: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedField(field);
-    toast.success('Copiado para área de transferência');
-    setTimeout(() => setCopiedField(null), 2000);
+    navigator.clipboard.writeText(text)
+      .then(() => { setCopiedField(field); toast.success('Copiado para área de transferência'); setTimeout(() => setCopiedField(null), 2000); })
+      .catch(() => toast.error('Não foi possível copiar'));
   };
 
   return (

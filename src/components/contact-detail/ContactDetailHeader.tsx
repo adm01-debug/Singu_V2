@@ -99,9 +99,9 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
   const discProfile = behavior?.discProfile as string | null;
 
   const copyToClipboard = (text: string, field: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedField(field);
-    setTimeout(() => setCopiedField(null), 2000);
+    navigator.clipboard.writeText(text)
+      .then(() => { setCopiedField(field); setTimeout(() => setCopiedField(null), 2000); })
+      .catch(() => {});
   };
 
   // Build channels from contact fields + normalized external tables

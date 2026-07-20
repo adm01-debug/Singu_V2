@@ -48,10 +48,14 @@ export default function AdminSecretsManagement() {
   }, []);
 
   const handleCopy = useCallback(async () => {
-    await navigator.clipboard.writeText(generatedSecret);
-    setCopied(true);
-    toast.success('Secret copiado para a área de transferência');
-    setTimeout(() => setCopied(false), 3000);
+    try {
+      await navigator.clipboard.writeText(generatedSecret);
+      setCopied(true);
+      toast.success('Secret copiado para a área de transferência');
+      setTimeout(() => setCopied(false), 3000);
+    } catch {
+      toast.error('Não foi possível copiar');
+    }
   }, [generatedSecret]);
 
   const handleConfirmRotation = useCallback(async () => {

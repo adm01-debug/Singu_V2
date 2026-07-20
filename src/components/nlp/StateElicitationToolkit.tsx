@@ -51,13 +51,13 @@ const StateElicitationToolkit: React.FC<StateElicitationToolkitProps> = ({
   const discProfile = (getDISCProfile(activeContact) as DISCProfile) || 'D';
 
   const copyScript = (script: string) => {
-    navigator.clipboard.writeText(script);
-    setCopiedScript(script);
-    setTimeout(() => setCopiedScript(null), 2000);
-    toast({
-      title: "Copiado!",
-      description: "Script de eliciação copiado"
-    });
+    navigator.clipboard.writeText(script)
+      .then(() => {
+        setCopiedScript(script);
+        setTimeout(() => setCopiedScript(null), 2000);
+        toast({ title: "Copiado!", description: "Script de eliciação copiado" });
+      })
+      .catch(() => toast({ title: "Erro", description: "Não foi possível copiar", variant: "destructive" }));
   };
 
   const getStateScripts = (state: typeof EMOTIONAL_STATES[number]) => {

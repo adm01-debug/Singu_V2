@@ -56,8 +56,9 @@ export function AppreciationPanel({ contact = null, className }: AppreciationPan
   const { discProfile } = useCarnegieAnalysis(contact);
 
   const copyToClipboard = (text: string, label: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success(`${label} copiado!`);
+    navigator.clipboard.writeText(text)
+      .then(() => toast.success(`${label} copiado!`))
+      .catch(() => toast.error('Não foi possível copiar'));
   };
 
   const appreciationData = Object.entries(APPRECIATION_TEMPLATES).map(([type, data]) => ({

@@ -229,13 +229,13 @@ const MiltonianCalibration: React.FC<MiltonianCalibrationProps> = ({
     : adaptedPatterns.filter(p => p.category === selectedCategory);
 
   const copyToClipboard = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
-    toast({
-      title: "Copiado!",
-      description: "Padrão Miltoniano copiado para a área de transferência"
-    });
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(null), 2000);
+        toast({ title: "Copiado!", description: "Padrão Miltoniano copiado para a área de transferência" });
+      })
+      .catch(() => toast({ title: "Erro", description: "Não foi possível copiar", variant: "destructive" }));
   };
 
   const getCategoryIcon = (category: string) => {

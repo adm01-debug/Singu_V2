@@ -47,10 +47,14 @@ export function SendSurveyDialog({ open, onOpenChange }: Props) {
   };
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(publicUrl);
-    setCopied(true);
-    toast.success('Link copiado!');
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(publicUrl);
+      setCopied(true);
+      toast.success('Link copiado!');
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error('Não foi possível copiar o link');
+    }
   };
 
   return (
