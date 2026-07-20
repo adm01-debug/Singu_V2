@@ -46,7 +46,7 @@ export const EmbeddableDashboards = React.memo(function EmbeddableDashboards() {
       setCopiedId(id);
       toast.success('Código de embed copiado!');
       setTimeout(() => setCopiedId(null), 2000);
-    });
+    }).catch(() => toast.error('Falha ao copiar'));
   };
 
   return (
