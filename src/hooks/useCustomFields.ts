@@ -101,7 +101,7 @@ export function useCustomFields(entityType: EntityType) {
 export function useCustomFieldValues(entityType: EntityType, entityId?: string) {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['custom-field-values', entityType, entityId];
+  const key = ['custom-field-values', user?.id, entityType, entityId];
 
   const { data: values = [], isLoading } = useQuery({
     queryKey: key,

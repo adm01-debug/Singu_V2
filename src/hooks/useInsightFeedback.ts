@@ -13,8 +13,8 @@ export interface InsightFeedbackRow {
   updated_at: string;
 }
 
-function key(contactId: string, kind: EvidenceKind, label: string) {
-  return ['insight-feedback', contactId, kind, label.trim().toLowerCase()];
+function key(userId: string | undefined, contactId: string, kind: EvidenceKind, label: string) {
+  return ['insight-feedback', userId, contactId, kind, label.trim().toLowerCase()];
 }
 
 export function useInsightFeedback(
@@ -24,7 +24,7 @@ export function useInsightFeedback(
 ) {
   const { user } = useAuth();
   return useQuery({
-    queryKey: key(contactId ?? '', kind ?? 'preference', label ?? ''),
+    queryKey: key(user?.id, contactId ?? '', kind ?? 'preference', label ?? ''),
     enabled: !!contactId && !!kind && !!label && label.trim().length > 0,
     staleTime: 30_000,
     queryFn: async (): Promise<InsightFeedbackRow | null> => {
@@ -74,7 +74,7 @@ export function useSubmitInsightFeedback() {
       return data as InsightFeedbackRow;
     },
     onSuccess: (row, vars) => {
-      qc.setQueryData(key(vars.contactId, vars.kind, vars.label), row);
+      qc.setQueryData(key(user?.id, vars.contactId, vars.kind, vars.label), row);
     },
     onError: () => toast.error('Erro ao registrar feedback'),
   });
@@ -97,7 +97,7 @@ export function useRemoveInsightFeedback() {
       if (error) throw error;
     },
     onSuccess: (_v, vars) => {
-      qc.setQueryData(key(vars.contactId, vars.kind, vars.label), null);
+      qc.setQueryData(key(user?.id, vars.contactId, vars.kind, vars.label), null);
     },
     onError: () => toast.error('Erro ao remover feedback'),
   });

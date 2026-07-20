@@ -72,6 +72,7 @@ export function useRoutingMetrics() {
     },
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 

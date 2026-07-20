@@ -92,6 +92,7 @@ export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
     queryKey: ['unified-history', filters, user?.id],
     enabled: !!user,
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<HistoryItem[]> => {
       const channels = filters.channels && filters.channels.length > 0 ? filters.channels : null;
       const wantWA = !channels || channels.includes('whatsapp');

@@ -83,6 +83,7 @@ export function useEntity360(type: Entity360Type | null, id: string | null) {
     enabled: !!type && !!id,
     staleTime: 2 * 60 * 1000,
     retry: 1,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<Entity360Result | null> => {
       if (!type || !id) return null;
       const table = tableMap[type];

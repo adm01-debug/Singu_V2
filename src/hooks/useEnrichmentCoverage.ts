@@ -21,6 +21,7 @@ export function useEnrichmentCoverage() {
     enabled: !!user,
     staleTime: 5 * 60_000,
     refetchInterval: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<EnrichmentCoverage> => {
       const uid = user!.id;
 

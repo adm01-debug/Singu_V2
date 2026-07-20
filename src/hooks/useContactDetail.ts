@@ -91,6 +91,7 @@ export function useContactDetail(contactId: string | undefined) {
       };
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const error = queryError instanceof Error ? queryError.message : null;

@@ -71,5 +71,6 @@ export function useTeamDashboard() {
       return { members: enriched, isManager: true };
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }

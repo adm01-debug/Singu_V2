@@ -26,7 +26,7 @@ export interface Document {
 export function useDocuments(entityType: string, entityId?: string) {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['documents', entityType, entityId];
+  const key = ['documents', user?.id, entityType, entityId];
 
   const { data: documents = [], isLoading } = useQuery({
     queryKey: key,
