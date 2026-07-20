@@ -64,6 +64,7 @@ export function usePendingFollowups(limit = 20) {
   const { user } = useAuth();
   return useQuery({
     queryKey: ['pending-followups', limit, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<PendingFollowup[]>(

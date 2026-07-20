@@ -30,9 +30,9 @@ interface ToggleArgs {
 export function useObjectionExampleFeedback({ objection, category }: UseFeedbackOptions) {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const enabled = !!objection;
+  const enabled = !!objection && !!user;
 
-  const queryKey = ["objection-example-feedback", objection ?? ""];
+  const queryKey = ["objection-example-feedback", objection ?? "", user?.id];
 
   const { data: rows = [], isLoading } = useQuery({
     queryKey,

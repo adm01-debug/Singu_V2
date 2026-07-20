@@ -106,8 +106,10 @@ export function usePipelineSummary() {
 }
 
 export function useWeightedForecast() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['weighted-forecast'],
+    queryKey: ['weighted-forecast', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<WeightedForecast[]>(
         'get_weighted_forecast',
@@ -121,8 +123,10 @@ export function useWeightedForecast() {
 }
 
 export function useStageVelocity() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['stage-velocity'],
+    queryKey: ['stage-velocity', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<StageVelocity[]>(
         'get_stage_velocity',
@@ -136,8 +140,10 @@ export function useStageVelocity() {
 }
 
 export function useStalledDeals(days = 14) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['stalled-deals', days],
+    queryKey: ['stalled-deals', days, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<StalledDeal[]>(
         'get_stalled_deals',
@@ -151,8 +157,10 @@ export function useStalledDeals(days = 14) {
 }
 
 export function useVelocityMetrics() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['velocity-metrics'],
+    queryKey: ['velocity-metrics', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<VelocityMetrics>(
         'get_velocity_metrics',

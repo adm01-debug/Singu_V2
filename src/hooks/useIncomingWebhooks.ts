@@ -50,6 +50,7 @@ export function useIncomingWebhooks() {
 
   const { data: webhooks = [], isLoading } = useQuery({
     queryKey: ['incoming_webhooks', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('incoming_webhooks')

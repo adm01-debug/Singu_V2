@@ -62,7 +62,7 @@ export function useUnifiedTimeline(contactId: string) {
          .order('created_at', { ascending: false });
        return data || [];
      },
-     enabled: !!contactId
+     enabled: !!user && !!contactId
    });
  
    const unifiedEvents = useMemo(() => {

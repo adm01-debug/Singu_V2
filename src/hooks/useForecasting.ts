@@ -224,8 +224,10 @@ export function useForecastNarrative() {
 }
 
 export function useQuotaSettings() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["forecast-quota-settings"],
+    queryKey: ["forecast-quota-settings", user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase.from("forecast_quota_settings").select("*").maybeSingle();
       if (error) throw error;

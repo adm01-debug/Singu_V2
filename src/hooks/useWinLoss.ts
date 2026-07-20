@@ -216,8 +216,10 @@ export function useSeedReasons() {
 // ── Competitors ──────────────────────────────────────
 
 export function useCompetitors() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['competitors'],
+    queryKey: ['competitors', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('competitors')
@@ -364,8 +366,10 @@ export function useWinLossMetrics(periodDays = 90) {
 // ── Insights ────────────────────────────────────────
 
 export function useWinLossInsights() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['win-loss-insights'],
+    queryKey: ['win-loss-insights', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('win_loss_insights')

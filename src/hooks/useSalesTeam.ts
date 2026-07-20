@@ -5,13 +5,13 @@ import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 import type { SalesTeamMember, SalesRole } from '@/types/leadRouting';
 
-const QUERY_KEY_BASE_BASE = ['sales-team-members'];
+const QUERY_KEY_BASE = ['sales-team-members'];
 
 export function useSalesTeam() {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: [...QUERY_KEY_BASE_BASE, user?.id],
+    queryKey: [...QUERY_KEY_BASE, user?.id],
     queryFn: async (): Promise<SalesTeamMember[]> => {
       if (!user) return [];
       const { data, error } = await supabase
