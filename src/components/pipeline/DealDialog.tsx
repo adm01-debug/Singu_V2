@@ -36,6 +36,7 @@ import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 const STAGES = [
   { id: 'lead', name: 'Novo Lead', probability: 10 },
@@ -133,7 +134,7 @@ export function DealDialog({ open, onOpenChange, initialStage = 'lead' }: Props)
       onOpenChange(false);
       form.reset();
     } catch (error) {
-      console.error('Error creating deal:', error);
+      logger.error('Error creating deal:', error);
       toast.error('Erro ao criar deal. Verifique os campos e tente novamente.');
     }
   };

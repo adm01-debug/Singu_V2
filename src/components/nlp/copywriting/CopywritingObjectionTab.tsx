@@ -4,6 +4,7 @@
  import { Badge } from '@/components/ui/badge';
  import { ShieldAlert, Loader2, Copy, CheckCircle, Brain, AlertCircle } from 'lucide-react';
  import { supabase } from '@/integrations/supabase/client';
+ import { logger } from '@/lib/logger';
  import { Contact } from '@/types';
  import { toast } from 'sonner';
  
@@ -50,7 +51,7 @@
        setResponse(data.suggestion);
        toast.success('Estratégia de contorno gerada!');
      } catch (error) {
-       console.error('Error handling objection:', error);
+       logger.error('Error handling objection:', error);
        toast.error('Erro ao gerar contorno de objeção.');
      } finally {
        setLoading(false);

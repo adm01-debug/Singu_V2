@@ -28,6 +28,7 @@ import { SLEIGHT_TEMPLATES } from '@/data/sleightOfMouth';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { logger } from '@/lib/logger';
 
  interface Suggestion {
    id: string;
@@ -250,7 +251,7 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
           interaction_id: null as unknown as string
         });
       } catch (e) {
-        console.error("Error saving feedback:", e);
+        logger.error("Error saving feedback:", e);
       }
     }
     
