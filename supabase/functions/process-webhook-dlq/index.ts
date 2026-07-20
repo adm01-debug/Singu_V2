@@ -55,22 +55,42 @@ Deno.serve(async (req) => {
   }
 
   const rows = (pending ?? []) as DlqRow[];
-  const results: { id: string; status: string; error?: string }[] = [];
+  const results: { id: string; status: string }[] = [];
+
+  if (rows.length === 0) {
+    return new Response(JSON.stringify({ processed: 0, results: [] }), {
+      status: 200, headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+
+  const rowIds = rows.map(r => r.id);
+  const resolvedAt = new Date().toISOString();
+
+  // Batch-mark all as "processing" and pre-fetch all webhooks in parallel
+  const uniqueWebhookIds = [...new Set(rows.map(r => r.webhook_id))];
+  const [, webhookResult] = await Promise.all([
+    admin.from("incoming_webhook_dlq").update({ status: "processing" }).in("id", rowIds),
+    admin.from("incoming_webhooks")
+      .select("id, target_entity, created_by, field_mapping, is_active")
+      .in("id", uniqueWebhookIds),
+  ]);
+
+  const webhookMap = new Map(
+    (webhookResult.data ?? []).map((w: { id: string }) => [w.id, w])
+  );
+
+  // Outcome accumulators (different data per row → upsert arrays)
+  type DlqUpdate = Record<string, unknown>;
+  const abandonedRows: DlqUpdate[] = [];
+  const succeededRows: DlqUpdate[] = [];
+  const failedRows: DlqUpdate[] = [];
+  const retryRows: DlqUpdate[] = [];
 
   for (const row of rows) {
-    await admin.from("incoming_webhook_dlq")
-      .update({ status: "processing" }).eq("id", row.id);
-
-    const { data: webhook } = await admin.from("incoming_webhooks")
-      .select("target_entity, created_by, field_mapping, is_active")
-      .eq("id", row.webhook_id).maybeSingle();
+    const webhook = webhookMap.get(row.webhook_id) as (typeof webhookResult.data extends Array<infer T> ? T : never) | undefined;
 
     if (!webhook || !webhook.is_active) {
-      await admin.from("incoming_webhook_dlq").update({
-        status: "abandoned",
-        last_error: "Webhook removido ou inativo",
-        resolved_at: new Date().toISOString(),
-      }).eq("id", row.id);
+      abandonedRows.push({ id: row.id, status: "abandoned", last_error: "Webhook removido ou inativo", resolved_at: resolvedAt });
       results.push({ id: row.id, status: "abandoned" });
       continue;
     }
@@ -91,35 +111,33 @@ Deno.serve(async (req) => {
     if (targetTable) {
       const { error: insErr } = await admin.from(targetTable)
         .insert({ ...finalRow, user_id: webhook.created_by });
-      if (insErr) errMsg = insErr.message; else succeeded = true;
+      if (insErr) { console.error("process-webhook-dlq insert error:", insErr); errMsg = insErr.message; } else succeeded = true;
     } else {
       succeeded = true;
     }
 
     const newAttempts = row.attempts + 1;
     if (succeeded) {
-      await admin.from("incoming_webhook_dlq").update({
-        status: "succeeded", attempts: newAttempts,
-        resolved_at: new Date().toISOString(), last_error: null,
-      }).eq("id", row.id);
+      succeededRows.push({ id: row.id, status: "succeeded", attempts: newAttempts, resolved_at: resolvedAt, last_error: null });
       results.push({ id: row.id, status: "succeeded" });
     } else if (newAttempts >= row.max_attempts) {
-      await admin.from("incoming_webhook_dlq").update({
-        status: "failed", attempts: newAttempts, last_error: errMsg,
-        resolved_at: new Date().toISOString(),
-      }).eq("id", row.id);
-      results.push({ id: row.id, status: "failed", error: errMsg ?? undefined });
+      failedRows.push({ id: row.id, status: "failed", attempts: newAttempts, last_error: errMsg, resolved_at: resolvedAt });
+      results.push({ id: row.id, status: "failed" });
     } else {
       // Backoff exponencial: 2^attempts minutos (2, 4, 8, 16, 32 min)
-      const delayMin = Math.pow(2, newAttempts);
-      const nextRetry = new Date(Date.now() + delayMin * 60_000).toISOString();
-      await admin.from("incoming_webhook_dlq").update({
-        status: "pending", attempts: newAttempts, last_error: errMsg,
-        next_retry_at: nextRetry,
-      }).eq("id", row.id);
-      results.push({ id: row.id, status: "retry_scheduled", error: errMsg ?? undefined });
+      const nextRetry = new Date(Date.now() + Math.pow(2, newAttempts) * 60_000).toISOString();
+      retryRows.push({ id: row.id, status: "pending", attempts: newAttempts, last_error: errMsg, next_retry_at: nextRetry });
+      results.push({ id: row.id, status: "retry_scheduled" });
     }
   }
+
+  // Flush all outcome updates in parallel
+  await Promise.all([
+    abandonedRows.length > 0 ? admin.from("incoming_webhook_dlq").upsert(abandonedRows, { onConflict: "id" }) : Promise.resolve(),
+    succeededRows.length > 0 ? admin.from("incoming_webhook_dlq").upsert(succeededRows, { onConflict: "id" }) : Promise.resolve(),
+    failedRows.length > 0 ? admin.from("incoming_webhook_dlq").upsert(failedRows, { onConflict: "id" }) : Promise.resolve(),
+    retryRows.length > 0 ? admin.from("incoming_webhook_dlq").upsert(retryRows, { onConflict: "id" }) : Promise.resolve(),
+  ]);
 
   return new Response(JSON.stringify({ processed: results.length, results }), {
     status: 200, headers: { ...cors, "Content-Type": "application/json" },
