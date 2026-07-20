@@ -58,7 +58,7 @@ describe('Design System Audit - Semantic Token Compliance', () => {
       (_name, filePath) => {
         const content = fs.readFileSync(filePath, 'utf8');
         const matches = content.match(/text-white(?!\/)/g) || [];
-        expect(matches.length).toBe(0);
+        expect(matches).toHaveLength(0);
       }
     );
   });
@@ -69,7 +69,7 @@ describe('Design System Audit - Semantic Token Compliance', () => {
       (_name, filePath) => {
         const content = fs.readFileSync(filePath, 'utf8');
         const matches = content.match(/bg-gray-\d+/g) || [];
-        expect(matches.length).toBe(0);
+        expect(matches).toHaveLength(0);
       }
     );
   });
@@ -81,7 +81,7 @@ describe('Design System Audit - Semantic Token Compliance', () => {
         const content = fs.readFileSync(filePath, 'utf8');
         // text-black is ok, but not text-black without opacity
         const matches = (content.match(/\btext-black\b/g) || []);
-        expect(matches.length).toBe(0);
+        expect(matches).toHaveLength(0);
       }
     );
   });
@@ -310,62 +310,26 @@ describe('Design System Audit - NLP Components', () => {
     expect(content).not.toContain('bg-lime-500 text-white');
   });
 
-  it('MiltonianCalibration uses semantic tokens', () => {
-    const content = fs.readFileSync(
-      path.resolve(COMPONENTS_DIR, 'nlp/MiltonianCalibration.tsx'), 'utf8'
-    );
-    expect(content).not.toContain('text-white');
-  });
-
-  it('WellFormedOutcomeBuilder uses semantic tokens', () => {
-    const content = fs.readFileSync(
-      path.resolve(COMPONENTS_DIR, 'nlp/WellFormedOutcomeBuilder.tsx'), 'utf8'
-    );
-    expect(content).not.toContain('text-white');
-  });
-
-  it('NLPEvolutionTimeline uses semantic tokens', () => {
-    const content = fs.readFileSync(
-      path.resolve(COMPONENTS_DIR, 'nlp/NLPEvolutionTimeline.tsx'), 'utf8'
-    );
+  it.each([
+    ['MiltonianCalibration', 'nlp/MiltonianCalibration.tsx'],
+    ['WellFormedOutcomeBuilder', 'nlp/WellFormedOutcomeBuilder.tsx'],
+    ['NLPEvolutionTimeline', 'nlp/NLPEvolutionTimeline.tsx'],
+  ])('%s uses semantic tokens', (_name, file) => {
+    const content = fs.readFileSync(path.resolve(COMPONENTS_DIR, file), 'utf8');
     expect(content).not.toContain('text-white');
   });
 });
 
 describe('Design System Audit - Analytics Components', () => {
   
-  it('ChurnPredictionPanel uses semantic tokens', () => {
-    const content = fs.readFileSync(
-      path.resolve(COMPONENTS_DIR, 'analytics/ChurnPredictionPanel.tsx'), 'utf8'
-    );
-    expect(content).not.toContain('text-white');
-  });
-
-  it('AccountChurnPredictionPanel uses semantic tokens', () => {
-    const content = fs.readFileSync(
-      path.resolve(COMPONENTS_DIR, 'analytics/AccountChurnPredictionPanel.tsx'), 'utf8'
-    );
-    expect(content).not.toContain('text-white');
-  });
-
-  it('CognitiveBiasesPanel uses semantic tokens', () => {
-    const content = fs.readFileSync(
-      path.resolve(COMPONENTS_DIR, 'analytics/CognitiveBiasesPanel.tsx'), 'utf8'
-    );
-    expect(content).not.toContain('text-white');
-  });
-
-  it('RFMAnalysisPanel uses semantic tokens', () => {
-    const content = fs.readFileSync(
-      path.resolve(COMPONENTS_DIR, 'analytics/RFMAnalysisPanel.tsx'), 'utf8'
-    );
-    expect(content).not.toContain('text-white');
-  });
-
-  it('ClosingScoreRanking uses semantic tokens', () => {
-    const content = fs.readFileSync(
-      path.resolve(COMPONENTS_DIR, 'analytics/ClosingScoreRanking.tsx'), 'utf8'
-    );
+  it.each([
+    ['ChurnPredictionPanel', 'analytics/ChurnPredictionPanel.tsx'],
+    ['AccountChurnPredictionPanel', 'analytics/AccountChurnPredictionPanel.tsx'],
+    ['CognitiveBiasesPanel', 'analytics/CognitiveBiasesPanel.tsx'],
+    ['RFMAnalysisPanel', 'analytics/RFMAnalysisPanel.tsx'],
+    ['ClosingScoreRanking', 'analytics/ClosingScoreRanking.tsx'],
+  ])('%s uses semantic tokens', (_name, file) => {
+    const content = fs.readFileSync(path.resolve(COMPONENTS_DIR, file), 'utf8');
     expect(content).not.toContain('text-white');
   });
 
@@ -379,38 +343,14 @@ describe('Design System Audit - Analytics Components', () => {
 
 describe('Design System Audit - Onboarding Components', () => {
   
-  it('OnboardingWizard uses semantic tokens', () => {
-    const content = fs.readFileSync(
-      path.resolve(COMPONENTS_DIR, 'onboarding/OnboardingWizard.tsx'), 'utf8'
-    );
-    expect(content).not.toContain('text-white');
-  });
-
-  it('WelcomeStep uses semantic tokens', () => {
-    const content = fs.readFileSync(
-      path.resolve(COMPONENTS_DIR, 'onboarding/steps/WelcomeStep.tsx'), 'utf8'
-    );
-    expect(content).not.toContain('text-white');
-  });
-
-  it('CompletionStep uses semantic tokens', () => {
-    const content = fs.readFileSync(
-      path.resolve(COMPONENTS_DIR, 'onboarding/steps/CompletionStep.tsx'), 'utf8'
-    );
-    expect(content).not.toContain('text-white');
-  });
-
-  it('ImportStep uses semantic tokens', () => {
-    const content = fs.readFileSync(
-      path.resolve(COMPONENTS_DIR, 'onboarding/steps/ImportStep.tsx'), 'utf8'
-    );
-    expect(content).not.toContain('text-white');
-  });
-
-  it('PreferencesStep uses semantic tokens', () => {
-    const content = fs.readFileSync(
-      path.resolve(COMPONENTS_DIR, 'onboarding/steps/PreferencesStep.tsx'), 'utf8'
-    );
+  it.each([
+    ['OnboardingWizard', 'onboarding/OnboardingWizard.tsx'],
+    ['WelcomeStep', 'onboarding/steps/WelcomeStep.tsx'],
+    ['CompletionStep', 'onboarding/steps/CompletionStep.tsx'],
+    ['ImportStep', 'onboarding/steps/ImportStep.tsx'],
+    ['PreferencesStep', 'onboarding/steps/PreferencesStep.tsx'],
+  ])('%s uses semantic tokens', (_name, file) => {
+    const content = fs.readFileSync(path.resolve(COMPONENTS_DIR, file), 'utf8');
     expect(content).not.toContain('text-white');
   });
 });
