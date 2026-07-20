@@ -277,24 +277,12 @@ ${interaction.content.slice(0, 12000)}`;
       return jsonError("Falha ao persistir análise", 500, req);
     }
  
-    // Update interactions table with summary data
-    await supabase
-      .from("interactions")
-      .update({
-        sentiment: analysis.sentiment_overall,
-        emotion_analysis: analysis.emotion_analysis,
-        key_insights: analysis.action_items && Array.isArray(analysis.action_items)
-          ? (analysis.action_items as Array<{ task: string }>).map(i => i.task)
-          : []
-      })
-      .eq("id", interactionId);
- 
-    // Handle Sleight of Mouth reframing suggestions
+    // Prepare all side-effect rows up-front (pure computation)
+    const reframings: Array<Record<string, unknown>> = [];
     if (analysis.objections && Array.isArray(analysis.objections)) {
-      const reframings: Array<Record<string, unknown>> = [];
-      analysis.objections.forEach((obj: { objection: string; category: string; reframing_suggestions?: Array<{ pattern: string; response: string }> }) => {
+      (analysis.objections as Array<{ objection: string; category: string; reframing_suggestions?: Array<{ pattern: string; response: string }> }>).forEach((obj) => {
         if (obj.reframing_suggestions && Array.isArray(obj.reframing_suggestions)) {
-          obj.reframing_suggestions.forEach((ref: { pattern: string; response: string }) => {
+          obj.reframing_suggestions.forEach((ref) => {
             reframings.push({
               user_id: userId,
               contact_id: interaction.contact_id,
@@ -308,57 +296,63 @@ ${interaction.content.slice(0, 12000)}`;
           });
         }
       });
- 
-      if (reframings.length > 0) {
-        await supabase.from('reframing_analysis').insert(reframings);
-      }
     }
 
-    // Handle relatives mentioned (Módulo 2.5 AI)
+    const relativesSuggestions: Array<Record<string, unknown>> = [];
     if (analysis.relatives_mentioned && Array.isArray(analysis.relatives_mentioned)) {
-      const relativesSuggestions = analysis.relatives_mentioned.map((rel: { name: string; relationship_type: string; occupation?: string; notes?: string }) => {
+      (analysis.relatives_mentioned as Array<{ name: string; relationship_type: string; occupation?: string; notes?: string }>).forEach((rel) => {
         const occupationSuffix = rel.occupation ? ` - ${rel.occupation}` : '';
-        return {
-        user_id: userId,
-        contact_id: interaction.contact_id,
-        event_type: 'other',
-        title: `Novo Relacionado Detectado: ${rel.name}`,
-        description: `${rel.name} (${rel.relationship_type})${occupationSuffix}. ${rel.notes || ''}`,
-        source_type: 'conversation',
-        confidence: 0.8,
-        status: 'pending',
-        metadata: { 
-          interaction_id: interactionId, 
-          type: 'relative_suggestion',
-          relative_data: rel
-        }
-      };
+        relativesSuggestions.push({
+          user_id: userId,
+          contact_id: interaction.contact_id,
+          event_type: 'other',
+          title: `Novo Relacionado Detectado: ${rel.name}`,
+          description: `${rel.name} (${rel.relationship_type})${occupationSuffix}. ${rel.notes || ''}`,
+          source_type: 'conversation',
+          confidence: 0.8,
+          status: 'pending',
+          metadata: { interaction_id: interactionId, type: 'relative_suggestion', relative_data: rel }
+        });
       });
-
-      if (relativesSuggestions.length > 0) {
-        await supabase.from('suggested_life_events').insert(relativesSuggestions);
-      }
     }
 
-    // Handle detected life events (Módulo 2.4 AI)
+    const lifeEvents: Array<Record<string, unknown>> = [];
     if (analysis.life_events_detected && Array.isArray(analysis.life_events_detected)) {
-      const lifeEvents = analysis.life_events_detected.map((ev: { event_type: string; title: string; description: string; event_date?: string; confidence: number }) => ({
-        user_id: userId,
-        contact_id: interaction.contact_id,
-        event_type: ev.event_type,
-        title: ev.title,
-        description: ev.description,
-        event_date: ev.event_date || null,
-        source_type: 'conversation',
-        confidence: ev.confidence,
-        status: 'pending',
-        metadata: { interaction_id: interactionId }
-      }));
-
-      if (lifeEvents.length > 0) {
-        await supabase.from('suggested_life_events').insert(lifeEvents);
-      }
+      (analysis.life_events_detected as Array<{ event_type: string; title: string; description: string; event_date?: string; confidence: number }>).forEach((ev) => {
+        lifeEvents.push({
+          user_id: userId,
+          contact_id: interaction.contact_id,
+          event_type: ev.event_type,
+          title: ev.title,
+          description: ev.description,
+          event_date: ev.event_date || null,
+          source_type: 'conversation',
+          confidence: ev.confidence,
+          status: 'pending',
+          metadata: { interaction_id: interactionId }
+        });
+      });
     }
+
+    // Flush all independent side-effect writes in parallel
+    await Promise.all([
+      supabase.from("interactions").update({
+        sentiment: analysis.sentiment_overall,
+        emotion_analysis: analysis.emotion_analysis,
+        key_insights: analysis.action_items && Array.isArray(analysis.action_items)
+          ? (analysis.action_items as Array<{ task: string }>).map(i => i.task)
+          : []
+      }).eq("id", interactionId),
+      reframings.length > 0
+        ? supabase.from('reframing_analysis').insert(reframings)
+        : Promise.resolve(),
+      relativesSuggestions.length > 0
+        ? supabase.from('suggested_life_events').insert(relativesSuggestions)
+        : Promise.resolve(),
+      lifeEvents.length > 0
+        ? supabase.from('suggested_life_events').insert(lifeEvents)
+        : Promise.resolve(),
+    ]);
 
    return jsonOk({ ok: true, id: saved.id, analysis }, req);
 });
