@@ -79,20 +79,32 @@ Deno.serve(async (req) => {
     (ownedCompanies ?? []).forEach(c => allowedCompanyIds.add(c.id));
   }
 
+  // Pre-assign UUIDs so transcriptions and logs can be bulk-inserted without needing DB-returned IDs
+  type PendingMessage = {
+    index: number;
+    msgId: string;
+    row: Record<string, unknown>;
+    safeContactId: string | null;
+    safeCompanyId: string | null;
+    hasTranscription: boolean;
+    m: typeof parsed.data.messages[number];
+  };
+  const pendingMessages: PendingMessage[] = [];
+
   for (let i = 0; i < parsed.data.messages.length; i++) {
     const m = parsed.data.messages[i];
-    try {
-      const isAudio = m.message_type === 'audio';
-      const hasTranscription = !!m.transcription;
-      const transcription_status = isAudio
-        ? hasTranscription ? 'done' : 'pending'
-        : 'not_applicable';
-
-      // Only attach to contacts/companies that belong to this user
-      const safeContactId = m.contact_id && allowedContactIds.has(m.contact_id) ? m.contact_id : null;
-      const safeCompanyId = m.company_id && allowedCompanyIds.has(m.company_id) ? m.company_id : null;
-
-      const row = {
+    const isAudio = m.message_type === 'audio';
+    const hasTranscription = !!m.transcription;
+    const transcription_status = isAudio
+      ? hasTranscription ? 'done' : 'pending'
+      : 'not_applicable';
+    const safeContactId = m.contact_id && allowedContactIds.has(m.contact_id) ? m.contact_id : null;
+    const safeCompanyId = m.company_id && allowedCompanyIds.has(m.company_id) ? m.company_id : null;
+    const msgId = crypto.randomUUID();
+    pendingMessages.push({
+      index: i, msgId, safeContactId, safeCompanyId, hasTranscription, m,
+      row: {
+        id: msgId,
         user_id: userId,
         contact_id: safeContactId,
         company_id: safeCompanyId,
@@ -108,48 +120,63 @@ Deno.serve(async (req) => {
         duration_seconds: m.duration_seconds ?? null,
         timestamp: m.timestamp ?? new Date().toISOString(),
         transcription_status,
-      };
+      },
+    });
+  }
 
-      const { data: msg, error: insertErr } = await admin
-        .from('whatsapp_messages')
-        .insert(row)
-        .select('id')
-        .single();
-      if (insertErr) throw insertErr;
+  // Bulk-insert all messages in one query; track which indexes failed
+  const { error: bulkInsertErr, data: insertedMsgs } = await admin
+    .from('whatsapp_messages')
+    .insert(pendingMessages.map(p => p.row))
+    .select('id');
 
-      if (hasTranscription) {
-        const { error: trErr } = await admin.from('whatsapp_transcriptions').insert({
-          whatsapp_message_id: msg.id,
-          content: m.transcription!,
-          provider: m.transcription_provider ?? 'manual',
-          confidence: m.transcription_confidence ?? null,
-        });
-        if (trErr) throw trErr;
-      }
+  const insertedIdSet = new Set((insertedMsgs ?? []).map((r: { id: string }) => r.id));
+  const transcriptionRows: Array<Record<string, unknown>> = [];
+  const logRows: Array<Record<string, unknown>> = [];
 
-      await admin.from('whatsapp_ingestion_logs').insert({
-        user_id: userId,
-        contact_id: safeContactId,
-        message_id: m.message_id ?? null,
-        event_type: 'import',
-        status: 'ok',
-        details: { message_type: m.message_type, company_id: safeCompanyId },
-      });
-
-      inserted.push(msg.id);
-    } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : String(err);
-      failed.push({ index: i, error: errorMsg });
-      await admin.from('whatsapp_ingestion_logs').insert({
-        user_id: userId,
-        contact_id: m.contact_id ?? null,
-        message_id: m.message_id ?? null,
-        event_type: 'import',
-        status: 'error',
-        details: { error: errorMsg },
+  if (bulkInsertErr) {
+    // Whole batch failed — log each as failed
+    for (const p of pendingMessages) {
+      failed.push({ index: p.index, error: bulkInsertErr.message });
+      logRows.push({
+        user_id: userId, contact_id: p.m.contact_id ?? null,
+        message_id: p.m.message_id ?? null, event_type: 'import', status: 'error',
+        details: { error: bulkInsertErr.message },
       });
     }
+  } else {
+    for (const p of pendingMessages) {
+      if (!insertedIdSet.has(p.msgId)) {
+        failed.push({ index: p.index, error: 'insert_not_confirmed' });
+        logRows.push({
+          user_id: userId, contact_id: p.m.contact_id ?? null,
+          message_id: p.m.message_id ?? null, event_type: 'import', status: 'error',
+          details: { error: 'insert_not_confirmed' },
+        });
+        continue;
+      }
+      inserted.push(p.msgId);
+      logRows.push({
+        user_id: userId, contact_id: p.safeContactId,
+        message_id: p.m.message_id ?? null, event_type: 'import', status: 'ok',
+        details: { message_type: p.m.message_type, company_id: p.safeCompanyId },
+      });
+      if (p.hasTranscription) {
+        transcriptionRows.push({
+          whatsapp_message_id: p.msgId,
+          content: p.m.transcription!,
+          provider: p.m.transcription_provider ?? 'manual',
+          confidence: p.m.transcription_confidence ?? null,
+        });
+      }
+    }
   }
+
+  // Bulk-flush transcriptions and logs in parallel
+  await Promise.all([
+    transcriptionRows.length > 0 ? admin.from('whatsapp_transcriptions').insert(transcriptionRows) : Promise.resolve(),
+    logRows.length > 0 ? admin.from('whatsapp_ingestion_logs').insert(logRows) : Promise.resolve(),
+  ]);
 
   return json(req, { inserted_count: inserted.length, failed_count: failed.length, inserted, failed }, 200);
 });
