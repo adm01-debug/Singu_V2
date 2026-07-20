@@ -114,7 +114,8 @@ describe('Design System Audit - Accessibility', () => {
     const content = fs.readFileSync(
       path.resolve(__dirname, '../main.tsx'), 'utf8'
     );
-    const skipNavCount = (content.match(/skip/gi) || []).length;
+    // Match only accessibility skip-nav patterns (not service-worker `skipWaiting` / `SKIP_WAITING`)
+    const skipNavCount = (content.match(/SkipNav|skip-to-content|skip-link|skip-navigation/gi) || []).length;
     expect(skipNavCount).toBeLessThanOrEqual(1);
   });
 });
