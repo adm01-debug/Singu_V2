@@ -3,7 +3,8 @@ import { describe, it, expect } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const readFile = (filePath: string) => fs.readFileSync(path.join(process.cwd(), filePath), 'utf-8');
+const REPO_ROOT = path.resolve(__dirname, '../..');
+const readFile = (filePath: string) => fs.readFileSync(path.join(REPO_ROOT, filePath), 'utf-8');
 
 describe('Dashboard Layout Improvements Validation', () => {
   const indexContent = readFile('src/pages/Index.tsx');

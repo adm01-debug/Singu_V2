@@ -98,10 +98,10 @@ function clusterStakeholders(stakeholders: StakeholderData[]): Coalition[] {
     const members = [...supportGroups.champions, ...supportGroups.supporters];
     members.forEach(m => assigned.add(m.contact.id));
     
-    const leader = members.reduce((a, b) => 
+    const leader = members.reduce((a, b) =>
       (a.metrics.power * a.metrics.influence) > (b.metrics.power * b.metrics.influence) ? a : b
-    );
-    
+    , members[0]);
+
     const cohesion = Math.max(0, 100 - (Math.max(...members.map(m => m.metrics.support)) - Math.min(...members.map(m => m.metrics.support))) * 10);
     
     coalitions.push({
@@ -129,7 +129,7 @@ function clusterStakeholders(stakeholders: StakeholderData[]): Coalition[] {
     members.forEach(m => assigned.add(m.contact.id));
     
     const leader = members.length > 0 
-      ? members.reduce((a, b) => (a.metrics.power * a.metrics.influence) > (b.metrics.power * b.metrics.influence) ? a : b)
+      ? members.reduce((a, b) => (a.metrics.power * a.metrics.influence) > (b.metrics.power * b.metrics.influence) ? a : b, members[0])
       : undefined;
     
     const cohesion = members.length > 1 

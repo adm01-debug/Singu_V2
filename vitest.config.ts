@@ -13,15 +13,16 @@
        VITE_SUPABASE_PUBLISHABLE_KEY: 'test-key',
        VITE_SUPABASE_PROJECT_ID: 'test-project',
      },
-     include: ['tests/**/*.{test,spec}.{ts,tsx}', 'src/**/*.{test,spec}.{ts,tsx}'],
-     // Playwright e2e specs (import '@playwright/test') must not run under Vitest.
-     exclude: [
-       'node_modules', 'dist', '.idea', '.git', '.cache',
-       'e2e/**',
-       'tests/e2e/**',
-       'tests/*.spec.ts',
-       'tests/contacts-e2e.test.ts',
+     // Playwright e2e specs (tests/ root + tests/e2e + e2e/) import '@playwright/test'
+     // and must not run under vitest. Vitest unit/integration tests live in src/ and
+     // the tests/{integration,security,stress} subdirectories.
+     include: [
+       'src/**/*.{test,spec}.{ts,tsx}',
+       'tests/integration/**/*.{test,spec}.{ts,tsx}',
+       'tests/security/**/*.{test,spec}.{ts,tsx}',
+       'tests/stress/**/*.{test,spec}.{ts,tsx}',
      ],
+     exclude: ['node_modules', 'dist', '.idea', '.git', '.cache', 'e2e/**', 'tests/e2e/**'],
    },
    resolve: {
      alias: [
