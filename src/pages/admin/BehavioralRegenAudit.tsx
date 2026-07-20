@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { logger } from "@/lib/logger";
 import { Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -422,7 +423,7 @@ export default function BehavioralRegenAudit() {
       toast.success("CSV exportado");
     } catch (err) {
       toast.error("Falha ao exportar CSV");
-      console.error(err);
+      logger.error('CSV export failed:', err);
     }
   }
 

@@ -6,6 +6,7 @@ import { ptBR } from 'date-fns/locale';
 import { ThumbsUp, ThumbsDown, TrendingDown, AlertTriangle, ExternalLink, RefreshCcw, Loader2, Download } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { logger } from '@/lib/logger';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -211,7 +212,7 @@ function ContactsWithMostDownvotes({ rows }: { rows: Row[] }) {
       } catch (e) {
         fail += 1;
         const msg = e instanceof Error ? e.message : String(e);
-        console.error('[runBatch] falha ao reanalisar', contactId, msg);
+        logger.error('[runBatch] falha ao reanalisar', contactId, msg);
         await supabase
           .from('behavioral_profile_regen_queue')
           .update({ last_error: msg })

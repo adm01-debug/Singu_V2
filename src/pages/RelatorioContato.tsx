@@ -183,7 +183,7 @@ const RelatorioContato = () => {
       toast.success("Alterações salvas com sucesso");
       setEditingInsights(false);
     } catch (error) {
-      console.error('Error saving overrides:', error);
+      logger.error('Error saving overrides:', error);
       toast.error("Erro ao salvar alterações");
     } finally {
       setSaving(false);
