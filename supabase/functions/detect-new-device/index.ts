@@ -49,11 +49,12 @@ Deno.serve(async (req) => {
       .maybeSingle();
 
     if (existing) {
-      // Update last used
-      await supabase
+      // Update last used (best-effort, does not affect response)
+      supabase
         .from("user_known_devices")
         .update({ last_used_at: new Date().toISOString() })
-        .eq("id", existing.id);
+        .eq("id", existing.id)
+        .catch((e: unknown) => console.error("user_known_devices update error:", e));
 
       return jsonOk({ is_new: false, is_trusted: existing.is_trusted }, req);
     }
@@ -72,14 +73,14 @@ Deno.serve(async (req) => {
       .select("id")
       .single();
 
-    // Create notification
+    // Create notification (best-effort)
     if (newDevice) {
-      await supabase.from("device_login_notifications").insert({
+      supabase.from("device_login_notifications").insert({
         user_id: userId,
         device_id: newDevice.id,
         ip_address,
         location: location ?? null,
-      });
+      }).catch((e: unknown) => console.error("device_login_notifications insert error:", e));
     }
 
     return jsonOk({ is_new: true, is_trusted: false }, req);

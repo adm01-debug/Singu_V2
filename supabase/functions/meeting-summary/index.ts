@@ -144,9 +144,19 @@ Responda APENAS com JSON válido no formato:
       }
     );
 
+    if (aiResponse.status === 429) {
+      return new Response(JSON.stringify({ error: "Limite de uso da IA atingido. Aguarde antes de tentar novamente." }), {
+        status: 429, headers: { ...cors, "Content-Type": "application/json" },
+      });
+    }
+    if (aiResponse.status === 402) {
+      return new Response(JSON.stringify({ error: "Créditos da IA esgotados. Adicione créditos para continuar." }), {
+        status: 402, headers: { ...cors, "Content-Type": "application/json" },
+      });
+    }
     if (!aiResponse.ok) {
-      const errText = await aiResponse.text();
-      console.error("AI API error:", errText);
+      const errText = await aiResponse.text().catch(() => "");
+      console.error("AI API error:", aiResponse.status, errText);
       return new Response(
         JSON.stringify({ error: "Erro ao processar com IA" }),
         {
