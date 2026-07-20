@@ -23,26 +23,16 @@ Deno.serve(async (req) => {
       return jsonError('contactId and queueId are required', 400);
     }
 
-    // 1. Update queue status to processing
-    await supabase
-      .from('social_sync_queue')
-      .update({ status: 'processing', last_attempt: new Date().toISOString() })
-      .eq('id', queueId);
-
-    // 2. Fetch social insights
-    const { error: insightsError } = await supabase
-      .from('social_insights')
-      .select('*')
-      .eq('contact_id', contactId);
-
-    if (insightsError) throw insightsError;
-
-    // 3. Get latest analysis to compare for audit log
-    const { data: currentAnalysis } = await supabase
-      .from('social_behavior_analysis')
-      .select('*')
-      .eq('contact_id', contactId)
-      .maybeSingle();
+    // Mark as processing + fetch current analysis concurrently (independent)
+    const [, { data: currentAnalysis }] = await Promise.all([
+      supabase.from('social_sync_queue')
+        .update({ status: 'processing', last_attempt: new Date().toISOString() })
+        .eq('id', queueId),
+      supabase.from('social_behavior_analysis')
+        .select('*')
+        .eq('contact_id', contactId)
+        .maybeSingle(),
+    ]);
 
     // 4. Process enrichment
     const enrichedData = {
@@ -51,32 +41,23 @@ Deno.serve(async (req) => {
       last_sync_at: new Date().toISOString()
     };
 
-    // 5. Update social behavior analysis
-    await supabase
-      .from('social_behavior_analysis')
-      .upsert({ contact_id: contactId, ...enrichedData });
-
-    // 6. Log the audit with change tracking
-    await supabase
-      .from('psychographic_audit_log')
-      .insert({
+    // Flush all writes in parallel: behavior analysis update, audit log, queue completion
+    await Promise.all([
+      supabase.from('social_behavior_analysis')
+        .upsert({ contact_id: contactId, ...enrichedData }),
+      supabase.from('psychographic_audit_log').insert({
         contact_id: contactId,
         change_type: 'automation',
         previous_values: currentAnalysis || {},
         new_values: enrichedData,
-        changed_fields: ['interests', 'keywords', 'last_sync_at']
-      });
+        changed_fields: ['interests', 'keywords', 'last_sync_at'],
+      }),
+      supabase.from('social_sync_queue').update({ status: 'completed' }).eq('id', queueId),
+    ]);
 
-    // 7. Trigger offer regeneration
-    await supabase.functions.invoke('generate-offer-suggestions', {
-      body: { contactId }
-    }).catch(err => console.error('Error triggering offer regeneration:', err));
-
-    // 8. Complete queue
-    await supabase
-      .from('social_sync_queue')
-      .update({ status: 'completed' })
-      .eq('id', queueId);
+    // Fire-and-forget offer regeneration (non-critical path)
+    supabase.functions.invoke('generate-offer-suggestions', { body: { contactId } })
+      .catch(err => console.error('Error triggering offer regeneration:', err));
 
     return jsonOk({ success: true });
   } catch (error) {
