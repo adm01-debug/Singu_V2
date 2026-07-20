@@ -82,6 +82,7 @@ Deno.serve(async (req: Request) => {
     return jsonOk({ recalculated: recalcCount, alerts_generated: alertCount }, req);
   } catch (e) {
     console.error("cs-health-recalc error", e);
-    return jsonError((e as Error).message, 500, req);
+    console.error("cs-health-recalc error:", e);
+    return jsonError("Internal server error", 500, req);
   }
 });

@@ -233,7 +233,7 @@ Deno.serve(async (req) => {
       .select()
       .single();
 
-    if (upErr) return json({ error: `Falha ao salvar: ${upErr.message}` }, 500);
+    if (upErr) { console.error("generate-behavioral-profile save error:", upErr); return json({ error: "Internal server error" }, 500); }
 
     // Snapshot de versão (best-effort — não falha a chamada se a inserção do histórico der erro)
     try {
@@ -259,7 +259,8 @@ Deno.serve(async (req) => {
 
     return json({ profile: saved });
   } catch (e) {
-    return json({ error: (e as Error).message }, 500);
+    console.error("generate-behavioral-profile error:", e);
+    return json({ error: "Internal server error" }, 500);
   }
 });
 

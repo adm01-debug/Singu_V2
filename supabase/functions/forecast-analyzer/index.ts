@@ -181,6 +181,7 @@ Regras:
     return jsonOk({ analyzed: upserts.length, categorizations: cats });
   } catch (e) {
     console.error("forecast-analyzer error:", e);
-    return jsonError(e instanceof Error ? e.message : "Erro interno", 500);
+    console.error("forecast-analyzer error:", e);
+    return jsonError("Internal server error", 500);
   }
 });

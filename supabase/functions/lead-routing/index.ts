@@ -77,7 +77,7 @@ async function handleDistribute(
   const { data: members, error: mErr } = await query
     .order("last_assigned_at", { ascending: true, nullsFirst: true });
 
-  if (mErr) return json({ error: mErr.message }, 500, cors);
+  if (mErr) { console.error("lead-routing members query error:", mErr); return json({ error: "Internal server error" }, 500, cors); }
   if (!members?.length) {
     return json({ error: "Nenhum vendedor elegível disponível" }, 400, cors);
   }
@@ -126,7 +126,7 @@ async function handleDistribute(
       sla_deadline: new Date(Date.now() + 4 * 3600_000).toISOString(),
     });
 
-  if (assignErr) return json({ error: assignErr.message }, 500, cors);
+  if (assignErr) { console.error("lead-routing assign error:", assignErr); return json({ error: "Internal server error" }, 500, cors); }
 
   await supabase
     .from("sales_team_members")
@@ -161,7 +161,7 @@ async function handleRedistribute(
     .lt("created_at", cutoff)
     .limit(50);
 
-  if (staleErr) return json({ error: staleErr.message }, 500, cors);
+  if (staleErr) { console.error("lead-routing stale query error:", staleErr); return json({ error: "Internal server error" }, 500, cors); }
   if (!stale?.length) {
     return json({ redistributed: 0, message: "Nenhum lead inativo encontrado" }, 200, cors);
   }

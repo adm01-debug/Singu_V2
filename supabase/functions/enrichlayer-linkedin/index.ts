@@ -178,6 +178,7 @@ Deno.serve(async (req) => {
     });
   } catch (error) {
     console.error("EnrichLayer function error:", error);
-    return jsonError(error instanceof Error ? error.message : "Unknown error", 500);
+    console.error("enrichlayer-linkedin error:", error);
+    return jsonError("Internal server error", 500);
   }
 });

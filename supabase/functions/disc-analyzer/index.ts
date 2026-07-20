@@ -310,6 +310,7 @@ Deno.serve(async (req) => {
 
   } catch (error) {
     console.error("DISC analyzer error:", error);
-    return jsonError(error instanceof Error ? error.message : "Erro desconhecido", 500);
+    console.error("disc-analyzer error:", error);
+    return jsonError("Internal server error", 500);
   }
 });

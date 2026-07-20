@@ -53,7 +53,8 @@ Deno.serve(async (req) => {
       .or('company_id.is.null,relationship_stage.eq.unknown');
 
     if (fetchError) {
-      throw new Error(`Error fetching local contacts: ${fetchError.message}`);
+      console.error('Error fetching local contacts:', fetchError);
+      throw new Error('Failed to fetch contacts');
     }
 
     if (!localContacts || localContacts.length === 0) {
@@ -142,8 +143,8 @@ Deno.serve(async (req) => {
             .eq('user_id', userId); // double-check ownership
 
           if (updateError) {
-            console.error(`Error updating contact ${contact.id}:`, updateError.message);
-            results.push({ contactId: contact.id, name: `${contact.first_name} ${contact.last_name}`, status: 'error', details: updateError.message });
+            console.error(`Error updating contact ${contact.id}:`, updateError);
+            results.push({ contactId: contact.id, name: `${contact.first_name} ${contact.last_name}`, status: 'error', details: 'Update failed' });
             errorCount++;
           } else {
             enrichedCount++;
@@ -175,7 +176,6 @@ Deno.serve(async (req) => {
 
   } catch (error) {
     console.error('Enrich contacts error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return jsonError(errorMessage, 500);
+    return jsonError('Internal server error', 500);
   }
 });

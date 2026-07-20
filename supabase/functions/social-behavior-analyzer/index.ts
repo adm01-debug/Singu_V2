@@ -167,6 +167,7 @@ Responda APENAS com um JSON válido no formato especificado.`;
     return jsonOk({ success: true, analysis, savedId: savedAnalysis?.id });
   } catch (error) {
     console.error("social-behavior-analyzer error:", error);
-    return jsonError(error instanceof Error ? error.message : "Unknown error", 500);
+    console.error("social-behavior-analyzer error:", error);
+    return jsonError("Internal server error", 500);
   }
 });

@@ -129,6 +129,7 @@ Deno.serve(async (req) => {
 
   } catch (error: unknown) {
     console.error('Smart Notify Error:', error);
-    return jsonError(error instanceof Error ? error.message : 'Unknown error', 500);
+    console.error("smart-notify error:", error);
+    return jsonError("Internal server error", 500);
   }
 });

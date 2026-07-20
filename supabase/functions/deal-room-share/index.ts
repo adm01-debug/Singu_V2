@@ -42,13 +42,14 @@ Deno.serve(async (req) => {
       const { data: upd, error: uErr } = await supabase
         .from("deal_rooms").update(update).eq("id", room_id)
         .select("share_token,share_enabled").single();
-      if (uErr) return jsonError(uErr.message, 500, req);
+      if (uErr) { console.error("deal-room-share update error:", uErr); return jsonError("Internal server error", 500, req); }
       token = upd.share_token;
       shareEnabled = upd.share_enabled;
     }
 
     return jsonOk({ token, share_enabled: shareEnabled }, req);
   } catch (e) {
-    return jsonError(e instanceof Error ? e.message : "error", 500, req);
+    console.error("deal-room-share error:", e);
+    return jsonError("Internal server error", 500, req);
   }
 });
