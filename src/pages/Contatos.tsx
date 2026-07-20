@@ -263,14 +263,28 @@ const Contatos = () => {
   const handleSelectAll = () => { setSelectedIds(selectedIds.size === filteredAndSortedContacts.length ? new Set() : new Set(filteredAndSortedContacts.map(c => c.id))); };
 
   const handleBulkDelete = async (ids: string[]) => {
-    for (const id of ids) { await deleteContact(id); }
+    await Promise.all(ids.map(id => deleteContact(id)));
     setSelectedIds(new Set());
     setSelectionMode(false);
     const plural = ids.length > 1 ? 's' : '';
     accessibleToast.success(`${ids.length} contato${plural} excluído${plural}`);
   };
-  const handleBulkAddTag = async (ids: string[], tag: string) => { for (const id of ids) { const contact = contacts.find(c => c.id === id); if (contact) { const currentTags = contact.tags || []; if (!currentTags.includes(tag)) await updateContact(id, { tags: [...currentTags, tag] }); } } setSelectedIds(new Set()); accessibleToast.success(`Tag "${tag}" adicionada a ${ids.length} contato${ids.length > 1 ? 's' : ''}`); };
-  const handleBulkUpdateStage = async (ids: string[], stage: Contact['relationship_stage']) => { for (const id of ids) { await updateContact(id, { relationship_stage: stage }); } setSelectedIds(new Set()); accessibleToast.success(`Estágio atualizado para ${ids.length} contato${ids.length > 1 ? 's' : ''}`); };
+  const handleBulkAddTag = async (ids: string[], tag: string) => {
+    await Promise.all(ids.map(id => {
+      const contact = contacts.find(c => c.id === id);
+      if (!contact) return Promise.resolve();
+      const currentTags = contact.tags || [];
+      if (currentTags.includes(tag)) return Promise.resolve();
+      return updateContact(id, { tags: [...currentTags, tag] });
+    }));
+    setSelectedIds(new Set());
+    accessibleToast.success(`Tag "${tag}" adicionada a ${ids.length} contato${ids.length > 1 ? 's' : ''}`);
+  };
+  const handleBulkUpdateStage = async (ids: string[], stage: Contact['relationship_stage']) => {
+    await Promise.all(ids.map(id => updateContact(id, { relationship_stage: stage })));
+    setSelectedIds(new Set());
+    accessibleToast.success(`Estágio atualizado para ${ids.length} contato${ids.length > 1 ? 's' : ''}`);
+  };
 
   return (
     <>
