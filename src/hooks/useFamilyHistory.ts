@@ -28,6 +28,8 @@ export function useFamilyHistory(contactId?: string) {
       return (data || []) as FamilyHistoryEntry[];
     },
     enabled: !!contactId && !!user,
+    staleTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const revertMutation = useMutation({

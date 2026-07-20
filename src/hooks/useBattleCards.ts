@@ -38,6 +38,8 @@ export function useBattleCards(search?: string) {
   return useQuery({
     queryKey: ["battle-cards", user?.id, search],
     enabled: !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       let q = supabase
         .from("battle_cards")
@@ -64,6 +66,8 @@ export function useBattleCard(id?: string) {
   return useQuery({
     queryKey: ["battle-card", id],
     enabled: !!id,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("battle_cards")

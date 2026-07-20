@@ -51,6 +51,8 @@ export function useIncomingWebhooks() {
   const { data: webhooks = [], isLoading } = useQuery({
     queryKey: ['incoming_webhooks', user?.id],
     enabled: !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('incoming_webhooks')
@@ -133,6 +135,8 @@ export function useIncomingWebhookLogs(webhookId: string | undefined) {
   return useQuery({
     queryKey: ['incoming_webhook_logs', webhookId],
     enabled: !!webhookId,
+    staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('incoming_webhook_logs')

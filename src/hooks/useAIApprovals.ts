@@ -49,6 +49,8 @@ export function useAIApprovals(contactId?: string) {
       }) as SuggestedRapportIntel[];
     },
     enabled: !!user,
+    staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const approveMutation = useMutation({

@@ -64,6 +64,8 @@ export function usePlaybooks(filters: PlaybookFilters = {}) {
   return useQuery({
     queryKey: ["playbooks", user?.id, filters],
     enabled: !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       let q = supabase.from("sales_playbooks").select("*").order("usage_count", { ascending: false });
       
@@ -83,6 +85,8 @@ export function usePlaybook(id?: string) {
   return useQuery({
     queryKey: ["playbook", id],
     enabled: !!id,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase.from("sales_playbooks").select("*").eq("id", id!).maybeSingle();
       if (error) throw error;
@@ -260,6 +264,8 @@ export function usePlaybookUsageLog(filters: { playbookId?: string; days?: numbe
   return useQuery({
     queryKey: ["playbook-usage-log", user?.id, filters],
     enabled: !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const since = new Date(Date.now() - (filters.days ?? 30) * 86400_000).toISOString();
       let q = supabase

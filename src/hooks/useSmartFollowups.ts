@@ -23,6 +23,8 @@ export function useSmartFollowups() {
   const { data: reminders = [], isLoading } = useQuery({
     queryKey: ['smart-reminders', user?.id],
     enabled: !!user,
+    staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const [
         { data: contacts, error },

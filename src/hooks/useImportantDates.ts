@@ -46,6 +46,8 @@ export interface DateReminders {
       return data;
     },
     enabled: !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: relatives = [] } = useQuery({
