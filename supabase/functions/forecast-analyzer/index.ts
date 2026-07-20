@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { withAuth, jsonError, jsonOk, scopedCorsHeaders } from "../_shared/auth.ts";
+import { withAuth, jsonError, jsonOk, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
@@ -64,8 +64,10 @@ Deno.serve(async (req) => {
   if (auth instanceof Response) return auth;
   const { user } = auth;
 
+  const { body, error: bodyError } = await guardBody(req, 256 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    const body = await req.json();
     const { period_id, deals } = body as { period_id: string; deals: DealInput[] };
     if (!period_id || !Array.isArray(deals)) return jsonError("period_id and deals[] required", 400);
 

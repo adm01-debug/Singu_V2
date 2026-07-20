@@ -6,6 +6,7 @@ import {
   isServiceRoleCaller,
   jsonError,
   jsonOk,
+  guardBody,
 } from "../_shared/auth.ts";
 
 const RfmInput = z.object({
@@ -37,20 +38,18 @@ Deno.serve(async (req) => {
   const authResult = await withAuthOrServiceRole(req);
   if (authResult instanceof Response) return authResult;
 
+  const { body: raw, error: bodyError } = await guardBody(req, 256 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     let requestBody: z.infer<typeof RfmInput> = {};
-    try {
-      const raw = await req.json();
-      const parsed = RfmInput.safeParse(raw);
-      if (!parsed.success) return jsonError(`Entrada inválida: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
-      requestBody = parsed.data;
-    } catch {
-      // no body — run for all contacts
-    }
+    const parsed = RfmInput.safeParse(raw);
+    if (!parsed.success) return jsonError(`Entrada inválida: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
+    requestBody = parsed.data;
     const { contactId } = requestBody;
 
     let userId: string;

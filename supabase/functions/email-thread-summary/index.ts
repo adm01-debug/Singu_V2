@@ -5,6 +5,7 @@ import {
   withAuth,
   jsonError,
   jsonOk,
+  guardBody,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
@@ -50,12 +51,8 @@ Deno.serve(async (req) => {
   const limited = limiter.check(userId, req);
   if (limited) return limited;
 
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return jsonError("JSON inválido", 400, req);
-  }
+  const { body, error: bodyError } = await guardBody(req, 128 * 1024);
+  if (bodyError) return bodyError;
   const parsed = InputSchema.safeParse(body);
   if (!parsed.success) return jsonError("Parâmetros inválidos", 400, req);
 

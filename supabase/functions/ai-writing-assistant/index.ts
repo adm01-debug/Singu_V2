@@ -1,5 +1,5 @@
 import { z } from "npm:zod@3.23.8";
-import { withAuth, jsonError, jsonOk, scopedCorsHeaders } from "../_shared/auth.ts";
+import { withAuth, jsonError, jsonOk, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
@@ -123,8 +123,10 @@ Deno.serve(async (req) => {
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    const rawBody = await req.json();
     const parsed = WritingInput.safeParse(rawBody);
     if (!parsed.success) {
       return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);

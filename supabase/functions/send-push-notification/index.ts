@@ -5,6 +5,7 @@ import {
   isServiceRoleCaller,
   jsonError,
   jsonOk,
+  guardBody,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
@@ -79,18 +80,16 @@ Deno.serve(async (req) => {
     if (rl) return rl;
   }
 
+  const { body: rawPush, error: bodyError } = await guardBody(req, 16 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    let payload: PushPayload;
-    try {
-      payload = await req.json();
-    } catch {
-      return jsonError('Invalid JSON body', 400);
-    }
+    const payload = rawPush as PushPayload;
     
     if (!payload.title || !payload.body) {
       return jsonError('Title and body are required', 400);

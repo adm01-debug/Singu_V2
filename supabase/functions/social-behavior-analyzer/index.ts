@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
-import { scopedCorsHeaders, withAuthOrServiceRole, jsonError, jsonOk, isServiceRoleCaller } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuthOrServiceRole, jsonError, jsonOk, isServiceRoleCaller, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
@@ -24,6 +24,9 @@ Deno.serve(async (req) => {
      if (rl) return rl;
    }
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
@@ -36,7 +39,6 @@ Deno.serve(async (req) => {
       { global: { headers: { Authorization: req.headers.get("Authorization")! } } }
     );
 
-     const rawBody = await req.json();
      const parsed = SocialBehaviorInput.safeParse(rawBody);
      if (!parsed.success) {
        return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);

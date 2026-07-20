@@ -1,7 +1,7 @@
 // Lead Scorer — calcula score server-side com decay temporal por dimensão.
 // Modos: { contact_id } -> recalcula 1, { batch: true, limit?: n } -> processa fila.
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { handleCorsAndMethod, withAuth, jsonOk } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuth, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 60 });
@@ -187,8 +187,9 @@ Deno.serve(async (req: Request) => {
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
   );
 
-  let body: { contact_id?: string; batch?: boolean; limit?: number } = {};
-  try { body = await req.json(); } catch { /* allow empty */ }
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+  const body = (rawBody ?? {}) as { contact_id?: string; batch?: boolean; limit?: number };
 
   await ensureDefaults(supabase, userId);
 

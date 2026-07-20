@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
@@ -22,8 +22,11 @@ Deno.serve(async (req) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    const { contactId } = await req.json();
+    const { contactId } = rawBody as { contactId?: string };
     if (!contactId) { return jsonError("contactId is required", 400); }
 
     // Verify contact ownership before fetching any related data
