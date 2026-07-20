@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export type DocumentType = 'contract' | 'proposal' | 'nda' | 'invoice' | 'report' | 'presentation' | 'spreadsheet' | 'image' | 'other';
@@ -23,14 +24,14 @@ export interface Document {
 }
 
 export function useDocuments(entityType: string, entityId?: string) {
+  const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['documents', entityType, entityId];
+  const key = ['documents', user?.id, entityType, entityId];
 
   const { data: documents = [], isLoading } = useQuery({
     queryKey: key,
     queryFn: async () => {
       if (!entityId) return [];
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase
         .from('documents')
@@ -49,7 +50,6 @@ export function useDocuments(entityType: string, entityId?: string) {
   const upload = useMutation({
     mutationFn: async ({ file, docType, description }: { file: File; docType: DocumentType; description?: string }) => {
       if (!entityId) throw new Error('Entity ID required');
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
 
       const ext = file.name.split('.').pop();

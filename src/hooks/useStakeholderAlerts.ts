@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import type { Json } from '@/integrations/supabase/types';
 import { isPushSupported, getSubscriptionStatus } from '@/lib/pushNotifications';
@@ -64,6 +65,7 @@ const SEVERITY_LEVELS = {
 } as const;
 
 export function useStakeholderAlerts(companyId?: string) {
+  const { user } = useAuth();
   const [alerts, setAlerts] = useState<StakeholderAlert[]>([]);
   const [loading, setLoading] = useState(true);
   const [storedMetrics, setStoredMetrics] = useState<StoredMetrics[]>([]);
@@ -115,7 +117,6 @@ export function useStakeholderAlerts(companyId?: string) {
 
   const fetchAlerts = useCallback(async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       let query = supabase
@@ -151,7 +152,7 @@ export function useStakeholderAlerts(companyId?: string) {
     } finally {
       setLoading(false);
     }
-  }, [companyId]);
+  }, [companyId, user]);
 
   useEffect(() => {
     fetchAlerts();
@@ -196,7 +197,6 @@ export function useStakeholderAlerts(companyId?: string) {
     recommendedAction: string
   ) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       const { error } = await supabase
@@ -232,8 +232,7 @@ export function useStakeholderAlerts(companyId?: string) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error creating stakeholder alert:', { error: msg });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchAlerts]);
+  }, [fetchAlerts, user]);
 
   const checkForChanges = useCallback(async (
     contactId: string,
@@ -431,7 +430,6 @@ export function useStakeholderAlerts(companyId?: string) {
     setAlerts([]);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         setAlerts(previousAlerts);
         return;
@@ -457,7 +455,7 @@ export function useStakeholderAlerts(companyId?: string) {
       logger.error('Error dismissing all alerts:', { error: msg });
       toast.error('Erro ao dispensar alertas', { description: msg });
     }
-  }, [companyId, alerts]);
+  }, [companyId, alerts, user]);
 
   return {
     alerts,

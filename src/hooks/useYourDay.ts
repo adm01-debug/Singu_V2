@@ -185,6 +185,7 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
     enabled: !!user,
     staleTime: 3 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const refresh = useCallback(async () => {

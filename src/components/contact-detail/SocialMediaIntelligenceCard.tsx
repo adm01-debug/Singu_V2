@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Share2, EyeOff, ShieldCheck, Linkedin, Instagram, Twitter } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { logger } from '@/lib/logger';
  
 interface SocialMediaIntelligenceCardProps {
   contactId: string;
@@ -28,7 +29,7 @@ interface SocialMediaIntelligenceCardProps {
       source_url: source,
       consent_type: 'public_data_osint'
     });
-    if (error) console.error('Error logging consent:', error);
+    if (error) logger.error('Error logging consent:', error);
   }, [user, contactId]);
 
   useEffect(() => {

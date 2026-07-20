@@ -119,7 +119,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   const { logActivity } = useActivityLogger();
   const queryClient = useQueryClient();
 
-  const queryKey = useMemo(() => ['contacts', companyId ?? '__all__'], [companyId]);
+  const queryKey = useMemo(() => ['contacts', companyId ?? '__all__', user?.id], [companyId, user?.id]);
   const externalEnabled = options?.enabled ?? true;
 
   const { 
@@ -153,12 +153,14 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const prefetchContactDetails = (id: string) => {
+    // Use a separate key namespace to avoid colliding with useContactDetail's
+    // ['contact', id] cache which stores the richer ContactDetailData shape.
     queryClient.prefetchQuery({
-      queryKey: ['contact', id],
+      queryKey: ['contact-prefetch', id],
       queryFn: async () => {
         const { data, error } = await queryExternalData<Record<string, unknown>>({
           table: 'contacts',
-          select: '*', // Ensure all fields are fetched for details
+          select: '*',
           filters: [{ type: 'eq', column: 'id', value: id }]
         });
         if (error) throw error;

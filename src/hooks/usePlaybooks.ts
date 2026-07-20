@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Database, Json } from "@/integrations/supabase/types";
 import { type BattleCard } from "@/hooks/useBattleCards";
+import { logger } from "@/lib/logger";
 
 export type PlaybookScenario =
   | "discovery" | "demo" | "negotiation" | "objection"
@@ -63,6 +64,8 @@ export function usePlaybooks(filters: PlaybookFilters = {}) {
   return useQuery({
     queryKey: ["playbooks", user?.id, filters],
     enabled: !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       let q = supabase.from("sales_playbooks").select("*").order("usage_count", { ascending: false });
       
@@ -82,6 +85,8 @@ export function usePlaybook(id?: string) {
   return useQuery({
     queryKey: ["playbook", id],
     enabled: !!id,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase.from("sales_playbooks").select("*").eq("id", id!).maybeSingle();
       if (error) throw error;
@@ -150,7 +155,7 @@ export function useUpsertPlaybook() {
       toast.success("Playbook salvo com sucesso");
     },
     onError: (e: Error) => {
-      console.error("[useUpsertPlaybook] Erro:", e);
+      logger.error("[useUpsertPlaybook] Erro:", e);
       toast.error(e.message || "Erro ao salvar playbook");
     },
   });
@@ -168,7 +173,7 @@ export function useDeletePlaybook() {
       toast.success("Playbook removido");
     },
     onError: (e: Error) => {
-      console.error("[useDeletePlaybook] Erro:", e);
+      logger.error("[useDeletePlaybook] Erro:", e);
       toast.error(e.message || "Erro ao remover playbook");
     },
   });
@@ -195,7 +200,7 @@ export function useGeneratePlaybook() {
       toast.success("Playbook gerado por IA");
     },
     onError: (e: Error) => {
-      console.error("[useGeneratePlaybook] Erro:", e);
+      logger.error("[useGeneratePlaybook] Erro:", e);
       toast.error(e.message || "Erro ao gerar playbook");
     },
   });
@@ -204,22 +209,23 @@ export function useGeneratePlaybook() {
 export function useRecommendPlaybooks() {
   return useMutation({
     mutationFn: async (input: {
-      contact_id?: string; 
-      deal_id?: string; 
+      contact_id?: string;
+      deal_id?: string;
       current_stage?: string;
-      recent_topics?: string[]; 
-      industry?: string; 
+      recent_topics?: string[];
+      industry?: string;
       persona?: string;
       competitor_mentioned?: string;
     }) => {
       const { data, error } = await supabase.functions.invoke("playbook-recommender", { body: input });
       if (error) throw error;
-      
-      return data as { 
-        recommendations: Array<{ playbook: SalesPlaybook; score: number; reasons: string[] }>; 
-        battle_card?: BattleCard; 
+
+      return data as {
+        recommendations: Array<{ playbook: SalesPlaybook; score: number; reasons: string[] }>;
+        battle_card?: BattleCard;
       };
     },
+    onError: (e: Error) => toast.error(e.message || "Erro ao recomendar playbooks"),
   });
 }
 
@@ -247,7 +253,7 @@ export function useLogPlaybookUsage() {
       });
       
       if (error) {
-        console.error("[useLogPlaybookUsage] Erro ao registrar log:", error);
+        logger.error("[useLogPlaybookUsage] Erro ao registrar log:", error);
       }
     },
   });
@@ -258,6 +264,8 @@ export function usePlaybookUsageLog(filters: { playbookId?: string; days?: numbe
   return useQuery({
     queryKey: ["playbook-usage-log", user?.id, filters],
     enabled: !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const since = new Date(Date.now() - (filters.days ?? 30) * 86400_000).toISOString();
       let q = supabase

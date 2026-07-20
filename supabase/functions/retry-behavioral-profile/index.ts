@@ -25,7 +25,7 @@ Deno.serve(async (req) => {
     const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
 
     const authHeader = req.headers.get("Authorization") ?? "";
-    if (!authHeader) return json({ error: "Não autenticado", requestId }, 401);
+    if (!authHeader) return json({ error: "Não autenticado", requestId }, 401, cors);
 
     // 1) Identifica o usuário chamador
     const userClient = createClient(SUPABASE_URL, ANON_KEY, {
@@ -33,7 +33,7 @@ Deno.serve(async (req) => {
     });
     const { data: userData, error: userErr } = await userClient.auth.getUser();
     if (userErr || !userData?.user) {
-      return json({ error: "Sessão inválida", requestId }, 401);
+      return json({ error: "Sessão inválida", requestId }, 401, cors);
     }
     const callerId = userData.user.id;
 
@@ -47,7 +47,7 @@ Deno.serve(async (req) => {
     });
     if (roleErr) throw roleErr;
     if (!isAdmin) {
-      return json({ error: "Acesso negado: requer admin", requestId }, 403);
+      return json({ error: "Acesso negado: requer admin", requestId }, 403, cors);
     }
 
     // 3) Valida input
@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
       trigger?: string;
     };
     if (!body.contact_id || typeof body.contact_id !== "string") {
-      return json({ error: "contact_id obrigatório", requestId }, 400);
+      return json({ error: "contact_id obrigatório", requestId }, 400, cors);
     }
     const triggerSource = body.trigger || `manual_retry:${callerId.slice(0, 8)}`;
 
@@ -68,7 +68,7 @@ Deno.serve(async (req) => {
       .maybeSingle();
     if (contactErr) throw contactErr;
     if (!contactRow?.user_id) {
-      return json({ error: "Contato não encontrado", requestId }, 404);
+      return json({ error: "Contato não encontrado", requestId }, 404, cors);
     }
     const ownerId = contactRow.user_id as string;
 
@@ -94,6 +94,7 @@ Deno.serve(async (req) => {
             retry_in_seconds: retryInSec,
           },
           429,
+          cors,
         );
       }
     }
@@ -157,7 +158,7 @@ Deno.serve(async (req) => {
           last_processed_at: finishedIso,
         })
         .eq("contact_id", body.contact_id);
-      return json({ ok: false, error: invokeError, requestId }, 502);
+      return json({ ok: false, error: invokeError, requestId }, 502, cors);
     }
 
     await admin
@@ -168,17 +169,17 @@ Deno.serve(async (req) => {
       })
       .eq("contact_id", body.contact_id);
 
-    return json({ ok: true, requestId, contact_id: body.contact_id, trigger: triggerSource });
+    return json({ ok: true, requestId, contact_id: body.contact_id, trigger: triggerSource }, 200, cors);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[retry-behavioral-profile]", requestId, msg);
-    return json({ error: msg, requestId }, 500);
+    return json({ error: msg, requestId }, 500, cors);
   }
 });
 
-function json(body: unknown, status = 200) {
+function json(body: unknown, status = 200, corsH: Record<string, string> = {}) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { ...cors, "Content-Type": "application/json" },
+    headers: { ...corsH, "Content-Type": "application/json" },
   });
 }

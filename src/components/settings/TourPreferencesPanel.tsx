@@ -34,19 +34,20 @@ export function TourPreferencesPanel() {
   useEffect(() => {
     // Check push support
     setPushSupported(isPushSupported());
-    
+
     // Check current permission and subscription status
     if ('Notification' in window) {
       setPermissionStatus(Notification.permission);
     }
-    
-    checkPushStatus();
-  }, []);
 
-  const checkPushStatus = async () => {
-    const { isSubscribed } = await getSubscriptionStatus();
-    setIsPushEnabled(isSubscribed);
-  };
+    let cancelled = false;
+    const checkPushStatus = async () => {
+      const { isSubscribed } = await getSubscriptionStatus();
+      if (!cancelled) setIsPushEnabled(isSubscribed);
+    };
+    checkPushStatus();
+    return () => { cancelled = true; };
+  }, []);
 
   const handleTogglePush = async () => {
     setPushLoading(true);

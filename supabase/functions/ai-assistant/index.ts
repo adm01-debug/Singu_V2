@@ -100,36 +100,38 @@ Deno.serve(async (req) => {
       content: message,
     });
 
-    // Load last 20 messages for context
-    const { data: history } = await supabase
-      .from("ai_chat_messages")
-      .select("role, content")
-      .eq("thread_id", thread_id)
-      .order("created_at", { ascending: true })
-      .limit(20);
+    // History and entity context are independent — fetch in parallel
+    const entityQuery =
+      context_entity_type === "contact" && context_entity_id
+        ? supabase
+            .from("contacts")
+            .select("first_name, last_name, email, phone, role_title, sentiment, relationship_score, notes, company:companies(name, industry)")
+            .eq("id", context_entity_id)
+            .eq("user_id", userId)
+            .maybeSingle()
+        : context_entity_type === "company" && context_entity_id
+          ? supabase
+              .from("companies")
+              .select("name, industry, city, state, employee_count, annual_revenue, notes, challenges")
+              .eq("id", context_entity_id)
+              .eq("user_id", userId)
+              .maybeSingle()
+          : Promise.resolve({ data: null });
 
-    // Load entity context if provided
+    const [{ data: history }, { data: entityData }] = await Promise.all([
+      supabase
+        .from("ai_chat_messages")
+        .select("role, content")
+        .eq("thread_id", thread_id)
+        .order("created_at", { ascending: true })
+        .limit(20),
+      entityQuery,
+    ]);
+
     let contextBlock = "";
-    if (context_entity_type === "contact" && context_entity_id) {
-      const { data: contact } = await supabase
-        .from("contacts")
-        .select("first_name, last_name, email, phone, role_title, sentiment, relationship_score, notes, company:companies(name, industry)")
-        .eq("id", context_entity_id)
-        .eq("user_id", userId)
-        .maybeSingle();
-      if (contact) {
-        contextBlock = `\n\nCONTEXTO — Contato em foco:\n${JSON.stringify(contact, null, 2)}`;
-      }
-    } else if (context_entity_type === "company" && context_entity_id) {
-      const { data: company } = await supabase
-        .from("companies")
-        .select("name, industry, city, state, employee_count, annual_revenue, notes, challenges")
-        .eq("id", context_entity_id)
-        .eq("user_id", userId)
-        .maybeSingle();
-      if (company) {
-        contextBlock = `\n\nCONTEXTO — Empresa em foco:\n${JSON.stringify(company, null, 2)}`;
-      }
+    if (entityData) {
+      const label = context_entity_type === "contact" ? "Contato" : "Empresa";
+      contextBlock = `\n\nCONTEXTO — ${label} em foco:\n${JSON.stringify(entityData, null, 2)}`;
     }
 
     const messages = [
@@ -183,12 +185,13 @@ Deno.serve(async (req) => {
       .select()
       .single();
 
-    // Update thread timestamp + auto-title if first message
+    // Update thread timestamp + auto-title (fire-and-forget — not used in response)
     const updates: Record<string, unknown> = { last_message_at: new Date().toISOString() };
     if ((history || []).length <= 1 && thread.title === "Nova conversa") {
       updates.title = message.slice(0, 60);
     }
-    await supabase.from("ai_chat_threads").update(updates).eq("id", thread_id);
+    supabase.from("ai_chat_threads").update(updates).eq("id", thread_id)
+      .catch((e: unknown) => console.error("ai_chat_threads update error:", e));
 
     log.info("chat_complete", { threadId: thread_id, tokens });
 

@@ -38,12 +38,39 @@ Deno.serve(async (req) => {
       .limit(1000);
 
     type ActionRow = { id: string; action: string; urgency: string; contact_id: string; user_id: string; generated_at: string; contacts: unknown };
+    const allActionRows = (allActions ?? []) as ActionRow[];
     const actionsByUser = new Map<string, ActionRow[]>();
-    for (const a of (allActions ?? []) as ActionRow[]) {
+    for (const a of allActionRows) {
       const arr = actionsByUser.get(a.user_id) ?? [];
       arr.push(a);
       actionsByUser.set(a.user_id, arr);
     }
+
+    // Pre-batch: fetch ALL contact_automation_settings and notification_logs up-front
+    const allContactIds = [...new Set(allActionRows.map((a) => a.contact_id))];
+    const allReminderIdsGlobal = allActionRows.flatMap((a) => [`nba-esc-${a.id}`, `nba-rem-${a.id}`]);
+    const [settingsResult, logsResult] = await Promise.all([
+      allContactIds.length > 0
+        ? supabaseClient.from('contact_automation_settings')
+            .select('contact_id, escalation_enabled, delay_hours, reminder_enabled, escalation_role')
+            .in('contact_id', allContactIds)
+        : Promise.resolve({ data: [] }),
+      allReminderIdsGlobal.length > 0
+        ? supabaseClient.from('notification_logs')
+            .select('reminder_id, channel')
+            .in('reminder_id', allReminderIdsGlobal)
+        : Promise.resolve({ data: [] }),
+    ]);
+    const globalSettingsMap = new Map(
+      ((settingsResult as { data: Array<{ contact_id: string }> }).data ?? []).map((s) => [s.contact_id, s])
+    );
+    const globalNotifiedMap = new Map<string, Set<string>>();
+    for (const log of (logsResult as { data: Array<{ reminder_id: string; channel: string }> }).data ?? []) {
+      if (!globalNotifiedMap.has(log.reminder_id)) globalNotifiedMap.set(log.reminder_id, new Set());
+      globalNotifiedMap.get(log.reminder_id)!.add(log.channel);
+    }
+
+    const allLogsToInsert: Array<{ reminder_id: string; contact_id: string; user_id: string; channel: string }> = [];
 
     for (const user of users) {
       stats.usersProcessed++;
@@ -52,26 +79,8 @@ Deno.serve(async (req) => {
 
       if (actions.length > 0) {
         const now = new Date();
-
-        // Pre-fetch all contact_automation_settings for this batch in one query
-        const actionContactIds = [...new Set(actions.map((a: { contact_id: string }) => a.contact_id))];
-        const { data: settingsList } = await supabaseClient
-          .from('contact_automation_settings')
-          .select('contact_id, escalation_enabled, delay_hours, reminder_enabled, escalation_role')
-          .in('contact_id', actionContactIds);
-        const settingsMap = new Map((settingsList ?? []).map((s: { contact_id: string }) => [s.contact_id, s]));
-
-        // Pre-fetch all existing notification_logs for this batch in one query
-        const allReminderIds = actions.flatMap((a: { id: string }) => [`nba-esc-${a.id}`, `nba-rem-${a.id}`]);
-        const { data: existingLogs } = await supabaseClient
-          .from('notification_logs')
-          .select('reminder_id, channel')
-          .in('reminder_id', allReminderIds);
-        const notifiedMap = new Map<string, Set<string>>();
-        for (const log of existingLogs ?? []) {
-          if (!notifiedMap.has(log.reminder_id)) notifiedMap.set(log.reminder_id, new Set());
-          notifiedMap.get(log.reminder_id)!.add(log.channel);
-        }
+        const settingsMap = globalSettingsMap;
+        const notifiedMap = globalNotifiedMap;
 
         const logsToInsert: Array<{ reminder_id: string; contact_id: string; user_id: string; channel: string }> = [];
 
@@ -138,11 +147,14 @@ Deno.serve(async (req) => {
           }
         }
 
-        // Bulk-insert all notification logs accumulated during this user's loop
-        if (logsToInsert.length > 0) {
-          await supabaseClient.from('notification_logs').insert(logsToInsert);
-        }
+        allLogsToInsert.push(...logsToInsert);
       }
+    }
+
+    // Flush all notification logs for all users in a single write
+    if (allLogsToInsert.length > 0) {
+      supabaseClient.from('notification_logs').insert(allLogsToInsert)
+        .catch((e: unknown) => console.error('notification_logs insert error:', e));
     }
 
     return jsonOk({ success: true, stats });

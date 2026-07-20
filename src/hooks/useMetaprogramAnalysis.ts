@@ -180,18 +180,19 @@ export function useMetaprogramAnalysis() {
     if (!user) return;
     setLoading(true);
     try {
-      let analyzedCount = 0;
-      for (const interaction of interactions) {
-        const textToAnalyze = interaction.transcription || interaction.content;
-        if (!textToAnalyze || textToAnalyze.length < 20) continue;
-        const result = analyzeText(textToAnalyze);
-        const totalScore = Object.values(result.scores).reduce((a, b) => a + b, 0);
-        if (totalScore > 0) {
-          await saveAnalysis(contactId, interaction.id, result, textToAnalyze);
-          analyzedCount++;
-        }
-      }
-      toast({ title: "Análise concluída", description: `${analyzedCount} interações analisadas` });
+      const eligible = interactions.filter(i => {
+        const text = i.transcription || i.content;
+        if (!text || text.length < 20) return false;
+        const totalScore = Object.values(analyzeText(text).scores).reduce((a, b) => a + b, 0);
+        return totalScore > 0;
+      });
+      await Promise.all(
+        eligible.map(i => {
+          const text = i.transcription || i.content as string;
+          return saveAnalysis(contactId, i.id, analyzeText(text), text);
+        })
+      );
+      toast({ title: "Análise concluída", description: `${eligible.length} interações analisadas` });
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error analyzing interactions:', { error: msg });

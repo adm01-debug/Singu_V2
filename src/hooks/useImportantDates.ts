@@ -46,6 +46,8 @@ export interface DateReminders {
       return data;
     },
     enabled: !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: relatives = [] } = useQuery({
@@ -319,8 +321,7 @@ export interface DateReminders {
       hasUrgent,
       summary
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contacts, interactions]);
+  }, [contacts, interactions, lifeEvents, relatives]);
 
   return reminders;
 }

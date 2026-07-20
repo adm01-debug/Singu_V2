@@ -34,12 +34,13 @@ Deno.serve(async (req: Request) => {
     }
 
     if (rows.length > 0) {
-      // Insere em lotes de 500
-      for (let i = 0; i < rows.length; i += 500) {
-        const { error: insertError } = await supabase
-          .from('lead_score_recompute_queue').insert(rows.slice(i, i + 500));
-        if (insertError) throw insertError;
-      }
+      const chunks: typeof rows[] = [];
+      for (let i = 0; i < rows.length; i += 500) chunks.push(rows.slice(i, i + 500));
+      const chunkResults = await Promise.all(
+        chunks.map((chunk) => supabase.from('lead_score_recompute_queue').insert(chunk)),
+      );
+      const insertError = chunkResults.find((r) => r.error)?.error;
+      if (insertError) throw insertError;
     }
 
     return jsonOk({ ok: true, enqueued: rows.length }, req);

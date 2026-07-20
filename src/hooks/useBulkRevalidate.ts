@@ -28,7 +28,7 @@ export function useBulkRevalidatePreview(filters: BulkRevalidateFilters, enabled
   return useQuery({
     queryKey: ["bulk-revalidate-preview", user?.id, filters],
     enabled: !!user && enabled && filters.statuses.length > 0,
-    staleTime: 10_000,
+    staleTime: 60_000,
     queryFn: async (): Promise<BulkRevalidateResult> => {
       const { data, error } = await supabase.functions.invoke("bulk-revalidate", {
         body: { ...filters, dryRun: true },

@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAuth } from './useAuth';
 
 export type ForecastCategory = "commit" | "best_case" | "pipeline" | "omitted";
 
@@ -62,8 +63,10 @@ export interface QuotaSettings {
 }
 
 export function useForecastPeriods() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["forecast-periods"],
+    queryKey: ["forecast-periods", user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase.from("forecast_periods").select("*").order("period_start", { ascending: false });
       if (error) throw error;
@@ -74,8 +77,10 @@ export function useForecastPeriods() {
 }
 
 export function useCurrentPeriod(type: "month" | "quarter" = "month") {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["forecast-current-period", type],
+    queryKey: ["forecast-current-period", type, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const today = new Date().toISOString().split("T")[0];
       const { data, error } = await supabase.from("forecast_periods").select("*")
@@ -90,10 +95,10 @@ export function useCurrentPeriod(type: "month" | "quarter" = "month") {
 }
 
 export function useCreatePeriod() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (type: "month" | "quarter") => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const { data, error } = await supabase.rpc("seed_forecast_period", { _user_id: user.id, _type: type });
       if (error) throw error;
@@ -219,8 +224,10 @@ export function useForecastNarrative() {
 }
 
 export function useQuotaSettings() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["forecast-quota-settings"],
+    queryKey: ["forecast-quota-settings", user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase.from("forecast_quota_settings").select("*").maybeSingle();
       if (error) throw error;
@@ -230,10 +237,10 @@ export function useQuotaSettings() {
 }
 
 export function useUpsertQuotaSettings() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (s: Partial<QuotaSettings>) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const { error } = await supabase.from("forecast_quota_settings")
         .upsert({ user_id: user.id, ...s }, { onConflict: "user_id" });

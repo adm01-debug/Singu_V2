@@ -36,6 +36,7 @@ export function useUnifiedTimeline(contactId: string) {
       return data || [];
     },
     enabled: !!user && !!contactId,
+    staleTime: 5 * 60_000,
   });
 
   // Fetch CRM Alerts
@@ -50,6 +51,7 @@ export function useUnifiedTimeline(contactId: string) {
       return data || [];
     },
     enabled: !!user && !!contactId,
+    staleTime: 5 * 60_000,
   });
 
    const { data: neuroHistory } = useQuery({
@@ -62,7 +64,8 @@ export function useUnifiedTimeline(contactId: string) {
          .order('created_at', { ascending: false });
        return data || [];
      },
-     enabled: !!contactId
+     enabled: !!user && !!contactId,
+     staleTime: 10 * 60_000,
    });
  
    const unifiedEvents = useMemo(() => {
@@ -169,8 +172,7 @@ export function useUnifiedTimeline(contactId: string) {
     });
 
     return events.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [interactions, tasks, meetings, lifeEvents, crmAlerts]);
+  }, [interactions, tasks, meetings, lifeEvents, crmAlerts, neuroHistory]);
 
   return {
     events: unifiedEvents,

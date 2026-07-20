@@ -5,13 +5,13 @@ import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 import type { SalesTeamMember, SalesRole } from '@/types/leadRouting';
 
-const QUERY_KEY = ['sales-team-members'];
+const QUERY_KEY_BASE = ['sales-team-members'];
 
 export function useSalesTeam() {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: QUERY_KEY,
+    queryKey: [...QUERY_KEY_BASE, user?.id],
     queryFn: async (): Promise<SalesTeamMember[]> => {
       if (!user) return [];
       const { data, error } = await supabase
@@ -48,7 +48,7 @@ export function useCreateTeamMember() {
       return data;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: QUERY_KEY });
+      qc.invalidateQueries({ queryKey: QUERY_KEY_BASE });
       toast.success('Membro adicionado à equipe');
     },
     onError: () => toast.error('Erro ao adicionar membro'),
@@ -71,7 +71,7 @@ export function useUpdateTeamMember() {
       return data;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: QUERY_KEY });
+      qc.invalidateQueries({ queryKey: QUERY_KEY_BASE });
       toast.success('Membro atualizado');
     },
     onError: () => toast.error('Erro ao atualizar membro'),
@@ -90,7 +90,7 @@ export function useDeleteTeamMember() {
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: QUERY_KEY });
+      qc.invalidateQueries({ queryKey: QUERY_KEY_BASE });
       toast.success('Membro removido da equipe');
     },
     onError: () => toast.error('Erro ao remover membro'),
@@ -101,7 +101,7 @@ export function useActiveTeamByRole(role?: SalesRole) {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ['sales-team-active', role],
+    queryKey: ['sales-team-active', role, user?.id],
     queryFn: async (): Promise<SalesTeamMember[]> => {
       if (!user) return [];
       let query = supabase

@@ -207,9 +207,9 @@ Deno.serve(async (req) => {
       }),
     );
 
-    // Cache (best-effort)
+    // Cache (best-effort — fire-and-forget, response uses in-memory results)
     const expiresAt = new Date(Date.now() + CACHE_TTL_MINUTES * 60 * 1000).toISOString();
-    await supabase
+    supabase
       .from("semantic_search_cache")
       .upsert(
         {
@@ -220,7 +220,8 @@ Deno.serve(async (req) => {
           expires_at: expiresAt,
         },
         { onConflict: "user_id,query_hash" },
-      );
+      )
+      .catch((e: unknown) => console.error("semantic_search_cache upsert error:", e));
 
     return new Response(
       JSON.stringify({ results, cached: false, query, variations, entities: requested }),

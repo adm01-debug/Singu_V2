@@ -267,7 +267,7 @@ export function useLeadScoreConfig() {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ['lead-score-config'],
+    queryKey: ['lead-score-config', user?.id],
     queryFn: async () => {
       if (!user?.id) return null;
       const { data, error } = await supabase
@@ -299,12 +299,11 @@ export function useCalculateLeadScore() {
     mutationFn: async ({ contactId, contactData }: { contactId: string; contactData: ContactData }) => {
       if (!user?.id) throw new Error('Não autenticado');
 
-      // Get config or use defaults
-      const { data: config } = await supabase
-        .from('lead_score_config')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
+      // Config and previous score are independent — fetch in parallel
+      const [{ data: config }, { data: existing }] = await Promise.all([
+        supabase.from('lead_score_config').select('*').eq('user_id', user.id).maybeSingle(),
+        supabase.from('lead_scores').select('total_score').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
+      ]);
 
       const weights = config
         ? { engagement: Number(config.weight_engagement), fit: Number(config.weight_fit), intent: Number(config.weight_intent), relationship: Number(config.weight_relationship) }
@@ -315,15 +314,6 @@ export function useCalculateLeadScore() {
         : undefined;
 
       const result = computeLeadScore(contactData, weights, thresholds);
-
-      // Get previous score
-      const { data: existing } = await supabase
-        .from('lead_scores')
-        .select('total_score')
-        .eq('contact_id', contactId)
-        .eq('user_id', user.id)
-        .maybeSingle();
-
       const previousScore = existing?.total_score ? Number(existing.total_score) : 0;
 
       // Upsert score
@@ -351,8 +341,8 @@ export function useCalculateLeadScore() {
 
       if (error) throw error;
 
-      // Record history
-      await supabase.from('lead_score_history').insert({
+      // Record history (fire-and-forget — response uses in-memory result)
+      void supabase.from('lead_score_history').insert({
         contact_id: contactId,
         user_id: user.id,
         total_score: result.total_score,
@@ -361,7 +351,7 @@ export function useCalculateLeadScore() {
         fit_score: result.fit_score,
         intent_score: result.intent_score,
         relationship_score: result.relationship_score,
-      });
+      }).catch((e: unknown) => logger.error('lead_score_history insert error:', e));
 
       return { ...result, score_change: result.total_score - previousScore, previous_score: previousScore };
     },

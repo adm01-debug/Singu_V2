@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export interface KBArticle {
@@ -17,13 +18,14 @@ export interface KBArticle {
 }
 
 export function useKnowledgeBase() {
+  const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['knowledge-base'];
+  const key = ['knowledge-base', user?.id];
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: key,
+    enabled: !!user,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase
         .from('knowledge_base_articles')
@@ -38,7 +40,6 @@ export function useKnowledgeBase() {
 
   const create = useMutation({
     mutationFn: async (input: Partial<KBArticle>) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('knowledge_base_articles')
         .insert({ ...input, user_id: user.id } as never);

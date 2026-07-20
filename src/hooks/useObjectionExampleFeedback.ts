@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAuth } from './useAuth';
 
 export interface ObjectionExampleFeedbackRow {
   id: string;
@@ -27,10 +28,11 @@ interface ToggleArgs {
  * para priorizar conversas marcadas como úteis nas próximas sugestões.
  */
 export function useObjectionExampleFeedback({ objection, category }: UseFeedbackOptions) {
+  const { user } = useAuth();
   const qc = useQueryClient();
-  const enabled = !!objection;
+  const enabled = !!objection && !!user;
 
-  const queryKey = ["objection-example-feedback", objection ?? ""];
+  const queryKey = ["objection-example-feedback", objection ?? "", user?.id];
 
   const { data: rows = [], isLoading } = useQuery({
     queryKey,
@@ -61,8 +63,7 @@ export function useObjectionExampleFeedback({ objection, category }: UseFeedback
   const toggle = useMutation({
     mutationFn: async ({ interactionId, isUseful }: ToggleArgs) => {
       if (!objection) throw new Error("Objeção ausente");
-      const { data: userData } = await supabase.auth.getUser();
-      const userId = userData.user?.id;
+      const userId = user?.id;
       if (!userId) throw new Error("Você precisa estar autenticado.");
 
       if (!isUseful) {

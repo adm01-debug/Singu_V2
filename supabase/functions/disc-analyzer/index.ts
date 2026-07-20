@@ -263,7 +263,7 @@ Deno.serve(async (req) => {
 
     if (contactOwnership) {
       const currentBehavior = (contactOwnership.behavior as Record<string, unknown>) || {};
-      await supabase
+      supabase
         .from("contacts")
         .update({
           behavior: {
@@ -275,7 +275,8 @@ Deno.serve(async (req) => {
           }
         })
         .eq("id", contactId)
-        .eq("user_id", userId);
+        .eq("user_id", userId)
+        .catch((e: unknown) => console.error("contacts behavior update error:", e));
     }
 
     // Fire-and-forget communication log (non-critical)

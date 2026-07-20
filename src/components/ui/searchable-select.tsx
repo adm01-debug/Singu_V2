@@ -19,6 +19,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 export type CustomValueMode = 'strict' | 'flexible' | 'approval';
 
@@ -56,6 +57,8 @@ export function SearchableSelect({
   customValueLabel = 'Adicionar novo',
   fieldName,
 }: SearchableSelectProps) {
+  const { user } = useAuth();
+
   // Resolve mode: new prop takes precedence over legacy
   const mode: CustomValueMode = customValueMode
     ?? (allowCustom === false ? 'strict' : allowCustom === true ? 'flexible' : 'strict');
@@ -78,7 +81,6 @@ export function SearchableSelect({
 
   const logCustomValue = useCallback(async (customValue: string) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
       await supabase.from('audit_log').insert({
         entity_type: 'custom_value',
@@ -90,7 +92,7 @@ export function SearchableSelect({
     } catch {
       // Non-blocking — don't break UX for audit failure
     }
-  }, [fieldName]);
+  }, [fieldName, user]);
 
   const handleCustomValue = useCallback(async (customValue: string) => {
     if (mode === 'strict') return;

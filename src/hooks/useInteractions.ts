@@ -33,7 +33,8 @@ async function fetchInteractionsPage(
 
   const { data, error, count } = await query;
   if (error) throw error;
-  return { data: data || [], nextCursor: data.length === PAGE_SIZE ? pageParam + 1 : undefined, total: count || 0 } as InteractionPage;
+  const rows = data ?? [];
+  return { data: rows, nextCursor: rows.length === PAGE_SIZE ? pageParam + 1 : undefined, total: count || 0 } as InteractionPage;
 }
 
 export function useInteractions(contactId?: string, companyId?: string, options?: { enabled?: boolean }) {
@@ -43,7 +44,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
   const { triggerAnalysis } = useNLPAutoAnalysis();
   const queryClient = useQueryClient();
 
-  const queryKey = useMemo(() => ['interactions', contactId ?? '__all__', companyId ?? '__all__'], [contactId, companyId]);
+  const queryKey = useMemo(() => ['interactions', contactId ?? '__all__', companyId ?? '__all__', user?.id], [contactId, companyId, user?.id]);
   const externalEnabled = options?.enabled ?? true;
 
   const {

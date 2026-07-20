@@ -42,27 +42,23 @@ export function usePortfolioCompatibility() {
     setLoading(true);
 
     try {
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('nlp_profile')
-        .eq('id', user.id)
-        .maybeSingle();
+      // All 4 queries are independent — run in parallel
+      const [
+        { data: profileData },
+        { data: contactsData, error },
+        { data: vakData },
+        { data: metaData },
+      ] = await Promise.all([
+        supabase.from('profiles').select('nlp_profile').eq('id', user.id).maybeSingle(),
+        supabase.from('contacts').select('id, first_name, last_name, behavior, relationship_score, companies(name)').eq('user_id', user.id),
+        supabase.from('vak_analysis_history').select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score').eq('user_id', user.id).order('created_at', { ascending: false }),
+        supabase.from('metaprogram_analysis').select('contact_id, toward_score, away_from_score, internal_score, external_score, options_score, procedures_score').eq('user_id', user.id).order('created_at', { ascending: false }),
+      ]);
 
       const spProfile = profileData?.nlp_profile as unknown as SalespersonProfile | null;
       setSalespersonProfile(spProfile);
 
-      const { data: contactsData, error } = await supabase
-        .from('contacts')
-        .select('id, first_name, last_name, behavior, relationship_score, companies(name)')
-        .eq('user_id', user.id);
-
       if (error) throw error;
-
-      const { data: vakData } = await supabase
-        .from('vak_analysis_history')
-        .select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
 
       const vakMap = new Map<string, VAKType>();
       vakData?.forEach((v) => {
@@ -72,12 +68,6 @@ export function usePortfolioCompatibility() {
           vakMap.set(v.contact_id, primary);
         }
       });
-
-      const { data: metaData } = await supabase
-        .from('metaprogram_analysis')
-        .select('contact_id, toward_score, away_from_score, internal_score, external_score, options_score, procedures_score')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
 
       const metaMap = new Map<string, { motivation: string; reference: string; working: string }>();
       metaData?.forEach((m) => {

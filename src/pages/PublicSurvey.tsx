@@ -28,13 +28,16 @@ export default function PublicSurvey() {
 
   useEffect(() => {
     if (!token) return;
+    let cancelled = false;
+    const currentToken = token;
     (async () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('csat_surveys')
         .select('id, score, feedback, status, channel, expires_at')
-        .eq('public_token', token)
+        .eq('public_token', currentToken)
         .maybeSingle();
+      if (cancelled) return;
       if (error || !data) {
         setError('Pesquisa não encontrada ou expirada.');
       } else if (data.expires_at && new Date(data.expires_at) < new Date()) {
@@ -47,6 +50,7 @@ export default function PublicSurvey() {
       }
       setLoading(false);
     })();
+    return () => { cancelled = true; };
   }, [token]);
 
   const handleSubmit = async () => {

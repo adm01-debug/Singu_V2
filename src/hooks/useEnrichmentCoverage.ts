@@ -19,10 +19,12 @@ export function useEnrichmentCoverage() {
   return useQuery({
     queryKey: ["enrichment-coverage", user?.id],
     enabled: !!user,
-    staleTime: 60_000,
-    refetchInterval: 60_000,
+    staleTime: 5 * 60_000,
+    refetchInterval: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<EnrichmentCoverage> => {
-      const uid = user!.id;
+      if (!user) throw new Error('Usuário não autenticado');
+      const uid = user.id;
 
       const [contactsRes, withEmailRes, emailsValidRes, phonesValidRes, intelRes] = await Promise.all([
         supabase.from("contacts").select("id", { count: "exact", head: true }).eq("user_id", uid),

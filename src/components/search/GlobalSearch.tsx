@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import { useModalHistory } from '@/hooks/useModalHistory';
@@ -92,6 +92,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
   const setVoiceOpen = useCallback((v: boolean) => { setVoiceOpenInternal(v); onVoiceModeChange?.(v); }, [onVoiceModeChange]);
   const [isLoading, setIsLoading] = useState(false);
   const [recentItems, setRecentItems] = useState<RecentItem[]>([]);
+  const searchGenRef = useRef(0);
   const [semanticMode, setSemanticMode] = useState<boolean>(() => {
     try { return localStorage.getItem('global-search-semantic') === '1'; } catch { return false; }
   });
@@ -191,12 +192,15 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
   const performSearch = useCallback(async (searchQuery: string) => {
     if (!searchQuery.trim() || !user) { setResults({ contacts: [], companies: [], interactions: [] }); return; }
 
+    const gen = ++searchGenRef.current;
+
     if (semanticMode) {
       const sem = await semanticSearch(searchQuery.trim(), {
         entities: ['contacts', 'companies', 'interactions'],
         limit: 8,
         silent: true,
       });
+      if (gen !== searchGenRef.current) return;
       setResults({
         contacts: sem.contacts.map(c => ({
           id: c.id, type: 'contact' as const,
@@ -227,6 +231,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
         supabase.rpc('search_companies_unaccent', { p_user_id: user.id, p_query: searchQuery.trim(), p_limit: 5 }),
         supabase.rpc('search_interactions_unaccent', { p_user_id: user.id, p_query: searchQuery.trim(), p_limit: 5 }),
       ]);
+      if (gen !== searchGenRef.current) return;
       if (contactsResponse.error || companiesResponse.error || interactionsResponse.error) throw contactsResponse.error || companiesResponse.error || interactionsResponse.error;
 
       let externalContacts: SearchResult[] = [];
@@ -238,17 +243,19 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
         }
       } catch { /* best-effort */ }
 
+      if (gen !== searchGenRef.current) return;
       setResults({
         contacts: [...(contactsResponse.data?.map(c => ({ id: c.id, type: 'contact' as const, title: `${c.first_name} ${c.last_name}`, subtitle: c.role_title || c.email, meta: c.phone })) || []), ...externalContacts],
         companies: companiesResponse.data?.map(c => ({ id: c.id, type: 'company' as const, title: toTitleCase(c.name), subtitle: c.industry, meta: c.city && c.state ? `${c.city}, ${c.state}` : undefined })) || [],
         interactions: interactionsResponse.data?.map(i => ({ id: i.id, type: 'interaction' as const, title: i.title, subtitle: i.type, meta: new Date(i.created_at).toLocaleDateString('pt-BR') })) || [],
       });
-    } catch (error) { 
+    } catch (error) {
+      if (gen !== searchGenRef.current) return;
       const msg = error instanceof Error ? error.message : 'Não foi possível completar a busca agora.';
-      logger.error('Search error:', { error: msg }); 
-      toast.error(msg); 
-      setResults({ contacts: [], companies: [], interactions: [] }); 
-    } finally { setIsLoading(false); }
+      logger.error('Search error:', { error: msg });
+      toast.error(msg);
+      setResults({ contacts: [], companies: [], interactions: [] });
+    } finally { if (gen === searchGenRef.current) setIsLoading(false); }
   }, [user, semanticMode, semanticSearch]);
 
   useEffect(() => {

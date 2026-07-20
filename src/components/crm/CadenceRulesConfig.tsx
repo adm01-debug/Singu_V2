@@ -102,7 +102,8 @@ export function CadenceRulesConfig() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['crm-cadence-rules'] });
       toast.success('Regra removida');
-    }
+    },
+    onError: (e: Error) => toast.error(`Erro ao remover regra: ${e.message}`),
   });
 
   const handleOpenDialog = (rule?: { id?: string; relationship_stage?: string; frequency_days?: number; priority?: string; cadence_steps?: unknown }) => {

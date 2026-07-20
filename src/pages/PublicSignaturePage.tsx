@@ -35,22 +35,27 @@ export default function PublicSignaturePage() {
 
   useEffect(() => {
     if (!token) return;
+    let cancelled = false;
+    const currentToken = token;
     (async () => {
       try {
-        const res = await fetch(`${FN_BASE}/get-signature?token=${encodeURIComponent(token)}`, {
+        const res = await fetch(`${FN_BASE}/get-signature?token=${encodeURIComponent(currentToken)}`, {
           headers: {
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
         });
         const data = await res.json();
+        if (cancelled) return;
         if (!res.ok) throw new Error(data?.error ?? 'Erro');
         setSignature(data);
       } catch (e) {
+        if (cancelled) return;
         setError(e instanceof Error ? e.message : 'Erro ao carregar');
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     })();
+    return () => { cancelled = true; };
   }, [token]);
 
   const submit = async (action: 'sign' | 'decline') => {

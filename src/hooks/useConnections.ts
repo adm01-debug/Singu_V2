@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export type ConnectionType = 'supabase_external' | 'bitrix24' | 'n8n' | 'mcp_claude' | 'custom';
@@ -34,10 +35,13 @@ export interface ConnectionTestLog {
 }
 
 export function useConnections() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   const { data: connections = [], isLoading } = useQuery({
-    queryKey: ['connection_configs'],
+    queryKey: ['connection_configs', user?.id],
+    enabled: !!user,
+    staleTime: 10 * 60_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('connection_configs')
@@ -50,7 +54,6 @@ export function useConnections() {
 
   const upsert = useMutation({
     mutationFn: async (input: Partial<ConnectionConfig> & { name: string; connection_type: ConnectionType }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
 
       if (input.id) {
@@ -94,6 +97,7 @@ export function useConnections() {
       qc.invalidateQueries({ queryKey: ['connection_configs'] });
       toast.success('Conexão removida');
     },
+    onError: () => toast.error('Erro ao remover conexão'),
   });
 
   const toggleActive = useMutation({
@@ -105,6 +109,7 @@ export function useConnections() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['connection_configs'] }),
+    onError: () => toast.error('Erro ao atualizar status da conexão'),
   });
 
   const test = useMutation({
@@ -128,6 +133,7 @@ export function useConnectionTestLogs(connectionId: string | undefined) {
   return useQuery({
     queryKey: ['connection_test_logs', connectionId],
     enabled: !!connectionId,
+    staleTime: 5 * 60_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('connection_test_logs')

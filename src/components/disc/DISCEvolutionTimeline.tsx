@@ -59,18 +59,22 @@ const DISCEvolutionTimeline: React.FC<DISCEvolutionTimelineProps> = ({
   const [viewMode, setViewMode] = useState<'line' | 'area'>('area');
 
   useEffect(() => {
-    const fetchHistory = async () => {
-      if (!user || !contactId) return;
+    if (!user || !contactId) return;
+    const currentUser = user;
+    let cancelled = false;
 
+    const fetchHistory = async () => {
       setLoading(true);
       try {
         const { data: history, error } = await supabase
           .from('disc_analysis_history')
           .select('*')
           .eq('contact_id', contactId)
+          .eq('user_id', currentUser.id)
           .order('analyzed_at', { ascending: true })
           .limit(50);
 
+        if (cancelled) return;
         if (error) throw error;
 
         const chartData: TimelineDataPoint[] = (history || []).map(h => ({
@@ -90,14 +94,16 @@ const DISCEvolutionTimeline: React.FC<DISCEvolutionTimelineProps> = ({
           setSelectedPoint(chartData[chartData.length - 1]);
         }
       } catch (error) {
+        if (cancelled) return;
         const msg = error instanceof Error ? error.message : 'Erro desconhecido';
         logger.error('Error fetching DISC history:', { error: msg });
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchHistory();
+    return () => { cancelled = true; };
   }, [user, contactId]);
 
   const getTrend = (dimension: 'D' | 'I' | 'S' | 'C'): 'up' | 'down' | 'stable' => {

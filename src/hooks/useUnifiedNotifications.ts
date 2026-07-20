@@ -24,6 +24,7 @@ export function useUnifiedNotifications() {
     enabled: !!user?.id,
     staleTime: 30_000,
     refetchInterval: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<UnifiedNotification[]> => {
       const uid = user!.id;
       const [alertsRes, churnRes, npsRes] = await Promise.all([

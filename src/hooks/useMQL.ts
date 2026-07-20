@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export interface MQLCriteria {
@@ -29,13 +30,14 @@ export interface MQLClassification {
 }
 
 export function useMQLCriteria() {
+  const { user } = useAuth();
   const qc = useQueryClient();
-  const KEY = ['mql-criteria'];
+  const KEY = ['mql-criteria', user?.id];
 
   const { data: criteria = [], isLoading } = useQuery({
     queryKey: KEY,
+    enabled: !!user,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase.from('mql_criteria').select('*').eq('user_id', user.id).order('priority', { ascending: false });
       if (error) throw error;
@@ -46,7 +48,6 @@ export function useMQLCriteria() {
 
   const upsert = useMutation({
     mutationFn: async (input: Partial<MQLCriteria> & { name: string }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       if (input.id) {
         const { error } = await supabase.from('mql_criteria').update(input as never).eq('id', input.id);
@@ -66,16 +67,18 @@ export function useMQLCriteria() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
+    onError: () => toast.error('Erro ao remover critério'),
   });
 
   return { criteria, isLoading, upsert, remove };
 }
 
 export function useMQLClassifications() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['mql-classifications'],
+    queryKey: ['mql-classifications', user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase
         .from('mql_classifications')

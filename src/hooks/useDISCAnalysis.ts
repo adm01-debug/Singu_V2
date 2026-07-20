@@ -136,10 +136,9 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
         ? `Perfil ${profileInfo.name} (${primary}${secondarySuffix}): ${profileInfo.shortDescription}`
         : `Perfil primário identificado: ${primary}`;
 
-      // Save to database
-      const { data, error } = await supabase
-        .from('disc_analysis_history')
-        .insert({
+      // Save analysis + fetch contact behavior in parallel (no dependency between them)
+      const [{ data, error }, { data: contactData }] = await Promise.all([
+        supabase.from('disc_analysis_history').insert({
           user_id: user.id,
           contact_id: contactId,
           interaction_id: interactionId || null,
@@ -157,9 +156,9 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
           behavior_indicators: behaviorIndicators,
           analyzed_text: combinedText.slice(0, 5000),
           profile_summary: summary
-        })
-        .select()
-        .maybeSingle();
+        }).select().maybeSingle(),
+        supabase.from('contacts').select('behavior').eq('id', contactId).maybeSingle(),
+      ]);
 
       if (error) throw error;
       if (!data) throw new Error('Falha ao salvar análise DISC');
@@ -189,13 +188,6 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
 
       setLatestAnalysis(record);
       setAnalysisHistory(prev => [record, ...prev]);
-
-      // Update contact behavior with new DISC profile
-      const { data: contactData } = await supabase
-        .from('contacts')
-        .select('behavior')
-        .eq('id', contactId)
-        .maybeSingle();
 
       const currentBehavior = (contactData?.behavior as Record<string, unknown>) || {};
       await supabase
@@ -415,19 +407,11 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
     if (!user) return;
 
     try {
-      // Fetch all contacts with behavior
-      const { data: contacts } = await supabase
-        .from('contacts')
-        .select('id, behavior, relationship_score')
-        .eq('user_id', user.id);
-
-      // Fetch recent analyses
-      const { data: recentAnalyses } = await supabase
-        .from('disc_analysis_history')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('analyzed_at', { ascending: false })
-        .limit(10);
+      // Both queries are independent — fetch in parallel
+      const [{ data: contacts }, { data: recentAnalyses }] = await Promise.all([
+        supabase.from('contacts').select('id, behavior, relationship_score').eq('user_id', user.id),
+        supabase.from('disc_analysis_history').select('*').eq('user_id', user.id).order('analyzed_at', { ascending: false }).limit(10),
+      ]);
 
       // Calculate distributions
       const profileCounts = { D: 0, I: 0, S: 0, C: 0 };

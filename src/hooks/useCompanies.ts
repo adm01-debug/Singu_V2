@@ -274,7 +274,7 @@ export function useCompanies(options?: { enabled?: boolean }) {
   const [searchTerm, setSearchTerm] = useState('');
   const externalEnabled = options?.enabled ?? true;
 
-  const queryKey = ['companies', searchTerm || '__all__'];
+  const queryKey = ['companies', searchTerm || '__all__', user?.id];
 
   const { data, isLoading: loading, isFetching } = useQuery({
     queryKey,
@@ -286,7 +286,7 @@ export function useCompanies(options?: { enabled?: boolean }) {
   });
 
   // Background-load remaining companies — deferred to avoid blocking initial render
-  const remainingKey = ['companies-remaining', searchTerm || '__all__'];
+  const remainingKey = ['companies-remaining', searchTerm || '__all__', user?.id];
   const { data: remainingCompanies } = useQuery({
     queryKey: remainingKey,
     queryFn: () => fetchRemainingCompanies(searchTerm || undefined),

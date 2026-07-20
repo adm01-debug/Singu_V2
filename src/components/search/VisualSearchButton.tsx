@@ -14,6 +14,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 type VisualResult = {
   id: string;
@@ -103,7 +104,7 @@ export function VisualSearchButton({
         toast.success(`${data.results.length} produto(s) similar(es) encontrado(s).`);
       }
     } catch (e) {
-      console.error("Visual search failed:", e);
+      logger.error("Visual search failed:", e);
       const msg = e instanceof Error ? e.message : "Erro na busca visual";
       toast.error(msg);
     } finally {

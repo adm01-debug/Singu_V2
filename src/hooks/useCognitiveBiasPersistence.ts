@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
 import { BiasAnalysisResult, CognitiveBiasType, BiasCategory, DetectedBias } from '@/types/cognitive-biases';
 import { Json } from '@/integrations/supabase/types';
 
@@ -51,7 +52,8 @@ export function useCognitiveBiasPersistence(contactId: string) {
 
   // Fetch bias history for a contact
   const { data: history, isLoading, error } = useQuery({
-    queryKey: ['bias-history', contactId],
+    queryKey: ['bias-history', contactId, user?.id],
+    staleTime: 30 * 60_000,
     queryFn: async (): Promise<BiasHistoryRecord[]> => {
       if (!user?.id) return [];
 
@@ -109,8 +111,9 @@ export function useCognitiveBiasPersistence(contactId: string) {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['bias-history', contactId] });
-    }
+      queryClient.invalidateQueries({ queryKey: ['bias-history', contactId, user?.id] });
+    },
+    onError: () => toast.error('Erro ao salvar análise de viés cognitivo'),
   });
 
   // Calculate evolution data

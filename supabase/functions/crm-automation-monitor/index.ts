@@ -41,28 +41,28 @@ Deno.serve(async (req) => {
 
     result = { scoreResult };
 
-    // Log the automation execution
-    await supabase.from('crm_automation_logs').insert({
+    // Log the automation execution (fire-and-forget — response uses in-memory result)
+    supabase.from('crm_automation_logs').insert({
       user_id: userId,
       contact_id,
       automation_name: 'score_recalculation',
       status: 'success',
       execution_time_ms: Date.now() - start,
       result: result
-    });
+    }).catch((e: unknown) => console.error("crm_automation_logs insert error:", e));
 
     return jsonOk({ success: true, result }, req);
 
   } catch (error) {
     console.error("Automation Log Error:", error);
-    
-    await supabase.from('crm_automation_logs').insert({
+
+    supabase.from('crm_automation_logs').insert({
       user_id: userId,
       automation_name: 'score_recalculation_failed',
       status: 'failed',
       result: { error: error instanceof Error ? error.message : String(error) },
       execution_time_ms: Date.now() - start
-    });
+    }).catch((e: unknown) => console.error("crm_automation_logs error insert error:", e));
 
     return jsonError("Internal server error", 500);
   }

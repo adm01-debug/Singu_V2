@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export interface DocumentTemplate {
   id: string;
@@ -65,12 +67,13 @@ export function renderMergeFields(html: string, data: Record<string, string>): s
 }
 
 export function useDocumentTemplates() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   const { data: templates = [], isLoading } = useQuery({
-    queryKey: ['document_templates'],
+    queryKey: ['document_templates', user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase
         .from('document_templates')
@@ -88,7 +91,6 @@ export function useDocumentTemplates() {
 
   const create = useMutation({
     mutationFn: async (input: Partial<DocumentTemplate>) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const merge_fields = extractMergeFields(input.content_html || '');
       const { error } = await supabase.from('document_templates').insert({
@@ -142,12 +144,12 @@ export function useDocumentTemplates() {
 }
 
 export function useDocumentSignatures() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   const { data: signatures = [], isLoading } = useQuery({
     queryKey: ['document_signatures'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase
         .from('document_signatures')
@@ -171,14 +173,12 @@ export function useDocumentSignatures() {
       merge_data: Record<string, string>;
       expires_in_days?: number;
     }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const expires_at = input.expires_in_days
         ? new Date(Date.now() + input.expires_in_days * 86_400_000).toISOString()
         : null;
-      const { data, error } = await supabase
-        .from('document_signatures')
-        .insert({
+      const [{ data, error }, { data: tpl }] = await Promise.all([
+        supabase.from('document_signatures').insert({
           user_id: user.id,
           template_id: input.template_id ?? null,
           contact_id: input.contact_id ?? null,
@@ -188,24 +188,18 @@ export function useDocumentSignatures() {
           rendered_html: input.rendered_html,
           merge_data: input.merge_data,
           expires_at,
-        } as never)
-        .select()
-        .maybeSingle();
+        } as never).select().maybeSingle(),
+        input.template_id
+          ? supabase.from('document_templates').select('usage_count').eq('id', input.template_id).maybeSingle()
+          : Promise.resolve({ data: null, error: null }),
+      ]);
       if (error) throw error;
       if (!data) throw new Error("Falha ao registrar assinatura");
-      if (input.template_id) {
-        // Increment usage_count (best-effort)
-        const { data: tpl } = await supabase
-          .from('document_templates')
-          .select('usage_count')
+      if (tpl && input.template_id) {
+        void supabase.from('document_templates')
+          .update({ usage_count: (tpl.usage_count ?? 0) + 1 } as never)
           .eq('id', input.template_id)
-          .maybeSingle();
-        if (tpl) {
-          await supabase
-            .from('document_templates')
-            .update({ usage_count: (tpl.usage_count ?? 0) + 1 } as never)
-            .eq('id', input.template_id);
-        }
+          .catch((e: unknown) => logger.error('template usage_count update failed:', e));
       }
       return data as unknown as DocumentSignature;
     },

@@ -51,16 +51,18 @@ Deno.serve(async (req) => {
       }
 
       if (Object.keys(update).length > 0) {
-        await supabase.from('sequence_send_log').update(update).eq('id', log.id);
-        await supabase.from('sequence_events').insert({
-          enrollment_id: log.enrollment_id,
-          sequence_id: log.sequence_id,
-          contact_id: log.contact_id,
-          user_id: log.user_id,
-          step_order: log.step_order,
-          event_type: action === 'open' ? 'opened' : 'clicked',
-          metadata: { url: target ?? null },
-        });
+        await Promise.all([
+          supabase.from('sequence_send_log').update(update).eq('id', log.id),
+          supabase.from('sequence_events').insert({
+            enrollment_id: log.enrollment_id,
+            sequence_id: log.sequence_id,
+            contact_id: log.contact_id,
+            user_id: log.user_id,
+            step_order: log.step_order,
+            event_type: action === 'open' ? 'opened' : 'clicked',
+            metadata: { url: target ?? null },
+          }),
+        ]);
       }
     }
   } catch (e) {

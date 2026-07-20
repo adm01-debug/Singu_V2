@@ -1,4 +1,5 @@
  import { useMemo } from 'react';
+import { useAuth } from '@/hooks/useAuth';
  import { useForm } from 'react-hook-form';
  import { zodResolver } from '@hookform/resolvers/zod';
  import { z } from 'zod';
@@ -87,15 +88,16 @@ const initiatedByOptions = [
   { value: 'them', label: 'Contato' },
 ];
 
-export function InteractionForm({ 
-  interaction, 
-  contacts, 
+export function InteractionForm({
+  interaction,
+  contacts,
   defaultContactId,
   defaultCompanyId,
-  onSubmit, 
-  onCancel, 
-  isSubmitting 
+  onSubmit,
+  onCancel,
+  isSubmitting
 }: InteractionFormProps) {
+  const { user } = useAuth();
   const form = useForm<InteractionFormData>({
     resolver: zodResolver(interactionSchema),
     mode: 'onBlur',
@@ -162,7 +164,7 @@ export function InteractionForm({
        const fileName = `${Date.now()}-${file.name}`;
        const { data: uploadData, error: uploadError } = await supabase.storage
          .from('interaction-attachments')
-         .upload(`${(await supabase.auth.getUser()).data.user?.id}/${fileName}`, file);
+         .upload(`${user?.id}/${fileName}`, file);
  
        if (uploadError) throw uploadError;
  

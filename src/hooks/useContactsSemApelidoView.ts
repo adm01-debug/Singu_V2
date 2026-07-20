@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { queryExternalData } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface ContactSemApelido {
   contact_id: string;
@@ -20,8 +21,10 @@ export interface ContactSemApelido {
 
 /** Contacts missing nickname — useful for data quality dashboards */
 export function useContactsSemApelido(limit = 20) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['contacts-sem-apelido', limit],
+    queryKey: ['contacts-sem-apelido', limit, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await queryExternalData<ContactSemApelido>({
         table: 'vw_contacts_sem_apelido',

@@ -14,14 +14,17 @@ export function useTemplateHistoryMetrics() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!user) return;
+    const currentUser = user;
+    let cancelled = false;
     async function fetchContactDISC() {
-      if (!user) return;
       try {
         const { data: contacts, error } = await supabase
           .from('contacts')
           .select('id, first_name, last_name, behavior')
-          .eq('user_id', user.id);
+          .eq('user_id', currentUser.id);
 
+        if (cancelled) return;
         if (error) throw error;
 
         const discMap = new Map<string, ContactDISCInfo>();
@@ -37,13 +40,15 @@ export function useTemplateHistoryMetrics() {
         });
         setContactDISCMap(discMap);
       } catch (error) {
+        if (cancelled) return;
         const msg = error instanceof Error ? error.message : 'Unknown error';
         logger.error('Error fetching contact DISC profiles:', { error: msg });
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     }
     fetchContactDISC();
+    return () => { cancelled = true; };
   }, [user]);
 
   const profileMetrics = useMemo(() => {

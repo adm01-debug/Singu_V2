@@ -12,6 +12,8 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
 
   useEffect(() => {
     if (!user) return;
+    const currentUser = user;
+    let cancelled = false;
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -26,7 +28,7 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
         let query = supabase
           .from('trigger_usage_history')
           .select('id, trigger_type, result, effectiveness_rating, used_at, contact_id')
-          .eq('user_id', user.id)
+          .eq('user_id', currentUser.id)
           .order('used_at', { ascending: false });
 
         if (dateFilter) query = query.gte('used_at', dateFilter);
@@ -37,7 +39,7 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
         const { data: contacts, error: contactsError } = await supabase
           .from('contacts')
           .select('id, behavior')
-          .eq('user_id', user.id);
+          .eq('user_id', currentUser.id);
         if (contactsError) throw contactsError;
 
         const contactDISCMap = new Map<string, DISCProfile | null>();
@@ -46,6 +48,7 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
           contactDISCMap.set(contact.id, (behavior?.discProfile as DISCProfile) || null);
         });
 
+        if (cancelled) return;
         setUsageData((usageHistory || []).map((usage) => ({
           id: usage.id,
           trigger_type: usage.trigger_type,
@@ -58,10 +61,11 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
         const msg = error instanceof Error ? error.message : 'Unknown error';
         logger.error('Error fetching analytics data:', { error: msg });
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
     fetchData();
+    return () => { cancelled = true; };
   }, [user, periodFilter]);
 
   const stats = useMemo(() => {

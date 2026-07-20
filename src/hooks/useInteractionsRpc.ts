@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 
 export interface InteractionHistoryItem {
   id: string;
@@ -60,10 +62,11 @@ export function useInteractionHistory(companyId?: string, tipo?: string, limit =
 }
 
 export function usePendingFollowups(limit = 20) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['pending-followups', limit],
+    queryKey: ['pending-followups', limit, user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<PendingFollowup[]>(
         'get_pending_followups',
@@ -91,6 +94,7 @@ export function useCompleteFollowup() {
       queryClient.invalidateQueries({ queryKey: ['pending-followups'] });
       queryClient.invalidateQueries({ queryKey: ['interaction-history'] });
     },
+    onError: () => toast.error('Erro ao concluir follow-up'),
   });
 }
 
@@ -116,12 +120,15 @@ export function useCreateQuickInteraction() {
       queryClient.invalidateQueries({ queryKey: ['pending-followups'] });
       queryClient.invalidateQueries({ queryKey: ['complete-dashboard'] });
     },
+    onError: () => toast.error('Erro ao registrar interação'),
   });
 }
 
 export function useActivityHeatmap(days = 30) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['activity-heatmap', days],
+    queryKey: ['activity-heatmap', days, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<ActivityHeatmapData[]>(
         'get_activity_heatmap',

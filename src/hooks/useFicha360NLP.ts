@@ -13,12 +13,14 @@ export function useFicha360NLP(contactId?: string) {
     queryKey: ['vak-profile', contactId],
     queryFn: () => contactId ? getContactVAKProfile(contactId) : null,
     enabled: !!user && !!contactId,
+    staleTime: 30 * 60_000,
   });
 
   const { data: metaprogramProfile, isLoading: loadingMetaprograms, refetch: refetchMetaprograms } = useQuery({
     queryKey: ['metaprogram-profile', contactId],
     queryFn: () => contactId ? getContactMetaprogramProfile(contactId) : null,
     enabled: !!user && !!contactId,
+    staleTime: 30 * 60_000,
   });
 
   const { data: latestReframings = [], isLoading: loadingReframings } = useQuery({
@@ -35,6 +37,7 @@ export function useFicha360NLP(contactId?: string) {
       return data;
     },
     enabled: !!user && !!contactId,
+    staleTime: 30 * 60_000,
   });
 
   return {

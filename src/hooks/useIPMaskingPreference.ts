@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { logger } from '@/lib/logger';
 
 const STORAGE_KEY = 'singu:mask-ips';
 const CUSTOM_EVENT_KEY = 'singu:mask-ips:changed';
@@ -15,7 +16,7 @@ function read(): boolean {
     return val === '1';
   } catch (err) {
     // In some environments, accessing localStorage might throw even without reading/writing
-    console.warn('[useIPMaskingPreference] Failed to read localStorage:', err);
+    logger.warn('[useIPMaskingPreference] Failed to read localStorage:', err);
     return false;
   }
 }
@@ -31,7 +32,7 @@ function write(value: boolean) {
     window.localStorage.setItem(STORAGE_KEY, strValue);
   } catch (err) {
     // Private mode or quota exceeded should not crash the app
-    console.warn('[useIPMaskingPreference] Failed to persist preference:', err);
+    logger.warn('[useIPMaskingPreference] Failed to persist preference:', err);
   }
 
   // Notify other hook instances IN THE SAME tab via explicit CustomEvent.
@@ -68,7 +69,7 @@ export function useIPMaskingPreference() {
       window.addEventListener('storage', onStorage);
       window.addEventListener(CUSTOM_EVENT_KEY, onCustomChange);
     } catch (err) {
-      console.warn('[useIPMaskingPreference] Failed to attach event listeners:', err);
+      logger.warn('[useIPMaskingPreference] Failed to attach event listeners:', err);
     }
     
     return () => {

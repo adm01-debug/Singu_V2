@@ -1,5 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 
 // ── Types ──────────────────────────────────────────
 
@@ -72,8 +74,10 @@ interface RecordsFilter {
 // ── Records ──────────────────────────────────────────
 
 export function useWinLossRecords(filters: RecordsFilter = {}) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['win-loss-records', filters],
+    queryKey: ['win-loss-records', filters, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       let q = supabase
         .from('win_loss_records')
@@ -109,10 +113,10 @@ export function useWinLossRecordByDeal(dealId: string | null | undefined) {
 }
 
 export function useUpsertWinLossRecord() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (payload: Partial<WinLossRecord> & { deal_id: string; outcome: WinLossOutcome }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await supabase
         .from('win_loss_records')
@@ -128,6 +132,7 @@ export function useUpsertWinLossRecord() {
       qc.invalidateQueries({ queryKey: ['win-loss-metrics'] });
       qc.invalidateQueries({ queryKey: ['win-loss-record-by-deal'] });
     },
+    onError: () => toast.error('Erro ao registrar resultado'),
   });
 }
 
@@ -142,14 +147,17 @@ export function useDeleteWinLossRecord() {
       qc.invalidateQueries({ queryKey: ['win-loss-records'] });
       qc.invalidateQueries({ queryKey: ['win-loss-metrics'] });
     },
+    onError: () => toast.error('Erro ao remover registro'),
   });
 }
 
 // ── Reasons ──────────────────────────────────────────
 
 export function useWinLossReasons(outcome?: ReasonOutcomeType) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['win-loss-reasons', outcome],
+    queryKey: ['win-loss-reasons', outcome, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       let q = supabase
         .from('win_loss_reasons')
@@ -166,10 +174,10 @@ export function useWinLossReasons(outcome?: ReasonOutcomeType) {
 }
 
 export function useUpsertReason() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (r: Partial<WinLossReason> & { category: ReasonCategory; label: string; outcome_type: ReasonOutcomeType }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await supabase
         .from('win_loss_reasons')
@@ -181,6 +189,7 @@ export function useUpsertReason() {
       return data as WinLossReason;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-reasons'] }),
+    onError: () => toast.error('Erro ao salvar motivo'),
   });
 }
 
@@ -192,27 +201,31 @@ export function useDeleteReason() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-reasons'] }),
+    onError: () => toast.error('Erro ao remover motivo'),
   });
 }
 
 export function useSeedReasons() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { error } = await (supabase.rpc as unknown as (fn: string, args: Record<string, unknown>) => Promise<{ error: Error | null }>)('seed_win_loss_defaults', { _user_id: user.id });
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-reasons'] }),
+    onError: () => toast.error('Erro ao configurar motivos padrão'),
   });
 }
 
 // ── Competitors ──────────────────────────────────────
 
 export function useCompetitors() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['competitors'],
+    queryKey: ['competitors', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('competitors')
@@ -227,10 +240,10 @@ export function useCompetitors() {
 }
 
 export function useUpsertCompetitor() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (c: Partial<Competitor> & { name: string }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await supabase
         .from('competitors')
@@ -242,6 +255,7 @@ export function useUpsertCompetitor() {
       return data as Competitor;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['competitors'] }),
+    onError: () => toast.error('Erro ao salvar concorrente'),
   });
 }
 
@@ -253,6 +267,7 @@ export function useDeleteCompetitor() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['competitors'] }),
+    onError: () => toast.error('Erro ao remover concorrente'),
   });
 }
 
@@ -273,8 +288,10 @@ export interface WinLossMetrics {
 }
 
 export function useWinLossMetrics(periodDays = 90) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['win-loss-metrics', periodDays],
+    queryKey: ['win-loss-metrics', periodDays, user?.id],
+    enabled: !!user,
     queryFn: async (): Promise<WinLossMetrics> => {
       const fromDate = new Date(Date.now() - periodDays * 86400_000).toISOString();
       const { data: records, error } = await supabase
@@ -304,14 +321,6 @@ export function useWinLossMetrics(periodDays = 90) {
         reasonMap.set(r.primary_reason_id, cur);
       });
       const reasonIds = [...reasonMap.keys()];
-      const { data: reasons } = reasonIds.length > 0
-        ? await supabase.from('win_loss_reasons').select('id, label').in('id', reasonIds)
-        : { data: [] };
-      const reasonLabels = new Map((reasons ?? []).map((r: { id: string; label: string }) => [r.id, r.label]));
-      const reasonDist = [...reasonMap.entries()].map(([id, c]) => ({
-        id, label: reasonLabels.get(id) ?? '?', won: c.won, lost: c.lost,
-      })).sort((a, b) => (b.won + b.lost) - (a.won + a.lost));
-      const topLoss = reasonDist.filter(r => r.lost > 0).sort((a, b) => b.lost - a.lost)[0];
 
       // Competitor distribution
       const compMap = new Map<string, { won: number; lost: number }>();
@@ -323,9 +332,17 @@ export function useWinLossMetrics(periodDays = 90) {
         compMap.set(r.competitor_id, cur);
       });
       const compIds = [...compMap.keys()];
-      const { data: comps } = compIds.length > 0
-        ? await supabase.from('competitors').select('id, name').in('id', compIds)
-        : { data: [] };
+
+      const [{ data: reasons }, { data: comps }] = await Promise.all([
+        reasonIds.length > 0 ? supabase.from('win_loss_reasons').select('id, label').in('id', reasonIds) : Promise.resolve({ data: [] }),
+        compIds.length > 0 ? supabase.from('competitors').select('id, name').in('id', compIds) : Promise.resolve({ data: [] }),
+      ]);
+
+      const reasonLabels = new Map((reasons ?? []).map((r: { id: string; label: string }) => [r.id, r.label]));
+      const reasonDist = [...reasonMap.entries()].map(([id, c]) => ({
+        id, label: reasonLabels.get(id) ?? '?', won: c.won, lost: c.lost,
+      })).sort((a, b) => (b.won + b.lost) - (a.won + a.lost));
+      const topLoss = reasonDist.filter(r => r.lost > 0).sort((a, b) => b.lost - a.lost)[0];
       const compNames = new Map((comps ?? []).map((c: { id: string; name: string }) => [c.id, c.name]));
       const compDist = [...compMap.entries()].map(([id, c]) => {
         const total = c.won + c.lost;
@@ -357,8 +374,10 @@ export function useWinLossMetrics(periodDays = 90) {
 // ── Insights ────────────────────────────────────────
 
 export function useWinLossInsights() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['win-loss-insights'],
+    queryKey: ['win-loss-insights', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('win_loss_insights')
@@ -383,6 +402,7 @@ export function useGenerateInsights() {
       return data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-insights'] }),
+    onError: () => toast.error('Erro ao gerar insights'),
   });
 }
 
@@ -394,5 +414,6 @@ export function useDeleteInsight() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-insights'] }),
+    onError: () => toast.error('Erro ao remover insight'),
   });
 }

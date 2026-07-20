@@ -36,6 +36,7 @@ import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 const STAGES = [
   { id: 'lead', name: 'Novo Lead', probability: 10 },
@@ -93,29 +94,25 @@ export function DealDialog({ open, onOpenChange, initialStage = 'lead' }: Props)
   }, [currentStage, form]);
 
   useEffect(() => {
-    if (open) {
-      fetchEntities();
-    }
+    if (!open) return;
+    let cancelled = false;
+    const fetchEntities = async () => {
+      setIsLoadingEntities(true);
+      try {
+        const [compRes, contRes] = await Promise.all([
+          supabase.from('companies').select('id, name').limit(100),
+          supabase.from('contacts').select('id, first_name, last_name').limit(100),
+        ]);
+        if (cancelled) return;
+        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
+        if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
+      } finally {
+        if (!cancelled) setIsLoadingEntities(false);
+      }
+    };
+    fetchEntities();
+    return () => { cancelled = true; };
   }, [open]);
-
-  const fetchEntities = async () => {
-    setIsLoadingEntities(true);
-    try {
-      const [compRes, contRes] = await Promise.all([
-        supabase.from('companies').select('id, name').limit(100),
-        supabase.from('contacts').select('id, first_name, last_name').limit(100),
-      ]);
-
-      if (compRes.data) {
-        setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
-      }
-      if (contRes.data) {
-        setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
-      }
-    } finally {
-      setIsLoadingEntities(false);
-    }
-  };
 
   const onSubmit = async (values: DealFormValues) => {
     try {
@@ -133,7 +130,7 @@ export function DealDialog({ open, onOpenChange, initialStage = 'lead' }: Props)
       onOpenChange(false);
       form.reset();
     } catch (error) {
-      console.error('Error creating deal:', error);
+      logger.error('Error creating deal:', error);
       toast.error('Erro ao criar deal. Verifique os campos e tente novamente.');
     }
   };

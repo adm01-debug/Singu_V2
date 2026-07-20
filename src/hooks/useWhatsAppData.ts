@@ -26,6 +26,7 @@ export function useWhatsAppData(contactId?: string) {
     enabled: !!user,
     staleTime: 2 * 60 * 1000,
     gcTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   return {

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export interface VisitCheckin {
@@ -20,14 +21,14 @@ export interface VisitCheckin {
 }
 
 export function useVisitCheckins(entityId?: string, entityType?: 'contact' | 'company') {
+  const { user } = useAuth();
   const qc = useQueryClient();
-  const key = ['visit-checkins', entityId, entityType];
+  const key = ['visit-checkins', entityId, entityType, user?.id];
 
   const { data: checkins = [], isLoading } = useQuery({
     queryKey: key,
+    enabled: !!user,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return [];
       let query = supabase.from('visit_checkins').select('*').eq('user_id', user.id).order('check_in_at', { ascending: false });
       if (entityId && entityType === 'contact') query = query.eq('contact_id', entityId);
       if (entityId && entityType === 'company') query = query.eq('company_id', entityId);
@@ -40,7 +41,6 @@ export function useVisitCheckins(entityId?: string, entityType?: 'contact' | 'co
 
   const checkIn = useMutation({
     mutationFn: async (input: { contactId?: string; companyId?: string; notes?: string; visitType?: string }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
 
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {

@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 
 // ── Types ──────────────────────────────────────────
 
@@ -69,10 +71,11 @@ export interface VelocityMetrics {
 // ── Hooks ──────────────────────────────────────────
 
 export function useDealsPipeline() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['deals-pipeline'],
+    queryKey: ['deals-pipeline', user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<PipelineDeal[]>(
         'get_deals_pipeline',
@@ -86,10 +89,11 @@ export function useDealsPipeline() {
 }
 
 export function usePipelineSummary() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['pipeline-summary'],
+    queryKey: ['pipeline-summary', user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<PipelineSummary>(
         'get_pipeline_summary',
@@ -103,8 +107,10 @@ export function usePipelineSummary() {
 }
 
 export function useWeightedForecast() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['weighted-forecast'],
+    queryKey: ['weighted-forecast', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<WeightedForecast[]>(
         'get_weighted_forecast',
@@ -118,8 +124,10 @@ export function useWeightedForecast() {
 }
 
 export function useStageVelocity() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['stage-velocity'],
+    queryKey: ['stage-velocity', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<StageVelocity[]>(
         'get_stage_velocity',
@@ -133,8 +141,10 @@ export function useStageVelocity() {
 }
 
 export function useStalledDeals(days = 14) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['stalled-deals', days],
+    queryKey: ['stalled-deals', days, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<StalledDeal[]>(
         'get_stalled_deals',
@@ -148,8 +158,10 @@ export function useStalledDeals(days = 14) {
 }
 
 export function useVelocityMetrics() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['velocity-metrics'],
+    queryKey: ['velocity-metrics', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<VelocityMetrics>(
         'get_velocity_metrics',
@@ -227,5 +239,6 @@ export function useCreateDeal() {
       queryClient.invalidateQueries({ queryKey: ['deals-pipeline'] });
       queryClient.invalidateQueries({ queryKey: ['pipeline-summary'] });
     },
+    onError: () => toast.error('Erro ao criar negócio'),
   });
 }

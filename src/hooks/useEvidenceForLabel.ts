@@ -37,6 +37,7 @@ export function useEvidenceForLabel(
     queryKey: ['evidence-for-label', contactId, label, perSourceLimit],
     enabled: !!contactId && !!label && label.trim().length >= 2,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<EvidenceHit[]> => {
       const term = label!.trim();
       const like = `%${ilikeEscape(term)}%`;

@@ -8,7 +8,7 @@ export function usePasswordResetRequests() {
   const qc = useQueryClient();
 
   const { data: requests = [], isLoading } = useQuery({
-    queryKey: ['password-reset-requests'],
+    queryKey: ['password-reset-requests', user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('password_reset_requests')

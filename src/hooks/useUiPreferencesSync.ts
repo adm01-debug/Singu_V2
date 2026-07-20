@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 
 /**
  * Hook genérico para sincronizar preferências de UI por escopo no perfil do
@@ -69,21 +71,21 @@ export function useUiPreferencesSync<T extends Record<string, unknown>>(
   opts: UseUiPreferencesSyncOptions<T>,
 ) {
   const { scope, current, defaults, sanitize, hydrate, hasUrlOverride, debounceMs = 600 } = opts;
+  const { user } = useAuth();
   const qc = useQueryClient();
   const hydratedRef = useRef(false);
   const lastSavedRef = useRef<T | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const QK = ['user-ui-preferences', scope] as const;
+  const QK = ['user-ui-preferences', scope, user?.id] as const;
 
   const { data: remote } = useQuery({
     queryKey: QK,
+    enabled: !!user,
     queryFn: async (): Promise<T> => {
-      const { data: auth } = await supabase.auth.getUser();
-      if (!auth?.user?.id) return { ...defaults };
       const { data, error } = await supabase
         .from('user_ui_preferences')
         .select('preferences')
-        .eq('user_id', auth.user.id)
+        .eq('user_id', user!.id)
         .eq('scope', scope)
         .maybeSingle();
       if (error) throw error;
@@ -94,8 +96,7 @@ export function useUiPreferencesSync<T extends Record<string, unknown>>(
 
   const upsert = useMutation({
     mutationFn: async (prefs: T) => {
-      const { data: auth } = await supabase.auth.getUser();
-      const userId = auth?.user?.id;
+      const userId = user?.id;
       if (!userId) return;
       const { error } = await supabase
         .from('user_ui_preferences')
@@ -109,6 +110,7 @@ export function useUiPreferencesSync<T extends Record<string, unknown>>(
       lastSavedRef.current = vars;
       qc.setQueryData<T>(QK, vars);
     },
+    onError: () => toast.error('Erro ao salvar preferências'),
   });
 
   // Hidratação one-shot. Roda só após `remote` chegar, e respeita URL.

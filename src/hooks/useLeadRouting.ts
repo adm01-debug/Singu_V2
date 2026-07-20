@@ -9,12 +9,13 @@ import type {
   SalesTeamMember,
 } from '@/types/leadRouting';
 
-const RULES_KEY = ['lead-routing-rules'];
-const ASSIGNMENTS_KEY = ['lead-assignments'];
+const RULES_KEY_BASE = ['lead-routing-rules'];
+const ASSIGNMENTS_KEY_BASE = ['lead-assignments'];
 
 // ── Routing Rules ──
 export function useRoutingRules() {
   const { user } = useAuth();
+  const RULES_KEY = [...RULES_KEY_BASE, user?.id];
   return useQuery({
     queryKey: RULES_KEY,
     queryFn: async (): Promise<LeadRoutingRule[]> => {
@@ -47,7 +48,7 @@ export function useCreateRoutingRule() {
       return data;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: RULES_KEY });
+      qc.invalidateQueries({ queryKey: RULES_KEY_BASE });
       toast.success('Regra criada');
     },
     onError: () => toast.error('Erro ao criar regra'),
@@ -69,7 +70,7 @@ export function useUpdateRoutingRule() {
       return data;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: RULES_KEY });
+      qc.invalidateQueries({ queryKey: RULES_KEY_BASE });
       toast.success('Regra atualizada');
     },
     onError: () => toast.error('Erro ao atualizar regra'),
@@ -87,7 +88,7 @@ export function useDeleteRoutingRule() {
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: RULES_KEY });
+      qc.invalidateQueries({ queryKey: RULES_KEY_BASE });
       toast.success('Regra removida');
     },
     onError: () => toast.error('Erro ao remover regra'),
@@ -98,7 +99,7 @@ export function useDeleteRoutingRule() {
 export function useLeadAssignments(status?: string) {
   const { user } = useAuth();
   return useQuery({
-    queryKey: [...ASSIGNMENTS_KEY, status],
+    queryKey: [...ASSIGNMENTS_KEY_BASE, status, user?.id],
     queryFn: async (): Promise<LeadAssignment[]> => {
       if (!user) return [];
       let query = supabase
@@ -152,10 +153,8 @@ export function useDistributeLead() {
 
       const selected = sorted[0];
 
-      // Create assignment
-      const { error: assignError } = await supabase
-        .from('lead_assignments')
-        .insert({
+      const [{ error: assignError }, { error: updateError }] = await Promise.all([
+        supabase.from('lead_assignments').insert({
           user_id: user.id,
           contact_id: contactId ?? null,
           company_id: companyId ?? null,
@@ -165,24 +164,20 @@ export function useDistributeLead() {
           status: 'active',
           routing_rule_id: ruleId ?? null,
           sla_deadline: new Date(Date.now() + 4 * 3600_000).toISOString(),
-        } as never);
-      if (assignError) throw assignError;
-
-      // Update member counts
-      const { error: updateError } = await supabase
-        .from('sales_team_members')
-        .update({
+        } as never),
+        supabase.from('sales_team_members').update({
           current_lead_count: selected.current_lead_count + 1,
           leads_today: selected.leads_today + 1,
           last_assigned_at: new Date().toISOString(),
-        } as never)
-        .eq('id', selected.id);
+        } as never).eq('id', selected.id),
+      ]);
+      if (assignError) throw assignError;
       if (updateError) logger.error('Erro ao atualizar contadores:', updateError);
 
       return selected;
     },
     onSuccess: (member) => {
-      qc.invalidateQueries({ queryKey: ASSIGNMENTS_KEY });
+      qc.invalidateQueries({ queryKey: ASSIGNMENTS_KEY_BASE });
       qc.invalidateQueries({ queryKey: ['sales-team-members'] });
       toast.success(`Lead distribuído para ${member.name}`);
     },

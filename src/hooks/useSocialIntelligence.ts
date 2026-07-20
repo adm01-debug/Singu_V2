@@ -22,11 +22,14 @@ export function useSocialIntelligence(contactId: string) {
 
       // Sincronização Automática de Hobbies/Interesses baseada no enriquecimento social
       if (behaviorAnalysis?.interests && Array.isArray(behaviorAnalysis.interests)) {
-        const { data: contact } = await supabase.from('contacts').select('interests, hobbies').eq('id', contactId).maybeSingle();
+        const [{ data: contact }, { data: existingPending }] = await Promise.all([
+          supabase.from('contacts').select('interests, hobbies').eq('id', contactId).maybeSingle(),
+          supabase.from('suggested_rapport_intel').select('value').eq('contact_id', contactId).eq('status', 'pending'),
+        ]);
         if (contact) {
           const currentInterests = contact.interests || [];
           const suggestedInterests = behaviorAnalysis.interests.filter(i => !currentInterests.includes(i));
-          
+
           if (suggestedInterests.length > 0) {
             // Em vez de salvar direto, criar sugestões pendentes para o usuário aprovar
             const suggestions = suggestedInterests.map(val => ({
@@ -37,13 +40,6 @@ export function useSocialIntelligence(contactId: string) {
               source: 'linkedin', // Simplificado, poderia vir da análise
               status: 'pending' as const
             }));
-
-            // Evitar duplicatas nas sugestões pendentes
-            const { data: existingPending } = await supabase
-              .from('suggested_rapport_intel')
-              .select('value')
-              .eq('contact_id', contactId)
-              .eq('status', 'pending');
             
             const pendingValues = new Set(existingPending?.map(p => p.value) || []);
             const newSuggestions = suggestions.filter(s => !pendingValues.has(s.value));
@@ -65,15 +61,18 @@ export function useSocialIntelligence(contactId: string) {
     enabled: !!user && !!contactId,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const dismissMutation = useMutation({
     mutationFn: async (eventId: string) => {
-      await supabase.from('social_life_events').update({ dismissed: true }).eq('id', eventId);
+      const { error } = await supabase.from('social_life_events').update({ dismissed: true }).eq('id', eventId);
+      if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['social-intelligence', contactId] });
     },
+    onError: () => toast.error('Erro ao dispensar evento'),
   });
 
    const syncToPsychographic = useMutation({
@@ -106,10 +105,9 @@ export function useSocialIntelligence(contactId: string) {
          ? analysis.communication_style 
          : JSON.stringify(analysis.communication_style);
  
-       // 3. Update or Insert analytical profile
-       const { error: profileError } = await supabase
-         .from('contact_analytical_profiles')
-         .upsert({
+       // 3+4. Update analytical profile and core contact fields in parallel
+       const [{ error: profileError }, { error: contactError }] = await Promise.all([
+         supabase.from('contact_analytical_profiles').upsert({
            contact_id: contactId,
            user_id: user.id,
            preferences,
@@ -117,19 +115,14 @@ export function useSocialIntelligence(contactId: string) {
            communication_style: communicationStyle,
            sentiment_trend: analysis.overall_sentiment,
            last_updated_at: new Date().toISOString()
-         }, { onConflict: 'contact_id' });
- 
-       if (profileError) throw profileError;
- 
-       // 4. Update core contact fields
-       const { error: contactError } = await supabase
-         .from('contacts')
-         .update({
+         }, { onConflict: 'contact_id' }),
+         supabase.from('contacts').update({
            interests: analysis.interests || [],
            notes: `Perfil psicográfico atualizado via IA Social em ${new Date().toLocaleDateString('pt-BR')}`
-         })
-         .eq('id', contactId);
- 
+         }).eq('id', contactId),
+       ]);
+
+       if (profileError) throw profileError;
        if (contactError) throw contactError;
  
        // 5. Trigger offer regeneration (simulation/edge function call)

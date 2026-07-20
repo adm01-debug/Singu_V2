@@ -21,6 +21,8 @@ export function useLuxWebhookConfig() {
 
   const { data: configs = [], isLoading } = useQuery({
     queryKey: ['lux-webhook-config'],
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('lux_webhook_config')
@@ -80,6 +82,7 @@ export function useLuxWebhookConfig() {
       qc.invalidateQueries({ queryKey: ['lux-webhook-config'] });
       toast.success('Status atualizado');
     },
+    onError: () => toast.error('Erro ao atualizar status'),
   });
 
   const testWebhook = useMutation({

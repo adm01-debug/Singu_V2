@@ -65,8 +65,12 @@ function WidgetRenderer({ widgetId }: { widgetId: WidgetId }) {
 
 export default function ReportBuilder() {
   const [layouts, setLayouts] = useState<DashboardLayout[]>(() => {
-    const saved = localStorage.getItem('singu-custom-dashboards');
-    return saved ? JSON.parse(saved) : DEFAULT_LAYOUTS;
+    try {
+      const saved = localStorage.getItem('singu-custom-dashboards');
+      return saved ? (JSON.parse(saved) as DashboardLayout[]) : DEFAULT_LAYOUTS;
+    } catch {
+      return DEFAULT_LAYOUTS;
+    }
   });
   const [activeLayout, setActiveLayout] = useState(0);
   const [isEditing, setIsEditing] = useState(false);

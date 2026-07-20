@@ -109,12 +109,17 @@ Deno.serve(async (req) => {
     }
     const ctx = parsed.data;
 
-    // Pull active playbooks
-    const { data: playbooks, error: pbErr } = await supabase
-      .from("sales_playbooks")
-      .select("*")
-      .eq("active", true)
-      .limit(100);
+    // Parallelize playbooks + battle card (when competitor_mentioned present)
+    const escapedCompetitor = ctx.competitor_mentioned
+      ? ctx.competitor_mentioned.replace(/\\/g, "\\\\").replace(/%/g, "\\%").replace(/_/g, "\\_")
+      : null;
+
+    const [{ data: playbooks, error: pbErr }, { data: battleCard }] = await Promise.all([
+      supabase.from("sales_playbooks").select("*").eq("active", true).limit(100),
+      escapedCompetitor
+        ? supabase.from("battle_cards").select("*").eq("active", true).ilike("competitor_name", `%${escapedCompetitor}%`).limit(1).maybeSingle()
+        : Promise.resolve({ data: null }),
+    ]);
 
     if (pbErr) throw pbErr;
 
@@ -122,23 +127,6 @@ Deno.serve(async (req) => {
       .map((pb) => ({ playbook: pb, ...scorePlaybook(pb, ctx) }))
       .sort((a, b) => b.score - a.score)
       .slice(0, 3);
-
-    // Battle card if competitor mentioned
-    let battleCard = null;
-    if (ctx.competitor_mentioned) {
-      const escapedCompetitor = ctx.competitor_mentioned
-        .replace(/\\/g, "\\\\")
-        .replace(/%/g, "\\%")
-        .replace(/_/g, "\\_");
-      const { data: bc } = await supabase
-        .from("battle_cards")
-        .select("*")
-        .eq("active", true)
-        .ilike("competitor_name", `%${escapedCompetitor}%`)
-        .limit(1)
-        .maybeSingle();
-      battleCard = bc;
-    }
 
     return new Response(JSON.stringify({
       recommendations: ranked,

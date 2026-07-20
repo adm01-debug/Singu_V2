@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { logger } from "@/lib/logger";
 
  interface VoiceInputProps {
@@ -22,6 +23,7 @@ import { logger } from "@/lib/logger";
    disabled = false,
    uploadAudio = false
  }: VoiceInputProps) {
+  const { user } = useAuth();
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -124,7 +126,7 @@ import { logger } from "@/lib/logger";
          const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.webm`;
          const { data: uploadData, error: uploadError } = await supabase.storage
            .from('interaction-audios')
-           .upload(`${(await supabase.auth.getUser()).data.user?.id}/${fileName}`, audioBlob);
+           .upload(`${user?.id}/${fileName}`, audioBlob);
  
          if (uploadError) {
            logger.error('Error uploading audio:', uploadError);

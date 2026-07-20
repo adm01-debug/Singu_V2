@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 
 export interface SegmentFilter {
   field: string;
@@ -58,12 +59,13 @@ type FlattenedContact = Omit<RawContactRow, 'contact_behavior'> & ContactBehavio
  ];
 
 export function useContactSegmentation() {
+  const { user } = useAuth();
   const [segment, setSegment] = useState<SegmentDefinition>({ name: '', filters: [], logic: 'and' });
 
    const { data: allContacts = [] } = useQuery({
-     queryKey: ['contacts-for-segmentation'],
+     queryKey: ['contacts-for-segmentation', user?.id],
+     enabled: !!user,
      queryFn: async () => {
-       const { data: { user } } = await supabase.auth.getUser();
        if (!user) return [];
        
        // Join with contact_behavior to get behavioral data

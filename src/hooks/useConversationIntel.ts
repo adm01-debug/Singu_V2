@@ -51,6 +51,7 @@ export function useConversationAnalysis(interactionId: string | undefined) {
   return useQuery({
     queryKey: ["conversation-analysis", interactionId],
     enabled: !!interactionId,
+    staleTime: 10 * 60_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("conversation_analyses")
@@ -68,6 +69,7 @@ export function useConversationAnalyses(filters?: { sentiment?: SentimentOverall
   return useQuery({
     queryKey: ["conversation-analyses", user?.id, filters],
     enabled: !!user?.id,
+    staleTime: 10 * 60_000,
     queryFn: async () => {
       let q = supabase
         .from("conversation_analyses")
@@ -155,6 +157,7 @@ export function useDeleteTopic() {
       qc.invalidateQueries({ queryKey: ["conversation-topics"] });
       toast.success("Tópico removido");
     },
+    onError: () => toast.error("Erro ao remover tópico"),
   });
 }
 
@@ -170,6 +173,7 @@ export function useSeedTopics() {
       qc.invalidateQueries({ queryKey: ["conversation-topics"] });
       toast.success("Tópicos padrão criados");
     },
+    onError: () => toast.error("Erro ao criar tópicos padrão"),
   });
 }
 
@@ -209,6 +213,7 @@ export function useUpsertScorecard() {
       qc.invalidateQueries({ queryKey: ["coaching-scorecards"] });
       toast.success("Scorecard salvo");
     },
+    onError: () => toast.error("Erro ao salvar scorecard"),
   });
 }
 

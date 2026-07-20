@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { 
   isPushSupported, 
@@ -166,7 +167,6 @@ export const useNotifications = () => {
     if (permissionState.permission !== 'granted') return;
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       const today = new Date();
@@ -223,14 +223,13 @@ export const useNotifications = () => {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error checking follow-up alerts:', { error: msg });
     }
-  }, [permissionState.permission, showNotification]);
+  }, [permissionState.permission, showNotification, user]);
 
   // Check for contact birthdays
   const checkBirthdayAlerts = useCallback(async () => {
     if (permissionState.permission !== 'granted') return;
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       const today = new Date();
@@ -272,14 +271,13 @@ export const useNotifications = () => {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error checking birthday alerts:', { error: msg });
     }
-  }, [permissionState.permission, showNotification]);
+  }, [permissionState.permission, showNotification, user]);
 
   // Check for critical stakeholder alerts
   const checkStakeholderAlerts = useCallback(async () => {
     if (permissionState.permission !== 'granted') return;
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       // Fetch recent critical stakeholder alerts (last 24 hours)
@@ -332,7 +330,7 @@ export const useNotifications = () => {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error checking stakeholder alerts:', { error: msg });
     }
-  }, [permissionState.permission, showNotification]);
+  }, [permissionState.permission, showNotification, user]);
 
   // Schedule periodic checks
   useEffect(() => {

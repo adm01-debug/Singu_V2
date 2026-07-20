@@ -66,54 +66,59 @@ const NLPEvolutionTimeline: React.FC<NLPEvolutionTimelineProps> = ({
   const [activeTab, setActiveTab] = useState<AnalysisType>('all');
   const [vakData, setVakData] = useState<VAKDataPoint[]>([]);
   const [emotionalData, setEmotionalData] = useState<EmotionalDataPoint[]>([]);
+  const [refreshCounter, setRefreshCounter] = useState(0);
 
   useEffect(() => {
-    if (user && contactId) fetchEvolutionData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, contactId, period]);
+    if (!user || !contactId) return;
+    const currentUser = user;
+    let cancelled = false;
+    const fetchEvolutionData = async () => {
+      setLoading(true);
+      try {
+        const periodDays = { '7d': 7, '30d': 30, '90d': 90, '180d': 180 }[period];
+        const startDate = subDays(new Date(), periodDays).toISOString();
 
-  const fetchEvolutionData = async () => {
-    setLoading(true);
-    try {
-      const periodDays = { '7d': 7, '30d': 30, '90d': 90, '180d': 180 }[period];
-      const startDate = subDays(new Date(), periodDays).toISOString();
+        const { data: vakHistory } = await supabase
+          .from('vak_analysis_history')
+          .select('created_at, visual_score, auditory_score, kinesthetic_score, digital_score')
+          .eq('contact_id', contactId).eq('user_id', currentUser.id)
+          .gte('created_at', startDate).order('created_at', { ascending: true });
 
-      const { data: vakHistory } = await supabase
-        .from('vak_analysis_history')
-        .select('created_at, visual_score, auditory_score, kinesthetic_score, digital_score')
-        .eq('contact_id', contactId).eq('user_id', user!.id)
-        .gte('created_at', startDate).order('created_at', { ascending: true });
+        const { data: emotionalHistory } = await supabase
+          .from('emotional_states_history')
+          .select('created_at, emotional_state, confidence')
+          .eq('contact_id', contactId).eq('user_id', currentUser.id)
+          .gte('created_at', startDate).order('created_at', { ascending: true });
 
-      const { data: emotionalHistory } = await supabase
-        .from('emotional_states_history')
-        .select('created_at, emotional_state, confidence')
-        .eq('contact_id', contactId).eq('user_id', user!.id)
-        .gte('created_at', startDate).order('created_at', { ascending: true });
+        if (cancelled) return;
+        const typeMap: Record<string, VAKType> = { visual: 'V', auditory: 'A', kinesthetic: 'K', digital: 'D' };
 
-      const typeMap: Record<string, VAKType> = { visual: 'V', auditory: 'A', kinesthetic: 'K', digital: 'D' };
+        const processedVak: VAKDataPoint[] = (vakHistory || []).map(entry => {
+          const scores = { visual: entry.visual_score || 0, auditory: entry.auditory_score || 0, kinesthetic: entry.kinesthetic_score || 0, digital: entry.digital_score || 0 };
+          const maxScore = Math.max(...Object.values(scores));
+          const dominant = (Object.keys(scores) as Array<keyof typeof scores>).find(k => scores[k] === maxScore) || 'visual';
+          return { date: entry.created_at, displayDate: format(new Date(entry.created_at), 'dd/MM', { locale: ptBR }), ...scores, dominant: typeMap[dominant] };
+        });
 
-      const processedVak: VAKDataPoint[] = (vakHistory || []).map(entry => {
-        const scores = { visual: entry.visual_score || 0, auditory: entry.auditory_score || 0, kinesthetic: entry.kinesthetic_score || 0, digital: entry.digital_score || 0 };
-        const maxScore = Math.max(...Object.values(scores));
-        const dominant = (Object.keys(scores) as Array<keyof typeof scores>).find(k => scores[k] === maxScore) || 'visual';
-        return { date: entry.created_at, displayDate: format(new Date(entry.created_at), 'dd/MM', { locale: ptBR }), ...scores, dominant: typeMap[dominant] };
-      });
+        const processedEmotional: EmotionalDataPoint[] = (emotionalHistory || []).map(entry => ({
+          date: entry.created_at, displayDate: format(new Date(entry.created_at), 'dd/MM', { locale: ptBR }),
+          state: entry.emotional_state as EmotionalState, confidence: entry.confidence || 50,
+          stateScore: getEmotionalScore(entry.emotional_state as EmotionalState)
+        }));
 
-      const processedEmotional: EmotionalDataPoint[] = (emotionalHistory || []).map(entry => ({
-        date: entry.created_at, displayDate: format(new Date(entry.created_at), 'dd/MM', { locale: ptBR }),
-        state: entry.emotional_state as EmotionalState, confidence: entry.confidence || 50,
-        stateScore: getEmotionalScore(entry.emotional_state as EmotionalState)
-      }));
-
-      setVakData(processedVak);
-      setEmotionalData(processedEmotional);
-    } catch (error) {
-      logger.error('Error fetching evolution data:', { error: error instanceof Error ? error.message : String(error) });
-      toast.error('Erro ao carregar histórico de evolução');
-    } finally {
-      setLoading(false);
-    }
-  };
+        setVakData(processedVak);
+        setEmotionalData(processedEmotional);
+      } catch (error) {
+        if (cancelled) return;
+        logger.error('Error fetching evolution data:', { error: error instanceof Error ? error.message : String(error) });
+        toast.error('Erro ao carregar histórico de evolução');
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    fetchEvolutionData();
+    return () => { cancelled = true; };
+  }, [user, contactId, period, refreshCounter]);
 
   const vakTrend = useMemo(() => {
     if (vakData.length < 2) return null;
@@ -172,7 +177,7 @@ const NLPEvolutionTimeline: React.FC<NLPEvolutionTimelineProps> = ({
                 <SelectItem value="180d">6 meses</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="icon" onClick={fetchEvolutionData}><RefreshCw className="w-4 h-4" /></Button>
+            <Button variant="outline" size="icon" onClick={() => setRefreshCounter(c => c + 1)}><RefreshCw className="w-4 h-4" /></Button>
           </div>
         </div>
       </CardHeader>

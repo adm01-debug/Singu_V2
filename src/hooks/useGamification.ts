@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
 import { logger } from '@/lib/logger';
+import { toast } from 'sonner';
 
 // ── Types ──
 
@@ -156,6 +157,10 @@ export function useCheckAndAwardBadges() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['gamification', 'user-badges'] });
       queryClient.invalidateQueries({ queryKey: ['gamification', 'goals-dashboard'] });
+    },
+    onError: (err) => {
+      logger.error('Error awarding badges:', err);
+      toast.error('Erro ao verificar conquistas');
     },
   });
 }

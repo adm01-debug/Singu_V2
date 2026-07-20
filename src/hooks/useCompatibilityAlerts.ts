@@ -47,12 +47,11 @@ export function useCompatibilityAlerts() {
 
     setChecking(true);
     try {
-      // 1. Fetch user settings
-      const { data: settingsData } = await supabase
-        .from('compatibility_settings')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
+      // Stage 1: fetch settings and salesperson profile in parallel
+      const [{ data: settingsData }, { data: profileData }] = await Promise.all([
+        supabase.from('compatibility_settings').select('*').eq('user_id', user.id).maybeSingle(),
+        supabase.from('profiles').select('nlp_profile').eq('id', user.id).maybeSingle(),
+      ]);
 
       const settings: CompatibilitySettings = {
         alert_threshold: settingsData?.alert_threshold ?? 50,
@@ -60,42 +59,22 @@ export function useCompatibilityAlerts() {
         important_min_relationship_score: settingsData?.important_min_relationship_score ?? 70,
       };
 
-      // 2. Fetch salesperson profile
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('nlp_profile')
-        .eq('id', user.id)
-        .maybeSingle();
-
       const salespersonProfile = profileData?.nlp_profile as unknown as SalespersonProfile | null;
-      
+
       if (!salespersonProfile?.discProfile && !salespersonProfile?.vakProfile) {
         return; // No profile configured
       }
 
-      // 3. Fetch all contacts
-      const { data: contacts } = await supabase
-        .from('contacts')
-        .select('id, first_name, last_name, behavior, relationship_score')
-        .eq('user_id', user.id);
+      // Stage 2: contacts, existing alerts, and VAK data are all independent — run in parallel
+      const [{ data: contacts }, { data: existingAlerts }, { data: vakData }] = await Promise.all([
+        supabase.from('contacts').select('id, first_name, last_name, behavior, relationship_score').eq('user_id', user.id),
+        supabase.from('compatibility_alerts').select('contact_id').eq('user_id', user.id).eq('dismissed', false),
+        supabase.from('vak_analysis_history').select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score').eq('user_id', user.id).order('created_at', { ascending: false }),
+      ]);
 
       if (!contacts) return;
 
-      // 4. Fetch existing non-dismissed alerts
-      const { data: existingAlerts } = await supabase
-        .from('compatibility_alerts')
-        .select('contact_id')
-        .eq('user_id', user.id)
-        .eq('dismissed', false);
-
       const existingAlertContactIds = new Set(existingAlerts?.map(a => a.contact_id) || []);
-
-      // 5. Fetch VAK profiles
-      const { data: vakData } = await supabase
-        .from('vak_analysis_history')
-        .select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
 
       const vakMap = new Map<string, VAKType>();
       vakData?.forEach((v) => {

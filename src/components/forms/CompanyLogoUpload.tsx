@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { ImagePlus, Loader2, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -12,6 +13,7 @@ interface CompanyLogoUploadProps {
 }
 
 export function CompanyLogoUpload({ logoUrl, onLogoChange, companyId }: CompanyLogoUploadProps) {
+  const { user } = useAuth();
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -31,7 +33,6 @@ export function CompanyLogoUpload({ logoUrl, onLogoChange, companyId }: CompanyL
 
     setUploading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) { toast.error('Usuário não autenticado'); return; }
       const ext = file.name.split('.').pop()?.toLowerCase() || 'png';
       const path = `${user.id}/${companyId || crypto.randomUUID()}/logo.${ext}`;

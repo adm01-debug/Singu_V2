@@ -85,27 +85,24 @@ export function useNLPAutoAnalysis() {
     try {
       if (import.meta.env.DEV) logger.log('🧠 NLP Auto-Analysis starting for interaction:', interactionId);
 
-      // 1. VAK Analysis
+      // 1-3: Run VAK, Metaprogram, and Emotional analyses in parallel
       const vakResult = analyzeVAK(text);
-      await saveVAKAnalysis(contactId, vakResult, text, interactionId);
-
-      // 2. Metaprogram Analysis
       const metaResult = analyzeMetaprograms(text);
-      await saveMetaprogramAnalysis(contactId, interactionId, metaResult, text);
-
-      // 3. Emotional State Analysis
       const emotionalResult = detectEmotionalState(text);
-      
-      // Save emotional state to history
-      const { error: emotionalInsertError } = await supabase.from('emotional_states_history').insert({
-        user_id: user.id,
-        contact_id: contactId,
-        interaction_id: interactionId,
-        emotional_state: emotionalResult.state,
-        confidence: emotionalResult.confidence,
-        trigger: emotionalResult.matchedWords[0] || null,
-        context: text.substring(0, 200)
-      });
+
+      const [,, { error: emotionalInsertError }] = await Promise.all([
+        saveVAKAnalysis(contactId, vakResult, text, interactionId),
+        saveMetaprogramAnalysis(contactId, interactionId, metaResult, text),
+        supabase.from('emotional_states_history').insert({
+          user_id: user.id,
+          contact_id: contactId,
+          interaction_id: interactionId,
+          emotional_state: emotionalResult.state,
+          confidence: emotionalResult.confidence,
+          trigger: emotionalResult.matchedWords[0] || null,
+          context: text.substring(0, 200)
+        }),
+      ]);
 
       if (emotionalInsertError) throw emotionalInsertError;
 
@@ -248,21 +245,16 @@ export function useNLPAutoAnalysis() {
       if (error) throw error;
       if (!interactions) return { analyzed: 0, total: 0 };
 
-      let analyzed = 0;
-      for (const interaction of interactions) {
-        if (shouldAnalyze(interaction.type, interaction.content, interaction.transcription)) {
-          await analyzeInteraction(
-            contactId,
-            interaction.id,
-            interaction.content,
-            interaction.transcription,
-            interaction.type
-          );
-          analyzed++;
-        }
-      }
+      const eligible = interactions.filter(i =>
+        shouldAnalyze(i.type, i.content, i.transcription)
+      );
+      await Promise.all(
+        eligible.map(i =>
+          analyzeInteraction(contactId, i.id, i.content, i.transcription, i.type)
+        )
+      );
 
-      return { analyzed, total: interactions.length };
+      return { analyzed: eligible.length, total: interactions.length };
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error batch analyzing interactions:', { error: msg });

@@ -21,26 +21,20 @@ export function useSmartFollowups() {
 
   // Buscar lembretes inteligentes
   const { data: reminders = [], isLoading } = useQuery({
-    queryKey: ['smart-reminders'],
+    queryKey: ['smart-reminders', user?.id],
     enabled: !!user,
+    staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
-      // Usamos a tipagem do Database para garantir que as colunas existem
-      const { data: contacts, error } = await supabase
-        .from('contacts')
-        .select('id, first_name, last_name, relationship_score, relationship_stage')
-        .limit(100);
-      
+      const [
+        { data: contacts, error },
+        { data: lastInteractions, error: intError },
+      ] = await Promise.all([
+        supabase.from('contacts').select('id, first_name, last_name, relationship_score, relationship_stage').limit(100),
+        supabase.from('interactions').select('contact_id, created_at').order('created_at', { ascending: false }),
+      ]);
+
       if (error) throw error;
-
-      // Como o linter reclamou de 'last_interaction_at' no hook anterior, 
-      // vou assumir que essa coluna pode estar faltando ou ter outro nome.
-      // Vou buscar a data da última interação da tabela de interações de forma otimizada.
-      
-      const { data: lastInteractions, error: intError } = await supabase
-        .from('interactions')
-        .select('contact_id, created_at')
-        .order('created_at', { ascending: false });
-
       if (intError) throw intError;
 
       const latestInteractionMap = new Map<string, string>();

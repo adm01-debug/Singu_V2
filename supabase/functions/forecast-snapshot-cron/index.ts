@@ -52,6 +52,7 @@ Deno.serve(async (req) => {
     }
     return new Response(JSON.stringify({ snapshots: snapshotRows.length }), { headers: { ...cors, "Content-Type": "application/json" } });
   } catch (e) {
+    console.error("forecast-snapshot-cron error:", e);
     return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
   }
 });

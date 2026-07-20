@@ -49,6 +49,7 @@ export function useAllowedIPs() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['allowed-ips'] }),
+    onError: () => toast.error('Erro ao atualizar status do IP.'),
   });
 
   return { ips, isLoading, addIP: addIP.mutate, removeIP: removeIP.mutate, toggleIP: toggleIP.mutate };

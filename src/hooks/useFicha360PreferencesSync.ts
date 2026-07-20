@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 import type { NbaPriority, NbaSort } from './useProximosPassosFilters';
 
 const SCOPE = 'ficha360';
@@ -48,7 +50,7 @@ function prefsEqual(a: Ficha360Preferences, b: Ficha360Preferences) {
   return arraysEqual(a.priorities, b.priorities) && arraysEqual(a.channels, b.channels) && a.sort === b.sort;
 }
 
-const QK = ['user-ui-preferences', SCOPE] as const;
+/** @internal — computed inside the hook so it includes user?.id */
 
 /**
  * Sincroniza preferências de filtros/ordenação da Ficha 360 com o perfil do usuário.
@@ -60,21 +62,23 @@ export function useFicha360PreferencesSync(opts: {
   hydrate: (prefs: Ficha360Preferences) => void;
   hasUrlOverride: boolean;
 }) {
+  const { user } = useAuth();
   const { current, hydrate, hasUrlOverride } = opts;
   const qc = useQueryClient();
+  const QK = ['user-ui-preferences', SCOPE, user?.id] as const;
   const hydratedRef = useRef(false);
   const lastSavedRef = useRef<Ficha360Preferences | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { data: remote } = useQuery({
     queryKey: QK,
+    enabled: !!user,
     queryFn: async (): Promise<Ficha360Preferences> => {
-      const { data: auth } = await supabase.auth.getUser();
-      if (!auth?.user?.id) return { ...DEFAULTS };
+      if (!user?.id) return { ...DEFAULTS };
       const { data, error } = await supabase
         .from('user_ui_preferences')
         .select('preferences')
-        .eq('user_id', auth.user.id)
+        .eq('user_id', user!.id)
         .eq('scope', SCOPE)
         .maybeSingle();
       if (error) throw error;
@@ -85,8 +89,7 @@ export function useFicha360PreferencesSync(opts: {
 
   const upsert = useMutation({
     mutationFn: async (prefs: Ficha360Preferences) => {
-      const { data: auth } = await supabase.auth.getUser();
-      const userId = auth?.user?.id;
+      const userId = user?.id;
       if (!userId) return;
       const { error } = await supabase
         .from('user_ui_preferences')
@@ -100,6 +103,7 @@ export function useFicha360PreferencesSync(opts: {
       lastSavedRef.current = vars;
       qc.setQueryData<Ficha360Preferences>(QK, vars);
     },
+    onError: () => toast.error('Erro ao salvar preferências da Ficha 360'),
   });
 
   // Hidrata uma única vez se a URL não trouxe overrides

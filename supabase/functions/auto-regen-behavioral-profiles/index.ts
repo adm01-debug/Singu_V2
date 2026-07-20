@@ -67,18 +67,25 @@ Deno.serve(async (req) => {
       return json({ requestId, processed: 0, skipped: 0, message: "nenhum contato elegível" });
     }
 
-    // 2. Filtrar por SLA (última regeneração > 24h atrás)
+    // 2. Filtrar por SLA — single query fetches both last_processed_at and attempts
     const contactIds = eligible.map((e) => e.contactId);
-    const { data: recent, error: queueError } = await admin
+    const { data: queueData, error: queueError } = await admin
       .from("behavioral_profile_regen_queue")
-      .select("contact_id, last_processed_at")
+      .select("contact_id, last_processed_at, attempts")
       .in("contact_id", contactIds);
 
     if (queueError) throw queueError;
 
     const slaCutoff = Date.now() - SLA_HOURS * 3600 * 1000;
     const recentMap = new Map(
-      (recent ?? []).map((r) => [r.contact_id as string, r.last_processed_at as string | null]),
+      (queueData ?? []).map((r) => [r.contact_id as string, r.last_processed_at as string | null]),
+    );
+    // Derived from the same single query — no second round-trip needed
+    const attemptsMap = new Map<string, number>(
+      (queueData ?? []).map((r: { contact_id: string; attempts: number | null }) => [
+        r.contact_id as string,
+        r.attempts ?? 0,
+      ]),
     );
 
     const toProcess = eligible
@@ -91,19 +98,6 @@ Deno.serve(async (req) => {
 
     let processed = 0;
     const failures: Array<{ contactId: string; error: string }> = [];
-
-    // 3. Enfileirar + disparar reanálise sequencialmente (evita rate limit)
-    // Pré-carrega attempts atuais para incremento correto (não reset).
-    const { data: existingAttemptsRows } = await admin
-      .from("behavioral_profile_regen_queue")
-      .select("contact_id, attempts")
-      .in("contact_id", toProcess.map((t) => t.contactId));
-    const attemptsMap = new Map<string, number>(
-      (existingAttemptsRows ?? []).map((r: { contact_id: string; attempts: number | null }) => [
-        r.contact_id,
-        r.attempts ?? 0,
-      ]),
-    );
 
     // Batch-upsert all items to mark as queued before invoking
     const nowIso = new Date().toISOString();
@@ -195,10 +189,20 @@ const MIN_SAMPLE = 5; // ignora janelas com pouquíssimas execuções para evita
 async function maybeRaiseErrorRateAlert(admin: ReturnType<typeof createClient>, requestId: string) {
   try {
     const sinceIso = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-    const { data: recentRuns, error: runsError } = await admin
-      .from("behavioral_profile_regen_queue")
-      .select("last_error, last_processed_at, trigger_source")
-      .gte("last_processed_at", sinceIso);
+    // Fetch recent runs and open alert in parallel — both queries are independent
+    const [{ data: recentRuns, error: runsError }, { data: existing }] = await Promise.all([
+      admin
+        .from("behavioral_profile_regen_queue")
+        .select("last_error, last_processed_at, trigger_source")
+        .gte("last_processed_at", sinceIso),
+      admin
+        .from("system_alerts")
+        .select("id")
+        .eq("alert_type", "behavioral_regen_error_rate")
+        .is("acknowledged_at", null)
+        .gte("created_at", sinceIso)
+        .limit(1),
+    ]);
     if (runsError) throw runsError;
 
     const rows = recentRuns ?? [];
@@ -212,13 +216,6 @@ async function maybeRaiseErrorRateAlert(admin: ReturnType<typeof createClient>, 
     }
 
     // Deduplicação: se já existe alerta não reconhecido da mesma categoria na última hora, não duplica
-    const { data: existing } = await admin
-      .from("system_alerts")
-      .select("id")
-      .eq("alert_type", "behavioral_regen_error_rate")
-      .is("acknowledged_at", null)
-      .gte("created_at", sinceIso)
-      .limit(1);
 
     if (existing && existing.length > 0) {
       return { raised: false, rate, total, reason: "already_open", existing: existing[0].id };

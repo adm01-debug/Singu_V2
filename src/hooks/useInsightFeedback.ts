@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 import type { EvidenceKind } from '@/components/contacts/EvidenceDrillDownSheet';
 
 export type InsightVote = 1 | -1;
@@ -11,8 +13,8 @@ export interface InsightFeedbackRow {
   updated_at: string;
 }
 
-function key(contactId: string, kind: EvidenceKind, label: string) {
-  return ['insight-feedback', contactId, kind, label.trim().toLowerCase()];
+function key(userId: string | undefined, contactId: string, kind: EvidenceKind, label: string) {
+  return ['insight-feedback', userId, contactId, kind, label.trim().toLowerCase()];
 }
 
 export function useInsightFeedback(
@@ -20,13 +22,13 @@ export function useInsightFeedback(
   kind: EvidenceKind | null | undefined,
   label: string | null | undefined,
 ) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: key(contactId ?? '', kind ?? 'preference', label ?? ''),
+    queryKey: key(user?.id, contactId ?? '', kind ?? 'preference', label ?? ''),
     enabled: !!contactId && !!kind && !!label && label.trim().length > 0,
     staleTime: 30_000,
     queryFn: async (): Promise<InsightFeedbackRow | null> => {
-      const { data: auth } = await supabase.auth.getUser();
-      const uid = auth.user?.id;
+      const uid = user?.id;
       if (!uid) return null;
       const { data, error } = await supabase
         .from('behavioral_insight_feedback')
@@ -43,6 +45,7 @@ export function useInsightFeedback(
 }
 
 export function useSubmitInsightFeedback() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: {
@@ -52,8 +55,7 @@ export function useSubmitInsightFeedback() {
       vote: InsightVote;
       note?: string | null;
     }) => {
-      const { data: auth } = await supabase.auth.getUser();
-      const uid = auth.user?.id;
+      const uid = user?.id;
       if (!uid) throw new Error('Você precisa estar autenticado para enviar feedback.');
       const payload = {
         user_id: uid,
@@ -72,17 +74,18 @@ export function useSubmitInsightFeedback() {
       return data as InsightFeedbackRow;
     },
     onSuccess: (row, vars) => {
-      qc.setQueryData(key(vars.contactId, vars.kind, vars.label), row);
+      qc.setQueryData(key(user?.id, vars.contactId, vars.kind, vars.label), row);
     },
+    onError: () => toast.error('Erro ao registrar feedback'),
   });
 }
 
 export function useRemoveInsightFeedback() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { contactId: string; kind: EvidenceKind; label: string }) => {
-      const { data: auth } = await supabase.auth.getUser();
-      const uid = auth.user?.id;
+      const uid = user?.id;
       if (!uid) throw new Error('Você precisa estar autenticado.');
       const { error } = await supabase
         .from('behavioral_insight_feedback')
@@ -94,7 +97,8 @@ export function useRemoveInsightFeedback() {
       if (error) throw error;
     },
     onSuccess: (_v, vars) => {
-      qc.setQueryData(key(vars.contactId, vars.kind, vars.label), null);
+      qc.setQueryData(key(user?.id, vars.contactId, vars.kind, vars.label), null);
     },
+    onError: () => toast.error('Erro ao remover feedback'),
   });
 }

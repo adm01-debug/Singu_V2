@@ -284,13 +284,16 @@ Deno.serve(async (req) => {
   const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
   if (bodyError) return bodyError;
 
+  // Hoist userId so the catch block can reference it for error logging
+  let userId: string | null = null;
+
   try {
     // Auth: shared authenticateRequest calls supabase.auth.getUser() —
     // the original used getClaims() which is weaker / non-standard.
     const authResult = await withAuth(req);
     if (authResult instanceof Response) return authResult; // 401
 
-    const userId: string = authResult;
+    userId = authResult;
 
     const rl = limiter.check(userId, req);
     if (rl) return rl;
@@ -312,7 +315,7 @@ Deno.serve(async (req) => {
         Deno.env.get("SUPABASE_URL")!,
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
       );
-      await Promise.all([
+      Promise.all([
         admin.from("connection_configs").update({
           last_tested_at: new Date().toISOString(),
           last_test_status: "success",
@@ -326,7 +329,7 @@ Deno.serve(async (req) => {
           message: result.message,
           tested_by: userId,
         }),
-      ]);
+      ]).catch((e: unknown) => console.error("connection_test_logs success write error:", e));
     }
 
     return new Response(JSON.stringify({ success: true, ...result }), {
@@ -334,27 +337,25 @@ Deno.serve(async (req) => {
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Erro desconhecido";
-    try {
-      const body = rawBody as TestPayload;
-      if (body.connection_id) {
-        const admin = createClient(
-          Deno.env.get("SUPABASE_URL")!,
-          Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-        );
-        await Promise.all([
-          admin.from("connection_configs").update({
-            last_tested_at: new Date().toISOString(),
-            last_test_status: "error",
-            last_test_message: message,
-          }).eq("id", body.connection_id).eq("user_id", userId),
-          admin.from("connection_test_logs").insert({
-            connection_id: body.connection_id,
-            status: "error",
-            message,
-          }),
-        ]);
-      }
-    } catch { /* ignore */ }
+    const body = rawBody as TestPayload;
+    if (body?.connection_id && userId) {
+      const admin = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+      );
+      Promise.all([
+        admin.from("connection_configs").update({
+          last_tested_at: new Date().toISOString(),
+          last_test_status: "error",
+          last_test_message: message,
+        }).eq("id", body.connection_id).eq("user_id", userId),
+        admin.from("connection_test_logs").insert({
+          connection_id: body.connection_id,
+          status: "error",
+          message,
+        }),
+      ]).catch((e: unknown) => console.error("connection_test_logs error write error:", e));
+    }
 
     return new Response(JSON.stringify({ success: false, error: message }), {
       status: 200,

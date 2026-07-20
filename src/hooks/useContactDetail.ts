@@ -35,7 +35,14 @@ export function useContactDetail(contactId: string | undefined) {
     queryKey,
     enabled: !!user && !!contactId,
     queryFn: async (): Promise<ContactDetailData> => {
-      // 1. Fetch contact
+      // Start secondary queries immediately — they only need contactId (known upfront)
+      const secondaryPromise = Promise.all([
+        supabase.from('interactions').select('*').eq('contact_id', contactId!).order('created_at', { ascending: false }).limit(50),
+        supabase.from('insights').select('*').eq('contact_id', contactId!).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
+        supabase.from('alerts').select('*').eq('contact_id', contactId!).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
+      ]);
+
+      // 1. Fetch contact (runs in parallel with secondary queries above)
       const { data: localContact, error: contactError } = await supabase
         .from('contacts')
         .select('*')
@@ -57,7 +64,7 @@ export function useContactDetail(contactId: string | undefined) {
 
       if (!contactData) throw new Error('Contato não encontrado');
 
-      // 2. Fetch company
+      // 2. Fetch company (depends on contactData.company_id — must be sequential)
       let companyData: Company | null = null;
       if (contactData.company_id) {
         const { data: localCompany } = await supabase.from('companies').select('*').eq('id', contactData.company_id).maybeSingle();
@@ -72,12 +79,8 @@ export function useContactDetail(contactId: string | undefined) {
         }
       }
 
-      // 3. Parallel secondary data
-      const [interactionsRes, insightsRes, alertsRes] = await Promise.all([
-        supabase.from('interactions').select('*').eq('contact_id', contactId!).order('created_at', { ascending: false }).limit(50),
-        supabase.from('insights').select('*').eq('contact_id', contactId!).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
-        supabase.from('alerts').select('*').eq('contact_id', contactId!).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
-      ]);
+      // 3. Collect secondary data (already in-flight since query start)
+      const [interactionsRes, insightsRes, alertsRes] = await secondaryPromise;
 
       return {
         contact: contactData,
@@ -88,6 +91,7 @@ export function useContactDetail(contactId: string | undefined) {
       };
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const error = queryError instanceof Error ? queryError.message : null;

@@ -108,6 +108,8 @@ export const useContactBehavior = (contactId: string) => {
       return data as ContactBehavior;
     },
     enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: decision, isLoading: isLoadingDecision } = useQuery({
@@ -122,6 +124,8 @@ export const useContactBehavior = (contactId: string) => {
       return data as ContactDecisionMaking;
     },
     enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: influence, isLoading: isLoadingInfluence } = useQuery({
@@ -136,6 +140,8 @@ export const useContactBehavior = (contactId: string) => {
       return data as ContactInfluence;
     },
     enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: personality, isLoading: isLoadingPersonality } = useQuery({
@@ -150,6 +156,8 @@ export const useContactBehavior = (contactId: string) => {
       return data as ContactPersonality;
     },
     enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: metaprograms, isLoading: isLoadingMetaprograms } = useQuery({
@@ -164,6 +172,8 @@ export const useContactBehavior = (contactId: string) => {
       return data as ContactMetaprograms;
     },
     enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: rapport, isLoading: isLoadingRapport } = useQuery({
@@ -178,6 +188,8 @@ export const useContactBehavior = (contactId: string) => {
       return data as ContactRapportStrategy;
     },
     enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: businessContext, isLoading: isLoadingBusiness } = useQuery({
@@ -192,6 +204,8 @@ export const useContactBehavior = (contactId: string) => {
       return data as ContactBusinessContext;
     },
     enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const updateBehaviorMutation = useMutation({
@@ -205,6 +219,7 @@ export const useContactBehavior = (contactId: string) => {
       queryClient.invalidateQueries({ queryKey: ["contact-behavior", contactId] });
       toast.success("Perfil comportamental atualizado");
     },
+    onError: () => toast.error("Erro ao atualizar perfil comportamental"),
   });
 
   const updateDecisionMutation = useMutation({
@@ -218,6 +233,7 @@ export const useContactBehavior = (contactId: string) => {
       queryClient.invalidateQueries({ queryKey: ["contact-decision", contactId] });
       toast.success("Critérios de decisão atualizados");
     },
+    onError: () => toast.error("Erro ao atualizar critérios de decisão"),
   });
 
   const updateInfluenceMutation = useMutation({
@@ -231,6 +247,7 @@ export const useContactBehavior = (contactId: string) => {
       queryClient.invalidateQueries({ queryKey: ["contact-influence", contactId] });
       toast.success("Influência e poder atualizados");
     },
+    onError: () => toast.error("Erro ao atualizar influência"),
   });
 
   const updateBusinessMutation = useMutation({
@@ -244,6 +261,7 @@ export const useContactBehavior = (contactId: string) => {
       queryClient.invalidateQueries({ queryKey: ["contact-business-context", contactId] });
       toast.success("Contexto empresarial atualizado");
     },
+    onError: () => toast.error("Erro ao atualizar contexto empresarial"),
   });
 
   const updatePersonalityMutation = useMutation({
@@ -257,6 +275,7 @@ export const useContactBehavior = (contactId: string) => {
       queryClient.invalidateQueries({ queryKey: ["contact-personality", contactId] });
       toast.success("Frameworks de personalidade atualizados");
     },
+    onError: () => toast.error("Erro ao atualizar personalidade"),
   });
 
   const updateMetaprogramsMutation = useMutation({
@@ -270,6 +289,7 @@ export const useContactBehavior = (contactId: string) => {
       queryClient.invalidateQueries({ queryKey: ["contact-metaprograms", contactId] });
       toast.success("Metaprogramas atualizados");
     },
+    onError: () => toast.error("Erro ao atualizar metaprogramas"),
   });
 
   const updateRapportMutation = useMutation({
@@ -283,6 +303,7 @@ export const useContactBehavior = (contactId: string) => {
       queryClient.invalidateQueries({ queryKey: ["contact-rapport", contactId] });
       toast.success("Estratégia de Rapport atualizada");
     },
+    onError: () => toast.error("Erro ao atualizar estratégia de rapport"),
   });
 
   const { data: gaps, isLoading: isLoadingGaps } = useQuery({
@@ -295,6 +316,8 @@ export const useContactBehavior = (contactId: string) => {
       return data as ContactBehaviorGap[];
     },
     enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: auditLogs, isLoading: isLoadingAudit } = useQuery({
@@ -308,6 +331,8 @@ export const useContactBehavior = (contactId: string) => {
       return data as BehavioralAuditLog[];
     },
     enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: consistency, refetch: checkConsistency } = useQuery({
@@ -320,6 +345,8 @@ export const useContactBehavior = (contactId: string) => {
       return data as { is_consistent: boolean; issues: string[] };
     },
     enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: frameworkGaps, isLoading: isLoadingFGaps } = useQuery({
@@ -332,6 +359,8 @@ export const useContactBehavior = (contactId: string) => {
       return data as ContactBehaviorGap[];
     },
     enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: frameworkAudit, isLoading: isLoadingFAudit } = useQuery({
@@ -345,6 +374,8 @@ export const useContactBehavior = (contactId: string) => {
       return data as BehavioralAuditLog[];
     },
     enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: lifeEventGaps, isLoading: isLoadingLEGaps } = useQuery({
@@ -357,6 +388,8 @@ export const useContactBehavior = (contactId: string) => {
       return data as ContactBehaviorGap[];
     },
     enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   return {

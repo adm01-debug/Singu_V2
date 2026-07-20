@@ -21,6 +21,7 @@ export function useSlowQueryDetector(): SlowQueryState {
     severity: 'warning',
   });
   const timers = useRef<Map<string, number>>(new Map());
+  const activeIntervals = useRef<Set<ReturnType<typeof setInterval>>>(new Set());
   const clearTimer = useRef<ReturnType<typeof setTimeout>>();
 
   const checkQuery = useCallback((key: string, startTime: number) => {
@@ -52,13 +53,12 @@ export function useSlowQueryDetector(): SlowQueryState {
           const interval = setInterval(() => {
             if (event.query.state.fetchStatus !== 'fetching') {
               clearInterval(interval);
+              activeIntervals.current.delete(interval);
               return;
             }
             checkQuery(key, start);
           }, 1000);
-          // Store interval for cleanup
-          const existingStart = timers.current.get(key);
-          if (existingStart) timers.current.set(key + '_interval', interval as unknown as number);
+          activeIntervals.current.add(interval);
         }
 
         if (status === 'idle') {
@@ -88,6 +88,8 @@ export function useSlowQueryDetector(): SlowQueryState {
     return () => {
       unsubscribe();
       if (clearTimer.current) clearTimeout(clearTimer.current);
+      activeIntervals.current.forEach(clearInterval);
+      activeIntervals.current.clear();
     };
   }, [queryClient, checkQuery]);
 

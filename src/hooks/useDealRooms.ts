@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Database } from "@/integrations/supabase/types";
+import { useAuth } from './useAuth';
 
 export type DealRoomStatus = "active" | "won" | "lost" | "paused";
 export type MilestoneStatus = "pending" | "in_progress" | "done" | "blocked";
@@ -109,8 +110,11 @@ const KEYS = {
 };
 
 export function useDealRooms(filters?: { status?: DealRoomStatus | "all" }) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: [...KEYS.rooms, filters?.status ?? "all"],
+    queryKey: [...KEYS.rooms, filters?.status ?? "all", user?.id],
+    enabled: !!user,
+    staleTime: 5 * 60_000,
     queryFn: async () => {
       let q = supabase.from("deal_rooms").select("*").order("updated_at", { ascending: false });
       if (filters?.status && filters.status !== "all") {
@@ -127,6 +131,7 @@ export function useDealRoom(id: string | undefined) {
   return useQuery({
     queryKey: KEYS.room(id ?? ""),
     enabled: !!id,
+    staleTime: 5 * 60_000,
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_rooms").select("*").eq("id", id!).maybeSingle();
       if (error) throw error;
@@ -136,10 +141,10 @@ export function useDealRoom(id: string | undefined) {
 }
 
 export function useCreateDealRoom() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (payload: { title: string; deal_name?: string; deal_id?: string; company_id?: string; target_close_date?: string; deal_value?: number; description?: string }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const { data, error } = await supabase.from("deal_rooms").insert({
         user_id: user.id,
@@ -200,6 +205,7 @@ export function useMilestones(roomId: string | undefined) {
   return useQuery({
     queryKey: KEYS.ms(roomId ?? ""),
     enabled: !!roomId,
+    staleTime: 5 * 60_000,
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_milestones").select("*").eq("room_id", roomId!).order("sort_order");
       if (error) throw error;
@@ -209,10 +215,10 @@ export function useMilestones(roomId: string | undefined) {
 }
 
 export function useUpsertMilestone(roomId: string) {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (m: Partial<DealRoomMilestone>) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       
       const payload: MilestoneInsert = {
@@ -258,10 +264,10 @@ export function useStakeholders(roomId: string | undefined) {
 }
 
 export function useUpsertStakeholder(roomId: string) {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (s: Partial<DealRoomStakeholder>) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       
       const payload: StakeholderInsert = {
@@ -308,13 +314,13 @@ export function useRoomDocuments(roomId: string | undefined) {
 }
 
 export function useUploadDocument(roomId: string) {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (file: File) => {
       const validation = await validateFileUpload(file, { maxSizeMB: 50 });
       if (!validation.valid) throw new Error(validation.error);
 
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const path = `deal-rooms/${roomId}/${Date.now()}-${file.name}`;
       const { error: upErr } = await supabase.storage.from("documents").upload(path, file);
@@ -385,10 +391,10 @@ export function useRoomComments(roomId: string | undefined) {
 }
 
 export function useAddComment(roomId: string) {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (body: string) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Não autenticado");
       const { data, error } = await supabase.from("deal_room_comments").insert({
         room_id: roomId, user_id: user.id, author_side: "seller", author_label: user.email ?? "Vendedor", body,

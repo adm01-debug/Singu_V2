@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export type AttributionModel = 'first' | 'last' | 'linear' | 'u_shape' | 'w_shape' | 'time_decay';
@@ -65,10 +66,10 @@ export function useAttribution(dealId: string | undefined, model: AttributionMod
 }
 
 export function useRecordTouchpoint() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: Partial<Touchpoint> & { touchpoint_type: string }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('attribution_touchpoints').insert({ ...input, user_id: user.id } as never);
       if (error) throw error;

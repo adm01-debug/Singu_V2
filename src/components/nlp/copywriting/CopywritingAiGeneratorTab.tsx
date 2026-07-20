@@ -9,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Contact } from '@/types';
 import { toast } from 'sonner';
 import { useTonePersistence, ToneType } from '@/hooks/useTonePersistence';
+import { logger } from '@/lib/logger';
 
 interface Props {
   contact: Contact;
@@ -68,7 +69,7 @@ export function CopywritingAiGeneratorTab({ contact }: Props) {
        setTips(data.tips || []);
        toast.success('Sugestões geradas com sucesso!');
      } catch (error) {
-       console.error('Error generating AI scripts:', error);
+       logger.error('Error generating AI scripts:', error);
        toast.error('Erro ao gerar scripts com IA.');
      } finally {
        setLoading(false);

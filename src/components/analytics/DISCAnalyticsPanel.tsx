@@ -34,7 +34,10 @@ const DISCAnalyticsPanel = () => {
     if (!user) return;
     setLoading(true);
     try {
-      const { data: contactsData } = await supabase.from('contacts').select('id, first_name, last_name, avatar_url, behavior, relationship_score, companies(name)').eq('user_id', user.id);
+      const [{ data: contactsData }, { count: recentCount }] = await Promise.all([
+        supabase.from('contacts').select('id, first_name, last_name, avatar_url, behavior, relationship_score, companies(name)').eq('user_id', user.id),
+        supabase.from('disc_analysis_history').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('analyzed_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
+      ]);
       const mappedContacts: ContactWithDISC[] = (contactsData || []).map(c => {
         const behavior = getContactBehavior(c);
         return { id: c.id, firstName: c.first_name, lastName: c.last_name, avatar: c.avatar_url || undefined, discProfile: behavior?.discProfile as DISCProfile, discConfidence: behavior?.discConfidence, relationshipScore: c.relationship_score || 0, companyName: (c.companies as { name: string } | null)?.name };
@@ -48,7 +51,6 @@ const DISCAnalyticsPanel = () => {
         if (c.discConfidence) { totalConfidence += c.discConfidence; confidenceCount++; }
       });
       const mostCommon = (Object.entries(profileCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'I') as DISCProfile;
-      const { count: recentCount } = await supabase.from('disc_analysis_history').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('analyzed_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
       setStats({ totalProfiled: mappedContacts.length, avgConfidence: confidenceCount > 0 ? Math.round(totalConfidence / confidenceCount) : 0, mostCommon, recentAnalyses: recentCount || 0 });
       await fetchDashboardData();
     } catch (err) {

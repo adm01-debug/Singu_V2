@@ -7,7 +7,7 @@ export function useRoutingMetrics() {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ['routing-metrics'],
+    queryKey: ['routing-metrics', user?.id],
     queryFn: async (): Promise<RoutingMetrics> => {
       if (!user) return emptyMetrics();
 
@@ -72,6 +72,7 @@ export function useRoutingMetrics() {
     },
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 

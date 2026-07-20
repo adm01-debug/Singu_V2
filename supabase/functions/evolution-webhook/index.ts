@@ -80,7 +80,7 @@ function jsonResponse(data: unknown, status = 200) {
 }
 
 // Helper: Find contact by phone number - searches local DB first, then external DB
-async function findContactByPhone(supabase: SupabaseAdminClient, phoneNumber: string): Promise<{
+async function findContactByPhone(supabase: SupabaseAdminClient, phoneNumber: string, instance: string): Promise<{
   contactId: string | null;
   userId: string | null;
   companyId: string | null;
@@ -88,7 +88,7 @@ async function findContactByPhone(supabase: SupabaseAdminClient, phoneNumber: st
 }> {
   // Clean phone number - remove country code prefix variations and non-digits
   const cleanPhone = phoneNumber.replace(/\D/g, '');
-  
+
   // Try multiple phone formats for matching
   const phoneVariants = [cleanPhone];
   // If starts with 55 (Brazil), also try without country code
@@ -100,25 +100,21 @@ async function findContactByPhone(supabase: SupabaseAdminClient, phoneNumber: st
     phoneVariants.push('55' + cleanPhone);
   }
 
-  // Searching contact for phone variants
+  // 1. Search in LOCAL contacts table — single query covering all variants via OR
+  const localOrFilter = phoneVariants.map(v => `whatsapp.eq.${v},phone.eq.${v}`).join(',');
+  const { data: localContacts } = await supabase
+    .from('contacts')
+    .select('id, user_id, company_id')
+    .or(localOrFilter)
+    .limit(1);
 
-  // 1. Search in LOCAL contacts table
-  for (const variant of phoneVariants) {
-    const { data: localContacts } = await supabase
-      .from('contacts')
-      .select('id, user_id, company_id')
-      .or(`whatsapp.eq.${variant},phone.eq.${variant}`)
-      .limit(1);
-
-    if (localContacts && localContacts.length > 0) {
-      // Found contact in local DB;
-      return {
-        contactId: localContacts[0].id,
-        userId: localContacts[0].user_id,
-        companyId: localContacts[0].company_id,
-        source: 'local',
-      };
-    }
+  if (localContacts && localContacts.length > 0) {
+    return {
+      contactId: localContacts[0].id,
+      userId: localContacts[0].user_id,
+      companyId: localContacts[0].company_id,
+      source: 'local',
+    };
   }
 
   // 2. Search in EXTERNAL contacts database
@@ -128,54 +124,48 @@ async function findContactByPhone(supabase: SupabaseAdminClient, phoneNumber: st
   if (externalUrl && externalKey) {
     const externalSupabase = createClient(externalUrl, externalKey);
 
-    for (const variant of phoneVariants) {
-      // Search by phone fields in external DB - try multiple column names
-      const { data: extContacts, error: extError } = await externalSupabase
-        .from('contacts')
-        .select('id, company_id, first_name, last_name, cargo, whatsapp, phone')
-        .or(`whatsapp.eq.${variant},phone.eq.${variant}`)
-        .limit(1);
+    // Single query covering all variants via OR
+    const extOrFilter = phoneVariants.map(v => `whatsapp.eq.${v},phone.eq.${v}`).join(',');
+    const { data: extContacts, error: extError } = await externalSupabase
+      .from('contacts')
+      .select('id, company_id, first_name, last_name, cargo, whatsapp, phone')
+      .or(extOrFilter)
+      .limit(1);
 
-      if (extError) {
-        console.error('Error searching external contacts:', extError.message);
-        continue;
+    if (extError) {
+      console.error('Error searching external contacts:', extError.message);
+    } else if (extContacts && extContacts.length > 0) {
+      const extContact = extContacts[0];
+
+      // Try to find the user associated with this instance first
+      const { data: instanceData } = await supabase
+        .from('whatsapp_instances')
+        .select('user_id')
+        .eq('instance_name', instance)
+        .maybeSingle();
+
+      let defaultUserId = instanceData?.user_id;
+
+      if (!defaultUserId) {
+        // Fallback to first user in profiles as last resort
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id')
+          .limit(1);
+        defaultUserId = profiles?.[0]?.id || null;
       }
 
-      if (extContacts && extContacts.length > 0) {
-        const extContact = extContacts[0];
-        // Found contact in external DB;
-
-        // Get the default user (first user in profiles) to assign interaction
-         // Try to find the user associated with this instance first
-         const { data: instanceData } = await supabase
-           .from('whatsapp_instances')
-           .select('user_id')
-           .eq('instance_name', instance)
-           .maybeSingle();
- 
-         let defaultUserId = instanceData?.user_id;
- 
-         if (!defaultUserId) {
-           // Fallback to first user in profiles as last resort
-           const { data: profiles } = await supabase
-             .from('profiles')
-             .select('id')
-             .limit(1);
-           defaultUserId = profiles?.[0]?.id || null;
-         }
-
-        if (!defaultUserId) {
-          console.error('No user found in profiles to assign interaction');
-          return { contactId: extContact.id, userId: null, companyId: extContact.company_id, source: 'external' };
-        }
-
-        return {
-          contactId: extContact.id,
-          userId: defaultUserId,
-          companyId: extContact.company_id,
-          source: 'external',
-        };
+      if (!defaultUserId) {
+        console.error('No user found in profiles to assign interaction');
+        return { contactId: extContact.id, userId: null, companyId: extContact.company_id, source: 'external' };
       }
+
+      return {
+        contactId: extContact.id,
+        userId: defaultUserId,
+        companyId: extContact.company_id,
+        source: 'external',
+      };
     }
   } else {
     console.log('External DB credentials not configured, skipping external search');
@@ -289,7 +279,7 @@ async function handleMessageUpsert(supabase: SupabaseAdminClient, payload: any, 
   // SERVER_ACK mantém o valor inicial 'sent'
 
   // Find contact using enhanced search (local -> external -> create)
-  const { contactId, userId, companyId, source } = await findContactByPhone(supabase, phoneNumber || '');
+  const { contactId, userId, companyId, source } = await findContactByPhone(supabase, phoneNumber || '', instance);
 
   // Enhanced automated ingestion: WhatsApp messages, company link and audio handling
   let dbMessageId = null;
@@ -324,14 +314,14 @@ async function handleMessageUpsert(supabase: SupabaseAdminClient, payload: any, 
       .single();
 
     if (!msgError && upsertedMsg) {
-       await supabase.from('whatsapp_ingestion_logs').insert({
+      supabase.from('whatsapp_ingestion_logs').insert({
         user_id: userId,
         contact_id: contactId,
         message_id: messageId,
         event_type: 'message',
         status: 'success',
         details: { dbMessageId: upsertedMsg.id, source, companyId }
-      });
+      }).catch((e: unknown) => console.error('ingestion_log insert error:', e));
       dbMessageId = upsertedMsg.id;
     } else if (msgError) {
       console.error('Error upserting whatsapp_message:', msgError.message);
@@ -342,14 +332,14 @@ async function handleMessageUpsert(supabase: SupabaseAdminClient, payload: any, 
 
     // Automated transcription for voice messages/attachments
     if (messageType === 'audio' && dbMessageId) {
-       await supabase.from('whatsapp_ingestion_logs').insert({
+      supabase.from('whatsapp_ingestion_logs').insert({
         user_id: userId,
         contact_id: contactId,
         message_id: messageId,
         event_type: 'transcription_init',
         status: 'pending',
         details: { dbMessageId }
-      });
+      }).catch((e: unknown) => console.error('ingestion_log transcription_init error:', e));
 
       // Invoke voice-to-text with auto-save to interaction
       supabase.functions.invoke('voice-to-text', {
@@ -384,11 +374,11 @@ async function handleMessageUpsert(supabase: SupabaseAdminClient, payload: any, 
   if (messageContent && contactId && userId && messageType === 'text') {
     // Update contact name if we created it and now have pushName
     if (source === 'created' && senderName && senderName !== 'Desconhecido') {
-      await supabase
+      supabase
         .from('contacts')
         .update({ first_name: senderName, last_name: '' })
-        .eq('id', contactId);
-      // Updated contact name: ${senderName}`);
+        .eq('id', contactId)
+        .catch((e: unknown) => console.error('contact name update error:', e));
     }
 
     const interactionTitle = isFromMe 
@@ -572,7 +562,7 @@ async function handleCall(supabase: SupabaseAdminClient, payload: any, instance:
 
   // Find contact using enhanced search
   if (phoneNumber) {
-    const { contactId, userId, companyId } = await findContactByPhone(supabase, phoneNumber);
+    const { contactId, userId, companyId } = await findContactByPhone(supabase, phoneNumber, instance);
 
     if (contactId && userId) {
       await supabase.from('interactions').insert({

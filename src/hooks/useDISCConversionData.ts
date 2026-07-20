@@ -24,18 +24,19 @@ export function useDISCConversionData(period: ConversionPeriod) {
   const [metrics, setMetrics] = useState<ProfileMetrics[]>([]);
 
   useEffect(() => {
+    if (!user) return;
+    const currentUser = user;
+    let cancelled = false;
     const fetchMetrics = async () => {
-      if (!user) return;
       setLoading(true);
       try {
-        const { data: contacts } = await supabase
-          .from('contacts')
-          .select('id, behavior, relationship_score, relationship_stage, created_at');
+        // Both queries are independent — run in parallel
+        const [{ data: contacts }, { data: interactions }] = await Promise.all([
+          supabase.from('contacts').select('id, behavior, relationship_score, relationship_stage, created_at').eq('user_id', currentUser.id),
+          supabase.from('interactions').select('contact_id, type, created_at').eq('user_id', currentUser.id).order('created_at', { ascending: true }),
+        ]);
 
-        const { data: interactions } = await supabase
-          .from('interactions')
-          .select('contact_id, type, created_at')
-          .order('created_at', { ascending: true });
+        if (cancelled) return;
 
         const profileData: Record<string, {
           contacts: number; opportunities: number; conversions: number;
@@ -62,8 +63,6 @@ export function useDISCConversionData(period: ConversionPeriod) {
           if (stage === 'fechado' || stage === 'cliente') {
             profileData[discProfile].conversions++;
             profileData[discProfile].closedCount++;
-            // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
-            profileData[discProfile].totalValue += Math.random() * 50000 + 10000;
           }
 
           // eslint-disable-next-line sonarjs/no-nested-functions
@@ -82,21 +81,21 @@ export function useDISCConversionData(period: ConversionPeriod) {
           const avgDealValue = data.closedCount > 0 ? Math.round(data.totalValue / data.closedCount) : 0;
           const avgCycleDays = data.closedCount > 0 ? Math.round(data.totalCycleDays / data.closedCount) : 0;
           const avgRelationshipScore = data.contacts > 0 ? Math.round(data.totalRelationshipScore / data.contacts) : 0;
-          const trends: ('up' | 'down' | 'stable')[] = ['up', 'down', 'stable'];
-          // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
-          const trend = trends[Math.floor(Math.random() * 3)];
+          const trend: 'up' | 'down' | 'stable' = conversionRate >= 60 ? 'up' : conversionRate >= 30 ? 'stable' : 'down';
           return { profile, totalContacts: data.contacts, opportunities: data.opportunities, conversions: data.conversions, conversionRate, avgDealValue, avgCycleDays, avgRelationshipScore, trend };
         });
 
         setMetrics(calculatedMetrics);
       } catch (error) {
+        if (cancelled) return;
         const msg = error instanceof Error ? error.message : 'Unknown error';
         logger.error('Error fetching conversion metrics:', { error: msg });
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
     fetchMetrics();
+    return () => { cancelled = true; };
   }, [user, period]);
 
   const bestProfile = useMemo(() =>

@@ -149,10 +149,9 @@ Responda APENAS com um JSON válido no formato especificado.`;
        .select().single();
  
      if (saveError) console.error("Error saving analysis:", saveError);
- 
-     // Sync with new analytical profile table
+
      if (analysis.analytical_profile) {
-       await supabaseClient
+       supabaseClient
          .from("contact_analytical_profiles")
          .upsert({
            contact_id: contactId,
@@ -162,7 +161,8 @@ Responda APENAS com um JSON válido no formato especificado.`;
            communication_style: analysis.analytical_profile.communication_style_tag,
            sentiment_trend: analysis.overall_sentiment,
            last_updated_at: new Date().toISOString()
-         }, { onConflict: 'contact_id' });
+         }, { onConflict: 'contact_id' })
+         .catch((e: unknown) => console.error("contact_analytical_profiles upsert error:", e));
      }
 
     return jsonOk({ success: true, analysis, savedId: savedAnalysis?.id });

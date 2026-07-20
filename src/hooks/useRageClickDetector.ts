@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { logger } from '@/lib/logger';
 
 /**
  * Detects "rage clicks" (multiple clicks in a short period on the same area)
@@ -31,7 +32,7 @@ export function useRageClickDetector() {
         );
 
         if (isSameArea) {
-          console.warn('[UX Audit] Detectado "Rage Click" em:', {
+          logger.warn('[UX Audit] Detectado "Rage Click" em:', {
             x: e.clientX,
             y: e.clientY,
             target: e.target,

@@ -165,10 +165,11 @@ Deno.serve(async (req) => {
     if (!scrapeResponse.ok) {
       const errorText = await scrapeResponse.text();
       console.error("Firecrawl error:", errorText);
-      await supabaseClient
+      supabaseClient
         .from("social_scraping_schedule")
         .update({ last_run_at: new Date().toISOString(), consecutive_failures: 1, last_error: `Firecrawl error: ${scrapeResponse.status}` })
-        .eq("contact_id", contactId).eq("platform", platform);
+        .eq("contact_id", contactId).eq("platform", platform)
+        .catch((e: unknown) => console.error("social_scraping_schedule error update error:", e));
       return jsonError("Failed to scrape profile", 500);
     }
 
@@ -217,7 +218,7 @@ Deno.serve(async (req) => {
     }
 
     // Save/update profile
-    const { error: upsertError } = await supabaseClient.from("social_profiles").upsert({
+    supabaseClient.from("social_profiles").upsert({
       contact_id: contactId, user_id: userId, platform, profile_url: profileUrl,
       profile_data: { markdown, metadata, parsed: parsedProfile },
       headline: parsedProfile.headline, current_company: parsedProfile.current_company,
@@ -225,12 +226,12 @@ Deno.serve(async (req) => {
       skills: parsedProfile.skills || [], followers_count: parsedProfile.followers_count,
       following_count: parsedProfile.following_count, recent_posts: parsedProfile.recent_posts,
       last_scraped_at: new Date().toISOString(),
-    }, { onConflict: "contact_id,platform" });
-    if (upsertError) console.error("Error saving profile:", upsertError);
+    }, { onConflict: "contact_id,platform" })
+      .catch((e: unknown) => console.error("social_profiles upsert error:", e));
 
     // Suggest hobbies and interests based on social profile (AI Enrichment)
     const suggestedIntel = [];
-    
+
     // Suggest interests from skills
     if (parsedProfile.skills && parsedProfile.skills.length > 0) {
       for (const skill of parsedProfile.skills.slice(0, 5)) {
@@ -248,7 +249,7 @@ Deno.serve(async (req) => {
     // Try to extract hobbies from headline/bio
     const textToAnalyze = `${parsedProfile.headline} ${markdown}`.toLowerCase();
     const commonHobbies = ["futebol", "surf", "beach tennis", "viagem", "leitura", "vinhos", "gastronomia", "pets", "cachorros", "corrida", "academia", "yoga", "meditação"];
-    
+
     for (const hobby of commonHobbies) {
       if (textToAnalyze.includes(hobby)) {
         suggestedIntel.push({
@@ -262,27 +263,28 @@ Deno.serve(async (req) => {
       }
     }
 
+    const flushPromises: Promise<unknown>[] = [
+      supabaseClient.from("social_scraping_schedule").update({
+        last_run_at: new Date().toISOString(), consecutive_failures: 0, last_error: null,
+        next_run_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      }).eq("contact_id", contactId).eq("platform", platform),
+    ];
+
     if (suggestedIntel.length > 0) {
-      const { error: suggestError } = await supabaseClient
-        .from("suggested_rapport_intel")
-        .upsert(suggestedIntel, { onConflict: "contact_id,type,value" });
-      
-      if (suggestError) console.error("Error saving suggested intel:", suggestError);
+      flushPromises.push(
+        supabaseClient.from("suggested_rapport_intel")
+          .upsert(suggestedIntel, { onConflict: "contact_id,type,value" })
+      );
     }
 
     if (lifeEvents.length > 0) {
-      const { error: eventsError } = await supabaseClient.from("social_life_events").insert(lifeEvents);
-      if (eventsError) console.error("Error saving life events:", eventsError);
+      flushPromises.push(supabaseClient.from("social_life_events").insert(lifeEvents));
     }
 
-    await supabaseClient.from("social_scraping_schedule").update({
-      last_run_at: new Date().toISOString(), consecutive_failures: 0, last_error: null,
-      next_run_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-    }).eq("contact_id", contactId).eq("platform", platform);
+    Promise.all(flushPromises).catch((e: unknown) => console.error("social-profile-scraper flush error:", e));
 
     return jsonOk({ success: true, platform, profile: parsedProfile, lifeEvents: lifeEvents.length });
   } catch (error) {
-    console.error("social-profile-scraper error:", error);
     console.error("social-profile-scraper error:", error);
     return jsonError("Internal server error", 500);
   }

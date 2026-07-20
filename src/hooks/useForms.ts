@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export interface FormField {
@@ -43,15 +44,17 @@ export interface FormSubmission {
   created_at: string;
 }
 
-const KEY = ['marketing-forms'];
+const KEY_BASE = ['marketing-forms'];
 
 export function useForms() {
+  const { user } = useAuth();
   const qc = useQueryClient();
+  const KEY = [...KEY_BASE, user?.id];
 
   const { data: forms = [], isLoading } = useQuery({
     queryKey: KEY,
+    enabled: !!user,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
       const { data, error } = await supabase
         .from('forms')
@@ -70,7 +73,6 @@ export function useForms() {
 
   const upsert = useMutation({
     mutationFn: async (input: Partial<MarketingForm> & { name: string; slug: string }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
       const payload = { ...input, user_id: user.id } as never;
       if (input.id) {
@@ -91,6 +93,7 @@ export function useForms() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: KEY }); toast.success('Removido'); },
+    onError: () => toast.error('Erro ao remover formulário'),
   });
 
   const togglePublish = useMutation({
@@ -99,6 +102,7 @@ export function useForms() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
+    onError: () => toast.error('Erro ao alterar status de publicação'),
   });
 
   return { forms, isLoading, upsert, remove, togglePublish };

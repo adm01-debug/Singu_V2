@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { queryExternalData } from '@/lib/externalData';
 
 export type SeqChannel = 'whatsapp' | 'email' | 'call' | 'meeting';
@@ -58,12 +59,13 @@ function dealOutcome(d: RawDeal): 'won' | 'lost' | null {
 }
 
 export function useTouchpointSequences() {
+  const { user } = useAuth();
   return useQuery<TouchpointSequencesResult>({
-    queryKey: ['touchpoint-sequences'],
+    queryKey: ['touchpoint-sequences', user?.id],
+    enabled: !!user,
     // eslint-disable-next-line sonarjs/cognitive-complexity
     queryFn: async () => {
       const since = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString();
-      const { data: { user } } = await supabase.auth.getUser();
       const empty: TouchpointSequencesResult = { byLength: { 2: [], 3: [], 4: [], 5: [] }, totalClosedDeals: 0, topInsight: null };
       if (!user) return empty;
 

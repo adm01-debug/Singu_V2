@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useNotifications } from '@/hooks/useNotifications';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { SmartRemindersPanel } from '@/components/smart-reminders/SmartRemindersPanel';
@@ -23,6 +24,7 @@ interface BeforeInstallPromptEvent extends Event {
 
 const Notificacoes = () => {
   usePageTitle('Notificações');
+  const { user } = useAuth();
   const { permissionState, isSubscribed, isLoading, requestPermission, unsubscribe, showNotification } = useNotifications();
   const { toast } = useToast();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
@@ -62,7 +64,6 @@ const Notificacoes = () => {
     setNotificationSettings(newSettings);
     localStorage.setItem('notificationSettings', JSON.stringify(newSettings));
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       if (user) await supabase.from('profiles').update({ preferences: { notifications: newSettings } }).eq('id', user.id);
     } catch (error) { 
       const msg = error instanceof Error ? error.message : 'Unknown error';
@@ -71,24 +72,27 @@ const Notificacoes = () => {
   };
 
   useEffect(() => {
+    let cancelled = false;
     const loadSettings = async () => {
       try {
         const saved = localStorage.getItem('notificationSettings');
         if (saved) setNotificationSettings(JSON.parse(saved));
-        const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           const { data: profile } = await supabase.from('profiles').select('preferences').eq('id', user.id).maybeSingle();
+          if (cancelled) return;
           if (profile?.preferences) {
             const prefs = profile.preferences as { notifications?: typeof notificationSettings };
             if (prefs.notifications) { setNotificationSettings(prefs.notifications); localStorage.setItem('notificationSettings', JSON.stringify(prefs.notifications)); }
           }
         }
-      } catch (error) { 
+      } catch (error) {
+        if (cancelled) return;
         const msg = error instanceof Error ? error.message : 'Unknown error';
-        logger.error('Error loading notification settings:', { error: msg }); 
+        logger.error('Error loading notification settings:', { error: msg });
       }
     };
     loadSettings();
+    return () => { cancelled = true; };
   }, []);
 
   return (

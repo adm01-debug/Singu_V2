@@ -49,6 +49,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { useAuth } from '@/hooks/useAuth';
 import { useQueryClient } from '@tanstack/react-query';
+import { logger } from '@/lib/logger';
 
 
 interface Contact {
@@ -384,7 +385,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
         description: "Aguardando sua revisão na fila de aprovação.",
       });
     } catch (err) {
-      console.error(err);
+      logger.error('Error generating follow-up:', err);
       toast({
         title: "Erro ao gerar follow-up",
         variant: "destructive"
@@ -439,7 +440,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       queryClient.invalidateQueries({ queryKey: ['calendario-followups'] });
       
     } catch (err) {
-      console.error(err);
+      logger.error('Error scheduling reminder:', err);
       toast({
         title: "Erro ao agendar",
         description: "Não foi possível criar o lembrete interno.",

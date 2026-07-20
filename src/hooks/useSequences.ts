@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export interface SequenceStep {
   id: string;
@@ -133,6 +134,7 @@ export function useSequences() {
       qc.invalidateQueries({ queryKey: ['sequences'] });
       toast.success('Status atualizado');
     },
+    onError: () => toast.error('Erro ao atualizar status da sequência'),
   });
 
   const deleteSequence = useMutation({
@@ -144,6 +146,7 @@ export function useSequences() {
       qc.invalidateQueries({ queryKey: ['sequences'] });
       toast.success('Sequência removida');
     },
+    onError: () => toast.error('Erro ao remover sequência'),
   });
 
   const fetchSteps = async (sequenceId: string): Promise<SequenceStep[]> => {
@@ -159,18 +162,19 @@ export function useSequences() {
   const enrollContact = useMutation({
     mutationFn: async ({ sequenceId, contactId }: { sequenceId: string; contactId: string }) => {
       if (!userId) throw new Error('Não autenticado');
-      const { error } = await supabase.from('sequence_enrollments').insert({
-        sequence_id: sequenceId,
-        contact_id: contactId,
-        user_id: userId,
-        next_action_at: new Date().toISOString(),
-      });
+      const [{ error }, { error: updError }] = await Promise.all([
+        supabase.from('sequence_enrollments').insert({
+          sequence_id: sequenceId,
+          contact_id: contactId,
+          user_id: userId,
+          next_action_at: new Date().toISOString(),
+        }),
+        supabase.from('sequences')
+          .update({ total_enrolled: (sequences.find(s => s.id === sequenceId)?.total_enrolled || 0) + 1 })
+          .eq('id', sequenceId),
+      ]);
       if (error) throw error;
-
-      await supabase
-        .from('sequences')
-        .update({ total_enrolled: (sequences.find(s => s.id === sequenceId)?.total_enrolled || 0) + 1 })
-        .eq('id', sequenceId);
+      if (updError) logger.error('Failed to update enrollment count', updError);
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['sequences'] });

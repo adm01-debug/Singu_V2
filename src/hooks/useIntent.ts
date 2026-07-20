@@ -152,6 +152,7 @@ export function useTogglePixel() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["intent-pixels"] }),
+    onError: () => toast.error("Erro ao atualizar status do pixel"),
   });
 }
 
@@ -166,6 +167,7 @@ export function useDeletePixel() {
       qc.invalidateQueries({ queryKey: ["intent-pixels"] });
       toast.success("Pixel removido");
     },
+    onError: () => toast.error("Erro ao remover pixel"),
   });
 }
 

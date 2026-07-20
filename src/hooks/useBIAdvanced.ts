@@ -1,5 +1,6 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 // ── Demand Forecast ──
@@ -34,26 +35,19 @@ export interface ProfitabilityItem {
 }
 
 export function useProfitabilityByContact() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['bi-profitability-contacts'],
+    queryKey: ['bi-profitability-contacts', user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-
-      // Get contacts with interaction counts
-      const { data: contacts } = await supabase
-        .from('contacts')
-        .select('id, first_name, last_name, relationship_score, sentiment')
-        .eq('user_id', user.id)
-        .limit(100);
+      if (!user) return [];
+      // Both queries are independent — run in parallel
+      const [{ data: contacts }, { data: interactions }] = await Promise.all([
+        supabase.from('contacts').select('id, first_name, last_name, relationship_score, sentiment').eq('user_id', user.id).limit(100),
+        supabase.from('interactions').select('contact_id, type, sentiment').eq('user_id', user.id),
+      ]);
 
       if (!contacts) return [];
-
-      // Get interaction counts per contact
-      const { data: interactions } = await supabase
-        .from('interactions')
-        .select('contact_id, type, sentiment')
-        .eq('user_id', user.id);
 
       const interactionMap = new Map<string, { count: number; positive: number; negative: number }>();
       for (const i of interactions || []) {
@@ -94,12 +88,12 @@ export interface GeoSalesPoint {
 }
 
 export function useGeoSalesData() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['bi-geo-sales'],
+    queryKey: ['bi-geo-sales', user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-
+      if (!user) return [];
       const { data: companies } = await supabase
         .from('companies')
         .select('id, name, lat, lng, city, state')
@@ -109,21 +103,16 @@ export function useGeoSalesData() {
 
       if (!companies?.length) return [];
 
-      const { data: contacts } = await supabase
-        .from('contacts')
-        .select('company_id')
-        .eq('user_id', user.id);
+      // Both queries are independent of each other — run in parallel
+      const [{ data: contacts }, { data: interactions }] = await Promise.all([
+        supabase.from('contacts').select('company_id').eq('user_id', user.id),
+        supabase.from('interactions').select('company_id').eq('user_id', user.id).not('company_id', 'is', null),
+      ]);
 
       const contactCount = new Map<string, number>();
       for (const c of contacts || []) {
         if (c.company_id) contactCount.set(c.company_id, (contactCount.get(c.company_id) || 0) + 1);
       }
-
-      const { data: interactions } = await supabase
-        .from('interactions')
-        .select('company_id')
-        .eq('user_id', user.id)
-        .not('company_id', 'is', null);
 
       const interactionCount = new Map<string, number>();
       for (const i of interactions || []) {

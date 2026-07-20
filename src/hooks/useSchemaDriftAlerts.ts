@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
+import { toast } from 'sonner';
 
 export interface SchemaDriftAlert {
   id: string;
@@ -22,7 +23,7 @@ export function useSchemaDriftAlerts(onlyUnresolved = true) {
   const { isAdmin } = useIsAdmin();
 
   return useQuery({
-    queryKey: ['schema-drift-alerts', onlyUnresolved],
+    queryKey: ['schema-drift-alerts', onlyUnresolved, user?.id],
     queryFn: async () => {
       let query = supabase
         .from('schema_drift_alerts')
@@ -49,7 +50,7 @@ export function useUnresolvedDriftCount() {
   const { isAdmin } = useIsAdmin();
 
   return useQuery({
-    queryKey: ['schema-drift-count'],
+    queryKey: ['schema-drift-count', user?.id],
     queryFn: async () => {
       const { count, error } = await supabase
         .from('schema_drift_alerts')
@@ -85,6 +86,8 @@ export function useResolveDriftAlert() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['schema-drift-alerts'] });
       queryClient.invalidateQueries({ queryKey: ['schema-drift-count'] });
+      toast.success('Alerta resolvido');
     },
+    onError: () => toast.error('Erro ao resolver alerta de drift'),
   });
 }

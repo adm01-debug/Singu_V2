@@ -55,35 +55,42 @@ const RelatorioContato = () => {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
     const fetchData = async () => {
-      if (!id) return;
-
       try {
-        // Fetch contact - local first, then external
-        let contact: Tables<'contacts'> | null = null;
-        const { data: localContact } = await supabase.from("contacts").select("*").eq("id", id).maybeSingle();
-        if (localContact) {
-          contact = localContact;
-        } else {
+        // Fetch all local data in parallel, then fall back to external if each is empty
+        const [
+          { data: localContact },
+          { data: localInteractions },
+          { data: localDisc },
+        ] = await Promise.all([
+          supabase.from("contacts").select("*").eq("id", id).maybeSingle(),
+          supabase.from("interactions").select("*").eq("contact_id", id).order("created_at", { ascending: false }),
+          supabase.from("disc_analysis_history").select("*").eq("contact_id", id).order("analyzed_at", { ascending: false }),
+        ]);
+
+        if (cancelled) return;
+
+        let contact: Tables<'contacts'> | null = localContact;
+        if (!contact) {
           const { data: extContact } = await queryExternalData<Tables<'contacts'>>({ table: 'contacts', filters: [{ type: 'eq', column: 'id', value: id }] });
           contact = extContact?.[0] || null;
         }
 
-        // Fetch interactions - local first, then external
-        const { data: localInteractions } = await supabase.from("interactions").select("*").eq("contact_id", id).order("created_at", { ascending: false });
         let interactions = localInteractions || [];
         if (interactions.length === 0) {
           const { data: extInteractions } = await queryExternalData<Tables<'interactions'>>({ table: 'interactions', filters: [{ type: 'eq', column: 'contact_id', value: id }], order: { column: 'created_at', ascending: false } });
           interactions = extInteractions || [];
         }
 
-        // Fetch DISC - local first, then external
-        const { data: localDisc } = await supabase.from("disc_analysis_history").select("*").eq("contact_id", id).order("analyzed_at", { ascending: false });
         let discHistory = localDisc || [];
         if (discHistory.length === 0) {
           const { data: extDisc } = await queryExternalData<Tables<'disc_analysis_history'>>({ table: 'disc_analysis_history', filters: [{ type: 'eq', column: 'contact_id', value: id }], order: { column: 'analyzed_at', ascending: false } });
           discHistory = extDisc || [];
         }
+
+        if (cancelled) return;
 
         if (!contact) {
           setData(null);
@@ -94,18 +101,27 @@ const RelatorioContato = () => {
            .filter(i => i.content?.toLowerCase().includes('objeção') || i.content?.toLowerCase().includes('não gostou'))
            .map(i => i.content)
            .slice(0, 3);
- 
+
          const topPreferences = interactions
            .filter(i => i.content?.toLowerCase().includes('preferência') || i.content?.toLowerCase().includes('gosta'))
            .map(i => i.content)
            .slice(0, 3);
- 
+
         // Fetch overrides
         const { data: overrides } = await supabase
           .from("contact_report_overrides")
           .select("*")
           .eq("contact_id", id)
           .maybeSingle();
+
+        // Fetch consent logs
+        const { data: consentLogs } = await supabase
+          .from("social_consent_audit")
+          .select("*")
+          .eq("contact_id", id)
+          .order("created_at", { ascending: false });
+
+        if (cancelled) return;
 
         const defaultInsights = {
           recurringObjections: recurringObjections.filter((o): o is string => o !== null),
@@ -124,17 +140,10 @@ const RelatorioContato = () => {
           ...savedInsights
         } : defaultInsights;
 
-        // Fetch consent logs
-        const { data: consentLogs } = await supabase
-          .from("social_consent_audit")
-          .select("*")
-          .eq("contact_id", id)
-          .order("created_at", { ascending: false });
-
-        setData({ 
-          contact, 
-          interactions, 
-          discHistory, 
+        setData({
+          contact,
+          interactions,
+          discHistory,
           consentLogs: consentLogs || [],
           insights: defaultInsights,
           overrides: overrides
@@ -144,21 +153,23 @@ const RelatorioContato = () => {
               }
             : undefined
         });
-        
+
         setEditedInsights(mergedInsights);
         setCustomScripts((overrides?.custom_scripts as Record<string, string>) || {
           main_script: `"Olá ${contact.first_name}, tudo bem? Revisitando nossa conversa sobre o projeto X. Estava lendo um case hoje de uma empresa que teve os mesmos desafios de segurança que você comentou e pensei em te mostrar como resolvemos. Faz sentido darmos uma olhada rápida amanhã?"`
         });
       } catch (error) {
+        if (cancelled) return;
         const msg = error instanceof Error ? error.message : 'Unknown error';
         logger.error('Error fetching report data:', { error: msg });
         setData(null);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchData();
+    return () => { cancelled = true; };
   }, [id]);
 
    const handlePrint = () => window.print();
@@ -180,7 +191,7 @@ const RelatorioContato = () => {
       toast.success("Alterações salvas com sucesso");
       setEditingInsights(false);
     } catch (error) {
-      console.error('Error saving overrides:', error);
+      logger.error('Error saving overrides:', error);
       toast.error("Erro ao salvar alterações");
     } finally {
       setSaving(false);

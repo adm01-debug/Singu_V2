@@ -2,6 +2,7 @@ import { memo, useState, useEffect } from 'react';
 import { Cake, Heart, Sparkles, Users, Edit2, Check, X, Loader2, Plus, Trash2, Baby, RefreshCw, Zap, Star, History, RotateCcw, Brain, MessageSquare, Instagram, Linkedin, Twitter, Phone, Globe } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { InlineEmptyState } from '@/components/ui/empty-state';
@@ -132,21 +133,19 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
         return;
       }
 
-      for (const p of platforms) {
-        const { error } = await supabase.functions.invoke('social-profile-scraper', {
-          body: {
-            contactId: rapportIntel.contact_id,
-            platform: p.key,
-            profileUrl: p.url
-          }
-        });
-        if (error) throw error;
-      }
+      // Invoke all social scrapers in parallel instead of sequentially
+      const results = await Promise.all(
+        platforms.map(p => supabase.functions.invoke('social-profile-scraper', {
+          body: { contactId: rapportIntel.contact_id, platform: p.key, profileUrl: p.url }
+        }))
+      );
+      const firstError = results.find(r => r.error)?.error;
+      if (firstError) throw firstError;
 
       toast.success('Sincronização social concluída! Recarregando dados...');
       window.location.reload(); // Refresh to show new data
     } catch (error) {
-      console.error('Social sync error:', error);
+      logger.error('Social sync error:', error);
       toast.error('Erro na sincronização social. Verifique as configurações.');
     } finally {
       setIsSyncing(false);

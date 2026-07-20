@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
 export type WebhookTargetEntity = 'contact' | 'company' | 'deal' | 'interaction' | 'note' | 'custom';
@@ -44,10 +45,14 @@ function genToken() {
 }
 
 export function useIncomingWebhooks() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   const { data: webhooks = [], isLoading } = useQuery({
-    queryKey: ['incoming_webhooks'],
+    queryKey: ['incoming_webhooks', user?.id],
+    enabled: !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('incoming_webhooks')
@@ -60,7 +65,6 @@ export function useIncomingWebhooks() {
 
   const upsert = useMutation({
     mutationFn: async (input: Partial<IncomingWebhook> & { name: string; target_entity: WebhookTargetEntity }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Não autenticado');
 
       if (input.id) {
@@ -109,6 +113,7 @@ export function useIncomingWebhooks() {
       qc.invalidateQueries({ queryKey: ['incoming_webhooks'] });
       toast.success('Webhook removido');
     },
+    onError: () => toast.error('Erro ao remover webhook'),
   });
 
   const rotateToken = useMutation({
@@ -120,6 +125,7 @@ export function useIncomingWebhooks() {
       qc.invalidateQueries({ queryKey: ['incoming_webhooks'] });
       toast.success('Token rotacionado');
     },
+    onError: () => toast.error('Erro ao rotacionar token'),
   });
 
   return { webhooks, isLoading, upsert, remove, rotateToken };
@@ -129,6 +135,8 @@ export function useIncomingWebhookLogs(webhookId: string | undefined) {
   return useQuery({
     queryKey: ['incoming_webhook_logs', webhookId],
     enabled: !!webhookId,
+    staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('incoming_webhook_logs')

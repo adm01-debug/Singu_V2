@@ -211,23 +211,23 @@ Deno.serve(async (req) => {
         const startedAt = Date.now();
         try {
           result = await callTool(callParsed.data.name, callParsed.data.arguments, admin, conn.created_by);
-          await admin.from("mcp_tool_calls").insert({
+          admin.from("mcp_tool_calls").insert({
             connection_id: conn.id,
             tool_name: callParsed.data.name,
             arguments_summary: { keys: Object.keys(callParsed.data.arguments) },
             status: "success",
             latency_ms: Date.now() - startedAt,
-          });
+          }).catch((e: unknown) => console.error("mcp_tool_calls insert error:", e));
         } catch (toolErr) {
           const message = toolErr instanceof Error ? toolErr.message : "Erro";
-          await admin.from("mcp_tool_calls").insert({
+          admin.from("mcp_tool_calls").insert({
             connection_id: conn.id,
             tool_name: callParsed.data.name,
             arguments_summary: { keys: Object.keys(callParsed.data.arguments) },
             status: "error",
             error_message: message.slice(0, 500),
             latency_ms: Date.now() - startedAt,
-          });
+          }).catch((e: unknown) => console.error("mcp_tool_calls error insert error:", e));
           throw toolErr;
         }
         break;

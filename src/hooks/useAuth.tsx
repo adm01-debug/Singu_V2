@@ -2,6 +2,7 @@ import { useState, useEffect, createContext, useContext, ReactNode, forwardRef, 
 import { User, Session, AuthChangeEvent } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { logger } from "@/lib/logger";
 import { PageLoadingFallback } from '@/components/feedback/PageLoadingFallback';
@@ -31,6 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isHandling401Ref = useRef(false);
+  const qc = useQueryClient();
 
   // Função para agendar refresh automático
   const scheduleTokenRefresh = useCallback((currentSession: Session | null) => {
@@ -126,16 +128,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session: existingSession } }) => {
-      setSession(existingSession);
-      setUser(existingSession?.user ?? null);
-      setLoading(false);
-      
-      if (existingSession) {
-        scheduleTokenRefresh(existingSession);
-      }
-    });
+    // Check for existing session — always call setLoading(false) so app never stays stuck
+    supabase.auth.getSession()
+      .then(({ data: { session: existingSession } }) => {
+        setSession(existingSession);
+        setUser(existingSession?.user ?? null);
+        setLoading(false);
+        if (existingSession) {
+          scheduleTokenRefresh(existingSession);
+        }
+      })
+      .catch((err: unknown) => {
+        logger.error('Failed to retrieve session:', err);
+        setLoading(false);
+      });
 
     // Cleanup
     return () => {
@@ -245,6 +251,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       refreshTimeoutRef.current = null;
     }
     await supabase.auth.signOut();
+    qc.clear();
     setUser(null);
     setSession(null);
     toast.success('Logout realizado com sucesso!');

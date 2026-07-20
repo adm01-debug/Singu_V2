@@ -54,36 +54,35 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
   const [emotionalMetrics, setEmotionalMetrics] = useState<ProfileMetrics[]>([]);
 
   useEffect(() => {
-    if (user) fetchMetrics();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, period]);
-
-  const fetchMetrics = async () => {
+    if (!user) return;
+    const currentUser = user;
+    let cancelled = false;
+    const fetchMetrics = async () => {
     setLoading(true);
     try {
       // Fetch VAK analysis history
       const { data: vakHistory } = await supabase
         .from('vak_analysis_history')
         .select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score')
-        .eq('user_id', user!.id);
+        .eq('user_id', currentUser.id);
 
       // Fetch contacts for relationship scores
       const { data: contacts } = await supabase
         .from('contacts')
         .select('id, relationship_score, relationship_stage')
-        .eq('user_id', user!.id);
+        .eq('user_id', currentUser.id);
 
       // Fetch emotional states
       const { data: emotionalHistory } = await supabase
         .from('emotional_states_history')
         .select('contact_id, emotional_state')
-        .eq('user_id', user!.id);
+        .eq('user_id', currentUser.id);
 
       // Fetch interactions count
       const { data: interactions } = await supabase
         .from('interactions')
         .select('contact_id')
-        .eq('user_id', user!.id);
+        .eq('user_id', currentUser.id);
 
       // Process VAK metrics
       const vakData: Record<VAKType, { contacts: Set<string>; totalScore: number; interactions: number; conversions: number }> = {
@@ -120,15 +119,15 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
       const processedVak: ProfileMetrics[] = (['V', 'A', 'K', 'D'] as VAKType[]).map(type => {
         const data = vakData[type];
         const contactCount = data.contacts.size;
+        const conversionRate = contactCount > 0 ? Math.round((data.conversions / contactCount) * 100) : 0;
         return {
           profile: VAK_LABELS[type].name,
           profileType: 'vak',
           totalContacts: contactCount,
           avgRelationshipScore: contactCount > 0 ? Math.round(data.totalScore / contactCount) : 0,
           interactionCount: data.interactions,
-          conversionRate: contactCount > 0 ? Math.round((data.conversions / contactCount) * 100) : 0,
-          // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
-          trend: Math.random() > 0.5 ? 'up' : 'stable'
+          conversionRate,
+          trend: conversionRate >= 50 ? 'up' : conversionRate >= 25 ? 'stable' : 'down'
         };
       });
 
@@ -161,15 +160,20 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
         trend: cat === 'positive' ? 'up' : cat === 'negative' ? 'down' : 'stable'
       }));
 
+      if (cancelled) return;
       setVakMetrics(processedVak);
       setEmotionalMetrics(processedEmotional);
     } catch (error) {
+      if (cancelled) return;
       const msg = error instanceof Error ? error.message : 'Erro ao carregar métricas';
       logger.error('Error fetching NLP metrics:', { error: msg });
     } finally {
-      setLoading(false);
+      if (!cancelled) setLoading(false);
     }
-  };
+    };
+    fetchMetrics();
+    return () => { cancelled = true; };
+  }, [user, period]);
 
   const currentMetrics = metricType === 'vak' ? vakMetrics : emotionalMetrics;
   

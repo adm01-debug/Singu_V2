@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { insertExternalData } from '@/lib/externalData';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 
 export type MeetingModality = 'video' | 'presencial' | 'phone';
 
@@ -30,12 +31,13 @@ export interface CreatedMeeting {
 }
 
 export function useCreateMeeting() {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (payload: CreateMeetingPayload): Promise<CreatedMeeting> => {
-      const { data: userData } = await supabase.auth.getUser();
-      const userId = userData?.user?.id;
+      if (!user) throw new Error('Usuário não autenticado');
+      const userId = user.id;
 
       const record: Record<string, unknown> = {
         contact_id: payload.contactId,
@@ -47,7 +49,7 @@ export function useCreateMeeting() {
         meeting_url: payload.meetingUrl ?? null,
         notes: payload.notes ?? null,
         status: 'scheduled',
-        ...(userId ? { user_id: userId } : {}),
+        user_id: userId,
       };
 
       const { data, error } = await insertExternalData<CreatedMeeting>('meetings', record);

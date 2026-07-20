@@ -165,39 +165,37 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Send notifications
+    // Send all push notifications in parallel
     const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
     const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
-    
-    let sentCount = 0;
-    
-    for (const notification of notifications) {
-      try {
-        const response = await fetchAPI(`${supabaseUrl}/functions/v1/send-push-notification`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${supabaseAnonKey}`,
-            'x-trace-id': traceId
-          },
-          body: JSON.stringify({
-            userId: notification.userId,
-            title: notification.title,
-            body: notification.body,
-            data: notification.data,
-            tag: notification.tag
-          })
-        });
-        
-        if (response.ok) {
-          sentCount++;
-        } else {
-          log.warn('push_send_failed', { userId: notification.userId, status: response.status });
+
+    const sendResults = await Promise.all(
+      notifications.map(async (notification) => {
+        try {
+          const response = await fetchAPI(`${supabaseUrl}/functions/v1/send-push-notification`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${supabaseAnonKey}`,
+              'x-trace-id': traceId
+            },
+            body: JSON.stringify({
+              userId: notification.userId,
+              title: notification.title,
+              body: notification.body,
+              data: notification.data,
+              tag: notification.tag
+            })
+          });
+          if (!response.ok) log.warn('push_send_failed', { userId: notification.userId, status: response.status });
+          return response.ok;
+        } catch (error) {
+          log.error('push_error', { userId: notification.userId, error: error instanceof Error ? error.message : String(error) });
+          return false;
         }
-      } catch (error) {
-        log.error('push_error', { userId: notification.userId, error: error instanceof Error ? error.message : String(error) });
-      }
-    }
+      })
+    );
+    const sentCount = sendResults.filter(Boolean).length;
 
     log.info("check_complete", { sentCount, total: notifications.length });
 

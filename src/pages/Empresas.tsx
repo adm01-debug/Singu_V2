@@ -182,13 +182,23 @@ const Empresas = () => {
   };
   const handleSelectAll = () => { setSelectedIds(selectedIds.size === filteredAndSortedCompanies.length ? new Set() : new Set(filteredAndSortedCompanies.map(c => c.id))); };
   const handleBulkDelete = async (ids: string[]) => {
-    for (const id of ids) { await deleteCompany(id); }
+    await Promise.all(ids.map(id => deleteCompany(id)));
     setSelectedIds(new Set());
     setSelectionMode(false);
     const plural = ids.length > 1 ? 's' : '';
     toast.success(`${ids.length} empresa${plural} excluída${plural}`);
   };
-  const handleBulkAddTag = async (ids: string[], tag: string) => { for (const id of ids) { const company = companies.find(c => c.id === id); if (company) { const currentTags = company.tags || []; if (!currentTags.includes(tag)) await updateCompany(id, { tags: [...currentTags, tag] }); } } setSelectedIds(new Set()); toast.success(`Tag "${tag}" adicionada a ${ids.length} empresa${ids.length > 1 ? 's' : ''}`); };
+  const handleBulkAddTag = async (ids: string[], tag: string) => {
+    await Promise.all(ids.map(id => {
+      const company = companies.find(c => c.id === id);
+      if (!company) return Promise.resolve();
+      const currentTags = company.tags || [];
+      if (currentTags.includes(tag)) return Promise.resolve();
+      return updateCompany(id, { tags: [...currentTags, tag] });
+    }));
+    setSelectedIds(new Set());
+    toast.success(`Tag "${tag}" adicionada a ${ids.length} empresa${ids.length > 1 ? 's' : ''}`);
+  };
 
   return (
     <AppLayout>
