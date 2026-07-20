@@ -35,47 +35,40 @@ Deno.serve(async (req) => {
     const edgeUrl = `${supabaseUrl}/functions/v1/external-data`;
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
 
-    // Get latest email
-    const latestRes = await fetchAPI(edgeUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: authHeader || `Bearer ${anonKey}`,
-        apikey: anonKey,
-      },
-      body: JSON.stringify({
-        action: "select",
-        table: "email_logs",
-        select: "id,sent_at,from_email,to_email,status",
-        order: { column: "sent_at", ascending: false },
-        range: { from: 0, to: 0 },
-      }),
-    });
-
-    const latestData = await latestRes.json();
-    const latestEmail = Array.isArray(latestData?.data)
-      ? latestData.data[0]
-      : null;
-
-    // Get count last 24h
+    // Fetch latest email and 24h stats concurrently (independent requests)
     const now = new Date();
     const h24Ago = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
+    const commonHeaders = {
+      "Content-Type": "application/json",
+      Authorization: authHeader || `Bearer ${anonKey}`,
+      apikey: anonKey,
+    };
 
-    const countRes = await fetchAPI(edgeUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: authHeader || `Bearer ${anonKey}`,
-        apikey: anonKey,
-      },
-      body: JSON.stringify({
-        action: "rpc",
-        functionName: "get_email_pipeline_stats",
-        params: { p_since: h24Ago },
+    const [latestRes, countRes] = await Promise.all([
+      fetchAPI(edgeUrl, {
+        method: "POST",
+        headers: commonHeaders,
+        body: JSON.stringify({
+          action: "select",
+          table: "email_logs",
+          select: "id,sent_at,from_email,to_email,status",
+          order: { column: "sent_at", ascending: false },
+          range: { from: 0, to: 0 },
+        }),
       }),
-    });
+      fetchAPI(edgeUrl, {
+        method: "POST",
+        headers: commonHeaders,
+        body: JSON.stringify({
+          action: "rpc",
+          functionName: "get_email_pipeline_stats",
+          params: { p_since: h24Ago },
+        }),
+      }),
+    ]);
 
-    const countData = await countRes.json();
+    const [latestData, countData] = await Promise.all([latestRes.json(), countRes.json()]);
+    const latestEmail = Array.isArray(latestData?.data) ? latestData.data[0] : null;
     let stats = countData?.data;
 
     // Fallback: if RPC doesn't exist, use basic count
@@ -151,8 +144,8 @@ Deno.serve(async (req) => {
       status: 200,
     });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Unknown error";
-    return new Response(JSON.stringify({ error: message }), {
+    console.error("email-pipeline-health error:", err);
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       headers: { ...cors, "Content-Type": "application/json" },
       status: 500,
     });

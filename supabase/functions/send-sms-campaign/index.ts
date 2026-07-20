@@ -64,14 +64,11 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "Campaign already processed" }), { status: 409, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
-    // Materialize recipients from contacts with phone, excluding opt-outs
-    const { data: contacts } = await admin
-      .from("contacts")
-      .select("id, first_name, last_name, phone, whatsapp")
-      .eq("user_id", user.id);
-
-    const { data: optOuts } = await admin
-      .from("sms_opt_outs").select("phone").eq("user_id", user.id);
+    // Materialize recipients from contacts with phone, excluding opt-outs (parallel reads)
+    const [{ data: contacts }, { data: optOuts }] = await Promise.all([
+      admin.from("contacts").select("id, first_name, last_name, phone, whatsapp").eq("user_id", user.id),
+      admin.from("sms_opt_outs").select("phone").eq("user_id", user.id),
+    ]);
     const optedOut = new Set((optOuts || []).map(o => o.phone));
 
     const recipientRows: Array<{ campaign_id: string; contact_id: string; phone: string; status: string }> = [];
@@ -113,52 +110,55 @@ Deno.serve(async (req) => {
     const { data: storedRecipients } = await admin
       .from("sms_campaign_recipients").select("id, contact_id, phone").eq("campaign_id", campaignId);
 
-    for (const r of storedRecipients || []) {
-      const body = renderedByContact.get(r.contact_id) || campaign.message;
-      if (!canSend) {
-        // Mark as failed with explanation; admin must connect Twilio + sender
+    if (!canSend) {
+      // One batch update for all recipients — no Twilio provider configured
+      const allIds = (storedRecipients || []).map((r: { id: string }) => r.id);
+      if (allIds.length > 0) {
         await admin.from("sms_campaign_recipients").update({
           status: "failed",
           error_message: "SMS provider not configured (Twilio connector + sender_id required)",
           failed_at: new Date().toISOString(),
-        }).eq("id", r.id);
-        failed++;
-        continue;
+        }).in("id", allIds);
       }
-      try {
-        const resp = await fetchAPI(`${TWILIO_GATEWAY}/Messages.json`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${LOVABLE_API_KEY}`,
-            "X-Connection-Api-Key": TWILIO_API_KEY,
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({ To: r.phone, From: fromNumber, Body: body }),
-        });
-        const data = await resp.json();
-        if (!resp.ok) {
-          await admin.from("sms_campaign_recipients").update({
-            status: "failed",
-            error_message: data?.message || `HTTP ${resp.status}`,
-            failed_at: new Date().toISOString(),
-          }).eq("id", r.id);
+      failed = allIds.length;
+    } else {
+      type SentRow = { id: string; status: string; provider_message_id: string | null; sent_at: string };
+      type FailedRow = { id: string; status: string; error_message: string; failed_at: string };
+      const sentRows: SentRow[] = [];
+      const failedRows: FailedRow[] = [];
+      const now = new Date().toISOString();
+
+      for (const r of storedRecipients || []) {
+        const body = renderedByContact.get(r.contact_id) || campaign.message;
+        try {
+          const resp = await fetchAPI(`${TWILIO_GATEWAY}/Messages.json`, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+              "X-Connection-Api-Key": TWILIO_API_KEY,
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({ To: r.phone, From: fromNumber, Body: body }),
+          });
+          const data = await resp.json();
+          if (!resp.ok) {
+            failedRows.push({ id: r.id, status: "failed", error_message: data?.message || `HTTP ${resp.status}`, failed_at: now });
+            failed++;
+          } else {
+            sentRows.push({ id: r.id, status: "sent", provider_message_id: data?.sid || null, sent_at: now });
+            sent++;
+          }
+        } catch (err) {
+          failedRows.push({ id: r.id, status: "failed", error_message: err instanceof Error ? err.message : "send error", failed_at: now });
           failed++;
-        } else {
-          await admin.from("sms_campaign_recipients").update({
-            status: "sent",
-            provider_message_id: data?.sid || null,
-            sent_at: new Date().toISOString(),
-          }).eq("id", r.id);
-          sent++;
         }
-      } catch (err) {
-        await admin.from("sms_campaign_recipients").update({
-          status: "failed",
-          error_message: err instanceof Error ? err.message : "send error",
-          failed_at: new Date().toISOString(),
-        }).eq("id", r.id);
-        failed++;
       }
+
+      // Batch-write all outcomes after the loop
+      await Promise.all([
+        sentRows.length > 0 ? admin.from("sms_campaign_recipients").upsert(sentRows, { onConflict: "id" }) : Promise.resolve(),
+        failedRows.length > 0 ? admin.from("sms_campaign_recipients").upsert(failedRows, { onConflict: "id" }) : Promise.resolve(),
+      ]);
     }
 
     const finalStatus = sent > 0 ? "sent" : "failed";

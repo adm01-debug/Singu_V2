@@ -1,11 +1,12 @@
- import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
- import { Share2, EyeOff, ShieldCheck, Linkedin, Instagram, Twitter } from 'lucide-react';
- import { supabase } from '@/integrations/supabase/client';
- import { useAuth } from '@/hooks/useAuth';
+import { Share2, EyeOff, ShieldCheck, Linkedin, Instagram, Twitter } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
  
 interface SocialMediaIntelligenceCardProps {
   contactId: string;
@@ -18,26 +19,24 @@ interface SocialMediaIntelligenceCardProps {
    const [allowPublicData, setAllowPublicData] = useState(true);
    const { user } = useAuth();
  
-   const logConsent = async (network: string, source: string) => {
-     if (!user) return;
-     const { error } = await supabase.from('social_consent_audit').insert({
-       contact_id: contactId,
-       user_id: user.id,
-       network,
-       source_url: source,
-       consent_type: 'public_data_osint'
-     });
-     if (error) console.error('Error logging consent:', error);
-   };
- 
-   useEffect(() => {
-     if (allowPublicData) {
-       if (linkedin) logConsent('linkedin', linkedin);
-       if (instagram) logConsent('instagram', instagram);
-       if (twitter) logConsent('twitter', twitter);
-     }
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [allowPublicData]);
+  const logConsent = useCallback(async (network: string, source: string) => {
+    if (!user) return;
+    const { error } = await supabase.from('social_consent_audit').insert({
+      contact_id: contactId,
+      user_id: user.id,
+      network,
+      source_url: source,
+      consent_type: 'public_data_osint'
+    });
+    if (error) console.error('Error logging consent:', error);
+  }, [user, contactId]);
+
+  useEffect(() => {
+    if (!allowPublicData) return;
+    if (linkedin) logConsent('linkedin', linkedin);
+    if (instagram) logConsent('instagram', instagram);
+    if (twitter) logConsent('twitter', twitter);
+  }, [allowPublicData, logConsent, linkedin, instagram, twitter]);
 
   if (!allowPublicData) {
     return (
@@ -144,5 +143,3 @@ interface SocialMediaIntelligenceCardProps {
     </Card>
   );
 };
-
-import { Button } from '@/components/ui/button';

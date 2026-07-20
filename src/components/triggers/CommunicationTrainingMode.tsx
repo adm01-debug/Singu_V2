@@ -52,6 +52,7 @@ export function CommunicationTrainingMode() {
       }
     } catch (err) {
       logger.error('Error fetching profile:', err);
+      toast.error('Não foi possível carregar seu perfil de comunicação');
     } finally {
       setLoading(false);
     }

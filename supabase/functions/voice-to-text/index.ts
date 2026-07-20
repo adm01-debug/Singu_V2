@@ -148,7 +148,6 @@ Deno.serve(async (req) => {
     return jsonOk({ success: true, text: transcribedText, interactionId }, req);
 
   } catch (error: unknown) {
-    console.error('Error in voice-to-text function:', error);
     console.error("voice-to-text error:", error);
     return jsonError("Internal server error", 500, req);
   }

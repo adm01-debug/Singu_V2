@@ -206,7 +206,7 @@ Deno.serve(async (req: Request) => {
     return jsonOk({ ok: true, result }, req);
   }
 
-  // Batch — processa fila
+  // Batch — processa fila com pré-busca em bloco para eliminar N+1
   const limit = Math.min(Math.max(1, body.limit ?? 50), 200);
   const { data: queue } = await supabase
     .from('lead_score_recompute_queue')
@@ -215,15 +215,183 @@ Deno.serve(async (req: Request) => {
     .order('enqueued_at', { ascending: true })
     .limit(limit);
 
+  const queueItems = queue ?? [];
+  if (queueItems.length === 0) {
+    return jsonOk({ ok: true, processed: 0, results: [] }, req);
+  }
+
+  const batchContactIds = queueItems.map(q => q.contact_id as string);
+  const nowMs = Date.now();
+  const since60d = new Date(nowMs - 60 * DAY_MS).toISOString();
+
+  // Pre-fetch all data for all queue items in 4 parallel queries
+  const [
+    { data: batchContacts },
+    { data: batchInteractions },
+    { data: batchSignals },
+    { data: batchPrevScores },
+  ] = await Promise.all([
+    supabase.from('contacts')
+      .select('id, email, phone, role_title, company_id, relationship_score')
+      .eq('user_id', userId).in('id', batchContactIds),
+    supabase.from('interactions').select('id, contact_id, created_at')
+      .eq('user_id', userId).in('contact_id', batchContactIds).gte('created_at', since60d),
+    supabase.from('intent_signals').select('signal_type, weight, occurred_at, contact_id')
+      .eq('user_id', userId).in('contact_id', batchContactIds).gte('occurred_at', since60d),
+    supabase.from('lead_scores').select('contact_id, total_score, grade')
+      .eq('user_id', userId).in('contact_id', batchContactIds),
+  ]);
+
+  // Build lookup Maps for O(1) per-item access
+  const contactMap = new Map((batchContacts ?? []).map(c => [c.id, c]));
+  const interactionsByContact = new Map<string, typeof batchInteractions extends (infer T)[] | null ? T[] : never[]>();
+  for (const i of batchInteractions ?? []) {
+    if (!interactionsByContact.has(i.contact_id)) interactionsByContact.set(i.contact_id, []);
+    interactionsByContact.get(i.contact_id)!.push(i);
+  }
+  const signalsByContact = new Map<string, typeof batchSignals extends (infer T)[] | null ? T[] : never[]>();
+  for (const s of batchSignals ?? []) {
+    const cid = (s as Record<string, unknown>).contact_id as string;
+    if (!signalsByContact.has(cid)) signalsByContact.set(cid, []);
+    signalsByContact.get(cid)!.push(s);
+  }
+  const prevScoreMap = new Map((batchPrevScores ?? []).map(p => [p.contact_id as string, p]));
+
+  const ruleMap = new Map(r.filter(rule => rule.active).map(rule => [`${rule.dimension}:${rule.signal_key}`, rule]));
+
+  // Accumulators
+  const upsertRows: Record<string, unknown>[] = [];
+  const historyRows: Record<string, unknown>[] = [];
+  type ThresholdPayload = { user_id: string; contact_id: string; from_grade: string | null; to_grade: string; from_score: number; to_score: number };
+  const thresholdPayloads: ThresholdPayload[] = [];
   const results: unknown[] = [];
-  for (const q of queue ?? []) {
+  const nowIso = new Date(nowMs).toISOString();
+
+  for (const q of queueItems) {
     try {
-      const res = await computeForContact(supabase, userId, q.contact_id as string, r, t);
-      if (res) results.push(res);
-      await supabase.from('lead_score_recompute_queue').update({ processed_at: new Date().toISOString() }).eq('id', q.id);
+      const contactId = q.contact_id as string;
+      const contact = contactMap.get(contactId);
+      if (!contact) continue;
+
+      const interactions = (interactionsByContact.get(contactId) ?? []) as Array<{ created_at: string }>;
+      const signals = (signalsByContact.get(contactId) ?? []) as Array<{ signal_type: string; weight: unknown; occurred_at: string }>;
+      const prev = prevScoreMap.get(contactId) as { total_score: number; grade: string } | undefined;
+
+      const dimScores: Record<string, number> = { fit: 0, engagement: 0, intent: 0, relationship: 0 };
+
+      // 1. Contact attributes (fit)
+      const fitChecks: Array<[string, boolean]> = [
+        ['company_present', !!contact.company_id],
+        ['role_present', !!contact.role_title],
+        ['email_present', !!contact.email],
+        ['phone_present', !!contact.phone],
+      ];
+      for (const [key, ok] of fitChecks) {
+        if (!ok) continue;
+        const rule = ruleMap.get(`fit:${key}`);
+        if (rule) dimScores.fit += Number(rule.weight);
+      }
+
+      // 2. Interactions (engagement) with decay
+      const intRule = ruleMap.get('engagement:interaction');
+      const recentRule = ruleMap.get('engagement:recent_interaction_7d');
+      for (const i of interactions) {
+        const ageDays = (nowMs - new Date(i.created_at).getTime()) / DAY_MS;
+        if (intRule) dimScores.engagement += Number(intRule.weight) * decayFactor(ageDays, intRule.decay_days);
+        if (recentRule && ageDays <= 7) dimScores.engagement += Number(recentRule.weight) * decayFactor(ageDays, recentRule.decay_days);
+      }
+
+      // 3. Intent signals
+      for (const s of signals) {
+        const rule = ruleMap.get(`intent:${s.signal_type}`);
+        if (!rule) continue;
+        const ageDays = (nowMs - new Date(s.occurred_at).getTime()) / DAY_MS;
+        dimScores.intent += Number(rule.weight) * Number(s.weight ?? 1) * decayFactor(ageDays, rule.decay_days);
+      }
+
+      // 4. Relationship
+      const relRule = ruleMap.get('relationship:relationship_score');
+      if (relRule && contact.relationship_score != null) {
+        dimScores.relationship = Number(contact.relationship_score) * Number(relRule.weight);
+      }
+
+      for (const k of Object.keys(dimScores)) dimScores[k] = Math.min(100, Math.max(0, dimScores[k]));
+      const total = Math.round(((dimScores.fit + dimScores.engagement + dimScores.intent + dimScores.relationship) / 4) * 100) / 100;
+      const grade = gradeFor(total, t);
+      const prevScore = Number(prev?.total_score ?? 0);
+      const change = total - prevScore;
+
+      upsertRows.push({
+        user_id: userId,
+        contact_id: contactId,
+        fit_score: dimScores.fit,
+        engagement_score: dimScores.engagement,
+        intent_score: dimScores.intent,
+        relationship_score: dimScores.relationship,
+        total_score: total,
+        grade,
+        score_change: change,
+        previous_score: prevScore,
+        last_calculated_at: nowIso,
+        computed_at: nowIso,
+        decay_applied_at: nowIso,
+      });
+
+      const shouldSnapshot = !prev || prev.grade !== grade || Math.abs(change) >= 10;
+      if (shouldSnapshot) {
+        historyRows.push({
+          user_id: userId,
+          contact_id: contactId,
+          total_score: total,
+          grade,
+          engagement_score: dimScores.engagement,
+          fit_score: dimScores.fit,
+          intent_score: dimScores.intent,
+          relationship_score: dimScores.relationship,
+          breakdown: { dimensions: dimScores, signals_count: signals.length, interactions_count: interactions.length },
+        });
+      }
+
+      const crossedScore = Math.floor(prevScore / 10) !== Math.floor(total / 10);
+      if (!prev || prev.grade !== grade || crossedScore) {
+        thresholdPayloads.push({
+          user_id: userId,
+          contact_id: contactId,
+          from_grade: prev?.grade ?? null,
+          to_grade: grade,
+          from_score: prevScore,
+          to_score: total,
+        });
+      }
+
+      results.push({ contact_id: contactId, total, grade, change, dimensions: dimScores });
     } catch (e) {
-      console.error('lead-scorer item error', q.id, e);
+      console.error('lead-scorer batch item error', q.id, e);
     }
+  }
+
+  // Bulk-flush all writes after the loop
+  await Promise.all([
+    upsertRows.length > 0
+      ? supabase.from('lead_scores').upsert(upsertRows, { onConflict: 'user_id,contact_id' })
+      : Promise.resolve(),
+    historyRows.length > 0
+      ? supabase.from('lead_score_history').insert(historyRows)
+      : Promise.resolve(),
+    queueItems.length > 0
+      ? supabase.from('lead_score_recompute_queue')
+          .update({ processed_at: nowIso })
+          .in('id', queueItems.map(q => q.id))
+      : Promise.resolve(),
+  ]);
+
+  // Fire threshold-runner invocations in parallel (after DB writes)
+  if (thresholdPayloads.length > 0) {
+    await Promise.allSettled(
+      thresholdPayloads.map(payload =>
+        supabase.functions.invoke('lead-score-threshold-runner', { body: payload })
+      )
+    );
   }
 
   return jsonOk({ ok: true, processed: results.length, results }, req);

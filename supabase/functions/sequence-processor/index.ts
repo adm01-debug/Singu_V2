@@ -127,6 +127,16 @@ Deno.serve(async (req) => {
       (contactRows ?? []).map((c: Contact) => [c.id, c])
     );
 
+    // Bulk-write accumulators — populate in pure computation loop, flush in parallel after
+    type EnrRow = Record<string, unknown>;
+    const repliedRows: EnrRow[] = [];
+    const completedRows: EnrRow[] = [];
+    const waitRows: EnrRow[] = [];
+    const advanceRows: EnrRow[] = [];
+    const nonEmailEventRows: EnrRow[] = [];
+    type EmailJob = { enr: Enrollment; step: Step; contact: Contact | null; nextAction: string | null };
+    const emailJobs: EmailJob[] = [];
+
     for (const enr of enrList) {
       stats.processed++;
       try {
@@ -135,10 +145,7 @@ Deno.serve(async (req) => {
         // 2. Pause-on-reply: se contato respondeu, pausa (Map lookup, no DB call)
         if (seq?.pause_on_reply) {
           if (enrollmentsWithReply.has(enr.id) || enr.replied_at) {
-            await supabase
-              .from('sequence_enrollments')
-              .update({ status: 'replied', replied_at: enr.replied_at ?? now.toISOString() })
-              .eq('id', enr.id);
+            repliedRows.push({ id: enr.id, status: 'replied', replied_at: enr.replied_at ?? now.toISOString() });
             stats.paused++;
             continue;
           }
@@ -148,10 +155,7 @@ Deno.serve(async (req) => {
         const steps = stepsBySeqId.get(enr.sequence_id) ?? [];
 
         if (steps.length === 0) {
-          await supabase
-            .from('sequence_enrollments')
-            .update({ status: 'completed', completed_at: now.toISOString() })
-            .eq('id', enr.id);
+          completedRows.push({ id: enr.id, status: 'completed', completed_at: now.toISOString() });
           stats.completed++;
           continue;
         }
@@ -170,10 +174,7 @@ Deno.serve(async (req) => {
                 new Date(enr.last_step_sent_at ?? enr.enrolled_at).getTime() +
                   prevStep.condition_wait_hours * 3600_000,
               );
-              await supabase
-                .from('sequence_enrollments')
-                .update({ next_action_at: waitUntil.toISOString() })
-                .eq('id', enr.id);
+              waitRows.push({ id: enr.id, next_action_at: waitUntil.toISOString() });
               continue;
             }
             const branchTo = conditionMet ? prevStep.branch_on_yes_step : prevStep.branch_on_no_step;
@@ -184,22 +185,25 @@ Deno.serve(async (req) => {
         }
 
         if (!targetStep) {
-          await supabase
-            .from('sequence_enrollments')
-            .update({ status: 'completed', completed_at: now.toISOString() })
-            .eq('id', enr.id);
+          completedRows.push({ id: enr.id, status: 'completed', completed_at: now.toISOString() });
           stats.completed++;
           continue;
         }
 
-        // 5. Enviar email — contact from Map, no extra DB call
+        // 5. Calcular próximo next_action_at (needed for both email and non-email advance)
+        const upcomingStep = steps.find((s) => s.step_order === targetStep!.step_order + 1);
+        let nextAction: string | null = null;
+        if (upcomingStep) {
+          const delayMs =
+            (upcomingStep.delay_days * 86400 + upcomingStep.delay_hours * 3600) * 1000;
+          nextAction = new Date(now.getTime() + delayMs).toISOString();
+        }
+
+        // 6. Accumulate work per channel
         if (targetStep.channel === 'email') {
-          const contact = contactMap.get(enr.contact_id) ?? null;
-          const sent = await sendEmailStep(supabase, enr, targetStep, contact);
-          if (sent) stats.sent++;
-          else stats.errors++;
+          emailJobs.push({ enr, step: targetStep, contact: contactMap.get(enr.contact_id) ?? null, nextAction });
         } else {
-          await supabase.from('sequence_events').insert({
+          nonEmailEventRows.push({
             enrollment_id: enr.id,
             sequence_id: enr.sequence_id,
             contact_id: enr.contact_id,
@@ -210,27 +214,15 @@ Deno.serve(async (req) => {
           });
         }
 
-        // 6. Calcular próximo next_action_at
-        const upcomingStep = steps.find((s) => s.step_order === targetStep!.step_order + 1);
-        let nextAction: string | null = null;
-        if (upcomingStep) {
-          const delayMs =
-            (upcomingStep.delay_days * 86400 + upcomingStep.delay_hours * 3600) * 1000;
-          nextAction = new Date(now.getTime() + delayMs).toISOString();
-        }
-
-        await supabase
-          .from('sequence_enrollments')
-          .update({
-            current_step: targetStep.step_order,
-            next_action_at: nextAction,
-            last_step_sent_at: now.toISOString(),
-            last_event_at: now.toISOString(),
-            status: nextAction ? 'active' : 'completed',
-            completed_at: nextAction ? null : now.toISOString(),
-          })
-          .eq('id', enr.id);
-
+        advanceRows.push({
+          id: enr.id,
+          current_step: targetStep.step_order,
+          next_action_at: nextAction,
+          last_step_sent_at: now.toISOString(),
+          last_event_at: now.toISOString(),
+          status: nextAction ? 'active' : 'completed',
+          completed_at: nextAction ? null : now.toISOString(),
+        });
         stats.advanced++;
       } catch (e) {
         console.error(`Erro enrollment ${enr.id}:`, e);
@@ -238,12 +230,39 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Flush all accumulated writes in parallel (4 bulk upserts + parallel email sends)
+    const emailResults = await Promise.allSettled(
+      emailJobs.map((job) => sendEmailStep(supabase, job.enr, job.step, job.contact))
+    );
+    for (const result of emailResults) {
+      if (result.status === 'fulfilled' && result.value) stats.sent++;
+      else if (result.status === 'rejected' || (result.status === 'fulfilled' && !result.value)) stats.errors++;
+    }
+
+    await Promise.all([
+      repliedRows.length > 0
+        ? supabase.from('sequence_enrollments').upsert(repliedRows, { onConflict: 'id' })
+        : Promise.resolve(),
+      completedRows.length > 0
+        ? supabase.from('sequence_enrollments').upsert(completedRows, { onConflict: 'id' })
+        : Promise.resolve(),
+      waitRows.length > 0
+        ? supabase.from('sequence_enrollments').upsert(waitRows, { onConflict: 'id' })
+        : Promise.resolve(),
+      advanceRows.length > 0
+        ? supabase.from('sequence_enrollments').upsert(advanceRows, { onConflict: 'id' })
+        : Promise.resolve(),
+      nonEmailEventRows.length > 0
+        ? supabase.from('sequence_events').insert(nonEmailEventRows)
+        : Promise.resolve(),
+    ]);
+
     return new Response(JSON.stringify({ ok: true, stats }), {
       headers: { ...cors, 'Content-Type': 'application/json' },
     });
   } catch (e) {
     console.error('Sequence processor fatal:', e);
-    return new Response(JSON.stringify({ ok: false, error: String(e), stats }), {
+    return new Response(JSON.stringify({ ok: false, error: 'Internal server error', stats }), {
       status: 500,
       headers: { ...cors, 'Content-Type': 'application/json' },
     });

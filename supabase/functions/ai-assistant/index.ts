@@ -194,8 +194,7 @@ Deno.serve(async (req) => {
 
     return jsonOk({ message: savedMsg, reply, tokens, traceId }, req);
   } catch (error) {
-    const msg = error instanceof Error ? error.message : "Erro desconhecido";
-    log.error("fatal_error", { error: msg });
-    return jsonError(msg, 500, req);
+    log.error("fatal_error", { error: error instanceof Error ? error.message : String(error) });
+    return jsonError("Internal server error", 500, req);
   }
 });

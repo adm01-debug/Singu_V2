@@ -55,22 +55,45 @@ Deno.serve(async (req) => {
   }
 
   const rows = (pending ?? []) as DlqRow[];
-  const results: { id: string; status: string; error?: string }[] = [];
+  const results: { id: string; status: string }[] = [];
+
+  if (rows.length === 0) {
+    return new Response(JSON.stringify({ processed: 0, results: [] }), {
+      status: 200, headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+
+  const rowIds = rows.map(r => r.id);
+  const resolvedAt = new Date().toISOString();
+
+  // Batch-mark all as "processing" and pre-fetch all webhooks in parallel
+  const uniqueWebhookIds = [...new Set(rows.map(r => r.webhook_id))];
+  const [, webhookResult] = await Promise.all([
+    admin.from("incoming_webhook_dlq").update({ status: "processing" }).in("id", rowIds),
+    admin.from("incoming_webhooks")
+      .select("id, target_entity, created_by, field_mapping, is_active")
+      .in("id", uniqueWebhookIds),
+  ]);
+
+  const webhookMap = new Map(
+    (webhookResult.data ?? []).map((w: { id: string }) => [w.id, w])
+  );
+
+  // Outcome accumulators (different data per row → upsert arrays)
+  type DlqUpdate = Record<string, unknown>;
+  const abandonedRows: DlqUpdate[] = [];
+  const succeededRows: DlqUpdate[] = [];
+  const failedRows: DlqUpdate[] = [];
+  const retryRows: DlqUpdate[] = [];
+  // Per-table insert accumulator: table name → [{rowId, attempts, payload}]
+  type PendingInsert = { rowId: string; attempts: number; payload: Record<string, unknown> };
+  const pendingTableInserts = new Map<string, PendingInsert[]>();
 
   for (const row of rows) {
-    await admin.from("incoming_webhook_dlq")
-      .update({ status: "processing" }).eq("id", row.id);
-
-    const { data: webhook } = await admin.from("incoming_webhooks")
-      .select("target_entity, created_by, field_mapping, is_active")
-      .eq("id", row.webhook_id).maybeSingle();
+    const webhook = webhookMap.get(row.webhook_id) as (typeof webhookResult.data extends Array<infer T> ? T : never) | undefined;
 
     if (!webhook || !webhook.is_active) {
-      await admin.from("incoming_webhook_dlq").update({
-        status: "abandoned",
-        last_error: "Webhook removido ou inativo",
-        resolved_at: new Date().toISOString(),
-      }).eq("id", row.id);
+      abandonedRows.push({ id: row.id, status: "abandoned", last_error: "Webhook removido ou inativo", resolved_at: resolvedAt });
       results.push({ id: row.id, status: "abandoned" });
       continue;
     }
@@ -85,41 +108,55 @@ Deno.serve(async (req) => {
     const finalRow = Object.keys(mapped).length ? mapped : row.payload;
     const targetTable = TABLE_MAP[webhook.target_entity];
 
-    let succeeded = false;
-    let errMsg: string | null = null;
-
+    // Accumulate payload for bulk insert after the loop
     if (targetTable) {
-      const { error: insErr } = await admin.from(targetTable)
-        .insert({ ...finalRow, user_id: webhook.created_by });
-      if (insErr) errMsg = insErr.message; else succeeded = true;
+      const tableInserts = pendingTableInserts.get(targetTable) ?? [];
+      tableInserts.push({ rowId: row.id, attempts: row.attempts, payload: { ...finalRow, user_id: webhook.created_by } });
+      pendingTableInserts.set(targetTable, tableInserts);
     } else {
-      succeeded = true;
-    }
-
-    const newAttempts = row.attempts + 1;
-    if (succeeded) {
-      await admin.from("incoming_webhook_dlq").update({
-        status: "succeeded", attempts: newAttempts,
-        resolved_at: new Date().toISOString(), last_error: null,
-      }).eq("id", row.id);
+      // No target table — mark as succeeded immediately
+      succeededRows.push({ id: row.id, status: "succeeded", attempts: row.attempts + 1, resolved_at: resolvedAt, last_error: null });
       results.push({ id: row.id, status: "succeeded" });
-    } else if (newAttempts >= row.max_attempts) {
-      await admin.from("incoming_webhook_dlq").update({
-        status: "failed", attempts: newAttempts, last_error: errMsg,
-        resolved_at: new Date().toISOString(),
-      }).eq("id", row.id);
-      results.push({ id: row.id, status: "failed", error: errMsg ?? undefined });
-    } else {
-      // Backoff exponencial: 2^attempts minutos (2, 4, 8, 16, 32 min)
-      const delayMin = Math.pow(2, newAttempts);
-      const nextRetry = new Date(Date.now() + delayMin * 60_000).toISOString();
-      await admin.from("incoming_webhook_dlq").update({
-        status: "pending", attempts: newAttempts, last_error: errMsg,
-        next_retry_at: nextRetry,
-      }).eq("id", row.id);
-      results.push({ id: row.id, status: "retry_scheduled", error: errMsg ?? undefined });
     }
   }
+
+  // Parallel-flush all target table inserts (up to 5 distinct tables at once)
+  const tableInsertResults = await Promise.all(
+    Array.from(pendingTableInserts.entries()).map(async ([tableName, items]) => {
+      const payloads = items.map(i => i.payload);
+      const { error: insErr } = await admin.from(tableName).insert(payloads);
+      return { tableName, items, insErr };
+    })
+  );
+
+  for (const { tableName, items, insErr } of tableInsertResults) {
+    for (const item of items) {
+      const newAttempts = item.attempts + 1;
+      if (!insErr) {
+        succeededRows.push({ id: item.rowId, status: "succeeded", attempts: newAttempts, resolved_at: resolvedAt, last_error: null });
+        results.push({ id: item.rowId, status: "succeeded" });
+      } else {
+        console.error(`process-webhook-dlq insert error for ${tableName}:`, insErr);
+        const row = rows.find(r => r.id === item.rowId)!;
+        if (newAttempts >= row.max_attempts) {
+          failedRows.push({ id: item.rowId, status: "failed", attempts: newAttempts, last_error: insErr.message, resolved_at: resolvedAt });
+          results.push({ id: item.rowId, status: "failed" });
+        } else {
+          const nextRetry = new Date(Date.now() + Math.pow(2, newAttempts) * 60_000).toISOString();
+          retryRows.push({ id: item.rowId, status: "pending", attempts: newAttempts, last_error: insErr.message, next_retry_at: nextRetry });
+          results.push({ id: item.rowId, status: "retry_scheduled" });
+        }
+      }
+    }
+  }
+
+  // Flush all outcome updates in parallel
+  await Promise.all([
+    abandonedRows.length > 0 ? admin.from("incoming_webhook_dlq").upsert(abandonedRows, { onConflict: "id" }) : Promise.resolve(),
+    succeededRows.length > 0 ? admin.from("incoming_webhook_dlq").upsert(succeededRows, { onConflict: "id" }) : Promise.resolve(),
+    failedRows.length > 0 ? admin.from("incoming_webhook_dlq").upsert(failedRows, { onConflict: "id" }) : Promise.resolve(),
+    retryRows.length > 0 ? admin.from("incoming_webhook_dlq").upsert(retryRows, { onConflict: "id" }) : Promise.resolve(),
+  ]);
 
   return new Response(JSON.stringify({ processed: results.length, results }), {
     status: 200, headers: { ...cors, "Content-Type": "application/json" },

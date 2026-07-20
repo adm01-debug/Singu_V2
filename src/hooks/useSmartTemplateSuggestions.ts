@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useTriggerHistory } from '@/hooks/useTriggerHistory';
@@ -39,12 +39,7 @@ export function useSmartTemplateSuggestions(contact: Contact) {
 
   const contactDISC = contact.behavior?.discProfile as DISCProfile | undefined;
 
-  useEffect(() => {
-    fetchTemplateStats();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  const fetchTemplateStats = async () => {
+  const fetchTemplateStats = useCallback(async () => {
     if (!user) {
       setLoading(false);
       return;
@@ -129,7 +124,11 @@ export function useSmartTemplateSuggestions(contact: Contact) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    fetchTemplateStats();
+  }, [fetchTemplateStats]);
 
   const suggestions = useMemo<SmartSuggestion[]>(() => {
     if (!allTemplates.length) return [];

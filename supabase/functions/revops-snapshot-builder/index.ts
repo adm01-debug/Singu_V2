@@ -5,6 +5,12 @@ import { guardBody, scopedCorsHeaders, requireCronSecret } from "../_shared/auth
 
 const STAGES = ["visitor", "lead", "mql", "sql", "opportunity", "customer"] as const;
 
+function countByUser(rows: Array<{ user_id: string }> | null): Map<string, number> {
+  const map = new Map<string, number>();
+  for (const r of rows ?? []) map.set(r.user_id, (map.get(r.user_id) ?? 0) + 1);
+  return map;
+}
+
 Deno.serve(async (req: Request) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
@@ -23,7 +29,6 @@ Deno.serve(async (req: Request) => {
   const _body = rawBody as { user_id?: string } | null;
   if (_body?.user_id) targetUserId = _body.user_id;
 
-  // Discover active users in parallel
   let userIds: string[] = [];
   if (targetUserId) {
     userIds = [targetUserId];
@@ -38,37 +43,53 @@ Deno.serve(async (req: Request) => {
     userIds = Array.from(set);
   }
 
+  if (userIds.length === 0) {
+    return new Response(JSON.stringify({ processed: 0, results: [] }), {
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+
   console.log(JSON.stringify({ fn: "revops-snapshot-builder", users: userIds.length, period: today }));
 
+  // --- PRE-BATCH PHASE: all counts and previous-week snapshots in one round-trip ---
+  const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
+  const [mqlResult, sqlResult, oppResult, leadResult, prevSnapResult] = await Promise.all([
+    supabase.from("mql_classifications").select("user_id").in("user_id", userIds).eq("status", "mql").gte("created_at", since).limit(100_000),
+    supabase.from("mql_classifications").select("user_id").in("user_id", userIds).eq("status", "sql").gte("created_at", since).limit(100_000),
+    supabase.from("deal_forecasts").select("user_id").in("user_id", userIds).gte("created_at", since).limit(100_000),
+    supabase.from("contacts").select("user_id").in("user_id", userIds).limit(100_000),
+    supabase.from("revops_snapshots").select("user_id, funnel_stage, conversion_rate").in("user_id", userIds).eq("period", weekAgo),
+  ]);
+
+  const mqlByUser = countByUser(mqlResult.data as Array<{ user_id: string }> | null);
+  const sqlByUser = countByUser(sqlResult.data as Array<{ user_id: string }> | null);
+  const oppByUser = countByUser(oppResult.data as Array<{ user_id: string }> | null);
+  const leadByUser = countByUser(leadResult.data as Array<{ user_id: string }> | null);
+
+  type PrevSnapRow = { user_id: string; funnel_stage: string; conversion_rate: number | null };
+  const prevSnapsByUser = new Map<string, Map<string, number>>();
+  for (const r of (prevSnapResult.data ?? []) as PrevSnapRow[]) {
+    if (r.conversion_rate == null) continue;
+    const userMap = prevSnapsByUser.get(r.user_id) ?? new Map<string, number>();
+    userMap.set(r.funnel_stage, Number(r.conversion_rate));
+    prevSnapsByUser.set(r.user_id, userMap);
+  }
+
+  // --- ACCUMULATION LOOP (pure in-memory, no DB calls) ---
   const results: Array<{ user_id: string; ok: boolean; error?: string }> = [];
+  const allSnapshotRows: Array<Record<string, unknown>> = [];
+  const allAlertRows: Array<Record<string, unknown>> = [];
 
   for (const userId of userIds) {
     try {
-      const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-
-      // Parallelize all 4 count queries
-      const [
-        { count: mqlCount },
-        { count: sqlCount },
-        { count: oppCount },
-        { count: leadCount },
-      ] = await Promise.all([
-        supabase.from("mql_classifications").select("*", { count: "exact", head: true })
-          .eq("user_id", userId).eq("status", "mql").gte("created_at", since),
-        supabase.from("mql_classifications").select("*", { count: "exact", head: true })
-          .eq("user_id", userId).eq("status", "sql").gte("created_at", since),
-        supabase.from("deal_forecasts").select("*", { count: "exact", head: true })
-          .eq("user_id", userId).gte("created_at", since),
-        supabase.from("contacts").select("*", { count: "exact", head: true })
-          .eq("user_id", userId),
-      ]);
-
       const stageCounts: Record<string, number> = {
         visitor: 0,
-        lead: leadCount ?? 0,
-        mql: mqlCount ?? 0,
-        sql: sqlCount ?? 0,
-        opportunity: oppCount ?? 0,
+        lead: leadByUser.get(userId) ?? 0,
+        mql: mqlByUser.get(userId) ?? 0,
+        sql: sqlByUser.get(userId) ?? 0,
+        opportunity: oppByUser.get(userId) ?? 0,
         customer: 0,
       };
 
@@ -87,29 +108,16 @@ Deno.serve(async (req: Request) => {
         };
       });
 
-      // Upsert snapshots + fetch previous week in parallel
-      const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
-      const [{ error: upErr }, { data: prevSnap }] = await Promise.all([
-        supabase.from("revops_snapshots").upsert(rows, { onConflict: "user_id,period,funnel_stage" }),
-        supabase.from("revops_snapshots").select("funnel_stage,conversion_rate")
-          .eq("user_id", userId).eq("period", weekAgo),
-      ]);
-      if (upErr) throw upErr;
+      for (const row of rows) allSnapshotRows.push(row);
 
-      const prevMap = new Map<string, number>();
-      (prevSnap || []).forEach((r: { funnel_stage: string; conversion_rate: number | null }) => {
-        if (r.conversion_rate != null) prevMap.set(r.funnel_stage, Number(r.conversion_rate));
-      });
-
-      // Collect all alerts then batch-insert
-      const alerts: Array<Record<string, unknown>> = [];
+      const prevMap = prevSnapsByUser.get(userId) ?? new Map<string, number>();
       for (const stage of STAGES) {
         const cur = rows.find(r => r.funnel_stage === stage)?.conversion_rate;
         const prev = prevMap.get(stage);
         if (cur != null && prev != null && prev > 0) {
           const delta = ((cur - prev) / prev) * 100;
           if (delta <= -15) {
-            alerts.push({
+            allAlertRows.push({
               user_id: userId,
               metric_key: `conversion_${stage}`,
               severity: delta <= -30 ? "critical" : "warning",
@@ -122,10 +130,6 @@ Deno.serve(async (req: Request) => {
         }
       }
 
-      if (alerts.length > 0) {
-        await supabase.from("revops_alerts").insert(alerts);
-      }
-
       results.push({ user_id: userId, ok: true });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -133,6 +137,16 @@ Deno.serve(async (req: Request) => {
       results.push({ user_id: userId, ok: false, error: msg });
     }
   }
+
+  // --- BULK FLUSH ---
+  await Promise.all([
+    allSnapshotRows.length > 0
+      ? supabase.from("revops_snapshots").upsert(allSnapshotRows, { onConflict: "user_id,period,funnel_stage" })
+      : Promise.resolve(),
+    allAlertRows.length > 0
+      ? supabase.from("revops_alerts").insert(allAlertRows)
+      : Promise.resolve(),
+  ]);
 
   return new Response(JSON.stringify({ processed: results.length, results }), {
     headers: { ...cors, "Content-Type": "application/json" },

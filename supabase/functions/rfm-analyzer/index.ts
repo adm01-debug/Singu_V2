@@ -66,24 +66,23 @@ Deno.serve(async (req) => {
       .from('contacts')
       .select('id, first_name, last_name, company_id')
       .eq('user_id', userId);
-    
+
     if (contactId && contactId !== 'all') {
       contactsQuery = contactsQuery.eq('id', contactId);
     }
 
-    const { data: contacts, error: contactsError } = await contactsQuery;
+    // All three reads are independent — parallelize to cut 2/3 of wall-clock latency
+    const [
+      { data: contacts, error: contactsError },
+      { data: purchases, error: purchasesError },
+      { data: interactions, error: interactionsError },
+    ] = await Promise.all([
+      contactsQuery,
+      supabase.from('purchase_history').select('*').eq('user_id', userId),
+      supabase.from('interactions').select('id, contact_id, created_at').eq('user_id', userId),
+    ]);
     if (contactsError) throw contactsError;
-
-    const { data: purchases, error: purchasesError } = await supabase
-      .from('purchase_history')
-      .select('*')
-      .eq('user_id', userId);
     if (purchasesError) throw purchasesError;
-
-    const { data: interactions, error: interactionsError } = await supabase
-      .from('interactions')
-      .select('id, contact_id, created_at')
-      .eq('user_id', userId);
     if (interactionsError) throw interactionsError;
 
     const now = new Date();
@@ -183,6 +182,8 @@ Deno.serve(async (req) => {
     };
 
     const results = [];
+    const rfmUpsertRows: typeof results = [];
+    const rfmHistoryRows: Array<Record<string, unknown>> = [];
 
     for (const [cId, metrics] of contactMetrics) {
       const recencyScore = calculateScore(metrics.daysSinceLastPurchase, recencyPercentiles, true);
@@ -238,15 +239,8 @@ Deno.serve(async (req) => {
         analyzed_at: now.toISOString()
       };
 
-      const { error: upsertError } = await supabase
-        .from('rfm_analysis')
-        .upsert(rfmResult, { onConflict: 'user_id,contact_id' });
-
-      if (upsertError) {
-        console.error('Error upserting RFM:', upsertError);
-      }
-
-      await supabase.from('rfm_history').insert({
+      rfmUpsertRows.push(rfmResult);
+      rfmHistoryRows.push({
         user_id: userId,
         contact_id: cId,
         recency_score: recencyScore,
@@ -255,22 +249,30 @@ Deno.serve(async (req) => {
         segment,
         total_monetary_value: metrics.totalValue
       });
-
       results.push(rfmResult);
     }
 
-    // RFM analysis completed
+    // Bulk-flush all writes after the scoring loop
+    await Promise.all([
+      rfmUpsertRows.length > 0
+        ? supabase.from('rfm_analysis').upsert(rfmUpsertRows, { onConflict: 'user_id,contact_id' })
+            .then(({ error }) => { if (error) console.error('Error upserting RFM:', error); })
+        : Promise.resolve(),
+      rfmHistoryRows.length > 0
+        ? supabase.from('rfm_history').insert(rfmHistoryRows)
+            .then(({ error }) => { if (error) console.error('Error inserting RFM history:', error); })
+        : Promise.resolve(),
+    ]);
 
-    return jsonOk({ 
-      success: true, 
+    return jsonOk({
+      success: true,
       analyzed: results.length,
-      results 
+      results
     });
 
   } catch (error: unknown) {
     console.error('RFM analysis error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return jsonError(errorMessage, 500);
+    return jsonError("Internal server error", 500);
   }
 });
 

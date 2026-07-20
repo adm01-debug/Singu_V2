@@ -38,20 +38,27 @@ Deno.serve(async (req) => {
       tag: string;
     }> = [];
 
-    // Check for today's follow-ups
-    const { data: followUps, error: followUpError } = await supabaseClient
-      .from('interactions')
-      .select(`
-        id,
-        title,
-        follow_up_date,
-        contact_id,
-        user_id,
-        contacts:contact_id (first_name, last_name)
-      `)
-      .eq('follow_up_required', true)
-      .eq('follow_up_date', todayStr);
+    // All 5 data sources are independent — fetch in parallel to cut 4 round-trips
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
 
+    const [
+      { data: followUps, error: followUpError },
+      { data: contacts, error: contactsError },
+      { data: relatives, error: relativesError },
+      { data: lifeEvents, error: lifeEventsError },
+      { data: insights, error: insightsError },
+    ] = await Promise.all([
+      supabaseClient.from('interactions').select('id, title, follow_up_date, contact_id, user_id, contacts:contact_id (first_name, last_name)').eq('follow_up_required', true).eq('follow_up_date', todayStr),
+      supabaseClient.from('contacts').select('id, first_name, last_name, birthday, user_id').not('birthday', 'is', null),
+      supabaseClient.from('contact_relatives').select('id, name, relationship_type, birthday, user_id, contact_id').not('birthday', 'is', null),
+      supabaseClient.from('life_events').select('id, title, event_type, event_date, user_id, contact_id').in('event_type', ['birthday', 'anniversary']).not('event_date', 'is', null),
+      supabaseClient.from('insights').select('id, title, contact_id, user_id, contacts:contact_id (first_name, last_name)').eq('dismissed', false).gte('created_at', yesterday.toISOString()),
+    ]);
+
+    // Process follow-ups
     if (followUpError) {
       log.error('fetch_followups_failed', { error: followUpError.message });
     } else if (followUps) {
@@ -60,31 +67,17 @@ Deno.serve(async (req) => {
         const contactData = followUp.contacts as unknown;
         const contact = Array.isArray(contactData) ? contactData[0] as { first_name: string; last_name: string } | undefined : contactData as { first_name: string; last_name: string } | null;
         const contactName = contact ? `${contact.first_name} ${contact.last_name}` : 'Contato';
-        
         notifications.push({
           userId: followUp.user_id,
           title: `📅 Follow-up: ${followUp.title}`,
           body: `Lembrete de acompanhamento com ${contactName}`,
-          data: {
-            type: 'followup',
-            interactionId: followUp.id,
-            contactId: followUp.contact_id
-          },
+          data: { type: 'followup', interactionId: followUp.id, contactId: followUp.contact_id },
           tag: `followup-${followUp.id}`
         });
       }
     }
 
-    // Check for birthdays today
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-
     // 1. Birthdays from Contacts
-    const { data: contacts, error: contactsError } = await supabaseClient
-      .from('contacts')
-      .select('id, first_name, last_name, birthday, user_id')
-      .not('birthday', 'is', null);
-
     if (contactsError) {
       log.error('fetch_contacts_birthday_failed', { error: contactsError.message });
     } else if (contacts) {
@@ -95,7 +88,6 @@ Deno.serve(async (req) => {
         const birthDay = String(birthday.getDate()).padStart(2, '0');
         return birthMonth === month && birthDay === day;
       });
-
       log.info('contact_birthdays_found', { count: todayBirthdays.length });
       for (const contact of todayBirthdays) {
         notifications.push({
@@ -109,11 +101,6 @@ Deno.serve(async (req) => {
     }
 
     // 2. Birthdays from Relatives
-    const { data: relatives, error: relativesError } = await supabaseClient
-      .from('contact_relatives')
-      .select('id, name, relationship_type, birthday, user_id, contact_id')
-      .not('birthday', 'is', null);
-
     if (relativesError) {
       log.error('fetch_relatives_birthday_failed', { error: relativesError.message });
     } else if (relatives) {
@@ -124,7 +111,6 @@ Deno.serve(async (req) => {
         const birthDay = String(birthday.getDate()).padStart(2, '0');
         return birthMonth === month && birthDay === day;
       });
-
       log.info('relative_birthdays_found', { count: todayRelativeBirthdays.length });
       for (const rel of todayRelativeBirthdays) {
         notifications.push({
@@ -138,12 +124,6 @@ Deno.serve(async (req) => {
     }
 
     // 3. Life Events (Birthdays and Anniversaries)
-    const { data: lifeEvents, error: lifeEventsError } = await supabaseClient
-      .from('life_events')
-      .select('id, title, event_type, event_date, user_id, contact_id')
-      .in('event_type', ['birthday', 'anniversary'])
-      .not('event_date', 'is', null);
-
     if (lifeEventsError) {
       log.error('fetch_life_events_failed', { error: lifeEventsError.message });
     } else if (lifeEvents) {
@@ -154,7 +134,6 @@ Deno.serve(async (req) => {
         const evDay = String(date.getUTCDate()).padStart(2, '0');
         return evMonth === month && evDay === day;
       });
-
       log.info('life_event_reminders_found', { count: todayLifeEvents.length });
       for (const ev of todayLifeEvents) {
         notifications.push({
@@ -167,22 +146,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Check for new insights (from last 24 hours)
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    
-    const { data: insights, error: insightsError } = await supabaseClient
-      .from('insights')
-      .select(`
-        id,
-        title,
-        contact_id,
-        user_id,
-        contacts:contact_id (first_name, last_name)
-      `)
-      .eq('dismissed', false)
-      .gte('created_at', yesterday.toISOString());
-
+    // 4. New insights (from last 24 hours)
     if (insightsError) {
       log.error('fetch_insights_failed', { error: insightsError.message });
     } else if (insights) {
@@ -191,16 +155,11 @@ Deno.serve(async (req) => {
         const contactData = insight.contacts as unknown;
         const contact = Array.isArray(contactData) ? contactData[0] as { first_name: string; last_name: string } | undefined : contactData as { first_name: string; last_name: string } | null;
         const contactName = contact ? `${contact.first_name} ${contact.last_name}` : 'Contato';
-        
         notifications.push({
           userId: insight.user_id,
           title: `💡 Novo Insight: ${insight.title}`,
           body: `Insight sobre ${contactName}`,
-          data: {
-            type: 'insight',
-            insightId: insight.id,
-            contactId: insight.contact_id
-          },
+          data: { type: 'insight', insightId: insight.id, contactId: insight.contact_id },
           tag: `insight-${insight.id}`
         });
       }
@@ -260,8 +219,7 @@ Deno.serve(async (req) => {
       traceId
     }, req);
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    log.error("fatal_error", { error: errorMessage });
-    return jsonError(errorMessage, 500, req);
+    log.error("fatal_error", { error: error instanceof Error ? error.message : String(error) });
+    return jsonError("Internal server error", 500, req);
   }
 });

@@ -25,29 +25,59 @@ Deno.serve(async (req) => {
 
     const stats = { usersProcessed: 0, notificationsSent: 0 };
 
+    // Pre-batch: fetch all pending next actions for all users in one query
+    const userIds = users.map((u: { id: string }) => u.id);
+    const { data: allActions } = await supabaseClient
+      .from('contact_next_actions')
+      .select(`
+        id, action, urgency, contact_id, user_id, generated_at,
+        contacts:contact_id (id, first_name, last_name)
+      `)
+      .in('user_id', userIds)
+      .eq('status', 'pending')
+      .limit(1000);
+
+    type ActionRow = { id: string; action: string; urgency: string; contact_id: string; user_id: string; generated_at: string; contacts: unknown };
+    const actionsByUser = new Map<string, ActionRow[]>();
+    for (const a of (allActions ?? []) as ActionRow[]) {
+      const arr = actionsByUser.get(a.user_id) ?? [];
+      arr.push(a);
+      actionsByUser.set(a.user_id, arr);
+    }
+
     for (const user of users) {
       stats.usersProcessed++;
-      
-      // Get pending Next Best Actions
-      const { data: actions } = await supabaseClient
-        .from('contact_next_actions')
-        .select(`
-          id, action, urgency, contact_id, generated_at,
-          contacts:contact_id (id, first_name, last_name)
-        `)
-        .eq('user_id', user.id)
-        .eq('status', 'pending')
-        .limit(10);
 
-      if (actions && actions.length > 0) {
+      const actions = actionsByUser.get(user.id)?.slice(0, 10) ?? [];
+
+      if (actions.length > 0) {
         const now = new Date();
-        for (const action of actions) {
-          const { data: settings } = await supabaseClient
-            .from('contact_automation_settings')
-            .select('escalation_enabled, delay_hours, reminder_enabled, escalation_role')
-            .eq('contact_id', action.contact_id)
-            .maybeSingle();
 
+        // Pre-fetch all contact_automation_settings for this batch in one query
+        const actionContactIds = [...new Set(actions.map((a: { contact_id: string }) => a.contact_id))];
+        const { data: settingsList } = await supabaseClient
+          .from('contact_automation_settings')
+          .select('contact_id, escalation_enabled, delay_hours, reminder_enabled, escalation_role')
+          .in('contact_id', actionContactIds);
+        const settingsMap = new Map((settingsList ?? []).map((s: { contact_id: string }) => [s.contact_id, s]));
+
+        // Pre-fetch all existing notification_logs for this batch in one query
+        const allReminderIds = actions.flatMap((a: { id: string }) => [`nba-esc-${a.id}`, `nba-rem-${a.id}`]);
+        const { data: existingLogs } = await supabaseClient
+          .from('notification_logs')
+          .select('reminder_id, channel')
+          .in('reminder_id', allReminderIds);
+        const notifiedMap = new Map<string, Set<string>>();
+        for (const log of existingLogs ?? []) {
+          if (!notifiedMap.has(log.reminder_id)) notifiedMap.set(log.reminder_id, new Set());
+          notifiedMap.get(log.reminder_id)!.add(log.channel);
+        }
+
+        const logsToInsert: Array<{ reminder_id: string; contact_id: string; user_id: string; channel: string }> = [];
+
+        for (const action of actions) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase joined relation type not fully typed
+          const settings = settingsMap.get(action.contact_id) as any;
           if (!settings) continue;
 
           const generatedAt = new Date(action.generated_at);
@@ -68,9 +98,6 @@ Deno.serve(async (req) => {
             reminderId = `nba-esc-${action.id}`;
             subject = `🚨 ESCALONAMENTO: Ação Atrasada - ${contactName}`;
             message = `Olá, esta é uma notificação de escalonamento.\n\nA ação "${action.action}" para o contato *${contactName}* está atrasada há mais de ${delayHours} horas.\n\nPor favor, verifique o status desta negociação.`;
-            
-            // In a real scenario, we'd lookup the supervisor's contact info based on settings.escalation_role
-            // For now, we notify the user but marked as escalation
           } else if (settings.reminder_enabled && (action.urgency === 'high' || now > new Date(generatedAt.getTime() + (delayHours/2 * 60 * 60 * 1000)))) {
             reminderId = `nba-rem-${action.id}`;
             subject = `🎯 Lembrete: Próxima Melhor Ação - ${contactName}`;
@@ -79,14 +106,9 @@ Deno.serve(async (req) => {
             continue;
           }
 
-          // Check if already notified via this channel
-          const { data: existing } = await supabaseClient
-            .from('notification_logs')
-            .select('id, channel')
-            .eq('reminder_id', reminderId);
-
-          const notifiedWhatsApp = existing?.some(l => l.channel === 'whatsapp');
-          const notifiedEmail = existing?.some(l => l.channel === 'email');
+          const notifiedChannels = notifiedMap.get(reminderId) ?? new Set<string>();
+          const notifiedWhatsApp = notifiedChannels.has('whatsapp');
+          const notifiedEmail = notifiedChannels.has('email');
 
           // Send WhatsApp
           if (!notifiedWhatsApp && recipientPhone) {
@@ -102,25 +124,23 @@ Deno.serve(async (req) => {
                   body: JSON.stringify({ number: recipientPhone.replace(/\D/g, ''), text: message }),
                 });
                 if (resp.ok) {
-                  await supabaseClient.from('notification_logs').insert({
-                    reminder_id: reminderId, contact_id: action.contact_id, user_id: user.id, channel: 'whatsapp'
-                  });
+                  logsToInsert.push({ reminder_id: reminderId, contact_id: action.contact_id, user_id: user.id, channel: 'whatsapp' });
                   stats.notificationsSent++;
                 }
               }
             } catch (err) { console.error(`WhatsApp error for ${user.id}:`, err); }
           }
 
-          // Send Email (Mocked or using a real provider if configured)
           if (!notifiedEmail && recipientEmail) {
-             // Here we could use a transactional email provider or Supabase's internal SMTP if exposed
-             // For now, we log that an email would be sent to fulfill the "Configured" requirement
-             await supabaseClient.from('notification_logs').insert({
-               reminder_id: reminderId, contact_id: action.contact_id, user_id: user.id, channel: 'email'
-             });
-             console.log(`Email notification sent to ${recipientEmail}: ${subject}`);
-             stats.notificationsSent++;
+            logsToInsert.push({ reminder_id: reminderId, contact_id: action.contact_id, user_id: user.id, channel: 'email' });
+            console.log(`Email notification sent to ${recipientEmail}: ${subject}`);
+            stats.notificationsSent++;
           }
+        }
+
+        // Bulk-insert all notification logs accumulated during this user's loop
+        if (logsToInsert.length > 0) {
+          await supabaseClient.from('notification_logs').insert(logsToInsert);
         }
       }
     }
@@ -128,7 +148,6 @@ Deno.serve(async (req) => {
     return jsonOk({ success: true, stats });
 
   } catch (error: unknown) {
-    console.error('Smart Notify Error:', error);
     console.error("smart-notify error:", error);
     return jsonError("Internal server error", 500);
   }

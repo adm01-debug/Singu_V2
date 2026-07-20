@@ -113,9 +113,8 @@ async function handleDistribute(
   const selected = eligible[0];
   const selectedId = selected.id as string;
 
-  const { error: assignErr } = await supabase
-    .from("lead_assignments")
-    .insert({
+  const [{ error: assignErr }] = await Promise.all([
+    supabase.from("lead_assignments").insert({
       user_id: userId,
       contact_id: body.contact_id ?? null,
       company_id: body.company_id ?? null,
@@ -124,18 +123,15 @@ async function handleDistribute(
       status: "active",
       routing_rule_id: body.rule_id ?? null,
       sla_deadline: new Date(Date.now() + 4 * 3600_000).toISOString(),
-    });
-
-  if (assignErr) { console.error("lead-routing assign error:", assignErr); return json({ error: "Internal server error" }, 500, cors); }
-
-  await supabase
-    .from("sales_team_members")
-    .update({
+    }),
+    supabase.from("sales_team_members").update({
       current_lead_count: ((selected.current_lead_count as number) ?? 0) + 1,
       leads_today: ((selected.leads_today as number) ?? 0) + 1,
       last_assigned_at: new Date().toISOString(),
-    })
-    .eq("id", selectedId);
+    }).eq("id", selectedId),
+  ]);
+
+  if (assignErr) { console.error("lead-routing assign error:", assignErr); return json({ error: "Internal server error" }, 500, cors); }
 
   return json({
     success: true,
@@ -180,19 +176,18 @@ async function handleRedistribute(
 
   const memberIds = [...decrementByMember.keys()];
   if (memberIds.length > 0) {
-    // One batch fetch + one update per unique member (not per assignment)
     const { data: memberRows } = await supabase
       .from("sales_team_members")
       .select("id, current_lead_count")
       .in("id", memberIds);
 
-    await Promise.all(
-      (memberRows ?? []).map((m: { id: string; current_lead_count: number | null }) =>
-        supabase.from("sales_team_members").update({
-          current_lead_count: Math.max(0, (m.current_lead_count ?? 0) - (decrementByMember.get(m.id) ?? 0)),
-        }).eq("id", m.id)
-      )
-    );
+    const upsertRows = (memberRows ?? []).map((m: { id: string; current_lead_count: number | null }) => ({
+      id: m.id,
+      current_lead_count: Math.max(0, (m.current_lead_count ?? 0) - (decrementByMember.get(m.id) ?? 0)),
+    }));
+    if (upsertRows.length > 0) {
+      await supabase.from("sales_team_members").upsert(upsertRows, { onConflict: "id" });
+    }
   }
 
   // Batch-insert all redistribution logs in one query (was N inserts)
@@ -254,9 +249,11 @@ Deno.serve(async (req: Request) => {
         return await handleRedistribute(supabase, user.id, body, cors);
     }
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Erro interno";
-    const status = message.includes("autorizado") || message.includes("Token") ? 401 : 500;
     console.error("[lead-routing] Error:", e);
-    return json({ error: message }, status, cors);
+    const message = e instanceof Error ? e.message : "";
+    if (message === "Não autorizado" || message === "Token inválido") {
+      return json({ error: message }, 401, cors);
+    }
+    return json({ error: "Erro interno" }, 500, cors);
   }
 });

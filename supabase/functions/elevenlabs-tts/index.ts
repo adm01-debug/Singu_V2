@@ -88,7 +88,6 @@ Deno.serve(async (req) => {
     });
   } catch (error: unknown) {
     console.error("TTS error:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
-    return jsonError(message, 500);
+    return jsonError("Internal server error", 500);
   }
 });

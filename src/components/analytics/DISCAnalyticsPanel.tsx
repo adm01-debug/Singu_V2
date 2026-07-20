@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Brain, Users, Target, Award, Activity, RefreshCw } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -30,7 +30,7 @@ const DISCAnalyticsPanel = () => {
   const [contacts, setContacts] = useState<ContactWithDISC[]>([]);
   const [stats, setStats] = useState({ totalProfiled: 0, avgConfidence: 0, mostCommon: 'I' as DISCProfile, recentAnalyses: 0 });
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!user) return;
     setLoading(true);
     try {
@@ -51,14 +51,13 @@ const DISCAnalyticsPanel = () => {
       const { count: recentCount } = await supabase.from('disc_analysis_history').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('analyzed_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
       setStats({ totalProfiled: mappedContacts.length, avgConfidence: confidenceCount > 0 ? Math.round(totalConfidence / confidenceCount) : 0, mostCommon, recentAnalyses: recentCount || 0 });
       await fetchDashboardData();
-    } catch (err) { 
+    } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
-      logger.error('Error loading DISC data:', { error: msg }); 
+      logger.error('Error loading DISC data:', { error: msg });
     } finally { setLoading(false); }
-  };
+  }, [user, fetchDashboardData]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { loadData(); }, [user]);
+  useEffect(() => { loadData(); }, [loadData]);
 
   if (loading) return (<div className="space-y-6"><div className="grid grid-cols-2 md:grid-cols-4 gap-4">{[1,2,3,4].map(i => <Skeleton key={i} className="h-28" />)}</div><div className="grid grid-cols-1 lg:grid-cols-2 gap-6">{[1,2,3,4].map(i => <Skeleton key={i} className="h-80" />)}</div></div>);
 

@@ -26,9 +26,13 @@ export function MilestoneKanban({ roomId }: { roomId: string }) {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<DealRoomMilestone | null>(null);
   const onSave = async (m: Partial<DealRoomMilestone>) => {
-    await upsert.mutateAsync(m);
-    setOpen(false);
-    setEditing(null);
+    try {
+      await upsert.mutateAsync(m);
+      setOpen(false);
+      setEditing(null);
+    } catch {
+      // mutation onError handles the toast; dialog stays open so user can retry
+    }
   };
 
   return (

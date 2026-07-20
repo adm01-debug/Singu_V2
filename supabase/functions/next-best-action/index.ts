@@ -35,9 +35,8 @@ Deno.serve(async (req) => {
     if (contactErr || !contact) { return jsonError("Contact not found", 404); }
 
     // 1. Gather Rich Context (ownership already verified above)
-     const [interactionsRes, , neuroRes, analyticalRes, whatsappRes] = await Promise.all([
+     const [interactionsRes, neuroRes, analyticalRes, whatsappRes] = await Promise.all([
        supabase.from('interactions').select('*').eq('contact_id', contactId).eq('user_id', userId).order('created_at', { ascending: false }).limit(10),
-       supabase.from('social_behavior_analysis').select('*').eq('contact_id', contactId).order('analysis_date', { ascending: false }).limit(1),
        supabase.from('neuro_behavioral_history').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(5),
        supabase.from('contact_analytical_profiles').select('*').eq('contact_id', contactId).maybeSingle(),
        supabase.from('whatsapp_messages').select('content, message_type').eq('contact_id', contactId).eq('user_id', userId).order('timestamp', { ascending: false }).limit(5)
@@ -118,6 +117,7 @@ Por favor, gere:
 
     const aiJson = await aiResp.json();
     const toolCall = aiJson.choices?.[0]?.message?.tool_calls?.[0];
+    if (!toolCall?.function?.arguments) throw new Error("AI did not return a tool call");
     const result = JSON.parse(toolCall.function.arguments);
 
     // 3. Persist Action

@@ -16,12 +16,10 @@ interface EnrichResult {
   details?: string;
 }
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
   const guard = handleCorsAndMethod(req);
   if (guard) return guard;
 
-  // ── Rate limit ──
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const limited = limiter.check(ip, req);
   if (limited) return limited;
@@ -45,7 +43,6 @@ Deno.serve(async (req) => {
 
     const externalSupabase = createClient(externalUrl, externalKey);
 
-    // Scope to authenticated user's contacts only
     const { data: localContacts, error: fetchError } = await supabase
       .from('contacts')
       .select('id, first_name, last_name, phone, whatsapp, company_id, email, role_title, relationship_stage')
@@ -63,104 +60,108 @@ Deno.serve(async (req) => {
 
     console.log(`Found ${localContacts.length} contacts to enrich`);
 
-    let enrichedCount = 0;
-    let errorCount = 0;
-    const results: EnrichResult[] = [];
+    // Build phone-variant → local contact map and collect all variants for one batch query
+    type LocalContact = typeof localContacts[number];
+    const variantToContact = new Map<string, LocalContact>();
 
     for (const contact of localContacts) {
-      try {
-        const phoneNumber = contact.whatsapp || contact.phone;
-        if (!phoneNumber) {
-          results.push({ contactId: contact.id, name: `${contact.first_name} ${contact.last_name}`, status: 'skipped', details: 'No phone number' });
-          continue;
+      const phoneNumber = contact.whatsapp || contact.phone;
+      if (!phoneNumber) continue;
+      const cleanPhone = phoneNumber.replace(/\D/g, '');
+      const variants = [cleanPhone];
+      if (cleanPhone.startsWith('55') && cleanPhone.length >= 12) variants.push(cleanPhone.substring(2));
+      if (!cleanPhone.startsWith('55') && cleanPhone.length >= 10) variants.push('55' + cleanPhone);
+      for (const v of variants) {
+        if (!variantToContact.has(v)) variantToContact.set(v, contact);
+      }
+    }
+
+    const allVariants = Array.from(variantToContact.keys());
+
+    // One batch external query for ALL phone variants (eliminates N+1)
+    type ExtContact = { id: string; company_id: string | null; first_name: string | null; last_name: string | null; cargo: string | null; whatsapp: string | null; phone: string | null; email: string | null };
+    let extContactMap = new Map<string, ExtContact>(); // variant → ext contact
+
+    if (allVariants.length > 0) {
+      // Use OR filter: whatsapp.in.(...) OR phone.in.(...)
+      const { data: extResults } = await externalSupabase
+        .from('contacts')
+        .select('id, company_id, first_name, last_name, cargo, whatsapp, phone, email')
+        .or(`whatsapp.in.(${allVariants.join(',')}),phone.in.(${allVariants.join(',')})`)
+        .limit(1000);
+
+      for (const ext of (extResults ?? []) as ExtContact[]) {
+        if (ext.whatsapp) extContactMap.set(ext.whatsapp, ext);
+        if (ext.phone && !extContactMap.has(ext.phone)) extContactMap.set(ext.phone, ext);
+      }
+    }
+
+    // In-memory enrichment pass — no DB calls
+    const results: EnrichResult[] = [];
+    const pendingUpdates: Array<{ id: string; updates: Record<string, unknown> }> = [];
+
+    for (const contact of localContacts) {
+      const phoneNumber = contact.whatsapp || contact.phone;
+      if (!phoneNumber) {
+        results.push({ contactId: contact.id, name: `${contact.first_name} ${contact.last_name}`, status: 'skipped', details: 'No phone number' });
+        continue;
+      }
+
+      const cleanPhone = phoneNumber.replace(/\D/g, '');
+      const variants = [cleanPhone];
+      if (cleanPhone.startsWith('55') && cleanPhone.length >= 12) variants.push(cleanPhone.substring(2));
+      if (!cleanPhone.startsWith('55') && cleanPhone.length >= 10) variants.push('55' + cleanPhone);
+
+      let extContact: ExtContact | undefined;
+      for (const v of variants) {
+        extContact = extContactMap.get(v);
+        if (extContact) break;
+      }
+
+      if (!extContact) {
+        results.push({ contactId: contact.id, name: `${contact.first_name} ${contact.last_name}`, status: 'not_found', details: `Phone: ${cleanPhone}` });
+        continue;
+      }
+
+      const updates: Record<string, unknown> = {};
+      if (contact.first_name === 'WhatsApp' && extContact.first_name) {
+        updates.first_name = extContact.first_name;
+        updates.last_name = extContact.last_name || '';
+      }
+      if (!contact.company_id && extContact.company_id) updates.company_id = extContact.company_id;
+      if (!contact.email && extContact.email) updates.email = extContact.email;
+      if (!contact.role_title && extContact.cargo) updates.role_title = extContact.cargo;
+      if (contact.relationship_stage === 'unknown') updates.relationship_stage = 'known';
+      updates.updated_at = new Date().toISOString();
+
+      if (Object.keys(updates).length > 1) {
+        pendingUpdates.push({ id: contact.id, updates });
+        const enrichedFields = Object.keys(updates).filter(k => k !== 'updated_at');
+        results.push({ contactId: contact.id, name: (extContact.first_name) || contact.first_name, status: 'enriched', details: `Fields: ${enrichedFields.join(', ')}` });
+      } else {
+        results.push({ contactId: contact.id, name: `${contact.first_name} ${contact.last_name}`, status: 'already_complete', details: 'External match found but no new data' });
+      }
+    }
+
+    // Bulk-upsert all pending updates in one call (each row has different fields → upsert with merge)
+    let enrichedCount = 0;
+    let errorCount = 0;
+
+    if (pendingUpdates.length > 0) {
+      const upsertRows = pendingUpdates.map(({ id, updates }) => ({ id, user_id: userId, ...updates }));
+      const { error: upsertErr } = await supabase
+        .from('contacts')
+        .upsert(upsertRows, { onConflict: 'id' });
+
+      if (upsertErr) {
+        console.error('Bulk upsert error:', upsertErr);
+        errorCount = pendingUpdates.length;
+        for (const p of pendingUpdates) {
+          const idx = results.findIndex(r => r.contactId === p.id);
+          if (idx >= 0) results[idx] = { ...results[idx], status: 'error', details: 'Update failed' };
         }
-
-        const cleanPhone = phoneNumber.replace(/\D/g, '');
-        
-        const phoneVariants = [cleanPhone];
-        if (cleanPhone.startsWith('55') && cleanPhone.length >= 12) {
-          phoneVariants.push(cleanPhone.substring(2));
-        }
-        if (!cleanPhone.startsWith('55') && cleanPhone.length >= 10) {
-          phoneVariants.push('55' + cleanPhone);
-        }
-
-        let extContact: Record<string, unknown> | null = null;
-
-        for (const variant of phoneVariants) {
-          const { data: extResults, error: extError } = await externalSupabase
-            .from('contacts')
-            .select('id, company_id, first_name, last_name, cargo, whatsapp, phone, email')
-            .or(`whatsapp.eq.${variant},phone.eq.${variant}`)
-            .limit(1);
-
-          if (extError) {
-            console.error(`External search error for ${variant}:`, extError.message);
-            continue;
-          }
-
-          if (extResults && extResults.length > 0) {
-            extContact = extResults[0] as Record<string, unknown>;
-            break;
-          }
-        }
-
-        if (!extContact) {
-          results.push({ contactId: contact.id, name: `${contact.first_name} ${contact.last_name}`, status: 'not_found', details: `Phone: ${cleanPhone}` });
-          continue;
-        }
-
-        const updates: Record<string, unknown> = {};
-
-        if (contact.first_name === 'WhatsApp' && extContact.first_name) {
-          updates.first_name = extContact.first_name;
-          updates.last_name = (extContact.last_name as string) || '';
-        }
-
-        if (!contact.company_id && extContact.company_id) {
-          updates.company_id = extContact.company_id;
-        }
-
-        if (!contact.email && extContact.email) {
-          updates.email = extContact.email;
-        }
-
-        if (!contact.role_title && extContact.cargo) {
-          updates.role_title = extContact.cargo;
-        }
-
-        if (contact.relationship_stage === 'unknown') {
-          updates.relationship_stage = 'known';
-        }
-
-        updates.updated_at = new Date().toISOString();
-
-        if (Object.keys(updates).length > 1) {
-          const { error: updateError } = await supabase
-            .from('contacts')
-            .update(updates)
-            .eq('id', contact.id)
-            .eq('user_id', userId); // double-check ownership
-
-          if (updateError) {
-            console.error(`Error updating contact ${contact.id}:`, updateError);
-            results.push({ contactId: contact.id, name: `${contact.first_name} ${contact.last_name}`, status: 'error', details: 'Update failed' });
-            errorCount++;
-          } else {
-            enrichedCount++;
-            const enrichedFields = Object.keys(updates).filter(k => k !== 'updated_at');
-            results.push({ contactId: contact.id, name: (extContact.first_name as string) || contact.first_name, status: 'enriched', details: `Fields: ${enrichedFields.join(', ')}` });
-            console.log(`Enriched contact ${contact.id}: ${enrichedFields.join(', ')}`);
-          }
-        } else {
-          results.push({ contactId: contact.id, name: `${contact.first_name} ${contact.last_name}`, status: 'already_complete', details: 'External match found but no new data' });
-        }
-
-      } catch (contactError) {
-        const msg = contactError instanceof Error ? contactError.message : 'Unknown error';
-        console.error(`Error processing contact ${contact.id}:`, msg);
-        results.push({ contactId: contact.id, name: `${contact.first_name} ${contact.last_name}`, status: 'error', details: msg });
-        errorCount++;
+      } else {
+        enrichedCount = pendingUpdates.length;
       }
     }
 

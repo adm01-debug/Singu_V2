@@ -184,7 +184,6 @@ Deno.serve(async (req) => {
     return jsonOk(result);
   } catch (error: unknown) {
     console.error("Voice agent error:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
-    return jsonError(message, 500);
+    return jsonError("Internal server error", 500);
   }
 });

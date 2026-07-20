@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -52,16 +52,8 @@ export function CompatibilityAlertsList({
   const [loading, setLoading] = useState(true);
   const [alerts, setAlerts] = useState<CompatibilityAlert[]>([]);
 
-  useEffect(() => {
-    if (user) {
-      fetchAlerts();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  const fetchAlerts = async () => {
+  const fetchAlerts = useCallback(async () => {
     if (!user) return;
-    
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -82,7 +74,11 @@ export function CompatibilityAlertsList({
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, maxItems]);
+
+  useEffect(() => {
+    fetchAlerts();
+  }, [fetchAlerts]);
 
   const handleDismiss = async (alertId: string) => {
     try {

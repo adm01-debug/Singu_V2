@@ -161,7 +161,6 @@ Deno.serve(async (req) => {
     return jsonOk({ success: true, analyzed: contacts.length, risks: top }, req);
   } catch (error) {
     console.error("detect-churn-risk error:", error);
-    console.error("detect-churn-risk error:", error);
     return jsonError("Internal server error", 500, req);
   }
 });

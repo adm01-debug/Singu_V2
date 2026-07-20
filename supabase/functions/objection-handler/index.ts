@@ -75,6 +75,8 @@ Gere um script que:
 2. Requadre o problema para focar em benefício ou custo de oportunidade.
 3. CTA clara e de baixo atrito.`;
 
+    if (!LOVABLE_API_KEY) return jsonError("LOVABLE_API_KEY não configurada", 500, req);
+
     const response = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -106,11 +108,21 @@ Gere um script que:
       })
     });
 
-    const aiJson = await response.json();
-    const result = JSON.parse(aiJson.choices[0].message.tool_calls[0].function.arguments);
+    if (!response.ok) {
+      if (response.status === 429) return jsonError("Rate limit do gateway IA. Tente em alguns segundos.", 429, req);
+      if (response.status === 402) return jsonError("Créditos de IA esgotados. Adicione créditos em Settings.", 402, req);
+      const errText = await response.text();
+      console.error("AI gateway error:", response.status, errText);
+      throw new Error(`AI gateway error: ${response.status}`);
+    }
 
-     // 3. Persist for Audit and Intelligence Dashboard
-     await supabase.from('crm_objection_intelligence').insert({
+    const aiJson = await response.json();
+    const toolArgs = aiJson.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
+    if (!toolArgs) throw new Error("AI did not return expected tool call");
+    const result = JSON.parse(toolArgs);
+
+     // 3. Persist for Audit and Intelligence Dashboard (fire-and-forget — non-critical logs)
+     supabase.from('crm_objection_intelligence').insert({
        contact_id: contactId,
        user_id: userId,
        objection_type: objectionId,
@@ -118,10 +130,10 @@ Gere um script que:
        suggested_strategy: result.title,
        script_content: result.suggested_message,
        success_rate: result.confidence
-     });
- 
+     }).catch((e: unknown) => console.error("crm_objection_intelligence insert error:", e));
+
      // Also log in the older table for backward compatibility
-     await supabase.from('contact_objection_scripts').insert({
+     supabase.from('contact_objection_scripts').insert({
        contact_id: contactId,
        user_id: userId,
        objection_type: objectionId,

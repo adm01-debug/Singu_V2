@@ -85,7 +85,11 @@ const RelatorioContato = () => {
           discHistory = extDisc || [];
         }
 
-         const behavior = (contact.behavior || {}) as ContactBehavior;
+        if (!contact) {
+          setData(null);
+          return;
+        }
+        const behavior = (contact.behavior || {}) as ContactBehavior;
          const recurringObjections = interactions
            .filter(i => i.content?.toLowerCase().includes('objeção') || i.content?.toLowerCase().includes('não gostou'))
            .map(i => i.content)
@@ -184,7 +188,7 @@ const RelatorioContato = () => {
   };
 
   const handleExportCSV = () => {
-     if (!data) return;
+     if (!data?.contact) return;
      const rows = [
        ["Campo", "Valor"],
        ["Nome", contactName],

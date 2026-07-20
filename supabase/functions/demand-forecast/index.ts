@@ -125,7 +125,6 @@ Retorne EXATAMENTE um JSON com a estrutura usando a tool fornecida.`;
       ...forecastData,
     });
   } catch (error: unknown) {
-    console.error('Demand forecast error:', error);
     console.error("demand-forecast error:", error);
     return jsonError("Internal server error", 500);
   }

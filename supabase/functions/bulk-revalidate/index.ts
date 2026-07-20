@@ -45,20 +45,20 @@ Deno.serve(async (req) => {
 
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
-      return jsonRes({ error: "Missing Authorization" }, 401);
+      return jsonRes({ error: "Missing Authorization" }, 401, cors);
     }
 
     const userClient = createClient(SUPABASE_URL, ANON, {
       global: { headers: { Authorization: authHeader } },
     });
     const { data: userData, error: userErr } = await userClient.auth.getUser();
-    if (userErr || !userData?.user) return jsonRes({ error: "Unauthorized" }, 401);
+    if (userErr || !userData?.user) return jsonRes({ error: "Unauthorized" }, 401, cors);
     const userId = userData.user.id;
 
     const json = rawBody;
     const parsed = BodySchema.safeParse(json);
     if (!parsed.success) {
-      return jsonRes({ error: "Invalid body", details: parsed.error.flatten() }, 400);
+      return jsonRes({ error: "Invalid body", details: parsed.error.flatten() }, 400, cors);
     }
     const { kind, statuses, olderThanDays, limit, dryRun } = parsed.data;
 
@@ -81,27 +81,29 @@ Deno.serve(async (req) => {
     const emailItems: Array<{ contactId: string; value: string }> = [];
     const phoneItems: Array<{ contactId: string; value: string }> = [];
 
-    if (targetEmail) {
-      const withEmail = contactList.filter((c) => c.email && c.email.trim().length > 3);
-      const ids = withEmail.map((c) => c.id);
-      const verMap = await fetchLatest(admin, "email_verifications", ids, "verified_at");
-      for (const c of withEmail) {
-        const v = verMap.get(c.id);
-        if (matchesFilter(v?.status ?? "never", v?.verified_at ?? null, statuses, cutoff)) {
-          emailItems.push({ contactId: c.id, value: c.email! });
-        }
+    const withEmail = targetEmail ? contactList.filter((c) => c.email && c.email.trim().length > 3) : [];
+    const withPhone = targetPhone ? contactList.filter((c) => c.phone && c.phone.trim().length >= 5) : [];
+
+    // Run both verification lookups in parallel when kind="both"
+    const [emailVerMap, phoneVerMap] = await Promise.all([
+      withEmail.length > 0
+        ? fetchLatest(admin, "email_verifications", withEmail.map((c) => c.id), "verified_at")
+        : Promise.resolve(new Map<string, VerificationRow>()),
+      withPhone.length > 0
+        ? fetchLatest(admin, "phone_validations", withPhone.map((c) => c.id), "validated_at")
+        : Promise.resolve(new Map<string, VerificationRow>()),
+    ]);
+
+    for (const c of withEmail) {
+      const v = emailVerMap.get(c.id);
+      if (matchesFilter(v?.status ?? "never", v?.verified_at ?? null, statuses, cutoff)) {
+        emailItems.push({ contactId: c.id, value: c.email! });
       }
     }
-
-    if (targetPhone) {
-      const withPhone = contactList.filter((c) => c.phone && c.phone.trim().length >= 5);
-      const ids = withPhone.map((c) => c.id);
-      const verMap = await fetchLatest(admin, "phone_validations", ids, "validated_at");
-      for (const c of withPhone) {
-        const v = verMap.get(c.id);
-        if (matchesFilter(v?.status ?? "never", v?.validated_at ?? null, statuses, cutoff)) {
-          phoneItems.push({ contactId: c.id, value: c.phone! });
-        }
+    for (const c of withPhone) {
+      const v = phoneVerMap.get(c.id);
+      if (matchesFilter(v?.status ?? "never", v?.validated_at ?? null, statuses, cutoff)) {
+        phoneItems.push({ contactId: c.id, value: c.phone! });
       }
     }
 
@@ -118,11 +120,11 @@ Deno.serve(async (req) => {
     };
 
     if (dryRun) {
-      return jsonRes({ dryRun: true, ...totals });
+      return jsonRes({ dryRun: true, ...totals }, 200, cors);
     }
 
     if (allItems.length === 0) {
-      return jsonRes({ enqueued: 0, ...totals });
+      return jsonRes({ enqueued: 0, ...totals }, 200, cors);
     }
 
     // Insere em validation_queue
@@ -138,17 +140,17 @@ Deno.serve(async (req) => {
     const { error: insErr } = await admin.from("validation_queue").insert(rows);
     if (insErr) throw insErr;
 
-    return jsonRes({ enqueued: rows.length, ...totals });
+    return jsonRes({ enqueued: rows.length, ...totals }, 200, cors);
   } catch (err) {
     console.error("bulk-revalidate error", err);
-    return jsonRes({ error: String(err) }, 500);
+    return jsonRes({ error: "Internal server error" }, 500, cors);
   }
 });
 
-function jsonRes(body: unknown, status = 200) {
+function jsonRes(body: unknown, status = 200, corsHeaders: Record<string, string> = {}) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { ...cors, "Content-Type": "application/json" },
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 }
 

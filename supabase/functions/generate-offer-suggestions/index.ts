@@ -61,39 +61,30 @@ Deno.serve(async (req) => {
       return jsonOk({ success: true, suggestions: [] });
     }
 
-    // Get purchase history for all contacts
+    // Fetch all dependent data in parallel — all 6 queries depend only on contactIds
     const contactIds = contacts.map(c => c.id);
-    const { data: purchases } = await supabase
-      .from('purchase_history')
-      .select('*')
-      .in('contact_id', contactIds)
-      .order('purchase_date', { ascending: false });
+    const [
+      { data: purchases },
+      { data: interactions },
+      { data: analyticalProfiles },
+      { data: socialAnalysis },
+      { data: existingOffers },
+      { data: allSocialInsights },
+    ] = await Promise.all([
+      supabase.from('purchase_history').select('*').in('contact_id', contactIds).order('purchase_date', { ascending: false }),
+      supabase.from('interactions').select('*').in('contact_id', contactIds).order('created_at', { ascending: false }).limit(100),
+      supabase.from('contact_analytical_profiles').select('*').in('contact_id', contactIds),
+      supabase.from('social_behavior_analysis').select('*').in('contact_id', contactIds),
+      supabase.from('offer_suggestions').select('contact_id, offer_name').in('contact_id', contactIds).eq('status', 'pending'),
+      supabase.from('social_insights').select('id, contact_id, platform, content').in('contact_id', contactIds),
+    ]);
 
-    // Get interactions for context
-    const { data: interactions } = await supabase
-      .from('interactions')
-      .select('*')
-      .in('contact_id', contactIds)
-      .order('created_at', { ascending: false })
-      .limit(100);
-
-     // Get psychographic data and social analysis
-     const { data: analyticalProfiles } = await supabase
-       .from('contact_analytical_profiles')
-       .select('*')
-       .in('contact_id', contactIds);
- 
-     const { data: socialAnalysis } = await supabase
-       .from('social_behavior_analysis')
-       .select('*')
-       .in('contact_id', contactIds);
- 
-     // Get existing offer suggestions to avoid duplicates
-    const { data: existingOffers } = await supabase
-      .from('offer_suggestions')
-      .select('contact_id, offer_name')
-      .in('contact_id', contactIds)
-      .eq('status', 'pending');
+    const socialInsightsByContact = new Map<string, Array<{ id: string; platform: string; content: string }>>();
+    for (const si of allSocialInsights ?? []) {
+      const arr = socialInsightsByContact.get(si.contact_id) ?? [];
+      arr.push({ id: si.id, platform: si.platform, content: si.content });
+      socialInsightsByContact.set(si.contact_id, arr);
+    }
 
     const existingOffersSet = new Set(
       (existingOffers || []).map(o => `${o.contact_id}-${o.offer_name}`)
@@ -157,11 +148,8 @@ Deno.serve(async (req) => {
         if (matchedKeywords.length > 0) {
           confidence += matchedKeywords.length * 10;
           
-          // Identify which social insights caused the match
-          const { data: insights } = await supabase
-            .from('social_insights')
-            .select('id, platform, content')
-            .eq('contact_id', contact.id);
+          // Identify which social insights caused the match (Map lookup — no DB call)
+          const insights = socialInsightsByContact.get(contact.id);
 
           if (insights) {
             for (const insight of insights) {
@@ -268,7 +256,6 @@ Deno.serve(async (req) => {
 
   } catch (error: unknown) {
     console.error("Error generating offer suggestions:", error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return jsonError(errorMessage, 500);
+    return jsonError("Internal server error", 500);
   }
 });

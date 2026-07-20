@@ -73,7 +73,7 @@ Deno.serve(async (req) => {
     const best = candidates[0];
 
     const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-    await admin.from("email_finder_results").insert({
+    admin.from("email_finder_results").insert({
       user_id: userData.user.id,
       contact_id: contactId ?? null,
       full_name: `${firstName} ${lastName}`,
@@ -84,12 +84,13 @@ Deno.serve(async (req) => {
       best_email: best?.email ?? null,
       best_confidence: best?.score ?? 0,
       sources: [{ type: "permutation_heuristic" }],
-    });
+    }).catch((e: unknown) => console.error("email_finder_results insert error:", e));
 
     return new Response(JSON.stringify({ best, candidates }), {
       headers: { ...cors, "Content-Type": "application/json" },
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: String(err) }), { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
+    console.error('email-finder error:', err);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
   }
 });

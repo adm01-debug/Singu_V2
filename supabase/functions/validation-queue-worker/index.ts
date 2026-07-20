@@ -50,6 +50,11 @@ Deno.serve(async (req) => {
     let okCount = 0;
     let errCount = 0;
 
+    type DoneRow = { id: string; status: string; processed_at: string; attempts: number };
+    type ErrRow = { id: string; status: string; attempts: number; last_error: string; processed_at: string | null };
+    const doneRows: DoneRow[] = [];
+    const errRows: ErrRow[] = [];
+
     for (const item of queue) {
       try {
         const fnName = item.kind === "email" ? "email-verifier" : "phone-validator";
@@ -73,33 +78,35 @@ Deno.serve(async (req) => {
           throw new Error(`${fnName} ${resp.status}: ${txt.slice(0, 200)}`);
         }
 
-        await admin
-          .from("validation_queue")
-          .update({ status: "done", processed_at: new Date().toISOString(), attempts: item.attempts + 1 })
-          .eq("id", item.id);
+        doneRows.push({ id: item.id, status: "done", processed_at: new Date().toISOString(), attempts: item.attempts + 1 });
         okCount++;
       } catch (err) {
         const nextAttempts = item.attempts + 1;
         const finalStatus = nextAttempts >= MAX_ATTEMPTS ? "error" : "pending";
-        await admin
-          .from("validation_queue")
-          .update({
-            status: finalStatus,
-            attempts: nextAttempts,
-            last_error: String(err).slice(0, 500),
-            processed_at: finalStatus === "error" ? new Date().toISOString() : null,
-          })
-          .eq("id", item.id);
+        errRows.push({
+          id: item.id,
+          status: finalStatus,
+          attempts: nextAttempts,
+          last_error: String(err).slice(0, 500),
+          processed_at: finalStatus === "error" ? new Date().toISOString() : null,
+        });
         errCount++;
       }
     }
+
+    // Flush all outcome updates in two batched upserts
+    await Promise.all([
+      doneRows.length > 0 ? admin.from("validation_queue").upsert(doneRows, { onConflict: "id" }) : Promise.resolve(),
+      errRows.length > 0 ? admin.from("validation_queue").upsert(errRows, { onConflict: "id" }) : Promise.resolve(),
+    ]);
 
     return new Response(
       JSON.stringify({ processed: queue.length, ok: okCount, errors: errCount }),
       { headers: { ...cors, "Content-Type": "application/json" } }
     );
   } catch (err) {
-    return new Response(JSON.stringify({ error: String(err) }), {
+    console.error("validation-queue-worker error:", err);
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { ...cors, "Content-Type": "application/json" },
     });

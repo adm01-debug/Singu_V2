@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { DISCProfile } from '@/types';
 import { VAKType, VAK_LABELS } from '@/types/vak';
 import { supabase } from '@/integrations/supabase/client';
@@ -37,12 +37,7 @@ export function usePortfolioCompatibility() {
     minChars: 1,
   });
 
-  useEffect(() => {
-    if (user) loadData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!user) return;
     setLoading(true);
 
@@ -158,7 +153,11 @@ export function usePortfolioCompatibility() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) loadData();
+  }, [user, loadData]);
 
   const filteredContacts = useMemo(() => {
     let result = [...fuzzyResults];

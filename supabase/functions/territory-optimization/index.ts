@@ -219,6 +219,12 @@ Deno.serve(async (req) => {
     let territories: TerritoryRow[] = [];
     let performance: TerritoryPerformanceRow[] = [];
 
+    // Launch teamMembers fetch immediately so it runs concurrently with external RPCs
+    const teamMembersPromise = supabase
+      .from("sales_team_members")
+      .select("user_id, territories, is_active, role")
+      .eq("is_active", true);
+
     if (externalUrl && externalKey) {
       const externalDb = createClient(externalUrl, externalKey);
       const [{ data: tData }, { data: pData }] = await Promise.all([
@@ -229,10 +235,7 @@ Deno.serve(async (req) => {
       performance = Array.isArray(pData) ? (pData as TerritoryPerformanceRow[]) : [];
     }
 
-    const { data: teamMembers } = await supabase
-      .from("sales_team_members")
-      .select("user_id, territories, is_active, role")
-      .eq("is_active", true);
+    const { data: teamMembers } = await teamMembersPromise;
 
     const assignedTerritoryIds = new Set<string>();
     (teamMembers ?? []).forEach((m) => {
@@ -329,7 +332,6 @@ Deno.serve(async (req) => {
     );
   } catch (err) {
     console.error("[territory-optimization] error", err);
-    console.error("territory-optimization error:", err);
     return jsonError("Internal server error", 500, req);
   }
 });

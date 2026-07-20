@@ -79,17 +79,29 @@ Deno.serve(async (req) => {
       return jsonOk({ scored: 0, accounts: [] }, req);
     }
 
-    const updates: Array<{ id: string; account_score: number; score_breakdown: ScoreBreakdown }> = [];
+    const accountIds = accounts.map((a) => a.id);
+
+    // Batch-fetch all committee members for all accounts in one query
+    const { data: allCommittee } = await supabase
+      .from("abm_buying_committee")
+      .select("account_id, committee_role")
+      .in("account_id", accountIds);
+
+    const committeeByAccount = new Map<string, Array<{ committee_role: string }>>();
+    for (const c of allCommittee ?? []) {
+      if (!committeeByAccount.has(c.account_id)) committeeByAccount.set(c.account_id, []);
+      committeeByAccount.get(c.account_id)!.push(c);
+    }
+
+    const returnUpdates: Array<{ id: string; account_score: number; score_breakdown: ScoreBreakdown }> = [];
+    const upsertRows: Array<{ id: string; account_score: number; score_breakdown: ScoreBreakdown; last_scored_at: string }> = [];
+    const now = new Date().toISOString();
 
     for (const acc of accounts) {
-      const { data: committee } = await supabase
-        .from("abm_buying_committee")
-        .select("committee_role")
-        .eq("account_id", acc.id);
-
-      const committeeSize = committee?.length ?? 0;
-      const hasChampion = committee?.some((c) => c.committee_role === "champion") ?? false;
-      const hasDecisionMaker = committee?.some((c) => c.committee_role === "decision_maker") ?? false;
+      const committee = committeeByAccount.get(acc.id) ?? [];
+      const committeeSize = committee.length;
+      const hasChampion = committee.some((c) => c.committee_role === "champion");
+      const hasDecisionMaker = committee.some((c) => c.committee_role === "decision_maker");
 
       const fit = calcFitScore(acc.tier, !!acc.target_revenue);
       const engagement = calcEngagementScore(committeeSize, 0, 0);
@@ -99,27 +111,24 @@ Deno.serve(async (req) => {
       const total = Math.min(100, fit + engagement + intent + influence);
       const breakdown: ScoreBreakdown = { fit, engagement, intent, influence };
 
-      updates.push({ id: acc.id, account_score: total, score_breakdown: breakdown });
+      returnUpdates.push({ id: acc.id, account_score: total, score_breakdown: breakdown });
+      upsertRows.push({ id: acc.id, account_score: total, score_breakdown: breakdown, last_scored_at: now });
+    }
 
-      const { error: updateErr } = await supabase
+    // Bulk-update all accounts in a single upsert
+    if (upsertRows.length > 0) {
+      const { error: upsertErr } = await supabase
         .from("abm_accounts")
-        .update({ 
-          account_score: total, 
-          score_breakdown: breakdown, 
-          last_scored_at: new Date().toISOString() 
-        })
-        .eq("id", acc.id);
-      
-      if (updateErr) {
-        log.error("update_account_failed", { accountId: acc.id, error: updateErr.message });
+        .upsert(upsertRows, { onConflict: "id" });
+      if (upsertErr) {
+        log.error("bulk_update_accounts_failed", { error: upsertErr.message });
       }
     }
 
-    log.info("scoring_complete", { count: updates.length });
-    return jsonOk({ scored: updates.length, accounts: updates, traceId }, req);
+    log.info("scoring_complete", { count: returnUpdates.length });
+    return jsonOk({ scored: returnUpdates.length, accounts: returnUpdates, traceId }, req);
   } catch (err) {
-    const msg = err instanceof Error ? err.message : "Unknown error";
-    log.error("fatal_error", { error: msg });
-    return jsonError(msg, 500, req);
+    log.error("fatal_error", { error: err instanceof Error ? err.message : String(err) });
+    return jsonError("Internal server error", 500, req);
   }
 });
