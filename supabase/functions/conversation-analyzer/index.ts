@@ -1,6 +1,13 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { z } from "npm:zod@3.23.8";
+
+const bodySchema = z.object({
+  interaction_id: z.string().uuid(),
+  force:          z.boolean().optional(),
+});
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
 
@@ -15,12 +22,14 @@ Deno.serve(async (req) => {
   const limited = limiter.check(userId, req);
   if (limited) return limited;
 
-  let body: { interaction_id?: string; force?: boolean };
-  try { body = await req.json(); } catch { return jsonError("Invalid JSON", 400, req); }
-  const interactionId = body.interaction_id;
-  if (!interactionId || typeof interactionId !== "string") {
-    return jsonError("interaction_id required", 400, req);
+  const { body: rawBody, error: bodyError } = await guardBody(req);
+  if (bodyError) return bodyError;
+
+  const parsed = bodySchema.safeParse(rawBody);
+  if (!parsed.success) {
+    return jsonError(parsed.error.issues[0]?.message ?? "Invalid request body", 400, req);
   }
+  const { interaction_id: interactionId, force } = parsed.data;
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -38,7 +47,7 @@ Deno.serve(async (req) => {
     return jsonError("Conteúdo insuficiente para análise (mínimo 80 caracteres)", 400, req);
   }
 
-  if (!body.force) {
+  if (!force) {
     const { data: existing } = await supabase
       .from("conversation_analyses")
       .select("id")
@@ -69,7 +78,7 @@ Catálogo de tópicos: ${JSON.stringify(topicCatalog)}`;
 
 ${interaction.content.slice(0, 12000)}`;
 
-  const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+  const aiResp = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({

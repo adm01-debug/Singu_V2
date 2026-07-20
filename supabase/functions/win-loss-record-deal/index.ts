@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { z } from "npm:zod@3.23.8";
 
@@ -15,6 +15,9 @@ const BodySchema = z.object({
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: scopedCorsHeaders(req) });
+
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
 
   try {
     const authHeader = req.headers.get("Authorization");
@@ -43,7 +46,7 @@ Deno.serve(async (req) => {
     const limited = limiter.check(userId, req);
     if (limited) return limited;
 
-    const parsed = BodySchema.safeParse(await req.json());
+    const parsed = BodySchema.safeParse(rawBody);
     if (!parsed.success) {
       return new Response(JSON.stringify({ error: parsed.error.flatten().fieldErrors }), {
         status: 400,
@@ -77,7 +80,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("win-loss-record-deal error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown" }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
     });

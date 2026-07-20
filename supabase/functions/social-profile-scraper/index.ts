@@ -1,6 +1,14 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { fetchScrape } from "../_shared/fetch-utils.ts";
+import { z } from "npm:zod@3.23.8";
+
+const bodySchema = z.object({
+  contactId:  z.string().uuid(),
+  platform:   z.enum(["linkedin", "twitter", "instagram"]),
+  profileUrl: z.string().url().max(2048),
+});
 
 interface ScrapeRequest {
   contactId: string;
@@ -137,15 +145,18 @@ Deno.serve(async (req) => {
       { global: { headers: { Authorization: req.headers.get("Authorization")! } } }
     );
 
-    const { contactId, platform, profileUrl }: ScrapeRequest = await req.json();
+    const { body: rawBody, error: bodyError } = await guardBody(req);
+    if (bodyError) return bodyError;
 
-    if (!contactId || !platform || !profileUrl) {
-      return jsonError("Missing required fields", 400);
+    const parsed = bodySchema.safeParse(rawBody);
+    if (!parsed.success) {
+      return jsonError(parsed.error.issues[0]?.message ?? "Invalid request body", 400);
     }
+    const { contactId, platform, profileUrl } = parsed.data;
 
     console.log(`Scraping ${platform} profile: ${profileUrl}`);
 
-    const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
+    const scrapeResponse = await fetchScrape("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
       headers: { Authorization: `Bearer ${FIRECRAWL_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({ url: profileUrl, formats: ["markdown"], onlyMainContent: true, waitFor: 3000 }),

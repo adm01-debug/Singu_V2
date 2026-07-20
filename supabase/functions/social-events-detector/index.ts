@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { fetchScrape } from "../_shared/fetch-utils.ts";
 
 interface ScrapeResult {
   contactId: string;
@@ -87,7 +88,7 @@ Deno.serve(async (req) => {
         console.log(`Processing ${schedule.platform} for contact ${schedule.contact_id}`);
 
         // Fazer scraping
-        const scrapeResponse = await fetch('https://api.firecrawl.dev/v1/scrape', {
+        const scrapeResponse = await fetchScrape('https://api.firecrawl.dev/v1/scrape', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${FIRECRAWL_API_KEY}`,

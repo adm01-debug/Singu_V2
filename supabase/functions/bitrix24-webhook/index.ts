@@ -1,6 +1,9 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { handleCorsAndMethod, jsonError, jsonOk, requireWebhookSecret } from "../_shared/auth.ts";
+import { guardBody, handleCorsAndMethod, jsonError, jsonOk, requireWebhookSecret } from "../_shared/auth.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 100 });
 
 interface BitrixCallEvent {
   event: string;
@@ -30,8 +33,15 @@ Deno.serve(async (req) => {
   const corsResp = handleCorsAndMethod(req);
   if (corsResp) return corsResp;
 
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip, req);
+  if (limited) return limited;
+
   const authCheck = await requireWebhookSecret(req, 'BITRIX24_WEBHOOK_SECRET', 'x-bitrix24-secret');
   if (authCheck) return authCheck;
+
+  const { body: rawBody, error: bodyError } = await guardBody(req, 512 * 1024);
+  if (bodyError) return bodyError;
 
   try {
     const supabase = createClient(
@@ -44,7 +54,7 @@ Deno.serve(async (req) => {
     const contentType = req.headers.get('content-type') || '';
     
     if (contentType.includes('application/json')) {
-      payload = await req.json();
+      payload = rawBody as BitrixCallEvent;
     } else {
       // Handle form-urlencoded data
       const formData = await req.formData();

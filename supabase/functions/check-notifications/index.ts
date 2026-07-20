@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, requireCronSecret, jsonError, jsonOk } from "../_shared/auth.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 Deno.serve(async (req) => {
   const traceId = extractTraceId(req);
@@ -213,7 +214,7 @@ Deno.serve(async (req) => {
     
     for (const notification of notifications) {
       try {
-        const response = await fetch(`${supabaseUrl}/functions/v1/send-push-notification`, {
+        const response = await fetchAPI(`${supabaseUrl}/functions/v1/send-push-notification`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

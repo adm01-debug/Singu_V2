@@ -1,5 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, withAuth } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Rate limit exceeded for health." });
 
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
@@ -7,6 +10,10 @@ Deno.serve(async (req) => {
 
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
+  const userId = authResult;
+
+  const limited = limiter.check(userId, req);
+  if (limited) return limited;
 
   const startTime = Date.now();
   const checks: Record<string, { status: string; latencyMs?: number; error?: string }> = {};

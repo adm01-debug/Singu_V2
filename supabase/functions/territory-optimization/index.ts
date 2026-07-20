@@ -6,6 +6,7 @@ import {
   jsonOk,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 
 /* ─── Types ──────────────────────────────────────────────── */
 
@@ -105,7 +106,7 @@ async function generateAiRecommendations(payload: {
   };
 
   try {
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const res = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,

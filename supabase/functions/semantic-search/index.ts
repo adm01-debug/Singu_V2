@@ -1,6 +1,15 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { z } from "npm:zod@3.23.8";
+
+const bodySchema = z.object({
+  query:    z.string().min(2).max(500),
+  limit:    z.number().int().min(1).max(50).optional(),
+  useAI:    z.boolean().optional(),
+  entities: z.array(z.enum(["products","contacts","companies","interactions"])).optional(),
+});
 
 
 const CACHE_TTL_MINUTES = 10;
@@ -28,7 +37,7 @@ async function expandQueryWithAI(query: string): Promise<string[]> {
   if (!apiKey) return [query];
 
   try {
-    const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const resp = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -122,22 +131,23 @@ Deno.serve(async (req) => {
       });
     }
 
-    const body = await req.json().catch(() => ({}));
-    const query = String(body?.query ?? "").trim();
-    const limit = Math.min(Math.max(Number(body?.limit ?? 10), 1), 50);
-    const useAI = body?.useAI !== false;
-    const requested: EntityKey[] = Array.isArray(body?.entities) && body.entities.length > 0
-      ? body.entities.filter((e: string): e is EntityKey =>
-        ALL_ENTITIES.includes(e as EntityKey)
-      )
-      : ALL_ENTITIES;
+    const { body: rawBody, error: bodyError } = await guardBody(req);
+    if (bodyError) return bodyError;
 
-    if (!query || query.length < 2) {
-      return new Response(JSON.stringify({ error: "Query must be at least 2 characters" }), {
-        status: 400,
-        headers: { ...cors, "Content-Type": "application/json" },
-      });
+    const parsedBody = bodySchema.safeParse(rawBody);
+    if (!parsedBody.success) {
+      return new Response(
+        JSON.stringify({ error: parsedBody.error.issues[0]?.message ?? "Invalid request body" }),
+        { status: 400, headers: { ...cors, "Content-Type": "application/json" } },
+      );
     }
+
+    const query = parsedBody.data.query.trim();
+    const limit = parsedBody.data.limit ?? 10;
+    const useAI = parsedBody.data.useAI !== false;
+    const requested: EntityKey[] = parsedBody.data.entities && parsedBody.data.entities.length > 0
+      ? parsedBody.data.entities
+      : ALL_ENTITIES;
 
     const queryHash = await hashQuery(`${query}:${limit}:${useAI}:${requested.sort().join(",")}`);
 
@@ -219,7 +229,7 @@ Deno.serve(async (req) => {
   } catch (e) {
     console.error("semantic-search error:", e);
     return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
+      JSON.stringify({ error: "Internal server error" }),
       { status: 500, headers: { ...cors, "Content-Type": "application/json" } },
     );
   }

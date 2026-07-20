@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { withAuth, jsonError, jsonOk, scopedCorsHeaders } from "../_shared/auth.ts";
+import { withAuth, jsonError, jsonOk, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
@@ -13,8 +14,11 @@ Deno.serve(async (req) => {
   const limited = limiter.check(userId, req);
   if (limited) return limited;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    const { period_id } = await req.json();
+    const { period_id } = rawBody as { period_id?: string };
     if (!period_id) return jsonError("period_id required", 400);
 
     const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
@@ -43,7 +47,7 @@ Top deals em risco: ${JSON.stringify(atRisk.map(d => ({ name: d.deal_name, amoun
 
 Inclua: status vs quota, principais riscos, recomendações de ação. Tom executivo, direto, em português.`;
 
-    const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const aiResp = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({

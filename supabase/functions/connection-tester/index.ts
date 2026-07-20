@@ -25,6 +25,7 @@ import {
   scopedCorsHeaders,
   handleCorsAndMethod,
   withAuth,
+  guardBody,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
@@ -280,6 +281,9 @@ Deno.serve(async (req) => {
 
   const corsH = scopedCorsHeaders(req);
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     // Auth: shared authenticateRequest calls supabase.auth.getUser() —
     // the original used getClaims() which is weaker / non-standard.
@@ -291,7 +295,7 @@ Deno.serve(async (req) => {
     const rl = limiter.check(userId, req);
     if (rl) return rl;
 
-    const payload = (await req.json()) as TestPayload;
+    const payload = rawBody as TestPayload;
     let result: TestResult;
 
     switch (payload.connection_type) {
@@ -331,7 +335,7 @@ Deno.serve(async (req) => {
   } catch (err) {
     const message = err instanceof Error ? err.message : "Erro desconhecido";
     try {
-      const body = (await req.clone().json()) as TestPayload;
+      const body = rawBody as TestPayload;
       if (body.connection_id) {
         const admin = createClient(
           Deno.env.get("SUPABASE_URL")!,

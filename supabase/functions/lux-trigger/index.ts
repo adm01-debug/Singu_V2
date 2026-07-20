@@ -1,4 +1,4 @@
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
@@ -67,6 +67,9 @@ Deno.serve(async (req) => {
     });
   }
 
+  const { body: gbBody, error: gbErr } = await guardBody(req, 128 * 1024);
+  if (gbErr) return gbErr;
+
   try {
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
@@ -89,8 +92,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const rawBody = await req.json();
-    const parsed = LuxTriggerSchema.safeParse(rawBody);
+    const parsed = LuxTriggerSchema.safeParse(gbBody);
     if (!parsed.success) {
       return new Response(JSON.stringify({ 
         error: 'Invalid input',
@@ -188,7 +190,7 @@ Deno.serve(async (req) => {
     });
   } catch (error) {
     console.error('[lux-trigger] Error:', error);
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }), {
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500, headers: { ...cors, 'Content-Type': 'application/json' },
     });
   }

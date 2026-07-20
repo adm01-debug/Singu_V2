@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
 
 interface WeeklyDigestData {
   userId: string;
@@ -25,18 +25,16 @@ Deno.serve(async (req) => {
   const cronError = await requireCronSecret(req);
   if (cronError) return cronError;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Check if called from cron
-    let requestBody: { source?: string; userId?: string } = {};
-    try {
-      requestBody = await req.json();
-    } catch {
-      // No body, that's fine
-    }
+    const requestBody = (rawBody as { source?: string; userId?: string }) ?? {};
 
     const isCronJob = requestBody.source === 'cron';
     const specificUserId = requestBody.userId;

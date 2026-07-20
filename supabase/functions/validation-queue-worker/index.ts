@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 
 const limiter = rateLimit({ windowMs: 60_000, max: 12 });
@@ -57,7 +58,7 @@ Deno.serve(async (req) => {
           : { phone: item.value, contactId: item.contact_id, persist: true };
 
         // Invoca função interna com service role
-        const resp = await fetch(`${SUPABASE_URL}/functions/v1/${fnName}`, {
+        const resp = await fetchAPI(`${SUPABASE_URL}/functions/v1/${fnName}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

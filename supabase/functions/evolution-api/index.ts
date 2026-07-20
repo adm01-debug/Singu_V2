@@ -4,7 +4,12 @@ import {
   withAuth,
   jsonError,
   jsonOk,
+  guardBody,
 } from "../_shared/auth.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 30 });
 
 interface EvolutionRequest {
   action: string;
@@ -34,8 +39,15 @@ Deno.serve(async (req) => {
   const guard = handleCorsAndMethod(req);
   if (guard) return guard;
 
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip, req);
+  if (limited) return limited;
+
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
+
+  const { body: rawBody, error: bodyError } = await guardBody(req, 128 * 1024);
+  if (bodyError) return bodyError;
 
   try {
     const evolutionUrl = Deno.env.get('EVOLUTION_API_URL');
@@ -61,12 +73,6 @@ Deno.serve(async (req) => {
       body: z.record(z.unknown()).optional(),
     });
 
-    let rawBody: unknown;
-    try {
-      rawBody = await req.json();
-    } catch {
-      return jsonError('Invalid JSON body', 400);
-    }
     const parsed = EvolutionInput.safeParse(rawBody);
     if (!parsed.success) {
       return jsonError(`Entrada inválida: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
@@ -376,7 +382,7 @@ Deno.serve(async (req) => {
 
     // Evolution API call logged;
 
-    const response = await fetch(`${baseUrl}${endpoint}`, {
+    const response = await fetchAPI(`${baseUrl}${endpoint}`, {
       method,
       headers,
       body,

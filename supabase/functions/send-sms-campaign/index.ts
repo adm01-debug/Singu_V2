@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecret, guardBody } from "../_shared/auth.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
@@ -25,6 +26,9 @@ Deno.serve(async (req) => {
   const cronCheck = await requireCronSecret(req);
   if (cronCheck) return cronCheck;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
@@ -41,7 +45,7 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
-    const { campaignId } = (await req.json()) as Body;
+    const { campaignId } = (rawBody ?? {}) as Body;
     if (!campaignId) {
       return new Response(JSON.stringify({ error: "campaignId required" }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
     }
@@ -122,7 +126,7 @@ Deno.serve(async (req) => {
         continue;
       }
       try {
-        const resp = await fetch(`${TWILIO_GATEWAY}/Messages.json`, {
+        const resp = await fetchAPI(`${TWILIO_GATEWAY}/Messages.json`, {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${LOVABLE_API_KEY}`,
@@ -170,7 +174,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("send-sms-campaign error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Internal error" }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500, headers: { ...cors, "Content-Type": "application/json" },
     });
   }

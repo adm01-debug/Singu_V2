@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, jsonError, jsonOk, withAuth } from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
@@ -96,7 +97,7 @@ Deno.serve(async (req) => {
       const series = aggregateDaily(logs);
       const aiInput = `Webhook: ${wh.name}\nSérie diária (últimos 7d):\n${JSON.stringify(series, null, 2)}`;
 
-      const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const aiRes = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -4,7 +4,8 @@
 // - Invoca generate-behavioral-profile com x-internal-key (bypass RLS)
 // - Atualiza a fila com o resultado (sucesso ou erro)
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 
 Deno.serve(async (req) => {
@@ -14,6 +15,9 @@ Deno.serve(async (req) => {
   const cronCheck = await requireCronSecret(req);
   if (cronCheck) return cronCheck;
   const requestId = crypto.randomUUID();
+
+  const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
+  if (bodyError) return bodyError;
 
   try {
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -47,7 +51,7 @@ Deno.serve(async (req) => {
     }
 
     // 3) Valida input
-    const body = (await req.json().catch(() => ({}))) as {
+    const body = rawBody as {
       contact_id?: string;
       trigger?: string;
     };
@@ -111,7 +115,7 @@ Deno.serve(async (req) => {
     // 6) Invoca gerador com service-role (bypass RLS: admin não precisa ter acesso ao histórico)
     let invokeError: string | null = null;
     try {
-      const resp = await fetch(`${SUPABASE_URL}/functions/v1/generate-behavioral-profile`, {
+      const resp = await fetchAPI(`${SUPABASE_URL}/functions/v1/generate-behavioral-profile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,7 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
-import { scopedCorsHeaders, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 // EnrichLayer returns the profile data directly
 interface EnrichLayerProfile {
@@ -71,12 +72,15 @@ Deno.serve(async (req) => {
   if (authResult instanceof Response) return authResult;
   const userId = authResult;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const InputSchema = z.object({
       linkedinUrl: z.string().url("LinkedIn URL inválida").min(1),
       contactId: z.string().uuid("contactId deve ser UUID válido").optional(),
     });
-    const parsed = InputSchema.safeParse(await req.json());
+    const parsed = InputSchema.safeParse(rawBody);
     if (!parsed.success) {
       return jsonError(`Entrada inválida: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
     }
@@ -92,7 +96,7 @@ Deno.serve(async (req) => {
 
     const apiUrl = `https://enrichlayer.com/api/v2/profile?url=${encodeURIComponent(linkedinUrl)}`;
     
-    const enrichResponse = await fetch(apiUrl, {
+    const enrichResponse = await fetchAPI(apiUrl, {
       method: "GET",
       headers: { Authorization: `Bearer ${apiKey}` },
     });

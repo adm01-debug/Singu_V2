@@ -1,7 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
 
 /**
  * MCP Server v1.2.0 (Streamable HTTP, JSON-RPC 2.0).
@@ -172,13 +172,8 @@ Deno.serve(async (req) => {
   // Optional per-connection tool allowlist from config (null = all tools permitted)
   const allowedTools: string[] | null = Array.isArray(conn.config?.allowed_tools) ? conn.config.allowed_tools as string[] : null;
 
-  let rawBody: unknown;
-  try { rawBody = await req.json(); }
-  catch {
-    return new Response(JSON.stringify({ jsonrpc: "2.0", error: { code: -32700, message: "Parse error" }, id: null }), {
-      status: 400, headers: { ...cors, "Content-Type": "application/json" },
-    });
-  }
+  const { body: rawBody, error: bodyError } = await guardBody(req, 128 * 1024);
+  if (bodyError) return bodyError;
 
   const parsed = JsonRpcSchema.safeParse(rawBody);
   if (!parsed.success) {

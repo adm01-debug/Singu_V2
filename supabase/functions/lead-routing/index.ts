@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
-import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
 
 /* ─── Schemas ──────────────────────────────────────────────── */
@@ -213,7 +213,7 @@ async function handleRedistribute(
 
 async function handleResetDaily(supabase: ReturnType<typeof createClient>, cors: Record<string, string>) {
   const { data, error } = await supabase.rpc("reset_daily_lead_counts");
-  if (error) return json({ error: error.message }, 500, cors);
+  if (error) { console.error("handleResetDaily rpc error:", error); return json({ error: "Internal server error" }, 500, cors); }
   return json({ success: true, reset_count: data }, 200, cors);
 }
 
@@ -223,9 +223,11 @@ Deno.serve(async (req: Request) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const supabase = createSupabaseAdmin();
-    const rawBody = await req.json();
 
     const parsed = RequestSchema.safeParse(rawBody);
     if (!parsed.success) {

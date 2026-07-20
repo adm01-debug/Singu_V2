@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 
@@ -52,9 +52,12 @@ Deno.serve(async (req) => {
     return limited;
   }
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    const body = await req.json().catch(() => ({}));
-    const accountId: string | undefined = body.account_id;
+    const body = (rawBody ?? {}) as Record<string, unknown>;
+    const accountId: string | undefined = body.account_id as string | undefined;
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -68,7 +71,7 @@ Deno.serve(async (req) => {
     const { data: accounts, error } = await query;
     if (error) {
       log.error("fetch_accounts_failed", { error: error.message });
-      return jsonError(error.message, 500, req);
+      return jsonError("Internal server error", 500, req);
     }
     
     if (!accounts || accounts.length === 0) {

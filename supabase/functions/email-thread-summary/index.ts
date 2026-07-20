@@ -5,8 +5,10 @@ import {
   withAuth,
   jsonError,
   jsonOk,
+  guardBody,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
 
@@ -49,12 +51,8 @@ Deno.serve(async (req) => {
   const limited = limiter.check(userId, req);
   if (limited) return limited;
 
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return jsonError("JSON inválido", 400, req);
-  }
+  const { body, error: bodyError } = await guardBody(req, 128 * 1024);
+  if (bodyError) return bodyError;
   const parsed = InputSchema.safeParse(body);
   if (!parsed.success) return jsonError("Parâmetros inválidos", 400, req);
 
@@ -145,7 +143,7 @@ Responda APENAS com JSON válido:
   "next_steps": ["próximo passo 1", "próximo passo 2"]
 }`;
 
-  const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+  const aiResp = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

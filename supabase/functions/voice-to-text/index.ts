@@ -1,6 +1,17 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { z } from "npm:zod@3.23.8";
+
+const bodySchema = z.object({
+  audio:             z.string().optional(),
+  whatsappMessageId: z.string().uuid().optional(),
+  autoSave:          z.boolean().optional(),
+  contactId:         z.string().uuid().optional(),
+  companyId:         z.string().uuid().optional(),
+  userId:            z.string().uuid().optional(),
+});
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Muitas transcrições. Aguarde antes de tentar novamente." });
 
@@ -42,7 +53,14 @@ Deno.serve(async (req) => {
   if (authResult instanceof Response) return authResult;
 
   try {
-    const { audio, whatsappMessageId, autoSave, contactId, companyId, userId: providedUserId } = await req.json();
+    const { body, error: bodyError } = await guardBody(req, 10 * 1024 * 1024); // 10 MB ceiling for base64 audio
+    if (bodyError) return bodyError;
+
+    const parsed = bodySchema.safeParse(body);
+    if (!parsed.success) {
+      return jsonError(parsed.error.issues[0]?.message ?? "Invalid request body", 400, req);
+    }
+    const { audio, whatsappMessageId, autoSave, contactId, companyId, userId: providedUserId } = parsed.data;
 
     const userId = isServiceRoleCaller(authResult) ? providedUserId : authResult;
 
@@ -71,7 +89,7 @@ Deno.serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await fetchAI('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${LOVABLE_API_KEY}`,

@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
@@ -14,14 +14,17 @@ Deno.serve(async (req) => {
   const limited = limiter.check(ip, req);
   if (limited) return limited;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    const body = await req.json().catch(() => ({}));
-    const { token, action, signature_typed, signature_image, declined_reason } = body;
+    const { token, action, signature_typed, signature_image, declined_reason } =
+      (rawBody ?? {}) as { token?: string; action?: string; signature_typed?: string; signature_image?: string; declined_reason?: string };
 
     if (!token || typeof token !== "string") {
       return new Response(JSON.stringify({ error: "Invalid token" }), {
@@ -101,7 +104,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("submit-signature error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown" }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { ...cors, "Content-Type": "application/json" },
     });

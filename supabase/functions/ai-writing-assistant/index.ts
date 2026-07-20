@@ -1,5 +1,6 @@
 import { z } from "npm:zod@3.23.8";
-import { withAuth, jsonError, jsonOk, scopedCorsHeaders } from "../_shared/auth.ts";
+import { withAuth, jsonError, jsonOk, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20, message: "Rate limit exceeded for AI writing. Please wait." });
@@ -113,17 +114,19 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: scopedCorsHeaders(req) });
   }
 
-  // ── Rate limit ──
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const limited = limiter.check(ip, req);
-  if (limited) return limited;
-
   // ── Auth guard ──
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
+  const userId = authResult;
+
+  // ── Rate limit (keyed by userId, not IP — avoids shared-NAT false positives) ──
+  const limited = limiter.check(userId, req);
+  if (limited) return limited;
+
+  const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
+  if (bodyError) return bodyError;
 
   try {
-    const rawBody = await req.json();
     const parsed = WritingInput.safeParse(rawBody);
     if (!parsed.success) {
       return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
@@ -201,7 +204,7 @@ ${vakStyle ? `3. Conselho VAK: ${vakStyle.advice}` : ''}
 
       const userPrompt = buildUserPrompt(messageType, customContext, tone, contact, framework, storyArc);
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const response = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,

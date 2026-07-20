@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { handleCorsAndMethod, withAuth, jsonOk } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuth, jsonOk, guardBody } from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
@@ -13,8 +14,9 @@ Deno.serve(async (req) => {
   const limited = limiter.check(userId, req);
   if (limited) return limited;
 
-  let body: { period_days?: number };
-  try { body = await req.json(); } catch { body = {}; }
+  const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
+  if (bodyError) return bodyError;
+  const body = (rawBody ?? {}) as { period_days?: number };
   const days = Math.min(Math.max(body.period_days ?? 7, 1), 90);
   const since = new Date(Date.now() - days * 86400_000).toISOString();
 
@@ -66,7 +68,7 @@ Deno.serve(async (req) => {
   const apiKey = Deno.env.get("LOVABLE_API_KEY");
   if (!apiKey) return jsonOk({ ok: true, stats, narrative: "IA indisponível." }, req);
 
-  const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+  const aiResp = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({

@@ -5,6 +5,7 @@ import {
   withAuth,
   jsonError,
   jsonOk,
+  guardBody,
 } from "../_shared/auth.ts";
 
 interface OfferSuggestion {
@@ -35,17 +36,15 @@ Deno.serve(async (req) => {
   if (authResult instanceof Response) return authResult;
   const userId = authResult;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    let requestBody: { contactId?: string } = {};
-    try {
-      requestBody = await req.json();
-    } catch {
-      // No body
-    }
+    const requestBody = (rawBody ?? {}) as { contactId?: string };
 
     const { contactId } = requestBody;
 

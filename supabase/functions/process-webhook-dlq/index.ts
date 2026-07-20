@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecret, guardBody } from "../_shared/auth.ts";
 
 
 interface DlqRow {
@@ -26,6 +26,8 @@ Deno.serve(async (req) => {
   const cronCheck = await requireCronSecret(req);
   if (cronCheck) return cronCheck;
 
+  const { body: rawBody } = await guardBody(req, 32 * 1024);
+
   const admin = createClient(
     Deno.env.get("SUPABASE_URL")!,
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
@@ -33,10 +35,8 @@ Deno.serve(async (req) => {
 
   let manualId: string | null = null;
   if (req.method === "POST") {
-    try {
-      const body = await req.json();
-      if (typeof body?.id === "string") manualId = body.id;
-    } catch { /* ignore */ }
+    const body = rawBody as Record<string, unknown> | null;
+    if (typeof body?.id === "string") manualId = body.id;
   }
 
   const query = admin.from("incoming_webhook_dlq")
@@ -48,7 +48,8 @@ Deno.serve(async (req) => {
     : await query.lte("next_retry_at", new Date().toISOString()).limit(20);
 
   if (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+    console.error("process-webhook-dlq query error:", error);
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500, headers: { ...cors, "Content-Type": "application/json" },
     });
   }

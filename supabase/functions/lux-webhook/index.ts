@@ -1,5 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { requireWebhookSecret, scopedCorsHeaders } from "../_shared/auth.ts";
+import { requireWebhookSecret, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 50 });
 
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
@@ -7,12 +10,19 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: cors });
   }
 
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip, req);
+  if (limited) return limited;
+
   // Reject unauthenticated requests before touching any data
   const authCheck = await requireWebhookSecret(req, 'LUX_WEBHOOK_SECRET', 'x-lux-secret');
   if (authCheck) return authCheck;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 2 * 1024 * 1024); // 2 MB — enrichment payloads
+  if (bodyError) return bodyError;
+
   try {
-    const payload = await req.json();
+    const payload = rawBody as Record<string, unknown>;
     const {
       luxRecordId,
       status,
@@ -123,7 +133,7 @@ Deno.serve(async (req) => {
     });
   } catch (error) {
     console.error('Error in lux-webhook:', error);
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }), {
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500, headers: { ...cors, 'Content-Type': 'application/json' },
     });
   }

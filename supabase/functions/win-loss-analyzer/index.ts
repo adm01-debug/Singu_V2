@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
@@ -13,6 +14,9 @@ interface AggregateRow {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: scopedCorsHeaders(req) });
+
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
 
   try {
     const authHeader = req.headers.get("Authorization");
@@ -41,7 +45,7 @@ Deno.serve(async (req) => {
     const limited = limiter.check(userId, req);
     if (limited) return limited;
 
-    const { period_days = 90 } = await req.json().catch(() => ({}));
+    const { period_days = 90 } = (rawBody ?? {}) as { period_days?: number };
     const periodStart = new Date(Date.now() - period_days * 86400 * 1000).toISOString();
     const periodEnd = new Date().toISOString();
 
@@ -123,7 +127,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const aiResp = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -206,7 +210,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("win-loss-analyzer error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown" }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
     });

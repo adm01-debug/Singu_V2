@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
@@ -24,8 +24,11 @@ Deno.serve(async (req) => {
   let status = 'success';
   let result: Record<string, unknown> = {};
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    const { contact_id } = await req.json();
+    const { contact_id } = rawBody as { contact_id?: string };
     if (!contact_id) return jsonError("contact_id required", 400, req);
 
     // Verify contact ownership before triggering RPC
@@ -59,10 +62,10 @@ Deno.serve(async (req) => {
       user_id: userId,
       automation_name: 'score_recalculation_failed',
       status: 'failed',
-      result: { error: error.message },
+      result: { error: error instanceof Error ? error.message : String(error) },
       execution_time_ms: Date.now() - start
     });
 
-    return jsonError(error.message, 500);
+    return jsonError("Internal server error", 500);
   }
 });

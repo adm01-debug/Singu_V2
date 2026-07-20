@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
-import { scopedCorsHeaders, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 
@@ -56,11 +57,13 @@ Deno.serve(async (req) => {
 
   log.info("request_received", { method: req.method, userId });
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024); // 32 KB — question text only
+  if (bodyError) return bodyError;
+
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const rawBody = await req.json();
     const parsed = InputSchema.safeParse(rawBody);
     if (!parsed.success) {
       return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
@@ -70,7 +73,7 @@ Deno.serve(async (req) => {
     const prompt = SYSTEM_PROMPT.replace("{USER_ID}", userId);
 
     // Step 1: Generate SQL from question
-    const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const aiResponse = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,

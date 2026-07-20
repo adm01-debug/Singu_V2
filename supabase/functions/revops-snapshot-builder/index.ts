@@ -1,7 +1,7 @@
 // Edge function: revops-snapshot-builder
 // Cron diário 04:00 UTC. Consolida funil ponta-a-ponta por usuário ativo, gera snapshots e alertas.
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
 
 const STAGES = ["visitor", "lead", "mql", "sql", "opportunity", "customer"] as const;
 
@@ -12,15 +12,16 @@ Deno.serve(async (req: Request) => {
   const cronCheck = await requireCronSecret(req);
   if (cronCheck) return cronCheck;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
+  if (bodyError) return bodyError;
+
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
   const supabase = createClient(Deno.env.get("SUPABASE_URL")!, serviceKey);
   const today = new Date().toISOString().slice(0, 10);
 
   let targetUserId: string | null = null;
-  try {
-    const body = await req.json().catch(() => ({}));
-    if (body?.user_id) targetUserId = body.user_id;
-  } catch { /* noop */ }
+  const _body = rawBody as { user_id?: string } | null;
+  if (_body?.user_id) targetUserId = _body.user_id;
 
   // Discover active users in parallel
   let userIds: string[] = [];

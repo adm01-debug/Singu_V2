@@ -1,6 +1,14 @@
-import { jsonError, jsonOk, handleCorsAndMethod, withAuth } from "../_shared/auth.ts";
+import { jsonError, jsonOk, handleCorsAndMethod, withAuth, guardBody } from "../_shared/auth.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { z } from "npm:zod@3.23.8";
+
+const bodySchema = z.object({
+  ip:         z.string().ip().max(45).optional(),
+  country:    z.string().length(2).optional(),
+  city:       z.string().max(100).optional(),
+  user_agent: z.string().max(512).optional(),
+});
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
 
@@ -15,9 +23,15 @@ Deno.serve(async (req) => {
   const rl = limiter.check(userId, req);
   if (rl) return rl;
 
+  const { body: raw, error: bodyError } = await guardBody(req, 16 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    const body = await req.json();
-    const { ip, country, city, user_agent } = body;
+    const parsed = bodySchema.safeParse(raw ?? {});
+    if (!parsed.success) {
+      return jsonError(parsed.error.issues[0]?.message ?? "Invalid request body", 400, req);
+    }
+    const { ip, country, city, user_agent } = parsed.data;
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,

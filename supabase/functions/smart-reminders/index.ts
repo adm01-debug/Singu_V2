@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Muitas solicitações de lembretes. Aguarde antes de tentar novamente." });
@@ -32,9 +33,11 @@ Deno.serve(async (req) => {
     if (limited) return limited;
   }
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    let body: Record<string, unknown> = {};
-    try { body = await req.json(); } catch { /* empty body is OK */ }
+    const body = (rawBody ?? {}) as Record<string, unknown>;
 
     let userId: string;
     if (isServiceRoleCaller(authResult)) {
@@ -333,7 +336,7 @@ Deno.serve(async (req) => {
           const lines = decayReminders.slice(0, 5).map(r =>
             `- ${r.contactName}: ${r.description}\n  - Score: ${r.metadata.relationshipScore}\n  - Dias sem contato: ${r.metadata.daysSinceLastInteraction}`
           ).join('\n');
-          const resp = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+          const resp = await fetchAI('https://ai.gateway.lovable.dev/v1/chat/completions', {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({

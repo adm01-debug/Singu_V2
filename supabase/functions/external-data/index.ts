@@ -1,8 +1,9 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { withAuth, jsonError, jsonOk, handleCorsAndMethod } from "../_shared/auth.ts";
+import { withAuth, jsonError, jsonOk, handleCorsAndMethod, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { assertVersionMatch } from "../_shared/version-guard.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 100, message: "Rate limit exceeded for external data. Please wait." });
 
@@ -210,13 +211,11 @@ Deno.serve(async (req) => {
 
   const startTime = performance.now();
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 128 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    let body: Record<string, unknown>;
-    try {
-      body = await req.json();
-    } catch {
-      return jsonError('Invalid JSON body', 400, req);
-    }
+    const body = rawBody as Record<string, unknown>;
 
     const action = typeof body.action === 'string' ? body.action : undefined;
     const table = typeof body.table === 'string' ? body.table : undefined;
@@ -244,7 +243,7 @@ Deno.serve(async (req) => {
     if (operation === 'list_tables') {
       const extUrl = Deno.env.get('EXTERNAL_SUPABASE_URL')!;
       const extKey = Deno.env.get('EXTERNAL_SUPABASE_SERVICE_ROLE_KEY')!;
-      const resp = await fetch(`${extUrl}/rest/v1/`, {
+      const resp = await fetchAPI(`${extUrl}/rest/v1/`, {
         headers: { 'apikey': extKey, 'Authorization': `Bearer ${extKey}` }
       });
       const swagger = await resp.json();
@@ -260,7 +259,7 @@ Deno.serve(async (req) => {
     if (operation === 'schema') {
       const extUrl = Deno.env.get('EXTERNAL_SUPABASE_URL')!;
       const extKey = Deno.env.get('EXTERNAL_SUPABASE_SERVICE_ROLE_KEY')!;
-      const resp = await fetch(`${extUrl}/rest/v1/`, {
+      const resp = await fetchAPI(`${extUrl}/rest/v1/`, {
         headers: { 'apikey': extKey, 'Authorization': `Bearer ${extKey}` }
       });
       const swagger = await resp.json();
@@ -288,7 +287,7 @@ Deno.serve(async (req) => {
 
       let functions: string[] = [];
       try {
-        const rpcResp = await fetch(`${extUrl}/rest/v1/rpc/`, {
+        const rpcResp = await fetchAPI(`${extUrl}/rest/v1/rpc/`, {
           headers: { 'apikey': extKey, 'Authorization': `Bearer ${extKey}` }
         });
         if (rpcResp.ok) {
