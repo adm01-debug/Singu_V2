@@ -105,26 +105,36 @@ Deno.serve(async (req) => {
       ]),
     );
 
-    for (const item of toProcess) {
-      const nowIso = new Date().toISOString();
-      // Marca enfileiramento sem tocar em last_processed_at (só após sucesso/falha real).
-      const { error: upsertError } = await admin
-        .from("behavioral_profile_regen_queue")
-        .upsert(
-          {
-            contact_id: item.contactId,
-            user_id: item.userId,
-            enqueued_at: nowIso,
-            next_run_at: nowIso,
-            trigger_source: "cron_auto_regen_downvotes",
-          },
-          { onConflict: "contact_id" },
-        );
+    // Batch-upsert all items to mark as queued before invoking
+    const nowIso = new Date().toISOString();
+    const queueRows = toProcess.map((item) => ({
+      contact_id: item.contactId,
+      user_id: item.userId,
+      enqueued_at: nowIso,
+      next_run_at: nowIso,
+      trigger_source: "cron_auto_regen_downvotes",
+    }));
+    const { error: batchQueueError, data: batchQueueData } = await admin
+      .from("behavioral_profile_regen_queue")
+      .upsert(queueRows, { onConflict: "contact_id" })
+      .select("contact_id");
 
-      if (upsertError) {
-        failures.push({ contactId: item.contactId, error: upsertError.message });
-        continue;
-      }
+    const enqueuedSet = new Set(
+      (batchQueueData ?? []).map((r: { contact_id: string }) => r.contact_id)
+    );
+    if (batchQueueError) {
+      // If batch fails entirely, fall back to per-item failure recording
+      failures.push(...toProcess.map((item) => ({ contactId: item.contactId, error: batchQueueError.message })));
+    }
+
+    // Accumulators for success/failure outcome updates
+    type OutcomeRow = { contact_id: string; last_processed_at: string; last_error: string | null; attempts?: number };
+    const successRows: OutcomeRow[] = [];
+    const failureRows: OutcomeRow[] = [];
+
+    for (const item of toProcess) {
+      // Skip items that failed to enqueue
+      if (batchQueueError && !enqueuedSet.has(item.contactId)) continue;
 
       try {
         const { error: invokeError } = await admin.functions.invoke(
@@ -136,31 +146,32 @@ Deno.serve(async (req) => {
         );
         if (invokeError) throw invokeError;
         processed += 1;
-        // Sucesso: registra last_processed_at e limpa erro anterior.
-        await admin
-          .from("behavioral_profile_regen_queue")
-          .update({
-            last_processed_at: new Date().toISOString(),
-            last_error: null,
-          })
-          .eq("contact_id", item.contactId);
+        successRows.push({ contact_id: item.contactId, last_processed_at: new Date().toISOString(), last_error: null });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         failures.push({ contactId: item.contactId, error: msg });
         const prevAttempts = attemptsMap.get(item.contactId) ?? 0;
-        await admin
-          .from("behavioral_profile_regen_queue")
-          .update({
-            last_error: msg.slice(0, 500),
-            attempts: prevAttempts + 1,
-            last_processed_at: new Date().toISOString(),
-          })
-          .eq("contact_id", item.contactId);
+        failureRows.push({
+          contact_id: item.contactId,
+          last_error: msg.slice(0, 500),
+          attempts: prevAttempts + 1,
+          last_processed_at: new Date().toISOString(),
+        });
       }
 
       // pequena pausa para não saturar edge function
       await new Promise((r) => setTimeout(r, 500));
     }
+
+    // Flush all outcome updates in two batched upserts
+    await Promise.all([
+      successRows.length > 0
+        ? admin.from("behavioral_profile_regen_queue").upsert(successRows, { onConflict: "contact_id" })
+        : Promise.resolve(),
+      failureRows.length > 0
+        ? admin.from("behavioral_profile_regen_queue").upsert(failureRows, { onConflict: "contact_id" })
+        : Promise.resolve(),
+    ]);
 
     return json({
       requestId,
