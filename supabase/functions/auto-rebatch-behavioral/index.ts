@@ -29,13 +29,16 @@ Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
 
+  // Capture cors for the json() helper defined at module scope
+  const jsonWithCors = (body: unknown, status = 200) => json(body, status, cors);
+
   const cronCheck = await requireCronSecret(req);
   if (cronCheck) return cronCheck;
 
   try {
     const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
-    if (!SERVICE_KEY || !SUPABASE_URL) return json({ error: 'Configuração ausente' }, 500);
+    if (!SERVICE_KEY || !SUPABASE_URL) return jsonWithCors({ error: 'Configuração ausente' }, 500);
 
     // Autorização: service role no header interno OU chave de cron
     const cronKey = req.headers.get('x-cron-key') ?? '';
@@ -53,7 +56,7 @@ Deno.serve(async (req) => {
       const expected = (sec as { value?: string } | null)?.value;
       if (expected && cronKey === expected) authorized = true;
     }
-    if (!authorized) return json({ error: 'Não autorizado' }, 401);
+    if (!authorized) return jsonWithCors({ error: 'Não autorizado' }, 401);
 
     // 1) Buscar feedback negativo dos últimos 30 dias
     const cutoff = new Date(Date.now() - 30 * 86400_000).toISOString();
@@ -62,7 +65,7 @@ Deno.serve(async (req) => {
       .select('contact_id, user_id, vote, created_at')
       .gte('created_at', cutoff)
       .eq('vote', -1);
-    if (fbErr) { console.error("auto-rebatch-behavioral feedback read error:", fbErr); return json({ error: "Internal server error" }, 500); }
+    if (fbErr) { console.error("auto-rebatch-behavioral feedback read error:", fbErr); return jsonWithCors({ error: "Internal server error" }, 500); }
 
     // 2) Agregar por contato: contagem + último feedback negativo
     interface Agg { down: number; lastFb: string; userId: string }
@@ -80,7 +83,7 @@ Deno.serve(async (req) => {
       .map(([contact_id, v]) => ({ contact_id, ...v }));
 
     if (candidates.length === 0) {
-      return json({ ok: true, considered: 0, eligible: 0, processed: 0, skipped: 0, failed: 0 });
+      return jsonWithCors({ ok: true, considered: 0, eligible: 0, processed: 0, skipped: 0, failed: 0 });
     }
 
     // 4) Carregar perfis existentes para aplicar SLA/debounce
@@ -89,7 +92,7 @@ Deno.serve(async (req) => {
       .from('contact_analytical_profiles')
       .select('contact_id, last_updated_at')
       .in('contact_id', contactIds);
-    if (profErr) { console.error("auto-rebatch-behavioral profiles read error:", profErr); return json({ error: "Internal server error" }, 500); }
+    if (profErr) { console.error("auto-rebatch-behavioral profiles read error:", profErr); return jsonWithCors({ error: "Internal server error" }, 500); }
 
     const lastUpdatedByContact = new Map<string, string>();
     for (const p of (profiles ?? []) as Array<{ contact_id: string; last_updated_at: string | null }>) {
@@ -140,7 +143,7 @@ Deno.serve(async (req) => {
       await new Promise((r) => setTimeout(r, DELAY_MS));
     }
 
-    return json({
+    return jsonWithCors({
       ok: true,
       considered: candidates.length,
       eligible: eligible.length,
@@ -152,13 +155,13 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("auto-rebatch-behavioral error:", e);
-    return json({ error: "Internal server error" }, 500);
+    return jsonWithCors({ error: "Internal server error" }, 500);
   }
 });
 
-function json(body: unknown, status = 200) {
+function json(body: unknown, status = 200, corsHeaders: Record<string, string> = {}) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { ...cors, 'Content-Type': 'application/json' },
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 }

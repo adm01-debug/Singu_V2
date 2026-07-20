@@ -21,7 +21,6 @@ Deno.serve(async (req) => {
   );
 
   const start = Date.now();
-  let status = 'success';
   let result: Record<string, unknown> = {};
 
   const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
@@ -55,7 +54,6 @@ Deno.serve(async (req) => {
     return jsonOk({ success: true, result }, req);
 
   } catch (error) {
-    status = 'failed';
     console.error("Automation Log Error:", error);
     
     await supabase.from('crm_automation_logs').insert({

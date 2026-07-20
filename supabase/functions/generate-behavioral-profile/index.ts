@@ -47,6 +47,9 @@ Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
 
+  // Bind cors to module-scope json() helper
+  const jsonWithCors = (body: unknown, status = 200) => json(body, status, cors);
+
   const cronCheck = await requireCronSecret(req);
   if (cronCheck) return cronCheck;
 
@@ -60,7 +63,7 @@ Deno.serve(async (req) => {
 
     const body = rawBody as Partial<Body> & { user_id?: string };
     if (!body.contact_id || typeof body.contact_id !== 'string') {
-      return json({ error: 'contact_id obrigatório' }, 400);
+      return jsonWithCors({ error: 'contact_id obrigatório' }, 400);
     }
 
     let userId: string | null = null;
@@ -74,17 +77,17 @@ Deno.serve(async (req) => {
         const { data: c } = await supabase.from('contacts').select('user_id').eq('id', body.contact_id).maybeSingle();
         userId = (c as { user_id?: string } | null)?.user_id ?? null;
       }
-      if (!userId) return json({ error: 'contato não encontrado' }, 404);
+      if (!userId) return jsonWithCors({ error: 'contato não encontrado' }, 404);
     } else {
       const authHeader = req.headers.get('Authorization') ?? '';
-      if (!authHeader) return json({ error: 'Não autenticado' }, 401);
+      if (!authHeader) return jsonWithCors({ error: 'Não autenticado' }, 401);
       supabase = createClient(
         Deno.env.get('SUPABASE_URL')!,
         Deno.env.get('SUPABASE_ANON_KEY')!,
         { global: { headers: { Authorization: authHeader } } },
       );
       const { data: userData } = await supabase.auth.getUser();
-      if (!userData?.user) return json({ error: 'Não autenticado' }, 401);
+      if (!userData?.user) return jsonWithCors({ error: 'Não autenticado' }, 401);
       userId = userData.user.id;
     }
 
@@ -108,7 +111,7 @@ Deno.serve(async (req) => {
     ]);
 
     const total = (wa.data?.length ?? 0) + (calls.data?.length ?? 0) + (ints.data?.length ?? 0);
-    if (total === 0) return json({ error: 'Sem histórico suficiente para gerar perfil' }, 422);
+    if (total === 0) return jsonWithCors({ error: 'Sem histórico suficiente para gerar perfil' }, 422);
 
     const lines: string[] = [];
     for (const m of (wa.data ?? [])) {
@@ -151,7 +154,7 @@ Deno.serve(async (req) => {
       .join('\n');
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) return json({ error: 'LOVABLE_API_KEY ausente' }, 500);
+    if (!LOVABLE_API_KEY) return jsonWithCors({ error: 'LOVABLE_API_KEY ausente' }, 500);
 
     const model = 'google/gemini-2.5-flash';
     const aiResp = await fetchAI('https://ai.gateway.lovable.dev/v1/chat/completions', {
@@ -182,20 +185,20 @@ Deno.serve(async (req) => {
       }),
     });
 
-    if (aiResp.status === 429) return json({ error: 'Limite de requisições atingido. Tente novamente em instantes.' }, 429);
-    if (aiResp.status === 402) return json({ error: 'Créditos de IA esgotados. Adicione créditos ao workspace.' }, 402);
+    if (aiResp.status === 429) return jsonWithCors({ error: 'Limite de requisições atingido. Tente novamente em instantes.' }, 429);
+    if (aiResp.status === 402) return jsonWithCors({ error: 'Créditos de IA esgotados. Adicione créditos ao workspace.' }, 402);
     if (!aiResp.ok) {
       const t = await aiResp.text();
-      return json({ error: `Falha no gateway de IA: ${t.slice(0, 200)}` }, 502);
+      return jsonWithCors({ error: `Falha no gateway de IA: ${t.slice(0, 200)}` }, 502);
     }
 
     const aiJson = await aiResp.json();
     const call = aiJson?.choices?.[0]?.message?.tool_calls?.[0];
-    if (!call?.function?.arguments) return json({ error: 'Resposta de IA inválida' }, 502);
+    if (!call?.function?.arguments) return jsonWithCors({ error: 'Resposta de IA inválida' }, 502);
 
     let parsed: Record<string, unknown>;
     try { parsed = JSON.parse(call.function.arguments); }
-    catch { return json({ error: 'JSON de IA inválido' }, 502); }
+    catch { return jsonWithCors({ error: 'JSON de IA inválido' }, 502); }
 
     // Guard-rail final: remove qualquer insight banido que a IA tenha reproduzido mesmo assim.
     const filterList = (arr: unknown, kind: 'preference' | 'hobby'): unknown[] => {
@@ -233,7 +236,7 @@ Deno.serve(async (req) => {
       .select()
       .single();
 
-    if (upErr) { console.error("generate-behavioral-profile save error:", upErr); return json({ error: "Internal server error" }, 500); }
+    if (upErr) { console.error("generate-behavioral-profile save error:", upErr); return jsonWithCors({ error: "Internal server error" }, 500); }
 
     // Snapshot de versão (best-effort — não falha a chamada se a inserção do histórico der erro)
     try {
@@ -257,16 +260,16 @@ Deno.serve(async (req) => {
       console.warn('Snapshot save failed (non-critical):', (e as Error).message);
     }
 
-    return json({ profile: saved });
+    return jsonWithCors({ profile: saved });
   } catch (e) {
     console.error("generate-behavioral-profile error:", e);
-    return json({ error: "Internal server error" }, 500);
+    return jsonWithCors({ error: "Internal server error" }, 500);
   }
 });
 
-function json(body: unknown, status = 200) {
+function json(body: unknown, status = 200, corsHeaders: Record<string, string> = {}) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { ...cors, 'Content-Type': 'application/json' },
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 }
