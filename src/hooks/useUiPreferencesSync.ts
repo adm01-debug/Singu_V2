@@ -79,8 +79,8 @@ export function useUiPreferencesSync<T extends Record<string, unknown>>(
 
   const { data: remote } = useQuery({
     queryKey: QK,
+    enabled: !!user,
     queryFn: async (): Promise<T> => {
-      if (!user?.id) return { ...defaults };
       const { data, error } = await supabase
         .from('user_ui_preferences')
         .select('preferences')

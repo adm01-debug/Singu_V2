@@ -38,8 +38,8 @@ export function useProfitabilityByContact() {
   const { user } = useAuth();
   return useQuery({
     queryKey: ['bi-profitability-contacts', user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      if (!user) throw new Error('Not authenticated');
 
       // Both queries are independent — run in parallel
       const [{ data: contacts }, { data: interactions }] = await Promise.all([
@@ -91,8 +91,8 @@ export function useGeoSalesData() {
   const { user } = useAuth();
   return useQuery({
     queryKey: ['bi-geo-sales', user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      if (!user) throw new Error('Not authenticated');
 
       const { data: companies } = await supabase
         .from('companies')

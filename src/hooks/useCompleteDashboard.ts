@@ -32,8 +32,8 @@ export function useCompleteDashboard() {
   const { user } = useAuth();
   return useQuery({
     queryKey: ['complete-dashboard', user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      if (!user) throw new Error('Not authenticated');
 
       const { data, error } = await callExternalRpc<CompleteDashboardData>(
         'get_complete_dashboard',
