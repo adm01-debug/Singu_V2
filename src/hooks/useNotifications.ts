@@ -304,7 +304,7 @@ export const useNotifications = () => {
       if (error) throw error;
 
       // Check localStorage for already notified alerts
-      const notifiedAlerts = JSON.parse(localStorage.getItem('notified_stakeholder_alerts') || '[]');
+      const notifiedAlerts: string[] = (() => { try { return JSON.parse(localStorage.getItem('notified_stakeholder_alerts') || '[]'); } catch { return []; } })();
 
       for (const alert of alerts || []) {
         if (!notifiedAlerts.includes(alert.id)) {

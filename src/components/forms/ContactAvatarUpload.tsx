@@ -84,6 +84,8 @@ export function ContactAvatarUpload({ avatarUrl, onAvatarChange, contactId }: Co
               src={avatarUrl}
               alt="Foto do contato"
               className="w-full h-full object-cover"
+              loading="eager"
+              decoding="async"
             />
             <span
               role="button"

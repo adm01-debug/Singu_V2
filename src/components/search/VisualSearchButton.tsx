@@ -159,7 +159,7 @@ export function VisualSearchButton({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1 overflow-hidden">
               <div className="space-y-3">
                 <div className="relative rounded-lg overflow-hidden border border-border">
-                  <img src={preview} alt="Preview" className="w-full aspect-square object-cover" />
+                  <img src={preview} alt="Preview" className="w-full aspect-square object-cover" loading="eager" decoding="async" />
                   <Button
                     size="icon"
                     variant="secondary"
@@ -234,6 +234,8 @@ export function VisualSearchButton({
                                 src={r.image_url}
                                 alt={r.name}
                                 className="w-full aspect-square object-cover rounded"
+                                loading="lazy"
+                                decoding="async"
                               />
                             ) : (
                               <div className="w-full aspect-square bg-muted rounded flex items-center justify-center">

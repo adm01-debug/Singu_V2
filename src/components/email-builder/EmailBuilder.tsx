@@ -153,7 +153,7 @@ function BlockPreview({ block }: { block: EmailBlock }) {
     case 'button':
       return <div style={{ textAlign: block.align }}><span className="inline-block bg-primary text-primary-foreground px-3 py-1 text-xs rounded">{block.label}</span></div>;
     case 'image':
-      return <img src={block.src} alt={block.alt} className="max-w-full h-auto rounded" />;
+      return <img src={block.src} alt={block.alt} className="max-w-full h-auto rounded" loading="lazy" decoding="async" />;
     case 'divider':
       return <hr className="border-t border-border" />;
     case 'spacer':

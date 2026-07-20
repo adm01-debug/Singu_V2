@@ -125,7 +125,7 @@ export const useSmartReminders = (autoFetch = true) => {
       
       // Persist to localStorage with timestamp
       const stored = localStorage.getItem('dismissedReminders');
-      const parsed = stored ? JSON.parse(stored) : {};
+      const parsed = stored ? (() => { try { return JSON.parse(stored); } catch { return {}; } })() : {};
       parsed[id] = Date.now();
       localStorage.setItem('dismissedReminders', JSON.stringify(parsed));
       
@@ -144,7 +144,7 @@ export const useSmartReminders = (autoFetch = true) => {
     // Store snooze time in localStorage
     const snoozeUntil = Date.now() + hours * 60 * 60 * 1000;
     const stored = localStorage.getItem('snoozedReminders');
-    const parsed = stored ? JSON.parse(stored) : {};
+    const parsed = stored ? (() => { try { return JSON.parse(stored); } catch { return {}; } })() : {};
     parsed[id] = snoozeUntil;
     localStorage.setItem('snoozedReminders', JSON.stringify(parsed));
     
@@ -163,7 +163,7 @@ export const useSmartReminders = (autoFetch = true) => {
       updated.add(reminder.id);
       
       const stored = localStorage.getItem('dismissedReminders');
-      const parsed = stored ? JSON.parse(stored) : {};
+      const parsed = stored ? (() => { try { return JSON.parse(stored); } catch { return {}; } })() : {};
       parsed[reminder.id] = Date.now();
       localStorage.setItem('dismissedReminders', JSON.stringify(parsed));
       

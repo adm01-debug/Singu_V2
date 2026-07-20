@@ -84,6 +84,8 @@ export function CompanyLogoUpload({ logoUrl, onLogoChange, companyId }: CompanyL
               src={logoUrl}
               alt="Logo da empresa"
               className="w-full h-full object-contain p-1"
+              loading="eager"
+              decoding="async"
             />
             <span
               role="button"
