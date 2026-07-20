@@ -260,8 +260,7 @@ Deno.serve(async (req) => {
       traceId
     }, req);
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    log.error("fatal_error", { error: errorMessage });
-    return jsonError(errorMessage, 500, req);
+    log.error("fatal_error", { error: error instanceof Error ? error.message : String(error) });
+    return jsonError("Internal server error", 500, req);
   }
 });

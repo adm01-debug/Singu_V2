@@ -104,6 +104,7 @@ Deno.serve(async (req) => {
 
     return new Response(JSON.stringify(result), { headers: { ...cors, "Content-Type": "application/json" } });
   } catch (err) {
-    return new Response(JSON.stringify({ error: String(err) }), { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
+    console.error('phone-validator error:', err);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
   }
 });

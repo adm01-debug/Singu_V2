@@ -243,7 +243,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error('Sequence processor fatal:', e);
-    return new Response(JSON.stringify({ ok: false, error: String(e), stats }), {
+    return new Response(JSON.stringify({ ok: false, error: 'Internal server error', stats }), {
       status: 500,
       headers: { ...cors, 'Content-Type': 'application/json' },
     });
