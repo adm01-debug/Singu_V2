@@ -376,7 +376,7 @@ Deno.serve(async (req) => {
       const { data, error } = await client.rpc(functionName, params as Record<string, unknown>);
       if (error) {
         log.warn("RPC failed", { rpc: functionName, error: error.message });
-        return jsonOk({ data: null, error: `RPC ${functionName} failed: ${error.message}` }, req);
+        return jsonOk({ data: null, error: `RPC ${functionName} failed` }, req);
       }
       return jsonOk({ data }, req);
     }

@@ -120,10 +120,16 @@ Deno.serve(async (req) => {
     }
   }
 
-  // Bulk-flush all target table inserts, track success/failure per row
-  for (const [tableName, items] of pendingTableInserts.entries()) {
-    const payloads = items.map(i => i.payload);
-    const { error: insErr } = await admin.from(tableName).insert(payloads);
+  // Parallel-flush all target table inserts (up to 5 distinct tables at once)
+  const tableInsertResults = await Promise.all(
+    Array.from(pendingTableInserts.entries()).map(async ([tableName, items]) => {
+      const payloads = items.map(i => i.payload);
+      const { error: insErr } = await admin.from(tableName).insert(payloads);
+      return { tableName, items, insErr };
+    })
+  );
+
+  for (const { tableName, items, insErr } of tableInsertResults) {
     for (const item of items) {
       const newAttempts = item.attempts + 1;
       if (!insErr) {
