@@ -137,7 +137,7 @@ describe('CanaisQuickFilter', () => {
     const { container } = render(<CanaisQuickFilter canais={[]} onChange={onChange} />);
     // Nenhum span com o estilo de contador deve existir
     const counters = container.querySelectorAll('span.tabular-nums');
-    expect(counters.length).toBe(0);
+    expect(counters).toHaveLength(0);
   });
 
   it('counts: shows number next to chip and applies opacity-50 to zero-count chips', () => {
