@@ -223,44 +223,43 @@ Deno.serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { data: savedRecord, error: saveError } = await supabase
-      .from("disc_analysis_history")
-      .insert({
-        user_id: userId,
-        contact_id: contactId,
-        interaction_id: interactionId || null,
-        dominance_score: analysisResult.scores.D,
-        influence_score: analysisResult.scores.I,
-        steadiness_score: analysisResult.scores.S,
-        conscientiousness_score: analysisResult.scores.C,
-        primary_profile: primary,
-        secondary_profile: secondary,
-        blend_profile: blend,
-        stress_primary: analysisResult.stressPrimary,
-        stress_secondary: analysisResult.stressSecondary,
-        confidence: analysisResult.confidence,
-        analysis_source: "ai_analysis",
-        detected_keywords: [],
-        detected_phrases: [],
-        behavior_indicators: analysisResult.behaviorIndicators,
-        analyzed_text: combinedText.slice(0, 5000),
-        profile_summary: analysisResult.profileSummary
-      })
-      .select()
-      .single();
+    // Run the history insert and the ownership check concurrently (both independent)
+    const [{ data: savedRecord, error: saveError }, { data: contactOwnership }] = await Promise.all([
+      supabase.from("disc_analysis_history")
+        .insert({
+          user_id: userId,
+          contact_id: contactId,
+          interaction_id: interactionId || null,
+          dominance_score: analysisResult.scores.D,
+          influence_score: analysisResult.scores.I,
+          steadiness_score: analysisResult.scores.S,
+          conscientiousness_score: analysisResult.scores.C,
+          primary_profile: primary,
+          secondary_profile: secondary,
+          blend_profile: blend,
+          stress_primary: analysisResult.stressPrimary,
+          stress_secondary: analysisResult.stressSecondary,
+          confidence: analysisResult.confidence,
+          analysis_source: "ai_analysis",
+          detected_keywords: [],
+          detected_phrases: [],
+          behavior_indicators: analysisResult.behaviorIndicators,
+          analyzed_text: combinedText.slice(0, 5000),
+          profile_summary: analysisResult.profileSummary
+        })
+        .select()
+        .single(),
+      supabase.from("contacts")
+        .select("id, behavior")
+        .eq("id", contactId)
+        .eq("user_id", userId)
+        .maybeSingle(),
+    ]);
 
     if (saveError) {
       console.error("Save error:", saveError);
       throw new Error(`Database save error: ${saveError.message}`);
     }
-
-    // Verify contact belongs to this user before updating
-    const { data: contactOwnership } = await supabase
-      .from("contacts")
-      .select("id, behavior")
-      .eq("id", contactId)
-      .eq("user_id", userId)
-      .maybeSingle();
 
     if (contactOwnership) {
       const currentBehavior = (contactOwnership.behavior as Record<string, unknown>) || {};
@@ -279,15 +278,14 @@ Deno.serve(async (req) => {
         .eq("user_id", userId);
     }
 
-    await supabase
-      .from("disc_communication_logs")
-      .insert({
-        user_id: userId,
-        contact_id: contactId,
-        contact_disc_profile: primary,
-        approach_adapted: false,
-        adaptation_tips_shown: analysisResult.salesStrategies
-      });
+    // Fire-and-forget communication log (non-critical)
+    supabase.from("disc_communication_logs").insert({
+      user_id: userId,
+      contact_id: contactId,
+      contact_disc_profile: primary,
+      approach_adapted: false,
+      adaptation_tips_shown: analysisResult.salesStrategies
+    }).catch((err: unknown) => console.error("disc_communication_logs insert error:", err));
 
     return jsonOk({
       success: true,
@@ -309,7 +307,6 @@ Deno.serve(async (req) => {
     });
 
   } catch (error) {
-    console.error("DISC analyzer error:", error);
     console.error("disc-analyzer error:", error);
     return jsonError("Internal server error", 500);
   }
