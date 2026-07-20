@@ -61,20 +61,22 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
     const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down'>>({});
   
    useEffect(() => {
+     let cancelled = false;
      const fetchContactBehavior = async () => {
-       if (contactId) {
-         const { data } = await supabase.from('contacts').select('behavior').eq('id', contactId).maybeSingle();
-         if (data?.behavior) {
-           const behavior = data.behavior as {
-             vakProfile?: { primary?: VAKType };
-             discProfile?: DISCProfile;
-           };
-           if (behavior.vakProfile?.primary) setContactVAK(behavior.vakProfile.primary);
-           if (behavior.discProfile) setContactDISC(behavior.discProfile);
-         }
+       if (!contactId) return;
+       const { data } = await supabase.from('contacts').select('behavior').eq('id', contactId).maybeSingle();
+       if (cancelled) return;
+       if (data?.behavior) {
+         const behavior = data.behavior as {
+           vakProfile?: { primary?: VAKType };
+           discProfile?: DISCProfile;
+         };
+         if (behavior.vakProfile?.primary) setContactVAK(behavior.vakProfile.primary);
+         if (behavior.discProfile) setContactDISC(behavior.discProfile);
        }
      };
      fetchContactBehavior();
+     return () => { cancelled = true; };
    }, [contactId]);
 
    useEffect(() => {

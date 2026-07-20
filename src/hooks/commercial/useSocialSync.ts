@@ -15,11 +15,12 @@ export function useSocialSync(contactId: string) {
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle();
-      
+
       if (error) throw error;
       return data;
     },
     enabled: !!contactId,
+    staleTime: 2 * 60 * 1000,
   });
 
   const { data: auditLogs, isLoading: isLoadingAudit } = useQuery({
@@ -30,11 +31,12 @@ export function useSocialSync(contactId: string) {
         .select('*')
         .eq('contact_id', contactId)
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       return data;
     },
     enabled: !!contactId,
+    staleTime: 5 * 60 * 1000,
   });
 
   const syncNow = useMutation({

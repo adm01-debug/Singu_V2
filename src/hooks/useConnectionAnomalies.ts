@@ -38,6 +38,7 @@ export function useConnectionAnomalies(opts?: { onlyOpen?: boolean }) {
   const { data: anomalies = [], isLoading } = useQuery({
     queryKey: ['connection_anomalies', opts?.onlyOpen ?? true, user?.id],
     enabled: !!user,
+    staleTime: 60 * 1000,
     queryFn: async () => {
       let q = supabase
         .from('connection_anomalies')
