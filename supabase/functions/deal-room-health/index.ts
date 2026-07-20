@@ -89,11 +89,12 @@ Deno.serve(async (req) => {
       console.error("AI error", e);
     }
 
-    await supabase.from("deal_rooms").update({
+    supabase.from("deal_rooms").update({
       health_score: baseHealth,
       health_recommendations: recommendations,
       health_analyzed_at: new Date().toISOString(),
-    }).eq("id", room_id);
+    }).eq("id", room_id)
+      .catch((e: unknown) => console.error("deal_rooms health update error:", e));
 
     return jsonOk({ health_score: baseHealth, recommendations }, req);
   } catch (e) {
