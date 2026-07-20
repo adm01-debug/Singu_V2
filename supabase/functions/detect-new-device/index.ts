@@ -1,6 +1,16 @@
 import { jsonError, jsonOk, handleCorsAndMethod, withAuth } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { z } from "npm:zod@3.23.8";
+
+const bodySchema = z.object({
+  fingerprint:  z.string().min(1).max(512),
+  device_name:  z.string().max(200).optional(),
+  browser:      z.string().max(100).optional(),
+  os:           z.string().max(100).optional(),
+  ip_address:   z.string().ip().max(45).optional(),
+  location:     z.string().max(200).optional(),
+});
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
 
@@ -16,8 +26,12 @@ Deno.serve(async (req) => {
   if (rl) return rl;
 
   try {
-    const body = await req.json();
-    const { fingerprint, device_name, browser, os, ip_address } = body;
+    const raw = await req.json().catch(() => null);
+    const parsed = bodySchema.safeParse(raw);
+    if (!parsed.success) {
+      return jsonError(parsed.error.issues[0]?.message ?? "Invalid request body", 400, req);
+    }
+    const { fingerprint, device_name, browser, os, ip_address, location } = parsed.data;
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -62,7 +76,7 @@ Deno.serve(async (req) => {
         user_id: userId,
         device_id: newDevice.id,
         ip_address,
-        location: body.location ?? null,
+        location: location ?? null,
       });
     }
 
