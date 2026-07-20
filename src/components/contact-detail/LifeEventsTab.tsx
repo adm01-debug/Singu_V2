@@ -183,7 +183,8 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['life-events', contactId] });
       toast({ title: "Evento removido" });
-    }
+    },
+    onError: (e: Error) => toast({ title: "Erro ao remover evento", description: e.message, variant: "destructive" }),
   });
 
   const resetForm = () => {
