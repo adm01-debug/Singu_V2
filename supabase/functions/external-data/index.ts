@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { withAuth, jsonError, jsonOk, handleCorsAndMethod } from "../_shared/auth.ts";
+import { withAuth, jsonError, jsonOk, handleCorsAndMethod, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { assertVersionMatch } from "../_shared/version-guard.ts";
@@ -211,13 +211,11 @@ Deno.serve(async (req) => {
 
   const startTime = performance.now();
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 128 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    let body: Record<string, unknown>;
-    try {
-      body = await req.json();
-    } catch {
-      return jsonError('Invalid JSON body', 400, req);
-    }
+    const body = rawBody as Record<string, unknown>;
 
     const action = typeof body.action === 'string' ? body.action : undefined;
     const table = typeof body.table === 'string' ? body.table : undefined;

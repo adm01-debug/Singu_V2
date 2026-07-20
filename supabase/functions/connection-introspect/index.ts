@@ -1,7 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
-import { scopedCorsHeaders, withAuth } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuth, guardBody } from "../_shared/auth.ts";
 
 
 /**
@@ -35,6 +35,9 @@ Deno.serve(async (req) => {
   const limited = limiter.check(`introspect:${ip}`, req);
   if (limited) return limited;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     // withAuth calls getUser() (server-side verification), not getClaims() (local decode)
     const authResult = await withAuth(req);
@@ -52,7 +55,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const parsed = BodySchema.safeParse(await req.json());
+    const parsed = BodySchema.safeParse(rawBody);
     if (!parsed.success) {
       return new Response(JSON.stringify({ error: parsed.error.flatten() }), {
         status: 400, headers: { ...cors, "Content-Type": "application/json" },

@@ -4,6 +4,7 @@ import {
   withAuth,
   jsonError,
   jsonOk,
+  guardBody,
 } from "../_shared/auth.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
@@ -45,6 +46,9 @@ Deno.serve(async (req) => {
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 128 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const evolutionUrl = Deno.env.get('EVOLUTION_API_URL');
     const evolutionKey = Deno.env.get('EVOLUTION_API_KEY');
@@ -69,12 +73,6 @@ Deno.serve(async (req) => {
       body: z.record(z.unknown()).optional(),
     });
 
-    let rawBody: unknown;
-    try {
-      rawBody = await req.json();
-    } catch {
-      return jsonError('Invalid JSON body', 400);
-    }
     const parsed = EvolutionInput.safeParse(rawBody);
     if (!parsed.success) {
       return jsonError(`Entrada inválida: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);

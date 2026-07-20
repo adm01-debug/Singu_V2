@@ -2,6 +2,9 @@
 // retorna série temporal diária e dispara alertas em 50/75/100% do consumo.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { withAuth, scopedCorsHeaders } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Rate limit exceeded for error-budget." });
 
 const SLO_TARGET = 99.5; // %
 const WINDOW_HOURS = 720; // 30 dias
@@ -101,6 +104,10 @@ Deno.serve(async (req) => {
 
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
+  const userId = authResult;
+
+  const limited = limiter.check(userId, req);
+  if (limited) return limited;
 
   try {
     const supabase = createClient(

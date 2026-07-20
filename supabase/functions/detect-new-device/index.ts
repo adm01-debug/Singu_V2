@@ -1,4 +1,4 @@
-import { jsonError, jsonOk, handleCorsAndMethod, withAuth } from "../_shared/auth.ts";
+import { jsonError, jsonOk, handleCorsAndMethod, withAuth, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
@@ -25,9 +25,11 @@ Deno.serve(async (req) => {
   const rl = limiter.check(userId, req);
   if (rl) return rl;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    const raw = await req.json().catch(() => null);
-    const parsed = bodySchema.safeParse(raw);
+    const parsed = bodySchema.safeParse(rawBody);
     if (!parsed.success) {
       return jsonError(parsed.error.issues[0]?.message ?? "Invalid request body", 400, req);
     }

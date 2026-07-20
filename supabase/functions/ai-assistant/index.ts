@@ -3,6 +3,7 @@ import {
   withAuth,
   jsonError,
   jsonOk,
+  guardBody,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
@@ -54,6 +55,9 @@ Deno.serve(async (req) => {
   if (typeof authResult !== "string") return authResult;
   const userId = authResult;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
@@ -61,8 +65,7 @@ Deno.serve(async (req) => {
       return jsonError("LOVABLE_API_KEY not configured", 500, req);
     }
 
-    const body = await req.json().catch(() => null);
-    const parsed = InputSchema.safeParse(body);
+    const parsed = InputSchema.safeParse(rawBody);
     if (!parsed.success) {
       log.warn("invalid_input", { errors: parsed.error.flatten().fieldErrors });
       return jsonError(`Invalid input: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);

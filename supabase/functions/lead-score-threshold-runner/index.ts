@@ -2,7 +2,7 @@
 // Modo: { contact_id, from_grade, to_grade, from_score, to_score }
 // Aciona ações: notify | create_task | enroll_sequence | webhook | tag (respeitando cooldown).
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { handleCorsAndMethod, withAuthOrServiceRole, jsonError, jsonOk } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuthOrServiceRole, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 120 });
@@ -166,8 +166,10 @@ Deno.serve(async (req: Request) => {
   const auth = await withAuthOrServiceRole(req);
   if (auth instanceof Response) return auth;
 
-  let body: Payload;
-  try { body = await req.json() as Payload; } catch { return jsonError('Invalid JSON', 400, req); }
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
+  const body = rawBody as Payload;
 
   if (!body?.user_id || !body?.contact_id) return jsonError('user_id and contact_id required', 400, req);
 

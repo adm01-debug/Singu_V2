@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
-import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
@@ -106,9 +106,10 @@ Deno.serve(async (req) => {
   const limited = limiter.check(userId, req);
   if (limited) return limited;
 
-  let raw: unknown;
-  try { raw = await req.json(); } catch { return jsonError("JSON inválido", 400, req); }
-  const parsed = BodySchema.safeParse(raw);
+  const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
+  if (bodyError) return bodyError;
+
+  const parsed = BodySchema.safeParse(rawBody);
   if (!parsed.success) {
     return jsonError("Payload inválido: " + JSON.stringify(parsed.error.flatten().fieldErrors), 400, req);
   }

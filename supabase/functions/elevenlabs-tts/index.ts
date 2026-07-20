@@ -2,6 +2,7 @@ import {
   scopedCorsHeaders, handleCorsAndMethod,
   withAuth,
   jsonError,
+  guardBody,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
@@ -21,18 +22,16 @@ Deno.serve(async (req) => {
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
     if (!ELEVENLABS_API_KEY) {
       throw new Error("ELEVENLABS_API_KEY is not configured");
     }
 
-    let body: Record<string, unknown>;
-    try {
-      body = await req.json();
-    } catch {
-      return jsonError("Invalid JSON body", 400);
-    }
+    const body = rawBody as Record<string, unknown>;
 
     const { text, voiceId } = body as { text?: unknown; voiceId?: string };
 

@@ -1,4 +1,4 @@
-import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
@@ -19,8 +19,11 @@ Deno.serve(async (req) => {
   const rl = limiter.check(userId, req);
   if (rl) return rl;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 128 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    const { deal_id, model = "linear", deal_value = 0 } = await req.json();
+    const { deal_id, model = "linear", deal_value = 0 } = rawBody as { deal_id?: string; model?: string; deal_value?: number };
     if (!deal_id) {
       log.warn("missing_deal_id");
       return jsonError("deal_id required", 400, req);

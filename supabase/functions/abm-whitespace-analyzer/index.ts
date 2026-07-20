@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
@@ -107,8 +107,11 @@ Deno.serve(async (req) => {
     return limited;
   }
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 128 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    const { account_id } = await req.json();
+    const { account_id } = rawBody as { account_id: string };
     if (!account_id) return jsonError("account_id is required", 400, req);
 
     const supabase = createClient(

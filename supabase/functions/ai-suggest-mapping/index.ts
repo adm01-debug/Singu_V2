@@ -1,5 +1,5 @@
 import { z } from "npm:zod@3.23.8";
-import { scopedCorsHeaders, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
@@ -55,11 +55,14 @@ Deno.serve(async (req) => {
 
   log.info("request_received", { method: req.method });
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 128 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 
-    const body = await req.json();
+    const body = rawBody;
     const parsed = InputSchema.safeParse(body);
     if (!parsed.success) {
       return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);

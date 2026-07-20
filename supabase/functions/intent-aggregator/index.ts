@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, handleCorsAndMethod } from "../_shared/auth.ts";
+import { withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, handleCorsAndMethod, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
@@ -24,17 +24,16 @@ Deno.serve(async (req) => {
     if (rl) return rl;
   }
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 128 * 1024);
+  if (bodyError) return bodyError;
+
   let targetUserId: string;
   if (isServiceRoleCaller(auth)) {
-    try {
-      const body = await req.json();
-      if (!body?.user_id || typeof body.user_id !== "string") {
-        return jsonError("user_id required for service-role calls", 400, req);
-      }
-      targetUserId = body.user_id;
-    } catch {
-      return jsonError("Invalid JSON body", 400, req);
+    const body = rawBody as Record<string, unknown> | null;
+    if (!body?.user_id || typeof body.user_id !== "string") {
+      return jsonError("user_id required for service-role calls", 400, req);
     }
+    targetUserId = body.user_id;
   } else {
     targetUserId = auth;
   }
