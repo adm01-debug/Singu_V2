@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export interface DocumentTemplate {
   id: string;
@@ -197,7 +198,8 @@ export function useDocumentSignatures() {
       if (tpl && input.template_id) {
         void supabase.from('document_templates')
           .update({ usage_count: (tpl.usage_count ?? 0) + 1 } as never)
-          .eq('id', input.template_id);
+          .eq('id', input.template_id)
+          .catch((e: unknown) => logger.error('template usage_count update failed:', e));
       }
       return data as unknown as DocumentSignature;
     },
