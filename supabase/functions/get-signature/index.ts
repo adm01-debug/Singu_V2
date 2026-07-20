@@ -48,10 +48,11 @@ Deno.serve(async (req) => {
 
     // Check expiration
     if (signature.expires_at && new Date(signature.expires_at) < new Date()) {
-      await supabase
+      supabase
         .from("document_signatures")
         .update({ status: "expired" })
-        .eq("id", signature.id);
+        .eq("id", signature.id)
+        .catch((e: unknown) => console.error("document_signatures expired update error:", e));
       return new Response(JSON.stringify({ ...signature, status: "expired" }), {
         headers: { ...cors, "Content-Type": "application/json" },
       });
@@ -67,15 +68,15 @@ Deno.serve(async (req) => {
       signature.viewed_at = new Date().toISOString();
     }
 
-    // Track view
+    // Track view (best-effort)
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || null;
     const ua = req.headers.get("user-agent") || null;
-    await supabase.from("document_views").insert({
+    supabase.from("document_views").insert({
       signature_id: signature.id,
       viewer_ip: ip,
       viewer_user_agent: ua,
       viewer_email: signature.signer_email,
-    });
+    }).catch((e: unknown) => console.error("document_views insert error:", e));
 
     return new Response(JSON.stringify(signature), {
       headers: { ...cors, "Content-Type": "application/json" },

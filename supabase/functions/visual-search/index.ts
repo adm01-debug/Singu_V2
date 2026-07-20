@@ -150,15 +150,19 @@ Deno.serve(async (req) => {
       ...analysis.keywords.slice(0, 5),
     ].filter(Boolean) as string[];
 
-    for (const term of searches) {
-      const { data, error } = await supabase.rpc("search_products_semantic", {
-        p_user_id: user.id,
-        p_query: term,
-        p_limit: limit,
-        p_min_similarity: 0.1,
-      });
+    const searchResults = await Promise.all(
+      searches.map((term) =>
+        supabase.rpc("search_products_semantic", {
+          p_user_id: user.id,
+          p_query: term,
+          p_limit: limit,
+          p_min_similarity: 0.1,
+        })
+      )
+    );
+    for (const { data, error } of searchResults) {
       if (error) {
-        console.error("RPC error for term", term, error);
+        console.error("RPC error:", error);
         continue;
       }
       for (const row of data || []) {
