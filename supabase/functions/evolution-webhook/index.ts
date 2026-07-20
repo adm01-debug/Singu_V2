@@ -65,8 +65,7 @@ Deno.serve(async (req) => {
 
   } catch (error) {
     console.error('Evolution webhook error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return new Response(JSON.stringify({ error: errorMessage }), {
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
       headers: { ...cors, 'Content-Type': 'application/json' },
     });
