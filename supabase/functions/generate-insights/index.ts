@@ -1,5 +1,5 @@
 import { z } from "npm:zod@3.23.8";
-import { scopedCorsHeaders, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
@@ -36,7 +36,9 @@ Deno.serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const rawBody = await req.json();
+    const { body: rawBody, error: bodyError } = await guardBody(req, 512 * 1024); // 512 KB — arrays of CRM records
+    if (bodyError) return bodyError;
+
     const parsed = InsightsInput.safeParse(rawBody);
     if (!parsed.success) {
       log.warn("invalid_input", { errors: parsed.error.flatten().fieldErrors });
