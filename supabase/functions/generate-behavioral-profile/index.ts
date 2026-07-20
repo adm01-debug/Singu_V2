@@ -238,27 +238,23 @@ Deno.serve(async (req) => {
 
     if (upErr) { console.error("generate-behavioral-profile save error:", upErr); return jsonWithCors({ error: "Internal server error" }, 500); }
 
-    // Snapshot de versão (best-effort — não falha a chamada se a inserção do histórico der erro)
-    try {
-      await supabase.from('contact_analytical_profile_versions').insert({
-        contact_id: body.contact_id,
-        user_id: userId,
-        profile_id: (saved as { id?: string } | null)?.id ?? null,
-        summary: row.summary,
-        tone: row.tone,
-        communication_style: row.communication_style,
-        sentiment_trend: row.sentiment_trend,
-        preferences: row.preferences,
-        hobbies: row.hobbies,
-        recurrent_topics: row.recurrent_topics,
-        based_on_count: row.based_on_count,
-        model: row.model,
-        trigger_source: isInternal ? 'auto' : 'manual',
-        generated_at: row.last_updated_at,
-      });
-    } catch (e) {
-      console.warn('Snapshot save failed (non-critical):', (e as Error).message);
-    }
+    // Snapshot de versão (best-effort — não bloqueia a resposta)
+    supabase.from('contact_analytical_profile_versions').insert({
+      contact_id: body.contact_id,
+      user_id: userId,
+      profile_id: (saved as { id?: string } | null)?.id ?? null,
+      summary: row.summary,
+      tone: row.tone,
+      communication_style: row.communication_style,
+      sentiment_trend: row.sentiment_trend,
+      preferences: row.preferences,
+      hobbies: row.hobbies,
+      recurrent_topics: row.recurrent_topics,
+      based_on_count: row.based_on_count,
+      model: row.model,
+      trigger_source: isInternal ? 'auto' : 'manual',
+      generated_at: row.last_updated_at,
+    }).catch((e: unknown) => console.warn('Snapshot save failed (non-critical):', (e as Error).message));
 
     return jsonWithCors({ profile: saved });
   } catch (e) {

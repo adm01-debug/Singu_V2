@@ -334,8 +334,8 @@ ${interaction.content.slice(0, 12000)}`;
       });
     }
 
-    // Flush all independent side-effect writes in parallel
-    await Promise.all([
+    // Side-effect writes — fire-and-forget (response uses saved.id + analysis, not these results)
+    Promise.all([
       supabase.from("interactions").update({
         sentiment: analysis.sentiment_overall,
         emotion_analysis: analysis.emotion_analysis,
@@ -352,7 +352,7 @@ ${interaction.content.slice(0, 12000)}`;
       lifeEvents.length > 0
         ? supabase.from('suggested_life_events').insert(lifeEvents)
         : Promise.resolve(),
-    ]);
+    ]).catch((e: unknown) => console.error("conversation-analyzer side-effects error:", e));
 
    return jsonOk({ ok: true, id: saved.id, analysis }, req);
 });
