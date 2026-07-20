@@ -23,21 +23,41 @@ Deno.serve(async (req: Request) => {
     let recalcCount = 0;
     let alertCount = 0;
 
-    for (const account of accounts ?? []) {
-      const previousScore = account.health_score ?? 50;
+    const accountList = accounts ?? [];
+    if (accountList.length === 0) {
+      return jsonOk({ recalculated: 0, alerts_generated: 0 }, req);
+    }
 
-      // Buscar signals dos últimos 90 dias
-      const since = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
-      const { data: signals } = await supabase
-        .from("cs_health_signals")
-        .select("score, weight, captured_at")
-        .eq("account_id", account.id)
-        .gte("captured_at", since);
+    // Pre-fetch ALL signals for ALL accounts in one query
+    const since = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
+    const accountIds = accountList.map((a: { id: string }) => a.id);
+    const { data: allSignals } = await supabase
+      .from("cs_health_signals")
+      .select("account_id, score, weight, captured_at")
+      .in("account_id", accountIds)
+      .gte("captured_at", since);
+
+    const signalsByAccount = new Map<string, Array<{ score: unknown; weight: unknown; captured_at: string }>>();
+    for (const s of allSignals ?? []) {
+      if (!signalsByAccount.has(s.account_id)) signalsByAccount.set(s.account_id, []);
+      signalsByAccount.get(s.account_id)!.push(s);
+    }
+
+    const now = Date.now();
+    const nowIso = new Date(now).toISOString();
+
+    // Accumulators — split by whether lifecycle_stage changes to avoid upsert column mismatch
+    type AccountUpdate = { id: string; health_score: number; health_trend: string; last_health_recalc_at: string; lifecycle_stage?: string };
+    const accountUpdates: AccountUpdate[] = [];
+    const alertRows: Array<Record<string, unknown>> = [];
+
+    for (const account of accountList) {
+      const previousScore = account.health_score ?? 50;
+      const signals = signalsByAccount.get(account.id) ?? [];
 
       let weightedSum = 0;
       let weightTotal = 0;
-      const now = Date.now();
-      for (const s of signals ?? []) {
+      for (const s of signals) {
         const daysAgo = (now - new Date(s.captured_at).getTime()) / 86400000;
         const decay = Math.exp(-daysAgo / 45);
         weightedSum += Number(s.score) * Number(s.weight) * decay;
@@ -51,23 +71,16 @@ Deno.serve(async (req: Request) => {
       const trend = newScore - previousScore >= 5 ? "up"
         : previousScore - newScore >= 5 ? "down" : "stable";
 
-      const newStage = newScore < 40 ? "at_risk" : null;
-
-      const updates: Record<string, unknown> = {
-        health_score: newScore,
-        health_trend: trend,
-        last_health_recalc_at: new Date().toISOString(),
-      };
-      if (newStage) updates.lifecycle_stage = newStage;
-
-      await supabase.from("cs_accounts").update(updates).eq("id", account.id);
+      const row: AccountUpdate = { id: account.id, health_score: newScore, health_trend: trend, last_health_recalc_at: nowIso };
+      if (newScore < 40) row.lifecycle_stage = "at_risk";
+      accountUpdates.push(row);
       recalcCount++;
 
       // Alertas: queda >20pts ou score crítico <40
       const drop = previousScore - newScore;
       if (drop >= 20 || newScore < 40) {
         const severity = newScore < 30 || drop >= 30 ? "critical" : "warning";
-        await supabase.from("alerts").insert({
+        alertRows.push({
           user_id: account.user_id,
           type: "cs_health_drop",
           priority: severity === "critical" ? "high" : "medium",
@@ -79,9 +92,24 @@ Deno.serve(async (req: Request) => {
       }
     }
 
+    // Split updates to avoid upsert padding lifecycle_stage=null on rows that don't set it
+    const withStage = accountUpdates.filter(r => r.lifecycle_stage !== undefined);
+    const withoutStage = accountUpdates.filter(r => r.lifecycle_stage === undefined);
+
+    await Promise.all([
+      withStage.length > 0
+        ? supabase.from("cs_accounts").upsert(withStage, { onConflict: "id" })
+        : Promise.resolve(),
+      withoutStage.length > 0
+        ? supabase.from("cs_accounts").upsert(withoutStage, { onConflict: "id" })
+        : Promise.resolve(),
+      alertRows.length > 0
+        ? supabase.from("alerts").insert(alertRows)
+        : Promise.resolve(),
+    ]);
+
     return jsonOk({ recalculated: recalcCount, alerts_generated: alertCount }, req);
   } catch (e) {
-    console.error("cs-health-recalc error", e);
     console.error("cs-health-recalc error:", e);
     return jsonError("Internal server error", 500, req);
   }
