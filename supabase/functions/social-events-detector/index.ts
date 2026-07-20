@@ -73,15 +73,37 @@ Deno.serve(async (req) => {
     }
 
     if (!pendingSchedules || pendingSchedules.length === 0) {
-      return new Response(JSON.stringify({ 
+      return new Response(JSON.stringify({
         message: "No pending scrapes",
-        processed: 0 
+        processed: 0
       }), {
         headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
+    // Pre-fetch all existing social profiles for all schedules in one query
+    const contactIds = [...new Set(pendingSchedules.map(s => s.contact_id))];
+    const { data: existingProfilesData } = await supabaseAdmin
+      .from('social_profiles')
+      .select('*')
+      .in('contact_id', contactIds);
+
+    // Build Map: `${contact_id}:${platform}` -> profile for O(1) lookup
+    const profileMap = new Map<string, Record<string, unknown>>();
+    for (const p of existingProfilesData ?? []) {
+      profileMap.set(`${p.contact_id}:${p.platform}`, p);
+    }
+
     const results: ScrapeResult[] = [];
+
+    // Accumulators — all DB writes flushed after the loop
+    type ProfileRow = Record<string, unknown>;
+    type ScheduleRow = Record<string, unknown>;
+    const profileUpserts: ProfileRow[] = [];
+    const allLifeEvents: LifeEvent[] = [];
+    const allNotifications: Record<string, unknown>[] = [];
+    const successScheduleRows: ScheduleRow[] = [];
+    const failureScheduleRows: ScheduleRow[] = [];
 
     for (const schedule of pendingSchedules) {
       try {
@@ -103,15 +125,12 @@ Deno.serve(async (req) => {
         });
 
         if (!scrapeResponse.ok) {
-          // Incrementar falhas
-          await supabaseAdmin
-            .from('social_scraping_schedule')
-            .update({
-              last_run_at: now,
-              consecutive_failures: schedule.consecutive_failures + 1,
-              last_error: `HTTP ${scrapeResponse.status}`,
-            })
-            .eq('id', schedule.id);
+          failureScheduleRows.push({
+            id: schedule.id,
+            last_run_at: now,
+            consecutive_failures: schedule.consecutive_failures + 1,
+            last_error: `HTTP ${scrapeResponse.status}`,
+          });
 
           results.push({
             contactId: schedule.contact_id,
@@ -126,13 +145,8 @@ Deno.serve(async (req) => {
         const markdown = scrapeData.data?.markdown || scrapeData.markdown || '';
         const metadata = scrapeData.data?.metadata || scrapeData.metadata || {};
 
-        // Buscar perfil existente
-        const { data: existingProfile } = await supabaseAdmin
-          .from('social_profiles')
-          .select('*')
-          .eq('contact_id', schedule.contact_id)
-          .eq('platform', schedule.platform)
-          .single();
+        // Look up existing profile from pre-fetched Map (no DB call per schedule)
+        const existingProfile = profileMap.get(`${schedule.contact_id}:${schedule.platform}`);
 
         // Detectar eventos baseado na plataforma
         const lifeEvents: LifeEvent[] = [];
@@ -141,15 +155,15 @@ Deno.serve(async (req) => {
           // Detectar mudanças no headline/título
           const headlineMatch = markdown.match(/^#\s*(.+)/m);
           const newHeadline = headlineMatch ? headlineMatch[1].trim() : '';
-          
-          if (existingProfile?.headline && newHeadline && 
+
+          if (existingProfile?.headline && newHeadline &&
               existingProfile.headline !== newHeadline) {
-            
+
             // Detectar se é promoção
             const promotionKeywords = ['senior', 'lead', 'head', 'director', 'vp', 'chief', 'manager', 'principal'];
-            const wasPromoted = promotionKeywords.some(kw => 
-              newHeadline.toLowerCase().includes(kw) && 
-              !existingProfile.headline.toLowerCase().includes(kw)
+            const wasPromoted = promotionKeywords.some(kw =>
+              newHeadline.toLowerCase().includes(kw) &&
+              !(existingProfile.headline as string).toLowerCase().includes(kw)
             );
 
             if (wasPromoted) {
@@ -160,7 +174,7 @@ Deno.serve(async (req) => {
                 event_type: 'promotion',
                 event_title: '🎉 Promoção Detectada!',
                 event_description: `${schedule.contacts?.first_name} parece ter sido promovido(a). Título anterior: "${existingProfile.headline}". Novo título: "${newHeadline}"`,
-                previous_value: existingProfile.headline,
+                previous_value: existingProfile.headline as string,
                 new_value: newHeadline,
                 confidence: 0.85,
                 event_date: now,
@@ -183,7 +197,7 @@ Deno.serve(async (req) => {
           ];
 
           for (const indicator of newJobIndicators) {
-            if (indicator.test(markdown) && !indicator.test(existingProfile?.profile_data?.markdown || '')) {
+            if (indicator.test(markdown) && !indicator.test((existingProfile?.profile_data as Record<string, unknown>)?.markdown as string || '')) {
               lifeEvents.push({
                 contact_id: schedule.contact_id,
                 user_id: schedule.user_id,
@@ -207,9 +221,10 @@ Deno.serve(async (req) => {
           const anniversaryMatch = markdown.match(/(\d+)\s*(?:years?|anos?)\s+(?:at|em|@)/i);
           if (anniversaryMatch) {
             const years = parseInt(anniversaryMatch[1]);
+            const existingMarkdown = (existingProfile?.profile_data as Record<string, unknown>)?.markdown as string || '';
             // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
-            const existingYears = existingProfile?.profile_data?.markdown?.match(/(\d+)\s*(?:years?|anos?)\s+(?:at|em|@)/i);
-            
+            const existingYears = existingMarkdown.match(/(\d+)\s*(?:years?|anos?)\s+(?:at|em|@)/i);
+
             if (!existingYears || parseInt(existingYears[1]) !== years) {
               lifeEvents.push({
                 contact_id: schedule.contact_id,
@@ -236,8 +251,8 @@ Deno.serve(async (req) => {
           const engagementMatch = markdown.match(/(\d+(?:[,.\s]\d+)*)\s*(?:likes?|curtidas?|reactions?|reações?)/i);
           if (engagementMatch) {
             const likes = parseInt(engagementMatch[1].replace(/[,.\s]/g, ''));
-            const previousLikes = existingProfile?.engagement_metrics?.max_likes || 0;
-            
+            const previousLikes = (existingProfile?.engagement_metrics as Record<string, unknown>)?.max_likes as number || 0;
+
             if (likes > 1000 && likes > previousLikes * 2) {
               lifeEvents.push({
                 contact_id: schedule.contact_id,
@@ -258,54 +273,44 @@ Deno.serve(async (req) => {
           }
         }
 
-        // Atualizar perfil
-        await supabaseAdmin
-          .from('social_profiles')
-          .upsert({
-            contact_id: schedule.contact_id,
+        // Accumulate profile upsert
+        profileUpserts.push({
+          contact_id: schedule.contact_id,
+          user_id: schedule.user_id,
+          platform: schedule.platform,
+          profile_url: schedule.profile_url,
+          profile_data: { markdown, metadata },
+          last_scraped_at: now,
+        });
+
+        // Accumulate life events
+        allLifeEvents.push(...lifeEvents);
+
+        // Accumulate notifications for each detected event
+        for (const event of lifeEvents) {
+          allNotifications.push({
             user_id: schedule.user_id,
-            platform: schedule.platform,
-            profile_url: schedule.profile_url,
-            profile_data: { markdown, metadata },
-            last_scraped_at: now,
-          }, { onConflict: 'contact_id,platform' });
-
-        // Salvar eventos
-        if (lifeEvents.length > 0) {
-          await supabaseAdmin
-            .from('social_life_events')
-            .insert(lifeEvents);
-
-          // Criar notificações para eventos importantes
-          for (const event of lifeEvents) {
-            await supabaseAdmin
-              .from('notifications')
-              .insert({
-                user_id: schedule.user_id,
-                title: event.event_title,
-                message: event.event_description,
-                type: 'social_event',
-                action_url: `/contato/${schedule.contact_id}`,
-                metadata: {
-                  event_type: event.event_type,
-                  contact_id: schedule.contact_id,
-                  platform: schedule.platform,
-                },
-              });
-          }
+            title: event.event_title,
+            message: event.event_description,
+            type: 'social_event',
+            action_url: `/contato/${schedule.contact_id}`,
+            metadata: {
+              event_type: event.event_type,
+              contact_id: schedule.contact_id,
+              platform: schedule.platform,
+            },
+          });
         }
 
-        // Atualizar schedule
+        // Accumulate schedule success update
         const nextRun = new Date(Date.now() + schedule.frequency_days * 24 * 60 * 60 * 1000);
-        await supabaseAdmin
-          .from('social_scraping_schedule')
-          .update({
-            last_run_at: now,
-            next_run_at: nextRun.toISOString(),
-            consecutive_failures: 0,
-            last_error: null,
-          })
-          .eq('id', schedule.id);
+        successScheduleRows.push({
+          id: schedule.id,
+          last_run_at: now,
+          next_run_at: nextRun.toISOString(),
+          consecutive_failures: 0,
+          last_error: null,
+        });
 
         results.push({
           contactId: schedule.contact_id,
@@ -316,15 +321,13 @@ Deno.serve(async (req) => {
 
       } catch (err) {
         console.error(`Error processing ${schedule.platform} for ${schedule.contact_id}:`, err);
-        
-        await supabaseAdmin
-          .from('social_scraping_schedule')
-          .update({
-            last_run_at: now,
-            consecutive_failures: schedule.consecutive_failures + 1,
-            last_error: err instanceof Error ? err.message : 'Unknown error',
-          })
-          .eq('id', schedule.id);
+
+        failureScheduleRows.push({
+          id: schedule.id,
+          last_run_at: now,
+          consecutive_failures: schedule.consecutive_failures + 1,
+          last_error: err instanceof Error ? err.message : 'Unknown error',
+        });
 
         results.push({
           contactId: schedule.contact_id,
@@ -333,6 +336,27 @@ Deno.serve(async (req) => {
           error: err instanceof Error ? err.message : 'Unknown error',
         });
       }
+    }
+
+    // Bulk-flush all accumulated DB writes in parallel
+    await Promise.all([
+      profileUpserts.length > 0
+        ? supabaseAdmin.from('social_profiles').upsert(profileUpserts, { onConflict: 'contact_id,platform' })
+        : Promise.resolve(),
+      allLifeEvents.length > 0
+        ? supabaseAdmin.from('social_life_events').insert(allLifeEvents)
+        : Promise.resolve(),
+      allNotifications.length > 0
+        ? supabaseAdmin.from('notifications').insert(allNotifications)
+        : Promise.resolve(),
+    ]);
+
+    // Flush schedule updates (success + failure) in a single upsert
+    const allScheduleRows = [...successScheduleRows, ...failureScheduleRows];
+    if (allScheduleRows.length > 0) {
+      await supabaseAdmin
+        .from('social_scraping_schedule')
+        .upsert(allScheduleRows, { onConflict: 'id' });
     }
 
     return new Response(JSON.stringify({
@@ -345,8 +369,8 @@ Deno.serve(async (req) => {
 
   } catch (error) {
     console.error("social-events-detector error:", error);
-    return new Response(JSON.stringify({ 
-      error: error instanceof Error ? error.message : "Unknown error" 
+    return new Response(JSON.stringify({
+      error: "Internal server error"
     }), {
       status: 500,
       headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" },
