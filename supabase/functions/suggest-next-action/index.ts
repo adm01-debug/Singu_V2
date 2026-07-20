@@ -50,25 +50,25 @@ Deno.serve(async (req) => {
  
      // 🔄 Auto-fetch context if contactId provided — verify ownership with user_id filter
      if (contactId && !contact) {
-       const { data: dbContact } = await supabase
-         .from('contacts')
-         .select('*, companies(*)')
-         .eq('id', contactId)
-         .eq('user_id', userId)
-         .single();
-
-       if (dbContact) {
-         contact = dbContact;
-         company = dbContact.companies;
-
-         const { data: dbInteractions } = await supabase
+       const [{ data: dbContact }, { data: dbInteractions }] = await Promise.all([
+         supabase
+           .from('contacts')
+           .select('*, companies(*)')
+           .eq('id', contactId)
+           .eq('user_id', userId)
+           .single(),
+         supabase
            .from('interactions')
            .select('*')
            .eq('contact_id', contactId)
            .eq('user_id', userId)
            .order('created_at', { ascending: false })
-           .limit(10);
+           .limit(10),
+       ]);
 
+       if (dbContact) {
+         contact = dbContact;
+         company = dbContact.companies;
          interactions = dbInteractions || [];
        }
      }
@@ -204,7 +204,6 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
  
      return jsonOk({ suggestion });
   } catch (error) {
-    console.error("suggest-next-action error:", error);
     console.error("suggest-next-action error:", error);
     return jsonError("Internal server error", 500);
   }

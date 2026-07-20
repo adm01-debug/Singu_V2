@@ -61,45 +61,23 @@ Deno.serve(async (req) => {
       return jsonOk({ success: true, suggestions: [] });
     }
 
-    // Get purchase history for all contacts
+    // Fetch all dependent data in parallel — all 6 queries depend only on contactIds
     const contactIds = contacts.map(c => c.id);
-    const { data: purchases } = await supabase
-      .from('purchase_history')
-      .select('*')
-      .in('contact_id', contactIds)
-      .order('purchase_date', { ascending: false });
-
-    // Get interactions for context
-    const { data: interactions } = await supabase
-      .from('interactions')
-      .select('*')
-      .in('contact_id', contactIds)
-      .order('created_at', { ascending: false })
-      .limit(100);
-
-     // Get psychographic data and social analysis
-     const { data: analyticalProfiles } = await supabase
-       .from('contact_analytical_profiles')
-       .select('*')
-       .in('contact_id', contactIds);
- 
-     const { data: socialAnalysis } = await supabase
-       .from('social_behavior_analysis')
-       .select('*')
-       .in('contact_id', contactIds);
- 
-     // Get existing offer suggestions to avoid duplicates
-    const { data: existingOffers } = await supabase
-      .from('offer_suggestions')
-      .select('contact_id, offer_name')
-      .in('contact_id', contactIds)
-      .eq('status', 'pending');
-
-    // Pre-fetch all social_insights for all contacts to avoid N+1 in inner loop
-    const { data: allSocialInsights } = await supabase
-      .from('social_insights')
-      .select('id, contact_id, platform, content')
-      .in('contact_id', contactIds);
+    const [
+      { data: purchases },
+      { data: interactions },
+      { data: analyticalProfiles },
+      { data: socialAnalysis },
+      { data: existingOffers },
+      { data: allSocialInsights },
+    ] = await Promise.all([
+      supabase.from('purchase_history').select('*').in('contact_id', contactIds).order('purchase_date', { ascending: false }),
+      supabase.from('interactions').select('*').in('contact_id', contactIds).order('created_at', { ascending: false }).limit(100),
+      supabase.from('contact_analytical_profiles').select('*').in('contact_id', contactIds),
+      supabase.from('social_behavior_analysis').select('*').in('contact_id', contactIds),
+      supabase.from('offer_suggestions').select('contact_id, offer_name').in('contact_id', contactIds).eq('status', 'pending'),
+      supabase.from('social_insights').select('id, contact_id, platform, content').in('contact_id', contactIds),
+    ]);
 
     const socialInsightsByContact = new Map<string, Array<{ id: string; platform: string; content: string }>>();
     for (const si of allSocialInsights ?? []) {
