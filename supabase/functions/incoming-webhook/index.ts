@@ -2,7 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
 
 
 const limiter = rateLimit({
@@ -77,14 +77,10 @@ Deno.serve(async (req) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
 
-  const rawBody = await req.text();
-  let rawPayload: unknown = {};
-  try {
-    rawPayload = rawBody ? JSON.parse(rawBody) : {};
-  } catch {
-    rawPayload = {};
-  }
-  const parsed = PayloadSchema.safeParse(rawPayload);
+  const { body: rawBody, error: bodyError } = await guardBody(req, 512 * 1024);
+  if (bodyError) return bodyError;
+
+  const parsed = PayloadSchema.safeParse(rawBody);
   if (!parsed.success) {
     return new Response(
       JSON.stringify({ error: "Payload inválido", details: parsed.error.flatten() }),
@@ -127,7 +123,7 @@ Deno.serve(async (req) => {
       });
     }
     const ok = webhook.webhook_secret
-      ? await verifyHmac(webhook.webhook_secret, ts, rawBody, sig)
+      ? await verifyHmac(webhook.webhook_secret, ts, JSON.stringify(rawBody ?? {}), sig)
       : false;
     if (!ok) {
       await admin.from("incoming_webhook_logs").insert({

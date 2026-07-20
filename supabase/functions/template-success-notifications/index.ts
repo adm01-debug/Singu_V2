@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 interface TemplateStats {
@@ -31,13 +31,16 @@ Deno.serve(async (req) => {
   const cronError = await requireCronSecret(req);
   if (cronError) return cronError;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const { userId, checkAll = false } = await req.json();
+    const { userId, checkAll = false } = rawBody as { userId?: string; checkAll?: boolean };
 
     // Get all users or specific user
     let usersQuery = supabaseClient.from('profiles').select('id');

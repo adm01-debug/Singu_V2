@@ -1,10 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 5, message: "Too many form submissions. Please wait before trying again." });
-
-const MAX_BODY_BYTES = 32_768; // 32 KB guard against payload bombs
 
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
@@ -19,17 +17,11 @@ Deno.serve(async (req) => {
   const limited = limiter.check(ip, req);
   if (limited) return limited;
 
-  // Size guard
-  const contentLength = parseInt(req.headers.get("content-length") ?? "0", 10);
-  if (contentLength > MAX_BODY_BYTES) {
-    return new Response(JSON.stringify({ error: "Payload too large" }), {
-      status: 413,
-      headers: { ...cors, "Content-Type": "application/json" },
-    });
-  }
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
 
   try {
-    const body = await req.json();
+    const body = rawBody;
     const { slug, data, utms = {}, page_url, user_agent } = body || {};
 
     if (!slug || typeof slug !== "string" || slug.length > 128) {

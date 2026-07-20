@@ -2,7 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { parsePhoneNumberFromString } from "npm:libphonenumber-js@1.11.7/max";
 import { rateLimit } from "../_shared/rate-limit.ts";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
 
 
 const BodySchema = z.object({
@@ -42,6 +42,9 @@ Deno.serve(async (req) => {
   const limited = limiter.check(ip, req);
   if (limited) return limited;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const auth = req.headers.get("Authorization");
     if (!auth) return new Response(JSON.stringify({ error: "Missing auth" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
@@ -54,7 +57,7 @@ Deno.serve(async (req) => {
     const { data: userData } = await supabase.auth.getUser();
     if (!userData?.user) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
 
-    const parsed = BodySchema.safeParse(await req.json());
+    const parsed = BodySchema.safeParse(rawBody);
     if (!parsed.success) return new Response(JSON.stringify({ error: parsed.error.flatten() }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
 
     const { phone, defaultCountry, contactId, persist } = parsed.data;

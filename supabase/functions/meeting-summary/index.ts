@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 
 
@@ -16,6 +16,9 @@ Deno.serve(async (req) => {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const limited = limiter.check(ip, req);
   if (limited) return limited;
+
+  const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
+  if (bodyError) return bodyError;
 
   try {
     const authHeader = req.headers.get("Authorization");
@@ -42,7 +45,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const body = await req.json();
+    const body = rawBody;
     const { interaction_id } = body;
 
     if (!interaction_id) {

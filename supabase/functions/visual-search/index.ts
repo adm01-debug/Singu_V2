@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
@@ -97,6 +97,9 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: cors });
   }
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
@@ -123,7 +126,7 @@ Deno.serve(async (req) => {
     const rl = limiter.check(user.id, req);
     if (rl) return rl;
 
-    const body = await req.json().catch(() => ({}));
+    const body = rawBody as Record<string, unknown>;
     const imageDataUrl = String(body?.image ?? "");
     const limit = Math.min(Math.max(Number(body?.limit ?? 12), 1), 30);
 

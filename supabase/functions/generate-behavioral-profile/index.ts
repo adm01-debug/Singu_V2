@@ -1,5 +1,5 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 
 
@@ -50,12 +50,15 @@ Deno.serve(async (req) => {
   const cronCheck = await requireCronSecret(req);
   if (cronCheck) return cronCheck;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const internalKey = req.headers.get('x-internal-key') ?? '';
     const isInternal = internalKey && internalKey === SERVICE_KEY;
 
-    const body = (await req.json().catch(() => ({}))) as Partial<Body> & { user_id?: string };
+    const body = rawBody as Partial<Body> & { user_id?: string };
     if (!body.contact_id || typeof body.contact_id !== 'string') {
       return json({ error: 'contact_id obrigatório' }, 400);
     }

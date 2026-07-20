@@ -114,14 +114,14 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: scopedCorsHeaders(req) });
   }
 
-  // ── Rate limit ──
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const limited = limiter.check(ip, req);
-  if (limited) return limited;
-
   // ── Auth guard ──
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
+  const userId = authResult;
+
+  // ── Rate limit (keyed by userId, not IP — avoids shared-NAT false positives) ──
+  const limited = limiter.check(userId, req);
+  if (limited) return limited;
 
   const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
   if (bodyError) return bodyError;

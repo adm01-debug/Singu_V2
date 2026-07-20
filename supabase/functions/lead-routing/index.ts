@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
-import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
 
 /* ─── Schemas ──────────────────────────────────────────────── */
@@ -223,9 +223,11 @@ Deno.serve(async (req: Request) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const supabase = createSupabaseAdmin();
-    const rawBody = await req.json();
 
     const parsed = RequestSchema.safeParse(rawBody);
     if (!parsed.success) {

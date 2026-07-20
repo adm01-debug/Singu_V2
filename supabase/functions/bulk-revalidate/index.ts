@@ -1,7 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
 
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
@@ -35,6 +35,9 @@ Deno.serve(async (req) => {
   const limited = limiter.check(ip, req);
   if (limited) return limited;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const ANON = Deno.env.get("SUPABASE_ANON_KEY")!;
@@ -52,7 +55,7 @@ Deno.serve(async (req) => {
     if (userErr || !userData?.user) return jsonRes({ error: "Unauthorized" }, 401);
     const userId = userData.user.id;
 
-    const json = await req.json().catch(() => ({}));
+    const json = rawBody;
     const parsed = BodySchema.safeParse(json);
     if (!parsed.success) {
       return jsonRes({ error: "Invalid body", details: parsed.error.flatten() }, 400);

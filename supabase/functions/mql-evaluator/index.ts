@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
 
 Deno.serve(async (req) => {
@@ -9,6 +9,9 @@ Deno.serve(async (req) => {
   const cronCheck = await requireCronSecret(req);
   if (cronCheck) return cronCheck;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
+  if (bodyError) return bodyError;
+
   const auth = req.headers.get("Authorization");
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -17,8 +20,8 @@ Deno.serve(async (req) => {
   );
 
   try {
-    const body = await req.json().catch(() => ({}));
-    const { contact_id, user_id_override } = body || {};
+    const body = rawBody;
+    const { contact_id, user_id_override } = (body as Record<string, unknown> | null) || {};
 
     // Single contact mode
     if (contact_id) {
