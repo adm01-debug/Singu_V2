@@ -2,6 +2,7 @@ import { useEffect, useCallback, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { safehref } from '@/lib/utils';
 import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
 interface RealtimeNotification {
@@ -79,7 +80,8 @@ export function useRealtimeNotifications() {
         label: 'Ver',
         onClick: () => {
           if (alert.action_url) {
-            window.location.href = alert.action_url;
+            const safe = safehref(alert.action_url);
+            if (safe !== '#') window.location.href = safe;
           }
         },
       },

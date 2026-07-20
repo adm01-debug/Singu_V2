@@ -10,6 +10,7 @@ import { renderBlocksToHtml } from '@/lib/emailBuilderRenderer';
 import type { EmailBlock } from '@/components/email-builder/types';
 import { toast } from 'sonner';
 import { CheckCircle2, Loader2 } from 'lucide-react';
+import { safehref } from '@/lib/utils';
 
 interface PublicPage {
   id: string;
@@ -89,7 +90,7 @@ export default function PublicLandingPage() {
     }
     setSubmitted(true);
     if (page.redirect_url) {
-      setTimeout(() => { window.location.href = page.redirect_url!; }, 800);
+      setTimeout(() => { const safe = safehref(page.redirect_url!); if (safe !== '#') window.location.href = safe; }, 800);
     }
   };
 

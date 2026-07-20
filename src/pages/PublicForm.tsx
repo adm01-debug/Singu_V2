@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { PublicFormRenderer } from '@/components/marketing/PublicFormRenderer';
 import { CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { safehref } from '@/lib/utils';
 import type { FormField, MarketingForm } from '@/hooks/useForms';
 
 export default function PublicForm() {
@@ -46,7 +47,8 @@ export default function PublicForm() {
       return;
     }
     if (data.redirect_url) {
-      window.location.href = data.redirect_url;
+      const safe = safehref(data.redirect_url);
+      window.location.href = safe !== '#' ? safe : '/';
     } else {
       setSubmitted(true);
     }
