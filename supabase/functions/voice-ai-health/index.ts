@@ -156,8 +156,9 @@ Deno.serve(async (req) => {
       { headers: { ...cors, "Content-Type": "application/json" }, status: 200 }
     );
   } catch (err) {
+    console.error("voice-ai-health error:", err);
     return new Response(
-      JSON.stringify({ error: err instanceof Error ? err.message : "Unknown error" }),
+      JSON.stringify({ error: "Internal server error" }),
       { headers: { ...cors, "Content-Type": "application/json" }, status: 500 }
     );
   }

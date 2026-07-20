@@ -213,7 +213,7 @@ async function handleRedistribute(
 
 async function handleResetDaily(supabase: ReturnType<typeof createClient>, cors: Record<string, string>) {
   const { data, error } = await supabase.rpc("reset_daily_lead_counts");
-  if (error) return json({ error: error.message }, 500, cors);
+  if (error) { console.error("handleResetDaily rpc error:", error); return json({ error: "Internal server error" }, 500, cors); }
   return json({ success: true, reset_count: data }, 200, cors);
 }
 

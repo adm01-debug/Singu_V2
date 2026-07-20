@@ -122,7 +122,8 @@ Deno.serve(async (req) => {
       headers: { ...cors, "Content-Type": "application/json" },
     });
   } catch (e) {
-    return new Response(JSON.stringify({ error: (e as Error).message, stats }), {
+    console.error("nurturing-runner error:", e);
+    return new Response(JSON.stringify({ error: "Internal server error", stats }), {
       status: 500,
       headers: { ...cors, "Content-Type": "application/json" },
     });

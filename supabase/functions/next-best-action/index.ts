@@ -140,6 +140,6 @@ Por favor, gere:
 
   } catch (error) {
     console.error("NBA Error:", error);
-    return jsonError(error.message, 500);
+    return jsonError("Internal server error", 500);
   }
 });

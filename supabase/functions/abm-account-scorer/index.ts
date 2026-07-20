@@ -71,7 +71,7 @@ Deno.serve(async (req) => {
     const { data: accounts, error } = await query;
     if (error) {
       log.error("fetch_accounts_failed", { error: error.message });
-      return jsonError(error.message, 500, req);
+      return jsonError("Internal server error", 500, req);
     }
     
     if (!accounts || accounts.length === 0) {

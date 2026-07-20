@@ -62,10 +62,10 @@ Deno.serve(async (req) => {
       user_id: userId,
       automation_name: 'score_recalculation_failed',
       status: 'failed',
-      result: { error: error.message },
+      result: { error: error instanceof Error ? error.message : String(error) },
       execution_time_ms: Date.now() - start
     });
 
-    return jsonError(error.message, 500);
+    return jsonError("Internal server error", 500);
   }
 });

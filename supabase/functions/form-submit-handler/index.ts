@@ -57,7 +57,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("form-submit-handler error", e);
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { ...cors, "Content-Type": "application/json" },
     });
