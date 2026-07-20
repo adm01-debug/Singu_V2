@@ -13,38 +13,40 @@ export function useMFAGuard() {
   const location = useLocation();
 
   useEffect(() => {
+    let cancelled = false;
     async function checkMFA() {
       if (authLoading || adminLoading || !user || !isAdmin) {
         if (!authLoading && !adminLoading && (!user || !isAdmin)) {
-          setMfaVerified(true); // Non-admins or non-users don't need MFA check here
+          if (!cancelled) setMfaVerified(true);
         }
         return;
       }
 
       try {
         const { data, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+        if (cancelled) return;
         if (error) throw error;
 
-        // aal1 = password only
-        // aal2 = password + second factor
         const isVerified = data.currentLevel === 'aal2';
         setMfaVerified(isVerified);
 
         if (!isVerified && location.pathname !== '/seguranca') {
-          navigate('/seguranca', { 
-            state: { 
-              mfaRequired: true, 
-              from: location.pathname 
-            } 
+          navigate('/seguranca', {
+            state: {
+              mfaRequired: true,
+              from: location.pathname
+            }
           });
         }
       } catch (err) {
+        if (cancelled) return;
         logger.error('MFA Check Error:', err);
         setMfaVerified(false);
       }
     }
 
     checkMFA();
+    return () => { cancelled = true; };
   }, [user, isAdmin, authLoading, adminLoading, navigate, location.pathname]);
 
   return {

@@ -23,14 +23,18 @@ export default function PublicLeadMagnet() {
 
   useEffect(() => {
     if (!slug) return;
+    let cancelled = false;
+    const currentSlug = slug;
     (async () => {
-      const { data } = await supabase.from('lead_magnets').select('*').eq('slug', slug).eq('is_published', true).maybeSingle();
+      const { data } = await supabase.from('lead_magnets').select('*').eq('slug', currentSlug).eq('is_published', true).maybeSingle();
+      if (cancelled) return;
       if (data) {
         setMagnet(data as unknown as LeadMagnet);
-        await supabase.rpc('increment_magnet_view', { _slug: slug });
+        void supabase.rpc('increment_magnet_view', { _slug: currentSlug });
       }
       setLoading(false);
     })();
+    return () => { cancelled = true; };
   }, [slug]);
 
   const handleDownload = async (e: React.FormEvent) => {

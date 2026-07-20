@@ -64,10 +64,12 @@ export function SessionExpiryHandler({
   // Monitor session expiry
   useEffect(() => {
     if (!user) return;
+    let cancelled = false;
 
     const checkExpiry = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      
+      if (cancelled) return;
+
       if (!session) {
         setShowWarning(true);
         setExpiresIn(0);
@@ -88,7 +90,6 @@ export function SessionExpiryHandler({
         setExpiresIn(0);
         setShowWarning(true);
       } else if (autoRefresh && minutesUntilExpiry <= warningMinutes * 2) {
-        // Auto-refresh before warning threshold
         await refreshSession();
       }
     };
@@ -99,7 +100,7 @@ export function SessionExpiryHandler({
     // Check every minute
     const intervalId = setInterval(checkExpiry, 60 * 1000);
 
-    return () => clearInterval(intervalId);
+    return () => { cancelled = true; clearInterval(intervalId); };
   }, [user, warningMinutes, autoRefresh, refreshSession]);
 
   // Listen for auth state changes

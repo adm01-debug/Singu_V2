@@ -16,14 +16,18 @@ export default function PublicForm() {
 
   useEffect(() => {
     if (!slug) return;
+    let cancelled = false;
+    const currentSlug = slug;
     (async () => {
-      const { data } = await supabase.from('forms').select('*').eq('slug', slug).eq('is_published', true).maybeSingle();
+      const { data } = await supabase.from('forms').select('*').eq('slug', currentSlug).eq('is_published', true).maybeSingle();
+      if (cancelled) return;
       if (data) {
         setForm({ ...data, fields: Array.isArray(data.fields) ? data.fields : [] } as unknown as MarketingForm);
-        await supabase.rpc('increment_form_view', { _slug: slug });
+        void supabase.rpc('increment_form_view', { _slug: currentSlug });
       }
       setLoading(false);
     })();
+    return () => { cancelled = true; };
   }, [slug]);
 
   const handleSubmit = async (values: Record<string, unknown>) => {
