@@ -251,6 +251,37 @@ export async function requireCronSecret(req: Request): Promise<Response | null> 
  * Async because the underlying secret comparison uses crypto.subtle.
  * Callers must await this function.
  */
+/**
+ * guardBody — size-checked JSON parse helper.
+ *
+ * Checks the Content-Length header and rejects payloads above `maxBytes`
+ * before reading the body (fast-path rejection). Falls through to
+ * JSON.parse and returns a typed result union so callers avoid try/catch.
+ *
+ * Usage:
+ *   const { body, error } = await guardBody(req);
+ *   if (error) return error;     // 400 or 413 Response already built
+ *   const { field } = body as MyType;
+ *
+ * @param req      The incoming Request
+ * @param maxBytes Payload size ceiling in bytes (default: 256 KB)
+ */
+export async function guardBody(
+  req: Request,
+  maxBytes = 256 * 1024,
+): Promise<{ body: unknown; error: null } | { body: null; error: Response }> {
+  const cl = parseInt(req.headers.get("content-length") ?? "0", 10);
+  if (cl > maxBytes) {
+    return { body: null, error: jsonError("Payload too large", 413) };
+  }
+  try {
+    const body = await req.json();
+    return { body, error: null };
+  } catch {
+    return { body: null, error: jsonError("Invalid JSON body", 400) };
+  }
+}
+
 export async function requireWebhookSecret(
   req: Request,
   envName: string,
