@@ -47,22 +47,27 @@ Deno.serve(async (req) => {
     return jsonError("Conteúdo insuficiente para análise (mínimo 80 caracteres)", 400, req);
   }
 
-  if (!force) {
-    const { data: existing } = await supabase
-      .from("conversation_analyses")
-      .select("id")
-      .eq("interaction_id", interactionId)
-      .maybeSingle();
-    if (existing) {
-      return jsonOk({ ok: true, cached: true, id: existing.id }, req);
-    }
+  // Existing-check and topics catalog are independent — fetch in parallel
+  const [existingResult, topicsResult] = await Promise.all([
+    force
+      ? Promise.resolve({ data: null })
+      : supabase
+          .from("conversation_analyses")
+          .select("id")
+          .eq("interaction_id", interactionId)
+          .maybeSingle(),
+    supabase
+      .from("conversation_topics_catalog")
+      .select("topic_key, label, category, keywords")
+      .eq("user_id", userId)
+      .eq("active", true),
+  ]);
+
+  if (!force && existingResult.data) {
+    return jsonOk({ ok: true, cached: true, id: (existingResult.data as { id: string }).id }, req);
   }
 
-  const { data: topics } = await supabase
-    .from("conversation_topics_catalog")
-    .select("topic_key, label, category, keywords")
-    .eq("user_id", userId)
-    .eq("active", true);
+  const { data: topics } = topicsResult;
   const topicCatalog = (topics ?? []).map((t) => ({
     key: t.topic_key, label: t.label, category: t.category, keywords: t.keywords,
   }));
@@ -346,11 +351,8 @@ ${interaction.content.slice(0, 12000)}`;
       reframings.length > 0
         ? supabase.from('reframing_analysis').insert(reframings)
         : Promise.resolve(),
-      relativesSuggestions.length > 0
-        ? supabase.from('suggested_life_events').insert(relativesSuggestions)
-        : Promise.resolve(),
-      lifeEvents.length > 0
-        ? supabase.from('suggested_life_events').insert(lifeEvents)
+      (relativesSuggestions.length + lifeEvents.length) > 0
+        ? supabase.from('suggested_life_events').insert([...relativesSuggestions, ...lifeEvents])
         : Promise.resolve(),
     ]).catch((e: unknown) => console.error("conversation-analyzer side-effects error:", e));
 

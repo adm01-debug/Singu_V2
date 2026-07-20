@@ -44,9 +44,10 @@ Deno.serve(async (req) => {
     next_run_at: string;
   }> = [];
 
-  for (const item of items) {
-    try {
-      const resp = await fetchAPI(`${SUPABASE_URL}/functions/v1/generate-behavioral-profile`, {
+  // All items are independent — fire concurrently, not sequentially
+  const settled = await Promise.allSettled(
+    items.map((item) =>
+      fetchAPI(`${SUPABASE_URL}/functions/v1/generate-behavioral-profile`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,23 +56,29 @@ Deno.serve(async (req) => {
           'apikey': SERVICE_KEY,
         },
         body: JSON.stringify({ contact_id: item.contact_id, user_id: item.user_id }),
-      });
-
-      if (!resp.ok) {
-        const txt = await resp.text();
-        // 422 = sem histórico ainda; remove da fila para não reprocessar em loop
-        if (resp.status === 422) {
-          toDelete.push(item.contact_id);
-          results.push({ contact_id: item.contact_id, ok: false, error: 'sem histórico' });
-          continue;
+      }).then(async (resp) => {
+        if (!resp.ok) {
+          const txt = await resp.text();
+          if (resp.status === 422) return { status: 422 as const };
+          throw new Error(`[${resp.status}] ${txt.slice(0, 200)}`);
         }
-        throw new Error(`[${resp.status}] ${txt.slice(0, 200)}`);
-      }
+        return { status: 200 as const };
+      })
+    )
+  );
 
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    const outcome = settled[i];
+    if (outcome.status === 'fulfilled') {
       toDelete.push(item.contact_id);
-      results.push({ contact_id: item.contact_id, ok: true });
-    } catch (e) {
-      const msg = (e as Error).message;
+      results.push({
+        contact_id: item.contact_id,
+        ok: outcome.value.status === 200,
+        ...(outcome.value.status === 422 ? { error: 'sem histórico' } : {}),
+      });
+    } else {
+      const msg = (outcome.reason as Error).message;
       const nextAttempts = item.attempts + 1;
       const backoffMin = Math.min(60, 5 * Math.pow(2, item.attempts));
       toUpdate.push({

@@ -36,7 +36,8 @@ export function useCreateMeeting() {
 
   return useMutation({
     mutationFn: async (payload: CreateMeetingPayload): Promise<CreatedMeeting> => {
-      const userId = user?.id;
+      if (!user) throw new Error('Usuário não autenticado');
+      const userId = user.id;
 
       const record: Record<string, unknown> = {
         contact_id: payload.contactId,
@@ -48,7 +49,7 @@ export function useCreateMeeting() {
         meeting_url: payload.meetingUrl ?? null,
         notes: payload.notes ?? null,
         status: 'scheduled',
-        ...(userId ? { user_id: userId } : {}),
+        user_id: userId,
       };
 
       const { data, error } = await insertExternalData<CreatedMeeting>('meetings', record);

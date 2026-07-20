@@ -346,17 +346,18 @@ async function sendEmailStep(
       console.warn('send-transactional-email indisponível, log apenas:', e);
     }
 
-    await supabase.from('sequence_events').insert({
-      enrollment_id: enr.id,
-      sequence_id: enr.sequence_id,
-      contact_id: enr.contact_id,
-      user_id: enr.user_id,
-      step_order: step.step_order,
-      event_type: 'sent',
-      metadata: { channel: 'email', subject, tracking_token: log?.tracking_token },
-    });
-
-    await supabase.rpc('increment', { table_name: 'sequences' }).catch(() => {});
+    await Promise.all([
+      supabase.from('sequence_events').insert({
+        enrollment_id: enr.id,
+        sequence_id: enr.sequence_id,
+        contact_id: enr.contact_id,
+        user_id: enr.user_id,
+        step_order: step.step_order,
+        event_type: 'sent',
+        metadata: { channel: 'email', subject, tracking_token: log?.tracking_token },
+      }),
+      supabase.rpc('increment', { table_name: 'sequences' }).catch(() => {}),
+    ]);
 
     return true;
   } catch (e) {

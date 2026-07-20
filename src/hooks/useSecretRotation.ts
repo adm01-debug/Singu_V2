@@ -32,7 +32,8 @@ export function useSecretRotation() {
   const qc = useQueryClient();
 
   const { data: rotationLogs = [], isLoading } = useQuery({
-    queryKey: ['secret-rotation-logs'],
+    queryKey: ['secret-rotation-logs', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('secret_rotation_log')
