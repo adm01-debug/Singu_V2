@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 import type { NbaPriority, NbaSort } from './useProximosPassosFilters';
 
 const SCOPE = 'ficha360';
@@ -102,6 +103,7 @@ export function useFicha360PreferencesSync(opts: {
       lastSavedRef.current = vars;
       qc.setQueryData<Ficha360Preferences>(QK, vars);
     },
+    onError: () => toast.error('Erro ao salvar preferências da Ficha 360'),
   });
 
   // Hidrata uma única vez se a URL não trouxe overrides

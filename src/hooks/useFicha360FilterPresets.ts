@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 import type { NbaPriority, NbaSort } from './useProximosPassosFilters';
 
 const SCOPE = 'ficha360:presets';
@@ -96,6 +97,7 @@ export function useFicha360FilterPresets() {
     onSuccess: (next) => {
       qc.setQueryData<PresetsPayload>(QK, next);
     },
+    onError: () => toast.error('Erro ao salvar filtros predefinidos'),
   });
 
   const presets = data?.presets ?? [];

@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 
 /**
  * Hook genérico para sincronizar preferências de UI por escopo no perfil do
@@ -109,6 +110,7 @@ export function useUiPreferencesSync<T extends Record<string, unknown>>(
       lastSavedRef.current = vars;
       qc.setQueryData<T>(QK, vars);
     },
+    onError: () => toast.error('Erro ao salvar preferências'),
   });
 
   // Hidratação one-shot. Roda só após `remote` chegar, e respeita URL.
