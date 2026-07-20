@@ -108,22 +108,18 @@ Deno.serve(async (req) => {
         .single();
 
       if (luxRecord) {
-        for (const stakeholder of stakeholders) {
-          try {
-            await supabase.from('contacts').insert({
-              user_id: luxRecord.user_id,
-              company_id: luxRecord.entity_id,
-              first_name: stakeholder.first_name || stakeholder.name?.split(' ')[0] || 'Unknown',
-              last_name: stakeholder.last_name || stakeholder.name?.split(' ').slice(1).join(' ') || '',
-              role_title: stakeholder.role_title || stakeholder.position || null,
-              email: stakeholder.email || null,
-              phone: stakeholder.phone || null,
-              linkedin: stakeholder.linkedin || null,
-            });
-          } catch (e) {
-            console.error('Error creating stakeholder contact:', e);
-          }
-        }
+        const contactRows = stakeholders.map((stakeholder: Record<string, unknown>) => ({
+          user_id: luxRecord.user_id,
+          company_id: luxRecord.entity_id,
+          first_name: stakeholder.first_name || (stakeholder.name as string)?.split(' ')[0] || 'Unknown',
+          last_name: stakeholder.last_name || (stakeholder.name as string)?.split(' ').slice(1).join(' ') || '',
+          role_title: stakeholder.role_title || stakeholder.position || null,
+          email: stakeholder.email || null,
+          phone: stakeholder.phone || null,
+          linkedin: stakeholder.linkedin || null,
+        }));
+        supabase.from('contacts').insert(contactRows)
+          .catch((e: unknown) => console.error('Error creating stakeholder contacts:', e));
       }
     }
 
