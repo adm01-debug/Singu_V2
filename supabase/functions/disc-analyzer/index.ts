@@ -5,14 +5,14 @@
 
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
-import { withAuth, jsonError, jsonOk, scopedCorsHeaders } from "../_shared/auth.ts";
+import { withAuth, jsonError, jsonOk, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 30, message: "Rate limit exceeded for DISC analyzer. Please wait." });
 
 const DiscAnalyzerInput = z.object({
-  texts: z.array(z.string().min(1)).min(1, 'Pelo menos 1 texto é necessário').max(50),
+  texts: z.array(z.string().min(1).max(5000)).min(1, 'Pelo menos 1 texto é necessário').max(50),
   contactId: z.string().uuid('contactId deve ser UUID válido'),
   interactionId: z.string().uuid().optional(),
 });
@@ -133,7 +133,9 @@ Deno.serve(async (req) => {
   const userId = authResult; // from JWT
 
   try {
-    const rawBody = await req.json();
+    const { body: rawBody, error: bodyError } = await guardBody(req, 512 * 1024); // 512 KB — up to 50 text strings
+    if (bodyError) return bodyError;
+
     const parsed = DiscAnalyzerInput.safeParse(rawBody);
     if (!parsed.success) {
       return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
