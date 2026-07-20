@@ -1,5 +1,8 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { requireWebhookSecret, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 200 });
 
 type SupabaseAdminClient = ReturnType<typeof createClient>;
 
@@ -8,6 +11,10 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: cors });
   }
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const limited = limiter.check(ip, req);
+  if (limited) return limited;
 
   // Reject requests that don't carry the shared Evolution API secret
   const authCheck = await requireWebhookSecret(req, 'EVOLUTION_API_SECRET', 'apikey');
