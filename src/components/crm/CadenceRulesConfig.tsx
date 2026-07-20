@@ -38,10 +38,14 @@ type CadenceStepType = 'message' | 'call' | 'email' | 'task';
 type CadencePriority = 'low' | 'medium' | 'high' | 'urgent';
 
 interface CadenceStep {
+  _localId?: string;
   type: CadenceStepType;
   delay_days: number;
   content: string;
 }
+
+let _stepCounter = 0;
+const nextStepId = () => `step-${++_stepCounter}`;
 
 interface CadenceRule {
   id?: string;
@@ -72,16 +76,20 @@ export function CadenceRulesConfig() {
 
   const saveRule = useMutation({
     mutationFn: async (ruleData: CadenceRule) => {
-      if (ruleData.id) {
+      const payload = {
+        ...ruleData,
+        cadence_steps: ruleData.cadence_steps.map(({ _localId: _, ...step }) => step),
+      };
+      if (payload.id) {
         const { error } = await supabase
           .from('crm_cadence_rules')
-          .update(ruleData as never)
-          .eq('id', ruleData.id);
+          .update(payload as never)
+          .eq('id', payload.id);
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('crm_cadence_rules')
-          .insert([ruleData as never]);
+          .insert([payload as never]);
         if (error) throw error;
       }
     },
@@ -113,7 +121,7 @@ export function CadenceRulesConfig() {
         relationship_stage: rule.relationship_stage ?? 'prospect',
         frequency_days: rule.frequency_days ?? 7,
         priority: (rule.priority as CadencePriority) ?? 'medium',
-        cadence_steps: (rule.cadence_steps as CadenceStep[] | undefined) ?? []
+        cadence_steps: ((rule.cadence_steps as CadenceStep[] | undefined) ?? []).map(s => ({ ...s, _localId: nextStepId() }))
       });
     } else {
       setEditingRule({
@@ -121,7 +129,7 @@ export function CadenceRulesConfig() {
         frequency_days: 7,
         priority: 'medium',
         cadence_steps: [
-          { type: 'message', delay_days: 0, content: 'Primeiro contato de acompanhamento' }
+          { _localId: nextStepId(), type: 'message', delay_days: 0, content: 'Primeiro contato de acompanhamento' }
         ]
       });
     }
@@ -149,7 +157,7 @@ export function CadenceRulesConfig() {
   const handleAddStep = () => {
     if (!editingRule) return;
     const steps = [...(editingRule.cadence_steps || [])];
-    steps.push({ type: 'message', delay_days: 2, content: 'Próximo passo da cadência' });
+    steps.push({ _localId: nextStepId(), type: 'message', delay_days: 2, content: 'Próximo passo da cadência' });
     setEditingRule({ ...editingRule, cadence_steps: steps });
   };
 
@@ -321,7 +329,7 @@ export function CadenceRulesConfig() {
 
                     <div className="space-y-3">
                       {editingRule.cadence_steps?.map((step: CadenceStep, index: number) => (
-                        <div key={index} className="group relative bg-muted/30 rounded-lg p-3 border border-dashed hover:border-primary/30 transition-colors">
+                        <div key={step._localId ?? index} className="group relative bg-muted/30 rounded-lg p-3 border border-dashed hover:border-primary/30 transition-colors">
                           <Button 
                             variant="ghost" 
                             size="icon" 
