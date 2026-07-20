@@ -417,7 +417,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       const details = encodeURIComponent(`Links e contexto no Singu CRM: ${window.location.origin}/contatos/${contact.id}`);
       const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${new Date().toISOString().replace(/-|:|\.\d\d\d/g, '')}/${new Date(Date.now() + 30 * 60 * 1000).toISOString().replace(/-|:|\.\d\d\d/g, '')}`;
       
-      window.open(googleCalendarUrl, '_blank');
+      window.open(googleCalendarUrl, '_blank', 'noopener,noreferrer');
 
       toast({
         title: "Lembrete Agendado",

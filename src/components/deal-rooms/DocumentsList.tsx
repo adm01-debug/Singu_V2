@@ -14,7 +14,7 @@ export function DocumentsList({ roomId }: { roomId: string }) {
   const handleDownload = async (path: string) => {
     try {
       const url = await getDocumentSignedUrl(path);
-      window.open(url, "_blank");
+      window.open(url, "_blank", "noopener,noreferrer");
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Erro ao baixar arquivo";
       toast.error(msg);

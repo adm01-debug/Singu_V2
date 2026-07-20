@@ -27,19 +27,21 @@ export const useNotifications = () => {
 
   // Check if notifications are supported and current subscription status
   useEffect(() => {
+    let alive = true;
     const checkStatus = async () => {
       const supported = isPushSupported();
       const permission = supported ? (Notification.permission as NotificationPermission['permission']) : 'denied';
-      
+      if (!alive) return;
       setPermissionState({ permission, supported });
-      
+
       if (supported && permission === 'granted') {
         const { isSubscribed: subscribed } = await getSubscriptionStatus();
-        setIsSubscribed(subscribed);
+        if (alive) setIsSubscribed(subscribed);
       }
     };
-    
+
     checkStatus();
+    return () => { alive = false; };
   }, []);
 
   // Register service worker on mount

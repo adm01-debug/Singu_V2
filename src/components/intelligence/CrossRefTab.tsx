@@ -55,6 +55,7 @@ export const CrossRefTab = () => {
   useEffect(() => {
     const pivot = params.get('pivot');
     if (!pivot) return;
+    let alive = true;
     const [pType, pId] = pivot.split(':');
     if ((pType === 'contact' || pType === 'company') && pId) {
       setType(pType);
@@ -68,12 +69,14 @@ export const CrossRefTab = () => {
             filters: [{ type: 'eq', column: 'id', value: pId }],
             range: { from: 0, to: 0 },
           });
+          if (!alive) return;
           const name = rows?.[0]?.[nameCol] ? String(rows[0][nameCol]) : pId.slice(0, 8);
           setPicked((prev) =>
             // eslint-disable-next-line sonarjs/no-nested-functions
             prev.some((p) => p.id === pId) ? prev : [...prev, { id: pId, name }].slice(0, 3)
           );
         } catch {
+          if (!alive) return;
           setPicked((prev) =>
             // eslint-disable-next-line sonarjs/no-nested-functions
             prev.some((p) => p.id === pId) ? prev : [...prev, { id: pId, name: pId.slice(0, 8) }].slice(0, 3)
@@ -84,6 +87,7 @@ export const CrossRefTab = () => {
     const next = new URLSearchParams(params);
     next.delete('pivot');
     setParams(next, { replace: true });
+    return () => { alive = false; };
   }, [params, setParams]);
 
   const { data, isLoading, error, refetch } = useCrossReference({

@@ -3,6 +3,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { Header } from '@/components/layout/Header';
  import { useState } from 'react';
+ import { useDebounce } from '@/hooks/useDebounce';
  import { 
    NLPConversionMetrics,
    NLPMasteryScore,
@@ -39,19 +40,20 @@ import { Contact, ContactRole, RelationshipStage, SentimentType, ContactBehavior
 const NLPAnalytics = () => {
    const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
    const [searchTerm, setSearchTerm] = useState('');
- 
+   const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
    const { data: contacts } = useQuery({
-     queryKey: ['nlp-contacts-search', searchTerm],
+     queryKey: ['nlp-contacts-search', debouncedSearchTerm],
      queryFn: async () => {
-       if (searchTerm.length < 2) return [];
+       if (debouncedSearchTerm.length < 2) return [];
        const { data } = await supabase
          .from('contacts')
          .select('id, first_name, last_name')
-         .or(`first_name.ilike.%${searchTerm}%,last_name.ilike.%${searchTerm}%`)
+         .or(`first_name.ilike.%${debouncedSearchTerm}%,last_name.ilike.%${debouncedSearchTerm}%`)
          .limit(5);
        return data?.map(c => ({ ...c, name: `${c.first_name} ${c.last_name}` })) || [];
      },
-     enabled: searchTerm.length >= 2
+     enabled: debouncedSearchTerm.length >= 2
    });
  
    const { data: selectedContact } = useQuery({
