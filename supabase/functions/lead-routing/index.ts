@@ -113,9 +113,8 @@ async function handleDistribute(
   const selected = eligible[0];
   const selectedId = selected.id as string;
 
-  const { error: assignErr } = await supabase
-    .from("lead_assignments")
-    .insert({
+  const [{ error: assignErr }] = await Promise.all([
+    supabase.from("lead_assignments").insert({
       user_id: userId,
       contact_id: body.contact_id ?? null,
       company_id: body.company_id ?? null,
@@ -124,18 +123,15 @@ async function handleDistribute(
       status: "active",
       routing_rule_id: body.rule_id ?? null,
       sla_deadline: new Date(Date.now() + 4 * 3600_000).toISOString(),
-    });
-
-  if (assignErr) { console.error("lead-routing assign error:", assignErr); return json({ error: "Internal server error" }, 500, cors); }
-
-  await supabase
-    .from("sales_team_members")
-    .update({
+    }),
+    supabase.from("sales_team_members").update({
       current_lead_count: ((selected.current_lead_count as number) ?? 0) + 1,
       leads_today: ((selected.leads_today as number) ?? 0) + 1,
       last_assigned_at: new Date().toISOString(),
-    })
-    .eq("id", selectedId);
+    }).eq("id", selectedId),
+  ]);
+
+  if (assignErr) { console.error("lead-routing assign error:", assignErr); return json({ error: "Internal server error" }, 500, cors); }
 
   return json({
     success: true,
