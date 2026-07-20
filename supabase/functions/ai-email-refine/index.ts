@@ -103,6 +103,7 @@ Deno.serve(async (req) => {
     return jsonOk({ subject: result.subject, message: result.message }, req);
   } catch (err) {
     console.error('refine error:', err);
-    return jsonError(err instanceof Error ? err.message : 'Erro desconhecido', 500, req);
+    console.error("ai-email-refine error:", err);
+    return jsonError("Internal server error", 500, req);
   }
 });

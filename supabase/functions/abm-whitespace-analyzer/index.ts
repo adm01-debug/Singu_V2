@@ -163,7 +163,7 @@ Deno.serve(async (req) => {
     
     if (insErr) {
       log.error("insert_opportunities_failed", { error: insErr.message });
-      return jsonError(insErr.message, 500, req);
+      return jsonError("Internal server error", 500, req);
     }
 
     log.info("analysis_complete", { count: created?.length });

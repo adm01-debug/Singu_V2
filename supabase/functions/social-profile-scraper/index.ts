@@ -283,6 +283,7 @@ Deno.serve(async (req) => {
     return jsonOk({ success: true, platform, profile: parsedProfile, lifeEvents: lifeEvents.length });
   } catch (error) {
     console.error("social-profile-scraper error:", error);
-    return jsonError(error instanceof Error ? error.message : "Unknown error", 500);
+    console.error("social-profile-scraper error:", error);
+    return jsonError("Internal server error", 500);
   }
 });

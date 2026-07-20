@@ -66,6 +66,7 @@ Deno.serve(async (req) => {
     return jsonOk(data);
   } catch (error) {
     console.error('Error scraping:', error);
-    return jsonError(error instanceof Error ? error.message : 'Failed to scrape', 500);
+    console.error("firecrawl-scrape error:", error);
+    return jsonError("Internal server error", 500);
   }
 });

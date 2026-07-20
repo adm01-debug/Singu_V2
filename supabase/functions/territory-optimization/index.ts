@@ -329,6 +329,7 @@ Deno.serve(async (req) => {
     );
   } catch (err) {
     console.error("[territory-optimization] error", err);
-    return jsonError(err instanceof Error ? err.message : "Erro inesperado", 500, req);
+    console.error("territory-optimization error:", err);
+    return jsonError("Internal server error", 500, req);
   }
 });

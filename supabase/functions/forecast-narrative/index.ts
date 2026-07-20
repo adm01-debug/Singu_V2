@@ -69,6 +69,7 @@ Inclua: status vs quota, principais riscos, recomendações de ação. Tom execu
 
     return jsonOk({ narrative, commit, best_case: bestCase, quota: Number(period.quota_amount), at_risk_count: atRisk.length });
   } catch (e) {
-    return jsonError(e instanceof Error ? e.message : "error", 500);
+    console.error("forecast-narrative error:", e);
+    return jsonError("Internal server error", 500);
   }
 });

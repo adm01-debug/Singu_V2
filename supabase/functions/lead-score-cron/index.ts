@@ -45,6 +45,7 @@ Deno.serve(async (req: Request) => {
     return jsonOk({ ok: true, enqueued: rows.length }, req);
   } catch (err) {
     console.error('lead-score-cron error:', err);
-    return jsonError(err instanceof Error ? err.message : 'Unknown error', 500, req);
+    console.error("lead-score-cron error:", err);
+    return jsonError("Internal server error", 500, req);
   }
 });

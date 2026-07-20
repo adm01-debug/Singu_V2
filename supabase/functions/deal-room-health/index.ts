@@ -97,6 +97,7 @@ Deno.serve(async (req) => {
 
     return jsonOk({ health_score: baseHealth, recommendations }, req);
   } catch (e) {
-    return jsonError(e instanceof Error ? e.message : "error", 500, req);
+    console.error("deal-room-health error:", e);
+    return jsonError("Internal server error", 500, req);
   }
 });

@@ -281,7 +281,8 @@ ${vakStyle ? `3. Conselho VAK: ${vakStyle.advice}` : ''}
     return jsonOk(result);
   } catch (error) {
     console.error("AI Writing Assistant error:", error);
-    return jsonError(error instanceof Error ? error.message : "Erro ao gerar sugestões", 500);
+    console.error("ai-writing-assistant error:", error);
+    return jsonError("Internal server error", 500);
   }
 });
 

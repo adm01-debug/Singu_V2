@@ -240,6 +240,7 @@ Deno.serve(async (req) => {
     return jsonOk(responsePayload, req);
   } catch (error) {
     console.error("conversational-search error:", error);
-    return jsonError(error instanceof Error ? error.message : "Erro desconhecido", 500, req);
+    console.error("conversational-search error:", error);
+    return jsonError("Internal server error", 500, req);
   }
 });

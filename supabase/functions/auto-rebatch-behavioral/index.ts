@@ -62,7 +62,7 @@ Deno.serve(async (req) => {
       .select('contact_id, user_id, vote, created_at')
       .gte('created_at', cutoff)
       .eq('vote', -1);
-    if (fbErr) return json({ error: `Falha ao ler feedback: ${fbErr.message}` }, 500);
+    if (fbErr) { console.error("auto-rebatch-behavioral feedback read error:", fbErr); return json({ error: "Internal server error" }, 500); }
 
     // 2) Agregar por contato: contagem + último feedback negativo
     interface Agg { down: number; lastFb: string; userId: string }
@@ -89,7 +89,7 @@ Deno.serve(async (req) => {
       .from('contact_analytical_profiles')
       .select('contact_id, last_updated_at')
       .in('contact_id', contactIds);
-    if (profErr) return json({ error: `Falha ao ler perfis: ${profErr.message}` }, 500);
+    if (profErr) { console.error("auto-rebatch-behavioral profiles read error:", profErr); return json({ error: "Internal server error" }, 500); }
 
     const lastUpdatedByContact = new Map<string, string>();
     for (const p of (profiles ?? []) as Array<{ contact_id: string; last_updated_at: string | null }>) {
@@ -151,7 +151,8 @@ Deno.serve(async (req) => {
       sla: { threshold: DOWN_THRESHOLD, batch_size: BATCH_SIZE, min_interval_min: MIN_INTERVAL_MIN },
     });
   } catch (e) {
-    return json({ error: (e as Error).message }, 500);
+    console.error("auto-rebatch-behavioral error:", e);
+    return json({ error: "Internal server error" }, 500);
   }
 });
 

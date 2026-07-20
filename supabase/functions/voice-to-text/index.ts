@@ -149,6 +149,7 @@ Deno.serve(async (req) => {
 
   } catch (error: unknown) {
     console.error('Error in voice-to-text function:', error);
-    return jsonError(error instanceof Error ? error.message : 'Failed to process audio', 500, req);
+    console.error("voice-to-text error:", error);
+    return jsonError("Internal server error", 500, req);
   }
 });

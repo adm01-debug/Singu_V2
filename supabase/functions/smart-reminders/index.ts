@@ -376,6 +376,7 @@ Deno.serve(async (req) => {
     return jsonOk({ success: true, reminders, summary, aiInsights }, req);
   } catch (error: unknown) {
     console.error('Smart Reminders Error:', error);
-    return jsonError(error instanceof Error ? error.message : 'Unknown error', 500, req);
+    console.error("smart-reminders error:", error);
+    return jsonError("Internal server error", 500, req);
   }
 });

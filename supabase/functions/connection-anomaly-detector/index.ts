@@ -147,7 +147,8 @@ Deno.serve(async (req) => {
     return jsonOk({ inserted: totalInserted, scanned: webhooks.length, isCron }, req);
   } catch (e) {
     log.error("anomaly-detector uncaught error", { error: e instanceof Error ? e.message : String(e) });
-    return jsonError(e instanceof Error ? e.message : "Erro desconhecido", 500, req);
+    console.error("connection-anomaly-detector error:", e);
+    return jsonError("Internal server error", 500, req);
   }
 });
 

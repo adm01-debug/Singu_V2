@@ -205,6 +205,7 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
      return jsonOk({ suggestion });
   } catch (error) {
     console.error("suggest-next-action error:", error);
-    return jsonError(error instanceof Error ? error.message : "Erro desconhecido", 500);
+    console.error("suggest-next-action error:", error);
+    return jsonError("Internal server error", 500);
   }
 });

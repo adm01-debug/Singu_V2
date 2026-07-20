@@ -128,7 +128,8 @@ Produza o mapeamento JSON conforme instruído.`;
     }
   } catch (e) {
     log.error("ai-suggest-mapping uncaught error", { error: e instanceof Error ? e.message : String(e) });
-    return jsonError(e instanceof Error ? e.message : "Erro desconhecido", 500, req);
+    console.error("ai-suggest-mapping error:", e);
+    return jsonError("Internal server error", 500, req);
   }
 });
 

@@ -200,6 +200,7 @@ Deno.serve(async (req) => {
     }, req);
   } catch (error) {
     log.error("ask-crm uncaught error", { error: error instanceof Error ? error.message : String(error) });
-    return jsonError(error instanceof Error ? error.message : "Erro desconhecido", 500, req);
+    console.error("ask-crm error:", error);
+    return jsonError("Internal server error", 500, req);
   }
 });

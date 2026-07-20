@@ -28,7 +28,8 @@ Deno.serve(async (req) => {
     .rpc('claim_regen_batch', { p_batch_size: batchSize, p_lock_minutes: 15 });
 
   if (readErr) {
-    return json({ error: readErr.message }, 500);
+    console.error("process-behavioral-regen-queue fetch error:", readErr);
+    return json({ error: "Internal server error" }, 500);
   }
 
   const items = (due ?? []) as QueueRow[];
