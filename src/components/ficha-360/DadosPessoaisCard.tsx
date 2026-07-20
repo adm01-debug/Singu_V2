@@ -18,6 +18,7 @@ import { useFamilyHistory } from '@/hooks/useFamilyHistory';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { logger } from "@/lib/logger";
 
 interface Props {
   rapportIntel: RapportIntel | null;

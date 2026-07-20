@@ -1,4 +1,5 @@
  import { useQuery } from '@tanstack/react-query';
+import { logger } from "@/lib/logger";
  import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { logger } from '@/lib/logger';
