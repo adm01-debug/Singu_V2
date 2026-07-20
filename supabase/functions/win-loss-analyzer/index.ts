@@ -190,7 +190,7 @@ Deno.serve(async (req) => {
     const args = toolCall ? JSON.parse(toolCall.function.arguments) : { insights: [] };
     const insights = args.insights ?? [];
 
-    // Persist
+    // Persist (best-effort — não bloqueia resposta)
     if (insights.length > 0) {
       const rows = insights.map((i: { insight_type: string; title: string; description: string; severity: string }) => ({
         user_id: userId,
@@ -202,7 +202,8 @@ Deno.serve(async (req) => {
         severity: i.severity,
         supporting_data: aggregate,
       }));
-      await supabase.from("win_loss_insights").insert(rows);
+      supabase.from("win_loss_insights").insert(rows)
+        .catch((e: unknown) => console.error("win_loss_insights insert error:", e));
     }
 
     return new Response(JSON.stringify({ aggregate, insights }), {
