@@ -86,7 +86,7 @@ Deno.serve(async (req) => {
 
     if (persist) {
       const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-      await admin.from("phone_validations").insert({
+      admin.from("phone_validations").insert({
         user_id: userData.user.id,
         contact_id: contactId ?? null,
         phone_input: phone,
@@ -99,7 +99,7 @@ Deno.serve(async (req) => {
         reasons: result.reasons,
         provider: "libphonenumber",
         raw: result,
-      });
+      }).catch((e: unknown) => console.error("phone_validations insert error:", e));
     }
 
     return new Response(JSON.stringify(result), { headers: { ...cors, "Content-Type": "application/json" } });
