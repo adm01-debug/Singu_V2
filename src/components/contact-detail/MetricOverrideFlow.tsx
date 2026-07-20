@@ -44,18 +44,19 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
 
       if (!user) throw new Error('Usuário não autenticado');
 
-      const { error: logError } = await supabase.from('crm_metric_overrides').insert({
-        user_id: user.id,
-        contact_id: contactId,
-        metric_type: metricType,
-        old_value: metricType === 'score' ? currentScore.toString() : currentSentiment,
-        new_value: valToStore,
-        reason: reason,
-      });
+      const [{ error: logError }, { error: updateError }] = await Promise.all([
+        supabase.from('crm_metric_overrides').insert({
+          user_id: user.id,
+          contact_id: contactId,
+          metric_type: metricType,
+          old_value: metricType === 'score' ? currentScore.toString() : currentSentiment,
+          new_value: valToStore,
+          reason: reason,
+        }),
+        supabase.from('contacts').update(updates).eq('id', contactId),
+      ]);
 
       if (logError) throw logError;
-
-      const { error: updateError } = await supabase.from('contacts').update(updates).eq('id', contactId);
       if (updateError) throw updateError;
     },
     onSuccess: () => {

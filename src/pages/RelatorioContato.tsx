@@ -59,26 +59,29 @@ const RelatorioContato = () => {
       if (!id) return;
 
       try {
-        // Fetch contact - local first, then external
-        let contact: Tables<'contacts'> | null = null;
-        const { data: localContact } = await supabase.from("contacts").select("*").eq("id", id).maybeSingle();
-        if (localContact) {
-          contact = localContact;
-        } else {
+        // Fetch all local data in parallel, then fall back to external if each is empty
+        const [
+          { data: localContact },
+          { data: localInteractions },
+          { data: localDisc },
+        ] = await Promise.all([
+          supabase.from("contacts").select("*").eq("id", id).maybeSingle(),
+          supabase.from("interactions").select("*").eq("contact_id", id).order("created_at", { ascending: false }),
+          supabase.from("disc_analysis_history").select("*").eq("contact_id", id).order("analyzed_at", { ascending: false }),
+        ]);
+
+        let contact: Tables<'contacts'> | null = localContact;
+        if (!contact) {
           const { data: extContact } = await queryExternalData<Tables<'contacts'>>({ table: 'contacts', filters: [{ type: 'eq', column: 'id', value: id }] });
           contact = extContact?.[0] || null;
         }
 
-        // Fetch interactions - local first, then external
-        const { data: localInteractions } = await supabase.from("interactions").select("*").eq("contact_id", id).order("created_at", { ascending: false });
         let interactions = localInteractions || [];
         if (interactions.length === 0) {
           const { data: extInteractions } = await queryExternalData<Tables<'interactions'>>({ table: 'interactions', filters: [{ type: 'eq', column: 'contact_id', value: id }], order: { column: 'created_at', ascending: false } });
           interactions = extInteractions || [];
         }
 
-        // Fetch DISC - local first, then external
-        const { data: localDisc } = await supabase.from("disc_analysis_history").select("*").eq("contact_id", id).order("analyzed_at", { ascending: false });
         let discHistory = localDisc || [];
         if (discHistory.length === 0) {
           const { data: extDisc } = await queryExternalData<Tables<'disc_analysis_history'>>({ table: 'disc_analysis_history', filters: [{ type: 'eq', column: 'contact_id', value: id }], order: { column: 'analyzed_at', ascending: false } });
