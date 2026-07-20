@@ -62,7 +62,7 @@ Deno.serve(async (req) => {
 
   const auth = await withAuth(req);
   if (auth instanceof Response) return auth;
-  const { user } = auth;
+  const userId = auth;
 
   const { body, error: bodyError } = await guardBody(req, 256 * 1024);
   if (bodyError) return bodyError;
@@ -73,7 +73,7 @@ Deno.serve(async (req) => {
 
     const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 
-    const { data: settings } = await admin.from("forecast_quota_settings").select("*").eq("user_id", user.id).maybeSingle();
+    const { data: settings } = await admin.from("forecast_quota_settings").select("*").eq("user_id", userId).maybeSingle();
     const weights = {
       activity: settings?.health_weight_activity ?? 30,
       stage_age: settings?.health_weight_stage_age ?? 25,
@@ -155,7 +155,7 @@ Regras:
       const cat = catMap.get(d.deal_id) as { category?: string; confidence_score?: number; risk_factors?: string[]; rationale?: string } | undefined;
       const allRisks = [...d.computed_risks, ...(cat?.risk_factors ?? [])];
       return {
-        user_id: user.id,
+        user_id: userId,
         deal_id: d.deal_id,
         deal_name: d.deal_name,
         contact_id: d.contact_id,
@@ -180,7 +180,6 @@ Regras:
 
     return jsonOk({ analyzed: upserts.length, categorizations: cats });
   } catch (e) {
-    console.error("forecast-analyzer error:", e);
     console.error("forecast-analyzer error:", e);
     return jsonError("Internal server error", 500);
   }
