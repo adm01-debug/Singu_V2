@@ -130,10 +130,14 @@ export function useVAKAnalysis() {
     try {
       const { data: interactions, error } = await supabase.from('interactions').select('id, content, transcription').eq('contact_id', contactId).eq('user_id', user.id);
       if (error || !interactions) return null;
-      for (const interaction of interactions) {
-        const text = [interaction.content, interaction.transcription].filter(Boolean).join(' ');
-        if (text.trim().length > 10) await saveAnalysis(contactId, analyzeText(text), text, interaction.id);
-      }
+      await Promise.all(
+        interactions
+          .filter(i => [i.content, i.transcription].filter(Boolean).join(' ').trim().length > 10)
+          .map(i => {
+            const text = [i.content, i.transcription].filter(Boolean).join(' ');
+            return saveAnalysis(contactId, analyzeText(text), text, i.id);
+          })
+      );
       return await getContactVAKProfile(contactId);
     } finally {
       setAnalyzing(false);
