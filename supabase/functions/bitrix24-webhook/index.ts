@@ -33,6 +33,9 @@ Deno.serve(async (req) => {
   const authCheck = await requireWebhookSecret(req, 'BITRIX24_WEBHOOK_SECRET', 'x-bitrix24-secret');
   if (authCheck) return authCheck;
 
+  const cl = parseInt(req.headers.get("content-length") ?? "0", 10);
+  if (cl > 64 * 1024) return jsonError("Payload too large", 413);
+
   try {
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
