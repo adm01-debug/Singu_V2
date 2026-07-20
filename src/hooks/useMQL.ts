@@ -67,6 +67,7 @@ export function useMQLCriteria() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
+    onError: () => toast.error('Erro ao remover critério'),
   });
 
   return { criteria, isLoading, upsert, remove };

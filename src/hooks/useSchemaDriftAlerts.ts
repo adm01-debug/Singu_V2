@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
+import { toast } from 'sonner';
 
 export interface SchemaDriftAlert {
   id: string;
@@ -85,6 +86,8 @@ export function useResolveDriftAlert() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['schema-drift-alerts'] });
       queryClient.invalidateQueries({ queryKey: ['schema-drift-count'] });
+      toast.success('Alerta resolvido');
     },
+    onError: () => toast.error('Erro ao resolver alerta de drift'),
   });
 }

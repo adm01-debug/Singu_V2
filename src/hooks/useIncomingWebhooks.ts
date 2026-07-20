@@ -111,6 +111,7 @@ export function useIncomingWebhooks() {
       qc.invalidateQueries({ queryKey: ['incoming_webhooks'] });
       toast.success('Webhook removido');
     },
+    onError: () => toast.error('Erro ao remover webhook'),
   });
 
   const rotateToken = useMutation({
@@ -122,6 +123,7 @@ export function useIncomingWebhooks() {
       qc.invalidateQueries({ queryKey: ['incoming_webhooks'] });
       toast.success('Token rotacionado');
     },
+    onError: () => toast.error('Erro ao rotacionar token'),
   });
 
   return { webhooks, isLoading, upsert, remove, rotateToken };

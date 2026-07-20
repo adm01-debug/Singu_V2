@@ -102,6 +102,7 @@ export function useNpsSurveys() {
       toast.success('Resposta registrada!');
       qc.invalidateQueries({ queryKey: ['nps-surveys'] });
     },
+    onError: () => toast.error('Erro ao registrar resposta'),
   });
 
   const remove = useMutation({
@@ -113,6 +114,7 @@ export function useNpsSurveys() {
       toast.success('Pesquisa removida');
       qc.invalidateQueries({ queryKey: ['nps-surveys'] });
     },
+    onError: () => toast.error('Erro ao remover pesquisa'),
   });
 
   const surveys = surveysQuery.data ?? [];

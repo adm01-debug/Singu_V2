@@ -134,6 +134,7 @@ export function useSequences() {
       qc.invalidateQueries({ queryKey: ['sequences'] });
       toast.success('Status atualizado');
     },
+    onError: () => toast.error('Erro ao atualizar status da sequência'),
   });
 
   const deleteSequence = useMutation({
@@ -145,6 +146,7 @@ export function useSequences() {
       qc.invalidateQueries({ queryKey: ['sequences'] });
       toast.success('Sequência removida');
     },
+    onError: () => toast.error('Erro ao remover sequência'),
   });
 
   const fetchSteps = async (sequenceId: string): Promise<SequenceStep[]> => {

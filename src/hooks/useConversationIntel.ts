@@ -157,6 +157,7 @@ export function useDeleteTopic() {
       qc.invalidateQueries({ queryKey: ["conversation-topics"] });
       toast.success("Tópico removido");
     },
+    onError: () => toast.error("Erro ao remover tópico"),
   });
 }
 
@@ -172,6 +173,7 @@ export function useSeedTopics() {
       qc.invalidateQueries({ queryKey: ["conversation-topics"] });
       toast.success("Tópicos padrão criados");
     },
+    onError: () => toast.error("Erro ao criar tópicos padrão"),
   });
 }
 
@@ -211,6 +213,7 @@ export function useUpsertScorecard() {
       qc.invalidateQueries({ queryKey: ["coaching-scorecards"] });
       toast.success("Scorecard salvo");
     },
+    onError: () => toast.error("Erro ao salvar scorecard"),
   });
 }
 

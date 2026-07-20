@@ -97,6 +97,7 @@ export function useConnections() {
       qc.invalidateQueries({ queryKey: ['connection_configs'] });
       toast.success('Conexão removida');
     },
+    onError: () => toast.error('Erro ao remover conexão'),
   });
 
   const toggleActive = useMutation({
@@ -108,6 +109,7 @@ export function useConnections() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['connection_configs'] }),
+    onError: () => toast.error('Erro ao atualizar status da conexão'),
   });
 
   const test = useMutation({

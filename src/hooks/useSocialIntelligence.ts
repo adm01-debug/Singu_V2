@@ -65,11 +65,13 @@ export function useSocialIntelligence(contactId: string) {
 
   const dismissMutation = useMutation({
     mutationFn: async (eventId: string) => {
-      await supabase.from('social_life_events').update({ dismissed: true }).eq('id', eventId);
+      const { error } = await supabase.from('social_life_events').update({ dismissed: true }).eq('id', eventId);
+      if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['social-intelligence', contactId] });
     },
+    onError: () => toast.error('Erro ao dispensar evento'),
   });
 
    const syncToPsychographic = useMutation({

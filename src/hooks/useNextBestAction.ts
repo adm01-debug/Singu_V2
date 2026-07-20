@@ -82,7 +82,8 @@ export function useNextBestAction(contactId: string | undefined) {
      onSuccess: () => {
        qc.invalidateQueries({ queryKey: ['next-best-action', user?.id, contactId] });
        toast.success('Script atualizado');
-     }
+     },
+     onError: () => toast.error('Erro ao atualizar script'),
    });
 
    const complete = useMutation({

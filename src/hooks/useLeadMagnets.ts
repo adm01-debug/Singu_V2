@@ -73,6 +73,7 @@ export function useLeadMagnets() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: KEY }); toast.success('Removido'); },
+    onError: () => toast.error('Erro ao remover lead magnet'),
   });
 
   const togglePublish = useMutation({
@@ -81,6 +82,7 @@ export function useLeadMagnets() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
+    onError: () => toast.error('Erro ao alterar status de publicação'),
   });
 
   return { magnets, isLoading, upsert, remove, togglePublish };

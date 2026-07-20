@@ -48,6 +48,7 @@ export function useFamilyHistory(contactId?: string) {
       queryClient.invalidateQueries({ queryKey: ['family-history', contactId] });
       toast.success('Informações familiares revertidas com sucesso');
     },
+    onError: () => toast.error('Erro ao reverter informações familiares'),
   });
 
   return {

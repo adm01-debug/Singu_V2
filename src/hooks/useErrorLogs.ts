@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
+import { toast } from 'sonner';
 import type { Database } from '@/integrations/supabase/types';
 
 export type ErrorLog = Database['public']['Tables']['error_logs']['Row'];
@@ -44,7 +45,9 @@ export function useErrorLogs() {
     },
     onSuccess: () => {
       queryClient.setQueryData(['admin', 'error-logs'], []);
-    }
+      toast.success('Logs limpos');
+    },
+    onError: () => toast.error('Erro ao limpar logs'),
   });
 
   return {

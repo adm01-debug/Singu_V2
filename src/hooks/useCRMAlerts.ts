@@ -47,6 +47,7 @@ export function useCRMAlerts(contactId: string) {
       queryClient.invalidateQueries({ queryKey: ['crm-alerts', contactId, user?.id] });
       toast.success('Alerta resolvido');
     },
+    onError: () => toast.error('Erro ao resolver alerta'),
   });
 
   return {

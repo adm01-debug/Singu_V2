@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
 
 export type AnnotationCategory = 'campanha' | 'abordagem' | 'release' | 'reuniao' | 'outro';
 
@@ -87,6 +88,7 @@ export function useSentimentAnnotations(contactId: string | undefined) {
       return data as SentimentAnnotation;
     },
     onSuccess: invalidate,
+    onError: () => toast.error('Erro ao criar anotação'),
   });
 
   const update = useMutation({
@@ -103,6 +105,7 @@ export function useSentimentAnnotations(contactId: string | undefined) {
       return data as SentimentAnnotation;
     },
     onSuccess: invalidate,
+    onError: () => toast.error('Erro ao atualizar anotação'),
   });
 
   const remove = useMutation({
@@ -112,6 +115,7 @@ export function useSentimentAnnotations(contactId: string | undefined) {
       return id;
     },
     onSuccess: invalidate,
+    onError: () => toast.error('Erro ao remover anotação'),
   });
 
   return { list, byWeek, create, update, remove };

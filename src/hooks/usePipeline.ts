@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 
 // ── Types ──────────────────────────────────────────
 
@@ -238,5 +239,6 @@ export function useCreateDeal() {
       queryClient.invalidateQueries({ queryKey: ['deals-pipeline'] });
       queryClient.invalidateQueries({ queryKey: ['pipeline-summary'] });
     },
+    onError: () => toast.error('Erro ao criar negócio'),
   });
 }

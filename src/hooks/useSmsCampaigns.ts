@@ -127,6 +127,7 @@ export function useSmsCampaigns() {
       qc.invalidateQueries({ queryKey: ['sms-campaigns'] });
       toast.success('Campanha removida');
     },
+    onError: () => toast.error('Erro ao remover campanha'),
   });
 
   return {
@@ -212,6 +213,7 @@ export function useSmsTemplates() {
       qc.invalidateQueries({ queryKey: ['sms-templates'] });
       toast.success('Template removido');
     },
+    onError: () => toast.error('Erro ao remover template'),
   });
 
   return {

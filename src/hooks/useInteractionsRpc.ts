@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 
 export interface InteractionHistoryItem {
   id: string;
@@ -93,6 +94,7 @@ export function useCompleteFollowup() {
       queryClient.invalidateQueries({ queryKey: ['pending-followups'] });
       queryClient.invalidateQueries({ queryKey: ['interaction-history'] });
     },
+    onError: () => toast.error('Erro ao concluir follow-up'),
   });
 }
 
@@ -118,6 +120,7 @@ export function useCreateQuickInteraction() {
       queryClient.invalidateQueries({ queryKey: ['pending-followups'] });
       queryClient.invalidateQueries({ queryKey: ['complete-dashboard'] });
     },
+    onError: () => toast.error('Erro ao registrar interação'),
   });
 }
 

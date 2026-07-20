@@ -226,6 +226,8 @@ export function useReopenTask() {
       }
       return data;
     },
+    onSuccess: () => toast.success('Tarefa reaberta'),
+    onError: () => toast.error('Erro ao reabrir tarefa'),
     onSettled: () => {
       qc.invalidateQueries({ queryKey: ['tasks'] });
     },

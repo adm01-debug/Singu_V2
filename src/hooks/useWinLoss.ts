@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 
 // ── Types ──────────────────────────────────────────
 
@@ -131,6 +132,7 @@ export function useUpsertWinLossRecord() {
       qc.invalidateQueries({ queryKey: ['win-loss-metrics'] });
       qc.invalidateQueries({ queryKey: ['win-loss-record-by-deal'] });
     },
+    onError: () => toast.error('Erro ao registrar resultado'),
   });
 }
 
@@ -145,6 +147,7 @@ export function useDeleteWinLossRecord() {
       qc.invalidateQueries({ queryKey: ['win-loss-records'] });
       qc.invalidateQueries({ queryKey: ['win-loss-metrics'] });
     },
+    onError: () => toast.error('Erro ao remover registro'),
   });
 }
 
@@ -186,6 +189,7 @@ export function useUpsertReason() {
       return data as WinLossReason;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-reasons'] }),
+    onError: () => toast.error('Erro ao salvar motivo'),
   });
 }
 
@@ -197,6 +201,7 @@ export function useDeleteReason() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-reasons'] }),
+    onError: () => toast.error('Erro ao remover motivo'),
   });
 }
 
@@ -210,6 +215,7 @@ export function useSeedReasons() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-reasons'] }),
+    onError: () => toast.error('Erro ao configurar motivos padrão'),
   });
 }
 
@@ -249,6 +255,7 @@ export function useUpsertCompetitor() {
       return data as Competitor;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['competitors'] }),
+    onError: () => toast.error('Erro ao salvar concorrente'),
   });
 }
 
@@ -260,6 +267,7 @@ export function useDeleteCompetitor() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['competitors'] }),
+    onError: () => toast.error('Erro ao remover concorrente'),
   });
 }
 
@@ -394,6 +402,7 @@ export function useGenerateInsights() {
       return data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-insights'] }),
+    onError: () => toast.error('Erro ao gerar insights'),
   });
 }
 
@@ -405,5 +414,6 @@ export function useDeleteInsight() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-insights'] }),
+    onError: () => toast.error('Erro ao remover insight'),
   });
 }

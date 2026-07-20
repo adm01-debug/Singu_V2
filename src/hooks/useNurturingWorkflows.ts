@@ -89,6 +89,7 @@ export function useNurturingWorkflows() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); },
+    onError: () => toast.error('Erro ao atualizar workflow'),
   });
 
   return { workflows, isLoading, create, update, remove, toggleActive };

@@ -93,6 +93,7 @@ export function useForms() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: KEY }); toast.success('Removido'); },
+    onError: () => toast.error('Erro ao remover formulário'),
   });
 
   const togglePublish = useMutation({
@@ -101,6 +102,7 @@ export function useForms() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
+    onError: () => toast.error('Erro ao alterar status de publicação'),
   });
 
   return { forms, isLoading, upsert, remove, togglePublish };

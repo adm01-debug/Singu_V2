@@ -80,6 +80,7 @@ export function useLuxWebhookConfig() {
       qc.invalidateQueries({ queryKey: ['lux-webhook-config'] });
       toast.success('Status atualizado');
     },
+    onError: () => toast.error('Erro ao atualizar status'),
   });
 
   const testWebhook = useMutation({
