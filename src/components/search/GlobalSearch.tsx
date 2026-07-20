@@ -163,6 +163,17 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
     setRecentItems(getRecentItems());
   }, [open]);
 
+  const handleNavigate = useCallback((path: string, label: string) => {
+    onOpenChange(false);
+    addRecentItem({ id: path, type: 'page', title: label, path });
+    navigate(path);
+  }, [onOpenChange, navigate]);
+
+  const handleQuickAction = useCallback((action: typeof quickActions[0]) => {
+    onOpenChange(false);
+    navigate(action.path);
+  }, [onOpenChange, navigate]);
+
   useEffect(() => {
     if (!open) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -175,8 +186,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, handleQuickAction, handleNavigate]);
 
   const performSearch = useCallback(async (searchQuery: string) => {
     if (!searchQuery.trim() || !user) { setResults({ contacts: [], companies: [], interactions: [] }); return; }
@@ -296,9 +306,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
     else if (item.entity === 'deals') navigate('/pipeline');
   }, [navigate, onOpenChange]);
 
-  const handleNavigate = (path: string, label: string) => { onOpenChange(false); addRecentItem({ id: path, type: 'page', title: label, path }); navigate(path); };
   const handleSelect = (result: SearchResult) => { onOpenChange(false); const path = result.type === 'contact' ? `/contatos/${result.id}` : result.type === 'company' ? `/empresas/${result.id}` : '/interacoes'; addRecentItem({ id: result.id, type: result.type, title: result.title, path }); navigate(path); };
-  const handleQuickAction = (action: typeof quickActions[0]) => { onOpenChange(false); navigate(action.path); };
   const handleRecentSelect = (item: RecentItem) => { onOpenChange(false); navigate(item.path); };
 
   const hasResults = results.contacts.length > 0 || results.companies.length > 0 || results.interactions.length > 0;

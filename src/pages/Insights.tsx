@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { Sparkles, RefreshCw, Heart, Briefcase } from 'lucide-react';
@@ -42,10 +42,7 @@ const Insights = () => {
     keys: ['title', 'description', 'action_suggestion', 'category'], threshold: 0.3, minChars: 1,
   });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { if (user) fetchData(); }, [user]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!user) return;
     setLoading(true);
     try {
@@ -60,7 +57,11 @@ const Insights = () => {
       }
     } catch (error) { logger.error('Error fetching data:', error); }
     finally { setLoading(false); }
-  };
+  // generateInsights uses session?.access_token which is stable for a given session
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const generateInsights = async (contactsData: Contact[], interactionsData: Interaction[], companiesData: Company[]) => {
     if (!session?.access_token) { toast.error('Você precisa estar logado para gerar insights'); return; }
