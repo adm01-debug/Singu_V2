@@ -81,18 +81,31 @@ Deno.serve(async (req) => {
 
     const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
     const windowEnd = new Date().toISOString();
-    let totalInserted = 0;
+    const webhookIds = webhooks.map(w => w.id);
+
+    // Pre-batch: single query for all webhook logs (eliminates N+1)
+    const { data: allLogs } = await supabase
+      .from("incoming_webhook_logs")
+      .select("webhook_id, status, http_status, latency_ms, created_at")
+      .in("webhook_id", webhookIds)
+      .gte("created_at", since)
+      .order("created_at", { ascending: true })
+      .limit(100_000);
+
+    type LogRow = { webhook_id: string; status: string; http_status: number | null; latency_ms: number | null; created_at: string };
+    const logsByWebhook = new Map<string, LogRow[]>();
+    for (const l of (allLogs ?? []) as LogRow[]) {
+      const arr = logsByWebhook.get(l.webhook_id) ?? [];
+      arr.push(l);
+      logsByWebhook.set(l.webhook_id, arr);
+    }
+
+    // Accumulate all anomaly rows for a single bulk insert after the loop
+    const anomalyRows: Array<Record<string, unknown>> = [];
 
     for (const wh of webhooks) {
-      const { data: logs } = await supabase
-        .from("incoming_webhook_logs")
-        .select("status, http_status, latency_ms, created_at")
-        .eq("webhook_id", wh.id)
-        .gte("created_at", since)
-        .order("created_at", { ascending: true })
-        .limit(2000);
-
-      if (!logs || logs.length < 10) continue;
+      const logs = logsByWebhook.get(wh.id) ?? [];
+      if (logs.length < 10) continue;
 
       const series = aggregateDaily(logs);
       const aiInput = `Webhook: ${wh.name}\nSérie diária (últimos 7d):\n${JSON.stringify(series, null, 2)}`;
@@ -125,26 +138,30 @@ Deno.serve(async (req) => {
         anomalies = deterministicAnomalies(series);
       }
 
+      const validTypes = ["error_spike", "latency_degradation", "volume_drop", "volume_spike", "suspicious_window", "schema_drift"];
+      const validSev = ["low", "medium", "high", "critical"];
       for (const a of anomalies) {
-        const validTypes = ["error_spike", "latency_degradation", "volume_drop", "volume_spike", "suspicious_window", "schema_drift"];
-        const validSev = ["low", "medium", "high", "critical"];
         if (!validTypes.includes(a.type) || !validSev.includes(a.severity)) continue;
-        await supabase.from("connection_anomalies").insert({
+        anomalyRows.push({
           webhook_id: wh.id,
           anomaly_type: a.type,
           severity: a.severity,
           explanation: a.explanation.slice(0, 500),
-          metrics: { series } as never,
+          metrics: { series },
           window_start: since,
           window_end: windowEnd,
           model_used: aiRes.ok ? "google/gemini-2.5-flash" : "deterministic",
           confidence: typeof a.confidence === "number" ? Math.min(1, Math.max(0, a.confidence)) : 0.5,
         });
-        totalInserted++;
       }
     }
 
-    return jsonOk({ inserted: totalInserted, scanned: webhooks.length, isCron }, req);
+    // Bulk-flush all anomaly rows in one insert
+    if (anomalyRows.length > 0) {
+      await supabase.from("connection_anomalies").insert(anomalyRows as never);
+    }
+
+    return jsonOk({ inserted: anomalyRows.length, scanned: webhooks.length, isCron }, req);
   } catch (e) {
     log.error("anomaly-detector uncaught error", { error: e instanceof Error ? e.message : String(e) });
     console.error("connection-anomaly-detector error:", e);

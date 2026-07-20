@@ -103,16 +103,26 @@ Deno.serve(async (req) => {
       ? tablesData.map((t: { table_name: string }) => t.table_name)
       : [];
 
-    for (const tableName of tableList.slice(0, 50)) {
-      const { data: cols } = await externalClient
-        .from("information_schema.columns" as never)
-        .select("column_name,data_type,is_nullable")
-        .eq("table_schema", "public")
-        .eq("table_name", tableName)
-        .limit(80);
+    // Pre-fetch all columns for all tables in a single query (eliminate N+1)
+    const targetTables = tableList.slice(0, 50);
+    const { data: allCols } = await externalClient
+      .from("information_schema.columns" as never)
+      .select("table_name,column_name,data_type,is_nullable")
+      .eq("table_schema", "public")
+      .in("table_name" as never, targetTables)
+      .limit(4000);
+
+    const colsByTable = new Map<string, ColumnInfo[]>();
+    for (const col of (Array.isArray(allCols) ? allCols : []) as Array<ColumnInfo & { table_name: string }>) {
+      const arr = colsByTable.get(col.table_name) ?? [];
+      arr.push({ column_name: col.column_name, data_type: col.data_type, is_nullable: col.is_nullable });
+      colsByTable.set(col.table_name, arr);
+    }
+
+    for (const tableName of targetTables) {
       tables.push({
         table_name: tableName,
-        columns: Array.isArray(cols) ? (cols as ColumnInfo[]) : [],
+        columns: colsByTable.get(tableName) ?? [],
       });
     }
 
@@ -127,8 +137,8 @@ Deno.serve(async (req) => {
       headers: { ...cors, "Content-Type": "application/json" },
     });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Erro desconhecido";
-    return new Response(JSON.stringify({ error: message }), {
+    console.error('connection-introspect error:', err);
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500, headers: { ...cors, "Content-Type": "application/json" },
     });
   }

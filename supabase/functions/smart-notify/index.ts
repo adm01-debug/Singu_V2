@@ -25,21 +25,32 @@ Deno.serve(async (req) => {
 
     const stats = { usersProcessed: 0, notificationsSent: 0 };
 
+    // Pre-batch: fetch all pending next actions for all users in one query
+    const userIds = users.map((u: { id: string }) => u.id);
+    const { data: allActions } = await supabaseClient
+      .from('contact_next_actions')
+      .select(`
+        id, action, urgency, contact_id, user_id, generated_at,
+        contacts:contact_id (id, first_name, last_name)
+      `)
+      .in('user_id', userIds)
+      .eq('status', 'pending')
+      .limit(1000);
+
+    type ActionRow = { id: string; action: string; urgency: string; contact_id: string; user_id: string; generated_at: string; contacts: unknown };
+    const actionsByUser = new Map<string, ActionRow[]>();
+    for (const a of (allActions ?? []) as ActionRow[]) {
+      const arr = actionsByUser.get(a.user_id) ?? [];
+      arr.push(a);
+      actionsByUser.set(a.user_id, arr);
+    }
+
     for (const user of users) {
       stats.usersProcessed++;
-      
-      // Get pending Next Best Actions
-      const { data: actions } = await supabaseClient
-        .from('contact_next_actions')
-        .select(`
-          id, action, urgency, contact_id, generated_at,
-          contacts:contact_id (id, first_name, last_name)
-        `)
-        .eq('user_id', user.id)
-        .eq('status', 'pending')
-        .limit(10);
 
-      if (actions && actions.length > 0) {
+      const actions = actionsByUser.get(user.id)?.slice(0, 10) ?? [];
+
+      if (actions.length > 0) {
         const now = new Date();
 
         // Pre-fetch all contact_automation_settings for this batch in one query
