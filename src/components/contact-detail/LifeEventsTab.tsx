@@ -65,7 +65,8 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
         .from('life_events')
         .select('*')
         .eq('contact_id', contactId)
-        .order('event_date', { ascending: true });
+        .order('event_date', { ascending: true })
+        .limit(1000);
       if (error) throw error;
       return data as Tables<'life_events'>[];
     },
@@ -80,7 +81,8 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
         .select('*')
         .eq('contact_id', contactId)
         .eq('status', 'pending')
-        .order('confidence', { ascending: false });
+        .order('confidence', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return data;
     },

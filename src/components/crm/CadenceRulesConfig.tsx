@@ -68,7 +68,8 @@ export function CadenceRulesConfig() {
         .from('crm_cadence_rules')
         .select('*')
         .eq('is_active', true)
-        .order('relationship_stage');
+        .order('relationship_stage')
+        .limit(1000);
       if (error) throw error;
       return data;
     }

@@ -94,7 +94,8 @@ export function useABMAccounts() {
       const { data, error } = await supabase
         .from("abm_accounts")
         .select("*")
-        .order("account_score", { ascending: false });
+        .order("account_score", { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as ABMAccount[]) : [];
     },
@@ -208,7 +209,8 @@ export function useBuyingCommittee(accountId: string | undefined) {
         .from("abm_buying_committee")
         .select("*")
         .eq("account_id", accountId)
-        .order("influence_level", { ascending: false });
+        .order("influence_level", { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as BuyingCommitteeMember[]) : [];
     },
@@ -274,7 +276,8 @@ export function useWhitespaceOpportunities(accountId: string | undefined) {
         .from("abm_whitespace_opportunities")
         .select("*")
         .eq("account_id", accountId)
-        .order("estimated_value", { ascending: false, nullsFirst: false });
+        .order("estimated_value", { ascending: false, nullsFirst: false })
+        .limit(1000);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as WhitespaceOpportunity[]) : [];
     },
@@ -328,7 +331,8 @@ export function useABMAccountPlans(accountId: string | undefined) {
         .from("abm_account_plans")
         .select("*")
         .eq("account_id", accountId)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as ABMAccountPlan[]) : [];
     },
@@ -375,7 +379,8 @@ export function useABMCampaigns() {
       const { data, error } = await supabase
         .from("abm_campaigns")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as ABMCampaign[]) : [];
     },

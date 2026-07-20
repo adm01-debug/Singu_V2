@@ -31,7 +31,8 @@ export function useKnowledgeBase() {
         .from('knowledge_base_articles')
         .select('*')
         .eq('user_id', user.id)
-        .order('updated_at', { ascending: false });
+        .order('updated_at', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data || []) as KBArticle[];
     },

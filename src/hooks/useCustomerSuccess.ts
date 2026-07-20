@@ -92,7 +92,8 @@ export function useCSAccounts() {
         .from("cs_accounts")
         .select("*")
         .eq("user_id", user!.id)
-        .order("health_score", { ascending: true });
+        .order("health_score", { ascending: true })
+        .limit(1000);
       if (error) throw error;
       return (data ?? []) as CSAccount[];
     },
@@ -214,7 +215,8 @@ export function useNPS(accountId?: string) {
     enabled: !!user?.id,
     staleTime: 60_000,
     queryFn: async () => {
-      let q = supabase.from("cs_nps_responses").select("*").eq("user_id", user!.id);
+      let q = supabase.from("cs_nps_responses").select("*").eq("user_id", user!.id)
+      .limit(1000);
       if (accountId) q = q.eq("account_id", accountId);
       const { data, error } = await q.order("surveyed_at", { ascending: false }).limit(500);
       if (error) throw error;
@@ -271,7 +273,8 @@ export function useQBRs(accountId?: string) {
     enabled: !!user?.id,
     staleTime: 60_000,
     queryFn: async () => {
-      let q = supabase.from("cs_qbrs").select("*").eq("user_id", user!.id);
+      let q = supabase.from("cs_qbrs").select("*").eq("user_id", user!.id)
+      .limit(1000);
       if (accountId) q = q.eq("account_id", accountId);
       const { data, error } = await q.order("scheduled_at", { ascending: false }).limit(200);
       if (error) throw error;

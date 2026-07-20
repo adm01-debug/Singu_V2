@@ -63,7 +63,8 @@ export function useContactCadence() {
           contact:contacts(id, first_name, last_name, avatar_url, company_id, relationship_score)
         `)
         .eq('user_id', user.id)
-        .order('next_contact_due', { ascending: true, nullsFirst: false });
+        .order('next_contact_due', { ascending: true, nullsFirst: false })
+        .limit(500);
 
       if (error) throw error;
 

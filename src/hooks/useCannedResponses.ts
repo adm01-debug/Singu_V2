@@ -27,7 +27,8 @@ export function useCannedResponses() {
         .from('canned_responses')
         .select('*')
         .eq('user_id', user.id)
-        .order('usage_count', { ascending: false });
+        .order('usage_count', { ascending: false })
+        .limit(200);
       if (error) throw error;
       return (data || []) as CannedResponse[];
     },

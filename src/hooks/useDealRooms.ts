@@ -116,7 +116,8 @@ export function useDealRooms(filters?: { status?: DealRoomStatus | "all" }) {
     enabled: !!user,
     staleTime: 5 * 60_000,
     queryFn: async () => {
-      let q = supabase.from("deal_rooms").select("*").order("updated_at", { ascending: false });
+      let q = supabase.from("deal_rooms").select("*").order("updated_at", { ascending: false })
+      .limit(1000);
       if (filters?.status && filters.status !== "all") {
         q = q.eq("status", filters.status);
       }
@@ -207,7 +208,8 @@ export function useMilestones(roomId: string | undefined) {
     enabled: !!roomId,
     staleTime: 5 * 60_000,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_room_milestones").select("*").eq("room_id", roomId!).order("sort_order");
+      const { data, error } = await supabase.from("deal_room_milestones").select("*").eq("room_id", roomId!).order("sort_order")
+      .limit(1000);
       if (error) throw error;
       return (data ?? []) as DealRoomMilestone[];
     },
@@ -256,7 +258,8 @@ export function useStakeholders(roomId: string | undefined) {
     queryKey: KEYS.sh(roomId ?? ""),
     enabled: !!roomId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_room_stakeholders").select("*").eq("room_id", roomId!);
+      const { data, error } = await supabase.from("deal_room_stakeholders").select("*").eq("room_id", roomId!)
+      .limit(1000);
       if (error) throw error;
       return (data ?? []) as DealRoomStakeholder[];
     },
@@ -306,7 +309,8 @@ export function useRoomDocuments(roomId: string | undefined) {
     queryKey: KEYS.docs(roomId ?? ""),
     enabled: !!roomId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_room_documents").select("*").eq("room_id", roomId!).order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("deal_room_documents").select("*").eq("room_id", roomId!).order("created_at", { ascending: false })
+      .limit(1000);
       if (error) throw error;
       return (data ?? []) as DealRoomDocument[];
     },
@@ -383,7 +387,8 @@ export function useRoomComments(roomId: string | undefined) {
     queryKey: KEYS.cmts(roomId ?? ""),
     enabled: !!roomId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_room_comments").select("*").eq("room_id", roomId!).order("created_at");
+      const { data, error } = await supabase.from("deal_room_comments").select("*").eq("room_id", roomId!).order("created_at")
+      .limit(1000);
       if (error) throw error;
       return (data ?? []) as DealRoomComment[];
     },

@@ -12,7 +12,8 @@ export default function RolesPage() {
   const { data: roles = [], isLoading } = useQuery({
     queryKey: ['all-user-roles'],
     queryFn: async () => {
-      const { data, error } = await supabase.from('user_roles').select('*');
+      const { data, error } = await supabase.from('user_roles').select('*')
+      .limit(1000);
       if (error) return [];
       return Array.isArray(data) ? data : [];
     },

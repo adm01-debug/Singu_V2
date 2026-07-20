@@ -38,9 +38,9 @@ const Calendario = () => {
     gcTime: 5 * 60_000,
     queryFn: async (): Promise<FollowUp[]> => {
       const [interactionsRes, contactsRes, companiesRes] = await Promise.all([
-        supabase.from('interactions').select('*').eq('follow_up_required', true).not('follow_up_date', 'is', null).order('follow_up_date', { ascending: true }),
-        supabase.from('contacts').select('*'),
-        supabase.from('companies').select('*'),
+        supabase.from('interactions').select('*').eq('user_id', user.id).eq('follow_up_required', true).not('follow_up_date', 'is', null).order('follow_up_date', { ascending: true }).limit(500),
+        supabase.from('contacts').select('*').eq('user_id', user.id).limit(1000),
+        supabase.from('companies').select('*').eq('user_id', user.id).limit(1000),
       ]);
       if (interactionsRes.error) throw interactionsRes.error;
       if (contactsRes.error) throw contactsRes.error;

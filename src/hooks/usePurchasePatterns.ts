@@ -61,7 +61,8 @@ export function usePurchasePatterns() {
             last_name
           )
         `)
-        .order('purchase_date', { ascending: false });
+        .order('purchase_date', { ascending: false })
+        .limit(1000);
 
       if (purchaseError) throw purchaseError;
 

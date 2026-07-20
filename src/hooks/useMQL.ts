@@ -39,7 +39,8 @@ export function useMQLCriteria() {
     enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
-      const { data, error } = await supabase.from('mql_criteria').select('*').eq('user_id', user.id).order('priority', { ascending: false });
+      const { data, error } = await supabase.from('mql_criteria').select('*').eq('user_id', user.id).order('priority', { ascending: false })
+      .limit(1000);
       if (error) throw error;
       return (data || []) as unknown as MQLCriteria[];
     },

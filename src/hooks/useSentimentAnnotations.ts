@@ -50,7 +50,8 @@ export function useSentimentAnnotations(contactId: string | undefined) {
         .select('*')
         .eq('contact_id', contactId!)
         .order('week_start', { ascending: false })
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data ?? []) as SentimentAnnotation[];
     },

@@ -125,7 +125,8 @@ export function useTriggerHistory(contactId?: string) {
         .from('trigger_usage_history')
         .select('*')
         .eq('user_id', user.id)
-        .order('used_at', { ascending: false });
+        .order('used_at', { ascending: false })
+        .limit(1000);
 
       if (contactId) {
         query = query.eq('contact_id', contactId);

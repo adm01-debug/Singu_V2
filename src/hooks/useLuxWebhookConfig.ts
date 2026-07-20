@@ -27,7 +27,8 @@ export function useLuxWebhookConfig() {
       const { data, error } = await supabase
         .from('lux_webhook_config')
         .select('*')
-        .order('entity_type');
+        .order('entity_type')
+        .limit(1000);
       if (error) throw error;
       return (data || []) as unknown as LuxWebhookConfig[];
     },

@@ -46,7 +46,8 @@ export function useAiAssistant() {
         .eq('user_id', user.id)
         .eq('archived', false)
         .order('pinned', { ascending: false })
-        .order('last_message_at', { ascending: false });
+        .order('last_message_at', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       setThreads((data || []) as ChatThread[]);
     } catch (e) {
@@ -62,7 +63,8 @@ export function useAiAssistant() {
         .from('ai_chat_messages')
         .select('*')
         .eq('thread_id', threadId)
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: true })
+        .limit(1000);
       if (error) throw error;
       setMessages((data || []) as ChatMessage[]);
     } catch (e) {

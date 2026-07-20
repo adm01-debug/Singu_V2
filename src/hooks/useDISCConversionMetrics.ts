@@ -18,7 +18,8 @@ export function useDISCConversionMetrics() {
         .from('disc_conversion_metrics')
         .select('*')
         .eq('user_id', user.id)
-        .order('conversion_rate', { ascending: false });
+        .order('conversion_rate', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       setMetrics(data || []);
     } catch (err) {

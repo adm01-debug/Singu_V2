@@ -15,7 +15,8 @@ export function useGeoBlocking() {
         .from('geo_allowed_countries')
         .select('*')
         .eq('user_id', user.id)
-        .order('country_name');
+        .order('country_name')
+        .limit(1000);
       if (error) return [];
       return Array.isArray(data) ? data : [];
     },

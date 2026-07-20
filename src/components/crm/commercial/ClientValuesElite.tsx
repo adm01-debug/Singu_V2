@@ -32,7 +32,8 @@ export function ClientValuesElite({ contactId }: Props) {
         .from('client_values')
         .select('*')
         .eq('contact_id', contactId)
-        .order('importance', { ascending: false });
+        .order('importance', { ascending: false })
+        .limit(1000);
       
       if (error) throw error;
       return data;

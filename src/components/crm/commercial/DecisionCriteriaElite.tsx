@@ -41,7 +41,8 @@ export function DecisionCriteriaElite({ contactId }: Props) {
         .from('decision_criteria')
         .select('*')
         .eq('contact_id', contactId)
-        .order('priority', { ascending: false });
+        .order('priority', { ascending: false })
+        .limit(1000);
       
       if (error) throw error;
       return data;

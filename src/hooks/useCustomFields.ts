@@ -42,7 +42,8 @@ export function useCustomFields(entityType: EntityType) {
         .select('*')
         .eq('user_id', user.id)
         .eq('entity_type', entityType)
-        .order('display_order');
+        .order('display_order')
+        .limit(1000);
       if (error) throw error;
       return (data || []) as CustomField[];
     },
@@ -113,7 +114,8 @@ export function useCustomFieldValues(entityType: EntityType, entityId?: string) 
         .from('custom_fields')
         .select('id')
         .eq('user_id', user.id)
-        .eq('entity_type', entityType);
+        .eq('entity_type', entityType)
+        .limit(1000);
 
       if (!fields?.length) return [];
 
@@ -122,7 +124,8 @@ export function useCustomFieldValues(entityType: EntityType, entityId?: string) 
         .from('custom_field_values')
         .select('*')
         .eq('entity_id', entityId)
-        .in('custom_field_id', fieldIds);
+        .in('custom_field_id', fieldIds)
+        .limit(1000);
 
       if (error) throw error;
       return (data || []) as CustomFieldValue[];

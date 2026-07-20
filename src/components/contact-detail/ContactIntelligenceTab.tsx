@@ -62,10 +62,10 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
     queryKey: ['contact-intelligence', contactId, user?.id],
     queryFn: async () => {
       const [objRes, critRes, valRes, offRes] = await Promise.all([
-        supabase.from('hidden_objections').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }),
-        supabase.from('decision_criteria').select('*').eq('contact_id', contactId).order('priority', { ascending: false }),
-        supabase.from('client_values').select('*').eq('contact_id', contactId).order('importance', { ascending: false }),
-        supabase.from('offer_suggestions').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }),
+        supabase.from('hidden_objections').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(200),
+        supabase.from('decision_criteria').select('*').eq('contact_id', contactId).order('priority', { ascending: false }).limit(200),
+        supabase.from('client_values').select('*').eq('contact_id', contactId).order('importance', { ascending: false }).limit(200),
+        supabase.from('offer_suggestions').select('*').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(200),
       ]);
 
       return {

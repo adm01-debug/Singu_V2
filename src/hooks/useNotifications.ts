@@ -196,7 +196,8 @@ export const useNotifications = () => {
         const { data: contacts } = await supabase
           .from('contacts')
           .select('id, first_name, last_name')
-          .in('id', contactIds);
+          .in('id', contactIds)
+          .limit(1000);
 
         const contactMap = new Map(
           contacts?.map(c => [c.id, `${c.first_name} ${c.last_name}`]) || []
@@ -241,7 +242,8 @@ export const useNotifications = () => {
         .from('contacts')
         .select('id, first_name, last_name, birthday')
         .eq('user_id', user.id)
-        .not('birthday', 'is', null);
+        .not('birthday', 'is', null)
+        .limit(1000);
 
       if (error) throw error;
 

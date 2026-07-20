@@ -71,7 +71,8 @@ export function useSequences() {
         .from('sequences')
         .select('*')
         .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data || []) as unknown as Sequence[];
     },
@@ -154,7 +155,8 @@ export function useSequences() {
       .from('sequence_steps')
       .select('*')
       .eq('sequence_id', sequenceId)
-      .order('step_order');
+      .order('step_order')
+      .limit(1000);
     if (error) throw error;
     return (data || []) as unknown as SequenceStep[];
   };

@@ -240,7 +240,8 @@ export function useNLPAutoAnalysis() {
         .select('id, type, content, transcription')
         .eq('contact_id', contactId)
         .eq('user_id', user.id)
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: true })
+        .limit(1000);
 
       if (error) throw error;
       if (!interactions) return { analyzed: 0, total: 0 };

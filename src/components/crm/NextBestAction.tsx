@@ -80,7 +80,8 @@ export function NextBestAction({ contactId }: Props) {
          .from('contact_predictive_roadmap')
          .select('*')
          .eq('contact_id', contactId)
-         .order('forecast_month', { ascending: true });
+         .order('forecast_month', { ascending: true })
+         .limit(1000);
        
        if (error) throw error;
        return data;

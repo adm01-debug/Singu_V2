@@ -21,7 +21,8 @@ export function RelationshipAuditPanel({ contactId }: Props) {
         .from('crm_relationship_audit_logs')
         .select('*')
         .eq('contact_id', contactId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       
       if (error) throw error;
       return data;

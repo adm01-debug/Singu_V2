@@ -66,7 +66,8 @@ export function useSequenceMetrics(sequenceId?: string) {
       const { data: events } = await supabase
         .from('sequence_events')
         .select('event_type')
-        .eq('sequence_id', sequenceId);
+        .eq('sequence_id', sequenceId)
+        .limit(1000);
       const list = (events || []) as Array<{ event_type: string }>;
       const sent = list.filter(e => e.event_type === 'sent').length;
       const opened = list.filter(e => e.event_type === 'opened').length;

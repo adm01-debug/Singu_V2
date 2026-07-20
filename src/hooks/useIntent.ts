@@ -111,7 +111,8 @@ export function useIntentPixels() {
     staleTime: STALE,
     queryFn: async (): Promise<IntentPixel[]> => {
       const { data, error } = await supabase.from("intent_tracking_pixels").select("*")
-        .eq("user_id", user!.id).order("created_at", { ascending: false });
+        .eq("user_id", user!.id).order("created_at", { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (Array.isArray(data) ? data : []) as IntentPixel[];
     },

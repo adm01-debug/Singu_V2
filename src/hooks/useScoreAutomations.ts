@@ -49,7 +49,8 @@ export function useScoreAutomations() {
         .from('lead_score_threshold_automations')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data ?? []) as ScoreAutomation[];
     },

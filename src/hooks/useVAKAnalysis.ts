@@ -102,7 +102,8 @@ export function useVAKAnalysis() {
   const getContactVAKProfile = useCallback(async (contactId: string): Promise<VAKProfile | null> => {
     if (!user) return null;
     try {
-      const { data, error } = await supabase.from('vak_analysis_history').select('*').eq('contact_id', contactId).eq('user_id', user.id).order('created_at', { ascending: false });
+      const { data, error } = await supabase.from('vak_analysis_history').select('*').eq('contact_id', contactId).eq('user_id', user.id).order('created_at', { ascending: false })
+      .limit(1000);
       if (error || !data || data.length === 0) return null;
       const history = data as VAKAnalysisHistory[];
       const totals = history.reduce((acc, entry) => {
@@ -128,7 +129,8 @@ export function useVAKAnalysis() {
     if (!user) return null;
     setAnalyzing(true);
     try {
-      const { data: interactions, error } = await supabase.from('interactions').select('id, content, transcription').eq('contact_id', contactId).eq('user_id', user.id);
+      const { data: interactions, error } = await supabase.from('interactions').select('id, content, transcription').eq('contact_id', contactId).eq('user_id', user.id)
+      .limit(1000);
       if (error || !interactions) return null;
       await Promise.all(
         interactions

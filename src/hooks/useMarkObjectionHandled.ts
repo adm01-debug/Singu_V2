@@ -42,7 +42,8 @@ export function useMarkObjectionHandled() {
       const { data, error } = await supabase
         .from("conversation_analyses")
         .select("id, objections")
-        .eq("user_id", user.id);
+        .eq("user_id", user.id)
+        .limit(1000);
       if (error) throw error;
       if (!Array.isArray(data) || data.length === 0) return { updated: 0, matched: 0 };
 

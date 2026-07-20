@@ -25,7 +25,8 @@ export function useWebAuthn() {
         .from('webauthn_credentials')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) return [];
       return Array.isArray(data) ? data : [];
     },

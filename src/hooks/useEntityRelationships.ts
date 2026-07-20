@@ -63,7 +63,8 @@ export function useEntityRelationships(entityType?: EntityType, entityId?: strin
     enabled: !entityType || !!entityId,
     staleTime: 30_000,
     queryFn: async (): Promise<EntityRelationship[]> => {
-      let q = supabase.from('entity_relationships').select('*').order('created_at', { ascending: false });
+      let q = supabase.from('entity_relationships').select('*').order('created_at', { ascending: false })
+      .limit(1000);
       if (entityType && entityId) {
         q = q.or(
           `and(from_type.eq.${entityType},from_id.eq.${entityId}),and(to_type.eq.${entityType},to_id.eq.${entityId})`

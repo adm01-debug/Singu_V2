@@ -31,7 +31,8 @@ export function useRFMAnalysis(contactId?: string) {
   const { data: rfmData = [], isLoading: rfmLoading } = useQuery({
     queryKey: ['rfm-analysis', user?.id, contactId],
     queryFn: async () => {
-      let query = supabase.from('rfm_analysis').select('*').eq('user_id', user!.id);
+      let query = supabase.from('rfm_analysis').select('*').eq('user_id', user!.id)
+      .limit(1000);
       if (contactId) query = query.eq('contact_id', contactId);
       const { data, error } = await query;
       if (error) throw error;
@@ -85,7 +86,8 @@ export function useRFMAnalysis(contactId?: string) {
     if (!user?.id || contacts.length === 0) return;
     setAnalyzing(true);
     try {
-      const { data: purchaseData } = await supabase.from('purchase_history').select('*').eq('user_id', user.id);
+      const { data: purchaseData } = await supabase.from('purchase_history').select('*').eq('user_id', user.id)
+      .limit(1000);
       const contactMetrics: Map<string, PurchaseData> = new Map();
       contacts.forEach(contact => {
         const contactInteractions = interactions.filter(i => i.contact_id === contact.id);

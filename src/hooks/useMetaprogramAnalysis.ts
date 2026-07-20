@@ -105,7 +105,8 @@ export function useMetaprogramAnalysis() {
         .from('metaprogram_analysis')
         .select('*')
         .eq('contact_id', contactId)
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .limit(1000);
 
       if (error) throw error;
       if (!data || data.length === 0) return null;

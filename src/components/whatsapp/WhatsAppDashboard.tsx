@@ -23,7 +23,8 @@ export function WhatsAppDashboard({ contactId }: Props) {
          .from('whatsapp_messages_index')
          .select('*')
          .eq('contact_id', contactId)
-         .order('received_at', { ascending: false });
+         .order('received_at', { ascending: false })
+         .limit(1000);
        if (error) throw error;
        return data;
      },

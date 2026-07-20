@@ -336,7 +336,8 @@ export default function BehavioralRegenAudit() {
       const { data, error } = await supabase
         .from("contacts")
         .select("id, first_name, last_name")
-        .in("id", contactIds);
+        .in("id", contactIds)
+        .limit(1000);
       if (error) throw error;
       const map = new Map<string, string>();
       for (const c of data ?? []) {

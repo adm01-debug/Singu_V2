@@ -121,7 +121,8 @@ export function useTopicsCatalog() {
         .from("conversation_topics_catalog")
         .select("*")
         .eq("user_id", user!.id)
-        .order("sort_order");
+        .order("sort_order")
+        .limit(1000);
       if (error) throw error;
       return (data ?? []) as ConversationTopic[];
     },
@@ -188,7 +189,8 @@ export function useCoachingScorecards() {
         .from("coaching_scorecards")
         .select("*")
         .eq("user_id", user!.id)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data ?? []) as unknown as CoachingScorecard[];
     },
@@ -229,7 +231,8 @@ export function useCoachingMetrics(periodDays: number = 30) {
         .from("conversation_analyses")
         .select("coaching_score, sentiment_overall, talk_ratio_rep, objections, topics, analyzed_at")
         .eq("user_id", user!.id)
-        .gte("analyzed_at", since);
+        .gte("analyzed_at", since)
+        .limit(1000);
       if (error) throw error;
       const list = data ?? [];
       const total = list.length;

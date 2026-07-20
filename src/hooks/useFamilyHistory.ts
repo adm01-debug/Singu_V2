@@ -22,7 +22,8 @@ export function useFamilyHistory(contactId?: string) {
         .from('contact_family_history')
         .select('*')
         .eq('contact_id', contactId)
-        .order('changed_at', { ascending: false });
+        .order('changed_at', { ascending: false })
+        .limit(1000);
 
       if (error) throw error;
       return (data || []) as FamilyHistoryEntry[];

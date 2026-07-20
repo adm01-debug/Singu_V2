@@ -60,7 +60,8 @@ export function useForms() {
         .from('forms')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data || []).map((f) => ({
         ...f,

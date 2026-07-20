@@ -46,7 +46,8 @@ export function useConnections() {
       const { data, error } = await supabase
         .from('connection_configs')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data ?? []) as unknown as ConnectionConfig[];
     },

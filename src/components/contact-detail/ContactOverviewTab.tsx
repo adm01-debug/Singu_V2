@@ -56,7 +56,8 @@ export function ContactOverviewTab({ contact, company, insights, alerts, interac
         .select('*')
         .eq('contact_id', contact.id)
         .eq('user_id', user.id)
-        .order('event_date', { ascending: true });
+        .order('event_date', { ascending: true })
+        .limit(1000);
       return (data ?? []) as Tables<'life_events'>[];
     },
     enabled: !!user,

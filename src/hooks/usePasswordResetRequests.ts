@@ -13,7 +13,8 @@ export function usePasswordResetRequests() {
       const { data, error } = await supabase
         .from('password_reset_requests')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) return [];
       return Array.isArray(data) ? data : [];
     },

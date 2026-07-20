@@ -18,7 +18,8 @@ export function useSalesTeam() {
         .from('sales_team_members')
         .select('*')
         .order('role', { ascending: true })
-        .order('name', { ascending: true });
+        .order('name', { ascending: true })
+        .limit(200);
 
       if (error) {
         logger.error('Erro ao carregar equipe:', error);
@@ -107,7 +108,8 @@ export function useActiveTeamByRole(role?: SalesRole) {
       let query = supabase
         .from('sales_team_members')
         .select('*')
-        .eq('is_active', true);
+        .eq('is_active', true)
+        .limit(200);
 
       if (role) query = query.eq('role', role);
 

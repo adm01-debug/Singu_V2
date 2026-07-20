@@ -15,7 +15,8 @@ export function ConsentAuditCard({ contactId }: { contactId: string }) {
         .from('social_consent_audit')
         .select('*')
         .eq('contact_id', contactId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       
       if (error) throw error;
       return data || [];

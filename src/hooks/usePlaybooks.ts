@@ -67,7 +67,8 @@ export function usePlaybooks(filters: PlaybookFilters = {}) {
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      let q = supabase.from("sales_playbooks").select("*").order("usage_count", { ascending: false });
+      let q = supabase.from("sales_playbooks").select("*").order("usage_count", { ascending: false })
+      .limit(1000);
       
       if (filters.scenario) q = q.eq("scenario", filters.scenario);
       if (filters.industry) q = q.ilike("industry_target", `%${filters.industry}%`);

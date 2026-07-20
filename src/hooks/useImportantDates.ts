@@ -41,7 +41,8 @@ export interface DateReminders {
       const { data, error } = await supabase
         .from('life_events')
         .select('*')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .limit(1000);
       if (error) throw error;
       return data;
     },
@@ -57,7 +58,8 @@ export interface DateReminders {
       const { data, error } = await supabase
         .from('contact_relatives')
         .select('*')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .limit(1000);
       if (error) throw error;
       return data;
     },

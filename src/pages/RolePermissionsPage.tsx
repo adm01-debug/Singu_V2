@@ -14,7 +14,8 @@ export default function RolePermissionsPage() {
     queryFn: async () => {
       const { data: rp, error } = await supabase
         .from('role_permissions')
-        .select('role, permission_id, permissions(name, module, action)');
+        .select('role, permission_id, permissions(name, module, action)')
+        .limit(1000);
       if (error || !Array.isArray(rp)) return [];
       return rp.map(r => ({
         role: r.role,

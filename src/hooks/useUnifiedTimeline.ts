@@ -32,7 +32,8 @@ export function useUnifiedTimeline(contactId: string) {
         .from('life_events')
         .select('*')
         .eq('contact_id', contactId)
-        .order('event_date', { ascending: false });
+        .order('event_date', { ascending: false })
+        .limit(1000);
       return data || [];
     },
     enabled: !!user && !!contactId,
@@ -47,7 +48,8 @@ export function useUnifiedTimeline(contactId: string) {
         .from('crm_alerts')
         .select('*')
         .eq('contact_id', contactId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       return data || [];
     },
     enabled: !!user && !!contactId,
@@ -61,7 +63,8 @@ export function useUnifiedTimeline(contactId: string) {
          .from('neuro_behavioral_history')
          .select('*')
          .eq('contact_id', contactId)
-         .order('created_at', { ascending: false });
+         .order('created_at', { ascending: false })
+         .limit(1000);
        return data || [];
      },
      enabled: !!user && !!contactId,

@@ -313,7 +313,8 @@ export function ThemeExamplesDrawer({ theme, onClose }: Props) {
       const { data, error } = await supabase
         .from("interactions")
         .select("id, title, type, created_at, content, transcription, contact_id, sentiment")
-        .in("id", theme.examples);
+        .in("id", theme.examples)
+        .limit(1000);
       if (!cancelled) {
         if (!error && Array.isArray(data)) setInteractions(data as InteractionRow[]);
         setLoading(false);

@@ -52,7 +52,8 @@ export function useLandingPages() {
         .from('landing_pages')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data ?? []) as unknown as LandingPage[];
     },

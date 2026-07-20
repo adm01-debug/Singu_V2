@@ -21,7 +21,8 @@
          .from('neuro_behavioral_history')
          .select('*')
          .eq('contact_id', contactId)
-         .order('created_at', { ascending: true });
+         .order('created_at', { ascending: true })
+         .limit(1000);
        
        if (error) throw error;
        

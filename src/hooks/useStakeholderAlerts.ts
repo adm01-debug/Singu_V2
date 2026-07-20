@@ -134,7 +134,7 @@ export function useStakeholderAlerts(companyId?: string) {
         query = query.eq('company_id', companyId);
       }
 
-      const { data, error } = await query;
+      const { data, error } = await query.limit(500);
 
       if (error) throw error;
 

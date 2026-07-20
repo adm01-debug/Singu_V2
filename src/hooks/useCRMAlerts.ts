@@ -27,7 +27,8 @@ export function useCRMAlerts(contactId: string) {
         .select('*')
         .eq('contact_id', contactId)
         .eq('is_resolved', false)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
 
       if (error) throw error;
       return data as CRMAlert[];

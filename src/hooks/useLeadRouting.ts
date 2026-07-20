@@ -23,7 +23,8 @@ export function useRoutingRules() {
       const { data, error } = await supabase
         .from('lead_routing_rules')
         .select('*')
-        .order('priority', { ascending: true });
+        .order('priority', { ascending: true })
+        .limit(1000);
       if (error) throw error;
       return (data ?? []) as unknown as LeadRoutingRule[];
     },

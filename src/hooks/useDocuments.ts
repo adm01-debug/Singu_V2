@@ -39,7 +39,8 @@ export function useDocuments(entityType: string, entityId?: string) {
         .eq('user_id', user.id)
         .eq('entity_type', entityType)
         .eq('entity_id', entityId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data || []) as Document[];
     },

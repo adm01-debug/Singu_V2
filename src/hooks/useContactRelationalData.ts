@@ -127,7 +127,7 @@ export function useContactRelationalData(contactId: string | undefined) {
           supabase.from('contact_cadence').select('*').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
           supabase.from('contact_preferences').select('*').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
           supabase.from('communication_preferences').select('*').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
-          supabase.from('contact_time_analysis').select('*').eq('contact_id', contactId).eq('user_id', user.id),
+          supabase.from('contact_time_analysis').select('*').eq('contact_id', contactId).eq('user_id', user.id).limit(100),
         ]);
         relatives = relRes.data || [];
         cadence = cadRes.data;

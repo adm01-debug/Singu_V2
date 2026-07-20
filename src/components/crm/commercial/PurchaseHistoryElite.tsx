@@ -27,7 +27,8 @@ export function PurchaseHistoryElite({ contactId }: Props) {
         .from('purchase_history')
         .select('*')
         .eq('contact_id', contactId)
-        .order('purchase_date', { ascending: false });
+        .order('purchase_date', { ascending: false })
+        .limit(1000);
       
       if (error) throw error;
       return data;

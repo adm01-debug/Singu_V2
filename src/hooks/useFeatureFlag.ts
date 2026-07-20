@@ -42,7 +42,8 @@ export function useFeatureFlags() {
       const { data, error } = await supabase
         .from("feature_flags")
         .select("*")
-        .order("name");
+        .order("name")
+        .limit(1000);
       if (error) throw error;
       return (data ?? []) as FeatureFlag[];
     },

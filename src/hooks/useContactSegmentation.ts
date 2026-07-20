@@ -77,8 +77,9 @@ export function useContactSegmentation() {
              disc_primary, vak_primary, motivation_primary, preferred_channel, formality_level
            )
          `)
-         .eq('user_id', user.id);
-         
+         .eq('user_id', user.id)
+         .limit(1000);
+
        if (error) {
          throw error;
        }

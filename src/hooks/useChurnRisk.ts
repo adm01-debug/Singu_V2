@@ -97,7 +97,8 @@ export function useLocalChurnRisks(contactId?: string) {
       let query = supabase
         .from("churn_risk_scores")
         .select("*")
-        .order("risk_score", { ascending: false });
+        .order("risk_score", { ascending: false })
+        .limit(1000);
       if (contactId) query = query.eq("contact_id", contactId);
       const { data, error } = await query;
       if (error) throw error;

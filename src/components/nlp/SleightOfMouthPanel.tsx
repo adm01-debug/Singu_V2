@@ -48,7 +48,8 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
         .from('reframing_analysis')
         .select('*')
         .eq('contact_id', contactId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
 
       if (interactionId) {
         query = query.eq('interaction_id', interactionId);

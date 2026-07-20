@@ -326,7 +326,8 @@ export const useContactBehavior = (contactId: string) => {
       const { data, error } = await supabase
         .from("v_contact_behavior_audit")
         .select("*")
-        .eq("contact_id", contactId);
+        .eq("contact_id", contactId)
+        .limit(1000);
       if (error) throw error;
       return data as BehavioralAuditLog[];
     },
@@ -369,7 +370,8 @@ export const useContactBehavior = (contactId: string) => {
       const { data, error } = await supabase
         .from("v_contact_personality_audit")
         .select("*")
-        .eq("contact_id", contactId);
+        .eq("contact_id", contactId)
+        .limit(1000);
       if (error) throw error;
       return data as BehavioralAuditLog[];
     },

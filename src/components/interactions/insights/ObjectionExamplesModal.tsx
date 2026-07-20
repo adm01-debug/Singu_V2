@@ -344,7 +344,8 @@ function ObjectionExamplesModalImpl({ objection, onClose }: Props) {
         .from("interactions")
         .select("id, title, type, created_at, content, contact_id, sentiment")
         .in("id", slice)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return Array.isArray(data) ? (data as Example[]) : [];
     },
@@ -373,7 +374,8 @@ function ObjectionExamplesModalImpl({ objection, onClose }: Props) {
       const { data, error } = await supabase
         .from("contacts")
         .select("id, first_name, last_name, role_title, company:companies(name, nome_fantasia)")
-        .in("id", contactIds);
+        .in("id", contactIds)
+        .limit(1000);
       if (error) throw error;
       const map: Record<string, ContactSummary> = {};
       for (const c of (data ?? []) as ContactRow[]) {

@@ -75,7 +75,8 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
           const { data: companies } = await supabase
             .from('companies')
             .select('id, name, nome_fantasia')
-            .in('id', idList);
+            .in('id', idList)
+            .limit(1000);
           if (Array.isArray(companies)) {
             for (const c of companies) {
               nameMap.set(c.id, c.nome_fantasia || c.name || 'Empresa sem nome');
@@ -85,7 +86,8 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
           const { data: contacts } = await supabase
             .from('contacts')
             .select('id, first_name, last_name')
-            .in('id', idList);
+            .in('id', idList)
+            .limit(1000);
           if (Array.isArray(contacts)) {
             for (const c of contacts) {
               const fullName = `${c.first_name ?? ''} ${c.last_name ?? ''}`.trim();

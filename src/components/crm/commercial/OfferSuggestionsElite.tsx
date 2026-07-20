@@ -52,7 +52,8 @@ export function OfferSuggestionsElite({ contactId }: Props) {
         .from('offer_suggestions')
         .select('*')
         .eq('contact_id', contactId)
-        .order('confidence_score', { ascending: false });
+        .order('confidence_score', { ascending: false })
+        .limit(1000);
       
       if (error) throw error;
       return data;

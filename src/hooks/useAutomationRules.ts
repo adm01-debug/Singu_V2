@@ -104,7 +104,8 @@ export function useAutomationRules() {
         .from('automation_rules')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(200);
       if (error) throw error;
       setRules((data ?? []) as unknown as AutomationRule[]);
     } catch (e: unknown) {

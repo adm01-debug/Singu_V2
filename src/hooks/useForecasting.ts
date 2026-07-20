@@ -68,7 +68,8 @@ export function useForecastPeriods() {
     queryKey: ["forecast-periods", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from("forecast_periods").select("*").order("period_start", { ascending: false });
+      const { data, error } = await supabase.from("forecast_periods").select("*").order("period_start", { ascending: false })
+      .limit(1000);
       if (error) throw error;
       return (data ?? []) as ForecastPeriod[];
     },
@@ -136,7 +137,8 @@ export function useDealForecasts(periodId: string | undefined) {
     queryFn: async () => {
       if (!periodId) return [];
       const { data, error } = await supabase.from("deal_forecasts").select("*")
-        .eq("period_id", periodId).order("forecasted_amount", { ascending: false });
+        .eq("period_id", periodId).order("forecasted_amount", { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data ?? []) as DealForecast[];
     },
@@ -182,7 +184,8 @@ export function useForecastSnapshots(periodId: string | undefined) {
     queryFn: async () => {
       if (!periodId) return [];
       const { data, error } = await supabase.from("forecast_snapshots").select("*")
-        .eq("period_id", periodId).order("snapshot_date", { ascending: true });
+        .eq("period_id", periodId).order("snapshot_date", { ascending: true })
+        .limit(1000);
       if (error) throw error;
       return (data ?? []) as ForecastSnapshot[];
     },

@@ -71,7 +71,8 @@ export function useSmsCampaigns() {
         .from('sms_campaigns')
         .select('*')
         .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data || []) as SmsCampaign[];
     },
@@ -172,7 +173,8 @@ export function useSmsTemplates() {
         .from('sms_templates')
         .select('*')
         .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data || []).map((t) => ({
         ...t,

@@ -77,7 +77,8 @@ export function useContactSentimentTrend(contactId: string | undefined) {
         .eq('contact_id', contactId!)
         .gte('created_at', since.toISOString())
         .not('sentiment', 'is', null)
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: true })
+        .limit(1000);
 
       if (error) throw error;
 

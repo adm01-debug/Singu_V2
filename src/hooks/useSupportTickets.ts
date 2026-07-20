@@ -45,7 +45,8 @@ export function useSupportTickets() {
         .from('support_tickets')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data || []) as SupportTicket[];
     },
@@ -117,7 +118,8 @@ export function useTicketComments(ticketId?: string) {
         .from('ticket_comments')
         .select('*')
         .eq('ticket_id', ticketId)
-        .order('created_at');
+        .order('created_at')
+        .limit(1000);
       if (error) throw error;
       return (data || []) as TicketComment[];
     },

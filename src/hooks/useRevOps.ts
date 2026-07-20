@@ -73,7 +73,8 @@ export function useRevOpsSnapshots(periodStart: string, periodEnd: string) {
         .select("*")
         .gte("period", periodStart)
         .lte("period", periodEnd)
-        .order("period", { ascending: false });
+        .order("period", { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data || []) as unknown as RevOpsSnapshot[];
     },
@@ -108,7 +109,8 @@ export function useRevOpsBenchmarks() {
       const { data, error } = await supabase
         .from("revops_benchmarks")
         .select("*")
-        .order("metric_key");
+        .order("metric_key")
+        .limit(1000);
       if (error) throw error;
       return (data || []) as unknown as RevOpsBenchmark[];
     },
