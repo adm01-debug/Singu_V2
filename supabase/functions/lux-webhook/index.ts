@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { requireWebhookSecret, scopedCorsHeaders } from "../_shared/auth.ts";
+import { requireWebhookSecret, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
@@ -11,8 +11,11 @@ Deno.serve(async (req) => {
   const authCheck = await requireWebhookSecret(req, 'LUX_WEBHOOK_SECRET', 'x-lux-secret');
   if (authCheck) return authCheck;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 2 * 1024 * 1024); // 2 MB — enrichment payloads
+  if (bodyError) return bodyError;
+
   try {
-    const payload = await req.json();
+    const payload = rawBody as Record<string, unknown>;
     const {
       luxRecordId,
       status,

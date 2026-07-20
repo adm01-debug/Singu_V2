@@ -1,5 +1,5 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { requireWebhookSecret, scopedCorsHeaders } from "../_shared/auth.ts";
+import { requireWebhookSecret, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 
 type SupabaseAdminClient = ReturnType<typeof createClient>;
 
@@ -13,13 +13,16 @@ Deno.serve(async (req) => {
   const authCheck = await requireWebhookSecret(req, 'EVOLUTION_API_SECRET', 'apikey');
   if (authCheck) return authCheck;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 5 * 1024 * 1024); // 5 MB — WhatsApp media payloads
+  if (bodyError) return bodyError;
+
   try {
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const payload = await req.json();
+    const payload = rawBody as Record<string, unknown>;
     const event = payload.event;
     const instance = payload.instance;
 
