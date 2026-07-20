@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
 import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 
 /**
@@ -118,7 +119,7 @@ Deno.serve(async (req) => {
 
     for (const item of batch) {
       try {
-        const resp = await fetch(`${SUPABASE_URL}/functions/v1/generate-behavioral-profile`, {
+        const resp = await fetchAPI(`${SUPABASE_URL}/functions/v1/generate-behavioral-profile`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

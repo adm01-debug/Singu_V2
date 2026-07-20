@@ -1,4 +1,5 @@
 import { scopedCorsHeaders, withAuth } from "../_shared/auth.ts";
+import { fetchAPI, fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 5 });
@@ -18,7 +19,7 @@ async function checkElevenLabsSTT(): Promise<ServiceCheck> {
   }
 
   try {
-    const res = await fetch("https://api.elevenlabs.io/v1/single-use-token/realtime_scribe", {
+    const res = await fetchAPI("https://api.elevenlabs.io/v1/single-use-token/realtime_scribe", {
       method: "POST",
       headers: { "xi-api-key": key },
     });
@@ -50,7 +51,7 @@ async function checkElevenLabsTTS(): Promise<ServiceCheck> {
 
   try {
     const voiceId = "JBFqnCBsd6RMkjVDRZzb";
-    const res = await fetch(
+    const res = await fetchAPI(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_22050_32`,
       {
         method: "POST",
@@ -89,7 +90,7 @@ async function checkGeminiNLU(): Promise<ServiceCheck> {
   }
 
   try {
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const res = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({

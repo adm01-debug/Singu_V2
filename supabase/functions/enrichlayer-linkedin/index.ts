@@ -2,6 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { scopedCorsHeaders, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 // EnrichLayer returns the profile data directly
 interface EnrichLayerProfile {
@@ -92,7 +93,7 @@ Deno.serve(async (req) => {
 
     const apiUrl = `https://enrichlayer.com/api/v2/profile?url=${encodeURIComponent(linkedinUrl)}`;
     
-    const enrichResponse = await fetch(apiUrl, {
+    const enrichResponse = await fetchAPI(apiUrl, {
       method: "GET",
       headers: { Authorization: `Bearer ${apiKey}` },
     });

@@ -5,6 +5,7 @@ import {
   jsonOk,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
@@ -25,7 +26,7 @@ Deno.serve(async (req) => {
       throw new Error("ELEVENLABS_API_KEY is not configured");
     }
 
-    const response = await fetch(
+    const response = await fetchAPI(
       "https://api.elevenlabs.io/v1/single-use-token/realtime_scribe",
       {
         method: "POST",

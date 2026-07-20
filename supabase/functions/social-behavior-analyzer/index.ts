@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { scopedCorsHeaders, withAuthOrServiceRole, jsonError, jsonOk, isServiceRoleCaller } from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 5 });
@@ -93,7 +94,7 @@ Responda APENAS com um JSON válido no formato especificado.`;
  
  Retorne um JSON com personality_traits, communication_style, interests, topics, keywords, hashtags, overall_sentiment, sentiment_score, influence_level, influence_score, active_hours, active_days, sales_insights, executive_summary. Além disso, inclua um campo "analytical_profile" com: preferences (array de strings), recurrent_topics (array de strings), communication_style_tag (string).`;
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const response = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({

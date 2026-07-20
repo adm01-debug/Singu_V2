@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, jsonError, jsonOk, requireCronSecret } from "../_shared/auth.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
@@ -95,7 +96,7 @@ Deno.serve(async (req) => {
               if (evolutionUrl && evolutionKey) {
                 const baseUrl = evolutionUrl.replace(/\/$/, '');
                 const instanceName = Deno.env.get('EVOLUTION_INSTANCE_NAME') || 'main';
-                const resp = await fetch(`${baseUrl}/message/sendText/${instanceName}`, {
+                const resp = await fetchAPI(`${baseUrl}/message/sendText/${instanceName}`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json', 'apikey': evolutionKey },
                   body: JSON.stringify({ number: recipientPhone.replace(/\D/g, ''), text: message }),

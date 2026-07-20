@@ -3,6 +3,7 @@ import { withAuth, jsonError, jsonOk, handleCorsAndMethod } from "../_shared/aut
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { assertVersionMatch } from "../_shared/version-guard.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 100, message: "Rate limit exceeded for external data. Please wait." });
 
@@ -244,7 +245,7 @@ Deno.serve(async (req) => {
     if (operation === 'list_tables') {
       const extUrl = Deno.env.get('EXTERNAL_SUPABASE_URL')!;
       const extKey = Deno.env.get('EXTERNAL_SUPABASE_SERVICE_ROLE_KEY')!;
-      const resp = await fetch(`${extUrl}/rest/v1/`, {
+      const resp = await fetchAPI(`${extUrl}/rest/v1/`, {
         headers: { 'apikey': extKey, 'Authorization': `Bearer ${extKey}` }
       });
       const swagger = await resp.json();
@@ -260,7 +261,7 @@ Deno.serve(async (req) => {
     if (operation === 'schema') {
       const extUrl = Deno.env.get('EXTERNAL_SUPABASE_URL')!;
       const extKey = Deno.env.get('EXTERNAL_SUPABASE_SERVICE_ROLE_KEY')!;
-      const resp = await fetch(`${extUrl}/rest/v1/`, {
+      const resp = await fetchAPI(`${extUrl}/rest/v1/`, {
         headers: { 'apikey': extKey, 'Authorization': `Bearer ${extKey}` }
       });
       const swagger = await resp.json();
@@ -288,7 +289,7 @@ Deno.serve(async (req) => {
 
       let functions: string[] = [];
       try {
-        const rpcResp = await fetch(`${extUrl}/rest/v1/rpc/`, {
+        const rpcResp = await fetchAPI(`${extUrl}/rest/v1/rpc/`, {
           headers: { 'apikey': extKey, 'Authorization': `Bearer ${extKey}` }
         });
         if (rpcResp.ok) {

@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, withAuth } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
@@ -35,7 +36,7 @@ Deno.serve(async (req) => {
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
 
     // Get latest email
-    const latestRes = await fetch(edgeUrl, {
+    const latestRes = await fetchAPI(edgeUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -60,7 +61,7 @@ Deno.serve(async (req) => {
     const now = new Date();
     const h24Ago = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
 
-    const countRes = await fetch(edgeUrl, {
+    const countRes = await fetchAPI(edgeUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -79,7 +80,7 @@ Deno.serve(async (req) => {
 
     // Fallback: if RPC doesn't exist, use basic count
     if (!stats || countData?.error) {
-      const fallbackRes = await fetch(edgeUrl, {
+      const fallbackRes = await fetchAPI(edgeUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

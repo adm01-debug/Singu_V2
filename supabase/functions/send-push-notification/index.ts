@@ -7,6 +7,7 @@ import {
   jsonOk,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
@@ -38,7 +39,7 @@ async function sendWebPush(subscription: Subscription, payload: PushPayload): Pr
       requireInteraction: payload.requireInteraction || false
     });
 
-    const response = await fetch(subscription.endpoint, {
+    const response = await fetchAPI(subscription.endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/octet-stream',

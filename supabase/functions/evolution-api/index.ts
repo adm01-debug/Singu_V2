@@ -5,6 +5,7 @@ import {
   jsonError,
   jsonOk,
 } from "../_shared/auth.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 interface EvolutionRequest {
   action: string;
@@ -376,7 +377,7 @@ Deno.serve(async (req) => {
 
     // Evolution API call logged;
 
-    const response = await fetch(`${baseUrl}${endpoint}`, {
+    const response = await fetchAPI(`${baseUrl}${endpoint}`, {
       method,
       headers,
       body,

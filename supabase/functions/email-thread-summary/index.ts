@@ -7,6 +7,7 @@ import {
   jsonOk,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
 
@@ -145,7 +146,7 @@ Responda APENAS com JSON válido:
   "next_steps": ["próximo passo 1", "próximo passo 2"]
 }`;
 
-  const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+  const aiResp = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

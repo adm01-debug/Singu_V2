@@ -1,5 +1,6 @@
 import { z } from "npm:zod@3.23.8";
 import { handleCorsAndMethod, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 30, message: "Limite de refinamentos atingido. Aguarde um momento." });
@@ -65,7 +66,7 @@ Deno.serve(async (req) => {
   if (!apiKey) return jsonError('LOVABLE_API_KEY não configurada', 500, req);
 
   try {
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await fetchAI('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${apiKey}`,

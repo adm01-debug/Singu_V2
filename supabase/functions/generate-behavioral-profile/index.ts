@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
 import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 
 
 interface Body { contact_id: string }
@@ -150,7 +151,7 @@ Deno.serve(async (req) => {
     if (!LOVABLE_API_KEY) return json({ error: 'LOVABLE_API_KEY ausente' }, 500);
 
     const model = 'google/gemini-2.5-flash';
-    const aiResp = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const aiResp = await fetchAI('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${LOVABLE_API_KEY}`,

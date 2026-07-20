@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 interface TemplateStats {
   templateId: string;
@@ -226,7 +227,7 @@ Deno.serve(async (req) => {
 
       // Send push notification via the send-push-notification function
       try {
-        const pushResponse = await fetch(
+        const pushResponse = await fetchAPI(
           `${Deno.env.get('SUPABASE_URL')}/functions/v1/send-push-notification`,
           {
             method: 'POST',

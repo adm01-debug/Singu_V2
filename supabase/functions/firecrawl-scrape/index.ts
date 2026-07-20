@@ -1,5 +1,6 @@
 import { withAuth, jsonError, jsonOk, scopedCorsHeaders } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { fetchScrape } from "../_shared/fetch-utils.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 15 });
 
@@ -32,7 +33,7 @@ Deno.serve(async (req) => {
       formattedUrl = `https://${formattedUrl}`;
     }
 
-    const response = await fetch('https://api.firecrawl.dev/v1/scrape', {
+    const response = await fetchScrape('https://api.firecrawl.dev/v1/scrape', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,

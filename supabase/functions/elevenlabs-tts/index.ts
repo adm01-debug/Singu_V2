@@ -4,6 +4,7 @@ import {
   jsonError,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 const VOICE_ID_REGEX = /^[a-zA-Z0-9]{10,30}$/;
 
@@ -47,7 +48,7 @@ Deno.serve(async (req) => {
       selectedVoiceId = voiceId;
     }
 
-    const response = await fetch(
+    const response = await fetchAPI(
       `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoiceId}?output_format=mp3_22050_32`,
       {
         method: "POST",

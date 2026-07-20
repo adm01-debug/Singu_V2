@@ -5,6 +5,7 @@
 // - Atualiza a fila com o resultado (sucesso ou erro)
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 
 Deno.serve(async (req) => {
@@ -111,7 +112,7 @@ Deno.serve(async (req) => {
     // 6) Invoca gerador com service-role (bypass RLS: admin não precisa ter acesso ao histórico)
     let invokeError: string | null = null;
     try {
-      const resp = await fetch(`${SUPABASE_URL}/functions/v1/generate-behavioral-profile`, {
+      const resp = await fetchAPI(`${SUPABASE_URL}/functions/v1/generate-behavioral-profile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

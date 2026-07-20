@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
@@ -122,7 +123,7 @@ Deno.serve(async (req) => {
         continue;
       }
       try {
-        const resp = await fetch(`${TWILIO_GATEWAY}/Messages.json`, {
+        const resp = await fetchAPI(`${TWILIO_GATEWAY}/Messages.json`, {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${LOVABLE_API_KEY}`,

@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { fetchAI } from "../_shared/fetch-utils.ts";
 
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Rate limit excedido para meeting-summary." });
@@ -124,7 +125,7 @@ Responda APENAS com JSON válido no formato:
   "next_steps": ["próximo passo 1", "próximo passo 2"]
 }`;
 
-    const aiResponse = await fetch(
+    const aiResponse = await fetchAI(
       "https://api.lovable.dev/v1/chat/completions",
       {
         method: "POST",
