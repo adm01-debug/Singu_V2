@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { logger } from '@/lib/logger';
 
 export function useMFAGuard() {
   const { user, loading: authLoading } = useAuth();
@@ -38,7 +39,7 @@ export function useMFAGuard() {
           });
         }
       } catch (err) {
-        console.error('MFA Check Error:', err);
+        logger.error('MFA Check Error:', err);
         setMfaVerified(false);
       }
     }

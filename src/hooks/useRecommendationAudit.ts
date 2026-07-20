@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { logger } from '@/lib/logger';
 
 export interface AuditLogPayload {
   contactId: string;
@@ -37,7 +38,7 @@ export function useRecommendationAudit() {
       qc.invalidateQueries({ queryKey: ['ai-recommendation-audit-logs'] });
     },
     onError: (error) => {
-      console.error('Audit log error:', error);
+      logger.error('Audit log error:', error);
     }
   });
 }

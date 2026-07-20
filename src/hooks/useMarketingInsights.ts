@@ -1,6 +1,7 @@
  import { useQuery } from '@tanstack/react-query';
  import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { logger } from '@/lib/logger';
 
  export interface FunnelStat {
    stage: string;
@@ -40,7 +41,7 @@ import { useAuth } from './useAuth';
        });
 
        if (error) {
-         console.error('Error fetching marketing funnel:', error);
+         logger.error('Error fetching marketing funnel:', error);
          throw error;
        }
        return (data || []) as unknown as FunnelStat[];
@@ -104,7 +105,7 @@ import { useAuth } from './useAuth';
          .order('date', { ascending: false });
 
        if (error) {
-         console.error('Error fetching campaign stats:', error);
+         logger.error('Error fetching campaign stats:', error);
          throw error;
        }
        return (data || []) as unknown as CampaignStat[];

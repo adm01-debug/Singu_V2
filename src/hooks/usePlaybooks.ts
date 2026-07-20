@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Database, Json } from "@/integrations/supabase/types";
 import { type BattleCard } from "@/hooks/useBattleCards";
+import { logger } from "@/lib/logger";
 
 export type PlaybookScenario =
   | "discovery" | "demo" | "negotiation" | "objection"
@@ -150,7 +151,7 @@ export function useUpsertPlaybook() {
       toast.success("Playbook salvo com sucesso");
     },
     onError: (e: Error) => {
-      console.error("[useUpsertPlaybook] Erro:", e);
+      logger.error("[useUpsertPlaybook] Erro:", e);
       toast.error(e.message || "Erro ao salvar playbook");
     },
   });
@@ -168,7 +169,7 @@ export function useDeletePlaybook() {
       toast.success("Playbook removido");
     },
     onError: (e: Error) => {
-      console.error("[useDeletePlaybook] Erro:", e);
+      logger.error("[useDeletePlaybook] Erro:", e);
       toast.error(e.message || "Erro ao remover playbook");
     },
   });
@@ -195,7 +196,7 @@ export function useGeneratePlaybook() {
       toast.success("Playbook gerado por IA");
     },
     onError: (e: Error) => {
-      console.error("[useGeneratePlaybook] Erro:", e);
+      logger.error("[useGeneratePlaybook] Erro:", e);
       toast.error(e.message || "Erro ao gerar playbook");
     },
   });
@@ -247,7 +248,7 @@ export function useLogPlaybookUsage() {
       });
       
       if (error) {
-        console.error("[useLogPlaybookUsage] Erro ao registrar log:", error);
+        logger.error("[useLogPlaybookUsage] Erro ao registrar log:", error);
       }
     },
   });

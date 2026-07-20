@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Database, Json } from "@/integrations/supabase/types";
+import { logger } from "@/lib/logger";
 
 export interface BattleCardItem { title: string; detail: string }
 export interface ProofPoint { client: string; result: string }
@@ -145,7 +146,7 @@ export function useUpsertBattleCard() {
       toast.success("Battle card salvo com sucesso");
     },
     onError: (e: Error) => {
-      console.error("[useUpsertBattleCard] Erro:", e);
+      logger.error("[useUpsertBattleCard] Erro:", e);
       toast.error(e.message || "Erro ao salvar battle card");
     },
   });
@@ -170,7 +171,7 @@ export function useDeleteBattleCard() {
       toast.success("Battle card removido");
     },
     onError: (e: Error) => {
-      console.error("[useDeleteBattleCard] Erro:", e);
+      logger.error("[useDeleteBattleCard] Erro:", e);
       toast.error("Erro ao remover battle card");
     },
   });

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export type ToneType = 'friendly' | 'formal' | 'casual';
 
@@ -22,7 +23,7 @@ export function useTonePersistence(companyId?: string) {
         .maybeSingle();
 
       if (error) {
-        console.error('Error fetching tone preference:', error);
+        logger.error('Error fetching tone preference:', error);
         return null;
       }
 
@@ -53,7 +54,7 @@ export function useTonePersistence(companyId?: string) {
       toast.success('Preferência de tom salva!');
     },
     onError: (error) => {
-      console.error('Error saving tone preference:', error);
+      logger.error('Error saving tone preference:', error);
       toast.error('Erro ao salvar preferência de tom.');
     },
   });
