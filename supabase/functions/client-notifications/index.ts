@@ -214,8 +214,7 @@ Deno.serve(async (req) => {
     }, req);
 
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : 'Unknown error';
-    log.error("fatal_error", { error: msg });
-    return jsonError(msg, 500, req);
+    log.error("fatal_error", { error: error instanceof Error ? error.message : String(error) });
+    return jsonError("Internal server error", 500, req);
   }
 });

@@ -553,6 +553,6 @@ Deno.serve(async (req) => {
     }
 
     const status = message.includes('timeout') ? 504 : 500;
-    return jsonError(message, status, req);
+    return jsonError("Internal server error", status, req);
   }
 });

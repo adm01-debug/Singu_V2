@@ -44,7 +44,6 @@ Deno.serve(async (req) => {
     return jsonOk({ token });
   } catch (error: unknown) {
     console.error("Error generating scribe token:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
-    return jsonError(message, 500);
+    return jsonError("Internal server error", 500);
   }
 });

@@ -142,8 +142,7 @@ Gere entre 3 e 8 insights relevantes baseados nestes dados. Retorne um JSON com 
     log.info("generation_complete", { count: insights.length });
     return jsonOk({ insights, traceId }, req);
   } catch (error) {
-    const msg = error instanceof Error ? error.message : "Erro desconhecido";
-    log.error("fatal_error", { error: msg });
-    return jsonError(msg, 500, req);
+    log.error("fatal_error", { error: error instanceof Error ? error.message : String(error) });
+    return jsonError("Internal server error", 500, req);
   }
 });

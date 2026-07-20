@@ -227,12 +227,11 @@ Deno.serve(async (req) => {
 
   } catch (error: unknown) {
     console.error("Error generating weekly digest:", error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return new Response(
-      JSON.stringify({ error: errorMessage }),
-      { 
-        status: 500, 
-        headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" } 
+      JSON.stringify({ error: "Internal server error" }),
+      {
+        status: 500,
+        headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" }
       }
     );
   }

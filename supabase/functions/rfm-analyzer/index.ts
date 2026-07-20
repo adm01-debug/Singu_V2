@@ -273,8 +273,7 @@ Deno.serve(async (req) => {
 
   } catch (error: unknown) {
     console.error('RFM analysis error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return jsonError(errorMessage, 500);
+    return jsonError("Internal server error", 500);
   }
 });
 
