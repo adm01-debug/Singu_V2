@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecret, guardBody } from "../_shared/auth.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 
@@ -26,6 +26,9 @@ Deno.serve(async (req) => {
   const cronCheck = await requireCronSecret(req);
   if (cronCheck) return cronCheck;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
+  if (bodyError) return bodyError;
+
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
@@ -42,7 +45,7 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
-    const { campaignId } = (await req.json()) as Body;
+    const { campaignId } = (rawBody ?? {}) as Body;
     if (!campaignId) {
       return new Response(JSON.stringify({ error: "campaignId required" }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
     }

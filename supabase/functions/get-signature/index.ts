@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
@@ -14,6 +14,8 @@ Deno.serve(async (req) => {
   const limited = limiter.check(ip, req);
   if (limited) return limited;
 
+  const { body: rawBody } = await guardBody(req, 32 * 1024);
+
   try {
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -21,7 +23,7 @@ Deno.serve(async (req) => {
     );
 
     const url = new URL(req.url);
-    const token = url.searchParams.get("token") || (await req.json().catch(() => ({}))).token;
+    const token = url.searchParams.get("token") || (rawBody as Record<string, unknown> | null)?.token;
 
     if (!token || typeof token !== "string" || token.length < 16) {
       return new Response(JSON.stringify({ error: "Invalid token" }), {

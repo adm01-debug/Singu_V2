@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 30 });
@@ -13,8 +13,11 @@ Deno.serve(async (req) => {
   const limited = limiter.check(ip, req);
   if (limited) return limited;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
+  if (bodyError) return bodyError;
+
   try {
-    const { token, label } = await req.json();
+    const { token, label } = rawBody as { token?: string; label?: string };
     if (!token) return new Response(JSON.stringify({ error: "token required" }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
 
     const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);

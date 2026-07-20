@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, requireCronSecret, jsonError, jsonOk } from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecret, guardBody, jsonError, jsonOk } from "../_shared/auth.ts";
 
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
@@ -8,13 +8,16 @@ Deno.serve(async (req) => {
   const cronCheck = await requireCronSecret(req);
   if (cronCheck) return cronCheck;
 
+  const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
+  if (bodyError) return bodyError;
+
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
   );
 
   try {
-    const { contactId, queueId } = await req.json();
+    const { contactId, queueId } = (rawBody ?? {}) as { contactId?: string; queueId?: string };
 
     if (!contactId || !queueId) {
       return jsonError('contactId and queueId are required', 400);
