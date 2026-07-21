@@ -381,9 +381,10 @@ async function handleMessageUpsert(supabase: SupabaseAdminClient, payload: any, 
         .catch((e: unknown) => console.error('contact name update error:', e));
     }
 
-    const interactionTitle = isFromMe 
-      ? 'Mensagem Enviada (WhatsApp)' 
-      : `Mensagem de ${senderName} (WhatsApp)`;
+    const safeSenderName = senderName ? String(senderName).slice(0, 200) : 'Desconhecido';
+    const interactionTitle = isFromMe
+      ? 'Mensagem Enviada (WhatsApp)'
+      : `Mensagem de ${safeSenderName} (WhatsApp)`;
 
     const interactionData = {
       contact_id: contactId,

@@ -94,26 +94,37 @@ Deno.serve(async (req) => {
       luxRecord = data as typeof luxRecord;
     }
 
-    // If there are entity updates, apply them
+    // If there are entity updates, apply them — only allowed columns to prevent arbitrary writes
     if (entityUpdates && luxRecord) {
       const table = luxRecord.entity_type === 'company' ? 'companies' : 'contacts';
-      await supabase
-        .from(table)
-        .update(entityUpdates)
-        .eq('id', luxRecord.entity_id);
+      const ALLOWED_COMPANY_COLS = new Set(['name','industry','website','phone','description','city','state','country','employee_count','annual_revenue','linkedin','notes']);
+      const ALLOWED_CONTACT_COLS = new Set(['first_name','last_name','email','phone','role_title','linkedin','city','state','country','notes','birthday','preferred_channel']);
+      const allowedCols = luxRecord.entity_type === 'company' ? ALLOWED_COMPANY_COLS : ALLOWED_CONTACT_COLS;
+      const safeUpdates = Object.fromEntries(
+        Object.entries(entityUpdates as Record<string, unknown>)
+          .filter(([k]) => allowedCols.has(k))
+          .map(([k, v]) => [k, typeof v === 'string' ? v.slice(0, 1000) : v])
+      );
+      if (Object.keys(safeUpdates).length > 0) {
+        const { error: updErr } = await supabase
+          .from(table)
+          .update(safeUpdates)
+          .eq('id', luxRecord.entity_id);
+        if (updErr) console.error('lux-webhook entity update failed:', updErr.message);
+      }
     }
 
-    // If stakeholders were found, auto-create contacts
+    // If stakeholders were found, auto-create contacts (capped at 50 per call)
     if (stakeholders && Array.isArray(stakeholders) && stakeholders.length > 0 && luxRecord) {
-      const contactRows = stakeholders.map((stakeholder: Record<string, unknown>) => ({
+      const contactRows = stakeholders.slice(0, 50).map((stakeholder: Record<string, unknown>) => ({
         user_id: luxRecord!.user_id,
         company_id: luxRecord!.entity_id,
-        first_name: stakeholder.first_name || (stakeholder.name as string)?.split(' ')[0] || 'Unknown',
-        last_name: stakeholder.last_name || (stakeholder.name as string)?.split(' ').slice(1).join(' ') || '',
-        role_title: stakeholder.role_title || stakeholder.position || null,
-        email: stakeholder.email || null,
-        phone: stakeholder.phone || null,
-        linkedin: stakeholder.linkedin || null,
+        first_name: (String(stakeholder.first_name || (stakeholder.name as string)?.split(' ')[0] || 'Unknown')).slice(0, 100),
+        last_name: (String(stakeholder.last_name || (stakeholder.name as string)?.split(' ').slice(1).join(' ') || '')).slice(0, 100),
+        role_title: stakeholder.role_title ? String(stakeholder.role_title).slice(0, 200) : null,
+        email: stakeholder.email ? String(stakeholder.email).slice(0, 254) : null,
+        phone: stakeholder.phone ? String(stakeholder.phone).slice(0, 50) : null,
+        linkedin: stakeholder.linkedin ? String(stakeholder.linkedin).slice(0, 500) : null,
       }));
       supabase.from('contacts').insert(contactRows)
         .catch((e: unknown) => console.error('Error creating stakeholder contacts:', e));
