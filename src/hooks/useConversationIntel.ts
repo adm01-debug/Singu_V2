@@ -168,7 +168,8 @@ export function useSeedTopics() {
   const { user } = useAuth();
   return useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.rpc("seed_conversation_topics", { _user_id: user!.id });
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.rpc("seed_conversation_topics", { _user_id: user.id });
       if (error) throw error;
     },
     onSuccess: () => {
