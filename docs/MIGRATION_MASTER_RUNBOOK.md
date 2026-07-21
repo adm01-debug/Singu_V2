@@ -127,6 +127,8 @@ SNAPSHOT_DIR=/backups/pre-cutover ./rollback/full-restore.sh --confirm --i-know-
 - `MIGRATION_POSTMORTEM_TEMPLATE.md` — template pós-cutover
 - `dr/backup-strategy.md` — estratégia de DR (RPO 15min / RTO 2h)
 - `cutover/dns-flip-checklist.md` — flip de DNS custom
+- `MIGRATION_EXECUTIVE_BRIEF.md` — brief 1 página para stakeholders
+- `dr/backup-encryption-check.md` — verificação trimestral KMS/Object Lock
 
 ## Checklist final (10/10)
 
@@ -151,3 +153,17 @@ SNAPSHOT_DIR=/backups/pre-cutover ./rollback/full-restore.sh --confirm --i-know-
 - [ ] `monitoring/post-cutover-watch.sh` rodando por 24h
 - [ ] `monitoring/synthetic-checks.ts` sem falhas por 1h
 - [ ] Postmortem preenchido a partir do template
+
+## Checklist final (11/10 — Rodada Final++)
+
+- [ ] `cdc/drain.sh` rodando desde freeze até flip (RPO=0)
+- [ ] `cdc/replay.ts` aplicado com `applied>0 mismatch=0`
+- [ ] `dual-write-proxy` deployado com whitelist ativa (bake T+0..T+2h)
+- [ ] `verify/row-diff-deep.ts --compare` — 0 divergências
+- [ ] `verify/storage-bytes.ts` — 0 mismatches SHA-256
+- [ ] `diff src-ext.txt dest-ext.txt` vazio (versão exata)
+- [ ] Trigger `ai_cost_budget` armado no destino
+- [ ] Backpressure regen queue configurado em `system_config`
+- [ ] `compliance/lgpd-snapshot.ts` executado, manifesto arquivado
+- [ ] `dr/backup-encryption-check.md` validado no último trimestre
+- [ ] `MIGRATION_EXECUTIVE_BRIEF.md` distribuído a stakeholders
