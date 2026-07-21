@@ -6,3 +6,6 @@ env.migration
 functions/secrets.env
 functions/deploy.log
 functions/remote-functions.txt
+storage/.env
+storage/storage-copy.log
+storage/verify-report.json
