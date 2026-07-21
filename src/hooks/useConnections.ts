@@ -69,6 +69,7 @@ export function useConnections() {
             config: (input.config ?? {}) as unknown as Json,
             secret_refs: (input.secret_refs ?? {}) as unknown as Json,
           } as TablesUpdate<'connection_configs'>)
+          .eq('created_by', user!.id)
           .eq('id', input.id);
         if (error) throw error;
       } else {
@@ -93,7 +94,7 @@ export function useConnections() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('connection_configs').delete().eq('id', id);
+      const { error } = await supabase.from('connection_configs').delete().eq('created_by', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -108,6 +109,7 @@ export function useConnections() {
       const { error } = await supabase
         .from('connection_configs')
         .update({ is_active })
+        .eq('created_by', user!.id)
         .eq('id', id);
       if (error) throw error;
     },

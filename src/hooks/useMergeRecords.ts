@@ -25,12 +25,14 @@ export function useMergeRecords() {
   return useMutation({
     mutationFn: async ({ entity, primaryId, secondaryId, fieldOverrides }: MergeArgs) => {
       if (primaryId === secondaryId) throw new Error('IDs idênticos');
+      if (!user?.id) throw new Error('Não autenticado');
 
       // 1. Apply overrides on primary (if any)
       if (fieldOverrides && Object.keys(fieldOverrides).length > 0) {
         const { error: updErr } = await supabase
           .from(entity)
           .update(fieldOverrides)
+          .eq('user_id', user.id)
           .eq('id', primaryId);
         if (updErr) throw updErr;
       }
@@ -40,12 +42,13 @@ export function useMergeRecords() {
         const { error: repointErr } = await supabase
           .from('contacts')
           .update({ company_id: primaryId })
+          .eq('user_id', user!.id)
           .eq('company_id', secondaryId);
         if (repointErr) throw repointErr;
       }
 
       // 3. Delete the secondary
-      const { error: delErr } = await supabase.from(entity).delete().eq('id', secondaryId);
+      const { error: delErr } = await supabase.from(entity).delete().eq('user_id', user!.id).eq('id', secondaryId);
       if (delErr) throw delErr;
 
       // 4. Audit log entry

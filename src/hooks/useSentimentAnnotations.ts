@@ -99,6 +99,7 @@ export function useSentimentAnnotations(contactId: string | undefined) {
       const { data, error } = await supabase
         .from('sentiment_annotations')
         .update(patch)
+        .eq('created_by', user!.id)
         .eq('id', id)
         .select()
         .maybeSingle();
@@ -112,7 +113,7 @@ export function useSentimentAnnotations(contactId: string | undefined) {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('sentiment_annotations').delete().eq('id', id);
+      const { error } = await supabase.from('sentiment_annotations').delete().eq('created_by', user!.id).eq('id', id);
       if (error) throw error;
       return id;
     },

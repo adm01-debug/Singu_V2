@@ -81,7 +81,7 @@ export function useIncomingWebhooks() {
           require_signature: input.require_signature ?? false,
           webhook_secret: input.webhook_secret ?? null,
           replay_window_seconds: input.replay_window_seconds ?? 300,
-        } as TablesUpdate<'incoming_webhooks'>).eq('id', input.id);
+        } as TablesUpdate<'incoming_webhooks'>).eq('created_by', user!.id).eq('id', input.id);
         if (error) throw error;
       } else {
         const { error } = await supabase.from('incoming_webhooks').insert({
@@ -109,7 +109,7 @@ export function useIncomingWebhooks() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('incoming_webhooks').delete().eq('id', id);
+      const { error } = await supabase.from('incoming_webhooks').delete().eq('created_by', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -121,7 +121,7 @@ export function useIncomingWebhooks() {
 
   const rotateToken = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('incoming_webhooks').update({ token: genToken() }).eq('id', id);
+      const { error } = await supabase.from('incoming_webhooks').update({ token: genToken() }).eq('created_by', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
