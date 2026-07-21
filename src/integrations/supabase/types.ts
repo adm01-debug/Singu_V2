@@ -14712,7 +14712,6 @@ export type Database = {
             }
             Returns: Json
           }
-        // eslint-disable-next-line sonarjs/no-duplicate-in-composite -- auto-generated type file
         | {
             Args: {
               p_deal_id: string
