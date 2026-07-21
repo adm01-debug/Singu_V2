@@ -116,13 +116,13 @@ export function QuickActionsMenu({
 
   const handleCall = () => {
     if (phone) {
-      window.open(`tel:${phone}`, '_blank');
+      window.open(`tel:${phone}`, '_blank', 'noopener,noreferrer');
     }
   };
 
   const handleEmail = () => {
     if (email) {
-      window.open(`mailto:${email}`, '_blank');
+      window.open(`mailto:${email}`, '_blank', 'noopener,noreferrer');
     }
   };
 
