@@ -79,6 +79,7 @@ export function useBehavioralProfilesList(filters: BehavioralProfilesFilters) {
           preferences, hobbies, recurrent_topics, based_on_count, model, last_updated_at,
           contacts:contact_id ( name, avatar_url, company_id, companies:company_id ( name ) )
         `)
+        .eq('user_id', user!.id)
         .order('last_updated_at', { ascending: false })
         .limit(500);
 

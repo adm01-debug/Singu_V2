@@ -68,7 +68,7 @@ export function useContactDetail(contactId: string | undefined) {
       // 2. Fetch company (depends on contactData.company_id — must be sequential)
       let companyData: Company | null = null;
       if (contactData.company_id) {
-        const { data: localCompany } = await supabase.from('companies').select('*').eq('id', contactData.company_id).maybeSingle();
+        const { data: localCompany } = await supabase.from('companies').select('*').eq('id', contactData.company_id).eq('user_id', user!.id).maybeSingle();
         if (localCompany) {
           companyData = localCompany;
         } else {

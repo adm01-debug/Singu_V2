@@ -12,9 +12,9 @@ export function useSocialIntelligence(contactId: string) {
     queryKey: ['social-intelligence', contactId, user?.id],
     queryFn: async () => {
       const [profRes, behavRes, eventsRes] = await Promise.all([
-        supabase.from('social_profiles').select('*').eq('contact_id', contactId).order('updated_at', { ascending: false }).limit(10),
-        supabase.from('social_behavior_analysis').select('*').eq('contact_id', contactId).order('analysis_date', { ascending: false }).limit(1),
-        supabase.from('social_life_events').select('*').eq('contact_id', contactId).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
+        supabase.from('social_profiles').select('*').eq('contact_id', contactId).eq('user_id', user!.id).order('updated_at', { ascending: false }).limit(10),
+        supabase.from('social_behavior_analysis').select('*').eq('contact_id', contactId).eq('user_id', user!.id).order('analysis_date', { ascending: false }).limit(1),
+        supabase.from('social_life_events').select('*').eq('contact_id', contactId).eq('user_id', user!.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
       ]);
 
       const profiles = profRes.data || [];
@@ -23,8 +23,8 @@ export function useSocialIntelligence(contactId: string) {
       // Sincronização Automática de Hobbies/Interesses baseada no enriquecimento social
       if (behaviorAnalysis?.interests && Array.isArray(behaviorAnalysis.interests)) {
         const [{ data: contact }, { data: existingPending }] = await Promise.all([
-          supabase.from('contacts').select('interests, hobbies').eq('id', contactId).maybeSingle(),
-          supabase.from('suggested_rapport_intel').select('value').eq('contact_id', contactId).eq('status', 'pending').limit(50),
+          supabase.from('contacts').select('interests, hobbies').eq('id', contactId).eq('user_id', user!.id).maybeSingle(),
+          supabase.from('suggested_rapport_intel').select('value').eq('contact_id', contactId).eq('user_id', user!.id).eq('status', 'pending').limit(50),
         ]);
         if (contact) {
           const currentInterests = contact.interests || [];

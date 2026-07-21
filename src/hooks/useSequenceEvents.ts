@@ -30,7 +30,7 @@ export function useSequenceEvents(sequenceId?: string, enrollmentId?: string) {
   return useQuery({
     queryKey: ['sequence-events', sequenceId, enrollmentId, user?.id],
     queryFn: async () => {
-      let q = supabase.from('sequence_events').select('*').order('created_at', { ascending: false }).limit(200);
+      let q = supabase.from('sequence_events').select('*').eq('user_id', user!.id).order('created_at', { ascending: false }).limit(200);
       if (enrollmentId) q = q.eq('enrollment_id', enrollmentId);
       else if (sequenceId) q = q.eq('sequence_id', sequenceId);
       const { data, error } = await q;
@@ -51,6 +51,7 @@ export function useSequenceSendLogs(sequenceId?: string) {
         .from('sequence_send_log')
         .select('*')
         .eq('sequence_id', sequenceId!)
+        .eq('user_id', user!.id)
         .order('sent_at', { ascending: false })
         .limit(200);
       if (error) throw error;
@@ -71,6 +72,7 @@ export function useSequenceMetrics(sequenceId?: string) {
         .from('sequence_events')
         .select('event_type')
         .eq('sequence_id', sequenceId)
+        .eq('user_id', user!.id)
         .limit(1000);
       const list = (events || []) as Array<{ event_type: string }>;
       const sent = list.filter(e => e.event_type === 'sent').length;

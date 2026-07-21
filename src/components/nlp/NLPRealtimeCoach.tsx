@@ -62,12 +62,12 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
     const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down'>>({});
   
   const { data: contactBehavior } = useQuery({
-    queryKey: ['contact-behavior-coach', contactId],
+    queryKey: ['contact-behavior-coach', contactId, user?.id],
     queryFn: async () => {
-      const { data } = await supabase.from('contacts').select('behavior').eq('id', contactId!).maybeSingle();
+      const { data } = await supabase.from('contacts').select('behavior').eq('id', contactId!).eq('user_id', user!.id).maybeSingle();
       return (data?.behavior ?? null) as { vakProfile?: { primary?: VAKType }; discProfile?: DISCProfile } | null;
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
     staleTime: 5 * 60_000,
   });
 

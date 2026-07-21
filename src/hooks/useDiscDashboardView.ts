@@ -11,6 +11,7 @@ export function useDiscDashboardView() {
       const { data, error } = await queryExternalData({
         table: 'vw_singu_disc_dashboard',
         select: '*',
+        filters: [{ type: 'eq', column: 'user_id', value: user!.id }],
         range: { from: 0, to: 99 },
       });
       if (error) throw error;

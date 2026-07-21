@@ -47,8 +47,8 @@ export function ContactCommercialTab({ contactId }: Props) {
 
       // Try local first, then external
       const [rfmLocal, purchaseLocal] = await Promise.all([
-        supabase.from('rfm_analysis').select('*').eq('contact_id', contactId).order('analyzed_at', { ascending: false }).limit(1),
-        supabase.from('purchase_history').select('*').eq('contact_id', contactId).order('purchase_date', { ascending: false }).limit(20),
+        supabase.from('rfm_analysis').select('*').eq('contact_id', contactId).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(1),
+        supabase.from('purchase_history').select('*').eq('contact_id', contactId).eq('user_id', user!.id).order('purchase_date', { ascending: false }).limit(20),
       ]);
 
       let rfm = rfmLocal.data?.[0] || null;

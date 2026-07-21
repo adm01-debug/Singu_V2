@@ -175,9 +175,9 @@ export function usePreContactBriefing(): PreContactBriefingData {
           ? supabase.from('companies').select('*').in('id', companyIds).limit(200)
           : Promise.resolve({ data: [] as unknown[], error: null }),
         supabase.from('interactions').select('*').eq('user_id', user!.id).in('contact_id', contactIds).order('created_at', { ascending: false }).limit(50),
-        supabase.from('client_values').select('*').in('contact_id', contactIds).order('importance', { ascending: false }).limit(100),
-        supabase.from('hidden_objections').select('*').in('contact_id', contactIds).eq('resolved', false).limit(100),
-        supabase.from('vak_analysis_history').select('*').in('contact_id', contactIds).order('created_at', { ascending: false }).limit(50)
+        supabase.from('client_values').select('*').in('contact_id', contactIds).eq('user_id', user!.id).order('importance', { ascending: false }).limit(100),
+        supabase.from('hidden_objections').select('*').in('contact_id', contactIds).eq('user_id', user!.id).eq('resolved', false).limit(100),
+        supabase.from('vak_analysis_history').select('*').in('contact_id', contactIds).eq('user_id', user!.id).order('created_at', { ascending: false }).limit(50)
       ]);
 
       const companies = (companiesResult.data || []) as Record<string, unknown>[];

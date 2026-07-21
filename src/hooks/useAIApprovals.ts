@@ -62,7 +62,7 @@ export function useAIApprovals(contactId?: string) {
 
       const [{ error: updateError }, { data: contact, error: contactError }] = await Promise.all([
         supabase.from('suggested_rapport_intel').update({ status: 'approved' }).eq('id', suggestion.id),
-        supabase.from('contacts').select('hobbies, interests, rapport_metadata').eq('id', suggestion.contact_id).maybeSingle(),
+        supabase.from('contacts').select('hobbies, interests, rapport_metadata').eq('id', suggestion.contact_id).eq('user_id', user.id).maybeSingle(),
       ]);
 
       if (updateError) throw updateError;

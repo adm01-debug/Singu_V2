@@ -157,7 +157,7 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
           analyzed_text: combinedText.slice(0, 5000),
           profile_summary: summary
         }).select().maybeSingle(),
-        supabase.from('contacts').select('behavior').eq('id', contactId).maybeSingle(),
+        supabase.from('contacts').select('behavior').eq('id', contactId).eq('user_id', user.id).maybeSingle(),
       ]);
 
       if (error) throw error;

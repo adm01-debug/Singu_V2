@@ -177,6 +177,7 @@ export function useHealthSignals(accountId: string | undefined) {
         .from("cs_health_signals")
         .select("*")
         .eq("account_id", accountId!)
+        .eq("user_id", user!.id)
         .order("captured_at", { ascending: false })
         .limit(200);
       if (error) throw error;

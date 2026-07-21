@@ -67,22 +67,22 @@ import type { Contact } from '@/hooks/useContactDetail';
 
       const [discRes, eqRes, biasRes, metaRes] = await Promise.all([
         fetchWithFallback<Tables<'disc_analysis_history'>[]>(
-          async () => supabase.from('disc_analysis_history').select('*').eq('contact_id', contact.id).order('analyzed_at', { ascending: false }).limit(5),
+          async () => supabase.from('disc_analysis_history').select('*').eq('contact_id', contact.id).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(5),
           'disc_analysis_history', contactFilter,
           { order: { column: 'analyzed_at', ascending: false }, range: { from: 0, to: 4 } },
         ),
         fetchWithFallback<Record<string, unknown>[]>(
-          async () => supabase.from('eq_analysis_history').select('*').eq('contact_id', contact.id).order('analyzed_at', { ascending: false }).limit(1),
+          async () => supabase.from('eq_analysis_history').select('*').eq('contact_id', contact.id).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(1),
           'eq_analysis_history', contactFilter,
           { order: { column: 'analyzed_at', ascending: false }, range: { from: 0, to: 0 } },
         ),
         fetchWithFallback<Record<string, unknown>[]>(
-          async () => supabase.from('cognitive_bias_history').select('*').eq('contact_id', contact.id).order('analyzed_at', { ascending: false }).limit(1),
+          async () => supabase.from('cognitive_bias_history').select('*').eq('contact_id', contact.id).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(1),
           'cognitive_bias_history', contactFilter,
           { order: { column: 'analyzed_at', ascending: false }, range: { from: 0, to: 0 } },
         ),
         fetchWithFallback<Record<string, unknown>[]>(
-          async () => supabase.from('metaprogram_analysis').select('*').eq('contact_id', contact.id).order('created_at', { ascending: false }).limit(1),
+          async () => supabase.from('metaprogram_analysis').select('*').eq('contact_id', contact.id).eq('user_id', user!.id).order('created_at', { ascending: false }).limit(1),
           'metaprogram_analysis', contactFilter,
           { order: { column: 'created_at', ascending: false }, range: { from: 0, to: 0 } },
         ),

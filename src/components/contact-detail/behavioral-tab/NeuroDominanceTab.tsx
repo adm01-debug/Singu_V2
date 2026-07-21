@@ -6,25 +6,29 @@
  import { motion } from 'framer-motion';
  import { useQuery } from '@tanstack/react-query';
  import { supabase } from '@/integrations/supabase/client';
+ import { useAuth } from '@/hooks/useAuth';
  
  interface NeuroDominanceTabProps {
    contactId: string;
  }
  
  export function NeuroDominanceTab({ contactId }: NeuroDominanceTabProps) {
+   const { user } = useAuth();
    const { data: analysis, isLoading } = useQuery({
-     queryKey: ['brain-dominance', contactId],
+     queryKey: ['brain-dominance', contactId, user?.id],
      queryFn: async () => {
        const { data, error } = await supabase
          .from('brain_dominance_analysis')
          .select('*')
          .eq('contact_id', contactId)
+         .eq('user_id', user!.id)
          .order('analyzed_at', { ascending: false })
          .limit(1)
          .maybeSingle();
        if (error) throw error;
        return data;
-     }
+     },
+     enabled: !!contactId && !!user,
    });
  
    if (isLoading) return <div className="p-8 text-center animate-pulse">Analisando dominância cerebral...</div>;

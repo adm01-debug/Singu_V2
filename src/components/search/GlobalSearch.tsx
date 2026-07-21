@@ -65,20 +65,23 @@ const quickActions = [
   { id: 'new-interaction', label: 'Nova Interação', description: 'Registrar uma nova interação', icon: MessagesSquare, shortcut: 'I', color: 'warning', path: '/interacoes?new=true' },
 ];
 
-const RECENT_ITEMS_KEY = 'command-palette-recent';
 const MAX_RECENT_ITEMS = 5;
 
-function getRecentItems(): RecentItem[] {
+function recentItemsKey(userId?: string) {
+  return `command-palette-recent-${userId ?? 'anon'}`;
+}
+
+function getRecentItems(key: string): RecentItem[] {
   try {
-    const stored = localStorage.getItem(RECENT_ITEMS_KEY);
+    const stored = localStorage.getItem(key);
     return stored ? JSON.parse(stored) : [];
   } catch { return []; }
 }
 
-function addRecentItem(item: Omit<RecentItem, 'timestamp'>) {
-  const recent = getRecentItems();
+function addRecentItem(key: string, item: Omit<RecentItem, 'timestamp'>) {
+  const recent = getRecentItems(key);
   const filtered = recent.filter(r => !(r.id === item.id && r.type === item.type));
-  try { localStorage.setItem(RECENT_ITEMS_KEY, JSON.stringify([{ ...item, timestamp: Date.now() }, ...filtered].slice(0, MAX_RECENT_ITEMS))); } catch { /* quota/private */ }
+  try { localStorage.setItem(key, JSON.stringify([{ ...item, timestamp: Date.now() }, ...filtered].slice(0, MAX_RECENT_ITEMS))); } catch { /* quota/private */ }
 }
 
 function normalizeText(text: string): string {
@@ -162,12 +165,12 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
     const params = new URLSearchParams(window.location.search);
     const urlQuery = params.get('q') ?? '';
     setQuery((prev) => (prev === urlQuery ? prev : urlQuery));
-    setRecentItems(getRecentItems());
+    setRecentItems(getRecentItems(recentItemsKey(user?.id)));
   }, [open]);
 
   const handleNavigate = useCallback((path: string, label: string) => {
     onOpenChange(false);
-    addRecentItem({ id: path, type: 'page', title: label, path });
+    addRecentItem(recentItemsKey(user?.id), { id: path, type: 'page', title: label, path });
     navigate(path);
   }, [onOpenChange, navigate]);
 
@@ -314,7 +317,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
     else if (item.entity === 'deals') navigate('/pipeline');
   }, [navigate, onOpenChange]);
 
-  const handleSelect = (result: SearchResult) => { onOpenChange(false); const path = result.type === 'contact' ? `/contatos/${result.id}` : result.type === 'company' ? `/empresas/${result.id}` : '/interacoes'; addRecentItem({ id: result.id, type: result.type, title: result.title, path }); navigate(path); };
+  const handleSelect = (result: SearchResult) => { onOpenChange(false); const path = result.type === 'contact' ? `/contatos/${result.id}` : result.type === 'company' ? `/empresas/${result.id}` : '/interacoes'; addRecentItem(recentItemsKey(user?.id), { id: result.id, type: result.type, title: result.title, path }); navigate(path); };
   const handleRecentSelect = (item: RecentItem) => { onOpenChange(false); navigate(item.path); };
 
   const hasResults = results.contacts.length > 0 || results.companies.length > 0 || results.interactions.length > 0;

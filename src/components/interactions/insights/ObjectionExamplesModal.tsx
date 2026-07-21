@@ -39,6 +39,7 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import type { ObjectionAggregate } from "@/hooks/useInteractionsInsights";
 import { cn } from "@/lib/utils";
 import { useObjectionExampleFeedback } from "@/hooks/useObjectionExampleFeedback";
@@ -263,6 +264,7 @@ function sentimentStyle(s: string): { Icon: typeof Smile; cls: string; label: st
 }
 
 function ObjectionExamplesModalImpl({ objection, onClose }: Props) {
+  const { user } = useAuth();
   const ids = useMemo(
     () => (objection && Array.isArray(objection.examples) ? objection.examples : []),
     [objection],
@@ -328,8 +330,8 @@ function ObjectionExamplesModalImpl({ objection, onClose }: Props) {
     isFetchingNextPage,
     fetchNextPage,
   } = useInfiniteQuery<Example[], Error, { pages: Example[][]; pageParams: number[] }, readonly unknown[], number>({
-    queryKey: ["objection-examples-full", objectionKey, idsKey],
-    enabled: !!objection && totalIds > 0,
+    queryKey: ["objection-examples-full", objectionKey, idsKey, user?.id],
+    enabled: !!objection && totalIds > 0 && !!user,
     staleTime: 5 * 60 * 1000,
     initialPageParam: 0,
     getNextPageParam: (_last, allPages) => {
@@ -344,6 +346,7 @@ function ObjectionExamplesModalImpl({ objection, onClose }: Props) {
         .from("interactions")
         .select("id, title, type, created_at, content, contact_id, sentiment")
         .in("id", slice)
+        .eq("user_id", user!.id)
         .order("created_at", { ascending: false })
         .limit(1000);
       if (error) throw error;
@@ -367,14 +370,15 @@ function ObjectionExamplesModalImpl({ objection, onClose }: Props) {
   const contactIdsKey = contactIds.join(",");
 
   const { data: contactsMap = {} } = useQuery({
-    queryKey: ["objection-examples-contacts", contactIdsKey],
-    enabled: contactIds.length > 0,
+    queryKey: ["objection-examples-contacts", contactIdsKey, user?.id],
+    enabled: contactIds.length > 0 && !!user,
     staleTime: 5 * 60 * 1000,
     queryFn: async (): Promise<Record<string, ContactSummary>> => {
       const { data, error } = await supabase
         .from("contacts")
         .select("id, first_name, last_name, role_title, company:companies(name, nome_fantasia)")
         .in("id", contactIds)
+        .eq("user_id", user!.id)
         .limit(1000);
       if (error) throw error;
       const map: Record<string, ContactSummary> = {};

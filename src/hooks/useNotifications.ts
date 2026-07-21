@@ -201,6 +201,7 @@ export const useNotifications = () => {
           .from('contacts')
           .select('id, first_name, last_name')
           .in('id', contactIds)
+          .eq('user_id', user.id)
           .limit(1000);
 
         const contactMap = new Map(

@@ -3,7 +3,7 @@
 // Enterprise Level Component
 // ==============================================
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -71,13 +71,13 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
     importantMinScore: 70
   });
 
-  const sellerProfile: Exclude<DISCProfile, null> = (() => {
+  const sellerProfile = useMemo<Exclude<DISCProfile, null>>(() => {
     try {
-      const stored = localStorage.getItem('singu-seller-disc-profile');
+      const stored = localStorage.getItem(`singu-seller-disc-profile-${user?.id ?? 'anon'}`);
       if (stored && ['D', 'I', 'S', 'C'].includes(stored)) return stored as Exclude<DISCProfile, null>;
     } catch { /* fallback */ }
     return 'I';
-  })();
+  }, [user?.id]);
 
   const fetchAlerts = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
@@ -88,6 +88,7 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
       const { data: contacts, error } = await supabase
         .from('contacts')
         .select('id, first_name, last_name, behavior, relationship_score')
+        .eq('user_id', user.id)
         .order('relationship_score', { ascending: false })
         .limit(100);
 
@@ -194,14 +195,14 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
               onClick={() => setShowSettings(!showSettings)}
             >
               <Settings className="w-4 h-4" />
-       <Button
+            </Button>
+            <Button
               variant="ghost"
               size="icon" aria-label="Atualizar"
               onClick={fetchAlerts}
               disabled={loading}
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            </Button>`} />
             </Button>
           </div>
         </div>

@@ -213,12 +213,13 @@ export function useBuyingCommittee(accountId: string | undefined) {
         .from("abm_buying_committee")
         .select("*")
         .eq("account_id", accountId)
+        .eq("user_id", user!.id)
         .order("influence_level", { ascending: false })
         .limit(1000);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as BuyingCommitteeMember[]) : [];
     },
-    enabled: !!accountId,
+    enabled: !!accountId && !!user,
   });
 }
 
@@ -281,12 +282,13 @@ export function useWhitespaceOpportunities(accountId: string | undefined) {
         .from("abm_whitespace_opportunities")
         .select("*")
         .eq("account_id", accountId)
+        .eq("user_id", user!.id)
         .order("estimated_value", { ascending: false, nullsFirst: false })
         .limit(1000);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as WhitespaceOpportunity[]) : [];
     },
-    enabled: !!accountId,
+    enabled: !!accountId && !!user,
   });
 }
 
@@ -337,12 +339,13 @@ export function useABMAccountPlans(accountId: string | undefined) {
         .from("abm_account_plans")
         .select("*")
         .eq("account_id", accountId)
+        .eq("user_id", user!.id)
         .order("created_at", { ascending: false })
         .limit(1000);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as ABMAccountPlan[]) : [];
     },
-    enabled: !!accountId,
+    enabled: !!accountId && !!user,
   });
 }
 

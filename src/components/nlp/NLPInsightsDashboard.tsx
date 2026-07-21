@@ -2,11 +2,11 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
-  FileText, 
-  Sparkles, 
-  TrendingUp, 
-  Target, 
+import {
+  FileText,
+  Sparkles,
+  TrendingUp,
+  Target,
   AlertTriangle,
   ArrowRight,
   Brain
@@ -14,6 +14,7 @@ import {
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -40,10 +41,11 @@ interface InsightItem {
 }
 
 export function NLPInsightsDashboard({ contactId, className }: Props) {
+  const { user } = useAuth();
   const { data: insights, isLoading } = useQuery({
-    queryKey: ['nlp-insights-actionable', contactId],
+    queryKey: ['nlp-insights-actionable', contactId, user?.id],
      queryFn: async () => {
-        const { data: behavior } = await supabase.from('contacts').select('vak_profile, metaprogram_profile, objection_patterns').eq('id', contactId).maybeSingle();
+        const { data: behavior } = await supabase.from('contacts').select('vak_profile, metaprogram_profile, objection_patterns').eq('id', contactId).eq('user_id', user!.id).maybeSingle();
        
        const vak = (behavior?.vak_profile as unknown as NLPProfile) || {};
        const meta = (behavior?.metaprogram_profile as unknown as NLPProfile) || {};
@@ -73,7 +75,7 @@ export function NLPInsightsDashboard({ contactId, className }: Props) {
  
        return items;
      },
-    enabled: !!contactId
+    enabled: !!contactId && !!user,
   });
 
   const handleExportPDF = () => {

@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
  import { format } from 'date-fns';
  import { ptBR } from 'date-fns/locale';
  import { Skeleton } from '@/components/ui/skeleton';
+ import { useAuth } from '@/hooks/useAuth';
 
 interface RoadmapItem {
   month: string;
@@ -19,19 +20,22 @@ interface RoadmapItem {
 }
 
 export function PredictiveRoadmap({ contactId }: { contactId: string }) {
+   const { user } = useAuth();
    const { data: roadmapData, isLoading } = useQuery({
-     queryKey: ['contact-predictive-roadmap', contactId],
+     queryKey: ['contact-predictive-roadmap', contactId, user?.id],
      queryFn: async () => {
        const { data, error } = await supabase
          .from('contact_predictive_roadmap')
          .select('*')
          .eq('contact_id', contactId)
+         .eq('user_id', user!.id)
          .order('forecast_month', { ascending: true })
          .limit(1000);
-       
+
        if (error) throw error;
        return data;
-     }
+     },
+     enabled: !!contactId && !!user,
    });
  
    const steps: RoadmapItem[] = useMemo(() => {
