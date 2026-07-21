@@ -157,8 +157,8 @@ export function useBehaviorAlerts() {
         { data: contacts, error: contactsError },
         { data: recentInteractions, error: interactionsError },
       ] = await Promise.all([
-        supabase.from('contacts').select('*').order('updated_at', { ascending: false }),
-        supabase.from('interactions').select('*').gte('created_at', thirtyDaysAgo.toISOString()),
+        supabase.from('contacts').select('*').eq('user_id', user.id).order('updated_at', { ascending: false }).limit(500),
+        supabase.from('interactions').select('*').eq('user_id', user.id).gte('created_at', thirtyDaysAgo.toISOString()).limit(1000),
       ]);
 
       if (contactsError) throw contactsError;

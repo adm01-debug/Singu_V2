@@ -409,7 +409,7 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
     try {
       // Both queries are independent — fetch in parallel
       const [{ data: contacts }, { data: recentAnalyses }] = await Promise.all([
-        supabase.from('contacts').select('id, behavior, relationship_score').eq('user_id', user.id),
+        supabase.from('contacts').select('id, behavior, relationship_score').eq('user_id', user.id).limit(1000),
         supabase.from('disc_analysis_history').select('*').eq('user_id', user.id).order('analyzed_at', { ascending: false }).limit(10),
       ]);
 

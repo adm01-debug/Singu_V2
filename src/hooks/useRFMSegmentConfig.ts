@@ -10,7 +10,7 @@ export function useRFMSegmentConfig() {
     queryKey: ['rfm-segment-config', user?.id],
     queryFn: async () => {
       const [segRes, metRes] = await Promise.all([
-        supabase.from('rfm_segment_config').select('*').order('priority', { ascending: true }),
+        supabase.from('rfm_segment_config').select('*').order('priority', { ascending: true }).limit(20),
         supabase.from('rfm_metrics').select('*').order('created_at', { ascending: false }).limit(1),
       ]);
       return {

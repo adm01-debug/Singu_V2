@@ -172,12 +172,12 @@ export function usePreContactBriefing(): PreContactBriefingData {
       const companyIds = [...new Set(contacts.map(c => c.company_id).filter(Boolean) as string[])];
       const [companiesResult, recentInteractionsResult, valuesResult, objectionsResult, vakResult] = await Promise.all([
         companyIds.length > 0
-          ? supabase.from('companies').select('*').in('id', companyIds)
+          ? supabase.from('companies').select('*').in('id', companyIds).limit(200)
           : Promise.resolve({ data: [] as unknown[], error: null }),
         supabase.from('interactions').select('*').in('contact_id', contactIds).order('created_at', { ascending: false }).limit(50),
-        supabase.from('client_values').select('*').in('contact_id', contactIds).order('importance', { ascending: false }),
-        supabase.from('hidden_objections').select('*').in('contact_id', contactIds).eq('resolved', false),
-        supabase.from('vak_analysis_history').select('*').in('contact_id', contactIds).order('created_at', { ascending: false })
+        supabase.from('client_values').select('*').in('contact_id', contactIds).order('importance', { ascending: false }).limit(100),
+        supabase.from('hidden_objections').select('*').in('contact_id', contactIds).eq('resolved', false).limit(100),
+        supabase.from('vak_analysis_history').select('*').in('contact_id', contactIds).order('created_at', { ascending: false }).limit(50)
       ]);
 
       const companies = (companiesResult.data || []) as Record<string, unknown>[];
