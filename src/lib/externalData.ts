@@ -24,6 +24,8 @@ interface ExternalQueryOptions {
   };
   /** Use 'planned' for faster approximate counts */
   countMethod?: 'exact' | 'planned';
+  /** AbortSignal to cancel the underlying fetch; does not trip the circuit breaker. */
+  signal?: AbortSignal;
 }
 
 // Cached auth token to avoid calling getSession() on every request
@@ -53,7 +55,9 @@ const externalDbBreaker = getCircuitBreaker('external-db', {
   resetTimeoutMs: 30_000,
 });
 
-async function callExternalData(body: Record<string, unknown>): Promise<Record<string, unknown>> {
+const isAbortError = (e: unknown) => e instanceof Error && e.name === 'AbortError';
+
+async function callExternalData(body: Record<string, unknown>, signal?: AbortSignal): Promise<Record<string, unknown>> {
   return externalDbBreaker.call(async () => {
     const accessToken = await getAccessToken();
 
@@ -65,6 +69,7 @@ async function callExternalData(body: Record<string, unknown>): Promise<Record<s
         'apikey': ANON_KEY,
       },
       body: JSON.stringify(body),
+      signal,
     });
 
     if (!response.ok) {
@@ -85,17 +90,18 @@ async function callExternalData(body: Record<string, unknown>): Promise<Record<s
     }
 
     return result;
-  });
+  }, isAbortError);
 }
 
 export { CircuitOpenError };
 
 export async function queryExternalData<T = Record<string, unknown>>(options: ExternalQueryOptions): Promise<{ data: T[] | null; count: number | null; error: Error | null }> {
+  const { signal, ...queryOptions } = options;
   try {
-    const result = await callExternalData({ action: 'select', ...options });
+    const result = await callExternalData({ action: 'select', ...queryOptions }, signal);
     const data = (result?.data as unknown as T[]) || [];
     const count = (result?.count as number) || 0;
-    
+
     // Log access for auditing
     if (data.length > 0) {
       const { data: { session } } = await supabase.auth.getSession();
@@ -103,16 +109,17 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
         await supabase.from('activities').insert({
           user_id: session.user.id,
           type: 'access',
-          entity_type: options.table === 'contacts' ? 'contact' : options.table === 'companies' ? 'company' : 'interaction',
+          entity_type: queryOptions.table === 'contacts' ? 'contact' : queryOptions.table === 'companies' ? 'company' : 'interaction',
           entity_id: 'batch_query',
-          description: `Acesso a ${data.length} registros da tabela ${options.table}`,
-          metadata: { query_options: options }
+          description: `Acesso a ${data.length} registros da tabela ${queryOptions.table}`,
+          metadata: { query_options: queryOptions }
         });
       }
     }
-    
+
     return { data, count, error: null };
   } catch (err) {
+    if (isAbortError(err)) return { data: null, count: null, error: err as Error };
     const msg = err instanceof Error ? err.message : 'Unknown error';
     logger.error('Error querying external data:', { error: msg });
     return { data: null, count: null, error: err as Error };

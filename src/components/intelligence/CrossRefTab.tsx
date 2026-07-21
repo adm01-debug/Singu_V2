@@ -55,7 +55,7 @@ export const CrossRefTab = () => {
   useEffect(() => {
     const pivot = params.get('pivot');
     if (!pivot) return;
-    let alive = true;
+    const controller = new AbortController();
     const [pType, pId] = pivot.split(':');
     if ((pType === 'contact' || pType === 'company') && pId) {
       setType(pType);
@@ -68,15 +68,17 @@ export const CrossRefTab = () => {
             select: `id, ${nameCol}`,
             filters: [{ type: 'eq', column: 'id', value: pId }],
             range: { from: 0, to: 0 },
+            signal: controller.signal,
           });
-          if (!alive) return;
+          if (controller.signal.aborted) return;
           const name = rows?.[0]?.[nameCol] ? String(rows[0][nameCol]) : pId.slice(0, 8);
           setPicked((prev) =>
             // eslint-disable-next-line sonarjs/no-nested-functions
             prev.some((p) => p.id === pId) ? prev : [...prev, { id: pId, name }].slice(0, 3)
           );
-        } catch {
-          if (!alive) return;
+        } catch (e) {
+          if (e instanceof Error && e.name === 'AbortError') return;
+          if (controller.signal.aborted) return;
           setPicked((prev) =>
             // eslint-disable-next-line sonarjs/no-nested-functions
             prev.some((p) => p.id === pId) ? prev : [...prev, { id: pId, name: pId.slice(0, 8) }].slice(0, 3)
@@ -87,7 +89,7 @@ export const CrossRefTab = () => {
     const next = new URLSearchParams(params);
     next.delete('pivot');
     setParams(next, { replace: true });
-    return () => { alive = false; };
+    return () => { controller.abort(); };
   }, [params, setParams]);
 
   const { data, isLoading, error, refetch } = useCrossReference({
@@ -124,7 +126,7 @@ export const CrossRefTab = () => {
   }, [data, picked, overlap.index]);
 
   useEffect(() => {
-    let cancelled = false;
+    const controller = new AbortController();
     const run = async () => {
       if (picked.length < 2) { setMetaRows([]); return; }
       setLoadingMeta(true);
@@ -137,19 +139,21 @@ export const CrossRefTab = () => {
               select: '*',
               filters: [{ type: 'eq', column: 'id', value: p.id }],
               range: { from: 0, to: 0 },
+              signal: controller.signal,
             });
             return { id: p.id, name: p.name, metadata: r?.[0] || {} };
           })
         );
-        if (!cancelled) setMetaRows(rows);
-      } catch {
-        if (!cancelled) setMetaRows([]);
+        if (!controller.signal.aborted) setMetaRows(rows);
+      } catch (e) {
+        if (e instanceof Error && e.name === 'AbortError') return;
+        if (!controller.signal.aborted) setMetaRows([]);
       } finally {
-        if (!cancelled) setLoadingMeta(false);
+        if (!controller.signal.aborted) setLoadingMeta(false);
       }
     };
     run();
-    return () => { cancelled = true; };
+    return () => { controller.abort(); };
   }, [picked, type]);
 
   const compareFields = useMemo(() => {
