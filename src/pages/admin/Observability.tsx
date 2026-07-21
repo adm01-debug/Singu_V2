@@ -31,7 +31,7 @@ export default function Observability() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('slow_queries_audit')
-        .select('*')
+        .select('query, calls, mean_exec_ms')
         .limit(10);
       if (error) return []; // Fallback if extension not enabled
       return (data || []) as unknown as SlowQuery[];

@@ -14,8 +14,8 @@ export default function PermissionsPage() {
   const { data: permissions = [], isLoading } = useQuery({
     queryKey: ['all-permissions', user?.id],
     queryFn: async () => {
-      const { data, error } = await supabase.from('permissions').select('*').order('module')
-      .limit(1000);
+      const { data, error } = await supabase.from('permissions').select('id, module, name, action, description, created_at').order('module')
+      .limit(200);
       if (error) return [];
       return Array.isArray(data) ? data : [];
     },
