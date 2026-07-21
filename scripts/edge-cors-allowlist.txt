@@ -1,3 +1,5 @@
 # Edge functions autorizadas a usar `Access-Control-Allow-Origin: *`.
 # Requer justificativa via ADR. Padrão: preferir scopedCorsHeaders().
 _shared
+# connection-tester: endpoint diagnóstico público de webhooks/CORS; wildcard é intencional.
+connection-tester
