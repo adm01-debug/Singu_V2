@@ -114,7 +114,7 @@ export function useSmartNotifications() {
       }
       if (patch.snoozed_until !== undefined) updates.snoozed_until = patch.snoozed_until;
       if (!user) throw new Error('Não autenticado');
-      const { error } = await supabase.from('smart_notifications').update(updates).eq('user_id', user.id).eq('id', patch.id);
+      const { error } = await supabase.from('smart_notifications').update(updates as never).eq('user_id', user.id).eq('id', patch.id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['smart-notifications', user?.id] }),

@@ -39,6 +39,7 @@ export interface SmartRemindersResponse {
 }
 
 export const useSmartReminders = (autoFetch = true) => {
+  const { user } = useAuth();
   const [reminders, setReminders] = useState<SmartReminder[]>([]);
   const [summary, setSummary] = useState<ReminderSummary | null>(null);
   const [aiInsights, setAiInsights] = useState<string | null>(null);

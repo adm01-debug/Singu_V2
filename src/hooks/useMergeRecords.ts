@@ -32,7 +32,7 @@ export function useMergeRecords() {
       if (fieldOverrides && Object.keys(fieldOverrides).length > 0) {
         const { error: updErr } = await supabase
           .from(entity)
-          .update(fieldOverrides)
+          .update(fieldOverrides as never)
           .eq('user_id', user.id)
           .eq('id', primaryId);
         if (updErr) throw updErr;

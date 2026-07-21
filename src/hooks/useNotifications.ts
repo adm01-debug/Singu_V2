@@ -17,6 +17,7 @@ interface NotificationPermission {
 }
 
 export const useNotifications = () => {
+  const { user } = useAuth();
   const [permissionState, setPermissionState] = useState<NotificationPermission>({
     permission: 'default',
     supported: false,

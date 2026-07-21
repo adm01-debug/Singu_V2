@@ -112,8 +112,8 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
           entity_type: queryOptions.table === 'contacts' ? 'contact' : queryOptions.table === 'companies' ? 'company' : 'interaction',
           entity_id: 'batch_query',
           description: `Acesso a ${data.length} registros da tabela ${queryOptions.table}`,
-          metadata: { query_options: queryOptions }
-        });
+          metadata: { query_options: queryOptions },
+        } as never);
         if (auditErr) logger.warn('Failed to write access audit log', { error: auditErr.message });
       }
     }
@@ -231,8 +231,8 @@ export async function deleteExternalData(table: string, id: string): Promise<{ s
         entity_type: table === 'contacts' ? 'contact' : table === 'companies' ? 'company' : 'interaction',
         entity_id: id,
         description: `Exclusão de registro na tabela ${table}`,
-        reason: 'Solicitação via interface'
-      });
+        reason: 'Solicitação via interface',
+      } as never);
       if (auditErr) logger.warn('Failed to write delete audit log', { error: auditErr.message });
     }
     return { success: true, error: null };

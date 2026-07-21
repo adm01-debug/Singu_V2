@@ -1,0 +1,30 @@
+-- Generated 2026-07-21T16:17:01Z
+
+CREATE TABLE public.audit_log_2026_07 PARTITION OF public.audit_log FOR VALUES FROM ('2026-07-01 00:00:00+00') TO ('2026-08-01 00:00:00+00');
+CREATE TABLE public.audit_log_2026_08 PARTITION OF public.audit_log FOR VALUES FROM ('2026-08-01 00:00:00+00') TO ('2026-09-01 00:00:00+00');
+CREATE TABLE public.audit_log_2026_09 PARTITION OF public.audit_log FOR VALUES FROM ('2026-09-01 00:00:00+00') TO ('2026-10-01 00:00:00+00');
+CREATE TABLE public.audit_log_2026_10 PARTITION OF public.audit_log FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2026-11-01 00:00:00+00');
+CREATE TABLE public.audit_log_2026_11 PARTITION OF public.audit_log FOR VALUES FROM ('2026-11-01 00:00:00+00') TO ('2026-12-01 00:00:00+00');
+CREATE TABLE public.audit_log_2026_12 PARTITION OF public.audit_log FOR VALUES FROM ('2026-12-01 00:00:00+00') TO ('2027-01-01 00:00:00+00');
+CREATE TABLE public.audit_log_default PARTITION OF public.audit_log DEFAULT;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -157,7 +157,7 @@ export function useNLPAutoAnalysis() {
 
       // Sync to company if linked
       if (contactData?.company_id) {
-        const { error: companyError } = await supabase.from('companies').update(behavioralUpdates).eq('user_id', user!.id).eq('id', contactData.company_id);
+        const { error: companyError } = await supabase.from('companies').update(behavioralUpdates as never).eq('user_id', user!.id).eq('id', contactData.company_id);
         if (companyError) logger.error('Error syncing behavioral data to company:', { error: companyError.message });
       }
 

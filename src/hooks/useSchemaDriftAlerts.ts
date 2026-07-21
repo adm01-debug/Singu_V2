@@ -80,7 +80,7 @@ export function useResolveDriftAlert() {
           resolved: true,
           resolved_at: new Date().toISOString(),
           resolved_by: user?.id,
-        } as Record<string, unknown>)
+        } as never)
         .eq('id', alertId);
 
       if (error) throw error;

@@ -229,7 +229,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
       });
@@ -239,6 +239,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return { error: new Error('Email ou senha incorretos.') };
         }
         return { error };
+      }
+
+      // Guard pós-migração: se o usuário exige reset, encerra a sessão e
+      // dispara o fluxo /reset-password?forced=true.
+      const mustReset = Boolean(
+        (data?.user?.user_metadata as { must_reset_password?: boolean } | undefined)
+          ?.must_reset_password
+      );
+      if (mustReset) {
+        try {
+          if (data?.user?.email) {
+            await supabase.auth.resetPasswordForEmail(data.user.email, {
+              redirectTo: `${window.location.origin}/reset-password?forced=true`,
+            });
+          }
+        } catch (err) {
+          logger.warn('resetPasswordForEmail (forced) falhou:', err);
+        }
+        await supabase.auth.signOut();
+        toast.info(
+          'Por segurança, sua senha precisa ser redefinida. Enviamos um link para o seu e-mail.'
+        );
+        return {
+          error: new Error(
+            'É necessário redefinir sua senha. Verifique seu e-mail para continuar.'
+          ),
+        };
       }
 
       return { error: null };
