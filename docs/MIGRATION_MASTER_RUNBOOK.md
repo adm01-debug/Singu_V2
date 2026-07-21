@@ -167,3 +167,15 @@ SNAPSHOT_DIR=/backups/pre-cutover ./rollback/full-restore.sh --confirm --i-know-
 - [ ] `compliance/lgpd-snapshot.ts` executado, manifesto arquivado
 - [ ] `dr/backup-encryption-check.md` validado no último trimestre
 - [ ] `MIGRATION_EXECUTIVE_BRIEF.md` distribuído a stakeholders
+
+## Checklist final (12/10 — Defense-in-Depth)
+
+- [ ] `cdc/lag-watch.sh` rodando em paralelo ao drain (AUTO_DRAIN=1)
+- [ ] `verify/dual-write-diverge.ts` agendado a cada 5min durante bake
+- [ ] `verify/schema-freeze-guard.sql -v action=snapshot` executado no freeze
+- [ ] `verify/schema-freeze-guard.sql -v action=check` verde a cada 10min na janela
+- [ ] `functions/secrets-leak-scan.sh` verde antes do `deploy-all.sh`
+- [ ] `storage/copy-large.ts` usado para todos os objetos >100MB
+- [ ] `sql/heal-sequences.sql` aplicado após import paralelo
+- [ ] `verify/dns-multi-region.sh` 12/12 resolvers alinhados
+- [ ] `chaos/inject.sh` executado nos 5 cenários em staging (release-blocker)
