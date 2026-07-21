@@ -10,6 +10,7 @@ Não implementar módulos de Produtos nem Propostas (escopo proibido).
 Excelência sustentada: 70/70 melhorias atômicas (Rodadas A-N). Gate a11y no CI.
 
 ## Memories
+- [Rodada 13/10 — Excelência Sustentada](mem://migration/completion-13-10) — 8 hardenings: restore drill, CDC order-guard, RLS coverage no CI, JWT rotation dual-key, WAL archive health, k6 pool saturation, extension parity, tz/locale drift.
 - [Rodada N — IA & Self-Healing](mem://features/ux-rodada-n-ia-self-healing) — 70/70: ai-suggest-mapping, anomaly detector diário, self-healing por schema drift (human-in-the-loop), ask-crm com tabelas de integrações, ADR-017.
 - [Rodada M — Federação & DX](mem://features/ux-rodada-m-federacao-dx) — 65/65: schema discovery via information_schema, templates de webhook (Bitrix/n8n/Stripe/GitHub), snippets cURL/JS/Python/n8n, MCP v1.2.0 com 5 novas tools, ADR-016.
 - [Rodada L — Governança Conexões](mem://features/ux-rodada-l-governanca-compliance) — 60/60: auditoria com mascaramento, HMAC SHA-256 + anti-replay, quotas mensais (429), dry-run/replay, ADR-015.
