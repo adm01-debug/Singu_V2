@@ -28,6 +28,7 @@ import {
   guardBody,
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { validate } from "../_shared/validate.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
@@ -298,7 +299,18 @@ Deno.serve(async (req) => {
     const rl = limiter.check(userId, req);
     if (rl) return rl;
 
-    const payload = rawBody as TestPayload;
+    const vct = validate(rawBody, {
+      connection_type: { type: 'string', required: true, maxLength: 30 },
+      connection_id:   { type: 'string', maxLength: 36 },
+      config:          { type: 'object', required: true },
+    });
+    if (!vct.ok) {
+      return new Response(JSON.stringify({ success: false, error: vct.error }), {
+        status: 400,
+        headers: { ...corsH, 'Content-Type': 'application/json' },
+      });
+    }
+    const payload = vct.data as TestPayload;
     let result: TestResult;
 
     switch (payload.connection_type) {

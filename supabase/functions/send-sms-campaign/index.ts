@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, requireCronSecret, guardBody } from "../_shared/auth.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
+import { validate } from "../_shared/validate.ts";
 
 
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
@@ -45,10 +46,13 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
-    const { campaignId } = (rawBody ?? {}) as Body;
-    if (!campaignId) {
-      return new Response(JSON.stringify({ error: "campaignId required" }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
+    const vsc = validate(rawBody ?? {}, {
+      campaignId: { type: 'string', required: true, maxLength: 36 },
+    });
+    if (!vsc.ok) {
+      return new Response(JSON.stringify({ error: vsc.error }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
     }
+    const { campaignId } = vsc.data as { campaignId: string };
 
     const admin = createClient(
       Deno.env.get("SUPABASE_URL")!,
