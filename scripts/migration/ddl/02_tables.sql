@@ -2684,3 +2684,21 @@ CREATE TABLE public.knowledge_base_articles (
   views_count integer DEFAULT 0,
   helpful_count integer DEFAULT 0
 );
+
+-- ─── public.landing_page_submissions ───
+CREATE TABLE public.landing_page_submissions (
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  utm_campaign text,
+  CONSTRAINT landing_page_submissions_pkey PRIMARY KEY (id),
+  ip_address text,
+  user_agent text,
+  created_at timestamp with time zone DEFAULT now() NOT NULL,
+  landing_page_id uuid NOT NULL,
+  user_id uuid NOT NULL,
+  data jsonb DEFAULT '{}'::jsonb NOT NULL,
+  email text,
+  name text,
+  phone text,
+  utm_source text,
+  utm_medium text
+);
