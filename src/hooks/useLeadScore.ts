@@ -342,7 +342,7 @@ export function useCalculateLeadScore() {
       if (error) throw error;
 
       // Record history (fire-and-forget — response uses in-memory result)
-      void supabase.from('lead_score_history').insert({
+      supabase.from('lead_score_history').insert({
         contact_id: contactId,
         user_id: user.id,
         total_score: result.total_score,

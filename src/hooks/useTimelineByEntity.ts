@@ -51,12 +51,12 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
     queryFn: async (): Promise<TimelineGroup[]> => {
       if (!user) return [];
       // Build base query (client-side fallback — sempre funciona)
-       let query = supabase
-         .from('interactions')
-         .select('id, type, title, content, created_at, sentiment, follow_up_required, contact_id, company_id, transcription, transcription_metadata')
-         .eq('user_id', user.id)
-         .order('created_at', { ascending: false })
-         .limit(500);
+      let query = supabase
+        .from('interactions')
+        .select('id, type, title, content, created_at, sentiment, follow_up_required, contact_id, company_id, transcription, transcription_metadata')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(500);
 
       if (dateFrom) query = query.gte('created_at', dateFrom.toISOString());
       if (dateTo) query = query.lte('created_at', dateTo.toISOString());

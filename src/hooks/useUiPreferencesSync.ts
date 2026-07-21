@@ -71,7 +71,7 @@ function shallowEqual<T extends Record<string, unknown>>(a: T, b: T): boolean {
 export function useUiPreferencesSync<T extends Record<string, unknown>>(
   opts: UseUiPreferencesSyncOptions<T>,
 ) {
-  const { scope, current, defaults, sanitize, hydrate, hasUrlOverride, debounceMs = 600 } = opts;
+  const { scope, current, sanitize, hydrate, hasUrlOverride, debounceMs = 600 } = opts;
   const { user } = useAuth();
   const qc = useQueryClient();
   const hydratedRef = useRef(false);

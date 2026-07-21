@@ -203,7 +203,7 @@ export function useDocumentSignatures() {
       if (error) throw error;
       if (!data) throw new Error("Falha ao registrar assinatura");
       if (tpl && input.template_id) {
-        void supabase.from('document_templates')
+        supabase.from('document_templates')
           .update({ usage_count: (tpl.usage_count ?? 0) + 1 } as TablesUpdate<'document_templates'>)
           .eq('user_id', user.id)
           .eq('id', input.template_id)

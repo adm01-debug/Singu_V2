@@ -75,22 +75,25 @@ interface WhyScoreDrawerProps {
 
 const FEEDBACK_KEY = 'singu-score-feedback-v1';
 
-function readFeedback(storageKey: string): Record<string, 'up' | 'down'> {
-  if (typeof window === 'undefined') return {};
+function readLocalStorage<T extends Record<string, unknown>>(storageKey: string): T {
+  if (typeof window === 'undefined') return {} as T;
   try {
-    return JSON.parse(window.localStorage.getItem(storageKey) ?? '{}');
+    return JSON.parse(window.localStorage.getItem(storageKey) ?? '{}') as T;
   } catch {
-    return {};
+    return {} as T;
   }
 }
 
-function writeFeedback(storageKey: string, map: Record<string, 'up' | 'down'>) {
+function writeLocalStorage<T extends Record<string, unknown>>(storageKey: string, map: T) {
   try {
     window.localStorage.setItem(storageKey, JSON.stringify(map));
   } catch {
     /* noop */
   }
 }
+
+const readFeedback = (key: string) => readLocalStorage<Record<string, 'up' | 'down'>>(key);
+const writeFeedback = writeLocalStorage<Record<string, 'up' | 'down'>>;
 
 // Feedback sobre a explicação ("faz sentido / não faz sentido"), persistido por scoreKey
 // (que já encoda o contato, ex.: "lead-score:contact:abc").
@@ -104,22 +107,8 @@ interface ExplanationFeedbackEntry {
   updatedAt: string;
 }
 
-function readExplanationFeedback(storageKey: string): Record<string, ExplanationFeedbackEntry> {
-  if (typeof window === 'undefined') return {};
-  try {
-    return JSON.parse(window.localStorage.getItem(storageKey) ?? '{}');
-  } catch {
-    return {};
-  }
-}
-
-function writeExplanationFeedback(storageKey: string, map: Record<string, ExplanationFeedbackEntry>) {
-  try {
-    window.localStorage.setItem(storageKey, JSON.stringify(map));
-  } catch {
-    /* noop */
-  }
-}
+const readExplanationFeedback = (key: string) => readLocalStorage<Record<string, ExplanationFeedbackEntry>>(key);
+const writeExplanationFeedback = writeLocalStorage<Record<string, ExplanationFeedbackEntry>>;
 
 function deriveBand(score: number): ScoreBand {
   if (score >= 70) return 'high';

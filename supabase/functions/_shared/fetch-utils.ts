@@ -25,8 +25,10 @@ export const HEALTH_TIMEOUT_MS = 10_000;
  * @param opts    RequestInit options (signal is overridden)
  * @param timeoutMs Deadline in milliseconds (default: API_TIMEOUT_MS = 30 s)
  */
+type FetchTarget = string | URL | Request;
+
 export function fetchWithTimeout(
-  url: string | URL | Request,
+  url: FetchTarget,
   opts: RequestInit = {},
   timeoutMs: number = API_TIMEOUT_MS,
 ): Promise<Response> {
@@ -35,7 +37,7 @@ export function fetchWithTimeout(
 
 /** Convenience wrapper for AI gateway / LLM inference calls (45 s deadline). */
 export function fetchAI(
-  url: string | URL | Request,
+  url: FetchTarget,
   opts: RequestInit = {},
 ): Promise<Response> {
   return fetch(url, { ...opts, signal: AbortSignal.timeout(AI_TIMEOUT_MS) });

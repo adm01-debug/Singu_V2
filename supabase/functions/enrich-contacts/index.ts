@@ -80,7 +80,7 @@ Deno.serve(async (req) => {
 
     // One batch external query for ALL phone variants (eliminates N+1)
     type ExtContact = { id: string; company_id: string | null; first_name: string | null; last_name: string | null; cargo: string | null; whatsapp: string | null; phone: string | null; email: string | null };
-    let extContactMap = new Map<string, ExtContact>(); // variant → ext contact
+    const extContactMap = new Map<string, ExtContact>(); // variant → ext contact
 
     if (allVariants.length > 0) {
       // Use OR filter: whatsapp.in.(...) OR phone.in.(...)

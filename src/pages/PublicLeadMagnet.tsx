@@ -32,7 +32,7 @@ export default function PublicLeadMagnet() {
       if (cancelled) return;
       if (data) {
         setMagnet(data as unknown as LeadMagnet);
-        void supabase.rpc('increment_magnet_view', { _slug: currentSlug });
+        supabase.rpc('increment_magnet_view', { _slug: currentSlug }).catch(() => {});
       }
       setLoading(false);
     })();
@@ -42,7 +42,8 @@ export default function PublicLeadMagnet() {
   const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!slug) return;
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+    const atIdx = email.indexOf('@');
+    if (atIdx < 1 || atIdx === email.length - 1 || !email.slice(atIdx + 1).includes('.')) return;
     setSubmitting(true);
     try {
       const params = new URLSearchParams(window.location.search);

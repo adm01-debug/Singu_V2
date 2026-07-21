@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
-import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import type { Json, TablesUpdate } from '@/integrations/supabase/types';
 import { parseApiError } from '@/lib/errorMessages';
 
 export interface NurturingStep {

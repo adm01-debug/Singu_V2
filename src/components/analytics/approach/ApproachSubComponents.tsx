@@ -61,7 +61,8 @@ export function MessagesTab({ personalizedMessages, objectionHandling, copyToCli
         {personalizedMessages.map((msg, idx) => (
           <motion.div key={idx} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.1 }} className="p-4 rounded-xl bg-muted/50 border hover:border-primary/50 transition-colors">
             <div className="flex items-start justify-between gap-3 mb-2">
-              <Badge variant="outline">{msg.context}<Button variant="ghost" size="icon" aria-label="Confirmar" className="h-8 w-8" onClick={() => copyToClipboard(msg.message, `msg-${idx}`)}>
+              <Badge variant="outline">{msg.context}</Badge>
+              <Button variant="ghost" size="icon" aria-label="Copiar mensagem" className="h-8 w-8" onClick={() => copyToClipboard(msg.message, `msg-${idx}`)}>
                 {copiedItem === `msg-${idx}` ? <Check className="w-4 h-4 text-success" /> : <Copy className="w-4 h-4" />}
               </Button>
             </div>

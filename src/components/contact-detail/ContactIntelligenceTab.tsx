@@ -6,10 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { InlineEmptyState } from '@/components/ui/empty-state';
 import { cn } from '@/lib/utils';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { toast } from 'sonner';
 import { ModuleHelp, moduleHelpContent } from '@/components/ui/module-help';
 import { EmotionalAnchorsPanel } from '@/components/contact-detail/EmotionalAnchorsPanel';
 import { BestTimeToContactCard } from '@/components/contact-detail/BestTimeToContactCard';
@@ -57,8 +56,6 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
    interactions = []
  }: Props) {
   const { user } = useAuth();
-  const queryClient = useQueryClient();
-
   const { data } = useQuery({
     queryKey: ['contact-intelligence', contactId, user?.id],
     queryFn: async () => {
@@ -79,23 +76,6 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
     enabled: !!contactId && !!user,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-  });
-
-  const updateOfferStatus = useMutation({
-    mutationFn: async ({ offerId, status }: { offerId: string; status: string }) => {
-      if (!user) throw new Error('Não autenticado');
-      const { error } = await supabase
-        .from('offer_suggestions')
-        .update({ status })
-        .eq('user_id', user.id)
-        .eq('id', offerId);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['contact-intelligence', contactId] });
-      toast.success('Status da oferta atualizado');
-    },
-    onError: () => toast.error('Erro ao atualizar status'),
   });
 
   const objections = data?.objections || [];

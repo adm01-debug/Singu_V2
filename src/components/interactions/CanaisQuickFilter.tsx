@@ -57,7 +57,7 @@ function readApplied(key: string): string[] | null {
   return readStoredArray(key);
 }
 
-function writePending(key: string, next: string[]) {
+function writeStoredArray(key: string, next: string[]) {
   try {
     localStorage.setItem(key, JSON.stringify(next));
   } catch {
@@ -65,13 +65,8 @@ function writePending(key: string, next: string[]) {
   }
 }
 
-function writeApplied(key: string, next: string[]) {
-  try {
-    localStorage.setItem(key, JSON.stringify(next));
-  } catch {
-    /* noop */
-  }
-}
+const writePending = writeStoredArray;
+const writeApplied = writeStoredArray;
 
 function clearPending(key: string) {
   try {

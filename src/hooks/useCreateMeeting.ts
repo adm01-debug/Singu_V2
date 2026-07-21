@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { insertExternalData } from '@/lib/externalData';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { parseApiError } from '@/lib/errorMessages';
 

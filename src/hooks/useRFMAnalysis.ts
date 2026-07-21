@@ -158,7 +158,7 @@ export function useRFMAnalysis(contactId?: string) {
           frequency_score: r.frequency_score, monetary_score: r.monetary_score,
           segment: r.segment, total_monetary_value: r.total_monetary_value,
         }));
-        void supabase.from('rfm_history').insert(historyRows)
+        supabase.from('rfm_history').insert(historyRows)
           .catch((e: unknown) => logger.error('rfm_history bulk insert error:', e));
       }
       await queryClient.invalidateQueries({ queryKey: ['rfm-analysis'] });
