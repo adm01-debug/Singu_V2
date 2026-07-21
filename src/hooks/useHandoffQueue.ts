@@ -137,7 +137,7 @@ export function useHandoffRealtime() {
     if (!user) return;
 
     const channel = supabase
-      .channel('handoff-realtime')
+      .channel(`handoff-realtime:${user.id}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'handoff_requests', filter: `user_id=eq.${user.id}` },

@@ -194,7 +194,7 @@ export function useRealtimeNotifications() {
 
         // Subscribe channel
         channel = supabase
-          .channel('realtime-notifications')
+          .channel(`realtime-notifications:${user.id}`)
           .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'alerts', filter: `user_id=eq.${user.id}` }, handleNewAlert)
           .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'insights', filter: `user_id=eq.${user.id}` }, handleNewInsight)
           .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'health_alerts', filter: `user_id=eq.${user.id}` }, handleNewHealthAlert)

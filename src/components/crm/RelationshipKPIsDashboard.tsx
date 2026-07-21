@@ -141,7 +141,7 @@ export function RelationshipKPIsDashboard() {
    useEffect(() => {
      if (!user?.id) return;
      const channel = supabase
-       .channel('crm-pulse')
+       .channel(`crm-pulse:${user.id}`)
        .on(
          'postgres_changes',
          { event: 'INSERT', schema: 'public', table: 'interactions', filter: `user_id=eq.${user.id}` },

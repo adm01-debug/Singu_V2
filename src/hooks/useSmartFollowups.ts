@@ -2,6 +2,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { parseISO } from 'date-fns';
+import { toast } from 'sonner';
 import { useCreateTask } from './useTasks';
 
 export interface SmartReminder {
@@ -99,7 +100,8 @@ export function useSmartFollowups() {
     },
     onSuccess: () => {
       // Feedback já é dado pelo useCreateTask
-    }
+    },
+    onError: () => toast.error('Erro ao agendar lembrete'),
   });
 
   return {

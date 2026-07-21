@@ -144,7 +144,7 @@ export function CadenceRulesConfig() {
   useEffect(() => {
     if (!user?.id) return;
     const channel = supabase
-      .channel('cadence-updates')
+      .channel(`cadence-updates:${user.id}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'crm_cadence_rules', filter: `user_id=eq.${user.id}` },

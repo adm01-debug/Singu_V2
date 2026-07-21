@@ -29,15 +29,17 @@ export function useFavoriteTemplates() {
       if (!user) throw new Error('Not authenticated');
       const isFav = favorites.includes(templateId);
       if (isFav) {
-        await supabase
+        const { error } = await supabase
           .from('favorite_templates')
           .delete()
           .eq('user_id', user.id)
           .eq('template_id', templateId);
+        if (error) throw error;
       } else {
-        await supabase
+        const { error } = await supabase
           .from('favorite_templates')
           .insert([{ user_id: user.id, template_id: templateId }]);
+        if (error) throw error;
       }
       return { templateId, added: !isFav };
     },

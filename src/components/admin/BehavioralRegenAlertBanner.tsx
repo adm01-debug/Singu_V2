@@ -25,11 +25,12 @@ export function BehavioralRegenAlertBanner() {
   const qc = useQueryClient();
   const [showSimulated, setShowSimulated] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
-    return window.localStorage.getItem("brab:show-simulated") === "1";
+    try { return window.localStorage.getItem("brab:show-simulated") === "1"; } catch { return false; }
   });
 
   const { data: allAlerts, isLoading } = useQuery({
-    queryKey: ["behavioral-regen-active-alerts"],
+    queryKey: ["behavioral-regen-active-alerts", user?.id],
+    enabled: !!user,
     refetchInterval: 60_000,
     refetchOnWindowFocus: false,
     queryFn: async (): Promise<AlertRow[]> => {
@@ -62,7 +63,7 @@ export function BehavioralRegenAlertBanner() {
     const next = !showSimulated;
     setShowSimulated(next);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem("brab:show-simulated", next ? "1" : "0");
+      try { window.localStorage.setItem("brab:show-simulated", next ? "1" : "0"); } catch { /* quota/private */ }
     }
   };
 

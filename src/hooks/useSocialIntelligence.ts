@@ -78,7 +78,7 @@ export function useSocialIntelligence(contactId: string) {
 
    const syncToPsychographic = useMutation({
      mutationFn: async () => {
-       if (!user) return;
+       if (!user) throw new Error('Not authenticated');
        
        // 1. Get current social behavior analysis
        const { data: analysis } = await supabase

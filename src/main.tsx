@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ACTIVE_THEME_STORAGE_KEY, bootstrapTheme } from "@/components/theme/themeBootstrap";
 import { initGlobalErrorHandlers } from "@/lib/errorReporting";
 import { ProviderErrorBoundary } from "@/components/feedback/ProviderErrorBoundary";
+import { logger } from "@/lib/logger";
 import App from "./App.tsx";
 import "./index.css";
 
@@ -75,7 +76,7 @@ async function migrateLegacyPushSW(): Promise<void> {
 
     try {
       await reg.unregister();
-      console.info(
+      logger.info(
         "[main] Migrated: removed legacy sw-push.js." +
           " Push notifications will reactivate after next login."
       );
@@ -121,7 +122,7 @@ if (import.meta.env.PROD) {
 
             onRegistered(reg) {
               if (reg) {
-                console.info("[PWA] SW registered — scope:", reg.scope);
+                logger.info("[PWA] SW registered — scope:", reg.scope);
               }
             },
 

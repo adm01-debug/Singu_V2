@@ -107,7 +107,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
   const toggleSmooth = (next: boolean) => {
     setSmoothEnabled(next);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(SMOOTH_ENABLED_KEY, next ? "1" : "0");
+      try { window.localStorage.setItem(SMOOTH_ENABLED_KEY, next ? "1" : "0"); } catch { /* quota/private */ }
     }
   };
 
@@ -115,7 +115,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
   const changeSmoothWindow = (next: SmoothWindow) => {
     setSmoothWindow(next);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(SMOOTH_WINDOW_KEY, String(next));
+      try { window.localStorage.setItem(SMOOTH_WINDOW_KEY, String(next)); } catch { /* quota/private */ }
     }
   };
 
@@ -130,7 +130,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
   const togglePctLine = (next: boolean) => {
     setShowPositivePctLine(next);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(SHOW_PCT_LINE_KEY, next ? "1" : "0");
+      try { window.localStorage.setItem(SHOW_PCT_LINE_KEY, next ? "1" : "0"); } catch { /* quota/private */ }
     }
   };
 
@@ -143,7 +143,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
 
   const persistAnnFilter = (next: Set<AnnotationCategory>) => {
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(ANN_FILTER_KEY, JSON.stringify(Array.from(next)));
+      try { window.localStorage.setItem(ANN_FILTER_KEY, JSON.stringify(Array.from(next))); } catch { /* quota/private */ }
     }
   };
 
