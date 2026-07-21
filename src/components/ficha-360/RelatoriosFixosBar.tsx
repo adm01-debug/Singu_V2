@@ -32,6 +32,7 @@ import {
   type FilterFavorite,
 } from '@/hooks/useFicha360FilterFavorites';
 import type { InteractionTag } from '@/lib/interactionTags';
+import { periodLabelShort } from '@/lib/ficha360Formatters';
 import { SalvarRelatorioDialog } from './SalvarRelatorioDialog';
 
 const MAX_VISIBLE = 4;
@@ -44,12 +45,8 @@ const CHANNEL_LABELS: Record<string, string> = {
   note: 'Nota',
 };
 
-function periodLabel(d: number) {
-  return d === 7 ? '7d' : d === 30 ? '30d' : d === 365 ? '1a' : '90d';
-}
-
 function buildSummary(f: FilterFavorite): string {
-  const parts: string[] = [periodLabel(f.days)];
+  const parts: string[] = [periodLabelShort(f.days)];
   if (f.channels.length === 0) parts.push('Todos');
   else parts.push(f.channels.map((c) => CHANNEL_LABELS[c] ?? c).join('+'));
   if (f.tags.length > 0) parts.push(`${f.tags.length} tag${f.tags.length === 1 ? '' : 's'}`);

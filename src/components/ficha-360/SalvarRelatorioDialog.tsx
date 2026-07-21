@@ -1,4 +1,5 @@
 import { memo, useEffect, useId, useState } from 'react';
+import { periodLabelShort } from '@/lib/ficha360Formatters';
 import { Save, Sparkles } from 'lucide-react';
 import {
   Dialog,
@@ -27,17 +28,13 @@ const CHANNEL_LABELS: Record<string, string> = {
   note: 'Nota',
 };
 
-function periodLabel(d: number) {
-  return d === 7 ? '7d' : d === 30 ? '30d' : d === 365 ? '1a' : '90d';
-}
-
 function buildPreview(
   days: number,
   channels: string[],
   tags: InteractionTag[],
   q: string,
 ): string {
-  const parts: string[] = [periodLabel(days)];
+  const parts: string[] = [periodLabelShort(days)];
   if (channels.length === 0) parts.push('Todos os canais');
   else parts.push(channels.map((c) => CHANNEL_LABELS[c] ?? c).join('+'));
   if (tags.length > 0) parts.push(`${tags.length} tag${tags.length === 1 ? '' : 's'}`);

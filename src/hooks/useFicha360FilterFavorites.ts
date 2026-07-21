@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { sanitizeTags as sanitizeTagsLib, type InteractionTag } from '@/lib/interactionTags';
+import { periodLabelShort } from '@/lib/ficha360Formatters';
 import { useAuth } from '@/hooks/useAuth';
 
 const BASE_STORAGE_KEY = 'ficha360-filter-favorites-v1';
@@ -478,8 +479,7 @@ export function suggestFavoriteName(
   tags: InteractionTag[] = [],
   q?: string,
 ): string {
-  const periodLabel =
-    days === 7 ? '7d' : days === 30 ? '30d' : days === 365 ? '1a' : '90d';
+  const periodLabel = periodLabelShort(days);
   const labels: Record<string, string> = {
     whatsapp: 'WhatsApp',
     call: 'Ligação',

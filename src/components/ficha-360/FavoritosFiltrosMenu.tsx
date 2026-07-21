@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { periodLabelShort } from '@/lib/ficha360Formatters';
 import {
   useFicha360FilterFavorites,
   suggestFavoriteName,
@@ -37,13 +38,12 @@ const CHANNEL_LABELS: Record<string, string> = {
 };
 
 function formatCombo(days: number, channels: string[]): string {
-  const periodLabel =
-    days === 7 ? '7d' : days === 30 ? '30d' : days === 365 ? '1a' : '90d';
-  if (channels.length === 0) return `${periodLabel} · todos os canais`;
+  const label = periodLabelShort(days);
+  if (channels.length === 0) return `${label} · todos os canais`;
   if (channels.length <= 2) {
-    return `${periodLabel} · ${channels.map((c) => CHANNEL_LABELS[c] ?? c).join(', ')}`;
+    return `${label} · ${channels.map((c) => CHANNEL_LABELS[c] ?? c).join(', ')}`;
   }
-  return `${periodLabel} · ${CHANNEL_LABELS[channels[0]] ?? channels[0]} +${channels.length - 1}`;
+  return `${label} · ${CHANNEL_LABELS[channels[0]] ?? channels[0]} +${channels.length - 1}`;
 }
 
 async function copyToClipboard(text: string): Promise<boolean> {
