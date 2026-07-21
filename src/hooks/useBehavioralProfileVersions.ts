@@ -50,7 +50,7 @@ export function useBehavioralProfileVersions(contactId: string | null | undefine
     queryFn: async (): Promise<BehavioralProfileVersion[]> => {
       const { data, error } = await supabase
         .from('contact_analytical_profile_versions')
-        .select('*')
+        .select('id, contact_id, profile_id, summary, tone, communication_style, sentiment_trend, preferences, hobbies, recurrent_topics, based_on_count, model, trigger_source, generated_at')
         .eq('contact_id', contactId!)
         .order('generated_at', { ascending: false })
         .limit(limit);

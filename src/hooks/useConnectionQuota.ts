@@ -26,7 +26,7 @@ export function useConnectionQuota(webhookId: string | undefined) {
       const periodStr = period.toISOString().slice(0, 10);
       const { data, error } = await supabase
         .from('connection_quotas')
-        .select('*')
+        .select('id, webhook_id, period_start, calls_limit, calls_used, overage_blocked, alert_sent_80')
         .eq('webhook_id', webhookId!)
         .eq('period_start', periodStr)
         .maybeSingle();
