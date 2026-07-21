@@ -73,11 +73,12 @@ export function useNextBestAction(contactId: string | undefined) {
 
    const updateScript = useMutation({
      mutationFn: async ({ id, script }: { id: string; script: string }) => {
+       if (!user) throw new Error('Não autenticado');
        const { error } = await supabase
          .from('contact_next_actions')
          .update({ edited_script: script })
          .eq('id', id)
-         .eq('user_id', user!.id);
+         .eq('user_id', user.id);
        if (error) throw error;
      },
      onSuccess: () => {
@@ -89,6 +90,7 @@ export function useNextBestAction(contactId: string | undefined) {
 
    const complete = useMutation({
      mutationFn: async ({ id, notes, completed_at, was_successful }: { id: string; notes?: string; completed_at?: string; was_successful?: boolean }) => {
+      if (!user) throw new Error('Não autenticado');
       const currentAction = query.data;
       const [{ error }, { error: intError }] = await Promise.all([
         supabase.from('contact_next_actions').update({
@@ -96,7 +98,7 @@ export function useNextBestAction(contactId: string | undefined) {
           completed_at: completed_at || new Date().toISOString(),
           completion_notes: notes,
           was_successful: was_successful ?? true
-        }).eq('id', id).eq('user_id', user!.id),
+        }).eq('id', id).eq('user_id', user.id),
         (currentAction && user?.id && contactId)
           ? supabase.from('interactions').insert([{
               contact_id: contactId,

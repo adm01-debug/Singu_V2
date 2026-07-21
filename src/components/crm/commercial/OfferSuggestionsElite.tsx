@@ -66,10 +66,11 @@ export function OfferSuggestionsElite({ contactId }: Props) {
 
   const updateStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string, status: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('offer_suggestions')
         .update({ status, presented_at: status === 'presented' ? new Date().toISOString() : undefined })
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq('id', id);
       if (error) throw error;
     },

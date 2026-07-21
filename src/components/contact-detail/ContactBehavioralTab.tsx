@@ -151,8 +151,8 @@ import type { Contact } from '@/hooks/useContactDetail';
         familyInfo={contact.family_info || undefined}
         metadata={(contact.rapport_metadata ?? undefined) as { hobbies?: Record<string, string>; interests?: Record<string, string> } | undefined}
         onUpdate={async (data) => {
-          // Trigger the local update state via supabase
-          const { error } = await supabase.from('contacts').update(data).eq('id', contact.id).eq('user_id', user!.id);
+          if (!user) throw new Error('Não autenticado');
+          const { error } = await supabase.from('contacts').update(data).eq('id', contact.id).eq('user_id', user.id);
           if (error) throw error;
           return { success: true };
         }}

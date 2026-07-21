@@ -195,7 +195,8 @@ export function useRelativeMutations(contactId: string | undefined) {
 
   const updateRelative = useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<Tables<'contact_relatives'>> }) => {
-      const { error } = await supabase.from('contact_relatives').update(updates).eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('contact_relatives').update(updates).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -206,7 +207,8 @@ export function useRelativeMutations(contactId: string | undefined) {
 
   const deleteRelative = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('contact_relatives').delete().eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('contact_relatives').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

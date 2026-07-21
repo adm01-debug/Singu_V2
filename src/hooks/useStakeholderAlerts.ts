@@ -417,6 +417,7 @@ export function useStakeholderAlerts(companyId?: string) {
   }, [getStoredMetrics, saveMetrics, createAlert]);
 
   const dismissAlert = useCallback(async (alertId: string) => {
+    if (!user) return;
     const previousAlerts = alerts;
     setAlerts(prev => prev.filter(a => a.id !== alertId));
 
@@ -424,7 +425,7 @@ export function useStakeholderAlerts(companyId?: string) {
       const { error } = await supabase
         .from('stakeholder_alerts')
         .update({ dismissed: true, dismissed_at: new Date().toISOString() })
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq('id', alertId);
 
       if (error) throw error;
