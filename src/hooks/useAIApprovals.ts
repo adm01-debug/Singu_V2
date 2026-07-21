@@ -81,7 +81,7 @@ export function useAIApprovals(contactId?: string) {
 
         const { error: saveError } = await supabase
           .from('contacts')
-          .update({ 
+          .update({
             [field]: newValues,
             rapport_metadata: updatedMetadata as unknown as Json
           })

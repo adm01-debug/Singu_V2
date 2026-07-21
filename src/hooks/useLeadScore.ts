@@ -351,7 +351,7 @@ export function useCalculateLeadScore() {
         fit_score: result.fit_score,
         intent_score: result.intent_score,
         relationship_score: result.relationship_score,
-      }).catch((e: unknown) => logger.error('lead_score_history insert error:', e));
+      }) as unknown as Promise<{ error: unknown }>).then((r) => { if (r?.error) logger.error('lead_score_history insert error:', r.error); }, (e) => logger.error('lead_score_history insert error:', e));
 
       return { ...result, score_change: result.total_score - previousScore, previous_score: previousScore };
     },
