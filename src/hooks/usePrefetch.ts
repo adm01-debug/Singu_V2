@@ -1,18 +1,21 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useCallback, useRef } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 export function usePrefetch() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const prefetchedIds = useRef(new Set<string>());
 
   const prefetchContact = useCallback((contactId: string) => {
-    // Evitar prefetch duplicado
-    if (prefetchedIds.current.has(`contact-${contactId}`)) return;
-    prefetchedIds.current.add(`contact-${contactId}`);
+    if (!user) return;
+    const dedupeKey = `contact-${user.id}-${contactId}`;
+    if (prefetchedIds.current.has(dedupeKey)) return;
+    prefetchedIds.current.add(dedupeKey);
 
     queryClient.prefetchQuery({
-      queryKey: ['contact-detail', contactId],
+      queryKey: ['contact-detail', user.id, contactId],
       queryFn: async () => {
         const { data } = await supabase
           .from('contacts')
@@ -22,19 +25,22 @@ export function usePrefetch() {
             interactions:interactions(id, title, type, created_at, sentiment)
           `)
           .eq('id', contactId)
+          .eq('user_id', user.id)
           .maybeSingle();
         return data;
       },
-      staleTime: 5 * 60 * 1000, // 5 minutos
+      staleTime: 5 * 60 * 1000,
     });
-  }, [queryClient]);
+  }, [queryClient, user]);
 
   const prefetchCompany = useCallback((companyId: string) => {
-    if (prefetchedIds.current.has(`company-${companyId}`)) return;
-    prefetchedIds.current.add(`company-${companyId}`);
+    if (!user) return;
+    const dedupeKey = `company-${user.id}-${companyId}`;
+    if (prefetchedIds.current.has(dedupeKey)) return;
+    prefetchedIds.current.add(dedupeKey);
 
     queryClient.prefetchQuery({
-      queryKey: ['company-detail', companyId],
+      queryKey: ['company-detail', user.id, companyId],
       queryFn: async () => {
         const { data } = await supabase
           .from('companies')
@@ -48,36 +54,39 @@ export function usePrefetch() {
       },
       staleTime: 5 * 60 * 1000,
     });
-  }, [queryClient]);
+  }, [queryClient, user]);
 
   const prefetchInteractions = useCallback((contactId: string) => {
-    if (prefetchedIds.current.has(`interactions-${contactId}`)) return;
-    prefetchedIds.current.add(`interactions-${contactId}`);
+    if (!user) return;
+    const dedupeKey = `interactions-${user.id}-${contactId}`;
+    if (prefetchedIds.current.has(dedupeKey)) return;
+    prefetchedIds.current.add(dedupeKey);
 
     queryClient.prefetchQuery({
-      queryKey: ['interactions', contactId],
+      queryKey: ['interactions', user.id, contactId],
       queryFn: async () => {
         const { data } = await supabase
           .from('interactions')
           .select('*')
           .eq('contact_id', contactId)
+          .eq('user_id', user.id)
           .order('created_at', { ascending: false })
           .limit(20);
         return data;
       },
       staleTime: 2 * 60 * 1000,
     });
-  }, [queryClient]);
+  }, [queryClient, user]);
 
   const clearPrefetchCache = useCallback(() => {
     prefetchedIds.current.clear();
   }, []);
 
-  return { 
-    prefetchContact, 
-    prefetchCompany, 
+  return {
+    prefetchContact,
+    prefetchCompany,
     prefetchInteractions,
-    clearPrefetchCache 
+    clearPrefetchCache
   };
 }
 

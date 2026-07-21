@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface RecentlyViewedItem {
   id: string;
@@ -12,41 +13,45 @@ export interface RecentlyViewedItem {
 const STORAGE_KEY = 'relateiq-recently-viewed';
 const MAX_ITEMS = 10;
 
-function getStoredItems(): RecentlyViewedItem[] {
+function getStoredItems(key: string): RecentlyViewedItem[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(key);
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
   }
 }
 
-function saveItems(items: RecentlyViewedItem[]) {
+function saveItems(items: RecentlyViewedItem[], key: string) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    localStorage.setItem(key, JSON.stringify(items));
   } catch {
     // localStorage blocked in private browsing
   }
 }
 
 export function useRecentlyViewed(filterType?: 'contact' | 'company') {
-  const [items, setItems] = useState<RecentlyViewedItem[]>(() => getStoredItems());
+  const { user } = useAuth();
+  const storageKey = user?.id ? `${STORAGE_KEY}-${user.id}` : STORAGE_KEY;
 
-  // Listen for storage changes from other tabs/components
+  const [items, setItems] = useState<RecentlyViewedItem[]>(() => getStoredItems(storageKey));
+
+  // Re-read when user changes and subscribe to cross-tab updates
   useEffect(() => {
-    const handler = () => setItems(getStoredItems());
+    setItems(getStoredItems(storageKey));
+    const handler = () => setItems(getStoredItems(storageKey));
     window.addEventListener('recently-viewed-updated', handler);
     return () => window.removeEventListener('recently-viewed-updated', handler);
-  }, []);
+  }, [storageKey]);
 
   const trackView = useCallback((item: Omit<RecentlyViewedItem, 'viewedAt'>) => {
-    const stored = getStoredItems();
+    const stored = getStoredItems(storageKey);
     const filtered = stored.filter(i => !(i.id === item.id && i.type === item.type));
     const updated = [{ ...item, viewedAt: new Date().toISOString() }, ...filtered].slice(0, MAX_ITEMS);
-    saveItems(updated);
+    saveItems(updated, storageKey);
     setItems(updated);
     window.dispatchEvent(new Event('recently-viewed-updated'));
-  }, []);
+  }, [storageKey]);
 
   const filteredItems = filterType ? items.filter(i => i.type === filterType) : items;
 

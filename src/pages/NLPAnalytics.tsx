@@ -36,34 +36,38 @@ import { Header } from '@/components/layout/Header';
  import { useQuery } from '@tanstack/react-query';
  import { supabase } from '@/integrations/supabase/client';
 import { Contact, ContactRole, RelationshipStage, SentimentType, ContactBehavior } from '@/types';
+import { useAuth } from '@/hooks/useAuth';
 
 const NLPAnalytics = () => {
    const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
    const [searchTerm, setSearchTerm] = useState('');
    const debouncedSearchTerm = useDebounce(searchTerm, 300);
+   const { user } = useAuth();
 
    const { data: contacts } = useQuery({
-     queryKey: ['nlp-contacts-search', debouncedSearchTerm],
+     queryKey: ['nlp-contacts-search', user?.id, debouncedSearchTerm],
      queryFn: async () => {
-       if (debouncedSearchTerm.length < 2) return [];
+       if (debouncedSearchTerm.length < 2 || !user) return [];
        const { data } = await supabase
          .from('contacts')
          .select('id, first_name, last_name')
+         .eq('user_id', user.id)
          .or(`first_name.ilike.%${debouncedSearchTerm}%,last_name.ilike.%${debouncedSearchTerm}%`)
          .limit(5);
        return data?.map(c => ({ ...c, name: `${c.first_name} ${c.last_name}` })) || [];
      },
-     enabled: debouncedSearchTerm.length >= 2
+     enabled: debouncedSearchTerm.length >= 2 && !!user
    });
- 
+
    const { data: selectedContact } = useQuery({
-     queryKey: ['selected-contact-nlp', selectedContactId],
+     queryKey: ['selected-contact-nlp', user?.id, selectedContactId],
      queryFn: async () => {
-       if (!selectedContactId) return null;
+       if (!selectedContactId || !user) return null;
        const { data, error } = await supabase
          .from('contacts')
          .select('*, companies(name)')
          .eq('id', selectedContactId)
+         .eq('user_id', user.id)
           .maybeSingle();
        
         if (error) throw error;
@@ -100,7 +104,7 @@ const NLPAnalytics = () => {
  
        return contact;
      },
-     enabled: !!selectedContactId
+     enabled: !!selectedContactId && !!user
    });
  
   return (

@@ -1,6 +1,7 @@
  import { toast } from 'sonner';
 import { useEffect, useCallback, useRef } from 'react';
 import type { UseFormReturn, FieldValues } from 'react-hook-form';
+import { useAuth } from '@/hooks/useAuth';
 
 interface UseFormDraftOptions {
   /** Unique key for this form draft (e.g. 'contact-new' or 'contact-edit-{id}') */
@@ -27,7 +28,8 @@ export function useFormDraft<T extends FieldValues>(
   form: UseFormReturn<T>,
   { key, debounceMs = 1000, enabled = true }: UseFormDraftOptions
 ) {
-  const storageKey = `relateiq-draft-${key}`;
+  const { user } = useAuth();
+  const storageKey = user?.id ? `relateiq-draft-${user.id}-${key}` : `relateiq-draft-${key}`;
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const hasDraftRef = useRef(false);
 

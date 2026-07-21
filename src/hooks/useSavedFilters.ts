@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import { logger } from "@/lib/logger";
+import { useAuth } from '@/hooks/useAuth';
 
 export interface SavedFilter {
   id: string;
@@ -16,13 +17,15 @@ export interface SavedFilter {
 const SAVED_FILTERS_KEY = 'relateiq_saved_filters';
 
 export function useSavedFilters(type: 'contacts' | 'companies' | 'interactions') {
+  const { user } = useAuth();
+  const effectiveKey = user?.id ? `${SAVED_FILTERS_KEY}-${user.id}` : SAVED_FILTERS_KEY;
   const [filters, setFilters] = useState<SavedFilter[]>([]);
   const [activeFilter, setActiveFilter] = useState<SavedFilter | null>(null);
 
   // Load filters from localStorage
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(SAVED_FILTERS_KEY);
+      const stored = localStorage.getItem(effectiveKey);
       if (stored) {
         const allFilters: SavedFilter[] = JSON.parse(stored);
         const typeFilters = allFilters.filter(f => f.type === type);
@@ -38,24 +41,24 @@ export function useSavedFilters(type: 'contacts' | 'companies' | 'interactions')
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Failed to load saved filters:', { error: msg });
     }
-  }, [type]);
+  }, [type, effectiveKey]);
 
   // Save all filters to localStorage
   const saveToStorage = useCallback((updatedFilters: SavedFilter[]) => {
     try {
-      const stored = localStorage.getItem(SAVED_FILTERS_KEY);
+      const stored = localStorage.getItem(effectiveKey);
       const allFilters: SavedFilter[] = stored ? JSON.parse(stored) : [];
-      
+
       // Remove old filters of this type and add updated ones
       const otherFilters = allFilters.filter(f => f.type !== type);
       const newAllFilters = [...otherFilters, ...updatedFilters];
-      
-      localStorage.setItem(SAVED_FILTERS_KEY, JSON.stringify(newAllFilters));
+
+      localStorage.setItem(effectiveKey, JSON.stringify(newAllFilters));
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Failed to save filters:', { error: msg });
     }
-  }, [type]);
+  }, [type, effectiveKey]);
 
   // Create a new saved filter
   const saveFilter = useCallback((name: string, filterConfig: Record<string, unknown>) => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { CheckCircle2, XCircle, Loader2, FileText, Clock } from 'lucide-react';
@@ -32,6 +32,11 @@ export default function PublicSignaturePage() {
   const [error, setError] = useState<string | null>(null);
   const [typedSignature, setTypedSignature] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const submitControllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    return () => { submitControllerRef.current?.abort(); };
+  }, []);
 
   useEffect(() => {
     if (!token) return;
@@ -65,6 +70,9 @@ export default function PublicSignaturePage() {
       return;
     }
     setSubmitting(true);
+    submitControllerRef.current?.abort();
+    const controller = new AbortController();
+    submitControllerRef.current = controller;
     try {
       const res = await fetch(`${FN_BASE}/submit-signature`, {
         method: 'POST',
@@ -77,12 +85,14 @@ export default function PublicSignaturePage() {
           action,
           signature_typed: action === 'sign' ? typedSignature : undefined,
         }),
+        signal: controller.signal,
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? 'Erro');
       toast.success(action === 'sign' ? 'Documento assinado!' : 'Documento recusado');
       setSignature((prev) => (prev ? { ...prev, status: action === 'sign' ? 'signed' : 'declined' } : prev));
     } catch (e) {
+      if (e instanceof Error && e.name === 'AbortError') return;
       toast.error(e instanceof Error ? e.message : 'Erro ao enviar');
     } finally {
       setSubmitting(false);

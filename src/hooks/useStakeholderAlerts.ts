@@ -165,13 +165,17 @@ export function useStakeholderAlerts(companyId?: string) {
 
   // Load stored metrics from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem('stakeholder_metrics');
-    if (stored) {
-      try {
-        setStoredMetrics(JSON.parse(stored));
-      } catch {
-        setStoredMetrics([]);
+    try {
+      const stored = localStorage.getItem('stakeholder_metrics');
+      if (stored) {
+        try {
+          setStoredMetrics(JSON.parse(stored));
+        } catch {
+          setStoredMetrics([]);
+        }
       }
+    } catch {
+      // localStorage blocked in private browsing
     }
   }, []);
 

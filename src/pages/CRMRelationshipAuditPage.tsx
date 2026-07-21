@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { ShieldCheck, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/hooks/useAuth';
 
 interface AuditIssue {
   type: string;
@@ -18,12 +19,15 @@ interface AuditResult {
 }
 
 export default function CRMRelationshipAuditPage() {
+  const { user } = useAuth();
   const { data: contacts, isLoading } = useQuery({
-    queryKey: ['global-relationship-audit'],
+    queryKey: ['global-relationship-audit', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('contacts')
         .select('id, first_name, last_name, relationship_score, relationship_stage, sentiment, interactions_count, last_interaction_at')
+        .eq('user_id', user!.id)
         .limit(100);
       
       if (error) throw error;
