@@ -75,7 +75,7 @@ export function CRMAutomationAuditLog() {
       const { error: logUpdateError } = await supabase
         .from('crm_automation_logs')
         .update({ status: 'reprocessing' } as TablesUpdate<'crm_automation_logs'>)
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq('id', logId);
       
       if (logUpdateError) throw logUpdateError;

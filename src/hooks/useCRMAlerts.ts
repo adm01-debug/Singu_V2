@@ -39,10 +39,11 @@ export function useCRMAlerts(contactId: string) {
 
   const resolveAlert = useMutation({
     mutationFn: async (alertId: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('crm_alerts')
         .update({ is_resolved: true, resolved_at: new Date().toISOString() })
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq('id', alertId);
       if (error) throw error;
     },

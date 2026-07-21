@@ -69,10 +69,11 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
 
   const updateStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string, status: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('reframing_analysis')
         .update({ status })
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq('id', id);
       if (error) throw error;
     },

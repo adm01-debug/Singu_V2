@@ -63,10 +63,11 @@ export function useUpdateRoutingRule() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<LeadRoutingRule> & { id: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from('lead_routing_rules')
         .update(updates as TablesUpdate<'lead_routing_rules'>)
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq('id', id)
         .select()
         .maybeSingle();
@@ -87,10 +88,11 @@ export function useDeleteRoutingRule() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('lead_routing_rules')
         .delete()
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq('id', id);
       if (error) throw error;
     },

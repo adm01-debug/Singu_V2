@@ -112,10 +112,11 @@ export function useAppliedResponses() {
 
   const unmark = useMutation({
     mutationFn: async (id: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from("applied_objection_responses")
         .delete()
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq("id", id);
       if (error) throw error;
       return id;

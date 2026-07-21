@@ -119,9 +119,10 @@ export function useClosePeriod() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (periodId: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from("forecast_periods")
         .update({ status: "closed", closed_at: new Date().toISOString() })
-        .eq("user_id", user!.id)
+        .eq("user_id", user.id)
         .eq("id", periodId);
       if (error) throw error;
     },
@@ -155,7 +156,8 @@ export function useUpdateDealForecast() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, patch }: { id: string; patch: Partial<DealForecast> }) => {
-      const { error } = await supabase.from("deal_forecasts").update(patch).eq("user_id", user!.id).eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("deal_forecasts").update(patch).eq("user_id", user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: (_, v) => {

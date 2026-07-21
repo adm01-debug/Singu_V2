@@ -58,13 +58,14 @@ export function useCSATSurveys(contactId?: string) {
 
   const answer = useMutation({
     mutationFn: async ({ id, score, feedback }: { id: string; score: number; feedback?: string }) => {
+      if (!user) throw new Error('Não autenticado');
       if (score < 0 || score > 10) throw new Error('Score deve ser entre 0 e 10');
       const { error } = await supabase.from('csat_surveys').update({
         score,
         feedback: feedback || null,
         status: 'answered' as const,
         answered_at: new Date().toISOString(),
-      }).eq('user_id', user!.id).eq('id', id);
+      }).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Resposta registrada!'); },

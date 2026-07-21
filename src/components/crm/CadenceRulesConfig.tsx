@@ -89,7 +89,7 @@ export function CadenceRulesConfig() {
         const { error } = await supabase
           .from('crm_cadence_rules')
           .update(payload as TablesUpdate<'crm_cadence_rules'>)
-          .eq('user_id', user!.id)
+          .eq('user_id', user.id)
           .eq('id', payload.id);
         if (error) throw error;
       } else {
