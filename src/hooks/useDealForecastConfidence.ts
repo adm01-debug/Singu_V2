@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { PipelineDeal } from '@/hooks/usePipeline';
 import { useDealSlipRisk } from '@/hooks/useDealSlipRisk';
+import { useAuth } from '@/hooks/useAuth';
 
 export type ConfidenceLevel = 'low' | 'medium' | 'high';
 
@@ -46,11 +47,12 @@ interface MomentumPayload {
 export function useDealForecastConfidence(
   deal: PipelineDeal | null | undefined,
 ): DealForecastConfidence {
+  const { user } = useAuth();
   const slip = useDealSlipRisk(deal);
-  const enabled = !!deal?.contact_id;
+  const enabled = !!deal?.contact_id && !!user;
 
   const { data: momentum } = useQuery<MomentumPayload>({
-    queryKey: ['deal-momentum', deal?.contact_id],
+    queryKey: ['deal-momentum', user?.id, deal?.contact_id],
     enabled,
     staleTime: 5 * 60 * 1000,
     queryFn: async () => {
@@ -60,6 +62,7 @@ export function useDealForecastConfidence(
         .from('interactions')
         .select('created_at')
         .eq('contact_id', deal!.contact_id!)
+        .eq('user_id', user!.id)
         .gte('created_at', since28)
         .order('created_at', { ascending: false })
         .limit(200);

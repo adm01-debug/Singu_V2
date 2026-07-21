@@ -20,7 +20,7 @@ export function useAIApprovals(contactId?: string) {
   const { user } = useAuth();
 
   const query = useQuery({
-    queryKey: ['suggested-rapport', contactId],
+    queryKey: ['suggested-rapport', user?.id, contactId],
     queryFn: async () => {
       if (!user) return [];
       let query = supabase
@@ -31,7 +31,8 @@ export function useAIApprovals(contactId?: string) {
             full_name
           )
         `)
-        .eq('status', 'pending');
+        .eq('status', 'pending')
+        .eq('user_id', user.id);
       
       if (contactId) {
         query = query.eq('contact_id', contactId);

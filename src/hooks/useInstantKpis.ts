@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface InstantKpis {
   total_companies: number;
@@ -14,10 +15,13 @@ export interface InstantKpis {
 }
 
 export function useInstantKpis() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['instant-kpis'],
+    queryKey: ['instant-kpis', user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await callExternalRpc<InstantKpis>('get_instant_kpis', {});
+      if (!user) throw new Error('Not authenticated');
+      const { data, error } = await callExternalRpc<InstantKpis>('get_instant_kpis', { p_user_id: user.id });
       if (error) throw error;
       return data;
     },

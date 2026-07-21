@@ -52,7 +52,7 @@ export function useGraphLayout() {
   }, []);
 
   const clear = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY);
+    try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
     setSaved(null);
   }, []);
 

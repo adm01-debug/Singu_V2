@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { queryExternalData } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 
 /**
  * Pre-computed 360° view from the external DB (vw_singu_contact_360).
@@ -36,21 +37,25 @@ export interface ContactView360 {
 }
 
 export function useContactView360(contactId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['contact-view-360', contactId],
+    queryKey: ['contact-view-360', user?.id, contactId],
     queryFn: async () => {
       if (!contactId) return null;
 
       const { data, error } = await queryExternalData<ContactView360>({
         table: 'vw_singu_contact_360',
-        filters: [{ type: 'eq', column: 'contact_id', value: contactId }],
+        filters: [
+          { type: 'eq', column: 'contact_id', value: contactId },
+          { type: 'eq', column: 'user_id', value: user!.id },
+        ],
         range: { from: 0, to: 0 },
       });
 
       if (error) throw error;
       return data?.[0] ?? null;
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });

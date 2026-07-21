@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { PipelineDeal } from '@/hooks/usePipeline';
+import { useAuth } from '@/hooks/useAuth';
 import {
   STAGE_BENCHMARK_DAYS,
   DEAL_RISK_LOOKBACK_DAYS,
@@ -34,10 +35,11 @@ interface SignalPayload {
 }
 
 export function useDealSlipRisk(deal: PipelineDeal | null | undefined) {
-  const enabled = !!deal?.contact_id;
+  const { user } = useAuth();
+  const enabled = !!deal?.contact_id && !!user;
 
   const { data: signals } = useQuery<SignalPayload>({
-    queryKey: ['deal-slip-signals', deal?.contact_id],
+    queryKey: ['deal-slip-signals', user?.id, deal?.contact_id],
     enabled,
     staleTime: 5 * 60 * 1000,
     queryFn: async () => {
@@ -48,6 +50,7 @@ export function useDealSlipRisk(deal: PipelineDeal | null | undefined) {
         .from('interactions')
         .select('sentiment, created_at, initiated_by')
         .eq('contact_id', deal!.contact_id!)
+        .eq('user_id', user!.id)
         .gte('created_at', since.toISOString())
         .order('created_at', { ascending: false })
         .limit(20);

@@ -74,7 +74,7 @@ export function useEntityNotes(entityKey: string | null) {
 
   const clear = useCallback(() => {
     if (!keyRef.current) return;
-    localStorage.removeItem(STORAGE_PREFIX + keyRef.current);
+    try { localStorage.removeItem(STORAGE_PREFIX + keyRef.current); } catch { /* ignore */ }
     setText('');
     setUpdatedAt(0);
   }, []);

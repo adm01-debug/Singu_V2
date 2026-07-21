@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 export type TrendDirection = 'up' | 'stable' | 'down';
 
@@ -63,9 +64,10 @@ const linearSlope = (values: number[]): number => {
 };
 
 export function useContactSentimentTrend(contactId: string | undefined) {
+  const { user } = useAuth();
   return useQuery<SentimentTrendResult>({
-    queryKey: ['contact-sentiment-trend', contactId],
-    enabled: !!contactId,
+    queryKey: ['contact-sentiment-trend', user?.id, contactId],
+    enabled: !!contactId && !!user,
     staleTime: 1000 * 60 * 5,
     queryFn: async () => {
       const since = new Date();
@@ -75,6 +77,7 @@ export function useContactSentimentTrend(contactId: string | undefined) {
         .from('interactions')
         .select('sentiment, created_at')
         .eq('contact_id', contactId!)
+        .eq('user_id', user!.id)
         .gte('created_at', since.toISOString())
         .not('sentiment', 'is', null)
         .order('created_at', { ascending: true })
