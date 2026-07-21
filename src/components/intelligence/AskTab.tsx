@@ -325,7 +325,7 @@ export const AskTab = ({ onRegisterBridge, contextEntity = null }: AskTabProps) 
                   <Download className="h-3 w-3" aria-hidden /> EXPORT
                 </button>
                 <button
-                  onClick={() => { setHistory([]); localStorage.removeItem(historyKey); }}
+                  onClick={() => { setHistory([]); try { localStorage.removeItem(historyKey); } catch { /* noop */ } }}
                   className="intel-mono text-[10px] text-muted-foreground hover:text-destructive"
                   aria-label="Limpar histórico"
                 >

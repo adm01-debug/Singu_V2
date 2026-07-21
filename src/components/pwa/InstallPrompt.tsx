@@ -54,10 +54,11 @@ export const InstallPrompt = React.forwardRef<HTMLDivElement>(function InstallPr
 
   const handleDismiss = () => {
     setShowPrompt(false);
-    sessionStorage.setItem('pwa-prompt-dismissed', 'true');
+    try { sessionStorage.setItem('pwa-prompt-dismissed', 'true'); } catch { /* noop */ }
   };
 
-  if (isInstalled || !showPrompt || sessionStorage.getItem('pwa-prompt-dismissed')) {
+  const isDismissed = (() => { try { return !!sessionStorage.getItem('pwa-prompt-dismissed'); } catch { return false; } })();
+  if (isInstalled || !showPrompt || isDismissed) {
     return null;
   }
 
