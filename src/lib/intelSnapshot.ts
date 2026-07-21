@@ -80,6 +80,7 @@ export function pushRecentSnapshot(entry: Omit<RecentSnapshot, 'id' | 'savedAt'>
 }
 
 export function buildShareUrl(hash: string): string {
+  if (typeof window === 'undefined') return '';
   const url = new URL(window.location.href);
   url.searchParams.set('snap', hash);
   return url.toString();

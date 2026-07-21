@@ -36,10 +36,11 @@ export function exportToCSV(data: Array<Record<string, unknown>>, fileName: stri
     )
   ];
 
+  if (typeof document === 'undefined') return;
   const csvString = csvRows.join('\n');
   const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
-  
+
   const link = document.createElement('a');
   link.setAttribute('href', url);
   link.setAttribute('download', `${fileName}_${new Date().toISOString().split('T')[0]}.csv`);

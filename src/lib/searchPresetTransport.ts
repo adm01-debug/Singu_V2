@@ -149,6 +149,7 @@ export function downloadBundleAsFile(bundle: PresetBundle, filename?: string): v
     (bundle.presets.length === 1
       ? `busca-${slugify(bundle.presets[0].name)}.json`
       : `buscas-${bundle.presets.length}.json`);
+  if (typeof document === 'undefined') return;
   const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');

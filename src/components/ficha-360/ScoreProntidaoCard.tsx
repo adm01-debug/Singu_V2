@@ -90,8 +90,9 @@ export const ScoreProntidaoCard = memo(({ data, contactId, simulated, realData }
         weight: factor.weight / 100,
         detail: factor.detail,
       })),
+    // factors is derived from data + realData inline above
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data],
+    [data, realData],
   );
 
   const band: 'low' | 'mid' | 'high' =

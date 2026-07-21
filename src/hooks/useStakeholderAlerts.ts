@@ -115,7 +115,7 @@ export function useStakeholderAlerts(companyId?: string) {
     }
   }, []);
 
-  const fetchAlerts = useCallback(async () => {
+  const fetchAlerts = useCallback(async (signal?: { cancelled: boolean }) => {
     try {
       if (!user) return;
 
@@ -136,6 +136,7 @@ export function useStakeholderAlerts(companyId?: string) {
 
       const { data, error } = await query.limit(500);
 
+      if (signal?.cancelled) return;
       if (error) throw error;
 
       // Type assertion for the joined data
@@ -147,15 +148,19 @@ export function useStakeholderAlerts(companyId?: string) {
 
       setAlerts(typedData);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error fetching stakeholder alerts:', { error: msg });
+      if (!signal?.cancelled) {
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching stakeholder alerts:', { error: msg });
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [companyId, user]);
 
   useEffect(() => {
-    fetchAlerts();
+    const signal = { cancelled: false };
+    fetchAlerts(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchAlerts]);
 
   // Load stored metrics from localStorage

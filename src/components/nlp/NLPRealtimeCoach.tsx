@@ -234,8 +234,7 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
        setDetectedMeta(null);
        setRapportScore(0);
      }
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [content, analyzeVAK, analyzeMeta, contactVAK]);
+   }, [content, analyzeVAK, analyzeMeta, contactVAK, contactDISC]);
 
   const handleFeedback = async (suggestionId: string, type: 'up' | 'down') => {
     setFeedbackGiven(prev => ({ ...prev, [suggestionId]: type }));

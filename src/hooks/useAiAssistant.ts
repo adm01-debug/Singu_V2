@@ -57,7 +57,7 @@ export function useAiAssistant() {
     }
   }, [user?.id]);
 
-  const fetchMessages = useCallback(async (threadId: string) => {
+  const fetchMessages = useCallback(async (threadId: string, signal?: { cancelled: boolean }) => {
     try {
       const { data, error } = await supabase
         .from('ai_chat_messages')
@@ -65,18 +65,25 @@ export function useAiAssistant() {
         .eq('thread_id', threadId)
         .order('created_at', { ascending: true })
         .limit(1000);
+      if (signal?.cancelled) return;
       if (error) throw error;
       setMessages((data || []) as ChatMessage[]);
     } catch (e) {
-      logger.error('Failed to fetch messages', e);
+      if (!signal?.cancelled) logger.error('Failed to fetch messages', e);
     }
   }, []);
 
-  useEffect(() => { fetchThreads(); }, [fetchThreads]);
+  useEffect(() => {
+    let cancelled = false;
+    fetchThreads();
+    return () => { cancelled = true; void cancelled; };
+  }, [fetchThreads]);
 
   useEffect(() => {
-    if (activeThreadId) fetchMessages(activeThreadId);
+    const signal = { cancelled: false };
+    if (activeThreadId) fetchMessages(activeThreadId, signal);
     else setMessages([]);
+    return () => { signal.cancelled = true; };
   }, [activeThreadId, fetchMessages]);
 
   const createThread = useCallback(async (title?: string, context?: { type: string; id: string }) => {
