@@ -124,11 +124,11 @@ export function useContactRelationalData(contactId: string | undefined) {
 
       if (user) {
         const [relRes, cadRes, prefRes, commPrefRes, timeRes] = await Promise.all([
-          supabase.from('contact_relatives').select('*').eq('contact_id', contactId).eq('user_id', user.id).order('name'),
-          supabase.from('contact_cadence').select('*').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
-          supabase.from('contact_preferences').select('*').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
-          supabase.from('communication_preferences').select('*').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
-          supabase.from('contact_time_analysis').select('*').eq('contact_id', contactId).eq('user_id', user.id).limit(100),
+          supabase.from('contact_relatives').select('id, age, birthday, company, contact_id, created_at, email, is_decision_influencer, name, notes, occupation, phone, relationship_type, updated_at, user_id').eq('contact_id', contactId).eq('user_id', user.id).order('name'),
+          supabase.from('contact_cadence').select('id, auto_remind, cadence_days, contact_id, created_at, last_contact_at, next_contact_due, notes, priority, updated_at, user_id').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
+          supabase.from('contact_preferences').select('id, avoid_days, avoid_times, communication_tips, contact_id, created_at, personal_notes, preferred_channel, preferred_days, preferred_times, restrictions, updated_at, user_id').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
+          supabase.from('communication_preferences').select('id, avoid_days, contact_frequency, contact_id, created_at, notes, preferred_channel, preferred_days, preferred_time_end, preferred_time_start, response_rate_by_channel, updated_at, user_id').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
+          supabase.from('contact_time_analysis').select('id, avg_response_time_minutes, contact_id, day_of_week, hour_of_day, last_updated, success_count, total_attempts, user_id').eq('contact_id', contactId).eq('user_id', user.id).limit(100),
         ]);
         relatives = relRes.data || [];
         cadence = cadRes.data;

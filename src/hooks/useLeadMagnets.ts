@@ -45,10 +45,10 @@ export function useLeadMagnets() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('lead_magnets')
-        .select('*')
+        .select('id, user_id, title, slug, description, type, file_path, external_url, thumbnail_url, gated, form_id, download_count, view_count, is_published, created_at, updated_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(200);
       if (error) throw error;
       return (data || []) as unknown as LeadMagnet[];
     },
@@ -101,12 +101,13 @@ export function useMagnetDownloads(magnetId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('lead_magnet_downloads')
-        .select('*')
+        .select('id, magnet_id, email, name, utm_source, downloaded_at')
         .eq('magnet_id', magnetId!)
         .order('downloaded_at', { ascending: false })
         .limit(200);
       if (error) throw error;
       return (data || []) as unknown as MagnetDownload[];
     },
+    staleTime: 5 * 60_000,
   });
 }

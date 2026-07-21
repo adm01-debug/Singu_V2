@@ -59,7 +59,7 @@ export function useSmartNotifications() {
     queryFn: async (): Promise<SmartNotification[]> => {
       const { data, error } = await supabase
         .from('smart_notifications')
-        .select('*')
+        .select('id, event_type, entity_type, entity_id, title, body, urgency, decided_channel, bundle_key, bundle_count, status, scheduled_for, snoozed_until, action_url, created_at, payload')
         .eq('user_id', user!.id)
         .in('status', ['pending', 'delivered', 'snoozed'])
         .order('created_at', { ascending: false })

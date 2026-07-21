@@ -17,7 +17,7 @@ export function useSalesTeam() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('sales_team_members')
-        .select('*')
+        .select('id, user_id, profile_user_id, name, email, role, is_active, weight, max_leads_day, max_leads_total, current_lead_count, leads_today, leads_today_reset_at, last_assigned_at, territories, specializations, vacation_start, vacation_end, created_at, updated_at')
         .eq('user_id', user.id)
         .order('role', { ascending: true })
         .order('name', { ascending: true })
@@ -115,7 +115,7 @@ export function useActiveTeamByRole(role?: SalesRole) {
       if (!user) return [];
       let query = supabase
         .from('sales_team_members')
-        .select('*')
+        .select('id, user_id, profile_user_id, name, email, role, is_active, weight, max_leads_day, max_leads_total, current_lead_count, leads_today, leads_today_reset_at, last_assigned_at, territories, specializations, vacation_start, vacation_end, created_at, updated_at')
         .eq('user_id', user.id)
         .eq('is_active', true)
         .limit(200);
