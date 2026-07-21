@@ -95,10 +95,10 @@ export function useABMAccounts() {
     queryFn: async (): Promise<ABMAccount[]> => {
       const { data, error } = await supabase
         .from("abm_accounts")
-        .select("*")
+        .select("id, user_id, external_company_id, company_name, parent_account_id, tier, account_score, score_breakdown, status, assigned_to, target_revenue, notes, last_scored_at, created_at, updated_at")
         .eq("user_id", user!.id)
         .order("account_score", { ascending: false })
-        .limit(1000);
+        .limit(200);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as ABMAccount[]) : [];
     },
@@ -216,11 +216,11 @@ export function useBuyingCommittee(accountId: string | undefined) {
       if (!accountId) return [];
       const { data, error } = await supabase
         .from("abm_buying_committee")
-        .select("*")
+        .select("id, account_id, contact_name, contact_email, contact_role, external_contact_id, committee_role, influence_level, engagement_score, notes")
         .eq("account_id", accountId)
         .eq("user_id", user!.id)
         .order("influence_level", { ascending: false })
-        .limit(1000);
+        .limit(50);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as BuyingCommitteeMember[]) : [];
     },
@@ -287,11 +287,11 @@ export function useWhitespaceOpportunities(accountId: string | undefined) {
       if (!accountId) return [];
       const { data, error } = await supabase
         .from("abm_whitespace_opportunities")
-        .select("*")
+        .select("id, account_id, opportunity_type, product_category, estimated_value, confidence, rationale, status, identified_at")
         .eq("account_id", accountId)
         .eq("user_id", user!.id)
         .order("estimated_value", { ascending: false, nullsFirst: false })
-        .limit(1000);
+        .limit(50);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as WhitespaceOpportunity[]) : [];
     },
@@ -346,11 +346,11 @@ export function useABMAccountPlans(accountId: string | undefined) {
       if (!accountId) return [];
       const { data, error } = await supabase
         .from("abm_account_plans")
-        .select("*")
+        .select("id, account_id, template_type, goal, objectives, strategies, key_stakeholders, milestones, status, target_revenue, start_date, end_date")
         .eq("account_id", accountId)
         .eq("user_id", user!.id)
         .order("created_at", { ascending: false })
-        .limit(1000);
+        .limit(20);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as ABMAccountPlan[]) : [];
     },
@@ -398,10 +398,10 @@ export function useABMCampaigns() {
     queryFn: async (): Promise<ABMCampaign[]> => {
       const { data, error } = await supabase
         .from("abm_campaigns")
-        .select("*")
+        .select("id, name, description, campaign_type, target_account_ids, channels, status, start_date, end_date, budget, metrics, created_at")
         .eq("user_id", user!.id)
         .order("created_at", { ascending: false })
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as ABMCampaign[]) : [];
     },

@@ -120,10 +120,10 @@ export function useTopicsCatalog() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("conversation_topics_catalog")
-        .select("*")
+        .select("id, topic_key, label, category, keywords, active, sort_order")
         .eq("user_id", user!.id)
         .order("sort_order")
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as ConversationTopic[];
     },
@@ -191,10 +191,10 @@ export function useCoachingScorecards() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("coaching_scorecards")
-        .select("*")
+        .select("id, name, description, criteria, active, is_default")
         .eq("user_id", user!.id)
         .order("created_at", { ascending: false })
-        .limit(1000);
+        .limit(50);
       if (error) throw error;
       return (data ?? []) as unknown as CoachingScorecard[];
     },
@@ -236,7 +236,7 @@ export function useCoachingMetrics(periodDays: number = 30) {
         .select("coaching_score, sentiment_overall, talk_ratio_rep, objections, topics, analyzed_at")
         .eq("user_id", user!.id)
         .gte("analyzed_at", since)
-        .limit(1000);
+        .limit(500);
       if (error) throw error;
       const list = data ?? [];
       const total = list.length;
