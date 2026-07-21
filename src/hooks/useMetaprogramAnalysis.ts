@@ -103,7 +103,7 @@ export function useMetaprogramAnalysis() {
     try {
       const { data, error } = await supabase
         .from('metaprogram_analysis')
-        .select('*')
+        .select('toward_score, away_from_score, internal_score, external_score, options_score, procedures_score, general_score, specific_score, proactive_score, reactive_score, sameness_score, difference_score')
         .eq('contact_id', contactId)
         .eq('user_id', user.id)
         .limit(200);
