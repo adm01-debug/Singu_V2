@@ -10,11 +10,17 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import type { Tables } from '@/integrations/supabase/types';
 
-type Interaction = Tables<'interactions'>;
-type Contact = Tables<'contacts'>;
-type Company = Tables<'companies'>;
+type CalendarInteraction = Pick<Tables<'interactions'>,
+  'id' | 'user_id' | 'contact_id' | 'company_id' | 'title' | 'type' | 'content' |
+  'follow_up_date' | 'follow_up_required'
+>;
+type CalendarContact = Pick<Tables<'contacts'>, 'id' | 'first_name' | 'last_name'>;
+type CalendarCompany = Pick<Tables<'companies'>, 'id' | 'name'>;
 
-export interface FollowUp extends Interaction { contact?: Contact | null; company?: Company | null; }
+export interface FollowUp extends CalendarInteraction {
+  contact?: CalendarContact | null;
+  company?: CalendarCompany | null;
+}
 
 const interactionTypeIcons: Record<string, React.ReactNode> = {
   call: <Phone className="w-4 h-4" />, email: <Mail className="w-4 h-4" />, meeting: <Users className="w-4 h-4" />,

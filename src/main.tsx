@@ -81,7 +81,7 @@ async function migrateLegacyPushSW(): Promise<void> {
           " Push notifications will reactivate after next login."
       );
     } catch (err) {
-      console.warn("[main] Could not unregister legacy sw-push.js:", err);
+      logger.warn("[main] Could not unregister legacy sw-push.js:", err);
     }
   }
 }
@@ -127,7 +127,7 @@ if (import.meta.env.PROD) {
             },
 
             onRegisterError(error) {
-              console.error("[PWA] SW registration error:", error);
+              logger.error("[PWA] SW registration error:", error);
             },
           });
         })
@@ -135,7 +135,7 @@ if (import.meta.env.PROD) {
           // virtual:pwa-register is only present when the VitePWA plugin is
           // active.  In edge cases (e.g. canary builds without the plugin)
           // this import may fail; swallow silently so the app still boots.
-          console.warn("[PWA] Could not import virtual:pwa-register:", err);
+          logger.warn("[PWA] Could not import virtual:pwa-register:", err);
         });
     },
     { once: true }

@@ -20,8 +20,8 @@ import { parseApiError } from '@/lib/errorMessages';
 import { CalendarioContent, type FollowUp } from './calendario/CalendarioContent';
 import { FollowUpDetailDialog } from './calendario/FollowUpDetailDialog';
 
-type Contact = Tables<'contacts'>;
-type Company = Tables<'companies'>;
+type ContactRow = Pick<Tables<'contacts'>, 'id' | 'first_name' | 'last_name'>;
+type CompanyRow = Pick<Tables<'companies'>, 'id' | 'name'>;
 
 const Calendario = () => {
   usePageTitle('Calendário');
@@ -39,17 +39,17 @@ const Calendario = () => {
     gcTime: 5 * 60_000,
     queryFn: async (): Promise<FollowUp[]> => {
       const [interactionsRes, contactsRes, companiesRes] = await Promise.all([
-        supabase.from('interactions').select('*').eq('user_id', user.id).eq('follow_up_required', true).not('follow_up_date', 'is', null).order('follow_up_date', { ascending: true }).limit(500),
-        supabase.from('contacts').select('*').eq('user_id', user.id).limit(1000),
-        supabase.from('companies').select('*').eq('user_id', user.id).limit(1000),
+        supabase.from('interactions').select('id, user_id, contact_id, company_id, title, type, content, follow_up_date, follow_up_required').eq('user_id', user.id).eq('follow_up_required', true).not('follow_up_date', 'is', null).order('follow_up_date', { ascending: true }).limit(500),
+        supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user.id).limit(1000),
+        supabase.from('companies').select('id, name').eq('user_id', user.id).limit(1000),
       ]);
       if (interactionsRes.error) throw interactionsRes.error;
       if (contactsRes.error) throw contactsRes.error;
       if (companiesRes.error) throw companiesRes.error;
 
-      const contactsMap: Record<string, Contact> = {};
+      const contactsMap: Record<string, ContactRow> = {};
       contactsRes.data?.forEach(c => { contactsMap[c.id] = c; });
-      const companiesMap: Record<string, Company> = {};
+      const companiesMap: Record<string, CompanyRow> = {};
       companiesRes.data?.forEach(c => { companiesMap[c.id] = c; });
 
       return (interactionsRes.data || []).map(i => ({
