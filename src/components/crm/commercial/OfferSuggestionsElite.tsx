@@ -49,6 +49,7 @@ export function OfferSuggestionsElite({ contactId }: Props) {
 
   const { data: offers, isLoading } = useQuery({
     queryKey: ['offer-suggestions-elite', contactId, user?.id],
+    enabled: !!contactId && !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('offer_suggestions')

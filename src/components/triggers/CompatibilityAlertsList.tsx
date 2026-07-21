@@ -84,11 +84,12 @@ export function CompatibilityAlertsList({
   }, [fetchAlerts]);
 
   const handleDismiss = async (alertId: string) => {
+    if (!user) return;
     try {
       const { error } = await supabase
         .from('compatibility_alerts')
         .update({ dismissed: true })
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq('id', alertId);
 
       if (error) throw error;

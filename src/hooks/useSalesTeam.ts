@@ -64,10 +64,11 @@ export function useUpdateTeamMember() {
 
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<SalesTeamMember> & { id: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from('sales_team_members')
         .update(updates as TablesUpdate<'sales_team_members'>)
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq('id', id)
         .select()
         .maybeSingle();
@@ -89,10 +90,11 @@ export function useDeleteTeamMember() {
 
   return useMutation({
     mutationFn: async (id: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('sales_team_members')
         .delete()
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq('id', id);
       if (error) throw error;
     },

@@ -112,7 +112,8 @@ export function useSmartNotifications() {
         if (patch.status === 'clicked') updates.clicked_at = new Date().toISOString();
       }
       if (patch.snoozed_until !== undefined) updates.snoozed_until = patch.snoozed_until;
-      const { error } = await supabase.from('smart_notifications').update(updates).eq('user_id', user!.id).eq('id', patch.id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('smart_notifications').update(updates).eq('user_id', user.id).eq('id', patch.id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['smart-notifications', user?.id] }),
@@ -127,12 +128,13 @@ export function useSmartNotifications() {
     update.mutate({ id, status: 'snoozed', snoozed_until: until });
   }, [update]);
   const markAllRead = useCallback(async () => {
+    if (!user) return;
     const ids = visible.filter((n) => n.status === 'pending').map((n) => n.id);
     if (ids.length === 0) return;
     const { error } = await supabase
       .from('smart_notifications')
       .update({ status: 'delivered', delivered_at: new Date().toISOString() })
-      .eq('user_id', user!.id)
+      .eq('user_id', user.id)
       .in('id', ids);
     if (error) toast.error('Falha ao marcar como lidas');
     else qc.invalidateQueries({ queryKey: ['smart-notifications', user?.id] });

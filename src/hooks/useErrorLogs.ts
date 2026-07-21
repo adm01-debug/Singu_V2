@@ -44,7 +44,7 @@ export function useErrorLogs() {
       return true;
     },
     onSuccess: () => {
-      queryClient.setQueryData(['admin', 'error-logs'], []);
+      queryClient.invalidateQueries({ queryKey: ['admin', 'error-logs'] });
       toast.success('Logs limpos');
     },
     onError: () => toast.error('Erro ao limpar logs'),

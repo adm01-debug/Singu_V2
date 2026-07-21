@@ -92,6 +92,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
   });
 
   const handleAcceptSuggestion = async (suggestion: SuggestedLifeEvent) => {
+    if (!user) return;
     const meta = (suggestion.metadata ?? {}) as SuggestionMetadata;
     const isRelative = meta.type === 'relative_suggestion';
     
@@ -143,7 +144,8 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
   };
 
   const handleRejectSuggestion = async (id: string) => {
-    const { error } = await supabase.from('suggested_life_events').update({ status: 'rejected' }).eq('id', id).eq('user_id', user!.id);
+    if (!user) return;
+    const { error } = await supabase.from('suggested_life_events').update({ status: 'rejected' }).eq('id', id).eq('user_id', user.id);
     if (error) {
       toast({ title: "Erro ao rejeitar", description: error.message, variant: "destructive" });
     } else {
@@ -170,7 +172,8 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
 
   const updateEventMutation = useMutation({
     mutationFn: async ({ id, ...event }: Partial<Tables<'life_events'>> & { id: string }) => {
-      const { data, error } = await supabase.from('life_events').update(event).eq('id', id).eq('user_id', user!.id).select().maybeSingle();
+      if (!user) throw new Error('Não autenticado');
+      const { data, error } = await supabase.from('life_events').update(event).eq('id', id).eq('user_id', user.id).select().maybeSingle();
       if (error) throw error;
       return data;
     },
@@ -187,7 +190,8 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
 
   const deleteEventMutation = useMutation({
     mutationFn: async (eventId: string) => {
-      const { error } = await supabase.from('life_events').delete().eq('id', eventId).eq('user_id', user!.id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('life_events').delete().eq('id', eventId).eq('user_id', user.id);
       if (error) throw error;
     },
     onSuccess: () => {

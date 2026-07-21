@@ -63,6 +63,7 @@ export function CRMAutomationAuditLog() {
 
   const reprocessEvent = useMutation({
     mutationFn: async (logId: string) => {
+      if (!user) throw new Error('Não autenticado');
       // 1. Create reprocess entry
       const { error: queueError } = await supabase
         .from('crm_automation_reprocess_queue')

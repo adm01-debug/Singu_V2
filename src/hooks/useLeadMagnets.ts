@@ -71,7 +71,8 @@ export function useLeadMagnets() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('lead_magnets').delete().eq('id', id).eq('user_id', user!.id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('lead_magnets').delete().eq('id', id).eq('user_id', user.id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: KEY }); toast.success('Removido'); },
@@ -80,7 +81,8 @@ export function useLeadMagnets() {
 
   const togglePublish = useMutation({
     mutationFn: async ({ id, is_published }: { id: string; is_published: boolean }) => {
-      const { error } = await supabase.from('lead_magnets').update({ is_published } as TablesUpdate<'lead_magnets'>).eq('id', id).eq('user_id', user!.id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('lead_magnets').update({ is_published } as TablesUpdate<'lead_magnets'>).eq('id', id).eq('user_id', user.id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),

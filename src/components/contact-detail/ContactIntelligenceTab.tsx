@@ -81,12 +81,13 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
     gcTime: 10 * 60 * 1000,
   });
 
-  useMutation({
+  const updateOfferStatus = useMutation({
     mutationFn: async ({ offerId, status }: { offerId: string; status: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('offer_suggestions')
         .update({ status })
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq('id', offerId);
       if (error) throw error;
     },

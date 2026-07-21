@@ -52,7 +52,8 @@ export function useTonePersistence(companyId?: string) {
       return tone;
     },
     onSuccess: (tone) => {
-      queryClient.setQueryData(['ai-tone-preferences', companyId], tone);
+      queryClient.setQueryData(['ai-tone-preferences', companyId, user?.id], tone);
+      queryClient.invalidateQueries({ queryKey: ['ai-tone-preferences', companyId, user?.id] });
       toast.success('Preferência de tom salva!');
     },
     onError: (error) => {

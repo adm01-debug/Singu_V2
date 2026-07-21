@@ -80,6 +80,7 @@ export function CadenceRulesConfig() {
 
   const saveRule = useMutation({
     mutationFn: async (ruleData: CadenceRule) => {
+      if (!user) throw new Error('Não autenticado');
       const payload = {
         ...ruleData,
         cadence_steps: ruleData.cadence_steps.map(({ _localId: _, ...step }) => step),
@@ -109,7 +110,8 @@ export function CadenceRulesConfig() {
 
   const deleteRule = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('crm_cadence_rules').update({ is_active: false }).eq('id', id).eq('user_id', user!.id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('crm_cadence_rules').update({ is_active: false }).eq('id', id).eq('user_id', user.id);
       if (error) throw error;
     },
     onSuccess: () => {

@@ -217,6 +217,7 @@ export function useRealtimeNotifications() {
   }, []);
 
   const dismissNotification = useCallback(async (notification: RealtimeNotification) => {
+    if (!user) return;
     const tableMap = {
       alert: 'alerts',
       insight: 'insights',
@@ -229,7 +230,7 @@ export function useRealtimeNotifications() {
     const { error } = await supabase
       .from(table)
       .update({ dismissed: true })
-      .eq('user_id', user!.id)
+      .eq('user_id', user.id)
       .eq('id', notification.id);
 
     if (error) {
@@ -238,7 +239,7 @@ export function useRealtimeNotifications() {
     }
 
     setNotifications(prev => prev.filter(n => n.id !== notification.id));
-  }, []);
+  }, [user]);
 
   return {
     notifications,
