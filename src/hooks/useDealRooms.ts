@@ -117,8 +117,8 @@ export function useDealRooms(filters?: { status?: DealRoomStatus | "all" }) {
     enabled: !!user,
     staleTime: 5 * 60_000,
     queryFn: async () => {
-      let q = supabase.from("deal_rooms").select("*").eq("user_id", user!.id).order("updated_at", { ascending: false })
-      .limit(1000);
+      let q = supabase.from("deal_rooms").select("id, user_id, deal_id, deal_name, company_id, title, description, status, deal_value, target_close_date, share_token, share_enabled, last_buyer_view_at, buyer_view_count, health_score, health_recommendations, health_analyzed_at, created_at, updated_at").eq("user_id", user!.id).order("updated_at", { ascending: false })
+      .limit(100);
       if (filters?.status && filters.status !== "all") {
         q = q.eq("status", filters.status);
       }
@@ -214,8 +214,8 @@ export function useMilestones(roomId: string | undefined) {
     enabled: !!roomId,
     staleTime: 5 * 60_000,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_room_milestones").select("*").eq("room_id", roomId!).order("sort_order")
-      .limit(1000);
+      const { data, error } = await supabase.from("deal_room_milestones").select("id, room_id, user_id, title, description, status, sort_order, due_date, completed_at, completed_by_side, owner_side, created_at, updated_at").eq("room_id", roomId!).order("sort_order")
+      .limit(50);
       if (error) throw error;
       return (data ?? []) as DealRoomMilestone[];
     },
@@ -266,8 +266,8 @@ export function useStakeholders(roomId: string | undefined) {
     queryKey: KEYS.sh(roomId ?? ""),
     enabled: !!roomId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_room_stakeholders").select("*").eq("room_id", roomId!)
-      .limit(1000);
+      const { data, error } = await supabase.from("deal_room_stakeholders").select("id, room_id, user_id, contact_id, name, email, role_title, side, influence, engagement_score, notes, created_at, updated_at").eq("room_id", roomId!)
+      .limit(50);
       if (error) throw error;
       return (data ?? []) as DealRoomStakeholder[];
     },
@@ -319,8 +319,8 @@ export function useRoomDocuments(roomId: string | undefined) {
     queryKey: KEYS.docs(roomId ?? ""),
     enabled: !!roomId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_room_documents").select("*").eq("room_id", roomId!).order("created_at", { ascending: false })
-      .limit(1000);
+      const { data, error } = await supabase.from("deal_room_documents").select("id, room_id, user_id, title, file_path, file_type, file_size, uploaded_by_side, created_at").eq("room_id", roomId!).order("created_at", { ascending: false })
+      .limit(100);
       if (error) throw error;
       return (data ?? []) as DealRoomDocument[];
     },
@@ -399,8 +399,8 @@ export function useRoomComments(roomId: string | undefined) {
     queryKey: KEYS.cmts(roomId ?? ""),
     enabled: !!roomId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_room_comments").select("*").eq("room_id", roomId!).order("created_at")
-      .limit(1000);
+      const { data, error } = await supabase.from("deal_room_comments").select("id, room_id, user_id, author_side, author_label, body, created_at").eq("room_id", roomId!).order("created_at")
+      .limit(200);
       if (error) throw error;
       return (data ?? []) as DealRoomComment[];
     },
