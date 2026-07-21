@@ -76,7 +76,8 @@ export function useNextBestAction(contactId: string | undefined) {
        const { error } = await supabase
          .from('contact_next_actions')
          .update({ edited_script: script })
-         .eq('id', id);
+         .eq('id', id)
+         .eq('user_id', user!.id);
        if (error) throw error;
      },
      onSuccess: () => {
@@ -95,7 +96,7 @@ export function useNextBestAction(contactId: string | undefined) {
           completed_at: completed_at || new Date().toISOString(),
           completion_notes: notes,
           was_successful: was_successful ?? true
-        }).eq('id', id),
+        }).eq('id', id).eq('user_id', user!.id),
         (currentAction && user?.id && contactId)
           ? supabase.from('interactions').insert([{
               contact_id: contactId,

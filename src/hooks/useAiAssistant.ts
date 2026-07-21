@@ -65,6 +65,7 @@ export function useAiAssistant() {
         .from('ai_chat_messages')
         .select('*')
         .eq('thread_id', threadId)
+        .eq('user_id', user?.id ?? '')
         .order('created_at', { ascending: true })
         .limit(1000);
       if (signal?.cancelled) return;

@@ -59,34 +59,36 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
   });
 
   const { data: lifeEvents = [], isLoading } = useQuery({
-    queryKey: ['life-events', contactId],
+    queryKey: ['life-events', contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('life_events')
         .select('*')
         .eq('contact_id', contactId)
+        .eq('user_id', user!.id)
         .order('event_date', { ascending: true })
         .limit(1000);
       if (error) throw error;
       return data as Tables<'life_events'>[];
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
   });
 
   const { data: suggestions = [], refetch: refetchSuggestions } = useQuery({
-    queryKey: ['suggested-life-events', contactId],
+    queryKey: ['suggested-life-events', contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('suggested_life_events')
         .select('*')
         .eq('contact_id', contactId)
+        .eq('user_id', user!.id)
         .eq('status', 'pending')
         .order('confidence', { ascending: false })
         .limit(1000);
       if (error) throw error;
       return data;
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
   });
 
   const handleAcceptSuggestion = async (suggestion: SuggestedLifeEvent) => {
@@ -107,7 +109,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
       });
 
       if (!error) {
-        const { error: updateErr } = await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id);
+        const { error: updateErr } = await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id).eq('user_id', user!.id);
         if (updateErr) toast({ title: "Aviso", description: "Relacionado adicionado, mas falha ao marcar sugestão.", variant: "destructive" });
         queryClient.invalidateQueries({ queryKey: ['contact-relational-data', contactId] });
         refetchSuggestions();
@@ -130,7 +132,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     });
 
     if (!error) {
-      const { error: updateErr } = await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id);
+      const { error: updateErr } = await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id).eq('user_id', user!.id);
       if (updateErr) toast({ title: "Aviso", description: "Marco adicionado, mas falha ao marcar sugestão.", variant: "destructive" });
       queryClient.invalidateQueries({ queryKey: ['life-events', contactId] });
       refetchSuggestions();
@@ -141,7 +143,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
   };
 
   const handleRejectSuggestion = async (id: string) => {
-    const { error } = await supabase.from('suggested_life_events').update({ status: 'rejected' }).eq('id', id);
+    const { error } = await supabase.from('suggested_life_events').update({ status: 'rejected' }).eq('id', id).eq('user_id', user!.id);
     if (error) {
       toast({ title: "Erro ao rejeitar", description: error.message, variant: "destructive" });
     } else {
@@ -168,7 +170,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
 
   const updateEventMutation = useMutation({
     mutationFn: async ({ id, ...event }: Partial<Tables<'life_events'>> & { id: string }) => {
-      const { data, error } = await supabase.from('life_events').update(event).eq('id', id).select().maybeSingle();
+      const { data, error } = await supabase.from('life_events').update(event).eq('id', id).eq('user_id', user!.id).select().maybeSingle();
       if (error) throw error;
       return data;
     },
@@ -185,7 +187,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
 
   const deleteEventMutation = useMutation({
     mutationFn: async (eventId: string) => {
-      const { error } = await supabase.from('life_events').delete().eq('id', eventId);
+      const { error } = await supabase.from('life_events').delete().eq('id', eventId).eq('user_id', user!.id);
       if (error) throw error;
     },
     onSuccess: () => {

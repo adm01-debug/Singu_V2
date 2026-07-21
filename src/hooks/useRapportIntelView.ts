@@ -19,19 +19,23 @@ export interface RapportIntel {
 }
 
 export function useRapportIntel(contactId?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['rapport-intel', contactId],
+    queryKey: ['rapport-intel', contactId, user?.id],
     queryFn: async () => {
       if (!contactId) return null;
       const { data, error } = await queryExternalData<RapportIntel>({
         table: 'vw_singu_rapport_intel',
-        filters: [{ type: 'eq', column: 'contact_id', value: contactId }],
+        filters: [
+          { type: 'eq', column: 'contact_id', value: contactId },
+          { type: 'eq', column: 'user_id', value: user!.id },
+        ],
         range: { from: 0, to: 0 },
       });
       if (error) throw error;
       return data?.[0] || null;
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
     staleTime: 10 * 60 * 1000,
   });
 }
@@ -44,6 +48,7 @@ export function useRapportIntelList() {
     queryFn: async () => {
       const { data, error } = await queryExternalData<RapportIntel>({
         table: 'vw_singu_rapport_intel',
+        filters: [{ type: 'eq', column: 'user_id', value: user!.id }],
         range: { from: 0, to: 99 },
       });
       if (error) throw error;

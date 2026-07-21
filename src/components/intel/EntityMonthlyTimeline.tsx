@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { SectionFrame } from './SectionFrame';
@@ -51,11 +52,20 @@ function matchesKind(kind: string, f: KindFilter): boolean {
  * Filtro por kind persistido em localStorage.
  */
 export const EntityMonthlyTimeline = ({ events, onClose }: EntityMonthlyTimelineProps) => {
-  const [filter, setFilter] = useState<KindFilter>(() => readFilter());
+  const { user } = useAuth();
+  const filterKey = `${FILTER_KEY}-${user?.id ?? 'anon'}`;
+  const [filter, setFilter] = useState<KindFilter>('all');
 
   useEffect(() => {
-    try { localStorage.setItem(FILTER_KEY, filter); } catch { /* ignore */ }
-  }, [filter]);
+    try {
+      const raw = localStorage.getItem(filterKey);
+      if (raw === 'interaction' || raw === 'deal' || raw === 'event' || raw === 'all') setFilter(raw);
+    } catch { /* ignore */ }
+  }, [filterKey]);
+
+  useEffect(() => {
+    try { localStorage.setItem(filterKey, filter); } catch { /* ignore */ }
+  }, [filter, filterKey]);
 
   const filtered = useMemo(
     () => events.filter((e) => matchesKind(e.kind, filter)),

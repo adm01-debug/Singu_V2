@@ -11,6 +11,7 @@ export function useUsageKpisView() {
       const { data, error } = await queryExternalData({
         table: 'vw_singu_usage_kpis',
         select: '*',
+        filters: [{ type: 'eq', column: 'user_id', value: user!.id }],
         range: { from: 0, to: 49 },
       });
       if (error) throw error;

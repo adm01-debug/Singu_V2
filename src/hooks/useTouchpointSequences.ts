@@ -79,6 +79,7 @@ export function useTouchpointSequences() {
         queryExternalData<RawDeal>({
           table: 'deals',
           select: 'id, contact_id, status, pipeline_stage, valor, closed_at, updated_at, created_at',
+          filters: [{ type: 'eq', column: 'user_id', value: user.id }],
           order: { column: 'updated_at', ascending: false },
           range: { from: 0, to: 1999 },
         }),

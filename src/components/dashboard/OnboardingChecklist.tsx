@@ -21,6 +21,7 @@ import { Progress } from '@/components/ui/progress';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
 import { celebrate } from '@/lib/celebrate';
+import { useAuth } from '@/hooks/useAuth';
 
 interface ChecklistStep {
   id: string;
@@ -44,9 +45,6 @@ interface OnboardingChecklistProps {
   hasSequence?: boolean;
 }
 
-const STORAGE_DISMISSED = 'singu_onboarding_dismissed';
-const STORAGE_CELEBRATED = 'singu_onboarding_celebrated_v2';
-
 export const OnboardingChecklist = React.memo(function OnboardingChecklist({
   hasProfile,
   hasContacts,
@@ -56,15 +54,20 @@ export const OnboardingChecklist = React.memo(function OnboardingChecklist({
   hasLeadScore = false,
   hasSequence = false,
 }: OnboardingChecklistProps) {
+  const { user } = useAuth();
+  const uid = user?.id ?? 'anon';
+  const storageDismissed = `singu_onboarding_dismissed_${uid}`;
+  const storageCelebrated = `singu_onboarding_celebrated_v2_${uid}`;
+
   const [dismissed, setDismissed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     try {
-      const isDismissed = localStorage.getItem(STORAGE_DISMISSED);
+      const isDismissed = localStorage.getItem(storageDismissed);
       if (isDismissed === 'true') setDismissed(true);
     } catch { /* quota/private */ }
-  }, []);
+  }, [storageDismissed]);
 
   const steps: ChecklistStep[] = [
     {
@@ -140,8 +143,8 @@ export const OnboardingChecklist = React.memo(function OnboardingChecklist({
   useEffect(() => {
     if (!allComplete) return;
     try {
-      if (localStorage.getItem(STORAGE_CELEBRATED) === 'true') return;
-      localStorage.setItem(STORAGE_CELEBRATED, 'true');
+      if (localStorage.getItem(storageCelebrated) === 'true') return;
+      localStorage.setItem(storageCelebrated, 'true');
       celebrate({
         kind: 'milestone',
         title: 'Onboarding completo!',
@@ -156,7 +159,7 @@ export const OnboardingChecklist = React.memo(function OnboardingChecklist({
 
   const handleDismiss = () => {
     setDismissed(true);
-    try { localStorage.setItem(STORAGE_DISMISSED, 'true'); } catch { /* quota/private */ }
+    try { localStorage.setItem(storageDismissed, 'true'); } catch { /* quota/private */ }
   };
 
   const nextStep = steps.find((s) => !s.completed);

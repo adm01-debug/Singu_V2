@@ -97,12 +97,8 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
   const [isLoading, setIsLoading] = useState(false);
   const [recentItems, setRecentItems] = useState<RecentItem[]>([]);
   const searchGenRef = useRef(0);
-  const [semanticMode, setSemanticMode] = useState<boolean>(() => {
-    try { return localStorage.getItem('global-search-semantic') === '1'; } catch { return false; }
-  });
-  const [conversationalMode, setConversationalMode] = useState<boolean>(() => {
-    try { return localStorage.getItem('global-search-conversational') === '1'; } catch { return false; }
-  });
+  const [semanticMode, setSemanticMode] = useState(false);
+  const [conversationalMode, setConversationalMode] = useState(false);
   const [convDraft, setConvDraft] = useState('');
   const {
     search: semanticSearch,
@@ -130,6 +126,13 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
   );
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  // Hydrate search mode preferences from user-scoped localStorage keys
+  useEffect(() => {
+    const uid = user?.id ?? 'anon';
+    try { setSemanticMode(localStorage.getItem(`global-search-semantic-${uid}`) === '1'); } catch { /* noop */ }
+    try { setConversationalMode(localStorage.getItem(`global-search-conversational-${uid}`) === '1'); } catch { /* noop */ }
+  }, [user?.id]);
 
   useModalHistory(open, () => onOpenChange(false), 'global-search');
 
@@ -277,29 +280,31 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
   }, [open, resetSemantic, resetConversational]);
 
   const toggleSemantic = useCallback(() => {
+    const uid = user?.id ?? 'anon';
     setSemanticMode(prev => {
       const next = !prev;
-      try { localStorage.setItem('global-search-semantic', next ? '1' : '0'); } catch { /* noop */ }
+      try { localStorage.setItem(`global-search-semantic-${uid}`, next ? '1' : '0'); } catch { /* noop */ }
       if (next) {
         setConversationalMode(false);
-        try { localStorage.setItem('global-search-conversational', '0'); } catch { /* noop */ }
+        try { localStorage.setItem(`global-search-conversational-${uid}`, '0'); } catch { /* noop */ }
       }
       return next;
     });
-  }, []);
+  }, [user?.id]);
 
   const toggleConversational = useCallback(() => {
+    const uid = user?.id ?? 'anon';
     setConversationalMode(prev => {
       const next = !prev;
-      try { localStorage.setItem('global-search-conversational', next ? '1' : '0'); } catch { /* noop */ }
+      try { localStorage.setItem(`global-search-conversational-${uid}`, next ? '1' : '0'); } catch { /* noop */ }
       if (next) {
         setSemanticMode(false);
-        try { localStorage.setItem('global-search-semantic', '0'); } catch { /* noop */ }
+        try { localStorage.setItem(`global-search-semantic-${uid}`, '0'); } catch { /* noop */ }
         resetConversational();
       }
       return next;
     });
-  }, [resetConversational]);
+  }, [resetConversational, user?.id]);
 
   const submitConversational = useCallback(async (q?: string) => {
     if (!user) return;

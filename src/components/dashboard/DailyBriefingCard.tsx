@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useUpcomingLifeEvents } from '@/hooks/useUpcomingLifeEvents';
+import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -65,16 +66,16 @@ export function DailyBriefingCard({
   weeklyAverage = 0,
   className,
 }: Props) {
+  const { user } = useAuth();
   const { data: upcomingEvents = [] } = useUpcomingLifeEvents(7);
-  const key = STORAGE_PREFIX + todayKey();
-  const [dismissed, setDismissed] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
+  const key = `${STORAGE_PREFIX}${user?.id ?? 'anon'}-${todayKey()}`;
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
     try {
-      return window.localStorage.getItem(key) === '1';
-    } catch {
-      return false;
-    }
-  });
+      if (window.localStorage.getItem(key) === '1') setDismissed(true);
+    } catch { /* noop */ }
+  }, [key]);
 
   const greeting = useMemo(() => getGreeting(), []);
 

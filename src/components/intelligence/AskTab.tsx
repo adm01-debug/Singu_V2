@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Send, Loader2, Sparkles, History as HistoryIcon, Trash2, Save, Play, Download } from 'lucide-react';
@@ -17,7 +18,7 @@ import { DataGrid } from '@/components/intel/DataGrid';
 import { intelExportUniversal, type IntelExportFormat } from '@/lib/intelExportUniversal';
 import { ExportFormatMenu } from '@/components/intel/ExportFormatMenu';
 
-const HISTORY_KEY = 'intel-ask-history';
+const HISTORY_KEY_PREFIX = 'intel-ask-history';
 const MAX_HISTORY = 10;
 
 
@@ -38,6 +39,8 @@ interface AskTabProps {
 }
 
 export const AskTab = ({ onRegisterBridge, contextEntity = null }: AskTabProps) => {
+  const { user } = useAuth();
+  const historyKey = `${HISTORY_KEY_PREFIX}-${user?.id ?? 'anon'}`;
   const { messages, loading, ask, clearMessages } = useAskCrm();
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>([]);
@@ -48,10 +51,10 @@ export const AskTab = ({ onRegisterBridge, contextEntity = null }: AskTabProps) 
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(HISTORY_KEY);
+      const raw = localStorage.getItem(historyKey);
       if (raw) setHistory(JSON.parse(raw));
     } catch { /* ignore */ }
-  }, []);
+  }, [historyKey]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -67,10 +70,10 @@ export const AskTab = ({ onRegisterBridge, contextEntity = null }: AskTabProps) 
   const persistHistory = useCallback((q: string) => {
     setHistory((prev) => {
       const next = [q, ...prev.filter((x) => x !== q)].slice(0, MAX_HISTORY);
-      try { localStorage.setItem(HISTORY_KEY, JSON.stringify(next)); } catch { /* ignore */ }
+      try { localStorage.setItem(historyKey, JSON.stringify(next)); } catch { /* ignore */ }
       return next;
     });
-  }, []);
+  }, [historyKey]);
 
   const exportLastTable = useCallback((fmt: IntelExportFormat = 'csv') => {
     const lastWithData = [...messages].reverse().find((m) => Array.isArray(m.data) && m.data.length > 0);
@@ -322,7 +325,7 @@ export const AskTab = ({ onRegisterBridge, contextEntity = null }: AskTabProps) 
                   <Download className="h-3 w-3" aria-hidden /> EXPORT
                 </button>
                 <button
-                  onClick={() => { setHistory([]); localStorage.removeItem(HISTORY_KEY); }}
+                  onClick={() => { setHistory([]); localStorage.removeItem(historyKey); }}
                   className="intel-mono text-[10px] text-muted-foreground hover:text-destructive"
                   aria-label="Limpar histórico"
                 >

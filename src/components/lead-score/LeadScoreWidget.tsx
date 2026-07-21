@@ -32,17 +32,17 @@ function LeadScoreWidgetInner({ contactId }: Props) {
         cadenceRes,
         rapportRes,
       ] = await Promise.all([
-        supabase.from('contacts').select('relationship_score, email, phone, birthday, company_id, linkedin, instagram, twitter, whatsapp, role, interests, hobbies, notes').eq('id', contactId).maybeSingle(),
-        supabase.from('interactions').select('id, created_at').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(50),
-        supabase.from('disc_analysis_history').select('id').eq('contact_id', contactId).limit(1),
-        supabase.from('eq_analysis_history').select('id').eq('contact_id', contactId).limit(1),
-        supabase.from('vak_analysis_history').select('id').eq('contact_id', contactId).limit(1),
-        supabase.from('metaprogram_analysis').select('id').eq('contact_id', contactId).limit(1),
+        supabase.from('contacts').select('relationship_score, email, phone, birthday, company_id, linkedin, instagram, twitter, whatsapp, role, interests, hobbies, notes').eq('id', contactId).eq('user_id', user.id).maybeSingle(),
+        supabase.from('interactions').select('id, created_at').eq('contact_id', contactId).eq('user_id', user.id).order('created_at', { ascending: false }).limit(50),
+        supabase.from('disc_analysis_history').select('id').eq('contact_id', contactId).eq('user_id', user.id).limit(1),
+        supabase.from('eq_analysis_history').select('id').eq('contact_id', contactId).eq('user_id', user.id).limit(1),
+        supabase.from('vak_analysis_history').select('id').eq('contact_id', contactId).eq('user_id', user.id).limit(1),
+        supabase.from('metaprogram_analysis').select('id').eq('contact_id', contactId).eq('user_id', user.id).limit(1),
         // Check pipeline for active deals - use a simple approach
-        supabase.from('interactions').select('id').eq('contact_id', contactId).eq('type', 'deal').limit(10),
-        supabase.from('hidden_objections').select('id').eq('contact_id', contactId).eq('resolved', false),
-        supabase.from('contact_cadence').select('next_contact_due, last_contact_at').eq('contact_id', contactId).maybeSingle(),
-        supabase.from('score_history').select('score_value').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(1),
+        supabase.from('interactions').select('id').eq('contact_id', contactId).eq('user_id', user.id).eq('type', 'deal').limit(10),
+        supabase.from('hidden_objections').select('id').eq('contact_id', contactId).eq('user_id', user.id).eq('resolved', false),
+        supabase.from('contact_cadence').select('next_contact_due, last_contact_at').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
+        supabase.from('score_history').select('score_value').eq('contact_id', contactId).eq('user_id', user.id).order('created_at', { ascending: false }).limit(1),
       ]);
 
       const contact = contactRes.data;

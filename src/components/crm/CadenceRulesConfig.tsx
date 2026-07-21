@@ -108,7 +108,7 @@ export function CadenceRulesConfig() {
 
   const deleteRule = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('crm_cadence_rules').update({ is_active: false }).eq('id', id);
+      const { error } = await supabase.from('crm_cadence_rules').update({ is_active: false }).eq('id', id).eq('user_id', user!.id);
       if (error) throw error;
     },
     onSuccess: () => {
