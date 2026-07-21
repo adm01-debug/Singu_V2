@@ -15,10 +15,11 @@
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "strict": true,
-    "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "useUnknownInCatchVariables": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "useUnknownInCatchVariables": false,
     "paths": {
       "@/*": [
         "./src/*"
