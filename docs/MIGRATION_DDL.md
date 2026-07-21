@@ -121,3 +121,7 @@ Rode também o linter do Supabase no destino para confirmar baseline.
 3. **Secrets** — recadastrar via UI ou `supabase secrets set`.
 4. **`auth.users`** — decisão pendente (opção A/B/C do plano de migração).
 5. **Storage buckets** — recriar buckets + copiar objetos.
+## Ver também
+
+- [Master Runbook](./MIGRATION_MASTER_RUNBOOK.md) — orquestra todas as fases
+- [DDL](./MIGRATION_DDL.md) · [Data](./MIGRATION_DATA.md) · [Edge Functions](./MIGRATION_EDGE_FUNCTIONS.md) · [Storage](./MIGRATION_STORAGE.md) · [Password Reset](./MIGRATION_PASSWORD_RESET.md)

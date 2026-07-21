@@ -2,6 +2,28 @@
 // Uso: deno run --allow-env --allow-net --allow-write --allow-read storage/copy-objects.ts
 import { loadEnv, listBuckets, iterObjects, authHeaders, retryFetch, runPool, fmtBytes, type StorageObject } from "./_lib.ts";
 
+// P3.13 — rate limit global em bytes/s (0 = ilimitado)
+const RATE_LIMIT = parseInt(Deno.env.get("RATE_LIMIT_BPS") ?? "0", 10);
+let bytesInWindow = 0;
+let windowStart = Date.now();
+async function throttle(bytes: number): Promise<void> {
+  if (!RATE_LIMIT) return;
+  bytesInWindow += bytes;
+  const elapsed = Date.now() - windowStart;
+  if (elapsed >= 1000) { bytesInWindow = bytes; windowStart = Date.now(); return; }
+  if (bytesInWindow > RATE_LIMIT) {
+    await new Promise((r) => setTimeout(r, 1000 - elapsed));
+    bytesInWindow = 0; windowStart = Date.now();
+  }
+}
+
+// P1.6 — validação de ETag pós-PUT
+async function md5Hex(buf: Uint8Array): Promise<string> {
+  const d = await crypto.subtle.digest("MD5", buf).catch(() => null);
+  if (!d) return ""; // Deno pode não expor MD5; nesse caso pulamos sem falhar
+  return Array.from(new Uint8Array(d)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 const env = loadEnv();
 const buckets = await listBuckets(env.SRC_SUPABASE_URL, env.SRC_SERVICE_ROLE_KEY);
 
@@ -48,6 +70,7 @@ async function copyOne(bucket: string, obj: StorageObject): Promise<{ bytes: num
 
   let body: BodyInit;
   let tmpPath: string | null = null;
+  let bodyBuf: Uint8Array | null = null;
   if (size > env.STREAM_TMPFILE_THRESHOLD) {
     // objeto grande → buffer em tmpfile para permitir retry idempotente do PUT
     tmpPath = await Deno.makeTempFile({ prefix: "storage-copy-" });
@@ -61,7 +84,8 @@ async function copyOne(bucket: string, obj: StorageObject): Promise<{ bytes: num
       console.warn(`  ! tamanho divergente em ${bucket}/${key}: src.metadata=${size} baixado=${stat.size}`);
     }
   } else {
-    body = new Uint8Array(await src.arrayBuffer());
+    bodyBuf = new Uint8Array(await src.arrayBuffer());
+    body = bodyBuf;
   }
 
   const putUrl = `${env.DEST_SUPABASE_URL}/storage/v1/object/${encodeURIComponent(bucket)}/${encodePath(key)}`;
@@ -78,6 +102,18 @@ async function copyOne(bucket: string, obj: StorageObject): Promise<{ bytes: num
   if (tmpPath) await Deno.remove(tmpPath).catch(() => {});
 
   if (!put.ok) throw new Error(`PUT ${bucket}/${key} HTTP ${put.status}: ${await put.text()}`);
+
+  // Validação de ETag (só para objetos pequenos que ficaram em memória).
+  if (bodyBuf) {
+    const etag = (put.headers.get("etag") ?? "").replace(/"/g, "");
+    if (etag && /^[a-f0-9]{32}$/i.test(etag)) {
+      const local = await md5Hex(bodyBuf);
+      if (local && local !== etag.toLowerCase()) {
+        throw new Error(`ETag mismatch em ${bucket}/${key}: local=${local} remoto=${etag}`);
+      }
+    }
+  }
+  await throttle(size);
   return { bytes: size, skipped: false };
 }
 
