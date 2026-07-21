@@ -59,7 +59,8 @@ const urgencyMeta: Record<string, { label: string; variant: 'default' | 'destruc
           .maybeSingle();
        return contact;
      },
-     enabled: !!contactId
+     enabled: !!contactId,
+     staleTime: 5 * 60_000,
    });
   const createTask = useCreateTask();
    const [scriptOpen, setScriptOpen] = useState(false);

@@ -34,9 +34,10 @@
         neocortex: (entry.dominance_data as { neocortex?: number } | null)?.neocortex || 0,
          empathy: entry.empathy_score || 0
        }));
-     }
+     },
+     staleTime: 5 * 60_000,
    });
- 
+
    if (isLoading) return <div className="h-48 animate-pulse bg-muted rounded-lg" />;
    if (!history || history.length < 1) {
      return (

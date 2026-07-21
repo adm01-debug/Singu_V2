@@ -28,6 +28,7 @@ export function LifeEventsAuditTrail({ contactId }: LifeEventsAuditTrailProps) {
       return data;
     },
     enabled: !!contactId && !!user,
+    staleTime: 5 * 60_000,
   });
 
   if (isLoading) {

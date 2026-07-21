@@ -26,7 +26,8 @@ export function RelationshipAuditPanel({ contactId }: Props) {
       
       if (error) throw error;
       return data;
-    }
+    },
+    staleTime: 5 * 60_000,
   });
 
   const getIcon = (source: string) => {

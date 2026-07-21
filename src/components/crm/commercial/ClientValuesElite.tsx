@@ -37,7 +37,8 @@ export function ClientValuesElite({ contactId }: Props) {
       
       if (error) throw error;
       return data;
-    }
+    },
+    staleTime: 5 * 60_000,
   });
 
   if (isLoading) {

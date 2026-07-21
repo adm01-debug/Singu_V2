@@ -135,7 +135,8 @@ export function RelationshipKPIsDashboard() {
         avgScoreByStage,
         trendData
       };
-    }
+    },
+    staleTime: 5 * 60_000,
   });
 
    useEffect(() => {
@@ -218,9 +219,10 @@ export function RelationshipKPIsDashboard() {
          .limit(5);
        if (error) return [];
        return data;
-     }
+     },
+     staleTime: 5 * 60_000,
    });
- 
+
    if (isLoading) return <Skeleton className="h-[600px] w-full" />;
 
   return (

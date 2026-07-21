@@ -28,7 +28,8 @@ export function WhatsAppDashboard({ contactId }: Props) {
        if (error) throw error;
        return data;
      },
-     enabled: !!contactId
+     enabled: !!contactId,
+     staleTime: 5 * 60_000,
    });
 
   if (loading) return null;

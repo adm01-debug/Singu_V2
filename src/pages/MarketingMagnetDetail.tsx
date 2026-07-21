@@ -28,6 +28,7 @@ export default function MarketingMagnetDetail() {
       if (error) throw error;
       return data as unknown as LeadMagnet | null;
     },
+    staleTime: 5 * 60_000,
   });
   const { data: downloads = [] } = useMagnetDownloads(id);
 

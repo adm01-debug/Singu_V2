@@ -18,7 +18,8 @@ export function ScoreExplicabilityPanel({ contactId }: Props) {
       const { data, error } = await supabase.rpc('get_score_explicability', { p_contact_id: contactId });
       if (error) throw error;
       return data;
-    }
+    },
+    staleTime: 5 * 60_000,
   });
 
   if (isLoading) return <Skeleton className="h-64 w-full" />;

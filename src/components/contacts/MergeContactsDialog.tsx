@@ -36,7 +36,8 @@ export function MergeContactsDialog({ primaryId, secondaryId, open, onOpenChange
       const primary = data.find(r => r.id === primaryId);
       const secondary = data.find(r => r.id === secondaryId);
       return { primary, secondary };
-    }
+    },
+    staleTime: 30_000,
   });
 
   const fields = [

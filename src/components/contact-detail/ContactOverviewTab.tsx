@@ -61,6 +61,7 @@ export function ContactOverviewTab({ contact, company, insights, alerts, interac
       return (data ?? []) as Tables<'life_events'>[];
     },
     enabled: !!user,
+    staleTime: 5 * 60_000,
   });
 
   const cadence = relData?.cadence ?? null;

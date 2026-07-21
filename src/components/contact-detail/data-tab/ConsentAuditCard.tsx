@@ -20,7 +20,8 @@ export function ConsentAuditCard({ contactId }: { contactId: string }) {
       
       if (error) throw error;
       return data || [];
-    }
+    },
+    staleTime: 5 * 60_000,
   });
 
   if (isLoading) return <Skeleton className="h-48 w-full" />;

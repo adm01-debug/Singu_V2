@@ -56,7 +56,8 @@ const NLPAnalytics = () => {
          .limit(5);
        return data?.map(c => ({ ...c, name: `${c.first_name} ${c.last_name}` })) || [];
      },
-     enabled: debouncedSearchTerm.length >= 2 && !!user
+     enabled: debouncedSearchTerm.length >= 2 && !!user,
+     staleTime: 60_000,
    });
 
    const { data: selectedContact } = useQuery({
@@ -104,9 +105,10 @@ const NLPAnalytics = () => {
  
        return contact;
      },
-     enabled: !!selectedContactId && !!user
+     enabled: !!selectedContactId && !!user,
+     staleTime: 5 * 60_000,
    });
- 
+
   return (
     <AppLayout>
       <SEOHead 

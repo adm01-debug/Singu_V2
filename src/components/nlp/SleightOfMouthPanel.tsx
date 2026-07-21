@@ -65,6 +65,7 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
       })) as ReframingItem[];
     },
     enabled: !!user && !!contactId,
+    staleTime: 5 * 60_000,
   });
 
   const updateStatus = useMutation({

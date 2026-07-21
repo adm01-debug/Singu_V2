@@ -36,7 +36,8 @@ export function MetaprogramsSubTab({ contactId }: Props) {
       if (error) throw error;
       return data;
     },
-    enabled: !!user && !!contactId
+    enabled: !!user && !!contactId,
+    staleTime: 5 * 60_000,
   });
 
   const latestMeta = metaHistory?.[0];

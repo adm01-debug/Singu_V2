@@ -86,9 +86,10 @@ export function NextBestAction({ contactId }: Props) {
        
        if (error) throw error;
        return data;
-     }
+     },
+     staleTime: 5 * 60_000,
    });
- 
+
    const commonObjections = useMemo(() => [
     { id: 'price', label: 'Preço / Orçamento', icon: '💰' },
     { id: 'timing', label: 'Não é o momento', icon: '⏳' },

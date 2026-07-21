@@ -38,7 +38,8 @@ export default function RecommendationAudit() {
 
       if (error) throw error;
       return (data ?? []) as unknown as AuditLog[];
-    }
+    },
+    staleTime: 5 * 60_000,
   });
 
   return (

@@ -29,6 +29,7 @@ export function ConsentAuditLog({ contactId }: Props) {
       return data;
     },
     enabled: !!contactId && !!user,
+    staleTime: 5 * 60_000,
   });
 
   if (isLoading) return <Skeleton className="h-48 w-full" />;

@@ -76,7 +76,8 @@ export function CadenceRulesConfig() {
         .limit(1000);
       if (error) throw error;
       return data;
-    }
+    },
+    staleTime: 5 * 60_000,
   });
 
   const saveRule = useMutation({

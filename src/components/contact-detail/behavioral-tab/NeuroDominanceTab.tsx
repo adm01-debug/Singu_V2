@@ -29,6 +29,7 @@
        return data;
      },
      enabled: !!contactId && !!user,
+     staleTime: 5 * 60_000,
    });
  
    if (isLoading) return <div className="p-8 text-center animate-pulse">Analisando dominância cerebral...</div>;

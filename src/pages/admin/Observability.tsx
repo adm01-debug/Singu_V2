@@ -23,6 +23,7 @@ export default function Observability() {
       if (error) throw error;
       return data;
     },
+    staleTime: 2 * 60_000,
   });
 
   const { data: slowQueries } = useQuery<SlowQuery[]>({
@@ -35,6 +36,7 @@ export default function Observability() {
       if (error) return []; // Fallback if extension not enabled
       return (data || []) as unknown as SlowQuery[];
     },
+    staleTime: 2 * 60_000,
   });
 
   return (
