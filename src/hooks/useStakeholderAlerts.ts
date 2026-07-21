@@ -424,6 +424,7 @@ export function useStakeholderAlerts(companyId?: string) {
       const { error } = await supabase
         .from('stakeholder_alerts')
         .update({ dismissed: true, dismissed_at: new Date().toISOString() })
+        .eq('user_id', user!.id)
         .eq('id', alertId);
 
       if (error) throw error;

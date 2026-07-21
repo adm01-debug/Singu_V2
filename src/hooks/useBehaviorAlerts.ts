@@ -316,7 +316,7 @@ export function useBehaviorAlerts() {
 
   const dismissAlert = useCallback(async (alertId: string) => {
     try {
-      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('id', alertId);
+      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user!.id).eq('id', alertId);
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey });
       toast({ title: 'Alerta dispensado', description: 'O alerta foi removido da sua lista.' });
@@ -329,7 +329,7 @@ export function useBehaviorAlerts() {
 
   const markActionTaken = useCallback(async (alertId: string) => {
     try {
-      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('id', alertId);
+      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user!.id).eq('id', alertId);
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey });
       toast({ title: 'Ação registrada', description: 'A ação foi marcada como concluída.' });

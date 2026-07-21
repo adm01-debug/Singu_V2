@@ -56,7 +56,7 @@ export function useCannedResponses() {
       if (!r) return '';
       const { error } = await supabase.from('canned_responses').update({
         usage_count: r.usage_count + 1
-      }).eq('id', id);
+      }).eq('user_id', user!.id).eq('id', id);
       if (error) logger.warn('Failed to increment usage_count', { error: error.message });
       return r.content;
     },
@@ -66,7 +66,7 @@ export function useCannedResponses() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('canned_responses').delete().eq('id', id);
+      const { error } = await supabase.from('canned_responses').delete().eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Resposta removida!'); },

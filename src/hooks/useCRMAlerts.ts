@@ -42,6 +42,7 @@ export function useCRMAlerts(contactId: string) {
       const { error } = await supabase
         .from('crm_alerts')
         .update({ is_resolved: true, resolved_at: new Date().toISOString() })
+        .eq('user_id', user!.id)
         .eq('id', alertId);
       if (error) throw error;
     },

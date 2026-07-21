@@ -37,7 +37,7 @@ export function useGeoBlocking() {
 
   const removeCountry = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('geo_allowed_countries').delete().eq('id', id);
+      const { error } = await supabase.from('geo_allowed_countries').delete().eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { toast.success('País removido.'); qc.invalidateQueries({ queryKey: ['geo-countries'] }); },

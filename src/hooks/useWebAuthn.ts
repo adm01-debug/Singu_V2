@@ -78,7 +78,7 @@ export function useWebAuthn() {
   }, [user, isSupported, qc]);
 
   const remove = useCallback(async (credentialId: string) => {
-    const { error } = await supabase.from('webauthn_credentials').delete().eq('id', credentialId);
+    const { error } = await supabase.from('webauthn_credentials').delete().eq('user_id', user!.id).eq('id', credentialId);
     if (error) { toast.error('Erro ao remover passkey.'); return; }
     toast.success('Passkey removida.');
     qc.invalidateQueries({ queryKey: ['webauthn-credentials'] });

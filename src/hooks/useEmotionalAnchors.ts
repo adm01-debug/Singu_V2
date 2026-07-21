@@ -54,7 +54,7 @@ export function useEmotionalAnchors(contactId?: string) {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('emotional_anchors').delete().eq('id', id);
+      const { error } = await supabase.from('emotional_anchors').delete().eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onMutate: async (id) => {

@@ -48,7 +48,7 @@ export function useClosingScoreAlerts() {
   });
 
   const dismissAlert = async (id: string) => {
-    const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('id', id);
+    const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user.id).eq('id', id);
     if (error) logger.error('Error dismissing alert:', { error: error.message });
     refetch();
   };

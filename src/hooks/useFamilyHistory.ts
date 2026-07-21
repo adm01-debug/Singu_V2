@@ -40,6 +40,7 @@ export function useFamilyHistory(contactId?: string) {
       const { error } = await supabase
         .from('contacts')
         .update({ family_info: historyEntry.family_info })
+        .eq('user_id', user!.id)
         .eq('id', contactId);
 
       if (error) throw error;

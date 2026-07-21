@@ -115,6 +115,7 @@ export function useAppliedResponses() {
       const { error } = await supabase
         .from("applied_objection_responses")
         .delete()
+        .eq('user_id', user!.id)
         .eq("id", id);
       if (error) throw error;
       return id;

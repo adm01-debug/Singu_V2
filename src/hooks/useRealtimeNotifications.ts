@@ -229,6 +229,7 @@ export function useRealtimeNotifications() {
     const { error } = await supabase
       .from(table)
       .update({ dismissed: true })
+      .eq('user_id', user!.id)
       .eq('id', notification.id);
 
     if (error) {

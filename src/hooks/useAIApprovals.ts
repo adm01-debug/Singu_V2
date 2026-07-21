@@ -61,7 +61,7 @@ export function useAIApprovals(contactId?: string) {
       const field = suggestion.type === 'hobby' ? 'hobbies' : 'interests';
 
       const [{ error: updateError }, { data: contact, error: contactError }] = await Promise.all([
-        supabase.from('suggested_rapport_intel').update({ status: 'approved' }).eq('id', suggestion.id),
+        supabase.from('suggested_rapport_intel').update({ status: 'approved' }).eq('user_id', user!.id).eq('id', suggestion.id),
         supabase.from('contacts').select('hobbies, interests, rapport_metadata').eq('id', suggestion.contact_id).eq('user_id', user.id).maybeSingle(),
       ]);
 
@@ -82,10 +82,11 @@ export function useAIApprovals(contactId?: string) {
 
         const { error: saveError } = await supabase
           .from('contacts')
-          .update({ 
+          .update({
             [field]: newValues,
             rapport_metadata: updatedMetadata as unknown as Json
           })
+          .eq('user_id', user.id)
           .eq('id', suggestion.contact_id);
         
         if (saveError) throw saveError;
@@ -109,6 +110,7 @@ export function useAIApprovals(contactId?: string) {
       const { error } = await supabase
         .from('suggested_rapport_intel')
         .update({ status: 'rejected' })
+        .eq('user_id', user!.id)
         .eq('id', suggestionId);
 
       if (error) throw error;
