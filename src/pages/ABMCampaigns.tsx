@@ -78,7 +78,6 @@ export default function ABMCampaigns() {
                         <Pencil className="h-3.5 w-3.5" />
                       </Button>   <Button size="icon" aria-label="Remover" variant="ghost" className="h-7 w-7" onClick={() => del.mutate(c.id)}>
                         <Trash2 className="h-3.5 w-3.5" />
-                      </Button>-3.5" />
                       </Button>
                     </div>
                   </div>

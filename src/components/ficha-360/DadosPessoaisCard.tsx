@@ -250,7 +250,8 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                   disabled={mutation.isPending}
                 >
                   <X className="h-4 w-4" />
-                </Butt<Button 
+                </Button>
+                <Button 
                   variant="ghost" 
                   size="icon" aria-label="Carregando" 
                   className="h-8 w-8 text-success"
@@ -258,7 +259,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                   disabled={mutation.isPending}
                 >
                   {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
-                </Button>           </Button>
+                </Button>
               </div>
             )}
           </div>
@@ -459,7 +460,8 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                             e.preventDefault();
                             setHobbies(prev => [...prev, newHobby.trim()]);
                             setNewHobby('');
-                          }}
+                          }
+                        }}
                         />
                         <Button size="icon" aria-label="Adicionar hobby" variant="outline" className="h-8 w-8" onClick={() => { if (newHobby.trim()) { setHobbies(prev => [...prev, newHobby.trim()]); setNewHobby(''); } }}>
                         <Plus className="h-3.5 w-3.5" />
@@ -515,7 +517,8 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                             e.preventDefault();
                             setInterests(prev => [...prev, newInterest.trim()]);
                             setNewInterest('');
-                          }}
+                          }
+                        }}
                         />
                         <Button size="icon" aria-label="Adicionar interesse" variant="outline" className="h-8 w-8" onClick={() => { if (newInterest.trim()) { setInterests(prev => [...prev, newInterest.trim()]); setNewInterest(''); } }}>
                         <Plus className="h-3.5 w-3.5" />

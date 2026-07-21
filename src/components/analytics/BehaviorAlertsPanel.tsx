@@ -313,7 +313,7 @@ export function BehaviorAlertsPanel({ compact = false }: BehaviorAlertsPanelProp
                               title="Ver contato"
                             >
                               <ChevronRight className="w-4 h-4" />
-                            </Button>              </Button>
+                            </Button>
                           </Link>
                         </div>
                       </div>

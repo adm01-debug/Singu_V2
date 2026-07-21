@@ -125,7 +125,8 @@ export const SocialProfileCard = ({ profile }: { profile: LuxSocialProfile }) =>
            >
              {adding ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : added ? <Check className="w-3.5 h-3.5" /> : <UserPlus className="w-3.5 h-3.5" />}
            </Button>
- <Button variant="ghost" size="icon" aria-label="Compartilhar" className="h-7 w-7" asChild>
+         {stakeholder.email && (
+           <Button variant="ghost" size="icon" aria-label="Compartilhar" className="h-7 w-7" asChild>
              <a href={`mailto:${stakeholder.email}`}><Share2 className="w-3.5 h-3.5" /></a>
            </Button>
          )}

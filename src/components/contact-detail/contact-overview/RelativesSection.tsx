@@ -174,16 +174,19 @@ export function RelativesSection({ contactId, relatives }: RelativesSectionProps
                  <RelativeDialog
                    initialData={rel}
                    onSave={(updates) => updateRelative.mutate({ id: rel.id, updates })}
-       <Button
+                   trigger={
+                     <Button
                        variant="ghost"
                        size="icon" aria-label="Editar"
                        className="h-6 w-6 text-muted-foreground hover:text-primary hover:bg-primary/10"
                      >
                        <Edit2 className="h-3 w-3" />
                      </Button>
-                     <Button
+                   }
+                 />
+                 <Button
                    variant="ghost"
-                   size="icon" aria-label="Adicionar"
+                   size="icon" aria-label="Remover"
                    className="h-6 w-6 text-destructive hover:text-destructive hover:bg-destructive/10"
                    onClick={() => deleteRelative.mutate(rel.id)}
                  >

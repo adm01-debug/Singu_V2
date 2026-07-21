@@ -90,7 +90,8 @@ export const ImportantDatesCalendar = forwardRef<HTMLDivElement, ImportantDatesC
           </div>
           <div className="flex items-center gap-1">
             <Button variant="ghost" size="icon" aria-label="Anterior" className="h-8 w-8" onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}><ChevronLeft className="h-4 w-4" /></Button>
-            <span className="text-sm font-medium min-w-[120px] text-center">{format(currentMonth, 'MMMM yyyy', { locale: ptBR }<Button variant="ghost" size="icon" aria-label="Próximo" className="h-8 w-8" onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}><ChevronRight className="h-4 w-4" /></Button>="h-4 w-4" /></Button>
+            <span className="text-sm font-medium min-w-[120px] text-center">{format(currentMonth, 'MMMM yyyy', { locale: ptBR })}</span>
+            <Button variant="ghost" size="icon" aria-label="Próximo" className="h-8 w-8" onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}><ChevronRight className="h-4 w-4" /></Button>
           </div>
         </CardTitle>
       </CardHeader>

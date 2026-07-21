@@ -164,9 +164,10 @@ export function CompatibilityAlertsList({
               <Button variant="ghost" size="icon" aria-label="Atualizar" onClick={fetchAlerts} className="h-8 w-8">
                 <RefreshCw className="w-4 h-4" />
               </Button>
-              {alerts.length > <Button variant="ghost" size="icon" aria-label="Remover" onClick={handleDismissAll} className="h-8 w-8">
+              {alerts.length > 0 && (
+                <Button variant="ghost" size="icon" aria-label="Remover" onClick={handleDismissAll} className="h-8 w-8">
                   <Trash2 className="w-4 h-4 text-muted-foreground" />
-                </Button>              </Button>
+                </Button>
               )}
             </div>
           </div>
@@ -231,7 +232,8 @@ export function CompatibilityAlertsList({
                         onClick={() => handleDismiss(alert.id)}
                       >
                         <X className="w-4 h-4" />
-          <Button
+                      </Button>
+                      <Button
                         variant="ghost"
                         size="icon" aria-label="Próximo"
                         className="h-7 w-7"
@@ -240,7 +242,6 @@ export function CompatibilityAlertsList({
                         <Link to={`/contatos/${alert.contact_id}`}>
                           <ChevronRight className="w-4 h-4" />
                         </Link>
-                      </Button>     </Link>
                       </Button>
                     </div>
                   </div>

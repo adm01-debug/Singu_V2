@@ -166,9 +166,10 @@ export function AccountPlanEditor({ accountId }: { accountId: string }) {
             <div className="space-y-2">
               {(plan.strategies ?? []).map((s, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <Input value={s} onChange={(e) => updStrategy(i, e.target.value)} placeholder="Estratégia" <Button size="icon" aria-label="Remover" variant="ghost" onClick={() => removeStrategy(i)}>
+                  <Input value={s} onChange={(e) => updStrategy(i, e.target.value)} placeholder="Estratégia" />
+                  <Button size="icon" aria-label="Remover" variant="ghost" onClick={() => removeStrategy(i)}>
                     <Trash2 className="h-3 w-3" />
-                  </Button>            </Button>
+                  </Button>
                 </div>
               ))}
             </div>

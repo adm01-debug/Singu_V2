@@ -615,7 +615,7 @@ export const InteracoesPresetsMenu = React.memo(function InteracoesPresetsMenu({
                             onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); cancelRename(); }}
                           >
                             <X className="w-3 h-3 text-muted-foreground" />
-                          </Button>              </Button>
+                          </Button>
                         </>
                       ) : (
                         <>
@@ -675,7 +675,8 @@ export const InteracoesPresetsMenu = React.memo(function InteracoesPresetsMenu({
                             }}
                           >
                             <Copy className="w-3 h-3 text-muted-foreground" />
-                 <Button
+                          </Button>
+                          <Button
                             variant="ghost"
                             size="icon" aria-label="Baixar JSON"
                             className="h-6 w-6"

@@ -175,7 +175,7 @@
                              <td className="p-3 text-right">
           <Button variant="ghost" size="icon" aria-label="Automação" className="h-7 w-7">
                                  <Zap className="w-3.5 h-3.5 text-primary" />
-                               </Button>            </Button>
+                               </Button>
                              </td>
                            </tr>
                          ))}

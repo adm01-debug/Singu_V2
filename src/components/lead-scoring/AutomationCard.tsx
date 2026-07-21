@@ -80,7 +80,8 @@ function AutomationCardInner({ automation, onEdit }: Props) {
               <Button size="icon" aria-label="Editar" variant="ghost" className="h-7 w-7" onClick={() => onEdit(automation)}>
                 <Pencil className="h-3.5 w-3.5" />
               </Button>
-       <Button
+            )}
+            <Button
               size="icon" aria-label="Remover"
               variant="ghost"
               className="h-7 w-7 text-destructive hover:text-destructive"
@@ -89,7 +90,7 @@ function AutomationCardInner({ automation, onEdit }: Props) {
               }}
             >
               <Trash2 className="h-3.5 w-3.5" />
-            </Button>           </Button>
+            </Button>
           </div>
         </div>
       </CardContent>

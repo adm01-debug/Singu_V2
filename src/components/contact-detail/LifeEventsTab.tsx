@@ -486,7 +486,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                           onClick={() => deleteEventMutation.mutate(event.id)}
                         >
                           <Trash2 className="h-3.5 w-3.5" />
-                        </Button>           </Button>
+                        </Button>
                       </div>
                     </div>
                   </CardContent>

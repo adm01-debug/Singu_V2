@@ -242,9 +242,10 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
                           Pular por enquanto
                         </DropdownMenuItem>
                       </DropdownMenuContent>
-                    </DropdownMe<Button size="icon" aria-label="Avançar" variant="ghost" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                    </DropdownMenu>
+                    <Button size="icon" aria-label="Avançar" variant="ghost" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                       <ArrowRight className="h-4 w-4" />
-                    </Button>                </Button>
+                    </Button>
                   </div>
                 </motion.div>
               ))}
@@ -470,7 +471,6 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
                 <Calendar className="h-4 w-4" />
               </Button>
               </div>
-            </div>
           </SheetHeader>
         </div>
 

@@ -101,7 +101,7 @@ export function BuyingCommitteeBoard({ accountId }: { accountId: string }) {
                               onClick={() => del.mutate({ id: m.id, account_id: accountId })}
                             >
                               <Trash2 className="h-3 w-3" />
-                            </Button>           </Button>
+                            </Button>
                           </div>
                         </div>
                       </div>

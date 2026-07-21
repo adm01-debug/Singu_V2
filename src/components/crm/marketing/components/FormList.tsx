@@ -72,12 +72,13 @@
                        <Copy className="w-3.5 h-3.5" />
                      </Button>
                      {form.is_published && (
-   <Button asChild size="icon" aria-label="Abrir em nova aba" variant="outline" className="h-8 w-8 hover:bg-emerald-500/10 hover:text-emerald-600 border-border/50">
+                       <Button asChild size="icon" aria-label="Abrir em nova aba" variant="outline" className="h-8 w-8 hover:bg-emerald-500/10 hover:text-emerald-600 border-border/50">
                          <a href={`/f/${form.slug}`} target="_blank" rel="noreferrer">
                            <ExternalLink className="w-3.5 h-3.5" />
                          </a>
                        </Button>
-                       <Button 
+                     )}
+                     <Button
                        size="icon" aria-label="Remover" 
                        variant="outline" 
                        className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive border-border/50" 

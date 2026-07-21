@@ -123,7 +123,7 @@ export function AutomacoesRulesList({
                         </Button>
     <Button variant="ghost" size="icon" aria-label="Remover" className="h-8 w-8 text-destructive" onClick={() => onDeleteRequest(rule.id)}>
                           <Trash2 className="w-4 h-4" />
-                        </Button>           </Button>
+                        </Button>
                       </div>
                     </div>
                   </CardContent>

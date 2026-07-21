@@ -350,7 +350,7 @@ export function SearchPresetsMenu({
                           onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); cancelRename(); }}
                         >
                           <X className="w-3 h-3 text-muted-foreground" />
-                        </Button>              </Button>
+                        </Button>
                       </>
                     ) : (
                       <>
