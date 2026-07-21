@@ -1,6 +1,5 @@
--- replication-lag-guard.sql — Detecta réplicas de leitura stale.
+-- replication-lag-guard.sql — Detecta replicas de leitura stale.
 -- Falha se qualquer replica com replay_lag > 30s ou write_lag > 10s.
--- Uso: psql "$PRIMARY_DB_URL" -v ON_ERROR_STOP=1 -f verify/replication-lag-guard.sql
 \set ON_ERROR_STOP on
 \pset pager off
 
@@ -19,8 +18,8 @@ BEGIN
    WHERE COALESCE(EXTRACT(EPOCH FROM replay_lag), 0) > 30
       OR COALESCE(EXTRACT(EPOCH FROM write_lag),  0) > 10;
   IF v_bad > 0 THEN
-    RAISE EXCEPTION '🚨 REPLICATION LAG: % réplica(s) fora do SLO (replay>30s ou write>10s)', v_bad;
+    RAISE EXCEPTION 'REPLICATION LAG: % replica(s) fora do SLO', v_bad;
   END IF;
-  RAISE NOTICE '✔ Todas réplicas dentro do SLO de lag';
+  RAISE NOTICE 'OK Todas replicas dentro do SLO de lag';
 END
 $BODY$;
