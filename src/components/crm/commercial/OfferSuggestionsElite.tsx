@@ -53,11 +53,11 @@ export function OfferSuggestionsElite({ contactId }: Props) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('offer_suggestions')
-        .select('*')
+        .select('id, confidence_score, contact_id, created_at, expires_at, metadata, offer_category, offer_name, presented_at, reason, result, status, user_id')
         .eq('contact_id', contactId)
         .eq('user_id', user!.id)
         .order('confidence_score', { ascending: false })
-        .limit(1000);
+        .limit(50);
       
       if (error) throw error;
       return data;

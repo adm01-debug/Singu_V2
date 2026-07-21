@@ -29,7 +29,7 @@ export function VakSubTab({ contactId }: Props) {
      queryFn: async () => {
        const { data, error } = await supabase
          .from('vak_analysis_history')
-         .select('*')
+         .select('id, contact_id, created_at, auditory_score, auditory_words, digital_score, digital_words, kinesthetic_score, kinesthetic_words, user_id')
          .eq('contact_id', contactId)
          .order('created_at', { ascending: false })
          .limit(1);

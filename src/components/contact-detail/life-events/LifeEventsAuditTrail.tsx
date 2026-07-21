@@ -18,11 +18,11 @@ export function LifeEventsAuditTrail({ contactId }: LifeEventsAuditTrailProps) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('v_life_events_audit')
-        .select('*')
+        .select('id, change_type, changed_at, title, event_type, reason, user_name')
         .eq('contact_id', contactId)
         .eq('user_id', user!.id)
         .order('changed_at', { ascending: false })
-        .limit(1000);
+        .limit(100);
 
       if (error) throw error;
       return data;

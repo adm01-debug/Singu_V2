@@ -39,10 +39,10 @@ export function DecisionCriteriaElite({ contactId }: Props) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('decision_criteria')
-        .select('*')
+        .select('id, contact_id, created_at, criteria_type, detected_from, how_to_address, name, priority, updated_at, user_id')
         .eq('contact_id', contactId)
         .order('priority', { ascending: false })
-        .limit(1000);
+        .limit(50);
       
       if (error) throw error;
       return data;

@@ -25,7 +25,7 @@ export function EscalationAutomation({ contactId }: { contactId: string }) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('contact_automation_settings')
-        .select('*')
+        .select('id, contact_id, created_at, delay_hours, escalation_enabled, escalation_role, last_escalation_at, reminder_enabled, resolution_summary, updated_at, user_id')
         .eq('contact_id', contactId)
         .maybeSingle();
       

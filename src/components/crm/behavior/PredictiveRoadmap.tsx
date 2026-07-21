@@ -26,11 +26,11 @@ export function PredictiveRoadmap({ contactId }: { contactId: string }) {
      queryFn: async () => {
        const { data, error } = await supabase
          .from('contact_predictive_roadmap')
-         .select('*')
+         .select('id, contact_id, created_at, forecast_month, predicted_need, probability, rationale, suggested_offering, updated_at, user_id')
          .eq('contact_id', contactId)
          .eq('user_id', user!.id)
          .order('forecast_month', { ascending: true })
-         .limit(1000);
+         .limit(24);
 
        if (error) throw error;
        return data;

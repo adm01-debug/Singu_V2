@@ -29,7 +29,7 @@ export function MetaprogramsSubTab({ contactId }: Props) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('metaprogram_analysis')
-        .select('*')
+        .select('id, contact_id, created_at, toward_score, away_from_score, internal_score, external_score, options_score, procedures_score, toward_words, away_from_words, internal_words, external_words, user_id')
         .eq('contact_id', contactId)
         .order('created_at', { ascending: false })
         .limit(1);

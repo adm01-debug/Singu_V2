@@ -53,11 +53,11 @@ export function ContactOverviewTab({ contact, company, insights, alerts, interac
       if (!user) return [];
       const { data } = await supabase
         .from('life_events')
-        .select('*')
+        .select('id, contact_id, created_at, description, event_date, event_type, last_reminded_at, metadata, recurring, reminder_days_before, title, updated_at, user_id')
         .eq('contact_id', contact.id)
         .eq('user_id', user.id)
         .order('event_date', { ascending: true })
-        .limit(1000);
+        .limit(100);
       return (data ?? []) as Tables<'life_events'>[];
     },
     enabled: !!user,

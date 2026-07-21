@@ -19,10 +19,10 @@
      queryFn: async () => {
        const { data, error } = await supabase
          .from('neuro_behavioral_history')
-         .select('*')
+         .select('id, contact_id, created_at, dominance_data, empathy_score')
          .eq('contact_id', contactId)
          .order('created_at', { ascending: true })
-         .limit(1000);
+         .limit(200);
        
        if (error) throw error;
        
