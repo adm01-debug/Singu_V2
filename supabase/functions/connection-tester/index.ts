@@ -285,8 +285,9 @@ Deno.serve(async (req) => {
   const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
   if (bodyError) return bodyError;
 
-  // Hoist userId so the catch block can reference it for error logging
+  // Hoist userId and payload so the catch block can reference them for error logging
   let userId: string | null = null;
+  let payload: TestPayload | undefined;
 
   try {
     // Auth: shared authenticateRequest calls supabase.auth.getUser() —
@@ -310,7 +311,7 @@ Deno.serve(async (req) => {
         headers: { ...corsH, 'Content-Type': 'application/json' },
       });
     }
-    const payload = vct.data as TestPayload;
+    payload = vct.data as TestPayload;
     let result: TestResult;
 
     switch (payload.connection_type) {
@@ -349,8 +350,7 @@ Deno.serve(async (req) => {
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Erro desconhecido";
-    const body = rawBody as TestPayload;
-    if (body?.connection_id && userId) {
+    if (payload?.connection_id && userId) {
       const admin = createClient(
         Deno.env.get("SUPABASE_URL")!,
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
@@ -360,9 +360,9 @@ Deno.serve(async (req) => {
           last_tested_at: new Date().toISOString(),
           last_test_status: "error",
           last_test_message: message,
-        }).eq("id", body.connection_id).eq("user_id", userId),
+        }).eq("id", payload.connection_id).eq("user_id", userId),
         admin.from("connection_test_logs").insert({
-          connection_id: body.connection_id,
+          connection_id: payload.connection_id,
           status: "error",
           message,
         }),
