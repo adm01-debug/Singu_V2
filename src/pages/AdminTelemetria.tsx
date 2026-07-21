@@ -54,7 +54,7 @@ export default function AdminTelemetriaPage() {
       const { from, to } = getTimeThreshold();
       let query = supabase
         .from("query_telemetry")
-        .select("*")
+        .select("id, operation, table_name, rpc_name, duration_ms, record_count, query_limit, query_offset, count_mode, severity, error_message, user_id, created_at")
         .gte("created_at", from)
         .lte("created_at", to)
         .order("created_at", { ascending: false })

@@ -24,12 +24,12 @@ export function useCRMAlerts(contactId: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('crm_alerts')
-        .select('*')
+        .select('id, type, severity, message, suggested_action, is_resolved, created_at, resolved_at')
         .eq('contact_id', contactId)
         .eq('user_id', user!.id)
         .eq('is_resolved', false)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(50);
 
       if (error) throw error;
       return data as CRMAlert[];

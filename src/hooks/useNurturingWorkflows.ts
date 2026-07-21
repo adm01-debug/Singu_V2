@@ -47,8 +47,8 @@ export function useNurturingWorkflows() {
     enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
-      const { data, error } = await supabase.from('nurturing_workflows').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
-      .limit(1000);
+      const { data, error } = await supabase.from('nurturing_workflows').select('id, user_id, name, description, trigger_type, trigger_config, is_active, steps, enrolled_count, completed_count, created_at').eq('user_id', user.id).order('created_at', { ascending: false })
+      .limit(200);
       if (error) throw error;
       return (data || []).map(d => ({ ...d, steps: Array.isArray(d.steps) ? d.steps : [] })) as unknown as NurturingWorkflow[];
     },

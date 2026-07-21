@@ -123,7 +123,7 @@ export function useTriggerHistory(contactId?: string) {
     try {
       let query = supabase
         .from('trigger_usage_history')
-        .select('*')
+        .select('id, user_id, contact_id, trigger_type, template_id, template_title, scenario, channel, context, result, notes, effectiveness_rating, used_at, created_at')
         .eq('user_id', user.id)
         .order('used_at', { ascending: false })
         .limit(1000);
