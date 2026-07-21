@@ -2,6 +2,7 @@
 // Cron diário 04:00 UTC. Consolida funil ponta-a-ponta por usuário ativo, gera snapshots e alertas.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { guardBody, scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { validate } from "../_shared/validate.ts";
 
 const STAGES = ["visitor", "lead", "mql", "sql", "opportunity", "customer"] as const;
 
@@ -26,8 +27,10 @@ Deno.serve(async (req: Request) => {
   const today = new Date().toISOString().slice(0, 10);
 
   let targetUserId: string | null = null;
-  const _body = rawBody as { user_id?: string } | null;
-  if (_body?.user_id) targetUserId = _body.user_id;
+  if (rawBody) {
+    const vrb = validate(rawBody, { user_id: { type: 'string', maxLength: 36 } });
+    if (vrb.ok && vrb.data.user_id) targetUserId = vrb.data.user_id as string;
+  }
 
   let userIds: string[] = [];
   if (targetUserId) {

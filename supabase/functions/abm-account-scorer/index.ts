@@ -2,6 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
+import { validate } from "../_shared/validate.ts";
 
 interface ScoreBreakdown {
   fit: number;
@@ -56,8 +57,11 @@ Deno.serve(async (req) => {
   if (bodyError) return bodyError;
 
   try {
-    const body = (rawBody ?? {}) as Record<string, unknown>;
-    const accountId: string | undefined = body.account_id as string | undefined;
+    const va = validate(rawBody ?? {}, {
+      account_id: { type: 'string', maxLength: 36 },
+    });
+    if (!va.ok) return jsonError(va.error, 400, req);
+    const { account_id: accountId } = va.data as { account_id?: string };
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,

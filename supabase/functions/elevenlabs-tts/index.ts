@@ -6,6 +6,7 @@ import {
 } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
+import { validate } from "../_shared/validate.ts";
 
 const VOICE_ID_REGEX = /^[a-zA-Z0-9]{10,30}$/;
 
@@ -31,21 +32,16 @@ Deno.serve(async (req) => {
       throw new Error("ELEVENLABS_API_KEY is not configured");
     }
 
-    const body = rawBody as Record<string, unknown>;
+    const ve = validate(rawBody, {
+      text:    { type: 'string', required: true, maxLength: 5000 },
+      voiceId: { type: 'string', maxLength: 30, pattern: VOICE_ID_REGEX },
+    });
+    if (!ve.ok) return jsonError(ve.error, 400);
+    const { text, voiceId } = ve.data as { text: string; voiceId?: string };
 
-    const { text, voiceId } = body as { text?: unknown; voiceId?: string };
+    if (!text.trim()) return jsonError("Invalid text (required, max 5000 chars)", 400);
 
-    if (!text || typeof text !== "string" || text.trim().length === 0 || text.length > 5000) {
-      return jsonError("Invalid text (required, max 5000 chars)", 400);
-    }
-
-    let selectedVoiceId = "4tRn1lSkEn13EVTuqb0g";
-    if (voiceId && typeof voiceId === "string") {
-      if (!VOICE_ID_REGEX.test(voiceId)) {
-        return jsonError("Invalid voiceId format", 400);
-      }
-      selectedVoiceId = voiceId;
-    }
+    const selectedVoiceId = voiceId ?? "4tRn1lSkEn13EVTuqb0g";
 
     const response = await fetchAPI(
       `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoiceId}?output_format=mp3_22050_32`,

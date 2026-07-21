@@ -7,6 +7,7 @@ import {
   jsonOk,
   guardBody,
 } from "../_shared/auth.ts";
+import { validate } from "../_shared/validate.ts";
 
 const SYSTEM_PROMPT = `Você é um assistente de voz inteligente para um CRM de relacionamentos (SINGU).
 Sua função é interpretar comandos de voz do usuário e retornar uma ação estruturada.
@@ -126,12 +127,11 @@ Deno.serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const body = rawBody as Record<string, unknown>;
-
-    const transcript = body?.transcript;
-    if (!transcript || typeof transcript !== "string" || transcript.trim().length === 0 || transcript.length > 1000) {
-      return jsonError("Invalid transcript (required, max 1000 chars)", 400);
-    }
+    const vt = validate(rawBody, {
+      transcript: { type: 'string', required: true, maxLength: 1000 },
+    });
+    if (!vt.ok) return jsonError(vt.error, 400);
+    const { transcript } = vt.data as { transcript: string };
 
     const response = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

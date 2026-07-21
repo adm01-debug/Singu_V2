@@ -1,6 +1,7 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { guardBody, scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
+import { validate } from "../_shared/validate.ts";
 
 
 interface Body { contact_id: string }
@@ -61,10 +62,12 @@ Deno.serve(async (req) => {
     const internalKey = req.headers.get('x-internal-key') ?? '';
     const isInternal = internalKey && internalKey === SERVICE_KEY;
 
-    const body = rawBody as Partial<Body> & { user_id?: string };
-    if (!body.contact_id || typeof body.contact_id !== 'string') {
-      return jsonWithCors({ error: 'contact_id obrigatório' }, 400);
-    }
+    const vbp = validate(rawBody, {
+      contact_id: { type: 'string', required: true, maxLength: 36 },
+      user_id:    { type: 'string', maxLength: 36 },
+    });
+    if (!vbp.ok) return jsonWithCors({ error: vbp.error }, 400);
+    const body = vbp.data as { contact_id: string; user_id?: string };
 
     let userId: string | null = null;
     let supabase;

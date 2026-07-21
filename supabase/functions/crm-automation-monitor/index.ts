@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { validate } from "../_shared/validate.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
 
@@ -27,8 +28,11 @@ Deno.serve(async (req) => {
   if (bodyError) return bodyError;
 
   try {
-    const { contact_id } = rawBody as { contact_id?: string };
-    if (!contact_id) return jsonError("contact_id required", 400, req);
+    const vc = validate(rawBody, {
+      contact_id: { type: 'string', required: true, maxLength: 36 },
+    });
+    if (!vc.ok) return jsonError(vc.error, 400, req);
+    const { contact_id } = vc.data as { contact_id: string };
 
     // Verify contact ownership before triggering RPC
     const { data: owned, error: ownerErr } = await supabase

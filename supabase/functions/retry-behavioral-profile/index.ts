@@ -6,6 +6,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { guardBody, scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
+import { validate } from "../_shared/validate.ts";
 
 
 Deno.serve(async (req) => {
@@ -51,20 +52,19 @@ Deno.serve(async (req) => {
     }
 
     // 3) Valida input
-    const body = rawBody as {
-      contact_id?: string;
-      trigger?: string;
-    };
-    if (!body.contact_id || typeof body.contact_id !== "string") {
-      return json({ error: "contact_id obrigatório", requestId }, 400, cors);
-    }
-    const triggerSource = body.trigger || `manual_retry:${callerId.slice(0, 8)}`;
+    const vr = validate(rawBody, {
+      contact_id: { type: 'string', required: true, maxLength: 36 },
+      trigger:    { type: 'string', maxLength: 100 },
+    });
+    if (!vr.ok) return json({ error: vr.error, requestId }, 400, cors);
+    const { contact_id: contactId, trigger } = vr.data as { contact_id: string; trigger?: string };
+    const triggerSource = trigger || `manual_retry:${callerId.slice(0, 8)}`;
 
     // 4) Busca user_id dono do contato + estado atual da fila (cooldown)
     const { data: contactRow, error: contactErr } = await admin
       .from("contacts")
       .select("user_id")
-      .eq("id", body.contact_id)
+      .eq("id", contactId)
       .maybeSingle();
     if (contactErr) throw contactErr;
     if (!contactRow?.user_id) {
@@ -78,7 +78,7 @@ Deno.serve(async (req) => {
     const { data: queueRow } = await admin
       .from("behavioral_profile_regen_queue")
       .select("last_processed_at, trigger_source")
-      .eq("contact_id", body.contact_id)
+      .eq("contact_id", contactId)
       .maybeSingle();
     if (queueRow?.last_processed_at) {
       const lastMs = new Date(queueRow.last_processed_at as string).getTime();
@@ -103,7 +103,7 @@ Deno.serve(async (req) => {
     const enqueuedIso = new Date().toISOString();
     await admin.from("behavioral_profile_regen_queue").upsert(
       {
-        contact_id: body.contact_id,
+        contact_id: contactId,
         user_id: ownerId,
         enqueued_at: enqueuedIso,
         next_run_at: enqueuedIso,
@@ -125,7 +125,7 @@ Deno.serve(async (req) => {
           "apikey": SERVICE_KEY,
         },
         body: JSON.stringify({
-          contact_id: body.contact_id,
+          contact_id: contactId,
           user_id: ownerId,
           trigger: triggerSource,
         }),
@@ -147,7 +147,7 @@ Deno.serve(async (req) => {
       const { data: cur } = await admin
         .from("behavioral_profile_regen_queue")
         .select("attempts")
-        .eq("contact_id", body.contact_id)
+        .eq("contact_id", contactId)
         .maybeSingle();
       const prev = (cur as { attempts?: number } | null)?.attempts ?? 0;
       await admin
@@ -157,7 +157,7 @@ Deno.serve(async (req) => {
           attempts: prev + 1,
           last_processed_at: finishedIso,
         })
-        .eq("contact_id", body.contact_id);
+        .eq("contact_id", contactId);
       return json({ ok: false, error: invokeError, requestId }, 502, cors);
     }
 
@@ -167,9 +167,9 @@ Deno.serve(async (req) => {
         last_error: null,
         last_processed_at: finishedIso,
       })
-      .eq("contact_id", body.contact_id);
+      .eq("contact_id", contactId);
 
-    return json({ ok: true, requestId, contact_id: body.contact_id, trigger: triggerSource }, 200, cors);
+    return json({ ok: true, requestId, contact_id: contactId, trigger: triggerSource }, 200, cors);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[retry-behavioral-profile]", requestId, msg);
