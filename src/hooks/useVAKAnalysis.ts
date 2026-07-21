@@ -102,10 +102,10 @@ export function useVAKAnalysis() {
   const getContactVAKProfile = useCallback(async (contactId: string): Promise<VAKProfile | null> => {
     if (!user) return null;
     try {
-      const { data, error } = await supabase.from('vak_analysis_history').select('*').eq('contact_id', contactId).eq('user_id', user.id).order('created_at', { ascending: false })
+      const { data, error } = await supabase.from('vak_analysis_history').select('visual_score, auditory_score, kinesthetic_score, digital_score, visual_words, auditory_words, kinesthetic_words, digital_words').eq('contact_id', contactId).eq('user_id', user.id).order('created_at', { ascending: false })
       .limit(1000);
       if (error || !data || data.length === 0) return null;
-      const history = data as VAKAnalysisHistory[];
+      const history = data as unknown as VAKAnalysisHistory[];
       const totals = history.reduce((acc, entry) => {
         acc.visual += entry.visual_score; acc.auditory += entry.auditory_score; acc.kinesthetic += entry.kinesthetic_score; acc.digital += entry.digital_score; acc.count++;
         acc.totalWords += (entry.visual_words.length + entry.auditory_words.length + entry.kinesthetic_words.length + entry.digital_words.length);
