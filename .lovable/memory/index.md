@@ -22,4 +22,5 @@ Excelência sustentada: 70/70 melhorias atômicas (Rodadas A-N). Gate a11y no CI
 - [Error Budget Dashboard](mem://features/error-budget-dashboard) — `/admin/error-budget` com SLO 99.5%, sparkline 30d, alertas auto 50/75/100% (`system_alerts`), retenção 60d, RUNBOOK v2.2.0.
 - [Migration Completion 10/10](mem://migration/completion-10-10) — Freeze, DNS propagation, parity (sequences/RLS/triggers), post-cutover watch, synthetic checks, full-restore, DR strategy, postmortem template
 - [Migration Completion 11/10](mem://migration/completion-11-10) — CDC RPO=0, dual-write bake, verify SHA-256, LGPD manifest, brief executivo
+- [Migration Completion 12/10](mem://migration/completion-12-10) — CDC lag watch, dual-write diverge, schema freeze guard, secrets scan, large-object storage, sequence heal, DNS multi-region, chaos drill
 - [User preferences](mem://~user) — Execução autônoma e sequencial de melhorias.
