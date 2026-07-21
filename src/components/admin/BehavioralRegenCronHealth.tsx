@@ -108,7 +108,7 @@ export function BehavioralRegenCronHealth() {
             <Skeleton className="h-16 w-full" />
           </>
         ) : error ? (
-          <p className="text-xs text-destructive">Falha ao carregar: {(error as Error).message}</p>
+          <p className="text-xs text-destructive">{parseApiError(error, 'Falha ao carregar')}</p>
         ) : !data?.length ? (
           <p className="text-xs text-muted-foreground">Nenhum job agendado encontrado.</p>
         ) : (

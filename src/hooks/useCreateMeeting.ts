@@ -3,6 +3,7 @@ import { toast } from 'sonner';
 import { insertExternalData } from '@/lib/externalData';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type MeetingModality = 'video' | 'presencial' | 'phone';
 
@@ -65,7 +66,7 @@ export function useCreateMeeting() {
     },
     onError: (error: Error) => {
       toast.error('Não foi possível agendar a reunião', {
-        description: error.message,
+        description: parseApiError(error),
       });
     },
   });

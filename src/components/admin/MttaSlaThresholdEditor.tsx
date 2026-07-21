@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { useMttaSlaThreshold } from "@/hooks/useMttaSlaThreshold";
 import { useActionToast } from "@/hooks/useActionToast";
+import { parseApiError } from '@/lib/errorMessages';
 
 const KEY = "mtta_critical_sla_min";
 
@@ -42,7 +43,7 @@ export function MttaSlaThresholdEditor() {
       await qc.invalidateQueries({ queryKey: ["system-config", KEY] });
       toast.success(`SLA atualizado para ${parsed} min`);
     } catch (e) {
-      toast.error(`Falha ao salvar: ${(e as Error).message}`);
+      toast.error(parseApiError(e, 'Falha ao salvar'));
     } finally {
       setSaving(false);
     }

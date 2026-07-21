@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { parseApiError } from '@/lib/errorMessages';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
@@ -116,7 +117,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
         refetchSuggestions();
         toast({ title: "Relacionado adicionado", description: `${relData.name} foi adicionado aos contatos relacionados.` });
       } else {
-        toast({ title: "Erro ao adicionar", description: error.message, variant: "destructive" });
+        toast({ title: "Erro ao adicionar", description: parseApiError(error), variant: "destructive" });
       }
       return;
     }
@@ -139,7 +140,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
       refetchSuggestions();
       toast({ title: "Sugestão aceita", description: "O marco foi adicionado à linha do tempo." });
     } else {
-      toast({ title: "Erro ao aceitar", description: error.message, variant: "destructive" });
+      toast({ title: "Erro ao aceitar", description: parseApiError(error), variant: "destructive" });
     }
   };
 
@@ -147,7 +148,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     if (!user) return;
     const { error } = await supabase.from('suggested_life_events').update({ status: 'rejected' }).eq('id', id).eq('user_id', user.id);
     if (error) {
-      toast({ title: "Erro ao rejeitar", description: error.message, variant: "destructive" });
+      toast({ title: "Erro ao rejeitar", description: parseApiError(error), variant: "destructive" });
     } else {
       refetchSuggestions();
     }
@@ -166,7 +167,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
       resetForm();
     },
     onError: (error) => {
-      toast({ title: "Erro ao criar evento", description: error.message, variant: "destructive" });
+      toast({ title: "Erro ao criar evento", description: parseApiError(error), variant: "destructive" });
     }
   });
 
@@ -184,7 +185,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
       resetForm();
     },
     onError: (error) => {
-      toast({ title: "Erro ao atualizar", description: error.message, variant: "destructive" });
+      toast({ title: "Erro ao atualizar", description: parseApiError(error), variant: "destructive" });
     }
   });
 
@@ -198,7 +199,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
       queryClient.invalidateQueries({ queryKey: ['life-events', contactId] });
       toast({ title: "Evento removido" });
     },
-    onError: (e: Error) => toast({ title: "Erro ao remover evento", description: e.message, variant: "destructive" }),
+    onError: (e: Error) => toast({ title: "Erro ao remover evento", description: parseApiError(e), variant: "destructive" }),
   });
 
   const resetForm = () => {

@@ -13,6 +13,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useAuth } from '@/hooks/useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { useToast } from '@/hooks/use-toast';
 import { ANNOTATION_CATEGORIES } from './annotationCategories';
@@ -85,7 +86,7 @@ export function AnnotationList({ api, onEdit, categoryFilter }: Props) {
     } catch (err) {
       toast({
         title: 'Erro ao excluir',
-        description: err instanceof Error ? err.message : 'Tente novamente',
+        description: parseApiError(err, 'Tente novamente'),
         variant: 'destructive',
       });
     } finally {

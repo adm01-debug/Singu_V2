@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface AskCrmMessage {
   id: string;
@@ -79,7 +80,7 @@ export function useAskCrm() {
       const errorMsg: AskCrmMessage = {
         id: crypto.randomUUID(),
         role: 'assistant',
-        content: err instanceof Error ? err.message : 'Erro ao processar pergunta',
+        content: parseApiError(err, 'Erro ao processar pergunta'),
         error: 'true',
         timestamp: new Date(),
       };

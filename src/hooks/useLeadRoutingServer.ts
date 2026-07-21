@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface DistributePayload {
   contactId?: string;
@@ -50,7 +51,7 @@ export function useServerDistribute() {
     },
     onError: (err) => {
       logger.error('[ServerDistribute]', err);
-      toast.error((err as Error).message || 'Erro ao distribuir lead');
+      toast.error(parseApiError(err, 'Erro ao distribuir lead'));
     },
   });
 }
@@ -82,7 +83,7 @@ export function useServerRedistribute() {
     },
     onError: (err) => {
       logger.error('[ServerRedistribute]', err);
-      toast.error((err as Error).message || 'Erro na redistribuição');
+      toast.error(parseApiError(err, 'Erro na redistribuição'));
     },
   });
 }

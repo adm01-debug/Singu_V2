@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 import type {
   LeadRoutingRule,
   LeadAssignment,
@@ -191,6 +192,6 @@ export function useDistributeLead() {
       qc.invalidateQueries({ queryKey: ['sales-team-members'] });
       toast.success(`Lead distribuído para ${member.name}`);
     },
-    onError: (err) => toast.error((err as Error).message || 'Erro na distribuição'),
+    onError: (err) => toast.error(parseApiError(err, 'Erro na distribuição')),
   });
 }

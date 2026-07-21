@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import type { Json } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type AutomationTrigger = 'grade_reached' | 'grade_dropped' | 'score_above' | 'score_below';
 export type AutomationAction = 'notify' | 'create_task' | 'enroll_sequence' | 'webhook' | 'tag';
@@ -93,7 +94,7 @@ export function useUpsertAutomation() {
       toast.success('Automação salva');
       qc.invalidateQueries({ queryKey: ['score-automations'] });
     },
-    onError: (e) => toast.error((e as Error).message),
+    onError: (e) => toast.error(parseApiError(e)),
   });
 }
 
@@ -107,7 +108,7 @@ export function useToggleAutomation() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['score-automations'] }),
-    onError: (e) => toast.error((e as Error).message),
+    onError: (e) => toast.error(parseApiError(e)),
   });
 }
 
@@ -124,7 +125,7 @@ export function useDeleteAutomation() {
       toast.success('Automação removida');
       qc.invalidateQueries({ queryKey: ['score-automations'] });
     },
-    onError: (e) => toast.error((e as Error).message),
+    onError: (e) => toast.error(parseApiError(e)),
   });
 }
 
