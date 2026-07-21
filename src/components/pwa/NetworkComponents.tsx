@@ -21,20 +21,23 @@ export function OfflineIndicator() {
   const [showReconnecting, setShowReconnecting] = useState(false);
 
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
     const handleOnline = () => {
       setShowReconnecting(true);
-      setTimeout(() => {
+      timer = setTimeout(() => {
         setIsOnline(true);
         setShowReconnecting(false);
       }, 1000);
     };
-    
+
     const handleOffline = () => setIsOnline(false);
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
     return () => {
+      clearTimeout(timer);
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
