@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, X, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,7 @@ export const InstallPrompt = React.forwardRef<HTMLDivElement>(function InstallPr
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+  const promptTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -23,7 +24,7 @@ export const InstallPrompt = React.forwardRef<HTMLDivElement>(function InstallPr
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setTimeout(() => setShowPrompt(true), 30000);
+      promptTimerRef.current = setTimeout(() => setShowPrompt(true), 30000);
     };
 
     const handleAppInstalled = () => {
@@ -36,6 +37,7 @@ export const InstallPrompt = React.forwardRef<HTMLDivElement>(function InstallPr
     window.addEventListener('appinstalled', handleAppInstalled);
 
     return () => {
+      clearTimeout(promptTimerRef.current);
       window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };

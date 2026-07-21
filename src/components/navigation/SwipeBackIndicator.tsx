@@ -114,12 +114,16 @@ export function SwipeBackIndicator() {
     try {
       const shown = localStorage.getItem(hintKey);
       if (!shown) {
+        let hideTimer: ReturnType<typeof setTimeout> | undefined;
         const timer = setTimeout(() => {
           setShowHint(true);
           try { localStorage.setItem(hintKey, '1'); } catch { /* quota/private */ }
-          setTimeout(() => setShowHint(false), 2500);
+          hideTimer = setTimeout(() => setShowHint(false), 2500);
         }, 1500);
-        return () => clearTimeout(timer);
+        return () => {
+          clearTimeout(timer);
+          clearTimeout(hideTimer);
+        };
       }
     } catch {
       // ignora falhas de acesso ao storage (ex.: modo privado)

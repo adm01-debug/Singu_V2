@@ -57,20 +57,25 @@ export function RouteProgressBar() {
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
+      if (completeTimerRef.current) clearTimeout(completeTimerRef.current);
     };
   }, [isFetching, visible]);
 
   // Auto-complete if no fetches happen within 400ms of route change
   useEffect(() => {
     if (visible && isFetching === 0) {
+      let innerTimer: ReturnType<typeof setTimeout> | undefined;
       const timer = setTimeout(() => {
         setProgress(100);
-        setTimeout(() => {
+        innerTimer = setTimeout(() => {
           setVisible(false);
           setProgress(0);
         }, 200);
       }, 150);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(innerTimer);
+      };
     }
   }, [visible, isFetching]);
 
