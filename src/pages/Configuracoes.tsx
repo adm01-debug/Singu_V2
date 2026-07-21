@@ -27,6 +27,7 @@ import { useUnsavedChangesGuard } from '@/hooks/useUnsavedChangesGuard';
 import { ConfigNotificationsTab } from './configuracoes/ConfigNotificationsTab';
 import { ConfigSecurityTab } from './configuracoes/ConfigSecurityTab';
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 
 interface ProfileData {
   first_name: string;
@@ -77,8 +78,7 @@ const Configuracoes = () => {
       setHasUnsavedChanges(false);
       accessibleToast.success('Perfil atualizado com sucesso!');
     } catch (error) { 
-      const msg = error instanceof Error ? error.message : 'Erro ao atualizar perfil';
-      accessibleToast.error(msg); 
+      accessibleToast.error(parseApiError(error, 'Erro ao atualizar perfil'));
     }
     finally { setLoading(false); }
   };

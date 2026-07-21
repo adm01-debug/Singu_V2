@@ -14,6 +14,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 
 interface SessionExpiryHandlerProps {
   /** Warning shown X minutes before expiry */
@@ -49,7 +50,7 @@ export function SessionExpiryHandler({
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error refreshing session:', { error: msg });
-      toast.error('Erro ao renovar sessão', { description: msg });
+      toast.error('Erro ao renovar sessão', { description: parseApiError(error) });
       return false;
     } finally {
       setIsRefreshing(false);
