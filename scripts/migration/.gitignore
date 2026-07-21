@@ -3,3 +3,6 @@ data/
 env.migration
 *.csv
 *.csv.gz
+functions/secrets.env
+functions/deploy.log
+functions/remote-functions.txt
