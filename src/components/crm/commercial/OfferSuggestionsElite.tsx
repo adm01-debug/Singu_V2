@@ -31,6 +31,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { useSocialSync } from '@/hooks/commercial/useSocialSync';
 import { SocialMatchPanel } from './components/SocialMatchPanel';
@@ -42,16 +43,18 @@ interface Props {
 }
 
 export function OfferSuggestionsElite({ contactId }: Props) {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const { queueStatus, auditLogs, syncNow } = useSocialSync(contactId);
 
   const { data: offers, isLoading } = useQuery({
-    queryKey: ['offer-suggestions-elite', contactId],
+    queryKey: ['offer-suggestions-elite', contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('offer_suggestions')
         .select('*')
         .eq('contact_id', contactId)
+        .eq('user_id', user!.id)
         .order('confidence_score', { ascending: false })
         .limit(1000);
       
@@ -65,6 +68,7 @@ export function OfferSuggestionsElite({ contactId }: Props) {
       const { error } = await supabase
         .from('offer_suggestions')
         .update({ status, presented_at: status === 'presented' ? new Date().toISOString() : undefined })
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
     },

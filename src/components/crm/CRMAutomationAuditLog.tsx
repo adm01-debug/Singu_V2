@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { History, CheckCircle2, XCircle, RefreshCw, Eye } from 'lucide-react';
 import { 
   Table, 
@@ -38,6 +39,7 @@ interface AutomationLog {
 }
 
 export function CRMAutomationAuditLog() {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [selectedLog, setSelectedLog] = useState<AutomationLog | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -72,6 +74,7 @@ export function CRMAutomationAuditLog() {
       const { error: logUpdateError } = await supabase
         .from('crm_automation_logs')
         .update({ status: 'reprocessing' } as TablesUpdate<'crm_automation_logs'>)
+        .eq('user_id', user!.id)
         .eq('id', logId);
       
       if (logUpdateError) throw logUpdateError;
