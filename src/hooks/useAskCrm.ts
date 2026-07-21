@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface AskCrmMessage {
@@ -23,6 +23,7 @@ interface AskCrmResponse {
 export function useAskCrm() {
   const [messages, setMessages] = useState<AskCrmMessage[]>([]);
   const [loading, setLoading] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const ask = useCallback(async (question: string) => {
     const userMsg: AskCrmMessage = {
@@ -33,6 +34,9 @@ export function useAskCrm() {
     };
     setMessages(prev => [...prev, userMsg]);
     setLoading(true);
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     try {
       const { data: sessionData } = await supabase.auth.getSession();
@@ -48,6 +52,7 @@ export function useAskCrm() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ question }),
+          signal: controller.signal,
         }
       );
 
@@ -70,6 +75,7 @@ export function useAskCrm() {
       };
       setMessages(prev => [...prev, assistantMsg]);
     } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') return;
       const errorMsg: AskCrmMessage = {
         id: crypto.randomUUID(),
         role: 'assistant',

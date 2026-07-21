@@ -6,6 +6,7 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
@@ -77,7 +78,7 @@ export default function MapaEmpresas() {
       const coords = await geocode(loc);
       if (coords) {
         const { error: geoError } = await supabase.from("companies").update({ lat: coords.lat, lng: coords.lng }).eq("id", c.id);
-        if (geoError) console.error('Error saving geocoordinates:', geoError.message);
+        if (geoError) logger.error('Error saving geocoordinates:', { error: geoError.message });
         newResults.push({ id: c.id, name: c.name, nome_crm: c.nome_crm, ramo_atividade: c.ramo_atividade, status: c.status, cnpj: c.cnpj, email: c.email, phone: c.phone, website: c.website, city: c.city, state: c.state, lat: coords.lat, lng: coords.lng, relationship_score: 50 });
         geocoded++;
       }

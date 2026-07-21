@@ -34,20 +34,21 @@ export interface UpdateAnnotationInput {
   week_start?: string;
 }
 
-const QK = (contactId?: string) => ['sentiment-annotations', contactId ?? 'none'] as const;
+const QK = (contactId?: string, userId?: string) => ['sentiment-annotations', userId ?? 'none', contactId ?? 'none'] as const;
 
 export function useSentimentAnnotations(contactId: string | undefined) {
   const { user } = useAuth();
   const qc = useQueryClient();
 
   const list = useQuery({
-    queryKey: QK(contactId),
-    enabled: !!contactId,
+    queryKey: QK(contactId, user?.id),
+    enabled: !!contactId && !!user,
     staleTime: 5 * 60_000,
     queryFn: async (): Promise<SentimentAnnotation[]> => {
       const { data, error } = await supabase
         .from('sentiment_annotations')
         .select('*')
+        .eq('created_by', user!.id)
         .eq('contact_id', contactId!)
         .order('week_start', { ascending: false })
         .order('created_at', { ascending: false })
@@ -67,7 +68,7 @@ export function useSentimentAnnotations(contactId: string | undefined) {
     return map;
   }, [list.data]);
 
-  const invalidate = () => qc.invalidateQueries({ queryKey: QK(contactId) });
+  const invalidate = () => qc.invalidateQueries({ queryKey: QK(contactId, user?.id) });
 
   const create = useMutation({
     mutationFn: async (input: CreateAnnotationInput) => {

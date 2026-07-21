@@ -18,6 +18,7 @@ export function useHandoffQueue(status?: HandoffStatus) {
       let query = supabase
         .from('handoff_requests')
         .select('*')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(100);
       if (status) query = query.eq('status', status);
@@ -116,6 +117,7 @@ export function usePendingHandoffCount() {
       const { count, error } = await supabase
         .from('handoff_requests')
         .select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id)
         .eq('status', 'pending');
       if (error) {
         logger.error('Erro contando handoffs:', error);

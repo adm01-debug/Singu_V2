@@ -207,11 +207,13 @@ export function RelationshipKPIsDashboard() {
   }, [queryClient, user?.id]);
 
    const { data: intelligenceData } = useQuery({
-     queryKey: ['crm-intelligence-summary'],
+     queryKey: ['crm-intelligence-summary', user?.id],
+     enabled: !!user,
      queryFn: async () => {
        const { data, error } = await supabase
         .from('crm_objection_intelligence')
          .select('*')
+         .eq('user_id', user!.id)
          .order('created_at', { ascending: false })
          .limit(5);
        if (error) return [];

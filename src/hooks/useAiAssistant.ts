@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -35,6 +35,7 @@ export function useAiAssistant() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const fetchThreads = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user?.id) return;
@@ -129,6 +130,9 @@ export function useAiAssistant() {
     };
     setMessages(prev => [...prev, optimisticUserMsg]);
     setSending(true);
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -146,6 +150,7 @@ export function useAiAssistant() {
             context_entity_type: thread?.context_entity_type || undefined,
             context_entity_id: thread?.context_entity_id || undefined,
           }),
+          signal: controller.signal,
         },
       );
 
@@ -158,6 +163,7 @@ export function useAiAssistant() {
       await Promise.all([fetchMessages(activeThreadId), fetchThreads()]);
       return result;
     } catch (e) {
+      if (e instanceof Error && e.name === 'AbortError') return;
       logger.error('Failed to send message', e);
       toast.error(e instanceof Error ? e.message : 'Falha ao enviar mensagem');
       setMessages(prev => prev.filter(m => m.id !== optimisticUserMsg.id));
