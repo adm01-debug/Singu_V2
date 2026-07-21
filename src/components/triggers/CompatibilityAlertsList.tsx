@@ -52,7 +52,7 @@ export function CompatibilityAlertsList({
   const [loading, setLoading] = useState(true);
   const [alerts, setAlerts] = useState<CompatibilityAlert[]>([]);
 
-  const fetchAlerts = useCallback(async () => {
+  const fetchAlerts = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
     setLoading(true);
     try {
@@ -67,17 +67,20 @@ export function CompatibilityAlertsList({
         .order('created_at', { ascending: false })
         .limit(maxItems);
 
+      if (signal?.cancelled) return;
       if (error) throw error;
       setAlerts(data || []);
     } catch (err) {
       logger.error('Error fetching alerts:', err);
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user, maxItems]);
 
   useEffect(() => {
-    fetchAlerts();
+    const signal = { cancelled: false };
+    fetchAlerts(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchAlerts]);
 
   const handleDismiss = async (alertId: string) => {

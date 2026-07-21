@@ -217,7 +217,7 @@ const NeuroTooltip = ({
             {content.tips.length > 0 && (
               <div className="pt-2 border-t">
                 {content.tips.map((tip, index) => (
-                  <div key={index} className="flex items-start gap-1.5">
+                  <div key={`${tip.slice(0, 20)}-${index}`} className="flex items-start gap-1.5">
                     <Lightbulb className="h-3 w-3 text-warning mt-0.5 flex-shrink-0" />
                     <p className="text-xs text-warning dark:text-warning">{tip}</p>
                   </div>

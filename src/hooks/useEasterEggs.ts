@@ -33,7 +33,7 @@ export function useEasterEggs() {
     setDiscoveredEggs(prev => {
       const next = new Set(prev);
       next.add(eggId);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]));
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...next])); } catch { /* quota/private */ }
       return next;
     });
   }, []);

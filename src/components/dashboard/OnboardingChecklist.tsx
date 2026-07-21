@@ -60,8 +60,10 @@ export const OnboardingChecklist = React.memo(function OnboardingChecklist({
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const isDismissed = localStorage.getItem(STORAGE_DISMISSED);
-    if (isDismissed === 'true') setDismissed(true);
+    try {
+      const isDismissed = localStorage.getItem(STORAGE_DISMISSED);
+      if (isDismissed === 'true') setDismissed(true);
+    } catch { /* quota/private */ }
   }, []);
 
   const steps: ChecklistStep[] = [

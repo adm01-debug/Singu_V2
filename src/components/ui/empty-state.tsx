@@ -263,7 +263,7 @@ export function EmptyState({
           <p className="text-sm font-medium text-foreground mb-2"><span role="img" aria-hidden="true">💡</span> Dicas para começar:</p>
           <ul className="text-sm text-muted-foreground space-y-1.5">
             {tips.map((tip, index) => (
-              <li key={index} className="flex items-start gap-2">
+              <li key={`${tip.slice(0, 20)}-${index}`} className="flex items-start gap-2">
                 <span className="text-primary">•</span>
                 <span>{tip}</span>
               </li>
@@ -282,7 +282,7 @@ export function EmptyState({
         >
           {actions.map((action, index) => (
             <Button
-              key={index}
+              key={`${action.label}-${index}`}
               variant={action.variant || (index === 0 ? 'default' : 'outline')}
               onClick={action.onClick}
               className={index === 0 ? 'gap-2' : ''}

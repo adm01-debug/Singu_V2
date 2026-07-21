@@ -79,7 +79,7 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
     return 'I';
   })();
 
-  const fetchAlerts = useCallback(async () => {
+  const fetchAlerts = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
 
     setLoading(true);
@@ -91,6 +91,7 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
         .order('relationship_score', { ascending: false })
         .limit(100);
 
+      if (signal?.cancelled) return;
       if (error) throw error;
 
       const newAlerts: CompatibilityAlert[] = [];
@@ -129,19 +130,20 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
       // Sort by compatibility score (lowest first)
       newAlerts.sort((a, b) => a.compatibilityScore - b.compatibilityScore);
 
-      setAlerts(newAlerts.slice(0, maxItems));
+      if (!signal?.cancelled) setAlerts(newAlerts.slice(0, maxItems));
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Erro desconhecido';
       logger.error('Error fetching compatibility alerts:', { error: msg });
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user, sellerProfile, settings.threshold, settings.onlyImportantContacts, settings.importantMinScore, maxItems]);
 
   useEffect(() => {
-    if (settings.enabled) {
-      fetchAlerts();
-    }
+    if (!settings.enabled) return;
+    const signal = { cancelled: false };
+    fetchAlerts(signal);
+    return () => { signal.cancelled = true; };
   }, [settings.enabled, fetchAlerts]);
 
   const dismissAlert = useCallback((alertId: string) => {

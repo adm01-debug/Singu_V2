@@ -50,7 +50,8 @@ export const useSmartReminders = (autoFetch = true) => {
 
   // Load dismissed reminders from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem('dismissedReminders');
+    let stored: string | null = null;
+    try { stored = localStorage.getItem('dismissedReminders'); } catch { /* quota/private */ }
     if (stored) {
       try {
         const parsed = JSON.parse(stored);

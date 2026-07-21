@@ -113,7 +113,7 @@ export function SwipeBackIndicator() {
       if (!shown) {
         const timer = setTimeout(() => {
           setShowHint(true);
-          localStorage.setItem(HINT_STORAGE_KEY, '1');
+          try { localStorage.setItem(HINT_STORAGE_KEY, '1'); } catch { /* quota/private */ }
           setTimeout(() => setShowHint(false), 2500);
         }, 1500);
         return () => clearTimeout(timer);
