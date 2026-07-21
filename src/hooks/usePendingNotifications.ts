@@ -21,9 +21,10 @@ export function usePendingNotifications(limit = 20) {
   return useQuery({
     queryKey: ['pending-notifications', limit, user?.id],
     queryFn: async () => {
+      if (!user) throw new Error('Not authenticated');
       const { data, error } = await queryExternalData<PendingNotification>({
         table: 'vw_pending_notifications',
-        filters: [{ type: 'eq', column: 'user_id', value: user!.id }],
+        filters: [{ type: 'eq', column: 'user_id', value: user.id }],
         order: { column: 'created_at', ascending: false },
         range: { from: 0, to: limit - 1 },
       });
