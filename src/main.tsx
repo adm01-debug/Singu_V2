@@ -95,8 +95,10 @@ if (import.meta.env.PROD) {
       migrateLegacyPushSW();
 
       // Step 2 — Register the unified VitePWA SW.
-      // "virtual:pwa-register" is tree-shaken in dev (no-op import).
-      import("virtual:pwa-register")
+      // "virtual:pwa-register" only exists when VitePWA plugin runs (prod build).
+      // Use @vite-ignore + variable to prevent dev-time resolution error.
+      const pwaModule = "virtual:pwa-register";
+      import(/* @vite-ignore */ pwaModule)
         .then(({ registerSW }) => {
           registerSW({
             /**
