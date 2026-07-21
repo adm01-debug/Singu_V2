@@ -93,12 +93,13 @@ Deno.serve(async (req) => {
     }
 
     // Save user message
-    await supabase.from("ai_chat_messages").insert({
+    const { error: msgInsertErr } = await supabase.from("ai_chat_messages").insert({
       thread_id,
       user_id: userId,
       role: "user",
       content: message,
     });
+    if (msgInsertErr) console.warn("Failed to persist user message:", msgInsertErr.message);
 
     // History and entity context are independent — fetch in parallel
     const entityQuery =

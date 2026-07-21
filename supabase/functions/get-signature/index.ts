@@ -66,12 +66,16 @@ Deno.serve(async (req) => {
 
     // Mark as viewed if pending
     if (signature.status === "pending") {
-      await supabase
+      const { error: viewErr } = await supabase
         .from("document_signatures")
         .update({ status: "viewed", viewed_at: new Date().toISOString() })
         .eq("id", signature.id);
-      signature.status = "viewed";
-      signature.viewed_at = new Date().toISOString();
+      if (!viewErr) {
+        signature.status = "viewed";
+        signature.viewed_at = new Date().toISOString();
+      } else {
+        console.warn("Failed to mark signature as viewed:", viewErr.message);
+      }
     }
 
     // Track view (best-effort)

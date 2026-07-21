@@ -94,13 +94,17 @@ export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
     if (!open) return;
     let cancelled = false;
     const fetchEntities = async () => {
-      const [compRes, contRes] = await Promise.all([
-        supabase.from('companies').select('id, name').limit(100),
-        supabase.from('contacts').select('id, first_name, last_name').limit(100),
-      ]);
-      if (cancelled) return;
-      if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
-      if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
+      try {
+        const [compRes, contRes] = await Promise.all([
+          supabase.from('companies').select('id, name').limit(100),
+          supabase.from('contacts').select('id, first_name, last_name').limit(100),
+        ]);
+        if (cancelled) return;
+        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
+        if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
+      } catch {
+        // non-critical — dropdowns remain empty; task can still be saved with existing values
+      }
     };
     fetchEntities();
     return () => { cancelled = true; };

@@ -51,7 +51,7 @@ Deno.serve(async (req) => {
       }
 
       if (Object.keys(update).length > 0) {
-        await Promise.all([
+        const [upd, ins] = await Promise.all([
           supabase.from('sequence_send_log').update(update).eq('id', log.id),
           supabase.from('sequence_events').insert({
             enrollment_id: log.enrollment_id,
@@ -63,6 +63,8 @@ Deno.serve(async (req) => {
             metadata: { url: target ?? null },
           }),
         ]);
+        if (upd.error) console.error('sequence_send_log update failed:', upd.error.message);
+        if (ins.error) console.error('sequence_events insert failed:', ins.error.message);
       }
     }
   } catch (e) {

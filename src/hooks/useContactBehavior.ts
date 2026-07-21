@@ -105,7 +105,7 @@ export const useContactBehavior = (contactId: string) => {
         .eq("contact_id", contactId)
         .maybeSingle();
       if (error) throw error;
-      return data as ContactBehavior;
+      return data as ContactBehavior | null;
     },
     enabled: !!contactId,
     staleTime: 5 * 60_000,
@@ -121,7 +121,7 @@ export const useContactBehavior = (contactId: string) => {
         .eq("contact_id", contactId)
         .maybeSingle();
       if (error) throw error;
-      return data as ContactDecisionMaking;
+      return data as ContactDecisionMaking | null;
     },
     enabled: !!contactId,
     staleTime: 5 * 60_000,
@@ -137,7 +137,7 @@ export const useContactBehavior = (contactId: string) => {
         .eq("contact_id", contactId)
         .maybeSingle();
       if (error) throw error;
-      return data as ContactInfluence;
+      return data as ContactInfluence | null;
     },
     enabled: !!contactId,
     staleTime: 5 * 60_000,
@@ -153,7 +153,7 @@ export const useContactBehavior = (contactId: string) => {
         .eq("contact_id", contactId)
         .maybeSingle();
       if (error) throw error;
-      return data as ContactPersonality;
+      return data as ContactPersonality | null;
     },
     enabled: !!contactId,
     staleTime: 5 * 60_000,
@@ -169,7 +169,7 @@ export const useContactBehavior = (contactId: string) => {
         .eq("contact_id", contactId)
         .maybeSingle();
       if (error) throw error;
-      return data as ContactMetaprograms;
+      return data as ContactMetaprograms | null;
     },
     enabled: !!contactId,
     staleTime: 5 * 60_000,
@@ -185,7 +185,7 @@ export const useContactBehavior = (contactId: string) => {
         .eq("contact_id", contactId)
         .maybeSingle();
       if (error) throw error;
-      return data as ContactRapportStrategy;
+      return data as ContactRapportStrategy | null;
     },
     enabled: !!contactId,
     staleTime: 5 * 60_000,
@@ -201,7 +201,7 @@ export const useContactBehavior = (contactId: string) => {
         .eq("contact_id", contactId)
         .maybeSingle();
       if (error) throw error;
-      return data as ContactBusinessContext;
+      return data as ContactBusinessContext | null;
     },
     enabled: !!contactId,
     staleTime: 5 * 60_000,

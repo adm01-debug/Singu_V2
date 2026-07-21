@@ -142,14 +142,16 @@ Deno.serve(async (req: Request) => {
   }
 
   // --- BULK FLUSH ---
-  await Promise.all([
+  const [snapRes, alertRes] = await Promise.all([
     allSnapshotRows.length > 0
       ? supabase.from("revops_snapshots").upsert(allSnapshotRows, { onConflict: "user_id,period,funnel_stage" })
-      : Promise.resolve(),
+      : Promise.resolve({ error: null }),
     allAlertRows.length > 0
       ? supabase.from("revops_alerts").insert(allAlertRows)
-      : Promise.resolve(),
+      : Promise.resolve({ error: null }),
   ]);
+  if (snapRes.error) console.error(JSON.stringify({ fn: "revops-snapshot-builder", stage: "upsert", error: snapRes.error.message }));
+  if (alertRes.error) console.error(JSON.stringify({ fn: "revops-snapshot-builder", stage: "alerts", error: alertRes.error.message }));
 
   return new Response(JSON.stringify({ processed: results.length, results }), {
     headers: { ...cors, "Content-Type": "application/json" },

@@ -241,12 +241,14 @@ Deno.serve(async (req) => {
     }
 
     // --- BULK FLUSH ---
-    await Promise.all([
-      allAlertRows.length > 0 ? supabase.from('alerts').insert(allAlertRows) : Promise.resolve(),
+    const [alertsRes, eventsRes] = await Promise.all([
+      allAlertRows.length > 0 ? supabase.from('alerts').insert(allAlertRows) : Promise.resolve({ error: null }),
       allLifeEventUpdateIds.length > 0
         ? supabase.from('life_events').update({ last_reminded_at: now.toISOString() }).in('id', allLifeEventUpdateIds)
-        : Promise.resolve(),
+        : Promise.resolve({ error: null }),
     ]);
+    if (alertsRes.error) log.error('alerts_insert_failed', { error: alertsRes.error.message });
+    if (eventsRes.error) log.error('life_events_update_failed', { error: eventsRes.error.message });
 
     log.info('check_complete', { alertsSent: allAlertsSent.length });
 

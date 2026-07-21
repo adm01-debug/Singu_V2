@@ -110,8 +110,9 @@ Deno.serve(async (req) => {
 
     // Single bulk insert for all users (1 query total)
     if (allNewClassifications.length > 0) {
-      await supabase.from("mql_classifications").insert(allNewClassifications as never[]);
-      qualified = allNewClassifications.length;
+      const { error: insertErr } = await supabase.from("mql_classifications").insert(allNewClassifications as never[]);
+      if (insertErr) console.error("mql_classifications insert failed:", insertErr.message);
+      else qualified = allNewClassifications.length;
     }
 
     return new Response(JSON.stringify({ ok: true, evaluated, qualified, users: userIds.length }), {

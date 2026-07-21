@@ -96,17 +96,20 @@ Deno.serve(async (req: Request) => {
     const withStage = accountUpdates.filter(r => r.lifecycle_stage !== undefined);
     const withoutStage = accountUpdates.filter(r => r.lifecycle_stage === undefined);
 
-    await Promise.all([
+    const [r1, r2, r3] = await Promise.all([
       withStage.length > 0
         ? supabase.from("cs_accounts").upsert(withStage, { onConflict: "id" })
-        : Promise.resolve(),
+        : Promise.resolve({ error: null }),
       withoutStage.length > 0
         ? supabase.from("cs_accounts").upsert(withoutStage, { onConflict: "id" })
-        : Promise.resolve(),
+        : Promise.resolve({ error: null }),
       alertRows.length > 0
         ? supabase.from("alerts").insert(alertRows)
-        : Promise.resolve(),
+        : Promise.resolve({ error: null }),
     ]);
+    if (r1.error) console.error("cs_accounts upsert (with stage) failed:", r1.error.message);
+    if (r2.error) console.error("cs_accounts upsert (without stage) failed:", r2.error.message);
+    if (r3.error) console.error("alerts insert failed:", r3.error.message);
 
     return jsonOk({ recalculated: recalcCount, alerts_generated: alertCount }, req);
   } catch (e) {
