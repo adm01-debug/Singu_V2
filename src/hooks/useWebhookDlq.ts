@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface DlqItem {
   id: string;
@@ -17,10 +18,12 @@ export interface DlqItem {
 }
 
 export function useWebhookDlq() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   const { data: items = [], isLoading } = useQuery({
-    queryKey: ['incoming_webhook_dlq'],
+    queryKey: ['incoming_webhook_dlq', user?.id],
+    enabled: !!user,
     staleTime: 30_000,
     queryFn: async () => {
       const { data, error } = await supabase

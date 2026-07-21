@@ -2,6 +2,7 @@ import { useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
 import { toast } from 'sonner';
+import { useAuth } from '@/hooks/useAuth';
 
 export type ConvEntity = 'contacts' | 'companies' | 'deals' | 'interactions';
 
@@ -39,23 +40,23 @@ export interface ConvInterpretation {
   cached: boolean;
 }
 
-const HISTORY_KEY = 'crm-conversational-history';
+const BASE_HISTORY_KEY = 'crm-conversational-history';
 const MAX_HISTORY = 10;
 
-function loadHistory(): string[] {
+function loadHistory(storageKey: string): string[] {
   try {
-    const raw = localStorage.getItem(HISTORY_KEY);
+    const raw = localStorage.getItem(storageKey);
     return raw ? (JSON.parse(raw) as string[]) : [];
   } catch { return []; }
 }
 
-function saveHistory(items: string[]) {
-  try { localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, MAX_HISTORY))); } catch { /* noop */ }
+function saveHistory(storageKey: string, items: string[]) {
+  try { localStorage.setItem(storageKey, JSON.stringify(items.slice(0, MAX_HISTORY))); } catch { /* noop */ }
 }
 
-function pushHistory(q: string) {
-  const cur = loadHistory().filter(h => h.toLowerCase() !== q.toLowerCase());
-  saveHistory([q, ...cur]);
+function pushHistory(storageKey: string, q: string) {
+  const cur = loadHistory(storageKey).filter(h => h.toLowerCase() !== q.toLowerCase());
+  saveHistory(storageKey, [q, ...cur]);
 }
 
 interface ContactRow {
@@ -184,10 +185,12 @@ async function executeFilters(
 }
 
 export function useConversationalSearch() {
+  const { user } = useAuth();
+  const historyKey = `${BASE_HISTORY_KEY}-${user?.id ?? 'anon'}`;
   const [loading, setLoading] = useState(false);
   const [interpretation, setInterpretation] = useState<ConvInterpretation | null>(null);
   const [items, setItems] = useState<ConvResultItem[]>([]);
-  const [history, setHistory] = useState<string[]>(loadHistory);
+  const [history, setHistory] = useState<string[]>(() => loadHistory(historyKey));
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -224,8 +227,8 @@ export function useConversationalSearch() {
         setItems([]);
       }
 
-      pushHistory(q);
-      setHistory(loadHistory());
+      pushHistory(historyKey, q);
+      setHistory(loadHistory(historyKey));
     } catch (e) {
       if (ctrl.signal.aborted) return;
       const msg = e instanceof Error ? e.message : 'Erro ao processar pergunta';
@@ -246,9 +249,9 @@ export function useConversationalSearch() {
   }, []);
 
   const clearHistory = useCallback(() => {
-    saveHistory([]);
+    saveHistory(historyKey, []);
     setHistory([]);
-  }, []);
+  }, [historyKey]);
 
   return { ask, reset, clearHistory, loading, interpretation, items, history, error };
 }

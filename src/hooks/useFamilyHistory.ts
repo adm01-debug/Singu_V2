@@ -15,7 +15,7 @@ export function useFamilyHistory(contactId?: string) {
   const { user } = useAuth();
 
   const query = useQuery({
-    queryKey: ['family-history', contactId],
+    queryKey: ['family-history', contactId, user?.id],
     queryFn: async () => {
       if (!contactId || !user) return [];
       const { data, error } = await supabase

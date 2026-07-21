@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface SequenceEvent {
   id: string;
@@ -25,8 +26,9 @@ export interface SequenceSendLog {
 }
 
 export function useSequenceEvents(sequenceId?: string, enrollmentId?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['sequence-events', sequenceId, enrollmentId],
+    queryKey: ['sequence-events', sequenceId, enrollmentId, user?.id],
     queryFn: async () => {
       let q = supabase.from('sequence_events').select('*').order('created_at', { ascending: false }).limit(200);
       if (enrollmentId) q = q.eq('enrollment_id', enrollmentId);
@@ -35,14 +37,15 @@ export function useSequenceEvents(sequenceId?: string, enrollmentId?: string) {
       if (error) throw error;
       return (data || []) as unknown as SequenceEvent[];
     },
-    enabled: !!(sequenceId || enrollmentId),
+    enabled: !!(sequenceId || enrollmentId) && !!user,
     staleTime: 60_000,
   });
 }
 
 export function useSequenceSendLogs(sequenceId?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['sequence-send-logs', sequenceId],
+    queryKey: ['sequence-send-logs', sequenceId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('sequence_send_log')
@@ -53,14 +56,15 @@ export function useSequenceSendLogs(sequenceId?: string) {
       if (error) throw error;
       return (data || []) as unknown as SequenceSendLog[];
     },
-    enabled: !!sequenceId,
+    enabled: !!sequenceId && !!user,
     staleTime: 60_000,
   });
 }
 
 export function useSequenceMetrics(sequenceId?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['sequence-metrics', sequenceId],
+    queryKey: ['sequence-metrics', sequenceId, user?.id],
     queryFn: async () => {
       if (!sequenceId) return null;
       const { data: events } = await supabase
@@ -80,7 +84,7 @@ export function useSequenceMetrics(sequenceId?: string) {
         replyRate: sent > 0 ? (replied / sent) * 100 : 0,
       };
     },
-    enabled: !!sequenceId,
+    enabled: !!sequenceId && !!user,
     staleTime: 60_000,
   });
 }

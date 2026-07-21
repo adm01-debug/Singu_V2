@@ -13,6 +13,7 @@ export function useScoreHistory(contactId: string) {
         .from('score_history')
         .select('*')
         .eq('contact_id', contactId)
+        .eq('user_id', user!.id)
         .order('calculated_at', { ascending: false })
         .limit(50);
       return (data || []) as Tables<'score_history'>[];

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 
 interface BirthdayContact {
   id?: string;
@@ -15,8 +16,9 @@ interface BirthdayContact {
 }
 
 export function useBirthdayContacts(enabled = true) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['birthday-contacts'],
+    queryKey: ['birthday-contacts', user?.id],
     queryFn: async () => {
       const { data, error } = await callExternalRpc<BirthdayContact[]>(
         'get_birthday_contacts',
@@ -25,7 +27,7 @@ export function useBirthdayContacts(enabled = true) {
       if (error) throw error;
       return (Array.isArray(data) ? data : []) as BirthdayContact[];
     },
-    enabled,
+    enabled: enabled && !!user,
     staleTime: 30 * 60 * 1000,
   });
 }

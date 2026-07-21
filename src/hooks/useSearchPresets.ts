@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface SearchPreset {
   id: string;
@@ -16,8 +17,8 @@ export interface SearchPreset {
 
 export type PresetSortMode = 'favoritos' | 'mais-usados' | 'recentes' | 'alfabetica';
 
-const STORAGE_KEY = 'relateiq-search-presets';
-const SORT_KEY = 'relateiq-search-presets-sort';
+const BASE_STORAGE_KEY = 'relateiq-search-presets';
+const BASE_SORT_KEY = 'relateiq-search-presets-sort';
 
 const VALID_SORT_MODES: PresetSortMode[] = ['favoritos', 'mais-usados', 'recentes', 'alfabetica'];
 
@@ -54,8 +55,9 @@ export function comparePresets(a: SearchPreset, b: SearchPreset, mode: PresetSor
  * Persists to localStorage for cross-session use
  */
 export function useSearchPresets(context: string = 'contacts') {
-  const storageKey = `${STORAGE_KEY}-${context}`;
-  const sortStorageKey = `${SORT_KEY}-${context}`;
+  const { user } = useAuth();
+  const storageKey = `${BASE_STORAGE_KEY}-${user?.id ?? 'anon'}-${context}`;
+  const sortStorageKey = `${BASE_SORT_KEY}-${user?.id ?? 'anon'}-${context}`;
 
   const [presets, setPresets] = useState<SearchPreset[]>(() => {
     try {
@@ -76,6 +78,27 @@ export function useSearchPresets(context: string = 'contacts') {
       return 'favoritos';
     }
   });
+
+  // Re-hydrate on user change (e.g. login / account switch on shared device)
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(storageKey);
+      setPresets(stored ? JSON.parse(stored) : []);
+    } catch {
+      setPresets([]);
+    }
+  }, [storageKey]);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(sortStorageKey);
+      setSortModeState(stored && (VALID_SORT_MODES as string[]).includes(stored)
+        ? (stored as PresetSortMode)
+        : 'favoritos');
+    } catch {
+      setSortModeState('favoritos');
+    }
+  }, [sortStorageKey]);
 
   // Persist presets
   useEffect(() => {

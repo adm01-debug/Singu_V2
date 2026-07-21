@@ -163,10 +163,12 @@ export function useStakeholderAlerts(companyId?: string) {
     return () => { signal.cancelled = true; };
   }, [fetchAlerts]);
 
+  const stakeholderMetricsKey = `stakeholder_metrics-${user?.id ?? 'anon'}`;
+
   // Load stored metrics from localStorage
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('stakeholder_metrics');
+      const stored = localStorage.getItem(stakeholderMetricsKey);
       if (stored) {
         try {
           setStoredMetrics(JSON.parse(stored));
@@ -177,7 +179,7 @@ export function useStakeholderAlerts(companyId?: string) {
     } catch {
       // localStorage blocked in private browsing
     }
-  }, []);
+  }, [stakeholderMetricsKey]);
 
   const saveMetrics = useCallback((contactId: string, metrics: StakeholderMetrics) => {
     const newStored = storedMetrics.filter(m => m.contactId !== contactId);
@@ -187,8 +189,8 @@ export function useStakeholderAlerts(companyId?: string) {
       timestamp: new Date().toISOString()
     });
     setStoredMetrics(newStored);
-    try { localStorage.setItem('stakeholder_metrics', JSON.stringify(newStored)); } catch { /* quota/private */ }
-  }, [storedMetrics]);
+    try { localStorage.setItem(stakeholderMetricsKey, JSON.stringify(newStored)); } catch { /* quota/private */ }
+  }, [storedMetrics, stakeholderMetricsKey]);
 
   const getStoredMetrics = useCallback((contactId: string): StoredMetrics | undefined => {
     return storedMetrics.find(m => m.contactId === contactId);

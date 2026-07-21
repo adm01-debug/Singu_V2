@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 export type TagCategory = 'hobbies' | 'interests';
 
@@ -40,8 +41,9 @@ export function diffArrays(oldArr: string[], newArr: string[]): TagDiff {
 const CATEGORIES: TagCategory[] = ['hobbies', 'interests'];
 
 export function useContactTagsHistory(contactId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['contact-tags-history', contactId],
+    queryKey: ['contact-tags-history', contactId, user?.id],
     queryFn: async (): Promise<TagHistoryEvent[]> => {
       if (!contactId) return [];
       const { data, error } = await supabase
@@ -79,7 +81,7 @@ export function useContactTagsHistory(contactId: string | undefined) {
       }
       return events;
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
     staleTime: 5 * 60 * 1000,
     gcTime: 15 * 60 * 1000,
   });
