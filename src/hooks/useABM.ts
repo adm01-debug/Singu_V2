@@ -95,6 +95,7 @@ export function useABMAccounts() {
       const { data, error } = await supabase
         .from("abm_accounts")
         .select("*")
+        .eq("user_id", user!.id)
         .order("account_score", { ascending: false })
         .limit(1000);
       if (error) throw error;
@@ -105,15 +106,16 @@ export function useABMAccounts() {
 }
 
 export function useABMAccount(id: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["abm", "account", id],
+    queryKey: ["abm", "account", id, user?.id],
     queryFn: async (): Promise<ABMAccount | null> => {
       if (!id) return null;
-      const { data, error } = await supabase.from("abm_accounts").select("*").eq("id", id).maybeSingle();
+      const { data, error } = await supabase.from("abm_accounts").select("*").eq("id", id).eq("user_id", user!.id).maybeSingle();
       if (error) throw error;
       return data as unknown as ABMAccount | null;
     },
-    enabled: !!id,
+    enabled: !!id && !!user,
     staleTime: 2 * 60 * 1000,
   });
 }
@@ -202,8 +204,9 @@ export function useRescoreAccounts(accountId?: string) {
 /* ───────────── Buying Committee ───────────── */
 
 export function useBuyingCommittee(accountId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["abm", "committee", accountId],
+    queryKey: ["abm", "committee", accountId, user?.id],
     queryFn: async (): Promise<BuyingCommitteeMember[]> => {
       if (!accountId) return [];
       const { data, error } = await supabase
@@ -269,8 +272,9 @@ export function useDeleteCommitteeMember() {
 /* ───────────── Whitespace ───────────── */
 
 export function useWhitespaceOpportunities(accountId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["abm", "whitespace", accountId],
+    queryKey: ["abm", "whitespace", accountId, user?.id],
     queryFn: async (): Promise<WhitespaceOpportunity[]> => {
       if (!accountId) return [];
       const { data, error } = await supabase
@@ -324,8 +328,9 @@ export function useUpdateWhitespaceStatus() {
 /* ───────────── Account Plans ───────────── */
 
 export function useABMAccountPlans(accountId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["abm", "plans", accountId],
+    queryKey: ["abm", "plans", accountId, user?.id],
     queryFn: async (): Promise<ABMAccountPlan[]> => {
       if (!accountId) return [];
       const { data, error } = await supabase
@@ -374,12 +379,15 @@ export function useUpsertAccountPlan() {
 /* ───────────── Campaigns ───────────── */
 
 export function useABMCampaigns() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["abm", "campaigns"],
+    queryKey: ["abm", "campaigns", user?.id],
+    enabled: !!user,
     queryFn: async (): Promise<ABMCampaign[]> => {
       const { data, error } = await supabase
         .from("abm_campaigns")
         .select("*")
+        .eq("user_id", user!.id)
         .order("created_at", { ascending: false })
         .limit(1000);
       if (error) throw error;

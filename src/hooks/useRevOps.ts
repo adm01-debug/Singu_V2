@@ -71,6 +71,7 @@ export function useRevOpsSnapshots(periodStart: string, periodEnd: string) {
       const { data, error } = await supabase
         .from("revops_snapshots")
         .select("*")
+        .eq("user_id", user!.id)
         .gte("period", periodStart)
         .lte("period", periodEnd)
         .order("period", { ascending: false })
@@ -109,6 +110,7 @@ export function useRevOpsBenchmarks() {
       const { data, error } = await supabase
         .from("revops_benchmarks")
         .select("*")
+        .eq("user_id", user!.id)
         .order("metric_key")
         .limit(1000);
       if (error) throw error;
@@ -156,6 +158,7 @@ export function useRevOpsAlerts() {
       const { data, error } = await supabase
         .from("revops_alerts")
         .select("*")
+        .eq("user_id", user!.id)
         .eq("dismissed", false)
         .order("created_at", { ascending: false })
         .limit(20);

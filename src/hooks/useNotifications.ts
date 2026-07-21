@@ -309,8 +309,9 @@ export const useNotifications = () => {
 
       if (error) throw error;
 
-      // Check localStorage for already notified alerts
-      const notifiedAlerts: string[] = (() => { try { return JSON.parse(localStorage.getItem('notified_stakeholder_alerts') || '[]'); } catch { return []; } })();
+      // Check localStorage for already notified alerts (user-scoped key)
+      const notifKey = `notified_stakeholder_alerts_${user.id}`;
+      const notifiedAlerts: string[] = (() => { try { return JSON.parse(localStorage.getItem(notifKey) || '[]'); } catch { return []; } })();
 
       for (const alert of alerts || []) {
         if (!notifiedAlerts.includes(alert.id)) {
@@ -326,10 +327,10 @@ export const useNotifications = () => {
               },
             }
           );
-          
+
           // Mark as notified
           notifiedAlerts.push(alert.id);
-          localStorage.setItem('notified_stakeholder_alerts', JSON.stringify(notifiedAlerts));
+          try { localStorage.setItem(notifKey, JSON.stringify(notifiedAlerts)); } catch { /* quota/private */ }
         }
       }
     } catch (error) {

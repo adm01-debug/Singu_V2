@@ -37,9 +37,9 @@ export function useContactDetail(contactId: string | undefined) {
     queryFn: async (): Promise<ContactDetailData> => {
       // Start secondary queries immediately — they only need contactId (known upfront)
       const secondaryPromise = Promise.all([
-        supabase.from('interactions').select('*').eq('contact_id', contactId!).order('created_at', { ascending: false }).limit(50),
-        supabase.from('insights').select('*').eq('contact_id', contactId!).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
-        supabase.from('alerts').select('*').eq('contact_id', contactId!).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
+        supabase.from('interactions').select('*').eq('contact_id', contactId!).eq('user_id', user!.id).order('created_at', { ascending: false }).limit(50),
+        supabase.from('insights').select('*').eq('contact_id', contactId!).eq('user_id', user!.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
+        supabase.from('alerts').select('*').eq('contact_id', contactId!).eq('user_id', user!.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
       ]);
 
       // 1. Fetch contact (runs in parallel with secondary queries above)
@@ -47,6 +47,7 @@ export function useContactDetail(contactId: string | undefined) {
         .from('contacts')
         .select('*')
         .eq('id', contactId!)
+        .eq('user_id', user!.id)
         .maybeSingle();
 
       if (contactError) throw contactError;

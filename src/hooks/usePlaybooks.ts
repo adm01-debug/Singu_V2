@@ -83,13 +83,14 @@ export function usePlaybooks(filters: PlaybookFilters = {}) {
 }
 
 export function usePlaybook(id?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["playbook", id],
-    enabled: !!id,
+    queryKey: ["playbook", id, user?.id],
+    enabled: !!id && !!user,
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      const { data, error } = await supabase.from("sales_playbooks").select("*").eq("id", id!).maybeSingle();
+      const { data, error } = await supabase.from("sales_playbooks").select("*").eq("id", id!).eq("user_id", user!.id).maybeSingle();
       if (error) throw error;
       return data as unknown as SalesPlaybook | null;
     },

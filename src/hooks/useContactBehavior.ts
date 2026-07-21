@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Database } from "@/integrations/supabase/types";
+import { useAuth } from "@/hooks/useAuth";
 
 type PersonalityRow = Database['public']['Tables']['contact_personality']['Row'];
 export type ContactPersonality = Partial<PersonalityRow>;
@@ -95,9 +96,10 @@ export interface ContactBusinessContext {
 
 export const useContactBehavior = (contactId: string) => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const { data: behavior, isLoading: isLoadingBehavior } = useQuery({
-    queryKey: ["contact-behavior", contactId],
+    queryKey: ["contact-behavior", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("contact_behavior")
@@ -113,7 +115,7 @@ export const useContactBehavior = (contactId: string) => {
   });
 
   const { data: decision, isLoading: isLoadingDecision } = useQuery({
-    queryKey: ["contact-decision", contactId],
+    queryKey: ["contact-decision", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("contact_decision_making")
@@ -129,7 +131,7 @@ export const useContactBehavior = (contactId: string) => {
   });
 
   const { data: influence, isLoading: isLoadingInfluence } = useQuery({
-    queryKey: ["contact-influence", contactId],
+    queryKey: ["contact-influence", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("contact_influence")
@@ -145,7 +147,7 @@ export const useContactBehavior = (contactId: string) => {
   });
 
   const { data: personality, isLoading: isLoadingPersonality } = useQuery({
-    queryKey: ["contact-personality", contactId],
+    queryKey: ["contact-personality", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("contact_personality")
@@ -161,7 +163,7 @@ export const useContactBehavior = (contactId: string) => {
   });
 
   const { data: metaprograms, isLoading: isLoadingMetaprograms } = useQuery({
-    queryKey: ["contact-metaprograms", contactId],
+    queryKey: ["contact-metaprograms", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("contact_metaprograms")
@@ -177,7 +179,7 @@ export const useContactBehavior = (contactId: string) => {
   });
 
   const { data: rapport, isLoading: isLoadingRapport } = useQuery({
-    queryKey: ["contact-rapport", contactId],
+    queryKey: ["contact-rapport", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("contact_rapport_strategy")
@@ -193,7 +195,7 @@ export const useContactBehavior = (contactId: string) => {
   });
 
   const { data: businessContext, isLoading: isLoadingBusiness } = useQuery({
-    queryKey: ["contact-business-context", contactId],
+    queryKey: ["contact-business-context", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("contact_business_context")
@@ -307,7 +309,7 @@ export const useContactBehavior = (contactId: string) => {
   });
 
   const { data: gaps, isLoading: isLoadingGaps } = useQuery({
-    queryKey: ["contact-behavior-gaps", contactId],
+    queryKey: ["contact-behavior-gaps", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_contact_behavior_gaps", {
         p_contact_id: contactId,
@@ -321,7 +323,7 @@ export const useContactBehavior = (contactId: string) => {
   });
 
   const { data: auditLogs, isLoading: isLoadingAudit } = useQuery({
-    queryKey: ["contact-behavior-audit", contactId],
+    queryKey: ["contact-behavior-audit", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("v_contact_behavior_audit")
@@ -337,7 +339,7 @@ export const useContactBehavior = (contactId: string) => {
   });
 
   const { data: consistency, refetch: checkConsistency } = useQuery({
-    queryKey: ["contact-behavior-consistency", contactId],
+    queryKey: ["contact-behavior-consistency", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase.rpc("validate_behavioral_consistency", {
         p_contact_id: contactId,
@@ -351,7 +353,7 @@ export const useContactBehavior = (contactId: string) => {
   });
 
   const { data: frameworkGaps, isLoading: isLoadingFGaps } = useQuery({
-    queryKey: ["contact-framework-gaps", contactId],
+    queryKey: ["contact-framework-gaps", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_contact_framework_gaps", {
         p_contact_id: contactId,
@@ -365,7 +367,7 @@ export const useContactBehavior = (contactId: string) => {
   });
 
   const { data: frameworkAudit, isLoading: isLoadingFAudit } = useQuery({
-    queryKey: ["contact-personality-audit", contactId],
+    queryKey: ["contact-personality-audit", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("v_contact_personality_audit")
@@ -381,7 +383,7 @@ export const useContactBehavior = (contactId: string) => {
   });
 
   const { data: lifeEventGaps, isLoading: isLoadingLEGaps } = useQuery({
-    queryKey: ["contact-life-event-gaps", contactId],
+    queryKey: ["contact-life-event-gaps", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_contact_life_event_gaps", {
         p_contact_id: contactId,

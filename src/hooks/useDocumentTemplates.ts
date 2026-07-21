@@ -150,13 +150,13 @@ export function useDocumentSignatures() {
   const qc = useQueryClient();
 
   const { data: signatures = [], isLoading } = useQuery({
-    queryKey: ['document_signatures'],
+    queryKey: ['document_signatures', user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      if (!user) return [];
       const { data, error } = await supabase
         .from('document_signatures')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', user!.id)
         .order('created_at', { ascending: false })
         .limit(1000);
       if (error) throw error;

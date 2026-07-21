@@ -116,7 +116,7 @@ export function useDealRooms(filters?: { status?: DealRoomStatus | "all" }) {
     enabled: !!user,
     staleTime: 5 * 60_000,
     queryFn: async () => {
-      let q = supabase.from("deal_rooms").select("*").order("updated_at", { ascending: false })
+      let q = supabase.from("deal_rooms").select("*").eq("user_id", user!.id).order("updated_at", { ascending: false })
       .limit(1000);
       if (filters?.status && filters.status !== "all") {
         q = q.eq("status", filters.status);
@@ -129,12 +129,13 @@ export function useDealRooms(filters?: { status?: DealRoomStatus | "all" }) {
 }
 
 export function useDealRoom(id: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: KEYS.room(id ?? ""),
-    enabled: !!id,
+    queryKey: [...KEYS.room(id ?? ""), user?.id],
+    enabled: !!id && !!user,
     staleTime: 5 * 60_000,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_rooms").select("*").eq("id", id!).maybeSingle();
+      const { data, error } = await supabase.from("deal_rooms").select("*").eq("id", id!).eq("user_id", user!.id).maybeSingle();
       if (error) throw error;
       return data as DealRoom | null;
     },

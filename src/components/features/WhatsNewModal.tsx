@@ -173,7 +173,7 @@ export function WhatsNewModal({
 // eslint-disable-next-line react-refresh/only-export-components
 export function useWhatsNew() {
   const show = () => {
-    localStorage.removeItem(WHATS_NEW_KEY);
+    try { localStorage.removeItem(WHATS_NEW_KEY); } catch { /* quota/private */ }
     window.dispatchEvent(new CustomEvent('show-whats-new'));
   };
   return { show };

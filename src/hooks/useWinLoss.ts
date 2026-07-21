@@ -97,19 +97,21 @@ export function useWinLossRecords(filters: RecordsFilter = {}) {
 }
 
 export function useWinLossRecordByDeal(dealId: string | null | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['win-loss-record-by-deal', dealId],
+    queryKey: ['win-loss-record-by-deal', dealId, user?.id],
     queryFn: async () => {
       if (!dealId) return null;
       const { data, error } = await supabase
         .from('win_loss_records')
         .select('*')
         .eq('deal_id', dealId)
+        .eq('user_id', user!.id)
         .maybeSingle();
       if (error) throw error;
       return data as WinLossRecord | null;
     },
-    enabled: !!dealId,
+    enabled: !!dealId && !!user,
   });
 }
 

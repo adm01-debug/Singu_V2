@@ -85,7 +85,7 @@ export function useCurrentPeriod(type: "month" | "quarter" = "month") {
     queryFn: async () => {
       const today = new Date().toISOString().split("T")[0];
       const { data, error } = await supabase.from("forecast_periods").select("*")
-        .eq("period_type", type).eq("status", "open")
+        .eq("user_id", user!.id).eq("period_type", type).eq("status", "open")
         .lte("period_start", today).gte("period_end", today)
         .maybeSingle();
       if (error) throw error;
@@ -132,17 +132,18 @@ export function useClosePeriod() {
 }
 
 export function useDealForecasts(periodId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["deal-forecasts", periodId],
+    queryKey: ["deal-forecasts", periodId, user?.id],
     queryFn: async () => {
       if (!periodId) return [];
       const { data, error } = await supabase.from("deal_forecasts").select("*")
-        .eq("period_id", periodId).order("forecasted_amount", { ascending: false })
+        .eq("period_id", periodId).eq("user_id", user!.id).order("forecasted_amount", { ascending: false })
         .limit(1000);
       if (error) throw error;
       return (data ?? []) as DealForecast[];
     },
-    enabled: !!periodId,
+    enabled: !!periodId && !!user,
     staleTime: 60 * 1000,
   });
 }
@@ -179,8 +180,9 @@ export function useAnalyzeForecast() {
 }
 
 export function useForecastSnapshots(periodId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["forecast-snapshots", periodId],
+    queryKey: ["forecast-snapshots", periodId, user?.id],
     queryFn: async () => {
       if (!periodId) return [];
       const { data, error } = await supabase.from("forecast_snapshots").select("*")
@@ -189,20 +191,21 @@ export function useForecastSnapshots(periodId: string | undefined) {
       if (error) throw error;
       return (data ?? []) as ForecastSnapshot[];
     },
-    enabled: !!periodId,
+    enabled: !!periodId && !!user,
   });
 }
 
 export function useForecastSummary(periodId: string | undefined) {
+  const { user } = useAuth();
   const { data: forecasts } = useDealForecasts(periodId);
   const { data: period } = useQuery({
-    queryKey: ["forecast-period", periodId],
+    queryKey: ["forecast-period", periodId, user?.id],
     queryFn: async () => {
       if (!periodId) return null;
-      const { data } = await supabase.from("forecast_periods").select("*").eq("id", periodId).maybeSingle();
+      const { data } = await supabase.from("forecast_periods").select("*").eq("id", periodId).eq("user_id", user!.id).maybeSingle();
       return data as ForecastPeriod | null;
     },
-    enabled: !!periodId,
+    enabled: !!periodId && !!user,
   });
   const f = forecasts ?? [];
   const commit = f.filter(x => x.category === "commit").reduce((s, x) => s + Number(x.forecasted_amount), 0);

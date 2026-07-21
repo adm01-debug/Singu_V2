@@ -34,11 +34,12 @@ export interface Allocation {
 }
 
 export function useTouchpoints(opts: { contactId?: string; dealId?: string }) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['touchpoints', opts.contactId, opts.dealId],
-    enabled: !!(opts.contactId || opts.dealId),
+    queryKey: ['touchpoints', opts.contactId, opts.dealId, user?.id],
+    enabled: !!(opts.contactId || opts.dealId) && !!user,
     queryFn: async () => {
-      let q = supabase.from('attribution_touchpoints').select('*').order('occurred_at', { ascending: false }).limit(500);
+      let q = supabase.from('attribution_touchpoints').select('*').eq('user_id', user!.id).order('occurred_at', { ascending: false }).limit(500);
       if (opts.contactId) q = q.eq('contact_id', opts.contactId);
       if (opts.dealId) q = q.eq('deal_id', opts.dealId);
       const { data, error } = await q;
@@ -50,9 +51,10 @@ export function useTouchpoints(opts: { contactId?: string; dealId?: string }) {
 }
 
 export function useAttribution(dealId: string | undefined, model: AttributionModel = 'linear', dealValue = 0) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['attribution', dealId, model, dealValue],
-    enabled: !!dealId,
+    queryKey: ['attribution', dealId, model, dealValue, user?.id],
+    enabled: !!dealId && !!user,
     queryFn: async () => {
       const { data, error } = await supabase.rpc('compute_attribution', {
         _deal_id: dealId!,

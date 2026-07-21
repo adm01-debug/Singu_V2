@@ -111,11 +111,12 @@ export function useForms() {
 }
 
 export function useForm(id: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['marketing-form', id],
-    enabled: !!id,
+    queryKey: ['marketing-form', id, user?.id],
+    enabled: !!id && !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from('forms').select('*').eq('id', id!).maybeSingle();
+      const { data, error } = await supabase.from('forms').select('*').eq('id', id!).eq('user_id', user!.id).maybeSingle();
       if (error) throw error;
       if (!data) return null;
       return {
@@ -128,9 +129,10 @@ export function useForm(id: string | undefined) {
 }
 
 export function useFormSubmissions(formId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['form-submissions', formId],
-    enabled: !!formId,
+    queryKey: ['form-submissions', formId, user?.id],
+    enabled: !!formId && !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('form_submissions')

@@ -101,15 +101,17 @@ export function useCSAccounts() {
 }
 
 export function useCSAccount(id: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["cs-account", id],
-    enabled: !!id,
+    queryKey: ["cs-account", id, user?.id],
+    enabled: !!id && !!user,
     staleTime: 60_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("cs_accounts")
         .select("*")
         .eq("id", id!)
+        .eq("user_id", user!.id)
         .maybeSingle();
       if (error) throw error;
       return data as CSAccount | null;

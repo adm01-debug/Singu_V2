@@ -317,7 +317,7 @@ export function useOnboardingTour(tourId: string = 'main') {
 
   const resetTour = () => {
     setHasCompleted(false);
-    localStorage.removeItem(`tour-completed-${tourId}`);
+    try { localStorage.removeItem(`tour-completed-${tourId}`); } catch { /* quota/private */ }
   };
 
   return {
