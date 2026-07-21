@@ -141,7 +141,7 @@ export default function ReportBuilder() {
                 {layout.name}
               </Button>
               {isEditing && layouts.length > 1 && (
-                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-destructive" onClick={() => removeLayout(idx)}>
+                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-destructive" aria-label="Remover layout" onClick={() => removeLayout(idx)}>
                   <X className="h-3 w-3" />
                 </Button>
               )}

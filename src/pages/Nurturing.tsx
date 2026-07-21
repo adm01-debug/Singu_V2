@@ -77,10 +77,10 @@ export default function NurturingPage() {
                     {wf.description && <p className="text-[10px] text-muted-foreground mt-0.5">{wf.description}</p>}
                   </div>
                   <div className="flex gap-1">
-                    <Button variant="outline" size="sm" className="h-7 w-7 p-0" onClick={() => toggleActive.mutate({ id: wf.id, is_active: !wf.is_active })}>
+                    <Button variant="outline" size="sm" className="h-7 w-7 p-0" aria-label={wf.is_active ? 'Pausar fluxo' : 'Ativar fluxo'} onClick={() => toggleActive.mutate({ id: wf.id, is_active: !wf.is_active })}>
                       {wf.is_active ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
                     </Button>
-                    <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-destructive" onClick={() => remove.mutate(wf.id)}>
+                    <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-destructive" aria-label="Excluir fluxo" onClick={() => remove.mutate(wf.id)}>
                       <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>

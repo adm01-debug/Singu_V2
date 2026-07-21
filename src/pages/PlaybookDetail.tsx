@@ -68,7 +68,7 @@ export default function PlaybookDetail() {
           <SmartBackButton fallback="/playbooks" label="Playbooks" />
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={handleCopyAll}><Copy className="size-4" /> Copiar tudo</Button>
-            <Button variant="ghost" size="sm" onClick={handleDelete}><Trash2 className="size-4 text-destructive" /></Button>
+            <Button variant="ghost" size="sm" aria-label="Excluir playbook" onClick={handleDelete}><Trash2 className="size-4 text-destructive" /></Button>
           </div>
         </div>
 

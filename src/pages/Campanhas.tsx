@@ -183,7 +183,7 @@ export default function Campanhas() {
                               <Send className="h-3 w-3 mr-1" /> Enviar
                             </Button>
                           )}
-                          <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-destructive" onClick={() => remove.mutate(campaign.id)}>
+                          <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-destructive" aria-label="Excluir campanha" onClick={() => remove.mutate(campaign.id)}>
                             <Trash2 className="h-3 w-3" />
                           </Button>
                         </div>

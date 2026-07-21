@@ -141,6 +141,7 @@ export function MobileSidebarDrawer({ open, onClose, onSearchClick }: MobileSide
               <button
                 onClick={onClose}
                 className="p-2 rounded-lg hover:bg-sidebar-accent transition-colors"
+                aria-label="Fechar menu lateral"
               >
                 <X className="w-5 h-5 text-sidebar-foreground" />
               </button>

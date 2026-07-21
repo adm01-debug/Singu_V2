@@ -582,10 +582,11 @@ export function InteractionForm({
                    <a href={safehref(url)} target="_blank" rel="noopener noreferrer" className="hover:underline truncate max-w-[150px]">
                      {url.split('/').pop()}
                    </a>
-                   <button 
-                     type="button" 
+                   <button
+                     type="button"
                      onClick={() => form.setValue('attachments', attachments.filter((_, idx) => idx !== i))}
                      className="text-muted-foreground hover:text-destructive"
+                     aria-label="Remover anexo"
                    >
                      <CloseIcon className="w-3 h-3" />
                    </button>

@@ -163,7 +163,7 @@ export default function LandingPages() {
                           onCheckedChange={(v) => togglePublish.mutate({ id: p.id, publish: v })}
                         />
                       </div>
-                      <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-destructive" onClick={() => remove.mutate(p.id)}>
+                      <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-destructive" aria-label="Excluir landing page" onClick={() => remove.mutate(p.id)}>
                         <Trash2 className="w-3.5 h-3.5" />
                       </Button>
                     </div>

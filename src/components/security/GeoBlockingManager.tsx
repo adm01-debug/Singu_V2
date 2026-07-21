@@ -45,7 +45,7 @@ export function GeoBlockingManager() {
             {countries.map(c => (
               <Badge key={c.id} variant="secondary" className="gap-1 pl-2">
                 <Flag className="h-3 w-3" />{c.country_name}
-                <button onClick={() => removeCountry(c.id)} className="ml-1 hover:text-destructive">
+                <button onClick={() => removeCountry(c.id)} className="ml-1 hover:text-destructive" aria-label={`Remover ${c.country_name} do bloqueio geográfico`}>
                   <Trash2 className="h-3 w-3" />
                 </button>
               </Badge>

@@ -68,7 +68,7 @@ export function SegmentBuilderPanel({ onSegmentChange }: Props) {
               {!['is_null', 'is_not_null'].includes(f.operator) && (
                 <Badge className="text-[10px] h-4">{f.value}</Badge>
               )}
-              <Button variant="ghost" size="sm" className="h-5 w-5 p-0 ml-auto" onClick={() => removeFilter(i)}>
+              <Button variant="ghost" size="sm" className="h-5 w-5 p-0 ml-auto" aria-label="Remover filtro" onClick={() => removeFilter(i)}>
                 <X className="h-3 w-3" />
               </Button>
             </div>

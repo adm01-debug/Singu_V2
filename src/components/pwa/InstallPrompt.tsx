@@ -105,6 +105,7 @@ export const InstallPrompt = React.forwardRef<HTMLDivElement>(function InstallPr
               <button
                 onClick={handleDismiss}
                 className="p-1 hover:bg-foreground/20 rounded-full transition-colors"
+                aria-label="Dispensar instalação do app"
               >
                 <X className="h-4 w-4" />
               </button>

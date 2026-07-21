@@ -92,10 +92,10 @@ export default function Assistente() {
                     <span className="text-xs flex-1 truncate">{t.title}</span>
                     {t.pinned && <Pin className="h-3 w-3 text-warning shrink-0" />}
                     <div className="opacity-0 group-hover:opacity-100 flex gap-0.5">
-                      <Button size="sm" variant="ghost" className="h-5 w-5 p-0" onClick={(e) => { e.stopPropagation(); togglePin(t.id, t.pinned); }}>
+                      <Button size="sm" variant="ghost" className="h-5 w-5 p-0" aria-label={t.pinned ? 'Desafixar conversa' : 'Fixar conversa'} onClick={(e) => { e.stopPropagation(); togglePin(t.id, t.pinned); }}>
                         <Pin className="h-3 w-3" />
                       </Button>
-                      <Button size="sm" variant="ghost" className="h-5 w-5 p-0 text-destructive" onClick={(e) => { e.stopPropagation(); deleteThread(t.id); }}>
+                      <Button size="sm" variant="ghost" className="h-5 w-5 p-0 text-destructive" aria-label="Excluir conversa" onClick={(e) => { e.stopPropagation(); deleteThread(t.id); }}>
                         <Trash2 className="h-3 w-3" />
                       </Button>
                     </div>
