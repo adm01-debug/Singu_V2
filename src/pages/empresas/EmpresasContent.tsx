@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect, startTransition } from 'react';
+import { useState, useMemo, useRef, useEffect, startTransition, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { Search, Plus, CheckSquare, X } from 'lucide-react';
 import { CompaniesGridSkeleton } from '@/components/skeletons/PageSkeletons';
@@ -91,10 +91,18 @@ export function EmpresasContent(props: Props) {
   const visibleCompanies = useMemo(() => filteredAndSortedCompanies.slice(0, visibleCount), [filteredAndSortedCompanies, visibleCount]);
   const hasMore = visibleCount < filteredAndSortedCompanies.length;
 
-  const handleTableSort = (field: string) => {
+  const handleTableSort = useCallback((field: string) => {
     if (sortBy === field) onSortChange(field, sortOrder === 'asc' ? 'desc' : 'asc');
     else onSortChange(field, 'asc');
-  };
+  }, [sortBy, sortOrder, onSortChange]);
+
+  const handleApplyPreset = useCallback((preset: SearchPreset) => {
+    onFiltersChange(preset.filters);
+    onSortChange(preset.sortBy, preset.sortOrder);
+    const ns = preset.searchTerm || '';
+    onSearchChange(ns);
+    triggerSearch(ns);
+  }, [onFiltersChange, onSortChange, onSearchChange, triggerSearch]);
 
   const companySortOptions = [
     { value: 'name', label: 'Nome' },
@@ -118,7 +126,7 @@ export function EmpresasContent(props: Props) {
         <div className="flex items-center gap-2">
           <SearchPresetsMenu context="companies" buttonLabel="Listas" title="Listas salvas" description="Salve combinações de filtros para segmentar empresas em um clique."
             currentFilters={activeFilters} currentSortBy={sortBy} currentSortOrder={sortOrder} currentSearchTerm={localSearch}
-            onApplyPreset={(preset: SearchPreset) => { onFiltersChange(preset.filters); onSortChange(preset.sortBy, preset.sortOrder); const ns = preset.searchTerm || ''; onSearchChange(ns); triggerSearch(ns); }} />
+            onApplyPreset={handleApplyPreset} />
           <ViewModeSwitcher value={viewMode} onChange={onViewModeChange} gridColumns={gridColumns} onGridColumnsChange={onGridColumnsChange} />
           {isAdmin && <BulkImportDialog entityType="companies" />}
           {isAdmin && <MergeCompaniesDialog />}
@@ -135,7 +143,7 @@ export function EmpresasContent(props: Props) {
         onFiltersChange={onFiltersChange} 
         sortBy={sortBy} 
         sortOrder={sortOrder} 
-        onSortChange={(sb, so) => onSortChange(sb, so)} 
+        onSortChange={onSortChange}
         multiSort={props.multiSort}
         onMultiSortChange={props.onMultiSortChange}
       />

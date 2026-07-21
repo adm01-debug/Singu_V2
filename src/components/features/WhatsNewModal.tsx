@@ -85,13 +85,13 @@ export function WhatsNewModal({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem(WHATS_NEW_KEY, version);
+    try { localStorage.setItem(WHATS_NEW_KEY, version); } catch { /* private browsing */ }
     setIsVisible(false);
     return undefined;
   }, [version]);
 
   const handleDismiss = () => {
-    localStorage.setItem(WHATS_NEW_KEY, version);
+    try { localStorage.setItem(WHATS_NEW_KEY, version); } catch { /* private browsing */ }
     setIsVisible(false);
     onClose?.();
   };

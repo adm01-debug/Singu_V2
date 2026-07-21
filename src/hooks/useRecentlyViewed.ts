@@ -22,7 +22,11 @@ function getStoredItems(): RecentlyViewedItem[] {
 }
 
 function saveItems(items: RecentlyViewedItem[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  } catch {
+    // localStorage blocked in private browsing
+  }
 }
 
 export function useRecentlyViewed(filterType?: 'contact' | 'company') {

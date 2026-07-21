@@ -29,6 +29,7 @@ import type { HistoryEntry } from '@/hooks/useEntityHistory';
 import type { EntityBookmark } from '@/hooks/useEntityBookmarks';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 
 const TABS = [
   { value: 'graph', label: 'Graph', icon: Network, hotkey: 'G' },
@@ -278,7 +279,9 @@ const Intelligence = () => {
                             exit={{ opacity: 0, y: -4 }}
                             transition={{ duration: 0.18, ease: 'easeOut' }}
                           >
-                            {tabComponents[t.value]}
+                            <DashboardErrorBoundary sectionName={t.label}>
+                              {tabComponents[t.value]}
+                            </DashboardErrorBoundary>
                           </motion.div>
                         </TabsContent>
                       ) : null

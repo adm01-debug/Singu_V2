@@ -1,4 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { AnalyticsEngagementTab } from './analytics/AnalyticsEngagementTab';
 import { AnalyticsSentimentTab } from './analytics/AnalyticsSentimentTab';
@@ -113,18 +114,26 @@ const Analytics = () => {
       
       <div className="p-6 space-y-6">
         <SmartBreadcrumbs />
-        <Suspense fallback={<Skeleton className="h-28 rounded-lg" />}>
-          <BehavioralIntelSummaryWidget />
-        </Suspense>
-        <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
-          <DailyStatsWidget />
-        </Suspense>
-        <Suspense fallback={<Skeleton className="h-20 rounded-lg" />}>
-          <TagCloudWidget />
-        </Suspense>
-        <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
-          <TagExplorerWidget />
-        </Suspense>
+        <DashboardErrorBoundary sectionName="Behavioral Intel">
+          <Suspense fallback={<Skeleton className="h-28 rounded-lg" />}>
+            <BehavioralIntelSummaryWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Daily Stats">
+          <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
+            <DailyStatsWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Tag Cloud">
+          <Suspense fallback={<Skeleton className="h-20 rounded-lg" />}>
+            <TagCloudWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Tag Explorer">
+          <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
+            <TagExplorerWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
 
         {/* Header Actions */}
         <motion.div
@@ -180,15 +189,19 @@ const Analytics = () => {
           </TabsList>
 
           <TabsContent value="reports" className="space-y-6">
-            <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-              <ReportsTab />
-            </Suspense>
+            <DashboardErrorBoundary sectionName="Reports">
+              <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                <ReportsTab />
+              </Suspense>
+            </DashboardErrorBoundary>
           </TabsContent>
 
           <TabsContent value="advanced" className="space-y-6">
-            <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-              <AdvancedAnalyticsTab />
-            </Suspense>
+            <DashboardErrorBoundary sectionName="Advanced Analytics">
+              <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                <AdvancedAnalyticsTab />
+              </Suspense>
+            </DashboardErrorBoundary>
           </TabsContent>
 
           <TabsContent value="neuro" className="space-y-6">

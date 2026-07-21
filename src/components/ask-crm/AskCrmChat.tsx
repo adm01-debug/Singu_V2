@@ -38,7 +38,7 @@ const MessageBubble = memo(({ msg }: { msg: AskCrmMessage }) => {
               <table className="w-full text-xs border-collapse">
                 <thead>
                   <tr>
-                    {Object.keys(msg.data[0]).map(key => (
+                    {Object.keys(msg.data[0] || {}).map(key => (
                       <th key={key} className="text-left px-2 py-1 border-b border-border/50 font-medium text-muted-foreground">
                         {key}
                       </th>

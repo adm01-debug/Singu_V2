@@ -80,7 +80,7 @@ export default function ReportBuilder() {
 
   const saveLayouts = (updated: DashboardLayout[]) => {
     setLayouts(updated);
-    localStorage.setItem('singu-custom-dashboards', JSON.stringify(updated));
+    try { localStorage.setItem('singu-custom-dashboards', JSON.stringify(updated)); } catch { /* private browsing */ }
   };
 
   const addWidget = (widgetId: WidgetId) => {

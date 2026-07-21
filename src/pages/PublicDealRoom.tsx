@@ -15,7 +15,7 @@ export default function PublicDealRoom() {
   const { token } = useParams();
   const { data, isLoading } = usePublicDealRoom(token);
   const qc = useQueryClient();
-  const [label, setLabel] = useState(localStorage.getItem("dr_buyer_label") ?? "");
+  const [label, setLabel] = useState(() => { try { return localStorage.getItem("dr_buyer_label") ?? ""; } catch { return ""; } });
   const [comment, setComment] = useState("");
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function PublicDealRoom() {
 
   const saveLabel = (v: string) => {
     setLabel(v);
-    localStorage.setItem("dr_buyer_label", v);
+    try { localStorage.setItem("dr_buyer_label", v); } catch { /* private browsing */ }
   };
 
   return (

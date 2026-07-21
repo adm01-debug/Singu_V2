@@ -239,7 +239,7 @@ export const AskTab = ({ onRegisterBridge, contextEntity = null }: AskTabProps) 
                   {m.data && Array.isArray(m.data) && m.data.length > 0 && (
                     <div className="mt-2">
                       <DataGrid
-                        columns={Object.keys(m.data[0]).slice(0, 5).map((k) => ({
+                        columns={Object.keys(m.data[0] ?? {}).slice(0, 5).map((k) => ({
                           key: k, label: k.toUpperCase(), mono: true,
                         }))}
                         rows={m.data as Array<Record<string, unknown>>}

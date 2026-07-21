@@ -62,7 +62,7 @@ const Notificacoes = () => {
   const handleSettingChange = async (key: keyof typeof notificationSettings) => {
     const newSettings = { ...notificationSettings, [key]: !notificationSettings[key] };
     setNotificationSettings(newSettings);
-    localStorage.setItem('notificationSettings', JSON.stringify(newSettings));
+    try { localStorage.setItem('notificationSettings', JSON.stringify(newSettings)); } catch { /* private browsing */ }
     try {
       if (user) await supabase.from('profiles').update({ preferences: { notifications: newSettings } }).eq('id', user.id);
     } catch (error) { 
