@@ -126,7 +126,8 @@ export function useSocialIntelligence(contactId: string) {
        ]);
 
        if (profileError) throw profileError;
-       if (contactError) throw contactError;
+       // Contact notes update is supplementary — log on failure, don't fail the enrichment
+       if (contactError) logger.error('Failed to update contact notes during social enrichment', contactError);
  
        // 5. Trigger offer regeneration (simulation/edge function call)
        try {

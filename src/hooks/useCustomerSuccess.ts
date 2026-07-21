@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Database, Json } from "@/integrations/supabase/types";
 import { parseApiError } from '@/lib/errorMessages';
+import { logger } from '@/lib/logger';
 
 export type CSTier = "strategic" | "enterprise" | "mid" | "smb";
 export type CSLifecycle = "onboarding" | "adopting" | "mature" | "at_risk" | "churned";
@@ -259,7 +260,8 @@ export function useSubmitNPS() {
         }),
       ]);
       if (npsError) throw npsError;
-      if (signalError) throw signalError;
+      // Health signal is derived from NPS — log on failure but don't fail the primary write
+      if (signalError) logger.error('Failed to write health signal from NPS', signalError);
     },
     onSuccess: (_, vars) => {
       toast.success("Resposta NPS registrada");
