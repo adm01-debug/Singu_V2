@@ -12,9 +12,9 @@ export function useRoutingMetrics() {
       if (!user) return emptyMetrics();
 
       const [assignmentsRes, handoffsRes, redistRes, teamRes] = await Promise.all([
-        supabase.from('lead_assignments').select('status, assignment_type, sla_met, first_contact_at, created_at').eq('user_id', user.id).limit(500),
+        supabase.from('lead_assignments').select('status, assignment_type, sla_met, first_contact_at, created_at, assigned_to').eq('user_id', user.id).limit(500),
         supabase.from('handoff_requests').select('status').eq('user_id', user.id).eq('status', 'pending'),
-        supabase.from('redistribution_log').select('id').eq('user_id', user.id).limit(1000),
+        supabase.from('redistribution_log').select('id').eq('user_id', user.id).limit(200),
         supabase.from('sales_team_members').select('role, is_active').eq('user_id', user.id).limit(200),
       ]);
 
