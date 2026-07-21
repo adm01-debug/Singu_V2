@@ -109,6 +109,13 @@ WINDOW_MIN=240 ./dashboard.sh             # P2.10
 
 Ver `MIGRATION_PASSWORD_RESET.md` para o impacto de rollback sobre usuários que já resetaram.
 
+### Rollback total (snapshot pré-migração)
+
+```bash
+SNAPSHOT_DIR=/backups/pre-cutover ./rollback/full-restore.sh --dry-run
+SNAPSHOT_DIR=/backups/pre-cutover ./rollback/full-restore.sh --confirm --i-know-what-im-doing
+```
+
 ## Índice de runbooks
 
 - `MIGRATION_DDL.md` — schema
@@ -117,6 +124,9 @@ Ver `MIGRATION_PASSWORD_RESET.md` para o impacto de rollback sobre usuários que
 - `MIGRATION_STORAGE.md` — buckets/objetos
 - `MIGRATION_PASSWORD_RESET.md` — reset forçado
 - `MIGRATION_MASTER_RUNBOOK.md` — este arquivo
+- `MIGRATION_POSTMORTEM_TEMPLATE.md` — template pós-cutover
+- `dr/backup-strategy.md` — estratégia de DR (RPO 15min / RTO 2h)
+- `cutover/dns-flip-checklist.md` — flip de DNS custom
 
 ## Checklist final (10/10)
 
@@ -133,3 +143,11 @@ Ver `MIGRATION_PASSWORD_RESET.md` para o impacto de rollback sobre usuários que
 - [ ] `smoke-tests.ts` 100% pass
 - [ ] Dashboard mostra progresso encerrado
 - [ ] Rollback documentado e revisado
+- [ ] `cutover/freeze-origin.sh` executado antes do export final
+- [ ] `verify/dns-propagation.sh` 6/6 resolvers globais
+- [ ] `verify/sequences-audit.sql` sem gaps
+- [ ] `verify/rls-parity.ts` exit 0
+- [ ] `verify/triggers-parity.sql` diff vazio
+- [ ] `monitoring/post-cutover-watch.sh` rodando por 24h
+- [ ] `monitoring/synthetic-checks.ts` sem falhas por 1h
+- [ ] Postmortem preenchido a partir do template
