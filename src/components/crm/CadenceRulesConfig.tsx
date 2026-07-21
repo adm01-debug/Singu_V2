@@ -70,10 +70,10 @@ export function CadenceRulesConfig() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('crm_cadence_rules')
-        .select('*')
+        .select('id, relationship_stage, frequency_days, priority, cadence_steps, is_active')
         .eq('is_active', true)
         .order('relationship_stage')
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return data;
     },

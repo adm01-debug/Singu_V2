@@ -68,7 +68,7 @@ const DISCEvolutionTimeline: React.FC<DISCEvolutionTimelineProps> = ({
       try {
         const { data: history, error } = await supabase
           .from('disc_analysis_history')
-          .select('*')
+          .select('analyzed_at, dominance_score, influence_score, steadiness_score, conscientiousness_score, primary_profile, confidence, analysis_source')
           .eq('contact_id', contactId)
           .eq('user_id', currentUser.id)
           .order('analyzed_at', { ascending: true })

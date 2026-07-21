@@ -49,7 +49,7 @@ export function CompatibilityAlertSettings() {
       try {
         const { data, error } = await supabase
           .from('compatibility_settings')
-          .select('*')
+          .select('alert_threshold, alert_only_important, important_min_relationship_score, email_notifications')
           .eq('user_id', currentUser.id)
           .maybeSingle();
 

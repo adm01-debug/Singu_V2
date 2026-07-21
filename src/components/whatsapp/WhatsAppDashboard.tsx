@@ -21,10 +21,10 @@ export function WhatsAppDashboard({ contactId }: Props) {
        if (!contactId) return [];
        const { data, error } = await supabase
          .from('whatsapp_messages_index')
-         .select('*')
+         .select('id, message_type, received_at, content, transcription, sentiment, intent, neuro_tags')
          .eq('contact_id', contactId)
          .order('received_at', { ascending: false })
-         .limit(1000);
+         .limit(100);
        if (error) throw error;
        return data;
      },

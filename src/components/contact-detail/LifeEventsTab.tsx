@@ -68,7 +68,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
         .eq('contact_id', contactId)
         .eq('user_id', user!.id)
         .order('event_date', { ascending: true })
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return data as Tables<'life_events'>[];
     },
@@ -86,7 +86,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
         .eq('user_id', user!.id)
         .eq('status', 'pending')
         .order('confidence', { ascending: false })
-        .limit(1000);
+        .limit(50);
       if (error) throw error;
       return data;
     },

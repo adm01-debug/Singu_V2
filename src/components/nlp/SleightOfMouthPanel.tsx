@@ -46,16 +46,16 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
     queryFn: async () => {
       let query = supabase
         .from('reframing_analysis')
-        .select('*')
+        .select('id, objection, objection_category, pattern_used, suggested_response, status, created_at, contacts(first_name, last_name)')
         .eq('contact_id', contactId)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(100);
 
       if (interactionId) {
         query = query.eq('interaction_id', interactionId);
       }
 
-      const { data, error } = await query.select('*, contacts(first_name, last_name)');
+      const { data, error } = await query;
       if (error) throw error;
       type Row = ReframingItem & { contacts?: { first_name?: string | null; last_name?: string | null } | null };
       return ((data || []) as Row[]).map(item => ({
