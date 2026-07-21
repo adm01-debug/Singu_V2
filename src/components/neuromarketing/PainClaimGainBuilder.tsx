@@ -256,6 +256,7 @@ O que faz mais sentido para você?"
                   value={newPainIntensity}
                   onChange={(e) => setNewPainIntensity(Number(e.target.value))}
                   className="flex-1"
+                  aria-label="Intensidade da dor (1-10)"
                 />
                 <Badge variant="outline">{newPainIntensity}/10</Badge>
               </div>

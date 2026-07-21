@@ -66,8 +66,8 @@ const RelatorioContato = () => {
           { data: localDisc },
         ] = await Promise.all([
           supabase.from("contacts").select("*").eq("id", id).maybeSingle(),
-          supabase.from("interactions").select("*").eq("contact_id", id).order("created_at", { ascending: false }),
-          supabase.from("disc_analysis_history").select("*").eq("contact_id", id).order("analyzed_at", { ascending: false }),
+          supabase.from("interactions").select("*").eq("contact_id", id).order("created_at", { ascending: false }).limit(500),
+          supabase.from("disc_analysis_history").select("*").eq("contact_id", id).order("analyzed_at", { ascending: false }).limit(50),
         ]);
 
         if (cancelled) return;

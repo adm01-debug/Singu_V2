@@ -86,11 +86,20 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
     setIsSubmitting(true);
     try {
       const insertData = {
-        ...data,
+        title: String(data.title ?? ''),
+        type: String(data.type ?? 'note'),
         contact_id: contact.id,
-        company_id: companyId,
+        company_id: companyId ?? null,
         user_id: user.id,
-      } as unknown as import('@/integrations/supabase/types').Database['public']['Tables']['interactions']['Insert'];
+        content: data.content != null ? String(data.content) : null,
+        sentiment: data.sentiment != null ? String(data.sentiment) : null,
+        follow_up_required: data.follow_up_required != null ? Boolean(data.follow_up_required) : null,
+        follow_up_date: data.follow_up_date != null ? String(data.follow_up_date) : null,
+        duration: data.duration != null ? Number(data.duration) : null,
+        initiated_by: data.initiated_by != null ? String(data.initiated_by) : null,
+        tags: Array.isArray(data.tags) ? (data.tags as string[]) : null,
+        attachments: Array.isArray(data.attachments) ? (data.attachments as string[]) : null,
+      };
        const { data: interaction, error } = await supabase.from('interactions').insert(insertData).select().maybeSingle();
        if (error) throw error;
        

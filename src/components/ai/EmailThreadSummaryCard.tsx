@@ -20,8 +20,9 @@ interface Props {
 export function EmailThreadSummaryCard({ contactId, subject, interactionId, threadCount }: Props) {
   const { summary, loading, generate, generating } = useEmailThreadSummary({ contactId, subject });
 
-  const handleGenerate = () =>
-    generate(interactionId ? { interaction_id: interactionId } : { contact_id: contactId, subject });
+  const handleGenerate = () => {
+    generate(interactionId ? { interaction_id: interactionId } : { contact_id: contactId, subject }).catch(() => {});
+  };
 
   if (loading) return <Skeleton className="h-24 w-full" />;
 

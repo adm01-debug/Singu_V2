@@ -247,7 +247,6 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
           is_useful: type === 'up',
           objection: content.substring(0, 500),
           category: suggestion?.type || 'general',
-          interaction_id: null as unknown as string
         });
       } catch (e) {
         logger.error("Error saving feedback:", e);

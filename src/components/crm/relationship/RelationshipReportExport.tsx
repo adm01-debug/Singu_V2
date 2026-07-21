@@ -23,9 +23,10 @@ export function RelationshipReportExport({ contactId, contactName }: Props) {
       // Fetch timeline data for CSV
       const { data: interactions, error } = await supabase
         .from('interactions')
-        .select('*')
+        .select('id, created_at, title, type, content, sentiment')
         .eq('contact_id', contactId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
 
       if (error) throw error;
 

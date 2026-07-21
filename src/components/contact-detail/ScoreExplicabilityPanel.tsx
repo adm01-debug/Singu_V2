@@ -30,6 +30,7 @@ export function ScoreExplicabilityPanel({ contactId }: Props) {
     factors: { volume: FactorEntry; sentiment: FactorEntry; recency: FactorEntry; risk: FactorEntry };
   }
   const explicability = data as unknown as Explicability;
+  if (!explicability?.factors) return null;
   const factors = explicability.factors;
   const current_score = explicability.current_score;
 

@@ -29,7 +29,7 @@ export function MeetingSummaryCard({ interactionId, hasContent }: Props) {
       <Button
         variant="outline"
         size="sm"
-        onClick={() => generate(interactionId)}
+        onClick={() => { generate(interactionId).catch(() => {}); }}
         disabled={generating}
         className="gap-1.5 text-xs"
       >
@@ -59,7 +59,7 @@ export function MeetingSummaryCard({ interactionId, hasContent }: Props) {
               variant="ghost"
               size="icon" aria-label="Atualizar"
               className="h-6 w-6"
-              onClick={() => generate(interactionId)}
+              onClick={() => { generate(interactionId).catch(() => {}); }}
               disabled={generating}
               title="Regenerar"
             >

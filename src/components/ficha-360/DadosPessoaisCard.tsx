@@ -438,7 +438,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                   <div className="space-y-2 mt-1">
                     <div className="flex flex-wrap gap-1.5">
                       {hobbies.map((hobby, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-amber-50 text-amber-700 border-amber-100">
+                        <Badge key={hobby} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-amber-50 text-amber-700 border-amber-100">
                           {hobby}
                           {/* eslint-disable-next-line sonarjs/no-nested-functions */}
                           <button onClick={() => setHobbies(prev => prev.filter((_, idx) => idx !== i))}>
@@ -494,7 +494,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                   <div className="space-y-2 mt-1">
                     <div className="flex flex-wrap gap-1.5">
                       {interests.map((interest, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-purple-50 text-purple-700 border-purple-100">
+                        <Badge key={interest} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-purple-50 text-purple-700 border-purple-100">
                           {interest}
                           {/* eslint-disable-next-line sonarjs/no-nested-functions */}
                           <button onClick={() => setInterests(prev => prev.filter((_, idx) => idx !== i))}>
@@ -547,8 +547,8 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {(isEditing ? anchors : currentAnchors).map((a, i) => (
-                  <Badge 
-                    key={`anchor-${i}`} 
+                  <Badge
+                    key={`anchor-${a}-${i}`}
                     variant="secondary" 
                     className={cn("text-xs font-normal", isEditing && "pr-1 gap-1")}
                   >

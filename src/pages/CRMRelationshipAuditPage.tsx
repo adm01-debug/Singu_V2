@@ -28,13 +28,19 @@ export default function CRMRelationshipAuditPage() {
       
       if (error) throw error;
 
-      // Executar validação para cada contato (limitado para performance)
-      const auditResults = await Promise.all(
-        data.map(async (contact) => {
-          const { data: result } = await supabase.rpc('check_relationship_consistency', { p_contact_id: contact.id });
-          return { contact, audit: (result as unknown as AuditResult) ?? { consistent: true, issues: [] } };
-        })
-      );
+      // Concurrency-limited audit: max 5 RPCs in flight at a time to avoid pool exhaustion
+      const CONCURRENCY = 5;
+      const auditResults: { contact: (typeof data)[number]; audit: AuditResult }[] = [];
+      for (let i = 0; i < data.length; i += CONCURRENCY) {
+        const batch = data.slice(i, i + CONCURRENCY);
+        const batchResults = await Promise.all(
+          batch.map(async (contact) => {
+            const { data: result } = await supabase.rpc('check_relationship_consistency', { p_contact_id: contact.id });
+            return { contact, audit: (result as unknown as AuditResult) ?? { consistent: true, issues: [] } };
+          })
+        );
+        auditResults.push(...batchResults);
+      }
 
       return auditResults;
     }
