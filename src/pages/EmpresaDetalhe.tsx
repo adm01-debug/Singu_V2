@@ -47,6 +47,7 @@ import { useAuth } from '@/hooks/useAuth';
 import type { Tables } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
 import { useToast } from '@/hooks/use-toast';
+import { parseApiError } from '@/lib/errorMessages';
 import { CompanyExecutiveSummary } from '@/components/company-detail/CompanyExecutiveSummary';
 
 const ContactTimelineWidget = lazy(() => import('@/components/contact-detail/ContactTimelineWidget'));
@@ -97,9 +98,8 @@ const EmpresaDetalhe = () => {
       await updateExternalData('companies', id, { deleted_at: null, deleted_by: null });
       toast({ title: 'Empresa restaurada', description: 'A empresa foi reativada com sucesso.' });
       fetchCompanyData();
-    } catch (e) { 
-      const msg = e instanceof Error ? e.message : 'Erro ao restaurar';
-      toast({ title: 'Erro ao restaurar', description: msg, variant: 'destructive' }); 
+    } catch (e) {
+      toast({ title: 'Erro ao restaurar', description: parseApiError(e, 'Tente novamente'), variant: 'destructive' });
     }
   };
 

@@ -15,6 +15,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 import { entityConfigs, EntityType, ColumnConfig } from '@/data/exporterConfigs';
 
 type ExportFormat = 'csv' | 'json';
@@ -72,10 +73,10 @@ export function AdvancedDataExporter({ entityType, className }: AdvancedDataExpo
       document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url);
       setExportComplete(true); toast.success(`${data.length} registros exportados com sucesso!`);
       setTimeout(() => { setExportComplete(false); setOpen(false); }, 2000);
-    } catch (error) { 
+    } catch (error) {
       const msg = error instanceof Error ? error.message : 'Erro ao exportar dados';
-      logger.error('Export error:', { error: msg }); 
-      toast.error(msg); 
+      logger.error('Export error:', { error: msg });
+      toast.error(parseApiError(error, 'Erro ao exportar dados'));
     }
     finally { setIsExporting(false); }
   };

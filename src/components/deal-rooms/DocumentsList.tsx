@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Upload, Download, Trash2, FileText } from "lucide-react";
 import { toast } from "sonner";
+import { parseApiError } from '@/lib/errorMessages';
 
 export function DocumentsList({ roomId }: { roomId: string }) {
   const { data = [] } = useRoomDocuments(roomId);
@@ -16,8 +17,7 @@ export function DocumentsList({ roomId }: { roomId: string }) {
       const url = await getDocumentSignedUrl(path);
       window.open(url, "_blank", "noopener,noreferrer");
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Erro ao baixar arquivo";
-      toast.error(msg);
+      toast.error(parseApiError(e, 'Erro ao baixar arquivo'));
     }
   };
 

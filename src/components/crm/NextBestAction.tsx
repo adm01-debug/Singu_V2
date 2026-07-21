@@ -33,6 +33,7 @@ import { useEdgeFunctionActions } from '@/hooks/useEdgeFunctionActions';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -157,8 +158,7 @@ export function NextBestAction({ contactId }: Props) {
       setFeedback('');
       setScript('');
     } catch (error) {
-      const msg = error instanceof Error ? error.message : String(error);
-      toast.error('Erro ao concluir ação: ' + msg);
+      toast.error(parseApiError(error, 'Erro ao concluir ação'));
     } finally {
       setIsSubmitting(false);
     }

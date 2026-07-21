@@ -15,6 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 
 type VisualResult = {
   id: string;
@@ -105,8 +106,7 @@ export function VisualSearchButton({
       }
     } catch (e) {
       logger.error("Visual search failed:", e);
-      const msg = e instanceof Error ? e.message : "Erro na busca visual";
-      toast.error(msg);
+      toast.error(parseApiError(e, 'Erro na busca visual'));
     } finally {
       setLoading(false);
     }

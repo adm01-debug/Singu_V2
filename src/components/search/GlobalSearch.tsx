@@ -14,6 +14,7 @@ import { toTitleCase } from '@/lib/formatters';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 import { queryExternalData } from '@/lib/externalData';
 import { useSemanticSearch } from '@/hooks/useSemanticSearch';
 import { useConversationalSearch } from '@/hooks/useConversationalSearch';
@@ -260,7 +261,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
       if (gen !== searchGenRef.current) return;
       const msg = error instanceof Error ? error.message : 'Não foi possível completar a busca agora.';
       logger.error('Search error:', { error: msg });
-      toast.error(msg);
+      toast.error(parseApiError(error, 'Não foi possível completar a busca agora.'));
       setResults({ contacts: [], companies: [], interactions: [] });
     } finally { if (gen === searchGenRef.current) setIsLoading(false); }
   }, [user, semanticMode, semanticSearch]);
