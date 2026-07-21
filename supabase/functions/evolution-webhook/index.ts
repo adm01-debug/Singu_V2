@@ -264,6 +264,9 @@ async function handleMessageUpsert(supabase: SupabaseAdminClient, payload: any, 
     messageContent = data.message.pollCreationMessage.name || '[Enquete]';
   }
 
+  // Truncate to DB column limit (whatsapp_messages.content is TEXT, but guard against abuse)
+  messageContent = messageContent.slice(0, 100_000);
+
   // Skip if no content
   if (!messageContent && messageType === 'text') {
     return jsonResponse({ status: 'ignored', reason: 'no text content' });
