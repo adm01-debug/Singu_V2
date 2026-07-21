@@ -18,6 +18,7 @@ import {
   type WhatsAppImportInput,
 } from '@/hooks/useWhatsAppImport';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 type Picked = { id: string; label: string } | null;
 
@@ -83,7 +84,7 @@ export default function WhatsAppImport() {
         setTextContent(''); setAudioFile(null); setTranscription(''); setDuration('');
       }
     } catch (e) {
-      toast.error(`Erro: ${(e as Error).message}`);
+      toast.error(`Erro: ${parseApiError(e)}`);
       setUploading(false);
     }
   };

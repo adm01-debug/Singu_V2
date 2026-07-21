@@ -10,6 +10,8 @@ import { supabase } from '@/integrations/supabase/client';
  import { Download, CheckCircle2 } from 'lucide-react';
  import { OptimizedImage } from '@/components/ui/optimized-image';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
+import { safehref } from '@/lib/utils';
 import type { LeadMagnet } from '@/hooks/useLeadMagnets';
 
 export default function PublicLeadMagnet() {
@@ -56,9 +58,10 @@ export default function PublicLeadMagnet() {
       const result = data as { external_url?: string; file_path?: string };
       const downloadUrl = result?.external_url || result?.file_path || '';
       setDownloaded(downloadUrl);
-      if (downloadUrl) window.open(downloadUrl, '_blank');
+      const safeUrl = safehref(downloadUrl);
+      if (safeUrl !== '#') window.open(safeUrl, '_blank', 'noopener,noreferrer');
     } catch (err) {
-      toast.error((err as Error).message);
+      toast.error(parseApiError(err));
     } finally {
       setSubmitting(false);
     }

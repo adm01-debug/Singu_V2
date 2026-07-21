@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { insertExternalData } from '@/lib/externalData';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 import { Loader2 } from 'lucide-react';
 
 const schema = z.object({
@@ -56,7 +57,7 @@ export function EmpresaForm({ onCreated }: Props) {
       onCreated?.(data.id, data.nome_crm || values.nome_crm);
       setValues(empty);
     } catch (err) {
-      toast.error(`Falha ao cadastrar empresa: ${(err as Error).message}`);
+      toast.error(`Falha ao cadastrar empresa: ${parseApiError(err)}`);
     } finally {
       setSubmitting(false);
     }

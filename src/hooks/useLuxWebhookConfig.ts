@@ -40,6 +40,7 @@ export function useLuxWebhookConfig() {
 
   const upsert = useMutation({
     mutationFn: async (config: Partial<LuxWebhookConfig> & { entity_type: string; webhook_url: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const existing = configs.find(c => c.entity_type === config.entity_type);
       if (existing) {
         const { error } = await supabase
@@ -77,6 +78,7 @@ export function useLuxWebhookConfig() {
 
   const toggleActive = useMutation({
     mutationFn: async ({ id, is_active }: { id: string; is_active: boolean }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('lux_webhook_config')
         .update({ is_active })
@@ -92,8 +94,10 @@ export function useLuxWebhookConfig() {
 
   const testWebhook = useMutation({
     mutationFn: async (entityType: string) => {
+      if (!user) throw new Error('Não autenticado');
       const config = configs.find(c => c.entity_type === entityType);
       if (!config) throw new Error('Configuração não encontrada');
+      if (!config.webhook_url.startsWith('https://')) throw new Error('URL do webhook deve usar HTTPS');
 
       try {
         const res = await fetch(config.webhook_url, {

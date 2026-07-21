@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type LeadScoreGrade = 'A' | 'B' | 'C' | 'D';
 
@@ -150,7 +151,7 @@ export function useRecomputeLead() {
       qc.invalidateQueries({ queryKey: ['lead-scores-distribution'] });
       qc.invalidateQueries({ queryKey: ['lead-score-history-srv', contactId] });
     },
-    onError: (e) => toast.error(`Erro: ${(e as Error).message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 }
 
@@ -167,7 +168,7 @@ export function useRecomputeAllLeads() {
       qc.invalidateQueries({ queryKey: ['lead-scores-top'] });
       qc.invalidateQueries({ queryKey: ['lead-scores-distribution'] });
     },
-    onError: (e) => toast.error(`Erro: ${(e as Error).message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 }
 
@@ -207,7 +208,7 @@ export function useUpdateRule() {
       toast.success('Regra atualizada');
       qc.invalidateQueries({ queryKey: ['lead-score-rules'] });
     },
-    onError: (e) => toast.error((e as Error).message),
+    onError: (e) => toast.error(parseApiError(e)),
   });
 }
 
@@ -241,6 +242,6 @@ export function useUpdateThreshold() {
       toast.success('Threshold atualizado');
       qc.invalidateQueries({ queryKey: ['lead-score-thresholds'] });
     },
-    onError: (e) => toast.error((e as Error).message),
+    onError: (e) => toast.error(parseApiError(e)),
   });
 }
