@@ -278,6 +278,7 @@ export function DealDialog({ open, onOpenChange, initialStage = 'lead' }: Props)
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
+                            type="button"
                             variant={"outline"}
                             className={cn(
                               "pl-3 text-left font-normal",
