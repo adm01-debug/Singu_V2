@@ -241,9 +241,10 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
               </Button>
             ) : (
               <div className="flex items-center gap-1">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Cancelar"
                   className="h-8 w-8 text-destructive"
                   onClick={handleCancel}
                   disabled={mutation.isPending}

@@ -173,31 +173,35 @@ export function useRealtimeNotifications() {
     const handle = schedule(async () => {
       if (cancelled) return;
 
-      // Initial load
-      const [alertsRes, insightsRes, healthRes] = await Promise.all([
-        supabase.from('alerts').select('*').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
-        supabase.from('insights').select('*').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
-        supabase.from('health_alerts').select('*').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
-      ]);
-      if (cancelled) return;
+      try {
+        // Initial load
+        const [alertsRes, insightsRes, healthRes] = await Promise.all([
+          supabase.from('alerts').select('*').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
+          supabase.from('insights').select('*').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
+          supabase.from('health_alerts').select('*').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
+        ]);
+        if (cancelled) return;
 
-      const allNotifications: RealtimeNotification[] = [
-        ...(alertsRes.data || []).map(a => ({ id: a.id, type: 'alert' as const, title: a.title, description: a.description || undefined, entityId: a.contact_id || undefined, entityType: 'contact', createdAt: a.created_at })),
-        ...(insightsRes.data || []).map(i => ({ id: i.id, type: 'insight' as const, title: i.title, description: i.description || undefined, entityId: i.contact_id, entityType: 'contact', createdAt: i.created_at })),
-        ...(healthRes.data || []).map(h => ({ id: h.id, type: 'health_alert' as const, title: h.title, description: h.description || undefined, entityId: h.contact_id, entityType: 'contact', createdAt: h.created_at })),
-      ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 50);
+        const allNotifications: RealtimeNotification[] = [
+          ...(alertsRes.data || []).map(a => ({ id: a.id, type: 'alert' as const, title: a.title, description: a.description || undefined, entityId: a.contact_id || undefined, entityType: 'contact', createdAt: a.created_at })),
+          ...(insightsRes.data || []).map(i => ({ id: i.id, type: 'insight' as const, title: i.title, description: i.description || undefined, entityId: i.contact_id, entityType: 'contact', createdAt: i.created_at })),
+          ...(healthRes.data || []).map(h => ({ id: h.id, type: 'health_alert' as const, title: h.title, description: h.description || undefined, entityId: h.contact_id, entityType: 'contact', createdAt: h.created_at })),
+        ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 50);
 
-      setNotifications(allNotifications);
-      setUnreadCount(allNotifications.length);
+        setNotifications(allNotifications);
+        setUnreadCount(allNotifications.length);
 
-      // Subscribe channel
-      channel = supabase
-        .channel('realtime-notifications')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'alerts', filter: `user_id=eq.${user.id}` }, handleNewAlert)
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'insights', filter: `user_id=eq.${user.id}` }, handleNewInsight)
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'health_alerts', filter: `user_id=eq.${user.id}` }, handleNewHealthAlert)
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'stakeholder_alerts', filter: `user_id=eq.${user.id}` }, handleNewStakeholderAlert)
-        .subscribe();
+        // Subscribe channel
+        channel = supabase
+          .channel('realtime-notifications')
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'alerts', filter: `user_id=eq.${user.id}` }, handleNewAlert)
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'insights', filter: `user_id=eq.${user.id}` }, handleNewInsight)
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'health_alerts', filter: `user_id=eq.${user.id}` }, handleNewHealthAlert)
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'stakeholder_alerts', filter: `user_id=eq.${user.id}` }, handleNewStakeholderAlert)
+          .subscribe();
+      } catch {
+        // Network failure during initial load — realtime subscription will still work on reconnect
+      }
     });
 
     return () => {

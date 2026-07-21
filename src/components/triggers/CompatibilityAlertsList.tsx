@@ -221,6 +221,7 @@ export function CompatibilityAlertsList({
                       <Button
                         variant="ghost"
                         size="icon"
+                        aria-label="Dispensar alerta"
                         className="h-7 w-7"
                         onClick={() => handleDismiss(alert.id)}
                       >
