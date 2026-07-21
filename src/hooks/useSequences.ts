@@ -174,6 +174,7 @@ export function useSequences() {
         }),
         supabase.from('sequences')
           .update({ total_enrolled: (sequences.find(s => s.id === sequenceId)?.total_enrolled || 0) + 1 })
+          .eq('user_id', userId!)
           .eq('id', sequenceId),
       ]);
       if (error) throw error;

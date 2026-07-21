@@ -189,6 +189,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       const { data, error } = await supabase
         .from('interactions')
         .update(updates)
+        .eq('user_id', user!.id)
         .eq('id', id)
         .select()
         .maybeSingle();
@@ -247,6 +248,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       const { error } = await supabase
         .from('interactions')
         .delete()
+        .eq('user_id', user!.id)
         .eq('id', id);
 
       if (error) throw error;

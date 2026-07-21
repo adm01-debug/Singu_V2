@@ -127,7 +127,7 @@ export function useContactDetail(contactId: string | undefined) {
     if (!user || !contactId) return null;
 
     try {
-      let query = supabase.from('contacts').update(updates).eq('id', contactId);
+      let query = supabase.from('contacts').update(updates).eq('user_id', user.id).eq('id', contactId);
       const currentVersion = data?.contact?.version;
       if (currentVersion !== undefined && currentVersion !== null) query = query.eq('version', currentVersion);
 

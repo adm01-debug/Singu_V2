@@ -132,6 +132,7 @@ export function useSmartNotifications() {
     const { error } = await supabase
       .from('smart_notifications')
       .update({ status: 'delivered', delivered_at: new Date().toISOString() })
+      .eq('user_id', user!.id)
       .in('id', ids);
     if (error) toast.error('Falha ao marcar como lidas');
     else qc.invalidateQueries({ queryKey: ['smart-notifications', user?.id] });

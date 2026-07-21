@@ -78,7 +78,7 @@ export function useForms() {
       if (!user) throw new Error('Não autenticado');
       const payload = { ...input, user_id: user.id } as TablesInsert<'forms'>;
       if (input.id) {
-        const { error } = await supabase.from('forms').update(input as TablesUpdate<'forms'>).eq('id', input.id);
+        const { error } = await supabase.from('forms').update(input as TablesUpdate<'forms'>).eq('user_id', user.id).eq('id', input.id);
         if (error) throw error;
       } else {
         const { error } = await supabase.from('forms').insert(payload);
@@ -91,7 +91,8 @@ export function useForms() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('forms').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('forms').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: KEY }); toast.success('Removido'); },
@@ -100,7 +101,8 @@ export function useForms() {
 
   const togglePublish = useMutation({
     mutationFn: async ({ id, is_published }: { id: string; is_published: boolean }) => {
-      const { error } = await supabase.from('forms').update({ is_published } as TablesUpdate<'forms'>).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('forms').update({ is_published } as TablesUpdate<'forms'>).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),

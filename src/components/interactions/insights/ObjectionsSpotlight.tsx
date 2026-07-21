@@ -12,6 +12,7 @@ import { SuggestedResponseModal } from "./SuggestedResponseModal";
 import { useMarkObjectionHandled } from "@/hooks/useMarkObjectionHandled";
 import { usePersistentBoolean } from "@/hooks/usePersistentBoolean";
 import { useObjectionContextSummary } from "@/hooks/useObjectionContextSummary";
+import { useAuth } from "@/hooks/useAuth";
 import { useObjectionExampleFeedback } from "@/hooks/useObjectionExampleFeedback";
 import { useAppliedResponses } from "@/hooks/useAppliedResponses";
 
@@ -93,13 +94,15 @@ interface ObjectionCardProps {
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const ObjectionCard = memo(function ObjectionCard({ o }: ObjectionCardProps) {
+  const { user } = useAuth();
+  const uid = user?.id ?? 'anon';
   const [expanded, setExpanded] = usePersistentBoolean(
-    objectionStorageKey("objection-suggested-expanded", o.objection),
+    `${objectionStorageKey("objection-suggested-expanded", o.objection)}-${uid}`,
     false,
   );
   // Aba ativa do bloco "Resposta sugerida": true = "Resumo", false = "Resposta".
   const [summaryActive, setSummaryActive] = usePersistentBoolean(
-    objectionStorageKey("objection-summary-active", o.objection),
+    `${objectionStorageKey("objection-summary-active", o.objection)}-${uid}`,
     false,
   );
   const [copied, setCopied] = useState(false);

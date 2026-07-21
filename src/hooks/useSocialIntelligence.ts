@@ -120,7 +120,7 @@ export function useSocialIntelligence(contactId: string) {
          supabase.from('contacts').update({
            interests: analysis.interests || [],
            notes: `Perfil psicográfico atualizado via IA Social em ${new Date().toLocaleDateString('pt-BR')}`
-         }).eq('id', contactId),
+         }).eq('user_id', user.id).eq('id', contactId),
        ]);
 
        if (profileError) throw profileError;

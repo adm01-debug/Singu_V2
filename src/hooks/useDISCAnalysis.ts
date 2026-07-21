@@ -199,6 +199,7 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
             discConfidence: detection.confidence
           }
         })
+        .eq('user_id', user.id)
         .eq('id', contactId);
 
       return record;
