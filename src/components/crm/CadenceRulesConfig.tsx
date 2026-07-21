@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { CalendarClock, Plus, ShieldCheck, History, Trash2, Settings2 } from 'lucide-react';
 import { 
   Table, 
@@ -58,6 +59,7 @@ interface CadenceRule {
 
 export function CadenceRulesConfig() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingRule, setEditingRule] = useState<CadenceRule | null>(null);
 
@@ -139,11 +141,12 @@ export function CadenceRulesConfig() {
 
   // Sincronização automática para novas regras ou mudanças de estágio
   useEffect(() => {
+    if (!user?.id) return;
     const channel = supabase
       .channel('cadence-updates')
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'crm_cadence_rules' },
+        { event: '*', schema: 'public', table: 'crm_cadence_rules', filter: `user_id=eq.${user.id}` },
         () => {
           queryClient.invalidateQueries({ queryKey: ['crm-cadence-rules'] });
         }
@@ -153,7 +156,7 @@ export function CadenceRulesConfig() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [queryClient]);
+  }, [queryClient, user?.id]);
 
   const handleAddStep = () => {
     if (!editingRule) return;

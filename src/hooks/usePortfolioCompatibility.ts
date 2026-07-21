@@ -51,8 +51,8 @@ export function usePortfolioCompatibility() {
       ] = await Promise.all([
         supabase.from('profiles').select('nlp_profile').eq('id', user.id).maybeSingle(),
         supabase.from('contacts').select('id, first_name, last_name, behavior, relationship_score, companies(name)').eq('user_id', user.id).limit(2000),
-        supabase.from('vak_analysis_history').select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score').eq('user_id', user.id).order('created_at', { ascending: false }),
-        supabase.from('metaprogram_analysis').select('contact_id, toward_score, away_from_score, internal_score, external_score, options_score, procedures_score').eq('user_id', user.id).order('created_at', { ascending: false }),
+        supabase.from('vak_analysis_history').select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5000),
+        supabase.from('metaprogram_analysis').select('contact_id, toward_score, away_from_score, internal_score, external_score, options_score, procedures_score').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5000),
       ]);
 
       const spProfile = profileData?.nlp_profile as unknown as SalespersonProfile | null;

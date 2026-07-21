@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import type { Tables } from '@/integrations/supabase/types';
 
 export type GroupBy = 'company' | 'contact';
@@ -35,6 +36,7 @@ type InteractionRow = Tables<'interactions'>;
 
 export function useTimelineByEntity(params: UseTimelineByEntityParams) {
   const { groupBy, dateFrom, dateTo, channels } = params;
+  const { user } = useAuth();
 
   return useQuery({
     queryKey: [
@@ -43,12 +45,16 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
       dateFrom?.toISOString() ?? null,
       dateTo?.toISOString() ?? null,
       channels?.slice().sort().join(',') ?? '',
+      user?.id,
     ],
+    enabled: !!user,
     queryFn: async (): Promise<TimelineGroup[]> => {
+      if (!user) return [];
       // Build base query (client-side fallback — sempre funciona)
        let query = supabase
          .from('interactions')
          .select('id, type, title, content, created_at, sentiment, follow_up_required, contact_id, company_id, transcription, transcription_metadata')
+         .eq('user_id', user.id)
          .order('created_at', { ascending: false })
          .limit(500);
 

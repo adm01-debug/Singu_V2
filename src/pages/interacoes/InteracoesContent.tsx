@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef, lazy, Suspense, startTransition } from 'react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   MessageSquare, Phone, Mail, Users, Edit, Calendar, MoreVertical,
@@ -436,7 +437,11 @@ interface Props {
         <Card className="border-border/50"><CardContent className="p-4 text-center"><MorphingNumber value={stats.thisWeek} className="text-2xl font-bold text-primary" /><p className="text-xs text-muted-foreground">Esta semana</p></CardContent></Card>
       </div>
 
-      <Suspense fallback={<Card className="border-border/50"><CardContent className="p-4"><div className="h-48 animate-pulse bg-muted/30 rounded-lg" /></CardContent></Card>}><ActivityHeatmapChart /></Suspense>
+      <DashboardErrorBoundary sectionName="Heatmap de Atividade">
+        <Suspense fallback={<Card className="border-border/50"><CardContent className="p-4"><div className="h-48 animate-pulse bg-muted/30 rounded-lg" /></CardContent></Card>}>
+          <ActivityHeatmapChart />
+        </Suspense>
+      </DashboardErrorBoundary>
 
        <div className="flex items-center justify-between">
          <div className="flex items-center gap-2">

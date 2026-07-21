@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef, startTransition, lazy, Suspense, useCallback } from 'react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { useNavigate } from 'react-router-dom';
 import { List as VirtualList } from 'react-window';
 import { UserPlus, Upload, CheckSquare, Globe } from 'lucide-react';
@@ -177,7 +178,9 @@ export function ContatosContent(props: Props) {
       </div>
 
       <div className="p-4 md:p-6 space-y-5">
-        <Suspense fallback={null}><DuplicateContactsPanel /></Suspense>
+        <DashboardErrorBoundary sectionName="Contatos Duplicados">
+          <Suspense fallback={null}><DuplicateContactsPanel /></Suspense>
+        </DashboardErrorBoundary>
         <ContactsStatsBar contacts={contacts} />
         <BirthdayWidget />
 
@@ -269,12 +272,14 @@ export function ContatosContent(props: Props) {
         onExport={handleBulkExport}
       />
 
-      <Suspense fallback={null}>
-        <ExternalContactLookupDialog 
-          open={isExternalSearchOpen} 
-          onOpenChange={setIsExternalSearchOpen} 
-        />
-      </Suspense>
+      <DashboardErrorBoundary sectionName="Busca Externa">
+        <Suspense fallback={null}>
+          <ExternalContactLookupDialog
+            open={isExternalSearchOpen}
+            onOpenChange={setIsExternalSearchOpen}
+          />
+        </Suspense>
+      </DashboardErrorBoundary>
     </div>
     </>
   );

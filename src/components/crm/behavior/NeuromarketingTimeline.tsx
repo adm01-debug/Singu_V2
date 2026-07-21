@@ -33,7 +33,8 @@ export function NeuromarketingTimeline({ contactId }: Props) {
           .from('neuro_behavioral_history')
           .select('*')
           .eq('contact_id', contactId)
-          .order('created_at', { ascending: true }),
+          .order('created_at', { ascending: true })
+          .limit(200),
         supabase
           .from('interactions')
           .select('*')
