@@ -30,8 +30,7 @@ async function fetchInteractionsPage(
     .range(pageParam * PAGE_SIZE, (pageParam + 1) * PAGE_SIZE - 1);
 
   if (userId) query = query.eq('user_id', userId);
-  if (contactId) query = query.eq('contact_id', contactId)
-  .limit(1000);
+  if (contactId) query = query.eq('contact_id', contactId);
   if (companyId) query = query.eq('company_id', companyId);
 
   const { data, error, count } = await query;

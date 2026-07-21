@@ -243,7 +243,7 @@ export function useNLPAutoAnalysis() {
         .eq('contact_id', contactId)
         .eq('user_id', user.id)
         .order('created_at', { ascending: true })
-        .limit(1000);
+        .limit(200);
 
       if (error) throw error;
       if (!interactions) return { analyzed: 0, total: 0 };

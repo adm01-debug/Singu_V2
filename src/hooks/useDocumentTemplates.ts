@@ -79,7 +79,7 @@ export function useDocumentTemplates() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('document_templates')
-        .select('*')
+        .select('id, user_id, name, description, document_type, content_html, merge_fields, category, is_active, usage_count, created_at, updated_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(200);
@@ -159,10 +159,10 @@ export function useDocumentSignatures() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('document_signatures')
-        .select('*')
+        .select('id, user_id, template_id, contact_id, company_id, signer_name, signer_email, rendered_html, merge_data, status, signature_token, signature_typed, viewed_at, signed_at, declined_at, expires_at, created_at, updated_at')
         .eq('user_id', user!.id)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(200);
       if (error) throw error;
       return (data || []) as unknown as DocumentSignature[];
     },

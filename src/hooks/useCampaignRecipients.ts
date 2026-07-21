@@ -23,7 +23,7 @@ export function useCampaignRecipients(campaignId?: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('campaign_recipients')
-        .select('*')
+        .select('id, campaign_id, contact_id, email, status, sent_at, opened_at, clicked_at, created_at')
         .eq('campaign_id', campaignId!)
         .order('created_at', { ascending: false })
         .limit(500);

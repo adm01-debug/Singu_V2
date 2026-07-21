@@ -68,8 +68,8 @@ export function usePlaybooks(filters: PlaybookFilters = {}) {
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      let q = supabase.from("sales_playbooks").select("*").eq("user_id", user!.id).order("usage_count", { ascending: false })
-      .limit(1000);
+      let q = supabase.from("sales_playbooks").select("id, user_id, name, description, scenario, stage_target, industry_target, persona_target, content, tags, active, usage_count, version, created_at, updated_at").eq("user_id", user!.id).order("usage_count", { ascending: false })
+      .limit(200);
       
       if (filters.scenario) q = q.eq("scenario", filters.scenario);
       if (filters.industry) q = q.ilike("industry_target", `%${filters.industry}%`);
@@ -276,7 +276,7 @@ export function usePlaybookUsageLog(filters: { playbookId?: string; days?: numbe
       const since = new Date(Date.now() - (filters.days ?? 30) * 86400_000).toISOString();
       let q = supabase
         .from("playbook_usage_log")
-        .select("*")
+        .select("id, user_id, playbook_id, battle_card_id, contact_id, deal_id, action, context, opened_at")
         .eq("user_id", user!.id)
         .gte("opened_at", since)
         .order("opened_at", { ascending: false })
