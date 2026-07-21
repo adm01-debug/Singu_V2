@@ -14,7 +14,7 @@ export function useSocialSync(contactId: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('social_sync_queue')
-        .select('*')
+        .select('id, contact_id, status, retry_count, error_log, last_attempt, max_retries, created_at, updated_at')
         .eq('contact_id', contactId)
         .order('created_at', { ascending: false })
         .limit(1)
@@ -32,10 +32,10 @@ export function useSocialSync(contactId: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('psychographic_audit_log')
-        .select('*')
+        .select('id, contact_id, change_type, changed_by, changed_fields, new_values, previous_values, created_at')
         .eq('contact_id', contactId)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(100);
 
       if (error) throw error;
       return data;

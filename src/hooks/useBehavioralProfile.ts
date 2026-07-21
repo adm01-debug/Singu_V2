@@ -50,7 +50,7 @@ export function useBehavioralProfile(contactId: string | null | undefined) {
     queryFn: async (): Promise<BehavioralProfile | null> => {
       const { data, error } = await supabase
         .from('contact_analytical_profiles')
-        .select('*')
+        .select('id, contact_id, summary, tone, communication_style, sentiment_trend, preferences, hobbies, recurrent_topics, based_on_count, model, last_updated_at')
         .eq('contact_id', contactId!)
         .maybeSingle();
       if (error) throw error;

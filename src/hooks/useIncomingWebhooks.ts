@@ -58,10 +58,10 @@ export function useIncomingWebhooks() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('incoming_webhooks')
-        .select('*')
+        .select('id, name, description, token, target_entity, is_active, allowed_origins, field_mapping, total_calls, total_errors, last_called_at, created_by, created_at, updated_at, webhook_secret, require_signature, replay_window_seconds')
         .eq('created_by', user!.id)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as unknown as IncomingWebhook[];
     },
@@ -146,7 +146,7 @@ export function useIncomingWebhookLogs(webhookId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('incoming_webhook_logs')
-        .select('*')
+        .select('id, webhook_id, status, http_status, payload, response, error_message, source_ip, latency_ms, created_at')
         .eq('webhook_id', webhookId!)
         .order('created_at', { ascending: false })
         .limit(50);

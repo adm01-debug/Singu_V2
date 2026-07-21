@@ -152,7 +152,7 @@ export function usePreContactBriefing(): PreContactBriefingData {
         .from('interactions').select('*').eq('user_id', user!.id).eq('follow_up_required', true)
         .not('follow_up_date', 'is', null).in('type', ['call', 'meeting', 'video_call'])
         .order('follow_up_date', { ascending: true })
-        .limit(1000);
+        .limit(50);
       if (interactionsError) throw interactionsError;
 
       const upcomingInteractions = (interactions || []).filter(interaction => {
@@ -165,7 +165,7 @@ export function usePreContactBriefing(): PreContactBriefingData {
       const contactIds = [...new Set(upcomingInteractions.map(i => i.contact_id))];
       const { data: contactsData, error: contactsError } = await supabase
         .from('contacts').select('*').eq('user_id', user!.id).in('id', contactIds)
-        .limit(1000);
+        .limit(50);
       if (contactsError) throw contactsError;
       const contacts = contactsData || [];
 

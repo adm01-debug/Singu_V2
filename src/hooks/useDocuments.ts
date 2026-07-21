@@ -36,12 +36,12 @@ export function useDocuments(entityType: string, entityId?: string) {
       if (!user) return [];
       const { data, error } = await supabase
         .from('documents')
-        .select('*')
+        .select('id, user_id, entity_type, entity_id, name, description, document_type, file_url, file_size, mime_type, version, status, tags, created_at, updated_at')
         .eq('user_id', user.id)
         .eq('entity_type', entityType)
         .eq('entity_id', entityId)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return (data || []) as Document[];
     },

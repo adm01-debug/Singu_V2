@@ -81,7 +81,7 @@ export function useWinLossRecords(filters: RecordsFilter = {}) {
     queryFn: async () => {
       let q = supabase
         .from('win_loss_records')
-        .select('*')
+        .select('id, user_id, deal_id, outcome, primary_reason_id, secondary_reasons, competitor_id, deal_value, sales_cycle_days, decision_maker_contact_id, notes, lessons_learned, recorded_at, created_at, updated_at')
         .eq('user_id', user!.id)
         .order('recorded_at', { ascending: false })
         .limit(500);
@@ -104,7 +104,7 @@ export function useWinLossRecordByDeal(dealId: string | null | undefined) {
       if (!dealId) return null;
       const { data, error } = await supabase
         .from('win_loss_records')
-        .select('*')
+        .select('id, user_id, deal_id, outcome, primary_reason_id, secondary_reasons, competitor_id, deal_value, sales_cycle_days, decision_maker_contact_id, notes, lessons_learned, recorded_at, created_at, updated_at')
         .eq('deal_id', dealId)
         .eq('user_id', user!.id)
         .maybeSingle();
@@ -166,13 +166,12 @@ export function useWinLossReasons(outcome?: ReasonOutcomeType) {
     queryFn: async () => {
       let q = supabase
         .from('win_loss_reasons')
-        .select('*')
+        .select('id, user_id, category, label, outcome_type, active, sort_order')
         .eq('user_id', user!.id)
         .eq('active', true)
         .order('sort_order')
-        .limit(1000);
-      if (outcome) q = q.in('outcome_type', [outcome, 'both'])
-      .limit(1000);
+        .limit(100);
+      if (outcome) q = q.in('outcome_type', [outcome, 'both']);
       const { data, error } = await q;
       if (error) throw error;
       return (data ?? []) as WinLossReason[];
@@ -239,11 +238,11 @@ export function useCompetitors() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('competitors')
-        .select('*')
+        .select('id, user_id, name, website, strengths, weaknesses, typical_price_range, win_rate_against, notes, active')
         .eq('user_id', user!.id)
         .eq('active', true)
         .order('name')
-        .limit(1000);
+        .limit(200);
       if (error) throw error;
       return (data ?? []) as Competitor[];
     },
@@ -310,10 +309,10 @@ export function useWinLossMetrics(periodDays = 90) {
       const fromDate = new Date(Date.now() - periodDays * 86400_000).toISOString();
       const { data: records, error } = await supabase
         .from('win_loss_records')
-        .select('*')
+        .select('id, user_id, deal_id, outcome, primary_reason_id, secondary_reasons, competitor_id, deal_value, sales_cycle_days, decision_maker_contact_id, notes, lessons_learned, recorded_at, created_at, updated_at')
         .eq('user_id', user!.id)
         .gte('recorded_at', fromDate)
-        .limit(1000);
+        .limit(500);
       if (error) throw error;
 
       const list = (records ?? []) as WinLossRecord[];
@@ -397,7 +396,7 @@ export function useWinLossInsights() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('win_loss_insights')
-        .select('*')
+        .select('id, user_id, period_start, period_end, insight_type, title, description, severity, supporting_data, generated_at')
         .eq('user_id', user!.id)
         .order('generated_at', { ascending: false })
         .limit(20);

@@ -52,10 +52,10 @@ export function useLandingPages() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('landing_pages')
-        .select('*')
+        .select('id, user_id, slug, title, description, blocks, theme, is_published, view_count, submission_count, redirect_url, created_at, updated_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as unknown as LandingPage[];
     },
@@ -131,7 +131,7 @@ export function useLandingPageSubmissions(pageId?: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('landing_page_submissions')
-        .select('*')
+        .select('id, landing_page_id, email, name, phone, data, utm_source, utm_medium, utm_campaign, created_at')
         .eq('landing_page_id', pageId!)
         .order('created_at', { ascending: false })
         .limit(500);

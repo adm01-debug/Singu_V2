@@ -67,10 +67,10 @@ export function useEntityRelationships(entityType?: EntityType, entityId?: strin
     queryFn: async (): Promise<EntityRelationship[]> => {
       let q = supabase
         .from('entity_relationships')
-        .select('*')
+        .select('id, from_type, from_id, to_type, to_id, role, is_primary, started_at, ended_at, notes, created_at, updated_at, created_by')
         .eq('created_by', user!.id)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(200);
       if (entityType && entityId) {
         q = q.or(
           `and(from_type.eq.${entityType},from_id.eq.${entityId}),and(to_type.eq.${entityType},to_id.eq.${entityId})`
@@ -90,7 +90,7 @@ export function useCreateEntityRelationship() {
     mutationFn: async (input: NewEntityRelationship) => {
       if (!user?.id) throw new Error('Não autenticado');
       const payload = { ...input, created_by: user.id };
-      const { data, error } = await supabase.from('entity_relationships').insert(payload).select('*').single();
+      const { data, error } = await supabase.from('entity_relationships').insert(payload).select('id, from_type, from_id, to_type, to_id, role, is_primary, started_at, ended_at, notes, created_at, updated_at, created_by').single();
       if (error) throw error;
       return data as EntityRelationship;
     },

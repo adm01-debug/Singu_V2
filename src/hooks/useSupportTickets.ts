@@ -45,10 +45,10 @@ export function useSupportTickets() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('support_tickets')
-        .select('*')
+        .select('id, user_id, contact_id, company_id, title, description, priority, status, category, assigned_to, sla_deadline, resolved_at, first_response_at, tags, created_at, updated_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(200);
       if (error) throw error;
       return (data || []) as SupportTicket[];
     },
@@ -121,10 +121,10 @@ export function useTicketComments(ticketId?: string) {
       if (!ticketId) return [];
       const { data, error } = await supabase
         .from('ticket_comments')
-        .select('*')
+        .select('id, ticket_id, user_id, content, is_internal, created_at')
         .eq('ticket_id', ticketId)
         .order('created_at')
-        .limit(1000);
+        .limit(200);
       if (error) throw error;
       return (data || []) as TicketComment[];
     },

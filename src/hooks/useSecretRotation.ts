@@ -39,7 +39,7 @@ export function useSecretRotation() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('secret_rotation_log')
-        .select('*')
+        .select('id, secret_name, rotated_at, rotated_by, old_hash, new_hash, reason, is_automatic, created_at')
         .order('rotated_at', { ascending: false })
         .limit(200);
       if (error) throw error;

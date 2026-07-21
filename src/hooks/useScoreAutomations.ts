@@ -49,10 +49,10 @@ export function useScoreAutomations() {
       if (!user?.id) return [];
       const { data, error } = await supabase
         .from('lead_score_threshold_automations')
-        .select('*')
+        .select('id, user_id, name, description, trigger_type, grade_target, score_target, action_type, action_config, cooldown_hours, active, last_fired_at, fired_count, created_at, updated_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as ScoreAutomation[];
     },
@@ -138,7 +138,7 @@ export function useAutomationLog(automationId?: string, days = 30) {
       const since = new Date(Date.now() - days * 86_400_000).toISOString();
       let q = supabase
         .from('lead_score_threshold_log')
-        .select('*')
+        .select('id, automation_id, contact_id, from_grade, to_grade, from_score, to_score, action_result, success, fired_at')
         .eq('user_id', user.id)
         .gte('fired_at', since)
         .order('fired_at', { ascending: false })

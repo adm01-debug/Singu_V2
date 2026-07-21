@@ -49,7 +49,7 @@ export function useSequenceSendLogs(sequenceId?: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('sequence_send_log')
-        .select('*')
+        .select('id, enrollment_id, step_order, channel, status, opened_at, clicked_at, sent_at, error_message')
         .eq('sequence_id', sequenceId!)
         .eq('user_id', user!.id)
         .order('sent_at', { ascending: false })

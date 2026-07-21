@@ -43,7 +43,7 @@ export function useConnectionAnomalies(opts?: { onlyOpen?: boolean }) {
     queryFn: async () => {
       let q = supabase
         .from('connection_anomalies')
-        .select('*')
+        .select('id, webhook_id, connection_id, anomaly_type, severity, explanation, metrics, window_start, window_end, detected_at, acknowledged_at, acknowledged_by, model_used, confidence, created_at')
         .order('detected_at', { ascending: false })
         .limit(50);
       if (opts?.onlyOpen ?? true) q = q.is('acknowledged_at', null);

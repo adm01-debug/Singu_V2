@@ -13,10 +13,10 @@ export function useGeoBlocking() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('geo_allowed_countries')
-        .select('*')
+        .select('id, user_id, country_code, country_name, is_active, created_at')
         .eq('user_id', user.id)
         .order('country_name')
-        .limit(1000);
+        .limit(300);
       if (error) return [];
       return Array.isArray(data) ? data : [];
     },
