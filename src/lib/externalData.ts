@@ -106,7 +106,7 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
     if (data.length > 0) {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user?.id) {
-        await supabase.from('activities').insert({
+        const { error: auditErr } = await supabase.from('activities').insert({
           user_id: session.user.id,
           type: 'access',
           entity_type: queryOptions.table === 'contacts' ? 'contact' : queryOptions.table === 'companies' ? 'company' : 'interaction',
@@ -114,6 +114,7 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
           description: `Acesso a ${data.length} registros da tabela ${queryOptions.table}`,
           metadata: { query_options: queryOptions }
         });
+        if (auditErr) logger.warn('Failed to write access audit log', { error: auditErr.message });
       }
     }
 
@@ -224,7 +225,7 @@ export async function deleteExternalData(table: string, id: string): Promise<{ s
     await callExternalData({ action: 'delete', table, id });
     const { data: { session } } = await supabase.auth.getSession();
     if (session?.user?.id) {
-      await supabase.from('activities').insert({
+      const { error: auditErr } = await supabase.from('activities').insert({
         user_id: session.user.id,
         type: 'deleted',
         entity_type: table === 'contacts' ? 'contact' : table === 'companies' ? 'company' : 'interaction',
@@ -232,6 +233,7 @@ export async function deleteExternalData(table: string, id: string): Promise<{ s
         description: `Exclusão de registro na tabela ${table}`,
         reason: 'Solicitação via interface'
       });
+      if (auditErr) logger.warn('Failed to write delete audit log', { error: auditErr.message });
     }
     return { success: true, error: null };
   } catch (err) {

@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { Json } from '@/integrations/supabase/types';
+import { logger } from '@/lib/logger';
 
 export type MergeEntity = 'contacts' | 'companies';
 
@@ -48,14 +50,15 @@ export function useMergeRecords() {
 
       // 4. Audit log entry
       if (user?.id) {
-        await supabase.from('audit_log').insert([{
-          user_id: user!.id,
+        const { error: auditErr } = await supabase.from('audit_log').insert([{
+          user_id: user.id,
           action: 'merge',
           entity_type: entity,
           entity_id: primaryId,
           old_data: { merged_from: secondaryId },
-          new_data: (fieldOverrides ?? {}) as Record<string, never>,
+          new_data: (fieldOverrides ?? {}) as Json,
         }]);
+        if (auditErr) logger.warn('Failed to write audit log', { error: auditErr.message });
       }
 
       return { primaryId, secondaryId };

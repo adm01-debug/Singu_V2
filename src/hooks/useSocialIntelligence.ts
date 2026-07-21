@@ -45,7 +45,8 @@ export function useSocialIntelligence(contactId: string) {
             const newSuggestions = suggestions.filter(s => !pendingValues.has(s.value));
 
             if (newSuggestions.length > 0) {
-              await supabase.from('suggested_rapport_intel').insert(newSuggestions);
+              const { error: intelErr } = await supabase.from('suggested_rapport_intel').insert(newSuggestions);
+              if (intelErr) logger.warn('suggested_rapport_intel insert failed', { error: intelErr.message });
               queryClient.invalidateQueries({ queryKey: ['suggested-rapport', contactId] });
             }
           }

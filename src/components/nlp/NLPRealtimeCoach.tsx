@@ -242,12 +242,13 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
     if (user) {
       try {
         const suggestion = suggestions.find(s => s.id === suggestionId);
-        await supabase.from('objection_example_feedback').insert({
+        const { error: fbErr } = await supabase.from('objection_example_feedback').insert({
           user_id: user.id,
           is_useful: type === 'up',
           objection: content.substring(0, 500),
           category: suggestion?.type || 'general',
         });
+        if (fbErr) logger.error("Error saving feedback:", fbErr);
       } catch (e) {
         logger.error("Error saving feedback:", e);
       }

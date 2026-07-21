@@ -82,6 +82,7 @@ export function useWinLossRecords(filters: RecordsFilter = {}) {
       let q = supabase
         .from('win_loss_records')
         .select('*')
+        .eq('user_id', user!.id)
         .order('recorded_at', { ascending: false })
         .limit(500);
       if (filters.outcome) q = q.eq('outcome', filters.outcome);
@@ -162,6 +163,7 @@ export function useWinLossReasons(outcome?: ReasonOutcomeType) {
       let q = supabase
         .from('win_loss_reasons')
         .select('*')
+        .eq('user_id', user!.id)
         .eq('active', true)
         .order('sort_order')
         .limit(1000);
@@ -232,6 +234,7 @@ export function useCompetitors() {
       const { data, error } = await supabase
         .from('competitors')
         .select('*')
+        .eq('user_id', user!.id)
         .eq('active', true)
         .order('name')
         .limit(1000);
@@ -300,6 +303,7 @@ export function useWinLossMetrics(periodDays = 90) {
       const { data: records, error } = await supabase
         .from('win_loss_records')
         .select('*')
+        .eq('user_id', user!.id)
         .gte('recorded_at', fromDate)
         .limit(1000);
       if (error) throw error;
@@ -386,6 +390,7 @@ export function useWinLossInsights() {
       const { data, error } = await supabase
         .from('win_loss_insights')
         .select('*')
+        .eq('user_id', user!.id)
         .order('generated_at', { ascending: false })
         .limit(20);
       if (error) throw error;

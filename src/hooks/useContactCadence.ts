@@ -81,7 +81,7 @@ export function useContactCadence() {
 
       // Fetch all companies in a single .in() query instead of N individual requests
       const { data: companiesData } = companyIds.length > 0
-        ? await supabase.from('companies').select('id, name').in('id', companyIds)
+        ? await supabase.from('companies').select('id, name').in('id', companyIds).limit(500)
         : { data: [] };
       const companyMap = new Map((companiesData || []).map(c => [c.id, { name: c.name }]));
 

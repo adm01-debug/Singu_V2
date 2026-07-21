@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export function useSocialSync(contactId: string) {
   const queryClient = useQueryClient();
@@ -73,13 +74,14 @@ export function useSocialSync(contactId: string) {
         attempts++;
         
         if (attempts < maxRetries) {
-          await supabase.from('social_sync_queue')
-            .update({ 
+          const { error: retryErr } = await supabase.from('social_sync_queue')
+            .update({
               retry_count: attempts,
               error_log: `Falha na tentativa ${attempts}: ${error.message}`,
               last_attempt: new Date().toISOString()
             })
             .eq('id', queueItem.id);
+          if (retryErr) logger.warn('Failed to update social_sync_queue retry', { error: retryErr.message });
             
           // Exponential backoff wait (simple version)
           await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempts) * 1000));
@@ -87,9 +89,10 @@ export function useSocialSync(contactId: string) {
       }
 
       if (funcError) {
-        await supabase.from('social_sync_queue')
+        const { error: failErr } = await supabase.from('social_sync_queue')
           .update({ status: 'failed', error_log: funcError.message, last_attempt: new Date().toISOString() })
           .eq('id', queueItem.id);
+        if (failErr) logger.warn('Failed to update social_sync_queue status to failed', { error: failErr.message });
         throw funcError;
       }
 

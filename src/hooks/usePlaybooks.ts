@@ -67,7 +67,7 @@ export function usePlaybooks(filters: PlaybookFilters = {}) {
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      let q = supabase.from("sales_playbooks").select("*").order("usage_count", { ascending: false })
+      let q = supabase.from("sales_playbooks").select("*").eq("user_id", user!.id).order("usage_count", { ascending: false })
       .limit(1000);
       
       if (filters.scenario) q = q.eq("scenario", filters.scenario);
@@ -272,6 +272,7 @@ export function usePlaybookUsageLog(filters: { playbookId?: string; days?: numbe
       let q = supabase
         .from("playbook_usage_log")
         .select("*")
+        .eq("user_id", user!.id)
         .gte("opened_at", since)
         .order("opened_at", { ascending: false })
         .limit(200);

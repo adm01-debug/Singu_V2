@@ -15,7 +15,7 @@ export async function trackScoreChange(params: {
   factors?: Record<string, unknown>;
 }): Promise<void> {
   try {
-    await supabase.from('score_history').insert([{
+    const { error } = await supabase.from('score_history').insert([{
       user_id: params.userId,
       contact_id: params.contactId,
       score_type: params.scoreType,
@@ -23,6 +23,7 @@ export async function trackScoreChange(params: {
       previous_value: params.previousValue ?? null,
       factors: (params.factors ?? null) as Json,
     }]);
+    if (error) logger.warn('Failed to track score change', { error: error.message });
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Unknown error';
     logger.warn('Failed to track score change', { error: msg });

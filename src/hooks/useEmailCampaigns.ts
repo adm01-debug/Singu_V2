@@ -100,10 +100,11 @@ export function useEmailCampaigns() {
       if (eligible.length === 0) throw new Error('Nenhum contato com email válido foi encontrado');
 
       // Marcar como enviando + buscar destinatários já existentes em paralelo
-      const [, { data: existing }] = await Promise.all([
+      const [{ error: sendingErr }, { data: existing }] = await Promise.all([
         supabase.from('email_campaigns').update({ status: 'sending' } as TablesUpdate<'email_campaigns'>).eq('id', campaignId),
         supabase.from('campaign_recipients').select('contact_id').eq('campaign_id', campaignId),
       ]);
+      if (sendingErr) throw sendingErr;
       const existingIds = new Set((existing ?? []).map(r => r.contact_id));
 
       const toInsert = eligible

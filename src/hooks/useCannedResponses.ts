@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export interface CannedResponse {
   id: string;
@@ -53,9 +54,10 @@ export function useCannedResponses() {
     mutationFn: async (id: string) => {
       const r = responses.find(r => r.id === id);
       if (!r) return '';
-      await supabase.from('canned_responses').update({
+      const { error } = await supabase.from('canned_responses').update({
         usage_count: r.usage_count + 1
       }).eq('id', id);
+      if (error) logger.warn('Failed to increment usage_count', { error: error.message });
       return r.content;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: key }),

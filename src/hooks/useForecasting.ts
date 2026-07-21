@@ -68,7 +68,7 @@ export function useForecastPeriods() {
     queryKey: ["forecast-periods", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from("forecast_periods").select("*").order("period_start", { ascending: false })
+      const { data, error } = await supabase.from("forecast_periods").select("*").eq("user_id", user!.id).order("period_start", { ascending: false })
       .limit(1000);
       if (error) throw error;
       return (data ?? []) as ForecastPeriod[];
@@ -232,7 +232,7 @@ export function useQuotaSettings() {
     queryKey: ["forecast-quota-settings", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from("forecast_quota_settings").select("*").maybeSingle();
+      const { data, error } = await supabase.from("forecast_quota_settings").select("*").eq("user_id", user!.id).maybeSingle();
       if (error) throw error;
       return data as QuotaSettings | null;
     },

@@ -20,6 +20,7 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { toast } from "sonner";
 import { MarkerClusterLayer, MappableCompany } from "./mapa/MapMarkerCluster";
 import { geocode, buildLocationString } from "./mapa/geocoding";
+import { useAuth } from "@/hooks/useAuth";
 
 // Fix default marker icon
 delete (L.Icon.Default.prototype as { _getIconUrl?: () => string })._getIconUrl;
@@ -31,6 +32,7 @@ L.Icon.Default.mergeOptions({
 
 export default function MapaEmpresas() {
   usePageTitle("Mapa de Empresas");
+  const { user } = useAuth();
   const [minScore, setMinScore] = useState(0);
   const [selectedSector, setSelectedSector] = useState("all");
   const [showFilters, setShowFilters] = useState(true);
@@ -41,9 +43,10 @@ export default function MapaEmpresas() {
   const queryClient = useQueryClient();
 
   const { data: rawCompanies, isLoading } = useQuery({
-    queryKey: ["companies-map-data"],
+    queryKey: ["companies-map-data", user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from("companies").select("id,name,nome_crm,ramo_atividade,status,cnpj,email,phone,website,city,state,address,extra_data_rf,lat,lng").order("updated_at", { ascending: false })
+      const { data, error } = await supabase.from("companies").select("id,name,nome_crm,ramo_atividade,status,cnpj,email,phone,website,city,state,address,extra_data_rf,lat,lng").eq("user_id", user!.id).order("updated_at", { ascending: false })
       .limit(1000);
       if (error) throw error;
       return data || [];

@@ -64,8 +64,11 @@ const Notificacoes = () => {
     setNotificationSettings(newSettings);
     try { localStorage.setItem('notificationSettings', JSON.stringify(newSettings)); } catch { /* private browsing */ }
     try {
-      if (user) await supabase.from('profiles').update({ preferences: { notifications: newSettings } }).eq('id', user.id);
-    } catch (error) { 
+      if (user) {
+        const { error: prefErr } = await supabase.from('profiles').update({ preferences: { notifications: newSettings } }).eq('id', user.id);
+        if (prefErr) throw prefErr;
+      }
+    } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error saving notification settings:', { error: msg }); 
     }
