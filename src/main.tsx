@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ACTIVE_THEME_STORAGE_KEY, bootstrapTheme } from "@/components/theme/themeBootstrap";
 import { initGlobalErrorHandlers } from "@/lib/errorReporting";
+import { ProviderErrorBoundary } from "@/components/feedback/ProviderErrorBoundary";
 import App from "./App.tsx";
 import "./index.css";
 
@@ -142,7 +143,9 @@ if (import.meta.env.PROD) {
 
 // ── React root ─────────────────────────────────────────────────────────────
 createRoot(document.getElementById("root")!).render(
-  <ThemeProvider defaultTheme="dark" storageKey={ACTIVE_THEME_STORAGE_KEY}>
-    <App />
-  </ThemeProvider>
+  <ProviderErrorBoundary providerName="Root">
+    <ThemeProvider defaultTheme="dark" storageKey={ACTIVE_THEME_STORAGE_KEY}>
+      <App />
+    </ThemeProvider>
+  </ProviderErrorBoundary>
 );

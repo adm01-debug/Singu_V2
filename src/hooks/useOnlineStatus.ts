@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 interface UseOnlineStatusOptions {
   /** Callback when connection is lost */
@@ -26,23 +26,29 @@ interface UseOnlineStatusReturn {
 export function useOnlineStatus(options: UseOnlineStatusOptions = {}): UseOnlineStatusReturn {
   const { onOffline, onOnline, pingInterval } = options;
   
-  const [isOnline, setIsOnline] = useState<boolean>(() => 
+  const [isOnline, setIsOnline] = useState<boolean>(() =>
     typeof navigator !== 'undefined' ? navigator.onLine : true
   );
   const [isChecking, setIsChecking] = useState(false);
   const [lastChecked, setLastChecked] = useState<Date | null>(null);
+  const pingAbortRef = useRef<AbortController | null>(null);
 
   // Check connection with a simple fetch
   const checkConnection = useCallback(async (): Promise<boolean> => {
     if (typeof navigator === 'undefined') return true;
-    
+
+    pingAbortRef.current?.abort();
+    const controller = new AbortController();
+    pingAbortRef.current = controller;
+
     setIsChecking(true);
-    
+
     try {
       // Use a small favicon or similar resource to check connectivity
       const response = await fetch('/favicon.ico', {
         method: 'HEAD',
         cache: 'no-store',
+        signal: controller.signal,
       });
       
       const online = response.ok;
@@ -58,14 +64,15 @@ export function useOnlineStatus(options: UseOnlineStatusOptions = {}): UseOnline
       }
       
       return online;
-    } catch {
+    } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') return false;
       setLastChecked(new Date());
-      
+
       if (isOnline) {
         setIsOnline(false);
         onOffline?.();
       }
-      
+
       return false;
     } finally {
       setIsChecking(false);
@@ -101,7 +108,10 @@ export function useOnlineStatus(options: UseOnlineStatusOptions = {}): UseOnline
       checkConnection();
     }, pingInterval);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      pingAbortRef.current?.abort();
+    };
   }, [pingInterval, checkConnection]);
 
   return {

@@ -40,6 +40,7 @@ export default function PublicLeadMagnet() {
   const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!slug) return;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
     setSubmitting(true);
     try {
       const params = new URLSearchParams(window.location.search);
