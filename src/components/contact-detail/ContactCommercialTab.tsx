@@ -43,7 +43,10 @@ export function ContactCommercialTab({ contactId }: Props) {
   const { data, error, refetch } = useQuery({
     queryKey: ['contact-commercial', contactId, user?.id],
     queryFn: async () => {
-      const contactFilter = [{ type: 'eq' as const, column: 'contact_id', value: contactId }];
+      const contactFilter = [
+        { type: 'eq' as const, column: 'contact_id', value: contactId },
+        { type: 'eq' as const, column: 'user_id', value: user?.id ?? '' },
+      ];
 
       // Try local first, then external
       const [rfmLocal, purchaseLocal] = await Promise.all([

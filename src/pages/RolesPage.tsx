@@ -1,4 +1,5 @@
 import { useIsAdmin } from '@/hooks/useIsAdmin';
+import { useAuth } from '@/hooks/useAuth';
 import { Helmet } from 'react-helmet-async';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -7,10 +8,11 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
 export default function RolesPage() {
+  const { user } = useAuth();
   const { isAdmin, isLoading: adminLoading } = useIsAdmin();
 
   const { data: roles = [], isLoading } = useQuery({
-    queryKey: ['all-user-roles'],
+    queryKey: ['all-user-roles', user?.id],
     queryFn: async () => {
       const { data, error } = await supabase.from('user_roles').select('*')
       .limit(1000);

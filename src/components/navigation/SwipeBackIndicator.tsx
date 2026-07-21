@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { useNavigationStack } from '@/contexts/NavigationStackContext';
+import { useAuth } from '@/hooks/useAuth';
 
-const HINT_STORAGE_KEY = 'singu_swipe_hint_shown';
+const HINT_STORAGE_KEY_PREFIX = 'singu_swipe_hint_shown';
 
 /**
  * Unified swipe-back gesture handler + visual indicator for mobile.
@@ -14,6 +15,8 @@ const HINT_STORAGE_KEY = 'singu_swipe_hint_shown';
  * - Threshold: 80px horizontal to trigger navigation
  */
 export function SwipeBackIndicator() {
+  const { user } = useAuth();
+  const hintKey = `${HINT_STORAGE_KEY_PREFIX}-${user?.id ?? 'anon'}`;
   const [swipeProgress, setSwipeProgress] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [showHint, setShowHint] = useState(false);
@@ -109,11 +112,11 @@ export function SwipeBackIndicator() {
     if (!isTouchDevice) return;
 
     try {
-      const shown = localStorage.getItem(HINT_STORAGE_KEY);
+      const shown = localStorage.getItem(hintKey);
       if (!shown) {
         const timer = setTimeout(() => {
           setShowHint(true);
-          try { localStorage.setItem(HINT_STORAGE_KEY, '1'); } catch { /* quota/private */ }
+          try { localStorage.setItem(hintKey, '1'); } catch { /* quota/private */ }
           setTimeout(() => setShowHint(false), 2500);
         }, 1500);
         return () => clearTimeout(timer);

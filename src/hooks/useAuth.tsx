@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { logger } from "@/lib/logger";
+import { clearUserContext } from '@/lib/errorReporting';
 import { PageLoadingFallback } from '@/components/feedback/PageLoadingFallback';
 
 interface AuthContextType {
@@ -110,6 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               clearTimeout(refreshTimeoutRef.current);
               refreshTimeoutRef.current = null;
             }
+            clearUserContext();
             break;
             
           case 'TOKEN_REFRESHED':

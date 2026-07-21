@@ -63,7 +63,10 @@ import type { Contact } from '@/hooks/useContactDetail';
   const { data: behavioralData } = useQuery({
     queryKey: ['contact-behavioral', contact.id, user?.id],
     queryFn: async () => {
-      const contactFilter = [{ type: 'eq' as const, column: 'contact_id', value: contact.id }];
+      const contactFilter = [
+        { type: 'eq' as const, column: 'contact_id', value: contact.id },
+        { type: 'eq' as const, column: 'user_id', value: user?.id ?? '' },
+      ];
 
       const [discRes, eqRes, biasRes, metaRes] = await Promise.all([
         fetchWithFallback<Tables<'disc_analysis_history'>[]>(

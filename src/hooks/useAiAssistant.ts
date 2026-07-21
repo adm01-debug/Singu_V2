@@ -175,7 +175,7 @@ export function useAiAssistant() {
 
   const deleteThread = useCallback(async (threadId: string) => {
     try {
-      const { error } = await supabase.from('ai_chat_threads').delete().eq('id', threadId);
+      const { error } = await supabase.from('ai_chat_threads').delete().eq('user_id', user?.id ?? '').eq('id', threadId);
       if (error) throw error;
       setThreads(prev => prev.filter(t => t.id !== threadId));
       if (activeThreadId === threadId) setActiveThreadId(null);
@@ -188,7 +188,7 @@ export function useAiAssistant() {
 
   const togglePin = useCallback(async (threadId: string, pinned: boolean) => {
     try {
-      const { error } = await supabase.from('ai_chat_threads').update({ pinned: !pinned }).eq('id', threadId);
+      const { error } = await supabase.from('ai_chat_threads').update({ pinned: !pinned }).eq('user_id', user?.id ?? '').eq('id', threadId);
       if (error) throw error;
       await fetchThreads();
     } catch (e) {
@@ -198,7 +198,7 @@ export function useAiAssistant() {
 
   const renameThread = useCallback(async (threadId: string, title: string) => {
     try {
-      const { error } = await supabase.from('ai_chat_threads').update({ title }).eq('id', threadId);
+      const { error } = await supabase.from('ai_chat_threads').update({ title }).eq('user_id', user?.id ?? '').eq('id', threadId);
       if (error) throw error;
       setThreads(prev => prev.map(t => t.id === threadId ? { ...t, title } : t));
     } catch (e) {

@@ -243,7 +243,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
 
       let externalContacts: SearchResult[] = [];
       try {
-        const { data: extResults } = await queryExternalData<SearchContact>({ table: 'vw_search_contacts', search: { term: searchQuery.trim(), columns: ['full_name', 'nome_tratamento', 'email', 'phone'] }, range: { from: 0, to: 4 } });
+        const { data: extResults } = await queryExternalData<SearchContact>({ table: 'vw_search_contacts', filters: [{ type: 'eq', column: 'user_id', value: user?.id ?? '' }], search: { term: searchQuery.trim(), columns: ['full_name', 'nome_tratamento', 'email', 'phone'] }, range: { from: 0, to: 4 } });
         if (extResults?.length) {
           const localIds = new Set(contactsResponse.data?.map(c => c.id) || []);
           externalContacts = extResults.filter(e => !localIds.has(e.id)).map(e => ({ id: e.id, type: 'contact' as const, title: e.full_name, subtitle: e.company || e.email || undefined, meta: e.phone || undefined }));

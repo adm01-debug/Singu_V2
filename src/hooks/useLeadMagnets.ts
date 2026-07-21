@@ -58,7 +58,7 @@ export function useLeadMagnets() {
     mutationFn: async (input: Partial<LeadMagnet> & { title: string; slug: string; type: LeadMagnet['type'] }) => {
       if (!user) throw new Error('Não autenticado');
       if (input.id) {
-        const { error } = await supabase.from('lead_magnets').update(input as TablesUpdate<'lead_magnets'>).eq('id', input.id);
+        const { error } = await supabase.from('lead_magnets').update(input as TablesUpdate<'lead_magnets'>).eq('user_id', user.id).eq('id', input.id);
         if (error) throw error;
       } else {
         const { error } = await supabase.from('lead_magnets').insert({ ...input, user_id: user.id } as TablesInsert<'lead_magnets'>);

@@ -128,6 +128,7 @@ export function useSequences() {
       const { error } = await supabase
         .from('sequences')
         .update({ status: newStatus, updated_at: new Date().toISOString() })
+        .eq('user_id', userId!)
         .eq('id', id);
       if (error) throw error;
     },
@@ -140,7 +141,7 @@ export function useSequences() {
 
   const deleteSequence = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('sequences').delete().eq('id', id);
+      const { error } = await supabase.from('sequences').delete().eq('user_id', userId!).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

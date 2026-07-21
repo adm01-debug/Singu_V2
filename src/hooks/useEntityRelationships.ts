@@ -102,10 +102,11 @@ export function useCreateEntityRelationship() {
 }
 
 export function useDeleteEntityRelationship() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('entity_relationships').delete().eq('id', id);
+      const { error } = await supabase.from('entity_relationships').delete().eq('created_by', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

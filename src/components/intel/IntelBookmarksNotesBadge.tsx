@@ -1,24 +1,26 @@
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { Star, StickyNote } from 'lucide-react';
 
-const BOOKMARKS_KEY = 'intel-bookmarks-v1';
-const NOTES_PREFIX = 'intel-notes-v1:';
+const BOOKMARKS_KEY_PREFIX = 'intel-bookmarks-v1';
+const NOTES_PREFIX_BASE = 'intel-notes-v1:';
 
-function countBookmarks(): number {
+function countBookmarks(userId: string): number {
   try {
-    const raw = localStorage.getItem(BOOKMARKS_KEY);
+    const raw = localStorage.getItem(`${BOOKMARKS_KEY_PREFIX}-${userId}`);
     if (!raw) return 0;
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed.length : 0;
   } catch { return 0; }
 }
 
-function countNotes(): number {
+function countNotes(userId: string): number {
+  const prefix = `${NOTES_PREFIX_BASE}${userId}:`;
   try {
     let n = 0;
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);
-      if (k && k.startsWith(NOTES_PREFIX)) {
+      if (k && k.startsWith(prefix)) {
         const raw = localStorage.getItem(k);
         if (raw) {
           try {
@@ -52,18 +54,22 @@ function openCommandPalette(): void {
  * Click em ★ abre command palette; click em NOTE foca aside Pinned.
  */
 export const IntelBookmarksNotesBadge = () => {
+  const { user } = useAuth();
+  const userId = user?.id ?? 'anon';
   const [bookmarks, setBookmarks] = useState(0);
   const [notes, setNotes] = useState(0);
 
   useEffect(() => {
+    const bookmarksKey = `${BOOKMARKS_KEY_PREFIX}-${userId}`;
+    const notesPrefix = `${NOTES_PREFIX_BASE}${userId}:`;
     const refresh = () => {
-      setBookmarks(countBookmarks());
-      setNotes(countNotes());
+      setBookmarks(countBookmarks(userId));
+      setNotes(countNotes(userId));
     };
     refresh();
     const onStorage = (e: StorageEvent) => {
       if (!e.key) return;
-      if (e.key === BOOKMARKS_KEY || e.key.startsWith(NOTES_PREFIX)) refresh();
+      if (e.key === bookmarksKey || e.key.startsWith(notesPrefix)) refresh();
     };
     window.addEventListener('storage', onStorage);
     const t = window.setInterval(refresh, 3000);
@@ -71,7 +77,7 @@ export const IntelBookmarksNotesBadge = () => {
       window.removeEventListener('storage', onStorage);
       window.clearInterval(t);
     };
-  }, []);
+  }, [userId]);
 
   return (
     <span className="hidden sm:inline-flex items-center gap-2" aria-label="Bookmarks e notas">

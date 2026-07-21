@@ -29,13 +29,6 @@ const FILTERS: { value: KindFilter; label: string }[] = [
   { value: 'event', label: 'EVENT' },
 ];
 
-function readFilter(): KindFilter {
-  try {
-    const raw = localStorage.getItem(FILTER_KEY);
-    if (raw === 'interaction' || raw === 'deal' || raw === 'event' || raw === 'all') return raw;
-  } catch { /* ignore */ }
-  return 'all';
-}
 
 function matchesKind(kind: string, f: KindFilter): boolean {
   if (f === 'all') return true;

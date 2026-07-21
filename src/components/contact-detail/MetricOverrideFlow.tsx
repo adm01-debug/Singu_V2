@@ -53,7 +53,7 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
           new_value: valToStore,
           reason: reason,
         }),
-        supabase.from('contacts').update(updates).eq('id', contactId),
+        supabase.from('contacts').update(updates).eq('user_id', user!.id).eq('id', contactId),
       ]);
 
       if (logError) throw logError;

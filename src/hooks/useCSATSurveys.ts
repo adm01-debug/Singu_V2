@@ -64,7 +64,7 @@ export function useCSATSurveys(contactId?: string) {
         feedback: feedback || null,
         status: 'answered' as const,
         answered_at: new Date().toISOString(),
-      }).eq('id', id);
+      }).eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Resposta registrada!'); },

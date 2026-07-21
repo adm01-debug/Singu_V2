@@ -44,7 +44,7 @@ export default function MarketingMagnetDetail() {
       external_url: draft.external_url,
       thumbnail_url: draft.thumbnail_url,
       gated: draft.gated,
-    } as TablesUpdate<'lead_magnets'>).eq('id', draft.id);
+    } as TablesUpdate<'lead_magnets'>).eq('user_id', user!.id).eq('id', draft.id);
     if (error) toast.error(error.message);
     else {
       toast.success('Salvo!');

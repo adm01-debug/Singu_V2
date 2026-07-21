@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -61,6 +62,7 @@ interface Picked { id: string; name: string; }
 
 export const CrossRefTab = () => {
   const [params, setParams] = useSearchParams();
+  const { user } = useAuth();
   const [type, setType] = useState<'contact' | 'company'>('contact');
   const [picked, setPicked] = useState<Picked[]>([]);
   const [search, setSearch] = useState('');
@@ -84,7 +86,7 @@ export const CrossRefTab = () => {
           const { data: rows } = await queryExternalData<Record<string, unknown>>({
             table,
             select: `id, ${nameCol}`,
-            filters: [{ type: 'eq', column: 'id', value: pId }],
+            filters: [{ type: 'eq', column: 'id', value: pId }, { type: 'eq', column: 'user_id', value: user?.id ?? '' }],
             range: { from: 0, to: 0 },
             signal: controller.signal,
           });
@@ -155,7 +157,7 @@ export const CrossRefTab = () => {
             const { data: r } = await queryExternalData<Record<string, unknown>>({
               table,
               select: '*',
-              filters: [{ type: 'eq', column: 'id', value: p.id }],
+              filters: [{ type: 'eq', column: 'id', value: p.id }, { type: 'eq', column: 'user_id', value: user?.id ?? '' }],
               range: { from: 0, to: 0 },
               signal: controller.signal,
             });
@@ -190,6 +192,7 @@ export const CrossRefTab = () => {
       const { data: rows } = await queryExternalData<Record<string, unknown>>({
         table,
         select: `id, ${nameCol}`,
+        filters: [{ type: 'eq', column: 'user_id', value: user?.id ?? '' }],
         search: { term: search, columns: [nameCol] },
         range: { from: 0, to: 9 },
       });

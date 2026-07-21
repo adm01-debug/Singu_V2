@@ -224,6 +224,10 @@ export function initGlobalErrorHandlers(): void {
   });
 }
 
+export function clearUserContext() {
+  try { localStorage.removeItem('userId'); } catch { /* quota/private */ }
+}
+
 // Hook para componentes React
 export function useErrorReporter() {
   return {
@@ -234,6 +238,7 @@ export function useErrorReporter() {
     setUserContext: (userId: string) => {
       try { localStorage.setItem('userId', userId); } catch { /* quota/private */ }
     },
+    clearUserContext,
   };
 }
 

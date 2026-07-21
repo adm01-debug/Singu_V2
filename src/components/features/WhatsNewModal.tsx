@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, X, ArrowRight, Zap, Brain, Rocket, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,7 @@ interface WhatsNewModalProps {
   onClose?: () => void;
 }
 
-const WHATS_NEW_KEY = 'relateiq-whats-new-seen';
+const WHATS_NEW_KEY_PREFIX = 'relateiq-whats-new-seen';
 const CURRENT_VERSION = '2.0.0';
 
 const defaultFeatures: Feature[] = [
@@ -82,16 +83,18 @@ export function WhatsNewModal({
   features = defaultFeatures,
   onClose,
 }: WhatsNewModalProps) {
+  const { user } = useAuth();
+  const whatsNewKey = useMemo(() => `${WHATS_NEW_KEY_PREFIX}-${user?.id ?? 'anon'}`, [user?.id]);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    try { localStorage.setItem(WHATS_NEW_KEY, version); } catch { /* private browsing */ }
+    try { localStorage.setItem(whatsNewKey, version); } catch { /* private browsing */ }
     setIsVisible(false);
     return undefined;
-  }, [version]);
+  }, [version, whatsNewKey]);
 
   const handleDismiss = () => {
-    try { localStorage.setItem(WHATS_NEW_KEY, version); } catch { /* private browsing */ }
+    try { localStorage.setItem(whatsNewKey, version); } catch { /* private browsing */ }
     setIsVisible(false);
     onClose?.();
   };
@@ -172,8 +175,9 @@ export function WhatsNewModal({
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useWhatsNew() {
+  const { user } = useAuth();
   const show = () => {
-    try { localStorage.removeItem(WHATS_NEW_KEY); } catch { /* quota/private */ }
+    try { localStorage.removeItem(`${WHATS_NEW_KEY_PREFIX}-${user?.id ?? 'anon'}`); } catch { /* quota/private */ }
     window.dispatchEvent(new CustomEvent('show-whats-new'));
   };
   return { show };

@@ -123,6 +123,7 @@ export function useUpsertPlaybook() {
         const { data, error } = await supabase
           .from("sales_playbooks")
           .update(updatePayload)
+          .eq("user_id", user.id)
           .eq("id", input.id)
           .select()
           .maybeSingle();
@@ -164,10 +165,11 @@ export function useUpsertPlaybook() {
 }
 
 export function useDeletePlaybook() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("sales_playbooks").delete().eq("id", id);
+      const { error } = await supabase.from("sales_playbooks").delete().eq("user_id", user!.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {

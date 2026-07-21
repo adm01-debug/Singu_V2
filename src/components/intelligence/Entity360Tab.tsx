@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useImperativeHandle, forwardRef, useRef } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -42,6 +43,7 @@ export const Entity360Tab = forwardRef<Entity360Handle>((_props, ref) => {
 
   const searchAbortRef = useRef<AbortController | null>(null);
 
+  const { user } = useAuth();
   const { current, push, back, forward, canBack, canForward, stack, cursor } = useEntityHistory();
   const { isPinned, toggle: togglePin } = useEntityBookmarks();
   const { data, isLoading, error, refetch } = useEntity360(current?.type ?? null, current?.id ?? null);
@@ -93,6 +95,7 @@ export const Entity360Tab = forwardRef<Entity360Handle>((_props, ref) => {
       const { data: rows } = await queryExternalData<Record<string, unknown>>({
         table,
         select: `id, ${nameCol}`,
+        filters: [{ type: 'eq', column: 'user_id', value: user?.id ?? '' }],
         search: { term: search, columns: [nameCol] },
         range: { from: 0, to: 9 },
         signal: controller.signal,

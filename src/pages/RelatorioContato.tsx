@@ -69,26 +69,26 @@ const RelatorioContato = () => {
         ] = await Promise.all([
           supabase.from("contacts").select("*").eq("id", id).eq("user_id", user.id).maybeSingle(),
           supabase.from("interactions").select("*").eq("contact_id", id).eq("user_id", user.id).order("created_at", { ascending: false }).limit(500),
-          supabase.from("disc_analysis_history").select("*").eq("contact_id", id).order("analyzed_at", { ascending: false }).limit(50),
+          supabase.from("disc_analysis_history").select("*").eq("contact_id", id).eq("user_id", user.id).order("analyzed_at", { ascending: false }).limit(50),
         ]);
 
         if (cancelled) return;
 
         let contact: Tables<'contacts'> | null = localContact;
         if (!contact) {
-          const { data: extContact } = await queryExternalData<Tables<'contacts'>>({ table: 'contacts', filters: [{ type: 'eq', column: 'id', value: id }] });
+          const { data: extContact } = await queryExternalData<Tables<'contacts'>>({ table: 'contacts', filters: [{ type: 'eq', column: 'id', value: id }, { type: 'eq', column: 'user_id', value: user.id }] });
           contact = extContact?.[0] || null;
         }
 
         let interactions = localInteractions || [];
         if (interactions.length === 0) {
-          const { data: extInteractions } = await queryExternalData<Tables<'interactions'>>({ table: 'interactions', filters: [{ type: 'eq', column: 'contact_id', value: id }], order: { column: 'created_at', ascending: false } });
+          const { data: extInteractions } = await queryExternalData<Tables<'interactions'>>({ table: 'interactions', filters: [{ type: 'eq', column: 'contact_id', value: id }, { type: 'eq', column: 'user_id', value: user.id }], order: { column: 'created_at', ascending: false } });
           interactions = extInteractions || [];
         }
 
         let discHistory = localDisc || [];
         if (discHistory.length === 0) {
-          const { data: extDisc } = await queryExternalData<Tables<'disc_analysis_history'>>({ table: 'disc_analysis_history', filters: [{ type: 'eq', column: 'contact_id', value: id }], order: { column: 'analyzed_at', ascending: false } });
+          const { data: extDisc } = await queryExternalData<Tables<'disc_analysis_history'>>({ table: 'disc_analysis_history', filters: [{ type: 'eq', column: 'contact_id', value: id }, { type: 'eq', column: 'user_id', value: user.id }], order: { column: 'analyzed_at', ascending: false } });
           discHistory = extDisc || [];
         }
 

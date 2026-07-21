@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect, useLayoutEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { Bookmark, BookmarkPlus, Trash2, Check, Download, Link2, Upload, FileJson, Star, Sparkles, Pencil, RefreshCw, X, Zap, Copy, Eye, EyeOff } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -74,19 +75,25 @@ function parseDate(iso?: string): Date | undefined {
 export const InteracoesPresetsMenu = React.memo(function InteracoesPresetsMenu({
   filters, setFilter, clear, activeCount, onApplyAll,
 }: Props) {
+  const { user } = useAuth();
+  const uid = user?.id ?? 'anon';
+  const openKey = `interacoes-presets-open-${uid}`;
+  const autosaveKey = `interacoes-presets-autosave-${uid}`;
+  const activeKey = `interacoes-presets-active-id-${uid}`;
+
   const { presets, sortedPresets, sortMode, setSortMode, savePreset, deletePreset, updatePreset, duplicatePreset, toggleFavorite, markAsUsed } = useSearchPresets('interactions');
   const [isNaming, setIsNaming] = useState(false);
   const [name, setName] = useState('');
   // Estado do popover persistido em localStorage:
   // - se estava aberto antes de aplicar um preset, restaura no próximo mount
   //   e não fecha automaticamente após aplicar.
-  const OPEN_KEY = 'interacoes-presets-open';
-  const [open, setOpen] = useState<boolean>(() => {
-    try { return localStorage.getItem(OPEN_KEY) === '1'; } catch { return false; }
-  });
+  const [open, setOpen] = useState(false);
   useEffect(() => {
-    try { localStorage.setItem(OPEN_KEY, open ? '1' : '0'); } catch { /* noop */ }
-  }, [open]);
+    try { setOpen(localStorage.getItem(openKey) === '1'); } catch { /* noop */ }
+  }, [openKey]);
+  useEffect(() => {
+    try { localStorage.setItem(openKey, open ? '1' : '0'); } catch { /* noop */ }
+  }, [open, openKey]);
   const [importOpen, setImportOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -103,24 +110,22 @@ export const InteracoesPresetsMenu = React.memo(function InteracoesPresetsMenu({
   const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
 
   // Auto-save: persistent toggle + active preset id (last applied/saved)
-  const AUTOSAVE_KEY = 'interacoes-presets-autosave';
-  const ACTIVE_KEY = 'interacoes-presets-active-id';
-  const [autoSave, setAutoSave] = useState<boolean>(() => {
-    try { return localStorage.getItem(AUTOSAVE_KEY) === '1'; } catch { return false; }
-  });
-  const [activePresetId, setActivePresetId] = useState<string | null>(() => {
-    try { return localStorage.getItem(ACTIVE_KEY); } catch { return null; }
-  });
+  const [autoSave, setAutoSave] = useState(false);
+  const [activePresetId, setActivePresetId] = useState<string | null>(null);
   const [autoSavedAt, setAutoSavedAt] = useState<number | null>(null);
   useEffect(() => {
-    try { localStorage.setItem(AUTOSAVE_KEY, autoSave ? '1' : '0'); } catch { /* noop */ }
-  }, [autoSave]);
+    try { setAutoSave(localStorage.getItem(autosaveKey) === '1'); } catch { /* noop */ }
+    try { setActivePresetId(localStorage.getItem(activeKey)); } catch { /* noop */ }
+  }, [autosaveKey, activeKey]);
+  useEffect(() => {
+    try { localStorage.setItem(autosaveKey, autoSave ? '1' : '0'); } catch { /* noop */ }
+  }, [autoSave, autosaveKey]);
   useEffect(() => {
     try {
-      if (activePresetId) localStorage.setItem(ACTIVE_KEY, activePresetId);
-      else localStorage.removeItem(ACTIVE_KEY);
+      if (activePresetId) localStorage.setItem(activeKey, activePresetId);
+      else localStorage.removeItem(activeKey);
     } catch { /* noop */ }
-  }, [activePresetId]);
+  }, [activePresetId, activeKey]);
   // If the active preset was deleted elsewhere, clear the reference
   useEffect(() => {
     if (activePresetId && !presets.some(p => p.id === activePresetId)) {
