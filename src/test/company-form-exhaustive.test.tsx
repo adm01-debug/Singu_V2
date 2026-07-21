@@ -636,8 +636,9 @@ describe('CompanyForm — Stress & Boundary', () => {
     expect(screen.getByDisplayValue(longNotes)).toBeInTheDocument();
   });
 
-  it('handles CNPJ with special characters', () => {
+  it('handles CNPJ with special characters', async () => {
     renderForm({ ...minimalCompany, cnpj: '79.114.450/0284-18' });
+    await userEvent.click(screen.getByRole('tab', { name: /Fiscal/i }));
     expect(screen.getByDisplayValue('79.114.450/0284-18')).toBeInTheDocument();
   });
 

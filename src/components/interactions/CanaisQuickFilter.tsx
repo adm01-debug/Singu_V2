@@ -179,6 +179,12 @@ export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais,
         return prev;
       }
 
+      // Em auto mode sem mudança de safe e safe vazio: não resetar pending.
+      // Evita sobrescrever a hidratação de pending que ocorre no mesmo flush.
+      if (mode === 'auto' && !safeChanged && safe.length === 0) {
+        return prev;
+      }
+
       return safe;
     });
   }, [safe, mode, setMode]);

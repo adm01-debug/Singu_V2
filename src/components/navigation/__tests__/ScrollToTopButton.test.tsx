@@ -44,12 +44,12 @@ describe('ScrollToTopButton', () => {
     setScrollY(0);
     scrollToSpy = vi.fn();
     window.scrollTo = scrollToSpy as unknown as typeof window.scrollTo;
-    try { localStorage.removeItem('singu-table-density'); } catch { /* noop */ }
+    try { localStorage.removeItem('singu-table-density-anon'); } catch { /* noop */ }
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
-    try { localStorage.removeItem('singu-table-density'); } catch { /* noop */ }
+    try { localStorage.removeItem('singu-table-density-anon'); } catch { /* noop */ }
   });
 
   it('não fica visível com scrollY=0 (default threshold)', async () => {
@@ -117,7 +117,7 @@ describe('ScrollToTopButton', () => {
   });
 
   it('densidade compact reduz threshold default (~280px)', async () => {
-    localStorage.setItem('singu-table-density', 'compact');
+    localStorage.setItem('singu-table-density-anon', 'compact');
     render(<ScrollToTopButton />);
     // 250px < 280px → ainda invisível
     setScrollY(250);
@@ -132,7 +132,7 @@ describe('ScrollToTopButton', () => {
   });
 
   it('compactRatio=1 desabilita o ajuste de densidade', async () => {
-    localStorage.setItem('singu-table-density', 'compact');
+    localStorage.setItem('singu-table-density-anon', 'compact');
     render(<ScrollToTopButton compactRatio={1} />);
     setScrollY(290);
     fireEvent.scroll(window);
