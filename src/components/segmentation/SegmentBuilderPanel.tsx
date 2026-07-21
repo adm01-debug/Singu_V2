@@ -62,7 +62,7 @@ export function SegmentBuilderPanel({ onSegmentChange }: Props) {
         {segment.filters.map((f, i) => {
           const field = availableFields.find(af => af.key === f.field);
           return (
-            <div key={i} className="flex items-center gap-1.5 bg-muted/30 rounded px-2 py-1.5">
+            <div key={`${f.field}-${f.operator}-${f.value}`} className="flex items-center gap-1.5 bg-muted/30 rounded px-2 py-1.5">
               <Badge variant="outline" className="text-[10px] h-4">{field?.label || f.field}</Badge>
               <span className="text-[10px] text-muted-foreground">{OPERATOR_LABELS[f.operator]}</span>
               {!['is_null', 'is_not_null'].includes(f.operator) && (

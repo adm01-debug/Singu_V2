@@ -23,6 +23,24 @@ import { CrossRefInsightsPanel } from '@/components/intel/CrossRefInsightsPanel'
 import { buildCrossRefInsights } from '@/lib/crossRefInsights';
 import { format } from 'date-fns';
 
+const SHARED_INTERACTIONS_COLUMNS = [
+  {
+    key: 'occurred_at', label: 'TIMESTAMP', mono: true, width: '140px',
+    render: (r: Record<string, unknown>) => format(new Date(String(r.occurred_at)), 'dd/MM/yy HH:mm'),
+  },
+  { key: 'channel', label: 'CHANNEL', mono: true, width: '100px' },
+  { key: 'type', label: 'TYPE', mono: true },
+] as const;
+
+const SHARED_DEALS_COLUMNS = [
+  { key: 'title', label: 'TITLE' },
+  { key: 'stage', label: 'STAGE', mono: true, width: '120px' },
+  {
+    key: 'value', label: 'VALUE', mono: true, width: '120px',
+    render: (r: Record<string, unknown>) => `R$ ${Number(r.value).toLocaleString('pt-BR')}`,
+  },
+] as const;
+
 interface MetaRow {
   id: string;
   name: string;
@@ -428,14 +446,7 @@ export const CrossRefTab = () => {
               <IntelSkeleton lines={5} />
             ) : (
               <DataGrid
-                columns={[
-                  {
-                    key: 'occurred_at', label: 'TIMESTAMP', mono: true, width: '140px',
-                    render: (r) => format(new Date(String(r.occurred_at)), 'dd/MM/yy HH:mm'),
-                  },
-                  { key: 'channel', label: 'CHANNEL', mono: true, width: '100px' },
-                  { key: 'type', label: 'TYPE', mono: true },
-                ]}
+                columns={SHARED_INTERACTIONS_COLUMNS}
                 rows={(data?.sharedInteractions || []) as unknown as Array<Record<string, unknown>>}
                 getRowKey={(r) => String(r.id)}
                 emptyMessage="NO_SHARED_INTERACTIONS"
@@ -448,14 +459,7 @@ export const CrossRefTab = () => {
               <IntelSkeleton lines={4} />
             ) : (
               <DataGrid
-                columns={[
-                  { key: 'title', label: 'TITLE' },
-                  { key: 'stage', label: 'STAGE', mono: true, width: '120px' },
-                  {
-                    key: 'value', label: 'VALUE', mono: true, width: '120px',
-                    render: (r) => `R$ ${Number(r.value).toLocaleString('pt-BR')}`,
-                  },
-                ]}
+                columns={SHARED_DEALS_COLUMNS}
                 rows={(data?.sharedDeals || []) as unknown as Array<Record<string, unknown>>}
                 getRowKey={(r) => String(r.id)}
                 emptyMessage="NO_SHARED_DEALS"

@@ -75,7 +75,7 @@ export function PredictiveRoadmap({ contactId }: { contactId: string }) {
         <div className="space-y-8">
            {steps.length > 0 ? steps.map((step, index) => (
             <motion.div
-              key={index}
+              key={`${step.month}-${step.title}`}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.2 }}

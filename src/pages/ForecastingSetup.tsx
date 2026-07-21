@@ -23,8 +23,7 @@ export default function ForecastingSetup() {
     slip_threshold_days: 7,
   });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { if (settings) setForm({ ...form, ...settings });   }, [settings]);
+  useEffect(() => { if (settings) setForm(prev => ({ ...prev, ...settings })); }, [settings]);
 
   const totalWeight = form.health_weight_activity + form.health_weight_stage_age + form.health_weight_engagement + form.health_weight_relationship;
 
