@@ -1,4 +1,5 @@
- import { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
+import type { Json } from '@/integrations/supabase/types';
  import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
  import { Plus, Globe, Eye, Trash2, ExternalLink, Copy, BarChart3, FileText, Layout } from 'lucide-react';
@@ -195,7 +196,7 @@ export default function LandingPages() {
             {editing && (
               <LandingPageEditor
                 page={editing}
-                onSave={(blocks, theme) => update.mutate({ id: editing.id, blocks: blocks as never, theme: theme as never })}
+                onSave={(blocks, theme) => update.mutate({ id: editing.id, blocks: blocks as unknown as Json, theme: theme as unknown as Json })}
                 isSaving={update.isPending}
               />
             )}

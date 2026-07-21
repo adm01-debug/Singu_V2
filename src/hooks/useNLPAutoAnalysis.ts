@@ -156,7 +156,8 @@ export function useNLPAutoAnalysis() {
 
       // Sync to company if linked
       if (contactData?.company_id) {
-        await supabase.from('companies').update(behavioralUpdates).eq('id', contactData.company_id);
+        const { error: companyError } = await supabase.from('companies').update(behavioralUpdates).eq('id', contactData.company_id);
+        if (companyError) logger.error('Error syncing behavioral data to company:', { error: companyError.message });
       }
 
       // 5. Calculate overall confidence

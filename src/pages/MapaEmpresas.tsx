@@ -73,7 +73,8 @@ export default function MapaEmpresas() {
       if (!loc) continue;
       const coords = await geocode(loc);
       if (coords) {
-        await supabase.from("companies").update({ lat: coords.lat, lng: coords.lng }).eq("id", c.id);
+        const { error: geoError } = await supabase.from("companies").update({ lat: coords.lat, lng: coords.lng }).eq("id", c.id);
+        if (geoError) console.error('Error saving geocoordinates:', geoError.message);
         newResults.push({ id: c.id, name: c.name, nome_crm: c.nome_crm, ramo_atividade: c.ramo_atividade, status: c.status, cnpj: c.cnpj, email: c.email, phone: c.phone, website: c.website, city: c.city, state: c.state, lat: coords.lat, lng: coords.lng, relationship_score: 50 });
         geocoded++;
       }

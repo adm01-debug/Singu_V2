@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { Json } from '@/integrations/supabase/types';
 import type { NbaPriority, NbaSort } from './useProximosPassosFilters';
 
 const SCOPE = 'ficha360:presets';
@@ -86,7 +87,7 @@ export function useFicha360FilterPresets() {
             {
               user_id: userId,
               scope: SCOPE,
-              preferences: next as unknown as never,
+              preferences: next as unknown as Json,
             },
           ],
           { onConflict: 'user_id,scope' },

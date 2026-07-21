@@ -36,7 +36,7 @@ export function useAiAssistant() {
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
 
-  const fetchThreads = useCallback(async () => {
+  const fetchThreads = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user?.id) return;
     setLoading(true);
     try {
@@ -48,12 +48,13 @@ export function useAiAssistant() {
         .order('pinned', { ascending: false })
         .order('last_message_at', { ascending: false })
         .limit(1000);
+      if (signal?.cancelled) return;
       if (error) throw error;
       setThreads((data || []) as ChatThread[]);
     } catch (e) {
-      logger.error('Failed to fetch threads', e);
+      if (!signal?.cancelled) logger.error('Failed to fetch threads', e);
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user?.id]);
 
@@ -74,9 +75,9 @@ export function useAiAssistant() {
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-    fetchThreads();
-    return () => { cancelled = true; void cancelled; };
+    const signal = { cancelled: false };
+    fetchThreads(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchThreads]);
 
   useEffect(() => {

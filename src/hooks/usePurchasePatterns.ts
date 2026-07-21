@@ -45,7 +45,7 @@ export function usePurchasePatterns() {
   const [predictions, setPredictions] = useState<PurchasePrediction[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const analyzePurchasePatterns = useCallback(async () => {
+  const analyzePurchasePatterns = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
 
     setLoading(true);
@@ -257,15 +257,18 @@ export function usePurchasePatterns() {
       setPredictions(upcomingPredictions);
 
     } catch (error) {
+      if (signal?.cancelled) return;
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error analyzing purchase patterns:', { error: msg });
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user]);
 
   useEffect(() => {
-    analyzePurchasePatterns();
+    const signal = { cancelled: false };
+    analyzePurchasePatterns(signal);
+    return () => { signal.cancelled = true; };
   }, [analyzePurchasePatterns]);
 
   // Summary stats

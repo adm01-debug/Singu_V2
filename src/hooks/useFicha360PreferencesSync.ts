@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { Json } from '@/integrations/supabase/types';
 import type { NbaPriority, NbaSort } from './useProximosPassosFilters';
 
 const SCOPE = 'ficha360';
@@ -94,7 +95,7 @@ export function useFicha360PreferencesSync(opts: {
       const { error } = await supabase
         .from('user_ui_preferences')
         .upsert(
-          [{ user_id: userId, scope: SCOPE, preferences: prefs as unknown as never }],
+          [{ user_id: userId, scope: SCOPE, preferences: prefs as unknown as Json }],
           { onConflict: 'user_id,scope' },
         );
       if (error) throw error;

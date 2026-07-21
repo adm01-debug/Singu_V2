@@ -102,8 +102,10 @@ export function useBehaviorAlerts() {
             last_name
           )
         `)
+        .eq('user_id', user!.id)
         .eq('dismissed', false)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(500);
 
       if (error) throw error;
 
@@ -292,7 +294,8 @@ export function useBehaviorAlerts() {
             dismissed: false,
           }));
         if (toInsert.length > 0) {
-          await supabase.from('alerts').insert(toInsert);
+          const { error: insertError } = await supabase.from('alerts').insert(toInsert);
+          if (insertError) logger.error('Error inserting alerts:', { error: insertError.message });
         }
       }
 

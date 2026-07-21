@@ -188,7 +188,8 @@ export const useNotifications = () => {
         .eq('user_id', user.id)
         .eq('follow_up_required', true)
         .gte('follow_up_date', today.toISOString().split('T')[0])
-        .lt('follow_up_date', tomorrow.toISOString().split('T')[0]);
+        .lt('follow_up_date', tomorrow.toISOString().split('T')[0])
+        .limit(500);
 
       if (error) throw error;
 

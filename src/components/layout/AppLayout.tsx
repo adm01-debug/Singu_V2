@@ -34,6 +34,7 @@ import {
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -256,20 +257,22 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
 
       {/* Global Components */}
       {deferredReady && (
-        <Suspense fallback={null}>
-          <GlobalCommandBar
-            open={cmdBarOpen}
-            onOpenChange={setCmdBarOpen}
-            onOpenLegacySearch={() => setLegacySearchOpen(true)}
-            onOpenAsk={() => window.dispatchEvent(new CustomEvent('open-ask-crm'))}
-          />
-          <GlobalSearch 
-            open={legacySearchOpen} 
-            onOpenChange={setLegacySearchOpen} 
-            voiceMode={voiceMode} 
-            onVoiceModeChange={setVoiceMode} 
-          />
-        </Suspense>
+        <DashboardErrorBoundary sectionName="Global Command Bar">
+          <Suspense fallback={null}>
+            <GlobalCommandBar
+              open={cmdBarOpen}
+              onOpenChange={setCmdBarOpen}
+              onOpenLegacySearch={() => setLegacySearchOpen(true)}
+              onOpenAsk={() => window.dispatchEvent(new CustomEvent('open-ask-crm'))}
+            />
+            <GlobalSearch
+              open={legacySearchOpen}
+              onOpenChange={setLegacySearchOpen}
+              voiceMode={voiceMode}
+              onVoiceModeChange={setVoiceMode}
+            />
+          </Suspense>
+        </DashboardErrorBoundary>
       )}
       {/*
         Stack flutuante única: empilha ScrollToTopButton (topo) acima do
@@ -293,12 +296,14 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
       <NotificationCenter />
       <SlowQueryIndicator />
       {deferredReady && (
-        <Suspense fallback={null}>
-          <OnboardingTourWrapper />
-          <KeyboardShortcutsCheatsheet />
-          <AskCrmChat />
-          <AIEmailComposer />
-        </Suspense>
+        <DashboardErrorBoundary sectionName="Global Overlays">
+          <Suspense fallback={null}>
+            <OnboardingTourWrapper />
+            <KeyboardShortcutsCheatsheet />
+            <AskCrmChat />
+            <AIEmailComposer />
+          </Suspense>
+        </DashboardErrorBoundary>
       )}
     </div>
   );

@@ -29,8 +29,7 @@ export function useCSATSurveys(contactId?: string) {
     enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
-      let query = supabase.from('csat_surveys').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
-      .limit(1000);
+      let query = supabase.from('csat_surveys').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
       if (contactId) query = query.eq('contact_id', contactId);
       const { data, error } = await query.limit(100);
       if (error) throw error;
