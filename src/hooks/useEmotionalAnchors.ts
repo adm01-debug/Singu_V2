@@ -22,7 +22,7 @@ export function useEmotionalAnchors(contactId?: string) {
         .eq('contact_id', contactId!)
         .eq('user_id', user?.id ?? '')
         .order('strength', { ascending: false })
-        .limit(1000);
+        .limit(50);
       if (error) throw error;
       return data || [];
     },

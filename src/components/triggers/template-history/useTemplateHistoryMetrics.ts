@@ -23,7 +23,7 @@ export function useTemplateHistoryMetrics() {
           .from('contacts')
           .select('id, first_name, last_name, behavior')
           .eq('user_id', currentUser.id)
-          .limit(1000);
+          .limit(500);
 
         if (cancelled) return;
         if (error) throw error;

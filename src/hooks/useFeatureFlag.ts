@@ -43,7 +43,7 @@ export function useFeatureFlags() {
         .from("feature_flags")
         .select("*")
         .order("name")
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as FeatureFlag[];
     },

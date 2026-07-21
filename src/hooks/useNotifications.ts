@@ -202,7 +202,7 @@ export const useNotifications = () => {
           .select('id, first_name, last_name')
           .in('id', contactIds)
           .eq('user_id', user.id)
-          .limit(1000);
+          .limit(500);
 
         const contactMap = new Map(
           contacts?.map(c => [c.id, `${c.first_name} ${c.last_name}`]) || []
@@ -248,7 +248,7 @@ export const useNotifications = () => {
         .select('id, first_name, last_name, birthday')
         .eq('user_id', user.id)
         .not('birthday', 'is', null)
-        .limit(1000);
+        .limit(500);
 
       if (error) throw error;
 

@@ -27,7 +27,7 @@ export function useValidationQueueStats() {
         .select("status")
         .eq("user_id", user!.id)
         .gte("created_at", since)
-        .limit(1000);
+        .limit(200);
       if (error) throw error;
       const stats: QueueStats = { pending: 0, processing: 0, done: 0, error: 0, total: 0 };
       (data ?? []).forEach((r: { status: string }) => {

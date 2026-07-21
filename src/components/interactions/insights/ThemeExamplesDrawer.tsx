@@ -314,7 +314,7 @@ export function ThemeExamplesDrawer({ theme, onClose }: Props) {
         .from("interactions")
         .select("id, title, type, created_at, content, transcription, contact_id, sentiment")
         .in("id", theme.examples)
-        .limit(1000);
+        .limit(500);
       if (!cancelled) {
         if (!error && Array.isArray(data)) setInteractions(data as InteractionRow[]);
         setLoading(false);

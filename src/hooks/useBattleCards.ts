@@ -48,7 +48,7 @@ export function useBattleCards(search?: string) {
         .eq("user_id", user!.id)
         .eq("active", true)
         .order("competitor_name")
-        .limit(1000);
+        .limit(100);
       
       if (search) {
         q = q.ilike("competitor_name", `%${search}%`);

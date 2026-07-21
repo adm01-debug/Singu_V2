@@ -146,7 +146,7 @@ export function ForecastConfidencePanel() {
         .in('contact_id', contactIds)
         .gte('created_at', since.toISOString())
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(500);
       return (data ?? []) as InteractionRow[];
     },
   });

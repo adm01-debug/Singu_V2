@@ -60,7 +60,7 @@ function SentimentExamplesDrawerImpl({ bucket, interactionIds, onClose }: Props)
         .select("id, title, type, created_at, content, contact_id, sentiment")
         .in("id", limitedIds)
         .order("created_at", { ascending: false })
-        .limit(1000);
+        .limit(500);
       if (error) throw error;
       return Array.isArray(data) ? (data as Example[]) : [];
     },

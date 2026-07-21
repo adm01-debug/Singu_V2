@@ -29,7 +29,7 @@ export function useUpcomingLifeEvents(daysThreshold: number = 7) {
           contacts (first_name, last_name)
         `)
         .eq('user_id', user.id)
-        .limit(1000);
+        .limit(100);
 
       if (error) throw error;
 

@@ -71,7 +71,7 @@ export function useNetworkGraph() {
         { data: interactions, error: interactionsError },
       ] = await Promise.all([
         supabase.from('companies').select('id, name, industry, logo_url').eq('user_id', user.id).limit(500),
-        supabase.from('contacts').select('id, first_name, last_name, company_id, relationship_score, role, avatar_url').eq('user_id', user.id).limit(1000),
+        supabase.from('contacts').select('id, first_name, last_name, company_id, relationship_score, role, avatar_url').eq('user_id', user.id).limit(500),
         supabase.from('interactions').select('id, contact_id, company_id, created_at').eq('user_id', user.id).limit(5000),
       ]);
 

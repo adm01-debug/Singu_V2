@@ -63,7 +63,7 @@ import { logger } from '@/lib/logger';
          .from('contacts')
          .select('id, contact_behavior(disc_primary, vak_primary, motivation_primary)')
          .eq('user_id', user.id)
-         .limit(1000);
+         .limit(500);
 
        if (error) { throw error; }
 
@@ -108,7 +108,7 @@ import { logger } from '@/lib/logger';
         .select('*')
         .eq('user_id', user.id)
         .order('date', { ascending: false })
-        .limit(1000);
+        .limit(500);
 
        if (error) {
          logger.error('Error fetching campaign stats:', error);

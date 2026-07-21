@@ -78,11 +78,11 @@ export function useNLPAnalyticsData() {
     queryFn: async () => {
       try {
         const [emRes, vakRes, cRes, vRes, oRes] = await Promise.all([
-          supabase.from('emotional_states_history').select('emotional_state, confidence, created_at').eq('user_id', user!.id).gte('created_at', dateFilter).limit(1000),
-          supabase.from('vak_analysis_history').select('visual_score, auditory_score, kinesthetic_score, digital_score').eq('user_id', user!.id).gte('created_at', dateFilter).limit(1000),
-          supabase.from('contacts').select('behavior').eq('user_id', user!.id).limit(1000),
-          supabase.from('client_values').select('value_name, importance').eq('user_id', user!.id).gte('created_at', dateFilter).limit(1000),
-          supabase.from('hidden_objections').select('objection_type, resolved').eq('user_id', user!.id).gte('created_at', dateFilter).limit(1000),
+          supabase.from('emotional_states_history').select('emotional_state, confidence, created_at').eq('user_id', user!.id).gte('created_at', dateFilter).limit(500),
+          supabase.from('vak_analysis_history').select('visual_score, auditory_score, kinesthetic_score, digital_score').eq('user_id', user!.id).gte('created_at', dateFilter).limit(500),
+          supabase.from('contacts').select('behavior').eq('user_id', user!.id).limit(500),
+          supabase.from('client_values').select('value_name, importance').eq('user_id', user!.id).gte('created_at', dateFilter).limit(500),
+          supabase.from('hidden_objections').select('objection_type, resolved').eq('user_id', user!.id).gte('created_at', dateFilter).limit(500),
         ]);
 
         if (emRes.error) throw emRes.error;

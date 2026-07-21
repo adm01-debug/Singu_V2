@@ -19,7 +19,7 @@ export function useDISCConversionMetrics() {
         .select('*')
         .eq('user_id', user.id)
         .order('conversion_rate', { ascending: false })
-        .limit(1000);
+        .limit(200);
       if (signal?.cancelled) return;
       if (error) throw error;
       setMetrics(data || []);

@@ -16,7 +16,7 @@ export function useFavoriteTemplates() {
         .from('favorite_templates')
         .select('template_id')
         .eq('user_id', user.id)
-        .limit(1000);
+        .limit(200);
       if (error) throw error;
       return (data || []).map(f => f.template_id);
     },

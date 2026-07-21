@@ -45,7 +45,7 @@ export function useObjectionExampleFeedback({ objection, category }: UseFeedback
         .select("id, objection, category, interaction_id, is_useful")
         .eq("user_id", user!.id)
         .eq("objection", objection!)
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as ObjectionExampleFeedbackRow[];
     },

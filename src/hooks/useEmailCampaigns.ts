@@ -94,7 +94,7 @@ export function useEmailCampaigns() {
         .select('id, email, first_name, last_name')
         .eq('user_id', user.id)
         .not('email', 'is', null)
-        .limit(1000);
+        .limit(500);
       if (contactsError) throw contactsError;
 
       const eligible = (contacts ?? []).filter(c => c.email && c.email.includes('@'));

@@ -36,7 +36,7 @@ export function useProximoPassoFeedbacks(contactId: string | undefined) {
         .eq('contact_id', contactId!)
         .gte('executed_at', since)
         .order('executed_at', { ascending: false })
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as PassoFeedback[];
     },

@@ -63,7 +63,7 @@ export function usePurchasePatterns() {
         `)
         .eq('user_id', user.id)
         .order('purchase_date', { ascending: false })
-        .limit(1000);
+        .limit(500);
 
       if (purchaseError) throw purchaseError;
 

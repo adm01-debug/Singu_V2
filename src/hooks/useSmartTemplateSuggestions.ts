@@ -52,7 +52,7 @@ export function useSmartTemplateSuggestions(contact: Contact) {
         { data: contacts, error: contactsError },
       ] = await Promise.all([
         supabase.from('trigger_usage_history').select('id, trigger_type, template_id, template_title, scenario, result, effectiveness_rating, contact_id').eq('user_id', user.id).limit(2000),
-        supabase.from('contacts').select('id, behavior').eq('user_id', user.id).limit(1000),
+        supabase.from('contacts').select('id, behavior').eq('user_id', user.id).limit(500),
       ]);
 
       if (signal?.cancelled) return;

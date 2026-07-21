@@ -30,10 +30,10 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
           .select('id, trigger_type, result, effectiveness_rating, used_at, contact_id')
           .eq('user_id', currentUser.id)
           .order('used_at', { ascending: false })
-          .limit(1000);
+          .limit(500);
 
         if (dateFilter) query = query.gte('used_at', dateFilter)
-        .limit(1000);
+        .limit(500);
 
         const { data: usageHistory, error: usageError } = await query;
         if (usageError) throw usageError;
@@ -42,7 +42,7 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
           .from('contacts')
           .select('id, behavior')
           .eq('user_id', currentUser.id)
-          .limit(1000);
+          .limit(500);
         if (contactsError) throw contactsError;
 
         const contactDISCMap = new Map<string, DISCProfile | null>();

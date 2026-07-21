@@ -51,7 +51,7 @@ export function useDealVelocity() {
         .from('contacts')
         .select('id, relationship_stage, relationship_score, created_at, updated_at')
         .eq('user_id', user.id)
-        .limit(1000);
+        .limit(500);
 
       if (!contacts || contacts.length === 0) return null;
 

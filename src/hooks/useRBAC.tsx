@@ -21,7 +21,7 @@ export function useRBAC() {
         .from('user_roles')
         .select('role')
         .eq('user_id', user.id)
-        .limit(1000);
+        .limit(20);
       if (error) return [];
       return Array.isArray(data) ? data.map(r => r.role) : [];
     },
@@ -37,7 +37,7 @@ export function useRBAC() {
         .from('role_permissions')
         .select('permission_id, permissions(id, name, description, module, action)')
         .in('role', userRoles)
-        .limit(1000);
+        .limit(200);
       if (error || !Array.isArray(data)) return [];
       const perms: Permission[] = [];
       for (const rp of data) {

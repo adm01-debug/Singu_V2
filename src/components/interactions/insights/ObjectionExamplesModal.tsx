@@ -348,7 +348,7 @@ function ObjectionExamplesModalImpl({ objection, onClose }: Props) {
         .in("id", slice)
         .eq("user_id", user!.id)
         .order("created_at", { ascending: false })
-        .limit(1000);
+        .limit(500);
       if (error) throw error;
       return Array.isArray(data) ? (data as Example[]) : [];
     },
@@ -379,7 +379,7 @@ function ObjectionExamplesModalImpl({ objection, onClose }: Props) {
         .select("id, first_name, last_name, role_title, company:companies(name, nome_fantasia)")
         .in("id", contactIds)
         .eq("user_id", user!.id)
-        .limit(1000);
+        .limit(500);
       if (error) throw error;
       const map: Record<string, ContactSummary> = {};
       for (const c of (data ?? []) as ContactRow[]) {

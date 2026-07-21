@@ -78,7 +78,7 @@ export function useContactSegmentation() {
            )
          `)
          .eq('user_id', user.id)
-         .limit(1000);
+         .limit(500);
 
        if (error) {
          throw error;

@@ -26,7 +26,7 @@ export function useTeamDashboard() {
         .from('sales_team_members')
         .select('id, name, role, user_id, manager_id, vacation_end')
         .order('name')
-        .limit(1000);
+        .limit(200);
 
       if (!allMembers?.length) return { members: [] as TeamMemberStats[], isManager: false };
 

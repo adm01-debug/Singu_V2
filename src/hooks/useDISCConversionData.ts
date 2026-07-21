@@ -32,7 +32,7 @@ export function useDISCConversionData(period: ConversionPeriod) {
       try {
         // Both queries are independent — run in parallel
         const [{ data: contacts }, { data: interactions }] = await Promise.all([
-          supabase.from('contacts').select('id, behavior, relationship_score, relationship_stage, created_at').eq('user_id', currentUser.id).limit(1000),
+          supabase.from('contacts').select('id, behavior, relationship_score, relationship_stage, created_at').eq('user_id', currentUser.id).limit(500),
           supabase.from('interactions').select('contact_id, type, created_at').eq('user_id', currentUser.id).order('created_at', { ascending: true }).limit(5000),
         ]);
 

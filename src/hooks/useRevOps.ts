@@ -76,7 +76,7 @@ export function useRevOpsSnapshots(periodStart: string, periodEnd: string) {
         .gte("period", periodStart)
         .lte("period", periodEnd)
         .order("period", { ascending: false })
-        .limit(1000);
+        .limit(500);
       if (error) throw error;
       return (data || []) as unknown as RevOpsSnapshot[];
     },
@@ -113,7 +113,7 @@ export function useRevOpsBenchmarks() {
         .select("*")
         .eq("user_id", user!.id)
         .order("metric_key")
-        .limit(1000);
+        .limit(500);
       if (error) throw error;
       return (data || []) as unknown as RevOpsBenchmark[];
     },
