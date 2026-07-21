@@ -309,11 +309,15 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
   );
 }
 
-const SIDEBAR_KEY = "nexus-sidebar-state";
+const SIDEBAR_KEY_PREFIX = "nexus-sidebar-state";
 
-function getDefaultOpen() {
+function getSidebarKey(userId?: string) {
+  return `${SIDEBAR_KEY_PREFIX}-${userId ?? 'anon'}`;
+}
+
+function getDefaultOpen(userId?: string) {
   try {
-    const stored = localStorage.getItem(SIDEBAR_KEY);
+    const stored = localStorage.getItem(getSidebarKey(userId));
     return stored !== "false";
   } catch {
     return true;
@@ -321,11 +325,13 @@ function getDefaultOpen() {
 }
 
 export function AppLayout({ children, title }: AppLayoutProps) {
+  const { user } = useAuth();
+  const sidebarKey = getSidebarKey(user?.id);
   return (
     <SidebarProvider
-      defaultOpen={getDefaultOpen()}
+      defaultOpen={getDefaultOpen(user?.id)}
       onOpenChange={(open) => {
-        try { localStorage.setItem(SIDEBAR_KEY, String(open)); } catch { /* noop */ }
+        try { localStorage.setItem(sidebarKey, String(open)); } catch { /* noop */ }
       }}
     >
       <AppLayoutInner title={title}>

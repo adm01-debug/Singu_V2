@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AlertTriangle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,10 +23,14 @@ interface AlertRow {
 export function BehavioralRegenAlertBanner() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const [showSimulated, setShowSimulated] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    try { return window.localStorage.getItem("brab:show-simulated") === "1"; } catch { return false; }
-  });
+  const brabKey = `brab:show-simulated-${user?.id ?? 'anon'}`;
+  const [showSimulated, setShowSimulated] = useState<boolean>(false);
+
+  // Hydrate from user-scoped key after user resolves
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    try { setShowSimulated(window.localStorage.getItem(brabKey) === "1"); } catch { /* quota/private */ }
+  }, [brabKey]);
 
   const { data: allAlerts, isLoading } = useQuery({
     queryKey: ["behavioral-regen-active-alerts", user?.id],
@@ -63,7 +67,7 @@ export function BehavioralRegenAlertBanner() {
     const next = !showSimulated;
     setShowSimulated(next);
     if (typeof window !== "undefined") {
-      try { window.localStorage.setItem("brab:show-simulated", next ? "1" : "0"); } catch { /* quota/private */ }
+      try { window.localStorage.setItem(brabKey, next ? "1" : "0"); } catch { /* quota/private */ }
     }
   };
 

@@ -77,11 +77,12 @@ const navSections = [
   },
 ];
 
-const COLLAPSED_KEY = "nexus-sidebar-sections";
+const COLLAPSED_KEY_PREFIX = "nexus-sidebar-sections";
 
-function getInitialCollapsed(): Record<string, boolean> {
+function getInitialCollapsed(userId?: string): Record<string, boolean> {
+  const key = `${COLLAPSED_KEY_PREFIX}-${userId ?? 'anon'}`;
   try {
-    const stored = localStorage.getItem(COLLAPSED_KEY);
+    const stored = localStorage.getItem(key);
     if (stored) return JSON.parse(stored);
   } catch { /* noop */ }
   return { principal: false, analise: false, ops: true, config: true };
@@ -93,7 +94,8 @@ function AppSidebarInner() {
   const location = useLocation();
   const { prefetch } = usePrefetch();
   const { user, signOut } = useAuth();
-  const [sectionCollapsed, setSectionCollapsed] = useState<Record<string, boolean>>(getInitialCollapsed);
+  const collapsedKey = `${COLLAPSED_KEY_PREFIX}-${user?.id ?? 'anon'}`;
+  const [sectionCollapsed, setSectionCollapsed] = useState<Record<string, boolean>>(() => getInitialCollapsed(user?.id));
 
   useEffect(() => {
     setSectionCollapsed(prev => {
@@ -103,7 +105,7 @@ function AppSidebarInner() {
         );
         if (hasActive && prev[section.key]) {
           const next = { ...prev, [section.key]: false };
-          try { localStorage.setItem(COLLAPSED_KEY, JSON.stringify(next)); } catch { /* noop */ }
+          try { localStorage.setItem(collapsedKey, JSON.stringify(next)); } catch { /* noop */ }
           return next;
         }
       }
@@ -114,7 +116,7 @@ function AppSidebarInner() {
   const toggleSection = useCallback((key: string) => {
     setSectionCollapsed(prev => {
       const next = { ...prev, [key]: !prev[key] };
-      try { localStorage.setItem(COLLAPSED_KEY, JSON.stringify(next)); } catch { /* noop */ }
+      try { localStorage.setItem(collapsedKey, JSON.stringify(next)); } catch { /* noop */ }
       return next;
     });
   }, []);
