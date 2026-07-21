@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { guardBody, scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { validate } from "../_shared/validate.ts";
 
 
 Deno.serve(async (req) => {
@@ -20,8 +21,12 @@ Deno.serve(async (req) => {
   );
 
   try {
-    const body = rawBody;
-    const { contact_id, user_id_override } = (body as Record<string, unknown> | null) || {};
+    const vm = validate(rawBody ?? {}, {
+      contact_id:      { type: 'string', maxLength: 36 },
+      user_id_override: { type: 'string', maxLength: 36 },
+    });
+    if (!vm.ok) return new Response(JSON.stringify({ error: vm.error }), { status: 400, headers: { ...cors, 'Content-Type': 'application/json' } });
+    const { contact_id, user_id_override } = vm.data as { contact_id?: string; user_id_override?: string };
 
     // Single contact mode
     if (contact_id) {

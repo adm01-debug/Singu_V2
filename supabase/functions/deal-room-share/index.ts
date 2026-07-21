@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { validate } from "../_shared/validate.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
 
@@ -18,9 +19,15 @@ Deno.serve(async (req) => {
   const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
   if (bodyError) return bodyError;
 
+  const v = validate(rawBody, {
+    room_id: { type: 'string', required: true, maxLength: 36 },
+    enabled:  { type: 'boolean' },
+    rotate:   { type: 'boolean' },
+  });
+  if (!v.ok) return jsonError(v.error, 400, req);
+  const { room_id, enabled, rotate } = v.data as { room_id: string; enabled?: boolean; rotate?: boolean };
+
   try {
-    const { room_id, enabled, rotate } = rawBody as { room_id?: string; enabled?: boolean; rotate?: boolean };
-    if (!room_id) return jsonError("room_id required", 400, req);
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,

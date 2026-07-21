@@ -2,6 +2,7 @@ import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { validate } from "../_shared/validate.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
@@ -22,12 +23,15 @@ Deno.serve(async (req) => {
   const { body: rawBody, error: bodyError } = await guardBody(req, 128 * 1024);
   if (bodyError) return bodyError;
 
+  const v = validate(rawBody, {
+    deal_id:    { type: 'string', required: true, maxLength: 36 },
+    model:      { type: 'string', maxLength: 20 },
+    deal_value: { type: 'number', min: 0 },
+  });
+  if (!v.ok) { log.warn("invalid_input", { error: v.error }); return jsonError(v.error, 400, req); }
+  const { deal_id, model = "linear", deal_value = 0 } = v.data as { deal_id: string; model?: string; deal_value?: number };
+
   try {
-    const { deal_id, model = "linear", deal_value = 0 } = rawBody as { deal_id?: string; model?: string; deal_value?: number };
-    if (!deal_id) {
-      log.warn("missing_deal_id");
-      return jsonError("deal_id required", 400, req);
-    }
 
     log.info("calculation_started", { userId, dealId: deal_id, model });
 

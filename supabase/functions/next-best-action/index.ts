@@ -2,6 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { validate } from "../_shared/validate.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
 
@@ -25,9 +26,13 @@ Deno.serve(async (req) => {
   const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
   if (bodyError) return bodyError;
 
+  const vnb = validate(rawBody, {
+    contactId: { type: 'string', required: true, maxLength: 36 },
+  });
+  if (!vnb.ok) return jsonError(vnb.error, 400);
+  const { contactId } = vnb.data as { contactId: string };
+
   try {
-    const { contactId } = rawBody as { contactId?: string };
-    if (!contactId) { return jsonError("contactId is required", 400); }
 
     // Verify contact ownership before fetching any related data
     const { data: contact, error: contactErr } = await supabase
