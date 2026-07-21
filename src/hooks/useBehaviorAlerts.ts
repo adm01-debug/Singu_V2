@@ -274,7 +274,8 @@ export function useBehaviorAlerts() {
           .select('contact_id, type')
           .in('contact_id', contactIds)
           .in('type', types)
-          .eq('dismissed', false);
+          .eq('dismissed', false)
+          .limit(1000);
         const existingSet = new Set(
           (existing || []).map(e => `${e.contact_id}::${e.type}`)
         );

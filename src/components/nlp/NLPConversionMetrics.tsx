@@ -64,25 +64,29 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
       const { data: vakHistory } = await supabase
         .from('vak_analysis_history')
         .select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score')
-        .eq('user_id', currentUser.id);
+        .eq('user_id', currentUser.id)
+        .limit(1000);
 
       // Fetch contacts for relationship scores
       const { data: contacts } = await supabase
         .from('contacts')
         .select('id, relationship_score, relationship_stage')
-        .eq('user_id', currentUser.id);
+        .eq('user_id', currentUser.id)
+        .limit(1000);
 
       // Fetch emotional states
       const { data: emotionalHistory } = await supabase
         .from('emotional_states_history')
         .select('contact_id, emotional_state')
-        .eq('user_id', currentUser.id);
+        .eq('user_id', currentUser.id)
+        .limit(1000);
 
       // Fetch interactions count
       const { data: interactions } = await supabase
         .from('interactions')
         .select('contact_id')
-        .eq('user_id', currentUser.id);
+        .eq('user_id', currentUser.id)
+        .limit(1000);
 
       // Process VAK metrics
       const vakData: Record<VAKType, { contacts: Set<string>; totalScore: number; interactions: number; conversions: number }> = {

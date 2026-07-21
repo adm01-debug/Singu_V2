@@ -30,7 +30,8 @@ export function useSocialSync(contactId: string) {
         .from('psychographic_audit_log')
         .select('*')
         .eq('contact_id', contactId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
 
       if (error) throw error;
       return data;

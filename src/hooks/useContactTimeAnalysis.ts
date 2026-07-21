@@ -27,7 +27,8 @@ export function useContactTimeAnalysis(contactId?: string) {
         .from('contact_time_analysis')
         .select('*')
         .eq('contact_id', contactId!)
-        .eq('user_id', user?.id ?? '');
+        .eq('user_id', user?.id ?? '')
+        .limit(1000);
       if (error) throw error;
       return data || [];
     },

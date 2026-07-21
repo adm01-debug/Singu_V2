@@ -67,9 +67,9 @@ export function useCompatibilityAlerts() {
 
       // Stage 2: contacts, existing alerts, and VAK data are all independent — run in parallel
       const [{ data: contacts }, { data: existingAlerts }, { data: vakData }] = await Promise.all([
-        supabase.from('contacts').select('id, first_name, last_name, behavior, relationship_score').eq('user_id', user.id),
-        supabase.from('compatibility_alerts').select('contact_id').eq('user_id', user.id).eq('dismissed', false),
-        supabase.from('vak_analysis_history').select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score').eq('user_id', user.id).order('created_at', { ascending: false }),
+        supabase.from('contacts').select('id, first_name, last_name, behavior, relationship_score').eq('user_id', user.id).limit(1000),
+        supabase.from('compatibility_alerts').select('contact_id').eq('user_id', user.id).eq('dismissed', false).limit(500),
+        supabase.from('vak_analysis_history').select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score').eq('user_id', user.id).order('created_at', { ascending: false }).limit(2000),
       ]);
 
       if (!contacts) return;

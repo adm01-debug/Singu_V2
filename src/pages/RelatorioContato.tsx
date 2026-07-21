@@ -119,7 +119,8 @@ const RelatorioContato = () => {
           .from("social_consent_audit")
           .select("*")
           .eq("contact_id", id)
-          .order("created_at", { ascending: false });
+          .order("created_at", { ascending: false })
+          .limit(1000);
 
         if (cancelled) return;
 

@@ -36,7 +36,8 @@ export function useEmailCampaigns() {
         .from('email_campaigns')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (error) throw error;
       return (data || []) as EmailCampaign[];
     },
@@ -90,7 +91,8 @@ export function useEmailCampaigns() {
         .from('contacts')
         .select('id, email, first_name, last_name')
         .eq('user_id', user.id)
-        .not('email', 'is', null);
+        .not('email', 'is', null)
+        .limit(1000);
       if (contactsError) throw contactsError;
 
       const eligible = (contacts ?? []).filter(c => c.email && c.email.includes('@'));

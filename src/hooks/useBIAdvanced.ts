@@ -99,7 +99,8 @@ export function useGeoSalesData() {
         .select('id, name, lat, lng, city, state')
         .eq('user_id', user.id)
         .not('lat', 'is', null)
-        .not('lng', 'is', null);
+        .not('lng', 'is', null)
+        .limit(1000);
 
       if (!companies?.length) return [];
 
