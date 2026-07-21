@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 export interface MQLCriteria {
   id: string;
@@ -51,10 +52,10 @@ export function useMQLCriteria() {
     mutationFn: async (input: Partial<MQLCriteria> & { name: string }) => {
       if (!user) throw new Error('Não autenticado');
       if (input.id) {
-        const { error } = await supabase.from('mql_criteria').update(input as never).eq('id', input.id);
+        const { error } = await supabase.from('mql_criteria').update(input as TablesUpdate<'mql_criteria'>).eq('id', input.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from('mql_criteria').insert({ ...input, user_id: user.id } as never);
+        const { error } = await supabase.from('mql_criteria').insert({ ...input, user_id: user.id } as TablesInsert<'mql_criteria'>);
         if (error) throw error;
       }
     },
@@ -120,7 +121,7 @@ export function useHandoffMQL() {
         status,
         handoff_to: to ?? null,
         handoff_at: new Date().toISOString(),
-      } as never).eq('id', id);
+      } as TablesUpdate<'mql_classifications'>).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['mql-classifications'] }); toast.success('Handoff registrado'); },

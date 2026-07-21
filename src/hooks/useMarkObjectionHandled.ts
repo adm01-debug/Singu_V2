@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import type { ConversationAnalysis } from "@/hooks/useConversationIntel";
+import type { Json } from "@/integrations/supabase/types";
 
 function normalize(s: string): string {
   return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
@@ -75,7 +76,7 @@ export function useMarkObjectionHandled() {
         updates.map((u) =>
           supabase
             .from("conversation_analyses")
-            .update({ objections: u.objections as unknown as never })
+            .update({ objections: u.objections as unknown as Json })
             .eq("id", u.id)
             .eq("user_id", user.id),
         ),

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import type { TablesUpdate } from '@/integrations/supabase/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -70,7 +71,7 @@ export function CRMAutomationAuditLog() {
       // 2. Update log status to show it was re-queued
       const { error: logUpdateError } = await supabase
         .from('crm_automation_logs')
-        .update({ status: 'reprocessing' } as never)
+        .update({ status: 'reprocessing' } as TablesUpdate<'crm_automation_logs'>)
         .eq('id', logId);
       
       if (logUpdateError) throw logUpdateError;

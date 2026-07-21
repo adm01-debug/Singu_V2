@@ -2,6 +2,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { GlobalSyncIndicator } from '@/components/feedback/GlobalSyncIndicator';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import {
   PWAShell,
   SchemaDriftBannerLazy,
@@ -17,9 +18,11 @@ const WhatsNewWrapper = () => {
   const location = useLocation();
   if (!user || location.pathname === '/auth') return null;
   return (
-    <Suspense fallback={null}>
-      <WhatsNewModal />
-    </Suspense>
+    <DashboardErrorBoundary sectionName="Novidades">
+      <Suspense fallback={null}>
+        <WhatsNewModal />
+      </Suspense>
+    </DashboardErrorBoundary>
   );
 };
 
@@ -46,25 +49,35 @@ export const DeferredAppChrome = () => {
     <>
       <GlobalSyncIndicator />
       {shouldLoadShell && (
-        <Suspense fallback={null}>
-          <PWAShell />
-        </Suspense>
+        <DashboardErrorBoundary sectionName="PWA Shell">
+          <Suspense fallback={null}>
+            <PWAShell />
+          </Suspense>
+        </DashboardErrorBoundary>
       )}
 
       {shouldLoadAuthenticatedChrome && (
         <>
-          <Suspense fallback={null}>
-            <SchemaDriftBannerLazy />
-          </Suspense>
-          <Suspense fallback={null}>
-            <EasterEggsProvider />
-          </Suspense>
-          <Suspense fallback={null}>
-            <KeyboardShortcutsDialogEnhanced />
-          </Suspense>
-          <Suspense fallback={null}>
-            <SessionExpiryHandler />
-          </Suspense>
+          <DashboardErrorBoundary sectionName="Schema Drift">
+            <Suspense fallback={null}>
+              <SchemaDriftBannerLazy />
+            </Suspense>
+          </DashboardErrorBoundary>
+          <DashboardErrorBoundary sectionName="Easter Eggs">
+            <Suspense fallback={null}>
+              <EasterEggsProvider />
+            </Suspense>
+          </DashboardErrorBoundary>
+          <DashboardErrorBoundary sectionName="Atalhos de Teclado">
+            <Suspense fallback={null}>
+              <KeyboardShortcutsDialogEnhanced />
+            </Suspense>
+          </DashboardErrorBoundary>
+          <DashboardErrorBoundary sectionName="Expiração de Sessão">
+            <Suspense fallback={null}>
+              <SessionExpiryHandler />
+            </Suspense>
+          </DashboardErrorBoundary>
           <WhatsNewWrapper />
         </>
       )}

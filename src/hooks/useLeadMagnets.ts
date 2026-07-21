@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 export interface LeadMagnet {
   id: string;
@@ -57,10 +58,10 @@ export function useLeadMagnets() {
     mutationFn: async (input: Partial<LeadMagnet> & { title: string; slug: string; type: LeadMagnet['type'] }) => {
       if (!user) throw new Error('Não autenticado');
       if (input.id) {
-        const { error } = await supabase.from('lead_magnets').update(input as never).eq('id', input.id);
+        const { error } = await supabase.from('lead_magnets').update(input as TablesUpdate<'lead_magnets'>).eq('id', input.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from('lead_magnets').insert({ ...input, user_id: user.id } as never);
+        const { error } = await supabase.from('lead_magnets').insert({ ...input, user_id: user.id } as TablesInsert<'lead_magnets'>);
         if (error) throw error;
       }
     },
@@ -79,7 +80,7 @@ export function useLeadMagnets() {
 
   const togglePublish = useMutation({
     mutationFn: async ({ id, is_published }: { id: string; is_published: boolean }) => {
-      const { error } = await supabase.from('lead_magnets').update({ is_published } as never).eq('id', id);
+      const { error } = await supabase.from('lead_magnets').update({ is_published } as TablesUpdate<'lead_magnets'>).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),

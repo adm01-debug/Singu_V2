@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Users, ArrowUpDown, Banknote, Network, AlertCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -93,6 +93,14 @@ export const CompaniesTableView = React.memo(function CompaniesTableView({
   sortOrder,
   onSortChange,
 }: CompaniesTableViewProps) {
+  const enrichedCompanies = useMemo(() => companies.map((company) => ({
+    ...company,
+    _location: [company.city, company.state].filter(Boolean).join(', ') ? toTitleCase([company.city, company.state].filter(Boolean).join(', ')) : '',
+    _capital: formatCapitalSocial(company.capital_social),
+    _cnpj: formatCnpj(company.cnpj),
+    _duplicateSimilarity: (company as { similarity?: number }).similarity,
+  })), [companies]);
+
   const SortButton = ({ field, children }: { field: string; children: React.ReactNode }) => (
     <button
       onClick={() => onSortChange(field)}
@@ -121,16 +129,13 @@ export const CompaniesTableView = React.memo(function CompaniesTableView({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {companies.map((company) => {
+          {enrichedCompanies.map((company) => {
             const count = contactCountMap.get(company.id) || 0;
             const health = healthLabel[company.financial_health || ''];
-            const rawLocation = [company.city, company.state].filter(Boolean).join(', ');
-            const location = rawLocation ? toTitleCase(rawLocation) : '';
-            const capital = formatCapitalSocial(company.capital_social);
-            const cnpjFormatted = formatCnpj(company.cnpj);
-            
-            // Check for potential duplicate similarity
-            const duplicateSimilarity = (company as { similarity?: number }).similarity;
+            const location = company._location;
+            const capital = company._capital;
+            const cnpjFormatted = company._cnpj;
+            const duplicateSimilarity = company._duplicateSimilarity;
             const isHighSimilarity = duplicateSimilarity && duplicateSimilarity >= 90;
 
             return (

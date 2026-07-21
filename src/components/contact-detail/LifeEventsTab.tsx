@@ -107,7 +107,8 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
       });
 
       if (!error) {
-        await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id);
+        const { error: updateErr } = await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id);
+        if (updateErr) toast({ title: "Aviso", description: "Relacionado adicionado, mas falha ao marcar sugestão.", variant: "destructive" });
         queryClient.invalidateQueries({ queryKey: ['contact-relational-data', contactId] });
         refetchSuggestions();
         toast({ title: "Relacionado adicionado", description: `${relData.name} foi adicionado aos contatos relacionados.` });
@@ -129,7 +130,8 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     });
 
     if (!error) {
-      await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id);
+      const { error: updateErr } = await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id);
+      if (updateErr) toast({ title: "Aviso", description: "Marco adicionado, mas falha ao marcar sugestão.", variant: "destructive" });
       queryClient.invalidateQueries({ queryKey: ['life-events', contactId] });
       refetchSuggestions();
       toast({ title: "Sugestão aceita", description: "O marco foi adicionado à linha do tempo." });

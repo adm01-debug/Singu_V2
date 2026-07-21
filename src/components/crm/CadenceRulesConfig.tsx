@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -86,13 +87,13 @@ export function CadenceRulesConfig() {
       if (payload.id) {
         const { error } = await supabase
           .from('crm_cadence_rules')
-          .update(payload as never)
+          .update(payload as TablesUpdate<'crm_cadence_rules'>)
           .eq('id', payload.id);
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('crm_cadence_rules')
-          .insert([payload as never]);
+          .insert([payload as TablesInsert<'crm_cadence_rules'>]);
         if (error) throw error;
       }
     },

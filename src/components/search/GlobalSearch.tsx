@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef, lazy, Suspense } from 'react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { useNavigate } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import { useModalHistory } from '@/hooks/useModalHistory';
@@ -520,6 +521,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
       </CommandDialog>
 
       {voiceOpen && (
+        <DashboardErrorBoundary sectionName="Assistente de Voz">
         <Suspense fallback={null}>
           <LazyVoiceOverlay isOpen={voiceOpen} onClose={() => setVoiceOpen(false)} onAction={(action) => {
             if (action.action === 'navigate' && action.data?.route) navigate(action.data.route);
@@ -541,6 +543,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
              }
           }} />
         </Suspense>
+        </DashboardErrorBoundary>
       )}
     </>
   );

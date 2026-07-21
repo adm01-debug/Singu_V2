@@ -1,4 +1,5 @@
 import React, { lazy, Suspense } from 'react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -301,16 +302,22 @@ export default function ReportsTab() {
       </div>
       <ChannelChart />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Suspense fallback={<Skeleton className="h-72 rounded-lg" />}>
-          <YoyComparisonWidget />
-        </Suspense>
-        <Suspense fallback={<Skeleton className="h-72 rounded-lg" />}>
-          <MonthlyReportWidget />
-        </Suspense>
+        <DashboardErrorBoundary sectionName="Comparativo Anual">
+          <Suspense fallback={<Skeleton className="h-72 rounded-lg" />}>
+            <YoyComparisonWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Relatório Mensal">
+          <Suspense fallback={<Skeleton className="h-72 rounded-lg" />}>
+            <MonthlyReportWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
       </div>
-      <Suspense fallback={<Skeleton className="h-72 rounded-lg" />}>
-        <CohortAnalysisWidget />
-      </Suspense>
+      <DashboardErrorBoundary sectionName="Análise de Coorte">
+        <Suspense fallback={<Skeleton className="h-72 rounded-lg" />}>
+          <CohortAnalysisWidget />
+        </Suspense>
+      </DashboardErrorBoundary>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ParetoList />
       </div>

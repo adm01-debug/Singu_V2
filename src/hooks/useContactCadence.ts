@@ -52,7 +52,7 @@ export function useContactCadence() {
   const [alerts, setAlerts] = useState<CadenceAlert[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchCadences = useCallback(async () => {
+  const fetchCadences = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
 
     try {
@@ -66,6 +66,7 @@ export function useContactCadence() {
         .order('next_contact_due', { ascending: true, nullsFirst: false })
         .limit(500);
 
+      if (signal?.cancelled) return;
       if (error) throw error;
 
       // Fetch companies in parallel (avoid N+1 waterfall)
@@ -92,6 +93,7 @@ export function useContactCadence() {
           : null,
       } as ContactCadence));
 
+      if (signal?.cancelled) return;
       setCadences(cadencesWithCompanies);
 
       // Calculate alerts
@@ -130,17 +132,21 @@ export function useContactCadence() {
         return statusOrder[a.status] - statusOrder[b.status];
       });
 
-      setAlerts(calculatedAlerts);
+      if (!signal?.cancelled) setAlerts(calculatedAlerts);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error fetching cadences:', { error: msg });
+      if (!signal?.cancelled) {
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching cadences:', { error: msg });
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user]);
 
   useEffect(() => {
-    fetchCadences();
+    const signal = { cancelled: false };
+    fetchCadences(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchCadences]);
 
   const setCadence = useCallback(async (

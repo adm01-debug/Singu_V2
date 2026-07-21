@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 import type { SalesTeamMember, SalesRole } from '@/types/leadRouting';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 const QUERY_KEY_BASE = ['sales-team-members'];
 
@@ -41,7 +42,7 @@ export function useCreateTeamMember() {
       if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from('sales_team_members')
-        .insert({ ...member, user_id: user.id } as never)
+        .insert({ ...member, user_id: user.id } as TablesInsert<'sales_team_members'>)
         .select()
         .maybeSingle();
       if (error) throw error;
@@ -63,7 +64,7 @@ export function useUpdateTeamMember() {
     mutationFn: async ({ id, ...updates }: Partial<SalesTeamMember> & { id: string }) => {
       const { data, error } = await supabase
         .from('sales_team_members')
-        .update(updates as never)
+        .update(updates as TablesUpdate<'sales_team_members'>)
         .eq('id', id)
         .select()
         .maybeSingle();

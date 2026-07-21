@@ -55,6 +55,7 @@ export function useTeamDashboard() {
         const [{ count: cc }, { count: ic }, { data: deals }] = await Promise.all([
           supabase.from('contacts').select('*', { count: 'exact', head: true }).eq('user_id', uid),
           supabase.from('interactions').select('*', { count: 'exact', head: true }).eq('user_id', uid).gte('created_at', monthAgo.toISOString()),
+          // 'deals' is a planned table not yet in the generated types — cast is intentional until migration runs
           supabase.from('deals' as never).select('value, stage').eq('user_id', uid).limit(500),
         ]);
 

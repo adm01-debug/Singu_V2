@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -100,17 +101,19 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
 
   return (
     <div className="space-y-4">
-      <Suspense fallback={<Skeleton className="h-20" />}>
-        <CRMAlertsWidget contactId={contactId} />
-      </Suspense>
+      <DashboardErrorBoundary sectionName="Alertas CRM">
+        <Suspense fallback={<Skeleton className="h-20" />}>
+          <CRMAlertsWidget contactId={contactId} />
+        </Suspense>
+      </DashboardErrorBoundary>
 
       <div className="flex justify-end">
         <ModuleHelp {...moduleHelpContent.neuromarketing} />
       </div>
        <div className="grid gap-4 md:grid-cols-2">
-         <EmotionalIntelligencePanel 
-           contact={{ id: contactId, firstName: contactName || 'Contato' } as unknown as Contact} 
-           interactions={interactions as never} 
+         <EmotionalIntelligencePanel
+           contact={{ id: contactId, firstName: contactName || 'Contato' } as unknown as Contact}
+           interactions={(interactions ?? []).map(i => ({ id: i.id, content: i.content ?? undefined, transcription: i.transcription ?? undefined, createdAt: i.created_at }))}
          />
       {/* Hidden Objections */}
       <Card className={cn(unresolvedObjections.length > 0 && 'border-accent/30 dark:border-accent/30')}>
@@ -199,20 +202,28 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
         <LeadScoreWidget contactId={contactId} />
         <EmotionalAnchorsPanel contactId={contactId} />
         <BestTimeToContactCard contactId={contactId} />
-        <Suspense fallback={<Skeleton className="h-40 rounded-lg" />}>
-          <ChurnRiskWidget contactId={contactId} />
-        </Suspense>
-        <Suspense fallback={<Skeleton className="h-28 rounded-lg" />}>
-          <ChurnPredictionsWidget contactId={contactId} />
-        </Suspense>
-        <Suspense fallback={<Skeleton className="h-40 rounded-lg" />}>
-          <LocalChurnRiskPanel contactId={contactId} compact />
-        </Suspense>
+        <DashboardErrorBoundary sectionName="Risco de Churn">
+          <Suspense fallback={<Skeleton className="h-40 rounded-lg" />}>
+            <ChurnRiskWidget contactId={contactId} />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Predições de Churn">
+          <Suspense fallback={<Skeleton className="h-28 rounded-lg" />}>
+            <ChurnPredictionsWidget contactId={contactId} />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Painel de Risco">
+          <Suspense fallback={<Skeleton className="h-40 rounded-lg" />}>
+            <LocalChurnRiskPanel contactId={contactId} compact />
+          </Suspense>
+        </DashboardErrorBoundary>
       </div>
 
-      <Suspense fallback={<Skeleton className="h-12 rounded-lg" />}>
-        <ContactDaysWithoutWidget contactId={contactId} />
-      </Suspense>
+      <DashboardErrorBoundary sectionName="Dias sem Contato">
+        <Suspense fallback={<Skeleton className="h-12 rounded-lg" />}>
+          <ContactDaysWithoutWidget contactId={contactId} />
+        </Suspense>
+      </DashboardErrorBoundary>
 
       <AIActionsPanel
         contactId={contactId}

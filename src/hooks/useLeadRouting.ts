@@ -8,6 +8,7 @@ import type {
   LeadAssignment,
   SalesTeamMember,
 } from '@/types/leadRouting';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 const RULES_KEY_BASE = ['lead-routing-rules'];
 const ASSIGNMENTS_KEY_BASE = ['lead-assignments'];
@@ -41,7 +42,7 @@ export function useCreateRoutingRule() {
       if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from('lead_routing_rules')
-        .insert({ ...rule, user_id: user.id } as never)
+        .insert({ ...rule, user_id: user.id } as TablesInsert<'lead_routing_rules'>)
         .select()
         .maybeSingle();
       if (error) throw error;
@@ -62,7 +63,7 @@ export function useUpdateRoutingRule() {
     mutationFn: async ({ id, ...updates }: Partial<LeadRoutingRule> & { id: string }) => {
       const { data, error } = await supabase
         .from('lead_routing_rules')
-        .update(updates as never)
+        .update(updates as TablesUpdate<'lead_routing_rules'>)
         .eq('id', id)
         .select()
         .maybeSingle();
@@ -165,12 +166,12 @@ export function useDistributeLead() {
           status: 'active',
           routing_rule_id: ruleId ?? null,
           sla_deadline: new Date(Date.now() + 4 * 3600_000).toISOString(),
-        } as never),
+        } as TablesInsert<'lead_assignments'>),
         supabase.from('sales_team_members').update({
           current_lead_count: selected.current_lead_count + 1,
           leads_today: selected.leads_today + 1,
           last_assigned_at: new Date().toISOString(),
-        } as never).eq('id', selected.id),
+        } as TablesUpdate<'sales_team_members'>).eq('id', selected.id),
       ]);
       if (assignError) throw assignError;
       if (updateError) logger.error('Erro ao atualizar contadores:', updateError);

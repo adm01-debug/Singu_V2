@@ -206,9 +206,11 @@ const Analytics = () => {
 
           <TabsContent value="neuro" className="space-y-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-                <NeuroPortfolioDashboard />
-              </Suspense>
+              <DashboardErrorBoundary sectionName="Neuro Portfolio">
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <NeuroPortfolioDashboard />
+                </Suspense>
+              </DashboardErrorBoundary>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <NeuroRadarChart discProfile={null} interactions={[]} title="Balanço Neural Médio do Portfólio" />
                 <NeuroTimeline contactName="Portfólio Geral" interactions={[]} maxEntries={8} />
@@ -223,9 +225,11 @@ const Analytics = () => {
 
            <TabsContent value="disc" className="space-y-6">
              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-               <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-                 <DISCAnalyticsPanel />
-               </Suspense>
+               <DashboardErrorBoundary sectionName="DISC Analytics">
+                 <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                   <DISCAnalyticsPanel />
+                 </Suspense>
+               </DashboardErrorBoundary>
                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                  <DISCCompatibilityAlerts />
                  <DISCConversionMetrics />
@@ -236,9 +240,11 @@ const Analytics = () => {
 
           <TabsContent value="rfm" className="space-y-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-                <RfmExternalDashboard />
-              </Suspense>
+              <DashboardErrorBoundary sectionName="RFM Dashboard">
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <RfmExternalDashboard />
+                </Suspense>
+              </DashboardErrorBoundary>
               <RFMAnalysisPanel />
             </motion.div>
           </TabsContent>

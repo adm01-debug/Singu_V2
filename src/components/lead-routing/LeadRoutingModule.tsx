@@ -1,4 +1,5 @@
 import React, { useState, lazy, Suspense } from 'react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -115,26 +116,28 @@ export default function LeadRoutingModule() {
           </TabsTrigger>
         </TabsList>
 
-        <Suspense fallback={<TabSkeleton />}>
-          <TabsContent value="team">
-            <SalesTeamTab />
-          </TabsContent>
-          <TabsContent value="rules">
-            <RoutingRulesTab />
-          </TabsContent>
-          <TabsContent value="handoff">
-            <HandoffQueueTab />
-          </TabsContent>
-          <TabsContent value="history">
-            <AssignmentHistoryTab />
-          </TabsContent>
-          <TabsContent value="redistlog">
-            <RedistributionLogTab />
-          </TabsContent>
-          <TabsContent value="metrics">
-            <RoutingMetricsTab />
-          </TabsContent>
-        </Suspense>
+        <DashboardErrorBoundary sectionName="Lead Routing">
+          <Suspense fallback={<TabSkeleton />}>
+            <TabsContent value="team">
+              <SalesTeamTab />
+            </TabsContent>
+            <TabsContent value="rules">
+              <RoutingRulesTab />
+            </TabsContent>
+            <TabsContent value="handoff">
+              <HandoffQueueTab />
+            </TabsContent>
+            <TabsContent value="history">
+              <AssignmentHistoryTab />
+            </TabsContent>
+            <TabsContent value="redistlog">
+              <RedistributionLogTab />
+            </TabsContent>
+            <TabsContent value="metrics">
+              <RoutingMetricsTab />
+            </TabsContent>
+          </Suspense>
+        </DashboardErrorBoundary>
       </Tabs>
     </div>
   );
