@@ -32,6 +32,7 @@ export function useCommunicationPreferences(contactId: string) {
         const { error } = await supabase
           .from('communication_preferences')
           .update(updates)
+          .eq('user_id', user!.id)
           .eq('id', prefs.id);
         if (error) throw error;
       } else {
