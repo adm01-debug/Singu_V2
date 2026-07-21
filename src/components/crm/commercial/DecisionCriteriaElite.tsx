@@ -48,6 +48,7 @@ export function DecisionCriteriaElite({ contactId }: Props) {
       return data;
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   if (isLoading) {

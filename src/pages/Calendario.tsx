@@ -36,6 +36,7 @@ const Calendario = () => {
     queryKey: ['calendario-followups', user?.id],
     enabled: !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     gcTime: 5 * 60_000,
     queryFn: async (): Promise<FollowUp[]> => {
       const [interactionsRes, contactsRes, companiesRes] = await Promise.all([

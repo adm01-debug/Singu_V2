@@ -78,6 +78,7 @@ export function CadenceRulesConfig() {
       return data;
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const saveRule = useMutation({

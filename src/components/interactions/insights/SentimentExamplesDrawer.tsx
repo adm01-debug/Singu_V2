@@ -54,6 +54,7 @@ function SentimentExamplesDrawerImpl({ bucket, interactionIds, onClose }: Props)
     queryKey: ["sentiment-examples", bucket, idsKey],
     enabled: !!bucket && limitedIds.length > 0,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<Example[]> => {
       const { data, error } = await supabase
         .from("interactions")

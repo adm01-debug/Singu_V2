@@ -28,6 +28,7 @@ function useRedistributionLog() {
     },
     enabled: !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 

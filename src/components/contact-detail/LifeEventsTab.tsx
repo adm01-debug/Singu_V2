@@ -74,6 +74,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     },
     enabled: !!contactId && !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: suggestions = [], refetch: refetchSuggestions } = useQuery({
@@ -92,6 +93,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     },
     enabled: !!contactId && !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const handleAcceptSuggestion = async (suggestion: SuggestedLifeEvent) => {

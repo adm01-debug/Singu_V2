@@ -40,6 +40,7 @@ function useFeedbackData() {
   return useQuery({
     queryKey: ['admin-insight-feedback'],
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<Row[]> => {
       const { data, error } = await supabase
         .from('behavioral_insight_feedback')

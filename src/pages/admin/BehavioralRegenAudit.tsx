@@ -118,6 +118,7 @@ export default function BehavioralRegenAudit() {
     queryKey: ["behavioral-regen-audit", period, statusFilter],
     initialPageParam: null as string | null,
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
     queryFn: async ({ pageParam }) => {
       let q = supabase
         .from("behavioral_profile_regen_queue")
@@ -286,6 +287,7 @@ export default function BehavioralRegenAudit() {
   const { data: aggStats } = useQuery({
     queryKey: ["behavioral-regen-stats", period, statusFilter],
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const buildBase = () => {
         let q = supabase

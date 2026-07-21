@@ -111,6 +111,7 @@ import type { Contact } from '@/hooks/useContactDetail';
     },
     enabled: !!contact.id && !!user,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 10 * 60 * 1000,
   });
 

@@ -137,6 +137,7 @@ export function RelationshipKPIsDashboard() {
       };
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
    useEffect(() => {
@@ -221,6 +222,7 @@ export function RelationshipKPIsDashboard() {
        return data;
      },
      staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
 
    if (isLoading) return <Skeleton className="h-[600px] w-full" />;

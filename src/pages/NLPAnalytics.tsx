@@ -58,6 +58,7 @@ const NLPAnalytics = () => {
      },
      enabled: debouncedSearchTerm.length >= 2 && !!user,
      staleTime: 60_000,
+     refetchOnWindowFocus: false,
    });
 
    const { data: selectedContact } = useQuery({
@@ -107,6 +108,7 @@ const NLPAnalytics = () => {
      },
      enabled: !!selectedContactId && !!user,
      staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
 
   return (

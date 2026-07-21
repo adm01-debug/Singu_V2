@@ -121,6 +121,7 @@ export default function AdminConexoesLogs() {
       );
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const filtered = useMemo(() => {

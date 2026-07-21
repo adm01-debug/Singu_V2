@@ -21,6 +21,7 @@ export default function RolesPage() {
     },
     enabled: isAdmin,
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
   });
 
   if (adminLoading || isLoading) return <Skeleton className="h-64 m-6" />;

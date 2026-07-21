@@ -77,6 +77,7 @@ export function NLPInsightsDashboard({ contactId, className }: Props) {
      },
     enabled: !!contactId && !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const handleExportPDF = () => {

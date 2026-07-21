@@ -17,13 +17,14 @@ export default function Observability() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('system_health_snapshots')
-        .select('*')
+        .select('captured_at, avg_latency_ms')
         .order('captured_at', { ascending: false })
         .limit(100);
       if (error) throw error;
       return data;
     },
     staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: slowQueries } = useQuery<SlowQuery[]>({
@@ -37,6 +38,7 @@ export default function Observability() {
       return (data || []) as unknown as SlowQuery[];
     },
     staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   return (

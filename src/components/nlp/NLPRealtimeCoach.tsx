@@ -69,6 +69,7 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
     },
     enabled: !!contactId && !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {

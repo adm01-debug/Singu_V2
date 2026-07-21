@@ -61,6 +61,7 @@ export function CRMAutomationAuditLog() {
       return data;
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const reprocessEvent = useMutation({

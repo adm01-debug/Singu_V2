@@ -40,6 +40,7 @@ export default function RecommendationAudit() {
       return (data ?? []) as unknown as AuditLog[];
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   return (

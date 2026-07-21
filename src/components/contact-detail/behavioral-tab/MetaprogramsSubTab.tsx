@@ -38,6 +38,7 @@ export function MetaprogramsSubTab({ contactId }: Props) {
     },
     enabled: !!user && !!contactId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const latestMeta = metaHistory?.[0];

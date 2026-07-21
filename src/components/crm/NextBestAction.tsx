@@ -88,6 +88,7 @@ export function NextBestAction({ contactId }: Props) {
        return data;
      },
      staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
 
    const commonObjections = useMemo(() => [

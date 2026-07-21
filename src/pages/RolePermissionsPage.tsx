@@ -26,6 +26,7 @@ export default function RolePermissionsPage() {
     },
     enabled: isAdmin,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   if (adminLoading || isLoading) return <Skeleton className="h-64 m-6" />;

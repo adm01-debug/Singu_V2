@@ -49,6 +49,7 @@ export default function CRMRelationshipAuditPage() {
       return auditResults;
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const gapChecklist = [

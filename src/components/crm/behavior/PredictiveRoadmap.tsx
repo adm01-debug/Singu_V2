@@ -37,6 +37,7 @@ export function PredictiveRoadmap({ contactId }: { contactId: string }) {
      },
      enabled: !!contactId && !!user,
      staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
 
    const steps: RoadmapItem[] = useMemo(() => {

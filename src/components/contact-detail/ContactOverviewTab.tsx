@@ -62,6 +62,7 @@ export function ContactOverviewTab({ contact, company, insights, alerts, interac
     },
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const cadence = relData?.cadence ?? null;

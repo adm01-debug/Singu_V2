@@ -39,6 +39,7 @@ export function ClientValuesElite({ contactId }: Props) {
       return data;
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   if (isLoading) {

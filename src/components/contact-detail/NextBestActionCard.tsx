@@ -61,6 +61,7 @@ const urgencyMeta: Record<string, { label: string; variant: 'default' | 'destruc
      },
      enabled: !!contactId,
      staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
   const createTask = useCreateTask();
    const [scriptOpen, setScriptOpen] = useState(false);

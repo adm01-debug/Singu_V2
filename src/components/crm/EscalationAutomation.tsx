@@ -34,6 +34,7 @@ export function EscalationAutomation({ contactId }: { contactId: string }) {
     },
     enabled: !!contactId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {

@@ -94,6 +94,7 @@ export default function AdminAuditTrail() {
       return (auditData || []) as AuditEntry[];
     },
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
   });
 
   // Distinct entity types for filter

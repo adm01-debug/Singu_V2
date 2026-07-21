@@ -36,6 +36,7 @@
        }));
      },
      staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
 
    if (isLoading) return <div className="h-48 animate-pulse bg-muted rounded-lg" />;

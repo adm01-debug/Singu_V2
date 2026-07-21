@@ -38,6 +38,7 @@ export function MergeContactsDialog({ primaryId, secondaryId, open, onOpenChange
       return { primary, secondary };
     },
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
   });
 
   const fields = [

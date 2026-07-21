@@ -38,6 +38,7 @@ export function VakSubTab({ contactId }: Props) {
      },
      enabled: !!user && !!contactId,
      staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
  
    const latestVAK = useMemo(() => {

@@ -30,6 +30,7 @@ export function WhatsAppDashboard({ contactId }: Props) {
      },
      enabled: !!contactId,
      staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
 
   if (loading) return null;

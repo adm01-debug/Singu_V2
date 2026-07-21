@@ -70,6 +70,7 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
     },
     enabled: !!contactId && !!user,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 10 * 60 * 1000,
   });
 

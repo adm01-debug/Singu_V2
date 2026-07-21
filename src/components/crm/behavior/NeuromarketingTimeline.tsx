@@ -56,6 +56,7 @@ export function NeuromarketingTimeline({ contactId }: Props) {
     },
     enabled: !!contactId && !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const history = neuroData?.history;

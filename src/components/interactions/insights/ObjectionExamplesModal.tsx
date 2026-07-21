@@ -333,6 +333,7 @@ function ObjectionExamplesModalImpl({ objection, onClose }: Props) {
     queryKey: ["objection-examples-full", objectionKey, idsKey, user?.id],
     enabled: !!objection && totalIds > 0 && !!user,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     initialPageParam: 0,
     getNextPageParam: (_last, allPages) => {
       const loaded = allPages.reduce((acc, p) => acc + p.length, 0);
@@ -373,6 +374,7 @@ function ObjectionExamplesModalImpl({ objection, onClose }: Props) {
     queryKey: ["objection-examples-contacts", contactIdsKey, user?.id],
     enabled: contactIds.length > 0 && !!user,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<Record<string, ContactSummary>> => {
       const { data, error } = await supabase
         .from("contacts")

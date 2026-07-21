@@ -53,6 +53,7 @@ export default function MapaEmpresas() {
       return data || [];
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const processAndGeocode = useCallback(async () => {

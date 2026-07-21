@@ -88,6 +88,7 @@ function LeadScoreWidgetInner({ contactId }: Props) {
     },
     enabled: !!contactId && !!user?.id,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   return <LeadScoreCard contactId={contactId} contactData={contactData ?? undefined} />;
