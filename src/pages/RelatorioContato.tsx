@@ -124,7 +124,7 @@ const RelatorioContato = () => {
           .eq("contact_id", id)
           .eq("user_id", user.id)
           .order("created_at", { ascending: false })
-          .limit(1000);
+          .limit(100);
 
         if (cancelled) return;
 

@@ -45,7 +45,7 @@ function useFeedbackData() {
         .from('behavioral_insight_feedback')
         .select('id, contact_id, insight_kind, insight_label, vote, note, created_at')
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(500);
       if (error) throw error;
       return (data ?? []) as Row[];
     },

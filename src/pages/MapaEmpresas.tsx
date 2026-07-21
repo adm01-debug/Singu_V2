@@ -48,7 +48,7 @@ export default function MapaEmpresas() {
     enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase.from("companies").select("id,name,nome_crm,ramo_atividade,status,cnpj,email,phone,website,city,state,address,extra_data_rf,lat,lng").eq("user_id", user!.id).order("updated_at", { ascending: false })
-      .limit(1000);
+      .limit(500);
       if (error) throw error;
       return data || [];
     },
