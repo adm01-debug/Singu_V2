@@ -241,7 +241,7 @@ export function useLogPlaybookUsage() {
       action: "opened" | "copied" | "shared" | "recommended" | "used_in_deal";
       context?: Record<string, unknown>;
     }) => {
-      if (!user) return;
+      if (!user) throw new Error('Not authenticated');
       
       const { error } = await supabase.from("playbook_usage_log").insert({
         user_id: user.id,

@@ -82,7 +82,7 @@ export function StakeholderMap({ contacts, interactions, companyId }: Stakeholde
                 <Card><CardContent className="p-3 text-center"><div className={`text-2xl font-bold ${summary.riskScore > 50 ? 'text-destructive' : summary.riskScore > 25 ? 'text-warning' : 'text-success'}`}>{summary.riskScore}%</div><div className="text-xs text-muted-foreground">Score de Risco</div></CardContent></Card>
               </div>
               <Card><CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Info className="w-4 h-4 text-info" />Recomendações Estratégicas</CardTitle></CardHeader>
-                <CardContent><ul className="space-y-2">{recommendations.map((rec, index) => (<motion.li key={index} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }} className="text-sm text-muted-foreground flex items-start gap-2"><span className="block mt-1.5 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />{rec}</motion.li>))}</ul></CardContent>
+                <CardContent><ul className="space-y-2">{recommendations.map((rec, index) => (<motion.li key={`${rec.slice(0, 24)}-${index}`} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }} className="text-sm text-muted-foreground flex items-start gap-2"><span className="block mt-1.5 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />{rec}</motion.li>))}</ul></CardContent>
               </Card>
             </div>
           </TabsContent>

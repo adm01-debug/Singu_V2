@@ -183,7 +183,7 @@ export function useStakeholderAlerts(companyId?: string) {
       timestamp: new Date().toISOString()
     });
     setStoredMetrics(newStored);
-    localStorage.setItem('stakeholder_metrics', JSON.stringify(newStored));
+    try { localStorage.setItem('stakeholder_metrics', JSON.stringify(newStored)); } catch { /* quota/private */ }
   }, [storedMetrics]);
 
   const getStoredMetrics = useCallback((contactId: string): StoredMetrics | undefined => {

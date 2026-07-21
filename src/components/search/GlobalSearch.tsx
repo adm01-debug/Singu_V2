@@ -78,7 +78,7 @@ function getRecentItems(): RecentItem[] {
 function addRecentItem(item: Omit<RecentItem, 'timestamp'>) {
   const recent = getRecentItems();
   const filtered = recent.filter(r => !(r.id === item.id && r.type === item.type));
-  localStorage.setItem(RECENT_ITEMS_KEY, JSON.stringify([{ ...item, timestamp: Date.now() }, ...filtered].slice(0, MAX_RECENT_ITEMS)));
+  try { localStorage.setItem(RECENT_ITEMS_KEY, JSON.stringify([{ ...item, timestamp: Date.now() }, ...filtered].slice(0, MAX_RECENT_ITEMS))); } catch { /* quota/private */ }
 }
 
 function normalizeText(text: string): string {

@@ -154,7 +154,7 @@ export const OnboardingChecklist = React.memo(function OnboardingChecklist({
 
   const handleDismiss = () => {
     setDismissed(true);
-    localStorage.setItem(STORAGE_DISMISSED, 'true');
+    try { localStorage.setItem(STORAGE_DISMISSED, 'true'); } catch { /* quota/private */ }
   };
 
   const nextStep = steps.find((s) => !s.completed);

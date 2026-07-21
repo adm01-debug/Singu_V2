@@ -232,7 +232,7 @@ export function useErrorReporter() {
       captureError(new Error(message), undefined, { customMessage: true, severity });
     },
     setUserContext: (userId: string) => {
-      localStorage.setItem('userId', userId);
+      try { localStorage.setItem('userId', userId); } catch { /* quota/private */ }
     },
   };
 }

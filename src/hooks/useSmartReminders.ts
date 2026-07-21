@@ -128,13 +128,13 @@ export const useSmartReminders = (autoFetch = true) => {
       const stored = localStorage.getItem('dismissedReminders');
       const parsed = stored ? (() => { try { return JSON.parse(stored); } catch { return {}; } })() : {};
       parsed[id] = Date.now();
-      localStorage.setItem('dismissedReminders', JSON.stringify(parsed));
-      
+      try { localStorage.setItem('dismissedReminders', JSON.stringify(parsed)); } catch { /* quota/private */ }
+
       return updated;
     });
-    
+
     setReminders(prev => prev.filter(r => r.id !== id));
-    
+
     toast({
       title: 'Lembrete dispensado',
       description: 'O lembrete foi removido da sua lista.'
@@ -147,7 +147,7 @@ export const useSmartReminders = (autoFetch = true) => {
     const stored = localStorage.getItem('snoozedReminders');
     const parsed = stored ? (() => { try { return JSON.parse(stored); } catch { return {}; } })() : {};
     parsed[id] = snoozeUntil;
-    localStorage.setItem('snoozedReminders', JSON.stringify(parsed));
+    try { localStorage.setItem('snoozedReminders', JSON.stringify(parsed)); } catch { /* quota/private */ }
     
     setReminders(prev => prev.filter(r => r.id !== id));
     
@@ -166,7 +166,7 @@ export const useSmartReminders = (autoFetch = true) => {
       const stored = localStorage.getItem('dismissedReminders');
       const parsed = stored ? (() => { try { return JSON.parse(stored); } catch { return {}; } })() : {};
       parsed[reminder.id] = Date.now();
-      localStorage.setItem('dismissedReminders', JSON.stringify(parsed));
+      try { localStorage.setItem('dismissedReminders', JSON.stringify(parsed)); } catch { /* quota/private */ }
       
       return updated;
     });

@@ -35,7 +35,7 @@ export function useSavedReports() {
   const persist = useCallback((next: SavedReport[]) => {
     setReports(next);
     if (user?.id) {
-      localStorage.setItem(`${STORAGE_KEY}-${user.id}`, JSON.stringify(next));
+      try { localStorage.setItem(`${STORAGE_KEY}-${user.id}`, JSON.stringify(next)); } catch { /* quota/private */ }
     }
   }, [user?.id]);
 
