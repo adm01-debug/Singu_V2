@@ -16,7 +16,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { InsightFeedbackTrendChart } from '@/components/admin/InsightFeedbackTrendChart';
-import { logger } from "@/lib/logger";
 
 type Kind = 'preference' | 'hobby' | 'tone';
 
