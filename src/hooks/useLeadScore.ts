@@ -213,7 +213,7 @@ export function useLeadScore(contactId: string | undefined) {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ['lead-score', contactId],
+    queryKey: ['lead-score', user?.id, contactId],
     queryFn: async () => {
       if (!contactId || !user?.id) return null;
       const { data, error } = await supabase
@@ -245,7 +245,7 @@ export function useLeadScoreHistory(contactId: string | undefined) {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ['lead-score-history', contactId],
+    queryKey: ['lead-score-history', user?.id, contactId],
     queryFn: async () => {
       if (!contactId || !user?.id) return [];
       const { data, error } = await supabase
@@ -371,7 +371,7 @@ export function useAllLeadScores() {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ['lead-scores-all'],
+    queryKey: ['lead-scores-all', user?.id],
     queryFn: async () => {
       if (!user?.id) return [];
       const { data, error } = await supabase

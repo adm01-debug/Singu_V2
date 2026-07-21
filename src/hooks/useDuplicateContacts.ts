@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 import { logger } from '@/lib/logger';
 
 interface DuplicateContact {
@@ -16,9 +17,10 @@ interface DuplicateContact {
 }
 
 export function useDuplicateContacts(enabled = true) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['duplicate-contacts'],
-    enabled,
+    queryKey: ['duplicate-contacts', user?.id],
+    enabled: enabled && !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<DuplicateContact[]>('get_duplicate_contacts', {});
       if (error) {

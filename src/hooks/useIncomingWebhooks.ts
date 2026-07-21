@@ -58,6 +58,7 @@ export function useIncomingWebhooks() {
       const { data, error } = await supabase
         .from('incoming_webhooks')
         .select('*')
+        .eq('created_by', user!.id)
         .order('created_at', { ascending: false })
         .limit(1000);
       if (error) throw error;

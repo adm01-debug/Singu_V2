@@ -29,7 +29,7 @@ export function useContactDetail(contactId: string | undefined) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const queryKey = useMemo(() => ['contact', contactId], [contactId]);
+  const queryKey = useMemo(() => ['contact', user?.id, contactId], [user?.id, contactId]);
 
   const { data, isLoading: loading, error: queryError, refetch } = useQuery({
     queryKey,

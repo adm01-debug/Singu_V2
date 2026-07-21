@@ -47,6 +47,7 @@ export function useConnections() {
       const { data, error } = await supabase
         .from('connection_configs')
         .select('*')
+        .eq('created_by', user!.id)
         .order('created_at', { ascending: false })
         .limit(1000);
       if (error) throw error;
