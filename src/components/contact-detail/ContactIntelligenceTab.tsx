@@ -59,19 +59,14 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
   const { data } = useQuery({
     queryKey: ['contact-intelligence', contactId, user?.id],
     queryFn: async () => {
-      const [objRes, critRes, valRes, offRes] = await Promise.all([
-        supabase.from('hidden_objections').select('*').eq('contact_id', contactId).eq('user_id', user!.id).order('created_at', { ascending: false }).limit(200),
-        supabase.from('decision_criteria').select('*').eq('contact_id', contactId).eq('user_id', user!.id).order('priority', { ascending: false }).limit(200),
-        supabase.from('client_values').select('*').eq('contact_id', contactId).eq('user_id', user!.id).order('importance', { ascending: false }).limit(200),
-        supabase.from('offer_suggestions').select('*').eq('contact_id', contactId).eq('user_id', user!.id).order('created_at', { ascending: false }).limit(200),
-      ]);
-
-      return {
-        objections: objRes.data || [],
-        criteria: critRes.data || [],
-        values: valRes.data || [],
-        offers: offRes.data || [],
-      };
+      const { data: objData } = await supabase
+        .from('hidden_objections')
+        .select('id, resolved, objection_type, severity, indicator, possible_real_objection, suggested_probe, probability')
+        .eq('contact_id', contactId)
+        .eq('user_id', user!.id)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      return { objections: objData || [] };
     },
     enabled: !!contactId && !!user,
     staleTime: 5 * 60 * 1000,
