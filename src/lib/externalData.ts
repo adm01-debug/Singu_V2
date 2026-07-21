@@ -100,7 +100,7 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
     if (data.length > 0) {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user?.id) {
-        await supabase.from('activities').insert({
+        await supabase.from('activities' as never).insert({
           user_id: session.user.id,
           type: 'access',
           entity_type: options.table === 'contacts' ? 'contact' : options.table === 'companies' ? 'company' : 'interaction',
@@ -217,7 +217,7 @@ export async function deleteExternalData(table: string, id: string): Promise<{ s
     await callExternalData({ action: 'delete', table, id });
     const { data: { session } } = await supabase.auth.getSession();
     if (session?.user?.id) {
-      await supabase.from('activities').insert({
+      await supabase.from('activities' as never).insert({
         user_id: session.user.id,
         type: 'deleted',
         entity_type: table === 'contacts' ? 'contact' : table === 'companies' ? 'company' : 'interaction',
