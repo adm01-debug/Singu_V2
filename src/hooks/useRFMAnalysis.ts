@@ -57,6 +57,7 @@ export function useRFMAnalysis(contactId?: string) {
     },
     enabled: !!user,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 10 * 60 * 1000,
   });
 
@@ -78,6 +79,7 @@ export function useRFMAnalysis(contactId?: string) {
     },
     enabled: !!user && !!contactId,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const loading = rfmLoading;

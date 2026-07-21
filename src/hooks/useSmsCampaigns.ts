@@ -79,6 +79,7 @@ export function useSmsCampaigns() {
     },
     enabled: !!userId,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const createCampaign = useMutation({
@@ -185,6 +186,7 @@ export function useSmsTemplates() {
     },
     enabled: !!userId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const createTemplate = useMutation({

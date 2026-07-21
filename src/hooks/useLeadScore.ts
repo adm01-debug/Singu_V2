@@ -238,6 +238,7 @@ export function useLeadScore(contactId: string | undefined) {
     },
     enabled: !!contactId && !!user?.id,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -260,6 +261,7 @@ export function useLeadScoreHistory(contactId: string | undefined) {
     },
     enabled: !!contactId && !!user?.id,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -288,6 +290,7 @@ export function useLeadScoreConfig() {
     },
     enabled: !!user?.id,
     staleTime: 30 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -385,5 +388,6 @@ export function useAllLeadScores() {
     },
     enabled: !!user?.id,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }

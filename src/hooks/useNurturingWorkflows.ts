@@ -53,6 +53,7 @@ export function useNurturingWorkflows() {
       return (data || []).map(d => ({ ...d, steps: Array.isArray(d.steps) ? d.steps : [] })) as unknown as NurturingWorkflow[];
     },
     staleTime: 3 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const create = useMutation({

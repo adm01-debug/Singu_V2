@@ -20,6 +20,7 @@ export function usePasswordResetRequests() {
     },
     enabled: !!user,
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
   });
 
   const approveMutation = useMutation({

@@ -64,6 +64,7 @@ export function useEntityRelationships(entityType?: EntityType, entityId?: strin
     queryKey: [...key(entityType, entityId), user?.id],
     enabled: !!user && (!entityType || !!entityId),
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<EntityRelationship[]> => {
       let q = supabase
         .from('entity_relationships')

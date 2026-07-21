@@ -27,6 +27,7 @@ export function useDealsAtRisk(limit = 5) {
     queryKey: ['deals-at-risk', deals?.map((d) => d.id).join(','), user?.id],
     enabled: !!deals && deals.length > 0,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const open = (deals ?? []).filter(
         (d) => d.status !== 'ganho' && d.status !== 'perdido'

@@ -39,6 +39,7 @@ export function useObjectionExampleFeedback({ objection, category }: UseFeedback
     queryKey,
     enabled,
     staleTime: 60 * 1000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<ObjectionExampleFeedbackRow[]> => {
       const { data, error } = await supabase
         .from("objection_example_feedback")

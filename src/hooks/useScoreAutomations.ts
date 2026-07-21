@@ -58,6 +58,7 @@ export function useScoreAutomations() {
     },
     enabled: !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -150,5 +151,6 @@ export function useAutomationLog(automationId?: string, days = 30) {
     },
     enabled: !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
   });
 }

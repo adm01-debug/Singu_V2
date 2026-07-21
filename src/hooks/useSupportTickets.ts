@@ -53,6 +53,7 @@ export function useSupportTickets() {
       return (data || []) as SupportTicket[];
     },
     staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const create = useMutation({

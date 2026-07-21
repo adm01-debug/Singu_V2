@@ -95,6 +95,7 @@ export function useContactSegmentation() {
        }));
      },
      staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
 
   const matchesFilter = useCallback((contact: FlattenedContact, filter: SegmentFilter): boolean => {

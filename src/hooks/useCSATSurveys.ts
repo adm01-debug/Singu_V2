@@ -37,6 +37,7 @@ export function useCSATSurveys(contactId?: string) {
       return (data || []) as unknown as CSATSurvey[];
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const send = useMutation({

@@ -29,6 +29,7 @@ import { logger } from '@/lib/logger';
      queryKey: ['marketing-funnel', startDate, endDate, user?.id],
      enabled: !!user,
      staleTime: 10 * 60_000,
+     refetchOnWindowFocus: false,
      queryFn: async () => {
        if (!user) return [];
 
@@ -56,6 +57,7 @@ import { logger } from '@/lib/logger';
      queryKey: ['marketing-behavioral-insights', user?.id],
      enabled: !!user,
      staleTime: 10 * 60_000,
+     refetchOnWindowFocus: false,
      queryFn: async () => {
        if (!user) return null;
 
@@ -100,6 +102,7 @@ import { logger } from '@/lib/logger';
      queryKey: ['marketing-campaign-stats', user?.id],
      enabled: !!user,
      staleTime: 10 * 60_000,
+     refetchOnWindowFocus: false,
      queryFn: async () => {
        if (!user) return [];
 

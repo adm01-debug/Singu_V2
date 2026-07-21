@@ -53,6 +53,7 @@ export function useConversationAnalysis(interactionId: string | undefined) {
     queryKey: ["conversation-analysis", interactionId],
     enabled: !!interactionId,
     staleTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("conversation_analyses")
@@ -71,6 +72,7 @@ export function useConversationAnalyses(filters?: { sentiment?: SentimentOverall
     queryKey: ["conversation-analyses", user?.id, filters],
     enabled: !!user?.id,
     staleTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       let q = supabase
         .from("conversation_analyses")

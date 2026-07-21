@@ -90,6 +90,7 @@ export function useDocumentTemplates() {
       })) as unknown as DocumentTemplate[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const create = useMutation({
@@ -167,6 +168,7 @@ export function useDocumentSignatures() {
       return (data || []) as unknown as DocumentSignature[];
     },
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
   });
 
   const sendForSignature = useMutation({

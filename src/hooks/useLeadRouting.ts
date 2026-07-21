@@ -33,6 +33,7 @@ export function useRoutingRules() {
     },
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -125,6 +126,7 @@ export function useLeadAssignments(status?: string) {
     },
     enabled: !!user,
     staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 

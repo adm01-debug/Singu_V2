@@ -89,6 +89,7 @@ export function useCSAccounts() {
     queryKey: ["cs-accounts", user?.id],
     enabled: !!user?.id,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("cs_accounts")
@@ -108,6 +109,7 @@ export function useCSAccount(id: string | undefined) {
     queryKey: ["cs-account", id, user?.id],
     enabled: !!id && !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("cs_accounts")
@@ -174,6 +176,7 @@ export function useHealthSignals(accountId: string | undefined) {
     queryKey: ["cs-signals", accountId, user?.id],
     enabled: !!accountId && !!user,
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("cs_health_signals")
@@ -220,6 +223,7 @@ export function useNPS(accountId?: string) {
     queryKey: ["cs-nps", accountId ?? "all", user?.id],
     enabled: !!user?.id,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       let q = supabase.from("cs_nps_responses").select("id, account_id, contact_id, score, category, comment, surveyed_at").eq("user_id", user!.id);
       if (accountId) q = q.eq("account_id", accountId);
@@ -278,6 +282,7 @@ export function useQBRs(accountId?: string) {
     queryKey: ["cs-qbrs", accountId ?? "all", user?.id],
     enabled: !!user?.id,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       let q = supabase.from("cs_qbrs").select("id, account_id, title, scheduled_at, completed_at, status, agenda, outcomes, next_steps, attendees, notes").eq("user_id", user!.id);
       if (accountId) q = q.eq("account_id", accountId);
@@ -340,6 +345,7 @@ export function useRenewals(daysAhead = 90) {
     queryKey: ["cs-renewals-pipeline", user?.id, daysAhead],
     enabled: !!user?.id,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase.rpc("cs_renewal_pipeline", {
         _user_id: user!.id,

@@ -48,6 +48,7 @@ export function useMQLCriteria() {
       return (data || []) as unknown as MQLCriteria[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const upsert = useMutation({
@@ -95,6 +96,7 @@ export function useMQLClassifications() {
       return (data || []) as unknown as MQLClassification[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 

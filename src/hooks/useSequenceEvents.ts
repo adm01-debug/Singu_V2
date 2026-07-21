@@ -39,6 +39,7 @@ export function useSequenceEvents(sequenceId?: string, enrollmentId?: string) {
     },
     enabled: !!(sequenceId || enrollmentId) && !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -59,6 +60,7 @@ export function useSequenceSendLogs(sequenceId?: string) {
     },
     enabled: !!sequenceId && !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -88,5 +90,6 @@ export function useSequenceMetrics(sequenceId?: string) {
     },
     enabled: !!sequenceId && !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }

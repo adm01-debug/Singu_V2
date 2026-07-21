@@ -68,6 +68,7 @@ export function useRevOpsSnapshots(periodStart: string, periodEnd: string) {
     queryKey: ["revops-snapshots", user?.id, periodStart, periodEnd],
     enabled: !!user,
     staleTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("revops_snapshots")
@@ -89,6 +90,7 @@ export function useRevOpsKPIs(periodStart: string, periodEnd: string) {
     queryKey: ["revops-kpis", user?.id, periodStart, periodEnd],
     enabled: !!user,
     staleTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase.rpc("compute_revops_kpis", {
         _user_id: user!.id,
@@ -107,6 +109,7 @@ export function useRevOpsBenchmarks() {
     queryKey: ["revops-benchmarks", user?.id],
     enabled: !!user,
     staleTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("revops_benchmarks")
@@ -156,6 +159,7 @@ export function useRevOpsAlerts() {
     queryKey: ["revops-alerts", user?.id],
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("revops_alerts")

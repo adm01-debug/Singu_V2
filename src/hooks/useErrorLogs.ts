@@ -29,6 +29,7 @@ export function useErrorLogs() {
     queryKey: ['admin', 'error-logs'],
     queryFn: fetchLogs,
     staleTime: 30000, // 30 segundos
+    refetchOnWindowFocus: false,
   });
 
   const clearLogsMutation = useMutation({

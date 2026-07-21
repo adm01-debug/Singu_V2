@@ -28,6 +28,7 @@ export function useProximoPassoFeedbacks(contactId: string | undefined) {
     queryKey: FEEDBACK_KEY(contactId ?? ''),
     enabled: !!contactId,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<PassoFeedback[]> => {
       const since = new Date(Date.now() - 30 * 86400000).toISOString();
       const { data, error } = await supabase

@@ -22,6 +22,7 @@ export function useFavoriteTemplates() {
     },
     enabled: !!user,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const toggleFavorite = useMutation({

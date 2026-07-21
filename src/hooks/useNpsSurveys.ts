@@ -42,6 +42,7 @@ export function useNpsSurveys() {
     queryKey: ['nps-surveys', user?.id],
     enabled: !!user?.id,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('csat_surveys')

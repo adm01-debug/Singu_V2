@@ -47,6 +47,7 @@ export function useDocuments(entityType: string, entityId?: string) {
     },
     enabled: !!entityId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const upload = useMutation({

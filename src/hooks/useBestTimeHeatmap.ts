@@ -59,6 +59,7 @@ export function useBestTimeHeatmap() {
     queryKey: ['best-time-heatmap', user?.id],
     enabled: !!user?.id,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 30 * 60 * 1000,
     queryFn: async () => {
       const since = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();

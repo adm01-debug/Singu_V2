@@ -48,6 +48,7 @@ export function useTouchpoints(opts: { contactId?: string; dealId?: string }) {
       return (data || []) as unknown as Touchpoint[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -66,6 +67,7 @@ export function useAttribution(dealId: string | undefined, model: AttributionMod
       return data as unknown as { model: string; allocations: Allocation[]; total_value: number; touchpoints_count: number };
     },
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
   });
 }
 

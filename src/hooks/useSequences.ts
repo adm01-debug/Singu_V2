@@ -79,6 +79,7 @@ export function useSequences() {
     },
     enabled: !!userId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const createSequence = useMutation({

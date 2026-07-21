@@ -38,6 +38,7 @@ export function useUnifiedTimeline(contactId: string) {
     },
     enabled: !!user && !!contactId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   // Fetch CRM Alerts
@@ -54,6 +55,7 @@ export function useUnifiedTimeline(contactId: string) {
     },
     enabled: !!user && !!contactId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
    const { data: neuroHistory } = useQuery({
@@ -69,6 +71,7 @@ export function useUnifiedTimeline(contactId: string) {
      },
      enabled: !!user && !!contactId,
      staleTime: 10 * 60_000,
+     refetchOnWindowFocus: false,
    });
  
    const unifiedEvents = useMemo(() => {

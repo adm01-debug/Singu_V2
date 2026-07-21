@@ -92,5 +92,6 @@ type SupabaseWithDynamicTables = {
      },
      enabled: !!contactId && !!user,
      staleTime: 15 * 60 * 1000,
+     refetchOnWindowFocus: false,
    });
  }

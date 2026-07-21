@@ -27,6 +27,7 @@ export function useRBAC() {
     },
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: permissions = [], isLoading: permsLoading } = useQuery({
@@ -48,6 +49,7 @@ export function useRBAC() {
     },
     enabled: userRoles.length > 0,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const hasPermission = (permName: string): boolean =>

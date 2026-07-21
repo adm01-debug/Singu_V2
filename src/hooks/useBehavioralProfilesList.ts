@@ -69,6 +69,7 @@ export function useBehavioralProfilesList(filters: BehavioralProfilesFilters) {
     queryKey: ['behavioral-profiles-list', filters.period ?? 'all', user?.id],
     enabled: !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<BehavioralProfileListItem[]> => {
       const fromDate = periodToDate(filters.period);
 

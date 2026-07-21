@@ -72,6 +72,7 @@ export function useForms() {
       })) as unknown as MarketingForm[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const upsert = useMutation({

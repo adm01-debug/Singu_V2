@@ -191,6 +191,7 @@ export function useChannelPerformanceMatrix() {
       };
     },
     staleTime: 15 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 30 * 60 * 1000,
   });
 }

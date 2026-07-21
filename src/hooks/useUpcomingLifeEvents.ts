@@ -67,5 +67,6 @@ export function useUpcomingLifeEvents(daysThreshold: number = 7) {
     },
     enabled: !!user,
     staleTime: 1000 * 60 * 30, // 30 minutes
+    refetchOnWindowFocus: false,
   });
 }

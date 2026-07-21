@@ -60,6 +60,7 @@ export function useLandingPages() {
       return (data ?? []) as unknown as LandingPage[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const create = useMutation({
@@ -128,6 +129,7 @@ export function useLandingPageSubmissions(pageId?: string) {
     queryKey: ['lp-submissions', pageId],
     enabled: !!pageId,
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('landing_page_submissions')

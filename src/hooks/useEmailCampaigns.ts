@@ -44,6 +44,7 @@ export function useEmailCampaigns() {
       return (data || []) as EmailCampaign[];
     },
     staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const create = useMutation({

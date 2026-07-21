@@ -116,6 +116,7 @@ export function useDealRooms(filters?: { status?: DealRoomStatus | "all" }) {
     queryKey: [...KEYS.rooms, filters?.status ?? "all", user?.id],
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       let q = supabase.from("deal_rooms").select("id, user_id, deal_id, deal_name, company_id, title, description, status, deal_value, target_close_date, share_token, share_enabled, last_buyer_view_at, buyer_view_count, health_score, health_recommendations, health_analyzed_at, created_at, updated_at").eq("user_id", user!.id).order("updated_at", { ascending: false })
       .limit(100);
@@ -135,6 +136,7 @@ export function useDealRoom(id: string | undefined) {
     queryKey: [...KEYS.room(id ?? ""), user?.id],
     enabled: !!id && !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_rooms").select("*").eq("id", id!).eq("user_id", user!.id).maybeSingle();
       if (error) throw error;
@@ -213,6 +215,7 @@ export function useMilestones(roomId: string | undefined) {
     queryKey: KEYS.ms(roomId ?? ""),
     enabled: !!roomId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase.from("deal_room_milestones").select("id, room_id, user_id, title, description, status, sort_order, due_date, completed_at, completed_by_side, owner_side, created_at, updated_at").eq("room_id", roomId!).order("sort_order")
       .limit(50);

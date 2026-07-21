@@ -26,6 +26,7 @@ export function useWebhookDlq() {
     queryKey: ['incoming_webhook_dlq', user?.id],
     enabled: !!user,
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('incoming_webhook_dlq')

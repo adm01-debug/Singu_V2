@@ -25,6 +25,7 @@ export function useSocialSync(contactId: string) {
     },
     enabled: !!contactId && !!user,
     staleTime: 2 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: auditLogs, isLoading: isLoadingAudit } = useQuery({
@@ -42,6 +43,7 @@ export function useSocialSync(contactId: string) {
     },
     enabled: !!contactId && !!user,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const syncNow = useMutation({

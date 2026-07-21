@@ -25,6 +25,7 @@ export function useFeatureFlag(name: string) {
       return (data ?? null) as FeatureFlag | null;
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   return {
@@ -48,5 +49,6 @@ export function useFeatureFlags() {
       return (data ?? []) as FeatureFlag[];
     },
     staleTime: 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }

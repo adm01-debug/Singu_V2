@@ -103,6 +103,7 @@ export function useABMAccounts() {
       return Array.isArray(data) ? (data as unknown as ABMAccount[]) : [];
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -118,6 +119,7 @@ export function useABMAccount(id: string | undefined) {
     },
     enabled: !!id && !!user,
     staleTime: 2 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 

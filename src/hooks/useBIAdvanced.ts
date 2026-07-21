@@ -73,6 +73,7 @@ export function useProfitabilityByContact() {
       }).sort((a, b) => b.roi_score - a.roi_score);
     },
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -131,6 +132,7 @@ export function useGeoSalesData() {
       })) as GeoSalesPoint[];
     },
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 

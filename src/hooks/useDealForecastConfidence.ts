@@ -55,6 +55,7 @@ export function useDealForecastConfidence(
     queryKey: ['deal-momentum', user?.id, deal?.contact_id],
     enabled,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const now = Date.now();
       const since28 = new Date(now - 28 * 86400000).toISOString();

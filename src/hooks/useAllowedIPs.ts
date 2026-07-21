@@ -22,6 +22,7 @@ export function useAllowedIPs() {
     },
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const addIP = useMutation({

@@ -34,6 +34,7 @@ export function useContactTimeAnalysis(contactId?: string) {
     },
     enabled: !!user && !!contactId,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 10 * 60 * 1000,
   });
 

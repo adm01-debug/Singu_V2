@@ -31,6 +31,7 @@ export function useSalesTeam() {
     },
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -137,5 +138,6 @@ export function useActiveTeamByRole(role?: SalesRole) {
     },
     enabled: !!user,
     staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }

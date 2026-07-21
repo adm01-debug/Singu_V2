@@ -75,6 +75,7 @@ export function useForecastPeriods() {
       return (data ?? []) as ForecastPeriod[];
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -93,6 +94,7 @@ export function useCurrentPeriod(type: "month" | "quarter" = "month") {
       return data as ForecastPeriod | null;
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -149,6 +151,7 @@ export function useDealForecasts(periodId: string | undefined) {
     },
     enabled: !!periodId && !!user,
     staleTime: 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 

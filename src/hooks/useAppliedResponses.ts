@@ -40,6 +40,7 @@ export function useAppliedResponses() {
     queryKey: [...QUERY_KEY, user?.id ?? "anon"],
     enabled: !!user?.id,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("applied_objection_responses")

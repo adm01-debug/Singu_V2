@@ -44,6 +44,7 @@ export function useSentimentAnnotations(contactId: string | undefined) {
     queryKey: QK(contactId, user?.id),
     enabled: !!contactId && !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<SentimentAnnotation[]> => {
       const { data, error } = await supabase
         .from('sentiment_annotations')

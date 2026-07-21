@@ -141,6 +141,7 @@ export function useBehaviorAlerts() {
     },
     enabled: !!user,
     staleTime: 3 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 10 * 60 * 1000,
   });
 

@@ -69,6 +69,7 @@ export function useContactSentimentTrend(contactId: string | undefined) {
     queryKey: ['contact-sentiment-trend', user?.id, contactId],
     enabled: !!contactId && !!user,
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const since = new Date();
       since.setDate(since.getDate() - 90);

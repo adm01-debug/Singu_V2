@@ -140,6 +140,7 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
       );
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 10 * 60 * 1000,
   });
 }

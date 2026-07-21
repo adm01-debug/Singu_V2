@@ -39,6 +39,7 @@ export function useChurnRisk(contactId: string | undefined) {
     },
     enabled: !!contactId,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 20 * 60 * 1000,
   });
 }
@@ -72,6 +73,7 @@ export function useChurnPredictions(contactId: string | undefined) {
     },
     enabled: !!contactId,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 20 * 60 * 1000,
   });
 }
@@ -109,6 +111,7 @@ export function useLocalChurnRisks(contactId?: string) {
       return (data ?? []) as unknown as LocalChurnRisk[];
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 

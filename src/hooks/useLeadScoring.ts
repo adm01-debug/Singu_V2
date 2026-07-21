@@ -65,6 +65,7 @@ export function useLeadScore(contactId?: string) {
     },
     enabled: !!contactId && !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -86,6 +87,7 @@ export function useTopLeads(grade?: LeadScoreGrade | 'all', limit = 50) {
     },
     enabled: !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -116,6 +118,7 @@ export function useLeadScoreDistribution() {
     },
     enabled: !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -133,6 +136,7 @@ export function useLeadScoreHistory(contactId?: string) {
     },
     enabled: !!contactId && !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -188,6 +192,7 @@ export function useScoreRules() {
     },
     enabled: !!user?.id,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -226,6 +231,7 @@ export function useScoreThresholds() {
     },
     enabled: !!user?.id,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 

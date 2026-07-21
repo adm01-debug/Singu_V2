@@ -39,6 +39,7 @@ export function useKnowledgeBase() {
       return (data || []) as KBArticle[];
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const create = useMutation({

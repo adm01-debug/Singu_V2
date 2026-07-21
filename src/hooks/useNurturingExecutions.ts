@@ -31,6 +31,7 @@ export function useNurturingExecutions(workflowId?: string) {
       return (data || []) as unknown as NurturingExecution[];
     },
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
   });
 }
 

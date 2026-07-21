@@ -20,6 +20,7 @@ export function useCampaignRecipients(campaignId?: string) {
     queryKey: ['campaign-recipients', campaignId, user?.id],
     enabled: !!campaignId && !!user,
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('campaign_recipients')

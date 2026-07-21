@@ -49,6 +49,7 @@ export function useCustomFields(entityType: EntityType) {
       return (data || []) as CustomField[];
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const createField = useMutation({
@@ -136,6 +137,7 @@ export function useCustomFieldValues(entityType: EntityType, entityId?: string) 
     },
     enabled: !!entityId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const saveValue = useMutation({

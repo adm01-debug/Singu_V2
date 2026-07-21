@@ -93,6 +93,7 @@ export function useWinLossRecords(filters: RecordsFilter = {}) {
       return (data ?? []) as WinLossRecord[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -177,6 +178,7 @@ export function useWinLossReasons(outcome?: ReasonOutcomeType) {
       return (data ?? []) as WinLossReason[];
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -247,6 +249,7 @@ export function useCompetitors() {
       return (data ?? []) as Competitor[];
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -383,6 +386,7 @@ export function useWinLossMetrics(periodDays = 90) {
       };
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -404,6 +408,7 @@ export function useWinLossInsights() {
       return (data ?? []) as WinLossInsight[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 

@@ -36,6 +36,7 @@ export function useCannedResponses() {
       return (data || []) as CannedResponse[];
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const create = useMutation({

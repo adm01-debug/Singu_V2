@@ -88,6 +88,7 @@ export function useDealVelocity() {
     },
     enabled: !!user,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   return { metrics, loading };

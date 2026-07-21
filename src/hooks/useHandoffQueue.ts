@@ -28,6 +28,7 @@ export function useHandoffQueue(status?: HandoffStatus) {
     },
     enabled: !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -129,6 +130,7 @@ export function usePendingHandoffCount() {
     },
     enabled: !!user,
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
   });
 }
 

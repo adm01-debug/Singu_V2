@@ -64,6 +64,7 @@ export function useDedupEngine(entity: DedupEntity, threshold = 0.82) {
     queryFn: () => (entity === 'contacts' ? fetchContacts(user!.id) : fetchCompanies(user!.id)),
     enabled: !!user,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const pairs: DuplicatePair[] = useMemo(() => {

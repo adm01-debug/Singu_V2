@@ -53,6 +53,7 @@ export function useLeadMagnets() {
       return (data || []) as unknown as LeadMagnet[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const upsert = useMutation({
@@ -109,5 +110,6 @@ export function useMagnetDownloads(magnetId: string | undefined) {
       return (data || []) as unknown as MagnetDownload[];
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
