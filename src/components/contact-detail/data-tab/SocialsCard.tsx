@@ -119,6 +119,7 @@ export const SocialsCard = memo(function SocialsCard({ socials, copiedField, onC
               <div className="flex items-center gap-1 flex-shrink-0">
                 {s.url && (
                   <button
+                    aria-label={`Copiar URL de ${s.plataforma}`}
                     onClick={() => onCopy(s.url!, `social-${s.id}`)}
                     className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                   >

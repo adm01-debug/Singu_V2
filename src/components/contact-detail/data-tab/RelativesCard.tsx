@@ -54,7 +54,7 @@ interface Props {
                      onSave={(updates) => onUpdate(rel.id, updates)} 
                      initialData={rel}
                      trigger={
-                       <button className="rounded p-0.5 text-muted-foreground hover:text-primary transition-colors">
+                       <button aria-label={`Editar ${rel.name}`} className="rounded p-0.5 text-muted-foreground hover:text-primary transition-colors">
                          <Edit2 className="h-3 w-3" />
                        </button>
                      }

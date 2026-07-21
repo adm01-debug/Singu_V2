@@ -160,6 +160,7 @@ export const EmailsCard = memo(function EmailsCard({
                 <ShieldCheck className="h-3 w-3" />
               </button>
               <button
+                aria-label={`Copiar email ${e.email}`}
                 onClick={() => onCopy(e.email, `email-${e.id}`)}
                 className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
               >

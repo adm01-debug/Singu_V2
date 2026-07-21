@@ -157,7 +157,8 @@ export const UltimasInteracoesCard = memo(({ interactions, contactId, headerExtr
               className="pl-9 h-9 text-sm bg-muted/30 border-none"
             />
             {localSearch && (
-              <button 
+              <button
+                aria-label="Limpar busca"
                 onClick={() => { setLocalSearch(''); setQ(''); }}
                 className="absolute right-2.5 top-2.5 text-muted-foreground hover:text-foreground"
               >

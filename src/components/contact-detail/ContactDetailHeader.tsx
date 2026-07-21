@@ -352,6 +352,7 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
                           {href?.startsWith('http') && <ExternalLink className="h-3 w-3 text-muted-foreground" />}
                         </a>
                         <button
+                          aria-label={`Copiar ${label}`}
                           onClick={() => copyToClipboard(value!, label)}
                           className="rounded p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                         >

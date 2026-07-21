@@ -369,7 +369,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                           <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1">
                             {child}
                             {/* eslint-disable-next-line sonarjs/no-nested-functions */}
-                            <button onClick={() => setChildren(prev => prev.filter((_, idx) => idx !== i))}>
+                            <button aria-label={`Remover filho ${child}`} onClick={() => setChildren(prev => prev.filter((_, idx) => idx !== i))}>
                               <Trash2 className="h-3 w-3 text-destructive" />
                             </button>
                           </Badge>
@@ -443,7 +443,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                         <Badge key={hobby} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-amber-50 text-amber-700 border-amber-100">
                           {hobby}
                           {/* eslint-disable-next-line sonarjs/no-nested-functions */}
-                          <button onClick={() => setHobbies(prev => prev.filter((_, idx) => idx !== i))}>
+                          <button aria-label={`Remover hobby ${hobby}`} onClick={() => setHobbies(prev => prev.filter((_, idx) => idx !== i))}>
                             <X className="h-3 w-3" />
                           </button>
                         </Badge>
@@ -500,7 +500,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                         <Badge key={interest} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-purple-50 text-purple-700 border-purple-100">
                           {interest}
                           {/* eslint-disable-next-line sonarjs/no-nested-functions */}
-                          <button onClick={() => setInterests(prev => prev.filter((_, idx) => idx !== i))}>
+                          <button aria-label={`Remover interesse ${interest}`} onClick={() => setInterests(prev => prev.filter((_, idx) => idx !== i))}>
                             <X className="h-3 w-3" />
                           </button>
                         </Badge>
@@ -559,7 +559,8 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                   >
                     {a}
                     {isEditing && (
-                      <button 
+                      <button
+                        aria-label={`Remover âncora ${a}`}
                         onClick={() => removeAnchor(i)}
                         className="hover:text-destructive rounded-full p-0.5 transition-colors"
                       >
