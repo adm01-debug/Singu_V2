@@ -76,10 +76,10 @@ ALTER TABLE public.sms_opt_outs ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users manage own SMS opt-outs" ON public.sms_opt_outs
   FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
-CREATE INDEX idx_sms_campaigns_user_status ON public.sms_campaigns(user_id, status, created_at DESC);
-CREATE INDEX idx_sms_recipients_campaign ON public.sms_campaign_recipients(campaign_id, status);
-CREATE INDEX idx_sms_templates_user ON public.sms_templates(user_id, created_at DESC);
-CREATE INDEX idx_sms_opt_outs_user_phone ON public.sms_opt_outs(user_id, phone);
+CREATE INDEX IF NOT EXISTS idx_sms_campaigns_user_status ON public.sms_campaigns(user_id, status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_sms_recipients_campaign ON public.sms_campaign_recipients(campaign_id, status);
+CREATE INDEX IF NOT EXISTS idx_sms_templates_user ON public.sms_templates(user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_sms_opt_outs_user_phone ON public.sms_opt_outs(user_id, phone);
 
 CREATE TRIGGER trg_sms_campaigns_updated_at BEFORE UPDATE ON public.sms_campaigns
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

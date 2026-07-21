@@ -16,7 +16,7 @@ CREATE TABLE public.win_loss_reasons (
   UNIQUE(user_id, category, label)
 );
 
-CREATE INDEX idx_win_loss_reasons_user ON public.win_loss_reasons(user_id, active);
+CREATE INDEX IF NOT EXISTS idx_win_loss_reasons_user ON public.win_loss_reasons(user_id, active);
 
 ALTER TABLE public.win_loss_reasons ENABLE ROW LEVEL SECURITY;
 
@@ -44,7 +44,7 @@ CREATE TABLE public.competitors (
   UNIQUE(user_id, name)
 );
 
-CREATE INDEX idx_competitors_user ON public.competitors(user_id, active);
+CREATE INDEX IF NOT EXISTS idx_competitors_user ON public.competitors(user_id, active);
 
 ALTER TABLE public.competitors ENABLE ROW LEVEL SECURITY;
 
@@ -75,9 +75,9 @@ CREATE TABLE public.win_loss_records (
   UNIQUE(user_id, deal_id)
 );
 
-CREATE INDEX idx_win_loss_records_user_outcome ON public.win_loss_records(user_id, outcome, recorded_at DESC);
-CREATE INDEX idx_win_loss_records_competitor ON public.win_loss_records(competitor_id);
-CREATE INDEX idx_win_loss_records_primary_reason ON public.win_loss_records(primary_reason_id);
+CREATE INDEX IF NOT EXISTS idx_win_loss_records_user_outcome ON public.win_loss_records(user_id, outcome, recorded_at DESC);
+CREATE INDEX IF NOT EXISTS idx_win_loss_records_competitor ON public.win_loss_records(competitor_id);
+CREATE INDEX IF NOT EXISTS idx_win_loss_records_primary_reason ON public.win_loss_records(primary_reason_id);
 
 ALTER TABLE public.win_loss_records ENABLE ROW LEVEL SECURITY;
 
@@ -107,7 +107,7 @@ CREATE TABLE public.win_loss_insights (
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_win_loss_insights_user_generated ON public.win_loss_insights(user_id, generated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_win_loss_insights_user_generated ON public.win_loss_insights(user_id, generated_at DESC);
 
 ALTER TABLE public.win_loss_insights ENABLE ROW LEVEL SECURITY;
 

@@ -11,8 +11,8 @@ CREATE TABLE public.ficha360_conversation_summaries (
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_f360_summ_user_contact ON public.ficha360_conversation_summaries (user_id, contact_id, created_at DESC);
-CREATE INDEX idx_f360_summ_hash ON public.ficha360_conversation_summaries (user_id, contact_id, filters_hash, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_f360_summ_user_contact ON public.ficha360_conversation_summaries (user_id, contact_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_f360_summ_hash ON public.ficha360_conversation_summaries (user_id, contact_id, filters_hash, created_at DESC);
 
 ALTER TABLE public.ficha360_conversation_summaries ENABLE ROW LEVEL SECURITY;
 

@@ -22,10 +22,10 @@ CREATE TABLE public.deal_rooms (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_deal_rooms_user ON public.deal_rooms(user_id);
-CREATE INDEX idx_deal_rooms_status ON public.deal_rooms(user_id, status);
-CREATE INDEX idx_deal_rooms_company ON public.deal_rooms(company_id);
-CREATE INDEX idx_deal_rooms_token ON public.deal_rooms(share_token);
+CREATE INDEX IF NOT EXISTS idx_deal_rooms_user ON public.deal_rooms(user_id);
+CREATE INDEX IF NOT EXISTS idx_deal_rooms_status ON public.deal_rooms(user_id, status);
+CREATE INDEX IF NOT EXISTS idx_deal_rooms_company ON public.deal_rooms(company_id);
+CREATE INDEX IF NOT EXISTS idx_deal_rooms_token ON public.deal_rooms(share_token);
 
 CREATE TABLE public.deal_room_milestones (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -42,8 +42,8 @@ CREATE TABLE public.deal_room_milestones (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_dr_milestones_room ON public.deal_room_milestones(room_id, sort_order);
-CREATE INDEX idx_dr_milestones_user ON public.deal_room_milestones(user_id);
+CREATE INDEX IF NOT EXISTS idx_dr_milestones_room ON public.deal_room_milestones(room_id, sort_order);
+CREATE INDEX IF NOT EXISTS idx_dr_milestones_user ON public.deal_room_milestones(user_id);
 
 CREATE TABLE public.deal_room_stakeholders (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -60,8 +60,8 @@ CREATE TABLE public.deal_room_stakeholders (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_dr_stakeholders_room ON public.deal_room_stakeholders(room_id);
-CREATE INDEX idx_dr_stakeholders_user ON public.deal_room_stakeholders(user_id);
+CREATE INDEX IF NOT EXISTS idx_dr_stakeholders_room ON public.deal_room_stakeholders(room_id);
+CREATE INDEX IF NOT EXISTS idx_dr_stakeholders_user ON public.deal_room_stakeholders(user_id);
 
 CREATE TABLE public.deal_room_documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -76,8 +76,8 @@ CREATE TABLE public.deal_room_documents (
   last_viewed_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_dr_docs_room ON public.deal_room_documents(room_id);
-CREATE INDEX idx_dr_docs_user ON public.deal_room_documents(user_id);
+CREATE INDEX IF NOT EXISTS idx_dr_docs_room ON public.deal_room_documents(room_id);
+CREATE INDEX IF NOT EXISTS idx_dr_docs_user ON public.deal_room_documents(user_id);
 
 CREATE TABLE public.deal_room_activities (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -89,7 +89,7 @@ CREATE TABLE public.deal_room_activities (
   payload JSONB NOT NULL DEFAULT '{}'::jsonb,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_dr_activities_room ON public.deal_room_activities(room_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_dr_activities_room ON public.deal_room_activities(room_id, created_at DESC);
 
 CREATE TABLE public.deal_room_comments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -100,7 +100,7 @@ CREATE TABLE public.deal_room_comments (
   body TEXT NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_dr_comments_room ON public.deal_room_comments(room_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_dr_comments_room ON public.deal_room_comments(room_id, created_at DESC);
 
 -- ============= RLS =============
 ALTER TABLE public.deal_rooms ENABLE ROW LEVEL SECURITY;

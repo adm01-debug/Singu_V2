@@ -290,18 +290,18 @@ CREATE POLICY "Users can insert their own activities"
   WITH CHECK (auth.uid() = user_id);
 
 -- 8. INDEXES for performance
-CREATE INDEX idx_companies_user_id ON public.companies(user_id);
-CREATE INDEX idx_contacts_user_id ON public.contacts(user_id);
-CREATE INDEX idx_contacts_company_id ON public.contacts(company_id);
-CREATE INDEX idx_interactions_user_id ON public.interactions(user_id);
-CREATE INDEX idx_interactions_contact_id ON public.interactions(contact_id);
-CREATE INDEX idx_interactions_created_at ON public.interactions(created_at DESC);
-CREATE INDEX idx_insights_user_id ON public.insights(user_id);
-CREATE INDEX idx_insights_contact_id ON public.insights(contact_id);
-CREATE INDEX idx_alerts_user_id ON public.alerts(user_id);
-CREATE INDEX idx_alerts_dismissed ON public.alerts(dismissed) WHERE dismissed = FALSE;
-CREATE INDEX idx_activities_user_id ON public.activities(user_id);
-CREATE INDEX idx_activities_created_at ON public.activities(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_companies_user_id ON public.companies(user_id);
+CREATE INDEX IF NOT EXISTS idx_contacts_user_id ON public.contacts(user_id);
+CREATE INDEX IF NOT EXISTS idx_contacts_company_id ON public.contacts(company_id);
+CREATE INDEX IF NOT EXISTS idx_interactions_user_id ON public.interactions(user_id);
+CREATE INDEX IF NOT EXISTS idx_interactions_contact_id ON public.interactions(contact_id);
+CREATE INDEX IF NOT EXISTS idx_interactions_created_at ON public.interactions(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_insights_user_id ON public.insights(user_id);
+CREATE INDEX IF NOT EXISTS idx_insights_contact_id ON public.insights(contact_id);
+CREATE INDEX IF NOT EXISTS idx_alerts_user_id ON public.alerts(user_id);
+CREATE INDEX IF NOT EXISTS idx_alerts_dismissed ON public.alerts(dismissed) WHERE dismissed = FALSE;
+CREATE INDEX IF NOT EXISTS idx_activities_user_id ON public.activities(user_id);
+CREATE INDEX IF NOT EXISTS idx_activities_created_at ON public.activities(created_at DESC);
 
 -- 9. Updated_at trigger function
 CREATE OR REPLACE FUNCTION public.update_updated_at_column()

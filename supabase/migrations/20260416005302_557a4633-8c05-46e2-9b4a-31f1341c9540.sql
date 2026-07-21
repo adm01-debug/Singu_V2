@@ -70,11 +70,11 @@ CREATE TABLE public.lead_score_config (
 );
 
 -- Indexes
-CREATE INDEX idx_lead_scores_contact ON public.lead_scores(contact_id);
-CREATE INDEX idx_lead_scores_user ON public.lead_scores(user_id);
-CREATE INDEX idx_lead_scores_grade ON public.lead_scores(grade);
-CREATE INDEX idx_lead_scores_total ON public.lead_scores(total_score DESC);
-CREATE INDEX idx_lead_score_history_contact ON public.lead_score_history(contact_id, recorded_at DESC);
+CREATE INDEX IF NOT EXISTS idx_lead_scores_contact ON public.lead_scores(contact_id);
+CREATE INDEX IF NOT EXISTS idx_lead_scores_user ON public.lead_scores(user_id);
+CREATE INDEX IF NOT EXISTS idx_lead_scores_grade ON public.lead_scores(grade);
+CREATE INDEX IF NOT EXISTS idx_lead_scores_total ON public.lead_scores(total_score DESC);
+CREATE INDEX IF NOT EXISTS idx_lead_score_history_contact ON public.lead_score_history(contact_id, recorded_at DESC);
 
 -- RLS
 ALTER TABLE public.lead_scores ENABLE ROW LEVEL SECURITY;

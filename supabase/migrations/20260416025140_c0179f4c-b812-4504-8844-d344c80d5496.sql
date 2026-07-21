@@ -30,9 +30,9 @@ CREATE POLICY "Users can update their own churn risks"
 CREATE POLICY "Users can delete their own churn risks"
   ON public.churn_risk_scores FOR DELETE USING (auth.uid() = user_id);
 
-CREATE INDEX idx_churn_risk_contact ON public.churn_risk_scores(contact_id);
-CREATE INDEX idx_churn_risk_user ON public.churn_risk_scores(user_id);
-CREATE INDEX idx_churn_risk_level ON public.churn_risk_scores(risk_level);
+CREATE INDEX IF NOT EXISTS idx_churn_risk_contact ON public.churn_risk_scores(contact_id);
+CREATE INDEX IF NOT EXISTS idx_churn_risk_user ON public.churn_risk_scores(user_id);
+CREATE INDEX IF NOT EXISTS idx_churn_risk_level ON public.churn_risk_scores(risk_level);
 
 CREATE TRIGGER update_churn_risk_scores_updated_at
   BEFORE UPDATE ON public.churn_risk_scores

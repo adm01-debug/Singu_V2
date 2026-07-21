@@ -12,9 +12,9 @@ CREATE TABLE public.behavioral_insight_feedback (
   CONSTRAINT behavioral_insight_feedback_unique UNIQUE (user_id, contact_id, insight_kind, insight_label)
 );
 
-CREATE INDEX idx_bif_contact_kind ON public.behavioral_insight_feedback (contact_id, insight_kind);
-CREATE INDEX idx_bif_user ON public.behavioral_insight_feedback (user_id);
-CREATE INDEX idx_bif_label_vote ON public.behavioral_insight_feedback (insight_kind, insight_label, vote);
+CREATE INDEX IF NOT EXISTS idx_bif_contact_kind ON public.behavioral_insight_feedback (contact_id, insight_kind);
+CREATE INDEX IF NOT EXISTS idx_bif_user ON public.behavioral_insight_feedback (user_id);
+CREATE INDEX IF NOT EXISTS idx_bif_label_vote ON public.behavioral_insight_feedback (insight_kind, insight_label, vote);
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.behavioral_insight_feedback TO authenticated;
 GRANT ALL ON public.behavioral_insight_feedback TO service_role;

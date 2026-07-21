@@ -13,11 +13,11 @@ CREATE TABLE public.score_history (
 );
 
 -- Create indexes for performance
-CREATE INDEX idx_score_history_contact_id ON public.score_history(contact_id);
-CREATE INDEX idx_score_history_user_id ON public.score_history(user_id);
-CREATE INDEX idx_score_history_score_type ON public.score_history(score_type);
-CREATE INDEX idx_score_history_calculated_at ON public.score_history(calculated_at DESC);
-CREATE INDEX idx_score_history_composite ON public.score_history(contact_id, score_type, calculated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_score_history_contact_id ON public.score_history(contact_id);
+CREATE INDEX IF NOT EXISTS idx_score_history_user_id ON public.score_history(user_id);
+CREATE INDEX IF NOT EXISTS idx_score_history_score_type ON public.score_history(score_type);
+CREATE INDEX IF NOT EXISTS idx_score_history_calculated_at ON public.score_history(calculated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_score_history_composite ON public.score_history(contact_id, score_type, calculated_at DESC);
 
 -- Enable RLS
 ALTER TABLE public.score_history ENABLE ROW LEVEL SECURITY;

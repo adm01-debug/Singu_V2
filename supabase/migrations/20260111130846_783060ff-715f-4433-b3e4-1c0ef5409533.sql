@@ -143,13 +143,13 @@ CREATE POLICY "Users can delete their own hidden objections"
 ON public.hidden_objections FOR DELETE USING (auth.uid() = user_id);
 
 -- Create indexes for better query performance
-CREATE INDEX idx_emotional_states_contact ON public.emotional_states_history(contact_id);
-CREATE INDEX idx_emotional_states_created ON public.emotional_states_history(created_at DESC);
-CREATE INDEX idx_emotional_anchors_contact ON public.emotional_anchors(contact_id);
-CREATE INDEX idx_client_values_contact ON public.client_values(contact_id);
-CREATE INDEX idx_decision_criteria_contact ON public.decision_criteria(contact_id);
-CREATE INDEX idx_hidden_objections_contact ON public.hidden_objections(contact_id);
-CREATE INDEX idx_hidden_objections_resolved ON public.hidden_objections(resolved);
+CREATE INDEX IF NOT EXISTS idx_emotional_states_contact ON public.emotional_states_history(contact_id);
+CREATE INDEX IF NOT EXISTS idx_emotional_states_created ON public.emotional_states_history(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_emotional_anchors_contact ON public.emotional_anchors(contact_id);
+CREATE INDEX IF NOT EXISTS idx_client_values_contact ON public.client_values(contact_id);
+CREATE INDEX IF NOT EXISTS idx_decision_criteria_contact ON public.decision_criteria(contact_id);
+CREATE INDEX IF NOT EXISTS idx_hidden_objections_contact ON public.hidden_objections(contact_id);
+CREATE INDEX IF NOT EXISTS idx_hidden_objections_resolved ON public.hidden_objections(resolved);
 
 -- Create function to update timestamps
 CREATE OR REPLACE FUNCTION public.update_nlp_updated_at_column()

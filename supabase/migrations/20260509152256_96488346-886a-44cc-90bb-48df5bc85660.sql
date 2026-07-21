@@ -72,5 +72,5 @@ BEFORE UPDATE ON public.suggested_rapport_intel
 FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- Indexes for performance
-CREATE INDEX idx_suggested_rapport_contact ON public.suggested_rapport_intel(contact_id, status);
-CREATE INDEX idx_contact_family_history_contact ON public.contact_family_history(contact_id, changed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_suggested_rapport_contact ON public.suggested_rapport_intel(contact_id, status);
+CREATE INDEX IF NOT EXISTS idx_contact_family_history_contact ON public.contact_family_history(contact_id, changed_at DESC);

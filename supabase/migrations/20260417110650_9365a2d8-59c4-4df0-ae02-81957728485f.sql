@@ -19,10 +19,10 @@ CREATE TABLE public.cs_accounts (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_cs_accounts_user ON public.cs_accounts(user_id);
-CREATE INDEX idx_cs_accounts_renewal ON public.cs_accounts(user_id, renewal_date);
-CREATE INDEX idx_cs_accounts_health ON public.cs_accounts(user_id, health_score);
-CREATE INDEX idx_cs_accounts_lifecycle ON public.cs_accounts(user_id, lifecycle_stage);
+CREATE INDEX IF NOT EXISTS idx_cs_accounts_user ON public.cs_accounts(user_id);
+CREATE INDEX IF NOT EXISTS idx_cs_accounts_renewal ON public.cs_accounts(user_id, renewal_date);
+CREATE INDEX IF NOT EXISTS idx_cs_accounts_health ON public.cs_accounts(user_id, health_score);
+CREATE INDEX IF NOT EXISTS idx_cs_accounts_lifecycle ON public.cs_accounts(user_id, lifecycle_stage);
 
 ALTER TABLE public.cs_accounts ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "cs_accounts_select" ON public.cs_accounts FOR SELECT USING (auth.uid() = user_id);
@@ -47,8 +47,8 @@ CREATE TABLE public.cs_health_signals (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_cs_signals_account ON public.cs_health_signals(account_id, signal_type);
-CREATE INDEX idx_cs_signals_captured ON public.cs_health_signals(user_id, captured_at DESC);
+CREATE INDEX IF NOT EXISTS idx_cs_signals_account ON public.cs_health_signals(account_id, signal_type);
+CREATE INDEX IF NOT EXISTS idx_cs_signals_captured ON public.cs_health_signals(user_id, captured_at DESC);
 
 ALTER TABLE public.cs_health_signals ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "cs_signals_select" ON public.cs_health_signals FOR SELECT USING (auth.uid() = user_id);
@@ -69,8 +69,8 @@ CREATE TABLE public.cs_nps_responses (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_cs_nps_account ON public.cs_nps_responses(account_id, surveyed_at DESC);
-CREATE INDEX idx_cs_nps_user ON public.cs_nps_responses(user_id, surveyed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_cs_nps_account ON public.cs_nps_responses(account_id, surveyed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_cs_nps_user ON public.cs_nps_responses(user_id, surveyed_at DESC);
 
 ALTER TABLE public.cs_nps_responses ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "cs_nps_select" ON public.cs_nps_responses FOR SELECT USING (auth.uid() = user_id);
@@ -96,8 +96,8 @@ CREATE TABLE public.cs_qbrs (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_cs_qbrs_account ON public.cs_qbrs(account_id, scheduled_at DESC);
-CREATE INDEX idx_cs_qbrs_user_status ON public.cs_qbrs(user_id, status, scheduled_at);
+CREATE INDEX IF NOT EXISTS idx_cs_qbrs_account ON public.cs_qbrs(account_id, scheduled_at DESC);
+CREATE INDEX IF NOT EXISTS idx_cs_qbrs_user_status ON public.cs_qbrs(user_id, status, scheduled_at);
 
 ALTER TABLE public.cs_qbrs ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "cs_qbrs_select" ON public.cs_qbrs FOR SELECT USING (auth.uid() = user_id);
@@ -124,9 +124,9 @@ CREATE TABLE public.cs_renewals (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_cs_renewals_user_date ON public.cs_renewals(user_id, renewal_date);
-CREATE INDEX idx_cs_renewals_account ON public.cs_renewals(account_id, renewal_date DESC);
-CREATE INDEX idx_cs_renewals_status ON public.cs_renewals(user_id, status);
+CREATE INDEX IF NOT EXISTS idx_cs_renewals_user_date ON public.cs_renewals(user_id, renewal_date);
+CREATE INDEX IF NOT EXISTS idx_cs_renewals_account ON public.cs_renewals(account_id, renewal_date DESC);
+CREATE INDEX IF NOT EXISTS idx_cs_renewals_status ON public.cs_renewals(user_id, status);
 
 ALTER TABLE public.cs_renewals ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "cs_renewals_select" ON public.cs_renewals FOR SELECT USING (auth.uid() = user_id);

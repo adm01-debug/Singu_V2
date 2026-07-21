@@ -44,5 +44,5 @@ ON public.metaprogram_analysis FOR DELETE
 USING (auth.uid() = user_id);
 
 -- Add indexes
-CREATE INDEX idx_metaprogram_analysis_contact ON public.metaprogram_analysis(contact_id);
-CREATE INDEX idx_metaprogram_analysis_user ON public.metaprogram_analysis(user_id);
+CREATE INDEX IF NOT EXISTS idx_metaprogram_analysis_contact ON public.metaprogram_analysis(contact_id);
+CREATE INDEX IF NOT EXISTS idx_metaprogram_analysis_user ON public.metaprogram_analysis(user_id);

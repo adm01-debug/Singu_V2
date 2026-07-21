@@ -27,5 +27,5 @@ FOR SELECT
 USING (public.has_role(auth.uid(), 'admin'));
 
 -- Index para busca rápida por data e severidade
-CREATE INDEX idx_error_logs_created_at ON public.error_logs(created_at DESC);
-CREATE INDEX idx_error_logs_severity ON public.error_logs(severity);
+CREATE INDEX IF NOT EXISTS idx_error_logs_created_at ON public.error_logs(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_error_logs_severity ON public.error_logs(severity);

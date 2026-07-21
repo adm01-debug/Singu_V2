@@ -49,9 +49,9 @@ CREATE POLICY "Users can delete their own team members"
   ON public.sales_team_members FOR DELETE TO authenticated
   USING (auth.uid() = user_id);
 
-CREATE INDEX idx_sales_team_role ON public.sales_team_members(role);
-CREATE INDEX idx_sales_team_active ON public.sales_team_members(is_active);
-CREATE INDEX idx_sales_team_user ON public.sales_team_members(user_id);
+CREATE INDEX IF NOT EXISTS idx_sales_team_role ON public.sales_team_members(role);
+CREATE INDEX IF NOT EXISTS idx_sales_team_active ON public.sales_team_members(is_active);
+CREATE INDEX IF NOT EXISTS idx_sales_team_user ON public.sales_team_members(user_id);
 
 CREATE TRIGGER update_sales_team_members_updated_at
   BEFORE UPDATE ON public.sales_team_members
@@ -96,8 +96,8 @@ CREATE POLICY "Users can delete their own routing rules"
   ON public.lead_routing_rules FOR DELETE TO authenticated
   USING (auth.uid() = user_id);
 
-CREATE INDEX idx_routing_rules_priority ON public.lead_routing_rules(priority);
-CREATE INDEX idx_routing_rules_active ON public.lead_routing_rules(is_active);
+CREATE INDEX IF NOT EXISTS idx_routing_rules_priority ON public.lead_routing_rules(priority);
+CREATE INDEX IF NOT EXISTS idx_routing_rules_active ON public.lead_routing_rules(is_active);
 
 CREATE TRIGGER update_lead_routing_rules_updated_at
   BEFORE UPDATE ON public.lead_routing_rules
@@ -145,11 +145,11 @@ CREATE POLICY "Users can delete their own assignments"
   ON public.lead_assignments FOR DELETE TO authenticated
   USING (auth.uid() = user_id);
 
-CREATE INDEX idx_assignments_contact ON public.lead_assignments(contact_id);
-CREATE INDEX idx_assignments_assigned_to ON public.lead_assignments(assigned_to);
-CREATE INDEX idx_assignments_status ON public.lead_assignments(status);
-CREATE INDEX idx_assignments_type ON public.lead_assignments(assignment_type);
-CREATE INDEX idx_assignments_created ON public.lead_assignments(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_assignments_contact ON public.lead_assignments(contact_id);
+CREATE INDEX IF NOT EXISTS idx_assignments_assigned_to ON public.lead_assignments(assigned_to);
+CREATE INDEX IF NOT EXISTS idx_assignments_status ON public.lead_assignments(status);
+CREATE INDEX IF NOT EXISTS idx_assignments_type ON public.lead_assignments(assignment_type);
+CREATE INDEX IF NOT EXISTS idx_assignments_created ON public.lead_assignments(created_at DESC);
 
 CREATE TRIGGER update_lead_assignments_updated_at
   BEFORE UPDATE ON public.lead_assignments
@@ -198,10 +198,10 @@ CREATE POLICY "Users can delete their own handoff requests"
   ON public.handoff_requests FOR DELETE TO authenticated
   USING (auth.uid() = user_id);
 
-CREATE INDEX idx_handoff_status ON public.handoff_requests(status);
-CREATE INDEX idx_handoff_from ON public.handoff_requests(from_member_id);
-CREATE INDEX idx_handoff_to ON public.handoff_requests(to_member_id);
-CREATE INDEX idx_handoff_created ON public.handoff_requests(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_handoff_status ON public.handoff_requests(status);
+CREATE INDEX IF NOT EXISTS idx_handoff_from ON public.handoff_requests(from_member_id);
+CREATE INDEX IF NOT EXISTS idx_handoff_to ON public.handoff_requests(to_member_id);
+CREATE INDEX IF NOT EXISTS idx_handoff_created ON public.handoff_requests(created_at DESC);
 
 CREATE TRIGGER update_handoff_requests_updated_at
   BEFORE UPDATE ON public.handoff_requests
@@ -236,5 +236,5 @@ CREATE POLICY "Users can insert their own redistribution logs"
   ON public.redistribution_log FOR INSERT TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
-CREATE INDEX idx_redistribution_reason ON public.redistribution_log(reason);
-CREATE INDEX idx_redistribution_created ON public.redistribution_log(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_redistribution_reason ON public.redistribution_log(reason);
+CREATE INDEX IF NOT EXISTS idx_redistribution_created ON public.redistribution_log(created_at DESC);

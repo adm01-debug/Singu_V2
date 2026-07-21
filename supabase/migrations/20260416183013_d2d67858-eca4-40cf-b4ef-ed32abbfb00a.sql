@@ -24,8 +24,8 @@ CREATE TABLE public.ai_chat_messages (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_ai_chat_threads_user ON public.ai_chat_threads(user_id, archived, last_message_at DESC);
-CREATE INDEX idx_ai_chat_messages_thread ON public.ai_chat_messages(thread_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_ai_chat_threads_user ON public.ai_chat_threads(user_id, archived, last_message_at DESC);
+CREATE INDEX IF NOT EXISTS idx_ai_chat_messages_thread ON public.ai_chat_messages(thread_id, created_at);
 
 ALTER TABLE public.ai_chat_threads ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ai_chat_messages ENABLE ROW LEVEL SECURITY;

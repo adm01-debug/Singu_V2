@@ -16,7 +16,7 @@ CREATE TABLE public.lead_score_threshold_automations (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_lsta_user_active ON public.lead_score_threshold_automations(user_id, active);
+CREATE INDEX IF NOT EXISTS idx_lsta_user_active ON public.lead_score_threshold_automations(user_id, active);
 
 ALTER TABLE public.lead_score_threshold_automations ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "auto select own" ON public.lead_score_threshold_automations FOR SELECT USING (auth.uid() = user_id);
@@ -43,9 +43,9 @@ CREATE TABLE public.lead_score_threshold_log (
   success BOOLEAN NOT NULL DEFAULT true,
   fired_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_lstl_user_fired ON public.lead_score_threshold_log(user_id, fired_at DESC);
-CREATE INDEX idx_lstl_automation ON public.lead_score_threshold_log(automation_id, fired_at DESC);
-CREATE INDEX idx_lstl_contact ON public.lead_score_threshold_log(contact_id, fired_at DESC);
+CREATE INDEX IF NOT EXISTS idx_lstl_user_fired ON public.lead_score_threshold_log(user_id, fired_at DESC);
+CREATE INDEX IF NOT EXISTS idx_lstl_automation ON public.lead_score_threshold_log(automation_id, fired_at DESC);
+CREATE INDEX IF NOT EXISTS idx_lstl_contact ON public.lead_score_threshold_log(contact_id, fired_at DESC);
 
 ALTER TABLE public.lead_score_threshold_log ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "log select own" ON public.lead_score_threshold_log FOR SELECT USING (auth.uid() = user_id);

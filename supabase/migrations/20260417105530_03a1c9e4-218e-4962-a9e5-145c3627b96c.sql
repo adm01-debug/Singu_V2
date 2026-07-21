@@ -14,7 +14,7 @@ CREATE TABLE public.revops_snapshots (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE (user_id, period, funnel_stage)
 );
-CREATE INDEX idx_revops_snapshots_user_period ON public.revops_snapshots(user_id, period DESC);
+CREATE INDEX IF NOT EXISTS idx_revops_snapshots_user_period ON public.revops_snapshots(user_id, period DESC);
 ALTER TABLE public.revops_snapshots ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users view own snapshots" ON public.revops_snapshots FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users insert own snapshots" ON public.revops_snapshots FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -33,7 +33,7 @@ CREATE TABLE public.revops_benchmarks (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE (user_id, metric_key)
 );
-CREATE INDEX idx_revops_benchmarks_user_metric ON public.revops_benchmarks(user_id, metric_key);
+CREATE INDEX IF NOT EXISTS idx_revops_benchmarks_user_metric ON public.revops_benchmarks(user_id, metric_key);
 ALTER TABLE public.revops_benchmarks ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users view own benchmarks" ON public.revops_benchmarks FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users insert own benchmarks" ON public.revops_benchmarks FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -57,7 +57,7 @@ CREATE TABLE public.revops_alerts (
   dismissed BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_revops_alerts_user_active ON public.revops_alerts(user_id, dismissed, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_revops_alerts_user_active ON public.revops_alerts(user_id, dismissed, created_at DESC);
 ALTER TABLE public.revops_alerts ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users view own alerts" ON public.revops_alerts FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users insert own alerts" ON public.revops_alerts FOR INSERT WITH CHECK (auth.uid() = user_id);

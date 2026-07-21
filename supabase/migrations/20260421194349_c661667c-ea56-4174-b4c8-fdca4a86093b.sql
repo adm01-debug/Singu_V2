@@ -11,7 +11,7 @@ CREATE TABLE public.sentiment_annotations (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_sentiment_annotations_contact_week
+CREATE INDEX IF NOT EXISTS idx_sentiment_annotations_contact_week
   ON public.sentiment_annotations (contact_id, week_start DESC);
 
 ALTER TABLE public.sentiment_annotations ENABLE ROW LEVEL SECURITY;

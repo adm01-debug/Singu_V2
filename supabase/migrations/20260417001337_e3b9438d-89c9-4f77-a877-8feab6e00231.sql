@@ -14,7 +14,7 @@ CREATE TABLE public.forecast_periods (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE(user_id, period_type, period_start)
 );
-CREATE INDEX idx_forecast_periods_user ON public.forecast_periods(user_id, status, period_start DESC);
+CREATE INDEX IF NOT EXISTS idx_forecast_periods_user ON public.forecast_periods(user_id, status, period_start DESC);
 ALTER TABLE public.forecast_periods ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "own forecast_periods select" ON public.forecast_periods FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "own forecast_periods insert" ON public.forecast_periods FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -47,8 +47,8 @@ CREATE TABLE public.deal_forecasts (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE(deal_id, period_id)
 );
-CREATE INDEX idx_deal_forecasts_period ON public.deal_forecasts(period_id, category);
-CREATE INDEX idx_deal_forecasts_user ON public.deal_forecasts(user_id, period_id);
+CREATE INDEX IF NOT EXISTS idx_deal_forecasts_period ON public.deal_forecasts(period_id, category);
+CREATE INDEX IF NOT EXISTS idx_deal_forecasts_user ON public.deal_forecasts(user_id, period_id);
 ALTER TABLE public.deal_forecasts ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "own deal_forecasts select" ON public.deal_forecasts FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "own deal_forecasts insert" ON public.deal_forecasts FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -72,7 +72,7 @@ CREATE TABLE public.forecast_snapshots (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE(period_id, snapshot_date)
 );
-CREATE INDEX idx_forecast_snapshots_period ON public.forecast_snapshots(period_id, snapshot_date DESC);
+CREATE INDEX IF NOT EXISTS idx_forecast_snapshots_period ON public.forecast_snapshots(period_id, snapshot_date DESC);
 ALTER TABLE public.forecast_snapshots ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "own forecast_snapshots select" ON public.forecast_snapshots FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "own forecast_snapshots insert" ON public.forecast_snapshots FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -89,7 +89,7 @@ CREATE TABLE public.forecast_categories_history (
   reason TEXT,
   changed_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_forecast_cat_history_df ON public.forecast_categories_history(deal_forecast_id, changed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_forecast_cat_history_df ON public.forecast_categories_history(deal_forecast_id, changed_at DESC);
 ALTER TABLE public.forecast_categories_history ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "own forecast_cat_history select" ON public.forecast_categories_history FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "own forecast_cat_history insert" ON public.forecast_categories_history FOR INSERT WITH CHECK (auth.uid() = user_id);

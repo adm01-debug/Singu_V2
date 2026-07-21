@@ -19,8 +19,8 @@ CREATE TABLE public.contact_relatives (
 );
 
 -- Índices
-CREATE INDEX idx_contact_relatives_user_id ON public.contact_relatives(user_id);
-CREATE INDEX idx_contact_relatives_contact_id ON public.contact_relatives(contact_id);
+CREATE INDEX IF NOT EXISTS idx_contact_relatives_user_id ON public.contact_relatives(user_id);
+CREATE INDEX IF NOT EXISTS idx_contact_relatives_contact_id ON public.contact_relatives(contact_id);
 
 -- RLS
 ALTER TABLE public.contact_relatives ENABLE ROW LEVEL SECURITY;

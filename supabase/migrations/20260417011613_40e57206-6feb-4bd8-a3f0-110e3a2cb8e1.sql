@@ -25,8 +25,8 @@ CREATE POLICY "forms_owner_all" ON public.forms FOR ALL
 CREATE POLICY "forms_public_read_published" ON public.forms FOR SELECT
   USING (is_published = true);
 
-CREATE INDEX idx_forms_user ON public.forms(user_id);
-CREATE INDEX idx_forms_slug ON public.forms(slug);
+CREATE INDEX IF NOT EXISTS idx_forms_user ON public.forms(user_id);
+CREATE INDEX IF NOT EXISTS idx_forms_slug ON public.forms(slug);
 CREATE TRIGGER trg_forms_updated BEFORE UPDATE ON public.forms FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- =========================
@@ -58,9 +58,9 @@ CREATE POLICY "fs_public_insert" ON public.form_submissions FOR INSERT
     EXISTS (SELECT 1 FROM public.forms f WHERE f.id = form_id AND f.is_published = true AND f.user_id = form_submissions.user_id)
   );
 
-CREATE INDEX idx_fs_form ON public.form_submissions(form_id);
-CREATE INDEX idx_fs_user ON public.form_submissions(user_id);
-CREATE INDEX idx_fs_contact ON public.form_submissions(contact_id);
+CREATE INDEX IF NOT EXISTS idx_fs_form ON public.form_submissions(form_id);
+CREATE INDEX IF NOT EXISTS idx_fs_user ON public.form_submissions(user_id);
+CREATE INDEX IF NOT EXISTS idx_fs_contact ON public.form_submissions(contact_id);
 
 -- =========================
 -- LEAD MAGNETS
@@ -90,8 +90,8 @@ CREATE POLICY "lm_owner_all" ON public.lead_magnets FOR ALL
 CREATE POLICY "lm_public_read" ON public.lead_magnets FOR SELECT
   USING (is_published = true);
 
-CREATE INDEX idx_lm_user ON public.lead_magnets(user_id);
-CREATE INDEX idx_lm_slug ON public.lead_magnets(slug);
+CREATE INDEX IF NOT EXISTS idx_lm_user ON public.lead_magnets(user_id);
+CREATE INDEX IF NOT EXISTS idx_lm_slug ON public.lead_magnets(slug);
 CREATE TRIGGER trg_lm_updated BEFORE UPDATE ON public.lead_magnets FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- =========================
@@ -118,8 +118,8 @@ CREATE POLICY "lmd_public_insert" ON public.lead_magnet_downloads FOR INSERT
     EXISTS (SELECT 1 FROM public.lead_magnets m WHERE m.id = magnet_id AND m.is_published = true AND m.user_id = lead_magnet_downloads.user_id)
   );
 
-CREATE INDEX idx_lmd_magnet ON public.lead_magnet_downloads(magnet_id);
-CREATE INDEX idx_lmd_user ON public.lead_magnet_downloads(user_id);
+CREATE INDEX IF NOT EXISTS idx_lmd_magnet ON public.lead_magnet_downloads(magnet_id);
+CREATE INDEX IF NOT EXISTS idx_lmd_user ON public.lead_magnet_downloads(user_id);
 
 -- =========================
 -- MQL CRITERIA
@@ -140,7 +140,7 @@ CREATE TABLE public.mql_criteria (
 ALTER TABLE public.mql_criteria ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "mqlc_owner_all" ON public.mql_criteria FOR ALL
   USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
-CREATE INDEX idx_mqlc_user ON public.mql_criteria(user_id);
+CREATE INDEX IF NOT EXISTS idx_mqlc_user ON public.mql_criteria(user_id);
 CREATE TRIGGER trg_mqlc_updated BEFORE UPDATE ON public.mql_criteria FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- =========================
@@ -165,9 +165,9 @@ CREATE TABLE public.mql_classifications (
 ALTER TABLE public.mql_classifications ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "mqlcls_owner_all" ON public.mql_classifications FOR ALL
   USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
-CREATE INDEX idx_mqlcls_user ON public.mql_classifications(user_id);
-CREATE INDEX idx_mqlcls_contact ON public.mql_classifications(contact_id);
-CREATE INDEX idx_mqlcls_status ON public.mql_classifications(status);
+CREATE INDEX IF NOT EXISTS idx_mqlcls_user ON public.mql_classifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_mqlcls_contact ON public.mql_classifications(contact_id);
+CREATE INDEX IF NOT EXISTS idx_mqlcls_status ON public.mql_classifications(status);
 CREATE TRIGGER trg_mqlcls_updated BEFORE UPDATE ON public.mql_classifications FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- =========================
@@ -193,10 +193,10 @@ CREATE TABLE public.attribution_touchpoints (
 ALTER TABLE public.attribution_touchpoints ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "atp_owner_all" ON public.attribution_touchpoints FOR ALL
   USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
-CREATE INDEX idx_atp_user ON public.attribution_touchpoints(user_id);
-CREATE INDEX idx_atp_contact ON public.attribution_touchpoints(contact_id);
-CREATE INDEX idx_atp_deal ON public.attribution_touchpoints(deal_id);
-CREATE INDEX idx_atp_occurred ON public.attribution_touchpoints(occurred_at DESC);
+CREATE INDEX IF NOT EXISTS idx_atp_user ON public.attribution_touchpoints(user_id);
+CREATE INDEX IF NOT EXISTS idx_atp_contact ON public.attribution_touchpoints(contact_id);
+CREATE INDEX IF NOT EXISTS idx_atp_deal ON public.attribution_touchpoints(deal_id);
+CREATE INDEX IF NOT EXISTS idx_atp_occurred ON public.attribution_touchpoints(occurred_at DESC);
 
 -- =========================
 -- ATTRIBUTION CACHE
@@ -214,7 +214,7 @@ CREATE TABLE public.attribution_models_cache (
 ALTER TABLE public.attribution_models_cache ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "amc_owner_all" ON public.attribution_models_cache FOR ALL
   USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
-CREATE INDEX idx_amc_user_deal ON public.attribution_models_cache(user_id, deal_id);
+CREATE INDEX IF NOT EXISTS idx_amc_user_deal ON public.attribution_models_cache(user_id, deal_id);
 
 -- =========================
 -- NURTURING EXECUTIONS
@@ -239,9 +239,9 @@ CREATE TABLE public.nurturing_executions (
 ALTER TABLE public.nurturing_executions ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "ne_owner_all" ON public.nurturing_executions FOR ALL
   USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
-CREATE INDEX idx_ne_user ON public.nurturing_executions(user_id);
-CREATE INDEX idx_ne_workflow ON public.nurturing_executions(workflow_id);
-CREATE INDEX idx_ne_next_action ON public.nurturing_executions(next_action_at) WHERE status = 'active';
+CREATE INDEX IF NOT EXISTS idx_ne_user ON public.nurturing_executions(user_id);
+CREATE INDEX IF NOT EXISTS idx_ne_workflow ON public.nurturing_executions(workflow_id);
+CREATE INDEX IF NOT EXISTS idx_ne_next_action ON public.nurturing_executions(next_action_at) WHERE status = 'active';
 CREATE TRIGGER trg_ne_updated BEFORE UPDATE ON public.nurturing_executions FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- =========================

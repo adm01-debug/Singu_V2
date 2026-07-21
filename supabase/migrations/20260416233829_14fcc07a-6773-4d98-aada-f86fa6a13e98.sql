@@ -18,10 +18,10 @@ CREATE TABLE public.intent_signals (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_intent_signals_user_occurred ON public.intent_signals(user_id, occurred_at DESC);
-CREATE INDEX idx_intent_signals_contact ON public.intent_signals(contact_id) WHERE contact_id IS NOT NULL;
-CREATE INDEX idx_intent_signals_external_company ON public.intent_signals(external_company_id) WHERE external_company_id IS NOT NULL;
-CREATE INDEX idx_intent_signals_type ON public.intent_signals(signal_type);
+CREATE INDEX IF NOT EXISTS idx_intent_signals_user_occurred ON public.intent_signals(user_id, occurred_at DESC);
+CREATE INDEX IF NOT EXISTS idx_intent_signals_contact ON public.intent_signals(contact_id) WHERE contact_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_intent_signals_external_company ON public.intent_signals(external_company_id) WHERE external_company_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_intent_signals_type ON public.intent_signals(signal_type);
 
 ALTER TABLE public.intent_signals ENABLE ROW LEVEL SECURITY;
 
@@ -54,7 +54,7 @@ CREATE TABLE public.intent_scores (
   UNIQUE(user_id, scope, scope_id)
 );
 
-CREATE INDEX idx_intent_scores_user_score ON public.intent_scores(user_id, intent_score DESC);
+CREATE INDEX IF NOT EXISTS idx_intent_scores_user_score ON public.intent_scores(user_id, intent_score DESC);
 
 ALTER TABLE public.intent_scores ENABLE ROW LEVEL SECURITY;
 
@@ -85,8 +85,8 @@ CREATE TABLE public.intent_tracking_pixels (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_intent_pixels_user ON public.intent_tracking_pixels(user_id);
-CREATE INDEX idx_intent_pixels_key ON public.intent_tracking_pixels(pixel_key) WHERE active = true;
+CREATE INDEX IF NOT EXISTS idx_intent_pixels_user ON public.intent_tracking_pixels(user_id);
+CREATE INDEX IF NOT EXISTS idx_intent_pixels_key ON public.intent_tracking_pixels(pixel_key) WHERE active = true;
 
 ALTER TABLE public.intent_tracking_pixels ENABLE ROW LEVEL SECURITY;
 

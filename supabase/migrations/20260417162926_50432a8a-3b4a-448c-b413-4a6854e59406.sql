@@ -32,8 +32,8 @@ CREATE POLICY "Users delete own email thread summaries"
   ON public.email_thread_summaries FOR DELETE
   USING (auth.uid() = user_id);
 
-CREATE INDEX idx_ets_user_thread ON public.email_thread_summaries (user_id, thread_key);
-CREATE INDEX idx_ets_user_created ON public.email_thread_summaries (user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_ets_user_thread ON public.email_thread_summaries (user_id, thread_key);
+CREATE INDEX IF NOT EXISTS idx_ets_user_created ON public.email_thread_summaries (user_id, created_at DESC);
 
 CREATE TRIGGER update_email_thread_summaries_updated_at
   BEFORE UPDATE ON public.email_thread_summaries
