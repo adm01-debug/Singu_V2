@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { sanitizeHtml, sanitizeText, sanitizeUrl } from '../sanitize';
+import { sanitizeHtml, sanitizeDocumentHtml, sanitizeText, sanitizeUrl } from '../sanitize';
 
 describe('Sanitize Lib', () => {
   describe('sanitizeHtml', () => {
@@ -30,6 +30,50 @@ describe('Sanitize Lib', () => {
       const dirty = '<p>Hello <strong>World</strong></p>';
       const clean = sanitizeText(dirty);
       expect(clean).toBe('Hello World');
+    });
+  });
+
+  describe('sanitizeDocumentHtml', () => {
+    it('should allow rich document tags', () => {
+      const html = '<h1>Title</h1><table><tr><td>Cell</td></tr></table><img src="https://example.com/logo.png" alt="logo">';
+      const clean = sanitizeDocumentHtml(html);
+      expect(clean).toContain('<h1>');
+      expect(clean).toContain('<table>');
+      expect(clean).toContain('<img');
+    });
+
+    it('should block script tags and event handlers', () => {
+      const dirty = '<div onclick="xss()">Safe text</div><script>alert(1)</script>';
+      const clean = sanitizeDocumentHtml(dirty);
+      expect(clean).not.toContain('<script>');
+      expect(clean).not.toContain('onclick');
+    });
+
+    it('should block form and input elements', () => {
+      const dirty = '<form action="/steal"><input type="text" name="pw"><button>Submit</button></form>';
+      const clean = sanitizeDocumentHtml(dirty);
+      expect(clean).not.toContain('<form');
+      expect(clean).not.toContain('<input');
+      expect(clean).not.toContain('<button');
+    });
+
+    it('should block iframe and object elements', () => {
+      const dirty = '<iframe src="https://evil.com"></iframe><object data="evil.swf"></object>';
+      const clean = sanitizeDocumentHtml(dirty);
+      expect(clean).not.toContain('<iframe');
+      expect(clean).not.toContain('<object');
+    });
+
+    it('should block javascript: href on anchor tags', () => {
+      const dirty = '<a href="javascript:alert(1)">Click</a>';
+      const clean = sanitizeDocumentHtml(dirty);
+      expect(clean).not.toContain('javascript:');
+    });
+
+    it('should add noopener noreferrer to target=_blank links', () => {
+      const dirty = '<a href="https://example.com" target="_blank">Link</a>';
+      const clean = sanitizeDocumentHtml(dirty);
+      expect(clean).toContain('rel="noopener noreferrer"');
     });
   });
 
