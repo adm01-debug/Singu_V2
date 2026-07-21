@@ -52,12 +52,12 @@ const Insights = () => {
     setLoading(true);
     try {
       const [contactsRes, interactionsRes, companiesRes] = await Promise.all([
-        supabase.from('contacts').select('*').eq('user_id', user.id).limit(50),
-        supabase.from('interactions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(100),
-        supabase.from('companies').select('*').eq('user_id', user.id).limit(20),
+        supabase.from('contacts').select('id, first_name, last_name, role_title, relationship_score, relationship_stage, sentiment, updated_at').eq('user_id', user.id).limit(50),
+        supabase.from('interactions').select('id, type, title, content, sentiment, follow_up_required, created_at, contact_id').eq('user_id', user.id).order('created_at', { ascending: false }).limit(100),
+        supabase.from('companies').select('id, name, industry, financial_health').eq('user_id', user.id).limit(20),
       ]);
       if (controller.signal.aborted) return;
-      setContacts(contactsRes.data || []);
+      setContacts((contactsRes.data || []) as Contact[]);
       if ((contactsRes.data?.length || 0) > 0 || (interactionsRes.data?.length || 0) > 0) {
         await generateInsights(contactsRes.data || [], interactionsRes.data || [], companiesRes.data || [], controller.signal);
       }
@@ -103,11 +103,11 @@ const Insights = () => {
     try {
       if (!user) return;
       const [contactsRes, interactionsRes, companiesRes] = await Promise.all([
-        supabase.from('contacts').select('*').eq('user_id', user.id).limit(50),
-        supabase.from('interactions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(100),
-        supabase.from('companies').select('*').eq('user_id', user.id).limit(20),
+        supabase.from('contacts').select('id, first_name, last_name, role_title, relationship_score, relationship_stage, sentiment, updated_at').eq('user_id', user.id).limit(50),
+        supabase.from('interactions').select('id, type, title, content, sentiment, follow_up_required, created_at, contact_id').eq('user_id', user.id).order('created_at', { ascending: false }).limit(100),
+        supabase.from('companies').select('id, name, industry, financial_health').eq('user_id', user.id).limit(20),
       ]);
-      await generateInsights(contactsRes.data || [], interactionsRes.data || [], companiesRes.data || []);
+      await generateInsights((contactsRes.data || []) as Contact[], (interactionsRes.data || []) as Interaction[], (companiesRes.data || []) as Company[]);
     } catch (error) { logger.error('Error refreshing insights:', error); toast.error('Erro ao atualizar insights. Tente novamente.'); }
   };
 

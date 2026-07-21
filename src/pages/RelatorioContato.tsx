@@ -68,7 +68,7 @@ const RelatorioContato = () => {
           { data: localDisc },
         ] = await Promise.all([
           supabase.from("contacts").select("*").eq("id", id).eq("user_id", user.id).maybeSingle(),
-          supabase.from("interactions").select("*").eq("contact_id", id).eq("user_id", user.id).order("created_at", { ascending: false }).limit(500),
+          supabase.from("interactions").select("id, type, content, created_at").eq("contact_id", id).eq("user_id", user.id).order("created_at", { ascending: false }).limit(500),
           supabase.from("disc_analysis_history").select("*").eq("contact_id", id).eq("user_id", user.id).order("analyzed_at", { ascending: false }).limit(50),
         ]);
 
@@ -80,7 +80,7 @@ const RelatorioContato = () => {
           contact = extContact?.[0] || null;
         }
 
-        let interactions = localInteractions || [];
+        let interactions: Tables<'interactions'>[] = (localInteractions as unknown as Tables<'interactions'>[]) || [];
         if (interactions.length === 0) {
           const { data: extInteractions } = await queryExternalData<Tables<'interactions'>>({ table: 'interactions', filters: [{ type: 'eq', column: 'contact_id', value: id }, { type: 'eq', column: 'user_id', value: user.id }], order: { column: 'created_at', ascending: false } });
           interactions = extInteractions || [];
