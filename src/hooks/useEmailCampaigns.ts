@@ -36,10 +36,10 @@ export function useEmailCampaigns() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('email_campaigns')
-        .select('*')
+        .select('id, user_id, name, subject, content_html, content_text, status, segment_filter, tags, scheduled_at, sent_at, total_recipients, total_opened, total_clicked, total_bounced, created_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return (data || []) as EmailCampaign[];
     },

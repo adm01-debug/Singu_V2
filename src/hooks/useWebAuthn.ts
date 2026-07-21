@@ -23,10 +23,10 @@ export function useWebAuthn() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('webauthn_credentials')
-        .select('*')
+        .select('id, user_id, credential_id, public_key, label, transports, last_used_at, created_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(20);
       if (error) return [];
       return Array.isArray(data) ? data : [];
     },

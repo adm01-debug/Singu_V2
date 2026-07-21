@@ -179,11 +179,11 @@ export function useScoreRules() {
     queryFn: async () => {
       if (!user?.id) return [];
       const { data } = await supabase
-        .from('lead_score_rules').select('*')
+        .from('lead_score_rules').select('id, dimension, signal_key, weight, decay_days, active')
         .eq('user_id', user.id)
         .order('dimension', { ascending: true })
         .order('signal_key', { ascending: true })
-        .limit(1000);
+        .limit(100);
       return (data ?? []) as LeadScoreRule[];
     },
     enabled: !!user?.id,
@@ -219,9 +219,9 @@ export function useScoreThresholds() {
     queryFn: async () => {
       if (!user?.id) return [];
       const { data } = await supabase
-        .from('lead_score_thresholds').select('*')
+        .from('lead_score_thresholds').select('id, grade, min_score')
         .eq('user_id', user.id).order('min_score', { ascending: false })
-        .limit(1000);
+        .limit(20);
       return (data ?? []) as LeadScoreThreshold[];
     },
     enabled: !!user?.id,

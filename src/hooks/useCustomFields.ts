@@ -40,11 +40,11 @@ export function useCustomFields(entityType: EntityType) {
       if (!user) return [];
       const { data, error } = await supabase
         .from('custom_fields')
-        .select('*')
+        .select('id, user_id, entity_type, field_name, field_label, field_type, field_options, is_required, display_order, created_at, updated_at')
         .eq('user_id', user.id)
         .eq('entity_type', entityType)
         .order('display_order')
-        .limit(1000);
+        .limit(200);
       if (error) throw error;
       return (data || []) as CustomField[];
     },
@@ -119,17 +119,17 @@ export function useCustomFieldValues(entityType: EntityType, entityId?: string) 
         .select('id')
         .eq('user_id', user.id)
         .eq('entity_type', entityType)
-        .limit(1000);
+        .limit(200);
 
       if (!fields?.length) return [];
 
       const fieldIds = fields.map(f => f.id);
       const { data, error } = await supabase
         .from('custom_field_values')
-        .select('*')
+        .select('id, custom_field_id, entity_id, value')
         .eq('entity_id', entityId)
         .in('custom_field_id', fieldIds)
-        .limit(1000);
+        .limit(200);
 
       if (error) throw error;
       return (data || []) as CustomFieldValue[];

@@ -60,10 +60,10 @@ export function useForms() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('forms')
-        .select('*')
+        .select('id, user_id, name, slug, description, fields, routing_rules, nurturing_workflow_id, redirect_url, success_message, is_published, view_count, submission_count, created_at, updated_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return (data || []).map((f) => ({
         ...f,

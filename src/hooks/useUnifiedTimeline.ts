@@ -30,10 +30,10 @@ export function useUnifiedTimeline(contactId: string) {
     queryFn: async () => {
       const { data } = await supabase
         .from('life_events')
-        .select('*')
+        .select('id, event_type, title, description, event_date, recurring')
         .eq('contact_id', contactId)
         .order('event_date', { ascending: false })
-        .limit(1000);
+        .limit(100);
       return data || [];
     },
     enabled: !!user && !!contactId,
@@ -46,10 +46,10 @@ export function useUnifiedTimeline(contactId: string) {
     queryFn: async () => {
       const { data } = await supabase
         .from('crm_alerts')
-        .select('*')
+        .select('id, type, message, suggested_action, created_at, severity, is_resolved')
         .eq('contact_id', contactId)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(100);
       return data || [];
     },
     enabled: !!user && !!contactId,
@@ -61,10 +61,10 @@ export function useUnifiedTimeline(contactId: string) {
      queryFn: async () => {
        const { data } = await supabase
          .from('neuro_behavioral_history')
-         .select('*')
+         .select('id, created_at, empathy_score, dominance_data')
          .eq('contact_id', contactId)
          .order('created_at', { ascending: false })
-         .limit(1000);
+         .limit(50);
        return data || [];
      },
      enabled: !!user && !!contactId,

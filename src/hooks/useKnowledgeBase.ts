@@ -31,10 +31,10 @@ export function useKnowledgeBase() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('knowledge_base_articles')
-        .select('*')
+        .select('id, user_id, title, content, category, tags, is_published, views_count, helpful_count, created_at, updated_at')
         .eq('user_id', user.id)
         .order('updated_at', { ascending: false })
-        .limit(1000);
+        .limit(200);
       if (error) throw error;
       return (data || []) as KBArticle[];
     },

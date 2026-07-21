@@ -13,10 +13,10 @@ export function useAllowedIPs() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('ip_whitelist')
-        .select('*')
+        .select('id, user_id, ip_address, label, is_active')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(200);
       if (error) return [];
       return Array.isArray(data) ? data : [];
     },

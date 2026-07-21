@@ -12,9 +12,9 @@ export function usePasswordResetRequests() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('password_reset_requests')
-        .select('*')
+        .select('id, user_id, email, status, reason, approved_by, resolved_at, created_at')
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(200);
       if (error) return [];
       return Array.isArray(data) ? data : [];
     },
