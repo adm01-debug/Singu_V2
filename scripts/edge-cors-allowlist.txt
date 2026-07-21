@@ -1,0 +1,3 @@
+# Edge functions autorizadas a usar `Access-Control-Allow-Origin: *`.
+# Requer justificativa via ADR. Padrão: preferir scopedCorsHeaders().
+_shared

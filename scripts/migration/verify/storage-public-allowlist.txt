@@ -1,0 +1,2 @@
+# Buckets autorizados a serem públicos. Um por linha. Requer ADR.
+public-assets
