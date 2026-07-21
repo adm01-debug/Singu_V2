@@ -45,9 +45,10 @@ export function useMttaSlaBreachSnapshot(mttaCriticalMinutes: number | null): vo
     if (!needSnapshot && !needAlert) return;
 
     inFlight.current = true;
+    let aborted = false;
     void (async () => {
       try {
-        if (needSnapshot) {
+        if (needSnapshot && !aborted) {
           const { error } = await supabase.from("system_health_snapshots").insert({
             status: "degraded",
             components: {
@@ -58,19 +59,23 @@ export function useMttaSlaBreachSnapshot(mttaCriticalMinutes: number | null): vo
               breach: true,
             },
           });
-          if (!error) writeKey(DEDUP_KEY);
+          if (!error && !aborted) writeKey(DEDUP_KEY);
         }
-        if (needAlert) {
+        if (needAlert && !aborted) {
           // Publica alerta na trilha de auditoria (dedup 24h + auto-ack server-side).
           const { error } = await supabase.rpc("publish_mtta_sla_breach_alert", {
             _mtta_minutes: mttaCriticalMinutes,
             _sla_minutes: SLA_MINUTES,
           });
-          if (!error) writeKey(ALERT_DEDUP_KEY);
+          if (!error && !aborted) writeKey(ALERT_DEDUP_KEY);
         }
       } finally {
-        inFlight.current = false;
+        if (!aborted) inFlight.current = false;
       }
     })();
+    return () => {
+      aborted = true;
+      inFlight.current = false;
+    };
   }, [mttaCriticalMinutes, user]);
 }
