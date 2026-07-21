@@ -75,6 +75,7 @@ export function useCreateHandoff() {
 }
 
 export function useRespondHandoff() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   return useMutation({
@@ -96,6 +97,7 @@ export function useRespondHandoff() {
       const { error } = await supabase
         .from('handoff_requests')
         .update(updates as unknown as TablesUpdate<'handoff_requests'>)
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
     },

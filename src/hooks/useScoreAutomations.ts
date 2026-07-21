@@ -79,7 +79,7 @@ export function useUpsertAutomation() {
         active: input.active ?? true,
       };
       if (input.id) {
-        const { error } = await supabase.from('lead_score_threshold_automations').update(payload).eq('id', input.id);
+        const { error } = await supabase.from('lead_score_threshold_automations').update(payload).eq('user_id', user!.id).eq('id', input.id);
         if (error) throw error;
         return { id: input.id };
       }
@@ -97,10 +97,11 @@ export function useUpsertAutomation() {
 }
 
 export function useToggleAutomation() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, active }: { id: string; active: boolean }) => {
-      const { error } = await supabase.from('lead_score_threshold_automations').update({ active }).eq('id', id);
+      const { error } = await supabase.from('lead_score_threshold_automations').update({ active }).eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['score-automations'] }),
@@ -109,10 +110,11 @@ export function useToggleAutomation() {
 }
 
 export function useDeleteAutomation() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('lead_score_threshold_automations').delete().eq('id', id);
+      const { error } = await supabase.from('lead_score_threshold_automations').delete().eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

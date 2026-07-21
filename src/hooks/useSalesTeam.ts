@@ -59,6 +59,7 @@ export function useCreateTeamMember() {
 }
 
 export function useUpdateTeamMember() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   return useMutation({
@@ -66,6 +67,7 @@ export function useUpdateTeamMember() {
       const { data, error } = await supabase
         .from('sales_team_members')
         .update(updates as TablesUpdate<'sales_team_members'>)
+        .eq('user_id', user!.id)
         .eq('id', id)
         .select()
         .maybeSingle();
@@ -82,6 +84,7 @@ export function useUpdateTeamMember() {
 }
 
 export function useDeleteTeamMember() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   return useMutation({
@@ -89,6 +92,7 @@ export function useDeleteTeamMember() {
       const { error } = await supabase
         .from('sales_team_members')
         .delete()
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
     },

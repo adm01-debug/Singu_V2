@@ -53,7 +53,7 @@ export function useMQLCriteria() {
     mutationFn: async (input: Partial<MQLCriteria> & { name: string }) => {
       if (!user) throw new Error('Não autenticado');
       if (input.id) {
-        const { error } = await supabase.from('mql_criteria').update(input as TablesUpdate<'mql_criteria'>).eq('id', input.id);
+        const { error } = await supabase.from('mql_criteria').update(input as TablesUpdate<'mql_criteria'>).eq('user_id', user.id).eq('id', input.id);
         if (error) throw error;
       } else {
         const { error } = await supabase.from('mql_criteria').insert({ ...input, user_id: user.id } as TablesInsert<'mql_criteria'>);
@@ -66,7 +66,7 @@ export function useMQLCriteria() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('mql_criteria').delete().eq('id', id);
+      const { error } = await supabase.from('mql_criteria').delete().eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
@@ -115,6 +115,7 @@ export function useEvaluateMQL() {
 }
 
 export function useHandoffMQL() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, to, status = 'sql' }: { id: string; to?: string; status?: 'sql' | 'disqualified' }) => {
@@ -122,7 +123,7 @@ export function useHandoffMQL() {
         status,
         handoff_to: to ?? null,
         handoff_at: new Date().toISOString(),
-      } as TablesUpdate<'mql_classifications'>).eq('id', id);
+      } as TablesUpdate<'mql_classifications'>).eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['mql-classifications'] }); toast.success('Handoff registrado'); },

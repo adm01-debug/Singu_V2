@@ -74,6 +74,7 @@ export function useCustomFields(entityType: EntityType) {
       const { error } = await supabase
         .from('custom_fields')
         .update(updates)
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
     },
@@ -86,7 +87,7 @@ export function useCustomFields(entityType: EntityType) {
 
   const deleteField = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('custom_fields').delete().eq('id', id);
+      const { error } = await supabase.from('custom_fields').delete().eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

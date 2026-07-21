@@ -62,7 +62,7 @@ export function useEmailCampaigns() {
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<EmailCampaign> & { id: string }) => {
-      const { error } = await supabase.from('email_campaigns').update(updates).eq('id', id);
+      const { error } = await supabase.from('email_campaigns').update(updates).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha atualizada!'); },
@@ -71,7 +71,7 @@ export function useEmailCampaigns() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('email_campaigns').delete().eq('id', id);
+      const { error } = await supabase.from('email_campaigns').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha removida!'); },
@@ -101,7 +101,7 @@ export function useEmailCampaigns() {
 
       // Marcar como enviando + buscar destinatários já existentes em paralelo
       const [{ error: sendingErr }, { data: existing }] = await Promise.all([
-        supabase.from('email_campaigns').update({ status: 'sending' } as TablesUpdate<'email_campaigns'>).eq('id', campaignId),
+        supabase.from('email_campaigns').update({ status: 'sending' } as TablesUpdate<'email_campaigns'>).eq('user_id', user.id).eq('id', campaignId),
         supabase.from('campaign_recipients').select('contact_id').eq('campaign_id', campaignId),
       ]);
       if (sendingErr) throw sendingErr;
@@ -125,7 +125,7 @@ export function useEmailCampaigns() {
           status: 'sent',
           sent_at: new Date().toISOString(),
           total_recipients: eligible.length,
-        } as TablesUpdate<'email_campaigns'>).eq('id', campaignId),
+        } as TablesUpdate<'email_campaigns'>).eq('user_id', user.id).eq('id', campaignId),
       ]);
       if (insError) throw insError;
       if (updError) throw updError;

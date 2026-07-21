@@ -72,7 +72,7 @@ export function useVisitCheckins(entityId?: string, entityType?: 'contact' | 'co
       const { error } = await supabase.from('visit_checkins').update({
         check_out_at: new Date().toISOString(),
         duration_minutes: duration,
-      }).eq('id', id);
+      }).eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Check-out realizado!'); },

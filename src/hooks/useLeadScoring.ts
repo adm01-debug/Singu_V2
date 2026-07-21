@@ -191,6 +191,7 @@ export function useScoreRules() {
 }
 
 export function useUpdateRule() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (rule: Partial<LeadScoreRule> & { id: string }) => {
@@ -198,7 +199,7 @@ export function useUpdateRule() {
         weight: rule.weight,
         decay_days: rule.decay_days,
         active: rule.active,
-      }).eq('id', rule.id);
+      }).eq('user_id', user!.id).eq('id', rule.id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -227,10 +228,11 @@ export function useScoreThresholds() {
 }
 
 export function useUpdateThreshold() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (t: Pick<LeadScoreThreshold, 'id' | 'min_score'>) => {
-      const { error } = await supabase.from('lead_score_thresholds').update({ min_score: t.min_score }).eq('id', t.id);
+      const { error } = await supabase.from('lead_score_thresholds').update({ min_score: t.min_score }).eq('user_id', user!.id).eq('id', t.id);
       if (error) throw error;
     },
     onSuccess: () => {

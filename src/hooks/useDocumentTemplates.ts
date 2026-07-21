@@ -120,6 +120,7 @@ export function useDocumentTemplates() {
       const { error } = await supabase
         .from('document_templates')
         .update({ ...input, ...(merge_fields ? { merge_fields } : {}) } as TablesUpdate<'document_templates'>)
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
     },
@@ -132,7 +133,7 @@ export function useDocumentTemplates() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('document_templates').delete().eq('id', id);
+      const { error } = await supabase.from('document_templates').delete().eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

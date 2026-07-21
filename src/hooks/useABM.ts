@@ -151,10 +151,11 @@ export function useCreateABMAccount() {
 }
 
 export function useUpdateABMAccount() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<ABMAccount> & { id: string }) => {
-      const { data, error } = await supabase.from("abm_accounts").update(updates).eq("id", id).select().maybeSingle();
+      const { data, error } = await supabase.from("abm_accounts").update(updates).eq('user_id', user!.id).eq("id", id).select().maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Conta ABM não encontrada");
       return data;
@@ -169,10 +170,11 @@ export function useUpdateABMAccount() {
 }
 
 export function useDeleteABMAccount() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("abm_accounts").delete().eq("id", id);
+      const { error } = await supabase.from("abm_accounts").delete().eq('user_id', user!.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -233,7 +235,7 @@ export function useUpsertCommitteeMember() {
       if (!user) throw new Error("Não autenticado");
       if (input.id) {
         const { id, ...updates } = input;
-        const { data, error } = await supabase.from("abm_buying_committee").update(updates).eq("id", id).select().maybeSingle();
+        const { data, error } = await supabase.from("abm_buying_committee").update(updates).eq('user_id', user!.id).eq("id", id).select().maybeSingle();
         if (error) throw error;
         if (!data) throw new Error("Stakeholder não encontrado");
         return data;
@@ -256,10 +258,11 @@ export function useUpsertCommitteeMember() {
 }
 
 export function useDeleteCommitteeMember() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id }: { id: string; account_id: string }) => {
-      const { error } = await supabase.from("abm_buying_committee").delete().eq("id", id);
+      const { error } = await supabase.from("abm_buying_committee").delete().eq('user_id', user!.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: (_, vars) => {
@@ -314,10 +317,11 @@ export function useGenerateWhitespace() {
 }
 
 export function useUpdateWhitespaceStatus() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string; account_id: string }) => {
-      const { error } = await supabase.from("abm_whitespace_opportunities").update({ status }).eq("id", id);
+      const { error } = await supabase.from("abm_whitespace_opportunities").update({ status }).eq('user_id', user!.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: (_, vars) => {
@@ -357,7 +361,7 @@ export function useUpsertAccountPlan() {
       if (!user) throw new Error("Não autenticado");
       if (input.id) {
         const { id, ...updates } = input;
-        const { data, error } = await supabase.from("abm_account_plans").update(updates).eq("id", id).select().maybeSingle();
+        const { data, error } = await supabase.from("abm_account_plans").update(updates).eq('user_id', user!.id).eq("id", id).select().maybeSingle();
         if (error) throw error;
         if (!data) throw new Error("Plano de conta não encontrado");
         return data;
@@ -409,7 +413,7 @@ export function useUpsertCampaign() {
         const { id, metrics, ...rest } = input;
         const updates: Record<string, unknown> = { ...rest };
         if (metrics !== undefined) updates.metrics = metrics as unknown;
-        const { data, error } = await supabase.from("abm_campaigns").update(updates as unknown as TablesUpdate<'abm_campaigns'>).eq("id", id).select().maybeSingle();
+        const { data, error } = await supabase.from("abm_campaigns").update(updates as unknown as TablesUpdate<'abm_campaigns'>).eq('user_id', user!.id).eq("id", id).select().maybeSingle();
         if (error) throw error;
         if (!data) throw new Error("Campanha não encontrada");
         return data;
@@ -443,10 +447,11 @@ export function useUpsertCampaign() {
 }
 
 export function useDeleteCampaign() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("abm_campaigns").delete().eq("id", id);
+      const { error } = await supabase.from("abm_campaigns").delete().eq('user_id', user!.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {

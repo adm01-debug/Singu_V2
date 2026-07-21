@@ -148,10 +148,11 @@ export function useUpsertTopic() {
 }
 
 export function useDeleteTopic() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("conversation_topics_catalog").delete().eq("id", id);
+      const { error } = await supabase.from("conversation_topics_catalog").delete().eq('user_id', user!.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -204,7 +205,7 @@ export function useUpsertScorecard() {
     mutationFn: async (sc: Partial<CoachingScorecard> & { name: string }) => {
       const payload = { ...sc, user_id: user!.id };
       if (sc.id) {
-        const { error } = await supabase.from("coaching_scorecards").update(payload).eq("id", sc.id);
+        const { error } = await supabase.from("coaching_scorecards").update(payload).eq('user_id', user!.id).eq("id", sc.id);
         if (error) throw error;
       } else {
         const { error } = await supabase.from("coaching_scorecards").insert(payload);

@@ -59,12 +59,14 @@ export function useCreateRoutingRule() {
 }
 
 export function useUpdateRoutingRule() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<LeadRoutingRule> & { id: string }) => {
       const { data, error } = await supabase
         .from('lead_routing_rules')
         .update(updates as TablesUpdate<'lead_routing_rules'>)
+        .eq('user_id', user!.id)
         .eq('id', id)
         .select()
         .maybeSingle();
@@ -81,12 +83,14 @@ export function useUpdateRoutingRule() {
 }
 
 export function useDeleteRoutingRule() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
         .from('lead_routing_rules')
         .delete()
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
     },
@@ -173,7 +177,7 @@ export function useDistributeLead() {
           current_lead_count: selected.current_lead_count + 1,
           leads_today: selected.leads_today + 1,
           last_assigned_at: new Date().toISOString(),
-        } as TablesUpdate<'sales_team_members'>).eq('id', selected.id),
+        } as TablesUpdate<'sales_team_members'>).eq('user_id', user.id).eq('id', selected.id),
       ]);
       if (assignError) throw assignError;
       if (updateError) logger.error('Erro ao atualizar contadores:', updateError);

@@ -95,6 +95,7 @@ export function useNpsSurveys() {
           status: 'answered',
           answered_at: new Date().toISOString(),
         })
+        .eq('user_id', user!.id)
         .eq('id', input.id);
       if (error) throw error;
     },
@@ -107,7 +108,7 @@ export function useNpsSurveys() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('csat_surveys').delete().eq('id', id);
+      const { error } = await supabase.from('csat_surveys').delete().eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

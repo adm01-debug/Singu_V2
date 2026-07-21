@@ -87,6 +87,7 @@ export function useSupportTickets() {
       
       const { error } = await supabase.from('support_tickets')
         .update(updateData as unknown as TablesUpdate<'support_tickets'>)
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
     },
@@ -96,7 +97,7 @@ export function useSupportTickets() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('support_tickets').delete().eq('id', id);
+      const { error } = await supabase.from('support_tickets').delete().eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Ticket removido!'); },

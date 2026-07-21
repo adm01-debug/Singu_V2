@@ -87,7 +87,7 @@ export function useDocuments(entityType: string, entityId?: string) {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('documents').delete().eq('id', id);
+      const { error } = await supabase.from('documents').delete().eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
