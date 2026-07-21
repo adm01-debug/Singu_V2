@@ -24,7 +24,7 @@ export default function MarketingMagnetDetail() {
     queryKey: ['lead-magnet', id, user?.id],
     enabled: !!id && !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from('lead_magnets').select('*').eq('id', id!).eq('user_id', user!.id).maybeSingle();
+      const { data, error } = await supabase.from('lead_magnets').select('id, user_id, title, slug, description, type, file_path, external_url, thumbnail_url, gated, form_id, download_count, view_count, is_published, created_at, updated_at').eq('id', id!).eq('user_id', user!.id).maybeSingle();
       if (error) throw error;
       return data as unknown as LeadMagnet | null;
     },

@@ -20,7 +20,7 @@ export default function PublicForm() {
     let cancelled = false;
     const currentSlug = slug;
     (async () => {
-      const { data } = await supabase.from('forms').select('*').eq('slug', currentSlug).eq('is_published', true).maybeSingle();
+      const { data } = await supabase.from('forms').select('id, user_id, name, slug, description, fields, routing_rules, nurturing_workflow_id, redirect_url, success_message, is_published, view_count, submission_count, created_at, updated_at').eq('slug', currentSlug).eq('is_published', true).maybeSingle();
       if (cancelled) return;
       if (data) {
         setForm({ ...data, fields: Array.isArray(data.fields) ? data.fields : [] } as unknown as MarketingForm);

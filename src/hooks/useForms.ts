@@ -119,7 +119,7 @@ export function useForm(id: string | undefined) {
     queryKey: ['marketing-form', id, user?.id],
     enabled: !!id && !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from('forms').select('*').eq('id', id!).eq('user_id', user!.id).maybeSingle();
+      const { data, error } = await supabase.from('forms').select('id, user_id, name, slug, description, fields, routing_rules, nurturing_workflow_id, redirect_url, success_message, is_published, view_count, submission_count, created_at, updated_at').eq('id', id!).eq('user_id', user!.id).maybeSingle();
       if (error) throw error;
       if (!data) return null;
       return {
@@ -139,7 +139,7 @@ export function useFormSubmissions(formId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('form_submissions')
-        .select('*')
+        .select('id, form_id, user_id, contact_id, data, routed_to, utm_source, utm_medium, utm_campaign, page_url, created_at')
         .eq('form_id', formId!)
         .eq('user_id', user!.id)
         .order('created_at', { ascending: false })
