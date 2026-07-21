@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 export interface LandingPageBlock {
   id: string;
@@ -71,10 +72,10 @@ export function useLandingPages() {
           slug,
           title: input.title ?? 'Nova landing page',
           description: input.description ?? null,
-          blocks: (input.blocks ?? []) as never,
-          theme: (input.theme ?? {}) as never,
+          blocks: (input.blocks ?? []) as unknown as Json,
+          theme: (input.theme ?? {}) as unknown as Json,
           is_published: false,
-        })
+        } as TablesInsert<'landing_pages'>)
         .select()
         .maybeSingle();
       if (error) throw error;
@@ -87,7 +88,7 @@ export function useLandingPages() {
 
   const update = useMutation({
     mutationFn: async ({ id, ...patch }: Partial<LandingPage> & { id: string }) => {
-      const { error } = await supabase.from('landing_pages').update(patch as never).eq('id', id);
+      const { error } = await supabase.from('landing_pages').update(patch as unknown as TablesUpdate<'landing_pages'>).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Landing page salva!'); },

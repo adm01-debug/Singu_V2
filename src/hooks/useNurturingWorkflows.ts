@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 export interface NurturingStep {
   type: 'email' | 'whatsapp' | 'task' | 'wait';
@@ -58,7 +59,7 @@ export function useNurturingWorkflows() {
       if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('nurturing_workflows').insert({
         user_id: user.id, name: input.name, description: input.description || null,
-        trigger_type: input.trigger_type || 'manual', steps: (input.steps || []) as never,
+        trigger_type: input.trigger_type || 'manual', steps: (input.steps || []) as unknown as Json,
       });
       if (error) throw error;
     },
@@ -68,7 +69,7 @@ export function useNurturingWorkflows() {
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<NurturingWorkflow> & { id: string }) => {
-      const { error } = await supabase.from('nurturing_workflows').update(updates as never).eq('id', id);
+      const { error } = await supabase.from('nurturing_workflows').update(updates as unknown as TablesUpdate<'nurturing_workflows'>).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Workflow atualizado!'); },

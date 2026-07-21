@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 export interface FormField {
   key: string;
@@ -75,9 +76,9 @@ export function useForms() {
   const upsert = useMutation({
     mutationFn: async (input: Partial<MarketingForm> & { name: string; slug: string }) => {
       if (!user) throw new Error('Não autenticado');
-      const payload = { ...input, user_id: user.id } as never;
+      const payload = { ...input, user_id: user.id } as TablesInsert<'forms'>;
       if (input.id) {
-        const { error } = await supabase.from('forms').update(input as never).eq('id', input.id);
+        const { error } = await supabase.from('forms').update(input as TablesUpdate<'forms'>).eq('id', input.id);
         if (error) throw error;
       } else {
         const { error } = await supabase.from('forms').insert(payload);
@@ -99,7 +100,7 @@ export function useForms() {
 
   const togglePublish = useMutation({
     mutationFn: async ({ id, is_published }: { id: string; is_published: boolean }) => {
-      const { error } = await supabase.from('forms').update({ is_published } as never).eq('id', id);
+      const { error } = await supabase.from('forms').update({ is_published } as TablesUpdate<'forms'>).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),

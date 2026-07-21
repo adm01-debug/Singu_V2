@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 export interface SupportTicket {
   id: string;
@@ -67,7 +68,7 @@ export function useSupportTickets() {
       if ('created_at' in insertData) delete insertData.created_at;
       if ('updated_at' in insertData) delete insertData.updated_at;
 
-      const { error } = await supabase.from('support_tickets').insert(insertData as never);
+      const { error } = await supabase.from('support_tickets').insert(insertData as unknown as TablesInsert<'support_tickets'>);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Ticket criado!'); },
@@ -85,7 +86,7 @@ export function useSupportTickets() {
       if ('created_at' in updateData) delete (updateData as Record<string, unknown>).created_at;
       
       const { error } = await supabase.from('support_tickets')
-        .update(updateData as never)
+        .update(updateData as unknown as TablesUpdate<'support_tickets'>)
         .eq('id', id);
       if (error) throw error;
     },

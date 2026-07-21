@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 export type ConnectionType = 'supabase_external' | 'bitrix24' | 'n8n' | 'mcp_claude' | 'custom';
 
@@ -64,9 +65,9 @@ export function useConnections() {
             name: input.name,
             description: input.description,
             is_active: input.is_active ?? true,
-            config: (input.config ?? {}) as never,
-            secret_refs: (input.secret_refs ?? {}) as never,
-          })
+            config: (input.config ?? {}) as unknown as Json,
+            secret_refs: (input.secret_refs ?? {}) as unknown as Json,
+          } as TablesUpdate<'connection_configs'>)
           .eq('id', input.id);
         if (error) throw error;
       } else {
@@ -75,10 +76,10 @@ export function useConnections() {
           connection_type: input.connection_type,
           description: input.description ?? null,
           is_active: input.is_active ?? true,
-          config: (input.config ?? {}) as never,
-          secret_refs: (input.secret_refs ?? {}) as never,
+          config: (input.config ?? {}) as unknown as Json,
+          secret_refs: (input.secret_refs ?? {}) as unknown as Json,
           created_by: user.id,
-        });
+        } as TablesInsert<'connection_configs'>);
         if (error) throw error;
       }
     },

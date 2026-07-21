@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 import type { HandoffRequest, HandoffStatus, QualificationData } from '@/types/leadRouting';
+import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 const HANDOFF_KEY = ['handoff-requests'];
 
@@ -53,11 +54,11 @@ export function useCreateHandoff() {
           from_member_id: payload.fromMemberId,
           to_member_id: payload.toMemberId ?? null,
           status: 'pending',
-          qualification_data: payload.qualificationData as never,
+          qualification_data: payload.qualificationData as unknown as Json,
           handoff_reason: payload.reason ?? null,
           notes: payload.notes ?? null,
           sla_hours: 4,
-        } as never)
+        } as TablesInsert<'handoff_requests'>)
         .select()
         .maybeSingle();
       if (error) throw error;
@@ -93,7 +94,7 @@ export function useRespondHandoff() {
 
       const { error } = await supabase
         .from('handoff_requests')
-        .update(updates as never)
+        .update(updates as unknown as TablesUpdate<'handoff_requests'>)
         .eq('id', id);
       if (error) throw error;
     },

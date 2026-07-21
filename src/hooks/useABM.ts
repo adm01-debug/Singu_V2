@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 import { useAuth } from './useAuth';
+import type { TablesUpdate } from '@/integrations/supabase/types';
 
 export type AccountTier = "strategic" | "enterprise" | "mid" | "smb";
 export type AccountStatus = "active" | "nurture" | "closed_won" | "closed_lost" | "paused";
@@ -397,7 +398,7 @@ export function useUpsertCampaign() {
         const { id, metrics, ...rest } = input;
         const updates: Record<string, unknown> = { ...rest };
         if (metrics !== undefined) updates.metrics = metrics as unknown;
-        const { data, error } = await supabase.from("abm_campaigns").update(updates as never).eq("id", id).select().maybeSingle();
+        const { data, error } = await supabase.from("abm_campaigns").update(updates as unknown as TablesUpdate<'abm_campaigns'>).eq("id", id).select().maybeSingle();
         if (error) throw error;
         if (!data) throw new Error("Campanha não encontrada");
         return data;

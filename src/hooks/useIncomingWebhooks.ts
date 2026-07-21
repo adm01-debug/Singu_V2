@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 export type WebhookTargetEntity = 'contact' | 'company' | 'deal' | 'interaction' | 'note' | 'custom';
 
@@ -75,11 +76,11 @@ export function useIncomingWebhooks() {
           target_entity: input.target_entity,
           is_active: input.is_active ?? true,
           allowed_origins: input.allowed_origins ?? [],
-          field_mapping: (input.field_mapping ?? {}) as never,
+          field_mapping: (input.field_mapping ?? {}) as unknown as Json,
           require_signature: input.require_signature ?? false,
           webhook_secret: input.webhook_secret ?? null,
           replay_window_seconds: input.replay_window_seconds ?? 300,
-        }).eq('id', input.id);
+        } as TablesUpdate<'incoming_webhooks'>).eq('id', input.id);
         if (error) throw error;
       } else {
         const { error } = await supabase.from('incoming_webhooks').insert({
@@ -89,12 +90,12 @@ export function useIncomingWebhooks() {
           target_entity: input.target_entity,
           is_active: input.is_active ?? true,
           allowed_origins: input.allowed_origins ?? [],
-          field_mapping: (input.field_mapping ?? {}) as never,
+          field_mapping: (input.field_mapping ?? {}) as unknown as Json,
           require_signature: input.require_signature ?? false,
           webhook_secret: input.webhook_secret ?? null,
           replay_window_seconds: input.replay_window_seconds ?? 300,
           created_by: user.id,
-        });
+        } as TablesInsert<'incoming_webhooks'>);
         if (error) throw error;
       }
     },

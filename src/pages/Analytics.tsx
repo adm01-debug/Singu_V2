@@ -263,9 +263,11 @@ const Analytics = () => {
 
           <TabsContent value="nlp" className="space-y-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-                <NLPAnalyticsPanel />
-              </Suspense>
+              <DashboardErrorBoundary sectionName="NLP Analytics">
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <NLPAnalyticsPanel />
+                </Suspense>
+              </DashboardErrorBoundary>
               <NLPTrainingMode />
               <NLPConversionMetrics />
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"><RapportRealtimeCoach /><MiltonianCalibration /></div>

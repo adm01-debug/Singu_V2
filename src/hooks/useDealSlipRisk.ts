@@ -2,6 +2,14 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { PipelineDeal } from '@/hooks/usePipeline';
+import {
+  STAGE_BENCHMARK_DAYS,
+  DEAL_RISK_LOOKBACK_DAYS,
+  DEAL_ENGAGEMENT_GAP_DAYS,
+  sentimentValue,
+  clamp,
+  levelFromScore,
+} from '@/lib/deal-risk-constants';
 
 export type RiskLevel = 'healthy' | 'attention' | 'high';
 
@@ -20,31 +28,6 @@ export interface DealRiskResult {
   recommendations: string[];
 }
 
-// Benchmarks por stage (dias esperados)
-const STAGE_BENCHMARK_DAYS: Record<string, number> = {
-  lead: 7,
-  primeiro_contato: 7,
-  qualificacao: 14,
-  proposta: 10,
-  negociacao: 21,
-  fechamento: 14,
-};
-
-const AVG_CYCLE_DAYS = 60;
-
-const sentimentValue = (s: string | null | undefined): number => {
-  if (!s) return 0;
-  const v = s.toLowerCase();
-  if (v === 'positive' || v === 'positivo') return 1;
-  if (v === 'negative' || v === 'negativo') return -1;
-  return 0;
-};
-
-const clamp = (n: number, min = 0, max = 100) => Math.max(min, Math.min(max, n));
-
-const levelFromScore = (score: number): RiskLevel =>
-  score >= 61 ? 'high' : score >= 31 ? 'attention' : 'healthy';
-
 interface SignalPayload {
   recentSentiments: Array<{ sentiment: string | null; created_at: string }>;
   lastInboundAt: string | null;
@@ -59,7 +42,7 @@ export function useDealSlipRisk(deal: PipelineDeal | null | undefined) {
     staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const since = new Date();
-      since.setDate(since.getDate() - 60);
+      since.setDate(since.getDate() - DEAL_RISK_LOOKBACK_DAYS);
 
       const { data: interactions } = await supabase
         .from('interactions')
@@ -110,13 +93,13 @@ export function useDealSlipRisk(deal: PipelineDeal | null | undefined) {
     const lastInbound = signals?.lastInboundAt ? new Date(signals.lastInboundAt) : null;
     const daysSinceInbound = lastInbound
       ? Math.floor((Date.now() - lastInbound.getTime()) / (1000 * 60 * 60 * 24))
-      : 60;
-    const engagementScore = clamp((daysSinceInbound / 30) * 100);
+      : DEAL_RISK_LOOKBACK_DAYS;
+    const engagementScore = clamp((daysSinceInbound / DEAL_ENGAGEMENT_GAP_DAYS) * 100);
 
     // 4) Age vs benchmark
     const createdAt = deal.created_at ? new Date(deal.created_at) : new Date();
     const totalAge = Math.floor((Date.now() - createdAt.getTime()) / (1000 * 60 * 60 * 24));
-    const ageScore = clamp(((totalAge / AVG_CYCLE_DAYS) - 0.5) * 100);
+    const ageScore = clamp(((totalAge / DEAL_RISK_LOOKBACK_DAYS) - 0.5) * 100);
 
     const factors: RiskFactor[] = [
       {
@@ -143,14 +126,14 @@ export function useDealSlipRisk(deal: PipelineDeal | null | undefined) {
         weight: 0.25,
         detail: lastInbound
           ? `${daysSinceInbound}d sem resposta do contato`
-          : 'Nenhuma resposta inbound em 60d',
+          : `Nenhuma resposta inbound em ${DEAL_RISK_LOOKBACK_DAYS}d`,
       },
       {
         key: 'age',
         label: 'Idade vs ciclo médio',
         score: Math.round(ageScore),
         weight: 0.1,
-        detail: `${totalAge}d de idade (ciclo médio: ${AVG_CYCLE_DAYS}d)`,
+        detail: `${totalAge}d de idade (ciclo médio: ${DEAL_RISK_LOOKBACK_DAYS}d)`,
       },
     ];
 

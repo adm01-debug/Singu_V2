@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { logger } from '@/lib/logger';
+import type { Json } from '@/integrations/supabase/types';
 
 export interface AuditLogPayload {
   contactId: string;
@@ -28,7 +29,7 @@ export function useRecommendationAudit() {
           score: payload.score,
           recommendation_type: payload.recommendationType,
           reasons: payload.reasons,
-          data_used: (payload.dataUsed ?? {}) as never,
+          data_used: (payload.dataUsed ?? {}) as unknown as Json,
           user_action: payload.userAction,
         }]);
 

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 export interface EmailCampaign {
   id: string;
@@ -48,7 +49,7 @@ export function useEmailCampaigns() {
     mutationFn: async (input: Partial<EmailCampaign>) => {
       if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase.from('email_campaigns')
-        .insert({ ...input, user_id: user.id } as never)
+        .insert({ ...input, user_id: user.id } as TablesInsert<'email_campaigns'>)
         .select()
         .maybeSingle();
       if (error) throw error;
@@ -100,7 +101,7 @@ export function useEmailCampaigns() {
 
       // Marcar como enviando + buscar destinatários já existentes em paralelo
       const [, { data: existing }] = await Promise.all([
-        supabase.from('email_campaigns').update({ status: 'sending' } as never).eq('id', campaignId),
+        supabase.from('email_campaigns').update({ status: 'sending' } as TablesUpdate<'email_campaigns'>).eq('id', campaignId),
         supabase.from('campaign_recipients').select('contact_id').eq('campaign_id', campaignId),
       ]);
       const existingIds = new Set((existing ?? []).map(r => r.contact_id));
@@ -123,7 +124,7 @@ export function useEmailCampaigns() {
           status: 'sent',
           sent_at: new Date().toISOString(),
           total_recipients: eligible.length,
-        } as never).eq('id', campaignId),
+        } as TablesUpdate<'email_campaigns'>).eq('id', campaignId),
       ]);
       if (insError) throw insError;
       if (updError) throw updError;

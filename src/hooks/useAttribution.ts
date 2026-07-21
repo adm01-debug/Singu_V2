@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { TablesInsert } from '@/integrations/supabase/types';
 
 export type AttributionModel = 'first' | 'last' | 'linear' | 'u_shape' | 'w_shape' | 'time_decay';
 
@@ -71,7 +72,7 @@ export function useRecordTouchpoint() {
   return useMutation({
     mutationFn: async (input: Partial<Touchpoint> & { touchpoint_type: string }) => {
       if (!user) throw new Error('Não autenticado');
-      const { error } = await supabase.from('attribution_touchpoints').insert({ ...input, user_id: user.id } as never);
+      const { error } = await supabase.from('attribution_touchpoints').insert({ ...input, user_id: user.id } as TablesInsert<'attribution_touchpoints'>);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['touchpoints'] }); toast.success('Touchpoint registrado'); },

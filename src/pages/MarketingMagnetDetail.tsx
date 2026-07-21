@@ -11,6 +11,7 @@ import { ArrowLeft, Save, Copy, ExternalLink } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
+import type { TablesUpdate } from '@/integrations/supabase/types';
 import { useMagnetDownloads, type LeadMagnet } from '@/hooks/useLeadMagnets';
 
 export default function MarketingMagnetDetail() {
@@ -41,7 +42,7 @@ export default function MarketingMagnetDetail() {
       external_url: draft.external_url,
       thumbnail_url: draft.thumbnail_url,
       gated: draft.gated,
-    } as never).eq('id', draft.id);
+    } as TablesUpdate<'lead_magnets'>).eq('id', draft.id);
     if (error) toast.error(error.message);
     else {
       toast.success('Salvo!');

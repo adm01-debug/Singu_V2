@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import type { Json } from '@/integrations/supabase/types';
 
 export type IntentScope = "contact" | "account";
 export type IntentTrend = "rising" | "stable" | "falling";
@@ -207,7 +208,7 @@ export function useCreateManualSignal() {
         contact_id: input.contact_id ?? null,
         external_company_id: input.external_company_id ?? null,
         signal_source: input.signal_source ?? "manual",
-        signal_value: (input.signal_value ?? {}) as never,
+        signal_value: (input.signal_value ?? {}) as unknown as Json,
       }]);
       if (error) throw error;
     },

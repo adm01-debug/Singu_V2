@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 export interface KBArticle {
   id: string;
@@ -43,7 +44,7 @@ export function useKnowledgeBase() {
     mutationFn: async (input: Partial<KBArticle>) => {
       if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('knowledge_base_articles')
-        .insert({ ...input, user_id: user.id } as never);
+        .insert({ ...input, user_id: user.id } as TablesInsert<'knowledge_base_articles'>);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Artigo criado!'); },
@@ -52,7 +53,7 @@ export function useKnowledgeBase() {
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<KBArticle> & { id: string }) => {
-      const { error } = await supabase.from('knowledge_base_articles').update(updates as never).eq('id', id);
+      const { error } = await supabase.from('knowledge_base_articles').update(updates as TablesUpdate<'knowledge_base_articles'>).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Artigo atualizado!'); },

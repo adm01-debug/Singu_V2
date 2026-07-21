@@ -13,6 +13,7 @@ import { PublicFormRenderer } from '@/components/marketing/PublicFormRenderer';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
+import type { TablesUpdate } from '@/integrations/supabase/types';
 
 export default function MarketingFormDetail() {
   const { id } = useParams<{ id: string }>();
@@ -35,7 +36,7 @@ export default function MarketingFormDetail() {
       fields: draft.fields,
       redirect_url: draft.redirect_url,
       success_message: draft.success_message,
-    } as never).eq('id', draft.id);
+    } as TablesUpdate<'forms'>).eq('id', draft.id);
     if (error) toast.error(error.message);
     else {
       toast.success('Salvo!');

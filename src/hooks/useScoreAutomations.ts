@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import type { Json } from '@/integrations/supabase/types';
 
 export type AutomationTrigger = 'grade_reached' | 'grade_dropped' | 'score_above' | 'score_below';
 export type AutomationAction = 'notify' | 'create_task' | 'enroll_sequence' | 'webhook' | 'tag';
@@ -73,7 +74,7 @@ export function useUpsertAutomation() {
         grade_target: input.grade_target ?? null,
         score_target: input.score_target ?? null,
         action_type: input.action_type,
-        action_config: (input.action_config ?? {}) as never,
+        action_config: (input.action_config ?? {}) as unknown as Json,
         cooldown_hours: input.cooldown_hours ?? 24,
         active: input.active ?? true,
       };

@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 export interface DocumentTemplate {
   id: string;
@@ -103,7 +104,7 @@ export function useDocumentTemplates() {
         merge_fields,
         category: input.category ?? null,
         is_active: input.is_active ?? true,
-      } as never);
+      } as TablesInsert<'document_templates'>);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -118,7 +119,7 @@ export function useDocumentTemplates() {
       const merge_fields = input.content_html ? extractMergeFields(input.content_html) : undefined;
       const { error } = await supabase
         .from('document_templates')
-        .update({ ...input, ...(merge_fields ? { merge_fields } : {}) } as never)
+        .update({ ...input, ...(merge_fields ? { merge_fields } : {}) } as TablesUpdate<'document_templates'>)
         .eq('id', id);
       if (error) throw error;
     },
@@ -190,7 +191,7 @@ export function useDocumentSignatures() {
           rendered_html: input.rendered_html,
           merge_data: input.merge_data,
           expires_at,
-        } as never).select().maybeSingle(),
+        } as TablesInsert<'document_signatures'>).select().maybeSingle(),
         input.template_id
           ? supabase.from('document_templates').select('usage_count').eq('id', input.template_id).maybeSingle()
           : Promise.resolve({ data: null, error: null }),
@@ -199,7 +200,7 @@ export function useDocumentSignatures() {
       if (!data) throw new Error("Falha ao registrar assinatura");
       if (tpl && input.template_id) {
         void supabase.from('document_templates')
-          .update({ usage_count: (tpl.usage_count ?? 0) + 1 } as never)
+          .update({ usage_count: (tpl.usage_count ?? 0) + 1 } as TablesUpdate<'document_templates'>)
           .eq('id', input.template_id)
           .catch((e: unknown) => logger.error('template usage_count update failed:', e));
       }
@@ -216,7 +217,7 @@ export function useDocumentSignatures() {
     mutationFn: async (id: string) => {
       const { error } = await supabase
         .from('document_signatures')
-        .update({ status: 'declined', declined_at: new Date().toISOString(), declined_reason: 'Cancelado pelo remetente' } as never)
+        .update({ status: 'declined', declined_at: new Date().toISOString(), declined_reason: 'Cancelado pelo remetente' } as TablesUpdate<'document_signatures'>)
         .eq('id', id);
       if (error) throw error;
     },
