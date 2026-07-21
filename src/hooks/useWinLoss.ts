@@ -140,10 +140,11 @@ export function useUpsertWinLossRecord() {
 }
 
 export function useDeleteWinLossRecord() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('win_loss_records').delete().eq('id', id);
+      const { error } = await supabase.from('win_loss_records').delete().eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -200,10 +201,11 @@ export function useUpsertReason() {
 }
 
 export function useDeleteReason() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('win_loss_reasons').update({ active: false }).eq('id', id);
+      const { error } = await supabase.from('win_loss_reasons').update({ active: false }).eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-reasons'] }),
@@ -268,10 +270,11 @@ export function useUpsertCompetitor() {
 }
 
 export function useDeleteCompetitor() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('competitors').update({ active: false }).eq('id', id);
+      const { error } = await supabase.from('competitors').update({ active: false }).eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['competitors'] }),
@@ -418,10 +421,11 @@ export function useGenerateInsights() {
 }
 
 export function useDeleteInsight() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('win_loss_insights').delete().eq('id', id);
+      const { error } = await supabase.from('win_loss_insights').delete().eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-insights'] }),

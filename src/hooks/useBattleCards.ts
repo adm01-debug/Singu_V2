@@ -122,6 +122,7 @@ export function useUpsertBattleCard() {
         const { data, error } = await supabase
           .from("battle_cards")
           .update(updatePayload)
+          .eq("user_id", user!.id)
           .eq("id", input.id)
           .select()
           .maybeSingle();
@@ -164,12 +165,14 @@ export function useUpsertBattleCard() {
  * Hook to delete a battle card.
  */
 export function useDeleteBattleCard() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
         .from("battle_cards")
         .delete()
+        .eq("user_id", user!.id)
         .eq("id", id);
       
       if (error) throw error;
