@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { CheckCircle2, XCircle, Loader2, FileText, Clock } from 'lucide-react';
-import { sanitizeHtml } from '@/lib/sanitize';
+import { sanitizeDocumentHtml } from '@/lib/sanitize';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,7 +35,7 @@ export default function PublicSignaturePage() {
 
   useEffect(() => {
     if (!token) return;
-    let cancelled = false;
+    const controller = new AbortController();
     const currentToken = token;
     (async () => {
       try {
@@ -43,19 +43,19 @@ export default function PublicSignaturePage() {
           headers: {
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
+          signal: controller.signal,
         });
         const data = await res.json();
-        if (cancelled) return;
         if (!res.ok) throw new Error(data?.error ?? 'Erro');
         setSignature(data);
       } catch (e) {
-        if (cancelled) return;
+        if (e instanceof Error && e.name === 'AbortError') return;
         setError(e instanceof Error ? e.message : 'Erro ao carregar');
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => { controller.abort(); };
   }, [token]);
 
   const submit = async (action: 'sign' | 'decline') => {
@@ -149,7 +149,7 @@ export default function PublicSignaturePage() {
           <CardContent className="p-6">
             <div 
               className="prose prose-sm max-w-none dark:prose-invert" 
-              dangerouslySetInnerHTML={{ __html: sanitizeHtml(signature.rendered_html) }} 
+              dangerouslySetInnerHTML={{ __html: sanitizeDocumentHtml(signature.rendered_html) }} 
             />
           </CardContent>
         </Card>

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { PartyPopper, Trophy, Target, Heart, Sparkles, CheckCircle2, Star } from 'lucide-react';
 
 type CelebrationType = 
@@ -143,13 +143,15 @@ interface CelebrationOverlayProps {
 const CelebrationOverlay = ({ config, onComplete }: CelebrationOverlayProps) => {
   const style = celebrationStyles[config.type];
   const Icon = style.icon;
-  
+  const prefersReducedMotion = useReducedMotion();
+
   React.useEffect(() => {
     const timer = setTimeout(onComplete, config.duration || 3000);
     return () => clearTimeout(timer);
   }, [config.duration, onComplete]);
-  
+
   const confettiPieces = React.useMemo(() => {
+    if (prefersReducedMotion) return [];
     return Array.from({ length: 60 }, (_, i) => ({
       id: i,
       color: style.confettiColors[i % style.confettiColors.length],
@@ -158,8 +160,8 @@ const CelebrationOverlay = ({ config, onComplete }: CelebrationOverlayProps) => 
       // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
       startX: Math.random() * window.innerWidth,
     }));
-  }, [style.confettiColors]);
-  
+  }, [style.confettiColors, prefersReducedMotion]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -167,7 +169,7 @@ const CelebrationOverlay = ({ config, onComplete }: CelebrationOverlayProps) => 
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[100] pointer-events-none overflow-hidden"
     >
-      {/* Confetti */}
+      {/* Confetti — skipped when prefers-reduced-motion is set */}
       {confettiPieces.map((piece) => (
         <ConfettiPiece
           key={piece.id}
@@ -253,8 +255,8 @@ const CelebrationOverlay = ({ config, onComplete }: CelebrationOverlayProps) => 
         )}
       </div>
       
-      {/* Sparkle particles */}
-      {Array.from({ length: 12 }).map((_, i) => (
+      {/* Sparkle particles — skipped when prefers-reduced-motion is set */}
+      {!prefersReducedMotion && Array.from({ length: 12 }).map((_, i) => (
         <motion.div
           key={`sparkle-${i}`}
           initial={{ 
