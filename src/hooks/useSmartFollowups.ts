@@ -31,8 +31,8 @@ export function useSmartFollowups() {
         { data: contacts, error },
         { data: lastInteractions, error: intError },
       ] = await Promise.all([
-        supabase.from('contacts').select('id, first_name, last_name, relationship_score, relationship_stage').limit(100),
-        supabase.from('interactions').select('contact_id, created_at').order('created_at', { ascending: false }).limit(500),
+        supabase.from('contacts').select('id, first_name, last_name, relationship_score, relationship_stage').eq('user_id', user!.id).limit(100),
+        supabase.from('interactions').select('contact_id, created_at').eq('user_id', user!.id).order('created_at', { ascending: false }).limit(500),
       ]);
 
       if (error) throw error;

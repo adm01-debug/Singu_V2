@@ -126,7 +126,7 @@ export const useSmartReminders = (autoFetch = true) => {
       updated.add(id);
       
       // Persist to localStorage with timestamp
-      const stored = localStorage.getItem('dismissedReminders');
+      const stored = (() => { try { return localStorage.getItem('dismissedReminders'); } catch { return null; } })();
       const parsed = stored ? (() => { try { return JSON.parse(stored); } catch { return {}; } })() : {};
       parsed[id] = Date.now();
       try { localStorage.setItem('dismissedReminders', JSON.stringify(parsed)); } catch { /* quota/private */ }
@@ -145,7 +145,7 @@ export const useSmartReminders = (autoFetch = true) => {
   const snoozeReminder = useCallback((id: string, hours: number) => {
     // Store snooze time in localStorage
     const snoozeUntil = Date.now() + hours * 60 * 60 * 1000;
-    const stored = localStorage.getItem('snoozedReminders');
+    const stored = (() => { try { return localStorage.getItem('snoozedReminders'); } catch { return null; } })();
     const parsed = stored ? (() => { try { return JSON.parse(stored); } catch { return {}; } })() : {};
     parsed[id] = snoozeUntil;
     try { localStorage.setItem('snoozedReminders', JSON.stringify(parsed)); } catch { /* quota/private */ }
@@ -164,7 +164,7 @@ export const useSmartReminders = (autoFetch = true) => {
       const updated = new Set(prev);
       updated.add(reminder.id);
       
-      const stored = localStorage.getItem('dismissedReminders');
+      const stored = (() => { try { return localStorage.getItem('dismissedReminders'); } catch { return null; } })();
       const parsed = stored ? (() => { try { return JSON.parse(stored); } catch { return {}; } })() : {};
       parsed[reminder.id] = Date.now();
       try { localStorage.setItem('dismissedReminders', JSON.stringify(parsed)); } catch { /* quota/private */ }

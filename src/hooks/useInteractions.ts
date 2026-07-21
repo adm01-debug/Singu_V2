@@ -20,7 +20,8 @@ type InteractionInfiniteData = InfiniteData<InteractionPage>;
 async function fetchInteractionsPage(
   contactId?: string,
   companyId?: string,
-  pageParam = 0
+  pageParam = 0,
+  userId?: string
 ) {
   let query = supabase
     .from('interactions')
@@ -28,6 +29,7 @@ async function fetchInteractionsPage(
     .order('created_at', { ascending: false })
     .range(pageParam * PAGE_SIZE, (pageParam + 1) * PAGE_SIZE - 1);
 
+  if (userId) query = query.eq('user_id', userId);
   if (contactId) query = query.eq('contact_id', contactId)
   .limit(1000);
   if (companyId) query = query.eq('company_id', companyId);
@@ -57,7 +59,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
     error: queryError,
   } = useInfiniteQuery({
     queryKey,
-    queryFn: ({ pageParam = 0 }) => fetchInteractionsPage(contactId, companyId, pageParam as number),
+    queryFn: ({ pageParam = 0 }) => fetchInteractionsPage(contactId, companyId, pageParam as number, user?.id),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     enabled: !!user && externalEnabled,

@@ -143,6 +143,7 @@ export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
         let q = supabase
           .from('interactions')
           .select('id, contact_id, company_id, type, title, content, transcription, audio_url, duration, initiated_by, created_at')
+          .eq('user_id', user!.id)
           .in('type', intChannels)
           .order('created_at', { ascending: false })
           .limit(limit);

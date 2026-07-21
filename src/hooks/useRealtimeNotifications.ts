@@ -177,9 +177,9 @@ export function useRealtimeNotifications() {
       try {
         // Initial load
         const [alertsRes, insightsRes, healthRes] = await Promise.all([
-          supabase.from('alerts').select('*').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
-          supabase.from('insights').select('*').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
-          supabase.from('health_alerts').select('*').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
+          supabase.from('alerts').select('id, title, description, contact_id, created_at').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
+          supabase.from('insights').select('id, title, description, contact_id, created_at').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
+          supabase.from('health_alerts').select('id, title, description, contact_id, created_at').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
         ]);
         if (cancelled) return;
 

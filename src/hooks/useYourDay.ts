@@ -66,15 +66,17 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
 
   const { data } = useQuery({
     queryKey: ['your-day', user?.id],
+    enabled: !!user,
     queryFn: async (): Promise<Omit<YourDayData, 'loading'>> => {
+      if (!user) throw new Error('Not authenticated');
       try {
         const today = new Date();
 
         const [followUpsResult, birthdayContactsResult, attentionContactsResult, insightsResult] = await Promise.all([
-          supabase.from('interactions').select(INTERACTION_FOLLOWUP_SELECT).eq('follow_up_required', true).not('follow_up_date', 'is', null).order('follow_up_date', { ascending: true }).limit(50),
-          supabase.from('contacts').select(CONTACT_LIGHT_SELECT).not('birthday', 'is', null).limit(200),
-          supabase.from('contacts').select(CONTACT_LIGHT_SELECT).or('relationship_score.lt.30,sentiment.eq.negative,role.eq.decision_maker,role.eq.owner').order('updated_at', { ascending: true }).limit(50),
-          supabase.from('insights').select('*').eq('dismissed', false).order('created_at', { ascending: false }).limit(5),
+          supabase.from('interactions').select(INTERACTION_FOLLOWUP_SELECT).eq('user_id', user.id).eq('follow_up_required', true).not('follow_up_date', 'is', null).order('follow_up_date', { ascending: true }).limit(50),
+          supabase.from('contacts').select(CONTACT_LIGHT_SELECT).eq('user_id', user.id).not('birthday', 'is', null).limit(200),
+          supabase.from('contacts').select(CONTACT_LIGHT_SELECT).eq('user_id', user.id).or('relationship_score.lt.30,sentiment.eq.negative,role.eq.decision_maker,role.eq.owner').order('updated_at', { ascending: true }).limit(50),
+          supabase.from('insights').select('id, title, description, type, contact_id, dismissed, created_at, priority').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(5),
         ]);
 
         const followUpInteractions = (followUpsResult.data || []) as Interaction[];
