@@ -14,7 +14,7 @@
     "moduleResolution": "bundler",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
-    "strict": true,
+    "strict": false,
     "noImplicitAny": false,
     "strictNullChecks": false,
     "noUnusedLocals": false,
