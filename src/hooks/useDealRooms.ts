@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Database } from "@/integrations/supabase/types";
 import { useAuth } from './useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type DealRoomStatus = "active" | "won" | "lost" | "paused";
 export type MilestoneStatus = "pending" | "in_progress" | "done" | "blocked";
@@ -166,7 +167,7 @@ export function useCreateDealRoom() {
       qc.invalidateQueries({ queryKey: KEYS.rooms });
       toast.success("Deal Room criado");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -185,7 +186,7 @@ export function useUpdateDealRoom() {
       qc.invalidateQueries({ queryKey: KEYS.rooms });
       qc.invalidateQueries({ queryKey: KEYS.room(d.id) });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -202,7 +203,7 @@ export function useDeleteDealRoom() {
       qc.invalidateQueries({ queryKey: KEYS.rooms });
       toast.success("Deal Room excluído");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -241,7 +242,7 @@ export function useUpsertMilestone(roomId: string) {
       return data as DealRoomMilestone;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.ms(roomId) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -255,7 +256,7 @@ export function useDeleteMilestone(roomId: string) {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.ms(roomId) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -294,7 +295,7 @@ export function useUpsertStakeholder(roomId: string) {
       return data as DealRoomStakeholder;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.sh(roomId) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -308,7 +309,7 @@ export function useDeleteStakeholder(roomId: string) {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.sh(roomId) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -355,7 +356,7 @@ export function useUploadDocument(roomId: string) {
       qc.invalidateQueries({ queryKey: KEYS.docs(roomId) });
       toast.success("Documento enviado");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -370,7 +371,7 @@ export function useDeleteDocument(roomId: string) {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.docs(roomId) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -420,7 +421,7 @@ export function useAddComment(roomId: string) {
       return data as DealRoomComment;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.cmts(roomId) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -437,7 +438,7 @@ export function useShareRoom() {
       qc.invalidateQueries({ queryKey: KEYS.room(vars.room_id) });
       qc.invalidateQueries({ queryKey: KEYS.rooms });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -450,7 +451,7 @@ export function useRoomHealth() {
       return data as { health_score: number; recommendations: string[] };
     },
     onSuccess: (_d, room_id) => qc.invalidateQueries({ queryKey: KEYS.room(room_id) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 

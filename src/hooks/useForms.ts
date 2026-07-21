@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface FormField {
   key: string;
@@ -86,7 +87,7 @@ export function useForms() {
       }
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: KEY }); toast.success('Formulário salvo!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({

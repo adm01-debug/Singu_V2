@@ -5,6 +5,7 @@ import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import Papa from 'papaparse';
 import type { TablesInsert } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface ImportResult {
   total: number;
@@ -159,7 +160,7 @@ export function useBulkImport(entityType: ImportEntityType) {
         toast.warning(`${result.errors.length} erros encontrados`);
       }
     },
-    onError: (err: Error) => toast.error(`Erro na importação: ${err.message}`),
+    onError: (err: Error) => toast.error(`Erro na importação: ${parseApiError(err)}`),
   });
 
   const reset = useCallback(() => {

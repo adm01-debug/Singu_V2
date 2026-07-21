@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type AnomalyType =
   | 'error_spike'
@@ -64,7 +65,7 @@ export function useConnectionAnomalies(opts?: { onlyOpen?: boolean }) {
       qc.invalidateQueries({ queryKey: ['connection_anomalies'] });
       toast.success('Anomalia reconhecida');
     },
-    onError: (e) => toast.error(`Erro: ${e.message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 
   const triggerScan = useMutation({
@@ -77,7 +78,7 @@ export function useConnectionAnomalies(opts?: { onlyOpen?: boolean }) {
       qc.invalidateQueries({ queryKey: ['connection_anomalies'] });
       toast.success(`Detecção concluída — ${d?.inserted ?? 0} anomalia(s) encontrada(s)`);
     },
-    onError: (e) => toast.error(`Erro: ${e.message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 
   return { anomalies, isLoading, acknowledge, triggerScan };

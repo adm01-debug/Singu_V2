@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface NurturingStep {
   type: 'email' | 'whatsapp' | 'task' | 'wait';
@@ -64,7 +65,7 @@ export function useNurturingWorkflows() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Workflow criado!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const update = useMutation({
@@ -74,7 +75,7 @@ export function useNurturingWorkflows() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Workflow atualizado!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
@@ -84,7 +85,7 @@ export function useNurturingWorkflows() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Workflow removido!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const toggleActive = useMutation({

@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Bell, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export function EscalationAutomation({ contactId }: { contactId: string }) {
   const { user } = useAuth();
@@ -68,7 +69,7 @@ export function EscalationAutomation({ contactId }: { contactId: string }) {
       toast.success('Configurações de automação e escalonamento salvas');
     },
     onError: (error) => {
-      toast.error('Erro ao salvar configurações: ' + error.message);
+      toast.error('Erro ao salvar configurações: ' + parseApiError(error));
     }
   });
 

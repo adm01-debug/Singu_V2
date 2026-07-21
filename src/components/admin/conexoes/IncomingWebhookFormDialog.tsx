@@ -14,6 +14,7 @@ import { Loader2, Save, Info, Sparkles, Wand2 } from 'lucide-react';
 import { WEBHOOK_TEMPLATES, getTemplateById } from './webhookTemplates';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface Props {
   open: boolean;
@@ -63,7 +64,7 @@ export function IncomingWebhookFormDialog({ open, onOpenChange, webhookId }: Pro
       const conf = Math.round((data?.overall_confidence ?? 0) * 100);
       toast.success(`Mapping sugerido (confiança ${conf}%)${data?.fallback ? ' · fallback determinístico' : ''}`);
     } catch (e) {
-      toast.error(`Falha IA: ${e instanceof Error ? e.message : 'erro'}`);
+      toast.error(`Falha IA: ${parseApiError(e)}`);
     } finally { setAiLoading(false); }
   };
 

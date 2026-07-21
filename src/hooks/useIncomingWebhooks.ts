@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type WebhookTargetEntity = 'contact' | 'company' | 'deal' | 'interaction' | 'note' | 'custom';
 
@@ -104,7 +105,7 @@ export function useIncomingWebhooks() {
       qc.invalidateQueries({ queryKey: ['incoming_webhooks'] });
       toast.success('Webhook salvo');
     },
-    onError: (e) => toast.error(`Erro: ${e.message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 
   const remove = useMutation({

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface SmsCampaign {
   id: string;
@@ -96,7 +97,7 @@ export function useSmsCampaigns() {
       qc.invalidateQueries({ queryKey: ['sms-campaigns'] });
       toast.success('Campanha SMS criada');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const sendCampaign = useMutation({
@@ -116,7 +117,7 @@ export function useSmsCampaigns() {
         toast.success(`${data?.sent || 0} mensagens enviadas, ${data?.failed || 0} falhas`);
       }
     },
-    onError: (e: Error) => toast.error(`Erro ao enviar: ${e.message}`),
+    onError: (e: Error) => toast.error(`Erro ao enviar: ${parseApiError(e)}`),
   });
 
   const deleteCampaign = useMutation({
@@ -203,7 +204,7 @@ export function useSmsTemplates() {
       qc.invalidateQueries({ queryKey: ['sms-templates'] });
       toast.success('Template criado');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const deleteTemplate = useMutation({

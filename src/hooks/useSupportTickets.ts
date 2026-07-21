@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface SupportTicket {
   id: string;
@@ -72,7 +73,7 @@ export function useSupportTickets() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Ticket criado!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const update = useMutation({
@@ -92,7 +93,7 @@ export function useSupportTickets() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Ticket atualizado!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
@@ -101,7 +102,7 @@ export function useSupportTickets() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Ticket removido!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { tickets, isLoading, create, update, remove };
@@ -141,7 +142,7 @@ export function useTicketComments(ticketId?: string) {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: key }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { comments, isLoading, addComment };

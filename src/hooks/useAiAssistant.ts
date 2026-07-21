@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface ChatThread {
   id: string;
@@ -166,7 +167,7 @@ export function useAiAssistant() {
     } catch (e) {
       if (e instanceof Error && e.name === 'AbortError') return;
       logger.error('Failed to send message', e);
-      toast.error(e instanceof Error ? e.message : 'Falha ao enviar mensagem');
+      toast.error(parseApiError(e));
       setMessages(prev => prev.filter(m => m.id !== optimisticUserMsg.id));
     } finally {
       setSending(false);

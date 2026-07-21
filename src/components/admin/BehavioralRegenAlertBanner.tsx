@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { parseApiError } from '@/lib/errorMessages';
 
 interface AlertRow {
   id: string;
@@ -87,7 +88,7 @@ export function BehavioralRegenAlertBanner() {
       qc.invalidateQueries({ queryKey: ["behavioral-regen-active-alerts"] });
     },
     onError: (err: Error) => {
-      toast.error("Falha ao reconhecer alerta", { description: err.message });
+      toast.error("Falha ao reconhecer alerta", { description: parseApiError(err) });
     },
   });
 

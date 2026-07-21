@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type ConnectionType = 'supabase_external' | 'bitrix24' | 'n8n' | 'mcp_claude' | 'custom';
 
@@ -89,7 +90,7 @@ export function useConnections() {
       qc.invalidateQueries({ queryKey: ['connection_configs'] });
       toast.success('Conexão salva');
     },
-    onError: (e) => toast.error(`Erro: ${e.message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 
   const remove = useMutation({
@@ -128,7 +129,7 @@ export function useConnections() {
       qc.invalidateQueries({ queryKey: ['connection_configs'] });
       toast.success(`✅ ${data.message ?? 'Conexão OK'} (${data.latency_ms}ms)`);
     },
-    onError: (e) => toast.error(`❌ ${e.message}`),
+    onError: (e) => toast.error(`❌ ${parseApiError(e)}`),
   });
 
   return { connections, isLoading, upsert, remove, toggleActive, test };

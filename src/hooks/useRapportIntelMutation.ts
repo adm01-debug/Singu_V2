@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateExternalData } from '@/lib/externalData';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export function useRapportIntelMutation(contactId: string | undefined) {
   const queryClient = useQueryClient();
@@ -24,7 +25,7 @@ export function useRapportIntelMutation(contactId: string | undefined) {
       toast.success('Informações de rapport atualizadas');
     },
     onError: (error) => {
-      toast.error(`Erro ao atualizar: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
+      toast.error(`Erro ao atualizar: ${parseApiError(error)}`);
     }
   });
 }

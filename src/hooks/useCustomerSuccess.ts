@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Database, Json } from "@/integrations/supabase/types";
+import { parseApiError } from '@/lib/errorMessages';
 
 export type CSTier = "strategic" | "enterprise" | "mid" | "smb";
 export type CSLifecycle = "onboarding" | "adopting" | "mature" | "at_risk" | "churned";
@@ -144,7 +145,7 @@ export function useUpsertCSAccount() {
       qc.invalidateQueries({ queryKey: ["cs-accounts"] });
       qc.invalidateQueries({ queryKey: ["cs-account"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -161,7 +162,7 @@ export function useRecalcAccountHealth() {
       qc.invalidateQueries({ queryKey: ["cs-accounts"] });
       qc.invalidateQueries({ queryKey: ["cs-account"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -207,7 +208,7 @@ export function useRecordSignal() {
       toast.success("Sinal registrado");
       qc.invalidateQueries({ queryKey: ["cs-signals", vars.account_id] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -265,7 +266,7 @@ export function useSubmitNPS() {
       qc.invalidateQueries({ queryKey: ["cs-nps"] });
       qc.invalidateQueries({ queryKey: ["cs-signals", vars.account_id] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -328,7 +329,7 @@ export function useUpsertQBR() {
       toast.success("QBR salvo");
       qc.invalidateQueries({ queryKey: ["cs-qbrs"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -383,6 +384,6 @@ export function useUpdateRenewal() {
       qc.invalidateQueries({ queryKey: ["cs-renewals-pipeline"] });
       toast.success("Renovação atualizada");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { queryExternalData, insertExternalData, updateExternalData, deleteExternalData } from '@/lib/externalData';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 
 // ─── Types ─────────────────────────────────────────────────────
 
@@ -124,7 +125,7 @@ function useCompanyRelated<T extends { id?: string; company_id: string }>(
       queryClient.invalidateQueries({ queryKey });
     },
     onError: (err: Error) => {
-      toast.error(`Erro ao salvar ${label}: ${err.message}`);
+      toast.error(`Erro ao salvar ${label}: ${parseApiError(err)}`);
     },
   });
 
@@ -137,7 +138,7 @@ function useCompanyRelated<T extends { id?: string; company_id: string }>(
       queryClient.invalidateQueries({ queryKey });
     },
     onError: (err: Error) => {
-      toast.error(`Erro ao remover ${label}: ${err.message}`);
+      toast.error(`Erro ao remover ${label}: ${parseApiError(err)}`);
     },
   });
 

@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from './useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface ObjectionExampleFeedbackRow {
   id: string;
@@ -120,7 +121,7 @@ export function useObjectionExampleFeedback({ objection, category }: UseFeedback
     },
     onError: (err, _vars, ctx) => {
       if (ctx?.prev) qc.setQueryData(queryKey, ctx.prev);
-      toast.error(err instanceof Error ? err.message : "Não foi possível salvar o feedback.");
+      toast.error(parseApiError(err));
     },
     onSuccess: (_res, vars) => {
       toast.success(

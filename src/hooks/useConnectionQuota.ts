@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface ConnectionQuota {
   id: string;
@@ -57,7 +58,7 @@ export function useConnectionQuota(webhookId: string | undefined) {
       qc.invalidateQueries({ queryKey: ['connection_quota', v.webhook_id] });
       toast.success('Quota atualizada');
     },
-    onError: (e) => toast.error(`Erro: ${e.message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 
   return { ...query, updateLimit };

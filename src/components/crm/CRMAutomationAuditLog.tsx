@@ -27,6 +27,7 @@ import {
   DialogFooter
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface AutomationLog {
   id: string;
@@ -85,7 +86,7 @@ export function CRMAutomationAuditLog() {
       toast.success('Evento enfileirado para reprocessamento');
       setIsDetailsOpen(false);
     },
-    onError: (error: Error) => toast.error(`Erro ao reprocessar: ${error.message}`)
+    onError: (error: Error) => toast.error(`Erro ao reprocessar: ${parseApiError(error)}`)
   });
 
   const handleViewDetails = (log: AutomationLog) => {

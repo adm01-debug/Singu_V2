@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface CannedResponse {
   id: string;
@@ -47,7 +48,7 @@ export function useCannedResponses() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Resposta rápida criada!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const use = useMutation({
@@ -72,7 +73,7 @@ export function useCannedResponses() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Resposta removida!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { responses, isLoading, create, use, remove };

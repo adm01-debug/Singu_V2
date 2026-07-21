@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from './useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type ForecastCategory = "commit" | "best_case" | "pipeline" | "omitted";
 
@@ -110,7 +111,7 @@ export function useCreatePeriod() {
       qc.invalidateQueries({ queryKey: ["forecast-current-period"] });
       toast.success("Período criado");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -130,7 +131,7 @@ export function useClosePeriod() {
       qc.invalidateQueries({ queryKey: ["forecast-periods"] });
       toast.success("Período fechado");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -164,7 +165,7 @@ export function useUpdateDealForecast() {
       qc.invalidateQueries({ queryKey: ["deal-forecasts"] });
       toast.success("Forecast atualizado");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -180,7 +181,7 @@ export function useAnalyzeForecast() {
       qc.invalidateQueries({ queryKey: ["deal-forecasts"] });
       toast.success("Forecast analisado pela IA");
     },
-    onError: (e: Error) => toast.error(`Erro: ${e.message}`),
+    onError: (e: Error) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 }
 
@@ -230,7 +231,7 @@ export function useForecastNarrative() {
       if (error) throw error;
       return data as { narrative: string; commit: number; best_case: number; quota: number; at_risk_count: number };
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -261,6 +262,6 @@ export function useUpsertQuotaSettings() {
       qc.invalidateQueries({ queryKey: ["forecast-quota-settings"] });
       toast.success("Configurações salvas");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }

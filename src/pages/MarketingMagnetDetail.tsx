@@ -14,6 +14,7 @@ import { useQueryClient, useQuery } from '@tanstack/react-query';
 import type { TablesUpdate } from '@/integrations/supabase/types';
 import { useMagnetDownloads, type LeadMagnet } from '@/hooks/useLeadMagnets';
 import { useAuth } from '@/hooks/useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 
 export default function MarketingMagnetDetail() {
   const { id } = useParams<{ id: string }>();
@@ -46,7 +47,7 @@ export default function MarketingMagnetDetail() {
       thumbnail_url: draft.thumbnail_url,
       gated: draft.gated,
     } as TablesUpdate<'lead_magnets'>).eq('user_id', user.id).eq('id', draft.id);
-    if (error) toast.error(error.message);
+    if (error) toast.error(parseApiError(error));
     else {
       toast.success('Salvo!');
       qc.invalidateQueries({ queryKey: ['lead-magnet', id] });

@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface SequenceStep {
   id: string;
@@ -119,7 +120,7 @@ export function useSequences() {
       qc.invalidateQueries({ queryKey: ['sequences'] });
       toast.success('Sequência criada');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const toggleStatus = useMutation({
@@ -184,7 +185,7 @@ export function useSequences() {
       qc.invalidateQueries({ queryKey: ['sequences'] });
       toast.success('Contato inscrito na sequência');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return {

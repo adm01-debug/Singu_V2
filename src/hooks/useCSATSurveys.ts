@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface CSATSurvey {
   id: string;
@@ -53,7 +54,7 @@ export function useCSATSurveys(contactId?: string) {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Pesquisa CSAT enviada!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const answer = useMutation({
@@ -69,7 +70,7 @@ export function useCSATSurveys(contactId?: string) {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Resposta registrada!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const stats = {

@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
  import { toast } from 'sonner';
  import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 
 export function useSocialIntelligence(contactId: string) {
   const { user } = useAuth();
@@ -147,7 +148,7 @@ export function useSocialIntelligence(contactId: string) {
        });
      },
      onError: (error) => {
-       toast.error('Erro ao sincronizar perfil', { description: error instanceof Error ? error.message : 'Tente novamente.' });
+       toast.error('Erro ao sincronizar perfil', { description: parseApiError(error, 'Tente novamente.') });
      }
    });
  

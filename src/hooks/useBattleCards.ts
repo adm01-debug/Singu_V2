@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Database, Json } from "@/integrations/supabase/types";
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface BattleCardItem { title: string; detail: string }
 export interface ProofPoint { client: string; result: string }
@@ -156,7 +157,7 @@ export function useUpsertBattleCard() {
     },
     onError: (e: Error) => {
       logger.error("[useUpsertBattleCard] Erro:", e);
-      toast.error(e.message || "Erro ao salvar battle card");
+      toast.error(parseApiError(e, "Erro ao salvar battle card"));
     },
   });
 }

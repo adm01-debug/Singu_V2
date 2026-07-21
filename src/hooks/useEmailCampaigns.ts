@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface EmailCampaign {
   id: string;
@@ -57,7 +58,7 @@ export function useEmailCampaigns() {
       return data as EmailCampaign;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha criada!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const update = useMutation({
@@ -66,7 +67,7 @@ export function useEmailCampaigns() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha atualizada!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
@@ -75,7 +76,7 @@ export function useEmailCampaigns() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha removida!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   /**
@@ -138,7 +139,7 @@ export function useEmailCampaigns() {
       toast.success(`Campanha enviada para ${recipientsCount} destinatários (${newlyAdded} novos)`);
     },
     onError: (e: Error) => {
-      toast.error(`Falha ao enviar: ${e.message}`);
+      toast.error(`Falha ao enviar: ${parseApiError(e)}`);
     },
   });
 

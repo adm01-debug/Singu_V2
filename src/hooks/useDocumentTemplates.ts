@@ -4,6 +4,7 @@ import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface DocumentTemplate {
   id: string;
@@ -111,7 +112,7 @@ export function useDocumentTemplates() {
       qc.invalidateQueries({ queryKey: ['document_templates'] });
       toast.success('Template criado');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const update = useMutation({
@@ -129,7 +130,7 @@ export function useDocumentTemplates() {
       qc.invalidateQueries({ queryKey: ['document_templates'] });
       toast.success('Template atualizado');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
@@ -142,7 +143,7 @@ export function useDocumentTemplates() {
       qc.invalidateQueries({ queryKey: ['document_templates'] });
       toast.success('Template removido');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { templates, isLoading, create, update, remove, defaultFields: DEFAULT_FIELDS };
@@ -214,7 +215,7 @@ export function useDocumentSignatures() {
       qc.invalidateQueries({ queryKey: ['document_signatures'] });
       toast.success('Documento enviado para assinatura');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const cancel = useMutation({
@@ -231,7 +232,7 @@ export function useDocumentSignatures() {
       qc.invalidateQueries({ queryKey: ['document_signatures'] });
       toast.success('Assinatura cancelada');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const stats = {

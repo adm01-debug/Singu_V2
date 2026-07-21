@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface LandingPageBlock {
   id: string;
@@ -83,7 +84,7 @@ export function useLandingPages() {
       return data as unknown as LandingPage;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Landing page criada!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const update = useMutation({
@@ -92,7 +93,7 @@ export function useLandingPages() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Landing page salva!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
@@ -101,7 +102,7 @@ export function useLandingPages() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Removida.'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const togglePublish = useMutation({
@@ -113,7 +114,7 @@ export function useLandingPages() {
       qc.invalidateQueries({ queryKey: key });
       toast.success(v.publish ? 'Página publicada!' : 'Página despublicada.');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { pages, isLoading, create, update, remove, togglePublish };

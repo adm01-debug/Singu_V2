@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import type { TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export default function MarketingFormDetail() {
   const { id } = useParams<{ id: string }>();
@@ -40,7 +41,7 @@ export default function MarketingFormDetail() {
       redirect_url: draft.redirect_url,
       success_message: draft.success_message,
     } as TablesUpdate<'forms'>).eq('user_id', user.id).eq('id', draft.id);
-    if (error) toast.error(error.message);
+    if (error) toast.error(parseApiError(error));
     else {
       toast.success('Salvo!');
       qc.invalidateQueries({ queryKey: ['marketing-form', id] });

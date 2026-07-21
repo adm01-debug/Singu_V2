@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type DocumentType = 'contract' | 'proposal' | 'nda' | 'invoice' | 'report' | 'presentation' | 'spreadsheet' | 'image' | 'other';
 
@@ -82,7 +83,7 @@ export function useDocuments(entityType: string, entityId?: string) {
       qc.invalidateQueries({ queryKey: key });
       toast.success('Documento enviado!');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
@@ -94,7 +95,7 @@ export function useDocuments(entityType: string, entityId?: string) {
       qc.invalidateQueries({ queryKey: key });
       toast.success('Documento removido!');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { documents, isLoading, upload, remove };

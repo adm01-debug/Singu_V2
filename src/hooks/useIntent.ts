@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import type { Json } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type IntentScope = "contact" | "account";
 export type IntentTrend = "rising" | "stable" | "falling";
@@ -141,7 +142,7 @@ export function useCreatePixel() {
       qc.invalidateQueries({ queryKey: ["intent-pixels"] });
       toast.success("Pixel criado");
     },
-    onError: (e: Error) => toast.error(`Erro ao criar pixel: ${e.message}`),
+    onError: (e: Error) => toast.error(`Erro ao criar pixel: ${parseApiError(e)}`),
   });
 }
 
@@ -189,7 +190,7 @@ export function useRefreshIntent() {
       const d = data as { contacts_scored?: number; accounts_scored?: number };
       toast.success(`Intent atualizado · ${d?.contacts_scored ?? 0} contatos · ${d?.accounts_scored ?? 0} contas`);
     },
-    onError: (e: Error) => toast.error(`Falha ao recalcular: ${e.message}`),
+    onError: (e: Error) => toast.error(`Falha ao recalcular: ${parseApiError(e)}`),
   });
 }
 
@@ -218,7 +219,7 @@ export function useCreateManualSignal() {
       qc.invalidateQueries({ queryKey: ["intent-signals"] });
       toast.success("Sinal registrado");
     },
-    onError: (e: Error) => toast.error(`Erro: ${e.message}`),
+    onError: (e: Error) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 }
 

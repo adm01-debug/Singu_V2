@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface MQLCriteria {
   id: string;
@@ -61,7 +62,7 @@ export function useMQLCriteria() {
       }
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: KEY }); toast.success('Critério salvo!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
@@ -111,7 +112,7 @@ export function useEvaluateMQL() {
       if (d?.qualified) toast.success(`MQL qualificado! Score ${d.score}`);
       else toast.info(`Ainda não qualificado (score ${d?.score ?? 0})`);
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -129,6 +130,6 @@ export function useHandoffMQL() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['mql-classifications'] }); toast.success('Handoff registrado'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }

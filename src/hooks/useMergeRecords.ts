@@ -4,6 +4,7 @@ import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import type { Json } from '@/integrations/supabase/types';
 import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type MergeEntity = 'contacts' | 'companies';
 
@@ -73,6 +74,6 @@ export function useMergeRecords() {
       qc.invalidateQueries({ queryKey: ['companies'] });
       toast.success('Registros mesclados com sucesso');
     },
-    onError: (e: Error) => toast.error(`Falha ao mesclar: ${e.message}`),
+    onError: (e: Error) => toast.error(`Falha ao mesclar: ${parseApiError(e)}`),
   });
 }

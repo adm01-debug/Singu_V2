@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Database, Json } from "@/integrations/supabase/types";
 import { type BattleCard } from "@/hooks/useBattleCards";
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 
 export type PlaybookScenario =
   | "discovery" | "demo" | "negotiation" | "objection"
@@ -159,7 +160,7 @@ export function useUpsertPlaybook() {
     },
     onError: (e: Error) => {
       logger.error("[useUpsertPlaybook] Erro:", e);
-      toast.error(e.message || "Erro ao salvar playbook");
+      toast.error(parseApiError(e, "Erro ao salvar playbook"));
     },
   });
 }
@@ -179,7 +180,7 @@ export function useDeletePlaybook() {
     },
     onError: (e: Error) => {
       logger.error("[useDeletePlaybook] Erro:", e);
-      toast.error(e.message || "Erro ao remover playbook");
+      toast.error(parseApiError(e, "Erro ao remover playbook"));
     },
   });
 }
@@ -206,7 +207,7 @@ export function useGeneratePlaybook() {
     },
     onError: (e: Error) => {
       logger.error("[useGeneratePlaybook] Erro:", e);
-      toast.error(e.message || "Erro ao gerar playbook");
+      toast.error(parseApiError(e, "Erro ao gerar playbook"));
     },
   });
 }
@@ -230,7 +231,7 @@ export function useRecommendPlaybooks() {
         battle_card?: BattleCard;
       };
     },
-    onError: (e: Error) => toast.error(e.message || "Erro ao recomendar playbooks"),
+    onError: (e: Error) => toast.error(parseApiError(e, "Erro ao recomendar playbooks")),
   });
 }
 

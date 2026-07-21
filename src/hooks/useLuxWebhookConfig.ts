@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface LuxWebhookConfig {
   id: string;
@@ -71,7 +72,7 @@ export function useLuxWebhookConfig() {
       qc.invalidateQueries({ queryKey: ['lux-webhook-config'] });
       toast.success('Configuração salva');
     },
-    onError: (e: Error) => toast.error(`Erro: ${e.message}`),
+    onError: (e: Error) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 
   const toggleActive = useMutation({
@@ -129,7 +130,7 @@ export function useLuxWebhookConfig() {
       }
     },
     onSuccess: () => toast.success('✅ Webhook respondeu com sucesso'),
-    onError: (e) => toast.error(`❌ Falha no teste: ${e.message}`),
+    onError: (e) => toast.error(`❌ Falha no teste: ${parseApiError(e)}`),
   });
 
   const getConfigForEntity = (entityType: string) => configs.find(c => c.entity_type === entityType && c.is_active);

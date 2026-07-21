@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import type { TablesInsert } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type AttributionModel = 'first' | 'last' | 'linear' | 'u_shape' | 'w_shape' | 'time_decay';
 
@@ -78,6 +79,6 @@ export function useRecordTouchpoint() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['touchpoints'] }); toast.success('Touchpoint registrado'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface NurturingExecution {
   id: string;
@@ -42,7 +43,7 @@ export function useEnrollContact() {
       return data;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['nurturing-executions'] }); toast.success('Contato enrolado no workflow'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -54,6 +55,6 @@ export function useRunNurturing() {
       return data as { ok: boolean; stats: Record<string, number> };
     },
     onSuccess: (d) => toast.success(`Runner OK: ${d.stats.processed} processados, ${d.stats.advanced} avançados`),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }

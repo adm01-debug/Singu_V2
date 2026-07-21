@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 import { useAuth } from '@/hooks/useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 
 export function useSocialSync(contactId: string) {
   const queryClient = useQueryClient();
@@ -107,7 +108,7 @@ export function useSocialSync(contactId: string) {
       toast.success('Sincronização agendada com sucesso');
     },
     onError: (error: Error) => {
-      toast.error(`Falha ao iniciar sincronização: ${error.message}`);
+      toast.error(`Falha ao iniciar sincronização: ${parseApiError(error)}`);
     }
   });
 

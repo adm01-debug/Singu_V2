@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface RefineParams {
   original: string;
@@ -28,6 +29,6 @@ async function refineEmail(params: RefineParams): Promise<RefineResult> {
 export function useEmailRefine() {
   return useMutation<RefineResult, Error, RefineParams>({
     mutationFn: refineEmail,
-    onError: (e) => toast.error(e.message || 'Erro ao refinar email'),
+    onError: (e) => toast.error(parseApiError(e, 'Erro ao refinar email')),
   });
 }

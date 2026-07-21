@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface VisitCheckin {
   id: string;
@@ -62,7 +63,7 @@ export function useVisitCheckins(entityId?: string, entityType?: 'contact' | 'co
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('📍 Check-in realizado!'); },
-    onError: (e: Error) => toast.error(e.message.includes('denied') ? 'Permissão de localização negada' : e.message),
+    onError: (e: Error) => toast.error(e.message.includes('denied') ? 'Permissão de localização negada' : parseApiError(e)),
   });
 
   const checkOut = useMutation({
@@ -76,7 +77,7 @@ export function useVisitCheckins(entityId?: string, entityType?: 'contact' | 'co
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Check-out realizado!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { checkins, isLoading, checkIn, checkOut };

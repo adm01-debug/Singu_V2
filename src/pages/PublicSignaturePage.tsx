@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 type Signature = {
   id: string;
@@ -55,7 +56,7 @@ export default function PublicSignaturePage() {
         setSignature(data);
       } catch (e) {
         if (e instanceof Error && e.name === 'AbortError') return;
-        setError(e instanceof Error ? e.message : 'Erro ao carregar');
+        setError(parseApiError(e, 'Erro ao carregar'));
       } finally {
         if (!controller.signal.aborted) setLoading(false);
       }
@@ -93,7 +94,7 @@ export default function PublicSignaturePage() {
       setSignature((prev) => (prev ? { ...prev, status: action === 'sign' ? 'signed' : 'declined' } : prev));
     } catch (e) {
       if (e instanceof Error && e.name === 'AbortError') return;
-      toast.error(e instanceof Error ? e.message : 'Erro ao enviar');
+      toast.error(parseApiError(e));
     } finally {
       setSubmitting(false);
     }

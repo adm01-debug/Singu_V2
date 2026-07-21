@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface ThreadActionItem {
   task: string;
@@ -73,7 +74,7 @@ export function useEmailThreadSummary(params?: { contactId?: string; subject?: s
       qc.invalidateQueries({ queryKey: ['email-thread-summary'] });
       toast.success('Resumo da thread gerado!');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return {

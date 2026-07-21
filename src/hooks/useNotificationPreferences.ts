@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type Urgency = 'critical' | 'high' | 'normal' | 'low';
 export type DigestMode = 'immediate' | 'hourly' | 'daily';
@@ -70,7 +71,7 @@ export function useNotificationPreferences() {
       qc.setQueryData(['notification-preferences', user?.id], next);
       toast.success('Preferências atualizadas');
     },
-    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : 'Falha ao salvar'),
+    onError: (e: unknown) => toast.error(parseApiError(e)),
   });
 
   return { ...query, save };

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { parseApiError } from '@/lib/errorMessages';
 
 export type SentimentOverall = "positive" | "neutral" | "negative" | "mixed";
 
@@ -106,7 +107,7 @@ export function useAnalyzeConversation() {
       qc.invalidateQueries({ queryKey: ["conversation-analyses"] });
       toast.success("Análise concluída");
     },
-    onError: (e: Error) => toast.error(e.message ?? "Falha ao analisar"),
+    onError: (e: Error) => toast.error(parseApiError(e, "Falha ao analisar")),
   });
 }
 
@@ -143,7 +144,7 @@ export function useUpsertTopic() {
       qc.invalidateQueries({ queryKey: ["conversation-topics"] });
       toast.success("Tópico salvo");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 

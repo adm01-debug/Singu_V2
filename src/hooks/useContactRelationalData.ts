@@ -4,6 +4,7 @@ import { queryExternalData } from '@/lib/externalData';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import type { Tables } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 // ─── External DB Types ────────────────────────────────────────
 
@@ -190,7 +191,7 @@ export function useRelativeMutations(contactId: string | undefined) {
       toast.success('Relacionado adicionado');
       invalidate();
     },
-    onError: (e) => toast.error(`Erro: ${e.message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 
   const updateRelative = useMutation({
@@ -202,7 +203,7 @@ export function useRelativeMutations(contactId: string | undefined) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contact-relational-data', contactId] });
     },
-    onError: (e) => toast.error(`Erro ao atualizar: ${e.message}`),
+    onError: (e) => toast.error(`Erro ao atualizar: ${parseApiError(e)}`),
   });
 
   const deleteRelative = useMutation({
@@ -215,7 +216,7 @@ export function useRelativeMutations(contactId: string | undefined) {
       toast.success('Relacionado removido');
       invalidate();
     },
-    onError: (e) => toast.error(`Erro: ${e.message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 
   return { addRelative, updateRelative, deleteRelative };
@@ -241,7 +242,7 @@ export function useCadenceMutation(contactId: string | undefined) {
       toast.success('Cadência salva');
       queryClient.invalidateQueries({ queryKey: ['contact-relational-data', contactId] });
     },
-    onError: (e) => toast.error(`Erro: ${e.message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 }
 
@@ -274,6 +275,6 @@ export function usePreferencesMutation(contactId: string | undefined) {
       toast.success('Preferências salvas');
       queryClient.invalidateQueries({ queryKey: ['contact-relational-data', contactId] });
     },
-    onError: (e) => toast.error(`Erro: ${e.message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 }

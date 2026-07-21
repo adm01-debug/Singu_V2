@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type FieldType = 'text' | 'number' | 'date' | 'select' | 'boolean' | 'url' | 'email' | 'phone';
 export type EntityType = 'contact' | 'company' | 'deal';
@@ -66,7 +67,7 @@ export function useCustomFields(entityType: EntityType) {
       qc.invalidateQueries({ queryKey: key });
       toast.success('Campo personalizado criado!');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const updateField = useMutation({
@@ -82,7 +83,7 @@ export function useCustomFields(entityType: EntityType) {
       qc.invalidateQueries({ queryKey: key });
       toast.success('Campo atualizado!');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const deleteField = useMutation({
@@ -94,7 +95,7 @@ export function useCustomFields(entityType: EntityType) {
       qc.invalidateQueries({ queryKey: key });
       toast.success('Campo removido!');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { fields, isLoading, createField, updateField, deleteField };
@@ -149,7 +150,7 @@ export function useCustomFieldValues(entityType: EntityType, entityId?: string) 
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: key }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { values, isLoading, saveValue };

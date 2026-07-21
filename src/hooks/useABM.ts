@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 import { useAuth } from './useAuth';
 import type { TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type AccountTier = "strategic" | "enterprise" | "mid" | "smb";
 export type AccountStatus = "active" | "nurture" | "closed_won" | "closed_lost" | "paused";
@@ -146,7 +147,7 @@ export function useCreateABMAccount() {
       qc.invalidateQueries({ queryKey: ["abm", "accounts"] });
       toast.success("Conta ABM criada");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -165,7 +166,7 @@ export function useUpdateABMAccount() {
       qc.invalidateQueries({ queryKey: ["abm", "account", vars.id] });
       toast.success("Conta atualizada");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -181,7 +182,7 @@ export function useDeleteABMAccount() {
       qc.invalidateQueries({ queryKey: ["abm", "accounts"] });
       toast.success("Conta removida");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -199,7 +200,7 @@ export function useRescoreAccounts(accountId?: string) {
       qc.invalidateQueries({ queryKey: ["abm"] });
       toast.success(`${data?.scored ?? 0} conta(s) reavaliada(s)`);
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -253,7 +254,7 @@ export function useUpsertCommitteeMember() {
       qc.invalidateQueries({ queryKey: ["abm", "committee", vars.account_id] });
       toast.success("Stakeholder salvo");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -269,7 +270,7 @@ export function useDeleteCommitteeMember() {
       qc.invalidateQueries({ queryKey: ["abm", "committee", vars.account_id] });
       toast.success("Stakeholder removido");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -311,7 +312,7 @@ export function useGenerateWhitespace() {
     },
     onError: (e: Error) => {
       logger.error("whitespace error", e);
-      toast.error(e.message);
+      toast.error(parseApiError(e));
     },
   });
 }
@@ -327,7 +328,7 @@ export function useUpdateWhitespaceStatus() {
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["abm", "whitespace", vars.account_id] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -379,7 +380,7 @@ export function useUpsertAccountPlan() {
       qc.invalidateQueries({ queryKey: ["abm", "plans", vars.account_id] });
       toast.success("Plano de conta salvo");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -442,7 +443,7 @@ export function useUpsertCampaign() {
       qc.invalidateQueries({ queryKey: ["abm", "campaigns"] });
       toast.success("Campanha salva");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -458,6 +459,6 @@ export function useDeleteCampaign() {
       qc.invalidateQueries({ queryKey: ["abm", "campaigns"] });
       toast.success("Campanha removida");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }

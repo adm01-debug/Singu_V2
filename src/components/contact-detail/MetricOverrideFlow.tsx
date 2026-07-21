@@ -10,6 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Settings2, UserCheck } from 'lucide-react';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface Props {
   contactId: string;
@@ -66,7 +67,7 @@ export function MetricOverrideFlow({ contactId, currentScore, currentSentiment }
       setNewValue('');
       setReason('');
     },
-    onError: (err: Error) => toast.error(`Erro ao corrigir: ${err.message}`)
+    onError: (err: Error) => toast.error(`Erro ao corrigir: ${parseApiError(err)}`)
   });
 
   return (

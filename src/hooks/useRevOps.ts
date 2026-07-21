@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { parseApiError } from '@/lib/errorMessages';
 
 export type FunnelStage = "visitor" | "lead" | "mql" | "sql" | "opportunity" | "customer";
 
@@ -145,7 +146,7 @@ export function useUpsertBenchmark() {
       qc.invalidateQueries({ queryKey: ["revops-benchmarks"] });
       toast.success("Benchmark salvo");
     },
-    onError: (e: Error) => toast.error(e.message || "Erro ao salvar benchmark"),
+    onError: (e: Error) => toast.error(parseApiError(e, "Erro ao salvar benchmark")),
   });
 }
 
@@ -177,7 +178,7 @@ export function useDismissAlert() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["revops-alerts"] }),
-    onError: (e: Error) => toast.error(e.message || "Erro ao dispensar alerta"),
+    onError: (e: Error) => toast.error(parseApiError(e, "Erro ao dispensar alerta")),
   });
 }
 
@@ -199,6 +200,6 @@ export function useTriggerRevOpsSnapshot() {
       qc.invalidateQueries({ queryKey: ["revops-alerts"] });
       toast.success("Snapshot gerado");
     },
-    onError: (e: Error) => toast.error(e.message || "Erro ao gerar snapshot"),
+    onError: (e: Error) => toast.error(parseApiError(e, "Erro ao gerar snapshot")),
   });
 }

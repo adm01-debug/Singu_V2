@@ -29,6 +29,7 @@ import { BehavioralRegenCronHealth } from "@/components/admin/BehavioralRegenCro
 import { BehavioralRegenAlertsStats } from "@/components/admin/BehavioralRegenAlertsStats";
 import { BehavioralRegenAlertsTrend } from "@/components/admin/BehavioralRegenAlertsTrend";
 import { useUiPreferencesSync } from "@/hooks/useUiPreferencesSync";
+import { parseApiError } from '@/lib/errorMessages';
 
 type QueueRow = {
   contact_id: string;
@@ -171,7 +172,7 @@ export default function BehavioralRegenAudit() {
       if (err.cooldown) {
         toast.warning(err.message);
       } else {
-        toast.error(`Falha ao reenfileirar: ${err.message}`);
+        toast.error(`Falha ao reenfileirar: ${parseApiError(err)}`);
       }
     },
   });
@@ -201,7 +202,7 @@ export default function BehavioralRegenAudit() {
       queryClient.invalidateQueries({ queryKey: ["behavioral-regen-stats"] });
     },
     onError: (err: Error) => {
-      toast.error(`Falha na limpeza: ${err.message}`);
+      toast.error(`Falha na limpeza: ${parseApiError(err)}`);
     },
   });
 
@@ -275,7 +276,7 @@ export default function BehavioralRegenAudit() {
     },
     onError: (err: Error) => {
       setBatchProgress((p) => (p ? { ...p, running: false } : null));
-      toast.error(`Batch retry abortado: ${err.message}`);
+      toast.error(`Batch retry abortado: ${parseApiError(err)}`);
     },
   });
 

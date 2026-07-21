@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface DlqItem {
   id: string;
@@ -49,7 +50,7 @@ export function useWebhookDlq() {
       toast.success('Reprocessamento agendado');
       qc.invalidateQueries({ queryKey: ['incoming_webhook_dlq'] });
     },
-    onError: (e: Error) => toast.error('Falha ao reprocessar', { description: e.message }),
+    onError: (e: Error) => toast.error('Falha ao reprocessar', { description: parseApiError(e) }),
   });
 
   const reprocessAll = useMutation({
@@ -62,7 +63,7 @@ export function useWebhookDlq() {
       toast.success(`${data?.processed ?? 0} itens processados`);
       qc.invalidateQueries({ queryKey: ['incoming_webhook_dlq'] });
     },
-    onError: (e: Error) => toast.error('Falha ao reprocessar lote', { description: e.message }),
+    onError: (e: Error) => toast.error('Falha ao reprocessar lote', { description: parseApiError(e) }),
   });
 
   return { items, isLoading, reprocess, reprocessAll };

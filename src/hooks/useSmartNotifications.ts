@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type NotifUrgency = 'critical' | 'high' | 'normal' | 'low';
 export type NotifStatus = 'pending' | 'delivered' | 'dismissed' | 'clicked' | 'suppressed' | 'snoozed';
@@ -117,7 +118,7 @@ export function useSmartNotifications() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['smart-notifications', user?.id] }),
-    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : 'Falha ao atualizar notificação'),
+    onError: (e: unknown) => toast.error(parseApiError(e)),
   });
 
   const markRead = useCallback((id: string) => update.mutate({ id, status: 'delivered' }), [update]);
@@ -147,7 +148,7 @@ export function useSmartNotifications() {
       return data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['smart-notifications', user?.id] }),
-    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : 'Falha ao enfileirar notificação'),
+    onError: (e: unknown) => toast.error(parseApiError(e)),
   });
 
   return {

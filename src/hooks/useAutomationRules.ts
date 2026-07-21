@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 import type { Json } from '@/integrations/supabase/types';
 
 // ===================== TYPES =====================
@@ -196,7 +197,7 @@ export function useAutomationRules() {
       return true;
     } catch (e: unknown) {
       setRules(previousRules);
-      toast.error('Erro ao atualizar: ' + (e instanceof Error ? e.message : 'Erro desconhecido'));
+      toast.error('Erro ao atualizar: ' + parseApiError(e));
       return false;
     }
   }, [user, rules]);
@@ -220,7 +221,7 @@ export function useAutomationRules() {
       return true;
     } catch (e: unknown) {
       setRules(previousRules);
-      toast.error('Erro ao remover: ' + (e instanceof Error ? e.message : 'Erro desconhecido'));
+      toast.error('Erro ao remover: ' + parseApiError(e));
       return false;
     }
   }, [user, rules]);

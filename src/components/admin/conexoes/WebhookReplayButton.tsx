@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Play, FlaskConical } from 'lucide-react';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface Props {
   webhookToken: string;
@@ -37,7 +38,7 @@ export function WebhookReplayButton({ webhookToken, payload }: Props) {
       toast.success(dryRun ? 'Dry-run executado com sucesso' : 'Replay persistido com sucesso');
     } catch (e) {
       if (e instanceof Error && e.name === 'AbortError') return;
-      toast.error(`Falha: ${e instanceof Error ? e.message : 'erro desconhecido'}`);
+      toast.error(`Falha: ${parseApiError(e)}`);
     } finally {
       setBusy(false);
     }

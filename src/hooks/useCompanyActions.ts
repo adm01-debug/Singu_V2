@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export function useMergeCompanies() {
   const qc = useQueryClient();
@@ -18,7 +19,7 @@ export function useMergeCompanies() {
       qc.invalidateQueries({ queryKey: ['external-companies'] });
       toast.success('Empresas mescladas com sucesso');
     },
-    onError: (err: Error) => toast.error(`Erro ao mesclar: ${err.message}`),
+    onError: (err: Error) => toast.error(`Erro ao mesclar: ${parseApiError(err)}`),
   });
 }
 
@@ -45,6 +46,6 @@ export function useExportCompaniesCsv() {
       URL.revokeObjectURL(url);
       toast.success('Exportação concluída');
     },
-    onError: (err: Error) => toast.error(`Erro na exportação: ${err.message}`),
+    onError: (err: Error) => toast.error(`Erro na exportação: ${parseApiError(err)}`),
   });
 }

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type EntityType = 'company' | 'contact';
 export type EntityRelationshipRole =
@@ -97,7 +98,7 @@ export function useCreateEntityRelationship() {
       toast.success('Vínculo criado');
       qc.invalidateQueries({ queryKey: ['entity-relationships'] });
     },
-    onError: (e: Error) => toast.error(`Falha ao criar vínculo: ${e.message}`),
+    onError: (e: Error) => toast.error(`Falha ao criar vínculo: ${parseApiError(e)}`),
   });
 }
 
@@ -114,6 +115,6 @@ export function useDeleteEntityRelationship() {
       toast.success('Vínculo removido');
       qc.invalidateQueries({ queryKey: ['entity-relationships'] });
     },
-    onError: (e: Error) => toast.error(`Falha ao remover vínculo: ${e.message}`),
+    onError: (e: Error) => toast.error(`Falha ao remover vínculo: ${parseApiError(e)}`),
   });
 }

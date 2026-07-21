@@ -35,6 +35,7 @@ import {
   SelectValue 
 } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { parseApiError } from '@/lib/errorMessages';
 
 type CadenceStepType = 'message' | 'call' | 'email' | 'task';
 type CadencePriority = 'low' | 'medium' | 'high' | 'urgent';
@@ -105,7 +106,7 @@ export function CadenceRulesConfig() {
       setIsDialogOpen(false);
       setEditingRule(null);
     },
-    onError: (error: Error) => toast.error(`Erro ao salvar regra: ${error.message}`)
+    onError: (error: Error) => toast.error(`Erro ao salvar regra: ${parseApiError(error)}`)
   });
 
   const deleteRule = useMutation({
@@ -118,7 +119,7 @@ export function CadenceRulesConfig() {
       queryClient.invalidateQueries({ queryKey: ['crm-cadence-rules'] });
       toast.success('Regra removida');
     },
-    onError: (e: Error) => toast.error(`Erro ao remover regra: ${e.message}`),
+    onError: (e: Error) => toast.error(`Erro ao remover regra: ${parseApiError(e)}`),
   });
 
   const handleOpenDialog = (rule?: { id?: string; relationship_stage?: string; frequency_days?: number; priority?: string; cadence_steps?: unknown }) => {
