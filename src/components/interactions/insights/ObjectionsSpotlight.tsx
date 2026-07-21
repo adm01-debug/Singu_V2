@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { parseApiError } from '@/lib/errorMessages';
 import type { ObjectionAggregate } from "@/hooks/useInteractionsInsights";
 import { ObjectionExamplesModal } from "./ObjectionExamplesModal";
 import { SuggestedResponseModal } from "./SuggestedResponseModal";
@@ -380,9 +381,7 @@ const ObjectionCard = memo(function ObjectionCard({ o }: ObjectionCardProps) {
                     <AlertCircle className="h-3 w-3 mt-0.5 shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p>
-                        {summaryQuery.error instanceof Error
-                          ? summaryQuery.error.message
-                          : "Não foi possível gerar o resumo."}
+                        {parseApiError(summaryQuery.error, "Não foi possível gerar o resumo.")}
                       </p>
                       <button
                         type="button"

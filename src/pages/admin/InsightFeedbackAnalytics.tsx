@@ -16,6 +16,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { InsightFeedbackTrendChart } from '@/components/admin/InsightFeedbackTrendChart';
+import { parseApiError } from '@/lib/errorMessages';
 
 type Kind = 'preference' | 'hobby' | 'tone';
 
@@ -361,7 +362,7 @@ export default function InsightFeedbackAnalytics() {
       <div className="p-6">
         <Card>
           <CardContent className="p-6 text-sm text-destructive">
-            Erro ao carregar feedbacks: {(error as Error).message}
+            Erro ao carregar feedbacks: {parseApiError(error)}
           </CardContent>
         </Card>
       </div>
