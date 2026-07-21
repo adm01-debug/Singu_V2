@@ -112,7 +112,10 @@ export const SmartRemindersPanel = ({ className, compact = false, contacts, inte
                     <div className="flex items-start gap-3">
                       <div className="p-2 bg-primary/10 rounded-lg shrink-0"><Sparkles className="w-4 h-4 text-primary" /></div>
                       <div><h4 className="font-medium text-sm text-foreground mb-1">Insights da IA</h4><p className="text-xs text-muted-foreground whitespace-pre-wrap">{aiInsights}</p></div>
-                    </di<Button size="icon" aria-label="Ocultar" variant="ghost" className="h-6 w-6 shrink-0" onClick={() => setShowInsights(false)}><EyeOff className="w-3 h-3" /></Button>e="w-3 h-3" /></Button>
+                    </div>
+                    <Button size="icon" aria-label="Ocultar" variant="ghost" className="h-6 w-6 shrink-0" onClick={() => setShowInsights(false)}>
+                      <EyeOff className="w-3 h-3" />
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

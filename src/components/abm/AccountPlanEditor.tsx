@@ -193,9 +193,10 @@ export function AccountPlanEditor({ accountId }: { accountId: string }) {
                     type="date"
                     className="w-40"
                     value={m.date ?? ""}
-                    onChange={(e) => updMilestone(i, { date: e.target.value }<Button size="icon" aria-label="Remover" variant="ghost" onClick={() => removeMilestone(i)}>
+                    onChange={(e) => updMilestone(i, { date: e.target.value })}
+                  />
+                  <Button size="icon" aria-label="Remover" variant="ghost" onClick={() => removeMilestone(i)}>
                     <Trash2 className="h-3 w-3" />
-                  </Button>e="h-3 w-3" />
                   </Button>
                 </div>
               ))}

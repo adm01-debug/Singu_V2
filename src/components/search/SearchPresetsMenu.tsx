@@ -394,7 +394,8 @@ export function SearchPresetsMenu({
                           }}
                         >
                           <Copy className="w-3 h-3 text-muted-foreground" />
-             <Button
+                        </Button>
+                        <Button
                           variant="ghost"
                           size="icon" aria-label="Remover"
                           className="h-6 w-6"
@@ -406,7 +407,6 @@ export function SearchPresetsMenu({
                           }}
                         >
                           <Trash2 className="w-3 h-3 text-muted-foreground" />
-                        </Button>eground" />
                         </Button>
                       </>
                     )}

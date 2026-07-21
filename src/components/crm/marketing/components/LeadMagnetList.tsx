@@ -96,14 +96,14 @@
                          <a href={`/lm/${magnet.slug}`} target="_blank" rel="noreferrer">
                            <ExternalLink className="w-3.5 h-3.5" />
                          </a>
-                       </Button>           </Bu<Button 
+                       </Button>
+                       <Button 
                        size="icon" aria-label="Remover" 
                        variant="outline" 
                        className="h-8 w-8 border-border/50 hover:bg-destructive/10 hover:text-destructive" 
                        onClick={() => onRemove(magnet.id)}
                      >
                        <Trash2 className="w-3.5 h-3.5" />
-                     </Button>ame="w-3.5 h-3.5" />
                      </Button>
                    </div>
                  </div>

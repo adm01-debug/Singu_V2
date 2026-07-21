@@ -202,7 +202,8 @@ export function CompanyFormCompositeFields({ form }: Props) {
                 )}
               />
             </div>
-            <div className="md:col-span-1 flex justify<Button
+            <div className="md:col-span-1 flex justify-end">
+              <Button
                 type="button"
                 variant="ghost"
                 size="icon" aria-label="Remover"
@@ -210,7 +211,7 @@ export function CompanyFormCompositeFields({ form }: Props) {
                 onClick={() => removeEmail(index)}
               >
                 <Trash2 className="w-4 h-4" />
-              </Button>            </Button>
+              </Button>
             </div>
           </div>
         ))}
@@ -237,7 +238,8 @@ export function CompanyFormCompositeFields({ form }: Props) {
         )}
 
         {addressFields.map((field, index) => (
-          <div key={field.id} className="space-y-3 border border-border/50 p-4 rou<Button
+          <div key={field.id} className="space-y-3 border border-border/50 p-4 rounded-lg relative">
+            <Button
               type="button"
               variant="ghost"
               size="icon" aria-label="Remover"
@@ -245,7 +247,6 @@ export function CompanyFormCompositeFields({ form }: Props) {
               onClick={() => removeAddress(index)}
             >
               <Trash2 className="w-4 h-4" />
-            </Button>assName="w-4 h-4" />
             </Button>
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3">

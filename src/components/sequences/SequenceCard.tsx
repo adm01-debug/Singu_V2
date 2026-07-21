@@ -81,12 +81,13 @@ export const SequenceCard = memo(({ sequence, onToggle, onDelete, onClick }: Pro
               disabled={sequence.status === 'archived'}
             >
               {sequence.status === 'active' ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
-            </<Button
+            </Button>
+            <Button
               variant="ghost" size="icon" aria-label="Remover" className="h-7 w-7 text-destructive"
               onClick={() => onDelete(sequence.id)}
             >
               <Trash2 className="h-3.5 w-3.5" />
-            </Button>           </Button>
+            </Button>
           </div>
         </div>
       </CardContent>

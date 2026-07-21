@@ -236,14 +236,15 @@ export function CadenceRulesConfig() {
                       onClick={() => handleOpenDialog(rule)}
                     >
                       <Settings2 className="h-3.5 w-3.5" />
-                    </B<Button 
+                    </Button>
+                    <Button 
                       variant="ghost" 
                       size="icon" aria-label="Remover" 
                       className="h-7 w-7 text-muted-foreground hover:text-destructive"
                       onClick={() => deleteRule.mutate(rule.id)}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
-                    </Button>                  </Button>
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -337,14 +338,14 @@ export function CadenceRulesConfig() {
 
                     <div className="space-y-3">
                       {editingRule.cadence_steps?.map((step: CadenceStep, index: number) => (
-                        <div key={step._localId ?? index} className="group relative bg-muted/30 rounded-lg p-3 border border-dashed hover:border-primary/3<Button 
+                        <div key={step._localId ?? index} className="group relative bg-muted/30 rounded-lg p-3 border border-dashed hover:border-primary/30">
+                          <Button 
                             variant="ghost" 
                             size="icon" aria-label="Remover" 
                             className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-background border shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
                             onClick={() => handleRemoveStep(index)}
                           >
                             <Trash2 className="h-3 w-3 text-destructive" />
-                          </Button>tructive" />
                           </Button>
                           
                           <div className="grid grid-cols-12 gap-3">

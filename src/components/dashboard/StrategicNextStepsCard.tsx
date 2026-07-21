@@ -463,12 +463,12 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
                   <SheetDescription>{contact?.role_title || 'Contato Estratégico'}</SheetDescription>
                 </div>
               </div>
-             <Button size="icon" aria-label="Exportar PDF" variant="outline" className="h-8 w-8" onClick={exportToPDF} title="Exportar PDF">
-                  <Download className="h-4 w-4" />
-                <Button size="icon" aria-label="Agendar no Calendário" variant="outline" className="h-8 w-8" onClick={scheduleReminder} title="Agendar no Calendário">
-                  <Calendar className="h-4 w-4" />
-                </Button>              <Calendar className="h-4 w-4" />
-                </Button>
+              <Button size="icon" aria-label="Exportar PDF" variant="outline" className="h-8 w-8" onClick={exportToPDF} title="Exportar PDF">
+                <Download className="h-4 w-4" />
+              </Button>
+              <Button size="icon" aria-label="Agendar no Calendário" variant="outline" className="h-8 w-8" onClick={scheduleReminder} title="Agendar no Calendário">
+                <Calendar className="h-4 w-4" />
+              </Button>
               </div>
             </div>
           </SheetHeader>
