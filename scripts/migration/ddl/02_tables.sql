@@ -2642,3 +2642,45 @@ CREATE TABLE public.interactions (
   audio_url text,
   transcription text
 );
+
+-- ─── public.interactions_audit ───
+CREATE TABLE public.interactions_audit (
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  CONSTRAINT interactions_audit_pkey PRIMARY KEY (id),
+  interaction_id uuid NOT NULL,
+  contact_id uuid NOT NULL,
+  user_id uuid NOT NULL,
+  operation text NOT NULL,
+  old_data jsonb,
+  new_data jsonb,
+  changed_by uuid DEFAULT auth.uid(),
+  created_at timestamp with time zone DEFAULT now()
+);
+
+-- ─── public.ip_whitelist ───
+CREATE TABLE public.ip_whitelist (
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  CONSTRAINT ip_whitelist_pkey PRIMARY KEY (id),
+  user_id uuid NOT NULL,
+  ip_address text NOT NULL,
+  label text,
+  is_active boolean DEFAULT true,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now()
+);
+
+-- ─── public.knowledge_base_articles ───
+CREATE TABLE public.knowledge_base_articles (
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  created_at timestamp with time zone DEFAULT now() NOT NULL,
+  CONSTRAINT knowledge_base_articles_pkey PRIMARY KEY (id),
+  updated_at timestamp with time zone DEFAULT now() NOT NULL,
+  user_id uuid NOT NULL,
+  title text NOT NULL,
+  content text NOT NULL,
+  category text DEFAULT 'geral'::text NOT NULL,
+  tags text[] DEFAULT '{}'::text[],
+  is_published boolean DEFAULT true,
+  views_count integer DEFAULT 0,
+  helpful_count integer DEFAULT 0
+);
