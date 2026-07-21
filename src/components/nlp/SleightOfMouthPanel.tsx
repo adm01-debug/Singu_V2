@@ -42,7 +42,7 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
   const [activeTab, setActiveTab] = useState<'detected' | 'templates'>('detected');
 
   const { data: reframings = [], isLoading } = useQuery({
-    queryKey: ['reframing-analysis', contactId, interactionId],
+    queryKey: ['reframing-analysis', contactId, interactionId, user?.id],
     queryFn: async () => {
       let query = supabase
         .from('reframing_analysis')
@@ -72,6 +72,7 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
       const { error } = await supabase
         .from('reframing_analysis')
         .update({ status })
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
     },

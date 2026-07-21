@@ -88,6 +88,7 @@ export function CompatibilityAlertsList({
       const { error } = await supabase
         .from('compatibility_alerts')
         .update({ dismissed: true })
+        .eq('user_id', user!.id)
         .eq('id', alertId);
 
       if (error) throw error;

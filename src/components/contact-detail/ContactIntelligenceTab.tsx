@@ -86,6 +86,7 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
       const { error } = await supabase
         .from('offer_suggestions')
         .update({ status })
+        .eq('user_id', user!.id)
         .eq('id', offerId);
       if (error) throw error;
     },
