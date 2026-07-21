@@ -47,6 +47,9 @@ export function validate<T extends Record<string, unknown>>(
     if (rule.type === 'string') {
       if (typeof raw !== 'string') return { ok: false, error: `Field '${field}' must be a string` };
       const val = rule.trim !== false ? raw.trim() : raw;
+      // A whitespace-only string is functionally empty — reject it as missing for required fields
+      if (val.length === 0 && rule.required)
+        return { ok: false, error: `Field '${field}' is required` };
       if (rule.minLength !== undefined && val.length < rule.minLength)
         return { ok: false, error: `Field '${field}' must be at least ${rule.minLength} characters` };
       if (rule.maxLength !== undefined && val.length > rule.maxLength)
@@ -55,21 +58,22 @@ export function validate<T extends Record<string, unknown>>(
         return { ok: false, error: `Field '${field}' has an invalid format` };
       out[field] = val;
     } else if (rule.type === 'integer') {
-      const n = Number(raw);
-      if (!Number.isInteger(n)) return { ok: false, error: `Field '${field}' must be an integer` };
-      if (rule.min !== undefined && n < rule.min)
+      // Require a proper JSON number — reject strings that happen to coerce to integers
+      if (typeof raw !== 'number' || !Number.isInteger(raw))
+        return { ok: false, error: `Field '${field}' must be an integer` };
+      if (rule.min !== undefined && raw < rule.min)
         return { ok: false, error: `Field '${field}' must be >= ${rule.min}` };
-      if (rule.max !== undefined && n > rule.max)
+      if (rule.max !== undefined && raw > rule.max)
         return { ok: false, error: `Field '${field}' must be <= ${rule.max}` };
-      out[field] = n;
+      out[field] = raw;
     } else if (rule.type === 'number') {
-      const n = Number(raw);
-      if (isNaN(n)) return { ok: false, error: `Field '${field}' must be a number` };
-      if (rule.min !== undefined && n < rule.min)
+      if (typeof raw !== 'number' || isNaN(raw))
+        return { ok: false, error: `Field '${field}' must be a number` };
+      if (rule.min !== undefined && raw < rule.min)
         return { ok: false, error: `Field '${field}' must be >= ${rule.min}` };
-      if (rule.max !== undefined && n > rule.max)
+      if (rule.max !== undefined && raw > rule.max)
         return { ok: false, error: `Field '${field}' must be <= ${rule.max}` };
-      out[field] = n;
+      out[field] = raw;
     } else if (rule.type === 'boolean') {
       if (typeof raw !== 'boolean') return { ok: false, error: `Field '${field}' must be a boolean` };
       out[field] = raw;
