@@ -18,6 +18,8 @@ FATAL=(
   security-definer-audit.sql
   replication-slots-guard.sql
   long-running-tx-guard.sql
+  prepared-xacts-guard.sql
+  function-volatility-audit.sql
 )
 WARN=(
   autovacuum-audit.sql
@@ -25,6 +27,13 @@ WARN=(
   fdw-credentials-audit.sql
   pg-stat-statements-config.sql
   log-retention-audit.sql
+  unused-indexes.sql
+  duplicate-indexes.sql
+  rls-force-audit.sql
+  statement-timeout-audit.sql
+  publication-tables-coverage.sql
+  role-membership-parity.sql
+  jit-checkpoint-audit.sql
 )
 
 FAILED=0
