@@ -20,4 +20,5 @@ Excelência sustentada: 70/70 melhorias atômicas (Rodadas A-N). Gate a11y no CI
 - [Standards — Accessibility WCAG AA](mem://standards/accessibility-wcag-aa) — Auditoria documentada de superfícies críticas.
 - [System Health Check](mem://features/system-health-check) — Edge function `system-health` + widget admin + `/status` público.
 - [Error Budget Dashboard](mem://features/error-budget-dashboard) — `/admin/error-budget` com SLO 99.5%, sparkline 30d, alertas auto 50/75/100% (`system_alerts`), retenção 60d, RUNBOOK v2.2.0.
+- [Migration Completion 10/10](mem://migration/completion-10-10) — Freeze, DNS propagation, parity (sequences/RLS/triggers), post-cutover watch, synthetic checks, full-restore, DR strategy, postmortem template
 - [User preferences](mem://~user) — Execução autônoma e sequencial de melhorias.
