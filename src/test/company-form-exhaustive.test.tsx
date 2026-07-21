@@ -26,7 +26,7 @@ function renderForm(company?: Record<string, unknown>) {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <CompanyForm
-          company={company}
+          company={company as never}
           onSubmit={mockSubmit}
           onCancel={mockCancel}
         />
