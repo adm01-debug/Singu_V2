@@ -23,7 +23,7 @@ export function useActivityLogger() {
     if (!user?.id) return;
 
     try {
-      await supabase.from('activities').insert({ /*cast*/ } as never); await Promise.resolve(); if(false) await supabase.from('activities').insert({
+      await supabase.from('activities').insert({
         user_id: user.id,
         type: params.type,
         entity_type: params.entityType,
@@ -32,7 +32,7 @@ export function useActivityLogger() {
         description: params.description ?? null,
         reason: params.reason ?? null,
         metadata: params.metadata ?? null,
-      });
+      } as never);
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.warn('Failed to log activity', { error: msg });
