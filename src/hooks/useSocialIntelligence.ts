@@ -67,7 +67,8 @@ export function useSocialIntelligence(contactId: string) {
 
   const dismissMutation = useMutation({
     mutationFn: async (eventId: string) => {
-      const { error } = await supabase.from('social_life_events').update({ dismissed: true }).eq('user_id', user!.id).eq('id', eventId);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('social_life_events').update({ dismissed: true }).eq('user_id', user.id).eq('id', eventId);
       if (error) throw error;
     },
     onSuccess: () => {

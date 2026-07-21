@@ -32,13 +32,14 @@ export default function MarketingFormDetail() {
   if (isLoading || !draft) return <div className="container py-8 text-sm text-muted-foreground">Carregando...</div>;
 
   const save = async () => {
+    if (!user) return;
     const { error } = await supabase.from('forms').update({
       name: draft.name,
       description: draft.description,
       fields: draft.fields,
       redirect_url: draft.redirect_url,
       success_message: draft.success_message,
-    } as TablesUpdate<'forms'>).eq('user_id', user!.id).eq('id', draft.id);
+    } as TablesUpdate<'forms'>).eq('user_id', user.id).eq('id', draft.id);
     if (error) toast.error(error.message);
     else {
       toast.success('Salvo!');

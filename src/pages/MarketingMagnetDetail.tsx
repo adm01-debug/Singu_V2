@@ -36,6 +36,7 @@ export default function MarketingMagnetDetail() {
   if (isLoading || !draft) return <div className="container py-8 text-sm text-muted-foreground">Carregando...</div>;
 
   const save = async () => {
+    if (!user) return;
     const { error } = await supabase.from('lead_magnets').update({
       title: draft.title,
       description: draft.description,
@@ -44,7 +45,7 @@ export default function MarketingMagnetDetail() {
       external_url: draft.external_url,
       thumbnail_url: draft.thumbnail_url,
       gated: draft.gated,
-    } as TablesUpdate<'lead_magnets'>).eq('user_id', user!.id).eq('id', draft.id);
+    } as TablesUpdate<'lead_magnets'>).eq('user_id', user.id).eq('id', draft.id);
     if (error) toast.error(error.message);
     else {
       toast.success('Salvo!');

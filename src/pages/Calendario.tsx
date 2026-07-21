@@ -60,9 +60,10 @@ const Calendario = () => {
   });
 
   const markAsCompleted = async (id: string) => {
+    if (!user) return;
     try {
       const followUp = followUps.find(f => f.id === id);
-      const { error } = await supabase.from('interactions').update({ follow_up_required: false }).eq('user_id', user!.id).eq('id', id);
+      const { error } = await supabase.from('interactions').update({ follow_up_required: false }).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
       queryClient.setQueryData<FollowUp[]>(['calendario-followups', user?.id], prev => (prev || []).filter(f => f.id !== id));
       setSelectedFollowUp(null);

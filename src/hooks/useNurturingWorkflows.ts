@@ -69,7 +69,8 @@ export function useNurturingWorkflows() {
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<NurturingWorkflow> & { id: string }) => {
-      const { error } = await supabase.from('nurturing_workflows').update(updates as unknown as TablesUpdate<'nurturing_workflows'>).eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('nurturing_workflows').update(updates as unknown as TablesUpdate<'nurturing_workflows'>).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Workflow atualizado!'); },
@@ -78,7 +79,8 @@ export function useNurturingWorkflows() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('nurturing_workflows').delete().eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('nurturing_workflows').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Workflow removido!'); },
@@ -87,7 +89,8 @@ export function useNurturingWorkflows() {
 
   const toggleActive = useMutation({
     mutationFn: async ({ id, is_active }: { id: string; is_active: boolean }) => {
-      const { error } = await supabase.from('nurturing_workflows').update({ is_active }).eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('nurturing_workflows').update({ is_active }).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); },

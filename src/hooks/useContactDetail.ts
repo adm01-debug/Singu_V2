@@ -170,8 +170,9 @@ export function useContactDetail(contactId: string | undefined) {
   };
 
   const dismissAlert = async (alertId: string) => {
+    if (!user) return;
     try {
-      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user!.id).eq('id', alertId);
+      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user.id).eq('id', alertId);
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey });
       toast({ title: 'Alerta dispensado' });
@@ -181,8 +182,9 @@ export function useContactDetail(contactId: string | undefined) {
   };
 
   const dismissInsight = async (insightId: string) => {
+    if (!user) return;
     try {
-      const { error } = await supabase.from('insights').update({ dismissed: true }).eq('user_id', user!.id).eq('id', insightId);
+      const { error } = await supabase.from('insights').update({ dismissed: true }).eq('user_id', user.id).eq('id', insightId);
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey });
       toast({ title: 'Insight dispensado' });

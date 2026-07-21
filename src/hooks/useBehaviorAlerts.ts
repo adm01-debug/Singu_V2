@@ -315,8 +315,9 @@ export function useBehaviorAlerts() {
   }, [user, fetchAlerts, toast]);
 
   const dismissAlert = useCallback(async (alertId: string) => {
+    if (!user) return;
     try {
-      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user!.id).eq('id', alertId);
+      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user.id).eq('id', alertId);
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey });
       toast({ title: 'Alerta dispensado', description: 'O alerta foi removido da sua lista.' });
@@ -325,11 +326,12 @@ export function useBehaviorAlerts() {
       logger.error('Error dismissing alert:', { error: msg });
       toast({ title: 'Erro ao dispensar alerta', description: msg, variant: 'destructive' });
     }
-  }, [toast, queryClient, queryKey]);
+  }, [toast, queryClient, queryKey, user]);
 
   const markActionTaken = useCallback(async (alertId: string) => {
+    if (!user) return;
     try {
-      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user!.id).eq('id', alertId);
+      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user.id).eq('id', alertId);
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey });
       toast({ title: 'Ação registrada', description: 'A ação foi marcada como concluída.' });
@@ -338,7 +340,7 @@ export function useBehaviorAlerts() {
       logger.error('Error marking action taken:', { error: msg });
       toast({ title: 'Erro ao registrar ação', description: msg, variant: 'destructive' });
     }
-  }, [toast, queryClient, queryKey]);
+  }, [toast, queryClient, queryKey, user]);
 
   // Stats
   const stats = useMemo(() => {

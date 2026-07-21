@@ -195,11 +195,12 @@ export function useUpdateRule() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (rule: Partial<LeadScoreRule> & { id: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('lead_score_rules').update({
         weight: rule.weight,
         decay_days: rule.decay_days,
         active: rule.active,
-      }).eq('user_id', user!.id).eq('id', rule.id);
+      }).eq('user_id', user.id).eq('id', rule.id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -232,7 +233,8 @@ export function useUpdateThreshold() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (t: Pick<LeadScoreThreshold, 'id' | 'min_score'>) => {
-      const { error } = await supabase.from('lead_score_thresholds').update({ min_score: t.min_score }).eq('user_id', user!.id).eq('id', t.id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('lead_score_thresholds').update({ min_score: t.min_score }).eq('user_id', user.id).eq('id', t.id);
       if (error) throw error;
     },
     onSuccess: () => {

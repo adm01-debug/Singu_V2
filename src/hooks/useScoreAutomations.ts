@@ -78,8 +78,9 @@ export function useUpsertAutomation() {
         cooldown_hours: input.cooldown_hours ?? 24,
         active: input.active ?? true,
       };
+      if (!user) throw new Error('Não autenticado');
       if (input.id) {
-        const { error } = await supabase.from('lead_score_threshold_automations').update(payload).eq('user_id', user!.id).eq('id', input.id);
+        const { error } = await supabase.from('lead_score_threshold_automations').update(payload).eq('user_id', user.id).eq('id', input.id);
         if (error) throw error;
         return { id: input.id };
       }
@@ -101,7 +102,8 @@ export function useToggleAutomation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, active }: { id: string; active: boolean }) => {
-      const { error } = await supabase.from('lead_score_threshold_automations').update({ active }).eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('lead_score_threshold_automations').update({ active }).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['score-automations'] }),
@@ -114,7 +116,8 @@ export function useDeleteAutomation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('lead_score_threshold_automations').delete().eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('lead_score_threshold_automations').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

@@ -170,6 +170,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
   };
 
   const updateInteraction = async (id: string, updates: InteractionUpdate) => {
+    if (!user) return null;
     const previous = queryClient.getQueryData<InteractionInfiniteData>(queryKey);
 
     // Optimistic update across all pages
@@ -189,7 +190,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       const { data, error } = await supabase
         .from('interactions')
         .update(updates)
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq('id', id)
         .select()
         .maybeSingle();
@@ -228,6 +229,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
   };
 
   const deleteInteraction = async (id: string) => {
+    if (!user) return false;
     const previous = queryClient.getQueryData<InteractionInfiniteData>(queryKey);
 
     // Optimistic delete across all pages
@@ -248,7 +250,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       const { error } = await supabase
         .from('interactions')
         .delete()
-        .eq('user_id', user!.id)
+        .eq('user_id', user.id)
         .eq('id', id);
 
       if (error) throw error;

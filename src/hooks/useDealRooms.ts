@@ -175,7 +175,8 @@ export function useUpdateDealRoom() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...patch }: Partial<DealRoom> & { id: string }) => {
-      const { data, error } = await supabase.from("deal_rooms").update(patch).eq('user_id', user!.id).eq("id", id).select("*").maybeSingle();
+      if (!user) throw new Error('Não autenticado');
+      const { data, error } = await supabase.from("deal_rooms").update(patch).eq('user_id', user.id).eq("id", id).select("*").maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Deal Room não encontrado");
       return data as DealRoom;
@@ -193,7 +194,8 @@ export function useDeleteDealRoom() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("deal_rooms").delete().eq('user_id', user!.id).eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("deal_rooms").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -248,7 +250,8 @@ export function useDeleteMilestone(roomId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("deal_room_milestones").delete().eq('user_id', user!.id).eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("deal_room_milestones").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.ms(roomId) }),
@@ -300,7 +303,8 @@ export function useDeleteStakeholder(roomId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("deal_room_stakeholders").delete().eq('user_id', user!.id).eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("deal_room_stakeholders").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.sh(roomId) }),
@@ -360,8 +364,9 @@ export function useDeleteDocument(roomId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (doc: { id: string; file_path: string }) => {
+      if (!user) throw new Error('Não autenticado');
       await supabase.storage.from("documents").remove([doc.file_path]);
-      const { error } = await supabase.from("deal_room_documents").delete().eq('user_id', user!.id).eq("id", doc.id);
+      const { error } = await supabase.from("deal_room_documents").delete().eq('user_id', user.id).eq("id", doc.id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.docs(roomId) }),

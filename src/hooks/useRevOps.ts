@@ -124,10 +124,11 @@ export function useUpsertBenchmark() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: Partial<RevOpsBenchmark> & { metric_key: string; target_value: number }) => {
+      if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from("revops_benchmarks")
         .upsert({
-          user_id: user!.id,
+          user_id: user.id,
           metric_key: input.metric_key,
           target_value: input.target_value,
           warning_threshold: input.warning_threshold ?? 90,
@@ -185,8 +186,9 @@ export function useTriggerRevOpsSnapshot() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async () => {
+      if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase.functions.invoke("revops-snapshot-builder", {
-        body: { user_id: user!.id },
+        body: { user_id: user.id },
       });
       if (error) throw error;
       return data;

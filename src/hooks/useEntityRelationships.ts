@@ -106,7 +106,8 @@ export function useDeleteEntityRelationship() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('entity_relationships').delete().eq('created_by', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('entity_relationships').delete().eq('created_by', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
