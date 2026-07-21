@@ -342,16 +342,23 @@ export function useCalculateLeadScore() {
       if (error) throw error;
 
       // Record history (fire-and-forget — response uses in-memory result)
-      void supabase.from('lead_score_history').insert({
-        contact_id: contactId,
-        user_id: user.id,
-        total_score: result.total_score,
-        grade: result.grade,
-        engagement_score: result.engagement_score,
-        fit_score: result.fit_score,
-        intent_score: result.intent_score,
-        relationship_score: result.relationship_score,
-      }) as unknown as Promise<{ error: unknown }>).then((r) => { if (r?.error) logger.error('lead_score_history insert error:', r.error); }, (e) => logger.error('lead_score_history insert error:', e));
+      void (async () => {
+        try {
+          const { error: hErr } = await supabase.from('lead_score_history').insert({
+            contact_id: contactId,
+            user_id: user.id,
+            total_score: result.total_score,
+            grade: result.grade,
+            engagement_score: result.engagement_score,
+            fit_score: result.fit_score,
+            intent_score: result.intent_score,
+            relationship_score: result.relationship_score,
+          } as never);
+          if (hErr) logger.error('lead_score_history insert error:', hErr);
+        } catch (e) {
+          logger.error('lead_score_history insert error:', e);
+        }
+      })();
 
       return { ...result, score_change: result.total_score - previousScore, previous_score: previousScore };
     },
