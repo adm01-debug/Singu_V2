@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import type { BehavioralInsightItem } from '@/hooks/useBehavioralProfile';
 
 export interface BehavioralProfileVersion {
@@ -41,9 +42,10 @@ function normalize(row: Record<string, unknown>): BehavioralProfileVersion {
 }
 
 export function useBehavioralProfileVersions(contactId: string | null | undefined, limit = 50) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['behavioral-profile-versions', contactId, limit],
-    enabled: !!contactId,
+    queryKey: ['behavioral-profile-versions', contactId, limit, user?.id],
+    enabled: !!contactId && !!user,
     staleTime: 30_000,
     queryFn: async (): Promise<BehavioralProfileVersion[]> => {
       const { data, error } = await supabase

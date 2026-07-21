@@ -61,6 +61,7 @@ export function useCannedResponses() {
       return r.content;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: key }),
+    onError: (e: Error) => logger.warn('Failed to use canned response:', { error: e.message }),
   });
 
   const remove = useMutation({

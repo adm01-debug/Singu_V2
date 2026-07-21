@@ -44,6 +44,7 @@ export function useBattleCards(search?: string) {
       let q = supabase
         .from("battle_cards")
         .select("*")
+        .eq("user_id", user!.id)
         .eq("active", true)
         .order("competitor_name")
         .limit(1000);
@@ -64,9 +65,10 @@ export function useBattleCards(search?: string) {
  * Hook to fetch a single battle card by ID.
  */
 export function useBattleCard(id?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["battle-card", id],
-    enabled: !!id,
+    queryKey: ["battle-card", id, user?.id],
+    enabled: !!id && !!user,
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
@@ -74,8 +76,9 @@ export function useBattleCard(id?: string) {
         .from("battle_cards")
         .select("*")
         .eq("id", id!)
+        .eq("user_id", user!.id)
         .maybeSingle();
-      
+
       if (error) throw error;
       return data as unknown as BattleCard | null;
     },

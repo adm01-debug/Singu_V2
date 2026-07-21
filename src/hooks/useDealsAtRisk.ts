@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useDealsPipeline, type PipelineDeal } from '@/hooks/usePipeline';
+import { useAuth } from '@/hooks/useAuth';
 import {
   STAGE_BENCHMARK_DAYS,
   DEAL_RISK_LOOKBACK_DAYS,
@@ -19,10 +20,11 @@ export interface DealAtRisk {
 }
 
 export function useDealsAtRisk(limit = 5) {
+  const { user } = useAuth();
   const { data: deals } = useDealsPipeline();
 
   return useQuery<DealAtRisk[]>({
-    queryKey: ['deals-at-risk', deals?.map((d) => d.id).join(',')],
+    queryKey: ['deals-at-risk', deals?.map((d) => d.id).join(','), user?.id],
     enabled: !!deals && deals.length > 0,
     staleTime: 5 * 60 * 1000,
     queryFn: async () => {

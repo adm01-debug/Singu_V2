@@ -18,6 +18,7 @@ export function useSalesTeam() {
       const { data, error } = await supabase
         .from('sales_team_members')
         .select('*')
+        .eq('user_id', user.id)
         .order('role', { ascending: true })
         .order('name', { ascending: true })
         .limit(200);
@@ -109,6 +110,7 @@ export function useActiveTeamByRole(role?: SalesRole) {
       let query = supabase
         .from('sales_team_members')
         .select('*')
+        .eq('user_id', user.id)
         .eq('is_active', true)
         .limit(200);
 

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 
 export interface LuxWebhookConfig {
@@ -17,10 +18,12 @@ export interface LuxWebhookConfig {
 }
 
 export function useLuxWebhookConfig() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   const { data: configs = [], isLoading } = useQuery({
-    queryKey: ['lux-webhook-config'],
+    queryKey: ['lux-webhook-config', user?.id],
+    enabled: !!user,
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
     queryFn: async () => {

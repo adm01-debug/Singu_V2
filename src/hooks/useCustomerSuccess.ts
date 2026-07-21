@@ -167,9 +167,10 @@ export function useRecalcAccountHealth() {
 
 // ============ Health Signals ============
 export function useHealthSignals(accountId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["cs-signals", accountId],
-    enabled: !!accountId,
+    queryKey: ["cs-signals", accountId, user?.id],
+    enabled: !!accountId && !!user,
     staleTime: 30_000,
     queryFn: async () => {
       const { data, error } = await supabase

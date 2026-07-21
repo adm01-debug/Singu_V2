@@ -58,13 +58,18 @@ function key(entityType?: EntityType, entityId?: string) {
 }
 
 export function useEntityRelationships(entityType?: EntityType, entityId?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: key(entityType, entityId),
-    enabled: !entityType || !!entityId,
+    queryKey: [...key(entityType, entityId), user?.id],
+    enabled: !!user && (!entityType || !!entityId),
     staleTime: 30_000,
     queryFn: async (): Promise<EntityRelationship[]> => {
-      let q = supabase.from('entity_relationships').select('*').order('created_at', { ascending: false })
-      .limit(1000);
+      let q = supabase
+        .from('entity_relationships')
+        .select('*')
+        .eq('created_by', user!.id)
+        .order('created_at', { ascending: false })
+        .limit(1000);
       if (entityType && entityId) {
         q = q.or(
           `and(from_type.eq.${entityType},from_id.eq.${entityId}),and(to_type.eq.${entityType},to_id.eq.${entityId})`
@@ -82,7 +87,8 @@ export function useCreateEntityRelationship() {
   const { user } = useAuth();
   return useMutation({
     mutationFn: async (input: NewEntityRelationship) => {
-      const payload = { ...input, created_by: user?.id ?? null };
+      if (!user?.id) throw new Error('Não autenticado');
+      const payload = { ...input, created_by: user.id };
       const { data, error } = await supabase.from('entity_relationships').insert(payload).select('*').single();
       if (error) throw error;
       return data as EntityRelationship;

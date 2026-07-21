@@ -91,9 +91,10 @@ export function useLeadMagnets() {
 }
 
 export function useMagnetDownloads(magnetId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['magnet-downloads', magnetId],
-    enabled: !!magnetId,
+    queryKey: ['magnet-downloads', magnetId, user?.id],
+    enabled: !!magnetId && !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('lead_magnet_downloads')

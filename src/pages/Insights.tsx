@@ -52,9 +52,9 @@ const Insights = () => {
     setLoading(true);
     try {
       const [contactsRes, interactionsRes, companiesRes] = await Promise.all([
-        supabase.from('contacts').select('*').limit(50),
-        supabase.from('interactions').select('*').order('created_at', { ascending: false }).limit(100),
-        supabase.from('companies').select('*').limit(20),
+        supabase.from('contacts').select('*').eq('user_id', user.id).limit(50),
+        supabase.from('interactions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(100),
+        supabase.from('companies').select('*').eq('user_id', user.id).limit(20),
       ]);
       if (controller.signal.aborted) return;
       setContacts(contactsRes.data || []);
@@ -101,10 +101,11 @@ const Insights = () => {
 
   const handleRefreshInsights = async () => {
     try {
+      if (!user) return;
       const [contactsRes, interactionsRes, companiesRes] = await Promise.all([
-        supabase.from('contacts').select('*').limit(50),
-        supabase.from('interactions').select('*').order('created_at', { ascending: false }).limit(100),
-        supabase.from('companies').select('*').limit(20),
+        supabase.from('contacts').select('*').eq('user_id', user.id).limit(50),
+        supabase.from('interactions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(100),
+        supabase.from('companies').select('*').eq('user_id', user.id).limit(20),
       ]);
       await generateInsights(contactsRes.data || [], interactionsRes.data || [], companiesRes.data || []);
     } catch (error) { logger.error('Error refreshing insights:', error); toast.error('Erro ao atualizar insights. Tente novamente.'); }

@@ -1,6 +1,5 @@
- import { useQuery } from '@tanstack/react-query';
-import { logger } from "@/lib/logger";
- import { supabase } from '@/integrations/supabase/client';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { logger } from '@/lib/logger';
 
@@ -106,9 +105,10 @@ import { logger } from '@/lib/logger';
 
        const { data, error } = await supabase
         .from('marketing_campaign_stats')
-         .select('*')
-         .order('date', { ascending: false })
-         .limit(1000);
+        .select('*')
+        .eq('user_id', user.id)
+        .order('date', { ascending: false })
+        .limit(1000);
 
        if (error) {
          logger.error('Error fetching campaign stats:', error);

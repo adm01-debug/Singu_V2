@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 
 // ── Types ──────────────────────────────────────────
 
@@ -90,8 +91,10 @@ export interface ChannelAnalysis {
 // ── Hooks ──────────────────────────────────────────
 
 export function useRfmDashboard() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['rfm-dashboard'],
+    queryKey: ['rfm-dashboard', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<RfmDashboard>(
         'get_rfm_dashboard', {}
@@ -104,8 +107,10 @@ export function useRfmDashboard() {
 }
 
 export function useCohortAnalysis(months = 6) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['cohort-analysis', months],
+    queryKey: ['cohort-analysis', months, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<CohortData[]>(
         'get_cohort_analysis', { p_months: months }
@@ -118,8 +123,10 @@ export function useCohortAnalysis(months = 6) {
 }
 
 export function useSeasonalityAnalysis(months = 12) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['seasonality', months],
+    queryKey: ['seasonality', months, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<SeasonalityData[]>(
         'get_seasonality_analysis', { p_months: months }
@@ -132,8 +139,10 @@ export function useSeasonalityAnalysis(months = 12) {
 }
 
 export function useComparePeriods(metric: string, days = 30) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['compare-periods', metric, days],
+    queryKey: ['compare-periods', metric, days, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<PeriodComparison>(
         'compare_periods', { p_metric: metric, p_days: days }
@@ -146,8 +155,10 @@ export function useComparePeriods(metric: string, days = 30) {
 }
 
 export function useYoyComparison(year?: number) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['yoy-comparison', year],
+    queryKey: ['yoy-comparison', year, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const params: Record<string, unknown> = {};
       if (year) params.p_year = year;
@@ -162,8 +173,10 @@ export function useYoyComparison(year?: number) {
 }
 
 export function useConversionFunnel(days = 30) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['conversion-funnel', days],
+    queryKey: ['conversion-funnel', days, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<ConversionFunnel[]>(
         'get_conversion_funnel', { p_days: days }
@@ -176,8 +189,10 @@ export function useConversionFunnel(days = 30) {
 }
 
 export function useParetoCustomers() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['pareto-customers'],
+    queryKey: ['pareto-customers', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<ParetoCustomer[]>(
         'get_pareto_customers', {}
@@ -190,8 +205,10 @@ export function useParetoCustomers() {
 }
 
 export function useMonthlyReport(year: number, month: number) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['monthly-report', year, month],
+    queryKey: ['monthly-report', year, month, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<Record<string, unknown>>(
         'generate_monthly_report', { p_year: year, p_month: month }
@@ -204,8 +221,10 @@ export function useMonthlyReport(year: number, month: number) {
 }
 
 export function useTrendAnalysis(months = 6) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['trend-analysis', months],
+    queryKey: ['trend-analysis', months, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<TrendData[]>(
         'get_trend_analysis', { p_months: months }
@@ -218,8 +237,10 @@ export function useTrendAnalysis(months = 6) {
 }
 
 export function useLossReasonAnalysis() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['loss-reason-analysis'],
+    queryKey: ['loss-reason-analysis', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<LossReasonData[]>(
         'get_loss_reason_analysis', {}
@@ -232,8 +253,10 @@ export function useLossReasonAnalysis() {
 }
 
 export function useIndustryAnalysis() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['industry-analysis'],
+    queryKey: ['industry-analysis', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<IndustryAnalysis[]>(
         'get_industry_analysis', {}
@@ -246,8 +269,10 @@ export function useIndustryAnalysis() {
 }
 
 export function useChannelAnalysis() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['channel-analysis'],
+    queryKey: ['channel-analysis', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<ChannelAnalysis[]>(
         'get_channel_analysis', {}
@@ -260,8 +285,10 @@ export function useChannelAnalysis() {
 }
 
 export function useChurnRiskReport() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['churn-risk-report'],
+    queryKey: ['churn-risk-report', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<Array<Record<string, unknown>>>(
         'get_churn_risk_report', {}
@@ -274,8 +301,10 @@ export function useChurnRiskReport() {
 }
 
 export function useDailyInsights() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['daily-insights'],
+    queryKey: ['daily-insights', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<Record<string, unknown>>(
         'generate_daily_insights', {}

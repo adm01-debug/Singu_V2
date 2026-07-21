@@ -24,6 +24,7 @@ export function useRoutingRules() {
       const { data, error } = await supabase
         .from('lead_routing_rules')
         .select('*')
+        .eq('user_id', user.id)
         .order('priority', { ascending: true })
         .limit(1000);
       if (error) throw error;

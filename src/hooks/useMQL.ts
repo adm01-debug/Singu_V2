@@ -19,6 +19,7 @@ export interface MQLCriteria {
 
 export interface MQLClassification {
   id: string;
+  user_id: string;
   contact_id: string;
   criteria_id: string | null;
   status: 'mql' | 'sql' | 'disqualified' | 'customer';
