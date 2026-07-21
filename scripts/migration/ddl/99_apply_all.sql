@@ -16,6 +16,16 @@
 \i 04_foreign_keys.sql
 \echo '── 05 grants'
 \i 05_grants.sql
+\echo ''
+\echo '⏸ PONTO DE PAUSA RECOMENDADO PARA MIGRAÇÃO DE DADOS'
+\echo '   Se o destino for receber dados via scripts/migration/import-data.sh:'
+\echo '     1. deixe rodar até 08_functions.sql (policies dependem)'
+\echo '     2. INTERROMPA antes de 06_rls_enable.sql'
+\echo '     3. rode export-data.sh na origem e import-data.sh no destino'
+\echo '     4. rode 06/07/09/10 manualmente'
+\echo '     5. bash scripts/migration/compare-counts.sh'
+\echo '   Ver docs/MIGRATION_DATA.md.'
+\echo ''
 \echo '── 08 functions (antes das policies: policies chamam has_role e afins)'
 \i 08_functions.sql
 \echo '── 06 RLS enable'
