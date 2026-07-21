@@ -26,7 +26,7 @@ function renderForm(company?: Record<string, unknown>) {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <CompanyForm
-          company={company}
+          company={company as never}
           onSubmit={mockSubmit}
           onCancel={mockCancel}
         />
@@ -660,7 +660,7 @@ describe('CompanyForm — Stress & Boundary', () => {
           {Array.from({ length: 10 }, (_, i) => (
             <CompanyForm
               key={i}
-              company={{ ...fullExternalCompany, id: `id-${i}` } as unknown as Record<string, unknown>}
+              company={{ ...fullExternalCompany, id: `id-${i}` } as never}
               onSubmit={mockSubmit}
               onCancel={mockCancel}
             />

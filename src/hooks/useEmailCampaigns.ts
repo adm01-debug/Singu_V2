@@ -60,7 +60,7 @@ export function useEmailCampaigns() {
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<EmailCampaign> & { id: string }) => {
-      const { error } = await supabase.from('email_campaigns').update(updates).eq('id', id);
+      const { error } = await supabase.from('email_campaigns').update(updates as never).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha atualizada!'); },

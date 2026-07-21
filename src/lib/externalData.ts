@@ -106,8 +106,8 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
           entity_type: options.table === 'contacts' ? 'contact' : options.table === 'companies' ? 'company' : 'interaction',
           entity_id: 'batch_query',
           description: `Acesso a ${data.length} registros da tabela ${options.table}`,
-          metadata: { query_options: options }
-        });
+          metadata: { query_options: options },
+        } as never);
       }
     }
     
@@ -223,8 +223,8 @@ export async function deleteExternalData(table: string, id: string): Promise<{ s
         entity_type: table === 'contacts' ? 'contact' : table === 'companies' ? 'company' : 'interaction',
         entity_id: id,
         description: `Exclusão de registro na tabela ${table}`,
-        reason: 'Solicitação via interface'
-      });
+        reason: 'Solicitação via interface',
+      } as never);
     }
     return { success: true, error: null };
   } catch (err) {

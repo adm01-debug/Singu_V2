@@ -182,7 +182,7 @@ export function useAutomationRules() {
     try {
       const { error } = await supabase
         .from('automation_rules')
-        .update(updateData)
+        .update(updateData as never)
         .eq('id', id)
         .eq('user_id', user.id);
 
