@@ -28,6 +28,9 @@ jobs:
       - name: Check for circular dependencies
         run: npx depcruise src --config .dependency-cruiser.cjs
 
+      - name: Edge Function CORS scoped enforcer
+        run: node scripts/check-edge-cors.mjs
+
       - name: Typecheck
         run: npx tsc --noEmit
 
