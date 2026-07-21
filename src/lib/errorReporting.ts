@@ -73,7 +73,7 @@ function createErrorReport(
     timestamp: new Date().toISOString(),
     url: window.location.href,
     userAgent: navigator.userAgent,
-    userId: localStorage.getItem('userId') ?? undefined,
+    userId: (() => { try { return localStorage.getItem('userId') ?? undefined; } catch { return undefined; } })(),
     metadata,
     severity: determineSeverity(error),
     fingerprint: generateFingerprint(error),
