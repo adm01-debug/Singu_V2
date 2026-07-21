@@ -1,0 +1,5 @@
+# Nunca commitar dados exportados ou credenciais reais
+data/
+env.migration
+*.csv
+*.csv.gz
