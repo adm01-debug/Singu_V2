@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
  import { PersonalityExecutiveSummary } from './behavioral-tab/PersonalityExecutiveSummary';
  import { NeuroEvolutionChart } from './NeuroEvolutionChart';
 import { RelationshipScoreChart } from './behavioral-tab/RelationshipScoreChart';
@@ -243,17 +244,23 @@ import type { Contact } from '@/hooks/useContactDetail';
       <CommunicationDashboardCard contactId={contact.id} />
       <EqEvolutionCard contactId={contact.id} />
       <EqDashboardCard contactId={contact.id} />
-      <Suspense fallback={<Skeleton className="h-40 rounded-lg" />}>
-        <CommunicationIntelWidget contactId={contact.id} />
-      </Suspense>
-      <Suspense fallback={<Skeleton className="h-40 rounded-lg" />}>
-        <EmotionalTrendWidget contactId={contact.id} />
-      </Suspense>
+      <DashboardErrorBoundary sectionName="Inteligência de Comunicação">
+        <Suspense fallback={<Skeleton className="h-40 rounded-lg" />}>
+          <CommunicationIntelWidget contactId={contact.id} />
+        </Suspense>
+      </DashboardErrorBoundary>
+      <DashboardErrorBoundary sectionName="Tendência Emocional">
+        <Suspense fallback={<Skeleton className="h-40 rounded-lg" />}>
+          <EmotionalTrendWidget contactId={contact.id} />
+        </Suspense>
+      </DashboardErrorBoundary>
     </div>
 
-    <Suspense fallback={<Skeleton className="h-12 rounded-lg" />}>
-      <EmotionalTrendByContactWidget contactId={contact.id} />
-    </Suspense>
+    <DashboardErrorBoundary sectionName="Evolução Emocional por Contato">
+      <Suspense fallback={<Skeleton className="h-12 rounded-lg" />}>
+        <EmotionalTrendByContactWidget contactId={contact.id} />
+      </Suspense>
+    </DashboardErrorBoundary>
 
     {/* Relationship Score Evolution Chart */}
     <RelationshipScoreChart contactId={contact.id} />

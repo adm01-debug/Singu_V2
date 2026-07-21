@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -76,6 +77,7 @@ const STAGE_COLORS: Record<string, string> = {
 
 export function RelationshipKPIsDashboard() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [liveEvents, setLiveEvents] = useState<LiveEvent[]>([]);
 
   const { data: stats, isLoading } = useQuery({
@@ -137,11 +139,12 @@ export function RelationshipKPIsDashboard() {
   });
 
    useEffect(() => {
+     if (!user?.id) return;
      const channel = supabase
        .channel('crm-pulse')
        .on(
          'postgres_changes',
-         { event: 'INSERT', schema: 'public', table: 'interactions' },
+         { event: 'INSERT', schema: 'public', table: 'interactions', filter: `user_id=eq.${user.id}` },
          async (payload) => {
            const { data: contact } = await supabase
              .from('contacts')
@@ -169,7 +172,7 @@ export function RelationshipKPIsDashboard() {
        )
        .on(
          'postgres_changes',
-         { event: 'INSERT', schema: 'public', table: 'crm_objection_intelligence' },
+         { event: 'INSERT', schema: 'public', table: 'crm_objection_intelligence', filter: `user_id=eq.${user.id}` },
          (payload) => {
            const newEvent: LiveEvent = {
              id: payload.new.id,
@@ -184,7 +187,7 @@ export function RelationshipKPIsDashboard() {
        )
        .on(
          'postgres_changes',
-         { event: 'INSERT', schema: 'public', table: 'neuro_behavioral_history' },
+         { event: 'INSERT', schema: 'public', table: 'neuro_behavioral_history', filter: `user_id=eq.${user.id}` },
          (payload) => {
            const newEvent: LiveEvent = {
              id: payload.new.id,
@@ -201,7 +204,7 @@ export function RelationshipKPIsDashboard() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [queryClient]);
+  }, [queryClient, user?.id]);
 
    const { data: intelligenceData } = useQuery({
      queryKey: ['crm-intelligence-summary'],

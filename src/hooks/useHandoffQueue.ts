@@ -139,7 +139,7 @@ export function useHandoffRealtime() {
       .channel('handoff-realtime')
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'handoff_requests' },
+        { event: '*', schema: 'public', table: 'handoff_requests', filter: `user_id=eq.${user.id}` },
         (payload) => {
           logger.info('[Handoff Realtime]', payload.eventType);
           qc.invalidateQueries({ queryKey: HANDOFF_KEY });

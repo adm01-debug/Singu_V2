@@ -66,9 +66,9 @@ const Insights = () => {
       logger.error('Error fetching data:', error);
     }
     finally { if (!controller.signal.aborted) setLoading(false); }
-  // generateInsights uses session?.access_token which is stable for a given session
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  // session?.access_token can refresh hourly; including it ensures fetchData always
+  // calls generateInsights with the current token, not a stale one from the initial render.
+  }, [user, session?.access_token]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => { fetchData(); return () => { abortRef.current?.abort(); }; }, [fetchData]);
 

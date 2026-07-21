@@ -53,7 +53,8 @@ export function useInteractions(contactId?: string, companyId?: string, options?
     isLoading: loading,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage
+    isFetchingNextPage,
+    error: queryError,
   } = useInfiniteQuery({
     queryKey,
     queryFn: ({ pageParam = 0 }) => fetchInteractionsPage(contactId, companyId, pageParam as number),
@@ -274,6 +275,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
     hasMore,
     isFetchingNextPage,
     totalCount,
+    error: queryError,
     fetchInteractions,
     loadMore,
     createInteraction,

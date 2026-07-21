@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -293,41 +294,63 @@ export function CompanyInsightsTab({
 
     {/* Intelligence Widgets */}
     <div className="grid gap-4 md:grid-cols-2 mt-4">
-      <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
-        <CompanyHealthScoreWidget companyId={companyId} />
-      </Suspense>
-      <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
-        <CompanyStatisticsWidget companyId={companyId} />
-      </Suspense>
-      <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
-        <PropensityScoreWidget companyId={companyId} />
-      </Suspense>
-      <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
-        <AccountPlanWidget companyId={companyId} />
-      </Suspense>
-      <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
-        <CompanyBenchmarkRadar companyId={companyId} />
-      </Suspense>
-      <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
-        <CompanyDuplicatesWidget companyId={companyId} />
-      </Suspense>
-      <Suspense fallback={<Skeleton className="h-20 rounded-lg" />}>
-        <OptimalContactWindowsWidget companyId={companyId} />
-      </Suspense>
+      <DashboardErrorBoundary sectionName="Health Score">
+        <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
+          <CompanyHealthScoreWidget companyId={companyId} />
+        </Suspense>
+      </DashboardErrorBoundary>
+      <DashboardErrorBoundary sectionName="Estatísticas">
+        <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
+          <CompanyStatisticsWidget companyId={companyId} />
+        </Suspense>
+      </DashboardErrorBoundary>
+      <DashboardErrorBoundary sectionName="Score de Propensão">
+        <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
+          <PropensityScoreWidget companyId={companyId} />
+        </Suspense>
+      </DashboardErrorBoundary>
+      <DashboardErrorBoundary sectionName="Plano de Conta">
+        <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
+          <AccountPlanWidget companyId={companyId} />
+        </Suspense>
+      </DashboardErrorBoundary>
+      <DashboardErrorBoundary sectionName="Benchmark">
+        <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
+          <CompanyBenchmarkRadar companyId={companyId} />
+        </Suspense>
+      </DashboardErrorBoundary>
+      <DashboardErrorBoundary sectionName="Duplicatas">
+        <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
+          <CompanyDuplicatesWidget companyId={companyId} />
+        </Suspense>
+      </DashboardErrorBoundary>
+      <DashboardErrorBoundary sectionName="Janelas de Contato">
+        <Suspense fallback={<Skeleton className="h-20 rounded-lg" />}>
+          <OptimalContactWindowsWidget companyId={companyId} />
+        </Suspense>
+      </DashboardErrorBoundary>
     </div>
 
-    <Suspense fallback={<Skeleton className="h-16 rounded-lg" />}>
-      <QuickActionsWidget companyId={companyId} />
-    </Suspense>
-    <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
-      <CompanyViewsWidget companyId={companyId} />
-    </Suspense>
-    <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
-      <InteractionHistoryWidget companyId={companyId} />
-    </Suspense>
-    <Suspense fallback={<Skeleton className="h-20 rounded-lg" />}>
-      <CreateDealWidget companyId={companyId} />
-    </Suspense>
+    <DashboardErrorBoundary sectionName="Ações Rápidas">
+      <Suspense fallback={<Skeleton className="h-16 rounded-lg" />}>
+        <QuickActionsWidget companyId={companyId} />
+      </Suspense>
+    </DashboardErrorBoundary>
+    <DashboardErrorBoundary sectionName="Visitas">
+      <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
+        <CompanyViewsWidget companyId={companyId} />
+      </Suspense>
+    </DashboardErrorBoundary>
+    <DashboardErrorBoundary sectionName="Histórico de Interações">
+      <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
+        <InteractionHistoryWidget companyId={companyId} />
+      </Suspense>
+    </DashboardErrorBoundary>
+    <DashboardErrorBoundary sectionName="Criar Negócio">
+      <Suspense fallback={<Skeleton className="h-20 rounded-lg" />}>
+        <CreateDealWidget companyId={companyId} />
+      </Suspense>
+    </DashboardErrorBoundary>
     </>
   );
 }

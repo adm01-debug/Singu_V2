@@ -80,8 +80,7 @@ export function AIEmailComposer() {
       setCustomContext('');
       clearSuggestions();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, prefilledContactId]);
+  }, [isOpen, prefilledContactId, clearSuggestions]);
 
   // Sync incoming suggestions
   useEffect(() => {
