@@ -106,6 +106,7 @@ export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
         let q = supabase
           .from('whatsapp_messages')
           .select('id, contact_id, company_id, from_me, message_type, content, media_url, status, timestamp, created_at, duration_seconds')
+          .eq('user_id', user!.id)
           .order('timestamp', { ascending: false })
           .limit(limit);
         if (filters.contactId) q = q.eq('contact_id', filters.contactId);
@@ -123,6 +124,7 @@ export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
         let q = supabase
           .from('call_logs')
           .select('id, contact_id, company_id, direction, status, duration_seconds, audio_url, transcription, summary, created_at')
+          .eq('user_id', user!.id)
           .order('created_at', { ascending: false })
           .limit(limit);
         if (filters.contactId) q = q.eq('contact_id', filters.contactId);

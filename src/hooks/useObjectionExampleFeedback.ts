@@ -42,6 +42,7 @@ export function useObjectionExampleFeedback({ objection, category }: UseFeedback
       const { data, error } = await supabase
         .from("objection_example_feedback")
         .select("id, objection, category, interaction_id, is_useful")
+        .eq("user_id", user!.id)
         .eq("objection", objection!)
         .limit(1000);
       if (error) throw error;
