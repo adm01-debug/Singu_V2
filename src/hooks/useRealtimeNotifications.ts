@@ -166,8 +166,12 @@ export function useRealtimeNotifications() {
     let cancelled = false;
     let channel: ReturnType<typeof supabase.channel> | null = null;
 
-    const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number };
-    const schedule = w.requestIdleCallback
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    const useIdle = !!w.requestIdleCallback;
+    const schedule = useIdle
       ? (cb: () => void) => w.requestIdleCallback!(cb, { timeout: 3000 })
       : (cb: () => void) => window.setTimeout(cb, 1500);
 
@@ -207,7 +211,10 @@ export function useRealtimeNotifications() {
 
     return () => {
       cancelled = true;
-      if (typeof handle === 'number') window.clearTimeout(handle);
+      if (typeof handle === 'number') {
+        if (useIdle && w.cancelIdleCallback) w.cancelIdleCallback(handle);
+        else window.clearTimeout(handle);
+      }
       if (channel) supabase.removeChannel(channel);
     };
   }, [user, handleNewAlert, handleNewInsight, handleNewHealthAlert, handleNewStakeholderAlert]);
