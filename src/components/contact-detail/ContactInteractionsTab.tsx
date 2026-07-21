@@ -97,9 +97,9 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
        toast.success('Interação registrada');
  
        // Trigger AI Analysis if content is sufficient
-       if (insertData.content && insertData.content.length >= 80) {
+       if (interaction && insertData.content && insertData.content.length >= 80) {
          toast.info('IA analisando conversa e comportamento...', { duration: 3000 });
-         
+
          // Call both analysis functions (fire-and-forget with catch)
          Promise.all([
            supabase.functions.invoke('conversation-analyzer', {
