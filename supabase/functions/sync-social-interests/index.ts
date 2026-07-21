@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, requireCronSecret, guardBody, jsonError, jsonOk } from "../_shared/auth.ts";
+import { validate } from "../_shared/validate.ts";
 
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
@@ -17,11 +18,12 @@ Deno.serve(async (req) => {
   );
 
   try {
-    const { contactId, queueId } = (rawBody ?? {}) as { contactId?: string; queueId?: string };
-
-    if (!contactId || !queueId) {
-      return jsonError('contactId and queueId are required', 400);
-    }
+    const vsi = validate(rawBody, {
+      contactId: { type: 'string', required: true, maxLength: 36 },
+      queueId:   { type: 'string', required: true, maxLength: 36 },
+    });
+    if (!vsi.ok) return jsonError(vsi.error, 400);
+    const { contactId, queueId } = vsi.data as { contactId: string; queueId: string };
 
     // Mark as processing + fetch current analysis concurrently (independent)
     const [, { data: currentAnalysis }] = await Promise.all([

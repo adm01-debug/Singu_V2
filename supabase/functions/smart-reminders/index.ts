@@ -2,6 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { validate } from "../_shared/validate.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Muitas solicitações de lembretes. Aguarde antes de tentar novamente." });
 
@@ -37,17 +38,20 @@ Deno.serve(async (req) => {
   if (bodyError) return bodyError;
 
   try {
-    const body = (rawBody ?? {}) as Record<string, unknown>;
+    const vsr = validate(rawBody ?? {}, {
+      userId: { type: 'string', maxLength: 36 },
+      action: { type: 'string', maxLength: 50 },
+    });
+    if (!vsr.ok) return jsonError(vsr.error, 400);
+    const { userId: bodyUserId, action } = vsr.data as { userId?: string; action?: string };
 
     let userId: string;
     if (isServiceRoleCaller(authResult)) {
-      if (!body.userId || typeof body.userId !== 'string') return jsonError('userId required for service-role calls', 400);
-      userId = body.userId;
+      if (!bodyUserId) return jsonError('userId required for service-role calls', 400);
+      userId = bodyUserId;
     } else {
       userId = authResult;
     }
-
-    const action = body.action as string | undefined;
 
     const db = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',

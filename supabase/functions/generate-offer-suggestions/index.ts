@@ -7,6 +7,7 @@ import {
   jsonOk,
   guardBody,
 } from "../_shared/auth.ts";
+import { validate } from "../_shared/validate.ts";
 
 interface OfferSuggestion {
   contactId: string;
@@ -44,9 +45,11 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const requestBody = (rawBody ?? {}) as { contactId?: string };
-
-    const { contactId } = requestBody;
+    const vgo = validate(rawBody ?? {}, {
+      contactId: { type: 'string', maxLength: 36 },
+    });
+    if (!vgo.ok) return jsonError(vgo.error, 400);
+    const { contactId } = vgo.data as { contactId?: string };
 
     // Generating offer suggestions — scoped to authenticated user
 

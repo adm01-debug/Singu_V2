@@ -1,7 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { handleCorsAndMethod, withAuth, jsonOk, guardBody } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuth, jsonOk, jsonError, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { validate } from "../_shared/validate.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
@@ -16,8 +17,11 @@ Deno.serve(async (req) => {
 
   const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
   if (bodyError) return bodyError;
-  const body = (rawBody ?? {}) as { period_days?: number };
-  const days = Math.min(Math.max(body.period_days ?? 7, 1), 90);
+  const vcc = validate(rawBody ?? {}, {
+    period_days: { type: 'integer', min: 1, max: 90 },
+  });
+  if (!vcc.ok) return jsonError(vcc.error, 400);
+  const days = (vcc.data.period_days as number | undefined) ?? 7;
   const since = new Date(Date.now() - days * 86400_000).toISOString();
 
   const supabase = createClient(

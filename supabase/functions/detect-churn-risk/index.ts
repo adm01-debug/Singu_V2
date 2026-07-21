@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { validate } from "../_shared/validate.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 15 });
 
@@ -26,10 +27,14 @@ Deno.serve(async (req) => {
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, serviceKey);
 
-    const body = (rawBody ?? {}) as { contactId?: string };
+    const vdc = validate(rawBody ?? {}, {
+      contactId: { type: 'string', maxLength: 36 },
+    });
+    if (!vdc.ok) return jsonError(vdc.error, 400, req);
+    const { contactId } = vdc.data as { contactId?: string };
 
     let contactsQuery = supabase.from("contacts").select("*").eq("user_id", userId);
-    if (body.contactId) contactsQuery = contactsQuery.eq("id", body.contactId);
+    if (contactId) contactsQuery = contactsQuery.eq("id", contactId);
     const { data: contacts, error: cErr } = await contactsQuery;
     if (cErr) throw cErr;
     if (!Array.isArray(contacts) || contacts.length === 0) {
