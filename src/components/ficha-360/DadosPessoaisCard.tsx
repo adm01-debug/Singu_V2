@@ -313,9 +313,9 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                           </div>
                         </div>
                       </div>
-                      <div className<Button size="icon" aria-label="Confirmar" variant="ghost" className="h-6 w-6 text-green-500 hover:bg-green-50" onClick={() => approve.mutate(s)}>
+                      <div className="flex gap-1">
+                        <Button size="icon" aria-label="Confirmar" variant="ghost" className="h-6 w-6 text-green-500 hover:bg-green-50" onClick={() => approve.mutate(s)}>
                           <Check className="h-3.5 w-3.5" />
-                        </Button> w-3.5" />
                         </Button>
                         <Button size="icon" variant="ghost" aria-label="Rejeitar" className="h-6 w-6 text-destructive hover:bg-red-50" onClick={() => reject.mutate(s.id)}>
                           <X className="h-3.5 w-3.5" />
@@ -386,10 +386,12 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                               setChildren(prev => [...prev, newChild.trim()]);
                               setNewChild('');
                             }
-             <Button 
-                          size="icon" aria-label="Adicionar" 
-                          variant="outline" 
-                          className="h-8 w-8" 
+                          }}
+                        />
+                        <Button
+                          size="icon" aria-label="Adicionar filho"
+                          variant="outline"
+                          className="h-8 w-8"
                           onClick={() => {
                             if (newChild.trim()) {
                               setChildren(prev => [...prev, newChild.trim()]);
@@ -398,7 +400,6 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                           }}
                         >
                           <Plus className="h-3.5 w-3.5" />
-                        </Button> <Plus className="h-3.5 w-3.5" />
                         </Button>
                       </div>
                     </div>
@@ -458,9 +459,9 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                             e.preventDefault();
                             setHobbies(prev => [...prev, newHobby.trim()]);
                             setNewHobby('');
-            <Button size="icon" aria-label="Adicionar" variant="outline" className="h-8 w-8" onClick={() => { if (newHobby.trim()) { setHobbies(prev => [...prev, newHobby.trim()]); setNewHobby(''); } }}>
-                        <Plus className="h-3.5 w-3.5" />
-                      </Button>>
+                          }}
+                        />
+                        <Button size="icon" aria-label="Adicionar hobby" variant="outline" className="h-8 w-8" onClick={() => { if (newHobby.trim()) { setHobbies(prev => [...prev, newHobby.trim()]); setNewHobby(''); } }}>
                         <Plus className="h-3.5 w-3.5" />
                       </Button>
                     </div>
@@ -513,9 +514,10 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                           if (e.key === 'Enter' && newInterest.trim()) {
                             e.preventDefault();
                             setInterests(prev => [...prev, newInterest.trim()]);
-                            setNewInt<Button size="icon" aria-label="Adicionar" variant="outline" className="h-8 w-8" onClick={() => { if (newInterest.trim()) { setInterests(prev => [...prev, newInterest.trim()]); setNewInterest(''); } }}>
-                        <Plus className="h-3.5 w-3.5" />
-                      </Button>etNewInterest(''); } }}>
+                            setNewInterest('');
+                          }}
+                        />
+                        <Button size="icon" aria-label="Adicionar interesse" variant="outline" className="h-8 w-8" onClick={() => { if (newInterest.trim()) { setInterests(prev => [...prev, newInterest.trim()]); setNewInterest(''); } }}>
                         <Plus className="h-3.5 w-3.5" />
                       </Button>
                     </div>
@@ -565,13 +567,13 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                 ))}
                 {isEditing && (
                   <div className="flex items-center gap-1 mt-1 w-full">
-                    <Input 
-                      placeholder="Nova âncora..." 
+                    <Input
+                      placeholder="Nova âncora..."
                       value={newAnchor}
                       onChange={(e) => setNewAnchor(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter<Button size="icon" aria-label="Adicionar" variant="outline" className="h-7 w-7" onClick={addAnchor}>
-                      <Plus className="h-3 w-3" />
-                    </Button>iant="outline" className="h-7 w-7" onClick={addAnchor}>
+                      onKeyDown={(e) => e.key === 'Enter' && addAnchor()}
+                    />
+                    <Button size="icon" aria-label="Adicionar âncora" variant="outline" className="h-7 w-7" onClick={addAnchor}>
                       <Plus className="h-3 w-3" />
                     </Button>
                   </div>
