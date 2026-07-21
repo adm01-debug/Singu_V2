@@ -29,7 +29,7 @@ export function useWebhookDlq() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('incoming_webhook_dlq')
-        .select('*')
+        .select('id, webhook_id, payload, attempts, max_attempts, status, next_retry_at, last_error, created_at, resolved_at, source_ip')
         .in('status', ['pending', 'processing', 'failed'])
         .order('created_at', { ascending: false })
         .limit(100);

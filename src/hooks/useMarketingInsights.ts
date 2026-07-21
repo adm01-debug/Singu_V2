@@ -105,7 +105,7 @@ import { logger } from '@/lib/logger';
 
        const { data, error } = await supabase
         .from('marketing_campaign_stats')
-        .select('*')
+        .select('id, entity_type, entity_id, date, views, clicks, submissions, conversions, spend, revenue')
         .eq('user_id', user.id)
         .order('date', { ascending: false })
         .limit(500);

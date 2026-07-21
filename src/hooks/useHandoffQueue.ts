@@ -17,7 +17,7 @@ export function useHandoffQueue(status?: HandoffStatus) {
       if (!user) return [];
       let query = supabase
         .from('handoff_requests')
-        .select('*')
+        .select('id, user_id, contact_id, company_id, from_member_id, to_member_id, status, qualification_data, handoff_reason, notes, rejection_reason, sla_hours, accepted_at, rejected_at, expired_at, created_at, updated_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(100);

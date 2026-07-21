@@ -103,7 +103,7 @@ export function useAutomationRules() {
     try {
       const { data, error } = await supabase
         .from('automation_rules')
-        .select('*')
+        .select('id, user_id, name, description, is_active, trigger_type, trigger_config, conditions, actions, execution_count, last_executed_at, last_error, created_at, updated_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(200);
@@ -122,7 +122,7 @@ export function useAutomationRules() {
     try {
       let query = supabase
         .from('automation_logs')
-        .select('*')
+        .select('id, user_id, rule_id, trigger_entity_type, trigger_entity_id, actions_executed, success, error_message, executed_at')
         .eq('user_id', user.id)
         .order('executed_at', { ascending: false })
         .limit(50);

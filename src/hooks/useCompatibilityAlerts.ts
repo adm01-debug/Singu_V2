@@ -49,7 +49,7 @@ export function useCompatibilityAlerts() {
     try {
       // Stage 1: fetch settings and salesperson profile in parallel
       const [{ data: settingsData }, { data: profileData }] = await Promise.all([
-        supabase.from('compatibility_settings').select('*').eq('user_id', user.id).maybeSingle(),
+        supabase.from('compatibility_settings').select('alert_threshold, alert_only_important, important_min_relationship_score').eq('user_id', user.id).maybeSingle(),
         supabase.from('profiles').select('nlp_profile').eq('id', user.id).maybeSingle(),
       ]);
 

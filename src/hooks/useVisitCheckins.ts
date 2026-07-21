@@ -30,7 +30,7 @@ export function useVisitCheckins(entityId?: string, entityType?: 'contact' | 'co
     queryKey: key,
     enabled: !!user,
     queryFn: async () => {
-      let query = supabase.from('visit_checkins').select('*').eq('user_id', user.id).order('check_in_at', { ascending: false });
+      let query = supabase.from('visit_checkins').select('id, user_id, contact_id, company_id, latitude, longitude, address, notes, photo_url, visit_type, check_in_at, check_out_at, duration_minutes, created_at').eq('user_id', user.id).order('check_in_at', { ascending: false });
       if (entityId && entityType === 'contact') query = query.eq('contact_id', entityId);
       if (entityId && entityType === 'company') query = query.eq('company_id', entityId);
       const { data, error } = await query.limit(entityId ? 50 : 200);

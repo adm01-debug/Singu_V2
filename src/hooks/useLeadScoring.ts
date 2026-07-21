@@ -59,7 +59,7 @@ export function useLeadScore(contactId?: string) {
     queryFn: async () => {
       if (!contactId || !user?.id) return null;
       const { data } = await supabase
-        .from('lead_scores').select('*')
+        .from('lead_scores').select('id, user_id, contact_id, fit_score, engagement_score, intent_score, relationship_score, total_score, grade, score_change, previous_score, computed_at, last_calculated_at')
         .eq('contact_id', contactId).eq('user_id', user.id).maybeSingle();
       return data as LeadScoreRow | null;
     },
@@ -126,7 +126,7 @@ export function useLeadScoreHistory(contactId?: string) {
     queryFn: async () => {
       if (!contactId || !user?.id) return [];
       const { data } = await supabase
-        .from('lead_score_history').select('*')
+        .from('lead_score_history').select('id, contact_id, total_score, grade, fit_score, engagement_score, intent_score, relationship_score, breakdown, recorded_at')
         .eq('contact_id', contactId).eq('user_id', user.id)
         .order('recorded_at', { ascending: true }).limit(100);
       return (data ?? []) as LeadScoreHistoryRow[];

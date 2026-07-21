@@ -99,7 +99,7 @@ export function useLuxIntelligence(entityType: 'contact' | 'company', entityId?:
     try {
       const { data, error } = await supabase
         .from('lux_intelligence')
-        .select('*')
+        .select('id, user_id, entity_type, entity_id, status, request_type, social_profiles, social_analysis, fiscal_data, stakeholders, audience_analysis, personal_profile, ai_report, ai_summary, fields_updated, error_message, n8n_execution_id, started_at, completed_at, created_at, updated_at')
         .eq('entity_type', entityType)
         .eq('entity_id', entityId)
         .order('created_at', { ascending: false })
