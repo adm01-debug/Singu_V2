@@ -26,6 +26,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { queryExternalData } from '@/lib/externalData';
 import type { Tables } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface Props {
   contactId: string;
@@ -91,7 +92,7 @@ export function ContactCommercialTab({ contactId }: Props) {
           <div>
             <p className="text-sm font-medium text-foreground">Erro ao carregar dados comerciais</p>
             <p className="text-xs text-muted-foreground mt-1">
-              {error instanceof Error ? error.message : 'Tente novamente em alguns instantes'}
+              {parseApiError(error, 'Tente novamente em alguns instantes')}
             </p>
           </div>
           <button onClick={() => refetch()} className="text-xs text-primary hover:underline">Tentar novamente</button>

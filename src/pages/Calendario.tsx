@@ -16,6 +16,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useCelebration } from '@/components/celebrations/CelebrationProvider';
 import type { Tables } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 import { CalendarioContent, type FollowUp } from './calendario/CalendarioContent';
 import { FollowUpDetailDialog } from './calendario/FollowUpDetailDialog';
 
@@ -71,7 +72,7 @@ const Calendario = () => {
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Erro ao concluir follow-up';
       logger.error('Error marking as completed:', { error: msg });
-      toast.error(msg);
+      toast.error(parseApiError(error, 'Erro ao concluir follow-up'));
     }
   };
 
