@@ -9,3 +9,8 @@ functions/remote-functions.txt
 storage/.env
 storage/storage-copy.log
 storage/verify-report.json
+# verify outputs
+verify/row-diff-out/
+verify/row-diff.sql
+auth/auth-identities.csv
+.env

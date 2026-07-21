@@ -172,3 +172,7 @@ O usuário volta a fazer login com a senha migrada.
 | `supabase/functions/_shared/email-templates/password-migration-reset.tsx` | Template opcional |
 | `src/hooks/useAuth.tsx`                      | Guard no `signIn` |
 | `src/pages/ResetPassword.tsx`                | Banner `?forced=true` + limpeza |
+## Ver também
+
+- [Master Runbook](./MIGRATION_MASTER_RUNBOOK.md) — orquestra todas as fases
+- [DDL](./MIGRATION_DDL.md) · [Data](./MIGRATION_DATA.md) · [Edge Functions](./MIGRATION_EDGE_FUNCTIONS.md) · [Storage](./MIGRATION_STORAGE.md) · [Password Reset](./MIGRATION_PASSWORD_RESET.md)

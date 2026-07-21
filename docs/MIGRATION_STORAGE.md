@@ -129,3 +129,8 @@ done
 - [ ] `./run.sh --step verify` verde (exit 0).
 - [ ] Frontend apontado para novo `VITE_SUPABASE_URL`.
 - [ ] Teste manual: upload de logo, upload de doc, envio de áudio WhatsApp.
+
+## Ver também
+
+- [Master Runbook](./MIGRATION_MASTER_RUNBOOK.md) — orquestra todas as fases
+- [DDL](./MIGRATION_DDL.md) · [Data](./MIGRATION_DATA.md) · [Edge Functions](./MIGRATION_EDGE_FUNCTIONS.md) · [Storage](./MIGRATION_STORAGE.md) · [Password Reset](./MIGRATION_PASSWORD_RESET.md)

@@ -174,3 +174,7 @@ As funções no novo Supabase permanecem deployadas sem efeito colateral.
 - Migração de schema e dados → `docs/MIGRATION_DDL.md`, `docs/MIGRATION_DATA.md`.
 - Reset de senhas dos usuários migrados → `docs/MIGRATION_PASSWORD_RESET.md`.
 - Alterar código das functions — este processo é reprovisionamento **1:1**.
+## Ver também
+
+- [Master Runbook](./MIGRATION_MASTER_RUNBOOK.md) — orquestra todas as fases
+- [DDL](./MIGRATION_DDL.md) · [Data](./MIGRATION_DATA.md) · [Edge Functions](./MIGRATION_EDGE_FUNCTIONS.md) · [Storage](./MIGRATION_STORAGE.md) · [Password Reset](./MIGRATION_PASSWORD_RESET.md)

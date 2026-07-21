@@ -131,3 +131,7 @@ produção.
 - [ ] Edge functions publicadas no destino.
 - [ ] `12_cron_jobs.sql` aplicado (ver `MIGRATION_DDL.md`).
 - [ ] `.env` do frontend apontado para o novo `VITE_SUPABASE_URL`.
+## Ver também
+
+- [Master Runbook](./MIGRATION_MASTER_RUNBOOK.md) — orquestra todas as fases
+- [DDL](./MIGRATION_DDL.md) · [Data](./MIGRATION_DATA.md) · [Edge Functions](./MIGRATION_EDGE_FUNCTIONS.md) · [Storage](./MIGRATION_STORAGE.md) · [Password Reset](./MIGRATION_PASSWORD_RESET.md)
