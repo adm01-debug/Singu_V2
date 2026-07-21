@@ -93,7 +93,7 @@ export function useLuxIntelligence(entityType: 'contact' | 'company', entityId?:
   const [loading, setLoading] = useState(false);
   const [triggering, setTriggering] = useState(false);
 
-  const fetchRecords = useCallback(async () => {
+  const fetchRecords = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user || !entityId) return;
     setLoading(true);
     try {
@@ -105,20 +105,25 @@ export function useLuxIntelligence(entityType: 'contact' | 'company', entityId?:
         .order('created_at', { ascending: false })
         .limit(10);
 
+      if (signal?.cancelled) return;
       if (error) throw error;
       const typed = (data || []) as unknown as LuxIntelligenceRecord[];
       setRecords(typed);
       setLatestRecord(typed[0] || null);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Unknown error';
-      logger.error('Error fetching lux records:', { error: msg });
+      if (!signal?.cancelled) {
+        const msg = err instanceof Error ? err.message : 'Unknown error';
+        logger.error('Error fetching lux records:', { error: msg });
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user, entityType, entityId]);
 
   useEffect(() => {
-    fetchRecords();
+    const signal = { cancelled: false };
+    fetchRecords(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchRecords]);
 
   // Poll for updates when there's a processing record

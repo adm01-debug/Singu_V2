@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import { safehref } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
 interface RealtimeNotification {
@@ -225,10 +226,15 @@ export function useRealtimeNotifications() {
     const table = tableMap[notification.type as keyof typeof tableMap];
     if (!table) return;
 
-    await supabase
+    const { error } = await supabase
       .from(table)
       .update({ dismissed: true })
       .eq('id', notification.id);
+
+    if (error) {
+      logger.warn('Failed to dismiss notification:', { error: error.message });
+      return;
+    }
 
     setNotifications(prev => prev.filter(n => n.id !== notification.id));
   }, []);

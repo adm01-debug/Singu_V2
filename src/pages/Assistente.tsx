@@ -27,10 +27,10 @@ export default function Assistente() {
   } = useAiAssistant();
 
   const [input, setInput] = useState('');
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollAnchorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+    scrollAnchorRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   const handleSend = async () => {
@@ -129,7 +129,7 @@ export default function Assistente() {
                 </div>
               </div>
             ) : (
-              <ScrollArea className="flex-1" ref={scrollRef as never}>
+              <ScrollArea className="flex-1">
                 <div className="p-4 space-y-4">
                   {messages.map(m => (
                     <div key={m.id} className={cn('flex', m.role === 'user' ? 'justify-end' : 'justify-start')}>
@@ -153,6 +153,7 @@ export default function Assistente() {
                       </div>
                     </div>
                   )}
+                  <div ref={scrollAnchorRef} />
                 </div>
               </ScrollArea>
             )}

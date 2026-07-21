@@ -46,6 +46,7 @@ export const useSmartReminders = (autoFetch = true) => {
   const [error, setError] = useState<string | null>(null);
   const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
   const { toast } = useToast();
+  const { user } = useAuth();
 
   // Load dismissed reminders from localStorage
   useEffect(() => {
@@ -116,7 +117,7 @@ export const useSmartReminders = (autoFetch = true) => {
       clearTimeout(timeout);
       setIsLoading(false);
     }
-  }, [dismissedIds]);
+  }, [dismissedIds, user]);
 
   const dismissReminder = useCallback((id: string) => {
     setDismissedIds(prev => {

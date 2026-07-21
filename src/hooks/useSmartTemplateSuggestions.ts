@@ -39,7 +39,7 @@ export function useSmartTemplateSuggestions(contact: Contact) {
 
   const contactDISC = contact.behavior?.discProfile as DISCProfile | undefined;
 
-  const fetchTemplateStats = useCallback(async () => {
+  const fetchTemplateStats = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) {
       setLoading(false);
       return;
@@ -55,6 +55,7 @@ export function useSmartTemplateSuggestions(contact: Contact) {
         supabase.from('contacts').select('id, behavior').eq('user_id', user.id).limit(1000),
       ]);
 
+      if (signal?.cancelled) return;
       if (error) throw error;
       if (contactsError) throw contactsError;
 
@@ -115,17 +116,21 @@ export function useSmartTemplateSuggestions(contact: Contact) {
         stat.successRate = stat.totalUsages > 0 ? (stat.successCount / stat.totalUsages) * 100 : 0;
       });
 
-      setTemplateStats(statsMap);
+      if (!signal?.cancelled) setTemplateStats(statsMap);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error fetching template stats:', { error: msg });
+      if (!signal?.cancelled) {
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching template stats:', { error: msg });
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user]);
 
   useEffect(() => {
-    fetchTemplateStats();
+    const signal = { cancelled: false };
+    fetchTemplateStats(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchTemplateStats]);
 
   const suggestions = useMemo<SmartSuggestion[]>(() => {

@@ -173,7 +173,7 @@ export function useBehaviorAlerts() {
           i => i.contact_id === contact.id
         ) || [];
 
-        const contactName = `${contact.first_name} ${contact.last_name}`;
+        const contactName = `${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim();
 
         // Check for communication gap (no interaction in 14+ days)
         const lastInteractionDate = contactInteractions.length > 0

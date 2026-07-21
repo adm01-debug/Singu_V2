@@ -97,7 +97,7 @@ export function useAutomationRules() {
   const [logs, setLogs] = useState<AutomationLog[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchRules = useCallback(async () => {
+  const fetchRules = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
     try {
       const { data, error } = await supabase
@@ -106,12 +106,13 @@ export function useAutomationRules() {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(200);
+      if (signal?.cancelled) return;
       if (error) throw error;
       setRules((data ?? []) as unknown as AutomationRule[]);
     } catch (e: unknown) {
-      logger.error('Error fetching automation rules:', e);
+      if (!signal?.cancelled) logger.error('Error fetching automation rules:', e);
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user]);
 
@@ -134,7 +135,9 @@ export function useAutomationRules() {
   }, [user]);
 
   useEffect(() => {
-    fetchRules();
+    const signal = { cancelled: false };
+    fetchRules(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchRules]);
 
   const createRule = useCallback(async (data: CreateRuleData) => {

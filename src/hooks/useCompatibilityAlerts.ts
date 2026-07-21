@@ -146,11 +146,13 @@ export function useCompatibilityAlerts() {
 
       // 7. Insert new alerts
       if (newAlerts.length > 0) {
-        const { error } = await supabase
+        const { error: insertError } = await supabase
           .from('compatibility_alerts')
           .insert(newAlerts);
 
-        if (!error) {
+        if (insertError) {
+          logger.error('Error inserting compatibility alerts:', { error: insertError.message });
+        } else {
           toast.warning(`${newAlerts.length} novo(s) alerta(s) de compatibilidade`, {
             description: 'Alguns clientes importantes estão abaixo do limite configurado.',
           });
@@ -168,21 +170,27 @@ export function useCompatibilityAlerts() {
   useEffect(() => {
     if (!user || typeof window === 'undefined') return;
 
+    let cancelled = false;
+    let idleId: number | undefined;
+
     const scheduleCheck = () => {
-      void checkAndCreateAlerts();
+      if (!cancelled) void checkAndCreateAlerts();
     };
 
     const timer = window.setTimeout(() => {
+      if (cancelled) return;
       if ('requestIdleCallback' in window) {
-        const idleId = window.requestIdleCallback(scheduleCheck, { timeout: 5000 });
-        return () => window.cancelIdleCallback(idleId);
+        idleId = window.requestIdleCallback(scheduleCheck, { timeout: 5000 });
+      } else {
+        scheduleCheck();
       }
-
-      scheduleCheck();
-      return undefined;
     }, 5000);
 
-    return () => window.clearTimeout(timer);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      if (idleId !== undefined) window.cancelIdleCallback(idleId);
+    };
   }, [checkAndCreateAlerts, user]);
 
   return {

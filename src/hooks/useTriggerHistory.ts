@@ -113,7 +113,7 @@ export function useTriggerHistory(contactId?: string) {
     setStats(calculateStats(entries));
   }, [calculateStats]);
 
-  const fetchHistory = useCallback(async () => {
+  const fetchHistory = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) {
       applyHistoryState([]);
       setLoading(false);
@@ -133,19 +133,24 @@ export function useTriggerHistory(contactId?: string) {
       }
 
       const { data, error } = await query;
+      if (signal?.cancelled) return;
       if (error) throw error;
 
       applyHistoryState((data as TriggerUsageEntry[]) || []);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error fetching trigger history:', { error: msg });
+      if (!signal?.cancelled) {
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching trigger history:', { error: msg });
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user, contactId, applyHistoryState]);
 
   useEffect(() => {
-    fetchHistory();
+    const signal = { cancelled: false };
+    fetchHistory(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchHistory]);
 
   const createUsage = async (input: CreateTriggerUsageInput): Promise<TriggerUsageEntry | null> => {
