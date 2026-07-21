@@ -1,0 +1,18 @@
+-- Migration: todo_enable_hibp_password_check (Wave 130)
+-- The auth_leaked_password_protection advisor warns that Supabase Auth's
+-- HaveIBeenPwned (HIBP) password leak check is disabled.
+--
+-- This setting protects users from choosing passwords that have appeared in
+-- known data breaches. It cannot be enabled via SQL — it must be configured
+-- in the Supabase Dashboard or via the Management API:
+--
+--   Dashboard → Authentication → Providers → Email → Password strength
+--   → Enable "Password must not be leaked"
+--
+-- Management API equivalent:
+--   PATCH /v1/projects/{ref}/config/auth
+--   Body: { "password_hibp_enabled": true }
+--
+-- No SQL changes in this migration — this is a tracking record so the
+-- advisory is not lost during the audit trail.
+SELECT 1; -- no-op placeholder
