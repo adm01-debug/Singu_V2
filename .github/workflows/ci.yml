@@ -31,6 +31,16 @@ jobs:
       - name: Edge Function CORS scoped enforcer
         run: node scripts/check-edge-cors.mjs
 
+      - name: Invalid indexes guard (public.*)
+        if: ${{ secrets.PGHOST != '' }}
+        env:
+          PGHOST: ${{ secrets.PGHOST }}
+          PGPORT: ${{ secrets.PGPORT }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+        run: psql -v ON_ERROR_STOP=1 -f scripts/migration/verify/invalid-indexes-guard.sql
+
       - name: Typecheck
         run: npx tsc --noEmit
 
