@@ -41,8 +41,8 @@ export function DocumentsList({ roomId }: { roomId: string }) {
                 <p className="font-medium text-sm truncate">{d.title}</p>
                 <p className="text-xs text-muted-foreground">{((d.file_size ?? 0) / 1024).toFixed(1)} KB · {d.uploaded_by_side === "seller" ? "Vendedor" : "Comprador"}</p>
               </div>
-              <Button variant="ghost" size="icon-sm" onClick={() => handleDownload(d.file_path)}><Download className="h-4 w-4" /></Button>
-              <Button variant="ghost" size="icon-sm" onClick={() => del.mutate({ id: d.id, file_path: d.file_path })}><Trash2 className="h-4 w-4" /></Button>
+              <Button variant="ghost" size="icon-sm" aria-label="Baixar documento" onClick={() => handleDownload(d.file_path)}><Download className="h-4 w-4" /></Button>
+              <Button variant="ghost" size="icon-sm" aria-label="Remover documento" onClick={() => del.mutate({ id: d.id, file_path: d.file_path })}><Trash2 className="h-4 w-4" /></Button>
             </CardContent>
           </Card>
         ))}

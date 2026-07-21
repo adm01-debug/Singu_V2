@@ -259,7 +259,7 @@ export const ProximaAcaoCTA = React.memo(function ProximaAcaoCTA({ contactId, co
           <div className="bg-muted/30 border border-border/50 rounded-md p-3 space-y-2">
             <div className="flex items-center justify-between">
               <p className="text-xs font-medium">Registrar interação no CRM</p>
-              <Button variant="ghost" size="icon-sm" onClick={() => setRegisterOpen(false)}>
+              <Button variant="ghost" size="icon-sm" aria-label="Fechar" onClick={() => setRegisterOpen(false)}>
                 <X className="w-3 h-3" />
               </Button>
             </div>

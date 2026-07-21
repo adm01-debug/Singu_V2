@@ -392,6 +392,7 @@ export default function AdminKnowledgeExport() {
                         <Button
                           size="icon-sm"
                           variant="ghost"
+                          aria-label="Copiar"
                           onClick={() => handleCopyBlock(section.id, section.content)}
                         >
                           {copiedId === section.id

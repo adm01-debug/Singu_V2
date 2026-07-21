@@ -200,6 +200,7 @@ export function AnnotationList({ api, onEdit, categoryFilter }: Props) {
                                     variant="ghost"
                                     onClick={() => onEdit(a)}
                                     title="Editar"
+                                    aria-label="Editar anotação"
                                   >
                                     <Pencil className="h-3.5 w-3.5" />
                                   </Button>
@@ -211,6 +212,7 @@ export function AnnotationList({ api, onEdit, categoryFilter }: Props) {
                                     variant="ghost"
                                     onClick={() => setPendingDelete(a)}
                                     title={isAdmin && !isOwner ? 'Excluir (admin)' : 'Excluir'}
+                                    aria-label={isAdmin && !isOwner ? 'Excluir anotação (admin)' : 'Excluir anotação'}
                                     disabled={api.remove.isPending}
                                   >
                                     <Trash2 className="h-3.5 w-3.5 text-destructive" />

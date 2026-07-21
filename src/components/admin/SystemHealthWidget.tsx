@@ -105,7 +105,7 @@ export function SystemHealthWidget() {
               <span className={cn('w-2.5 h-2.5 rounded-full', cfg.dot)} />
               <span className="text-sm font-medium">{cfg.label}</span>
             </div>
-            <Button variant="ghost" size="icon-sm" onClick={() => refetch()}>
+            <Button variant="ghost" size="icon-sm" aria-label="Atualizar" onClick={() => refetch()}>
               <RefreshCw className="w-3.5 h-3.5" />
             </Button>
           </div>

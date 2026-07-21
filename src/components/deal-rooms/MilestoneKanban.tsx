@@ -58,7 +58,7 @@ export function MilestoneKanban({ roomId }: { roomId: string }) {
                   <CardContent className="p-3 space-y-2">
                     <div className="flex items-start justify-between gap-2">
                       <p className="text-sm font-medium line-clamp-2">{m.title}</p>
-                      <Button variant="ghost" size="icon-sm" onClick={(e) => { e.stopPropagation(); del.mutate(m.id); }}>
+                      <Button variant="ghost" size="icon-sm" aria-label="Remover milestone" onClick={(e) => { e.stopPropagation(); del.mutate(m.id); }}>
                         <Trash2 className="h-3.5 w-3.5" />
                       </Button>
                     </div>
