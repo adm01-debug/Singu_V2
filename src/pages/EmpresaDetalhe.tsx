@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, lazy } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { CustomFieldsDisplay } from '@/components/custom-fields/CustomFieldsDisplay';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
 import { useParams, Link } from 'react-router-dom';
@@ -49,9 +49,6 @@ import { logger } from "@/lib/logger";
 import { useToast } from '@/hooks/use-toast';
 import { parseApiError } from '@/lib/errorMessages';
 import { CompanyExecutiveSummary } from '@/components/company-detail/CompanyExecutiveSummary';
-
-const ContactTimelineWidget = lazy(() => import('@/components/contact-detail/ContactTimelineWidget'));
-const UnifiedCommunicationHistory = lazy(() => import('@/components/interactions/UnifiedCommunicationHistory'));
 
 type Company = Tables<'companies'>;
 type Contact = Tables<'contacts'>;
