@@ -31,8 +31,8 @@ export function useRFMAnalysis(contactId?: string) {
   const { data: rfmData = [], isLoading: rfmLoading } = useQuery({
     queryKey: ['rfm-analysis', user?.id, contactId],
     queryFn: async () => {
-      let query = supabase.from('rfm_analysis').select('*').eq('user_id', user!.id)
-      .limit(1000);
+      let query = supabase.from('rfm_analysis').select('id, user_id, contact_id, recency_score, frequency_score, monetary_score, rfm_score, total_score, days_since_last_purchase, days_since_last_interaction, total_purchases, total_interactions, total_monetary_value, average_order_value, segment, segment_description, segment_color, recency_trend, frequency_trend, monetary_trend, overall_trend, predicted_next_purchase_date, predicted_lifetime_value, churn_probability, recommended_actions, recommended_offers, communication_priority, analyzed_at, created_at, updated_at').eq('user_id', user!.id)
+      .limit(500);
       if (contactId) query = query.eq('contact_id', contactId);
       const { data, error } = await query;
       if (error) throw error;
@@ -64,7 +64,7 @@ export function useRFMAnalysis(contactId?: string) {
     queryKey: ['rfm-history', user?.id, contactId],
     queryFn: async () => {
       if (!contactId) return [];
-      const { data, error } = await supabase.from('rfm_history').select('*')
+      const { data, error } = await supabase.from('rfm_history').select('id, contact_id, recency_score, frequency_score, monetary_score, segment, total_monetary_value, recorded_at')
         .eq('user_id', user!.id).eq('contact_id', contactId)
         .order('recorded_at', { ascending: false }).limit(12);
       if (error) throw error;
@@ -86,7 +86,7 @@ export function useRFMAnalysis(contactId?: string) {
     if (!user?.id || contacts.length === 0) return;
     setAnalyzing(true);
     try {
-      const { data: purchaseData } = await supabase.from('purchase_history').select('*').eq('user_id', user.id)
+      const { data: purchaseData } = await supabase.from('purchase_history').select('contact_id, amount, purchase_date').eq('user_id', user.id)
       .limit(1000);
       const contactMetrics: Map<string, PurchaseData> = new Map();
       contacts.forEach(contact => {

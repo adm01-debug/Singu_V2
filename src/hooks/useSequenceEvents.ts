@@ -30,7 +30,7 @@ export function useSequenceEvents(sequenceId?: string, enrollmentId?: string) {
   return useQuery({
     queryKey: ['sequence-events', sequenceId, enrollmentId, user?.id],
     queryFn: async () => {
-      let q = supabase.from('sequence_events').select('*').eq('user_id', user!.id).order('created_at', { ascending: false }).limit(200);
+      let q = supabase.from('sequence_events').select('id, enrollment_id, sequence_id, contact_id, step_order, event_type, metadata, created_at').eq('user_id', user!.id).order('created_at', { ascending: false }).limit(200);
       if (enrollmentId) q = q.eq('enrollment_id', enrollmentId);
       else if (sequenceId) q = q.eq('sequence_id', sequenceId);
       const { data, error } = await q;

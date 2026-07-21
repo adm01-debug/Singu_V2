@@ -26,7 +26,7 @@ export function useClosingScoreAlerts() {
       if (!user) return [];
       const { data } = await supabase
         .from('alerts')
-        .select('*')
+        .select('id, contact_id, title, priority, created_at')
         .eq('user_id', user.id)
         .eq('type', 'closing_score')
         .eq('dismissed', false)

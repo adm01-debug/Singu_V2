@@ -42,8 +42,8 @@ export function useMQLCriteria() {
     enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
-      const { data, error } = await supabase.from('mql_criteria').select('*').eq('user_id', user.id).order('priority', { ascending: false })
-      .limit(1000);
+      const { data, error } = await supabase.from('mql_criteria').select('id, user_id, name, description, conditions, is_active, auto_handoff, handoff_to_role, priority, created_at').eq('user_id', user.id).order('priority', { ascending: false })
+      .limit(100);
       if (error) throw error;
       return (data || []) as unknown as MQLCriteria[];
     },
@@ -87,7 +87,7 @@ export function useMQLClassifications() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('mql_classifications')
-        .select('*')
+        .select('id, user_id, contact_id, criteria_id, status, qualified_at, handoff_to, handoff_at, score_snapshot, reason, notes')
         .eq('user_id', user.id)
         .order('qualified_at', { ascending: false })
         .limit(200);

@@ -44,10 +44,10 @@ type SupabaseWithDynamicTables = {
           const client = supabase as unknown as SupabaseWithDynamicTables;
           const { data, error } = await client
             .from('social_insights')
-            .select('*')
+            .select('id, platform, insight_type, content, source_url, metadata, indicator_score, sentiment, created_at')
             .eq('contact_id', contactId)
             .order('created_at', { ascending: false })
-            .limit(1000);
+            .limit(100);
 
           if (error) throw error;
           return (data as unknown) as SocialInsight[];

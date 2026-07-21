@@ -20,10 +20,10 @@ export function useFamilyHistory(contactId?: string) {
       if (!contactId || !user) return [];
       const { data, error } = await supabase
         .from('contact_family_history')
-        .select('*')
+        .select('id, contact_id, family_info, changed_at')
         .eq('contact_id', contactId)
         .order('changed_at', { ascending: false })
-        .limit(1000);
+        .limit(50);
 
       if (error) throw error;
       return (data || []) as FamilyHistoryEntry[];

@@ -98,7 +98,7 @@ export function useWeeklyReport() {
     try {
       const { data, error } = await supabase
         .from('weekly_report_settings')
-        .select('*')
+        .select('id, user_id, enabled, send_day, send_time, email_address, include_portfolio_summary, include_at_risk_clients, include_health_alerts, include_upcoming_dates, include_recommendations, include_performance_metrics, last_sent_at')
         .eq('user_id', userId)
         .maybeSingle();
       if (signal?.cancelled) return;
@@ -119,7 +119,7 @@ export function useWeeklyReport() {
     try {
       const { data, error } = await supabase
         .from('weekly_reports')
-        .select('*')
+        .select('id, user_id, report_data, sent_via, created_at')
         .eq('user_id', userId)
         .order('created_at', { ascending: false })
         .limit(10);

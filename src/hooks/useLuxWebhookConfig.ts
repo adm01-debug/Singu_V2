@@ -30,9 +30,9 @@ export function useLuxWebhookConfig() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('lux_webhook_config')
-        .select('*')
+        .select('id, entity_type, webhook_url, is_active, timeout_ms, max_retries, headers, last_test_at, last_test_status, created_at, updated_at')
         .order('entity_type')
-        .limit(1000);
+        .limit(20);
       if (error) throw error;
       return (data || []) as unknown as LuxWebhookConfig[];
     },

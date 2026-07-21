@@ -24,10 +24,10 @@ export function useRoutingRules() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('lead_routing_rules')
-        .select('*')
+        .select('id, user_id, name, description, rule_type, priority, conditions, team_pool, role_filter, is_active, fallback_rule_id, created_at, updated_at')
         .eq('user_id', user.id)
         .order('priority', { ascending: true })
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as unknown as LeadRoutingRule[];
     },
@@ -114,7 +114,7 @@ export function useLeadAssignments(status?: string) {
       if (!user) return [];
       let query = supabase
         .from('lead_assignments')
-        .select('*')
+        .select('id, user_id, contact_id, company_id, assigned_to, assigned_by, assignment_type, previous_owner, status, routing_rule_id, sla_deadline, first_contact_at, sla_met, notes, created_at, updated_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(200);

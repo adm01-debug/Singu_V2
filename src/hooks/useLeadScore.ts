@@ -218,7 +218,7 @@ export function useLeadScore(contactId: string | undefined) {
       if (!contactId || !user?.id) return null;
       const { data, error } = await supabase
         .from('lead_scores')
-        .select('*')
+        .select('id, contact_id, total_score, grade, engagement_score, fit_score, intent_score, relationship_score, score_factors, score_change, previous_score, last_calculated_at')
         .eq('contact_id', contactId)
         .eq('user_id', user.id)
         .maybeSingle();
@@ -250,7 +250,7 @@ export function useLeadScoreHistory(contactId: string | undefined) {
       if (!contactId || !user?.id) return [];
       const { data, error } = await supabase
         .from('lead_score_history')
-        .select('*')
+        .select('id, contact_id, total_score, grade, engagement_score, fit_score, intent_score, relationship_score, recorded_at')
         .eq('contact_id', contactId)
         .eq('user_id', user.id)
         .order('recorded_at', { ascending: true })
@@ -272,7 +272,7 @@ export function useLeadScoreConfig() {
       if (!user?.id) return null;
       const { data, error } = await supabase
         .from('lead_score_config')
-        .select('*')
+        .select('id, weight_engagement, weight_fit, weight_intent, weight_relationship, grade_thresholds, auto_recalculate, recalculate_interval_hours')
         .eq('user_id', user.id)
         .maybeSingle();
       if (error) throw error;
@@ -301,7 +301,7 @@ export function useCalculateLeadScore() {
 
       // Config and previous score are independent — fetch in parallel
       const [{ data: config }, { data: existing }] = await Promise.all([
-        supabase.from('lead_score_config').select('*').eq('user_id', user.id).maybeSingle(),
+        supabase.from('lead_score_config').select('weight_engagement, weight_fit, weight_intent, weight_relationship, grade_thresholds').eq('user_id', user.id).maybeSingle(),
         supabase.from('lead_scores').select('total_score').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
       ]);
 
@@ -376,10 +376,10 @@ export function useAllLeadScores() {
       if (!user?.id) return [];
       const { data, error } = await supabase
         .from('lead_scores')
-        .select('*, contacts:contact_id(first_name, last_name, company_id)')
+        .select('id, contact_id, total_score, grade, engagement_score, fit_score, intent_score, relationship_score, score_factors, score_change, previous_score, last_calculated_at, contacts:contact_id(first_name, last_name, company_id)')
         .eq('user_id', user.id)
         .order('total_score', { ascending: false })
-        .limit(1000);
+        .limit(500);
       if (error) throw error;
       return data ?? [];
     },

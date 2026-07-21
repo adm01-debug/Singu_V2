@@ -37,7 +37,7 @@ export function useNextBestAction(contactId: string | undefined) {
        if (!user?.id || !contactId) return null;
        const { data, error } = await supabase
          .from('contact_next_actions')
-         .select('*')
+         .select('id, contact_id, action, reason, channel, urgency, suggested_script, expected_outcome, generated_at, model, status, completed_at, completion_notes, edited_script, contextual_tone, was_successful')
          .eq('user_id', user.id)
          .eq('contact_id', contactId)
          .order('generated_at', { ascending: false })

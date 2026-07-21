@@ -61,7 +61,7 @@ function useHealthAlertsFetch(userId?: string) {
     try {
       const { data, error } = await supabase
         .from('health_alerts')
-        .select('*, contact:contacts(first_name, last_name)')
+        .select('id, user_id, contact_id, alert_type, health_score, previous_score, title, description, factors, dismissed, notified_via, created_at, contact:contacts(first_name, last_name)')
         .eq('user_id', userId)
         .eq('dismissed', false)
         .order('created_at', { ascending: false })
@@ -97,7 +97,7 @@ function useHealthAlertSettingsFetch(userId?: string) {
     try {
       const { data, error } = await supabase
         .from('health_alert_settings')
-        .select('*')
+        .select('id, user_id, email_notifications, push_notifications, critical_threshold, warning_threshold, check_frequency_hours, notify_on_critical, notify_on_warning, email_address')
         .eq('user_id', userId)
         .maybeSingle();
       if (signal?.cancelled) return;

@@ -30,7 +30,7 @@ export function useCSATSurveys(contactId?: string) {
     enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
-      let query = supabase.from('csat_surveys').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+      let query = supabase.from('csat_surveys').select('id, user_id, contact_id, interaction_id, ticket_id, score, feedback, channel, status, sent_at, answered_at, expires_at, created_at').eq('user_id', user.id).order('created_at', { ascending: false });
       if (contactId) query = query.eq('contact_id', contactId);
       const { data, error } = await query.limit(100);
       if (error) throw error;

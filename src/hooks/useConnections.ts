@@ -47,10 +47,10 @@ export function useConnections() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('connection_configs')
-        .select('*')
+        .select('id, name, connection_type, description, is_active, config, secret_refs, last_tested_at, last_test_status, last_test_latency_ms, last_test_message, discovered_schema, discovered_at, created_by, created_at, updated_at')
         .eq('created_by', user!.id)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as unknown as ConnectionConfig[];
     },
@@ -144,7 +144,7 @@ export function useConnectionTestLogs(connectionId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('connection_test_logs')
-        .select('*')
+        .select('id, connection_id, status, latency_ms, message, details, created_at')
         .eq('connection_id', connectionId!)
         .order('created_at', { ascending: false })
         .limit(20);

@@ -24,7 +24,7 @@ export function useNurturingExecutions(workflowId?: string) {
     enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
-      let q = supabase.from('nurturing_executions').select('*').eq('user_id', user.id).order('started_at', { ascending: false }).limit(200);
+      let q = supabase.from('nurturing_executions').select('id, workflow_id, contact_id, current_step, status, next_action_at, last_action_at, started_at, completed_at, error_message').eq('user_id', user.id).order('started_at', { ascending: false }).limit(200);
       if (workflowId) q = q.eq('workflow_id', workflowId);
       const { data, error } = await q;
       if (error) throw error;

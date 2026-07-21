@@ -70,10 +70,10 @@ export function useSequences() {
       if (!userId) return [];
       const { data, error } = await supabase
         .from('sequences')
-        .select('*')
+        .select('id, user_id, name, description, status, pause_on_reply, pause_on_meeting, max_enrollments, total_enrolled, total_completed, total_replied, created_at, updated_at')
         .eq('user_id', userId)
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(200);
       if (error) throw error;
       return (data || []) as unknown as Sequence[];
     },
@@ -155,10 +155,10 @@ export function useSequences() {
   const fetchSteps = async (sequenceId: string): Promise<SequenceStep[]> => {
     const { data, error } = await supabase
       .from('sequence_steps')
-      .select('*')
+      .select('id, sequence_id, step_order, channel, delay_days, delay_hours, subject, message_template, notes, condition_type, condition_wait_hours, branch_on_yes_step, branch_on_no_step')
       .eq('sequence_id', sequenceId)
       .order('step_order')
-      .limit(1000);
+      .limit(50);
     if (error) throw error;
     return (data || []) as unknown as SequenceStep[];
   };

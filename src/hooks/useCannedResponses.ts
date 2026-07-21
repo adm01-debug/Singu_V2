@@ -28,7 +28,7 @@ export function useCannedResponses() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('canned_responses')
-        .select('*')
+        .select('id, user_id, title, content, category, shortcut, usage_count, created_at')
         .eq('user_id', user.id)
         .order('usage_count', { ascending: false })
         .limit(200);

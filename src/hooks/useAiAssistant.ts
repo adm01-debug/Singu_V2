@@ -44,12 +44,12 @@ export function useAiAssistant() {
     try {
       const { data, error } = await supabase
         .from('ai_chat_threads')
-        .select('*')
+        .select('id, user_id, title, context_entity_type, context_entity_id, pinned, archived, last_message_at, created_at, updated_at')
         .eq('user_id', user.id)
         .eq('archived', false)
         .order('pinned', { ascending: false })
         .order('last_message_at', { ascending: false })
-        .limit(1000);
+        .limit(100);
       if (signal?.cancelled) return;
       if (error) throw error;
       setThreads((data || []) as ChatThread[]);
@@ -64,11 +64,11 @@ export function useAiAssistant() {
     try {
       const { data, error } = await supabase
         .from('ai_chat_messages')
-        .select('*')
+        .select('id, thread_id, user_id, role, content, metadata, tokens_used, created_at')
         .eq('thread_id', threadId)
         .eq('user_id', user?.id ?? '')
         .order('created_at', { ascending: true })
-        .limit(1000);
+        .limit(500);
       if (signal?.cancelled) return;
       if (error) throw error;
       setMessages((data || []) as ChatMessage[]);

@@ -47,12 +47,12 @@ export function useSentimentAnnotations(contactId: string | undefined) {
     queryFn: async (): Promise<SentimentAnnotation[]> => {
       const { data, error } = await supabase
         .from('sentiment_annotations')
-        .select('*')
+        .select('id, created_by, contact_id, week_start, category, title, description, created_at, updated_at')
         .eq('created_by', user!.id)
         .eq('contact_id', contactId!)
         .order('week_start', { ascending: false })
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(200);
       if (error) throw error;
       return (data ?? []) as SentimentAnnotation[];
     },
