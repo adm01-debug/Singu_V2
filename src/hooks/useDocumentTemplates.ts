@@ -202,6 +202,7 @@ export function useDocumentSignatures() {
       if (tpl && input.template_id) {
         void supabase.from('document_templates')
           .update({ usage_count: (tpl.usage_count ?? 0) + 1 } as TablesUpdate<'document_templates'>)
+          .eq('user_id', user!.id)
           .eq('id', input.template_id)
           .catch((e: unknown) => logger.error('template usage_count update failed:', e));
       }
@@ -219,6 +220,7 @@ export function useDocumentSignatures() {
       const { error } = await supabase
         .from('document_signatures')
         .update({ status: 'declined', declined_at: new Date().toISOString(), declined_reason: 'Cancelado pelo remetente' } as TablesUpdate<'document_signatures'>)
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
     },

@@ -13,6 +13,7 @@ export function useNLPAnalysisValidation() {
       const { error } = await supabase
         .from('vak_analysis_history')
         .update({ is_validated: isValidated, user_feedback: feedback })
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
       toast.success(isValidated ? 'Análise VAK validada' : 'Análise VAK atualizada');
@@ -28,6 +29,7 @@ export function useNLPAnalysisValidation() {
       const { error } = await supabase
         .from('metaprogram_analysis')
         .update({ is_validated: isValidated, user_feedback: feedback })
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
       toast.success(isValidated ? 'Metaprograma validado' : 'Metaprograma atualizado');
@@ -43,6 +45,7 @@ export function useNLPAnalysisValidation() {
       const { error } = await supabase
         .from('reframing_analysis')
         .update({ feedback })
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
       toast.success('Feedback do reenquadramento salvo');
