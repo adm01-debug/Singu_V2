@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { queryExternalData } from "@/lib/externalData";
 import { Button } from "@/components/ui/button";
  import { Printer, FileSpreadsheet, Edit3, Save, ShieldCheck } from "lucide-react";
@@ -47,6 +48,7 @@ interface ContactBehavior {
 
 const RelatorioContato = () => {
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
   const [data, setData] = useState<ContactReport | null>(null);
   const [editingInsights, setEditingInsights] = useState(false);
   const [editedInsights, setEditedInsights] = useState<ContactReport['insights'] | null>(null);
@@ -55,7 +57,7 @@ const RelatorioContato = () => {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || !user) return;
     let cancelled = false;
     const fetchData = async () => {
       try {
@@ -65,8 +67,8 @@ const RelatorioContato = () => {
           { data: localInteractions },
           { data: localDisc },
         ] = await Promise.all([
-          supabase.from("contacts").select("*").eq("id", id).maybeSingle(),
-          supabase.from("interactions").select("*").eq("contact_id", id).order("created_at", { ascending: false }).limit(500),
+          supabase.from("contacts").select("*").eq("id", id).eq("user_id", user.id).maybeSingle(),
+          supabase.from("interactions").select("*").eq("contact_id", id).eq("user_id", user.id).order("created_at", { ascending: false }).limit(500),
           supabase.from("disc_analysis_history").select("*").eq("contact_id", id).order("analyzed_at", { ascending: false }).limit(50),
         ]);
 
@@ -112,6 +114,7 @@ const RelatorioContato = () => {
           .from("contact_report_overrides")
           .select("*")
           .eq("contact_id", id)
+          .eq("user_id", user.id)
           .maybeSingle();
 
         // Fetch consent logs
@@ -119,6 +122,7 @@ const RelatorioContato = () => {
           .from("social_consent_audit")
           .select("*")
           .eq("contact_id", id)
+          .eq("user_id", user.id)
           .order("created_at", { ascending: false })
           .limit(1000);
 

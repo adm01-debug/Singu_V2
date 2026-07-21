@@ -123,7 +123,7 @@ export function useContactRelationalData(contactId: string | undefined) {
 
       if (user) {
         const [relRes, cadRes, prefRes, commPrefRes, timeRes] = await Promise.all([
-          supabase.from('contact_relatives').select('*').eq('contact_id', contactId).order('name'),
+          supabase.from('contact_relatives').select('*').eq('contact_id', contactId).eq('user_id', user.id).order('name'),
           supabase.from('contact_cadence').select('*').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
           supabase.from('contact_preferences').select('*').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),
           supabase.from('communication_preferences').select('*').eq('contact_id', contactId).eq('user_id', user.id).maybeSingle(),

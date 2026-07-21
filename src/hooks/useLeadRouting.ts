@@ -108,6 +108,7 @@ export function useLeadAssignments(status?: string) {
       let query = supabase
         .from('lead_assignments')
         .select('*')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(200);
       if (status) query = query.eq('status', status);

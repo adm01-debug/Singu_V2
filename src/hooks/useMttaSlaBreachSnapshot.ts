@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 const SLA_MINUTES = 30;
-const DEDUP_KEY = "mtta_sla_breach_snapshot_day";
-const ALERT_DEDUP_KEY = "mtta_sla_breach_alert_day";
+const BASE_DEDUP_KEY = "mtta_sla_breach_snapshot_day";
+const BASE_ALERT_DEDUP_KEY = "mtta_sla_breach_alert_day";
 
 /**
  * Registra um snapshot em `system_health_snapshots` quando o MTTA crítico
@@ -14,12 +15,16 @@ const ALERT_DEDUP_KEY = "mtta_sla_breach_alert_day";
  * usuários não-admin apenas ignoram o insert.
  */
 export function useMttaSlaBreachSnapshot(mttaCriticalMinutes: number | null): void {
+  const { user } = useAuth();
   const inFlight = useRef(false);
 
   useEffect(() => {
     if (mttaCriticalMinutes === null || mttaCriticalMinutes <= SLA_MINUTES) return;
     if (inFlight.current) return;
 
+    const uid = user?.id ?? 'anon';
+    const DEDUP_KEY = `${BASE_DEDUP_KEY}-${uid}`;
+    const ALERT_DEDUP_KEY = `${BASE_ALERT_DEDUP_KEY}-${uid}`;
     const today = new Date().toISOString().slice(0, 10);
     const readKey = (k: string): string | null => {
       try {
@@ -67,5 +72,5 @@ export function useMttaSlaBreachSnapshot(mttaCriticalMinutes: number | null): vo
         inFlight.current = false;
       }
     })();
-  }, [mttaCriticalMinutes]);
+  }, [mttaCriticalMinutes, user]);
 }

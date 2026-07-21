@@ -138,6 +138,7 @@ export function useFormSubmissions(formId: string | undefined) {
         .from('form_submissions')
         .select('*')
         .eq('form_id', formId!)
+        .eq('user_id', user!.id)
         .order('created_at', { ascending: false })
         .limit(200);
       if (error) throw error;

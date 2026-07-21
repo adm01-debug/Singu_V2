@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useCreateTask } from '@/hooks/useTasks';
+import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 
 /**
@@ -147,6 +148,7 @@ function composeDescription(description: string, note: string): string | undefin
 }
 
 export function CreateTaskDialog() {
+  const { user } = useAuth();
   const createTask = useCreateTask();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
@@ -171,8 +173,8 @@ export function CreateTaskDialog() {
     const fetchEntities = async () => {
       try {
         const [compRes, contRes] = await Promise.all([
-          supabase.from('companies').select('id, name').limit(100),
-          supabase.from('contacts').select('id, first_name, last_name').limit(100),
+          supabase.from('companies').select('id, name').eq('user_id', user?.id ?? '').limit(100),
+          supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user?.id ?? '').limit(100),
         ]);
         if (cancelled) return;
         if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));

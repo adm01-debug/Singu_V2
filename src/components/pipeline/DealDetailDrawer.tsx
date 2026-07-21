@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/select';
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import { type PipelineDeal } from '@/hooks/usePipeline';
+import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Loader2, DollarSign, Trash2, Trophy, Frown } from 'lucide-react';
@@ -62,6 +63,7 @@ interface Props {
 }
 
 export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -101,8 +103,8 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
     const fetchEntities = async () => {
       try {
         const [compRes, contRes] = await Promise.all([
-          supabase.from('companies').select('id, name').limit(100),
-          supabase.from('contacts').select('id, first_name, last_name').limit(100),
+          supabase.from('companies').select('id, name').eq('user_id', user?.id ?? '').limit(100),
+          supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user?.id ?? '').limit(100),
         ]);
         if (cancelled) return;
         if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));

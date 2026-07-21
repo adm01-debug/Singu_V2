@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { useAuth } from '@/hooks/useAuth';
 
 interface EasterEgg {
   id: string;
@@ -11,33 +12,31 @@ interface EasterEgg {
   discovered: boolean;
 }
 
-const STORAGE_KEY = 'discovered-easter-eggs';
+const BASE_STORAGE_KEY = 'discovered-easter-eggs';
 
 export function useEasterEggs() {
+  const { user } = useAuth();
+  const storageKey = `${BASE_STORAGE_KEY}-${user?.id ?? 'anon'}`;
   const [keySequence, setKeySequence] = useState<string[]>([]);
   const [discoveredEggs, setDiscoveredEggs] = useState<Set<string>>(new Set());
 
-  // Load discovered eggs from storage
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setDiscoveredEggs(new Set(JSON.parse(stored)));
-      }
+      const stored = localStorage.getItem(storageKey);
+      setDiscoveredEggs(stored ? new Set(JSON.parse(stored)) : new Set());
     } catch {
-      // Ignore errors
+      setDiscoveredEggs(new Set());
     }
-  }, []);
+  }, [storageKey]);
 
-  // Save discovered eggs
   const saveDiscoveredEgg = useCallback((eggId: string) => {
     setDiscoveredEggs(prev => {
       const next = new Set(prev);
       next.add(eggId);
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...next])); } catch { /* quota/private */ }
+      try { localStorage.setItem(storageKey, JSON.stringify([...next])); } catch { /* quota/private */ }
       return next;
     });
-  }, []);
+  }, [storageKey]);
 
   // Konami code confetti explosion
   const konamiAction = useCallback(() => {

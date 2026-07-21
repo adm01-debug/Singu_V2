@@ -13,15 +13,17 @@ import { toast } from 'sonner';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import type { TablesUpdate } from '@/integrations/supabase/types';
 import { useMagnetDownloads, type LeadMagnet } from '@/hooks/useLeadMagnets';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function MarketingMagnetDetail() {
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
   const qc = useQueryClient();
   const { data: magnet, isLoading } = useQuery({
-    queryKey: ['lead-magnet', id],
-    enabled: !!id,
+    queryKey: ['lead-magnet', id, user?.id],
+    enabled: !!id && !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from('lead_magnets').select('*').eq('id', id!).maybeSingle();
+      const { data, error } = await supabase.from('lead_magnets').select('*').eq('id', id!).eq('user_id', user!.id).maybeSingle();
       if (error) throw error;
       return data as unknown as LeadMagnet | null;
     },

@@ -1,36 +1,32 @@
-import { useState, useCallback } from 'react';
-import { notifyDensityChange } from '@/contexts/DensityContext';
+import { useState, useCallback, useEffect } from 'react';
+import { notifyDensityChange, BASE_TABLE_DENSITY_KEY } from '@/contexts/DensityContext';
+import { useAuth } from '@/hooks/useAuth';
 
 export type TableDensity = 'comfortable' | 'compact';
 
-const STORAGE_KEY = 'singu-table-density';
-
-/**
- * Hook to manage table density preference (comfortable vs compact).
- * Persists choice in localStorage and notifies in-tab listeners
- * (e.g., `useListDensity`) so passive consumers like `InfiniteScrollSentinel`
- * react instantly without prop drilling.
- */
 export function useTableDensity() {
-  const [density, setDensityState] = useState<TableDensity>(() => {
+  const { user } = useAuth();
+  const storageKey = `${BASE_TABLE_DENSITY_KEY}-${user?.id ?? 'anon'}`;
+  const [density, setDensityState] = useState<TableDensity>('comfortable');
+
+  useEffect(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored === 'compact' ? 'compact' : 'comfortable';
+      const stored = localStorage.getItem(storageKey);
+      setDensityState(stored === 'compact' ? 'compact' : 'comfortable');
     } catch {
-      return 'comfortable';
+      setDensityState('comfortable');
     }
-  });
+  }, [storageKey]);
 
   const setDensity = useCallback((d: TableDensity) => {
     setDensityState(d);
     try {
-      localStorage.setItem(STORAGE_KEY, d);
+      localStorage.setItem(storageKey, d);
     } catch {
       // ignora falhas de acesso ao localStorage (ex.: modo privado)
     }
     notifyDensityChange();
-  }, []);
-
+  }, [storageKey]);
 
   const toggle = useCallback(() => {
     setDensity(density === 'comfortable' ? 'compact' : 'comfortable');
@@ -38,7 +34,6 @@ export function useTableDensity() {
 
   const isCompact = density === 'compact';
 
-  /** Tailwind class helpers */
   const cellPadding = isCompact ? 'px-3 py-1.5' : 'px-4 py-3';
   const rowHeight = isCompact ? 'h-9' : 'h-12';
   const textSize = isCompact ? 'text-xs' : 'text-sm';

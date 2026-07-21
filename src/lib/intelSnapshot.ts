@@ -3,7 +3,7 @@
  * (tab + filtros via URLSearchParams + entidade aberta) em base64 JSON
  * compactado e mantém histórico recente em localStorage.
  */
-const STORAGE_KEY = 'intel-snapshots-v1';
+export const BASE_STORAGE_KEY = 'intel-snapshots-v1';
 const MAX_RECENT = 5;
 
 export interface IntelSnapshotPayload {
@@ -52,9 +52,9 @@ export function decodeSnapshot(hash: string): IntelSnapshotPayload | null {
   }
 }
 
-export function readRecentSnapshots(): RecentSnapshot[] {
+export function readRecentSnapshots(storageKey = BASE_STORAGE_KEY): RecentSnapshot[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as RecentSnapshot[];
     return Array.isArray(parsed) ? parsed.slice(0, MAX_RECENT) : [];
@@ -63,16 +63,19 @@ export function readRecentSnapshots(): RecentSnapshot[] {
   }
 }
 
-export function pushRecentSnapshot(entry: Omit<RecentSnapshot, 'id' | 'savedAt'>): RecentSnapshot[] {
+export function pushRecentSnapshot(
+  entry: Omit<RecentSnapshot, 'id' | 'savedAt'>,
+  storageKey = BASE_STORAGE_KEY,
+): RecentSnapshot[] {
   const next: RecentSnapshot = {
     ...entry,
     // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     savedAt: Date.now(),
   };
-  const list = [next, ...readRecentSnapshots()].slice(0, MAX_RECENT);
+  const list = [next, ...readRecentSnapshots(storageKey)].slice(0, MAX_RECENT);
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    localStorage.setItem(storageKey, JSON.stringify(list));
   } catch {
     /* ignore */
   }

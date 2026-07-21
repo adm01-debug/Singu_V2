@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/select';
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useUpdateTask, useDeleteTask, type Task } from '@/hooks/useTasks';
+import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2, Trash2, Calendar as CalendarIcon } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
@@ -56,6 +57,7 @@ interface Props {
 }
 
 export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
+  const { user } = useAuth();
   const updateTask = useUpdateTask();
   const deleteTask = useDeleteTask();
   const [companies, setCompanies] = useState<{ value: string; label: string }[]>([]);
@@ -96,8 +98,8 @@ export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
     const fetchEntities = async () => {
       try {
         const [compRes, contRes] = await Promise.all([
-          supabase.from('companies').select('id, name').limit(100),
-          supabase.from('contacts').select('id, first_name, last_name').limit(100),
+          supabase.from('companies').select('id, name').eq('user_id', user?.id ?? '').limit(100),
+          supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user?.id ?? '').limit(100),
         ]);
         if (cancelled) return;
         if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));

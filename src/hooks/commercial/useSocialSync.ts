@@ -2,12 +2,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { useAuth } from '@/hooks/useAuth';
 
 export function useSocialSync(contactId: string) {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const { data: queueStatus, isLoading: isLoadingQueue } = useQuery({
-    queryKey: ['social-sync-queue', contactId],
+    queryKey: ['social-sync-queue', contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('social_sync_queue')
@@ -20,12 +22,12 @@ export function useSocialSync(contactId: string) {
       if (error) throw error;
       return data;
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
     staleTime: 2 * 60 * 1000,
   });
 
   const { data: auditLogs, isLoading: isLoadingAudit } = useQuery({
-    queryKey: ['psychographic-audit-log', contactId],
+    queryKey: ['psychographic-audit-log', contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('psychographic_audit_log')
@@ -37,7 +39,7 @@ export function useSocialSync(contactId: string) {
       if (error) throw error;
       return data;
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
     staleTime: 5 * 60 * 1000,
   });
 

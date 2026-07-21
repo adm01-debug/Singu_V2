@@ -177,7 +177,7 @@ export function useInteractionsAdvancedFilter() {
     if (hydratedRef.current) return;
     hydratedRef.current = true;
     if (searchParams.get('canais')) return;
-    const cachedRaw = readAppliedCanais() ?? [];
+    const cachedRaw = readAppliedCanais(uid) ?? [];
     const cached = normalizeCanais(cachedRaw);
     const ignored = Array.isArray(cachedRaw)
       ? Array.from(new Set(
@@ -229,14 +229,14 @@ export function useInteractionsAdvancedFilter() {
   useEffect(() => {
     pendingCanaisRef.current = filters.canais;
     const timer = setTimeout(() => {
-      writeAppliedCanais(pendingCanaisRef.current);
+      writeAppliedCanais(pendingCanaisRef.current, uid);
     }, 250);
     return () => {
       clearTimeout(timer);
       // Garante persistência da última versão se o efeito foi cancelado.
-      writeAppliedCanais(pendingCanaisRef.current);
+      writeAppliedCanais(pendingCanaisRef.current, uid);
     };
-  }, [filters.canais]);
+  }, [filters.canais, uid]);
 
   // Hidratação one-shot consolidada das preferências de visualização: URL ganha sobre cache.
   const prefsHydratedRef = useRef(false);

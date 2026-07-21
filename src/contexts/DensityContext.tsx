@@ -1,15 +1,16 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 export type ListDensity = 'comfortable' | 'compact';
 
-const STORAGE_KEY = 'singu-table-density';
+export const BASE_TABLE_DENSITY_KEY = 'singu-table-density';
 const STORAGE_EVENT = 'singu:density-change';
 
 const DensityContext = createContext<ListDensity | null>(null);
 
-function readFromStorage(): ListDensity {
+function readFromStorage(storageKey: string): ListDensity {
   try {
-    return localStorage.getItem(STORAGE_KEY) === 'compact' ? 'compact' : 'comfortable';
+    return localStorage.getItem(storageKey) === 'compact' ? 'compact' : 'comfortable';
   } catch {
     return 'comfortable';
   }
@@ -39,21 +40,25 @@ export function DensityProvider({
  */
 export function useListDensity(): ListDensity {
   const fromContext = useContext(DensityContext);
-  const [stored, setStored] = useState<ListDensity>(() =>
-    fromContext != null ? fromContext : readFromStorage(),
-  );
+  const { user } = useAuth();
+  const storageKey = `${BASE_TABLE_DENSITY_KEY}-${user?.id ?? 'anon'}`;
+  const [stored, setStored] = useState<ListDensity>('comfortable');
 
   useEffect(() => {
-    // Provider tem prioridade; ignoramos sincronização de storage neste caso.
     if (fromContext != null) return;
-    const sync = () => setStored(readFromStorage());
+    setStored(readFromStorage(storageKey));
+  }, [fromContext, storageKey]);
+
+  useEffect(() => {
+    if (fromContext != null) return;
+    const sync = () => setStored(readFromStorage(storageKey));
     window.addEventListener('storage', sync);
     window.addEventListener(STORAGE_EVENT, sync);
     return () => {
       window.removeEventListener('storage', sync);
       window.removeEventListener(STORAGE_EVENT, sync);
     };
-  }, [fromContext]);
+  }, [fromContext, storageKey]);
 
   return useMemo(() => fromContext ?? stored, [fromContext, stored]);
 }
