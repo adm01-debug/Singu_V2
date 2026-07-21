@@ -33,6 +33,7 @@ export function useEmotionalAnchors(contactId?: string) {
 
   const createMutation = useMutation({
     mutationFn: async (anchor: Omit<TablesInsert<'emotional_anchors'>, 'user_id'>) => {
+      if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from('emotional_anchors')
         .insert({ ...anchor, user_id: user!.id })
@@ -54,7 +55,8 @@ export function useEmotionalAnchors(contactId?: string) {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('emotional_anchors').delete().eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('emotional_anchors').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onMutate: async (id) => {

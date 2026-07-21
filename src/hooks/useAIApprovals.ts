@@ -107,6 +107,7 @@ export function useAIApprovals(contactId?: string) {
 
   const rejectMutation = useMutation({
     mutationFn: async (suggestionId: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('suggested_rapport_intel')
         .update({ status: 'rejected' })

@@ -87,6 +87,7 @@ export function useNpsSurveys() {
 
   const answer = useMutation({
     mutationFn: async (input: { id: string; score: number; feedback?: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('csat_surveys')
         .update({
@@ -108,7 +109,8 @@ export function useNpsSurveys() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('csat_surveys').delete().eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('csat_surveys').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

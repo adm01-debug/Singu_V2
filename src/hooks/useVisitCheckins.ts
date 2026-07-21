@@ -68,6 +68,7 @@ export function useVisitCheckins(entityId?: string, entityType?: 'contact' | 'co
 
   const checkOut = useMutation({
     mutationFn: async (id: string) => {
+      if (!user) throw new Error('Não autenticado');
       const checkin = checkins.find(c => c.id === id);
       const duration = checkin ? Math.round((Date.now() - new Date(checkin.check_in_at).getTime()) / 60000) : null;
       const { error } = await supabase.from('visit_checkins').update({

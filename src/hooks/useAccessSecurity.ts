@@ -44,6 +44,7 @@ export function useAccessSecurity() {
 
   const update = useMutation({
     mutationFn: async (updates: Partial<Omit<SecuritySettings, 'id'>>) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('access_security_settings')
         .upsert({ user_id: user!.id, ...updates }, { onConflict: 'user_id' });

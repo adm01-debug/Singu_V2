@@ -110,7 +110,8 @@ export function useIncomingWebhooks() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('incoming_webhooks').delete().eq('created_by', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('incoming_webhooks').delete().eq('created_by', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -122,7 +123,8 @@ export function useIncomingWebhooks() {
 
   const rotateToken = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('incoming_webhooks').update({ token: genToken() }).eq('created_by', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('incoming_webhooks').update({ token: genToken() }).eq('created_by', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

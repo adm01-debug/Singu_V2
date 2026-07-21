@@ -122,7 +122,8 @@ export function useSmsCampaigns() {
 
   const deleteCampaign = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('sms_campaigns').delete().eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('sms_campaigns').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -209,7 +210,8 @@ export function useSmsTemplates() {
 
   const deleteTemplate = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('sms_templates').delete().eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('sms_templates').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

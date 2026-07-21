@@ -156,7 +156,8 @@ export function useUpdateABMAccount() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<ABMAccount> & { id: string }) => {
-      const { data, error } = await supabase.from("abm_accounts").update(updates).eq('user_id', user!.id).eq("id", id).select().maybeSingle();
+      if (!user) throw new Error('Não autenticado');
+      const { data, error } = await supabase.from("abm_accounts").update(updates).eq('user_id', user.id).eq("id", id).select().maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Conta ABM não encontrada");
       return data;
@@ -175,7 +176,8 @@ export function useDeleteABMAccount() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("abm_accounts").delete().eq('user_id', user!.id).eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("abm_accounts").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -263,7 +265,8 @@ export function useDeleteCommitteeMember() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id }: { id: string; account_id: string }) => {
-      const { error } = await supabase.from("abm_buying_committee").delete().eq('user_id', user!.id).eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("abm_buying_committee").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: (_, vars) => {
@@ -322,7 +325,8 @@ export function useUpdateWhitespaceStatus() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string; account_id: string }) => {
-      const { error } = await supabase.from("abm_whitespace_opportunities").update({ status }).eq('user_id', user!.id).eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("abm_whitespace_opportunities").update({ status }).eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: (_, vars) => {
@@ -452,7 +456,8 @@ export function useDeleteCampaign() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("abm_campaigns").delete().eq('user_id', user!.id).eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("abm_campaigns").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {

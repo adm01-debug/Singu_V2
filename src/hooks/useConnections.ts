@@ -95,7 +95,8 @@ export function useConnections() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('connection_configs').delete().eq('created_by', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('connection_configs').delete().eq('created_by', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

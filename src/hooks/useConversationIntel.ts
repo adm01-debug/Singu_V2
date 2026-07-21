@@ -153,7 +153,8 @@ export function useDeleteTopic() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("conversation_topics_catalog").delete().eq('user_id', user!.id).eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("conversation_topics_catalog").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {

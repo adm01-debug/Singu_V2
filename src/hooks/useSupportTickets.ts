@@ -78,6 +78,7 @@ export function useSupportTickets() {
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<SupportTicket> & { id: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const resolved = updates.status === 'resolved' || updates.status === 'closed';
       const updateData = {
         ...updates,
@@ -98,7 +99,8 @@ export function useSupportTickets() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('support_tickets').delete().eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('support_tickets').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Ticket removido!'); },

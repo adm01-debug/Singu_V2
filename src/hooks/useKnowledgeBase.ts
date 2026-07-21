@@ -54,7 +54,8 @@ export function useKnowledgeBase() {
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<KBArticle> & { id: string }) => {
-      const { error } = await supabase.from('knowledge_base_articles').update(updates as TablesUpdate<'knowledge_base_articles'>).eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('knowledge_base_articles').update(updates as TablesUpdate<'knowledge_base_articles'>).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Artigo atualizado!'); },
@@ -63,7 +64,8 @@ export function useKnowledgeBase() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('knowledge_base_articles').delete().eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('knowledge_base_articles').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Artigo removido!'); },

@@ -89,7 +89,8 @@ export function useLandingPages() {
 
   const update = useMutation({
     mutationFn: async ({ id, ...patch }: Partial<LandingPage> & { id: string }) => {
-      const { error } = await supabase.from('landing_pages').update(patch as unknown as TablesUpdate<'landing_pages'>).eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('landing_pages').update(patch as unknown as TablesUpdate<'landing_pages'>).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Landing page salva!'); },
@@ -98,7 +99,8 @@ export function useLandingPages() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('landing_pages').delete().eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('landing_pages').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Removida.'); },
@@ -107,7 +109,8 @@ export function useLandingPages() {
 
   const togglePublish = useMutation({
     mutationFn: async ({ id, publish }: { id: string; publish: boolean }) => {
-      const { error } = await supabase.from('landing_pages').update({ is_published: publish }).eq('user_id', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('landing_pages').update({ is_published: publish }).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: (_d, v) => {

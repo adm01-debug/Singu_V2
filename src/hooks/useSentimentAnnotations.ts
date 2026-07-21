@@ -95,6 +95,7 @@ export function useSentimentAnnotations(contactId: string | undefined) {
 
   const update = useMutation({
     mutationFn: async (input: UpdateAnnotationInput) => {
+      if (!user) throw new Error('Não autenticado');
       const { id, ...patch } = input;
       const { data, error } = await supabase
         .from('sentiment_annotations')
@@ -113,7 +114,8 @@ export function useSentimentAnnotations(contactId: string | undefined) {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('sentiment_annotations').delete().eq('created_by', user!.id).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('sentiment_annotations').delete().eq('created_by', user.id).eq('id', id);
       if (error) throw error;
       return id;
     },

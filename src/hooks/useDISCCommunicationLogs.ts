@@ -33,6 +33,7 @@ export function useDISCCommunicationLogs(contactId?: string) {
 
   const logMutation = useMutation({
     mutationFn: async (log: Omit<TablesInsert<'disc_communication_logs'>, 'user_id'>) => {
+      if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from('disc_communication_logs')
         .insert({ ...log, user_id: user!.id })
