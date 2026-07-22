@@ -9,7 +9,7 @@ export interface EntityNote {
   updatedAt: number;
 }
 
-function readNote(key: string): EntityNote {
+function readNote(key: string, STORAGE_PREFIX: string): EntityNote {
   try {
     const raw = localStorage.getItem(STORAGE_PREFIX + key);
     if (!raw) return { text: '', updatedAt: 0 };
@@ -20,7 +20,7 @@ function readNote(key: string): EntityNote {
   }
 }
 
-function writeNote(key: string, note: EntityNote): void {
+function writeNote(key: string, note: EntityNote, STORAGE_PREFIX: string): void {
   try {
     localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(note));
   } catch {
