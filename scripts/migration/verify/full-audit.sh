@@ -29,6 +29,9 @@ FATAL=(
   sequence-overflow-guard.sql
   index-corruption-amcheck.sql
   archive-command-health.sql
+  dead-tuple-ratio-guard.sql
+  checksum-failures-guard.sql
+  relfrozenxid-table-guard.sql
 )
 WARN=(
   autovacuum-audit.sql
@@ -55,6 +58,11 @@ WARN=(
   bgwriter-efficiency-audit.sql
   fillfactor-hot-audit.sql
   subscription-lag-guard.sql
+  cache-hit-ratio-audit.sql
+  lock-wait-duration-guard.sql
+  superuser-count-audit.sql
+  pg-hba-permissive-audit.sql
+  seq-scan-large-tables-audit.sql
 )
 
 FAILED=0
@@ -74,4 +82,4 @@ if [[ "$FAILED" -gt 0 ]]; then
   log "AUDIT FAILED: $FAILED check(s) fatal(is)"
   exit 1
 fi
-log "OK Audit 21/10 completo (SQL). Rode pitr-window-verifier.sh, connection-pool-exhaustion-canary.sh e timeline-divergence-guard.sh separadamente."
+log "OK Audit 22/10 completo (SQL). Rode pitr-window-verifier.sh, connection-pool-exhaustion-canary.sh e timeline-divergence-guard.sh separadamente."
