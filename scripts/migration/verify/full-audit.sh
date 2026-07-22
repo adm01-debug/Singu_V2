@@ -20,6 +20,8 @@ FATAL=(
   long-running-tx-guard.sql
   prepared-xacts-guard.sql
   function-volatility-audit.sql
+  idle-in-transaction-guard.sql
+  function-search-path-reset-audit.sql
 )
 WARN=(
   autovacuum-audit.sql
@@ -34,6 +36,10 @@ WARN=(
   publication-tables-coverage.sql
   role-membership-parity.sql
   jit-checkpoint-audit.sql
+  toast-compression-audit.sql
+  public-role-privileges-audit.sql
+  logical-vs-physical-drift.sql
+  cron-job-failover-guard.sql
 )
 
 FAILED=0
@@ -53,4 +59,4 @@ if [[ "$FAILED" -gt 0 ]]; then
   log "AUDIT FAILED: $FAILED check(s) fatal(is)"
   exit 1
 fi
-log "OK Audit 16/10 completo"
+log "OK Audit 19/10 completo (SQL). Rode pitr-window-verifier.sh e connection-pool-exhaustion-canary.sh separadamente."
