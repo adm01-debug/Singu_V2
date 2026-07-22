@@ -32,7 +32,7 @@ export default function PublicLeadMagnet() {
       if (cancelled) return;
       if (data) {
         setMagnet(data as unknown as LeadMagnet);
-        supabase.rpc('increment_magnet_view', { _slug: currentSlug }).catch(() => {});
+        try { await supabase.rpc('increment_magnet_view' as never, { _slug: currentSlug } as never); } catch { /* noop */ }
       }
       setLoading(false);
     })();
