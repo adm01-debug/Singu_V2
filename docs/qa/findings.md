@@ -13,7 +13,7 @@ Ranking por severidade. Fechados nesta rodada marcados ✅.
 
 | # | Módulo | Descrição | Ação proposta |
 | --- | --- | --- | --- |
-| 3 | Testes / Runtime | Onda B: 216 erros em specs zerados. Onda C: runtime 0 erros / 52 warnings. **Onda D (30/10):** 52 warnings suprimidos com `eslint-disable-next-line <regra> -- <motivo>` (ADR-020). Runtime agora **0/0**; ratchet CI `src --max-warnings=0`. | ✅ |
+| 3 | Testes / Runtime / Externo | Ondas B/C/D zeraram `src/` e specs. **Onda E (31/10):** rename `slow-regex → super-linear-regex` em edge functions + supressões justificadas em 5 handlers HTTP e 3 amostragens em `scripts/**` (ADR-021). Repo inteiro agora **0/0**; ratchet CI global `--max-warnings=0`. | ✅ |
 | 4 | Arquitetura | 101 warnings `no-orphans` em `depcruise` (arquivos legados em `src/data/*`, componentes UI). | Rever cada órfão: importar/consumir ou remover. |
 | 5 | Backend | 109 WARN linter Supabase (`SECURITY DEFINER` acessível a anon/authenticated). | Já aceitos pelo baseline; revisar caso a caso quando features forem tocadas. |
 | 6 | E2E | ✅ Onda B: `e2e/gap-modules-smoke.spec.ts` cobre 12 rotas gap + Ask CRM + LP pública fallback. | ✅ |
