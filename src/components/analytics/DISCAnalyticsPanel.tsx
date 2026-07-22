@@ -35,7 +35,7 @@ const DISCAnalyticsPanel = () => {
     setLoading(true);
     try {
       const [{ data: contactsData }, { count: recentCount }] = await Promise.all([
-        supabase.from('contacts').select('id, first_name, last_name, avatar_url, behavior, relationship_score, companies(name)').eq('user_id', user.id),
+        supabase.from('contacts').select('id, first_name, last_name, avatar_url, behavior, relationship_score, companies(name)').eq('user_id', user.id).limit(5000),
         supabase.from('disc_analysis_history').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('analyzed_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
       ]);
       if (signal?.cancelled) return;

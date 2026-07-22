@@ -99,7 +99,7 @@ export function useLeadScoreDistribution() {
       if (!user?.id) return { A: 0, B: 0, C: 0, D: 0, avg: 0, total: 0, changes24h: 0 };
       const { data } = await supabase
         .from('lead_scores').select('grade, total_score, computed_at, score_change')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id).limit(5000);
       const rows = (data ?? []) as Array<Pick<LeadScoreRow, 'grade' | 'total_score' | 'computed_at' | 'score_change'>>;
       const out = { A: 0, B: 0, C: 0, D: 0, avg: 0, total: rows.length, changes24h: 0 };
       const since = Date.now() - 86_400_000;
