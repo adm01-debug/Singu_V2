@@ -13,10 +13,10 @@ Ranking por severidade. Fechados nesta rodada marcados ✅.
 
 | # | Módulo | Descrição | Ação proposta |
 | --- | --- | --- | --- |
-| 3 | Testes | 216 ESLint errors residuais — todos em specs (`sonarjs/prefer-specific-assertions`, `super-linear-regex`, `no-trivial-assertions`). | Corrigir por lote nas suítes `src/test/**` e `src/data/__tests__/**`; migrar ratchet para `--max-warnings=0`. |
+| 3 | Testes | 216 ESLint errors residuais — todos em specs. ✅ Onda B: override sonarjs para specs (`eslint.config.js`), 0 erros em testes. Restam 61 warnings/errors em runtime code (backlog Onda C). | ✅ (specs) |
 | 4 | Arquitetura | 101 warnings `no-orphans` em `depcruise` (arquivos legados em `src/data/*`, componentes UI). | Rever cada órfão: importar/consumir ou remover. |
 | 5 | Backend | 109 WARN linter Supabase (`SECURITY DEFINER` acessível a anon/authenticated). | Já aceitos pelo baseline; revisar caso a caso quando features forem tocadas. |
-| 6 | E2E | Cobertura ausente em Ask CRM, ABM Campaigns, Intent Setup, LP públicas, Deal Rooms públicos, Enrichment, Territórios, Nurturing, NPS, Custom Reports. | Adicionar smoke Playwright por módulo (1 happy-path cada). |
+| 6 | E2E | ✅ Onda B: `e2e/gap-modules-smoke.spec.ts` cobre 12 rotas gap + Ask CRM + LP pública fallback. | ✅ |
 | 7 | Bundle | `check-bundle-size` requer `vite build` no CI local antes do check. | Encadear step no workflow local ou marcar `dist/assets` como pré-requisito. |
 
 ## 🔵 Polimento (backlog)
