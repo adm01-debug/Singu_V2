@@ -28,7 +28,7 @@ export function MergeContactsDialog({ primaryId, secondaryId, open, onOpenChange
     queryFn: async () => {
       const { data, error } = await supabase
         .from('contacts')
-        .select('id, first_name, last_name, email, phone, role_title, company_id, whatsapp, linkedin, instagram, notes')
+        .select('id, first_name, last_name, email, phone, role_title, company_id, whatsapp, linkedin, instagram, notes, family_info')
         .in('id', [primaryId, secondaryId])
         .limit(2);
       if (error) throw error;

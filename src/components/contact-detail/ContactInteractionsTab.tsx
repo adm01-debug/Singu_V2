@@ -99,6 +99,12 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
         initiated_by: data.initiated_by != null ? String(data.initiated_by) : null,
         tags: Array.isArray(data.tags) ? (data.tags as string[]) : null,
         attachments: Array.isArray(data.attachments) ? (data.attachments as string[]) : null,
+        response_time: data.response_time != null ? Number(data.response_time) : null,
+        key_insights: Array.isArray(data.key_insights) ? (data.key_insights as string[]) : null,
+        audio_url: data.audio_url != null ? String(data.audio_url) : null,
+        transcription: data.transcription != null ? String(data.transcription) : null,
+        neuro_pnl_technique: data.neuro_pnl_technique != null ? String(data.neuro_pnl_technique) : null,
+        neuro_pnl_result: data.neuro_pnl_result != null ? String(data.neuro_pnl_result) : null,
       };
        const { data: interaction, error } = await supabase.from('interactions').insert(insertData).select().maybeSingle();
        if (error) throw error;
