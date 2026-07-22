@@ -78,9 +78,9 @@ export function useForms() {
   const upsert = useMutation({
     mutationFn: async (input: Partial<MarketingForm> & { name: string; slug: string }) => {
       if (!user) throw new Error('Não autenticado');
-      const payload = { ...input, user_id: user.id } as TablesInsert<'forms'>;
+      const payload = { ...input, user_id: user.id } as unknown as TablesInsert<'forms'>;
       if (input.id) {
-        const { error } = await supabase.from('forms').update(input as TablesUpdate<'forms'>).eq('user_id', user.id).eq('id', input.id);
+        const { error } = await supabase.from('forms').update(input as unknown as TablesUpdate<'forms'>).eq('user_id', user.id).eq('id', input.id);
         if (error) throw error;
       } else {
         const { error } = await supabase.from('forms').insert(payload);
