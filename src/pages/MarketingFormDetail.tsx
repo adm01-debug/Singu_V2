@@ -40,7 +40,7 @@ export default function MarketingFormDetail() {
       fields: draft.fields,
       redirect_url: draft.redirect_url,
       success_message: draft.success_message,
-    } as TablesUpdate<'forms'>).eq('user_id', user.id).eq('id', draft.id);
+    } as unknown as TablesUpdate<'forms'>).eq('user_id', user.id).eq('id', draft.id);
     if (error) toast.error(parseApiError(error));
     else {
       toast.success('Salvo!');
