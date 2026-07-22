@@ -57,11 +57,11 @@ export const TemporalHeatmap = memo(({ data, days = 30 }: TemporalHeatmapProps) 
       </div>
       <div className="flex items-center justify-end gap-1.5 intel-mono text-[10px] text-muted-foreground">
         <span>MENOS</span>
-        {[0.1, 0.3, 0.55, 0.8, 1].map((i) => (
+        {[0.1, 0.3, 0.55, 0.8, 1].map((i, idx) => (
           <div
             key={i}
             className="h-2.5 w-2.5 rounded-[2px] border border-border/40"
-            style={{ backgroundColor: i === 0.1 ? 'hsl(var(--intel-surface-2))' : `hsl(var(--intel-accent) / ${i})` }}
+            style={{ backgroundColor: idx === 0 ? 'hsl(var(--intel-surface-2))' : `hsl(var(--intel-accent) / ${i})` }}
           />
         ))}
         <span>MAIS</span>

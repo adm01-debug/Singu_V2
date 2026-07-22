@@ -15,7 +15,7 @@ export interface UnifiedTimelineEvent {
   title: string;
   content?: string;
   timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export function useUnifiedTimeline(contactId: string) {
