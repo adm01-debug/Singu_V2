@@ -89,16 +89,22 @@ export function useEmailCampaigns() {
     mutationFn: async (campaignId: string) => {
       if (!user) throw new Error('Não autenticado');
 
-      // Buscar contatos elegíveis (com email)
-      const { data: contacts, error: contactsError } = await supabase
-        .from('contacts')
-        .select('id, email, first_name, last_name')
-        .eq('user_id', user.id)
-        .not('email', 'is', null)
-        .limit(500);
-      if (contactsError) throw contactsError;
+      // Buscar TODOS os contatos elegíveis (com email) via paginação
+      const PAGE = 1000;
+      let allContacts: { id: string; email: string | null; first_name: string | null; last_name: string | null }[] = [];
+      for (let offset = 0; ; offset += PAGE) {
+        const { data: page, error: pageErr } = await supabase
+          .from('contacts')
+          .select('id, email, first_name, last_name')
+          .eq('user_id', user.id)
+          .not('email', 'is', null)
+          .range(offset, offset + PAGE - 1);
+        if (pageErr) throw pageErr;
+        allContacts = allContacts.concat(page ?? []);
+        if (!page || page.length < PAGE) break;
+      }
 
-      const eligible = (contacts ?? []).filter(c => c.email && c.email.includes('@'));
+      const eligible = allContacts.filter(c => c.email && c.email.includes('@'));
       if (eligible.length === 0) throw new Error('Nenhum contato com email válido foi encontrado');
 
       // Marcar como enviando + buscar destinatários já existentes em paralelo
@@ -119,17 +125,18 @@ export function useEmailCampaigns() {
           sent_at: new Date().toISOString(),
         }));
 
-      const [{ error: insError }, { error: updError }] = await Promise.all([
-        toInsert.length > 0
-          ? supabase.from('campaign_recipients').insert(toInsert)
-          : Promise.resolve({ error: null }),
-        supabase.from('email_campaigns').update({
-          status: 'sent',
-          sent_at: new Date().toISOString(),
-          total_recipients: eligible.length,
-        } as TablesUpdate<'email_campaigns'>).eq('user_id', user.id).eq('id', campaignId),
-      ]);
-      if (insError) throw insError;
+      // Inserir destinatários em lotes de 500 para evitar limites de payload
+      const BATCH = 500;
+      for (let i = 0; i < toInsert.length; i += BATCH) {
+        const { error: insError } = await supabase.from('campaign_recipients').insert(toInsert.slice(i, i + BATCH));
+        if (insError) throw insError;
+      }
+
+      const { error: updError } = await supabase.from('email_campaigns').update({
+        status: 'sent',
+        sent_at: new Date().toISOString(),
+        total_recipients: eligible.length,
+      } as TablesUpdate<'email_campaigns'>).eq('user_id', user.id).eq('id', campaignId);
       if (updError) throw updError;
 
       return { recipientsCount: eligible.length, newlyAdded: toInsert.length };
