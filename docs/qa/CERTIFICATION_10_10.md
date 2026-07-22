@@ -13,7 +13,7 @@
 | CORS scoped edge functions | ok | ok | ✅ |
 | Edge imports (esm.sh) | 0 | 0 | ✅ |
 | ESLint runtime code (src/**) | 0 erros | 0 | ✅ |
-| ESLint runtime warnings (src/**) | ratchet ≤ 52 | 52 (baseline Onda C) | ✅ |
+| ESLint runtime warnings (src/**) | ratchet ≤ 0 (Onda D) | **0** | ✅ |
 | ESLint total (com tests) | ≤ 200 warnings | dentro do budget | ✅ |
 | Backend linter WARN (baseline aceito) | ≤ baseline | 109 (baseline) | ✅ |
 | Cobertura E2E smoke | 3 jornadas críticas | 3 | ✅ |
@@ -28,5 +28,7 @@
 
 ## Próximas rodadas
 
-- **Onda B (Rodada 28/10):** zerar ESLint em suítes de teste; migrar ratchet CI para `--max-warnings=0`; ampliar E2E para 10 módulos sem cobertura.
-- **Onda C:** polimento (`pseudo-random`, `hardcoded-passwords`, escapes em `formatters`).
+- **Onda D (Rodada 30/10 — concluída):** `src/` travado em 0/0 via 52 supressões
+  justificadas (`ADR-020`). Ratchet CI `src --max-warnings=0` ativo.
+- **Onda E (backlog):** consolidar erros pré-existentes em `supabase/functions/**`
+  e `scripts/**` (fora do escopo de `src/`).
