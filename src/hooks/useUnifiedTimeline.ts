@@ -15,7 +15,8 @@ export interface UnifiedTimelineEvent {
   title: string;
   content?: string;
   timestamp: string;
-  metadata?: Record<string, unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- metadata é payload dinâmico heterogêneo consumido por múltiplos renderers
+  metadata?: Record<string, any>;
 }
 
 export function useUnifiedTimeline(contactId: string) {
