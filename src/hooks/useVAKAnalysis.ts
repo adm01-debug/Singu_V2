@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
-import { useNLPAutoAnalysis } from "./useNLPAutoAnalysis";
 import { 
   VAKType, 
   VAKProfile, 
@@ -28,7 +27,6 @@ interface VAKAnalysisHistory {
 
 export function useVAKAnalysis() {
   const { user } = useAuth();
-  const { triggerAnalysis } = useNLPAutoAnalysis();
   const [analyzing, setAnalyzing] = useState(false);
 
   const normalizeText = (text: string): string => {
@@ -89,15 +87,12 @@ export function useVAKAnalysis() {
         analyzed_text: text.substring(0, 1000), is_validated: false
       });
       if (error) throw error;
-      if (contactId) {
-        triggerAnalysis(contactId, interactionId || "manual", text, null, "whatsapp", false);
-      }
       return true;
     } catch (error) {
       logger.error('Error saving VAK analysis:', error);
       return false;
     }
-  }, [user, triggerAnalysis]);
+  }, [user]);
 
   const getContactVAKProfile = useCallback(async (contactId: string): Promise<VAKProfile | null> => {
     if (!user) return null;
