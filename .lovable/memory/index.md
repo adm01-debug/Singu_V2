@@ -11,6 +11,7 @@ Excelência sustentada: 70/70 melhorias atômicas (Rodadas A-N). Gate a11y no CI
 
 ## Memories
 - [Rodada 26/10 — Observabilidade Externa & Alerting](mem://migration/completion-26-10) — Exporter Prometheus textfile, SLO 99.5% multi-window burn-rate, Alertmanager (PagerDuty/Slack), runbooks 34 secoes, CI monitoring-lint (promtool/amtool/coverage/secret-scan) + 6 regressores 26-*.
+- [Rodada 27/10 — QA Exaustivo & Hardening](mem://migration/completion-27-10) — Ciclos NLP fechados (useNLPAutoAnalysis ↔ VAK/Metaprograms), fix TS Ficha360, docs/qa/ (surface-map, static-audit, findings, CERTIFICATION_10_10), 0 TS/ciclos/CRITICAL.
 - [Rodada 25/10 — Hardening Contínuo](mem://migration/completion-25-10) — 8 novos guards (4 FATAL heap/LO/collation/replica-identity + 4 WARN PITR/passwd/autovacuum/plan-cache); full-audit agora 28 FATAL + 38 WARN.
 - [Rodada 23-24/10 — Validação Exaustiva & Patches](mem://migration/completion-23-10) — 1024 cenários, 5 falsos-negativos corrigidos (idle-tx aborted, search_path=public, checksums off, archive off, amcheck skipped), 6 guards novos (replication slot idle FATAL, SSL enforcement FATAL, pg_stat_statements reset, sync_commit drift, wal_sender timeout, ext upgrade pendente) + suíte tests/run-all.sh.
 - [Rodada 22/10 — Blindagem Definitiva](mem://migration/completion-22-10) — 8 hardenings: cache hit ratio, dead tuple, lock waits, checksum failures, superuser inventory, pg_hba permissivo, relfrozenxid por tabela, seq_scan em tabelas grandes.

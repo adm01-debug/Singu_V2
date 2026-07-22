@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from '@/hooks/use-toast';
-import { useNLPAutoAnalysis } from "./useNLPAutoAnalysis";
 import {
   MetaprogramProfile,
   MetaprogramAnalysisResult,
@@ -12,7 +11,6 @@ import { logger } from "@/lib/logger";
 
 export function useMetaprogramAnalysis() {
   const { user } = useAuth();
-  const { triggerAnalysis } = useNLPAutoAnalysis();
   const [loading, setLoading] = useState(false);
 
   // Analyze text for metaprogram patterns
@@ -81,18 +79,13 @@ export function useMetaprogramAnalysis() {
 
       if (error) throw error;
 
-      // Auto-trigger aggregated analysis update
-      if (contactId) {
-        triggerAnalysis(contactId, interactionId || "manual", analyzedText, null, "whatsapp", false);
-      }
-
       return data;
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error saving metaprogram analysis:', { error: msg });
       return null;
     }
-  }, [user, triggerAnalysis]);
+  }, [user]);
 
   // Get aggregated profile for a contact
   const getContactMetaprogramProfile = useCallback(async (

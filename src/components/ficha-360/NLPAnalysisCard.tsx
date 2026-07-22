@@ -28,7 +28,6 @@ interface MetaprogramProfile {
   referenceConfidence: number;
   workingStyle: string;
   workingConfidence: number;
-  [key: string]: string | number;
 }
 
 interface Reframing {
