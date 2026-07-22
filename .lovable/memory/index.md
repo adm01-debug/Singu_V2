@@ -10,6 +10,7 @@ Não implementar módulos de Produtos nem Propostas (escopo proibido).
 Excelência sustentada: 70/70 melhorias atômicas (Rodadas A-N). Gate a11y no CI.
 
 ## Memories
+- [Rodada 19/10 — Governança & Resiliência Extrema](mem://migration/completion-19-10) — 8 hardenings: toast compression, idle-in-tx guard, PUBLIC privileges audit, PITR window verifier, logical-vs-physical drift, pg_cron failover guard, search_path reset audit, connection pool canary.
 - [Rodada 16/10 — Governanca Profunda](mem://migration/completion-16-10) — 8 hardenings: replication slots orfaos, security definer search_path, NOT VALID constraints, long-running tx, tabelas sem PK, FDW credenciais, pg_stat_statements config, log retention + orquestrador full-audit.sh.
 - [Rodada 15/10 — Hardening Sustentado](mem://migration/completion-15-10) — 8 hardenings: replication lag, grants parity, logical publication, invalid indexes no CI, autovacuum audit, bloat monitor, planner stats, query plan regression.
 - [Rodada 14/10 — Hardening Contínuo](mem://migration/completion-14-10) — 8 hardenings: FK integrity, trigger parity wrapper, MV refresh audit, sequence gap, storage public guard, cron TZ, CORS scoped no CI, backup encryption verifier.
