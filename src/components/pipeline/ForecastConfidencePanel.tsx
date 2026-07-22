@@ -146,8 +146,7 @@ export function ForecastConfidencePanel() {
         .select('contact_id, sentiment, created_at, initiated_by')
         .in('contact_id', contactIds)
         .gte('created_at', since.toISOString())
-        .order('created_at', { ascending: false })
-        .limit(500);
+        .order('created_at', { ascending: false });
       return (data ?? []) as InteractionRow[];
     },
   });

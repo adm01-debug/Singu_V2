@@ -26,8 +26,7 @@ export function RelationshipReportExport({ contactId, contactName }: Props) {
         .from('interactions')
         .select('id, created_at, title, type, content, sentiment')
         .eq('contact_id', contactId)
-        .order('created_at', { ascending: false })
-        .limit(500);
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
 

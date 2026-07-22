@@ -67,7 +67,7 @@ export function usePrefetch() {
       queryFn: async () => {
         const { data } = await supabase
           .from('interactions')
-          .select('*')
+          .select('id, title, type, created_at, sentiment, follow_up_required, follow_up_date, outcome, contact_id')
           .eq('contact_id', contactId)
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })

@@ -24,10 +24,15 @@ interface EmotionalProfile {
   resistanceLevel: number;
 }
 
+type BriefingInteraction = Pick<Interaction,
+  'id' | 'contact_id' | 'title' | 'type' | 'follow_up_required' | 'follow_up_date' |
+  'created_at' | 'outcome' | 'sentiment'
+>;
+
 interface NLPBriefing {
   contact: Contact;
   company: Company | null;
-  interaction: Interaction;
+  interaction: BriefingInteraction;
   vakProfile: VAKProfile;
   discProfile: DISCProfileData;
   emotionalProfile: EmotionalProfile;
@@ -149,7 +154,9 @@ export function usePreContactBriefing(): PreContactBriefingData {
       const in60Minutes = addMinutes(now, 60);
 
       const { data: interactions, error: interactionsError } = await supabase
-        .from('interactions').select('*').eq('user_id', user!.id).eq('follow_up_required', true)
+        .from('interactions')
+        .select('id, contact_id, title, type, follow_up_required, follow_up_date, created_at, outcome, sentiment')
+        .eq('user_id', user!.id).eq('follow_up_required', true)
         .not('follow_up_date', 'is', null).in('type', ['call', 'meeting', 'video_call'])
         .order('follow_up_date', { ascending: true })
         .limit(50);

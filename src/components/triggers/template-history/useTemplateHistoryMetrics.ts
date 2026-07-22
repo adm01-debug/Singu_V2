@@ -22,8 +22,7 @@ export function useTemplateHistoryMetrics() {
         const { data: contacts, error } = await supabase
           .from('contacts')
           .select('id, first_name, last_name, behavior')
-          .eq('user_id', currentUser.id)
-          .limit(500);
+          .eq('user_id', currentUser.id);
 
         if (cancelled) return;
         if (error) throw error;

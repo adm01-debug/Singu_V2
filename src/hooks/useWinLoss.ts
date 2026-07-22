@@ -83,8 +83,7 @@ export function useWinLossRecords(filters: RecordsFilter = {}) {
         .from('win_loss_records')
         .select('id, user_id, deal_id, outcome, primary_reason_id, secondary_reasons, competitor_id, deal_value, sales_cycle_days, decision_maker_contact_id, notes, lessons_learned, recorded_at, created_at, updated_at')
         .eq('user_id', user!.id)
-        .order('recorded_at', { ascending: false })
-        .limit(500);
+        .order('recorded_at', { ascending: false });
       if (filters.outcome) q = q.eq('outcome', filters.outcome);
       if (filters.competitor_id) q = q.eq('competitor_id', filters.competitor_id);
       if (filters.fromDate) q = q.gte('recorded_at', filters.fromDate);
@@ -314,8 +313,7 @@ export function useWinLossMetrics(periodDays = 90) {
         .from('win_loss_records')
         .select('id, user_id, deal_id, outcome, primary_reason_id, secondary_reasons, competitor_id, deal_value, sales_cycle_days, decision_maker_contact_id, notes, lessons_learned, recorded_at, created_at, updated_at')
         .eq('user_id', user!.id)
-        .gte('recorded_at', fromDate)
-        .limit(500);
+        .gte('recorded_at', fromDate);
       if (error) throw error;
 
       const list = (records ?? []) as WinLossRecord[];

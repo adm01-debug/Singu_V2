@@ -388,8 +388,7 @@ export function useAllLeadScores() {
         .from('lead_scores')
         .select('id, contact_id, total_score, grade, engagement_score, fit_score, intent_score, relationship_score, score_factors, score_change, previous_score, last_calculated_at, contacts:contact_id(first_name, last_name, company_id)')
         .eq('user_id', user.id)
-        .order('total_score', { ascending: false })
-        .limit(500);
+        .order('total_score', { ascending: false });
       if (error) throw error;
       return data ?? [];
     },

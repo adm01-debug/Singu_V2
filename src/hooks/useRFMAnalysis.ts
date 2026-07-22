@@ -87,7 +87,7 @@ export function useRFMAnalysis(contactId?: string) {
     if (!user?.id || contacts.length === 0) return;
     setAnalyzing(true);
     try {
-      const { data: purchaseData } = await supabase.from('purchase_history').select('contact_id, amount, purchase_date').eq('user_id', user.id);
+      const { data: purchaseData } = await supabase.from('purchase_history').select('contact_id, amount, purchase_date').eq('user_id', user.id).limit(10000);
       const contactMetrics: Map<string, PurchaseData> = new Map();
       contacts.forEach(contact => {
         const contactInteractions = interactions.filter(i => i.contact_id === contact.id);

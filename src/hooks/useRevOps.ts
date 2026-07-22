@@ -72,12 +72,11 @@ export function useRevOpsSnapshots(periodStart: string, periodEnd: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("revops_snapshots")
-        .select("*")
+        .select("id, user_id, period, funnel_stage, count, conversion_rate, avg_velocity_days, total_value, captured_at")
         .eq("user_id", user!.id)
         .gte("period", periodStart)
         .lte("period", periodEnd)
-        .order("period", { ascending: false })
-        .limit(500);
+        .order("period", { ascending: false });
       if (error) throw error;
       return (data || []) as unknown as RevOpsSnapshot[];
     },
@@ -113,10 +112,9 @@ export function useRevOpsBenchmarks() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("revops_benchmarks")
-        .select("*")
+        .select("id, user_id, metric_key, target_value, warning_threshold, critical_threshold, description, updated_at")
         .eq("user_id", user!.id)
-        .order("metric_key")
-        .limit(500);
+        .order("metric_key");
       if (error) throw error;
       return (data || []) as unknown as RevOpsBenchmark[];
     },
@@ -163,7 +161,7 @@ export function useRevOpsAlerts() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("revops_alerts")
-        .select("*")
+        .select("id, user_id, metric_key, severity, message, current_value, expected_value, period, dismissed, created_at")
         .eq("user_id", user!.id)
         .eq("dismissed", false)
         .order("created_at", { ascending: false })

@@ -160,8 +160,8 @@ export function useBehaviorAlerts() {
         { data: contacts, error: contactsError },
         { data: recentInteractions, error: interactionsError },
       ] = await Promise.all([
-        supabase.from('contacts').select('id, first_name, last_name, relationship_score, relationship_stage, updated_at').eq('user_id', user.id).order('updated_at', { ascending: false }).limit(500),
-        supabase.from('interactions').select('id, contact_id, created_at, sentiment').eq('user_id', user.id).gte('created_at', thirtyDaysAgo.toISOString()).limit(500),
+        supabase.from('contacts').select('id, first_name, last_name, relationship_score, relationship_stage, updated_at').eq('user_id', user.id).order('updated_at', { ascending: false }).limit(5000),
+        supabase.from('interactions').select('id, contact_id, created_at, sentiment').eq('user_id', user.id).gte('created_at', thirtyDaysAgo.toISOString()).limit(3000),
       ]);
 
       if (contactsError) throw contactsError;
@@ -277,8 +277,7 @@ export function useBehaviorAlerts() {
           .select('contact_id, type')
           .in('contact_id', contactIds)
           .in('type', types)
-          .eq('dismissed', false)
-          .limit(500);
+          .eq('dismissed', false);
         const existingSet = new Set(
           (existing || []).map(e => `${e.contact_id}::${e.type}`)
         );

@@ -40,10 +40,10 @@ export function useTouchpoints(opts: { contactId?: string; dealId?: string }) {
     queryKey: ['touchpoints', opts.contactId, opts.dealId, user?.id],
     enabled: !!(opts.contactId || opts.dealId) && !!user,
     queryFn: async () => {
-      let q = supabase.from('attribution_touchpoints').select('id, user_id, contact_id, deal_id, touchpoint_type, source, medium, campaign, content, page_url, occurred_at, value_attributed, metadata').eq('user_id', user!.id).order('occurred_at', { ascending: false }).limit(500);
+      let q = supabase.from('attribution_touchpoints').select('id, user_id, contact_id, deal_id, touchpoint_type, source, medium, campaign, content, page_url, occurred_at, value_attributed, metadata').eq('user_id', user!.id).order('occurred_at', { ascending: false });
       if (opts.contactId) q = q.eq('contact_id', opts.contactId);
       if (opts.dealId) q = q.eq('deal_id', opts.dealId);
-      const { data, error } = await q;
+      const { data, error } = await q.limit(1000);
       if (error) throw error;
       return (data || []) as unknown as Touchpoint[];
     },
