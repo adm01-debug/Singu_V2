@@ -66,7 +66,6 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
 
   const { data } = useQuery({
     queryKey: ['your-day', user?.id],
-    enabled: !!user,
     queryFn: async (): Promise<Omit<YourDayData, 'loading'>> => {
       if (!user) throw new Error('Not authenticated');
       try {
