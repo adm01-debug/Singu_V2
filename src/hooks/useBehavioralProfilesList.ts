@@ -81,8 +81,7 @@ export function useBehavioralProfilesList(filters: BehavioralProfilesFilters) {
           contacts:contact_id ( name, avatar_url, company_id, companies:company_id ( name ) )
         `)
         .eq('user_id', user!.id)
-        .order('last_updated_at', { ascending: false })
-        .limit(500);
+        .order('last_updated_at', { ascending: false });
 
       if (fromDate) q = q.gte('last_updated_at', fromDate);
 

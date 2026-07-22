@@ -48,7 +48,6 @@ export function useDealsAtRisk(limit = 5) {
             .in('contact_id', contactIds)
             .gte('created_at', since.toISOString())
             .order('created_at', { ascending: false })
-            .limit(500)
         : { data: [] as Array<{ contact_id: string; sentiment: string | null; created_at: string; initiated_by: string | null }> };
 
       type Row = { contact_id: string; sentiment: string | null; created_at: string; initiated_by: string | null };
