@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface ActionItem {
   task: string;
@@ -35,7 +36,7 @@ export function useMeetingSummary(interactionId?: string) {
       if (!interactionId) return null;
       const { data, error } = await supabase
         .from('meeting_summaries')
-        .select('*')
+        .select('id, interaction_id, user_id, summary, key_decisions, action_items, participants, sentiment_overview, topics, next_steps, duration_minutes, generated_by_model, created_at, updated_at')
         .eq('interaction_id', interactionId)
         .maybeSingle();
       if (error) throw error;
@@ -58,7 +59,7 @@ export function useMeetingSummary(interactionId?: string) {
       qc.invalidateQueries({ queryKey: ['meeting-summary', intId] });
       toast.success('Resumo gerado com sucesso!');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return {

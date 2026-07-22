@@ -21,6 +21,6 @@ CREATE POLICY "Users can view their own telemetry" ON public.query_telemetry FOR
 CREATE POLICY "Users can insert their own telemetry" ON public.query_telemetry FOR INSERT TO authenticated WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users can delete their own telemetry" ON public.query_telemetry FOR DELETE TO authenticated USING (auth.uid() = user_id);
 
-CREATE INDEX idx_query_telemetry_created_at ON public.query_telemetry (created_at DESC);
-CREATE INDEX idx_query_telemetry_severity ON public.query_telemetry (severity);
-CREATE INDEX idx_query_telemetry_user_id ON public.query_telemetry (user_id);
+CREATE INDEX IF NOT EXISTS idx_query_telemetry_created_at ON public.query_telemetry (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_query_telemetry_severity ON public.query_telemetry (severity);
+CREATE INDEX IF NOT EXISTS idx_query_telemetry_user_id ON public.query_telemetry (user_id);

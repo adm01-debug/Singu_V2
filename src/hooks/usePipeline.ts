@@ -112,9 +112,10 @@ export function useWeightedForecast() {
     queryKey: ['weighted-forecast', user?.id],
     enabled: !!user,
     queryFn: async () => {
+      if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<WeightedForecast[]>(
         'get_weighted_forecast',
-        {}
+        { p_user_id: user.id }
       );
       if (error) throw error;
       return data || [];
@@ -129,9 +130,10 @@ export function useStageVelocity() {
     queryKey: ['stage-velocity', user?.id],
     enabled: !!user,
     queryFn: async () => {
+      if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<StageVelocity[]>(
         'get_stage_velocity',
-        {}
+        { p_user_id: user.id }
       );
       if (error) throw error;
       return data || [];
@@ -146,9 +148,10 @@ export function useStalledDeals(days = 14) {
     queryKey: ['stalled-deals', days, user?.id],
     enabled: !!user,
     queryFn: async () => {
+      if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<StalledDeal[]>(
         'get_stalled_deals',
-        { p_days: days }
+        { p_user_id: user.id, p_days: days }
       );
       if (error) throw error;
       return data || [];
@@ -163,9 +166,10 @@ export function useVelocityMetrics() {
     queryKey: ['velocity-metrics', user?.id],
     enabled: !!user,
     queryFn: async () => {
+      if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<VelocityMetrics>(
         'get_velocity_metrics',
-        {}
+        { p_user_id: user.id }
       );
       if (error) throw error;
       return data;

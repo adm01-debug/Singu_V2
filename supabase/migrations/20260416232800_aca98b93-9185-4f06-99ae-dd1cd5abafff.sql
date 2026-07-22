@@ -17,10 +17,10 @@ CREATE TABLE public.abm_accounts (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE(user_id, external_company_id)
 );
-CREATE INDEX idx_abm_accounts_user ON public.abm_accounts(user_id);
-CREATE INDEX idx_abm_accounts_parent ON public.abm_accounts(parent_account_id);
-CREATE INDEX idx_abm_accounts_tier ON public.abm_accounts(user_id, tier);
-CREATE INDEX idx_abm_accounts_external ON public.abm_accounts(external_company_id);
+CREATE INDEX IF NOT EXISTS idx_abm_accounts_user ON public.abm_accounts(user_id);
+CREATE INDEX IF NOT EXISTS idx_abm_accounts_parent ON public.abm_accounts(parent_account_id);
+CREATE INDEX IF NOT EXISTS idx_abm_accounts_tier ON public.abm_accounts(user_id, tier);
+CREATE INDEX IF NOT EXISTS idx_abm_accounts_external ON public.abm_accounts(external_company_id);
 
 ALTER TABLE public.abm_accounts ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "abm_accounts_select" ON public.abm_accounts FOR SELECT USING (auth.uid() = user_id);
@@ -51,8 +51,8 @@ CREATE TABLE public.abm_account_plans (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_abm_plans_account ON public.abm_account_plans(account_id);
-CREATE INDEX idx_abm_plans_user ON public.abm_account_plans(user_id);
+CREATE INDEX IF NOT EXISTS idx_abm_plans_account ON public.abm_account_plans(account_id);
+CREATE INDEX IF NOT EXISTS idx_abm_plans_user ON public.abm_account_plans(user_id);
 
 ALTER TABLE public.abm_account_plans ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "abm_plans_select" ON public.abm_account_plans FOR SELECT USING (auth.uid() = user_id);
@@ -81,8 +81,8 @@ CREATE TABLE public.abm_buying_committee (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_abm_committee_account ON public.abm_buying_committee(account_id);
-CREATE INDEX idx_abm_committee_user ON public.abm_buying_committee(user_id);
+CREATE INDEX IF NOT EXISTS idx_abm_committee_account ON public.abm_buying_committee(account_id);
+CREATE INDEX IF NOT EXISTS idx_abm_committee_user ON public.abm_buying_committee(user_id);
 
 ALTER TABLE public.abm_buying_committee ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "abm_committee_select" ON public.abm_buying_committee FOR SELECT USING (auth.uid() = user_id);
@@ -108,8 +108,8 @@ CREATE TABLE public.abm_whitespace_opportunities (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_abm_whitespace_account ON public.abm_whitespace_opportunities(account_id);
-CREATE INDEX idx_abm_whitespace_user ON public.abm_whitespace_opportunities(user_id);
+CREATE INDEX IF NOT EXISTS idx_abm_whitespace_account ON public.abm_whitespace_opportunities(account_id);
+CREATE INDEX IF NOT EXISTS idx_abm_whitespace_user ON public.abm_whitespace_opportunities(user_id);
 
 ALTER TABLE public.abm_whitespace_opportunities ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "abm_whitespace_select" ON public.abm_whitespace_opportunities FOR SELECT USING (auth.uid() = user_id);
@@ -137,8 +137,8 @@ CREATE TABLE public.abm_campaigns (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_abm_campaigns_user ON public.abm_campaigns(user_id);
-CREATE INDEX idx_abm_campaigns_status ON public.abm_campaigns(user_id, status);
+CREATE INDEX IF NOT EXISTS idx_abm_campaigns_user ON public.abm_campaigns(user_id);
+CREATE INDEX IF NOT EXISTS idx_abm_campaigns_status ON public.abm_campaigns(user_id, status);
 
 ALTER TABLE public.abm_campaigns ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "abm_campaigns_select" ON public.abm_campaigns FOR SELECT USING (auth.uid() = user_id);

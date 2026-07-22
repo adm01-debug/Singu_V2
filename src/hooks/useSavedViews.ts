@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface SavedView<T = unknown> {
   id: string;
@@ -13,10 +14,11 @@ export interface SavedView<T = unknown> {
 
 const PREFIX = 'singu-views-';
 
-function readAll<T>(scope: string): SavedView<T>[] {
+function readAll<T>(scope: string, userId?: string): SavedView<T>[] {
   if (typeof window === 'undefined') return [];
   try {
-    const raw = window.localStorage.getItem(PREFIX + scope + '-v1');
+    const key = userId ? `${PREFIX}${userId}-${scope}-v1` : `${PREFIX}${scope}-v1`;
+    const raw = window.localStorage.getItem(key);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? (parsed as SavedView<T>[]) : [];
@@ -25,9 +27,10 @@ function readAll<T>(scope: string): SavedView<T>[] {
   }
 }
 
-function writeAll<T>(scope: string, views: SavedView<T>[]) {
+function writeAll<T>(scope: string, views: SavedView<T>[], userId?: string) {
   try {
-    window.localStorage.setItem(PREFIX + scope + '-v1', JSON.stringify(views));
+    const key = userId ? `${PREFIX}${userId}-${scope}-v1` : `${PREFIX}${scope}-v1`;
+    window.localStorage.setItem(key, JSON.stringify(views));
   } catch { /* noop */ }
 }
 
@@ -59,12 +62,13 @@ function decodeState<T>(encoded: string): T | null {
  */
 export function useSavedViews<T>(scope: string) {
   const [params, setParams] = useSearchParams();
-  const [views, setViews] = useState<SavedView<T>[]>(() => readAll<T>(scope));
+  const { user } = useAuth();
+  const [views, setViews] = useState<SavedView<T>[]>(() => readAll<T>(scope, user?.id));
 
   const persist = useCallback((next: SavedView<T>[]) => {
     setViews(next);
-    writeAll(scope, next);
-  }, [scope]);
+    writeAll(scope, next, user?.id);
+  }, [scope, user?.id]);
 
   const save = useCallback(
     (name: string, state: T) => {

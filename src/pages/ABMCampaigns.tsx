@@ -36,7 +36,7 @@ export default function ABMCampaigns() {
       <div className="space-y-6 p-4 md:p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Button asChild variant="ghost" size="icon"><Link to="/abm"><ArrowLeft className="h-4 w-4" /></Link></Button>
+            <Button asChild variant="ghost" size="icon" aria-label="Voltar"><Link to="/abm"><ArrowLeft className="h-4 w-4" /></Link></Button>
             <div>
               <h1 className="text-2xl font-bold flex items-center gap-2">
                 <Megaphone className="h-6 w-6 text-primary" />
@@ -74,10 +74,9 @@ export default function ABMCampaigns() {
                       </div>
                     </div>
                     <div className="flex gap-1">
-                      <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => openEdit(c)}>
+  <Button size="icon" aria-label="Editar" variant="ghost" className="h-7 w-7" onClick={() => openEdit(c)}>
                         <Pencil className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => del.mutate(c.id)}>
+                      </Button>   <Button size="icon" aria-label="Remover" variant="ghost" className="h-7 w-7" onClick={() => del.mutate(c.id)}>
                         <Trash2 className="h-3.5 w-3.5" />
                       </Button>
                     </div>

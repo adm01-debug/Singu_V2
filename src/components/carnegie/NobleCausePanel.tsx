@@ -74,8 +74,9 @@ export function NobleCausePanel({ contact = null, className }: NobleCausePanelPr
   const [expandedCause, setExpandedCause] = useState<string | null>(null);
 
   const copyToClipboard = (text: string, label: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success(`${label} copiado!`);
+    navigator.clipboard.writeText(text)
+      .then(() => toast.success(`${label} copiado!`))
+      .catch(() => toast.error('Não foi possível copiar'));
   };
 
   const getIntensityStars = (intensity: number) => {

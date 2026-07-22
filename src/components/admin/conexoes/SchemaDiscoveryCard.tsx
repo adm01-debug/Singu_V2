@@ -9,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface ColumnInfo { column_name: string; data_type: string; is_nullable: string }
 interface TableInfo { table_name: string; columns: ColumnInfo[] }
@@ -37,7 +38,7 @@ export function SchemaDiscoveryCard({ connectionId, discoveredSchema, discovered
       qc.invalidateQueries({ queryKey: ['connection_configs'] });
       toast.success('Schema descoberto');
     },
-    onError: (e) => toast.error(`Erro: ${e.message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 
   const tables = discoveredSchema?.tables ?? [];

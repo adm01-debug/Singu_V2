@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 
-const DISMISS_KEY = 'singu_mfa_banner_dismissed';
+const DISMISS_KEY_PREFIX = 'singu_mfa_banner_dismissed';
 const DISMISS_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 dias
 
 /**
@@ -16,12 +16,13 @@ const DISMISS_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 dias
  */
 export const MFAEnrollmentBanner = ({ className }: { className?: string }) => {
   const { user } = useAuth();
+  const dismissKey = `${DISMISS_KEY_PREFIX}-${user?.id ?? 'anon'}`;
   const [hasMfa, setHasMfa] = useState<boolean | null>(null);
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(DISMISS_KEY);
+      const raw = localStorage.getItem(dismissKey);
       if (raw) {
         const at = Number(raw);
         if (Number.isFinite(at) && Date.now() - at < DISMISS_TTL_MS) {
@@ -31,7 +32,7 @@ export const MFAEnrollmentBanner = ({ className }: { className?: string }) => {
     } catch {
       /* localStorage indisponível */
     }
-  }, []);
+  }, [dismissKey]);
 
   useEffect(() => {
     if (!user) return;
@@ -47,7 +48,7 @@ export const MFAEnrollmentBanner = ({ className }: { className?: string }) => {
   }, [user]);
 
   const handleDismiss = () => {
-    try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch { /* ignora */ }
+    try { localStorage.setItem(dismissKey, String(Date.now())); } catch { /* ignora */ }
     setDismissed(true);
   };
 

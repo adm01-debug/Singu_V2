@@ -3,6 +3,7 @@ import { ThumbsUp, ThumbsDown, Loader2, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 import { cn } from '@/lib/utils';
 import type { EvidenceKind } from './EvidenceDrillDownSheet';
 import {
@@ -41,7 +42,7 @@ export function InsightFeedbackControls({ contactId, kind, label }: Props) {
         toast.success('Feedback removido');
         setShowNote(false);
       } catch (e) {
-        toast.error('Erro ao remover feedback', { description: (e as Error).message });
+        toast.error('Erro ao remover feedback', { description: parseApiError(e) });
       }
       return;
     }
@@ -50,7 +51,7 @@ export function InsightFeedbackControls({ contactId, kind, label }: Props) {
       toast.success(vote === 1 ? 'Insight marcado como útil' : 'Feedback registrado — a análise será refinada');
       if (vote === -1) setShowNote(true);
     } catch (e) {
-      toast.error('Erro ao enviar feedback', { description: (e as Error).message });
+      toast.error('Erro ao enviar feedback', { description: parseApiError(e) });
     }
   }
 
@@ -61,7 +62,7 @@ export function InsightFeedbackControls({ contactId, kind, label }: Props) {
       toast.success('Observação salva');
       setShowNote(false);
     } catch (e) {
-      toast.error('Erro ao salvar observação', { description: (e as Error).message });
+      toast.error('Erro ao salvar observação', { description: parseApiError(e) });
     }
   }
 

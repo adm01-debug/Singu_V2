@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type FieldType = 'text' | 'number' | 'date' | 'select' | 'boolean' | 'url' | 'email' | 'phone';
 export type EntityType = 'contact' | 'company' | 'deal';
@@ -39,14 +40,16 @@ export function useCustomFields(entityType: EntityType) {
       if (!user) return [];
       const { data, error } = await supabase
         .from('custom_fields')
-        .select('*')
+        .select('id, user_id, entity_type, field_name, field_label, field_type, field_options, is_required, display_order, created_at, updated_at')
         .eq('user_id', user.id)
         .eq('entity_type', entityType)
-        .order('display_order');
+        .order('display_order')
+        .limit(200);
       if (error) throw error;
       return (data || []) as CustomField[];
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const createField = useMutation({
@@ -65,14 +68,16 @@ export function useCustomFields(entityType: EntityType) {
       qc.invalidateQueries({ queryKey: key });
       toast.success('Campo personalizado criado!');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const updateField = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<CustomField> & { id: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('custom_fields')
         .update(updates)
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
     },
@@ -80,19 +85,20 @@ export function useCustomFields(entityType: EntityType) {
       qc.invalidateQueries({ queryKey: key });
       toast.success('Campo atualizado!');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const deleteField = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('custom_fields').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('custom_fields').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: key });
       toast.success('Campo removido!');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { fields, isLoading, createField, updateField, deleteField };
@@ -113,22 +119,25 @@ export function useCustomFieldValues(entityType: EntityType, entityId?: string) 
         .from('custom_fields')
         .select('id')
         .eq('user_id', user.id)
-        .eq('entity_type', entityType);
+        .eq('entity_type', entityType)
+        .limit(200);
 
       if (!fields?.length) return [];
 
       const fieldIds = fields.map(f => f.id);
       const { data, error } = await supabase
         .from('custom_field_values')
-        .select('*')
+        .select('id, custom_field_id, entity_id, value')
         .eq('entity_id', entityId)
-        .in('custom_field_id', fieldIds);
+        .in('custom_field_id', fieldIds)
+        .limit(200);
 
       if (error) throw error;
       return (data || []) as CustomFieldValue[];
     },
     enabled: !!entityId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const saveValue = useMutation({
@@ -145,7 +154,7 @@ export function useCustomFieldValues(entityType: EntityType, entityId?: string) 
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: key }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { values, isLoading, saveValue };

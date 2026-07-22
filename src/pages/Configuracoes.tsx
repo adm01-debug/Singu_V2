@@ -27,6 +27,7 @@ import { useUnsavedChangesGuard } from '@/hooks/useUnsavedChangesGuard';
 import { ConfigNotificationsTab } from './configuracoes/ConfigNotificationsTab';
 import { ConfigSecurityTab } from './configuracoes/ConfigSecurityTab';
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 
 interface ProfileData {
   first_name: string;
@@ -77,8 +78,7 @@ const Configuracoes = () => {
       setHasUnsavedChanges(false);
       accessibleToast.success('Perfil atualizado com sucesso!');
     } catch (error) { 
-      const msg = error instanceof Error ? error.message : 'Erro ao atualizar perfil';
-      accessibleToast.error(msg); 
+      accessibleToast.error(parseApiError(error, 'Erro ao atualizar perfil'));
     }
     finally { setLoading(false); }
   };
@@ -118,7 +118,7 @@ const Configuracoes = () => {
                   <div className="flex items-center gap-6">
                     <div className="relative">
                       <OptimizedAvatar src={profile.avatar_url} alt={`${profile.first_name} ${profile.last_name}`} fallback={userInitials} size="xl" className="border-4 border-primary/20" />
-                      <button className="absolute bottom-0 right-0 p-2 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-colors shadow-sm"><Camera className="w-4 h-4" /></button>
+                      <button className="absolute bottom-0 right-0 p-2 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-colors shadow-sm" aria-label="Alterar foto de perfil"><Camera className="w-4 h-4" /></button>
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg">{profile.first_name && profile.last_name ? `${profile.first_name} ${profile.last_name}` : 'Seu Nome'}</h3>

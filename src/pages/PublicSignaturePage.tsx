@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { CheckCircle2, XCircle, Loader2, FileText, Clock } from 'lucide-react';
-import { sanitizeHtml } from '@/lib/sanitize';
+import { sanitizeDocumentHtml } from '@/lib/sanitize';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 type Signature = {
   id: string;
@@ -32,10 +33,15 @@ export default function PublicSignaturePage() {
   const [error, setError] = useState<string | null>(null);
   const [typedSignature, setTypedSignature] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const submitControllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    return () => { submitControllerRef.current?.abort(); };
+  }, []);
 
   useEffect(() => {
     if (!token) return;
-    let cancelled = false;
+    const controller = new AbortController();
     const currentToken = token;
     (async () => {
       try {
@@ -43,19 +49,19 @@ export default function PublicSignaturePage() {
           headers: {
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
+          signal: controller.signal,
         });
         const data = await res.json();
-        if (cancelled) return;
         if (!res.ok) throw new Error(data?.error ?? 'Erro');
         setSignature(data);
       } catch (e) {
-        if (cancelled) return;
-        setError(e instanceof Error ? e.message : 'Erro ao carregar');
+        if (e instanceof Error && e.name === 'AbortError') return;
+        setError(parseApiError(e, 'Erro ao carregar'));
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => { controller.abort(); };
   }, [token]);
 
   const submit = async (action: 'sign' | 'decline') => {
@@ -65,6 +71,9 @@ export default function PublicSignaturePage() {
       return;
     }
     setSubmitting(true);
+    submitControllerRef.current?.abort();
+    const controller = new AbortController();
+    submitControllerRef.current = controller;
     try {
       const res = await fetch(`${FN_BASE}/submit-signature`, {
         method: 'POST',
@@ -77,13 +86,15 @@ export default function PublicSignaturePage() {
           action,
           signature_typed: action === 'sign' ? typedSignature : undefined,
         }),
+        signal: controller.signal,
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? 'Erro');
       toast.success(action === 'sign' ? 'Documento assinado!' : 'Documento recusado');
       setSignature((prev) => (prev ? { ...prev, status: action === 'sign' ? 'signed' : 'declined' } : prev));
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : 'Erro ao enviar');
+      if (e instanceof Error && e.name === 'AbortError') return;
+      toast.error(parseApiError(e));
     } finally {
       setSubmitting(false);
     }
@@ -149,7 +160,7 @@ export default function PublicSignaturePage() {
           <CardContent className="p-6">
             <div 
               className="prose prose-sm max-w-none dark:prose-invert" 
-              dangerouslySetInnerHTML={{ __html: sanitizeHtml(signature.rendered_html) }} 
+              dangerouslySetInnerHTML={{ __html: sanitizeDocumentHtml(signature.rendered_html) }} 
             />
           </CardContent>
         </Card>

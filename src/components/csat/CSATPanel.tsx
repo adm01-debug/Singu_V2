@@ -92,6 +92,7 @@ export function CSATPanel({ contactId, interactionId }: Props) {
                           // eslint-disable-next-line sonarjs/no-nested-functions
                           onClick={() => setPendingScore(prev => ({ ...prev, [survey.id]: s }))}
                           className="p-0.5"
+                          aria-label={`Nota ${s} ${s === 1 ? 'estrela' : 'estrelas'}`}
                         >
                           <Star className={`h-4 w-4 transition-colors ${s <= (pendingScore[survey.id] || 0) ? 'fill-yellow-500 text-yellow-500' : 'text-muted-foreground/30 hover:text-yellow-500/50'}`} />
                         </button>

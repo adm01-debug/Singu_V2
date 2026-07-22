@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type ConnectionType = 'supabase_external' | 'bitrix24' | 'n8n' | 'mcp_claude' | 'custom';
 
@@ -42,11 +44,14 @@ export function useConnections() {
     queryKey: ['connection_configs', user?.id],
     enabled: !!user,
     staleTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('connection_configs')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select('id, name, connection_type, description, is_active, config, secret_refs, last_tested_at, last_test_status, last_test_latency_ms, last_test_message, discovered_schema, discovered_at, created_by, created_at, updated_at')
+        .eq('created_by', user!.id)
+        .order('created_at', { ascending: false })
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as unknown as ConnectionConfig[];
     },
@@ -63,9 +68,10 @@ export function useConnections() {
             name: input.name,
             description: input.description,
             is_active: input.is_active ?? true,
-            config: (input.config ?? {}) as never,
-            secret_refs: (input.secret_refs ?? {}) as never,
-          })
+            config: (input.config ?? {}) as unknown as Json,
+            secret_refs: (input.secret_refs ?? {}) as unknown as Json,
+          } as TablesUpdate<'connection_configs'>)
+          .eq('created_by', user!.id)
           .eq('id', input.id);
         if (error) throw error;
       } else {
@@ -74,10 +80,10 @@ export function useConnections() {
           connection_type: input.connection_type,
           description: input.description ?? null,
           is_active: input.is_active ?? true,
-          config: (input.config ?? {}) as never,
-          secret_refs: (input.secret_refs ?? {}) as never,
+          config: (input.config ?? {}) as unknown as Json,
+          secret_refs: (input.secret_refs ?? {}) as unknown as Json,
           created_by: user.id,
-        });
+        } as TablesInsert<'connection_configs'>);
         if (error) throw error;
       }
     },
@@ -85,12 +91,13 @@ export function useConnections() {
       qc.invalidateQueries({ queryKey: ['connection_configs'] });
       toast.success('Conexão salva');
     },
-    onError: (e) => toast.error(`Erro: ${e.message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('connection_configs').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('connection_configs').delete().eq('created_by', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -105,6 +112,7 @@ export function useConnections() {
       const { error } = await supabase
         .from('connection_configs')
         .update({ is_active })
+        .eq('created_by', user!.id)
         .eq('id', id);
       if (error) throw error;
     },
@@ -123,7 +131,7 @@ export function useConnections() {
       qc.invalidateQueries({ queryKey: ['connection_configs'] });
       toast.success(`✅ ${data.message ?? 'Conexão OK'} (${data.latency_ms}ms)`);
     },
-    onError: (e) => toast.error(`❌ ${e.message}`),
+    onError: (e) => toast.error(`❌ ${parseApiError(e)}`),
   });
 
   return { connections, isLoading, upsert, remove, toggleActive, test };
@@ -134,10 +142,11 @@ export function useConnectionTestLogs(connectionId: string | undefined) {
     queryKey: ['connection_test_logs', connectionId],
     enabled: !!connectionId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('connection_test_logs')
-        .select('*')
+        .select('id, connection_id, status, latency_ms, message, details, created_at')
         .eq('connection_id', connectionId!)
         .order('created_at', { ascending: false })
         .limit(20);

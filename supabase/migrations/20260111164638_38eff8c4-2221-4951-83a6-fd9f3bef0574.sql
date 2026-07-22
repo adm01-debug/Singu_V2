@@ -41,5 +41,5 @@ FOR DELETE
 USING (auth.uid() = user_id);
 
 -- Create index for faster queries
-CREATE INDEX idx_stakeholder_alerts_user_contact ON public.stakeholder_alerts(user_id, contact_id);
-CREATE INDEX idx_stakeholder_alerts_dismissed ON public.stakeholder_alerts(user_id, dismissed);
+CREATE INDEX IF NOT EXISTS idx_stakeholder_alerts_user_contact ON public.stakeholder_alerts(user_id, contact_id);
+CREATE INDEX IF NOT EXISTS idx_stakeholder_alerts_dismissed ON public.stakeholder_alerts(user_id, dismissed);

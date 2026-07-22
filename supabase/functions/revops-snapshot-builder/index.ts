@@ -2,6 +2,7 @@
 // Cron diário 04:00 UTC. Consolida funil ponta-a-ponta por usuário ativo, gera snapshots e alertas.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { guardBody, scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { validate } from "../_shared/validate.ts";
 
 const STAGES = ["visitor", "lead", "mql", "sql", "opportunity", "customer"] as const;
 
@@ -26,8 +27,10 @@ Deno.serve(async (req: Request) => {
   const today = new Date().toISOString().slice(0, 10);
 
   let targetUserId: string | null = null;
-  const _body = rawBody as { user_id?: string } | null;
-  if (_body?.user_id) targetUserId = _body.user_id;
+  if (rawBody) {
+    const vrb = validate(rawBody, { user_id: { type: 'string', maxLength: 36 } });
+    if (vrb.ok && vrb.data.user_id) targetUserId = vrb.data.user_id as string;
+  }
 
   let userIds: string[] = [];
   if (targetUserId) {
@@ -139,14 +142,16 @@ Deno.serve(async (req: Request) => {
   }
 
   // --- BULK FLUSH ---
-  await Promise.all([
+  const [snapRes, alertRes] = await Promise.all([
     allSnapshotRows.length > 0
       ? supabase.from("revops_snapshots").upsert(allSnapshotRows, { onConflict: "user_id,period,funnel_stage" })
-      : Promise.resolve(),
+      : Promise.resolve({ error: null }),
     allAlertRows.length > 0
       ? supabase.from("revops_alerts").insert(allAlertRows)
-      : Promise.resolve(),
+      : Promise.resolve({ error: null }),
   ]);
+  if (snapRes.error) console.error(JSON.stringify({ fn: "revops-snapshot-builder", stage: "upsert", error: snapRes.error.message }));
+  if (alertRes.error) console.error(JSON.stringify({ fn: "revops-snapshot-builder", stage: "alerts", error: alertRes.error.message }));
 
   return new Response(JSON.stringify({ processed: results.length, results }), {
     headers: { ...cors, "Content-Type": "application/json" },

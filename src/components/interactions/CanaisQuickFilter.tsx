@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { MessageSquare, Phone, Mail, Users, Video, FileText, Zap, MousePointerClick, Check, X, Eraser, AlertCircle, Plus, Minus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -28,8 +29,9 @@ const CHANNELS = [
   { value: 'note', label: 'Nota', icon: FileText },
 ] as const;
 
-const PENDING_KEY = 'channel-pending-canais';
-const APPLIED_KEY = 'channel-applied-canais';
+const PENDING_KEY_PREFIX = 'channel-pending-canais';
+const APPLIED_KEY_PREFIX = 'channel-applied-canais';
+const CHANNEL_SYNC_KEY_PREFIX = 'channel-sync-mode';
 const VALID_VALUES = new Set(CHANNELS.map((c) => c.value));
 
 function readStoredArray(key: string): string[] | null {
@@ -47,33 +49,28 @@ function readStoredArray(key: string): string[] | null {
   }
 }
 
-function readPending(): string[] | null {
-  return readStoredArray(PENDING_KEY);
+function readPending(key: string): string[] | null {
+  return readStoredArray(key);
 }
 
-function readApplied(): string[] | null {
-  return readStoredArray(APPLIED_KEY);
+function readApplied(key: string): string[] | null {
+  return readStoredArray(key);
 }
 
-function writePending(next: string[]) {
+function writeStoredArray(key: string, next: string[]) {
   try {
-    localStorage.setItem(PENDING_KEY, JSON.stringify(next));
+    localStorage.setItem(key, JSON.stringify(next));
   } catch {
     /* noop */
   }
 }
 
-function writeApplied(next: string[]) {
-  try {
-    localStorage.setItem(APPLIED_KEY, JSON.stringify(next));
-  } catch {
-    /* noop */
-  }
-}
+const writePending = writeStoredArray;
+const writeApplied = writeStoredArray;
 
-function clearPending() {
+function clearPending(key: string) {
   try {
-    localStorage.removeItem(PENDING_KEY);
+    localStorage.removeItem(key);
   } catch {
     /* noop */
   }
@@ -98,30 +95,38 @@ function arraysEqual(a: string[], b: string[]) {
 }
 
 export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais, onChange, counts }: Props) {
+  const { user } = useAuth();
+  const uid = user?.id ?? 'anon';
+  const pendingKey = `${PENDING_KEY_PREFIX}-${uid}`;
+  const appliedKey = `${APPLIED_KEY_PREFIX}-${uid}`;
+  const syncModeKey = `${CHANNEL_SYNC_KEY_PREFIX}-${uid}`;
+
   const safe = useMemo(() => (Array.isArray(canais) ? canais : []), [canais]);
   const { mode, toggle, setMode } = useChannelSyncMode();
   const { history, record: recordCombo, remove: removeCombo, clear: clearHistory } = useChannelHistory();
-  const [pending, setPendingState] = useState<string[]>(() => {
-    // Restaura pending salvo apenas se modo for manual e diferir do aplicado.
-    // Se não houver pending salvo, usa o `applied` persistido como base
-    // (cobre o caso em que o pai ainda não hidratou `canais` no primeiro render).
+
+  // Default to safe; hydrate from user-scoped keys after auth is known.
+  const [pending, setPendingState] = useState<string[]>(safe);
+  const hydratedRef = React.useRef(false);
+  useEffect(() => {
+    if (hydratedRef.current) return;
+    hydratedRef.current = true;
     try {
-      const savedMode = localStorage.getItem('channel-sync-mode');
+      const savedMode = localStorage.getItem(syncModeKey);
       if (savedMode === 'manual') {
-        const savedPending = readPending();
-        if (savedPending) return savedPending;
+        const savedPending = readPending(pendingKey);
+        if (savedPending) { setPendingState(savedPending); return; }
         const initial = Array.isArray(canais) ? canais : [];
         if (initial.length === 0) {
-          const savedApplied = readApplied();
-          if (savedApplied) return savedApplied;
+          const savedApplied = readApplied(appliedKey);
+          if (savedApplied) { setPendingState(savedApplied); return; }
         }
-        return initial;
+        setPendingState(initial);
       }
     } catch {
       /* noop */
     }
-    return Array.isArray(canais) ? canais : [];
-  });
+  }, [syncModeKey, pendingKey, appliedKey, canais]);
 
   const setPending = useCallback((next: string[] | ((prev: string[]) => string[])) => {
     setPendingState((prev) => {
@@ -161,7 +166,7 @@ export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais,
       // o preset venceu — voltamos para auto e sincronizamos.
       if (safeChanged && safe.length > 0 && mode === 'manual') {
         setMode('auto');
-        clearPending();
+        clearPending(pendingKey);
         toast.info('Preset aplicado', {
           description: 'Canais sincronizados e modo manual desativado.',
           duration: 3000,
@@ -174,6 +179,12 @@ export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais,
         return prev;
       }
 
+      // Em auto mode sem mudança de safe e safe vazio: não resetar pending.
+      // Evita sobrescrever a hidratação de pending que ocorre no mesmo flush.
+      if (mode === 'auto' && !safeChanged && safe.length === 0) {
+        return prev;
+      }
+
       return safe;
     });
   }, [safe, mode, setMode]);
@@ -182,7 +193,7 @@ export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais,
   // Persiste o estado aplicado (safe) no localStorage para servir de bootstrap
   // do modo manual em recargas futuras antes do pai hidratar a prop `canais`.
   useEffect(() => {
-    writeApplied(safe);
+    writeApplied(appliedKey, safe);
   }, [safe]);
 
   // Registra cada combinação aplicada não-vazia no histórico MRU.
@@ -194,9 +205,9 @@ export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais,
   // Persiste pending no localStorage quando estiver no modo manual e houver divergência
   useEffect(() => {
     if (mode === 'manual' && !arraysEqual(pending, safe)) {
-      writePending(pending);
+      writePending(pendingKey, pending);
     } else {
-      clearPending();
+      clearPending(pendingKey);
     }
   }, [pending, safe, mode]);
 
@@ -253,7 +264,7 @@ export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais,
       // que está na URL.
       if (!arraysEqual(pending, safe)) {
         setPending(safe);
-        clearPending();
+        clearPending(pendingKey);
       }
       toast.info('Você está no modo manual', {
         description: 'Clique em "Aplicar" para atualizar os filtros após selecionar os canais.',
@@ -268,7 +279,7 @@ export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais,
       if (!arraysEqual(pending, safe)) {
         onChange(pending);
       }
-      clearPending();
+      clearPending(pendingKey);
       toast.success('Modo automático ativado', {
         description: 'Canais aplicados imediatamente e seleção pendente limpa.',
         duration: 3000,

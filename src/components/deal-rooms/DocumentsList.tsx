@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Upload, Download, Trash2, FileText } from "lucide-react";
 import { toast } from "sonner";
+import { parseApiError } from '@/lib/errorMessages';
 
 export function DocumentsList({ roomId }: { roomId: string }) {
   const { data = [] } = useRoomDocuments(roomId);
@@ -14,10 +15,9 @@ export function DocumentsList({ roomId }: { roomId: string }) {
   const handleDownload = async (path: string) => {
     try {
       const url = await getDocumentSignedUrl(path);
-      window.open(url, "_blank");
+      window.open(url, "_blank", "noopener,noreferrer");
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Erro ao baixar arquivo";
-      toast.error(msg);
+      toast.error(parseApiError(e, 'Erro ao baixar arquivo'));
     }
   };
 
@@ -41,8 +41,8 @@ export function DocumentsList({ roomId }: { roomId: string }) {
                 <p className="font-medium text-sm truncate">{d.title}</p>
                 <p className="text-xs text-muted-foreground">{((d.file_size ?? 0) / 1024).toFixed(1)} KB · {d.uploaded_by_side === "seller" ? "Vendedor" : "Comprador"}</p>
               </div>
-              <Button variant="ghost" size="icon-sm" onClick={() => handleDownload(d.file_path)}><Download className="h-4 w-4" /></Button>
-              <Button variant="ghost" size="icon-sm" onClick={() => del.mutate({ id: d.id, file_path: d.file_path })}><Trash2 className="h-4 w-4" /></Button>
+              <Button variant="ghost" size="icon-sm" aria-label="Baixar documento" onClick={() => handleDownload(d.file_path)}><Download className="h-4 w-4" /></Button>
+              <Button variant="ghost" size="icon-sm" aria-label="Remover documento" onClick={() => del.mutate({ id: d.id, file_path: d.file_path })}><Trash2 className="h-4 w-4" /></Button>
             </CardContent>
           </Card>
         ))}

@@ -25,6 +25,7 @@ import { UnifiedTimelineView } from '@/components/interactions/UnifiedTimelineVi
 import { useSearchParams } from 'react-router-dom';
 import { List, Activity, Sparkles } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 
 const InsightsPanel = lazy(() => import('@/components/interactions/insights/InsightsPanel').then(m => ({ default: m.InsightsPanel })));
 
@@ -177,9 +178,11 @@ const Interacoes = () => {
           <UnifiedTimelineView />
         </TabsContent>
         <TabsContent value="insights" className="mt-0 p-6">
-          <Suspense fallback={<div className="space-y-3"><Skeleton className="h-10 w-64" /><Skeleton className="h-24" /><Skeleton className="h-56" /></div>}>
-            <InsightsPanel />
-          </Suspense>
+          <DashboardErrorBoundary sectionName="Insights de Interações">
+            <Suspense fallback={<div className="space-y-3"><Skeleton className="h-10 w-64" /><Skeleton className="h-24" /><Skeleton className="h-56" /></div>}>
+              <InsightsPanel />
+            </Suspense>
+          </DashboardErrorBoundary>
         </TabsContent>
       </Tabs>
 

@@ -15,12 +15,13 @@ export default function PublicDealRoom() {
   const { token } = useParams();
   const { data, isLoading } = usePublicDealRoom(token);
   const qc = useQueryClient();
-  const [label, setLabel] = useState(localStorage.getItem("dr_buyer_label") ?? "");
+  const [label, setLabel] = useState(() => { try { return localStorage.getItem("dr_buyer_label") ?? ""; } catch { return ""; } });
   const [comment, setComment] = useState("");
+  const labelRef = React.useRef(label);
+  labelRef.current = label;
 
   useEffect(() => {
-    if (token) recordBuyerView(token, label || undefined).catch(() => {});
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (token) recordBuyerView(token, labelRef.current || undefined).catch(() => {});
   }, [token]);
 
   if (isLoading) return <div className="min-h-screen grid place-items-center">Carregando...</div>;
@@ -53,7 +54,7 @@ export default function PublicDealRoom() {
 
   const saveLabel = (v: string) => {
     setLabel(v);
-    localStorage.setItem("dr_buyer_label", v);
+    try { localStorage.setItem("dr_buyer_label", v); } catch { /* private browsing */ }
   };
 
   return (

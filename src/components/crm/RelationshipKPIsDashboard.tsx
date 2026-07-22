@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -76,6 +77,7 @@ const STAGE_COLORS: Record<string, string> = {
 
 export function RelationshipKPIsDashboard() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [liveEvents, setLiveEvents] = useState<LiveEvent[]>([]);
 
   const { data: stats, isLoading } = useQuery({
@@ -83,7 +85,8 @@ export function RelationshipKPIsDashboard() {
     queryFn: async () => {
       const { data: contacts, error } = await supabase
         .from('contacts')
-        .select('relationship_stage, relationship_score, sentiment, last_interaction_at');
+        .select('relationship_stage, relationship_score, sentiment, last_interaction_at')
+        .limit(500);
       
       if (error) throw error;
 
@@ -132,15 +135,18 @@ export function RelationshipKPIsDashboard() {
         avgScoreByStage,
         trendData
       };
-    }
+    },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
    useEffect(() => {
+     if (!user?.id) return;
      const channel = supabase
-       .channel('crm-pulse')
+       .channel(`crm-pulse:${user.id}`)
        .on(
          'postgres_changes',
-         { event: 'INSERT', schema: 'public', table: 'interactions' },
+         { event: 'INSERT', schema: 'public', table: 'interactions', filter: `user_id=eq.${user.id}` },
          async (payload) => {
            const { data: contact } = await supabase
              .from('contacts')
@@ -168,7 +174,7 @@ export function RelationshipKPIsDashboard() {
        )
        .on(
          'postgres_changes',
-         { event: 'INSERT', schema: 'public', table: 'crm_objection_intelligence' },
+         { event: 'INSERT', schema: 'public', table: 'crm_objection_intelligence', filter: `user_id=eq.${user.id}` },
          (payload) => {
            const newEvent: LiveEvent = {
              id: payload.new.id,
@@ -183,7 +189,7 @@ export function RelationshipKPIsDashboard() {
        )
        .on(
          'postgres_changes',
-         { event: 'INSERT', schema: 'public', table: 'neuro_behavioral_history' },
+         { event: 'INSERT', schema: 'public', table: 'neuro_behavioral_history', filter: `user_id=eq.${user.id}` },
          (payload) => {
            const newEvent: LiveEvent = {
              id: payload.new.id,
@@ -200,21 +206,25 @@ export function RelationshipKPIsDashboard() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [queryClient]);
+  }, [queryClient, user?.id]);
 
    const { data: intelligenceData } = useQuery({
-     queryKey: ['crm-intelligence-summary'],
+     queryKey: ['crm-intelligence-summary', user?.id],
+     enabled: !!user,
      queryFn: async () => {
        const { data, error } = await supabase
         .from('crm_objection_intelligence')
-         .select('*')
+         .select('id, behavioral_profile, contact_id, created_at, objection_type, script_content, success_rate, suggested_strategy, updated_at')
+         .eq('user_id', user!.id)
          .order('created_at', { ascending: false })
          .limit(5);
        if (error) return [];
        return data;
-     }
+     },
+     staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
- 
+
    if (isLoading) return <Skeleton className="h-[600px] w-full" />;
 
   return (

@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Database, Json } from "@/integrations/supabase/types";
+import { parseApiError } from '@/lib/errorMessages';
+import { logger } from '@/lib/logger';
 
 export type CSTier = "strategic" | "enterprise" | "mid" | "smb";
 export type CSLifecycle = "onboarding" | "adopting" | "mature" | "at_risk" | "churned";
@@ -87,12 +89,14 @@ export function useCSAccounts() {
     queryKey: ["cs-accounts", user?.id],
     enabled: !!user?.id,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("cs_accounts")
-        .select("*")
+        .select("id, user_id, account_name, contact_id, company_id, csm_owner_id, tier, arr, contract_start, renewal_date, lifecycle_stage, health_score, health_trend, notes, last_health_recalc_at, created_at, updated_at")
         .eq("user_id", user!.id)
-        .order("health_score", { ascending: true });
+        .order("health_score", { ascending: true })
+        .limit(200);
       if (error) throw error;
       return (data ?? []) as CSAccount[];
     },
@@ -100,15 +104,18 @@ export function useCSAccounts() {
 }
 
 export function useCSAccount(id: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["cs-account", id],
-    enabled: !!id,
+    queryKey: ["cs-account", id, user?.id],
+    enabled: !!id && !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("cs_accounts")
         .select("*")
         .eq("id", id!)
+        .eq("user_id", user!.id)
         .maybeSingle();
       if (error) throw error;
       return data as CSAccount | null;
@@ -129,7 +136,7 @@ export function useUpsertCSAccount() {
       } as CSAccountUpdate | CSAccountInsert;
 
       const { data, error } = input.id
-        ? await supabase.from("cs_accounts").update(payload as CSAccountUpdate).eq("id", input.id).select().maybeSingle()
+        ? await supabase.from("cs_accounts").update(payload as CSAccountUpdate).eq("user_id", user.id).eq("id", input.id).select().maybeSingle()
         : await supabase.from("cs_accounts").insert(payload as CSAccountInsert).select().maybeSingle();
       
       if (error) throw error;
@@ -141,7 +148,7 @@ export function useUpsertCSAccount() {
       qc.invalidateQueries({ queryKey: ["cs-accounts"] });
       qc.invalidateQueries({ queryKey: ["cs-account"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -158,21 +165,24 @@ export function useRecalcAccountHealth() {
       qc.invalidateQueries({ queryKey: ["cs-accounts"] });
       qc.invalidateQueries({ queryKey: ["cs-account"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 // ============ Health Signals ============
 export function useHealthSignals(accountId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["cs-signals", accountId],
-    enabled: !!accountId,
+    queryKey: ["cs-signals", accountId, user?.id],
+    enabled: !!accountId && !!user,
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("cs_health_signals")
         .select("*")
         .eq("account_id", accountId!)
+        .eq("user_id", user!.id)
         .order("captured_at", { ascending: false })
         .limit(200);
       if (error) throw error;
@@ -202,7 +212,7 @@ export function useRecordSignal() {
       toast.success("Sinal registrado");
       qc.invalidateQueries({ queryKey: ["cs-signals", vars.account_id] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -213,8 +223,9 @@ export function useNPS(accountId?: string) {
     queryKey: ["cs-nps", accountId ?? "all", user?.id],
     enabled: !!user?.id,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
-      let q = supabase.from("cs_nps_responses").select("*").eq("user_id", user!.id);
+      let q = supabase.from("cs_nps_responses").select("id, account_id, contact_id, score, category, comment, surveyed_at").eq("user_id", user!.id);
       if (accountId) q = q.eq("account_id", accountId);
       const { data, error } = await q.order("surveyed_at", { ascending: false }).limit(500);
       if (error) throw error;
@@ -252,14 +263,15 @@ export function useSubmitNPS() {
         }),
       ]);
       if (npsError) throw npsError;
-      if (signalError) throw signalError;
+      // Health signal is derived from NPS — log on failure but don't fail the primary write
+      if (signalError) logger.error('Failed to write health signal from NPS', signalError);
     },
     onSuccess: (_, vars) => {
       toast.success("Resposta NPS registrada");
       qc.invalidateQueries({ queryKey: ["cs-nps"] });
       qc.invalidateQueries({ queryKey: ["cs-signals", vars.account_id] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -270,8 +282,9 @@ export function useQBRs(accountId?: string) {
     queryKey: ["cs-qbrs", accountId ?? "all", user?.id],
     enabled: !!user?.id,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
-      let q = supabase.from("cs_qbrs").select("*").eq("user_id", user!.id);
+      let q = supabase.from("cs_qbrs").select("id, account_id, title, scheduled_at, completed_at, status, agenda, outcomes, next_steps, attendees, notes").eq("user_id", user!.id);
       if (accountId) q = q.eq("account_id", accountId);
       const { data, error } = await q.order("scheduled_at", { ascending: false }).limit(200);
       if (error) throw error;
@@ -298,7 +311,7 @@ export function useUpsertQBR() {
 
       if (input.id) {
         const updatePayload: QBRUpdate = basePayload;
-        const { data, error } = await supabase.from("cs_qbrs").update(updatePayload).eq("id", input.id).select().maybeSingle();
+        const { data, error } = await supabase.from("cs_qbrs").update(updatePayload).eq("user_id", user.id).eq("id", input.id).select().maybeSingle();
         if (error) throw error;
         if (!data) throw new Error("Falha ao salvar QBR");
         return data as QBR;
@@ -321,7 +334,7 @@ export function useUpsertQBR() {
       toast.success("QBR salvo");
       qc.invalidateQueries({ queryKey: ["cs-qbrs"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -332,6 +345,7 @@ export function useRenewals(daysAhead = 90) {
     queryKey: ["cs-renewals-pipeline", user?.id, daysAhead],
     enabled: !!user?.id,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase.rpc("cs_renewal_pipeline", {
         _user_id: user!.id,
@@ -362,10 +376,12 @@ export function useRenewals(daysAhead = 90) {
 }
 
 export function useUpdateRenewal() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: Partial<Renewal> & { id: string }) => {
-      const { data, error } = await supabase.from("cs_renewals").update(input as Database["public"]["Tables"]["cs_renewals"]["Update"]).eq("id", input.id).select().maybeSingle();
+      if (!user?.id) throw new Error('Não autenticado');
+      const { data, error } = await supabase.from("cs_renewals").update(input as Database["public"]["Tables"]["cs_renewals"]["Update"]).eq("user_id", user.id).eq("id", input.id).select().maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Renovação não encontrada");
       return data as Renewal;
@@ -374,6 +390,6 @@ export function useUpdateRenewal() {
       qc.invalidateQueries({ queryKey: ["cs-renewals-pipeline"] });
       toast.success("Renovação atualizada");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }

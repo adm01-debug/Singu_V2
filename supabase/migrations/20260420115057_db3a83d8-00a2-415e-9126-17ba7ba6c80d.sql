@@ -16,8 +16,8 @@ CREATE TABLE public.connection_configs (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_connection_configs_type ON public.connection_configs(connection_type);
-CREATE INDEX idx_connection_configs_active ON public.connection_configs(is_active);
+CREATE INDEX IF NOT EXISTS idx_connection_configs_type ON public.connection_configs(connection_type);
+CREATE INDEX IF NOT EXISTS idx_connection_configs_active ON public.connection_configs(is_active);
 
 ALTER TABLE public.connection_configs ENABLE ROW LEVEL SECURITY;
 
@@ -43,7 +43,7 @@ CREATE TABLE public.connection_test_logs (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_connection_test_logs_conn ON public.connection_test_logs(connection_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_connection_test_logs_conn ON public.connection_test_logs(connection_id, created_at DESC);
 
 ALTER TABLE public.connection_test_logs ENABLE ROW LEVEL SECURITY;
 
@@ -75,8 +75,8 @@ CREATE TABLE public.incoming_webhooks (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_incoming_webhooks_token ON public.incoming_webhooks(token);
-CREATE INDEX idx_incoming_webhooks_active ON public.incoming_webhooks(is_active);
+CREATE INDEX IF NOT EXISTS idx_incoming_webhooks_token ON public.incoming_webhooks(token);
+CREATE INDEX IF NOT EXISTS idx_incoming_webhooks_active ON public.incoming_webhooks(is_active);
 
 ALTER TABLE public.incoming_webhooks ENABLE ROW LEVEL SECURITY;
 
@@ -105,7 +105,7 @@ CREATE TABLE public.incoming_webhook_logs (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_incoming_webhook_logs_wh ON public.incoming_webhook_logs(webhook_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_incoming_webhook_logs_wh ON public.incoming_webhook_logs(webhook_id, created_at DESC);
 
 ALTER TABLE public.incoming_webhook_logs ENABLE ROW LEVEL SECURITY;
 

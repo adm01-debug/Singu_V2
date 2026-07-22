@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { logger } from '@/lib/logger';
 
 interface ClosingScoreAlert {
   id: string;
@@ -25,7 +26,7 @@ export function useClosingScoreAlerts() {
       if (!user) return [];
       const { data } = await supabase
         .from('alerts')
-        .select('*')
+        .select('id, contact_id, title, priority, created_at')
         .eq('user_id', user.id)
         .eq('type', 'closing_score')
         .eq('dismissed', false)
@@ -47,13 +48,15 @@ export function useClosingScoreAlerts() {
   });
 
   const dismissAlert = async (id: string) => {
-    await supabase.from('alerts').update({ dismissed: true }).eq('id', id);
+    const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user.id).eq('id', id);
+    if (error) logger.error('Error dismissing alert:', { error: error.message });
     refetch();
   };
 
   const dismissAllAlerts = async () => {
     if (!user) return;
-    await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user.id).eq('type', 'closing_score');
+    const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user.id).eq('type', 'closing_score');
+    if (error) logger.error('Error dismissing all alerts:', { error: error.message });
     refetch();
   };
 

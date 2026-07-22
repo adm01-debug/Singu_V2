@@ -92,7 +92,7 @@ export function ContactFamilyInterestsCard({ contactId, hobbies, interests, fami
                 <FamilyHistoryDialog contactId={contactId} />
                 <Button 
                   variant="ghost" 
-                  size="icon" 
+                  size="icon" aria-label="Editar" 
                   className="h-6 w-6 text-muted-foreground hover:text-primary"
                   onClick={() => setIsEditingFamily(true)}
                 >

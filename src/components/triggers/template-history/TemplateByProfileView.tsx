@@ -50,7 +50,7 @@ export function TemplateByProfileView({ templateMetrics }: { templateMetrics: Te
                     </p>
                     <p className="text-xs text-muted-foreground">{tm.totalUsages} usos</p>
                   </div>
-                  <Button variant="ghost" size="icon" className="h-7 w-7">
+                  <Button variant="ghost" size="icon" aria-label="Subir" className="h-7 w-7">
                     {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </Button>
                 </div>

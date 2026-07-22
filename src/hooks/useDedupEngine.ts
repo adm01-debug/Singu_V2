@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { detectDuplicates, type DedupRecord, type DuplicatePair } from '@/lib/fuzzyDedup';
 
 export type DedupEntity = 'contacts' | 'companies';
@@ -24,10 +25,11 @@ interface CompanyRow {
   cnpj: string | null;
 }
 
-async function fetchContacts(): Promise<DedupRecord[]> {
+async function fetchContacts(userId: string): Promise<DedupRecord[]> {
   const { data, error } = await supabase
     .from('contacts')
     .select('id, first_name, last_name, email, phone, whatsapp, company_id')
+    .eq('user_id', userId)
     .limit(2000);
   if (error) throw error;
   return (data as ContactRow[] | null ?? []).map(c => ({
@@ -39,10 +41,11 @@ async function fetchContacts(): Promise<DedupRecord[]> {
   }));
 }
 
-async function fetchCompanies(): Promise<DedupRecord[]> {
+async function fetchCompanies(userId: string): Promise<DedupRecord[]> {
   const { data, error } = await supabase
     .from('companies')
     .select('id, name, nome_crm, email, phone, cnpj')
+    .eq('user_id', userId)
     .limit(2000);
   if (error) throw error;
   return (data as CompanyRow[] | null ?? []).map(c => ({
@@ -55,10 +58,13 @@ async function fetchCompanies(): Promise<DedupRecord[]> {
 }
 
 export function useDedupEngine(entity: DedupEntity, threshold = 0.82) {
+  const { user } = useAuth();
   const query = useQuery({
-    queryKey: ['dedup-source', entity],
-    queryFn: () => (entity === 'contacts' ? fetchContacts() : fetchCompanies()),
+    queryKey: ['dedup-source', entity, user?.id],
+    queryFn: () => (entity === 'contacts' ? fetchContacts(user!.id) : fetchCompanies(user!.id)),
+    enabled: !!user,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const pairs: DuplicatePair[] = useMemo(() => {

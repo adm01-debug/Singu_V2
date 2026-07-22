@@ -45,7 +45,7 @@ export function useIntelTelemetry() {
     eventsRef.current = updated;
     writeEvents(updated);
     setEvents(updated);
-    if (typeof console !== 'undefined' && console.debug) {
+    if (import.meta.env.DEV) {
       console.debug('[intel.telemetry]', next);
     }
   }, []);

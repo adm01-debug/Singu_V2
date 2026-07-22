@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AppLayout } from '@/components/layout/AppLayout';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 
 const GoalsDashboardWidget = lazy(() => import('@/components/gamification/GoalsDashboardWidget'));
 const QuotaStatusWidget = lazy(() => import('@/components/gamification/QuotaStatusWidget'));
@@ -28,28 +29,38 @@ export default function Metas() {
         </div>
 
         {/* Dashboard Overview */}
-        <Suspense fallback={<WidgetSkeleton />}>
-          <GoalsDashboardWidget />
-        </Suspense>
+        <DashboardErrorBoundary sectionName="Dashboard de Metas">
+          <Suspense fallback={<WidgetSkeleton />}>
+            <GoalsDashboardWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
 
         {/* Quotas + Goals */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Suspense fallback={<WidgetSkeleton />}>
-            <QuotaStatusWidget />
-          </Suspense>
-          <Suspense fallback={<WidgetSkeleton />}>
-            <UserGoalsWidget />
-          </Suspense>
+          <DashboardErrorBoundary sectionName="Status de Cotas">
+            <Suspense fallback={<WidgetSkeleton />}>
+              <QuotaStatusWidget />
+            </Suspense>
+          </DashboardErrorBoundary>
+          <DashboardErrorBoundary sectionName="Metas do Usuário">
+            <Suspense fallback={<WidgetSkeleton />}>
+              <UserGoalsWidget />
+            </Suspense>
+          </DashboardErrorBoundary>
         </div>
 
         {/* Leaderboard + Badges */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Suspense fallback={<WidgetSkeleton />}>
-            <LeaderboardWidget />
-          </Suspense>
-          <Suspense fallback={<WidgetSkeleton />}>
-            <BadgesWidget />
-          </Suspense>
+          <DashboardErrorBoundary sectionName="Ranking">
+            <Suspense fallback={<WidgetSkeleton />}>
+              <LeaderboardWidget />
+            </Suspense>
+          </DashboardErrorBoundary>
+          <DashboardErrorBoundary sectionName="Conquistas">
+            <Suspense fallback={<WidgetSkeleton />}>
+              <BadgesWidget />
+            </Suspense>
+          </DashboardErrorBoundary>
         </div>
       </div>
     </AppLayout>

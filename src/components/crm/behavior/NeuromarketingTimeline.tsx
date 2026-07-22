@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, AreaChart, Area } from 'recharts';
 import { Brain, Heart, TrendingUp, Info, MessageSquare, Mic, Activity, Smile, Meh, Frown } from 'lucide-react';
@@ -25,29 +26,37 @@ interface EmotionAnalysis {
 }
 
 export function NeuromarketingTimeline({ contactId }: Props) {
+  const { user } = useAuth();
   const { data: neuroData, isLoading } = useQuery({
-    queryKey: ['neuro-unified-data', contactId],
+    queryKey: ['neuro-unified-data', contactId, user?.id],
     queryFn: async () => {
       const [historyRes, interactionsRes] = await Promise.all([
         supabase
           .from('neuro_behavioral_history')
-          .select('*')
+          .select('id, contact_id, created_at, dominance_data, empathy_score, empathy_trend, language_complexity_score, neuromarketing_data, recommendations, response_synchronicity')
           .eq('contact_id', contactId)
-          .order('created_at', { ascending: true }),
+          .eq('user_id', user!.id)
+          .order('created_at', { ascending: true })
+          .limit(200),
         supabase
           .from('interactions')
-          .select('*')
+          .select('id, sentiment, response_time, created_at')
           .eq('contact_id', contactId)
+          .eq('user_id', user!.id)
           .order('created_at', { ascending: false })
           .limit(10)
       ]);
+
       
       if (historyRes.error) throw historyRes.error;
       return {
         history: historyRes.data || [],
         interactions: interactionsRes.data || []
       };
-    }
+    },
+    enabled: !!contactId && !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const history = neuroData?.history;

@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface FormField {
   key: string;
@@ -58,9 +60,10 @@ export function useForms() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('forms')
-        .select('*')
+        .select('id, user_id, name, slug, description, fields, routing_rules, nurturing_workflow_id, redirect_url, success_message, is_published, view_count, submission_count, created_at, updated_at')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(100);
       if (error) throw error;
       return (data || []).map((f) => ({
         ...f,
@@ -69,14 +72,15 @@ export function useForms() {
       })) as unknown as MarketingForm[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const upsert = useMutation({
     mutationFn: async (input: Partial<MarketingForm> & { name: string; slug: string }) => {
       if (!user) throw new Error('Não autenticado');
-      const payload = { ...input, user_id: user.id } as never;
+      const payload = { ...input, user_id: user.id } as TablesInsert<'forms'>;
       if (input.id) {
-        const { error } = await supabase.from('forms').update(input as never).eq('id', input.id);
+        const { error } = await supabase.from('forms').update(input as TablesUpdate<'forms'>).eq('user_id', user.id).eq('id', input.id);
         if (error) throw error;
       } else {
         const { error } = await supabase.from('forms').insert(payload);
@@ -84,12 +88,13 @@ export function useForms() {
       }
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: KEY }); toast.success('Formulário salvo!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('forms').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('forms').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: KEY }); toast.success('Removido'); },
@@ -98,7 +103,8 @@ export function useForms() {
 
   const togglePublish = useMutation({
     mutationFn: async ({ id, is_published }: { id: string; is_published: boolean }) => {
-      const { error } = await supabase.from('forms').update({ is_published } as never).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('forms').update({ is_published } as TablesUpdate<'forms'>).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
@@ -109,11 +115,12 @@ export function useForms() {
 }
 
 export function useForm(id: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['marketing-form', id],
-    enabled: !!id,
+    queryKey: ['marketing-form', id, user?.id],
+    enabled: !!id && !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from('forms').select('*').eq('id', id!).maybeSingle();
+      const { data, error } = await supabase.from('forms').select('id, user_id, name, slug, description, fields, routing_rules, nurturing_workflow_id, redirect_url, success_message, is_published, view_count, submission_count, created_at, updated_at').eq('id', id!).eq('user_id', user!.id).maybeSingle();
       if (error) throw error;
       if (!data) return null;
       return {
@@ -126,14 +133,16 @@ export function useForm(id: string | undefined) {
 }
 
 export function useFormSubmissions(formId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['form-submissions', formId],
-    enabled: !!formId,
+    queryKey: ['form-submissions', formId, user?.id],
+    enabled: !!formId && !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('form_submissions')
-        .select('*')
+        .select('id, form_id, user_id, contact_id, data, routed_to, utm_source, utm_medium, utm_campaign, page_url, created_at')
         .eq('form_id', formId!)
+        .eq('user_id', user!.id)
         .order('created_at', { ascending: false })
         .limit(200);
       if (error) throw error;

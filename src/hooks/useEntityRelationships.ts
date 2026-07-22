@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type EntityType = 'company' | 'contact';
 export type EntityRelationshipRole =
@@ -58,12 +59,19 @@ function key(entityType?: EntityType, entityId?: string) {
 }
 
 export function useEntityRelationships(entityType?: EntityType, entityId?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: key(entityType, entityId),
-    enabled: !entityType || !!entityId,
+    queryKey: [...key(entityType, entityId), user?.id],
+    enabled: !!user && (!entityType || !!entityId),
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<EntityRelationship[]> => {
-      let q = supabase.from('entity_relationships').select('*').order('created_at', { ascending: false });
+      let q = supabase
+        .from('entity_relationships')
+        .select('id, from_type, from_id, to_type, to_id, role, is_primary, started_at, ended_at, notes, created_at, updated_at, created_by')
+        .eq('created_by', user!.id)
+        .order('created_at', { ascending: false })
+        .limit(200);
       if (entityType && entityId) {
         q = q.or(
           `and(from_type.eq.${entityType},from_id.eq.${entityId}),and(to_type.eq.${entityType},to_id.eq.${entityId})`
@@ -81,8 +89,9 @@ export function useCreateEntityRelationship() {
   const { user } = useAuth();
   return useMutation({
     mutationFn: async (input: NewEntityRelationship) => {
-      const payload = { ...input, created_by: user?.id ?? null };
-      const { data, error } = await supabase.from('entity_relationships').insert(payload).select('*').single();
+      if (!user?.id) throw new Error('Não autenticado');
+      const payload = { ...input, created_by: user.id };
+      const { data, error } = await supabase.from('entity_relationships').insert(payload).select('id, from_type, from_id, to_type, to_id, role, is_primary, started_at, ended_at, notes, created_at, updated_at, created_by').single();
       if (error) throw error;
       return data as EntityRelationship;
     },
@@ -90,21 +99,23 @@ export function useCreateEntityRelationship() {
       toast.success('Vínculo criado');
       qc.invalidateQueries({ queryKey: ['entity-relationships'] });
     },
-    onError: (e: Error) => toast.error(`Falha ao criar vínculo: ${e.message}`),
+    onError: (e: Error) => toast.error(`Falha ao criar vínculo: ${parseApiError(e)}`),
   });
 }
 
 export function useDeleteEntityRelationship() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('entity_relationships').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('entity_relationships').delete().eq('created_by', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
       toast.success('Vínculo removido');
       qc.invalidateQueries({ queryKey: ['entity-relationships'] });
     },
-    onError: (e: Error) => toast.error(`Falha ao remover vínculo: ${e.message}`),
+    onError: (e: Error) => toast.error(`Falha ao remover vínculo: ${parseApiError(e)}`),
   });
 }

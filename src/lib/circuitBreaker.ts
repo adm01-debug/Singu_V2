@@ -60,8 +60,10 @@ export class CircuitBreaker {
   /**
    * Execute a function through the circuit breaker.
    * Throws CircuitOpenError if the circuit is open.
+   * @param ignoreError - optional predicate; errors it returns true for are re-thrown
+   *   without incrementing the failure counter (e.g. intentional AbortErrors).
    */
-  async call<T>(fn: () => Promise<T>): Promise<T> {
+  async call<T>(fn: () => Promise<T>, ignoreError?: (e: unknown) => boolean): Promise<T> {
     if (this.state === "OPEN") {
       const elapsed = Date.now() - this.lastFailureTime;
       if (elapsed >= this.resetTimeoutMs) {
@@ -79,6 +81,7 @@ export class CircuitBreaker {
       this.onSuccess();
       return result;
     } catch (error) {
+      if (ignoreError?.(error)) throw error;
       this.onFailure();
       // Garantir logs consistentes mesmo para erros internos
       const msg = error instanceof Error ? error.message : 'Unknown error';

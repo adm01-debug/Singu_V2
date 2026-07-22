@@ -1,6 +1,6 @@
 const PLACEHOLDER = '—';
 
-export function maskIPv4(ip: string): string {
+function maskIPv4(ip: string): string {
   const parts = ip.split('.');
   if (parts.length !== 4 || parts.some(p => p === '' || Number.isNaN(Number(p)))) return ip;
   return `${parts[0]}.${parts[1]}.*.*`;
@@ -23,7 +23,7 @@ export function maskIP(ip: string | null | undefined): string {
   return PLACEHOLDER;
 }
 
-export function matchIP(ip: string | null | undefined, query: string): boolean {
+function matchIP(ip: string | null | undefined, query: string): boolean {
   if (!ip) return false;
   if (!query) return true;
   return ip.toLowerCase().includes(query.toLowerCase());

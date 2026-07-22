@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import type { Tables } from '@/integrations/supabase/types';
 
 export type GroupBy = 'company' | 'contact';
@@ -35,6 +36,7 @@ type InteractionRow = Tables<'interactions'>;
 
 export function useTimelineByEntity(params: UseTimelineByEntityParams) {
   const { groupBy, dateFrom, dateTo, channels } = params;
+  const { user } = useAuth();
 
   return useQuery({
     queryKey: [
@@ -43,14 +45,18 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
       dateFrom?.toISOString() ?? null,
       dateTo?.toISOString() ?? null,
       channels?.slice().sort().join(',') ?? '',
+      user?.id,
     ],
+    enabled: !!user,
     queryFn: async (): Promise<TimelineGroup[]> => {
+      if (!user) return [];
       // Build base query (client-side fallback — sempre funciona)
-       let query = supabase
-         .from('interactions')
-         .select('id, type, title, content, created_at, sentiment, follow_up_required, contact_id, company_id, transcription, transcription_metadata')
-         .order('created_at', { ascending: false })
-         .limit(500);
+      let query = supabase
+        .from('interactions')
+        .select('id, type, title, content, created_at, sentiment, follow_up_required, contact_id, company_id, transcription, transcription_metadata')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(500);
 
       if (dateFrom) query = query.gte('created_at', dateFrom.toISOString());
       if (dateTo) query = query.lte('created_at', dateTo.toISOString());
@@ -75,7 +81,8 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
           const { data: companies } = await supabase
             .from('companies')
             .select('id, name, nome_fantasia')
-            .in('id', idList);
+            .in('id', idList)
+            .limit(500);
           if (Array.isArray(companies)) {
             for (const c of companies) {
               nameMap.set(c.id, c.nome_fantasia || c.name || 'Empresa sem nome');
@@ -85,7 +92,8 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
           const { data: contacts } = await supabase
             .from('contacts')
             .select('id, first_name, last_name')
-            .in('id', idList);
+            .in('id', idList)
+            .limit(500);
           if (Array.isArray(contacts)) {
             for (const c of contacts) {
               const fullName = `${c.first_name ?? ''} ${c.last_name ?? ''}`.trim();
@@ -132,6 +140,7 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
       );
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 10 * 60 * 1000,
   });
 }

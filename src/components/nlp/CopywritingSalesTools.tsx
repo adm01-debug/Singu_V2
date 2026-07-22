@@ -88,10 +88,9 @@ export default function CopywritingSalesTools({ contact }: CopywritingSalesTools
   }, [analyzeText, generateChannelPreviews]);
 
   const copyToClipboard = useCallback((text: string, id: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedId(id);
-    toast.success('Copiado!');
-    setTimeout(() => setCopiedId(null), 2000);
+    navigator.clipboard.writeText(text)
+      .then(() => { setCopiedId(id); toast.success('Copiado!'); setTimeout(() => setCopiedId(null), 2000); })
+      .catch(() => toast.error('Não foi possível copiar'));
   }, []);
 
   return (

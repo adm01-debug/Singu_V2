@@ -114,13 +114,13 @@ const ChunkingNavigator: React.FC<ChunkingNavigatorProps> = ({
   const currentChunk = CHUNK_LEVELS.find(c => c.level === currentLevel)!;
 
   const copyQuestion = (question: string, index: number) => {
-    navigator.clipboard.writeText(question);
-    setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
-    toast({
-      title: "Copiado!",
-      description: "Pergunta copiada para a área de transferência"
-    });
+    navigator.clipboard.writeText(question)
+      .then(() => {
+        setCopiedIndex(index);
+        setTimeout(() => setCopiedIndex(null), 2000);
+        toast({ title: "Copiado!", description: "Pergunta copiada para a área de transferência" });
+      })
+      .catch(() => toast({ title: "Erro", description: "Não foi possível copiar", variant: "destructive" }));
   };
 
   const getLevelColor = (level: string) => {

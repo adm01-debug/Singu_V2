@@ -69,13 +69,17 @@ const DISCTemplateLibrary: React.FC<DISCTemplateLibraryProps> = ({ filterProfile
   }, [filteredTemplates]);
 
   const copyToClipboard = async (template: Template) => {
-    await navigator.clipboard.writeText(template.template);
-    setCopiedId(template.id);
-    setTimeout(() => setCopiedId(null), 2000);
-    toast({
-      title: '📋 Template Copiado!',
-      description: `${template.category} - ${template.context}`
-    });
+    try {
+      await navigator.clipboard.writeText(template.template);
+      setCopiedId(template.id);
+      setTimeout(() => setCopiedId(null), 2000);
+      toast({
+        title: '📋 Template Copiado!',
+        description: `${template.category} - ${template.context}`
+      });
+    } catch {
+      toast({ title: 'Erro', description: 'Não foi possível copiar', variant: 'destructive' });
+    }
   };
 
   return (
@@ -176,7 +180,7 @@ const DISCTemplateLibrary: React.FC<DISCTemplateLibraryProps> = ({ filterProfile
                             <div className="flex items-center gap-2">
                               <Button
                                 variant="ghost"
-                                size="icon"
+                                size="icon" aria-label="Favoritar"
                                 className="h-7 w-7 shrink-0"
                                 onClick={() => toggleFavorite(template.id)}
                               >

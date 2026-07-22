@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type WhatsAppMessageType = 'text' | 'audio' | 'image' | 'video' | 'document' | 'sticker';
 
@@ -51,7 +52,7 @@ export function useImportWhatsAppMessages() {
         toast.success(`${r.inserted_count} mensagem(ns) importada(s)`);
       }
     },
-    onError: (e: Error) => toast.error(`Falha na importação: ${e.message}`),
+    onError: (e: Error) => toast.error(`Falha na importação: ${parseApiError(e)}`),
   });
 }
 

@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
  import { toast } from 'sonner';
  import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 
 export function useSocialIntelligence(contactId: string) {
   const { user } = useAuth();
@@ -12,9 +13,9 @@ export function useSocialIntelligence(contactId: string) {
     queryKey: ['social-intelligence', contactId, user?.id],
     queryFn: async () => {
       const [profRes, behavRes, eventsRes] = await Promise.all([
-        supabase.from('social_profiles').select('*').eq('contact_id', contactId).order('updated_at', { ascending: false }),
-        supabase.from('social_behavior_analysis').select('*').eq('contact_id', contactId).order('analysis_date', { ascending: false }).limit(1),
-        supabase.from('social_life_events').select('*').eq('contact_id', contactId).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
+        supabase.from('social_profiles').select('*').eq('contact_id', contactId).eq('user_id', user!.id).order('updated_at', { ascending: false }).limit(10),
+        supabase.from('social_behavior_analysis').select('*').eq('contact_id', contactId).eq('user_id', user!.id).order('analysis_date', { ascending: false }).limit(1),
+        supabase.from('social_life_events').select('*').eq('contact_id', contactId).eq('user_id', user!.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
       ]);
 
       const profiles = profRes.data || [];
@@ -23,8 +24,8 @@ export function useSocialIntelligence(contactId: string) {
       // Sincronização Automática de Hobbies/Interesses baseada no enriquecimento social
       if (behaviorAnalysis?.interests && Array.isArray(behaviorAnalysis.interests)) {
         const [{ data: contact }, { data: existingPending }] = await Promise.all([
-          supabase.from('contacts').select('interests, hobbies').eq('id', contactId).maybeSingle(),
-          supabase.from('suggested_rapport_intel').select('value').eq('contact_id', contactId).eq('status', 'pending'),
+          supabase.from('contacts').select('interests, hobbies').eq('id', contactId).eq('user_id', user!.id).maybeSingle(),
+          supabase.from('suggested_rapport_intel').select('value').eq('contact_id', contactId).eq('user_id', user!.id).eq('status', 'pending').limit(50),
         ]);
         if (contact) {
           const currentInterests = contact.interests || [];
@@ -45,7 +46,8 @@ export function useSocialIntelligence(contactId: string) {
             const newSuggestions = suggestions.filter(s => !pendingValues.has(s.value));
 
             if (newSuggestions.length > 0) {
-              await supabase.from('suggested_rapport_intel').insert(newSuggestions);
+              const { error: intelErr } = await supabase.from('suggested_rapport_intel').insert(newSuggestions);
+              if (intelErr) logger.warn('suggested_rapport_intel insert failed', { error: intelErr.message });
               queryClient.invalidateQueries({ queryKey: ['suggested-rapport', contactId] });
             }
           }
@@ -66,7 +68,8 @@ export function useSocialIntelligence(contactId: string) {
 
   const dismissMutation = useMutation({
     mutationFn: async (eventId: string) => {
-      const { error } = await supabase.from('social_life_events').update({ dismissed: true }).eq('id', eventId);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('social_life_events').update({ dismissed: true }).eq('user_id', user.id).eq('id', eventId);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -77,7 +80,7 @@ export function useSocialIntelligence(contactId: string) {
 
    const syncToPsychographic = useMutation({
      mutationFn: async () => {
-       if (!user) return;
+       if (!user) throw new Error('Not authenticated');
        
        // 1. Get current social behavior analysis
        const { data: analysis } = await supabase
@@ -119,11 +122,12 @@ export function useSocialIntelligence(contactId: string) {
          supabase.from('contacts').update({
            interests: analysis.interests || [],
            notes: `Perfil psicográfico atualizado via IA Social em ${new Date().toLocaleDateString('pt-BR')}`
-         }).eq('id', contactId),
+         }).eq('user_id', user.id).eq('id', contactId),
        ]);
 
        if (profileError) throw profileError;
-       if (contactError) throw contactError;
+       // Contact notes update is supplementary — log on failure, don't fail the enrichment
+       if (contactError) logger.error('Failed to update contact notes during social enrichment', contactError);
  
        // 5. Trigger offer regeneration (simulation/edge function call)
        try {
@@ -145,7 +149,7 @@ export function useSocialIntelligence(contactId: string) {
        });
      },
      onError: (error) => {
-       toast.error('Erro ao sincronizar perfil', { description: error instanceof Error ? error.message : 'Tente novamente.' });
+       toast.error('Erro ao sincronizar perfil', { description: parseApiError(error, 'Tente novamente.') });
      }
    });
  

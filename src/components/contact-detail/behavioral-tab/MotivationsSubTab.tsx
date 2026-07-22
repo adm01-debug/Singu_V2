@@ -133,7 +133,7 @@ export function MotivationsSubTab({ contactId }: Props) {
               <Input 
                 type="number" min="1" max="5"
                 value={formData.formality_level || 3} 
-                onChange={(e) => setFormData({ ...formData, formality_level: parseInt(e.target.value) })}
+                onChange={(e) => setFormData({ ...formData, formality_level: parseInt(e.target.value) || 3 })}
                 className="h-8 text-xs"
               />
             </div>

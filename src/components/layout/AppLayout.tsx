@@ -34,6 +34,7 @@ import {
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -256,20 +257,22 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
 
       {/* Global Components */}
       {deferredReady && (
-        <Suspense fallback={null}>
-          <GlobalCommandBar
-            open={cmdBarOpen}
-            onOpenChange={setCmdBarOpen}
-            onOpenLegacySearch={() => setLegacySearchOpen(true)}
-            onOpenAsk={() => window.dispatchEvent(new CustomEvent('open-ask-crm'))}
-          />
-          <GlobalSearch 
-            open={legacySearchOpen} 
-            onOpenChange={setLegacySearchOpen} 
-            voiceMode={voiceMode} 
-            onVoiceModeChange={setVoiceMode} 
-          />
-        </Suspense>
+        <DashboardErrorBoundary sectionName="Global Command Bar">
+          <Suspense fallback={null}>
+            <GlobalCommandBar
+              open={cmdBarOpen}
+              onOpenChange={setCmdBarOpen}
+              onOpenLegacySearch={() => setLegacySearchOpen(true)}
+              onOpenAsk={() => window.dispatchEvent(new CustomEvent('open-ask-crm'))}
+            />
+            <GlobalSearch
+              open={legacySearchOpen}
+              onOpenChange={setLegacySearchOpen}
+              voiceMode={voiceMode}
+              onVoiceModeChange={setVoiceMode}
+            />
+          </Suspense>
+        </DashboardErrorBoundary>
       )}
       {/*
         Stack flutuante única: empilha ScrollToTopButton (topo) acima do
@@ -293,22 +296,28 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
       <NotificationCenter />
       <SlowQueryIndicator />
       {deferredReady && (
-        <Suspense fallback={null}>
-          <OnboardingTourWrapper />
-          <KeyboardShortcutsCheatsheet />
-          <AskCrmChat />
-          <AIEmailComposer />
-        </Suspense>
+        <DashboardErrorBoundary sectionName="Global Overlays">
+          <Suspense fallback={null}>
+            <OnboardingTourWrapper />
+            <KeyboardShortcutsCheatsheet />
+            <AskCrmChat />
+            <AIEmailComposer />
+          </Suspense>
+        </DashboardErrorBoundary>
       )}
     </div>
   );
 }
 
-const SIDEBAR_KEY = "nexus-sidebar-state";
+const SIDEBAR_KEY_PREFIX = "nexus-sidebar-state";
 
-function getDefaultOpen() {
+function getSidebarKey(userId?: string) {
+  return `${SIDEBAR_KEY_PREFIX}-${userId ?? 'anon'}`;
+}
+
+function getDefaultOpen(userId?: string) {
   try {
-    const stored = localStorage.getItem(SIDEBAR_KEY);
+    const stored = localStorage.getItem(getSidebarKey(userId));
     return stored !== "false";
   } catch {
     return true;
@@ -316,11 +325,13 @@ function getDefaultOpen() {
 }
 
 export function AppLayout({ children, title }: AppLayoutProps) {
+  const { user } = useAuth();
+  const sidebarKey = getSidebarKey(user?.id);
   return (
     <SidebarProvider
-      defaultOpen={getDefaultOpen()}
+      defaultOpen={getDefaultOpen(user?.id)}
       onOpenChange={(open) => {
-        try { localStorage.setItem(SIDEBAR_KEY, String(open)); } catch { /* noop */ }
+        try { localStorage.setItem(sidebarKey, String(open)); } catch { /* noop */ }
       }}
     >
       <AppLayoutInner title={title}>

@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface SequenceStep {
   id: string;
@@ -69,14 +70,16 @@ export function useSequences() {
       if (!userId) return [];
       const { data, error } = await supabase
         .from('sequences')
-        .select('*')
+        .select('id, user_id, name, description, status, pause_on_reply, pause_on_meeting, max_enrollments, total_enrolled, total_completed, total_replied, created_at, updated_at')
         .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(200);
       if (error) throw error;
       return (data || []) as unknown as Sequence[];
     },
     enabled: !!userId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const createSequence = useMutation({
@@ -118,7 +121,7 @@ export function useSequences() {
       qc.invalidateQueries({ queryKey: ['sequences'] });
       toast.success('Sequência criada');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const toggleStatus = useMutation({
@@ -127,6 +130,7 @@ export function useSequences() {
       const { error } = await supabase
         .from('sequences')
         .update({ status: newStatus, updated_at: new Date().toISOString() })
+        .eq('user_id', userId!)
         .eq('id', id);
       if (error) throw error;
     },
@@ -139,7 +143,7 @@ export function useSequences() {
 
   const deleteSequence = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('sequences').delete().eq('id', id);
+      const { error } = await supabase.from('sequences').delete().eq('user_id', userId!).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -152,9 +156,10 @@ export function useSequences() {
   const fetchSteps = async (sequenceId: string): Promise<SequenceStep[]> => {
     const { data, error } = await supabase
       .from('sequence_steps')
-      .select('*')
+      .select('id, sequence_id, step_order, channel, delay_days, delay_hours, subject, message_template, notes, condition_type, condition_wait_hours, branch_on_yes_step, branch_on_no_step')
       .eq('sequence_id', sequenceId)
-      .order('step_order');
+      .order('step_order')
+      .limit(50);
     if (error) throw error;
     return (data || []) as unknown as SequenceStep[];
   };
@@ -171,6 +176,7 @@ export function useSequences() {
         }),
         supabase.from('sequences')
           .update({ total_enrolled: (sequences.find(s => s.id === sequenceId)?.total_enrolled || 0) + 1 })
+          .eq('user_id', userId!)
           .eq('id', sequenceId),
       ]);
       if (error) throw error;
@@ -180,7 +186,7 @@ export function useSequences() {
       qc.invalidateQueries({ queryKey: ['sequences'] });
       toast.success('Contato inscrito na sequência');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return {

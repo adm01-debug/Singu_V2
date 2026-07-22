@@ -11,9 +11,11 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { format as formatDate } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 import { entityConfigs, EntityType, ColumnConfig } from '@/data/exporterConfigs';
 
 type ExportFormat = 'csv' | 'json';
@@ -24,6 +26,7 @@ interface AdvancedDataExporterProps {
 }
 
 export function AdvancedDataExporter({ entityType, className }: AdvancedDataExporterProps) {
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [format, setFormat] = useState<ExportFormat>('csv');
   const [columns, setColumns] = useState<ColumnConfig[]>(entityConfigs[entityType].columns);
@@ -40,7 +43,7 @@ export function AdvancedDataExporter({ entityType, className }: AdvancedDataExpo
     try {
       const selectedColumns = columns.filter(col => col.selected).map(col => col.key);
       if (selectedColumns.length === 0) { toast.error('Selecione pelo menos uma coluna para exportar'); setIsExporting(false); return; }
-      let query = supabase.from(entityType).select(selectedColumns.join(','));
+      let query = supabase.from(entityType).select(selectedColumns.join(',')).eq('user_id', user?.id ?? '');
       if (dateRange.from) query = query.gte('created_at', dateRange.from.toISOString());
       if (dateRange.to) query = query.lte('created_at', dateRange.to.toISOString());
       const { data, error } = await query;
@@ -70,10 +73,10 @@ export function AdvancedDataExporter({ entityType, className }: AdvancedDataExpo
       document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url);
       setExportComplete(true); toast.success(`${data.length} registros exportados com sucesso!`);
       setTimeout(() => { setExportComplete(false); setOpen(false); }, 2000);
-    } catch (error) { 
+    } catch (error) {
       const msg = error instanceof Error ? error.message : 'Erro ao exportar dados';
-      logger.error('Export error:', { error: msg }); 
-      toast.error(msg); 
+      logger.error('Export error:', { error: msg });
+      toast.error(parseApiError(error, 'Erro ao exportar dados'));
     }
     finally { setIsExporting(false); }
   };

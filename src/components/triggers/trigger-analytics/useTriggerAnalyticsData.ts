@@ -29,9 +29,11 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
           .from('trigger_usage_history')
           .select('id, trigger_type, result, effectiveness_rating, used_at, contact_id')
           .eq('user_id', currentUser.id)
-          .order('used_at', { ascending: false });
+          .order('used_at', { ascending: false })
+          .limit(500);
 
-        if (dateFilter) query = query.gte('used_at', dateFilter);
+        if (dateFilter) query = query.gte('used_at', dateFilter)
+        .limit(500);
 
         const { data: usageHistory, error: usageError } = await query;
         if (usageError) throw usageError;
@@ -39,7 +41,8 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
         const { data: contacts, error: contactsError } = await supabase
           .from('contacts')
           .select('id, behavior')
-          .eq('user_id', currentUser.id);
+          .eq('user_id', currentUser.id)
+          .limit(500);
         if (contactsError) throw contactsError;
 
         const contactDISCMap = new Map<string, DISCProfile | null>();

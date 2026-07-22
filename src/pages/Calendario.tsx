@@ -16,11 +16,12 @@ import { useAuth } from '@/hooks/useAuth';
 import { useCelebration } from '@/components/celebrations/CelebrationProvider';
 import type { Tables } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 import { CalendarioContent, type FollowUp } from './calendario/CalendarioContent';
 import { FollowUpDetailDialog } from './calendario/FollowUpDetailDialog';
 
-type Contact = Tables<'contacts'>;
-type Company = Tables<'companies'>;
+type ContactRow = Pick<Tables<'contacts'>, 'id' | 'first_name' | 'last_name'>;
+type CompanyRow = Pick<Tables<'companies'>, 'id' | 'name'>;
 
 const Calendario = () => {
   usePageTitle('Calendário');
@@ -35,20 +36,21 @@ const Calendario = () => {
     queryKey: ['calendario-followups', user?.id],
     enabled: !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     gcTime: 5 * 60_000,
     queryFn: async (): Promise<FollowUp[]> => {
       const [interactionsRes, contactsRes, companiesRes] = await Promise.all([
-        supabase.from('interactions').select('*').eq('follow_up_required', true).not('follow_up_date', 'is', null).order('follow_up_date', { ascending: true }),
-        supabase.from('contacts').select('*'),
-        supabase.from('companies').select('*'),
+        supabase.from('interactions').select('id, user_id, contact_id, company_id, title, type, content, follow_up_date, follow_up_required').eq('user_id', user.id).eq('follow_up_required', true).not('follow_up_date', 'is', null).order('follow_up_date', { ascending: true }).limit(500),
+        supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user.id).limit(500),
+        supabase.from('companies').select('id, name').eq('user_id', user.id).limit(500),
       ]);
       if (interactionsRes.error) throw interactionsRes.error;
       if (contactsRes.error) throw contactsRes.error;
       if (companiesRes.error) throw companiesRes.error;
 
-      const contactsMap: Record<string, Contact> = {};
+      const contactsMap: Record<string, ContactRow> = {};
       contactsRes.data?.forEach(c => { contactsMap[c.id] = c; });
-      const companiesMap: Record<string, Company> = {};
+      const companiesMap: Record<string, CompanyRow> = {};
       companiesRes.data?.forEach(c => { companiesMap[c.id] = c; });
 
       return (interactionsRes.data || []).map(i => ({
@@ -60,9 +62,10 @@ const Calendario = () => {
   });
 
   const markAsCompleted = async (id: string) => {
+    if (!user) return;
     try {
       const followUp = followUps.find(f => f.id === id);
-      const { error } = await supabase.from('interactions').update({ follow_up_required: false }).eq('id', id);
+      const { error } = await supabase.from('interactions').update({ follow_up_required: false }).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
       queryClient.setQueryData<FollowUp[]>(['calendario-followups', user?.id], prev => (prev || []).filter(f => f.id !== id));
       setSelectedFollowUp(null);
@@ -70,7 +73,7 @@ const Calendario = () => {
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Erro ao concluir follow-up';
       logger.error('Error marking as completed:', { error: msg });
-      toast.error(msg);
+      toast.error(parseApiError(error, 'Erro ao concluir follow-up'));
     }
   };
 

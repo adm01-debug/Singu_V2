@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { queryExternalData } from '@/lib/externalData';
+import { useAuth } from './useAuth';
 
 export interface ContactNpsSurvey {
   id: string;
@@ -14,8 +15,9 @@ export interface ContactNpsSurvey {
 }
 
 export function useContactNpsSurveys(contactId?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['contact-nps-surveys', contactId],
+    queryKey: ['contact-nps-surveys', contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await queryExternalData<ContactNpsSurvey>({
         table: 'nps_surveys',
@@ -27,7 +29,7 @@ export function useContactNpsSurveys(contactId?: string) {
       if (error) throw error;
       return data || [];
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
     staleTime: 5 * 60 * 1000,
   });
 }

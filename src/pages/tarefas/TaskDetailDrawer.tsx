@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/select';
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useUpdateTask, useDeleteTask, type Task } from '@/hooks/useTasks';
+import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2, Trash2, Calendar as CalendarIcon } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
@@ -56,6 +57,7 @@ interface Props {
 }
 
 export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
+  const { user } = useAuth();
   const updateTask = useUpdateTask();
   const deleteTask = useDeleteTask();
   const [companies, setCompanies] = useState<{ value: string; label: string }[]>([]);
@@ -94,13 +96,17 @@ export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
     if (!open) return;
     let cancelled = false;
     const fetchEntities = async () => {
-      const [compRes, contRes] = await Promise.all([
-        supabase.from('companies').select('id, name').limit(100),
-        supabase.from('contacts').select('id, first_name, last_name').limit(100),
-      ]);
-      if (cancelled) return;
-      if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
-      if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
+      try {
+        const [compRes, contRes] = await Promise.all([
+          supabase.from('companies').select('id, name').eq('user_id', user?.id ?? '').limit(100),
+          supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user?.id ?? '').limit(100),
+        ]);
+        if (cancelled) return;
+        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
+        if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
+      } catch {
+        // non-critical — dropdowns remain empty; task can still be saved with existing values
+      }
     };
     fetchEntities();
     return () => { cancelled = true; };
@@ -239,6 +245,7 @@ export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
+                            type="button"
                             variant={"outline"}
                             className={cn(
                               "pl-3 text-left font-normal",
@@ -323,7 +330,7 @@ export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
               <Button 
                 type="button" 
                 variant="ghost" 
-                size="icon" 
+                size="icon" aria-label="Remover" 
                 className="text-destructive"
                 onClick={handleDelete}
                 disabled={deleteTask.isPending}

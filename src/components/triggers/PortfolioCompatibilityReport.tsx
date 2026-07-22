@@ -104,7 +104,7 @@ export function PortfolioCompatibilityReport({ className }: PortfolioCompatibili
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input placeholder="Buscar cliente... (tolerante a erros)" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className={`pl-9 ${isSearching ? 'pr-9' : ''}`} />
-            {isSearching && <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" onClick={clearSearch}><X className="h-4 w-4" /></Button>}
+            {isSearching && <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" aria-label="Limpar pesquisa" onClick={clearSearch}><X className="h-4 w-4" /></Button>}
           </div>
           <Select value={filterLevel} onValueChange={setFilterLevel}>
             <SelectTrigger className="w-[150px]"><Filter className="w-4 h-4 mr-2" /><SelectValue placeholder="Filtrar" /></SelectTrigger>
@@ -124,7 +124,7 @@ export function PortfolioCompatibilityReport({ className }: PortfolioCompatibili
               <SelectItem value="relationship">Score de Relacionamento</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" size="icon" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
+          <Button variant="outline" size="icon" aria-label="Ordenar" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
             {sortOrder === 'desc' ? <SortDesc className="w-4 h-4" /> : <SortAsc className="w-4 h-4" />}
           </Button>
         </div>

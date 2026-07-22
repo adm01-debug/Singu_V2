@@ -137,6 +137,7 @@ export function ForecastConfidencePanel() {
     queryKey: ['forecast-confidence-interactions', contactIds.join(',')],
     enabled: contactIds.length > 0,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const since = new Date();
       since.setDate(since.getDate() - 60);
@@ -146,7 +147,7 @@ export function ForecastConfidencePanel() {
         .in('contact_id', contactIds)
         .gte('created_at', since.toISOString())
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(500);
       return (data ?? []) as InteractionRow[];
     },
   });

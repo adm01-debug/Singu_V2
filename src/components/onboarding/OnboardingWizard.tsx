@@ -8,6 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 import WelcomeStep from './steps/WelcomeStep';
 import ProfileStep from './steps/ProfileStep';
@@ -137,7 +138,7 @@ const OnboardingWizard = ({ onComplete }: OnboardingWizardProps) => {
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error completing onboarding:', { error: msg });
-      toast.error('Erro ao salvar configurações. Tente novamente.', { description: msg });
+      toast.error('Erro ao salvar configurações. Tente novamente.', { description: parseApiError(error) });
     } finally {
       setIsLoading(false);
     }

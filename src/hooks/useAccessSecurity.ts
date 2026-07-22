@@ -32,11 +32,11 @@ export function useAccessSecurity() {
       if (!user) return null;
       const { data, error } = await supabase
         .from('access_security_settings')
-        .select('*')
+        .select('id, enable_ip_restriction, enable_geo_blocking, enable_device_detection, notify_new_device, max_sessions, session_timeout_minutes')
         .eq('user_id', user.id)
         .maybeSingle();
       if (error || !data) return { id: '', ...DEFAULTS };
-      return data as SecuritySettings;
+      return data as unknown as SecuritySettings;
     },
     enabled: !!user,
     staleTime: 5 * 60_000,
@@ -44,6 +44,7 @@ export function useAccessSecurity() {
 
   const update = useMutation({
     mutationFn: async (updates: Partial<Omit<SecuritySettings, 'id'>>) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('access_security_settings')
         .upsert({ user_id: user!.id, ...updates }, { onConflict: 'user_id' });

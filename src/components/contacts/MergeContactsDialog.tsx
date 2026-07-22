@@ -28,14 +28,17 @@ export function MergeContactsDialog({ primaryId, secondaryId, open, onOpenChange
     queryFn: async () => {
       const { data, error } = await supabase
         .from('contacts')
-        .select('*')
-        .in('id', [primaryId, secondaryId]);
+        .select('id, first_name, last_name, email, phone, role_title, company_id, whatsapp, linkedin, instagram, notes, family_info')
+        .in('id', [primaryId, secondaryId])
+        .limit(2);
       if (error) throw error;
       
       const primary = data.find(r => r.id === primaryId);
       const secondary = data.find(r => r.id === secondaryId);
       return { primary, secondary };
-    }
+    },
+    staleTime: 30_000,
+    refetchOnWindowFocus: false,
   });
 
   const fields = [

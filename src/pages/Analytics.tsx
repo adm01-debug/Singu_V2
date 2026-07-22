@@ -1,4 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { AnalyticsEngagementTab } from './analytics/AnalyticsEngagementTab';
 import { AnalyticsSentimentTab } from './analytics/AnalyticsSentimentTab';
@@ -113,18 +114,26 @@ const Analytics = () => {
       
       <div className="p-6 space-y-6">
         <SmartBreadcrumbs />
-        <Suspense fallback={<Skeleton className="h-28 rounded-lg" />}>
-          <BehavioralIntelSummaryWidget />
-        </Suspense>
-        <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
-          <DailyStatsWidget />
-        </Suspense>
-        <Suspense fallback={<Skeleton className="h-20 rounded-lg" />}>
-          <TagCloudWidget />
-        </Suspense>
-        <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
-          <TagExplorerWidget />
-        </Suspense>
+        <DashboardErrorBoundary sectionName="Behavioral Intel">
+          <Suspense fallback={<Skeleton className="h-28 rounded-lg" />}>
+            <BehavioralIntelSummaryWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Daily Stats">
+          <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
+            <DailyStatsWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Tag Cloud">
+          <Suspense fallback={<Skeleton className="h-20 rounded-lg" />}>
+            <TagCloudWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Tag Explorer">
+          <Suspense fallback={<Skeleton className="h-32 rounded-lg" />}>
+            <TagExplorerWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
 
         {/* Header Actions */}
         <motion.div
@@ -180,22 +189,28 @@ const Analytics = () => {
           </TabsList>
 
           <TabsContent value="reports" className="space-y-6">
-            <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-              <ReportsTab />
-            </Suspense>
+            <DashboardErrorBoundary sectionName="Reports">
+              <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                <ReportsTab />
+              </Suspense>
+            </DashboardErrorBoundary>
           </TabsContent>
 
           <TabsContent value="advanced" className="space-y-6">
-            <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-              <AdvancedAnalyticsTab />
-            </Suspense>
+            <DashboardErrorBoundary sectionName="Advanced Analytics">
+              <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                <AdvancedAnalyticsTab />
+              </Suspense>
+            </DashboardErrorBoundary>
           </TabsContent>
 
           <TabsContent value="neuro" className="space-y-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-                <NeuroPortfolioDashboard />
-              </Suspense>
+              <DashboardErrorBoundary sectionName="Neuro Portfolio">
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <NeuroPortfolioDashboard />
+                </Suspense>
+              </DashboardErrorBoundary>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <NeuroRadarChart discProfile={null} interactions={[]} title="Balanço Neural Médio do Portfólio" />
                 <NeuroTimeline contactName="Portfólio Geral" interactions={[]} maxEntries={8} />
@@ -210,9 +225,11 @@ const Analytics = () => {
 
            <TabsContent value="disc" className="space-y-6">
              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-               <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-                 <DISCAnalyticsPanel />
-               </Suspense>
+               <DashboardErrorBoundary sectionName="DISC Analytics">
+                 <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                   <DISCAnalyticsPanel />
+                 </Suspense>
+               </DashboardErrorBoundary>
                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                  <DISCCompatibilityAlerts />
                  <DISCConversionMetrics />
@@ -223,9 +240,11 @@ const Analytics = () => {
 
           <TabsContent value="rfm" className="space-y-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-                <RfmExternalDashboard />
-              </Suspense>
+              <DashboardErrorBoundary sectionName="RFM Dashboard">
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <RfmExternalDashboard />
+                </Suspense>
+              </DashboardErrorBoundary>
               <RFMAnalysisPanel />
             </motion.div>
           </TabsContent>
@@ -244,9 +263,11 @@ const Analytics = () => {
 
           <TabsContent value="nlp" className="space-y-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-                <NLPAnalyticsPanel />
-              </Suspense>
+              <DashboardErrorBoundary sectionName="NLP Analytics">
+                <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+                  <NLPAnalyticsPanel />
+                </Suspense>
+              </DashboardErrorBoundary>
               <NLPTrainingMode />
               <NLPConversionMetrics />
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"><RapportRealtimeCoach /><MiltonianCalibration /></div>

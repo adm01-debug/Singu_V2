@@ -102,8 +102,10 @@ export function useBehaviorAlerts() {
             last_name
           )
         `)
+        .eq('user_id', user!.id)
         .eq('dismissed', false)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(500);
 
       if (error) throw error;
 
@@ -139,6 +141,7 @@ export function useBehaviorAlerts() {
     },
     enabled: !!user,
     staleTime: 3 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 10 * 60 * 1000,
   });
 
@@ -157,8 +160,8 @@ export function useBehaviorAlerts() {
         { data: contacts, error: contactsError },
         { data: recentInteractions, error: interactionsError },
       ] = await Promise.all([
-        supabase.from('contacts').select('*').order('updated_at', { ascending: false }),
-        supabase.from('interactions').select('*').gte('created_at', thirtyDaysAgo.toISOString()),
+        supabase.from('contacts').select('id, first_name, last_name, relationship_score, relationship_stage, updated_at').eq('user_id', user.id).order('updated_at', { ascending: false }).limit(500),
+        supabase.from('interactions').select('id, contact_id, created_at, sentiment').eq('user_id', user.id).gte('created_at', thirtyDaysAgo.toISOString()).limit(500),
       ]);
 
       if (contactsError) throw contactsError;
@@ -171,7 +174,7 @@ export function useBehaviorAlerts() {
           i => i.contact_id === contact.id
         ) || [];
 
-        const contactName = `${contact.first_name} ${contact.last_name}`;
+        const contactName = `${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim();
 
         // Check for communication gap (no interaction in 14+ days)
         const lastInteractionDate = contactInteractions.length > 0
@@ -274,7 +277,8 @@ export function useBehaviorAlerts() {
           .select('contact_id, type')
           .in('contact_id', contactIds)
           .in('type', types)
-          .eq('dismissed', false);
+          .eq('dismissed', false)
+          .limit(500);
         const existingSet = new Set(
           (existing || []).map(e => `${e.contact_id}::${e.type}`)
         );
@@ -291,7 +295,8 @@ export function useBehaviorAlerts() {
             dismissed: false,
           }));
         if (toInsert.length > 0) {
-          await supabase.from('alerts').insert(toInsert);
+          const { error: insertError } = await supabase.from('alerts').insert(toInsert);
+          if (insertError) logger.error('Error inserting alerts:', { error: insertError.message });
         }
       }
 
@@ -311,8 +316,9 @@ export function useBehaviorAlerts() {
   }, [user, fetchAlerts, toast]);
 
   const dismissAlert = useCallback(async (alertId: string) => {
+    if (!user) return;
     try {
-      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('id', alertId);
+      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user.id).eq('id', alertId);
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey });
       toast({ title: 'Alerta dispensado', description: 'O alerta foi removido da sua lista.' });
@@ -321,11 +327,12 @@ export function useBehaviorAlerts() {
       logger.error('Error dismissing alert:', { error: msg });
       toast({ title: 'Erro ao dispensar alerta', description: msg, variant: 'destructive' });
     }
-  }, [toast, queryClient, queryKey]);
+  }, [toast, queryClient, queryKey, user]);
 
   const markActionTaken = useCallback(async (alertId: string) => {
+    if (!user) return;
     try {
-      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('id', alertId);
+      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user.id).eq('id', alertId);
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey });
       toast({ title: 'Ação registrada', description: 'A ação foi marcada como concluída.' });
@@ -334,7 +341,7 @@ export function useBehaviorAlerts() {
       logger.error('Error marking action taken:', { error: msg });
       toast({ title: 'Erro ao registrar ação', description: msg, variant: 'destructive' });
     }
-  }, [toast, queryClient, queryKey]);
+  }, [toast, queryClient, queryKey, user]);
 
   // Stats
   const stats = useMemo(() => {

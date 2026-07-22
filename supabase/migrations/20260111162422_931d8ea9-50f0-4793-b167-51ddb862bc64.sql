@@ -94,10 +94,10 @@ FOR DELETE
 USING (auth.uid() = user_id);
 
 -- Create indexes for better query performance
-CREATE INDEX idx_eq_analysis_history_contact_id ON public.eq_analysis_history(contact_id);
-CREATE INDEX idx_eq_analysis_history_user_id ON public.eq_analysis_history(user_id);
-CREATE INDEX idx_eq_analysis_history_analyzed_at ON public.eq_analysis_history(analyzed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_eq_analysis_history_contact_id ON public.eq_analysis_history(contact_id);
+CREATE INDEX IF NOT EXISTS idx_eq_analysis_history_user_id ON public.eq_analysis_history(user_id);
+CREATE INDEX IF NOT EXISTS idx_eq_analysis_history_analyzed_at ON public.eq_analysis_history(analyzed_at DESC);
 
-CREATE INDEX idx_cognitive_bias_history_contact_id ON public.cognitive_bias_history(contact_id);
-CREATE INDEX idx_cognitive_bias_history_user_id ON public.cognitive_bias_history(user_id);
-CREATE INDEX idx_cognitive_bias_history_analyzed_at ON public.cognitive_bias_history(analyzed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_cognitive_bias_history_contact_id ON public.cognitive_bias_history(contact_id);
+CREATE INDEX IF NOT EXISTS idx_cognitive_bias_history_user_id ON public.cognitive_bias_history(user_id);
+CREATE INDEX IF NOT EXISTS idx_cognitive_bias_history_analyzed_at ON public.cognitive_bias_history(analyzed_at DESC);

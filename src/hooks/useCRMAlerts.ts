@@ -24,10 +24,12 @@ export function useCRMAlerts(contactId: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('crm_alerts')
-        .select('*')
+        .select('id, type, severity, message, suggested_action, is_resolved, created_at, resolved_at')
         .eq('contact_id', contactId)
+        .eq('user_id', user!.id)
         .eq('is_resolved', false)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(50);
 
       if (error) throw error;
       return data as CRMAlert[];
@@ -37,9 +39,11 @@ export function useCRMAlerts(contactId: string) {
 
   const resolveAlert = useMutation({
     mutationFn: async (alertId: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('crm_alerts')
         .update({ is_resolved: true, resolved_at: new Date().toISOString() })
+        .eq('user_id', user.id)
         .eq('id', alertId);
       if (error) throw error;
     },

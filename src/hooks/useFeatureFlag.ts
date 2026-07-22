@@ -25,6 +25,7 @@ export function useFeatureFlag(name: string) {
       return (data ?? null) as FeatureFlag | null;
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   return {
@@ -42,10 +43,12 @@ export function useFeatureFlags() {
       const { data, error } = await supabase
         .from("feature_flags")
         .select("*")
-        .order("name");
+        .order("name")
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as FeatureFlag[];
     },
     staleTime: 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }

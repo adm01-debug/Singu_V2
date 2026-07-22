@@ -26,6 +26,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { queryExternalData } from '@/lib/externalData';
 import type { Tables } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface Props {
   contactId: string;
@@ -43,12 +44,15 @@ export function ContactCommercialTab({ contactId }: Props) {
   const { data, error, refetch } = useQuery({
     queryKey: ['contact-commercial', contactId, user?.id],
     queryFn: async () => {
-      const contactFilter = [{ type: 'eq' as const, column: 'contact_id', value: contactId }];
+      const contactFilter = [
+        { type: 'eq' as const, column: 'contact_id', value: contactId },
+        { type: 'eq' as const, column: 'user_id', value: user?.id ?? '' },
+      ];
 
       // Try local first, then external
       const [rfmLocal, purchaseLocal] = await Promise.all([
-        supabase.from('rfm_analysis').select('*').eq('contact_id', contactId).order('analyzed_at', { ascending: false }).limit(1),
-        supabase.from('purchase_history').select('*').eq('contact_id', contactId).order('purchase_date', { ascending: false }).limit(20),
+        supabase.from('rfm_analysis').select('*').eq('contact_id', contactId).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(1),
+        supabase.from('purchase_history').select('*').eq('contact_id', contactId).eq('user_id', user!.id).order('purchase_date', { ascending: false }).limit(20),
       ]);
 
       let rfm = rfmLocal.data?.[0] || null;
@@ -75,6 +79,7 @@ export function ContactCommercialTab({ contactId }: Props) {
     },
     enabled: !!contactId && !!user,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 10 * 60 * 1000,
   });
 
@@ -88,7 +93,7 @@ export function ContactCommercialTab({ contactId }: Props) {
           <div>
             <p className="text-sm font-medium text-foreground">Erro ao carregar dados comerciais</p>
             <p className="text-xs text-muted-foreground mt-1">
-              {error instanceof Error ? error.message : 'Tente novamente em alguns instantes'}
+              {parseApiError(error, 'Tente novamente em alguns instantes')}
             </p>
           </div>
           <button onClick={() => refetch()} className="text-xs text-primary hover:underline">Tentar novamente</button>

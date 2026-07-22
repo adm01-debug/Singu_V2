@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { callExternalRpc, queryExternalData } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 
@@ -26,8 +27,10 @@ export interface Task {
 }
 
 export function usePendingTasks() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['tasks', 'pending'],
+    queryKey: ['tasks', 'pending', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       try {
         const { data, error } = await callExternalRpc<Task[]>('get_pending_tasks', {});
@@ -57,8 +60,10 @@ export function usePendingTasks() {
 }
 
 export function useOverdueTasks() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['tasks', 'overdue'],
+    queryKey: ['tasks', 'overdue', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       try {
         const { data, error } = await callExternalRpc<Task[]>('get_overdue_tasks', {});
@@ -77,8 +82,10 @@ export function useOverdueTasks() {
 }
 
 export function useAllTasks(statusFilter?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['tasks', 'all', statusFilter],
+    queryKey: ['tasks', 'all', statusFilter, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       try {
         const { data, error } = await callExternalRpc<Task[]>('get_all_tasks', {});

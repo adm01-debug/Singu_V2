@@ -325,6 +325,7 @@ const NeuroAlerts = ({
                   size="icon"
                   className="shrink-0 h-6 w-6"
                   onClick={() => dismissAlert(alert.id)}
+                  aria-label="Dispensar alerta"
                 >
                   <X className="h-4 w-4" />
                 </Button>

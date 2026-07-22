@@ -18,6 +18,7 @@ import { useFamilyHistory } from '@/hooks/useFamilyHistory';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { logger } from "@/lib/logger";
 
 interface Props {
   rapportIntel: RapportIntel | null;
@@ -181,7 +182,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
           <div className="flex items-center gap-1">
             <Popover open={showHistory} onOpenChange={setShowHistory}>
               <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
+                <Button variant="ghost" size="icon" aria-label="Histórico" className="h-8 w-8 text-muted-foreground hover:text-primary">
                   <History className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>
@@ -232,7 +233,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
             {!isEditing ? (
               <Button 
                 variant="ghost" 
-                size="icon" 
+                size="icon" aria-label="Editar" 
                 className="h-8 w-8 text-muted-foreground hover:text-primary"
                 onClick={() => setIsEditing(true)}
               >
@@ -240,9 +241,10 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
               </Button>
             ) : (
               <div className="flex items-center gap-1">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Cancelar"
                   className="h-8 w-8 text-destructive"
                   onClick={handleCancel}
                   disabled={mutation.isPending}
@@ -251,7 +253,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                 </Button>
                 <Button 
                   variant="ghost" 
-                  size="icon" 
+                  size="icon" aria-label="Carregando" 
                   className="h-8 w-8 text-success"
                   onClick={handleSave}
                   disabled={mutation.isPending}
@@ -312,11 +314,11 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                           </div>
                         </div>
                       </div>
-                      <div className="flex gap-1 ml-2">
-                        <Button size="icon" variant="ghost" className="h-6 w-6 text-green-500 hover:bg-green-50" onClick={() => approve.mutate(s)}>
+                      <div className="flex gap-1">
+                        <Button size="icon" aria-label="Confirmar" variant="ghost" className="h-6 w-6 text-green-500 hover:bg-green-50" onClick={() => approve.mutate(s)}>
                           <Check className="h-3.5 w-3.5" />
                         </Button>
-                        <Button size="icon" variant="ghost" className="h-6 w-6 text-destructive hover:bg-red-50" onClick={() => reject.mutate(s.id)}>
+                        <Button size="icon" variant="ghost" aria-label="Rejeitar" className="h-6 w-6 text-destructive hover:bg-red-50" onClick={() => reject.mutate(s.id)}>
                           <X className="h-3.5 w-3.5" />
                         </Button>
                       </div>
@@ -367,7 +369,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                           <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1">
                             {child}
                             {/* eslint-disable-next-line sonarjs/no-nested-functions */}
-                            <button onClick={() => setChildren(prev => prev.filter((_, idx) => idx !== i))}>
+                            <button aria-label={`Remover filho ${child}`} onClick={() => setChildren(prev => prev.filter((_, idx) => idx !== i))}>
                               <Trash2 className="h-3 w-3 text-destructive" />
                             </button>
                           </Badge>
@@ -387,10 +389,10 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                             }
                           }}
                         />
-                        <Button 
-                          size="icon" 
-                          variant="outline" 
-                          className="h-8 w-8" 
+                        <Button
+                          size="icon" aria-label="Adicionar filho"
+                          variant="outline"
+                          className="h-8 w-8"
                           onClick={() => {
                             if (newChild.trim()) {
                               setChildren(prev => [...prev, newChild.trim()]);
@@ -438,10 +440,10 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                   <div className="space-y-2 mt-1">
                     <div className="flex flex-wrap gap-1.5">
                       {hobbies.map((hobby, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-amber-50 text-amber-700 border-amber-100">
+                        <Badge key={hobby} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-amber-50 text-amber-700 border-amber-100">
                           {hobby}
                           {/* eslint-disable-next-line sonarjs/no-nested-functions */}
-                          <button onClick={() => setHobbies(prev => prev.filter((_, idx) => idx !== i))}>
+                          <button aria-label={`Remover hobby ${hobby}`} onClick={() => setHobbies(prev => prev.filter((_, idx) => idx !== i))}>
                             <X className="h-3 w-3" />
                           </button>
                         </Badge>
@@ -460,8 +462,8 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                             setNewHobby('');
                           }
                         }}
-                      />
-                      <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => { if (newHobby.trim()) { setHobbies(prev => [...prev, newHobby.trim()]); setNewHobby(''); } }}>
+                        />
+                        <Button size="icon" aria-label="Adicionar hobby" variant="outline" className="h-8 w-8" onClick={() => { if (newHobby.trim()) { setHobbies(prev => [...prev, newHobby.trim()]); setNewHobby(''); } }}>
                         <Plus className="h-3.5 w-3.5" />
                       </Button>
                     </div>
@@ -495,10 +497,10 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                   <div className="space-y-2 mt-1">
                     <div className="flex flex-wrap gap-1.5">
                       {interests.map((interest, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-purple-50 text-purple-700 border-purple-100">
+                        <Badge key={interest} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-purple-50 text-purple-700 border-purple-100">
                           {interest}
                           {/* eslint-disable-next-line sonarjs/no-nested-functions */}
-                          <button onClick={() => setInterests(prev => prev.filter((_, idx) => idx !== i))}>
+                          <button aria-label={`Remover interesse ${interest}`} onClick={() => setInterests(prev => prev.filter((_, idx) => idx !== i))}>
                             <X className="h-3 w-3" />
                           </button>
                         </Badge>
@@ -517,8 +519,8 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                             setNewInterest('');
                           }
                         }}
-                      />
-                      <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => { if (newInterest.trim()) { setInterests(prev => [...prev, newInterest.trim()]); setNewInterest(''); } }}>
+                        />
+                        <Button size="icon" aria-label="Adicionar interesse" variant="outline" className="h-8 w-8" onClick={() => { if (newInterest.trim()) { setInterests(prev => [...prev, newInterest.trim()]); setNewInterest(''); } }}>
                         <Plus className="h-3.5 w-3.5" />
                       </Button>
                     </div>
@@ -550,14 +552,15 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {(isEditing ? anchors : currentAnchors).map((a, i) => (
-                  <Badge 
-                    key={`anchor-${i}`} 
+                  <Badge
+                    key={`anchor-${a}-${i}`}
                     variant="secondary" 
                     className={cn("text-xs font-normal", isEditing && "pr-1 gap-1")}
                   >
                     {a}
                     {isEditing && (
-                      <button 
+                      <button
+                        aria-label={`Remover âncora ${a}`}
                         onClick={() => removeAnchor(i)}
                         className="hover:text-destructive rounded-full p-0.5 transition-colors"
                       >
@@ -568,14 +571,13 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                 ))}
                 {isEditing && (
                   <div className="flex items-center gap-1 mt-1 w-full">
-                    <Input 
-                      placeholder="Nova âncora..." 
+                    <Input
+                      placeholder="Nova âncora..."
                       value={newAnchor}
                       onChange={(e) => setNewAnchor(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addAnchor())}
-                      className="h-7 text-xs flex-1"
+                      onKeyDown={(e) => e.key === 'Enter' && addAnchor()}
                     />
-                    <Button size="icon" variant="outline" className="h-7 w-7" onClick={addAnchor}>
+                    <Button size="icon" aria-label="Adicionar âncora" variant="outline" className="h-7 w-7" onClick={addAnchor}>
                       <Plus className="h-3 w-3" />
                     </Button>
                   </div>

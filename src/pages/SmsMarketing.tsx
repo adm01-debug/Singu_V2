@@ -180,7 +180,7 @@ export default function SmsMarketing() {
                       <CardTitle className="text-base">{t.name}</CardTitle>
                       {t.category && <Badge variant="outline" className="mt-1">{t.category}</Badge>}
                     </div>
-                    <Button variant="ghost" size="icon" onClick={() => deleteTemplate(t.id)}>
+                    <Button variant="ghost" size="icon" aria-label="Remover" onClick={() => deleteTemplate(t.id)}>
                       <Trash2 className="w-4 h-4 text-destructive" />
                     </Button>
                   </CardHeader>

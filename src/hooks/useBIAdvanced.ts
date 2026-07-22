@@ -44,7 +44,7 @@ export function useProfitabilityByContact() {
       // Both queries are independent — run in parallel
       const [{ data: contacts }, { data: interactions }] = await Promise.all([
         supabase.from('contacts').select('id, first_name, last_name, relationship_score, sentiment').eq('user_id', user.id).limit(100),
-        supabase.from('interactions').select('contact_id, type, sentiment').eq('user_id', user.id),
+        supabase.from('interactions').select('contact_id, type, sentiment').eq('user_id', user.id).limit(5000),
       ]);
 
       if (!contacts) return [];
@@ -73,6 +73,7 @@ export function useProfitabilityByContact() {
       }).sort((a, b) => b.roi_score - a.roi_score);
     },
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -99,14 +100,15 @@ export function useGeoSalesData() {
         .select('id, name, lat, lng, city, state')
         .eq('user_id', user.id)
         .not('lat', 'is', null)
-        .not('lng', 'is', null);
+        .not('lng', 'is', null)
+        .limit(500);
 
       if (!companies?.length) return [];
 
       // Both queries are independent of each other — run in parallel
       const [{ data: contacts }, { data: interactions }] = await Promise.all([
-        supabase.from('contacts').select('company_id').eq('user_id', user.id),
-        supabase.from('interactions').select('company_id').eq('user_id', user.id).not('company_id', 'is', null),
+        supabase.from('contacts').select('company_id').eq('user_id', user.id).limit(10000),
+        supabase.from('interactions').select('company_id').eq('user_id', user.id).not('company_id', 'is', null).limit(10000),
       ]);
 
       const contactCount = new Map<string, number>();
@@ -130,6 +132,7 @@ export function useGeoSalesData() {
       })) as GeoSalesPoint[];
     },
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 

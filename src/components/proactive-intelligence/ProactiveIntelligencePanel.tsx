@@ -49,10 +49,9 @@ function ActionCard({ action }: { action: NextBestAction }) {
 
   const copyScript = () => {
     if (action.script) {
-      navigator.clipboard.writeText(action.script);
-      setCopied(true);
-      toast.success('Script copiado!');
-      setTimeout(() => setCopied(false), 2000);
+      navigator.clipboard.writeText(action.script)
+        .then(() => { setCopied(true); toast.success('Script copiado!'); setTimeout(() => setCopied(false), 2000); })
+        .catch(() => toast.error('Não foi possível copiar'));
     }
   };
 
@@ -153,10 +152,9 @@ function ScriptCard({ script }: { script: ApproachScript }) {
   const fullScript = `${script.opening}\n\n${script.body}\n\n${script.closing}`;
 
   const copyFullScript = () => {
-    navigator.clipboard.writeText(fullScript);
-    setCopied(true);
-    toast.success('Script completo copiado!');
-    setTimeout(() => setCopied(false), 2000);
+    navigator.clipboard.writeText(fullScript)
+      .then(() => { setCopied(true); toast.success('Script completo copiado!'); setTimeout(() => setCopied(false), 2000); })
+      .catch(() => toast.error('Não foi possível copiar'));
   };
 
   return (

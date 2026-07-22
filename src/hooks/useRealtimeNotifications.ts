@@ -2,6 +2,8 @@ import { useEffect, useCallback, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { safehref } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
 interface RealtimeNotification {
@@ -79,7 +81,8 @@ export function useRealtimeNotifications() {
         label: 'Ver',
         onClick: () => {
           if (alert.action_url) {
-            window.location.href = alert.action_url;
+            const safe = safehref(alert.action_url);
+            if (safe !== '#') window.location.href = safe;
           }
         },
       },
@@ -163,44 +166,55 @@ export function useRealtimeNotifications() {
     let cancelled = false;
     let channel: ReturnType<typeof supabase.channel> | null = null;
 
-    const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number };
-    const schedule = w.requestIdleCallback
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    const useIdle = !!w.requestIdleCallback;
+    const schedule = useIdle
       ? (cb: () => void) => w.requestIdleCallback!(cb, { timeout: 3000 })
       : (cb: () => void) => window.setTimeout(cb, 1500);
 
     const handle = schedule(async () => {
       if (cancelled) return;
 
-      // Initial load
-      const [alertsRes, insightsRes, healthRes] = await Promise.all([
-        supabase.from('alerts').select('*').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
-        supabase.from('insights').select('*').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
-        supabase.from('health_alerts').select('*').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
-      ]);
-      if (cancelled) return;
+      try {
+        // Initial load
+        const [alertsRes, insightsRes, healthRes] = await Promise.all([
+          supabase.from('alerts').select('id, title, description, contact_id, created_at').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
+          supabase.from('insights').select('id, title, description, contact_id, created_at').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
+          supabase.from('health_alerts').select('id, title, description, contact_id, created_at').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
+        ]);
+        if (cancelled) return;
 
-      const allNotifications: RealtimeNotification[] = [
-        ...(alertsRes.data || []).map(a => ({ id: a.id, type: 'alert' as const, title: a.title, description: a.description || undefined, entityId: a.contact_id || undefined, entityType: 'contact', createdAt: a.created_at })),
-        ...(insightsRes.data || []).map(i => ({ id: i.id, type: 'insight' as const, title: i.title, description: i.description || undefined, entityId: i.contact_id, entityType: 'contact', createdAt: i.created_at })),
-        ...(healthRes.data || []).map(h => ({ id: h.id, type: 'health_alert' as const, title: h.title, description: h.description || undefined, entityId: h.contact_id, entityType: 'contact', createdAt: h.created_at })),
-      ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 50);
+        const allNotifications: RealtimeNotification[] = [
+          ...(alertsRes.data || []).map(a => ({ id: a.id, type: 'alert' as const, title: a.title, description: a.description || undefined, entityId: a.contact_id || undefined, entityType: 'contact', createdAt: a.created_at })),
+          ...(insightsRes.data || []).map(i => ({ id: i.id, type: 'insight' as const, title: i.title, description: i.description || undefined, entityId: i.contact_id, entityType: 'contact', createdAt: i.created_at })),
+          ...(healthRes.data || []).map(h => ({ id: h.id, type: 'health_alert' as const, title: h.title, description: h.description || undefined, entityId: h.contact_id, entityType: 'contact', createdAt: h.created_at })),
+        ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 50);
 
-      setNotifications(allNotifications);
-      setUnreadCount(allNotifications.length);
+        setNotifications(allNotifications);
+        setUnreadCount(allNotifications.length);
 
-      // Subscribe channel
-      channel = supabase
-        .channel('realtime-notifications')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'alerts', filter: `user_id=eq.${user.id}` }, handleNewAlert)
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'insights', filter: `user_id=eq.${user.id}` }, handleNewInsight)
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'health_alerts', filter: `user_id=eq.${user.id}` }, handleNewHealthAlert)
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'stakeholder_alerts', filter: `user_id=eq.${user.id}` }, handleNewStakeholderAlert)
-        .subscribe();
+        // Subscribe channel
+        channel = supabase
+          .channel(`realtime-notifications:${user.id}`)
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'alerts', filter: `user_id=eq.${user.id}` }, handleNewAlert)
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'insights', filter: `user_id=eq.${user.id}` }, handleNewInsight)
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'health_alerts', filter: `user_id=eq.${user.id}` }, handleNewHealthAlert)
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'stakeholder_alerts', filter: `user_id=eq.${user.id}` }, handleNewStakeholderAlert)
+          .subscribe();
+      } catch {
+        // Network failure during initial load — realtime subscription will still work on reconnect
+      }
     });
 
     return () => {
       cancelled = true;
-      if (typeof handle === 'number') window.clearTimeout(handle);
+      if (typeof handle === 'number') {
+        if (useIdle && w.cancelIdleCallback) w.cancelIdleCallback(handle);
+        else window.clearTimeout(handle);
+      }
       if (channel) supabase.removeChannel(channel);
     };
   }, [user, handleNewAlert, handleNewInsight, handleNewHealthAlert, handleNewStakeholderAlert]);
@@ -210,6 +224,7 @@ export function useRealtimeNotifications() {
   }, []);
 
   const dismissNotification = useCallback(async (notification: RealtimeNotification) => {
+    if (!user) return;
     const tableMap = {
       alert: 'alerts',
       insight: 'insights',
@@ -219,13 +234,19 @@ export function useRealtimeNotifications() {
     const table = tableMap[notification.type as keyof typeof tableMap];
     if (!table) return;
 
-    await supabase
+    const { error } = await supabase
       .from(table)
       .update({ dismissed: true })
+      .eq('user_id', user.id)
       .eq('id', notification.id);
 
+    if (error) {
+      logger.warn('Failed to dismiss notification:', { error: error.message });
+      return;
+    }
+
     setNotifications(prev => prev.filter(n => n.id !== notification.id));
-  }, []);
+  }, [user]);
 
   return {
     notifications,

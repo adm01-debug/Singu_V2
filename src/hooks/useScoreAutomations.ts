@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import type { Json } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type AutomationTrigger = 'grade_reached' | 'grade_dropped' | 'score_above' | 'score_below';
 export type AutomationAction = 'notify' | 'create_task' | 'enroll_sequence' | 'webhook' | 'tag';
@@ -47,14 +49,16 @@ export function useScoreAutomations() {
       if (!user?.id) return [];
       const { data, error } = await supabase
         .from('lead_score_threshold_automations')
-        .select('*')
+        .select('id, user_id, name, description, trigger_type, grade_target, score_target, action_type, action_config, cooldown_hours, active, last_fired_at, fired_count, created_at, updated_at')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as ScoreAutomation[];
     },
     enabled: !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -72,12 +76,13 @@ export function useUpsertAutomation() {
         grade_target: input.grade_target ?? null,
         score_target: input.score_target ?? null,
         action_type: input.action_type,
-        action_config: (input.action_config ?? {}) as never,
+        action_config: (input.action_config ?? {}) as unknown as Json,
         cooldown_hours: input.cooldown_hours ?? 24,
         active: input.active ?? true,
       };
+      if (!user) throw new Error('Não autenticado');
       if (input.id) {
-        const { error } = await supabase.from('lead_score_threshold_automations').update(payload).eq('id', input.id);
+        const { error } = await supabase.from('lead_score_threshold_automations').update(payload).eq('user_id', user.id).eq('id', input.id);
         if (error) throw error;
         return { id: input.id };
       }
@@ -90,34 +95,38 @@ export function useUpsertAutomation() {
       toast.success('Automação salva');
       qc.invalidateQueries({ queryKey: ['score-automations'] });
     },
-    onError: (e) => toast.error((e as Error).message),
+    onError: (e) => toast.error(parseApiError(e)),
   });
 }
 
 export function useToggleAutomation() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, active }: { id: string; active: boolean }) => {
-      const { error } = await supabase.from('lead_score_threshold_automations').update({ active }).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('lead_score_threshold_automations').update({ active }).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['score-automations'] }),
-    onError: (e) => toast.error((e as Error).message),
+    onError: (e) => toast.error(parseApiError(e)),
   });
 }
 
 export function useDeleteAutomation() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('lead_score_threshold_automations').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('lead_score_threshold_automations').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
       toast.success('Automação removida');
       qc.invalidateQueries({ queryKey: ['score-automations'] });
     },
-    onError: (e) => toast.error((e as Error).message),
+    onError: (e) => toast.error(parseApiError(e)),
   });
 }
 
@@ -130,7 +139,7 @@ export function useAutomationLog(automationId?: string, days = 30) {
       const since = new Date(Date.now() - days * 86_400_000).toISOString();
       let q = supabase
         .from('lead_score_threshold_log')
-        .select('*')
+        .select('id, automation_id, contact_id, from_grade, to_grade, from_score, to_score, action_result, success, fired_at')
         .eq('user_id', user.id)
         .gte('fired_at', since)
         .order('fired_at', { ascending: false })
@@ -142,5 +151,6 @@ export function useAutomationLog(automationId?: string, days = 30) {
     },
     enabled: !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
   });
 }

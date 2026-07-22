@@ -87,10 +87,13 @@ export function ApproachRecommendationPanel({ contact, interactions, className }
   };
 
   const copyToClipboard = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedItem(id);
-    setTimeout(() => setCopiedItem(null), 2000);
-    toast({ title: 'Copiado!', description: 'Texto copiado para a área de transferência.' });
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        setCopiedItem(id);
+        setTimeout(() => setCopiedItem(null), 2000);
+        toast({ title: 'Copiado!', description: 'Texto copiado para a área de transferência.' });
+      })
+      .catch(() => toast({ title: 'Erro', description: 'Não foi possível copiar', variant: 'destructive' }));
   };
 
   if (loading) {

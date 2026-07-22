@@ -1,25 +1,27 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 export type IntelDensity = 'compact' | 'comfortable';
 
-const STORAGE_KEY = 'intel-density-v1';
+const BASE_STORAGE_KEY = 'intel-density-v1';
 
-function read(): IntelDensity {
+function read(storageKey: string): IntelDensity {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey);
     return raw === 'compact' ? 'compact' : 'comfortable';
   } catch {
     return 'comfortable';
   }
 }
 
-/**
- * Toggle de densidade do Intelligence Hub, persistido em localStorage.
- * Aplica/remove a classe .intel-density-compact no <html> para que regras
- * CSS globais ajustem padding e tipografia dos cards.
- */
 export function useIntelDensity() {
-  const [density, setDensityState] = useState<IntelDensity>(() => read());
+  const { user } = useAuth();
+  const storageKey = `${BASE_STORAGE_KEY}-${user?.id ?? 'anon'}`;
+  const [density, setDensityState] = useState<IntelDensity>('comfortable');
+
+  useEffect(() => {
+    setDensityState(read(storageKey));
+  }, [storageKey]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -30,16 +32,16 @@ export function useIntelDensity() {
 
   const setDensity = useCallback((d: IntelDensity) => {
     setDensityState(d);
-    try { localStorage.setItem(STORAGE_KEY, d); } catch { /* ignore */ }
-  }, []);
+    try { localStorage.setItem(storageKey, d); } catch { /* ignore */ }
+  }, [storageKey]);
 
   const toggle = useCallback(() => {
     setDensityState((prev) => {
       const next: IntelDensity = prev === 'compact' ? 'comfortable' : 'compact';
-      try { localStorage.setItem(STORAGE_KEY, next); } catch { /* ignore */ }
+      try { localStorage.setItem(storageKey, next); } catch { /* ignore */ }
       return next;
     });
-  }, []);
+  }, [storageKey]);
 
   return { density, setDensity, toggle, isCompact: density === 'compact' };
 }

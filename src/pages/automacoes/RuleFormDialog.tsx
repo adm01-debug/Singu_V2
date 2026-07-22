@@ -184,7 +184,7 @@ export function RuleFormDialog({ open, onOpenChange, onSubmit, initialData }: Ru
                     </SelectContent>
                   </Select>
                   {actions.length > 1 && (
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => removeAction(i)}>
+                    <Button variant="ghost" size="icon" aria-label="Remover" className="h-8 w-8 text-destructive" onClick={() => removeAction(i)}>
                       <Trash2 className="w-3.5 h-3.5" />
                     </Button>
                   )}

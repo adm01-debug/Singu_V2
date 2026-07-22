@@ -3,7 +3,7 @@
 // Enterprise Level Component
 // ==============================================
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -71,15 +71,15 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
     importantMinScore: 70
   });
 
-  const sellerProfile: Exclude<DISCProfile, null> = (() => {
+  const sellerProfile = useMemo<Exclude<DISCProfile, null>>(() => {
     try {
-      const stored = localStorage.getItem('singu-seller-disc-profile');
+      const stored = localStorage.getItem(`singu-seller-disc-profile-${user?.id ?? 'anon'}`);
       if (stored && ['D', 'I', 'S', 'C'].includes(stored)) return stored as Exclude<DISCProfile, null>;
     } catch { /* fallback */ }
     return 'I';
-  })();
+  }, [user?.id]);
 
-  const fetchAlerts = useCallback(async () => {
+  const fetchAlerts = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
 
     setLoading(true);
@@ -88,9 +88,11 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
       const { data: contacts, error } = await supabase
         .from('contacts')
         .select('id, first_name, last_name, behavior, relationship_score')
+        .eq('user_id', user.id)
         .order('relationship_score', { ascending: false })
         .limit(100);
 
+      if (signal?.cancelled) return;
       if (error) throw error;
 
       const newAlerts: CompatibilityAlert[] = [];
@@ -129,19 +131,20 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
       // Sort by compatibility score (lowest first)
       newAlerts.sort((a, b) => a.compatibilityScore - b.compatibilityScore);
 
-      setAlerts(newAlerts.slice(0, maxItems));
+      if (!signal?.cancelled) setAlerts(newAlerts.slice(0, maxItems));
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Erro desconhecido';
       logger.error('Error fetching compatibility alerts:', { error: msg });
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user, sellerProfile, settings.threshold, settings.onlyImportantContacts, settings.importantMinScore, maxItems]);
 
   useEffect(() => {
-    if (settings.enabled) {
-      fetchAlerts();
-    }
+    if (!settings.enabled) return;
+    const signal = { cancelled: false };
+    fetchAlerts(signal);
+    return () => { signal.cancelled = true; };
   }, [settings.enabled, fetchAlerts]);
 
   const dismissAlert = useCallback((alertId: string) => {
@@ -188,14 +191,14 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
             <Badge variant="outline">{alerts.length} alertas</Badge>
             <Button
               variant="ghost"
-              size="icon"
+              size="icon" aria-label="Configurações"
               onClick={() => setShowSettings(!showSettings)}
             >
               <Settings className="w-4 h-4" />
             </Button>
             <Button
               variant="ghost"
-              size="icon"
+              size="icon" aria-label="Atualizar"
               onClick={fetchAlerts}
               disabled={loading}
             >
@@ -383,6 +386,7 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
                         variant="ghost"
                         size="icon"
                         onClick={() => dismissAlert(alert.id)}
+                        aria-label="Dispensar"
                         className="shrink-0"
                       >
                         <X className="w-4 h-4" />

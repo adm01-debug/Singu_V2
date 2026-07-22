@@ -150,7 +150,7 @@ export function AccountPlanEditor({ accountId }: { accountId: string }) {
                     onChange={(e) => updObjective(i, { title: e.target.value })}
                     placeholder="Descreva o objetivo"
                   />
-                  <Button size="icon" variant="ghost" onClick={() => removeObjective(i)}>
+                  <Button size="icon" aria-label="Remover" variant="ghost" onClick={() => removeObjective(i)}>
                     <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>
@@ -167,7 +167,7 @@ export function AccountPlanEditor({ accountId }: { accountId: string }) {
               {(plan.strategies ?? []).map((s, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <Input value={s} onChange={(e) => updStrategy(i, e.target.value)} placeholder="Estratégia" />
-                  <Button size="icon" variant="ghost" onClick={() => removeStrategy(i)}>
+                  <Button size="icon" aria-label="Remover" variant="ghost" onClick={() => removeStrategy(i)}>
                     <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>
@@ -196,7 +196,7 @@ export function AccountPlanEditor({ accountId }: { accountId: string }) {
                     value={m.date ?? ""}
                     onChange={(e) => updMilestone(i, { date: e.target.value })}
                   />
-                  <Button size="icon" variant="ghost" onClick={() => removeMilestone(i)}>
+                  <Button size="icon" aria-label="Remover" variant="ghost" onClick={() => removeMilestone(i)}>
                     <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>

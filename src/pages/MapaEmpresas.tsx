@@ -6,6 +6,7 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
@@ -20,6 +21,7 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { toast } from "sonner";
 import { MarkerClusterLayer, MappableCompany } from "./mapa/MapMarkerCluster";
 import { geocode, buildLocationString } from "./mapa/geocoding";
+import { useAuth } from "@/hooks/useAuth";
 
 // Fix default marker icon
 delete (L.Icon.Default.prototype as { _getIconUrl?: () => string })._getIconUrl;
@@ -31,6 +33,7 @@ L.Icon.Default.mergeOptions({
 
 export default function MapaEmpresas() {
   usePageTitle("Mapa de Empresas");
+  const { user } = useAuth();
   const [minScore, setMinScore] = useState(0);
   const [selectedSector, setSelectedSector] = useState("all");
   const [showFilters, setShowFilters] = useState(true);
@@ -41,17 +44,20 @@ export default function MapaEmpresas() {
   const queryClient = useQueryClient();
 
   const { data: rawCompanies, isLoading } = useQuery({
-    queryKey: ["companies-map-data"],
+    queryKey: ["companies-map-data", user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from("companies").select("id,name,nome_crm,ramo_atividade,status,cnpj,email,phone,website,city,state,address,extra_data_rf,lat,lng").order("updated_at", { ascending: false });
+      const { data, error } = await supabase.from("companies").select("id,name,nome_crm,ramo_atividade,status,cnpj,email,phone,website,city,state,address,extra_data_rf,lat,lng").eq("user_id", user!.id).order("updated_at", { ascending: false })
+      .limit(500);
       if (error) throw error;
       return data || [];
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const processAndGeocode = useCallback(async () => {
-    if (!rawCompanies || rawCompanies.length === 0 || isGeocoding) return;
+    if (!user || !rawCompanies || rawCompanies.length === 0 || isGeocoding) return;
     const alreadyMapped: MappableCompany[] = [];
     const needsGeocoding: typeof rawCompanies = [];
     for (const c of rawCompanies) {
@@ -72,7 +78,8 @@ export default function MapaEmpresas() {
       if (!loc) continue;
       const coords = await geocode(loc);
       if (coords) {
-        await supabase.from("companies").update({ lat: coords.lat, lng: coords.lng }).eq("id", c.id);
+        const { error: geoError } = await supabase.from("companies").update({ lat: coords.lat, lng: coords.lng }).eq("user_id", user.id).eq("id", c.id);
+        if (geoError) logger.error('Error saving geocoordinates:', { error: geoError.message });
         newResults.push({ id: c.id, name: c.name, nome_crm: c.nome_crm, ramo_atividade: c.ramo_atividade, status: c.status, cnpj: c.cnpj, email: c.email, phone: c.phone, website: c.website, city: c.city, state: c.state, lat: coords.lat, lng: coords.lng, relationship_score: 50 });
         geocoded++;
       }

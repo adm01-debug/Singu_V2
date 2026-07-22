@@ -4,6 +4,7 @@
  * fornece executores que rodam a query no Supabase + agregam client-side.
  */
 import { supabase } from '@/integrations/supabase/client';
+import type { Database } from '@/integrations/supabase/types';
 
 export type EntityKey = 'contacts' | 'companies' | 'interactions' | 'deals' | 'tickets';
 
@@ -196,9 +197,9 @@ export interface ReportResult {
 
 export async function runReport(config: ReportConfig, userId: string): Promise<ReportResult> {
   const def = ENTITIES[config.entity];
-  // Usamos cast controlado para TableName para permitir o uso de tabelas vindas de ENTITIES
-  // sem comprometer a segurança de tipos do restante da query.
-  const query = supabase.from(def.table as never).select(def.defaultSelect).eq('user_id', userId);
+  // Cast to valid DB table name — ENTITIES dict is constrained to known tables at definition.
+  const query = supabase.from(def.table as keyof Database['public']['Tables']).select(def.defaultSelect).eq('user_id', userId)
+  .limit(500);
 
   if (config.orderBy) {
     query.order(config.orderBy.field, { ascending: config.orderBy.direction === 'asc' });

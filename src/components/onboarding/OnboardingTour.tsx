@@ -239,6 +239,7 @@ export function OnboardingTour({
               size="icon"
               className="h-6 w-6 -mr-2 -mt-2"
               onClick={onSkip}
+              aria-label="Pular tour"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -309,14 +310,14 @@ export function useOnboardingTour(tourId: string = 'main') {
   const completeTour = () => {
     setIsOpen(false);
     setHasCompleted(true);
-    localStorage.setItem(`tour-completed-${tourId}`, 'true');
+    try { localStorage.setItem(`tour-completed-${tourId}`, 'true'); } catch { /* quota/private */ }
   };
 
   const skipTour = completeTour;
 
   const resetTour = () => {
     setHasCompleted(false);
-    localStorage.removeItem(`tour-completed-${tourId}`);
+    try { localStorage.removeItem(`tour-completed-${tourId}`); } catch { /* quota/private */ }
   };
 
   return {

@@ -171,10 +171,10 @@ export function NLPAnalysisCard({ contactId, vakProfile, metaprogramProfile, ref
 
         <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between">
           <div className="flex gap-2">
-            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => onRefetch?.()}>
+            <Button variant="ghost" size="icon" aria-label="Atualizar" className="h-7 w-7 rounded-full" onClick={() => onRefetch?.()}>
               <RefreshCcw className="h-3 w-3" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full text-success">
+            <Button variant="ghost" size="icon" aria-label="Análise verificada" className="h-7 w-7 rounded-full text-success">
               <ShieldCheck className="h-3.5 w-3.5" />
             </Button>
           </div>

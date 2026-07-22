@@ -10,6 +10,7 @@ import { renderBlocksToHtml } from '@/lib/emailBuilderRenderer';
 import type { EmailBlock } from '@/components/email-builder/types';
 import { toast } from 'sonner';
 import { CheckCircle2, Loader2 } from 'lucide-react';
+import { safehref } from '@/lib/utils';
 
 interface PublicPage {
   id: string;
@@ -54,8 +55,8 @@ export default function PublicLandingPage() {
       }
       setPage(data as unknown as PublicPage);
       setLoading(false);
-      // Increment view count (fire-and-forget)
-      supabase.from('landing_pages').update({ view_count: (data.view_count ?? 0) + 1 }).eq('id', data.id).then(() => {}, () => {});
+      // Increment view count via SECURITY DEFINER RPC (anon has no direct UPDATE policy)
+      supabase.rpc('increment_landing_page_view', { page_id: data.id }).then(() => {}, () => {});
     })();
     return () => { alive = false; };
   }, [slug]);
@@ -89,7 +90,7 @@ export default function PublicLandingPage() {
     }
     setSubmitted(true);
     if (page.redirect_url) {
-      setTimeout(() => { window.location.href = page.redirect_url!; }, 800);
+      setTimeout(() => { const safe = safehref(page.redirect_url!); if (safe !== '#') window.location.href = safe; }, 800);
     }
   };
 

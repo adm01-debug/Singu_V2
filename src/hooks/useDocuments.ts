@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type DocumentType = 'contract' | 'proposal' | 'nda' | 'invoice' | 'report' | 'presentation' | 'spreadsheet' | 'image' | 'other';
 
@@ -35,16 +36,18 @@ export function useDocuments(entityType: string, entityId?: string) {
       if (!user) return [];
       const { data, error } = await supabase
         .from('documents')
-        .select('*')
+        .select('id, user_id, entity_type, entity_id, name, description, document_type, file_url, file_size, mime_type, version, status, tags, created_at, updated_at')
         .eq('user_id', user.id)
         .eq('entity_type', entityType)
         .eq('entity_id', entityId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(100);
       if (error) throw error;
       return (data || []) as Document[];
     },
     enabled: !!entityId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const upload = useMutation({
@@ -81,19 +84,20 @@ export function useDocuments(entityType: string, entityId?: string) {
       qc.invalidateQueries({ queryKey: key });
       toast.success('Documento enviado!');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('documents').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('documents').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: key });
       toast.success('Documento removido!');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { documents, isLoading, upload, remove };

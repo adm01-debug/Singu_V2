@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { validate } from "../_shared/validate.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
@@ -23,15 +24,25 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    const { token, action, signature_typed, signature_image, declined_reason } =
-      (rawBody ?? {}) as { token?: string; action?: string; signature_typed?: string; signature_image?: string; declined_reason?: string };
-
-    if (!token || typeof token !== "string") {
-      return new Response(JSON.stringify({ error: "Invalid token" }), {
+    const v = validate(rawBody, {
+      token:            { type: 'string', required: true, maxLength: 512 },
+      action:           { type: 'string', required: true, maxLength: 20 },
+      signature_typed:  { type: 'string', maxLength: 500 },
+      declined_reason:  { type: 'string', maxLength: 1000 },
+    });
+    if (!v.ok) {
+      return new Response(JSON.stringify({ error: v.error }), {
         status: 400,
         headers: { ...cors, "Content-Type": "application/json" },
       });
     }
+
+    const { token, action, declined_reason } = v.data as { token: string; action: string; declined_reason?: string };
+    // signature_image is a base64 dataURL — accept from raw body with size cap (guardBody already enforces 64 KB)
+    const signature_typed = v.data.signature_typed as string | undefined;
+    const signature_image = typeof (rawBody as Record<string, unknown>)?.signature_image === 'string'
+      ? ((rawBody as Record<string, unknown>).signature_image as string).slice(0, 65_536)
+      : undefined;
 
     const { data: existing } = await supabase
       .from("document_signatures")

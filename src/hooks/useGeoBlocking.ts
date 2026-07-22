@@ -13,20 +13,23 @@ export function useGeoBlocking() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('geo_allowed_countries')
-        .select('*')
+        .select('id, user_id, country_code, country_name, is_active, created_at')
         .eq('user_id', user.id)
-        .order('country_name');
+        .order('country_name')
+        .limit(300);
       if (error) return [];
       return Array.isArray(data) ? data : [];
     },
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const addCountry = useMutation({
     mutationFn: async ({ code, name }: { code: string; name: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('geo_allowed_countries').insert({
-        user_id: user!.id, country_code: code, country_name: name,
+        user_id: user.id, country_code: code, country_name: name,
       });
       if (error) throw error;
     },
@@ -36,7 +39,8 @@ export function useGeoBlocking() {
 
   const removeCountry = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('geo_allowed_countries').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('geo_allowed_countries').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { toast.success('País removido.'); qc.invalidateQueries({ queryKey: ['geo-countries'] }); },

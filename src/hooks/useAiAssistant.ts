@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface ChatThread {
   id: string;
@@ -35,46 +36,58 @@ export function useAiAssistant() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  const fetchThreads = useCallback(async () => {
+  const fetchThreads = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user?.id) return;
     setLoading(true);
     try {
       const { data, error } = await supabase
         .from('ai_chat_threads')
-        .select('*')
+        .select('id, user_id, title, context_entity_type, context_entity_id, pinned, archived, last_message_at, created_at, updated_at')
         .eq('user_id', user.id)
         .eq('archived', false)
         .order('pinned', { ascending: false })
-        .order('last_message_at', { ascending: false });
+        .order('last_message_at', { ascending: false })
+        .limit(100);
+      if (signal?.cancelled) return;
       if (error) throw error;
       setThreads((data || []) as ChatThread[]);
     } catch (e) {
-      logger.error('Failed to fetch threads', e);
+      if (!signal?.cancelled) logger.error('Failed to fetch threads', e);
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user?.id]);
 
-  const fetchMessages = useCallback(async (threadId: string) => {
+  const fetchMessages = useCallback(async (threadId: string, signal?: { cancelled: boolean }) => {
     try {
       const { data, error } = await supabase
         .from('ai_chat_messages')
-        .select('*')
+        .select('id, thread_id, user_id, role, content, metadata, tokens_used, created_at')
         .eq('thread_id', threadId)
-        .order('created_at', { ascending: true });
+        .eq('user_id', user?.id ?? '')
+        .order('created_at', { ascending: true })
+        .limit(500);
+      if (signal?.cancelled) return;
       if (error) throw error;
       setMessages((data || []) as ChatMessage[]);
     } catch (e) {
-      logger.error('Failed to fetch messages', e);
+      if (!signal?.cancelled) logger.error('Failed to fetch messages', e);
     }
   }, []);
 
-  useEffect(() => { fetchThreads(); }, [fetchThreads]);
+  useEffect(() => {
+    const signal = { cancelled: false };
+    fetchThreads(signal);
+    return () => { signal.cancelled = true; };
+  }, [fetchThreads]);
 
   useEffect(() => {
-    if (activeThreadId) fetchMessages(activeThreadId);
+    const signal = { cancelled: false };
+    if (activeThreadId) fetchMessages(activeThreadId, signal);
     else setMessages([]);
+    return () => { signal.cancelled = true; };
   }, [activeThreadId, fetchMessages]);
 
   const createThread = useCallback(async (title?: string, context?: { type: string; id: string }) => {
@@ -119,6 +132,9 @@ export function useAiAssistant() {
     };
     setMessages(prev => [...prev, optimisticUserMsg]);
     setSending(true);
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -136,6 +152,7 @@ export function useAiAssistant() {
             context_entity_type: thread?.context_entity_type || undefined,
             context_entity_id: thread?.context_entity_id || undefined,
           }),
+          signal: controller.signal,
         },
       );
 
@@ -148,8 +165,9 @@ export function useAiAssistant() {
       await Promise.all([fetchMessages(activeThreadId), fetchThreads()]);
       return result;
     } catch (e) {
+      if (e instanceof Error && e.name === 'AbortError') return;
       logger.error('Failed to send message', e);
-      toast.error(e instanceof Error ? e.message : 'Falha ao enviar mensagem');
+      toast.error(parseApiError(e));
       setMessages(prev => prev.filter(m => m.id !== optimisticUserMsg.id));
     } finally {
       setSending(false);
@@ -158,7 +176,7 @@ export function useAiAssistant() {
 
   const deleteThread = useCallback(async (threadId: string) => {
     try {
-      const { error } = await supabase.from('ai_chat_threads').delete().eq('id', threadId);
+      const { error } = await supabase.from('ai_chat_threads').delete().eq('user_id', user?.id ?? '').eq('id', threadId);
       if (error) throw error;
       setThreads(prev => prev.filter(t => t.id !== threadId));
       if (activeThreadId === threadId) setActiveThreadId(null);
@@ -171,7 +189,7 @@ export function useAiAssistant() {
 
   const togglePin = useCallback(async (threadId: string, pinned: boolean) => {
     try {
-      const { error } = await supabase.from('ai_chat_threads').update({ pinned: !pinned }).eq('id', threadId);
+      const { error } = await supabase.from('ai_chat_threads').update({ pinned: !pinned }).eq('user_id', user?.id ?? '').eq('id', threadId);
       if (error) throw error;
       await fetchThreads();
     } catch (e) {
@@ -181,7 +199,7 @@ export function useAiAssistant() {
 
   const renameThread = useCallback(async (threadId: string, title: string) => {
     try {
-      const { error } = await supabase.from('ai_chat_threads').update({ title }).eq('id', threadId);
+      const { error } = await supabase.from('ai_chat_threads').update({ title }).eq('user_id', user?.id ?? '').eq('id', threadId);
       if (error) throw error;
       setThreads(prev => prev.map(t => t.id === threadId ? { ...t, title } : t));
     } catch (e) {

@@ -78,11 +78,15 @@
  
    const selected = FRAMEWORKS.find(f => f.id === selectedId) || FRAMEWORKS[0];
  
-   const handleCopy = () => {
-     navigator.clipboard.writeText(selected.example);
-     setCopied(true);
-     toast.success('Exemplo copiado para o clipboard!');
-     setTimeout(() => setCopied(false), 2000);
+   const handleCopy = async () => {
+     try {
+       await navigator.clipboard.writeText(selected.example);
+       setCopied(true);
+       toast.success('Exemplo copiado para o clipboard!');
+       setTimeout(() => setCopied(false), 2000);
+     } catch {
+       toast.error('Não foi possível copiar');
+     }
    };
  
    return (

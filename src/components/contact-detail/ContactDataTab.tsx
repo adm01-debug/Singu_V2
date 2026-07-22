@@ -18,6 +18,7 @@ import { SocialMediaExternalCard } from './data-tab/SocialMediaExternalCard';
 import { ContactEnrichedCard } from './data-tab/ContactEnrichedCard';
 import { ExtraDataCard, BitrixIntegrationCard } from './data-tab/ExtraDataCards';
 import { ConsentAuditCard } from './data-tab/ConsentAuditCard';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface Props {
   contact: Contact;
@@ -35,9 +36,9 @@ export function ContactDataTab({ contact }: Props) {
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
   const copyToClipboard = (text: string, field: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedField(field);
-    setTimeout(() => setCopiedField(null), 2000);
+    navigator.clipboard.writeText(text)
+      .then(() => { setCopiedField(field); setTimeout(() => setCopiedField(null), 2000); })
+      .catch(() => {});
   };
 
   if (isLoading) {
@@ -61,7 +62,7 @@ export function ContactDataTab({ contact }: Props) {
           <div>
             <p className="text-sm font-medium text-foreground">Erro ao carregar dados relacionais</p>
             <p className="text-xs text-muted-foreground mt-1">
-              {error instanceof Error ? error.message : 'Tente novamente em alguns instantes'}
+              {parseApiError(error, 'Tente novamente em alguns instantes')}
             </p>
           </div>
           <Button variant="outline" size="sm" onClick={() => refetch()}>

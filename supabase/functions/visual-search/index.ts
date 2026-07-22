@@ -2,6 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { validate } from "../_shared/validate.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
@@ -126,9 +127,13 @@ Deno.serve(async (req) => {
     const rl = limiter.check(user.id, req);
     if (rl) return rl;
 
-    const body = rawBody as Record<string, unknown>;
-    const imageDataUrl = String(body?.image ?? "");
-    const limit = Math.min(Math.max(Number(body?.limit ?? 12), 1), 30);
+    const vvs = validate(rawBody, {
+      image: { type: 'string', required: true, maxLength: 5_000_000 },
+      limit: { type: 'integer', min: 1, max: 30 },
+    });
+    if (!vvs.ok) return new Response(JSON.stringify({ error: vvs.error }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
+    const { image: imageDataUrl, limit: rawLimit } = vvs.data as { image: string; limit?: number };
+    const limit = rawLimit ?? 12;
 
     if (!imageDataUrl.startsWith("data:image/")) {
       return new Response(JSON.stringify({ error: "Invalid image. Send a data URL (data:image/...;base64,...)" }), {

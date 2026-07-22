@@ -98,7 +98,7 @@
                      </Badge>
                      <Button 
                        variant="ghost" 
-                       size="icon" 
+                       size="icon" aria-label="Remover" 
                        className="h-8 w-8 text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
                        onClick={() => removeFilter(idx)}
                      >
@@ -173,7 +173,7 @@
                                {c.relationship_stage}
                              </td>
                              <td className="p-3 text-right">
-                               <Button variant="ghost" size="icon" className="h-7 w-7">
+          <Button variant="ghost" size="icon" aria-label="Automação" className="h-7 w-7">
                                  <Zap className="w-3.5 h-3.5 text-primary" />
                                </Button>
                              </td>

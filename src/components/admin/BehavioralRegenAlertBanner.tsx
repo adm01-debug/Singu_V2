@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AlertTriangle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { parseApiError } from '@/lib/errorMessages';
 
 interface AlertRow {
   id: string;
@@ -23,14 +24,20 @@ interface AlertRow {
 export function BehavioralRegenAlertBanner() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const [showSimulated, setShowSimulated] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    return window.localStorage.getItem("brab:show-simulated") === "1";
-  });
+  const brabKey = `brab:show-simulated-${user?.id ?? 'anon'}`;
+  const [showSimulated, setShowSimulated] = useState<boolean>(false);
+
+  // Hydrate from user-scoped key after user resolves
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    try { setShowSimulated(window.localStorage.getItem(brabKey) === "1"); } catch { /* quota/private */ }
+  }, [brabKey]);
 
   const { data: allAlerts, isLoading } = useQuery({
-    queryKey: ["behavioral-regen-active-alerts"],
+    queryKey: ["behavioral-regen-active-alerts", user?.id],
+    enabled: !!user,
     refetchInterval: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<AlertRow[]> => {
       const { data, error } = await supabase
         .from("system_alerts")
@@ -61,7 +68,7 @@ export function BehavioralRegenAlertBanner() {
     const next = !showSimulated;
     setShowSimulated(next);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem("brab:show-simulated", next ? "1" : "0");
+      try { window.localStorage.setItem(brabKey, next ? "1" : "0"); } catch { /* quota/private */ }
     }
   };
 
@@ -81,7 +88,7 @@ export function BehavioralRegenAlertBanner() {
       qc.invalidateQueries({ queryKey: ["behavioral-regen-active-alerts"] });
     },
     onError: (err: Error) => {
-      toast.error("Falha ao reconhecer alerta", { description: err.message });
+      toast.error("Falha ao reconhecer alerta", { description: parseApiError(err) });
     },
   });
 

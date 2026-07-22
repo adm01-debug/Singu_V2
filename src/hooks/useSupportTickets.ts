@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface SupportTicket {
   id: string;
@@ -43,13 +45,15 @@ export function useSupportTickets() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('support_tickets')
-        .select('*')
+        .select('id, user_id, contact_id, company_id, title, description, priority, status, category, assigned_to, sla_deadline, resolved_at, first_response_at, tags, created_at, updated_at')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(200);
       if (error) throw error;
       return (data || []) as SupportTicket[];
     },
     staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const create = useMutation({
@@ -66,15 +70,16 @@ export function useSupportTickets() {
       if ('created_at' in insertData) delete insertData.created_at;
       if ('updated_at' in insertData) delete insertData.updated_at;
 
-      const { error } = await supabase.from('support_tickets').insert(insertData as never);
+      const { error } = await supabase.from('support_tickets').insert(insertData as unknown as TablesInsert<'support_tickets'>);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Ticket criado!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<SupportTicket> & { id: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const resolved = updates.status === 'resolved' || updates.status === 'closed';
       const updateData = {
         ...updates,
@@ -84,21 +89,23 @@ export function useSupportTickets() {
       if ('created_at' in updateData) delete (updateData as Record<string, unknown>).created_at;
       
       const { error } = await supabase.from('support_tickets')
-        .update(updateData as never)
+        .update(updateData as unknown as TablesUpdate<'support_tickets'>)
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Ticket atualizado!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('support_tickets').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('support_tickets').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Ticket removido!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { tickets, isLoading, create, update, remove };
@@ -115,9 +122,10 @@ export function useTicketComments(ticketId?: string) {
       if (!ticketId) return [];
       const { data, error } = await supabase
         .from('ticket_comments')
-        .select('*')
+        .select('id, ticket_id, user_id, content, is_internal, created_at')
         .eq('ticket_id', ticketId)
-        .order('created_at');
+        .order('created_at')
+        .limit(200);
       if (error) throw error;
       return (data || []) as TicketComment[];
     },
@@ -137,7 +145,7 @@ export function useTicketComments(ticketId?: string) {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: key }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { comments, isLoading, addComment };

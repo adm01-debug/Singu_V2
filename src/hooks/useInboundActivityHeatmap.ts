@@ -66,6 +66,7 @@ export function useInboundActivityHeatmap(channel: InboundChannel = 'all') {
     queryKey: ['inbound-activity-heatmap', user?.id, channel],
     enabled: !!user?.id,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 30 * 60 * 1000,
     queryFn: async () => {
       const since = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();

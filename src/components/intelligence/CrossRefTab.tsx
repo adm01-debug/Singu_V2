@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,6 +24,24 @@ import { CrossRefInsightsPanel } from '@/components/intel/CrossRefInsightsPanel'
 import { buildCrossRefInsights } from '@/lib/crossRefInsights';
 import { format } from 'date-fns';
 
+const SHARED_INTERACTIONS_COLUMNS = [
+  {
+    key: 'occurred_at', label: 'TIMESTAMP', mono: true, width: '140px',
+    render: (r: Record<string, unknown>) => format(new Date(String(r.occurred_at)), 'dd/MM/yy HH:mm'),
+  },
+  { key: 'channel', label: 'CHANNEL', mono: true, width: '100px' },
+  { key: 'type', label: 'TYPE', mono: true },
+] as const;
+
+const SHARED_DEALS_COLUMNS = [
+  { key: 'title', label: 'TITLE' },
+  { key: 'stage', label: 'STAGE', mono: true, width: '120px' },
+  {
+    key: 'value', label: 'VALUE', mono: true, width: '120px',
+    render: (r: Record<string, unknown>) => `R$ ${Number(r.value).toLocaleString('pt-BR')}`,
+  },
+] as const;
+
 interface MetaRow {
   id: string;
   name: string;
@@ -43,6 +62,7 @@ interface Picked { id: string; name: string; }
 
 export const CrossRefTab = () => {
   const [params, setParams] = useSearchParams();
+  const { user } = useAuth();
   const [type, setType] = useState<'contact' | 'company'>('contact');
   const [picked, setPicked] = useState<Picked[]>([]);
   const [search, setSearch] = useState('');
@@ -55,6 +75,7 @@ export const CrossRefTab = () => {
   useEffect(() => {
     const pivot = params.get('pivot');
     if (!pivot) return;
+    const controller = new AbortController();
     const [pType, pId] = pivot.split(':');
     if ((pType === 'contact' || pType === 'company') && pId) {
       setType(pType);
@@ -65,15 +86,19 @@ export const CrossRefTab = () => {
           const { data: rows } = await queryExternalData<Record<string, unknown>>({
             table,
             select: `id, ${nameCol}`,
-            filters: [{ type: 'eq', column: 'id', value: pId }],
+            filters: [{ type: 'eq', column: 'id', value: pId }, { type: 'eq', column: 'user_id', value: user?.id ?? '' }],
             range: { from: 0, to: 0 },
+            signal: controller.signal,
           });
+          if (controller.signal.aborted) return;
           const name = rows?.[0]?.[nameCol] ? String(rows[0][nameCol]) : pId.slice(0, 8);
           setPicked((prev) =>
             // eslint-disable-next-line sonarjs/no-nested-functions
             prev.some((p) => p.id === pId) ? prev : [...prev, { id: pId, name }].slice(0, 3)
           );
-        } catch {
+        } catch (e) {
+          if (e instanceof Error && e.name === 'AbortError') return;
+          if (controller.signal.aborted) return;
           setPicked((prev) =>
             // eslint-disable-next-line sonarjs/no-nested-functions
             prev.some((p) => p.id === pId) ? prev : [...prev, { id: pId, name: pId.slice(0, 8) }].slice(0, 3)
@@ -84,6 +109,7 @@ export const CrossRefTab = () => {
     const next = new URLSearchParams(params);
     next.delete('pivot');
     setParams(next, { replace: true });
+    return () => { controller.abort(); };
   }, [params, setParams]);
 
   const { data, isLoading, error, refetch } = useCrossReference({
@@ -120,7 +146,7 @@ export const CrossRefTab = () => {
   }, [data, picked, overlap.index]);
 
   useEffect(() => {
-    let cancelled = false;
+    const controller = new AbortController();
     const run = async () => {
       if (picked.length < 2) { setMetaRows([]); return; }
       setLoadingMeta(true);
@@ -131,21 +157,23 @@ export const CrossRefTab = () => {
             const { data: r } = await queryExternalData<Record<string, unknown>>({
               table,
               select: '*',
-              filters: [{ type: 'eq', column: 'id', value: p.id }],
+              filters: [{ type: 'eq', column: 'id', value: p.id }, { type: 'eq', column: 'user_id', value: user?.id ?? '' }],
               range: { from: 0, to: 0 },
+              signal: controller.signal,
             });
             return { id: p.id, name: p.name, metadata: r?.[0] || {} };
           })
         );
-        if (!cancelled) setMetaRows(rows);
-      } catch {
-        if (!cancelled) setMetaRows([]);
+        if (!controller.signal.aborted) setMetaRows(rows);
+      } catch (e) {
+        if (e instanceof Error && e.name === 'AbortError') return;
+        if (!controller.signal.aborted) setMetaRows([]);
       } finally {
-        if (!cancelled) setLoadingMeta(false);
+        if (!controller.signal.aborted) setLoadingMeta(false);
       }
     };
     run();
-    return () => { cancelled = true; };
+    return () => { controller.abort(); };
   }, [picked, type]);
 
   const compareFields = useMemo(() => {
@@ -164,6 +192,7 @@ export const CrossRefTab = () => {
       const { data: rows } = await queryExternalData<Record<string, unknown>>({
         table,
         select: `id, ${nameCol}`,
+        filters: [{ type: 'eq', column: 'user_id', value: user?.id ?? '' }],
         search: { term: search, columns: [nameCol] },
         range: { from: 0, to: 9 },
       });
@@ -420,14 +449,7 @@ export const CrossRefTab = () => {
               <IntelSkeleton lines={5} />
             ) : (
               <DataGrid
-                columns={[
-                  {
-                    key: 'occurred_at', label: 'TIMESTAMP', mono: true, width: '140px',
-                    render: (r) => format(new Date(String(r.occurred_at)), 'dd/MM/yy HH:mm'),
-                  },
-                  { key: 'channel', label: 'CHANNEL', mono: true, width: '100px' },
-                  { key: 'type', label: 'TYPE', mono: true },
-                ]}
+                columns={SHARED_INTERACTIONS_COLUMNS}
                 rows={(data?.sharedInteractions || []) as unknown as Array<Record<string, unknown>>}
                 getRowKey={(r) => String(r.id)}
                 emptyMessage="NO_SHARED_INTERACTIONS"
@@ -440,14 +462,7 @@ export const CrossRefTab = () => {
               <IntelSkeleton lines={4} />
             ) : (
               <DataGrid
-                columns={[
-                  { key: 'title', label: 'TITLE' },
-                  { key: 'stage', label: 'STAGE', mono: true, width: '120px' },
-                  {
-                    key: 'value', label: 'VALUE', mono: true, width: '120px',
-                    render: (r) => `R$ ${Number(r.value).toLocaleString('pt-BR')}`,
-                  },
-                ]}
+                columns={SHARED_DEALS_COLUMNS}
                 rows={(data?.sharedDeals || []) as unknown as Array<Record<string, unknown>>}
                 getRowKey={(r) => String(r.id)}
                 emptyMessage="NO_SHARED_DEALS"

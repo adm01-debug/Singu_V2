@@ -37,8 +37,8 @@ USING (true)
 WITH CHECK (true);
 
 -- Add index
-CREATE INDEX idx_suggested_life_events_contact_id ON public.suggested_life_events(contact_id);
-CREATE INDEX idx_suggested_life_events_status ON public.suggested_life_events(status);
+CREATE INDEX IF NOT EXISTS idx_suggested_life_events_contact_id ON public.suggested_life_events(contact_id);
+CREATE INDEX IF NOT EXISTS idx_suggested_life_events_status ON public.suggested_life_events(status);
 
 -- Add trigger for updated_at
 CREATE TRIGGER update_suggested_life_events_updated_at

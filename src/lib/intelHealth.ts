@@ -84,10 +84,12 @@ export function inspectIntelStorage(): IntelStorageStat[] {
 export function resetIntelState(): number {
   let removed = 0;
   INTEL_STORAGE_KEYS.forEach((key) => {
-    if (localStorage.getItem(key) !== null) {
-      localStorage.removeItem(key);
-      removed += 1;
-    }
+    try {
+      if (localStorage.getItem(key) !== null) {
+        localStorage.removeItem(key);
+        removed += 1;
+      }
+    } catch { /* ignore storage errors */ }
   });
   try {
     const toRemove: string[] = [];

@@ -247,7 +247,7 @@ function getScoreColor(score: number) {
               size="icon" 
               variant="ghost" 
               className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={() => onTextChange('')}
+              aria-label="Limpar texto" onClick={() => onTextChange('')}
               title="Limpar texto"
             >
               <span className="text-[10px] font-bold">CLR</span>

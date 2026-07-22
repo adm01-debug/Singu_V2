@@ -6,6 +6,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * - SSR-safe: lê do storage apenas após o mount (evita mismatch de hidratação).
  * - Tolerante a falhas: storage indisponível (modo privado, quota) é silenciosamente ignorado.
  * - Sincroniza entre abas via evento `storage`.
+ * - SECURITY: callers that store user-specific state MUST include the user ID in `key`
+ *   (e.g. `my-feature-${userId ?? 'anon'}`) to prevent cross-user bleed on shared devices.
  */
 export function usePersistentBoolean(
   key: string,

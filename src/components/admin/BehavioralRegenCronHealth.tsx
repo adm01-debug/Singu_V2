@@ -7,6 +7,7 @@ import { AlertTriangle, CheckCircle2, Clock, Loader2, Pause, Zap } from "lucide-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { parseApiError } from '@/lib/errorMessages';
 
 interface CronHealthRow {
   jobname: string;
@@ -39,6 +40,7 @@ export function BehavioralRegenCronHealth() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["behavioral-regen-cron-health"],
     refetchInterval: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<CronHealthRow[]> => {
       const { data, error } = await (supabase.rpc as unknown as (
         fn: string,
@@ -69,7 +71,7 @@ export function BehavioralRegenCronHealth() {
       qc.invalidateQueries({ queryKey: ["behavioral-regen-active-alerts"] });
     },
     onError: (err: Error) => {
-      toast.error("Falha ao simular alerta", { description: err.message });
+      toast.error("Falha ao simular alerta", { description: parseApiError(err) });
     },
   });
 
@@ -106,7 +108,7 @@ export function BehavioralRegenCronHealth() {
             <Skeleton className="h-16 w-full" />
           </>
         ) : error ? (
-          <p className="text-xs text-destructive">Falha ao carregar: {(error as Error).message}</p>
+          <p className="text-xs text-destructive">{parseApiError(error, 'Falha ao carregar')}</p>
         ) : !data?.length ? (
           <p className="text-xs text-muted-foreground">Nenhum job agendado encontrado.</p>
         ) : (

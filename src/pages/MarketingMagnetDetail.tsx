@@ -11,19 +11,25 @@ import { ArrowLeft, Save, Copy, ExternalLink } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
+import type { TablesUpdate } from '@/integrations/supabase/types';
 import { useMagnetDownloads, type LeadMagnet } from '@/hooks/useLeadMagnets';
+import { useAuth } from '@/hooks/useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 
 export default function MarketingMagnetDetail() {
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
   const qc = useQueryClient();
   const { data: magnet, isLoading } = useQuery({
-    queryKey: ['lead-magnet', id],
-    enabled: !!id,
+    queryKey: ['lead-magnet', id, user?.id],
+    enabled: !!id && !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from('lead_magnets').select('*').eq('id', id!).maybeSingle();
+      const { data, error } = await supabase.from('lead_magnets').select('id, user_id, title, slug, description, type, file_path, external_url, thumbnail_url, gated, form_id, download_count, view_count, is_published, created_at, updated_at').eq('id', id!).eq('user_id', user!.id).maybeSingle();
       if (error) throw error;
       return data as unknown as LeadMagnet | null;
     },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
   const { data: downloads = [] } = useMagnetDownloads(id);
 
@@ -33,6 +39,7 @@ export default function MarketingMagnetDetail() {
   if (isLoading || !draft) return <div className="container py-8 text-sm text-muted-foreground">Carregando...</div>;
 
   const save = async () => {
+    if (!user) return;
     const { error } = await supabase.from('lead_magnets').update({
       title: draft.title,
       description: draft.description,
@@ -41,8 +48,8 @@ export default function MarketingMagnetDetail() {
       external_url: draft.external_url,
       thumbnail_url: draft.thumbnail_url,
       gated: draft.gated,
-    } as never).eq('id', draft.id);
-    if (error) toast.error(error.message);
+    } as TablesUpdate<'lead_magnets'>).eq('user_id', user.id).eq('id', draft.id);
+    if (error) toast.error(parseApiError(error));
     else {
       toast.success('Salvo!');
       qc.invalidateQueries({ queryKey: ['lead-magnet', id] });
@@ -59,7 +66,7 @@ export default function MarketingMagnetDetail() {
       <div className="flex items-center justify-between">
         <Button asChild variant="ghost" size="sm" className="gap-1"><Link to="/marketing"><ArrowLeft className="w-4 h-4" /> Marketing</Link></Button>
         <div className="flex items-center gap-2">
-          <Button size="sm" variant="outline" className="gap-1" onClick={() => { navigator.clipboard.writeText(url); toast.success('URL copiada'); }}>
+          <Button size="sm" variant="outline" className="gap-1" onClick={() => { navigator.clipboard.writeText(url).then(() => toast.success('URL copiada')).catch(() => toast.error('Não foi possível copiar')); }}>
             <Copy className="w-4 h-4" /> URL
           </Button>
           {draft.is_published && (

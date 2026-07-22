@@ -10,11 +10,17 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import type { Tables } from '@/integrations/supabase/types';
 
-type Interaction = Tables<'interactions'>;
-type Contact = Tables<'contacts'>;
-type Company = Tables<'companies'>;
+type CalendarInteraction = Pick<Tables<'interactions'>,
+  'id' | 'user_id' | 'contact_id' | 'company_id' | 'title' | 'type' | 'content' |
+  'follow_up_date' | 'follow_up_required'
+>;
+type CalendarContact = Pick<Tables<'contacts'>, 'id' | 'first_name' | 'last_name'>;
+type CalendarCompany = Pick<Tables<'companies'>, 'id' | 'name'>;
 
-export interface FollowUp extends Interaction { contact?: Contact | null; company?: Company | null; }
+export interface FollowUp extends CalendarInteraction {
+  contact?: CalendarContact | null;
+  company?: CalendarCompany | null;
+}
 
 const interactionTypeIcons: Record<string, React.ReactNode> = {
   call: <Phone className="w-4 h-4" />, email: <Mail className="w-4 h-4" />, meeting: <Users className="w-4 h-4" />,
@@ -56,9 +62,9 @@ export function CalendarioContent({ currentMonth, selectedDate, followUps, follo
             <div className="flex items-center justify-between">
               <CardTitle className="text-xl capitalize">{format(currentMonth, 'MMMM yyyy', { locale: ptBR })}</CardTitle>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="icon" onClick={onPrevMonth}><ChevronLeft className="w-4 h-4" /></Button>
+                <Button variant="outline" size="icon" aria-label="Anterior" onClick={onPrevMonth}><ChevronLeft className="w-4 h-4" /></Button>
                 <Button variant="outline" size="sm" onClick={onToday}>Hoje</Button>
-                <Button variant="outline" size="icon" onClick={onNextMonth}><ChevronRight className="w-4 h-4" /></Button>
+                <Button variant="outline" size="icon" aria-label="Próximo" onClick={onNextMonth}><ChevronRight className="w-4 h-4" /></Button>
               </div>
             </div>
           </CardHeader>

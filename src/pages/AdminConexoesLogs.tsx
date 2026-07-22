@@ -120,6 +120,8 @@ export default function AdminConexoesLogs() {
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       );
     },
+    staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const filtered = useMemo(() => {

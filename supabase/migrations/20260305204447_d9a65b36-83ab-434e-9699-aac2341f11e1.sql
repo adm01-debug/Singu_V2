@@ -72,11 +72,11 @@ CREATE POLICY "Users can manage their own whatsapp_instances" ON public.whatsapp
 CREATE POLICY "Users can manage their own whatsapp_kpis" ON public.whatsapp_kpis FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- Indexes for performance
-CREATE INDEX idx_whatsapp_messages_user_contact ON public.whatsapp_messages(user_id, contact_id);
-CREATE INDEX idx_whatsapp_messages_remote_jid ON public.whatsapp_messages(remote_jid);
-CREATE INDEX idx_whatsapp_messages_instance ON public.whatsapp_messages(instance_name);
-CREATE INDEX idx_whatsapp_messages_timestamp ON public.whatsapp_messages(timestamp DESC);
-CREATE INDEX idx_whatsapp_instances_user ON public.whatsapp_instances(user_id);
+CREATE INDEX IF NOT EXISTS idx_whatsapp_messages_user_contact ON public.whatsapp_messages(user_id, contact_id);
+CREATE INDEX IF NOT EXISTS idx_whatsapp_messages_remote_jid ON public.whatsapp_messages(remote_jid);
+CREATE INDEX IF NOT EXISTS idx_whatsapp_messages_instance ON public.whatsapp_messages(instance_name);
+CREATE INDEX IF NOT EXISTS idx_whatsapp_messages_timestamp ON public.whatsapp_messages(timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_whatsapp_instances_user ON public.whatsapp_instances(user_id);
 
 -- Enable realtime for messages
 ALTER PUBLICATION supabase_realtime ADD TABLE public.whatsapp_messages;

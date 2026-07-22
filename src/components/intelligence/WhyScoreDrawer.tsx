@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
@@ -74,22 +75,25 @@ interface WhyScoreDrawerProps {
 
 const FEEDBACK_KEY = 'singu-score-feedback-v1';
 
-function readFeedback(): Record<string, 'up' | 'down'> {
-  if (typeof window === 'undefined') return {};
+function readLocalStorage<T extends Record<string, unknown>>(storageKey: string): T {
+  if (typeof window === 'undefined') return {} as T;
   try {
-    return JSON.parse(window.localStorage.getItem(FEEDBACK_KEY) ?? '{}');
+    return JSON.parse(window.localStorage.getItem(storageKey) ?? '{}') as T;
   } catch {
-    return {};
+    return {} as T;
   }
 }
 
-function writeFeedback(map: Record<string, 'up' | 'down'>) {
+function writeLocalStorage<T extends Record<string, unknown>>(storageKey: string, map: T) {
   try {
-    window.localStorage.setItem(FEEDBACK_KEY, JSON.stringify(map));
+    window.localStorage.setItem(storageKey, JSON.stringify(map));
   } catch {
     /* noop */
   }
 }
+
+const readFeedback = (key: string) => readLocalStorage<Record<string, 'up' | 'down'>>(key);
+const writeFeedback = writeLocalStorage<Record<string, 'up' | 'down'>>;
 
 // Feedback sobre a explicação ("faz sentido / não faz sentido"), persistido por scoreKey
 // (que já encoda o contato, ex.: "lead-score:contact:abc").
@@ -103,22 +107,8 @@ interface ExplanationFeedbackEntry {
   updatedAt: string;
 }
 
-function readExplanationFeedback(): Record<string, ExplanationFeedbackEntry> {
-  if (typeof window === 'undefined') return {};
-  try {
-    return JSON.parse(window.localStorage.getItem(EXPLANATION_FEEDBACK_KEY) ?? '{}');
-  } catch {
-    return {};
-  }
-}
-
-function writeExplanationFeedback(map: Record<string, ExplanationFeedbackEntry>) {
-  try {
-    window.localStorage.setItem(EXPLANATION_FEEDBACK_KEY, JSON.stringify(map));
-  } catch {
-    /* noop */
-  }
-}
+const readExplanationFeedback = (key: string) => readLocalStorage<Record<string, ExplanationFeedbackEntry>>(key);
+const writeExplanationFeedback = writeLocalStorage<Record<string, ExplanationFeedbackEntry>>;
 
 function deriveBand(score: number): ScoreBand {
   if (score >= 70) return 'high';
@@ -172,16 +162,23 @@ export function WhyScoreDrawer({
   recommendations = [],
   band,
 }: WhyScoreDrawerProps) {
+  const { user } = useAuth();
+  const uid = user?.id ?? 'anon';
+  const feedbackStorageKey = `${FEEDBACK_KEY}-${uid}`;
+  const explanationStorageKey = `${EXPLANATION_FEEDBACK_KEY}-${uid}`;
+
   const resolvedBand = band ?? deriveBand(score);
   const meta = BAND_META[resolvedBand];
 
-  const [feedback, setFeedback] = useState<'up' | 'down' | null>(() => {
-    return readFeedback()[scoreKey] ?? null;
-  });
+  const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
+
+  useEffect(() => {
+    setFeedback(readFeedback(feedbackStorageKey)[scoreKey] ?? null);
+  }, [feedbackStorageKey, scoreKey]);
 
   const initialExplanation = useMemo<ExplanationFeedbackEntry | null>(() => {
-    return readExplanationFeedback()[scoreKey] ?? null;
-  }, [scoreKey]);
+    return readExplanationFeedback(explanationStorageKey)[scoreKey] ?? null;
+  }, [explanationStorageKey, scoreKey]);
   const [explanationFeedback, setExplanationFeedback] = useState<ExplanationFeedbackValue | null>(
     initialExplanation?.value ?? null,
   );
@@ -214,22 +211,22 @@ export function WhyScoreDrawer({
 
   const submitFeedback = (value: 'up' | 'down') => {
     setFeedback(value);
-    const all = readFeedback();
+    const all = readFeedback(feedbackStorageKey);
     all[scoreKey] = value;
-    writeFeedback(all);
+    writeFeedback(feedbackStorageKey, all);
     toast.success(value === 'up' ? 'Feedback registrado: score correto' : 'Feedback registrado: score incorreto', {
       description: 'Usaremos esse sinal para refinar o modelo localmente.',
     });
   };
 
   const persistExplanationFeedback = (value: ExplanationFeedbackValue, comment: string) => {
-    const all = readExplanationFeedback();
+    const all = readExplanationFeedback(explanationStorageKey);
     all[scoreKey] = {
       value,
       comment: comment.trim() ? comment.trim() : undefined,
       updatedAt: new Date().toISOString(),
     };
-    writeExplanationFeedback(all);
+    writeExplanationFeedback(explanationStorageKey, all);
   };
 
   const submitExplanationFeedback = (value: ExplanationFeedbackValue) => {

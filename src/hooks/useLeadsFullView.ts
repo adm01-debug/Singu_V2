@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { queryExternalData } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface LeadFull {
   id: string;
@@ -36,12 +37,14 @@ export interface LeadFull {
 }
 
 export function useLeadsFullView(contactId?: string, companyId?: string, limit = 20) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['leads-full', contactId, companyId, limit],
+    queryKey: ['leads-full', contactId, companyId, limit, user?.id],
     queryFn: async () => {
       const filters: Array<{ type: 'eq'; column: string; value: unknown }> = [];
       if (contactId) filters.push({ type: 'eq', column: 'contact_id', value: contactId });
       if (companyId) filters.push({ type: 'eq', column: 'company_id', value: companyId });
+      filters.push({ type: 'eq', column: 'user_id', value: user!.id });
       const { data, error } = await queryExternalData<LeadFull>({
         table: 'vw_leads_full',
         filters,
@@ -51,7 +54,7 @@ export function useLeadsFullView(contactId?: string, companyId?: string, limit =
       if (error) throw error;
       return data || [];
     },
-    enabled: !!(contactId || companyId),
+    enabled: !!(contactId || companyId) && !!user,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });

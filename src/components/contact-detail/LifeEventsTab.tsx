@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { parseApiError } from '@/lib/errorMessages';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
@@ -59,35 +60,44 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
   });
 
   const { data: lifeEvents = [], isLoading } = useQuery({
-    queryKey: ['life-events', contactId],
+    queryKey: ['life-events', contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('life_events')
         .select('*')
         .eq('contact_id', contactId)
-        .order('event_date', { ascending: true });
+        .eq('user_id', user!.id)
+        .order('event_date', { ascending: true })
+        .limit(100);
       if (error) throw error;
       return data as Tables<'life_events'>[];
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: suggestions = [], refetch: refetchSuggestions } = useQuery({
-    queryKey: ['suggested-life-events', contactId],
+    queryKey: ['suggested-life-events', contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('suggested_life_events')
         .select('*')
         .eq('contact_id', contactId)
+        .eq('user_id', user!.id)
         .eq('status', 'pending')
-        .order('confidence', { ascending: false });
+        .order('confidence', { ascending: false })
+        .limit(50);
       if (error) throw error;
       return data;
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const handleAcceptSuggestion = async (suggestion: SuggestedLifeEvent) => {
+    if (!user) return;
     const meta = (suggestion.metadata ?? {}) as SuggestionMetadata;
     const isRelative = meta.type === 'relative_suggestion';
     
@@ -105,12 +115,13 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
       });
 
       if (!error) {
-        await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id);
+        const { error: updateErr } = await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id).eq('user_id', user!.id);
+        if (updateErr) toast({ title: "Aviso", description: "Relacionado adicionado, mas falha ao marcar sugestão.", variant: "destructive" });
         queryClient.invalidateQueries({ queryKey: ['contact-relational-data', contactId] });
         refetchSuggestions();
         toast({ title: "Relacionado adicionado", description: `${relData.name} foi adicionado aos contatos relacionados.` });
       } else {
-        toast({ title: "Erro ao adicionar", description: error.message, variant: "destructive" });
+        toast({ title: "Erro ao adicionar", description: parseApiError(error), variant: "destructive" });
       }
       return;
     }
@@ -127,18 +138,24 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
     });
 
     if (!error) {
-      await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id);
+      const { error: updateErr } = await supabase.from('suggested_life_events').update({ status: 'accepted' }).eq('id', suggestion.id).eq('user_id', user!.id);
+      if (updateErr) toast({ title: "Aviso", description: "Marco adicionado, mas falha ao marcar sugestão.", variant: "destructive" });
       queryClient.invalidateQueries({ queryKey: ['life-events', contactId] });
       refetchSuggestions();
       toast({ title: "Sugestão aceita", description: "O marco foi adicionado à linha do tempo." });
     } else {
-      toast({ title: "Erro ao aceitar", description: error.message, variant: "destructive" });
+      toast({ title: "Erro ao aceitar", description: parseApiError(error), variant: "destructive" });
     }
   };
 
   const handleRejectSuggestion = async (id: string) => {
-    const { error } = await supabase.from('suggested_life_events').update({ status: 'rejected' }).eq('id', id);
-    if (!error) refetchSuggestions();
+    if (!user) return;
+    const { error } = await supabase.from('suggested_life_events').update({ status: 'rejected' }).eq('id', id).eq('user_id', user.id);
+    if (error) {
+      toast({ title: "Erro ao rejeitar", description: parseApiError(error), variant: "destructive" });
+    } else {
+      refetchSuggestions();
+    }
   };
 
   const createEventMutation = useMutation({
@@ -154,13 +171,14 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
       resetForm();
     },
     onError: (error) => {
-      toast({ title: "Erro ao criar evento", description: error.message, variant: "destructive" });
+      toast({ title: "Erro ao criar evento", description: parseApiError(error), variant: "destructive" });
     }
   });
 
   const updateEventMutation = useMutation({
     mutationFn: async ({ id, ...event }: Partial<Tables<'life_events'>> & { id: string }) => {
-      const { data, error } = await supabase.from('life_events').update(event).eq('id', id).select().maybeSingle();
+      if (!user) throw new Error('Não autenticado');
+      const { data, error } = await supabase.from('life_events').update(event).eq('id', id).eq('user_id', user.id).select().maybeSingle();
       if (error) throw error;
       return data;
     },
@@ -171,20 +189,21 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
       resetForm();
     },
     onError: (error) => {
-      toast({ title: "Erro ao atualizar", description: error.message, variant: "destructive" });
+      toast({ title: "Erro ao atualizar", description: parseApiError(error), variant: "destructive" });
     }
   });
 
   const deleteEventMutation = useMutation({
     mutationFn: async (eventId: string) => {
-      const { error } = await supabase.from('life_events').delete().eq('id', eventId);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('life_events').delete().eq('id', eventId).eq('user_id', user.id);
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['life-events', contactId] });
       toast({ title: "Evento removido" });
     },
-    onError: (e: Error) => toast({ title: "Erro ao remover evento", description: e.message, variant: "destructive" }),
+    onError: (e: Error) => toast({ title: "Erro ao remover evento", description: parseApiError(e), variant: "destructive" }),
   });
 
   const resetForm = () => {
@@ -340,7 +359,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                     type="number" 
                     className="w-16 h-8 text-xs" 
                     value={newEvent.reminder_days_before || 0}
-                    onChange={(e) => setNewEvent({...newEvent, reminder_days_before: parseInt(e.target.value)})}
+                    onChange={(e) => setNewEvent({...newEvent, reminder_days_before: parseInt(e.target.value) || 0})}
                   />
                   <span className="text-xs text-muted-foreground">dias antes</span>
                 </div>
@@ -458,15 +477,15 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                       <div className="flex items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                         <Button 
                           variant="ghost" 
-                          size="icon" 
+                          size="icon" aria-label="Editar" 
                           className="h-7 w-7 text-muted-foreground"
                           onClick={() => startEditing(event)}
                         >
                           <Edit2 className="h-3.5 w-3.5" />
                         </Button>
-                        <Button 
+    <Button 
                           variant="ghost" 
-                          size="icon" 
+                          size="icon" aria-label="Remover" 
                           className="h-7 w-7 text-destructive"
                           onClick={() => deleteEventMutation.mutate(event.id)}
                         >

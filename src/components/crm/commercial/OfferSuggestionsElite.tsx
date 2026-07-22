@@ -31,6 +31,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { useSocialSync } from '@/hooks/commercial/useSocialSync';
 import { SocialMatchPanel } from './components/SocialMatchPanel';
@@ -42,28 +43,36 @@ interface Props {
 }
 
 export function OfferSuggestionsElite({ contactId }: Props) {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const { queueStatus, auditLogs, syncNow } = useSocialSync(contactId);
 
   const { data: offers, isLoading } = useQuery({
-    queryKey: ['offer-suggestions-elite', contactId],
+    queryKey: ['offer-suggestions-elite', contactId, user?.id],
+    enabled: !!contactId && !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('offer_suggestions')
-        .select('*')
+        .select('id, confidence_score, contact_id, created_at, expires_at, metadata, offer_category, offer_name, presented_at, reason, result, status, user_id')
         .eq('contact_id', contactId)
-        .order('confidence_score', { ascending: false });
+        .eq('user_id', user!.id)
+        .order('confidence_score', { ascending: false })
+        .limit(50);
       
       if (error) throw error;
       return data;
-    }
+    },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const updateStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string, status: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('offer_suggestions')
         .update({ status, presented_at: status === 'presented' ? new Date().toISOString() : undefined })
+        .eq('user_id', user.id)
         .eq('id', id);
       if (error) throw error;
     },
@@ -243,8 +252,9 @@ export function OfferSuggestionsElite({ contactId }: Props) {
 
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" className="h-8 w-8 p-0" onClick={() => {
-                        navigator.clipboard.writeText(`Oferta: ${offer.offer_name}\nMotivo: ${offer.reason}`);
-                        toast.success('Copiado!');
+                        navigator.clipboard.writeText(`Oferta: ${offer.offer_name}\nMotivo: ${offer.reason}`)
+                          .then(() => toast.success('Copiado!'))
+                          .catch(() => toast.error('Não foi possível copiar'));
                       }}>
                         <Copy className="h-3.5 w-3.5" />
                       </Button>

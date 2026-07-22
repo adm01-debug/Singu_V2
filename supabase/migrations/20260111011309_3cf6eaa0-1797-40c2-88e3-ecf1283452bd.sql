@@ -27,5 +27,5 @@ FOR DELETE
 USING (auth.uid() = user_id);
 
 -- Create indexes
-CREATE INDEX idx_favorite_templates_user_id ON public.favorite_templates(user_id);
-CREATE INDEX idx_favorite_templates_template_id ON public.favorite_templates(template_id);
+CREATE INDEX IF NOT EXISTS idx_favorite_templates_user_id ON public.favorite_templates(user_id);
+CREATE INDEX IF NOT EXISTS idx_favorite_templates_template_id ON public.favorite_templates(template_id);

@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useCreateTask } from '@/hooks/useTasks';
+import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 
 /**
@@ -147,6 +148,7 @@ function composeDescription(description: string, note: string): string | undefin
 }
 
 export function CreateTaskDialog() {
+  const { user } = useAuth();
   const createTask = useCreateTask();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
@@ -169,13 +171,17 @@ export function CreateTaskDialog() {
     if (!open) return;
     let cancelled = false;
     const fetchEntities = async () => {
-      const [compRes, contRes] = await Promise.all([
-        supabase.from('companies').select('id, name').limit(100),
-        supabase.from('contacts').select('id, first_name, last_name').limit(100),
-      ]);
-      if (cancelled) return;
-      if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
-      if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
+      try {
+        const [compRes, contRes] = await Promise.all([
+          supabase.from('companies').select('id, name').eq('user_id', user?.id ?? '').limit(100),
+          supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user?.id ?? '').limit(100),
+        ]);
+        if (cancelled) return;
+        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
+        if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
+      } catch {
+        // non-critical — dropdowns remain empty; user can type IDs manually or retry
+      }
     };
     fetchEntities();
     return () => { cancelled = true; };

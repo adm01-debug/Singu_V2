@@ -149,9 +149,10 @@ export function usePreContactBriefing(): PreContactBriefingData {
       const in60Minutes = addMinutes(now, 60);
 
       const { data: interactions, error: interactionsError } = await supabase
-        .from('interactions').select('*').eq('follow_up_required', true)
+        .from('interactions').select('*').eq('user_id', user!.id).eq('follow_up_required', true)
         .not('follow_up_date', 'is', null).in('type', ['call', 'meeting', 'video_call'])
-        .order('follow_up_date', { ascending: true });
+        .order('follow_up_date', { ascending: true })
+        .limit(50);
       if (interactionsError) throw interactionsError;
 
       const upcomingInteractions = (interactions || []).filter(interaction => {
@@ -163,19 +164,20 @@ export function usePreContactBriefing(): PreContactBriefingData {
 
       const contactIds = [...new Set(upcomingInteractions.map(i => i.contact_id))];
       const { data: contactsData, error: contactsError } = await supabase
-        .from('contacts').select('*').in('id', contactIds);
+        .from('contacts').select('*').eq('user_id', user!.id).in('id', contactIds)
+        .limit(50);
       if (contactsError) throw contactsError;
       const contacts = contactsData || [];
 
       const companyIds = [...new Set(contacts.map(c => c.company_id).filter(Boolean) as string[])];
       const [companiesResult, recentInteractionsResult, valuesResult, objectionsResult, vakResult] = await Promise.all([
         companyIds.length > 0
-          ? supabase.from('companies').select('*').in('id', companyIds)
+          ? supabase.from('companies').select('*').in('id', companyIds).limit(200)
           : Promise.resolve({ data: [] as unknown[], error: null }),
-        supabase.from('interactions').select('*').in('contact_id', contactIds).order('created_at', { ascending: false }).limit(50),
-        supabase.from('client_values').select('*').in('contact_id', contactIds).order('importance', { ascending: false }),
-        supabase.from('hidden_objections').select('*').in('contact_id', contactIds).eq('resolved', false),
-        supabase.from('vak_analysis_history').select('*').in('contact_id', contactIds).order('created_at', { ascending: false })
+        supabase.from('interactions').select('id, contact_id, content, transcription, title, created_at').eq('user_id', user!.id).in('contact_id', contactIds).order('created_at', { ascending: false }).limit(50),
+        supabase.from('client_values').select('contact_id, value_name').in('contact_id', contactIds).eq('user_id', user!.id).order('importance', { ascending: false }).limit(100),
+        supabase.from('hidden_objections').select('contact_id, objection_type').in('contact_id', contactIds).eq('user_id', user!.id).eq('resolved', false).limit(100),
+        supabase.from('vak_analysis_history').select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score').in('contact_id', contactIds).eq('user_id', user!.id).order('created_at', { ascending: false }).limit(50)
       ]);
 
       const companies = (companiesResult.data || []) as Record<string, unknown>[];

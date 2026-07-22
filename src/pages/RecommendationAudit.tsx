@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -20,8 +21,10 @@ interface AuditLog {
 }
 
 export default function RecommendationAudit() {
+  const { user } = useAuth();
   const { data: logs = [], isLoading } = useQuery<AuditLog[]>({
-    queryKey: ['ai-recommendation-audit-logs'],
+    queryKey: ['ai-recommendation-audit-logs', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('ai_recommendation_audit_logs_v2')
@@ -29,12 +32,15 @@ export default function RecommendationAudit() {
           *,
           contacts:contact_id (first_name, last_name, avatar_url)
         `)
+        .eq('user_id', user!.id)
         .order('created_at', { ascending: false })
         .limit(100);
 
       if (error) throw error;
       return (data ?? []) as unknown as AuditLog[];
-    }
+    },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   return (

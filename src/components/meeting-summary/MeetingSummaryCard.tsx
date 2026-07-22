@@ -29,7 +29,7 @@ export function MeetingSummaryCard({ interactionId, hasContent }: Props) {
       <Button
         variant="outline"
         size="sm"
-        onClick={() => generate(interactionId)}
+        onClick={() => { generate(interactionId).catch(() => {}); }}
         disabled={generating}
         className="gap-1.5 text-xs"
       >
@@ -57,9 +57,9 @@ export function MeetingSummaryCard({ interactionId, hasContent }: Props) {
             </span>
             <Button
               variant="ghost"
-              size="icon"
+              size="icon" aria-label="Atualizar"
               className="h-6 w-6"
-              onClick={() => generate(interactionId)}
+              onClick={() => { generate(interactionId).catch(() => {}); }}
               disabled={generating}
               title="Regenerar"
             >
@@ -83,7 +83,7 @@ export function MeetingSummaryCard({ interactionId, hasContent }: Props) {
         {summary.topics.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {summary.topics.map((t, i) => (
-              <Badge key={i} variant="secondary" className="text-[10px]">{t}</Badge>
+              <Badge key={`${t}-${i}`} variant="secondary" className="text-[10px]">{t}</Badge>
             ))}
           </div>
         )}
@@ -96,7 +96,7 @@ export function MeetingSummaryCard({ interactionId, hasContent }: Props) {
             </p>
             <ul className="space-y-0.5">
               {summary.key_decisions.map((d, i) => (
-                <li key={i} className="text-xs text-foreground flex items-start gap-1.5">
+                <li key={`${d}-${i}`} className="text-xs text-foreground flex items-start gap-1.5">
                   <CheckCircle2 className="h-3 w-3 text-success mt-0.5 shrink-0" />
                   {d}
                 </li>
@@ -113,7 +113,7 @@ export function MeetingSummaryCard({ interactionId, hasContent }: Props) {
             </p>
             <ul className="space-y-1">
               {summary.action_items.map((item, i) => (
-                <li key={i} className="text-xs flex items-start gap-1.5 bg-background/50 rounded p-1.5">
+                <li key={`${item.task}-${i}`} className="text-xs flex items-start gap-1.5 bg-background/50 rounded p-1.5">
                   <Circle className="h-3 w-3 text-warning mt-0.5 shrink-0" />
                   <div className="min-w-0">
                     <span className="text-foreground">{item.task}</span>
@@ -140,7 +140,7 @@ export function MeetingSummaryCard({ interactionId, hasContent }: Props) {
             </p>
             <ul className="space-y-0.5">
               {summary.next_steps.map((s, i) => (
-                <li key={i} className="text-xs text-foreground flex items-start gap-1.5">
+                <li key={`${s}-${i}`} className="text-xs text-foreground flex items-start gap-1.5">
                   <ArrowRight className="h-3 w-3 text-primary mt-0.5 shrink-0" />
                   {s}
                 </li>

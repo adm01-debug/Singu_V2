@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 const SLA_MINUTES = 30;
-const DEDUP_KEY = "mtta_sla_breach_snapshot_day";
-const ALERT_DEDUP_KEY = "mtta_sla_breach_alert_day";
+const BASE_DEDUP_KEY = "mtta_sla_breach_snapshot_day";
+const BASE_ALERT_DEDUP_KEY = "mtta_sla_breach_alert_day";
 
 /**
  * Registra um snapshot em `system_health_snapshots` quando o MTTA crítico
@@ -14,12 +15,16 @@ const ALERT_DEDUP_KEY = "mtta_sla_breach_alert_day";
  * usuários não-admin apenas ignoram o insert.
  */
 export function useMttaSlaBreachSnapshot(mttaCriticalMinutes: number | null): void {
+  const { user } = useAuth();
   const inFlight = useRef(false);
 
   useEffect(() => {
     if (mttaCriticalMinutes === null || mttaCriticalMinutes <= SLA_MINUTES) return;
     if (inFlight.current) return;
 
+    const uid = user?.id ?? 'anon';
+    const DEDUP_KEY = `${BASE_DEDUP_KEY}-${uid}`;
+    const ALERT_DEDUP_KEY = `${BASE_ALERT_DEDUP_KEY}-${uid}`;
     const today = new Date().toISOString().slice(0, 10);
     const readKey = (k: string): string | null => {
       try {
@@ -40,9 +45,10 @@ export function useMttaSlaBreachSnapshot(mttaCriticalMinutes: number | null): vo
     if (!needSnapshot && !needAlert) return;
 
     inFlight.current = true;
+    let aborted = false;
     void (async () => {
       try {
-        if (needSnapshot) {
+        if (needSnapshot && !aborted) {
           const { error } = await supabase.from("system_health_snapshots").insert({
             status: "degraded",
             components: {
@@ -53,19 +59,23 @@ export function useMttaSlaBreachSnapshot(mttaCriticalMinutes: number | null): vo
               breach: true,
             },
           });
-          if (!error) writeKey(DEDUP_KEY);
+          if (!error && !aborted) writeKey(DEDUP_KEY);
         }
-        if (needAlert) {
+        if (needAlert && !aborted) {
           // Publica alerta na trilha de auditoria (dedup 24h + auto-ack server-side).
           const { error } = await supabase.rpc("publish_mtta_sla_breach_alert", {
             _mtta_minutes: mttaCriticalMinutes,
             _sla_minutes: SLA_MINUTES,
           });
-          if (!error) writeKey(ALERT_DEDUP_KEY);
+          if (!error && !aborted) writeKey(ALERT_DEDUP_KEY);
         }
       } finally {
-        inFlight.current = false;
+        if (!aborted) inFlight.current = false;
       }
     })();
-  }, [mttaCriticalMinutes]);
+    return () => {
+      aborted = true;
+      inFlight.current = false;
+    };
+  }, [mttaCriticalMinutes, user]);
 }

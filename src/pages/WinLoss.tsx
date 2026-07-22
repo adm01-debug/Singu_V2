@@ -13,6 +13,7 @@ import { WinLossRecordsTable } from '@/components/win-loss/WinLossRecordsTable';
 import { WinLossInsightCard } from '@/components/win-loss/WinLossInsightCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 import { Helmet } from 'react-helmet-async';
 
 export default function WinLoss() {
@@ -35,7 +36,7 @@ export default function WinLoss() {
         toast.success(`${count} insights gerados`);
       }
     } catch (e) {
-      toast.error('Erro ao gerar insights', { description: e instanceof Error ? e.message : '' });
+      toast.error('Erro ao gerar insights', { description: parseApiError(e) });
     }
   };
 

@@ -13,20 +13,23 @@ export function useAllowedIPs() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('ip_whitelist')
-        .select('*')
+        .select('id, user_id, ip_address, label, is_active')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(200);
       if (error) return [];
       return Array.isArray(data) ? data : [];
     },
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const addIP = useMutation({
     mutationFn: async ({ ip, label }: { ip: string; label?: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('ip_whitelist').insert({
-        user_id: user!.id, ip_address: ip, label: label ?? null,
+        user_id: user.id, ip_address: ip, label: label ?? null,
       });
       if (error) throw error;
     },
@@ -36,7 +39,7 @@ export function useAllowedIPs() {
 
   const removeIP = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('ip_whitelist').delete().eq('id', id);
+      const { error } = await supabase.from('ip_whitelist').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { toast.success('IP removido.'); qc.invalidateQueries({ queryKey: ['allowed-ips'] }); },
@@ -45,7 +48,7 @@ export function useAllowedIPs() {
 
   const toggleIP = useMutation({
     mutationFn: async ({ id, active }: { id: string; active: boolean }) => {
-      const { error } = await supabase.from('ip_whitelist').update({ is_active: active }).eq('id', id);
+      const { error } = await supabase.from('ip_whitelist').update({ is_active: active }).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['allowed-ips'] }),

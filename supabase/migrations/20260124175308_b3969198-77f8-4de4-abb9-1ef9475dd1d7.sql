@@ -132,13 +132,13 @@ CREATE POLICY "Users can update their own scraping schedule" ON public.social_sc
 CREATE POLICY "Users can delete their own scraping schedule" ON public.social_scraping_schedule FOR DELETE USING (auth.uid() = user_id);
 
 -- Índices para performance
-CREATE INDEX idx_social_profiles_contact ON public.social_profiles(contact_id);
-CREATE INDEX idx_social_profiles_platform ON public.social_profiles(platform);
-CREATE INDEX idx_social_life_events_contact ON public.social_life_events(contact_id);
-CREATE INDEX idx_social_life_events_type ON public.social_life_events(event_type);
-CREATE INDEX idx_social_life_events_date ON public.social_life_events(event_date);
-CREATE INDEX idx_social_behavior_analysis_contact ON public.social_behavior_analysis(contact_id);
-CREATE INDEX idx_social_scraping_schedule_next ON public.social_scraping_schedule(next_run_at) WHERE enabled = true;
+CREATE INDEX IF NOT EXISTS idx_social_profiles_contact ON public.social_profiles(contact_id);
+CREATE INDEX IF NOT EXISTS idx_social_profiles_platform ON public.social_profiles(platform);
+CREATE INDEX IF NOT EXISTS idx_social_life_events_contact ON public.social_life_events(contact_id);
+CREATE INDEX IF NOT EXISTS idx_social_life_events_type ON public.social_life_events(event_type);
+CREATE INDEX IF NOT EXISTS idx_social_life_events_date ON public.social_life_events(event_date);
+CREATE INDEX IF NOT EXISTS idx_social_behavior_analysis_contact ON public.social_behavior_analysis(contact_id);
+CREATE INDEX IF NOT EXISTS idx_social_scraping_schedule_next ON public.social_scraping_schedule(next_run_at) WHERE enabled = true;
 
 -- Trigger para updated_at
 CREATE TRIGGER update_social_profiles_updated_at BEFORE UPDATE ON public.social_profiles FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { sanitizeTags as sanitizeTagsLib, type InteractionTag } from '@/lib/interactionTags';
+import { periodLabelShort } from '@/lib/ficha360Formatters';
+import { useAuth } from '@/hooks/useAuth';
 
-const STORAGE_KEY = 'ficha360-filter-favorites-v1';
+const BASE_STORAGE_KEY = 'ficha360-filter-favorites-v1';
 const MAX_FAVORITES = 10;
 const VALID_DAYS = [7, 30, 90, 365] as const;
 const VALID_CHANNELS = ['whatsapp', 'call', 'email', 'meeting', 'note'] as const;
@@ -72,10 +74,10 @@ function normalizeQ(q: string | undefined | null): string {
   return (q ?? '').trim();
 }
 
-function readAll(): FilterFavorite[] {
+function readAll(storageKey: string): FilterFavorite[] {
   if (typeof window === 'undefined') return [];
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw = window.localStorage.getItem(storageKey);
     if (!raw) return [];
     const parsed: unknown = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
@@ -105,9 +107,9 @@ function readAll(): FilterFavorite[] {
   }
 }
 
-function writeAll(items: FilterFavorite[]): void {
+function writeAll(storageKey: string, items: FilterFavorite[]): void {
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    window.localStorage.setItem(storageKey, JSON.stringify(items));
   } catch {
     /* noop */
   }
@@ -227,21 +229,27 @@ export function buildFavoriteShareUrl(token: string): string {
  * em localStorage, com sincronização entre abas via evento `storage`.
  */
 export function useFicha360FilterFavorites() {
-  const [favorites, setFavorites] = useState<FilterFavorite[]>(() => readAll());
+  const { user } = useAuth();
+  const storageKey = `${BASE_STORAGE_KEY}-${user?.id ?? 'anon'}`;
+  const [favorites, setFavorites] = useState<FilterFavorite[]>([]);
+
+  useEffect(() => {
+    setFavorites(readAll(storageKey));
+  }, [storageKey]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const onStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY) setFavorites(readAll());
+      if (e.key === storageKey) setFavorites(readAll(storageKey));
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
-  }, []);
+  }, [storageKey]);
 
   const persist = useCallback((next: FilterFavorite[]) => {
     setFavorites(next);
-    writeAll(next);
-  }, []);
+    writeAll(storageKey, next);
+  }, [storageKey]);
 
   const findMatch = useCallback(
     (
@@ -471,8 +479,7 @@ export function suggestFavoriteName(
   tags: InteractionTag[] = [],
   q?: string,
 ): string {
-  const periodLabel =
-    days === 7 ? '7d' : days === 30 ? '30d' : days === 365 ? '1a' : '90d';
+  const periodLabel = periodLabelShort(days);
   const labels: Record<string, string> = {
     whatsapp: 'WhatsApp',
     call: 'Ligação',

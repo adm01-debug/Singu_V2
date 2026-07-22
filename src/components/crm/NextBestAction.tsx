@@ -33,6 +33,7 @@ import { useEdgeFunctionActions } from '@/hooks/useEdgeFunctionActions';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -78,15 +79,18 @@ export function NextBestAction({ contactId }: Props) {
      queryFn: async () => {
        const { data, error } = await supabase
          .from('contact_predictive_roadmap')
-         .select('*')
+         .select('id, contact_id, created_at, forecast_month, predicted_need, probability, rationale, suggested_offering, updated_at, user_id')
          .eq('contact_id', contactId)
-         .order('forecast_month', { ascending: true });
+         .order('forecast_month', { ascending: true })
+         .limit(24);
        
        if (error) throw error;
        return data;
-     }
+     },
+     staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
- 
+
    const commonObjections = useMemo(() => [
     { id: 'price', label: 'Preço / Orçamento', icon: '💰' },
     { id: 'timing', label: 'Não é o momento', icon: '⏳' },
@@ -156,16 +160,19 @@ export function NextBestAction({ contactId }: Props) {
       setFeedback('');
       setScript('');
     } catch (error) {
-      const msg = error instanceof Error ? error.message : String(error);
-      toast.error('Erro ao concluir ação: ' + msg);
+      toast.error(parseApiError(error, 'Erro ao concluir ação'));
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success('Copiado para a área de transferência');
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success('Copiado para a área de transferência');
+    } catch {
+      toast.error('Não foi possível copiar');
+    }
   };
 
    return (
@@ -265,7 +272,7 @@ export function NextBestAction({ contactId }: Props) {
                          <Progress value={suggestion.confidence || 85} className="h-1 w-16" />
                        </div>
                      </div>
-                     <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(script)}>
+                     <Button variant="ghost" size="icon" aria-label="Copiar" className="h-6 w-6" onClick={() => copyToClipboard(script)}>
                        <Copy className="h-3 w-3" />
                      </Button>
                    </div>

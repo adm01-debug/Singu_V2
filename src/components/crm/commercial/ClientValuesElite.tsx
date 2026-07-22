@@ -30,13 +30,16 @@ export function ClientValuesElite({ contactId }: Props) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('client_values')
-        .select('*')
+        .select('id, category, contact_id, created_at, detected_phrases, frequency, importance, last_mentioned, updated_at, user_id, value_name')
         .eq('contact_id', contactId)
-        .order('importance', { ascending: false });
+        .order('importance', { ascending: false })
+        .limit(50);
       
       if (error) throw error;
       return data;
-    }
+    },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   if (isLoading) {

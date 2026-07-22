@@ -50,6 +50,7 @@ export function ContactEmailThreadsSection({ contactId }: Props) {
       return (data ?? []) as EmailRow[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const threads = useMemo<ThreadGroup[]>(() => {

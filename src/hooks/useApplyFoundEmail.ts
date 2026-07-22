@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { insertExternalData, queryExternalData } from "@/lib/externalData";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 
 interface ApplyEmailVars {
   contactId: string;
@@ -68,7 +69,7 @@ export function useApplyFoundEmail() {
     },
     onError: (err: Error) => {
       logger.error("apply-found-email error", err);
-      toast.error(err.message || "Erro ao aplicar email no contato");
+      toast.error(parseApiError(err, "Erro ao aplicar email no contato"));
     },
   });
 }

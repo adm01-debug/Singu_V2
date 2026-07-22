@@ -91,13 +91,17 @@ export interface CommandAction {
   event?: string;
 }
 
-export const RECENT_KEY = 'singu-cmdk-recent-v1';
+export const RECENT_KEY_PREFIX = 'singu-cmdk-recent-v1';
 export const RECENT_LIMIT = 5;
 
-export function readRecent(): string[] {
+function recentKey(userId?: string) {
+  return `${RECENT_KEY_PREFIX}-${userId ?? 'anon'}`;
+}
+
+export function readRecent(userId?: string): string[] {
   if (typeof window === 'undefined') return [];
   try {
-    const raw = window.localStorage.getItem(RECENT_KEY);
+    const raw = window.localStorage.getItem(recentKey(userId));
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed.slice(0, RECENT_LIMIT) : [];
@@ -106,11 +110,12 @@ export function readRecent(): string[] {
   }
 }
 
-export function pushRecent(id: string) {
+export function pushRecent(id: string, userId?: string) {
   try {
-    const cur = readRecent().filter((x) => x !== id);
+    const key = recentKey(userId);
+    const cur = readRecent(userId).filter((x) => x !== id);
     cur.unshift(id);
-    window.localStorage.setItem(RECENT_KEY, JSON.stringify(cur.slice(0, RECENT_LIMIT)));
+    window.localStorage.setItem(key, JSON.stringify(cur.slice(0, RECENT_LIMIT)));
   } catch {
     /* noop */
   }

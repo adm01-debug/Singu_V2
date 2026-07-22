@@ -11,24 +11,30 @@ export function useDISCConversionMetrics() {
   const [metrics, setMetrics] = useState<DISCConversionMetric[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchMetrics = useCallback(async () => {
+  const fetchMetrics = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
     try {
       const { data, error } = await supabase
         .from('disc_conversion_metrics')
         .select('*')
         .eq('user_id', user.id)
-        .order('conversion_rate', { ascending: false });
+        .order('conversion_rate', { ascending: false })
+        .limit(200);
+      if (signal?.cancelled) return;
       if (error) throw error;
       setMetrics(data || []);
     } catch (err) {
-      logger.error('Error fetching DISC conversion metrics:', err);
+      if (!signal?.cancelled) logger.error('Error fetching DISC conversion metrics:', err);
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user]);
 
-  useEffect(() => { fetchMetrics(); }, [fetchMetrics]);
+  useEffect(() => {
+    const signal = { cancelled: false };
+    fetchMetrics(signal);
+    return () => { signal.cancelled = true; };
+  }, [fetchMetrics]);
 
   const bestProfile = metrics.length > 0 ? metrics[0] : null;
   const totalContacts = metrics.reduce((sum, m) => sum + m.total_contacts, 0);

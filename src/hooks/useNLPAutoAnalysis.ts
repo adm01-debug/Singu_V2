@@ -150,13 +150,15 @@ export function useNLPAutoAnalysis() {
            vak_profile,
            metaprogram_profile
          })
+         .eq('user_id', user!.id)
          .eq('id', contactId)
          .select('company_id')
           .maybeSingle();
 
       // Sync to company if linked
       if (contactData?.company_id) {
-        await supabase.from('companies').update(behavioralUpdates as never).eq('id', contactData.company_id);
+        const { error: companyError } = await supabase.from('companies').update(behavioralUpdates as never).eq('user_id', user!.id).eq('id', contactData.company_id);
+        if (companyError) logger.error('Error syncing behavioral data to company:', { error: companyError.message });
       }
 
       // 5. Calculate overall confidence
@@ -240,7 +242,8 @@ export function useNLPAutoAnalysis() {
         .select('id, type, content, transcription')
         .eq('contact_id', contactId)
         .eq('user_id', user.id)
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: true })
+        .limit(200);
 
       if (error) throw error;
       if (!interactions) return { analyzed: 0, total: 0 };

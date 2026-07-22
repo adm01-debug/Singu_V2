@@ -54,17 +54,19 @@ export default function PublicSurvey() {
   }, [token]);
 
   const handleSubmit = async () => {
-    if (score === null || !survey) return;
+    if (score === null || !survey || !token) return;
+    if (score < 0 || score > 10 || !Number.isInteger(score)) return;
     setSubmitting(true);
     const { error } = await supabase
       .from('csat_surveys')
       .update({
         score,
-        feedback: feedback.trim() || null,
+        feedback: feedback.trim().slice(0, 1000) || null,
         status: 'answered',
         answered_at: new Date().toISOString(),
       })
-      .eq('id', survey.id);
+      .eq('id', survey.id)
+      .eq('public_token', token);
     setSubmitting(false);
     if (error) {
       toast.error('Não foi possível registrar sua resposta. Tente novamente.');

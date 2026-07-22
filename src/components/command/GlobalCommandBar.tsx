@@ -12,6 +12,7 @@ import {
 import { cn } from '@/lib/utils';
 import { COMMAND_ROUTES, pushRecent, readRecent, type CommandAction, type CommandRoute } from './commandRegistry';
 import { useGlobalDensity } from '@/hooks/useGlobalDensity';
+import { useAuth } from '@/hooks/useAuth';
 
 type Mode = 'navigate' | 'actions' | 'search' | 'ask';
 
@@ -36,8 +37,9 @@ export function GlobalCommandBar({ open, onOpenChange, onOpenLegacySearch, onOpe
   const [mode, setMode] = useState<Mode>('navigate');
   const [query, setQuery] = useState('');
   const { toggle: toggleDensity, isCompact } = useGlobalDensity();
+  const { user } = useAuth();
 
-  const recentIds = useMemo(() => (open ? readRecent() : []), [open]);
+  const recentIds = useMemo(() => (open ? readRecent(user?.id) : []), [open, user?.id]);
 
   const close = useCallback(() => {
     onOpenChange(false);
@@ -46,11 +48,11 @@ export function GlobalCommandBar({ open, onOpenChange, onOpenLegacySearch, onOpe
 
   const goto = useCallback(
     (route: CommandRoute) => {
-      pushRecent(route.id);
+      pushRecent(route.id, user?.id);
       navigate(route.url);
       close();
     },
-    [navigate, close],
+    [navigate, close, user?.id],
   );
 
   const actions: CommandAction[] = useMemo(

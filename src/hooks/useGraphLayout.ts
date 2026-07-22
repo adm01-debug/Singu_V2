@@ -1,6 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
-const STORAGE_KEY = 'intel-graph-layout-v1';
+const BASE_KEY = 'intel-graph-layout-v1';
 
 export interface GraphLayoutState {
   period: string;
@@ -11,9 +12,9 @@ export interface GraphLayoutState {
   savedAt: number;
 }
 
-function read(): GraphLayoutState | null {
+function read(storageKey: string): GraphLayoutState | null {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as Partial<GraphLayoutState>;
     if (!parsed || parsed.v !== 1) return null;
@@ -29,32 +30,40 @@ function read(): GraphLayoutState | null {
   }
 }
 
-function write(state: GraphLayoutState): void {
+function write(storageKey: string, state: GraphLayoutState): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(storageKey, JSON.stringify(state));
   } catch {
     /* ignore */
   }
 }
 
 /**
- * Persistência simples do layout/filtros do Graph.
+ * Persistência simples do layout/filtros do Graph, isolada por usuário.
  * Não captura zoom/pan (o NetworkVisualization recalcula internamente),
  * mas restaura período + tipo + score, que é o estado visualmente significativo.
  */
 export function useGraphLayout() {
-  const [saved, setSaved] = useState<GraphLayoutState | null>(() => read());
+  const { user } = useAuth();
+  const storageKey = `${BASE_KEY}-${user?.id ?? 'anon'}`;
+
+  const [saved, setSaved] = useState<GraphLayoutState | null>(() => read(storageKey));
+
+  // Re-hydrate when user changes (login/logout)
+  useEffect(() => {
+    setSaved(read(storageKey));
+  }, [storageKey]);
 
   const save = useCallback((state: Omit<GraphLayoutState, 'v' | 'savedAt'>) => {
     const next: GraphLayoutState = { ...state, v: 1, savedAt: Date.now() };
-    write(next);
+    write(storageKey, next);
     setSaved(next);
-  }, []);
+  }, [storageKey]);
 
   const clear = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY);
+    try { localStorage.removeItem(storageKey); } catch { /* ignore */ }
     setSaved(null);
-  }, []);
+  }, [storageKey]);
 
   return { saved, save, clear };
 }

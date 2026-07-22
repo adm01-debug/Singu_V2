@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface ConversationSummaryPendency {
   item: string;
@@ -93,7 +94,7 @@ export function useFicha360ConversationSummary(contactId?: string) {
         qc.invalidateQueries({ queryKey: ['f360-summary-history', contactId] });
       }
     },
-    onError: (e: Error) => toast.error(e.message ?? 'Erro ao gerar resumo'),
+    onError: (e: Error) => toast.error(parseApiError(e, 'Erro ao gerar resumo')),
   });
 
   const history = useQuery({

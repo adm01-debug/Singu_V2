@@ -10,6 +10,8 @@ import { supabase } from '@/integrations/supabase/client';
  import { Download, CheckCircle2 } from 'lucide-react';
  import { OptimizedImage } from '@/components/ui/optimized-image';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
+import { safehref } from '@/lib/utils';
 import type { LeadMagnet } from '@/hooks/useLeadMagnets';
 
 export default function PublicLeadMagnet() {
@@ -26,11 +28,11 @@ export default function PublicLeadMagnet() {
     let cancelled = false;
     const currentSlug = slug;
     (async () => {
-      const { data } = await supabase.from('lead_magnets').select('*').eq('slug', currentSlug).eq('is_published', true).maybeSingle();
+      const { data } = await supabase.from('lead_magnets').select('id, user_id, title, slug, description, type, file_path, external_url, thumbnail_url, gated, form_id, download_count, view_count, is_published, created_at, updated_at').eq('slug', currentSlug).eq('is_published', true).maybeSingle();
       if (cancelled) return;
       if (data) {
         setMagnet(data as unknown as LeadMagnet);
-        void supabase.rpc('increment_magnet_view', { _slug: currentSlug });
+        supabase.rpc('increment_magnet_view', { _slug: currentSlug }).catch(() => {});
       }
       setLoading(false);
     })();
@@ -40,6 +42,8 @@ export default function PublicLeadMagnet() {
   const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!slug) return;
+    const atIdx = email.indexOf('@');
+    if (atIdx < 1 || atIdx === email.length - 1 || !email.slice(atIdx + 1).includes('.')) return;
     setSubmitting(true);
     try {
       const params = new URLSearchParams(window.location.search);
@@ -55,9 +59,10 @@ export default function PublicLeadMagnet() {
       const result = data as { external_url?: string; file_path?: string };
       const downloadUrl = result?.external_url || result?.file_path || '';
       setDownloaded(downloadUrl);
-      if (downloadUrl) window.open(downloadUrl, '_blank');
+      const safeUrl = safehref(downloadUrl);
+      if (safeUrl !== '#') window.open(safeUrl, '_blank', 'noopener,noreferrer');
     } catch (err) {
-      toast.error((err as Error).message);
+      toast.error(parseApiError(err));
     } finally {
       setSubmitting(false);
     }

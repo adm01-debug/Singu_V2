@@ -54,12 +54,14 @@ function SentimentExamplesDrawerImpl({ bucket, interactionIds, onClose }: Props)
     queryKey: ["sentiment-examples", bucket, idsKey],
     enabled: !!bucket && limitedIds.length > 0,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<Example[]> => {
       const { data, error } = await supabase
         .from("interactions")
         .select("id, title, type, created_at, content, contact_id, sentiment")
         .in("id", limitedIds)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(500);
       if (error) throw error;
       return Array.isArray(data) ? (data as Example[]) : [];
     },

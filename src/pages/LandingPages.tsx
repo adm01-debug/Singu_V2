@@ -1,4 +1,5 @@
- import { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
+import type { Json } from '@/integrations/supabase/types';
  import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
  import { Plus, Globe, Eye, Trash2, ExternalLink, Copy, BarChart3, FileText, Layout } from 'lucide-react';
@@ -53,8 +54,9 @@ export default function LandingPages() {
 
   const copyUrl = (slug: string) => {
     const url = `${window.location.origin}/lp/${slug}`;
-    navigator.clipboard.writeText(url);
-    toast.success('URL copiada!');
+    navigator.clipboard.writeText(url)
+      .then(() => toast.success('URL copiada!'))
+      .catch(() => toast.error('Não foi possível copiar'));
   };
 
   return (
@@ -161,7 +163,7 @@ export default function LandingPages() {
                           onCheckedChange={(v) => togglePublish.mutate({ id: p.id, publish: v })}
                         />
                       </div>
-                      <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-destructive" onClick={() => remove.mutate(p.id)}>
+                      <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-destructive" aria-label="Excluir landing page" onClick={() => remove.mutate(p.id)}>
                         <Trash2 className="w-3.5 h-3.5" />
                       </Button>
                     </div>
@@ -194,7 +196,7 @@ export default function LandingPages() {
             {editing && (
               <LandingPageEditor
                 page={editing}
-                onSave={(blocks, theme) => update.mutate({ id: editing.id, blocks: blocks as never, theme: theme as never })}
+                onSave={(blocks, theme) => update.mutate({ id: editing.id, blocks: blocks as unknown as Json, theme: theme as unknown as Json })}
                 isSaving={update.isPending}
               />
             )}

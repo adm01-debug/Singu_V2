@@ -14,7 +14,8 @@ export default function RolePermissionsPage() {
     queryFn: async () => {
       const { data: rp, error } = await supabase
         .from('role_permissions')
-        .select('role, permission_id, permissions(name, module, action)');
+        .select('role, permission_id, permissions(name, module, action)')
+        .limit(200);
       if (error || !Array.isArray(rp)) return [];
       return rp.map(r => ({
         role: r.role,
@@ -25,6 +26,7 @@ export default function RolePermissionsPage() {
     },
     enabled: isAdmin,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   if (adminLoading || isLoading) return <Skeleton className="h-64 m-6" />;

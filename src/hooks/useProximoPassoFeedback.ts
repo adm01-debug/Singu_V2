@@ -28,6 +28,7 @@ export function useProximoPassoFeedbacks(contactId: string | undefined) {
     queryKey: FEEDBACK_KEY(contactId ?? ''),
     enabled: !!contactId,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<PassoFeedback[]> => {
       const since = new Date(Date.now() - 30 * 86400000).toISOString();
       const { data, error } = await supabase
@@ -35,7 +36,8 @@ export function useProximoPassoFeedbacks(contactId: string | undefined) {
         .select('id, contact_id, passo_id, outcome, channel_used, notes, executed_at, created_at')
         .eq('contact_id', contactId!)
         .gte('executed_at', since)
-        .order('executed_at', { ascending: false });
+        .order('executed_at', { ascending: false })
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as PassoFeedback[];
     },

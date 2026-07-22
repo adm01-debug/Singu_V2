@@ -93,32 +93,37 @@ export function useLuxIntelligence(entityType: 'contact' | 'company', entityId?:
   const [loading, setLoading] = useState(false);
   const [triggering, setTriggering] = useState(false);
 
-  const fetchRecords = useCallback(async () => {
+  const fetchRecords = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user || !entityId) return;
     setLoading(true);
     try {
       const { data, error } = await supabase
         .from('lux_intelligence')
-        .select('*')
+        .select('id, user_id, entity_type, entity_id, status, request_type, social_profiles, social_analysis, fiscal_data, stakeholders, audience_analysis, personal_profile, ai_report, ai_summary, fields_updated, error_message, n8n_execution_id, started_at, completed_at, created_at, updated_at')
         .eq('entity_type', entityType)
         .eq('entity_id', entityId)
         .order('created_at', { ascending: false })
         .limit(10);
 
+      if (signal?.cancelled) return;
       if (error) throw error;
       const typed = (data || []) as unknown as LuxIntelligenceRecord[];
       setRecords(typed);
       setLatestRecord(typed[0] || null);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Unknown error';
-      logger.error('Error fetching lux records:', { error: msg });
+      if (!signal?.cancelled) {
+        const msg = err instanceof Error ? err.message : 'Unknown error';
+        logger.error('Error fetching lux records:', { error: msg });
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user, entityType, entityId]);
 
   useEffect(() => {
-    fetchRecords();
+    const signal = { cancelled: false };
+    fetchRecords(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchRecords]);
 
   // Poll for updates when there's a processing record

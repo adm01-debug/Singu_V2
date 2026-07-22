@@ -56,27 +56,34 @@ function useHealthAlertsFetch(userId?: string) {
   const [alerts, setAlerts] = useState<HealthAlert[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchAlerts = useCallback(async () => {
+  const fetchAlerts = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!userId) return;
     try {
       const { data, error } = await supabase
         .from('health_alerts')
-        .select('*, contact:contacts(first_name, last_name)')
+        .select('id, user_id, contact_id, alert_type, health_score, previous_score, title, description, factors, dismissed, notified_via, created_at, contact:contacts(first_name, last_name)')
         .eq('user_id', userId)
         .eq('dismissed', false)
         .order('created_at', { ascending: false })
         .limit(20);
+      if (signal?.cancelled) return;
       if (error) throw error;
       setAlerts((data || []) as unknown as HealthAlert[]);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error fetching health alerts:', { error: msg });
+      if (!signal?.cancelled) {
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching health alerts:', { error: msg });
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [userId]);
 
-  useEffect(() => { fetchAlerts(); }, [fetchAlerts]);
+  useEffect(() => {
+    const signal = { cancelled: false };
+    fetchAlerts(signal);
+    return () => { signal.cancelled = true; };
+  }, [fetchAlerts]);
 
   return { alerts, setAlerts, loading, fetchAlerts };
 }
@@ -85,25 +92,32 @@ function useHealthAlertSettingsFetch(userId?: string) {
   const [settings, setSettings] = useState<HealthAlertSettings | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchSettings = useCallback(async () => {
+  const fetchSettings = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!userId) return;
     try {
       const { data, error } = await supabase
         .from('health_alert_settings')
-        .select('*')
+        .select('id, user_id, email_notifications, push_notifications, critical_threshold, warning_threshold, check_frequency_hours, notify_on_critical, notify_on_warning, email_address')
         .eq('user_id', userId)
         .maybeSingle();
+      if (signal?.cancelled) return;
       if (error) throw error;
       setSettings(data as HealthAlertSettings | null);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error fetching health alert settings:', { error: msg });
+      if (!signal?.cancelled) {
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching health alert settings:', { error: msg });
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [userId]);
 
-  useEffect(() => { fetchSettings(); }, [fetchSettings]);
+  useEffect(() => {
+    const signal = { cancelled: false };
+    fetchSettings(signal);
+    return () => { signal.cancelled = true; };
+  }, [fetchSettings]);
 
   return { settings, setSettings, loading, fetchSettings };
 }

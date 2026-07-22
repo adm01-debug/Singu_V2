@@ -13,9 +13,13 @@ import { PublicFormRenderer } from '@/components/marketing/PublicFormRenderer';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '@/hooks/useAuth';
+import type { TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export default function MarketingFormDetail() {
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
   const { data: form, isLoading } = useForm(id);
   const { data: submissions = [] } = useFormSubmissions(id);
   const qc = useQueryClient();
@@ -29,14 +33,15 @@ export default function MarketingFormDetail() {
   if (isLoading || !draft) return <div className="container py-8 text-sm text-muted-foreground">Carregando...</div>;
 
   const save = async () => {
+    if (!user) return;
     const { error } = await supabase.from('forms').update({
       name: draft.name,
       description: draft.description,
       fields: draft.fields,
       redirect_url: draft.redirect_url,
       success_message: draft.success_message,
-    } as never).eq('id', draft.id);
-    if (error) toast.error(error.message);
+    } as TablesUpdate<'forms'>).eq('user_id', user.id).eq('id', draft.id);
+    if (error) toast.error(parseApiError(error));
     else {
       toast.success('Salvo!');
       qc.invalidateQueries({ queryKey: ['marketing-form', id] });
@@ -55,7 +60,7 @@ export default function MarketingFormDetail() {
           <Link to="/marketing"><ArrowLeft className="w-4 h-4" /> Marketing</Link>
         </Button>
         <div className="flex items-center gap-2">
-          <Button size="sm" variant="outline" className="gap-1" onClick={() => { navigator.clipboard.writeText(url); toast.success('URL copiada'); }}>
+          <Button size="sm" variant="outline" className="gap-1" onClick={() => { navigator.clipboard.writeText(url).then(() => toast.success('URL copiada')).catch(() => toast.error('Não foi possível copiar')); }}>
             <Copy className="w-4 h-4" /> Copiar URL
           </Button>
           {draft.is_published && (

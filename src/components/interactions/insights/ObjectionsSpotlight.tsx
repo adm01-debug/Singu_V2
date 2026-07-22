@@ -6,12 +6,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { parseApiError } from '@/lib/errorMessages';
 import type { ObjectionAggregate } from "@/hooks/useInteractionsInsights";
 import { ObjectionExamplesModal } from "./ObjectionExamplesModal";
 import { SuggestedResponseModal } from "./SuggestedResponseModal";
 import { useMarkObjectionHandled } from "@/hooks/useMarkObjectionHandled";
 import { usePersistentBoolean } from "@/hooks/usePersistentBoolean";
 import { useObjectionContextSummary } from "@/hooks/useObjectionContextSummary";
+import { useAuth } from "@/hooks/useAuth";
 import { useObjectionExampleFeedback } from "@/hooks/useObjectionExampleFeedback";
 import { useAppliedResponses } from "@/hooks/useAppliedResponses";
 
@@ -93,13 +95,15 @@ interface ObjectionCardProps {
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const ObjectionCard = memo(function ObjectionCard({ o }: ObjectionCardProps) {
+  const { user } = useAuth();
+  const uid = user?.id ?? 'anon';
   const [expanded, setExpanded] = usePersistentBoolean(
-    objectionStorageKey("objection-suggested-expanded", o.objection),
+    `${objectionStorageKey("objection-suggested-expanded", o.objection)}-${uid}`,
     false,
   );
   // Aba ativa do bloco "Resposta sugerida": true = "Resumo", false = "Resposta".
   const [summaryActive, setSummaryActive] = usePersistentBoolean(
-    objectionStorageKey("objection-summary-active", o.objection),
+    `${objectionStorageKey("objection-summary-active", o.objection)}-${uid}`,
     false,
   );
   const [copied, setCopied] = useState(false);
@@ -377,9 +381,7 @@ const ObjectionCard = memo(function ObjectionCard({ o }: ObjectionCardProps) {
                     <AlertCircle className="h-3 w-3 mt-0.5 shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p>
-                        {summaryQuery.error instanceof Error
-                          ? summaryQuery.error.message
-                          : "Não foi possível gerar o resumo."}
+                        {parseApiError(summaryQuery.error, "Não foi possível gerar o resumo.")}
                       </p>
                       <button
                         type="button"

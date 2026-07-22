@@ -396,16 +396,28 @@ Deno.serve(async (req) => {
         let query: any = client.from(table).select(select || '*', { count: countMode });
 
         if (search?.term && typeof search.term === 'string' && search.term.trim()) {
-          const term = `%${search.term.trim()}%`;
-          const columns: string[] = Array.isArray(search.columns) ? search.columns : [];
+          const term = `%${search.term.trim().slice(0, 200)}%`;
+          const columns: string[] = (Array.isArray(search.columns) ? search.columns : []).slice(0, 10);
           if (columns.length > 0) {
             query = query.or(columns.map((col: string) => `${col}.ilike.${term}`).join(','));
           }
         }
 
+        // Allowlist of safe PostgREST filter methods — prevents method injection
+        const ALLOWED_FILTER_TYPES = new Set([
+          'eq', 'neq', 'gt', 'gte', 'lt', 'lte',
+          'like', 'ilike', 'is', 'in',
+          'contains', 'overlaps', 'textSearch',
+        ]);
+
         if (Array.isArray(filters)) {
-          for (const f of filters) {
+          const cappedFilters = filters.slice(0, 20);
+          for (const f of cappedFilters) {
             if (!f.column || !f.type) continue;
+            if (!ALLOWED_FILTER_TYPES.has(f.type)) {
+              log.warn("skipping filter with disallowed type", { type: f.type });
+              continue;
+            }
             // Guard: skip filters with non-primitive values (objects/arrays except for 'in')
             if (f.type !== 'in' && typeof f.value === 'object' && f.value !== null) {
               log.warn("skipping filter with object value", { column: f.column, type: f.type });

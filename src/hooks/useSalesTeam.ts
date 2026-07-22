@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 import type { SalesTeamMember, SalesRole } from '@/types/leadRouting';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 const QUERY_KEY_BASE = ['sales-team-members'];
 
@@ -16,9 +17,11 @@ export function useSalesTeam() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('sales_team_members')
-        .select('*')
+        .select('id, user_id, profile_user_id, name, email, role, is_active, weight, max_leads_day, max_leads_total, current_lead_count, leads_today, leads_today_reset_at, last_assigned_at, territories, specializations, vacation_start, vacation_end, created_at, updated_at')
+        .eq('user_id', user.id)
         .order('role', { ascending: true })
-        .order('name', { ascending: true });
+        .order('name', { ascending: true })
+        .limit(200);
 
       if (error) {
         logger.error('Erro ao carregar equipe:', error);
@@ -28,6 +31,7 @@ export function useSalesTeam() {
     },
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -40,7 +44,7 @@ export function useCreateTeamMember() {
       if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from('sales_team_members')
-        .insert({ ...member, user_id: user.id } as never)
+        .insert({ ...member, user_id: user.id } as TablesInsert<'sales_team_members'>)
         .select()
         .maybeSingle();
       if (error) throw error;
@@ -56,13 +60,16 @@ export function useCreateTeamMember() {
 }
 
 export function useUpdateTeamMember() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<SalesTeamMember> & { id: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from('sales_team_members')
-        .update(updates as never)
+        .update(updates as TablesUpdate<'sales_team_members'>)
+        .eq('user_id', user.id)
         .eq('id', id)
         .select()
         .maybeSingle();
@@ -79,13 +86,16 @@ export function useUpdateTeamMember() {
 }
 
 export function useDeleteTeamMember() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   return useMutation({
     mutationFn: async (id: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('sales_team_members')
         .delete()
+        .eq('user_id', user.id)
         .eq('id', id);
       if (error) throw error;
     },
@@ -106,8 +116,10 @@ export function useActiveTeamByRole(role?: SalesRole) {
       if (!user) return [];
       let query = supabase
         .from('sales_team_members')
-        .select('*')
-        .eq('is_active', true);
+        .select('id, user_id, profile_user_id, name, email, role, is_active, weight, max_leads_day, max_leads_total, current_lead_count, leads_today, leads_today_reset_at, last_assigned_at, territories, specializations, vacation_start, vacation_end, created_at, updated_at')
+        .eq('user_id', user.id)
+        .eq('is_active', true)
+        .limit(200);
 
       if (role) query = query.eq('role', role);
 
@@ -126,5 +138,6 @@ export function useActiveTeamByRole(role?: SalesRole) {
     },
     enabled: !!user,
     staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }

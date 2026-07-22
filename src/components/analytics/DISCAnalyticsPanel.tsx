@@ -30,14 +30,15 @@ const DISCAnalyticsPanel = () => {
   const [contacts, setContacts] = useState<ContactWithDISC[]>([]);
   const [stats, setStats] = useState({ totalProfiled: 0, avgConfidence: 0, mostCommon: 'I' as DISCProfile, recentAnalyses: 0 });
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
     setLoading(true);
     try {
       const [{ data: contactsData }, { count: recentCount }] = await Promise.all([
-        supabase.from('contacts').select('id, first_name, last_name, avatar_url, behavior, relationship_score, companies(name)').eq('user_id', user.id),
+        supabase.from('contacts').select('id, first_name, last_name, avatar_url, behavior, relationship_score, companies(name)').eq('user_id', user.id).limit(500),
         supabase.from('disc_analysis_history').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('analyzed_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
       ]);
+      if (signal?.cancelled) return;
       const mappedContacts: ContactWithDISC[] = (contactsData || []).map(c => {
         const behavior = getContactBehavior(c);
         return { id: c.id, firstName: c.first_name, lastName: c.last_name, avatar: c.avatar_url || undefined, discProfile: behavior?.discProfile as DISCProfile, discConfidence: behavior?.discConfidence, relationshipScore: c.relationship_score || 0, companyName: (c.companies as { name: string } | null)?.name };
@@ -59,7 +60,11 @@ const DISCAnalyticsPanel = () => {
     } finally { setLoading(false); }
   }, [user, fetchDashboardData]);
 
-  useEffect(() => { loadData(); }, [loadData]);
+  useEffect(() => {
+    const signal = { cancelled: false };
+    loadData(signal);
+    return () => { signal.cancelled = true; };
+  }, [loadData]);
 
   if (loading) return (<div className="space-y-6"><div className="grid grid-cols-2 md:grid-cols-4 gap-4">{[1,2,3,4].map(i => <Skeleton key={i} className="h-28" />)}</div><div className="grid grid-cols-1 lg:grid-cols-2 gap-6">{[1,2,3,4].map(i => <Skeleton key={i} className="h-80" />)}</div></div>);
 

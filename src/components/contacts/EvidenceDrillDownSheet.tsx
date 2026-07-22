@@ -7,6 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEvidenceForLabel, type EvidenceHit } from '@/hooks/useEvidenceForLabel';
 import { InsightFeedbackControls } from './InsightFeedbackControls';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type EvidenceKind = 'preference' | 'hobby' | 'tone';
 
@@ -138,7 +139,7 @@ export function EvidenceDrillDownSheet({ contactId, context, onOpenChange }: Pro
             )}
 
             {error && (
-              <p className="text-sm text-destructive">Erro ao buscar evidências: {(error as Error).message}</p>
+              <p className="text-sm text-destructive">{parseApiError(error, 'Erro ao buscar evidências')}</p>
             )}
 
             {!isLoading && !error && hits.length === 0 && (

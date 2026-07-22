@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface BusinessAlert {
   alert_type: string;
@@ -23,8 +24,10 @@ const SEVERITY_MAP: Record<string, BusinessAlert['severity']> = {
 };
 
 export function useBusinessAlerts() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['business-alerts'],
+    queryKey: ['business-alerts', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await callExternalRpc<Record<string, unknown>[]>(
         'get_business_alerts',

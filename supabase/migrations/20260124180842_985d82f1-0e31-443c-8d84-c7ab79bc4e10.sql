@@ -133,13 +133,13 @@ CREATE TABLE public.rfm_metrics (
 );
 
 -- Índices para performance
-CREATE INDEX idx_rfm_analysis_user ON public.rfm_analysis(user_id);
-CREATE INDEX idx_rfm_analysis_contact ON public.rfm_analysis(contact_id);
-CREATE INDEX idx_rfm_analysis_segment ON public.rfm_analysis(segment);
-CREATE INDEX idx_rfm_analysis_scores ON public.rfm_analysis(recency_score, frequency_score, monetary_score);
-CREATE INDEX idx_rfm_history_contact ON public.rfm_history(contact_id);
-CREATE INDEX idx_rfm_history_recorded ON public.rfm_history(recorded_at);
-CREATE INDEX idx_rfm_metrics_period ON public.rfm_metrics(user_id, period_start, period_end);
+CREATE INDEX IF NOT EXISTS idx_rfm_analysis_user ON public.rfm_analysis(user_id);
+CREATE INDEX IF NOT EXISTS idx_rfm_analysis_contact ON public.rfm_analysis(contact_id);
+CREATE INDEX IF NOT EXISTS idx_rfm_analysis_segment ON public.rfm_analysis(segment);
+CREATE INDEX IF NOT EXISTS idx_rfm_analysis_scores ON public.rfm_analysis(recency_score, frequency_score, monetary_score);
+CREATE INDEX IF NOT EXISTS idx_rfm_history_contact ON public.rfm_history(contact_id);
+CREATE INDEX IF NOT EXISTS idx_rfm_history_recorded ON public.rfm_history(recorded_at);
+CREATE INDEX IF NOT EXISTS idx_rfm_metrics_period ON public.rfm_metrics(user_id, period_start, period_end);
 
 -- Enable RLS
 ALTER TABLE public.rfm_analysis ENABLE ROW LEVEL SECURITY;

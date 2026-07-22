@@ -61,8 +61,8 @@ export function StakeholderList({ roomId }: { roomId: string }) {
                         </div>
                       </div>
                       <div className="flex flex-col gap-1">
-                        <Button variant="ghost" size="icon-sm" onClick={() => { setEditing(s); setOpen(true); }}>✎</Button>
-                        <Button variant="ghost" size="icon-sm" onClick={() => del.mutate(s.id)}><Trash2 className="h-3.5 w-3.5" /></Button>
+                        <Button variant="ghost" size="icon-sm" aria-label="Editar stakeholder" onClick={() => { setEditing(s); setOpen(true); }}>✎</Button>
+                        <Button variant="ghost" size="icon-sm" aria-label="Remover stakeholder" onClick={() => del.mutate(s.id)}><Trash2 className="h-3.5 w-3.5" /></Button>
                       </div>
                     </div>
                   </CardContent>

@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 export type IntelTheme = 'cyan' | 'amber';
-const STORAGE_KEY = 'intel-theme-v1';
+const BASE_STORAGE_KEY = 'intel-theme-v1';
 const CLASS_PREFIX = 'intel-theme-';
 
-function read(): IntelTheme {
+function read(storageKey: string): IntelTheme {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey);
     return raw === 'amber' ? 'amber' : 'cyan';
   } catch {
     return 'cyan';
@@ -20,12 +21,14 @@ function applyClass(theme: IntelTheme): void {
   root.classList.add(`${CLASS_PREFIX}${theme}`);
 }
 
-/**
- * Tema alternativo do Intelligence Hub — alterna acentos cyan ↔ âmbar.
- * Persiste em localStorage e aplica classe no <html>.
- */
 export function useIntelTheme() {
-  const [theme, setTheme] = useState<IntelTheme>(() => read());
+  const { user } = useAuth();
+  const storageKey = `${BASE_STORAGE_KEY}-${user?.id ?? 'anon'}`;
+  const [theme, setTheme] = useState<IntelTheme>('cyan');
+
+  useEffect(() => {
+    setTheme(read(storageKey));
+  }, [storageKey]);
 
   useEffect(() => {
     applyClass(theme);
@@ -34,15 +37,15 @@ export function useIntelTheme() {
   const toggle = useCallback(() => {
     setTheme((prev) => {
       const next: IntelTheme = prev === 'cyan' ? 'amber' : 'cyan';
-      try { localStorage.setItem(STORAGE_KEY, next); } catch { /* ignore */ }
+      try { localStorage.setItem(storageKey, next); } catch { /* ignore */ }
       return next;
     });
-  }, []);
+  }, [storageKey]);
 
   const set = useCallback((next: IntelTheme) => {
     setTheme(next);
-    try { localStorage.setItem(STORAGE_KEY, next); } catch { /* ignore */ }
-  }, []);
+    try { localStorage.setItem(storageKey, next); } catch { /* ignore */ }
+  }, [storageKey]);
 
   return { theme, toggle, set };
 }

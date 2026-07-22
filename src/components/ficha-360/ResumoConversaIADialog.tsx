@@ -17,6 +17,7 @@ import {
   X,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 import {
   Dialog,
   DialogContent,
@@ -140,7 +141,7 @@ export function ResumoConversaIADialog({
       setSummary(res.summary);
       setAnalyzed(res.interactions_analyzed);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Erro desconhecido');
+      setError(parseApiError(e, 'Erro desconhecido'));
     }
   };
 

@@ -35,8 +35,8 @@ CREATE POLICY "Users can delete their own passo feedbacks"
   TO authenticated
   USING (user_id = auth.uid());
 
-CREATE INDEX idx_ppf_user_contact_recent
+CREATE INDEX IF NOT EXISTS idx_ppf_user_contact_recent
   ON public.proximo_passo_feedback (user_id, contact_id, executed_at DESC);
 
-CREATE INDEX idx_ppf_user_contact_passo
+CREATE INDEX IF NOT EXISTS idx_ppf_user_contact_passo
   ON public.proximo_passo_feedback (user_id, contact_id, passo_id, executed_at DESC);

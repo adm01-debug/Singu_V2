@@ -3,6 +3,7 @@
  * encontrado dentro do container fornecido.
  */
 export function snapshotGraphCanvas(container: HTMLElement | null, filename: string): boolean {
+  if (typeof document === 'undefined') return false;
   if (!container) return false;
   const canvas = container.querySelector('canvas');
   if (!canvas) return false;

@@ -241,7 +241,7 @@ export function TemplatePerformanceComparison({ contact, className }: TemplatePe
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <Button variant="ghost" size="icon" aria-label="Subir" className="h-8 w-8">
                             {isExpanded ? (
                               <ChevronUp className="w-4 h-4" />
                             ) : (

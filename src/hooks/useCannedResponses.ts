@@ -1,7 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { useAuth } from './useAuth';
+import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface CannedResponse {
   id: string;
@@ -26,13 +28,15 @@ export function useCannedResponses() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('canned_responses')
-        .select('*')
+        .select('id, user_id, title, content, category, shortcut, usage_count, created_at')
         .eq('user_id', user.id)
-        .order('usage_count', { ascending: false });
+        .order('usage_count', { ascending: false })
+        .limit(200);
       if (error) throw error;
       return (data || []) as CannedResponse[];
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const create = useMutation({
@@ -45,28 +49,32 @@ export function useCannedResponses() {
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Resposta rápida criada!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const use = useMutation({
     mutationFn: async (id: string) => {
+      if (!user) return '';
       const r = responses.find(r => r.id === id);
       if (!r) return '';
-      await supabase.from('canned_responses').update({
+      const { error } = await supabase.from('canned_responses').update({
         usage_count: r.usage_count + 1
-      }).eq('id', id);
+      }).eq('user_id', user.id).eq('id', id);
+      if (error) logger.warn('Failed to increment usage_count', { error: error.message });
       return r.content;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: key }),
+    onError: (e: Error) => logger.warn('Failed to use canned response:', { error: e.message }),
   });
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('canned_responses').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('canned_responses').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Resposta removida!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { responses, isLoading, create, use, remove };

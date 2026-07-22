@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { safehref } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -96,9 +97,9 @@ interface SocialMediaIntelligenceCardProps {
            <div className="flex items-center gap-3">
              {linkedin && (
                <a 
-                 href={linkedin} 
-                 target="_blank" 
-                 rel="noopener noreferrer" 
+                 href={safehref(linkedin)}
+                 target="_blank"
+                 rel="noopener noreferrer"
                  className="p-2 rounded-full bg-blue-100 text-blue-700 hover:scale-110 transition-transform"
                  onClick={() => logConsent('linkedin', linkedin)}
                >
@@ -107,9 +108,9 @@ interface SocialMediaIntelligenceCardProps {
              )}
              {instagram && (
                <a 
-                 href={instagram} 
-                 target="_blank" 
-                 rel="noopener noreferrer" 
+                 href={safehref(instagram)}
+                 target="_blank"
+                 rel="noopener noreferrer"
                  className="p-2 rounded-full bg-pink-100 text-pink-700 hover:scale-110 transition-transform"
                  onClick={() => logConsent('instagram', instagram)}
                >
@@ -118,9 +119,9 @@ interface SocialMediaIntelligenceCardProps {
              )}
              {twitter && (
                <a 
-                 href={twitter} 
-                 target="_blank" 
-                 rel="noopener noreferrer" 
+                 href={safehref(twitter)}
+                 target="_blank"
+                 rel="noopener noreferrer"
                  className="p-2 rounded-full bg-sky-100 text-sky-700 hover:scale-110 transition-transform"
                  onClick={() => logConsent('twitter', twitter)}
                >

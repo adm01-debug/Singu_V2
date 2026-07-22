@@ -189,11 +189,15 @@ const DISCSalesScriptGenerator: React.FC<DISCSalesScriptGeneratorProps> = ({ con
   const currentStage = salesStages.find(s => s.id === activeStage) || salesStages[0];
 
   const copyToClipboard = async (text: string) => {
-    await navigator.clipboard.writeText(text);
-    toast({
-      title: '📋 Copiado!',
-      description: 'Script copiado para a área de transferência'
-    });
+    try {
+      await navigator.clipboard.writeText(text);
+      toast({
+        title: '📋 Copiado!',
+        description: 'Script copiado para a área de transferência'
+      });
+    } catch {
+      toast({ title: 'Erro', description: 'Não foi possível copiar', variant: 'destructive' });
+    }
   };
 
   const exportScript = () => {

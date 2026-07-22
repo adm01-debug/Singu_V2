@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef, lazy, Suspense } from 'react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { useNavigate } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import { useModalHistory } from '@/hooks/useModalHistory';
@@ -13,6 +14,7 @@ import { toTitleCase } from '@/lib/formatters';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 import { queryExternalData } from '@/lib/externalData';
 import { useSemanticSearch } from '@/hooks/useSemanticSearch';
 import { useConversationalSearch } from '@/hooks/useConversationalSearch';
@@ -64,20 +66,23 @@ const quickActions = [
   { id: 'new-interaction', label: 'Nova Interação', description: 'Registrar uma nova interação', icon: MessagesSquare, shortcut: 'I', color: 'warning', path: '/interacoes?new=true' },
 ];
 
-const RECENT_ITEMS_KEY = 'command-palette-recent';
 const MAX_RECENT_ITEMS = 5;
 
-function getRecentItems(): RecentItem[] {
+function recentItemsKey(userId?: string) {
+  return `command-palette-recent-${userId ?? 'anon'}`;
+}
+
+function getRecentItems(key: string): RecentItem[] {
   try {
-    const stored = localStorage.getItem(RECENT_ITEMS_KEY);
+    const stored = localStorage.getItem(key);
     return stored ? JSON.parse(stored) : [];
   } catch { return []; }
 }
 
-function addRecentItem(item: Omit<RecentItem, 'timestamp'>) {
-  const recent = getRecentItems();
+function addRecentItem(key: string, item: Omit<RecentItem, 'timestamp'>) {
+  const recent = getRecentItems(key);
   const filtered = recent.filter(r => !(r.id === item.id && r.type === item.type));
-  localStorage.setItem(RECENT_ITEMS_KEY, JSON.stringify([{ ...item, timestamp: Date.now() }, ...filtered].slice(0, MAX_RECENT_ITEMS)));
+  try { localStorage.setItem(key, JSON.stringify([{ ...item, timestamp: Date.now() }, ...filtered].slice(0, MAX_RECENT_ITEMS))); } catch { /* quota/private */ }
 }
 
 function normalizeText(text: string): string {
@@ -93,12 +98,8 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
   const [isLoading, setIsLoading] = useState(false);
   const [recentItems, setRecentItems] = useState<RecentItem[]>([]);
   const searchGenRef = useRef(0);
-  const [semanticMode, setSemanticMode] = useState<boolean>(() => {
-    try { return localStorage.getItem('global-search-semantic') === '1'; } catch { return false; }
-  });
-  const [conversationalMode, setConversationalMode] = useState<boolean>(() => {
-    try { return localStorage.getItem('global-search-conversational') === '1'; } catch { return false; }
-  });
+  const [semanticMode, setSemanticMode] = useState(false);
+  const [conversationalMode, setConversationalMode] = useState(false);
   const [convDraft, setConvDraft] = useState('');
   const {
     search: semanticSearch,
@@ -126,6 +127,13 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
   );
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  // Hydrate search mode preferences from user-scoped localStorage keys
+  useEffect(() => {
+    const uid = user?.id ?? 'anon';
+    try { setSemanticMode(localStorage.getItem(`global-search-semantic-${uid}`) === '1'); } catch { /* noop */ }
+    try { setConversationalMode(localStorage.getItem(`global-search-conversational-${uid}`) === '1'); } catch { /* noop */ }
+  }, [user?.id]);
 
   useModalHistory(open, () => onOpenChange(false), 'global-search');
 
@@ -161,12 +169,12 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
     const params = new URLSearchParams(window.location.search);
     const urlQuery = params.get('q') ?? '';
     setQuery((prev) => (prev === urlQuery ? prev : urlQuery));
-    setRecentItems(getRecentItems());
+    setRecentItems(getRecentItems(recentItemsKey(user?.id)));
   }, [open]);
 
   const handleNavigate = useCallback((path: string, label: string) => {
     onOpenChange(false);
-    addRecentItem({ id: path, type: 'page', title: label, path });
+    addRecentItem(recentItemsKey(user?.id), { id: path, type: 'page', title: label, path });
     navigate(path);
   }, [onOpenChange, navigate]);
 
@@ -236,7 +244,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
 
       let externalContacts: SearchResult[] = [];
       try {
-        const { data: extResults } = await queryExternalData<SearchContact>({ table: 'vw_search_contacts', search: { term: searchQuery.trim(), columns: ['full_name', 'nome_tratamento', 'email', 'phone'] }, range: { from: 0, to: 4 } });
+        const { data: extResults } = await queryExternalData<SearchContact>({ table: 'vw_search_contacts', filters: [{ type: 'eq', column: 'user_id', value: user?.id ?? '' }], search: { term: searchQuery.trim(), columns: ['full_name', 'nome_tratamento', 'email', 'phone'] }, range: { from: 0, to: 4 } });
         if (extResults?.length) {
           const localIds = new Set(contactsResponse.data?.map(c => c.id) || []);
           externalContacts = extResults.filter(e => !localIds.has(e.id)).map(e => ({ id: e.id, type: 'contact' as const, title: e.full_name, subtitle: e.company || e.email || undefined, meta: e.phone || undefined }));
@@ -253,7 +261,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
       if (gen !== searchGenRef.current) return;
       const msg = error instanceof Error ? error.message : 'Não foi possível completar a busca agora.';
       logger.error('Search error:', { error: msg });
-      toast.error(msg);
+      toast.error(parseApiError(error, 'Não foi possível completar a busca agora.'));
       setResults({ contacts: [], companies: [], interactions: [] });
     } finally { if (gen === searchGenRef.current) setIsLoading(false); }
   }, [user, semanticMode, semanticSearch]);
@@ -273,29 +281,31 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
   }, [open, resetSemantic, resetConversational]);
 
   const toggleSemantic = useCallback(() => {
+    const uid = user?.id ?? 'anon';
     setSemanticMode(prev => {
       const next = !prev;
-      try { localStorage.setItem('global-search-semantic', next ? '1' : '0'); } catch { /* noop */ }
+      try { localStorage.setItem(`global-search-semantic-${uid}`, next ? '1' : '0'); } catch { /* noop */ }
       if (next) {
         setConversationalMode(false);
-        try { localStorage.setItem('global-search-conversational', '0'); } catch { /* noop */ }
+        try { localStorage.setItem(`global-search-conversational-${uid}`, '0'); } catch { /* noop */ }
       }
       return next;
     });
-  }, []);
+  }, [user?.id]);
 
   const toggleConversational = useCallback(() => {
+    const uid = user?.id ?? 'anon';
     setConversationalMode(prev => {
       const next = !prev;
-      try { localStorage.setItem('global-search-conversational', next ? '1' : '0'); } catch { /* noop */ }
+      try { localStorage.setItem(`global-search-conversational-${uid}`, next ? '1' : '0'); } catch { /* noop */ }
       if (next) {
         setSemanticMode(false);
-        try { localStorage.setItem('global-search-semantic', '0'); } catch { /* noop */ }
+        try { localStorage.setItem(`global-search-semantic-${uid}`, '0'); } catch { /* noop */ }
         resetConversational();
       }
       return next;
     });
-  }, [resetConversational]);
+  }, [resetConversational, user?.id]);
 
   const submitConversational = useCallback(async (q?: string) => {
     if (!user) return;
@@ -313,7 +323,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
     else if (item.entity === 'deals') navigate('/pipeline');
   }, [navigate, onOpenChange]);
 
-  const handleSelect = (result: SearchResult) => { onOpenChange(false); const path = result.type === 'contact' ? `/contatos/${result.id}` : result.type === 'company' ? `/empresas/${result.id}` : '/interacoes'; addRecentItem({ id: result.id, type: result.type, title: result.title, path }); navigate(path); };
+  const handleSelect = (result: SearchResult) => { onOpenChange(false); const path = result.type === 'contact' ? `/contatos/${result.id}` : result.type === 'company' ? `/empresas/${result.id}` : '/interacoes'; addRecentItem(recentItemsKey(user?.id), { id: result.id, type: result.type, title: result.title, path }); navigate(path); };
   const handleRecentSelect = (item: RecentItem) => { onOpenChange(false); navigate(item.path); };
 
   const hasResults = results.contacts.length > 0 || results.companies.length > 0 || results.interactions.length > 0;
@@ -520,6 +530,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
       </CommandDialog>
 
       {voiceOpen && (
+        <DashboardErrorBoundary sectionName="Assistente de Voz">
         <Suspense fallback={null}>
           <LazyVoiceOverlay isOpen={voiceOpen} onClose={() => setVoiceOpen(false)} onAction={(action) => {
             if (action.action === 'navigate' && action.data?.route) navigate(action.data.route);
@@ -541,6 +552,7 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
              }
           }} />
         </Suspense>
+        </DashboardErrorBoundary>
       )}
     </>
   );

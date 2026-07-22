@@ -83,7 +83,7 @@ export default function FieldMappingDocs() {
   // Fetch external schema
   const { data: schema, isLoading: schemaLoading, refetch: refetchSchema } = useQuery<SchemaResult | null>({
     queryKey: ['external-schema-introspection'],
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return null;
       const res = await fetch(
@@ -96,6 +96,7 @@ export default function FieldMappingDocs() {
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
           },
           body: JSON.stringify({ action: 'schema' }),
+          signal,
         }
       );
       if (!res.ok) return null;

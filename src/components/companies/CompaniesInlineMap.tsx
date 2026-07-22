@@ -58,6 +58,7 @@ export function CompaniesInlineMap({ companies, className }: CompaniesInlineMapP
         size="icon"
         className="absolute top-2 right-2 z-[1000] h-7 w-7 bg-background/80 backdrop-blur-sm"
         onClick={() => setIsVisible(false)}
+        aria-label="Fechar mapa"
       >
         <X className="w-4 h-4" />
       </Button>

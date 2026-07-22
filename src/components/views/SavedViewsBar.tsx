@@ -52,8 +52,9 @@ export function SavedViewsBar<T>({
       return;
     }
     if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(url);
-      toast.success('Link copiado para a área de transferência');
+      navigator.clipboard.writeText(url)
+        .then(() => toast.success('Link copiado para a área de transferência'))
+        .catch(() => toast.error('Não foi possível copiar'));
     } else {
       toast.info(url);
     }

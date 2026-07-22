@@ -104,13 +104,13 @@ export function EmailBuilder({ blocks, onBlocksChange }: Props) {
                   >
                     <BlockPreview block={b} />
                     <div className="absolute top-1 right-1 hidden group-hover:flex gap-0.5">
-                      <Button size="icon" variant="ghost" className="h-6 w-6" onClick={(e) => { e.stopPropagation(); move(b.id, -1); }}>
+                      <Button size="icon" aria-label="Mover para cima" variant="ghost" className="h-6 w-6" onClick={(e) => { e.stopPropagation(); move(b.id, -1); }}>
                         <ArrowUp className="w-3 h-3" />
                       </Button>
-                      <Button size="icon" variant="ghost" className="h-6 w-6" onClick={(e) => { e.stopPropagation(); move(b.id, 1); }}>
+                      <Button size="icon" aria-label="Mover para baixo" variant="ghost" className="h-6 w-6" onClick={(e) => { e.stopPropagation(); move(b.id, 1); }}>
                         <ArrowDown className="w-3 h-3" />
                       </Button>
-                      <Button size="icon" variant="ghost" className="h-6 w-6 text-destructive" onClick={(e) => { e.stopPropagation(); remove(b.id); }}>
+                      <Button size="icon" aria-label="Remover" variant="ghost" className="h-6 w-6 text-destructive" onClick={(e) => { e.stopPropagation(); remove(b.id); }}>
                         <Trash2 className="w-3 h-3" />
                       </Button>
                     </div>
@@ -154,7 +154,7 @@ function BlockPreview({ block }: { block: EmailBlock }) {
     case 'button':
       return <div style={{ textAlign: block.align }}><span className="inline-block bg-primary text-primary-foreground px-3 py-1 text-xs rounded">{block.label}</span></div>;
     case 'image':
-      return <img src={block.src} alt={block.alt} className="max-w-full h-auto rounded" />;
+      return <img src={block.src} alt={block.alt} className="max-w-full h-auto rounded" loading="lazy" decoding="async" />;
     case 'divider':
       return <hr className="border-t border-border" />;
     case 'spacer':

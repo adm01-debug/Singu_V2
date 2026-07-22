@@ -25,6 +25,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useChannelSyncMode } from '@/hooks/useChannelSyncMode';
+import { useAuth } from '@/hooks/useAuth';
 
 const CHANNELS: Array<{
   value: string;
@@ -39,11 +40,11 @@ const CHANNELS: Array<{
   { value: 'note', label: 'Nota', icon: FileText },
 ];
 
-const PENDING_KEY = 'channel-pending-canais';
+const PENDING_KEY_PREFIX = 'channel-pending-canais';
 
-function readPending(): string[] {
+function readPending(key: string): string[] {
   try {
-    const raw = localStorage.getItem(PENDING_KEY);
+    const raw = localStorage.getItem(key);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed.filter((v) => typeof v === 'string') : [];
@@ -97,8 +98,10 @@ export const ChannelShortcutsHelpOverlay = React.memo(function ChannelShortcutsH
   appliedCanais,
   channelCounts,
 }: Props) {
+  const { user } = useAuth();
+  const pendingKey = `${PENDING_KEY_PREFIX}-${user?.id ?? 'anon'}`;
   const [open, setOpen] = useState(false);
-  const [pending, setPending] = useState<string[]>(() => readPending());
+  const [pending, setPending] = useState<string[]>(() => readPending(pendingKey));
   const { mode } = useChannelSyncMode();
 
   const appliedSet = useMemo(() => new Set(appliedCanais), [appliedCanais]);
@@ -108,9 +111,9 @@ export const ChannelShortcutsHelpOverlay = React.memo(function ChannelShortcutsH
   // localStorage mudar em outra aba/janela.
   useEffect(() => {
     if (!open) return;
-    setPending(readPending());
+    setPending(readPending(pendingKey));
     const onStorage = (e: StorageEvent) => {
-      if (e.key === PENDING_KEY) setPending(readPending());
+      if (e.key === pendingKey) setPending(readPending(pendingKey));
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);

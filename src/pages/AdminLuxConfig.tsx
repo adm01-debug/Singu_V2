@@ -105,6 +105,8 @@ function LuxExecutionHistory() {
       if (error) throw error;
       return data || [];
     },
+    staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   if (loading) return <div className="text-sm text-muted-foreground py-4">Carregando histórico...</div>;

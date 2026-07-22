@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface BehavioralInsightItem {
   label: string;
@@ -49,7 +50,7 @@ export function useBehavioralProfile(contactId: string | null | undefined) {
     queryFn: async (): Promise<BehavioralProfile | null> => {
       const { data, error } = await supabase
         .from('contact_analytical_profiles')
-        .select('*')
+        .select('id, contact_id, summary, tone, communication_style, sentiment_trend, preferences, hobbies, recurrent_topics, based_on_count, model, last_updated_at')
         .eq('contact_id', contactId!)
         .maybeSingle();
       if (error) throw error;
@@ -74,7 +75,7 @@ export function useGenerateBehavioralProfile() {
       toast.success('Perfil comportamental atualizado');
     },
     onError: (e: Error) => {
-      toast.error('Erro ao gerar perfil', { description: e.message });
+      toast.error('Erro ao gerar perfil', { description: parseApiError(e) });
     },
   });
 }

@@ -69,6 +69,7 @@ export function useBehavioralProfilesList(filters: BehavioralProfilesFilters) {
     queryKey: ['behavioral-profiles-list', filters.period ?? 'all', user?.id],
     enabled: !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<BehavioralProfileListItem[]> => {
       const fromDate = periodToDate(filters.period);
 
@@ -79,6 +80,7 @@ export function useBehavioralProfilesList(filters: BehavioralProfilesFilters) {
           preferences, hobbies, recurrent_topics, based_on_count, model, last_updated_at,
           contacts:contact_id ( name, avatar_url, company_id, companies:company_id ( name ) )
         `)
+        .eq('user_id', user!.id)
         .order('last_updated_at', { ascending: false })
         .limit(500);
 

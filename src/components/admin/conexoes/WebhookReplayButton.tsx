@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Play, FlaskConical } from 'lucide-react';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface Props {
   webhookToken: string;
@@ -11,23 +12,33 @@ interface Props {
 export function WebhookReplayButton({ webhookToken, payload }: Props) {
   const [busyDry, setBusyDry] = useState(false);
   const [busyReal, setBusyReal] = useState(false);
+  const controllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    return () => { controllerRef.current?.abort(); };
+  }, []);
 
   async function send(dryRun: boolean) {
     if (!payload) return;
     const setBusy = dryRun ? setBusyDry : setBusyReal;
     setBusy(true);
+    controllerRef.current?.abort();
+    const controller = new AbortController();
+    controllerRef.current = controller;
     try {
       const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/incoming-webhook/${webhookToken}${dryRun ? '?dry_run=true' : ''}`;
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? `HTTP ${res.status}`);
       toast.success(dryRun ? 'Dry-run executado com sucesso' : 'Replay persistido com sucesso');
     } catch (e) {
-      toast.error(`Falha: ${e instanceof Error ? e.message : 'erro desconhecido'}`);
+      if (e instanceof Error && e.name === 'AbortError') return;
+      toast.error(`Falha: ${parseApiError(e)}`);
     } finally {
       setBusy(false);
     }

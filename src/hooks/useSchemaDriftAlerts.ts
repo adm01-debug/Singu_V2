@@ -27,7 +27,7 @@ export function useSchemaDriftAlerts(onlyUnresolved = true) {
     queryFn: async () => {
       let query = supabase
         .from('schema_drift_alerts')
-        .select('*')
+        .select('id, error_type, entity_type, entity_name, error_message, stack_trace, user_id, resolved, resolved_at, resolved_by, created_at')
         .order('created_at', { ascending: false })
         .limit(200);
 
@@ -42,6 +42,7 @@ export function useSchemaDriftAlerts(onlyUnresolved = true) {
     enabled: !!user && isAdmin,
     staleTime: 5 * 60_000,
     refetchInterval: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -63,6 +64,7 @@ export function useUnresolvedDriftCount() {
     enabled: !!user && isAdmin,
     staleTime: 5 * 60_000,
     refetchInterval: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 

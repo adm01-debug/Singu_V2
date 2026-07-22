@@ -16,7 +16,7 @@ export function FamilyHistoryDialog({ contactId }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-primary">
+        <Button variant="ghost" size="icon" aria-label="Histórico" className="h-6 w-6 text-muted-foreground hover:text-primary">
           <History className="h-3 w-3" />
         </Button>
       </DialogTrigger>

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from './useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type ForecastCategory = "commit" | "best_case" | "pipeline" | "omitted";
 
@@ -68,11 +69,13 @@ export function useForecastPeriods() {
     queryKey: ["forecast-periods", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from("forecast_periods").select("*").order("period_start", { ascending: false });
+      const { data, error } = await supabase.from("forecast_periods").select("*").eq("user_id", user!.id).order("period_start", { ascending: false })
+      .limit(500);
       if (error) throw error;
       return (data ?? []) as ForecastPeriod[];
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -84,13 +87,14 @@ export function useCurrentPeriod(type: "month" | "quarter" = "month") {
     queryFn: async () => {
       const today = new Date().toISOString().split("T")[0];
       const { data, error } = await supabase.from("forecast_periods").select("*")
-        .eq("period_type", type).eq("status", "open")
+        .eq("user_id", user!.id).eq("period_type", type).eq("status", "open")
         .lte("period_start", today).gte("period_end", today)
         .maybeSingle();
       if (error) throw error;
       return data as ForecastPeriod | null;
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -109,16 +113,19 @@ export function useCreatePeriod() {
       qc.invalidateQueries({ queryKey: ["forecast-current-period"] });
       toast.success("Período criado");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 export function useClosePeriod() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (periodId: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from("forecast_periods")
         .update({ status: "closed", closed_at: new Date().toISOString() })
+        .eq("user_id", user.id)
         .eq("id", periodId);
       if (error) throw error;
     },
@@ -126,37 +133,42 @@ export function useClosePeriod() {
       qc.invalidateQueries({ queryKey: ["forecast-periods"] });
       toast.success("Período fechado");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 export function useDealForecasts(periodId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["deal-forecasts", periodId],
+    queryKey: ["deal-forecasts", periodId, user?.id],
     queryFn: async () => {
       if (!periodId) return [];
       const { data, error } = await supabase.from("deal_forecasts").select("*")
-        .eq("period_id", periodId).order("forecasted_amount", { ascending: false });
+        .eq("period_id", periodId).eq("user_id", user!.id).order("forecasted_amount", { ascending: false })
+        .limit(500);
       if (error) throw error;
       return (data ?? []) as DealForecast[];
     },
-    enabled: !!periodId,
+    enabled: !!periodId && !!user,
     staleTime: 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
 export function useUpdateDealForecast() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, patch }: { id: string; patch: Partial<DealForecast> }) => {
-      const { error } = await supabase.from("deal_forecasts").update(patch).eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("deal_forecasts").update(patch).eq("user_id", user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: (_, v) => {
       qc.invalidateQueries({ queryKey: ["deal-forecasts"] });
       toast.success("Forecast atualizado");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -172,34 +184,37 @@ export function useAnalyzeForecast() {
       qc.invalidateQueries({ queryKey: ["deal-forecasts"] });
       toast.success("Forecast analisado pela IA");
     },
-    onError: (e: Error) => toast.error(`Erro: ${e.message}`),
+    onError: (e: Error) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 }
 
 export function useForecastSnapshots(periodId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["forecast-snapshots", periodId],
+    queryKey: ["forecast-snapshots", periodId, user?.id],
     queryFn: async () => {
       if (!periodId) return [];
       const { data, error } = await supabase.from("forecast_snapshots").select("*")
-        .eq("period_id", periodId).order("snapshot_date", { ascending: true });
+        .eq("period_id", periodId).eq("user_id", user!.id).order("snapshot_date", { ascending: true })
+        .limit(500);
       if (error) throw error;
       return (data ?? []) as ForecastSnapshot[];
     },
-    enabled: !!periodId,
+    enabled: !!periodId && !!user,
   });
 }
 
 export function useForecastSummary(periodId: string | undefined) {
+  const { user } = useAuth();
   const { data: forecasts } = useDealForecasts(periodId);
   const { data: period } = useQuery({
-    queryKey: ["forecast-period", periodId],
+    queryKey: ["forecast-period", periodId, user?.id],
     queryFn: async () => {
       if (!periodId) return null;
-      const { data } = await supabase.from("forecast_periods").select("*").eq("id", periodId).maybeSingle();
+      const { data } = await supabase.from("forecast_periods").select("*").eq("id", periodId).eq("user_id", user!.id).maybeSingle();
       return data as ForecastPeriod | null;
     },
-    enabled: !!periodId,
+    enabled: !!periodId && !!user,
   });
   const f = forecasts ?? [];
   const commit = f.filter(x => x.category === "commit").reduce((s, x) => s + Number(x.forecasted_amount), 0);
@@ -219,7 +234,7 @@ export function useForecastNarrative() {
       if (error) throw error;
       return data as { narrative: string; commit: number; best_case: number; quota: number; at_risk_count: number };
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -229,7 +244,7 @@ export function useQuotaSettings() {
     queryKey: ["forecast-quota-settings", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from("forecast_quota_settings").select("*").maybeSingle();
+      const { data, error } = await supabase.from("forecast_quota_settings").select("*").eq("user_id", user!.id).maybeSingle();
       if (error) throw error;
       return data as QuotaSettings | null;
     },
@@ -250,6 +265,6 @@ export function useUpsertQuotaSettings() {
       qc.invalidateQueries({ queryKey: ["forecast-quota-settings"] });
       toast.success("Configurações salvas");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }

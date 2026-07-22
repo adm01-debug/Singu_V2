@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 export type BookmarkType = 'contact' | 'company' | 'deal';
 
@@ -9,12 +10,12 @@ export interface EntityBookmark {
   pinnedAt: number;
 }
 
-const STORAGE_KEY = 'intel-bookmarks-v1';
+const BASE_KEY = 'intel-bookmarks-v1';
 const MAX = 10;
 
-function read(): EntityBookmark[] {
+function read(storageKey: string): EntityBookmark[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as EntityBookmark[];
     return Array.isArray(parsed) ? parsed : [];
@@ -23,24 +24,32 @@ function read(): EntityBookmark[] {
   }
 }
 
-function write(items: EntityBookmark[]): void {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items.slice(0, MAX))); } catch { /* ignore */ }
+function write(storageKey: string, items: EntityBookmark[]): void {
+  try { localStorage.setItem(storageKey, JSON.stringify(items.slice(0, MAX))); } catch { /* ignore */ }
 }
 
 /**
- * Bookmarks de entidades persistidos em localStorage (máx 10).
+ * Bookmarks de entidades persistidos em localStorage (máx 10), isolados por usuário.
  * Sincroniza entre abas via evento 'storage'.
  */
 export function useEntityBookmarks() {
-  const [items, setItems] = useState<EntityBookmark[]>(() => read());
+  const { user } = useAuth();
+  const storageKey = `${BASE_KEY}-${user?.id ?? 'anon'}`;
+
+  const [items, setItems] = useState<EntityBookmark[]>(() => read(storageKey));
+
+  // Re-hydrate when user changes (login/logout)
+  useEffect(() => {
+    setItems(read(storageKey));
+  }, [storageKey]);
 
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY) setItems(read());
+      if (e.key === storageKey) setItems(read(storageKey));
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
-  }, []);
+  }, [storageKey]);
 
   const isPinned = useCallback(
     (type: BookmarkType, id: string) => items.some((b) => b.type === type && b.id === id),
@@ -53,20 +62,20 @@ export function useEntityBookmarks() {
       const next = exists
         ? prev.filter((b) => !(b.type === entry.type && b.id === entry.id))
         : [{ ...entry, pinnedAt: Date.now() }, ...prev].slice(0, MAX);
-      write(next);
+      write(storageKey, next);
       return next;
     });
-  }, []);
+  }, [storageKey]);
 
   const remove = useCallback((type: BookmarkType, id: string) => {
     setItems((prev) => {
       const next = prev.filter((b) => !(b.type === type && b.id === id));
-      write(next);
+      write(storageKey, next);
       return next;
     });
-  }, []);
+  }, [storageKey]);
 
-  const clear = useCallback(() => { write([]); setItems([]); }, []);
+  const clear = useCallback(() => { write(storageKey, []); setItems([]); }, [storageKey]);
 
   return { items, isPinned, toggle, remove, clear, max: MAX };
 }

@@ -13,6 +13,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useAuth } from '@/hooks/useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { useToast } from '@/hooks/use-toast';
 import { ANNOTATION_CATEGORIES } from './annotationCategories';
@@ -85,7 +86,7 @@ export function AnnotationList({ api, onEdit, categoryFilter }: Props) {
     } catch (err) {
       toast({
         title: 'Erro ao excluir',
-        description: err instanceof Error ? err.message : 'Tente novamente',
+        description: parseApiError(err, 'Tente novamente'),
         variant: 'destructive',
       });
     } finally {
@@ -199,6 +200,7 @@ export function AnnotationList({ api, onEdit, categoryFilter }: Props) {
                                     variant="ghost"
                                     onClick={() => onEdit(a)}
                                     title="Editar"
+                                    aria-label="Editar anotação"
                                   >
                                     <Pencil className="h-3.5 w-3.5" />
                                   </Button>
@@ -210,6 +212,7 @@ export function AnnotationList({ api, onEdit, categoryFilter }: Props) {
                                     variant="ghost"
                                     onClick={() => setPendingDelete(a)}
                                     title={isAdmin && !isOwner ? 'Excluir (admin)' : 'Excluir'}
+                                    aria-label={isAdmin && !isOwner ? 'Excluir anotação (admin)' : 'Excluir anotação'}
                                     disabled={api.remove.isPending}
                                   >
                                     <Trash2 className="h-3.5 w-3.5 text-destructive" />

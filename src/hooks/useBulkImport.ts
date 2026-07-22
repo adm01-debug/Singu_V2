@@ -4,6 +4,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import Papa from 'papaparse';
+import type { TablesInsert } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface ImportResult {
   total: number;
@@ -129,9 +131,9 @@ export function useBulkImport(entityType: ImportEntityType) {
               }).filter(Boolean);
 
               if (batch.length > 0) {
-                // Determine the correct table name for type safety
-                const tableName = entityType === 'contacts' ? 'contacts' : 'companies';
-                const { error } = await supabase.from(tableName as never).insert(batch as never);
+                const { error } = entityType === 'contacts'
+                  ? await supabase.from('contacts').insert(batch as TablesInsert<'contacts'>[])
+                  : await supabase.from('companies').insert(batch as TablesInsert<'companies'>[]);
                 
                 if (error) {
                   // eslint-disable-next-line sonarjs/no-nested-functions
@@ -158,7 +160,7 @@ export function useBulkImport(entityType: ImportEntityType) {
         toast.warning(`${result.errors.length} erros encontrados`);
       }
     },
-    onError: (err: Error) => toast.error(`Erro na importação: ${err.message}`),
+    onError: (err: Error) => toast.error(`Erro na importação: ${parseApiError(err)}`),
   });
 
   const reset = useCallback(() => {

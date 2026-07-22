@@ -50,7 +50,8 @@ export function useDealVelocity() {
       const { data: contacts } = await supabase
         .from('contacts')
         .select('id, relationship_stage, relationship_score, created_at, updated_at')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .limit(500);
 
       if (!contacts || contacts.length === 0) return null;
 
@@ -87,6 +88,7 @@ export function useDealVelocity() {
     },
     enabled: !!user,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   return { metrics, loading };

@@ -78,9 +78,9 @@ type SmoothWindow = 2 | 3;
 
 function readAnnotationFilter(): Set<AnnotationCategory> {
   if (typeof window === "undefined") return new Set(CATEGORY_KEYS);
-  const raw = window.localStorage.getItem(ANN_FILTER_KEY);
-  if (!raw) return new Set(CATEGORY_KEYS);
   try {
+    const raw = window.localStorage.getItem(ANN_FILTER_KEY);
+    if (!raw) return new Set(CATEGORY_KEYS);
     const parsed = JSON.parse(raw) as string[];
     const valid = parsed.filter((k): k is AnnotationCategory =>
       (CATEGORY_KEYS as string[]).includes(k)
@@ -93,21 +93,25 @@ function readAnnotationFilter(): Set<AnnotationCategory> {
 
 function readSmoothWindow(): SmoothWindow {
   if (typeof window === "undefined") return 3;
-  const v = window.localStorage.getItem(SMOOTH_WINDOW_KEY);
-  return v === "2" ? 2 : 3;
+  try {
+    const v = window.localStorage.getItem(SMOOTH_WINDOW_KEY);
+    return v === "2" ? 2 : 3;
+  } catch { return 3; }
 }
 
 function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
   const [smoothEnabled, setSmoothEnabled] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
-    const v = window.localStorage.getItem(SMOOTH_ENABLED_KEY);
-    return v === null ? true : v === "1";
+    try {
+      const v = window.localStorage.getItem(SMOOTH_ENABLED_KEY);
+      return v === null ? true : v === "1";
+    } catch { return true; }
   });
   
   const toggleSmooth = (next: boolean) => {
     setSmoothEnabled(next);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(SMOOTH_ENABLED_KEY, next ? "1" : "0");
+      try { window.localStorage.setItem(SMOOTH_ENABLED_KEY, next ? "1" : "0"); } catch { /* quota/private */ }
     }
   };
 
@@ -115,7 +119,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
   const changeSmoothWindow = (next: SmoothWindow) => {
     setSmoothWindow(next);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(SMOOTH_WINDOW_KEY, String(next));
+      try { window.localStorage.setItem(SMOOTH_WINDOW_KEY, String(next)); } catch { /* quota/private */ }
     }
   };
 
@@ -123,14 +127,16 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
   const [editingAnn, setEditingAnn] = useState<SentimentAnnotation | null>(null);
   const [showPositivePctLine, setShowPositivePctLine] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
-    const v = window.localStorage.getItem(SHOW_PCT_LINE_KEY);
-    return v === null ? true : v === "1";
+    try {
+      const v = window.localStorage.getItem(SHOW_PCT_LINE_KEY);
+      return v === null ? true : v === "1";
+    } catch { return true; }
   });
 
   const togglePctLine = (next: boolean) => {
     setShowPositivePctLine(next);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(SHOW_PCT_LINE_KEY, next ? "1" : "0");
+      try { window.localStorage.setItem(SHOW_PCT_LINE_KEY, next ? "1" : "0"); } catch { /* quota/private */ }
     }
   };
 
@@ -143,7 +149,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
 
   const persistAnnFilter = (next: Set<AnnotationCategory>) => {
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(ANN_FILTER_KEY, JSON.stringify(Array.from(next)));
+      try { window.localStorage.setItem(ANN_FILTER_KEY, JSON.stringify(Array.from(next))); } catch { /* quota/private */ }
     }
   };
 

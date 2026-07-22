@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type NotifUrgency = 'critical' | 'high' | 'normal' | 'low';
 export type NotifStatus = 'pending' | 'delivered' | 'dismissed' | 'clicked' | 'suppressed' | 'snoozed';
@@ -58,7 +59,7 @@ export function useSmartNotifications() {
     queryFn: async (): Promise<SmartNotification[]> => {
       const { data, error } = await supabase
         .from('smart_notifications')
-        .select('*')
+        .select('id, event_type, entity_type, entity_id, title, body, urgency, decided_channel, bundle_key, bundle_count, status, scheduled_for, snoozed_until, action_url, created_at, payload')
         .eq('user_id', user!.id)
         .in('status', ['pending', 'delivered', 'snoozed'])
         .order('created_at', { ascending: false })
@@ -112,11 +113,12 @@ export function useSmartNotifications() {
         if (patch.status === 'clicked') updates.clicked_at = new Date().toISOString();
       }
       if (patch.snoozed_until !== undefined) updates.snoozed_until = patch.snoozed_until;
-      const { error } = await supabase.from('smart_notifications').update(updates as never).eq('id', patch.id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('smart_notifications').update(updates as never).eq('user_id', user.id).eq('id', patch.id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['smart-notifications', user?.id] }),
-    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : 'Falha ao atualizar notificação'),
+    onError: (e: unknown) => toast.error(parseApiError(e)),
   });
 
   const markRead = useCallback((id: string) => update.mutate({ id, status: 'delivered' }), [update]);
@@ -127,11 +129,13 @@ export function useSmartNotifications() {
     update.mutate({ id, status: 'snoozed', snoozed_until: until });
   }, [update]);
   const markAllRead = useCallback(async () => {
+    if (!user) return;
     const ids = visible.filter((n) => n.status === 'pending').map((n) => n.id);
     if (ids.length === 0) return;
     const { error } = await supabase
       .from('smart_notifications')
       .update({ status: 'delivered', delivered_at: new Date().toISOString() })
+      .eq('user_id', user.id)
       .in('id', ids);
     if (error) toast.error('Falha ao marcar como lidas');
     else qc.invalidateQueries({ queryKey: ['smart-notifications', user?.id] });
@@ -144,7 +148,7 @@ export function useSmartNotifications() {
       return data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['smart-notifications', user?.id] }),
-    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : 'Falha ao enfileirar notificação'),
+    onError: (e: unknown) => toast.error(parseApiError(e)),
   });
 
   return {

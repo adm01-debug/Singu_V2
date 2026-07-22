@@ -37,7 +37,7 @@ export function usePortfolioCompatibility() {
     minChars: 1,
   });
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
     setLoading(true);
 
@@ -50,15 +50,16 @@ export function usePortfolioCompatibility() {
         { data: metaData },
       ] = await Promise.all([
         supabase.from('profiles').select('nlp_profile').eq('id', user.id).maybeSingle(),
-        supabase.from('contacts').select('id, first_name, last_name, behavior, relationship_score, companies(name)').eq('user_id', user.id),
-        supabase.from('vak_analysis_history').select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score').eq('user_id', user.id).order('created_at', { ascending: false }),
-        supabase.from('metaprogram_analysis').select('contact_id, toward_score, away_from_score, internal_score, external_score, options_score, procedures_score').eq('user_id', user.id).order('created_at', { ascending: false }),
+        supabase.from('contacts').select('id, first_name, last_name, behavior, relationship_score, companies(name)').eq('user_id', user.id).limit(2000),
+        supabase.from('vak_analysis_history').select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5000),
+        supabase.from('metaprogram_analysis').select('contact_id, toward_score, away_from_score, internal_score, external_score, options_score, procedures_score').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5000),
       ]);
+
+      if (signal?.cancelled) return;
+      if (error) throw error;
 
       const spProfile = profileData?.nlp_profile as unknown as SalespersonProfile | null;
       setSalespersonProfile(spProfile);
-
-      if (error) throw error;
 
       const vakMap = new Map<string, VAKType>();
       vakData?.forEach((v) => {
@@ -135,18 +136,23 @@ export function usePortfolioCompatibility() {
         };
       });
 
-      setContacts(contactsWithCompatibility);
+      if (!signal?.cancelled) setContacts(contactsWithCompatibility);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error loading portfolio data:', { error: msg });
-      toast.error('Erro ao carregar dados', { description: msg });
+      if (!signal?.cancelled) {
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error loading portfolio data:', { error: msg });
+        toast.error('Erro ao carregar dados', { description: msg });
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user]);
 
   useEffect(() => {
-    if (user) loadData();
+    if (!user) return;
+    const signal = { cancelled: false };
+    loadData(signal);
+    return () => { signal.cancelled = true; };
   }, [user, loadData]);
 
   const filteredContacts = useMemo(() => {

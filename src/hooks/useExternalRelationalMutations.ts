@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { insertExternalData, deleteExternalData } from '@/lib/externalData';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 /**
  * Generic hook for CRUD on external relational tables (phones, emails, addresses, socials).
@@ -19,7 +20,7 @@ export function useExternalRelationalMutations(contactId: string | undefined, ta
       if (error) throw error;
     },
     onSuccess: () => { toast.success(`${label} adicionado(a)`); invalidate(); },
-    onError: (e) => toast.error(`Erro ao adicionar ${label.toLowerCase()}: ${e.message}`),
+    onError: (e) => toast.error(`Erro ao adicionar ${label.toLowerCase()}: ${parseApiError(e)}`),
   });
 
   const remove = useMutation({
@@ -28,7 +29,7 @@ export function useExternalRelationalMutations(contactId: string | undefined, ta
       if (error) throw error;
     },
     onSuccess: () => { toast.success(`${label} removido(a)`); invalidate(); },
-    onError: (e) => toast.error(`Erro ao remover ${label.toLowerCase()}: ${e.message}`),
+    onError: (e) => toast.error(`Erro ao remover ${label.toLowerCase()}: ${parseApiError(e)}`),
   });
 
   return { add, remove };

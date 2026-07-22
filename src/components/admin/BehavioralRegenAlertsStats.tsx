@@ -16,6 +16,7 @@ export function BehavioralRegenAlertsStats({ hideSimulations = false }: Props = 
   const { data, isLoading, error } = useQuery({
     queryKey: ["behavioral-regen-alerts-stats-30d", hideSimulations],
     refetchInterval: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const since = new Date(Date.now() - 30 * 24 * 60 * 60_000).toISOString();
       let q = supabase

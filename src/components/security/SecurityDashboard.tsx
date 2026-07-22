@@ -21,16 +21,15 @@ function StatusBadge({ active, label }: { active: boolean; label: string }) {
 
 export function SecurityDashboard() {
   const { settings } = useAccessSecurity();
-  const twoFA = use2FA();
+  const { isEnabled, checkStatus } = use2FA();
   const { credentials } = useWebAuthn();
   const { ips } = useAllowedIPs();
   const { countries } = useGeoBlocking();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { twoFA.checkStatus(); }, [twoFA.checkStatus]);
+  useEffect(() => { checkStatus(); }, [checkStatus]);
 
   const activeCount = [
-    twoFA.isEnabled,
+    isEnabled,
     credentials.length > 0,
     settings.enable_ip_restriction && ips.length > 0,
     settings.enable_geo_blocking && countries.length > 0,
@@ -49,7 +48,7 @@ export function SecurityDashboard() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        <StatusBadge active={twoFA.isEnabled} label="2FA (TOTP)" />
+        <StatusBadge active={isEnabled} label="2FA (TOTP)" />
         <StatusBadge active={credentials.length > 0} label={`Passkeys (${credentials.length})`} />
         <StatusBadge active={settings.enable_ip_restriction && ips.length > 0} label={`IPs permitidos (${ips.length})`} />
         <StatusBadge active={settings.enable_geo_blocking && countries.length > 0} label={`Geo-blocking (${countries.length} países)`} />

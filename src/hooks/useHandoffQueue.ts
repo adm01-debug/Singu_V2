@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 import type { HandoffRequest, HandoffStatus, QualificationData } from '@/types/leadRouting';
+import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 const HANDOFF_KEY = ['handoff-requests'];
 
@@ -16,7 +17,8 @@ export function useHandoffQueue(status?: HandoffStatus) {
       if (!user) return [];
       let query = supabase
         .from('handoff_requests')
-        .select('*')
+        .select('id, user_id, contact_id, company_id, from_member_id, to_member_id, status, qualification_data, handoff_reason, notes, rejection_reason, sla_hours, accepted_at, rejected_at, expired_at, created_at, updated_at')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(100);
       if (status) query = query.eq('status', status);
@@ -26,6 +28,7 @@ export function useHandoffQueue(status?: HandoffStatus) {
     },
     enabled: !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -53,11 +56,11 @@ export function useCreateHandoff() {
           from_member_id: payload.fromMemberId,
           to_member_id: payload.toMemberId ?? null,
           status: 'pending',
-          qualification_data: payload.qualificationData as never,
+          qualification_data: payload.qualificationData as unknown as Json,
           handoff_reason: payload.reason ?? null,
           notes: payload.notes ?? null,
           sla_hours: 4,
-        } as never)
+        } as TablesInsert<'handoff_requests'>)
         .select()
         .maybeSingle();
       if (error) throw error;
@@ -73,6 +76,7 @@ export function useCreateHandoff() {
 }
 
 export function useRespondHandoff() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   return useMutation({
@@ -93,7 +97,8 @@ export function useRespondHandoff() {
 
       const { error } = await supabase
         .from('handoff_requests')
-        .update(updates as never)
+        .update(updates as unknown as TablesUpdate<'handoff_requests'>)
+        .eq('user_id', user!.id)
         .eq('id', id);
       if (error) throw error;
     },
@@ -115,6 +120,7 @@ export function usePendingHandoffCount() {
       const { count, error } = await supabase
         .from('handoff_requests')
         .select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id)
         .eq('status', 'pending');
       if (error) {
         logger.error('Erro contando handoffs:', error);
@@ -124,6 +130,7 @@ export function usePendingHandoffCount() {
     },
     enabled: !!user,
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -136,10 +143,10 @@ export function useHandoffRealtime() {
     if (!user) return;
 
     const channel = supabase
-      .channel('handoff-realtime')
+      .channel(`handoff-realtime:${user.id}`)
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'handoff_requests' },
+        { event: '*', schema: 'public', table: 'handoff_requests', filter: `user_id=eq.${user.id}` },
         (payload) => {
           logger.info('[Handoff Realtime]', payload.eventType);
           qc.invalidateQueries({ queryKey: HANDOFF_KEY });

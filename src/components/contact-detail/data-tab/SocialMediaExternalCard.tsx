@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ExternalDataCard } from '@/components/ui/external-data-card';
 import { useContactSocialMediaView } from '@/hooks/useContactSocialMediaView';
+import { safehref } from '@/lib/utils';
 
 interface Props {
   contactId: string;
@@ -55,7 +56,7 @@ export function SocialMediaExternalCard({ contactId }: Props) {
                   <Icon className={`h-4 w-4 ${color}`} />
                   <span className="text-muted-foreground">{label}:</span>
                   {url ? (
-                    <a href={url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">
+                    <a href={safehref(url)} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">
                       {handle || url}
                     </a>
                   ) : (

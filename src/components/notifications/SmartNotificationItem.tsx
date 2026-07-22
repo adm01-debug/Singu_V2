@@ -31,7 +31,7 @@ export const SmartNotificationItem = memo(function SmartNotificationItem({
 
   const handleOpen = () => {
     onClick(notif.id);
-    if (notif.action_url) {
+    if (notif.action_url && notif.action_url.startsWith('/')) {
       onClose();
       navigate(notif.action_url);
     }

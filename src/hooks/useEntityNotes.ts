@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
-const STORAGE_PREFIX = 'intel-notes-v1:';
+const BASE_STORAGE_PREFIX = 'intel-notes-v1:';
 const DEBOUNCE_MS = 500;
 
 export interface EntityNote {
@@ -32,24 +33,27 @@ function writeNote(key: string, note: EntityNote): void {
  * Autosave com debounce de 500ms. Identifica a entidade via `entityKey` (ex: "contact:abc123").
  */
 export function useEntityNotes(entityKey: string | null) {
+  const { user } = useAuth();
+  const storagePrefix = `${BASE_STORAGE_PREFIX}${user?.id ?? 'anon'}:`;
   const [text, setText] = useState('');
   const [updatedAt, setUpdatedAt] = useState(0);
   const [saving, setSaving] = useState(false);
   const timerRef = useRef<number | null>(null);
   const keyRef = useRef<string | null>(null);
 
-  // Carrega ao trocar entidade (sem useEffect para fetch externo — apenas read local).
+  // Carrega ao trocar entidade ou usuário (apenas read local).
   useEffect(() => {
-    keyRef.current = entityKey;
-    if (!entityKey) {
+    const fullKey = entityKey ? storagePrefix + entityKey : null;
+    keyRef.current = fullKey;
+    if (!fullKey) {
       setText('');
       setUpdatedAt(0);
       return;
     }
-    const n = readNote(entityKey);
+    const n = readNote(fullKey);
     setText(n.text);
     setUpdatedAt(n.updatedAt);
-  }, [entityKey]);
+  }, [entityKey, storagePrefix]);
 
   const update = useCallback((next: string) => {
     setText(next);
@@ -74,7 +78,7 @@ export function useEntityNotes(entityKey: string | null) {
 
   const clear = useCallback(() => {
     if (!keyRef.current) return;
-    localStorage.removeItem(STORAGE_PREFIX + keyRef.current);
+    try { localStorage.removeItem(keyRef.current); } catch { /* ignore */ }
     setText('');
     setUpdatedAt(0);
   }, []);

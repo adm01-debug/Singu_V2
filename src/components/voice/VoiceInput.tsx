@@ -32,6 +32,7 @@ import { logger } from "@/lib/logger";
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const processAudioRef = useRef<((blob: Blob) => Promise<void>) | null>(null);
   const { toast } = useToast();
 
   const startRecording = useCallback(async () => {
@@ -55,9 +56,9 @@ import { logger } from "@/lib/logger";
       mediaRecorder.onstop = async () => {
         const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
         stream.getTracks().forEach(track => track.stop());
-        
-        if (audioBlob.size > 0) {
-          await processAudio(audioBlob);
+
+        if (audioBlob.size > 0 && processAudioRef.current) {
+          await processAudioRef.current(audioBlob);
         }
       };
 
@@ -160,6 +161,7 @@ import { logger } from "@/lib/logger";
       setIsProcessing(false);
     }
   };
+  processAudioRef.current = processAudio;
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -182,7 +184,7 @@ import { logger } from "@/lib/logger";
       <Button
         type="button"
         variant={isRecording ? "destructive" : "outline"}
-        size="icon"
+        size="icon" aria-label="Carregando"
         onClick={handleClick}
         disabled={disabled || isProcessing}
         className={cn(

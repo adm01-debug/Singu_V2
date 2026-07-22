@@ -115,7 +115,7 @@ export function useStakeholderAlerts(companyId?: string) {
     }
   }, []);
 
-  const fetchAlerts = useCallback(async () => {
+  const fetchAlerts = useCallback(async (signal?: { cancelled: boolean }) => {
     try {
       if (!user) return;
 
@@ -134,8 +134,9 @@ export function useStakeholderAlerts(companyId?: string) {
         query = query.eq('company_id', companyId);
       }
 
-      const { data, error } = await query;
+      const { data, error } = await query.limit(500);
 
+      if (signal?.cancelled) return;
       if (error) throw error;
 
       // Type assertion for the joined data
@@ -147,28 +148,38 @@ export function useStakeholderAlerts(companyId?: string) {
 
       setAlerts(typedData);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error fetching stakeholder alerts:', { error: msg });
+      if (!signal?.cancelled) {
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching stakeholder alerts:', { error: msg });
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [companyId, user]);
 
   useEffect(() => {
-    fetchAlerts();
+    const signal = { cancelled: false };
+    fetchAlerts(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchAlerts]);
+
+  const stakeholderMetricsKey = `stakeholder_metrics-${user?.id ?? 'anon'}`;
 
   // Load stored metrics from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem('stakeholder_metrics');
-    if (stored) {
-      try {
-        setStoredMetrics(JSON.parse(stored));
-      } catch {
-        setStoredMetrics([]);
+    try {
+      const stored = localStorage.getItem(stakeholderMetricsKey);
+      if (stored) {
+        try {
+          setStoredMetrics(JSON.parse(stored));
+        } catch {
+          setStoredMetrics([]);
+        }
       }
+    } catch {
+      // localStorage blocked in private browsing
     }
-  }, []);
+  }, [stakeholderMetricsKey]);
 
   const saveMetrics = useCallback((contactId: string, metrics: StakeholderMetrics) => {
     const newStored = storedMetrics.filter(m => m.contactId !== contactId);
@@ -178,8 +189,8 @@ export function useStakeholderAlerts(companyId?: string) {
       timestamp: new Date().toISOString()
     });
     setStoredMetrics(newStored);
-    localStorage.setItem('stakeholder_metrics', JSON.stringify(newStored));
-  }, [storedMetrics]);
+    try { localStorage.setItem(stakeholderMetricsKey, JSON.stringify(newStored)); } catch { /* quota/private */ }
+  }, [storedMetrics, stakeholderMetricsKey]);
 
   const getStoredMetrics = useCallback((contactId: string): StoredMetrics | undefined => {
     return storedMetrics.find(m => m.contactId === contactId);
@@ -406,6 +417,7 @@ export function useStakeholderAlerts(companyId?: string) {
   }, [getStoredMetrics, saveMetrics, createAlert]);
 
   const dismissAlert = useCallback(async (alertId: string) => {
+    if (!user) return;
     const previousAlerts = alerts;
     setAlerts(prev => prev.filter(a => a.id !== alertId));
 
@@ -413,6 +425,7 @@ export function useStakeholderAlerts(companyId?: string) {
       const { error } = await supabase
         .from('stakeholder_alerts')
         .update({ dismissed: true, dismissed_at: new Date().toISOString() })
+        .eq('user_id', user.id)
         .eq('id', alertId);
 
       if (error) throw error;

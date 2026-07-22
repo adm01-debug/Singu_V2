@@ -20,8 +20,12 @@ export function McpInstructionsCard() {
 }`;
 
   const copy = async (txt: string) => {
-    await navigator.clipboard.writeText(txt);
-    toast.success('Copiado');
+    try {
+      await navigator.clipboard.writeText(txt);
+      toast.success('Copiado');
+    } catch {
+      toast.error('Não foi possível copiar');
+    }
   };
 
   return (

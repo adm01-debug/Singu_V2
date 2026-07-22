@@ -21,9 +21,9 @@ CREATE TABLE public.sales_playbooks (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_sales_playbooks_user ON public.sales_playbooks(user_id);
-CREATE INDEX idx_sales_playbooks_scenario ON public.sales_playbooks(user_id, scenario) WHERE active = true;
-CREATE INDEX idx_sales_playbooks_tags ON public.sales_playbooks USING GIN(tags);
+CREATE INDEX IF NOT EXISTS idx_sales_playbooks_user ON public.sales_playbooks(user_id);
+CREATE INDEX IF NOT EXISTS idx_sales_playbooks_scenario ON public.sales_playbooks(user_id, scenario) WHERE active = true;
+CREATE INDEX IF NOT EXISTS idx_sales_playbooks_tags ON public.sales_playbooks USING GIN(tags);
 
 ALTER TABLE public.sales_playbooks ENABLE ROW LEVEL SECURITY;
 
@@ -65,8 +65,8 @@ CREATE TABLE public.battle_cards (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_battle_cards_user ON public.battle_cards(user_id);
-CREATE INDEX idx_battle_cards_competitor ON public.battle_cards(user_id, lower(competitor_name)) WHERE active = true;
+CREATE INDEX IF NOT EXISTS idx_battle_cards_user ON public.battle_cards(user_id);
+CREATE INDEX IF NOT EXISTS idx_battle_cards_competitor ON public.battle_cards(user_id, lower(competitor_name)) WHERE active = true;
 
 ALTER TABLE public.battle_cards ENABLE ROW LEVEL SECURITY;
 
@@ -100,9 +100,9 @@ CREATE TABLE public.playbook_usage_log (
   opened_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_playbook_usage_user ON public.playbook_usage_log(user_id, opened_at DESC);
-CREATE INDEX idx_playbook_usage_playbook ON public.playbook_usage_log(playbook_id, opened_at DESC);
-CREATE INDEX idx_playbook_usage_battle_card ON public.playbook_usage_log(battle_card_id, opened_at DESC);
+CREATE INDEX IF NOT EXISTS idx_playbook_usage_user ON public.playbook_usage_log(user_id, opened_at DESC);
+CREATE INDEX IF NOT EXISTS idx_playbook_usage_playbook ON public.playbook_usage_log(playbook_id, opened_at DESC);
+CREATE INDEX IF NOT EXISTS idx_playbook_usage_battle_card ON public.playbook_usage_log(battle_card_id, opened_at DESC);
 
 ALTER TABLE public.playbook_usage_log ENABLE ROW LEVEL SECURITY;
 

@@ -1,5 +1,5 @@
- import { useQuery } from '@tanstack/react-query';
- import { supabase } from '@/integrations/supabase/client';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { logger } from '@/lib/logger';
 
@@ -29,6 +29,7 @@ import { logger } from '@/lib/logger';
      queryKey: ['marketing-funnel', startDate, endDate, user?.id],
      enabled: !!user,
      staleTime: 10 * 60_000,
+     refetchOnWindowFocus: false,
      queryFn: async () => {
        if (!user) return [];
 
@@ -56,13 +57,15 @@ import { logger } from '@/lib/logger';
      queryKey: ['marketing-behavioral-insights', user?.id],
      enabled: !!user,
      staleTime: 10 * 60_000,
+     refetchOnWindowFocus: false,
      queryFn: async () => {
        if (!user) return null;
 
        const { data, error } = await supabase
          .from('contacts')
          .select('id, contact_behavior(disc_primary, vak_primary, motivation_primary)')
-         .eq('user_id', user.id);
+         .eq('user_id', user.id)
+         .limit(500);
 
        if (error) { throw error; }
 
@@ -99,13 +102,16 @@ import { logger } from '@/lib/logger';
      queryKey: ['marketing-campaign-stats', user?.id],
      enabled: !!user,
      staleTime: 10 * 60_000,
+     refetchOnWindowFocus: false,
      queryFn: async () => {
        if (!user) return [];
 
        const { data, error } = await supabase
         .from('marketing_campaign_stats')
-         .select('*')
-         .order('date', { ascending: false });
+        .select('id, entity_type, entity_id, date, views, clicks, submissions, conversions, spend, revenue')
+        .eq('user_id', user.id)
+        .order('date', { ascending: false })
+        .limit(500);
 
        if (error) {
          logger.error('Error fetching campaign stats:', error);

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { queryExternalData } from '@/lib/externalData';
+import { useAuth } from './useAuth';
 
 export interface ContactProposal {
   id: string;
@@ -19,8 +20,9 @@ export interface ContactProposal {
 }
 
 export function useContactProposals(contactId?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['contact-proposals', contactId],
+    queryKey: ['contact-proposals', contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await queryExternalData<ContactProposal>({
         table: 'proposals',
@@ -32,7 +34,7 @@ export function useContactProposals(contactId?: string) {
       if (error) throw error;
       return data || [];
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
     staleTime: 5 * 60 * 1000,
   });
 }

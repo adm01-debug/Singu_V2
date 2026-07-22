@@ -122,13 +122,14 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   const queryKey = useMemo(() => ['contacts', companyId ?? '__all__', user?.id], [companyId, user?.id]);
   const externalEnabled = options?.enabled ?? true;
 
-  const { 
-    data, 
-    isLoading: loading, 
-    isFetching, 
-    fetchNextPage, 
-    hasNextPage, 
-    isFetchingNextPage 
+  const {
+    data,
+    isLoading: loading,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    error: queryError,
   } = useInfiniteQuery({
     queryKey,
     queryFn: ({ pageParam = 0 }) => fetchContactsPage(companyId, pageParam as number),
@@ -338,5 +339,5 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     }
   };
 
-  return { contacts, loading, isFetching, hasMore: hasNextPage, fetchContacts, loadMore, createContact, updateContact, deleteContact, prefetchContactDetails };
+  return { contacts, loading, isFetching, hasMore: hasNextPage, error: queryError, fetchContacts, loadMore, createContact, updateContact, deleteContact, prefetchContactDetails };
 }

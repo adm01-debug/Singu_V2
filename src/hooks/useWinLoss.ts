@@ -81,7 +81,8 @@ export function useWinLossRecords(filters: RecordsFilter = {}) {
     queryFn: async () => {
       let q = supabase
         .from('win_loss_records')
-        .select('*')
+        .select('id, user_id, deal_id, outcome, primary_reason_id, secondary_reasons, competitor_id, deal_value, sales_cycle_days, decision_maker_contact_id, notes, lessons_learned, recorded_at, created_at, updated_at')
+        .eq('user_id', user!.id)
         .order('recorded_at', { ascending: false })
         .limit(500);
       if (filters.outcome) q = q.eq('outcome', filters.outcome);
@@ -92,23 +93,26 @@ export function useWinLossRecords(filters: RecordsFilter = {}) {
       return (data ?? []) as WinLossRecord[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
 export function useWinLossRecordByDeal(dealId: string | null | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['win-loss-record-by-deal', dealId],
+    queryKey: ['win-loss-record-by-deal', dealId, user?.id],
     queryFn: async () => {
       if (!dealId) return null;
       const { data, error } = await supabase
         .from('win_loss_records')
-        .select('*')
+        .select('id, user_id, deal_id, outcome, primary_reason_id, secondary_reasons, competitor_id, deal_value, sales_cycle_days, decision_maker_contact_id, notes, lessons_learned, recorded_at, created_at, updated_at')
         .eq('deal_id', dealId)
+        .eq('user_id', user!.id)
         .maybeSingle();
       if (error) throw error;
       return data as WinLossRecord | null;
     },
-    enabled: !!dealId,
+    enabled: !!dealId && !!user,
   });
 }
 
@@ -137,10 +141,12 @@ export function useUpsertWinLossRecord() {
 }
 
 export function useDeleteWinLossRecord() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('win_loss_records').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('win_loss_records').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -161,15 +167,18 @@ export function useWinLossReasons(outcome?: ReasonOutcomeType) {
     queryFn: async () => {
       let q = supabase
         .from('win_loss_reasons')
-        .select('*')
+        .select('id, user_id, category, label, outcome_type, active, sort_order')
+        .eq('user_id', user!.id)
         .eq('active', true)
-        .order('sort_order');
+        .order('sort_order')
+        .limit(100);
       if (outcome) q = q.in('outcome_type', [outcome, 'both']);
       const { data, error } = await q;
       if (error) throw error;
       return (data ?? []) as WinLossReason[];
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -194,10 +203,12 @@ export function useUpsertReason() {
 }
 
 export function useDeleteReason() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('win_loss_reasons').update({ active: false }).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('win_loss_reasons').update({ active: false }).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-reasons'] }),
@@ -229,13 +240,16 @@ export function useCompetitors() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('competitors')
-        .select('*')
+        .select('id, user_id, name, website, strengths, weaknesses, typical_price_range, win_rate_against, notes, active')
+        .eq('user_id', user!.id)
         .eq('active', true)
-        .order('name');
+        .order('name')
+        .limit(200);
       if (error) throw error;
       return (data ?? []) as Competitor[];
     },
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -260,10 +274,12 @@ export function useUpsertCompetitor() {
 }
 
 export function useDeleteCompetitor() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('competitors').update({ active: false }).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('competitors').update({ active: false }).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['competitors'] }),
@@ -296,8 +312,10 @@ export function useWinLossMetrics(periodDays = 90) {
       const fromDate = new Date(Date.now() - periodDays * 86400_000).toISOString();
       const { data: records, error } = await supabase
         .from('win_loss_records')
-        .select('*')
-        .gte('recorded_at', fromDate);
+        .select('id, user_id, deal_id, outcome, primary_reason_id, secondary_reasons, competitor_id, deal_value, sales_cycle_days, decision_maker_contact_id, notes, lessons_learned, recorded_at, created_at, updated_at')
+        .eq('user_id', user!.id)
+        .gte('recorded_at', fromDate)
+        .limit(500);
       if (error) throw error;
 
       const list = (records ?? []) as WinLossRecord[];
@@ -368,6 +386,7 @@ export function useWinLossMetrics(periodDays = 90) {
       };
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -381,13 +400,15 @@ export function useWinLossInsights() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('win_loss_insights')
-        .select('*')
+        .select('id, user_id, period_start, period_end, insight_type, title, description, severity, supporting_data, generated_at')
+        .eq('user_id', user!.id)
         .order('generated_at', { ascending: false })
         .limit(20);
       if (error) throw error;
       return (data ?? []) as WinLossInsight[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -407,10 +428,12 @@ export function useGenerateInsights() {
 }
 
 export function useDeleteInsight() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('win_loss_insights').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('win_loss_insights').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-insights'] }),

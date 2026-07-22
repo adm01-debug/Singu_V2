@@ -15,12 +15,14 @@ export function useFavoriteTemplates() {
       const { data, error } = await supabase
         .from('favorite_templates')
         .select('template_id')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .limit(200);
       if (error) throw error;
       return (data || []).map(f => f.template_id);
     },
     enabled: !!user,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const toggleFavorite = useMutation({
@@ -28,15 +30,17 @@ export function useFavoriteTemplates() {
       if (!user) throw new Error('Not authenticated');
       const isFav = favorites.includes(templateId);
       if (isFav) {
-        await supabase
+        const { error } = await supabase
           .from('favorite_templates')
           .delete()
           .eq('user_id', user.id)
           .eq('template_id', templateId);
+        if (error) throw error;
       } else {
-        await supabase
+        const { error } = await supabase
           .from('favorite_templates')
           .insert([{ user_id: user.id, template_id: templateId }]);
+        if (error) throw error;
       }
       return { templateId, added: !isFav };
     },

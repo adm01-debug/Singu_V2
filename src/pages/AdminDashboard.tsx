@@ -115,6 +115,7 @@ export default function AdminDashboard() {
       }
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   // Secret health
@@ -137,6 +138,7 @@ export default function AdminDashboard() {
       return count || 0;
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   if (adminLoading) return <div className="p-8">Carregando...</div>;

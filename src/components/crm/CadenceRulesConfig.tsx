@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { CalendarClock, Plus, ShieldCheck, History, Trash2, Settings2 } from 'lucide-react';
 import { 
   Table, 
@@ -33,15 +35,20 @@ import {
   SelectValue 
 } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { parseApiError } from '@/lib/errorMessages';
 
 type CadenceStepType = 'message' | 'call' | 'email' | 'task';
 type CadencePriority = 'low' | 'medium' | 'high' | 'urgent';
 
 interface CadenceStep {
+  _localId?: string;
   type: CadenceStepType;
   delay_days: number;
   content: string;
 }
+
+let _stepCounter = 0;
+const nextStepId = () => `step-${++_stepCounter}`;
 
 interface CadenceRule {
   id?: string;
@@ -54,6 +61,7 @@ interface CadenceRule {
 
 export function CadenceRulesConfig() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingRule, setEditingRule] = useState<CadenceRule | null>(null);
 
@@ -62,26 +70,35 @@ export function CadenceRulesConfig() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('crm_cadence_rules')
-        .select('*')
+        .select('id, relationship_stage, frequency_days, priority, cadence_steps, is_active')
         .eq('is_active', true)
-        .order('relationship_stage');
+        .order('relationship_stage')
+        .limit(100);
       if (error) throw error;
       return data;
-    }
+    },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const saveRule = useMutation({
     mutationFn: async (ruleData: CadenceRule) => {
-      if (ruleData.id) {
+      if (!user) throw new Error('Não autenticado');
+      const payload = {
+        ...ruleData,
+        cadence_steps: ruleData.cadence_steps.map(({ _localId: _, ...step }) => step),
+      };
+      if (payload.id) {
         const { error } = await supabase
           .from('crm_cadence_rules')
-          .update(ruleData as never)
-          .eq('id', ruleData.id);
+          .update(payload as TablesUpdate<'crm_cadence_rules'>)
+          .eq('user_id', user.id)
+          .eq('id', payload.id);
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('crm_cadence_rules')
-          .insert([ruleData as never]);
+          .insert([payload as TablesInsert<'crm_cadence_rules'>]);
         if (error) throw error;
       }
     },
@@ -91,19 +108,20 @@ export function CadenceRulesConfig() {
       setIsDialogOpen(false);
       setEditingRule(null);
     },
-    onError: (error: Error) => toast.error(`Erro ao salvar regra: ${error.message}`)
+    onError: (error: Error) => toast.error(`Erro ao salvar regra: ${parseApiError(error)}`)
   });
 
   const deleteRule = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('crm_cadence_rules').update({ is_active: false }).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('crm_cadence_rules').update({ is_active: false }).eq('id', id).eq('user_id', user.id);
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['crm-cadence-rules'] });
       toast.success('Regra removida');
     },
-    onError: (e: Error) => toast.error(`Erro ao remover regra: ${e.message}`),
+    onError: (e: Error) => toast.error(`Erro ao remover regra: ${parseApiError(e)}`),
   });
 
   const handleOpenDialog = (rule?: { id?: string; relationship_stage?: string; frequency_days?: number; priority?: string; cadence_steps?: unknown }) => {
@@ -113,7 +131,7 @@ export function CadenceRulesConfig() {
         relationship_stage: rule.relationship_stage ?? 'prospect',
         frequency_days: rule.frequency_days ?? 7,
         priority: (rule.priority as CadencePriority) ?? 'medium',
-        cadence_steps: (rule.cadence_steps as CadenceStep[] | undefined) ?? []
+        cadence_steps: ((rule.cadence_steps as CadenceStep[] | undefined) ?? []).map(s => ({ ...s, _localId: nextStepId() }))
       });
     } else {
       setEditingRule({
@@ -121,7 +139,7 @@ export function CadenceRulesConfig() {
         frequency_days: 7,
         priority: 'medium',
         cadence_steps: [
-          { type: 'message', delay_days: 0, content: 'Primeiro contato de acompanhamento' }
+          { _localId: nextStepId(), type: 'message', delay_days: 0, content: 'Primeiro contato de acompanhamento' }
         ]
       });
     }
@@ -130,11 +148,12 @@ export function CadenceRulesConfig() {
 
   // Sincronização automática para novas regras ou mudanças de estágio
   useEffect(() => {
+    if (!user?.id) return;
     const channel = supabase
-      .channel('cadence-updates')
+      .channel(`cadence-updates:${user.id}`)
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'crm_cadence_rules' },
+        { event: '*', schema: 'public', table: 'crm_cadence_rules', filter: `user_id=eq.${user.id}` },
         () => {
           queryClient.invalidateQueries({ queryKey: ['crm-cadence-rules'] });
         }
@@ -144,12 +163,12 @@ export function CadenceRulesConfig() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [queryClient]);
+  }, [queryClient, user?.id]);
 
   const handleAddStep = () => {
     if (!editingRule) return;
     const steps = [...(editingRule.cadence_steps || [])];
-    steps.push({ type: 'message', delay_days: 2, content: 'Próximo passo da cadência' });
+    steps.push({ _localId: nextStepId(), type: 'message', delay_days: 2, content: 'Próximo passo da cadência' });
     setEditingRule({ ...editingRule, cadence_steps: steps });
   };
 
@@ -214,7 +233,7 @@ export function CadenceRulesConfig() {
                   <TableCell className="text-right flex items-center justify-end gap-1">
                     <Button 
                       variant="ghost" 
-                      size="icon" 
+                      size="icon" aria-label="Configurações" 
                       className="h-7 w-7 text-muted-foreground"
                       onClick={() => handleOpenDialog(rule)}
                     >
@@ -222,7 +241,7 @@ export function CadenceRulesConfig() {
                     </Button>
                     <Button 
                       variant="ghost" 
-                      size="icon" 
+                      size="icon" aria-label="Remover" 
                       className="h-7 w-7 text-muted-foreground hover:text-destructive"
                       onClick={() => deleteRule.mutate(rule.id)}
                     >
@@ -302,7 +321,7 @@ export function CadenceRulesConfig() {
                       <Input 
                         type="number" 
                         value={editingRule.frequency_days} 
-                        onChange={(e) => setEditingRule({...editingRule!, frequency_days: parseInt(e.target.value)})}
+                        onChange={(e) => setEditingRule({...editingRule!, frequency_days: parseInt(e.target.value) || 1})}
                         className="h-9"
                       />
                     </div>
@@ -321,10 +340,10 @@ export function CadenceRulesConfig() {
 
                     <div className="space-y-3">
                       {editingRule.cadence_steps?.map((step: CadenceStep, index: number) => (
-                        <div key={index} className="group relative bg-muted/30 rounded-lg p-3 border border-dashed hover:border-primary/30 transition-colors">
+                        <div key={step._localId ?? index} className="group relative bg-muted/30 rounded-lg p-3 border border-dashed hover:border-primary/30">
                           <Button 
                             variant="ghost" 
-                            size="icon" 
+                            size="icon" aria-label="Remover" 
                             className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-background border shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
                             onClick={() => handleRemoveStep(index)}
                           >
@@ -355,7 +374,7 @@ export function CadenceRulesConfig() {
                                 <Input 
                                   type="number" 
                                   value={step.delay_days} 
-                                  onChange={(e) => handleUpdateStep(index, 'delay_days', parseInt(e.target.value))}
+                                  onChange={(e) => handleUpdateStep(index, 'delay_days', parseInt(e.target.value) || 0)}
                                   className="h-8 text-xs pr-6"
                                 />
                                 <span className="absolute right-2 top-1.5 text-[9px] text-muted-foreground">d</span>

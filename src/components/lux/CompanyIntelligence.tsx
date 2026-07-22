@@ -30,10 +30,9 @@ interface LuxAudienceData {
   const socialProfiles = record.social_profiles || [];
 
   const copyToClipboard = (text: string, field: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedField(field);
-    toast.success('Copiado para área de transferência');
-    setTimeout(() => setCopiedField(null), 2000);
+    navigator.clipboard.writeText(text)
+      .then(() => { setCopiedField(field); toast.success('Copiado para área de transferência'); setTimeout(() => setCopiedField(null), 2000); })
+      .catch(() => toast.error('Não foi possível copiar'));
   };
 
   return (
@@ -82,7 +81,7 @@ interface LuxAudienceData {
                   <span className="text-sm text-muted-foreground">{label}</span>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium">{String(fiscal[key as keyof LuxFiscalData])}</span>
-                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(String(fiscal[key as keyof LuxFiscalData]), key)}>
+                    <Button variant="ghost" size="icon" aria-label="Confirmar" className="h-6 w-6" onClick={() => copyToClipboard(String(fiscal[key as keyof LuxFiscalData]), key)}>
                       {copiedField === key ? <Check className="w-3 h-3 text-success" /> : <Copy className="w-3 h-3 text-muted-foreground" />}
                     </Button>
                   </div>

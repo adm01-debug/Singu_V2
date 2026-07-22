@@ -1,4 +1,5 @@
 import React, { useState, lazy, Suspense } from 'react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -58,7 +59,7 @@ export default function LeadRoutingModule() {
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="h-8 w-8">
+              <Button variant="outline" size="icon" aria-label="Mais opções" className="h-8 w-8">
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -115,26 +116,28 @@ export default function LeadRoutingModule() {
           </TabsTrigger>
         </TabsList>
 
-        <Suspense fallback={<TabSkeleton />}>
-          <TabsContent value="team">
-            <SalesTeamTab />
-          </TabsContent>
-          <TabsContent value="rules">
-            <RoutingRulesTab />
-          </TabsContent>
-          <TabsContent value="handoff">
-            <HandoffQueueTab />
-          </TabsContent>
-          <TabsContent value="history">
-            <AssignmentHistoryTab />
-          </TabsContent>
-          <TabsContent value="redistlog">
-            <RedistributionLogTab />
-          </TabsContent>
-          <TabsContent value="metrics">
-            <RoutingMetricsTab />
-          </TabsContent>
-        </Suspense>
+        <DashboardErrorBoundary sectionName="Lead Routing">
+          <Suspense fallback={<TabSkeleton />}>
+            <TabsContent value="team">
+              <SalesTeamTab />
+            </TabsContent>
+            <TabsContent value="rules">
+              <RoutingRulesTab />
+            </TabsContent>
+            <TabsContent value="handoff">
+              <HandoffQueueTab />
+            </TabsContent>
+            <TabsContent value="history">
+              <AssignmentHistoryTab />
+            </TabsContent>
+            <TabsContent value="redistlog">
+              <RedistributionLogTab />
+            </TabsContent>
+            <TabsContent value="metrics">
+              <RoutingMetricsTab />
+            </TabsContent>
+          </Suspense>
+        </DashboardErrorBoundary>
       </Tabs>
     </div>
   );

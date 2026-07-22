@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
+import { useAuth } from '@/hooks/useAuth';
 
 interface EasterEgg {
   id: string;
@@ -10,33 +12,31 @@ interface EasterEgg {
   discovered: boolean;
 }
 
-const STORAGE_KEY = 'discovered-easter-eggs';
+const BASE_STORAGE_KEY = 'discovered-easter-eggs';
 
 export function useEasterEggs() {
+  const { user } = useAuth();
+  const storageKey = `${BASE_STORAGE_KEY}-${user?.id ?? 'anon'}`;
   const [keySequence, setKeySequence] = useState<string[]>([]);
   const [discoveredEggs, setDiscoveredEggs] = useState<Set<string>>(new Set());
 
-  // Load discovered eggs from storage
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setDiscoveredEggs(new Set(JSON.parse(stored)));
-      }
+      const stored = localStorage.getItem(storageKey);
+      setDiscoveredEggs(stored ? new Set(JSON.parse(stored)) : new Set());
     } catch {
-      // Ignore errors
+      setDiscoveredEggs(new Set());
     }
-  }, []);
+  }, [storageKey]);
 
-  // Save discovered eggs
   const saveDiscoveredEgg = useCallback((eggId: string) => {
     setDiscoveredEggs(prev => {
       const next = new Set(prev);
       next.add(eggId);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]));
+      try { localStorage.setItem(storageKey, JSON.stringify([...next])); } catch { /* quota/private */ }
       return next;
     });
-  }, []);
+  }, [storageKey]);
 
   // Konami code confetti explosion
   const konamiAction = useCallback(() => {
@@ -126,9 +126,7 @@ export function useEasterEggs() {
   // Developer mode
   const devAction = useCallback(() => {
     if (import.meta.env.DEV) {
-       
-      console.log('%c🛠️ Developer Mode Activated!\n%cWelcome, fellow developer! 👨‍💻',
-        'font-size: 24px; color: #00ff00;', 'font-size: 16px; color: #00ccff;');
+      logger.log('Developer Mode Activated! Welcome, fellow developer! 👨‍💻');
     }
     
     toast.success('🛠️ Dev Mode Ativado!', {

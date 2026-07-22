@@ -93,7 +93,7 @@ export default function ResetPassword() {
                   <Label>Nova senha</Label>
                   <div className="relative">
                     <Input type={showPw ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} required />
-                    <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2" onClick={() => setShowPw(!showPw)}>
+                    <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2" onClick={() => setShowPw(!showPw)} aria-label={showPw ? 'Ocultar senha' : 'Mostrar senha'}>
                       {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>

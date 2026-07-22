@@ -20,7 +20,7 @@ USING (auth.uid() = user_id)
 WITH CHECK (auth.uid() = user_id);
 
 -- Create index for faster lookups
-CREATE INDEX idx_ai_tone_prefs_user_company ON public.ai_tone_preferences(user_id, company_id);
+CREATE INDEX IF NOT EXISTS idx_ai_tone_prefs_user_company ON public.ai_tone_preferences(user_id, company_id);
 
 -- Update trigger for updated_at
 CREATE TRIGGER update_ai_tone_preferences_updated_at

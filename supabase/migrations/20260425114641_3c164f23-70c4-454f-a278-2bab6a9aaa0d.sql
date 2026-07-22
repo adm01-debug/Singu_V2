@@ -10,7 +10,7 @@ CREATE TABLE public.objection_example_feedback (
   CONSTRAINT objection_example_feedback_unique UNIQUE (user_id, objection, interaction_id)
 );
 
-CREATE INDEX idx_objection_example_feedback_user_objection
+CREATE INDEX IF NOT EXISTS idx_objection_example_feedback_user_objection
   ON public.objection_example_feedback (user_id, objection);
 
 ALTER TABLE public.objection_example_feedback ENABLE ROW LEVEL SECURITY;

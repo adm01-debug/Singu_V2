@@ -29,6 +29,7 @@ export function useErrorLogs() {
     queryKey: ['admin', 'error-logs'],
     queryFn: fetchLogs,
     staleTime: 30000, // 30 segundos
+    refetchOnWindowFocus: false,
   });
 
   const clearLogsMutation = useMutation({
@@ -44,7 +45,7 @@ export function useErrorLogs() {
       return true;
     },
     onSuccess: () => {
-      queryClient.setQueryData(['admin', 'error-logs'], []);
+      queryClient.invalidateQueries({ queryKey: ['admin', 'error-logs'] });
       toast.success('Logs limpos');
     },
     onError: () => toast.error('Erro ao limpar logs'),

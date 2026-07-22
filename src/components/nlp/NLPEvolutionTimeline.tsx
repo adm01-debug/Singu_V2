@@ -82,13 +82,15 @@ const NLPEvolutionTimeline: React.FC<NLPEvolutionTimelineProps> = ({
           .from('vak_analysis_history')
           .select('created_at, visual_score, auditory_score, kinesthetic_score, digital_score')
           .eq('contact_id', contactId).eq('user_id', currentUser.id)
-          .gte('created_at', startDate).order('created_at', { ascending: true });
+          .gte('created_at', startDate).order('created_at', { ascending: true })
+          .limit(500);
 
         const { data: emotionalHistory } = await supabase
           .from('emotional_states_history')
           .select('created_at, emotional_state, confidence')
           .eq('contact_id', contactId).eq('user_id', currentUser.id)
-          .gte('created_at', startDate).order('created_at', { ascending: true });
+          .gte('created_at', startDate).order('created_at', { ascending: true })
+          .limit(500);
 
         if (cancelled) return;
         const typeMap: Record<string, VAKType> = { visual: 'V', auditory: 'A', kinesthetic: 'K', digital: 'D' };
@@ -177,7 +179,7 @@ const NLPEvolutionTimeline: React.FC<NLPEvolutionTimelineProps> = ({
                 <SelectItem value="180d">6 meses</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="icon" onClick={() => setRefreshCounter(c => c + 1)}><RefreshCw className="w-4 h-4" /></Button>
+            <Button variant="outline" size="icon" aria-label="Atualizar" onClick={() => setRefreshCounter(c => c + 1)}><RefreshCw className="w-4 h-4" /></Button>
           </div>
         </div>
       </CardHeader>

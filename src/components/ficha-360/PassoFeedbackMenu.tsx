@@ -4,6 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 import { formatDistanceToNow, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import {
@@ -161,7 +162,7 @@ function PassoFeedbackMenuComponent({ passoId, contactId, channelHint }: Props) 
         },
         onError: (err) => {
           toast.error('Não foi possível registrar', {
-            description: err instanceof Error ? err.message : 'Tente novamente.',
+            description: parseApiError(err, 'Tente novamente.'),
           });
         },
       },

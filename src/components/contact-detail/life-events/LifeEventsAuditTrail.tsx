@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { History, User, Clock } from 'lucide-react';
@@ -11,19 +12,24 @@ interface LifeEventsAuditTrailProps {
 }
 
 export function LifeEventsAuditTrail({ contactId }: LifeEventsAuditTrailProps) {
+  const { user } = useAuth();
   const { data: auditLogs, isLoading } = useQuery({
-    queryKey: ['life-events-audit', contactId],
+    queryKey: ['life-events-audit', contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('v_life_events_audit')
-        .select('*')
+        .select('id, change_type, changed_at, title, event_type, reason, user_name')
         .eq('contact_id', contactId)
-        .order('changed_at', { ascending: false });
-      
+        .eq('user_id', user!.id)
+        .order('changed_at', { ascending: false })
+        .limit(100);
+
       if (error) throw error;
       return data;
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   if (isLoading) {

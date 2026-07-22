@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { queryExternalData } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface ChurnRiskData {
   contact_id: string;
@@ -38,6 +39,7 @@ export function useChurnRisk(contactId: string | undefined) {
     },
     enabled: !!contactId,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 20 * 60 * 1000,
   });
 }
@@ -71,6 +73,7 @@ export function useChurnPredictions(contactId: string | undefined) {
     },
     enabled: !!contactId,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 20 * 60 * 1000,
   });
 }
@@ -91,19 +94,24 @@ export interface LocalChurnRisk {
 }
 
 export function useLocalChurnRisks(contactId?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["local-churn-risks", contactId],
+    queryKey: ["local-churn-risks", contactId, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       let query = supabase
         .from("churn_risk_scores")
-        .select("*")
-        .order("risk_score", { ascending: false });
+        .select("id, contact_id, risk_level, risk_score, risk_factors, recommendations, days_since_last_interaction, sentiment_trend, score_trend, analyzed_at")
+        .eq("user_id", user!.id)
+        .order("risk_score", { ascending: false })
+        .limit(200);
       if (contactId) query = query.eq("contact_id", contactId);
       const { data, error } = await query;
       if (error) throw error;
       return (data ?? []) as unknown as LocalChurnRisk[];
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 

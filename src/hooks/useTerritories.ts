@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { useAuth } from './useAuth';
 
 export interface Territory {
   id: string;
@@ -31,8 +32,10 @@ export interface TerritoryPerformance {
 }
 
 export function useTerritories() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['territories'],
+    queryKey: ['territories', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       try {
         const { data, error } = await callExternalRpc<Territory[]>('get_territories', {});
@@ -52,8 +55,10 @@ export function useTerritories() {
 }
 
 export function useTerritoryPerformance() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['territory-performance'],
+    queryKey: ['territory-performance', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       try {
         const { data, error } = await callExternalRpc<TerritoryPerformance[]>(

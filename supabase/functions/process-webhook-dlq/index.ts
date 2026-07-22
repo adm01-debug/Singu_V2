@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, requireCronSecret, guardBody } from "../_shared/auth.ts";
+import { validate } from "../_shared/validate.ts";
 
 
 interface DlqRow {
@@ -34,9 +35,9 @@ Deno.serve(async (req) => {
   );
 
   let manualId: string | null = null;
-  if (req.method === "POST") {
-    const body = rawBody as Record<string, unknown> | null;
-    if (typeof body?.id === "string") manualId = body.id;
+  if (req.method === "POST" && rawBody) {
+    const vdq = validate(rawBody, { id: { type: 'string', maxLength: 36 } });
+    if (vdq.ok && vdq.data.id) manualId = vdq.data.id as string;
   }
 
   const query = admin.from("incoming_webhook_dlq")

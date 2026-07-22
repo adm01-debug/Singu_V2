@@ -23,9 +23,10 @@ export function useWebAuthn() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('webauthn_credentials')
-        .select('*')
+        .select('id, user_id, credential_id, public_key, label, transports, last_used_at, created_at')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(20);
       if (error) return [];
       return Array.isArray(data) ? data : [];
     },
@@ -77,7 +78,7 @@ export function useWebAuthn() {
   }, [user, isSupported, qc]);
 
   const remove = useCallback(async (credentialId: string) => {
-    const { error } = await supabase.from('webauthn_credentials').delete().eq('id', credentialId);
+    const { error } = await supabase.from('webauthn_credentials').delete().eq('user_id', user!.id).eq('id', credentialId);
     if (error) { toast.error('Erro ao remover passkey.'); return; }
     toast.success('Passkey removida.');
     qc.invalidateQueries({ queryKey: ['webauthn-credentials'] });

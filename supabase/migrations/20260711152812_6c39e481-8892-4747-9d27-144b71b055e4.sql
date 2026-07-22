@@ -18,8 +18,8 @@ CREATE TABLE public.audit_log (
 ) PARTITION BY RANGE (created_at);
 
 -- Índices no parent (propagados para partições)
-CREATE INDEX idx_audit_log_entity ON public.audit_log (entity_type, entity_id);
-CREATE INDEX idx_audit_log_user ON public.audit_log (user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_audit_log_entity ON public.audit_log (entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_audit_log_user ON public.audit_log (user_id, created_at DESC);
 
 -- Grants
 GRANT SELECT, INSERT ON public.audit_log TO authenticated;

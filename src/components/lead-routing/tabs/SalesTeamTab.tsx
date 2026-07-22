@@ -1,4 +1,5 @@
 import React, { useState, useCallback, lazy, Suspense } from 'react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -116,7 +117,7 @@ function DeleteConfirmDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+        <Button variant="ghost" size="icon" aria-label="Remover"><Trash2 className="h-4 w-4 text-destructive" /></Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -186,9 +187,11 @@ export default function SalesTeamTab() {
 
   return (
     <div className="space-y-4">
-      <Suspense fallback={null}>
-        <QuickDistributeWidget />
-      </Suspense>
+      <DashboardErrorBoundary sectionName="Distribuição Rápida">
+        <Suspense fallback={null}>
+          <QuickDistributeWidget />
+        </Suspense>
+      </DashboardErrorBoundary>
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
           <p className="text-sm text-muted-foreground">{members.length} membros</p>
@@ -248,7 +251,7 @@ export default function SalesTeamTab() {
                     />
                     <Dialog open={editingId === m.id} onOpenChange={(o) => setEditingId(o ? m.id : null)}>
                       <DialogTrigger asChild>
-                        <Button variant="ghost" size="icon"><Edit className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="icon" aria-label="Editar"><Edit className="h-4 w-4" /></Button>
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader><DialogTitle>Editar {m.name}</DialogTitle></DialogHeader>

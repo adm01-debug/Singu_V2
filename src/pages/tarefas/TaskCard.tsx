@@ -52,13 +52,14 @@ export function TaskCard({ task, onComplete, onEdit }: TaskCardProps) {
       )}>
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <button 
+            <button
               onClick={(e) => {
                 e.stopPropagation();
                 if (!isCompleted) onComplete(task.id);
-              }} 
-              disabled={isCompleted} 
+              }}
+              disabled={isCompleted}
               className="mt-0.5 shrink-0"
+              aria-label={isCompleted ? 'Tarefa concluída' : 'Marcar tarefa como concluída'}
             >
               {isCompleted ? <CheckCircle2 className="h-5 w-5 text-success" /> : <Circle className={cn('h-5 w-5 hover:text-success transition-colors', priority.color)} />}
             </button>

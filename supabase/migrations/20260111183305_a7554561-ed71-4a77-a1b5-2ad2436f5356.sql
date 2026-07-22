@@ -116,11 +116,11 @@ CREATE POLICY "Users can update their own offer suggestions" ON public.offer_sug
 CREATE POLICY "Users can delete their own offer suggestions" ON public.offer_suggestions FOR DELETE USING (auth.uid() = user_id);
 
 -- Create indexes for performance
-CREATE INDEX idx_purchase_history_contact ON public.purchase_history(contact_id);
-CREATE INDEX idx_purchase_history_user ON public.purchase_history(user_id);
-CREATE INDEX idx_communication_preferences_contact ON public.communication_preferences(contact_id);
-CREATE INDEX idx_life_events_contact ON public.life_events(contact_id);
-CREATE INDEX idx_life_events_date ON public.life_events(event_date);
-CREATE INDEX idx_contact_time_analysis_contact ON public.contact_time_analysis(contact_id);
-CREATE INDEX idx_offer_suggestions_contact ON public.offer_suggestions(contact_id);
-CREATE INDEX idx_offer_suggestions_status ON public.offer_suggestions(status);
+CREATE INDEX IF NOT EXISTS idx_purchase_history_contact ON public.purchase_history(contact_id);
+CREATE INDEX IF NOT EXISTS idx_purchase_history_user ON public.purchase_history(user_id);
+CREATE INDEX IF NOT EXISTS idx_communication_preferences_contact ON public.communication_preferences(contact_id);
+CREATE INDEX IF NOT EXISTS idx_life_events_contact ON public.life_events(contact_id);
+CREATE INDEX IF NOT EXISTS idx_life_events_date ON public.life_events(event_date);
+CREATE INDEX IF NOT EXISTS idx_contact_time_analysis_contact ON public.contact_time_analysis(contact_id);
+CREATE INDEX IF NOT EXISTS idx_offer_suggestions_contact ON public.offer_suggestions(contact_id);
+CREATE INDEX IF NOT EXISTS idx_offer_suggestions_status ON public.offer_suggestions(status);

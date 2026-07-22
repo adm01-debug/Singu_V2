@@ -20,8 +20,9 @@ interface Props {
 export function EmailThreadSummaryCard({ contactId, subject, interactionId, threadCount }: Props) {
   const { summary, loading, generate, generating } = useEmailThreadSummary({ contactId, subject });
 
-  const handleGenerate = () =>
-    generate(interactionId ? { interaction_id: interactionId } : { contact_id: contactId, subject });
+  const handleGenerate = () => {
+    generate(interactionId ? { interaction_id: interactionId } : { contact_id: contactId, subject }).catch(() => {});
+  };
 
   if (loading) return <Skeleton className="h-24 w-full" />;
 
@@ -66,7 +67,7 @@ export function EmailThreadSummaryCard({ contactId, subject, interactionId, thre
             </span>
             <Button
               variant="ghost"
-              size="icon"
+              size="icon" aria-label="Regenerar"
               className="h-6 w-6"
               onClick={handleGenerate}
               disabled={generating}
@@ -87,7 +88,7 @@ export function EmailThreadSummaryCard({ contactId, subject, interactionId, thre
             </p>
             <ul className="space-y-0.5">
               {summary.key_points.map((p, i) => (
-                <li key={i} className="text-xs text-foreground flex items-start gap-1.5">
+                <li key={`${p}-${i}`} className="text-xs text-foreground flex items-start gap-1.5">
                   <CheckCircle2 className="h-3 w-3 text-success mt-0.5 shrink-0" />
                   {p}
                 </li>
@@ -103,7 +104,7 @@ export function EmailThreadSummaryCard({ contactId, subject, interactionId, thre
             </p>
             <ul className="space-y-1">
               {summary.action_items.map((item, i) => (
-                <li key={i} className="text-xs flex items-start gap-1.5 bg-background/60 rounded p-1.5">
+                <li key={`${item.task}-${i}`} className="text-xs flex items-start gap-1.5 bg-background/60 rounded p-1.5">
                   <ListChecks className="h-3 w-3 text-warning mt-0.5 shrink-0" />
                   <div className="min-w-0">
                     <span className="text-foreground">{item.task}</span>
@@ -127,7 +128,7 @@ export function EmailThreadSummaryCard({ contactId, subject, interactionId, thre
             </p>
             <ul className="space-y-0.5">
               {summary.next_steps.map((s, i) => (
-                <li key={i} className="text-xs text-foreground flex items-start gap-1.5">
+                <li key={`${s}-${i}`} className="text-xs text-foreground flex items-start gap-1.5">
                   <ArrowRight className="h-3 w-3 text-primary mt-0.5 shrink-0" />
                   {s}
                 </li>

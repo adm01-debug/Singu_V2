@@ -14,6 +14,7 @@ import { z } from 'zod';
 import { logger } from "@/lib/logger";
 import { checkRateLimit, recordFailedAttempt, recordSuccessfulAttempt, getRemainingAttempts, formatRetryTime } from '@/lib/rateLimiter';
 import { AuthBranding } from './auth/AuthBranding';
+import { parseApiError } from '@/lib/errorMessages';
 
 const emailSchema = z.string().email('Email inválido');
 const passwordSchema = z.string().min(6, 'Senha deve ter no mínimo 6 caracteres');
@@ -75,9 +76,9 @@ const Auth = () => {
           if (result.lockedOut && result.retryAfterSeconds) {
             toast.error(`Conta temporariamente bloqueada. Tente novamente em ${formatRetryTime(result.retryAfterSeconds)}.`);
           } else if (remaining <= 2) {
-            toast.error(`${error.message} (${remaining} tentativa${remaining > 1 ? 's' : ''} restante${remaining > 1 ? 's' : ''})`);
+            toast.error(`${parseApiError(error)} (${remaining} tentativa${remaining > 1 ? 's' : ''} restante${remaining > 1 ? 's' : ''})`);
           } else {
-            toast.error(error.message);
+            toast.error(parseApiError(error));
           }
         } else {
           recordSuccessfulAttempt(email);
@@ -88,7 +89,7 @@ const Auth = () => {
       } else {
         const { error, needsEmailVerification } = await signUp(email, password, { first_name: firstName, last_name: lastName });
         if (error) {
-          toast.error(error.message);
+          toast.error(parseApiError(error));
         } else if (needsEmailVerification) {
           toast.success('Conta criada! Verifique seu email para ativar o acesso.');
           setMode('login');
@@ -99,7 +100,7 @@ const Auth = () => {
         }
       }
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Não foi possível concluir a autenticação. Tente novamente.';
+      const msg = parseApiError(error, 'Não foi possível concluir a autenticação. Tente novamente.');
       logger.error('Auth submit error:', { error: msg });
       toast.error(msg);
     } finally {
@@ -196,7 +197,7 @@ const Auth = () => {
                 <Button type="button" variant="outline" className="w-full" onClick={async () => {
                   const { error } = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
                   if (error) { 
-                    const msg = error instanceof Error ? error.message : 'Erro ao entrar com Google';
+                    const msg = parseApiError(error, 'Erro ao entrar com Google');
                     toast.error(msg); 
                     logger.error('Google OAuth error:', { error: msg }); 
                   }

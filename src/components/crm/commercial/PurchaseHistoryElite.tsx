@@ -25,13 +25,16 @@ export function PurchaseHistoryElite({ contactId }: Props) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('purchase_history')
-        .select('*')
+        .select('id, amount, contact_id, created_at, cycle_months, notes, product_category, product_name, purchase_date, renewal_date, updated_at, user_id')
         .eq('contact_id', contactId)
-        .order('purchase_date', { ascending: false });
+        .order('purchase_date', { ascending: false })
+        .limit(100);
       
       if (error) throw error;
       return data;
-    }
+    },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   if (isLoading) {

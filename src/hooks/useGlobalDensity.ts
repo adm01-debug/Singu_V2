@@ -1,38 +1,40 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 export type GlobalDensity = 'comfortable' | 'compact';
 
-const STORAGE_KEY = 'singu-global-density-v1';
+const BASE_STORAGE_KEY = 'singu-global-density-v1';
 const CLASS_NAME = 'density-compact';
 
-function readInitial(): GlobalDensity {
+function readInitial(storageKey: string): GlobalDensity {
   if (typeof window === 'undefined') return 'comfortable';
   try {
-    const v = window.localStorage.getItem(STORAGE_KEY);
+    const v = window.localStorage.getItem(storageKey);
     return v === 'compact' ? 'compact' : 'comfortable';
   } catch {
     return 'comfortable';
   }
 }
 
-/**
- * Densidade global da UI (cozy vs compact). Aplica `html.density-compact`
- * para que regras CSS reduzam padding/gap em elementos com `[data-density-aware]`.
- * Persistido em localStorage. Independente do toggle do Intelligence Hub.
- */
 export function useGlobalDensity() {
-  const [density, setDensity] = useState<GlobalDensity>(readInitial);
+  const { user } = useAuth();
+  const storageKey = `${BASE_STORAGE_KEY}-${user?.id ?? 'anon'}`;
+  const [density, setDensity] = useState<GlobalDensity>('comfortable');
+
+  useEffect(() => {
+    setDensity(readInitial(storageKey));
+  }, [storageKey]);
 
   useEffect(() => {
     const root = document.documentElement;
     if (density === 'compact') root.classList.add(CLASS_NAME);
     else root.classList.remove(CLASS_NAME);
     try {
-      window.localStorage.setItem(STORAGE_KEY, density);
+      window.localStorage.setItem(storageKey, density);
     } catch {
       /* noop */
     }
-  }, [density]);
+  }, [density, storageKey]);
 
   const toggle = useCallback(() => {
     setDensity((prev) => (prev === 'compact' ? 'comfortable' : 'compact'));

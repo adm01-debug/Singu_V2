@@ -46,8 +46,8 @@ Deno.serve(async (req) => {
       _slug: slug,
       _data: data,
       _utms: utms,
-      _page_url: page_url ?? null,
-      _user_agent: user_agent ?? null,
+      _page_url: page_url ? String(page_url).slice(0, 2000) : null,
+      _user_agent: user_agent ? String(user_agent).slice(0, 500) : null,
     });
 
     if (error) throw error;

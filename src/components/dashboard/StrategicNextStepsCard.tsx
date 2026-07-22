@@ -228,7 +228,7 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
                   <div className="flex items-center gap-1 shrink-0" onClick={e => e.stopPropagation()}>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button size="icon" aria-label="Mais opções" variant="ghost" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
@@ -243,8 +243,7 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-
-                    <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button size="icon" aria-label="Avançar" variant="ghost" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </div>
@@ -419,7 +418,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       const details = encodeURIComponent(`Links e contexto no Singu CRM: ${window.location.origin}/contatos/${contact.id}`);
       const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${new Date().toISOString().replace(/-|:|\.\d\d\d/g, '')}/${new Date(Date.now() + 30 * 60 * 1000).toISOString().replace(/-|:|\.\d\d\d/g, '')}`;
       
-      window.open(googleCalendarUrl, '_blank');
+      window.open(googleCalendarUrl, '_blank', 'noopener,noreferrer');
 
       toast({
         title: "Lembrete Agendado",
@@ -465,15 +464,13 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
                   <SheetDescription>{contact?.role_title || 'Contato Estratégico'}</SheetDescription>
                 </div>
               </div>
-              <div className="flex gap-1">
-                <Button size="icon" variant="outline" className="h-8 w-8" onClick={exportToPDF} title="Exportar PDF">
-                  <Download className="h-4 w-4" />
-                </Button>
-                <Button size="icon" variant="outline" className="h-8 w-8" onClick={scheduleReminder} title="Agendar no Calendário">
-                  <Calendar className="h-4 w-4" />
-                </Button>
+              <Button size="icon" aria-label="Exportar PDF" variant="outline" className="h-8 w-8" onClick={exportToPDF} title="Exportar PDF">
+                <Download className="h-4 w-4" />
+              </Button>
+              <Button size="icon" aria-label="Agendar no Calendário" variant="outline" className="h-8 w-8" onClick={scheduleReminder} title="Agendar no Calendário">
+                <Calendar className="h-4 w-4" />
+              </Button>
               </div>
-            </div>
           </SheetHeader>
         </div>
 

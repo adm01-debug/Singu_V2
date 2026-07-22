@@ -18,6 +18,7 @@ export function useValidationQueueStats() {
     queryKey: ["validation-queue-stats", user?.id],
     enabled: !!user,
     refetchInterval: 30_000,
+    refetchOnWindowFocus: false,
     staleTime: 25_000,
     queryFn: async (): Promise<QueueStats> => {
       const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
@@ -25,7 +26,8 @@ export function useValidationQueueStats() {
         .from("validation_queue")
         .select("status")
         .eq("user_id", user!.id)
-        .gte("created_at", since);
+        .gte("created_at", since)
+        .limit(200);
       if (error) throw error;
       const stats: QueueStats = { pending: 0, processing: 0, done: 0, error: 0, total: 0 };
       (data ?? []).forEach((r: { status: string }) => {

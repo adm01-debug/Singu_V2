@@ -15,14 +15,15 @@ export function useFamilyHistory(contactId?: string) {
   const { user } = useAuth();
 
   const query = useQuery({
-    queryKey: ['family-history', contactId],
+    queryKey: ['family-history', contactId, user?.id],
     queryFn: async () => {
       if (!contactId || !user) return [];
       const { data, error } = await supabase
         .from('contact_family_history')
-        .select('*')
+        .select('id, contact_id, family_info, changed_at')
         .eq('contact_id', contactId)
-        .order('changed_at', { ascending: false });
+        .order('changed_at', { ascending: false })
+        .limit(50);
 
       if (error) throw error;
       return (data || []) as FamilyHistoryEntry[];
@@ -39,6 +40,7 @@ export function useFamilyHistory(contactId?: string) {
       const { error } = await supabase
         .from('contacts')
         .update({ family_info: historyEntry.family_info })
+        .eq('user_id', user!.id)
         .eq('id', contactId);
 
       if (error) throw error;

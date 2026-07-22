@@ -25,9 +25,9 @@ export function MultiStepProgress({ steps, currentStep, className }: MultiStepPr
         ))}
       </div>
       <div className="flex h-1.5 w-full gap-1.5 overflow-hidden rounded-full bg-muted/30">
-        {steps.map((_, index) => (
-          <div 
-            key={index} 
+        {steps.map((step, index) => (
+          <div
+            key={step}
             className="relative flex-1"
           >
             <div className="absolute inset-0 bg-muted/20" />

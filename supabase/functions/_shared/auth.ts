@@ -242,21 +242,11 @@ export async function requireCronSecret(req: Request): Promise<Response | null> 
 }
 
 /**
- * requireWebhookSecret — Validates a custom header against an env secret.
- * @param req        The incoming request
- * @param envName    Name of the env var holding the secret (e.g. "EVOLUTION_API_SECRET")
- * @param headerName Name of the header to check (e.g. "x-evolution-secret")
- * Returns a 401 Response on failure, or null to continue.
- *
- * Async because the underlying secret comparison uses crypto.subtle.
- * Callers must await this function.
- */
-/**
  * guardBody — size-checked JSON parse helper.
  *
- * Checks the Content-Length header and rejects payloads above `maxBytes`
- * before reading the body (fast-path rejection). Falls through to
- * JSON.parse and returns a typed result union so callers avoid try/catch.
+ * Uses Content-Length for a fast-path rejection, then reads the actual bytes
+ * to enforce the limit regardless of header spoofing. Returns a typed result
+ * union so callers avoid try/catch.
  *
  * Usage:
  *   const { body, error } = await guardBody(req);
@@ -270,18 +260,39 @@ export async function guardBody(
   req: Request,
   maxBytes = 256 * 1024,
 ): Promise<{ body: unknown; error: null } | { body: null; error: Response }> {
+  // Fast-path: reject if Content-Length header already exceeds limit
   const cl = parseInt(req.headers.get("content-length") ?? "0", 10);
-  if (cl > maxBytes) {
+  if (!isNaN(cl) && cl > maxBytes) {
+    return { body: null, error: jsonError("Payload too large", 413) };
+  }
+  // Read actual bytes to enforce the limit regardless of Content-Length spoofing
+  let buf: ArrayBuffer;
+  try {
+    buf = await req.arrayBuffer();
+  } catch {
+    return { body: null, error: jsonError("Failed to read request body", 400) };
+  }
+  if (buf.byteLength > maxBytes) {
     return { body: null, error: jsonError("Payload too large", 413) };
   }
   try {
-    const body = await req.json();
+    const body = JSON.parse(new TextDecoder().decode(buf));
     return { body, error: null };
   } catch {
     return { body: null, error: jsonError("Invalid JSON body", 400) };
   }
 }
 
+/**
+ * requireWebhookSecret — Validates a custom header against an env secret.
+ * @param req        The incoming request
+ * @param envName    Name of the env var holding the secret (e.g. "EVOLUTION_API_SECRET")
+ * @param headerName Name of the header to check (e.g. "x-evolution-secret")
+ * Returns a 401 Response on failure, or null to continue.
+ *
+ * Async because the underlying secret comparison uses crypto.subtle.
+ * Callers must await this function.
+ */
 export async function requireWebhookSecret(
   req: Request,
   envName: string,

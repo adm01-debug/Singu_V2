@@ -52,7 +52,7 @@ export function RelativesSection({ contactId, relatives }: RelativesSectionProps
            <RelativeDialog
              onSave={(data) => addRelative.mutate(data)}
              trigger={
-               <Button variant="ghost" size="icon" className="h-7 w-7">
+               <Button variant="ghost" size="icon" aria-label="Adicionar" className="h-7 w-7">
                  <Plus className="h-3.5 w-3.5" />
                </Button>
              }
@@ -66,9 +66,9 @@ export function RelativesSection({ contactId, relatives }: RelativesSectionProps
             <div key={rel.id} className="rounded-lg border p-2.5 text-sm space-y-1 relative group">
                <div className="flex items-center justify-between gap-2">
                  <div className="flex-1 min-w-0 flex items-center gap-2">
-                   <Button
+                    <Button
                      variant="ghost"
-                     size="icon"
+                     size="icon" aria-label="Alerta"
                      className={`h-5 w-5 flex-shrink-0 ${rel.is_decision_influencer ? 'text-warning' : 'text-muted-foreground/30 hover:text-warning'}`}
                      onClick={() => handleUpdate(rel.id, 'is_decision_influencer', !rel.is_decision_influencer)}
                    >
@@ -177,7 +177,7 @@ export function RelativesSection({ contactId, relatives }: RelativesSectionProps
                    trigger={
                      <Button
                        variant="ghost"
-                       size="icon"
+                       size="icon" aria-label="Editar"
                        className="h-6 w-6 text-muted-foreground hover:text-primary hover:bg-primary/10"
                      >
                        <Edit2 className="h-3 w-3" />
@@ -186,7 +186,7 @@ export function RelativesSection({ contactId, relatives }: RelativesSectionProps
                  />
                  <Button
                    variant="ghost"
-                   size="icon"
+                   size="icon" aria-label="Remover"
                    className="h-6 w-6 text-destructive hover:text-destructive hover:bg-destructive/10"
                    onClick={() => deleteRelative.mutate(rel.id)}
                  >

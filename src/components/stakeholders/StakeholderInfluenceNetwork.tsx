@@ -114,7 +114,7 @@ export function StakeholderInfluenceNetwork({ stakeholders, height = 400, classN
           { icon: ZoomOut, action: () => graphRef.current?.zoom(graphRef.current.zoom() / 1.5, 300), tip: 'Zoom Out' },
           { icon: Maximize2, action: () => graphRef.current?.centerAt(0, 0, 500), tip: 'Centralizar' }
         ].map(({ icon: Icon, action, tip }) => (
-          <TooltipProvider key={tip}><Tooltip><TooltipTrigger asChild><Button size="icon" variant="secondary" onClick={action} className="h-8 w-8 shadow-md"><Icon className="w-4 h-4" /></Button></TooltipTrigger><TooltipContent side="left">{tip}</TooltipContent></Tooltip></TooltipProvider>
+          <TooltipProvider key={tip}><Tooltip><TooltipTrigger asChild><Button size="icon" variant="secondary" onClick={action} aria-label={tip} className="h-8 w-8 shadow-md"><Icon className="w-4 h-4" /></Button></TooltipTrigger><TooltipContent side="left">{tip}</TooltipContent></Tooltip></TooltipProvider>
         ))}
       </div>
 

@@ -63,7 +63,7 @@ export function InsightsContent({ insights, contacts, loading, generating, searc
         <div className="relative flex-1 max-w-md w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input placeholder="Buscar insights..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className={`pl-10 ${isSearching ? 'pr-10' : ''}`} />
-          {isSearching && <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" onClick={clearSearch}><X className="h-4 w-4" /></Button>}
+          {isSearching && <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" aria-label="Limpar pesquisa" onClick={clearSearch}><X className="h-4 w-4" /></Button>}
         </div>
         <ScrollArea className="w-full sm:w-auto"><div className="flex items-center gap-2 pb-2">
           <Button variant={selectedCategory === null ? 'default' : 'outline'} size="sm" onClick={() => setSelectedCategory(null)}>Todos</Button>

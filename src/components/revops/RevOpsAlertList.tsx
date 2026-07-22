@@ -19,7 +19,7 @@ export function RevOpsAlertList() {
             <Icon className="h-4 w-4" />
             <AlertTitle className="capitalize">{a.metric_key.replace(/_/g, " ")}</AlertTitle>
             <AlertDescription>{a.message}</AlertDescription>
-            <Button size="icon" variant="ghost" className="absolute top-2 right-2 h-7 w-7" onClick={() => dismiss.mutate(a.id)}>
+            <Button size="icon" variant="ghost" className="absolute top-2 right-2 h-7 w-7" aria-label="Dispensar" onClick={() => dismiss.mutate(a.id)}>
               <X className="h-4 w-4" />
             </Button>
           </Alert>

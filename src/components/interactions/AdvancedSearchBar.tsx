@@ -152,7 +152,7 @@ export const AdvancedSearchBar = React.memo(function AdvancedSearchBar({
             className={cn('pl-10', filters.q && 'pr-10')}
           />
           {filters.q && (
-            <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" onClick={() => setFilter('q', '')}>
+            <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" aria-label="Limpar pesquisa" onClick={() => setFilter('q', '')}>
               <X className="h-4 w-4" />
             </Button>
           )}

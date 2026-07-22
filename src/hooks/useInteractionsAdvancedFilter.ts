@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -41,17 +42,17 @@ function parseSentimento(v: string | null): SentimentoFilter | undefined {
   return (VALID_SENTIMENTOS as string[]).includes(v ?? '') ? (v as SentimentoFilter) : undefined;
 }
 
-const DENSITY_STORAGE_KEY = 'singu-interactions-density-v1';
-const PERPAGE_STORAGE_KEY = 'singu-interactions-perPage-v1';
-const VIEW_STORAGE_KEY = 'singu-interactions-view-v1';
-const SORT_STORAGE_KEY = 'singu-interactions-sort-v1';
-const Q_STORAGE_KEY = 'singu-interactions-q-v1';
-const DIRECAO_STORAGE_KEY = 'singu-interactions-direcao-v1';
-const CONTACT_STORAGE_KEY = 'singu-interactions-contact-v1';
-const COMPANY_STORAGE_KEY = 'singu-interactions-company-v1';
-const DE_STORAGE_KEY = 'singu-interactions-de-v1';
-const ATE_STORAGE_KEY = 'singu-interactions-ate-v1';
-const SENTIMENTO_STORAGE_KEY = 'singu-interactions-sentimento-v1';
+const BASE_DENSITY_STORAGE_KEY = 'singu-interactions-density-v1';
+const BASE_PERPAGE_STORAGE_KEY = 'singu-interactions-perPage-v1';
+const BASE_VIEW_STORAGE_KEY = 'singu-interactions-view-v1';
+const BASE_SORT_STORAGE_KEY = 'singu-interactions-sort-v1';
+const BASE_Q_STORAGE_KEY = 'singu-interactions-q-v1';
+const BASE_DIRECAO_STORAGE_KEY = 'singu-interactions-direcao-v1';
+const BASE_CONTACT_STORAGE_KEY = 'singu-interactions-contact-v1';
+const BASE_COMPANY_STORAGE_KEY = 'singu-interactions-company-v1';
+const BASE_DE_STORAGE_KEY = 'singu-interactions-de-v1';
+const BASE_ATE_STORAGE_KEY = 'singu-interactions-ate-v1';
+const BASE_SENTIMENTO_STORAGE_KEY = 'singu-interactions-sentimento-v1';
 
 function readLS(key: string): string | null {
   try {
@@ -121,6 +122,19 @@ const serializeDate = formatCivilDate;
 
 export function useInteractionsAdvancedFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { user } = useAuth();
+  const uid = user?.id ?? 'anon';
+  const DENSITY_STORAGE_KEY = `${BASE_DENSITY_STORAGE_KEY}-${uid}`;
+  const PERPAGE_STORAGE_KEY = `${BASE_PERPAGE_STORAGE_KEY}-${uid}`;
+  const VIEW_STORAGE_KEY = `${BASE_VIEW_STORAGE_KEY}-${uid}`;
+  const SORT_STORAGE_KEY = `${BASE_SORT_STORAGE_KEY}-${uid}`;
+  const Q_STORAGE_KEY = `${BASE_Q_STORAGE_KEY}-${uid}`;
+  const DIRECAO_STORAGE_KEY = `${BASE_DIRECAO_STORAGE_KEY}-${uid}`;
+  const CONTACT_STORAGE_KEY = `${BASE_CONTACT_STORAGE_KEY}-${uid}`;
+  const COMPANY_STORAGE_KEY = `${BASE_COMPANY_STORAGE_KEY}-${uid}`;
+  const DE_STORAGE_KEY = `${BASE_DE_STORAGE_KEY}-${uid}`;
+  const ATE_STORAGE_KEY = `${BASE_ATE_STORAGE_KEY}-${uid}`;
+  const SENTIMENTO_STORAGE_KEY = `${BASE_SENTIMENTO_STORAGE_KEY}-${uid}`;
 
   const filters: AdvancedFilters = useMemo(() => ({
     q: searchParams.get('q') ?? '',
@@ -163,7 +177,7 @@ export function useInteractionsAdvancedFilter() {
     if (hydratedRef.current) return;
     hydratedRef.current = true;
     if (searchParams.get('canais')) return;
-    const cachedRaw = readAppliedCanais() ?? [];
+    const cachedRaw = readAppliedCanais(uid) ?? [];
     const cached = normalizeCanais(cachedRaw);
     const ignored = Array.isArray(cachedRaw)
       ? Array.from(new Set(
@@ -215,14 +229,14 @@ export function useInteractionsAdvancedFilter() {
   useEffect(() => {
     pendingCanaisRef.current = filters.canais;
     const timer = setTimeout(() => {
-      writeAppliedCanais(pendingCanaisRef.current);
+      writeAppliedCanais(pendingCanaisRef.current, uid);
     }, 250);
     return () => {
       clearTimeout(timer);
       // Garante persistência da última versão se o efeito foi cancelado.
-      writeAppliedCanais(pendingCanaisRef.current);
+      writeAppliedCanais(pendingCanaisRef.current, uid);
     };
-  }, [filters.canais]);
+  }, [filters.canais, uid]);
 
   // Hidratação one-shot consolidada das preferências de visualização: URL ganha sobre cache.
   const prefsHydratedRef = useRef(false);

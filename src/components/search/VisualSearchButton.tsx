@@ -15,6 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 
 type VisualResult = {
   id: string;
@@ -105,8 +106,7 @@ export function VisualSearchButton({
       }
     } catch (e) {
       logger.error("Visual search failed:", e);
-      const msg = e instanceof Error ? e.message : "Erro na busca visual";
-      toast.error(msg);
+      toast.error(parseApiError(e, 'Erro na busca visual'));
     } finally {
       setLoading(false);
     }
@@ -159,12 +159,13 @@ export function VisualSearchButton({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1 overflow-hidden">
               <div className="space-y-3">
                 <div className="relative rounded-lg overflow-hidden border border-border">
-                  <img src={preview} alt="Preview" className="w-full aspect-square object-cover" />
+                  <img src={preview} alt="Preview" className="w-full aspect-square object-cover" loading="eager" decoding="async" />
                   <Button
                     size="icon"
                     variant="secondary"
                     className="absolute top-2 right-2 h-8 w-8"
                     onClick={reset}
+                    aria-label="Limpar pesquisa"
                   >
                     <X className="h-4 w-4" />
                   </Button>
@@ -233,6 +234,8 @@ export function VisualSearchButton({
                                 src={r.image_url}
                                 alt={r.name}
                                 className="w-full aspect-square object-cover rounded"
+                                loading="lazy"
+                                decoding="async"
                               />
                             ) : (
                               <div className="w-full aspect-square bg-muted rounded flex items-center justify-center">

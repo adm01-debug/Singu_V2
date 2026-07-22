@@ -1,6 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useDealsPipeline, type PipelineDeal } from '@/hooks/usePipeline';
+import { useAuth } from '@/hooks/useAuth';
+import {
+  STAGE_BENCHMARK_DAYS,
+  DEAL_RISK_LOOKBACK_DAYS,
+  DEAL_ENGAGEMENT_GAP_DAYS,
+  DEAL_RISK_HIGH_THRESHOLD,
+  DEAL_RISK_ATTENTION_THRESHOLD,
+  sentimentValue,
+  clamp,
+} from '@/lib/deal-risk-constants';
 
 export interface DealAtRisk {
   deal: PipelineDeal;
@@ -9,32 +19,15 @@ export interface DealAtRisk {
   topFactor: string;
 }
 
-const STAGE_BENCHMARK_DAYS: Record<string, number> = {
-  lead: 7,
-  primeiro_contato: 7,
-  qualificacao: 14,
-  proposta: 10,
-  negociacao: 21,
-  fechamento: 14,
-};
-
-const sentimentValue = (s: string | null): number => {
-  if (!s) return 0;
-  const v = s.toLowerCase();
-  if (v === 'positive' || v === 'positivo') return 1;
-  if (v === 'negative' || v === 'negativo') return -1;
-  return 0;
-};
-
-const clamp = (n: number, min = 0, max = 100) => Math.max(min, Math.min(max, n));
-
 export function useDealsAtRisk(limit = 5) {
+  const { user } = useAuth();
   const { data: deals } = useDealsPipeline();
 
   return useQuery<DealAtRisk[]>({
-    queryKey: ['deals-at-risk', deals?.map((d) => d.id).join(',')],
+    queryKey: ['deals-at-risk', deals?.map((d) => d.id).join(','), user?.id],
     enabled: !!deals && deals.length > 0,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const open = (deals ?? []).filter(
         (d) => d.status !== 'ganho' && d.status !== 'perdido'
@@ -46,7 +39,7 @@ export function useDealsAtRisk(limit = 5) {
       );
 
       const since = new Date();
-      since.setDate(since.getDate() - 60);
+      since.setDate(since.getDate() - DEAL_RISK_LOOKBACK_DAYS);
 
       const { data: interactions } = contactIds.length > 0
         ? await supabase
@@ -87,19 +80,19 @@ export function useDealsAtRisk(limit = 5) {
         const inbound = list.find((r) => isInbound(r.initiated_by));
         const daysSince = inbound
           ? Math.floor((Date.now() - new Date(inbound.created_at).getTime()) / 86400000)
-          : 60;
-        const engagement = clamp((daysSince / 30) * 100);
+          : DEAL_RISK_LOOKBACK_DAYS;
+        const engagement = clamp((daysSince / DEAL_ENGAGEMENT_GAP_DAYS) * 100);
 
         const totalAge = deal.created_at
           ? Math.floor((Date.now() - new Date(deal.created_at).getTime()) / 86400000)
           : 0;
-        const age = clamp((totalAge / 60 - 0.5) * 100);
+        const age = clamp((totalAge / DEAL_RISK_LOOKBACK_DAYS - 0.5) * 100);
 
         const score = Math.round(
           stagnation * 0.4 + sentimentScore * 0.25 + engagement * 0.25 + age * 0.1
         );
         const level: DealAtRisk['level'] =
-          score >= 61 ? 'high' : score >= 31 ? 'attention' : 'healthy';
+          score >= DEAL_RISK_HIGH_THRESHOLD ? 'high' : score >= DEAL_RISK_ATTENTION_THRESHOLD ? 'attention' : 'healthy';
 
         const factorMap: Array<[number, string]> = [
           [stagnation, 'Estagnação'],

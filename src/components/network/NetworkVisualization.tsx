@@ -136,7 +136,7 @@ export const NetworkVisualization = ({ className, height = 600 }: NetworkVisuali
                 <DropdownMenuCheckboxItem checked={filters.showYou} onCheckedChange={(c) => setFilters(f => ({ ...f, showYou: c }))}><Star className="w-4 h-4 mr-2" />Você</DropdownMenuCheckboxItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <TooltipProvider><Tooltip><TooltipTrigger asChild><Button variant="ghost" size="icon" onClick={refetch}><RefreshCw className="w-4 h-4" /></Button></TooltipTrigger><TooltipContent>Atualizar</TooltipContent></Tooltip></TooltipProvider>
+            <TooltipProvider><Tooltip><TooltipTrigger asChild><Button variant="ghost" size="icon" aria-label="Atualizar" onClick={refetch}><RefreshCw className="w-4 h-4" /></Button></TooltipTrigger><TooltipContent>Atualizar</TooltipContent></Tooltip></TooltipProvider>
           </div>
         </div>
 
@@ -170,7 +170,7 @@ export const NetworkVisualization = ({ className, height = 600 }: NetworkVisuali
 
         <div className="absolute bottom-4 right-4 flex flex-col gap-2">
           {[{ icon: ZoomIn, fn: handleZoomIn, label: 'Zoom In' }, { icon: ZoomOut, fn: handleZoomOut, label: 'Zoom Out' }, { icon: Maximize2, fn: handleCenter, label: 'Centralizar' }].map(z => (
-            <TooltipProvider key={z.label}><Tooltip><TooltipTrigger asChild><Button size="icon" variant="secondary" onClick={z.fn} className="shadow-sm"><z.icon className="w-4 h-4" /></Button></TooltipTrigger><TooltipContent side="left">{z.label}</TooltipContent></Tooltip></TooltipProvider>
+            <TooltipProvider key={z.label}><Tooltip><TooltipTrigger asChild><Button size="icon" variant="secondary" onClick={z.fn} aria-label={z.label} className="shadow-sm"><z.icon className="w-4 h-4" /></Button></TooltipTrigger><TooltipContent side="left">{z.label}</TooltipContent></Tooltip></TooltipProvider>
           ))}
         </div>
 

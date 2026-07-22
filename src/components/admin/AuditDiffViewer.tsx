@@ -38,13 +38,17 @@ function getChangedFields(
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
-  const handleCopy = () => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard unavailable — silently ignore */
+    }
   };
   return (
-    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleCopy}>
+    <Button variant="ghost" size="icon" aria-label="Confirmar" className="h-6 w-6" onClick={handleCopy}>
       {copied ? <Check className="w-3 h-3 text-success" /> : <Copy className="w-3 h-3" />}
     </Button>
   );

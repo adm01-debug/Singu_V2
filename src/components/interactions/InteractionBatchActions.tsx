@@ -95,6 +95,7 @@
            variant="ghost" 
            size="icon" 
            onClick={onClearSelection}
+           aria-label="Limpar seleção"
            className="h-8 w-8 text-background hover:bg-background/20 rounded-full"
          >
            <CheckCircle2 className="w-5 h-5" />

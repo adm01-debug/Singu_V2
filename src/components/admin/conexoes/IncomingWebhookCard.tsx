@@ -24,8 +24,12 @@ export function IncomingWebhookCard({ webhook, onEdit }: Props) {
   const url = `https://${projectId}.functions.supabase.co/incoming-webhook/${webhook.token}`;
 
   const copy = async (txt: string, msg: string) => {
-    await navigator.clipboard.writeText(txt);
-    toast.success(msg);
+    try {
+      await navigator.clipboard.writeText(txt);
+      toast.success(msg);
+    } catch {
+      toast.error('Não foi possível copiar');
+    }
   };
 
   return (

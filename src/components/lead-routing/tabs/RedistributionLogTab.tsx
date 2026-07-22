@@ -20,7 +20,7 @@ function useRedistributionLog() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('redistribution_log')
-        .select('*')
+        .select('id, from_member_id, to_member_id, reason, auto_triggered, inactivity_days, created_at, notes')
         .order('created_at', { ascending: false })
         .limit(100);
       if (error) throw error;
@@ -28,6 +28,7 @@ function useRedistributionLog() {
     },
     enabled: !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { Helmet } from 'react-helmet-async';
 import { LayoutGrid, Plus, X, BarChart3, Users, Building2, TrendingUp, Clock, Target, Activity, PieChart } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
@@ -64,15 +65,21 @@ function WidgetRenderer({ widgetId }: { widgetId: WidgetId }) {
 }
 
 export default function ReportBuilder() {
-  const [layouts, setLayouts] = useState<DashboardLayout[]>(() => {
-    try {
-      const saved = localStorage.getItem('singu-custom-dashboards');
-      return saved ? (JSON.parse(saved) as DashboardLayout[]) : DEFAULT_LAYOUTS;
-    } catch {
-      return DEFAULT_LAYOUTS;
-    }
-  });
+  const { user } = useAuth();
+  const dashboardKey = `singu-custom-dashboards-${user?.id ?? 'anon'}`;
+
+  const [layouts, setLayouts] = useState<DashboardLayout[]>(DEFAULT_LAYOUTS);
   const [activeLayout, setActiveLayout] = useState(0);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(dashboardKey);
+      setLayouts(saved ? (JSON.parse(saved) as DashboardLayout[]) : DEFAULT_LAYOUTS);
+    } catch {
+      setLayouts(DEFAULT_LAYOUTS);
+    }
+    setActiveLayout(0);
+  }, [dashboardKey]);
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState('');
 
@@ -80,7 +87,7 @@ export default function ReportBuilder() {
 
   const saveLayouts = (updated: DashboardLayout[]) => {
     setLayouts(updated);
-    localStorage.setItem('singu-custom-dashboards', JSON.stringify(updated));
+    try { localStorage.setItem(dashboardKey, JSON.stringify(updated)); } catch { /* private browsing */ }
   };
 
   const addWidget = (widgetId: WidgetId) => {
@@ -134,7 +141,7 @@ export default function ReportBuilder() {
                 {layout.name}
               </Button>
               {isEditing && layouts.length > 1 && (
-                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-destructive" onClick={() => removeLayout(idx)}>
+                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-destructive" aria-label="Remover layout" onClick={() => removeLayout(idx)}>
                   <X className="h-3 w-3" />
                 </Button>
               )}

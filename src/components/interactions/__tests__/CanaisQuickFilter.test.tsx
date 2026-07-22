@@ -30,7 +30,7 @@ describe('CanaisQuickFilter', () => {
   });
 
   it('manual mode: clicking a chip does NOT call onChange and shows Apply button', () => {
-    localStorage.setItem('channel-sync-mode', 'manual');
+    localStorage.setItem('channel-sync-mode-anon', 'manual');
     const onChange = vi.fn();
     render(<CanaisQuickFilter canais={[]} onChange={onChange} />);
     fireEvent.click(screen.getByTitle('Email'));
@@ -39,7 +39,7 @@ describe('CanaisQuickFilter', () => {
   });
 
   it('manual mode: Apply button calls onChange with pending selection', () => {
-    localStorage.setItem('channel-sync-mode', 'manual');
+    localStorage.setItem('channel-sync-mode-anon', 'manual');
     const onChange = vi.fn();
     render(<CanaisQuickFilter canais={[]} onChange={onChange} />);
     fireEvent.click(screen.getByTitle('Email'));
@@ -49,7 +49,7 @@ describe('CanaisQuickFilter', () => {
   });
 
   it('manual mode: Revert opens confirmation and restores pending to applied value when confirmed', () => {
-    localStorage.setItem('channel-sync-mode', 'manual');
+    localStorage.setItem('channel-sync-mode-anon', 'manual');
     const onChange = vi.fn();
     render(<CanaisQuickFilter canais={['email']} onChange={onChange} />);
     fireEvent.click(screen.getByTitle('WhatsApp'));
@@ -62,18 +62,18 @@ describe('CanaisQuickFilter', () => {
   });
 
   it('manual mode: persists pending to localStorage', () => {
-    localStorage.setItem('channel-sync-mode', 'manual');
+    localStorage.setItem('channel-sync-mode-anon', 'manual');
     const onChange = vi.fn();
     render(<CanaisQuickFilter canais={[]} onChange={onChange} />);
     fireEvent.click(screen.getByTitle('Email'));
     fireEvent.click(screen.getByTitle('WhatsApp'));
-    const stored = JSON.parse(localStorage.getItem('channel-pending-canais') || '[]');
+    const stored = JSON.parse(localStorage.getItem('channel-pending-canais-anon') || '[]');
     expect(stored).toEqual(expect.arrayContaining(['email', 'whatsapp']));
   });
 
   it('manual mode: restores pending from localStorage on remount', () => {
-    localStorage.setItem('channel-sync-mode', 'manual');
-    localStorage.setItem('channel-pending-canais', JSON.stringify(['email', 'call']));
+    localStorage.setItem('channel-sync-mode-anon', 'manual');
+    localStorage.setItem('channel-pending-canais-anon', JSON.stringify(['email', 'call']));
     const onChange = vi.fn();
     render(<CanaisQuickFilter canais={[]} onChange={onChange} />);
     expect(screen.getByText('Aplicar')).toBeInTheDocument();
@@ -82,19 +82,19 @@ describe('CanaisQuickFilter', () => {
   });
 
   it('manual mode: clears persisted pending after apply (no divergence)', () => {
-    localStorage.setItem('channel-sync-mode', 'manual');
+    localStorage.setItem('channel-sync-mode-anon', 'manual');
     const onChange = vi.fn();
     const { rerender } = render(<CanaisQuickFilter canais={[]} onChange={onChange} />);
     fireEvent.click(screen.getByTitle('Email'));
-    expect(localStorage.getItem('channel-pending-canais')).not.toBeNull();
+    expect(localStorage.getItem('channel-pending-canais-anon')).not.toBeNull();
     fireEvent.click(screen.getByText('Aplicar'));
     rerender(<CanaisQuickFilter canais={['email']} onChange={onChange} />);
-    expect(localStorage.getItem('channel-pending-canais')).toBeNull();
+    expect(localStorage.getItem('channel-pending-canais-anon')).toBeNull();
   });
 
   it('manual mode: ignores invalid persisted values', () => {
-    localStorage.setItem('channel-sync-mode', 'manual');
-    localStorage.setItem('channel-pending-canais', JSON.stringify(['email', 'invalid_channel', 'call']));
+    localStorage.setItem('channel-sync-mode-anon', 'manual');
+    localStorage.setItem('channel-pending-canais-anon', JSON.stringify(['email', 'invalid_channel', 'call']));
     const onChange = vi.fn();
     render(<CanaisQuickFilter canais={[]} onChange={onChange} />);
     fireEvent.click(screen.getByText('Aplicar'));
@@ -102,8 +102,8 @@ describe('CanaisQuickFilter', () => {
   });
 
   it('auto mode: does not restore pending from localStorage', () => {
-    localStorage.setItem('channel-sync-mode', 'auto');
-    localStorage.setItem('channel-pending-canais', JSON.stringify(['email']));
+    localStorage.setItem('channel-sync-mode-anon', 'auto');
+    localStorage.setItem('channel-pending-canais-anon', JSON.stringify(['email']));
     const onChange = vi.fn();
     render(<CanaisQuickFilter canais={[]} onChange={onChange} />);
     expect(screen.queryByText('Aplicar')).not.toBeInTheDocument();
@@ -117,7 +117,7 @@ describe('CanaisQuickFilter', () => {
   });
 
   it('manual mode: Limpar canais clears pending without calling onChange', () => {
-    localStorage.setItem('channel-sync-mode', 'manual');
+    localStorage.setItem('channel-sync-mode-anon', 'manual');
     const onChange = vi.fn();
     render(<CanaisQuickFilter canais={['email']} onChange={onChange} />);
     fireEvent.click(screen.getByRole('button', { name: /Limpar seleção de canais/i }));
@@ -187,7 +187,7 @@ describe('CanaisQuickFilter', () => {
   });
 
   it('keyboard: in manual mode, Alt+N updates pending without calling onChange', () => {
-    localStorage.setItem('channel-sync-mode', 'manual');
+    localStorage.setItem('channel-sync-mode-anon', 'manual');
     const onChange = vi.fn();
     render(<CanaisQuickFilter canais={[]} onChange={onChange} />);
     fireEvent.keyDown(window, { key: '1', altKey: true });
@@ -197,7 +197,7 @@ describe('CanaisQuickFilter', () => {
 
   describe('Reverter (descarta pendências)', () => {
     it('restaura pending para os filtros aplicados após confirmar', () => {
-      localStorage.setItem('channel-sync-mode', 'manual');
+      localStorage.setItem('channel-sync-mode-anon', 'manual');
       const onChange = vi.fn();
       render(<CanaisQuickFilter canais={['email']} onChange={onChange} />);
 
@@ -217,21 +217,21 @@ describe('CanaisQuickFilter', () => {
     });
 
     it('remove channel-pending-canais do localStorage após reverter', () => {
-      localStorage.setItem('channel-sync-mode', 'manual');
+      localStorage.setItem('channel-sync-mode-anon', 'manual');
       const onChange = vi.fn();
       render(<CanaisQuickFilter canais={['email']} onChange={onChange} />);
 
       fireEvent.click(screen.getByTitle('WhatsApp'));
-      expect(localStorage.getItem('channel-pending-canais')).not.toBeNull();
+      expect(localStorage.getItem('channel-pending-canais-anon')).not.toBeNull();
 
       fireEvent.click(screen.getByRole('button', { name: /Reverter/i }));
       fireEvent.click(screen.getByRole('button', { name: 'Descartar' }));
 
-      expect(localStorage.getItem('channel-pending-canais')).toBeNull();
+      expect(localStorage.getItem('channel-pending-canais-anon')).toBeNull();
     });
 
     it('preserva channel-applied-canais no localStorage após reverter', () => {
-      localStorage.setItem('channel-sync-mode', 'manual');
+      localStorage.setItem('channel-sync-mode-anon', 'manual');
       const onChange = vi.fn();
       render(<CanaisQuickFilter canais={['email']} onChange={onChange} />);
 
@@ -239,28 +239,28 @@ describe('CanaisQuickFilter', () => {
       fireEvent.click(screen.getByRole('button', { name: /Reverter/i }));
       fireEvent.click(screen.getByRole('button', { name: 'Descartar' }));
 
-      const applied = JSON.parse(localStorage.getItem('channel-applied-canais') || '[]');
+      const applied = JSON.parse(localStorage.getItem('channel-applied-canais-anon') || '[]');
       expect(applied).toEqual(['email']);
     });
 
     it('Esc reverte pendências sem abrir o diálogo de confirmação', () => {
-      localStorage.setItem('channel-sync-mode', 'manual');
+      localStorage.setItem('channel-sync-mode-anon', 'manual');
       const onChange = vi.fn();
       render(<CanaisQuickFilter canais={['email']} onChange={onChange} />);
 
       fireEvent.click(screen.getByTitle('WhatsApp'));
       expect(screen.getByText('Aplicar')).toBeInTheDocument();
-      expect(localStorage.getItem('channel-pending-canais')).not.toBeNull();
+      expect(localStorage.getItem('channel-pending-canais-anon')).not.toBeNull();
 
       fireEvent.keyDown(window, { key: 'Escape' });
 
       expect(screen.queryByText('Aplicar')).not.toBeInTheDocument();
-      expect(localStorage.getItem('channel-pending-canais')).toBeNull();
+      expect(localStorage.getItem('channel-pending-canais-anon')).toBeNull();
       expect(onChange).not.toHaveBeenCalled();
     });
 
     it('cancelar o diálogo mantém as pendências intactas', () => {
-      localStorage.setItem('channel-sync-mode', 'manual');
+      localStorage.setItem('channel-sync-mode-anon', 'manual');
       const onChange = vi.fn();
       render(<CanaisQuickFilter canais={['email']} onChange={onChange} />);
 
@@ -269,7 +269,7 @@ describe('CanaisQuickFilter', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }));
 
       expect(screen.getByText('Aplicar')).toBeInTheDocument();
-      expect(localStorage.getItem('channel-pending-canais')).not.toBeNull();
+      expect(localStorage.getItem('channel-pending-canais-anon')).not.toBeNull();
     });
   });
 
@@ -362,8 +362,8 @@ describe('CanaisQuickFilter', () => {
     it('auto→manual: pending órfão do localStorage não causa divergência ao entrar em manual', () => {
       // Pending salvo de uma sessão anterior, mas usuário está agora em auto
       // com canais=[email] vindo da URL.
-      localStorage.setItem('channel-sync-mode', 'auto');
-      localStorage.setItem('channel-pending-canais', JSON.stringify(['whatsapp', 'call']));
+      localStorage.setItem('channel-sync-mode-anon', 'auto');
+      localStorage.setItem('channel-pending-canais-anon', JSON.stringify(['whatsapp', 'call']));
 
       const onChange = vi.fn();
       render(<CanaisQuickFilter canais={['email']} onChange={onChange} />);
@@ -383,12 +383,12 @@ describe('CanaisQuickFilter', () => {
       expect(screen.getByTitle('Ligação')).toHaveAttribute('aria-pressed', 'false');
 
       // Pending órfão foi removido do storage.
-      expect(localStorage.getItem('channel-pending-canais')).toBeNull();
+      expect(localStorage.getItem('channel-pending-canais-anon')).toBeNull();
       expect(onChange).not.toHaveBeenCalled();
     });
 
     it('manual→auto: aplica pending e re-sincroniza chips com o novo safe via re-render', () => {
-      localStorage.setItem('channel-sync-mode', 'manual');
+      localStorage.setItem('channel-sync-mode-anon', 'manual');
       const onChange = vi.fn();
       const { rerender } = render(<CanaisQuickFilter canais={['email']} onChange={onChange} />);
 
@@ -409,14 +409,14 @@ describe('CanaisQuickFilter', () => {
       expect(screen.getByTitle('Email')).toHaveAttribute('aria-pressed', 'true');
       expect(screen.getByTitle('WhatsApp')).toHaveAttribute('aria-pressed', 'true');
       expect(screen.queryByText('Aplicar')).not.toBeInTheDocument();
-      expect(localStorage.getItem('channel-pending-canais')).toBeNull();
+      expect(localStorage.getItem('channel-pending-canais-anon')).toBeNull();
     });
 
     it('manual→auto: pai descarta canal inválido — voltar para manual NÃO mostra divergência fantasma', () => {
       // Cenário: pai (whitelist da URL) ignorou um canal pendente. Sem o
       // realinhamento, voltar para manual mostraria Aplicar sem o usuário
       // ter feito nada na nova sessão de modo.
-      localStorage.setItem('channel-sync-mode', 'manual');
+      localStorage.setItem('channel-sync-mode-anon', 'manual');
       const onChange = vi.fn();
       const { rerender } = render(<CanaisQuickFilter canais={['email']} onChange={onChange} />);
 

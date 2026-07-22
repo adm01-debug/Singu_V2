@@ -3,21 +3,25 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
+import { useAuth } from '@/hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
 export default function PermissionsPage() {
+  const { user } = useAuth();
   const { isAdmin, isLoading: adminLoading } = useIsAdmin();
 
   const { data: permissions = [], isLoading } = useQuery({
-    queryKey: ['all-permissions'],
+    queryKey: ['all-permissions', user?.id],
     queryFn: async () => {
-      const { data, error } = await supabase.from('permissions').select('*').order('module');
+      const { data, error } = await supabase.from('permissions').select('id, module, name, action, description, created_at').order('module')
+      .limit(200);
       if (error) return [];
       return Array.isArray(data) ? data : [];
     },
     enabled: isAdmin,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   if (adminLoading || isLoading) return <Skeleton className="h-64 m-6" />;

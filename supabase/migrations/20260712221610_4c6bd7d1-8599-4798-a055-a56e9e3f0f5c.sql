@@ -12,7 +12,7 @@ CREATE TABLE public.behavioral_profile_regen_queue (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_bpr_queue_next_run ON public.behavioral_profile_regen_queue (next_run_at) WHERE attempts < 5;
+CREATE INDEX IF NOT EXISTS idx_bpr_queue_next_run ON public.behavioral_profile_regen_queue (next_run_at) WHERE attempts < 5;
 
 GRANT SELECT ON public.behavioral_profile_regen_queue TO authenticated;
 GRANT ALL ON public.behavioral_profile_regen_queue TO service_role;

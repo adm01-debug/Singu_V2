@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
 import { logger } from '@/lib/logger';
 import { toast } from 'sonner';
+import { useAuth } from './useAuth';
 
 // ── Types ──
 
@@ -67,8 +68,9 @@ export interface UserBadge {
 // ── Hooks ──
 
 export function useUserGoals(enabled = true) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['gamification', 'user-goals'],
+    queryKey: ['gamification', 'user-goals', user?.id],
     queryFn: async () => {
       try {
         const { data, error } = await callExternalRpc<UserGoal[]>('get_user_goals', {});
@@ -76,15 +78,16 @@ export function useUserGoals(enabled = true) {
         return (Array.isArray(data) ? data : []) as UserGoal[];
       } catch (e) { logger.warn('[Gamification] get_user_goals failed:', e); return []; }
     },
-    enabled,
+    enabled: enabled && !!user,
     staleTime: 5 * 60 * 1000,
     retry: false,
   });
 }
 
 export function useGoalsDashboard(enabled = true) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['gamification', 'goals-dashboard'],
+    queryKey: ['gamification', 'goals-dashboard', user?.id],
     queryFn: async () => {
       try {
         const { data, error } = await callExternalRpc<GoalsDashboard>('get_goals_dashboard', {});
@@ -92,15 +95,16 @@ export function useGoalsDashboard(enabled = true) {
         return (data ?? null) as GoalsDashboard | null;
       } catch (e) { logger.warn('[Gamification] get_goals_dashboard failed:', e); return null; }
     },
-    enabled,
+    enabled: enabled && !!user,
     staleTime: 5 * 60 * 1000,
     retry: false,
   });
 }
 
 export function useQuotaStatus(enabled = true) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['gamification', 'quota-status'],
+    queryKey: ['gamification', 'quota-status', user?.id],
     queryFn: async () => {
       try {
         const { data, error } = await callExternalRpc<QuotaStatus | QuotaStatus[]>('get_quota_status', {});
@@ -108,15 +112,16 @@ export function useQuotaStatus(enabled = true) {
         return (Array.isArray(data) ? data : data ? [data] : []) as QuotaStatus[];
       } catch (e) { logger.warn('[Gamification] get_quota_status failed:', e); return []; }
     },
-    enabled,
+    enabled: enabled && !!user,
     staleTime: 5 * 60 * 1000,
     retry: false,
   });
 }
 
 export function useLeaderboard(enabled = true) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['gamification', 'leaderboard'],
+    queryKey: ['gamification', 'leaderboard', user?.id],
     queryFn: async () => {
       try {
         const { data, error } = await callExternalRpc<LeaderboardEntry[]>('get_leaderboard', {});
@@ -124,15 +129,16 @@ export function useLeaderboard(enabled = true) {
         return (Array.isArray(data) ? data : []) as LeaderboardEntry[];
       } catch (e) { logger.warn('[Gamification] get_leaderboard failed:', e); return []; }
     },
-    enabled,
+    enabled: enabled && !!user,
     staleTime: 5 * 60 * 1000,
     retry: false,
   });
 }
 
 export function useUserBadges(enabled = true) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['gamification', 'user-badges'],
+    queryKey: ['gamification', 'user-badges', user?.id],
     queryFn: async () => {
       try {
         const { data, error } = await callExternalRpc<UserBadge[]>('get_user_badges', {});
@@ -140,7 +146,7 @@ export function useUserBadges(enabled = true) {
         return (Array.isArray(data) ? data : []) as UserBadge[];
       } catch (e) { logger.warn('[Gamification] get_user_badges failed:', e); return []; }
     },
-    enabled,
+    enabled: enabled && !!user,
     staleTime: 5 * 60 * 1000,
     retry: false,
   });

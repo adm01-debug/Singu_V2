@@ -73,7 +73,7 @@ function createErrorReport(
     timestamp: new Date().toISOString(),
     url: window.location.href,
     userAgent: navigator.userAgent,
-    userId: localStorage.getItem('userId') ?? undefined,
+    userId: (() => { try { return localStorage.getItem('userId') ?? undefined; } catch { return undefined; } })(),
     metadata,
     severity: determineSeverity(error),
     fingerprint: generateFingerprint(error),
@@ -224,6 +224,10 @@ export function initGlobalErrorHandlers(): void {
   });
 }
 
+export function clearUserContext() {
+  try { localStorage.removeItem('userId'); } catch { /* quota/private */ }
+}
+
 // Hook para componentes React
 export function useErrorReporter() {
   return {
@@ -232,8 +236,9 @@ export function useErrorReporter() {
       captureError(new Error(message), undefined, { customMessage: true, severity });
     },
     setUserContext: (userId: string) => {
-      localStorage.setItem('userId', userId);
+      try { localStorage.setItem('userId', userId); } catch { /* quota/private */ }
     },
+    clearUserContext,
   };
 }
 

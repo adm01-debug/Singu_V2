@@ -1,7 +1,7 @@
 /**
  * Validação de magic bytes para garantir a integridade dos arquivos enviados.
  */
-export async function validateFileMagicBytes(file: File): Promise<boolean> {
+async function validateFileMagicBytes(file: File): Promise<boolean> {
   // More compatible way to read first bytes
   const buffer = await new Promise<ArrayBuffer>((resolve, reject) => {
     const reader = new FileReader();

@@ -77,7 +77,8 @@ export function IOSInstallInstructions() {
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
     const dismissed = sessionStorage.getItem('ios-install-dismissed');
     if (isIOS && !isStandalone && !dismissed) {
-      setTimeout(() => setShow(true), 10000);
+      const timer = setTimeout(() => setShow(true), 10000);
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -132,7 +133,8 @@ export function NotificationPermission() {
     if (Notification.permission === 'default') {
       const dismissed = sessionStorage.getItem('notification-prompt-dismissed');
       if (!dismissed) {
-        setTimeout(() => setShow(true), 60000);
+        const timer = setTimeout(() => setShow(true), 60000);
+        return () => clearTimeout(timer);
       }
     }
   }, []);

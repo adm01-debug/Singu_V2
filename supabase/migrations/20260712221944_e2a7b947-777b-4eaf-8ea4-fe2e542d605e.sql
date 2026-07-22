@@ -18,8 +18,8 @@ CREATE TABLE public.contact_analytical_profile_versions (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_capv_contact_generated ON public.contact_analytical_profile_versions (contact_id, generated_at DESC);
-CREATE INDEX idx_capv_user ON public.contact_analytical_profile_versions (user_id);
+CREATE INDEX IF NOT EXISTS idx_capv_contact_generated ON public.contact_analytical_profile_versions (contact_id, generated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_capv_user ON public.contact_analytical_profile_versions (user_id);
 
 GRANT SELECT ON public.contact_analytical_profile_versions TO authenticated;
 GRANT ALL ON public.contact_analytical_profile_versions TO service_role;

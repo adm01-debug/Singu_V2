@@ -40,8 +40,9 @@ export interface DateReminders {
       if (!user) return [];
       const { data, error } = await supabase
         .from('life_events')
-        .select('*')
-        .eq('user_id', user.id);
+        .select('id, contact_id, event_type, event_date, title, description, recurring, reminder_days_before')
+        .eq('user_id', user.id)
+        .limit(500);
       if (error) throw error;
       return data;
     },
@@ -56,8 +57,9 @@ export interface DateReminders {
       if (!user) return [];
       const { data, error } = await supabase
         .from('contact_relatives')
-        .select('*')
-        .eq('user_id', user.id);
+        .select('id, contact_id, name, birthday, relationship_type')
+        .eq('user_id', user.id)
+        .limit(500);
       if (error) throw error;
       return data;
     },

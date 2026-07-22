@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { validate } from "../_shared/validate.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
 
@@ -23,7 +24,12 @@ Deno.serve(async (req) => {
     );
 
     const url = new URL(req.url);
-    const token = url.searchParams.get("token") || (rawBody as Record<string, unknown> | null)?.token;
+    let bodyToken: string | undefined;
+    if (rawBody) {
+      const vgs = validate(rawBody, { token: { type: 'string', maxLength: 128 } });
+      if (vgs.ok) bodyToken = vgs.data.token as string | undefined;
+    }
+    const token = url.searchParams.get("token") || bodyToken;
 
     if (!token || typeof token !== "string" || token.length < 16) {
       return new Response(JSON.stringify({ error: "Invalid token" }), {
@@ -60,20 +66,24 @@ Deno.serve(async (req) => {
 
     // Mark as viewed if pending
     if (signature.status === "pending") {
-      await supabase
+      const { error: viewErr } = await supabase
         .from("document_signatures")
         .update({ status: "viewed", viewed_at: new Date().toISOString() })
         .eq("id", signature.id);
-      signature.status = "viewed";
-      signature.viewed_at = new Date().toISOString();
+      if (!viewErr) {
+        signature.status = "viewed";
+        signature.viewed_at = new Date().toISOString();
+      } else {
+        console.warn("Failed to mark signature as viewed:", viewErr.message);
+      }
     }
 
     // Track view (best-effort)
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || null;
+    const viewerIp = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || null;
     const ua = req.headers.get("user-agent") || null;
     supabase.from("document_views").insert({
       signature_id: signature.id,
-      viewer_ip: ip,
+      viewer_ip: viewerIp,
       viewer_user_agent: ua,
       viewer_email: signature.signer_email,
     }).catch((e: unknown) => console.error("document_views insert error:", e));

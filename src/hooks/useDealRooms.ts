@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Database } from "@/integrations/supabase/types";
 import { useAuth } from './useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type DealRoomStatus = "active" | "won" | "lost" | "paused";
 export type MilestoneStatus = "pending" | "in_progress" | "done" | "blocked";
@@ -115,8 +116,10 @@ export function useDealRooms(filters?: { status?: DealRoomStatus | "all" }) {
     queryKey: [...KEYS.rooms, filters?.status ?? "all", user?.id],
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
-      let q = supabase.from("deal_rooms").select("*").order("updated_at", { ascending: false });
+      let q = supabase.from("deal_rooms").select("id, user_id, deal_id, deal_name, company_id, title, description, status, deal_value, target_close_date, share_token, share_enabled, last_buyer_view_at, buyer_view_count, health_score, health_recommendations, health_analyzed_at, created_at, updated_at").eq("user_id", user!.id).order("updated_at", { ascending: false })
+      .limit(100);
       if (filters?.status && filters.status !== "all") {
         q = q.eq("status", filters.status);
       }
@@ -128,12 +131,14 @@ export function useDealRooms(filters?: { status?: DealRoomStatus | "all" }) {
 }
 
 export function useDealRoom(id: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: KEYS.room(id ?? ""),
-    enabled: !!id,
+    queryKey: [...KEYS.room(id ?? ""), user?.id],
+    enabled: !!id && !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_rooms").select("*").eq("id", id!).maybeSingle();
+      const { data, error } = await supabase.from("deal_rooms").select("*").eq("id", id!).eq("user_id", user!.id).maybeSingle();
       if (error) throw error;
       return data as DealRoom | null;
     },
@@ -164,15 +169,17 @@ export function useCreateDealRoom() {
       qc.invalidateQueries({ queryKey: KEYS.rooms });
       toast.success("Deal Room criado");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 export function useUpdateDealRoom() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...patch }: Partial<DealRoom> & { id: string }) => {
-      const { data, error } = await supabase.from("deal_rooms").update(patch).eq("id", id).select("*").maybeSingle();
+      if (!user) throw new Error('Não autenticado');
+      const { data, error } = await supabase.from("deal_rooms").update(patch).eq('user_id', user.id).eq("id", id).select("*").maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Deal Room não encontrado");
       return data as DealRoom;
@@ -181,22 +188,24 @@ export function useUpdateDealRoom() {
       qc.invalidateQueries({ queryKey: KEYS.rooms });
       qc.invalidateQueries({ queryKey: KEYS.room(d.id) });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 export function useDeleteDealRoom() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("deal_rooms").delete().eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("deal_rooms").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: KEYS.rooms });
       toast.success("Deal Room excluído");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -206,8 +215,10 @@ export function useMilestones(roomId: string | undefined) {
     queryKey: KEYS.ms(roomId ?? ""),
     enabled: !!roomId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_room_milestones").select("*").eq("room_id", roomId!).order("sort_order");
+      const { data, error } = await supabase.from("deal_room_milestones").select("id, room_id, user_id, title, description, status, sort_order, due_date, completed_at, completed_by_side, owner_side, created_at, updated_at").eq("room_id", roomId!).order("sort_order")
+      .limit(50);
       if (error) throw error;
       return (data ?? []) as DealRoomMilestone[];
     },
@@ -234,19 +245,21 @@ export function useUpsertMilestone(roomId: string) {
       return data as DealRoomMilestone;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.ms(roomId) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 export function useDeleteMilestone(roomId: string) {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("deal_room_milestones").delete().eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("deal_room_milestones").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.ms(roomId) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -256,7 +269,8 @@ export function useStakeholders(roomId: string | undefined) {
     queryKey: KEYS.sh(roomId ?? ""),
     enabled: !!roomId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_room_stakeholders").select("*").eq("room_id", roomId!);
+      const { data, error } = await supabase.from("deal_room_stakeholders").select("id, room_id, user_id, contact_id, name, email, role_title, side, influence, engagement_score, notes, created_at, updated_at").eq("room_id", roomId!)
+      .limit(50);
       if (error) throw error;
       return (data ?? []) as DealRoomStakeholder[];
     },
@@ -284,19 +298,21 @@ export function useUpsertStakeholder(roomId: string) {
       return data as DealRoomStakeholder;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.sh(roomId) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 export function useDeleteStakeholder(roomId: string) {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("deal_room_stakeholders").delete().eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("deal_room_stakeholders").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.sh(roomId) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -306,7 +322,8 @@ export function useRoomDocuments(roomId: string | undefined) {
     queryKey: KEYS.docs(roomId ?? ""),
     enabled: !!roomId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_room_documents").select("*").eq("room_id", roomId!).order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("deal_room_documents").select("id, room_id, user_id, title, file_path, file_type, file_size, uploaded_by_side, created_at").eq("room_id", roomId!).order("created_at", { ascending: false })
+      .limit(100);
       if (error) throw error;
       return (data ?? []) as DealRoomDocument[];
     },
@@ -342,20 +359,22 @@ export function useUploadDocument(roomId: string) {
       qc.invalidateQueries({ queryKey: KEYS.docs(roomId) });
       toast.success("Documento enviado");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 export function useDeleteDocument(roomId: string) {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (doc: { id: string; file_path: string }) => {
+      if (!user) throw new Error('Não autenticado');
       await supabase.storage.from("documents").remove([doc.file_path]);
-      const { error } = await supabase.from("deal_room_documents").delete().eq("id", doc.id);
+      const { error } = await supabase.from("deal_room_documents").delete().eq('user_id', user.id).eq("id", doc.id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.docs(roomId) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -383,7 +402,8 @@ export function useRoomComments(roomId: string | undefined) {
     queryKey: KEYS.cmts(roomId ?? ""),
     enabled: !!roomId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("deal_room_comments").select("*").eq("room_id", roomId!).order("created_at");
+      const { data, error } = await supabase.from("deal_room_comments").select("id, room_id, user_id, author_side, author_label, body, created_at").eq("room_id", roomId!).order("created_at")
+      .limit(200);
       if (error) throw error;
       return (data ?? []) as DealRoomComment[];
     },
@@ -404,7 +424,7 @@ export function useAddComment(roomId: string) {
       return data as DealRoomComment;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.cmts(roomId) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -421,7 +441,7 @@ export function useShareRoom() {
       qc.invalidateQueries({ queryKey: KEYS.room(vars.room_id) });
       qc.invalidateQueries({ queryKey: KEYS.rooms });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -434,7 +454,7 @@ export function useRoomHealth() {
       return data as { health_score: number; recommendations: string[] };
     },
     onSuccess: (_d, room_id) => qc.invalidateQueries({ queryKey: KEYS.room(room_id) }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 

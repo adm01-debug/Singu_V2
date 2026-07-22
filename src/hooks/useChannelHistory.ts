@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
-const KEY = 'channel-combo-history-v1';
+const BASE_KEY = 'channel-combo-history-v1';
 const MAX = 5;
 const VALID = new Set(['whatsapp', 'call', 'email', 'meeting', 'video_call', 'note']);
 
@@ -18,9 +19,9 @@ function sanitize(arr: unknown): string[] | null {
   return out;
 }
 
-function read(): string[][] {
+function read(storageKey: string): string[][] {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = localStorage.getItem(storageKey);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
@@ -37,9 +38,9 @@ function read(): string[][] {
   }
 }
 
-function write(list: string[][]) {
+function write(storageKey: string, list: string[][]) {
   try {
-    localStorage.setItem(KEY, JSON.stringify(list));
+    localStorage.setItem(storageKey, JSON.stringify(list));
   } catch { /* noop */ }
 }
 
@@ -51,24 +52,32 @@ function sameCombo(a: string[], b: string[]): boolean {
 }
 
 /**
- * Mantém um histórico MRU (até 5) de combinações de canais aplicadas.
- * Persiste em `localStorage` na chave `channel-combo-history-v1`.
+ * Mantém um histórico MRU (até 5) de combinações de canais aplicadas, isolado por usuário.
+ * Persiste em `localStorage` com chave derivada de `channel-combo-history-v1-{userId}`.
  *
  * - `record(combo)`: registra uma combinação não vazia, deduplicada e movida ao topo.
  * - `remove(combo)`: remove uma combinação específica do histórico.
  * - `clear()`: apaga o histórico inteiro.
  */
 export function useChannelHistory() {
-  const [history, setHistory] = useState<string[][]>(() => read());
+  const { user } = useAuth();
+  const storageKey = `${BASE_KEY}-${user?.id ?? 'anon'}`;
+
+  const [history, setHistory] = useState<string[][]>(() => read(storageKey));
+
+  // Re-hydrate when user changes (login/logout)
+  useEffect(() => {
+    setHistory(read(storageKey));
+  }, [storageKey]);
 
   // Sincroniza entre abas/janelas que compartilham o mesmo localStorage.
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
-      if (e.key === KEY) setHistory(read());
+      if (e.key === storageKey) setHistory(read(storageKey));
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
-  }, []);
+  }, [storageKey]);
 
   const record = useCallback((combo: string[]) => {
     const sanitized = sanitize(combo) ?? [];
@@ -76,25 +85,25 @@ export function useChannelHistory() {
     setHistory((prev) => {
       const filtered = prev.filter((c) => !sameCombo(c, sanitized));
       const next = [sanitized, ...filtered].slice(0, MAX);
-      write(next);
+      write(storageKey, next);
       return next;
     });
-  }, []);
+  }, [storageKey]);
 
   const remove = useCallback((combo: string[]) => {
     setHistory((prev) => {
       const next = prev.filter((c) => !sameCombo(c, combo));
-      write(next);
+      write(storageKey, next);
       return next;
     });
-  }, []);
+  }, [storageKey]);
 
   const clear = useCallback(() => {
-    write([]);
+    write(storageKey, []);
     setHistory([]);
-  }, []);
+  }, [storageKey]);
 
   return { history, record, remove, clear };
 }
 
-export const __test__ = { sanitize, sameCombo, KEY, MAX };
+export const __test__ = { sanitize, sameCombo, BASE_KEY, MAX };

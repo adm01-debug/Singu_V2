@@ -77,8 +77,9 @@ export function useContactSegmentation() {
              disc_primary, vak_primary, motivation_primary, preferred_channel, formality_level
            )
          `)
-         .eq('user_id', user.id);
-         
+         .eq('user_id', user.id)
+         .limit(500);
+
        if (error) {
          throw error;
        }
@@ -94,6 +95,7 @@ export function useContactSegmentation() {
        }));
      },
      staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
 
   const matchesFilter = useCallback((contact: FlattenedContact, filter: SegmentFilter): boolean => {

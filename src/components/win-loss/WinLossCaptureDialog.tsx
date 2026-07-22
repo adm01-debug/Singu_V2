@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useWinLossReasons, useCompetitors, useUpsertWinLossRecord, useWinLossRecordByDeal } from '@/hooks/useWinLoss';
 import type { WinLossOutcome } from '@/hooks/useWinLoss';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface Props {
   open: boolean;
@@ -55,7 +56,7 @@ export function WinLossCaptureDialog({ open, onOpenChange, dealId, initialOutcom
       toast.success('Win/Loss registrado');
       onOpenChange(false);
     } catch (e) {
-      toast.error('Erro ao salvar', { description: e instanceof Error ? e.message : 'Erro desconhecido' });
+      toast.error('Erro ao salvar', { description: parseApiError(e) });
     }
   };
 

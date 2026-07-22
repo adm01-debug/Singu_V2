@@ -1,3 +1,4 @@
+import type { Json } from '@/integrations/supabase/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -81,7 +82,7 @@ export function ConnectionCard({ connection, onEdit }: Props) {
           <div className="mt-3">
             <SchemaDiscoveryCard
               connectionId={connection.id}
-              discoveredSchema={connection.discovered_schema as never}
+              discoveredSchema={connection.discovered_schema as unknown as Json}
               discoveredAt={connection.discovered_at}
             />
           </div>

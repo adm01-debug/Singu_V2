@@ -25,6 +25,7 @@ interface BeforeInstallPromptEvent extends Event {
 const Notificacoes = () => {
   usePageTitle('Notificações');
   const { user } = useAuth();
+  const notifSettingsKey = `notificationSettings-${user?.id ?? 'anon'}`;
   const { permissionState, isSubscribed, isLoading, requestPermission, unsubscribe, showNotification } = useNotifications();
   const { toast } = useToast();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
@@ -62,10 +63,13 @@ const Notificacoes = () => {
   const handleSettingChange = async (key: keyof typeof notificationSettings) => {
     const newSettings = { ...notificationSettings, [key]: !notificationSettings[key] };
     setNotificationSettings(newSettings);
-    localStorage.setItem('notificationSettings', JSON.stringify(newSettings));
+    try { localStorage.setItem(notifSettingsKey, JSON.stringify(newSettings)); } catch { /* private browsing */ }
     try {
-      if (user) await supabase.from('profiles').update({ preferences: { notifications: newSettings } }).eq('id', user.id);
-    } catch (error) { 
+      if (user) {
+        const { error: prefErr } = await supabase.from('profiles').update({ preferences: { notifications: newSettings } }).eq('id', user.id);
+        if (prefErr) throw prefErr;
+      }
+    } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error saving notification settings:', { error: msg }); 
     }
@@ -75,14 +79,14 @@ const Notificacoes = () => {
     let cancelled = false;
     const loadSettings = async () => {
       try {
-        const saved = localStorage.getItem('notificationSettings');
+        const saved = localStorage.getItem(notifSettingsKey);
         if (saved) setNotificationSettings(JSON.parse(saved));
         if (user) {
           const { data: profile } = await supabase.from('profiles').select('preferences').eq('id', user.id).maybeSingle();
           if (cancelled) return;
           if (profile?.preferences) {
             const prefs = profile.preferences as { notifications?: typeof notificationSettings };
-            if (prefs.notifications) { setNotificationSettings(prefs.notifications); localStorage.setItem('notificationSettings', JSON.stringify(prefs.notifications)); }
+            if (prefs.notifications) { setNotificationSettings(prefs.notifications); localStorage.setItem(notifSettingsKey, JSON.stringify(prefs.notifications)); }
           }
         }
       } catch (error) {

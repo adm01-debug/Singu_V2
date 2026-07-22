@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useAuth } from '@/hooks/useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface DlqItem {
   id: string;
@@ -17,15 +19,18 @@ export interface DlqItem {
 }
 
 export function useWebhookDlq() {
+  const { user } = useAuth();
   const qc = useQueryClient();
 
   const { data: items = [], isLoading } = useQuery({
-    queryKey: ['incoming_webhook_dlq'],
+    queryKey: ['incoming_webhook_dlq', user?.id],
+    enabled: !!user,
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('incoming_webhook_dlq')
-        .select('*')
+        .select('id, webhook_id, payload, attempts, max_attempts, status, next_retry_at, last_error, created_at, resolved_at, source_ip')
         .in('status', ['pending', 'processing', 'failed'])
         .order('created_at', { ascending: false })
         .limit(100);
@@ -46,7 +51,7 @@ export function useWebhookDlq() {
       toast.success('Reprocessamento agendado');
       qc.invalidateQueries({ queryKey: ['incoming_webhook_dlq'] });
     },
-    onError: (e: Error) => toast.error('Falha ao reprocessar', { description: e.message }),
+    onError: (e: Error) => toast.error('Falha ao reprocessar', { description: parseApiError(e) }),
   });
 
   const reprocessAll = useMutation({
@@ -59,7 +64,7 @@ export function useWebhookDlq() {
       toast.success(`${data?.processed ?? 0} itens processados`);
       qc.invalidateQueries({ queryKey: ['incoming_webhook_dlq'] });
     },
-    onError: (e: Error) => toast.error('Falha ao reprocessar lote', { description: e.message }),
+    onError: (e: Error) => toast.error('Falha ao reprocessar lote', { description: parseApiError(e) }),
   });
 
   return { items, isLoading, reprocess, reprocessAll };

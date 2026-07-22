@@ -3,6 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface DocumentTemplate {
   id: string;
@@ -77,9 +79,10 @@ export function useDocumentTemplates() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('document_templates')
-        .select('*')
+        .select('id, user_id, name, description, document_type, content_html, merge_fields, category, is_active, usage_count, created_at, updated_at')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(200);
       if (error) throw error;
       return (data || []).map((t: Record<string, unknown>) => ({
         ...t,
@@ -87,6 +90,7 @@ export function useDocumentTemplates() {
       })) as unknown as DocumentTemplate[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const create = useMutation({
@@ -102,22 +106,24 @@ export function useDocumentTemplates() {
         merge_fields,
         category: input.category ?? null,
         is_active: input.is_active ?? true,
-      } as never);
+      } as TablesInsert<'document_templates'>);
       if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['document_templates'] });
       toast.success('Template criado');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const update = useMutation({
     mutationFn: async ({ id, ...input }: Partial<DocumentTemplate> & { id: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const merge_fields = input.content_html ? extractMergeFields(input.content_html) : undefined;
       const { error } = await supabase
         .from('document_templates')
-        .update({ ...input, ...(merge_fields ? { merge_fields } : {}) } as never)
+        .update({ ...input, ...(merge_fields ? { merge_fields } : {}) } as TablesUpdate<'document_templates'>)
+        .eq('user_id', user.id)
         .eq('id', id);
       if (error) throw error;
     },
@@ -125,19 +131,20 @@ export function useDocumentTemplates() {
       qc.invalidateQueries({ queryKey: ['document_templates'] });
       toast.success('Template atualizado');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('document_templates').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('document_templates').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['document_templates'] });
       toast.success('Template removido');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { templates, isLoading, create, update, remove, defaultFields: DEFAULT_FIELDS };
@@ -148,18 +155,20 @@ export function useDocumentSignatures() {
   const qc = useQueryClient();
 
   const { data: signatures = [], isLoading } = useQuery({
-    queryKey: ['document_signatures'],
+    queryKey: ['document_signatures', user?.id],
+    enabled: !!user,
     queryFn: async () => {
-      if (!user) return [];
       const { data, error } = await supabase
         .from('document_signatures')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .select('id, user_id, template_id, contact_id, company_id, signer_name, signer_email, rendered_html, merge_data, status, signature_token, signature_typed, viewed_at, signed_at, declined_at, expires_at, created_at, updated_at')
+        .eq('user_id', user!.id)
+        .order('created_at', { ascending: false })
+        .limit(200);
       if (error) throw error;
       return (data || []) as unknown as DocumentSignature[];
     },
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
   });
 
   const sendForSignature = useMutation({
@@ -188,7 +197,7 @@ export function useDocumentSignatures() {
           rendered_html: input.rendered_html,
           merge_data: input.merge_data,
           expires_at,
-        } as never).select().maybeSingle(),
+        } as TablesInsert<'document_signatures'>).select().maybeSingle(),
         input.template_id
           ? supabase.from('document_templates').select('usage_count').eq('id', input.template_id).maybeSingle()
           : Promise.resolve({ data: null, error: null }),
@@ -196,7 +205,7 @@ export function useDocumentSignatures() {
       if (error) throw error;
       if (!data) throw new Error("Falha ao registrar assinatura");
       if (tpl && input.template_id) {
-        void (async () => { try { await supabase.from('document_templates').update({ usage_count: (tpl.usage_count ?? 0) + 1 } as never).eq('id', input.template_id); } catch (e) { logger.error('template usage_count update failed:', e); } })();
+        void (async () => { try { await supabase.from('document_templates').update({ usage_count: (tpl.usage_count ?? 0) + 1 } as never).eq('user_id', user.id).eq('id', input.template_id); } catch (e) { logger.error('template usage_count update failed:', e); } })();
       }
       return data as unknown as DocumentSignature;
     },
@@ -204,14 +213,16 @@ export function useDocumentSignatures() {
       qc.invalidateQueries({ queryKey: ['document_signatures'] });
       toast.success('Documento enviado para assinatura');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const cancel = useMutation({
     mutationFn: async (id: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('document_signatures')
-        .update({ status: 'declined', declined_at: new Date().toISOString(), declined_reason: 'Cancelado pelo remetente' } as never)
+        .update({ status: 'declined', declined_at: new Date().toISOString(), declined_reason: 'Cancelado pelo remetente' } as TablesUpdate<'document_signatures'>)
+        .eq('user_id', user.id)
         .eq('id', id);
       if (error) throw error;
     },
@@ -219,7 +230,7 @@ export function useDocumentSignatures() {
       qc.invalidateQueries({ queryKey: ['document_signatures'] });
       toast.success('Assinatura cancelada');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const stats = {

@@ -1,1 +1,1 @@
-DROP POLICY "Service role can update lux intelligence" ON public.lux_intelligence;
+DROP POLICY IF EXISTS "Service role can update lux intelligence" ON public.lux_intelligence;

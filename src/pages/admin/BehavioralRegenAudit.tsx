@@ -29,6 +29,7 @@ import { BehavioralRegenCronHealth } from "@/components/admin/BehavioralRegenCro
 import { BehavioralRegenAlertsStats } from "@/components/admin/BehavioralRegenAlertsStats";
 import { BehavioralRegenAlertsTrend } from "@/components/admin/BehavioralRegenAlertsTrend";
 import { useUiPreferencesSync } from "@/hooks/useUiPreferencesSync";
+import { parseApiError } from '@/lib/errorMessages';
 
 type QueueRow = {
   contact_id: string;
@@ -117,6 +118,7 @@ export default function BehavioralRegenAudit() {
     queryKey: ["behavioral-regen-audit", period, statusFilter],
     initialPageParam: null as string | null,
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
     queryFn: async ({ pageParam }) => {
       let q = supabase
         .from("behavioral_profile_regen_queue")
@@ -171,7 +173,7 @@ export default function BehavioralRegenAudit() {
       if (err.cooldown) {
         toast.warning(err.message);
       } else {
-        toast.error(`Falha ao reenfileirar: ${err.message}`);
+        toast.error(`Falha ao reenfileirar: ${parseApiError(err)}`);
       }
     },
   });
@@ -201,7 +203,7 @@ export default function BehavioralRegenAudit() {
       queryClient.invalidateQueries({ queryKey: ["behavioral-regen-stats"] });
     },
     onError: (err: Error) => {
-      toast.error(`Falha na limpeza: ${err.message}`);
+      toast.error(`Falha na limpeza: ${parseApiError(err)}`);
     },
   });
 
@@ -275,7 +277,7 @@ export default function BehavioralRegenAudit() {
     },
     onError: (err: Error) => {
       setBatchProgress((p) => (p ? { ...p, running: false } : null));
-      toast.error(`Batch retry abortado: ${err.message}`);
+      toast.error(`Batch retry abortado: ${parseApiError(err)}`);
     },
   });
 
@@ -285,6 +287,7 @@ export default function BehavioralRegenAudit() {
   const { data: aggStats } = useQuery({
     queryKey: ["behavioral-regen-stats", period, statusFilter],
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const buildBase = () => {
         let q = supabase
@@ -336,7 +339,8 @@ export default function BehavioralRegenAudit() {
       const { data, error } = await supabase
         .from("contacts")
         .select("id, first_name, last_name")
-        .in("id", contactIds);
+        .in("id", contactIds)
+        .limit(500);
       if (error) throw error;
       const map = new Map<string, string>();
       for (const c of data ?? []) {

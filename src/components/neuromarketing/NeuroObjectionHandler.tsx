@@ -34,7 +34,7 @@ const NeuroObjectionHandler = ({ contactId, contactName, dominantBrain = 'limbic
 
   const getRecommendedResponse = (template: ObjectionTemplate) => template.responses.find(r => r.brain === dominantBrain) || template.responses[0];
 
-  const handleCopy = async (text: string, id: string) => { await navigator.clipboard.writeText(text); setCopiedId(id); setTimeout(() => setCopiedId(null), 2000); };
+  const handleCopy = async (text: string, id: string) => { try { await navigator.clipboard.writeText(text); setCopiedId(id); setTimeout(() => setCopiedId(null), 2000); } catch { /* clipboard unavailable */ } };
 
   return (
     <Card className={cn("border-primary/20", className)}>

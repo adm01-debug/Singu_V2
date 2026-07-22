@@ -41,6 +41,6 @@ FOR DELETE
 USING (auth.uid() = user_id);
 
 -- Create index for faster queries
-CREATE INDEX idx_trigger_usage_history_contact_id ON public.trigger_usage_history(contact_id);
-CREATE INDEX idx_trigger_usage_history_user_id ON public.trigger_usage_history(user_id);
-CREATE INDEX idx_trigger_usage_history_used_at ON public.trigger_usage_history(used_at DESC);
+CREATE INDEX IF NOT EXISTS idx_trigger_usage_history_contact_id ON public.trigger_usage_history(contact_id);
+CREATE INDEX IF NOT EXISTS idx_trigger_usage_history_user_id ON public.trigger_usage_history(user_id);
+CREATE INDEX IF NOT EXISTS idx_trigger_usage_history_used_at ON public.trigger_usage_history(used_at DESC);

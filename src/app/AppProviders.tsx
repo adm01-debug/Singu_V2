@@ -14,6 +14,7 @@ import { ErrorBoundary } from '@/components/feedback/ErrorBoundary';
 import { RouteAnnouncer } from '@/components/navigation/RouteAnnouncer';
 import { SkipNav } from '@/components/navigation/SkipNav';
 import ScrollToTop from '@/components/ScrollToTop';
+import { MotionConfig } from 'framer-motion';
 import { queryClient } from './queryClient';
 import { AppRoutes } from './AppRoutes';
 import { DeferredAppChrome } from './AppChrome';
@@ -51,6 +52,7 @@ if (import.meta.env.DEV) {
 
 export const AppProviders = () => (
   <HelmetProvider>
+    <MotionConfig reducedMotion="user">
     <ErrorBoundary showDetails={import.meta.env.DEV}>
       <QueryClientProvider client={queryClient}>
         <CelebrationProvider>
@@ -78,5 +80,6 @@ export const AppProviders = () => (
         </CelebrationProvider>
       </QueryClientProvider>
     </ErrorBoundary>
+    </MotionConfig>
   </HelmetProvider>
 );

@@ -1,4 +1,5 @@
  import React, { useState } from 'react';
+import { logger } from "@/lib/logger";
  import { Button } from '@/components/ui/button';
  import { Card, CardContent } from '@/components/ui/card';
  import { Badge } from '@/components/ui/badge';
@@ -59,10 +60,9 @@
    };
  
    const copyToClipboard = (text: string) => {
-     navigator.clipboard.writeText(text);
-     setCopied(true);
-     toast.success('Copiado!');
-     setTimeout(() => setCopied(false), 2000);
+     navigator.clipboard.writeText(text)
+       .then(() => { setCopied(true); toast.success('Copiado!'); setTimeout(() => setCopied(false), 2000); })
+       .catch(() => toast.error('Não foi possível copiar'));
    };
  
    return (
@@ -124,7 +124,7 @@
                  "{response.suggested_message}"
                </div>
                <Button 
-                 size="icon" 
+                 size="icon" aria-label="Confirmar" 
                  variant="outline" 
                  className="absolute top-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
                  onClick={() => copyToClipboard(response.suggested_message)}

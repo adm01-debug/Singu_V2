@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
  import { PersonalityExecutiveSummary } from './behavioral-tab/PersonalityExecutiveSummary';
  import { NeuroEvolutionChart } from './NeuroEvolutionChart';
 import { RelationshipScoreChart } from './behavioral-tab/RelationshipScoreChart';
@@ -62,26 +63,29 @@ import type { Contact } from '@/hooks/useContactDetail';
   const { data: behavioralData } = useQuery({
     queryKey: ['contact-behavioral', contact.id, user?.id],
     queryFn: async () => {
-      const contactFilter = [{ type: 'eq' as const, column: 'contact_id', value: contact.id }];
+      const contactFilter = [
+        { type: 'eq' as const, column: 'contact_id', value: contact.id },
+        { type: 'eq' as const, column: 'user_id', value: user?.id ?? '' },
+      ];
 
       const [discRes, eqRes, biasRes, metaRes] = await Promise.all([
         fetchWithFallback<Tables<'disc_analysis_history'>[]>(
-          async () => supabase.from('disc_analysis_history').select('*').eq('contact_id', contact.id).order('analyzed_at', { ascending: false }).limit(5),
+          async () => supabase.from('disc_analysis_history').select('*').eq('contact_id', contact.id).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(5),
           'disc_analysis_history', contactFilter,
           { order: { column: 'analyzed_at', ascending: false }, range: { from: 0, to: 4 } },
         ),
         fetchWithFallback<Record<string, unknown>[]>(
-          async () => supabase.from('eq_analysis_history').select('*').eq('contact_id', contact.id).order('analyzed_at', { ascending: false }).limit(1),
+          async () => supabase.from('eq_analysis_history').select('*').eq('contact_id', contact.id).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(1),
           'eq_analysis_history', contactFilter,
           { order: { column: 'analyzed_at', ascending: false }, range: { from: 0, to: 0 } },
         ),
         fetchWithFallback<Record<string, unknown>[]>(
-          async () => supabase.from('cognitive_bias_history').select('*').eq('contact_id', contact.id).order('analyzed_at', { ascending: false }).limit(1),
+          async () => supabase.from('cognitive_bias_history').select('*').eq('contact_id', contact.id).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(1),
           'cognitive_bias_history', contactFilter,
           { order: { column: 'analyzed_at', ascending: false }, range: { from: 0, to: 0 } },
         ),
         fetchWithFallback<Record<string, unknown>[]>(
-          async () => supabase.from('metaprogram_analysis').select('*').eq('contact_id', contact.id).order('created_at', { ascending: false }).limit(1),
+          async () => supabase.from('metaprogram_analysis').select('*').eq('contact_id', contact.id).eq('user_id', user!.id).order('created_at', { ascending: false }).limit(1),
           'metaprogram_analysis', contactFilter,
           { order: { column: 'created_at', ascending: false }, range: { from: 0, to: 0 } },
         ),
@@ -107,6 +111,7 @@ import type { Contact } from '@/hooks/useContactDetail';
     },
     enabled: !!contact.id && !!user,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 10 * 60 * 1000,
   });
 
@@ -147,8 +152,8 @@ import type { Contact } from '@/hooks/useContactDetail';
         familyInfo={contact.family_info || undefined}
         metadata={(contact.rapport_metadata ?? undefined) as { hobbies?: Record<string, string>; interests?: Record<string, string> } | undefined}
         onUpdate={async (data) => {
-          // Trigger the local update state via supabase
-          const { error } = await supabase.from('contacts').update(data).eq('id', contact.id);
+          if (!user) throw new Error('Não autenticado');
+          const { error } = await supabase.from('contacts').update(data).eq('id', contact.id).eq('user_id', user.id);
           if (error) throw error;
           return { success: true };
         }}
@@ -243,17 +248,23 @@ import type { Contact } from '@/hooks/useContactDetail';
       <CommunicationDashboardCard contactId={contact.id} />
       <EqEvolutionCard contactId={contact.id} />
       <EqDashboardCard contactId={contact.id} />
-      <Suspense fallback={<Skeleton className="h-40 rounded-lg" />}>
-        <CommunicationIntelWidget contactId={contact.id} />
-      </Suspense>
-      <Suspense fallback={<Skeleton className="h-40 rounded-lg" />}>
-        <EmotionalTrendWidget contactId={contact.id} />
-      </Suspense>
+      <DashboardErrorBoundary sectionName="Inteligência de Comunicação">
+        <Suspense fallback={<Skeleton className="h-40 rounded-lg" />}>
+          <CommunicationIntelWidget contactId={contact.id} />
+        </Suspense>
+      </DashboardErrorBoundary>
+      <DashboardErrorBoundary sectionName="Tendência Emocional">
+        <Suspense fallback={<Skeleton className="h-40 rounded-lg" />}>
+          <EmotionalTrendWidget contactId={contact.id} />
+        </Suspense>
+      </DashboardErrorBoundary>
     </div>
 
-    <Suspense fallback={<Skeleton className="h-12 rounded-lg" />}>
-      <EmotionalTrendByContactWidget contactId={contact.id} />
-    </Suspense>
+    <DashboardErrorBoundary sectionName="Evolução Emocional por Contato">
+      <Suspense fallback={<Skeleton className="h-12 rounded-lg" />}>
+        <EmotionalTrendByContactWidget contactId={contact.id} />
+      </Suspense>
+    </DashboardErrorBoundary>
 
     {/* Relationship Score Evolution Chart */}
     <RelationshipScoreChart contactId={contact.id} />

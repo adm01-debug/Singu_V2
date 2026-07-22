@@ -21,13 +21,16 @@ export function WhatsAppDashboard({ contactId }: Props) {
        if (!contactId) return [];
        const { data, error } = await supabase
          .from('whatsapp_messages_index')
-         .select('*')
+         .select('id, message_type, received_at, content, transcription, sentiment, intent, neuro_tags')
          .eq('contact_id', contactId)
-         .order('received_at', { ascending: false });
+         .order('received_at', { ascending: false })
+         .limit(100);
        if (error) throw error;
        return data;
      },
-     enabled: !!contactId
+     enabled: !!contactId,
+     staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
 
   if (loading) return null;

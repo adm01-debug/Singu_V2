@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS public.secret_rotation_log (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_secret_rotation_name ON public.secret_rotation_log(secret_name, rotated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_secret_rotation_name ON public.secret_rotation_log(secret_name, rotated_at DESC);
 
 ALTER TABLE public.secret_rotation_log ENABLE ROW LEVEL SECURITY;
 

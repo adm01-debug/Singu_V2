@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type LeadScoreGrade = 'A' | 'B' | 'C' | 'D';
 
@@ -58,12 +59,13 @@ export function useLeadScore(contactId?: string) {
     queryFn: async () => {
       if (!contactId || !user?.id) return null;
       const { data } = await supabase
-        .from('lead_scores').select('*')
+        .from('lead_scores').select('id, user_id, contact_id, fit_score, engagement_score, intent_score, relationship_score, total_score, grade, score_change, previous_score, computed_at, last_calculated_at')
         .eq('contact_id', contactId).eq('user_id', user.id).maybeSingle();
       return data as LeadScoreRow | null;
     },
     enabled: !!contactId && !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -85,6 +87,7 @@ export function useTopLeads(grade?: LeadScoreGrade | 'all', limit = 50) {
     },
     enabled: !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -96,7 +99,8 @@ export function useLeadScoreDistribution() {
       if (!user?.id) return { A: 0, B: 0, C: 0, D: 0, avg: 0, total: 0, changes24h: 0 };
       const { data } = await supabase
         .from('lead_scores').select('grade, total_score, computed_at, score_change')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .limit(500);
       const rows = (data ?? []) as Array<Pick<LeadScoreRow, 'grade' | 'total_score' | 'computed_at' | 'score_change'>>;
       const out = { A: 0, B: 0, C: 0, D: 0, avg: 0, total: rows.length, changes24h: 0 };
       const since = Date.now() - 86_400_000;
@@ -114,6 +118,7 @@ export function useLeadScoreDistribution() {
     },
     enabled: !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -124,13 +129,14 @@ export function useLeadScoreHistory(contactId?: string) {
     queryFn: async () => {
       if (!contactId || !user?.id) return [];
       const { data } = await supabase
-        .from('lead_score_history').select('*')
+        .from('lead_score_history').select('id, contact_id, total_score, grade, fit_score, engagement_score, intent_score, relationship_score, breakdown, recorded_at')
         .eq('contact_id', contactId).eq('user_id', user.id)
         .order('recorded_at', { ascending: true }).limit(100);
       return (data ?? []) as LeadScoreHistoryRow[];
     },
     enabled: !!contactId && !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -149,7 +155,7 @@ export function useRecomputeLead() {
       qc.invalidateQueries({ queryKey: ['lead-scores-distribution'] });
       qc.invalidateQueries({ queryKey: ['lead-score-history-srv', contactId] });
     },
-    onError: (e) => toast.error(`Erro: ${(e as Error).message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 }
 
@@ -166,7 +172,7 @@ export function useRecomputeAllLeads() {
       qc.invalidateQueries({ queryKey: ['lead-scores-top'] });
       qc.invalidateQueries({ queryKey: ['lead-scores-distribution'] });
     },
-    onError: (e) => toast.error(`Erro: ${(e as Error).message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 }
 
@@ -177,33 +183,37 @@ export function useScoreRules() {
     queryFn: async () => {
       if (!user?.id) return [];
       const { data } = await supabase
-        .from('lead_score_rules').select('*')
+        .from('lead_score_rules').select('id, dimension, signal_key, weight, decay_days, active')
         .eq('user_id', user.id)
         .order('dimension', { ascending: true })
-        .order('signal_key', { ascending: true });
+        .order('signal_key', { ascending: true })
+        .limit(100);
       return (data ?? []) as LeadScoreRule[];
     },
     enabled: !!user?.id,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
 export function useUpdateRule() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (rule: Partial<LeadScoreRule> & { id: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('lead_score_rules').update({
         weight: rule.weight,
         decay_days: rule.decay_days,
         active: rule.active,
-      }).eq('id', rule.id);
+      }).eq('user_id', user.id).eq('id', rule.id);
       if (error) throw error;
     },
     onSuccess: () => {
       toast.success('Regra atualizada');
       qc.invalidateQueries({ queryKey: ['lead-score-rules'] });
     },
-    onError: (e) => toast.error((e as Error).message),
+    onError: (e) => toast.error(parseApiError(e)),
   });
 }
 
@@ -214,26 +224,30 @@ export function useScoreThresholds() {
     queryFn: async () => {
       if (!user?.id) return [];
       const { data } = await supabase
-        .from('lead_score_thresholds').select('*')
-        .eq('user_id', user.id).order('min_score', { ascending: false });
+        .from('lead_score_thresholds').select('id, grade, min_score')
+        .eq('user_id', user.id).order('min_score', { ascending: false })
+        .limit(20);
       return (data ?? []) as LeadScoreThreshold[];
     },
     enabled: !!user?.id,
     staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
 export function useUpdateThreshold() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (t: Pick<LeadScoreThreshold, 'id' | 'min_score'>) => {
-      const { error } = await supabase.from('lead_score_thresholds').update({ min_score: t.min_score }).eq('id', t.id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('lead_score_thresholds').update({ min_score: t.min_score }).eq('user_id', user.id).eq('id', t.id);
       if (error) throw error;
     },
     onSuccess: () => {
       toast.success('Threshold atualizado');
       qc.invalidateQueries({ queryKey: ['lead-score-thresholds'] });
     },
-    onError: (e) => toast.error((e as Error).message),
+    onError: (e) => toast.error(parseApiError(e)),
   });
 }

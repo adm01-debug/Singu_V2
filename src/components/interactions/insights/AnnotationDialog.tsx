@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { parseApiError } from '@/lib/errorMessages';
 import { ANNOTATION_CATEGORIES, CATEGORY_KEYS } from './annotationCategories';
 import type { AnnotationCategory, SentimentAnnotation, useSentimentAnnotations } from '@/hooks/useSentimentAnnotations';
 
@@ -75,7 +76,7 @@ export function AnnotationDialog({ open, onOpenChange, contactId, weekOptions, d
     } catch (err) {
       toast({
         title: 'Erro ao salvar anotação',
-        description: err instanceof Error ? err.message : 'Tente novamente',
+        description: parseApiError(err, 'Tente novamente'),
         variant: 'destructive',
       });
     }

@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { insertExternalData } from '@/lib/externalData';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 import { Loader2 } from 'lucide-react';
 import { EntityPicker } from './EntityPicker';
 
@@ -60,7 +61,7 @@ export function PessoaForm({ onCreated }: Props) {
       setValues(empty);
       setCompany(null);
     } catch (err) {
-      toast.error(`Falha ao cadastrar pessoa: ${(err as Error).message}`);
+      toast.error(`Falha ao cadastrar pessoa: ${parseApiError(err)}`);
     } finally {
       setSubmitting(false);
     }

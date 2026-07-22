@@ -26,9 +26,9 @@ CREATE TABLE public.conversation_analyses (
   UNIQUE(user_id, interaction_id)
 );
 
-CREATE INDEX idx_conv_analyses_user ON public.conversation_analyses(user_id, analyzed_at DESC);
-CREATE INDEX idx_conv_analyses_contact ON public.conversation_analyses(contact_id);
-CREATE INDEX idx_conv_analyses_score ON public.conversation_analyses(user_id, coaching_score DESC);
+CREATE INDEX IF NOT EXISTS idx_conv_analyses_user ON public.conversation_analyses(user_id, analyzed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_conv_analyses_contact ON public.conversation_analyses(contact_id);
+CREATE INDEX IF NOT EXISTS idx_conv_analyses_score ON public.conversation_analyses(user_id, coaching_score DESC);
 
 ALTER TABLE public.conversation_analyses ENABLE ROW LEVEL SECURITY;
 
@@ -60,7 +60,7 @@ CREATE TABLE public.conversation_topics_catalog (
   UNIQUE(user_id, topic_key)
 );
 
-CREATE INDEX idx_conv_topics_user ON public.conversation_topics_catalog(user_id, active, category);
+CREATE INDEX IF NOT EXISTS idx_conv_topics_user ON public.conversation_topics_catalog(user_id, active, category);
 
 ALTER TABLE public.conversation_topics_catalog ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "conv_topics_select_own" ON public.conversation_topics_catalog FOR SELECT USING (auth.uid() = user_id);
@@ -85,7 +85,7 @@ CREATE TABLE public.coaching_scorecards (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_coaching_scorecards_user ON public.coaching_scorecards(user_id, active);
+CREATE INDEX IF NOT EXISTS idx_coaching_scorecards_user ON public.coaching_scorecards(user_id, active);
 
 ALTER TABLE public.coaching_scorecards ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "coaching_scorecards_select_own" ON public.coaching_scorecards FOR SELECT USING (auth.uid() = user_id);

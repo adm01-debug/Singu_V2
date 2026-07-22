@@ -21,6 +21,7 @@ export function MttaAutoAckHeartbeatCard() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["mtta-auto-ack-heartbeat"],
     refetchInterval: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<HeartbeatRow | null> => {
       const since = new Date(Date.now() - 24 * 60 * 60_000).toISOString();
       const { data, error } = await supabase

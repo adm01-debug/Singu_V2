@@ -27,12 +27,14 @@ export function useContactTimeAnalysis(contactId?: string) {
         .from('contact_time_analysis')
         .select('*')
         .eq('contact_id', contactId!)
-        .eq('user_id', user?.id ?? '');
+        .eq('user_id', user?.id ?? '')
+        .limit(500);
       if (error) throw error;
       return data || [];
     },
     enabled: !!user && !!contactId,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 10 * 60 * 1000,
   });
 

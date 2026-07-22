@@ -16,6 +16,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { InsightFeedbackTrendChart } from '@/components/admin/InsightFeedbackTrendChart';
+import { parseApiError } from '@/lib/errorMessages';
 
 type Kind = 'preference' | 'hobby' | 'tone';
 
@@ -39,12 +40,13 @@ function useFeedbackData() {
   return useQuery({
     queryKey: ['admin-insight-feedback'],
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<Row[]> => {
       const { data, error } = await supabase
         .from('behavioral_insight_feedback')
         .select('id, contact_id, insight_kind, insight_label, vote, note, created_at')
         .order('created_at', { ascending: false })
-        .limit(1000);
+        .limit(500);
       if (error) throw error;
       return (data ?? []) as Row[];
     },
@@ -361,7 +363,7 @@ export default function InsightFeedbackAnalytics() {
       <div className="p-6">
         <Card>
           <CardContent className="p-6 text-sm text-destructive">
-            Erro ao carregar feedbacks: {(error as Error).message}
+            Erro ao carregar feedbacks: {parseApiError(error)}
           </CardContent>
         </Card>
       </div>

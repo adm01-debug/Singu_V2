@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,6 +22,7 @@ export function ExternalContactLookupDialog({ open, onOpenChange }: { open: bool
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState<ExternalContactRow[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const { user } = useAuth();
   const { createContact } = useContacts();
 
   const handleSearch = async () => {
@@ -29,6 +31,7 @@ export function ExternalContactLookupDialog({ open, onOpenChange }: { open: bool
     try {
       const { data, error } = await queryExternalData<ExternalContactRow>({
         table: 'contacts',
+        filters: [{ type: 'eq', column: 'user_id', value: user?.id ?? '' }],
         search: {
           term: searchTerm,
           columns: ['first_name', 'last_name', 'email', 'cargo']

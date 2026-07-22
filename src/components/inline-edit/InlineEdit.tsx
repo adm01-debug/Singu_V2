@@ -180,7 +180,7 @@ export function InlineEdit({
             
             <div className="flex gap-1">
               <Button
-                size="icon"
+                size="icon" aria-label="Carregando"
                 variant="ghost"
                 className="h-8 w-8"
                 onClick={handleSave}
@@ -196,6 +196,7 @@ export function InlineEdit({
                 size="icon"
                 variant="ghost"
                 className="h-8 w-8"
+                aria-label="Cancelar edição"
                 onClick={handleCancel}
                 disabled={isSaving}
               >

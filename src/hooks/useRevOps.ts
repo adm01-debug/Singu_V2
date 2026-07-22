@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { parseApiError } from '@/lib/errorMessages';
 
 export type FunnelStage = "visitor" | "lead" | "mql" | "sql" | "opportunity" | "customer";
 
@@ -67,13 +68,16 @@ export function useRevOpsSnapshots(periodStart: string, periodEnd: string) {
     queryKey: ["revops-snapshots", user?.id, periodStart, periodEnd],
     enabled: !!user,
     staleTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("revops_snapshots")
         .select("*")
+        .eq("user_id", user!.id)
         .gte("period", periodStart)
         .lte("period", periodEnd)
-        .order("period", { ascending: false });
+        .order("period", { ascending: false })
+        .limit(500);
       if (error) throw error;
       return (data || []) as unknown as RevOpsSnapshot[];
     },
@@ -86,6 +90,7 @@ export function useRevOpsKPIs(periodStart: string, periodEnd: string) {
     queryKey: ["revops-kpis", user?.id, periodStart, periodEnd],
     enabled: !!user,
     staleTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase.rpc("compute_revops_kpis", {
         _user_id: user!.id,
@@ -104,11 +109,14 @@ export function useRevOpsBenchmarks() {
     queryKey: ["revops-benchmarks", user?.id],
     enabled: !!user,
     staleTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("revops_benchmarks")
         .select("*")
-        .order("metric_key");
+        .eq("user_id", user!.id)
+        .order("metric_key")
+        .limit(500);
       if (error) throw error;
       return (data || []) as unknown as RevOpsBenchmark[];
     },
@@ -120,10 +128,11 @@ export function useUpsertBenchmark() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: Partial<RevOpsBenchmark> & { metric_key: string; target_value: number }) => {
+      if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from("revops_benchmarks")
         .upsert({
-          user_id: user!.id,
+          user_id: user.id,
           metric_key: input.metric_key,
           target_value: input.target_value,
           warning_threshold: input.warning_threshold ?? 90,
@@ -140,7 +149,7 @@ export function useUpsertBenchmark() {
       qc.invalidateQueries({ queryKey: ["revops-benchmarks"] });
       toast.success("Benchmark salvo");
     },
-    onError: (e: Error) => toast.error(e.message || "Erro ao salvar benchmark"),
+    onError: (e: Error) => toast.error(parseApiError(e, "Erro ao salvar benchmark")),
   });
 }
 
@@ -150,10 +159,12 @@ export function useRevOpsAlerts() {
     queryKey: ["revops-alerts", user?.id],
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("revops_alerts")
         .select("*")
+        .eq("user_id", user!.id)
         .eq("dismissed", false)
         .order("created_at", { ascending: false })
         .limit(20);
@@ -171,7 +182,7 @@ export function useDismissAlert() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["revops-alerts"] }),
-    onError: (e: Error) => toast.error(e.message || "Erro ao dispensar alerta"),
+    onError: (e: Error) => toast.error(parseApiError(e, "Erro ao dispensar alerta")),
   });
 }
 
@@ -180,8 +191,9 @@ export function useTriggerRevOpsSnapshot() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async () => {
+      if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase.functions.invoke("revops-snapshot-builder", {
-        body: { user_id: user!.id },
+        body: { user_id: user.id },
       });
       if (error) throw error;
       return data;
@@ -192,6 +204,6 @@ export function useTriggerRevOpsSnapshot() {
       qc.invalidateQueries({ queryKey: ["revops-alerts"] });
       toast.success("Snapshot gerado");
     },
-    onError: (e: Error) => toast.error(e.message || "Erro ao gerar snapshot"),
+    onError: (e: Error) => toast.error(parseApiError(e, "Erro ao gerar snapshot")),
   });
 }

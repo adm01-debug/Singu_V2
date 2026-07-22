@@ -68,7 +68,7 @@ export default function AdminAuditTrail() {
       // Query regular audit_log
       let auditQuery = supabase
         .from('audit_log')
-        .select('*')
+        .select('id, entity_type, entity_id, action, old_data, new_data, user_id, created_at')
         .order('created_at', { ascending: false })
         .limit(400);
 
@@ -94,6 +94,7 @@ export default function AdminAuditTrail() {
       return (auditData || []) as AuditEntry[];
     },
     staleTime: 30_000,
+    refetchOnWindowFocus: false,
   });
 
   // Distinct entity types for filter

@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import type { Json } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type IntentScope = "contact" | "account";
 export type IntentTrend = "rising" | "stable" | "falling";
@@ -57,6 +59,7 @@ export function useIntentSignals(filters?: { signal_type?: string; days?: number
     queryKey: ["intent-signals", user?.id, filters],
     enabled: !!user?.id,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<IntentSignal[]> => {
       const since = new Date(Date.now() - (filters?.days ?? 30) * 86400_000).toISOString();
       let q = supabase.from("intent_signals").select("*")
@@ -78,6 +81,7 @@ export function useIntentScore(scope: IntentScope, scopeId: string | undefined) 
     queryKey: ["intent-score", user?.id, scope, scopeId],
     enabled: !!user?.id && !!scopeId,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<IntentScore | null> => {
       const { data, error } = await supabase.from("intent_scores").select("*")
         .eq("user_id", user!.id).eq("scope", scope).eq("scope_id", scopeId!).maybeSingle();
@@ -93,6 +97,7 @@ export function useTopIntentScores(scope: IntentScope = "account", limit = 50) {
     queryKey: ["intent-scores-top", user?.id, scope, limit],
     enabled: !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<IntentScore[]> => {
       const { data, error } = await supabase.from("intent_scores").select("*")
         .eq("user_id", user!.id).eq("scope", scope)
@@ -109,9 +114,11 @@ export function useIntentPixels() {
     queryKey: ["intent-pixels", user?.id],
     enabled: !!user?.id,
     staleTime: STALE,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<IntentPixel[]> => {
       const { data, error } = await supabase.from("intent_tracking_pixels").select("*")
-        .eq("user_id", user!.id).order("created_at", { ascending: false });
+        .eq("user_id", user!.id).order("created_at", { ascending: false })
+        .limit(500);
       if (error) throw error;
       return (Array.isArray(data) ? data : []) as IntentPixel[];
     },
@@ -139,16 +146,18 @@ export function useCreatePixel() {
       qc.invalidateQueries({ queryKey: ["intent-pixels"] });
       toast.success("Pixel criado");
     },
-    onError: (e: Error) => toast.error(`Erro ao criar pixel: ${e.message}`),
+    onError: (e: Error) => toast.error(`Erro ao criar pixel: ${parseApiError(e)}`),
   });
 }
 
 export function useTogglePixel() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { id: string; active: boolean }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from("intent_tracking_pixels")
-        .update({ active: input.active }).eq("id", input.id);
+        .update({ active: input.active }).eq("user_id", user!.id).eq("id", input.id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["intent-pixels"] }),
@@ -157,10 +166,12 @@ export function useTogglePixel() {
 }
 
 export function useDeletePixel() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("intent_tracking_pixels").delete().eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("intent_tracking_pixels").delete().eq("user_id", user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -185,7 +196,7 @@ export function useRefreshIntent() {
       const d = data as { contacts_scored?: number; accounts_scored?: number };
       toast.success(`Intent atualizado · ${d?.contacts_scored ?? 0} contatos · ${d?.accounts_scored ?? 0} contas`);
     },
-    onError: (e: Error) => toast.error(`Falha ao recalcular: ${e.message}`),
+    onError: (e: Error) => toast.error(`Falha ao recalcular: ${parseApiError(e)}`),
   });
 }
 
@@ -206,7 +217,7 @@ export function useCreateManualSignal() {
         contact_id: input.contact_id ?? null,
         external_company_id: input.external_company_id ?? null,
         signal_source: input.signal_source ?? "manual",
-        signal_value: (input.signal_value ?? {}) as never,
+        signal_value: (input.signal_value ?? {}) as unknown as Json,
       }]);
       if (error) throw error;
     },
@@ -214,7 +225,7 @@ export function useCreateManualSignal() {
       qc.invalidateQueries({ queryKey: ["intent-signals"] });
       toast.success("Sinal registrado");
     },
-    onError: (e: Error) => toast.error(`Erro: ${e.message}`),
+    onError: (e: Error) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 }
 

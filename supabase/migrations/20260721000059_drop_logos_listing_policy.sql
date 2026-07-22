@@ -1,0 +1,21 @@
+-- Migration: drop_logos_listing_policy (Wave 145)
+-- Fixes advisor: public_bucket_allows_listing (logos bucket).
+--
+-- The logos bucket has public=true at the storage layer, which means any file
+-- with a known URL is accessible via the public CDN endpoint:
+--   https://<project>.supabase.co/storage/v1/object/public/logos/<filename>
+--
+-- CDN URL access does NOT require a SELECT policy on storage.objects.
+-- The SELECT policy only gates the /storage/v1/object/list/ and
+-- /storage/v1/object/authenticated/ API endpoints.
+--
+-- Our Wave 137 policy (logos_authenticated_select) was added to replace the
+-- anonymous listing policy, but it still allows any authenticated user to
+-- enumerate all files in the logos bucket via the list API — which exposes
+-- internal file names and structure without business need.
+--
+-- Fix: drop the SELECT policy entirely. The app uses public CDN URLs
+-- (stored in the database), not the list API. Logo display continues to work
+-- because the bucket remains public=true at the storage level.
+
+DROP POLICY IF EXISTS logos_authenticated_select ON storage.objects;

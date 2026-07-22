@@ -86,9 +86,9 @@ const NeuroScriptGenerator = ({
   const scriptSections = useMemo(() => generateScriptSections(scriptGoal, dominantBrain, firstName), [dominantBrain, firstName, scriptGoal]);
 
   const handleCopy = (content: string, section: string) => {
-    navigator.clipboard.writeText(content);
-    setCopiedSection(section);
-    setTimeout(() => setCopiedSection(null), 2000);
+    navigator.clipboard.writeText(content)
+      .then(() => { setCopiedSection(section); setTimeout(() => setCopiedSection(null), 2000); })
+      .catch(() => {});
   };
 
   const toggleSection = (section: string) => {
@@ -211,7 +211,7 @@ const NeuroScriptGenerator = ({
                         <p className="pr-8">{section.content}</p>
                         <Button
                           variant="ghost"
-                          size="icon"
+                          size="icon" aria-label="Confirmar"
                           className="absolute top-2 right-2 h-6 w-6"
                           onClick={() => handleCopy(section.content, section.name)}
                         >

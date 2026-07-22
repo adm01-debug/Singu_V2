@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShieldCheck, Clock, ShieldAlert, Globe, MessageSquare, Mail } from "lucide-react";
 import { format } from "date-fns";
@@ -13,17 +14,23 @@ interface Props {
 }
 
 export function ConsentAuditLog({ contactId }: Props) {
+  const { user } = useAuth();
   const { data: logs, isLoading } = useQuery({
-    queryKey: ["consent-audit-logs", contactId],
+    queryKey: ["consent-audit-logs", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("crm_consent_audit_logs")
         .select("*")
         .eq("contact_id", contactId)
-        .order("created_at", { ascending: false });
+        .eq("user_id", user!.id)
+        .order("created_at", { ascending: false })
+        .limit(500);
       if (error) throw error;
       return data;
     },
+    enabled: !!contactId && !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   if (isLoading) return <Skeleton className="h-48 w-full" />;

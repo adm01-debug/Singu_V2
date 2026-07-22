@@ -2,6 +2,8 @@ import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ACTIVE_THEME_STORAGE_KEY, bootstrapTheme } from "@/components/theme/themeBootstrap";
 import { initGlobalErrorHandlers } from "@/lib/errorReporting";
+import { ProviderErrorBoundary } from "@/components/feedback/ProviderErrorBoundary";
+import { logger } from "@/lib/logger";
 import App from "./App.tsx";
 import "./index.css";
 
@@ -74,12 +76,12 @@ async function migrateLegacyPushSW(): Promise<void> {
 
     try {
       await reg.unregister();
-      console.info(
+      logger.info(
         "[main] Migrated: removed legacy sw-push.js." +
           " Push notifications will reactivate after next login."
       );
     } catch (err) {
-      console.warn("[main] Could not unregister legacy sw-push.js:", err);
+      logger.warn("[main] Could not unregister legacy sw-push.js:", err);
     }
   }
 }
@@ -122,12 +124,12 @@ if (import.meta.env.PROD) {
 
             onRegistered(reg) {
               if (reg) {
-                console.info("[PWA] SW registered — scope:", reg.scope);
+                logger.info("[PWA] SW registered — scope:", reg.scope);
               }
             },
 
             onRegisterError(error) {
-              console.error("[PWA] SW registration error:", error);
+              logger.error("[PWA] SW registration error:", error);
             },
           });
         })
@@ -135,7 +137,7 @@ if (import.meta.env.PROD) {
           // virtual:pwa-register is only present when the VitePWA plugin is
           // active.  In edge cases (e.g. canary builds without the plugin)
           // this import may fail; swallow silently so the app still boots.
-          console.warn("[PWA] Could not import virtual:pwa-register:", err);
+          logger.warn("[PWA] Could not import virtual:pwa-register:", err);
         });
     },
     { once: true }
@@ -144,7 +146,9 @@ if (import.meta.env.PROD) {
 
 // ── React root ─────────────────────────────────────────────────────────────
 createRoot(document.getElementById("root")!).render(
-  <ThemeProvider defaultTheme="dark" storageKey={ACTIVE_THEME_STORAGE_KEY}>
-    <App />
-  </ThemeProvider>
+  <ProviderErrorBoundary providerName="Root">
+    <ThemeProvider defaultTheme="dark" storageKey={ACTIVE_THEME_STORAGE_KEY}>
+      <App />
+    </ThemeProvider>
+  </ProviderErrorBoundary>
 );

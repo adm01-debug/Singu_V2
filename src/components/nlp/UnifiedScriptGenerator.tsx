@@ -139,10 +139,9 @@ const UnifiedScriptGenerator: React.FC<UnifiedScriptGeneratorProps> = ({
   const allScripts = (['rapport', 'discovery', 'presentation', 'objection_handling', 'negotiation', 'closing', 'follow_up'] as SalesStage[]).map(generateScript);
 
   const copyToClipboard = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedSection(id);
-    setTimeout(() => setCopiedSection(null), 2000);
-    toast.success('Script copiado!');
+    navigator.clipboard.writeText(text)
+      .then(() => { setCopiedSection(id); setTimeout(() => setCopiedSection(null), 2000); toast.success('Script copiado!'); })
+      .catch(() => toast.error('Não foi possível copiar'));
   };
 
   return (

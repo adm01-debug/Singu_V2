@@ -2,6 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { withAuth, jsonError, jsonOk, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { validate } from "../_shared/validate.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
@@ -17,9 +18,13 @@ Deno.serve(async (req) => {
   const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
   if (bodyError) return bodyError;
 
+  const vn = validate(rawBody, {
+    period_id: { type: 'string', required: true, maxLength: 36 },
+  });
+  if (!vn.ok) return jsonError(vn.error, 400);
+  const { period_id } = vn.data as { period_id: string };
+
   try {
-    const { period_id } = rawBody as { period_id?: string };
-    if (!period_id) return jsonError("period_id required", 400);
 
     const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
     const { data: period } = await admin.from("forecast_periods").select("*").eq("id", period_id).eq("user_id", userId).maybeSingle();

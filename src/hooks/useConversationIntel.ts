@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { parseApiError } from '@/lib/errorMessages';
 
 export type SentimentOverall = "positive" | "neutral" | "negative" | "mixed";
 
@@ -52,6 +53,7 @@ export function useConversationAnalysis(interactionId: string | undefined) {
     queryKey: ["conversation-analysis", interactionId],
     enabled: !!interactionId,
     staleTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("conversation_analyses")
@@ -70,6 +72,7 @@ export function useConversationAnalyses(filters?: { sentiment?: SentimentOverall
     queryKey: ["conversation-analyses", user?.id, filters],
     enabled: !!user?.id,
     staleTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       let q = supabase
         .from("conversation_analyses")
@@ -106,7 +109,7 @@ export function useAnalyzeConversation() {
       qc.invalidateQueries({ queryKey: ["conversation-analyses"] });
       toast.success("Análise concluída");
     },
-    onError: (e: Error) => toast.error(e.message ?? "Falha ao analisar"),
+    onError: (e: Error) => toast.error(parseApiError(e, "Falha ao analisar")),
   });
 }
 
@@ -119,9 +122,10 @@ export function useTopicsCatalog() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("conversation_topics_catalog")
-        .select("*")
+        .select("id, topic_key, label, category, keywords, active, sort_order")
         .eq("user_id", user!.id)
-        .order("sort_order");
+        .order("sort_order")
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as ConversationTopic[];
     },
@@ -142,15 +146,17 @@ export function useUpsertTopic() {
       qc.invalidateQueries({ queryKey: ["conversation-topics"] });
       toast.success("Tópico salvo");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 export function useDeleteTopic() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("conversation_topics_catalog").delete().eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("conversation_topics_catalog").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -166,7 +172,8 @@ export function useSeedTopics() {
   const { user } = useAuth();
   return useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.rpc("seed_conversation_topics", { _user_id: user!.id });
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.rpc("seed_conversation_topics", { _user_id: user.id });
       if (error) throw error;
     },
     onSuccess: () => {
@@ -186,9 +193,10 @@ export function useCoachingScorecards() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("coaching_scorecards")
-        .select("*")
+        .select("id, name, description, criteria, active, is_default")
         .eq("user_id", user!.id)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(50);
       if (error) throw error;
       return (data ?? []) as unknown as CoachingScorecard[];
     },
@@ -202,7 +210,7 @@ export function useUpsertScorecard() {
     mutationFn: async (sc: Partial<CoachingScorecard> & { name: string }) => {
       const payload = { ...sc, user_id: user!.id };
       if (sc.id) {
-        const { error } = await supabase.from("coaching_scorecards").update(payload).eq("id", sc.id);
+        const { error } = await supabase.from("coaching_scorecards").update(payload).eq('user_id', user!.id).eq("id", sc.id);
         if (error) throw error;
       } else {
         const { error } = await supabase.from("coaching_scorecards").insert(payload);
@@ -229,7 +237,8 @@ export function useCoachingMetrics(periodDays: number = 30) {
         .from("conversation_analyses")
         .select("coaching_score, sentiment_overall, talk_ratio_rep, objections, topics, analyzed_at")
         .eq("user_id", user!.id)
-        .gte("analyzed_at", since);
+        .gte("analyzed_at", since)
+        .limit(500);
       if (error) throw error;
       const list = data ?? [];
       const total = list.length;

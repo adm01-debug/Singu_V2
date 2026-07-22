@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Database, Json } from "@/integrations/supabase/types";
 import { type BattleCard } from "@/hooks/useBattleCards";
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 
 export type PlaybookScenario =
   | "discovery" | "demo" | "negotiation" | "objection"
@@ -67,7 +68,8 @@ export function usePlaybooks(filters: PlaybookFilters = {}) {
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      let q = supabase.from("sales_playbooks").select("*").order("usage_count", { ascending: false });
+      let q = supabase.from("sales_playbooks").select("id, user_id, name, description, scenario, stage_target, industry_target, persona_target, content, tags, active, usage_count, version, created_at, updated_at").eq("user_id", user!.id).order("usage_count", { ascending: false })
+      .limit(200);
       
       if (filters.scenario) q = q.eq("scenario", filters.scenario);
       if (filters.industry) q = q.ilike("industry_target", `%${filters.industry}%`);
@@ -82,13 +84,14 @@ export function usePlaybooks(filters: PlaybookFilters = {}) {
 }
 
 export function usePlaybook(id?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["playbook", id],
-    enabled: !!id,
+    queryKey: ["playbook", id, user?.id],
+    enabled: !!id && !!user,
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      const { data, error } = await supabase.from("sales_playbooks").select("*").eq("id", id!).maybeSingle();
+      const { data, error } = await supabase.from("sales_playbooks").select("*").eq("id", id!).eq("user_id", user!.id).maybeSingle();
       if (error) throw error;
       return data as unknown as SalesPlaybook | null;
     },
@@ -121,6 +124,7 @@ export function useUpsertPlaybook() {
         const { data, error } = await supabase
           .from("sales_playbooks")
           .update(updatePayload)
+          .eq("user_id", user.id)
           .eq("id", input.id)
           .select()
           .maybeSingle();
@@ -156,16 +160,18 @@ export function useUpsertPlaybook() {
     },
     onError: (e: Error) => {
       logger.error("[useUpsertPlaybook] Erro:", e);
-      toast.error(e.message || "Erro ao salvar playbook");
+      toast.error(parseApiError(e, "Erro ao salvar playbook"));
     },
   });
 }
 
 export function useDeletePlaybook() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("sales_playbooks").delete().eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("sales_playbooks").delete().eq("user_id", user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -174,7 +180,7 @@ export function useDeletePlaybook() {
     },
     onError: (e: Error) => {
       logger.error("[useDeletePlaybook] Erro:", e);
-      toast.error(e.message || "Erro ao remover playbook");
+      toast.error(parseApiError(e, "Erro ao remover playbook"));
     },
   });
 }
@@ -201,7 +207,7 @@ export function useGeneratePlaybook() {
     },
     onError: (e: Error) => {
       logger.error("[useGeneratePlaybook] Erro:", e);
-      toast.error(e.message || "Erro ao gerar playbook");
+      toast.error(parseApiError(e, "Erro ao gerar playbook"));
     },
   });
 }
@@ -225,7 +231,7 @@ export function useRecommendPlaybooks() {
         battle_card?: BattleCard;
       };
     },
-    onError: (e: Error) => toast.error(e.message || "Erro ao recomendar playbooks"),
+    onError: (e: Error) => toast.error(parseApiError(e, "Erro ao recomendar playbooks")),
   });
 }
 
@@ -240,7 +246,7 @@ export function useLogPlaybookUsage() {
       action: "opened" | "copied" | "shared" | "recommended" | "used_in_deal";
       context?: Record<string, unknown>;
     }) => {
-      if (!user) return;
+      if (!user) throw new Error('Not authenticated');
       
       const { error } = await supabase.from("playbook_usage_log").insert({
         user_id: user.id,
@@ -270,7 +276,8 @@ export function usePlaybookUsageLog(filters: { playbookId?: string; days?: numbe
       const since = new Date(Date.now() - (filters.days ?? 30) * 86400_000).toISOString();
       let q = supabase
         .from("playbook_usage_log")
-        .select("*")
+        .select("id, user_id, playbook_id, battle_card_id, contact_id, deal_id, action, context, opened_at")
+        .eq("user_id", user!.id)
         .gte("opened_at", since)
         .order("opened_at", { ascending: false })
         .limit(200);

@@ -274,10 +274,14 @@ export default function AdminKnowledgeExport() {
   }, []);
 
   const handleCopyBlock = useCallback(async (id: string, content: string) => {
-    await navigator.clipboard.writeText(content);
-    setCopiedId(id);
-    toast.success('Conteúdo copiado');
-    setTimeout(() => setCopiedId(null), 2000);
+    try {
+      await navigator.clipboard.writeText(content);
+      setCopiedId(id);
+      toast.success('Conteúdo copiado');
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch {
+      toast.error('Não foi possível copiar');
+    }
   }, []);
 
   if (isLoading) return <div className="p-8">Carregando...</div>;
@@ -388,6 +392,7 @@ export default function AdminKnowledgeExport() {
                         <Button
                           size="icon-sm"
                           variant="ghost"
+                          aria-label="Copiar"
                           onClick={() => handleCopyBlock(section.id, section.content)}
                         >
                           {copiedId === section.id

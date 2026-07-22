@@ -15,7 +15,7 @@ import { SentimentIndicator } from '@/components/ui/sentiment-indicator';
  import { RelationshipFunnel, RelationshipStageBadge } from '@/components/ui/relationship-stage';
  import { NextBestActionCard } from './NextBestActionCard';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
+import { cn, safehref } from '@/lib/utils';
 import { format } from 'date-fns';
 import { formatContactName, pluralize } from '@/lib/formatters';
 import { useContactRelationalData } from '@/hooks/useContactRelationalData';
@@ -99,9 +99,9 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
   const discProfile = behavior?.discProfile as string | null;
 
   const copyToClipboard = (text: string, field: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedField(field);
-    setTimeout(() => setCopiedField(null), 2000);
+    navigator.clipboard.writeText(text)
+      .then(() => { setCopiedField(field); setTimeout(() => setCopiedField(null), 2000); })
+      .catch(() => {});
   };
 
   // Build channels from contact fields + normalized external tables
@@ -109,7 +109,7 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
     { icon: Mail, value: contact.email, label: 'Email', href: `mailto:${contact.email}` },
     { icon: Phone, value: contact.phone, label: 'Telefone', href: `tel:${contact.phone}` },
     { icon: MessageSquare, value: contact.whatsapp, label: 'WhatsApp', href: `https://wa.me/${contact.whatsapp?.replace(/\D/g, '')}` },
-    { icon: Linkedin, value: contact.linkedin, label: 'LinkedIn', href: contact.linkedin },
+    { icon: Linkedin, value: contact.linkedin, label: 'LinkedIn', href: safehref(contact.linkedin) },
     { icon: Instagram, value: contact.instagram, label: 'Instagram', href: `https://instagram.com/${contact.instagram?.replace('@', '')}` },
     { icon: Twitter, value: contact.twitter, label: 'Twitter', href: `https://twitter.com/${contact.twitter?.replace('@', '')}` },
   ].filter(c => c.value);
@@ -139,7 +139,7 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
       icon: platformIconMap[s.plataforma] || Globe,
       value: s.handle || s.url || s.plataforma,
       label: s.plataforma.charAt(0).toUpperCase() + s.plataforma.slice(1),
-      href: s.url || '#',
+      href: safehref(s.url) || '#',
     }));
 
   const contactChannels = [...baseChannels, ...extraPhoneChannels, ...extraEmailChannels, ...extraSocialChannels];
@@ -352,6 +352,7 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
                           {href?.startsWith('http') && <ExternalLink className="h-3 w-3 text-muted-foreground" />}
                         </a>
                         <button
+                          aria-label={`Copiar ${label}`}
                           onClick={() => copyToClipboard(value!, label)}
                           className="rounded p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                         >

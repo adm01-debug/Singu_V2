@@ -25,22 +25,25 @@ export const useNotifications = () => {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   // Check if notifications are supported and current subscription status
   useEffect(() => {
+    let alive = true;
     const checkStatus = async () => {
       const supported = isPushSupported();
       const permission = supported ? (Notification.permission as NotificationPermission['permission']) : 'denied';
-      
+      if (!alive) return;
       setPermissionState({ permission, supported });
-      
+
       if (supported && permission === 'granted') {
         const { isSubscribed: subscribed } = await getSubscriptionStatus();
-        setIsSubscribed(subscribed);
+        if (alive) setIsSubscribed(subscribed);
       }
     };
-    
+
     checkStatus();
+    return () => { alive = false; };
   }, []);
 
   // Register service worker on mount
@@ -187,7 +190,8 @@ export const useNotifications = () => {
         .eq('user_id', user.id)
         .eq('follow_up_required', true)
         .gte('follow_up_date', today.toISOString().split('T')[0])
-        .lt('follow_up_date', tomorrow.toISOString().split('T')[0]);
+        .lt('follow_up_date', tomorrow.toISOString().split('T')[0])
+        .limit(500);
 
       if (error) throw error;
 
@@ -197,7 +201,9 @@ export const useNotifications = () => {
         const { data: contacts } = await supabase
           .from('contacts')
           .select('id, first_name, last_name')
-          .in('id', contactIds);
+          .in('id', contactIds)
+          .eq('user_id', user.id)
+          .limit(500);
 
         const contactMap = new Map(
           contacts?.map(c => [c.id, `${c.first_name} ${c.last_name}`]) || []
@@ -242,7 +248,8 @@ export const useNotifications = () => {
         .from('contacts')
         .select('id, first_name, last_name, birthday')
         .eq('user_id', user.id)
-        .not('birthday', 'is', null);
+        .not('birthday', 'is', null)
+        .limit(500);
 
       if (error) throw error;
 
@@ -304,8 +311,9 @@ export const useNotifications = () => {
 
       if (error) throw error;
 
-      // Check localStorage for already notified alerts
-      const notifiedAlerts = JSON.parse(localStorage.getItem('notified_stakeholder_alerts') || '[]');
+      // Check localStorage for already notified alerts (user-scoped key)
+      const notifKey = `notified_stakeholder_alerts_${user.id}`;
+      const notifiedAlerts: string[] = (() => { try { return JSON.parse(localStorage.getItem(notifKey) || '[]'); } catch { return []; } })();
 
       for (const alert of alerts || []) {
         if (!notifiedAlerts.includes(alert.id)) {
@@ -321,10 +329,10 @@ export const useNotifications = () => {
               },
             }
           );
-          
+
           // Mark as notified
           notifiedAlerts.push(alert.id);
-          localStorage.setItem('notified_stakeholder_alerts', JSON.stringify(notifiedAlerts));
+          try { localStorage.setItem(notifKey, JSON.stringify(notifiedAlerts)); } catch { /* quota/private */ }
         }
       }
     } catch (error) {

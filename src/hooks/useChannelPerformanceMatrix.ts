@@ -86,6 +86,7 @@ export function useChannelPerformanceMatrix() {
         queryExternalData<RawDeal>({
           table: 'deals',
           select: 'id, contact_id, pipeline_stage, status, created_at, updated_at, closed_at',
+          filters: [{ type: 'eq', column: 'user_id', value: user.id }],
           order: { column: 'updated_at', ascending: false },
           range: { from: 0, to: 1999 },
         }),
@@ -190,6 +191,7 @@ export function useChannelPerformanceMatrix() {
       };
     },
     staleTime: 15 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 30 * 60 * 1000,
   });
 }

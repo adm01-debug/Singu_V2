@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface MQLCriteria {
   id: string;
@@ -18,6 +20,7 @@ export interface MQLCriteria {
 
 export interface MQLClassification {
   id: string;
+  user_id: string;
   contact_id: string;
   criteria_id: string | null;
   status: 'mql' | 'sql' | 'disqualified' | 'customer';
@@ -39,31 +42,34 @@ export function useMQLCriteria() {
     enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
-      const { data, error } = await supabase.from('mql_criteria').select('*').eq('user_id', user.id).order('priority', { ascending: false });
+      const { data, error } = await supabase.from('mql_criteria').select('id, user_id, name, description, conditions, is_active, auto_handoff, handoff_to_role, priority, created_at').eq('user_id', user.id).order('priority', { ascending: false })
+      .limit(100);
       if (error) throw error;
       return (data || []) as unknown as MQLCriteria[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const upsert = useMutation({
     mutationFn: async (input: Partial<MQLCriteria> & { name: string }) => {
       if (!user) throw new Error('Não autenticado');
       if (input.id) {
-        const { error } = await supabase.from('mql_criteria').update(input as never).eq('id', input.id);
+        const { error } = await supabase.from('mql_criteria').update(input as TablesUpdate<'mql_criteria'>).eq('user_id', user.id).eq('id', input.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from('mql_criteria').insert({ ...input, user_id: user.id } as never);
+        const { error } = await supabase.from('mql_criteria').insert({ ...input, user_id: user.id } as TablesInsert<'mql_criteria'>);
         if (error) throw error;
       }
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: KEY }); toast.success('Critério salvo!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('mql_criteria').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('mql_criteria').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
@@ -82,7 +88,7 @@ export function useMQLClassifications() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('mql_classifications')
-        .select('*')
+        .select('id, user_id, contact_id, criteria_id, status, qualified_at, handoff_to, handoff_at, score_snapshot, reason, notes')
         .eq('user_id', user.id)
         .order('qualified_at', { ascending: false })
         .limit(200);
@@ -90,6 +96,7 @@ export function useMQLClassifications() {
       return (data || []) as unknown as MQLClassification[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -107,22 +114,24 @@ export function useEvaluateMQL() {
       if (d?.qualified) toast.success(`MQL qualificado! Score ${d.score}`);
       else toast.info(`Ainda não qualificado (score ${d?.score ?? 0})`);
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 export function useHandoffMQL() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, to, status = 'sql' }: { id: string; to?: string; status?: 'sql' | 'disqualified' }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('mql_classifications').update({
         status,
         handoff_to: to ?? null,
         handoff_at: new Date().toISOString(),
-      } as never).eq('id', id);
+      } as TablesUpdate<'mql_classifications'>).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['mql-classifications'] }); toast.success('Handoff registrado'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }

@@ -34,8 +34,12 @@ export function ShareDialog({ room }: { room: DealRoom }) {
   };
 
   const copy = async () => {
-    await navigator.clipboard.writeText(url);
-    toast.success("Link copiado");
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("Link copiado");
+    } catch {
+      toast.error("Não foi possível copiar");
+    }
   };
 
   return (
@@ -54,7 +58,7 @@ export function ShareDialog({ room }: { room: DealRoom }) {
             <>
               <div className="flex gap-2">
                 <Input value={url} readOnly />
-                <Button variant="outline" size="icon" onClick={copy}><Copy className="h-4 w-4" /></Button>
+                <Button variant="outline" size="icon" aria-label="Copiar" onClick={copy}><Copy className="h-4 w-4" /></Button>
               </div>
               <Button variant="ghost" size="sm" onClick={rotate} disabled={share.isPending}>
                 <RotateCw className="h-4 w-4" />Rotacionar token

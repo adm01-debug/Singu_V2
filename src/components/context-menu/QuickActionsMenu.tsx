@@ -82,15 +82,17 @@ export function QuickActionsMenu({
 
   const handleCopyEmail = () => {
     if (email) {
-      navigator.clipboard.writeText(email);
-      toast.success('Email copiado!');
+      navigator.clipboard.writeText(email)
+        .then(() => toast.success('Email copiado!'))
+        .catch(() => toast.error('Não foi possível copiar'));
     }
   };
 
   const handleCopyPhone = () => {
     if (phone) {
-      navigator.clipboard.writeText(phone);
-      toast.success('Telefone copiado!');
+      navigator.clipboard.writeText(phone)
+        .then(() => toast.success('Telefone copiado!'))
+        .catch(() => toast.error('Não foi possível copiar'));
     }
   };
 
@@ -114,13 +116,13 @@ export function QuickActionsMenu({
 
   const handleCall = () => {
     if (phone) {
-      window.open(`tel:${phone}`, '_blank');
+      window.open(`tel:${phone}`, '_blank', 'noopener,noreferrer');
     }
   };
 
   const handleEmail = () => {
     if (email) {
-      window.open(`mailto:${email}`, '_blank');
+      window.open(`mailto:${email}`, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -137,8 +139,9 @@ export function QuickActionsMenu({
         // User cancelled
       }
     } else {
-      navigator.clipboard.writeText(url);
-      toast.success('Link copiado!');
+      navigator.clipboard.writeText(url)
+        .then(() => toast.success('Link copiado!'))
+        .catch(() => toast.error('Não foi possível copiar'));
     }
   };
 

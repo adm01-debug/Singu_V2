@@ -8,6 +8,7 @@ import { useFeatureFlags } from "@/hooks/useFeatureFlag";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useActionToast } from "@/hooks/useActionToast";
+import { parseApiError } from "@/lib/errorMessages";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageLoadingFallback } from "@/components/feedback/PageLoadingFallback";
 import { Flag, Plus } from "lucide-react";
@@ -32,7 +33,7 @@ export default function FeatureFlagsPage() {
       qc.invalidateQueries({ queryKey: ["feature-flag"] });
       toast.success("Flag atualizada");
     },
-    onError: (e: Error) => toast.error("Falha ao atualizar", e.message),
+    onError: (e: Error) => toast.error("Falha ao atualizar", parseApiError(e)),
   });
 
   const createFlag = useMutation({
@@ -42,6 +43,7 @@ export default function FeatureFlagsPage() {
         name: newName.trim(),
         description: newDesc.trim() || null,
         enabled: false,
+        refetchOnWindowFocus: false,
       });
       if (error) throw error;
     },
@@ -51,7 +53,7 @@ export default function FeatureFlagsPage() {
       qc.invalidateQueries({ queryKey: ["feature-flags"] });
       toast.success("Flag criada");
     },
-    onError: (e: Error) => toast.error("Falha ao criar", e.message),
+    onError: (e: Error) => toast.error("Falha ao criar", parseApiError(e)),
   });
 
   if (isLoading) return <PageLoadingFallback />;

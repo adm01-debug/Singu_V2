@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect, useImperativeHandle, forwardRef } from 'react';
+import { useState, useCallback, useEffect, useImperativeHandle, forwardRef, useRef } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -40,6 +41,9 @@ export const Entity360Tab = forwardRef<Entity360Handle>((_props, ref) => {
   const [results, setResults] = useState<Array<{ id: string; name: string }>>([]);
   const [searching, setSearching] = useState(false);
 
+  const searchAbortRef = useRef<AbortController | null>(null);
+
+  const { user } = useAuth();
   const { current, push, back, forward, canBack, canForward, stack, cursor } = useEntityHistory();
   const { isPinned, toggle: togglePin } = useEntityBookmarks();
   const { data, isLoading, error, refetch } = useEntity360(current?.type ?? null, current?.id ?? null);
@@ -81,6 +85,9 @@ export const Entity360Tab = forwardRef<Entity360Handle>((_props, ref) => {
 
   const doSearch = useCallback(async () => {
     if (!search.trim()) return;
+    searchAbortRef.current?.abort();
+    const controller = new AbortController();
+    searchAbortRef.current = controller;
     setSearching(true);
     try {
       const table = type === 'contact' ? 'contacts' : type === 'company' ? 'companies' : 'deals';
@@ -88,19 +95,23 @@ export const Entity360Tab = forwardRef<Entity360Handle>((_props, ref) => {
       const { data: rows } = await queryExternalData<Record<string, unknown>>({
         table,
         select: `id, ${nameCol}`,
+        filters: [{ type: 'eq', column: 'user_id', value: user?.id ?? '' }],
         search: { term: search, columns: [nameCol] },
         range: { from: 0, to: 9 },
+        signal: controller.signal,
       });
+      if (controller.signal.aborted) return;
       const mapped = (rows || []).map((r) => ({
         id: String(r.id),
         name: String(r[nameCol] || 'Sem nome'),
       }));
       setResults(mapped);
       if (mapped.length === 0) toast.info('Nenhum resultado para a busca.');
-    } catch {
+    } catch (e) {
+      if (e instanceof Error && e.name === 'AbortError') return;
       toast.error('Falha ao buscar entidades.');
     } finally {
-      setSearching(false);
+      if (!controller.signal.aborted) setSearching(false);
     }
   }, [search, type]);
 
@@ -237,8 +248,9 @@ export const Entity360Tab = forwardRef<Entity360Handle>((_props, ref) => {
                 <button
                   type="button"
                   onClick={() => {
-                    navigator.clipboard.writeText(current.id);
-                    toast.success('ID copiado.');
+                    navigator.clipboard.writeText(current.id)
+                      .then(() => toast.success('ID copiado.'))
+                      .catch(() => toast.error('Não foi possível copiar'));
                   }}
                   className="intel-mono text-[10px] text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
                   aria-label="Copiar ID"

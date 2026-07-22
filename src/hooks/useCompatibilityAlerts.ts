@@ -49,7 +49,7 @@ export function useCompatibilityAlerts() {
     try {
       // Stage 1: fetch settings and salesperson profile in parallel
       const [{ data: settingsData }, { data: profileData }] = await Promise.all([
-        supabase.from('compatibility_settings').select('*').eq('user_id', user.id).maybeSingle(),
+        supabase.from('compatibility_settings').select('alert_threshold, alert_only_important, important_min_relationship_score').eq('user_id', user.id).maybeSingle(),
         supabase.from('profiles').select('nlp_profile').eq('id', user.id).maybeSingle(),
       ]);
 
@@ -67,9 +67,9 @@ export function useCompatibilityAlerts() {
 
       // Stage 2: contacts, existing alerts, and VAK data are all independent — run in parallel
       const [{ data: contacts }, { data: existingAlerts }, { data: vakData }] = await Promise.all([
-        supabase.from('contacts').select('id, first_name, last_name, behavior, relationship_score').eq('user_id', user.id),
-        supabase.from('compatibility_alerts').select('contact_id').eq('user_id', user.id).eq('dismissed', false),
-        supabase.from('vak_analysis_history').select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score').eq('user_id', user.id).order('created_at', { ascending: false }),
+        supabase.from('contacts').select('id, first_name, last_name, behavior, relationship_score').eq('user_id', user.id).limit(500),
+        supabase.from('compatibility_alerts').select('contact_id').eq('user_id', user.id).eq('dismissed', false).limit(500),
+        supabase.from('vak_analysis_history').select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score').eq('user_id', user.id).order('created_at', { ascending: false }).limit(2000),
       ]);
 
       if (!contacts) return;
@@ -146,11 +146,13 @@ export function useCompatibilityAlerts() {
 
       // 7. Insert new alerts
       if (newAlerts.length > 0) {
-        const { error } = await supabase
+        const { error: insertError } = await supabase
           .from('compatibility_alerts')
           .insert(newAlerts);
 
-        if (!error) {
+        if (insertError) {
+          logger.error('Error inserting compatibility alerts:', { error: insertError.message });
+        } else {
           toast.warning(`${newAlerts.length} novo(s) alerta(s) de compatibilidade`, {
             description: 'Alguns clientes importantes estão abaixo do limite configurado.',
           });
@@ -168,21 +170,27 @@ export function useCompatibilityAlerts() {
   useEffect(() => {
     if (!user || typeof window === 'undefined') return;
 
+    let cancelled = false;
+    let idleId: number | undefined;
+
     const scheduleCheck = () => {
-      void checkAndCreateAlerts();
+      if (!cancelled) void checkAndCreateAlerts();
     };
 
     const timer = window.setTimeout(() => {
+      if (cancelled) return;
       if ('requestIdleCallback' in window) {
-        const idleId = window.requestIdleCallback(scheduleCheck, { timeout: 5000 });
-        return () => window.cancelIdleCallback(idleId);
+        idleId = window.requestIdleCallback(scheduleCheck, { timeout: 5000 });
+      } else {
+        scheduleCheck();
       }
-
-      scheduleCheck();
-      return undefined;
     }, 5000);
 
-    return () => window.clearTimeout(timer);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      if (idleId !== undefined) window.cancelIdleCallback(idleId);
+    };
   }, [checkAndCreateAlerts, user]);
 
   return {

@@ -157,7 +157,7 @@ export default function NPS() {
                                 <CheckCircle2 className="h-3 w-3 mr-1" /> Registrar
                               </Button>
                             )}
-                            <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-destructive" onClick={() => deleteSurvey(s.id)}>
+                            <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-destructive" aria-label="Excluir pesquisa NPS" onClick={() => deleteSurvey(s.id)}>
                               <Trash2 className="h-3 w-3" />
                             </Button>
                           </div>

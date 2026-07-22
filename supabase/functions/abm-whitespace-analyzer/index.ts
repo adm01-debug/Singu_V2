@@ -3,6 +3,7 @@ import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
+import { validate } from "../_shared/validate.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 5, message: "Análise de whitespace muito frequente. Aguarde." });
 
@@ -111,8 +112,11 @@ Deno.serve(async (req) => {
   if (bodyError) return bodyError;
 
   try {
-    const { account_id } = rawBody as { account_id: string };
-    if (!account_id) return jsonError("account_id is required", 400, req);
+    const vw = validate(rawBody, {
+      account_id: { type: 'string', required: true, maxLength: 36 },
+    });
+    if (!vw.ok) return jsonError(vw.error, 400, req);
+    const { account_id } = vw.data as { account_id: string };
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,

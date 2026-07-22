@@ -196,8 +196,8 @@ CREATE POLICY "Users can update their own DISC communication logs"
   USING (auth.uid() = user_id);
 
 -- Create indexes for performance
-CREATE INDEX idx_disc_analysis_history_contact ON public.disc_analysis_history(contact_id);
-CREATE INDEX idx_disc_analysis_history_user ON public.disc_analysis_history(user_id);
-CREATE INDEX idx_disc_analysis_history_analyzed_at ON public.disc_analysis_history(analyzed_at DESC);
-CREATE INDEX idx_disc_conversion_metrics_user ON public.disc_conversion_metrics(user_id);
-CREATE INDEX idx_disc_communication_logs_contact ON public.disc_communication_logs(contact_id);
+CREATE INDEX IF NOT EXISTS idx_disc_analysis_history_contact ON public.disc_analysis_history(contact_id);
+CREATE INDEX IF NOT EXISTS idx_disc_analysis_history_user ON public.disc_analysis_history(user_id);
+CREATE INDEX IF NOT EXISTS idx_disc_analysis_history_analyzed_at ON public.disc_analysis_history(analyzed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_disc_conversion_metrics_user ON public.disc_conversion_metrics(user_id);
+CREATE INDEX IF NOT EXISTS idx_disc_communication_logs_contact ON public.disc_communication_logs(contact_id);

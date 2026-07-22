@@ -42,10 +42,11 @@ export function useNpsSurveys() {
     queryKey: ['nps-surveys', user?.id],
     enabled: !!user?.id,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('csat_surveys')
-        .select('*')
+        .select('id, user_id, contact_id, ticket_id, interaction_id, channel, score, feedback, status, sent_at, answered_at, expires_at, public_token, created_at, updated_at')
         .eq('user_id', user!.id)
         .order('created_at', { ascending: false })
         .limit(500);
@@ -87,6 +88,7 @@ export function useNpsSurveys() {
 
   const answer = useMutation({
     mutationFn: async (input: { id: string; score: number; feedback?: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('csat_surveys')
         .update({
@@ -95,6 +97,7 @@ export function useNpsSurveys() {
           status: 'answered',
           answered_at: new Date().toISOString(),
         })
+        .eq('user_id', user!.id)
         .eq('id', input.id);
       if (error) throw error;
     },
@@ -107,7 +110,8 @@ export function useNpsSurveys() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('csat_surveys').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('csat_surveys').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

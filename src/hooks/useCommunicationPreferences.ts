@@ -17,6 +17,7 @@ export function useCommunicationPreferences(contactId: string) {
         .from('communication_preferences')
         .select('*')
         .eq('contact_id', contactId)
+        .eq('user_id', user!.id)
         .limit(1);
       return (data?.[0] || null) as Tables<'communication_preferences'> | null;
     },
@@ -27,16 +28,18 @@ export function useCommunicationPreferences(contactId: string) {
 
   const upsertMutation = useMutation({
     mutationFn: async (updates: Partial<Tables<'communication_preferences'>>) => {
+      if (!user) throw new Error('Não autenticado');
       if (prefs) {
         const { error } = await supabase
           .from('communication_preferences')
           .update(updates)
+          .eq('user_id', user.id)
           .eq('id', prefs.id);
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('communication_preferences')
-          .insert({ contact_id: contactId, user_id: user!.id, preferred_channel: 'email', ...updates });
+          .insert({ contact_id: contactId, user_id: user.id, preferred_channel: 'email', ...updates });
         if (error) throw error;
       }
     },

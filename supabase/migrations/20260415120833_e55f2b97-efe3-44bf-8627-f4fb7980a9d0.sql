@@ -16,8 +16,8 @@ CREATE TABLE IF NOT EXISTS public.schema_drift_alerts (
 ALTER TABLE public.schema_drift_alerts ENABLE ROW LEVEL SECURITY;
 
 -- Index for fast unresolved lookups
-CREATE INDEX idx_schema_drift_unresolved ON public.schema_drift_alerts(resolved, created_at DESC);
-CREATE INDEX idx_schema_drift_entity ON public.schema_drift_alerts(entity_name, error_type);
+CREATE INDEX IF NOT EXISTS idx_schema_drift_unresolved ON public.schema_drift_alerts(resolved, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_schema_drift_entity ON public.schema_drift_alerts(entity_name, error_type);
 
 -- Admins can view all alerts
 CREATE POLICY "Admins can view schema drift alerts"

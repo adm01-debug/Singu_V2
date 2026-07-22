@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
+import { parseApiError } from '@/lib/errorMessages';
 interface BulkActionsBarProps {
   selectedIds: string[];
   totalCount: number;
@@ -94,8 +95,7 @@ export function BulkActionsBar({
       toast.success(`${selectedCount} ${entityType === 'contacts' ? 'contatos' : entityType === 'companies' ? 'empresas' : 'interações'} excluídos`);
       onClearSelection();
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Erro ao excluir itens';
-      toast.error(msg);
+      toast.error(parseApiError(error, 'Erro ao excluir itens'));
     } finally {
       setIsProcessing(false);
       setShowDeleteConfirm(false);
@@ -110,8 +110,7 @@ export function BulkActionsBar({
       await onUpdateStage(selectedIds, stage);
       toast.success(`Estágio atualizado para ${selectedCount} itens`);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Erro ao atualizar estágio';
-      toast.error(msg);
+      toast.error(parseApiError(error, 'Erro ao atualizar estágio'));
     } finally {
       setIsProcessing(false);
     }
@@ -125,8 +124,7 @@ export function BulkActionsBar({
       await onAddTag(selectedIds, tag);
       toast.success(`Tag "${tag}" adicionada a ${selectedCount} itens`);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Erro ao adicionar tag';
-      toast.error(msg);
+      toast.error(parseApiError(error, 'Erro ao adicionar tag'));
     } finally {
       setIsProcessing(false);
     }
@@ -140,8 +138,7 @@ export function BulkActionsBar({
       await onExport(selectedIds);
       toast.success(`${selectedCount} itens exportados`);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Erro ao exportar';
-      toast.error(msg);
+      toast.error(parseApiError(error, 'Erro ao exportar'));
     } finally {
       setIsProcessing(false);
     }
@@ -155,8 +152,7 @@ export function BulkActionsBar({
       await onToggleFavorite(selectedIds);
       toast.success(`${selectedCount} itens atualizados`);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Erro ao atualizar favoritos';
-      toast.error(msg);
+      toast.error(parseApiError(error, 'Erro ao atualizar favoritos'));
     } finally {
       setIsProcessing(false);
     }
@@ -304,6 +300,7 @@ export function BulkActionsBar({
                   size="icon"
                   className="h-8 w-8"
                   onClick={onClearSelection}
+                  aria-label="Limpar seleção"
                 >
                   <X className="w-4 h-4" />
                 </Button>

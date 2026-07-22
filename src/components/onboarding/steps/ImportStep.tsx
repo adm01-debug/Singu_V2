@@ -83,7 +83,7 @@ const ImportStep = ({ onImport, onNext, onBack }: ImportStepProps) => {
     return contacts;
   };
 
-  const handleFile = async (selectedFile: File) => {
+  const handleFile = useCallback(async (selectedFile: File) => {
     setFile(selectedFile);
     setError(null);
     setImporting(true);
@@ -135,7 +135,7 @@ const ImportStep = ({ onImport, onNext, onBack }: ImportStepProps) => {
     } finally {
       setImporting(false);
     }
-  };
+  }, [user]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -147,8 +147,7 @@ const ImportStep = ({ onImport, onNext, onBack }: ImportStepProps) => {
     } else {
       setError('Por favor, selecione um arquivo CSV');
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [handleFile]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];

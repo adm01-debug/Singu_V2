@@ -25,6 +25,7 @@ export function MttaSlaBreachHistoryCard() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["mtta-sla-breach-history-30d"],
     refetchInterval: 5 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<BreachRow[]> => {
       const since = new Date(Date.now() - 30 * 24 * 60 * 60_000).toISOString();
       const { data, error } = await supabase

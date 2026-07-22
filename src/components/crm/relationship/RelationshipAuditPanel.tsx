@@ -19,13 +19,16 @@ export function RelationshipAuditPanel({ contactId }: Props) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('crm_relationship_audit_logs')
-        .select('*')
+        .select('id, change_source, contact_id, created_at, field_name, new_value, old_value, reason, trigger_name, user_id')
         .eq('contact_id', contactId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(100);
       
       if (error) throw error;
       return data;
-    }
+    },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const getIcon = (source: string) => {

@@ -48,10 +48,14 @@ export default function AdminSecretsManagement() {
   }, []);
 
   const handleCopy = useCallback(async () => {
-    await navigator.clipboard.writeText(generatedSecret);
-    setCopied(true);
-    toast.success('Secret copiado para a área de transferência');
-    setTimeout(() => setCopied(false), 3000);
+    try {
+      await navigator.clipboard.writeText(generatedSecret);
+      setCopied(true);
+      toast.success('Secret copiado para a área de transferência');
+      setTimeout(() => setCopied(false), 3000);
+    } catch {
+      toast.error('Não foi possível copiar');
+    }
   }, [generatedSecret]);
 
   const handleConfirmRotation = useCallback(async () => {
@@ -164,7 +168,7 @@ export default function AdminSecretsManagement() {
                   value={generatedSecret}
                   className="font-mono text-xs"
                 />
-                <Button size="icon" variant="outline" onClick={handleCopy}>
+                <Button size="icon" aria-label="Confirmar" variant="outline" onClick={handleCopy}>
                   {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 </Button>
               </div>

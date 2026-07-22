@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface SmsCampaign {
   id: string;
@@ -69,14 +70,16 @@ export function useSmsCampaigns() {
       if (!userId) return [];
       const { data, error } = await supabase
         .from('sms_campaigns')
-        .select('*')
+        .select('id, user_id, name, message, sender_id, status, scheduled_at, sent_at, total_recipients, total_sent, total_delivered, total_failed, total_replies, total_opt_outs, cost_estimate_cents, created_at, updated_at')
         .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(100);
       if (error) throw error;
       return (data || []) as SmsCampaign[];
     },
     enabled: !!userId,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const createCampaign = useMutation({
@@ -95,7 +98,7 @@ export function useSmsCampaigns() {
       qc.invalidateQueries({ queryKey: ['sms-campaigns'] });
       toast.success('Campanha SMS criada');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const sendCampaign = useMutation({
@@ -115,12 +118,13 @@ export function useSmsCampaigns() {
         toast.success(`${data?.sent || 0} mensagens enviadas, ${data?.failed || 0} falhas`);
       }
     },
-    onError: (e: Error) => toast.error(`Erro ao enviar: ${e.message}`),
+    onError: (e: Error) => toast.error(`Erro ao enviar: ${parseApiError(e)}`),
   });
 
   const deleteCampaign = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('sms_campaigns').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('sms_campaigns').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -148,7 +152,7 @@ export function useSmsCampaignRecipients(campaignId: string | null) {
       if (!campaignId) return [];
       const { data, error } = await supabase
         .from('sms_campaign_recipients')
-        .select('*')
+        .select('id, campaign_id, contact_id, phone, status, provider_message_id, error_message, sent_at, delivered_at, failed_at, replied_at, cost_cents, created_at')
         .eq('campaign_id', campaignId)
         .order('created_at', { ascending: false })
         .limit(500);
@@ -170,9 +174,10 @@ export function useSmsTemplates() {
       if (!userId) return [];
       const { data, error } = await supabase
         .from('sms_templates')
-        .select('*')
+        .select('id, user_id, name, body, category, variables, usage_count, created_at, updated_at')
         .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(200);
       if (error) throw error;
       return (data || []).map((t) => ({
         ...t,
@@ -181,6 +186,7 @@ export function useSmsTemplates() {
     },
     enabled: !!userId,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const createTemplate = useMutation({
@@ -201,12 +207,13 @@ export function useSmsTemplates() {
       qc.invalidateQueries({ queryKey: ['sms-templates'] });
       toast.success('Template criado');
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const deleteTemplate = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('sms_templates').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('sms_templates').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

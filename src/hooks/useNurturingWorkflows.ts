@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { Json, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface NurturingStep {
   type: 'email' | 'whatsapp' | 'task' | 'wait';
@@ -45,11 +47,13 @@ export function useNurturingWorkflows() {
     enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
-      const { data, error } = await supabase.from('nurturing_workflows').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+      const { data, error } = await supabase.from('nurturing_workflows').select('id, user_id, name, description, trigger_type, trigger_config, is_active, steps, enrolled_count, completed_count, created_at').eq('user_id', user.id).order('created_at', { ascending: false })
+      .limit(200);
       if (error) throw error;
       return (data || []).map(d => ({ ...d, steps: Array.isArray(d.steps) ? d.steps : [] })) as unknown as NurturingWorkflow[];
     },
     staleTime: 3 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const create = useMutation({
@@ -57,35 +61,38 @@ export function useNurturingWorkflows() {
       if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('nurturing_workflows').insert({
         user_id: user.id, name: input.name, description: input.description || null,
-        trigger_type: input.trigger_type || 'manual', steps: (input.steps || []) as never,
+        trigger_type: input.trigger_type || 'manual', steps: (input.steps || []) as unknown as Json,
       });
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Workflow criado!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<NurturingWorkflow> & { id: string }) => {
-      const { error } = await supabase.from('nurturing_workflows').update(updates as never).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('nurturing_workflows').update(updates as unknown as TablesUpdate<'nurturing_workflows'>).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Workflow atualizado!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('nurturing_workflows').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('nurturing_workflows').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Workflow removido!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const toggleActive = useMutation({
     mutationFn: async ({ id, is_active }: { id: string; is_active: boolean }) => {
-      const { error } = await supabase.from('nurturing_workflows').update({ is_active }).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('nurturing_workflows').update({ is_active }).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); },

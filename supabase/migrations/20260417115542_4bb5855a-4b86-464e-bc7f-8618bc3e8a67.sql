@@ -18,10 +18,10 @@ CREATE TABLE public.email_verifications (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_email_verif_user ON public.email_verifications(user_id);
-CREATE INDEX idx_email_verif_contact ON public.email_verifications(contact_id);
-CREATE INDEX idx_email_verif_email ON public.email_verifications(lower(email));
-CREATE INDEX idx_email_verif_verified_at ON public.email_verifications(verified_at DESC);
+CREATE INDEX IF NOT EXISTS idx_email_verif_user ON public.email_verifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_email_verif_contact ON public.email_verifications(contact_id);
+CREATE INDEX IF NOT EXISTS idx_email_verif_email ON public.email_verifications(lower(email));
+CREATE INDEX IF NOT EXISTS idx_email_verif_verified_at ON public.email_verifications(verified_at DESC);
 ALTER TABLE public.email_verifications ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "ev_select_own" ON public.email_verifications FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "ev_insert_own" ON public.email_verifications FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -50,10 +50,10 @@ CREATE TABLE public.phone_validations (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_phone_val_user ON public.phone_validations(user_id);
-CREATE INDEX idx_phone_val_contact ON public.phone_validations(contact_id);
-CREATE INDEX idx_phone_val_e164 ON public.phone_validations(phone_e164);
-CREATE INDEX idx_phone_val_validated_at ON public.phone_validations(validated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_phone_val_user ON public.phone_validations(user_id);
+CREATE INDEX IF NOT EXISTS idx_phone_val_contact ON public.phone_validations(contact_id);
+CREATE INDEX IF NOT EXISTS idx_phone_val_e164 ON public.phone_validations(phone_e164);
+CREATE INDEX IF NOT EXISTS idx_phone_val_validated_at ON public.phone_validations(validated_at DESC);
 ALTER TABLE public.phone_validations ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "pv_select_own" ON public.phone_validations FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "pv_insert_own" ON public.phone_validations FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -79,9 +79,9 @@ CREATE TABLE public.email_finder_results (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_efr_user ON public.email_finder_results(user_id);
-CREATE INDEX idx_efr_contact ON public.email_finder_results(contact_id);
-CREATE INDEX idx_efr_domain ON public.email_finder_results(domain);
+CREATE INDEX IF NOT EXISTS idx_efr_user ON public.email_finder_results(user_id);
+CREATE INDEX IF NOT EXISTS idx_efr_contact ON public.email_finder_results(contact_id);
+CREATE INDEX IF NOT EXISTS idx_efr_domain ON public.email_finder_results(domain);
 ALTER TABLE public.email_finder_results ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "efr_select_own" ON public.email_finder_results FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "efr_insert_own" ON public.email_finder_results FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -105,9 +105,9 @@ CREATE TABLE public.people_intelligence_events (
   detected_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_pie_user ON public.people_intelligence_events(user_id);
-CREATE INDEX idx_pie_contact ON public.people_intelligence_events(contact_id, detected_at DESC);
-CREATE INDEX idx_pie_type ON public.people_intelligence_events(event_type);
+CREATE INDEX IF NOT EXISTS idx_pie_user ON public.people_intelligence_events(user_id);
+CREATE INDEX IF NOT EXISTS idx_pie_contact ON public.people_intelligence_events(contact_id, detected_at DESC);
+CREATE INDEX IF NOT EXISTS idx_pie_type ON public.people_intelligence_events(event_type);
 ALTER TABLE public.people_intelligence_events ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "pie_select_own" ON public.people_intelligence_events FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "pie_insert_own" ON public.people_intelligence_events FOR INSERT WITH CHECK (auth.uid() = user_id);

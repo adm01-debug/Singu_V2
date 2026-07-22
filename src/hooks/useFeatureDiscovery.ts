@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
-const STORAGE_KEY = 'relateiq-feature-discovery';
+const BASE_STORAGE_KEY = 'relateiq-feature-discovery';
 
 interface FeatureFlag {
   id: string;
@@ -12,22 +13,27 @@ interface FeatureFlag {
  * Tracks which features the user has seen/dismissed
  */
 export function useFeatureDiscovery() {
-  const [seenFeatures, setSeenFeatures] = useState<FeatureFlag[]>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
+  const { user } = useAuth();
+  const storageKey = `${BASE_STORAGE_KEY}-${user?.id ?? 'anon'}`;
+
+  const [seenFeatures, setSeenFeatures] = useState<FeatureFlag[]>([]);
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(seenFeatures));
+      const stored = localStorage.getItem(storageKey);
+      setSeenFeatures(stored ? JSON.parse(stored) : []);
+    } catch {
+      setSeenFeatures([]);
+    }
+  }, [storageKey]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(seenFeatures));
     } catch {
       // silently fail
     }
-  }, [seenFeatures]);
+  }, [seenFeatures, storageKey]);
 
   const hasSeenFeature = useCallback((featureId: string) => {
     return seenFeatures.some(f => f.id === featureId);

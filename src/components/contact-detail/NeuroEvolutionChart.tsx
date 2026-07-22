@@ -19,9 +19,10 @@
      queryFn: async () => {
        const { data, error } = await supabase
          .from('neuro_behavioral_history')
-         .select('*')
+         .select('id, contact_id, created_at, dominance_data, empathy_score')
          .eq('contact_id', contactId)
-         .order('created_at', { ascending: true });
+         .order('created_at', { ascending: true })
+         .limit(200);
        
        if (error) throw error;
        
@@ -33,9 +34,11 @@
         neocortex: (entry.dominance_data as { neocortex?: number } | null)?.neocortex || 0,
          empathy: entry.empathy_score || 0
        }));
-     }
+     },
+     staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
- 
+
    if (isLoading) return <div className="h-48 animate-pulse bg-muted rounded-lg" />;
    if (!history || history.length < 1) {
      return (

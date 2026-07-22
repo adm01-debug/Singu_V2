@@ -47,10 +47,14 @@ export const useSmartReminders = (autoFetch = true) => {
   const [error, setError] = useState<string | null>(null);
   const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
   const { toast } = useToast();
+  const { user } = useAuth();
+  const dismissedKey = `dismissedReminders-${user?.id ?? 'anon'}`;
+  const snoozedKey = `snoozedReminders-${user?.id ?? 'anon'}`;
 
   // Load dismissed reminders from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem('dismissedReminders');
+    let stored: string | null = null;
+    try { stored = localStorage.getItem(dismissedKey); } catch { /* quota/private */ }
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
@@ -64,13 +68,13 @@ export const useSmartReminders = (autoFetch = true) => {
             cleaned[id] = timestamp as number;
           }
         }
-        localStorage.setItem('dismissedReminders', JSON.stringify(cleaned));
+        localStorage.setItem(dismissedKey, JSON.stringify(cleaned));
         setDismissedIds(new Set(Object.keys(cleaned)));
       } catch {
-        localStorage.removeItem('dismissedReminders');
+        localStorage.removeItem(dismissedKey);
       }
     }
-  }, []);
+  }, [dismissedKey]);
 
   const fetchReminders = useCallback(async (analyze = false) => {
     setIsLoading(true);
@@ -117,7 +121,7 @@ export const useSmartReminders = (autoFetch = true) => {
       clearTimeout(timeout);
       setIsLoading(false);
     }
-  }, [dismissedIds]);
+  }, [dismissedIds, user]);
 
   const dismissReminder = useCallback((id: string) => {
     setDismissedIds(prev => {
@@ -125,29 +129,29 @@ export const useSmartReminders = (autoFetch = true) => {
       updated.add(id);
       
       // Persist to localStorage with timestamp
-      const stored = localStorage.getItem('dismissedReminders');
-      const parsed = stored ? JSON.parse(stored) : {};
+      const stored = (() => { try { return localStorage.getItem(dismissedKey); } catch { return null; } })();
+      const parsed = stored ? (() => { try { return JSON.parse(stored); } catch { return {}; } })() : {};
       parsed[id] = Date.now();
-      localStorage.setItem('dismissedReminders', JSON.stringify(parsed));
-      
+      try { localStorage.setItem(dismissedKey, JSON.stringify(parsed)); } catch { /* quota/private */ }
+
       return updated;
     });
-    
+
     setReminders(prev => prev.filter(r => r.id !== id));
-    
+
     toast({
       title: 'Lembrete dispensado',
       description: 'O lembrete foi removido da sua lista.'
     });
-  }, [toast]);
+  }, [toast, dismissedKey]);
 
   const snoozeReminder = useCallback((id: string, hours: number) => {
     // Store snooze time in localStorage
     const snoozeUntil = Date.now() + hours * 60 * 60 * 1000;
-    const stored = localStorage.getItem('snoozedReminders');
-    const parsed = stored ? JSON.parse(stored) : {};
+    const stored = (() => { try { return localStorage.getItem(snoozedKey); } catch { return null; } })();
+    const parsed = stored ? (() => { try { return JSON.parse(stored); } catch { return {}; } })() : {};
     parsed[id] = snoozeUntil;
-    localStorage.setItem('snoozedReminders', JSON.stringify(parsed));
+    try { localStorage.setItem(snoozedKey, JSON.stringify(parsed)); } catch { /* quota/private */ }
     
     setReminders(prev => prev.filter(r => r.id !== id));
     
@@ -155,7 +159,7 @@ export const useSmartReminders = (autoFetch = true) => {
       title: 'Lembrete adiado',
       description: `Você será lembrado novamente em ${hours} hora${hours > 1 ? 's' : ''}.`
     });
-  }, [toast]);
+  }, [toast, snoozedKey]);
 
   const completeReminder = useCallback((reminder: SmartReminder) => {
     // Dismiss from local state
@@ -163,10 +167,10 @@ export const useSmartReminders = (autoFetch = true) => {
       const updated = new Set(prev);
       updated.add(reminder.id);
       
-      const stored = localStorage.getItem('dismissedReminders');
-      const parsed = stored ? JSON.parse(stored) : {};
+      const stored = (() => { try { return localStorage.getItem(dismissedKey); } catch { return null; } })();
+      const parsed = stored ? (() => { try { return JSON.parse(stored); } catch { return {}; } })() : {};
       parsed[reminder.id] = Date.now();
-      localStorage.setItem('dismissedReminders', JSON.stringify(parsed));
+      try { localStorage.setItem(dismissedKey, JSON.stringify(parsed)); } catch { /* quota/private */ }
       
       return updated;
     });
@@ -174,7 +178,7 @@ export const useSmartReminders = (autoFetch = true) => {
     setReminders(prev => prev.filter(r => r.id !== reminder.id));
     
     return reminder; // Return for celebration handling
-  }, []);
+  }, [dismissedKey]);
 
   const getHighPriorityCount = useCallback(() => {
     return reminders.filter(r => r.priority === 'high').length;

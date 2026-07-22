@@ -1,4 +1,5 @@
-import { useState, useMemo, useEffect, useRef, startTransition, lazy, Suspense } from 'react';
+import { useState, useMemo, useEffect, useRef, startTransition, lazy, Suspense, useCallback } from 'react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { useNavigate } from 'react-router-dom';
 import { List as VirtualList } from 'react-window';
 import { UserPlus, Upload, CheckSquare, Globe } from 'lucide-react';
@@ -138,6 +139,11 @@ export function ContatosContent(props: Props) {
   const visibleContacts = useMemo(() => filteredAndSortedContacts.slice(0, visibleCount), [filteredAndSortedContacts, visibleCount]);
   const hasMoreContacts = visibleCount < filteredAndSortedContacts.length;
 
+  const handleTableSort = useCallback((field: string) => {
+    if (sortBy === field) onSortChange(field, sortOrder === 'asc' ? 'desc' : 'asc');
+    else onSortChange(field, 'asc');
+  }, [sortBy, sortOrder, onSortChange]);
+
   const handleBulkExport = async (ids: string[]) => {
     const dataToExport = contacts.filter(c => ids.includes(c.id)).map(c => ({
       Nome: `${c.first_name} ${c.last_name}`,
@@ -172,7 +178,9 @@ export function ContatosContent(props: Props) {
       </div>
 
       <div className="p-4 md:p-6 space-y-5">
-        <Suspense fallback={null}><DuplicateContactsPanel /></Suspense>
+        <DashboardErrorBoundary sectionName="Contatos Duplicados">
+          <Suspense fallback={null}><DuplicateContactsPanel /></Suspense>
+        </DashboardErrorBoundary>
         <ContactsStatsBar contacts={contacts} />
         <BirthdayWidget />
 
@@ -240,7 +248,7 @@ export function ContatosContent(props: Props) {
             )}
 
             {viewMode === 'table' && (
-              <ContactsTableView contacts={filteredAndSortedContacts} selectionMode={selectionMode} selectedIds={selectedIds} onSelect={onSelect} getCompanyName={getCompanyName} getLastInteractionDate={getLastInteractionDate} sortBy={sortBy} sortOrder={sortOrder} onSortChange={(field) => { if (sortBy === field) onSortChange(field, sortOrder === 'asc' ? 'desc' : 'asc'); else onSortChange(field, 'asc'); }} />
+              <ContactsTableView contacts={filteredAndSortedContacts} selectionMode={selectionMode} selectedIds={selectedIds} onSelect={onSelect} getCompanyName={getCompanyName} getLastInteractionDate={getLastInteractionDate} sortBy={sortBy} sortOrder={sortOrder} onSortChange={handleTableSort} />
             )}
 
             {filteredAndSortedContacts.length === 0 && !loading && (
@@ -264,12 +272,14 @@ export function ContatosContent(props: Props) {
         onExport={handleBulkExport}
       />
 
-      <Suspense fallback={null}>
-        <ExternalContactLookupDialog 
-          open={isExternalSearchOpen} 
-          onOpenChange={setIsExternalSearchOpen} 
-        />
-      </Suspense>
+      <DashboardErrorBoundary sectionName="Busca Externa">
+        <Suspense fallback={null}>
+          <ExternalContactLookupDialog
+            open={isExternalSearchOpen}
+            onOpenChange={setIsExternalSearchOpen}
+          />
+        </Suspense>
+      </DashboardErrorBoundary>
     </div>
     </>
   );

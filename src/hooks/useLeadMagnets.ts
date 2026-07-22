@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface LeadMagnet {
   id: string;
@@ -43,33 +45,36 @@ export function useLeadMagnets() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('lead_magnets')
-        .select('*')
+        .select('id, user_id, title, slug, description, type, file_path, external_url, thumbnail_url, gated, form_id, download_count, view_count, is_published, created_at, updated_at')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(200);
       if (error) throw error;
       return (data || []) as unknown as LeadMagnet[];
     },
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const upsert = useMutation({
     mutationFn: async (input: Partial<LeadMagnet> & { title: string; slug: string; type: LeadMagnet['type'] }) => {
       if (!user) throw new Error('Não autenticado');
       if (input.id) {
-        const { error } = await supabase.from('lead_magnets').update(input as never).eq('id', input.id);
+        const { error } = await supabase.from('lead_magnets').update(input as TablesUpdate<'lead_magnets'>).eq('user_id', user.id).eq('id', input.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from('lead_magnets').insert({ ...input, user_id: user.id } as never);
+        const { error } = await supabase.from('lead_magnets').insert({ ...input, user_id: user.id } as TablesInsert<'lead_magnets'>);
         if (error) throw error;
       }
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: KEY }); toast.success('Lead magnet salvo!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('lead_magnets').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('lead_magnets').delete().eq('id', id).eq('user_id', user.id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: KEY }); toast.success('Removido'); },
@@ -78,7 +83,8 @@ export function useLeadMagnets() {
 
   const togglePublish = useMutation({
     mutationFn: async ({ id, is_published }: { id: string; is_published: boolean }) => {
-      const { error } = await supabase.from('lead_magnets').update({ is_published } as never).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('lead_magnets').update({ is_published } as TablesUpdate<'lead_magnets'>).eq('id', id).eq('user_id', user.id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
@@ -89,18 +95,21 @@ export function useLeadMagnets() {
 }
 
 export function useMagnetDownloads(magnetId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['magnet-downloads', magnetId],
-    enabled: !!magnetId,
+    queryKey: ['magnet-downloads', magnetId, user?.id],
+    enabled: !!magnetId && !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('lead_magnet_downloads')
-        .select('*')
+        .select('id, magnet_id, email, name, utm_source, downloaded_at')
         .eq('magnet_id', magnetId!)
         .order('downloaded_at', { ascending: false })
         .limit(200);
       if (error) throw error;
       return (data || []) as unknown as MagnetDownload[];
     },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }

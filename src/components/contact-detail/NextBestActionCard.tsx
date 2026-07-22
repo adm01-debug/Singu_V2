@@ -59,7 +59,9 @@ const urgencyMeta: Record<string, { label: string; variant: 'default' | 'destruc
           .maybeSingle();
        return contact;
      },
-     enabled: !!contactId
+     enabled: !!contactId,
+     staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
   const createTask = useCreateTask();
    const [scriptOpen, setScriptOpen] = useState(false);
@@ -270,10 +272,11 @@ const urgencyMeta: Record<string, { label: string; variant: 'default' | 'destruc
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Data da Conclusão</label>
-              <input 
-                type="date" 
-                value={completionDate} 
+              <label htmlFor="completion-date" className="text-sm font-medium">Data da Conclusão</label>
+              <input
+                id="completion-date"
+                type="date"
+                value={completionDate}
                 onChange={(e) => setCompletionDate(e.target.value)}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               />

@@ -45,11 +45,13 @@ const DOCS: DocSection[] = [
     const { data, error } = await supabase
       .from('contacts')
       .select('*')
-      .eq('user_id', userId);
+      .eq('user_id', userId)
+      .limit(1000);
     if (error) throw error;
     return data;
   },
   staleTime: 5 * 60 * 1000,
+  refetchOnWindowFocus: false,
 });`,
     },
   },

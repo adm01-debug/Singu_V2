@@ -20,7 +20,7 @@ describe('InfiniteScrollSentinel — densidade ambiente', () => {
   });
 
   it('lê "compact" do localStorage automaticamente', () => {
-    localStorage.setItem('singu-table-density', 'compact');
+    localStorage.setItem('singu-table-density-anon', 'compact');
     notifyDensityChange();
     const { container } = render(
       <InfiniteScrollSentinel sentinelRef={makeRef()} hasMore total={100} totalLoaded={10} />,
@@ -31,7 +31,7 @@ describe('InfiniteScrollSentinel — densidade ambiente', () => {
   });
 
   it('DensityProvider tem prioridade sobre localStorage', () => {
-    localStorage.setItem('singu-table-density', 'comfortable');
+    localStorage.setItem('singu-table-density-anon', 'comfortable');
     const { container } = render(
       <DensityProvider value="compact">
         <InfiniteScrollSentinel sentinelRef={makeRef()} hasMore total={100} totalLoaded={10} />
@@ -57,7 +57,7 @@ describe('InfiniteScrollSentinel — densidade ambiente', () => {
   });
 
   it('mensagem final inclui total exibido e densidade compacta', () => {
-    localStorage.setItem('singu-table-density', 'compact');
+    localStorage.setItem('singu-table-density-anon', 'compact');
     render(
       <InfiniteScrollSentinel
         sentinelRef={makeRef()}

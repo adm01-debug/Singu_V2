@@ -59,7 +59,7 @@ export function useCognitiveBiasPersistence(contactId: string) {
 
       const { data, error } = await supabase
         .from('cognitive_bias_history')
-        .select('*')
+        .select('id, contact_id, interaction_id, detected_biases, category_distribution, dominant_biases, vulnerabilities, resistances, profile_summary, analyzed_at, created_at')
         .eq('contact_id', contactId)
         .eq('user_id', user.id)
         .order('analyzed_at', { ascending: false })

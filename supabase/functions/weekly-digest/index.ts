@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { guardBody, scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { validate } from "../_shared/validate.ts";
 
 interface WeeklyDigestData {
   userId: string;
@@ -38,9 +39,13 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const requestBody = (rawBody as { source?: string; userId?: string }) ?? {};
-    const isCronJob = requestBody.source === 'cron';
-    const specificUserId = requestBody.userId;
+    const vwd = validate(rawBody ?? {}, {
+      source: { type: 'string', maxLength: 20 },
+      userId: { type: 'string', maxLength: 36 },
+    });
+    if (!vwd.ok) return new Response(JSON.stringify({ error: vwd.error }), { status: 400, headers: { ...scopedCorsHeaders(req), 'Content-Type': 'application/json' } });
+    const { source, userId: specificUserId } = vwd.data as { source?: string; userId?: string };
+    const isCronJob = source === 'cron';
 
     console.log(`Starting weekly digest generation... Source: ${isCronJob ? 'cron' : 'manual'}`);
 

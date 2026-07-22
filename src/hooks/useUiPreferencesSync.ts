@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { Json } from '@/integrations/supabase/types';
 
 /**
  * Hook genérico para sincronizar preferências de UI por escopo no perfil do
@@ -70,7 +71,7 @@ function shallowEqual<T extends Record<string, unknown>>(a: T, b: T): boolean {
 export function useUiPreferencesSync<T extends Record<string, unknown>>(
   opts: UseUiPreferencesSyncOptions<T>,
 ) {
-  const { scope, current, defaults, sanitize, hydrate, hasUrlOverride, debounceMs = 600 } = opts;
+  const { scope, current, sanitize, hydrate, hasUrlOverride, debounceMs = 600 } = opts;
   const { user } = useAuth();
   const qc = useQueryClient();
   const hydratedRef = useRef(false);
@@ -101,7 +102,7 @@ export function useUiPreferencesSync<T extends Record<string, unknown>>(
       const { error } = await supabase
         .from('user_ui_preferences')
         .upsert(
-          [{ user_id: userId, scope, preferences: prefs as unknown as never }],
+          [{ user_id: userId, scope, preferences: prefs as unknown as Json }],
           { onConflict: 'user_id,scope' },
         );
       if (error) throw error;

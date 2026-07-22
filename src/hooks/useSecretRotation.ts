@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { hashForAudit } from '@/lib/secretRotation';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface SecretRotationEntry {
   id: string;
@@ -35,10 +36,11 @@ export function useSecretRotation() {
     queryKey: ['secret-rotation-logs', user?.id],
     enabled: !!user,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('secret_rotation_log')
-        .select('*')
+        .select('id, secret_name, rotated_at, rotated_by, old_hash, new_hash, reason, is_automatic, created_at')
         .order('rotated_at', { ascending: false })
         .limit(200);
       if (error) throw error;
@@ -69,7 +71,7 @@ export function useSecretRotation() {
       qc.invalidateQueries({ queryKey: ['secret-rotation-logs'] });
       toast.success('Rotação registrada com sucesso');
     },
-    onError: (e) => toast.error(`Erro ao registrar rotação: ${e.message}`),
+    onError: (e) => toast.error(`Erro ao registrar rotação: ${parseApiError(e)}`),
   });
 
   /** Último log de rotação por secret */

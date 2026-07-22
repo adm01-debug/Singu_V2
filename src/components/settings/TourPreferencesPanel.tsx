@@ -15,6 +15,7 @@ import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 import { useOnboardingTour } from '@/components/onboarding/OnboardingTour';
 import { 
   isPushSupported, 
@@ -85,7 +86,7 @@ export function TourPreferencesPanel() {
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Push toggle error:', { error: msg });
-      toast.error('Erro ao alterar configurações de push', { description: msg });
+      toast.error('Erro ao alterar configurações de push', { description: parseApiError(error) });
     } finally {
       setPushLoading(false);
     }

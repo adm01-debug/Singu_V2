@@ -2,6 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
+import { validate } from "../_shared/validate.ts";
 
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Rate limit excedido para meeting-summary." });
@@ -45,18 +46,13 @@ Deno.serve(async (req) => {
       });
     }
 
-    const body = rawBody;
-    const { interaction_id } = body;
-
-    if (!interaction_id) {
-      return new Response(
-        JSON.stringify({ error: "interaction_id é obrigatório" }),
-        {
-          status: 400,
-          headers: { ...cors, "Content-Type": "application/json" },
-        }
-      );
+    const vms = validate(rawBody, {
+      interaction_id: { type: 'string', required: true, maxLength: 36 },
+    });
+    if (!vms.ok) {
+      return new Response(JSON.stringify({ error: vms.error }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
     }
+    const { interaction_id } = vms.data as { interaction_id: string };
 
     // Fetch interaction
     const { data: interaction, error: intError } = await supabase

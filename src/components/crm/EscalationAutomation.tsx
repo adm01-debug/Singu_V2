@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Bell, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export function EscalationAutomation({ contactId }: { contactId: string }) {
   const { user } = useAuth();
@@ -24,14 +25,16 @@ export function EscalationAutomation({ contactId }: { contactId: string }) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('contact_automation_settings')
-        .select('*')
+        .select('id, contact_id, created_at, delay_hours, escalation_enabled, escalation_role, last_escalation_at, reminder_enabled, resolution_summary, updated_at, user_id')
         .eq('contact_id', contactId)
         .maybeSingle();
       
       if (error) throw error;
       return data;
     },
-    enabled: !!contactId
+    enabled: !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
@@ -68,7 +71,7 @@ export function EscalationAutomation({ contactId }: { contactId: string }) {
       toast.success('Configurações de automação e escalonamento salvas');
     },
     onError: (error) => {
-      toast.error('Erro ao salvar configurações: ' + error.message);
+      toast.error('Erro ao salvar configurações: ' + parseApiError(error));
     }
   });
 

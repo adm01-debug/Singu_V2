@@ -1,12 +1,12 @@
 const geocodeCache = new Map<string, { lat: number; lng: number } | null>();
 
-export async function geocode(location: string): Promise<{ lat: number; lng: number } | null> {
+export async function geocode(location: string, signal?: AbortSignal): Promise<{ lat: number; lng: number } | null> {
   const key = location.trim().toLowerCase();
   if (geocodeCache.has(key)) return geocodeCache.get(key) ?? null;
   try {
     const res = await fetch(
       `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q=${encodeURIComponent(location)}`,
-      { headers: { "User-Agent": "SINGU-CRM/1.0" } }
+      { headers: { "User-Agent": "SINGU-CRM/1.0" }, signal }
     );
     const data = await res.json();
     if (data.length > 0) {

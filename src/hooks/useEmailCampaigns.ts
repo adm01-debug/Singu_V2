@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface EmailCampaign {
   id: string;
@@ -34,20 +36,22 @@ export function useEmailCampaigns() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('email_campaigns')
-        .select('*')
+        .select('id, user_id, name, subject, content_html, content_text, status, segment_filter, tags, scheduled_at, sent_at, total_recipients, total_opened, total_clicked, total_bounced, created_at')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(100);
       if (error) throw error;
       return (data || []) as EmailCampaign[];
     },
     staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const create = useMutation({
     mutationFn: async (input: Partial<EmailCampaign>) => {
       if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase.from('email_campaigns')
-        .insert({ ...input, user_id: user.id } as never)
+        .insert({ ...input, user_id: user.id } as TablesInsert<'email_campaigns'>)
         .select()
         .maybeSingle();
       if (error) throw error;
@@ -55,25 +59,25 @@ export function useEmailCampaigns() {
       return data as EmailCampaign;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha criada!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const update = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<EmailCampaign> & { id: string }) => {
-      const { error } = await supabase.from('email_campaigns').update(updates as never).eq('id', id);
+      const { error } = await supabase.from('email_campaigns').update(updates as never).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha atualizada!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('email_campaigns').delete().eq('id', id);
+      const { error } = await supabase.from('email_campaigns').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha removida!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   /**
@@ -85,22 +89,30 @@ export function useEmailCampaigns() {
     mutationFn: async (campaignId: string) => {
       if (!user) throw new Error('Não autenticado');
 
-      // Buscar contatos elegíveis (com email)
-      const { data: contacts, error: contactsError } = await supabase
-        .from('contacts')
-        .select('id, email, first_name, last_name')
-        .eq('user_id', user.id)
-        .not('email', 'is', null);
-      if (contactsError) throw contactsError;
+      // Buscar TODOS os contatos elegíveis (com email) via paginação
+      const PAGE = 1000;
+      let allContacts: { id: string; email: string | null; first_name: string | null; last_name: string | null }[] = [];
+      for (let offset = 0; ; offset += PAGE) {
+        const { data: page, error: pageErr } = await supabase
+          .from('contacts')
+          .select('id, email, first_name, last_name')
+          .eq('user_id', user.id)
+          .not('email', 'is', null)
+          .range(offset, offset + PAGE - 1);
+        if (pageErr) throw pageErr;
+        allContacts = allContacts.concat(page ?? []);
+        if (!page || page.length < PAGE) break;
+      }
 
-      const eligible = (contacts ?? []).filter(c => c.email && c.email.includes('@'));
+      const eligible = allContacts.filter(c => c.email && c.email.includes('@'));
       if (eligible.length === 0) throw new Error('Nenhum contato com email válido foi encontrado');
 
       // Marcar como enviando + buscar destinatários já existentes em paralelo
-      const [, { data: existing }] = await Promise.all([
-        supabase.from('email_campaigns').update({ status: 'sending' } as never).eq('id', campaignId),
+      const [{ error: sendingErr }, { data: existing }] = await Promise.all([
+        supabase.from('email_campaigns').update({ status: 'sending' } as TablesUpdate<'email_campaigns'>).eq('user_id', user.id).eq('id', campaignId),
         supabase.from('campaign_recipients').select('contact_id').eq('campaign_id', campaignId),
       ]);
+      if (sendingErr) throw sendingErr;
       const existingIds = new Set((existing ?? []).map(r => r.contact_id));
 
       const toInsert = eligible
@@ -113,17 +125,18 @@ export function useEmailCampaigns() {
           sent_at: new Date().toISOString(),
         }));
 
-      const [{ error: insError }, { error: updError }] = await Promise.all([
-        toInsert.length > 0
-          ? supabase.from('campaign_recipients').insert(toInsert)
-          : Promise.resolve({ error: null }),
-        supabase.from('email_campaigns').update({
-          status: 'sent',
-          sent_at: new Date().toISOString(),
-          total_recipients: eligible.length,
-        } as never).eq('id', campaignId),
-      ]);
-      if (insError) throw insError;
+      // Inserir destinatários em lotes de 500 para evitar limites de payload
+      const BATCH = 500;
+      for (let i = 0; i < toInsert.length; i += BATCH) {
+        const { error: insError } = await supabase.from('campaign_recipients').insert(toInsert.slice(i, i + BATCH));
+        if (insError) throw insError;
+      }
+
+      const { error: updError } = await supabase.from('email_campaigns').update({
+        status: 'sent',
+        sent_at: new Date().toISOString(),
+        total_recipients: eligible.length,
+      } as TablesUpdate<'email_campaigns'>).eq('user_id', user.id).eq('id', campaignId);
       if (updError) throw updError;
 
       return { recipientsCount: eligible.length, newlyAdded: toInsert.length };
@@ -134,7 +147,7 @@ export function useEmailCampaigns() {
       toast.success(`Campanha enviada para ${recipientsCount} destinatários (${newlyAdded} novos)`);
     },
     onError: (e: Error) => {
-      toast.error(`Falha ao enviar: ${e.message}`);
+      toast.error(`Falha ao enviar: ${parseApiError(e)}`);
     },
   });
 

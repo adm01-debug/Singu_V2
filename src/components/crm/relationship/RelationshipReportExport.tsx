@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { FileText, Download, Loader2, FileSpreadsheet, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 import { exportToCSV } from '@/lib/export-utils';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
@@ -23,9 +24,10 @@ export function RelationshipReportExport({ contactId, contactName }: Props) {
       // Fetch timeline data for CSV
       const { data: interactions, error } = await supabase
         .from('interactions')
-        .select('*')
+        .select('id, created_at, title, type, content, sentiment')
         .eq('contact_id', contactId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(500);
 
       if (error) throw error;
 
@@ -40,7 +42,7 @@ export function RelationshipReportExport({ contactId, contactName }: Props) {
       exportToCSV(exportData, `Relatorio_Timeline_${contactName.replace(/\s+/g, '_')}`);
       toast.success('CSV exportado com sucesso');
     } catch (err) {
-      toast.error('Erro ao exportar CSV: ' + (err instanceof Error ? err.message : String(err)));
+      toast.error('Erro ao exportar CSV: ' + parseApiError(err));
     } finally {
       setIsExportingCSV(false);
     }
@@ -62,7 +64,7 @@ export function RelationshipReportExport({ contactId, contactName }: Props) {
       
       toast.success('Relatório PDF pronto para download/impressão');
     } catch (err) {
-      toast.error('Erro ao gerar PDF: ' + (err instanceof Error ? err.message : String(err)));
+      toast.error('Erro ao gerar PDF: ' + parseApiError(err));
     } finally {
       setIsExportingPDF(false);
     }

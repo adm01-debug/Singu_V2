@@ -30,12 +30,18 @@ export function PlaybookSuggestionDrawer({ open, onOpenChange, context }: Props)
     battle_card?: BattleCard; 
   } | null>(null);
 
+  const contextKey = [
+    context.contact_id, context.deal_id, context.current_stage,
+    context.industry, context.persona, context.competitor_mentioned,
+    (context.recent_topics ?? []).join(','),
+  ].join('|');
+
   useEffect(() => {
     if (open && !recommend.isPending) {
       recommend.mutateAsync(context).then(setData).catch(() => setData(null));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, contextKey]);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>

@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export function useSequenceProcessor() {
   return useMutation({
@@ -13,6 +14,6 @@ export function useSequenceProcessor() {
       const { stats } = data;
       toast.success(`Processador rodou: ${stats.sent} enviados, ${stats.advanced} avançados, ${stats.paused} pausados`);
     },
-    onError: (e: Error) => toast.error(`Erro: ${e.message}`),
+    onError: (e: Error) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 }

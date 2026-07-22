@@ -142,6 +142,7 @@ export const PhonesCard = memo(function PhonesCard({ phones, copiedField, onCopy
                 <ShieldCheck className="h-3 w-3" />
               </button>
               <button
+                aria-label={`Copiar telefone ${formatPhoneDisplay(p)}`}
                 onClick={() => onCopy(formatPhoneDisplay(p), `phone-${p.id}`)}
                 className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
               >

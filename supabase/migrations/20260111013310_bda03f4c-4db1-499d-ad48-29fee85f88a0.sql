@@ -42,5 +42,5 @@ FOR DELETE
 USING (auth.uid() = user_id);
 
 -- Create index for faster lookups
-CREATE INDEX idx_vak_analysis_contact ON public.vak_analysis_history(contact_id);
-CREATE INDEX idx_vak_analysis_user ON public.vak_analysis_history(user_id);
+CREATE INDEX IF NOT EXISTS idx_vak_analysis_contact ON public.vak_analysis_history(contact_id);
+CREATE INDEX IF NOT EXISTS idx_vak_analysis_user ON public.vak_analysis_history(user_id);

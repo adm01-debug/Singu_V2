@@ -29,7 +29,7 @@ CREATE TRIGGER trg_document_templates_updated_at
   BEFORE UPDATE ON public.document_templates
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
-CREATE INDEX idx_document_templates_user ON public.document_templates(user_id);
+CREATE INDEX IF NOT EXISTS idx_document_templates_user ON public.document_templates(user_id);
 
 -- Assinaturas eletrônicas
 CREATE TABLE IF NOT EXISTS public.document_signatures (
@@ -77,9 +77,9 @@ CREATE TRIGGER trg_document_signatures_updated_at
   BEFORE UPDATE ON public.document_signatures
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
-CREATE INDEX idx_document_signatures_user ON public.document_signatures(user_id);
-CREATE INDEX idx_document_signatures_token ON public.document_signatures(signature_token);
-CREATE INDEX idx_document_signatures_status ON public.document_signatures(user_id, status);
+CREATE INDEX IF NOT EXISTS idx_document_signatures_user ON public.document_signatures(user_id);
+CREATE INDEX IF NOT EXISTS idx_document_signatures_token ON public.document_signatures(signature_token);
+CREATE INDEX IF NOT EXISTS idx_document_signatures_status ON public.document_signatures(user_id, status);
 
 -- Visualizações de documentos (tracking)
 CREATE TABLE IF NOT EXISTS public.document_views (
@@ -106,4 +106,4 @@ CREATE POLICY "Owner views document_views via signature" ON public.document_view
 CREATE POLICY "Anyone can insert document_views" ON public.document_views
   FOR INSERT WITH CHECK (true);
 
-CREATE INDEX idx_document_views_signature ON public.document_views(signature_id);
+CREATE INDEX IF NOT EXISTS idx_document_views_signature ON public.document_views(signature_id);

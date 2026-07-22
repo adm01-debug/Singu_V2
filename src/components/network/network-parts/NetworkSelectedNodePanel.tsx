@@ -34,7 +34,7 @@ export function NetworkSelectedNodePanel({ selectedNode, onClose, onNavigate }: 
             <Badge variant="outline" className="text-xs">{selectedNode.type === 'company' ? 'Empresa' : 'Contato'}</Badge>
           </div>
         </div>
-        <Button size="icon" variant="ghost" className="h-6 w-6" onClick={onClose}><X className="w-4 h-4" /></Button>
+        <Button size="icon" variant="ghost" aria-label="Fechar" className="h-6 w-6" onClick={onClose}><X className="w-4 h-4" /></Button>
       </div>
 
       <div className="space-y-2 mb-4">

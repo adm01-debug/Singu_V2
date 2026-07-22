@@ -60,7 +60,7 @@ const SHOW_ALL_ROWS_KEY = "singu:sentiment-trend:tooltip-show-all-rows";
 
 function readShowAllRows(): boolean {
   if (typeof window === "undefined") return false;
-  return window.localStorage.getItem(SHOW_ALL_ROWS_KEY) === "1";
+  try { return window.localStorage.getItem(SHOW_ALL_ROWS_KEY) === "1"; } catch { return false; }
 }
 
 export function WeeklySentimentTooltip({ active, payload }: TooltipProps<number, string>) {
@@ -69,7 +69,7 @@ export function WeeklySentimentTooltip({ active, payload }: TooltipProps<number,
   const toggleShowAll = (next: boolean) => {
     setShowAllRows(next);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(SHOW_ALL_ROWS_KEY, next ? "1" : "0");
+      try { window.localStorage.setItem(SHOW_ALL_ROWS_KEY, next ? "1" : "0"); } catch { /* private browsing */ }
     }
   };
 

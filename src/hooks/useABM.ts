@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 import { useAuth } from './useAuth';
+import type { TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type AccountTier = "strategic" | "enterprise" | "mid" | "smb";
 export type AccountStatus = "active" | "nurture" | "closed_won" | "closed_lost" | "paused";
@@ -93,26 +95,31 @@ export function useABMAccounts() {
     queryFn: async (): Promise<ABMAccount[]> => {
       const { data, error } = await supabase
         .from("abm_accounts")
-        .select("*")
-        .order("account_score", { ascending: false });
+        .select("id, user_id, external_company_id, company_name, parent_account_id, tier, account_score, score_breakdown, status, assigned_to, target_revenue, notes, last_scored_at, created_at, updated_at")
+        .eq("user_id", user!.id)
+        .order("account_score", { ascending: false })
+        .limit(200);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as ABMAccount[]) : [];
     },
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
 export function useABMAccount(id: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["abm", "account", id],
+    queryKey: ["abm", "account", id, user?.id],
     queryFn: async (): Promise<ABMAccount | null> => {
       if (!id) return null;
-      const { data, error } = await supabase.from("abm_accounts").select("*").eq("id", id).maybeSingle();
+      const { data, error } = await supabase.from("abm_accounts").select("*").eq("id", id).eq("user_id", user!.id).maybeSingle();
       if (error) throw error;
       return data as unknown as ABMAccount | null;
     },
-    enabled: !!id,
+    enabled: !!id && !!user,
     staleTime: 2 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -142,15 +149,17 @@ export function useCreateABMAccount() {
       qc.invalidateQueries({ queryKey: ["abm", "accounts"] });
       toast.success("Conta ABM criada");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 export function useUpdateABMAccount() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<ABMAccount> & { id: string }) => {
-      const { data, error } = await supabase.from("abm_accounts").update(updates).eq("id", id).select().maybeSingle();
+      if (!user) throw new Error('Não autenticado');
+      const { data, error } = await supabase.from("abm_accounts").update(updates).eq('user_id', user.id).eq("id", id).select().maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Conta ABM não encontrada");
       return data;
@@ -160,22 +169,24 @@ export function useUpdateABMAccount() {
       qc.invalidateQueries({ queryKey: ["abm", "account", vars.id] });
       toast.success("Conta atualizada");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 export function useDeleteABMAccount() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("abm_accounts").delete().eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("abm_accounts").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["abm", "accounts"] });
       toast.success("Conta removida");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
@@ -193,26 +204,29 @@ export function useRescoreAccounts(accountId?: string) {
       qc.invalidateQueries({ queryKey: ["abm"] });
       toast.success(`${data?.scored ?? 0} conta(s) reavaliada(s)`);
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 /* ───────────── Buying Committee ───────────── */
 
 export function useBuyingCommittee(accountId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["abm", "committee", accountId],
+    queryKey: ["abm", "committee", accountId, user?.id],
     queryFn: async (): Promise<BuyingCommitteeMember[]> => {
       if (!accountId) return [];
       const { data, error } = await supabase
         .from("abm_buying_committee")
-        .select("*")
+        .select("id, account_id, contact_name, contact_email, contact_role, external_contact_id, committee_role, influence_level, engagement_score, notes")
         .eq("account_id", accountId)
-        .order("influence_level", { ascending: false });
+        .eq("user_id", user!.id)
+        .order("influence_level", { ascending: false })
+        .limit(50);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as BuyingCommitteeMember[]) : [];
     },
-    enabled: !!accountId,
+    enabled: !!accountId && !!user,
   });
 }
 
@@ -226,7 +240,7 @@ export function useUpsertCommitteeMember() {
       if (!user) throw new Error("Não autenticado");
       if (input.id) {
         const { id, ...updates } = input;
-        const { data, error } = await supabase.from("abm_buying_committee").update(updates).eq("id", id).select().maybeSingle();
+        const { data, error } = await supabase.from("abm_buying_committee").update(updates).eq('user_id', user!.id).eq("id", id).select().maybeSingle();
         if (error) throw error;
         if (!data) throw new Error("Stakeholder não encontrado");
         return data;
@@ -244,41 +258,46 @@ export function useUpsertCommitteeMember() {
       qc.invalidateQueries({ queryKey: ["abm", "committee", vars.account_id] });
       toast.success("Stakeholder salvo");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 export function useDeleteCommitteeMember() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id }: { id: string; account_id: string }) => {
-      const { error } = await supabase.from("abm_buying_committee").delete().eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("abm_buying_committee").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["abm", "committee", vars.account_id] });
       toast.success("Stakeholder removido");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 /* ───────────── Whitespace ───────────── */
 
 export function useWhitespaceOpportunities(accountId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["abm", "whitespace", accountId],
+    queryKey: ["abm", "whitespace", accountId, user?.id],
     queryFn: async (): Promise<WhitespaceOpportunity[]> => {
       if (!accountId) return [];
       const { data, error } = await supabase
         .from("abm_whitespace_opportunities")
-        .select("*")
+        .select("id, account_id, opportunity_type, product_category, estimated_value, confidence, rationale, status, identified_at")
         .eq("account_id", accountId)
-        .order("estimated_value", { ascending: false, nullsFirst: false });
+        .eq("user_id", user!.id)
+        .order("estimated_value", { ascending: false, nullsFirst: false })
+        .limit(50);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as WhitespaceOpportunity[]) : [];
     },
-    enabled: !!accountId,
+    enabled: !!accountId && !!user,
   });
 }
 
@@ -298,41 +317,46 @@ export function useGenerateWhitespace() {
     },
     onError: (e: Error) => {
       logger.error("whitespace error", e);
-      toast.error(e.message);
+      toast.error(parseApiError(e));
     },
   });
 }
 
 export function useUpdateWhitespaceStatus() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string; account_id: string }) => {
-      const { error } = await supabase.from("abm_whitespace_opportunities").update({ status }).eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("abm_whitespace_opportunities").update({ status }).eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["abm", "whitespace", vars.account_id] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 /* ───────────── Account Plans ───────────── */
 
 export function useABMAccountPlans(accountId: string | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["abm", "plans", accountId],
+    queryKey: ["abm", "plans", accountId, user?.id],
     queryFn: async (): Promise<ABMAccountPlan[]> => {
       if (!accountId) return [];
       const { data, error } = await supabase
         .from("abm_account_plans")
-        .select("*")
+        .select("id, account_id, template_type, goal, objectives, strategies, key_stakeholders, milestones, status, target_revenue, start_date, end_date")
         .eq("account_id", accountId)
-        .order("created_at", { ascending: false });
+        .eq("user_id", user!.id)
+        .order("created_at", { ascending: false })
+        .limit(20);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as ABMAccountPlan[]) : [];
     },
-    enabled: !!accountId,
+    enabled: !!accountId && !!user,
   });
 }
 
@@ -344,7 +368,7 @@ export function useUpsertAccountPlan() {
       if (!user) throw new Error("Não autenticado");
       if (input.id) {
         const { id, ...updates } = input;
-        const { data, error } = await supabase.from("abm_account_plans").update(updates).eq("id", id).select().maybeSingle();
+        const { data, error } = await supabase.from("abm_account_plans").update(updates).eq('user_id', user!.id).eq("id", id).select().maybeSingle();
         if (error) throw error;
         if (!data) throw new Error("Plano de conta não encontrado");
         return data;
@@ -362,20 +386,24 @@ export function useUpsertAccountPlan() {
       qc.invalidateQueries({ queryKey: ["abm", "plans", vars.account_id] });
       toast.success("Plano de conta salvo");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 /* ───────────── Campaigns ───────────── */
 
 export function useABMCampaigns() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["abm", "campaigns"],
+    queryKey: ["abm", "campaigns", user?.id],
+    enabled: !!user,
     queryFn: async (): Promise<ABMCampaign[]> => {
       const { data, error } = await supabase
         .from("abm_campaigns")
-        .select("*")
-        .order("created_at", { ascending: false });
+        .select("id, name, description, campaign_type, target_account_ids, channels, status, start_date, end_date, budget, metrics, created_at")
+        .eq("user_id", user!.id)
+        .order("created_at", { ascending: false })
+        .limit(100);
       if (error) throw error;
       return Array.isArray(data) ? (data as unknown as ABMCampaign[]) : [];
     },
@@ -392,7 +420,7 @@ export function useUpsertCampaign() {
         const { id, metrics, ...rest } = input;
         const updates: Record<string, unknown> = { ...rest };
         if (metrics !== undefined) updates.metrics = metrics as unknown;
-        const { data, error } = await supabase.from("abm_campaigns").update(updates as never).eq("id", id).select().maybeSingle();
+        const { data, error } = await supabase.from("abm_campaigns").update(updates as unknown as TablesUpdate<'abm_campaigns'>).eq('user_id', user!.id).eq("id", id).select().maybeSingle();
         if (error) throw error;
         if (!data) throw new Error("Campanha não encontrada");
         return data;
@@ -421,21 +449,23 @@ export function useUpsertCampaign() {
       qc.invalidateQueries({ queryKey: ["abm", "campaigns"] });
       toast.success("Campanha salva");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
 
 export function useDeleteCampaign() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("abm_campaigns").delete().eq("id", id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from("abm_campaigns").delete().eq('user_id', user.id).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["abm", "campaigns"] });
       toast.success("Campanha removida");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }

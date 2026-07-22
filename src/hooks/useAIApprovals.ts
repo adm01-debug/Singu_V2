@@ -20,7 +20,7 @@ export function useAIApprovals(contactId?: string) {
   const { user } = useAuth();
 
   const query = useQuery({
-    queryKey: ['suggested-rapport', contactId],
+    queryKey: ['suggested-rapport', user?.id, contactId],
     queryFn: async () => {
       if (!user) return [];
       let query = supabase
@@ -31,13 +31,14 @@ export function useAIApprovals(contactId?: string) {
             full_name
           )
         `)
-        .eq('status', 'pending');
+        .eq('status', 'pending')
+        .eq('user_id', user.id);
       
       if (contactId) {
         query = query.eq('contact_id', contactId);
       }
 
-      const { data, error } = await query.order('created_at', { ascending: false });
+      const { data, error } = await query.order('created_at', { ascending: false }).limit(500);
 
       if (error) throw error;
       return (data || []).map(item => {
@@ -60,8 +61,8 @@ export function useAIApprovals(contactId?: string) {
       const field = suggestion.type === 'hobby' ? 'hobbies' : 'interests';
 
       const [{ error: updateError }, { data: contact, error: contactError }] = await Promise.all([
-        supabase.from('suggested_rapport_intel').update({ status: 'approved' }).eq('id', suggestion.id),
-        supabase.from('contacts').select('hobbies, interests, rapport_metadata').eq('id', suggestion.contact_id).maybeSingle(),
+        supabase.from('suggested_rapport_intel').update({ status: 'approved' }).eq('user_id', user!.id).eq('id', suggestion.id),
+        supabase.from('contacts').select('hobbies, interests, rapport_metadata').eq('id', suggestion.contact_id).eq('user_id', user.id).maybeSingle(),
       ]);
 
       if (updateError) throw updateError;
@@ -82,6 +83,7 @@ export function useAIApprovals(contactId?: string) {
         const { error: saveError } = await supabase
           .from('contacts')
           .update({ [field]: newValues, rapport_metadata: updatedMetadata as unknown as Json } as never)
+          .eq('user_id', user.id)
           .eq('id', suggestion.contact_id);
         
         if (saveError) throw saveError;
@@ -102,9 +104,11 @@ export function useAIApprovals(contactId?: string) {
 
   const rejectMutation = useMutation({
     mutationFn: async (suggestionId: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('suggested_rapport_intel')
         .update({ status: 'rejected' })
+        .eq('user_id', user!.id)
         .eq('id', suggestionId);
 
       if (error) throw error;

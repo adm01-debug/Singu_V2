@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import type { TablesUpdate } from '@/integrations/supabase/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { History, CheckCircle2, XCircle, RefreshCw, Eye } from 'lucide-react';
 import { 
   Table, 
@@ -25,6 +27,7 @@ import {
   DialogFooter
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface AutomationLog {
   id: string;
@@ -37,6 +40,7 @@ interface AutomationLog {
 }
 
 export function CRMAutomationAuditLog() {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [selectedLog, setSelectedLog] = useState<AutomationLog | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -55,11 +59,14 @@ export function CRMAutomationAuditLog() {
       
       if (error) throw error;
       return data;
-    }
+    },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const reprocessEvent = useMutation({
     mutationFn: async (logId: string) => {
+      if (!user) throw new Error('Não autenticado');
       // 1. Create reprocess entry
       const { error: queueError } = await supabase
         .from('crm_automation_reprocess_queue')
@@ -70,7 +77,8 @@ export function CRMAutomationAuditLog() {
       // 2. Update log status to show it was re-queued
       const { error: logUpdateError } = await supabase
         .from('crm_automation_logs')
-        .update({ status: 'reprocessing' } as never)
+        .update({ status: 'reprocessing' } as TablesUpdate<'crm_automation_logs'>)
+        .eq('user_id', user.id)
         .eq('id', logId);
       
       if (logUpdateError) throw logUpdateError;
@@ -80,7 +88,7 @@ export function CRMAutomationAuditLog() {
       toast.success('Evento enfileirado para reprocessamento');
       setIsDetailsOpen(false);
     },
-    onError: (error: Error) => toast.error(`Erro ao reprocessar: ${error.message}`)
+    onError: (error: Error) => toast.error(`Erro ao reprocessar: ${parseApiError(error)}`)
   });
 
   const handleViewDetails = (log: AutomationLog) => {
@@ -141,7 +149,7 @@ export function CRMAutomationAuditLog() {
                     {formatDistanceToNow(new Date(log.created_at), { addSuffix: true, locale: ptBR })}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleViewDetails(log as AutomationLog)}>
+                    <Button variant="ghost" size="icon" aria-label="Visualizar" className="h-7 w-7" onClick={() => handleViewDetails(log as AutomationLog)}>
                       <Eye className="h-3.5 w-3.5" />
                     </Button>
                   </TableCell>

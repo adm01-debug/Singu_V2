@@ -20,7 +20,8 @@ type InteractionInfiniteData = InfiniteData<InteractionPage>;
 async function fetchInteractionsPage(
   contactId?: string,
   companyId?: string,
-  pageParam = 0
+  pageParam = 0,
+  userId?: string
 ) {
   let query = supabase
     .from('interactions')
@@ -28,6 +29,7 @@ async function fetchInteractionsPage(
     .order('created_at', { ascending: false })
     .range(pageParam * PAGE_SIZE, (pageParam + 1) * PAGE_SIZE - 1);
 
+  if (userId) query = query.eq('user_id', userId);
   if (contactId) query = query.eq('contact_id', contactId);
   if (companyId) query = query.eq('company_id', companyId);
 
@@ -52,10 +54,11 @@ export function useInteractions(contactId?: string, companyId?: string, options?
     isLoading: loading,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage
+    isFetchingNextPage,
+    error: queryError,
   } = useInfiniteQuery({
     queryKey,
-    queryFn: ({ pageParam = 0 }) => fetchInteractionsPage(contactId, companyId, pageParam as number),
+    queryFn: ({ pageParam = 0 }) => fetchInteractionsPage(contactId, companyId, pageParam as number, user?.id),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     enabled: !!user && externalEnabled,
@@ -166,6 +169,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
   };
 
   const updateInteraction = async (id: string, updates: InteractionUpdate) => {
+    if (!user) return null;
     const previous = queryClient.getQueryData<InteractionInfiniteData>(queryKey);
 
     // Optimistic update across all pages
@@ -185,6 +189,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       const { data, error } = await supabase
         .from('interactions')
         .update(updates)
+        .eq('user_id', user.id)
         .eq('id', id)
         .select()
         .maybeSingle();
@@ -223,6 +228,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
   };
 
   const deleteInteraction = async (id: string) => {
+    if (!user) return false;
     const previous = queryClient.getQueryData<InteractionInfiniteData>(queryKey);
 
     // Optimistic delete across all pages
@@ -243,6 +249,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       const { error } = await supabase
         .from('interactions')
         .delete()
+        .eq('user_id', user.id)
         .eq('id', id);
 
       if (error) throw error;
@@ -273,6 +280,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
     hasMore,
     isFetchingNextPage,
     totalCount,
+    error: queryError,
     fetchInteractions,
     loadMore,
     createInteraction,

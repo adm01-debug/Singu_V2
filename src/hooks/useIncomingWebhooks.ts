@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { parseApiError } from '@/lib/errorMessages';
 
 export type WebhookTargetEntity = 'contact' | 'company' | 'deal' | 'interaction' | 'note' | 'custom';
 
@@ -56,8 +58,10 @@ export function useIncomingWebhooks() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('incoming_webhooks')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select('id, name, description, token, target_entity, is_active, allowed_origins, field_mapping, total_calls, total_errors, last_called_at, created_by, created_at, updated_at, webhook_secret, require_signature, replay_window_seconds')
+        .eq('created_by', user!.id)
+        .order('created_at', { ascending: false })
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as unknown as IncomingWebhook[];
     },
@@ -74,11 +78,11 @@ export function useIncomingWebhooks() {
           target_entity: input.target_entity,
           is_active: input.is_active ?? true,
           allowed_origins: input.allowed_origins ?? [],
-          field_mapping: (input.field_mapping ?? {}) as never,
+          field_mapping: (input.field_mapping ?? {}) as unknown as Json,
           require_signature: input.require_signature ?? false,
           webhook_secret: input.webhook_secret ?? null,
           replay_window_seconds: input.replay_window_seconds ?? 300,
-        }).eq('id', input.id);
+        } as TablesUpdate<'incoming_webhooks'>).eq('created_by', user!.id).eq('id', input.id);
         if (error) throw error;
       } else {
         const { error } = await supabase.from('incoming_webhooks').insert({
@@ -88,12 +92,12 @@ export function useIncomingWebhooks() {
           target_entity: input.target_entity,
           is_active: input.is_active ?? true,
           allowed_origins: input.allowed_origins ?? [],
-          field_mapping: (input.field_mapping ?? {}) as never,
+          field_mapping: (input.field_mapping ?? {}) as unknown as Json,
           require_signature: input.require_signature ?? false,
           webhook_secret: input.webhook_secret ?? null,
           replay_window_seconds: input.replay_window_seconds ?? 300,
           created_by: user.id,
-        });
+        } as TablesInsert<'incoming_webhooks'>);
         if (error) throw error;
       }
     },
@@ -101,12 +105,13 @@ export function useIncomingWebhooks() {
       qc.invalidateQueries({ queryKey: ['incoming_webhooks'] });
       toast.success('Webhook salvo');
     },
-    onError: (e) => toast.error(`Erro: ${e.message}`),
+    onError: (e) => toast.error(`Erro: ${parseApiError(e)}`),
   });
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('incoming_webhooks').delete().eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('incoming_webhooks').delete().eq('created_by', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -118,7 +123,8 @@ export function useIncomingWebhooks() {
 
   const rotateToken = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('incoming_webhooks').update({ token: genToken() }).eq('id', id);
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('incoming_webhooks').update({ token: genToken() }).eq('created_by', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -140,7 +146,7 @@ export function useIncomingWebhookLogs(webhookId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('incoming_webhook_logs')
-        .select('*')
+        .select('id, webhook_id, status, http_status, payload, response, error_message, source_ip, latency_ms, created_at')
         .eq('webhook_id', webhookId!)
         .order('created_at', { ascending: false })
         .limit(50);

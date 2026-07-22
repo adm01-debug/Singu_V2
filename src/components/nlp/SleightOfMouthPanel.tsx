@@ -42,19 +42,20 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
   const [activeTab, setActiveTab] = useState<'detected' | 'templates'>('detected');
 
   const { data: reframings = [], isLoading } = useQuery({
-    queryKey: ['reframing-analysis', contactId, interactionId],
+    queryKey: ['reframing-analysis', contactId, interactionId, user?.id],
     queryFn: async () => {
       let query = supabase
         .from('reframing_analysis')
-        .select('*')
+        .select('id, objection, objection_category, pattern_used, suggested_response, status, created_at, contacts(first_name, last_name)')
         .eq('contact_id', contactId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(100);
 
       if (interactionId) {
         query = query.eq('interaction_id', interactionId);
       }
 
-      const { data, error } = await query.select('*, contacts(first_name, last_name)');
+      const { data, error } = await query;
       if (error) throw error;
       type Row = ReframingItem & { contacts?: { first_name?: string | null; last_name?: string | null } | null };
       return ((data || []) as Row[]).map(item => ({
@@ -64,13 +65,17 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
       })) as ReframingItem[];
     },
     enabled: !!user && !!contactId,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const updateStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string, status: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('reframing_analysis')
         .update({ status })
+        .eq('user_id', user.id)
         .eq('id', id);
       if (error) throw error;
     },
@@ -81,8 +86,9 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
   });
 
   const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success('Copiado para a área de transferência');
+    navigator.clipboard.writeText(text)
+      .then(() => toast.success('Copiado para a área de transferência'))
+      .catch(() => toast.error('Não foi possível copiar'));
   };
 
   if (isLoading) return <div className="h-40 animate-pulse bg-muted rounded-lg" />;
@@ -156,17 +162,19 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
                         
                         <div className="flex items-center gap-2">
                           <div className="flex items-center bg-muted/50 rounded-full px-1">
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label="Útil"
                               className="h-6 w-6 rounded-full text-muted-foreground hover:text-success"
                               onClick={() => addReframingFeedback(item.id, "positive")}
                             >
                               <ThumbsUp className="h-3.5 w-3.5" />
                             </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label="Não útil"
                               className="h-6 w-6 rounded-full text-muted-foreground hover:text-destructive"
                               onClick={() => addReframingFeedback(item.id, "negative")}
                             >
@@ -175,7 +183,7 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
                           </div>
                           <Button 
                             variant="ghost" 
-                            size="icon" 
+                            size="icon" aria-label="Confirmar" 
                             className="h-7 w-7 text-success"
                             onClick={() => updateStatus.mutate({ id: item.id, status: "used" })}
                             disabled={item.status === "used"}

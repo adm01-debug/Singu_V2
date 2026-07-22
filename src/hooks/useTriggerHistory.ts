@@ -113,7 +113,7 @@ export function useTriggerHistory(contactId?: string) {
     setStats(calculateStats(entries));
   }, [calculateStats]);
 
-  const fetchHistory = useCallback(async () => {
+  const fetchHistory = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) {
       applyHistoryState([]);
       setLoading(false);
@@ -123,28 +123,34 @@ export function useTriggerHistory(contactId?: string) {
     try {
       let query = supabase
         .from('trigger_usage_history')
-        .select('*')
+        .select('id, user_id, contact_id, trigger_type, template_id, template_title, scenario, channel, context, result, notes, effectiveness_rating, used_at, created_at')
         .eq('user_id', user.id)
-        .order('used_at', { ascending: false });
+        .order('used_at', { ascending: false })
+        .limit(500);
 
       if (contactId) {
         query = query.eq('contact_id', contactId);
       }
 
       const { data, error } = await query;
+      if (signal?.cancelled) return;
       if (error) throw error;
 
       applyHistoryState((data as TriggerUsageEntry[]) || []);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error fetching trigger history:', { error: msg });
+      if (!signal?.cancelled) {
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching trigger history:', { error: msg });
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user, contactId, applyHistoryState]);
 
   useEffect(() => {
-    fetchHistory();
+    const signal = { cancelled: false };
+    fetchHistory(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchHistory]);
 
   const createUsage = async (input: CreateTriggerUsageInput): Promise<TriggerUsageEntry | null> => {

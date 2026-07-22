@@ -61,6 +61,7 @@ export default function StatusPage() {
       return data;
     },
     refetchInterval: 60_000,
+    refetchOnWindowFocus: false,
     staleTime: 30_000,
   });
 

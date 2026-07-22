@@ -11,9 +11,9 @@ CREATE TABLE public.sequence_events (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_seq_events_enrollment ON public.sequence_events(enrollment_id, created_at DESC);
-CREATE INDEX idx_seq_events_contact ON public.sequence_events(contact_id, event_type);
-CREATE INDEX idx_seq_events_user ON public.sequence_events(user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_seq_events_enrollment ON public.sequence_events(enrollment_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_seq_events_contact ON public.sequence_events(contact_id, event_type);
+CREATE INDEX IF NOT EXISTS idx_seq_events_user ON public.sequence_events(user_id, created_at DESC);
 
 ALTER TABLE public.sequence_events ENABLE ROW LEVEL SECURITY;
 
@@ -44,9 +44,9 @@ CREATE TABLE public.sequence_send_log (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_seq_send_log_enrollment ON public.sequence_send_log(enrollment_id);
-CREATE INDEX idx_seq_send_log_token ON public.sequence_send_log(tracking_token);
-CREATE INDEX idx_seq_send_log_user ON public.sequence_send_log(user_id, sent_at DESC);
+CREATE INDEX IF NOT EXISTS idx_seq_send_log_enrollment ON public.sequence_send_log(enrollment_id);
+CREATE INDEX IF NOT EXISTS idx_seq_send_log_token ON public.sequence_send_log(tracking_token);
+CREATE INDEX IF NOT EXISTS idx_seq_send_log_user ON public.sequence_send_log(user_id, sent_at DESC);
 
 ALTER TABLE public.sequence_send_log ENABLE ROW LEVEL SECURITY;
 

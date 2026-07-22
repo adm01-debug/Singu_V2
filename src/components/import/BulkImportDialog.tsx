@@ -77,7 +77,7 @@ export function BulkImportDialog({ entityType, trigger }: BulkImportDialogProps)
                 <FileSpreadsheet className="h-4 w-4 text-primary" />
                 <span className="text-sm font-medium">{file.name}</span>
               </div>
-              <Button variant="ghost" size="icon" onClick={reset} className="h-8 w-8">
+              <Button variant="ghost" size="icon" aria-label="Fechar" onClick={reset} className="h-8 w-8">
                 <X className="h-4 w-4" />
               </Button>
             </div>

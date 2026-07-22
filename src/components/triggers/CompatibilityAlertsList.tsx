@@ -52,7 +52,7 @@ export function CompatibilityAlertsList({
   const [loading, setLoading] = useState(true);
   const [alerts, setAlerts] = useState<CompatibilityAlert[]>([]);
 
-  const fetchAlerts = useCallback(async () => {
+  const fetchAlerts = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
     setLoading(true);
     try {
@@ -67,24 +67,29 @@ export function CompatibilityAlertsList({
         .order('created_at', { ascending: false })
         .limit(maxItems);
 
+      if (signal?.cancelled) return;
       if (error) throw error;
       setAlerts(data || []);
     } catch (err) {
       logger.error('Error fetching alerts:', err);
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user, maxItems]);
 
   useEffect(() => {
-    fetchAlerts();
+    const signal = { cancelled: false };
+    fetchAlerts(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchAlerts]);
 
   const handleDismiss = async (alertId: string) => {
+    if (!user) return;
     try {
       const { error } = await supabase
         .from('compatibility_alerts')
         .update({ dismissed: true })
+        .eq('user_id', user.id)
         .eq('id', alertId);
 
       if (error) throw error;
@@ -156,11 +161,11 @@ export function CompatibilityAlertsList({
               </CardDescription>
             </div>
             <div className="flex gap-1">
-              <Button variant="ghost" size="icon" onClick={fetchAlerts} className="h-8 w-8">
+              <Button variant="ghost" size="icon" aria-label="Atualizar" onClick={fetchAlerts} className="h-8 w-8">
                 <RefreshCw className="w-4 h-4" />
               </Button>
               {alerts.length > 0 && (
-                <Button variant="ghost" size="icon" onClick={handleDismissAll} className="h-8 w-8">
+                <Button variant="ghost" size="icon" aria-label="Remover" onClick={handleDismissAll} className="h-8 w-8">
                   <Trash2 className="w-4 h-4 text-muted-foreground" />
                 </Button>
               )}
@@ -222,6 +227,7 @@ export function CompatibilityAlertsList({
                       <Button
                         variant="ghost"
                         size="icon"
+                        aria-label="Dispensar alerta"
                         className="h-7 w-7"
                         onClick={() => handleDismiss(alert.id)}
                       >
@@ -229,7 +235,7 @@ export function CompatibilityAlertsList({
                       </Button>
                       <Button
                         variant="ghost"
-                        size="icon"
+                        size="icon" aria-label="Próximo"
                         className="h-7 w-7"
                         asChild
                       >

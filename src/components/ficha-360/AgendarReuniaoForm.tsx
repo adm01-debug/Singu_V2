@@ -141,12 +141,20 @@ function AgendarReuniaoFormComponent({
     });
 
     const copyWhatsapp = async () => {
-      await navigator.clipboard.writeText(invite.whatsapp);
-      toast.success('Convite de WhatsApp copiado');
+      try {
+        await navigator.clipboard.writeText(invite.whatsapp);
+        toast.success('Convite de WhatsApp copiado');
+      } catch {
+        toast.error('Não foi possível copiar');
+      }
     };
     const copyEmail = async () => {
-      await navigator.clipboard.writeText(`Assunto: ${invite.email.subject}\n\n${invite.email.body}`);
-      toast.success('Convite de e-mail copiado');
+      try {
+        await navigator.clipboard.writeText(`Assunto: ${invite.email.subject}\n\n${invite.email.body}`);
+        toast.success('Convite de e-mail copiado');
+      } catch {
+        toast.error('Não foi possível copiar');
+      }
     };
 
     return (

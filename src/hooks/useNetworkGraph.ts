@@ -57,7 +57,7 @@ export function useNetworkGraph() {
   const [error, setError] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
 
-  const fetchGraphData = useCallback(async () => {
+  const fetchGraphData = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
 
     setLoading(true);
@@ -70,11 +70,12 @@ export function useNetworkGraph() {
         { data: contacts, error: contactsError },
         { data: interactions, error: interactionsError },
       ] = await Promise.all([
-        supabase.from('companies').select('id, name, industry, logo_url'),
-        supabase.from('contacts').select('id, first_name, last_name, company_id, relationship_score, role, avatar_url'),
-        supabase.from('interactions').select('id, contact_id, company_id, created_at'),
+        supabase.from('companies').select('id, name, industry, logo_url').eq('user_id', user.id).limit(500),
+        supabase.from('contacts').select('id, first_name, last_name, company_id, relationship_score, role, avatar_url').eq('user_id', user.id).limit(500),
+        supabase.from('interactions').select('id, contact_id, company_id, created_at').eq('user_id', user.id).limit(5000),
       ]);
 
+      if (signal?.cancelled) return;
       if (companiesError) throw companiesError;
       if (contactsError) throw contactsError;
       if (interactionsError) throw interactionsError;
@@ -187,17 +188,21 @@ export function useNetworkGraph() {
         }
       });
 
-      setGraphData({ nodes, links });
+      if (!signal?.cancelled) setGraphData({ nodes, links });
     } catch (err) {
-      logger.error('Error fetching graph data:', err);
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      if (!signal?.cancelled) {
+        logger.error('Error fetching graph data:', err);
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [user]);
 
   useEffect(() => {
-    fetchGraphData();
+    const signal = { cancelled: false };
+    fetchGraphData(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchGraphData]);
 
   const stats = useMemo<NetworkStats>(() => {

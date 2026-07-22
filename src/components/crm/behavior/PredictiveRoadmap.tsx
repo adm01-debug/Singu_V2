@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
  import { format } from 'date-fns';
  import { ptBR } from 'date-fns/locale';
  import { Skeleton } from '@/components/ui/skeleton';
+ import { useAuth } from '@/hooks/useAuth';
 
 interface RoadmapItem {
   month: string;
@@ -19,20 +20,26 @@ interface RoadmapItem {
 }
 
 export function PredictiveRoadmap({ contactId }: { contactId: string }) {
+   const { user } = useAuth();
    const { data: roadmapData, isLoading } = useQuery({
-     queryKey: ['contact-predictive-roadmap', contactId],
+     queryKey: ['contact-predictive-roadmap', contactId, user?.id],
      queryFn: async () => {
        const { data, error } = await supabase
          .from('contact_predictive_roadmap')
-         .select('*')
+         .select('id, contact_id, created_at, forecast_month, predicted_need, probability, rationale, suggested_offering, updated_at, user_id')
          .eq('contact_id', contactId)
-         .order('forecast_month', { ascending: true });
-       
+         .eq('user_id', user!.id)
+         .order('forecast_month', { ascending: true })
+         .limit(24);
+
        if (error) throw error;
        return data;
-     }
+     },
+     enabled: !!contactId && !!user,
+     staleTime: 5 * 60_000,
+     refetchOnWindowFocus: false,
    });
- 
+
    const steps: RoadmapItem[] = useMemo(() => {
      if (!roadmapData || roadmapData.length === 0) return [];
      
@@ -74,7 +81,7 @@ export function PredictiveRoadmap({ contactId }: { contactId: string }) {
         <div className="space-y-8">
            {steps.length > 0 ? steps.map((step, index) => (
             <motion.div
-              key={index}
+              key={`${step.month}-${step.title}`}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.2 }}

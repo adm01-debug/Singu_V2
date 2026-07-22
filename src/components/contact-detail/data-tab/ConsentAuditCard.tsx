@@ -13,13 +13,16 @@ export function ConsentAuditCard({ contactId }: { contactId: string }) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('social_consent_audit')
-        .select('*')
+        .select('id, consent_type, contact_id, created_at, ip_address, network, source_url, user_agent, user_id')
         .eq('contact_id', contactId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(100);
       
       if (error) throw error;
       return data || [];
-    }
+    },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   if (isLoading) return <Skeleton className="h-48 w-full" />;

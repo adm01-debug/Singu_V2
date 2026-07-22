@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Database, Json } from "@/integrations/supabase/types";
 import { logger } from "@/lib/logger";
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface BattleCardItem { title: string; detail: string }
 export interface ProofPoint { client: string; result: string }
@@ -44,8 +45,10 @@ export function useBattleCards(search?: string) {
       let q = supabase
         .from("battle_cards")
         .select("*")
+        .eq("user_id", user!.id)
         .eq("active", true)
-        .order("competitor_name");
+        .order("competitor_name")
+        .limit(100);
       
       if (search) {
         q = q.ilike("competitor_name", `%${search}%`);
@@ -63,9 +66,10 @@ export function useBattleCards(search?: string) {
  * Hook to fetch a single battle card by ID.
  */
 export function useBattleCard(id?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["battle-card", id],
-    enabled: !!id,
+    queryKey: ["battle-card", id, user?.id],
+    enabled: !!id && !!user,
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
@@ -73,8 +77,9 @@ export function useBattleCard(id?: string) {
         .from("battle_cards")
         .select("*")
         .eq("id", id!)
+        .eq("user_id", user!.id)
         .maybeSingle();
-      
+
       if (error) throw error;
       return data as unknown as BattleCard | null;
     },
@@ -118,6 +123,7 @@ export function useUpsertBattleCard() {
         const { data, error } = await supabase
           .from("battle_cards")
           .update(updatePayload)
+          .eq("user_id", user!.id)
           .eq("id", input.id)
           .select()
           .maybeSingle();
@@ -151,7 +157,7 @@ export function useUpsertBattleCard() {
     },
     onError: (e: Error) => {
       logger.error("[useUpsertBattleCard] Erro:", e);
-      toast.error(e.message || "Erro ao salvar battle card");
+      toast.error(parseApiError(e, "Erro ao salvar battle card"));
     },
   });
 }
@@ -160,12 +166,15 @@ export function useUpsertBattleCard() {
  * Hook to delete a battle card.
  */
 export function useDeleteBattleCard() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from("battle_cards")
         .delete()
+        .eq("user_id", user.id)
         .eq("id", id);
       
       if (error) throw error;

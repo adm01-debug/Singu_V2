@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { parseApiError } from '@/lib/errorMessages';
 
 export interface VisitCheckin {
   id: string;
@@ -29,10 +30,10 @@ export function useVisitCheckins(entityId?: string, entityType?: 'contact' | 'co
     queryKey: key,
     enabled: !!user,
     queryFn: async () => {
-      let query = supabase.from('visit_checkins').select('*').eq('user_id', user.id).order('check_in_at', { ascending: false });
+      let query = supabase.from('visit_checkins').select('id, user_id, contact_id, company_id, latitude, longitude, address, notes, photo_url, visit_type, check_in_at, check_out_at, duration_minutes, created_at').eq('user_id', user.id).order('check_in_at', { ascending: false });
       if (entityId && entityType === 'contact') query = query.eq('contact_id', entityId);
       if (entityId && entityType === 'company') query = query.eq('company_id', entityId);
-      const { data, error } = await query.limit(50);
+      const { data, error } = await query.limit(entityId ? 50 : 200);
       if (error) throw error;
       return (data || []) as unknown as VisitCheckin[];
     },
@@ -60,21 +61,22 @@ export function useVisitCheckins(entityId?: string, entityType?: 'contact' | 'co
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('📍 Check-in realizado!'); },
-    onError: (e: Error) => toast.error(e.message.includes('denied') ? 'Permissão de localização negada' : e.message),
+    onError: (e: Error) => toast.error(e.message.includes('denied') ? 'Permissão de localização negada' : parseApiError(e)),
   });
 
   const checkOut = useMutation({
     mutationFn: async (id: string) => {
+      if (!user) throw new Error('Não autenticado');
       const checkin = checkins.find(c => c.id === id);
       const duration = checkin ? Math.round((Date.now() - new Date(checkin.check_in_at).getTime()) / 60000) : null;
       const { error } = await supabase.from('visit_checkins').update({
         check_out_at: new Date().toISOString(),
         duration_minutes: duration,
-      }).eq('id', id);
+      }).eq('user_id', user!.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Check-out realizado!'); },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   return { checkins, isLoading, checkIn, checkOut };

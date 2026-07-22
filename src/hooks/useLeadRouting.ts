@@ -3,11 +3,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { parseApiError } from '@/lib/errorMessages';
 import type {
   LeadRoutingRule,
   LeadAssignment,
   SalesTeamMember,
 } from '@/types/leadRouting';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 const RULES_KEY_BASE = ['lead-routing-rules'];
 const ASSIGNMENTS_KEY_BASE = ['lead-assignments'];
@@ -22,13 +24,16 @@ export function useRoutingRules() {
       if (!user) return [];
       const { data, error } = await supabase
         .from('lead_routing_rules')
-        .select('*')
-        .order('priority', { ascending: true });
+        .select('id, user_id, name, description, rule_type, priority, conditions, team_pool, role_filter, is_active, fallback_rule_id, created_at, updated_at')
+        .eq('user_id', user.id)
+        .order('priority', { ascending: true })
+        .limit(100);
       if (error) throw error;
       return (data ?? []) as unknown as LeadRoutingRule[];
     },
     enabled: !!user,
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -40,7 +45,7 @@ export function useCreateRoutingRule() {
       if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from('lead_routing_rules')
-        .insert({ ...rule, user_id: user.id } as never)
+        .insert({ ...rule, user_id: user.id } as TablesInsert<'lead_routing_rules'>)
         .select()
         .maybeSingle();
       if (error) throw error;
@@ -56,12 +61,15 @@ export function useCreateRoutingRule() {
 }
 
 export function useUpdateRoutingRule() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<LeadRoutingRule> & { id: string }) => {
+      if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase
         .from('lead_routing_rules')
-        .update(updates as never)
+        .update(updates as TablesUpdate<'lead_routing_rules'>)
+        .eq('user_id', user.id)
         .eq('id', id)
         .select()
         .maybeSingle();
@@ -78,12 +86,15 @@ export function useUpdateRoutingRule() {
 }
 
 export function useDeleteRoutingRule() {
+  const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase
         .from('lead_routing_rules')
         .delete()
+        .eq('user_id', user.id)
         .eq('id', id);
       if (error) throw error;
     },
@@ -104,7 +115,8 @@ export function useLeadAssignments(status?: string) {
       if (!user) return [];
       let query = supabase
         .from('lead_assignments')
-        .select('*')
+        .select('id, user_id, contact_id, company_id, assigned_to, assigned_by, assignment_type, previous_owner, status, routing_rule_id, sla_deadline, first_contact_at, sla_met, notes, created_at, updated_at')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(200);
       if (status) query = query.eq('status', status);
@@ -114,6 +126,7 @@ export function useLeadAssignments(status?: string) {
     },
     enabled: !!user,
     staleTime: 2 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -164,12 +177,12 @@ export function useDistributeLead() {
           status: 'active',
           routing_rule_id: ruleId ?? null,
           sla_deadline: new Date(Date.now() + 4 * 3600_000).toISOString(),
-        } as never),
+        } as TablesInsert<'lead_assignments'>),
         supabase.from('sales_team_members').update({
           current_lead_count: selected.current_lead_count + 1,
           leads_today: selected.leads_today + 1,
           last_assigned_at: new Date().toISOString(),
-        } as never).eq('id', selected.id),
+        } as TablesUpdate<'sales_team_members'>).eq('user_id', user.id).eq('id', selected.id),
       ]);
       if (assignError) throw assignError;
       if (updateError) logger.error('Erro ao atualizar contadores:', updateError);
@@ -181,6 +194,6 @@ export function useDistributeLead() {
       qc.invalidateQueries({ queryKey: ['sales-team-members'] });
       toast.success(`Lead distribuído para ${member.name}`);
     },
-    onError: (err) => toast.error((err as Error).message || 'Erro na distribuição'),
+    onError: (err) => toast.error(parseApiError(err, 'Erro na distribuição')),
   });
 }

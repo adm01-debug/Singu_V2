@@ -93,44 +93,52 @@ export function useWeeklyReport() {
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
 
-  const fetchSettings = useCallback(async () => {
+  const fetchSettings = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!userId) return;
     try {
       const { data, error } = await supabase
         .from('weekly_report_settings')
-        .select('*')
+        .select('id, user_id, enabled, send_day, send_time, email_address, include_portfolio_summary, include_at_risk_clients, include_health_alerts, include_upcoming_dates, include_recommendations, include_performance_metrics, last_sent_at')
         .eq('user_id', userId)
         .maybeSingle();
+      if (signal?.cancelled) return;
       if (error) throw error;
       setSettings(data as WeeklyReportSettings | null);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error fetching weekly report settings:', { error: msg });
+      if (!signal?.cancelled) {
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching weekly report settings:', { error: msg });
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.cancelled) setLoading(false);
     }
   }, [userId]);
 
-  const fetchReports = useCallback(async () => {
+  const fetchReports = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!userId) return;
     try {
       const { data, error } = await supabase
         .from('weekly_reports')
-        .select('*')
+        .select('id, user_id, report_data, sent_via, created_at')
         .eq('user_id', userId)
         .order('created_at', { ascending: false })
         .limit(10);
+      if (signal?.cancelled) return;
       if (error) throw error;
       setReports((data || []) as unknown as WeeklyReportData[]);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error fetching weekly reports:', { error: msg });
+      if (!signal?.cancelled) {
+        const msg = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error fetching weekly reports:', { error: msg });
+      }
     }
   }, [userId]);
 
   useEffect(() => {
-    fetchSettings();
-    fetchReports();
+    const signal = { cancelled: false };
+    fetchSettings(signal);
+    fetchReports(signal);
+    return () => { signal.cancelled = true; };
   }, [fetchSettings, fetchReports]);
 
   const saveSettings = useCallback(async (newSettings: Partial<WeeklyReportSettings>) => {

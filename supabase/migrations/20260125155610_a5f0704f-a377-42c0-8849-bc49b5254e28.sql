@@ -176,15 +176,15 @@ CREATE TRIGGER update_trigger_bundles_updated_at
   EXECUTE FUNCTION public.update_updated_at_column();
 
 -- Indexes for performance
-CREATE INDEX idx_trigger_ab_tests_user_contact ON public.trigger_ab_tests(user_id, contact_id);
-CREATE INDEX idx_trigger_ab_tests_disc ON public.trigger_ab_tests(disc_profile);
-CREATE INDEX idx_trigger_ab_tests_active ON public.trigger_ab_tests(is_active) WHERE is_active = true;
+CREATE INDEX IF NOT EXISTS idx_trigger_ab_tests_user_contact ON public.trigger_ab_tests(user_id, contact_id);
+CREATE INDEX IF NOT EXISTS idx_trigger_ab_tests_disc ON public.trigger_ab_tests(disc_profile);
+CREATE INDEX IF NOT EXISTS idx_trigger_ab_tests_active ON public.trigger_ab_tests(is_active) WHERE is_active = true;
 
-CREATE INDEX idx_trigger_intensity_history_user_contact ON public.trigger_intensity_history(user_id, contact_id);
-CREATE INDEX idx_trigger_intensity_history_trigger ON public.trigger_intensity_history(trigger_type);
+CREATE INDEX IF NOT EXISTS idx_trigger_intensity_history_user_contact ON public.trigger_intensity_history(user_id, contact_id);
+CREATE INDEX IF NOT EXISTS idx_trigger_intensity_history_trigger ON public.trigger_intensity_history(trigger_type);
 
-CREATE INDEX idx_trigger_channel_effectiveness_user_contact ON public.trigger_channel_effectiveness(user_id, contact_id);
-CREATE INDEX idx_trigger_channel_effectiveness_trigger_channel ON public.trigger_channel_effectiveness(trigger_type, channel);
+CREATE INDEX IF NOT EXISTS idx_trigger_channel_effectiveness_user_contact ON public.trigger_channel_effectiveness(user_id, contact_id);
+CREATE INDEX IF NOT EXISTS idx_trigger_channel_effectiveness_trigger_channel ON public.trigger_channel_effectiveness(trigger_type, channel);
 
-CREATE INDEX idx_trigger_bundles_scenario ON public.trigger_bundles(scenario);
-CREATE INDEX idx_trigger_bundles_system ON public.trigger_bundles(is_system_bundle) WHERE is_system_bundle = true;
+CREATE INDEX IF NOT EXISTS idx_trigger_bundles_scenario ON public.trigger_bundles(scenario);
+CREATE INDEX IF NOT EXISTS idx_trigger_bundles_system ON public.trigger_bundles(is_system_bundle) WHERE is_system_bundle = true;

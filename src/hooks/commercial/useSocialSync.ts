@@ -1,16 +1,20 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
+import { useAuth } from '@/hooks/useAuth';
+import { parseApiError } from '@/lib/errorMessages';
 
 export function useSocialSync(contactId: string) {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const { data: queueStatus, isLoading: isLoadingQueue } = useQuery({
-    queryKey: ['social-sync-queue', contactId],
+    queryKey: ['social-sync-queue', contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('social_sync_queue')
-        .select('*')
+        .select('id, contact_id, status, retry_count, error_log, last_attempt, max_retries, created_at, updated_at')
         .eq('contact_id', contactId)
         .order('created_at', { ascending: false })
         .limit(1)
@@ -19,24 +23,27 @@ export function useSocialSync(contactId: string) {
       if (error) throw error;
       return data;
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
     staleTime: 2 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: auditLogs, isLoading: isLoadingAudit } = useQuery({
-    queryKey: ['psychographic-audit-log', contactId],
+    queryKey: ['psychographic-audit-log', contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('psychographic_audit_log')
-        .select('*')
+        .select('id, contact_id, change_type, changed_by, changed_fields, new_values, previous_values, created_at')
         .eq('contact_id', contactId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(100);
 
       if (error) throw error;
       return data;
     },
-    enabled: !!contactId,
+    enabled: !!contactId && !!user,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const syncNow = useMutation({
@@ -72,13 +79,14 @@ export function useSocialSync(contactId: string) {
         attempts++;
         
         if (attempts < maxRetries) {
-          await supabase.from('social_sync_queue')
-            .update({ 
+          const { error: retryErr } = await supabase.from('social_sync_queue')
+            .update({
               retry_count: attempts,
               error_log: `Falha na tentativa ${attempts}: ${error.message}`,
               last_attempt: new Date().toISOString()
             })
             .eq('id', queueItem.id);
+          if (retryErr) logger.warn('Failed to update social_sync_queue retry', { error: retryErr.message });
             
           // Exponential backoff wait (simple version)
           await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempts) * 1000));
@@ -86,9 +94,10 @@ export function useSocialSync(contactId: string) {
       }
 
       if (funcError) {
-        await supabase.from('social_sync_queue')
+        const { error: failErr } = await supabase.from('social_sync_queue')
           .update({ status: 'failed', error_log: funcError.message, last_attempt: new Date().toISOString() })
           .eq('id', queueItem.id);
+        if (failErr) logger.warn('Failed to update social_sync_queue status to failed', { error: failErr.message });
         throw funcError;
       }
 
@@ -101,7 +110,7 @@ export function useSocialSync(contactId: string) {
       toast.success('Sincronização agendada com sucesso');
     },
     onError: (error: Error) => {
-      toast.error(`Falha ao iniciar sincronização: ${error.message}`);
+      toast.error(`Falha ao iniciar sincronização: ${parseApiError(error)}`);
     }
   });
 

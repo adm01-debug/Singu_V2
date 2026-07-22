@@ -75,7 +75,7 @@ export function ReasonsEditor() {
                 <SelectItem value="both">Both</SelectItem>
               </SelectContent>
             </Select>
-            <Button size="icon" onClick={handleAdd}><Plus className="h-4 w-4" /></Button>
+            <Button size="icon" aria-label="Adicionar" onClick={handleAdd}><Plus className="h-4 w-4" /></Button>
           </div>
         </div>
 

@@ -120,8 +120,9 @@ const TONE_CHIPS: PromptChip[] = [
                    size="sm" 
                    className="h-6 px-2 text-[10px] text-primary"
                    onClick={() => {
-                     navigator.clipboard.writeText(suggestion.script);
-                     toast.success('Script copiado!');
+                     navigator.clipboard.writeText(suggestion.script)
+                       .then(() => toast.success('Script copiado!'))
+                       .catch(() => toast.error('Não foi possível copiar'));
                    }}
                  >
                    <Copy className="h-3 w-3 mr-1" /> Copiar

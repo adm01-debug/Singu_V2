@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -60,24 +61,22 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
     const [detectedDISC, setDetectedDISC] = useState<DISCProfile | null>(null);
     const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down'>>({});
   
-   useEffect(() => {
-     let cancelled = false;
-     const fetchContactBehavior = async () => {
-       if (!contactId) return;
-       const { data } = await supabase.from('contacts').select('behavior').eq('id', contactId).maybeSingle();
-       if (cancelled) return;
-       if (data?.behavior) {
-         const behavior = data.behavior as {
-           vakProfile?: { primary?: VAKType };
-           discProfile?: DISCProfile;
-         };
-         if (behavior.vakProfile?.primary) setContactVAK(behavior.vakProfile.primary);
-         if (behavior.discProfile) setContactDISC(behavior.discProfile);
-       }
-     };
-     fetchContactBehavior();
-     return () => { cancelled = true; };
-   }, [contactId]);
+  const { data: contactBehavior } = useQuery({
+    queryKey: ['contact-behavior-coach', contactId, user?.id],
+    queryFn: async () => {
+      const { data } = await supabase.from('contacts').select('behavior').eq('id', contactId!).eq('user_id', user!.id).maybeSingle();
+      return (data?.behavior ?? null) as { vakProfile?: { primary?: VAKType }; discProfile?: DISCProfile } | null;
+    },
+    enabled: !!contactId && !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+  });
+
+  useEffect(() => {
+    if (!contactBehavior) return;
+    if (contactBehavior.vakProfile?.primary) setContactVAK(contactBehavior.vakProfile.primary);
+    if (contactBehavior.discProfile) setContactDISC(contactBehavior.discProfile);
+  }, [contactBehavior]);
 
    useEffect(() => {
      if (content.length > 10) {
@@ -236,8 +235,7 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
        setDetectedMeta(null);
        setRapportScore(0);
      }
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [content, analyzeVAK, analyzeMeta, contactVAK]);
+   }, [content, analyzeVAK, analyzeMeta, contactVAK, contactDISC]);
 
   const handleFeedback = async (suggestionId: string, type: 'up' | 'down') => {
     setFeedbackGiven(prev => ({ ...prev, [suggestionId]: type }));
@@ -245,13 +243,13 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
     if (user) {
       try {
         const suggestion = suggestions.find(s => s.id === suggestionId);
-        await supabase.from('objection_example_feedback').insert({
+        const { error: fbErr } = await supabase.from('objection_example_feedback').insert({
           user_id: user.id,
           is_useful: type === 'up',
           objection: content.substring(0, 500),
           category: suggestion?.type || 'general',
-          interaction_id: null as unknown as string
         });
+        if (fbErr) logger.error("Error saving feedback:", fbErr);
       } catch (e) {
         logger.error("Error saving feedback:", e);
       }
@@ -356,7 +354,7 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
                             variant="ghost" 
                             size="icon" 
                             className={`h-7 w-7 rounded-full ${feedbackGiven[s.id] === "up" ? 'text-success bg-success/10' : 'text-muted-foreground hover:text-success'}`}
-                            onClick={() => handleFeedback(s.id, 'up')}
+                            aria-label="Útil" onClick={() => handleFeedback(s.id, 'up')}
                           >
                             <ThumbsUp className="h-3 w-3" />
                           </Button>
@@ -364,7 +362,7 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
                             variant="ghost" 
                             size="icon" 
                             className={`h-7 w-7 rounded-full ${feedbackGiven[s.id] === "down" ? 'text-destructive bg-destructive/10' : 'text-muted-foreground hover:text-destructive'}`}
-                            onClick={() => handleFeedback(s.id, 'down')}
+                            aria-label="Não útil" onClick={() => handleFeedback(s.id, 'down')}
                           >
                             <ThumbsDown className="h-3 w-3" />
                           </Button>

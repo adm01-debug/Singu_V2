@@ -80,7 +80,7 @@ export function FormBuilder({ fields, onChange }: Props) {
                 {TYPES.map((t) => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
               </SelectContent>
             </Select>
-            <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive" onClick={() => remove(i)}>
+            <Button size="icon" aria-label="Remover" variant="ghost" className="h-8 w-8 text-destructive" onClick={() => remove(i)}>
               <Trash2 className="w-3.5 h-3.5" />
             </Button>
           </div>

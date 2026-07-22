@@ -29,7 +29,7 @@ export function useContactDetail(contactId: string | undefined) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const queryKey = useMemo(() => ['contact', contactId], [contactId]);
+  const queryKey = useMemo(() => ['contact', user?.id, contactId], [user?.id, contactId]);
 
   const { data, isLoading: loading, error: queryError, refetch } = useQuery({
     queryKey,
@@ -37,9 +37,9 @@ export function useContactDetail(contactId: string | undefined) {
     queryFn: async (): Promise<ContactDetailData> => {
       // Start secondary queries immediately — they only need contactId (known upfront)
       const secondaryPromise = Promise.all([
-        supabase.from('interactions').select('*').eq('contact_id', contactId!).order('created_at', { ascending: false }).limit(50),
-        supabase.from('insights').select('*').eq('contact_id', contactId!).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
-        supabase.from('alerts').select('*').eq('contact_id', contactId!).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
+        supabase.from('interactions').select('*').eq('contact_id', contactId!).eq('user_id', user!.id).order('created_at', { ascending: false }).limit(50),
+        supabase.from('insights').select('*').eq('contact_id', contactId!).eq('user_id', user!.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(20),
+        supabase.from('alerts').select('*').eq('contact_id', contactId!).eq('user_id', user!.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(10),
       ]);
 
       // 1. Fetch contact (runs in parallel with secondary queries above)
@@ -47,6 +47,7 @@ export function useContactDetail(contactId: string | undefined) {
         .from('contacts')
         .select('*')
         .eq('id', contactId!)
+        .eq('user_id', user!.id)
         .maybeSingle();
 
       if (contactError) throw contactError;
@@ -67,7 +68,7 @@ export function useContactDetail(contactId: string | undefined) {
       // 2. Fetch company (depends on contactData.company_id — must be sequential)
       let companyData: Company | null = null;
       if (contactData.company_id) {
-        const { data: localCompany } = await supabase.from('companies').select('*').eq('id', contactData.company_id).maybeSingle();
+        const { data: localCompany } = await supabase.from('companies').select('*').eq('id', contactData.company_id).eq('user_id', user!.id).maybeSingle();
         if (localCompany) {
           companyData = localCompany;
         } else {
@@ -126,7 +127,7 @@ export function useContactDetail(contactId: string | undefined) {
     if (!user || !contactId) return null;
 
     try {
-      let query = supabase.from('contacts').update(updates).eq('id', contactId);
+      let query = supabase.from('contacts').update(updates).eq('user_id', user.id).eq('id', contactId);
       const currentVersion = data?.contact?.version;
       if (currentVersion !== undefined && currentVersion !== null) query = query.eq('version', currentVersion);
 
@@ -169,8 +170,9 @@ export function useContactDetail(contactId: string | undefined) {
   };
 
   const dismissAlert = async (alertId: string) => {
+    if (!user) return;
     try {
-      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('id', alertId);
+      const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user.id).eq('id', alertId);
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey });
       toast({ title: 'Alerta dispensado' });
@@ -180,8 +182,9 @@ export function useContactDetail(contactId: string | undefined) {
   };
 
   const dismissInsight = async (insightId: string) => {
+    if (!user) return;
     try {
-      const { error } = await supabase.from('insights').update({ dismissed: true }).eq('id', insightId);
+      const { error } = await supabase.from('insights').update({ dismissed: true }).eq('user_id', user.id).eq('id', insightId);
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey });
       toast({ title: 'Insight dispensado' });
