@@ -102,7 +102,7 @@ Deno.serve(async (req) => {
 
     let parsed_ai: { sql: string | null; explanation: string; display_type: string };
     try {
-      // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
+      // eslint-disable-next-line sonarjs/super-linear-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (!jsonMatch) throw new Error("No JSON in response");
       parsed_ai = JSON.parse(jsonMatch[0]);

@@ -124,7 +124,7 @@ Responda APENAS com um JSON válido no formato especificado.`;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI response JSON shape not statically typed
     let analysis: any = null;
     try {
-      // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
+      // eslint-disable-next-line sonarjs/super-linear-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (jsonMatch) analysis = JSON.parse(jsonMatch[0]);
     } catch (parseError) {

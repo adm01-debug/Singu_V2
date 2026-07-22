@@ -179,7 +179,7 @@ interface TestResult {
 }
 
 async function testSupabase(config: Record<string, unknown>): Promise<TestResult> {
-  // eslint-disable-next-line sonarjs/slow-regex -- regex bounded by protocol prefix, not user-controlled
+  // eslint-disable-next-line sonarjs/super-linear-regex -- regex bounded by protocol prefix, not user-controlled
   const url = String(config.url ?? "").replace(/\/+$/, "");
   const key = String(config.anon_key ?? config.service_role_key ?? "");
   if (!url || !key) throw new Error("URL e chave (anon ou service role) obrigatórias");
@@ -196,7 +196,7 @@ async function testSupabase(config: Record<string, unknown>): Promise<TestResult
 }
 
 async function testBitrix(config: Record<string, unknown>): Promise<TestResult> {
-  // eslint-disable-next-line sonarjs/slow-regex -- regex bounded by protocol prefix, not user-controlled
+  // eslint-disable-next-line sonarjs/super-linear-regex -- regex bounded by protocol prefix, not user-controlled
   const webhook = String(config.webhook_url ?? "").replace(/\/+$/, "");
   if (!webhook) throw new Error("webhook_url obrigatório");
   const t0 = Date.now();
