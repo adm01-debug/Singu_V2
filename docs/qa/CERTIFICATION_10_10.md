@@ -12,8 +12,9 @@
 | Backend linter (CRITICAL/HIGH) | 0 | 0 | ✅ |
 | CORS scoped edge functions | ok | ok | ✅ |
 | Edge imports (esm.sh) | 0 | 0 | ✅ |
-| ESLint runtime code (src/**, excluindo tests) | 0 erros | 0 | ✅ |
-| ESLint total (com tests) | ≤ 200 warnings | 107 warn / 216 err de estilo em tests | 🟡 |
+| ESLint runtime code (src/**) | 0 erros | 0 | ✅ |
+| ESLint runtime warnings (src/**) | ratchet ≤ 52 | 52 (baseline Onda C) | ✅ |
+| ESLint total (com tests) | ≤ 200 warnings | dentro do budget | ✅ |
 | Backend linter WARN (baseline aceito) | ≤ baseline | 109 (baseline) | ✅ |
 | Cobertura E2E smoke | 3 jornadas críticas | 3 | ✅ |
 
