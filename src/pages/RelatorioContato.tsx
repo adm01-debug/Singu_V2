@@ -114,7 +114,6 @@ const RelatorioContato = () => {
           .from("contact_report_overrides")
           .select("*")
           .eq("contact_id", id)
-          .eq("user_id", user.id)
           .maybeSingle();
 
         // Fetch consent logs
