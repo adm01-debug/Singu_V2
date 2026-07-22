@@ -32,6 +32,8 @@ FATAL=(
   dead-tuple-ratio-guard.sql
   checksum-failures-guard.sql
   relfrozenxid-table-guard.sql
+  replication-slot-idle-guard.sql
+  ssl-enforcement-audit.sql
 )
 WARN=(
   autovacuum-audit.sql
@@ -63,6 +65,10 @@ WARN=(
   superuser-count-audit.sql
   pg-hba-permissive-audit.sql
   seq-scan-large-tables-audit.sql
+  pg-stat-statements-reset-guard.sql
+  synchronous-commit-drift-audit.sql
+  wal-sender-timeout-guard.sql
+  extension-upgrade-available-audit.sql
 )
 
 FAILED=0
