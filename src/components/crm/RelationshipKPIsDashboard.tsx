@@ -85,8 +85,7 @@ export function RelationshipKPIsDashboard() {
     queryFn: async () => {
       const { data: contacts, error } = await supabase
         .from('contacts')
-        .select('relationship_stage, relationship_score, sentiment, last_interaction_at')
-        .limit(500);
+        .select('relationship_stage, relationship_score, sentiment, last_interaction_at');
       
       if (error) throw error;
 

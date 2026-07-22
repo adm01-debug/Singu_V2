@@ -47,8 +47,7 @@ export default function MapaEmpresas() {
     queryKey: ["companies-map-data", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from("companies").select("id,name,nome_crm,ramo_atividade,status,cnpj,email,phone,website,city,state,address,extra_data_rf,lat,lng").eq("user_id", user!.id).order("updated_at", { ascending: false })
-      .limit(500);
+      const { data, error } = await supabase.from("companies").select("id,name,nome_crm,ramo_atividade,status,cnpj,email,phone,website,city,state,address,extra_data_rf,lat,lng").eq("user_id", user!.id).order("updated_at", { ascending: false });
       if (error) throw error;
       return data || [];
     },

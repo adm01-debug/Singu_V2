@@ -82,15 +82,13 @@ const NLPEvolutionTimeline: React.FC<NLPEvolutionTimelineProps> = ({
           .from('vak_analysis_history')
           .select('created_at, visual_score, auditory_score, kinesthetic_score, digital_score')
           .eq('contact_id', contactId).eq('user_id', currentUser.id)
-          .gte('created_at', startDate).order('created_at', { ascending: true })
-          .limit(500);
+          .gte('created_at', startDate).order('created_at', { ascending: true });
 
         const { data: emotionalHistory } = await supabase
           .from('emotional_states_history')
           .select('created_at, emotional_state, confidence')
           .eq('contact_id', contactId).eq('user_id', currentUser.id)
-          .gte('created_at', startDate).order('created_at', { ascending: true })
-          .limit(500);
+          .gte('created_at', startDate).order('created_at', { ascending: true });
 
         if (cancelled) return;
         const typeMap: Record<string, VAKType> = { visual: 'V', auditory: 'A', kinesthetic: 'K', digital: 'D' };
