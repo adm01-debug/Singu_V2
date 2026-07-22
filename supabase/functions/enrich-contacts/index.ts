@@ -16,6 +16,7 @@ interface EnrichResult {
   details?: string;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity -- orquestração linear de handler HTTP com muitos guards; refactor rastreado como tech-debt (ADR-020)
 Deno.serve(async (req) => {
   const guard = handleCorsAndMethod(req);
   if (guard) return guard;

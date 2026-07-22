@@ -172,6 +172,7 @@ async function computeForContact(
   return { contact_id: contactId, total, grade, change, dimensions: dimScores };
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity -- orquestração linear de handler HTTP com muitos guards; refactor rastreado como tech-debt (ADR-020)
 Deno.serve(async (req: Request) => {
   const cors = handleCorsAndMethod(req);
   if (cors) return cors;

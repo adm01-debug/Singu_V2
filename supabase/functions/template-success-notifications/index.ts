@@ -23,6 +23,7 @@ interface HighPerformingTemplate {
   totalUsages: number;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity -- orquestração linear de handler HTTP com muitos guards; refactor rastreado como tech-debt (ADR-020)
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: scopedCorsHeaders(req) });

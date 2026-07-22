@@ -36,6 +36,7 @@ for (const b of src) {
   }
 
   // Amostra 20 objetos aleatórios da origem
+  // eslint-disable-next-line sonarjs/pseudo-random -- amostragem estatística de verificação, não requer CSPRNG (ADR-020)
   const sample = srcObjs.slice().sort(() => Math.random() - 0.5).slice(0, 20);
   const mismatches: string[] = [];
   for (const o of sample) {

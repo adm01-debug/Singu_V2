@@ -10,7 +10,7 @@ if (!BUCKET || !OBJECT) { console.error("BUCKET e OBJECT obrigatórios"); Deno.e
 
 const CKPT_DIR = new URL("./large-ckpt/", import.meta.url).pathname;
 await Deno.mkdir(CKPT_DIR, { recursive: true });
-const ckptFile = `${CKPT_DIR}/${BUCKET}__${OBJECT.replace(/[\/]/g, "_")}.json`;
+const ckptFile = `${CKPT_DIR}/${BUCKET}__${OBJECT.replace(/\//g, "_")}.json`;
 
 function encPath(p: string): string { return p.split("/").map(encodeURIComponent).join("/"); }
 

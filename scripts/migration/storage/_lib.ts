@@ -76,6 +76,7 @@ export async function retryFetch(
       return res;
     } catch (err) {
       lastErr = err;
+      // eslint-disable-next-line sonarjs/pseudo-random -- jitter de backoff, não requer aleatoriedade criptográfica (ADR-020)
       const delay = Math.min(30_000, 500 * 2 ** attempt) + Math.random() * 250;
       console.warn(`  ↻ retry ${attempt + 1}/${retries} ${opts.label ?? input} (${(err as Error).message}) em ${Math.round(delay)}ms`);
       await new Promise((r) => setTimeout(r, delay));
@@ -174,6 +175,7 @@ export async function runPool<T>(
   // relança se algum rejeitou
   const results = await Promise.allSettled(Array.from(inflight));
   for (const r of results) if (r.status === "rejected") throw r.reason;
+  // eslint-disable-next-line sonarjs/void-use -- descarta explicitamente ref ao queue drenado (ADR-020)
   void queue;
 }
 

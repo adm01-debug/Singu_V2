@@ -10,6 +10,7 @@ Não implementar módulos de Produtos nem Propostas (escopo proibido).
 Excelência sustentada: 70/70 melhorias atômicas (Rodadas A-N). Gate a11y no CI.
 
 ## Memories
+- [Rodada 31/10 — Global Zero-Warning Ratchet](mem://migration/completion-31-10) — repo inteiro em 0/0 ESLint; rename `slow-regex`→`super-linear-regex` em edge functions; 5 disables justificados em handlers HTTP; CI ratchet `. --max-warnings=0`; ADR-021.
 - [Rodada 30/10 — Zero-Warning Ratchet](mem://migration/completion-30-10) — src travado em 0 erros / 0 warnings; 52 supressões justificadas com `eslint-disable-next-line <regra> -- <motivo>`; CI ratchet `src --max-warnings=0`; ADR-020.
 - [Rodada 26/10 — Observabilidade Externa & Alerting](mem://migration/completion-26-10) — Exporter Prometheus textfile, SLO 99.5% multi-window burn-rate, Alertmanager (PagerDuty/Slack), runbooks 34 secoes, CI monitoring-lint (promtool/amtool/coverage/secret-scan) + 6 regressores 26-*.
 - [Rodada 27/10 — QA Exaustivo & Hardening](mem://migration/completion-27-10) — Ciclos NLP fechados (useNLPAutoAnalysis ↔ VAK/Metaprograms), fix TS Ficha360, docs/qa/ (surface-map, static-audit, findings, CERTIFICATION_10_10), 0 TS/ciclos/CRITICAL.

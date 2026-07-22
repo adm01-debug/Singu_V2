@@ -14,7 +14,9 @@
 | Edge imports (esm.sh) | 0 | 0 | ✅ |
 | ESLint runtime code (src/**) | 0 erros | 0 | ✅ |
 | ESLint runtime warnings (src/**) | ratchet ≤ 0 (Onda D) | **0** | ✅ |
-| ESLint total (com tests) | ≤ 200 warnings | dentro do budget | ✅ |
+| ESLint total (repo inteiro) | ratchet ≤ 0 (Onda E) | **0** | ✅ |
+| ESLint supabase/functions | ratchet ≤ 0 (Onda E) | **0** | ✅ |
+| ESLint scripts/** | ratchet ≤ 0 (Onda E) | **0** | ✅ |
 | Backend linter WARN (baseline aceito) | ≤ baseline | 109 (baseline) | ✅ |
 | Cobertura E2E smoke | 3 jornadas críticas | 3 | ✅ |
 
@@ -30,5 +32,6 @@
 
 - **Onda D (Rodada 30/10 — concluída):** `src/` travado em 0/0 via 52 supressões
   justificadas (`ADR-020`). Ratchet CI `src --max-warnings=0` ativo.
-- **Onda E (backlog):** consolidar erros pré-existentes em `supabase/functions/**`
-  e `scripts/**` (fora do escopo de `src/`).
+- **Onda E (Rodada 31/10 — concluída):** repo inteiro em 0/0. Rename global
+  `sonarjs/slow-regex → super-linear-regex` em edge functions + suppressões
+  justificadas em 5 handlers HTTP e 3 amostragens estatísticas (`ADR-021`).

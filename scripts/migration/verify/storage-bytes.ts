@@ -28,6 +28,7 @@ for (const b of src) {
   const all: StorageObject[] = [];
   for await (const o of iterObjects(env.SRC_SUPABASE_URL, env.SRC_SERVICE_ROLE_KEY, b.id)) all.push(o);
   const n = Math.min(MAX_PER_BUCKET, Math.max(1, Math.floor(all.length * SAMPLE_PCT / 100)));
+  // eslint-disable-next-line sonarjs/pseudo-random -- amostragem de auditoria, não requer CSPRNG (ADR-020)
   const sample = all.slice().sort(() => Math.random() - 0.5).slice(0, n);
   const mismatches: string[] = [];
   for (const o of sample) {

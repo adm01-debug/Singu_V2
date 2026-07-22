@@ -174,7 +174,7 @@ Responda APENAS com JSON válido:
     next_steps?: string[];
   };
   try {
-    // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
+    // eslint-disable-next-line sonarjs/super-linear-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
     const match = raw.match(/\{[\s\S]*\}/);
     parsedAI = JSON.parse(match ? match[0] : raw);
   } catch {

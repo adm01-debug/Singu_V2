@@ -4,7 +4,6 @@
 // Estratégia: usa pg_read via REST não é viável para hash; então fazemos via SELECT md5(cast(t.* as text))
 // através de RPC (execute_sql) — no destino existente OU via psql wrapper.
 // Este script gera SQL para rodar em AMBOS os bancos e diffa via arquivos JSON.
-import { parse as parseCsv } from "https://deno.land/std@0.224.0/csv/parse.ts";
 
 const SAMPLE = parseInt(Deno.env.get("SAMPLE_SIZE") ?? "200", 10);
 const ONLY_TABLE = Deno.env.get("ONLY_TABLE") ?? "";

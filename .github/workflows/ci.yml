@@ -45,14 +45,15 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Lint (ESLint)
-        # Rodada 30/10 — Onda D ratchet FINAL:
-        # `src/` (runtime) travado em 0 erros / 0 warnings. Novas violações
-        # devem vir com `eslint-disable-next-line <regra> -- <motivo>` justificado
-        # (ver docs/adr/ADR-020-zero-warning-ratchet.md). O sweep global mantém
-        # o ceiling histórico para specs/e2e/scripts.
+        # Rodada 31/10 — Onda E ratchet GLOBAL:
+        # Todo o repo travado em 0/0 (src + supabase/functions + scripts + specs).
+        # Novas violações devem vir com `eslint-disable-next-line <regra> -- <motivo>`
+        # (ver docs/adr/ADR-020-zero-warning-ratchet.md e ADR-021-onda-e-external-ratchet.md).
         run: |
           npx eslint src --max-warnings=0
-          npx eslint . --max-warnings=200
+          npx eslint supabase/functions --max-warnings=0
+          npx eslint scripts --max-warnings=0
+          npx eslint . --max-warnings=0
 
       - name: Security audit (high+ severity)
         run: npm audit --omit=dev --audit-level=high

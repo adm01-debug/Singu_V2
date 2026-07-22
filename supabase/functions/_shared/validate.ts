@@ -24,6 +24,7 @@ export type ValidateResult<T = Record<string, unknown>> =
   | { ok: true; data: T }
   | { ok: false; error: string };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity -- validador declarativo com muitos branches por tipo; refactor rastreado como tech-debt (ADR-020)
 export function validate<T extends Record<string, unknown>>(
   body: unknown,
   schema: Schema,
