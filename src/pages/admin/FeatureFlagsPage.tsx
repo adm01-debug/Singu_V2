@@ -43,7 +43,6 @@ export default function FeatureFlagsPage() {
         name: newName.trim(),
         description: newDesc.trim() || null,
         enabled: false,
-        refetchOnWindowFocus: false,
       });
       if (error) throw error;
     },
