@@ -96,6 +96,10 @@ export default tseslint.config(
       "sonarjs/no-hardcoded-passwords": "off",
       "sonarjs/no-hardcoded-credentials": "off",
       "sonarjs/cognitive-complexity": "off",
+      "sonarjs/no-skipped-tests": "off",
+      "sonarjs/parameterized-tests": "off",
+      "sonarjs/no-floating-point-equality": "warn",
+      "sonarjs/unused-import": "warn",
     },
   },
 );
