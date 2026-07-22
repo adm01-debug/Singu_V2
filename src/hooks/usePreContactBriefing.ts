@@ -26,7 +26,7 @@ interface EmotionalProfile {
 
 type BriefingInteraction = Pick<Interaction,
   'id' | 'contact_id' | 'title' | 'type' | 'follow_up_required' | 'follow_up_date' |
-  'created_at' | 'outcome' | 'sentiment'
+  'created_at' | 'sentiment'
 >;
 
 interface NLPBriefing {
@@ -155,7 +155,7 @@ export function usePreContactBriefing(): PreContactBriefingData {
 
       const { data: interactions, error: interactionsError } = await supabase
         .from('interactions')
-        .select('id, contact_id, title, type, follow_up_required, follow_up_date, created_at, outcome, sentiment')
+        .select('id, contact_id, title, type, follow_up_required, follow_up_date, created_at, sentiment')
         .eq('user_id', user!.id).eq('follow_up_required', true)
         .not('follow_up_date', 'is', null).in('type', ['call', 'meeting', 'video_call'])
         .order('follow_up_date', { ascending: true })
