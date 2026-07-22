@@ -67,7 +67,7 @@ export function PortfolioCompatibilityReport({ className }: PortfolioCompatibili
             <CardTitle className="flex items-center gap-2"><Briefcase className="w-5 h-5 text-primary" />Relatório de Compatibilidade</CardTitle>
             <CardDescription>Análise completa da sua carteira de clientes</CardDescription>
           </div>
-          <Button variant="outline" size="sm" onClick={loadData}><RefreshCw className="w-4 h-4 mr-2" />Atualizar</Button>
+          <Button variant="outline" size="sm" onClick={() => loadData()}><RefreshCw className="w-4 h-4 mr-2" />Atualizar</Button>
         </div>
       </CardHeader>
 

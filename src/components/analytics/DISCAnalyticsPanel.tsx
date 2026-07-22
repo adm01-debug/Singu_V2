@@ -84,7 +84,7 @@ const DISCAnalyticsPanel = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div><h2 className="text-2xl font-bold text-foreground flex items-center gap-2"><Brain className="w-6 h-6 text-primary" />DISC Analytics</h2><p className="text-muted-foreground">Análise comportamental do portfólio de contatos</p></div>
-        <Button onClick={loadData} variant="outline" size="sm" className="gap-2"><RefreshCw className="w-4 h-4" />Atualizar</Button>
+        <Button onClick={() => loadData()} variant="outline" size="sm" className="gap-2"><RefreshCw className="w-4 h-4" />Atualizar</Button>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

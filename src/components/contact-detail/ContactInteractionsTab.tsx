@@ -106,7 +106,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
         neuro_pnl_technique: data.neuro_pnl_technique != null ? String(data.neuro_pnl_technique) : null,
         neuro_pnl_result: data.neuro_pnl_result != null ? String(data.neuro_pnl_result) : null,
       };
-       const { data: interaction, error } = await supabase.from('interactions').insert(insertData).select().maybeSingle();
+       const { data: interaction, error } = await supabase.from('interactions').insert(insertData as never).select().maybeSingle();
        if (error) throw error;
        
        toast.success('Interação registrada');

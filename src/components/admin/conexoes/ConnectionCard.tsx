@@ -82,7 +82,7 @@ export function ConnectionCard({ connection, onEdit }: Props) {
           <div className="mt-3">
             <SchemaDiscoveryCard
               connectionId={connection.id}
-              discoveredSchema={connection.discovered_schema as unknown as Json}
+              discoveredSchema={connection.discovered_schema as never}
               discoveredAt={connection.discovered_at}
             />
           </div>

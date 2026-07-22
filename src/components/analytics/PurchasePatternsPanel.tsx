@@ -78,7 +78,7 @@ export function PurchasePatternsPanel({ compact = false }: PurchasePatternsPanel
               </p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={refresh}>
+          <Button variant="ghost" size="sm" onClick={() => refresh()}>
             <RefreshCw className="w-4 h-4" />
           </Button>
         </CardHeader>
