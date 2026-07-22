@@ -17,5 +17,5 @@ export function VersionBadge() {
   );
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
+ 
 export { APP_VERSION };

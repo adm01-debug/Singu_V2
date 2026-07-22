@@ -18,10 +18,10 @@ Object.defineProperty(window, "matchMedia", {
 if (!globalThis.crypto?.randomUUID) {
   Object.defineProperty(globalThis, 'crypto', {
     value: {
-      // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
+       
       randomUUID: () => 'test-uuid-' + Math.random().toString(36).substr(2, 9),
       getRandomValues: (arr: Uint8Array) => {
-        // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
+         
         for (let i = 0; i < arr.length; i++) arr[i] = Math.floor(Math.random() * 256);
         return arr;
       },

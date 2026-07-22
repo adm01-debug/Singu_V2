@@ -27,7 +27,7 @@ interface TelemetryRow {
 
 function createRow(overrides: Partial<TelemetryRow> = {}): TelemetryRow {
   return {
-    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
+     
     id: Math.random().toString(36).slice(2),
     operation: "select",
     table_name: "contacts",
@@ -449,9 +449,9 @@ describe("Bulk data generation and validation", () => {
         operation: operations[i % operations.length],
         severity: severities[i % severities.length],
         table_name: tables[i % tables.length],
-        // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
+         
         duration_ms: Math.floor(Math.random() * 15000),
-        // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
+         
         record_count: Math.floor(Math.random() * 1000),
         query_limit: [10, 50, 100, 200, 1000][i % 5],
         query_offset: (i % 10) * 100,

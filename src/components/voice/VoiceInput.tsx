@@ -81,7 +81,7 @@ import { logger } from "@/lib/logger";
         variant: 'destructive'
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [toast]);
 
   const stopRecording = useCallback(() => {
