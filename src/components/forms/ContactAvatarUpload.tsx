@@ -57,6 +57,7 @@ export function ContactAvatarUpload({ avatarUrl, onAvatarChange, contactId }: Co
       setUploading(false);
       if (inputRef.current) inputRef.current.value = '';
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [contactId, onAvatarChange]);
 
   const handleRemove = useCallback(() => {

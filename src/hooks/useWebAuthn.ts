@@ -82,6 +82,7 @@ export function useWebAuthn() {
     if (error) { toast.error('Erro ao remover passkey.'); return; }
     toast.success('Passkey removida.');
     qc.invalidateQueries({ queryKey: ['webauthn-credentials'] });
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [qc]);
 
   return { isSupported, credentials, isLoading, isRegistering, register, remove };

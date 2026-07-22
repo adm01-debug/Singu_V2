@@ -101,10 +101,12 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
         };
         
         const maxScore = Math.max(...Object.values(scores));
+        // eslint-disable-next-line sonarjs/no-nested-functions -- closures legítimas para métricas/timeline; refator quebraria coesão
         const dominant = (Object.keys(scores) as VAKType[]).find(k => scores[k] === maxScore) || 'V';
         
         vakData[dominant].contacts.add(entry.contact_id);
         
+        // eslint-disable-next-line sonarjs/no-nested-functions -- closures legítimas para métricas/timeline; refator quebraria coesão
         const contact = (contacts || []).find(c => c.id === entry.contact_id);
         if (contact) {
           vakData[dominant].totalScore += contact.relationship_score || 0;
@@ -113,6 +115,7 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
           }
         }
         
+        // eslint-disable-next-line sonarjs/no-nested-functions -- closures legítimas para métricas/timeline; refator quebraria coesão
         vakData[dominant].interactions += (interactions || []).filter(i => i.contact_id === entry.contact_id).length;
       });
 

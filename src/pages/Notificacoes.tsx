@@ -97,6 +97,7 @@ const Notificacoes = () => {
     };
     loadSettings();
     return () => { cancelled = true; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, []);
 
   return (

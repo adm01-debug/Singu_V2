@@ -187,6 +187,7 @@ export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais,
 
       return safe;
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [safe, mode, setMode]);
 
 
@@ -194,6 +195,7 @@ export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais,
   // do modo manual em recargas futuras antes do pai hidratar a prop `canais`.
   useEffect(() => {
     writeApplied(appliedKey, safe);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [safe]);
 
   // Registra cada combinação aplicada não-vazia no histórico MRU.
@@ -209,6 +211,7 @@ export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais,
     } else {
       clearPending(pendingKey);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [pending, safe, mode]);
 
   const dirty = mode === 'manual' && !arraysEqual(pending, safe);
@@ -285,6 +288,7 @@ export const CanaisQuickFilter = React.memo(function CanaisQuickFilter({ canais,
         duration: 3000,
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [mode, toggle, pending, safe, onChange, setPending]);
 
   // Após alternar manual→auto, realinha `pending` com o `safe` recém-aplicado

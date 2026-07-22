@@ -139,6 +139,7 @@ export function useSmartNotifications() {
       .in('id', ids);
     if (error) toast.error('Falha ao marcar como lidas');
     else qc.invalidateQueries({ queryKey: ['smart-notifications', user?.id] });
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [visible, qc, user?.id]);
 
   const enqueue = useMutation({

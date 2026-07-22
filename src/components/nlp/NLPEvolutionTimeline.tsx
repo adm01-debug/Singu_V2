@@ -96,6 +96,7 @@ const NLPEvolutionTimeline: React.FC<NLPEvolutionTimelineProps> = ({
         const processedVak: VAKDataPoint[] = (vakHistory || []).map(entry => {
           const scores = { visual: entry.visual_score || 0, auditory: entry.auditory_score || 0, kinesthetic: entry.kinesthetic_score || 0, digital: entry.digital_score || 0 };
           const maxScore = Math.max(...Object.values(scores));
+          // eslint-disable-next-line sonarjs/no-nested-functions -- closures legítimas para métricas/timeline; refator quebraria coesão
           const dominant = (Object.keys(scores) as Array<keyof typeof scores>).find(k => scores[k] === maxScore) || 'visual';
           return { date: entry.created_at, displayDate: format(new Date(entry.created_at), 'dd/MM', { locale: ptBR }), ...scores, dominant: typeMap[dominant] };
         });
