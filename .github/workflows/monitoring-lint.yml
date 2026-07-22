@@ -1,0 +1,49 @@
+name: monitoring-lint
+on:
+  push:
+    paths:
+      - 'monitoring/**'
+      - 'docs/runbooks/**'
+      - 'scripts/monitoring/**'
+      - '.github/workflows/monitoring-lint.yml'
+  pull_request:
+    paths:
+      - 'monitoring/**'
+      - 'docs/runbooks/**'
+      - 'scripts/monitoring/**'
+
+jobs:
+  promtool:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: promtool check rules
+        run: |
+          docker run --rm -v "$PWD:/w" -w /w prom/prometheus:latest \
+            promtool check rules monitoring/prometheus/rules/*.yml
+
+  amtool:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: amtool check-config
+        run: |
+          docker run --rm -v "$PWD:/w" -w /w --entrypoint amtool prom/alertmanager:latest \
+            check-config monitoring/alertmanager/alertmanager.yml
+
+  runbook-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: check-runbook-coverage
+        run: bash scripts/monitoring/check-runbook-coverage.sh
+
+  secret-leak-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: scan exporter for secrets
+        run: |
+          if grep -REn '(password|secret|token|postgres://)' scripts/migration/verify/exporter/ ; then
+            echo "Potencial secret leak no exporter"; exit 1
+          fi

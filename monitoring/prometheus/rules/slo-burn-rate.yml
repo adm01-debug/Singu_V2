@@ -1,0 +1,44 @@
+# slo-burn-rate.yml — Rodada 26/10
+# SLO 99.5% availability dos guards. Multi-window multi-burn-rate.
+groups:
+  - name: slo-audit-availability
+    interval: 30s
+    rules:
+      - record: sli:audit_success:ratio_rate1h
+        expr: avg_over_time((guard_audit_exit_code == bool 0)[1h:1m])
+      - record: sli:audit_success:ratio_rate5m
+        expr: avg_over_time((guard_audit_exit_code == bool 0)[5m:1m])
+      - record: sli:audit_success:ratio_rate6h
+        expr: avg_over_time((guard_audit_exit_code == bool 0)[6h:5m])
+      - record: sli:audit_success:ratio_rate30m
+        expr: avg_over_time((guard_audit_exit_code == bool 0)[30m:1m])
+
+      - alert: AuditSLOFastBurn
+        expr: |
+          (1 - sli:audit_success:ratio_rate1h) > (14.4 * 0.005)
+          and
+          (1 - sli:audit_success:ratio_rate5m) > (14.4 * 0.005)
+        for: 2m
+        labels:
+          severity: page
+          team: db-ops
+          slo: audit-availability
+        annotations:
+          summary: "SLO burn rate 14.4x em 1h (fast burn)"
+          description: "Consumindo 2% do error budget em 1h."
+          runbook_url: "https://github.com/lovable/repo/blob/main/docs/runbooks/db-guards.md#slo-fast-burn"
+
+      - alert: AuditSLOSlowBurn
+        expr: |
+          (1 - sli:audit_success:ratio_rate6h) > (6 * 0.005)
+          and
+          (1 - sli:audit_success:ratio_rate30m) > (6 * 0.005)
+        for: 15m
+        labels:
+          severity: ticket
+          team: db-ops
+          slo: audit-availability
+        annotations:
+          summary: "SLO burn rate 6x em 6h (slow burn)"
+          description: "Consumindo 5% do error budget em 6h."
+          runbook_url: "https://github.com/lovable/repo/blob/main/docs/runbooks/db-guards.md#slo-slow-burn"
