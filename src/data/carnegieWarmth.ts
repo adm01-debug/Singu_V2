@@ -13,7 +13,7 @@ export const WARMTH_PATTERNS = {
     name: 'Cumprimentos Calorosos',
     patterns: [
       { pattern: /(que bom|que prazer|que alegria)\s+(falar|conversar|ver)/i, score: 10 },
-      // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
+      // eslint-disable-next-line sonarjs/super-linear-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
       { pattern: /(olá|oi|bom dia|boa tarde)\s*,?\s*tudo bem/i, score: 7 },
       { pattern: /como você está\??/i, score: 8 },
       { pattern: /espero que esteja bem/i, score: 9 },

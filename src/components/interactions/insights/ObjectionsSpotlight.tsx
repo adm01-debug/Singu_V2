@@ -28,7 +28,7 @@ function objectionStorageKey(prefix: string, objection: string): string {
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
-    // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
+    // eslint-disable-next-line sonarjs/super-linear-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
     .replace(/^-+|-+$/g, "")
     .slice(0, 80);
   return `relateiq:${prefix}:${slug}:${objection.length}`;

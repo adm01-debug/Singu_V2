@@ -23,7 +23,7 @@ function AddEmailDialog({ onAdd }: { onAdd: (data: Record<string, unknown>) => v
   const [form, setForm] = useState({
     email: '', email_type: 'profissional', is_primary: false, contexto: '',
   });
-  // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
+  // eslint-disable-next-line sonarjs/super-linear-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const isValid = form.email.trim() && emailRegex.test(form.email.trim());
 
