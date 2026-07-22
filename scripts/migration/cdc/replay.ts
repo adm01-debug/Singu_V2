@@ -50,7 +50,7 @@ async function apply(change: WalChange) {
   }
 }
 
-let files: string[] = [];
+const files: string[] = [];
 for await (const e of Deno.readDir(CDC_DIR)) if (e.isFile && e.name.endsWith(".json")) files.push(e.name);
 files.sort();
 
