@@ -31,8 +31,7 @@ export function useRFMAnalysis(contactId?: string) {
   const { data: rfmData = [], isLoading: rfmLoading } = useQuery({
     queryKey: ['rfm-analysis', user?.id, contactId],
     queryFn: async () => {
-      let query = supabase.from('rfm_analysis').select('id, user_id, contact_id, recency_score, frequency_score, monetary_score, rfm_score, total_score, days_since_last_purchase, days_since_last_interaction, total_purchases, total_interactions, total_monetary_value, average_order_value, segment, segment_description, segment_color, recency_trend, frequency_trend, monetary_trend, overall_trend, predicted_next_purchase_date, predicted_lifetime_value, churn_probability, recommended_actions, recommended_offers, communication_priority, analyzed_at, created_at, updated_at').eq('user_id', user!.id)
-      .limit(500);
+      let query = supabase.from('rfm_analysis').select('id, user_id, contact_id, recency_score, frequency_score, monetary_score, rfm_score, total_score, days_since_last_purchase, days_since_last_interaction, total_purchases, total_interactions, total_monetary_value, average_order_value, segment, segment_description, segment_color, recency_trend, frequency_trend, monetary_trend, overall_trend, predicted_next_purchase_date, predicted_lifetime_value, churn_probability, recommended_actions, recommended_offers, communication_priority, analyzed_at, created_at, updated_at').eq('user_id', user!.id);
       if (contactId) query = query.eq('contact_id', contactId);
       const { data, error } = await query;
       if (error) throw error;
@@ -88,8 +87,7 @@ export function useRFMAnalysis(contactId?: string) {
     if (!user?.id || contacts.length === 0) return;
     setAnalyzing(true);
     try {
-      const { data: purchaseData } = await supabase.from('purchase_history').select('contact_id, amount, purchase_date').eq('user_id', user.id)
-      .limit(500);
+      const { data: purchaseData } = await supabase.from('purchase_history').select('contact_id, amount, purchase_date').eq('user_id', user.id);
       const contactMetrics: Map<string, PurchaseData> = new Map();
       contacts.forEach(contact => {
         const contactInteractions = interactions.filter(i => i.contact_id === contact.id);
