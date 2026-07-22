@@ -34,6 +34,10 @@ FATAL=(
   relfrozenxid-table-guard.sql
   replication-slot-idle-guard.sql
   ssl-enforcement-audit.sql
+  heap-corruption-scan.sql
+  orphaned-large-objects.sql
+  collation-version-mismatch.sql
+  logical-replica-identity.sql
 )
 WARN=(
   autovacuum-audit.sql
@@ -69,6 +73,10 @@ WARN=(
   synchronous-commit-drift-audit.sql
   wal-sender-timeout-guard.sql
   extension-upgrade-available-audit.sql
+  pitr-retention-window.sql
+  password-encryption-audit.sql
+  autovacuum-throttle-audit.sql
+  plan-cache-bloat.sql
 )
 
 FAILED=0
