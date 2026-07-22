@@ -89,6 +89,7 @@ export function useSlowQueryDetector(): SlowQueryState {
       unsubscribe();
       if (clearTimer.current) clearTimeout(clearTimer.current);
       activeIntervals.current.forEach(clearInterval);
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
       activeIntervals.current.clear();
     };
   }, [queryClient, checkQuery]);

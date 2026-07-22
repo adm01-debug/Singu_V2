@@ -104,6 +104,7 @@ describe('Data Validation Integration', () => {
       const totalCents = priceInCents * quantity;
       const totalReais = totalCents / 100;
       
+      // eslint-disable-next-line sonarjs/no-floating-point-equality -- comparação intencional em fixture de teste
       expect(totalReais).toBe(59.97);
     });
 

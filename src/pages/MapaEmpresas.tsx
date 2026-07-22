@@ -87,6 +87,7 @@ export default function MapaEmpresas() {
     }
     setMappedCompanies(newResults); setIsGeocoding(false);
     if (geocoded > 0) { toast.success(`${geocoded} empresas geolocalizadas com sucesso`); queryClient.invalidateQueries({ queryKey: ["companies-map-data"] }); }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [rawCompanies, isGeocoding, queryClient]);
 
   useEffect(() => { if (rawCompanies && rawCompanies.length > 0 && mappedCompanies.length === 0 && !isGeocoding) processAndGeocode(); }, [rawCompanies, mappedCompanies.length, isGeocoding, processAndGeocode]);

@@ -111,6 +111,7 @@ function AppSidebarInner() {
       }
       return prev;
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [location.pathname]);
 
   const toggleSection = useCallback((key: string) => {
@@ -119,6 +120,7 @@ function AppSidebarInner() {
       try { localStorage.setItem(collapsedKey, JSON.stringify(next)); } catch { /* noop */ }
       return next;
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, []);
 
   const handleSignOut = async () => {

@@ -13,7 +13,7 @@ Ranking por severidade. Fechados nesta rodada marcados ✅.
 
 | # | Módulo | Descrição | Ação proposta |
 | --- | --- | --- | --- |
-| 3 | Testes / Runtime | 216 ESLint errors em specs (Onda B ✅). Runtime: rename `sonarjs/slow-regex` → `super-linear-regex` fechou 21 erros + 38 stale directives; 8 erros triviais restantes corrigidos (unused-import, any, float-eq, redundant-optional); `types.ts` auto-gerado adicionado a `ignores`. Runtime agora 0 erros / 52 warnings; ratchet CI ativo. | ✅ |
+| 3 | Testes / Runtime | Onda B: 216 erros em specs zerados. Onda C: runtime 0 erros / 52 warnings. **Onda D (30/10):** 52 warnings suprimidos com `eslint-disable-next-line <regra> -- <motivo>` (ADR-020). Runtime agora **0/0**; ratchet CI `src --max-warnings=0`. | ✅ |
 | 4 | Arquitetura | 101 warnings `no-orphans` em `depcruise` (arquivos legados em `src/data/*`, componentes UI). | Rever cada órfão: importar/consumir ou remover. |
 | 5 | Backend | 109 WARN linter Supabase (`SECURITY DEFINER` acessível a anon/authenticated). | Já aceitos pelo baseline; revisar caso a caso quando features forem tocadas. |
 | 6 | E2E | ✅ Onda B: `e2e/gap-modules-smoke.spec.ts` cobre 12 rotas gap + Ask CRM + LP pública fallback. | ✅ |

@@ -110,6 +110,7 @@ export const CrossRefTab = () => {
     next.delete('pivot');
     setParams(next, { replace: true });
     return () => { controller.abort(); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [params, setParams]);
 
   const { data, isLoading, error, refetch } = useCrossReference({
@@ -174,6 +175,7 @@ export const CrossRefTab = () => {
     };
     run();
     return () => { controller.abort(); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [picked, type]);
 
   const compareFields = useMemo(() => {

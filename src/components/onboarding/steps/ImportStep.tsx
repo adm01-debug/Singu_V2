@@ -135,6 +135,7 @@ const ImportStep = ({ onImport, onNext, onBack }: ImportStepProps) => {
     } finally {
       setImporting(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [user]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {

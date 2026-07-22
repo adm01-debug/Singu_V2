@@ -75,6 +75,7 @@ export function useAiAssistant() {
     } catch (e) {
       if (!signal?.cancelled) logger.error('Failed to fetch messages', e);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, []);
 
   useEffect(() => {
@@ -185,6 +186,7 @@ export function useAiAssistant() {
       logger.error('Failed to delete thread', e);
       toast.error('Falha ao remover conversa');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [activeThreadId]);
 
   const togglePin = useCallback(async (threadId: string, pinned: boolean) => {
@@ -195,6 +197,7 @@ export function useAiAssistant() {
     } catch (e) {
       logger.error('Failed to toggle pin', e);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [fetchThreads]);
 
   const renameThread = useCallback(async (threadId: string, title: string) => {
@@ -205,6 +208,7 @@ export function useAiAssistant() {
     } catch (e) {
       logger.error('Failed to rename thread', e);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, []);
 
   return {

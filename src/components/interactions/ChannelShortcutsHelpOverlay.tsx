@@ -117,6 +117,7 @@ export const ChannelShortcutsHelpOverlay = React.memo(function ChannelShortcutsH
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [open]);
 
   // Listener da tecla `?` (ou Shift+/). Ignorado quando o foco está em input

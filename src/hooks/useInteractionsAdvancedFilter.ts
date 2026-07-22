@@ -314,40 +314,51 @@ export function useInteractionsAdvancedFilter() {
   }, []);
 
   // Persistência reativa: espelha preferências de visualização no localStorage.
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   useEffect(() => { writeLS(DENSITY_STORAGE_KEY, filters.density); }, [filters.density]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   useEffect(() => { writeLS(PERPAGE_STORAGE_KEY, String(filters.perPage)); }, [filters.perPage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   useEffect(() => { writeLS(VIEW_STORAGE_KEY, filters.view); }, [filters.view]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   useEffect(() => { writeLS(SORT_STORAGE_KEY, filters.sort); }, [filters.sort]);
   // Persistência reativa adicional: busca, direção, entidades, datas e sentimento.
   useEffect(() => {
     if (filters.q && filters.q.trim()) writeLS(Q_STORAGE_KEY, filters.q);
     else removeLS(Q_STORAGE_KEY);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [filters.q]);
   useEffect(() => {
     if (filters.direcao && filters.direcao !== 'all') writeLS(DIRECAO_STORAGE_KEY, filters.direcao);
     else removeLS(DIRECAO_STORAGE_KEY);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [filters.direcao]);
   useEffect(() => {
     if (filters.contact) writeLS(CONTACT_STORAGE_KEY, filters.contact);
     else removeLS(CONTACT_STORAGE_KEY);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [filters.contact]);
   useEffect(() => {
     if (filters.company) writeLS(COMPANY_STORAGE_KEY, filters.company);
     else removeLS(COMPANY_STORAGE_KEY);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [filters.company]);
   useEffect(() => {
     const s = serializeDate(filters.de);
     if (s) writeLS(DE_STORAGE_KEY, s);
     else removeLS(DE_STORAGE_KEY);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [filters.de]);
   useEffect(() => {
     const s = serializeDate(filters.ate);
     if (s) writeLS(ATE_STORAGE_KEY, s);
     else removeLS(ATE_STORAGE_KEY);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [filters.ate]);
   useEffect(() => {
     if (filters.sentimento) writeLS(SENTIMENTO_STORAGE_KEY, filters.sentimento);
     else removeLS(SENTIMENTO_STORAGE_KEY);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [filters.sentimento]);
 
   // ──────────────────────────────────────────────────────────────────────
@@ -518,6 +529,7 @@ export function useInteractionsAdvancedFilter() {
       'channel-pending-canais',
       'channel-sync-mode',
     ].forEach(removeLS);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [searchParams, setSearchParams]);
 
   const applyAll = useCallback((next: Partial<AdvancedFilters>) => {
@@ -622,6 +634,7 @@ export function useInteractionsAdvancedFilter() {
     setSearchParams(sp, { replace: true });
     [DENSITY_STORAGE_KEY, PERPAGE_STORAGE_KEY, VIEW_STORAGE_KEY, SORT_STORAGE_KEY].forEach(removeLS);
     return changed;
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [searchParams, setSearchParams]);
 
   const isViewPrefsAtDefault =

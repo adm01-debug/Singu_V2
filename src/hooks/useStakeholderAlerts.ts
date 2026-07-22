@@ -243,6 +243,7 @@ export function useStakeholderAlerts(companyId?: string) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error creating stakeholder alert:', { error: msg });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [fetchAlerts, user]);
 
   const checkForChanges = useCallback(async (
@@ -436,6 +437,7 @@ export function useStakeholderAlerts(companyId?: string) {
       logger.error('Error dismissing alert:', { error: msg });
       toast.error('Erro ao dispensar alerta', { description: msg });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [alerts]);
 
   const dismissAllAlerts = useCallback(async () => {

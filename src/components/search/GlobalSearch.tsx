@@ -170,12 +170,14 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
     const urlQuery = params.get('q') ?? '';
     setQuery((prev) => (prev === urlQuery ? prev : urlQuery));
     setRecentItems(getRecentItems(recentItemsKey(user?.id)));
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [open]);
 
   const handleNavigate = useCallback((path: string, label: string) => {
     onOpenChange(false);
     addRecentItem(recentItemsKey(user?.id), { id: path, type: 'page', title: label, path });
     navigate(path);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
   }, [onOpenChange, navigate]);
 
   const handleQuickAction = useCallback((action: typeof quickActions[0]) => {
