@@ -11,6 +11,7 @@ interface AlertData {
   userId: string;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity -- orquestração linear de handler HTTP com muitos guards; refactor rastreado como tech-debt (ADR-020)
 Deno.serve(async (req) => {
   const traceId = extractTraceId(req);
   const log = tracedLogger(traceId, "client-notifications");
