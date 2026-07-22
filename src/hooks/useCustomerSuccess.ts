@@ -180,7 +180,7 @@ export function useHealthSignals(accountId: string | undefined) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("cs_health_signals")
-        .select("*")
+        .select("id, account_id, signal_type, score, weight, source, metadata, captured_at")
         .eq("account_id", accountId!)
         .eq("user_id", user!.id)
         .order("captured_at", { ascending: false })

@@ -20,7 +20,7 @@ export function ConsentAuditLog({ contactId }: Props) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("crm_consent_audit_logs")
-        .select("*")
+        .select("id, consent_type, status, platform, source, ip_address, created_at")
         .eq("contact_id", contactId)
         .eq("user_id", user!.id)
         .order("created_at", { ascending: false })
