@@ -25,7 +25,6 @@ export const useNotifications = () => {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { user } = useAuth();
 
   // Check if notifications are supported and current subscription status
   useEffect(() => {

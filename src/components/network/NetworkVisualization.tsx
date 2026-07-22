@@ -118,7 +118,7 @@ export const NetworkVisualization = ({ className, height = 600 }: NetworkVisuali
 
   if (error) return (
     <Card className={cn('', className)}>
-      <CardContent className="p-8 text-center"><p className="text-destructive mb-4">Erro ao carregar visualização: {error}</p><Button onClick={refetch}>Tentar novamente</Button></CardContent>
+      <CardContent className="p-8 text-center"><p className="text-destructive mb-4">Erro ao carregar visualização: {error}</p><Button onClick={() => refetch()}>Tentar novamente</Button></CardContent>
     </Card>
   );
 
@@ -136,7 +136,7 @@ export const NetworkVisualization = ({ className, height = 600 }: NetworkVisuali
                 <DropdownMenuCheckboxItem checked={filters.showYou} onCheckedChange={(c) => setFilters(f => ({ ...f, showYou: c }))}><Star className="w-4 h-4 mr-2" />Você</DropdownMenuCheckboxItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <TooltipProvider><Tooltip><TooltipTrigger asChild><Button variant="ghost" size="icon" aria-label="Atualizar" onClick={refetch}><RefreshCw className="w-4 h-4" /></Button></TooltipTrigger><TooltipContent>Atualizar</TooltipContent></Tooltip></TooltipProvider>
+            <TooltipProvider><Tooltip><TooltipTrigger asChild><Button variant="ghost" size="icon" aria-label="Atualizar" onClick={() => refetch()}><RefreshCw className="w-4 h-4" /></Button></TooltipTrigger><TooltipContent>Atualizar</TooltipContent></Tooltip></TooltipProvider>
           </div>
         </div>
 

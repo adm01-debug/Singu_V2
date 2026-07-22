@@ -86,19 +86,20 @@ export function CadenceRulesConfig() {
       if (!user) throw new Error('Não autenticado');
       const payload = {
         ...ruleData,
+        user_id: user.id,
         cadence_steps: ruleData.cadence_steps.map(({ _localId: _, ...step }) => step),
       };
       if (payload.id) {
         const { error } = await supabase
           .from('crm_cadence_rules')
-          .update(payload as TablesUpdate<'crm_cadence_rules'>)
+          .update(payload as never)
           .eq('user_id', user.id)
           .eq('id', payload.id);
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('crm_cadence_rules')
-          .insert([payload as TablesInsert<'crm_cadence_rules'>]);
+          .insert([payload as never]);
         if (error) throw error;
       }
     },

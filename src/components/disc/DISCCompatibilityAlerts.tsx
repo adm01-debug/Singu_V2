@@ -199,7 +199,7 @@ const DISCCompatibilityAlerts: React.FC<DISCCompatibilityAlertsProps> = ({
             <Button
               variant="ghost"
               size="icon" aria-label="Atualizar"
-              onClick={fetchAlerts}
+              onClick={() => fetchAlerts()}
               disabled={loading}
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />

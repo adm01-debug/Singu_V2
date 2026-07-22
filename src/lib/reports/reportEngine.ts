@@ -198,7 +198,7 @@ export interface ReportResult {
 export async function runReport(config: ReportConfig, userId: string): Promise<ReportResult> {
   const def = ENTITIES[config.entity];
   // Cast to valid DB table name — ENTITIES dict is constrained to known tables at definition.
-  const query = supabase.from(def.table as keyof Database['public']['Tables']).select(def.defaultSelect).eq('user_id', userId);
+  const query = supabase.from(def.table as keyof Database['public']['Tables']).select(def.defaultSelect).eq('user_id' as never, userId as never);
 
   if (config.orderBy) {
     query.order(config.orderBy.field, { ascending: config.orderBy.direction === 'asc' });

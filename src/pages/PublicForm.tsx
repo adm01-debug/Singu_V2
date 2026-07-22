@@ -24,7 +24,7 @@ export default function PublicForm() {
       if (cancelled) return;
       if (data) {
         setForm({ ...data, fields: Array.isArray(data.fields) ? data.fields : [] } as unknown as MarketingForm);
-        supabase.rpc('increment_form_view', { _slug: currentSlug }).catch(() => {});
+        try { await supabase.rpc('increment_form_view' as never, { _slug: currentSlug } as never); } catch { /* noop */ }
       }
       setLoading(false);
     })();

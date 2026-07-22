@@ -196,7 +196,7 @@ export default function LandingPages() {
             {editing && (
               <LandingPageEditor
                 page={editing}
-                onSave={(blocks, theme) => update.mutate({ id: editing.id, blocks: blocks as unknown as Json, theme: theme as unknown as Json })}
+                onSave={(blocks, theme) => update.mutate({ id: editing.id, blocks: blocks as never, theme })}
                 isSaving={update.isPending}
               />
             )}

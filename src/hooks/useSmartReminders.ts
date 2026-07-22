@@ -47,7 +47,6 @@ export const useSmartReminders = (autoFetch = true) => {
   const [error, setError] = useState<string | null>(null);
   const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
   const { toast } = useToast();
-  const { user } = useAuth();
   const dismissedKey = `dismissedReminders-${user?.id ?? 'anon'}`;
   const snoozedKey = `snoozedReminders-${user?.id ?? 'anon'}`;
 

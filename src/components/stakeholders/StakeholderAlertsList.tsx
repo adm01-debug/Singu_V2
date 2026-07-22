@@ -141,7 +141,7 @@ export function StakeholderAlertsList({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={refreshAlerts}
+                onClick={() => refreshAlerts()}
                 className="h-8 w-8 p-0"
               >
                 <RefreshCw className="h-4 w-4" />
@@ -150,7 +150,7 @@ export function StakeholderAlertsList({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={dismissAllAlerts}
+                  onClick={() => dismissAllAlerts()}
                   className="text-xs"
                 >
                   Dispensar todos

@@ -449,7 +449,7 @@ export const CrossRefTab = () => {
               <IntelSkeleton lines={5} />
             ) : (
               <DataGrid
-                columns={SHARED_INTERACTIONS_COLUMNS}
+                columns={[...SHARED_INTERACTIONS_COLUMNS] as never}
                 rows={(data?.sharedInteractions || []) as unknown as Array<Record<string, unknown>>}
                 getRowKey={(r) => String(r.id)}
                 emptyMessage="NO_SHARED_INTERACTIONS"
@@ -462,7 +462,7 @@ export const CrossRefTab = () => {
               <IntelSkeleton lines={4} />
             ) : (
               <DataGrid
-                columns={SHARED_DEALS_COLUMNS}
+                columns={[...SHARED_DEALS_COLUMNS] as never}
                 rows={(data?.sharedDeals || []) as unknown as Array<Record<string, unknown>>}
                 getRowKey={(r) => String(r.id)}
                 emptyMessage="NO_SHARED_DEALS"

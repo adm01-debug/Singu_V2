@@ -1,5 +1,4 @@
  import React, { useState } from 'react';
-import { logger } from "@/lib/logger";
  import { Button } from '@/components/ui/button';
  import { Card, CardContent } from '@/components/ui/card';
  import { Badge } from '@/components/ui/badge';

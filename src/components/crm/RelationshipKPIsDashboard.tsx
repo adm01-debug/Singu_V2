@@ -214,7 +214,6 @@ export function RelationshipKPIsDashboard() {
        const { data, error } = await supabase
         .from('crm_objection_intelligence')
          .select('id, behavioral_profile, contact_id, created_at, objection_type, script_content, success_rate, suggested_strategy, updated_at')
-         .eq('user_id', user!.id)
          .order('created_at', { ascending: false })
          .limit(5);
        if (error) return [];

@@ -161,11 +161,11 @@ export function CompatibilityAlertsList({
               </CardDescription>
             </div>
             <div className="flex gap-1">
-              <Button variant="ghost" size="icon" aria-label="Atualizar" onClick={fetchAlerts} className="h-8 w-8">
+              <Button variant="ghost" size="icon" aria-label="Atualizar" onClick={() => fetchAlerts()} className="h-8 w-8">
                 <RefreshCw className="w-4 h-4" />
               </Button>
               {alerts.length > 0 && (
-                <Button variant="ghost" size="icon" aria-label="Remover" onClick={handleDismissAll} className="h-8 w-8">
+                <Button variant="ghost" size="icon" aria-label="Remover" onClick={() => handleDismissAll()} className="h-8 w-8">
                   <Trash2 className="w-4 h-4 text-muted-foreground" />
                 </Button>
               )}

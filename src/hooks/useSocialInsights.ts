@@ -8,7 +8,9 @@ type SupabaseWithDynamicTables = {
   from: (table: string) => {
     select: (cols: string) => {
       eq: (col: string, val: string) => {
-        order: (col: string, opts: { ascending: boolean }) => Promise<{ data: unknown; error: unknown }>;
+        order: (col: string, opts: { ascending: boolean }) => {
+          limit: (n: number) => Promise<{ data: unknown; error: unknown }>;
+        };
       };
     };
   };
