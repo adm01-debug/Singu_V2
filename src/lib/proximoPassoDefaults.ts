@@ -60,7 +60,7 @@ function nextBusinessDay(from: Date): Date {
 
 function extractDaysFromDetail(detail: string): number | null {
   // tenta achar padrão "em {n}d" ou "(aniversário em Xd)"
-  // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
+  // eslint-disable-next-line sonarjs/super-linear-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
   const m = detail.match(/(\d+)\s*d(?:ia)?s?/i);
   if (m) return parseInt(m[1], 10);
   if (/hoje/i.test(detail)) return 0;

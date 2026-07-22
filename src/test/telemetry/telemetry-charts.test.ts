@@ -53,7 +53,7 @@ function computeSeverityDistribution(rows: ChartRow[]) {
 }
 
 function mockRow(severity: string, created_at: string, duration_ms = 1000): ChartRow {
-  // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
+   
   return { id: Math.random().toString(), severity, created_at, duration_ms };
 }
 

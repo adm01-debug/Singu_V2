@@ -71,7 +71,7 @@ const COMPANY_SEARCH_COLUMNS = [
 /** Extract city/state from nome_crm patterns like "PAC Xerém - RJ - Duque de Caxias/RJ" */
 function extractLocationFromName(name: string): { city: string | null; state: string | null } {
   // Pattern: "... - City/UF" at end
-  // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
+  // eslint-disable-next-line sonarjs/super-linear-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
   const slashMatch = name.match(/[-–—]\s*([^-–—/]+)\/([A-Z]{2})\s*$/);
   if (slashMatch) return { city: slashMatch[1].trim(), state: slashMatch[2] };
   // Pattern: "... - UF" at end (2-letter state)

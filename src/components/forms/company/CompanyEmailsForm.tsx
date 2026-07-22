@@ -49,7 +49,7 @@ export function CompanyEmailsForm({ companyId, emails, onSave, onDelete, isLoadi
 
   const addItem = () => setItems(prev => [...prev, emptyEmail(companyId)]);
 
-  // eslint-disable-next-line sonarjs/slow-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
+  // eslint-disable-next-line sonarjs/super-linear-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleSave = async (idx: number) => {

@@ -470,13 +470,13 @@ describe("Duration boundary matrix", () => {
 describe("Bulk telemetry entry generation", () => {
   it("should generate 200 valid entries for contacts", () => {
     for (let i = 0; i < 200; i++) {
-      // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
+       
       const dur = Math.floor(Math.random() * 15000);
       const hasError = i % 20 === 0;
       const entry = createTelemetryEntry(
         { table: "contacts", range: { from: i * 50, to: i * 50 + 49 } },
         dur,
-        // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
+         
         hasError ? null : Math.floor(Math.random() * 100),
         hasError ? "Random error" : null,
         `user-${i % 5}`

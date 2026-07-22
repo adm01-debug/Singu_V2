@@ -45,9 +45,14 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Lint (ESLint)
-        # --max-warnings=200 is the current ceiling (ratchet: must not increase PR over PR).
-        # Errors must always be 0. Target: reduce warnings to 0 incrementally.
-        run: npx eslint . --max-warnings=200
+        # Rodada 29/10 — Onda C ratchet:
+        # `src/` (runtime) is frozen at 0 errors / 52 warnings (all pre-existing
+        # react-hooks/exhaustive-deps, no-nested-functions, no-floating-point).
+        # The full-repo pass keeps the historical ceiling for test suites/e2e.
+        # Target: drive src warnings toward 0 incrementally; PRs must not increase either budget.
+        run: |
+          npx eslint src --max-warnings=52
+          npx eslint . --max-warnings=200
 
       - name: Security audit (high+ severity)
         run: npm audit --omit=dev --audit-level=high

@@ -15,6 +15,7 @@ export interface UnifiedTimelineEvent {
   title: string;
   content?: string;
   timestamp: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- metadata é payload dinâmico heterogêneo consumido por múltiplos renderers
   metadata?: Record<string, any>;
 }
 

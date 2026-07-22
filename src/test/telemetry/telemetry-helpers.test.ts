@@ -83,7 +83,7 @@ function filterBySeverity(rows: TelemetryRow[], filter: SeverityFilter): Telemet
 
 function createMockRow(overrides: Partial<TelemetryRow> = {}): TelemetryRow {
   return {
-    // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
+     
     id: crypto.randomUUID?.() || Math.random().toString(36),
     operation: "select",
     table_name: "contacts",
@@ -475,7 +475,7 @@ describe("Stress tests - large datasets", () => {
     const rows = Array.from({ length: 1000 }, (_, i) =>
       createMockRow({
         severity: i % 4 === 0 ? "very_slow" : i % 3 === 0 ? "slow" : i % 5 === 0 ? "error" : "normal",
-        // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
+         
         duration_ms: Math.floor(Math.random() * 15000),
       })
     );

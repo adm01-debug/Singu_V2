@@ -37,7 +37,7 @@ function baseFilters(overrides: Partial<AdvancedFilters> = {}): AdvancedFilters 
 interface RenderOpts {
   filters?: Partial<AdvancedFilters>;
   /** Quando undefined, NÃO passa a prop — exercita o caminho do `?.()`. */
-  onAfterRemove?: (() => void) | undefined;
+  onAfterRemove?: () => void;
   withClearDateRange?: boolean;
 }
 
