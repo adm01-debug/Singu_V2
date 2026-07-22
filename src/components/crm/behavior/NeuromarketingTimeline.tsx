@@ -35,14 +35,12 @@ export function NeuromarketingTimeline({ contactId }: Props) {
           .from('neuro_behavioral_history')
           .select('id, contact_id, created_at, dominance_data, empathy_score, empathy_trend, language_complexity_score, neuromarketing_data, recommendations, response_synchronicity')
           .eq('contact_id', contactId)
-          .eq('user_id', user!.id)
           .order('created_at', { ascending: true })
           .limit(200),
         supabase
           .from('interactions')
-          .select('id, sentiment, response_time, created_at')
+          .select('id, sentiment, response_time, created_at, title, content, emotion_analysis')
           .eq('contact_id', contactId)
-          .eq('user_id', user!.id)
           .order('created_at', { ascending: false })
           .limit(10)
       ]);
