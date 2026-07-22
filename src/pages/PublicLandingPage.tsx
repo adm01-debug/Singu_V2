@@ -56,7 +56,7 @@ export default function PublicLandingPage() {
       setPage(data as unknown as PublicPage);
       setLoading(false);
       // Increment view count via SECURITY DEFINER RPC (anon has no direct UPDATE policy)
-      supabase.rpc('increment_landing_page_view', { page_id: data.id }).then(() => {}, () => {});
+      supabase.rpc('increment_landing_page_view' as never, { page_id: data.id } as never).then(() => {}, () => {});
     })();
     return () => { alive = false; };
   }, [slug]);
