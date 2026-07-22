@@ -10,6 +10,7 @@ Não implementar módulos de Produtos nem Propostas (escopo proibido).
 Excelência sustentada: 70/70 melhorias atômicas (Rodadas A-N). Gate a11y no CI.
 
 ## Memories
+- [Rodada 25/10 — Hardening Contínuo](mem://migration/completion-25-10) — 8 novos guards (4 FATAL heap/LO/collation/replica-identity + 4 WARN PITR/passwd/autovacuum/plan-cache); full-audit agora 28 FATAL + 38 WARN.
 - [Rodada 23-24/10 — Validação Exaustiva & Patches](mem://migration/completion-23-10) — 1024 cenários, 5 falsos-negativos corrigidos (idle-tx aborted, search_path=public, checksums off, archive off, amcheck skipped), 6 guards novos (replication slot idle FATAL, SSL enforcement FATAL, pg_stat_statements reset, sync_commit drift, wal_sender timeout, ext upgrade pendente) + suíte tests/run-all.sh.
 - [Rodada 22/10 — Blindagem Definitiva](mem://migration/completion-22-10) — 8 hardenings: cache hit ratio, dead tuple, lock waits, checksum failures, superuser inventory, pg_hba permissivo, relfrozenxid por tabela, seq_scan em tabelas grandes.
 - [Rodada 21/10 — Blindagem Profunda](mem://migration/completion-21-10) — 8 hardenings: sequence overflow, deadlock rate, temp files, bgwriter, amcheck btree, fillfactor HOT, archive health, subscription lag.
