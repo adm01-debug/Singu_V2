@@ -10,6 +10,7 @@ Não implementar módulos de Produtos nem Propostas (escopo proibido).
 Excelência sustentada: 70/70 melhorias atômicas (Rodadas A-N). Gate a11y no CI.
 
 ## Memories
+- [Rodada 21/10 — Blindagem Profunda](mem://migration/completion-21-10) — 8 hardenings: sequence overflow, deadlock rate, temp files, bgwriter, amcheck btree, fillfactor HOT, archive health, subscription lag.
 - [Rodada 20/10 — Blindagem Absoluta](mem://migration/completion-20-10) — 8 hardenings: MultiXact/datfrozenxid wraparound, AccessExclusive locks, wal_level logical, timeline split-brain, autovacuum saturation, hot_standby_feedback, extension minor parity.
 - [Rodada 19/10 — Governança & Resiliência Extrema](mem://migration/completion-19-10) — 8 hardenings: toast compression, idle-in-tx guard, PUBLIC privileges audit, PITR window verifier, logical-vs-physical drift, pg_cron failover guard, search_path reset audit, connection pool canary.
 - [Rodada 16/10 — Governanca Profunda](mem://migration/completion-16-10) — 8 hardenings: replication slots orfaos, security definer search_path, NOT VALID constraints, long-running tx, tabelas sem PK, FDW credenciais, pg_stat_statements config, log retention + orquestrador full-audit.sh.
