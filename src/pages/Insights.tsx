@@ -59,7 +59,7 @@ const Insights = () => {
       if (controller.signal.aborted) return;
       setContacts((contactsRes.data || []) as Contact[]);
       if ((contactsRes.data?.length || 0) > 0 || (interactionsRes.data?.length || 0) > 0) {
-        await generateInsights((contactsRes.data || []) as never, interactionsRes.data || [], companiesRes.data || [], controller.signal);
+        await generateInsights((contactsRes.data || []) as never, (interactionsRes.data || []) as never, companiesRes.data || [], controller.signal);
       }
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') return;
