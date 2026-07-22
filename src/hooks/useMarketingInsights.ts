@@ -64,8 +64,7 @@ import { logger } from '@/lib/logger';
        const { data, error } = await supabase
          .from('contacts')
          .select('id, contact_behavior(disc_primary, vak_primary, motivation_primary)')
-         .eq('user_id', user.id)
-         .limit(500);
+         .eq('user_id', user.id);
 
        if (error) { throw error; }
 
@@ -110,8 +109,7 @@ import { logger } from '@/lib/logger';
         .from('marketing_campaign_stats')
         .select('id, entity_type, entity_id, date, views, clicks, submissions, conversions, spend, revenue')
         .eq('user_id', user.id)
-        .order('date', { ascending: false })
-        .limit(500);
+        .order('date', { ascending: false });
 
        if (error) {
          logger.error('Error fetching campaign stats:', error);
