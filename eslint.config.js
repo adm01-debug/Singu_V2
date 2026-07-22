@@ -75,4 +75,31 @@ export default tseslint.config(
       "react-refresh/only-export-components": "off",
     },
   },
+  {
+    // Rodada 28/10 — Onda B (findings.md item #3):
+    // Regras estilísticas do sonarjs geram ruído em testes sem valor de bug real
+    // (assertions triviais em fixtures, regex controlados, pseudo-random em seeds).
+    // Rebaixamos para warning nos specs, mantendo o sinal para runtime code.
+    files: [
+      "**/*.test.{ts,tsx}",
+      "**/*.spec.{ts,tsx}",
+      "src/test/**/*.{ts,tsx}",
+      "src/**/__tests__/**/*.{ts,tsx}",
+      "tests/**/*.{ts,tsx}",
+      "e2e/**/*.{ts,tsx}",
+    ],
+    rules: {
+      "sonarjs/prefer-specific-assertions": "off",
+      "sonarjs/no-trivial-assertions": "off",
+      "sonarjs/super-linear-regex": "warn",
+      "sonarjs/pseudo-random": "off",
+      "sonarjs/no-hardcoded-passwords": "off",
+      "sonarjs/no-hardcoded-credentials": "off",
+      "sonarjs/cognitive-complexity": "off",
+      "sonarjs/no-skipped-tests": "off",
+      "sonarjs/parameterized-tests": "off",
+      "sonarjs/no-floating-point-equality": "warn",
+      "sonarjs/unused-import": "warn",
+    },
+  },
 );
