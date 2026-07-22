@@ -237,8 +237,7 @@ export function useCoachingMetrics(periodDays: number = 30) {
         .from("conversation_analyses")
         .select("coaching_score, sentiment_overall, talk_ratio_rep, objections, topics, analyzed_at")
         .eq("user_id", user!.id)
-        .gte("analyzed_at", since)
-        .limit(500);
+        .gte("analyzed_at", since);
       if (error) throw error;
       const list = data ?? [];
       const total = list.length;

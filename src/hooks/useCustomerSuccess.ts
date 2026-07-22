@@ -227,7 +227,7 @@ export function useNPS(accountId?: string) {
     queryFn: async () => {
       let q = supabase.from("cs_nps_responses").select("id, account_id, contact_id, score, category, comment, surveyed_at").eq("user_id", user!.id);
       if (accountId) q = q.eq("account_id", accountId);
-      const { data, error } = await q.order("surveyed_at", { ascending: false }).limit(500);
+      const { data, error } = await q.order("surveyed_at", { ascending: false });
       if (error) throw error;
       return (data ?? []) as NPSResponse[];
     },
