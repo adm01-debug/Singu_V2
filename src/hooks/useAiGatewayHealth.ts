@@ -11,6 +11,27 @@ export interface AiGatewayFunctionRow {
   last_seen: string;
 }
 
+export interface AiGatewayModelRow {
+  model: string;
+  requests: number;
+  errors: number;
+  error_rate_pct: number | null;
+  p50_ms: number | null;
+  p95_ms: number | null;
+  tokens_in: number;
+  tokens_out: number;
+}
+
+export interface AiGatewayActiveAlert {
+  id: string;
+  alert_type: string;
+  severity: string;
+  title: string;
+  message: string | null;
+  metadata: Record<string, unknown> | null;
+  created_at: string;
+}
+
 export interface AiGatewayHealth {
   window_hours: number;
   computed_at: string;
@@ -21,8 +42,12 @@ export interface AiGatewayHealth {
     p50_ms?: number | null;
     p95_ms?: number | null;
     p99_ms?: number | null;
+    tokens_in?: number;
+    tokens_out?: number;
   };
   by_function: AiGatewayFunctionRow[];
+  by_model: AiGatewayModelRow[];
+  active_alerts: AiGatewayActiveAlert[];
 }
 
 export function useAiGatewayHealth(hours = 24) {
