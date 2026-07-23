@@ -15009,6 +15009,21 @@ export type Database = {
       evaluate_mql: { Args: { _contact_id: string }; Returns: Json }
       execute_readonly_query: { Args: { query_text: string }; Returns: Json }
       get_ai_gateway_health: { Args: { _hours?: number }; Returns: Json }
+      get_ai_gateway_partition_stats: {
+        Args: never
+        Returns: {
+          estimated_rows: number
+          is_current: boolean
+          is_expiring: boolean
+          is_future: boolean
+          max_created_at: string
+          min_created_at: string
+          partition_name: string
+          range_end: string
+          range_start: string
+          total_bytes: number
+        }[]
+      }
       get_behavioral_regen_cron_health: {
         Args: never
         Returns: {
