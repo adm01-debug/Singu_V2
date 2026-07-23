@@ -1,14 +1,16 @@
 ---
 name: Supabase Linter Baseline
-description: Baseline de findings do supabase linter aceitos com justificativa. Zero CRITICAL/HIGH; 46 WARNs documentados (3 infra + 9 endpoints públicos anon + 34 RPCs para authenticated).
+description: Baseline de findings do supabase linter aceitos com justificativa. Zero CRITICAL/HIGH; 39 WARNs documentados (3 infra + 9 endpoints públicos anon + 27 RPCs para authenticated).
 type: constraint
 ---
 **Atualizada na Rodada 32/10 — Onda F (Backend Linter Baseline Reduction).**
 Redução de 109 → 46 WARNs (−58%) via `REVOKE EXECUTE` em 7 funções internas expostas a `anon` + 33 funções trigger + 23 funções internas RPC expostas a `authenticated`.
 
-**Resultado (após Rodada 33/10):** 0 CRITICAL, 0 HIGH, **42 WARN** — todos aceitos com justificativa abaixo.
+**Resultado (após Rodada 34/10):** 0 CRITICAL, 0 HIGH, **39 WARN** — todos aceitos com justificativa abaixo.
 
 **Rodada 33/10 (Onda G Bucket B parcial):** `search_companies_unaccent`, `search_contacts_unaccent`, `search_interactions_unaccent`, `search_products_semantic` convertidos DEFINER → INVOKER. RLS passa a valer na sessão do caller; `search_path` inclui `extensions` para pg_trgm.
+
+**Rodada 34/10 (Onda G Bucket B lote 2):** `get_score_explicability`, `cs_renewal_pipeline`, `get_marketing_funnel_stats` convertidos DEFINER → INVOKER. Todas leem tabelas com RLS por `user_id`/`contact_id`; RPCs que aceitam `_user_id` cross-checam contra `auth.uid()` antes de executar.
 
 ## Infra (3)
 | # | Lint | Justificativa |
@@ -26,9 +28,9 @@ Buyer portal, landing pages, forms e magnets — consumidos por rotas sem sessã
 Chamados via `supabase.rpc()` no client autenticado. Cada função valida `auth.uid()` ou recebe `_user_id`/`p_user_id` cross-checado contra `auth.uid()`.
 
 - **RBAC/utilitários:** `has_role`, `increment_webhook_quota`, `reset_daily_lead_counts`.
-- **Deals & Forecast:** `move_deal_atomic` (2 overloads), `dismiss_revops_alert`, `compute_attribution`, `compute_revops_kpis`, `publish_mtta_sla_breach_alert`, `get_marketing_funnel_stats`.
-- **Contas & CS:** `compute_account_health`, `cs_renewal_pipeline`, `evaluate_mql`, `enroll_contact_in_workflow`.
-- **Lead scoring:** `get_score_explicability`, `seed_lead_score_defaults`.
+- **Deals & Forecast:** `move_deal_atomic` (2 overloads), `dismiss_revops_alert`, `compute_attribution`, `compute_revops_kpis`, `publish_mtta_sla_breach_alert`.
+- **Contas & CS:** `compute_account_health`, `evaluate_mql`, `enroll_contact_in_workflow`.
+- **Lead scoring:** `seed_lead_score_defaults`.
 - **Connections:** `get_connection_metrics`.
 - **Busca:** `search_companies_unaccent`, `search_contacts_unaccent`, `search_interactions_unaccent`, `search_products_semantic`.
 - **Seeds/Setup:** `seed_conversation_topics`, `seed_forecast_period`.
