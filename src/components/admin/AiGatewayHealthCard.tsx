@@ -239,6 +239,13 @@ export function AiGatewayHealthCard() {
                 </ul>
               </div>
             )}
+
+            {data.error_heatmap && (
+              <AiGatewayErrorHeatmap
+                heatmap={data.error_heatmap}
+                worst={data.worst_windows ?? []}
+              />
+            )}
           </>
         )}
       </CardContent>
