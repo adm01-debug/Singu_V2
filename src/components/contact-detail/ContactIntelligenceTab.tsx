@@ -14,6 +14,7 @@ import { EmotionalAnchorsPanel } from '@/components/contact-detail/EmotionalAnch
 import { BestTimeToContactCard } from '@/components/contact-detail/BestTimeToContactCard';
 import { AIActionsPanel } from '@/components/contact-detail/AIActionsPanel';
 import { SocialIntelligencePanel } from '@/components/contact-detail/SocialIntelligencePanel';
+import { SocialEnrichmentCard } from '@/components/contact-detail/SocialEnrichmentCard';
 import { ScoreHistoryPanel } from '@/components/contact-detail/ScoreHistoryPanel';
 import { ContactTimeHeatmap } from '@/components/contact-detail/ContactTimeHeatmap';
  import { WorkspaceAccountsCard } from '@/components/contact-detail/WorkspaceAccountsCard';
@@ -166,6 +167,7 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
 
       {/* Social Intelligence */}
 
+      <SocialEnrichmentCard contactId={contactId} />
       <SocialIntelligencePanel contactId={contactId} />
 
         {/* Communication Preferences + Score History */}
