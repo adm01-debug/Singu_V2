@@ -2,8 +2,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Gauge, AlertTriangle } from 'lucide-react';
+import { Gauge, AlertTriangle, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { useRpcPerfStats, type RpcPerfStat } from '@/hooks/useRpcPerfStats';
+import { useSlowRpcTrend, type SlowRpcTrendRow } from '@/hooks/useSlowRpcTrend';
 
 const SLOW_P95_MS = 800;
 
@@ -40,8 +41,39 @@ function StatRow({ stat }: { stat: RpcPerfStat }) {
   );
 }
 
+function TrendIcon({ ratio }: { ratio: number | null }) {
+  if (ratio === null) return <Minus className="w-3 h-3 text-muted-foreground" />;
+  if (ratio >= 1.5) return <TrendingUp className="w-3 h-3 text-destructive" />;
+  if (ratio <= 0.75) return <TrendingDown className="w-3 h-3 text-success" />;
+  return <Minus className="w-3 h-3 text-muted-foreground" />;
+}
+
+function TrendRow({ row }: { row: SlowRpcTrendRow }) {
+  const variant = row.is_degraded ? 'destructive' : row.ratio && row.ratio >= 1.2 ? 'secondary' : 'outline';
+  return (
+    <div className="flex items-center justify-between gap-3 py-2 border-b last:border-b-0">
+      <div className="min-w-0">
+        <p className="text-sm font-medium truncate">{row.rpc_name}</p>
+        <p className="text-xs text-muted-foreground">
+          {row.samples_recent} amostras (1h) • baseline {row.samples_baseline} amostras (24h)
+        </p>
+      </div>
+      <div className="flex items-center gap-2 shrink-0">
+        <span className="text-xs text-muted-foreground">
+          24h <strong className="text-foreground">{row.p95_baseline_ms}</strong>ms
+        </span>
+        <Badge variant={variant} className="gap-1">
+          <TrendIcon ratio={row.ratio} />
+          1h {row.p95_recent_ms}ms{row.ratio ? ` · ${row.ratio}×` : ''}
+        </Badge>
+      </div>
+    </div>
+  );
+}
+
 export function RpcPerfCard() {
   const { data, isLoading, error } = useRpcPerfStats(24);
+  const trend = useSlowRpcTrend(5);
 
   if (isLoading) {
     return (
@@ -70,9 +102,11 @@ export function RpcPerfCard() {
 
   const stats = data?.stats ?? [];
   const anySlow = stats.some((s) => s.p95_ms >= SLOW_P95_MS);
+  const trendRows = trend.data ?? [];
+  const anyDegraded = trendRows.some((r) => r.is_degraded);
 
   return (
-    <Card variant={anySlow ? 'warning' : undefined}>
+    <Card variant={anyDegraded ? 'warning' : anySlow ? 'warning' : undefined}>
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
           <Gauge className="w-4 h-4" /> Performance de RPCs (últimas {data?.window_hours ?? 24}h)
@@ -89,6 +123,26 @@ export function RpcPerfCard() {
             {stats.map((s) => <StatRow key={s.rpc_name} stat={s} />)}
           </div>
         )}
+        <div className="mt-5">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
+            Top 5 RPCs mais lentas — tendência 1h vs 24h
+          </p>
+          {trend.isLoading ? (
+            <Skeleton className="h-16" />
+          ) : trendRows.length === 0 ? (
+            <p className="text-xs text-muted-foreground">Sem amostras recentes para comparar.</p>
+          ) : (
+            <div className="divide-y">
+              {trendRows.map((r) => <TrendRow key={r.rpc_name} row={r} />)}
+            </div>
+          )}
+          {anyDegraded && (
+            <p className="text-xs text-destructive mt-2">
+              ⚠ Degradação detectada: p95 recente ≥ 1,5× baseline (regra Prometheus
+              <code className="mx-1">RpcPerfDegradation</code>).
+            </p>
+          )}
+        </div>
         <p className="text-xs text-muted-foreground mt-3">
           Threshold de alerta: p95 ≥ {SLOW_P95_MS}ms sustentado por 10 minutos (regra
           <code className="mx-1">AiGatewayHealthRpcSlow</code> no Prometheus).

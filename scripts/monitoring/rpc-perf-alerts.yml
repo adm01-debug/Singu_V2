@@ -42,3 +42,22 @@ groups:
           description: |
             p99 atual: {{ $value }}ms. Impacto direto no tempo de carga do painel de
             observabilidade. Considerar redução da janela ou skip do heatmap.
+
+      - alert: RpcPerfDegradation
+        expr: |
+          (
+            avg_over_time(rpc_perf_latency_ms{quantile="0.95"}[1h])
+            /
+            clamp_min(avg_over_time(rpc_perf_latency_ms{quantile="0.95"}[24h]), 1)
+          ) >= 1.5
+        for: 15m
+        labels:
+          severity: warning
+          service: rpc
+          component: perf-trend
+        annotations:
+          summary: "RPC {{ $labels.rpc }} degradada: p95(1h) ≥ 1,5× p95(24h)"
+          description: |
+            A latência p95 na última 1h está ao menos 1,5× o baseline de 24h para {{ $labels.rpc }}.
+            Investigar picos de carga, planos de query alterados, ou concorrência incomum.
+          runbook: "docs/runbooks/db-guards.md#rpc-perf-degradation"
