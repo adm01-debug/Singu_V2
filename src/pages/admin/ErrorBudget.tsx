@@ -10,6 +10,7 @@ import { MttaSlaBreachHistoryCard } from '@/components/admin/MttaSlaBreachHistor
 import { MttaSlaThresholdEditor } from '@/components/admin/MttaSlaThresholdEditor';
 import { MttaAutoAckHeartbeatCard } from '@/components/admin/MttaAutoAckHeartbeatCard';
 import { AiGatewayHealthCard } from '@/components/admin/AiGatewayHealthCard';
+import { AiGatewayPartitionsCard } from '@/components/admin/AiGatewayPartitionsCard';
 
 function StatCard({
   title,
@@ -197,6 +198,8 @@ export default function ErrorBudget() {
       <MttaAutoAckHeartbeatCard />
 
       <AiGatewayHealthCard />
+
+      <AiGatewayPartitionsCard />
 
       <Card>
         <CardHeader>
