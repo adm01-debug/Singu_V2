@@ -79,6 +79,7 @@ export const AppRoutes = () => {
       <Route path="/historico" element={<Protected><P.Historico /></Protected>} />
       <Route path="/perfis-comportamentais" element={<Protected><P.PerfisComportamentais /></Protected>} />
       <Route path="/empresas/:id" element={<Protected fallback={<CompaniesPageSkeleton />}><P.EmpresaDetalhe /></Protected>} />
+      <Route path="/empresas/:companyId/analytics" element={<Protected fallback={<CompaniesPageSkeleton />}><P.CompanyProfileAnalytics /></Protected>} />
       <Route path="/contatos" element={<Protected fallback={<ContactsPageSkeleton />}><P.Contatos /></Protected>} />
       <Route path="/contatos/:id" element={<Protected fallback={<ContactsPageSkeleton />}><P.ContatoDetalhe /></Protected>} />
       <Route path="/contatos/:id/ficha-360" element={<Protected fallback={<ContactsPageSkeleton />}><P.Ficha360 /></Protected>} />

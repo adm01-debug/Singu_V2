@@ -14,6 +14,7 @@ export const WhatsAppImport = lazy(() => import("@/pages/WhatsAppImport"));
 export const Historico = lazy(() => import("@/pages/Historico"));
 export const PerfisComportamentais = lazy(() => import("@/pages/PerfisComportamentais"));
 export const EmpresaDetalhe = lazy(() => import("@/pages/EmpresaDetalhe"));
+export const CompanyProfileAnalytics = lazy(() => import("@/pages/CompanyProfileAnalytics"));
 export const Contatos = lazy(() => import("@/pages/Contatos"));
 export const ContatoDetalhe = lazy(() => import("@/pages/ContatoDetalhe"));
 export const Ficha360 = lazy(() => import("@/pages/Ficha360"));

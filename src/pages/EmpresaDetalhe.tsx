@@ -15,7 +15,7 @@ import { motion } from 'framer-motion';
 import {
   Building2, Users, Edit, Plus, MessageSquare,
   Network, BarChart3, Sparkles, Database, ShoppingCart,
-  AlertTriangle, RotateCcw, Target
+  AlertTriangle, RotateCcw, Target, PieChart
 } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { EntityDetailPageSkeleton } from '@/components/skeletons/PageSkeletons';
@@ -189,6 +189,9 @@ const EmpresaDetalhe = () => {
           )}
           <div className="absolute top-4 right-4 flex items-center gap-2">
             <LuxButton onClick={() => triggerLux({ name: company.name, cnpj: company.cnpj, website: company.website, industry: company.industry })} loading={luxTriggering} processing={luxRecord?.status === 'processing'} variant="header" />
+            <Link to={`/empresas/${id}/analytics`}>
+              <Button className="bg-primary-foreground/10 backdrop-blur hover:bg-primary-foreground/20 text-primary-foreground border-0"><PieChart className="w-4 h-4 mr-2" />Analytics do Perfil</Button>
+            </Link>
             <Button className="bg-primary-foreground/10 backdrop-blur hover:bg-primary-foreground/20 text-primary-foreground border-0" onClick={() => setIsAddContactOpen(true)}><Plus className="w-4 h-4 mr-2" />Novo Contato</Button>
             <Button className="bg-primary-foreground/10 backdrop-blur hover:bg-primary-foreground/20 text-primary-foreground border-0" onClick={() => setIsEditOpen(true)}><Edit className="w-4 h-4 mr-2" />Editar</Button>
           </div>
