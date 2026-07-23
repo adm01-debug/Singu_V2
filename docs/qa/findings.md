@@ -15,7 +15,7 @@ Ranking por severidade. Fechados nesta rodada marcados ✅.
 | --- | --- | --- | --- |
 | 3 | Testes / Runtime / Externo | Ondas B/C/D zeraram `src/` e specs. **Onda E (31/10):** rename `slow-regex → super-linear-regex` em edge functions + supressões justificadas em 5 handlers HTTP e 3 amostragens em `scripts/**` (ADR-021). Repo inteiro agora **0/0**; ratchet CI global `--max-warnings=0`. | ✅ |
 | 4 | Arquitetura | 101 warnings `no-orphans` em `depcruise` (arquivos legados em `src/data/*`, componentes UI). | Rever cada órfão: importar/consumir ou remover. |
-| 5 | Backend | 109 WARN linter Supabase (`SECURITY DEFINER` acessível a anon/authenticated). | Já aceitos pelo baseline; revisar caso a caso quando features forem tocadas. |
+| 5 | Backend | ✅ Rodada 32/10 (Onda F): 109 → **46 WARN** (−58%) via REVOKE EXECUTE em 7 anon + 33 triggers + 23 internos. Baseline documentado + ADR-022 + `scripts/check-backend-linter-baseline.mjs`. Bucket B (DEFINER→INVOKER) fica como dívida para próxima rodada. | ✅ |
 | 6 | E2E | ✅ Onda B: `e2e/gap-modules-smoke.spec.ts` cobre 12 rotas gap + Ask CRM + LP pública fallback. | ✅ |
 | 7 | Bundle | `check-bundle-size` requer `vite build` no CI local antes do check. | Encadear step no workflow local ou marcar `dist/assets` como pré-requisito. |
 
