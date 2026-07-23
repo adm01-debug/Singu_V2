@@ -190,6 +190,54 @@ export function AiGatewayHealthCard() {
                 </div>
               </div>
             )}
+
+            {data.resolved_mttr && data.resolved_mttr.length > 0 && (
+              <div className="pt-2 border-t">
+                <div className="text-xs text-muted-foreground mb-2 font-medium flex items-center gap-1">
+                  <Timer className="w-3 h-3" /> MTTR por tipo de alerta (24h)
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {data.resolved_mttr.map((row) => (
+                    <div key={row.alert_type} className="rounded border p-3">
+                      <div className="text-xs text-muted-foreground capitalize">
+                        {row.alert_type.replace(/_/g, ' ')}
+                      </div>
+                      <div className="text-lg font-bold tabular-nums">
+                        {row.avg_mttr_minutes != null ? `${row.avg_mttr_minutes} min` : '—'}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {row.resolved_count} resolvido{row.resolved_count > 1 ? 's' : ''}
+                        {row.max_mttr_minutes != null ? ` · máx ${row.max_mttr_minutes}min` : ''}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {data.resolved_recent && data.resolved_recent.length > 0 && (
+              <div className="pt-2 border-t">
+                <div className="text-xs text-muted-foreground mb-2 font-medium flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" /> Auto-resoluções recentes
+                </div>
+                <ul className="space-y-1 text-sm">
+                  {data.resolved_recent.slice(0, 5).map((row) => (
+                    <li key={row.id} className="flex items-center justify-between gap-2 border-b last:border-0 pb-1">
+                      <span className="truncate">
+                        <Badge variant="outline" className="mr-2 capitalize">
+                          {row.alert_type.replace(/_/g, ' ')}
+                        </Badge>
+                        {row.message}
+                      </span>
+                      <span className="text-xs text-muted-foreground shrink-0">
+                        {row.mttr_minutes != null ? `${row.mttr_minutes}min` : '—'}
+                        {row.auto_resolved ? ' · auto' : ''}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </>
         )}
       </CardContent>
