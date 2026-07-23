@@ -58,7 +58,9 @@ export function AiGatewayHealthCard() {
                   >
                     <ShieldAlert className="h-4 w-4" />
                     <AlertTitle className="flex items-center justify-between gap-2">
-                      <span>{alert.title}</span>
+                      <span className="capitalize">
+                        {alert.alert_type.replace(/_/g, ' ')} · {alert.severity}
+                      </span>
                       <span className="text-xs font-normal text-muted-foreground">
                         {formatDistanceToNow(new Date(alert.created_at), {
                           addSuffix: true,
@@ -66,7 +68,7 @@ export function AiGatewayHealthCard() {
                         })}
                       </span>
                     </AlertTitle>
-                    {alert.message && <AlertDescription>{alert.message}</AlertDescription>}
+                    <AlertDescription>{alert.message}</AlertDescription>
                   </Alert>
                 ))}
               </div>
