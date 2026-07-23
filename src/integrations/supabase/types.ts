@@ -5022,6 +5022,51 @@ export type Database = {
         }
         Relationships: []
       }
+      data_retention_policies: {
+        Row: {
+          action: string
+          created_at: string
+          date_column: string
+          description: string | null
+          extra_where: string | null
+          id: string
+          is_active: boolean
+          last_deleted_count: number | null
+          last_run_at: string | null
+          retention_days: number
+          table_name: string
+          updated_at: string
+        }
+        Insert: {
+          action?: string
+          created_at?: string
+          date_column?: string
+          description?: string | null
+          extra_where?: string | null
+          id?: string
+          is_active?: boolean
+          last_deleted_count?: number | null
+          last_run_at?: string | null
+          retention_days: number
+          table_name: string
+          updated_at?: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          date_column?: string
+          description?: string | null
+          extra_where?: string | null
+          id?: string
+          is_active?: boolean
+          last_deleted_count?: number | null
+          last_run_at?: string | null
+          retention_days?: number
+          table_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       deal_forecasts: {
         Row: {
           ai_rationale: string | null
@@ -14489,6 +14534,14 @@ export type Database = {
       aggregate_nlp_to_company: {
         Args: { p_company_id: string }
         Returns: undefined
+      }
+      apply_retention_policies: {
+        Args: never
+        Returns: {
+          deleted_count: number
+          error_message: string
+          tbl: string
+        }[]
       }
       auto_ack_stale_mtta_sla_breaches: { Args: never; Returns: number }
       buyer_add_comment: {
