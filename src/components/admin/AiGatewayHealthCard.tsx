@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Sparkles, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { Sparkles, AlertTriangle, ShieldAlert, CheckCircle2, Timer } from 'lucide-react';
 import { useAiGatewayHealth } from '@/hooks/useAiGatewayHealth';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
