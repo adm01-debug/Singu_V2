@@ -17,7 +17,7 @@
 | ESLint total (repo inteiro) | ratchet ≤ 0 (Onda E) | **0** | ✅ |
 | ESLint supabase/functions | ratchet ≤ 0 (Onda E) | **0** | ✅ |
 | ESLint scripts/** | ratchet ≤ 0 (Onda E) | **0** | ✅ |
-| Backend linter WARN (baseline aceito) | ≤ baseline | 109 (baseline) | ✅ |
+| Backend linter WARN (baseline documentado) | ≤ 46 (Onda F / ADR-022) | **46** | ✅ |
 | Cobertura E2E smoke | 3 jornadas críticas | 3 | ✅ |
 
 ## Deliverables desta rodada
@@ -35,3 +35,7 @@
 - **Onda E (Rodada 31/10 — concluída):** repo inteiro em 0/0. Rename global
   `sonarjs/slow-regex → super-linear-regex` em edge functions + suppressões
   justificadas em 5 handlers HTTP e 3 amostragens estatísticas (`ADR-021`).
+- **Onda F (Rodada 32/10 — concluída):** backend linter 109 → 46 WARN (−58%)
+  via `REVOKE EXECUTE` em 7 anon + 33 triggers + 23 internos. ADR-022 +
+  `scripts/check-backend-linter-baseline.mjs` + baseline documentado por
+  função em `linter-baseline.md`.
