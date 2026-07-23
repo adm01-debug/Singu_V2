@@ -15114,6 +15114,22 @@ export type Database = {
       }
       get_rpc_perf_stats: { Args: { _hours?: number }; Returns: Json }
       get_score_explicability: { Args: { p_contact_id: string }; Returns: Json }
+      get_slow_rpc_trend: {
+        Args: {
+          _hours_baseline?: number
+          _hours_recent?: number
+          _limit?: number
+        }
+        Returns: {
+          is_degraded: boolean
+          p95_baseline_ms: number
+          p95_recent_ms: number
+          ratio: number
+          rpc_name: string
+          samples_baseline: number
+          samples_recent: number
+        }[]
+      }
       get_system_config_num: {
         Args: { _default: number; _key: string }
         Returns: number
