@@ -1,5 +1,8 @@
 -- Rodada 49/10 · Invariantes para SECURITY DEFINER em public.*
--- 1) search_path travado; 2) sem auth.uid() no corpo; 3) baseline de 5 funções.
+--   1) search_path travado em TODO DEFINER
+--   2) DEFINER exposto a `anon` NUNCA pode usar auth.uid() (padrão inseguro:
+--      anon sem JWT resulta em auth.uid() = NULL e escreve linhas órfãs)
+--   3) Baseline: 63 DEFINERs (ajuste consciente aqui + docs/qa/security-definer-audit.md)
 
 BEGIN;
 
@@ -14,7 +17,8 @@ BEGIN
     SELECT p.oid,
            p.proname || '(' || pg_get_function_identity_arguments(p.oid) || ')' AS sig,
            p.proconfig,
-           p.prosrc
+           p.prosrc,
+           has_function_privilege('anon', p.oid, 'EXECUTE') AS anon_exec
     FROM pg_proc p
     JOIN pg_namespace n ON n.oid = p.pronamespace
     WHERE n.nspname = 'public'
@@ -31,7 +35,7 @@ BEGIN
       bad_searchpath := bad_searchpath || r.sig;
     END IF;
 
-    IF position('auth.uid()' in r.prosrc) > 0 THEN
+    IF r.anon_exec AND position('auth.uid()' in r.prosrc) > 0 THEN
       uses_authuid := uses_authuid || r.sig;
     END IF;
   END LOOP;
@@ -41,14 +45,14 @@ BEGIN
   END IF;
 
   IF array_length(uses_authuid, 1) > 0 THEN
-    RAISE EXCEPTION 'DEFINER usando auth.uid() (padrão inseguro em endpoint público): %', uses_authuid;
+    RAISE EXCEPTION 'DEFINER exposto a anon usando auth.uid() (padrão inseguro): %', uses_authuid;
   END IF;
 
-  IF total <> 5 THEN
-    RAISE EXCEPTION 'baseline DEFINER esperado = 5; atual = %. Atualize docs/qa/security-definer-audit.md se intencional.', total;
+  IF total <> 63 THEN
+    RAISE EXCEPTION 'baseline DEFINER esperado = 63; atual = %. Atualize docs/qa/security-definer-audit.md se intencional.', total;
   END IF;
 
-  RAISE NOTICE 'OK — 5/5 DEFINERs conformes (search_path pinned, sem auth.uid()).';
+  RAISE NOTICE 'OK — 63/63 DEFINERs conformes (search_path pinned; nenhum exposto a anon usa auth.uid()).';
 END $$;
 
 ROLLBACK;
