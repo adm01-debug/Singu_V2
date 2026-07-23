@@ -4,6 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Sparkles, AlertTriangle, ShieldAlert, CheckCircle2, Timer } from 'lucide-react';
 import { useAiGatewayHealth } from '@/hooks/useAiGatewayHealth';
+import { AiGatewayErrorHeatmap } from './AiGatewayErrorHeatmap';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -237,6 +238,13 @@ export function AiGatewayHealthCard() {
                   ))}
                 </ul>
               </div>
+            )}
+
+            {data.error_heatmap && (
+              <AiGatewayErrorHeatmap
+                heatmap={data.error_heatmap}
+                worst={data.worst_windows ?? []}
+              />
             )}
           </>
         )}
