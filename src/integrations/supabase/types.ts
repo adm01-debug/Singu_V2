@@ -14589,6 +14589,7 @@ export type Database = {
         }[]
       }
       auto_ack_stale_mtta_sla_breaches: { Args: never; Returns: number }
+      auto_resolve_ai_gateway_alerts: { Args: never; Returns: number }
       buyer_add_comment: {
         Args: { _body: string; _label?: string; _token: string }
         Returns: string
