@@ -14,7 +14,7 @@
  */
 import { readFileSync } from "node:fs";
 
-const BASELINE = 12; // ver linter-baseline.md (Rodada 41/10)
+const BASELINE = 12; // piso arquitetural — ver linter-baseline.md (Rodada 42/10)
 
 const input = process.stdin.isTTY ? "" : readFileSync(0, "utf8");
 if (!input.trim()) {

@@ -1,10 +1,18 @@
 ---
 name: Supabase Linter Baseline
-description: Baseline de findings do supabase linter aceitos com justificativa. Zero CRITICAL/HIGH; 36 WARNs documentados (3 infra + 9 endpoints públicos anon + 24 RPCs para authenticated).
+description: Baseline de findings do supabase linter aceitos com justificativa. Zero CRITICAL/HIGH; 12 WARNs documentados (3 infra + 4 endpoints públicos token/slug + has_role RBAC helper).
 type: constraint
 ---
-**Atualizada na Rodada 38/10 — Onda G Bucket B (lote 6).**
-**Resultado atual:** 0 CRITICAL, 0 HIGH, **24 WARN**.
+**Atualizada na Rodada 42/10 — Onda G Bucket B (lote 8, encerramento).**
+**Resultado atual:** 0 CRITICAL, 0 HIGH, **12 WARN** (piso operacional).
+
+**Rodada 42/10 (encerramento):** auditoria confirmou que os 12 WARN restantes representam o **piso arquitetural** — não podem ser removidos sem quebrar contratos públicos ou reestruturar RLS crítica. Ratchet travado em `BASELINE = 12` (`scripts/check-backend-linter-baseline.mjs`).
+
+**Rodada 41/10:** RLS por `share_token` implementado nos Deal Rooms; `get_deal_room_by_token`, `record_buyer_view`, `get_buyer_document_path` convertidos DEFINER → INVOKER (18 → 12).
+
+**Rodada 40/10:** `increment_form_view`, `increment_magnet_view` convertidos DEFINER → INVOKER com grant column-level em `view_count` (22 → 18).
+
+**Rodada 39/10:** `cleanup_behavioral_regen_queue`, `execute_readonly_query` convertidos DEFINER → INVOKER com guards `has_role('admin')` (24 → 22).
 
 **Rodada 38/10:** `increment_webhook_quota`, `move_deal_atomic` (integer e numeric), `publish_mtta_sla_breach_alert`, `reset_daily_lead_counts` convertidas DEFINER → INVOKER. Adicionada policy `Admins can insert system alerts` em `system_alerts`. RLS de `deals`, `connection_quotas`, `sales_team_members` passa a valer no caller; edge functions `incoming-webhook` e `lead-routing` continuam via service_role.
 
@@ -25,30 +33,27 @@ type: constraint
 | 2 | `0025_public_bucket_allows_listing` (`company-logos`) | Bucket público intencional; RLS de upload owner-only em `{userId}/{companyId}/`. |
 | 3 | `0025_public_bucket_allows_listing` (assets públicos) | Idem — UI não autenticada. |
 
-## Endpoints públicos — `anon` EXECUTE mantido (9)
-Buyer portal, landing pages, forms e magnets — consumidos por rotas sem sessão. Todos com `SET search_path=public, pg_temp` e validação server-side.
+## Endpoints públicos — `anon`+`authenticated` EXECUTE (4 funções × 2 papéis = 8 WARN)
+Capturas públicas por **token opaco** ou **slug publicado**. Não podem virar INVOKER sem grants amplos de INSERT/UPDATE a `anon` em múltiplas tabelas owner-scoped (deal_room_comments, deal_room_activities, deal_room_milestones, form_submissions, forms, attribution_touchpoints, lead_magnet_downloads), o que teria superfície de ataque maior que o WARN. Todas com `SET search_path=public, pg_temp`, validação server-side (length, published flags, share_enabled) e escrita restrita ao owner derivado do token/slug.
 
-`buyer_add_comment`, `buyer_toggle_milestone`, `get_buyer_document_path`, `get_deal_room_by_token`, `record_buyer_view`, `submit_public_form`, `track_magnet_download`, `increment_form_view`, `increment_magnet_view`.
+| Função | Auth vector |
+|--------|-------------|
+| `buyer_add_comment(_token, _body, _label)` | `deal_rooms.share_token` + `share_enabled=true` |
+| `buyer_toggle_milestone(_token, _milestone_id, _done, _label)` | idem + `owner_side != 'seller'` |
+| `submit_public_form(_slug, _data, _utms, _page_url, _user_agent)` | `forms.slug` + `is_published=true` |
+| `track_magnet_download(_slug, _email, _name, _utms)` | `lead_magnets.slug` + `is_published=true` |
 
-## RPCs autenticados — `authenticated` EXECUTE mantido (34)
-Chamados via `supabase.rpc()` no client autenticado. Cada função valida `auth.uid()` ou recebe `_user_id`/`p_user_id` cross-checado contra `auth.uid()`.
+## RBAC helper (1 função × 1 papel = 1 WARN)
 
-- **RBAC/utilitários:** `has_role`, `increment_webhook_quota`, `reset_daily_lead_counts`.
-- **Deals & Forecast:** `move_deal_atomic` (2 overloads), `dismiss_revops_alert`, `compute_attribution`, `compute_revops_kpis`, `publish_mtta_sla_breach_alert`.
-- **Contas & CS:** `compute_account_health`, `evaluate_mql`, `enroll_contact_in_workflow`.
-- **Lead scoring:** `seed_lead_score_defaults`.
-- **Connections:** `get_connection_metrics`.
-- **Busca:** `search_companies_unaccent`, `search_contacts_unaccent`, `search_interactions_unaccent`, `search_products_semantic`.
-- **Seeds/Setup:** `seed_conversation_topics`, `seed_forecast_period`.
-- **Buyer portal (anon-shared):** `buyer_add_comment`, `buyer_toggle_milestone`, `get_buyer_document_path`, `get_deal_room_by_token`, `record_buyer_view`, `submit_public_form`, `track_magnet_download`, `increment_form_view`, `increment_magnet_view`.
-- **Manutenção pipeline comportamental:** `cleanup_behavioral_regen_queue` (chamada por admin UI).
-- **Read-only bridge:** `execute_readonly_query` (validação de whitelist embutida no corpo da função).
+| Função | Justificativa |
+|--------|---------------|
+| `has_role(_user_id, _role)` (authenticated) | Helper `SECURITY DEFINER` chamado por **toda policy RLS** que faz gating por papel. Converter para INVOKER exigiria grant de SELECT em `user_roles` para `authenticated`, quebrando o isolamento anti-recursão documentado em `<user-roles>`. Design correto. |
 
 ## Reduções da Rodada 32/10
 - **7 REVOKE FROM anon:** `check_behavioral_regen_cron_staleness`, `cleanup_behavioral_regen_queue`, `cleanup_simulated_alerts`, `enqueue_behavioral_profile_regen`, `get_behavioral_regen_cron_health`, `notify_admins_on_critical_behavioral_alert`, `simulate_behavioral_regen_alert`.
 - **33 REVOKE FROM authenticated (triggers):** todos os `audit_*`, `process_*_audit`, `notify_*`, `log_*`, `sync_*`, `enqueue_*` (triggers disparam via table owner).
 - **23 REVOKE FROM authenticated (internos):** `_connection_encryption_key`, `encrypt/decrypt_connection_config`, `aggregate_nlp_to_company`, `enqueue_smart_notification`, `ensure_audit_log_partition`, `cleanup_old_health_snapshots`, `search_*_semantic` variantes, `seed_deal_room`, `seed_playbook_defaults`, `seed_win_loss_defaults`, `update_deal_amount`, `move_deal` (legado — o app usa `move_deal_atomic`), etc. Todos chamados por edge functions com `service_role` ou por cron.
 
-**Política (ADR-022):** novo WARN CRITICAL/HIGH bloqueia deploy. Novo WARN precisa ser anexado a esta tabela com justificativa ou corrigido. Ratchet enforçado por `scripts/check-backend-linter-baseline.mjs`.
+**Política (ADR-022):** novo CRITICAL/HIGH bloqueia deploy. Novo WARN precisa ser anexado a esta tabela com justificativa ou corrigido. Ratchet enforçado por `scripts/check-backend-linter-baseline.mjs` (`BASELINE = 12`).
 
-**Revalidação:** `supabase--linter` (sem argumentos). Baseline atual: **36 WARN**.
+**Revalidação:** `supabase--linter` (sem argumentos). Baseline atual: **12 WARN** (piso arquitetural — Rodada 42/10).
