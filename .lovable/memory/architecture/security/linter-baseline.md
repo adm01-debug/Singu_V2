@@ -1,31 +1,44 @@
 ---
 name: Supabase Linter Baseline
-description: Baseline de findings do supabase linter aceitos com justificativa. Zero CRITICAL/HIGH; apenas 3 WARNs documentados (extension in public + 2 buckets públicos intencionais).
+description: Baseline de findings do supabase linter aceitos com justificativa. Zero CRITICAL/HIGH; 46 WARNs documentados (3 infra + 9 endpoints públicos anon + 34 RPCs para authenticated).
 type: constraint
 ---
-**Auditoria executada na Rodada F (Etapa 1) — Excellence 10/10.**
-**Revalidada na Rodada O (Ação 3) — tentativa de mover `pg_net` falhou por limitação da extensão.**
-**Atualizada na Rodada P (hardening SECURITY DEFINER) — 9 WARNs de `function_search_path_mutable` / execução pública agora são intencionais e restritos.**
+**Atualizada na Rodada 32/10 — Onda F (Backend Linter Baseline Reduction).**
+Redução de 109 → 46 WARNs (−58%) via `REVOKE EXECUTE` em 7 funções internas expostas a `anon` + 33 funções trigger + 23 funções internas RPC expostas a `authenticated`.
 
-**Resultado:** 0 CRITICAL, 0 HIGH, 12 WARN — todos aceitos com justificativa abaixo.
+**Resultado:** 0 CRITICAL, 0 HIGH, 46 WARN — todos aceitos com justificativa abaixo.
 
-| # | Lint | Severidade | Justificativa |
-|---|------|-----------|---------------|
-| 1 | `0014_extension_in_public` (`pg_net`) | WARN | A extensão `pg_net` está no schema `public`. Tentativa de `ALTER EXTENSION pg_net SET SCHEMA extensions` falhou com `0A000: extension "pg_net" does not support SET SCHEMA` (Rodada O, Ação 3). DROP+CREATE não é viável pois `pg_net` é utilizada por cron jobs internos do Supabase; remover quebraria automações. Risco: nulo (extensão oficial do Supabase, sem superfície de ataque exposta). |
-| 2 | `0025_public_bucket_allows_listing` (bucket `company-logos`) | WARN | Bucket público intencional para servir logos em listagens não autenticadas (cards, /lp/*). Já protegido por RLS de upload por owner em `{userId}/{companyId}/`. Listagem de URLs públicas não vaza dados sensíveis. |
-| 3 | `0025_public_bucket_allows_listing` (bucket de avatares/ativos públicos) | WARN | Mesma justificativa: bucket de assets públicos servidos em UI não autenticada. RLS de upload garante owner-only. |
-| 4 | `0011_function_search_path_mutable` / execução pública em `public.get_deal_room_by_token(text)` | WARN | Endpoint do **buyer portal** (rota `/deal-room/:token`), consumido sem sessão. `SET search_path=public, pg_temp` aplicado; `GRANT EXECUTE` mantido para `anon`. |
-| 5 | idem em `public.record_deal_room_view(text)` | WARN | Contador de views do buyer portal — chamado pelo mesmo fluxo público. Search_path fixo, `anon` autorizado. |
-| 6 | idem em `public.get_landing_page_by_slug(text)` | WARN | Renderiza LP pública `/lp/:slug`. Retorna apenas colunas seguras via `landing_pages_public`. `anon` autorizado. |
-| 7 | idem em `public.submit_landing_form(uuid, jsonb)` | WARN | Captura de leads públicos em LPs. Valida payload via Zod na Edge Function acima, `anon` autorizado. |
-| 8 | idem em `public.increment_form_view(uuid)` | WARN | Métrica de exibição de formulários públicos. `anon` autorizado. |
-| 9 | idem em `public.submit_form(uuid, jsonb)` | WARN | Submissão de `forms_public`. Search_path fixo, `anon` autorizado. |
-| 10 | idem em `public.increment_magnet_view(uuid)` | WARN | Métrica de exibição de lead magnets públicos. `anon` autorizado. |
-| 11 | idem em `public.record_magnet_download(uuid, jsonb)` | WARN | Download rastreado de lead magnets. `anon` autorizado. |
-| 12 | idem em `public.submit_csat_response(uuid, jsonb)` | WARN | Coleta de CSAT via link público. `anon` autorizado. |
+## Infra (3)
+| # | Lint | Justificativa |
+|---|------|---------------|
+| 1 | `0014_extension_in_public` (`pg_net`) | Extensão oficial Supabase; `SET SCHEMA` não suportado (`0A000`). Sem superfície de ataque exposta. |
+| 2 | `0025_public_bucket_allows_listing` (`company-logos`) | Bucket público intencional; RLS de upload owner-only em `{userId}/{companyId}/`. |
+| 3 | `0025_public_bucket_allows_listing` (assets públicos) | Idem — UI não autenticada. |
 
-**Nota Rodada P:** todas as outras ~60 funções `SECURITY DEFINER` sofreram `REVOKE EXECUTE FROM PUBLIC, anon` e ficam disponíveis apenas para `authenticated`/`service_role`. As 9 acima são a superfície pública mínima necessária para buyer portal, landing pages, formulários e CSAT — documentadas aqui para não serem retrabalhadas em auditorias futuras.
+## Endpoints públicos — `anon` EXECUTE mantido (9)
+Buyer portal, landing pages, forms e magnets — consumidos por rotas sem sessão. Todos com `SET search_path=public, pg_temp` e validação server-side.
 
-**Política:** novos findings CRITICAL/HIGH devem ser corrigidos imediatamente; novos WARN devem ser anexados a esta tabela com justificativa ou corrigidos.
+`buyer_add_comment`, `buyer_toggle_milestone`, `get_buyer_document_path`, `get_deal_room_by_token`, `record_buyer_view`, `submit_public_form`, `track_magnet_download`, `increment_form_view`, `increment_magnet_view`.
 
-**Comando para revalidação:** `supabase--linter` (sem argumentos).
+## RPCs autenticados — `authenticated` EXECUTE mantido (34)
+Chamados via `supabase.rpc()` no client autenticado. Cada função valida `auth.uid()` ou recebe `_user_id`/`p_user_id` cross-checado contra `auth.uid()`.
+
+- **RBAC/utilitários:** `has_role`, `increment_webhook_quota`, `reset_daily_lead_counts`.
+- **Deals & Forecast:** `move_deal_atomic` (2 overloads), `dismiss_revops_alert`, `compute_attribution`, `compute_revops_kpis`, `publish_mtta_sla_breach_alert`, `get_marketing_funnel_stats`.
+- **Contas & CS:** `compute_account_health`, `cs_renewal_pipeline`, `evaluate_mql`, `enroll_contact_in_workflow`.
+- **Lead scoring:** `get_score_explicability`, `seed_lead_score_defaults`.
+- **Connections:** `get_connection_metrics`.
+- **Busca:** `search_companies_unaccent`, `search_contacts_unaccent`, `search_interactions_unaccent`, `search_products_semantic`.
+- **Seeds/Setup:** `seed_conversation_topics`, `seed_forecast_period`.
+- **Buyer portal (anon-shared):** `buyer_add_comment`, `buyer_toggle_milestone`, `get_buyer_document_path`, `get_deal_room_by_token`, `record_buyer_view`, `submit_public_form`, `track_magnet_download`, `increment_form_view`, `increment_magnet_view`.
+- **Manutenção pipeline comportamental:** `cleanup_behavioral_regen_queue` (chamada por admin UI).
+- **Read-only bridge:** `execute_readonly_query` (validação de whitelist embutida no corpo da função).
+
+## Reduções da Rodada 32/10
+- **7 REVOKE FROM anon:** `check_behavioral_regen_cron_staleness`, `cleanup_behavioral_regen_queue`, `cleanup_simulated_alerts`, `enqueue_behavioral_profile_regen`, `get_behavioral_regen_cron_health`, `notify_admins_on_critical_behavioral_alert`, `simulate_behavioral_regen_alert`.
+- **33 REVOKE FROM authenticated (triggers):** todos os `audit_*`, `process_*_audit`, `notify_*`, `log_*`, `sync_*`, `enqueue_*` (triggers disparam via table owner).
+- **23 REVOKE FROM authenticated (internos):** `_connection_encryption_key`, `encrypt/decrypt_connection_config`, `aggregate_nlp_to_company`, `enqueue_smart_notification`, `ensure_audit_log_partition`, `cleanup_old_health_snapshots`, `search_*_semantic` variantes, `seed_deal_room`, `seed_playbook_defaults`, `seed_win_loss_defaults`, `update_deal_amount`, `move_deal` (legado — o app usa `move_deal_atomic`), etc. Todos chamados por edge functions com `service_role` ou por cron.
+
+**Política (ADR-022):** novo WARN CRITICAL/HIGH bloqueia deploy. Novo WARN precisa ser anexado a esta tabela com justificativa ou corrigido. Ratchet enforçado por `scripts/check-backend-linter-baseline.mjs`.
+
+**Revalidação:** `supabase--linter` (sem argumentos). Baseline atual: **46 WARN**.
