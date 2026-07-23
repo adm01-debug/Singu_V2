@@ -1,0 +1,58 @@
+# Prometheus alerting rules — Rodada 59/10
+# Consome metricas emitidas por ai-gateway-partitions-exporter.sh
+#
+# Instalar em: /etc/prometheus/rules/aigw_partitions.yml
+# Recarregar: curl -X POST http://prometheus:9090/-/reload
+groups:
+  - name: ai_gateway_partitions
+    interval: 1m
+    rules:
+      - alert: AiGatewayPartitionExporterDown
+        expr: max_over_time(aigw_partitions_exporter_up[15m]) < 1
+        for: 15m
+        labels:
+          severity: warning
+          component: ai-gateway-metrics
+        annotations:
+          summary: "Exporter de particoes do AI Gateway parou de emitir metricas"
+          description: "Nenhum sucesso do exporter em 15min — verifique cron/psql em {{ $labels.instance }}."
+
+      - alert: AiGatewayPartitionBloatBytes
+        expr: aigw_partition_bytes > 524288000
+        for: 30m
+        labels:
+          severity: warning
+          component: ai-gateway-metrics
+        annotations:
+          summary: "Particao {{ $labels.partition }} passou de 500 MB"
+          description: "Investigar taxa de ingestao ou reduzir retencao. Tamanho atual: {{ $value | humanize1024 }}B."
+
+      - alert: AiGatewayPartitionBloatRows
+        expr: aigw_partition_rows > 5000000
+        for: 30m
+        labels:
+          severity: warning
+          component: ai-gateway-metrics
+        annotations:
+          summary: "Particao {{ $labels.partition }} passou de 5M linhas"
+          description: "Avaliar sampling em fetchAI ou reduzir retencao. Linhas estimadas: {{ $value }}."
+
+      - alert: AiGatewayPartitionExpiringNotDropped
+        expr: aigw_partitions_expiring_not_dropped > 0
+        for: 2h
+        labels:
+          severity: warning
+          component: ai-gateway-metrics
+        annotations:
+          summary: "Existem particoes fora da janela de 90d que nao foram removidas"
+          description: "Cron pg_cron ai-gateway-metrics-drop-old pode ter falhado. Rodar manualmente: SELECT public.drop_old_ai_gateway_metrics_partitions(90);"
+
+      - alert: AiGatewayNoCurrentPartition
+        expr: sum(aigw_partition_is_current) < 1
+        for: 10m
+        labels:
+          severity: critical
+          component: ai-gateway-metrics
+        annotations:
+          summary: "Nao ha particao cobrindo o mes atual"
+          description: "INSERTs em ai_gateway_metrics irao falhar. Rodar SELECT public.ensure_ai_gateway_metrics_partition(CURRENT_DATE);"
