@@ -1,0 +1,1 @@
+DELETE FROM public.rpc_perf_samples WHERE rpc_name = 'load_test_rpc';
