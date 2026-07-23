@@ -483,6 +483,51 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_gateway_metrics: {
+        Row: {
+          created_at: string
+          duration_ms: number
+          error_code: string | null
+          error_message: string | null
+          function_name: string
+          http_status: number | null
+          id: string
+          model: string | null
+          status: string
+          tokens_in: number | null
+          tokens_out: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          duration_ms: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name?: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status?: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       ai_recommendation_audit_logs: {
         Row: {
           contact_id: string
@@ -14638,6 +14683,7 @@ export type Database = {
       }
       evaluate_mql: { Args: { _contact_id: string }; Returns: Json }
       execute_readonly_query: { Args: { query_text: string }; Returns: Json }
+      get_ai_gateway_health: { Args: { _hours?: number }; Returns: Json }
       get_behavioral_regen_cron_health: {
         Args: never
         Returns: {
