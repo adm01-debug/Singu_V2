@@ -86,7 +86,8 @@ export function useEnrichSocialProfiles(contactId: string, socials: ExternalSoci
     onSuccess: (results) => {
       const ok = results.filter((r) => r.ok).length;
       const fail = results.length - ok;
-      if (ok > 0) toast.success(`${ok} perfil(is) sincronizado(s)${fail > 0 ? ` · ${fail} falha(s)` : ''}`);
+      const failSuffix = fail > 0 ? ` · ${fail} falha(s)` : '';
+      if (ok > 0) toast.success(`${ok} perfil(is) sincronizado(s)${failSuffix}`);
       else toast.error('Nenhum perfil pôde ser sincronizado.');
       queryClient.invalidateQueries({ queryKey: ['social-intelligence', contactId] });
       queryClient.invalidateQueries({ queryKey: ['social-insights-history', contactId] });

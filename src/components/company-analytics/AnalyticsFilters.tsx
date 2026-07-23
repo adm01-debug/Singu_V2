@@ -1,9 +1,11 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import type { AnalyticsContact } from '@/hooks/useCompanyProfileAnalytics';
 
+type AnalyticsDays = 30 | 90 | 180;
+
 interface Props {
-  days: 30 | 90 | 180;
-  onDaysChange: (d: 30 | 90 | 180) => void;
+  days: AnalyticsDays;
+  onDaysChange: (d: AnalyticsDays) => void;
   contactId: string | null;
   onContactChange: (id: string | null) => void;
   contacts: AnalyticsContact[];
@@ -12,7 +14,7 @@ interface Props {
 export function AnalyticsFilters({ days, onDaysChange, contactId, onContactChange, contacts }: Props) {
   return (
     <div className="flex flex-col sm:flex-row gap-3">
-      <Select value={String(days)} onValueChange={(v) => onDaysChange(Number(v) as 30 | 90 | 180)}>
+      <Select value={String(days)} onValueChange={(v) => onDaysChange(Number(v) as AnalyticsDays)}>
         <SelectTrigger className="w-full sm:w-40" aria-label="Período">
           <SelectValue placeholder="Período" />
         </SelectTrigger>
