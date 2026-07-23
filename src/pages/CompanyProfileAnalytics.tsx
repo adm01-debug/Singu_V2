@@ -57,8 +57,10 @@ const CompanyProfileAnalytics = () => {
             backTo={companyId ? `/empresas/${companyId}` : '/empresas'}
             backLabel="Empresa"
             title="Analytics de Perfil"
-            description="Interesses, timeline e canais preferidos dos contatos vinculados"
           />
+          <p className="text-sm text-muted-foreground mt-1">
+            Interesses, timeline e canais preferidos dos contatos vinculados
+          </p>
         </div>
 
         <div className="px-4 md:px-6 py-6 space-y-6">
