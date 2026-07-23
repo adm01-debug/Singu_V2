@@ -14681,6 +14681,7 @@ export type Database = {
         Args: { target_date?: string }
         Returns: undefined
       }
+      evaluate_ai_gateway_alerts: { Args: never; Returns: number }
       evaluate_mql: { Args: { _contact_id: string }; Returns: Json }
       execute_readonly_query: { Args: { query_text: string }; Returns: Json }
       get_ai_gateway_health: { Args: { _hours?: number }; Returns: Json }
