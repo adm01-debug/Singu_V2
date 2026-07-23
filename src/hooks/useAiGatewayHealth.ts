@@ -31,6 +31,24 @@ export interface AiGatewayActiveAlert {
   created_at: string;
 }
 
+export interface AiGatewayResolvedRow {
+  id: string;
+  alert_type: string;
+  severity: string;
+  message: string;
+  created_at: string;
+  acknowledged_at: string;
+  mttr_minutes: number | null;
+  auto_resolved: boolean | null;
+}
+
+export interface AiGatewayMttrRow {
+  alert_type: string;
+  resolved_count: number;
+  avg_mttr_minutes: number | null;
+  max_mttr_minutes: number | null;
+}
+
 export interface AiGatewayHealth {
   window_hours: number;
   computed_at: string;
@@ -47,6 +65,8 @@ export interface AiGatewayHealth {
   by_function: AiGatewayFunctionRow[];
   by_model: AiGatewayModelRow[];
   active_alerts: AiGatewayActiveAlert[];
+  resolved_recent: AiGatewayResolvedRow[];
+  resolved_mttr: AiGatewayMttrRow[];
 }
 
 export function useAiGatewayHealth(hours = 24) {
