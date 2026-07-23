@@ -21,6 +21,7 @@ const GlobalSearch = lazy(() => import('@/components/search/GlobalSearch').then(
 
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useKeyboardShortcutsEnhanced } from '@/hooks/useKeyboardShortcutsEnhanced';
+import { useAiGatewayCriticalToast } from '@/hooks/useAiGatewayCriticalToast';
 import { SkipToContent, SmartBreadcrumbs } from '@/components/navigation/NavigationPatterns';
 import { PageTransition } from '@/components/navigation/PageTransition';
 import { SwipeBackIndicator } from '@/components/navigation/SwipeBackIndicator';
@@ -84,6 +85,7 @@ function getBreadcrumbs(pathname: string, pageTitle: string): { label: string; p
 
 function AppLayoutInner({ children, title }: AppLayoutProps) {
   useRageClickDetector();
+  useAiGatewayCriticalToast();
   const { isOpen, setIsOpen } = useGlobalSearch();
   const [cmdBarOpen, setCmdBarOpen] = useState(false);
   const [legacySearchOpen, setLegacySearchOpen] = useState(false);
