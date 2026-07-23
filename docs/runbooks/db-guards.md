@@ -110,3 +110,8 @@
 
 ## timeline-divergence-guard
 **Sintoma:** timeline_id divergente. **Mitigacao:** reconstruir standby.
+## ai-gateway-health-slow
+**Sintoma:** p95 da RPC `get_ai_gateway_health` > 800ms por 10min. **Mitigação:** conferir bloat/partições de `ai_gateway_metrics`, reduzir janela do heatmap, checar contenção em `system_alerts`.
+
+## rpc-perf-degradation
+**Sintoma:** p95(1h) de qualquer RPC instrumentada ≥ 1,5× o baseline de 24h. **Mitigação:** identificar RPC no painel `/admin/error-budget` (card "Top 5 RPCs mais lentas"), rodar `EXPLAIN (ANALYZE, BUFFERS)` na chamada afetada, avaliar índices ou planos que mudaram, verificar cargas concorrentes anômalas.
