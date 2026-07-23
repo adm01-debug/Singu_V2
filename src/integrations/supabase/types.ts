@@ -528,6 +528,321 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_gateway_metrics_2026_04: {
+        Row: {
+          created_at: string
+          duration_ms: number
+          error_code: string | null
+          error_message: string | null
+          function_name: string
+          http_status: number | null
+          id: string
+          model: string | null
+          status: string
+          tokens_in: number | null
+          tokens_out: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          duration_ms: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name?: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status?: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      ai_gateway_metrics_2026_05: {
+        Row: {
+          created_at: string
+          duration_ms: number
+          error_code: string | null
+          error_message: string | null
+          function_name: string
+          http_status: number | null
+          id: string
+          model: string | null
+          status: string
+          tokens_in: number | null
+          tokens_out: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          duration_ms: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name?: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status?: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      ai_gateway_metrics_2026_06: {
+        Row: {
+          created_at: string
+          duration_ms: number
+          error_code: string | null
+          error_message: string | null
+          function_name: string
+          http_status: number | null
+          id: string
+          model: string | null
+          status: string
+          tokens_in: number | null
+          tokens_out: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          duration_ms: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name?: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status?: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      ai_gateway_metrics_2026_07: {
+        Row: {
+          created_at: string
+          duration_ms: number
+          error_code: string | null
+          error_message: string | null
+          function_name: string
+          http_status: number | null
+          id: string
+          model: string | null
+          status: string
+          tokens_in: number | null
+          tokens_out: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          duration_ms: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name?: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status?: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      ai_gateway_metrics_2026_08: {
+        Row: {
+          created_at: string
+          duration_ms: number
+          error_code: string | null
+          error_message: string | null
+          function_name: string
+          http_status: number | null
+          id: string
+          model: string | null
+          status: string
+          tokens_in: number | null
+          tokens_out: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          duration_ms: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name?: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status?: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      ai_gateway_metrics_2026_09: {
+        Row: {
+          created_at: string
+          duration_ms: number
+          error_code: string | null
+          error_message: string | null
+          function_name: string
+          http_status: number | null
+          id: string
+          model: string | null
+          status: string
+          tokens_in: number | null
+          tokens_out: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          duration_ms: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name?: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status?: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      ai_gateway_metrics_2026_10: {
+        Row: {
+          created_at: string
+          duration_ms: number
+          error_code: string | null
+          error_message: string | null
+          function_name: string
+          http_status: number | null
+          id: string
+          model: string | null
+          status: string
+          tokens_in: number | null
+          tokens_out: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          duration_ms: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number
+          error_code?: string | null
+          error_message?: string | null
+          function_name?: string
+          http_status?: number | null
+          id?: string
+          model?: string | null
+          status?: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       ai_recommendation_audit_logs: {
         Row: {
           contact_id: string
@@ -14659,6 +14974,10 @@ export type Database = {
         Returns: Json
       }
       dismiss_revops_alert: { Args: { _alert_id: string }; Returns: boolean }
+      drop_old_ai_gateway_metrics_partitions: {
+        Args: { retention_days?: number }
+        Returns: number
+      }
       encrypt_connection_config: { Args: { p_config: Json }; Returns: string }
       enqueue_smart_notification: {
         Args: {
@@ -14676,6 +14995,10 @@ export type Database = {
       }
       enroll_contact_in_workflow: {
         Args: { _contact_id: string; _workflow_id: string }
+        Returns: string
+      }
+      ensure_ai_gateway_metrics_partition: {
+        Args: { target_month?: string }
         Returns: string
       }
       ensure_audit_log_partition: {
