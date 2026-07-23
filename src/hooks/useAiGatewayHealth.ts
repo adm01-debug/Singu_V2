@@ -26,8 +26,7 @@ export interface AiGatewayActiveAlert {
   id: string;
   alert_type: string;
   severity: string;
-  title: string;
-  message: string | null;
+  message: string;
   metadata: Record<string, unknown> | null;
   created_at: string;
 }
