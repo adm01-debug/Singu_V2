@@ -41,4 +41,5 @@ Excelência sustentada: 70/70 melhorias atômicas (Rodadas A-N). Gate a11y no CI
 - [Migration Completion 11/10](mem://migration/completion-11-10) — CDC RPO=0, dual-write bake, verify SHA-256, LGPD manifest, brief executivo
 - [Migration Completion 12/10](mem://migration/completion-12-10) — CDC lag watch, dual-write diverge, schema freeze guard, secrets scan, large-object storage, sequence heal, DNS multi-region, chaos drill
 - [Migration Completion 37/10](mem://migration/completion-37-10) — Bucket B lote 5: dismiss_revops_alert, compute_attribution, enroll_contact_in_workflow, get_connection_metrics DEFINER→INVOKER; baseline 33→29 WARN
+- [Migration Completion 38/10](mem://migration/completion-38-10) — Bucket B lote 6: increment_webhook_quota, move_deal_atomic (2 overloads), publish_mtta_sla_breach_alert, reset_daily_lead_counts DEFINER→INVOKER; baseline 29→24 WARN
 - [User preferences](mem://~user) — Execução autônoma e sequencial de melhorias.
