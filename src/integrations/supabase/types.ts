@@ -15122,6 +15122,16 @@ export type Database = {
         Args: { _manager_user_id: string }
         Returns: string[]
       }
+      get_top_slow_rpcs: {
+        Args: { _hours?: number; _limit?: number }
+        Returns: {
+          max_ms: number
+          p95_ms: number
+          p99_ms: number
+          rpc_name: string
+          samples: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
