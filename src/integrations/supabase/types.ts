@@ -11614,6 +11614,27 @@ export type Database = {
           },
         ]
       }
+      rpc_perf_samples: {
+        Row: {
+          created_at: string
+          duration_ms: number
+          id: number
+          rpc_name: string
+        }
+        Insert: {
+          created_at?: string
+          duration_ms: number
+          id?: number
+          rpc_name: string
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number
+          id?: number
+          rpc_name?: string
+        }
+        Relationships: []
+      }
       sales_playbooks: {
         Row: {
           active: boolean
@@ -14955,6 +14976,7 @@ export type Database = {
         }[]
       }
       cleanup_old_health_snapshots: { Args: never; Returns: number }
+      cleanup_rpc_perf_samples: { Args: never; Returns: undefined }
       cleanup_simulated_alerts: { Args: never; Returns: number }
       compute_account_health: { Args: { _account_id: string }; Returns: Json }
       compute_attribution: {
@@ -15090,6 +15112,7 @@ export type Database = {
           stage: string
         }[]
       }
+      get_rpc_perf_stats: { Args: { _hours?: number }; Returns: Json }
       get_score_explicability: { Args: { p_contact_id: string }; Returns: Json }
       get_system_config_num: {
         Args: { _default: number; _key: string }
@@ -15166,6 +15189,10 @@ export type Database = {
       record_buyer_view: {
         Args: { _label?: string; _token: string }
         Returns: boolean
+      }
+      record_rpc_perf_sample: {
+        Args: { _duration_ms: number; _rpc_name: string }
+        Returns: undefined
       }
       reset_daily_lead_counts: { Args: never; Returns: number }
       search_companies_semantic: {

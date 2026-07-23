@@ -11,6 +11,7 @@ import { MttaSlaThresholdEditor } from '@/components/admin/MttaSlaThresholdEdito
 import { MttaAutoAckHeartbeatCard } from '@/components/admin/MttaAutoAckHeartbeatCard';
 import { AiGatewayHealthCard } from '@/components/admin/AiGatewayHealthCard';
 import { AiGatewayPartitionsCard } from '@/components/admin/AiGatewayPartitionsCard';
+import { RpcPerfCard } from '@/components/admin/RpcPerfCard';
 
 function StatCard({
   title,
@@ -200,6 +201,8 @@ export default function ErrorBudget() {
       <AiGatewayHealthCard />
 
       <AiGatewayPartitionsCard />
+
+      <RpcPerfCard />
 
       <Card>
         <CardHeader>
