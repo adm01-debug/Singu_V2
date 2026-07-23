@@ -1,12 +1,12 @@
 ---
 name: Supabase Linter Baseline
-description: Baseline de findings do supabase linter aceitos com justificativa. Zero CRITICAL/HIGH; 39 WARNs documentados (3 infra + 9 endpoints públicos anon + 27 RPCs para authenticated).
+description: Baseline de findings do supabase linter aceitos com justificativa. Zero CRITICAL/HIGH; 36 WARNs documentados (3 infra + 9 endpoints públicos anon + 24 RPCs para authenticated).
 type: constraint
 ---
-**Atualizada na Rodada 32/10 — Onda F (Backend Linter Baseline Reduction).**
-Redução de 109 → 46 WARNs (−58%) via `REVOKE EXECUTE` em 7 funções internas expostas a `anon` + 33 funções trigger + 23 funções internas RPC expostas a `authenticated`.
+**Atualizada na Rodada 35/10 — Onda G Bucket B (lote 3).**
+**Resultado atual:** 0 CRITICAL, 0 HIGH, **36 WARN**.
 
-**Resultado (após Rodada 34/10):** 0 CRITICAL, 0 HIGH, **39 WARN** — todos aceitos com justificativa abaixo.
+**Rodada 35/10:** `seed_lead_score_defaults`, `seed_conversation_topics`, `seed_forecast_period` convertidos DEFINER → INVOKER. Cada função guarda `auth.uid() = _user_id` e RLS de `lead_score_thresholds`, `lead_score_rules`, `conversation_topics_catalog`, `forecast_periods`, `forecast_quota_settings` aplica-se ao caller.
 
 **Rodada 33/10 (Onda G Bucket B parcial):** `search_companies_unaccent`, `search_contacts_unaccent`, `search_interactions_unaccent`, `search_products_semantic` convertidos DEFINER → INVOKER. RLS passa a valer na sessão do caller; `search_path` inclui `extensions` para pg_trgm.
 
@@ -45,4 +45,4 @@ Chamados via `supabase.rpc()` no client autenticado. Cada função valida `auth.
 
 **Política (ADR-022):** novo WARN CRITICAL/HIGH bloqueia deploy. Novo WARN precisa ser anexado a esta tabela com justificativa ou corrigido. Ratchet enforçado por `scripts/check-backend-linter-baseline.mjs`.
 
-**Revalidação:** `supabase--linter` (sem argumentos). Baseline atual: **46 WARN**.
+**Revalidação:** `supabase--linter` (sem argumentos). Baseline atual: **36 WARN**.
