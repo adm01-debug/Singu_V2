@@ -1,0 +1,44 @@
+groups:
+  - name: rpc-performance
+    interval: 30s
+    rules:
+      - alert: AiGatewayHealthRpcSlow
+        expr: rpc_perf_latency_ms{rpc="get_ai_gateway_health",quantile="0.95"} > 800
+        for: 10m
+        labels:
+          severity: high
+          service: ai-gateway
+          component: rpc
+        annotations:
+          summary: "RPC get_ai_gateway_health p95 acima de 800ms por 10min"
+          description: |
+            p95 atual: {{ $value }}ms (threshold 800ms).
+            Investigar: partition pruning, bloat da tabela ai_gateway_metrics,
+            queries paralelas, ou aumento súbito de alertas em system_alerts.
+          runbook: "docs/runbooks/db-guards.md#ai-gateway-health-slow"
+
+      - alert: RpcPerfSamplesMissing
+        expr: absent(rpc_perf_samples_total{rpc="get_ai_gateway_health"})
+        for: 15m
+        labels:
+          severity: warning
+          service: ai-gateway
+          component: exporter
+        annotations:
+          summary: "Sem amostras de perf da RPC get_ai_gateway_health por 15min"
+          description: |
+            Exporter rpc-perf-exporter.sh pode estar quebrado ou a RPC não está
+            sendo chamada pelo painel /admin/error-budget. Confirmar cron e login admin.
+
+      - alert: RpcPerfCriticalP99
+        expr: rpc_perf_latency_ms{rpc="get_ai_gateway_health",quantile="0.99"} > 2500
+        for: 5m
+        labels:
+          severity: critical
+          service: ai-gateway
+          component: rpc
+        annotations:
+          summary: "RPC get_ai_gateway_health p99 crítico (>2.5s)"
+          description: |
+            p99 atual: {{ $value }}ms. Impacto direto no tempo de carga do painel de
+            observabilidade. Considerar redução da janela ou skip do heatmap.
