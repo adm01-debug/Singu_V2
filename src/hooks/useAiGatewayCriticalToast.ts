@@ -18,7 +18,7 @@ interface CriticalAlertRow {
  * Poll a cada 60s para casar com a janela do avaliador (5min).
  */
 export function useAiGatewayCriticalToast(): void {
-  const isAdmin = useIsAdmin();
+  const { isAdmin } = useIsAdmin();
   const seenRef = useRef<Set<string>>(new Set());
 
   const { data } = useQuery({
@@ -44,7 +44,7 @@ export function useAiGatewayCriticalToast(): void {
 
   useEffect(() => {
     if (!data) return;
-    for (const alert of data) {
+    for (const alert of data as CriticalAlertRow[]) {
       if (seenRef.current.has(alert.id)) continue;
       seenRef.current.add(alert.id);
       toast.error(alert.message, {
