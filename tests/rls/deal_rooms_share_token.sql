@@ -70,11 +70,11 @@ BEGIN
   RAISE NOTICE '✅ anon tem UPDATE apenas nas colunas de view';
 END $$;
 
-\echo 'TEST: anon SEM UPDATE em colunas sensíveis (name, share_token, user_id)'
+\echo 'TEST: anon SEM UPDATE em colunas sensíveis (title, share_token, user_id)'
 DO $$
 BEGIN
-  IF has_column_privilege('anon','public.deal_rooms','name','UPDATE') THEN
-    RAISE EXCEPTION '❌ anon pode alterar name';
+  IF has_column_privilege('anon','public.deal_rooms','title','UPDATE') THEN
+    RAISE EXCEPTION '❌ anon pode alterar title';
   END IF;
   IF has_column_privilege('anon','public.deal_rooms','share_token','UPDATE') THEN
     RAISE EXCEPTION '❌ anon pode alterar share_token';
