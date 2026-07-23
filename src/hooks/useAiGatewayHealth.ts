@@ -49,6 +49,16 @@ export interface AiGatewayMttrRow {
   max_mttr_minutes: number | null;
 }
 
+export interface AiGatewayHeatmapCell {
+  dow: number; // 1..7 (ISO)
+  hour: number; // 0..23
+  requests: number;
+  errors: number;
+  error_rate_pct: number | null;
+}
+
+export interface AiGatewayWorstWindow extends AiGatewayHeatmapCell {}
+
 export interface AiGatewayHealth {
   window_hours: number;
   computed_at: string;
@@ -67,6 +77,8 @@ export interface AiGatewayHealth {
   active_alerts: AiGatewayActiveAlert[];
   resolved_recent: AiGatewayResolvedRow[];
   resolved_mttr: AiGatewayMttrRow[];
+  error_heatmap: AiGatewayHeatmapCell[];
+  worst_windows: AiGatewayWorstWindow[];
 }
 
 export function useAiGatewayHealth(hours = 24) {
