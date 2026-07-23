@@ -6,7 +6,9 @@ type: constraint
 **Atualizada na Rodada 32/10 — Onda F (Backend Linter Baseline Reduction).**
 Redução de 109 → 46 WARNs (−58%) via `REVOKE EXECUTE` em 7 funções internas expostas a `anon` + 33 funções trigger + 23 funções internas RPC expostas a `authenticated`.
 
-**Resultado:** 0 CRITICAL, 0 HIGH, 46 WARN — todos aceitos com justificativa abaixo.
+**Resultado (após Rodada 33/10):** 0 CRITICAL, 0 HIGH, **42 WARN** — todos aceitos com justificativa abaixo.
+
+**Rodada 33/10 (Onda G Bucket B parcial):** `search_companies_unaccent`, `search_contacts_unaccent`, `search_interactions_unaccent`, `search_products_semantic` convertidos DEFINER → INVOKER. RLS passa a valer na sessão do caller; `search_path` inclui `extensions` para pg_trgm.
 
 ## Infra (3)
 | # | Lint | Justificativa |
