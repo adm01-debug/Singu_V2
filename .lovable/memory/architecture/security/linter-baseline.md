@@ -3,8 +3,10 @@ name: Supabase Linter Baseline
 description: Baseline de findings do supabase linter aceitos com justificativa. Zero CRITICAL/HIGH; 36 WARNs documentados (3 infra + 9 endpoints públicos anon + 24 RPCs para authenticated).
 type: constraint
 ---
-**Atualizada na Rodada 35/10 — Onda G Bucket B (lote 3).**
-**Resultado atual:** 0 CRITICAL, 0 HIGH, **36 WARN**.
+**Atualizada na Rodada 36/10 — Onda G Bucket B (lote 4).**
+**Resultado atual:** 0 CRITICAL, 0 HIGH, **33 WARN**.
+
+**Rodada 36/10:** `compute_revops_kpis`, `compute_account_health`, `evaluate_mql` convertidas DEFINER → INVOKER. Guards de `auth.uid()` mantidos/reforçados; RLS das tabelas de RevOps, CS e MQL valem no caller.
 
 **Rodada 35/10:** `seed_lead_score_defaults`, `seed_conversation_topics`, `seed_forecast_period` convertidos DEFINER → INVOKER. Cada função guarda `auth.uid() = _user_id` e RLS de `lead_score_thresholds`, `lead_score_rules`, `conversation_topics_catalog`, `forecast_periods`, `forecast_quota_settings` aplica-se ao caller.
 
