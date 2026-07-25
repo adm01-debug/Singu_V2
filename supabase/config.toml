@@ -1,1 +1,4 @@
 project_id = "hjhthvzwtvwgdrochcam"
+
+[functions.migrate-helper]
+verify_jwt = false
