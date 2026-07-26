@@ -134,3 +134,18 @@
 **Notas**
 - Cron `capture-degraded-rpc-plans` roda a cada 15 min e só grava quando o hash estrutural muda.
 - Retenção: 30 dias. `reason` com sufixo `+estimated` = plano sem ANALYZE (RPC admin-only).
+
+## rpc-plan-regression-diff
+
+**Sintoma:** alerta `RpcPlanRegression` — snapshot com `plan_changed=true` nas últimas 6h.
+
+**Diagnóstico**
+1. `/admin/error-budget` → card "Snapshots de plano de execução" → clicar na linha da RPC.
+2. O diff lado a lado marca nós `alterado/novo/removido`; badge vermelho de "Regressão de
+   varredura" aparece quando um `Index Scan` virou `Seq Scan`.
+3. Via SQL: `SELECT slot, plan_hash, total_cost FROM public.get_rpc_plan_diff('<rpc>');`
+
+**Mitigação**
+- `ANALYZE public.<tabela>;` se as estatísticas estiverem desatualizadas.
+- Recriar índice ausente / conferir `invalid-indexes-guard.sql`.
+- Se o custo total subiu >3×, abrir ticket P2 e correlacionar com `RpcPerfDegradation`.
