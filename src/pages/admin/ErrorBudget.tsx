@@ -12,6 +12,7 @@ import { MttaAutoAckHeartbeatCard } from '@/components/admin/MttaAutoAckHeartbea
 import { AiGatewayHealthCard } from '@/components/admin/AiGatewayHealthCard';
 import { AiGatewayPartitionsCard } from '@/components/admin/AiGatewayPartitionsCard';
 import { RpcPerfCard } from '@/components/admin/RpcPerfCard';
+import { RpcPlanSnapshotsCard } from '@/components/admin/RpcPlanSnapshotsCard';
 
 function StatCard({
   title,
@@ -203,6 +204,7 @@ export default function ErrorBudget() {
       <AiGatewayPartitionsCard />
 
       <RpcPerfCard />
+      <RpcPlanSnapshotsCard />
 
       <Card>
         <CardHeader>
