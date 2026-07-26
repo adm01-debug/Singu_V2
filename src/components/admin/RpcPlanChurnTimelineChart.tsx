@@ -33,14 +33,20 @@ const P95_THRESHOLD_MS = 800;
 export function RpcPlanChurnTimelineChart({ rpcName, hours = 24 }: RpcPlanChurnTimelineChartProps) {
   const { data, isLoading, error } = useRpcPlanChurnTimeline(rpcName, hours);
 
-  const points = useMemo(
-    () =>
-      (Array.isArray(data) ? data : []).map((p) => ({
+  const points = useMemo(() => {
+    const rows = Array.isArray(data) ? data : [];
+    // Janelas longas (>48h) precisam de dia no rótulo para não repetir a mesma hora.
+    const longWindow = hours > 48;
+    return rows.map((p) => {
+      const d = new Date(p.bucket);
+      return {
         ...p,
-        label: new Date(p.bucket).toLocaleTimeString('pt-BR', { hour: '2-digit' }) + 'h',
-      })),
-    [data],
-  );
+        label: longWindow
+          ? d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
+          : `${d.toLocaleTimeString('pt-BR', { hour: '2-digit' })}h`,
+      };
+    });
+  }, [data, hours]);
 
   const hasSignal = points.some((p) => p.plan_changes > 0 || p.samples > 0);
   const maxP95 = points.reduce((acc, p) => Math.max(acc, p.p95_ms), 0);
