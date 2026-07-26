@@ -3,6 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { AlertTriangle, Activity, Shuffle } from 'lucide-react';
 import { useRpcPlanChurn, type RpcPlanChurnRow } from '@/hooks/useRpcPlanChurn';
 import { useRpcPerfStats } from '@/hooks/useRpcPerfStats';
@@ -10,6 +17,7 @@ import { RpcPlanDiffDialog } from '@/components/admin/RpcPlanDiffDialog';
 import { RpcPlanChurnTimelineChart } from '@/components/admin/RpcPlanChurnTimelineChart';
 
 const CHURN_WINDOW_HOURS = 6;
+const ALL_RPCS = '__all__';
 
 function severity(changes: number): { label: string; variant: 'destructive' | 'secondary' | 'outline' } {
   if (changes >= 3) return { label: 'instável', variant: 'destructive' };
@@ -60,6 +68,7 @@ export function RpcPlanChurnCard() {
   const churn = useRpcPlanChurn(CHURN_WINDOW_HOURS);
   const perf = useRpcPerfStats(24);
   const [selectedRpc, setSelectedRpc] = useState<string | null>(null);
+  const [timelineRpc, setTimelineRpc] = useState<string>(ALL_RPCS);
 
   const items = useMemo<ChurnItem[]>(() => {
     const rows = Array.isArray(churn.data) ? churn.data : [];
@@ -71,6 +80,10 @@ export function RpcPlanChurnCard() {
   }, [churn.data, perf.data]);
 
   const unstable = items.filter((i) => i.changes >= 3).length;
+  const rpcOptions = useMemo(
+    () => Array.from(new Set(items.map((i) => i.rpc_name))).sort((a, b) => a.localeCompare(b)),
+    [items],
+  );
 
   return (
     <Card>
@@ -82,10 +95,28 @@ export function RpcPlanChurnCard() {
       </CardHeader>
       <CardContent>
         <div className="mb-4">
-          <p className="text-xs text-muted-foreground mb-1">
-            Últimas 24h — barras: trocas de plano · linha: p95 (ms)
-          </p>
-          <RpcPlanChurnTimelineChart rpcName={null} hours={24} />
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <p className="text-xs text-muted-foreground">
+              Últimas 24h — barras: trocas de plano · linha: p95 (ms)
+            </p>
+            <Select value={timelineRpc} onValueChange={setTimelineRpc}>
+              <SelectTrigger className="h-8 w-[220px] text-xs" aria-label="Filtrar timeline por RPC">
+                <SelectValue placeholder="Todas as RPCs" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={ALL_RPCS}>Todas as RPCs</SelectItem>
+                {rpcOptions.map((name) => (
+                  <SelectItem key={name} value={name}>
+                    {name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <RpcPlanChurnTimelineChart
+            rpcName={timelineRpc === ALL_RPCS ? null : timelineRpc}
+            hours={24}
+          />
         </div>
         {churn.isLoading ? (
           <Skeleton className="h-20" />
