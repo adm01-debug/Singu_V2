@@ -15162,6 +15162,15 @@ export type Database = {
           rpc_name: string
         }[]
       }
+      get_rpc_plan_churn_timeline: {
+        Args: { _hours?: number; _rpc_name?: string }
+        Returns: {
+          bucket: string
+          p95_ms: number
+          plan_changes: number
+          samples: number
+        }[]
+      }
       get_rpc_plan_diff: {
         Args: { _rpc_name: string }
         Returns: {
