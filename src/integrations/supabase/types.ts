@@ -11635,6 +11635,39 @@ export type Database = {
         }
         Relationships: []
       }
+      rpc_plan_snapshots: {
+        Row: {
+          captured_at: string
+          execution_ms: number | null
+          id: string
+          plan: Json
+          plan_hash: string
+          reason: string
+          rpc_name: string
+          total_cost: number | null
+        }
+        Insert: {
+          captured_at?: string
+          execution_ms?: number | null
+          id?: string
+          plan: Json
+          plan_hash: string
+          reason?: string
+          rpc_name: string
+          total_cost?: number | null
+        }
+        Update: {
+          captured_at?: string
+          execution_ms?: number | null
+          id?: string
+          plan?: Json
+          plan_hash?: string
+          reason?: string
+          rpc_name?: string
+          total_cost?: number | null
+        }
+        Relationships: []
+      }
       sales_playbooks: {
         Row: {
           active: boolean
@@ -14947,6 +14980,11 @@ export type Database = {
         Args: { v_contact_id: string }
         Returns: undefined
       }
+      capture_degraded_rpc_plans: { Args: never; Returns: number }
+      capture_rpc_plan: {
+        Args: { _reason?: string; _rpc_name: string }
+        Returns: string
+      }
       check_at_risk_contacts: { Args: never; Returns: undefined }
       check_behavioral_regen_cron_staleness: {
         Args: never
@@ -15113,6 +15151,19 @@ export type Database = {
         }[]
       }
       get_rpc_perf_stats: { Args: { _hours?: number }; Returns: Json }
+      get_rpc_plan_snapshots: {
+        Args: { _limit?: number; _rpc_name?: string }
+        Returns: {
+          captured_at: string
+          execution_ms: number
+          id: string
+          plan_changed: boolean
+          plan_hash: string
+          reason: string
+          rpc_name: string
+          total_cost: number
+        }[]
+      }
       get_score_explicability: { Args: { p_contact_id: string }; Returns: Json }
       get_slow_rpc_trend: {
         Args: {
