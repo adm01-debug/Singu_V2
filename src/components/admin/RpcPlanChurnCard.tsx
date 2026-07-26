@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -16,8 +17,20 @@ import { useRpcPerfStats } from '@/hooks/useRpcPerfStats';
 import { RpcPlanDiffDialog } from '@/components/admin/RpcPlanDiffDialog';
 import { RpcPlanChurnTimelineChart } from '@/components/admin/RpcPlanChurnTimelineChart';
 
-const CHURN_WINDOW_HOURS = 6;
 const ALL_RPCS = '__all__';
+
+/** Janelas suportadas para a timeline/churn (horas). */
+const WINDOW_OPTIONS = [
+  { value: '6', label: '6h' },
+  { value: '24', label: '24h' },
+  { value: '168', label: '7d' },
+] as const;
+
+const DEFAULT_WINDOW = '24';
+const VALID_WINDOWS = new Set(WINDOW_OPTIONS.map((o) => o.value));
+
+/** Janela de agregação do churn (contagem de trocas) — fixa em 6h por alinhamento com os alertas. */
+const CHURN_WINDOW_HOURS = 6;
 
 function severity(changes: number): { label: string; variant: 'destructive' | 'secondary' | 'outline' } {
   if (changes >= 3) return { label: 'instável', variant: 'destructive' };
@@ -68,7 +81,26 @@ export function RpcPlanChurnCard() {
   const churn = useRpcPlanChurn(CHURN_WINDOW_HOURS);
   const perf = useRpcPerfStats(24);
   const [selectedRpc, setSelectedRpc] = useState<string | null>(null);
-  const [timelineRpc, setTimelineRpc] = useState<string>(ALL_RPCS);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const timelineRpc = searchParams.get('churnRpc') ?? ALL_RPCS;
+  const rawWindow = searchParams.get('churnWindow') ?? DEFAULT_WINDOW;
+  const timelineWindow = VALID_WINDOWS.has(rawWindow) ? rawWindow : DEFAULT_WINDOW;
+
+  const updateParam = useCallback(
+    (key: string, value: string, defaultValue: string) => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          if (value === defaultValue) next.delete(key);
+          else next.set(key, value);
+          return next;
+        },
+        { replace: true },
+      );
+    },
+    [setSearchParams],
+  );
 
   const items = useMemo<ChurnItem[]>(() => {
     const rows = Array.isArray(churn.data) ? churn.data : [];
@@ -95,12 +127,16 @@ export function RpcPlanChurnCard() {
       </CardHeader>
       <CardContent>
         <div className="mb-4">
-          <div className="flex items-center justify-between gap-3 mb-2">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
             <p className="text-xs text-muted-foreground">
-              Últimas 24h — barras: trocas de plano · linha: p95 (ms)
+              Barras: trocas de plano · linha: p95 (ms)
             </p>
-            <Select value={timelineRpc} onValueChange={setTimelineRpc}>
-              <SelectTrigger className="h-8 w-[220px] text-xs" aria-label="Filtrar timeline por RPC">
+            <div className="flex items-center gap-2">
+            <Select
+              value={timelineRpc}
+              onValueChange={(v) => updateParam('churnRpc', v, ALL_RPCS)}
+            >
+              <SelectTrigger className="h-8 w-full md:w-[220px] text-xs" aria-label="Filtrar timeline por RPC">
                 <SelectValue placeholder="Todas as RPCs" />
               </SelectTrigger>
               <SelectContent>
@@ -112,10 +148,26 @@ export function RpcPlanChurnCard() {
                 ))}
               </SelectContent>
             </Select>
+            <Select
+              value={timelineWindow}
+              onValueChange={(v) => updateParam('churnWindow', v, DEFAULT_WINDOW)}
+            >
+              <SelectTrigger className="h-8 w-[90px] text-xs" aria-label="Janela da timeline">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {WINDOW_OPTIONS.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>
+                    {o.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            </div>
           </div>
           <RpcPlanChurnTimelineChart
             rpcName={timelineRpc === ALL_RPCS ? null : timelineRpc}
-            hours={24}
+            hours={Number(timelineWindow)}
           />
         </div>
         {churn.isLoading ? (
