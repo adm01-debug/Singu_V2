@@ -61,3 +61,18 @@ groups:
             A latência p95 na última 1h está ao menos 1,5× o baseline de 24h para {{ $labels.rpc }}.
             Investigar picos de carga, planos de query alterados, ou concorrência incomum.
           runbook: "docs/runbooks/db-guards.md#rpc-perf-degradation"
+
+      - alert: RpcPlanRegression
+        expr: max_over_time(rpc_plan_changed{}[6h]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          service: rpc
+          component: query-plan
+        annotations:
+          summary: "Plano de execução da RPC {{ $labels.rpc }} mudou nas últimas 6h"
+          description: |
+            Um snapshot com plan_changed=true foi registrado para {{ $labels.rpc }}.
+            Abrir /admin/error-budget → card "Snapshots de plano de execução" e clicar na
+            linha para ver o diff lado a lado (Index Scan → Seq Scan indica regressão real).
+          runbook: "docs/runbooks/db-guards.md#rpc-plan-regression"
