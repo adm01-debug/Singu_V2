@@ -105,3 +105,19 @@ groups:
             Alternância frequente de plano indica estatísticas instáveis, parâmetros
             voláteis (plan flip-flop) ou autovacuum/ANALYZE insuficiente na tabela base.
           runbook: "docs/runbooks/db-guards.md#rpc-plan-churn"
+      - alert: RpcPlanChurnWithLatency
+        expr: (sum by (rpc) (rpc_plan_changed) >= 2) and on (rpc) (rpc_plan_p95_ms >= 800)
+        for: 15m
+        labels:
+          severity: critical
+          service: rpc
+          component: query-plan
+        annotations:
+          summary: "RPC {{ $labels.rpc }} com churn de plano E p95 24h ≥ 800ms"
+          description: |
+            Correlação entre instabilidade de plano e degradação real de latência:
+            o planner alternou de plano ≥2× em 6h enquanto o p95 de 24h passou de 800ms.
+            Abrir /admin/error-budget → card "Churn de plano (6h)" e comparar o diff.
+            Ações típicas: ANALYZE na tabela base, ajustar n_distinct/statistics target
+            ou fixar o plano via reescrita da query.
+          runbook: "docs/runbooks/db-guards.md#rpc-plan-churn-with-latency"

@@ -178,3 +178,24 @@
 - Ajustar autovacuum (`autovacuum_analyze_scale_factor`) em tabelas de alta rotatividade.
 - Se o flip-flop vier de parâmetros voláteis, fixar plano com CTE materializada ou
   reescrever o predicado para reduzir sensibilidade à cardinalidade.
+
+## rpc-plan-churn-with-latency
+
+**Sintoma:** alerta `RpcPlanChurnWithLatency` (critical) — churn de plano ≥2× em 6h
+**e** `rpc_plan_p95_ms` (p95 das últimas 24h) ≥ 800ms para a mesma RPC. Diferente do
+`RpcPlanChurn` puro, aqui a instabilidade já se traduziu em degradação de latência real.
+
+**Diagnóstico**
+1. `/admin/error-budget` → card "Churn de plano (6h)": linhas com badge `p95 alto`.
+2. Clicar na linha para abrir o diff; procurar `Index Scan → Seq Scan`, `Nested Loop →
+   Hash Join` ou explosão de `rows` estimadas vs reais.
+3. Cruzar com `SELECT * FROM public.get_rpc_perf_stats(24);` para confirmar a janela.
+
+**Mitigação**
+- `ANALYZE` na tabela base e, se necessário, `ALTER TABLE ... ALTER COLUMN ... SET
+  STATISTICS 500` nas colunas de filtro.
+- Criar/rever índice coberto pelo predicado do plano regressado.
+- Persistindo o flip-flop, reescrever a query (CTE materializada / `LATERAL`) para reduzir
+  sensibilidade à cardinalidade estimada.
+
+**Métricas relacionadas:** `rpc_plan_changed`, `rpc_plan_p95_ms`, `rpc_plan_change_age_seconds`.
