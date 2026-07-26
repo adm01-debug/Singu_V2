@@ -7,6 +7,7 @@ import { AlertTriangle, Activity, Shuffle } from 'lucide-react';
 import { useRpcPlanChurn, type RpcPlanChurnRow } from '@/hooks/useRpcPlanChurn';
 import { useRpcPerfStats } from '@/hooks/useRpcPerfStats';
 import { RpcPlanDiffDialog } from '@/components/admin/RpcPlanDiffDialog';
+import { RpcPlanChurnTimelineChart } from '@/components/admin/RpcPlanChurnTimelineChart';
 
 const CHURN_WINDOW_HOURS = 6;
 
@@ -80,6 +81,12 @@ export function RpcPlanChurnCard() {
         </CardTitle>
       </CardHeader>
       <CardContent>
+        <div className="mb-4">
+          <p className="text-xs text-muted-foreground mb-1">
+            Últimas 24h — barras: trocas de plano · linha: p95 (ms)
+          </p>
+          <RpcPlanChurnTimelineChart rpcName={null} hours={24} />
+        </div>
         {churn.isLoading ? (
           <Skeleton className="h-20" />
         ) : churn.error ? (
