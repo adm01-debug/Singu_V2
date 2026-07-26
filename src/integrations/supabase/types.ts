@@ -11641,6 +11641,7 @@ export type Database = {
           execution_ms: number | null
           id: string
           plan: Json
+          plan_changed: boolean
           plan_hash: string
           reason: string
           rpc_name: string
@@ -11651,6 +11652,7 @@ export type Database = {
           execution_ms?: number | null
           id?: string
           plan: Json
+          plan_changed?: boolean
           plan_hash: string
           reason?: string
           rpc_name: string
@@ -11661,6 +11663,7 @@ export type Database = {
           execution_ms?: number | null
           id?: string
           plan?: Json
+          plan_changed?: boolean
           plan_hash?: string
           reason?: string
           rpc_name?: string
@@ -15151,6 +15154,14 @@ export type Database = {
         }[]
       }
       get_rpc_perf_stats: { Args: { _hours?: number }; Returns: Json }
+      get_rpc_plan_change_counts: {
+        Args: { _hours?: number }
+        Returns: {
+          changes: number
+          last_change: string
+          rpc_name: string
+        }[]
+      }
       get_rpc_plan_diff: {
         Args: { _rpc_name: string }
         Returns: {
