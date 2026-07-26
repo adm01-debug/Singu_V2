@@ -27,7 +27,7 @@ const WINDOW_OPTIONS = [
 ] as const;
 
 const DEFAULT_WINDOW = '24';
-const VALID_WINDOWS = new Set(WINDOW_OPTIONS.map((o) => o.value));
+const VALID_WINDOWS = new Set<string>(WINDOW_OPTIONS.map((o) => o.value));
 
 /** Janela de agregação do churn (contagem de trocas) — fixa em 6h por alinhamento com os alertas. */
 const CHURN_WINDOW_HOURS = 6;
