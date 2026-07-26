@@ -25,24 +25,22 @@ export interface PlanDiffRow {
   previous: PlanNode | null;
 }
 
-type Json = unknown;
-
-function asRecord(value: Json): Record<string, Json> | null {
+function asRecord(value: unknown): Record<string, unknown> | null {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
-    ? (value as Record<string, Json>)
+    ? (value as Record<string, unknown>)
     : null;
 }
 
-function numberOrNull(value: Json): number | null {
+function numberOrNull(value: unknown): number | null {
   return typeof value === 'number' && Number.isFinite(value) ? value : null;
 }
 
-function stringOrNull(value: Json): string | null {
+function stringOrNull(value: unknown): string | null {
   return typeof value === 'string' && value.length > 0 ? value : null;
 }
 
 /** Extrai o nó raiz de um payload de `EXPLAIN (FORMAT JSON)`, tolerando variações. */
-function rootOf(plan: Json): Record<string, Json> | null {
+function rootOf(plan: unknown): Record<string, unknown> | null {
   if (Array.isArray(plan)) return plan.length > 0 ? rootOf(plan[0]) : null;
   const rec = asRecord(plan);
   if (!rec) return null;
@@ -51,12 +49,12 @@ function rootOf(plan: Json): Record<string, Json> | null {
 }
 
 /** Lineariza a árvore do plano em profundidade (pré-ordem) com caminhos estáveis. */
-export function flattenPlan(plan: Json): PlanNode[] {
+export function flattenPlan(plan: unknown): PlanNode[] {
   const root = rootOf(plan);
   if (!root) return [];
 
   const out: PlanNode[] = [];
-  const walk = (node: Record<string, Json>, path: string, depth: number): void => {
+  const walk = (node: Record<string, unknown>, path: string, depth: number): void => {
     // Guarda contra árvores patológicas/circulares vindas de payloads externos.
     if (depth > 64 || out.length > 500) return;
     out.push({
@@ -84,7 +82,7 @@ function signature(node: PlanNode): string {
 }
 
 /** Compara dois planos, pareando nós pelo caminho hierárquico. */
-export function diffPlans(currentPlan: Json, previousPlan: Json): PlanDiffRow[] {
+export function diffPlans(currentPlan: unknown, previousPlan: unknown): PlanDiffRow[] {
   const current = flattenPlan(currentPlan);
   const previous = flattenPlan(previousPlan);
   const prevByPath = new Map(previous.map((n) => [n.path, n]));
