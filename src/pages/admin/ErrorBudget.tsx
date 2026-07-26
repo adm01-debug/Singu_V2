@@ -13,6 +13,7 @@ import { AiGatewayHealthCard } from '@/components/admin/AiGatewayHealthCard';
 import { AiGatewayPartitionsCard } from '@/components/admin/AiGatewayPartitionsCard';
 import { RpcPerfCard } from '@/components/admin/RpcPerfCard';
 import { RpcPlanSnapshotsCard } from '@/components/admin/RpcPlanSnapshotsCard';
+import { RpcPlanChurnCard } from '@/components/admin/RpcPlanChurnCard';
 
 function StatCard({
   title,
@@ -205,6 +206,7 @@ export default function ErrorBudget() {
 
       <RpcPerfCard />
       <RpcPlanSnapshotsCard />
+      <RpcPlanChurnCard />
 
       <Card>
         <CardHeader>
