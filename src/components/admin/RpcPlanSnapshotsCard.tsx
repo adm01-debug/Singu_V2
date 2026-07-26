@@ -1,14 +1,21 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertTriangle, GitCompare } from 'lucide-react';
 import { useRpcPlanSnapshots, type RpcPlanSnapshotRow } from '@/hooks/useRpcPlanSnapshots';
+import { RpcPlanDiffDialog } from '@/components/admin/RpcPlanDiffDialog';
 
-function SnapshotRow({ row }: { row: RpcPlanSnapshotRow }) {
+function SnapshotRow({ row, onSelect }: { row: RpcPlanSnapshotRow; onSelect: (rpc: string) => void }) {
   const changed = row.plan_changed === true;
   return (
-    <div className="flex items-center justify-between gap-3 py-2 border-b last:border-b-0">
+    <button
+      type="button"
+      onClick={() => onSelect(row.rpc_name)}
+      aria-label={`Ver diff de plano da RPC ${row.rpc_name}`}
+      className="w-full text-left flex items-center justify-between gap-3 py-2 border-b last:border-b-0 hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
+    >
       <div className="min-w-0">
         <p className="text-sm font-medium truncate">{row.rpc_name}</p>
         <p className="text-xs text-muted-foreground">
@@ -27,7 +34,7 @@ function SnapshotRow({ row }: { row: RpcPlanSnapshotRow }) {
           {row.execution_ms !== null ? ` · ${Math.round(row.execution_ms)}ms` : ''}
         </Badge>
       </div>
-    </div>
+    </button>
   );
 }
 
@@ -37,6 +44,7 @@ function SnapshotRow({ row }: { row: RpcPlanSnapshotRow }) {
  */
 export function RpcPlanSnapshotsCard() {
   const { data, isLoading, error } = useRpcPlanSnapshots(undefined, 10);
+  const [selectedRpc, setSelectedRpc] = useState<string | null>(null);
 
   if (isLoading) {
     return (
@@ -81,13 +89,20 @@ export function RpcPlanSnapshotsCard() {
           </p>
         ) : (
           <div className="divide-y">
-            {rows.map((r) => <SnapshotRow key={r.id} row={r} />)}
+            {rows.map((r) => (
+              <SnapshotRow key={r.id} row={r} onSelect={setSelectedRpc} />
+            ))}
           </div>
         )}
         <p className="text-xs text-muted-foreground mt-3">
           Retenção de 30 dias. Hash estrutural ignora tempos/linhas, então mudança de hash indica
-          regressão real de plano.
+          regressão real de plano. Clique em uma linha para ver o diff lado a lado.
         </p>
+        <RpcPlanDiffDialog
+          rpcName={selectedRpc}
+          open={selectedRpc !== null}
+          onOpenChange={(open) => !open && setSelectedRpc(null)}
+        />
       </CardContent>
     </Card>
   );
