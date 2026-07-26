@@ -76,3 +76,32 @@ groups:
             Abrir /admin/error-budget → card "Snapshots de plano de execução" e clicar na
             linha para ver o diff lado a lado (Index Scan → Seq Scan indica regressão real).
           runbook: "docs/runbooks/db-guards.md#rpc-plan-regression"
+
+      - alert: RpcPlanExporterMissing
+        expr: absent(rpc_plan_window_hours)
+        for: 15m
+        labels:
+          severity: warning
+          service: rpc
+          component: exporter
+        annotations:
+          summary: "Exporter de planos de execução sem métricas por 15min"
+          description: |
+            scripts/monitoring/rpc-plan-exporter.sh não está publicando o textfile
+            (métrica rpc_plan_window_hours ausente). Verificar cron, credenciais libpq
+            e permissão de leitura em public.rpc_plan_snapshots.
+          runbook: "docs/runbooks/db-guards.md#rpc-plan-exporter-missing"
+
+      - alert: RpcPlanChurn
+        expr: sum by (rpc) (rpc_plan_changed) >= 3
+        for: 30m
+        labels:
+          severity: high
+          service: rpc
+          component: query-plan
+        annotations:
+          summary: "RPC {{ $labels.rpc }} trocou de plano ≥3× na janela de 6h"
+          description: |
+            Alternância frequente de plano indica estatísticas instáveis, parâmetros
+            voláteis (plan flip-flop) ou autovacuum/ANALYZE insuficiente na tabela base.
+          runbook: "docs/runbooks/db-guards.md#rpc-plan-churn"
