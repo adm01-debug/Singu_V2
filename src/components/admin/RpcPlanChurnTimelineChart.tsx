@@ -3,7 +3,9 @@ import {
   Bar,
   CartesianGrid,
   ComposedChart,
+  Legend,
   Line,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -20,8 +22,12 @@ interface RpcPlanChurnTimelineChartProps {
   hours?: number;
 }
 
+/** Limite de latência aceitável (ms) — alinhado ao alerta RpcPerfDegradation. */
+const P95_THRESHOLD_MS = 800;
+
 /**
- * Rodada 68/10 — timeline horária: barras = trocas de plano, linha = p95 (ms).
+ * Rodada 68-69/10 — timeline horária: barras = trocas de plano, linha = p95 (ms),
+ * com anotação visual do threshold de 800ms e legenda.
  * Permite ver visualmente se a degradação de latência acompanha a troca de plano.
  */
 export function RpcPlanChurnTimelineChart({ rpcName, hours = 24 }: RpcPlanChurnTimelineChartProps) {
@@ -37,6 +43,8 @@ export function RpcPlanChurnTimelineChart({ rpcName, hours = 24 }: RpcPlanChurnT
   );
 
   const hasSignal = points.some((p) => p.plan_changes > 0 || p.samples > 0);
+  const maxP95 = points.reduce((acc, p) => Math.max(acc, p.p95_ms), 0);
+  const rightDomainMax = Math.max(maxP95 * 1.15, P95_THRESHOLD_MS * 1.2);
 
   if (isLoading) return <Skeleton className="h-48" />;
 
@@ -70,6 +78,7 @@ export function RpcPlanChurnTimelineChart({ rpcName, hours = 24 }: RpcPlanChurnT
             orientation="right"
             tick={{ fontSize: 11 }}
             stroke="hsl(var(--muted-foreground))"
+            domain={[0, Math.ceil(rightDomainMax)]}
           />
           <Tooltip
             contentStyle={{
@@ -82,6 +91,22 @@ export function RpcPlanChurnTimelineChart({ rpcName, hours = 24 }: RpcPlanChurnT
             formatter={(value: number, name: string) =>
               name === 'p95_ms' ? [`${value} ms`, 'p95'] : [value, 'trocas de plano']
             }
+          />
+          <Legend
+            wrapperStyle={{ fontSize: 11 }}
+            formatter={(value: string) => (value === 'p95_ms' ? 'p95 (ms)' : 'trocas de plano')}
+          />
+          <ReferenceLine
+            yAxisId="right"
+            y={P95_THRESHOLD_MS}
+            stroke="hsl(var(--destructive))"
+            strokeDasharray="4 4"
+            label={{
+              value: `limite ${P95_THRESHOLD_MS}ms`,
+              position: 'insideTopRight',
+              fill: 'hsl(var(--destructive))',
+              fontSize: 10,
+            }}
           />
           <Bar
             yAxisId="left"
