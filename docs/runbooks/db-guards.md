@@ -115,3 +115,22 @@
 
 ## rpc-perf-degradation
 **Sintoma:** p95(1h) de qualquer RPC instrumentada ≥ 1,5× o baseline de 24h. **Mitigação:** identificar RPC no painel `/admin/error-budget` (card "Top 5 RPCs mais lentas"), rodar `EXPLAIN (ANALYZE, BUFFERS)` na chamada afetada, avaliar índices ou planos que mudaram, verificar cargas concorrentes anômalas.
+
+## rpc-plan-regression
+
+**Sintoma:** card "Snapshots de plano de execução" (`/admin/error-budget`) mostra badge
+`plano alterado` para uma RPC, geralmente junto com `RpcPerfDegradation`.
+
+**Diagnóstico**
+1. `SELECT rpc_name, reason, total_cost, execution_ms, captured_at FROM public.get_rpc_plan_snapshots('<rpc>', 10);`
+2. Compare os dois últimos `plan` (jsonb) procurando por `Seq Scan` que antes era `Index Scan`,
+   ou explosão de `Total Cost`.
+
+**Mitigação**
+- `ANALYZE public.<tabela>;` quando as estatísticas estiverem desatualizadas.
+- Recriar/validar índice ausente; conferir `scripts/migration/verify/invalid-indexes-guard.sql`.
+- Captura manual: `SELECT public.capture_rpc_plan('<rpc>', 'manual');` (allowlist rígida).
+
+**Notas**
+- Cron `capture-degraded-rpc-plans` roda a cada 15 min e só grava quando o hash estrutural muda.
+- Retenção: 30 dias. `reason` com sufixo `+estimated` = plano sem ANALYZE (RPC admin-only).
