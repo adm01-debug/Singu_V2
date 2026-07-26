@@ -11,7 +11,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { AlertTriangle, Activity, Shuffle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { AlertTriangle, Activity, Shuffle, Download } from 'lucide-react';
+import {
+  churnToCsv,
+  parseChurnWindow,
+  DEFAULT_CHURN_WINDOW,
+  CHURN_WINDOW_VALUES,
+} from '@/lib/rpcChurn';
 import { useRpcPlanChurn, type RpcPlanChurnRow } from '@/hooks/useRpcPlanChurn';
 import { useRpcPerfStats } from '@/hooks/useRpcPerfStats';
 import { RpcPlanDiffDialog } from '@/components/admin/RpcPlanDiffDialog';
@@ -20,14 +27,7 @@ import { RpcPlanChurnTimelineChart } from '@/components/admin/RpcPlanChurnTimeli
 const ALL_RPCS = '__all__';
 
 /** Janelas suportadas para a timeline/churn (horas). */
-const WINDOW_OPTIONS = [
-  { value: '6', label: '6h' },
-  { value: '24', label: '24h' },
-  { value: '168', label: '7d' },
-] as const;
-
-const DEFAULT_WINDOW = '24';
-const VALID_WINDOWS = new Set<string>(WINDOW_OPTIONS.map((o) => o.value));
+const WINDOW_LABELS: Record<string, string> = { '6': '6h', '24': '24h', '168': '7d' };
 
 /** Janela de agregação do churn (contagem de trocas) — fixa em 6h por alinhamento com os alertas. */
 const CHURN_WINDOW_HOURS = 6;
@@ -84,8 +84,7 @@ export function RpcPlanChurnCard() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const timelineRpc = searchParams.get('churnRpc') ?? ALL_RPCS;
-  const rawWindow = searchParams.get('churnWindow') ?? DEFAULT_WINDOW;
-  const timelineWindow = VALID_WINDOWS.has(rawWindow) ? rawWindow : DEFAULT_WINDOW;
+  const timelineWindow = parseChurnWindow(searchParams.get('churnWindow'));
 
   const updateParam = useCallback(
     (key: string, value: string, defaultValue: string) => {
@@ -117,12 +116,32 @@ export function RpcPlanChurnCard() {
     [items],
   );
 
+  const handleExportCsv = useCallback(() => {
+    const csv = churnToCsv(items);
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `rpc-plan-churn-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }, [items]);
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base">
           <Shuffle className="w-4 h-4" /> Churn de plano ({CHURN_WINDOW_HOURS}h)
           {unstable > 0 && <Badge variant="destructive">{unstable} instável(is)</Badge>}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="ml-auto h-8 gap-1 text-xs"
+            onClick={handleExportCsv}
+            disabled={items.length === 0}
+          >
+            <Download className="w-3 h-3" /> CSV
+          </Button>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -150,15 +169,15 @@ export function RpcPlanChurnCard() {
             </Select>
             <Select
               value={timelineWindow}
-              onValueChange={(v) => updateParam('churnWindow', v, DEFAULT_WINDOW)}
+              onValueChange={(v) => updateParam('churnWindow', v, DEFAULT_CHURN_WINDOW)}
             >
               <SelectTrigger className="h-8 w-[90px] text-xs" aria-label="Janela da timeline">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {WINDOW_OPTIONS.map((o) => (
-                  <SelectItem key={o.value} value={o.value}>
-                    {o.label}
+                {CHURN_WINDOW_VALUES.map((v) => (
+                  <SelectItem key={v} value={v}>
+                    {WINDOW_LABELS[v]}
                   </SelectItem>
                 ))}
               </SelectContent>
