@@ -149,3 +149,32 @@
 - `ANALYZE public.<tabela>;` se as estatísticas estiverem desatualizadas.
 - Recriar índice ausente / conferir `invalid-indexes-guard.sql`.
 - Se o custo total subiu >3×, abrir ticket P2 e correlacionar com `RpcPerfDegradation`.
+
+## rpc-plan-exporter-missing
+
+**Sintoma:** alerta `RpcPlanExporterMissing` — métrica `rpc_plan_window_hours` ausente por 15min.
+
+**Diagnóstico**
+1. `./scripts/monitoring/rpc-plan-exporter.sh` manualmente — deve imprimir as séries `rpc_plan_*`.
+2. Conferir cron e o textfile dir do node_exporter (arquivo `.prom` recente?).
+3. Conferir variáveis libpq (`PGHOST`/`PGUSER`/`PGPASSWORD`) e permissão de SELECT em
+   `public.rpc_plan_snapshots` (RLS admin-read; exporter deve usar role de serviço).
+
+**Mitigação**
+- Restabelecer cron/credenciais. Enquanto isso, ler direto:
+  `SELECT * FROM public.get_rpc_plan_change_counts(6);`
+
+## rpc-plan-churn
+
+**Sintoma:** alerta `RpcPlanChurn` — a mesma RPC mudou de plano ≥3× em 6h (flip-flop).
+
+**Diagnóstico**
+1. `SELECT * FROM public.get_rpc_plan_change_counts(6);` para ranquear as RPCs.
+2. `/admin/error-budget` → diff lado a lado: se os planos alternam entre dois hashes,
+   é instabilidade de estatísticas, não regressão pontual.
+
+**Mitigação**
+- `ANALYZE` nas tabelas base; aumentar `default_statistics_target` na coluna de filtro.
+- Ajustar autovacuum (`autovacuum_analyze_scale_factor`) em tabelas de alta rotatividade.
+- Se o flip-flop vier de parâmetros voláteis, fixar plano com CTE materializada ou
+  reescrever o predicado para reduzir sensibilidade à cardinalidade.
