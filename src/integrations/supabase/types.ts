@@ -15151,6 +15151,20 @@ export type Database = {
         }[]
       }
       get_rpc_perf_stats: { Args: { _hours?: number }; Returns: Json }
+      get_rpc_plan_diff: {
+        Args: { _rpc_name: string }
+        Returns: {
+          captured_at: string
+          execution_ms: number
+          id: string
+          plan: Json
+          plan_hash: string
+          reason: string
+          rpc_name: string
+          slot: string
+          total_cost: number
+        }[]
+      }
       get_rpc_plan_snapshots: {
         Args: { _limit?: number; _rpc_name?: string }
         Returns: {
