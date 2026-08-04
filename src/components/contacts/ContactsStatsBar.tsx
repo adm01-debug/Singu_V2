@@ -5,14 +5,15 @@ import type { Contact } from '@/hooks/useContacts';
 
 interface ContactsStatsBarProps {
   contacts: Contact[];
+  totalCount?: number | null;
   className?: string;
 }
 
-export function ContactsStatsBar({ contacts, className }: ContactsStatsBarProps) {
+export function ContactsStatsBar({ contacts, totalCount, className }: ContactsStatsBarProps) {
   const stats = useMemo(() => {
-    const total = contacts.length;
-    const avgScore = total > 0
-      ? Math.round(contacts.reduce((sum, c) => sum + (c.relationship_score || 0), 0) / total)
+    const total = totalCount ?? contacts.length;
+    const avgScore = contacts.length > 0
+      ? Math.round(contacts.reduce((sum, c) => sum + (c.relationship_score || 0), 0) / contacts.length)
       : 0;
     const excellent = contacts.filter(c => (c.relationship_score || 0) >= 80).length;
     const atRisk = contacts.filter(c => c.relationship_stage === 'at_risk').length;
@@ -22,7 +23,7 @@ export function ContactsStatsBar({ contacts, className }: ContactsStatsBarProps)
     }).length;
 
     return { total, avgScore, excellent, atRisk, inactive };
-  }, [contacts]);
+  }, [contacts, totalCount]);
 
 
   const getScoreColor = (score: number) => {

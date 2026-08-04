@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => ({
       "X-Content-Type-Options": "nosniff",
       "Referrer-Policy": "strict-origin-when-cross-origin",
       "Permissions-Policy": "camera=(), microphone=(self), geolocation=(self), payment=()",
-      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://rqodmqosrotmtrjnnjul.supabase.co wss://rqodmqosrotmtrjnnjul.supabase.co https://ai.gateway.lovable.dev https://api.elevenlabs.io; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self';",
+      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://pgxfvjmuubtbowutlide.supabase.co wss://pgxfvjmuubtbowutlide.supabase.co https://ai.gateway.lovable.dev https://api.elevenlabs.io; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self';",
     },
   },
   plugins: [

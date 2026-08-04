@@ -18,7 +18,7 @@ export function useContactTimeline(contactId?: string) {
     queryFn: async () => {
       const { data, error } = await callExternalRpc<TimelineEvent[]>(
         'get_contact_timeline',
-        { p_contact_id: contactId, p_user_id: user!.id }
+        { p_contact_id: contactId, p_limit: 50 }
       );
       if (error) throw error;
       return data || [];

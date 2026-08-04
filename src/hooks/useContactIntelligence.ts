@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface ContactIntelligence {
   contact_id?: string;
@@ -23,19 +24,20 @@ export interface ContactIntelligence {
 }
 
 export function useContactIntelligence(contactId: string, enabled = true) {
+  const { user } = useAuth();
   return useQuery({
     queryKey: ['contact-intelligence', contactId],
     queryFn: async () => {
+      if (!user) return null;
       const { data, error } = await callExternalRpc<ContactIntelligence | ContactIntelligence[]>(
         'get_contact_intelligence',
-        { p_contact_id: contactId }
+        { p_contact_id: contactId, p_user_id: user.id }
       );
       if (error) throw error;
-      // RPC may return array or single object
       if (Array.isArray(data)) return data[0] || null;
       return data;
     },
-    enabled: enabled && !!contactId,
-    staleTime: 5 * 60 * 1000,
+    enabled: enabled && !!contactId && !!user,
+    staleTime: 5 * 60_000,
   });
 }

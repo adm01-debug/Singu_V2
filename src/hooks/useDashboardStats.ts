@@ -51,9 +51,11 @@ interface UseDashboardStatsParams {
   companies: Company[];
   interactions: Interaction[];
   loading: boolean;
+  /** Total real de empresas do servidor (independente de quantas foram carregadas em memória). */
+  totalCompanies?: number;
 }
 
-export function useDashboardStats({ contacts = [], companies = [], interactions = [], loading = true }: UseDashboardStatsParams = {} as UseDashboardStatsParams): DashboardStats {
+export function useDashboardStats({ contacts = [], companies = [], interactions = [], loading = true, totalCompanies }: UseDashboardStatsParams = {} as UseDashboardStatsParams): DashboardStats {
   const stats = useMemo(() => {
     if (loading) {
       return {
@@ -262,15 +264,15 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
       .slice(0, 10); // Aumentado para 10 para melhor histórico no feed
 
     return {
-      totalCompanies: companies.length,
+      totalCompanies: totalCompanies ?? companies.length,
       totalContacts: contacts.length,
       weeklyInteractions: thisWeekInteractions,
       averageScore: avgScore,
       averageClosingScore: avgClosingScore,
       companyChange: companiesThisMonth > 0 ? `+${companiesThisMonth} este mês` : '~ Estável',
       contactChange: contactsThisMonth > 0 ? `+${contactsThisMonth} este mês` : '~ Estável',
-      interactionChange: interactionDiff >= 0 
-        ? `+${interactionDiff} vs semana anterior` 
+      interactionChange: interactionDiff >= 0
+        ? `+${interactionDiff} vs semana anterior`
         : `${interactionDiff} vs semana anterior`,
       scoreChange: '+0% vs mês anterior',
       topContacts,
@@ -279,7 +281,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
       loading: false,
     };
 
-  }, [contacts, companies, interactions, loading]);
+  }, [contacts, companies, interactions, loading, totalCompanies]);
 
   return stats;
 }

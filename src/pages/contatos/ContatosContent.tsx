@@ -31,6 +31,7 @@ interface Props {
   contacts: Contact[];
   loading: boolean;
   filteredAndSortedContacts: Contact[];
+  totalCount?: number | null;
   searchTerm: string;
   onSearchChange: (value: string) => void;
   viewMode: ViewMode;
@@ -67,7 +68,7 @@ interface Props {
 
 export function ContatosContent(props: Props) {
   const {
-    contacts, loading, filteredAndSortedContacts, searchTerm, onSearchChange,
+    contacts, loading, filteredAndSortedContacts, totalCount, searchTerm, onSearchChange,
     viewMode, onViewModeChange, gridColumns, onGridColumnsChange,
     activeFilters, onFiltersChange, sortBy, sortOrder, onSortChange,
     multiSort, onMultiSortChange,
@@ -81,7 +82,7 @@ export function ContatosContent(props: Props) {
   const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
   const [isExternalSearchOpen, setIsExternalSearchOpen] = useState(false);
-  const RENDER_BATCH = 50;
+  const RENDER_BATCH = 100;
   const [visibleCount, setVisibleCount] = useState(RENDER_BATCH);
   const sentinelRef = useRef<HTMLDivElement>(null);
   
@@ -117,21 +118,21 @@ export function ContatosContent(props: Props) {
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => { 
+    const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         startTransition(() => {
           // eslint-disable-next-line sonarjs/no-nested-functions
           setVisibleCount(prev => {
             const next = prev + RENDER_BATCH;
             // Se chegamos perto do fim do que temos em memória, e há mais no servidor, carrega mais.
-            if (next >= filteredAndSortedContacts.length && hasMore && onLoadMore) {
+            if (next >= filteredAndSortedContacts.length - 20 && hasMore && onLoadMore) {
               onLoadMore();
             }
             return next;
           });
         });
       }
-    }, { rootMargin: '400px' });
+    }, { rootMargin: '1200px' });
     observer.observe(el);
     return () => observer.disconnect();
   }, [filteredAndSortedContacts.length, hasMore, onLoadMore]);
@@ -166,7 +167,7 @@ export function ContatosContent(props: Props) {
       <div className="sticky top-[57px] z-20 w-full">
         <Header 
           title="Contatos" 
-          subtitle={`${filteredAndSortedContacts.length} de ${contacts.length} pessoas`}
+          subtitle={`${filteredAndSortedContacts.length} de ${totalCount ?? contacts.length} pessoas`}
           showAddButton 
           addButtonLabel="Novo" 
           onAddClick={() => onSetIsFormOpen(true)}
@@ -181,7 +182,7 @@ export function ContatosContent(props: Props) {
         <DashboardErrorBoundary sectionName="Contatos Duplicados">
           <Suspense fallback={null}><DuplicateContactsPanel /></Suspense>
         </DashboardErrorBoundary>
-        <ContactsStatsBar contacts={contacts} />
+        <ContactsStatsBar contacts={contacts} totalCount={totalCount} />
         <BirthdayWidget />
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">

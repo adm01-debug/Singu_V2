@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useActivityLogger } from '@/hooks/useActivityLogger';
@@ -36,7 +36,7 @@ interface ExternalRow extends Record<string, unknown> {
 interface CompaniesPage { companies: Company[]; count: number }
 
 const COMPANIES_PAGE_SIZE = 500;
-const MAX_COMPANIES_TOTAL = 2000;
+const MAX_COMPANIES_TOTAL = 60000;
 const INITIAL_FAST_LOAD = 100;
 
 /** Columns needed for listing — avoids SELECT * which is slow on wide tables */
@@ -165,11 +165,10 @@ function stripLocal(input: Record<string, unknown>): Record<string, unknown> {
   return out;
 }
 
-async function fetchCompaniesPage(search?: string): Promise<CompaniesPage> {
-  const buildOptions = (range: { from: number; to: number }): Parameters<typeof queryExternalData>[0] => ({
+async function fetchCompaniesPage(search?: string, page = 0): Promise<CompaniesPage> {
+  const buildOptions = (range: { from: number; to: number }, opts?: { countMethod?: 'exact' | 'planned' }): Parameters<typeof queryExternalData>[0] => ({
     table: 'companies',
     select: LISTING_SELECT,
-    countMethod: 'planned',
     order: { column: 'updated_at', ascending: false },
     range,
     filters: [
@@ -183,87 +182,35 @@ async function fetchCompaniesPage(search?: string): Promise<CompaniesPage> {
           },
         }
       : {}),
+    ...(opts?.countMethod ? { countMethod: opts.countMethod } : {}),
   });
 
-  const fetchBatch = async (range: { from: number; to: number }) => {
-    const { data, count, error } = await queryExternalData<ExternalRow>(buildOptions(range));
+  const fetchBatch = async (range: { from: number; to: number }, opts?: { countMethod?: 'exact' | 'planned' }) => {
+    const { data, count, error } = await queryExternalData<ExternalRow>(buildOptions(range, opts));
     if (error) throw error;
     return { rows: data || [], count: count || 0 };
   };
 
-  // Fast initial load — just the first batch
-  const firstBatch = await fetchBatch({ from: 0, to: INITIAL_FAST_LOAD - 1 });
-  const totalCount = firstBatch.count || firstBatch.rows.length;
+  const isFirstPage = page === 0;
+  const from = isFirstPage ? 0 : page * COMPANIES_PAGE_SIZE;
+  const to = isFirstPage ? INITIAL_FAST_LOAD - 1 : (page + 1) * COMPANIES_PAGE_SIZE - 1;
+
+  const batch = await fetchBatch({ from, to }, { countMethod: isFirstPage ? 'exact' : undefined });
 
   const seen = new Set<string>();
-  const uniqueRows = firstBatch.rows.filter((row) => {
+  const uniqueRows = batch.rows.filter((row) => {
     if (!row.id) return false;
     if (seen.has(row.id)) return false;
     seen.add(row.id);
     return true;
   });
 
-  return { companies: uniqueRows.map(mapCompany), count: totalCount };
+  return { companies: uniqueRows.map(mapCompany), count: batch.count };
 }
 
 /** Load remaining companies beyond initial fast load (called lazily) */
 async function fetchRemainingCompanies(search?: string): Promise<Company[]> {
-  const buildOptions = (range: { from: number; to: number }): Parameters<typeof queryExternalData>[0] => ({
-    table: 'companies',
-    select: LISTING_SELECT,
-    order: { column: 'updated_at', ascending: false },
-    range,
-    filters: [
-      { type: 'is', column: 'deleted_at', value: null },
-    ],
-    ...(search && search.trim().length >= 2
-      ? {
-          search: {
-            term: search.trim(),
-            columns: [...COMPANY_SEARCH_COLUMNS],
-          },
-        }
-      : {}),
-  });
-
-  // First, get total count
-  const { count } = await queryExternalData<ExternalRow>({
-    ...buildOptions({ from: 0, to: 0 }),
-    select: 'id',
-  });
-  const totalCount = count || 0;
-  const cappedTotal = Math.min(totalCount, MAX_COMPANIES_TOTAL);
-
-  if (cappedTotal <= INITIAL_FAST_LOAD) return [];
-
-  const pendingRanges: Array<{ from: number; to: number }> = [];
-  for (let from = INITIAL_FAST_LOAD; from < cappedTotal; from += COMPANIES_PAGE_SIZE) {
-    pendingRanges.push({
-      from,
-      to: Math.min(from + COMPANIES_PAGE_SIZE - 1, cappedTotal - 1),
-    });
-  }
-
-  let allRows: ExternalRow[] = [];
-  for (let index = 0; index < pendingRanges.length; index += 3) {
-    const slice = pendingRanges.slice(index, index + 3);
-    const batches = await Promise.all(slice.map(async (range) => {
-      const { data, error } = await queryExternalData<ExternalRow>(buildOptions(range));
-      if (error) throw error;
-      return data || [];
-    }));
-    allRows = allRows.concat(batches.flat());
-  }
-
-  const seen = new Set<string>();
-  return allRows
-    .filter((row) => {
-      if (!row.id) return false;
-      if (seen.has(row.id)) return false;
-      seen.add(row.id);
-      return true;
-    })
-    .map(mapCompany);
+  return [];
 }
 
 export function useCompanies(options?: { enabled?: boolean }) {
@@ -274,42 +221,50 @@ export function useCompanies(options?: { enabled?: boolean }) {
   const [searchTerm, setSearchTerm] = useState('');
   const externalEnabled = options?.enabled ?? true;
 
-  const queryKey = ['companies', searchTerm || '__all__', user?.id];
+  const queryKey = ['companies-infinite-v2', searchTerm || '__all__', user?.id];
 
-  const { data, isLoading: loading, isFetching, error: queryError } = useQuery({
+  const {
+    data,
+    isLoading: loading,
+    isFetching,
+    error: queryError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey,
-    queryFn: () => fetchCompaniesPage(searchTerm || undefined),
+    queryFn: ({ pageParam = 0 }) => fetchCompaniesPage(searchTerm || undefined, pageParam),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      const totalLoaded = allPages.reduce((sum, p) => sum + p.companies.length, 0);
+      const totalKnown = lastPage.count || totalLoaded;
+      if (totalLoaded >= totalKnown || totalLoaded >= MAX_COMPANIES_TOTAL) return undefined;
+      return allPages.length;
+    },
     enabled: !!user && externalEnabled,
-    staleTime: 10 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
-    placeholderData: (prev) => prev,
-  });
-
-  // Background-load remaining companies — deferred to avoid blocking initial render
-  const remainingKey = ['companies-remaining', searchTerm || '__all__', user?.id];
-  const { data: remainingCompanies } = useQuery({
-    queryKey: remainingKey,
-    queryFn: () => fetchRemainingCompanies(searchTerm || undefined),
-    enabled: !!user && externalEnabled && !!data && data.count > INITIAL_FAST_LOAD,
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
   });
 
   const companies = useMemo(() => {
-    const initial = data?.companies ?? [];
-    if (!remainingCompanies || remainingCompanies.length === 0) return initial;
-    // Merge & deduplicate
-    const seen = new Set(initial.map(c => c.id));
-    const extra = remainingCompanies.filter(c => !seen.has(c.id));
-    return [...initial, ...extra];
-  }, [data?.companies, remainingCompanies]);
+    const pages = data?.pages ?? [];
+    const seen = new Set<string>();
+    const result: Company[] = [];
+    for (const p of pages) {
+      for (const c of p.companies) {
+        if (!c.id || seen.has(c.id)) continue;
+        seen.add(c.id);
+        result.push(c);
+      }
+    }
+    return result;
+  }, [data?.pages]);
 
-  const totalCount = data?.count ?? 0;
+  const totalCount = data?.pages?.[0]?.count ?? 0;
 
   const fetchCompanies = useCallback(async (search?: string) => {
     if (search !== undefined) setSearchTerm(search);
     await queryClient.invalidateQueries({ queryKey: ['companies'] });
-    await queryClient.invalidateQueries({ queryKey: ['companies-remaining'] });
   }, [queryClient]);
 
   const createCompany = async (company: Omit<CompanyInsert, 'user_id'> & {
@@ -352,10 +307,17 @@ export function useCompanies(options?: { enabled?: boolean }) {
         }
 
         const mapped = mapCompany(data as unknown as ExternalRow);
-        queryClient.setQueryData<CompaniesPage>(queryKey, prev =>
+        queryClient.setQueryData<InfiniteData<CompaniesPage>>(queryKey, prev =>
           prev
-            ? { ...prev, companies: [mapped, ...prev.companies], count: prev.count + 1 }
-            : { companies: [mapped], count: 1 }
+            ? {
+                ...prev,
+                pages: prev.pages.map((p, i) =>
+                  i === 0
+                    ? { ...p, companies: [mapped, ...p.companies], count: p.count + 1 }
+                    : p
+                ),
+              }
+            : { pages: [{ companies: [mapped], count: 1 }], pageParams: [0] }
         );
       }
       
@@ -381,9 +343,17 @@ export function useCompanies(options?: { enabled?: boolean }) {
   };
 
   const updateCompany = async (id: string, updates: CompanyUpdate, expectedVersion?: number) => {
-    const previous = queryClient.getQueryData<CompaniesPage>(queryKey);
-    queryClient.setQueryData<CompaniesPage>(queryKey, prev =>
-      prev ? { ...prev, companies: prev.companies.map(c => c.id === id ? { ...c, ...updates } as Company : c) } : prev
+    const previous = queryClient.getQueryData<InfiniteData<CompaniesPage>>(queryKey);
+    queryClient.setQueryData<InfiniteData<CompaniesPage>>(queryKey, prev =>
+      prev
+        ? {
+            ...prev,
+            pages: prev.pages.map(p => ({
+              ...p,
+              companies: p.companies.map(c => c.id === id ? { ...c, ...updates } as Company : c),
+            })),
+          }
+        : prev
     );
     try {
       const input = updates as Record<string, unknown>;
@@ -402,8 +372,16 @@ export function useCompanies(options?: { enabled?: boolean }) {
       if (error) throw error;
       if (data) {
         const mapped = mapCompany(data as unknown as ExternalRow);
-        queryClient.setQueryData<CompaniesPage>(queryKey, prev =>
-          prev ? { ...prev, companies: prev.companies.map(c => c.id === id ? mapped : c) } : prev
+        queryClient.setQueryData<InfiniteData<CompaniesPage>>(queryKey, prev =>
+          prev
+            ? {
+                ...prev,
+                pages: prev.pages.map(p => ({
+                  ...p,
+                  companies: p.companies.map(c => c.id === id ? mapped : c),
+                })),
+              }
+            : prev
         );
       }
       const finalName = (data as Record<string, unknown>)?.nome_crm || input.name || 'Empresa';
@@ -411,7 +389,7 @@ export function useCompanies(options?: { enabled?: boolean }) {
       if (data) logActivity({ type: 'updated', entityType: 'company', entityId: id, entityName: String(finalName), description: 'Empresa atualizada' });
       return data;
     } catch (error) {
-      if (previous) queryClient.setQueryData<CompaniesPage>(queryKey, previous);
+      if (previous) queryClient.setQueryData<InfiniteData<CompaniesPage>>(queryKey, previous);
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error updating company:', { error: msg });
       if (error instanceof ConcurrentEditError) {
@@ -424,19 +402,28 @@ export function useCompanies(options?: { enabled?: boolean }) {
   };
 
   const deleteCompany = async (id: string) => {
-    const previous = queryClient.getQueryData<CompaniesPage>(queryKey);
-    queryClient.setQueryData<CompaniesPage>(queryKey, prev =>
-      prev ? { ...prev, companies: prev.companies.filter(c => c.id !== id), count: Math.max(0, prev.count - 1) } : prev
+    const previous = queryClient.getQueryData<InfiniteData<CompaniesPage>>(queryKey);
+    queryClient.setQueryData<InfiniteData<CompaniesPage>>(queryKey, prev =>
+      prev
+        ? {
+            ...prev,
+            pages: prev.pages.map(p => ({
+              ...p,
+              companies: p.companies.filter(c => c.id !== id),
+              count: Math.max(0, p.count - 1),
+            })),
+          }
+        : prev
     );
     try {
       const { success, error } = await deleteExternalData('companies', id);
       if (error || !success) throw error || new Error('Delete failed');
-      const deleted = previous?.companies.find(c => c.id === id);
+      const deleted = previous?.pages.flatMap(p => p.companies).find(c => c.id === id);
       logActivity({ type: 'deleted', entityType: 'company', entityId: id, entityName: deleted?.name || undefined, description: 'Empresa excluída' });
       toast({ title: 'Empresa removida', description: 'A empresa foi excluída com sucesso.' });
       return true;
     } catch (error) {
-      if (previous) queryClient.setQueryData<CompaniesPage>(queryKey, previous);
+      if (previous) queryClient.setQueryData<InfiniteData<CompaniesPage>>(queryKey, previous);
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error deleting company:', { error: msg });
       toast({ title: 'Erro ao excluir empresa', description: msg, variant: 'destructive' });
@@ -448,5 +435,6 @@ export function useCompanies(options?: { enabled?: boolean }) {
     companies, loading, isFetching, totalCount, searchTerm, error: queryError,
     setSearchTerm: (term: string) => { setSearchTerm(term); },
     fetchCompanies, createCompany, updateCompany, deleteCompany,
+    fetchNextPage, hasNextPage, isFetchingNextPage,
   };
 }

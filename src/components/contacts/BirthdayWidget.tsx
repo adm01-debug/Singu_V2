@@ -50,14 +50,15 @@ export function BirthdayWidget() {
                   <Gift className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold truncate">{contact.full_name || `${contact.first_name} ${contact.last_name}`}</p>
-                  <p className="text-[10px] text-muted-foreground">
+                  <p className="text-xs font-semibold truncate">{contact.full_name || contact.contact_name || contact.nome || `${contact.first_name} ${contact.last_name}`}</p>
+                  <p className="text-[10px] text-muted-foreground truncate">
                     {date ? format(new Date(date), "dd 'de' MMMM", { locale: ptBR }) : '—'}
+                    {(contact.company_name || contact.empresa) ? ` · ${contact.company_name || contact.empresa}` : ''}
                   </p>
                   {contact.days_until === 0 ? (
                     <Badge variant="default" className="mt-1 h-4 text-[8px] bg-green-500">HOJE!</Badge>
                   ) : (
-                    <p className="text-[9px] text-primary font-medium mt-0.5">Em {contact.days_until} dias</p>
+                    <p className="text-[9px] text-primary font-medium mt-0.5">Em {contact.days_until ?? contact.days_ahead} dias</p>
                   )}
                 </div>
               </Link>

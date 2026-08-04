@@ -31,7 +31,7 @@ export interface DailyStats {
 export function useDailyKpis() {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['daily-kpis', user?.id],
+    queryKey: ['daily-kpis-v2', user?.id],
     enabled: !!user,
     queryFn: async () => {
       const { data, error } = await queryExternalData<DailyKpi>({

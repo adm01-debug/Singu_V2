@@ -7,11 +7,14 @@ interface CompaniesStatsBarProps {
   companies: Company[];
   contactCountMap?: Map<string, number>;
   className?: string;
+  /** Total real do servidor (ignorando páginas carregadas). Quando fornecido, o card "Total" usa este valor. */
+  totalCount?: number;
 }
 
-export function CompaniesStatsBar({ companies, contactCountMap, className }: CompaniesStatsBarProps) {
+export function CompaniesStatsBar({ companies, contactCountMap, className, totalCount }: CompaniesStatsBarProps) {
   const stats = useMemo(() => {
-    const total = companies.length;
+    const loaded = companies.length;
+    const total = totalCount ?? loaded;
     const customers = companies.filter(c => c.is_customer).length;
     const prospects = total - customers;
     const conversionRate = total > 0 ? Math.round((customers / total) * 100) : 0;
@@ -26,7 +29,7 @@ export function CompaniesStatsBar({ companies, contactCountMap, className }: Com
     const suppliers = companies.filter(c => c.is_supplier).length;
 
     return { total, customers, prospects, conversionRate, totalContacts, needsAttention, carriers, suppliers };
-  }, [companies, contactCountMap]);
+  }, [companies, contactCountMap, totalCount]);
 
   return (
     <div className={cn('space-y-3 min-h-[120px]', className)}>

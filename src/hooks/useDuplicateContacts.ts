@@ -10,6 +10,7 @@ interface DuplicateContact {
   first_name?: string;
   last_name?: string;
   full_name?: string;
+  contact_name?: string;
   email?: string;
   phone?: string;
   similarity_score?: number;
@@ -22,7 +23,7 @@ export function useDuplicateContacts(enabled = true) {
     queryKey: ['duplicate-contacts', user?.id],
     enabled: enabled && !!user,
     queryFn: async () => {
-      const { data, error } = await callExternalRpc<DuplicateContact[]>('get_duplicate_contacts', {});
+      const { data, error } = await callExternalRpc<DuplicateContact[]>('get_duplicate_contacts', { p_limit: 100 });
       if (error) {
         logger.warn('[useDuplicateContacts] RPC error (resilience):', error);
         return [];

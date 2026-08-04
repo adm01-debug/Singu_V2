@@ -80,13 +80,19 @@ const Notificacoes = () => {
     const loadSettings = async () => {
       try {
         const saved = localStorage.getItem(notifSettingsKey);
-        if (saved) setNotificationSettings(JSON.parse(saved));
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && typeof parsed === 'object') setNotificationSettings((prev) => ({ ...prev, ...parsed }));
+        }
         if (user) {
           const { data: profile } = await supabase.from('profiles').select('preferences').eq('id', user.id).maybeSingle();
           if (cancelled) return;
           if (profile?.preferences) {
             const prefs = profile.preferences as { notifications?: typeof notificationSettings };
-            if (prefs.notifications) { setNotificationSettings(prefs.notifications); localStorage.setItem(notifSettingsKey, JSON.stringify(prefs.notifications)); }
+            if (prefs.notifications && typeof prefs.notifications === 'object') {
+              setNotificationSettings((prev) => ({ ...prev, ...prefs.notifications }));
+              localStorage.setItem(notifSettingsKey, JSON.stringify(prefs.notifications));
+            }
           }
         }
       } catch (error) {

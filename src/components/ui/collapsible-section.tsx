@@ -29,11 +29,18 @@ export function CollapsibleSection({
 
   return (
     <div className={cn('rounded-lg border bg-card', className)}>
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setIsOpen(!isOpen);
+          }
+        }}
         className={cn(
-          'flex w-full items-center justify-between p-4 text-left',
+          'flex w-full items-center justify-between p-4 text-left cursor-pointer',
           'min-h-[44px] touch-manipulation',
           'transition-colors hover:bg-muted/50',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2',
@@ -59,7 +66,7 @@ export function CollapsibleSection({
             <ChevronDown className="h-4 w-4 text-muted-foreground" />
           </motion.div>
         </div>
-      </button>
+      </div>
 
       <AnimatePresence initial={false}>
         {isOpen && (

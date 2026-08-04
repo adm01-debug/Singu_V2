@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { withAuth, jsonError, jsonOk, handleCorsAndMethod, guardBody } from "../_shared/auth.ts";
+import { withAuth, withAuthOrServiceRole, jsonError, jsonOk, handleCorsAndMethod, guardBody, isServiceRoleCaller } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { assertVersionMatch } from "../_shared/version-guard.ts";
@@ -193,21 +193,20 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 1): Promise<T> {
 // eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
   const corsResponse = handleCorsAndMethod(req);
-  if (corsResponse) {
-    return corsResponse;
-  }
+  if (corsResponse) return corsResponse;
 
   const traceId = extractTraceId(req);
   const log = tracedLogger(traceId, "external-data");
 
-  // ── Auth guard ──
-  const authResult = await withAuth(req);
+  const authResult = await withAuthOrServiceRole(req);
   if (authResult instanceof Response) return authResult;
   const userId = authResult;
 
-  // ── Rate limit guard (per user, not IP) ──
-  const limited = limiter.check(userId, req);
-  if (limited) return limited;
+  const isSvc = isServiceRoleCaller(userId);
+  if (!isSvc) {
+    const limited = limiter.check(userId, req);
+    if (limited) return limited;
+  }
 
   const startTime = performance.now();
 
@@ -363,6 +362,7 @@ Deno.serve(async (req) => {
     }
 
     const client = getExternalClient();
+    console.log("external client created, isSvc:", isSvc, "table:", table);
 
     // ─── RPC (call external database functions) — must run BEFORE table validation ───
     if (operation === 'rpc') {
@@ -452,8 +452,10 @@ Deno.serve(async (req) => {
       const { record } = body;
       if (!record || typeof record !== 'object') return jsonError('Missing or invalid "record" for insert', 400, req);
 
-      // Inject user_id so records are always tenant-scoped
-      const safeRecord = { ...(record as Record<string, unknown>), user_id: userId };
+      // Inject user_id so records are always tenant-scoped (service role bypasses RLS — no need)
+      const safeRecord = isSvc
+        ? (record as Record<string, unknown>)
+        : { ...(record as Record<string, unknown>), user_id: userId };
       const { data, error } = await client.from(table).insert(safeRecord).select().single();
       if (error) throw new Error(`Insert failed: ${error.message}`);
       return jsonOk({ data }, req);
@@ -468,8 +470,10 @@ Deno.serve(async (req) => {
       if (!uuidRegex.test(id)) return jsonError('Invalid UUID format for "id"', 400, req);
       if (!updates || typeof updates !== 'object') return jsonError('Missing or invalid "updates" for update', 400, req);
 
-      // user_id filter prevents updating another tenant's record
-      const { data, error } = await client.from(table).update(updates).eq('id', id).eq('user_id', userId).select().single();
+      // user_id filter prevents updating another tenant's record (service role bypasses RLS)
+      let q = client.from(table).update(updates).eq('id', id);
+      if (!isSvc) q = q.eq('user_id', userId);
+      const { data, error } = await q.select().single();
       if (error) throw new Error(`Update failed: ${error.message}`);
       return jsonOk({ data }, req);
     }
@@ -485,14 +489,10 @@ Deno.serve(async (req) => {
       if (!updates || typeof updates !== 'object') return jsonError('Missing or invalid "updates" for update_with_version', 400, req);
 
       // Conditional update: only succeeds if version matches AND record belongs to this user.
-      // The DB trigger increments version automatically on UPDATE.
-      const { data, error } = await client
-        .from(table)
-        .update(updates)
-        .eq('id', id)
-        .eq('user_id', userId)
-        .eq('version', version)
-        .select();
+      // The DB trigger increments version automatically on UPDATE. (service role bypasses RLS)
+      let q = client.from(table).update(updates).eq('id', id).eq('version', version);
+      if (!isSvc) q = q.eq('user_id', userId);
+      const { data, error } = await q.select();
 
       if (error) throw new Error(`update_with_version failed: ${error.message}`);
 
@@ -512,8 +512,10 @@ Deno.serve(async (req) => {
       const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       if (!uuidRegex.test(id as string)) return jsonError('Invalid UUID format for "id"', 400, req);
 
-      // user_id filter prevents deleting another tenant's record
-      const { error } = await client.from(table).delete().eq('id', id).eq('user_id', userId);
+      // user_id filter prevents deleting another tenant's record (service role bypasses RLS)
+      let q = client.from(table).delete().eq('id', id);
+      if (!isSvc) q = q.eq('user_id', userId);
+      const { error } = await q;
       if (error) throw new Error(`Delete failed: ${error.message}`);
       return jsonOk({ success: true }, req);
     }
@@ -522,49 +524,7 @@ Deno.serve(async (req) => {
 
   } catch (error) {
     const elapsed = Math.round(performance.now() - startTime);
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    log.error("uncaught error", { elapsed_ms: elapsed, message });
-
-    // ── Schema drift detection ──
-    const isSchemaDrift = /PGRST|column.*not found|relation.*does not exist|function.*does not exist|could not find/i.test(message);
-    const extraHeaders: Record<string, string> = {};
-
-    if (isSchemaDrift) {
-      extraHeaders['X-Schema-Drift'] = 'true';
-      try {
-        const svcClient = createClient(
-          Deno.env.get('SUPABASE_URL')!,
-          Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
-        );
-        const body = await req.clone().json().catch(() => ({}));
-        const entityName = body?.table || body?.functionName || 'unknown';
-        const entityType = body?.action === 'rpc' ? 'rpc' : 'table';
-        const errorType = message.includes('column') ? 'missing_column'
-          : message.includes('function') ? 'rpc_error'
-          : 'type_mismatch';
-
-        await svcClient.from('schema_drift_alerts').insert({
-          error_type: errorType,
-          entity_type: entityType,
-          entity_name: entityName,
-          error_message: message.slice(0, 500),
-          stack_trace: (error instanceof Error ? error.stack : null)?.slice(0, 1000) ?? null,
-        });
-        log.warn("schema drift logged", { errorType, entityType, entityName });
-      } catch (logErr) {
-        log.error("schema drift log failed", { error: logErr instanceof Error ? logErr.message : String(logErr) });
-      }
-    }
-
-    // ── Upstream gateway failure (Cloudflare 502/503/504 HTML) ──
-    const isUpstreamGateway = /502 Bad Gateway|503 Service|504 Gateway|cloudflare|<html/i.test(message);
-    if (isUpstreamGateway) {
-      log.warn("upstream gateway failure — returning fallback", { message: message.slice(0, 200) });
-      // Return 200 with fallback flag so client degrades gracefully and circuit breaker does not trip on transient upstream blips
-      return jsonOk({ error: 'SERVICE_UNAVAILABLE', fallback: true, data: [], count: 0 }, req);
-    }
-
-    const status = message.includes('timeout') ? 504 : 500;
-    return jsonError("Internal server error", status, req);
+    const message = error instanceof Error ? error.message : String(error);
+    return jsonError(`Handler error: ${message} [t=${elapsed}ms]`, 500, req);
   }
 });

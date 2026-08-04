@@ -106,11 +106,13 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
     if (data.length > 0) {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user?.id) {
+        const auditType = queryOptions.table === 'contacts' ? 'contact_viewed'
+          : queryOptions.table === 'companies' ? 'company_viewed'
+          : 'interaction_created';
         const { error: auditErr } = await supabase.from('activities').insert({
           user_id: session.user.id,
-          type: 'access',
+          type: auditType,
           entity_type: queryOptions.table === 'contacts' ? 'contact' : queryOptions.table === 'companies' ? 'company' : 'interaction',
-          entity_id: 'batch_query',
           description: `Acesso a ${data.length} registros da tabela ${queryOptions.table}`,
           metadata: { query_options: queryOptions },
         } as never);
@@ -227,7 +229,7 @@ export async function deleteExternalData(table: string, id: string): Promise<{ s
     if (session?.user?.id) {
       const { error: auditErr } = await supabase.from('activities').insert({
         user_id: session.user.id,
-        type: 'deleted',
+        type: table === 'contacts' ? 'contact_deleted' : table === 'companies' ? 'company_deleted' : 'interaction_deleted',
         entity_type: table === 'contacts' ? 'contact' : table === 'companies' ? 'company' : 'interaction',
         entity_id: id,
         description: `Exclusão de registro na tabela ${table}`,

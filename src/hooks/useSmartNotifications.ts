@@ -69,18 +69,38 @@ export function useSmartNotifications() {
     },
   });
 
-  // Realtime
+  // Realtime — wrapped in try/catch so a failing realtime subscription
+  // (e.g. table not yet in supabase_realtime publication) doesn't crash
+  // the entire component. Query data is still returned via REST polling.
   useEffect(() => {
     if (!user?.id) return;
-    const channel = supabase
-      .channel(`smart-notif:${user.id}`)
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'smart_notifications', filter: `user_id=eq.${user.id}` },
-        () => qc.invalidateQueries({ queryKey: ['smart-notifications', user.id] }),
-      )
-      .subscribe();
-    return () => { supabase.removeChannel(channel); };
+    let channelRef: ReturnType<typeof supabase.channel> | null = null;
+    let mounted = true;
+    try {
+      channelRef = supabase
+        .channel(`smart-notif:${user.id}`)
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'smart_notifications', filter: `user_id=eq.${user.id}` },
+          () => { if (mounted) qc.invalidateQueries({ queryKey: ['smart-notifications', user.id] }); },
+        )
+        .subscribe((status) => {
+          // Only act on terminal states to avoid re-triggering during pending
+          if (!mounted) return;
+          if (status === 'SUBSCRIBED') {
+            // ok
+          } else if (status === 'CHANNEL_ERROR') {
+            // Realtime unavailable — graceful degradation, polling handles data
+          }
+        });
+    } catch {
+      // Channel creation failed (e.g. realtime not enabled for this table) —
+      // graceful degradation, polling handles data
+    }
+    return () => {
+      mounted = false;
+      if (channelRef) supabase.removeChannel(channelRef);
+    };
   }, [user?.id, qc]);
 
   const visible = useMemo(() => {

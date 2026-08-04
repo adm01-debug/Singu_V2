@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect, startTransition, useCallback } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { Search, Plus, CheckSquare, X } from 'lucide-react';
 import { CompaniesGridSkeleton } from '@/components/skeletons/PageSkeletons';
@@ -56,6 +56,12 @@ interface Props {
   companyMetrics: { contactCountMap: Map<string, number>; lastInteractionMap: Map<string, number> };
   selectedIndex: number;
   triggerSearch: (term: string) => void;
+  /** Infinite query pagination — undefined is fine when pagination is disabled */
+  fetchNextPage?: () => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  /** Total real do servidor (independente de quantas foram carregadas) */
+  totalCount?: number;
 }
 
 export function EmpresasContent(props: Props) {
@@ -67,6 +73,7 @@ export function EmpresasContent(props: Props) {
     onToggleSelectionMode, onSelect, onSelectAll, onBulkDelete, onBulkAddTag,
     onSetEditingCompany, onSetDeletingCompany, onSetIsFormOpen,
     updateCompany, companyMetrics, selectedIndex, triggerSearch,
+    fetchNextPage, hasNextPage, isFetchingNextPage,
   } = props;
 
   const { isAdmin } = useIsAdmin();
@@ -81,12 +88,14 @@ export function EmpresasContent(props: Props) {
 
   useEffect(() => {
     const el = sentinelRef.current;
-    if (!el) return;
+    if (!el || !fetchNextPage || !hasNextPage) return;
     // eslint-disable-next-line sonarjs/no-nested-functions
-    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) startTransition(() => setVisibleCount(prev => prev + RENDER_BATCH)); }, { rootMargin: '400px' });
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !isFetchingNextPage) fetchNextPage();
+    }, { rootMargin: '600px' });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [filteredAndSortedCompanies.length]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   const visibleCompanies = useMemo(() => filteredAndSortedCompanies.slice(0, visibleCount), [filteredAndSortedCompanies, visibleCount]);
   const hasMore = visibleCount < filteredAndSortedCompanies.length;
@@ -114,7 +123,7 @@ export function EmpresasContent(props: Props) {
 
   return (
     <div className="p-4 md:p-6 space-y-4 md:space-y-6">
-      <CompaniesStatsBar companies={companies} contactCountMap={companyMetrics.contactCountMap} />
+      <CompaniesStatsBar companies={companies} contactCountMap={companyMetrics.contactCountMap} totalCount={props.totalCount} />
       <CompaniesInlineMap companies={filteredAndSortedCompanies} />
 
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
@@ -198,7 +207,15 @@ export function EmpresasContent(props: Props) {
                   tips={['Adicione dados como segmento e porte para análises mais precisas', 'Vincule contatos às empresas para contexto nas interações', 'Use tags para agrupar empresas por oportunidade ou projeto']} />
           )}
 
-          {hasMore && <div ref={sentinelRef} className="flex items-center justify-center py-6 text-sm text-muted-foreground animate-pulse">Carregando mais {Math.min(RENDER_BATCH, filteredAndSortedCompanies.length - visibleCount)} empresas...</div>}
+          {hasMore && (
+            <div ref={sentinelRef} className="flex items-center justify-center py-6 text-sm text-muted-foreground">
+              {isFetchingNextPage ? (
+                <span className="animate-pulse">Carregando mais empresas...</span>
+              ) : (
+                <span className="animate-pulse">Carregando mais {Math.min(RENDER_BATCH, filteredAndSortedCompanies.length - visibleCount)} empresas...</span>
+              )}
+            </div>
+          )}
         </>
       )}
 

@@ -98,28 +98,36 @@ export function useContactDetail(contactId: string | undefined) {
   const error = queryError instanceof Error ? queryError.message : null;
 
 
-  // Set up realtime subscription for updates
+  // Set up realtime subscription for updates — wrapped in try/catch so a
+  // failing realtime channel (table not in supabase_realtime publication,
+  // or channel reused after subscribe) doesn't crash the contact detail page.
+  // Polling via staleTime handles refresh; realtime is a nicety.
   useEffect(() => {
     if (!user || !contactId) return;
 
-    const channel = supabase
-      .channel(`contact-detail-${contactId}`)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'contacts', filter: `id=eq.${contactId}` }, () => {
-        queryClient.invalidateQueries({ queryKey });
-      })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'interactions', filter: `contact_id=eq.${contactId}` }, () => {
-        queryClient.invalidateQueries({ queryKey });
-      })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'insights', filter: `contact_id=eq.${contactId}` }, () => {
-        queryClient.invalidateQueries({ queryKey });
-      })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'alerts', filter: `contact_id=eq.${contactId}` }, () => {
-        queryClient.invalidateQueries({ queryKey });
-      })
-      .subscribe();
+    let channelRef: ReturnType<typeof supabase.channel> | null = null;
+    try {
+      channelRef = supabase
+        .channel(`contact-detail-${contactId}`)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'contacts', filter: `id=eq.${contactId}` }, () => {
+          queryClient.invalidateQueries({ queryKey });
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'interactions', filter: `contact_id=eq.${contactId}` }, () => {
+          queryClient.invalidateQueries({ queryKey });
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'insights', filter: `contact_id=eq.${contactId}` }, () => {
+          queryClient.invalidateQueries({ queryKey });
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'alerts', filter: `contact_id=eq.${contactId}` }, () => {
+          queryClient.invalidateQueries({ queryKey });
+        })
+        .subscribe();
+    } catch {
+      // Realtime unavailable — polling handles refresh
+    }
 
     return () => {
-      supabase.removeChannel(channel);
+      if (channelRef) supabase.removeChannel(channelRef);
     };
   }, [user, contactId, queryClient, queryKey]);
 

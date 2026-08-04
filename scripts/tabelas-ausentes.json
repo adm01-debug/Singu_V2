@@ -1,0 +1,1255 @@
+[
+  {
+    "tabela": "system_alerts",
+    "qtd_arquivos": 5,
+    "arquivos": [
+      "src/components/admin/BehavioralRegenAlertBanner.tsx",
+      "src/components/admin/BehavioralRegenAlertsStats.tsx",
+      "src/components/admin/BehavioralRegenAlertsTrend.tsx",
+      "src/components/admin/MttaSlaBreachHistoryCard.tsx",
+      "src/hooks/useAiGatewayCriticalToast.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"system_alerts\")",
+      ".from('system_alerts')"
+    ]
+  },
+  {
+    "tabela": "contact_analytical_profiles",
+    "qtd_arquivos": 4,
+    "arquivos": [
+      "src/hooks/useBehavioralProfile.ts",
+      "src/hooks/useBehavioralProfilesList.ts",
+      "src/hooks/useCompanyProfileAnalytics.ts",
+      "src/hooks/useSocialIntelligence.ts"
+    ],
+    "exemplos_uso": [
+      ".from('contact_analytical_profiles')",
+      "supabase.from('contact_analytical_profiles').upsert({"
+    ]
+  },
+  {
+    "tabela": "people_intelligence_events",
+    "qtd_arquivos": 4,
+    "arquivos": [
+      "src/hooks/useEnrichmentCoverage.ts",
+      "src/hooks/useEnrichmentExport.ts",
+      "src/hooks/useEnrichmentSuite.ts",
+      "src/hooks/useEntity360.ts"
+    ],
+    "exemplos_uso": [
+      "supabase.from(\"people_intelligence_events\").select(\"contact_id\", { count: \"exact\", head: true }).eq(\"user_id\", uid).not(\"contact_id\", \"is\", null),",
+      "supabase.from(\"people_intelligence_events\")",
+      ".from(\"people_intelligence_events\")",
+      ".from('people_intelligence_events')"
+    ]
+  },
+  {
+    "tabela": "system_health_snapshots",
+    "qtd_arquivos": 3,
+    "arquivos": [
+      "src/components/admin/MttaAutoAckHeartbeatCard.tsx",
+      "src/hooks/useMttaSlaBreachSnapshot.ts",
+      "src/pages/admin/Observability.tsx"
+    ],
+    "exemplos_uso": [
+      ".from(\"system_health_snapshots\")",
+      "const { error } = await supabase.from(\"system_health_snapshots\").insert({",
+      ".from('system_health_snapshots')"
+    ]
+  },
+  {
+    "tabela": "social_consent_audit",
+    "qtd_arquivos": 3,
+    "arquivos": [
+      "src/components/contact-detail/SocialMediaIntelligenceCard.tsx",
+      "src/components/contact-detail/data-tab/ConsentAuditCard.tsx",
+      "src/pages/RelatorioContato.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('social_consent_audit')",
+      "const { error } = await supabase.from('social_consent_audit').insert({",
+      ".from(\"social_consent_audit\")"
+    ]
+  },
+  {
+    "tabela": "neuro_behavioral_history",
+    "qtd_arquivos": 3,
+    "arquivos": [
+      "src/components/contact-detail/NeuroEvolutionChart.tsx",
+      "src/components/crm/behavior/NeuromarketingTimeline.tsx",
+      "src/hooks/useUnifiedTimeline.ts"
+    ],
+    "exemplos_uso": [
+      ".from('neuro_behavioral_history')"
+    ]
+  },
+  {
+    "tabela": "reframing_analysis",
+    "qtd_arquivos": 3,
+    "arquivos": [
+      "src/components/nlp/SleightOfMouthPanel.tsx",
+      "src/hooks/useFicha360NLP.ts",
+      "src/hooks/useNLPAnalysisValidation.ts"
+    ],
+    "exemplos_uso": [
+      ".from('reframing_analysis')"
+    ]
+  },
+  {
+    "tabela": "connection_test_logs",
+    "qtd_arquivos": 3,
+    "arquivos": [
+      "src/hooks/useConnectionMetrics.ts",
+      "src/hooks/useConnections.ts",
+      "src/pages/AdminConexoesLogs.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('connection_test_logs')"
+    ]
+  },
+  {
+    "tabela": "email_verifications",
+    "qtd_arquivos": 3,
+    "arquivos": [
+      "src/hooks/useEnrichmentCoverage.ts",
+      "src/hooks/useEnrichmentExport.ts",
+      "src/hooks/useEnrichmentSuite.ts"
+    ],
+    "exemplos_uso": [
+      "supabase.from(\"email_verifications\").select(\"contact_id\", { count: \"exact\", head: true }).eq(\"user_id\", uid).eq(\"status\", \"valid\").not(\"contact_id\", \"is\", null),",
+      "supabase.from(\"email_verifications\")",
+      ".from(\"email_verifications\")"
+    ]
+  },
+  {
+    "tabela": "phone_validations",
+    "qtd_arquivos": 3,
+    "arquivos": [
+      "src/hooks/useEnrichmentCoverage.ts",
+      "src/hooks/useEnrichmentExport.ts",
+      "src/hooks/useEnrichmentSuite.ts"
+    ],
+    "exemplos_uso": [
+      "supabase.from(\"phone_validations\").select(\"contact_id\", { count: \"exact\", head: true }).eq(\"user_id\", uid).eq(\"status\", \"valid\").not(\"contact_id\", \"is\", null),",
+      "supabase.from(\"phone_validations\")",
+      ".from(\"phone_validations\")"
+    ]
+  },
+  {
+    "tabela": "user_ui_preferences",
+    "qtd_arquivos": 3,
+    "arquivos": [
+      "src/hooks/useFicha360FilterPresets.ts",
+      "src/hooks/useFicha360PreferencesSync.ts",
+      "src/hooks/useUiPreferencesSync.ts"
+    ],
+    "exemplos_uso": [
+      ".from('user_ui_preferences')"
+    ]
+  },
+  {
+    "tabela": "forms",
+    "qtd_arquivos": 3,
+    "arquivos": [
+      "src/hooks/useForms.ts",
+      "src/pages/MarketingFormDetail.tsx",
+      "src/pages/PublicForm.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('forms')",
+      "const { error } = await supabase.from('forms').update({",
+      "const { data } = await supabase.from('forms').select('id, user_id, name, slug, description, fields, routing_rules, nurturing_workflow_id, redirect_url, success_message, is_published, view_count, submission_count, created_at, updated_at').eq('slug', currentSlug).eq('is_published', true).maybeSingle();"
+    ]
+  },
+  {
+    "tabela": "lead_magnets",
+    "qtd_arquivos": 3,
+    "arquivos": [
+      "src/hooks/useLeadMagnets.ts",
+      "src/pages/MarketingMagnetDetail.tsx",
+      "src/pages/PublicLeadMagnet.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('lead_magnets')",
+      "const { data, error } = await supabase.from('lead_magnets').select('id, user_id, title, slug, description, type, file_path, external_url, thumbnail_url, gated, form_id, download_count, view_count, is_published, created_at, updated_at').eq('id', id!).eq('user_id', user!.id).maybeSingle();",
+      "const { data } = await supabase.from('lead_magnets').select('id, user_id, title, slug, description, type, file_path, external_url, thumbnail_url, gated, form_id, download_count, view_count, is_published, created_at, updated_at').eq('slug', currentSlug).eq('is_published', true).maybeSingle();"
+    ]
+  },
+  {
+    "tabela": "system_config",
+    "qtd_arquivos": 2,
+    "arquivos": [
+      "src/components/admin/MttaSlaThresholdEditor.tsx",
+      "src/hooks/useMttaSlaThreshold.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"system_config\")"
+    ]
+  },
+  {
+    "tabela": "contact_predictive_roadmap",
+    "qtd_arquivos": 2,
+    "arquivos": [
+      "src/components/crm/NextBestAction.tsx",
+      "src/components/crm/behavior/PredictiveRoadmap.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('contact_predictive_roadmap')"
+    ]
+  },
+  {
+    "tabela": "proximo_passo_feedback",
+    "qtd_arquivos": 2,
+    "arquivos": [
+      "src/components/crm/NextBestAction.tsx",
+      "src/hooks/useProximoPassoFeedback.ts"
+    ],
+    "exemplos_uso": [
+      ".from('proximo_passo_feedback')"
+    ]
+  },
+  {
+    "tabela": "objection_example_feedback",
+    "qtd_arquivos": 2,
+    "arquivos": [
+      "src/components/nlp/NLPRealtimeCoach.tsx",
+      "src/hooks/useObjectionExampleFeedback.ts"
+    ],
+    "exemplos_uso": [
+      "const { error: fbErr } = await supabase.from('objection_example_feedback').insert({",
+      ".from(\"objection_example_feedback\")"
+    ]
+  },
+  {
+    "tabela": "suggested_rapport_intel",
+    "qtd_arquivos": 2,
+    "arquivos": [
+      "src/hooks/useAIApprovals.ts",
+      "src/hooks/useSocialIntelligence.ts"
+    ],
+    "exemplos_uso": [
+      ".from('suggested_rapport_intel')",
+      "supabase.from('suggested_rapport_intel').select('value').eq('contact_id', contactId).eq('user_id', user!.id).eq('status', 'pending').limit(50),"
+    ]
+  },
+  {
+    "tabela": "conversation_analyses",
+    "qtd_arquivos": 2,
+    "arquivos": [
+      "src/hooks/useConversationIntel.ts",
+      "src/hooks/useMarkObjectionHandled.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"conversation_analyses\")"
+    ]
+  },
+  {
+    "tabela": "crm_alerts",
+    "qtd_arquivos": 2,
+    "arquivos": [
+      "src/hooks/useCRMAlerts.ts",
+      "src/hooks/useUnifiedTimeline.ts"
+    ],
+    "exemplos_uso": [
+      ".from('crm_alerts')"
+    ]
+  },
+  {
+    "tabela": "call_logs",
+    "qtd_arquivos": 2,
+    "arquivos": [
+      "src/hooks/useEvidenceForLabel.ts",
+      "src/hooks/useUnifiedHistory.ts"
+    ],
+    "exemplos_uso": [
+      ".from('call_logs')"
+    ]
+  },
+  {
+    "tabela": "feature_flags",
+    "qtd_arquivos": 2,
+    "arquivos": [
+      "src/hooks/useFeatureFlag.ts",
+      "src/pages/admin/FeatureFlagsPage.tsx"
+    ],
+    "exemplos_uso": [
+      ".from(\"feature_flags\")"
+    ]
+  },
+  {
+    "tabela": "incoming_webhook_logs",
+    "qtd_arquivos": 2,
+    "arquivos": [
+      "src/hooks/useIncomingWebhooks.ts",
+      "src/pages/AdminConexoesLogs.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('incoming_webhook_logs')"
+    ]
+  },
+  {
+    "tabela": "behavioral_insight_feedback",
+    "qtd_arquivos": 2,
+    "arquivos": [
+      "src/hooks/useInsightFeedback.ts",
+      "src/pages/admin/InsightFeedbackAnalytics.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('behavioral_insight_feedback')"
+    ]
+  },
+  {
+    "tabela": "ai_recommendation_audit_logs_v2",
+    "qtd_arquivos": 2,
+    "arquivos": [
+      "src/hooks/useRecommendationAudit.ts",
+      "src/pages/RecommendationAudit.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('ai_recommendation_audit_logs_v2')"
+    ]
+  },
+  {
+    "tabela": "behavioral_profile_regen_queue",
+    "qtd_arquivos": 2,
+    "arquivos": [
+      "src/pages/admin/BehavioralRegenAudit.tsx",
+      "src/pages/admin/InsightFeedbackAnalytics.tsx"
+    ],
+    "exemplos_uso": [
+      ".from(\"behavioral_profile_regen_queue\")",
+      ".from('behavioral_profile_regen_queue')"
+    ]
+  },
+  {
+    "tabela": "brain_dominance_analysis",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/components/contact-detail/behavioral-tab/NeuroDominanceTab.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('brain_dominance_analysis')"
+    ]
+  },
+  {
+    "tabela": "v_life_events_audit",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/components/contact-detail/life-events/LifeEventsAuditTrail.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('v_life_events_audit')"
+    ]
+  },
+  {
+    "tabela": "suggested_life_events",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/components/contact-detail/LifeEventsTab.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('suggested_life_events')"
+    ]
+  },
+  {
+    "tabela": "crm_metric_overrides",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/components/contact-detail/MetricOverrideFlow.tsx"
+    ],
+    "exemplos_uso": [
+      "supabase.from('crm_metric_overrides').insert({"
+    ]
+  },
+  {
+    "tabela": "crm_cadence_rules",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/components/crm/CadenceRulesConfig.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('crm_cadence_rules')"
+    ]
+  },
+  {
+    "tabela": "crm_consent_audit_logs",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/components/crm/consent/ConsentAuditLog.tsx"
+    ],
+    "exemplos_uso": [
+      ".from(\"crm_consent_audit_logs\")"
+    ]
+  },
+  {
+    "tabela": "crm_automation_logs",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/components/crm/CRMAutomationAuditLog.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('crm_automation_logs')"
+    ]
+  },
+  {
+    "tabela": "crm_automation_reprocess_queue",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/components/crm/CRMAutomationAuditLog.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('crm_automation_reprocess_queue')"
+    ]
+  },
+  {
+    "tabela": "contact_automation_settings",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/components/crm/EscalationAutomation.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('contact_automation_settings')"
+    ]
+  },
+  {
+    "tabela": "crm_relationship_audit_logs",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/components/crm/relationship/RelationshipAuditPanel.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('crm_relationship_audit_logs')"
+    ]
+  },
+  {
+    "tabela": "crm_objection_intelligence",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/components/crm/RelationshipKPIsDashboard.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('crm_objection_intelligence')"
+    ]
+  },
+  {
+    "tabela": "follow_up_approvals_v2",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/components/dashboard/StrategicNextStepsCard.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('follow_up_approvals_v2')"
+    ]
+  },
+  {
+    "tabela": "whatsapp_messages_index",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/components/whatsapp/WhatsAppDashboard.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('whatsapp_messages_index')"
+    ]
+  },
+  {
+    "tabela": "social_sync_queue",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/commercial/useSocialSync.ts"
+    ],
+    "exemplos_uso": [
+      ".from('social_sync_queue')"
+    ]
+  },
+  {
+    "tabela": "psychographic_audit_log",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/commercial/useSocialSync.ts"
+    ],
+    "exemplos_uso": [
+      ".from('psychographic_audit_log')"
+    ]
+  },
+  {
+    "tabela": "abm_accounts",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useABM.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"abm_accounts\")"
+    ]
+  },
+  {
+    "tabela": "abm_buying_committee",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useABM.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"abm_buying_committee\")"
+    ]
+  },
+  {
+    "tabela": "abm_whitespace_opportunities",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useABM.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"abm_whitespace_opportunities\")"
+    ]
+  },
+  {
+    "tabela": "abm_account_plans",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useABM.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"abm_account_plans\")"
+    ]
+  },
+  {
+    "tabela": "abm_campaigns",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useABM.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"abm_campaigns\")"
+    ]
+  },
+  {
+    "tabela": "applied_objection_responses",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useAppliedResponses.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"applied_objection_responses\")"
+    ]
+  },
+  {
+    "tabela": "attribution_touchpoints",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useAttribution.ts"
+    ],
+    "exemplos_uso": [
+      "let q = supabase.from('attribution_touchpoints').select('id, user_id, contact_id, deal_id, touchpoint_type, source, medium, campaign, content, page_url, occurred_at, value_attributed, metadata').eq('user_id', user!.id).order('occurred_at', { ascending: false });"
+    ]
+  },
+  {
+    "tabela": "battle_cards",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useBattleCards.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"battle_cards\")"
+    ]
+  },
+  {
+    "tabela": "contact_analytical_profile_versions",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useBehavioralProfileVersions.ts"
+    ],
+    "exemplos_uso": [
+      ".from('contact_analytical_profile_versions')"
+    ]
+  },
+  {
+    "tabela": "connection_anomalies",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useConnectionAnomalies.ts"
+    ],
+    "exemplos_uso": [
+      ".from('connection_anomalies')"
+    ]
+  },
+  {
+    "tabela": "connection_quotas",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useConnectionQuota.ts"
+    ],
+    "exemplos_uso": [
+      ".from('connection_quotas')"
+    ]
+  },
+  {
+    "tabela": "connection_configs",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useConnections.ts"
+    ],
+    "exemplos_uso": [
+      ".from('connection_configs')"
+    ]
+  },
+  {
+    "tabela": "contact_behavior",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useContactBehavior.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"contact_behavior\")"
+    ]
+  },
+  {
+    "tabela": "contact_decision_making",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useContactBehavior.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"contact_decision_making\")"
+    ]
+  },
+  {
+    "tabela": "contact_influence",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useContactBehavior.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"contact_influence\")"
+    ]
+  },
+  {
+    "tabela": "contact_personality",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useContactBehavior.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"contact_personality\")"
+    ]
+  },
+  {
+    "tabela": "contact_metaprograms",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useContactBehavior.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"contact_metaprograms\")"
+    ]
+  },
+  {
+    "tabela": "contact_rapport_strategy",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useContactBehavior.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"contact_rapport_strategy\")"
+    ]
+  },
+  {
+    "tabela": "contact_business_context",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useContactBehavior.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"contact_business_context\")"
+    ]
+  },
+  {
+    "tabela": "v_contact_behavior_audit",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useContactBehavior.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"v_contact_behavior_audit\")"
+    ]
+  },
+  {
+    "tabela": "v_contact_personality_audit",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useContactBehavior.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"v_contact_personality_audit\")"
+    ]
+  },
+  {
+    "tabela": "conversation_topics_catalog",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useConversationIntel.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"conversation_topics_catalog\")"
+    ]
+  },
+  {
+    "tabela": "coaching_scorecards",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useConversationIntel.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"coaching_scorecards\")"
+    ]
+  },
+  {
+    "tabela": "cs_accounts",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useCustomerSuccess.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"cs_accounts\")"
+    ]
+  },
+  {
+    "tabela": "cs_health_signals",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useCustomerSuccess.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"cs_health_signals\")"
+    ]
+  },
+  {
+    "tabela": "cs_nps_responses",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useCustomerSuccess.ts"
+    ],
+    "exemplos_uso": [
+      "let q = supabase.from(\"cs_nps_responses\").select(\"id, account_id, contact_id, score, category, comment, surveyed_at\").eq(\"user_id\", user!.id);"
+    ]
+  },
+  {
+    "tabela": "cs_qbrs",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useCustomerSuccess.ts"
+    ],
+    "exemplos_uso": [
+      "let q = supabase.from(\"cs_qbrs\").select(\"id, account_id, title, scheduled_at, completed_at, status, agenda, outcomes, next_steps, attendees, notes\").eq(\"user_id\", user!.id);"
+    ]
+  },
+  {
+    "tabela": "cs_renewals",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useCustomerSuccess.ts"
+    ],
+    "exemplos_uso": [
+      "const { data, error } = await supabase.from(\"cs_renewals\").update(input as Database[\"public\"][\"Tables\"][\"cs_renewals\"][\"Update\"]).eq(\"user_id\", user.id).eq(\"id\", input.id).select().maybeSingle();"
+    ]
+  },
+  {
+    "tabela": "deal_rooms",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useDealRooms.ts"
+    ],
+    "exemplos_uso": [
+      "let q = supabase.from(\"deal_rooms\").select(\"id, user_id, deal_id, deal_name, company_id, title, description, status, deal_value, target_close_date, share_token, share_enabled, last_buyer_view_at, buyer_view_count, health_score, health_recommendations, health_analyzed_at, created_at, updated_at\").eq(\"user_id\", user!.id).order(\"updated_at\", { ascending: false })"
+    ]
+  },
+  {
+    "tabela": "deal_room_milestones",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useDealRooms.ts"
+    ],
+    "exemplos_uso": [
+      "const { data, error } = await supabase.from(\"deal_room_milestones\").select(\"id, room_id, user_id, title, description, status, sort_order, due_date, completed_at, completed_by_side, owner_side, created_at, updated_at\").eq(\"room_id\", roomId!).order(\"sort_order\")"
+    ]
+  },
+  {
+    "tabela": "deal_room_stakeholders",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useDealRooms.ts"
+    ],
+    "exemplos_uso": [
+      "const { data, error } = await supabase.from(\"deal_room_stakeholders\").select(\"id, room_id, user_id, contact_id, name, email, role_title, side, influence, engagement_score, notes, created_at, updated_at\").eq(\"room_id\", roomId!)"
+    ]
+  },
+  {
+    "tabela": "deal_room_documents",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useDealRooms.ts"
+    ],
+    "exemplos_uso": [
+      "const { data, error } = await supabase.from(\"deal_room_documents\").select(\"id, room_id, user_id, title, file_path, file_type, file_size, uploaded_by_side, created_at\").eq(\"room_id\", roomId!).order(\"created_at\", { ascending: false })"
+    ]
+  },
+  {
+    "tabela": "deal_room_activities",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useDealRooms.ts"
+    ],
+    "exemplos_uso": [
+      "const { data, error } = await supabase.from(\"deal_room_activities\").select(\"*\").eq(\"room_id\", roomId!).order(\"created_at\", { ascending: false }).limit(100);"
+    ]
+  },
+  {
+    "tabela": "deal_room_comments",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useDealRooms.ts"
+    ],
+    "exemplos_uso": [
+      "const { data, error } = await supabase.from(\"deal_room_comments\").select(\"id, room_id, user_id, author_side, author_label, body, created_at\").eq(\"room_id\", roomId!).order(\"created_at\")"
+    ]
+  },
+  {
+    "tabela": "email_thread_summaries",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useEmailThreadSummary.ts"
+    ],
+    "exemplos_uso": [
+      ".from('email_thread_summaries')"
+    ]
+  },
+  {
+    "tabela": "email_finder_results",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useEnrichmentSuite.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"email_finder_results\")"
+    ]
+  },
+  {
+    "tabela": "entity_relationships",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useEntityRelationships.ts"
+    ],
+    "exemplos_uso": [
+      ".from('entity_relationships')"
+    ]
+  },
+  {
+    "tabela": "error_logs",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useErrorLogs.ts"
+    ],
+    "exemplos_uso": [
+      ".from('error_logs')"
+    ]
+  },
+  {
+    "tabela": "contact_family_history",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useFamilyHistory.ts"
+    ],
+    "exemplos_uso": [
+      ".from('contact_family_history')"
+    ]
+  },
+  {
+    "tabela": "ficha360_conversation_summaries",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useFicha360ConversationSummary.ts"
+    ],
+    "exemplos_uso": [
+      ".from('ficha360_conversation_summaries')"
+    ]
+  },
+  {
+    "tabela": "forecast_periods",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useForecasting.ts"
+    ],
+    "exemplos_uso": [
+      "const { data, error } = await supabase.from(\"forecast_periods\").select(\"*\").eq(\"user_id\", user!.id).order(\"period_start\", { ascending: false });"
+    ]
+  },
+  {
+    "tabela": "deal_forecasts",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useForecasting.ts"
+    ],
+    "exemplos_uso": [
+      "const { data, error } = await supabase.from(\"deal_forecasts\").select(\"*\")"
+    ]
+  },
+  {
+    "tabela": "forecast_snapshots",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useForecasting.ts"
+    ],
+    "exemplos_uso": [
+      "const { data, error } = await supabase.from(\"forecast_snapshots\").select(\"*\")"
+    ]
+  },
+  {
+    "tabela": "forecast_quota_settings",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useForecasting.ts"
+    ],
+    "exemplos_uso": [
+      "const { data, error } = await supabase.from(\"forecast_quota_settings\").select(\"*\").eq(\"user_id\", user!.id).maybeSingle();"
+    ]
+  },
+  {
+    "tabela": "form_submissions",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useForms.ts"
+    ],
+    "exemplos_uso": [
+      ".from('form_submissions')"
+    ]
+  },
+  {
+    "tabela": "incoming_webhooks",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useIncomingWebhooks.ts"
+    ],
+    "exemplos_uso": [
+      ".from('incoming_webhooks')"
+    ]
+  },
+  {
+    "tabela": "intent_signals",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useIntent.ts"
+    ],
+    "exemplos_uso": [
+      "let q = supabase.from(\"intent_signals\").select(\"*\")"
+    ]
+  },
+  {
+    "tabela": "intent_scores",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useIntent.ts"
+    ],
+    "exemplos_uso": [
+      "const { data, error } = await supabase.from(\"intent_scores\").select(\"*\")"
+    ]
+  },
+  {
+    "tabela": "intent_tracking_pixels",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useIntent.ts"
+    ],
+    "exemplos_uso": [
+      "const { data, error } = await supabase.from(\"intent_tracking_pixels\").select(\"*\")"
+    ]
+  },
+  {
+    "tabela": "lead_magnet_downloads",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useLeadMagnets.ts"
+    ],
+    "exemplos_uso": [
+      ".from('lead_magnet_downloads')"
+    ]
+  },
+  {
+    "tabela": "lead_score_rules",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useLeadScoring.ts"
+    ],
+    "exemplos_uso": [
+      ".from('lead_score_rules').select('id, dimension, signal_key, weight, decay_days, active')"
+    ]
+  },
+  {
+    "tabela": "lead_score_thresholds",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useLeadScoring.ts"
+    ],
+    "exemplos_uso": [
+      ".from('lead_score_thresholds').select('id, grade, min_score')"
+    ]
+  },
+  {
+    "tabela": "marketing_campaign_stats",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useMarketingInsights.ts"
+    ],
+    "exemplos_uso": [
+      ".from('marketing_campaign_stats')"
+    ]
+  },
+  {
+    "tabela": "mql_criteria",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useMQL.ts"
+    ],
+    "exemplos_uso": [
+      "const { data, error } = await supabase.from('mql_criteria').select('id, user_id, name, description, conditions, is_active, auto_handoff, handoff_to_role, priority, created_at').eq('user_id', user.id).order('priority', { ascending: false })"
+    ]
+  },
+  {
+    "tabela": "mql_classifications",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useMQL.ts"
+    ],
+    "exemplos_uso": [
+      ".from('mql_classifications')"
+    ]
+  },
+  {
+    "tabela": "contact_next_actions",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useNextBestAction.ts"
+    ],
+    "exemplos_uso": [
+      ".from('contact_next_actions')"
+    ]
+  },
+  {
+    "tabela": "notification_preferences",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useNotificationPreferences.ts"
+    ],
+    "exemplos_uso": [
+      ".from('notification_preferences')"
+    ]
+  },
+  {
+    "tabela": "nurturing_executions",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useNurturingExecutions.ts"
+    ],
+    "exemplos_uso": [
+      "let q = supabase.from('nurturing_executions').select('id, workflow_id, contact_id, current_step, status, next_action_at, last_action_at, started_at, completed_at, error_message').eq('user_id', user.id).order('started_at', { ascending: false }).limit(200);"
+    ]
+  },
+  {
+    "tabela": "sales_playbooks",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/usePlaybooks.ts"
+    ],
+    "exemplos_uso": [
+      "let q = supabase.from(\"sales_playbooks\").select(\"id, user_id, name, description, scenario, stage_target, industry_target, persona_target, content, tags, active, usage_count, version, created_at, updated_at\").eq(\"user_id\", user!.id).order(\"usage_count\", { ascending: false })"
+    ]
+  },
+  {
+    "tabela": "playbook_usage_log",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/usePlaybooks.ts"
+    ],
+    "exemplos_uso": [
+      "const { error } = await supabase.from(\"playbook_usage_log\").insert({"
+    ]
+  },
+  {
+    "tabela": "revops_snapshots",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useRevOps.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"revops_snapshots\")"
+    ]
+  },
+  {
+    "tabela": "revops_benchmarks",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useRevOps.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"revops_benchmarks\")"
+    ]
+  },
+  {
+    "tabela": "revops_alerts",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useRevOps.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"revops_alerts\")"
+    ]
+  },
+  {
+    "tabela": "lead_score_threshold_automations",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useScoreAutomations.ts"
+    ],
+    "exemplos_uso": [
+      ".from('lead_score_threshold_automations')"
+    ]
+  },
+  {
+    "tabela": "lead_score_threshold_log",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useScoreAutomations.ts"
+    ],
+    "exemplos_uso": [
+      ".from('lead_score_threshold_log')"
+    ]
+  },
+  {
+    "tabela": "sentiment_annotations",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useSentimentAnnotations.ts"
+    ],
+    "exemplos_uso": [
+      ".from('sentiment_annotations')"
+    ]
+  },
+  {
+    "tabela": "sequence_events",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useSequenceEvents.ts"
+    ],
+    "exemplos_uso": [
+      "let q = supabase.from('sequence_events').select('id, enrollment_id, sequence_id, contact_id, step_order, event_type, metadata, created_at').eq('user_id', user!.id).order('created_at', { ascending: false }).limit(200);"
+    ]
+  },
+  {
+    "tabela": "sequence_send_log",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useSequenceEvents.ts"
+    ],
+    "exemplos_uso": [
+      ".from('sequence_send_log')"
+    ]
+  },
+  {
+    "tabela": "smart_notifications",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useSmartNotifications.ts"
+    ],
+    "exemplos_uso": [
+      ".from('smart_notifications')"
+    ]
+  },
+  {
+    "tabela": "social_insights",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useSocialInsights.ts"
+    ],
+    "exemplos_uso": [
+      ".from('social_insights')"
+    ]
+  },
+  {
+    "tabela": "ai_tone_preferences",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useTonePersistence.ts"
+    ],
+    "exemplos_uso": [
+      ".from('ai_tone_preferences')"
+    ]
+  },
+  {
+    "tabela": "validation_queue",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useValidationQueue.ts"
+    ],
+    "exemplos_uso": [
+      ".from(\"validation_queue\")"
+    ]
+  },
+  {
+    "tabela": "incoming_webhook_dlq",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useWebhookDlq.ts"
+    ],
+    "exemplos_uso": [
+      ".from('incoming_webhook_dlq')"
+    ]
+  },
+  {
+    "tabela": "win_loss_records",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useWinLoss.ts"
+    ],
+    "exemplos_uso": [
+      ".from('win_loss_records')"
+    ]
+  },
+  {
+    "tabela": "win_loss_reasons",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useWinLoss.ts"
+    ],
+    "exemplos_uso": [
+      ".from('win_loss_reasons')"
+    ]
+  },
+  {
+    "tabela": "win_loss_insights",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/hooks/useWinLoss.ts"
+    ],
+    "exemplos_uso": [
+      ".from('win_loss_insights')"
+    ]
+  },
+  {
+    "tabela": "slow_queries_audit",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/pages/admin/Observability.tsx"
+    ],
+    "exemplos_uso": [
+      ".from('slow_queries_audit')"
+    ]
+  },
+  {
+    "tabela": "contact_report_overrides",
+    "qtd_arquivos": 1,
+    "arquivos": [
+      "src/pages/RelatorioContato.tsx"
+    ],
+    "exemplos_uso": [
+      ".from(\"contact_report_overrides\")"
+    ]
+  }
+]

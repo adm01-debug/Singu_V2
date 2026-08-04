@@ -81,7 +81,7 @@ export function normalizeExternalContact(raw: Record<string, unknown>): Contact 
   return normalized as unknown as Contact;
 }
 
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 500;
 
 /** Lean select for listing — excludes heavy JSON blobs (behavior, life_events, extra_data) */
 const CONTACT_LISTING_SELECT = [
@@ -101,16 +101,21 @@ async function fetchContactsPage(companyId?: string, page = 0) {
     ? [{ type: 'eq' as const, column: 'company_id', value: companyId }]
     : undefined;
 
-  const { data, error } = await queryExternalData<Record<string, unknown>>({
+  const isFirstPage = page === 0;
+  const { data, count, error } = await queryExternalData<Record<string, unknown>>({
     table: 'contacts',
     select: CONTACT_LISTING_SELECT,
     order: { column: 'updated_at', ascending: false },
     range: { from: page * PAGE_SIZE, to: (page + 1) * PAGE_SIZE - 1 },
     filters,
+    countMethod: isFirstPage ? 'exact' : undefined,
   });
 
   if (error) throw error;
-  return (data || []).map(normalizeExternalContact);
+  return {
+    items: (data || []).map(normalizeExternalContact),
+    totalCount: isFirstPage ? count : null,
+  };
 }
 
 export function useContacts(companyId?: string, options?: { enabled?: boolean }) {
@@ -121,6 +126,8 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
 
   const queryKey = useMemo(() => ['contacts', companyId ?? '__all__', user?.id], [companyId, user?.id]);
   const externalEnabled = options?.enabled ?? true;
+
+  type Page = { items: Contact[]; totalCount: number | null };
 
   const {
     data,
@@ -135,14 +142,23 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     queryFn: ({ pageParam = 0 }) => fetchContactsPage(companyId, pageParam as number),
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      return lastPage.length === PAGE_SIZE ? allPages.length : undefined;
+      const loaded = allPages.reduce((sum, p) => sum + p.items.length, 0);
+      if (lastPage.totalCount != null) {
+        return loaded < lastPage.totalCount ? allPages.length : undefined;
+      }
+      return lastPage.items.length === PAGE_SIZE ? allPages.length : undefined;
     },
     enabled: !!user && externalEnabled,
     staleTime: 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
 
-  const contacts = useMemo(() => data?.pages.flat() ?? [], [data]);
+  const contacts = useMemo(() => data?.pages.flatMap(p => p.items) ?? [], [data]);
+  const totalCount = useMemo(() => {
+    const fromLast = data?.pages.find(p => p.totalCount != null)?.totalCount ?? null;
+    if (fromLast != null) return fromLast;
+    return contacts.length;
+  }, [data, contacts.length]);
 
   const fetchContacts = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey });
@@ -201,9 +217,11 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       if (error) throw error;
       if (data) {
         const normalized = normalizeExternalContact(data as unknown as Record<string, unknown>);
-        queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, prev => {
-          if (!prev) return { pages: [[normalized]], pageParams: [0] };
-          return { ...prev, pages: [[normalized, ...prev.pages[0]], ...prev.pages.slice(1)] };
+        queryClient.setQueryData<InfiniteData<Page[]>>(queryKey, prev => {
+          if (!prev) return { pages: [{ items: [normalized], totalCount: null }], pageParams: [0] };
+          const firstPage = prev.pages[0];
+          const updatedFirst = { ...firstPage, items: [normalized, ...firstPage.items] };
+          return { ...prev, pages: [updatedFirst, ...prev.pages.slice(1)] };
         });
         toast({ title: 'Contato criado', description: `${normalized.first_name} ${normalized.last_name} foi adicionado com sucesso.` });
         logActivity({ type: 'created', entityType: 'contact', entityId: normalized.id, entityName: `${normalized.first_name} ${normalized.last_name}`.trim(), description: 'Contato criado' });
@@ -219,18 +237,18 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   };
 
   const updateContact = async (id: string, updates: ContactUpdate, expectedVersion?: number) => {
-    const previous = queryClient.getQueryData<InfiniteData<Contact[]>>(queryKey);
-    const targetContact = previous?.pages.flat().find(c => c.id === id);
+    const previous = queryClient.getQueryData<InfiniteData<Page[]>>(queryKey);
+    const targetContact = previous?.pages.flatMap(p => p.items).find(c => c.id === id);
     const versionToUse = expectedVersion ?? targetContact?.version;
 
     // Optimistic Update — must update within paginated InfiniteData structure
-    queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, prev => {
+    queryClient.setQueryData<InfiniteData<Page[]>>(queryKey, prev => {
       if (!prev) return prev;
       return {
         ...prev,
         pages: prev.pages.map(page =>
           // eslint-disable-next-line sonarjs/no-nested-functions
-          page.map(c => c.id === id ? { ...c, ...updates } as Contact : c)
+          ({ ...page, items: page.items.map(c => c.id === id ? { ...c, ...updates } as Contact : c) })
         ),
       };
     });
@@ -276,13 +294,13 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       
       if (data) {
         const normalized = normalizeExternalContact(data as unknown as Record<string, unknown>);
-        queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, prev => {
+        queryClient.setQueryData<InfiniteData<Page[]>>(queryKey, prev => {
           if (!prev) return prev;
           return {
             ...prev,
             pages: prev.pages.map(page =>
               // eslint-disable-next-line sonarjs/no-nested-functions
-              page.map(c => c.id === id ? normalized : c)
+              ({ ...page, items: page.items.map(c => c.id === id ? normalized : c) })
             ),
           };
         });
@@ -290,7 +308,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
 
         // Track score changes
         if (updates.relationship_score !== undefined && user) {
-          const prev = previous?.pages.flat().find(c => c.id === id);
+          const prev = previous?.pages.flatMap(p => p.items).find(c => c.id === id);
           trackScoreChange({ userId: user.id, contactId: id, scoreType: 'relationship', newValue: updates.relationship_score ?? 0, previousValue: prev?.relationship_score });
         }
       }
@@ -312,26 +330,26 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   };
 
   const deleteContact = async (id: string) => {
-    const previous = queryClient.getQueryData<InfiniteData<Contact[]>>(queryKey);
+    const previous = queryClient.getQueryData<InfiniteData<Page[]>>(queryKey);
 
     // Optimistic Delete — filter across all InfiniteQuery pages
-    queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, prev => {
+    queryClient.setQueryData<InfiniteData<Page[]>>(queryKey, prev => {
       if (!prev) return prev;
       // eslint-disable-next-line sonarjs/no-nested-functions
-      return { ...prev, pages: prev.pages.map(page => page.filter(c => c.id !== id)) };
+      return { ...prev, pages: prev.pages.map(page => ({ ...page, items: page.items.filter(c => c.id !== id) })) };
     });
 
     try {
       const { error } = await deleteExternalData('contacts', id);
       if (error) throw error;
 
-      const deleted = previous?.pages.flat().find(c => c.id === id);
+      const deleted = previous?.pages.flatMap(p => p.items).find(c => c.id === id);
       logActivity({ type: 'deleted', entityType: 'contact', entityId: id, entityName: deleted ? `${deleted.first_name} ${deleted.last_name}`.trim() : undefined, description: 'Contato excluído' });
       return true;
     } catch (error) {
       // Automatic Rollback on error
-      if (previous) queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, previous);
-      
+      if (previous) queryClient.setQueryData<InfiniteData<Page[]>>(queryKey, previous);
+
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error deleting contact:', { error: msg });
       toast({ title: 'Erro ao excluir contato', description: msg, variant: 'destructive' });
@@ -339,5 +357,5 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     }
   };
 
-  return { contacts, loading, isFetching, hasMore: hasNextPage, error: queryError, fetchContacts, loadMore, createContact, updateContact, deleteContact, prefetchContactDetails };
+  return { contacts, loading, isFetching, hasMore: hasNextPage, totalCount, error: queryError, fetchContacts, loadMore, createContact, updateContact, deleteContact, prefetchContactDetails };
 }

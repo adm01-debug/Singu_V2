@@ -41,7 +41,7 @@ const Empresas = () => {
   usePageTitle('Empresas');
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { companies, loading, totalCount, searchTerm: activeSearch, setSearchTerm: triggerSearch, createCompany, updateCompany, deleteCompany } = useCompanies();
+  const { companies, loading, totalCount, searchTerm: activeSearch, setSearchTerm: triggerSearch, createCompany, updateCompany, deleteCompany, fetchNextPage, hasNextPage, isFetchingNextPage } = useCompanies();
   const { destructive } = useActionToast();
   const { restore } = useRestoreEntity();
 
@@ -203,7 +203,7 @@ const Empresas = () => {
   return (
     <AppLayout>
       <SEOHead title="Empresas" description="Gestão de empresas e organizações" />
-       <Header title="Empresas" subtitle={filteredAndSortedCompanies.length === (activeSearch ? totalCount : companies.length) ? `${activeSearch ? totalCount : companies.length} empresas` : `${filteredAndSortedCompanies.length} de ${activeSearch ? totalCount : companies.length} empresas`} showAddButton addButtonLabel="Nova Empresa" onAddClick={() => setIsFormOpen(true)} />
+       <Header title="Empresas" subtitle={totalCount ? `${filteredAndSortedCompanies.length} de ${totalCount} empresas` : `${filteredAndSortedCompanies.length} empresas`} showAddButton addButtonLabel="Nova Empresa" onAddClick={() => setIsFormOpen(true)} />
 
       <div className="px-4 md:px-6 -mt-2 mb-3">
         <EmpresasSavedViews
@@ -232,6 +232,8 @@ const Empresas = () => {
         onSelect={handleSelect} onSelectAll={handleSelectAll} onBulkDelete={handleBulkDelete} onBulkAddTag={handleBulkAddTag}
         onSetEditingCompany={setEditingCompany} onSetDeletingCompany={setDeletingCompany} onSetIsFormOpen={setIsFormOpen}
         updateCompany={updateCompany} companyMetrics={companyMetrics} selectedIndex={selectedIndex} triggerSearch={triggerSearch}
+        fetchNextPage={fetchNextPage} hasNextPage={hasNextPage} isFetchingNextPage={isFetchingNextPage}
+        totalCount={totalCount}
       />
 
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>

@@ -39,11 +39,11 @@ export const ContactTimelineWidget = React.memo(function ContactTimelineWidget({
       <CardContent>
         <div className="relative space-y-0 max-h-[400px] overflow-y-auto">
           <div className="absolute left-4 top-2 bottom-2 w-px bg-border" />
-          {events.map((event: TimelineEvent) => {
+          {events.map((event: TimelineEvent, idx: number) => {
             const Icon = eventIcons[event.event_type] || Clock;
             const colorClass = eventColors[event.event_type] || eventColors.note;
             return (
-              <div key={event.id} className="relative flex gap-3 py-2.5 pl-1">
+              <div key={event.id ?? `${event.event_type}-${event.event_date}-${idx}`} className="relative flex gap-3 py-2.5 pl-1">
                 <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 z-10 border ${colorClass}`}><Icon className="h-3.5 w-3.5" /></div>
                 <div className="flex-1 min-w-0 pt-0.5">
                   <div className="flex items-center justify-between gap-2">

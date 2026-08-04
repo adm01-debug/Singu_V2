@@ -34,7 +34,7 @@ export const DuplicateContactsPanel = React.memo(function DuplicateContactsPanel
               <div className="flex items-center gap-2 min-w-0">
                 <div className="w-8 h-8 rounded-full bg-warning/10 flex items-center justify-center shrink-0"><Users className="h-4 w-4 text-warning" /></div>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium truncate">{dup.full_name || `${dup.first_name || ''} ${dup.last_name || ''}`.trim() || 'N/A'}</p>
+                  <p className="text-sm font-medium truncate">{dup.full_name || dup.contact_name || `${dup.first_name || ''} ${dup.last_name || ''}`.trim() || 'N/A'}</p>
                   <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
                     {dup.email && <span className="truncate">{dup.email}</span>}
                     {dup.phone && <span>{dup.phone}</span>}

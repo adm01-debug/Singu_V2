@@ -43,7 +43,7 @@ export function BirthdayContactsWidget() {
         ) : (
           <div className="space-y-2 max-h-[300px] overflow-y-auto">
             {contacts.map((c, i) => {
-              const name = c.full_name || [c.first_name, c.last_name].filter(Boolean).join(' ') || 'Contato';
+              const name = c.full_name || c.contact_name || c.nome || [c.first_name, c.last_name].filter(Boolean).join(' ') || 'Contato';
               const birthday = c.birthday || c.data_nascimento;
               const daysUntil = c.days_until;
 
@@ -55,8 +55,8 @@ export function BirthdayContactsWidget() {
                   )} />
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-foreground truncate">{name}</p>
-                    {c.company_name && (
-                      <p className="text-[10px] text-muted-foreground truncate">{c.company_name}</p>
+                    {(c.company_name || c.empresa) && (
+                      <p className="text-[10px] text-muted-foreground truncate">{c.company_name || c.empresa}</p>
                     )}
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">

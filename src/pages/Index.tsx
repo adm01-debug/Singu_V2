@@ -50,13 +50,14 @@ const Dashboard = () => {
 
   // Data hooks
   const { contacts, loading: contactsLoading } = useContacts();
-  const { companies, loading: companiesLoading } = useCompanies();
+  const { companies, totalCount: companiesTotal, loading: companiesLoading } = useCompanies();
   const { interactions, loading: interactionsLoading } = useInteractions();
   const dashboardStats = useDashboardStats({
     contacts,
     companies,
     interactions,
     loading: contactsLoading || companiesLoading || interactionsLoading,
+    totalCompanies: companiesTotal,
   });
 
   useCompatibilityAlerts();

@@ -91,7 +91,7 @@ const sortOptions = [
 const Contatos = () => {
   usePageTitle('Contatos');
   const [searchParams, setSearchParams] = useSearchParams();
-  const { contacts, loading, createContact, updateContact, deleteContact, fetchContacts, hasMore, loadMore } = useContacts();
+  const { contacts, loading, createContact, updateContact, deleteContact, fetchContacts, hasMore, loadMore, totalCount } = useContacts();
 
   const dynamicFilterConfigs = useMemo(() => {
     const configs = [...filterConfigs];
@@ -290,7 +290,7 @@ const Contatos = () => {
     <>
       <AppLayout>
         <SEOHead title="Contatos" description="Gestão inteligente de contatos e relacionamentos" />
-         <Header title="Contatos" subtitle={`${filteredAndSortedContacts.length} de ${contacts.length} pessoas`} showAddButton addButtonLabel="Novo Contato" onAddClick={() => setIsFormOpen(true)} />
+        <Header title="Contatos" subtitle={`${filteredAndSortedContacts.length} de ${totalCount} pessoas`} showAddButton addButtonLabel="Novo Contato" onAddClick={() => setIsFormOpen(true)} />
 
         <div className="px-4 md:px-6 -mt-2 mb-3">
           <ContatosSavedViews
@@ -308,7 +308,7 @@ const Contatos = () => {
         </div>
 
         <ContatosContent
-          contacts={contacts} loading={loading} filteredAndSortedContacts={filteredAndSortedContacts}
+          contacts={contacts} loading={loading} filteredAndSortedContacts={filteredAndSortedContacts} totalCount={totalCount}
           searchTerm={searchTerm} onSearchChange={handleSearchChange}
           viewMode={viewMode} onViewModeChange={setViewMode}
           gridColumns={gridColumns} onGridColumnsChange={setGridColumns}
