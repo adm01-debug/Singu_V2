@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Anyone can insert document_views" ON public.document_views;

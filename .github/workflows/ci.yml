@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate PR Title (Conventional Commits)
+        if: github.event_name == 'pull_request'
+        run: echo "${{ github.event.pull_request.title }}" | npx commitlint
+
+      - name: Check for circular dependencies
+        run: npx depcruise src --config .dependency-cruiser.cjs
+
+      - name: Edge Function CORS scoped enforcer
+        run: node scripts/check-edge-cors.mjs
+
+      - name: Invalid indexes guard (public.*)
+        if: ${{ secrets.PGHOST != '' }}
+        env:
+          PGHOST: ${{ secrets.PGHOST }}
+          PGPORT: ${{ secrets.PGPORT }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+        run: psql -v ON_ERROR_STOP=1 -f scripts/migration/verify/invalid-indexes-guard.sql
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Lint (ESLint)
+        # Rodada 31/10 — Onda E ratchet GLOBAL:
+        # Todo o repo travado em 0/0 (src + supabase/functions + scripts + specs).
+        # Novas violações devem vir com `eslint-disable-next-line <regra> -- <motivo>`
+        # (ver docs/adr/ADR-020-zero-warning-ratchet.md e ADR-021-onda-e-external-ratchet.md).
+        run: |
+          npx eslint src --max-warnings=0
+          npx eslint supabase/functions --max-warnings=0
+          npx eslint scripts --max-warnings=0
+          npx eslint . --max-warnings=0
+
+      - name: Security audit (high+ severity)
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright E2E Tests
+        run: npm run test:e2e
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          CI: true
+
+      - name: Upload Playwright report and artifacts
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+
+      - name: Run unit tests with coverage
+        run: npm run test:unit -- --coverage --reporter=default
+
+      - name: Run RLS matrix tests (anon / user_a / user_b / user_admin)
+        if: ${{ secrets.PGHOST != '' }}
+        env:
+          PGHOST: ${{ secrets.PGHOST }}
+          PGPORT: ${{ secrets.PGPORT }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+          RLS_USER_A: ${{ secrets.RLS_USER_A }}
+          RLS_USER_B: ${{ secrets.RLS_USER_B }}
+          RLS_USER_ADMIN: ${{ secrets.RLS_USER_ADMIN }}
+        run: bash tests/rls/run.sh
+
+      - name: RLS coverage (public.* tables must have RLS + policy)
+        if: ${{ secrets.PGHOST != '' }}
+        env:
+          PGHOST: ${{ secrets.PGHOST }}
+          PGPORT: ${{ secrets.PGPORT }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+        run: psql -v ON_ERROR_STOP=1 -f scripts/migration/verify/rls-coverage.sql
+
+      - name: Build
+        run: npm run build
+
+      - name: Check bundle size budget
+        run: node scripts/check-bundle-size.mjs
+
+      - name: Lighthouse CI (performance budgets)
+        run: npx --yes @lhci/cli@0.13.x autorun || echo "::warning::Lighthouse-CI assertions failed (non-blocking)"

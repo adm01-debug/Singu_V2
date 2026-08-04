@@ -1,0 +1,128 @@
+import { useMemo } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
+
+export type AnnotationCategory = 'campanha' | 'abordagem' | 'release' | 'reuniao' | 'outro';
+
+export interface SentimentAnnotation {
+  id: string;
+  created_by: string;
+  contact_id: string;
+  week_start: string; // ISO date YYYY-MM-DD
+  category: AnnotationCategory;
+  title: string;
+  description: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateAnnotationInput {
+  contact_id: string;
+  week_start: string;
+  category: AnnotationCategory;
+  title: string;
+  description?: string | null;
+}
+
+export interface UpdateAnnotationInput {
+  id: string;
+  category?: AnnotationCategory;
+  title?: string;
+  description?: string | null;
+  week_start?: string;
+}
+
+const QK = (contactId?: string, userId?: string) => ['sentiment-annotations', userId ?? 'none', contactId ?? 'none'] as const;
+
+export function useSentimentAnnotations(contactId: string | undefined) {
+  const { user } = useAuth();
+  const qc = useQueryClient();
+
+  const list = useQuery({
+    queryKey: QK(contactId, user?.id),
+    enabled: !!contactId && !!user,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+    queryFn: async (): Promise<SentimentAnnotation[]> => {
+      const { data, error } = await supabase
+        .from('sentiment_annotations')
+        .select('id, created_by, contact_id, week_start, category, title, description, created_at, updated_at')
+        .eq('created_by', user!.id)
+        .eq('contact_id', contactId!)
+        .order('week_start', { ascending: false })
+        .order('created_at', { ascending: false })
+        .limit(200);
+      if (error) throw error;
+      return (data ?? []) as SentimentAnnotation[];
+    },
+  });
+
+  const byWeek = useMemo(() => {
+    const map = new Map<string, SentimentAnnotation[]>();
+    for (const a of list.data ?? []) {
+      const arr = map.get(a.week_start) ?? [];
+      arr.push(a);
+      map.set(a.week_start, arr);
+    }
+    return map;
+  }, [list.data]);
+
+  const invalidate = () => qc.invalidateQueries({ queryKey: QK(contactId, user?.id) });
+
+  const create = useMutation({
+    mutationFn: async (input: CreateAnnotationInput) => {
+      if (!user) throw new Error('Não autenticado');
+      const { data, error } = await supabase
+        .from('sentiment_annotations')
+        .insert({
+          created_by: user.id,
+          contact_id: input.contact_id,
+          week_start: input.week_start,
+          category: input.category,
+          title: input.title,
+          description: input.description ?? null,
+        })
+        .select()
+        .maybeSingle();
+      if (error) throw error;
+      if (!data) throw new Error('Falha ao criar anotação');
+      return data as SentimentAnnotation;
+    },
+    onSuccess: invalidate,
+    onError: () => toast.error('Erro ao criar anotação'),
+  });
+
+  const update = useMutation({
+    mutationFn: async (input: UpdateAnnotationInput) => {
+      if (!user) throw new Error('Não autenticado');
+      const { id, ...patch } = input;
+      const { data, error } = await supabase
+        .from('sentiment_annotations')
+        .update(patch)
+        .eq('created_by', user!.id)
+        .eq('id', id)
+        .select()
+        .maybeSingle();
+      if (error) throw error;
+      if (!data) throw new Error('Falha ao atualizar anotação');
+      return data as SentimentAnnotation;
+    },
+    onSuccess: invalidate,
+    onError: () => toast.error('Erro ao atualizar anotação'),
+  });
+
+  const remove = useMutation({
+    mutationFn: async (id: string) => {
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('sentiment_annotations').delete().eq('created_by', user.id).eq('id', id);
+      if (error) throw error;
+      return id;
+    },
+    onSuccess: invalidate,
+    onError: () => toast.error('Erro ao remover anotação'),
+  });
+
+  return { list, byWeek, create, update, remove };
+}

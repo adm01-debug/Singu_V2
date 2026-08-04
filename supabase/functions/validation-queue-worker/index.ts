@@ -1,0 +1,114 @@
+import { createClient } from "npm:@supabase/supabase-js@2";
+import { rateLimit } from "../_shared/rate-limit.ts";
+import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { fetchAPI } from "../_shared/fetch-utils.ts";
+
+
+const limiter = rateLimit({ windowMs: 60_000, max: 12 });
+const BATCH_SIZE = 50;
+const MAX_ATTEMPTS = 3;
+
+interface QueueItem {
+  id: string;
+  user_id: string;
+  contact_id: string | null;
+  kind: "email" | "phone";
+  value: string;
+  attempts: number;
+}
+
+Deno.serve(async (req) => {
+  const cors = scopedCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+
+  const cronCheck = await requireCronSecret(req);
+  if (cronCheck) return cronCheck;
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "worker";
+  const limited = limiter.check(ip, req);
+  if (limited) return limited;
+
+  try {
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+    const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const admin = createClient(SUPABASE_URL, SERVICE_KEY);
+
+    // Atomically claim a batch: UPDATE+RETURNING with FOR UPDATE SKIP LOCKED prevents
+    // two concurrent cron invocations from processing the same rows.
+    const { data: items, error: fetchErr } = await admin
+      .rpc("claim_validation_batch", { p_batch_size: BATCH_SIZE, p_max_attempts: MAX_ATTEMPTS });
+
+    if (fetchErr) throw fetchErr;
+    const queue = (items ?? []) as QueueItem[];
+
+    if (queue.length === 0) {
+      return new Response(JSON.stringify({ processed: 0, message: "Fila vazia" }), {
+        headers: { ...cors, "Content-Type": "application/json" },
+      });
+    }
+
+    let okCount = 0;
+    let errCount = 0;
+
+    type DoneRow = { id: string; status: string; processed_at: string; attempts: number };
+    type ErrRow = { id: string; status: string; attempts: number; last_error: string; processed_at: string | null };
+    const doneRows: DoneRow[] = [];
+    const errRows: ErrRow[] = [];
+
+    for (const item of queue) {
+      try {
+        const fnName = item.kind === "email" ? "email-verifier" : "phone-validator";
+        const body = item.kind === "email"
+          ? { email: item.value, contactId: item.contact_id, persist: true }
+          : { phone: item.value, contactId: item.contact_id, persist: true };
+
+        // Invoca função interna com service role
+        const resp = await fetchAPI(`${SUPABASE_URL}/functions/v1/${fnName}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${SERVICE_KEY}`,
+            apikey: SERVICE_KEY,
+          },
+          body: JSON.stringify(body),
+        });
+
+        if (!resp.ok) {
+          const txt = await resp.text();
+          throw new Error(`${fnName} ${resp.status}: ${txt.slice(0, 200)}`);
+        }
+
+        doneRows.push({ id: item.id, status: "done", processed_at: new Date().toISOString(), attempts: item.attempts + 1 });
+        okCount++;
+      } catch (err) {
+        const nextAttempts = item.attempts + 1;
+        const finalStatus = nextAttempts >= MAX_ATTEMPTS ? "error" : "pending";
+        errRows.push({
+          id: item.id,
+          status: finalStatus,
+          attempts: nextAttempts,
+          last_error: String(err).slice(0, 500),
+          processed_at: finalStatus === "error" ? new Date().toISOString() : null,
+        });
+        errCount++;
+      }
+    }
+
+    // Flush all outcome updates in two batched upserts
+    await Promise.all([
+      doneRows.length > 0 ? admin.from("validation_queue").upsert(doneRows, { onConflict: "id" }) : Promise.resolve(),
+      errRows.length > 0 ? admin.from("validation_queue").upsert(errRows, { onConflict: "id" }) : Promise.resolve(),
+    ]);
+
+    return new Response(
+      JSON.stringify({ processed: queue.length, ok: okCount, errors: errCount }),
+      { headers: { ...cors, "Content-Type": "application/json" } }
+    );
+  } catch (err) {
+    console.error("validation-queue-worker error:", err);
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+});

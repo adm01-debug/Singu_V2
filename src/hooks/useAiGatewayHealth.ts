@@ -1,0 +1,95 @@
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+
+export interface AiGatewayFunctionRow {
+  function_name: string;
+  requests: number;
+  errors: number;
+  error_rate_pct: number | null;
+  p50_ms: number | null;
+  p95_ms: number | null;
+  last_seen: string;
+}
+
+export interface AiGatewayModelRow {
+  model: string;
+  requests: number;
+  errors: number;
+  error_rate_pct: number | null;
+  p50_ms: number | null;
+  p95_ms: number | null;
+  tokens_in: number;
+  tokens_out: number;
+}
+
+export interface AiGatewayActiveAlert {
+  id: string;
+  alert_type: string;
+  severity: string;
+  message: string;
+  metadata: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface AiGatewayResolvedRow {
+  id: string;
+  alert_type: string;
+  severity: string;
+  message: string;
+  created_at: string;
+  acknowledged_at: string;
+  mttr_minutes: number | null;
+  auto_resolved: boolean | null;
+}
+
+export interface AiGatewayMttrRow {
+  alert_type: string;
+  resolved_count: number;
+  avg_mttr_minutes: number | null;
+  max_mttr_minutes: number | null;
+}
+
+export interface AiGatewayHeatmapCell {
+  dow: number; // 1..7 (ISO)
+  hour: number; // 0..23
+  requests: number;
+  errors: number;
+  error_rate_pct: number | null;
+}
+
+export interface AiGatewayWorstWindow extends AiGatewayHeatmapCell {}
+
+export interface AiGatewayHealth {
+  window_hours: number;
+  computed_at: string;
+  totals: {
+    requests?: number;
+    errors?: number;
+    error_rate_pct?: number | null;
+    p50_ms?: number | null;
+    p95_ms?: number | null;
+    p99_ms?: number | null;
+    tokens_in?: number;
+    tokens_out?: number;
+  };
+  by_function: AiGatewayFunctionRow[];
+  by_model: AiGatewayModelRow[];
+  active_alerts: AiGatewayActiveAlert[];
+  resolved_recent: AiGatewayResolvedRow[];
+  resolved_mttr: AiGatewayMttrRow[];
+  error_heatmap: AiGatewayHeatmapCell[];
+  worst_windows: AiGatewayWorstWindow[];
+}
+
+export function useAiGatewayHealth(hours = 24) {
+  return useQuery({
+    queryKey: ['ai-gateway-health', hours],
+    queryFn: async (): Promise<AiGatewayHealth> => {
+      const { data, error } = await supabase.rpc('get_ai_gateway_health', { _hours: hours });
+      if (error) throw error;
+      return data as unknown as AiGatewayHealth;
+    },
+    staleTime: 60_000,
+    refetchInterval: 5 * 60_000,
+  });
+}

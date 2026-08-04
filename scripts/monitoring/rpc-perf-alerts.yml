@@ -1,0 +1,123 @@
+groups:
+  - name: rpc-performance
+    interval: 30s
+    rules:
+      - alert: AiGatewayHealthRpcSlow
+        expr: rpc_perf_latency_ms{rpc="get_ai_gateway_health",quantile="0.95"} > 800
+        for: 10m
+        labels:
+          severity: high
+          service: ai-gateway
+          component: rpc
+        annotations:
+          summary: "RPC get_ai_gateway_health p95 acima de 800ms por 10min"
+          description: |
+            p95 atual: {{ $value }}ms (threshold 800ms).
+            Investigar: partition pruning, bloat da tabela ai_gateway_metrics,
+            queries paralelas, ou aumento súbito de alertas em system_alerts.
+          runbook: "docs/runbooks/db-guards.md#ai-gateway-health-slow"
+
+      - alert: RpcPerfSamplesMissing
+        expr: absent(rpc_perf_samples_total{rpc="get_ai_gateway_health"})
+        for: 15m
+        labels:
+          severity: warning
+          service: ai-gateway
+          component: exporter
+        annotations:
+          summary: "Sem amostras de perf da RPC get_ai_gateway_health por 15min"
+          description: |
+            Exporter rpc-perf-exporter.sh pode estar quebrado ou a RPC não está
+            sendo chamada pelo painel /admin/error-budget. Confirmar cron e login admin.
+
+      - alert: RpcPerfCriticalP99
+        expr: rpc_perf_latency_ms{rpc="get_ai_gateway_health",quantile="0.99"} > 2500
+        for: 5m
+        labels:
+          severity: critical
+          service: ai-gateway
+          component: rpc
+        annotations:
+          summary: "RPC get_ai_gateway_health p99 crítico (>2.5s)"
+          description: |
+            p99 atual: {{ $value }}ms. Impacto direto no tempo de carga do painel de
+            observabilidade. Considerar redução da janela ou skip do heatmap.
+
+      - alert: RpcPerfDegradation
+        expr: |
+          (
+            avg_over_time(rpc_perf_latency_ms{quantile="0.95"}[1h])
+            /
+            clamp_min(avg_over_time(rpc_perf_latency_ms{quantile="0.95"}[24h]), 1)
+          ) >= 1.5
+        for: 15m
+        labels:
+          severity: warning
+          service: rpc
+          component: perf-trend
+        annotations:
+          summary: "RPC {{ $labels.rpc }} degradada: p95(1h) ≥ 1,5× p95(24h)"
+          description: |
+            A latência p95 na última 1h está ao menos 1,5× o baseline de 24h para {{ $labels.rpc }}.
+            Investigar picos de carga, planos de query alterados, ou concorrência incomum.
+          runbook: "docs/runbooks/db-guards.md#rpc-perf-degradation"
+
+      - alert: RpcPlanRegression
+        expr: max_over_time(rpc_plan_changed{}[6h]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          service: rpc
+          component: query-plan
+        annotations:
+          summary: "Plano de execução da RPC {{ $labels.rpc }} mudou nas últimas 6h"
+          description: |
+            Um snapshot com plan_changed=true foi registrado para {{ $labels.rpc }}.
+            Abrir /admin/error-budget → card "Snapshots de plano de execução" e clicar na
+            linha para ver o diff lado a lado (Index Scan → Seq Scan indica regressão real).
+          runbook: "docs/runbooks/db-guards.md#rpc-plan-regression"
+
+      - alert: RpcPlanExporterMissing
+        expr: absent(rpc_plan_window_hours)
+        for: 15m
+        labels:
+          severity: warning
+          service: rpc
+          component: exporter
+        annotations:
+          summary: "Exporter de planos de execução sem métricas por 15min"
+          description: |
+            scripts/monitoring/rpc-plan-exporter.sh não está publicando o textfile
+            (métrica rpc_plan_window_hours ausente). Verificar cron, credenciais libpq
+            e permissão de leitura em public.rpc_plan_snapshots.
+          runbook: "docs/runbooks/db-guards.md#rpc-plan-exporter-missing"
+
+      - alert: RpcPlanChurn
+        expr: sum by (rpc) (rpc_plan_changed) >= 3
+        for: 30m
+        labels:
+          severity: high
+          service: rpc
+          component: query-plan
+        annotations:
+          summary: "RPC {{ $labels.rpc }} trocou de plano ≥3× na janela de 6h"
+          description: |
+            Alternância frequente de plano indica estatísticas instáveis, parâmetros
+            voláteis (plan flip-flop) ou autovacuum/ANALYZE insuficiente na tabela base.
+          runbook: "docs/runbooks/db-guards.md#rpc-plan-churn"
+      - alert: RpcPlanChurnWithLatency
+        expr: (sum by (rpc) (rpc_plan_changed) >= 2) and on (rpc) (rpc_plan_p95_ms >= 800)
+        for: 15m
+        labels:
+          severity: critical
+          service: rpc
+          component: query-plan
+        annotations:
+          summary: "RPC {{ $labels.rpc }} com churn de plano E p95 24h ≥ 800ms"
+          description: |
+            Correlação entre instabilidade de plano e degradação real de latência:
+            o planner alternou de plano ≥2× em 6h enquanto o p95 de 24h passou de 800ms.
+            Abrir /admin/error-budget → card "Churn de plano (6h)" e comparar o diff.
+            Ações típicas: ANALYZE na tabela base, ajustar n_distinct/statistics target
+            ou fixar o plano via reescrita da query.
+          runbook: "docs/runbooks/db-guards.md#rpc-plan-churn-with-latency"

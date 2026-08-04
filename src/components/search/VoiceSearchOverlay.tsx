@@ -1,0 +1,396 @@
+import React, { useEffect, useCallback, useRef, useState, useMemo } from "react";
+import { createPortal } from "react-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, MessageCircle, MicOff } from "lucide-react";
+import type { VoiceAgentPhase } from "@/hooks/useVoiceAgent";
+import { usePhaseColors } from "./voice/usePhaseColors";
+import { SpectrumWaveform } from "./voice/VoiceVisualEffects";
+import { VoiceOrb } from "./voice/VoiceOrb";
+import { FloatingParticles } from "./voice/FloatingParticles";
+
+interface VoiceSearchOverlayProps {
+  isOpen: boolean;
+  phase: VoiceAgentPhase;
+  partialTranscript: string;
+  finalTranscript: string;
+  agentResponse: string;
+  error?: string | null;
+  onClose: () => void;
+  onStartListening: () => void;
+  onStopListening: () => void;
+  onStopSpeaking: () => void;
+  onCommandSelect?: (command: string) => void;
+}
+
+const PHASE_META: Record<VoiceAgentPhase, { title: string; subtitle: string }> = {
+  idle: { title: "Assistente de Voz", subtitle: "Toque no orbe para começar" },
+  listening: { title: "Ouvindo...", subtitle: "Diga o que você precisa" },
+  processing: { title: "Processando...", subtitle: "IA interpretando seu comando" },
+  speaking: { title: "Respondendo...", subtitle: "Ouvindo a resposta" },
+  error: { title: "Erro", subtitle: "Toque para tentar novamente" },
+};
+
+const SUGGESTION_COMMANDS = [
+  "Buscar contatos sem interação há 30 dias",
+  "Mostrar contatos da empresa X",
+  "Ir para o dashboard",
+  "Qual contato tem maior score?",
+];
+
+export const VoiceSearchOverlay = React.forwardRef<HTMLDivElement, VoiceSearchOverlayProps>(
+  function VoiceSearchOverlay({
+    isOpen, phase, partialTranscript, finalTranscript, agentResponse, error,
+    onClose, onStartListening, onStopListening, onStopSpeaking, onCommandSelect,
+  }, ref) {
+    const [isAutoStarting, setIsAutoStarting] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
+    const [bootingTimedOut, setBootingTimedOut] = useState(false);
+    const wasOpenRef = useRef(false);
+
+    useEffect(() => {
+      if (isOpen) {
+        wasOpenRef.current = true;
+        setIsClosing(false);
+      } else if (wasOpenRef.current) {
+        wasOpenRef.current = false;
+        setIsClosing(true);
+        const timer = setTimeout(() => setIsClosing(false), 300);
+        return () => clearTimeout(timer);
+      }
+    }, [isOpen]);
+
+    useEffect(() => {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape" && isOpen) onClose();
+      };
+      document.addEventListener("keydown", handleKeyDown);
+      return () => document.removeEventListener("keydown", handleKeyDown);
+    }, [isOpen, onClose]);
+
+    const prevPhaseRef = useRef<VoiceAgentPhase>("idle");
+    const hasAutoStarted = useRef(false);
+    const startListeningRef = useRef(onStartListening);
+
+    useEffect(() => {
+      startListeningRef.current = onStartListening;
+    }, [onStartListening]);
+
+    useEffect(() => {
+      if (!isOpen) {
+        hasAutoStarted.current = false;
+        prevPhaseRef.current = "idle";
+        setIsAutoStarting(false);
+        return;
+      }
+
+      if (phase === "idle" && !hasAutoStarted.current) {
+        hasAutoStarted.current = true;
+        setIsAutoStarting(true);
+        const timer = window.setTimeout(() => startListeningRef.current(), 120);
+        return () => clearTimeout(timer);
+      }
+
+      if (phase === "idle" && prevPhaseRef.current === "speaking") {
+        setIsAutoStarting(true);
+        const timer = window.setTimeout(() => startListeningRef.current(), 800);
+        prevPhaseRef.current = phase;
+        return () => clearTimeout(timer);
+      }
+
+      if (phase !== "idle") {
+        setIsAutoStarting(false);
+        hasAutoStarted.current = true;
+      }
+      prevPhaseRef.current = phase;
+    }, [isOpen, phase]);
+
+    useEffect(() => {
+      if (!isOpen) {
+        setBootingTimedOut(false);
+        return;
+      }
+      const showsBooting = isAutoStarting && phase === "idle";
+      if (showsBooting) {
+        const timer = setTimeout(() => setBootingTimedOut(true), 10000);
+        return () => clearTimeout(timer);
+      }
+      setBootingTimedOut(false);
+    }, [isOpen, isAutoStarting, phase]);
+
+    const showBooting = (isAutoStarting && phase === "idle") || isClosing;
+    const meta = PHASE_META[phase] ?? PHASE_META.idle;
+    const title = showBooting
+      ? (bootingTimedOut ? "Microfone indisponível" : "Ativando microfone...")
+      : meta.title;
+    const subtitle = showBooting
+      ? (bootingTimedOut ? "Verifique as permissões do navegador e tente novamente" : "Preparando sua conversa por voz")
+      : meta.subtitle;
+    const showTranscript = partialTranscript || finalTranscript;
+    const colors = usePhaseColors(phase, showBooting);
+    const isWaveformActive = phase === "listening" || phase === "speaking" || showBooting;
+
+    const borderGlow = useMemo(() => {
+      const match = colors.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+      const [h, s, l] = match ? [match[1], match[2], match[3]] : ["263", "70", "50"];
+      return {
+        border: `hsla(${h}, ${s}%, ${l}%, 0.35)`,
+        shadowDim: `0 0 12px 1px hsla(${h}, ${s}%, ${l}%, 0.15), 0 0 30px 4px hsla(${h}, ${s}%, ${l}%, 0.08), inset 0 0 10px 0px hsla(${h}, ${s}%, ${l}%, 0.05)`,
+        shadowBright: `0 0 25px 5px hsla(${h}, ${s}%, ${l}%, 0.35), 0 0 60px 10px hsla(${h}, ${s}%, ${l}%, 0.15), inset 0 0 18px 0px hsla(${h}, ${s}%, ${l}%, 0.1)`,
+        borderDim: `hsla(${h}, ${s}%, ${l}%, 0.3)`,
+        borderBright: `hsla(${h}, ${s}%, ${l}%, 0.7)`,
+      };
+    }, [colors.primary]);
+
+    const vibrate = useCallback((pattern: number | number[]) => {
+      try { navigator?.vibrate?.(pattern); } catch { /* unsupported */ }
+    }, []);
+
+    const handleOrbClick = useCallback(() => {
+      if (showBooting || phase === "processing") return;
+      vibrate(15);
+      if (phase === "listening") onStopListening();
+      else if (phase === "speaking") onStopSpeaking();
+      else if (phase === "idle" || phase === "error") onStartListening();
+    }, [phase, showBooting, vibrate, onStartListening, onStopListening, onStopSpeaking]);
+
+    const prevVibratePhase = useRef(phase);
+    useEffect(() => {
+      if (phase !== prevVibratePhase.current) {
+        if (phase === "listening") vibrate(10);
+        else if (phase === "speaking") vibrate([10, 50, 10]);
+        else if (phase === "error") vibrate([30, 80, 30]);
+        prevVibratePhase.current = phase;
+      }
+    }, [phase, vibrate]);
+
+    return createPortal(
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-50"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Assistente de Voz"
+          >
+            <motion.div
+              className="absolute inset-0 backdrop-blur-xl"
+              initial={{ backgroundColor: "rgba(2,2,10,0.75)" }}
+              animate={{ backgroundColor: ["rgba(2,2,10,0.70)", "rgba(2,2,10,0.85)", "rgba(2,2,10,0.70)"] }}
+              transition={{ duration: 6.6, repeat: Infinity, ease: "easeInOut" }}
+              onClick={onClose}
+            />
+
+            <FloatingParticles phase={phase} isBooting={showBooting} />
+
+            <div className="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                transition={{ type: "spring", damping: 25, stiffness: 250 }}
+                className="relative max-w-xs w-full pointer-events-auto"
+              >
+                <motion.div
+                  className="relative flex flex-col items-center gap-4 w-full px-6 py-7 rounded-3xl max-h-[90vh] overflow-hidden"
+                  style={{
+                    background: "rgba(8,8,18,0.95)",
+                  }}
+                  animate={{
+                    boxShadow: [
+                      borderGlow.shadowDim,
+                      borderGlow.shadowBright,
+                      borderGlow.shadowDim,
+                    ],
+                    borderColor: [
+                      borderGlow.borderDim,
+                      borderGlow.borderBright,
+                      borderGlow.borderDim,
+                    ],
+                    border: `1.5px solid ${borderGlow.border}`,
+                  }}
+                  transition={{
+                    boxShadow: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
+                    borderColor: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
+                    border: { duration: 0.8, ease: "easeInOut" },
+                  }}
+                >
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
+                  className="text-center"
+                >
+                  <h2 className="font-display text-xs font-medium text-foreground/50 mb-0.5">{title}</h2>
+                  <p className="text-foreground/25 text-[10px]">{subtitle}</p>
+                </motion.div>
+
+                <motion.div
+                  className="cursor-pointer select-none"
+                  onClick={handleOrbClick}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  role="button"
+                  aria-label={
+                    showBooting ? "Ativando microfone"
+                      : phase === "listening" ? "Parar de ouvir"
+                      : phase === "processing" ? "Processando comando"
+                      : phase === "speaking" ? "Parar resposta"
+                      : "Iniciar microfone"
+                  }
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleOrbClick(); }}
+                >
+                  <VoiceOrb phase={phase} isBooting={showBooting} />
+                </motion.div>
+
+                <AnimatePresence mode="wait">
+                  {isWaveformActive && (
+                    <motion.div
+                      key="spectrum"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                    >
+                      <SpectrumWaveform colors={colors} isActive={isWaveformActive} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <AnimatePresence mode="wait">
+                  {showTranscript && (
+                    <motion.div
+                      key="transcript"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="w-full"
+                    >
+                      <div className="bg-foreground/5 border border-foreground/10 rounded-2xl px-5 py-4">
+                        <p className="text-[10px] text-foreground/30 uppercase tracking-widest mb-1">
+                          {phase === "listening" ? "Você está dizendo:" : "Você disse:"}
+                        </p>
+                        <p className="text-base font-medium text-foreground/90">
+                          "{partialTranscript || finalTranscript}"
+                          {phase === "listening" && partialTranscript && (
+                            <motion.span
+                              animate={{ opacity: [1, 0] }}
+                              transition={{ duration: 0.5, repeat: Infinity }}
+                              className="text-primary"
+                            >
+                              |
+                            </motion.span>
+                          )}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <AnimatePresence mode="wait">
+                  {agentResponse && (phase === "speaking" || phase === "idle") && (
+                    <motion.div
+                      key="agent-response"
+                      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                      className="w-full"
+                    >
+                      <div className="bg-foreground/5 border border-foreground/10 rounded-2xl px-5 py-4">
+                        <div className="flex items-start gap-3">
+                          <div className="h-7 w-7 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                            <MessageCircle className="h-3.5 w-3.5 text-primary" />
+                          </div>
+                          <div>
+                            <p className="text-[10px] text-foreground/30 uppercase tracking-widest mb-1">Assistente</p>
+                            <p className="text-sm font-medium text-foreground/90">{agentResponse}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <AnimatePresence>
+                  {error && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="w-full bg-destructive/10 border border-destructive/20 rounded-2xl px-5 py-4"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="h-7 w-7 rounded-full bg-destructive/20 flex items-center justify-center shrink-0 mt-0.5">
+                          <MicOff className="h-3.5 w-3.5 text-destructive" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-destructive">{error}</p>
+                          <p className="text-xs text-foreground/40 mt-1">Toque no orbe para tentar novamente</p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {phase === "idle" && !showBooting && (
+                  <motion.div
+                    initial={{ y: 15, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.25 }}
+                    className="space-y-3 text-center w-full"
+                  >
+                    <p className="text-[10px] text-foreground/25 uppercase tracking-widest font-medium">
+                      Experimente dizer
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      {SUGGESTION_COMMANDS.map((cmd) => (
+                        <button
+                          key={cmd}
+                          onClick={() => onCommandSelect?.(cmd)}
+                          className="group px-3 py-1.5 bg-foreground/[0.04] hover:bg-foreground/[0.08] rounded-full text-xs text-foreground/35 hover:text-foreground/70 border border-foreground/[0.06] hover:border-foreground/[0.12] transition-all duration-200 cursor-pointer "
+                        >
+                          <span className="group-hover:tracking-wide transition-all duration-200">"{cmd}"</span>
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                <div className="w-full flex items-center justify-between mt-1">
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-[10px] text-foreground/20"
+                  >
+                    <kbd className="px-1 py-0.5 bg-foreground/5 rounded text-[9px] font-mono border border-foreground/10">ESC</kbd> para fechar
+                  </motion.p>
+                  <button
+                    onClick={onClose}
+                    className="flex items-center justify-center w-7 h-7 rounded-full bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 text-foreground/40 hover:text-foreground/80 transition-colors"
+                    aria-label="Fechar assistente de voz"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                </motion.div>
+              </motion.div>
+            </div>
+
+            <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+              {showBooting && "Ativando microfone."}
+              {phase === "listening" && "Ouvindo. Fale seu comando."}
+              {phase === "processing" && `Processando: ${finalTranscript}`}
+              {phase === "speaking" && `Resposta: ${agentResponse}`}
+              {phase === "error" && `Erro: ${error}`}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>,
+      document.body
+    );
+  }
+);

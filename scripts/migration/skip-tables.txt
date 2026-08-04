@@ -1,0 +1,49 @@
+# Tabelas ignoradas por export-data.sh / import-data.sh.
+# Uma por linha. Comentários com #. Suporta curingas glob simples (fnmatch).
+#
+# Motivo geral: dados voláteis, caches ou partições que serão recriadas vazias.
+
+# Auditoria — partições recriadas vazias (a estrutura vem do DDL 11)
+audit_log
+audit_log_default
+audit_log_2026_*
+
+# Caches / snapshots efêmeros
+attribution_models_cache
+conversational_search_cache
+search_products_cache
+semantic_search_cache
+channel_counts_cache
+system_health_snapshots
+
+# Filas de processamento (serão repopuladas pelos triggers)
+behavioral_profile_regen_queue
+crm_automation_reprocess_queue
+lead_score_recompute_queue
+social_sync_queue
+validation_queue
+
+# Segurança / rate limiting (curto TTL)
+login_attempts
+access_blocked_log
+connection_test_logs
+
+# Logs de alto volume — migrar seletivamente se necessário
+notification_logs
+error_logs
+ai_gateway_logs
+incoming_webhook_logs
+incoming_webhook_dlq
+sequence_send_log
+redistribution_log
+psychographic_audit_log
+contact_cadence_audit
+contact_preferences_audit
+contact_relatives_audit
+contact_time_analysis_audit
+disc_analysis_history_audit
+interactions_audit
+reframing_analysis_audit
+
+# Telemetria de queries (regenera sozinha)
+query_telemetry

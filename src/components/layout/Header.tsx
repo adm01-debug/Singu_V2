@@ -1,0 +1,156 @@
+import { forwardRef, memo } from 'react';
+import { Plus, Search, ChevronLeft } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { BackButton } from '@/components/navigation/BackButton';
+import { UnifiedNotificationsBell } from '@/components/notifications/UnifiedNotificationsBell';
+import { SmartNotificationsBell } from '@/components/notifications/SmartNotificationsBell';
+import { GlobalDensityToggle } from '@/components/ui/global-density-toggle';
+import { SystemStatusBadge } from '@/components/ui/SystemStatusBadge';
+import { Input } from '@/components/ui/input';
+
+interface HeaderProps {
+  title: string;
+  subtitle?: string;
+  icon?: React.ElementType;
+  showAddButton?: boolean;
+  addButtonLabel?: string;
+  onAddClick?: () => void;
+  backTo?: string;
+  hideBack?: boolean;
+  showSearch?: boolean;
+  onSearchChange?: (val: string) => void;
+  className?: string;
+}
+
+const PARENT_ROUTES: Record<string, string> = {
+  '/contatos': '/',
+  '/empresas': '/',
+  '/interacoes': '/',
+  '/analytics': '/',
+  '/insights': '/',
+  '/calendario': '/',
+  '/notificacoes': '/',
+  '/network': '/',
+  '/automacoes': '/',
+  '/configuracoes': '/',
+  '/mapa-empresas': '/',
+};
+
+export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ 
+  title, 
+  subtitle,
+  icon: PageIcon,
+  showAddButton, 
+  addButtonLabel, 
+  onAddClick,
+  backTo,
+  hideBack = false,
+  showSearch,
+  onSearchChange,
+}, ref) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isRoot = location.pathname === '/';
+  const showBack = !hideBack && !isRoot;
+  const resolvedBackTo = backTo || PARENT_ROUTES[location.pathname] || '/';
+
+  return (
+    <header 
+      ref={ref} 
+      className="sticky top-0 z-30 border-b border-border/60 bg-[linear-gradient(180deg,hsl(var(--surface-1))/0.95_0%,hsl(var(--card))/0.9_100%)] backdrop-blur-xl px-4 md:px-6 py-3 shadow-sm shadow-black/5"
+    >
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 min-w-0">
+          {showBack && (
+            <div className="flex items-center">
+              <BackButton
+                to={resolvedBackTo}
+                label="Voltar"
+                variant="ghost"
+                className="shrink-0 -ml-1 hidden md:inline-flex"
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden h-11 w-11 -ml-2"
+                onClick={() => navigate(-1)}
+                aria-label="Voltar"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </Button>
+            </div>
+          )}
+          <div className="min-w-0 flex items-center gap-2">
+            {PageIcon && (
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="hidden shrink-0 rounded-xl border border-primary/15 bg-primary/10 p-2 md:flex"
+              >
+                <PageIcon className="w-4 h-4 text-primary" aria-hidden="true" />
+              </motion.div>
+            )}
+            <div className="min-w-0">
+              <h1 className="text-sm md:text-base font-semibold text-foreground truncate leading-tight">{title}</h1>
+              {subtitle && (
+                <p className="text-[11px] text-muted-foreground/80 truncate tabular-nums mt-0.5">{subtitle}</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1 md:gap-3 shrink-0">
+          {showSearch && (
+            <div className="hidden md:flex relative group w-48 lg:w-64">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+              <Input 
+                placeholder="Buscar..." 
+                className="pl-8 h-8 text-[11px] bg-muted/40 border-none focus-visible:ring-1 focus-visible:ring-primary/20"
+                onChange={(e) => onSearchChange?.(e.target.value)}
+              />
+            </div>
+          )}
+
+          <div className="hidden md:inline-flex items-center gap-4">
+            <SystemStatusBadge />
+            <div className="flex items-center gap-1">
+              <GlobalDensityToggle />
+              <SmartNotificationsBell />
+              <UnifiedNotificationsBell />
+            </div>
+          </div>
+
+          {/* Trigger ⌘K visível em mobile como ícone */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-11 w-11 md:h-8 md:w-8"
+            aria-label="Buscar (⌘K)"
+            onClick={() => {
+              const ev = new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true });
+              window.dispatchEvent(ev);
+            }}
+          >
+            <Search className="w-4 h-4" aria-hidden="true" />
+          </Button>
+
+          {showAddButton && (
+            <Button 
+              onClick={onAddClick} 
+              size="sm" 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground h-11 px-3 sm:h-8 text-xs sm:px-3 font-semibold shadow-sm"
+            >
+              <Plus className="w-4 h-4 sm:w-3.5 sm:h-3.5 sm:mr-1.5" aria-hidden="true" />
+              <span className="hidden sm:inline">{addButtonLabel || 'Adicionar'}</span>
+            </Button>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+});
+
+Header.displayName = 'Header';
+export const HeaderMemo = memo(Header);
