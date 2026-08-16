@@ -22,12 +22,17 @@
 
 > O denominador é o número de linhas da *Tabela de evidências* abaixo (68). Cada linha corresponde a uma funcionalidade rastreada de ponta a ponta (UI → hook → EF/RPC → tabela → uso real).
 >
-> Recorte por sub-domínio (contado sobre as linhas da tabela):
-> - **Autenticação, sessão e gate admin** — 8 itens (linhas 1–8 da tabela), **8 ✅**. É a parte sólida do escopo.
-> - **Segurança de acesso avançada e RBAC granular** — 12 itens (MFA efetivo, banner MFA, passkeys, IP, geo, `validate-access`, dispositivos, SSO, `useRBAC`, roles, permissions, role-permissions), **0 ✅** — 7 🟨 e 5 🟦.
-> - **Feature flags** — 2 itens, **0 ✅**.
-> - **Observabilidade, alertas e resiliência** — 24 itens, **10 ✅**, 9 🟨, 1 🟦, 4 ⬛.
-> - **Ferramentas administrativas e diagnóstico** — 22 itens, **11 ✅**.
+> Recorte por sub-domínio (soma = 68, contado sobre as linhas da tabela na ordem em que aparecem):
+>
+> | Sub-domínio | Itens | ✅ | 🟨 | 🟦 | ⬛ |
+> |---|---|---|---|---|---|
+> | Autenticação, sessão e gate admin (linhas 1–8) | 8 | **8** | 0 | 0 | 0 |
+> | Segurança de acesso avançada + RBAC granular (linhas 9–20) | 12 | **0** | 8 | 4 | 0 |
+> | Feature flags (linhas 21–22) | 2 | **0** | 1 | 1 | 0 |
+> | Observabilidade, alertas e resiliência (linhas 23–38 e 43–55) | 29 | 8 | 14 | 1 | 6 |
+> | Conexões, ferramentas admin e plataforma (linhas 39–42 e 56–68) | 17 | 13 | 4 | 0 | 0 |
+>
+> Ou seja: o **chassis de login funciona** (8/8), a **segurança de acesso além da senha não funciona** (0/12) e a **observabilidade é metade vitrine** (8 ✅ contra 14 🟨 + 6 ⬛ em 29 itens).
 
 **Leitura em uma frase**: o *chassis* de autenticação e de gate administrativo é real e sólido (`user_roles` + `has_role` + `RequireAdmin` em 100% das rotas admin), mas a camada de **observabilidade e de alertas é majoritariamente vitrine**: as tabelas existem, as telas existem, e em vários casos **não existe produtor de dados nem agendador**, de modo que os painéis leem tabelas vazias ou exibem verde por padrão.
 
