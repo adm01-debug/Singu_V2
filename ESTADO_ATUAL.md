@@ -83,7 +83,17 @@ As outras **22 funções cron-gated não têm agendador algum** no repositório.
 
 E o disparo manual também não resolve: nenhum hook do front-end envia `x-cron-secret`, e o cliente Supabase não injeta header global (`src/integrations/supabase/client.ts:12-23`). Botões como "Atualizar Snapshot" (`src/hooks/useRevOps.ts:193`) e "Resetar Contadores Diários" (`src/hooks/useLeadRoutingServer.ts:96`) retornam 401.
 
-**Agravante:** os dois crons existentes apontam para **project refs antigos** hardcoded — `hjhthvzwtvwgdrochcam` (identificado como `OLD_REF` em `docs/MIGRATION_EDGE_FUNCTIONS.md:20`) e `rqodmqosrotmtrjnnjul`, um terceiro ref.
+**Agravante — três project refs coexistem, e os dois arquivos de configuração se contradizem:**
+
+| Ref | Onde aparece | O que é |
+|---|---|---|
+| `hjhthvzwtvwgdrochcam` | `supabase/config.toml:1`; cron `smart-notify-automation` (`20260512105729_...sql:10`) | Identificado como `OLD_REF` — **projeto antigo** — em `docs/MIGRATION_EDGE_FUNCTIONS.md:20` |
+| `rqodmqosrotmtrjnnjul` | Cron `validation-queue-drain` (`20260417120721_...sql:18`), com JWT embutido | Não documentado em lugar nenhum |
+| `pgxfvjmuubtbowutlide` | `supabase/.temp/linked-project.json`; CSP em `vite.config.ts:19`; `HANDOFF.md:24` | O projeto **linkado**, de nome `"Singu - V2 | Cadastro de Empresas / Contatos"` — que a documentação chama de **"Banco Externo"** |
+
+Ou seja: `config.toml` aponta para o projeto que a própria documentação de migração chama de antigo, enquanto o projeto efetivamente linkado é aquele que os documentos descrevem como "externo, acessado via proxy". Os dois crons versionados apontam para os dois refs que **não** são o linkado.
+
+O `DEST_REF` do runbook de migração (`docs/MIGRATION_EDGE_FUNCTIONS.md:20`) continua como placeholder literal `"xxxxxxxxxxxxxxxxxxxx"` — a migração está documentada, mas o repositório não registra para onde ela foi.
 
 ### R3 — O CI não roda há meses `CRÍTICO` · `VERIFICADO em runtime`
 
@@ -99,7 +109,7 @@ Zero jobs criados significa falha **antes de qualquer step executar**. Todos os 
 
 Somam-se defeitos de projeto no próprio workflow: os 3 gates de banco usam `if: ${{ secrets.PGHOST != '' }}` (`ci.yml:35,84,97`), e o Lighthouse é neutralizado por `|| echo` (`ci.yml:113`) mais 7 assertions em `"warn"`.
 
-**Não existe pipeline de deploy** — nenhuma ocorrência de deploy/vercel/netlify/kubectl/terraform, nenhum Dockerfile ou `vercel.json`. A publicação acontece fora do Git.
+**Não existe pipeline de deploy versionado** — nenhum workflow de deploy, nenhum Dockerfile, nenhum `vercel.json`. Há indício de que a publicação passa por uma integração Vercel configurada fora do repositório (`supabase/.temp/linked-project.json` registra `organization_id: "vercel_icfg_..."`), mas essa configuração não é versionada e seu estado é `NAO_VERIFICADO`. Na prática: o repositório não descreve como o sistema vai para produção.
 
 ### R4 — Segredo real versionado `CRÍTICO`
 
@@ -255,6 +265,7 @@ Registradas porque erro repassado como verdade contamina o resto.
 3. **"`insights` tem zero escritores" estava impreciso.** Há 1 escritor — um `UPDATE` de dispensa em `src/hooks/useContactDetail.ts:195`. A conclusão fica mais forte, não mais fraca: não há **nenhum INSERT**, então o "dispensar" atua sobre linhas que nada cria.
 4. **Minha própria recontagem de cobertura acusou 247 evidências fabricadas — falso.** A alternação `(ts|tsx|...)` casava `ts` antes de `tsx` e truncava toda extensão `.tsx`. Corrigido, o número real de citações inexistentes é **0**. É a mesma armadilha que um critério ruim de detecção de código morto produz.
 5. **Um agente corrigiu a si mesmo, corretamente:** `lead-score-threshold-runner` **não** é órfã — é chamada EF→EF em `lead-scorer/index.ts:157,401`.
+6. **Refinamento após a primeira versão deste documento.** Eu havia escrito que os crons apontam para "dois refs antigos". Medindo melhor, são **três refs coexistindo**, e o projeto efetivamente linkado (`supabase/.temp/linked-project.json`) é justamente o que a documentação chama de "Banco Externo" — enquanto o `config.toml` aponta para o projeto que o runbook de migração chama de antigo. Ver R2. Também suavizei "não existe pipeline de deploy" para "não existe pipeline de deploy **versionado**": há sinal de integração Vercel fora do repositório, que não pude verificar.
 
 ---
 
