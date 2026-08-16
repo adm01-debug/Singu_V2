@@ -14,11 +14,20 @@
 
 | Classificação | Qtde | % |
 |---|---|---|
-| ✅ IMPLEMENTADO_TOTAL | 15 / 46 | 32,6% |
-| 🟨 IMPLEMENTADO_PARCIAL | 21 / 46 | 45,7% |
-| 🟦 SUGERIDO_OU_INICIADO | 4 / 46 | 8,7% |
-| ⬛ MORTO_OU_ABANDONADO | 6 / 46 | 13,0% |
-| **Total avaliado** | **46** | **100%** |
+| ✅ IMPLEMENTADO_TOTAL | 29 / 68 | 42,6% |
+| 🟨 IMPLEMENTADO_PARCIAL | 27 / 68 | 39,7% |
+| 🟦 SUGERIDO_OU_INICIADO | 6 / 68 | 8,8% |
+| ⬛ MORTO_OU_ABANDONADO | 6 / 68 | 8,8% |
+| **Total avaliado** | **68 funcionalidades** | **100%** |
+
+> O denominador é o número de linhas da *Tabela de evidências* abaixo (68). Cada linha corresponde a uma funcionalidade rastreada de ponta a ponta (UI → hook → EF/RPC → tabela → uso real).
+>
+> Recorte por sub-domínio (contado sobre as linhas da tabela):
+> - **Autenticação, sessão e gate admin** — 8 itens (linhas 1–8 da tabela), **8 ✅**. É a parte sólida do escopo.
+> - **Segurança de acesso avançada e RBAC granular** — 12 itens (MFA efetivo, banner MFA, passkeys, IP, geo, `validate-access`, dispositivos, SSO, `useRBAC`, roles, permissions, role-permissions), **0 ✅** — 7 🟨 e 5 🟦.
+> - **Feature flags** — 2 itens, **0 ✅**.
+> - **Observabilidade, alertas e resiliência** — 24 itens, **10 ✅**, 9 🟨, 1 🟦, 4 ⬛.
+> - **Ferramentas administrativas e diagnóstico** — 22 itens, **11 ✅**.
 
 **Leitura em uma frase**: o *chassis* de autenticação e de gate administrativo é real e sólido (`user_roles` + `has_role` + `RequireAdmin` em 100% das rotas admin), mas a camada de **observabilidade e de alertas é majoritariamente vitrine**: as tabelas existem, as telas existem, e em vários casos **não existe produtor de dados nem agendador**, de modo que os painéis leem tabelas vazias ou exibem verde por padrão.
 
