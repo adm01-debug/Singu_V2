@@ -136,6 +136,48 @@ Os demais itens de R9 tiveram a alcançabilidade verificada um a um e **todos s�
 
 ---
 
+## 4-bis. R5 remedido pelo autor, e um achado novo que quase inverteu R1
+
+### R5 confirmado, com os números corrigidos
+
+| Afirmado | Medido agora | Observação |
+|---|---|---|
+| 30 tabelas com `CREATE POLICY` sem `CREATE TABLE` | **28** | Minha primeira remedição deu 36 — inflada porque o regex capturava o " on " de **dentro do nome da política** (`"Allow all for authenticated users on behavior"` mira em `public.contact_behavior`) e contava `storage`, que é schema nativo do Supabase |
+| 35 tabelas com `CREATE INDEX` sem `CREATE TABLE` | **34** | — |
+| "sem guarda `IF EXISTS`" | **Confirmado** | `20260721000039_explicit_deny_rls_no_policy_tables.sql` tem **zero** ocorrências de qualquer guarda. Em `20260721000028_fix_rls_user_private_tables.sql` os 19 `IF EXISTS` são todos de `DROP POLICY IF EXISTS`, que protegem o DROP — e que também falham se a tabela não existir |
+
+### O achado novo: as migrations contêm duas linhagens de schema
+
+**33 das 34** tabelas que recebem índice sem serem criadas existem **apenas no `types.ts` em uso** e estão **ausentes do `.bak`** — incluindo `carrier_evaluations`, `carrier_homologations`, `carrier_score_history`, `supplier_evaluations`, `supplier_score_history`.
+
+Três migrations de julho/2026 fazem manutenção de índice sobre elas:
+
+- `20260720000006_db_perf_indexes_rls_cleanup.sql:29-30` — `CREATE INDEX ... ON public.carrier_score_history(carrier_id)`
+- `20260722000092_wave178_idx_remaining_unindexed_fks.sql:11-15` — idem para `carrier_evaluations` e `carrier_homologations`
+- `20260721000084_drop_unused_fk_indexes.sql`
+
+Ou seja: **parte do histórico de migrations foi escrita contra o mesmo banco estrangeiro de onde veio o `types.ts` em uso.** O `types.ts` não é o acidente de um único commit — ele é *coerente* com um subconjunto das migrations.
+
+### Isso quase inverteu R1 — e a medição impediu
+
+Se as migrations de julho concordam com o `types.ts` em uso, a hipótese natural passa a ser que o arquivo em uso é o **correto** e o `.bak` é o obsoleto — o que tornaria a recomendação nº 1 ("restaurar o `types.ts` a partir do `.bak`") **ativamente destrutiva**.
+
+O teste decisivo é qual arquivo cobre o que o **código realmente consulta**:
+
+| Fonte | Cobre quantos dos 248 alvos de `.from()` | % |
+|---|---|---|
+| `types.ts` **em uso** | 113 | 45,6% |
+| `types.ts.lovable.bak` | **233** | **94,0%** |
+| migrations | **236** | **95,2%** |
+
+Das 54 chamadas `.rpc()` distintas: **50** definidas nas migrations, **46** declaradas no `.bak`, **0** no arquivo em uso.
+
+**Veredito: R1 e a recomendação nº 1 se sustentam.** O código da aplicação pertence à linhagem do `.bak` e das migrations; o `types.ts` em uso é estrangeiro. O refinamento é que a contaminação ocorre nas **duas** direções — o arquivo de tipos é integralmente estrangeiro, e ~6 migrations de julho também foram escritas contra o banco estrangeiro, criando índices e políticas sobre 33 tabelas que nenhuma migration cria e que o app nunca consulta.
+
+*Ressalva à recomendação:* o `.bak` cobre 233 de 248 alvos e 46 de 54 RPCs — restaurá-lo é uma melhora grande, não uma correção completa. Regerar a partir do banco vivo continua sendo melhor.
+
+---
+
 ## 5. O que a validação CONFIRMOU
 
 Nem tudo caiu. Estes sobreviveram a tentativa deliberada de derrubá-los:

@@ -125,9 +125,13 @@ Além disso: **0 dos 22 secrets de backend** aparecem no `.env.example`.
 
 ### R5 — O ambiente não nasce do repositório `ALTO`
 
-Provado estaticamente: **30 tabelas recebem `CREATE POLICY`** e **35 recebem `CREATE INDEX`** sem nenhum `CREATE TABLE` correspondente, sem guarda `IF EXISTS`, em 14 arquivos (ex.: `supabase/migrations/20260721000028_fix_rls_user_private_tables.sql:15`). Duas materialized views são movidas, refrescadas e revogadas sem nunca serem criadas; dois schemas (`zapp_history`, `_dormant`) recebem políticas sem `CREATE SCHEMA`.
+Provado estaticamente e **remedido na validação**: **28 tabelas recebem `CREATE POLICY`** e **34 recebem `CREATE INDEX`** sem nenhum `CREATE TABLE` correspondente *(números corrigidos; a primeira versão dizia 30 e 35)*. A ausência de guarda foi confirmada: `supabase/migrations/20260721000039_explicit_deny_rls_no_policy_tables.sql` tem **zero** ocorrências de `IF EXISTS`/`to_regclass`/`pg_tables`, e em `20260721000028_fix_rls_user_private_tables.sql` os 19 `IF EXISTS` são todos de `DROP POLICY IF EXISTS` — que protegem o DROP, não o CREATE, e falham igualmente se a tabela não existir.
 
 Aplicar as migrations num banco limpo falha.
+
+**Descoberta da validação — o repositório carrega duas linhagens de schema.** **33 das 34** tabelas indexadas-sem-serem-criadas existem **só no `types.ts` em uso** e estão ausentes do `.bak`, incluindo `carrier_evaluations`, `carrier_homologations` e `supplier_score_history`. Três migrations de julho/2026 fazem manutenção de índice sobre elas (`20260720000006_...sql:29-30`, `20260722000092_...sql:11-15`, `20260721000084_...sql`). Portanto **parte do histórico de migrations também foi escrita contra o banco estrangeiro** — o `types.ts` não é o acidente de um commit isolado.
+
+Isso quase inverteu R1. Se as migrations recentes concordam com o `types.ts` em uso, ele poderia ser o arquivo certo — e restaurar o `.bak` seria destrutivo. O teste decisivo é qual arquivo cobre o que o **código consulta**: o `.bak` cobre **233 dos 248** alvos de `.from()` (94,0%) e as migrations **236** (95,2%), contra **113** (45,6%) do arquivo em uso; das 54 chamadas `.rpc()`, 50 estão nas migrations e 46 no `.bak`, contra **0** no arquivo em uso. **R1 e a recomendação nº 1 se sustentam.**
 
 ### R6 — Split-brain de persistência `ALTO`
 
@@ -308,7 +312,8 @@ Registradas porque erro repassado como verdade contamina o resto.
 7. **Nove números publicados sem medição própria, todos corrigidos.** Seis em R1 (a causa foi minha varredura do `types.ts` não delimitar as seções, varrendo `Views` e `Functions` junto com `Tables`), dois em R11 (amostra tratada como contagem) e um na cobertura de rotas (`grep -qF` com a rota `/`, que casa com qualquer linha). Nenhuma correção mudou a direção de um achado; todas mudaram a precisão.
 8. **Um achado estava invertido** — `attribution-calculator`, ver R14. É o erro mais perigoso desta auditoria, porque a recomendação original levava a apagar o único caminho funcional.
 9. **Uma camada inteira ficou fora de escopo sem ser declarada** — PWA / service worker, ver R13. A varredura por tema mostrou que `service worker`, `offline`, `error boundary` e `i18n` não aparecem em nenhum dos 8 documentos originais.
-10. **Refinamento após a primeira versão deste documento.** Eu havia escrito que os crons apontam para "dois refs antigos". Medindo melhor, são **três refs coexistindo**, e o projeto efetivamente linkado (`supabase/.temp/linked-project.json`) é justamente o que a documentação chama de "Banco Externo" — enquanto o `config.toml` aponta para o projeto que o runbook de migração chama de antigo. Ver R2. Também suavizei "não existe pipeline de deploy" para "não existe pipeline de deploy **versionado**": há sinal de integração Vercel fora do repositório, que não pude verificar.
+10. **Quase inverti R1 durante a própria validação.** Ao descobrir que 33 das 34 tabelas indexadas-sem-criação pertencem ao vocabulário do `types.ts` em uso, a hipótese natural virou "então o arquivo em uso é o certo e o `.bak` é o obsoleto" — o que tornaria a recomendação nº 1 destrutiva. Só a medição de cobertura dos alvos de `.from()` (233 vs 113) impediu o erro. Registro porque é o segundo achado que quase saiu invertido nesta auditoria.
+11. **Refinamento após a primeira versão deste documento.** Eu havia escrito que os crons apontam para "dois refs antigos". Medindo melhor, são **três refs coexistindo**, e o projeto efetivamente linkado (`supabase/.temp/linked-project.json`) é justamente o que a documentação chama de "Banco Externo" — enquanto o `config.toml` aponta para o projeto que o runbook de migração chama de antigo. Ver R2. Também suavizei "não existe pipeline de deploy" para "não existe pipeline de deploy **versionado**": há sinal de integração Vercel fora do repositório, que não pude verificar.
 
 ---
 
@@ -318,7 +323,7 @@ Registradas porque erro repassado como verdade contamina o resto.
 
 | # | Ação | Esforço |
 |---|---|---|
-| 1 | **Restaurar o `types.ts`** a partir do `.bak` ou regerar do banco correto. Destrava R1 e provavelmente parte do CI | Horas |
+| 1 | **Restaurar o `types.ts`** a partir do `.bak` ou regerar do banco vivo. Destrava R1 e provavelmente parte do CI. *Validado:* o `.bak` cobre 233 dos 248 alvos de `.from()` contra 113 do arquivo atual — mas cobre só 46 das 54 RPCs, então **regerar do banco é melhor que copiar o `.bak`** | Horas |
 | 2 | **Corrigir o `ci.yml`** para voltar a criar jobs, e trocar os 3 gates `if: secrets.*` por uma condição válida | Horas |
 | 3 | **Adicionar `x-cron-secret`** aos 2 crons versionados e parametrizar o project-ref (hoje hardcoded em 2 refs diferentes) | Horas |
 | 4 | **Criar as migrations faltantes** para as 30 tabelas que só recebem `CREATE POLICY` e as 35 que só recebem `CREATE INDEX` | Dias |
