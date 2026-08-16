@@ -49,7 +49,9 @@ Nenhuma dessas falhas produz erro visível para o usuário. Elas produzem **tela
 | [Integrações](docs/estado/06_INTEGRACOES.md) | 32 | 12 | 10 | 8 | 2 | 8 integrações prometidas em doc sem código |
 | [Infra / CI / Testes / Docs](docs/estado/08_INFRA_CI_TESTES_DOCS.md) | 47 | 13 | 7 | 6 | 21 | Sem pipeline de deploy; CI inoperante |
 
-A [camada de dados](docs/estado/07_DADOS_BACKEND.md) é contabilizada à parte, por domínio de dados e não por funcionalidade: **265 tabelas, 210 funções, 251 triggers, 1.063 políticas RLS, 15 jobs `pg_cron`** declarados em 390 migrations.
+A [camada de dados](docs/estado/07_DADOS_BACKEND.md) é contabilizada à parte, por domínio de dados e não por funcionalidade: **265 tabelas, 210 funções, 250 triggers, 1.061 políticas RLS, 15 jobs `pg_cron`** declarados em 390 migrations. *(Triggers e políticas corrigidos na validação: 251 contava pares nome+tabela, e 2 das 1.063 políticas são templates `format()` que nunca executam como DDL literal.)*
+
+> **Nota de método, contra mim:** na Fase A eu havia medido 268 tabelas e 211 funções e cheguei a desconfiar dos números acima. Eu é que estava errado — meu regex contava `CREATE TABLE`/`CREATE FUNCTION` dentro de **comentários SQL** (`-- Create table for decision` produzia a "tabela" `for`). Removidos os comentários, converge em 210 funções, 251 triggers e 14 views, batendo com o documento de dados.
 
 > **O que significa um ✅ aqui:** o fio está completo e correto **no código**, e o objeto de banco está declarado no repositório. **Não** significa "funciona em produção" — isso exigiria runtime, que não tivemos. Pela regra de ouro do método (*pronto = em produção com uso real*), todo ✅ deste documento é um ✅ condicional.
 
@@ -125,9 +127,13 @@ Além disso: **0 dos 22 secrets de backend** aparecem no `.env.example`.
 
 ### R5 — O ambiente não nasce do repositório `ALTO`
 
-Provado estaticamente e **remedido na validação**: **28 tabelas recebem `CREATE POLICY`** e **34 recebem `CREATE INDEX`** sem nenhum `CREATE TABLE` correspondente *(números corrigidos; a primeira versão dizia 30 e 35)*. A ausência de guarda foi confirmada: `supabase/migrations/20260721000039_explicit_deny_rls_no_policy_tables.sql` tem **zero** ocorrências de `IF EXISTS`/`to_regclass`/`pg_tables`, e em `20260721000028_fix_rls_user_private_tables.sql` os 19 `IF EXISTS` são todos de `DROP POLICY IF EXISTS` — que protegem o DROP, não o CREATE, e falham igualmente se a tabela não existir.
+Provado estaticamente e **remedido na validação**: **28 tabelas recebem `CREATE POLICY`** e **34–35 recebem `CREATE INDEX`** sem nenhum `CREATE TABLE` correspondente *(a primeira versão dizia 30; a contagem de índices ficou em 34 pela minha medição e 35 pela do normalizador de SQL — divergência de 1)*. A ausência de guarda foi confirmada: `supabase/migrations/20260721000039_explicit_deny_rls_no_policy_tables.sql` tem **zero** ocorrências de `IF EXISTS`/`to_regclass`/`pg_tables`, e em `20260721000028_fix_rls_user_private_tables.sql` os 19 `IF EXISTS` são todos de `DROP POLICY IF EXISTS` — que protegem o DROP, não o CREATE, e falham igualmente se a tabela não existir.
 
-Aplicar as migrations num banco limpo falha.
+Aplicar as migrations num banco limpo falha. O primeiro ponto de quebra é **`20260719000002_...sql:62`** (índice sobre `behavioral_profile_queue`, tabela inexistente — a real é `behavioral_profile_regen_queue`), e não o arquivo citado na primeira versão.
+
+> **Duas correções à primeira versão deste risco, ambas contra o que publiquei:**
+> - *"Dois schemas (`zapp_history`, `_dormant`) recebem políticas sem `CREATE SCHEMA`"* — **falso**. `20260721000035_fix_auth_rls_initplan_dormant_zapp.sql:10-18` é um `DO $$` que itera `FOR p IN SELECT ... FROM pg_policies WHERE schemaname IN ('_dormant','zapp_history')`. Em banco limpo o laço não encontra nada e degrada a **no-op**. Nenhuma política é criada ali.
+> - *Materialized views* — das três operações citadas, só o `REVOKE` quebra de fato: o `SET SCHEMA` tem `IF EXISTS` e o `REFRESH` está dentro do corpo de uma função, que não executa na aplicação da migration.
 
 **Descoberta da validação — o repositório carrega duas linhagens de schema.** **33 das 34** tabelas indexadas-sem-serem-criadas existem **só no `types.ts` em uso** e estão ausentes do `.bak`, incluindo `carrier_evaluations`, `carrier_homologations` e `supplier_score_history`. Três migrations de julho/2026 fazem manutenção de índice sobre elas (`20260720000006_...sql:29-30`, `20260722000092_...sql:11-15`, `20260721000084_...sql`). Portanto **parte do histórico de migrations também foi escrita contra o banco estrangeiro** — o `types.ts` não é o acidente de um commit isolado.
 
@@ -194,7 +200,7 @@ Em `/seguranca` o redirect é suprimido, o guard continua reprovando, e a págin
 - `ai_recommendation_audit_logs_v2`: consultada em `src/hooks/useRecommendationAudit.ts:25` e `src/pages/RecommendationAudit.tsx:30`; nas 390 migrations o nome aparece **uma vez**, dentro de um literal de lista (`20260723150429_...sql:33`), nunca num `CREATE TABLE`.
 - `win_loss_records`: o único escritor pela UI é `WinLossCaptureDialog.tsx`, que tem **0 importadores**.
 - `query_telemetry`, `schema_drift_alerts`, `password_reset_requests`: só leitores.
-- **Órfãos na base:** 24 de 265 tabelas (9,1%) e 75 de 210 funções (35,7%) sem qualquer consumidor — incluindo o núcleo `pipelines`/`pipeline_stages`.
+- **Órfãos na base** *(números corrigidos na validação — os publicados estavam bem acima do real)*: **9 de 265 tabelas (3,4%)**, não 24 — 15 das 24 originais têm `INSERT`/`FROM`/`REFERENCES` dentro de funções e triggers SQL, invisíveis a um teste que só procura `.from()` no código. Funções sem consumidor: **~70 de 210 (33,3%)**, não 75. *Ressalva honesta:* minhas próprias medições sucessivas deram 35 e depois 54 conforme removi ruído de `GRANT`/`ALTER`/`DROP`; o normalizador de SQL com autômato de estados deu 70. **A faixa defensável é 54–75 e não consigo fechá-la estaticamente** — o que é estável em todas as medições é a ordem de grandeza: cerca de um terço da superfície de RPC não tem chamador.
 
 ### R11 — Testes que não protegem `MÉDIO`
 
@@ -313,7 +319,9 @@ Registradas porque erro repassado como verdade contamina o resto.
 8. **Um achado estava invertido** — `attribution-calculator`, ver R14. É o erro mais perigoso desta auditoria, porque a recomendação original levava a apagar o único caminho funcional.
 9. **Uma camada inteira ficou fora de escopo sem ser declarada** — PWA / service worker, ver R13. A varredura por tema mostrou que `service worker`, `offline`, `error boundary` e `i18n` não aparecem em nenhum dos 8 documentos originais.
 10. **Quase inverti R1 durante a própria validação.** Ao descobrir que 33 das 34 tabelas indexadas-sem-criação pertencem ao vocabulário do `types.ts` em uso, a hipótese natural virou "então o arquivo em uso é o certo e o `.bak` é o obsoleto" — o que tornaria a recomendação nº 1 destrutiva. Só a medição de cobertura dos alvos de `.from()` (233 vs 113) impediu o erro. Registro porque é o segundo achado que quase saiu invertido nesta auditoria.
-11. **Refinamento após a primeira versão deste documento.** Eu havia escrito que os crons apontam para "dois refs antigos". Medindo melhor, são **três refs coexistindo**, e o projeto efetivamente linkado (`supabase/.temp/linked-project.json`) é justamente o que a documentação chama de "Banco Externo" — enquanto o `config.toml` aponta para o projeto que o runbook de migração chama de antigo. Ver R2. Também suavizei "não existe pipeline de deploy" para "não existe pipeline de deploy **versionado**": há sinal de integração Vercel fora do repositório, que não pude verificar.
+11. **Uma afirmação minha era simplesmente falsa.** Publiquei que "dois schemas (`zapp_history`, `_dormant`) recebem políticas sem `CREATE SCHEMA`". A migration é um `DO $$` que itera o catálogo (`pg_policies`) e vira **no-op** em banco limpo. Corrigido em R5.
+12. **Inflei os órfãos da base.** Publiquei 24 tabelas e 75 funções sem consumidor; o real é 9 tabelas e ~70 funções. O erro veio de testar só `.from()`/`.rpc()` e ignorar uso dentro de funções e triggers SQL. Na direção oposta, minha primeira remedição de funções órfãs deu 35 — **também errada**, por contar `GRANT`/`ALTER`/`DROP FUNCTION` como se fossem chamadas.
+13. **Refinamento após a primeira versão deste documento.** Eu havia escrito que os crons apontam para "dois refs antigos". Medindo melhor, são **três refs coexistindo**, e o projeto efetivamente linkado (`supabase/.temp/linked-project.json`) é justamente o que a documentação chama de "Banco Externo" — enquanto o `config.toml` aponta para o projeto que o runbook de migração chama de antigo. Ver R2. Também suavizei "não existe pipeline de deploy" para "não existe pipeline de deploy **versionado**": há sinal de integração Vercel fora do repositório, que não pude verificar.
 
 ---
 
