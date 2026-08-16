@@ -24,26 +24,30 @@ Nenhuma dessas falhas produz erro visível para o usuário. Elas produzem **tela
 
 ## 2. Contagem honesta
 
-**342 funcionalidades classificadas** em 7 dimensões, cada linha com evidência `arquivo:linha`.
+> ⚠️ **Números corrigidos em 2026-08-16 pela validação adversarial.** A primeira versão publicou 342 funcionalidades, somando os *resumos auto-relatados* de cada documento. Três desses resumos não batiam com as próprias tabelas de evidência. Os números abaixo vêm da contagem linha a linha das tabelas canônicas. Detalhe em [`docs/estado/12_VALIDACAO_DA_AUDITORIA.md`](docs/estado/12_VALIDACAO_DA_AUDITORIA.md).
 
-| Classificação | Quantidade | % |
-|---|---|---|
-| ✅ **IMPLEMENTADO_TOTAL** | **155 de 342** | **45,3%** |
-| 🟨 **IMPLEMENTADO_PARCIAL** | **99 de 342** | **28,9%** |
-| 🟦 **SUGERIDO_OU_INICIADO** | **51 de 342** | **14,9%** |
-| ⬛ **MORTO_OU_ABANDONADO** | **37 de 342** | **10,8%** |
+**385 funcionalidades classificadas** em 7 dimensões, cada linha com evidência `arquivo:linha`.
+
+| Classificação | Quantidade | % | Antes (errado) |
+|---|---|---|---|
+| ✅ **IMPLEMENTADO_TOTAL** | **181 de 385** | **47,1%** | 155 · 45,3% |
+| 🟨 **IMPLEMENTADO_PARCIAL** | **107 de 385** | **27,9%** | 99 · 28,9% |
+| 🟦 **SUGERIDO_OU_INICIADO** | **40 de 385** | **10,4%** | 51 · 14,9% |
+| ⬛ **MORTO_OU_ABANDONADO** | **56 de 385** | **14,6%** | 37 · 10,8% |
+
+> **⬛ é um limite superior, não um número confiável.** A verificação adversarial testou 27 classificações de código morto e **refutou 5** — incluindo um achado invertido. Ver R14 e §7.
 
 ### Por dimensão
 
 | Dimensão | Total | ✅ | 🟨 | 🟦 | ⬛ | Leitura |
 |---|---|---|---|---|---|---|
 | [Core CRM](docs/estado/01_CORE_CRM.md) | 65 | 47 | 11 | 3 | 4 | **A parte mais saudável do sistema** |
-| [Inteligência / IA / Voz](docs/estado/02_INTELIGENCIA_IA.md) | 46 | 21 | 14 | 5 | 6 | Provider único e telemetria boa; persistência falha |
-| [Marketing e Automação](docs/estado/03_MARKETING_AUTOMACAO.md) | 38 | **6** | 15 | 11 | 6 | **A dimensão mais frágil — 16% completa** |
+| [Inteligência / IA / Voz](docs/estado/02_INTELIGENCIA_IA.md) | 63 | 39 | 14 | 4 | 5 | Provider único e telemetria boa; persistência falha |
+| [Marketing e Automação](docs/estado/03_MARKETING_AUTOMACAO.md) | 51 | **7** | 27 | 5 | 12 | **A dimensão mais frágil — 13,7% completa** |
 | [RevOps e Vendas](docs/estado/04_REVOPS_VENDAS.md) | 59 | 34 | 11 | 8 | 6 | Telas maduras, camada de automação com **zero** ✅ |
 | [Admin / Segurança / Observabilidade](docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md) | 68 | 29 | 27 | 6 | 6 | RBAC real; observabilidade é metade vitrine |
 | [Integrações](docs/estado/06_INTEGRACOES.md) | 32 | 12 | 10 | 8 | 2 | 8 integrações prometidas em doc sem código |
-| [Infra / CI / Testes / Docs](docs/estado/08_INFRA_CI_TESTES_DOCS.md) | 34 | 6 | 11 | 10 | 7 | Sem pipeline de deploy; CI inoperante |
+| [Infra / CI / Testes / Docs](docs/estado/08_INFRA_CI_TESTES_DOCS.md) | 47 | 13 | 7 | 6 | 21 | Sem pipeline de deploy; CI inoperante |
 
 A [camada de dados](docs/estado/07_DADOS_BACKEND.md) é contabilizada à parte, por domínio de dados e não por funcionalidade: **265 tabelas, 210 funções, 251 triggers, 1.063 políticas RLS, 15 jobs `pg_cron`** declarados em 390 migrations.
 
@@ -59,14 +63,16 @@ O arquivo contra o qual todo o front-end tipa suas queries não corresponde ao b
 
 | Comparação | Tabelas em comum |
 |---|---|
-| 390 migrations ∩ `src/integrations/supabase/types.ts` (em uso) | **120** |
-| 390 migrations ∩ `src/integrations/supabase/types.ts.lovable.bak` | **262** |
+| 390 migrations ∩ `src/integrations/supabase/types.ts` (em uso) | **119** |
+| 390 migrations ∩ `src/integrations/supabase/types.ts.lovable.bak` | **261** |
 
 O arquivo em uso declara `carriers`, `carrier_evaluations`, `carrier_homologations`, `carrier_score_history`, `cidades`, `asia_upload_mapping` — vocabulário de sistema de transportadoras, **ausente do backup**.
 
 `git log -- src/integrations/supabase/types.ts` retorna **um único commit**: `c9b22b5 feat: Migração Banco Lovable para Supabase Singu v2` — o mesmo que criou o `.bak`. A migração salvou os tipos corretos como backup e instalou no lugar tipos gerados de outro banco.
 
-**Impacto medido:** 134 dos 248 alvos de `.from()` no código não existem no `types.ts`; 127 desses existem nas migrations. Inversamente, 144 das 145 tabelas exclusivas do `types.ts` nunca são consultadas por ninguém, e 0 das 111 views.
+**Impacto medido:** **135** dos 248 alvos de `.from()` no código não existem no `types.ts`; **124** desses existem nas migrations. Inversamente, **145 das 146** tabelas exclusivas do `types.ts` nunca são consultadas por ninguém, e **0 das 110** views.
+
+**E o pior consequente, que a primeira versão deste documento não registrou:** o `types.ts` em uso declara **zero RPCs** — apenas `_postgrest_anon_placeholder` (`src/integrations/supabase/types.ts:16609`) —, contra **83** no `.bak`. O código faz **54 chamadas `.rpc()` distintas**. Nenhuma tem tipo no contrato atual.
 
 ### R2 — A camada de automação agendada não pode rodar `CRÍTICO`
 
@@ -172,7 +178,11 @@ Em `/seguranca` o redirect é suprimido, o guard continua reprovando, e a págin
 | `src/hooks/useDealVelocity.ts:67` | Dias médios por estágio do pipeline (3–18) |
 | `supabase/functions/suggest-next-action/index.ts:192` | `predicted_need` — **sorteado e persistido no banco** |
 
-- Somam-se: `src/data/analyticsData.ts:27-213` (toda a aba Overview de `/analytics`, com ranking de nomes inventados em `:171-177`), `src/pages/admin/Observability.tsx:59,70,81` (`99.9%` / `142ms` / `0.02%` fixos), `NLPMasteryScore.tsx:19` ("10/10" fixo), `MarketingHub.tsx:254,258,262` (CPL/CAC/LTV fixos).
+- Somam-se: `src/data/analyticsData.ts:27-213` (toda a aba Overview de `/analytics`, com ranking de nomes inventados em `:171-177`), `NLPMasteryScore.tsx:19` ("10/10" fixo), `MarketingHub.tsx:254,258,262` (CPL/CAC/LTV fixos — `:256` e `:260` ao menos rotulam "Estimado"/"Sugerido").
+
+> **Alcançabilidade verificada na validação:** todos os itens acima são atingíveis por rotas vivas — os hooks por painéis de `/analytics` e do detalhe de contato, os componentes NLP por `src/pages/NLPAnalytics.tsx`, o Carnegie por `src/pages/Insights.tsx`, o `analyticsData.ts` por `src/pages/Analytics.tsx:72`.
+>
+> **Correção:** `src/pages/admin/Observability.tsx:59,70,81` (`99.9%` / `142ms` / `0.02%` fixos) constava desta lista na primeira versão. Está **errado**: o componente é referenciado apenas em `src/app/lazyPages.tsx:3` e **nenhuma rota o monta**. Não engana ninguém hoje — pertence a ⬛, não aqui.
 
 ### R10 — Tabelas e painéis sem produtor de dados `MÉDIO`
 
@@ -186,9 +196,35 @@ Em `/seguranca` o redirect é suprimido, o guard continua reprovando, e a págin
 
 100 arquivos / 1.892 casos. Mas:
 
-- **11 arquivos / 55 casos não são executados por runner nenhum** — inclusive os 4 specs de `e2e/` (fora do `testDir:'./tests'`, `playwright.config.ts:4`) e os **6 testes de Edge Function** com `Deno.test`, já que nenhum step roda `deno test`. **As 109 Edge Functions têm zero teste executado.**
+- **18 arquivos / 95 casos não são executados por runner nenhum** *(corrigido; a primeira versão dizia 11 / 55)* — os 4 specs de `e2e/` / 11 casos, fora do `testDir: './tests'` (`playwright.config.ts:4`) **e** explicitamente excluídos pelo vitest (`vitest.config.ts:25`, `'e2e/**'`); mais **14 arquivos / 84 casos** de Edge Function com `Deno.test`, já que `deno test` aparece **0 vezes** em `.github/`, `package.json` e `scripts/`. **As 109 Edge Functions têm zero teste executado.**
 - ~437 dos 1.892 casos (23%) são testes-espelho ou grep-tests que não exercitam produção.
 - E, com o CI vermelho (R3), **nenhum dos 1.892 é executado como gate**.
+
+### R13 — A camada PWA se contradiz em três pontos `MÉDIO` · *não coberto pela primeira passada*
+
+Nenhum dos 8 escopos auditou service worker, push ou offline. A validação foi olhar, e achou:
+
+| # | Contradição | Evidência |
+|---|---|---|
+| 1 | `main.tsx` declara a invariante *"pushNotifications.ts must use `navigator.serviceWorker.ready` instead of re-registering `/sw-push.js`"* — e `pushNotifications.ts` faz exatamente o proibido | `src/main.tsx:22-24` × `src/lib/pushNotifications.ts:30`, chamado por `subscribeToPush()` em `:42` |
+| 2 | `main.tsx` afirma `registerType is "prompt"`; a config diz `autoUpdate`. Todo o argumento de segurança do comentário repousa nessa premissa falsa | `src/main.tsx:19` × `vite.config.ts:26` |
+| 3 | `main.tsx` descreve injeção via `injectManifest` em `src/sw.ts` — **o arquivo não existe** e a config não usa `injectManifest` | `src/main.tsx:25-26`; `src/sw.ts` ausente |
+
+Efeito da nº 1: `migrateLegacyPushSW()` (`src/main.tsx:45-75`) existe para remover o registro legado de `/sw-push.js`, e o fluxo de push o recria a cada inscrição. **A migração nunca converge.**
+
+**Achado adicional:** `supabase/config.toml` tem **uma única linha** (`project_id`). Não há nenhuma declaração `[functions.*] verify_jwt` para as 109 Edge Functions — a política de JWT de todas elas vive fora do repositório e é `NAO_VERIFICADO`.
+
+**Em favor do sistema:** `AUDITORIA_COMPLETA_SISTEMA.md` afirma que o bootstrap do PWA "destrói seus próprios service workers a cada carregamento". **Falso hoje** — `src/main.tsx:45-75` só toca registros cujo `scriptURL` contém `sw-push.js`, captura o endpoint de push antes de desinscrever e o persiste em `sessionStorage`.
+
+### R14 — A classificação ⬛ desta auditoria não é confiável `ALTO` · *risco do próprio documento*
+
+A verificação adversarial testou 27 classificações de código morto: **5 refutadas, 6 inconclusivas, 16 confirmadas**.
+
+**Uma delas estava invertida.** `attribution-calculator` foi classificada ⬛. Mas `compute_attribution` teve `GRANT ... TO authenticated` (`20260522142957_...sql:4`) e depois **`REVOKE ... FROM anon, authenticated, PUBLIC`** (`20260723151654_...sql:14`), com `GRANT` só para `service_role` (`:26`), sem re-grant. Logo `src/hooks/useAttribution.ts:61` é o caminho **quebrado**, e a Edge Function (`index.ts:40,43`, service role) é o **único que funciona**. Aplicar a recomendação original removeria o único caminho vivo de atribuição.
+
+As outras quatro refutações: `crm-automation-monitor` (único escritor de `crm_automation_logs`, painel montado na **home**, `src/pages/Index.tsx:192`), `auto-regen-behavioral-profiles` (único produtor de um `system_alerts` consumido por 3 componentes), `process-behavioral-regen-queue` (monitorado por UI viva) e a tabela `insights` (tem 5 leitores — o achado correto é "**sem escritor**", não "órfã").
+
+**Consequência operacional:** nenhuma remoção de código deve ser feita com base nesta auditoria sem reverificação individual. Ver [`docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md`](docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md).
 
 ### R12 — Feature flags que não gateiam nada `BAIXO`
 
@@ -242,6 +278,9 @@ Declarado aqui, não escondido no rodapé.
 | **A causa exata da falha do CI** | Sei que 30/30 falharam e que o último não criou jobs. A anotação bruta do run não foi acessível |
 | **Leitura linha a linha de `src/components` (146k linhas), `supabase/migrations` (28k) e `scripts` (22k)** | Acima do teto de contexto. Cobertos por inventário de altitude, não por leitura integral |
 | **7 sub-rotas** | `/mapa-empresas` (que auditei diretamente ao fechar a costura), `/lead-scoring/config`, `/lead-scoring/automations`, `/customer-success/account/:id`, `/deal-rooms/:id`, `/playbooks/:id`, `/playbooks/battle-cards/:id` |
+| **Camada PWA / service worker / offline** | Caiu entre todos os 8 escopos. Coberta só na segunda passada, parcialmente — ver R13. `service worker`, `offline`, `error boundary` e `i18n` aparecem em **zero** dos 8 documentos originais |
+| **`src/contexts/`** | `DensityContext.tsx` e `NavigationStackContext.tsx` não são citados em nenhum documento |
+| **Realtime / websockets** | 8 arquivos usam `.channel(` / `postgres_changes`; tratado de passagem, sem inventário próprio |
 
 ### Recontagem de cobertura (Fase D)
 
@@ -249,8 +288,8 @@ Declarado aqui, não escondido no rodapé.
 |---|---|
 | Caminhos de arquivo distintos citados nas 8 saídas | 577 |
 | Citados que **não existem** no repositório | **0** — as 25 aparentes ausências são elisões de nome (`..._...sql`); todos os 25 prefixos de timestamp foram confirmados |
-| Edge Functions mencionadas por nome | **108 de 108** |
-| Rotas citadas | **106 de 113** |
+| Edge Functions mencionadas por nome | **108 de 108** — sobreviveu a reteste com âncora forte |
+| Rotas citadas | **104 de 111** *(corrigido; a primeira versão dizia 106 de 113, inflado por incluir a rota degenerada `/`, que casa com qualquer linha)* |
 
 **Não declaro "100% dos arquivos inventariados".** Não é verdade: 92 de 958 arquivos em `src/components` e 144 de 389 em `src/hooks` foram citados nominalmente. A auditoria é exaustiva **por funcionalidade e por objeto**, não por arquivo.
 
@@ -265,7 +304,11 @@ Registradas porque erro repassado como verdade contamina o resto.
 3. **"`insights` tem zero escritores" estava impreciso.** Há 1 escritor — um `UPDATE` de dispensa em `src/hooks/useContactDetail.ts:195`. A conclusão fica mais forte, não mais fraca: não há **nenhum INSERT**, então o "dispensar" atua sobre linhas que nada cria.
 4. **Minha própria recontagem de cobertura acusou 247 evidências fabricadas — falso.** A alternação `(ts|tsx|...)` casava `ts` antes de `tsx` e truncava toda extensão `.tsx`. Corrigido, o número real de citações inexistentes é **0**. É a mesma armadilha que um critério ruim de detecção de código morto produz.
 5. **Um agente corrigiu a si mesmo, corretamente:** `lead-score-threshold-runner` **não** é órfã — é chamada EF→EF em `lead-scorer/index.ts:157,401`.
-6. **Refinamento após a primeira versão deste documento.** Eu havia escrito que os crons apontam para "dois refs antigos". Medindo melhor, são **três refs coexistindo**, e o projeto efetivamente linkado (`supabase/.temp/linked-project.json`) é justamente o que a documentação chama de "Banco Externo" — enquanto o `config.toml` aponta para o projeto que o runbook de migração chama de antigo. Ver R2. Também suavizei "não existe pipeline de deploy" para "não existe pipeline de deploy **versionado**": há sinal de integração Vercel fora do repositório, que não pude verificar.
+6. **A validação adversarial derrubou os números de capa.** Publiquei 342 funcionalidades somando os *resumos auto-relatados* dos agentes. Três resumos não batiam com as próprias tabelas de evidência dos documentos. O total correto, contado linha a linha, é **385** — e o quadro **piora**: ⬛ sobe de 37 para 56. Cometi na camada de agregação exatamente o erro que exigi que os agentes não cometessem com a documentação: aceitar relato como evidência.
+7. **Nove números publicados sem medição própria, todos corrigidos.** Seis em R1 (a causa foi minha varredura do `types.ts` não delimitar as seções, varrendo `Views` e `Functions` junto com `Tables`), dois em R11 (amostra tratada como contagem) e um na cobertura de rotas (`grep -qF` com a rota `/`, que casa com qualquer linha). Nenhuma correção mudou a direção de um achado; todas mudaram a precisão.
+8. **Um achado estava invertido** — `attribution-calculator`, ver R14. É o erro mais perigoso desta auditoria, porque a recomendação original levava a apagar o único caminho funcional.
+9. **Uma camada inteira ficou fora de escopo sem ser declarada** — PWA / service worker, ver R13. A varredura por tema mostrou que `service worker`, `offline`, `error boundary` e `i18n` não aparecem em nenhum dos 8 documentos originais.
+10. **Refinamento após a primeira versão deste documento.** Eu havia escrito que os crons apontam para "dois refs antigos". Medindo melhor, são **três refs coexistindo**, e o projeto efetivamente linkado (`supabase/.temp/linked-project.json`) é justamente o que a documentação chama de "Banco Externo" — enquanto o `config.toml` aponta para o projeto que o runbook de migração chama de antigo. Ver R2. Também suavizei "não existe pipeline de deploy" para "não existe pipeline de deploy **versionado**": há sinal de integração Vercel fora do repositório, que não pude verificar.
 
 ---
 
@@ -292,7 +335,7 @@ Registradas porque erro repassado como verdade contamina o resto.
 | B | **Decidir o destino da camada de automação agendada** (22 funções sem cron): criar os jobs, ou assumir que o produto não tem automação e remover as telas que a prometem | Muda o escopo do produto |
 | C | **Resolver o split-brain** externo × local — unificar num banco ou tornar o proxy o único caminho de escrita | Arquitetural; afeta dados vivos |
 | D | **Fechar ou autenticar `incoming-webhook`** para exigir HMAC sempre | Pode quebrar integrações que já postam |
-| E | **Remover `evolution-api` e `dual-write-proxy`** (código morto; o segundo sem autenticação) | Deleção — confirmar que nada externo os chama |
+| E | ~~Remover `evolution-api` e `dual-write-proxy`~~ → **investigar antes, não remover** | **Rebaixado pela validação.** Ambos ficaram `INCONCLUSIVOS`: `evolution-api` tem contrato público documentado em `docs/EDGE_FUNCTIONS_API.md:324` e `dual-write-proxy` é citado em `docs/MIGRATION_MASTER_RUNBOOK.md:161,174`. Exige `SELECT * FROM cron.job` e logs do gateway. A falta de autenticação em `dual-write-proxy` continua valendo como risco |
 | F | **Definir um pipeline de deploy** — hoje a publicação acontece fora do Git | Processo, não código |
 | G | **Decidir sobre o envio de e-mail encenado**: implementar de fato (Resend está prometido em `useWeeklyReport.ts:206` sem código) ou remover a UI que diz "Campanha enviada" | Usuários podem estar confiando nessa métrica |
 
@@ -304,6 +347,8 @@ Registradas porque erro repassado como verdade contamina o resto.
 
 - [x] Toda funcionalidade auditada tem uma das 4 classificações, com evidência `arquivo:linha`
 - [x] Achados graves verificados de forma independente (R1, R2, R3, R6, R8, R9, R10 reproduzidos por mim, fora do relato dos agentes)
+- [x] **Segunda passada adversarial executada** — 3 agentes com instrução de refutar, mais remedição própria. Resultado em [`docs/estado/12_VALIDACAO_DA_AUDITORIA.md`](docs/estado/12_VALIDACAO_DA_AUDITORIA.md)
+- [ ] **Classificação ⬛ confiável** — **NÃO atingido.** 5 de 27 amostras refutadas, 1 invertida. Tratar como limite superior (R14)
 - [x] Runtime marcado `VERIFICADO` (só o CI) ou `NAO_VERIFICADO` (todo o resto), sem meio-termo
 - [x] Lacunas declaradas no próprio documento (§6)
 - [x] Erros próprios corrigidos em voz alta (§7)
