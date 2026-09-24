@@ -88,6 +88,7 @@ export interface RodizioFiltrosSugestao {
 
 export interface RodizioAplicarOndaResult {
   status: string;
+  message?: string;
   modo: ExecucaoModo;
   onda: number;
   execucao_id: string | null;
@@ -95,6 +96,13 @@ export interface RodizioAplicarOndaResult {
   total_aplicados: number;
   impacto: Record<string, unknown> | null;
   erros: unknown[] | null;
+}
+
+export interface RodizioSugerirDistribuicaoResult {
+  status: string;
+  message?: string;
+  onda?: number;
+  clientes_sugeridos?: number;
 }
 
 /* ─── Bloqueios (vw_rodizio_bloqueios) ─── */

@@ -10,6 +10,8 @@ import type {
   RodizioExecucao,
   RodizioFiltrosSugestao,
   RodizioAplicarOndaResult,
+  RodizioSugerirDistribuicaoResult,
+  RodizioReverterResult,
   ExecucaoModo,
   StagingStatus,
 } from '@/types/rodizio';
@@ -78,14 +80,18 @@ export function useSugerirDistribuicao() {
 
   return useMutation({
     mutationFn: async ({ onda, filtros }: { onda: number; filtros?: RodizioFiltrosSugestao }) =>
-      callRodizioRpc('rodizio_sugerir_distribuicao', {
+      callRodizioRpc<RodizioSugerirDistribuicaoResult>('rodizio_sugerir_distribuicao', {
         p_onda: onda,
         p_filtros: filtros ?? {},
         p_criado_por_id: appUserId ?? null,
       }),
-    onSuccess: (_, vars) => {
+    onSuccess: (result, vars) => {
       qc.invalidateQueries({ queryKey: [...STAGING_KEY_BASE, vars.onda] });
-      toast.success('Sugestão de distribuição gerada');
+      if (result.status !== 'success') {
+        toast.error(result.message ?? 'Erro ao sugerir distribuição');
+        return;
+      }
+      toast.success(`Sugestão de distribuição gerada: ${result.clientes_sugeridos ?? 0} cliente(s)`);
     },
     onError: (err) => {
       logger.error('[SugerirDistribuicao]', err);
@@ -110,10 +116,17 @@ export function useAplicarOnda() {
       qc.invalidateQueries({ queryKey: EXECUCOES_KEY });
       qc.invalidateQueries({ queryKey: ['rodizio-equipe'] });
       qc.invalidateQueries({ queryKey: ['rodizio-kpis'] });
+      if (result.status !== 'success') {
+        toast.error(result.message ?? 'Erro ao aplicar onda');
+        return;
+      }
       if (vars.modo === 'DRY_RUN') {
         toast.info(`Simulação: ${result.total_aplicados ?? 0} registros seriam aplicados`);
       } else {
         toast.success(`Onda aplicada: ${result.total_aplicados ?? 0} clientes rotacionados`);
+        if (Array.isArray(result.erros) && result.erros.length > 0) {
+          toast.error(`${result.erros.length} cliente(s) não foram aplicados — veja o histórico da execução`);
+        }
       }
     },
     onError: (err) => {
@@ -150,15 +163,19 @@ export function useReverterExecucao() {
 
   return useMutation({
     mutationFn: async (execucaoId: string) =>
-      callRodizioRpc('rodizio_reverter_execucao', {
+      callRodizioRpc<RodizioReverterResult>('rodizio_reverter_execucao', {
         p_execucao_id: execucaoId,
         p_revertido_por_id: appUserId ?? null,
       }),
-    onSuccess: () => {
+    onSuccess: (result) => {
       qc.invalidateQueries({ queryKey: EXECUCOES_KEY });
       qc.invalidateQueries({ queryKey: STAGING_KEY_BASE });
       qc.invalidateQueries({ queryKey: ['rodizio-equipe'] });
-      toast.success('Execução revertida');
+      if (result.status !== 'success') {
+        toast.error(result.message ?? 'Erro ao reverter execução');
+        return;
+      }
+      toast.success(`Execução revertida: ${result.clientes_revertidos ?? 0} cliente(s)`);
     },
     onError: (err) => {
       logger.error('[ReverterExecucao]', err);
