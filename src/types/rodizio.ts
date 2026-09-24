@@ -88,12 +88,31 @@ export interface RodizioFiltrosSugestao {
 
 export interface RodizioAplicarOndaResult {
   status: string;
+  message?: string;
   modo: ExecucaoModo;
   onda: number;
   execucao_id: string | null;
   total_aprovados: number;
   total_aplicados: number;
   impacto: Record<string, unknown> | null;
+  erros: unknown[] | null;
+}
+
+export interface RodizioSugerirDistribuicaoResult {
+  status: string;
+  message?: string;
+  onda?: number;
+  clientes_sugeridos?: number;
+}
+
+export interface RodizioCloserExecutarResult {
+  status: string;
+  message?: string;
+  modo: ExecucaoModo;
+  execucao_id: string | null;
+  total_elegiveis: number;
+  total_rotacionados: number;
+  distribuicao: Record<string, unknown>[] | null;
   erros: unknown[] | null;
 }
 

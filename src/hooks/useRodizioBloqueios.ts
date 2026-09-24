@@ -111,7 +111,11 @@ export function useAprovarBloqueio() {
       }),
     onSuccess: (result) => {
       qc.invalidateQueries({ queryKey: BLOQUEIOS_KEY_BASE });
-      toast.success(result.message ?? 'Bloqueio aprovado');
+      if (result.status === 'ok' || result.status === 'success') {
+        toast.success(result.message ?? 'Bloqueio aprovado');
+      } else {
+        toast.error(result.message ?? 'Não foi possível aprovar o bloqueio');
+      }
     },
     onError: (err) => {
       logger.error('[AprovarBloqueio]', err);
