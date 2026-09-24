@@ -2,8 +2,9 @@ name: RLS exposure guard
 
 # Etapa 84 do plano banco-único: trava regressão de exposição de RLS.
 # Roda com a anon key (que já é pública, vai no front) — não precisa de secret novo para o perfil anon.
-# Para cobrir o perfil de usuário logado (onde estão os números que importam), defina o secret
-# TEST_USER_JWT com o JWT de um usuário sem role e sem carteira.
+# Para o perfil de usuário logado (onde estão os números que importam), loga como o usuário de teste
+# qa-rls-baseline@promobrindes.com.br (sem role, sem carteira) a cada run — um JWT de sessão expira em
+# 1h, não dá pra guardar fixo como secret. TEST_USER_EMAIL/TEST_USER_PASSWORD são as credenciais dele.
 
 on:
   pull_request:
@@ -26,9 +27,27 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Login do usuário de teste (sem role/carteira)
+        id: login
+        env:
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+        run: |
+          if [ -z "$TEST_USER_EMAIL" ]; then
+            echo "TEST_USER_EMAIL/TEST_USER_PASSWORD não configurados — perfil authenticated_sem_role não será verificado."
+            exit 0
+          fi
+          TOKEN=$(curl -sS -X POST "$SUPABASE_URL/auth/v1/token?grant_type=password" \
+            -H "apikey: $SUPABASE_ANON_KEY" -H "Content-Type: application/json" \
+            -d "{\"email\":\"$TEST_USER_EMAIL\",\"password\":\"$TEST_USER_PASSWORD\"}" \
+            | node -e "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const j=JSON.parse(d);if(!j.access_token){console.error(JSON.stringify(j));process.exit(1)}console.log(j.access_token)})")
+          echo "::add-mask::$TOKEN"
+          echo "jwt=$TOKEN" >> "$GITHUB_OUTPUT"
       - name: Verifica exposição contra o baseline
         env:
           SUPABASE_URL: ${{ vars.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
-          TEST_USER_JWT: ${{ secrets.TEST_USER_JWT }}
+          TEST_USER_JWT: ${{ steps.login.outputs.jwt }}
         run: node scripts/rls-matrix/check-rls-baseline.mjs
