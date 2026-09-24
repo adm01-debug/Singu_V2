@@ -16,6 +16,9 @@ BEGIN
     'audit_log_default'
   ]
   LOOP
+    IF to_regclass('public.' || part) IS NULL THEN
+      CONTINUE;
+    END IF;
     EXECUTE format(
       'DROP POLICY IF EXISTS "deny_authenticated_direct_access" ON public.%I;',
       part
