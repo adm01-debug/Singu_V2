@@ -1,0 +1,34 @@
+name: RLS exposure guard
+
+# Etapa 84 do plano banco-único: trava regressão de exposição de RLS.
+# Roda com a anon key (que já é pública, vai no front) — não precisa de secret novo para o perfil anon.
+# Para cobrir o perfil de usuário logado (onde estão os números que importam), defina o secret
+# TEST_USER_JWT com o JWT de um usuário sem role e sem carteira.
+
+on:
+  pull_request:
+    paths:
+      - 'supabase/migrations/**'
+      - 'scripts/rls-matrix/**'
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/migrations/**'
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  rls-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verifica exposição contra o baseline
+        env:
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+          TEST_USER_JWT: ${{ secrets.TEST_USER_JWT }}
+        run: node scripts/rls-matrix/check-rls-baseline.mjs
