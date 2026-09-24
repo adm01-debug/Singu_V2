@@ -10,6 +10,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 import { parseApiError } from '@/lib/errorMessages';
+import type { RodizioCloserExecutarResult } from '@/types/rodizio';
 
 /**
  * Decisão: o widget antigo chamava a Edge Function `lead-routing` (ação
@@ -29,14 +30,21 @@ export default function QuickDistributeWidget() {
 
   const executar = useMutation({
     mutationFn: async () =>
-      callRodizioRpc('rodizio_closer_executar', {
+      callRodizioRpc<RodizioCloserExecutarResult>('rodizio_closer_executar', {
         p_modo: 'DRY_RUN',
         p_limit: limit,
         p_executado_por_id: appUserId ?? null,
       }),
-    onSuccess: () => {
+    onSuccess: (result) => {
       qc.invalidateQueries({ queryKey: ['rodizio-execucoes'] });
-      toast.success('Simulação de rodízio de closers executada');
+      if (result.status !== 'success') {
+        toast.error(result.message ?? 'Erro ao simular rodízio');
+        return;
+      }
+      toast.success(`Simulação executada: ${result.total_elegiveis} cliente(s) elegível(is)`);
+      if (Array.isArray(result.erros) && result.erros.length > 0) {
+        toast.error(`${result.erros.length} cliente(s) com erro na simulação`);
+      }
     },
     onError: (err) => {
       logger.error('[QuickDistribute]', err);

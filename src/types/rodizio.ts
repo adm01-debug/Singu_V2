@@ -105,6 +105,17 @@ export interface RodizioSugerirDistribuicaoResult {
   clientes_sugeridos?: number;
 }
 
+export interface RodizioCloserExecutarResult {
+  status: string;
+  message?: string;
+  modo: ExecucaoModo;
+  execucao_id: string | null;
+  total_elegiveis: number;
+  total_rotacionados: number;
+  distribuicao: Record<string, unknown>[] | null;
+  erros: unknown[] | null;
+}
+
 /* ─── Bloqueios (vw_rodizio_bloqueios) ─── */
 
 export type BloqueioStatus = 'NENHUM' | 'EXPIRADO' | 'PENDENTE_APROVACAO' | 'ATIVO';
