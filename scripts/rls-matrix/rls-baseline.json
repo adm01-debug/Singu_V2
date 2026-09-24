@@ -13,15 +13,15 @@
   "tabelas": {
     "customers": {
       "anon": 0,
-      "authenticated_sem_role": 1000
+      "authenticated_sem_role": 1001
     },
     "contact_phones": {
       "anon": 0,
-      "authenticated_sem_role": 1000
+      "authenticated_sem_role": 1001
     },
     "company_phones": {
       "anon": 0,
-      "authenticated_sem_role": 1000
+      "authenticated_sem_role": 1001
     },
     "suppliers": {
       "anon": 0,
