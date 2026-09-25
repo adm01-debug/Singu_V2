@@ -130,7 +130,7 @@ export const AppRoutes = () => {
       <Route path="/playbooks" element={<Protected><P.PlaybooksPage /></Protected>} />
       <Route path="/playbooks/battle-cards/:id" element={<Protected><P.BattleCardDetailPage /></Protected>} />
       <Route path="/playbooks/:id" element={<Protected><P.PlaybookDetailPage /></Protected>} />
-      <Route path="/rodizio" element={<Protected><P.Rodizio /></Protected>} />
+      <Route path="/rodizio" element={<Admin><P.Rodizio /></Admin>} />
       <Route path="/tarefas" element={<Protected><P.Tarefas /></Protected>} />
       <Route path="/bi" element={<Protected><P.BIAvancado /></Protected>} />
       <Route path="/suporte" element={<Protected><P.Suporte /></Protected>} />
