@@ -34,7 +34,8 @@ export function useAppUserId() {
         .maybeSingle();
       if (error) return null;
       // types.ts ainda não tem bitrix_user_id (coluna criada no t209).
-      return (data as { bitrix_user_id?: number | null } | null)?.bitrix_user_id ?? null;
+      const bitrixUserId = (data as Record<string, unknown> | null)?.bitrix_user_id;
+      return typeof bitrixUserId === 'number' ? bitrixUserId : null;
     },
     enabled: !!user?.id,
     staleTime: 10 * 60_000,
