@@ -1,27 +1,27 @@
 {
   "_meta": {
     "descricao": "Baseline de exposicao RLS do Singu (pgxfvjmuubtbowutlide). Linhas visiveis por perfil, medidas via PostgREST. Contador satura em 1001.",
-    "gerado_em": "2026-09-24",
+    "gerado_em": "2026-09-25",
     "etapa_plano": "84",
     "regra": "O teste FALHA se qualquer tabela expuser MAIS linhas que o baseline para um perfil. Reduzir exposicao (Fase 3) exige atualizar o baseline no mesmo PR que reduz.",
     "perfis": {
       "anon": "chave publishable, sem login. -1 = sem grant (permission denied) = bom.",
       "authenticated_sem_role": "usuario logado sem linha em user_roles e sem carteira. E o pior caso realista hoje."
     },
-    "alvo_fase_3": "Apos etapas 58-64, authenticated_sem_role deve ser 0 em customers/contact_phones/company_phones e apenas liberado_comercial em suppliers/carriers."
+    "alvo_fase_3": "customers/contact_phones/company_phones concluido em 2026-09-25 (policy admin_select via has_role, mesmo padrao do rodizio) — authenticated_sem_role agora 0. suppliers/carriers seguem pendentes (liberado_comercial)."
   },
   "tabelas": {
     "customers": {
       "anon": 0,
-      "authenticated_sem_role": 1001
+      "authenticated_sem_role": 0
     },
     "contact_phones": {
       "anon": 0,
-      "authenticated_sem_role": 1001
+      "authenticated_sem_role": 0
     },
     "company_phones": {
       "anon": 0,
-      "authenticated_sem_role": 1001
+      "authenticated_sem_role": 0
     },
     "suppliers": {
       "anon": 0,
