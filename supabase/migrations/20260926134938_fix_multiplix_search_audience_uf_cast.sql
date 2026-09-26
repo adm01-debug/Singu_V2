@@ -6,7 +6,7 @@
 --   mesmo tipo exato. list_ramos/list_ufs (LANGUAGE sql) nao sofrem disso porque a coercao de
 --   uma funcao SQL e mais permissiva; search_audience (plpgsql) falhava com 42804 em QUALQUER
 --   chamada que retornasse linhas (achado ao testar a RPC ja aplicada em producao,
---   supabase/migrations/20260926120000_multiplix_audience_rpcs.sql — a 1a rodada deste fix so
+--   supabase/migrations/20260926133544_multiplix_audience_rpcs.sql — a 1a rodada deste fix so
 --   pegou a coluna uf e ainda quebrava na coluna destino_e164). Puramente aditivo/corretivo: so
 --   os casts no SELECT final mudam; assinatura, grants e demais funcoes ficam identicas.
 -- Author: Claude (sessao Multiplix, achado ao integrar a edge multiplix-audience do ZAPP)
@@ -203,7 +203,7 @@ BEGIN
     SELECT
       av.company_id, av.company_name, av.ativa, av.no_escopo, ce.contact_id,
       ct.whatsapp AS contato_whatsapp,
-      COALESCE(cp.numero_e164::text, ct.whatsapp, cph.numero_e164::text) AS destino_e164,
+      COALESCE(cp.numero_e164, ct.whatsapp, cph.numero_e164) AS destino_e164,
       CASE
         WHEN cp.numero_e164 IS NOT NULL OR ct.whatsapp IS NOT NULL THEN 'contato_pessoa'
         WHEN cph.numero_e164 IS NOT NULL THEN 'telefone_empresa'
@@ -246,6 +246,6 @@ COMMIT;
 /*
 BEGIN;
 -- Reverte para a versao com o bug (nao recomendado); ver
--- 20260926120000_multiplix_audience_rpcs.sql para o corpo anterior.
+-- 20260926133544_multiplix_audience_rpcs.sql para o corpo anterior.
 COMMIT;
 */
