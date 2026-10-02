@@ -10,7 +10,7 @@ test.describe('Contacts Rapport & Intelligence', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(`${BASE}/auth`);
     await page.getByLabel(/e-?mail/i).fill(EMAIL!);
-    await page.getByLabel(/senha/i).fill(PASS!);
+    await page.getByLabel(/^senha$/i).fill(PASS!);
     await page.getByRole('button', { name: /entrar/i }).click();
     await expect(page).toHaveURL(/\/(dashboard|index|$)/, { timeout: 15_000 });
   });

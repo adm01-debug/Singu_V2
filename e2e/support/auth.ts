@@ -10,7 +10,7 @@ export function requireTestCredentials(): void {
 export async function loginWithTestUser(page: Page): Promise<void> {
   await page.goto('/auth');
   await page.getByLabel(/e-?mail/i).fill(EMAIL!);
-  await page.getByLabel(/senha/i).fill(PASS!);
+  await page.getByLabel(/^senha$/i).fill(PASS!);
   await page.getByRole('button', { name: /entrar/i }).click();
   await expect(page).toHaveURL(/\/(dashboard|index|$)/, { timeout: 15_000 });
 }
