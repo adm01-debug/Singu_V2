@@ -1,18 +1,17 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tests',
-  // These directories hold Vitest unit/integration tests, not Playwright e2e specs.
-  testIgnore: ['**/integration/**', '**/security/**', '**/stress/**', '**/load/**', '**/rls/**'],
+  testDir: './e2e',
+  globalTimeout: process.env.CI ? 15 * 60 * 1000 : undefined,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: process.env.CI ? [['github'], ['html']] : 'html',
   use: {
     baseURL: 'http://localhost:8080',
     trace: 'retain-on-failure',
-    screenshot: 'on',
+    screenshot: 'only-on-failure',
     video: 'on-first-retry',
   },
   projects: [
@@ -30,7 +29,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
+    command: 'npm run preview -- --host 127.0.0.1 --port 8080',
     url: 'http://localhost:8080',
     reuseExistingServer: !process.env.CI,
   },
