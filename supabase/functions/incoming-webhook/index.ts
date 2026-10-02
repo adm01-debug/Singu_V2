@@ -157,6 +157,40 @@ Deno.serve(async (req) => {
     });
   }
 
+  if (webhook.allowed_origins?.length) {
+    const origin = req.headers.get("origin") ?? "";
+    const ok = webhook.allowed_origins.some((allowedOrigin: string) => origin === allowedOrigin);
+    if (!ok) {
+      await admin.from("incoming_webhook_logs").insert({
+        webhook_id: webhook.id,
+        status: "error",
+        http_status: 403,
+        payload,
+        error_message: "Origem não permitida",
+        source_ip: sourceIp,
+        user_agent: userAgent,
+        latency_ms: Date.now() - t0,
+      });
+      return new Response(JSON.stringify({ error: "Origem não permitida" }), {
+        status: 403,
+        headers: { ...cors, "Content-Type": "application/json" },
+      });
+    }
+  }
+
+  const { error: cleanupError } = await admin
+    .from("incoming_webhook_nonces")
+    .delete()
+    .eq("webhook_id", webhook.id)
+    .lt("expires_at", new Date().toISOString());
+  if (cleanupError) {
+    log.error("idempotency_cleanup_failed", { error: cleanupError.message });
+    return new Response(JSON.stringify({ error: "Falha ao limpar idempotência" }), {
+      status: 500,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+
   const expiresAt = new Date(tsNum + window).toISOString();
   const { error: nonceError } = await admin.from("incoming_webhook_nonces").insert({
     webhook_id: webhook.id,
@@ -175,30 +209,6 @@ Deno.serve(async (req) => {
       status: 409,
       headers: { ...cors, "Content-Type": "application/json" },
     });
-  }
-
-  // Origem (opcional)
-  if (webhook.allowed_origins?.length) {
-    const origin = req.headers.get("origin") ?? "";
-    // Exact-match only — substring matching (includes) would allow evil-trusted.com to
-    // bypass a whitelist entry of trusted.com.
-    const ok = webhook.allowed_origins.some((o: string) => origin === o);
-    if (!ok) {
-      await admin.from("incoming_webhook_logs").insert({
-        webhook_id: webhook.id,
-        status: "error",
-        http_status: 403,
-        payload,
-        error_message: "Origem não permitida",
-        source_ip: sourceIp,
-        user_agent: userAgent,
-        latency_ms: Date.now() - t0,
-      });
-      return new Response(JSON.stringify({ error: "Origem não permitida" }), {
-        status: 403,
-        headers: { ...cors, "Content-Type": "application/json" },
-      });
-    }
   }
 
   // Quotas mensais
