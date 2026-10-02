@@ -1,6 +1,7 @@
-# Smoke Tests E2E (Playwright)
+# Testes E2E (Playwright)
 
-Suite de smoke tests que valida as 3 jornadas críticas do SINGU como gate de regressão.
+O gate combina a suíte canônica em `e2e/` nos três navegadores com os specs de
+regressão em `tests/` no Chromium.
 
 ## Setup
 
@@ -22,11 +23,14 @@ npx playwright install chromium
 ```bash
 # Local
 E2E_USER_EMAIL=qa@singu.local E2E_USER_PASS=*** \
-  npx playwright test e2e/smoke.spec.ts
+  npm run test:e2e
 
 # CI
-npx playwright test --reporter=github e2e/smoke.spec.ts
+npx playwright test
 ```
+
+`npm run test:e2e` sempre executa um build de produção antes de iniciar o
+`vite preview`. O CI já possui um step de build e chama o Playwright diretamente.
 
 ## Jornadas cobertas
 
@@ -42,7 +46,8 @@ npx playwright test --reporter=github e2e/smoke.spec.ts
 
 ```bash
 E2E_USER_EMAIL=qa@singu.local E2E_USER_PASS=*** \
-  npx playwright test e2e/interacoes-prefs-back-button.spec.ts
+  npm run test:e2e -- e2e/interacoes-prefs-back-button.spec.ts
 ```
 
-Os testes pulam silenciosamente quando as credenciais não estão configuradas (não falham CI sem seed).
+Localmente, os testes autenticados são ignorados quando as credenciais não estão
+configuradas. O CI valida a presença dos secrets antes de executar a suíte.

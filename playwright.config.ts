@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './e2e',
+  testDir: '.',
   globalTimeout: process.env.CI ? 15 * 60 * 1000 : undefined,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -16,16 +16,25 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
+      name: 'e2e-chromium',
+      testDir: './e2e',
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      name: 'firefox',
+      name: 'e2e-firefox',
+      testDir: './e2e',
       use: { ...devices['Desktop Firefox'] },
     },
     {
-      name: 'webkit',
+      name: 'e2e-webkit',
+      testDir: './e2e',
       use: { ...devices['Desktop Safari'] },
+    },
+    {
+      name: 'regression-chromium',
+      testDir: './tests',
+      testIgnore: ['**/integration/**', '**/security/**', '**/stress/**', '**/load/**', '**/rls/**'],
+      use: { ...devices['Desktop Chrome'] },
     },
   ],
   webServer: {

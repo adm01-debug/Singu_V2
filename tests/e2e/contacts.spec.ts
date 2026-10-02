@@ -1,8 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { loginWithTestUser, requireTestCredentials } from '../../e2e/support/auth';
 
 test.describe('Contatos CRUD & Filtros E2E', () => {
   test.beforeEach(async ({ page }) => {
-    // Mock login if necessary or navigate to the contacts page
+    requireTestCredentials();
+    await loginWithTestUser(page);
     await page.goto('/contatos');
     // Wait for the list to load
     await page.waitForSelector('[role="region"][aria-label="Tabela de contatos"]');
@@ -65,4 +67,3 @@ test.describe('Contatos CRUD & Filtros E2E', () => {
     }
   });
 });
-

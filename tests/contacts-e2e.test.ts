@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
+import { loginWithTestUser, requireTestCredentials } from '../e2e/support/auth';
 
 test.describe('Contact Management', () => {
+  test.beforeEach(async ({ page }) => {
+    requireTestCredentials();
+    await loginWithTestUser(page);
+  });
+
   test('should create, filter and paginate contacts', async ({ page }) => {
     await page.goto('/contatos');
     
