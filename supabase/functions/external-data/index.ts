@@ -415,9 +415,15 @@ Deno.serve(async (req) => {
     if (!table || typeof table !== 'string' || !isAllowedTable(table)) {
       return jsonError(`Invalid table "${table}". Only allowed tables are permitted.`, 400, req);
     }
+    if (GLOBAL_READ_ONLY_TABLES.has(table) && operation !== 'select') {
+      return jsonError('Global metrics are read-only', 405, req);
+    }
 
     // ─── SELECT (read) ───
     if (operation === 'select') {
+      if (!isSvc && GLOBAL_READ_ONLY_TABLES.has(table) && !await hasAdminRole(userId)) {
+        return jsonError('Admin role required', 403, req);
+      }
       const { filters, select, order, range, search, countMethod } = body;
       const selectedColumns = typeof select === 'string' ? select : '*';
       const searchConfig = search && typeof search === 'object'

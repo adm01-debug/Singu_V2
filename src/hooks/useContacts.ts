@@ -160,16 +160,17 @@ export function useContacts(
   const contacts = useMemo(() => data?.pages.flatMap(p => p.items) ?? [], [data]);
   const fetchAll = options?.fetchAll ?? false;
   useEffect(() => {
-    if (!fetchAll || !hasNextPage || isFetchingNextPage || isFetchNextPageError) return;
+    if (!externalEnabled || !fetchAll || !hasNextPage || isFetchingNextPage || isFetchNextPageError) return;
     void fetchNextPage();
-  }, [fetchAll, fetchNextPage, hasNextPage, isFetchNextPageError, isFetchingNextPage]);
+  }, [externalEnabled, fetchAll, fetchNextPage, hasNextPage, isFetchNextPageError, isFetchingNextPage]);
 
   const totalCount = useMemo(() => {
     const fromLast = data?.pages.find(p => p.totalCount != null)?.totalCount ?? null;
     if (fromLast != null) return fromLast;
     return contacts.length;
   }, [data, contacts.length]);
-  const allContactsLoading = fetchAll &&
+  const allContactsLoading = externalEnabled &&
+    fetchAll &&
     !isFetchNextPageError &&
     (hasNextPage || isFetchingNextPage);
 

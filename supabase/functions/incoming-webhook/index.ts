@@ -320,6 +320,7 @@ Deno.serve(async (req) => {
   let insertResult: unknown = null;
   let httpStatus = 200;
   let errorMessage: string | null = null;
+  let queueMessage: string | null = null;
 
   if (dryRun) {
     insertResult = { dry_run: true, mapped_row: finalRow, target_table: targetTable };
@@ -349,7 +350,8 @@ Deno.serve(async (req) => {
         errorMessage = "Falha ao processar webhook";
       } else {
         httpStatus = 202;
-        errorMessage = "Webhook aceito e enfileirado para nova tentativa";
+        queueMessage = "Webhook aceito e enfileirado para nova tentativa";
+        insertResult = { queued: true };
       }
     } else insertResult = data;
   } else {
@@ -357,17 +359,19 @@ Deno.serve(async (req) => {
   }
 
   // Flush stats update and audit log in parallel (both independent)
+  const queued = httpStatus === 202;
+  const failed = httpStatus >= 400;
   await Promise.all([
     dryRun
       ? Promise.resolve()
       : admin.from("incoming_webhooks").update({
           total_calls: (webhook.total_calls ?? 0) + 1,
-          total_errors: (webhook.total_errors ?? 0) + (errorMessage ? 1 : 0),
+          total_errors: (webhook.total_errors ?? 0) + (failed ? 1 : 0),
           last_called_at: new Date().toISOString(),
         }).eq("id", webhook.id),
     admin.from("incoming_webhook_logs").insert({
       webhook_id: webhook.id,
-      status: errorMessage ? "error" : "success",
+      status: queued ? "queued" : failed ? "error" : "success",
       http_status: httpStatus,
       payload,
       response: insertResult,
@@ -380,10 +384,11 @@ Deno.serve(async (req) => {
 
   return new Response(
     JSON.stringify({
-      success: httpStatus < 400,
-      queued: httpStatus === 202,
+      success: !failed,
+      queued,
       data: insertResult,
       error: errorMessage,
+      message: queueMessage,
       dry_run: dryRun,
     }),
     {

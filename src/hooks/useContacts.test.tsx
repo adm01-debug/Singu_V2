@@ -131,6 +131,32 @@ describe('useContacts CRUD & Pagination', () => {
     expect(result.current.hasMore).toBe(true);
   });
 
+  it('should not continue cached pagination while disabled', async () => {
+    const firstPage = Array.from({ length: 50 }, (_, i) => ({
+      id: `id-${i}`,
+      first_name: `User ${i}`,
+      last_name: 'Test',
+      updated_at: new Date().toISOString(),
+    }));
+    queryClient.setQueryData(
+      ['contacts', '__all__', 'test-user-id'],
+      {
+        pages: [{ items: firstPage, totalCount: 100 }],
+        pageParams: [0],
+      },
+    );
+
+    const { result } = renderHook(
+      () => useContacts(undefined, { enabled: false, fetchAll: true }),
+      { wrapper },
+    );
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.contacts).toHaveLength(50);
+    expect(externalData.queryExternalData).not.toHaveBeenCalled();
+  });
+
   it('should create a contact with mapped hobbies and interests', async () => {
     const newContact = {
       first_name: 'John',

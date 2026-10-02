@@ -22,6 +22,18 @@ interface BitrixAuth {
   application_token?: string;
 }
 
+interface BitrixProfile {
+  ID?: string;
+  ADMIN?: boolean;
+}
+
+interface BitrixContact {
+  ID?: string;
+  NAME?: string;
+  LAST_NAME?: string;
+  PHONE?: Array<{ VALUE?: string; VALUE_TYPE?: string }>;
+}
+
 interface InboundMessage {
   conversation?: string;
   extendedTextMessage?: { text?: string };
@@ -71,7 +83,6 @@ interface ConnectorPayload {
   messages?: OutboundMessage[];
   auth?: BitrixAuth;
   contactId?: string | number;
-  phone?: string;
 }
 
 function constantTimeEqual(a: string, b: string): boolean {
@@ -109,7 +120,13 @@ function json(data: unknown, status = 200) {
 }
 
 function html(content: string) {
-  return new Response(content, { headers: { ...CORS, "Content-Type": "text/html; charset=utf-8" } });
+  return new Response(content, {
+    headers: {
+      ...CORS,
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-store",
+    },
+  });
 }
 
 async function log(entry: Record<string, unknown>) {
@@ -139,19 +156,58 @@ async function b24(method: string, params: Record<string, unknown> = {}) {
   return resp.json();
 }
 
-async function verifyBitrixAccessToken(token: string): Promise<boolean> {
-  if (!token || !BITRIX_PORTAL) return false;
+async function callBitrixAsUser<T>(
+  method: string,
+  token: string,
+  params: Record<string, unknown> = {},
+): Promise<T | null> {
+  if (!token || !BITRIX_PORTAL) return null;
   try {
     const response = await fetch(
-      `${BITRIX_PORTAL}/rest/profile.json?auth=${encodeURIComponent(token)}`,
-      { headers: { "Accept": "application/json" } },
+      `${BITRIX_PORTAL}/rest/${method}.json?auth=${encodeURIComponent(token)}`,
+      {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify(params),
+      },
     );
-    if (!response.ok) return false;
+    if (!response.ok) return null;
     const data = await response.json();
-    return Boolean(data?.result?.ID);
+    return data?.error ? null : (data?.result as T ?? null);
   } catch {
-    return false;
+    return null;
   }
+}
+
+async function getBitrixProfile(token: string): Promise<BitrixProfile | null> {
+  const profile = await callBitrixAsUser<BitrixProfile>("profile", token);
+  return profile?.ID ? profile : null;
+}
+
+async function handleWidgetRequest(req: Request): Promise<Response> {
+  if (req.method !== "POST") return json({ error: "Unauthorized" }, 401);
+
+  let form: FormData;
+  try {
+    form = await req.formData();
+  } catch {
+    return json({ error: "Invalid widget request" }, 400);
+  }
+
+  const applicationToken = String(
+    form.get("APPLICATION_TOKEN") ?? form.get("application_token") ?? "",
+  );
+  const authToken = String(form.get("AUTH_ID") ?? form.get("auth_id") ?? "");
+  if (
+    !BITRIX_APPLICATION_TOKEN ||
+    !applicationToken ||
+    !constantTimeEqual(applicationToken, BITRIX_APPLICATION_TOKEN) ||
+    !await getBitrixProfile(authToken)
+  ) {
+    return json({ error: "Unauthorized" }, 401);
+  }
+
+  return html(getWidgetHtml());
 }
 
 async function findCrmResponsible(phone: string) {
@@ -249,25 +305,34 @@ async function handleOutbound(payload: ConnectorPayload): Promise<Response> {
   return json({ ok: true, results });
 }
 
-async function handleOpenChat(body: ConnectorPayload): Promise<Response> {
-  const { contactId, phone: rawPhone } = body;
-  let phone = rawPhone;
-  if (contactId && !phone) {
-    const contactData = await b24("crm.contact.get", { id: contactId });
-    const c = contactData?.result;
-    if (!c) return json({ error: "Contato nao encontrado" }, 404);
-    const phones = c.PHONE || [];
-    if (phones.length === 0) return json({ error: "Contato sem telefone", contactId }, 400);
-    const mobile = phones.find((phoneEntry: { VALUE_TYPE?: string }) =>
-      phoneEntry.VALUE_TYPE === "MOBILE"
-    ) || phones[0];
-    const normalizedPhone = String(mobile.VALUE ?? "").replace(/\D/g, "");
-    if (!normalizedPhone) return json({ error: "Contato sem telefone válido", contactId }, 400);
-    phone = !normalizedPhone.startsWith("55") && normalizedPhone.length <= 11
-      ? `55${normalizedPhone}`
-      : normalizedPhone;
+async function handleOpenChat(
+  body: ConnectorPayload,
+  bitrixAccessToken: string,
+  operatorId: string,
+): Promise<Response> {
+  const contactId = Number(body.contactId);
+  if (!Number.isSafeInteger(contactId) || contactId <= 0) {
+    return json({ error: "Contato inválido" }, 400);
   }
-  if (!phone) return json({ error: "Telefone nao informado" }, 400);
+
+  const contactInfo = await callBitrixAsUser<BitrixContact>(
+    "crm.contact.get",
+    bitrixAccessToken,
+    { id: contactId },
+  );
+  if (!contactInfo) {
+    return json({ error: "Contato indisponível para este operador" }, 403);
+  }
+
+  const phones = contactInfo.PHONE ?? [];
+  if (phones.length === 0) return json({ error: "Contato sem telefone", contactId }, 400);
+  const mobile = phones.find((phoneEntry) => phoneEntry.VALUE_TYPE === "MOBILE") || phones[0];
+  const normalizedPhone = String(mobile.VALUE ?? "").replace(/\D/g, "");
+  if (!normalizedPhone) return json({ error: "Contato sem telefone válido", contactId }, 400);
+  let phone = !normalizedPhone.startsWith("55") && normalizedPhone.length <= 11
+    ? `55${normalizedPhone}`
+    : normalizedPhone;
+
   phone = phone.replace(/\D/g, "");
   let hasWhatsApp = true;
   const checkResp = await fetch(`${EVOLUTION_URL}/chat/whatsappNumbers/${EVOLUTION_INSTANCE}`,
@@ -280,8 +345,7 @@ async function handleOpenChat(body: ConnectorPayload): Promise<Response> {
   if (found.length > 0 && found[0].jid) phone = found[0].jid.replace("@s.whatsapp.net", "");
   if (!hasWhatsApp) return json({ error: "Numero nao tem WhatsApp", phone }, 400);
   const accessToken = await getOAuthToken();
-  const contactInfo = contactId ? (await b24("crm.contact.get", { id: contactId }))?.result : null;
-  const contactName = contactInfo ? [contactInfo.NAME, contactInfo.LAST_NAME].filter(Boolean).join(" ") : phone;
+  const contactName = [contactInfo.NAME, contactInfo.LAST_NAME].filter(Boolean).join(" ") || phone;
   const resp = await fetch(`${BITRIX_PORTAL}/rest/imconnector.send.messages?auth=${accessToken}`,
     { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
       CONNECTOR: CONNECTOR_ID, LINE: LINE_ID,
@@ -291,7 +355,14 @@ async function handleOpenChat(body: ConnectorPayload): Promise<Response> {
   const result = await resp.json();
   const chatId = result?.result?.DATA?.RESULT?.[0]?.session?.CHAT_ID;
   const sessionId = result?.result?.DATA?.RESULT?.[0]?.session?.ID;
-  await log({ direction: "open-chat", whatsapp_number: phone, push_name: contactName, message_text: "[sessao aberta pelo operador]", bitrix_response: result, created_at: new Date().toISOString() });
+  await log({
+    direction: "open-chat",
+    whatsapp_number: phone,
+    push_name: contactName,
+    message_text: "[sessao aberta pelo operador]",
+    bitrix_response: { connector: result, operator_id: operatorId, contact_id: contactId },
+    created_at: new Date().toISOString(),
+  });
   return json({ ok: true, chatId, sessionId, phone, contactName, chatUrl: `/online/?IM_DIALOG=chat${chatId}` });
 }
 
@@ -370,9 +441,7 @@ Deno.serve(async (req: Request) => {
       hardened: true,
     }, configured ? 200 : 503);
   }
-  if (path.endsWith("/widget")) {
-    return html(getWidgetHtml());
-  }
+  if (path.endsWith("/widget")) return await handleWidgetRequest(req);
   if (req.method !== "POST") return json({ error: "POST only" }, 405);
 
   try {
@@ -399,10 +468,11 @@ Deno.serve(async (req: Request) => {
     // Route: /open-chat - Internal use (from widget in Bitrix24 iframe)
     if (path.endsWith("/open-chat")) {
       const bitrixAccessToken = req.headers.get("x-bitrix-auth") ?? "";
-      if (!await verifyBitrixAccessToken(bitrixAccessToken)) {
+      const profile = await getBitrixProfile(bitrixAccessToken);
+      if (!profile?.ID) {
         return json({ error: "Unauthorized" }, 401);
       }
-      return await handleOpenChat(body);
+      return await handleOpenChat(body, bitrixAccessToken, profile.ID);
     }
 
     return json({ error: "Use /inbound, /outbound, /open-chat, or /widget" }, 400);
