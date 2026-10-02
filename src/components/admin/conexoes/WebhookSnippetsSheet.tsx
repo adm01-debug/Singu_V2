@@ -22,66 +22,94 @@ export function WebhookSnippetsSheet({ open, onOpenChange, webhook, url }: Props
     null, 2,
   );
 
-  const ts = Date.now();
-  const hmacHeaders = webhook.require_signature
-    ? `\n  -H "X-Lovable-Timestamp: ${ts}" \\\n  -H "X-Lovable-Signature: sha256=<calcule_hmac>" \\`
-    : '';
+  const compactPayload = JSON.stringify(JSON.parse(examplePayload));
+  const curl = `secret="<seu_webhook_secret>"
+body='${compactPayload}'
+timestamp="$(($(date +%s) * 1000))"
+idempotency_key="$(openssl rand -hex 16)"
+signature="sha256=$(printf '%s' "$timestamp.$idempotency_key.$body" | openssl dgst -sha256 -hmac "$secret" -hex | sed 's/^.* //')"
 
-  const curl = `curl -X POST "${url}" \\
-  -H "Content-Type: application/json" \\${hmacHeaders}
-  -d '${examplePayload}'`;
+curl -X POST "${url}" \\
+  -H "Content-Type: application/json" \\
+  -H "X-Lovable-Timestamp: $timestamp" \\
+  -H "X-Webhook-Idempotency-Key: $idempotency_key" \\
+  -H "X-Lovable-Signature: $signature" \\
+  --data-raw "$body"`;
 
   const fetchJs = `// JavaScript / TypeScript
+const secret = "<seu_webhook_secret>";
+const body = JSON.stringify(${examplePayload});
+const timestamp = Date.now().toString();
+const idempotencyKey = crypto.randomUUID();
+const key = await crypto.subtle.importKey(
+  "raw",
+  new TextEncoder().encode(secret),
+  { name: "HMAC", hash: "SHA-256" },
+  false,
+  ["sign"],
+);
+const digest = await crypto.subtle.sign(
+  "HMAC",
+  key,
+  new TextEncoder().encode(timestamp + "." + idempotencyKey + "." + body),
+);
+const hmac = Array.from(new Uint8Array(digest), byte =>
+  byte.toString(16).padStart(2, "0"),
+).join("");
+
 const response = await fetch("${url}", {
   method: "POST",
   headers: {
-    "Content-Type": "application/json",${webhook.require_signature ? `
-    "X-Lovable-Timestamp": String(Date.now()),
-    "X-Lovable-Signature": "sha256=" + hmac, // calcule HMAC-SHA256(secret, timestamp + "." + body)` : ''}
+    "Content-Type": "application/json",
+    "X-Lovable-Timestamp": timestamp,
+    "X-Webhook-Idempotency-Key": idempotencyKey,
+    "X-Lovable-Signature": "sha256=" + hmac,
   },
-  body: ${examplePayload},
+  body,
 });
 const data = await response.json();`;
 
   const python = `# Python (requests)
-import requests${webhook.require_signature ? `, hmac, hashlib, time, json
+import requests, hmac, hashlib, time, json, uuid
 
+SECRET = "<seu_webhook_secret>"
 ts = str(int(time.time() * 1000))
-body = json.dumps(${examplePayload})
-sig = "sha256=" + hmac.new(SECRET.encode(), (ts + "." + body).encode(), hashlib.sha256).hexdigest()` : ''}
+idempotency_key = uuid.uuid4().hex
+body = json.dumps(${examplePayload}, separators=(",", ":"))
+sig = "sha256=" + hmac.new(SECRET.encode(), (ts + "." + idempotency_key + "." + body).encode(), hashlib.sha256).hexdigest()
 
 response = requests.post(
   "${url}",
   headers={
-    "Content-Type": "application/json",${webhook.require_signature ? `
+    "Content-Type": "application/json",
     "X-Lovable-Timestamp": ts,
-    "X-Lovable-Signature": sig,` : ''}
+    "X-Webhook-Idempotency-Key": idempotency_key,
+    "X-Lovable-Signature": sig,
   },
-  ${webhook.require_signature ? 'data=body' : `json=${examplePayload}`}
+  data=body,
 )`;
 
-  const n8n = `// n8n — Configure um nó HTTP Request:
-{
-  "method": "POST",
-  "url": "${url}",
-  "sendHeaders": true,
-  "headerParameters": {
-    "parameters": [
-      { "name": "Content-Type", "value": "application/json" }${webhook.require_signature ? `,
-      { "name": "X-Lovable-Timestamp", "value": "={{ $now.toMillis() }}" },
-      { "name": "X-Lovable-Signature", "value": "sha256={{ /* calcule via Code node */ }}" }` : ''}
-    ]
-  },
-  "sendBody": true,
-  "bodyContentType": "json",
-  "jsonBody": ${examplePayload}
-}`;
+  const n8n = `// n8n — nó Code antes do HTTP Request
+const crypto = require("crypto");
+const body = JSON.stringify(${examplePayload});
+const timestamp = Date.now().toString();
+const idempotencyKey = crypto.randomUUID();
+const signature = "sha256=" + crypto
+  .createHmac("sha256", $env.WEBHOOK_SECRET)
+  .update(timestamp + "." + idempotencyKey + "." + body)
+  .digest("hex");
+return [{ json: { body, timestamp, idempotencyKey, signature } }];
+
+// No nó HTTP Request, envie body={{ $json.body }} como RAW e use:
+// X-Lovable-Timestamp={{ $json.timestamp }}
+// X-Webhook-Idempotency-Key={{ $json.idempotencyKey }}
+// X-Lovable-Signature={{ $json.signature }}`;
 
   const bitrix = `// Bitrix24 — Outbound Webhook
-// Em Aplicações > Webhooks > Outbound:
-// Handler URL: ${url}
-// Eventos: ONCRMLEADADD, ONCRMCONTACTADD, etc.
-// O Bitrix envia automaticamente data.FIELDS.* — ajuste field_mapping para extrair.`;
+// O webhook nativo não calcula HMAC SHA-256 e não deve chamar esta URL diretamente.
+// Encaminhe o evento por uma automação/middleware que preserve o corpo bruto e adicione:
+// X-Lovable-Timestamp, X-Webhook-Idempotency-Key e X-Lovable-Signature.
+// Destino final: ${url}`;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>

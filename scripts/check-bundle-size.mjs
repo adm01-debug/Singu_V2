@@ -21,19 +21,31 @@ if (!existsSync(DIST_DIR)) {
   process.exit(0);
 }
 
-const files = readdirSync(DIST_DIR).filter((f) => f.endsWith('.js'));
+function listJavaScriptFiles(dir) {
+  return readdirSync(dir).flatMap((name) => {
+    const fullPath = join(dir, name);
+    if (statSync(fullPath).isDirectory()) return listJavaScriptFiles(fullPath);
+    return name.endsWith('.js') ? [fullPath] : [];
+  });
+}
+
+const files = listJavaScriptFiles(DIST_DIR);
+if (files.length === 0) {
+  console.error(`[bundle-size] Nenhum bundle JavaScript encontrado em ${DIST_DIR}.`);
+  process.exit(1);
+}
 let totalGzip = 0;
 const violations = [];
 const report = [];
 
 for (const file of files) {
-  const fullPath = join(DIST_DIR, file);
-  const buf = readFileSync(fullPath);
+  const buf = readFileSync(file);
   const rawKb = buf.byteLength / 1024;
   const gzipKb = gzipSync(buf).byteLength / 1024;
   totalGzip += gzipKb;
 
-  const isEntry = /^index-/.test(file) || /^main-/.test(file);
+  const fileName = file.split('/').pop() ?? file;
+  const isEntry = /^index-/.test(fileName) || /^main-/.test(fileName);
   const limit = isEntry ? MAX_ENTRY_KB : MAX_CHUNK_KB;
 
   report.push({ file, rawKb: rawKb.toFixed(1), gzipKb: gzipKb.toFixed(1), isEntry });

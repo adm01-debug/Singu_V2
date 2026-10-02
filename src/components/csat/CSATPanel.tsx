@@ -71,7 +71,7 @@ export function CSATPanel({ contactId, interactionId }: Props) {
                     {formatDistanceToNow(new Date(survey.created_at), { addSuffix: true, locale: ptBR })}
                   </span>
                 </div>
-                
+
                 {survey.score ? (
                   <div className="flex items-center gap-2">
                     <div className="flex gap-0.5">
@@ -89,7 +89,7 @@ export function CSATPanel({ contactId, interactionId }: Props) {
                       {[1, 2, 3, 4, 5].map(s => (
                         <button
                           key={s}
-                          // eslint-disable-next-line sonarjs/no-nested-functions
+
                           onClick={() => setPendingScore(prev => ({ ...prev, [survey.id]: s }))}
                           className="p-0.5"
                           aria-label={`Nota ${s} ${s === 1 ? 'estrela' : 'estrelas'}`}

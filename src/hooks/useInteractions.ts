@@ -179,7 +179,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
         ...prev,
         pages: prev.pages.map(page => ({
           ...page,
-          // eslint-disable-next-line sonarjs/no-nested-functions
+
           data: page.data.map(i => i.id === id ? { ...i, ...updates } as Interaction : i),
         })),
       };
@@ -204,7 +204,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
           ...prev,
           pages: prev.pages.map(page => ({
             ...page,
-            // eslint-disable-next-line sonarjs/no-nested-functions
+
             data: page.data.map(i => i.id === id ? data : i),
           })),
         };
@@ -238,7 +238,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
         ...prev,
         pages: prev.pages.map(page => ({
           ...page,
-          // eslint-disable-next-line sonarjs/no-nested-functions
+
           data: page.data.filter(i => i.id !== id),
           total: page.total > 0 ? page.total - 1 : 0,
         })),

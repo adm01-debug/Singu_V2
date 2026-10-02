@@ -139,7 +139,7 @@ export function AIEmailComposer() {
       setItems((prev) => prev.map((i) => (i.id === item.id ? { ...i, copied: true } : i)));
       toast.success('Email copiado para a área de transferência');
       setTimeout(() => {
-        // eslint-disable-next-line sonarjs/no-nested-functions
+
         setItems((prev) => prev.map((i) => (i.id === item.id ? { ...i, copied: false } : i)));
       }, 2000);
     } catch {

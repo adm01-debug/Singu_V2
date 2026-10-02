@@ -84,15 +84,7 @@ export function useSmartNotifications() {
           { event: '*', schema: 'public', table: 'smart_notifications', filter: `user_id=eq.${user.id}` },
           () => { if (mounted) qc.invalidateQueries({ queryKey: ['smart-notifications', user.id] }); },
         )
-        .subscribe((status) => {
-          // Only act on terminal states to avoid re-triggering during pending
-          if (!mounted) return;
-          if (status === 'SUBSCRIBED') {
-            // ok
-          } else if (status === 'CHANNEL_ERROR') {
-            // Realtime unavailable — graceful degradation, polling handles data
-          }
-        });
+        .subscribe();
     } catch {
       // Channel creation failed (e.g. realtime not enabled for this table) —
       // graceful degradation, polling handles data

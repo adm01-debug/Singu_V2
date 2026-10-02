@@ -2,8 +2,11 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
-import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
-
+import { scopedCorsHeaders } from "../_shared/auth.ts";
+import {
+  isValidIdempotencyKey,
+  verifyWebhookHmac,
+} from "../_shared/webhook-signature.ts";
 
 const limiter = rateLimit({
   windowMs: 60_000,
@@ -16,40 +19,15 @@ const PayloadSchema = z.record(z.unknown()).refine(
   { message: "Payload excede 256KB" },
 );
 
-async function verifyHmac(
-  secret: string,
-  timestamp: string,
-  rawBody: string,
-  signature: string,
-): Promise<boolean> {
-  try {
-    const enc = new TextEncoder();
-    const key = await crypto.subtle.importKey(
-      "raw",
-      enc.encode(secret),
-      { name: "HMAC", hash: "SHA-256" },
-      false,
-      ["sign"],
-    );
-    const sig = await crypto.subtle.sign("HMAC", key, enc.encode(`${timestamp}.${rawBody}`));
-    const hex = Array.from(new Uint8Array(sig))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-    const expected = `sha256=${hex}`;
-    if (expected.length !== signature.length) return false;
-    let diff = 0;
-    for (let i = 0; i < expected.length; i++) {
-      diff |= expected.charCodeAt(i) ^ signature.charCodeAt(i);
-    }
-    return diff === 0;
-  } catch {
-    return false;
-  }
-}
-
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Método não permitido" }), {
+      status: 405,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
   const t0 = Date.now();
 
   const traceId = extractTraceId(req);
@@ -77,8 +55,29 @@ Deno.serve(async (req) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
 
-  const { body: rawBody, error: bodyError } = await guardBody(req, 512 * 1024);
-  if (bodyError) return bodyError;
+  const contentLength = Number(req.headers.get("content-length") ?? "0");
+  if (Number.isFinite(contentLength) && contentLength > 512 * 1024) {
+    return new Response(JSON.stringify({ error: "Payload excede 512KB" }), {
+      status: 413,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+  const rawBodyText = await req.text();
+  if (new TextEncoder().encode(rawBodyText).byteLength > 512 * 1024) {
+    return new Response(JSON.stringify({ error: "Payload excede 512KB" }), {
+      status: 413,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+  let rawBody: unknown;
+  try {
+    rawBody = JSON.parse(rawBodyText);
+  } catch {
+    return new Response(JSON.stringify({ error: "JSON inválido" }), {
+      status: 400,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
 
   const parsed = PayloadSchema.safeParse(rawBody);
   if (!parsed.success) {
@@ -110,37 +109,72 @@ Deno.serve(async (req) => {
     });
   }
 
-  // Verificação HMAC + anti-replay
-  if (webhook.require_signature) {
-    const sig = req.headers.get("x-lovable-signature") ?? "";
-    const ts = req.headers.get("x-lovable-timestamp") ?? "";
-    const tsNum = Number(ts);
-    const window = (webhook.replay_window_seconds ?? 300) * 1000;
-    if (!sig || !ts || !Number.isFinite(tsNum) || Math.abs(Date.now() - tsNum) > window) {
-      return new Response(JSON.stringify({ error: "Timestamp ausente ou expirado" }), {
-        status: 401,
+  if (!webhook.require_signature || !webhook.webhook_secret) {
+    return new Response(JSON.stringify({ error: "Webhook desativado até configurar assinatura HMAC" }), {
+      status: 503,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+
+  const sig = req.headers.get("x-lovable-signature") ?? "";
+  const ts = req.headers.get("x-lovable-timestamp") ?? "";
+  const idempotencyKey = req.headers.get("x-webhook-idempotency-key") ?? "";
+  const tsNum = Number(ts);
+  const window = (webhook.replay_window_seconds ?? 300) * 1000;
+  if (
+    !sig ||
+    !ts ||
+    !isValidIdempotencyKey(idempotencyKey) ||
+    !Number.isFinite(tsNum) ||
+    Math.abs(Date.now() - tsNum) > window
+  ) {
+    return new Response(JSON.stringify({ error: "Headers de assinatura ausentes ou expirados" }), {
+      status: 401,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+  const signatureValid = await verifyWebhookHmac(
+    webhook.webhook_secret,
+    ts,
+    idempotencyKey,
+    rawBodyText,
+    sig,
+  );
+  if (!signatureValid) {
+    await admin.from("incoming_webhook_logs").insert({
+      webhook_id: webhook.id,
+      status: "error",
+      http_status: 401,
+      payload,
+      error_message: "Assinatura HMAC inválida",
+      source_ip: sourceIp,
+      user_agent: userAgent,
+      latency_ms: Date.now() - t0,
+    });
+    return new Response(JSON.stringify({ error: "Assinatura inválida" }), {
+      status: 401,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+
+  const expiresAt = new Date(tsNum + window).toISOString();
+  const { error: nonceError } = await admin.from("incoming_webhook_nonces").insert({
+    webhook_id: webhook.id,
+    idempotency_key: idempotencyKey,
+    expires_at: expiresAt,
+  });
+  if (nonceError) {
+    if (nonceError.code !== "23505") {
+      log.error("idempotency_store_failed", { error: nonceError.message });
+      return new Response(JSON.stringify({ error: "Falha ao registrar idempotência" }), {
+        status: 500,
         headers: { ...cors, "Content-Type": "application/json" },
       });
     }
-    const ok = webhook.webhook_secret
-      ? await verifyHmac(webhook.webhook_secret, ts, JSON.stringify(rawBody ?? {}), sig)
-      : false;
-    if (!ok) {
-      await admin.from("incoming_webhook_logs").insert({
-        webhook_id: webhook.id,
-        status: "error",
-        http_status: 401,
-        payload,
-        error_message: "Assinatura HMAC inválida",
-        source_ip: sourceIp,
-        user_agent: userAgent,
-        latency_ms: Date.now() - t0,
-      });
-      return new Response(JSON.stringify({ error: "Assinatura inválida" }), {
-        status: 401,
-        headers: { ...cors, "Content-Type": "application/json" },
-      });
-    }
+    return new Response(JSON.stringify({ error: "Requisição duplicada" }), {
+      status: 409,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
   }
 
   // Origem (opcional)

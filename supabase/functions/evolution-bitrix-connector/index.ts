@@ -4,18 +4,76 @@ import { createClient } from "jsr:@supabase/supabase-js@2";
 // evolution-bitrix-connector v7-hardened
 // Hybrid auth: Evolution webhooks via x-evolution-secret OR Bitrix via OAuth signature
 
-const EVOLUTION_URL = "https://evolution.atomicabr.com.br";
-const EVOLUTION_APIKEY = Deno.env.get('EVOLUTION_API_KEY') || "EDA4459AE6B0-4A47-9BA8-D318F012DF42";
-const EVOLUTION_INSTANCE = "wpp2";
-const BITRIX_CLIENT_ID = "local.693458e5bbe490.92982699";
-const BITRIX_CLIENT_SECRET = "pgfhXA5GKp7esPssFYXKDTfxalvJnJ3vSVPRXZRl1m4EgHYNPv";
-const BITRIX_PORTAL = "https://promobrindes.bitrix24.com.br";
-const BITRIX_WEBHOOK = "https://promobrindes.bitrix24.com.br/rest/1/9hjiwqpjx485u35y";
+const EVOLUTION_URL = Deno.env.get("EVOLUTION_API_URL") ?? "";
+const EVOLUTION_APIKEY = Deno.env.get("EVOLUTION_API_KEY") ?? "";
+const EVOLUTION_INSTANCE = Deno.env.get("EVOLUTION_INSTANCE_NAME") ?? "";
+const BITRIX_CLIENT_ID = Deno.env.get("BITRIX_CLIENT_ID") ?? "";
+const BITRIX_CLIENT_SECRET = Deno.env.get("BITRIX_CLIENT_SECRET") ?? "";
+const BITRIX_PORTAL = Deno.env.get("BITRIX_PORTAL_URL") ?? "";
+const BITRIX_WEBHOOK = Deno.env.get("BITRIX_WEBHOOK_URL") ?? "";
+const BITRIX_APPLICATION_TOKEN = Deno.env.get("BITRIX_APPLICATION_TOKEN") ?? "";
+const BITRIX_WIDGET_SECRET = Deno.env.get("BITRIX_WIDGET_SECRET") ?? "";
 const CONNECTOR_ID = "evolution_whatsapp";
 const LINE_ID = 44;
-const EDGE_FN_URL = "https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/evolution-bitrix-connector";
+const EDGE_FN_URL = Deno.env.get("EVOLUTION_BITRIX_CONNECTOR_URL") ?? "";
 
 const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+
+interface BitrixAuth {
+  application_token?: string;
+}
+
+interface InboundMessage {
+  conversation?: string;
+  extendedTextMessage?: { text?: string };
+  imageMessage?: { caption?: string };
+  videoMessage?: { caption?: string };
+  audioMessage?: unknown;
+  documentMessage?: { fileName?: string };
+  stickerMessage?: unknown;
+  locationMessage?: unknown;
+  contactMessage?: { displayName?: string };
+  reactionMessage?: unknown;
+}
+
+interface InboundData {
+  key?: {
+    fromMe?: boolean;
+    remoteJid?: string;
+    remoteJidAlt?: string;
+    participant?: string;
+    id?: string;
+  };
+  pushName?: string;
+  messageTimestamp?: number;
+  message?: InboundMessage;
+}
+
+interface OutboundMessage {
+  chat?: { id?: string };
+  im?: { chat_id?: string };
+  message?: { text?: string };
+}
+
+interface ConnectorData {
+  CONNECTOR?: string;
+  connector?: string;
+  MESSAGES?: OutboundMessage[];
+  messages?: OutboundMessage[];
+}
+
+interface ConnectorPayload {
+  event?: string;
+  instance?: unknown;
+  data?: InboundData & ConnectorData;
+  CONNECTOR?: string;
+  connector?: string;
+  MESSAGES?: OutboundMessage[];
+  messages?: OutboundMessage[];
+  auth?: BitrixAuth;
+  contactId?: string | number;
+  phone?: string;
+}
 
 function constantTimeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
@@ -31,17 +89,19 @@ function verifyEvolutionSecret(req: Request): boolean {
   return provided ? constantTimeEqual(provided, secret) : false;
 }
 
-function verifyBitrixRequest(req: Request, body: any): boolean {
-  // Bitrix sends auth token or uses registered app credentials
-  // For Open Channel webhooks, verify CONNECTOR matches
+function verifyBitrixRequest(body: ConnectorPayload): boolean {
   const connector = body?.data?.CONNECTOR || body?.CONNECTOR;
-  return connector === CONNECTOR_ID;
+  const providedToken = body?.auth?.application_token;
+  return connector === CONNECTOR_ID &&
+    Boolean(BITRIX_APPLICATION_TOKEN) &&
+    typeof providedToken === "string" &&
+    constantTimeEqual(providedToken, BITRIX_APPLICATION_TOKEN);
 }
 
 const CORS: Record<string, string> = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": BITRIX_PORTAL,
   "Access-Control-Allow-Methods": "POST,GET,OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type,apikey,authorization,x-evolution-secret",
+  "Access-Control-Allow-Headers": "Content-Type,apikey,authorization,x-evolution-secret,x-widget-secret",
   "Content-Type": "application/json"
 };
 
@@ -54,7 +114,11 @@ function html(content: string) {
 }
 
 async function log(entry: Record<string, unknown>) {
-  try { await supabase.from("connector_log").insert(entry); } catch (_) { }
+  try {
+    await supabase.from("connector_log").insert(entry);
+  } catch (error) {
+    console.error("Falha ao registrar evento do conector", error);
+  }
 }
 
 async function getOAuthToken(): Promise<string> {
@@ -95,13 +159,16 @@ async function findCrmResponsible(phone: string) {
       const l = (await b24("crm.lead.get", { id: result.LEAD[0] }))?.result || {};
       return { contactId: null, companyId: null, responsibleId: parseInt(l.ASSIGNED_BY_ID), contactName: l.TITLE || null };
     }
-  } catch (_) { }
+  } catch (error) {
+    console.warn("Falha ao consultar responsável no CRM", error);
+  }
   return { contactId: null, companyId: null, responsibleId: null, contactName: null };
 }
 
-async function handleInbound(payload: any): Promise<Response> {
+async function handleInbound(payload: ConnectorPayload): Promise<Response> {
   if (payload.event !== "messages.upsert") return json({ skip: true, reason: payload.event });
-  const data = payload.data; const key = data.key;
+  const data = payload.data ?? {};
+  const key = data.key ?? {};
   if (key.fromMe) return json({ skip: "fromMe" });
   if (key.remoteJid?.endsWith("@g.us")) return json({ skip: "group" });
   if (key.remoteJid === "status@broadcast") return json({ skip: "status" });
@@ -139,14 +206,16 @@ async function handleInbound(payload: any): Promise<Response> {
     if (chatId) {
       try { transferResult = await fetch(`${BITRIX_PORTAL}/rest/imopenlines.operator.transfer?auth=${accessToken}`,
         { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ CHAT_ID: parseInt(chatId), TRANSFER_ID: crm.responsibleId }) }
-      ).then(r => r.json()); } catch (_) { }
+      ).then(r => r.json()); } catch (error) {
+        console.warn("Falha ao transferir atendimento no Bitrix", error);
+      }
     }
   }
   await log({ direction: "inbound", whatsapp_number: number, push_name: pushName, message_text: messageText, bitrix_response: { connector: result, crm_match: crm, transfer: transferResult }, created_at: new Date().toISOString() });
   return json({ ok: true, number, name: crm.contactName || pushName, crm_match: crm, transfer: transferResult ? "routed_to_responsible" : "default_queue", bitrix: result });
 }
 
-async function handleOutbound(payload: any): Promise<Response> {
+async function handleOutbound(payload: ConnectorPayload): Promise<Response> {
   const data = payload.data || payload;
   const connector = data.CONNECTOR || data.connector;
   if (connector !== CONNECTOR_ID) return json({ skip: "wrong_connector", got: connector });
@@ -166,7 +235,7 @@ async function handleOutbound(payload: any): Promise<Response> {
   return json({ ok: true, results });
 }
 
-async function handleOpenChat(body: any): Promise<Response> {
+async function handleOpenChat(body: ConnectorPayload): Promise<Response> {
   const { contactId, phone: rawPhone } = body;
   let phone = rawPhone;
   if (contactId && !phone) {
@@ -175,22 +244,26 @@ async function handleOpenChat(body: any): Promise<Response> {
     if (!c) return json({ error: "Contato nao encontrado" }, 404);
     const phones = c.PHONE || [];
     if (phones.length === 0) return json({ error: "Contato sem telefone", contactId }, 400);
-    const mobile = phones.find((p: any) => p.VALUE_TYPE === "MOBILE") || phones[0];
-    phone = mobile.VALUE.replace(/\D/g, "");
-    if (!phone.startsWith("55") && phone.length <= 11) phone = "55" + phone;
+    const mobile = phones.find((phoneEntry: { VALUE_TYPE?: string }) =>
+      phoneEntry.VALUE_TYPE === "MOBILE"
+    ) || phones[0];
+    const normalizedPhone = String(mobile.VALUE ?? "").replace(/\D/g, "");
+    if (!normalizedPhone) return json({ error: "Contato sem telefone válido", contactId }, 400);
+    phone = !normalizedPhone.startsWith("55") && normalizedPhone.length <= 11
+      ? `55${normalizedPhone}`
+      : normalizedPhone;
   }
   if (!phone) return json({ error: "Telefone nao informado" }, 400);
   phone = phone.replace(/\D/g, "");
   let hasWhatsApp = true;
-  try {
-    const checkResp = await fetch(`${EVOLUTION_URL}/chat/whatsappNumbers/${EVOLUTION_INSTANCE}`,
-      { method: "POST", headers: { "Content-Type": "application/json", "apikey": EVOLUTION_APIKEY }, body: JSON.stringify({ numbers: [phone] }) }
-    );
-    const checkResult = await checkResp.json();
-    const found = Array.isArray(checkResult) ? checkResult : checkResult?.result || [];
-    if (found.length > 0 && found[0].numberExists === false) hasWhatsApp = false;
-    if (found.length > 0 && found[0].jid) phone = found[0].jid.replace("@s.whatsapp.net", "");
-  } catch (_) { }
+  const checkResp = await fetch(`${EVOLUTION_URL}/chat/whatsappNumbers/${EVOLUTION_INSTANCE}`,
+    { method: "POST", headers: { "Content-Type": "application/json", "apikey": EVOLUTION_APIKEY }, body: JSON.stringify({ numbers: [phone] }) }
+  );
+  if (!checkResp.ok) return json({ error: "Falha ao verificar WhatsApp" }, 502);
+  const checkResult = await checkResp.json();
+  const found = Array.isArray(checkResult) ? checkResult : checkResult?.result || [];
+  if (found.length > 0 && found[0].numberExists === false) hasWhatsApp = false;
+  if (found.length > 0 && found[0].jid) phone = found[0].jid.replace("@s.whatsapp.net", "");
   if (!hasWhatsApp) return json({ error: "Numero nao tem WhatsApp", phone }, 400);
   const accessToken = await getOAuthToken();
   const contactInfo = contactId ? (await b24("crm.contact.get", { id: contactId }))?.result : null;
@@ -233,6 +306,7 @@ function getWidgetHtml(): string {
 </div>
 <script>
 const EDGE_URL = "${EDGE_FN_URL}";
+const WIDGET_SECRET = ${JSON.stringify(BITRIX_WIDGET_SECRET)};
 function setStatus(msg, type) { const el = document.getElementById("status"); el.className = "status " + type; el.textContent = msg; }
 function startChat() {
   const btn = document.getElementById("openChat"); btn.disabled = true; setStatus("Buscando contato...", "loading");
@@ -240,7 +314,7 @@ function startChat() {
     const entityId = info.options?.ID || info.options?.id;
     if (!entityId) { setStatus("Erro: ID do contato nao encontrado", "error"); btn.disabled = false; return; }
     setStatus("Verificando WhatsApp...", "loading");
-    fetch(EDGE_URL + "/open-chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contactId: parseInt(entityId) }) })
+    fetch(EDGE_URL + "/open-chat", { method: "POST", headers: { "Content-Type": "application/json", "x-widget-secret": WIDGET_SECRET }, body: JSON.stringify({ contactId: parseInt(entityId) }) })
     .then(r => r.json()).then(data => {
       if (data.error) { setStatus(data.error, "error"); btn.disabled = false; return; }
       setStatus("Abrindo conversa com " + data.contactName + "...", "success");
@@ -260,14 +334,43 @@ Deno.serve(async (req: Request) => {
   const path = url.pathname;
 
   if (path.endsWith("/health") || (req.method === "GET" && path.endsWith("/evolution-bitrix-connector"))) {
-    return json({ status: "ok", connector: "evolution-bitrix24", instance: EVOLUTION_INSTANCE, line: LINE_ID, version: 7, hardened: true });
+    const configured = Boolean(
+      EVOLUTION_URL &&
+      EVOLUTION_APIKEY &&
+      EVOLUTION_INSTANCE &&
+      BITRIX_CLIENT_ID &&
+      BITRIX_CLIENT_SECRET &&
+      BITRIX_PORTAL &&
+      BITRIX_WEBHOOK &&
+      BITRIX_APPLICATION_TOKEN &&
+      BITRIX_WIDGET_SECRET &&
+      EDGE_FN_URL,
+    );
+    return json({
+      status: configured ? "ok" : "unavailable",
+      connector: "evolution-bitrix24",
+      instance: configured ? EVOLUTION_INSTANCE : "unknown",
+      line: LINE_ID,
+      version: 8,
+      hardened: true,
+    }, configured ? 200 : 503);
   }
-  if (path.endsWith("/widget")) return html(getWidgetHtml());
+  if (path.endsWith("/widget")) {
+    const widgetToken = url.searchParams.get("token") ?? "";
+    if (
+      !BITRIX_WIDGET_SECRET ||
+      !widgetToken ||
+      !constantTimeEqual(widgetToken, BITRIX_WIDGET_SECRET)
+    ) {
+      return json({ error: "Unauthorized" }, 401);
+    }
+    return html(getWidgetHtml());
+  }
   if (req.method !== "POST") return json({ error: "POST only" }, 405);
 
   try {
-    const body = await req.json();
-    
+    const body = await req.json() as ConnectorPayload;
+
     // Route: /inbound - Evolution webhook (require x-evolution-secret if configured)
     if (path.endsWith("/inbound") || body.event === "messages.upsert" || body.instance) {
       if (!verifyEvolutionSecret(req)) {
@@ -276,21 +379,29 @@ Deno.serve(async (req: Request) => {
       }
       return await handleInbound(body);
     }
-    
+
     // Route: /outbound - Bitrix webhook (verify connector ID)
     if (path.endsWith("/outbound") || body.data?.CONNECTOR || body.CONNECTOR) {
-      if (!verifyBitrixRequest(req, body)) {
+      if (!verifyBitrixRequest(body)) {
         await log({ direction: "outbound", error: "invalid_connector", created_at: new Date().toISOString() });
         return json({ error: "Invalid connector" }, 401);
       }
       return await handleOutbound(body);
     }
-    
+
     // Route: /open-chat - Internal use (from widget in Bitrix24 iframe)
     if (path.endsWith("/open-chat")) {
+      const widgetSecret = req.headers.get("x-widget-secret") ?? "";
+      if (
+        !BITRIX_WIDGET_SECRET ||
+        !widgetSecret ||
+        !constantTimeEqual(widgetSecret, BITRIX_WIDGET_SECRET)
+      ) {
+        return json({ error: "Unauthorized" }, 401);
+      }
       return await handleOpenChat(body);
     }
-    
+
     return json({ error: "Use /inbound, /outbound, /open-chat, or /widget" }, 400);
   } catch (err) { return json({ error: String(err) }, 500); }
 });

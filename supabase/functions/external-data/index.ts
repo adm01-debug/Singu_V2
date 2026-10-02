@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { withAuth, withAuthOrServiceRole, jsonError, jsonOk, handleCorsAndMethod, guardBody, isServiceRoleCaller } from "../_shared/auth.ts";
+import { withAuthOrServiceRole, jsonError, jsonOk, handleCorsAndMethod, guardBody, isServiceRoleCaller } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { assertVersionMatch } from "../_shared/version-guard.ts";
@@ -173,6 +173,30 @@ function clampRange(range?: { from: number; to: number }): { from: number; to: n
   return { from, to };
 }
 
+const TENANT_ID_KEYS = new Set([
+  'user_id',
+  'userid',
+  'userId',
+  'p_user_id',
+  'created_by',
+  'owner_id',
+]);
+
+function enforceTenantIdentity(value: unknown, userId: string, depth = 0): unknown {
+  if (depth > 5 || value === null || typeof value !== 'object') return value;
+  if (Array.isArray(value)) {
+    return value.map((item) => enforceTenantIdentity(item, userId, depth + 1));
+  }
+  return Object.fromEntries(
+    Object.entries(value as Record<string, unknown>).map(([key, entry]) => [
+      key,
+      TENANT_ID_KEYS.has(key)
+        ? userId
+        : enforceTenantIdentity(entry, userId, depth + 1),
+    ]),
+  );
+}
+
 async function withRetry<T>(fn: () => Promise<T>, retries = 1): Promise<T> {
   let lastError: Error | null = null;
   for (let i = 0; i <= retries; i++) {
@@ -224,6 +248,7 @@ Deno.serve(async (req) => {
 
     // ─── WHOAMI (debug — exposes only the external DB host, never keys) ───
     if (operation === 'whoami') {
+      if (!isSvc) return jsonError('Service role required', 403, req);
       const extUrl = Deno.env.get('EXTERNAL_SUPABASE_URL') || '';
       let host = '';
       let ref = '';
@@ -240,6 +265,7 @@ Deno.serve(async (req) => {
 
     // ─── LIST TABLES (schema discovery) ───
     if (operation === 'list_tables') {
+      if (!isSvc) return jsonError('Service role required', 403, req);
       const extUrl = Deno.env.get('EXTERNAL_SUPABASE_URL')!;
       const extKey = Deno.env.get('EXTERNAL_SUPABASE_SERVICE_ROLE_KEY')!;
       const resp = await fetchAPI(`${extUrl}/rest/v1/`, {
@@ -256,15 +282,16 @@ Deno.serve(async (req) => {
 
     // ─── FULL SCHEMA INTROSPECTION ───
     if (operation === 'schema') {
+      if (!isSvc) return jsonError('Service role required', 403, req);
       const extUrl = Deno.env.get('EXTERNAL_SUPABASE_URL')!;
       const extKey = Deno.env.get('EXTERNAL_SUPABASE_SERVICE_ROLE_KEY')!;
       const resp = await fetchAPI(`${extUrl}/rest/v1/`, {
         headers: { 'apikey': extKey, 'Authorization': `Bearer ${extKey}` }
       });
       const swagger = await resp.json();
-      
+
       const tables: Record<string, { columns: { name: string; type: string; format: string; required: boolean; description?: string }[] }> = {};
-      
+
       if (swagger?.definitions) {
         for (const [tableName, def] of Object.entries(swagger.definitions)) {
           const d = def as Record<string, unknown>;
@@ -305,12 +332,13 @@ Deno.serve(async (req) => {
       if (!column || typeof column !== 'string') return jsonError('Missing "column" for distinct', 400, req);
 
       const client = getExternalClient();
-      const query = client
+      let query = client
         .from(table)
         .select(column)
         .not(column, 'is', null)
         .order(column, { ascending: true })
         .limit(5000);
+      if (!isSvc) query = query.eq('user_id', userId);
 
       const { data, error } = await query;
 
@@ -334,12 +362,14 @@ Deno.serve(async (req) => {
       // Run all distinct queries in parallel
       const promises = columns.map(async (col: string) => {
         try {
-          const { data, error } = await client
+          let query = client
             .from(table)
             .select(col)
             .not(col, 'is', null)
             .order(col, { ascending: true })
             .limit(5000);
+          if (!isSvc) query = query.eq('user_id', userId);
+          const { data, error } = await query;
           if (error) {
             log.warn("batch_distinct column failed", { col, error: error.message });
             return { col, values: [] };
@@ -362,8 +392,6 @@ Deno.serve(async (req) => {
     }
 
     const client = getExternalClient();
-    console.log("external client created, isSvc:", isSvc, "table:", table);
-
     // ─── RPC (call external database functions) — must run BEFORE table validation ───
     if (operation === 'rpc') {
       const functionName = typeof body.functionName === 'string' ? body.functionName : undefined;
@@ -371,7 +399,8 @@ Deno.serve(async (req) => {
         return jsonError(`Invalid or disallowed RPC: "${functionName}"`, 400, req);
       }
 
-      const params = (body.params && typeof body.params === 'object') ? body.params : {};
+      const rawParams = (body.params && typeof body.params === 'object') ? body.params : {};
+      const params = isSvc ? rawParams : enforceTenantIdentity(rawParams, userId);
 
       const { data, error } = await client.rpc(functionName, params as Record<string, unknown>);
       if (error) {
@@ -394,6 +423,7 @@ Deno.serve(async (req) => {
         const countMode = countMethod === 'planned' ? 'planned' : 'exact';
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TS2589 deep type instantiation with dynamic Supabase queries
         let query: any = client.from(table).select(select || '*', { count: countMode });
+        if (!isSvc) query = query.eq('user_id', userId);
 
         if (search?.term && typeof search.term === 'string' && search.term.trim()) {
           const term = `%${search.term.trim().slice(0, 200)}%`;
@@ -455,7 +485,10 @@ Deno.serve(async (req) => {
       // Inject user_id so records are always tenant-scoped (service role bypasses RLS — no need)
       const safeRecord = isSvc
         ? (record as Record<string, unknown>)
-        : { ...(record as Record<string, unknown>), user_id: userId };
+        : {
+            ...(enforceTenantIdentity(record, userId) as Record<string, unknown>),
+            user_id: userId,
+          };
       const { data, error } = await client.from(table).insert(safeRecord).select().single();
       if (error) throw new Error(`Insert failed: ${error.message}`);
       return jsonOk({ data }, req);
@@ -471,7 +504,8 @@ Deno.serve(async (req) => {
       if (!updates || typeof updates !== 'object') return jsonError('Missing or invalid "updates" for update', 400, req);
 
       // user_id filter prevents updating another tenant's record (service role bypasses RLS)
-      let q = client.from(table).update(updates).eq('id', id);
+      const safeUpdates = isSvc ? updates : enforceTenantIdentity(updates, userId);
+      let q = client.from(table).update(safeUpdates).eq('id', id);
       if (!isSvc) q = q.eq('user_id', userId);
       const { data, error } = await q.select().single();
       if (error) throw new Error(`Update failed: ${error.message}`);
@@ -490,7 +524,8 @@ Deno.serve(async (req) => {
 
       // Conditional update: only succeeds if version matches AND record belongs to this user.
       // The DB trigger increments version automatically on UPDATE. (service role bypasses RLS)
-      let q = client.from(table).update(updates).eq('id', id).eq('version', version);
+      const safeUpdates = isSvc ? updates : enforceTenantIdentity(updates, userId);
+      let q = client.from(table).update(safeUpdates).eq('id', id).eq('version', version);
       if (!isSvc) q = q.eq('user_id', userId);
       const { data, error } = await q.select();
 

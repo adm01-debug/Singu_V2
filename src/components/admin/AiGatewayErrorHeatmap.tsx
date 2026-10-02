@@ -52,8 +52,9 @@ export function AiGatewayErrorHeatmap({ heatmap, worst }: Props) {
                   {Array.from({ length: 24 }, (_, h) => {
                     const cell = grid.get(`${dow}-${h}`);
                     const pct = cell?.error_rate_pct ?? null;
+                    const errorRate = pct == null ? '' : ` (${pct}%)`;
                     const title = cell
-                      ? `${label} ${h}h · ${cell.requests} req · ${cell.errors} erros${pct != null ? ` (${pct}%)` : ''}`
+                      ? `${label} ${h}h · ${cell.requests} req · ${cell.errors} erros${errorRate}`
                       : `${label} ${h}h · sem dados`;
                     return (
                       <td key={h} className="p-[1px]">

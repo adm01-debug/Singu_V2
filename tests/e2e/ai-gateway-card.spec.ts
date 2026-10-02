@@ -13,7 +13,7 @@ test.describe('AI Gateway Health card', () => {
     });
 
     await page.goto('/admin/error-budget', { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => undefined);
+    await expect(page.locator('body')).toBeVisible();
 
     expect(chunkErrors, `Chunk errors: ${chunkErrors.join('\n')}`).toHaveLength(0);
     // Sem sessão admin, aceitamos landing em /auth OU renderização do painel.

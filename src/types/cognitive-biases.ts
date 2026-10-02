@@ -3,7 +3,7 @@
 // ============================================
 // BIAS CATEGORIES
 // ============================================
-export type BiasCategory = 
+export type BiasCategory =
   | 'decision_making'    // Vieses de tomada de decisão
   | 'social'             // Vieses sociais
   | 'memory'             // Vieses de memória
@@ -21,26 +21,26 @@ export type CognitiveBiasType =
   | 'status_quo'             // Status quo
   | 'choice_overload'        // Sobrecarga de escolhas
   | 'framing_effect'         // Efeito de enquadramento
-  
+
   // Social Biases
   | 'halo_effect'            // Efeito halo
   | 'authority_bias'         // Viés de autoridade
   | 'bandwagon_effect'       // Efeito manada
   | 'in_group_bias'          // Viés de grupo
   | 'liking_bias'            // Viés de afinidade
-  
+
   // Memory Biases
   | 'recency_bias'           // Viés de recência
   | 'primacy_effect'         // Efeito de primazia
   | 'availability_heuristic' // Heurística de disponibilidade
   | 'peak_end_rule'          // Regra do pico-fim
-  
+
   // Probability Biases
   | 'optimism_bias'          // Viés de otimismo
   | 'pessimism_bias'         // Viés de pessimismo
   | 'gambler_fallacy'        // Falácia do jogador
   | 'base_rate_neglect'      // Negligência da taxa base
-  
+
   // Self-Perception Biases
   | 'confirmation_bias'      // Viés de confirmação
   | 'dunning_kruger'         // Efeito Dunning-Kruger
@@ -57,7 +57,7 @@ export interface DetectedBias {
   category: BiasCategory;
   indicator: string;           // Phrase that triggered detection
   context: string;             // Surrounding context
-  confidence: number;          // 0-100
+  evidence: 'keyword_match';
   polarity: 'exploitable' | 'obstacle' | 'neutral';
   detectedAt: string;
   interactionId?: string;
@@ -110,7 +110,7 @@ export interface BiasAnalysisResult {
     ethical_approach: string;
   };
   profileSummary: string;
-  confidence: number;
+  evidenceCoverage: number;
   lastAnalyzed: string;
 }
 

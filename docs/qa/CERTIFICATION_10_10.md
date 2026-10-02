@@ -1,6 +1,9 @@
 # Certificação QA 10/10 — Rodada 27/10
 
-**Data:** 22 de julho de 2026  
+> **Registro histórico.** Os resultados abaixo valem somente para a revisão e o
+> ambiente daquela rodada; use a CI atual e a auditoria mais recente como evidência.
+
+**Data:** 22 de julho de 2026
 **Escopo:** auditoria full-stack (frontend + edge functions + banco), correção crítica e baseline de qualidade.
 
 ## Dashboard

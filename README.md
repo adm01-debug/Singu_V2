@@ -1,4 +1,4 @@
- 
+
  ## 📄 Documentação Estratégica
  - [Estratégia de UX e Navegação](docs/ux_improvement_strategy.md) - Guia completo de melhorias de interface e fluxos.
 # SINGU CRM
@@ -76,7 +76,9 @@ npm run dev
 
  ## 📋 Auditoria Enterprise
 
- O sistema passa por processos rigorosos de auditoria técnica e funcional para garantir a excelência 10/10.
+ O sistema mantém auditorias técnicas versionadas. Selos históricos de “10/10” não
+ representam certificação contínua: o estado atual deve ser comprovado pelos gates
+ de CI e pelo relatório de auditoria mais recente.
 
  - **Relatório Completo (Markdown)**: [audit_report.md](./audit_report.md)
  - **Relatório Completo (PDF)**: [audit_report.pdf](./audit_report.pdf)
@@ -124,13 +126,13 @@ Decisões técnicas fundamentais estão documentadas em [ADRs](docs/adr/README.m
 
 ## 🔐 Segurança
 
-- **RLS** ativo em 100% das tabelas com políticas escopadas por `user_id`
+- **RLS** versionado nas migrations; cobertura e políticas do banco remoto devem ser validadas pelo gate `test:rls`
 - **RBAC** via tabela `user_roles` + função `has_role()` SECURITY DEFINER
-- **MFA** habilitado + verificação de senhas vazadas (HIBP)
+- **MFA/HIBP** dependem da configuração do projeto Supabase e não são inferidos pelo código
 - **Realtime** com políticas de canal escopadas por user ID
-- **CORS** restritivo (domínios `.lovable.app` autorizados)
+- **CORS** validado por allowlist e pelo checker automatizado de Edge Functions
 - **Headers de segurança**: CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy
-- **Edge Functions**: JWT validado em código, webhooks com secret, cron com `CRON_SECRET`
+- **Edge Functions**: JWT nativo por padrão; funções públicas usam autenticação própria explícita
 - **Validação**: Zod schemas em Edge Functions e formulários frontend
 - **Sanitização**: DOMPurify + `encodeURIComponent` em inputs dinâmicos
 - **Circuit Breaker**: Proteção contra cascading failures em integrações externas

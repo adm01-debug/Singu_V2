@@ -34,14 +34,17 @@ export type RodizioRpc =
 
 /**
  * `supabase.from(...)` para views/tabelas do rodízio ainda fora dos tipos
- * gerados. Retorna `any` de propósito — o alternativa seria reproduzir a
+ * gerados. Preserva o tipo de retorno do cliente e limita o cast ao nome
  * tipagem completa do `PostgrestQueryBuilder` aqui à mão, o que quebraria
  * assim que os tipos forem regenerados. Os hooks fazem `as unknown as T`
  * no retorno de `.select(...)` para recuperar tipagem no nível de uso.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function rodizioFrom(table: RodizioTable): any {
-  return (supabase.from as unknown as (t: string) => any)(table);
+export function rodizioFrom(table: RodizioTable): ReturnType<typeof supabase.from> {
+  return (
+    supabase.from as unknown as (
+      tableName: string,
+    ) => ReturnType<typeof supabase.from>
+  )(table);
 }
 
 /** `supabase.rpc(...)` para as RPCs do rodízio ainda fora dos tipos gerados. */

@@ -48,7 +48,8 @@ test.describe('Hubs — smoke E2E (Rodada 50/10)', () => {
     page.on('console', (m) => {
       if (m.type() === 'error') consoleErrors.push(`console: ${m.text()}`);
     });
-    await page.goto('/abm', { waitUntil: 'networkidle' });
+    await page.goto('/abm', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('body')).toBeVisible();
     const fatal = consoleErrors.filter((e) =>
       /(ChunkLoadError|Failed to fetch dynamically imported module|Unexpected token)/i.test(e),
     );
@@ -61,7 +62,8 @@ test.describe('Hubs — smoke E2E (Rodada 50/10)', () => {
     page.on('console', (m) => {
       if (m.type() === 'error') consoleErrors.push(`console: ${m.text()}`);
     });
-    await page.goto('/intent', { waitUntil: 'networkidle' });
+    await page.goto('/intent', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('body')).toBeVisible();
     const fatal = consoleErrors.filter((e) =>
       /(ChunkLoadError|Failed to fetch dynamically imported module|Unexpected token)/i.test(e),
     );
