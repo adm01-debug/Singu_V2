@@ -4,8 +4,14 @@
 --    (fn_proximo_sdr) lê `ativo` -- is_ativo é coluna órfã. As 4 linhas existentes são teste
 --    óbvio (nomes "SDR Novo"/"Closer Novo"/null, data_inicio=data_fim, todas de 2026-02-04,
 --    zero SDR real cadastrado no sistema ainda -- D6 confirma SDRs serão contratados depois).
-DELETE FROM public.sdr_closer_assignments;
-ALTER TABLE public.sdr_closer_assignments DROP COLUMN is_ativo;
+DO $migration$
+BEGIN
+  IF to_regclass('public.sdr_closer_assignments') IS NOT NULL THEN
+    DELETE FROM public.sdr_closer_assignments;
+    ALTER TABLE public.sdr_closer_assignments DROP COLUMN IF EXISTS is_ativo;
+  END IF;
+END;
+$migration$;
 
 -- 2) Dropar as 7 funções de round-robin sobre companies.user_id, substituídas pelo motor
 --    do rodízio sobre customers.vendedor_id/sdr_id. Confirmado: zero uso no front (PR #51

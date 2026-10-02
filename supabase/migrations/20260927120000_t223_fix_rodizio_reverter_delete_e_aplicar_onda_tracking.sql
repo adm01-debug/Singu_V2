@@ -21,23 +21,34 @@
 -- define proxima_rotacao_closer = CURRENT_DATE + v_dias_ciclo e reseta closers_visitados = {}
 -- para que o cron selecione o cliente no ciclo correto.
 
--- Fix 1a: DELETE crítico — rodizio_reverter_execucao volta a funcionar
-CREATE POLICY admin_delete ON public.customer_ownership_history
-  FOR DELETE TO authenticated
-  USING ((SELECT has_role((SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role));
-
--- Fix 1b: consistência admin-only nas tabelas do domínio rodízio
-CREATE POLICY admin_delete ON public.customer_rotation_state
-  FOR DELETE TO authenticated
-  USING ((SELECT has_role((SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role));
-
-CREATE POLICY admin_delete ON public.rodizio_distribuicao_staging
-  FOR DELETE TO authenticated
-  USING ((SELECT has_role((SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role));
-
-CREATE POLICY admin_delete ON public.customer_sdr_history
-  FOR DELETE TO authenticated
-  USING ((SELECT has_role((SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role));
+-- Fix 1: policies de DELETE do domínio rodízio
+DO $migration$
+DECLARE
+  table_name text;
+BEGIN
+  FOREACH table_name IN ARRAY ARRAY[
+    'customer_ownership_history',
+    'customer_rotation_state',
+    'rodizio_distribuicao_staging',
+    'customer_sdr_history'
+  ]
+  LOOP
+    IF to_regclass(format('public.%I', table_name)) IS NOT NULL
+      AND NOT EXISTS (
+        SELECT 1
+        FROM pg_policy
+        WHERE polrelid = to_regclass(format('public.%I', table_name))
+          AND polname = 'admin_delete'
+      )
+    THEN
+      EXECUTE format(
+        'CREATE POLICY admin_delete ON public.%I FOR DELETE TO authenticated USING ((SELECT has_role((SELECT auth.uid() AS uid), ''admin''::app_role) AS has_role))',
+        table_name
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;
 
 -- Fix 2: rodizio_aplicar_onda com tracking de proxima_rotacao_closer
 CREATE OR REPLACE FUNCTION public.rodizio_aplicar_onda(

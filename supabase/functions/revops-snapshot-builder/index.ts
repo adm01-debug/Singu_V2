@@ -39,10 +39,10 @@ Deno.serve(async (req: Request) => {
   } else {
     const [u1, u2] = await Promise.all([
       fetchAllPages((from, to) =>
-        supabase.from("mql_classifications").select("user_id").range(from, to)
+        supabase.from("mql_classifications").select("user_id").order("created_at").order("id").range(from, to)
       ),
       fetchAllPages((from, to) =>
-        supabase.from("deal_forecasts").select("user_id").range(from, to)
+        supabase.from("deal_forecasts").select("user_id").order("created_at").order("id").range(from, to)
       ),
     ]);
     const set = new Set<string>();
@@ -65,19 +65,19 @@ Deno.serve(async (req: Request) => {
 
   const [mqlRows, sqlRows, oppRows, leadRows, prevSnapRows] = await Promise.all([
     fetchAllPages((from, to) =>
-      supabase.from("mql_classifications").select("user_id").in("user_id", userIds).eq("status", "mql").gte("created_at", since).range(from, to)
+      supabase.from("mql_classifications").select("user_id").in("user_id", userIds).eq("status", "mql").gte("created_at", since).order("created_at").order("id").range(from, to)
     ),
     fetchAllPages((from, to) =>
-      supabase.from("mql_classifications").select("user_id").in("user_id", userIds).eq("status", "sql").gte("created_at", since).range(from, to)
+      supabase.from("mql_classifications").select("user_id").in("user_id", userIds).eq("status", "sql").gte("created_at", since).order("created_at").order("id").range(from, to)
     ),
     fetchAllPages((from, to) =>
-      supabase.from("deal_forecasts").select("user_id").in("user_id", userIds).gte("created_at", since).range(from, to)
+      supabase.from("deal_forecasts").select("user_id").in("user_id", userIds).gte("created_at", since).order("created_at").order("id").range(from, to)
     ),
     fetchAllPages((from, to) =>
-      supabase.from("contacts").select("user_id").in("user_id", userIds).range(from, to)
+      supabase.from("contacts").select("user_id").in("user_id", userIds).order("created_at").order("id").range(from, to)
     ),
     fetchAllPages((from, to) =>
-      supabase.from("revops_snapshots").select("user_id, funnel_stage, conversion_rate").in("user_id", userIds).eq("period", weekAgo).range(from, to)
+      supabase.from("revops_snapshots").select("user_id, funnel_stage, conversion_rate").in("user_id", userIds).eq("period", weekAgo).order("created_at").order("id").range(from, to)
     ),
   ]);
 

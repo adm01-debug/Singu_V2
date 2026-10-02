@@ -14,38 +14,32 @@
 --   sm_upload_mapping       — internal SM import pipeline mapping table
 --   xbz_upload_mapping      — internal XBZ import pipeline mapping table
 
-CREATE POLICY internal_deny_all ON public.access_blocked_log
-  AS RESTRICTIVE
-  FOR ALL
-  TO authenticated, anon
-  USING (false);
-
-CREATE POLICY internal_deny_all ON public.asia_upload_mapping
-  AS RESTRICTIVE
-  FOR ALL
-  TO authenticated, anon
-  USING (false);
-
-CREATE POLICY internal_deny_all ON public.login_attempts
-  AS RESTRICTIVE
-  FOR ALL
-  TO authenticated, anon
-  USING (false);
-
-CREATE POLICY internal_deny_all ON public.password_reset_requests
-  AS RESTRICTIVE
-  FOR ALL
-  TO authenticated, anon
-  USING (false);
-
-CREATE POLICY internal_deny_all ON public.sm_upload_mapping
-  AS RESTRICTIVE
-  FOR ALL
-  TO authenticated, anon
-  USING (false);
-
-CREATE POLICY internal_deny_all ON public.xbz_upload_mapping
-  AS RESTRICTIVE
-  FOR ALL
-  TO authenticated, anon
-  USING (false);
+DO $migration$
+DECLARE
+  table_name text;
+BEGIN
+  FOREACH table_name IN ARRAY ARRAY[
+    'access_blocked_log',
+    'asia_upload_mapping',
+    'login_attempts',
+    'password_reset_requests',
+    'sm_upload_mapping',
+    'xbz_upload_mapping'
+  ]
+  LOOP
+    IF to_regclass(format('public.%I', table_name)) IS NOT NULL
+      AND NOT EXISTS (
+        SELECT 1
+        FROM pg_policy
+        WHERE polrelid = to_regclass(format('public.%I', table_name))
+          AND polname = 'internal_deny_all'
+      )
+    THEN
+      EXECUTE format(
+        'CREATE POLICY internal_deny_all ON public.%I AS RESTRICTIVE FOR ALL TO authenticated, anon USING (false)',
+        table_name
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;

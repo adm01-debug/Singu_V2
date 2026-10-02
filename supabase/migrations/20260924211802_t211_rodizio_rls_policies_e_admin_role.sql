@@ -11,7 +11,9 @@ DO $$
 DECLARE t text;
 BEGIN
   FOREACH t IN ARRAY ARRAY['customer_purchases','customer_rotation_state','rodizio_distribuicao_staging','rodizio_execucoes'] LOOP
-    EXECUTE format('DROP POLICY IF EXISTS admin_select ON public.%I', t);
-    EXECUTE format('CREATE POLICY admin_select ON public.%I FOR SELECT TO authenticated USING (has_role(auth.uid(), ''admin''::app_role))', t);
+    IF to_regclass(format('public.%I', t)) IS NOT NULL THEN
+      EXECUTE format('DROP POLICY IF EXISTS admin_select ON public.%I', t);
+      EXECUTE format('CREATE POLICY admin_select ON public.%I FOR SELECT TO authenticated USING (has_role(auth.uid(), ''admin''::app_role))', t);
+    END IF;
   END LOOP;
 END $$;

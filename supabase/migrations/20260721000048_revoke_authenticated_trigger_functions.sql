@@ -19,14 +19,30 @@
 --     AND t.typname IN ('trigger', 'event_trigger')
 --     AND p.proname NOT IN ('fn_set_novelty_updated_at', 'fn_sync_novelty_to_product')
 
-REVOKE EXECUTE ON FUNCTION public.audit_companies_trigger()         FROM authenticated;
-REVOKE EXECUTE ON FUNCTION public.audit_trigger_fn()               FROM authenticated;
-REVOKE EXECUTE ON FUNCTION public.audit_trigger_func()             FROM authenticated;
-REVOKE EXECUTE ON FUNCTION public.auto_calculate_lead_score()      FROM authenticated;
-REVOKE EXECUTE ON FUNCTION public.companies_search_vector_update() FROM authenticated;
-REVOKE EXECUTE ON FUNCTION public.handle_new_singu_profile()       FROM authenticated;
-REVOKE EXECUTE ON FUNCTION public.handle_new_user()                FROM authenticated;
-REVOKE EXECUTE ON FUNCTION public.log_deal_status_change()         FROM authenticated;
-REVOKE EXECUTE ON FUNCTION public.mark_customer_on_deal_won()      FROM authenticated;
-REVOKE EXECUTE ON FUNCTION public.set_updated_at()                 FROM authenticated;
-REVOKE EXECUTE ON FUNCTION public.singu_audit_trigger_fn()         FROM authenticated;
+DO $migration$
+DECLARE
+  function_signature text;
+BEGIN
+  FOREACH function_signature IN ARRAY ARRAY[
+    'public.audit_companies_trigger()',
+    'public.audit_trigger_fn()',
+    'public.audit_trigger_func()',
+    'public.auto_calculate_lead_score()',
+    'public.companies_search_vector_update()',
+    'public.handle_new_singu_profile()',
+    'public.handle_new_user()',
+    'public.log_deal_status_change()',
+    'public.mark_customer_on_deal_won()',
+    'public.set_updated_at()',
+    'public.singu_audit_trigger_fn()'
+  ]
+  LOOP
+    IF to_regprocedure(function_signature) IS NOT NULL THEN
+      EXECUTE format(
+        'REVOKE EXECUTE ON FUNCTION %s FROM authenticated',
+        function_signature
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;

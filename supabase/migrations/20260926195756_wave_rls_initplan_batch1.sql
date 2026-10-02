@@ -28,7 +28,22 @@ ALTER POLICY "Users manage own threads" ON public.ai_chat_threads USING (((selec
 ALTER POLICY "Users can insert their own recommendation audit logs" ON public.ai_recommendation_audit_logs WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "Users can update their own recommendation audit logs" ON public.ai_recommendation_audit_logs USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can view their own recommendation audit logs" ON public.ai_recommendation_audit_logs USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can manage their own recommendation logs v2" ON public.ai_recommendation_audit_logs_v2 USING (((select auth.uid()) = user_id));
+DO $migration$
+BEGIN
+  IF to_regclass('public.ai_recommendation_audit_logs_v2') IS NOT NULL
+    AND EXISTS (
+      SELECT 1
+      FROM pg_policy
+      WHERE polrelid = to_regclass('public.ai_recommendation_audit_logs_v2')
+        AND polname = 'Users can manage their own recommendation logs v2'
+    )
+  THEN
+    ALTER POLICY "Users can manage their own recommendation logs v2"
+      ON public.ai_recommendation_audit_logs_v2
+      USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$migration$;
 ALTER POLICY "Users can create their own recommendation logs" ON public.ai_recommendation_logs WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "Users can update their own recommendation logs" ON public.ai_recommendation_logs USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can view their own recommendation logs" ON public.ai_recommendation_logs USING (((select auth.uid()) = user_id));

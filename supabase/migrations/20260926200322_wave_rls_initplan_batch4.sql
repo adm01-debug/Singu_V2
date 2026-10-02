@@ -66,7 +66,21 @@ ALTER POLICY "Users can manage their follow-up approvals" ON public.follow_up_ap
 ALTER POLICY "Users can update their own follow-up approvals" ON public.follow_up_approvals USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can view their own follow-up approvals" ON public.follow_up_approvals USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can manage their own follow-up approvals" ON public.follow_up_approvals_v2 USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can manage their own follow-up approvals v2" ON public.follow_up_approvals_v2 USING (((select auth.uid()) = user_id));
+DO $migration$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM pg_policy
+    WHERE polrelid = to_regclass('public.follow_up_approvals_v2')
+      AND polname = 'Users can manage their own follow-up approvals v2'
+  )
+  THEN
+    ALTER POLICY "Users can manage their own follow-up approvals v2"
+      ON public.follow_up_approvals_v2
+      USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$migration$;
 ALTER POLICY "own forecast_cat_history insert" ON public.forecast_categories_history WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "own forecast_cat_history select" ON public.forecast_categories_history USING (((select auth.uid()) = user_id));
 ALTER POLICY "own forecast_periods delete" ON public.forecast_periods USING (((select auth.uid()) = user_id));

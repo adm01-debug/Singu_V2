@@ -12,7 +12,6 @@ const BITRIX_CLIENT_SECRET = Deno.env.get("BITRIX_CLIENT_SECRET") ?? "";
 const BITRIX_PORTAL = Deno.env.get("BITRIX_PORTAL_URL") ?? "";
 const BITRIX_WEBHOOK = Deno.env.get("BITRIX_WEBHOOK_URL") ?? "";
 const BITRIX_APPLICATION_TOKEN = Deno.env.get("BITRIX_APPLICATION_TOKEN") ?? "";
-const BITRIX_WIDGET_SECRET = Deno.env.get("BITRIX_WIDGET_SECRET") ?? "";
 const CONNECTOR_ID = "evolution_whatsapp";
 const LINE_ID = 44;
 const EDGE_FN_URL = Deno.env.get("EVOLUTION_BITRIX_CONNECTOR_URL") ?? "";
@@ -360,7 +359,6 @@ Deno.serve(async (req: Request) => {
       BITRIX_PORTAL &&
       BITRIX_WEBHOOK &&
       BITRIX_APPLICATION_TOKEN &&
-      BITRIX_WIDGET_SECRET &&
       EDGE_FN_URL,
     );
     return json({
@@ -373,14 +371,6 @@ Deno.serve(async (req: Request) => {
     }, configured ? 200 : 503);
   }
   if (path.endsWith("/widget")) {
-    const widgetToken = url.searchParams.get("token") ?? "";
-    if (
-      !BITRIX_WIDGET_SECRET ||
-      !widgetToken ||
-      !constantTimeEqual(widgetToken, BITRIX_WIDGET_SECRET)
-    ) {
-      return json({ error: "Unauthorized" }, 401);
-    }
     return html(getWidgetHtml());
   }
   if (req.method !== "POST") return json({ error: "POST only" }, 405);

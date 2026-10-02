@@ -3,10 +3,50 @@ ALTER POLICY "Users can update their own communication preferences" ON public.co
 ALTER POLICY "Users can view their own communication preferences" ON public.communication_preferences USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can update their own companies" ON public.companies USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can view their own companies" ON public.companies USING (((select auth.uid()) = user_id));
-ALTER POLICY company_phones_delete ON public.company_phones USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY company_phones_insert ON public.company_phones WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY company_phones_select ON public.company_phones USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY company_phones_update ON public.company_phones USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role)) WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
+DO $migration$
+DECLARE
+  policy_definition record;
+  clauses text;
+BEGIN
+  FOR policy_definition IN
+    SELECT *
+    FROM (VALUES
+      ('company_phones', 'company_phones_delete', true, false),
+      ('company_phones', 'company_phones_insert', false, true),
+      ('company_phones', 'company_phones_select', true, false),
+      ('company_phones', 'company_phones_update', true, true),
+      ('contact_phones', 'contact_phones_delete', true, false),
+      ('contact_phones', 'contact_phones_insert', false, true),
+      ('contact_phones', 'contact_phones_select', true, false),
+      ('contact_phones', 'contact_phones_update', true, true)
+    ) AS policies(table_name, policy_name, use_using, use_check)
+  LOOP
+    IF to_regclass(format('public.%I', policy_definition.table_name)) IS NOT NULL
+      AND EXISTS (
+        SELECT 1
+        FROM pg_policy
+        WHERE polrelid = to_regclass(format('public.%I', policy_definition.table_name))
+          AND polname = policy_definition.policy_name
+      )
+    THEN
+      clauses := '';
+      IF policy_definition.use_using THEN
+        clauses := clauses || ' USING ((SELECT has_role((select auth.uid()), ''admin''::app_role) AS has_role))';
+      END IF;
+      IF policy_definition.use_check THEN
+        clauses := clauses || ' WITH CHECK ((SELECT has_role((select auth.uid()), ''admin''::app_role) AS has_role))';
+      END IF;
+
+      EXECUTE format(
+        'ALTER POLICY %I ON public.%I%s',
+        policy_definition.policy_name,
+        policy_definition.table_name,
+        clauses
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;
 ALTER POLICY "Users can create their own compatibility alerts" ON public.compatibility_alerts WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "Users can delete their own compatibility alerts" ON public.compatibility_alerts USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can update their own compatibility alerts" ON public.compatibility_alerts USING (((select auth.uid()) = user_id));
@@ -124,10 +164,6 @@ ALTER POLICY "Owner or admin can update contact_personality" ON public.contact_p
   WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))) WITH CHECK (((EXISTS ( SELECT 1
    FROM contacts c
   WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role)));
-ALTER POLICY contact_phones_delete ON public.contact_phones USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY contact_phones_insert ON public.contact_phones WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY contact_phones_select ON public.contact_phones USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY contact_phones_update ON public.contact_phones USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role)) WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
 ALTER POLICY "System can manage predictive roadmap" ON public.contact_predictive_roadmap USING ((((select auth.jwt()) ->> 'role'::text) = 'service_role'::text));
 ALTER POLICY "Users can insert roadmap for their contacts" ON public.contact_predictive_roadmap WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "Users can update roadmap for their contacts" ON public.contact_predictive_roadmap USING (((select auth.uid()) = user_id));

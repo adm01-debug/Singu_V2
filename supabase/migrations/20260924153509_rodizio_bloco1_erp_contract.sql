@@ -159,9 +159,15 @@ BEGIN
 END;
 $function$;
 
-DROP TRIGGER IF EXISTS trg_customer_purchases_after_insert ON public.customer_purchases;
-CREATE TRIGGER trg_customer_purchases_after_insert
-  AFTER INSERT ON public.customer_purchases
-  FOR EACH ROW EXECUTE FUNCTION public.trg_after_purchase();
+DO $migration$
+BEGIN
+  IF to_regclass('public.customer_purchases') IS NOT NULL THEN
+    DROP TRIGGER IF EXISTS trg_customer_purchases_after_insert ON public.customer_purchases;
+    CREATE TRIGGER trg_customer_purchases_after_insert
+      AFTER INSERT ON public.customer_purchases
+      FOR EACH ROW EXECUTE FUNCTION public.trg_after_purchase();
+  END IF;
+END;
+$migration$;
 
 REVOKE ALL ON FUNCTION public.trg_after_purchase() FROM PUBLIC, anon, authenticated;

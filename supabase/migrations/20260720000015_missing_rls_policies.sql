@@ -6,156 +6,127 @@
 -- are blocked. This migration adds owner-scoped policies so the frontend works
 -- correctly while maintaining row-level isolation between users.
 
--- 1. favorite_templates
-CREATE POLICY "Users manage own favorite_templates"
-  ON public.favorite_templates FOR ALL
-  USING (user_id = auth.uid())
-  WITH CHECK (user_id = auth.uid());
+DO $migration$
+DECLARE
+  policy_definition record;
+  ddl text;
+BEGIN
+  FOR policy_definition IN
+    SELECT *
+    FROM (VALUES
+      ('favorite_templates', 'Users manage own favorite_templates', 'ALL', true, true),
+      ('intent_scores', 'Users view own intent_scores', 'SELECT', true, false),
+      ('intent_scores', 'Users manage own intent_scores', 'INSERT', false, true),
+      ('intent_scores', 'Users update own intent_scores', 'UPDATE', true, true),
+      ('intent_scores', 'Users delete own intent_scores', 'DELETE', true, false),
+      ('intent_signals', 'Users view own intent_signals', 'SELECT', true, false),
+      ('intent_signals', 'Users insert own intent_signals', 'INSERT', false, true),
+      ('intent_signals', 'Users update own intent_signals', 'UPDATE', true, true),
+      ('intent_signals', 'Users delete own intent_signals', 'DELETE', true, false),
+      ('battle_cards', 'Users manage own battle_cards', 'ALL', true, true),
+      ('competitors', 'Users manage own competitors', 'ALL', true, true),
+      ('rfm_metrics', 'Users view own rfm_metrics', 'SELECT', true, false),
+      ('rfm_metrics', 'Users manage own rfm_metrics', 'INSERT', false, true),
+      ('rfm_metrics', 'Users update own rfm_metrics', 'UPDATE', true, true),
+      ('rfm_metrics', 'Users delete own rfm_metrics', 'DELETE', true, false),
+      ('rfm_history', 'Users view own rfm_history', 'SELECT', true, false),
+      ('rfm_history', 'Users insert own rfm_history', 'INSERT', false, true),
+      ('win_loss_records', 'Users manage own win_loss_records', 'ALL', true, true),
+      ('win_loss_reasons', 'Users manage own win_loss_reasons', 'ALL', true, true),
+      ('sequence_enrollments', 'Users view own sequence_enrollments', 'SELECT', true, false),
+      ('sequence_enrollments', 'Users insert own sequence_enrollments', 'INSERT', false, true),
+      ('sequence_enrollments', 'Users update own sequence_enrollments', 'UPDATE', true, true),
+      ('sequence_enrollments', 'Users delete own sequence_enrollments', 'DELETE', true, false)
+    ) AS policies(table_name, policy_name, action, has_using, has_check)
+  LOOP
+    IF EXISTS (
+      SELECT 1
+      FROM pg_attribute
+      WHERE attrelid = to_regclass(format('public.%I', policy_definition.table_name))
+        AND attname = 'user_id'
+        AND NOT attisdropped
+    ) AND NOT EXISTS (
+      SELECT 1
+      FROM pg_policy
+      WHERE polrelid = to_regclass(format('public.%I', policy_definition.table_name))
+        AND polname = policy_definition.policy_name
+    ) THEN
+      ddl := format(
+        'CREATE POLICY %I ON public.%I FOR %s',
+        policy_definition.policy_name,
+        policy_definition.table_name,
+        policy_definition.action
+      );
 
--- 2. intent_scores
-CREATE POLICY "Users view own intent_scores"
-  ON public.intent_scores FOR SELECT
-  USING (user_id = auth.uid());
+      IF policy_definition.has_using THEN
+        ddl := ddl || ' USING (user_id = auth.uid())';
+      END IF;
+      IF policy_definition.has_check THEN
+        ddl := ddl || ' WITH CHECK (user_id = auth.uid())';
+      END IF;
 
-CREATE POLICY "Users manage own intent_scores"
-  ON public.intent_scores FOR INSERT
-  WITH CHECK (user_id = auth.uid());
+      EXECUTE ddl;
+    END IF;
+  END LOOP;
+END;
+$migration$;
 
-CREATE POLICY "Users update own intent_scores"
-  ON public.intent_scores FOR UPDATE
-  USING (user_id = auth.uid())
-  WITH CHECK (user_id = auth.uid());
-
-CREATE POLICY "Users delete own intent_scores"
-  ON public.intent_scores FOR DELETE
-  USING (user_id = auth.uid());
-
--- 3. intent_signals
-CREATE POLICY "Users view own intent_signals"
-  ON public.intent_signals FOR SELECT
-  USING (user_id = auth.uid());
-
-CREATE POLICY "Users insert own intent_signals"
-  ON public.intent_signals FOR INSERT
-  WITH CHECK (user_id = auth.uid());
-
-CREATE POLICY "Users update own intent_signals"
-  ON public.intent_signals FOR UPDATE
-  USING (user_id = auth.uid())
-  WITH CHECK (user_id = auth.uid());
-
-CREATE POLICY "Users delete own intent_signals"
-  ON public.intent_signals FOR DELETE
-  USING (user_id = auth.uid());
-
--- 4. battle_cards
-CREATE POLICY "Users manage own battle_cards"
-  ON public.battle_cards FOR ALL
-  USING (user_id = auth.uid())
-  WITH CHECK (user_id = auth.uid());
-
--- 5. competitors
-CREATE POLICY "Users manage own competitors"
-  ON public.competitors FOR ALL
-  USING (user_id = auth.uid())
-  WITH CHECK (user_id = auth.uid());
-
--- 6. rfm_metrics
-CREATE POLICY "Users view own rfm_metrics"
-  ON public.rfm_metrics FOR SELECT
-  USING (user_id = auth.uid());
-
-CREATE POLICY "Users manage own rfm_metrics"
-  ON public.rfm_metrics FOR INSERT
-  WITH CHECK (user_id = auth.uid());
-
-CREATE POLICY "Users update own rfm_metrics"
-  ON public.rfm_metrics FOR UPDATE
-  USING (user_id = auth.uid())
-  WITH CHECK (user_id = auth.uid());
-
-CREATE POLICY "Users delete own rfm_metrics"
-  ON public.rfm_metrics FOR DELETE
-  USING (user_id = auth.uid());
-
--- 7. rfm_history
-CREATE POLICY "Users view own rfm_history"
-  ON public.rfm_history FOR SELECT
-  USING (user_id = auth.uid());
-
-CREATE POLICY "Users insert own rfm_history"
-  ON public.rfm_history FOR INSERT
-  WITH CHECK (user_id = auth.uid());
-
--- rfm_history is append-only from the engine; no UPDATE/DELETE for users
-
--- 8. win_loss_records
-CREATE POLICY "Users manage own win_loss_records"
-  ON public.win_loss_records FOR ALL
-  USING (user_id = auth.uid())
-  WITH CHECK (user_id = auth.uid());
-
--- 9. win_loss_reasons
-CREATE POLICY "Users manage own win_loss_reasons"
-  ON public.win_loss_reasons FOR ALL
-  USING (user_id = auth.uid())
-  WITH CHECK (user_id = auth.uid());
-
--- 10. sequence_enrollments
-CREATE POLICY "Users view own sequence_enrollments"
-  ON public.sequence_enrollments FOR SELECT
-  USING (user_id = auth.uid());
-
-CREATE POLICY "Users insert own sequence_enrollments"
-  ON public.sequence_enrollments FOR INSERT
-  WITH CHECK (user_id = auth.uid());
-
-CREATE POLICY "Users update own sequence_enrollments"
-  ON public.sequence_enrollments FOR UPDATE
-  USING (user_id = auth.uid())
-  WITH CHECK (user_id = auth.uid());
-
-CREATE POLICY "Users delete own sequence_enrollments"
-  ON public.sequence_enrollments FOR DELETE
-  USING (user_id = auth.uid());
-
--- 11. sms_campaign_recipients (no direct user_id — owned via sms_campaigns)
-CREATE POLICY "Users view own campaign recipients"
-  ON public.sms_campaign_recipients FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.sms_campaigns sc
+DO $migration$
+DECLARE
+  policy_definition record;
+  predicate constant text :=
+    'EXISTS (
+      SELECT 1
+      FROM public.sms_campaigns sc
       WHERE sc.id = sms_campaign_recipients.campaign_id
         AND sc.user_id = auth.uid()
-    )
-  );
+    )';
+  ddl text;
+BEGIN
+  IF (
+    SELECT count(*) = 1
+    FROM pg_attribute
+    WHERE attrelid = to_regclass('public.sms_campaign_recipients')
+      AND attname = 'campaign_id'
+      AND NOT attisdropped
+  ) AND (
+    SELECT count(*) = 2
+    FROM pg_attribute
+    WHERE attrelid = to_regclass('public.sms_campaigns')
+      AND attname = ANY(ARRAY['id', 'user_id'])
+      AND NOT attisdropped
+  ) THEN
+    FOR policy_definition IN
+      SELECT *
+      FROM (VALUES
+        ('Users view own campaign recipients', 'SELECT', true, false),
+        ('Users insert own campaign recipients', 'INSERT', false, true),
+        ('Users update own campaign recipients', 'UPDATE', true, false),
+        ('Users delete own campaign recipients', 'DELETE', true, false)
+      ) AS policies(policy_name, action, has_using, has_check)
+    LOOP
+      IF NOT EXISTS (
+        SELECT 1
+        FROM pg_policy
+        WHERE polrelid = 'public.sms_campaign_recipients'::regclass
+          AND polname = policy_definition.policy_name
+      ) THEN
+        ddl := format(
+          'CREATE POLICY %I ON public.sms_campaign_recipients FOR %s',
+          policy_definition.policy_name,
+          policy_definition.action
+        );
 
-CREATE POLICY "Users insert own campaign recipients"
-  ON public.sms_campaign_recipients FOR INSERT
-  WITH CHECK (
-    EXISTS (
-      SELECT 1 FROM public.sms_campaigns sc
-      WHERE sc.id = sms_campaign_recipients.campaign_id
-        AND sc.user_id = auth.uid()
-    )
-  );
+        IF policy_definition.has_using THEN
+          ddl := ddl || format(' USING (%s)', predicate);
+        END IF;
+        IF policy_definition.has_check THEN
+          ddl := ddl || format(' WITH CHECK (%s)', predicate);
+        END IF;
 
-CREATE POLICY "Users update own campaign recipients"
-  ON public.sms_campaign_recipients FOR UPDATE
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.sms_campaigns sc
-      WHERE sc.id = sms_campaign_recipients.campaign_id
-        AND sc.user_id = auth.uid()
-    )
-  );
-
-CREATE POLICY "Users delete own campaign recipients"
-  ON public.sms_campaign_recipients FOR DELETE
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.sms_campaigns sc
-      WHERE sc.id = sms_campaign_recipients.campaign_id
-        AND sc.user_id = auth.uid()
-    )
-  );
+        EXECUTE ddl;
+      END IF;
+    END LOOP;
+  END IF;
+END;
+$migration$;

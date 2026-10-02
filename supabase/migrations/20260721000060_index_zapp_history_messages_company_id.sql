@@ -8,5 +8,17 @@
 -- index, every company-scoped scan (the most common query pattern) requires
 -- a full sequential scan of what can be a very large table.
 
-CREATE INDEX IF NOT EXISTS idx_messages_company_id
-  ON zapp_history.messages (company_id);
+DO $migration$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM pg_attribute
+    WHERE attrelid = to_regclass('zapp_history.messages')
+      AND attname = 'company_id'
+      AND NOT attisdropped
+  ) THEN
+    CREATE INDEX IF NOT EXISTS idx_messages_company_id
+      ON zapp_history.messages (company_id);
+  END IF;
+END;
+$migration$;

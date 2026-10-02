@@ -169,7 +169,9 @@ export function useContacts(
     if (fromLast != null) return fromLast;
     return contacts.length;
   }, [data, contacts.length]);
-  const allContactsLoading = fetchAll && (hasNextPage || isFetchingNextPage);
+  const allContactsLoading = fetchAll &&
+    !isFetchNextPageError &&
+    (hasNextPage || isFetchingNextPage);
 
   const fetchContacts = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey });

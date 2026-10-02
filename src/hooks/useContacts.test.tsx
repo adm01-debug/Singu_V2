@@ -103,6 +103,34 @@ describe('useContacts CRUD & Pagination', () => {
     );
   });
 
+  it('should stop the full-dataset loading state when a later page fails', async () => {
+    const firstPage = Array.from({ length: 50 }, (_, i) => ({
+      id: `id-${i}`,
+      first_name: `User ${i}`,
+      last_name: 'Test',
+      updated_at: new Date().toISOString(),
+    }));
+
+    vi.mocked(externalData.queryExternalData)
+      .mockResolvedValueOnce({ data: firstPage, count: 100, error: null })
+      .mockResolvedValueOnce({
+        data: null,
+        count: null,
+        error: new Error('segunda página indisponível'),
+      });
+
+    const { result } = renderHook(
+      () => useContacts(undefined, { fetchAll: true }),
+      { wrapper },
+    );
+
+    await waitFor(() => expect(result.current.error).toBeTruthy());
+
+    expect(result.current.loading).toBe(false);
+    expect(result.current.contacts).toHaveLength(50);
+    expect(result.current.hasMore).toBe(true);
+  });
+
   it('should create a contact with mapped hobbies and interests', async () => {
     const newContact = {
       first_name: 'John',

@@ -154,6 +154,11 @@ const ALLOWED_TABLES = [
 
 type AllowedTable = typeof ALLOWED_TABLES[number];
 
+const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([
+  'mv_daily_kpis',
+  'mv_daily_stats',
+]);
+
 const MAX_PAGE_SIZE = 500;
 const DEFAULT_PAGE_SIZE = 50;
 const STATEMENT_TIMEOUT_MS = 15000;
@@ -438,7 +443,9 @@ Deno.serve(async (req) => {
         const countMode = countMethod === 'planned' ? 'planned' : 'exact';
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TS2589 deep type instantiation with dynamic Supabase queries
         let query: any = client.from(table).select(selectedColumns, { count: countMode });
-        if (!isSvc) query = query.eq('user_id', userId);
+        if (!isSvc && !GLOBAL_READ_ONLY_TABLES.has(table)) {
+          query = query.eq('user_id', userId);
+        }
 
         if (
           typeof searchConfig?.term === 'string' &&

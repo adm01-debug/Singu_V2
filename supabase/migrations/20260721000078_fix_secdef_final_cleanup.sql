@@ -14,12 +14,23 @@
 -- ── 1. resolver_alerta_inativacao ─────────────────────────────────────────────
 -- The function body cannot be replaced (ROWTYPE reference to dormant table fails
 -- at compile time), so we fix this purely at the privilege layer.
-REVOKE ALL ON FUNCTION public.resolver_alerta_inativacao(
-  uuid, text, integer, text, text
-) FROM PUBLIC, anon, authenticated;
-GRANT EXECUTE ON FUNCTION public.resolver_alerta_inativacao(
-  uuid, text, integer, text, text
-) TO service_role;
+DO $migration$
+DECLARE
+  function_signature text :=
+    'public.resolver_alerta_inativacao(uuid,text,integer,text,text)';
+BEGIN
+  IF to_regprocedure(function_signature) IS NOT NULL THEN
+    EXECUTE format(
+      'REVOKE ALL ON FUNCTION %s FROM PUBLIC, anon, authenticated',
+      function_signature
+    );
+    EXECUTE format(
+      'GRANT EXECUTE ON FUNCTION %s TO service_role',
+      function_signature
+    );
+  END IF;
+END;
+$migration$;
 
 -- ── 2. create_product overload 1: (p_name, p_sku, ..., p_stock_quantity) ──────
 DO $$
