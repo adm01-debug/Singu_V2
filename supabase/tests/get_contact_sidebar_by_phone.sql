@@ -74,6 +74,47 @@ BEGIN
   v_res := public.get_contact_sidebar_by_phone('11881234567');
   ASSERT v_res->>'contact_id' = v_base::text, 'duplicata não resolveu para o canônico';
 
+  -- 11b. duplicata MESCLADA (is_duplicate + duplicate_of + deleted_at):
+  -- a mesclagem marca deleted_at; a RPC segue duplicate_of mesmo assim.
+  INSERT INTO public.contacts (id, user_id, first_name, last_name, is_duplicate, duplicate_of, deleted_at)
+  VALUES (gen_random_uuid(), v_user, 'Mesclado', 'Dup', true, v_base, now())
+  RETURNING id INTO v_other;
+  INSERT INTO public.contact_phones (contact_id, numero, numero_normalizado, numero_e164, is_whatsapp)
+  VALUES (v_other, '11887770000', '11887770000', '+5511887770000', true);
+  v_res := public.get_contact_sidebar_by_phone('11887770000');
+  ASSERT v_res->>'contact_id' = v_base::text, 'duplicata mesclada não resolveu o canônico';
+
+  -- 11c. telefone compartilhado: contato ativo responde mesmo quando o
+  -- apagado tem is_whatsapp/is_primary melhor posicionados no ORDER BY.
+  INSERT INTO public.contacts (id, user_id, first_name, last_name, is_duplicate)
+  VALUES (gen_random_uuid(), v_user, 'Ativo', 'Compart', false)
+  RETURNING id INTO v_other;
+  INSERT INTO public.contacts (id, user_id, first_name, last_name, is_duplicate, deleted_at)
+  VALUES (gen_random_uuid(), v_user, 'Apagado', 'Compart', false, now())
+  RETURNING id INTO v_dup;
+  INSERT INTO public.contact_phones (contact_id, numero, numero_normalizado, numero_e164, is_whatsapp, is_primary)
+  VALUES
+    (v_dup,   '11888880000', '11888880000', '+5511888880000', true, true),
+    (v_other, '11888880000', '11888880000', '+5511888880000', false, false);
+  v_res := public.get_contact_sidebar_by_phone('11888880000');
+  ASSERT v_res->>'contact_id' = v_other::text, 'telefone compartilhado não escolheu o ativo';
+
+  -- 11d. VAK: scores do cadastro (contact_behavior.vak_*) vencem os de
+  -- rapport e os do jsonb de behavior.
+  INSERT INTO public.contacts (id, user_id, first_name, last_name, is_duplicate)
+  VALUES (gen_random_uuid(), v_user, 'VAK', 'Teste', false)
+  RETURNING id INTO v_other;
+  INSERT INTO public.contact_phones (contact_id, numero, numero_normalizado, is_whatsapp)
+  VALUES (v_other, '11777700000', '11777700000', true);
+  INSERT INTO public.contact_behavior (contact_id, vak_primary, vak_visual, vak_auditory, vak_kinesthetic)
+  VALUES (v_other, 'visual', 70, 20, 10);
+  INSERT INTO public.contact_rapport_strategy (contact_id, visual_preference_score, auditory_preference_score, kinesthetic_preference_score)
+  VALUES (v_other, 5, 5, 90);
+  v_res := public.get_contact_sidebar_by_phone('11777700000');
+  ASSERT v_res#>>'{singu_profile,vak,primary}' = 'visual', 'vak primary errado';
+  ASSERT (v_res#>>'{singu_profile,vak,visual}')::int = 70, 'vak visual não veio do cadastro';
+  ASSERT (v_res#>>'{singu_profile,vak,kinesthetic}')::int = 10, 'vak kinesthetic não veio do cadastro';
+
   -- ============ 12. bloco professional ============
   v_res := public.get_contact_sidebar_by_phone('11988776655');
   ASSERT v_res#>>'{professional,whatsapp,numero_e164}' = '+5511988776655', 'whatsapp errado';

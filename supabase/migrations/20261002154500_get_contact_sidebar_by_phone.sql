@@ -47,7 +47,10 @@ BEGIN
   WHERE cp.numero_normalizado IN (v_digits, v_national, '55' || v_national)
      OR replace(coalesce(cp.numero_e164, ''), '+', '') IN (v_digits, v_national, '55' || v_national)
      OR regexp_replace(coalesce(cp.numero, ''), '\D', '', 'g') IN (v_digits, v_national, '55' || v_national)
-  ORDER BY cp.is_whatsapp DESC NULLS LAST,
+  -- Contato utilizável vence: se dois contatos compartilham o telefone, o
+  -- ativo e não-duplicata responde, nunca um apagado/mesclado.
+  ORDER BY (c.deleted_at IS NULL AND c.is_duplicate IS NOT TRUE) DESC,
+           cp.is_whatsapp DESC NULLS LAST,
            cp.is_primary DESC NULLS LAST,
            cp.confiabilidade DESC NULLS LAST
   LIMIT 1;
@@ -59,13 +62,15 @@ BEGIN
     FROM public.contacts c
     WHERE regexp_replace(coalesce(c.phone, ''), '\D', '', 'g') IN (v_digits, v_national, '55' || v_national)
        OR regexp_replace(coalesce(c.whatsapp, ''), '\D', '', 'g') IN (v_digits, v_national, '55' || v_national)
-    ORDER BY c.created_at ASC
+    ORDER BY (c.deleted_at IS NULL AND c.is_duplicate IS NOT TRUE) DESC,
+             c.created_at ASC
     LIMIT 1;
   END IF;
 
-  -- Duplicata aponta para o canônico (1 hop); apagado não responde.
+  -- Duplicata aponta para o canônico (1 hop). A mesclagem marca a duplicata
+  -- com deleted_at, então a resolução NÃO exige deleted_at IS NULL nela —
+  -- o contato canônico é validado na checagem seguinte.
   IF v_contact.id IS NOT NULL
-     AND v_contact.deleted_at IS NULL
      AND v_contact.is_duplicate IS TRUE
      AND v_contact.duplicate_of IS NOT NULL THEN
     SELECT c.* INTO v_contact
@@ -157,12 +162,15 @@ BEGIN
       WHEN coalesce(cb.vak_primary, v_behavior->'vakProfile'->>'primary') IS NOT NULL THEN
         jsonb_build_object(
           'primary', coalesce(cb.vak_primary, v_behavior->'vakProfile'->>'primary'),
-          'visual', coalesce(rs.visual_preference_score,
+          -- contact_behavior.vak_* é a fonte de cadastro (DEFAULT 0 = nunca
+          -- preenchido, tratado como ausente); rapport e behavior jsonb são
+          -- fallbacks para perfis analisados fora do cadastro.
+          'visual', coalesce(nullif(cb.vak_visual, 0), rs.visual_preference_score,
                              CASE WHEN v_behavior->'vakProfile'->'scores'->>'visual' ~ '^\d{1,3}$' THEN (v_behavior->'vakProfile'->'scores'->>'visual')::int END),
-          'auditory', coalesce(rs.auditory_preference_score,
+          'auditory', coalesce(nullif(cb.vak_auditory, 0), rs.auditory_preference_score,
                                CASE WHEN v_behavior->'vakProfile'->'scores'->>'auditory' ~ '^\d{1,3}$' THEN (v_behavior->'vakProfile'->'scores'->>'auditory')::int END,
                                     CASE WHEN v_behavior->'vakProfile'->'scores'->>'auditivo' ~ '^\d{1,3}$' THEN (v_behavior->'vakProfile'->'scores'->>'auditivo')::int END),
-          'kinesthetic', coalesce(rs.kinesthetic_preference_score,
+          'kinesthetic', coalesce(nullif(cb.vak_kinesthetic, 0), rs.kinesthetic_preference_score,
                                   CASE WHEN v_behavior->'vakProfile'->'scores'->>'kinesthetic' ~ '^\d{1,3}$' THEN (v_behavior->'vakProfile'->'scores'->>'kinesthetic')::int END,
                                        CASE WHEN v_behavior->'vakProfile'->'scores'->>'cinestesico' ~ '^\d{1,3}$' THEN (v_behavior->'vakProfile'->'scores'->>'cinestesico')::int END)
         )
