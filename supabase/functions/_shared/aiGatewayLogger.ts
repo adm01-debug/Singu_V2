@@ -1,6 +1,6 @@
 // Shared helper for edge functions to record Lovable AI Gateway calls
 // into public.ai_gateway_metrics. Best-effort — never throws.
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
+import { createClient } from 'npm:@supabase/supabase-js@2.45.0';
 
 export type AiGatewayStatus = 'success' | 'error' | 'rate_limited' | 'timeout';
 

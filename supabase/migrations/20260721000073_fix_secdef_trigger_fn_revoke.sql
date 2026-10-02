@@ -14,26 +14,47 @@
 -- which is an implementation detail of singu_* functions and never meant
 -- for direct user calls.
 
--- ── Trigger functions ─────────────────────────────────────────────────────────
-REVOKE ALL ON FUNCTION public.audit_companies_trigger()     FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.audit_trigger_fn()           FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.audit_trigger_func()         FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.auto_calculate_lead_score()  FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.companies_search_vector_update() FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.fn_set_novelty_updated_at()  FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.fn_sync_novelty_to_product() FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.handle_new_singu_profile()   FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.handle_new_user()            FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.log_deal_status_change()     FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.mark_customer_on_deal_won()  FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.set_updated_at()             FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.singu_audit_trigger_fn()     FROM PUBLIC, anon, authenticated;
+DO $migration$
+DECLARE
+  function_signature text;
+BEGIN
+  FOREACH function_signature IN ARRAY ARRAY[
+    'public.audit_companies_trigger()',
+    'public.audit_trigger_fn()',
+    'public.audit_trigger_func()',
+    'public.auto_calculate_lead_score()',
+    'public.companies_search_vector_update()',
+    'public.fn_set_novelty_updated_at()',
+    'public.fn_sync_novelty_to_product()',
+    'public.handle_new_singu_profile()',
+    'public.handle_new_user()',
+    'public.log_deal_status_change()',
+    'public.mark_customer_on_deal_won()',
+    'public.set_updated_at()',
+    'public.singu_audit_trigger_fn()'
+  ]
+  LOOP
+    IF to_regprocedure(function_signature) IS NOT NULL THEN
+      EXECUTE format(
+        'REVOKE ALL ON FUNCTION %s FROM PUBLIC, anon, authenticated',
+        function_signature
+      );
+    END IF;
+  END LOOP;
 
--- ── Internal helpers ──────────────────────────────────────────────────────────
--- get_singu_allowed_tables is called internally by singu_* SECURITY DEFINER
--- functions; direct user calls return no sensitive data but are pointless.
-REVOKE ALL ON FUNCTION public.get_singu_allowed_tables() FROM PUBLIC, anon;
-GRANT  EXECUTE ON FUNCTION public.get_singu_allowed_tables() TO service_role;
+  function_signature := 'public.get_singu_allowed_tables()';
+  IF to_regprocedure(function_signature) IS NOT NULL THEN
+    EXECUTE format(
+      'REVOKE ALL ON FUNCTION %s FROM PUBLIC, anon',
+      function_signature
+    );
+    EXECUTE format(
+      'GRANT EXECUTE ON FUNCTION %s TO service_role',
+      function_signature
+    );
+  END IF;
+END;
+$migration$;
 
 -- ── Verification ──────────────────────────────────────────────────────────────
 DO $$

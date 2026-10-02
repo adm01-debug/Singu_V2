@@ -1,8 +1,17 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { withAuth, withAuthOrServiceRole, jsonError, jsonOk, handleCorsAndMethod, guardBody, isServiceRoleCaller } from "../_shared/auth.ts";
+import { withAuthOrServiceRole, jsonError, jsonOk, handleCorsAndMethod, guardBody, isServiceRoleCaller } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { assertVersionMatch } from "../_shared/version-guard.ts";
+import {
+  enforceTenantIdentity,
+  extractRelationId,
+  getRelationScope,
+  isSafeIdentifier,
+  MAX_QUERY_FILTERS,
+  quotePostgrestValue,
+  type RelationScope,
+} from "../_shared/tenant-guard.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 100, message: "Rate limit exceeded for external data. Please wait." });
@@ -149,6 +158,11 @@ const ALLOWED_TABLES = [
 
 type AllowedTable = typeof ALLOWED_TABLES[number];
 
+const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([
+  'mv_daily_kpis',
+  'mv_daily_stats',
+]);
+
 const MAX_PAGE_SIZE = 500;
 const DEFAULT_PAGE_SIZE = 50;
 const STATEMENT_TIMEOUT_MS = 15000;
@@ -161,6 +175,49 @@ function getExternalClient() {
     db: { schema: 'public' },
     global: { headers: { 'x-statement-timeout': String(STATEMENT_TIMEOUT_MS) } },
   });
+}
+
+async function hasRelationAccess(
+  client: ReturnType<typeof getExternalClient>,
+  scope: RelationScope,
+  relationId: string,
+  userId: string,
+): Promise<boolean> {
+  const { data, error } = await client
+    .from(scope.parentTable)
+    .select('id')
+    .eq('id', relationId)
+    .eq('user_id', userId)
+    .maybeSingle();
+  return !error && Boolean(data);
+}
+
+async function getRelationIdForRecord(
+  client: ReturnType<typeof getExternalClient>,
+  table: AllowedTable,
+  recordId: string,
+  scope: RelationScope,
+): Promise<string | null> {
+  const { data, error } = await client
+    .from(table)
+    .select(scope.foreignKey)
+    .eq('id', recordId)
+    .maybeSingle();
+  if (error || !data) return null;
+  const relationId = (data as Record<string, unknown>)[scope.foreignKey];
+  return typeof relationId === 'string' ? relationId : null;
+}
+
+async function hasAdminRole(userId: string): Promise<boolean> {
+  const admin = createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+  );
+  const { data, error } = await admin.rpc('has_role', {
+    _user_id: userId,
+    _role: 'admin',
+  });
+  return !error && data === true;
 }
 
 function isAllowedTable(table: string): table is AllowedTable {
@@ -224,6 +281,7 @@ Deno.serve(async (req) => {
 
     // ─── WHOAMI (debug — exposes only the external DB host, never keys) ───
     if (operation === 'whoami') {
+      if (!isSvc) return jsonError('Service role required', 403, req);
       const extUrl = Deno.env.get('EXTERNAL_SUPABASE_URL') || '';
       let host = '';
       let ref = '';
@@ -240,6 +298,7 @@ Deno.serve(async (req) => {
 
     // ─── LIST TABLES (schema discovery) ───
     if (operation === 'list_tables') {
+      if (!isSvc) return jsonError('Service role required', 403, req);
       const extUrl = Deno.env.get('EXTERNAL_SUPABASE_URL')!;
       const extKey = Deno.env.get('EXTERNAL_SUPABASE_SERVICE_ROLE_KEY')!;
       const resp = await fetchAPI(`${extUrl}/rest/v1/`, {
@@ -256,15 +315,18 @@ Deno.serve(async (req) => {
 
     // ─── FULL SCHEMA INTROSPECTION ───
     if (operation === 'schema') {
+      if (!isSvc && !await hasAdminRole(userId)) {
+        return jsonError('Admin role required', 403, req);
+      }
       const extUrl = Deno.env.get('EXTERNAL_SUPABASE_URL')!;
       const extKey = Deno.env.get('EXTERNAL_SUPABASE_SERVICE_ROLE_KEY')!;
       const resp = await fetchAPI(`${extUrl}/rest/v1/`, {
         headers: { 'apikey': extKey, 'Authorization': `Bearer ${extKey}` }
       });
       const swagger = await resp.json();
-      
+
       const tables: Record<string, { columns: { name: string; type: string; format: string; required: boolean; description?: string }[] }> = {};
-      
+
       if (swagger?.definitions) {
         for (const [tableName, def] of Object.entries(swagger.definitions)) {
           const d = def as Record<string, unknown>;
@@ -302,15 +364,19 @@ Deno.serve(async (req) => {
     if (operation === 'distinct') {
       const { column } = body;
       if (!table || !isAllowedTable(table)) return jsonError('Invalid table', 400, req);
-      if (!column || typeof column !== 'string') return jsonError('Missing "column" for distinct', 400, req);
+      if (!isSafeIdentifier(column)) return jsonError('Invalid "column" for distinct', 400, req);
+      if (!isSvc && getRelationScope(table)) {
+        return jsonError('Relation scope required', 400, req);
+      }
 
       const client = getExternalClient();
-      const query = client
+      let query = client
         .from(table)
         .select(column)
         .not(column, 'is', null)
         .order(column, { ascending: true })
         .limit(5000);
+      if (!isSvc) query = query.eq('user_id', userId);
 
       const { data, error } = await query;
 
@@ -327,6 +393,10 @@ Deno.serve(async (req) => {
       if (!table || !isAllowedTable(table)) return jsonError('Invalid table', 400, req);
       if (!Array.isArray(columns) || columns.length === 0) return jsonError('Missing "columns" array for batch_distinct', 400, req);
       if (columns.length > 20) return jsonError('Max 20 columns per batch', 400, req);
+      if (!columns.every(isSafeIdentifier)) return jsonError('Invalid column in batch_distinct', 400, req);
+      if (!isSvc && getRelationScope(table)) {
+        return jsonError('Relation scope required', 400, req);
+      }
 
       const client = getExternalClient();
       const results: Record<string, string[]> = {};
@@ -334,12 +404,14 @@ Deno.serve(async (req) => {
       // Run all distinct queries in parallel
       const promises = columns.map(async (col: string) => {
         try {
-          const { data, error } = await client
+          let query = client
             .from(table)
             .select(col)
             .not(col, 'is', null)
             .order(col, { ascending: true })
             .limit(5000);
+          if (!isSvc) query = query.eq('user_id', userId);
+          const { data, error } = await query;
           if (error) {
             log.warn("batch_distinct column failed", { col, error: error.message });
             return { col, values: [] };
@@ -362,8 +434,6 @@ Deno.serve(async (req) => {
     }
 
     const client = getExternalClient();
-    console.log("external client created, isSvc:", isSvc, "table:", table);
-
     // ─── RPC (call external database functions) — must run BEFORE table validation ───
     if (operation === 'rpc') {
       const functionName = typeof body.functionName === 'string' ? body.functionName : undefined;
@@ -371,7 +441,8 @@ Deno.serve(async (req) => {
         return jsonError(`Invalid or disallowed RPC: "${functionName}"`, 400, req);
       }
 
-      const params = (body.params && typeof body.params === 'object') ? body.params : {};
+      const rawParams = (body.params && typeof body.params === 'object') ? body.params : {};
+      const params = isSvc ? rawParams : enforceTenantIdentity(rawParams, userId);
 
       const { data, error } = await client.rpc(functionName, params as Record<string, unknown>);
       if (error) {
@@ -385,21 +456,60 @@ Deno.serve(async (req) => {
     if (!table || typeof table !== 'string' || !isAllowedTable(table)) {
       return jsonError(`Invalid table "${table}". Only allowed tables are permitted.`, 400, req);
     }
+    if (GLOBAL_READ_ONLY_TABLES.has(table) && operation !== 'select') {
+      return jsonError('Global metrics are read-only', 405, req);
+    }
 
     // ─── SELECT (read) ───
     if (operation === 'select') {
+      if (!isSvc && GLOBAL_READ_ONLY_TABLES.has(table) && !await hasAdminRole(userId)) {
+        return jsonError('Admin role required', 403, req);
+      }
       const { filters, select, order, range, search, countMethod } = body;
+      const relationScope = getRelationScope(table);
+      if (!isSvc && relationScope) {
+        const relationId = extractRelationId(filters, relationScope.foreignKey);
+        if (!relationId) return jsonError(`${relationScope.foreignKey} scope required`, 400, req);
+        if (!await hasRelationAccess(client, relationScope, relationId, userId)) {
+          return jsonError('Forbidden', 403, req);
+        }
+      }
+      const selectedColumns = typeof select === 'string' ? select : '*';
+      const searchConfig = search && typeof search === 'object'
+        ? search as Record<string, unknown>
+        : undefined;
+      const searchColumns = Array.isArray(searchConfig?.columns)
+        ? searchConfig.columns.slice(0, 10)
+        : [];
+      if (!searchColumns.every(isSafeIdentifier)) {
+        return jsonError('Invalid search column', 400, req);
+      }
+      const orderConfig = order && typeof order === 'object'
+        ? order as Record<string, unknown>
+        : undefined;
+      if (orderConfig?.column !== undefined && !isSafeIdentifier(orderConfig.column)) {
+        return jsonError('Invalid order column', 400, req);
+      }
+      const rangeConfig = range && typeof range === 'object'
+        ? range as { from: number; to: number }
+        : undefined;
 
       const result = await withRetry(async () => {
         const countMode = countMethod === 'planned' ? 'planned' : 'exact';
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TS2589 deep type instantiation with dynamic Supabase queries
-        let query: any = client.from(table).select(select || '*', { count: countMode });
+        let query: any = client.from(table).select(selectedColumns, { count: countMode });
+        if (!isSvc && !GLOBAL_READ_ONLY_TABLES.has(table) && !relationScope) {
+          query = query.eq('user_id', userId);
+        }
 
-        if (search?.term && typeof search.term === 'string' && search.term.trim()) {
-          const term = `%${search.term.trim().slice(0, 200)}%`;
-          const columns: string[] = (Array.isArray(search.columns) ? search.columns : []).slice(0, 10);
-          if (columns.length > 0) {
-            query = query.or(columns.map((col: string) => `${col}.ilike.${term}`).join(','));
+        if (
+          typeof searchConfig?.term === 'string' &&
+          searchConfig.term.trim() &&
+          searchColumns.length > 0
+        ) {
+          const term = quotePostgrestValue(`%${searchConfig.term.trim().slice(0, 200)}%`);
+          if (searchColumns.length > 0) {
+            query = query.or(searchColumns.map((col) => `${col}.ilike.${term}`).join(','));
           }
         }
 
@@ -411,9 +521,13 @@ Deno.serve(async (req) => {
         ]);
 
         if (Array.isArray(filters)) {
-          const cappedFilters = filters.slice(0, 20);
+          const cappedFilters = filters.slice(0, MAX_QUERY_FILTERS);
           for (const f of cappedFilters) {
             if (!f.column || !f.type) continue;
+            if (!isSafeIdentifier(f.column)) {
+              log.warn("skipping filter with invalid column", { column: f.column });
+              continue;
+            }
             if (!ALLOWED_FILTER_TYPES.has(f.type)) {
               log.warn("skipping filter with disallowed type", { type: f.type });
               continue;
@@ -430,8 +544,10 @@ Deno.serve(async (req) => {
           }
         }
 
-        if (order?.column) query = query.order(order.column, { ascending: order.ascending ?? false });
-        const clamped = clampRange(range);
+        if (isSafeIdentifier(orderConfig?.column)) {
+          query = query.order(orderConfig.column, { ascending: orderConfig.ascending === true });
+        }
+        const clamped = clampRange(rangeConfig);
         query = query.range(clamped.from, clamped.to);
 
         const { data, error, count } = await query as unknown as { data: unknown[]; error: { message: string } | null; count: number };
@@ -453,9 +569,22 @@ Deno.serve(async (req) => {
       if (!record || typeof record !== 'object') return jsonError('Missing or invalid "record" for insert', 400, req);
 
       // Inject user_id so records are always tenant-scoped (service role bypasses RLS — no need)
-      const safeRecord = isSvc
+      const relationScope = getRelationScope(table);
+      if (!isSvc && relationScope) {
+        const relationId = (record as Record<string, unknown>)[relationScope.foreignKey];
+        if (
+          typeof relationId !== 'string' ||
+          !await hasRelationAccess(client, relationScope, relationId, userId)
+        ) {
+          return jsonError('Forbidden', 403, req);
+        }
+      }
+      const safeRecord = isSvc || relationScope
         ? (record as Record<string, unknown>)
-        : { ...(record as Record<string, unknown>), user_id: userId };
+        : {
+            ...(enforceTenantIdentity(record, userId) as Record<string, unknown>),
+            user_id: userId,
+          };
       const { data, error } = await client.from(table).insert(safeRecord).select().single();
       if (error) throw new Error(`Insert failed: ${error.message}`);
       return jsonOk({ data }, req);
@@ -471,8 +600,30 @@ Deno.serve(async (req) => {
       if (!updates || typeof updates !== 'object') return jsonError('Missing or invalid "updates" for update', 400, req);
 
       // user_id filter prevents updating another tenant's record (service role bypasses RLS)
-      let q = client.from(table).update(updates).eq('id', id);
-      if (!isSvc) q = q.eq('user_id', userId);
+      const relationScope = getRelationScope(table);
+      let authorizedRelationId: string | null = null;
+      if (!isSvc && relationScope) {
+        const relationId = await getRelationIdForRecord(client, table, id, relationScope);
+        if (
+          !relationId ||
+          !await hasRelationAccess(client, relationScope, relationId, userId)
+        ) {
+          return jsonError('Forbidden', 403, req);
+        }
+        const requestedRelationId = (updates as Record<string, unknown>)[relationScope.foreignKey];
+        if (requestedRelationId !== undefined && requestedRelationId !== relationId) {
+          return jsonError(`${relationScope.foreignKey} cannot be changed`, 400, req);
+        }
+        authorizedRelationId = relationId;
+      }
+      const safeUpdates = (
+        isSvc || relationScope ? updates : enforceTenantIdentity(updates, userId)
+      ) as Record<string, unknown>;
+      let q = client.from(table).update(safeUpdates).eq('id', id);
+      if (!isSvc && !relationScope) q = q.eq('user_id', userId);
+      if (relationScope && authorizedRelationId) {
+        q = q.eq(relationScope.foreignKey, authorizedRelationId);
+      }
       const { data, error } = await q.select().single();
       if (error) throw new Error(`Update failed: ${error.message}`);
       return jsonOk({ data }, req);
@@ -490,8 +641,30 @@ Deno.serve(async (req) => {
 
       // Conditional update: only succeeds if version matches AND record belongs to this user.
       // The DB trigger increments version automatically on UPDATE. (service role bypasses RLS)
-      let q = client.from(table).update(updates).eq('id', id).eq('version', version);
-      if (!isSvc) q = q.eq('user_id', userId);
+      const relationScope = getRelationScope(table);
+      let authorizedRelationId: string | null = null;
+      if (!isSvc && relationScope) {
+        const relationId = await getRelationIdForRecord(client, table, id, relationScope);
+        if (
+          !relationId ||
+          !await hasRelationAccess(client, relationScope, relationId, userId)
+        ) {
+          return jsonError('Forbidden', 403, req);
+        }
+        const requestedRelationId = (updates as Record<string, unknown>)[relationScope.foreignKey];
+        if (requestedRelationId !== undefined && requestedRelationId !== relationId) {
+          return jsonError(`${relationScope.foreignKey} cannot be changed`, 400, req);
+        }
+        authorizedRelationId = relationId;
+      }
+      const safeUpdates = (
+        isSvc || relationScope ? updates : enforceTenantIdentity(updates, userId)
+      ) as Record<string, unknown>;
+      let q = client.from(table).update(safeUpdates).eq('id', id).eq('version', version);
+      if (!isSvc && !relationScope) q = q.eq('user_id', userId);
+      if (relationScope && authorizedRelationId) {
+        q = q.eq(relationScope.foreignKey, authorizedRelationId);
+      }
       const { data, error } = await q.select();
 
       if (error) throw new Error(`update_with_version failed: ${error.message}`);
@@ -513,8 +686,23 @@ Deno.serve(async (req) => {
       if (!uuidRegex.test(id as string)) return jsonError('Invalid UUID format for "id"', 400, req);
 
       // user_id filter prevents deleting another tenant's record (service role bypasses RLS)
+      const relationScope = getRelationScope(table);
+      let authorizedRelationId: string | null = null;
+      if (!isSvc && relationScope) {
+        const relationId = await getRelationIdForRecord(client, table, id, relationScope);
+        if (
+          !relationId ||
+          !await hasRelationAccess(client, relationScope, relationId, userId)
+        ) {
+          return jsonError('Forbidden', 403, req);
+        }
+        authorizedRelationId = relationId;
+      }
       let q = client.from(table).delete().eq('id', id);
-      if (!isSvc) q = q.eq('user_id', userId);
+      if (!isSvc && !relationScope) q = q.eq('user_id', userId);
+      if (relationScope && authorizedRelationId) {
+        q = q.eq(relationScope.foreignKey, authorizedRelationId);
+      }
       const { error } = await q;
       if (error) throw new Error(`Delete failed: ${error.message}`);
       return jsonOk({ success: true }, req);

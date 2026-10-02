@@ -71,6 +71,92 @@ describe('useContacts CRUD & Pagination', () => {
     }));
   });
 
+  it('should fetch every page when the consumer requires the full dataset', async () => {
+    const firstPage = Array.from({ length: 50 }, (_, i) => ({
+      id: `id-${i}`,
+      first_name: `User ${i}`,
+      last_name: 'Test',
+      updated_at: new Date().toISOString(),
+    }));
+    const secondPage = Array.from({ length: 30 }, (_, i) => ({
+      id: `id-${i + 50}`,
+      first_name: `User ${i + 50}`,
+      last_name: 'Test',
+      updated_at: new Date().toISOString(),
+    }));
+
+    vi.mocked(externalData.queryExternalData)
+      .mockResolvedValueOnce({ data: firstPage, count: 80, error: null })
+      .mockResolvedValueOnce({ data: secondPage, count: null, error: null });
+
+    const { result } = renderHook(
+      () => useContacts(undefined, { fetchAll: true }),
+      { wrapper },
+    );
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.contacts).toHaveLength(80);
+    expect(externalData.queryExternalData).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ range: { from: 50, to: 99 } }),
+    );
+  });
+
+  it('should stop the full-dataset loading state when a later page fails', async () => {
+    const firstPage = Array.from({ length: 50 }, (_, i) => ({
+      id: `id-${i}`,
+      first_name: `User ${i}`,
+      last_name: 'Test',
+      updated_at: new Date().toISOString(),
+    }));
+
+    vi.mocked(externalData.queryExternalData)
+      .mockResolvedValueOnce({ data: firstPage, count: 100, error: null })
+      .mockResolvedValueOnce({
+        data: null,
+        count: null,
+        error: new Error('segunda página indisponível'),
+      });
+
+    const { result } = renderHook(
+      () => useContacts(undefined, { fetchAll: true }),
+      { wrapper },
+    );
+
+    await waitFor(() => expect(result.current.error).toBeTruthy());
+
+    expect(result.current.loading).toBe(false);
+    expect(result.current.contacts).toHaveLength(50);
+    expect(result.current.hasMore).toBe(true);
+  });
+
+  it('should not continue cached pagination while disabled', async () => {
+    const firstPage = Array.from({ length: 50 }, (_, i) => ({
+      id: `id-${i}`,
+      first_name: `User ${i}`,
+      last_name: 'Test',
+      updated_at: new Date().toISOString(),
+    }));
+    queryClient.setQueryData(
+      ['contacts', '__all__', 'test-user-id'],
+      {
+        pages: [{ items: firstPage, totalCount: 100 }],
+        pageParams: [0],
+      },
+    );
+
+    const { result } = renderHook(
+      () => useContacts(undefined, { enabled: false, fetchAll: true }),
+      { wrapper },
+    );
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.contacts).toHaveLength(50);
+    expect(externalData.queryExternalData).not.toHaveBeenCalled();
+  });
+
   it('should create a contact with mapped hobbies and interests', async () => {
     const newContact = {
       first_name: 'John',

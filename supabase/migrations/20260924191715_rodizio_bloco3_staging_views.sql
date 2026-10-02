@@ -3,135 +3,149 @@
 -- (vendedor 20), DRY_RUN sem aprovar (0), DRY_RUN aprovado (mostra impacto sem
 -- persistir), REAL (rotaciona de fato, staging vira APLICADO).
 
-CREATE OR REPLACE VIEW public.vw_rodizio_carga_closers
-WITH (security_invoker = true) AS
-SELECT
-  u.id AS closer_id,
-  u.name AS closer_nome,
-  u.is_active,
-  u.ordem_rodizio,
-  u.capacidade_max,
-  u.afastado_ate,
-  count(c.id) FILTER (WHERE seg.segmento = 'ATIVO') AS total_ativo,
-  count(c.id) FILTER (WHERE seg.segmento = 'NAO_ATIVADO') AS total_nao_ativado,
-  count(c.id) FILTER (WHERE seg.segmento = 'INATIVO') AS total_inativo,
-  count(c.id) FILTER (WHERE seg.segmento = 'BLOQUEADO') AS total_bloqueado,
-  count(c.id) FILTER (WHERE seg.segmento = 'POOL_FRIO') AS total_pool_frio,
-  count(c.id) FILTER (WHERE seg.segmento IN ('NAO_ATIVADO','INATIVO')) AS carga_atual,
-  count(c.id) AS total_carteira
-FROM public.users u
-LEFT JOIN public.customers c ON c.vendedor_id = u.id AND c.deleted_at IS NULL
-LEFT JOIN LATERAL (SELECT public.fn_segmento_cliente(c.id) AS segmento) seg ON c.id IS NOT NULL
-WHERE u.participa_rodizio_closer
-GROUP BY u.id, u.name, u.is_active, u.ordem_rodizio, u.capacidade_max, u.afastado_ate
-ORDER BY u.ordem_rodizio NULLS LAST;
+DO $migration$
+BEGIN
+  IF to_regclass('public.users') IS NOT NULL
+    AND to_regclass('public.customers') IS NOT NULL
+    AND to_regclass('public.rodizio_execucoes') IS NOT NULL
+    AND to_regclass('public.customer_rotation_state') IS NOT NULL
+    AND to_regclass('public.companies') IS NOT NULL
+    AND to_regclass('public.customer_events') IS NOT NULL
+    AND to_regclass('public.customer_ownership_history') IS NOT NULL
+    AND to_regclass('public.customer_purchases') IS NOT NULL
+  THEN
+    CREATE OR REPLACE VIEW public.vw_rodizio_carga_closers
+    WITH (security_invoker = true) AS
+    SELECT
+      u.id AS closer_id,
+      u.name AS closer_nome,
+      u.is_active,
+      u.ordem_rodizio,
+      u.capacidade_max,
+      u.afastado_ate,
+      count(c.id) FILTER (WHERE seg.segmento = 'ATIVO') AS total_ativo,
+      count(c.id) FILTER (WHERE seg.segmento = 'NAO_ATIVADO') AS total_nao_ativado,
+      count(c.id) FILTER (WHERE seg.segmento = 'INATIVO') AS total_inativo,
+      count(c.id) FILTER (WHERE seg.segmento = 'BLOQUEADO') AS total_bloqueado,
+      count(c.id) FILTER (WHERE seg.segmento = 'POOL_FRIO') AS total_pool_frio,
+      count(c.id) FILTER (WHERE seg.segmento IN ('NAO_ATIVADO','INATIVO')) AS carga_atual,
+      count(c.id) AS total_carteira
+    FROM public.users u
+    LEFT JOIN public.customers c ON c.vendedor_id = u.id AND c.deleted_at IS NULL
+    LEFT JOIN LATERAL (SELECT public.fn_segmento_cliente(c.id) AS segmento) seg ON c.id IS NOT NULL
+    WHERE u.participa_rodizio_closer
+    GROUP BY u.id, u.name, u.is_active, u.ordem_rodizio, u.capacidade_max, u.afastado_ate
+    ORDER BY u.ordem_rodizio NULLS LAST;
 
-CREATE OR REPLACE VIEW public.vw_rodizio_carga_sdrs
-WITH (security_invoker = true) AS
-SELECT
-  u.id AS sdr_id,
-  u.name AS sdr_nome,
-  u.is_active,
-  u.ordem_rodizio,
-  u.capacidade_max,
-  u.afastado_ate,
-  count(c.id) FILTER (WHERE seg.segmento = 'NAO_ATIVADO') AS total_nao_ativado,
-  count(c.id) AS total_carteira
-FROM public.users u
-LEFT JOIN public.customers c ON c.sdr_id = u.id AND c.deleted_at IS NULL
-LEFT JOIN LATERAL (SELECT public.fn_segmento_cliente(c.id) AS segmento) seg ON c.id IS NOT NULL
-WHERE u.participa_rodizio_sdr
-GROUP BY u.id, u.name, u.is_active, u.ordem_rodizio, u.capacidade_max, u.afastado_ate
-ORDER BY u.ordem_rodizio NULLS LAST;
+    CREATE OR REPLACE VIEW public.vw_rodizio_carga_sdrs
+    WITH (security_invoker = true) AS
+    SELECT
+      u.id AS sdr_id,
+      u.name AS sdr_nome,
+      u.is_active,
+      u.ordem_rodizio,
+      u.capacidade_max,
+      u.afastado_ate,
+      count(c.id) FILTER (WHERE seg.segmento = 'NAO_ATIVADO') AS total_nao_ativado,
+      count(c.id) AS total_carteira
+    FROM public.users u
+    LEFT JOIN public.customers c ON c.sdr_id = u.id AND c.deleted_at IS NULL
+    LEFT JOIN LATERAL (SELECT public.fn_segmento_cliente(c.id) AS segmento) seg ON c.id IS NOT NULL
+    WHERE u.participa_rodizio_sdr
+    GROUP BY u.id, u.name, u.is_active, u.ordem_rodizio, u.capacidade_max, u.afastado_ate
+    ORDER BY u.ordem_rodizio NULLS LAST;
 
-REVOKE ALL ON public.vw_rodizio_carga_closers FROM PUBLIC, anon;
-REVOKE ALL ON public.vw_rodizio_carga_sdrs FROM PUBLIC, anon;
-GRANT SELECT ON public.vw_rodizio_carga_closers TO authenticated, service_role;
-GRANT SELECT ON public.vw_rodizio_carga_sdrs TO authenticated, service_role;
+    REVOKE ALL ON public.vw_rodizio_carga_closers FROM PUBLIC, anon;
+    REVOKE ALL ON public.vw_rodizio_carga_sdrs FROM PUBLIC, anon;
+    GRANT SELECT ON public.vw_rodizio_carga_closers TO authenticated, service_role;
+    GRANT SELECT ON public.vw_rodizio_carga_sdrs TO authenticated, service_role;
 
-CREATE OR REPLACE VIEW public.vw_rodizio_execucoes
-WITH (security_invoker = true) AS
-SELECT
-  e.id,
-  e.tipo,
-  e.modo,
-  e.iniciado_em,
-  e.finalizado_em,
-  e.total_elegiveis,
-  e.total_rotacionados,
-  e.executado_por_id,
-  u.name AS executado_por_nome,
-  e.revertida_por_execucao_id,
-  (e.revertida_por_execucao_id IS NOT NULL) AS foi_revertida,
-  e.parametros
-FROM public.rodizio_execucoes e
-LEFT JOIN public.users u ON u.id = e.executado_por_id
-ORDER BY e.iniciado_em DESC;
+    CREATE OR REPLACE VIEW public.vw_rodizio_execucoes
+    WITH (security_invoker = true) AS
+    SELECT
+      e.id,
+      e.tipo,
+      e.modo,
+      e.iniciado_em,
+      e.finalizado_em,
+      e.total_elegiveis,
+      e.total_rotacionados,
+      e.executado_por_id,
+      u.name AS executado_por_nome,
+      e.revertida_por_execucao_id,
+      (e.revertida_por_execucao_id IS NOT NULL) AS foi_revertida,
+      e.parametros
+    FROM public.rodizio_execucoes e
+    LEFT JOIN public.users u ON u.id = e.executado_por_id
+    ORDER BY e.iniciado_em DESC;
 
-REVOKE ALL ON public.vw_rodizio_execucoes FROM PUBLIC, anon;
-GRANT SELECT ON public.vw_rodizio_execucoes TO authenticated, service_role;
+    REVOKE ALL ON public.vw_rodizio_execucoes FROM PUBLIC, anon;
+    GRANT SELECT ON public.vw_rodizio_execucoes TO authenticated, service_role;
 
-CREATE OR REPLACE VIEW public.vw_rodizio_bloqueios
-WITH (security_invoker = true) AS
-SELECT
-  s.customer_id,
-  c.company_id,
-  co.nome_crm AS company_nome,
-  c.vendedor_id,
-  c.vendedor_nome,
-  s.bloqueado_ate,
-  s.bloqueio_motivo,
-  s.bloqueado_por_id,
-  ub.name AS bloqueado_por_nome,
-  s.bloqueio_aprovado_por_id,
-  ua.name AS aprovado_por_nome,
-  CASE
-    WHEN s.bloqueado_ate IS NULL THEN 'NENHUM'
-    WHEN s.bloqueado_ate < CURRENT_DATE THEN 'EXPIRADO'
-    WHEN s.bloqueio_aprovado_por_id IS NULL THEN 'PENDENTE_APROVACAO'
-    ELSE 'ATIVO'
-  END AS status
-FROM public.customer_rotation_state s
-JOIN public.customers c ON c.id = s.customer_id AND c.deleted_at IS NULL
-JOIN public.companies co ON co.id = c.company_id
-LEFT JOIN public.users ub ON ub.id = s.bloqueado_por_id
-LEFT JOIN public.users ua ON ua.id = s.bloqueio_aprovado_por_id
-WHERE s.bloqueado_ate IS NOT NULL
-ORDER BY s.bloqueado_ate DESC;
+    CREATE OR REPLACE VIEW public.vw_rodizio_bloqueios
+    WITH (security_invoker = true) AS
+    SELECT
+      s.customer_id,
+      c.company_id,
+      co.nome_crm AS company_nome,
+      c.vendedor_id,
+      c.vendedor_nome,
+      s.bloqueado_ate,
+      s.bloqueio_motivo,
+      s.bloqueado_por_id,
+      ub.name AS bloqueado_por_nome,
+      s.bloqueio_aprovado_por_id,
+      ua.name AS aprovado_por_nome,
+      CASE
+        WHEN s.bloqueado_ate IS NULL THEN 'NENHUM'
+        WHEN s.bloqueado_ate < CURRENT_DATE THEN 'EXPIRADO'
+        WHEN s.bloqueio_aprovado_por_id IS NULL THEN 'PENDENTE_APROVACAO'
+        ELSE 'ATIVO'
+      END AS status
+    FROM public.customer_rotation_state s
+    JOIN public.customers c ON c.id = s.customer_id AND c.deleted_at IS NULL
+    JOIN public.companies co ON co.id = c.company_id
+    LEFT JOIN public.users ub ON ub.id = s.bloqueado_por_id
+    LEFT JOIN public.users ua ON ua.id = s.bloqueio_aprovado_por_id
+    WHERE s.bloqueado_ate IS NOT NULL
+    ORDER BY s.bloqueado_ate DESC;
 
-REVOKE ALL ON public.vw_rodizio_bloqueios FROM PUBLIC, anon;
-GRANT SELECT ON public.vw_rodizio_bloqueios TO authenticated, service_role;
+    REVOKE ALL ON public.vw_rodizio_bloqueios FROM PUBLIC, anon;
+    GRANT SELECT ON public.vw_rodizio_bloqueios TO authenticated, service_role;
 
-CREATE OR REPLACE VIEW public.vw_rodizio_kpis
-WITH (security_invoker = true) AS
-SELECT
-  u.id AS closer_id,
-  u.name AS closer_nome,
-  count(c.id) FILTER (WHERE seg.segmento = 'ATIVO') AS total_ativo,
-  count(c.id) FILTER (WHERE seg.segmento = 'NAO_ATIVADO') AS total_nao_ativado,
-  count(c.id) FILTER (WHERE seg.segmento = 'INATIVO') AS total_inativo,
-  count(c.id) FILTER (WHERE seg.segmento = 'POOL_FRIO') AS total_pool_frio,
-  round(
-    100.0 * count(c.id) FILTER (WHERE seg.segmento = 'ATIVO')
-    / NULLIF(count(c.id), 0), 1
-  ) AS taxa_ativacao_pct,
-  (SELECT count(*) FROM public.customer_events ev
-     WHERE ev.evento_tipo = 'RODIZIO_BLOQUEIO' AND ev.vendedor_id = u.id
-       AND ev.data_evento >= date_trunc('month', CURRENT_DATE)) AS bloqueios_mes,
-  (SELECT count(*) FROM public.customer_ownership_history h
-     WHERE h.vendedor_id = u.id AND h.data_inicio >= CURRENT_DATE - 30) AS clientes_recebidos_30d,
-  (SELECT count(*) FROM public.customer_purchases p
-     JOIN public.customer_ownership_history h ON h.customer_id = p.customer_id AND h.vendedor_id = u.id
-     WHERE p.vendedor_credito_id = u.id AND p.data_pedido >= h.data_inicio AND h.data_fim IS NULL) AS vendas_pos_rotacao
-FROM public.users u
-LEFT JOIN public.customers c ON c.vendedor_id = u.id AND c.deleted_at IS NULL
-LEFT JOIN LATERAL (SELECT public.fn_segmento_cliente(c.id) AS segmento) seg ON c.id IS NOT NULL
-WHERE u.participa_rodizio_closer
-GROUP BY u.id, u.name, u.ordem_rodizio
-ORDER BY u.ordem_rodizio NULLS LAST;
+    CREATE OR REPLACE VIEW public.vw_rodizio_kpis
+    WITH (security_invoker = true) AS
+    SELECT
+      u.id AS closer_id,
+      u.name AS closer_nome,
+      count(c.id) FILTER (WHERE seg.segmento = 'ATIVO') AS total_ativo,
+      count(c.id) FILTER (WHERE seg.segmento = 'NAO_ATIVADO') AS total_nao_ativado,
+      count(c.id) FILTER (WHERE seg.segmento = 'INATIVO') AS total_inativo,
+      count(c.id) FILTER (WHERE seg.segmento = 'POOL_FRIO') AS total_pool_frio,
+      round(
+        100.0 * count(c.id) FILTER (WHERE seg.segmento = 'ATIVO')
+        / NULLIF(count(c.id), 0), 1
+      ) AS taxa_ativacao_pct,
+      (SELECT count(*) FROM public.customer_events ev
+         WHERE ev.evento_tipo = 'RODIZIO_BLOQUEIO' AND ev.vendedor_id = u.id
+           AND ev.data_evento >= date_trunc('month', CURRENT_DATE)) AS bloqueios_mes,
+      (SELECT count(*) FROM public.customer_ownership_history h
+         WHERE h.vendedor_id = u.id AND h.data_inicio >= CURRENT_DATE - 30) AS clientes_recebidos_30d,
+      (SELECT count(*) FROM public.customer_purchases p
+         JOIN public.customer_ownership_history h ON h.customer_id = p.customer_id AND h.vendedor_id = u.id
+         WHERE p.vendedor_credito_id = u.id AND p.data_pedido >= h.data_inicio AND h.data_fim IS NULL) AS vendas_pos_rotacao
+    FROM public.users u
+    LEFT JOIN public.customers c ON c.vendedor_id = u.id AND c.deleted_at IS NULL
+    LEFT JOIN LATERAL (SELECT public.fn_segmento_cliente(c.id) AS segmento) seg ON c.id IS NOT NULL
+    WHERE u.participa_rodizio_closer
+    GROUP BY u.id, u.name, u.ordem_rodizio
+    ORDER BY u.ordem_rodizio NULLS LAST;
 
-REVOKE ALL ON public.vw_rodizio_kpis FROM PUBLIC, anon;
-GRANT SELECT ON public.vw_rodizio_kpis TO authenticated, service_role;
+    REVOKE ALL ON public.vw_rodizio_kpis FROM PUBLIC, anon;
+    GRANT SELECT ON public.vw_rodizio_kpis TO authenticated, service_role;
+  END IF;
+END;
+$migration$;
 
 -- Sugere distribuição para uma onda: preenche staging com destino sugerido pelo motor (seção 10)
 CREATE OR REPLACE FUNCTION public.rodizio_sugerir_distribuicao(

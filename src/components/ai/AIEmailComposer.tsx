@@ -60,7 +60,7 @@ interface SuggestionState {
 
 export function AIEmailComposer() {
   const { isOpen, prefilledContactId, close } = useEmailComposerStore();
-  const { contacts = [], loading: loadingContacts } = useContacts();
+  const { contacts = [], loading: loadingContacts } = useContacts(undefined, { fetchAll: true });
   const { suggestions, loading: generating, error, generateSuggestions, clearSuggestions } = useAIWritingAssistant();
   const refineMutation = useEmailRefine();
 
@@ -139,7 +139,7 @@ export function AIEmailComposer() {
       setItems((prev) => prev.map((i) => (i.id === item.id ? { ...i, copied: true } : i)));
       toast.success('Email copiado para a área de transferência');
       setTimeout(() => {
-        // eslint-disable-next-line sonarjs/no-nested-functions
+
         setItems((prev) => prev.map((i) => (i.id === item.id ? { ...i, copied: false } : i)));
       }, 2000);
     } catch {

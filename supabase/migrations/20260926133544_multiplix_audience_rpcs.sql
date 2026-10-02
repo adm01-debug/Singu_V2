@@ -11,26 +11,32 @@ BEGIN;
 -- 1. multiplix_list_ramos — ramos reais (nada inferido pelo nome da empresa)
 CREATE OR REPLACE FUNCTION public.multiplix_list_ramos()
 RETURNS TABLE(ramo_atividade text, total bigint)
-LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public AS $$
-  SELECT COALESCE(NULLIF(trim(c.ramo_atividade), ''), 'Não informado') AS ramo_atividade,
-         count(*)::bigint AS total
-  FROM public.companies c
-  WHERE c.deleted_at IS NULL AND c.status = 'ativo'
-  GROUP BY 1
-  ORDER BY total DESC;
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  RETURN QUERY
+    SELECT COALESCE(NULLIF(trim(c.ramo_atividade), ''), 'Não informado') AS ramo_atividade,
+           count(*)::bigint AS total
+    FROM public.companies c
+    WHERE c.deleted_at IS NULL AND c.status = 'ativo'
+    GROUP BY 1
+    ORDER BY total DESC;
+END;
 $$;
 
 -- 2. multiplix_list_ufs — UF do endereço primário
 CREATE OR REPLACE FUNCTION public.multiplix_list_ufs()
 RETURNS TABLE(uf text, total bigint)
-LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public AS $$
-  SELECT ca.estado AS uf, count(DISTINCT ca.company_id)::bigint AS total
-  FROM public.company_addresses ca
-  JOIN public.companies c ON c.id = ca.company_id
-  WHERE ca.is_primary = true AND ca.estado IS NOT NULL
-    AND c.deleted_at IS NULL AND c.status = 'ativo'
-  GROUP BY 1
-  ORDER BY total DESC;
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  RETURN QUERY
+    SELECT ca.estado AS uf, count(DISTINCT ca.company_id)::bigint AS total
+    FROM public.company_addresses ca
+    JOIN public.companies c ON c.id = ca.company_id
+    WHERE ca.is_primary = true AND ca.estado IS NOT NULL
+      AND c.deleted_at IS NULL AND c.status = 'ativo'
+    GROUP BY 1
+    ORDER BY total DESC;
+END;
 $$;
 
 -- 3. multiplix_search_audience — lista paginada com escopo aplicado no servidor.

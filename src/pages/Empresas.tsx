@@ -41,14 +41,14 @@ const Empresas = () => {
   usePageTitle('Empresas');
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { companies, loading, totalCount, searchTerm: activeSearch, setSearchTerm: triggerSearch, createCompany, updateCompany, deleteCompany, fetchNextPage, hasNextPage, isFetchingNextPage } = useCompanies();
+  const { companies, loading, totalCount, setSearchTerm: triggerSearch, createCompany, updateCompany, deleteCompany, fetchNextPage, hasNextPage, isFetchingNextPage } = useCompanies();
   const { destructive } = useActionToast();
   const { restore } = useRestoreEntity();
 
   const [secondaryReady, setSecondaryReady] = useState(false);
   useEffect(() => { if (!loading && companies.length > 0) { const t = setTimeout(() => setSecondaryReady(true), 800); return () => clearTimeout(t); } }, [loading, companies.length]);
 
-  const { contacts } = useContacts(undefined, { enabled: secondaryReady });
+  const { contacts } = useContacts(undefined, { enabled: secondaryReady, fetchAll: true });
   const { interactions } = useInteractions(undefined, undefined, { enabled: secondaryReady });
   const dynamicFilters = useCompanyFilterOptions({ enabled: secondaryReady });
 
@@ -116,7 +116,7 @@ const Empresas = () => {
            if (!values.includes(String(companyValue ?? false))) { return false; }
            continue;
          }
-         
+
          if (key === 'vak_dominant' || key === 'motivation_direction' || key === 'working_style') {
            if (!companyValue || !values.includes(String(companyValue))) return false;
            continue;
@@ -130,7 +130,7 @@ const Empresas = () => {
       }
       return true;
     });
-    
+
     // Inject metrics into objects for sorting
     const enriched = result.map(c => ({
       ...c,

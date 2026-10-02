@@ -33,8 +33,40 @@ ALTER POLICY "Users delete own ui prefs" ON public.user_ui_preferences USING (((
 ALTER POLICY "Users insert own ui prefs" ON public.user_ui_preferences WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "Users select own ui prefs" ON public.user_ui_preferences USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users update own ui prefs" ON public.user_ui_preferences USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY admin_select ON public.users USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_update ON public.users USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role)) WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
+DO $migration$
+DECLARE
+  policy_definition record;
+  clauses text;
+BEGIN
+  FOR policy_definition IN
+    SELECT *
+    FROM (VALUES
+      ('admin_select', true, false),
+      ('admin_update', true, true)
+    ) AS policies(policy_name, use_using, use_check)
+  LOOP
+    IF to_regclass('public.users') IS NOT NULL
+      AND EXISTS (
+        SELECT 1
+        FROM pg_policy
+        WHERE polrelid = to_regclass('public.users')
+          AND polname = policy_definition.policy_name
+      )
+    THEN
+      clauses := ' USING ((SELECT has_role((select auth.uid()), ''admin''::app_role) AS has_role))';
+      IF policy_definition.use_check THEN
+        clauses := clauses || ' WITH CHECK ((SELECT has_role((select auth.uid()), ''admin''::app_role) AS has_role))';
+      END IF;
+
+      EXECUTE format(
+        'ALTER POLICY %I ON public.users%s',
+        policy_definition.policy_name,
+        clauses
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;
 ALTER POLICY "Users can delete their own VAK analysis" ON public.vak_analysis_history USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can insert their own VAK analysis" ON public.vak_analysis_history WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "Users can update their own vak_analysis_history" ON public.vak_analysis_history USING (((select auth.uid()) = user_id));
@@ -56,7 +88,21 @@ ALTER POLICY "Users can insert their own ingestion logs" ON public.whatsapp_inge
 ALTER POLICY "Users can view their own ingestion logs" ON public.whatsapp_ingestion_logs USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can manage their own whatsapp_instances" ON public.whatsapp_instances USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "Users can manage their own whatsapp_kpis" ON public.whatsapp_kpis USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users can manage their own whatsapp messages" ON public.whatsapp_messages USING (((select auth.uid()) = user_id));
+DO $migration$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM pg_policy
+    WHERE polrelid = to_regclass('public.whatsapp_messages')
+      AND polname = 'Users can manage their own whatsapp messages'
+  )
+  THEN
+    ALTER POLICY "Users can manage their own whatsapp messages"
+      ON public.whatsapp_messages
+      USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$migration$;
 ALTER POLICY "Users can manage their own whatsapp_messages" ON public.whatsapp_messages USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "Owner or admin can insert whatsapp messages index" ON public.whatsapp_messages_index WITH CHECK (((EXISTS ( SELECT 1
    FROM contacts c

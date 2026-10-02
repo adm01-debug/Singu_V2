@@ -5,7 +5,21 @@ ALTER POLICY "Users can insert their own contact time analysis" ON public.contac
 ALTER POLICY "Users can update their own contact time analysis" ON public.contact_time_analysis USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can view their own contact time analysis" ON public.contact_time_analysis USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can view their own analysis audit" ON public.contact_time_analysis_audit USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can access their own contacts" ON public.contacts USING (((select auth.uid()) = user_id));
+DO $migration$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM pg_policy
+    WHERE polrelid = to_regclass('public.contacts')
+      AND polname = 'Users can access their own contacts'
+  )
+  THEN
+    ALTER POLICY "Users can access their own contacts"
+      ON public.contacts
+      USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$migration$;
 ALTER POLICY "Users can delete their own contacts" ON public.contacts USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can insert their own contacts" ON public.contacts WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "Users can update their own contacts" ON public.contacts USING (((select auth.uid()) = user_id));
@@ -58,19 +72,55 @@ ALTER POLICY cs_renewals_update ON public.cs_renewals USING (((select auth.uid()
 ALTER POLICY "Users manage own csat surveys" ON public.csat_surveys USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "Users manage own custom field values" ON public.custom_field_values USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "Users manage own custom fields" ON public.custom_fields USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY admin_insert ON public.customer_events WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_insert ON public.customer_ownership_history WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_update ON public.customer_ownership_history USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role)) WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_select ON public.customer_purchases USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_insert ON public.customer_rotation_state WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_select ON public.customer_rotation_state USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_update ON public.customer_rotation_state USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role)) WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_insert ON public.customer_sdr_history WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_update ON public.customer_sdr_history USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role)) WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY customers_delete ON public.customers USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY customers_insert ON public.customers WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY customers_select ON public.customers USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY customers_update ON public.customers USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role)) WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
+DO $migration$
+DECLARE
+  policy_definition record;
+  clauses text;
+BEGIN
+  FOR policy_definition IN
+    SELECT *
+    FROM (VALUES
+      ('customer_events', 'admin_insert', false, true),
+      ('customer_ownership_history', 'admin_insert', false, true),
+      ('customer_ownership_history', 'admin_update', true, true),
+      ('customer_purchases', 'admin_select', true, false),
+      ('customer_rotation_state', 'admin_insert', false, true),
+      ('customer_rotation_state', 'admin_select', true, false),
+      ('customer_rotation_state', 'admin_update', true, true),
+      ('customer_sdr_history', 'admin_insert', false, true),
+      ('customer_sdr_history', 'admin_update', true, true),
+      ('customers', 'customers_delete', true, false),
+      ('customers', 'customers_insert', false, true),
+      ('customers', 'customers_select', true, false),
+      ('customers', 'customers_update', true, true)
+    ) AS policies(table_name, policy_name, use_using, use_check)
+  LOOP
+    IF to_regclass(format('public.%I', policy_definition.table_name)) IS NOT NULL
+      AND EXISTS (
+        SELECT 1
+        FROM pg_policy
+        WHERE polrelid = to_regclass(format('public.%I', policy_definition.table_name))
+          AND polname = policy_definition.policy_name
+      )
+    THEN
+      clauses := '';
+      IF policy_definition.use_using THEN
+        clauses := clauses || ' USING ((SELECT has_role((select auth.uid()), ''admin''::app_role) AS has_role))';
+      END IF;
+      IF policy_definition.use_check THEN
+        clauses := clauses || ' WITH CHECK ((SELECT has_role((select auth.uid()), ''admin''::app_role) AS has_role))';
+      END IF;
+
+      EXECUTE format(
+        'ALTER POLICY %I ON public.%I%s',
+        policy_definition.policy_name,
+        policy_definition.table_name,
+        clauses
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;
 ALTER POLICY "own deal_forecasts delete" ON public.deal_forecasts USING (((select auth.uid()) = user_id));
 ALTER POLICY "own deal_forecasts insert" ON public.deal_forecasts WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "own deal_forecasts select" ON public.deal_forecasts USING (((select auth.uid()) = user_id));
@@ -81,10 +131,44 @@ ALTER POLICY owner_all_docs ON public.deal_room_documents USING (((select auth.u
 ALTER POLICY owner_all_ms ON public.deal_room_milestones USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY owner_all_sh ON public.deal_room_stakeholders USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY owner_all_rooms ON public.deal_rooms USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users can delete their own deals" ON public.deals USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can insert their own deals" ON public.deals WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users can update their own deals" ON public.deals USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can view their own deals" ON public.deals USING (((select auth.uid()) = user_id));
+DO $migration$
+DECLARE
+  policy_definition record;
+  clauses text;
+BEGIN
+  FOR policy_definition IN
+    SELECT *
+    FROM (VALUES
+      ('Users can delete their own deals', true, false),
+      ('Users can insert their own deals', false, true),
+      ('Users can update their own deals', true, false),
+      ('Users can view their own deals', true, false)
+    ) AS policies(policy_name, use_using, use_check)
+  LOOP
+    IF EXISTS (
+      SELECT 1
+      FROM pg_policy
+      WHERE polrelid = to_regclass('public.deals')
+        AND polname = policy_definition.policy_name
+    )
+    THEN
+      clauses := '';
+      IF policy_definition.use_using THEN
+        clauses := clauses || ' USING (((select auth.uid()) = user_id))';
+      END IF;
+      IF policy_definition.use_check THEN
+        clauses := clauses || ' WITH CHECK (((select auth.uid()) = user_id))';
+      END IF;
+
+      EXECUTE format(
+        'ALTER POLICY %I ON public.deals%s',
+        policy_definition.policy_name,
+        clauses
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;
 ALTER POLICY "Users can create their own decision criteria" ON public.decision_criteria WITH CHECK (((select auth.uid()) = user_id));
 ALTER POLICY "Users can delete their own decision criteria" ON public.decision_criteria USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can update their own decision criteria" ON public.decision_criteria USING (((select auth.uid()) = user_id));

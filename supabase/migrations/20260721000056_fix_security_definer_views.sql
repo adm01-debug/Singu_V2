@@ -20,9 +20,31 @@
 --   - anon has no access (no GRANT on reporting schema or views)
 --   - advisor security_definer_view is cleared
 
-GRANT USAGE ON SCHEMA reporting TO authenticated;
-GRANT SELECT ON reporting.mv_daily_kpis  TO authenticated;
-GRANT SELECT ON reporting.mv_daily_stats TO authenticated;
+DO $migration$
+DECLARE
+  view_name text;
+BEGIN
+  IF to_regnamespace('reporting') IS NOT NULL THEN
+    GRANT USAGE ON SCHEMA reporting TO authenticated;
+  END IF;
 
-ALTER VIEW public.mv_daily_kpis  SET (security_invoker = on);
-ALTER VIEW public.mv_daily_stats SET (security_invoker = on);
+  FOREACH view_name IN ARRAY ARRAY['mv_daily_kpis', 'mv_daily_stats']
+  LOOP
+    IF to_regclass(format('reporting.%I', view_name)) IS NOT NULL THEN
+      EXECUTE format('GRANT SELECT ON reporting.%I TO authenticated', view_name);
+    END IF;
+
+    IF EXISTS (
+      SELECT 1
+      FROM pg_class
+      WHERE oid = to_regclass(format('public.%I', view_name))
+        AND relkind = 'v'
+    ) THEN
+      EXECUTE format(
+        'ALTER VIEW public.%I SET (security_invoker = on)',
+        view_name
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;

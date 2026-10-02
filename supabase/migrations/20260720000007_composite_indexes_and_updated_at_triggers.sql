@@ -19,28 +19,32 @@ DROP INDEX IF EXISTS public.idx_notifications_unread;
 -- efficiently; the planner would need a separate sort step.
 -- ============================================================
 
--- Notification inbox: WHERE user_id = $1 ORDER BY created_at DESC
-CREATE INDEX IF NOT EXISTS idx_notifications_user_created
-  ON public.notifications(user_id, created_at DESC);
-
--- Deal pipeline: WHERE user_id = $1 ORDER BY created_at DESC
-CREATE INDEX IF NOT EXISTS idx_deals_user_created
-  ON public.deals(user_id, created_at DESC);
-
--- Task list (all tasks): WHERE user_id = $1 ORDER BY created_at DESC
--- (existing idx_tasks_pending covers status=pending+due_date, but not the general list)
-CREATE INDEX IF NOT EXISTS idx_tasks_user_created
-  ON public.tasks(user_id, created_at DESC);
-
--- Ficha-360 insights panel: WHERE contact_id = $1 ORDER BY created_at DESC
-CREATE INDEX IF NOT EXISTS idx_insights_contact_created
-  ON public.insights(contact_id, created_at DESC);
-
--- Relationship score history: latest score per contact
--- (existing idx_score_history_contact + idx_score_history_measured are separate;
---  composite eliminates the sort step)
-CREATE INDEX IF NOT EXISTS idx_relationship_score_history_contact_measured
-  ON public.relationship_score_history(contact_id, measured_at DESC);
+DO $migration$
+DECLARE
+  index_definition record;
+BEGIN
+  FOR index_definition IN
+    SELECT *
+    FROM (VALUES
+      ('notifications', ARRAY['user_id', 'created_at'], 'CREATE INDEX IF NOT EXISTS idx_notifications_user_created ON public.notifications(user_id, created_at DESC)'),
+      ('deals', ARRAY['user_id', 'created_at'], 'CREATE INDEX IF NOT EXISTS idx_deals_user_created ON public.deals(user_id, created_at DESC)'),
+      ('tasks', ARRAY['user_id', 'created_at'], 'CREATE INDEX IF NOT EXISTS idx_tasks_user_created ON public.tasks(user_id, created_at DESC)'),
+      ('insights', ARRAY['contact_id', 'created_at'], 'CREATE INDEX IF NOT EXISTS idx_insights_contact_created ON public.insights(contact_id, created_at DESC)'),
+      ('relationship_score_history', ARRAY['contact_id', 'measured_at'], 'CREATE INDEX IF NOT EXISTS idx_relationship_score_history_contact_measured ON public.relationship_score_history(contact_id, measured_at DESC)')
+    ) AS indexes(table_name, column_names, ddl)
+  LOOP
+    IF (
+      SELECT count(*) = cardinality(index_definition.column_names)
+      FROM pg_attribute
+      WHERE attrelid = to_regclass(format('public.%I', index_definition.table_name))
+        AND attname = ANY(index_definition.column_names)
+        AND NOT attisdropped
+    ) THEN
+      EXECUTE index_definition.ddl;
+    END IF;
+  END LOOP;
+END;
+$migration$;
 
 -- ============================================================
 -- PART 3 — Add updated_at BEFORE UPDATE triggers for 24 tables
@@ -49,98 +53,52 @@ CREATE INDEX IF NOT EXISTS idx_relationship_score_history_contact_measured
 -- unless the application explicitly sets it on every UPDATE.
 -- ============================================================
 
-CREATE OR REPLACE TRIGGER trg_automations_updated_at
-  BEFORE UPDATE ON public.automations
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_calendar_events_updated_at
-  BEFORE UPDATE ON public.calendar_events
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_campaigns_updated_at
-  BEFORE UPDATE ON public.campaigns
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_company_cadences_updated_at
-  BEFORE UPDATE ON public.company_cadences
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_csat_surveys_updated_at
-  BEFORE UPDATE ON public.csat_surveys
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_custom_field_values_updated_at
-  BEFORE UPDATE ON public.custom_field_values
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_custom_fields_updated_at
-  BEFORE UPDATE ON public.custom_fields
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_documents_updated_at
-  BEFORE UPDATE ON public.documents
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_economic_groups_updated_at
-  BEFORE UPDATE ON public.economic_groups
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_inactivity_alerts_updated_at
-  BEFORE UPDATE ON public.inactivity_alerts
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_integrations_updated_at
-  BEFORE UPDATE ON public.integrations
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_interaction_templates_updated_at
-  BEFORE UPDATE ON public.interaction_templates
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_message_templates_updated_at
-  BEFORE UPDATE ON public.message_templates
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_products_updated_at
-  BEFORE UPDATE ON public.products
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_proposals_updated_at
-  BEFORE UPDATE ON public.proposals
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_quick_notes_updated_at
-  BEFORE UPDATE ON public.quick_notes
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_sales_cadences_updated_at
-  BEFORE UPDATE ON public.sales_cadences
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_sales_forecasts_updated_at
-  BEFORE UPDATE ON public.sales_forecasts
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_sales_goals_updated_at
-  BEFORE UPDATE ON public.sales_goals
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_sales_opportunities_updated_at
-  BEFORE UPDATE ON public.sales_opportunities
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_smart_segments_updated_at
-  BEFORE UPDATE ON public.smart_segments
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_tasks_updated_at
-  BEFORE UPDATE ON public.tasks
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_user_goals_updated_at
-  BEFORE UPDATE ON public.user_goals
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE OR REPLACE TRIGGER trg_whatsapp_messages_updated_at
-  BEFORE UPDATE ON public.whatsapp_messages
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+DO $migration$
+DECLARE
+  trigger_definition record;
+BEGIN
+  FOR trigger_definition IN
+    SELECT *
+    FROM (VALUES
+      ('automations', 'trg_automations_updated_at'),
+      ('calendar_events', 'trg_calendar_events_updated_at'),
+      ('campaigns', 'trg_campaigns_updated_at'),
+      ('company_cadences', 'trg_company_cadences_updated_at'),
+      ('csat_surveys', 'trg_csat_surveys_updated_at'),
+      ('custom_field_values', 'trg_custom_field_values_updated_at'),
+      ('custom_fields', 'trg_custom_fields_updated_at'),
+      ('documents', 'trg_documents_updated_at'),
+      ('economic_groups', 'trg_economic_groups_updated_at'),
+      ('inactivity_alerts', 'trg_inactivity_alerts_updated_at'),
+      ('integrations', 'trg_integrations_updated_at'),
+      ('interaction_templates', 'trg_interaction_templates_updated_at'),
+      ('message_templates', 'trg_message_templates_updated_at'),
+      ('products', 'trg_products_updated_at'),
+      ('proposals', 'trg_proposals_updated_at'),
+      ('quick_notes', 'trg_quick_notes_updated_at'),
+      ('sales_cadences', 'trg_sales_cadences_updated_at'),
+      ('sales_forecasts', 'trg_sales_forecasts_updated_at'),
+      ('sales_goals', 'trg_sales_goals_updated_at'),
+      ('sales_opportunities', 'trg_sales_opportunities_updated_at'),
+      ('smart_segments', 'trg_smart_segments_updated_at'),
+      ('tasks', 'trg_tasks_updated_at'),
+      ('user_goals', 'trg_user_goals_updated_at'),
+      ('whatsapp_messages', 'trg_whatsapp_messages_updated_at')
+    ) AS triggers(table_name, trigger_name)
+  LOOP
+    IF EXISTS (
+      SELECT 1
+      FROM pg_attribute
+      WHERE attrelid = to_regclass(format('public.%I', trigger_definition.table_name))
+        AND attname = 'updated_at'
+        AND NOT attisdropped
+    ) THEN
+      EXECUTE format(
+        'CREATE OR REPLACE TRIGGER %I BEFORE UPDATE ON public.%I FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()',
+        trigger_definition.trigger_name,
+        trigger_definition.table_name
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;

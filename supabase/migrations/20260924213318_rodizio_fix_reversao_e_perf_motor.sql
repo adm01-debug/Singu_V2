@@ -98,40 +98,52 @@ $function$;
 
 -- Fix 2: vw_rodizio_execucoes.foi_revertida tinha semântica invertida
 -- (marcava a linha de ROLLBACK como revertida, não a execução original revertida).
-CREATE OR REPLACE VIEW public.vw_rodizio_execucoes
-WITH (security_invoker = true) AS
-SELECT e.id,
-    e.tipo,
-    e.modo,
-    e.iniciado_em,
-    e.finalizado_em,
-    e.total_elegiveis,
-    e.total_rotacionados,
-    e.executado_por_id,
-    u.name AS executado_por_nome,
-    e.revertida_por_execucao_id,
-    EXISTS (SELECT 1 FROM public.rodizio_execucoes r2 WHERE r2.revertida_por_execucao_id = e.id) AS foi_revertida,
-    e.parametros
-   FROM (public.rodizio_execucoes e
-     LEFT JOIN public.users u ON ((u.id = e.executado_por_id)))
-  ORDER BY e.iniciado_em DESC;
+DO $migration$
+BEGIN
+  IF to_regclass('public.rodizio_execucoes') IS NOT NULL
+    AND to_regclass('public.users') IS NOT NULL
+  THEN
+    CREATE OR REPLACE VIEW public.vw_rodizio_execucoes
+    WITH (security_invoker = true) AS
+    SELECT e.id,
+        e.tipo,
+        e.modo,
+        e.iniciado_em,
+        e.finalizado_em,
+        e.total_elegiveis,
+        e.total_rotacionados,
+        e.executado_por_id,
+        u.name AS executado_por_nome,
+        e.revertida_por_execucao_id,
+        EXISTS (SELECT 1 FROM public.rodizio_execucoes r2 WHERE r2.revertida_por_execucao_id = e.id) AS foi_revertida,
+        e.parametros
+       FROM (public.rodizio_execucoes e
+         LEFT JOIN public.users u ON ((u.id = e.executado_por_id)))
+      ORDER BY e.iniciado_em DESC;
 
-REVOKE ALL ON public.vw_rodizio_execucoes FROM PUBLIC, anon;
-GRANT SELECT ON public.vw_rodizio_execucoes TO authenticated, service_role;
+    REVOKE ALL ON public.vw_rodizio_execucoes FROM PUBLIC, anon;
+    GRANT SELECT ON public.vw_rodizio_execucoes TO authenticated, service_role;
+  END IF;
+END;
+$migration$;
 
 -- Fix 3: fn_carga_atual_closer fazia N+1 (fn_segmento_cliente por linha, ~869ms/call).
 -- Passa a usar customer_rotation_state.segmento (mantido por trg_after_purchase e pelo cron
 -- diário singu-rodizio-segmentar já existente), com fallback NAO_ATIVADO igual ao da função original.
 CREATE OR REPLACE FUNCTION public.fn_carga_atual_closer(p_vendedor_id integer)
  RETURNS integer
- LANGUAGE sql
+ LANGUAGE plpgsql
  STABLE
  SET search_path TO 'public', 'pg_catalog'
 AS $function$
-  SELECT count(*)::integer
-  FROM public.customers c
-  LEFT JOIN public.customer_rotation_state s ON s.customer_id = c.id
-  WHERE c.vendedor_id = p_vendedor_id
-    AND c.deleted_at IS NULL
-    AND COALESCE(s.segmento, 'NAO_ATIVADO') IN ('NAO_ATIVADO', 'INATIVO');
+BEGIN
+  RETURN (
+    SELECT count(*)::integer
+    FROM public.customers c
+    LEFT JOIN public.customer_rotation_state s ON s.customer_id = c.id
+    WHERE c.vendedor_id = p_vendedor_id
+      AND c.deleted_at IS NULL
+      AND COALESCE(s.segmento, 'NAO_ATIVADO') IN ('NAO_ATIVADO', 'INATIVO')
+  );
+END;
 $function$;

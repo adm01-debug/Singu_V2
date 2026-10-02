@@ -10,7 +10,7 @@ import { NeuroPortfolioTabs } from './neuro-portfolio/NeuroPortfolioTabs';
 type DiscProfile = 'D' | 'I' | 'S' | 'C';
 
 const NeuroPortfolioDashboard = () => {
-  const { contacts } = useContacts();
+  const { contacts } = useContacts(undefined, { fetchAll: true });
   const { BRAIN_SYSTEM_INFO, NEUROCHEMICAL_INFO, PRIMAL_STIMULUS_INFO, DISC_BRAIN_CORRELATION } = useNeuromarketing();
   const [activeTab, setActiveTab] = useState('overview');
 

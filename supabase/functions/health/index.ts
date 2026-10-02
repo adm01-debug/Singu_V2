@@ -52,12 +52,13 @@ Deno.serve(async (req) => {
     external_database: extResult,
   };
 
-  const allHealthy = Object.values(checks).every(
-    (c) => c.status === "healthy" || c.status === "not_configured"
-  );
+  const statuses = Object.values(checks).map((check) => check.status);
+  const hasUnavailable = statuses.includes("not_configured");
+  const allHealthy = statuses.every((status) => status === "healthy");
+  const overall = allHealthy ? "healthy" : hasUnavailable ? "unavailable" : "degraded";
 
   return new Response(JSON.stringify({
-    status: allHealthy ? "healthy" : "degraded",
+    status: overall,
     timestamp: new Date().toISOString(),
     totalLatencyMs: Date.now() - startTime,
     checks,

@@ -114,7 +114,7 @@ async function checkVoiceAI(): Promise<ComponentCheck> {
   }
 }
 
-async function getActiveAlerts(): Promise<number> {
+async function getActiveAlerts(): Promise<number | null> {
   try {
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
@@ -126,7 +126,7 @@ async function getActiveAlerts(): Promise<number> {
       .eq("dismissed", false);
     return count ?? 0;
   } catch {
-    return 0;
+    return null;
   }
 }
 
@@ -158,10 +158,17 @@ Deno.serve(async (req) => {
   const components = { database_local, database_external, whatsapp, email_pipeline, voice_ai };
 
   // Determine overall status
-  const statuses = Object.values(components).filter(c => c.status !== "not_configured");
+  const statuses = Object.values(components);
   const hasDown = statuses.some(c => c.status === "down");
   const hasDegraded = statuses.some(c => c.status === "degraded");
-  const overallStatus = hasDown ? "unhealthy" : hasDegraded ? "degraded" : "healthy";
+  const hasUnavailable = statuses.some(c => c.status === "not_configured");
+  const overallStatus = hasDown
+    ? "unhealthy"
+    : hasUnavailable
+      ? "unavailable"
+      : hasDegraded
+        ? "degraded"
+        : "healthy";
 
   const response = {
     status: overallStatus,
@@ -173,17 +180,18 @@ Deno.serve(async (req) => {
   };
 
   // Persistir snapshot (best-effort) para alimentar /admin/error-budget
-  createClient(
+  const { error: snapshotError } = await createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
   ).from("system_health_snapshots").insert({
-    status: overallStatus,
+    status: overallStatus === "unavailable" ? "degraded" : overallStatus,
     total_latency_ms: response.total_latency_ms,
     components,
-  }).catch(() => { /* best-effort — não bloqueia resposta */ });
+  });
+  if (snapshotError) console.warn("Falha ao persistir snapshot de saúde", snapshotError.message);
 
   return new Response(JSON.stringify(response), {
-    status: overallStatus === "unhealthy" ? 503 : 200,
+    status: overallStatus === "healthy" ? 200 : 503,
     headers: { ...cors, "Content-Type": "application/json" },
   });
 });

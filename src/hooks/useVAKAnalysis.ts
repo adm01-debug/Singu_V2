@@ -1,11 +1,11 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
-import { 
-  VAKType, 
-  VAKProfile, 
-  VAKAnalysisResult, 
-  VAK_PREDICATES 
+import {
+  VAKType,
+  VAKProfile,
+  VAKAnalysisResult,
+  VAK_PREDICATES
 } from '@/types/vak';
 import { logger } from "@/lib/logger";
 
@@ -41,9 +41,9 @@ export function useVAKAnalysis() {
     words.forEach(word => {
       if (word.length < 3) return;
       (Object.keys(VAK_PREDICATES) as VAKType[]).forEach(type => {
-        // eslint-disable-next-line sonarjs/no-nested-functions
+
         const predicates = VAK_PREDICATES[type].map(p => normalizeText(p));
-        // eslint-disable-next-line sonarjs/no-nested-functions
+
         const match = predicates.find(pred => pred === word || (pred.length > 4 && word.length > 4 && word.startsWith(pred.slice(0, -2))));
         if (match) {
           results[type].count++;

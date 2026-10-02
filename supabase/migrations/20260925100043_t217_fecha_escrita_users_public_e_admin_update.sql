@@ -6,13 +6,21 @@
 -- logado podia alterar email/is_active/is_vendedor de qualquer pessoa. A RLS da tabela
 -- segurava escrita direta (só admin_select + service_full), mas não alcança a view.
 -- Zero consumidores da view hoje (grep em src/ e supabase/functions/), risco de quebra nulo.
-REVOKE ALL ON public.users_public FROM PUBLIC, anon, authenticated;
-GRANT SELECT ON public.users_public TO authenticated;
+DO $migration$
+BEGIN
+  IF to_regclass('public.users_public') IS NOT NULL THEN
+    REVOKE ALL ON public.users_public FROM PUBLIC, anon, authenticated;
+    GRANT SELECT ON public.users_public TO authenticated;
+  END IF;
 
--- Consequência não prevista do t212: users ficou só com admin_select (SELECT) + service_full,
--- sem nenhuma policy de UPDATE. A tela de gestão de equipe do rodízio (SalesTeamTab ->
--- useUpdateRodizioMembro) faz UPDATE direto em users (participa_rodizio_*, ordem_rodizio,
--- capacidade_max, afastado_ate) e está quebrada para todo mundo desde ontem.
-CREATE POLICY admin_update ON public.users FOR UPDATE TO authenticated
-  USING (has_role(auth.uid(), 'admin'::app_role))
-  WITH CHECK (has_role(auth.uid(), 'admin'::app_role));
+  -- Consequência não prevista do t212: users ficou só com admin_select (SELECT) + service_full,
+  -- sem nenhuma policy de UPDATE. A tela de gestão de equipe do rodízio (SalesTeamTab ->
+  -- useUpdateRodizioMembro) faz UPDATE direto em users (participa_rodizio_*, ordem_rodizio,
+  -- capacidade_max, afastado_ate) e está quebrada para todo mundo desde ontem.
+  IF to_regclass('public.users') IS NOT NULL THEN
+    CREATE POLICY admin_update ON public.users FOR UPDATE TO authenticated
+      USING (has_role(auth.uid(), 'admin'::app_role))
+      WITH CHECK (has_role(auth.uid(), 'admin'::app_role));
+  END IF;
+END;
+$migration$;

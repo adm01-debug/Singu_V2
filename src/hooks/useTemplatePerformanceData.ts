@@ -58,7 +58,7 @@ export function useTemplatePerformanceData(
 
       const discPerformance = (['D', 'I', 'S', 'C'] as DISCProfile[]).reduce((acc, disc) => {
         const discUsages = completedUsages;
-        // eslint-disable-next-line sonarjs/no-nested-functions
+
         const discSuccess = discUsages.filter(u => u.result === 'success').length;
         acc[disc] = { usages: discUsages.length, successRate: discUsages.length > 0 ? (discSuccess / discUsages.length) * 100 : 0 };
         return acc;

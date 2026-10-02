@@ -4,4 +4,10 @@
 -- via CREATE OR REPLACE VIEW sem repetir a opção, o que reseta reloptions no Postgres.
 -- Reaplica o fix da etapa 24 do plano banco-único (claude/PLANO_BANCO_UNICO_SINGU_200_ETAPAS.md)
 -- sem alterar colunas/lógica da view.
-ALTER VIEW public.users_public SET (security_invoker = on);
+DO $migration$
+BEGIN
+  IF to_regclass('public.users_public') IS NOT NULL THEN
+    ALTER VIEW public.users_public SET (security_invoker = on);
+  END IF;
+END;
+$migration$;

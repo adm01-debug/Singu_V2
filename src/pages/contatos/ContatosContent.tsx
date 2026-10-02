@@ -85,10 +85,10 @@ export function ContatosContent(props: Props) {
   const RENDER_BATCH = 100;
   const [visibleCount, setVisibleCount] = useState(RENDER_BATCH);
   const sentinelRef = useRef<HTMLDivElement>(null);
-  
+
   // Real list navigation implementation
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  
+
   useEffect(() => {
     const handleNavigate = (e: Event) => {
       const direction = (e as CustomEvent<'next' | 'prev'>).detail;
@@ -99,7 +99,7 @@ export function ContatosContent(props: Props) {
         return next;
       });
     };
-    
+
     const handleOpen = () => {
       const contact = filteredAndSortedContacts[selectedIndex];
       if (contact) navigate(`/contatos/${contact.id}`);
@@ -121,7 +121,7 @@ export function ContatosContent(props: Props) {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         startTransition(() => {
-          // eslint-disable-next-line sonarjs/no-nested-functions
+
           setVisibleCount(prev => {
             const next = prev + RENDER_BATCH;
             // Se chegamos perto do fim do que temos em memória, e há mais no servidor, carrega mais.
@@ -165,11 +165,11 @@ export function ContatosContent(props: Props) {
   return (
     <>
       <div className="sticky top-[57px] z-20 w-full">
-        <Header 
-          title="Contatos" 
+        <Header
+          title="Contatos"
           subtitle={`${filteredAndSortedContacts.length} de ${totalCount ?? contacts.length} pessoas`}
-          showAddButton 
-          addButtonLabel="Novo" 
+          showAddButton
+          addButtonLabel="Novo"
           onAddClick={() => onSetIsFormOpen(true)}
           hideBack
           showSearch
@@ -201,14 +201,14 @@ export function ContatosContent(props: Props) {
         </div>
 
         <div className="md:block">
-          <AdvancedFilters 
-            filters={filterConfigs} 
-            sortOptions={sortOptions} 
-            activeFilters={activeFilters} 
-            onFiltersChange={onFiltersChange} 
-            sortBy={sortBy} 
-            sortOrder={sortOrder} 
-            onSortChange={(newSortBy, newSortOrder) => onSortChange(newSortBy, newSortOrder)} 
+          <AdvancedFilters
+            filters={filterConfigs}
+            sortOptions={sortOptions}
+            activeFilters={activeFilters}
+            onFiltersChange={onFiltersChange}
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onSortChange={(newSortBy, newSortOrder) => onSortChange(newSortBy, newSortOrder)}
             multiSort={multiSort}
             onMultiSortChange={onMultiSortChange}
           />
@@ -261,13 +261,13 @@ export function ContatosContent(props: Props) {
         )}
       </PullToRefresh>
 
-      <BulkActionsBar 
-        selectedIds={Array.from(selectedIds)} 
-        totalCount={filteredAndSortedContacts.length} 
-        entityType="contacts" 
-        onSelectAll={onSelectAll} 
-        onClearSelection={() => onSelect('__clear__', false)} 
-        onDelete={onBulkDelete} 
+      <BulkActionsBar
+        selectedIds={Array.from(selectedIds)}
+        totalCount={filteredAndSortedContacts.length}
+        entityType="contacts"
+        onSelectAll={onSelectAll}
+        onClearSelection={() => onSelect('__clear__', false)}
+        onDelete={onBulkDelete}
         onAddTag={onBulkAddTag}
         onUpdateStage={onBulkUpdateStage}
         onExport={handleBulkExport}

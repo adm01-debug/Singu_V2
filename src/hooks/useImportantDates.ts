@@ -1,6 +1,6 @@
  import { useMemo } from 'react';
  import { Contact, Interaction } from '@/types';
- import { differenceInDays, addYears, isBefore, addMonths } from 'date-fns';
+ import { differenceInDays, addYears, isBefore } from 'date-fns';
  import { useQuery } from '@tanstack/react-query';
  import { supabase } from '@/integrations/supabase/client';
  import { useAuth } from './useAuth';
@@ -78,14 +78,14 @@ export interface DateReminders {
         const birthday = new Date(contact.birthday);
         let nextBirthday = new Date(birthday);
         nextBirthday.setFullYear(now.getFullYear());
-        
+
         if (isBefore(nextBirthday, now)) {
           nextBirthday = addYears(nextBirthday, 1);
         }
-        
+
         const daysUntil = differenceInDays(nextBirthday, now);
         const isPast = daysUntil < 0;
-        
+
         let urgency: ImportantDate['urgency'] = 'future';
         if (daysUntil === 0) urgency = 'today';
         else if (daysUntil < 0 && daysUntil >= -7) urgency = 'overdue';
@@ -102,10 +102,10 @@ export interface DateReminders {
           daysUntil,
           isPast,
           urgency,
-          suggestedAction: daysUntil === 0 
-            ? 'Envie uma mensagem de felicitações agora!' 
-            : daysUntil <= 7 
-              ? 'Prepare uma mensagem especial' 
+          suggestedAction: daysUntil === 0
+            ? 'Envie uma mensagem de felicitações agora!'
+            : daysUntil <= 7
+              ? 'Prepare uma mensagem especial'
               : 'Agende um lembrete',
           messageTemplate: `🎂 Feliz aniversário, ${contact.firstName}! Que este novo ano seja repleto de conquistas e alegrias. Um abraço!`,
           reminderDays: [7, 1, 0]
@@ -116,19 +116,19 @@ export interface DateReminders {
       const contactInteractions = interactions
         .filter(i => i.contactId === contact.id)
         .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-      
+
       if (contactInteractions.length > 0) {
         const firstInteraction = new Date(contactInteractions[0].createdAt);
         let nextAnniversary = new Date(firstInteraction);
         nextAnniversary.setFullYear(now.getFullYear());
-        
+
         if (isBefore(nextAnniversary, now)) {
           nextAnniversary = addYears(nextAnniversary, 1);
         }
-        
+
         const yearsOfRelationship = now.getFullYear() - firstInteraction.getFullYear();
         const daysUntil = differenceInDays(nextAnniversary, now);
-        
+
         if (yearsOfRelationship >= 1) {
           let urgency: ImportantDate['urgency'] = 'future';
           if (daysUntil === 0) urgency = 'today';
@@ -152,50 +152,14 @@ export interface DateReminders {
         }
       }
 
-      // 3. Contract Renewal (simulated - in production would come from contracts table)
-      if (contact.relationshipStage === 'customer' || contact.relationshipStage === 'loyal_customer') {
-        // Simulate renewal 1 year after becoming customer
-        const estimatedRenewal = addMonths(new Date(contact.createdAt), 12);
-        let nextRenewal = new Date(estimatedRenewal);
-        
-        while (isBefore(nextRenewal, now)) {
-          nextRenewal = addYears(nextRenewal, 1);
-        }
-        
-        const daysUntil = differenceInDays(nextRenewal, now);
-        
-        let urgency: ImportantDate['urgency'] = 'future';
-        if (daysUntil <= 0) urgency = 'overdue';
-        else if (daysUntil <= 14) urgency = 'urgent';
-        else if (daysUntil <= 60) urgency = 'upcoming';
-
-        if (daysUntil <= 90) {
-          allDates.push({
-            id: `renewal-${contact.id}`,
-            contactId: contact.id,
-            contactName,
-            type: 'contract_renewal',
-            title: `Renovação de contrato de ${contact.firstName}`,
-            date: nextRenewal,
-            daysUntil,
-            isPast: daysUntil < 0,
-            urgency,
-            suggestedAction: daysUntil <= 30 
-              ? 'Inicie o processo de renovação' 
-              : 'Prepare proposta de renovação',
-            messageTemplate: `Olá ${contact.firstName}! Seu contrato está próximo da renovação. Gostaria de agendar uma conversa para discutirmos as melhores condições para continuarmos nossa parceria?`,
-            reminderDays: [60, 30, 14, 7]
-          });
-        }
-      }
 
       // 4. Milestones (interaction count)
       const milestones = [10, 25, 50, 100];
       const nextMilestone = milestones.find(m => m > contact.interactionCount);
-      
+
       if (nextMilestone && contact.interactionCount >= nextMilestone - 3) {
         const remaining = nextMilestone - contact.interactionCount;
-        
+
         allDates.push({
           id: `milestone-${contact.id}-${nextMilestone}`,
           contactId: contact.id,
@@ -217,16 +181,16 @@ export interface DateReminders {
        contactEvents.forEach(event => {
          const eventDate = new Date(event.event_date);
          let nextEventDate = new Date(eventDate);
-         
+
          if (event.recurring) {
            nextEventDate.setFullYear(now.getFullYear());
            if (isBefore(nextEventDate, now)) {
              nextEventDate = addYears(nextEventDate, 1);
            }
          }
-         
+
          const daysUntil = differenceInDays(nextEventDate, now);
-         
+
          if (Math.abs(daysUntil) <= 90) { // Show up to 90 days out in calendar
            let urgency: ImportantDate['urgency'];
            if (daysUntil === 0) urgency = 'today';
@@ -257,13 +221,13 @@ export interface DateReminders {
          const bday = new Date(rel.birthday!);
          let nextBday = new Date(bday);
          nextBday.setFullYear(now.getFullYear());
-         
+
          if (isBefore(nextBday, now)) {
            nextBday = addYears(nextBday, 1);
          }
-         
+
          const daysUntil = differenceInDays(nextBday, now);
-         
+
          if (daysUntil <= 60) {
            let urgency: ImportantDate['urgency'];
            if (daysUntil === 0) urgency = 'today';

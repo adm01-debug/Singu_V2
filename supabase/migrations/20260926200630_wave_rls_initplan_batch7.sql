@@ -1,12 +1,48 @@
 ALTER POLICY "Users can view their own RFM history" ON public.rfm_history USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can view their RFM metrics" ON public.rfm_metrics USING (((select auth.uid()) = user_id));
 ALTER POLICY "Users can manage their RFM segment config" ON public.rfm_segment_config USING (((select auth.uid()) = user_id));
-ALTER POLICY admin_insert ON public.rodizio_distribuicao_staging WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_select ON public.rodizio_distribuicao_staging USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_update ON public.rodizio_distribuicao_staging USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role)) WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_insert ON public.rodizio_execucoes WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_select ON public.rodizio_execucoes USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
-ALTER POLICY admin_update ON public.rodizio_execucoes USING (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role)) WITH CHECK (( SELECT has_role((select auth.uid()), 'admin'::app_role) AS has_role));
+DO $migration$
+DECLARE
+  policy_definition record;
+  clauses text;
+BEGIN
+  FOR policy_definition IN
+    SELECT *
+    FROM (VALUES
+      ('rodizio_distribuicao_staging', 'admin_insert', false, true),
+      ('rodizio_distribuicao_staging', 'admin_select', true, false),
+      ('rodizio_distribuicao_staging', 'admin_update', true, true),
+      ('rodizio_execucoes', 'admin_insert', false, true),
+      ('rodizio_execucoes', 'admin_select', true, false),
+      ('rodizio_execucoes', 'admin_update', true, true)
+    ) AS policies(table_name, policy_name, use_using, use_check)
+  LOOP
+    IF to_regclass(format('public.%I', policy_definition.table_name)) IS NOT NULL
+      AND EXISTS (
+        SELECT 1
+        FROM pg_policy
+        WHERE polrelid = to_regclass(format('public.%I', policy_definition.table_name))
+          AND polname = policy_definition.policy_name
+      )
+    THEN
+      clauses := '';
+      IF policy_definition.use_using THEN
+        clauses := clauses || ' USING ((SELECT has_role((select auth.uid()), ''admin''::app_role) AS has_role))';
+      END IF;
+      IF policy_definition.use_check THEN
+        clauses := clauses || ' WITH CHECK ((SELECT has_role((select auth.uid()), ''admin''::app_role) AS has_role))';
+      END IF;
+
+      EXECUTE format(
+        'ALTER POLICY %I ON public.%I%s',
+        policy_definition.policy_name,
+        policy_definition.table_name,
+        clauses
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;
 ALTER POLICY "Admins manage role_permissions" ON public.role_permissions USING (has_role((select auth.uid()), 'admin'::app_role)) WITH CHECK (has_role((select auth.uid()), 'admin'::app_role));
 ALTER POLICY playbooks_delete_own ON public.sales_playbooks USING (((select auth.uid()) = user_id));
 ALTER POLICY playbooks_insert_own ON public.sales_playbooks WITH CHECK (((select auth.uid()) = user_id));

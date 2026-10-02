@@ -154,18 +154,18 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
         : 0;
 
       (['D', 'I', 'S', 'C'] as DISCProfile[]).forEach((disc) => {
-        // eslint-disable-next-line sonarjs/no-nested-functions
+
         const discUsages = usages.filter(u => u.contact_disc === disc);
-        // eslint-disable-next-line sonarjs/no-nested-functions
+
         const discCompleted = discUsages.filter(u => u.result !== 'pending');
-        // eslint-disable-next-line sonarjs/no-nested-functions
+
         const discSuccess = discUsages.filter(u => u.result === 'success').length;
-        // eslint-disable-next-line sonarjs/no-nested-functions
+
         const discRated = discUsages.filter(u => u.effectiveness_rating !== null);
 
         stat.byDISC[disc].successRate = discCompleted.length > 0 ? (discSuccess / discCompleted.length) * 100 : 0;
         stat.byDISC[disc].avgRating = discRated.length > 0
-          // eslint-disable-next-line sonarjs/no-nested-functions
+
           ? (discRated.reduce((sum, u) => sum + (u.effectiveness_rating || 0), 0) / discRated.length) * 20
           : 0;
       });

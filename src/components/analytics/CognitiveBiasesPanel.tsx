@@ -93,7 +93,7 @@ export function CognitiveBiasesPanel({ contact, interactions, className }: Cogni
               <div className="p-3 rounded-lg border bg-success dark:bg-success/20"><h4 className="text-sm font-medium text-success dark:text-success mb-2">⚡ Oportunidades</h4><ul className="text-xs space-y-1">{analysisResult.vulnerabilities.slice(0, 3).map(v => <li key={v.bias} className="flex items-center gap-1"><span>{COGNITIVE_BIAS_INFO[v.bias].icon}</span>{COGNITIVE_BIAS_INFO[v.bias].namePt}</li>)}</ul></div>
               <div className="p-3 rounded-lg border bg-destructive dark:bg-destructive/20"><h4 className="text-sm font-medium text-destructive dark:text-destructive mb-2">🛡️ Resistências</h4><ul className="text-xs space-y-1">{analysisResult.resistances.slice(0, 3).map(r => <li key={r.bias} className="flex items-center gap-1"><span>{COGNITIVE_BIAS_INFO[r.bias].icon}</span>{COGNITIVE_BIAS_INFO[r.bias].namePt}</li>)}</ul></div>
             </div>
-            <div className="flex items-center justify-between text-sm pt-2 border-t"><span className="text-muted-foreground flex items-center gap-1"><Info className="w-4 h-4" />Confiança da análise</span><span>{analysisResult.confidence}%</span></div>
+            <div className="flex items-center justify-between text-sm pt-2 border-t"><span className="text-muted-foreground flex items-center gap-1"><Info className="w-4 h-4" />Cobertura de evidências</span><span>{analysisResult.evidenceCoverage}%</span></div>
           </TabsContent>
 
           <TabsContent value="biases" className="mt-4">

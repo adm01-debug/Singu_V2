@@ -1,12 +1,12 @@
 import { useState, useCallback, useMemo } from 'react';
-import { 
-  CognitiveBiasType, 
+import {
+  CognitiveBiasType,
   BiasCategory,
-  DetectedBias, 
-  BiasAnalysisResult 
+  DetectedBias,
+  BiasAnalysisResult
 } from '@/types/cognitive-biases';
-import { 
-  COGNITIVE_BIAS_INFO, 
+import {
+  COGNITIVE_BIAS_INFO,
   BIAS_CATEGORY_INFO
 } from '@/data/cognitiveBiasesData';
 import { Contact } from '@/types';
@@ -33,23 +33,23 @@ export function useCognitiveBiases(contact: Contact, interactions: Interaction[]
 
     biasTypes.forEach(biasType => {
       const biasInfo = COGNITIVE_BIAS_INFO[biasType];
-      
+
       biasInfo.indicators.forEach(indicator => {
         if (lowerText.includes(indicator.toLowerCase())) {
           // Find surrounding context (sentence)
           const sentences = text.split(/[.!?]+/);
-          // eslint-disable-next-line sonarjs/no-nested-functions
-          const sentence = sentences.find(s => 
+
+          const sentence = sentences.find(s =>
             s.toLowerCase().includes(indicator.toLowerCase())
           ) || '';
 
           // Determine polarity based on bias type and context
           let polarity: 'exploitable' | 'obstacle' | 'neutral' = 'neutral';
-          
+
           // Decision-making biases can be obstacles or exploitable
           if (biasInfo.category === 'decision_making') {
-            polarity = ['status_quo', 'choice_overload', 'sunk_cost'].includes(biasType) 
-              ? 'obstacle' 
+            polarity = ['status_quo', 'choice_overload', 'sunk_cost'].includes(biasType)
+              ? 'obstacle'
               : 'exploitable';
           } else if (biasInfo.category === 'social') {
             polarity = 'exploitable';
@@ -58,14 +58,14 @@ export function useCognitiveBiases(contact: Contact, interactions: Interaction[]
           } else if (biasInfo.category === 'probability') {
             polarity = biasType === 'pessimism_bias' ? 'obstacle' : 'neutral';
           } else if (biasInfo.category === 'self_perception') {
-            polarity = ['overconfidence', 'dunning_kruger'].includes(biasType) 
-              ? 'obstacle' 
+            polarity = ['overconfidence', 'dunning_kruger'].includes(biasType)
+              ? 'obstacle'
               : 'neutral';
           }
 
           // Check if already detected (avoid duplicates per interaction)
           const exists = detectedBiases.some(
-            // eslint-disable-next-line sonarjs/no-nested-functions
+
             b => b.type === biasType && b.interactionId === interactionId
           );
 
@@ -76,8 +76,7 @@ export function useCognitiveBiases(contact: Contact, interactions: Interaction[]
               category: biasInfo.category,
               indicator,
               context: sentence.trim().slice(0, 150),
-              // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
-              confidence: 60 + Math.random() * 30, // 60-90%
+              evidence: 'keyword_match',
               polarity,
               detectedAt: timestamp,
               interactionId
@@ -176,9 +175,9 @@ export function useCognitiveBiases(contact: Contact, interactions: Interaction[]
 
     // Generate profile summary
     const profileSummary = generateProfileSummary(
-      contact, 
-      dominantBiases, 
-      vulnerabilities, 
+      contact,
+      dominantBiases,
+      vulnerabilities,
       resistances
     );
 
@@ -197,7 +196,13 @@ export function useCognitiveBiases(contact: Contact, interactions: Interaction[]
         ethical_approach: ethicalApproaches.join(' ')
       },
       profileSummary,
-      confidence: Math.min(95, 30 + allDetectedBiases.length * 5),
+      evidenceCoverage: interactions.length === 0
+        ? 0
+        : Math.round(
+          interactions.filter((interaction) =>
+            Boolean(interaction.content || interaction.transcription)
+          ).length / interactions.length * 100,
+        ),
       lastAnalyzed: new Date().toISOString()
     };
   }, [contact, interactions, detectBiases]);
@@ -222,13 +227,13 @@ function generateProfileSummary(
 
   const topBias = dominantBiases[0];
   const topBiasInfo = COGNITIVE_BIAS_INFO[topBias];
-  
+
   let summary = `${contact.firstName} demonstra predominantemente ${topBiasInfo.namePt}`;
-  
+
   if (dominantBiases.length > 1) {
     summary += ` combinado com ${COGNITIVE_BIAS_INFO[dominantBiases[1]].namePt}`;
   }
-  
+
   summary += '. ';
 
   if (vulnerabilities.length > 0) {

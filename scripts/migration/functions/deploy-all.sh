@@ -63,6 +63,29 @@ ok=0
 fail=0
 FAILED_LIST=()
 
+NO_JWT_FUNCTIONS=(
+  auto-rebatch-behavioral auto-regen-behavioral-profiles bitrix24-webhook
+  check-health-alerts check-notifications client-notifications cs-health-recalc
+  deal-room-buyer-view dual-write-proxy evolution-webhook forecast-snapshot-cron
+  evolution-bitrix-connector form-submit-handler generate-behavioral-profile
+  get-signature incoming-webhook
+  intent-pixel-snippet intent-tracker lead-score-cron lux-webhook mcp-server
+  mql-evaluator nurturing-runner
+  process-behavioral-regen-queue process-webhook-dlq retry-behavioral-profile
+  revops-snapshot-builder send-sms-campaign sequence-processor sequence-track
+  smart-notify social-events-detector submit-signature sync-social-interests
+  template-success-notifications validation-queue-worker weekly-digest
+)
+
+requires_custom_auth() {
+  local candidate="$1"
+  local public_name
+  for public_name in "${NO_JWT_FUNCTIONS[@]}"; do
+    [[ "$candidate" == "$public_name" ]] && return 0
+  done
+  return 1
+}
+
 for name in "${ALL_FUNCS[@]}"; do
   if [[ -n "$ONLY" && "$name" != "$ONLY" ]]; then
     continue
@@ -72,10 +95,11 @@ for name in "${ALL_FUNCS[@]}"; do
   fi
 
   printf "→ %s ... " "$name"
-  if supabase functions deploy "$name" \
-        --project-ref "$PROJECT_REF" \
-        --no-verify-jwt \
-        >>"$LOG_FILE" 2>&1; then
+  deploy_args=(functions deploy "$name" --project-ref "$PROJECT_REF")
+  if requires_custom_auth "$name"; then
+    deploy_args+=(--no-verify-jwt)
+  fi
+  if supabase "${deploy_args[@]}" >>"$LOG_FILE" 2>&1; then
     echo "OK"
     ok=$((ok+1))
   else

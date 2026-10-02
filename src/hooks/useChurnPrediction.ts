@@ -24,7 +24,7 @@ export interface ChurnFactor {
 }
 
 export function useChurnPrediction() {
-  const { contacts, loading: contactsLoading } = useContacts();
+  const { contacts, loading: contactsLoading } = useContacts(undefined, { fetchAll: true });
   const { interactions, loading: interactionsLoading } = useInteractions();
 
   const churnAnalysis = useMemo(() => {

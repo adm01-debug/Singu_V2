@@ -57,7 +57,7 @@ export interface AiGatewayHeatmapCell {
   error_rate_pct: number | null;
 }
 
-export interface AiGatewayWorstWindow extends AiGatewayHeatmapCell {}
+export type AiGatewayWorstWindow = AiGatewayHeatmapCell;
 
 export interface AiGatewayHealth {
   window_hours: number;

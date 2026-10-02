@@ -8,7 +8,6 @@ import { Progress } from '@/components/ui/progress';
 import {
   Activity, TrendingUp, TrendingDown, Clock, MessageSquare, Users,
   Building2, CheckCircle2, AlertCircle, Smile, Meh, Frown, Zap, Calendar,
-  Brain, Star, Trophy,
 } from 'lucide-react';
 import { usePerformanceMetrics } from '@/hooks/usePerformanceMetrics';
 import {
@@ -61,56 +60,6 @@ export default function Performance() {
             <Zap className="h-3 w-3" /> Tempo Real
           </Badge>
         </div>
-
-        {/* NLP Mastery Section */}
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-background to-accent/5 overflow-hidden">
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg font-bold flex items-center gap-2">
-                <Brain className="h-5 w-5 text-primary" /> Maestria PNL em Vendas
-              </CardTitle>
-              <div className="flex items-center gap-1.5">
-                <Star className="h-4 w-4 text-primary fill-primary" />
-                <span className="text-xl font-black text-primary">{m.nlpMasteryScore}%</span>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Consistência VAK</span>
-                  <span className="font-bold">{m.vakConsistency}%</span>
-                </div>
-                <Progress value={m.vakConsistency} className="h-2" />
-                <p className="text-[10px] text-muted-foreground">Uso equilibrado de predicados visuais, auditivos e cinestésicos.</p>
-              </div>
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Profundidade de Rapport</span>
-                  <span className="font-bold">{m.rapportDepth}%</span>
-                </div>
-                <Progress value={m.rapportDepth} className="h-2" />
-                <p className="text-[10px] text-muted-foreground">Capacidade de espelhamento e condução subconsciente.</p>
-              </div>
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Eficácia em Reenquadramento</span>
-                  <span className="font-bold">{m.reframingProficiency}%</span>
-                </div>
-                <Progress value={m.reframingProficiency} className="h-2" />
-                <p className="text-[10px] text-muted-foreground">Resolução de objeções via Sleight of Mouth.</p>
-              </div>
-            </div>
-            <div className="mt-6 flex items-center gap-3 p-3 rounded-lg bg-primary/10 border border-primary/20">
-              <Trophy className="h-5 w-5 text-primary shrink-0" />
-              <p className="text-xs font-medium">
-                Você está no <span className="text-primary font-bold">TOP 5%</span> de comunicadores da organização. 
-                Seu padrão cinestésico é sua maior força no fechamento.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Top KPIs */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">

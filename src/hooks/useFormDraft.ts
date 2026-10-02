@@ -15,7 +15,7 @@ interface UseFormDraftOptions {
 /**
  * Auto-saves form data to localStorage on change, and restores on mount.
  * Clears draft on successful submit.
- * 
+ *
  * Usage:
  * ```tsx
  * const form = useForm({ defaultValues });
@@ -36,7 +36,7 @@ export function useFormDraft<T extends FieldValues>(
   // Restore draft on mount
   useEffect(() => {
     if (!enabled) return;
-    
+
     try {
       const stored = localStorage.getItem(storageKey);
       if (stored) {
@@ -46,7 +46,7 @@ export function useFormDraft<T extends FieldValues>(
           // Only restore non-empty values to avoid overwriting defaults
           const currentValues = form.getValues();
           const mergedValues: Record<string, unknown> = {};
-          
+
           for (const [fieldKey, value] of Object.entries(parsed)) {
             // Only restore if current value is empty/default
             const currentVal = currentValues[fieldKey as keyof T];
@@ -54,7 +54,7 @@ export function useFormDraft<T extends FieldValues>(
               mergedValues[fieldKey] = value;
             }
           }
-          
+
            if (Object.keys(mergedValues).length > 0) {
              form.reset({ ...currentValues, ...mergedValues } as T);
              toast.info('Rascunho restaurado automaticamente', {
@@ -78,11 +78,11 @@ export function useFormDraft<T extends FieldValues>(
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-      
+
       timeoutRef.current = setTimeout(() => {
         try {
           // Only save if there's meaningful data
-          // eslint-disable-next-line sonarjs/no-nested-functions
+
           const hasData = Object.values(data).some(v => v !== '' && v !== null && v !== undefined);
           if (hasData) {
             localStorage.setItem(storageKey, JSON.stringify(data));

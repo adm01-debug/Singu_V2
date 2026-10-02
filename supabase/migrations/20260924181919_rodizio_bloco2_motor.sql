@@ -59,15 +59,19 @@ REVOKE ALL ON FUNCTION public.fn_segmento_cliente(uuid) FROM PUBLIC, anon, authe
 
 CREATE OR REPLACE FUNCTION public.fn_carga_atual_closer(p_vendedor_id integer)
 RETURNS integer
-LANGUAGE sql
+LANGUAGE plpgsql
 STABLE
 SET search_path TO 'public', 'pg_catalog'
 AS $function$
-  SELECT count(*)::integer
-  FROM public.customers c
-  WHERE c.vendedor_id = p_vendedor_id
-    AND c.deleted_at IS NULL
-    AND public.fn_segmento_cliente(c.id) IN ('NAO_ATIVADO', 'INATIVO');
+BEGIN
+  RETURN (
+    SELECT count(*)::integer
+    FROM public.customers c
+    WHERE c.vendedor_id = p_vendedor_id
+      AND c.deleted_at IS NULL
+      AND public.fn_segmento_cliente(c.id) IN ('NAO_ATIVADO', 'INATIVO')
+  );
+END;
 $function$;
 
 REVOKE ALL ON FUNCTION public.fn_carga_atual_closer(integer) FROM PUBLIC, anon, authenticated;

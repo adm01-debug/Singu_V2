@@ -4,11 +4,32 @@
 -- direto pra essas 3 tabelas no frontend (confirmado via grep) — todo acesso real passa por
 -- RPC (que roda como service_role). Restringe SELECT a admin, mesmo padrão já usado nas
 -- 4 tabelas do rodízio (admin_select / has_role).
-ALTER POLICY customers_select ON public.customers
-  USING (has_role(auth.uid(), 'admin'::app_role));
-
-ALTER POLICY contact_phones_select ON public.contact_phones
-  USING (has_role(auth.uid(), 'admin'::app_role));
-
-ALTER POLICY company_phones_select ON public.company_phones
-  USING (has_role(auth.uid(), 'admin'::app_role));
+DO $migration$
+DECLARE
+  policy_definition record;
+BEGIN
+  FOR policy_definition IN
+    SELECT *
+    FROM (VALUES
+      ('customers', 'customers_select'),
+      ('contact_phones', 'contact_phones_select'),
+      ('company_phones', 'company_phones_select')
+    ) AS policies(table_name, policy_name)
+  LOOP
+    IF to_regclass(format('public.%I', policy_definition.table_name)) IS NOT NULL
+      AND EXISTS (
+        SELECT 1
+        FROM pg_policy
+        WHERE polrelid = to_regclass(format('public.%I', policy_definition.table_name))
+          AND polname = policy_definition.policy_name
+      )
+    THEN
+      EXECUTE format(
+        'ALTER POLICY %I ON public.%I USING (has_role(auth.uid(), ''admin''::app_role))',
+        policy_definition.policy_name,
+        policy_definition.table_name
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;

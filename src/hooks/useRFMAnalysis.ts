@@ -23,7 +23,7 @@ interface PurchaseData {
 
 export function useRFMAnalysis(contactId?: string) {
   const { user } = useAuth();
-  const { contacts } = useContacts();
+  const { contacts } = useContacts(undefined, { fetchAll: true });
   const { interactions } = useInteractions();
   const queryClient = useQueryClient();
   const [analyzing, setAnalyzing] = useState(false);

@@ -33,6 +33,8 @@ DECLARE
   ];
 BEGIN
   FOREACH fn IN ARRAY fns LOOP
-    EXECUTE format('REVOKE EXECUTE ON FUNCTION public.%s FROM anon, authenticated, public', fn);
+    IF to_regprocedure('public.' || fn) IS NOT NULL THEN
+      EXECUTE format('REVOKE EXECUTE ON FUNCTION public.%s FROM anon, authenticated, public', fn);
+    END IF;
   END LOOP;
 END $$;

@@ -14,8 +14,8 @@ fi
 RESERVED='^(SUPABASE_URL|SUPABASE_ANON_KEY|SUPABASE_SERVICE_ROLE_KEY|SUPABASE_DB_URL|SUPABASE_PUBLISHABLE_KEY|SB_.*)$'
 
 echo "▶ Extraindo Deno.env.get(...) de supabase/functions/**/index.ts"
-USED=$(grep -rhoE 'Deno\.env\.get\(\s*["'\''][A-Z0-9_]+["'\'']' "$REPO_ROOT/supabase/functions" \
-  | grep -oE '[A-Z0-9_]+' | grep -vE '^(Deno|env|get)$' | sort -u \
+USED=$(grep -hoE 'Deno\.env\.get\(\s*["'\''][A-Z0-9_]+["'\'']' "$REPO_ROOT"/supabase/functions/*/index.ts \
+  | grep -oE '[A-Z][A-Z0-9_]+' | sort -u \
   | grep -Ev "$RESERVED" || true)
 
 DECLARED=$(grep -oE '^[A-Z0-9_]+' "$TEMPLATE" | sort -u)

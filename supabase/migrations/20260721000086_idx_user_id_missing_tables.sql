@@ -6,26 +6,36 @@
 -- Tables confirmed to have user_id column (uuid) with no existing index:
 --   activities, alerts, documents, meetings, proposals, quick_notes, user_goals
 
-CREATE INDEX IF NOT EXISTS idx_activities_user_id
-  ON public.activities (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_alerts_user_id
-  ON public.alerts (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_documents_user_id
-  ON public.documents (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_meetings_user_id
-  ON public.meetings (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_proposals_user_id
-  ON public.proposals (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_quick_notes_user_id
-  ON public.quick_notes (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_user_goals_user_id
-  ON public.user_goals (user_id);
+DO $migration$
+DECLARE
+  table_name text;
+BEGIN
+  FOREACH table_name IN ARRAY ARRAY[
+    'activities',
+    'alerts',
+    'documents',
+    'meetings',
+    'proposals',
+    'quick_notes',
+    'user_goals'
+  ]
+  LOOP
+    IF EXISTS (
+      SELECT 1
+      FROM pg_attribute
+      WHERE attrelid = to_regclass(format('public.%I', table_name))
+        AND attname = 'user_id'
+        AND NOT attisdropped
+    ) THEN
+      EXECUTE format(
+        'CREATE INDEX IF NOT EXISTS %I ON public.%I (user_id)',
+        'idx_' || table_name || '_user_id',
+        table_name
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;
 
 -- ── Verification ──────────────────────────────────────────────────────────────
 DO $$

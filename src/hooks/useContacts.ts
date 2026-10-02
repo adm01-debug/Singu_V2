@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useInfiniteQuery, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -13,7 +13,7 @@ export type Contact = Tables<'contacts'>;
 export type ContactInsert = TablesInsert<'contacts'>;
 export type ContactUpdate = TablesUpdate<'contacts'>;
 
-export type ContactListItem = Pick<Contact, 
+export type ContactListItem = Pick<Contact,
   | 'id' | 'first_name' | 'last_name' | 'company_id' | 'relationship_score'
   | 'relationship_stage' | 'sentiment' | 'tags' | 'updated_at' | 'created_at'
   | 'notes' // Added notes for summary
@@ -81,7 +81,7 @@ export function normalizeExternalContact(raw: Record<string, unknown>): Contact 
   return normalized as unknown as Contact;
 }
 
-const PAGE_SIZE = 500;
+const PAGE_SIZE = 50;
 
 /** Lean select for listing — excludes heavy JSON blobs (behavior, life_events, extra_data) */
 const CONTACT_LISTING_SELECT = [
@@ -118,7 +118,10 @@ async function fetchContactsPage(companyId?: string, page = 0) {
   };
 }
 
-export function useContacts(companyId?: string, options?: { enabled?: boolean }) {
+export function useContacts(
+  companyId?: string,
+  options?: { enabled?: boolean; fetchAll?: boolean },
+) {
   const { user } = useAuth();
   const { toast } = useToast();
   const { logActivity } = useActivityLogger();
@@ -136,6 +139,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isFetchNextPageError,
     error: queryError,
   } = useInfiniteQuery({
     queryKey,
@@ -154,11 +158,21 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   });
 
   const contacts = useMemo(() => data?.pages.flatMap(p => p.items) ?? [], [data]);
+  const fetchAll = options?.fetchAll ?? false;
+  useEffect(() => {
+    if (!externalEnabled || !fetchAll || !hasNextPage || isFetchingNextPage || isFetchNextPageError) return;
+    void fetchNextPage();
+  }, [externalEnabled, fetchAll, fetchNextPage, hasNextPage, isFetchNextPageError, isFetchingNextPage]);
+
   const totalCount = useMemo(() => {
     const fromLast = data?.pages.find(p => p.totalCount != null)?.totalCount ?? null;
     if (fromLast != null) return fromLast;
     return contacts.length;
   }, [data, contacts.length]);
+  const allContactsLoading = externalEnabled &&
+    fetchAll &&
+    !isFetchNextPageError &&
+    (hasNextPage || isFetchingNextPage);
 
   const fetchContacts = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey });
@@ -195,7 +209,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       for (const [k, v] of Object.entries(contact as Record<string, unknown>)) {
         if (!LOCAL_ONLY_FIELDS.has(k)) externalFields[k] = v;
       }
-      
+
       // Map local role_title to external cargo if provided
       if (contact.role_title && !externalFields.cargo) {
         externalFields.cargo = contact.role_title;
@@ -206,7 +220,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
         if (contact[field as keyof typeof contact]) {
           const val = contact[field as keyof typeof contact];
           const arrayVal = Array.isArray(val) ? val : String(val).split(',').map(s => s.trim()).filter(Boolean);
-          
+
           // Map to external column names if they differ
           const extKey = field === 'tags' ? 'tags_array' : field === 'interests' ? 'interests_array' : field;
           externalFields[extKey] = arrayVal;
@@ -247,7 +261,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       return {
         ...prev,
         pages: prev.pages.map(page =>
-          // eslint-disable-next-line sonarjs/no-nested-functions
+
           ({ ...page, items: page.items.map(c => c.id === id ? { ...c, ...updates } as Contact : c) })
         ),
       };
@@ -259,7 +273,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
       for (const [k, v] of Object.entries(updates as Record<string, unknown>)) {
         if (!LOCAL_ONLY_FIELDS.has(k)) cleanUpdates[k] = v;
       }
-      
+
       // Map local fields to external schema names if needed
       if (updates.role_title && !cleanUpdates.cargo) {
         cleanUpdates.cargo = updates.role_title;
@@ -289,9 +303,9 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
         data = result.data;
         error = result.error;
       }
-        
+
       if (error) throw error;
-      
+
       if (data) {
         const normalized = normalizeExternalContact(data as unknown as Record<string, unknown>);
         queryClient.setQueryData<InfiniteData<Page[]>>(queryKey, prev => {
@@ -299,7 +313,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
           return {
             ...prev,
             pages: prev.pages.map(page =>
-              // eslint-disable-next-line sonarjs/no-nested-functions
+
               ({ ...page, items: page.items.map(c => c.id === id ? normalized : c) })
             ),
           };
@@ -316,10 +330,10 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     } catch (error) {
       // Automatic Rollback on error
       if (previous) queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, previous);
-      
+
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error updating contact:', { error: msg });
-      
+
       if (error instanceof ConcurrentEditError) {
         showConcurrentEditToast({ entity: 'contato', queryClient, queryKey });
       } else {
@@ -335,7 +349,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     // Optimistic Delete — filter across all InfiniteQuery pages
     queryClient.setQueryData<InfiniteData<Page[]>>(queryKey, prev => {
       if (!prev) return prev;
-      // eslint-disable-next-line sonarjs/no-nested-functions
+
       return { ...prev, pages: prev.pages.map(page => ({ ...page, items: page.items.filter(c => c.id !== id) })) };
     });
 
@@ -357,5 +371,18 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     }
   };
 
-  return { contacts, loading, isFetching, hasMore: hasNextPage, totalCount, error: queryError, fetchContacts, loadMore, createContact, updateContact, deleteContact, prefetchContactDetails };
+  return {
+    contacts,
+    loading: loading || allContactsLoading,
+    isFetching,
+    hasMore: hasNextPage,
+    totalCount,
+    error: queryError,
+    fetchContacts,
+    loadMore,
+    createContact,
+    updateContact,
+    deleteContact,
+    prefetchContactDetails,
+  };
 }

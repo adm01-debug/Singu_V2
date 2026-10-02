@@ -34,7 +34,10 @@ export function IncomingWebhookLogsDialog({ open, onOpenChange, webhookId, webho
               <div key={l.id} className="border border-border/60 rounded-md p-3 text-xs space-y-1">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Badge variant={l.status === 'success' ? 'default' : 'destructive'} className="text-xs">
+                    <Badge
+                      variant={l.status === 'success' ? 'default' : l.status === 'queued' ? 'secondary' : 'destructive'}
+                      className="text-xs"
+                    >
                       {l.status} · HTTP {l.http_status ?? '—'}
                     </Badge>
                     {l.latency_ms != null && <span className="text-muted-foreground">{l.latency_ms}ms</span>}

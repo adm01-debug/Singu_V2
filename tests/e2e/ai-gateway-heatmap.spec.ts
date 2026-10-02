@@ -15,7 +15,7 @@ test.describe('AI Gateway heatmap', () => {
     const resp = await page.goto('/admin/error-budget', { waitUntil: 'domcontentloaded' });
     expect(resp?.ok(), 'response should be ok').toBeTruthy();
 
-    await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => undefined);
+    await expect(page.locator('body')).toBeVisible();
 
     expect(chunkErrors, `Chunk errors: ${chunkErrors.join('\n')}`).toHaveLength(0);
     expect(page.url()).toMatch(/\/(admin\/error-budget|auth)/);

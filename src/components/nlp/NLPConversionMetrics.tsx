@@ -99,14 +99,14 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
           K: entry.kinesthetic_score || 0,
           D: entry.digital_score || 0
         };
-        
+
         const maxScore = Math.max(...Object.values(scores));
-        // eslint-disable-next-line sonarjs/no-nested-functions -- closures legítimas para métricas/timeline; refator quebraria coesão
+
         const dominant = (Object.keys(scores) as VAKType[]).find(k => scores[k] === maxScore) || 'V';
-        
+
         vakData[dominant].contacts.add(entry.contact_id);
-        
-        // eslint-disable-next-line sonarjs/no-nested-functions -- closures legítimas para métricas/timeline; refator quebraria coesão
+
+
         const contact = (contacts || []).find(c => c.id === entry.contact_id);
         if (contact) {
           vakData[dominant].totalScore += contact.relationship_score || 0;
@@ -114,8 +114,8 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
             vakData[dominant].conversions++;
           }
         }
-        
-        // eslint-disable-next-line sonarjs/no-nested-functions -- closures legítimas para métricas/timeline; refator quebraria coesão
+
+
         vakData[dominant].interactions += (interactions || []).filter(i => i.contact_id === entry.contact_id).length;
       });
 
@@ -148,7 +148,7 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
         let category = 'neutral';
         if (positiveStates.includes(entry.emotional_state)) category = 'positive';
         else if (negativeStates.includes(entry.emotional_state)) category = 'negative';
-        
+
         emotionalData[category].contacts.add(entry.contact_id);
         emotionalData[category].count++;
       });
@@ -179,8 +179,8 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
   }, [user, period]);
 
   const currentMetrics = metricType === 'vak' ? vakMetrics : emotionalMetrics;
-  
-  const chartData = useMemo(() => 
+
+  const chartData = useMemo(() =>
     currentMetrics.map(m => ({
       name: m.profile,
       'Contatos': m.totalContacts,
@@ -212,9 +212,9 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
     }
   };
 
-  const bestProfile = useMemo(() => 
-    currentMetrics.reduce((best, curr) => 
-      curr.conversionRate > (best?.conversionRate || 0) ? curr : best, 
+  const bestProfile = useMemo(() =>
+    currentMetrics.reduce((best, curr) =>
+      curr.conversionRate > (best?.conversionRate || 0) ? curr : best,
       currentMetrics[0]
     ),
   [currentMetrics]);
@@ -322,14 +322,14 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="name" tick={{ fontSize: 11 }} />
                   <YAxis tick={{ fontSize: 11 }} />
-                  <Tooltip 
-                    contentStyle={{ 
+                  <Tooltip
+                    contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))'
                     }}
                   />
-                  <Bar 
-                    dataKey="Contatos" 
+                  <Bar
+                    dataKey="Contatos"
                     fill="hsl(var(--primary))"
                     radius={[4, 4, 0, 0]}
                   />
@@ -374,8 +374,8 @@ const NLPConversionMetrics: React.FC<{ className?: string }> = ({ className }) =
               Insight Principal
             </h4>
             <p className="text-sm">
-              Contatos com perfil <strong>{bestProfile.profile}</strong> representam sua maior base 
-              ({bestProfile.totalContacts} contatos). {metricType === 'vak' && bestProfile.avgRelationshipScore > 0 && 
+              Contatos com perfil <strong>{bestProfile.profile}</strong> representam sua maior base
+              ({bestProfile.totalContacts} contatos). {metricType === 'vak' && bestProfile.avgRelationshipScore > 0 &&
                 `O score médio de relacionamento é ${bestProfile.avgRelationshipScore}%.`}
               {' '}Adapte sua comunicação para maximizar resultados com esse perfil.
             </p>

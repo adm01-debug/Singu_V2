@@ -49,7 +49,7 @@ const Dashboard = () => {
   const tabsRef = useRef<HTMLDivElement>(null);
 
   // Data hooks
-  const { contacts, loading: contactsLoading } = useContacts();
+  const { contacts, loading: contactsLoading } = useContacts(undefined, { fetchAll: true });
   const { companies, totalCount: companiesTotal, loading: companiesLoading } = useCompanies();
   const { interactions, loading: interactionsLoading } = useInteractions();
   const dashboardStats = useDashboardStats({

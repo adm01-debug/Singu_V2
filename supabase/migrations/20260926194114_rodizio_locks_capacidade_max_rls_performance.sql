@@ -290,52 +290,86 @@ $function$;
 
 -- Fix 3: performance RLS — envolve has_role(auth.uid(),...) em (select ...) para
 -- gerar InitPlan (cache por statement) em vez de reavaliar auth.uid() por linha.
-ALTER POLICY company_phones_delete ON public.company_phones USING ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY company_phones_insert ON public.company_phones WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY company_phones_select ON public.company_phones USING ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY company_phones_update ON public.company_phones USING ((select has_role(auth.uid(), 'admin'::app_role))) WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
+DO $migration$
+DECLARE
+  policy_definition record;
+  table_name text;
+  clauses text;
+BEGIN
+  FOR policy_definition IN
+    SELECT *
+    FROM (VALUES
+      ('company_phones', 'company_phones_delete', true, false),
+      ('company_phones', 'company_phones_insert', false, true),
+      ('company_phones', 'company_phones_select', true, false),
+      ('company_phones', 'company_phones_update', true, true),
+      ('contact_phones', 'contact_phones_delete', true, false),
+      ('contact_phones', 'contact_phones_insert', false, true),
+      ('contact_phones', 'contact_phones_select', true, false),
+      ('contact_phones', 'contact_phones_update', true, true),
+      ('customers', 'customers_delete', true, false),
+      ('customers', 'customers_insert', false, true),
+      ('customers', 'customers_select', true, false),
+      ('customers', 'customers_update', true, true),
+      ('customer_events', 'admin_insert', false, true),
+      ('customer_ownership_history', 'admin_insert', false, true),
+      ('customer_ownership_history', 'admin_update', true, true),
+      ('customer_purchases', 'admin_select', true, false),
+      ('customer_rotation_state', 'admin_insert', false, true),
+      ('customer_rotation_state', 'admin_select', true, false),
+      ('customer_rotation_state', 'admin_update', true, true),
+      ('customer_sdr_history', 'admin_insert', false, true),
+      ('customer_sdr_history', 'admin_update', true, true),
+      ('rodizio_distribuicao_staging', 'admin_insert', false, true),
+      ('rodizio_distribuicao_staging', 'admin_select', true, false),
+      ('rodizio_distribuicao_staging', 'admin_update', true, true),
+      ('rodizio_execucoes', 'admin_insert', false, true),
+      ('rodizio_execucoes', 'admin_select', true, false),
+      ('rodizio_execucoes', 'admin_update', true, true),
+      ('users', 'admin_select', true, false),
+      ('users', 'admin_update', true, true)
+    ) AS policies(table_name, policy_name, use_using, use_check)
+  LOOP
+    IF to_regclass(format('public.%I', policy_definition.table_name)) IS NOT NULL
+      AND EXISTS (
+        SELECT 1
+        FROM pg_policy
+        WHERE polrelid = to_regclass(format('public.%I', policy_definition.table_name))
+          AND polname = policy_definition.policy_name
+      )
+    THEN
+      clauses := '';
+      IF policy_definition.use_using THEN
+        clauses := clauses || ' USING ((select has_role(auth.uid(), ''admin''::app_role)))';
+      END IF;
+      IF policy_definition.use_check THEN
+        clauses := clauses || ' WITH CHECK ((select has_role(auth.uid(), ''admin''::app_role)))';
+      END IF;
 
-ALTER POLICY contact_phones_delete ON public.contact_phones USING ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY contact_phones_insert ON public.contact_phones WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY contact_phones_select ON public.contact_phones USING ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY contact_phones_update ON public.contact_phones USING ((select has_role(auth.uid(), 'admin'::app_role))) WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
+      EXECUTE format(
+        'ALTER POLICY %I ON public.%I%s',
+        policy_definition.policy_name,
+        policy_definition.table_name,
+        clauses
+      );
+    END IF;
+  END LOOP;
 
-ALTER POLICY customers_delete ON public.customers USING ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY customers_insert ON public.customers WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY customers_select ON public.customers USING ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY customers_update ON public.customers USING ((select has_role(auth.uid(), 'admin'::app_role))) WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-
-ALTER POLICY admin_insert ON public.customer_events WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-
-ALTER POLICY admin_insert ON public.customer_ownership_history WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY admin_update ON public.customer_ownership_history USING ((select has_role(auth.uid(), 'admin'::app_role))) WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-
-ALTER POLICY admin_select ON public.customer_purchases USING ((select has_role(auth.uid(), 'admin'::app_role)));
-
-ALTER POLICY admin_insert ON public.customer_rotation_state WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY admin_select ON public.customer_rotation_state USING ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY admin_update ON public.customer_rotation_state USING ((select has_role(auth.uid(), 'admin'::app_role))) WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-
-ALTER POLICY admin_insert ON public.customer_sdr_history WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY admin_update ON public.customer_sdr_history USING ((select has_role(auth.uid(), 'admin'::app_role))) WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-
-ALTER POLICY admin_insert ON public.rodizio_distribuicao_staging WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY admin_select ON public.rodizio_distribuicao_staging USING ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY admin_update ON public.rodizio_distribuicao_staging USING ((select has_role(auth.uid(), 'admin'::app_role))) WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-
-ALTER POLICY admin_insert ON public.rodizio_execucoes WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY admin_select ON public.rodizio_execucoes USING ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY admin_update ON public.rodizio_execucoes USING ((select has_role(auth.uid(), 'admin'::app_role))) WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-
-ALTER POLICY admin_select ON public.users USING ((select has_role(auth.uid(), 'admin'::app_role)));
-ALTER POLICY admin_update ON public.users USING ((select has_role(auth.uid(), 'admin'::app_role))) WITH CHECK ((select has_role(auth.uid(), 'admin'::app_role)));
-
--- Fix 3: REVOKE do grant table-level solto para anon nas tabelas de PII/rodízio
--- (RLS já restringia por linha, mas o grant amplo era desnecessário e custava lint).
-REVOKE ALL ON TABLE public.customers FROM anon;
-REVOKE ALL ON TABLE public.contact_phones FROM anon;
-REVOKE ALL ON TABLE public.company_phones FROM anon;
-REVOKE ALL ON TABLE public.contacts FROM anon;
-REVOKE ALL ON TABLE public.companies FROM anon;
-REVOKE ALL ON TABLE public.profiles FROM anon;
-REVOKE ALL ON TABLE public.users FROM anon;
+  -- Fix 3: REVOKE do grant table-level solto para anon nas tabelas de PII/rodízio
+  -- (RLS já restringia por linha, mas o grant amplo era desnecessário e custava lint).
+  FOREACH table_name IN ARRAY ARRAY[
+    'customers',
+    'contact_phones',
+    'company_phones',
+    'contacts',
+    'companies',
+    'profiles',
+    'users'
+  ]
+  LOOP
+    IF to_regclass(format('public.%I', table_name)) IS NOT NULL THEN
+      EXECUTE format('REVOKE ALL ON TABLE public.%I FROM anon', table_name);
+    END IF;
+  END LOOP;
+END;
+$migration$;

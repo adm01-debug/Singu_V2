@@ -31,6 +31,12 @@ const ENTITIES: { value: WebhookTargetEntity; label: string }[] = [
   { value: 'custom', label: 'Custom (apenas log)' },
 ];
 
+function genWebhookSecret() {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
 export function IncomingWebhookFormDialog({ open, onOpenChange, webhookId }: Props) {
   const { webhooks, upsert } = useIncomingWebhooks();
   const existing = webhooks.find(w => w.id === webhookId);
@@ -44,8 +50,8 @@ export function IncomingWebhookFormDialog({ open, onOpenChange, webhookId }: Pro
     JSON.stringify(existing?.field_mapping ?? { first_name: 'name', email: 'email' }, null, 2),
   );
   const [mappingError, setMappingError] = useState<string | null>(null);
-  const [requireSignature, setRequireSignature] = useState(existing?.require_signature ?? false);
-  const [webhookSecret, setWebhookSecret] = useState(existing?.webhook_secret ?? '');
+  const requireSignature = true;
+  const [webhookSecret, setWebhookSecret] = useState(() => existing?.webhook_secret ?? genWebhookSecret());
   const [replayWindow, setReplayWindow] = useState(existing?.replay_window_seconds ?? 300);
   const [examplePayload, setExamplePayload] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
@@ -75,6 +81,10 @@ export function IncomingWebhookFormDialog({ open, onOpenChange, webhookId }: Pro
       setMappingError(null);
     } catch {
       setMappingError('JSON inválido no mapeamento');
+      return;
+    }
+    if (webhookSecret.length < 32) {
+      toast.error('O webhook secret deve ter ao menos 32 caracteres');
       return;
     }
     await upsert.mutateAsync({
@@ -188,11 +198,10 @@ export function IncomingWebhookFormDialog({ open, onOpenChange, webhookId }: Pro
 
           <div className="border-t border-border/40 pt-4 space-y-3">
             <div className="flex items-center gap-2">
-              <Switch checked={requireSignature} onCheckedChange={setRequireSignature} id="wh-hmac" />
-              <Label htmlFor="wh-hmac" className="font-medium">Exigir assinatura HMAC</Label>
+              <Switch checked disabled id="wh-hmac" />
+              <Label htmlFor="wh-hmac" className="font-medium">Assinatura HMAC obrigatória</Label>
             </div>
-            {requireSignature && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pl-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pl-6">
                 <div className="md:col-span-2">
                   <Label>Webhook secret</Label>
                   <Input
@@ -202,7 +211,7 @@ export function IncomingWebhookFormDialog({ open, onOpenChange, webhookId }: Pro
                     placeholder="ex: whk_3f9..."
                   />
                   <p className="text-xs text-muted-foreground mt-1">
-                    Origem deve enviar <code>X-Lovable-Signature: sha256=&lt;hmac&gt;</code> e <code>X-Lovable-Timestamp: &lt;ms&gt;</code>.
+                    Envie assinatura, timestamp e uma chave de idempotência única por requisição.
                   </p>
                 </div>
                 <div>
@@ -213,8 +222,7 @@ export function IncomingWebhookFormDialog({ open, onOpenChange, webhookId }: Pro
                     onChange={e => setReplayWindow(Number(e.target.value) || 300)}
                   />
                 </div>
-              </div>
-            )}
+            </div>
           </div>
 
           <Alert>
