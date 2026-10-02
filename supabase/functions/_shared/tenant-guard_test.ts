@@ -1,6 +1,8 @@
 import { assertEquals } from "jsr:@std/assert";
 import {
   enforceTenantIdentity,
+  extractRelationId,
+  getRelationScope,
   isSafeIdentifier,
   quotePostgrestValue,
 } from "./tenant-guard.ts";
@@ -42,4 +44,33 @@ Deno.test("quotePostgrestValue neutraliza separadores da expressão lógica", ()
     '"%nome%),user_id.neq.usuario%"',
   );
   assertEquals(quotePostgrestValue('valor"\\final'), '"valor\\"\\\\final"');
+});
+
+Deno.test("getRelationScope classifica relações sem user_id pelo proprietário", () => {
+  assertEquals(getRelationScope("contact_phones"), {
+    foreignKey: "contact_id",
+    parentTable: "contacts",
+  });
+  assertEquals(getRelationScope("company_addresses"), {
+    foreignKey: "company_id",
+    parentTable: "companies",
+  });
+  assertEquals(getRelationScope("contacts"), null);
+});
+
+Deno.test("extractRelationId exige filtro de igualdade da relação", () => {
+  assertEquals(
+    extractRelationId(
+      [{ type: "eq", column: "contact_id", value: "contato-autorizado" }],
+      "contact_id",
+    ),
+    "contato-autorizado",
+  );
+  assertEquals(
+    extractRelationId(
+      [{ type: "in", column: "contact_id", value: ["contato-externo"] }],
+      "contact_id",
+    ),
+    null,
+  );
 });

@@ -69,7 +69,8 @@ NO_JWT_FUNCTIONS=(
   deal-room-buyer-view dual-write-proxy evolution-webhook forecast-snapshot-cron
   evolution-bitrix-connector form-submit-handler generate-behavioral-profile
   get-signature incoming-webhook
-  lead-score-cron lux-webhook mcp-server mql-evaluator nurturing-runner
+  intent-pixel-snippet intent-tracker lead-score-cron lux-webhook mcp-server
+  mql-evaluator nurturing-runner
   process-behavioral-regen-queue process-webhook-dlq retry-behavioral-profile
   revops-snapshot-builder send-sms-campaign sequence-processor sequence-track
   smart-notify social-events-detector submit-signature sync-social-interests

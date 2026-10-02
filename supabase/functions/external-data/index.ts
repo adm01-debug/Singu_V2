@@ -5,8 +5,11 @@ import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { assertVersionMatch } from "../_shared/version-guard.ts";
 import {
   enforceTenantIdentity,
+  extractRelationId,
+  getRelationScope,
   isSafeIdentifier,
   quotePostgrestValue,
+  type RelationScope,
 } from "../_shared/tenant-guard.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 
@@ -173,6 +176,37 @@ function getExternalClient() {
   });
 }
 
+async function hasRelationAccess(
+  client: ReturnType<typeof getExternalClient>,
+  scope: RelationScope,
+  relationId: string,
+  userId: string,
+): Promise<boolean> {
+  const { data, error } = await client
+    .from(scope.parentTable)
+    .select('id')
+    .eq('id', relationId)
+    .eq('user_id', userId)
+    .maybeSingle();
+  return !error && Boolean(data);
+}
+
+async function getRelationIdForRecord(
+  client: ReturnType<typeof getExternalClient>,
+  table: AllowedTable,
+  recordId: string,
+  scope: RelationScope,
+): Promise<string | null> {
+  const { data, error } = await client
+    .from(table)
+    .select(scope.foreignKey)
+    .eq('id', recordId)
+    .maybeSingle();
+  if (error || !data) return null;
+  const relationId = (data as Record<string, unknown>)[scope.foreignKey];
+  return typeof relationId === 'string' ? relationId : null;
+}
+
 async function hasAdminRole(userId: string): Promise<boolean> {
   const admin = createClient(
     Deno.env.get('SUPABASE_URL')!,
@@ -330,6 +364,9 @@ Deno.serve(async (req) => {
       const { column } = body;
       if (!table || !isAllowedTable(table)) return jsonError('Invalid table', 400, req);
       if (!isSafeIdentifier(column)) return jsonError('Invalid "column" for distinct', 400, req);
+      if (!isSvc && getRelationScope(table)) {
+        return jsonError('Relation scope required', 400, req);
+      }
 
       const client = getExternalClient();
       let query = client
@@ -356,6 +393,9 @@ Deno.serve(async (req) => {
       if (!Array.isArray(columns) || columns.length === 0) return jsonError('Missing "columns" array for batch_distinct', 400, req);
       if (columns.length > 20) return jsonError('Max 20 columns per batch', 400, req);
       if (!columns.every(isSafeIdentifier)) return jsonError('Invalid column in batch_distinct', 400, req);
+      if (!isSvc && getRelationScope(table)) {
+        return jsonError('Relation scope required', 400, req);
+      }
 
       const client = getExternalClient();
       const results: Record<string, string[]> = {};
@@ -425,6 +465,14 @@ Deno.serve(async (req) => {
         return jsonError('Admin role required', 403, req);
       }
       const { filters, select, order, range, search, countMethod } = body;
+      const relationScope = getRelationScope(table);
+      if (!isSvc && relationScope) {
+        const relationId = extractRelationId(filters, relationScope.foreignKey);
+        if (!relationId) return jsonError(`${relationScope.foreignKey} scope required`, 400, req);
+        if (!await hasRelationAccess(client, relationScope, relationId, userId)) {
+          return jsonError('Forbidden', 403, req);
+        }
+      }
       const selectedColumns = typeof select === 'string' ? select : '*';
       const searchConfig = search && typeof search === 'object'
         ? search as Record<string, unknown>
@@ -449,7 +497,7 @@ Deno.serve(async (req) => {
         const countMode = countMethod === 'planned' ? 'planned' : 'exact';
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TS2589 deep type instantiation with dynamic Supabase queries
         let query: any = client.from(table).select(selectedColumns, { count: countMode });
-        if (!isSvc && !GLOBAL_READ_ONLY_TABLES.has(table)) {
+        if (!isSvc && !GLOBAL_READ_ONLY_TABLES.has(table) && !relationScope) {
           query = query.eq('user_id', userId);
         }
 
@@ -520,7 +568,17 @@ Deno.serve(async (req) => {
       if (!record || typeof record !== 'object') return jsonError('Missing or invalid "record" for insert', 400, req);
 
       // Inject user_id so records are always tenant-scoped (service role bypasses RLS — no need)
-      const safeRecord = isSvc
+      const relationScope = getRelationScope(table);
+      if (!isSvc && relationScope) {
+        const relationId = (record as Record<string, unknown>)[relationScope.foreignKey];
+        if (
+          typeof relationId !== 'string' ||
+          !await hasRelationAccess(client, relationScope, relationId, userId)
+        ) {
+          return jsonError('Forbidden', 403, req);
+        }
+      }
+      const safeRecord = isSvc || relationScope
         ? (record as Record<string, unknown>)
         : {
             ...(enforceTenantIdentity(record, userId) as Record<string, unknown>),
@@ -541,11 +599,30 @@ Deno.serve(async (req) => {
       if (!updates || typeof updates !== 'object') return jsonError('Missing or invalid "updates" for update', 400, req);
 
       // user_id filter prevents updating another tenant's record (service role bypasses RLS)
+      const relationScope = getRelationScope(table);
+      let authorizedRelationId: string | null = null;
+      if (!isSvc && relationScope) {
+        const relationId = await getRelationIdForRecord(client, table, id, relationScope);
+        if (
+          !relationId ||
+          !await hasRelationAccess(client, relationScope, relationId, userId)
+        ) {
+          return jsonError('Forbidden', 403, req);
+        }
+        const requestedRelationId = (updates as Record<string, unknown>)[relationScope.foreignKey];
+        if (requestedRelationId !== undefined && requestedRelationId !== relationId) {
+          return jsonError(`${relationScope.foreignKey} cannot be changed`, 400, req);
+        }
+        authorizedRelationId = relationId;
+      }
       const safeUpdates = (
-        isSvc ? updates : enforceTenantIdentity(updates, userId)
+        isSvc || relationScope ? updates : enforceTenantIdentity(updates, userId)
       ) as Record<string, unknown>;
       let q = client.from(table).update(safeUpdates).eq('id', id);
-      if (!isSvc) q = q.eq('user_id', userId);
+      if (!isSvc && !relationScope) q = q.eq('user_id', userId);
+      if (relationScope && authorizedRelationId) {
+        q = q.eq(relationScope.foreignKey, authorizedRelationId);
+      }
       const { data, error } = await q.select().single();
       if (error) throw new Error(`Update failed: ${error.message}`);
       return jsonOk({ data }, req);
@@ -563,11 +640,30 @@ Deno.serve(async (req) => {
 
       // Conditional update: only succeeds if version matches AND record belongs to this user.
       // The DB trigger increments version automatically on UPDATE. (service role bypasses RLS)
+      const relationScope = getRelationScope(table);
+      let authorizedRelationId: string | null = null;
+      if (!isSvc && relationScope) {
+        const relationId = await getRelationIdForRecord(client, table, id, relationScope);
+        if (
+          !relationId ||
+          !await hasRelationAccess(client, relationScope, relationId, userId)
+        ) {
+          return jsonError('Forbidden', 403, req);
+        }
+        const requestedRelationId = (updates as Record<string, unknown>)[relationScope.foreignKey];
+        if (requestedRelationId !== undefined && requestedRelationId !== relationId) {
+          return jsonError(`${relationScope.foreignKey} cannot be changed`, 400, req);
+        }
+        authorizedRelationId = relationId;
+      }
       const safeUpdates = (
-        isSvc ? updates : enforceTenantIdentity(updates, userId)
+        isSvc || relationScope ? updates : enforceTenantIdentity(updates, userId)
       ) as Record<string, unknown>;
       let q = client.from(table).update(safeUpdates).eq('id', id).eq('version', version);
-      if (!isSvc) q = q.eq('user_id', userId);
+      if (!isSvc && !relationScope) q = q.eq('user_id', userId);
+      if (relationScope && authorizedRelationId) {
+        q = q.eq(relationScope.foreignKey, authorizedRelationId);
+      }
       const { data, error } = await q.select();
 
       if (error) throw new Error(`update_with_version failed: ${error.message}`);
@@ -589,8 +685,23 @@ Deno.serve(async (req) => {
       if (!uuidRegex.test(id as string)) return jsonError('Invalid UUID format for "id"', 400, req);
 
       // user_id filter prevents deleting another tenant's record (service role bypasses RLS)
+      const relationScope = getRelationScope(table);
+      let authorizedRelationId: string | null = null;
+      if (!isSvc && relationScope) {
+        const relationId = await getRelationIdForRecord(client, table, id, relationScope);
+        if (
+          !relationId ||
+          !await hasRelationAccess(client, relationScope, relationId, userId)
+        ) {
+          return jsonError('Forbidden', 403, req);
+        }
+        authorizedRelationId = relationId;
+      }
       let q = client.from(table).delete().eq('id', id);
-      if (!isSvc) q = q.eq('user_id', userId);
+      if (!isSvc && !relationScope) q = q.eq('user_id', userId);
+      if (relationScope && authorizedRelationId) {
+        q = q.eq(relationScope.foreignKey, authorizedRelationId);
+      }
       const { error } = await q;
       if (error) throw new Error(`Delete failed: ${error.message}`);
       return jsonOk({ success: true }, req);
