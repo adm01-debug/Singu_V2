@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useInfiniteQuery, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -118,7 +118,10 @@ async function fetchContactsPage(companyId?: string, page = 0) {
   };
 }
 
-export function useContacts(companyId?: string, options?: { enabled?: boolean }) {
+export function useContacts(
+  companyId?: string,
+  options?: { enabled?: boolean; fetchAll?: boolean },
+) {
   const { user } = useAuth();
   const { toast } = useToast();
   const { logActivity } = useActivityLogger();
@@ -136,6 +139,7 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isFetchNextPageError,
     error: queryError,
   } = useInfiniteQuery({
     queryKey,
@@ -154,11 +158,18 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
   });
 
   const contacts = useMemo(() => data?.pages.flatMap(p => p.items) ?? [], [data]);
+  const fetchAll = options?.fetchAll ?? false;
+  useEffect(() => {
+    if (!fetchAll || !hasNextPage || isFetchingNextPage || isFetchNextPageError) return;
+    void fetchNextPage();
+  }, [fetchAll, fetchNextPage, hasNextPage, isFetchNextPageError, isFetchingNextPage]);
+
   const totalCount = useMemo(() => {
     const fromLast = data?.pages.find(p => p.totalCount != null)?.totalCount ?? null;
     if (fromLast != null) return fromLast;
     return contacts.length;
   }, [data, contacts.length]);
+  const allContactsLoading = fetchAll && (hasNextPage || isFetchingNextPage);
 
   const fetchContacts = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey });
@@ -357,5 +368,18 @@ export function useContacts(companyId?: string, options?: { enabled?: boolean })
     }
   };
 
-  return { contacts, loading, isFetching, hasMore: hasNextPage, totalCount, error: queryError, fetchContacts, loadMore, createContact, updateContact, deleteContact, prefetchContactDetails };
+  return {
+    contacts,
+    loading: loading || allContactsLoading,
+    isFetching,
+    hasMore: hasNextPage,
+    totalCount,
+    error: queryError,
+    fetchContacts,
+    loadMore,
+    createContact,
+    updateContact,
+    deleteContact,
+    prefetchContactDetails,
+  };
 }

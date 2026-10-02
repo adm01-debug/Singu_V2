@@ -73,6 +73,37 @@ function mapImportRow(
   return { data: mapped };
 }
 
+interface MappedImportRecord {
+  data: Record<string, unknown>;
+  rowNumber: number;
+}
+
+export function mapImportBatch(
+  rows: Record<string, string>[],
+  rowOffset: number,
+  rawHeaders: string[],
+  normalizedHeaders: string[],
+  validFields: string[],
+  userId: string,
+  entityType: ImportEntityType,
+): { records: MappedImportRecord[]; errors: ImportResult['errors'] } {
+  const errors: ImportResult['errors'] = [];
+  const records = rows.flatMap((row, batchIndex) => {
+    const rowNumber = rowOffset + batchIndex + 2;
+    const mapped = mapImportRow(
+      row,
+      rawHeaders,
+      normalizedHeaders,
+      validFields,
+      userId,
+      entityType,
+    );
+    if (mapped.error) errors.push({ row: rowNumber, message: mapped.error });
+    return mapped.data ? [{ data: mapped.data, rowNumber }] : [];
+  });
+  return { records, errors };
+}
+
 export function useBulkImport(entityType: ImportEntityType) {
   const { user } = useAuth();
   const qc = useQueryClient();
@@ -127,34 +158,29 @@ export function useBulkImport(entityType: ImportEntityType) {
 
             const BATCH_SIZE = 50;
             for (let i = 0; i < rows.length; i += BATCH_SIZE) {
+              const batch = mapImportBatch(
+                rows.slice(i, i + BATCH_SIZE),
+                i,
+                rawHeaders,
+                normalized,
+                validFields,
+                user.id,
+                entityType,
+              );
+              errors.push(...batch.errors);
 
-              const batch = rows.slice(i, i + BATCH_SIZE).flatMap((row, batchIndex) => {
-                const mapped = mapImportRow(
-                  row,
-                  rawHeaders,
-                  normalized,
-                  validFields,
-                  user.id,
-                  entityType,
-                );
-                if (mapped.error) {
-                  errors.push({ row: i + batchIndex + 2, message: mapped.error });
-                }
-                return mapped.data ? [mapped.data] : [];
-              });
-
-              if (batch.length > 0) {
+              if (batch.records.length > 0) {
+                const payloads = batch.records.map(record => record.data);
                 const { error } = entityType === 'contacts'
-                  ? await supabase.from('contacts').insert(batch as TablesInsert<'contacts'>[])
-                  : await supabase.from('companies').insert(batch as TablesInsert<'companies'>[]);
+                  ? await supabase.from('contacts').insert(payloads as TablesInsert<'contacts'>[])
+                  : await supabase.from('companies').insert(payloads as TablesInsert<'companies'>[]);
 
                 if (error) {
-
-                  batch.forEach((_, bIdx) => {
-                    errors.push({ row: i + bIdx + 2, message: error.message });
+                  batch.records.forEach(record => {
+                    errors.push({ row: record.rowNumber, message: error.message });
                   });
                 } else {
-                  success += batch.length;
+                  success += batch.records.length;
                 }
               }
             }

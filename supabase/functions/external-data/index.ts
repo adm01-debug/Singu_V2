@@ -3,6 +3,11 @@ import { withAuthOrServiceRole, jsonError, jsonOk, handleCorsAndMethod, guardBod
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { assertVersionMatch } from "../_shared/version-guard.ts";
+import {
+  enforceTenantIdentity,
+  isSafeIdentifier,
+  quotePostgrestValue,
+} from "../_shared/tenant-guard.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 100, message: "Rate limit exceeded for external data. Please wait." });
@@ -173,30 +178,6 @@ function clampRange(range?: { from: number; to: number }): { from: number; to: n
   return { from, to };
 }
 
-const TENANT_ID_KEYS = new Set([
-  'user_id',
-  'userid',
-  'userId',
-  'p_user_id',
-  'created_by',
-  'owner_id',
-]);
-
-function enforceTenantIdentity(value: unknown, userId: string, depth = 0): unknown {
-  if (depth > 5 || value === null || typeof value !== 'object') return value;
-  if (Array.isArray(value)) {
-    return value.map((item) => enforceTenantIdentity(item, userId, depth + 1));
-  }
-  return Object.fromEntries(
-    Object.entries(value as Record<string, unknown>).map(([key, entry]) => [
-      key,
-      TENANT_ID_KEYS.has(key)
-        ? userId
-        : enforceTenantIdentity(entry, userId, depth + 1),
-    ]),
-  );
-}
-
 async function withRetry<T>(fn: () => Promise<T>, retries = 1): Promise<T> {
   let lastError: Error | null = null;
   for (let i = 0; i <= retries; i++) {
@@ -329,7 +310,7 @@ Deno.serve(async (req) => {
     if (operation === 'distinct') {
       const { column } = body;
       if (!table || !isAllowedTable(table)) return jsonError('Invalid table', 400, req);
-      if (!column || typeof column !== 'string') return jsonError('Missing "column" for distinct', 400, req);
+      if (!isSafeIdentifier(column)) return jsonError('Invalid "column" for distinct', 400, req);
 
       const client = getExternalClient();
       let query = client
@@ -355,6 +336,7 @@ Deno.serve(async (req) => {
       if (!table || !isAllowedTable(table)) return jsonError('Invalid table', 400, req);
       if (!Array.isArray(columns) || columns.length === 0) return jsonError('Missing "columns" array for batch_distinct', 400, req);
       if (columns.length > 20) return jsonError('Max 20 columns per batch', 400, req);
+      if (!columns.every(isSafeIdentifier)) return jsonError('Invalid column in batch_distinct', 400, req);
 
       const client = getExternalClient();
       const results: Record<string, string[]> = {};
@@ -418,18 +400,40 @@ Deno.serve(async (req) => {
     // ─── SELECT (read) ───
     if (operation === 'select') {
       const { filters, select, order, range, search, countMethod } = body;
+      const selectedColumns = typeof select === 'string' ? select : '*';
+      const searchConfig = search && typeof search === 'object'
+        ? search as Record<string, unknown>
+        : undefined;
+      const searchColumns = Array.isArray(searchConfig?.columns)
+        ? searchConfig.columns.slice(0, 10)
+        : [];
+      if (!searchColumns.every(isSafeIdentifier)) {
+        return jsonError('Invalid search column', 400, req);
+      }
+      const orderConfig = order && typeof order === 'object'
+        ? order as Record<string, unknown>
+        : undefined;
+      if (orderConfig?.column !== undefined && !isSafeIdentifier(orderConfig.column)) {
+        return jsonError('Invalid order column', 400, req);
+      }
+      const rangeConfig = range && typeof range === 'object'
+        ? range as { from: number; to: number }
+        : undefined;
 
       const result = await withRetry(async () => {
         const countMode = countMethod === 'planned' ? 'planned' : 'exact';
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TS2589 deep type instantiation with dynamic Supabase queries
-        let query: any = client.from(table).select(select || '*', { count: countMode });
+        let query: any = client.from(table).select(selectedColumns, { count: countMode });
         if (!isSvc) query = query.eq('user_id', userId);
 
-        if (search?.term && typeof search.term === 'string' && search.term.trim()) {
-          const term = `%${search.term.trim().slice(0, 200)}%`;
-          const columns: string[] = (Array.isArray(search.columns) ? search.columns : []).slice(0, 10);
-          if (columns.length > 0) {
-            query = query.or(columns.map((col: string) => `${col}.ilike.${term}`).join(','));
+        if (
+          typeof searchConfig?.term === 'string' &&
+          searchConfig.term.trim() &&
+          searchColumns.length > 0
+        ) {
+          const term = quotePostgrestValue(`%${searchConfig.term.trim().slice(0, 200)}%`);
+          if (searchColumns.length > 0) {
+            query = query.or(searchColumns.map((col) => `${col}.ilike.${term}`).join(','));
           }
         }
 
@@ -444,6 +448,10 @@ Deno.serve(async (req) => {
           const cappedFilters = filters.slice(0, 20);
           for (const f of cappedFilters) {
             if (!f.column || !f.type) continue;
+            if (!isSafeIdentifier(f.column)) {
+              log.warn("skipping filter with invalid column", { column: f.column });
+              continue;
+            }
             if (!ALLOWED_FILTER_TYPES.has(f.type)) {
               log.warn("skipping filter with disallowed type", { type: f.type });
               continue;
@@ -460,8 +468,10 @@ Deno.serve(async (req) => {
           }
         }
 
-        if (order?.column) query = query.order(order.column, { ascending: order.ascending ?? false });
-        const clamped = clampRange(range);
+        if (isSafeIdentifier(orderConfig?.column)) {
+          query = query.order(orderConfig.column, { ascending: orderConfig.ascending === true });
+        }
+        const clamped = clampRange(rangeConfig);
         query = query.range(clamped.from, clamped.to);
 
         const { data, error, count } = await query as unknown as { data: unknown[]; error: { message: string } | null; count: number };
@@ -504,7 +514,9 @@ Deno.serve(async (req) => {
       if (!updates || typeof updates !== 'object') return jsonError('Missing or invalid "updates" for update', 400, req);
 
       // user_id filter prevents updating another tenant's record (service role bypasses RLS)
-      const safeUpdates = isSvc ? updates : enforceTenantIdentity(updates, userId);
+      const safeUpdates = (
+        isSvc ? updates : enforceTenantIdentity(updates, userId)
+      ) as Record<string, unknown>;
       let q = client.from(table).update(safeUpdates).eq('id', id);
       if (!isSvc) q = q.eq('user_id', userId);
       const { data, error } = await q.select().single();
@@ -524,7 +536,9 @@ Deno.serve(async (req) => {
 
       // Conditional update: only succeeds if version matches AND record belongs to this user.
       // The DB trigger increments version automatically on UPDATE. (service role bypasses RLS)
-      const safeUpdates = isSvc ? updates : enforceTenantIdentity(updates, userId);
+      const safeUpdates = (
+        isSvc ? updates : enforceTenantIdentity(updates, userId)
+      ) as Record<string, unknown>;
       let q = client.from(table).update(safeUpdates).eq('id', id).eq('version', version);
       if (!isSvc) q = q.eq('user_id', userId);
       const { data, error } = await q.select();

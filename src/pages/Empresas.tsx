@@ -48,7 +48,7 @@ const Empresas = () => {
   const [secondaryReady, setSecondaryReady] = useState(false);
   useEffect(() => { if (!loading && companies.length > 0) { const t = setTimeout(() => setSecondaryReady(true), 800); return () => clearTimeout(t); } }, [loading, companies.length]);
 
-  const { contacts } = useContacts(undefined, { enabled: secondaryReady });
+  const { contacts } = useContacts(undefined, { enabled: secondaryReady, fetchAll: true });
   const { interactions } = useInteractions(undefined, undefined, { enabled: secondaryReady });
   const dynamicFilters = useCompanyFilterOptions({ enabled: secondaryReady });
 

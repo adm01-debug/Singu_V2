@@ -33,7 +33,7 @@ export function EmailFinderWidget({
 
   const { mutate, data, isPending } = useEmailFinder();
   const apply = useApplyFoundEmail();
-  const { contacts } = useContacts(undefined, { enabled: !contactId });
+  const { contacts } = useContacts(undefined, { enabled: !contactId, fetchAll: true });
 
   // Atualiza prefill se as props mudarem (ex: dialog reabre com outro contato)
   useEffect(() => {

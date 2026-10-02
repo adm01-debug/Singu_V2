@@ -56,7 +56,7 @@ export const QuickAddButton = React.forwardRef<HTMLDivElement, QuickAddButtonPro
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isMobile = useIsMobile();
 
-  const { contacts, createContact, fetchContacts } = useContacts();
+  const { contacts, createContact, fetchContacts } = useContacts(undefined, { fetchAll: true });
   const { companies, createCompany, fetchCompanies } = useCompanies();
   const { createInteraction, fetchInteractions } = useInteractions();
 

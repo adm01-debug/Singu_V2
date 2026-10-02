@@ -46,7 +46,7 @@ const sortOptions: SortOption[] = [
 const Interacoes = () => {
   usePageTitle('Interações');
   const { interactions, loading, hasMore, loadMore, isFetchingNextPage, totalCount, createInteraction, updateInteraction, deleteInteraction } = useInteractions();
-  const { contacts } = useContacts();
+  const { contacts } = useContacts(undefined, { fetchAll: true });
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingInteraction, setEditingInteraction] = useState<Interaction | null>(null);
   const [deletingInteraction, setDeletingInteraction] = useState<Interaction | null>(null);

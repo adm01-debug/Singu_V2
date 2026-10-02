@@ -101,7 +101,7 @@ function verifyBitrixRequest(body: ConnectorPayload): boolean {
 const CORS: Record<string, string> = {
   "Access-Control-Allow-Origin": BITRIX_PORTAL,
   "Access-Control-Allow-Methods": "POST,GET,OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type,apikey,authorization,x-evolution-secret,x-widget-secret",
+  "Access-Control-Allow-Headers": "Content-Type,apikey,authorization,x-evolution-secret,x-bitrix-auth",
   "Content-Type": "application/json"
 };
 
@@ -138,6 +138,21 @@ async function getOAuthToken(): Promise<string> {
 async function b24(method: string, params: Record<string, unknown> = {}) {
   const resp = await fetch(`${BITRIX_WEBHOOK}/${method}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(params) });
   return resp.json();
+}
+
+async function verifyBitrixAccessToken(token: string): Promise<boolean> {
+  if (!token || !BITRIX_PORTAL) return false;
+  try {
+    const response = await fetch(
+      `${BITRIX_PORTAL}/rest/profile.json?auth=${encodeURIComponent(token)}`,
+      { headers: { "Accept": "application/json" } },
+    );
+    if (!response.ok) return false;
+    const data = await response.json();
+    return Boolean(data?.result?.ID);
+  } catch {
+    return false;
+  }
 }
 
 async function findCrmResponsible(phone: string) {
@@ -306,15 +321,17 @@ function getWidgetHtml(): string {
 </div>
 <script>
 const EDGE_URL = "${EDGE_FN_URL}";
-const WIDGET_SECRET = ${JSON.stringify(BITRIX_WIDGET_SECRET)};
 function setStatus(msg, type) { const el = document.getElementById("status"); el.className = "status " + type; el.textContent = msg; }
 function startChat() {
   const btn = document.getElementById("openChat"); btn.disabled = true; setStatus("Buscando contato...", "loading");
-  BX24.placement.info().then(function(info) {
+  Promise.all([BX24.placement.info(), Promise.resolve(BX24.getAuth())]).then(function(values) {
+    const info = values[0];
+    const auth = values[1];
     const entityId = info.options?.ID || info.options?.id;
     if (!entityId) { setStatus("Erro: ID do contato nao encontrado", "error"); btn.disabled = false; return; }
+    if (!auth?.access_token) { setStatus("Erro: sessão Bitrix inválida", "error"); btn.disabled = false; return; }
     setStatus("Verificando WhatsApp...", "loading");
-    fetch(EDGE_URL + "/open-chat", { method: "POST", headers: { "Content-Type": "application/json", "x-widget-secret": WIDGET_SECRET }, body: JSON.stringify({ contactId: parseInt(entityId) }) })
+    fetch(EDGE_URL + "/open-chat", { method: "POST", headers: { "Content-Type": "application/json", "x-bitrix-auth": auth.access_token }, body: JSON.stringify({ contactId: parseInt(entityId) }) })
     .then(r => r.json()).then(data => {
       if (data.error) { setStatus(data.error, "error"); btn.disabled = false; return; }
       setStatus("Abrindo conversa com " + data.contactName + "...", "success");
@@ -391,12 +408,8 @@ Deno.serve(async (req: Request) => {
 
     // Route: /open-chat - Internal use (from widget in Bitrix24 iframe)
     if (path.endsWith("/open-chat")) {
-      const widgetSecret = req.headers.get("x-widget-secret") ?? "";
-      if (
-        !BITRIX_WIDGET_SECRET ||
-        !widgetSecret ||
-        !constantTimeEqual(widgetSecret, BITRIX_WIDGET_SECRET)
-      ) {
+      const bitrixAccessToken = req.headers.get("x-bitrix-auth") ?? "";
+      if (!await verifyBitrixAccessToken(bitrixAccessToken)) {
         return json({ error: "Unauthorized" }, 401);
       }
       return await handleOpenChat(body);

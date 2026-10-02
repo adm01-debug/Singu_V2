@@ -1,8 +1,21 @@
-UPDATE public.incoming_webhooks
-SET is_active = false
-WHERE webhook_secret IS NULL
-   OR length(webhook_secret) < 32
-   OR require_signature = false;
+CREATE OR REPLACE FUNCTION public.migrate_harden_incoming_webhooks()
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  UPDATE public.incoming_webhooks
+  SET is_active = false
+  WHERE webhook_secret IS NULL
+     OR length(webhook_secret) < 32
+     OR require_signature = false;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.migrate_harden_incoming_webhooks() FROM PUBLIC;
+SELECT public.migrate_harden_incoming_webhooks();
+DROP FUNCTION public.migrate_harden_incoming_webhooks();
 
 ALTER TABLE public.incoming_webhooks
   ALTER COLUMN require_signature SET DEFAULT true;

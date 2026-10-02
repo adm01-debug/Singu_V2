@@ -9,22 +9,11 @@ import {
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-
-interface ComponentCheck {
-  status: 'up' | 'degraded' | 'down' | 'not_configured';
-  latency_ms?: number;
-  error?: string;
-  last_activity?: string;
-  details?: string;
-}
-
-interface HealthResponse {
-  status: 'healthy' | 'degraded' | 'unhealthy';
-  timestamp: string;
-  total_latency_ms: number;
-  components: Record<string, ComponentCheck>;
-  alerts_count: number;
-}
+import {
+  resolveHealthResponse,
+  type ComponentCheck,
+  type HealthResponse,
+} from '@/lib/systemHealth';
 
 const COMPONENT_META: Record<string, { label: string; icon: React.ElementType }> = {
   database_local: { label: 'Banco de Dados Local', icon: Database },
@@ -45,6 +34,7 @@ const OVERALL_CONFIG = {
   healthy: { label: 'Todos os sistemas operacionais', color: 'text-success', bg: 'bg-success' },
   degraded: { label: 'Alguns sistemas degradados', color: 'text-warning', bg: 'bg-warning' },
   unhealthy: { label: 'Sistemas com falha', color: 'text-destructive', bg: 'bg-destructive' },
+  unavailable: { label: 'Status dos sistemas indisponível', color: 'text-muted-foreground', bg: 'bg-muted-foreground' },
 };
 
 function StatusDot({ status }: { status: string }) {
@@ -53,19 +43,18 @@ function StatusDot({ status }: { status: string }) {
 }
 
 export default function StatusPage() {
-  const { data, isLoading, dataUpdatedAt } = useQuery<HealthResponse>({
+  const { data, isLoading, isError, dataUpdatedAt } = useQuery<HealthResponse>({
     queryKey: ['public-system-health'],
     queryFn: async () => {
       const { data, error } = await supabase.functions.invoke('system-health', { body: {} });
-      if (error) throw error;
-      return data;
+      return resolveHealthResponse(data, error);
     },
     refetchInterval: 60_000,
     refetchOnWindowFocus: false,
     staleTime: 30_000,
   });
 
-  const overall = data?.status || 'healthy';
+  const overall = isError ? 'unavailable' : data?.status ?? 'unavailable';
   const overallCfg = OVERALL_CONFIG[overall];
 
   return (
@@ -102,6 +91,14 @@ export default function StatusPage() {
         <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
           Componentes
         </h2>
+
+        {isError && (
+          <Card>
+            <CardContent className="py-4 text-sm text-muted-foreground">
+              Não foi possível consultar a saúde dos componentes.
+            </CardContent>
+          </Card>
+        )}
 
         {isLoading ? (
           Array.from({ length: 5 }).map((_, i) => (

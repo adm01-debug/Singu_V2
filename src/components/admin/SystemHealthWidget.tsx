@@ -8,27 +8,17 @@ import {
 } from '@/components/ui/popover';
 import { Activity, ChevronDown, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-interface ComponentCheck {
-  status: 'up' | 'degraded' | 'down' | 'not_configured';
-  latency_ms?: number;
-  error?: string;
-  last_activity?: string;
-  details?: string;
-}
-
-interface HealthResponse {
-  status: 'healthy' | 'degraded' | 'unhealthy';
-  timestamp: string;
-  total_latency_ms: number;
-  components: Record<string, ComponentCheck>;
-  alerts_count: number;
-}
+import {
+  resolveHealthResponse,
+  type ComponentCheck,
+  type HealthResponse,
+} from '@/lib/systemHealth';
 
 const STATUS_CONFIG = {
   healthy: { color: 'bg-success', label: 'Saudável', dot: 'bg-success' },
   degraded: { color: 'bg-warning', label: 'Degradado', dot: 'bg-warning' },
   unhealthy: { color: 'bg-destructive', label: 'Offline', dot: 'bg-destructive' },
+  unavailable: { color: 'bg-muted-foreground', label: 'Indisponível', dot: 'bg-muted-foreground' },
 } as const;
 
 const COMPONENT_LABELS: Record<string, string> = {
@@ -71,12 +61,11 @@ function ComponentRow({ name, check }: { name: string; check: ComponentCheck }) 
 export function SystemHealthWidget() {
   const { isAdmin } = useIsAdmin();
 
-  const { data, isLoading, refetch } = useQuery<HealthResponse>({
+  const { data, isLoading, isError, refetch } = useQuery<HealthResponse>({
     queryKey: ['system-health-widget'],
     queryFn: async () => {
       const { data, error } = await supabase.functions.invoke('system-health', { body: {} });
-      if (error) throw error;
-      return data;
+      return resolveHealthResponse(data, error);
     },
     refetchInterval: 60_000,
     refetchOnWindowFocus: false,
@@ -86,7 +75,7 @@ export function SystemHealthWidget() {
 
   if (!isAdmin) return null;
 
-  const status = data?.status || 'healthy';
+  const status = isError ? 'unavailable' : data?.status ?? 'unavailable';
   const cfg = STATUS_CONFIG[status];
 
   return (
@@ -116,6 +105,11 @@ export function SystemHealthWidget() {
           )}
         </div>
         <div className="p-3 space-y-0.5">
+          {isError && (
+            <p className="text-xs text-muted-foreground py-2">
+              Não foi possível consultar a saúde dos serviços.
+            </p>
+          )}
           {data?.components && Object.entries(data.components).map(([name, check]) => (
             <ComponentRow key={name} name={name} check={check as ComponentCheck} />
           ))}

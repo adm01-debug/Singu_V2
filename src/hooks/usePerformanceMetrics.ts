@@ -43,7 +43,7 @@ export interface PerformanceMetrics {
 }
 
 export function usePerformanceMetrics(): PerformanceMetrics {
-  const { contacts, loading: cLoading } = useContacts();
+  const { contacts, loading: cLoading } = useContacts(undefined, { fetchAll: true });
   const { companies, loading: coLoading } = useCompanies();
   const { interactions, loading: iLoading } = useInteractions();
 

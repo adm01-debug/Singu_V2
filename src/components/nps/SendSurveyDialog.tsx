@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 interface Props { open: boolean; onOpenChange: (o: boolean) => void; }
 
 export function SendSurveyDialog({ open, onOpenChange }: Props) {
-  const { contacts } = useContacts();
+  const { contacts } = useContacts(undefined, { fetchAll: true });
   const { createSurvey, isCreating } = useNpsSurveys();
   const [contactId, setContactId] = useState('');
   const [channel, setChannel] = useState('email');

@@ -52,7 +52,7 @@ export interface ContactRiskSummary {
 }
 
 export function useAccountChurnPrediction() {
-  const { contacts, loading: contactsLoading } = useContacts();
+  const { contacts, loading: contactsLoading } = useContacts(undefined, { fetchAll: true });
   const { companies, loading: companiesLoading } = useCompanies();
   const { interactions, loading: interactionsLoading } = useInteractions();
   const { alerts, loading: alertsLoading } = useStakeholderAlerts();

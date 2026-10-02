@@ -2,6 +2,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CodeExample } from '@/components/docs/CodeExample';
 import type { IncomingWebhook } from '@/hooks/useIncomingWebhooks';
+import { buildPythonWebhookSnippet } from './webhookSnippetBuilders';
 
 interface Props {
   open: boolean;
@@ -69,25 +70,7 @@ const response = await fetch("${url}", {
 });
 const data = await response.json();`;
 
-  const python = `# Python (requests)
-import requests, hmac, hashlib, time, json, uuid
-
-SECRET = "<seu_webhook_secret>"
-ts = str(int(time.time() * 1000))
-idempotency_key = uuid.uuid4().hex
-body = json.dumps(${examplePayload}, separators=(",", ":"))
-sig = "sha256=" + hmac.new(SECRET.encode(), (ts + "." + idempotency_key + "." + body).encode(), hashlib.sha256).hexdigest()
-
-response = requests.post(
-  "${url}",
-  headers={
-    "Content-Type": "application/json",
-    "X-Lovable-Timestamp": ts,
-    "X-Webhook-Idempotency-Key": idempotency_key,
-    "X-Lovable-Signature": sig,
-  },
-  data=body,
-)`;
+  const python = buildPythonWebhookSnippet(examplePayload, url);
 
   const n8n = `// n8n — nó Code antes do HTTP Request
 const crypto = require("crypto");

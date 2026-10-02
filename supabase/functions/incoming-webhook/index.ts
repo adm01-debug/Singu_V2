@@ -19,6 +19,14 @@ const PayloadSchema = z.record(z.unknown()).refine(
   { message: "Payload excede 256KB" },
 );
 
+async function releaseNonce(
+  operation: PromiseLike<{ error: { message: string } | null }>,
+  log: { error: (event: string, context: Record<string, unknown>) => void },
+): Promise<void> {
+  const { error } = await operation;
+  if (error) log.error("idempotency_release_failed", { error: error.message });
+}
+
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
@@ -218,6 +226,14 @@ Deno.serve(async (req) => {
     });
     const q = quota as { exceeded?: boolean; overage_blocked?: boolean } | null;
     if (q?.exceeded && q?.overage_blocked) {
+      await releaseNonce(
+        admin
+          .from("incoming_webhook_nonces")
+          .delete()
+          .eq("webhook_id", webhook.id)
+          .eq("idempotency_key", idempotencyKey),
+        log,
+      );
       await admin.from("incoming_webhook_logs").insert({
         webhook_id: webhook.id,
         status: "error",
@@ -266,9 +282,7 @@ Deno.serve(async (req) => {
     const { data, error } = await admin.from(targetTable).insert(row).select().maybeSingle();
     if (error) {
       console.error("incoming-webhook insert error:", error);
-      httpStatus = 500;
-      errorMessage = "Falha ao processar webhook";
-      await admin.from("incoming_webhook_dlq").insert({
+      const { error: dlqError } = await admin.from("incoming_webhook_dlq").insert({
         webhook_id: webhook.id,
         payload,
         source_ip: sourceIp,
@@ -276,6 +290,21 @@ Deno.serve(async (req) => {
         last_error: error.message,
         next_retry_at: new Date(Date.now() + 2 * 60_000).toISOString(),
       });
+      if (dlqError) {
+        await releaseNonce(
+          admin
+            .from("incoming_webhook_nonces")
+            .delete()
+            .eq("webhook_id", webhook.id)
+            .eq("idempotency_key", idempotencyKey),
+          log,
+        );
+        httpStatus = 500;
+        errorMessage = "Falha ao processar webhook";
+      } else {
+        httpStatus = 202;
+        errorMessage = "Webhook aceito e enfileirado para nova tentativa";
+      }
     } else insertResult = data;
   } else {
     insertResult = { received: true, payload: finalRow };
@@ -305,7 +334,8 @@ Deno.serve(async (req) => {
 
   return new Response(
     JSON.stringify({
-      success: !errorMessage,
+      success: httpStatus < 400,
+      queued: httpStatus === 202,
       data: insertResult,
       error: errorMessage,
       dry_run: dryRun,
