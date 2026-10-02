@@ -1,4 +1,4 @@
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
@@ -25,6 +25,59 @@ async function releaseNonce(
 ): Promise<void> {
   const { error } = await operation;
   if (error) log.error("idempotency_release_failed", { error: error.message });
+}
+
+async function isAdminReplay(req: Request, admin: SupabaseClient): Promise<boolean> {
+  const authHeader = req.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) return false;
+
+  const { data: userData, error: userError } = await admin.auth.getUser(
+    authHeader.slice("Bearer ".length),
+  );
+  if (userError || !userData.user) return false;
+
+  const { data: hasAdminRole, error: roleError } = await admin.rpc("has_role", {
+    _user_id: userData.user.id,
+    _role: "admin",
+  });
+  return !roleError && hasAdminRole === true;
+}
+
+interface SignatureContext {
+  timestampMs: number;
+  idempotencyKey: string;
+}
+
+async function resolveSignatureContext(
+  req: Request,
+  adminReplay: boolean,
+  secret: string,
+  rawBody: string,
+  windowMs: number,
+): Promise<SignatureContext | null> {
+  const signature = adminReplay ? "" : req.headers.get("x-lovable-signature") ?? "";
+  const timestamp = adminReplay
+    ? Date.now().toString()
+    : req.headers.get("x-lovable-timestamp") ?? "";
+  const idempotencyKey = adminReplay
+    ? `admin-replay-${crypto.randomUUID()}`
+    : req.headers.get("x-webhook-idempotency-key") ?? "";
+  const timestampMs = Number(timestamp);
+
+  if (
+    (!adminReplay && !signature) ||
+    !timestamp ||
+    !isValidIdempotencyKey(idempotencyKey) ||
+    !Number.isFinite(timestampMs) ||
+    Math.abs(Date.now() - timestampMs) > windowMs
+  ) return null;
+
+  if (
+    !adminReplay &&
+    !await verifyWebhookHmac(secret, timestamp, idempotencyKey, rawBody, signature)
+  ) return null;
+
+  return { timestampMs, idempotencyKey };
 }
 
 Deno.serve(async (req) => {
@@ -57,11 +110,19 @@ Deno.serve(async (req) => {
   const headerToken = req.headers.get("x-webhook-token");
   const token = pathToken && pathToken !== "incoming-webhook" ? pathToken : headerToken;
   const dryRun = url.searchParams.get("dry_run") === "true";
+  const adminReplay = url.searchParams.get("admin_replay") === "true";
 
   const admin = createClient(
     Deno.env.get("SUPABASE_URL")!,
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
+
+  if (adminReplay && !await isAdminReplay(req, admin)) {
+    return new Response(JSON.stringify({ error: "Replay restrito a administradores" }), {
+      status: 403,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
 
   const contentLength = Number(req.headers.get("content-length") ?? "0");
   if (Number.isFinite(contentLength) && contentLength > 512 * 1024) {
@@ -124,31 +185,15 @@ Deno.serve(async (req) => {
     });
   }
 
-  const sig = req.headers.get("x-lovable-signature") ?? "";
-  const ts = req.headers.get("x-lovable-timestamp") ?? "";
-  const idempotencyKey = req.headers.get("x-webhook-idempotency-key") ?? "";
-  const tsNum = Number(ts);
   const window = (webhook.replay_window_seconds ?? 300) * 1000;
-  if (
-    !sig ||
-    !ts ||
-    !isValidIdempotencyKey(idempotencyKey) ||
-    !Number.isFinite(tsNum) ||
-    Math.abs(Date.now() - tsNum) > window
-  ) {
-    return new Response(JSON.stringify({ error: "Headers de assinatura ausentes ou expirados" }), {
-      status: 401,
-      headers: { ...cors, "Content-Type": "application/json" },
-    });
-  }
-  const signatureValid = await verifyWebhookHmac(
+  const signatureContext = await resolveSignatureContext(
+    req,
+    adminReplay,
     webhook.webhook_secret,
-    ts,
-    idempotencyKey,
     rawBodyText,
-    sig,
+    window,
   );
-  if (!signatureValid) {
+  if (!signatureContext) {
     await admin.from("incoming_webhook_logs").insert({
       webhook_id: webhook.id,
       status: "error",
@@ -159,13 +204,14 @@ Deno.serve(async (req) => {
       user_agent: userAgent,
       latency_ms: Date.now() - t0,
     });
-    return new Response(JSON.stringify({ error: "Assinatura inválida" }), {
+    return new Response(JSON.stringify({ error: "Headers ou assinatura inválidos" }), {
       status: 401,
       headers: { ...cors, "Content-Type": "application/json" },
     });
   }
+  const { timestampMs: tsNum, idempotencyKey } = signatureContext;
 
-  if (webhook.allowed_origins?.length) {
+  if (!adminReplay && webhook.allowed_origins?.length) {
     const origin = req.headers.get("origin") ?? "";
     const ok = webhook.allowed_origins.some((allowedOrigin: string) => origin === allowedOrigin);
     if (!ok) {

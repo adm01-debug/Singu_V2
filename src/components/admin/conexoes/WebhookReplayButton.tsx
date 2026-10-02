@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Play, FlaskConical } from 'lucide-react';
 import { toast } from 'sonner';
 import { parseApiError } from '@/lib/errorMessages';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Props {
   webhookToken: string;
@@ -26,10 +27,19 @@ export function WebhookReplayButton({ webhookToken, payload }: Props) {
     const controller = new AbortController();
     controllerRef.current = controller;
     try {
-      const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/incoming-webhook/${webhookToken}${dryRun ? '?dry_run=true' : ''}`;
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Sessão expirada');
+
+      const params = new URLSearchParams({ admin_replay: 'true' });
+      if (dryRun) params.set('dry_run', 'true');
+      const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/incoming-webhook/${webhookToken}?${params}`;
       const res = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+        },
         body: JSON.stringify(payload),
         signal: controller.signal,
       });

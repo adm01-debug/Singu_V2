@@ -168,6 +168,18 @@ function getExternalClient() {
   });
 }
 
+async function hasAdminRole(userId: string): Promise<boolean> {
+  const admin = createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+  );
+  const { data, error } = await admin.rpc('has_role', {
+    _user_id: userId,
+    _role: 'admin',
+  });
+  return !error && data === true;
+}
+
 function isAllowedTable(table: string): table is AllowedTable {
   return ALLOWED_TABLES.includes(table as AllowedTable);
 }
@@ -263,7 +275,9 @@ Deno.serve(async (req) => {
 
     // ─── FULL SCHEMA INTROSPECTION ───
     if (operation === 'schema') {
-      if (!isSvc) return jsonError('Service role required', 403, req);
+      if (!isSvc && !await hasAdminRole(userId)) {
+        return jsonError('Admin role required', 403, req);
+      }
       const extUrl = Deno.env.get('EXTERNAL_SUPABASE_URL')!;
       const extKey = Deno.env.get('EXTERNAL_SUPABASE_SERVICE_ROLE_KEY')!;
       const resp = await fetchAPI(`${extUrl}/rest/v1/`, {

@@ -94,14 +94,14 @@ function getOrigin(req?: Request): string {
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": ALLOWED_ORIGINS[0],
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-lovable-timestamp, x-webhook-idempotency-key, x-lovable-signature",
 };
 
 /** Returns CORS headers scoped to the request's origin */
 export function scopedCorsHeaders(req: Request) {
   return {
     "Access-Control-Allow-Origin": getOrigin(req),
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-trace-id, x-request-id",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-trace-id, x-request-id, x-lovable-timestamp, x-webhook-idempotency-key, x-lovable-signature",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Vary": "Origin",
   };

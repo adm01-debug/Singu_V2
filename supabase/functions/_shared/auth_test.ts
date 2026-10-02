@@ -6,7 +6,12 @@
  */
 import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import { assertInstanceOf } from "https://deno.land/std@0.224.0/assert/assert_instance_of.ts";
-import { isServiceRoleCaller, timingSafeStringEqual, withAuthOrServiceRole } from "./auth.ts";
+import {
+  isServiceRoleCaller,
+  scopedCorsHeaders,
+  timingSafeStringEqual,
+  withAuthOrServiceRole,
+} from "./auth.ts";
 
 function restoreEnv(name: string, value: string | undefined): void {
   if (value === undefined) Deno.env.delete(name);
@@ -168,4 +173,13 @@ Deno.test("withAuthOrServiceRole: rejeita JWT expirado", async () => {
     restoreEnv("SUPABASE_ANON_KEY", previousAnonKey);
     restoreEnv("SUPABASE_SERVICE_ROLE_KEY", previousServiceRole);
   }
+});
+
+Deno.test("scopedCorsHeaders: autoriza os headers assinados de webhook", () => {
+  const headers = scopedCorsHeaders(new Request("https://example.test"));
+  const allowedHeaders = headers["Access-Control-Allow-Headers"];
+
+  assertEquals(allowedHeaders.includes("x-lovable-timestamp"), true);
+  assertEquals(allowedHeaders.includes("x-webhook-idempotency-key"), true);
+  assertEquals(allowedHeaders.includes("x-lovable-signature"), true);
 });
