@@ -8,6 +8,7 @@ import {
   extractRelationId,
   getRelationScope,
   isSafeIdentifier,
+  MAX_QUERY_FILTERS,
   quotePostgrestValue,
   type RelationScope,
 } from "../_shared/tenant-guard.ts";
@@ -520,7 +521,7 @@ Deno.serve(async (req) => {
         ]);
 
         if (Array.isArray(filters)) {
-          const cappedFilters = filters.slice(0, 20);
+          const cappedFilters = filters.slice(0, MAX_QUERY_FILTERS);
           for (const f of cappedFilters) {
             if (!f.column || !f.type) continue;
             if (!isSafeIdentifier(f.column)) {

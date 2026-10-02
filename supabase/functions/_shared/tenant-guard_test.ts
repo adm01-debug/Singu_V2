@@ -4,6 +4,7 @@ import {
   extractRelationId,
   getRelationScope,
   isSafeIdentifier,
+  MAX_QUERY_FILTERS,
   quotePostgrestValue,
 } from "./tenant-guard.ts";
 
@@ -69,6 +70,30 @@ Deno.test("extractRelationId exige filtro de igualdade da relação", () => {
   assertEquals(
     extractRelationId(
       [{ type: "in", column: "contact_id", value: ["contato-externo"] }],
+      "contact_id",
+    ),
+    null,
+  );
+  const unrelatedFilters = Array.from(
+    { length: MAX_QUERY_FILTERS },
+    (_, index) => ({ type: "eq", column: `campo_${index}`, value: index }),
+  );
+  assertEquals(
+    extractRelationId(
+      [
+        ...unrelatedFilters.slice(1),
+        { type: "eq", column: "contact_id", value: "contato-no-limite" },
+      ],
+      "contact_id",
+    ),
+    "contato-no-limite",
+  );
+  assertEquals(
+    extractRelationId(
+      [
+        ...unrelatedFilters,
+        { type: "eq", column: "contact_id", value: "contato-ignorado" },
+      ],
       "contact_id",
     ),
     null,

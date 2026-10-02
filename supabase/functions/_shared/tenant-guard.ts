@@ -14,6 +14,8 @@ export interface RelationScope {
   parentTable: 'contacts' | 'companies';
 }
 
+export const MAX_QUERY_FILTERS = 20;
+
 const RELATION_SCOPES = new Map<string, RelationScope>([
   ['contact_phones', { foreignKey: 'contact_id', parentTable: 'contacts' }],
   ['contact_emails', { foreignKey: 'contact_id', parentTable: 'contacts' }],
@@ -66,7 +68,7 @@ export function getRelationScope(table: string): RelationScope | null {
 
 export function extractRelationId(filters: unknown, foreignKey: string): string | null {
   if (!Array.isArray(filters)) return null;
-  for (const entry of filters) {
+  for (const entry of filters.slice(0, MAX_QUERY_FILTERS)) {
     if (!entry || typeof entry !== 'object') continue;
     const filter = entry as Record<string, unknown>;
     if (
