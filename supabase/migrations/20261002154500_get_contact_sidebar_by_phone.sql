@@ -245,30 +245,82 @@ BEGIN
         )
     END,
     'decision', CASE
-      WHEN cdm.id IS NOT NULL OR v_behavior->>'decisionCriteria' IS NOT NULL OR
-           v_behavior->>'needsApproval' IS NOT NULL THEN
+      -- `needs_approval = false` e `decisionCriteria = []` são defaults de
+      -- milhares de contatos legados. Sozinhos, não representam avaliação.
+      WHEN cdm.decision_speed IS NOT NULL
+        OR cardinality(cdm.decision_criteria) > 0
+        OR cdm.approver_id IS NOT NULL
+        OR cdm.needs_approval IS TRUE
+        OR cb.decision_speed IS NOT NULL
+        OR cardinality(cb.decision_criteria) > 0
+        OR cb.approver_id IS NOT NULL
+        OR cb.needs_approval IS TRUE
+        OR nullif(btrim(v_behavior->>'decisionSpeed'), '') IS NOT NULL
+        OR (jsonb_typeof(v_behavior->'decisionCriteria') = 'array'
+            AND jsonb_array_length(v_behavior->'decisionCriteria') > 0)
+        OR v_behavior->'needsApproval' = 'true'::jsonb THEN
         jsonb_build_object(
-          'speed', cdm.decision_speed,
+          'speed', coalesce(
+            cdm.decision_speed,
+            cb.decision_speed,
+            nullif(btrim(v_behavior->>'decisionSpeed'), '')
+          ),
           'criteria', coalesce(
-            to_jsonb(cdm.decision_criteria),
-            CASE WHEN jsonb_typeof(v_behavior->'decisionCriteria') = 'array' THEN v_behavior->'decisionCriteria' END
+            CASE WHEN cardinality(cdm.decision_criteria) > 0 THEN to_jsonb(cdm.decision_criteria) END,
+            CASE WHEN cardinality(cb.decision_criteria) > 0 THEN to_jsonb(cb.decision_criteria) END,
+            CASE WHEN jsonb_typeof(v_behavior->'decisionCriteria') = 'array'
+                       AND jsonb_array_length(v_behavior->'decisionCriteria') > 0
+                 THEN v_behavior->'decisionCriteria' END,
+            '[]'::jsonb
           ),
-          'needs_approval', coalesce(
-            cdm.needs_approval,
-            CASE WHEN jsonb_typeof(v_behavior->'needsApproval') = 'boolean' THEN (v_behavior->>'needsApproval')::boolean END
-          ),
-          'approver_name', (SELECT coalesce(c2.full_name, nullif(trim(concat_ws(' ', c2.first_name, c2.last_name)), '')) FROM public.contacts c2 WHERE c2.id = cdm.approver_id)
+          'needs_approval', CASE
+            WHEN cdm.decision_speed IS NOT NULL OR cardinality(cdm.decision_criteria) > 0
+              OR cdm.approver_id IS NOT NULL OR cdm.needs_approval IS TRUE
+              THEN cdm.needs_approval
+            WHEN cb.decision_speed IS NOT NULL OR cardinality(cb.decision_criteria) > 0
+              OR cb.approver_id IS NOT NULL OR cb.needs_approval IS TRUE
+              THEN cb.needs_approval
+            WHEN jsonb_typeof(v_behavior->'needsApproval') = 'boolean'
+              THEN (v_behavior->>'needsApproval')::boolean
+          END,
+          'approver_name', (
+            SELECT coalesce(c2.full_name, nullif(trim(concat_ws(' ', c2.first_name, c2.last_name)), ''))
+            FROM public.contacts c2
+            WHERE c2.id = coalesce(cdm.approver_id, cb.approver_id)
+          )
         )
     END,
     'budget', CASE
-      WHEN cdm.budget_authority IS NOT NULL OR cinf.decision_role IS NOT NULL OR
-           cinf.decision_power IS NOT NULL OR v_behavior->>'decisionPower' IS NOT NULL THEN
+      -- `budget_authority = false` e `decisionPower = 5` são defaults do
+      -- cadastro legado; só ganham significado junto de outro sinal avaliado.
+      WHEN cdm.budget_authority IS NOT NULL
+        OR cinf.decision_role IS NOT NULL
+        OR cinf.decision_power IS NOT NULL
+        OR cb.budget_authority IS TRUE
+        OR cb.decision_role IS NOT NULL
+        OR cb.decision_power IS NOT NULL
+        OR nullif(btrim(v_behavior->>'budgetAuthority'), '') IS NOT NULL
+        OR nullif(btrim(v_behavior->>'decisionRole'), '') IS NOT NULL
+        OR (v_behavior->>'decisionPower' ~ '^([1-4]|[6-9]|10)$') THEN
         jsonb_build_object(
-          'authority', cdm.budget_authority,
-          'decision_role', cinf.decision_role,
+          'authority', coalesce(
+            cdm.budget_authority,
+            CASE
+              WHEN cb.budget_authority IS TRUE THEN 'yes'
+              WHEN cb.decision_role IS NOT NULL OR cb.decision_power IS NOT NULL THEN 'no'
+            END,
+            nullif(btrim(v_behavior->>'budgetAuthority'), '')
+          ),
+          'decision_role', coalesce(
+            cinf.decision_role,
+            cb.decision_role,
+            nullif(btrim(v_behavior->>'decisionRole'), '')
+          ),
           'decision_power', coalesce(
             cinf.decision_power,
-            CASE WHEN v_behavior->>'decisionPower' ~ '^\d{1,2}$' THEN (v_behavior->>'decisionPower')::int END
+            cb.decision_power,
+            CASE WHEN v_behavior->>'decisionPower' ~ '^(10|[1-9])$'
+                 THEN (v_behavior->>'decisionPower')::int END
           )
         )
     END,
@@ -307,9 +359,10 @@ BEGIN
         'script_content', o.script_content,
         'neurological_bias', o.neurological_bias,
         'effectiveness_score', o.effectiveness_score
-      ))
+      ) ORDER BY o.effectiveness_score DESC NULLS LAST, o.created_at DESC)
       FROM (
-        SELECT os.objection_type, os.script_content, os.neurological_bias, os.effectiveness_score
+        SELECT os.objection_type, os.script_content, os.neurological_bias,
+               os.effectiveness_score, os.created_at
         FROM public.contact_objection_scripts os
         WHERE os.contact_id = v_contact.id
         ORDER BY os.effectiveness_score DESC NULLS LAST, os.created_at DESC

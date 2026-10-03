@@ -54,6 +54,18 @@ Retorna `jsonb`. Sem contato resolvido: `{"found": false}` — sem eco do telefo
 | redes / nascimento | `contact_social_media` (`is_active`), `contacts` | — |
 | perfil (disc, vak, big_five, mbti, enneagram, temperament, metaprograms, fears, decision, budget, influencers, rapport, objections) | `contact_behavior`, `contact_personality`, `contact_metaprograms`, `contact_rapport_strategy`, `contact_objection_scripts`, `contact_decision_making`, `contact_influence` | `contacts.behavior` (jsonb) para disc/vak/temperament/decision/budget |
 
+### Ausência honesta nos campos de decisão
+
+O cadastro legado gravou `decisionCriteria=[]`, `needsApproval=false` e
+`decisionPower=5` como template em milhares de contatos. Esses defaults isolados
+não são uma avaliação e não criam os blocos `decision`/`budget`. Um `false` ou
+um poder `5` continua válido quando acompanhado por outro sinal preenchido
+(velocidade, critério, aprovador, papel ou autoridade). A precedência é:
+
+1. tabelas dedicadas `contact_decision_making`/`contact_influence`;
+2. colunas de `contact_behavior`;
+3. `contacts.behavior` em JSON.
+
 Contato `deleted_at` não responde; `is_duplicate` resolve para `duplicate_of` (1 hop).
 
 ## Segurança
