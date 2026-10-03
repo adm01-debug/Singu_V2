@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
+import { loginWithTestUser, requireTestCredentials } from '../e2e/support/auth';
 
 test.describe('Contatos e Rapport (Meta 10/10)', () => {
+  test.beforeEach(async ({ page }) => {
+    requireTestCredentials();
+    await loginWithTestUser(page);
+  });
+
   test('Fluxo completo: CRUD, Filtros por Hobbies e Rapport', async ({ page }) => {
     // 1. Navegação e Listagem (Paginação/LoadMore)
     await page.goto('/contatos');

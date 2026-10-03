@@ -38,7 +38,7 @@ const PASS = process.env.E2E_USER_PASS;
 async function login(page: Page): Promise<void> {
   await page.goto(`${BASE}/auth`);
   await page.getByLabel(/e-?mail/i).fill(EMAIL!);
-  await page.getByLabel(/senha/i).fill(PASS!);
+  await page.getByLabel(/^senha$/i).fill(PASS!);
   await page.getByRole('button', { name: /entrar/i }).click();
   await expect(page).toHaveURL(/\/(dashboard|index|interacoes|$)/, { timeout: 15_000 });
 }

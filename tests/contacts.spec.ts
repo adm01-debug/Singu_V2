@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { loginWithTestUser, requireTestCredentials } from '../e2e/support/auth';
 
 test.describe('Contacts Module', () => {
   test.beforeEach(async ({ page }) => {
-    // Note: In a real app, we'd handle authentication here
-    // For this test, we assume we can navigate to the contacts page
+    requireTestCredentials();
+    await loginWithTestUser(page);
     await page.goto('/contatos');
   });
 

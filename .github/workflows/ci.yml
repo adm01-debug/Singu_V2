@@ -45,9 +45,11 @@ jobs:
           RLS_USER_ADMIN: ${{ secrets.RLS_USER_ADMIN }}
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
         run: |
           missing=0
-          for name in PGHOST PGUSER PGPASSWORD PGDATABASE RLS_USER_A RLS_USER_B RLS_USER_ADMIN VITE_SUPABASE_URL VITE_SUPABASE_PUBLISHABLE_KEY; do
+          for name in PGHOST PGUSER PGPASSWORD PGDATABASE RLS_USER_A RLS_USER_B RLS_USER_ADMIN VITE_SUPABASE_URL VITE_SUPABASE_PUBLISHABLE_KEY TEST_USER_EMAIL TEST_USER_PASSWORD; do
             if [[ -z "${!name}" ]]; then
               echo "::error::Secret obrigatório ausente: $name"
               missing=1
@@ -81,14 +83,22 @@ jobs:
       - name: Security audit (high+ severity)
         run: npm audit --omit=dev --audit-level=high
 
+      - name: Build
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
       - name: Run Playwright E2E Tests
-        run: npm run test:e2e
+        run: npx playwright test
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          E2E_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          E2E_USER_PASS: ${{ secrets.TEST_USER_PASSWORD }}
           CI: true
 
       - name: Upload Playwright report and artifacts
@@ -123,9 +133,6 @@ jobs:
           PGPASSWORD: ${{ secrets.PGPASSWORD }}
           PGDATABASE: ${{ secrets.PGDATABASE }}
         run: psql -v ON_ERROR_STOP=1 -f scripts/migration/verify/rls-coverage.sql
-
-      - name: Build
-        run: npm run build
 
       - name: Check bundle size budget
         run: node scripts/check-bundle-size.mjs
