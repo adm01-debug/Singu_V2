@@ -17,24 +17,10 @@ jobs:
       PGSSLMODE: require
     steps:
       - uses: actions/checkout@v4
-      - name: Diagnóstico (consultas + teste em transação revertida)
+      - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          q "select conname, pg_get_constraintdef(oid) from pg_constraint where conrelid='public.audit_log'::regclass"
-          q "select relkind, relispartition from pg_class where oid='public.audit_log'::regclass"
-          q "select count(*), max(created_at), count(*) filter (where created_at > now()-interval '30 days') d30 from public.audit_log"
-          q "select table_name, action, count(*), max(created_at) from public.audit_log group by 1,2 order by 4 desc nulls last limit 15"
-          q "select p.oid::regproc::text fn from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and pg_get_functiondef(p.oid) ~* 'insert\s+into\s+(public\.)?audit_log\s*\(' and pg_get_functiondef(p.oid) !~* 'table_name' order by 1"
-          q "select c.relname, t.tgname, t.tgfoid::regproc::text fn from pg_trigger t join pg_class c on c.oid=t.tgrelid where not t.tgisinternal and t.tgfoid in (select p.oid from pg_proc p where pg_get_functiondef(p.oid) ~* 'insert\s+into\s+(public\.)?audit_log\s*\(' and pg_get_functiondef(p.oid) !~* 'table_name') order by 1"
-          echo "### reproducao: insert em contacts dentro de transacao revertida"
-          psql -X -P pager=off <<'SQL' || true
-          BEGIN;
-          INSERT INTO public.contacts (first_name, last_name, user_id)
-          SELECT 'diag', 'rollback', user_id FROM public.contacts WHERE user_id IS NOT NULL LIMIT 1;
-          ROLLBACK;
-          SQL
-          echo "### migrations locais ausentes no remoto"
-          psql -X -At -c "select version from supabase_migrations.schema_migrations" | sort > remote.txt
-          ls supabase/migrations | sed -E 's/^([0-9]+)_.*/\1/' | sort > local.txt
-          echo "local=$(wc -l < local.txt) remoto=$(wc -l < remote.txt) so_local=$(comm -23 local.txt remote.txt | wc -l) so_remoto=$(comm -13 local.txt remote.txt | wc -l)"
-          echo "--- ultimas 25 so_local:"; comm -23 local.txt remote.txt | tail -25
+          q "select c.relname, t.tgname from pg_trigger t join pg_class c on c.oid=t.tgrelid where not t.tgisinternal and t.tgfoid='public.audit_trigger_fn'::regproc order by 1"
+          q "select pg_get_function_identity_arguments(p.oid) args, p.prosecdef, array_to_string(p.proacl, ',') acl from pg_proc p where p.oid in ('public.audit_trigger_fn'::regproc, 'public.log_contact_tag_changes'::regproc)"
+          echo "### correção aplicada em transação revertida"
+          psql -X -P pager=off -f diag/verify.sql
