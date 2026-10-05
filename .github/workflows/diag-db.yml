@@ -1,0 +1,34 @@
+name: diag-db (temporário, somente leitura)
+on:
+  push:
+    branches: ['chore/hermes-*-diag-db']
+permissions:
+  contents: read
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PGHOST: ${{ secrets.PGHOST }}
+      PGUSER: postgres.pgxfvjmuubtbowutlide
+      PGDATABASE: ${{ secrets.PGDATABASE }}
+      PGPASSWORD: ${{ secrets.PGPASSWORD }}
+      PGPORT: '5432'
+      PGSSLMODE: require
+      PGOPTIONS: '-c default_transaction_read_only=on'
+    steps:
+      - name: Diagnóstico somente leitura
+        run: |
+          q() { echo "### $1"; psql -X -v ON_ERROR_STOP=0 -P pager=off -c "$1" || true; }
+          q "select current_database(), current_setting('default_transaction_read_only') ro"
+          q "select column_name, data_type, is_nullable, column_default from information_schema.columns where table_schema='public' and table_name='audit_log' order by ordinal_position"
+          q "select to_regclass('public.contacts') contacts, (select count(*) from public.contacts) n_contacts"
+          q "select tgname, tgfoid::regproc::text fn, tgenabled from pg_trigger where tgrelid='public.contacts'::regclass and not tgisinternal order by 1"
+          q "select p.oid::regproc::text fn, pg_get_functiondef(p.oid) from pg_proc p where p.oid in (select tgfoid from pg_trigger where tgrelid='public.contacts'::regclass and not tgisinternal) and pg_get_functiondef(p.oid) ilike '%audit_log%'"
+          q "select count(*) total, max(version) ultima from supabase_migrations.schema_migrations"
+          q "select version, name from supabase_migrations.schema_migrations order by version desc limit 15"
+          q "select jobname, schedule, active, left(command,140) cmd from cron.job order by 1"
+          q "select count(*) n, max(created_at) ultimo from public.error_logs"
+          q "select policyname, cmd, roles, with_check from pg_policies where schemaname='public' and tablename='error_logs'"
+          q "select version from supabase_migrations.schema_migrations order by version" > remote_versions.txt
+          ls supabase 2>/dev/null; echo fim
