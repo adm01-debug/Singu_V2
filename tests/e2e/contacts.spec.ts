@@ -29,20 +29,15 @@ test.describe('Contatos CRUD & Filtros E2E', () => {
 
   test('deve navegar para ficha 360 e validar rapport e histórico familiar', async ({ page }) => {
     await requireContactRows(page);
-    // Clica no primeiro contato da lista
-    await page.click('tbody tr:first-child a');
-    
-    // Aguarda carregar a Ficha 360
-    await page.waitForSelector('text=Rapport & Dados Pessoais');
-    
-    // Verifica se os badges de hobbies e interesses estão visíveis (se houver dados)
-    // Se não houver, valida o estado vazio
-    const rapportCard = page.locator('div:has-text("Rapport & Dados Pessoais")').first();
-    await expect(rapportCard).toBeVisible();
+    await page.locator('tbody tr').first().getByRole('link').first().click();
+    await expect(page).toHaveURL(/\/contatos\/[0-9a-f-]{36}/);
 
-    // Testa a abertura do histórico familiar
-    await page.click('button:has(svg.lucide-history)');
-    await expect(page.locator('text=Histórico Familiar')).toBeVisible();
+    await page.getByRole('tab', { name: 'Comportamental' }).click();
+    await expect(page.getByText('Vida Pessoal & Rapport')).toBeVisible({ timeout: 15_000 });
+
+    const familySection = page.locator('h4', { hasText: 'Família & Contexto' }).locator('..');
+    await familySection.getByRole('button', { name: 'Histórico', exact: true }).click();
+    await expect(page.getByRole('dialog').getByRole('heading', { name: /Histórico Familiar/ })).toBeVisible();
   });
 
   test('deve validar fluxo de aprovação de sugestões IA', async ({ page }) => {

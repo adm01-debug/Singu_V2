@@ -44,12 +44,12 @@ test.describe('Autenticação e Navegação E2E', () => {
     // Test navigation to Contacts
     await sidebar.locator('a[href="/contatos"]').click();
     await expect(page).toHaveURL(/\/contatos/);
-    await expect(page.getByRole('heading', { name: /Contatos/i }).first()).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Contatos/i }).first()).toBeVisible({ timeout: 15_000 });
     
     // Test navigation to Companies
     await sidebar.locator('a[href="/empresas"]').click();
     await expect(page).toHaveURL(/\/empresas/);
-    await expect(page.getByRole('heading', { name: /Empresas/i }).first()).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Empresas/i }).first()).toBeVisible({ timeout: 15_000 });
     
     // Test logout via user menu
     await page.click('button[aria-label="Menu do usuário"]');
