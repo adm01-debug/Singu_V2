@@ -1,6 +1,10 @@
--- Gatilhos de auditoria compatíveis com os dois formatos de public.audit_log.
--- Produção usa table_name/record_id (NOT NULL) e a cadeia limpa usa entity_type/entity_id;
--- gravar ambos evita que INSERT/UPDATE/DELETE nas tabelas auditadas (ex.: contacts) falhem.
+-- Restaura as escritas em contacts/companies.
+-- 1) Os gatilhos de versão (optimistic locking) exigem a coluna version.
+-- 2) Os gatilhos de auditoria gravam os dois formatos de public.audit_log:
+--    table_name/record_id (NOT NULL em produção) e entity_type/entity_id (cadeia limpa).
+
+ALTER TABLE public.contacts ADD COLUMN IF NOT EXISTS version integer NOT NULL DEFAULT 0;
+ALTER TABLE public.companies ADD COLUMN IF NOT EXISTS version integer NOT NULL DEFAULT 0;
 
 ALTER TABLE public.audit_log ADD COLUMN IF NOT EXISTS table_name text;
 ALTER TABLE public.audit_log ADD COLUMN IF NOT EXISTS record_id text;
