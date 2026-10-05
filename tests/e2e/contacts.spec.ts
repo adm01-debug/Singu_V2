@@ -4,14 +4,13 @@ import {
   requireTestCredentials,
   requireWritableEnvironment,
 } from '../../e2e/support/auth';
+import { openContactsTable, requireContactRows } from '../../e2e/support/contacts';
 
 test.describe('Contatos CRUD & Filtros E2E', () => {
   test.beforeEach(async ({ page }) => {
     requireTestCredentials();
     await loginWithTestUser(page);
-    await page.goto('/contatos');
-    // Wait for the list to load
-    await page.waitForSelector('[role="region"][aria-label="Tabela de contatos"]');
+    await openContactsTable(page);
   });
 
   test('deve criar um novo contato e aparecer na lista', async ({ page }) => {
@@ -29,6 +28,7 @@ test.describe('Contatos CRUD & Filtros E2E', () => {
   });
 
   test('deve navegar para ficha 360 e validar rapport e histórico familiar', async ({ page }) => {
+    await requireContactRows(page);
     // Clica no primeiro contato da lista
     await page.click('tbody tr:first-child a');
     
@@ -59,16 +59,13 @@ test.describe('Contatos CRUD & Filtros E2E', () => {
   });
 
   test('deve filtrar contatos por interesses', async ({ page }) => {
-    // Abre filtros
-    await page.click('button:has-text("Filtros")');
-    
-    // Procura por um interesse conhecido (ex: Tecnologia)
-    const filterValue = 'Tecnologia';
-    // Se não houver o texto Tecnologia, o teste pode falhar, mas aqui validamos a intenção
-    const filterItem = page.locator(`text=${filterValue}`);
-    if (await filterItem.isVisible()) {
-      await filterItem.click();
-      await expect(page.locator('text=Filtros ativos')).toBeVisible();
-    }
+    await requireContactRows(page);
+    await page.getByRole('button', { name: /Interesses/ }).click();
+    await expect(page.getByRole('listbox')).toBeVisible();
+
+    const firstInterest = page.getByRole('option').first();
+    test.skip((await page.getByRole('option').count()) === 0, 'Contatos do usuário E2E sem interesses cadastrados');
+    await firstInterest.click();
+    await expect(page.getByText('Filtros ativos:')).toBeVisible();
   });
 });

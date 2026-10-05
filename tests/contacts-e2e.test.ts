@@ -1,5 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { loginWithTestUser, requireTestCredentials } from '../e2e/support/auth';
+import {
+  loginWithTestUser,
+  requireTestCredentials,
+  requireWritableEnvironment,
+} from '../e2e/support/auth';
+import { openContactsTable, requireContactRows } from '../e2e/support/contacts';
 
 test.describe('Contact Management', () => {
   test.beforeEach(async ({ page }) => {
@@ -8,13 +13,12 @@ test.describe('Contact Management', () => {
   });
 
   test('should create, filter and paginate contacts', async ({ page }) => {
-    await page.goto('/contatos');
-    
-    // Check if list loads
-    await expect(page.locator('table')).toBeVisible();
+    await openContactsTable(page);
     
     // Test Search
-    await page.fill('input[placeholder*="Buscar"]', 'Test');
+    const search = page.getByPlaceholder('Buscar...');
+    await search.fill('Test');
+    await expect(search).toHaveValue('Test');
     
     // Test Pagination (Scroll for loadMore)
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
@@ -26,8 +30,10 @@ test.describe('Contact Management', () => {
 
   test('should edit family info inline in Ficha 360', async ({ page }) => {
     // Navigate to a contact's Ficha 360 (using a mock ID or first available)
-    await page.goto('/contatos');
-    await page.click('table tr:first-child td:first-child a');
+    requireWritableEnvironment();
+    await openContactsTable(page);
+    await requireContactRows(page);
+    await page.click('tbody tr:first-child a');
     await page.click('text=Ficha 360');
     
     // Click edit on Rapport card

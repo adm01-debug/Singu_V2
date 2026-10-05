@@ -9,7 +9,7 @@ test.describe('Contacts Module', () => {
   });
 
   test('should display the contacts list', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'Contatos' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Contatos', exact: true }).first()).toBeVisible();
   });
 
   test('should load more contacts on scroll', async ({ page }) => {

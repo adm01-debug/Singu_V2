@@ -38,22 +38,22 @@ test.describe('Autenticação e Navegação E2E', () => {
     await loginWithTestUser(page);
 
     // Check main navigation elements
-    const sidebar = page.locator('nav').first();
+    const sidebar = page.getByRole('navigation', { name: 'Menu principal' });
     await expect(sidebar).toBeVisible();
     
     // Test navigation to Contacts
-    await page.click('nav a[href="/contatos"]');
+    await sidebar.locator('a[href="/contatos"]').click();
     await expect(page).toHaveURL(/\/contatos/);
-    await expect(page.locator('h1, h2')).toContainText(/Contatos/i);
+    await expect(page.getByRole('heading', { name: /Contatos/i }).first()).toBeVisible();
     
     // Test navigation to Companies
-    await page.click('nav a[href="/empresas"]');
+    await sidebar.locator('a[href="/empresas"]').click();
     await expect(page).toHaveURL(/\/empresas/);
-    await expect(page.locator('h1, h2')).toContainText(/Empresas/i);
+    await expect(page.getByRole('heading', { name: /Empresas/i }).first()).toBeVisible();
     
     // Test logout via user menu
     await page.click('button[aria-label="Menu do usuário"]');
-    await page.click('text=Sair');
+    await page.getByRole('menuitem', { name: 'Sair' }).click();
     
     // Should redirect back to auth
     await expect(page).toHaveURL(/\/auth/);
