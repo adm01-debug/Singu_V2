@@ -1,10 +1,16 @@
--- Restaura as escritas em contacts/companies.
+-- Restaura as escritas em contacts, companies, competitors e interactions.
 -- 1) Os gatilhos de versão (optimistic locking) exigem a coluna version.
 -- 2) Os gatilhos de auditoria gravam os dois formatos de public.audit_log:
 --    table_name/record_id (NOT NULL em produção) e entity_type/entity_id (cadeia limpa).
 
 ALTER TABLE public.contacts ADD COLUMN IF NOT EXISTS version integer NOT NULL DEFAULT 0;
 ALTER TABLE public.companies ADD COLUMN IF NOT EXISTS version integer NOT NULL DEFAULT 0;
+
+-- 3) trg_competitors_updated exige competitors.updated_at.
+ALTER TABLE public.competitors ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
+
+-- 4) interactions.contact_id é opcional; a auditoria de interações não pode exigi-lo.
+ALTER TABLE public.interactions_audit ALTER COLUMN contact_id DROP NOT NULL;
 
 ALTER TABLE public.audit_log ADD COLUMN IF NOT EXISTS table_name text;
 ALTER TABLE public.audit_log ADD COLUMN IF NOT EXISTS record_id text;
