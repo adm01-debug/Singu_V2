@@ -20,7 +20,8 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          q "select c.relname, t.tgname from pg_trigger t join pg_class c on c.oid=t.tgrelid where not t.tgisinternal and t.tgfoid='public.audit_trigger_fn'::regproc order by 1"
-          q "select pg_get_function_identity_arguments(p.oid) args, p.prosecdef, array_to_string(p.proacl, ',') acl from pg_proc p where p.oid in ('public.audit_trigger_fn'::regproc, 'public.log_contact_tag_changes'::regproc)"
-          echo "### correção aplicada em transação revertida"
-          psql -X -P pager=off -f diag/verify.sql
+          q "select table_name, column_name, data_type, is_nullable, column_default from information_schema.columns where table_schema='public' and column_name ilike '%version%' and table_name in ('contacts','companies','interactions','deals') order by 1,2"
+          q "select p.oid::regproc::text, pg_get_functiondef(p.oid) from pg_proc p where p.oid in ('public.increment_version_column'::regproc, 'public.increment_contact_version'::regproc)"
+          q "select c.relname, t.tgname, t.tgfoid::regproc::text fn, (select count(*) from information_schema.columns k where k.table_schema='public' and k.table_name=c.relname and k.column_name='version') tem_version from pg_trigger t join pg_class c on c.oid=t.tgrelid where not t.tgisinternal and t.tgfoid in ('public.increment_version_column'::regproc, 'public.increment_contact_version'::regproc) order by 1"
+          q "select max(updated_at) ultimo_update, max(created_at) ultimo_insert from public.contacts"
+          q "select date_trunc('day', created_at) dia, count(*) from public.contacts where created_at > now() - interval '90 days' group by 1 order by 1 desc limit 20"
