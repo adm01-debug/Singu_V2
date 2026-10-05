@@ -20,6 +20,5 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          echo "### correção aplicada em transação revertida"
-          psql -X -P pager=off -f diag/verify.sql
-          q "select 'pos-rollback' etapa, count(*) filter (where column_name='version') from information_schema.columns where table_schema='public' and table_name='contacts'"
+          echo "### varredura de gatilhos de UPDATE (transação revertida)"
+          psql -X -P pager=off -f diag/scan.sql 2>&1 | grep -E "FALHA|RESUMO|ERROR|ROLLBACK"
