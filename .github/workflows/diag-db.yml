@@ -20,9 +20,9 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          q "select conname, pg_get_constraintdef(oid) from pg_constraint where conname='chk_interaction_target'"
-          q "select t.tgname, t.tgtype, t.tgfoid::regproc::text, pg_get_functiondef(t.tgfoid) from pg_trigger t where t.tgrelid='public.oauth_tokens'::regclass and not t.tgisinternal"
-          q "select string_agg(column_name, ', ' order by ordinal_position) from information_schema.columns where table_schema='public' and table_name='oauth_tokens'"
+          q "select pg_get_functiondef('public.trigger_log_interaction_activity'::regproc)"
+          q "select c.relname, exists(select 1 from pg_attribute a where a.attrelid=c.oid and a.attname='id' and not a.attisdropped) tem_id, (select string_agg(a.attname, ',') from pg_index i join pg_attribute a on a.attrelid=i.indrelid and a.attnum=any(i.indkey) where i.indrelid=c.oid and i.indisprimary) pk, t.tgtype from pg_trigger t join pg_class c on c.oid=t.tgrelid where not t.tgisinternal and t.tgfoid='public.audit_trigger_func'::regproc order by 1"
+          q "select count(*) from public.oauth_tokens"
           echo "### verify (transação revertida)"
           psql -X -P pager=off -f diag/verify.sql 2>&1 | grep -vE "collation|DETAIL|HINT" || true
           echo "### varredura de gatilhos de UPDATE (transação revertida)"
