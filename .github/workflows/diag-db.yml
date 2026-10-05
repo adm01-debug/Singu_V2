@@ -15,20 +15,26 @@ jobs:
       PGPASSWORD: ${{ secrets.PGPASSWORD }}
       PGPORT: '5432'
       PGSSLMODE: require
-      PGOPTIONS: '-c default_transaction_read_only=on'
     steps:
-      - name: Diagnóstico somente leitura
+      - uses: actions/checkout@v4
+      - name: Diagnóstico (consultas + teste em transação revertida)
         run: |
-          q() { echo "### $1"; psql -X -v ON_ERROR_STOP=0 -P pager=off -c "$1" || true; }
-          q "select current_database(), current_setting('default_transaction_read_only') ro"
-          q "select column_name, data_type, is_nullable, column_default from information_schema.columns where table_schema='public' and table_name='audit_log' order by ordinal_position"
-          q "select to_regclass('public.contacts') contacts, (select count(*) from public.contacts) n_contacts"
-          q "select tgname, tgfoid::regproc::text fn, tgenabled from pg_trigger where tgrelid='public.contacts'::regclass and not tgisinternal order by 1"
-          q "select p.oid::regproc::text fn, pg_get_functiondef(p.oid) from pg_proc p where p.oid in (select tgfoid from pg_trigger where tgrelid='public.contacts'::regclass and not tgisinternal) and pg_get_functiondef(p.oid) ilike '%audit_log%'"
-          q "select count(*) total, max(version) ultima from supabase_migrations.schema_migrations"
-          q "select version, name from supabase_migrations.schema_migrations order by version desc limit 15"
-          q "select jobname, schedule, active, left(command,140) cmd from cron.job order by 1"
-          q "select count(*) n, max(created_at) ultimo from public.error_logs"
-          q "select policyname, cmd, roles, with_check from pg_policies where schemaname='public' and tablename='error_logs'"
-          q "select version from supabase_migrations.schema_migrations order by version" > remote_versions.txt
-          ls supabase 2>/dev/null; echo fim
+          q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
+          q "select conname, pg_get_constraintdef(oid) from pg_constraint where conrelid='public.audit_log'::regclass"
+          q "select relkind, relispartition from pg_class where oid='public.audit_log'::regclass"
+          q "select count(*), max(created_at), count(*) filter (where created_at > now()-interval '30 days') d30 from public.audit_log"
+          q "select table_name, action, count(*), max(created_at) from public.audit_log group by 1,2 order by 4 desc nulls last limit 15"
+          q "select p.oid::regproc::text fn from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and pg_get_functiondef(p.oid) ~* 'insert\s+into\s+(public\.)?audit_log\s*\(' and pg_get_functiondef(p.oid) !~* 'table_name' order by 1"
+          q "select c.relname, t.tgname, t.tgfoid::regproc::text fn from pg_trigger t join pg_class c on c.oid=t.tgrelid where not t.tgisinternal and t.tgfoid in (select p.oid from pg_proc p where pg_get_functiondef(p.oid) ~* 'insert\s+into\s+(public\.)?audit_log\s*\(' and pg_get_functiondef(p.oid) !~* 'table_name') order by 1"
+          echo "### reproducao: insert em contacts dentro de transacao revertida"
+          psql -X -P pager=off <<'SQL' || true
+          BEGIN;
+          INSERT INTO public.contacts (first_name, last_name, user_id)
+          SELECT 'diag', 'rollback', user_id FROM public.contacts WHERE user_id IS NOT NULL LIMIT 1;
+          ROLLBACK;
+          SQL
+          echo "### migrations locais ausentes no remoto"
+          psql -X -At -c "select version from supabase_migrations.schema_migrations" | sort > remote.txt
+          ls supabase/migrations | sed -E 's/^([0-9]+)_.*/\1/' | sort > local.txt
+          echo "local=$(wc -l < local.txt) remoto=$(wc -l < remote.txt) so_local=$(comm -23 local.txt remote.txt | wc -l) so_remoto=$(comm -13 local.txt remote.txt | wc -l)"
+          echo "--- ultimas 25 so_local:"; comm -23 local.txt remote.txt | tail -25
