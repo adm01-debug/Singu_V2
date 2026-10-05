@@ -22,5 +22,9 @@ SELECT relationship_score, sentiment, last_interaction_at IS NOT NULL AS tem_ult
 SELECT count(*) AS cadencias FROM public.contact_cadence WHERE contact_id = :'cid2' AND user_id = :'uid2';
 DELETE FROM public.interactions WHERE id IN (:'iid1', :'iid2', :'iid3');
 SELECT 'interacoes ok' AS status;
+UPDATE public.oauth_tokens SET updated_at = now() WHERE service = (SELECT service FROM public.oauth_tokens LIMIT 1);
+SELECT table_name, record_id IS NOT NULL AS tem_record, new_data ? 'access_token' AS vazou_token, changed_fields FROM public.audit_log WHERE table_name = 'oauth_tokens' ORDER BY created_at DESC LIMIT 1;
+UPDATE public.salespeople SET id = id WHERE id = (SELECT id FROM public.salespeople LIMIT 1);
+SELECT table_name, record_id IS NOT NULL AS tem_record FROM public.audit_log WHERE table_name = 'salespeople' ORDER BY created_at DESC LIMIT 1;
 ROLLBACK;
 SELECT 'verificacao concluida e revertida' AS status;

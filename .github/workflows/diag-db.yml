@@ -20,9 +20,7 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          q "select pg_get_functiondef('public.trigger_log_interaction_activity'::regproc)"
-          q "select c.relname, exists(select 1 from pg_attribute a where a.attrelid=c.oid and a.attname='id' and not a.attisdropped) tem_id, (select string_agg(a.attname, ',') from pg_index i join pg_attribute a on a.attrelid=i.indrelid and a.attnum=any(i.indkey) where i.indrelid=c.oid and i.indisprimary) pk, t.tgtype from pg_trigger t join pg_class c on c.oid=t.tgrelid where not t.tgisinternal and t.tgfoid='public.audit_trigger_func'::regproc order by 1"
-          q "select count(*) from public.oauth_tokens"
+          q "select column_name, is_nullable from information_schema.columns where table_schema='public' and table_name='audit_log' order by ordinal_position"
           echo "### verify (transação revertida)"
           psql -X -P pager=off -f diag/verify.sql 2>&1 | grep -vE "collation|DETAIL|HINT" || true
           echo "### varredura de gatilhos de UPDATE (transação revertida)"
