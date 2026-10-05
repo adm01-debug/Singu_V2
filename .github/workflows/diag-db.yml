@@ -20,7 +20,8 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          q "select table_name, column_name, is_nullable from information_schema.columns where table_schema='public' and ((table_name='interactions' and column_name in ('user_id','contact_id')) or (table_name in ('audit_log','interactions_audit') and column_name='user_id'))"
-          q "select count(*) filter (where user_id is null) interacoes_sem_user from public.interactions"
+          q "select p.oid::regproc::text fn, pg_get_functiondef(p.oid) from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.prosrc ilike '%last_contact_at%'"
+          q "select c.relname, t.tgname, t.tgfoid::regproc::text from pg_trigger t join pg_class c on c.oid=t.tgrelid where not t.tgisinternal and t.tgfoid in (select oid from pg_proc where prosrc ilike '%last_contact_at%')"
+          q "select column_name, data_type from information_schema.columns where table_schema='public' and table_name='contacts' and (column_name ilike '%last%' or column_name ilike '%contact_at%' or column_name ilike '%interaction%') order by 1"
           echo "### varredura de gatilhos de UPDATE (transação revertida)"
           psql -X -P pager=off -f diag/scan.sql 2>&1 | grep -E "FALHA|RESUMO|ERROR|ROLLBACK"
