@@ -20,8 +20,6 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          q "select pg_get_constraintdef(oid) from pg_constraint where conname='contacts_relationship_stage_check'" | tr -s ' ' | fold -w 200
-          q "select t.tgname, t.tgtype, p.proname, pg_get_functiondef(p.oid) from pg_trigger t join pg_proc p on p.oid=t.tgfoid where t.tgrelid='public.contacts'::regclass and not t.tgisinternal and p.prosrc ilike '%relationship_stage%'"
           echo "### verify (transação revertida)"
           psql -X -P pager=off -f diag/verify.sql 2>&1 | grep -vE "collation|DETAIL|HINT" || true
           echo "### varredura de gatilhos de UPDATE (transação revertida)"

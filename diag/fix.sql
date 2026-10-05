@@ -245,3 +245,27 @@ $$;
 
 REVOKE EXECUTE ON FUNCTION public.trigger_log_interaction_activity() FROM authenticated, anon, PUBLIC;
 REVOKE EXECUTE ON FUNCTION public.audit_trigger_func() FROM authenticated, anon, PUBLIC;
+
+-- 10) O estágio automático só emite valores aceitos por contacts_relationship_stage_check
+--     ('qualified' e 'lead' eram rejeitados e bloqueavam contatos com score entre 1 e 39).
+CREATE OR REPLACE FUNCTION public.auto_update_relationship_stage()
+RETURNS trigger
+LANGUAGE plpgsql
+SET search_path = public, pg_temp
+AS $$
+BEGIN
+  NEW.relationship_stage := CASE
+    WHEN NEW.relationship_score >= 80 THEN 'advocate'
+    WHEN NEW.relationship_score >= 60 THEN 'customer'
+    WHEN NEW.relationship_score >= 40 THEN 'opportunity'
+    WHEN NEW.relationship_score >= 20 THEN 'qualified_lead'
+    WHEN NEW.relationship_score >= 1 THEN 'prospect'
+    ELSE COALESCE(NEW.relationship_stage, 'unknown')
+  END;
+
+  NEW.updated_at := now();
+  RETURN NEW;
+END;
+$$;
+
+REVOKE EXECUTE ON FUNCTION public.auto_update_relationship_stage() FROM authenticated, anon, PUBLIC;
