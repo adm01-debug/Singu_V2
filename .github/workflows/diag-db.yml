@@ -20,6 +20,9 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
+          q "select conname, pg_get_constraintdef(oid) from pg_constraint where conname='chk_interaction_target'"
+          q "select t.tgname, t.tgtype, t.tgfoid::regproc::text, pg_get_functiondef(t.tgfoid) from pg_trigger t where t.tgrelid='public.oauth_tokens'::regclass and not t.tgisinternal"
+          q "select string_agg(column_name, ', ' order by ordinal_position) from information_schema.columns where table_schema='public' and table_name='oauth_tokens'"
           echo "### verify (transação revertida)"
           psql -X -P pager=off -f diag/verify.sql 2>&1 | grep -vE "collation|DETAIL|HINT" || true
           echo "### varredura de gatilhos de UPDATE (transação revertida)"
