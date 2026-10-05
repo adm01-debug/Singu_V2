@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { requireWritableEnvironment } from './support/auth';
 
 const BASE = process.env.E2E_BASE_URL || 'http://localhost:8080';
 const EMAIL = process.env.E2E_USER_EMAIL;
@@ -6,6 +7,7 @@ const PASS = process.env.E2E_USER_PASS;
 
 test.describe('Contacts Rapport & Intelligence', () => {
   test.skip(!EMAIL || !PASS, 'E2E_USER_EMAIL/E2E_USER_PASS não definidos');
+  requireWritableEnvironment();
 
   test.beforeEach(async ({ page }) => {
     await page.goto(`${BASE}/auth`);

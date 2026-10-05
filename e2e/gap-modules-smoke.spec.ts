@@ -17,6 +17,10 @@ const BASE = process.env.E2E_BASE_URL || 'http://localhost:8080';
 const EMAIL = process.env.E2E_USER_EMAIL;
 const PASS = process.env.E2E_USER_PASS;
 
+// Requisições de rede abortadas pela navegação (ex.: WebKit) não são erros de runtime da rota.
+const NETWORK_FAILURE =
+  /Fetch API cannot load|due to access control checks|Failed to fetch|NetworkError when attempting to fetch resource|Load failed/;
+
 async function login(page: Page) {
   await page.goto(`${BASE}/auth`);
   await page.getByLabel(/e-?mail/i).fill(EMAIL!);
@@ -27,7 +31,9 @@ async function login(page: Page) {
 
 async function assertRouteLoads(page: Page, path: string) {
   const errors: string[] = [];
-  page.on('pageerror', (err) => errors.push(err.message));
+  page.on('pageerror', (err) => {
+    if (!NETWORK_FAILURE.test(err.message)) errors.push(err.message);
+  });
   await page.goto(`${BASE}${path}`, { waitUntil: 'domcontentloaded' });
   // Aguarda algo interativo/estrutural renderizar
   await expect(page.locator('main, [role="main"], h1, h2').first()).toBeVisible({

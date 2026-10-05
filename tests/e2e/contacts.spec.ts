@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { loginWithTestUser, requireTestCredentials } from '../../e2e/support/auth';
+import {
+  loginWithTestUser,
+  requireTestCredentials,
+  requireWritableEnvironment,
+} from '../../e2e/support/auth';
 
 test.describe('Contatos CRUD & Filtros E2E', () => {
   test.beforeEach(async ({ page }) => {
@@ -11,6 +15,7 @@ test.describe('Contatos CRUD & Filtros E2E', () => {
   });
 
   test('deve criar um novo contato e aparecer na lista', async ({ page }) => {
+    requireWritableEnvironment();
     await page.click('button:has-text("Novo Contato")');
     
     await page.fill('input[name="first_name"]', 'Teste');

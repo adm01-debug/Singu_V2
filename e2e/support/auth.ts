@@ -7,6 +7,13 @@ export function requireTestCredentials(): void {
   test.skip(!EMAIL || !PASS, 'E2E_USER_EMAIL/E2E_USER_PASS não definidos');
 }
 
+export function requireWritableEnvironment(): void {
+  test.skip(
+    process.env.E2E_ALLOW_WRITES !== '1',
+    'Jornada grava dados; defina E2E_ALLOW_WRITES=1 somente em ambiente descartável',
+  );
+}
+
 export async function loginWithTestUser(page: Page): Promise<void> {
   await page.goto('/auth');
   await page.getByLabel(/e-?mail/i).fill(EMAIL!);
