@@ -20,9 +20,5 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          q "select table_name, column_name, is_nullable from information_schema.columns where table_schema='public' and table_name in ('audit_log','interactions_audit','activity_feed') and column_name in ('user_id','contact_id') order by 1,2"
-          q "select tgname, p.proname, tgenabled from pg_trigger t join pg_proc p on p.oid=t.tgfoid where tgrelid='public.interactions'::regclass and not tgisinternal order by 1"
-          q "select p.oid::regprocedure, pg_get_function_result(p.oid) from pg_proc p where proname in ('log_activity','calculate_relationship_metrics','update_contact_relationship_metrics')"
-          q "select indexrelid::regclass, indisunique, pg_get_indexdef(indexrelid) from pg_index where indrelid='public.contact_cadence'::regclass"
-          q "select pg_get_functiondef('public.trigger_log_interaction_activity()'::regprocedure)"
-          q "select pg_get_functiondef('public.calculate_relationship_metrics()'::regprocedure)"
+          q "select pg_get_functiondef(p.oid) from pg_proc p where proname in ('calculate_relationship_metrics_internal','log_activity')"
+          q "select tgname, pg_get_triggerdef(t.oid) from pg_trigger t where tgrelid='public.interactions'::regclass and tgname in ('tr_update_contact_metrics','tr_update_relationship_metrics','trg_log_interaction_activity','on_interaction_created')"
