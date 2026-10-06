@@ -14,6 +14,8 @@ ALTER TABLE public.interactions_audit ALTER COLUMN contact_id DROP NOT NULL;
 
 ALTER TABLE public.audit_log ADD COLUMN IF NOT EXISTS table_name text;
 ALTER TABLE public.audit_log ADD COLUMN IF NOT EXISTS record_id text;
+-- Gatilhos de auditoria também registram escritas sem usuário (importações, interações sem dono).
+ALTER TABLE public.audit_log ALTER COLUMN user_id DROP NOT NULL;
 
 CREATE OR REPLACE FUNCTION public.audit_trigger_fn()
 RETURNS trigger
@@ -83,8 +85,9 @@ REVOKE EXECUTE ON FUNCTION public.log_contact_tag_changes() FROM authenticated, 
 -- 5) interactions.user_id também é opcional; a auditoria de interações não pode exigi-lo.
 ALTER TABLE public.interactions_audit ALTER COLUMN user_id DROP NOT NULL;
 
--- 6) As métricas de relacionamento gravam somente colunas existentes em contacts
---    (last_contact_at, days_without_contact e interaction_count não existem).
+-- 6) O score de relacionamento é calculado por calculate_relationship_metrics
+--    (tr_update_contact_metrics); este gatilho mantém apenas sentimento e última interação,
+--    gravando somente colunas existentes em contacts.
 CREATE OR REPLACE FUNCTION public.update_contact_relationship_metrics()
 RETURNS trigger
 LANGUAGE plpgsql
@@ -92,16 +95,14 @@ SET search_path = public
 AS $$
 DECLARE
   last_interaction_date timestamptz;
-  total_interactions integer;
   avg_sentiment text;
-  new_score integer;
 BEGIN
   IF NEW.contact_id IS NULL THEN
     RETURN NEW;
   END IF;
 
-  SELECT max(created_at), count(*)
-  INTO last_interaction_date, total_interactions
+  SELECT max(created_at)
+  INTO last_interaction_date
   FROM public.interactions
   WHERE contact_id = NEW.contact_id;
 
@@ -117,26 +118,8 @@ BEGIN
     LIMIT 1
   ) sub;
 
-  new_score := CASE (SELECT relationship_stage FROM public.contacts WHERE id = NEW.contact_id)
-    WHEN 'prospect' THEN 20
-    WHEN 'qualified_lead' THEN 40
-    WHEN 'opportunity' THEN 60
-    WHEN 'customer' THEN 80
-    WHEN 'loyal_customer' THEN 100
-    ELSE 10
-  END;
-
-  new_score := new_score + LEAST(total_interactions, 20);
-
-  IF last_interaction_date IS NOT NULL THEN
-    new_score := new_score - (EXTRACT(DAY FROM (now() - last_interaction_date))::integer * 2);
-  END IF;
-
-  new_score := GREATEST(0, LEAST(100, new_score));
-
   UPDATE public.contacts
   SET
-    relationship_score = new_score,
     sentiment = COALESCE(avg_sentiment, 'neutral'),
     last_interaction_at = last_interaction_date,
     updated_at = now()
@@ -146,8 +129,8 @@ BEGIN
 END;
 $$;
 
--- 7) A cadência não depende de UNIQUE (contact_id, user_id), ausente em produção,
---    e ignora interações sem contato ou sem usuário (colunas NOT NULL em contact_cadence).
+-- 7) A cadência ignora interações sem contato ou sem usuário (colunas NOT NULL em
+--    contact_cadence) e usa a UNIQUE (user_id, contact_id) para um upsert atômico.
 CREATE OR REPLACE FUNCTION public.sync_contact_last_interaction()
 RETURNS trigger
 LANGUAGE plpgsql
@@ -159,15 +142,10 @@ BEGIN
     RETURN NEW;
   END IF;
 
-  UPDATE public.contact_cadence
-  SET last_contact_at = NEW.created_at
-  WHERE contact_id = NEW.contact_id
-    AND user_id = NEW.user_id;
-
-  IF NOT FOUND THEN
-    INSERT INTO public.contact_cadence (contact_id, user_id, last_contact_at)
-    VALUES (NEW.contact_id, NEW.user_id, NEW.created_at);
-  END IF;
+  INSERT INTO public.contact_cadence (contact_id, user_id, last_contact_at)
+  VALUES (NEW.contact_id, NEW.user_id, NEW.created_at)
+  ON CONFLICT (user_id, contact_id)
+  DO UPDATE SET last_contact_at = EXCLUDED.last_contact_at;
 
   RETURN NEW;
 END;

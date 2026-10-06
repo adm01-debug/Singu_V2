@@ -20,5 +20,7 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          q "select pg_get_functiondef(p.oid) from pg_proc p where proname in ('calculate_relationship_metrics_internal','log_activity')"
-          q "select tgname, pg_get_triggerdef(t.oid) from pg_trigger t where tgrelid='public.interactions'::regclass and tgname in ('tr_update_contact_metrics','tr_update_relationship_metrics','trg_log_interaction_activity','on_interaction_created')"
+          echo "### verify (transação revertida)"
+          psql -X -P pager=off -f diag/verify.sql 2>&1 | grep -vE "collation|DETAIL|HINT" || true
+          echo "### varredura de gatilhos (transação revertida)"
+          psql -X -P pager=off -f diag/scan.sql 2>&1 | grep -E "FALHA|RESUMO|ERROR|ROLLBACK" || true

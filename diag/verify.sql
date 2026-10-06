@@ -17,10 +17,15 @@ SELECT id AS coid FROM public.companies LIMIT 1 \gset
 INSERT INTO public.interactions (contact_id, user_id, channel, direction, assunto) VALUES (:'cid2', :'uid2', :'ch', :'dir', 'diag') RETURNING id AS iid1 \gset
 INSERT INTO public.interactions (company_id, user_id, channel, direction, assunto) VALUES (:'coid', :'uid2', :'ch', :'dir', 'diag') RETURNING id AS iid2 \gset
 INSERT INTO public.interactions (company_id, user_id, channel, direction, assunto) VALUES (:'coid', NULL, :'ch', :'dir', 'diag') RETURNING id AS iid3 \gset
-UPDATE public.interactions SET assunto = 'diag2' WHERE id IN (:'iid1', :'iid2', :'iid3');
+INSERT INTO public.interactions (contact_id, user_id, channel, direction, assunto) VALUES (:'cid2', NULL, :'ch', :'dir', 'diag') RETURNING id AS iid4 \gset
+SELECT count(*) AS audit_sem_usuario FROM public.audit_log WHERE record_id = :'iid4' AND user_id IS NULL;
+UPDATE public.interactions SET assunto = 'diag2' WHERE id IN (:'iid1', :'iid2', :'iid3', :'iid4');
 SELECT relationship_score, sentiment, last_interaction_at IS NOT NULL AS tem_ultima FROM public.contacts WHERE id = :'cid2';
+SELECT relationship_score AS score_atual FROM public.contacts WHERE id = :'cid2' \gset
+SELECT public.calculate_relationship_metrics_internal(:'cid2');
+SELECT relationship_score = :score_atual AS score_preservado FROM public.contacts WHERE id = :'cid2';
 SELECT count(*) AS cadencias FROM public.contact_cadence WHERE contact_id = :'cid2' AND user_id = :'uid2';
-DELETE FROM public.interactions WHERE id IN (:'iid1', :'iid2', :'iid3');
+DELETE FROM public.interactions WHERE id IN (:'iid1', :'iid2', :'iid3', :'iid4');
 SELECT 'interacoes ok' AS status;
 UPDATE public.contacts SET relationship_score = 25 WHERE id = :'cid2' RETURNING relationship_stage;
 UPDATE public.contacts SET relationship_score = 5 WHERE id = :'cid2' RETURNING relationship_stage;
