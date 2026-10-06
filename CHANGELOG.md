@@ -5,6 +5,14 @@ Todas as mudanças notáveis do SINGU CRM são documentadas neste arquivo.
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [Unreleased]
+
+### Fixed
+- `vercel.json` — fallback SPA na Vercel: links diretos e recarregamento de rotas internas (`/auth`, `/dashboard`, `/contatos` etc.) deixam de responder 404.
+
+### Security
+- `vercel.json` — cabeçalhos de segurança passam a ser enviados pela Vercel (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` e CSP mínima `frame-ancestors 'none'; object-src 'none'; base-uri 'self'`), além de cache imutável para `/assets/*` e `no-cache` para `index.html`, service workers e manifest.
+
 ## [2.7.4] - 2026-04-20 — Rodada S: Optimistic Locking End-to-End
 
 ### Added
