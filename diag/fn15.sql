@@ -18,7 +18,7 @@ SELECT sqlstate, count(DISTINCT fn) FROM chk GROUP BY 1 ORDER BY 2 DESC;
 \pset format unaligned
 \pset tuples_only on
 SELECT 'ERR|'||fn||'|'||coalesce(rel,'')||'|'||lineno||'|'||sqlstate||'|'||message
-       ||'|trg='||coalesce((SELECT string_agg(DISTINCT t.tgname||'@'||t.tgrelid::regclass||':'||t.tgenabled, ',') FROM pg_trigger t WHERE t.tgfoid = to_regprocedure(fn)),'')
+       ||'|trg='||coalesce((SELECT string_agg(DISTINCT t.tgname||'@'||t.tgrelid::regclass||':'||t.tgenabled::text, ',') FROM pg_trigger t WHERE t.tgfoid = to_regprocedure(fn)),'')
        ||'|anon='||has_function_privilege('anon', to_regprocedure(fn), 'EXECUTE')||'|auth='||has_function_privilege('authenticated', to_regprocedure(fn), 'EXECUTE')
        ||'|cron='||coalesce((SELECT string_agg(j.jobname, ',') FROM cron.job j WHERE j.command ILIKE '%'||split_part(fn,'(',1)||'%' AND j.active),'')
   FROM chk ORDER BY fn, lineno;
