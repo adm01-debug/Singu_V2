@@ -20,9 +20,4 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          q "SELECT r.rolname, left(regexp_replace(s.query,'\s+',' ','g'),140) AS q, s.calls FROM pg_stat_statements s JOIN pg_roles r ON r.oid=s.userid WHERE r.rolname IN ('anon','authenticator') AND s.query !~* '^(SET|SELECT set_config|BEGIN|COMMIT|ROLLBACK|WITH pgrst_source AS \(SELECT pg_catalog)' ORDER BY s.calls DESC LIMIT 40"
-          q "SELECT left(regexp_replace(s.query,'\s+',' ','g'),200) AS q, s.calls FROM pg_stat_statements s JOIN pg_roles r ON r.oid=s.userid WHERE r.rolname='anon' AND s.query ~* '(stg_|dados_dispersos|lalamove|search_contacts_advanced|contact_360|contact_intelligence|companies_by_phones|sync_interaction)' ORDER BY s.calls DESC LIMIT 30"
-          q "SELECT r.rolname, left(regexp_replace(s.query,'\s+',' ','g'),120) AS q, s.calls FROM pg_stat_statements s JOIN pg_roles r ON r.oid=s.userid WHERE s.query ~* '(stg_portal_sicoob|stg_site_sicoob|stg_bcb_sicoob|dados_dispersos_pb|lalamove_position_log)' ORDER BY s.calls DESC LIMIT 20"
-          q "SELECT c.relname, has_table_privilege('anon',c.oid,'SELECT') s, has_table_privilege('anon',c.oid,'INSERT') i, has_table_privilege('anon',c.oid,'UPDATE') u, has_table_privilege('anon',c.oid,'DELETE') d, c.relrowsecurity rls, (SELECT string_agg(policyname||':'||cmd||':'||array_to_string(roles,','),' | ') FROM pg_policies p WHERE p.schemaname='public' AND p.tablename=c.relname) pols FROM pg_class c WHERE c.relnamespace='public'::regnamespace AND c.relname ~ '^(stg_|dados_dispersos|lalamove)' ORDER BY 1"
-          q "SELECT p.oid::regprocedure, p.prosecdef, has_function_privilege('anon',p.oid,'EXECUTE') anon_exec FROM pg_proc p WHERE p.pronamespace='public'::regnamespace AND p.proname IN ('search_contacts_advanced','get_contact_360_by_phone','get_contact_intelligence_by_phone','get_companies_by_phones_batch','sync_interaction_from_zapp') ORDER BY 1"
-          q "SELECT stats_reset FROM pg_stat_statements_info"
+          psql -X -P pager=off -f diag/anon_crm.sql 2>&1 | grep -vE "NOTICE:  (policy|relation|schema|role)" || true
