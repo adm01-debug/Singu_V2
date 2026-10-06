@@ -20,4 +20,4 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          psql -XAt -q -f diag/rls.sql 2>&1 | grep -vE "^(BEGIN|ROLLBACK|REVOKE|GRANT|ALTER|DO|INSERT|CREATE|DROP|COMMENT)" | sed "s/^/RLS|/"
+          bash tests/rls/run.sh 2>&1 | sed "s/^/RLS|/"; true || psql -XAt -q -f diag/rls.sql 2>&1 | grep -vE "^(BEGIN|ROLLBACK|REVOKE|GRANT|ALTER|DO|INSERT|CREATE|DROP|COMMENT)" | sed "s/^/RLS|/"
