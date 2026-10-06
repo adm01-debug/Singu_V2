@@ -67,7 +67,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE EXECUTE ON FU
 DO $$
 BEGIN
   IF to_regclass('public.forms') IS NOT NULL THEN
-    GRANT SELECT ON public.forms TO anon;
+    GRANT SELECT (id, name, slug, description, fields, redirect_url, success_message, is_published) ON public.forms TO anon;
   END IF;
   IF to_regclass('public.lead_magnets') IS NOT NULL THEN
     GRANT SELECT ON public.lead_magnets TO anon;

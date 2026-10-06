@@ -71,3 +71,23 @@ BEGIN
   END LOOP;
   RAISE NOTICE '✅ RPCs do portal do comprador validam token e share_enabled';
 END $$;
+
+\echo 'TEST: portal do comprador funciona de fato como anon (token inexistente)'
+SET ROLE anon;
+DO $$
+BEGIN
+  BEGIN
+    PERFORM public.get_deal_room_by_token('rls-token-inexistente');
+  EXCEPTION
+    WHEN insufficient_privilege THEN RAISE EXCEPTION '❌ get_deal_room_by_token negado a anon: %', SQLERRM;
+    WHEN raise_exception OR no_data_found OR invalid_parameter_value THEN NULL;
+  END;
+  BEGIN
+    PERFORM public.get_buyer_document_path('rls-token-inexistente', gen_random_uuid());
+  EXCEPTION
+    WHEN insufficient_privilege THEN RAISE EXCEPTION '❌ get_buyer_document_path negado a anon: %', SQLERRM;
+    WHEN raise_exception OR no_data_found OR invalid_parameter_value THEN NULL;
+  END;
+  RAISE NOTICE '✅ RPCs de leitura do portal executam como anon sem permission denied';
+END $$;
+RESET ROLE;

@@ -8,7 +8,7 @@ DO $$
 DECLARE r TEXT;
 BEGIN
   FOREACH r IN ARRAY ARRAY['forms','lead_magnets','landing_pages'] LOOP
-    IF NOT has_table_privilege('anon','public.'||r,'SELECT') THEN
+    IF NOT has_any_column_privilege('anon','public.'||r,'SELECT') THEN
       RAISE EXCEPTION '❌ anon sem SELECT em %', r; END IF;
     IF has_table_privilege('anon','public.'||r,'INSERT')
        OR has_table_privilege('anon','public.'||r,'UPDATE')
@@ -43,3 +43,22 @@ BEGIN
     RAISE EXCEPTION '❌ anon tem privilégio além de INSERT em landing_page_submissions'; END IF;
   RAISE NOTICE '✅ anon apenas INSERT em landing_page_submissions';
 END $$;
+\echo 'TEST: página pública de formulário lê só colunas públicas como anon'
+SET ROLE anon;
+DO $$
+BEGIN
+  PERFORM id, name, slug, description, fields, redirect_url, success_message, is_published
+    FROM public.forms WHERE is_published LIMIT 1;
+  BEGIN
+    PERFORM routing_rules FROM public.forms LIMIT 1;
+    RAISE EXCEPTION '❌ anon lê forms.routing_rules';
+  EXCEPTION WHEN insufficient_privilege THEN NULL;
+  END;
+  BEGIN
+    PERFORM nurturing_workflow_id FROM public.forms LIMIT 1;
+    RAISE EXCEPTION '❌ anon lê forms.nurturing_workflow_id';
+  EXCEPTION WHEN insufficient_privilege THEN NULL;
+  END;
+  RAISE NOTICE '✅ anon lê só as colunas públicas de forms';
+END $$;
+RESET ROLE;
