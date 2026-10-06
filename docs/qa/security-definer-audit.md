@@ -2,24 +2,38 @@
 
 > Objetivo: confirmar que **toda** função `SECURITY DEFINER` em `public.*` (a) trava `search_path`; e que nenhum DEFINER **exposto a `anon`** lê `auth.uid()` — combinação perigosa: `anon` sem JWT resulta em `auth.uid() = NULL` e o DEFINER escreve linhas órfãs ou cross-tenant.
 
-## Baseline atual — 96 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-10-06)
+## Baseline atual — 95 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-10-06)
 
-Medido no banco canônico com as migrations `20261006120000` e `20261006120100` aplicadas em transação revertida (`tests/rls/run.sh`).
+Medido no banco canônico com as migrations `20261006120000`, `20261006120100` e `20261006130000` aplicadas em transação revertida (`tests/rls/run.sh`).
 O baseline anterior (63) refletia o histórico local de migrations, não o banco real (93 DEFINERs antes desta rodada; +3 RPCs públicas novas).
 
-- **Total DEFINER em `public.*`**: 96
+- **Total DEFINER em `public.*`**: 95 (`20261006130000` remove o overload quebrado `move_deal_atomic(uuid, text, numeric)`)
 - **Executáveis por `anon`**: 12 — exatamente a allowlist pública de `tests/rls/functions_authenticated_allowlist.sql` (Deal Room ×5, Forms ×2, Lead Magnets ×2, Landing Page ×1, CSAT ×2); nenhuma usa `auth.uid()`.
-- **Executável só por `authenticated` (além de service_role)**: 1 — `has_role(uuid, app_role)`.
-- **Somente `service_role`/owner**: 83 (triggers, jobs, RPCs administrativas). 22 delas usam `auth.uid()`.
+- **Executáveis só por `authenticated` (além de service_role)**: 16 — `has_role(uuid, app_role)` + as 15 RPCs do frontend abaixo.
+- **Somente `service_role`/owner**: 67 (triggers, jobs, RPCs administrativas).
 - **DEFINERs sem `search_path` travado**: **0** ✅
 
-### Achado aberto — RPCs chamadas pelo frontend sem `EXECUTE` para `authenticated`
+### RPCs do frontend com sessão de usuário — resolvido em `20261006130000`
 
-Já antes desta rodada, estas DEFINERs eram chamadas com sessão de usuário em `src/` mas só `service_role` as executa (resultado: `42501` no app):
-`cleanup_behavioral_regen_queue`, `compute_account_health`, `compute_attribution`, `compute_revops_kpis`, `cs_renewal_pipeline`,
-`dismiss_revops_alert`, `enroll_contact_in_workflow`, `evaluate_mql`, `get_connection_metrics`, `get_marketing_funnel_stats`,
-`get_score_explicability`, `move_deal_atomic`, `publish_mtta_sla_breach_alert`, `seed_conversation_topics`, `seed_forecast_period`.
-Conceder `EXECUTE` exige revisar cada corpo (várias recebem `_user_id` como parâmetro e seriam cross-tenant sem `auth.uid() = _user_id`); tratado em PR próprio.
+Estas DEFINERs eram chamadas com sessão de usuário em `src/` mas só `service_role` as executava (`42501` no app). Cada corpo foi revisado antes do `GRANT EXECUTE ... TO authenticated`:
+
+| Função | Escopo do chamador | Correção além do GRANT |
+|---|---|---|
+| `cleanup_behavioral_regen_queue` | exige admin | `search_path` com `pg_temp` |
+| `publish_mtta_sla_breach_alert` | no-op sem admin | `search_path` com `pg_temp` |
+| `get_connection_metrics` | exige admin | — |
+| `compute_account_health`, `cs_renewal_pipeline` | `auth.uid()` = dono | — |
+| `compute_attribution`, `dismiss_revops_alert` | filtram por `auth.uid()` | — |
+| `compute_revops_kpis` | `auth.uid() = _user_id` | lia `deal_forecasts.amount` (inexistente) → `forecasted_amount` |
+| `evaluate_mql` | contato de `auth.uid()` | lia `contacts.lead_score` (inexistente) → `lead_scores.total_score` |
+| `enroll_contact_in_workflow` | workflow e contato de `auth.uid()` | gravava `enrolled_count` (inexistente) → `total_enrolled`, só na primeira inscrição |
+| `get_marketing_funnel_stats` | `auth.uid() = _user_id` | lia `marketing_forms` (inexistente) → `forms`; período inclui o último dia |
+| `get_score_explicability` | contato de `auth.uid()` | — |
+| `move_deal_atomic(uuid, text, integer)` | deal de `auth.uid()` | overload `numeric` removido (lia `is_allowed`, inexistente) |
+| `seed_conversation_topics`, `seed_forecast_period` | `auth.uid() = _user_id` | — |
+
+O gatilho `log_deal_status_change` também foi corrigido: gravava `interactions` só com `company_id` e violava `chk_interaction_target` ao mover deal sem empresa.
+Contrato verificado por `tests/rls/frontend_rpcs_authenticated.sql` (dono executa as 15; outro usuário é recusado; `anon` não executa).
 
 ## DEFINERs expostos a `anon` — inspeção manual detalhada (5 críticos)
 
@@ -33,7 +47,7 @@ Conceder `EXECUTE` exige revisar cada corpo (várias recebem `_user_id` como par
 
 **Resultado**: nenhuma anomalia. Todas as funções expostas a `anon` derivam ownership do recurso público (token/slug) ou de parâmetro explícito, nunca de `auth.uid()` dentro do corpo DEFINER — padrão correto.
 
-> Os 58 DEFINERs restantes são acessíveis apenas por `service_role` (jobs, triggers, RPCs administrativas). Vários usam `auth.uid()` de forma legítima porque só rodam sob sessão autenticada válida, e todos têm `search_path` travado. Não são inspecionados um-a-um aqui — a invariante coletiva é validada por `tests/rls/security_definer_hardening.sql`.
+> Os DEFINERs restantes são acessíveis apenas por `service_role` (jobs, triggers, RPCs administrativas). Vários usam `auth.uid()` de forma legítima porque só rodam sob sessão autenticada válida, e todos têm `search_path` travado. Não são inspecionados um-a-um aqui — a invariante coletiva é validada por `tests/rls/security_definer_hardening.sql`.
 
 ## Invariantes
 

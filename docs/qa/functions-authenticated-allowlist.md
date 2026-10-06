@@ -2,7 +2,7 @@
 
 > Rodada 48/10 · Baseline histórico: 33 funções. Toda adição/remoção deve atualizar este documento e o teste `tests/rls/functions_authenticated_allowlist.sql`.
 >
-> **Atualização 2026-10-06 (banco canônico):** o banco real tem ~1.100 funções executáveis por `authenticated` (SECURITY INVOKER, protegidas por RLS), então o teste deixou de exigir a lista de 33. O invariante verificado agora é: `anon` executa **exatamente** as 12 RPCs públicas abaixo (9 originais + `increment_landing_page_view`, `get_public_csat_survey`, `submit_public_csat_survey`) e, entre as `SECURITY DEFINER`, `authenticated` executa só essas 12 + `has_role`. Ver `docs/qa/security-definer-audit.md`.
+> **Atualização 2026-10-06 (banco canônico):** o banco real tem ~1.100 funções executáveis por `authenticated` (SECURITY INVOKER, protegidas por RLS), então o teste deixou de exigir a lista de 33. O invariante verificado agora é: `anon` executa **exatamente** as 12 RPCs públicas abaixo (9 originais + `increment_landing_page_view`, `get_public_csat_survey`, `submit_public_csat_survey`) e, entre as `SECURITY DEFINER`, `authenticated` executa só essas 12 + `has_role` + as 15 RPCs do frontend escopadas por `auth.uid()` (migration `20261006130000`). Ver `docs/qa/security-definer-audit.md`.
 
 ## Regra
 
