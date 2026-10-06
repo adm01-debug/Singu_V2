@@ -23,6 +23,12 @@ INSERT INTO public.cs_accounts (user_id, account_name)
 VALUES (current_setting('rls.owner')::uuid, 'rls rpc fixture')
 RETURNING set_config('rls.account', id::text, true);
 
+INSERT INTO public.lead_scores (user_id, contact_id, total_score)
+VALUES (current_setting('rls.owner')::uuid, current_setting('rls.contact')::uuid, 80);
+INSERT INTO public.mql_criteria (user_id, name, conditions, is_active, priority)
+VALUES (current_setting('rls.owner')::uuid, 'rls rpc fixture', '{"min_score": 50}', true, 1000000);
+SELECT set_config('rls.admin', coalesce((SELECT user_id::text FROM public.user_roles WHERE role = 'admin' ORDER BY user_id LIMIT 1), ''), true);
+
 CREATE FUNCTION pg_temp.act_as(_uid text) RETURNS void LANGUAGE sql AS $$
   SELECT set_config('request.jwt.claim.sub', _uid, true),
          set_config('request.jwt.claims', json_build_object('sub', _uid, 'role', 'authenticated')::text, true);
@@ -82,7 +88,25 @@ BEGIN
                     AND contact_id = current_setting('rls.contact')::uuid) THEN
     RAISE EXCEPTION '❌ enroll_contact_in_workflow não inscreveu o contato do dono';
   END IF;
+  IF NOT (public.evaluate_mql(current_setting('rls.contact')::uuid)->>'qualified')::boolean THEN
+    RAISE EXCEPTION '❌ evaluate_mql não qualificou contato com score 80 e critério min_score 50';
+  END IF;
   RAISE NOTICE '✅ dono executa as 15 RPCs do frontend';
+END $$;
+RESET ROLE;
+
+\echo 'TEST: admin executa as RPCs administrativas'
+SELECT pg_temp.act_as(coalesce(nullif(current_setting('rls.admin'), ''), '00000000-0000-0000-0000-000000000000'));
+SET LOCAL ROLE authenticated;
+DO $$
+BEGIN
+  IF current_setting('rls.admin') = '' THEN
+    RAISE EXCEPTION '❌ nenhum admin em user_roles para exercitar as RPCs administrativas';
+  END IF;
+  PERFORM public.cleanup_behavioral_regen_queue(30, 5, 7);
+  PERFORM public.get_connection_metrics(gen_random_uuid());
+  PERFORM public.publish_mtta_sla_breach_alert(10, 5);
+  RAISE NOTICE '✅ admin executa cleanup_behavioral_regen_queue, get_connection_metrics e publish_mtta_sla_breach_alert';
 END $$;
 RESET ROLE;
 
