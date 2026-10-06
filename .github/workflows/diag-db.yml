@@ -20,7 +20,4 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          echo "### APLICACAO DEFINITIVA"
-          psql -X -P pager=off -f diag/apply.sql 2>&1 | grep -vE "NOTICE:  (policy|relation|schema|role)"
-          echo "### GATE RLS POS-APLICACAO"
           bash tests/rls/run.sh 2>&1 | sed "s/^/RLS|/"
