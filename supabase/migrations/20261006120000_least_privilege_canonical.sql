@@ -46,7 +46,8 @@ FROM (
   FROM pg_policies pol
   WHERE pol.schemaname = 'public'
     AND pol.tablename IN ('csat_surveys', 'document_signatures')
-    AND 'anon' = ANY (pol.roles)
+    AND pol.roles && ARRAY['anon', 'public']::name[]
+    AND coalesce(pol.qual, '') || coalesce(pol.with_check, '') NOT LIKE '%auth.uid()%'
 ) s
 WHERE NOT EXISTS (
   SELECT 1 FROM ops_backup.acl_snapshot b WHERE b.migration = '20261006120000'
@@ -70,7 +71,7 @@ BEGIN
     GRANT SELECT (id, name, slug, description, fields, redirect_url, success_message, is_published) ON public.forms TO anon;
   END IF;
   IF to_regclass('public.lead_magnets') IS NOT NULL THEN
-    GRANT SELECT ON public.lead_magnets TO anon;
+    GRANT SELECT (id, title, slug, description, type, thumbnail_url, is_published) ON public.lead_magnets TO anon;
   END IF;
   IF to_regclass('public.landing_pages') IS NOT NULL THEN
     GRANT SELECT ON public.landing_pages TO anon;
@@ -89,7 +90,7 @@ BEGIN
   END IF;
 END $$;
 
--- 3. Policies por token que expunham linhas de todos os usuários.
+-- 3. Policies por token (anon/public sem auth.uid()) que expunham linhas de todos os usuários.
 DO $$
 DECLARE
   pol record;
@@ -99,7 +100,8 @@ BEGIN
     FROM pg_policies
     WHERE schemaname = 'public'
       AND tablename IN ('csat_surveys', 'document_signatures')
-      AND 'anon' = ANY (roles)
+      AND roles && ARRAY['anon', 'public']::name[]
+      AND coalesce(qual, '') || coalesce(with_check, '') NOT LIKE '%auth.uid()%'
   LOOP
     EXECUTE format('DROP POLICY %I ON public.%I', pol.policyname, pol.tablename);
   END LOOP;

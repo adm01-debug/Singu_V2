@@ -40,6 +40,7 @@ for f in "$TESTS"/*.sql; do
   sed -E '/^(BEGIN|ROLLBACK);[[:space:]]*$/d' "$f" > "$WORK/body_$name"
   {
     echo 'BEGIN;'
+    echo "SET LOCAL lock_timeout = '180s';"
     echo "SELECT pg_advisory_xact_lock(hashtext('singu-rls-gate'));"
     echo "SET LOCAL lock_timeout = '5s';"
     echo "SET LOCAL statement_timeout = '60s';"
