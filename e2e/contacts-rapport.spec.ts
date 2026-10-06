@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { requireWritableEnvironment } from './support/auth';
 
 const BASE = process.env.E2E_BASE_URL || 'http://localhost:8080';
 const EMAIL = process.env.E2E_USER_EMAIL;
@@ -11,11 +12,12 @@ test.describe('Contacts Rapport & Intelligence', () => {
     await page.goto(`${BASE}/auth`);
     await page.getByLabel(/e-?mail/i).fill(EMAIL!);
     await page.getByLabel(/^senha$/i).fill(PASS!);
-    await page.getByRole('button', { name: /entrar/i }).click();
+    await page.getByRole('button', { name: 'Entrar', exact: true }).click();
     await expect(page).toHaveURL(/\/(dashboard|index|$)/, { timeout: 15_000 });
   });
 
   test('CRUD de contatos com Hobbies e Interesses', async ({ page }) => {
+    requireWritableEnvironment();
     await page.goto(`${BASE}/contatos`);
     await page.getByRole('button', { name: /novo contato/i }).click();
     
@@ -41,23 +43,20 @@ test.describe('Contacts Rapport & Intelligence', () => {
 
   test('Filtro por Hobbies e Interesses', async ({ page }) => {
     await page.goto(`${BASE}/contatos`);
-    
-    // Open filters if necessary (assuming they are visible or in a menu)
-    const filterButton = page.getByRole('button', { name: /filtros/i });
-    if (await filterButton.isVisible()) {
-      await filterButton.click();
-    }
-    
-    // Filter by a hobby
-    // Note: The specific implementation of filters might vary, assuming a label/dropdown approach
-    await page.getByText(/Futebol/).first().click();
-    
-    // Verify results count changed or list updated
-    // (This is a simplified check)
-    await expect(page.locator('article')).toBeVisible();
+
+    await page.getByRole('button', { name: /^Hobbies/ }).click();
+    const options = page.getByRole('option');
+    const hasOption = await options.first().isVisible({ timeout: 10_000 }).catch(() => false);
+    test.skip(!hasOption, 'Nenhum contato com hobbies cadastrados para filtrar');
+
+    await options.first().click();
+
+    await expect(page).toHaveURL(/[?&]filters=/);
+    await expect(page.getByText('Filtros ativos:')).toBeVisible();
   });
 
   test('Ficha 360: Edição Inline de Família e Histórico', async ({ page }) => {
+    requireWritableEnvironment();
     await page.goto(`${BASE}/contatos`);
     // Click on the first contact
     await page.locator('article').first().click();

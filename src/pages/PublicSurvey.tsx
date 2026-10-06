@@ -32,11 +32,10 @@ export default function PublicSurvey() {
     const currentToken = token;
     (async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('csat_surveys')
-        .select('id, score, feedback, status, channel, expires_at')
-        .eq('public_token', currentToken)
-        .maybeSingle();
+      const { data, error } = await supabase.rpc(
+        'get_public_csat_survey' as never,
+        { _token: currentToken } as never,
+      ) as unknown as { data: Survey | null; error: unknown };
       if (cancelled) return;
       if (error || !data) {
         setError('Pesquisa não encontrada ou expirada.');
@@ -57,18 +56,12 @@ export default function PublicSurvey() {
     if (score === null || !survey || !token) return;
     if (score < 0 || score > 10 || !Number.isInteger(score)) return;
     setSubmitting(true);
-    const { error } = await supabase
-      .from('csat_surveys')
-      .update({
-        score,
-        feedback: feedback.trim().slice(0, 1000) || null,
-        status: 'answered',
-        answered_at: new Date().toISOString(),
-      })
-      .eq('id', survey.id)
-      .eq('public_token', token);
+    const { data: answered, error } = await supabase.rpc(
+      'submit_public_csat_survey' as never,
+      { _token: token, _score: score, _feedback: feedback.trim().slice(0, 1000) || null } as never,
+    ) as unknown as { data: boolean | null; error: unknown };
     setSubmitting(false);
-    if (error) {
+    if (error || answered !== true) {
       toast.error('Não foi possível registrar sua resposta. Tente novamente.');
       return;
     }
