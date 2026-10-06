@@ -17,22 +17,33 @@ const BASE = process.env.E2E_BASE_URL || 'http://localhost:8080';
 const EMAIL = process.env.E2E_USER_EMAIL;
 const PASS = process.env.E2E_USER_PASS;
 
+// Requisições do documento anterior abortadas durante a navegação (ex.: WebKit) não são erros da rota.
+const NETWORK_FAILURE =
+  /Fetch API cannot load|due to access control checks|Failed to fetch|NetworkError when attempting to fetch resource|Load failed/;
+
 async function login(page: Page) {
   await page.goto(`${BASE}/auth`);
   await page.getByLabel(/e-?mail/i).fill(EMAIL!);
   await page.getByLabel(/^senha$/i).fill(PASS!);
-  await page.getByRole('button', { name: /entrar/i }).click();
+  await page.getByRole('button', { name: 'Entrar', exact: true }).click();
   await expect(page).toHaveURL(/\/(dashboard|index|$)/, { timeout: 15_000 });
 }
 
 async function assertRouteLoads(page: Page, path: string) {
   const errors: string[] = [];
-  page.on('pageerror', (err) => errors.push(err.message));
+  let leavingPreviousPage = true;
+  const onPageError = (err: Error) => {
+    if (leavingPreviousPage && NETWORK_FAILURE.test(err.message)) return;
+    errors.push(err.message);
+  };
+  page.on('pageerror', onPageError);
   await page.goto(`${BASE}${path}`, { waitUntil: 'domcontentloaded' });
+  leavingPreviousPage = false;
   // Aguarda algo interativo/estrutural renderizar
   await expect(page.locator('main, [role="main"], h1, h2').first()).toBeVisible({
     timeout: 15_000,
   });
+  page.off('pageerror', onPageError);
   expect(errors, `runtime errors em ${path}:\n${errors.join('\n')}`).toEqual([]);
 }
 

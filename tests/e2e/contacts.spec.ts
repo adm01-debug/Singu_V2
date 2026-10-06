@@ -1,16 +1,20 @@
 import { test, expect } from '@playwright/test';
-import { loginWithTestUser, requireTestCredentials } from '../../e2e/support/auth';
+import {
+  loginWithTestUser,
+  requireTestCredentials,
+  requireWritableEnvironment,
+} from '../../e2e/support/auth';
+import { openContactsTable, requireContactRows } from '../../e2e/support/contacts';
 
 test.describe('Contatos CRUD & Filtros E2E', () => {
   test.beforeEach(async ({ page }) => {
     requireTestCredentials();
     await loginWithTestUser(page);
-    await page.goto('/contatos');
-    // Wait for the list to load
-    await page.waitForSelector('[role="region"][aria-label="Tabela de contatos"]');
+    await openContactsTable(page);
   });
 
   test('deve criar um novo contato e aparecer na lista', async ({ page }) => {
+    requireWritableEnvironment();
     await page.click('button:has-text("Novo Contato")');
     
     await page.fill('input[name="first_name"]', 'Teste');
@@ -24,20 +28,16 @@ test.describe('Contatos CRUD & Filtros E2E', () => {
   });
 
   test('deve navegar para ficha 360 e validar rapport e histórico familiar', async ({ page }) => {
-    // Clica no primeiro contato da lista
-    await page.click('tbody tr:first-child a');
-    
-    // Aguarda carregar a Ficha 360
-    await page.waitForSelector('text=Rapport & Dados Pessoais');
-    
-    // Verifica se os badges de hobbies e interesses estão visíveis (se houver dados)
-    // Se não houver, valida o estado vazio
-    const rapportCard = page.locator('div:has-text("Rapport & Dados Pessoais")').first();
-    await expect(rapportCard).toBeVisible();
+    await requireContactRows(page);
+    await page.locator('tbody tr').first().getByRole('link').first().click();
+    await expect(page).toHaveURL(/\/contatos\/[0-9a-f-]{36}/);
 
-    // Testa a abertura do histórico familiar
-    await page.click('button:has(svg.lucide-history)');
-    await expect(page.locator('text=Histórico Familiar')).toBeVisible();
+    await page.getByRole('tab', { name: 'Comportamental' }).click();
+    await expect(page.getByText('Vida Pessoal & Rapport')).toBeVisible({ timeout: 15_000 });
+
+    const familySection = page.locator('h4', { hasText: 'Família & Contexto' }).locator('..');
+    await familySection.getByRole('button', { name: 'Histórico', exact: true }).click();
+    await expect(page.getByRole('dialog').getByRole('heading', { name: /Histórico Familiar/ })).toBeVisible();
   });
 
   test('deve validar fluxo de aprovação de sugestões IA', async ({ page }) => {
@@ -54,16 +54,13 @@ test.describe('Contatos CRUD & Filtros E2E', () => {
   });
 
   test('deve filtrar contatos por interesses', async ({ page }) => {
-    // Abre filtros
-    await page.click('button:has-text("Filtros")');
-    
-    // Procura por um interesse conhecido (ex: Tecnologia)
-    const filterValue = 'Tecnologia';
-    // Se não houver o texto Tecnologia, o teste pode falhar, mas aqui validamos a intenção
-    const filterItem = page.locator(`text=${filterValue}`);
-    if (await filterItem.isVisible()) {
-      await filterItem.click();
-      await expect(page.locator('text=Filtros ativos')).toBeVisible();
-    }
+    await requireContactRows(page);
+    await page.getByRole('button', { name: /Interesses/ }).click();
+    await expect(page.getByRole('listbox')).toBeVisible();
+
+    const firstInterest = page.getByRole('option').first();
+    test.skip((await page.getByRole('option').count()) === 0, 'Contatos do usuário E2E sem interesses cadastrados');
+    await firstInterest.click();
+    await expect(page.getByText('Filtros ativos:')).toBeVisible();
   });
 });

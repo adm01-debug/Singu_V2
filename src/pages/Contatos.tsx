@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { SEOHead } from '@/components/seo/SEOHead';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { sortArray } from '@/lib/sorting-utils';
 import { Crown, Briefcase, ShoppingCart, User } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
@@ -91,6 +91,7 @@ const sortOptions = [
 const Contatos = () => {
   usePageTitle('Contatos');
   const [searchParams, setSearchParams] = useSearchParams();
+  const { pathname: ownPathname } = useLocation();
   const { contacts, loading, createContact, updateContact, deleteContact, fetchContacts, hasMore, loadMore, totalCount } = useContacts();
 
   const dynamicFilterConfigs = useMemo(() => {
@@ -173,8 +174,11 @@ const Contatos = () => {
       if (sortOrder !== 'desc') params.set('order', sortOrder);
     }
     if (gridColumns !== 3) params.set('cols', String(gridColumns));
+    // Não reescreve a URL se o usuário já saiu da página nem quando nada mudou.
+    if (window.location.pathname !== ownPathname) return;
+    if (params.toString() === new URLSearchParams(window.location.search).toString()) return;
     setSearchParams(params, { replace: true });
-  }, [searchTerm, viewMode, activeFilters, sortBy, sortOrder, gridColumns, multiSort, setSearchParams]);
+  }, [ownPathname, searchTerm, viewMode, activeFilters, sortBy, sortOrder, gridColumns, multiSort, setSearchParams]);
 
   const { results: fuzzyResults, setQuery: setFuzzyQuery } = useFuzzySearch(contacts, { keys: ['first_name', 'last_name', 'email', 'role_title', 'hobbies', 'interests'], threshold: 0.4 });
   const handleSearchChange = useCallback((value: string) => { setSearchTerm(value); setFuzzyQuery(value); }, [setFuzzyQuery]);

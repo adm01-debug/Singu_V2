@@ -5,7 +5,7 @@ import { useSuccessCelebration } from '@/hooks/useSuccessCelebration';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { toast } from 'sonner';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { FloatingQuickActions } from '@/components/quick-actions/FloatingQuickActions';
 import { Header } from '@/components/layout/Header';
@@ -41,6 +41,7 @@ const Empresas = () => {
   usePageTitle('Empresas');
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { pathname: ownPathname } = useLocation();
   const { companies, loading, totalCount, setSearchTerm: triggerSearch, createCompany, updateCompany, deleteCompany, fetchNextPage, hasNextPage, isFetchingNextPage } = useCompanies();
   const { destructive } = useActionToast();
   const { restore } = useRestoreEntity();
@@ -93,8 +94,11 @@ const Empresas = () => {
       if (sortOrder !== 'desc') params.set('order', sortOrder);
     }
     if (gridColumns !== 3) params.set('cols', String(gridColumns));
+    // Não reescreve a URL se o usuário já saiu da página nem quando nada mudou.
+    if (window.location.pathname !== ownPathname) return;
+    if (params.toString() === new URLSearchParams(window.location.search).toString()) return;
     setSearchParams(params, { replace: true });
-  }, [localSearch, viewMode, activeFilters, sortBy, sortOrder, gridColumns, multiSort, setSearchParams]);
+  }, [ownPathname, localSearch, viewMode, activeFilters, sortBy, sortOrder, gridColumns, multiSort, setSearchParams]);
 
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const isSearching = localSearch.length > 0;
