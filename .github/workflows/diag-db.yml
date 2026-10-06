@@ -20,5 +20,4 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          psql -XAt -F "|" -c "select version, coalesce(name,'') from supabase_migrations.schema_migrations order by 1" | sed "s/^/REMV|/"
-          psql -XAt -F "|" -c "select p.oid::regprocedure from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.prosecdef order by 1" | sed "s/^/SECDEF|/"
+          psql -XAt -f diag/rls.sql 2>&1 | sed "s/^/RLS|/"
