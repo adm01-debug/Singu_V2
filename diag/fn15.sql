@@ -1,6 +1,7 @@
 \pset pager off
-SELECT p.proname, p.prosecdef FROM pg_proc p WHERE p.pronamespace='public'::regnamespace AND p.proname IN ('cleanup_behavioral_regen_queue','track_changes');
-SELECT count(*) AS admins FROM public.user_roles WHERE role='admin';
-SELECT left(pg_get_functiondef('public.track_changes()'::regprocedure), 1500);
-SELECT action, entity_type, table_name, count(*), max(created_at) FROM public.audit_log WHERE coalesce(table_name, entity_type)='deals' GROUP BY 1,2,3;
-SELECT jobname, schedule, active, left(command,200) FROM cron.job ORDER BY 1;
+SELECT n.nspname, c.relname, c.relkind FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE c.relname ILIKE '%ai_gateway%' OR c.relname ILIKE 'system_alerts%' ORDER BY 1,2;
+SELECT p.oid::regprocedure FROM pg_proc p WHERE p.proname ILIKE '%ai_gateway%' OR p.proname ILIKE '%system_alert%';
+SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema='public' AND table_name='system_alerts' ORDER BY ordinal_position;
+SELECT extname, extversion FROM pg_extension WHERE extname IN ('pg_partman','pg_cron','pg_net','plpgsql_check');
+SELECT count(*) FROM supabase_migrations.schema_migrations WHERE version BETWEEN '20260723152549' AND '20260723155033';
+SELECT max(version), count(*) FROM supabase_migrations.schema_migrations;
