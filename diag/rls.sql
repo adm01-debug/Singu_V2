@@ -1,23 +1,17 @@
 \pset pager off
-\echo ### anon_tabelas_com_grant
-SELECT count(DISTINCT c.relname) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND c.relkind='r' AND (has_table_privilege('anon',c.oid,'SELECT') OR has_table_privilege('anon',c.oid,'INSERT') OR has_table_privilege('anon',c.oid,'UPDATE') OR has_table_privilege('anon',c.oid,'DELETE'));
-\echo ### anon_policies_efetivas (tabela|cmd|roles|qual|check)
-SELECT p.tablename||'|'||p.cmd||'|'||array_to_string(p.roles,',')||'|'||coalesce(p.qual,'')||'|'||coalesce(p.with_check,'') FROM pg_policies p WHERE p.schemaname='public' AND (p.roles && ARRAY['anon','public']::name[]) AND has_table_privilege('anon', ('public.'||quote_ident(p.tablename))::regclass, CASE WHEN p.cmd IN ('ALL','SELECT') THEN 'SELECT' WHEN p.cmd='INSERT' THEN 'INSERT' WHEN p.cmd='UPDATE' THEN 'UPDATE' ELSE 'DELETE' END) ORDER BY 1;
-\echo ### auth_trunc_ref_trig
-SELECT priv, count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace, LATERAL (VALUES ('TRUNCATE'),('REFERENCES'),('TRIGGER')) v(priv) WHERE n.nspname='public' AND c.relkind='r' AND has_table_privilege('authenticated',c.oid,priv) GROUP BY 1;
-SELECT priv, count(*) AS anon FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace, LATERAL (VALUES ('TRUNCATE'),('REFERENCES'),('TRIGGER')) v(priv) WHERE n.nspname='public' AND c.relkind='r' AND has_table_privilege('anon',c.oid,priv) GROUP BY 1;
-\echo ### service_only (tabela|sel|ins|upd|del)
-SELECT t||'|'||has_table_privilege('authenticated','public.'||t,'SELECT')||'|'||has_table_privilege('authenticated','public.'||t,'INSERT')||'|'||has_table_privilege('authenticated','public.'||t,'UPDATE')||'|'||has_table_privilege('authenticated','public.'||t,'DELETE') FROM unnest(ARRAY['cron_secrets','audit_log','error_logs','login_attempts','webauthn_credentials','password_reset_requests','behavioral_profile_regen_queue','incoming_webhook_dlq','system_config','secret_rotation_log','lead_score_history']) t WHERE to_regclass('public.'||t) IS NOT NULL;
-\echo ### publicas (tabela|anon sel,ins,upd,del|rls)
-SELECT t||'|'||has_table_privilege('anon','public.'||t,'SELECT')||','||has_table_privilege('anon','public.'||t,'INSERT')||','||has_table_privilege('anon','public.'||t,'UPDATE')||','||has_table_privilege('anon','public.'||t,'DELETE')||'|'||(SELECT relrowsecurity FROM pg_class WHERE oid=('public.'||t)::regclass) FROM unnest(ARRAY['forms','lead_magnets','landing_pages','landing_page_submissions','form_submissions','lead_magnet_downloads','deal_rooms','deal_room_activities','deal_room_comments','deal_room_documents','deal_room_milestones','deal_room_stakeholders','csat_surveys','document_signatures']) t WHERE to_regclass('public.'||t) IS NOT NULL;
-\echo ### policies_publicas (tabela|nome|cmd|roles|qual)
-SELECT tablename||'|'||policyname||'|'||cmd||'|'||array_to_string(roles,',')||'|'||coalesce(qual,'')||'|'||coalesce(with_check,'') FROM pg_policies WHERE schemaname='public' AND tablename IN ('forms','lead_magnets','landing_pages','deal_rooms','landing_page_submissions') ORDER BY 1,2;
-\echo ### funcoes_exec
-SELECT count(*) FILTER (WHERE has_function_privilege('authenticated',p.oid,'EXECUTE')) AS auth, count(*) FILTER (WHERE has_function_privilege('anon',p.oid,'EXECUTE')) AS anon, count(*) AS total FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND p.prokind='f';
-\echo ### funcoes_em_policies
-SELECT DISTINCT m[1] FROM pg_policies p, regexp_matches(coalesce(p.qual,'')||' '||coalesce(p.with_check,''), '([a-z_][a-z0-9_]*)\(', 'g') m WHERE p.schemaname IN ('public','storage') ORDER BY 1;
-\echo ### ai_gateway
-SELECT relname FROM pg_class WHERE relname ILIKE '%ai_gateway%';
-SELECT p.oid::regprocedure FROM pg_proc p WHERE proname ILIKE '%ai_gateway%';
-\echo ### secdef_detalhe (sig|anon|auth|usa_authuid|search_path)
-SELECT p.oid::regprocedure||'|'||has_function_privilege('anon',p.oid,'EXECUTE')||'|'||has_function_privilege('authenticated',p.oid,'EXECUTE')||'|'||(position('auth.uid()' in p.prosrc)>0)||'|'||coalesce(array_to_string(p.proconfig,';'),'') FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND p.prokind='f' AND p.prosecdef ORDER BY 1;
+\echo ### front_rpcs (nome|existe|anon|auth|secdef)
+SELECT f||'|'||(p.oid IS NOT NULL)||'|'||coalesce(has_function_privilege('anon',p.oid,'EXECUTE')::text,'-')||'|'||coalesce(has_function_privilege('authenticated',p.oid,'EXECUTE')::text,'-')||'|'||coalesce(p.prosecdef::text,'-') FROM unnest(ARRAY['has_role','validate_behavioral_consistency','track_magnet_download','seed_forecast_period','seed_conversation_topics','search_interactions_unaccent','search_contacts_unaccent','search_companies_unaccent','publish_mtta_sla_breach_alert','move_deal_atomic','increment_magnet_view','increment_landing_page_view','increment_form_view','get_slow_rpc_trend','get_score_explicability','get_rpc_plan_snapshots','get_rpc_plan_diff','get_rpc_plan_churn_timeline','get_rpc_plan_change_counts','get_rpc_perf_stats','get_marketing_funnel_stats','get_deal_room_by_token','get_contact_life_event_gaps','get_contact_framework_gaps','get_contact_behavior_gaps','get_connection_metrics','get_buyer_document_path','get_ai_gateway_partition_stats','get_ai_gateway_health','evaluate_mql','enroll_contact_in_workflow','dismiss_revops_alert','cs_renewal_pipeline','compute_revops_kpis','compute_attribution','compute_account_health','cleanup_behavioral_regen_queue','check_relationship_consistency','buyer_toggle_milestone','buyer_add_comment']) f LEFT JOIN pg_proc p ON p.proname=f AND p.pronamespace='public'::regnamespace ORDER BY 1;
+\echo ### sem_rls (tabela|anon_sel|auth_sel)
+SELECT c.relname||'|'||has_table_privilege('anon',c.oid,'SELECT')||'|'||has_table_privilege('authenticated',c.oid,'SELECT') FROM pg_class c WHERE c.relnamespace='public'::regnamespace AND c.relkind IN ('r','p') AND NOT c.relrowsecurity ORDER BY 1;
+\echo ### views_anon (view|kind|anon_sel|invoker)
+SELECT c.relname||'|'||c.relkind||'|'||has_table_privilege('anon',c.oid,'SELECT')||'|'||coalesce(array_to_string(c.reloptions,';'),'') FROM pg_class c WHERE c.relnamespace='public'::regnamespace AND c.relkind IN ('v','m') AND has_table_privilege('anon',c.oid,'SELECT') ORDER BY 1;
+\echo ### policies_publicas
+SELECT tablename||'|'||policyname||'|'||cmd||'|'||array_to_string(roles,',')||'|'||coalesce(qual,'')||'|'||coalesce(with_check,'') FROM pg_policies WHERE schemaname='public' AND tablename IN ('forms','lead_magnets','landing_pages','deal_rooms','landing_page_submissions','cron_secrets','login_attempts') ORDER BY tablename, policyname;
+\echo ### rls_service_only
+SELECT c.relname||'|'||c.relrowsecurity||'|'||(SELECT count(*) FROM pg_policies p WHERE p.tablename=c.relname AND p.schemaname='public') FROM pg_class c WHERE c.relnamespace='public'::regnamespace AND c.relname IN ('cron_secrets','login_attempts','audit_log','error_logs','system_config');
+\echo ### secdef_expostas
+SELECT p.oid::regprocedure||'|'||has_function_privilege('anon',p.oid,'EXECUTE')||'|'||has_function_privilege('authenticated',p.oid,'EXECUTE') FROM pg_proc p WHERE p.pronamespace='public'::regnamespace AND p.prokind='f' AND p.prosecdef AND (has_function_privilege('anon',p.oid,'EXECUTE') OR has_function_privilege('authenticated',p.oid,'EXECUTE')) ORDER BY 1;
+\echo ### anon_funcs
+SELECT p.oid::regprocedure FROM pg_proc p WHERE p.pronamespace='public'::regnamespace AND p.prokind='f' AND has_function_privilege('anon',p.oid,'EXECUTE') ORDER BY 1;
+\echo ### default_acl
+SELECT pg_get_userbyid(defaclrole)||'|'||defaclobjtype||'|'||array_to_string(defaclacl,',') FROM pg_default_acl WHERE defaclnamespace='public'::regnamespace;
