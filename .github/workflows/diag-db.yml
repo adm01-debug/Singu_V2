@@ -20,4 +20,4 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          bash tests/rls/run.sh 2>&1 | sed "s/^/RLS|/"
+          echo "### APLICACAO DEFINITIVA"; psql -X -P pager=off -f diag/apply.sql 2>&1 | sed "s/^/AP|/"; bash tests/rls/run.sh 2>&1 | sed "s/^/RLS|/"

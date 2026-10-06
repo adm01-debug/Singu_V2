@@ -2,7 +2,7 @@
 --   1) search_path travado em TODO DEFINER
 --   2) DEFINER exposto a `anon` NUNCA pode usar auth.uid() (padrão inseguro:
 --      anon sem JWT resulta em auth.uid() = NULL e escreve linhas órfãs)
---   3) Baseline: 96 DEFINERs (ajuste consciente aqui + docs/qa/security-definer-audit.md)
+--   3) Baseline: 95 DEFINERs (ajuste consciente aqui + docs/qa/security-definer-audit.md)
 
 BEGIN;
 
