@@ -4,7 +4,7 @@
 -- Deal rooms e pesquisas CSAT públicas usam RPCs SECURITY DEFINER por token, sem grant de tabela.
 \set ON_ERROR_STOP on
 
-\echo 'TEST: exatamente 4 relações em public com grants a anon'
+\echo 'TEST: exatamente 4 relações em public com privilégio efetivo (tabela ou coluna) para anon'
 DO $$
 DECLARE
   n INT;
@@ -16,39 +16,26 @@ DECLARE
   ];
   offenders TEXT;
 BEGIN
-  WITH t AS (
-    SELECT c.relname, (aclexplode(COALESCE(c.relacl, acldefault('r', c.relowner)))).grantee AS grantee
+  WITH granted AS (
+    SELECT c.relname
       FROM pg_class c
-      JOIN pg_namespace nn ON nn.oid = c.relnamespace
-     WHERE nn.nspname='public' AND c.relkind IN ('r','p','v','m','f')
-  ), granted AS (
-    SELECT DISTINCT t.relname
-      FROM t JOIN pg_roles r ON r.oid = t.grantee
-     WHERE r.rolname = 'anon'
+     WHERE c.relnamespace = 'public'::regnamespace
+       AND c.relkind IN ('r','p','v','m','f')
+       AND (has_any_column_privilege('anon', c.oid, 'SELECT, INSERT, UPDATE, REFERENCES')
+            OR has_table_privilege('anon', c.oid, 'DELETE, TRUNCATE, TRIGGER'))
   )
-  SELECT string_agg(relname, ', ') INTO offenders
-  FROM granted
-  WHERE relname <> ALL (allowed);
+  SELECT string_agg(relname, ', ' ORDER BY relname) FILTER (WHERE relname <> ALL (allowed)),
+         count(*)
+    INTO offenders, n
+    FROM granted;
 
   IF offenders IS NOT NULL THEN
-    RAISE EXCEPTION '❌ Tabelas com grants inesperados a anon: %', offenders;
+    RAISE EXCEPTION '❌ Relações com privilégio inesperado para anon: %', offenders;
   END IF;
-
-  SELECT count(*) INTO n FROM (
-    SELECT DISTINCT t.relname
-      FROM (
-        SELECT c.relname, (aclexplode(COALESCE(c.relacl, acldefault('r', c.relowner)))).grantee AS grantee
-          FROM pg_class c
-          JOIN pg_namespace nn ON nn.oid = c.relnamespace
-         WHERE nn.nspname='public' AND c.relkind IN ('r','p','v','m','f')
-      ) t JOIN pg_roles r ON r.oid = t.grantee
-     WHERE r.rolname='anon'
-  ) x;
-
   IF n <> 4 THEN
-    RAISE EXCEPTION '❌ Esperado 4 relações com grants a anon; encontrado %', n;
+    RAISE EXCEPTION '❌ Esperado 4 relações com privilégio para anon; encontrado %', n;
   END IF;
-  RAISE NOTICE '✅ Exatamente 4 relações com grants a anon (least privilege global).';
+  RAISE NOTICE '✅ Exatamente 4 relações com privilégio para anon (least privilege global).';
 END $$;
 
 \echo 'TEST: anon NÃO tem SELECT em tabelas sensíveis'
