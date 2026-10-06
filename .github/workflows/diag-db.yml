@@ -20,7 +20,14 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          echo "### verify (transação revertida)"
-          psql -X -P pager=off -f diag/verify.sql 2>&1 | grep -vE "collation|DETAIL|HINT" || true
-          echo "### varredura de gatilhos de UPDATE (transação revertida)"
-          psql -X -P pager=off -f diag/scan.sql 2>&1 | grep -E "FALHA|RESUMO|ERROR|ROLLBACK"
+          psql -XAtc "select version from supabase_migrations.schema_migrations order by 1" > /tmp/remote.txt
+          ls supabase/migrations/*.sql | sed -E 's#.*/([0-9]+)_.*#\1#' | sort -u > /tmp/local.txt
+          echo "### remoto=$(wc -l < /tmp/remote.txt) local=$(wc -l < /tmp/local.txt) max_remoto=$(tail -1 /tmp/remote.txt) max_local=$(tail -1 /tmp/local.txt)"
+          echo "### locais ausentes no remoto: $(comm -13 /tmp/remote.txt /tmp/local.txt | wc -l)"
+          comm -13 /tmp/remote.txt /tmp/local.txt | tr '\n' ' '; echo
+          echo "### remotos ausentes no local: $(comm -23 /tmp/remote.txt /tmp/local.txt | wc -l)"
+          comm -23 /tmp/remote.txt /tmp/local.txt | tr '\n' ' '; echo
+          q "select count(*) filter (where p.prosecdef) definer, count(*) total from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public'"
+          q "select polname, pg_get_expr(polqual, polrelid) from pg_policy where polrelid='public.deal_rooms'::regclass"
+          q "select tablename, policyname, cmd, roles, with_check from pg_policies where tablename='contact_behavior'"
+          q "select grantee, privilege_type from information_schema.role_table_grants where table_schema='public' and table_name in ('lead_magnets','forms','landing_pages') and grantee in ('anon','authenticated') order by 1,2"
