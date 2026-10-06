@@ -20,7 +20,3 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          q "SELECT tablename, policyname, roles, cmd, qual, with_check FROM pg_policies WHERE schemaname='public' AND tablename IN ('csat_surveys','document_signatures') ORDER BY 1,2"
-          q "SELECT pg_get_functiondef('public.track_magnet_download(text,text,text,jsonb)'::regprocedure)"
-          q "SELECT string_agg(column_name, ', ' ORDER BY ordinal_position) FROM information_schema.columns WHERE table_schema='public' AND table_name='lead_magnets'"
-          q "SELECT grantee, privilege_type, count(*) FROM information_schema.column_privileges WHERE table_schema='public' AND table_name IN ('lead_magnets','csat_surveys','document_signatures') AND grantee IN ('anon','authenticated') GROUP BY 1,2 ORDER BY 1,2"

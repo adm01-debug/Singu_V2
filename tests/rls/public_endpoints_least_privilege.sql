@@ -63,6 +63,42 @@ BEGIN
 END $$;
 RESET ROLE;
 
+\echo 'TEST: anon lê só as colunas públicas de lead_magnets (download só pela RPC)'
+SET ROLE anon;
+DO $$
+BEGIN
+  PERFORM id, title, slug, description, type, thumbnail_url, is_published
+    FROM public.lead_magnets WHERE is_published LIMIT 1;
+  BEGIN
+    PERFORM file_path FROM public.lead_magnets LIMIT 1;
+    RAISE EXCEPTION '❌ anon lê lead_magnets.file_path';
+  EXCEPTION WHEN insufficient_privilege THEN NULL;
+  END;
+  BEGIN
+    PERFORM external_url FROM public.lead_magnets LIMIT 1;
+    RAISE EXCEPTION '❌ anon lê lead_magnets.external_url';
+  EXCEPTION WHEN insufficient_privilege THEN NULL;
+  END;
+  RAISE NOTICE '✅ anon lê só as colunas públicas de lead_magnets';
+END $$;
+RESET ROLE;
+
+\echo 'TEST: csat_surveys/document_signatures sem policy por token para anon/public'
+DO $$
+DECLARE bad TEXT;
+BEGIN
+  SELECT string_agg(format('%s.%s', tablename, policyname), ', ') INTO bad
+    FROM pg_policies
+   WHERE schemaname = 'public'
+     AND tablename IN ('csat_surveys', 'document_signatures')
+     AND roles && ARRAY['anon', 'public']::name[]
+     AND coalesce(qual, '') || coalesce(with_check, '') NOT LIKE '%auth.uid()%';
+  IF bad IS NOT NULL THEN
+    RAISE EXCEPTION '❌ policies públicas sem auth.uid(): %', bad;
+  END IF;
+  RAISE NOTICE '✅ csat_surveys/document_signatures só com policies do dono';
+END $$;
+
 \echo 'TEST: RPCs públicas de contador/tracking executam como anon'
 SET ROLE anon;
 DO $$
