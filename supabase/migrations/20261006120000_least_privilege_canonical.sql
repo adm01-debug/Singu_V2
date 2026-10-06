@@ -170,14 +170,18 @@ BEGIN
     RETURN NULL;
   END IF;
 
-  SELECT jsonb_build_object(
-    'id', s.id,
-    'score', s.score,
-    'feedback', s.feedback,
-    'status', s.status,
-    'channel', s.channel,
-    'expires_at', s.expires_at
-  )
+  SELECT CASE
+           WHEN s.expires_at IS NOT NULL AND s.expires_at <= now()
+             THEN jsonb_build_object('id', s.id, 'expires_at', s.expires_at)
+           ELSE jsonb_build_object(
+             'id', s.id,
+             'score', s.score,
+             'feedback', s.feedback,
+             'status', s.status,
+             'channel', s.channel,
+             'expires_at', s.expires_at
+           )
+         END
   INTO _result
   FROM public.csat_surveys s
   WHERE s.public_token = _token

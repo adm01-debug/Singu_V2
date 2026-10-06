@@ -62,3 +62,28 @@ BEGIN
   RAISE NOTICE '✅ anon lê só as colunas públicas de forms';
 END $$;
 RESET ROLE;
+
+\echo 'TEST: RPCs públicas de contador/tracking executam como anon'
+SET ROLE anon;
+DO $$
+DECLARE
+  calls TEXT[] := ARRAY[
+    $q$SELECT public.increment_form_view('rls-slug-inexistente')$q$,
+    $q$SELECT public.increment_magnet_view('rls-slug-inexistente')$q$,
+    $q$SELECT public.increment_landing_page_view(gen_random_uuid())$q$,
+    $q$SELECT public.record_buyer_view('rls-token-inexistente', NULL)$q$,
+    $q$SELECT public.get_public_csat_survey(gen_random_uuid())$q$
+  ];
+  c TEXT;
+BEGIN
+  FOREACH c IN ARRAY calls LOOP
+    BEGIN
+      EXECUTE c;
+    EXCEPTION
+      WHEN insufficient_privilege THEN RAISE EXCEPTION '❌ anon sem privilégio em: % (%)', c, SQLERRM;
+      WHEN raise_exception OR no_data_found OR invalid_parameter_value OR not_null_violation THEN NULL;
+    END;
+  END LOOP;
+  RAISE NOTICE '✅ RPCs públicas de contador/tracking executam como anon sem permission denied';
+END $$;
+RESET ROLE;
