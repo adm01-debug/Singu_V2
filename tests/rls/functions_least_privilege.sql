@@ -8,10 +8,13 @@ DECLARE
   fn TEXT;
   service_only TEXT[] := ARRAY[
     'tg_set_updated_at','touch_system_config','update_bpr_queue_updated_at',
-    'validate_entity_relationship','cleanup_behavioral_regen_queue',
+    'validate_entity_relationship',
     'execute_readonly_query','increment_webhook_quota',
-    'publish_mtta_sla_breach_alert','reset_daily_lead_counts','compute_attribution'
+    'reset_daily_lead_counts'
   ];
+  -- cleanup_behavioral_regen_queue, publish_mtta_sla_breach_alert e compute_attribution
+  -- são chamadas pelo frontend e checam admin/dono internamente; o contrato delas está
+  -- em frontend_rpcs_authenticated.sql.
 BEGIN
   FOREACH fn IN ARRAY service_only LOOP
     IF EXISTS (
