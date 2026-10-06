@@ -1,7 +1,8 @@
 -- Allowlist de funções expostas — ver docs/qa/functions-authenticated-allowlist.md.
 -- Invariante 1: anon executa EXATAMENTE as RPCs públicas listadas.
 -- Invariante 2: authenticated executa, entre as SECURITY DEFINER (que ignoram RLS), EXATAMENTE as
---               RPCs públicas + has_role. Funções SECURITY INVOKER rodam sob RLS e não entram aqui.
+--               RPCs públicas + has_role + as 15 RPCs do frontend
+--               com escopo por auth.uid() (20261006130000). Funções SECURITY INVOKER rodam sob RLS e não entram aqui.
 -- Falha se aparecer função extra ou se alguma da allowlist perder o grant.
 
 BEGIN;
@@ -24,6 +25,22 @@ INSERT INTO _public_rpc(sig) VALUES
 CREATE TEMP TABLE _definer_auth(sig text PRIMARY KEY);
 INSERT INTO _definer_auth SELECT sig FROM _public_rpc;
 INSERT INTO _definer_auth(sig) VALUES ('has_role(_user_id uuid, _role app_role)');
+INSERT INTO _definer_auth(sig) VALUES
+  ('cleanup_behavioral_regen_queue(_retention_days integer, _max_attempts integer, _dead_letter_backoff_days integer)'),
+  ('compute_account_health(_account_id uuid)'),
+  ('compute_attribution(_deal_id text, _model text, _deal_value numeric)'),
+  ('compute_revops_kpis(_user_id uuid, _period_start date, _period_end date)'),
+  ('cs_renewal_pipeline(_user_id uuid, _days_ahead integer)'),
+  ('dismiss_revops_alert(_alert_id uuid)'),
+  ('enroll_contact_in_workflow(_workflow_id uuid, _contact_id uuid)'),
+  ('evaluate_mql(_contact_id uuid)'),
+  ('get_connection_metrics(_connection_id uuid)'),
+  ('get_marketing_funnel_stats(_user_id uuid, _start_date date, _end_date date)'),
+  ('get_score_explicability(p_contact_id uuid)'),
+  ('move_deal_atomic(p_deal_id uuid, p_new_stage text, p_new_probability integer)'),
+  ('publish_mtta_sla_breach_alert(_mtta_minutes integer, _sla_minutes integer)'),
+  ('seed_conversation_topics(_user_id uuid)'),
+  ('seed_forecast_period(_user_id uuid, _type text)');
 
 CREATE TEMP TABLE _fn AS
 SELECT p.proname || '(' || pg_get_function_identity_arguments(p.oid) || ')' AS sig,
@@ -67,7 +84,7 @@ BEGIN
     RAISE EXCEPTION 'allowlist declara função(ões) sem EXECUTE para authenticated: %', missing;
   END IF;
 
-  RAISE NOTICE 'OK — anon: 12 RPCs públicas; authenticated: 13 SECURITY DEFINER da allowlist.';
+  RAISE NOTICE 'OK — anon: 12 RPCs públicas; authenticated: 28 SECURITY DEFINER da allowlist.';
 END $$;
 
 ROLLBACK;
