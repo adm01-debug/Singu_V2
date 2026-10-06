@@ -1,102 +1,73 @@
--- Testes RLS — deal rooms públicos via share_token (Rodada 43/10)
--- Sandbox não permite SET ROLE anon; usamos introspecção do catálogo para
--- garantir invariantes de segurança da hardening da Rodada 41.
+-- Testes RLS — deal rooms públicos via share_token.
+-- Desenho: anon não tem nenhum privilégio nas tabelas de deal room; o portal do comprador usa
+-- apenas RPCs SECURITY DEFINER que localizam a sala por share_token com share_enabled = true,
+-- têm search_path fixo e não dependem de auth.uid().
 
 \set ON_ERROR_STOP on
 
-\echo 'TEST: RLS habilitado em deal_rooms'
+\echo 'TEST: RLS habilitado nas tabelas de deal room'
 DO $$
-DECLARE ok BOOLEAN;
+DECLARE t text;
 BEGIN
-  SELECT relrowsecurity INTO ok
-  FROM pg_class WHERE oid='public.deal_rooms'::regclass;
-  IF NOT ok THEN RAISE EXCEPTION '❌ RLS desabilitado em deal_rooms'; END IF;
-  RAISE NOTICE '✅ RLS ativo em deal_rooms';
-END $$;
-
-\echo 'TEST: policy dr_public_read_shared exige share_enabled=true'
-DO $$
-DECLARE qual TEXT;
-BEGIN
-  SELECT pg_get_expr(polqual, polrelid) INTO qual
-  FROM pg_policy WHERE polname='dr_public_read_shared';
-  IF qual IS NULL OR qual NOT ILIKE '%share_enabled%' THEN
-    RAISE EXCEPTION '❌ policy dr_public_read_shared sem guard share_enabled: %', qual;
-  END IF;
-  RAISE NOTICE '✅ dr_public_read_shared exige share_enabled';
-END $$;
-
-\echo 'TEST: policy dr_public_increment_view é UPDATE-only'
-DO $$
-DECLARE cmd "char";
-BEGIN
-  SELECT polcmd INTO cmd FROM pg_policy WHERE polname='dr_public_increment_view';
-  IF cmd <> 'w' THEN
-    RAISE EXCEPTION '❌ dr_public_increment_view deveria ser UPDATE (w), é %', cmd;
-  END IF;
-  RAISE NOTICE '✅ dr_public_increment_view é UPDATE-only';
-END $$;
-
-\echo 'TEST: anon SEM privilégio de INSERT/DELETE em deal_rooms'
-DO $$
-BEGIN
-  IF has_table_privilege('anon','public.deal_rooms','INSERT') THEN
-    RAISE EXCEPTION '❌ anon tem INSERT em deal_rooms';
-  END IF;
-  IF has_table_privilege('anon','public.deal_rooms','DELETE') THEN
-    RAISE EXCEPTION '❌ anon tem DELETE em deal_rooms';
-  END IF;
-  RAISE NOTICE '✅ anon bloqueado em INSERT/DELETE';
-END $$;
-
-\echo 'TEST: anon SEM privilégio table-wide de UPDATE (só column-level)'
-DO $$
-BEGIN
-  IF has_table_privilege('anon','public.deal_rooms','UPDATE') THEN
-    RAISE EXCEPTION '❌ anon tem UPDATE table-wide (deveria ser column-level apenas)';
-  END IF;
-  RAISE NOTICE '✅ anon sem UPDATE table-wide';
-END $$;
-
-\echo 'TEST: anon COM privilégio column-level em buyer_view_count e last_buyer_view_at'
-DO $$
-BEGIN
-  IF NOT has_column_privilege('anon','public.deal_rooms','buyer_view_count','UPDATE') THEN
-    RAISE EXCEPTION '❌ anon sem UPDATE em buyer_view_count';
-  END IF;
-  IF NOT has_column_privilege('anon','public.deal_rooms','last_buyer_view_at','UPDATE') THEN
-    RAISE EXCEPTION '❌ anon sem UPDATE em last_buyer_view_at';
-  END IF;
-  RAISE NOTICE '✅ anon tem UPDATE apenas nas colunas de view';
-END $$;
-
-\echo 'TEST: anon SEM UPDATE em colunas sensíveis (title, share_token, user_id)'
-DO $$
-BEGIN
-  IF has_column_privilege('anon','public.deal_rooms','title','UPDATE') THEN
-    RAISE EXCEPTION '❌ anon pode alterar title';
-  END IF;
-  IF has_column_privilege('anon','public.deal_rooms','share_token','UPDATE') THEN
-    RAISE EXCEPTION '❌ anon pode alterar share_token';
-  END IF;
-  IF has_column_privilege('anon','public.deal_rooms','user_id','UPDATE') THEN
-    RAISE EXCEPTION '❌ anon pode alterar user_id';
-  END IF;
-  RAISE NOTICE '✅ colunas sensíveis protegidas de anon';
-END $$;
-
-\echo 'TEST: funções buyer são SECURITY INVOKER (Rodada 41)'
-DO $$
-DECLARE r RECORD;
-BEGIN
-  FOR r IN
-    SELECT proname, prosecdef FROM pg_proc
-    WHERE pronamespace='public'::regnamespace
-      AND proname IN ('get_deal_room_by_token','record_buyer_view','get_buyer_document_path')
-  LOOP
-    IF r.prosecdef THEN
-      RAISE EXCEPTION '❌ % ainda é SECURITY DEFINER', r.proname;
+  FOREACH t IN ARRAY ARRAY['deal_rooms','deal_room_milestones','deal_room_stakeholders',
+                           'deal_room_documents','deal_room_comments','deal_room_activities'] LOOP
+    IF NOT (SELECT relrowsecurity FROM pg_class WHERE oid = ('public.' || t)::regclass) THEN
+      RAISE EXCEPTION '❌ RLS desabilitado em %', t;
     END IF;
   END LOOP;
-  RAISE NOTICE '✅ funções buyer são SECURITY INVOKER';
+  RAISE NOTICE '✅ RLS ativo em todas as tabelas de deal room';
+END $$;
+
+\echo 'TEST: anon sem nenhum privilégio nas tabelas de deal room'
+DO $$
+DECLARE t text; priv text;
+BEGIN
+  FOREACH t IN ARRAY ARRAY['deal_rooms','deal_room_milestones','deal_room_stakeholders',
+                           'deal_room_documents','deal_room_comments','deal_room_activities'] LOOP
+    FOREACH priv IN ARRAY ARRAY['SELECT','INSERT','UPDATE','DELETE','TRUNCATE'] LOOP
+      IF has_table_privilege('anon', 'public.' || t, priv) THEN
+        RAISE EXCEPTION '❌ anon tem % em %', priv, t;
+      END IF;
+    END LOOP;
+    IF has_any_column_privilege('anon', 'public.' || t, 'SELECT')
+       OR has_any_column_privilege('anon', 'public.' || t, 'UPDATE') THEN
+      RAISE EXCEPTION '❌ anon tem privilégio de coluna em %', t;
+    END IF;
+  END LOOP;
+  RAISE NOTICE '✅ anon sem acesso direto às tabelas de deal room';
+END $$;
+
+\echo 'TEST: RPCs do portal do comprador exigem share_enabled e não usam auth.uid()'
+DO $$
+DECLARE
+  sig text;
+  fn regprocedure;
+  p record;
+BEGIN
+  FOREACH sig IN ARRAY ARRAY[
+    'public.get_deal_room_by_token(text)',
+    'public.record_buyer_view(text,text)',
+    'public.get_buyer_document_path(text,uuid)',
+    'public.buyer_add_comment(text,text,text)',
+    'public.buyer_toggle_milestone(text,uuid,boolean,text)'
+  ] LOOP
+    fn := to_regprocedure(sig);
+    IF fn IS NULL THEN
+      RAISE EXCEPTION '❌ RPC pública % não existe', sig;
+    END IF;
+    SELECT prosrc, prosecdef, proconfig INTO p FROM pg_proc WHERE oid = fn;
+    IF p.prosrc NOT ILIKE '%share_token%' OR p.prosrc NOT ILIKE '%share_enabled%' THEN
+      RAISE EXCEPTION '❌ % não valida share_token + share_enabled', sig;
+    END IF;
+    IF p.prosrc ILIKE '%auth.uid()%' THEN
+      RAISE EXCEPTION '❌ % usa auth.uid() (anon recebe NULL)', sig;
+    END IF;
+    IF p.prosecdef AND (p.proconfig IS NULL OR array_to_string(p.proconfig, ',') NOT LIKE '%search_path=%') THEN
+      RAISE EXCEPTION '❌ % é DEFINER sem search_path fixo', sig;
+    END IF;
+    IF NOT has_function_privilege('anon', fn, 'EXECUTE') THEN
+      RAISE EXCEPTION '❌ anon não executa % (portal do comprador quebrado)', sig;
+    END IF;
+  END LOOP;
+  RAISE NOTICE '✅ RPCs do portal do comprador validam token e share_enabled';
 END $$;

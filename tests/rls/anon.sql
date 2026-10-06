@@ -1,27 +1,27 @@
 -- Testes RLS — perfil anon (não autenticado)
--- Garante que dados sensíveis NÃO são acessíveis sem autenticação
+-- Garante que dados sensíveis NÃO são acessíveis sem autenticação.
+-- Roda em transação revertida: SET LOCAL ROLE só vale dentro de transação.
 
-\echo 'TEST: anon não pode ler contacts'
+BEGIN;
 SET LOCAL ROLE anon;
-DO $$
-DECLARE cnt INT;
-BEGIN
-  SELECT COUNT(*) INTO cnt FROM public.contacts LIMIT 1;
-  IF cnt > 0 THEN
-    RAISE EXCEPTION '❌ FALHA: anon conseguiu ler % contacts', cnt;
-  END IF;
-  RAISE NOTICE '✅ OK: anon não vê contacts';
-END $$;
 
-\echo 'TEST: anon não pode ler audit_log'
+\echo 'TEST: anon não pode ler contacts nem audit_log'
 DO $$
-DECLARE cnt INT;
+DECLARE
+  t text;
+  cnt int;
 BEGIN
-  SELECT COUNT(*) INTO cnt FROM public.audit_log LIMIT 1;
-  IF cnt > 0 THEN
-    RAISE EXCEPTION '❌ FALHA: anon conseguiu ler audit_log';
-  END IF;
-  RAISE NOTICE '✅ OK: anon não vê audit_log';
+  FOREACH t IN ARRAY ARRAY['contacts', 'audit_log'] LOOP
+    BEGIN
+      EXECUTE format('SELECT count(*) FROM public.%I', t) INTO cnt;
+      IF cnt > 0 THEN
+        RAISE EXCEPTION '❌ FALHA: anon conseguiu ler % linhas de %', cnt, t;
+      END IF;
+    EXCEPTION WHEN insufficient_privilege THEN
+      NULL;
+    END;
+  END LOOP;
+  RAISE NOTICE '✅ OK: anon não vê contacts nem audit_log';
 END $$;
 
 \echo 'TEST: anon não pode inserir em login_attempts'
@@ -35,4 +35,4 @@ BEGIN
   END;
 END $$;
 
-RESET ROLE;
+ROLLBACK;
