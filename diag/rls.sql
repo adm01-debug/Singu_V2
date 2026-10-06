@@ -1,15 +1,11 @@
 \pset pager off
-\echo ### views_anon
-SELECT c.relname||'|'||c.relkind::text||'|'||coalesce(array_to_string(c.reloptions,';'),'') FROM pg_class c WHERE c.relnamespace='public'::regnamespace AND c.relkind IN ('v','m') AND has_table_privilege('anon',c.oid,'SELECT') ORDER BY 1;
-\echo ### anon_funcs
-SELECT p.oid::regprocedure::text||'|'||p.prosecdef::text FROM pg_proc p WHERE p.pronamespace='public'::regnamespace AND p.prokind='f' AND has_function_privilege('anon',p.oid,'EXECUTE') ORDER BY 1;
-\echo ### default_acl
-SELECT pg_get_userbyid(defaclrole)||'|'||defaclobjtype::text||'|'||array_to_string(defaclacl,',') FROM pg_default_acl WHERE defaclnamespace IN (0,'public'::regnamespace);
-\echo ### authenticator
-SELECT rolname||'|'||coalesce(array_to_string(rolconfig,';'),'') FROM pg_roles WHERE rolname IN ('authenticator','anon','authenticated');
-\echo ### lps_defaults
-SELECT column_name||'|'||coalesce(column_default,'') FROM information_schema.columns WHERE table_schema='public' AND table_name='landing_page_submissions' AND column_default IS NOT NULL;
-\echo ### deals
-SELECT to_regclass('public.deals')::text, (SELECT count(*) FROM public.deals), (SELECT max(updated_at) FROM public.deals);
-\echo ### defs
-SELECT '>>>'||p.oid::regprocedure::text||E'\n'||pg_get_functiondef(p.oid) FROM pg_proc p WHERE p.pronamespace='public'::regnamespace AND p.proname IN ('move_deal_atomic','compute_account_health','compute_revops_kpis','cs_renewal_pipeline','dismiss_revops_alert','enroll_contact_in_workflow','evaluate_mql','get_connection_metrics','get_marketing_funnel_stats','get_score_explicability','seed_conversation_topics','seed_forecast_period','publish_mtta_sla_breach_alert','compute_attribution','cleanup_behavioral_regen_queue') ORDER BY 1;
+\echo ### triggers_publicas
+SELECT c.relname||'|'||t.tgname||'|'||p.oid::regprocedure::text||'|'||p.prosecdef::text FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid JOIN pg_proc p ON p.oid=t.tgfoid WHERE NOT t.tgisinternal AND c.relnamespace='public'::regnamespace AND c.relname IN ('landing_page_submissions','csat_surveys','document_signatures','forms','lead_magnets','landing_pages','lead_magnet_downloads','form_submissions') ORDER BY 1,2;
+\echo ### tokens
+SELECT 'csat', count(*), count(*) FILTER (WHERE public_token IS NOT NULL), count(*) FILTER (WHERE status='sent') FROM public.csat_surveys;
+SELECT 'docsig', count(*), count(*) FILTER (WHERE signature_token IS NOT NULL) FROM public.document_signatures;
+SELECT 'lm', count(*), count(*) FILTER (WHERE is_published) FROM public.lead_magnets;
+\echo ### deal_room_fn
+SELECT pg_get_functiondef('public.get_deal_room_by_token(text)'::regprocedure);
+\echo ### anon_policy_funcs
+SELECT DISTINCT p.tablename||'|'||m[1] FROM pg_policies p, regexp_matches(coalesce(p.qual,'')||' '||coalesce(p.with_check,''), '([a-z_][a-z0-9_]*)\(', 'g') m WHERE p.schemaname='public' AND p.tablename IN ('forms','lead_magnets','landing_pages','landing_page_submissions','csat_surveys','document_signatures') ORDER BY 1;
