@@ -3,6 +3,8 @@
 # cada arquivo roda numa transação revertida que antes aplica as migrations
 # do repositório mais novas que o ledger remoto (estado "banco + este branch").
 # Saída de arquivo com "SKIP:" conta como pulado e é listada no resumo.
+# Execuções concorrentes do gate são serializadas por advisory lock; conflito
+# de lock com o tráfego do banco (deadlock/lock_timeout) é repetido até 3 vezes.
 set -euo pipefail
 
 if [ -z "${PGHOST:-}" ]; then
@@ -40,12 +42,19 @@ for f in "$TESTS"/*.sql; do
     echo 'BEGIN;'
     echo "SET LOCAL lock_timeout = '5s';"
     echo "SET LOCAL statement_timeout = '60s';"
+    echo "SELECT pg_advisory_xact_lock(hashtext('singu-rls-gate'));"
     for m in "${PENDING[@]}"; do echo "\\i '$m'"; done
     echo "\\i '$WORK/body_$name'"
     echo 'ROLLBACK;'
   } > "$WORK/run_$name"
 
-  if (cd "$TESTS" && "${PSQL[@]}" -f "$WORK/run_$name") > "$WORK/out_$name" 2>&1; then
+  ok=0
+  for attempt in 1 2 3; do
+    if (cd "$TESTS" && "${PSQL[@]}" -f "$WORK/run_$name") > "$WORK/out_$name" 2>&1; then ok=1; break; fi
+    grep -qE 'deadlock detected|lock timeout' "$WORK/out_$name" || break
+    echo "↻  $name: conflito de lock com tráfego do banco — tentativa $((attempt + 1))"; sleep 5
+  done
+  if [ "$ok" = 1 ]; then
     if grep -q 'SKIP:' "$WORK/out_$name"; then
       SKIPPED+=("$name: $(grep -o 'SKIP:.*' "$WORK/out_$name" | head -1)")
       echo "⏭️  $name PULADO"
