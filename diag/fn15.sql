@@ -1,6 +1,7 @@
 \pset pager off
-SELECT table_name, string_agg(column_name||':'||data_type, ', ' ORDER BY ordinal_position) FROM information_schema.columns WHERE table_schema='public' AND table_name IN ('deals','nurturing_workflows','nurturing_executions','pipeline_stage_transitions','conversation_topics_catalog','forecast_periods','interactions','marketing_forms','form_submissions','audit_log') GROUP BY 1;
-SELECT tablename, policyname, cmd, roles, left(coalesce(qual,'')||' | '||coalesce(with_check,''),200) FROM pg_policies WHERE schemaname='public' AND tablename IN ('deals','nurturing_workflows','nurturing_executions','contacts','interactions','conversation_topics_catalog','forecast_periods','pipeline_stage_transitions') ORDER BY 1,2;
-SELECT c.relname, c.relrowsecurity FROM pg_class c WHERE c.relnamespace='public'::regnamespace AND c.relname IN ('deals','pipeline_stage_transitions','nurturing_workflows');
-SELECT count(*) AS deals, count(user_id) AS with_user FROM public.deals;
-SELECT * FROM public.pipeline_stage_transitions LIMIT 5;
+SELECT t, to_regclass('public.'||t) IS NOT NULL AS existe FROM unnest(ARRAY['marketing_forms','mql_classifications','forecast_quota_settings','cs_accounts','cs_health_signals','cs_renewals','revops_alerts','attribution_touchpoints','attribution_results','mql_criteria','connection_logs','behavioral_regen_queue','alerts','user_roles']) t;
+SELECT table_name, string_agg(column_name, ', ' ORDER BY ordinal_position) FROM information_schema.columns WHERE table_schema='public' AND table_name IN ('mql_classifications','forecast_quota_settings','lead_magnets','forms') GROUP BY 1;
+SELECT column_name FROM information_schema.columns WHERE table_schema='public' AND ((table_name='contacts' AND column_name IN ('relationship_score','relationship_stage','lead_score','user_id')) OR (table_name='interactions' AND column_name IN ('sentiment','created_at','user_id'))) ORDER BY 1;
+SELECT conrelid::regclass, pg_get_constraintdef(oid) FROM pg_constraint WHERE contype IN ('u','p') AND conrelid IN ('public.nurturing_executions'::regclass,'public.conversation_topics_catalog'::regclass,'public.forecast_periods'::regclass);
+SELECT i.indrelid::regclass, pg_get_indexdef(i.indexrelid) FROM pg_index i WHERE i.indisunique AND i.indrelid IN ('public.nurturing_executions'::regclass,'public.conversation_topics_catalog'::regclass,'public.forecast_periods'::regclass);
+SELECT d.user_id, count(*) FROM public.deals d GROUP BY 1;
