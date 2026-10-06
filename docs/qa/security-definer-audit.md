@@ -2,12 +2,24 @@
 
 > Objetivo: confirmar que **toda** função `SECURITY DEFINER` em `public.*` (a) trava `search_path`; e que nenhum DEFINER **exposto a `anon`** lê `auth.uid()` — combinação perigosa: `anon` sem JWT resulta em `auth.uid() = NULL` e o DEFINER escreve linhas órfãs ou cross-tenant.
 
-## Baseline atual — 63 DEFINERs
+## Baseline atual — 96 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-10-06)
 
-- **Total DEFINER em `public.*`**: 63
-- **DEFINERs expostos a `anon`** (endpoints públicos): 9 (Deal Rooms, Landing/Forms, Lead Magnets — ver `functions-authenticated-allowlist.md`)
-- **DEFINERs expostos a `anon` que usam `auth.uid()`**: **0** ✅
+Medido no banco canônico com as migrations `20261006120000` e `20261006120100` aplicadas em transação revertida (`tests/rls/run.sh`).
+O baseline anterior (63) refletia o histórico local de migrations, não o banco real (93 DEFINERs antes desta rodada; +3 RPCs públicas novas).
+
+- **Total DEFINER em `public.*`**: 96
+- **Executáveis por `anon`**: 12 — exatamente a allowlist pública de `tests/rls/functions_authenticated_allowlist.sql` (Deal Room ×5, Forms ×2, Lead Magnets ×2, Landing Page ×1, CSAT ×2); nenhuma usa `auth.uid()`.
+- **Executável só por `authenticated` (além de service_role)**: 1 — `has_role(uuid, app_role)`.
+- **Somente `service_role`/owner**: 83 (triggers, jobs, RPCs administrativas). 22 delas usam `auth.uid()`.
 - **DEFINERs sem `search_path` travado**: **0** ✅
+
+### Achado aberto — RPCs chamadas pelo frontend sem `EXECUTE` para `authenticated`
+
+Já antes desta rodada, estas DEFINERs eram chamadas com sessão de usuário em `src/` mas só `service_role` as executa (resultado: `42501` no app):
+`cleanup_behavioral_regen_queue`, `compute_account_health`, `compute_attribution`, `compute_revops_kpis`, `cs_renewal_pipeline`,
+`dismiss_revops_alert`, `enroll_contact_in_workflow`, `evaluate_mql`, `get_connection_metrics`, `get_marketing_funnel_stats`,
+`get_score_explicability`, `move_deal_atomic`, `publish_mtta_sla_breach_alert`, `seed_conversation_topics`, `seed_forecast_period`.
+Conceder `EXECUTE` exige revisar cada corpo (várias recebem `_user_id` como parâmetro e seriam cross-tenant sem `auth.uid() = _user_id`); tratado em PR próprio.
 
 ## DEFINERs expostos a `anon` — inspeção manual detalhada (5 críticos)
 
