@@ -20,7 +20,9 @@ jobs:
       - name: Diagnóstico
         run: |
           q() { echo "### $1"; psql -X -P pager=off -c "$1" || true; }
-          echo "### verify (transação revertida)"
+          echo "### APLICAÇÃO DEFINITIVA"
+          psql -X -P pager=off -f diag/apply.sql
+          echo "### verify pós-aplicação (transação revertida)"
           psql -X -P pager=off -f diag/verify.sql 2>&1 | grep -vE "collation|DETAIL|HINT" || true
           echo "### varredura de gatilhos (transação revertida)"
           psql -X -P pager=off -f diag/scan.sql 2>&1 | grep -E "FALHA|RESUMO|ERROR|ROLLBACK" || true
