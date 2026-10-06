@@ -17,6 +17,7 @@ npx playwright install chromium
 | `E2E_BASE_URL` | `http://localhost:8080` | URL do app |
 | `E2E_USER_EMAIL` | — | Usuário seed com dados (pipeline + inbox) |
 | `E2E_USER_PASS` | — | Senha do usuário seed |
+| `E2E_ALLOW_WRITES` | — | `1` libera jornadas que gravam dados (criar contato, mover deal, concluir tarefa, aprovar sugestões). Use somente em ambiente descartável; o CI aponta para o Supabase de produção e não define esta variável. |
 
 ## Execução
 

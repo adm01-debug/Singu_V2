@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { loginWithTestUser, requireTestCredentials } from '../e2e/support/auth';
+import {
+  loginWithTestUser,
+  requireTestCredentials,
+  requireWritableEnvironment,
+} from '../e2e/support/auth';
 
 test.describe('Contacts CRUD & Rapport', () => {
   test.beforeEach(async ({ page }) => {
@@ -8,6 +12,7 @@ test.describe('Contacts CRUD & Rapport', () => {
   });
 
   test('Complete flow: Create, Search, Filter, and Ficha 360 Rapport', async ({ page }) => {
+    requireWritableEnvironment();
     await page.goto('/contatos');
     
     // 1. Create Contact
