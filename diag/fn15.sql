@@ -1,5 +1,6 @@
 \pset pager off
-\pset format unaligned
-\pset tuples_only on
-SELECT '#### '||p.oid::regprocedure||' definer='||p.prosecdef||' auth_exec='||has_function_privilege('authenticated',p.oid,'EXECUTE')||' cfg='||coalesce(array_to_string(p.proconfig,','),'')||E'\n'||pg_get_functiondef(p.oid)
-FROM pg_proc p WHERE p.pronamespace='public'::regnamespace AND p.proname IN ('cleanup_behavioral_regen_queue','compute_account_health','compute_attribution','compute_revops_kpis','cs_renewal_pipeline','dismiss_revops_alert','enroll_contact_in_workflow','evaluate_mql','get_connection_metrics','get_marketing_funnel_stats','get_score_explicability','move_deal_atomic','publish_mtta_sla_breach_alert','seed_conversation_topics','seed_forecast_period','has_role') ORDER BY 1;
+SELECT table_name, string_agg(column_name||':'||data_type, ', ' ORDER BY ordinal_position) FROM information_schema.columns WHERE table_schema='public' AND table_name IN ('deals','nurturing_workflows','nurturing_executions','pipeline_stage_transitions','conversation_topics_catalog','forecast_periods','interactions','marketing_forms','form_submissions','audit_log') GROUP BY 1;
+SELECT tablename, policyname, cmd, roles, left(coalesce(qual,'')||' | '||coalesce(with_check,''),200) FROM pg_policies WHERE schemaname='public' AND tablename IN ('deals','nurturing_workflows','nurturing_executions','contacts','interactions','conversation_topics_catalog','forecast_periods','pipeline_stage_transitions') ORDER BY 1,2;
+SELECT c.relname, c.relrowsecurity FROM pg_class c WHERE c.relnamespace='public'::regnamespace AND c.relname IN ('deals','pipeline_stage_transitions','nurturing_workflows');
+SELECT count(*) AS deals, count(user_id) AS with_user FROM public.deals;
+SELECT * FROM public.pipeline_stage_transitions LIMIT 5;
