@@ -1,5 +1,5 @@
 -- Observabilidade do AI Gateway e das RPCs admin no banco canônico.
--- Consolida as migrations 20260723152549..20260726144503 (nunca aplicadas aqui) no estado
+-- Consolida as migrations 20260723152549..20260726154947 (nunca aplicadas aqui) no estado
 -- final, alinhado às colunas que as edge functions gravam (status, http_status, duration_ms,
 -- error_message) e aos campos que o painel admin lê (dow ISO 1..7, computed_at).
 
@@ -536,7 +536,8 @@ SECURITY INVOKER
 SET search_path = public
 AS $$
 BEGIN
-  IF NOT public.has_role(auth.uid(), 'admin') THEN
+  IF current_user NOT IN ('postgres', 'service_role')
+     AND NOT public.has_role(auth.uid(), 'admin') THEN
     RAISE EXCEPTION 'forbidden' USING ERRCODE = '42501';
   END IF;
 
@@ -553,6 +554,7 @@ BEGIN
            ROUND((percentile_cont(0.95) WITHIN GROUP (ORDER BY s.duration_ms))::numeric, 2) AS p95
       FROM public.rpc_perf_samples s
      WHERE s.created_at >= now() - make_interval(hours => _hours_baseline)
+       AND s.created_at <  now() - make_interval(hours => _hours_recent)
      GROUP BY s.rpc_name
   )
   SELECT COALESCE(r.rpc_name, b.rpc_name),
@@ -561,7 +563,7 @@ BEGIN
          COALESCE(r.p95, 0),
          COALESCE(b.p95, 0),
          CASE WHEN COALESCE(b.p95, 0) > 0 THEN ROUND(COALESCE(r.p95, 0) / b.p95, 2) END,
-         (COALESCE(r.samples, 0) >= 3 AND COALESCE(b.p95, 0) > 0 AND COALESCE(r.p95, 0) / b.p95 >= 1.5)
+         (COALESCE(r.samples, 0) >= 3 AND COALESCE(b.samples, 0) >= 3 AND COALESCE(b.p95, 0) > 0 AND COALESCE(r.p95, 0) / b.p95 >= 1.5)
     FROM recent r
     FULL OUTER JOIN baseline b USING (rpc_name)
    ORDER BY 7 DESC, 4 DESC NULLS LAST
@@ -569,7 +571,7 @@ BEGIN
 END;
 $$;
 
--- 6) Snapshots de plano (leitura do painel admin)
+-- 6) Snapshots de plano (captura, diff e churn do painel admin)
 CREATE TABLE IF NOT EXISTS public.rpc_plan_snapshots (
   id           uuid        PRIMARY KEY DEFAULT gen_random_uuid(),
   rpc_name     text        NOT NULL,
@@ -578,11 +580,15 @@ CREATE TABLE IF NOT EXISTS public.rpc_plan_snapshots (
   total_cost   numeric,
   execution_ms numeric,
   reason       text        NOT NULL DEFAULT 'scheduled',
+  plan_changed boolean     NOT NULL DEFAULT false,
   captured_at  timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE INDEX IF NOT EXISTS idx_rpc_plan_snapshots_name_time
   ON public.rpc_plan_snapshots (rpc_name, captured_at DESC);
+CREATE INDEX IF NOT EXISTS idx_rpc_plan_snapshots_changed
+  ON public.rpc_plan_snapshots (rpc_name, captured_at DESC)
+  WHERE plan_changed;
 
 REVOKE ALL ON public.rpc_plan_snapshots FROM PUBLIC, anon, authenticated;
 GRANT SELECT ON public.rpc_plan_snapshots TO authenticated;
@@ -599,6 +605,139 @@ CREATE POLICY "service_role_writes_rpc_plan_snapshots"
   ON public.rpc_plan_snapshots FOR ALL TO service_role
   USING (true) WITH CHECK (true);
 
+-- plan_changed só é verdadeiro quando existe snapshot anterior com hash diferente
+CREATE OR REPLACE FUNCTION public.set_rpc_plan_changed()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = public
+AS $$
+DECLARE
+  v_prev text;
+BEGIN
+  SELECT plan_hash INTO v_prev
+    FROM public.rpc_plan_snapshots
+   WHERE rpc_name = NEW.rpc_name
+   ORDER BY captured_at DESC
+   LIMIT 1;
+
+  NEW.plan_changed := v_prev IS NOT NULL AND v_prev IS DISTINCT FROM NEW.plan_hash;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_rpc_plan_changed ON public.rpc_plan_snapshots;
+CREATE TRIGGER trg_rpc_plan_changed
+  BEFORE INSERT ON public.rpc_plan_snapshots
+  FOR EACH ROW EXECUTE FUNCTION public.set_rpc_plan_changed();
+
+-- Captura com allowlist fixa (sem SQL dinâmico vindo do chamador)
+CREATE OR REPLACE FUNCTION public.capture_rpc_plan(_rpc_name text, _reason text DEFAULT 'scheduled')
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = public
+AS $$
+DECLARE
+  v_stmt      text;
+  v_plan      jsonb;
+  v_hash      text;
+  v_last_hash text;
+  v_id        uuid;
+BEGIN
+  v_stmt := CASE _rpc_name
+    WHEN 'get_ai_gateway_health'          THEN 'SELECT * FROM public.get_ai_gateway_health()'
+    WHEN 'get_ai_gateway_partition_stats' THEN 'SELECT * FROM public.get_ai_gateway_partition_stats()'
+    WHEN 'get_rpc_perf_stats'             THEN 'SELECT * FROM public.get_rpc_perf_stats()'
+    WHEN 'get_top_slow_rpcs'              THEN 'SELECT * FROM public.get_top_slow_rpcs()'
+    WHEN 'get_slow_rpc_trend'             THEN 'SELECT * FROM public.get_slow_rpc_trend()'
+    ELSE NULL
+  END;
+
+  IF v_stmt IS NULL THEN
+    RAISE EXCEPTION 'RPC % nao esta na allowlist de captura de plano', _rpc_name
+      USING ERRCODE = '22023';
+  END IF;
+
+  _reason := COALESCE(_reason, 'scheduled');
+
+  BEGIN
+    EXECUTE 'EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ' || v_stmt INTO v_plan;
+  EXCEPTION WHEN OTHERS THEN
+    v_plan := NULL;
+  END;
+
+  IF v_plan IS NULL THEN
+    BEGIN
+      EXECUTE 'EXPLAIN (FORMAT JSON) ' || v_stmt INTO v_plan;
+      _reason := _reason || '+estimated';
+    EXCEPTION WHEN OTHERS THEN
+      RAISE WARNING 'capture_rpc_plan(%): EXPLAIN falhou (%)', _rpc_name, SQLERRM;
+      RETURN NULL;
+    END;
+  END IF;
+
+  -- hash estrutural: ignora tempos e contadores variáveis
+  v_hash := md5(regexp_replace(
+    v_plan::text, '"(Actual [^"]*|Execution Time|Planning Time|Shared [^"]*)": *[0-9.]+', '', 'g'));
+
+  SELECT plan_hash INTO v_last_hash
+    FROM public.rpc_plan_snapshots
+   WHERE rpc_name = _rpc_name
+   ORDER BY captured_at DESC
+   LIMIT 1;
+
+  IF v_last_hash IS NOT DISTINCT FROM v_hash AND _reason LIKE 'scheduled%' THEN
+    RETURN NULL;
+  END IF;
+
+  INSERT INTO public.rpc_plan_snapshots (rpc_name, plan, plan_hash, total_cost, execution_ms, reason)
+  VALUES (_rpc_name, v_plan, v_hash,
+          (v_plan -> 0 -> 'Plan' ->> 'Total Cost')::numeric,
+          (v_plan -> 0 ->> 'Execution Time')::numeric,
+          _reason)
+  RETURNING id INTO v_id;
+
+  RETURN v_id;
+END;
+$$;
+
+-- Job: plano de cada RPC monitorada (grava só quando muda) + RPCs degradadas; retenção 30 dias
+CREATE OR REPLACE FUNCTION public.capture_degraded_rpc_plans()
+RETURNS integer
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = public
+AS $$
+DECLARE
+  r       record;
+  v_count integer := 0;
+BEGIN
+  FOR r IN
+    SELECT unnest(ARRAY['get_ai_gateway_health', 'get_ai_gateway_partition_stats',
+                        'get_rpc_perf_stats', 'get_top_slow_rpcs', 'get_slow_rpc_trend']) AS rpc_name
+  LOOP
+    IF public.capture_rpc_plan(r.rpc_name, 'scheduled') IS NOT NULL THEN
+      v_count := v_count + 1;
+    END IF;
+  END LOOP;
+
+  FOR r IN
+    SELECT t.rpc_name FROM public.get_slow_rpc_trend(1, 24, 20) t
+     WHERE t.is_degraded
+       AND t.rpc_name IN ('get_ai_gateway_health', 'get_ai_gateway_partition_stats',
+                          'get_rpc_perf_stats', 'get_top_slow_rpcs', 'get_slow_rpc_trend')
+  LOOP
+    IF public.capture_rpc_plan(r.rpc_name, 'degradation') IS NOT NULL THEN
+      v_count := v_count + 1;
+    END IF;
+  END LOOP;
+
+  DELETE FROM public.rpc_plan_snapshots WHERE captured_at < now() - interval '30 days';
+  RETURN v_count;
+END;
+$$;
+
 CREATE OR REPLACE FUNCTION public.get_rpc_plan_snapshots(_rpc_name text DEFAULT NULL, _limit integer DEFAULT 20)
 RETURNS TABLE (id uuid, rpc_name text, plan_hash text, total_cost numeric, execution_ms numeric,
                reason text, captured_at timestamptz, plan_changed boolean)
@@ -608,11 +747,86 @@ SECURITY INVOKER
 SET search_path = public
 AS $$
   SELECT s.id, s.rpc_name, s.plan_hash, s.total_cost, s.execution_ms, s.reason, s.captured_at,
-         s.plan_hash IS DISTINCT FROM lag(s.plan_hash) OVER (PARTITION BY s.rpc_name ORDER BY s.captured_at)
+         s.plan_changed
     FROM public.rpc_plan_snapshots s
    WHERE _rpc_name IS NULL OR s.rpc_name = _rpc_name
    ORDER BY s.captured_at DESC
    LIMIT LEAST(COALESCE(_limit, 20), 200);
+$$;
+
+CREATE OR REPLACE FUNCTION public.get_rpc_plan_diff(_rpc_name text)
+RETURNS TABLE (slot text, id uuid, rpc_name text, plan_hash text, total_cost numeric,
+               execution_ms numeric, reason text, captured_at timestamptz, plan jsonb)
+LANGUAGE sql
+STABLE
+SECURITY INVOKER
+SET search_path = public
+AS $$
+  WITH last_two AS (
+    SELECT s.*, row_number() OVER (ORDER BY s.captured_at DESC) AS rn
+      FROM public.rpc_plan_snapshots s
+     WHERE s.rpc_name = _rpc_name
+     ORDER BY s.captured_at DESC
+     LIMIT 2
+  )
+  SELECT CASE WHEN l.rn = 1 THEN 'current' ELSE 'previous' END,
+         l.id, l.rpc_name, l.plan_hash, l.total_cost, l.execution_ms, l.reason, l.captured_at, l.plan
+    FROM last_two l
+   ORDER BY l.rn;
+$$;
+
+CREATE OR REPLACE FUNCTION public.get_rpc_plan_change_counts(_hours integer DEFAULT 6)
+RETURNS TABLE (rpc_name text, changes bigint, last_change timestamptz)
+LANGUAGE sql
+STABLE
+SECURITY INVOKER
+SET search_path = public
+AS $$
+  SELECT s.rpc_name, count(*)::bigint, max(s.captured_at)
+    FROM public.rpc_plan_snapshots s
+   WHERE s.plan_changed
+     AND s.captured_at >= now() - make_interval(hours => LEAST(GREATEST(COALESCE(_hours, 6), 1), 168))
+   GROUP BY s.rpc_name
+   ORDER BY 2 DESC;
+$$;
+
+CREATE OR REPLACE FUNCTION public.get_rpc_plan_churn_timeline(_rpc_name text DEFAULT NULL, _hours integer DEFAULT 24)
+RETURNS TABLE (bucket timestamptz, plan_changes bigint, samples bigint, p95_ms numeric)
+LANGUAGE sql
+STABLE
+SECURITY INVOKER
+SET search_path = public
+AS $$
+  WITH bounds AS (
+    SELECT date_trunc('hour', now())
+             - make_interval(hours => LEAST(GREATEST(COALESCE(_hours, 24), 1), 168) - 1) AS from_ts,
+           date_trunc('hour', now()) AS to_ts
+  ),
+  buckets AS (
+    SELECT generate_series(b.from_ts, b.to_ts, interval '1 hour') AS bucket FROM bounds b
+  ),
+  changes AS (
+    SELECT date_trunc('hour', s.captured_at) AS bucket, count(*)::bigint AS plan_changes
+      FROM public.rpc_plan_snapshots s, bounds b
+     WHERE s.plan_changed
+       AND s.captured_at >= b.from_ts
+       AND (_rpc_name IS NULL OR s.rpc_name = _rpc_name)
+     GROUP BY 1
+  ),
+  perf AS (
+    SELECT date_trunc('hour', r.created_at) AS bucket,
+           count(*)::bigint AS samples,
+           percentile_disc(0.95) WITHIN GROUP (ORDER BY r.duration_ms) AS p95_ms
+      FROM public.rpc_perf_samples r, bounds b
+     WHERE r.created_at >= b.from_ts
+       AND (_rpc_name IS NULL OR r.rpc_name = _rpc_name)
+     GROUP BY 1
+  )
+  SELECT k.bucket, COALESCE(c.plan_changes, 0), COALESCE(p.samples, 0), ROUND(COALESCE(p.p95_ms, 0), 1)
+    FROM buckets k
+    LEFT JOIN changes c ON c.bucket = k.bucket
+    LEFT JOIN perf p ON p.bucket = k.bucket
+   ORDER BY k.bucket;
 $$;
 
 -- 7) Privilégios das funções
@@ -626,7 +840,10 @@ BEGIN
     'public.record_rpc_perf_sample(text,numeric)',
     'public.cleanup_rpc_perf_samples()',
     'public.evaluate_ai_gateway_alerts()',
-    'public.auto_resolve_ai_gateway_alerts()'
+    'public.auto_resolve_ai_gateway_alerts()',
+    'public.set_rpc_plan_changed()',
+    'public.capture_rpc_plan(text,text)',
+    'public.capture_degraded_rpc_plans()'
   ]::regprocedure[] LOOP
     EXECUTE format('REVOKE ALL ON FUNCTION %s FROM PUBLIC, anon, authenticated', fn);
     EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO service_role', fn);
@@ -638,7 +855,10 @@ BEGIN
     'public.get_rpc_perf_stats(integer)',
     'public.get_top_slow_rpcs(integer,integer)',
     'public.get_slow_rpc_trend(integer,integer,integer)',
-    'public.get_rpc_plan_snapshots(text,integer)'
+    'public.get_rpc_plan_snapshots(text,integer)',
+    'public.get_rpc_plan_diff(text)',
+    'public.get_rpc_plan_change_counts(integer)',
+    'public.get_rpc_plan_churn_timeline(text,integer)'
   ]::regprocedure[] LOOP
     EXECUTE format('REVOKE ALL ON FUNCTION %s FROM PUBLIC, anon', fn);
     EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO authenticated, service_role', fn);
@@ -660,7 +880,8 @@ BEGIN
       ('auto_resolve_ai_gateway_alerts',      '2-59/5 * * * *', 'SELECT public.auto_resolve_ai_gateway_alerts();'),
       ('ai-gateway-metrics-ensure-partition', '15 3 * * *',    'SELECT public.ensure_ai_gateway_metrics_partition();'),
       ('ai-gateway-metrics-drop-old',         '0 4 * * 0',     'SELECT public.drop_old_ai_gateway_metrics_partitions(90);'),
-      ('cleanup_rpc_perf_samples_daily',      '30 3 * * *',    'SELECT public.cleanup_rpc_perf_samples();')
+      ('cleanup_rpc_perf_samples_daily',      '30 3 * * *',    'SELECT public.cleanup_rpc_perf_samples();'),
+      ('capture-degraded-rpc-plans',          '*/15 * * * *',  'SELECT public.capture_degraded_rpc_plans();')
     ) AS v(name, schedule, command)
   LOOP
     PERFORM cron.unschedule(jobid) FROM cron.job WHERE jobname = j.name;
