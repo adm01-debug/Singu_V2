@@ -10,6 +10,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ### Fixed
 - `supabase/migrations/20261006140000_ai_gateway_observability.sql` — painel admin do AI Gateway (saúde, partições, latência de RPCs, tendência e planos de execução) deixa de falhar no banco canônico: cria `ai_gateway_metrics` (particionada por mês, retenção 90 dias), `rpc_perf_samples`, `rpc_plan_snapshots`, as RPCs de leitura e os jobs de alerta automático. As edge functions de IA voltam a registrar telemetria. A RPC de saúde usa as colunas que as funções realmente gravam e o dia da semana ISO esperado pelo heatmap.
 - `vercel.json` — fallback SPA na Vercel: links diretos e recarregamento de rotas internas (`/auth`, `/dashboard`, `/contatos` etc.) deixam de responder 404.
+- `supabase/migrations/20261007120000_rpc_plan_structural_hash.sql` — cartão de planos de RPC do AI Gateway deixa de acusar troca de plano quando só muda o que a execução observou (ordenação em memória ou em disco, workers, tempos); o hash considera apenas a estrutura escolhida pelo planejador. O plano capturado de `get_ai_gateway_partition_stats` passa a mostrar a leitura de `min/max` de cada partição, que é o que fica lento.
 
 ### Security
 - `vercel.json` — cabeçalhos de segurança passam a ser enviados pela Vercel (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` e CSP mínima `frame-ancestors 'none'; object-src 'none'; base-uri 'self'`), além de cache imutável para `/assets/*` e `no-cache` para `index.html`, service workers e manifest.
