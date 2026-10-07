@@ -23,6 +23,8 @@ BEGIN
     'cte',         _node -> 'CTE Name',
     'strategy',    _node -> 'Strategy',
     'partial',     _node -> 'Partial Mode',
+    'parallel',    _node -> 'Parallel Aware',
+    'async',       _node -> 'Async Capable',
     'join',        _node -> 'Join Type',
     'relation',    _node -> 'Relation Name',
     'index',       _node -> 'Index Name',
@@ -146,7 +148,32 @@ BEGIN
 END;
 $$;
 
--- snapshots existentes no novo formato: a próxima captura não acusa troca falsa
+-- snapshots existentes no novo formato: hash e plan_changed recalculados na
+-- ordem de captura, para o painel e os alertas não contarem trocas falsas
 UPDATE public.rpc_plan_snapshots
    SET plan_hash = md5(public.rpc_plan_structure(plan -> 0 -> 'Plan')::text)
  WHERE plan_hash IS DISTINCT FROM md5(public.rpc_plan_structure(plan -> 0 -> 'Plan')::text);
+
+UPDATE public.rpc_plan_snapshots s
+   SET plan_changed = r.changed
+  FROM (
+    SELECT id,
+           COALESCE(lag(plan_hash) OVER w IS DISTINCT FROM plan_hash, false)
+             AND lag(plan_hash) OVER w IS NOT NULL AS changed
+      FROM public.rpc_plan_snapshots
+    WINDOW w AS (PARTITION BY rpc_name ORDER BY captured_at, id)
+  ) r
+ WHERE r.id = s.id
+   AND s.plan_changed IS DISTINCT FROM r.changed;
+
+-- a consulta explicada de get_ai_gateway_partition_stats mudou: nova linha de
+-- base, que não conta como troca do plano monitorado
+DO $$
+DECLARE
+  v_id uuid;
+BEGIN
+  v_id := public.capture_rpc_plan('get_ai_gateway_partition_stats', 'baseline');
+  IF v_id IS NOT NULL THEN
+    UPDATE public.rpc_plan_snapshots SET plan_changed = false WHERE id = v_id;
+  END IF;
+END $$;
