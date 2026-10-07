@@ -2,7 +2,8 @@
 -- Invariante 1: anon executa EXATAMENTE as RPCs públicas listadas.
 -- Invariante 2: authenticated executa, entre as SECURITY DEFINER (que ignoram RLS), EXATAMENTE as
 --               RPCs públicas + has_role + as 15 RPCs do frontend
---               com escopo por auth.uid() (20261006130000). Funções SECURITY INVOKER rodam sob RLS e não entram aqui.
+--               com escopo por auth.uid() (20261006130000) + 2 RPCs admin do AI Gateway (20261006140000).
+--               Funções SECURITY INVOKER rodam sob RLS e não entram aqui.
 -- Falha se aparecer função extra ou se alguma da allowlist perder o grant.
 
 BEGIN;
@@ -41,6 +42,9 @@ INSERT INTO _definer_auth(sig) VALUES
   ('publish_mtta_sla_breach_alert(_mtta_minutes integer, _sla_minutes integer)'),
   ('seed_conversation_topics(_user_id uuid)'),
   ('seed_forecast_period(_user_id uuid, _type text)');
+INSERT INTO _definer_auth(sig) VALUES
+  ('get_ai_gateway_health(_hours integer)'),
+  ('get_ai_gateway_partition_stats()');
 
 CREATE TEMP TABLE _fn AS
 SELECT p.proname || '(' || pg_get_function_identity_arguments(p.oid) || ')' AS sig,
@@ -84,7 +88,7 @@ BEGIN
     RAISE EXCEPTION 'allowlist declara função(ões) sem EXECUTE para authenticated: %', missing;
   END IF;
 
-  RAISE NOTICE 'OK — anon: 12 RPCs públicas; authenticated: 28 SECURITY DEFINER da allowlist.';
+  RAISE NOTICE 'OK — anon: 12 RPCs públicas; authenticated: 30 SECURITY DEFINER da allowlist.';
 END $$;
 
 ROLLBACK;
