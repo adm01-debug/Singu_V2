@@ -177,6 +177,21 @@ function getExternalClient() {
   });
 }
 
+// RPCs de usuário rodam com o JWT dele: auth.uid() e RLS valem dentro das funções
+function getUserScopedClient(authHeader: string) {
+  const url = Deno.env.get('EXTERNAL_SUPABASE_URL');
+  const ownUrl = Deno.env.get('SUPABASE_URL');
+  const anonKey = Deno.env.get('SUPABASE_ANON_KEY');
+  if (!url || !ownUrl || !anonKey || new URL(url).origin !== new URL(ownUrl).origin) return null;
+  return createClient(url, anonKey, {
+    db: { schema: 'public' },
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: {
+      headers: { Authorization: authHeader, 'x-statement-timeout': String(STATEMENT_TIMEOUT_MS) },
+    },
+  });
+}
+
 async function hasRelationAccess(
   client: ReturnType<typeof getExternalClient>,
   scope: RelationScope,
@@ -443,8 +458,13 @@ Deno.serve(async (req) => {
 
       const rawParams = (body.params && typeof body.params === 'object') ? body.params : {};
       const params = isSvc ? rawParams : enforceTenantIdentity(rawParams, userId);
+      const rpcClient = isSvc ? client : getUserScopedClient(req.headers.get('Authorization') ?? '');
+      if (!rpcClient) {
+        log.error("RPC user client unavailable", { rpc: functionName });
+        return jsonError('RPC unavailable for user sessions', 503, req);
+      }
 
-      const { data, error } = await client.rpc(functionName, params as Record<string, unknown>);
+      const { data, error } = await rpcClient.rpc(functionName, params as Record<string, unknown>);
       if (error) {
         log.warn("RPC failed", { rpc: functionName, error: error.message });
         return jsonOk({ data: null, error: `RPC ${functionName} failed` }, req);
