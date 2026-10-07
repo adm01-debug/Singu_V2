@@ -165,7 +165,8 @@ DECLARE
   _t0     timestamptz := clock_timestamp();
   _result jsonb;
 BEGIN
-  IF current_setting('role') NOT IN ('postgres', 'service_role')
+  IF NOT (current_setting('role') IN ('postgres', 'service_role')
+          OR (current_setting('role') = 'none' AND session_user = 'postgres'))
      AND NOT public.has_role(auth.uid(), 'admin') THEN
     RAISE EXCEPTION 'access_denied' USING ERRCODE = '42501';
   END IF;
@@ -222,7 +223,6 @@ BEGIN
           FROM public.system_alerts
          WHERE alert_type LIKE 'ai_gateway_%'
            AND acknowledged_at IS NULL
-           AND created_at >= now() - interval '2 hours'
          ORDER BY created_at DESC
          LIMIT 20
       ) a
@@ -318,7 +318,9 @@ DECLARE
   now_ts timestamptz := now();
   _t0    timestamptz := clock_timestamp();
 BEGIN
-  IF NOT public.has_role(auth.uid(), 'admin') THEN
+  IF NOT (current_setting('role') IN ('postgres', 'service_role')
+          OR (current_setting('role') = 'none' AND session_user = 'postgres'))
+     AND NOT public.has_role(auth.uid(), 'admin') THEN
     RAISE EXCEPTION 'forbidden' USING ERRCODE = '42501';
   END IF;
 
@@ -399,9 +401,9 @@ BEGIN
   ) THEN
     _severity := CASE WHEN _p95 >= 15000 THEN 'critical' ELSE 'high' END;
     INSERT INTO public.system_alerts (alert_type, severity, threshold_pct, consumed_pct, message, metadata)
-    VALUES ('ai_gateway_latency_p95', _severity, 8000, _p95,
+    VALUES ('ai_gateway_latency_p95', _severity, 100, ROUND(_p95 / 8000 * 100, 2),
             format('Latência p95 do AI Gateway em %sms nos últimos 15 min (%s chamadas)', ROUND(_p95), _requests),
-            jsonb_build_object('requests', _requests, 'p95_ms', ROUND(_p95), 'window_minutes', 15));
+            jsonb_build_object('requests', _requests, 'p95_ms', ROUND(_p95), 'threshold_ms', 8000, 'window_minutes', 15));
     _alerts_created := _alerts_created + 1;
   END IF;
 
@@ -645,12 +647,37 @@ DECLARE
   v_last_hash text;
   v_id        uuid;
 BEGIN
+  -- EXPLAIN de uma função plpgsql só mostra "Function Scan": explica a consulta principal de cada RPC
   v_stmt := CASE _rpc_name
-    WHEN 'get_ai_gateway_health'          THEN 'SELECT * FROM public.get_ai_gateway_health()'
-    WHEN 'get_ai_gateway_partition_stats' THEN 'SELECT * FROM public.get_ai_gateway_partition_stats()'
-    WHEN 'get_rpc_perf_stats'             THEN 'SELECT * FROM public.get_rpc_perf_stats()'
-    WHEN 'get_top_slow_rpcs'              THEN 'SELECT * FROM public.get_top_slow_rpcs()'
-    WHEN 'get_slow_rpc_trend'             THEN 'SELECT * FROM public.get_slow_rpc_trend()'
+    WHEN 'get_ai_gateway_health' THEN $q$
+      SELECT function_name, model, status, duration_ms, tokens_in, tokens_out, created_at
+        FROM public.ai_gateway_metrics
+       WHERE created_at >= now() - interval '24 hours'$q$
+    WHEN 'get_ai_gateway_partition_stats' THEN $q$
+      SELECT c.oid, c.relname, pg_get_expr(c.relpartbound, c.oid)
+        FROM pg_inherits i
+        JOIN pg_class c ON c.oid = i.inhrelid
+       WHERE i.inhparent = 'public.ai_gateway_metrics'::regclass
+       ORDER BY c.relname$q$
+    WHEN 'get_rpc_perf_stats' THEN $q$
+      SELECT rpc_name, COUNT(*), percentile_cont(0.95) WITHIN GROUP (ORDER BY duration_ms), MAX(created_at)
+        FROM public.rpc_perf_samples
+       WHERE created_at >= now() - interval '24 hours'
+       GROUP BY rpc_name$q$
+    WHEN 'get_top_slow_rpcs' THEN $q$
+      SELECT rpc_name, COUNT(*), percentile_cont(0.95) WITHIN GROUP (ORDER BY duration_ms) AS p95
+        FROM public.rpc_perf_samples
+       WHERE created_at >= now() - interval '24 hours'
+       GROUP BY rpc_name
+      HAVING COUNT(*) >= 3
+       ORDER BY p95 DESC
+       LIMIT 5$q$
+    WHEN 'get_slow_rpc_trend' THEN $q$
+      SELECT rpc_name, COUNT(*), percentile_cont(0.95) WITHIN GROUP (ORDER BY duration_ms)
+        FROM public.rpc_perf_samples
+       WHERE created_at >= now() - interval '24 hours'
+         AND created_at <  now() - interval '1 hour'
+       GROUP BY rpc_name$q$
     ELSE NULL
   END;
 
@@ -677,9 +704,8 @@ BEGIN
     END;
   END IF;
 
-  -- hash estrutural: ignora tempos e contadores variáveis
-  v_hash := md5(regexp_replace(
-    v_plan::text, '"(Actual [^"]*|Execution Time|Planning Time|Shared [^"]*)": *[0-9.]+', '', 'g'));
+  -- hash estrutural: ignora todo campo numérico (custos, linhas, tempos, buffers, memória)
+  v_hash := md5(regexp_replace(v_plan::text, '"[^"]+": *-?[0-9.]+(e[-+]?[0-9]+)?', '', 'g'));
 
   SELECT plan_hash INTO v_last_hash
     FROM public.rpc_plan_snapshots
@@ -687,7 +713,7 @@ BEGIN
    ORDER BY captured_at DESC
    LIMIT 1;
 
-  IF v_last_hash IS NOT DISTINCT FROM v_hash AND _reason LIKE 'scheduled%' THEN
+  IF v_last_hash IS NOT DISTINCT FROM v_hash THEN
     RETURN NULL;
   END IF;
 
@@ -702,7 +728,7 @@ BEGIN
 END;
 $$;
 
--- Job: plano de cada RPC monitorada (grava só quando muda) + RPCs degradadas; retenção 30 dias
+-- Job: RPCs degradadas primeiro (razão 'degradation'), depois as demais; grava só quando o plano muda; retenção 30 dias
 CREATE OR REPLACE FUNCTION public.capture_degraded_rpc_plans()
 RETURNS integer
 LANGUAGE plpgsql
@@ -714,21 +740,21 @@ DECLARE
   v_count integer := 0;
 BEGIN
   FOR r IN
-    SELECT unnest(ARRAY['get_ai_gateway_health', 'get_ai_gateway_partition_stats',
-                        'get_rpc_perf_stats', 'get_top_slow_rpcs', 'get_slow_rpc_trend']) AS rpc_name
-  LOOP
-    IF public.capture_rpc_plan(r.rpc_name, 'scheduled') IS NOT NULL THEN
-      v_count := v_count + 1;
-    END IF;
-  END LOOP;
-
-  FOR r IN
     SELECT t.rpc_name FROM public.get_slow_rpc_trend(1, 24, 20) t
      WHERE t.is_degraded
        AND t.rpc_name IN ('get_ai_gateway_health', 'get_ai_gateway_partition_stats',
                           'get_rpc_perf_stats', 'get_top_slow_rpcs', 'get_slow_rpc_trend')
   LOOP
     IF public.capture_rpc_plan(r.rpc_name, 'degradation') IS NOT NULL THEN
+      v_count := v_count + 1;
+    END IF;
+  END LOOP;
+
+  FOR r IN
+    SELECT unnest(ARRAY['get_ai_gateway_health', 'get_ai_gateway_partition_stats',
+                        'get_rpc_perf_stats', 'get_top_slow_rpcs', 'get_slow_rpc_trend']) AS rpc_name
+  LOOP
+    IF public.capture_rpc_plan(r.rpc_name, 'scheduled') IS NOT NULL THEN
       v_count := v_count + 1;
     END IF;
   END LOOP;
