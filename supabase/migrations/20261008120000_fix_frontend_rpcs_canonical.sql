@@ -906,8 +906,9 @@ BEGIN
   PERFORM public.assert_company_access(p_company_id);
   PERFORM public.assert_self_user_id(p_user_id);
   -- o canônico não tem contact_id/deal_id em reminders; os ids opcionais ficam em notes
-  INSERT INTO reminders (user_id, title, reminder_date, company_id, notes)
-  VALUES (p_user_id, p_title, p_reminder_date, p_company_id,
+  -- priority precisa vir de chk_reminders_priority (alta/media/baixa/urgente); o default 'medium' viola o check
+  INSERT INTO reminders (user_id, title, reminder_date, company_id, priority, notes)
+  VALUES (p_user_id, p_title, p_reminder_date, p_company_id, 'media',
           concat_ws(' ',
             CASE WHEN p_contact_id IS NOT NULL THEN 'contact_id=' || p_contact_id END,
             CASE WHEN p_deal_id IS NOT NULL THEN 'deal_id=' || p_deal_id END))
