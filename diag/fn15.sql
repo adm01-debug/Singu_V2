@@ -190,7 +190,7 @@ SELECT p.proname, p.oid::regprocedure::text AS sig, e.lineno, e.position, e.stat
 FROM pg_proc p
 JOIN pg_namespace n ON n.oid=p.pronamespace
 JOIN wanted w ON w.name=p.proname
-CROSS JOIN LATERAL plpgsql_check_function_tb(p.oid) e
+CROSS JOIN LATERAL plpgsql_check_function_tb(p.oid, fatal_errors => false, other_warnings => false, extra_warnings => false, performance_warnings => false) e
 WHERE n.nspname='public' AND e.level='error'
 ORDER BY p.proname, e.lineno;
 \echo '=== resumo por funcao ==='
@@ -198,6 +198,6 @@ SELECT p.proname, count(*) AS erros
 FROM pg_proc p
 JOIN pg_namespace n ON n.oid=p.pronamespace
 JOIN wanted w ON w.name=p.proname
-CROSS JOIN LATERAL plpgsql_check_function_tb(p.oid) e
+CROSS JOIN LATERAL plpgsql_check_function_tb(p.oid, fatal_errors => false, other_warnings => false, extra_warnings => false, performance_warnings => false) e
 WHERE n.nspname='public' AND e.level='error'
 GROUP BY 1 ORDER BY 2 DESC, 1;
