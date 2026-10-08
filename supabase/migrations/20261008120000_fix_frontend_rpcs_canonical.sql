@@ -886,7 +886,7 @@ AS $function$
 BEGIN
   PERFORM public.assert_task_access(p_task_id);
   UPDATE tasks SET
-    status = 'done',
+    status = 'completed',
     completed_at = NOW(),
     description = COALESCE(p_notes, description),
     updated_at = NOW()
@@ -1170,7 +1170,7 @@ AS $function$
 BEGIN
   PERFORM public.assert_task_access(p_task_id);
   UPDATE tasks SET status = 'pending', completed_at = NULL, updated_at = NOW()
-  WHERE id = p_task_id AND status IN ('done', 'completed');
+  WHERE id = p_task_id AND status = 'completed';
   RETURN FOUND;
 END;
 $function$;
