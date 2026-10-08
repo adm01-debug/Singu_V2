@@ -186,6 +186,7 @@ INSERT INTO wanted(name) VALUES
 SELECT p.proname || ' | ' || e.lineno || ' | ' || e.sqlstate || ' | ' || e.message AS err
 FROM pg_proc p
 JOIN pg_namespace n ON n.oid=p.pronamespace
+JOIN pg_language l ON l.oid=p.prolang AND l.lanname='plpgsql'
 JOIN wanted w ON w.name=p.proname
 CROSS JOIN LATERAL plpgsql_check_function_tb(p.oid, fatal_errors => false, other_warnings => false, extra_warnings => false, performance_warnings => false) e
 WHERE n.nspname='public' AND e.level='error'
@@ -194,6 +195,7 @@ ORDER BY p.proname, e.lineno;
 SELECT p.proname || ' | ' || count(*) AS resumo
 FROM pg_proc p
 JOIN pg_namespace n ON n.oid=p.pronamespace
+JOIN pg_language l ON l.oid=p.prolang AND l.lanname='plpgsql'
 JOIN wanted w ON w.name=p.proname
 CROSS JOIN LATERAL plpgsql_check_function_tb(p.oid, fatal_errors => false, other_warnings => false, extra_warnings => false, performance_warnings => false) e
 WHERE n.nspname='public' AND e.level='error'
