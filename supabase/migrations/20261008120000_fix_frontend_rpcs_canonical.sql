@@ -164,8 +164,14 @@ BEGIN
     RETURN jsonb_build_object('success', false, 'message', 'Empresa não encontrada');
   END IF;
 
-  INSERT INTO contacts (company_id, full_name, email, phone, cargo, whatsapp, user_id)
-  VALUES (p_company_id, p_full_name, p_email, p_telefone, p_cargo, p_whatsapp, auth.uid())
+  -- full_name é GENERATED (first_name + last_name): dividimos o nome recebido
+  INSERT INTO contacts (company_id, first_name, last_name, email, phone, cargo, whatsapp, user_id)
+  VALUES (
+    p_company_id,
+    split_part(TRIM(p_full_name), ' ', 1),
+    NULLIF(TRIM(regexp_replace(TRIM(p_full_name), '^\S*\s*', '')), ''),
+    p_email, p_telefone, p_cargo, p_whatsapp, auth.uid()
+  )
   RETURNING id INTO new_id;
 
   SELECT jsonb_build_object(
@@ -188,8 +194,18 @@ DECLARE
   result   jsonb;
   affected int;
 BEGIN
+  -- full_name é GENERATED: aceitamos 'full_name' (divide) ou 'first_name'/'last_name' diretos
   UPDATE contacts SET
-    full_name  = COALESCE(p_data->>'full_name', full_name),
+    first_name = COALESCE(
+      CASE WHEN p_data ? 'full_name'
+           THEN split_part(TRIM(p_data->>'full_name'), ' ', 1)
+           ELSE p_data->>'first_name' END,
+      first_name),
+    last_name  = COALESCE(
+      CASE WHEN p_data ? 'full_name'
+           THEN NULLIF(TRIM(regexp_replace(TRIM(p_data->>'full_name'), '^\S*\s*', '')), '')
+           ELSE p_data->>'last_name' END,
+      last_name),
     email      = COALESCE(p_data->>'email',     email),
     phone      = COALESCE(p_data->>'telefone',  phone),
     cargo      = COALESCE(p_data->>'cargo',     cargo),
@@ -568,9 +584,9 @@ BEGIN
       'last_contact', (SELECT MAX(data_interacao) FROM interactions WHERE company_id = p_company_id)
     ),
     'scores', jsonb_build_object(
-      'engagement', (calculate_engagement_score(p_company_id)->>'engagement_score'),
-      'priority', (calculate_priority_score(p_company_id)->>'priority_score'),
-      'health', (get_company_health_score(p_company_id)->>'score')
+      'engagement', calculate_engagement_score(p_company_id),
+      'priority', calculate_priority_score(p_company_id),
+      'health', get_company_health_score(p_company_id)
     ),
     'workflow', get_company_workflow_state(p_company_id),
     'generated_at', NOW()
