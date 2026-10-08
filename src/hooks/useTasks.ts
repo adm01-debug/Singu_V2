@@ -74,14 +74,16 @@ export function useOverdueTasks() {
           logger.warn('[Tasks] get_overdue_tasks RPC failed:', error);
           return [] as Task[];
         }
-        return (Array.isArray(data) ? data : []).map((t) => ({
-          ...t,
-          id: (t.id ?? t.task_id) as string,
-          title:
-            (t.title as string | undefined) ??
-            `${t.task_type === 'reminder' ? 'Lembrete' : 'Follow-up'}${t.company_name ? `: ${t.company_name}` : ''}`,
-          created_at: (t.created_at ?? t.due_date) as string,
-        })) as Task[];
+        return (Array.isArray(data) ? data : []).map((t) => {
+          const kind = t.task_type === 'reminder' ? 'Lembrete' : 'Follow-up';
+          const company = t.company_name ? `: ${t.company_name}` : '';
+          return {
+            ...t,
+            id: (t.id ?? t.task_id) as string,
+            title: (t.title as string | undefined) ?? `${kind}${company}`,
+            created_at: (t.created_at ?? t.due_date) as string,
+          };
+        }) as Task[];
       } catch (e) {
         logger.warn('[Tasks] Fetch overdue failed:', e);
         return [] as Task[];
