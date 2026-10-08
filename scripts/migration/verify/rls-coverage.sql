@@ -10,6 +10,8 @@ WITH tables_pub AS (
    WHERE n.nspname = 'public'
      AND c.relkind = 'r'
      AND c.relname NOT LIKE '\_%' ESCAPE '\'
+     -- partições herdam as policies da tabela-particionada (pg_policy só na pai)
+     AND NOT EXISTS (SELECT 1 FROM pg_inherits i WHERE i.inhrelid = c.oid)
 ),
 policies_pub AS (
   SELECT c.oid, COUNT(p.polname) AS n_policies
@@ -41,6 +43,7 @@ BEGIN
     LEFT JOIN pg_policy p ON p.polrelid = c.oid
    WHERE n.nspname = 'public' AND c.relkind = 'r'
      AND c.relname NOT LIKE '\_%' ESCAPE '\'
+     AND NOT EXISTS (SELECT 1 FROM pg_inherits i WHERE i.inhrelid = c.oid)
    GROUP BY c.oid, c.relname, c.relrowsecurity
   HAVING NOT bool_or(c.relrowsecurity) OR COUNT(p.polname) = 0;
 

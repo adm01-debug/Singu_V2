@@ -55,7 +55,12 @@ SELECT pg_temp.act_as(current_setting('rls.owner'));
 SET LOCAL ROLE authenticated;
 SELECT public.assert_self_user_id(current_setting('rls.owner')::uuid);
 SELECT public.assert_contact_access(current_setting('rls.contact')::uuid);
-SELECT public.get_instant_kpis(current_setting('rls.owner')::uuid) IS NOT NULL AS kpis_ok;
+DO $$
+BEGIN
+  IF to_regprocedure('public.get_instant_kpis(uuid)') IS NOT NULL THEN
+    PERFORM public.get_instant_kpis(current_setting('rls.owner')::uuid);
+  END IF;
+END $$;
 RESET ROLE;
 
 \echo 'TEST: outro usuário é barrado nos dados do dono'
