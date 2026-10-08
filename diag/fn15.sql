@@ -243,7 +243,7 @@ BEGIN
   v_contact := (public.create_contact(v_company, 'Smoke Fixture', NULL, NULL, 'CEO', NULL))->>'contact_id'::text;
   SELECT ((public.create_quick_interaction(v_company, 'call', 'smoke', NULL, 3))->>'interaction_id')::uuid INTO v_inter;
   SELECT public.complete_followup(v_inter)->>'success' INTO STRICT q;
-  SELECT public.create_reminder(NULL, 'smoke', now() + interval '1 day', v_company) INTO v_rem;
+  SELECT public.create_reminder(v_user, 'smoke', now() + interval '1 day', v_company) INTO v_rem;
   INSERT INTO public.tasks (title, user_id, contact_id) VALUES ('smoke', v_user, v_contact) RETURNING id INTO v_task;
   PERFORM public.reopen_task(v_task);
   PERFORM public.complete_task(v_task);
