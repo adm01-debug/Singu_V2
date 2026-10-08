@@ -257,7 +257,7 @@ BEGIN
     VALUES (v_user, v_contact, 'whatsapp', 'smoke', 'pending') RETURNING id INTO v_appr;
   PERFORM public.approve_follow_up(v_appr);
   PERFORM public.reject_follow_up(v_appr);
-  PERFORM public.create_company('smoke-co', '123', 'a@b.co', '1199', 'rua x', 'cidade', 'SP', '01000');
+  PERFORM public.create_company('smoke-co', '123', 'a@b.co', '11987654321', 'rua x', 'cidade', 'SP', '01000');
   FOREACH q IN ARRAY calls LOOP
     BEGIN EXECUTE q; ok := ok + 1;
     EXCEPTION WHEN OTHERS THEN bad := bad + 1;
