@@ -240,8 +240,7 @@ DECLARE
 BEGIN
   v_user := COALESCE(current_setting('request.jwt.claim.sub', true), current_setting('request.jwt.claims', true)::jsonb->>'sub')::uuid;
   INSERT INTO public.companies (nome_crm, status, user_id) VALUES ('smoke-fixture', 'ativo', v_user) RETURNING id INTO v_company;
-  SELECT public.create_contact(v_company, 'Smoke Fixture', NULL, NULL, 'CEO', NULL) IS NOT NULL INTO STRICT ok;
-  SELECT id INTO v_contact FROM public.contacts WHERE full_name = 'Smoke Fixture' LIMIT 1;
+  v_contact := (public.create_contact(v_company, 'Smoke Fixture', NULL, NULL, 'CEO', NULL))->>'contact_id'::text;
   SELECT (public.create_quick_interaction(v_company, 'call', 'smoke', NULL, 3))->>'interaction_id'::uuid INTO v_inter;
   SELECT public.complete_followup(v_inter)->>'success' INTO STRICT q;
   SELECT public.create_reminder(NULL, 'smoke', now() + interval '1 day', v_company) INTO v_rem;
