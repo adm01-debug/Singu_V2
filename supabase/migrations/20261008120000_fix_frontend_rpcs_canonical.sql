@@ -82,16 +82,16 @@ BEGIN
     'pendencias', jsonb_build_object(
       'followups_hoje', (
         SELECT COUNT(*) FROM interactions
-        WHERE requer_followup = true
-        AND COALESCE(followup_concluido, false) = false
-        AND data_followup::date = CURRENT_DATE
+        WHERE (COALESCE(requer_followup, false) AND NOT COALESCE(followup_concluido, false)
+               OR COALESCE(follow_up_required, false))
+        AND COALESCE(data_followup, follow_up_date::timestamptz)::date = CURRENT_DATE
         AND (p_vendedor_id IS NULL OR usuario_responsavel_id = p_vendedor_id)
       ),
       'followups_atrasados', (
         SELECT COUNT(*) FROM interactions
-        WHERE requer_followup = true
-        AND COALESCE(followup_concluido, false) = false
-        AND data_followup < now()
+        WHERE (COALESCE(requer_followup, false) AND NOT COALESCE(followup_concluido, false)
+               OR COALESCE(follow_up_required, false))
+        AND COALESCE(data_followup, follow_up_date::timestamptz) < now()
         AND (p_vendedor_id IS NULL OR usuario_responsavel_id = p_vendedor_id)
       ),
       'alertas_pendentes', (
@@ -586,7 +586,25 @@ CREATE OR REPLACE FUNCTION public.get_company_360_view(p_company_id uuid)
  SET search_path TO 'public'
 AS $function$
 BEGIN
+  -- campos no topo para o contrato Company360 do frontend (useCompany360)
   RETURN jsonb_build_object(
+    'id', p_company_id,
+    'name', (SELECT COALESCE(nome_crm, nome_fantasia, razao_social) FROM companies WHERE id = p_company_id),
+    'cnpj', (SELECT cnpj FROM companies WHERE id = p_company_id),
+    'industry', (SELECT ramo_atividade FROM companies WHERE id = p_company_id),
+    'health_score', (
+      SELECT COALESCE((h->>'health_score')::numeric, (h->>'score')::numeric, (h->>'overall_score')::numeric)
+      FROM (SELECT get_company_health_score(p_company_id) h) s
+    ),
+    'total_contacts', (SELECT COUNT(*) FROM contacts WHERE company_id = p_company_id),
+    'top_contacts', (
+      SELECT COALESCE(jsonb_agg(jsonb_build_object('id', ct.id, 'name', ct.full_name, 'role', ct.cargo, 'score', ct.relationship_score)), '[]'::jsonb)
+      FROM (SELECT * FROM contacts WHERE company_id = p_company_id ORDER BY relationship_score DESC NULLS LAST LIMIT 5) ct
+    ),
+    'recent_activities', (
+      SELECT COALESCE(jsonb_agg(jsonb_build_object('type', i.type, 'date', i.data_interacao, 'description', COALESCE(i.resumo, i.content))), '[]'::jsonb)
+      FROM (SELECT * FROM interactions WHERE company_id = p_company_id ORDER BY data_interacao DESC LIMIT 10) i
+    ),
     'company', (SELECT to_jsonb(c) - 'deleted_at' FROM companies c WHERE id = p_company_id),
     'contacts', (SELECT COALESCE(jsonb_agg(to_jsonb(ct) ORDER BY ct.created_at), '[]'::jsonb) FROM contacts ct WHERE company_id = p_company_id),
     'addresses', (SELECT COALESCE(jsonb_agg(to_jsonb(a)), '[]'::jsonb) FROM company_addresses a WHERE company_id = p_company_id),
@@ -607,6 +625,14 @@ BEGIN
       'engagement', calculate_engagement_score(p_company_id),
       'priority', calculate_priority_score(p_company_id),
       'health', get_company_health_score(p_company_id)
+    ),
+    'key_metrics', jsonb_build_object(
+      'stats', jsonb_build_object(
+        'total_interactions', (SELECT COUNT(*) FROM interactions WHERE company_id = p_company_id),
+        'total_contacts', (SELECT COUNT(*) FROM contacts WHERE company_id = p_company_id),
+        'days_as_client', EXTRACT(DAY FROM NOW() - (SELECT created_at FROM companies WHERE id = p_company_id))::int,
+        'last_contact', (SELECT MAX(data_interacao) FROM interactions WHERE company_id = p_company_id)
+      )
     ),
     'workflow', get_company_workflow_state(p_company_id),
     'generated_at', NOW()
@@ -739,8 +765,11 @@ DECLARE
 BEGIN
   PERFORM public.assert_company_access(p_company_id);
   INSERT INTO interactions (company_id, type, resumo, usuario_responsavel_id,
-                            requer_followup, data_followup, user_id, created_by)
+                            requer_followup, data_followup, follow_up_required, follow_up_date,
+                            user_id, created_by)
   VALUES (p_company_id, p_tipo, p_resumo, p_vendedor_id,
+          p_followup_dias IS NOT NULL,
+          CASE WHEN p_followup_dias IS NOT NULL THEN now() + (p_followup_dias || ' days')::interval END,
           p_followup_dias IS NOT NULL,
           CASE WHEN p_followup_dias IS NOT NULL THEN now() + (p_followup_dias || ' days')::interval END,
           auth.uid(), auth.uid())
@@ -788,18 +817,18 @@ BEGIN
     i.company_id,
     c.nome_crm,
     i.type AS tipo_interacao,
-    i.data_followup,
-    EXTRACT(DAY FROM i.data_followup - now())::int as dias_restantes,
-    i.data_followup < now() as atrasado,
+    COALESCE(i.data_followup, i.follow_up_date::timestamptz) as data_followup,
+    EXTRACT(DAY FROM COALESCE(i.data_followup, i.follow_up_date::timestamptz) - now())::int as dias_restantes,
+    COALESCE(i.data_followup, i.follow_up_date::timestamptz) < now() as atrasado,
     cu.vendedor_nome
   FROM interactions i
   JOIN companies c ON c.id = i.company_id
   LEFT JOIN customers cu ON cu.company_id = i.company_id AND cu.deleted_at IS NULL
-  WHERE i.requer_followup = true
-  AND COALESCE(i.followup_concluido, false) = false
-  AND i.data_followup IS NOT NULL
+  WHERE (COALESCE(i.requer_followup, false) AND NOT COALESCE(i.followup_concluido, false)
+         OR COALESCE(i.follow_up_required, false))
+  AND COALESCE(i.data_followup, i.follow_up_date::timestamptz) IS NOT NULL
   AND (p_vendedor_id IS NULL OR i.usuario_responsavel_id = p_vendedor_id)
-  ORDER BY i.data_followup ASC
+  ORDER BY data_followup ASC
   LIMIT p_limit;
 END;
 $function$;
@@ -814,9 +843,9 @@ DECLARE
   affected int;
 BEGIN
   PERFORM public.assert_interaction_access(p_interaction_id);
-  UPDATE interactions SET followup_concluido = true, updated_at = now()
+  UPDATE interactions SET followup_concluido = true, follow_up_required = false, updated_at = now()
   WHERE id = p_interaction_id
-    AND requer_followup = true
+    AND (requer_followup = true OR follow_up_required = true)
     AND COALESCE(followup_concluido, false) = false;
   GET DIAGNOSTICS affected = ROW_COUNT;
 
@@ -952,13 +981,14 @@ BEGIN
     i.id as task_id,
     i.company_id,
     COALESCE(c.nome_fantasia, c.nome_crm, c.razao_social)::text as company_name,
-    i.follow_up_date as due_date,
-    (CURRENT_DATE - i.follow_up_date)::int as days_overdue,
-    CASE WHEN CURRENT_DATE - i.follow_up_date > 7 THEN 'critical' ELSE 'high' END::text as priority
+    COALESCE(i.follow_up_date::date, i.data_followup::date) as due_date,
+    (CURRENT_DATE - COALESCE(i.follow_up_date::date, i.data_followup::date))::int as days_overdue,
+    CASE WHEN CURRENT_DATE - COALESCE(i.follow_up_date::date, i.data_followup::date) > 7 THEN 'critical' ELSE 'high' END::text as priority
   FROM interactions i
   JOIN companies c ON c.id = i.company_id
-  WHERE i.follow_up_date < CURRENT_DATE
+  WHERE COALESCE(i.follow_up_date::date, i.data_followup::date) < CURRENT_DATE
     AND COALESCE(i.followup_concluido, false) = false
+    AND (COALESCE(i.follow_up_required, false) OR COALESCE(i.requer_followup, false))
     AND (p_user_id IS NULL OR i.created_by = p_user_id)
 
   UNION ALL
@@ -1001,16 +1031,16 @@ BEGIN
           i.id as interaction_id,
           i.company_id,
           c.nome_crm,
-          i.data_followup,
+          COALESCE(i.data_followup, i.follow_up_date::timestamptz) as data_followup,
           i.type AS tipo_interacao,
-          EXTRACT(DAY FROM i.data_followup - now())::int as dias_restantes
+          EXTRACT(DAY FROM COALESCE(i.data_followup, i.follow_up_date::timestamptz) - now())::int as dias_restantes
         FROM interactions i
         JOIN companies c ON c.id = i.company_id
-        WHERE i.requer_followup = true
-        AND COALESCE(i.followup_concluido, false) = false
+        WHERE (COALESCE(i.requer_followup, false) AND NOT COALESCE(i.followup_concluido, false)
+               OR COALESCE(i.follow_up_required, false))
         AND (p_vendedor_id IS NULL OR i.usuario_responsavel_id = p_vendedor_id)
-        AND i.data_followup IS NOT NULL
-        ORDER BY i.data_followup ASC
+        AND COALESCE(i.data_followup, i.follow_up_date::timestamptz) IS NOT NULL
+        ORDER BY data_followup ASC
         LIMIT 20
       ) t
     ),
@@ -1135,6 +1165,14 @@ DECLARE
   v_updated INT := 0;
 BEGIN
   PERFORM public.assert_self_user_id(p_user_id);
+  -- Só gestor de território ativo que cubra as UFs pedidas pode assumir empresas
+  IF auth.uid() IS NOT NULL AND NOT EXISTS (
+    SELECT 1 FROM territories t
+    WHERE t.manager_id = p_user_id AND t.is_active AND p_ufs <@ t.states
+  ) THEN
+    RAISE EXCEPTION 'Unauthorized: user % does not manage a territory covering the requested UFs', p_user_id
+      USING ERRCODE = 'insufficient_privilege';
+  END IF;
   -- Atualiza empresas no território para o vendedor
   UPDATE companies
   SET user_id = p_user_id,
@@ -1203,6 +1241,13 @@ AS $function$
 DECLARE
   affected int;
 BEGIN
+  -- Somente o gestor do território (ou service_role, auth.uid() nulo) pode editá-lo
+  IF auth.uid() IS NOT NULL AND NOT EXISTS (
+    SELECT 1 FROM territories t WHERE t.id = p_territory_id AND t.manager_id = auth.uid()
+  ) THEN
+    RAISE EXCEPTION 'Unauthorized: territory % is not managed by the current user', p_territory_id
+      USING ERRCODE = 'insufficient_privilege';
+  END IF;
   UPDATE territories SET
     name        = COALESCE(p_name, name),
     description = COALESCE(p_description, description),

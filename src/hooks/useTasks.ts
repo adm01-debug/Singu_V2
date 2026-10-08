@@ -33,7 +33,7 @@ export function usePendingTasks() {
     enabled: !!user,
     queryFn: async () => {
       try {
-        const { data, error } = await callExternalRpc<Task[]>('get_pending_tasks', {});
+        const { data, error } = await callExternalRpc<Task[]>('get_pending_tasks', { p_user_id: user.id });
         if (error) {
           logger.warn('[Tasks] get_pending_tasks RPC failed, falling back to table query:', error);
           // Fallback: query tasks table directly
@@ -49,7 +49,10 @@ export function usePendingTasks() {
           if (result.error) throw result.error;
           return result.data || [];
         }
-        return (Array.isArray(data) ? data : []) as Task[];
+        return (Array.isArray(data) ? data : []).map((t) => ({
+          ...t,
+          id: (t.id ?? t.task_id) as string,
+        })) as Task[];
       } catch (e) {
         logger.warn('[Tasks] Fetch pending failed:', e);
         return [] as Task[];
@@ -71,7 +74,14 @@ export function useOverdueTasks() {
           logger.warn('[Tasks] get_overdue_tasks RPC failed:', error);
           return [] as Task[];
         }
-        return (Array.isArray(data) ? data : []) as Task[];
+        return (Array.isArray(data) ? data : []).map((t) => ({
+          ...t,
+          id: (t.id ?? t.task_id) as string,
+          title:
+            (t.title as string | undefined) ??
+            `${t.task_type === 'reminder' ? 'Lembrete' : 'Follow-up'}${t.company_name ? `: ${t.company_name}` : ''}`,
+          created_at: (t.created_at ?? t.due_date) as string,
+        })) as Task[];
       } catch (e) {
         logger.warn('[Tasks] Fetch overdue failed:', e);
         return [] as Task[];
