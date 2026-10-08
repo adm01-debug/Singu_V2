@@ -238,13 +238,13 @@ DECLARE
   q text; ok int := 0; bad int := 0;
   v_company uuid; v_contact uuid; v_inter uuid; v_task uuid; v_appr uuid; v_rem uuid;
 BEGIN
-  INSERT INTO public.companies (nome_crm, status) VALUES ('smoke-fixture', 'ativo') RETURNING id INTO v_company;
+  INSERT INTO public.companies (nome_crm, status, user_id) VALUES ('smoke-fixture', 'ativo', :'uid'::uuid) RETURNING id INTO v_company;
   SELECT public.create_contact(v_company, 'Smoke Fixture', NULL, NULL, 'CEO', NULL) IS NOT NULL INTO STRICT ok;
   SELECT id INTO v_contact FROM public.contacts WHERE full_name = 'Smoke Fixture' LIMIT 1;
   SELECT (public.create_quick_interaction(v_company, 'call', 'smoke', NULL, 3))->>'interaction_id'::uuid INTO v_inter;
   SELECT public.complete_followup(v_inter)->>'success' INTO STRICT q;
   SELECT public.create_reminder(NULL, 'smoke', now() + interval '1 day', v_company) INTO v_rem;
-  INSERT INTO public.tasks (title, user_id, contact_id) VALUES ('smoke', NULL, v_contact) RETURNING id INTO v_task;
+  INSERT INTO public.tasks (title, user_id, contact_id) VALUES ('smoke', :'uid'::uuid, v_contact) RETURNING id INTO v_task;
   PERFORM public.reopen_task(v_task);
   PERFORM public.complete_task(v_task);
   PERFORM public.complete_task(v_task, 'smoke note');
@@ -255,7 +255,7 @@ BEGIN
   PERFORM public.get_company_360_view(v_company);
   PERFORM public.get_interaction_history(v_company, NULL, 5);
   INSERT INTO public.follow_up_approvals (user_id, contact_id, channel, content, status)
-    VALUES (NULL, v_contact, 'whatsapp', 'smoke', 'pending') RETURNING id INTO v_appr;
+    VALUES (:'uid'::uuid, v_contact, 'whatsapp', 'smoke', 'pending') RETURNING id INTO v_appr;
   PERFORM public.approve_follow_up(v_appr);
   PERFORM public.reject_follow_up(v_appr);
   PERFORM public.create_company('smoke-co', '123', 'a@b.co', '1199', 'rua x', 'cidade', 'SP', '01000');
