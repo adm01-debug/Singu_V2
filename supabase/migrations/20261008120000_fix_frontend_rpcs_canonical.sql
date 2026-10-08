@@ -27,6 +27,26 @@
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA extensions;
 
+-- Enums de domínio existem no canônico mas podem faltar em schemas aplicados
+-- só por migrations (preview/CI): garantimos a existência antes das assinaturas.
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace
+                 WHERE n.nspname='public' AND t.typname='email_type') THEN
+    CREATE TYPE public.email_type AS ENUM
+      ('corporativo','pessoal','financeiro','nfe','marketing','comercial','compras');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace
+                 WHERE n.nspname='public' AND t.typname='phone_type') THEN
+    CREATE TYPE public.phone_type AS ENUM
+      ('celular_corporativo','fixo_comercial','celular_pessoal','invalido');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace
+                 WHERE n.nspname='public' AND t.typname='company_status') THEN
+    CREATE TYPE public.company_status AS ENUM ('ativo','inativo','suspenso');
+  END IF;
+END $$;
+
 -- ── Dashboard & KPIs ────────────────────────────────────────────────────────
 
 CREATE OR REPLACE FUNCTION public.get_daily_summary(p_vendedor_id integer DEFAULT NULL::integer)
