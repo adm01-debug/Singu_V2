@@ -1,6 +1,12 @@
 \set ON_ERROR_STOP 1
 BEGIN;
 SET LOCAL statement_timeout = '600s';
+-- simula JWT de usuário autenticado (auth.uid() lê request.jwt.claims)
+SELECT id::text AS uid FROM auth.users ORDER BY created_at LIMIT 1 \gset
+SELECT jsonb_build_object('sub', :'uid')::text AS jwtclaims \gset
+SET LOCAL "request.jwt.claims" = :'jwtclaims';
+SET LOCAL "request.jwt.claim.sub" = :'uid';
+\i supabase/migrations/20261008120000_fix_frontend_rpcs_canonical.sql
 CREATE EXTENSION IF NOT EXISTS plpgsql_check;
 CREATE TEMP TABLE wanted(name text PRIMARY KEY);
 INSERT INTO wanted(name) VALUES
@@ -181,10 +187,16 @@ INSERT INTO wanted(name) VALUES
   ('upsert_contact_phone'),
   ('upsert_contact_social_media'),
   ('validate_behavioral_consistency');
-\echo '=== erros por assinatura (sem fix) ==='
+\echo '=== missing ==='
 \pset format unaligned
+SELECT w.name AS missing FROM wanted w
+WHERE NOT EXISTS (
+  SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+  WHERE n.nspname='public' AND p.proname=w.name)
+ORDER BY 1;
+\echo '=== erros plpgsql_check pos-fix ==='
 \pset tuples_only on
-SELECT p.proname || '(' || pg_get_function_identity_arguments(p.oid) || ') | ' || e.lineno || ' | ' || e.sqlstate || ' | ' || e.message AS err
+SELECT p.proname || ' | ' || e.lineno || ' | ' || e.sqlstate || ' | ' || e.message AS err
 FROM pg_proc p
 JOIN pg_namespace n ON n.oid=p.pronamespace
 JOIN pg_language l ON l.oid=p.prolang AND l.lanname='plpgsql'
@@ -192,4 +204,66 @@ JOIN wanted w ON w.name=p.proname
 CROSS JOIN LATERAL plpgsql_check_function_tb(p.oid, fatal_errors => false, other_warnings => false, extra_warnings => false, performance_warnings => false) e
 WHERE n.nspname='public' AND e.level='error'
 ORDER BY p.proname, e.lineno;
+\echo '=== smoke ==='
+DO $do$
+DECLARE
+  calls text[] := ARRAY[
+    'SELECT public.get_daily_summary(CURRENT_DATE)',
+    'SELECT public.get_daily_summary(30)',
+    'SELECT public.get_conversion_funnel(30)',
+    'SELECT public.get_contacts_by_role()',
+    'SELECT public.get_channel_analysis(30)',
+    'SELECT public.get_seasonality_analysis(12)',
+    'SELECT * FROM public.get_seasonality_analysis()',
+    'SELECT * FROM public.get_all_tasks()',
+    'SELECT * FROM public.get_ai_recommendation_logs(5)',
+    'SELECT * FROM public.get_pending_tasks(NULL::integer)',
+    'SELECT * FROM public.get_overdue_tasks(NULL, 5)',
+    'SELECT * FROM public.get_pending_followups(NULL, 5)',
+    'SELECT * FROM public.get_incomplete_companies(5)',
+    'SELECT * FROM public.advanced_company_search(NULL,NULL,NULL,NULL,NULL,NULL,NULL,5)',
+    'SELECT * FROM public.autocomplete_companies(''a'', 5)',
+    'SELECT * FROM public.fuzzy_search_companies(''singu'', 5)',
+    'SELECT * FROM public.search_contacts_fuzzy(''joao'', 5)',
+    'SELECT * FROM public.find_contacts_by_role(''gerente'', 5)',
+    'SELECT * FROM public.export_contacts_csv(5)',
+    'SELECT * FROM public.export_contacts_csv(NULL)',
+    'SELECT * FROM public.export_companies_csv(5)',
+    'SELECT * FROM public.export_companies_csv(''{}''::jsonb)',
+    'SELECT * FROM public.get_best_contact_times()',
+    'SELECT public.get_best_contact_times(NULL)',
+    'SELECT public.update_territory(NULL)',
+    'SELECT public.assign_territory(NULL, ''{}''::text[])'
+  ];
+  q text; ok int := 0; bad int := 0;
+  v_company uuid; v_contact uuid; v_inter uuid; v_task uuid; v_appr uuid; v_rem uuid; v_user uuid;
+BEGIN
+  v_user := COALESCE(current_setting('request.jwt.claim.sub', true), current_setting('request.jwt.claims', true)::jsonb->>'sub')::uuid;
+  INSERT INTO public.companies (nome_crm, status, user_id) VALUES ('smoke-fixture', 'ativo', v_user) RETURNING id INTO v_company;
+  v_contact := (public.create_contact(v_company, 'Smoke Fixture', NULL, NULL, 'CEO', NULL))->>'contact_id'::text;
+  SELECT ((public.create_quick_interaction(v_company, 'call', 'smoke', NULL, 3))->>'interaction_id')::uuid INTO v_inter;
+  SELECT public.complete_followup(v_inter)->>'success' INTO STRICT q;
+  SELECT public.create_reminder(v_user, 'smoke', now() + interval '1 day', v_company) INTO v_rem;
+  INSERT INTO public.tasks (title, user_id, contact_id) VALUES ('smoke', v_user, v_contact) RETURNING id INTO v_task;
+  PERFORM public.reopen_task(v_task);
+  PERFORM public.complete_task(v_task, 'smoke note');
+  PERFORM public.get_tasks_by_contact(v_contact);
+  PERFORM public.check_relationship_consistency(v_contact);
+  PERFORM public.update_contact(v_contact, '{"cargo":"CTO"}'::jsonb);
+  PERFORM public.get_company_timeline(v_company, 5);
+  PERFORM public.get_company_360_view(v_company);
+  PERFORM public.get_interaction_history(v_company, NULL, 5);
+  INSERT INTO public.follow_up_approvals (user_id, contact_id, channel, content, status)
+    VALUES (v_user, v_contact, 'whatsapp', 'smoke', 'pending') RETURNING id INTO v_appr;
+  PERFORM public.approve_follow_up(v_appr);
+  PERFORM public.reject_follow_up(v_appr);
+  PERFORM public.create_company('smoke-co', '123', 'a@b.co', '1199', 'rua x', 'cidade', 'SP', '01000');
+  FOREACH q IN ARRAY calls LOOP
+    BEGIN EXECUTE q; ok := ok + 1;
+    EXCEPTION WHEN OTHERS THEN bad := bad + 1;
+      RAISE NOTICE 'SMOKE_FALHA | % | %', q, SQLERRM;
+    END;
+  END LOOP;
+  RAISE NOTICE 'SMOKE_RESUMO ok=% bad=%', ok, bad;
+END $do$;
 ROLLBACK;
