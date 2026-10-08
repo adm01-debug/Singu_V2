@@ -183,7 +183,7 @@ INSERT INTO wanted(name) VALUES
   ('validate_behavioral_consistency');
 \echo '=== erros estaticos plpgsql_check nas RPCs do frontend ==='
 \pset format unaligned
-SELECT p.proname || ' | ' || e.lineno || ' | ' || e.state || ' | ' || e.message AS err
+SELECT p.proname || ' | ' || e.lineno || ' | ' || e.sqlstate || ' | ' || e.message AS err
 FROM pg_proc p
 JOIN pg_namespace n ON n.oid=p.pronamespace
 JOIN wanted w ON w.name=p.proname
