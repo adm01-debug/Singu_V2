@@ -363,7 +363,7 @@ BEGIN
 END;
 $function$;
 
-CREATE OR REPLACE FUNCTION public.export_contacts_csv(p_limit integer)
+CREATE OR REPLACE FUNCTION public.export_contacts_csv(p_limit integer DEFAULT 1000)
  RETURNS TABLE(id text, full_name text, email text, telefone text, cargo text, company_name text, created_at text)
  LANGUAGE plpgsql
  STABLE
@@ -606,7 +606,7 @@ BEGIN
 END;
 $function$;
 
-CREATE OR REPLACE FUNCTION public.export_companies_csv(p_limit integer)
+CREATE OR REPLACE FUNCTION public.export_companies_csv(p_limit integer DEFAULT 1000)
  RETURNS TABLE(id text, nome_crm text, razao_social text, cnpj text, email text, telefone text, status text, created_at text)
  LANGUAGE plpgsql
  STABLE
