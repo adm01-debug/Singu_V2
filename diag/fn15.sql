@@ -2,8 +2,10 @@
 BEGIN;
 SET LOCAL statement_timeout = '600s';
 -- simula JWT de usuário autenticado (auth.uid() lê request.jwt.claims)
-SET LOCAL "request.jwt.claims" = jsonb_build_object('sub', (SELECT id::text FROM auth.users ORDER BY created_at LIMIT 1))::text;
-SET LOCAL "request.jwt.claim.sub" = (SELECT id::text FROM auth.users ORDER BY created_at LIMIT 1);
+SELECT id::text AS uid FROM auth.users ORDER BY created_at LIMIT 1 \gset
+SELECT jsonb_build_object('sub', :'uid')::text AS jwtclaims \gset
+SET LOCAL "request.jwt.claims" = :'jwtclaims';
+SET LOCAL "request.jwt.claim.sub" = :'uid';
 \i supabase/migrations/20261008120000_fix_frontend_rpcs_canonical.sql
 CREATE EXTENSION IF NOT EXISTS plpgsql_check;
 CREATE TEMP TABLE wanted(name text PRIMARY KEY);
