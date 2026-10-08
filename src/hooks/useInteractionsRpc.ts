@@ -53,7 +53,15 @@ export function useInteractionHistory(companyId?: string, tipo?: string, limit =
         params
       );
       if (error) throw error;
-      return data || [];
+      return (data || []).map((it) => {
+        const raw = it as Record<string, unknown>;
+        return {
+          ...it,
+          type: (raw.type ?? raw.tipo_interacao) as string,
+          channel: (raw.channel ?? raw.canal) as string,
+          data_interacao: (raw.data_interacao ?? raw.created_at) as string,
+        };
+      });
     },
     enabled: !!companyId,
     staleTime: 3 * 60 * 1000,
