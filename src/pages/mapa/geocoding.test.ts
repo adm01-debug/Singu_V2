@@ -32,6 +32,16 @@ describe('geocode', () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
+  it('a nova tentativa consulta um resultado ausente e mantém coordenadas já encontradas', async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce(jsonResponse([]))
+      .mockResolvedValueOnce(jsonResponse([{ lat: '0', lon: '-51' }]));
+    vi.stubGlobal('fetch', fetchMock);
+    expect(await geocode('Local recuperado')).toBeNull();
+    expect(await geocode('Local recuperado', undefined, true)).toEqual({ lat: 0, lng: -51 });
+    expect(await geocode('Local recuperado', undefined, true)).toEqual({ lat: 0, lng: -51 });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
   it.each([
     null, {}, [{ lat: 'NaN', lon: '10' }], [{ lat: '91', lon: '10' }],
     [{ lat: '10', lon: '-181' }], [{ lat: '', lon: '10' }],

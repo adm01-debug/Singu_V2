@@ -351,7 +351,7 @@ async function handleRequest(req: Request) {
 
   await persistLeadScores(supabase, {
     _user_id: userId, _scores: upsertRows, _history: historyRows,
-    _queue_ids: queueItems.filter(q => results.some(result => result.contact_id === q.contact_id)).map(q => q.id as string),
+    _queue_ids: queueItems.map(q => q.id as string),
   });
 
   // Fire threshold-runner invocations in parallel (after DB writes)

@@ -2,7 +2,7 @@
 CREATE OR REPLACE FUNCTION public.persist_lead_score_results(
   _user_id uuid, _scores jsonb, _history jsonb DEFAULT '[]', _queue_ids uuid[] DEFAULT '{}'
 ) RETURNS void
-LANGUAGE plpgsql SECURITY DEFINER
+LANGUAGE plpgsql SECURITY INVOKER
 SET search_path = pg_catalog, public
 AS $function$
 BEGIN
@@ -40,7 +40,8 @@ BEGIN
 
   UPDATE public.lead_score_recompute_queue q SET processed_at = now()
   WHERE q.user_id = _user_id AND q.id = ANY(_queue_ids)
-    AND EXISTS (SELECT 1 FROM jsonb_array_elements(_scores) r WHERE (r->>'contact_id')::uuid = q.contact_id);
+    AND (EXISTS (SELECT 1 FROM jsonb_array_elements(_scores) r WHERE (r->>'contact_id')::uuid = q.contact_id)
+      OR NOT EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = q.contact_id AND c.user_id = _user_id));
 END;
 $function$;
 REVOKE ALL ON FUNCTION public.persist_lead_score_results(uuid, jsonb, jsonb, uuid[]) FROM PUBLIC, anon, authenticated;

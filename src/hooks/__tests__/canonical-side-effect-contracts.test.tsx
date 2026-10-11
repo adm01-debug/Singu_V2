@@ -8,10 +8,11 @@ import { useSequences } from '../useSequences';
 import { useUnifiedHistory } from '../useUnifiedHistory';
 import { normalizeDashboardLifeEvents } from '../useDashboardMappedData';
 
-const mocks = vi.hoisted(() => ({ from: vi.fn(), success: vi.fn(), error: vi.fn() }));
+const mocks = vi.hoisted(() => ({ from: vi.fn(), rpc: vi.fn(), success: vi.fn(), error: vi.fn(), warning: vi.fn() }));
 vi.mock('@/hooks/useAuth', () => ({ useAuth: () => ({ user: { id: 'usuario-1' } }) }));
 vi.mock('@/integrations/supabase/client', () => ({ supabase: { from: mocks.from } }));
-vi.mock('sonner', () => ({ toast: { success: mocks.success, error: mocks.error } }));
+vi.mock('sonner', () => ({ toast: { success: mocks.success, error: mocks.error, warning: mocks.warning } }));
+vi.mock('@/lib/externalData', () => ({ callExternalRpc: mocks.rpc }));
 
 function queryResult(data: unknown, error: Error | null = null) {
   const response = Promise.resolve({ data, error });
@@ -69,8 +70,10 @@ describe('Operações secundárias não geram sucesso quando falham', () => {
     const failure = new Error('Falha na contagem de inscrições');
     mocks.from.mockImplementationOnce(() => queryResult([]))
       .mockImplementation(table => queryResult([], table === 'sequences' ? failure : null));
+    mocks.rpc.mockResolvedValue({ data: null, error: failure });
     const { result } = renderHook(() => useSequences(), { wrapper });
     await expect(result.current.enrollContact({ sequenceId: 'sequencia-1', contactId: 'contato-1' })).rejects.toBe(failure);
+    expect(mocks.rpc).toHaveBeenCalledWith('enroll_sequence_contact', { _sequence_id: 'sequencia-1', _contact_id: 'contato-1' });
     expect(mocks.success).not.toHaveBeenCalled();
   });
 
@@ -83,12 +86,14 @@ describe('Operações secundárias não geram sucesso quando falham', () => {
     await waitFor(() => expect(result.current.configs).toHaveLength(1));
     await expect(result.current.testWebhook.mutateAsync('contact')).rejects.toBe(failure);
     expect(mocks.success).not.toHaveBeenCalled();
+    expect(mocks.warning).toHaveBeenCalledWith(expect.stringContaining('Webhook respondeu com sucesso'));
+    expect(mocks.error).not.toHaveBeenCalled();
   });
 
   it('preserva falhas do webhook e do registro em um AggregateError', async () => {
     const failure = new Error('Falha ao registrar erro');
     mocks.from.mockReturnValueOnce(queryResult([configuration]))
-      .mockReturnValueOnce(queryResult(null)).mockReturnValue(queryResult(null, failure));
+      .mockReturnValueOnce(queryResult(null, failure)).mockReturnValue(queryResult([configuration]));
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 503 }));
     const { result } = renderHook(() => useLuxWebhookConfig(), { wrapper });
     await waitFor(() => expect(result.current.configs).toHaveLength(1));

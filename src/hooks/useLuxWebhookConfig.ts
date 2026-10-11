@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { parseApiError } from '@/lib/errorMessages';
 import { z } from 'zod';
+import { useRef } from 'react';
 
 export interface LuxWebhookConfig {
   id: string;
@@ -22,6 +23,7 @@ export interface LuxWebhookConfig {
 export function useLuxWebhookConfig() {
   const { user } = useAuth();
   const qc = useQueryClient();
+  const recordingFailures = useRef(new WeakSet<object>());
 
   const { data: configs = [], isLoading, error } = useQuery({
     queryKey: ['lux-webhook-config', user?.id],
@@ -116,6 +118,8 @@ export function useLuxWebhookConfig() {
       if (!config) throw new Error('Configuração não encontrada');
       if (!config.webhook_url.startsWith('https://')) throw new Error('URL do webhook deve usar HTTPS');
 
+      let failure: Error | null = null;
+      let status: string;
       try {
         const res = await fetch(config.webhook_url, {
           method: 'POST',
@@ -131,29 +135,31 @@ export function useLuxWebhookConfig() {
           signal: AbortSignal.timeout(config.timeout_ms),
         });
 
-        const status = res.ok ? 'success' : `error:${res.status}`;
-        const { error: statusError } = await supabase
-          .from('lux_webhook_config')
-          .update({ last_test_at: new Date().toISOString(), last_test_status: status })
-          .eq('id', config.id);
-        if (statusError) throw statusError;
-        qc.invalidateQueries({ queryKey: ['lux-webhook-config'] });
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return status;
+        status = res.ok ? 'success' : `error:${res.status}`;
+        if (!res.ok) failure = new Error(`HTTP ${res.status}`);
       } catch (err) {
-        const msg = err instanceof Error ? err.message : 'Erro';
-        const { error: statusError } = await supabase
-          .from('lux_webhook_config')
-          .update({ last_test_at: new Date().toISOString(), last_test_status: `error:${msg}` })
-          .eq('id', config.id);
-        if (statusError) throw new AggregateError([err, statusError], 'Falha no teste do webhook e no registro do resultado');
-        qc.invalidateQueries({ queryKey: ['lux-webhook-config'] });
-        throw err;
+        failure = err instanceof Error ? err : new Error('Erro ao chamar o webhook');
+        status = `error:${failure.message}`;
       }
+      const { error: statusError } = await supabase
+        .from('lux_webhook_config')
+        .update({ last_test_at: new Date().toISOString(), last_test_status: status })
+        .eq('id', config.id);
+      qc.invalidateQueries({ queryKey: ['lux-webhook-config'] });
+      if (failure) {
+        if (statusError) throw new AggregateError([failure, statusError], 'Falha no teste do webhook e no registro do resultado');
+        throw failure;
+      }
+      if (statusError) {
+        recordingFailures.current.add(statusError);
+        throw statusError;
+      }
+      return status;
     },
-    onSuccess: () => toast.success('✅ Webhook respondeu com sucesso'),
-    onError: (e) => toast.error(`❌ Falha no teste: ${parseApiError(e)}`),
+    onSuccess: () => toast.success('Webhook respondeu com sucesso'),
+    onError: (e) => recordingFailures.current.has(e)
+      ? toast.warning(`Webhook respondeu com sucesso, mas o resultado não foi registrado: ${parseApiError(e)}`)
+      : toast.error(`Falha no teste: ${parseApiError(e)}`),
   });
 
   const getConfigForEntity = (entityType: string) => configs.find(c => c.entity_type === entityType && c.is_active);

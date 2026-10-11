@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -73,25 +74,20 @@ async function executeFilters(
   filters: ConvFilters,
 ): Promise<ConvResultItem[]> {
   const limit = 25;
-  let matchingCompanyIds: string[] | undefined;
-  if ((entity === 'contacts' || entity === 'companies') && (filters.cidade || filters.estado)) {
-    let addressQuery = supabase.from('company_addresses').select('company_id');
-    if (filters.cidade) addressQuery = addressQuery.ilike('cidade', `%${filters.cidade}%`);
-    if (filters.estado) addressQuery = addressQuery.ilike('estado', filters.estado);
-    const { data, error } = await addressQuery;
-    if (error) throw error;
-    matchingCompanyIds = [...new Set((data ?? []).map(address => address.company_id))];
-    if (matchingCompanyIds.length === 0) return [];
-  }
+  const byLocation = !!(filters.cidade || filters.estado);
 
   if (entity === 'contacts') {
+    const projection: string = 'id, first_name, last_name, email, role_title, relationship_score'
+      + (byLocation ? ', companies!inner(company_addresses!inner(id))' : '');
     let q = supabase
       .from('contacts')
-      .select('id, first_name, last_name, email, phone, role_title, relationship_score, relationship_stage, tags, updated_at, company_id')
+      .select(projection)
       .eq('user_id', userId)
       .order('relationship_score', { ascending: false, nullsFirst: false })
       .limit(limit);
-    if (matchingCompanyIds) q = q.in('company_id', matchingCompanyIds);
+    if (byLocation) q = q.eq('companies.user_id', userId);
+    if (filters.cidade) q = q.ilike('companies.company_addresses.cidade', `%${filters.cidade}%`);
+    if (filters.estado) q = q.ilike('companies.company_addresses.estado', filters.estado);
     if (filters.tag) q = q.contains('tags', [filters.tag]);
     if (filters.relationship_stage) q = q.eq('relationship_stage', filters.relationship_stage);
     if (typeof filters.min_score === 'number') q = q.gte('relationship_score', filters.min_score);
@@ -101,7 +97,9 @@ async function executeFilters(
     }
     const { data, error } = await q;
     if (error) throw error;
-    return (data ?? []).map(r => ({
+    return z.array(z.object({ id: z.string(), first_name: z.string(), last_name: z.string(),
+      email: z.string().nullable(), role_title: z.string().nullable(), relationship_score: z.number().nullable(),
+    })).parse(data ?? []).map(r => ({
       id: r.id,
       entity: 'contacts',
       title: `${r.first_name} ${r.last_name}`.trim() || 'Contato',
@@ -111,23 +109,27 @@ async function executeFilters(
   }
 
   if (entity === 'companies') {
+    const projection: string = 'id, nome_crm, industry, is_customer, tags'
+      + (byLocation ? ', company_addresses!inner(id)' : '');
     let q = supabase
       .from('companies')
-      .select('id, nome_crm, industry, is_customer, tags')
+      .select(projection)
       .eq('user_id', userId)
       .limit(limit);
-    if (matchingCompanyIds) q = q.in('id', matchingCompanyIds);
+    if (filters.cidade) q = q.ilike('company_addresses.cidade', `%${filters.cidade}%`);
+    if (filters.estado) q = q.ilike('company_addresses.estado', filters.estado);
     if (filters.industry) q = q.ilike('industry', `%${filters.industry}%`);
     if (typeof filters.is_customer === 'boolean') q = q.eq('is_customer', filters.is_customer);
     if (filters.tag) q = q.contains('tags', [filters.tag]);
     const { data, error } = await q;
     if (error) throw error;
-    if (!data?.length) return [];
+    const rows = z.array(z.object({ id: z.string(), nome_crm: z.string(), industry: z.string().nullable() })).parse(data ?? []);
+    if (!rows.length) return [];
     const { data: addresses, error: addressError } = await supabase.from('company_addresses')
-      .select('company_id, cidade, estado, is_primary').in('company_id', data.map(r => r.id))
+      .select('company_id, cidade, estado, is_primary').in('company_id', rows.map(r => r.id))
       .order('is_primary', { ascending: false, nullsFirst: false });
     if (addressError) throw addressError;
-    return data.map(r => {
+    return rows.map(r => {
       const address = addresses?.find(a => a.company_id === r.id);
       return {
         id: r.id,

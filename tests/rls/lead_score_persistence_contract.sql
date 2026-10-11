@@ -8,6 +8,9 @@ RETURNING set_config('rls.lead_contact', id::text, true);
 INSERT INTO public.lead_score_recompute_queue(user_id, contact_id)
 VALUES (current_setting('rls.lead_owner')::uuid, current_setting('rls.lead_contact')::uuid)
 RETURNING set_config('rls.lead_queue', id::text, true);
+INSERT INTO public.lead_score_recompute_queue(user_id, contact_id)
+VALUES (current_setting('rls.lead_owner')::uuid, gen_random_uuid())
+RETURNING set_config('rls.lead_orphan_queue', id::text, true);
 SET LOCAL ROLE service_role;
 DO $test$
 DECLARE
@@ -65,6 +68,13 @@ BEGIN
   EXCEPTION WHEN insufficient_privilege THEN failed := true;
   END;
   IF NOT failed THEN RAISE EXCEPTION 'Outro tenant alterou a pontuação'; END IF;
+  UPDATE public.lead_score_recompute_queue SET processed_at = NULL WHERE id = qid;
+  PERFORM public.persist_lead_score_results(uid, '[]', '[]', ARRAY[qid, current_setting('rls.lead_orphan_queue')::uuid]);
+  IF NOT EXISTS (SELECT 1 FROM public.lead_score_recompute_queue
+      WHERE id = current_setting('rls.lead_orphan_queue')::uuid AND processed_at IS NOT NULL)
+    OR EXISTS (SELECT 1 FROM public.lead_score_recompute_queue WHERE id = qid AND processed_at IS NOT NULL) THEN
+    RAISE EXCEPTION 'Descarte de contato excluído concluiu também uma pontuação não gravada';
+  END IF;
 END;
 $test$;
 RESET ROLE;

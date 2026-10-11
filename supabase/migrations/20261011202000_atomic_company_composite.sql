@@ -5,7 +5,7 @@ CREATE OR REPLACE FUNCTION public.persist_company_composite(
   _id uuid, _record jsonb, _create boolean, _version integer DEFAULT NULL,
   _phones jsonb DEFAULT '[]', _emails jsonb DEFAULT '[]', _addresses jsonb DEFAULT '[]'
 ) RETURNS jsonb
-LANGUAGE plpgsql SECURITY DEFINER
+LANGUAGE plpgsql SECURITY INVOKER
 SET search_path = pg_catalog, public
 AS $function$
 DECLARE
@@ -22,6 +22,7 @@ DECLARE
   affected integer;
   result jsonb;
   creation_recovered boolean := false;
+  conflict_constraint text;
 BEGIN
   IF actor IS NULL OR _id IS NULL OR _create IS NULL THEN
     RAISE EXCEPTION 'Autenticação e identificação obrigatórias' USING ERRCODE = '42501';
@@ -69,9 +70,17 @@ BEGIN
       IF NULLIF(btrim(_record->>'nome_crm'), '') IS NULL THEN
         RAISE EXCEPTION 'Nome da empresa obrigatório' USING ERRCODE = '22023';
       END IF;
-      EXECUTE format('INSERT INTO public.companies (id, user_id, %s)
-        SELECT $2, $3, %s FROM (SELECT jsonb_populate_record(NULL::public.companies, $1) AS rec) q', cols, vals)
-      USING _record, _id, actor;
+      BEGIN
+        EXECUTE format('INSERT INTO public.companies (id, user_id, %s)
+          SELECT $2, $3, %s FROM (SELECT jsonb_populate_record(NULL::public.companies, $1) AS rec) q', cols, vals)
+        USING _record, _id, actor;
+      EXCEPTION WHEN unique_violation THEN
+        GET STACKED DIAGNOSTICS conflict_constraint = CONSTRAINT_NAME;
+        IF conflict_constraint = 'companies_pkey' THEN
+          RAISE EXCEPTION 'Empresa indisponível' USING ERRCODE = '42501';
+        END IF;
+        RAISE;
+      END;
     ELSE
       EXECUTE format('UPDATE public.companies SET updated_at = now()%s
         FROM (SELECT jsonb_populate_record(NULL::public.companies, $1) AS rec) q

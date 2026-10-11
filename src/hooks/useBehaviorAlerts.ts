@@ -104,11 +104,13 @@ export function useBehaviorAlerts() {
 
       if (error) throw error;
       const contactIds = [...new Set((existingAlerts ?? []).flatMap(alert => alert.contact_id ? [alert.contact_id] : []))];
-      const { data: contacts, error: contactsError } = contactIds.length > 0
-        ? await supabase.from('contacts').select('id, first_name, last_name').in('id', contactIds).eq('user_id', user!.id)
-        : { data: [], error: null };
-      if (contactsError) throw contactsError;
-      const contactsById = new Map((contacts ?? []).map(contact => [contact.id, contact]));
+      const contactsById = new Map<string, { first_name: string; last_name: string }>();
+      for (let offset = 0; offset < contactIds.length; offset += 100) {
+        const { data: contacts, error: contactsError } = await supabase.from('contacts')
+          .select('id, first_name, last_name').in('id', contactIds.slice(offset, offset + 100)).eq('user_id', user!.id);
+        if (contactsError) throw contactsError;
+        for (const contact of contacts ?? []) contactsById.set(contact.id, contact);
+      }
 
       return (existingAlerts || []).map((alert): BehaviorAlert => {
         const contact = alert.contact_id ? contactsById.get(alert.contact_id) : undefined;

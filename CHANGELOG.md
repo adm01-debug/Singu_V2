@@ -8,6 +8,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- Inscrições em sequências salvam o contato e o contador na mesma transação e reconhecem tentativas repetidas; o banco exige que contato e sequência pertençam ao usuário. A busca conversacional filtra cidade/UF nas relações, e os alertas consultam contatos em lotes para evitar URLs excessivas. O mapa permite repetir geolocalizações não concluídas; o teste de webhook separa falhas HTTP de falhas de registro.
+- A fila de pontuação conclui entradas de contatos excluídos para não bloquear os próximos recálculos.
 - Pontuação de leads usa as categorias e colunas do banco canônico, preserva A/B/C/D na interface e nas automações, e grava pontuação, histórico por contato e conclusão da fila em uma transação com erros propagados.
 - Criação e edição de empresas salvam campos, telefones, emails e endereços em uma transação, preservam a versão e reutilizam a identificação após perda de resposta. Relações de empresas ficam restritas ao dono ou administrador.
 - Mesclagens concluídas deixam de aparecer como falhas após erro na auditoria adicional; os dados são atualizados e o usuário recebe um aviso da falha de auditoria.

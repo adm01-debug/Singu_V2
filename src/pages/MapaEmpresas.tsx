@@ -54,6 +54,7 @@ export default function MapaEmpresas() {
   const [isGeocoding, setIsGeocoding] = useState(false);
   const [geocodingProgress, setGeocodingProgress] = useState(0);
   const [geocodingTotal, setGeocodingTotal] = useState(0);
+  const [geocodingFailed, setGeocodingFailed] = useState(0);
   const queryClient = useQueryClient();
   const processedRef = useRef<CompanyWithScore[] | null>(null);
 
@@ -67,12 +68,12 @@ export default function MapaEmpresas() {
     refetchOnWindowFocus: false,
   });
 
-  const processAndGeocode = useCallback(async () => {
+  const processAndGeocode = useCallback(async (retryMissing = false) => {
     if (!user || !rawCompanies || isGeocoding) return;
     const alreadyMapped: MappableCompany[] = [];
     const needsGeocoding: typeof rawCompanies = [];
     for (const c of rawCompanies) {
-      if (c.lat != null && c.lng != null && Number.isFinite(c.lat) && Number.isFinite(c.lng) && c.lat !== 0) {
+      if (c.lat != null && c.lng != null && Number.isFinite(c.lat) && Number.isFinite(c.lng)) {
         alreadyMapped.push(toMappable(c, c.lat, c.lng));
       } else {
         const loc = buildLocationString({ city: c.city, state: c.state, address: c.address, extra_data_rf: c.extra_data_rf });
@@ -81,14 +82,15 @@ export default function MapaEmpresas() {
     }
     setMappedCompanies(alreadyMapped);
     if (needsGeocoding.length === 0) return;
-    setIsGeocoding(true); setGeocodingTotal(needsGeocoding.length); setGeocodingProgress(0);
+    setIsGeocoding(true); setGeocodingTotal(needsGeocoding.length); setGeocodingProgress(0); setGeocodingFailed(0);
     const newResults: MappableCompany[] = [...alreadyMapped];
     let geocoded = 0;
+    let failed = 0;
     for (const c of needsGeocoding) {
       const loc = buildLocationString({ city: c.city, state: c.state, address: c.address, extra_data_rf: c.extra_data_rf });
       if (!loc) continue;
       try {
-        const coords = await geocode(loc);
+        const coords = await geocode(loc, undefined, retryMissing);
         if (coords) {
           const primaryAddress = [...c.company_addresses].sort((a, b) =>
             Number(b.is_primary === true) - Number(a.is_primary === true) || a.id.localeCompare(b.id))[0];
@@ -98,15 +100,18 @@ export default function MapaEmpresas() {
           if (geoError) throw geoError;
           newResults.push(toMappable(c, coords.lat, coords.lng));
           geocoded++;
+        } else {
+          failed++;
         }
       } catch (error) {
+        failed++;
         logger.error('Erro ao geolocalizar empresa:', error);
         toast.error(`Não foi possível geolocalizar ${c.name}.`);
       }
       setGeocodingProgress(prev => prev + 1);
       await new Promise(r => setTimeout(r, 1100));
     }
-    setMappedCompanies(newResults); setIsGeocoding(false);
+    setMappedCompanies(newResults); setGeocodingFailed(failed); setIsGeocoding(false);
     if (geocoded > 0) { toast.success(`${geocoded} empresas geolocalizadas com sucesso`); queryClient.invalidateQueries({ queryKey: ["companies-map-data"] }); }
   }, [user, rawCompanies, isGeocoding, queryClient]);
 
@@ -133,6 +138,7 @@ export default function MapaEmpresas() {
             <div><p className="text-sm font-medium text-foreground">{filtered.length} empresas no mapa{hasActiveFilters && " (filtrado)"}</p><p className="text-xs text-muted-foreground">{rawCompanies?.length ?? 0} carregadas · {mappedCompanies.length} geolocalizadas</p></div>
           </div>
           <div className="flex gap-2 items-center">
+            {geocodingFailed > 0 && <Button variant="outline" size="sm" disabled={isGeocoding} onClick={() => processAndGeocode(true)}>Tentar geolocalização novamente ({geocodingFailed})</Button>}
             {isGeocoding && <div className="flex items-center gap-1.5 text-xs text-primary"><Loader2 className="h-3.5 w-3.5 animate-spin" />Geolocalizando... {geocodingProgress}/{geocodingTotal}</div>}
             <Button variant={showFilters ? "default" : "outline"} size="sm" className="gap-1.5 text-xs" onClick={() => setShowFilters(!showFilters)}><Filter className="h-3.5 w-3.5" />Filtros{hasActiveFilters && <Badge variant="secondary" className="ml-1 h-4 w-4 p-0 flex items-center justify-center text-[9px]">!</Badge>}</Button>
             {hasActiveFilters && <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-muted-foreground" onClick={clearFilters}><X className="h-3.5 w-3.5" /> Limpar</Button>}
