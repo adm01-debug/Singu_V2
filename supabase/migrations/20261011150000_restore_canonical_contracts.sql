@@ -1,4 +1,16 @@
 -- Pesquisas sem resposta não possuem nota; análises RFM podem ser de contatos.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conrelid = 'public.csat_surveys'::regclass
+      AND conname = 'csat_surveys_answered_score_check'
+  ) AND EXISTS (SELECT 1 FROM public.csat_surveys)
+    AND current_setting('singu.legacy_survey_types_confirmed', true) IS DISTINCT FROM 'true' THEN
+    RAISE EXCEPTION 'Confirme a modalidade das pesquisas históricas e reconcilie nps_score antes de aplicar esta migration (docs/qa/survey-contract-migration.md)';
+  END IF;
+END;
+$$;
 ALTER TABLE public.csat_surveys ALTER COLUMN score DROP NOT NULL;
 ALTER TABLE public.csat_surveys ALTER COLUMN sent_at DROP NOT NULL;
 ALTER TABLE public.csat_surveys ALTER COLUMN sent_at DROP DEFAULT;
@@ -7,6 +19,7 @@ ALTER TABLE public.csat_surveys
     CHECK (survey_type IN ('csat', 'nps', 'ces', 'custom')),
   ADD COLUMN IF NOT EXISTS nps_score integer CHECK (nps_score BETWEEN 0 AND 10),
   ADD COLUMN IF NOT EXISTS ces_score integer CHECK (ces_score BETWEEN 1 AND 7);
+ALTER TABLE public.csat_surveys ALTER COLUMN survey_type SET NOT NULL;
 DO $$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.csat_surveys'::regclass AND conname='csat_surveys_answered_score_check') THEN
@@ -205,6 +218,7 @@ GRANT SELECT, INSERT ON TABLE public.rfm_history TO authenticated;
 -- no canônico já existiam. Registrar o ACL original antes de aplicar a reversão.
 -- DROP POLICY IF EXISTS csat_surveys_owner ON public.csat_surveys;
 -- ALTER TABLE public.csat_surveys DROP CONSTRAINT IF EXISTS csat_surveys_answered_score_check;
+-- ALTER TABLE public.csat_surveys ALTER COLUMN survey_type DROP NOT NULL;
 -- ALTER TABLE public.csat_surveys ALTER COLUMN score SET NOT NULL;
 -- ALTER TABLE public.csat_surveys ALTER COLUMN sent_at SET DEFAULT now();
 -- ALTER TABLE public.csat_surveys ALTER COLUMN sent_at SET NOT NULL;
