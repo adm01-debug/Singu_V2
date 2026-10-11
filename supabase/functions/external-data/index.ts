@@ -178,7 +178,7 @@ function getExternalClient() {
   });
 }
 
-// RPCs de usuário rodam com o JWT dele: auth.uid() e RLS valem dentro das funções
+// Leituras e RPCs de usuário respeitam auth.uid() e RLS, inclusive nos relacionamentos.
 function getUserScopedClient(authHeader: string) {
   const url = Deno.env.get('EXTERNAL_SUPABASE_URL');
   const ownUrl = Deno.env.get('SUPABASE_URL');
@@ -512,11 +512,17 @@ Deno.serve(async (req) => {
       const rangeConfig = range && typeof range === 'object'
         ? range as { from: number; to: number }
         : undefined;
+      const readClient = isSvc || GLOBAL_READ_ONLY_TABLES.has(table)
+        ? client
+        : getUserScopedClient(req.headers.get('Authorization') ?? '');
+      if (!readClient) {
+        return jsonError('User-scoped database unavailable', 503, req);
+      }
 
       const result = await withRetry(async () => {
         const countMode = countMethod === null ? undefined : countMethod === 'planned' ? 'planned' : 'exact';
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TS2589 deep type instantiation with dynamic Supabase queries
-        let query: any = client.from(table).select(selectedColumns, { count: countMode });
+        let query: any = readClient.from(table).select(selectedColumns, { count: countMode });
         if (!isSvc && !GLOBAL_READ_ONLY_TABLES.has(table) && !relationScope) {
           query = query.eq('user_id', userId);
         }

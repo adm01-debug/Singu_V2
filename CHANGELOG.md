@@ -24,6 +24,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - O helper de formatação `to_title_case_pt(text)` publicado no canônico deixa de ter execução anônima fora da lista de endpoints públicos; chamadas autenticadas e de serviço são preservadas.
 
 ### Security
+- Leituras de dados pessoais pelo proxy respeitam o JWT e o RLS do usuário também nos relacionamentos; negócios próprios não expõem nomes de empresas ou contatos de outros usuários.
 - `supabase/functions/external-data/index.ts` + `supabase/migrations/20261007100000_external_rpc_user_scope.sql` — RPCs chamadas por usuários via `external-data` passam a rodar com o JWT do próprio usuário em vez da service role: os guards `assert_*` e o RLS voltam a valer, e um usuário deixa de conseguir ler ou alterar dados de outro passando o ID de uma empresa, contato ou tarefa. `get_instant_kpis` passa a SECURITY INVOKER (contagens respeitam o RLS).
 - `vercel.json` — cabeçalhos de segurança passam a ser enviados pela Vercel (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` e CSP mínima `frame-ancestors 'none'; object-src 'none'; base-uri 'self'`), além de cache imutável para `/assets/*` e `no-cache` para `index.html`, service workers e manifest.
 
