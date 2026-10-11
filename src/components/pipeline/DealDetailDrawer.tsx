@@ -159,7 +159,8 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
     setIsSaving(true);
     try {
       const { error } = await updateExternalData('deals', deal.id, { 
-        status,
+        status: status === 'won' ? 'ganho' : 'perdido',
+        closed_at: new Date().toISOString(),
         pipeline_stage: status === 'won' ? 'fechamento' : deal.pipeline_stage,
         probabilidade: status === 'won' ? 100 : 0
       });

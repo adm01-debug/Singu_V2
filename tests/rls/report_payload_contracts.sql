@@ -16,13 +16,16 @@ INSERT INTO public.interactions (user_id, contact_id, company_id, channel, direc
 VALUES (current_setting('rls.report_owner')::uuid, current_setting('rls.report_contact')::uuid,
   current_setting('rls.report_company')::uuid, 'email', 'outbound', now(), 120, true, true, now())
 RETURNING set_config('rls.report_interaction', id::text, true);
-INSERT INTO public.deals (user_id, company_id, titulo, valor, status, closed_at)
+INSERT INTO public.deals (user_id, company_id, titulo, valor, status)
 VALUES (current_setting('rls.report_owner')::uuid, current_setting('rls.report_company')::uuid,
-  'report-payload fixture', 127, 'ganho', now());
+  'report-payload fixture', 127, 'aberto')
+RETURNING set_config('rls.report_deal', id::text, true);
 UPDATE public.contacts SET last_interaction_at = now() - interval '1 day'
 WHERE id = current_setting('rls.report_contact')::uuid;
 
 SET LOCAL ROLE authenticated;
+UPDATE public.deals SET status = 'ganho', closed_at = now(), probabilidade = 100, pipeline_stage = 'fechamento'
+WHERE id = current_setting('rls.report_deal')::uuid;
 DO $$
 DECLARE
   before jsonb := current_setting('rls.report_baseline')::jsonb;
@@ -32,7 +35,8 @@ DECLARE
   audit jsonb := public.check_relationship_consistency(current_setting('rls.report_contact')::uuid);
   log_count bigint;
 BEGIN
-  IF (daily->>'interactions_count')::bigint <> (before->>'interactions_count')::bigint + 1
+  IF (daily->>'interactions_count')::bigint <> (before->>'interactions_count')::bigint
+      + (SELECT count(*) FROM public.interactions WHERE company_id = current_setting('rls.report_company')::uuid)
     OR (daily->>'deals_created')::bigint <> (before->>'deals_created')::bigint + 1
     OR (daily->>'deals_won')::bigint <> (before->>'deals_won')::bigint + 1
     OR (daily->>'followups_completed')::bigint <> (before->>'followups_completed')::bigint + 1
