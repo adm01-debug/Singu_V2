@@ -183,6 +183,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION public.persist_rfm_analysis(jsonb, uuid) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.persist_rfm_analysis(jsonb, uuid) TO authenticated, service_role;
+GRANT SELECT, INSERT ON TABLE public.rfm_history TO authenticated;
 
 -- DOWN MIGRATION (Rollback)
 -- Fazer backup dos novos campos antes de removê-los. A reversão das duas
@@ -190,6 +191,9 @@ GRANT EXECUTE ON FUNCTION public.persist_rfm_analysis(jsonb, uuid) TO authentica
 -- não preencher respostas ou vínculos desconhecidos com valores artificiais.
 -- BEGIN;
 -- DROP FUNCTION IF EXISTS public.persist_rfm_analysis(jsonb, uuid);
+-- REVOKE SELECT, INSERT ON TABLE public.rfm_history FROM authenticated;
+-- Executar o REVOKE apenas se estes grants não existiam antes da migration;
+-- no canônico já existiam. Registrar o ACL original antes de aplicar a reversão.
 -- DROP POLICY IF EXISTS csat_surveys_owner ON public.csat_surveys;
 -- ALTER TABLE public.csat_surveys DROP CONSTRAINT IF EXISTS csat_surveys_answered_score_check;
 -- ALTER TABLE public.csat_surveys ALTER COLUMN score SET NOT NULL;
