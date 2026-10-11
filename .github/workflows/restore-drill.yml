@@ -57,7 +57,7 @@ jobs:
             -e POSTGRES_PASSWORD \
             -v "$GITHUB_WORKSPACE:/workspace" \
             supabase/postgres:17.6.1.171
-          trap 'docker rm -fv singu-drill >/dev/null 2>&1 || true; rm -f "$GITHUB_WORKSPACE/.drill/backup.dump" "$GITHUB_WORKSPACE/.drill/counts.tsv"' EXIT
+          trap 'docker rm -fv singu-drill >/dev/null 2>&1 || true; rm -f "$GITHUB_WORKSPACE/.drill/backup.dump" "$GITHUB_WORKSPACE/.drill/counts.tsv" "$GITHUB_WORKSPACE/.drill/supabase-ca.crt"' EXIT
           trap 'exit 130' INT TERM
 
           for attempt in {1..90}; do
@@ -69,7 +69,12 @@ jobs:
           docker exec singu-drill pg_isready -h localhost -U supabase_admin -d postgres
 
           mkdir -m 700 "$GITHUB_WORKSPACE/.drill"
-          export PROD_DB_URL="postgresql://${PGUSER}@${PGHOST}:${PGPORT:-5432}/${PGDATABASE}?sslmode=require"
+          curl --fail --silent --show-error --location \
+            https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt \
+            --output "$GITHUB_WORKSPACE/.drill/supabase-ca.crt"
+          export NODE_EXTRA_CA_CERTS="$GITHUB_WORKSPACE/.drill/supabase-ca.crt"
+          export PGSSLROOTCERT=/workspace/.drill/supabase-ca.crt
+          export PROD_DB_URL="postgresql://${PGUSER}@${PGHOST}:${PGPORT:-5432}/${PGDATABASE}?sslmode=verify-full"
           BACKUP_FILE="$GITHUB_WORKSPACE/.drill/backup.dump" \
             SOURCE_COUNTS_FILE="$GITHUB_WORKSPACE/.drill/counts.tsv" \
             node scripts/migration/dr/create-drill-backup.mjs
@@ -79,7 +84,7 @@ jobs:
             bash scripts/migration/dr/backup-encryption-check.sh
 
           export DRILL_DB_URL="postgresql://supabase_admin:${POSTGRES_PASSWORD}@localhost:5432/postgres"
-          docker exec --user "$(id -u):$(id -g)" -e PGPASSWORD -e PROD_DB_URL -e DRILL_DB_URL \
+          docker exec --user "$(id -u):$(id -g)" -e PGPASSWORD -e PROD_DB_URL -e DRILL_DB_URL -e PGSSLROOTCERT \
             -e BACKUP_FILE=/workspace/.drill/backup.dump \
             -e SOURCE_COUNTS_FILE=/workspace/.drill/counts.tsv \
             -w /workspace singu-drill \
@@ -89,7 +94,7 @@ jobs:
         if: always()
         run: |
           docker rm -fv singu-drill >/dev/null 2>&1 || true
-          rm -f "$GITHUB_WORKSPACE/.drill/backup.dump" "$GITHUB_WORKSPACE/.drill/counts.tsv" \
+          rm -f "$GITHUB_WORKSPACE/.drill/backup.dump" "$GITHUB_WORKSPACE/.drill/counts.tsv" "$GITHUB_WORKSPACE/.drill/supabase-ca.crt" \
             "$GITHUB_WORKSPACE"/scripts/migration/dr/out/.pg-restore-*
           if docker inspect singu-drill >/dev/null 2>&1; then
             echo '::error::A instância efêmera não foi removida'
