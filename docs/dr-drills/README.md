@@ -15,6 +15,8 @@ Cada execução: criar `docs/dr-drills/AAAA-Q{N}-{cenario}.md` com timeline, sin
 
 ## 🔁 Protocolo de Verificação de Backup (Mensal)
 
+O workflow `restore-drill.yml` cria um dump lógico do banco canônico no momento da execução, restaura em PostgreSQL isolado e destrói a instância. Isso valida a restauração dessa cópia lógica, mas não comprova que os snapshots diários do provedor podem ser recuperados. Em 11/10/2026, o PITR do projeto canônico estava desabilitado; os passos abaixo que exigem PITR continuam pendentes até sua ativação e um exercício efetivo com um ponto histórico.
+
 **Frequência**: 1ª terça-feira de cada mês, janela 10h-12h BRT.
 **Owner**: @dba
 **Evidência**: `docs/dr-drills/AAAA-MM-restore.md`

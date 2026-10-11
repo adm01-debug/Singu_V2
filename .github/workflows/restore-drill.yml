@@ -1,0 +1,77 @@
+name: Teste de restauração lógica
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/restore-drill.yml
+      - scripts/migration/dr/restore-drill.sh
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  restore:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      PGHOST: ${{ secrets.PGHOST }}
+      PGPORT: ${{ secrets.PGPORT }}
+      PGUSER: ${{ secrets.PGUSER }}
+      PGPASSWORD: ${{ secrets.PGPASSWORD }}
+      PGDATABASE: ${{ secrets.PGDATABASE }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verificar conexão de origem
+        run: |
+          for name in PGHOST PGUSER PGPASSWORD PGDATABASE; do
+            if [[ -z "${!name}" ]]; then
+              echo "::error::Secret obrigatório ausente: $name"
+              exit 1
+            fi
+          done
+
+      - name: Restaurar cópia lógica em PostgreSQL isolado
+        run: |
+          set -euo pipefail
+          umask 077
+          docker run -d --name singu-drill \
+            -e POSTGRES_PASSWORD=local-drill-only \
+            -v "$GITHUB_WORKSPACE:/workspace" \
+            supabase/postgres:17.6.1.171
+          trap 'docker rm -f singu-drill >/dev/null 2>&1 || true; rm -f "$GITHUB_WORKSPACE/.drill/backup.dump"' EXIT
+
+          for attempt in {1..90}; do
+            if docker exec singu-drill pg_isready -U postgres >/dev/null 2>&1; then
+              break
+            fi
+            sleep 2
+          done
+          docker exec singu-drill pg_isready -U postgres
+
+          mkdir -m 700 "$GITHUB_WORKSPACE/.drill"
+          export PROD_DB_URL="postgresql://${PGUSER}@${PGHOST}:${PGPORT:-5432}/${PGDATABASE}?sslmode=require"
+          docker exec --user "$(id -u):$(id -g)" -e PGPASSWORD -e PROD_DB_URL singu-drill \
+            pg_dump --format=custom --no-owner --no-privileges \
+              --dbname "$PROD_DB_URL" --file /workspace/.drill/backup.dump
+
+          docker exec --user "$(id -u):$(id -g)" -e BACKUP_FILE=/workspace/.drill/backup.dump \
+            -w /workspace singu-drill \
+            bash scripts/migration/dr/backup-encryption-check.sh
+
+          docker exec --user "$(id -u):$(id -g)" -e PGPASSWORD -e PROD_DB_URL \
+            -e DRILL_DB_URL=postgresql://postgres:local-drill-only@localhost:5432/postgres \
+            -e BACKUP_FILE=/workspace/.drill/backup.dump \
+            -w /workspace singu-drill \
+            bash scripts/migration/dr/restore-drill.sh
+
+      - name: Registrar resultado sem incluir dados do banco
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: restore-drill-report
+          path: scripts/migration/dr/out/restore-drill-*.md
+          if-no-files-found: ignore
+          retention-days: 14

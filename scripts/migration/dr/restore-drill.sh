@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Backup Restore Drill — restaura o backup mais recente em instância efêmera,
 # roda smoke queries, compara row counts com produção e destrói a instância.
-# Uso: DEST_DB_URL=... PROD_DB_URL=... BACKUP_URL=s3://... ./dr/restore-drill.sh
+# Uso: DRILL_DB_URL=... PROD_DB_URL=... BACKUP_FILE=... ./dr/restore-drill.sh
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -23,6 +23,7 @@ log() { printf '[restore-drill %s] %s\n' "$(date -u +%H:%M:%S)" "$*" | tee -a "$
 
 cleanup() {
   log "🧹 limpando artefatos temporários"
+  [[ -n "${RESTORE_LOG:-}" && -f "$RESTORE_LOG" ]] && rm -f "$RESTORE_LOG" || true
   [[ -n "${TMP_DUMP:-}" && -f "$TMP_DUMP" ]] && rm -f "$TMP_DUMP" || true
 }
 trap cleanup EXIT
@@ -38,13 +39,18 @@ done
 [[ -f "$BACKUP_FILE" ]] || { log "✖ backup não encontrado: $BACKUP_FILE"; exit 2; }
 psql "$DRILL_DB_URL" -Atqc "SELECT 1" >/dev/null || { log "✖ DRILL_DB_URL inacessível"; exit 2; }
 psql "$PROD_DB_URL"  -Atqc "SELECT 1" >/dev/null || { log "✖ PROD_DB_URL inacessível"; exit 2; }
+prod_cluster=$(psql "$PROD_DB_URL" -Atqc 'SELECT system_identifier FROM pg_control_system()')
+drill_cluster=$(psql "$DRILL_DB_URL" -Atqc 'SELECT system_identifier FROM pg_control_system()')
+[[ -n "$prod_cluster" && -n "$drill_cluster" && "$prod_cluster" != "$drill_cluster" ]] || {
+  log "✖ origem e destino precisam ser instâncias PostgreSQL distintas"; exit 2; }
 log "✔ binários e conectividade OK"
 
 # ── Fase 2: restore no drill ─────────────────────────────────────────────
 log "## Fase 2 — restore"
 START_TS=$(date +%s)
+RESTORE_LOG=$(mktemp "$OUT_DIR/.pg-restore-XXXXXX")
 pg_restore --no-owner --no-privileges --clean --if-exists \
-  --dbname "$DRILL_DB_URL" "$BACKUP_FILE" 2>&1 | tail -n 20 | tee -a "$REPORT" || {
+  --dbname "$DRILL_DB_URL" "$BACKUP_FILE" >"$RESTORE_LOG" 2>&1 || {
     log "✖ pg_restore falhou"; exit 1; }
 ELAPSED=$(( $(date +%s) - START_TS ))
 log "✔ restore concluído em ${ELAPSED}s"
@@ -62,6 +68,7 @@ log "## Fase 4 — parity"
 IFS=',' read -ra TBLS <<<"$CRITICAL_TABLES"
 drift=0
 for t in "${TBLS[@]}"; do
+  [[ "$t" =~ ^[a-z_][a-z0-9_]*$ ]] || { log "✖ nome de tabela inválido"; exit 2; }
   p=$(psql "$PROD_DB_URL"  -Atqc "SELECT COUNT(*) FROM public.$t" 2>/dev/null || echo "-1")
   d=$(psql "$DRILL_DB_URL" -Atqc "SELECT COUNT(*) FROM public.$t" 2>/dev/null || echo "-1")
   if [[ "$p" == "-1" || "$d" == "-1" ]]; then
