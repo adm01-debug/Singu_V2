@@ -61,6 +61,9 @@ DECLARE
   v_plan      jsonb;
   v_hash      text;
   v_last_hash text;
+  v_inventory text;
+  v_last_inventory text;
+  v_new_inventory boolean := false;
   v_id        uuid;
 BEGIN
   -- EXPLAIN de uma função plpgsql só mostra "Function Scan": explica a consulta principal de cada RPC
@@ -128,13 +131,20 @@ BEGIN
 
   v_hash := md5(public.rpc_plan_structure(v_plan -> 0 -> 'Plan')::text);
 
-  SELECT plan_hash INTO v_last_hash
+  IF _rpc_name = 'get_ai_gateway_partition_stats' THEN
+    v_inventory := md5(v_stmt);
+    v_plan := jsonb_set(v_plan, '{0,Partition Inventory}', to_jsonb(v_inventory));
+  END IF;
+
+  SELECT plan_hash, plan -> 0 ->> 'Partition Inventory' INTO v_last_hash, v_last_inventory
     FROM public.rpc_plan_snapshots
    WHERE rpc_name = _rpc_name
-   ORDER BY captured_at DESC
+   ORDER BY captured_at DESC, id DESC
    LIMIT 1;
 
-  IF v_last_hash IS NOT DISTINCT FROM v_hash THEN
+  v_new_inventory := _rpc_name = 'get_ai_gateway_partition_stats'
+    AND v_inventory IS DISTINCT FROM v_last_inventory;
+  IF v_last_hash IS NOT DISTINCT FROM v_hash AND NOT v_new_inventory THEN
     RETURN NULL;
   END IF;
 
@@ -142,9 +152,12 @@ BEGIN
   VALUES (_rpc_name, v_plan, v_hash,
           (v_plan -> 0 -> 'Plan' ->> 'Total Cost')::numeric,
           (v_plan -> 0 ->> 'Execution Time')::numeric,
-          _reason)
+          CASE WHEN v_new_inventory THEN 'baseline' ELSE _reason END)
   RETURNING id INTO v_id;
 
+  IF v_new_inventory THEN
+    UPDATE public.rpc_plan_snapshots SET plan_changed = false WHERE id = v_id;
+  END IF;
   RETURN v_id;
 END;
 $$;
@@ -160,7 +173,7 @@ UPDATE public.rpc_plan_snapshots s
   FROM (
     SELECT id,
            COALESCE(lag(plan_hash) OVER w IS DISTINCT FROM plan_hash, false)
-             AND lag(plan_hash) OVER w IS NOT NULL AS changed
+             AND lag(plan_hash) OVER w IS NOT NULL AND reason NOT LIKE 'baseline%' AS changed
       FROM public.rpc_plan_snapshots
     WINDOW w AS (PARTITION BY rpc_name ORDER BY captured_at, id)
   ) r

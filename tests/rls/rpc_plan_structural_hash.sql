@@ -40,9 +40,20 @@ BEGIN
              WHERE rpc_name='get_ai_gateway_partition_stats' AND reason='baseline' AND plan_changed) THEN
     RAISE EXCEPTION 'Baseline de partições marcada como troca';
   END IF;
+  DELETE FROM public.rpc_plan_snapshots WHERE rpc_name = 'get_ai_gateway_partition_stats';
   first_id := public.capture_rpc_plan('get_ai_gateway_partition_stats', 'test');
+  IF first_id IS NULL THEN
+    RAISE EXCEPTION 'Primeira captura não produziu snapshot';
+  END IF;
   IF public.capture_rpc_plan('get_ai_gateway_partition_stats', 'test') IS NOT NULL THEN
     RAISE EXCEPTION 'Recaptura idêntica não foi deduplicada';
+  END IF;
+  UPDATE public.rpc_plan_snapshots SET plan = jsonb_set(plan, '{0,Partition Inventory}', '"inventário anterior"')
+    WHERE id = first_id;
+  first_id := public.capture_rpc_plan('get_ai_gateway_partition_stats', 'test');
+  IF first_id IS NULL OR EXISTS (SELECT 1 FROM public.rpc_plan_snapshots
+      WHERE id = first_id AND (plan_changed OR reason <> 'baseline')) THEN
+    RAISE EXCEPTION 'Mudança de inventário não criou baseline estável';
   END IF;
 END $$;
 
