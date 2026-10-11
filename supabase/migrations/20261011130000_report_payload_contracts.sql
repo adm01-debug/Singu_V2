@@ -116,9 +116,9 @@ BEGIN
     RETURN jsonb_build_object('consistent', false, 'issues', jsonb_build_array(
       jsonb_build_object('type', 'contact', 'expected', 'encontrado', 'actual', 'não encontrado')));
   END IF;
-  SELECT count(*), max(data_interacao) INTO v_count, v_last
+  SELECT count(*), max(created_at) INTO v_count, v_last
     FROM public.interactions WHERE contact_id = p_contact_id;
-  IF v_count > 0 AND v_contact.last_interaction_at IS DISTINCT FROM v_last THEN
+  IF v_contact.last_interaction_at IS DISTINCT FROM v_last THEN
     v_issues := v_issues || jsonb_build_array(jsonb_build_object('type', 'last_interaction_at',
       'expected', v_last, 'actual', v_contact.last_interaction_at));
   END IF;
@@ -131,9 +131,158 @@ BEGIN
 END;
 $$;
 
--- DOWN MIGRATION (Rollback manual): restaurar as quatro definições obtidas com
--- pg_get_functiondef antes do UP, na mesma transação. get_channel_analysis(integer)
--- get_seasonality_analysis(integer) e check_relationship_consistency(uuid)
--- também estão em 20261008120000_fix_frontend_rpcs_canonical.sql.
--- Não executar a migration anterior inteira. Nenhum dado é regravado ou apagado.
--- Publicar o frontend anterior junto com o DOWN, pois ele espera os contratos antigos.
+-- DOWN MIGRATION (Rollback manual; publicar também o frontend anterior)
+-- BEGIN;
+-- CREATE OR REPLACE FUNCTION public.get_seasonality_analysis(p_months integer DEFAULT 12)
+--  RETURNS jsonb
+--  LANGUAGE plpgsql
+--  STABLE
+--  SET search_path TO 'public'
+-- AS $function$
+-- DECLARE
+--   result jsonb;
+-- BEGIN
+--   SELECT jsonb_build_object(
+--     'periodo_meses', p_months,
+--     'por_mes', (
+--       SELECT jsonb_agg(row_to_json(t) ORDER BY t.mes_numero)
+--       FROM (
+--         SELECT
+--           EXTRACT(MONTH FROM c.created_at)::int as mes_numero,
+--           TO_CHAR(c.created_at, 'Month') as mes_nome,
+--           COUNT(*) as empresas_criadas,
+--           (SELECT COUNT(*) FROM interactions i
+--            WHERE EXTRACT(MONTH FROM i.created_at) = EXTRACT(MONTH FROM MIN(c.created_at))
+--            AND i.created_at >= now() - (p_months || ' months')::interval) as interacoes
+--         FROM companies c
+--         WHERE c.created_at >= now() - (p_months || ' months')::interval AND c.deleted_at IS NULL
+--         GROUP BY EXTRACT(MONTH FROM c.created_at)::int, TO_CHAR(c.created_at, 'Month')
+--       ) t
+--     ),
+--     'melhor_mes_empresas', (
+--       SELECT TO_CHAR(created_at, 'Month')
+--       FROM companies
+--       WHERE created_at >= now() - (p_months || ' months')::interval AND deleted_at IS NULL
+--       GROUP BY TO_CHAR(created_at, 'Month')
+--       ORDER BY COUNT(*) DESC
+--       LIMIT 1
+--     )
+--   ) INTO result;
+--
+--   RETURN result;
+-- END;
+-- $function$;
+--
+-- CREATE OR REPLACE FUNCTION public.get_channel_analysis(p_days integer DEFAULT 30)
+--  RETURNS jsonb
+--  LANGUAGE plpgsql
+--  STABLE
+--  SET search_path TO 'public'
+-- AS $function$
+-- DECLARE
+--   result jsonb;
+--   start_date timestamptz := now() - (p_days || ' days')::interval;
+-- BEGIN
+--   SELECT jsonb_build_object(
+--     'periodo_dias', p_days,
+--     'por_canal', (
+--       SELECT jsonb_agg(row_to_json(t) ORDER BY t.total DESC)
+--       FROM (
+--         SELECT
+--           COALESCE(channel, 'não informado') as canal,
+--           COUNT(*) as total,
+--           ROUND((COUNT(*)::numeric / (SELECT COUNT(*) FROM interactions WHERE created_at >= start_date)) * 100, 2) as percentual,
+--           COUNT(DISTINCT company_id) as empresas_unicas
+--         FROM interactions
+--         WHERE created_at >= start_date
+--         GROUP BY channel
+--       ) t
+--     ),
+--     'por_tipo', (
+--       SELECT jsonb_agg(row_to_json(t) ORDER BY t.total DESC)
+--       FROM (
+--         SELECT
+--           COALESCE(type, 'outros') as tipo,
+--           COUNT(*) as total,
+--           ROUND((COUNT(*)::numeric / (SELECT COUNT(*) FROM interactions WHERE created_at >= start_date)) * 100, 2) as percentual
+--         FROM interactions
+--         WHERE created_at >= start_date
+--         GROUP BY type
+--       ) t
+--     ),
+--     'totais', jsonb_build_object(
+--       'total_interacoes', (SELECT COUNT(*) FROM interactions WHERE created_at >= start_date),
+--       'empresas_alcancadas', (SELECT COUNT(DISTINCT company_id) FROM interactions WHERE created_at >= start_date),
+--       'media_diaria', ROUND((SELECT COUNT(*)::numeric FROM interactions WHERE created_at >= start_date) / p_days, 2)
+--     )
+--   ) INTO result;
+--
+--   RETURN result;
+-- END;
+-- $function$;
+--
+-- CREATE OR REPLACE FUNCTION public.get_daily_summary(p_date date DEFAULT CURRENT_DATE)
+--  RETURNS jsonb
+--  LANGUAGE plpgsql
+--  STABLE
+--  SET search_path TO 'public'
+-- AS $function$
+-- DECLARE v_result jsonb;
+-- BEGIN
+--   SELECT jsonb_build_object(
+--     'date', p_date,
+--     'new_companies', (SELECT COUNT(*) FROM companies WHERE DATE(created_at) = p_date),
+--     'new_contacts', (SELECT COUNT(*) FROM contacts WHERE DATE(created_at) = p_date),
+--     'new_deals', (SELECT COUNT(*) FROM deals WHERE DATE(created_at) = p_date),
+--     'deals_closed', (SELECT COUNT(*) FROM deals WHERE DATE(closed_at) = p_date AND status IN ('ganho', 'perdido')),
+--     'revenue', (SELECT COALESCE(SUM(valor), 0) FROM deals WHERE DATE(closed_at) = p_date AND status = 'ganho'),
+--     'interactions', (SELECT COUNT(*) FROM interactions WHERE DATE(data_interacao) = p_date),
+--     'by_channel', (
+--       SELECT jsonb_object_agg(channel, cnt) FROM (
+--         SELECT channel, COUNT(*) as cnt FROM interactions WHERE DATE(data_interacao) = p_date GROUP BY channel
+--       ) sub
+--     )
+--   ) INTO v_result;
+--   RETURN v_result;
+-- END;
+-- $function$;
+--
+-- CREATE OR REPLACE FUNCTION public.check_relationship_consistency(p_contact_id uuid)
+--  RETURNS jsonb
+--  LANGUAGE plpgsql
+--  SET search_path TO 'public'
+-- AS $function$
+-- DECLARE
+--     v_contact RECORD;
+--     v_int_count INTEGER;
+--     v_last_int TIMESTAMP WITH TIME ZONE;
+--     v_issues JSONB := '[]'::jsonb;
+-- BEGIN
+--     SELECT * INTO v_contact FROM public.contacts WHERE id = p_contact_id;
+--
+--     IF NOT FOUND THEN
+--         v_issues := v_issues || jsonb_build_object('type', 'contact_not_found');
+--         RETURN jsonb_build_object(
+--             'contact_id', p_contact_id,
+--             'consistent', false,
+--             'issues', v_issues,
+--             'timestamp', now()
+--         );
+--     END IF;
+--
+--     -- contadores denormalizados (interactions_count/last_interaction_at) não
+--     -- existem no canônico: reporta os valores reais computados das interações
+--     SELECT count(*), max(data_interacao) INTO v_int_count, v_last_int
+--     FROM public.interactions WHERE contact_id = p_contact_id;
+--
+--     RETURN jsonb_build_object(
+--         'contact_id', p_contact_id,
+--         'consistent', jsonb_array_length(v_issues) = 0,
+--         'issues', v_issues,
+--         'interactions_count', v_int_count,
+--         'last_interaction_at', v_last_int,
+--         'timestamp', now()
+--     );
+-- END;
+-- $function$;
+-- COMMIT;

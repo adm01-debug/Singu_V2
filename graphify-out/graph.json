@@ -86026,6 +86026,28 @@
       "source_location": null
     },
     {
+      "id": "supabase_migrations_20261011140000_fix_relationship_audit_trigger",
+      "label": "20261011140000_fix_relationship_audit_trigger.sql",
+      "_origin": "ast",
+      "community": 1246,
+      "community_name": "20261011140000_fix_relationship_audit_trigger.sql",
+      "file_type": "code",
+      "norm_label": "20261011140000_fix_relationship_audit_trigger.sql",
+      "source_file": "supabase/migrations/20261011140000_fix_relationship_audit_trigger.sql",
+      "source_location": null
+    },
+    {
+      "id": "supabase_migrations_20261011125900_align_report_schema",
+      "label": "20261011125900_align_report_schema.sql",
+      "_origin": "ast",
+      "community": 1247,
+      "community_name": "20261011125900_align_report_schema.sql",
+      "file_type": "code",
+      "norm_label": "20261011125900_align_report_schema.sql",
+      "source_file": "supabase/migrations/20261011125900_align_report_schema.sql",
+      "source_location": null
+    },
+    {
       "id": "src_hooks_useaccountchurnprediction",
       "label": "useAccountChurnPrediction.ts",
       "_origin": "ast",
@@ -86135,6 +86157,17 @@
       "norm_label": "3.4 hooks de analytics",
       "source_file": "docs/COMPLETE_SYSTEM_ANALYSIS.md",
       "source_location": "L428"
+    },
+    {
+      "id": "supabase_migrations_20261011125900_align_report_schema_sql_public_companies",
+      "label": "public.companies",
+      "_origin": "ast",
+      "community": 1249,
+      "community_name": "public.companies",
+      "file_type": "code",
+      "norm_label": "public.companies",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "changelog",
@@ -86579,6 +86612,39 @@
       "norm_label": "[unreleased]",
       "source_file": "CHANGELOG.md",
       "source_location": "L8"
+    },
+    {
+      "id": "supabase_migrations_20261011125900_align_report_schema_sql_public_contacts",
+      "label": "public.contacts",
+      "_origin": "ast",
+      "community": 1250,
+      "community_name": "public.contacts",
+      "file_type": "code",
+      "norm_label": "public.contacts",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "supabase_migrations_20261011125900_align_report_schema_sql_public_deals",
+      "label": "public.deals",
+      "_origin": "ast",
+      "community": 1251,
+      "community_name": "public.deals",
+      "file_type": "code",
+      "norm_label": "public.deals",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "supabase_migrations_20261011125900_align_report_schema_sql_public_interactions",
+      "label": "public.interactions",
+      "_origin": "ast",
+      "community": 1252,
+      "community_name": "public.interactions",
+      "file_type": "code",
+      "norm_label": "public.interactions",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "src_components_custom_fields_customfieldsmanager",
@@ -511135,5 +511201,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "aee336be99d5019a6e1db29d53ace169a2518d10"
+  "built_at_commit": "66cbe5560348067e96e4f02708586e3328ac237e"
 }

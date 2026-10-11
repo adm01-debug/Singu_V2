@@ -30,6 +30,7 @@ DECLARE
   channels jsonb := public.get_channel_analysis(30);
   seasons jsonb := public.get_seasonality_analysis(1);
   audit jsonb := public.check_relationship_consistency(current_setting('rls.report_contact')::uuid);
+  log_count bigint;
 BEGIN
   IF (daily->>'interactions_count')::bigint <> (before->>'interactions_count')::bigint + 1
     OR (daily->>'deals_created')::bigint <> (before->>'deals_created')::bigint + 1
@@ -55,11 +56,38 @@ BEGIN
   IF (audit->>'consistent')::boolean OR audit->'issues'->0->>'type' <> 'last_interaction_at' THEN
     RAISE EXCEPTION 'Auditoria não detectou data desatualizada';
   END IF;
-  UPDATE public.contacts SET last_interaction_at = (SELECT data_interacao FROM public.interactions
+  UPDATE public.contacts SET last_interaction_at = (SELECT created_at FROM public.interactions
     WHERE id = current_setting('rls.report_interaction')::uuid)
     WHERE id = current_setting('rls.report_contact')::uuid;
   IF NOT (public.check_relationship_consistency(current_setting('rls.report_contact')::uuid)->>'consistent')::boolean THEN
     RAISE EXCEPTION 'Auditoria não reconheceu data corrigida';
+  END IF;
+  UPDATE public.interactions SET data_interacao = now() - interval '3 days'
+    WHERE id = current_setting('rls.report_interaction')::uuid;
+  IF NOT (public.check_relationship_consistency(current_setting('rls.report_contact')::uuid)->>'consistent')::boolean THEN
+    RAISE EXCEPTION 'Auditoria diverge do gatilho quando data informada é anterior à criação';
+  END IF;
+  SELECT count(*) INTO log_count FROM public.crm_relationship_audit_logs
+    WHERE contact_id = current_setting('rls.report_contact')::uuid;
+  DELETE FROM public.interactions WHERE id = current_setting('rls.report_interaction')::uuid;
+  IF (SELECT count(*) FROM public.crm_relationship_audit_logs
+      WHERE contact_id = current_setting('rls.report_contact')::uuid) <= log_count THEN
+    RAISE EXCEPTION 'Exclusão autenticada não gravou histórico de score';
+  END IF;
+  BEGIN
+    INSERT INTO public.crm_relationship_audit_logs (user_id, contact_id, field_name, new_value, change_source)
+      VALUES (current_setting('rls.report_owner')::uuid, current_setting('rls.report_contact')::uuid,
+        'score', '100', 'manual');
+    RAISE EXCEPTION 'Usuário pode forjar log de auditoria diretamente';
+  EXCEPTION WHEN insufficient_privilege THEN NULL;
+  END;
+  UPDATE public.contacts SET last_interaction_at = now() WHERE id = current_setting('rls.report_contact')::uuid;
+  IF (public.check_relationship_consistency(current_setting('rls.report_contact')::uuid)->>'consistent')::boolean THEN
+    RAISE EXCEPTION 'Auditoria não detectou última interação órfã';
+  END IF;
+  UPDATE public.contacts SET last_interaction_at = NULL WHERE id = current_setting('rls.report_contact')::uuid;
+  IF NOT (public.check_relationship_consistency(current_setting('rls.report_contact')::uuid)->>'consistent')::boolean THEN
+    RAISE EXCEPTION 'Contato sem interações e sem última data é inconsistente';
   END IF;
 END $$;
 RESET ROLE;
@@ -79,6 +107,10 @@ BEGIN
     RAISE EXCEPTION 'Auditoria de contato alheio foi autorizada';
   EXCEPTION WHEN insufficient_privilege THEN NULL;
   END;
+  IF EXISTS (SELECT 1 FROM public.crm_relationship_audit_logs
+      WHERE contact_id = current_setting('rls.report_contact')::uuid) THEN
+    RAISE EXCEPTION 'Usuário enxerga histórico alheio';
+  END IF;
 END $$;
 RESET ROLE;
 

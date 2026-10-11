@@ -200,7 +200,7 @@ function SeasonalityChart() {
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex items-center gap-2">
-          <Sun className="h-4 w-4 text-warning" /> Sazonalidade (12 meses)
+          <Sun className="h-4 w-4 text-warning" /> Sazonalidade por Mês do Ano (12 meses)
         </CardTitle>
       </CardHeader>
       <CardContent>
