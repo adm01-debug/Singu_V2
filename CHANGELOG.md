@@ -8,6 +8,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- A próxima ação usa a unicidade por usuário/contato; históricos de empresa preservam registros sem tipo/canal. Valores personalizados de formulários ainda não persistidos deixam de gerar avisos indevidos de auditoria.
+- Auditoria comportamental reúne alterações de relacionamento e análises VAK/metaprogramas do usuário, preservando IDs e validações humanas. Deduplicação busca emails/telefones em lotes paginados e prefere a relação primária, evitando URLs extensas e truncamento das relações.
 - A geolocalização do BI pagina a carteira, as contagens e os endereços por lotes, mantém o endereço primário com coordenadas válidas e restringe a leitura ao dono.
 - Históricos aceitam interações com tipo/canal nulos e conservam a duração dos áudios em metadata. Recomendações RFM e perfis sociais normalizam os formatos realmente persistidos sem inventar estimativas; falhas em Meu Dia encerram o carregamento e oferecem nova tentativa.
 - A captura do backup confia na CA oficial do Supabase e verifica certificado e hostname; o dump recebe a conexão por ambiente, sem URL nos argumentos, e falhas registram somente etapa e SQLSTATE.

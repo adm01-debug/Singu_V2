@@ -139,7 +139,7 @@ Por favor, gere:
     };
 
     const { data: persisted, error: persistenceError } = await supabase.from('contact_next_actions')
-      .upsert(nextActionData, { onConflict: 'contact_id' }).select('id').single();
+      .upsert(nextActionData, { onConflict: 'user_id,contact_id' }).select('id').single();
     if (persistenceError || !persisted) throw new Error('Não foi possível persistir a próxima ação');
 
     return jsonOk({ success: true, next_action: { ...nextActionData, id: persisted.id } });

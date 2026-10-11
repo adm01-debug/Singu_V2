@@ -15,10 +15,16 @@ interface BehavioralAuditSubTabProps {
 }
 
 export const BehavioralAuditSubTab = ({ contactId }: BehavioralAuditSubTabProps) => {
-  const { auditLogs, gaps, consistency, isLoading } = useContactBehavior(contactId);
+  const { auditLogs, gaps, consistency, isLoading, auditError, refreshAudit } = useContactBehavior(contactId);
   const { validateVAK, validateMetaprogram } = useNLPAnalysisValidation();
 
   if (isLoading) return <div className="p-8 text-center">Carregando auditoria...</div>;
+  if (auditError) return (
+    <div role="alert" className="p-8 space-y-3">
+      <p>Não foi possível carregar a auditoria comportamental.</p>
+      <Button variant="outline" onClick={() => void refreshAudit()}>Tentar novamente</Button>
+    </div>
+  );
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -95,7 +101,7 @@ export const BehavioralAuditSubTab = ({ contactId }: BehavioralAuditSubTabProps)
             <div className="space-y-4">
               {auditLogs && auditLogs.length > 0 ? (
                 auditLogs.map((log) => (
-                  <div key={log.id} className="relative pl-6 border-l-2 border-muted pb-4 last:pb-0">
+                  <div key={`${log.analysis_type || 'change'}:${log.id}`} className="relative pl-6 border-l-2 border-muted pb-4 last:pb-0">
                     <div className="absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-background border-2 border-primary" />
                     <div className="flex flex-col gap-1">
                       <div className="flex items-center justify-between">
@@ -111,7 +117,7 @@ export const BehavioralAuditSubTab = ({ contactId }: BehavioralAuditSubTabProps)
                         {'user_email' in log ? log.user_email || 'Sistema/IA' : 'Sistema/IA'}
                       </div>
                       <p className="text-sm mt-1">{log.reason}</p>
-                      {'analysis_type' in log && log.analysis_type && !log.is_validated && (
+                      {(log.analysis_type === 'vak' || log.analysis_type === 'metaprogram') && !log.is_validated && (
                         <div className="flex items-center gap-2 mt-2">
                           <span className="text-[10px] text-muted-foreground uppercase font-bold">Validar Análise:</span>
                           <Button 

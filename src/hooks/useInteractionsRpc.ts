@@ -192,11 +192,11 @@ export function useUnifiedCommunicationHistory(entityId?: string, limit = 50, en
       );
       if (error) throw error;
       return z.array(z.object({
-        interaction_id: z.string(), interaction_type: z.string(), channel: z.string(),
+        interaction_id: z.string(), interaction_type: z.string().nullable(), channel: z.string().nullable(),
         summary: z.string().nullable(), interaction_date: z.string(), user_name: z.string(),
       })).parse(data ?? []).map((it): InteractionHistoryItem => ({
         id: it.interaction_id, company_id: entityType === 'company' ? entityId : undefined,
-        type: it.interaction_type, channel: it.channel, resumo: it.summary ?? undefined,
+        type: it.interaction_type ?? it.channel ?? 'note', channel: it.channel ?? it.interaction_type ?? 'note', resumo: it.summary ?? undefined,
         data_interacao: it.interaction_date,
       }));
     },

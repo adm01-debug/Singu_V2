@@ -87,8 +87,9 @@ export function SearchableSelect({
   }, [onValueChange]);
 
   const logCustomValue = useCallback(async (customValue: string) => {
+    if (!auditTarget) return;
     try {
-      if (!user || !auditTarget) throw new Error('Registro persistido indisponível para auditoria.');
+      if (!user) throw new Error('Usuário indisponível para auditoria.');
       const { error } = await supabase.from('audit_log').insert({
         table_name: auditTarget.table_name,
         record_id: auditTarget.record_id,
