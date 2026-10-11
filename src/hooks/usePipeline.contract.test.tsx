@@ -2,15 +2,16 @@ import { createElement, type PropsWithChildren } from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useDealsPipeline } from './usePipeline';
+import { useDealsPipeline, useMoveDeal } from './usePipeline';
 
-const { query, from } = vi.hoisted(() => ({
-  query: { select: vi.fn(), eq: vi.fn(), not: vi.fn(), order: vi.fn(), range: vi.fn() },
+const { queryExternalData, callExternalRpc, from } = vi.hoisted(() => ({
+  queryExternalData: vi.fn(),
+  callExternalRpc: vi.fn(),
   from: vi.fn(),
 }));
 vi.mock('@/hooks/useAuth', () => ({ useAuth: () => ({ user: { id: 'dono-pipeline' } }) }));
 vi.mock('@/integrations/supabase/client', () => ({ supabase: { from } }));
-vi.mock('@/lib/externalData', () => ({ callExternalRpc: vi.fn() }));
+vi.mock('@/lib/externalData', () => ({ callExternalRpc, queryExternalData }));
 
 function deal(index: number) {
   return {
@@ -32,18 +33,26 @@ function renderPipeline() {
 
 describe('Contrato de negócios individuais do Pipeline', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    from.mockReturnValue(query);
-    for (const method of [query.select, query.eq, query.not, query.order]) method.mockReturnValue(query);
+    vi.resetAllMocks();
   });
 
   it('consulta registros do dono e preserva o fechamento e os nomes relacionados', async () => {
-    query.range.mockResolvedValue({ data: [deal(1)], error: null });
+    queryExternalData.mockResolvedValue({ data: [deal(1)], error: null });
     const { result } = renderPipeline();
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(from).toHaveBeenCalledWith('deals');
-    expect(query.eq).toHaveBeenCalledWith('user_id', 'dono-pipeline');
-    expect(query.not).toHaveBeenCalledWith('status', 'in', '(perdido,arquivado,lost)');
+    expect(from).not.toHaveBeenCalled();
+    expect(queryExternalData).toHaveBeenCalledWith({
+      table: 'deals',
+      select: '*, company:companies(nome_crm), contact:contacts(first_name, last_name)',
+      filters: [
+        { type: 'eq', column: 'user_id', value: 'dono-pipeline' },
+        { type: 'neq', column: 'status', value: 'perdido' },
+        { type: 'neq', column: 'status', value: 'arquivado' },
+        { type: 'neq', column: 'status', value: 'lost' },
+      ],
+      order: [{ column: 'created_at', ascending: false }, { column: 'id', ascending: false }],
+      range: { from: 0, to: 499 },
+    });
     expect(result.current.data?.[0]).toMatchObject({
       id: 'negocio-1', titulo: 'Negócio 1', closed_at: '2026-03-10T15:00:00Z',
       company_name: 'Empresa do cliente', contact_name: 'Joana Silva',
@@ -51,23 +60,43 @@ describe('Contrato de negócios individuais do Pipeline', () => {
   });
 
   it('carrega todas as páginas quando há mais de mil negócios', async () => {
-    query.range.mockResolvedValueOnce({ data: Array.from({ length: 500 }, (_, i) => deal(i)), error: null })
+    queryExternalData.mockResolvedValueOnce({ data: Array.from({ length: 500 }, (_, i) => deal(i)), error: null })
       .mockResolvedValueOnce({ data: Array.from({ length: 500 }, (_, i) => deal(i + 500)), error: null })
       .mockResolvedValueOnce({ data: [deal(1000), deal(1001)], error: null });
     const { result } = renderPipeline();
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(query.range.mock.calls).toEqual([[0, 499], [500, 999], [1000, 1499]]);
+    expect(queryExternalData.mock.calls.map(([options]) => options.range)).toEqual([
+      { from: 0, to: 499 }, { from: 500, to: 999 }, { from: 1000, to: 1499 },
+    ]);
     expect(result.current.data).toHaveLength(1002);
     expect(result.current.data?.[1001].id).toBe('negocio-1001');
   });
 
   it('não apresenta sucesso parcial se a segunda página falhar', async () => {
     const error = new Error('Falha ao carregar a segunda página');
-    query.range.mockResolvedValueOnce({ data: Array.from({ length: 500 }, (_, i) => deal(i)), error: null })
+    queryExternalData.mockResolvedValueOnce({ data: Array.from({ length: 500 }, (_, i) => deal(i)), error: null })
       .mockResolvedValueOnce({ data: null, error });
     const { result } = renderPipeline();
     await waitFor(() => expect(result.current.isError).toBe(true));
     expect(result.current.error).toBe(error);
     expect(result.current.data).toBeUndefined();
+  });
+
+  it('move o negócio pelo mesmo proxy usado para listar, criar e editar', async () => {
+    callExternalRpc.mockResolvedValue({ data: { success: true }, error: null });
+    const client = new QueryClient();
+    const invalidate = vi.spyOn(client, 'invalidateQueries');
+    const { result } = renderHook(() => useMoveDeal(), {
+      wrapper: ({ children }: PropsWithChildren) => createElement(QueryClientProvider, { client }, children),
+    });
+    await result.current.mutateAsync({ dealId: 'negocio-1', newStageId: 'negociacao', probability: 65 });
+    expect(callExternalRpc).toHaveBeenCalledWith('move_deal_atomic', {
+      p_deal_id: 'negocio-1', p_new_stage: 'negociacao', p_new_probability: 65,
+    });
+    expect(from).not.toHaveBeenCalled();
+    for (const key of ['deals-pipeline', 'pipeline-summary', 'weighted-forecast', 'velocity-metrics',
+      'stage-velocity', 'stalled-deals', 'company-deals', 'daily-summary', 'channel-analysis', 'seasonality']) {
+      expect(invalidate).toHaveBeenCalledWith({ queryKey: [key] });
+    }
   });
 });

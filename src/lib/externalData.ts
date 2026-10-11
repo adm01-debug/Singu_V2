@@ -17,7 +17,7 @@ interface ExternalQueryOptions {
   order?: {
     column: string;
     ascending?: boolean;
-  };
+  } | Array<{ column: string; ascending?: boolean }>;
   range?: {
     from: number;
     to: number;

@@ -9,6 +9,7 @@ import {
   getRelationScope,
   isSafeIdentifier,
   MAX_QUERY_FILTERS,
+  parseQueryOrder,
   quotePostgrestValue,
   type RelationScope,
 } from "../_shared/tenant-guard.ts";
@@ -59,7 +60,7 @@ const ALLOWED_RPCS = [
   // ── Deals / Pipeline ──
   'create_deal', 'get_deals_pipeline', 'get_pipeline_summary',
   'get_weighted_forecast', 'get_stage_velocity', 'get_stalled_deals',
-  'get_velocity_metrics', 'move_deal_to_stage', 'mark_deal_lost',
+  'get_velocity_metrics', 'move_deal_to_stage', 'move_deal_atomic', 'mark_deal_lost',
   'predict_close_date',
   // ── Interactions ──
   'create_quick_interaction', 'get_interaction_history', 'get_pending_followups',
@@ -504,10 +505,8 @@ Deno.serve(async (req) => {
       if (!searchColumns.every(isSafeIdentifier)) {
         return jsonError('Invalid search column', 400, req);
       }
-      const orderConfig = order && typeof order === 'object'
-        ? order as Record<string, unknown>
-        : undefined;
-      if (orderConfig?.column !== undefined && !isSafeIdentifier(orderConfig.column)) {
+      const orderConfigs = parseQueryOrder(order);
+      if (orderConfigs === null) {
         return jsonError('Invalid order column', 400, req);
       }
       const rangeConfig = range && typeof range === 'object'
@@ -564,8 +563,8 @@ Deno.serve(async (req) => {
           }
         }
 
-        if (isSafeIdentifier(orderConfig?.column)) {
-          query = query.order(orderConfig.column, { ascending: orderConfig.ascending === true });
+        for (const orderConfig of orderConfigs) {
+          query = query.order(orderConfig.column, { ascending: orderConfig.ascending });
         }
         const clamped = clampRange(rangeConfig);
         query = query.range(clamped.from, clamped.to);

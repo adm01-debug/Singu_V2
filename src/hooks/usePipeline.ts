@@ -1,6 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { callExternalRpc } from '@/lib/externalData';
-import { supabase } from '@/integrations/supabase/client';
+import { callExternalRpc, queryExternalData } from '@/lib/externalData';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
@@ -36,6 +35,14 @@ export interface PipelineSummary {
     with_recent_interaction: number;
   };
 }
+
+type PipelineDealRow = Omit<PipelineDeal, 'valor' | 'probabilidade' | 'pipeline_stage'> & {
+  valor: number | null;
+  probabilidade: number | null;
+  pipeline_stage: string | null;
+  company: { nome_crm: string } | null;
+  contact: { first_name: string; last_name: string | null } | null;
+};
 
 export interface WeightedForecast {
   stage: string;
@@ -82,13 +89,18 @@ export function useDealsPipeline() {
       const deals: PipelineDeal[] = [];
       const pageSize = 500;
       for (let offset = 0; ; offset += pageSize) {
-        const { data, error } = await supabase.from('deals')
-          .select('*, company:companies(nome_crm), contact:contacts(first_name, last_name)')
-          .eq('user_id', user.id)
-          .not('status', 'in', '(perdido,arquivado,lost)')
-          .order('created_at', { ascending: false })
-          .order('id', { ascending: false })
-          .range(offset, offset + pageSize - 1);
+        const { data, error } = await queryExternalData<PipelineDealRow>({
+          table: 'deals',
+          select: '*, company:companies(nome_crm), contact:contacts(first_name, last_name)',
+          filters: [
+            { type: 'eq', column: 'user_id', value: user.id },
+            { type: 'neq', column: 'status', value: 'perdido' },
+            { type: 'neq', column: 'status', value: 'arquivado' },
+            { type: 'neq', column: 'status', value: 'lost' },
+          ],
+          order: [{ column: 'created_at', ascending: false }, { column: 'id', ascending: false }],
+          range: { from: offset, to: offset + pageSize - 1 },
+        });
         if (error) throw error;
         deals.push(...(data || []).map(({ company, contact, ...row }) => ({
           ...row,
@@ -204,13 +216,13 @@ export function useMoveDeal() {
       newStageId: string;
       probability?: number;
     }) => {
-       const { data, error } = await supabase.rpc('move_deal_atomic', {
+       const { data, error } = await callExternalRpc<{ success?: boolean; error?: string }>('move_deal_atomic', {
          p_deal_id: dealId,
          p_new_stage: newStageId,
          p_new_probability: probability
       });
       if (error) { throw error; }
-       const result = data as { success?: boolean; error?: string } | null;
+       const result = data;
        if (result && result.success === false) {
          throw new Error(result.error || 'Failed to move deal');
        }
@@ -239,9 +251,10 @@ export function useMoveDeal() {
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['deals-pipeline'] });
-      queryClient.invalidateQueries({ queryKey: ['pipeline-summary'] });
-      queryClient.invalidateQueries({ queryKey: ['weighted-forecast'] });
+      for (const key of ['deals-pipeline', 'pipeline-summary', 'weighted-forecast', 'velocity-metrics',
+        'stage-velocity', 'stalled-deals', 'company-deals', 'daily-summary', 'channel-analysis', 'seasonality']) {
+        queryClient.invalidateQueries({ queryKey: [key] });
+      }
     },
   });
 }
@@ -258,8 +271,10 @@ export function useCreateDeal() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['deals-pipeline'] });
-      queryClient.invalidateQueries({ queryKey: ['pipeline-summary'] });
+      for (const key of ['deals-pipeline', 'pipeline-summary', 'weighted-forecast', 'velocity-metrics',
+        'stage-velocity', 'stalled-deals', 'company-deals', 'daily-summary', 'channel-analysis', 'seasonality']) {
+        queryClient.invalidateQueries({ queryKey: [key] });
+      }
     },
     onError: () => toast.error('Erro ao criar negócio'),
   });
