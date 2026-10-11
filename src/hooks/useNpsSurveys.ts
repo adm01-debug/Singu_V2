@@ -82,7 +82,7 @@ export function useNpsSurveys() {
       qc.invalidateQueries({ queryKey: ['nps-surveys'] });
     },
     onError: (e) => {
-      logger.error('Failed to create NPS survey', e);
+      logger.error('Falha ao criar pesquisa NPS', e);
       toast.error('Falha ao criar pesquisa');
     },
   });
@@ -158,6 +158,7 @@ export function useNpsSurveys() {
     surveys,
     metrics,
     isLoading: surveysQuery.isLoading,
+    error: surveysQuery.error,
     refetch: surveysQuery.refetch,
     createSurvey: create.mutateAsync,
     answerSurvey: answer.mutateAsync,

@@ -1,9 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { z } from 'zod';
 import { logger } from '@/lib/logger';
 import { parseApiError } from '@/lib/errorMessages';
-import { rodizioFrom, callRodizioRpc } from '@/lib/rodizioRpc';
+import { callRodizioRpc } from '@/lib/rodizioRpc';
+import { supabase } from '@/integrations/supabase/client';
 import { useAppUserId } from '@/hooks/useAppUserId';
 import type {
   RodizioStagingRow,
@@ -34,7 +36,7 @@ export function useRodizioStaging(onda: number) {
     queryKey: [...STAGING_KEY_BASE, onda, user?.id],
     queryFn: async (): Promise<RodizioStagingRow[]> => {
       if (!user) return [];
-      const { data, error } = await rodizioFrom('rodizio_distribuicao_staging')
+      const { data, error } = await supabase.from('rodizio_distribuicao_staging')
         .select('*')
         .eq('onda', onda)
         .order('id', { ascending: true })
@@ -43,7 +45,11 @@ export function useRodizioStaging(onda: number) {
         logger.error('Erro ao carregar staging do rodízio:', error);
         throw error;
       }
-      return (data ?? []) as unknown as RodizioStagingRow[];
+      return (data ?? []).map(row => ({
+        ...row,
+        origem: z.enum(['MANUAL', 'SUGESTAO_MOTOR', 'IMPORT_CSV']).parse(row.origem),
+        status: z.enum(['RASCUNHO', 'APROVADO', 'APLICADO', 'REJEITADO']).parse(row.status),
+      }));
     },
     enabled: !!user,
     staleTime: 30_000,
@@ -58,7 +64,7 @@ export function useDecidirStaging() {
 
   return useMutation({
     mutationFn: async ({ id, decisao }: { id: string; decisao: Extract<StagingStatus, 'APROVADO' | 'REJEITADO'> }) => {
-      const { error } = await rodizioFrom('rodizio_distribuicao_staging')
+      const { error } = await supabase.from('rodizio_distribuicao_staging')
         .update({ status: decisao, aprovado_por_id: appUserId ?? null })
         .eq('id', id)
         .eq('status', 'RASCUNHO');
@@ -144,12 +150,19 @@ export function useRodizioExecucoes() {
     queryKey: [...EXECUCOES_KEY, user?.id],
     queryFn: async (): Promise<RodizioExecucao[]> => {
       if (!user) return [];
-      const { data, error } = await rodizioFrom('vw_rodizio_execucoes')
+      const { data, error } = await supabase.from('vw_rodizio_execucoes')
         .select('*')
         .order('iniciado_em', { ascending: false })
         .limit(200);
       if (error) throw error;
-      return (data ?? []) as unknown as RodizioExecucao[];
+      return (data ?? []).map(row => ({
+        ...row,
+        id: z.string().parse(row.id), iniciado_em: z.string().parse(row.iniciado_em),
+        tipo: z.enum(['CLOSER', 'SDR', 'SEGMENTAR', 'DISTRIBUICAO_INICIAL']).parse(row.tipo),
+        modo: z.enum(['DRY_RUN', 'REAL', 'ROLLBACK']).parse(row.modo),
+        foi_revertida: z.boolean().parse(row.foi_revertida),
+        parametros: z.record(z.unknown()).nullable().parse(row.parametros),
+      }));
     },
     enabled: !!user,
     staleTime: 60_000,

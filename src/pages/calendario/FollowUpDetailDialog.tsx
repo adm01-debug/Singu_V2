@@ -54,7 +54,7 @@ export function FollowUpDetailDialog({ followUp, onClose, onMarkCompleted }: Fol
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-muted"><Building2 className="w-4 h-4" /></div>
               <div>
-                <p className="font-medium">{followUp.company.name}</p>
+                <p className="font-medium">{followUp.company.nome_crm}</p>
                 <p className="text-sm text-muted-foreground">Empresa</p>
               </div>
             </div>

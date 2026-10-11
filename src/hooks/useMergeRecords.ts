@@ -2,11 +2,22 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
-import type { Json } from '@/integrations/supabase/types';
+import { z } from 'zod';
 import { logger } from '@/lib/logger';
 import { parseApiError } from '@/lib/errorMessages';
 
 export type MergeEntity = 'contacts' | 'companies';
+
+const contactOverridesSchema = z.object({
+  first_name: z.string().nullable(), last_name: z.string().nullable(), email: z.string().nullable(),
+  phone: z.string().nullable(), role_title: z.string().nullable(), company_id: z.string().nullable(),
+  whatsapp: z.string().nullable(), linkedin: z.string().nullable(), instagram: z.string().nullable(),
+  notes: z.string().nullable(), family_info: z.string().nullable(),
+}).partial().strict();
+const companyOverridesSchema = z.object({
+  nome_crm: z.string().nullable(), cnpj: z.string().nullable(), industry: z.string().nullable(),
+  website: z.string().nullable(), notes: z.string().nullable(), tags: z.array(z.string()).nullable(),
+}).partial().strict();
 
 interface MergeArgs {
   entity: MergeEntity;
@@ -28,13 +39,16 @@ export function useMergeRecords() {
       if (primaryId === secondaryId) throw new Error('IDs idênticos');
       if (!user?.id) throw new Error('Não autenticado');
 
+      const contactOverrides = entity === 'contacts' ? contactOverridesSchema.parse(fieldOverrides ?? {}) : null;
+      const companyOverrides = entity === 'companies' ? companyOverridesSchema.parse(fieldOverrides ?? {}) : null;
+      const overrides = contactOverrides ?? companyOverrides ?? {};
+
       // 1. Apply overrides on primary (if any)
-      if (fieldOverrides && Object.keys(fieldOverrides).length > 0) {
-        const { error: updErr } = await supabase
-          .from(entity)
-          .update(fieldOverrides as never)
-          .eq('user_id', user.id)
-          .eq('id', primaryId);
+      if (Object.keys(overrides).length > 0) {
+        const update = entity === 'contacts'
+          ? supabase.from('contacts').update(contactOverrides)
+          : supabase.from('companies').update(companyOverrides);
+        const { error: updErr } = await update.eq('user_id', user.id).eq('id', primaryId);
         if (updErr) throw updErr;
       }
 
@@ -53,26 +67,36 @@ export function useMergeRecords() {
       if (delErr) throw delErr;
 
       // 4. Audit log entry
+      let auditFailed = false;
       if (user?.id) {
         const { error: auditErr } = await supabase.from('audit_log').insert([{
           user_id: user.id,
           action: 'merge',
           entity_type: entity,
           entity_id: primaryId,
+          table_name: entity,
+          record_id: primaryId,
           old_data: { merged_from: secondaryId },
-          new_data: (fieldOverrides ?? {}) as Json,
+          new_data: overrides,
         }]);
-        if (auditErr) logger.warn('Failed to write audit log', { error: auditErr.message });
+        if (auditErr) {
+          logger.warn('Falha ao gravar auditoria da mesclagem', { error: auditErr.message });
+          auditFailed = true;
+        }
       }
 
-      return { primaryId, secondaryId };
+      return { primaryId, secondaryId, auditFailed };
     },
-    onSuccess: (_, vars) => {
+    onSuccess: ({ auditFailed }, vars) => {
       qc.invalidateQueries({ queryKey: ['dedup-source', vars.entity] });
       qc.invalidateQueries({ queryKey: [vars.entity] });
       qc.invalidateQueries({ queryKey: ['contacts'] });
       qc.invalidateQueries({ queryKey: ['companies'] });
-      toast.success('Registros mesclados com sucesso');
+      if (auditFailed) {
+        toast.warning('Registros mesclados, mas não foi possível gravar a auditoria adicional.');
+      } else {
+        toast.success('Registros mesclados com sucesso');
+      }
     },
     onError: (e: Error) => toast.error(`Falha ao mesclar: ${parseApiError(e)}`),
   });

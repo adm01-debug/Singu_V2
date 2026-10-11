@@ -38,10 +38,11 @@ export interface YourDayData {
   needsAttention: NeedsAttention[];
   newInsights: Insight[];
   loading: boolean;
+  error: Error | null;
 }
 
 const CONTACT_LIGHT_SELECT = 'id, first_name, last_name, email, phone, avatar_url, birthday, company_id, role, relationship_score, sentiment, updated_at, created_at';
-const COMPANY_LIGHT_SELECT = 'id, name';
+const COMPANY_LIGHT_SELECT = 'id, nome_crm';
 const INTERACTION_FOLLOWUP_SELECT = 'id, type, title, content, sentiment, follow_up_required, follow_up_date, created_at, contact_id, company_id, user_id';
 
 const isValidContactName = (c: Contact) => {
@@ -64,9 +65,9 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const { data } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['your-day', user?.id],
-    queryFn: async (): Promise<Omit<YourDayData, 'loading'>> => {
+    queryFn: async (): Promise<Omit<YourDayData, 'loading' | 'error'>> => {
       if (!user) throw new Error('Not authenticated');
       try {
         const today = new Date();
@@ -78,6 +79,10 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
           supabase.from('insights').select('id, title, description, category, contact_id, dismissed, created_at, actionable').eq('user_id', user.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(5),
         ]);
 
+        if (followUpsResult.error) throw followUpsResult.error;
+        if (birthdayContactsResult.error) throw birthdayContactsResult.error;
+        if (attentionContactsResult.error) throw attentionContactsResult.error;
+        if (insightsResult.error) throw insightsResult.error;
         const followUpInteractions = (followUpsResult.data || []) as Interaction[];
         const birthdayContacts = (birthdayContactsResult.data || []) as Contact[];
         const attentionContacts = (attentionContactsResult.data || []) as Contact[];
@@ -97,6 +102,8 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
           companyIds.size > 0 ? supabase.from('companies').select(COMPANY_LIGHT_SELECT).in('id', Array.from(companyIds)).limit(100) : Promise.resolve({ data: [] }),
         ]);
 
+        if ('error' in contactsForFollowUps && contactsForFollowUps.error) throw contactsForFollowUps.error;
+        if ('error' in companiesBatch && companiesBatch.error) throw companiesBatch.error;
         const contactMap = new Map((contactsForFollowUps.data || []).map(c => [c.id, c as Contact]));
         const companyMap = new Map((companiesBatch.data || []).map(c => [c.id, c as Company]));
 
@@ -140,7 +147,7 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
           const daysSinceContact = Math.floor((today.getTime() - lastUpdate.getTime()) / (1000 * 60 * 60 * 24));
 
           if ((contact.relationship_score || 0) < 30 && daysSinceContact > 14) {
-            const companyHint = company?.name ? ` · ${company.name}` : '';
+            const companyHint = company?.nome_crm ? ` · ${company.nome_crm}` : '';
             needsAttention.push({ contact, company, reason: `Score ${contact.relationship_score || 0}% — sem contato há ${daysSinceContact}d${companyHint}`, priority: 'high', daysSinceContact });
           } else if ((contact.role === 'decision_maker' || contact.role === 'owner') && daysSinceContact > 21) {
             const roleLabel = contact.role === 'owner' ? 'Sócio' : 'Decisor';
@@ -180,7 +187,7 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
       } catch (error) {
         const msg = error instanceof Error ? error.message : 'Unknown error';
         logger.error('Error fetching your day data:', { error: msg });
-        return { todayFollowUps: [], overdueFollowUps: [], upcomingBirthdays: [], needsAttention: [], newInsights: [] };
+        throw error;
       }
     },
     enabled: !!user,
@@ -199,7 +206,8 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
     upcomingBirthdays: data?.upcomingBirthdays || [],
     needsAttention: data?.needsAttention || [],
     newInsights: data?.newInsights || [],
-    loading: !data,
+    loading: !!user && isLoading,
+    error,
     refresh,
   };
 }

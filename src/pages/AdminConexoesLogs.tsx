@@ -58,7 +58,7 @@ export default function AdminConexoesLogs() {
     return new Date(Date.now() - ms * 3_600_000).toISOString();
   }, [period]);
 
-  const { data: logs = [], isLoading, refetch, isFetching } = useQuery({
+  const { data: logs = [], isLoading, error: logsError, refetch, isFetching } = useQuery({
     queryKey: ['conexoes-unified-logs', source, status, period],
     queryFn: async (): Promise<UnifiedLog[]> => {
       const queries: Promise<UnifiedLog[]>[] = [];
@@ -67,13 +67,21 @@ export default function AdminConexoesLogs() {
         queries.push((async () => {
           let q = supabase
             .from('connection_test_logs')
-            .select('id,connection_id,status,latency_ms,message,details,created_at,connection_configs(name)')
+            .select('id,connection_id,status,latency_ms,message,details,created_at')
             .gte('created_at', sinceIso)
             .order('created_at', { ascending: false })
             .limit(200);
           if (status !== 'all') q = q.eq('status', status);
           const { data, error } = await q;
           if (error) throw error;
+          const ids = [...new Set((data ?? []).map(r => r.connection_id))];
+          const names = new Map<string, string>();
+          if (ids.length > 0) {
+            const { data: configs, error: configsError } = await supabase
+              .from('connection_configs').select('id,name').in('id', ids);
+            if (configsError) throw configsError;
+            for (const config of configs ?? []) names.set(config.id, config.name);
+          }
           return (data ?? []).map((r): UnifiedLog => ({
             id: r.id,
             source: 'connection',
@@ -83,7 +91,7 @@ export default function AdminConexoesLogs() {
             message: r.message,
             details: r.details,
             ref_id: r.connection_id,
-            ref_label: (r.connection_configs as { name?: string } | null)?.name ?? 'Conexão',
+            ref_label: names.get(r.connection_id) ?? 'Conexão',
           }));
         })());
       }
@@ -92,13 +100,21 @@ export default function AdminConexoesLogs() {
         queries.push((async () => {
           let q = supabase
             .from('incoming_webhook_logs')
-            .select('id,webhook_id,status,http_status,latency_ms,error_message,payload,response,created_at,incoming_webhooks(name)')
+            .select('id,webhook_id,status,http_status,latency_ms,error_message,payload,response,created_at')
             .gte('created_at', sinceIso)
             .order('created_at', { ascending: false })
             .limit(200);
           if (status !== 'all') q = q.eq('status', status);
           const { data, error } = await q;
           if (error) throw error;
+          const ids = [...new Set((data ?? []).map(r => r.webhook_id))];
+          const names = new Map<string, string>();
+          if (ids.length > 0) {
+            const { data: webhooks, error: webhooksError } = await supabase
+              .from('incoming_webhooks').select('id,name').in('id', ids);
+            if (webhooksError) throw webhooksError;
+            for (const webhook of webhooks ?? []) names.set(webhook.id, webhook.name);
+          }
           return (data ?? []).map((r): UnifiedLog => ({
             id: r.id,
             source: 'webhook',
@@ -110,7 +126,7 @@ export default function AdminConexoesLogs() {
             payload: r.payload,
             response: r.response,
             ref_id: r.webhook_id,
-            ref_label: (r.incoming_webhooks as { name?: string } | null)?.name ?? 'Webhook',
+            ref_label: names.get(r.webhook_id) ?? 'Webhook',
           }));
         })());
       }
@@ -203,6 +219,8 @@ export default function AdminConexoesLogs() {
           <CardContent className="p-0">
             {isLoading ? (
               <div className="p-8 text-center text-muted-foreground text-sm">Carregando…</div>
+            ) : logsError ? (
+              <div role="alert" className="p-6 text-destructive">Falha ao carregar logs: {logsError.message}</div>
             ) : filtered.length === 0 ? (
               <div className="p-6">
                 <EmptyState

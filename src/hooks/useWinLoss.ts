@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { z } from 'zod';
+import type { Tables } from '@/integrations/supabase/types';
 
 // ── Types ──────────────────────────────────────────
 
@@ -41,7 +43,6 @@ export interface WinLossReason {
 
 export interface Competitor {
   id: string;
-  user_id: string;
   name: string;
   website: string | null;
   strengths: string[];
@@ -221,12 +222,29 @@ export function useSeedReasons() {
   return useMutation({
     mutationFn: async () => {
       if (!user) throw new Error('Not authenticated');
-      const { error } = await (supabase.rpc as unknown as (fn: string, args: Record<string, unknown>) => Promise<{ error: Error | null }>)('seed_win_loss_defaults', { _user_id: user.id });
+      const { error } = await supabase.rpc('seed_win_loss_defaults', { _user_id: user.id });
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['win-loss-reasons'] }),
     onError: () => toast.error('Erro ao configurar motivos padrão'),
   });
+}
+
+const competitorMetadataSchema = z.object({
+  typical_price_range: z.string().nullable().optional(),
+  notes: z.string().nullable().optional(),
+}).passthrough();
+
+function normalizeCompetitor(row: Tables<'competitors'>, records: Array<{ competitor_id: string | null; outcome: string }>): Competitor {
+  const metadata = competitorMetadataSchema.parse(row.metadata ?? {});
+  const decided = records.filter(record => record.competitor_id === row.id && (record.outcome === 'won' || record.outcome === 'lost'));
+  return {
+    id: row.id, name: row.name, website: row.website,
+    strengths: row.strengths ?? [], weaknesses: row.weaknesses ?? [],
+    typical_price_range: metadata.typical_price_range ?? null,
+    notes: metadata.notes ?? null, active: row.is_active === true,
+    win_rate_against: decided.length > 0 ? decided.filter(record => record.outcome === 'won').length / decided.length * 100 : 0,
+  };
 }
 
 // ── Competitors ──────────────────────────────────────
@@ -239,13 +257,15 @@ export function useCompetitors() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('competitors')
-        .select('id, user_id, name, website, strengths, weaknesses, typical_price_range, win_rate_against, notes, active')
-        .eq('user_id', user!.id)
-        .eq('active', true)
+        .select('*')
+        .eq('is_active', true)
         .order('name')
         .limit(200);
       if (error) throw error;
-      return (data ?? []) as Competitor[];
+      const { data: records, error: recordsError } = await supabase.from('win_loss_records')
+        .select('competitor_id, outcome').eq('user_id', user!.id);
+      if (recordsError) throw recordsError;
+      return (data ?? []).map(row => normalizeCompetitor(row, records ?? []));
     },
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
@@ -258,14 +278,32 @@ export function useUpsertCompetitor() {
   return useMutation({
     mutationFn: async (c: Partial<Competitor> & { name: string }) => {
       if (!user) throw new Error('Not authenticated');
+      let metadata: Tables<'competitors'>['metadata'] = {};
+      if (c.id) {
+        const { data: current, error: currentError } = await supabase.from('competitors').select('metadata').eq('id', c.id).single();
+        if (currentError) throw currentError;
+        metadata = current.metadata;
+      }
+      const parsedMetadata = metadata ?? {};
+      if (typeof parsedMetadata !== 'object' || Array.isArray(parsedMetadata)) {
+        throw new Error('Metadados do concorrente devem ser um objeto JSON');
+      }
+      competitorMetadataSchema.parse(parsedMetadata);
       const { data, error } = await supabase
         .from('competitors')
-        .upsert({ ...c, user_id: user.id }, { onConflict: 'user_id,name' })
+        .upsert({ id: c.id, name: c.name, website: c.website, strengths: c.strengths, weaknesses: c.weaknesses,
+          is_active: c.active, metadata: { ...parsedMetadata,
+            ...(c.typical_price_range !== undefined ? { typical_price_range: c.typical_price_range } : {}),
+            ...(c.notes !== undefined ? { notes: c.notes } : {}),
+          } })
         .select()
         .maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Falha ao salvar competidor");
-      return data as Competitor;
+      const { data: records, error: recordsError } = await supabase.from('win_loss_records')
+        .select('competitor_id, outcome').eq('competitor_id', data.id).eq('user_id', user.id);
+      if (recordsError) throw recordsError;
+      return normalizeCompetitor(data, records ?? []);
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['competitors'] }),
     onError: () => toast.error('Erro ao salvar concorrente'),
@@ -278,7 +316,7 @@ export function useDeleteCompetitor() {
   return useMutation({
     mutationFn: async (id: string) => {
       if (!user) throw new Error('Não autenticado');
-      const { error } = await supabase.from('competitors').update({ active: false }).eq('user_id', user.id).eq('id', id);
+      const { error } = await supabase.from('competitors').update({ is_active: false }).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['competitors'] }),

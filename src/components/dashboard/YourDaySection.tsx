@@ -80,6 +80,8 @@ export function YourDaySection({ className }: YourDaySectionProps) {
     needsAttention,
     newInsights,
     loading,
+    error,
+    refresh,
   } = useYourDay();
 
   const totalTasks = todayFollowUps.length + overdueFollowUps.length;
@@ -93,6 +95,17 @@ export function YourDaySection({ className }: YourDaySectionProps) {
       >
         <YourDaySkeleton />
       </motion.div>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className={className} role="alert">
+        <p className="text-sm text-destructive">Não foi possível carregar seu dia.</p>
+        <Button variant="outline" size="sm" className="mt-2" onClick={() => void refresh()}>
+          Tentar novamente
+        </Button>
+      </section>
     );
   }
 
@@ -302,7 +315,7 @@ export function YourDaySection({ className }: YourDaySectionProps) {
                             {formatContactName(item.contact.first_name, item.contact.last_name)}
                           </p>
                           <p className="text-xs text-muted-foreground truncate">
-                            {toTitleCase(item.company?.name || '') || 'Sem empresa'}
+                            {toTitleCase(item.company?.nome_crm || '') || 'Sem empresa'}
                           </p>
                         </div>
                         <span className={cn(

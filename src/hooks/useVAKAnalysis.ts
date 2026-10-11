@@ -9,22 +9,6 @@ import {
 } from '@/types/vak';
 import { logger } from "@/lib/logger";
 
-interface VAKAnalysisHistory {
-  id: string;
-  contact_id: string;
-  interaction_id: string | null;
-  visual_score: number;
-  auditory_score: number;
-  kinesthetic_score: number;
-  digital_score: number;
-  visual_words: string[];
-  auditory_words: string[];
-  kinesthetic_words: string[];
-  digital_words: string[];
-  analyzed_text: string;
-  created_at: string;
-}
-
 export function useVAKAnalysis() {
   const { user } = useAuth();
   const [analyzing, setAnalyzing] = useState(false);
@@ -80,30 +64,33 @@ export function useVAKAnalysis() {
     try {
       const { error } = await supabase.from('vak_analysis_history').insert({
         user_id: user.id, contact_id: contactId, interaction_id: interactionId || null,
-        visual_score: analysis.visual.score, auditory_score: analysis.auditory.score,
-        kinesthetic_score: analysis.kinesthetic.score, digital_score: analysis.digital.score,
+        primary_modality: analysis.dominantSystem, secondary_modality: analysis.secondarySystem,
+        confidence: analysis.confidence, analysis_source: 'keyword_match',
+        visual_score: Math.round(analysis.visual.score), auditory_score: Math.round(analysis.auditory.score),
+        kinesthetic_score: Math.round(analysis.kinesthetic.score), digital_score: Math.round(analysis.digital.score),
         visual_words: analysis.visual.words, auditory_words: analysis.auditory.words,
         kinesthetic_words: analysis.kinesthetic.words, digital_words: analysis.digital.words,
-        analyzed_text: text.substring(0, 1000), is_validated: false
+        analyzed_text: text.substring(0, 1000)
       });
       if (error) throw error;
       return true;
     } catch (error) {
       logger.error('Error saving VAK analysis:', error);
-      return false;
+      throw error;
     }
   }, [user]);
 
   const getContactVAKProfile = useCallback(async (contactId: string): Promise<VAKProfile | null> => {
     if (!user) return null;
     try {
-      const { data, error } = await supabase.from('vak_analysis_history').select('visual_score, auditory_score, kinesthetic_score, digital_score, visual_words, auditory_words, kinesthetic_words, digital_words').eq('contact_id', contactId).eq('user_id', user.id).order('created_at', { ascending: false })
+      const { data, error } = await supabase.from('vak_analysis_history').select('visual_score, auditory_score, kinesthetic_score, digital_score, visual_words, auditory_words, kinesthetic_words, digital_words, created_at').eq('contact_id', contactId).eq('user_id', user.id).order('created_at', { ascending: false })
       .limit(50);
-      if (error || !data || data.length === 0) return null;
-      const history = data as unknown as VAKAnalysisHistory[];
+      if (error) throw error;
+      if (!data || data.length === 0) return null;
+      const history = data;
       const totals = history.reduce((acc, entry) => {
-        acc.visual += entry.visual_score; acc.auditory += entry.auditory_score; acc.kinesthetic += entry.kinesthetic_score; acc.digital += entry.digital_score; acc.count++;
-        acc.totalWords += (entry.visual_words.length + entry.auditory_words.length + entry.kinesthetic_words.length + entry.digital_words.length);
+        acc.visual += entry.visual_score; acc.auditory += entry.auditory_score; acc.kinesthetic += entry.kinesthetic_score; acc.digital += entry.digital_score ?? 0; acc.count++;
+        acc.totalWords += ((entry.visual_words?.length ?? 0) + (entry.auditory_words?.length ?? 0) + (entry.kinesthetic_words?.length ?? 0) + (entry.digital_words?.length ?? 0));
         return acc;
       }, { visual: 0, auditory: 0, kinesthetic: 0, digital: 0, count: 0, totalWords: 0 });
       const avgScores = { visual: totals.visual / totals.count, auditory: totals.auditory / totals.count, kinesthetic: totals.kinesthetic / totals.count, digital: totals.digital / totals.count };
@@ -116,7 +103,7 @@ export function useVAKAnalysis() {
       };
     } catch (error) {
       logger.error('Error getting VAK profile:', error);
-      return null;
+      throw error;
     }
   }, [user]);
 
@@ -126,7 +113,8 @@ export function useVAKAnalysis() {
     try {
       const { data: interactions, error } = await supabase.from('interactions').select('id, content, transcription').eq('contact_id', contactId).eq('user_id', user.id)
       .limit(200);
-      if (error || !interactions) return null;
+      if (error) throw error;
+      if (!interactions) return null;
       await Promise.all(
         interactions
           .filter(i => [i.content, i.transcription].filter(Boolean).join(' ').trim().length > 10)

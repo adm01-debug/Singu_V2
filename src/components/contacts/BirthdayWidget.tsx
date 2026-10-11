@@ -58,7 +58,7 @@ export function BirthdayWidget() {
                   {contact.days_until === 0 ? (
                     <Badge variant="default" className="mt-1 h-4 text-[8px] bg-green-500">HOJE!</Badge>
                   ) : (
-                    <p className="text-[9px] text-primary font-medium mt-0.5">Em {contact.days_until ?? contact.days_ahead} dias</p>
+                    <p className="text-[9px] text-primary font-medium mt-0.5">{contact.days_until != null ? `Em ${contact.days_until} dias` : 'Data indisponível'}</p>
                   )}
                 </div>
               </Link>

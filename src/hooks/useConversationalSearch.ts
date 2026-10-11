@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -59,30 +60,6 @@ function pushHistory(storageKey: string, q: string) {
   saveHistory(storageKey, [q, ...cur]);
 }
 
-interface ContactRow {
-  id: string;
-  first_name: string;
-  last_name: string;
-  email: string | null;
-  phone: string | null;
-  role_title: string | null;
-  relationship_score: number | null;
-  relationship_stage: string | null;
-  tags: string[] | null;
-  updated_at: string;
-  company_id: string | null;
-}
-
-interface CompanyRow {
-  id: string;
-  name: string;
-  industry: string | null;
-  city: string | null;
-  state: string | null;
-  is_customer: boolean | null;
-  tags: string[] | null;
-}
-
 interface InteractionRow {
   id: string;
   title: string | null;
@@ -97,14 +74,20 @@ async function executeFilters(
   filters: ConvFilters,
 ): Promise<ConvResultItem[]> {
   const limit = 25;
+  const byLocation = !!(filters.cidade || filters.estado);
 
   if (entity === 'contacts') {
+    const projection: string = 'id, first_name, last_name, email, role_title, relationship_score'
+      + (byLocation ? ', companies!inner(company_addresses!inner(id))' : '');
     let q = supabase
       .from('contacts')
-      .select('id, first_name, last_name, email, phone, role_title, relationship_score, relationship_stage, tags, updated_at, company_id, companies:company_id(city, state)')
+      .select(projection)
       .eq('user_id', userId)
       .order('relationship_score', { ascending: false, nullsFirst: false })
       .limit(limit);
+    if (byLocation) q = q.eq('companies.user_id', userId);
+    if (filters.cidade) q = q.ilike('companies.company_addresses.cidade', `%${filters.cidade}%`);
+    if (filters.estado) q = q.ilike('companies.company_addresses.estado', filters.estado);
     if (filters.tag) q = q.contains('tags', [filters.tag]);
     if (filters.relationship_stage) q = q.eq('relationship_stage', filters.relationship_stage);
     if (typeof filters.min_score === 'number') q = q.gte('relationship_score', filters.min_score);
@@ -114,16 +97,9 @@ async function executeFilters(
     }
     const { data, error } = await q;
     if (error) throw error;
-    let rows = (data || []) as Array<ContactRow & { companies: { city: string | null; state: string | null } | null }>;
-    if (filters.cidade) {
-      const c = filters.cidade.toLowerCase();
-      rows = rows.filter(r => r.companies?.city?.toLowerCase().includes(c));
-    }
-    if (filters.estado) {
-      const s = filters.estado.toLowerCase();
-      rows = rows.filter(r => r.companies?.state?.toLowerCase() === s);
-    }
-    return rows.map(r => ({
+    return z.array(z.object({ id: z.string(), first_name: z.string(), last_name: z.string(),
+      email: z.string().nullable(), role_title: z.string().nullable(), relationship_score: z.number().nullable(),
+    })).parse(data ?? []).map(r => ({
       id: r.id,
       entity: 'contacts',
       title: `${r.first_name} ${r.last_name}`.trim() || 'Contato',
@@ -133,25 +109,36 @@ async function executeFilters(
   }
 
   if (entity === 'companies') {
+    const projection: string = 'id, nome_crm, industry, is_customer, tags'
+      + (byLocation ? ', company_addresses!inner(id)' : '');
     let q = supabase
       .from('companies')
-      .select('id, name, industry, city, state, is_customer, tags')
+      .select(projection)
       .eq('user_id', userId)
       .limit(limit);
-    if (filters.cidade) q = q.ilike('city', `%${filters.cidade}%`);
-    if (filters.estado) q = q.eq('state', filters.estado.toUpperCase());
+    if (filters.cidade) q = q.ilike('company_addresses.cidade', `%${filters.cidade}%`);
+    if (filters.estado) q = q.ilike('company_addresses.estado', filters.estado);
     if (filters.industry) q = q.ilike('industry', `%${filters.industry}%`);
     if (typeof filters.is_customer === 'boolean') q = q.eq('is_customer', filters.is_customer);
     if (filters.tag) q = q.contains('tags', [filters.tag]);
     const { data, error } = await q;
     if (error) throw error;
-    return ((data || []) as CompanyRow[]).map(r => ({
-      id: r.id,
-      entity: 'companies',
-      title: r.name,
-      subtitle: r.industry || undefined,
-      meta: r.city && r.state ? `${r.city}, ${r.state}` : undefined,
-    }));
+    const rows = z.array(z.object({ id: z.string(), nome_crm: z.string(), industry: z.string().nullable() })).parse(data ?? []);
+    if (!rows.length) return [];
+    const { data: addresses, error: addressError } = await supabase.from('company_addresses')
+      .select('company_id, cidade, estado, is_primary').in('company_id', rows.map(r => r.id))
+      .order('is_primary', { ascending: false, nullsFirst: false });
+    if (addressError) throw addressError;
+    return rows.map(r => {
+      const address = addresses?.find(a => a.company_id === r.id);
+      return {
+        id: r.id,
+        entity: 'companies',
+        title: r.nome_crm,
+        subtitle: r.industry || undefined,
+        meta: address?.cidade && address.estado ? `${address.cidade}, ${address.estado}` : undefined,
+      } satisfies ConvResultItem;
+    });
   }
 
   if (entity === 'deals') {

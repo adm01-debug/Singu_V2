@@ -82,18 +82,18 @@ export function CompanyProfileCard({
               {company.logo_url ? (
                 <OptimizedImage 
                   src={company.logo_url} 
-                  alt={company.name} 
+                  alt={company.nome_crm}
                   className="w-full h-full object-cover rounded-xl" 
                   containerClassName="w-full h-full"
                 />
               ) : (
-                safeInitial(company.name, 'E')
+                safeInitial(company.nome_crm, 'E')
               )}
             </div>
             
             <div className="text-center mt-4">
-              <h1 className="text-2xl font-bold text-foreground">{toTitleCase(company.name)}</h1>
-              {c.nome_fantasia && c.nome_fantasia !== company.name && (
+              <h1 className="text-2xl font-bold text-foreground">{toTitleCase(company.nome_crm)}</h1>
+              {c.nome_fantasia && c.nome_fantasia !== company.nome_crm && (
                 <p className="text-sm text-muted-foreground">{String(c.nome_fantasia)}</p>
               )}
               <p className="text-muted-foreground">{String(c.ramo_atividade || c.nicho_cliente || company.industry || '')}</p>

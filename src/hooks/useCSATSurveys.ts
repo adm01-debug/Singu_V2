@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { parseApiError } from '@/lib/errorMessages';
+import { z } from 'zod';
 
 export interface CSATSurvey {
   id: string;
@@ -20,6 +21,8 @@ export interface CSATSurvey {
   created_at: string;
 }
 
+const surveyStatusSchema = z.enum(['pending', 'sent', 'answered', 'expired']);
+
 export function useCSATSurveys(contactId?: string) {
   const { user } = useAuth();
   const qc = useQueryClient();
@@ -34,7 +37,7 @@ export function useCSATSurveys(contactId?: string) {
       if (contactId) query = query.eq('contact_id', contactId);
       const { data, error } = await query.limit(100);
       if (error) throw error;
-      return (data || []) as unknown as CSATSurvey[];
+      return (data || []).map(survey => ({ ...survey, status: surveyStatusSchema.parse(survey.status) }));
     },
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,

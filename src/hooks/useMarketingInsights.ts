@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { logger } from '@/lib/logger';
+import type { Tables } from '@/integrations/supabase/types';
+import { z } from 'zod';
 
  export interface FunnelStat {
    stage: string;
@@ -46,7 +48,7 @@ import { logger } from '@/lib/logger';
          logger.error('Error fetching marketing funnel:', error);
          throw error;
        }
-       return (data || []) as unknown as FunnelStat[];
+       return data ?? [];
      },
    });
  }
@@ -61,27 +63,36 @@ import { logger } from '@/lib/logger';
      queryFn: async () => {
        if (!user) return null;
 
-       const { data, error } = await supabase
-         .from('contacts')
-         .select('id, contact_behavior(disc_primary, vak_primary, motivation_primary)')
-         .eq('user_id', user.id);
-
-       if (error) { throw error; }
+       const data: Pick<Tables<'contact_behavior'>, 'disc_primary' | 'vak_primary' | 'motivation_primary'>[] = [];
+       const projection: string = 'id, disc_primary, vak_primary, motivation_primary, contact:contacts!inner(user_id)';
+       let afterId: string | undefined;
+       while (true) {
+         let query = supabase.from('contact_behavior')
+           .select(projection)
+           .eq('contact.user_id', user.id).order('id', { ascending: true }).limit(1000);
+         if (afterId) query = query.gt('id', afterId);
+         const { data: page, error } = await query;
+         if (error) throw error;
+         const rows = z.array(z.object({
+           id: z.string(), disc_primary: z.string().nullable(), vak_primary: z.string().nullable(), motivation_primary: z.string().nullable(),
+         })).parse(page ?? []);
+         data.push(...rows.map(row => ({
+           disc_primary: row.disc_primary ?? '',
+           vak_primary: row.vak_primary ?? '',
+           motivation_primary: row.motivation_primary ?? '',
+         })));
+         if (rows.length < 1000) break;
+         const cursor = rows[rows.length - 1].id;
+         if (!cursor) throw new Error('Identificação do perfil comportamental indisponível');
+         afterId = cursor;
+       }
 
        type BehavioralStats = {
          disc: Record<string, number>;
          vak: Record<string, number>;
          motivation: Record<string, number>;
        };
-       type ContactRow = {
-         contact_behavior?: Array<{
-           disc_primary?: string | null;
-           vak_primary?: string | null;
-           motivation_primary?: string | null;
-         }> | null;
-       };
-       const stats = (data || []).reduce<BehavioralStats>((acc, curr: ContactRow) => {
-         const behavior = curr.contact_behavior?.[0];
+       const stats = (data || []).reduce<BehavioralStats>((acc, behavior) => {
           if (behavior?.disc_primary) acc.disc[behavior.disc_primary] = (acc.disc[behavior.disc_primary] || 0) + 1;
           if (behavior?.vak_primary) acc.vak[behavior.vak_primary] = (acc.vak[behavior.vak_primary] || 0) + 1;
           if (behavior?.motivation_primary) {
@@ -115,7 +126,7 @@ import { logger } from '@/lib/logger';
          logger.error('Error fetching campaign stats:', error);
          throw error;
        }
-       return (data || []) as unknown as CampaignStat[];
+       return data ?? [];
      },
    });
  }

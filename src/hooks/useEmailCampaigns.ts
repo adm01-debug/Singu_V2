@@ -29,7 +29,7 @@ export function useEmailCampaigns() {
   const qc = useQueryClient();
   const key = ['email-campaigns', user?.id];
 
-  const { data: campaigns = [], isLoading } = useQuery({
+  const { data: campaigns = [], isLoading, error } = useQuery({
     queryKey: key,
     enabled: !!user,
     queryFn: async () => {
@@ -48,10 +48,10 @@ export function useEmailCampaigns() {
   });
 
   const create = useMutation({
-    mutationFn: async (input: Partial<EmailCampaign>) => {
+    mutationFn: async (input: Omit<TablesInsert<'email_campaigns'>, 'user_id'>) => {
       if (!user) throw new Error('Não autenticado');
       const { data, error } = await supabase.from('email_campaigns')
-        .insert({ ...input, user_id: user.id } as TablesInsert<'email_campaigns'>)
+        .insert({ ...input, user_id: user.id })
         .select()
         .maybeSingle();
       if (error) throw error;
@@ -63,8 +63,9 @@ export function useEmailCampaigns() {
   });
 
   const update = useMutation({
-    mutationFn: async ({ id, ...updates }: Partial<EmailCampaign> & { id: string }) => {
-      const { error } = await supabase.from('email_campaigns').update(updates as never).eq('user_id', user.id).eq('id', id);
+    mutationFn: async ({ id, ...updates }: TablesUpdate<'email_campaigns'> & { id: string }) => {
+      if (!user) throw new Error('Não autenticado');
+      const { error } = await supabase.from('email_campaigns').update(updates).eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Campanha atualizada!'); },
@@ -73,6 +74,7 @@ export function useEmailCampaigns() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
+      if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('email_campaigns').delete().eq('user_id', user.id).eq('id', id);
       if (error) throw error;
     },
@@ -82,8 +84,8 @@ export function useEmailCampaigns() {
 
   /**
    * Materializa destinatários a partir dos contatos do usuário com email válido,
-   * marca a campanha como "sending" e depois "sent". Simula o envio (não dispara emails reais —
-   * a entrega real é responsabilidade da edge function de email já existente).
+   * mantendo-os pendentes. Não existe neste contrato um produtor de entrega confirmado;
+   * preparar destinatários não comprova envio e não deve alterar status/sent_at da campanha.
    */
   const sendCampaign = useMutation({
     mutationFn: async (campaignId: string) => {
@@ -107,22 +109,20 @@ export function useEmailCampaigns() {
       const eligible = allContacts.filter(c => c.email && c.email.includes('@'));
       if (eligible.length === 0) throw new Error('Nenhum contato com email válido foi encontrado');
 
-      // Marcar como enviando + buscar destinatários já existentes em paralelo
-      const [{ error: sendingErr }, { data: existing }] = await Promise.all([
-        supabase.from('email_campaigns').update({ status: 'sending' } as TablesUpdate<'email_campaigns'>).eq('user_id', user.id).eq('id', campaignId),
-        supabase.from('campaign_recipients').select('contact_id').eq('campaign_id', campaignId).limit(10000),
-      ]);
-      if (sendingErr) throw sendingErr;
+      const { data: existing, error: existingError } = await supabase.from('campaign_recipients')
+        .select('contact_id').eq('user_id', user.id).eq('campaign_id', campaignId).limit(10000);
+      if (existingError) throw existingError;
       const existingIds = new Set((existing ?? []).map(r => r.contact_id));
 
       const toInsert = eligible
         .filter(c => !existingIds.has(c.id))
         .map(c => ({
           campaign_id: campaignId,
+          user_id: user.id,
           contact_id: c.id,
           email: c.email!,
-          status: 'sent',
-          sent_at: new Date().toISOString(),
+          status: 'pending',
+          sent_at: null,
         }));
 
       // Inserir destinatários em lotes de 500 para evitar limites de payload
@@ -133,18 +133,16 @@ export function useEmailCampaigns() {
       }
 
       const { error: updError } = await supabase.from('email_campaigns').update({
-        status: 'sent',
-        sent_at: new Date().toISOString(),
         total_recipients: eligible.length,
-      } as TablesUpdate<'email_campaigns'>).eq('user_id', user.id).eq('id', campaignId);
+      }).eq('user_id', user.id).eq('id', campaignId);
       if (updError) throw updError;
 
-      return { recipientsCount: eligible.length, newlyAdded: toInsert.length };
+      return { recipientsCount: eligible.length, newlyAdded: toInsert.length, deliveryConfirmed: false };
     },
     onSuccess: ({ recipientsCount, newlyAdded }) => {
       qc.invalidateQueries({ queryKey: key });
       qc.invalidateQueries({ queryKey: ['campaign-recipients'] });
-      toast.success(`Campanha enviada para ${recipientsCount} destinatários (${newlyAdded} novos)`);
+      toast.warning(`${recipientsCount} destinatários preparados (${newlyAdded} novos). Nenhum envio foi confirmado: falta integrar o serviço de entrega.`);
     },
     onError: (e: Error) => {
       toast.error(`Falha ao enviar: ${parseApiError(e)}`);
@@ -162,5 +160,5 @@ export function useEmailCampaigns() {
       : 0,
   };
 
-  return { campaigns, isLoading, create, update, remove, sendCampaign, stats };
+  return { campaigns, isLoading, error, create, update, remove, sendCampaign, stats };
 }

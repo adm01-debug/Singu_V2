@@ -12,7 +12,17 @@ import {
   RFM_SEGMENTS, determineRFMSegment, calculateRFMScore
 } from '@/types/rfm';
 import { logger } from "@/lib/logger";
+import { z } from 'zod';
 import { callExternalRpc } from '@/lib/externalData';
+
+const rfmActionsSchema = z.array(z.object({
+  id: z.string().min(1).nullish(), action: z.string(), description: z.string(), priority: z.number(),
+  channel: z.enum(['email', 'phone', 'whatsapp', 'meeting', 'any']), timing: z.string(), expectedImpact: z.string().nullish(),
+}));
+const rfmOffersSchema = z.array(z.object({
+  id: z.string().min(1).nullish(), offerType: z.string(), description: z.string(), discountPercent: z.number().optional(),
+  validDays: z.number(), reason: z.string(),
+}));
 
 interface PurchaseData {
   contactId: string;
@@ -39,7 +49,7 @@ export function useRFMAnalysis(contactId?: string) {
       return (data || []).map(item => ({
         id: item.id, userId: item.user_id, contactId: item.contact_id,
         recencyScore: item.recency_score as RFMScore, frequencyScore: item.frequency_score as RFMScore,
-        monetaryScore: item.monetary_score as RFMScore, rfmScore: item.rfm_score, totalScore: item.total_score,
+        monetaryScore: item.monetary_score as RFMScore, rfmScore: z.number().finite().parse(Number(item.rfm_score ?? (item.recency_score * 100 + item.frequency_score * 10 + item.monetary_score))), totalScore: item.total_score,
         daysSinceLastPurchase: item.days_since_last_purchase, daysSinceLastInteraction: item.days_since_last_interaction,
         totalPurchases: item.total_purchases || 0, totalInteractions: item.total_interactions || 0,
         totalMonetaryValue: Number(item.total_monetary_value) || 0, averageOrderValue: Number(item.average_order_value) || 0,
@@ -49,8 +59,12 @@ export function useRFMAnalysis(contactId?: string) {
         predictedNextPurchaseDate: item.predicted_next_purchase_date ? new Date(item.predicted_next_purchase_date) : null,
         predictedLifetimeValue: item.predicted_lifetime_value ? Number(item.predicted_lifetime_value) : null,
         churnProbability: item.churn_probability ? Number(item.churn_probability) : null,
-        recommendedActions: (item.recommended_actions as unknown as RFMAction[]) || [],
-        recommendedOffers: (item.recommended_offers as unknown as RFMOffer[]) || [],
+        recommendedActions: rfmActionsSchema.parse(item.recommended_actions ?? []).map((action, index) => ({
+          ...action, id: action.id ?? `${item.id}:action:${index}`, expectedImpact: action.expectedImpact ?? 'Impacto não estimado',
+        })),
+        recommendedOffers: rfmOffersSchema.parse(item.recommended_offers ?? []).map((offer, index) => ({
+          ...offer, id: offer.id ?? `${item.id}:offer:${index}`,
+        })),
         communicationPriority: item.communication_priority as CommunicationPriority || 'medium',
         analyzedAt: new Date(item.analyzed_at), createdAt: new Date(item.created_at), updatedAt: new Date(item.updated_at)
       })) as RFMAnalysis[];

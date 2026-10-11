@@ -9,8 +9,8 @@ import { useAuth } from '@/hooks/useAuth';
 
 interface AuditIssue {
   type: string;
-  expected: string | number | null;
-  actual: string | number | null;
+  expected?: string | number | null;
+  actual?: string | number | null;
 }
 
 interface AuditResult {
@@ -18,9 +18,25 @@ interface AuditResult {
   issues: AuditIssue[];
 }
 
+function isAuditIssue(value: unknown): value is AuditIssue {
+  return !!value && typeof value === 'object' && !Array.isArray(value) &&
+    'type' in value && typeof value.type === 'string' &&
+    (!('expected' in value) || value.expected == null || typeof value.expected === 'string' || typeof value.expected === 'number') &&
+    (!('actual' in value) || value.actual == null || typeof value.actual === 'string' || typeof value.actual === 'number');
+}
+
+function parseAuditResult(value: unknown): AuditResult {
+  if (!value || typeof value !== 'object' || Array.isArray(value) ||
+      !('consistent' in value) || typeof value.consistent !== 'boolean' ||
+      !('issues' in value) || !Array.isArray(value.issues) || !value.issues.every(isAuditIssue)) {
+    throw new Error('Resposta inválida da auditoria de relacionamento.');
+  }
+  return { consistent: value.consistent, issues: value.issues };
+}
+
 export default function CRMRelationshipAuditPage() {
   const { user } = useAuth();
-  const { data: contacts, isLoading, error } = useQuery({
+  const { data: contacts, isLoading, error: auditError } = useQuery({
     queryKey: ['global-relationship-audit', user?.id],
     enabled: !!user,
     queryFn: async () => {
@@ -41,8 +57,7 @@ export default function CRMRelationshipAuditPage() {
           batch.map(async (contact) => {
             const { data: result, error: rpcError } = await supabase.rpc('check_relationship_consistency', { p_contact_id: contact.id });
             if (rpcError) throw rpcError;
-            if (!result) throw new Error('Auditoria de relacionamento indisponível');
-            return { contact, audit: result as unknown as AuditResult };
+            return { contact, audit: parseAuditResult(result) };
           })
         );
         auditResults.push(...batchResults);
@@ -60,7 +75,7 @@ export default function CRMRelationshipAuditPage() {
   ];
 
   if (isLoading) return <Skeleton className="h-[600px] w-full" />;
-  if (error) return <div role="alert" className="p-6 text-destructive">Não foi possível verificar a integridade dos dados. Tente novamente.</div>;
+  if (auditError) return <div role="alert" className="p-6 text-destructive">Não foi possível verificar a integridade dos dados. Tente novamente.</div>;
 
   return (
     <div className="p-6 space-y-6">

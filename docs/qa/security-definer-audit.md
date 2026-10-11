@@ -7,6 +7,8 @@
 Medido no banco canônico com as migrations pendentes até `20261011140000` aplicadas em transação revertida (`tests/rls/run.sh`).
 O baseline anterior (63) refletia o histórico local de migrations, não o banco real (93 DEFINERs antes desta rodada; +3 RPCs públicas novas).
 
+As RPCs transacionais `persist_company_composite`, `persist_lead_score_results` e `enroll_sequence_contact` usam `SECURITY INVOKER`: as permissões canônicas já permitem as gravações necessárias. Empresas e inscrições obedecem à RLS do chamador, além da validação explícita do dono; pontuações exigem `service_role` e validam o tenant de cada contato. As fixtures de atomicidade, retry, bloqueio entre usuários e as duas allowlists foram executadas com as migrations pendentes em transação revertida. Não foi necessário ampliar a allowlist nem o baseline de DEFINERs.
+
 - **Total DEFINER em `public.*`**: 103 (`20261006130000` remove o overload quebrado `move_deal_atomic(uuid, text, numeric)`; `20261006140000` adiciona 8 do AI Gateway; `20261007100000` passa `get_instant_kpis(uuid)` a INVOKER; `20261011140000` restringe o gatilho de histórico de relacionamento a `service_role`/owner)
 - **Executáveis por `anon`**: 12 — exatamente a allowlist pública de `tests/rls/functions_authenticated_allowlist.sql` (Deal Room ×5, Forms ×2, Lead Magnets ×2, Landing Page ×1, CSAT ×2); nenhuma usa `auth.uid()`.
 - **Executáveis só por `authenticated` (além de service_role)**: 18 — `has_role(uuid, app_role)` + as 15 RPCs do frontend abaixo + `get_ai_gateway_health(integer)` e `get_ai_gateway_partition_stats()` (painel admin; ambas exigem `has_role(auth.uid(), 'admin')`).

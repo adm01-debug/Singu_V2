@@ -49,6 +49,8 @@ describe('useContacts CRUD & Pagination', () => {
   it('should fetch first page of contacts (50 per page)', async () => {
     const mockData = Array.from({ length: 50 }, (_, i) => ({
       id: `id-${i}`,
+      user_id: 'test-user-id',
+      version: 1,
       first_name: `User ${i}`,
       last_name: 'Test',
       updated_at: new Date().toISOString(),
@@ -74,12 +76,16 @@ describe('useContacts CRUD & Pagination', () => {
   it('should fetch every page when the consumer requires the full dataset', async () => {
     const firstPage = Array.from({ length: 50 }, (_, i) => ({
       id: `id-${i}`,
+      user_id: 'test-user-id',
+      version: 1,
       first_name: `User ${i}`,
       last_name: 'Test',
       updated_at: new Date().toISOString(),
     }));
     const secondPage = Array.from({ length: 30 }, (_, i) => ({
       id: `id-${i + 50}`,
+      user_id: 'test-user-id',
+      version: 1,
       first_name: `User ${i + 50}`,
       last_name: 'Test',
       updated_at: new Date().toISOString(),
@@ -106,6 +112,8 @@ describe('useContacts CRUD & Pagination', () => {
   it('should stop the full-dataset loading state when a later page fails', async () => {
     const firstPage = Array.from({ length: 50 }, (_, i) => ({
       id: `id-${i}`,
+      user_id: 'test-user-id',
+      version: 1,
       first_name: `User ${i}`,
       last_name: 'Test',
       updated_at: new Date().toISOString(),
@@ -134,6 +142,8 @@ describe('useContacts CRUD & Pagination', () => {
   it('should not continue cached pagination while disabled', async () => {
     const firstPage = Array.from({ length: 50 }, (_, i) => ({
       id: `id-${i}`,
+      user_id: 'test-user-id',
+      version: 1,
       first_name: `User ${i}`,
       last_name: 'Test',
       updated_at: new Date().toISOString(),
@@ -167,13 +177,13 @@ describe('useContacts CRUD & Pagination', () => {
     };
 
     vi.mocked(externalData.insertExternalData).mockResolvedValue({
-      data: { ...newContact, id: 'new-id', updated_at: new Date().toISOString() },
+      data: { ...newContact, id: 'new-id', user_id: 'test-user-id', version: 1, updated_at: new Date().toISOString() },
       error: null,
     });
 
     const { result } = renderHook(() => useContacts(), { wrapper });
     
-    await result.current.createContact(newContact as unknown as Parameters<typeof result.current.createContact>[0]);
+    await result.current.createContact(newContact);
 
     expect(externalData.insertExternalData).toHaveBeenCalledWith(
       'contacts',

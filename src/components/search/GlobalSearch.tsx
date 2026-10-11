@@ -244,18 +244,27 @@ export const GlobalSearch = React.forwardRef<HTMLDivElement, GlobalSearchProps>(
       if (gen !== searchGenRef.current) return;
       if (contactsResponse.error || companiesResponse.error || interactionsResponse.error) throw contactsResponse.error || companiesResponse.error || interactionsResponse.error;
 
+      const localIds = contactsResponse.data?.map(c => c.id) || [];
+      const roleById = new Map<string, string | null>();
+      if (localIds.length) {
+        const { data: contactRoles, error: rolesError } = await supabase.from('contacts').select('id, role_title').eq('user_id', user.id).in('id', localIds);
+        if (rolesError) throw rolesError;
+        if (gen !== searchGenRef.current) return;
+        for (const contact of contactRoles || []) roleById.set(contact.id, contact.role_title);
+      }
+
       let externalContacts: SearchResult[] = [];
       try {
         const { data: extResults } = await queryExternalData<SearchContact>({ table: 'vw_search_contacts', filters: [{ type: 'eq', column: 'user_id', value: user?.id ?? '' }], search: { term: searchQuery.trim(), columns: ['full_name', 'nome_tratamento', 'email', 'phone'] }, range: { from: 0, to: 4 } });
         if (extResults?.length) {
-          const localIds = new Set(contactsResponse.data?.map(c => c.id) || []);
-          externalContacts = extResults.filter(e => !localIds.has(e.id)).map(e => ({ id: e.id, type: 'contact' as const, title: e.full_name, subtitle: e.company || e.email || undefined, meta: e.phone || undefined }));
+          const localIdSet = new Set(localIds);
+          externalContacts = extResults.filter(e => !localIdSet.has(e.id)).map(e => ({ id: e.id, type: 'contact' as const, title: e.full_name, subtitle: e.company || e.email || undefined, meta: e.phone || undefined }));
         }
       } catch { /* best-effort */ }
 
       if (gen !== searchGenRef.current) return;
       setResults({
-        contacts: [...(contactsResponse.data?.map(c => ({ id: c.id, type: 'contact' as const, title: `${c.first_name} ${c.last_name}`, subtitle: c.role_title || c.email, meta: c.phone })) || []), ...externalContacts],
+        contacts: [...(contactsResponse.data?.map(c => ({ id: c.id, type: 'contact' as const, title: `${c.first_name} ${c.last_name}`, subtitle: roleById.get(c.id) || c.email, meta: c.phone })) || []), ...externalContacts],
         companies: companiesResponse.data?.map(c => ({ id: c.id, type: 'company' as const, title: toTitleCase(c.name), subtitle: c.industry, meta: c.city && c.state ? `${c.city}, ${c.state}` : undefined })) || [],
         interactions: interactionsResponse.data?.map(i => ({ id: i.id, type: 'interaction' as const, title: i.title, subtitle: i.type, meta: new Date(i.created_at).toLocaleDateString('pt-BR') })) || [],
       });

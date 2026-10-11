@@ -2,10 +2,24 @@ import { useMemo } from 'react';
 import type { Tables } from '@/integrations/supabase/types';
 import type { Contact, Interaction, ContactRole, SentimentType, InteractionType, RelationshipStage, LifeEvent } from '@/types';
 import { getBehavior } from '@/types/behavior';
+import { z } from 'zod';
+import type { Json } from '@/integrations/supabase/types';
 
 type DbContact = Tables<'contacts'>;
 type DbCompany = Tables<'companies'>;
 type DbInteraction = Tables<'interactions'>;
+
+const lifeEventsSchema = z.array(z.object({
+  id: z.string(), type: z.enum(['birthday', 'anniversary', 'promotion', 'travel', 'family', 'achievement', 'other']),
+  title: z.string(), date: z.string().datetime({ offset: true }).transform(value => new Date(value)),
+  notes: z.string().optional(), reminder: z.boolean(),
+}));
+
+export function normalizeDashboardLifeEvents(value: Json | null): LifeEvent[] {
+  return lifeEventsSchema.parse(value ?? []).map(event => ({
+    id: event.id, type: event.type, title: event.title, date: event.date, notes: event.notes, reminder: event.reminder,
+  }));
+}
 
 /**
  * Maps raw Supabase data to typed domain models.
@@ -52,7 +66,7 @@ export function useDashboardMappedData(
         twitter: c.twitter || undefined,
         role: (c.role as ContactRole) || 'contact',
         companyId: c.company_id || '',
-        companyName: company?.name || '',
+        companyName: company?.nome_crm || '',
         relationshipScore: c.relationship_score || 0,
         sentiment: (c.sentiment as SentimentType) || 'neutral',
         avatar: c.avatar_url || undefined,
@@ -80,7 +94,7 @@ export function useDashboardMappedData(
           currentChallenges: [],
           competitorsUsed: [],
         },
-        lifeEvents: (Array.isArray(c.life_events) ? c.life_events as unknown as LifeEvent[] : []),
+        lifeEvents: normalizeDashboardLifeEvents(c.life_events),
         relationshipStage: (c.relationship_stage as RelationshipStage) || 'unknown',
         roleTitle: c.role_title || '',
         birthday: c.birthday ? new Date(c.birthday) : undefined,

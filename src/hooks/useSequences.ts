@@ -2,8 +2,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { logger } from '@/lib/logger';
 import { parseApiError } from '@/lib/errorMessages';
+import { callExternalRpc } from '@/lib/externalData';
+import { z } from 'zod';
 
 export interface SequenceStep {
   id: string;
@@ -64,7 +65,7 @@ export function useSequences() {
   const qc = useQueryClient();
   const userId = user?.id;
 
-  const { data: sequences = [], isLoading } = useQuery({
+  const { data: sequences = [], isLoading, error } = useQuery({
     queryKey: ['sequences', userId],
     queryFn: async () => {
       if (!userId) return [];
@@ -99,6 +100,8 @@ export function useSequences() {
         const stepsToInsert = steps.map((s, i) => ({
           sequence_id: seq.id,
           step_order: i + 1,
+          step_number: i + 1,
+          user_id: userId,
           channel: s.channel,
           delay_days: s.delay_days,
           delay_hours: s.delay_hours,
@@ -167,24 +170,15 @@ export function useSequences() {
   const enrollContact = useMutation({
     mutationFn: async ({ sequenceId, contactId }: { sequenceId: string; contactId: string }) => {
       if (!userId) throw new Error('Não autenticado');
-      const [{ error }, { error: updError }] = await Promise.all([
-        supabase.from('sequence_enrollments').insert({
-          sequence_id: sequenceId,
-          contact_id: contactId,
-          user_id: userId,
-          next_action_at: new Date().toISOString(),
-        }),
-        supabase.from('sequences')
-          .update({ total_enrolled: (sequences.find(s => s.id === sequenceId)?.total_enrolled || 0) + 1 })
-          .eq('user_id', userId!)
-          .eq('id', sequenceId),
-      ]);
+      const { data, error } = await callExternalRpc<unknown>('enroll_sequence_contact', {
+        _sequence_id: sequenceId, _contact_id: contactId,
+      });
       if (error) throw error;
-      if (updError) logger.error('Failed to update enrollment count', updError);
+      return z.object({ id: z.string(), created: z.boolean() }).parse(data);
     },
-    onSuccess: () => {
+    onSuccess: ({ created }) => {
       qc.invalidateQueries({ queryKey: ['sequences'] });
-      toast.success('Contato inscrito na sequência');
+      toast.success(created ? 'Contato inscrito na sequência' : 'Contato já inscrito na sequência');
     },
     onError: (e: Error) => toast.error(parseApiError(e)),
   });
@@ -192,6 +186,7 @@ export function useSequences() {
   return {
     sequences,
     loading: isLoading,
+    error,
     createSequence: createSequence.mutateAsync,
     toggleStatus: toggleStatus.mutateAsync,
     deleteSequence: deleteSequence.mutateAsync,
