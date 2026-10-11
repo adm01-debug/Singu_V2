@@ -24,16 +24,17 @@ export interface PipelineDeal {
 }
 
 export interface PipelineSummary {
-  total_deals: number;
-  total_value: number;
-  weighted_value: number;
-  stages: Array<{
-    stage: string;
+  by_status: Record<string, {
     count: number;
-    value: number;
+    recent: number;
   }>;
-  avg_cycle_days: number;
-  conversion_rate: number;
+  by_segment: Record<string, number>;
+  by_state: Record<string, number>;
+  totals: {
+    active: number;
+    inactive: number;
+    with_recent_interaction: number;
+  };
 }
 
 export interface WeightedForecast {

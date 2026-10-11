@@ -8,6 +8,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- Resumo do Pipeline mantém o envelope de empresas e obtém a UF de um único endereço prioritário, evitando coluna inexistente, contagem duplicada e falha para empresas sem status. O contrato TypeScript acompanha o retorno real da RPC.
 - Pipeline carrega negócios individuais sob RLS, preserva datas de fechamentos anteriores e atualiza relatórios/aba comercial ao fechar negócios. Status canônicos aparecem corretamente nos indicadores da empresa. O resumo diário usa a data e o fuso da interface, inclusive após a virada do dia UTC; chamadas legadas mantêm o fuso da sessão.
 - Fechar negócios pelo Pipeline grava os estados canônicos `ganho`/`perdido` e o instante real de fechamento, permitindo contagens e receita nos relatórios sem criar datas para negócios antigos.
 - Resumo diário e relatórios passam a usar os contratos reais das RPCs: séries de sazonalidade e canais, etapas do funil e contagens de negócios/interações/follow-ups. Formatos legados são preservados e tempos de resposta ausentes ficam indisponíveis. A auditoria de relacionamento detecta divergências da última interação, respeita o dono do contato e mostra falhas de consulta sem declarar integridade global. Gravação do histórico pelo gatilho volta a permitir alterações de score/estágio/sentimento e exclusão de interações pelo dono, mantendo bloqueada a escrita direta de logs.
