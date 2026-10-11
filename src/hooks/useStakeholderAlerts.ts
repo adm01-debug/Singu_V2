@@ -124,7 +124,7 @@ export function useStakeholderAlerts(companyId?: string) {
         .select(`
           *,
           contact:contacts(first_name, last_name),
-          company:companies(name)
+          company:companies(nome_crm)
         `)
         .eq('user_id', user.id)
         .eq('dismissed', false)
@@ -143,7 +143,7 @@ export function useStakeholderAlerts(companyId?: string) {
       const typedData = (data || []).map(alert => ({
         ...alert,
         contact: alert.contact as { first_name: string; last_name: string } | undefined,
-        company: alert.company as { name: string } | undefined
+        company: alert.company ? { name: alert.company.nome_crm } : undefined
       })) as StakeholderAlert[];
 
       setAlerts(typedData);

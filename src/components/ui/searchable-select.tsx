@@ -19,7 +19,9 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { supabase } from '@/integrations/supabase/client';
+import type { TablesInsert } from '@/integrations/supabase/types';
 import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
 
 export type CustomValueMode = 'strict' | 'flexible' | 'approval';
 
@@ -41,6 +43,10 @@ interface SearchableSelectProps {
   customValueLabel?: string;
   /** Field name for audit logging */
   fieldName?: string;
+  /** Registro realmente persistido pelo callback de criação do valor. */
+  auditTarget?: Pick<TablesInsert<'audit_log'>, 'table_name' | 'record_id'> & {
+    action: 'INSERT' | 'UPDATE' | 'DELETE';
+  };
 }
 
 export function SearchableSelect({
@@ -56,6 +62,7 @@ export function SearchableSelect({
   onCustomValue,
   customValueLabel = 'Adicionar novo',
   fieldName,
+  auditTarget,
 }: SearchableSelectProps) {
   const { user } = useAuth();
 
@@ -81,18 +88,21 @@ export function SearchableSelect({
 
   const logCustomValue = useCallback(async (customValue: string) => {
     try {
-      if (!user) return;
-      await supabase.from('audit_log').insert({
+      if (!user || !auditTarget) throw new Error('Registro persistido indisponível para auditoria.');
+      const { error } = await supabase.from('audit_log').insert({
+        table_name: auditTarget.table_name,
+        record_id: auditTarget.record_id,
         entity_type: 'custom_value',
-        entity_id: user.id,
-        action: 'custom_value_created',
+        entity_id: auditTarget.record_id,
+        action: auditTarget.action,
         new_data: { field: fieldName || 'unknown', value: customValue },
         user_id: user.id,
       });
+      if (error) throw error;
     } catch {
-      // Non-blocking — don't break UX for audit failure
+      toast.error('Valor selecionado, mas não foi possível registrar a auditoria.');
     }
-  }, [fieldName, user]);
+  }, [auditTarget, fieldName, user]);
 
   const handleCustomValue = useCallback(async (customValue: string) => {
     if (mode === 'strict') return;

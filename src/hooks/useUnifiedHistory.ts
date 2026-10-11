@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import type { Tables } from '@/integrations/supabase/types';
+import { z } from 'zod';
 
 export type HistoryChannel = 'whatsapp' | 'call' | 'email' | 'meeting' | 'note' | 'social';
 
@@ -30,58 +32,60 @@ export interface UnifiedHistoryFilters {
   limit?: number;
 }
 
-function toItemFromWhatsapp(r: Record<string, unknown>): HistoryItem {
-  const type = (r.message_type as string) || 'text';
-  const content = (r.content as string) || '';
+const historyChannelSchema = z.enum(['whatsapp', 'call', 'email', 'meeting', 'note', 'social']);
+const directionSchema = z.enum(['inbound', 'outbound', 'unknown']);
+
+function toItemFromWhatsapp(r: Pick<Tables<'whatsapp_messages'>, 'id' | 'message_type' | 'content' | 'timestamp' | 'created_at' | 'from_me' | 'contact_id' | 'company_id' | 'status' | 'media_url'>): HistoryItem {
+  const type = r.message_type || 'text';
+  const content = r.content || '';
   return {
     id: `wa:${r.id}`,
     source: 'whatsapp_messages',
     channel: 'whatsapp',
-    timestamp: (r.timestamp as string) || (r.created_at as string),
-    direction: r.from_me ? 'outbound' : 'inbound',
+    timestamp: r.timestamp || r.created_at,
+    direction: r.from_me === null ? 'unknown' : r.from_me ? 'outbound' : 'inbound',
     title: `WhatsApp · ${type}`,
     preview: type === 'audio' ? '🎙️ Áudio' : content.slice(0, 200),
-    contact_id: (r.contact_id as string) ?? null,
-    company_id: (r.company_id as string) ?? null,
-    duration_seconds: (r.duration_seconds as number) ?? null,
-    status: (r.status as string) ?? null,
-    audio_url: (r.media_url as string) ?? null,
+    contact_id: r.contact_id,
+    company_id: r.company_id,
+    status: r.status ?? null,
+    audio_url: r.media_url ?? null,
   };
 }
 
-function toItemFromCall(r: Record<string, unknown>): HistoryItem {
+function toItemFromCall(r: Pick<Tables<'call_logs'>, 'id' | 'created_at' | 'direction' | 'status' | 'summary' | 'transcription' | 'contact_id' | 'company_id' | 'duration_seconds' | 'audio_url'>): HistoryItem {
   return {
     id: `call:${r.id}`,
     source: 'call_logs',
     channel: 'call',
-    timestamp: r.created_at as string,
-    direction: (r.direction as 'inbound' | 'outbound') || 'unknown',
+    timestamp: r.created_at,
+    direction: directionSchema.nullable().parse(r.direction) ?? 'unknown',
     title: `Ligação · ${r.status ?? 'registro'}`,
-    preview: ((r.summary as string) || (r.transcription as string) || '').slice(0, 200),
-    contact_id: (r.contact_id as string) ?? null,
-    company_id: (r.company_id as string) ?? null,
-    duration_seconds: (r.duration_seconds as number) ?? null,
-    status: (r.status as string) ?? null,
-    audio_url: (r.audio_url as string) ?? null,
-    transcription: (r.transcription as string) ?? null,
+    preview: (r.summary || r.transcription || '').slice(0, 200),
+    contact_id: r.contact_id,
+    company_id: r.company_id,
+    duration_seconds: r.duration_seconds,
+    status: r.status,
+    audio_url: r.audio_url,
+    transcription: r.transcription,
   };
 }
 
-function toItemFromInteraction(r: Record<string, unknown>): HistoryItem {
-  const type = (r.type as HistoryChannel) || 'note';
+function toItemFromInteraction(r: Pick<Tables<'interactions'>, 'id' | 'data_interacao' | 'direction' | 'type' | 'title' | 'content' | 'transcription' | 'contact_id' | 'company_id' | 'duracao_segundos' | 'audio_url'>): HistoryItem {
+  const type = historyChannelSchema.nullable().parse(r.type) ?? 'note';
   return {
     id: `int:${r.id}`,
     source: 'interactions',
     channel: type,
-    timestamp: r.created_at as string,
-    direction: r.initiated_by === 'them' ? 'inbound' : 'outbound',
-    title: (r.title as string) || `Interação · ${type}`,
-    preview: ((r.content as string) || (r.transcription as string) || '').slice(0, 200),
-    contact_id: (r.contact_id as string) ?? null,
-    company_id: (r.company_id as string) ?? null,
-    duration_seconds: (r.duration as number) ?? null,
-    audio_url: (r.audio_url as string) ?? null,
-    transcription: (r.transcription as string) ?? null,
+    timestamp: r.data_interacao,
+    direction: directionSchema.parse(r.direction),
+    title: r.title || `Interação · ${type}`,
+    preview: (r.content || r.transcription || '').slice(0, 200),
+    contact_id: r.contact_id,
+    company_id: r.company_id,
+    duration_seconds: r.duracao_segundos,
+    audio_url: r.audio_url,
+    transcription: r.transcription,
   };
 }
 
@@ -105,7 +109,7 @@ export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
       if (wantWA) {
         let q = supabase
           .from('whatsapp_messages')
-          .select('id, contact_id, company_id, from_me, message_type, content, media_url, status, timestamp, created_at, duration_seconds')
+          .select('id, contact_id, company_id, from_me, message_type, content, media_url, status, timestamp, created_at')
           .eq('user_id', user!.id)
           .order('timestamp', { ascending: false })
           .limit(limit);
@@ -116,7 +120,7 @@ export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
         if (filters.search) q = q.ilike('content', `%${filters.search}%`);
         tasks.push(run(q).then(({ data, error }) => {
           if (error) throw error;
-          return (data ?? []).map(r => toItemFromWhatsapp(r as Record<string, unknown>));
+          return (data ?? []).map(r => toItemFromWhatsapp(r));
         }));
       }
 
@@ -134,7 +138,7 @@ export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
         if (filters.search) q = q.or(`transcription.ilike.%${filters.search}%,summary.ilike.%${filters.search}%`);
         tasks.push(run(q).then(({ data, error }) => {
           if (error) throw error;
-          return (data ?? []).map(r => toItemFromCall(r as Record<string, unknown>));
+          return (data ?? []).map(toItemFromCall);
         }));
       }
 
@@ -144,19 +148,19 @@ export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
           : ['email', 'meeting', 'note', 'social'];
         let q = supabase
           .from('interactions')
-          .select('id, contact_id, company_id, type, title, content, transcription, audio_url, duration, initiated_by, created_at')
+          .select('id, contact_id, company_id, type, title, content, transcription, audio_url, duracao_segundos, direction, data_interacao')
           .eq('user_id', user!.id)
           .in('type', intChannels)
-          .order('created_at', { ascending: false })
+          .order('data_interacao', { ascending: false })
           .limit(limit);
         if (filters.contactId) q = q.eq('contact_id', filters.contactId);
         if (filters.companyId) q = q.eq('company_id', filters.companyId);
-        if (filters.from) q = q.gte('created_at', filters.from);
-        if (filters.to) q = q.lte('created_at', filters.to);
+        if (filters.from) q = q.gte('data_interacao', filters.from);
+        if (filters.to) q = q.lte('data_interacao', filters.to);
         if (filters.search) q = q.or(`title.ilike.%${filters.search}%,content.ilike.%${filters.search}%`);
         tasks.push(run(q).then(({ data, error }) => {
           if (error) throw error;
-          return (data ?? []).map(r => toItemFromInteraction(r as Record<string, unknown>));
+          return (data ?? []).map(toItemFromInteraction);
         }));
       }
 

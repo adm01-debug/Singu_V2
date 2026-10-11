@@ -4,14 +4,62 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useActivityLogger } from '@/hooks/useActivityLogger';
 import { trackScoreChange } from '@/lib/trackScoreChange';
-import { queryExternalData, insertExternalData, updateExternalData, updateExternalDataWithVersion, deleteExternalData, ConcurrentEditError } from '@/lib/externalData';
+import { queryExternalData, insertExternalData, updateExternalDataWithVersion, deleteExternalData, ConcurrentEditError } from '@/lib/externalData';
 import { showConcurrentEditToast } from '@/lib/concurrentEditToast';
-import type { Tables, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import { z } from 'zod';
+import { Constants, type Json, type Tables, type TablesInsert, type TablesUpdate } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
 
-export type Contact = Tables<'contacts'>;
-export type ContactInsert = TablesInsert<'contacts'>;
-export type ContactUpdate = TablesUpdate<'contacts'>;
+export type Contact = Omit<Tables<'contacts'>, 'tags' | 'interests' | 'hobbies'> & {
+  tags: string[];
+  interests: string[];
+  hobbies: string[];
+};
+export type ContactInsert = Omit<TablesInsert<'contacts'>, 'full_name'>;
+export type ContactUpdate = Omit<TablesUpdate<'contacts'>, 'full_name'>;
+
+const text = z.string().nullable().default(null);
+const numeric = z.number().finite().nullable().default(null);
+const json: z.ZodType<Json> = z.lazy(() => z.union([
+  z.string(), z.number().finite(), z.boolean(), z.null(), z.array(json), z.record(json),
+]));
+const nullableJson = json.nullable().default(null);
+function normalizeArray(value: unknown): string[] | null {
+  if (value == null) return null;
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    // JSON inválido ou de outra estrutura deve chegar ao caller como erro.
+    try {
+      value = JSON.parse(trimmed);
+    } catch (error) {
+      if (/^[[{"]/.test(trimmed)) throw error;
+      value = trimmed.split(',').map(item => item.trim()).filter(Boolean);
+    }
+  }
+  return z.array(z.string()).parse(value);
+}
+const strings = z.preprocess(normalizeArray, z.array(z.string()).nullable().default(null));
+const contactShape = {
+  id: z.string().min(1), user_id: z.string().min(1), version: z.number().int().nonnegative(),
+  action_filter: text, apelido: text, assigned_by_id: numeric, assinatura_contato: text,
+  avatar_url: text, behavior: nullableJson, birthday: text, bitrix_contact_id: numeric,
+  bitrix_created_at: text, cargo: text, chunk_size: text, company_id: text,
+  comparison_style: text, cpf: text, created_at: text, data_nascimento: text,
+  deleted_at: text, deleted_by: text, departamento: text, duplicate_of: text,
+  email: text, emotional_confidence: numeric, emotional_state: text, emotional_trigger: text,
+  extra_data: nullableJson, family_info: text, first_name: text, full_name: text,
+  hobbies: strings, instagram: text, interests: strings, interests_array: strings,
+  is_duplicate: z.boolean().nullable().default(null), last_interaction_at: text,
+  last_name: text, life_events: nullableJson, linkedin: text, metaprogram_profile: nullableJson,
+  most_frequent_objection: text, motivation_direction: text, nome_tratamento: text,
+  notes: text, objection_patterns: nullableJson, personal_notes: text, phone: text,
+  reference_frame: text, relationship_score: numeric, relationship_stage: text,
+  role: text, role_title: text, search_vector: z.unknown(), sentiment: text, sexo: text,
+  source: z.enum(Constants.public.Enums.data_source).nullable().default(null),
+  tags: strings, tags_array: strings, twitter: text, updated_at: text,
+  vak_dominant: text, vak_profile: nullableJson, whatsapp: text, working_style: text,
+} satisfies { [K in keyof Tables<'contacts'>]: z.ZodType<Tables<'contacts'>[K], z.ZodTypeDef, unknown> };
+const contactRowSchema = z.object(contactShape);
 
 export type ContactListItem = Pick<Contact,
   | 'id' | 'first_name' | 'last_name' | 'company_id' | 'relationship_score'
@@ -19,77 +67,40 @@ export type ContactListItem = Pick<Contact,
   | 'notes' // Added notes for summary
 >;
 
-/**
- * Fields that exist only in the LOCAL Supabase schema (types.ts) but NOT in the external DB.
- * These must be stripped before any insert/update to the external DB to avoid column-not-found errors.
- */
-const LOCAL_ONLY_FIELDS = new Set([
-  'tags', 'interests', 'hobbies',                                // local schema uses array fields; external uses array columns
-  'twitter', 'avatar_url',                                        // not columns in external contacts table
-  'email', 'phone', 'whatsapp', 'linkedin', 'instagram',         // live in contact_phones / contact_emails / contact_social_media
-   'id',                                                           // never send id on updates
-   'role_title',                                                   // local-only; external uses 'cargo'
-   'family_info',                                                  // mapped later
-   'vak_profile',                                                  // local-only JSON blob
-   'metaprogram_profile',                                          // local-only JSON blob
-   'objection_patterns',                                           // local-only JSON blob
- ]);
+/** Normaliza aliases reais sem inventar uma versão a partir de updated_at. */
+export function normalizeExternalContact(raw: unknown): Contact {
+  // Validação completa antes da asserção única (inferência Zod com strictNullChecks=false).
+  const row = contactRowSchema.parse(raw) as Tables<'contacts'>;
+  return {
+    ...row,
+    tags: row.tags_array ?? row.tags ?? [],
+    interests: row.interests_array ?? row.interests ?? [],
+    hobbies: row.hobbies || [],
+    role_title: row.role_title || row.cargo,
+  };
+}
 
-/**
- * Normalize external DB column names to local schema names.
- * External uses tags_array/interests_array, local uses tags/interests.
- * External uses cargo, local uses role_title.
- */
-/**
- * Normalize external DB column names to local schema names.
- * External uses tags_array/interests_array, local uses tags/interests.
- * External uses cargo, local uses role_title.
- */
-export function normalizeExternalContact(raw: Record<string, unknown>): Contact {
-  const normalized = { ...raw } as Record<string, unknown>;
-  // Map external → local field names
-  if ('tags_array' in normalized && !('tags' in normalized)) {
-    normalized.tags = normalized.tags_array;
-  }
-  if ('interests_array' in normalized && !('interests' in normalized)) {
-    normalized.interests = normalized.interests_array;
-  }
-  // External schema might use hobbies column directly or hobbies_array
-  if ('hobbies_array' in normalized && !('hobbies' in normalized)) {
-    normalized.hobbies = normalized.hobbies_array;
-  }
-  if ('cargo' in normalized && !normalized.role_title) {
-    normalized.role_title = normalized.cargo;
-  }
-  // Ensure array fields are actually arrays to prevent UI crashes
-  ['tags', 'interests', 'hobbies'].forEach(field => {
-    if (normalized[field] && typeof normalized[field] === 'string') {
-      try {
-        normalized[field] = JSON.parse(normalized[field] as string);
-      } catch {
-        normalized[field] = (normalized[field] as string).split(',').map(s => s.trim());
-      }
-    } else if (!normalized[field]) {
-      normalized[field] = [];
-    }
-  });
-  // Ensure version is present for optimistic locking
-  if (!('version' in normalized) && 'updated_at' in normalized) {
-    // Fallback: use updated_at timestamp as a pseudo-version if actual version column is missing
-    normalized.version = new Date(normalized.updated_at as string).getTime();
-  }
-  return normalized as unknown as Contact;
+export function prepareContactWrite(input: ContactUpdate): Record<string, unknown> {
+  // Proteção em runtime também para callers legados que enviem uma Row inteira.
+  const { id, version, full_name, ...record } = input as TablesUpdate<'contacts'>;
+  if (record.role_title !== undefined && record.cargo === undefined) record.cargo = record.role_title;
+  if (record.tags !== undefined && record.tags_array === undefined) record.tags_array = record.tags;
+  if (record.interests !== undefined && record.interests_array === undefined) record.interests_array = record.interests;
+  return contactRowSchema.omit({ id: true, version: true, full_name: true }).partial().strict().parse(record);
 }
 
 const PAGE_SIZE = 50;
 
 /** Lean select for listing — excludes heavy JSON blobs (behavior, life_events, extra_data) */
 const CONTACT_LISTING_SELECT = [
-   'id', 'first_name', 'last_name', 'full_name', 'nome_tratamento', 'apelido',
+   'id', 'first_name', 'last_name', 'full_name', 'nome_tratamento', 'apelido', 'version',
+   'cpf', 'role', 'role_title', 'family_info', 'personal_notes', 'assinatura_contato',
+   'email', 'phone', 'whatsapp', 'linkedin', 'instagram', 'twitter', 'avatar_url',
+   'data_nascimento', 'last_interaction_at', 'emotional_state', 'emotional_confidence', 'emotional_trigger',
    'vak_dominant', 'motivation_direction', 'working_style', 'reference_frame', 'chunk_size', 'action_filter', 'comparison_style', 'most_frequent_objection',
   'cargo', 'departamento', 'sexo',
   'company_id', 'relationship_score', 'relationship_stage', 'sentiment',
-  'tags_array', 'interests_array', 'hobbies',
+  'tags_array', 'interests_array', 'tags', 'interests', 'hobbies',
   'birthday', 'source',
   'updated_at', 'created_at', 'user_id',
   'bitrix_contact_id', 'is_duplicate', 'duplicate_of',
@@ -97,12 +108,13 @@ const CONTACT_LISTING_SELECT = [
 ].join(',');
 
 async function fetchContactsPage(companyId?: string, page = 0) {
-  const filters = companyId
-    ? [{ type: 'eq' as const, column: 'company_id', value: companyId }]
-    : undefined;
+  const filters: NonNullable<Parameters<typeof queryExternalData>[0]['filters']> = [
+    { type: 'is', column: 'deleted_at', value: null },
+    ...(companyId ? [{ type: 'eq' as const, column: 'company_id', value: companyId }] : []),
+  ];
 
   const isFirstPage = page === 0;
-  const { data, count, error } = await queryExternalData<Record<string, unknown>>({
+  const { data, count, error } = await queryExternalData<unknown>({
     table: 'contacts',
     select: CONTACT_LISTING_SELECT,
     order: { column: 'updated_at', ascending: false },
@@ -189,7 +201,7 @@ export function useContacts(
     queryClient.prefetchQuery({
       queryKey: ['contact-prefetch', id],
       queryFn: async () => {
-        const { data, error } = await queryExternalData<Record<string, unknown>>({
+        const { data, error } = await queryExternalData<unknown>({
           table: 'contacts',
           select: '*',
           filters: [{ type: 'eq', column: 'id', value: id }]
@@ -204,37 +216,16 @@ export function useContacts(
   const createContact = async (contact: Omit<ContactInsert, 'user_id'>) => {
     if (!user) return null;
     try {
-      // Strip local-only fields that don't exist in the external DB
-      const externalFields: Record<string, unknown> = {};
-      for (const [k, v] of Object.entries(contact as Record<string, unknown>)) {
-        if (!LOCAL_ONLY_FIELDS.has(k)) externalFields[k] = v;
-      }
-
-      // Map local role_title to external cargo if provided
-      if (contact.role_title && !externalFields.cargo) {
-        externalFields.cargo = contact.role_title;
-      }
-
-      // Ensure array fields are sent as PostgreSQL arrays if the external DB expects them
-      ['tags', 'interests', 'hobbies'].forEach(field => {
-        if (contact[field as keyof typeof contact]) {
-          const val = contact[field as keyof typeof contact];
-          const arrayVal = Array.isArray(val) ? val : String(val).split(',').map(s => s.trim()).filter(Boolean);
-
-          // Map to external column names if they differ
-          const extKey = field === 'tags' ? 'tags_array' : field === 'interests' ? 'interests_array' : field;
-          externalFields[extKey] = arrayVal;
-        }
-      });
-
-      const { data, error } = await insertExternalData<Contact>('contacts', { ...externalFields, user_id: user.id });
+      const externalFields = prepareContactWrite(contact);
+      const { data, error } = await insertExternalData<unknown>('contacts', { ...externalFields, user_id: user.id });
       if (error) throw error;
+      if (!data) throw new Error('Criação não retornou um contato válido.');
       if (data) {
-        const normalized = normalizeExternalContact(data as unknown as Record<string, unknown>);
-        queryClient.setQueryData<InfiniteData<Page[]>>(queryKey, prev => {
+        const normalized = normalizeExternalContact(data);
+        queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
           if (!prev) return { pages: [{ items: [normalized], totalCount: null }], pageParams: [0] };
-          const firstPage = prev.pages[0];
-          const updatedFirst = { ...firstPage, items: [normalized, ...firstPage.items] };
+          const firstPage = prev.pages[0] ?? { items: [], totalCount: null };
+          const updatedFirst = { ...firstPage, items: [normalized, ...firstPage.items], totalCount: firstPage.totalCount == null ? null : firstPage.totalCount + 1 };
           return { ...prev, pages: [updatedFirst, ...prev.pages.slice(1)] };
         });
         toast({ title: 'Contato criado', description: `${normalized.first_name} ${normalized.last_name} foi adicionado com sucesso.` });
@@ -243,72 +234,48 @@ export function useContacts(
       }
       return null;
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error creating contact:', { error: msg });
+      const msg = error instanceof Error ? error.message : 'Erro desconhecido';
+      logger.error('Erro ao criar contato:', { error: msg });
       toast({ title: 'Erro ao criar contato', description: msg, variant: 'destructive' });
       return null;
     }
   };
 
-  const updateContact = async (id: string, updates: ContactUpdate, expectedVersion?: number) => {
-    const previous = queryClient.getQueryData<InfiniteData<Page[]>>(queryKey);
+  const updateContact = async (id: string, updates: ContactUpdate, expectedVersion?: number): Promise<Contact | null> => {
+    const previous = queryClient.getQueryData<InfiniteData<Page>>(queryKey);
     const targetContact = previous?.pages.flatMap(p => p.items).find(c => c.id === id);
-    const versionToUse = expectedVersion ?? targetContact?.version;
 
     // Optimistic Update — must update within paginated InfiniteData structure
-    queryClient.setQueryData<InfiniteData<Page[]>>(queryKey, prev => {
+    queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
       if (!prev) return prev;
       return {
         ...prev,
         pages: prev.pages.map(page =>
 
-          ({ ...page, items: page.items.map(c => c.id === id ? { ...c, ...updates } as Contact : c) })
+          ({ ...page, items: page.items.map(c => c.id === id ? { ...c, ...updates, tags: updates.tags ?? c.tags, interests: updates.interests ?? c.interests, hobbies: updates.hobbies ?? c.hobbies } : c) })
         ),
       };
     });
 
     try {
-      // Strip local-only fields
-      const cleanUpdates: Record<string, unknown> = {};
-      for (const [k, v] of Object.entries(updates as Record<string, unknown>)) {
-        if (!LOCAL_ONLY_FIELDS.has(k)) cleanUpdates[k] = v;
+      const cleanUpdates = prepareContactWrite(updates);
+      let versionToUse = expectedVersion ?? targetContact?.version;
+      if (versionToUse == null) {
+        const current = await queryExternalData<unknown>({
+          table: 'contacts', select: 'id,user_id,version', range: { from: 0, to: 0 },
+          filters: [{ type: 'eq', column: 'id', value: id }],
+        });
+        if (current.error) throw current.error;
+        if (!current.data?.[0]) throw new Error('Contato não encontrado para atualização.');
+        versionToUse = normalizeExternalContact(current.data[0]).version;
       }
-
-      // Map local fields to external schema names if needed
-      if (updates.role_title && !cleanUpdates.cargo) {
-        cleanUpdates.cargo = updates.role_title;
-      }
-
-      // Map array updates
-      ['tags', 'interests', 'hobbies'].forEach(field => {
-        if (updates[field as keyof typeof updates] !== undefined) {
-          const val = updates[field as keyof typeof updates];
-          const arrayVal = Array.isArray(val) ? val : val ? String(val).split(',').map(s => s.trim()).filter(Boolean) : [];
-          const extKey = field === 'tags' ? 'tags_array' : field === 'interests' ? 'interests_array' : field;
-          cleanUpdates[extKey] = arrayVal;
-        }
-      });
-
-      let data: Contact | null = null;
-      let error: Error | null = null;
-
-      if (versionToUse !== undefined) {
-        // Use versioned update for optimistic locking
-        const result = await updateExternalDataWithVersion<Contact>('contacts', id, versionToUse, cleanUpdates);
-        data = result.data;
-        error = result.error;
-      } else {
-        // Fallback to regular update if version is missing
-        const result = await updateExternalData<Contact>('contacts', id, cleanUpdates);
-        data = result.data;
-        error = result.error;
-      }
-
+      const { data, error } = await updateExternalDataWithVersion<unknown>('contacts', id, versionToUse, cleanUpdates);
       if (error) throw error;
+      if (!data) throw new Error('Atualização não retornou um contato válido.');
 
-      if (data) {
-        const normalized = normalizeExternalContact(data as unknown as Record<string, unknown>);
-        queryClient.setQueryData<InfiniteData<Page[]>>(queryKey, prev => {
+      const normalized = normalizeExternalContact(data);
+      if (normalized) {
+        queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
           if (!prev) return prev;
           return {
             ...prev,
@@ -320,19 +287,20 @@ export function useContacts(
         });
         logActivity({ type: 'updated', entityType: 'contact', entityId: id, entityName: `${normalized.first_name} ${normalized.last_name}`.trim(), description: 'Contato atualizado' });
 
-        // Track score changes
+
+        // Registra alterações de score
         if (updates.relationship_score !== undefined && user) {
           const prev = previous?.pages.flatMap(p => p.items).find(c => c.id === id);
           trackScoreChange({ userId: user.id, contactId: id, scoreType: 'relationship', newValue: updates.relationship_score ?? 0, previousValue: prev?.relationship_score });
         }
       }
-      return data;
+      return normalized;
     } catch (error) {
-      // Automatic Rollback on error
-      if (previous) queryClient.setQueryData<InfiniteData<Contact[]>>(queryKey, previous);
+      // Rollback preserva o mesmo contrato paginado do cache.
+      if (previous) queryClient.setQueryData<InfiniteData<Page>>(queryKey, previous);
 
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error updating contact:', { error: msg });
+      const msg = error instanceof Error ? error.message : 'Erro desconhecido';
+      logger.error('Erro ao atualizar contato:', { error: msg });
 
       if (error instanceof ConcurrentEditError) {
         showConcurrentEditToast({ entity: 'contato', queryClient, queryKey });
@@ -344,28 +312,28 @@ export function useContacts(
   };
 
   const deleteContact = async (id: string) => {
-    const previous = queryClient.getQueryData<InfiniteData<Page[]>>(queryKey);
+    const previous = queryClient.getQueryData<InfiniteData<Page>>(queryKey);
 
     // Optimistic Delete — filter across all InfiniteQuery pages
-    queryClient.setQueryData<InfiniteData<Page[]>>(queryKey, prev => {
+    queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
       if (!prev) return prev;
 
       return { ...prev, pages: prev.pages.map(page => ({ ...page, items: page.items.filter(c => c.id !== id) })) };
     });
 
     try {
-      const { error } = await deleteExternalData('contacts', id);
-      if (error) throw error;
+      const { success, error } = await deleteExternalData('contacts', id);
+      if (error || !success) throw error || new Error('Não foi possível excluir o contato.');
 
       const deleted = previous?.pages.flatMap(p => p.items).find(c => c.id === id);
       logActivity({ type: 'deleted', entityType: 'contact', entityId: id, entityName: deleted ? `${deleted.first_name} ${deleted.last_name}`.trim() : undefined, description: 'Contato excluído' });
       return true;
     } catch (error) {
       // Automatic Rollback on error
-      if (previous) queryClient.setQueryData<InfiniteData<Page[]>>(queryKey, previous);
+      if (previous) queryClient.setQueryData<InfiniteData<Page>>(queryKey, previous);
 
-      const msg = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error deleting contact:', { error: msg });
+      const msg = error instanceof Error ? error.message : 'Erro desconhecido';
+      logger.error('Erro ao excluir contato:', { error: msg });
       toast({ title: 'Erro ao excluir contato', description: msg, variant: 'destructive' });
       return false;
     }

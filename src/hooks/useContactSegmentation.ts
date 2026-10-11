@@ -36,10 +36,9 @@ interface RawContactRow {
   tags: string[] | null;
   company_id: string | null;
   birthday: string | null;
-  contact_behavior: ContactBehaviorRow[] | null;
 }
 
-type FlattenedContact = Omit<RawContactRow, 'contact_behavior'> & ContactBehaviorRow;
+type FlattenedContact = RawContactRow & ContactBehaviorRow;
 
  const AVAILABLE_FIELDS = [
    { key: 'relationship_score', label: 'Score de Relacionamento', type: 'number' },
@@ -56,7 +55,7 @@ type FlattenedContact = Omit<RawContactRow, 'contact_behavior'> & ContactBehavio
    { key: 'motivation_primary', label: 'Motivação Primária', type: 'text' },
    { key: 'preferred_channel', label: 'Canal Preferido', type: 'text' },
    { key: 'formality_level', label: 'Nível de Formalidade', type: 'number' },
- ];
+ ] satisfies Array<{ key: keyof FlattenedContact; label: string; type: string; options?: string[] }>;
 
 export function useContactSegmentation() {
   const { user } = useAuth();
@@ -68,37 +67,42 @@ export function useContactSegmentation() {
      queryFn: async () => {
        if (!user) return [];
        
-       // Join with contact_behavior to get behavioral data
+       // Resolver os perfis separadamente evita inferência recursiva nas relações canônicas.
        const { data, error } = await supabase
          .from('contacts')
-         .select(`
-           id, first_name, last_name, email, whatsapp, phone, relationship_score, sentiment, relationship_stage, tags, company_id, birthday,
-           contact_behavior (
-             disc_primary, vak_primary, motivation_primary, preferred_channel, formality_level
-           )
-         `)
+         .select('id, first_name, last_name, email, whatsapp, phone, relationship_score, sentiment, relationship_stage, tags, company_id, birthday')
          .eq('user_id', user.id);
 
        if (error) {
          throw error;
        }
        
-       // Flatten the data for easier filtering
-        return ((data || []) as RawContactRow[]).map((c): FlattenedContact => ({
-         ...c,
-         disc_primary: c.contact_behavior?.[0]?.disc_primary || null,
-         vak_primary: c.contact_behavior?.[0]?.vak_primary || null,
-         motivation_primary: c.contact_behavior?.[0]?.motivation_primary || null,
-         preferred_channel: c.contact_behavior?.[0]?.preferred_channel || null,
-         formality_level: c.contact_behavior?.[0]?.formality_level || null,
-       }));
+       if (!data?.length) return [];
+       const { data: behaviors, error: behaviorError } = await supabase.from('contact_behavior')
+         .select('contact_id, disc_primary, vak_primary, motivation_primary, preferred_channel, formality_level')
+         .in('contact_id', data.map(contact => contact.id));
+       if (behaviorError) throw behaviorError;
+       const byContact = new Map((behaviors ?? []).map(behavior => [behavior.contact_id, behavior]));
+       return data.map((c): FlattenedContact => {
+         const behavior = byContact.get(c.id);
+         return {
+           ...c,
+           disc_primary: behavior?.disc_primary ?? null,
+           vak_primary: behavior?.vak_primary ?? null,
+           motivation_primary: behavior?.motivation_primary ?? null,
+           preferred_channel: behavior?.preferred_channel ?? null,
+           formality_level: behavior?.formality_level ?? null,
+         };
+       });
      },
      staleTime: 5 * 60_000,
      refetchOnWindowFocus: false,
    });
 
   const matchesFilter = useCallback((contact: FlattenedContact, filter: SegmentFilter): boolean => {
-    const val = (contact as unknown as Record<string, unknown>)[filter.field];
+    const field = AVAILABLE_FIELDS.find(item => item.key === filter.field);
+    if (!field) throw new Error(`Campo de segmentação inválido: ${filter.field}`);
+    const val = contact[field.key];
     switch (filter.operator) {
       case 'eq': return String(val) === filter.value;
       case 'neq': return String(val) !== filter.value;

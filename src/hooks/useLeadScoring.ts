@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { parseApiError } from '@/lib/errorMessages';
+import { z } from 'zod';
 
 export type LeadScoreGrade = 'A' | 'B' | 'C' | 'D';
 
@@ -58,10 +59,11 @@ export function useLeadScore(contactId?: string) {
     queryKey: ['lead-score', contactId, user?.id],
     queryFn: async () => {
       if (!contactId || !user?.id) return null;
-      const { data } = await supabase
-        .from('lead_scores').select('id, user_id, contact_id, fit_score, engagement_score, intent_score, relationship_score, total_score, grade, score_change, previous_score, computed_at, last_calculated_at')
+      const { data, error } = await supabase
+        .from('lead_scores').select('id, user_id, contact_id, fit_score, engagement_score, intent_score, relationship_score, total_score, grade, score_change, previous_score, computed_at:calculated_at, last_calculated_at')
         .eq('contact_id', contactId).eq('user_id', user.id).maybeSingle();
-      return data as LeadScoreRow | null;
+      if (error) throw error;
+      return data;
     },
     enabled: !!contactId && !!user?.id,
     staleTime: STALE,
@@ -77,13 +79,14 @@ export function useTopLeads(grade?: LeadScoreGrade | 'all', limit = 50) {
       if (!user?.id) return [];
       let q = supabase
         .from('lead_scores')
-        .select('*, contact:contacts(id, first_name, last_name, email, company_id, role_title)')
+        .select('id, user_id, contact_id, fit_score, engagement_score, intent_score, relationship_score, total_score, grade, score_change, previous_score, computed_at:calculated_at, last_calculated_at, contact:contacts(id, first_name, last_name, email, company_id, role_title)')
         .eq('user_id', user.id)
         .order('total_score', { ascending: false })
         .limit(limit);
       if (grade && grade !== 'all') q = q.eq('grade', grade);
-      const { data } = await q;
-      return (data ?? []) as Array<LeadScoreRow & { contact: { id: string; first_name?: string; last_name?: string; email?: string; role_title?: string; company_id?: string } | null }>;
+      const { data, error } = await q;
+      if (error) throw error;
+      return data ?? [];
     },
     enabled: !!user?.id,
     staleTime: STALE,
@@ -97,10 +100,11 @@ export function useLeadScoreDistribution() {
     queryKey: ['lead-scores-distribution', user?.id],
     queryFn: async () => {
       if (!user?.id) return { A: 0, B: 0, C: 0, D: 0, avg: 0, total: 0, changes24h: 0 };
-      const { data } = await supabase
-        .from('lead_scores').select('grade, total_score, computed_at, score_change')
+      const { data, error } = await supabase
+        .from('lead_scores').select('grade, total_score, computed_at:calculated_at, score_change')
         .eq('user_id', user.id).limit(5000);
-      const rows = (data ?? []) as Array<Pick<LeadScoreRow, 'grade' | 'total_score' | 'computed_at' | 'score_change'>>;
+      if (error) throw error;
+      const rows = data ?? [];
       const out = { A: 0, B: 0, C: 0, D: 0, avg: 0, total: rows.length, changes24h: 0 };
       const since = Date.now() - 86_400_000;
       let sum = 0;
@@ -127,11 +131,12 @@ export function useLeadScoreHistory(contactId?: string) {
     queryKey: ['lead-score-history-srv', contactId, user?.id],
     queryFn: async () => {
       if (!contactId || !user?.id) return [];
-      const { data } = await supabase
-        .from('lead_score_history').select('id, contact_id, total_score, grade, fit_score, engagement_score, intent_score, relationship_score, breakdown, recorded_at')
+      const { data, error } = await supabase
+        .from('lead_score_history').select('id, contact_id, total_score, grade, fit_score, engagement_score, intent_score, relationship_score, breakdown:factors, recorded_at')
         .eq('contact_id', contactId).eq('user_id', user.id)
         .order('recorded_at', { ascending: true }).limit(100);
-      return (data ?? []) as LeadScoreHistoryRow[];
+      if (error) throw error;
+      return (data ?? []).map(row => ({ ...row, breakdown: z.record(z.unknown()).parse(row.breakdown ?? {}) }));
     },
     enabled: !!contactId && !!user?.id,
     staleTime: STALE,
@@ -181,12 +186,13 @@ export function useScoreRules() {
     queryKey: ['lead-score-rules', user?.id],
     queryFn: async () => {
       if (!user?.id) return [];
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('lead_score_rules').select('id, dimension, signal_key, weight, decay_days, active')
         .eq('user_id', user.id)
         .order('dimension', { ascending: true })
         .order('signal_key', { ascending: true })
         .limit(100);
+      if (error) throw error;
       return (data ?? []) as LeadScoreRule[];
     },
     enabled: !!user?.id,
@@ -222,10 +228,11 @@ export function useScoreThresholds() {
     queryKey: ['lead-score-thresholds', user?.id],
     queryFn: async () => {
       if (!user?.id) return [];
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('lead_score_thresholds').select('id, grade, min_score')
         .eq('user_id', user.id).order('min_score', { ascending: false })
         .limit(20);
+      if (error) throw error;
       return (data ?? []) as LeadScoreThreshold[];
     },
     enabled: !!user?.id,

@@ -67,7 +67,7 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f scripts/migration/verify/invalid-indexes-guard.sql
 
       - name: Typecheck
-        run: npx tsc --noEmit
+        run: npm run typecheck
 
       - name: Lint (ESLint)
         # Rodada 31/10 — Onda E ratchet GLOBAL:

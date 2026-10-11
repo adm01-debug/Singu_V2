@@ -15,7 +15,7 @@ type CalendarInteraction = Pick<Tables<'interactions'>,
   'follow_up_date' | 'follow_up_required'
 >;
 type CalendarContact = Pick<Tables<'contacts'>, 'id' | 'first_name' | 'last_name'>;
-type CalendarCompany = Pick<Tables<'companies'>, 'id' | 'name'>;
+type CalendarCompany = Pick<Tables<'companies'>, 'id' | 'nome_crm'>;
 
 export interface FollowUp extends CalendarInteraction {
   contact?: CalendarContact | null;
@@ -120,7 +120,7 @@ export function CalendarioContent({ currentMonth, selectedDate, followUps, follo
                             {isOverdue && <Badge variant="destructive" className="text-xs">Atrasado</Badge>}
                           </div>
                           {followUp.contact && <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground"><User className="w-3 h-3" /><span>{followUp.contact.first_name} {followUp.contact.last_name}</span></div>}
-                          {followUp.company && <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground"><Building2 className="w-3 h-3" /><span>{followUp.company.name}</span></div>}
+                          {followUp.company && <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground"><Building2 className="w-3 h-3" /><span>{followUp.company.nome_crm}</span></div>}
                         </motion.div>
                       );
                     })}

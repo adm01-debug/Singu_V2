@@ -108,10 +108,10 @@ export const BehavioralAuditSubTab = ({ contactId }: BehavioralAuditSubTabProps)
                       </div>
                       <div className="flex items-center gap-1.5 text-sm font-semibold">
                         <User className="h-3 w-3" />
-                        {log.user_email || 'Sistema/IA'}
+                        {'user_email' in log ? log.user_email || 'Sistema/IA' : 'Sistema/IA'}
                       </div>
                       <p className="text-sm mt-1">{log.reason}</p>
-                      {log.analysis_type && !log.is_validated && (
+                      {'analysis_type' in log && log.analysis_type && !log.is_validated && (
                         <div className="flex items-center gap-2 mt-2">
                           <span className="text-[10px] text-muted-foreground uppercase font-bold">Validar Análise:</span>
                           <Button 
@@ -119,7 +119,7 @@ export const BehavioralAuditSubTab = ({ contactId }: BehavioralAuditSubTabProps)
                             size="icon" 
                             className="h-6 w-6 rounded-full hover:text-success"
                             aria-label="Aprovar análise"
-                            onClick={() => log.analysis_type === "vak" ? validateVAK(log.id, true) : validateMetaprogram(log.id, true)}
+                            onClick={() => 'analysis_type' in log && (log.analysis_type === "vak" ? validateVAK(log.id, true) : validateMetaprogram(log.id, true))}
                           >
                             <ThumbsUp className="h-3 w-3" />
                           </Button>
@@ -128,7 +128,7 @@ export const BehavioralAuditSubTab = ({ contactId }: BehavioralAuditSubTabProps)
                             size="icon" 
                             className="h-6 w-6 rounded-full hover:text-destructive"
                             aria-label="Rejeitar análise"
-                            onClick={() => log.analysis_type === "vak" ? validateVAK(log.id, false) : validateMetaprogram(log.id, false)}
+                            onClick={() => 'analysis_type' in log && (log.analysis_type === "vak" ? validateVAK(log.id, false) : validateMetaprogram(log.id, false))}
                           >
                             <ThumbsDown className="h-3 w-3" />
                           </Button>

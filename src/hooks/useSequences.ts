@@ -64,7 +64,7 @@ export function useSequences() {
   const qc = useQueryClient();
   const userId = user?.id;
 
-  const { data: sequences = [], isLoading } = useQuery({
+  const { data: sequences = [], isLoading, error } = useQuery({
     queryKey: ['sequences', userId],
     queryFn: async () => {
       if (!userId) return [];
@@ -99,6 +99,8 @@ export function useSequences() {
         const stepsToInsert = steps.map((s, i) => ({
           sequence_id: seq.id,
           step_order: i + 1,
+          step_number: i + 1,
+          user_id: userId,
           channel: s.channel,
           delay_days: s.delay_days,
           delay_hours: s.delay_hours,
@@ -180,7 +182,10 @@ export function useSequences() {
           .eq('id', sequenceId),
       ]);
       if (error) throw error;
-      if (updError) logger.error('Failed to update enrollment count', updError);
+      if (updError) {
+        logger.error('Falha ao atualizar a contagem de inscrições', updError);
+        throw updError;
+      }
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['sequences'] });
@@ -192,6 +197,7 @@ export function useSequences() {
   return {
     sequences,
     loading: isLoading,
+    error,
     createSequence: createSequence.mutateAsync,
     toggleStatus: toggleStatus.mutateAsync,
     deleteSequence: deleteSequence.mutateAsync,

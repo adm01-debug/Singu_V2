@@ -326,12 +326,17 @@ export const useContactBehavior = (contactId: string) => {
     queryKey: ["contact-behavior-audit", contactId, user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("v_contact_behavior_audit")
-        .select("*")
+        .from("crm_relationship_audit_logs")
+        .select("id, created_at, change_source, field_name, old_value, new_value, reason")
         .eq("contact_id", contactId)
+        .order("created_at", { ascending: false })
         .limit(500);
       if (error) throw error;
-      return data as BehavioralAuditLog[];
+      return (data ?? []).map(row => ({
+        id: row.id, timestamp: row.created_at, change_source: row.change_source ?? undefined,
+        field_name: row.field_name ?? undefined, old_value: row.old_value, new_value: row.new_value,
+        reason: row.reason ?? undefined,
+      }));
     },
     enabled: !!contactId,
     staleTime: 5 * 60_000,

@@ -2,6 +2,8 @@
 
 > **Registro histórico.** Os resultados abaixo valem somente para a revisão e o
 > ambiente daquela rodada; use a CI atual e a auditoria mais recente como evidência.
+> Com a configuração atual, `tsc --noEmit` no projeto raiz não verifica `src/`.
+> Use `npm run typecheck` para validar explicitamente o aplicativo e a configuração Node.
 
 **Data:** 22 de julho de 2026
 **Escopo:** auditoria full-stack (frontend + edge functions + banco), correção crítica e baseline de qualidade.

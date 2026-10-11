@@ -113,7 +113,7 @@ const ContatoDetalhe = () => {
       linkedin: contact.linkedin,
       instagram: contact.instagram,
       twitter: contact.twitter,
-      company_name: company?.name,
+      company_name: company?.nome_crm,
     });
   };
 

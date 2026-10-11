@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import type { TablesUpdate } from '@/integrations/supabase/types';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 import { parseApiError } from '@/lib/errorMessages';
-import { rodizioFrom } from '@/lib/rodizioRpc';
 import type { RodizioCloserCarga, RodizioSdrCarga, RodizioConfigFlags } from '@/types/rodizio';
 
 /**
@@ -26,8 +26,8 @@ export function useRodizioEquipe() {
       if (!user) return { closers: [], sdrs: [] };
 
       const [closersRes, sdrsRes] = await Promise.all([
-        rodizioFrom('vw_rodizio_carga_closers').select('*').order('closer_nome', { ascending: true }).limit(500),
-        rodizioFrom('vw_rodizio_carga_sdrs').select('*').order('sdr_nome', { ascending: true }).limit(500),
+        supabase.from('vw_rodizio_carga_closers').select('*').order('closer_nome', { ascending: true }).limit(500),
+        supabase.from('vw_rodizio_carga_sdrs').select('*').order('sdr_nome', { ascending: true }).limit(500),
       ]);
 
       if (closersRes.error) {
@@ -40,8 +40,8 @@ export function useRodizioEquipe() {
       }
 
       return {
-        closers: (closersRes.data ?? []) as unknown as RodizioCloserCarga[],
-        sdrs: (sdrsRes.data ?? []) as unknown as RodizioSdrCarga[],
+        closers: closersRes.data ?? [],
+        sdrs: sdrsRes.data ?? [],
       };
     },
     enabled: !!user,
@@ -66,16 +66,13 @@ export function useUpdateRodizioMembro() {
 
   return useMutation({
     mutationFn: async ({ id, tipo, participa, ...updates }: UpdateMembroPayload) => {
-      const payload: Record<string, unknown> = { ...updates };
+      const payload: TablesUpdate<'users'> = { ...updates };
       if (participa !== undefined) {
         payload[tipo === 'closer' ? 'participa_rodizio_closer' : 'participa_rodizio_sdr'] = participa;
       }
-      // `users` ganhou as colunas participa_rodizio_*/ordem_rodizio/capacidade_max/
-      // afastado_ate na migration do Bloco 3 (PR #50, ainda não mergeada), então
-      // ainda não estão no arquivo de tipos gerado — daqui o cast pontual.
       const { error } = await supabase
         .from('users')
-        .update(payload as never)
+        .update(payload)
         .eq('id', id);
       if (error) throw error;
     },

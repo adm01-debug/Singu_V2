@@ -6,25 +6,6 @@ import { detectDuplicates, type DedupRecord, type DuplicatePair } from '@/lib/fu
 
 export type DedupEntity = 'contacts' | 'companies';
 
-interface ContactRow {
-  id: string;
-  first_name: string | null;
-  last_name: string | null;
-  email: string | null;
-  phone: string | null;
-  whatsapp: string | null;
-  company_id: string | null;
-}
-
-interface CompanyRow {
-  id: string;
-  name: string;
-  nome_crm: string | null;
-  email: string | null;
-  phone: string | null;
-  cnpj: string | null;
-}
-
 async function fetchContacts(userId: string): Promise<DedupRecord[]> {
   const { data, error } = await supabase
     .from('contacts')
@@ -32,7 +13,7 @@ async function fetchContacts(userId: string): Promise<DedupRecord[]> {
     .eq('user_id', userId)
     .limit(2000);
   if (error) throw error;
-  return (data as ContactRow[] | null ?? []).map(c => ({
+  return (data ?? []).map(c => ({
     id: c.id,
     name: `${c.first_name ?? ''} ${c.last_name ?? ''}`.trim() || null,
     email: c.email,
@@ -44,15 +25,23 @@ async function fetchContacts(userId: string): Promise<DedupRecord[]> {
 async function fetchCompanies(userId: string): Promise<DedupRecord[]> {
   const { data, error } = await supabase
     .from('companies')
-    .select('id, name, nome_crm, email, phone, cnpj')
+    .select('id, nome_crm, cnpj')
     .eq('user_id', userId)
     .limit(2000);
   if (error) throw error;
-  return (data as CompanyRow[] | null ?? []).map(c => ({
+  if (!data?.length) return [];
+  const ids = data.map(c => c.id);
+  const [{ data: emails, error: emailError }, { data: phones, error: phoneError }] = await Promise.all([
+    supabase.from('company_emails').select('company_id, email, is_primary').in('company_id', ids).order('is_primary', { ascending: false, nullsFirst: false }),
+    supabase.from('company_phones').select('company_id, numero, is_primary').in('company_id', ids).order('is_primary', { ascending: false, nullsFirst: false }),
+  ]);
+  if (emailError) throw emailError;
+  if (phoneError) throw phoneError;
+  return data.map(c => ({
     id: c.id,
-    name: c.nome_crm || c.name,
-    email: c.email,
-    phone: c.phone,
+    name: c.nome_crm,
+    email: emails?.find(email => email.company_id === c.id)?.email ?? null,
+    phone: phones?.find(phone => phone.company_id === c.id)?.numero ?? null,
     cnpj: c.cnpj,
   }));
 }

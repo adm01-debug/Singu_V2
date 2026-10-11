@@ -46,7 +46,7 @@ import { logger } from '@/lib/logger';
          logger.error('Error fetching marketing funnel:', error);
          throw error;
        }
-       return (data || []) as unknown as FunnelStat[];
+       return data ?? [];
      },
    });
  }
@@ -61,27 +61,22 @@ import { logger } from '@/lib/logger';
      queryFn: async () => {
        if (!user) return null;
 
-       const { data, error } = await supabase
-         .from('contacts')
-         .select('id, contact_behavior(disc_primary, vak_primary, motivation_primary)')
-         .eq('user_id', user.id);
-
-       if (error) { throw error; }
+       const { data: contacts, error: contactsError } = await supabase
+         .from('contacts').select('id').eq('user_id', user.id);
+       if (contactsError) throw contactsError;
+       const contactIds = (contacts ?? []).map(contact => contact.id);
+       const { data, error } = contactIds.length > 0
+         ? await supabase.from('contact_behavior')
+           .select('disc_primary, vak_primary, motivation_primary').in('contact_id', contactIds)
+         : { data: [], error: null };
+       if (error) throw error;
 
        type BehavioralStats = {
          disc: Record<string, number>;
          vak: Record<string, number>;
          motivation: Record<string, number>;
        };
-       type ContactRow = {
-         contact_behavior?: Array<{
-           disc_primary?: string | null;
-           vak_primary?: string | null;
-           motivation_primary?: string | null;
-         }> | null;
-       };
-       const stats = (data || []).reduce<BehavioralStats>((acc, curr: ContactRow) => {
-         const behavior = curr.contact_behavior?.[0];
+       const stats = (data || []).reduce<BehavioralStats>((acc, behavior) => {
           if (behavior?.disc_primary) acc.disc[behavior.disc_primary] = (acc.disc[behavior.disc_primary] || 0) + 1;
           if (behavior?.vak_primary) acc.vak[behavior.vak_primary] = (acc.vak[behavior.vak_primary] || 0) + 1;
           if (behavior?.motivation_primary) {
@@ -115,7 +110,7 @@ import { logger } from '@/lib/logger';
          logger.error('Error fetching campaign stats:', error);
          throw error;
        }
-       return (data || []) as unknown as CampaignStat[];
+       return data ?? [];
      },
    });
  }

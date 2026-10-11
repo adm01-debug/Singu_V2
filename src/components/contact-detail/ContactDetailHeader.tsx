@@ -206,7 +206,7 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
                 {company && (
                   <span className="flex items-center gap-1">
                     <Building2 className="h-3.5 w-3.5" />
-                    {company.name}
+                    {company.nome_fantasia || company.nome_crm}
                   </span>
                 )}
                 {contact.role && ROLE_CONFIG[contact.role] && (

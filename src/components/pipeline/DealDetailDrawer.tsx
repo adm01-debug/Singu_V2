@@ -114,14 +114,16 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
     const fetchEntities = async () => {
       try {
         const [compRes, contRes] = await Promise.all([
-          supabase.from('companies').select('id, nome_crm').eq('user_id', user?.id ?? '').limit(100),
+          supabase.from('companies').select('id, nome_crm, nome_fantasia').eq('user_id', user?.id ?? '').limit(100),
           supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user?.id ?? '').limit(100),
         ]);
         if (cancelled) return;
-        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.nome_crm })));
+        if (compRes.error) throw compRes.error;
+        if (contRes.error) throw contRes.error;
+        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.nome_fantasia || c.nome_crm })));
         if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
       } catch {
-        // non-critical — dropdowns remain empty; user can still submit with IDs already on the deal
+        if (!cancelled) toast.error('Erro ao carregar empresas e contatos');
       }
     };
     fetchEntities();

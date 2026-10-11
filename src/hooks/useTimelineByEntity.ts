@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import type { Tables } from '@/integrations/supabase/types';
+import type { Json } from '@/integrations/supabase/types';
 
 export type GroupBy = 'company' | 'contact';
 
@@ -14,7 +14,7 @@ export interface TimelineEventItem {
    sentiment: string | null;
    follow_up_required: boolean | null;
    transcription?: string | null;
-   transcription_metadata?: Record<string, unknown> | null;
+   metadata?: Json | null;
 }
 
 export interface TimelineGroup {
@@ -31,8 +31,6 @@ export interface UseTimelineByEntityParams {
   dateTo?: Date;
   channels?: string[];
 }
-
-type InteractionRow = Tables<'interactions'>;
 
 export function useTimelineByEntity(params: UseTimelineByEntityParams) {
   const { groupBy, dateFrom, dateTo, channels } = params;
@@ -53,7 +51,7 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
       // Build base query (client-side fallback — sempre funciona)
       let query = supabase
         .from('interactions')
-        .select('id, type, title, content, created_at, sentiment, follow_up_required, contact_id, company_id, transcription, transcription_metadata')
+        .select('id, type, title, content, created_at, sentiment, follow_up_required, contact_id, company_id, transcription, metadata')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(500);
@@ -78,22 +76,24 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
 
       if (idList.length > 0) {
         if (groupBy === 'company') {
-          const { data: companies } = await supabase
+          const { data: companies, error: companyError } = await supabase
             .from('companies')
-            .select('id, name, nome_fantasia')
+            .select('id, nome_crm, nome_fantasia')
             .in('id', idList)
             .limit(500);
+          if (companyError) throw companyError;
           if (Array.isArray(companies)) {
             for (const c of companies) {
-              nameMap.set(c.id, c.nome_fantasia || c.name || 'Empresa sem nome');
+              nameMap.set(c.id, c.nome_fantasia || c.nome_crm || 'Empresa sem nome');
             }
           }
         } else {
-          const { data: contacts } = await supabase
+          const { data: contacts, error: contactError } = await supabase
             .from('contacts')
             .select('id, first_name, last_name')
             .in('id', idList)
             .limit(500);
+          if (contactError) throw contactError;
           if (Array.isArray(contacts)) {
             for (const c of contacts) {
               const fullName = `${c.first_name ?? ''} ${c.last_name ?? ''}`.trim();
@@ -105,7 +105,7 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
 
       // Agrupar
       const groupsMap = new Map<string, TimelineGroup>();
-      for (const it of interactions as InteractionRow[]) {
+      for (const it of interactions) {
         const entityId = groupBy === 'company' ? it.company_id : it.contact_id;
         if (!entityId) continue;
         const existing = groupsMap.get(entityId);
@@ -118,7 +118,7 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
            sentiment: it.sentiment,
            follow_up_required: it.follow_up_required,
            transcription: it.transcription,
-           transcription_metadata: (it.transcription_metadata ?? null) as Record<string, unknown> | null,
+           metadata: it.metadata,
          };
         if (existing) {
           existing.events.push(event);

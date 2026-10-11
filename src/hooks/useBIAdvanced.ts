@@ -95,20 +95,25 @@ export function useGeoSalesData() {
     enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
-      const { data: companies } = await supabase
+      const { data: companies, error: companiesError } = await supabase
         .from('companies')
-        .select('id, name, lat, lng, city, state')
-        .eq('user_id', user.id)
-        .not('lat', 'is', null)
-        .not('lng', 'is', null);
+        .select('id, nome_crm')
+        .eq('user_id', user.id);
+      if (companiesError) throw companiesError;
 
       if (!companies?.length) return [];
 
       // Both queries are independent of each other — run in parallel
-      const [{ data: contacts }, { data: interactions }] = await Promise.all([
+      const [{ data: contacts, error: contactsError }, { data: interactions, error: interactionsError }, { data: addresses, error: addressesError }] = await Promise.all([
         supabase.from('contacts').select('company_id').eq('user_id', user.id).limit(10000),
         supabase.from('interactions').select('company_id').eq('user_id', user.id).not('company_id', 'is', null).limit(10000),
+        supabase.from('company_addresses').select('company_id, latitude, longitude, cidade, estado, is_primary')
+          .in('company_id', companies.map(c => c.id)).not('latitude', 'is', null).not('longitude', 'is', null)
+          .order('is_primary', { ascending: false, nullsFirst: false }),
       ]);
+      if (contactsError) throw contactsError;
+      if (interactionsError) throw interactionsError;
+      if (addressesError) throw addressesError;
 
       const contactCount = new Map<string, number>();
       for (const c of contacts || []) {
@@ -120,15 +125,19 @@ export function useGeoSalesData() {
         if (i.company_id) interactionCount.set(i.company_id, (interactionCount.get(i.company_id) || 0) + 1);
       }
 
-      return companies.map(c => ({
-        lat: c.lat!,
-        lng: c.lng!,
-        company_name: c.name,
-        city: c.city || '',
-        state: c.state || '',
-        interaction_count: interactionCount.get(c.id) || 0,
-        contact_count: contactCount.get(c.id) || 0,
-      })) as GeoSalesPoint[];
+      return companies.flatMap(c => {
+        const address = addresses?.find(a => a.company_id === c.id && a.latitude != null && a.longitude != null);
+        if (!address || address.latitude == null || address.longitude == null) return [];
+        return [{
+          lat: address.latitude,
+          lng: address.longitude,
+          company_name: c.nome_crm,
+          city: address.cidade || '',
+          state: address.estado || '',
+          interaction_count: interactionCount.get(c.id) || 0,
+          contact_count: contactCount.get(c.id) || 0,
+        } satisfies GeoSalesPoint];
+      });
     },
     staleTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,

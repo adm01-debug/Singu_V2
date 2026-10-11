@@ -91,9 +91,7 @@ export function useInteractionsInsights(period: Period = "30d") {
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   const insights = useMemo(() => {
-    const list: ConversationAnalysis[] = Array.isArray(query.data)
-      ? (query.data as unknown as ConversationAnalysis[])
-      : [];
+    const list: ConversationAnalysis[] = query.data ?? [];
 
     const total = list.length;
 
@@ -301,5 +299,5 @@ export function useInteractionsInsights(period: Period = "30d") {
     return { kpis, sentimentDistribution, sentimentTrend, sentimentTrendSummary, topThemes, topObjections, objectionsTrend, objectionsTrendSummary, list, sentimentBuckets: sentBuckets };
   }, [query.data]);
 
-  return { ...insights, isLoading: query.isLoading, isError: query.isError };
+  return { ...insights, isLoading: query.isLoading, isError: query.isError, error: query.error };
 }

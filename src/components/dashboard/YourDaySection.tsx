@@ -302,7 +302,7 @@ export function YourDaySection({ className }: YourDaySectionProps) {
                             {formatContactName(item.contact.first_name, item.contact.last_name)}
                           </p>
                           <p className="text-xs text-muted-foreground truncate">
-                            {toTitleCase(item.company?.name || '') || 'Sem empresa'}
+                            {toTitleCase(item.company?.nome_crm || '') || 'Sem empresa'}
                           </p>
                         </div>
                         <span className={cn(

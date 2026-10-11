@@ -1,9 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { z } from 'zod';
 import { logger } from '@/lib/logger';
 import { parseApiError } from '@/lib/errorMessages';
-import { rodizioFrom, callRodizioRpc } from '@/lib/rodizioRpc';
+import { callRodizioRpc } from '@/lib/rodizioRpc';
+import { supabase } from '@/integrations/supabase/client';
 import { useAppUserId } from '@/hooks/useAppUserId';
 import type {
   RodizioBloqueio,
@@ -39,7 +41,7 @@ export function useRodizioBloqueios() {
     queryKey: [...BLOQUEIOS_KEY_BASE, user?.id],
     queryFn: async (): Promise<RodizioBloqueio[]> => {
       if (!user) return [];
-      const { data, error } = await rodizioFrom('vw_rodizio_bloqueios')
+      const { data, error } = await supabase.from('vw_rodizio_bloqueios')
         .select('*')
         .neq('status', 'NENHUM')
         .order('bloqueado_ate', { ascending: false, nullsFirst: false })
@@ -48,7 +50,11 @@ export function useRodizioBloqueios() {
         logger.error('Erro ao carregar bloqueios:', error);
         throw error;
       }
-      return (data ?? []) as unknown as RodizioBloqueio[];
+      return (data ?? []).map(row => ({
+        ...row,
+        customer_id: z.string().parse(row.customer_id),
+        status: z.enum(['NENHUM', 'EXPIRADO', 'PENDENTE_APROVACAO', 'ATIVO']).parse(row.status),
+      }));
     },
     enabled: !!user,
     staleTime: 30_000,

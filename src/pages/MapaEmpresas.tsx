@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -22,6 +22,8 @@ import { toast } from "sonner";
 import { MarkerClusterLayer, MappableCompany } from "./mapa/MapMarkerCluster";
 import { geocode, buildLocationString } from "./mapa/geocoding";
 import { useAuth } from "@/hooks/useAuth";
+import { mapCompany, type Company } from "@/hooks/useCompanies";
+import { fetchCompanyRelationshipScores } from "./mapa/relationshipScores";
 
 // Fix default marker icon
 delete (L.Icon.Default.prototype as { _getIconUrl?: () => string })._getIconUrl;
@@ -30,6 +32,17 @@ L.Icon.Default.mergeOptions({
   iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
 });
+
+type CompanyWithScore = Company & Pick<MappableCompany, 'relationship_score'>;
+
+function toMappable(c: CompanyWithScore, lat: number, lng: number): MappableCompany {
+  return {
+    id: c.id, name: c.name, nome_crm: c.nome_crm, ramo_atividade: c.ramo_atividade,
+    status: c.status, cnpj: c.cnpj, email: c.email, phone: c.phone,
+    website: c.website, city: c.city, state: c.state, lat, lng,
+    relationship_score: c.relationship_score,
+  };
+}
 
 export default function MapaEmpresas() {
   usePageTitle("Mapa de Empresas");
@@ -42,28 +55,33 @@ export default function MapaEmpresas() {
   const [geocodingProgress, setGeocodingProgress] = useState(0);
   const [geocodingTotal, setGeocodingTotal] = useState(0);
   const queryClient = useQueryClient();
+  const processedRef = useRef<CompanyWithScore[] | null>(null);
 
-  const { data: rawCompanies, isLoading } = useQuery({
+  const { data: rawCompanies, isLoading, error: companiesError } = useQuery({
     queryKey: ["companies-map-data", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from("companies").select("id,name,nome_crm,ramo_atividade,status,cnpj,email,phone,website,city,state,address,extra_data_rf,lat,lng").eq("user_id", user!.id).order("updated_at", { ascending: false });
+      const { data, error } = await supabase.from("companies")
+        .select("id,nome_crm,nome_fantasia,razao_social,ramo_atividade,status,cnpj,website,extra_data_rf,version,company_addresses(id,is_primary,logradouro,numero,cidade,estado,latitude,longitude),company_emails(id,is_primary,email),company_phones(id,is_primary,numero)")
+        .eq("user_id", user!.id).order("updated_at", { ascending: false });
       if (error) throw error;
-      return data || [];
+      const companies = (data || []).map(mapCompany);
+      const scores = await fetchCompanyRelationshipScores(companies.map(company => company.id));
+      return companies.map(company => ({ ...company, relationship_score: scores.get(company.id) ?? null }));
     },
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
 
   const processAndGeocode = useCallback(async () => {
-    if (!user || !rawCompanies || rawCompanies.length === 0 || isGeocoding) return;
+    if (!user || !rawCompanies || isGeocoding) return;
     const alreadyMapped: MappableCompany[] = [];
     const needsGeocoding: typeof rawCompanies = [];
     for (const c of rawCompanies) {
-      if (c.lat != null && c.lng != null && !isNaN(c.lat) && !isNaN(c.lng) && c.lat !== 0) {
-        alreadyMapped.push({ id: c.id, name: c.name, nome_crm: c.nome_crm, ramo_atividade: c.ramo_atividade, status: c.status, cnpj: c.cnpj, email: c.email, phone: c.phone, website: c.website, city: c.city, state: c.state, lat: c.lat, lng: c.lng, relationship_score: 50 });
+      if (c.lat != null && c.lng != null && Number.isFinite(c.lat) && Number.isFinite(c.lng) && c.lat !== 0) {
+        alreadyMapped.push(toMappable(c, c.lat, c.lng));
       } else {
-        const loc = buildLocationString(c as Record<string, unknown>);
+        const loc = buildLocationString({ city: c.city, state: c.state, address: c.address, extra_data_rf: c.extra_data_rf });
         if (loc) needsGeocoding.push(c);
       }
     }
@@ -73,27 +91,40 @@ export default function MapaEmpresas() {
     const newResults: MappableCompany[] = [...alreadyMapped];
     let geocoded = 0;
     for (const c of needsGeocoding) {
-      const loc = buildLocationString(c as Record<string, unknown>);
+      const loc = buildLocationString({ city: c.city, state: c.state, address: c.address, extra_data_rf: c.extra_data_rf });
       if (!loc) continue;
-      const coords = await geocode(loc);
-      if (coords) {
-        const { error: geoError } = await supabase.from("companies").update({ lat: coords.lat, lng: coords.lng }).eq("user_id", user.id).eq("id", c.id);
-        if (geoError) logger.error('Error saving geocoordinates:', { error: geoError.message });
-        newResults.push({ id: c.id, name: c.name, nome_crm: c.nome_crm, ramo_atividade: c.ramo_atividade, status: c.status, cnpj: c.cnpj, email: c.email, phone: c.phone, website: c.website, city: c.city, state: c.state, lat: coords.lat, lng: coords.lng, relationship_score: 50 });
-        geocoded++;
+      try {
+        const coords = await geocode(loc);
+        if (coords) {
+          const primaryAddress = [...c.company_addresses].sort((a, b) =>
+            Number(b.is_primary === true) - Number(a.is_primary === true) || a.id.localeCompare(b.id))[0];
+          const { error: geoError } = primaryAddress
+            ? await supabase.from("company_addresses").update({ latitude: coords.lat, longitude: coords.lng }).eq("company_id", c.id).eq("id", primaryAddress.id).select('id').single()
+            : await supabase.from("company_addresses").insert({ company_id: c.id, cidade: c.city, estado: c.state, latitude: coords.lat, longitude: coords.lng, is_primary: true });
+          if (geoError) throw geoError;
+          newResults.push(toMappable(c, coords.lat, coords.lng));
+          geocoded++;
+        }
+      } catch (error) {
+        logger.error('Erro ao geolocalizar empresa:', error);
+        toast.error(`Não foi possível geolocalizar ${c.name}.`);
       }
       setGeocodingProgress(prev => prev + 1);
       await new Promise(r => setTimeout(r, 1100));
     }
     setMappedCompanies(newResults); setIsGeocoding(false);
     if (geocoded > 0) { toast.success(`${geocoded} empresas geolocalizadas com sucesso`); queryClient.invalidateQueries({ queryKey: ["companies-map-data"] }); }
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
-  }, [rawCompanies, isGeocoding, queryClient]);
+  }, [user, rawCompanies, isGeocoding, queryClient]);
 
-  useEffect(() => { if (rawCompanies && rawCompanies.length > 0 && mappedCompanies.length === 0 && !isGeocoding) processAndGeocode(); }, [rawCompanies, mappedCompanies.length, isGeocoding, processAndGeocode]);
+  useEffect(() => {
+    if (rawCompanies && rawCompanies !== processedRef.current && !isGeocoding) {
+      processedRef.current = rawCompanies;
+      processAndGeocode();
+    }
+  }, [rawCompanies, isGeocoding, processAndGeocode]);
 
   const sectors = useMemo(() => { const s = new Set<string>(); mappedCompanies.forEach(c => { if (c.ramo_atividade) s.add(c.ramo_atividade); }); return Array.from(s).sort(); }, [mappedCompanies]);
-  const filtered = useMemo(() => mappedCompanies.filter(c => c.relationship_score >= minScore && (selectedSector === "all" || c.ramo_atividade === selectedSector)), [mappedCompanies, minScore, selectedSector]);
+  const filtered = useMemo(() => mappedCompanies.filter(c => (minScore === 0 || (c.relationship_score !== null && c.relationship_score >= minScore)) && (selectedSector === "all" || c.ramo_atividade === selectedSector)), [mappedCompanies, minScore, selectedSector]);
   const hasActiveFilters = minScore > 0 || selectedSector !== "all";
   const clearFilters = () => { setMinScore(0); setSelectedSector("all"); };
 
@@ -137,6 +168,8 @@ export default function MapaEmpresas() {
         <div className="rounded-lg border border-border/60 overflow-hidden" style={{ height: "calc(100vh - 320px)", minHeight: 400 }}>
           {isLoading ? (
             <div className="h-full flex flex-col items-center justify-center gap-3"><Loader2 className="h-8 w-8 animate-spin text-primary" /><p className="text-sm text-muted-foreground">Carregando empresas...</p></div>
+          ) : companiesError ? (
+            <div role="alert" className="h-full flex items-center justify-center text-destructive">Falha ao carregar empresas: {companiesError.message}</div>
           ) : mappedCompanies.length === 0 && !isGeocoding ? (
             <div className="h-full flex flex-col items-center justify-center gap-3 text-muted-foreground"><Building2 className="h-12 w-12 opacity-30" /><p className="text-sm">Nenhuma empresa com localização disponível</p><p className="text-xs">Empresas precisam ter cidade no cadastro para aparecer no mapa</p></div>
           ) : (

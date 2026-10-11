@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { logger } from '@/lib/logger';
-import { rodizioFrom } from '@/lib/rodizioRpc';
+import { supabase } from '@/integrations/supabase/client';
 import type { RodizioKpi } from '@/types/rodizio';
 
 /**
@@ -16,7 +16,7 @@ export function useRoutingMetrics() {
     queryKey: ['rodizio-kpis', user?.id],
     queryFn: async (): Promise<RodizioKpi[]> => {
       if (!user) return [];
-      const { data, error } = await rodizioFrom('vw_rodizio_kpis')
+      const { data, error } = await supabase.from('vw_rodizio_kpis')
         .select('*')
         .order('closer_nome', { ascending: true })
         .limit(500);
@@ -24,7 +24,7 @@ export function useRoutingMetrics() {
         logger.error('Erro ao carregar KPIs do rodízio:', error);
         throw error;
       }
-      return (data ?? []) as unknown as RodizioKpi[];
+      return data ?? [];
     },
     enabled: !!user,
     staleTime: 60_000,

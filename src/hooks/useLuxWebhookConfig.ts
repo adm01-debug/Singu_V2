@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { parseApiError } from '@/lib/errorMessages';
+import { z } from 'zod';
 
 export interface LuxWebhookConfig {
   id: string;
@@ -22,7 +23,7 @@ export function useLuxWebhookConfig() {
   const { user } = useAuth();
   const qc = useQueryClient();
 
-  const { data: configs = [], isLoading } = useQuery({
+  const { data: configs = [], isLoading, error } = useQuery({
     queryKey: ['lux-webhook-config', user?.id],
     enabled: !!user,
     staleTime: 5 * 60_000,
@@ -34,7 +35,20 @@ export function useLuxWebhookConfig() {
         .order('entity_type')
         .limit(20);
       if (error) throw error;
-      return (data || []) as unknown as LuxWebhookConfig[];
+      return z.array(z.object({
+        id: z.string(), entity_type: z.enum(['contact', 'company']), webhook_url: z.string(),
+        is_active: z.boolean().nullable().transform(value => value ?? true),
+        timeout_ms: z.number().nullable().transform(value => value ?? 60000),
+        max_retries: z.number().nullable().transform(value => value ?? 3),
+        headers: z.record(z.string()).nullable().transform(value => value ?? {}),
+        last_test_at: z.string().nullable(), last_test_status: z.string().nullable(),
+        created_at: z.string(), updated_at: z.string(),
+      })).parse(data ?? []).map(row => ({
+        id: row.id, entity_type: row.entity_type, webhook_url: row.webhook_url,
+        is_active: row.is_active, timeout_ms: row.timeout_ms, max_retries: row.max_retries,
+        headers: row.headers, last_test_at: row.last_test_at, last_test_status: row.last_test_status,
+        created_at: row.created_at, updated_at: row.updated_at,
+      } satisfies LuxWebhookConfig));
     },
   });
 
@@ -50,7 +64,7 @@ export function useLuxWebhookConfig() {
             is_active: config.is_active,
             timeout_ms: config.timeout_ms,
             max_retries: config.max_retries,
-            headers: config.headers as Record<string, string>,
+            headers: config.headers,
             updated_at: new Date().toISOString()
           })
           .eq('id', existing.id);
@@ -59,12 +73,15 @@ export function useLuxWebhookConfig() {
         const { error } = await supabase
           .from('lux_webhook_config')
           .insert({
-            entity_type: config.entity_type as 'contact' | 'company',
+            user_id: user.id,
+            config_name: `Lux ${config.entity_type}`,
+            scrape_target: config.entity_type,
+            entity_type: config.entity_type,
             webhook_url: config.webhook_url,
             is_active: config.is_active ?? true,
             timeout_ms: config.timeout_ms ?? 5000,
             max_retries: config.max_retries ?? 3,
-            headers: (config.headers ?? {}) as Record<string, string>
+            headers: config.headers ?? {}
           });
         if (error) throw error;
       }
@@ -115,20 +132,22 @@ export function useLuxWebhookConfig() {
         });
 
         const status = res.ok ? 'success' : `error:${res.status}`;
-        await supabase
+        const { error: statusError } = await supabase
           .from('lux_webhook_config')
           .update({ last_test_at: new Date().toISOString(), last_test_status: status })
           .eq('id', config.id);
+        if (statusError) throw statusError;
         qc.invalidateQueries({ queryKey: ['lux-webhook-config'] });
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return status;
       } catch (err) {
         const msg = err instanceof Error ? err.message : 'Erro';
-        await supabase
+        const { error: statusError } = await supabase
           .from('lux_webhook_config')
           .update({ last_test_at: new Date().toISOString(), last_test_status: `error:${msg}` })
           .eq('id', config.id);
+        if (statusError) throw new AggregateError([err, statusError], 'Falha no teste do webhook e no registro do resultado');
         qc.invalidateQueries({ queryKey: ['lux-webhook-config'] });
         throw err;
       }
@@ -139,5 +158,5 @@ export function useLuxWebhookConfig() {
 
   const getConfigForEntity = (entityType: string) => configs.find(c => c.entity_type === entityType && c.is_active);
 
-  return { configs, isLoading, upsert, toggleActive, testWebhook, getConfigForEntity };
+  return { configs, isLoading, error, upsert, toggleActive, testWebhook, getConfigForEntity };
 }

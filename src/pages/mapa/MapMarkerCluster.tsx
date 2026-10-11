@@ -14,7 +14,8 @@ const goldIcon = mkIcon("gold");
 const redIcon = mkIcon("red");
 const blueIcon = mkIcon("blue");
 
-function getIcon(score: number) {
+function getIcon(score: number | null) {
+  if (score === null) return blueIcon;
   if (score >= 70) return greenIcon;
   if (score >= 40) return goldIcon;
   if (score > 0) return redIcon;
@@ -35,7 +36,7 @@ export interface MappableCompany {
   state: string | null;
   lat: number;
   lng: number;
-  relationship_score: number;
+  relationship_score: number | null;
 }
 
 export function MarkerClusterLayer({ companies }: { companies: MappableCompany[] }) {
@@ -59,7 +60,7 @@ export function MarkerClusterLayer({ companies }: { companies: MappableCompany[]
 
     companies.forEach((company) => {
       const marker = L.marker([company.lat, company.lng], { icon: getIcon(company.relationship_score) });
-      const scoreColor = company.relationship_score >= 60 ? "#22c55e" : company.relationship_score >= 30 ? "#eab308" : "#ef4444";
+      const scoreColor = company.relationship_score === null ? "#888" : company.relationship_score >= 60 ? "#22c55e" : company.relationship_score >= 30 ? "#eab308" : "#ef4444";
       const locationText = [company.city, company.state].filter(Boolean).join(", ");
       marker.bindPopup(`
         <div style="min-width:240px;font-size:12px;font-family:system-ui;">
@@ -72,7 +73,7 @@ export function MarkerClusterLayer({ companies }: { companies: MappableCompany[]
           ${company.website ? `<p style="margin:2px 0">🌐 <a href="${company.website}" target="_blank" rel="noopener">${company.website.replace(/https?:\/\//, "").slice(0, 30)}</a></p>` : ""}
           <div style="border-top:1px solid #ddd;margin-top:6px;padding-top:4px;display:flex;justify-content:space-between">
             <span style="font-weight:600">Score</span>
-            <span style="font-family:monospace;font-weight:700;color:${scoreColor}">${company.relationship_score}/100</span>
+            <span style="font-family:monospace;font-weight:700;color:${scoreColor}">${company.relationship_score === null ? 'Não disponível' : `${company.relationship_score}/100`}</span>
           </div>
         </div>
       `);

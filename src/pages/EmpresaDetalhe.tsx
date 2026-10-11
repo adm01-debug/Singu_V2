@@ -5,12 +5,13 @@ import { useParams, Link } from 'react-router-dom';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { PageHeader } from '@/components/navigation/PageHeader';
-import { queryExternalData, updateExternalData } from '@/lib/externalData';
+import { queryExternalData, insertExternalData, updateExternalData } from '@/lib/externalData';
 import { toTitleCase } from '@/lib/formatters';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useLuxIntelligence } from '@/hooks/useLuxIntelligence';
 import { useCompanyPhones, useCompanyEmails, useCompanyAddresses, useCompanySocialMedia, useCompanyCnaes, useCompanyRfmScores, useCompanyStakeholders } from '@/hooks/useCompanyRelatedData';
 import { useCompanySummaryView } from '@/hooks/useCompanyViews';
+import { mapCompany, type Company } from '@/hooks/useCompanies';
 import { motion } from 'framer-motion';
 import {
   Building2, Users, Edit, Plus, MessageSquare,
@@ -42,7 +43,7 @@ import { CompanyErpProposalsWidget } from '@/components/erp/CompanyErpProposalsW
  import { RelatedContactsSection } from '@/components/company-detail/contacts/RelatedContactsSection';
  import { UnifiedTimelineSection } from '@/components/company-detail/timeline/UnifiedTimelineSection';
  import { QuickFollowUpGenerator } from '@/components/company-detail/QuickFollowUpGenerator';
-import { supabase } from '@/integrations/supabase/client';
+import { normalizeExternalContact, prepareContactWrite, type Contact } from '@/hooks/useContacts';
 import { useAuth } from '@/hooks/useAuth';
 import type { Tables } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
@@ -50,8 +51,6 @@ import { useToast } from '@/hooks/use-toast';
 import { parseApiError } from '@/lib/errorMessages';
 import { CompanyExecutiveSummary } from '@/components/company-detail/CompanyExecutiveSummary';
 
-type Company = Tables<'companies'>;
-type Contact = Tables<'contacts'>;
 type Interaction = Tables<'interactions'>;
 type HealthStatus = 'growing' | 'stable' | 'cutting' | 'unknown';
 
@@ -85,14 +84,15 @@ const EmpresaDetalhe = () => {
   const stakeholdersHook = useCompanyStakeholders(id);
   const { data: companySummary } = useCompanySummaryView(id);
 
-  const isDeleted = !!(company as Record<string, unknown>)?.deleted_at;
-  const leadScore = companySummary?.lead_score ?? (company as Record<string, unknown>)?.lead_score as number | null;
-  const leadStatus = companySummary?.lead_status ?? (company as Record<string, unknown>)?.lead_status as string | null;
+  const isDeleted = !!company?.deleted_at;
+  const leadScore = companySummary?.lead_score ?? company?.lead_score;
+  const leadStatus = companySummary?.lead_status ?? company?.lead_status;
 
   const handleRestore = async () => {
     if (!id) return;
     try {
-      await updateExternalData('companies', id, { deleted_at: null, deleted_by: null });
+      const { error } = await updateExternalData('companies', id, { deleted_at: null, deleted_by: null });
+      if (error) throw error;
       toast({ title: 'Empresa restaurada', description: 'A empresa foi reativada com sucesso.' });
       fetchCompanyData();
     } catch (e) {
@@ -103,10 +103,13 @@ const EmpresaDetalhe = () => {
   const fetchCompanyData = useCallback(async () => {
     setLoading(true);
     try {
-      const { data: companyResult, error: companyError } = await queryExternalData<Record<string, unknown>>({ table: 'companies', filters: [{ type: 'eq', column: 'id', value: id }] });
+      const { data: companyResult, error: companyError } = await queryExternalData<unknown>({
+        table: 'companies',
+        select: '*,company_addresses(id,is_primary,logradouro,numero,cidade,estado,latitude,longitude),company_emails(id,is_primary,email),company_phones(id,is_primary,numero)',
+        filters: [{ type: 'eq', column: 'id', value: id }],
+      });
       if (companyError) throw companyError;
-      const raw = Array.isArray(companyResult) ? (companyResult.at(0) ?? null) : null;
-      const companyData = raw ? { ...raw, name: (raw.nome_crm || raw.nome_fantasia || raw.razao_social || 'Sem nome') as string, industry: (raw.ramo_atividade || null) as string | null, tags: (raw.tags_array || []) as string[], challenges: (raw.challenges || []) as string[], competitors: (raw.competitors || []) as string[] } as Company : null;
+      const companyData = companyResult?.[0] ? mapCompany(companyResult[0]) : null;
       setCompany(companyData);
 
       if (companyData && id) {
@@ -114,16 +117,16 @@ const EmpresaDetalhe = () => {
       }
 
       if (companyData) {
-        const { data: contactsResult, error: contactsError } = await queryExternalData<Contact>({ table: 'contacts', filters: [{ type: 'eq', column: 'company_id', value: id }], order: { column: 'relationship_score', ascending: false } });
+        const { data: contactsResult, error: contactsError } = await queryExternalData<unknown>({ table: 'contacts', filters: [{ type: 'eq', column: 'company_id', value: id }], order: { column: 'relationship_score', ascending: false } });
         if (contactsError) throw contactsError;
-        const normalizedContacts = (contactsResult || []).map((c: Record<string, unknown>) => ({ ...c, first_name: c.first_name || c.nome || 'Sem', last_name: c.last_name || c.sobrenome || 'nome', tags: c.tags || [], hobbies: c.hobbies || [], interests: c.interests || [] })) as Contact[];
+        const normalizedContacts = (contactsResult || []).map(normalizeExternalContact);
         setContacts(normalizedContacts);
 
         // As interações agora são gerenciadas pelo hook useInteractions(undefined, id)
         // Isso remove o fetch manual e garante resiliência e cache via React Query.
       }
-    } catch (error) { logger.error('Error fetching company data:', error); } finally { setLoading(false); }
-  }, [id, trackView]);
+    } catch (error) { logger.error('Error fetching company data:', error); toast({ title: 'Erro ao carregar empresa', description: parseApiError(error, 'Tente novamente'), variant: 'destructive' }); } finally { setLoading(false); }
+  }, [id, trackView, toast]);
 
   useEffect(() => { if (id && user) fetchCompanyData(); }, [id, user, fetchCompanyData]);
 
@@ -307,13 +310,19 @@ const EmpresaDetalhe = () => {
           companies={company ? [company] : []}
           defaultCompanyId={id}
           onSubmit={async (data) => {
-            if (!user) return;
             try {
-              const { error } = await supabase.from('contacts').insert({ ...data, user_id: user.id, company_id: id } as unknown as import('@/integrations/supabase/types').Database['public']['Tables']['contacts']['Insert']);
+              if (!user || !id) throw new Error('Sua sessão expirou. Entre novamente para adicionar o contato.');
+              const { data: created, error } = await insertExternalData<unknown>('contacts', { ...prepareContactWrite(data), user_id: user.id, company_id: id });
               if (error) throw error;
+              if (!created) throw new Error('A criação não retornou um contato válido.');
+              normalizeExternalContact(created);
               setIsAddContactOpen(false);
               fetchCompanyData();
-            } catch (error) { logger.error('Error adding contact:', error); }
+            } catch (error) {
+              logger.error('Erro ao adicionar contato:', error);
+              toast({ title: 'Erro ao adicionar contato', description: parseApiError(error, 'Tente novamente'), variant: 'destructive' });
+              throw error;
+            }
           }}
           onCancel={() => setIsAddContactOpen(false)}
           isSubmitting={false}
