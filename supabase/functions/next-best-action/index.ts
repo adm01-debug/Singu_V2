@@ -135,7 +135,14 @@ Por favor, gere:
       suggested_script: result.suggested_script,
       expected_outcome: result.expected_outcome,
       generated_at: new Date().toISOString(),
-      model: "gemini-2.0-flash"
+      model: "gemini-2.0-flash",
+      status: 'pending',
+      completed_at: null,
+      completion_date: null,
+      completion_notes: null,
+      was_successful: null,
+      edited_script: null,
+      contextual_tone: null
     };
 
     const { data: persisted, error: persistenceError } = await supabase.from('contact_next_actions')

@@ -289,6 +289,10 @@ export function useUpsertCompetitor() {
         throw new Error('Metadados do concorrente devem ser um objeto JSON');
       }
       competitorMetadataSchema.parse(parsedMetadata);
+      const { data: records, error: recordsError } = c.id
+        ? await supabase.from('win_loss_records').select('competitor_id, outcome').eq('competitor_id', c.id).eq('user_id', user.id)
+        : { data: [], error: null };
+      if (recordsError) throw recordsError;
       const { data, error } = await supabase
         .from('competitors')
         .upsert({ id: c.id, name: c.name, website: c.website, strengths: c.strengths, weaknesses: c.weaknesses,
@@ -300,9 +304,6 @@ export function useUpsertCompetitor() {
         .maybeSingle();
       if (error) throw error;
       if (!data) throw new Error("Falha ao salvar competidor");
-      const { data: records, error: recordsError } = await supabase.from('win_loss_records')
-        .select('competitor_id, outcome').eq('competitor_id', data.id).eq('user_id', user.id);
-      if (recordsError) throw recordsError;
       return normalizeCompetitor(data, records ?? []);
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['competitors'] }),
