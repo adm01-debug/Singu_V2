@@ -16,18 +16,21 @@ export function useModalHistory(
   id: string = 'modal'
 ) {
   const pushedRef = useRef(false);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const [isClosing, setIsClosing] = useState(false);
 
   const handleClose = useCallback(() => {
     // Start closing animation phase
     setIsClosing(true);
     // Allow animation to complete before actually closing
-    const timer = setTimeout(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
       setIsClosing(false);
-      onClose();
+      onCloseRef.current();
     }, 200); // Match exit animation duration
-    return () => clearTimeout(timer);
-  }, [onClose]);
+  }, []);
 
   const handlePopState = useCallback(() => {
     if (pushedRef.current) {
@@ -39,7 +42,11 @@ export function useModalHistory(
   useEffect(() => {
     if (isOpen && !pushedRef.current) {
       // Push a state entry so browser back closes the modal
-      window.history.pushState({ modal: id }, '');
+      const routerState: unknown = window.history.state;
+      window.history.pushState({
+        ...(routerState && typeof routerState === 'object' ? routerState : {}),
+        modal: id,
+      }, '');
       pushedRef.current = true;
       setIsClosing(false);
     }
@@ -55,9 +62,7 @@ export function useModalHistory(
     window.addEventListener('popstate', handlePopState);
     return () => {
       window.removeEventListener('popstate', handlePopState);
-      if (pushedRef.current) {
-        pushedRef.current = false;
-      }
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, [handlePopState]);
 

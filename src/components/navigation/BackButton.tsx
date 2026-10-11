@@ -1,3 +1,4 @@
+ import { useState } from 'react';
  import { ArrowLeft, History } from 'lucide-react';
  import { motion } from 'framer-motion';
  import { Button } from '@/components/ui/button';
@@ -10,35 +11,14 @@
    DropdownMenuLabel,
  } from '@/components/ui/dropdown-menu';
  import { cn } from '@/lib/utils';
- import { useNavigationStack } from '@/contexts/NavigationStackContext';
+ import { safeNavigationPath, useNavigationStack } from '@/contexts/NavigationStackContext';
  import { useNavigate } from 'react-router-dom';
-
-/** Human-readable labels for route segments */
-const ROUTE_LABELS: Record<string, string> = {
-  '': 'início',
-  contatos: 'Contatos',
-  empresas: 'Empresas',
-  interacoes: 'Interações',
-  analytics: 'Analytics',
-  insights: 'Insights',
-  calendario: 'Calendário',
-  notificacoes: 'Notificações',
-  network: 'Network',
-  automacoes: 'Automações',
-  configuracoes: 'Configurações',
-  relatorio: 'Relatório',
-  admin: 'Admin',
-};
-
-function getReadableLabel(path: string | null): string {
-  if (!path) return 'início';
-  const segment = path.replace(/^\//, '').split('/')[0] || '';
-  return ROUTE_LABELS[segment] || segment || 'início';
-}
+ import { getReadableLabel } from '@/lib/navigationLabels';
 
 interface BackButtonProps {
   /** Explicit path to navigate to. If omitted, uses internal navigation stack. */
   to?: string;
+  fallback?: string;
   /** Label shown next to the arrow. Defaults to "Voltar". */
   label?: string;
   /** Visual variant */
@@ -59,28 +39,35 @@ interface BackButtonProps {
  */
  export function BackButton({
    to,
+   fallback = '/',
    label,
    variant = 'ghost',
    className,
    showLabelOnMobile = false,
  }: BackButtonProps) {
-   const { goBack, previousPath, stack } = useNavigationStack();
+   const { goBack, goToIndex, previousPath, stack } = useNavigationStack();
    const navigate = useNavigate();
+   const [showFullHistory, setShowFullHistory] = useState(false);
+   const historyEntries = stack.slice(0, -1).map((path, index) => ({ path, index }))
+     .filter(({ path }) => !path.startsWith('/auth')).reverse();
  
    const handleBack = () => {
      if (to) {
-       goBack(to);
+       const destination = safeNavigationPath(to);
+       if (!destination) return goBack(fallback);
+       if (!to.includes('?') && !to.includes('#') && previousPath
+         && new URL(previousPath, window.location.origin).pathname === destination) {
+         goBack(destination);
+       } else {
+         navigate(destination, { replace: true });
+       }
      } else {
-       goBack('/');
+       goBack(fallback);
      }
-   };
- 
-   const handleJumpTo = (path: string) => {
-     navigate(path);
    };
 
   // Resolve visible label: explicit > contextual destination > "Voltar"
-  const destinationPath = to || previousPath;
+  const destinationPath = to || previousPath || fallback;
   const contextualDestination = getReadableLabel(destinationPath);
   const displayLabel = label || contextualDestination;
 
@@ -114,8 +101,8 @@ interface BackButtonProps {
          </Button>
        </motion.div>
  
-       {stack.length > 1 && (
-         <DropdownMenu>
+       {historyEntries.length > 0 && (
+         <DropdownMenu onOpenChange={(open) => { if (!open) setShowFullHistory(false); }}>
            <DropdownMenuTrigger asChild>
              <Button
                variant="ghost"
@@ -126,29 +113,29 @@ interface BackButtonProps {
                <History className="h-3.5 w-3.5" />
              </Button>
            </DropdownMenuTrigger>
-           <DropdownMenuContent align="start" className="w-56 p-1">
+           <DropdownMenuContent align="start" className="w-56 p-1 max-h-80 overflow-y-auto">
              <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold px-2 py-1.5">
                Histórico Recente
              </DropdownMenuLabel>
              <DropdownMenuSeparator />
-             {stack.slice().reverse().slice(1, 6).map((path, idx) => (
+             {historyEntries.slice(0, showFullHistory ? 20 : 5).map(({ path, index }) => (
                <DropdownMenuItem
-                 key={`${path}-${idx}`}
-                 onClick={() => handleJumpTo(path)}
+                 key={`${path}-${index}`}
+                 onClick={() => goToIndex(index)}
                  className="text-xs py-2 px-2 cursor-pointer gap-2"
                >
                  <div className="w-1 h-1 rounded-full bg-primary/40 shrink-0" />
                  <span className="truncate flex-1">{getReadableLabel(path)}</span>
                  <span className="text-[10px] text-muted-foreground font-mono">
-                   {path.length > 20 ? path.substring(0, 17) + '...' : path}
+                   {path.split(/[?#]/)[0].length > 20 ? path.split(/[?#]/)[0].substring(0, 17) + '...' : path.split(/[?#]/)[0]}
                  </span>
                </DropdownMenuItem>
              ))}
-             {stack.length > 6 && (
+             {historyEntries.length > 5 && !showFullHistory && (
                <>
                  <DropdownMenuSeparator />
                  <DropdownMenuItem
-                   onClick={() => handleJumpTo('/')}
+                   onSelect={(event) => { event.preventDefault(); setShowFullHistory(true); }}
                    className="text-[10px] justify-center text-muted-foreground hover:text-primary transition-colors py-1"
                  >
                    Ver todo o rastro
