@@ -1,6 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from "@/lib/logger";
 import { getCircuitBreaker, CircuitOpenError } from "@/lib/circuitBreaker";
+import { z } from 'zod';
 
 interface ExternalQueryOptions {
   table: string;
@@ -57,7 +58,14 @@ const externalDbBreaker = getCircuitBreaker('external-db', {
 
 const isAbortError = (e: unknown) => e instanceof Error && e.name === 'AbortError';
 
-async function callExternalData(body: Record<string, unknown>, signal?: AbortSignal): Promise<Record<string, unknown>> {
+const externalResponseSchema = z.object({
+  error: z.string().nullish(),
+  fallback: z.boolean().optional(),
+  data: z.unknown().optional(),
+  count: z.number().int().nonnegative().nullable().optional(),
+});
+
+async function callExternalData(body: Record<string, unknown>, signal?: AbortSignal) {
   return externalDbBreaker.call(async () => {
     const accessToken = await getAccessToken();
 
@@ -79,14 +87,9 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
       throw new Error(`Edge function error [${response.status}]: ${errorText}`);
     }
 
-    const result = await response.json();
-    if (result?.error) {
-      // Soft fallback from upstream gateway failures — degrade gracefully without tripping breaker
-      if (result?.fallback === true) {
-        logger.warn('External data fallback:', result.error);
-        return result;
-      }
-      throw new Error(result.error);
+    const result = externalResponseSchema.parse(await response.json());
+    if (result.error != null || result.fallback === true) {
+      throw new Error(result.error || 'A fonte externa está indisponível; tente novamente');
     }
 
     return result;
@@ -99,8 +102,10 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
   const { signal, ...queryOptions } = options;
   try {
     const result = await callExternalData({ action: 'select', ...queryOptions }, signal);
-    const data = (result?.data as unknown as T[]) || [];
-    const count = (result?.count as number) || 0;
+    if (!Array.isArray(result.data)) throw new Error('Resposta externa inválida: data deve ser uma lista');
+    if (result.count === undefined) throw new Error('Resposta externa inválida: count ausente');
+    const data = result.data as T[];
+    const count = result.count;
 
     // Log access for auditing
     if (data.length > 0) {
