@@ -15,13 +15,25 @@ ALTER TABLE public.csat_surveys ALTER COLUMN score DROP NOT NULL;
 ALTER TABLE public.csat_surveys ALTER COLUMN sent_at DROP NOT NULL;
 ALTER TABLE public.csat_surveys ALTER COLUMN sent_at DROP DEFAULT;
 ALTER TABLE public.csat_surveys
-  ADD COLUMN IF NOT EXISTS survey_type text DEFAULT 'csat'
-    CHECK (survey_type IN ('csat', 'nps', 'ces', 'custom')),
-  ADD COLUMN IF NOT EXISTS nps_score integer CHECK (nps_score BETWEEN 0 AND 10),
-  ADD COLUMN IF NOT EXISTS ces_score integer CHECK (ces_score BETWEEN 1 AND 7);
+  ADD COLUMN IF NOT EXISTS survey_type text DEFAULT 'csat',
+  ADD COLUMN IF NOT EXISTS nps_score integer,
+  ADD COLUMN IF NOT EXISTS ces_score integer;
+ALTER TABLE public.csat_surveys ALTER COLUMN survey_type SET DEFAULT 'csat';
 ALTER TABLE public.csat_surveys ALTER COLUMN survey_type SET NOT NULL;
 DO $$
 BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.csat_surveys'::regclass AND conname='csat_surveys_type_contract_check') THEN
+    ALTER TABLE public.csat_surveys ADD CONSTRAINT csat_surveys_type_contract_check
+      CHECK (survey_type IN ('csat', 'nps', 'ces', 'custom'));
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.csat_surveys'::regclass AND conname='csat_surveys_nps_contract_check') THEN
+    ALTER TABLE public.csat_surveys ADD CONSTRAINT csat_surveys_nps_contract_check
+      CHECK (nps_score BETWEEN 0 AND 10);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.csat_surveys'::regclass AND conname='csat_surveys_ces_contract_check') THEN
+    ALTER TABLE public.csat_surveys ADD CONSTRAINT csat_surveys_ces_contract_check
+      CHECK (ces_score BETWEEN 1 AND 7);
+  END IF;
   IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.csat_surveys'::regclass AND conname='csat_surveys_answered_score_check') THEN
     ALTER TABLE public.csat_surveys ADD CONSTRAINT csat_surveys_answered_score_check CHECK (
       status <> 'answered' OR CASE survey_type
@@ -218,6 +230,10 @@ GRANT SELECT, INSERT ON TABLE public.rfm_history TO authenticated;
 -- no canônico já existiam. Registrar o ACL original antes de aplicar a reversão.
 -- DROP POLICY IF EXISTS csat_surveys_owner ON public.csat_surveys;
 -- ALTER TABLE public.csat_surveys DROP CONSTRAINT IF EXISTS csat_surveys_answered_score_check;
+-- ALTER TABLE public.csat_surveys DROP CONSTRAINT IF EXISTS csat_surveys_type_contract_check;
+-- ALTER TABLE public.csat_surveys DROP CONSTRAINT IF EXISTS csat_surveys_nps_contract_check;
+-- ALTER TABLE public.csat_surveys DROP CONSTRAINT IF EXISTS csat_surveys_ces_contract_check;
+-- Restaurar o default anterior de survey_type conforme o catálogo salvo antes da migration.
 -- ALTER TABLE public.csat_surveys ALTER COLUMN survey_type DROP NOT NULL;
 -- ALTER TABLE public.csat_surveys ALTER COLUMN score SET NOT NULL;
 -- ALTER TABLE public.csat_surveys ALTER COLUMN sent_at SET DEFAULT now();
