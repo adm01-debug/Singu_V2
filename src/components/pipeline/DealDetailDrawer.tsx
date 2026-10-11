@@ -70,6 +70,14 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
   const [companies, setCompanies] = useState<{ value: string; label: string }[]>([]);
   const [, setContacts] = useState<{ value: string; label: string }[]>([]);
 
+  const invalidateDealQueries = () => {
+    for (const key of ['deals-pipeline', 'pipeline-summary', 'weighted-forecast', 'velocity-metrics',
+      'daily-summary', 'channel-analysis', 'seasonality']) {
+      queryClient.invalidateQueries({ queryKey: [key] });
+    }
+    queryClient.invalidateQueries({ queryKey: ['company-deals', deal?.company_id] });
+  };
+
   const form = useForm<DealFormValues>({
     resolver: zodResolver(dealSchema),
     defaultValues: {
@@ -90,7 +98,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
         valor: deal.valor,
         pipeline_stage: deal.pipeline_stage,
         probabilidade: deal.probabilidade,
-        company_id: deal.company_id,
+        company_id: deal.company_id ?? '',
         contact_id: deal.contact_id,
         previsao_fechamento: deal.previsao_fechamento ? new Date(deal.previsao_fechamento) : null,
       });
@@ -129,7 +137,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
       if (error) throw error;
       
       toast.success('Deal atualizado!');
-      queryClient.invalidateQueries({ queryKey: ['deals-pipeline'] });
+      invalidateDealQueries();
       onOpenChange(false);
     } catch {
       toast.error('Erro ao atualizar deal');
@@ -145,7 +153,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
       const { error } = await deleteExternalData('deals', deal.id);
       if (error) throw error;
       toast.success('Deal excluído');
-      queryClient.invalidateQueries({ queryKey: ['deals-pipeline'] });
+      invalidateDealQueries();
       onOpenChange(false);
     } catch {
       toast.error('Erro ao excluir deal');
@@ -160,13 +168,14 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
     try {
       const { error } = await updateExternalData('deals', deal.id, { 
         status: status === 'won' ? 'ganho' : 'perdido',
-        closed_at: new Date().toISOString(),
+        ...(!['ganho', 'perdido', 'won', 'lost'].includes(deal.status)
+          ? { closed_at: new Date().toISOString() } : {}),
         pipeline_stage: status === 'won' ? 'fechamento' : deal.pipeline_stage,
         probabilidade: status === 'won' ? 100 : 0
       });
       if (error) throw error;
       toast.success(status === 'won' ? 'Parabéns! Deal Ganho! 🏆' : 'Deal marcado como perdido.');
-      queryClient.invalidateQueries({ queryKey: ['deals-pipeline'] });
+      invalidateDealQueries();
       onOpenChange(false);
     } catch {
       toast.error('Erro ao atualizar status');

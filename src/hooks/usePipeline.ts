@@ -13,13 +13,14 @@ export interface PipelineDeal {
   status: string;
   pipeline_stage: string;
   probabilidade: number;
-  company_id: string;
-  contact_id?: string;
+  company_id: string | null;
+  contact_id?: string | null;
   company_name?: string;
   contact_name?: string;
   previsao_fechamento?: string;
   dias_no_estagio_atual?: number;
-  created_at: string;
+  created_at: string | null;
+  closed_at?: string | null;
 }
 
 export interface PipelineSummary {
@@ -77,12 +78,28 @@ export function useDealsPipeline() {
     enabled: !!user,
     queryFn: async () => {
       if (!user) throw new Error('Not authenticated');
-      const { data, error } = await callExternalRpc<PipelineDeal[]>(
-        'get_deals_pipeline',
-        { p_user_id: user.id }
-      );
-      if (error) throw error;
-      return data || [];
+      const deals: PipelineDeal[] = [];
+      const pageSize = 500;
+      for (let offset = 0; ; offset += pageSize) {
+        const { data, error } = await supabase.from('deals')
+          .select('*, company:companies(nome_crm), contact:contacts(first_name, last_name)')
+          .eq('user_id', user.id)
+          .not('status', 'in', '(perdido,arquivado,lost)')
+          .order('created_at', { ascending: false })
+          .order('id', { ascending: false })
+          .range(offset, offset + pageSize - 1);
+        if (error) throw error;
+        deals.push(...(data || []).map(({ company, contact, ...row }) => ({
+          ...row,
+          valor: row.valor ?? 0,
+          probabilidade: row.probabilidade ?? 0,
+          pipeline_stage: row.pipeline_stage ?? 'lead',
+          company_name: company?.nome_crm,
+          contact_name: contact ? [contact.first_name, contact.last_name].filter(Boolean).join(' ') : undefined,
+        })));
+        if (!data || data.length < pageSize) break;
+      }
+      return deals;
     },
     staleTime: 3 * 60 * 1000,
   });

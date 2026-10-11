@@ -1,18 +1,18 @@
 -- Contratos de relatórios: manter campos legados e acrescentar séries do frontend.
-CREATE OR REPLACE FUNCTION public.get_daily_summary(p_date date DEFAULT CURRENT_DATE)
+CREATE OR REPLACE FUNCTION public.get_daily_summary(p_date date, p_timezone text)
 RETURNS jsonb LANGUAGE sql STABLE SECURITY INVOKER SET search_path = public AS $$
   WITH counts AS (
     SELECT
-      (SELECT count(*) FROM companies WHERE created_at::date = p_date AND deleted_at IS NULL) AS companies,
-      (SELECT count(*) FROM contacts WHERE created_at::date = p_date AND deleted_at IS NULL) AS contacts,
-      (SELECT count(*) FROM deals WHERE created_at::date = p_date) AS deals,
-      (SELECT count(*) FROM deals WHERE closed_at::date = p_date AND status = 'ganho') AS won,
-      (SELECT count(*) FROM deals WHERE closed_at::date = p_date AND status = 'perdido') AS lost,
-      (SELECT coalesce(sum(valor), 0) FROM deals WHERE closed_at::date = p_date AND status = 'ganho') AS revenue,
-      (SELECT count(*) FROM interactions WHERE data_interacao::date = p_date) AS interactions,
-      (SELECT count(*) FROM interactions WHERE coalesce(data_followup, follow_up_date::timestamptz)::date = p_date
+      (SELECT count(*) FROM companies WHERE (created_at AT TIME ZONE p_timezone)::date = p_date AND deleted_at IS NULL) AS companies,
+      (SELECT count(*) FROM contacts WHERE (created_at AT TIME ZONE p_timezone)::date = p_date AND deleted_at IS NULL) AS contacts,
+      (SELECT count(*) FROM deals WHERE (created_at AT TIME ZONE p_timezone)::date = p_date) AS deals,
+      (SELECT count(*) FROM deals WHERE (closed_at AT TIME ZONE p_timezone)::date = p_date AND status = 'ganho') AS won,
+      (SELECT count(*) FROM deals WHERE (closed_at AT TIME ZONE p_timezone)::date = p_date AND status = 'perdido') AS lost,
+      (SELECT coalesce(sum(valor), 0) FROM deals WHERE (closed_at AT TIME ZONE p_timezone)::date = p_date AND status = 'ganho') AS revenue,
+      (SELECT count(*) FROM interactions WHERE (data_interacao AT TIME ZONE p_timezone)::date = p_date) AS interactions,
+      (SELECT count(*) FROM interactions WHERE coalesce(follow_up_date, (data_followup AT TIME ZONE p_timezone)::date) = p_date
         AND followup_concluido = true) AS completed,
-      (SELECT count(*) FROM interactions WHERE coalesce(data_followup, follow_up_date::timestamptz)::date = p_date
+      (SELECT count(*) FROM interactions WHERE coalesce(follow_up_date, (data_followup AT TIME ZONE p_timezone)::date) = p_date
         AND (requer_followup = true OR follow_up_required = true) AND NOT coalesce(followup_concluido, false)) AS pending
   )
   SELECT jsonb_build_object(
@@ -23,8 +23,13 @@ RETURNS jsonb LANGUAGE sql STABLE SECURITY INVOKER SET search_path = public AS $
     'followups_completed', completed, 'followups_pending', pending,
     'by_channel', (SELECT coalesce(jsonb_object_agg(channel, total), '{}'::jsonb)
       FROM (SELECT coalesce(channel, 'não informado') AS channel, count(*) AS total
-        FROM interactions WHERE data_interacao::date = p_date GROUP BY 1) channels)
+        FROM interactions WHERE (data_interacao AT TIME ZONE p_timezone)::date = p_date GROUP BY 1) channels)
   ) FROM counts;
+$$;
+
+CREATE OR REPLACE FUNCTION public.get_daily_summary(p_date date DEFAULT CURRENT_DATE)
+RETURNS jsonb LANGUAGE sql STABLE SECURITY INVOKER SET search_path = public AS $$
+  SELECT public.get_daily_summary(p_date, current_setting('TimeZone'));
 $$;
 
 CREATE OR REPLACE FUNCTION public.get_channel_analysis(p_days integer DEFAULT 30)
@@ -97,9 +102,9 @@ RETURNS jsonb LANGUAGE sql STABLE SECURITY INVOKER SET search_path = public AS $
   );
 $$;
 
-REVOKE ALL ON FUNCTION public.get_daily_summary(date), public.get_channel_analysis(integer),
+REVOKE ALL ON FUNCTION public.get_daily_summary(date), public.get_daily_summary(date, text), public.get_channel_analysis(integer),
   public.get_seasonality_analysis(integer) FROM PUBLIC, anon;
-GRANT EXECUTE ON FUNCTION public.get_daily_summary(date), public.get_channel_analysis(integer),
+GRANT EXECUTE ON FUNCTION public.get_daily_summary(date), public.get_daily_summary(date, text), public.get_channel_analysis(integer),
   public.get_seasonality_analysis(integer) TO authenticated, service_role;
 
 CREATE OR REPLACE FUNCTION public.check_relationship_consistency(p_contact_id uuid)
@@ -133,6 +138,7 @@ $$;
 
 -- DOWN MIGRATION (Rollback manual; publicar também o frontend anterior)
 -- BEGIN;
+-- DROP FUNCTION IF EXISTS public.get_daily_summary(date, text);
 -- CREATE OR REPLACE FUNCTION public.get_seasonality_analysis(p_months integer DEFAULT 12)
 --  RETURNS jsonb
 --  LANGUAGE plpgsql
