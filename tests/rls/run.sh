@@ -18,6 +18,7 @@ fi
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 TESTS="$ROOT/tests/rls"
+node --test "$TESTS/prepare-sql.node-test.mjs"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
@@ -31,20 +32,26 @@ for m in "$ROOT"/supabase/migrations/*.sql; do
   if [[ "$v" > "$MAXV" ]]; then PENDING+=("$m"); fi
 done
 echo "ledger remoto: $MAXV — migrations pendentes aplicadas em transação: ${#PENDING[@]}"
-for m in "${PENDING[@]}"; do echo "  • $(basename "$m")"; done
+NORMALIZED=()
+for m in "${PENDING[@]}"; do
+  name="$(basename "$m")"
+  echo "  • $name"
+  node "$TESTS/prepare-sql.mjs" migration "$m" > "$WORK/migration_$name"
+  NORMALIZED+=("$WORK/migration_$name")
+done
 
 FAILED=(); SKIPPED=(); PASSED=0
 for f in "$TESTS"/*.sql; do
   name="$(basename "$f")"
   [ "$name" = "schema.sql" ] && continue
-  sed -E '/^(BEGIN|ROLLBACK);[[:space:]]*$/d' "$f" > "$WORK/body_$name"
+  node "$TESTS/prepare-sql.mjs" fixture "$f" > "$WORK/body_$name"
   {
     echo 'BEGIN;'
     echo "SET LOCAL lock_timeout = '180s';"
     echo "SELECT pg_advisory_xact_lock(hashtext('singu-rls-gate'));"
     echo "SET LOCAL lock_timeout = '5s';"
     echo "SET LOCAL statement_timeout = '60s';"
-    for m in "${PENDING[@]}"; do echo "\\i '$m'"; done
+    for m in "${NORMALIZED[@]}"; do echo "\\i '$m'"; done
     echo "\\i '$WORK/body_$name'"
     echo 'ROLLBACK;'
   } > "$WORK/run_$name"

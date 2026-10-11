@@ -8,6 +8,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- O gate RLS preserva o rollback externo mesmo quando migrations incluem `BEGIN`/`COMMIT`; o preparo lexical mantém blocos PL/pgSQL e rejeita controles transacionais ambíguos antes de executar alterações.
 - Análises RFM exigem um contato ou empresa vinculada e salvam lotes diretamente no banco com o login do usuário, preservando a transação única sem passar pelo limite de 128 KiB do proxy externo. A aba Pendentes do NPS inclui pesquisas recém-criadas e permite registrar suas respostas.
 - Pesquisas CSAT/NPS podem ser criadas sem uma nota fictícia; validações humanas de VAK/metaprogramas e ramificações de sequências recuperam os campos previstos. A análise RFM por contato deixa de exigir uma empresa artificial.
 - A pesquisa pública usa a escala e a coluna corretas (CSAT 1–5, NPS 0–10 e CES 1–7), exige nota ao responder, bloqueia reenvio e não inventa data de envio. O acesso do dono às pesquisas é restaurado no schema limpo. O analisador RFM grava `segment_code` e devolve erro quando a persistência falha.
