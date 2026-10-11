@@ -8,6 +8,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- O painel CSAT separa suas pesquisas das NPS, cria registros pendentes sem simular envio e aceita somente notas inteiras de 1 a 5. O registro manual exige uma pesquisa aberta do dono e preserva a nota escolhida se a gravação falhar.
 - O gate RLS preserva o rollback externo mesmo quando migrations incluem `BEGIN`/`COMMIT`; o preparo lexical mantém blocos PL/pgSQL e rejeita controles transacionais ambíguos antes de executar alterações.
 - Análises RFM exigem um contato ou empresa vinculada e salvam lotes diretamente no banco com o login do usuário, preservando a transação única sem passar pelo limite de 128 KiB do proxy externo. A aba Pendentes do NPS inclui pesquisas recém-criadas e permite registrar suas respostas.
 - Pesquisas CSAT/NPS podem ser criadas sem uma nota fictícia; validações humanas de VAK/metaprogramas e ramificações de sequências recuperam os campos previstos. A análise RFM por contato deixa de exigir uma empresa artificial.
