@@ -9,7 +9,7 @@ export interface PipelineDeal {
   id: string;
   titulo: string;
   valor: number;
-  status: string;
+  status: string | null;
   pipeline_stage: string;
   probabilidade: number;
   company_id: string | null;
@@ -94,15 +94,15 @@ export function useDealsPipeline() {
           select: '*, company:companies(nome_crm), contact:contacts(first_name, last_name)',
           filters: [
             { type: 'eq', column: 'user_id', value: user.id },
-            { type: 'neq', column: 'status', value: 'perdido' },
-            { type: 'neq', column: 'status', value: 'arquivado' },
-            { type: 'neq', column: 'status', value: 'lost' },
           ],
           order: [{ column: 'created_at', ascending: false }, { column: 'id', ascending: false }],
           range: { from: offset, to: offset + pageSize - 1 },
+          countMethod: null,
+          auditAccess: false,
         });
         if (error) throw error;
-        deals.push(...(data || []).map(({ company, contact, ...row }) => ({
+        deals.push(...(data || []).filter(row => !['perdido', 'arquivado', 'lost'].includes(row.status))
+          .map(({ company, contact, ...row }) => ({
           ...row,
           valor: row.valor ?? 0,
           probabilidade: row.probabilidade ?? 0,

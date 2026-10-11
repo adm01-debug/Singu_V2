@@ -514,7 +514,7 @@ Deno.serve(async (req) => {
         : undefined;
 
       const result = await withRetry(async () => {
-        const countMode = countMethod === 'planned' ? 'planned' : 'exact';
+        const countMode = countMethod === null ? undefined : countMethod === 'planned' ? 'planned' : 'exact';
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TS2589 deep type instantiation with dynamic Supabase queries
         let query: any = client.from(table).select(selectedColumns, { count: countMode });
         if (!isSvc && !GLOBAL_READ_ONLY_TABLES.has(table) && !relationScope) {

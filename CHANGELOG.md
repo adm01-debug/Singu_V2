@@ -8,6 +8,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- O forecast de confiança não atribui zero dias a negócios sem histórico de estágio; marca a estimativa como parcial ou indisponível e exclui negócios concluídos.
+- O Pipeline preserva negócios com status vazio, evita contagens e auditorias indevidas durante a paginação, permite editar negócios sem empresa e atualiza os indicadores e as empresas envolvidas após alterações.
 - O gate RLS preserva o rollback externo mesmo quando migrations incluem `BEGIN`/`COMMIT`; o preparo lexical mantém blocos PL/pgSQL e rejeita controles transacionais ambíguos antes de executar alterações.
 - Pipeline lê páginas de negócios pelo mesmo proxy externo usado nas gravações; ordenação por data e ID mantém a paginação estável mesmo com datas iguais.
 - Resumo do Pipeline mantém o envelope de empresas e obtém a UF de um único endereço prioritário, evitando coluna inexistente, contagem duplicada e falha para empresas sem status. O contrato TypeScript acompanha o retorno real da RPC.

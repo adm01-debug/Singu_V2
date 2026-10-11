@@ -60,12 +60,13 @@ interface Bucket {
 function computeConfidence(
   deal: PipelineDeal,
   list: InteractionRow[],
-): number {
+): number | null {
+  if (deal.dias_no_estagio_atual == null) return null;
   const stage = deal.pipeline_stage || 'lead';
   const stageProb = STAGE_PROBABILITY[stage] ?? 20;
   const benchmark = STAGE_BENCHMARK[stage] ?? 14;
 
-  const daysInStage = deal.dias_no_estagio_atual ?? 0;
+  const daysInStage = deal.dias_no_estagio_atual;
   const stagnation = clamp(((daysInStage / benchmark - 1) / 2) * 100);
   const recent5 = list.slice(0, 5);
   const avgSent = recent5.length
@@ -118,7 +119,7 @@ export function ForecastConfidencePanel() {
   const openDeals = useMemo(
     () =>
       (deals ?? []).filter(
-        (d) => d.status !== 'ganho' && d.status !== 'perdido',
+        (d) => !['ganho', 'won', 'perdido', 'lost', 'arquivado'].includes(d.status ?? ''),
       ),
     [deals],
   );
@@ -186,6 +187,7 @@ export function ForecastConfidencePanel() {
     openDeals.forEach((deal) => {
       const list = (deal.contact_id && byContact.get(deal.contact_id)) || [];
       const conf = computeConfidence(deal, list);
+      if (conf == null) return;
       const expected = (deal.valor || 0) * (conf / 100);
       const key: 'high' | 'medium' | 'low' =
         conf >= 71 ? 'high' : conf >= 41 ? 'medium' : 'low';
@@ -197,6 +199,8 @@ export function ForecastConfidencePanel() {
   }, [openDeals, interactions]);
 
   const grandTotal = buckets.reduce((a, b) => a + b.total, 0);
+  const eligibleCount = buckets.reduce((a, b) => a + b.count, 0);
+  const unavailableCount = openDeals.length - eligibleCount;
 
   if (openDeals.length === 0) return null;
 
@@ -207,12 +211,17 @@ export function ForecastConfidencePanel() {
           <Sparkles className="h-4 w-4 text-primary" />
           Forecast Ponderado por Confiança
           <span className="ml-auto text-xs font-normal text-muted-foreground">
-            Total esperado: <span className="font-semibold text-foreground">{formatCurrency(grandTotal)}</span>
+            {eligibleCount > 0 ? <>
+              Total esperado{unavailableCount > 0 ? ' (parcial)' : ''}: <span className="font-semibold text-foreground">{formatCurrency(grandTotal)}</span>
+            </> : 'Total indisponível'}
           </span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        {buckets.map((b) => {
+        {unavailableCount > 0 && <p className="text-xs text-muted-foreground">
+          {unavailableCount} negócio(s) sem duração conhecida no estágio atual; fora da previsão ponderada.
+        </p>}
+        {eligibleCount > 0 && buckets.map((b) => {
           const pct = grandTotal > 0 ? (b.total / grandTotal) * 100 : 0;
           return (
             <div key={b.label} className="space-y-1">

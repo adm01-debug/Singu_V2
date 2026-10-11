@@ -49,7 +49,7 @@ const dealSchema = z.object({
   valor: z.string().or(z.number()).transform(v => Number(v) || 0),
   pipeline_stage: z.string(),
   probabilidade: z.string().or(z.number()).transform(v => Number(v) || 0),
-  company_id: z.string().uuid('Selecione uma empresa'),
+  company_id: z.string().uuid('Selecione uma empresa').nullable(),
   contact_id: z.string().uuid('Selecione um contato').optional().nullable(),
   previsao_fechamento: z.date().optional().nullable(),
 });
@@ -70,12 +70,15 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
   const [companies, setCompanies] = useState<{ value: string; label: string }[]>([]);
   const [, setContacts] = useState<{ value: string; label: string }[]>([]);
 
-  const invalidateDealQueries = () => {
+  const invalidateDealQueries = (companyId?: string | null) => {
     for (const key of ['deals-pipeline', 'pipeline-summary', 'weighted-forecast', 'velocity-metrics',
-      'daily-summary', 'channel-analysis', 'seasonality']) {
+      'stage-velocity', 'stalled-deals', 'daily-summary', 'channel-analysis', 'seasonality']) {
       queryClient.invalidateQueries({ queryKey: [key] });
     }
     queryClient.invalidateQueries({ queryKey: ['company-deals', deal?.company_id] });
+    if (companyId && companyId !== deal?.company_id) {
+      queryClient.invalidateQueries({ queryKey: ['company-deals', companyId] });
+    }
   };
 
   const form = useForm<DealFormValues>({
@@ -85,7 +88,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
       valor: 0,
       pipeline_stage: 'lead',
       probabilidade: 10,
-      company_id: '',
+      company_id: null,
       contact_id: null,
       previsao_fechamento: null,
     },
@@ -98,7 +101,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
         valor: deal.valor,
         pipeline_stage: deal.pipeline_stage,
         probabilidade: deal.probabilidade,
-        company_id: deal.company_id ?? '',
+        company_id: deal.company_id,
         contact_id: deal.contact_id,
         previsao_fechamento: deal.previsao_fechamento ? new Date(deal.previsao_fechamento) : null,
       });
@@ -111,11 +114,11 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
     const fetchEntities = async () => {
       try {
         const [compRes, contRes] = await Promise.all([
-          supabase.from('companies').select('id, name').eq('user_id', user?.id ?? '').limit(100),
+          supabase.from('companies').select('id, nome_crm').eq('user_id', user?.id ?? '').limit(100),
           supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user?.id ?? '').limit(100),
         ]);
         if (cancelled) return;
-        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
+        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.nome_crm })));
         if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
       } catch {
         // non-critical — dropdowns remain empty; user can still submit with IDs already on the deal
@@ -137,7 +140,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
       if (error) throw error;
       
       toast.success('Deal atualizado!');
-      invalidateDealQueries();
+      invalidateDealQueries(values.company_id);
       onOpenChange(false);
     } catch {
       toast.error('Erro ao atualizar deal');

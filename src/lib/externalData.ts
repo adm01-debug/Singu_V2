@@ -24,7 +24,8 @@ interface ExternalQueryOptions {
     to: number;
   };
   /** Use 'planned' for faster approximate counts */
-  countMethod?: 'exact' | 'planned';
+  countMethod?: 'exact' | 'planned' | null;
+  auditAccess?: boolean;
   /** AbortSignal to cancel the underlying fetch; does not trip the circuit breaker. */
   signal?: AbortSignal;
 }
@@ -99,7 +100,7 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
 export { CircuitOpenError };
 
 export async function queryExternalData<T = Record<string, unknown>>(options: ExternalQueryOptions): Promise<{ data: T[] | null; count: number | null; error: Error | null }> {
-  const { signal, ...queryOptions } = options;
+  const { signal, auditAccess = true, ...queryOptions } = options;
   try {
     const result = await callExternalData({ action: 'select', ...queryOptions }, signal);
     if (!Array.isArray(result.data)) throw new Error('Resposta externa inválida: data deve ser uma lista');
@@ -108,7 +109,7 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
     const count = result.count;
 
     // Log access for auditing
-    if (data.length > 0) {
+    if (auditAccess && data.length > 0) {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user?.id) {
         const auditType = queryOptions.table === 'contacts' ? 'contact_viewed'

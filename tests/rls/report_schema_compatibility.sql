@@ -1,5 +1,4 @@
 BEGIN;
-\set compatibility_migration `cat "$(git rev-parse --show-toplevel)/supabase/migrations/20261011125900_align_report_schema.sql"`
 
 CREATE SCHEMA rls_report_compat;
 CREATE TABLE rls_report_compat.companies (id integer);

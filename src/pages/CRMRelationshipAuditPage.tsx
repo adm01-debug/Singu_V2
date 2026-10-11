@@ -146,12 +146,6 @@ export default function CRMRelationshipAuditPage() {
                   <td className="px-4 py-3 text-muted-foreground">Não avaliado</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-3 font-medium">Score 0-100</td>
-                  <td className="px-4 py-3"><Badge variant="outline">CHECK (Range)</Badge></td>
-                  <td className="px-4 py-3"><Badge variant="outline">RelationshipScore Component</Badge></td>
-                  <td className="px-4 py-3 text-muted-foreground">Não avaliado</td>
-                </tr>
-                <tr>
                   <td className="px-4 py-3 font-medium">Auditoria de Mudanças</td>
                   <td className="px-4 py-3"><Badge variant="outline">Trigger-based Logging</Badge></td>
                   <td className="px-4 py-3"><Badge variant="outline">RelationshipAuditPanel</Badge></td>

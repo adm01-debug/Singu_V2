@@ -24,6 +24,8 @@ trap 'rm -rf "$WORK"' EXIT
 
 PSQL=(psql -X -q -v ON_ERROR_STOP=1
   -v "user_a=${RLS_USER_A}" -v "user_b=${RLS_USER_B}" -v "user_admin=${RLS_USER_ADMIN}")
+COMPATIBILITY_MIGRATION="$ROOT/supabase/migrations/20261011125900_align_report_schema.sql"
+PSQL+=(-v "compatibility_migration=$(node "$TESTS/prepare-sql.mjs" migration "$COMPATIBILITY_MIGRATION")")
 
 MAXV="$("${PSQL[@]}" -At -c "SELECT coalesce(max(version), '0') FROM supabase_migrations.schema_migrations")"
 PENDING=()

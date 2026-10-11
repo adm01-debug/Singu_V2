@@ -46,17 +46,32 @@ describe('Contrato de negócios individuais do Pipeline', () => {
       select: '*, company:companies(nome_crm), contact:contacts(first_name, last_name)',
       filters: [
         { type: 'eq', column: 'user_id', value: 'dono-pipeline' },
-        { type: 'neq', column: 'status', value: 'perdido' },
-        { type: 'neq', column: 'status', value: 'arquivado' },
-        { type: 'neq', column: 'status', value: 'lost' },
       ],
       order: [{ column: 'created_at', ascending: false }, { column: 'id', ascending: false }],
       range: { from: 0, to: 499 },
+      countMethod: null,
+      auditAccess: false,
     });
     expect(result.current.data?.[0]).toMatchObject({
       id: 'negocio-1', titulo: 'Negócio 1', closed_at: '2026-03-10T15:00:00Z',
       company_name: 'Empresa do cliente', contact_name: 'Joana Silva',
     });
+  });
+
+  it('preserva status vazio e exclui negócios perdidos e arquivados depois da consulta', async () => {
+    queryExternalData.mockResolvedValue({ data: [
+      { ...deal(1), status: null, company_id: null, company: null },
+      { ...deal(2), status: 'perdido' },
+      { ...deal(3), status: 'arquivado' },
+      { ...deal(4), status: 'lost' },
+      { ...deal(5), status: 'won' },
+    ], error: null });
+    const { result } = renderPipeline();
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(result.current.data?.map(row => row.id)).toEqual(['negocio-1', 'negocio-5']);
+    expect(result.current.data?.[0]).toMatchObject({ status: null, company_id: null });
+    expect(result.current.data?.[0].company_name).toBeUndefined();
+    expect(result.current.data?.[0].dias_no_estagio_atual).toBeUndefined();
   });
 
   it('carrega todas as páginas quando há mais de mil negócios', async () => {
