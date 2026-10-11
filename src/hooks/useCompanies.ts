@@ -1,9 +1,9 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useInfiniteQuery, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useActivityLogger } from '@/hooks/useActivityLogger';
-import { queryExternalData, insertExternalData, updateExternalData, updateExternalDataWithVersion, deleteExternalData, ConcurrentEditError } from '@/lib/externalData';
+import { queryExternalData, callExternalRpc, deleteExternalData, ConcurrentEditError } from '@/lib/externalData';
 import { showConcurrentEditToast } from '@/lib/concurrentEditToast';
 import { z } from 'zod';
 import { Constants, type Json, type Tables, type TablesInsert, type TablesUpdate } from '@/integrations/supabase/types';
@@ -294,24 +294,24 @@ async function fetchCompany(id: string): Promise<Company> {
   return mapCompany(data[0]);
 }
 
-async function saveCompanyAliases(id: string, input: CompanyUpdate, previous?: Company) {
+function prepareCompanyAliasPatches(input: CompanyUpdate, previous: Company) {
   const email = primaryRelation(previous?.company_emails ?? []);
   const phone = primaryRelation(previous?.company_phones ?? []);
   const address = primaryRelation(previous?.company_addresses ?? []);
-  const writes: Promise<
-    { data: unknown; error: Error | null } | { success: boolean; error: Error | null }
-  >[] = [];
+  const emails: Record<string, unknown>[] = [];
+  const phones: Record<string, unknown>[] = [];
+  const addresses: Record<string, unknown>[] = [];
   if (input.email !== undefined) {
-    if (input.email) writes.push(email
-      ? updateExternalData('company_emails', email.id, { email: input.email })
-      : insertExternalData('company_emails', { company_id: id, email: input.email, is_primary: true }));
-    else if (email) writes.push(deleteExternalData('company_emails', email.id));
+    if (input.email) emails.push(email
+      ? { id: email.id, email: input.email }
+      : { email: input.email, is_primary: true });
+    else if (email) emails.push({ id: email.id, _delete: true });
   }
   if (input.phone !== undefined) {
-    if (input.phone) writes.push(phone
-      ? updateExternalData('company_phones', phone.id, { numero: input.phone })
-      : insertExternalData('company_phones', { company_id: id, numero: input.phone, is_primary: true }));
-    else if (phone) writes.push(deleteExternalData('company_phones', phone.id));
+    if (input.phone) phones.push(phone
+      ? { id: phone.id, numero: input.phone }
+      : { numero: input.phone, is_primary: true });
+    else if (phone) phones.push({ id: phone.id, _delete: true });
   }
   const addressUpdates: TablesUpdate<'company_addresses'> = {};
   if (input.address !== undefined) addressUpdates.logradouro = input.address;
@@ -319,12 +319,10 @@ async function saveCompanyAliases(id: string, input: CompanyUpdate, previous?: C
   if (input.state !== undefined) addressUpdates.estado = input.state;
   if (input.lat !== undefined) addressUpdates.latitude = input.lat;
   if (input.lng !== undefined) addressUpdates.longitude = input.lng;
-  if (Object.keys(addressUpdates).length && (address || Object.values(addressUpdates).some(value => value != null && value !== ''))) writes.push(address
-    ? updateExternalData('company_addresses', address.id, addressUpdates)
-    : insertExternalData('company_addresses', { ...addressUpdates, company_id: id, is_primary: true }));
-  const results = await Promise.all(writes);
-  const failure = results.find(result => result.error || ('success' in result ? !result.success : result.data == null));
-  if (failure) throw new Error(`Empresa salva, mas houve falha nos dados relacionados: ${failure.error?.message || 'Resposta vazia da relação.'}`);
+  if (Object.keys(addressUpdates).length && (address || Object.values(addressUpdates).some(value => value != null && value !== ''))) addresses.push(address
+    ? { ...addressUpdates, id: address.id }
+    : { ...addressUpdates, is_primary: true });
+  return { phones, emails, addresses };
 }
 
 async function fetchCompaniesPage(search?: string, page = 0): Promise<CompaniesPage> {
@@ -376,6 +374,7 @@ async function fetchRemainingCompanies(search?: string): Promise<Company[]> {
 }
 
 export function useCompanies(options?: { enabled?: boolean }) {
+  const createRequestId = useRef<string | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
   const { logActivity } = useActivityLogger();
@@ -441,47 +440,35 @@ export function useCompanies(options?: { enabled?: boolean }) {
       const record = { ...prepareCompanyWrite(input), user_id: user.id };
       z.object({ nome_crm: z.string().trim().min(1) }).parse(record);
 
-      const { data: raw, error } = await insertExternalData<unknown>('companies', record);
+      createRequestId.current ??= crypto.randomUUID();
+      const { data: raw, error } = await callExternalRpc<unknown>('persist_company_composite', {
+        _id: createRequestId.current, _record: record, _create: true,
+        _phones: phones, _emails: emails, _addresses: addresses,
+      });
       if (error) throw error;
       if (!raw) throw new Error('Escrita não retornou uma empresa válida.');
-      let data = mapCompany(raw);
+      const recovered = z.object({ _creation_recovered: z.boolean().optional() }).parse(raw)._creation_recovered;
+      const data = mapCompany(raw);
+      createRequestId.current = null;
       
       if (data) {
-        const companyId = data.id;
-        
-        // Parallel insertion of related data if provided
-        const relatedPromises = [];
-        if (phones?.length) {
-          relatedPromises.push(...phones.map(p => insertExternalData('company_phones', { ...p, company_id: companyId })));
-        }
-        if (emails?.length) {
-          relatedPromises.push(...emails.map(e => insertExternalData('company_emails', { ...e, company_id: companyId })));
-        }
-        if (addresses?.length) {
-          relatedPromises.push(...addresses.map(a => insertExternalData('company_addresses', { ...a, company_id: companyId })));
-        }
-        
-        const results = await Promise.all(relatedPromises);
-        const failure = results.find(result => result.error || result.data == null);
-        if (failure) throw new Error(`Empresa criada, mas houve falha nos dados relacionados: ${failure.error?.message || 'Resposta vazia da relação.'}`);
-        const mapped = await fetchCompany(companyId);
-        data = mapped;
         queryClient.setQueryData<InfiniteData<CompaniesPage>>(queryKey, prev =>
           prev
             ? {
                 ...prev,
-                pages: prev.pages.map((p, i) =>
-                  i === 0
-                    ? { ...p, companies: [mapped, ...p.companies], count: p.count + 1 }
-                    : p
-                ),
+                pages: prev.pages.some(p => p.companies.some(c => c.id === data.id))
+                  ? prev.pages.map(p => ({ ...p, companies: p.companies.map(c => c.id === data.id ? data : c) }))
+                  : prev.pages.map((p, i) => i === 0 ? { ...p, companies: [data, ...p.companies], count: p.count + 1 } : p),
               }
-            : { pages: [{ companies: [mapped], count: 1 }], pageParams: [0] }
+            : { pages: [{ companies: [data], count: 1 }], pageParams: [0] }
         );
       }
       
       const companyName = data?.name || input.name || input.nome_crm || 'Empresa';
-      toast({ title: 'Empresa criada', description: `${companyName} foi adicionada com sucesso.` });
+      toast({
+        title: recovered ? 'Empresa já estava salva' : 'Empresa criada',
+        description: recovered ? 'A tentativa anterior foi confirmada. Confira os dados da empresa antes de fazer novas alterações.' : `${companyName} foi adicionada com sucesso.`,
+      });
       
       if (data) {
         logActivity({ 
@@ -520,23 +507,25 @@ export function useCompanies(options?: { enabled?: boolean }) {
       const clean = prepareCompanyWrite(input);
       const current = previous?.pages.flatMap(p => p.companies).find(c => c.id === id) ?? await fetchCompany(id);
       const versionToUse = expectedVersion ?? current.version;
-      const { data: raw, error } = await updateExternalDataWithVersion<unknown>('companies', id, versionToUse, clean);
+      const relations = prepareCompanyAliasPatches(input, current);
+      const { data: raw, error } = await callExternalRpc<unknown>('persist_company_composite', {
+        _id: id, _record: clean, _create: false, _version: versionToUse,
+        _phones: relations.phones, _emails: relations.emails, _addresses: relations.addresses,
+      });
       if (error) throw error;
       if (!raw) throw new Error('Escrita não retornou uma empresa válida.');
-      let data = mapCompany(raw);
+      const data = mapCompany(raw);
       if (data) {
-        await saveCompanyAliases(id, input, current);
-        await Promise.all(['company_phones', 'company_emails', 'company_addresses'].map(table =>
-          queryClient.invalidateQueries({ queryKey: [table, id] })));
-        const mapped = await fetchCompany(id);
-        data = mapped;
+        for (const table of ['company_phones', 'company_emails', 'company_addresses']) {
+          void queryClient.invalidateQueries({ queryKey: [table, id] });
+        }
         queryClient.setQueryData<InfiniteData<CompaniesPage>>(queryKey, prev =>
           prev
             ? {
                 ...prev,
                 pages: prev.pages.map(p => ({
                   ...p,
-                  companies: p.companies.map(c => c.id === id ? mapped : c),
+                  companies: p.companies.map(c => c.id === id ? data : c),
                 })),
               }
             : prev
@@ -551,7 +540,7 @@ export function useCompanies(options?: { enabled?: boolean }) {
       const msg = error instanceof Error ? error.message : 'Erro desconhecido';
       logger.error('Erro ao atualizar empresa:', { error: msg });
       void queryClient.invalidateQueries({ queryKey });
-      if (error instanceof ConcurrentEditError) {
+      if (error instanceof ConcurrentEditError || /\bCONCURRENT_EDIT\b/.test(msg)) {
         showConcurrentEditToast({ entity: 'empresa', queryClient, queryKey });
       } else {
         toast({ title: 'Erro ao atualizar empresa', description: msg, variant: 'destructive' });

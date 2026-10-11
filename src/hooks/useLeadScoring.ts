@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { parseApiError } from '@/lib/errorMessages';
 import { z } from 'zod';
+import { displayLeadGrade, storedLeadGrade } from '../../supabase/functions/_shared/lead-score-contract';
 
 export type LeadScoreGrade = 'A' | 'B' | 'C' | 'D';
 
@@ -63,7 +64,7 @@ export function useLeadScore(contactId?: string) {
         .from('lead_scores').select('id, user_id, contact_id, fit_score, engagement_score, intent_score, relationship_score, total_score, grade, score_change, previous_score, computed_at:calculated_at, last_calculated_at')
         .eq('contact_id', contactId).eq('user_id', user.id).maybeSingle();
       if (error) throw error;
-      return data;
+      return data ? { ...data, grade: displayLeadGrade(data.grade) } : null;
     },
     enabled: !!contactId && !!user?.id,
     staleTime: STALE,
@@ -83,10 +84,10 @@ export function useTopLeads(grade?: LeadScoreGrade | 'all', limit = 50) {
         .eq('user_id', user.id)
         .order('total_score', { ascending: false })
         .limit(limit);
-      if (grade && grade !== 'all') q = q.eq('grade', grade);
+      if (grade && grade !== 'all') q = q.eq('grade', storedLeadGrade(grade));
       const { data, error } = await q;
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []).map(row => ({ ...row, grade: displayLeadGrade(row.grade) }));
     },
     enabled: !!user?.id,
     staleTime: STALE,
@@ -109,7 +110,7 @@ export function useLeadScoreDistribution() {
       const since = Date.now() - 86_400_000;
       let sum = 0;
       for (const r of rows) {
-        const g = (['A','B','C','D'].includes(r.grade) ? r.grade : 'D') as LeadScoreGrade;
+        const g = displayLeadGrade(r.grade);
         out[g]++;
         sum += Number(r.total_score);
         if (r.computed_at && new Date(r.computed_at).getTime() >= since && Math.abs(Number(r.score_change ?? 0)) > 0) {
@@ -136,7 +137,7 @@ export function useLeadScoreHistory(contactId?: string) {
         .eq('contact_id', contactId).eq('user_id', user.id)
         .order('recorded_at', { ascending: true }).limit(100);
       if (error) throw error;
-      return (data ?? []).map(row => ({ ...row, breakdown: z.record(z.unknown()).parse(row.breakdown ?? {}) }));
+      return (data ?? []).map(row => ({ ...row, grade: row.grade ? displayLeadGrade(row.grade) : null, breakdown: z.record(z.unknown()).parse(row.breakdown ?? {}) }));
     },
     enabled: !!contactId && !!user?.id,
     staleTime: STALE,

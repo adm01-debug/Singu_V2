@@ -67,6 +67,7 @@ export function useMergeRecords() {
       if (delErr) throw delErr;
 
       // 4. Audit log entry
+      let auditFailed = false;
       if (user?.id) {
         const { error: auditErr } = await supabase.from('audit_log').insert([{
           user_id: user.id,
@@ -80,18 +81,22 @@ export function useMergeRecords() {
         }]);
         if (auditErr) {
           logger.warn('Falha ao gravar auditoria da mesclagem', { error: auditErr.message });
-          throw auditErr;
+          auditFailed = true;
         }
       }
 
-      return { primaryId, secondaryId };
+      return { primaryId, secondaryId, auditFailed };
     },
-    onSuccess: (_, vars) => {
+    onSuccess: ({ auditFailed }, vars) => {
       qc.invalidateQueries({ queryKey: ['dedup-source', vars.entity] });
       qc.invalidateQueries({ queryKey: [vars.entity] });
       qc.invalidateQueries({ queryKey: ['contacts'] });
       qc.invalidateQueries({ queryKey: ['companies'] });
-      toast.success('Registros mesclados com sucesso');
+      if (auditFailed) {
+        toast.warning('Registros mesclados, mas não foi possível gravar a auditoria adicional.');
+      } else {
+        toast.success('Registros mesclados com sucesso');
+      }
     },
     onError: (e: Error) => toast.error(`Falha ao mesclar: ${parseApiError(e)}`),
   });

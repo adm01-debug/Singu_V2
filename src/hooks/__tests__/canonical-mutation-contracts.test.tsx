@@ -5,7 +5,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useMergeRecords } from '../useMergeRecords';
 import { usePortfolioCompatibility } from '../usePortfolioCompatibility';
 
-const mocks = vi.hoisted(() => ({ from: vi.fn(), user: { id: 'usuario-1' } }));
+const mocks = vi.hoisted(() => ({ from: vi.fn(), user: { id: 'usuario-1' }, successToast: vi.fn(), errorToast: vi.fn(), warningToast: vi.fn() }));
+vi.mock('sonner', () => ({ toast: { success: mocks.successToast, error: mocks.errorToast, warning: mocks.warningToast } }));
 vi.mock('@/hooks/useAuth', () => ({ useAuth: () => ({ user: mocks.user }) }));
 vi.mock('@/integrations/supabase/client', () => ({ supabase: { from: mocks.from } }));
 vi.mock('@/hooks/useFuzzySearch', () => ({ useFuzzySearch: (items: unknown[]) => ({ results: items }) }));
@@ -64,12 +65,16 @@ describe('Mesclagem valida overrides antes de qualquer operação', () => {
     })]);
   });
 
-  it('não anuncia sucesso quando a auditoria falha', async () => {
+  it('preserva a mesclagem concluída e avisa quando a auditoria adicional falha', async () => {
     const error = new Error('Falha na auditoria');
-    mocks.from.mockImplementation(table => queryResult([], table === 'audit_log' ? error : null));
+    const contacts = queryResult([]);
+    mocks.from.mockImplementation(table => table === 'audit_log' ? queryResult([], error) : contacts);
     const { result } = renderHook(() => useMergeRecords(), { wrapper });
     await expect(result.current.mutateAsync({ entity: 'contacts', primaryId: 'primario', secondaryId: 'secundario' }))
-      .rejects.toBe(error);
+      .resolves.toMatchObject({ primaryId: 'primario', secondaryId: 'secundario', auditFailed: true });
+    expect(contacts.delete).toHaveBeenCalled();
+    expect(mocks.warningToast).toHaveBeenCalledWith(expect.stringContaining('auditoria adicional'));
+    expect(mocks.successToast).not.toHaveBeenCalled();
   });
 });
 

@@ -8,6 +8,9 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- Pontuação de leads usa as categorias e colunas do banco canônico, preserva A/B/C/D na interface e nas automações, e grava pontuação, histórico por contato e conclusão da fila em uma transação com erros propagados.
+- Criação e edição de empresas salvam campos, telefones, emails e endereços em uma transação, preservam a versão e reutilizam a identificação após perda de resposta. Relações de empresas ficam restritas ao dono ou administrador.
+- Mesclagens concluídas deixam de aparecer como falhas após erro na auditoria adicional; os dados são atualizados e o usuário recebe um aviso da falha de auditoria.
 - A próxima ação usa a unicidade por usuário/contato; históricos de empresa preservam registros sem tipo/canal. Valores personalizados de formulários ainda não persistidos deixam de gerar avisos indevidos de auditoria.
 - Auditoria comportamental reúne alterações de relacionamento e análises VAK/metaprogramas do usuário, preservando IDs e validações humanas. Deduplicação busca emails/telefones em lotes paginados e prefere a relação primária, evitando URLs extensas e truncamento das relações.
 - A geolocalização do BI pagina a carteira, as contagens e os endereços por lotes, mantém o endereço primário com coordenadas válidas e restringe a leitura ao dono.

@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { logger } from '@/lib/logger';
+import type { Tables } from '@/integrations/supabase/types';
+import { z } from 'zod';
 
  export interface FunnelStat {
    stage: string;
@@ -61,15 +63,29 @@ import { logger } from '@/lib/logger';
      queryFn: async () => {
        if (!user) return null;
 
-       const { data: contacts, error: contactsError } = await supabase
-         .from('contacts').select('id').eq('user_id', user.id);
-       if (contactsError) throw contactsError;
-       const contactIds = (contacts ?? []).map(contact => contact.id);
-       const { data, error } = contactIds.length > 0
-         ? await supabase.from('contact_behavior')
-           .select('disc_primary, vak_primary, motivation_primary').in('contact_id', contactIds)
-         : { data: [], error: null };
-       if (error) throw error;
+       const data: Pick<Tables<'contact_behavior'>, 'disc_primary' | 'vak_primary' | 'motivation_primary'>[] = [];
+       const projection: string = 'id, disc_primary, vak_primary, motivation_primary, contact:contacts!inner(user_id)';
+       let afterId: string | undefined;
+       while (true) {
+         let query = supabase.from('contact_behavior')
+           .select(projection)
+           .eq('contact.user_id', user.id).order('id', { ascending: true }).limit(1000);
+         if (afterId) query = query.gt('id', afterId);
+         const { data: page, error } = await query;
+         if (error) throw error;
+         const rows = z.array(z.object({
+           id: z.string(), disc_primary: z.string().nullable(), vak_primary: z.string().nullable(), motivation_primary: z.string().nullable(),
+         })).parse(page ?? []);
+         data.push(...rows.map(row => ({
+           disc_primary: row.disc_primary ?? '',
+           vak_primary: row.vak_primary ?? '',
+           motivation_primary: row.motivation_primary ?? '',
+         })));
+         if (rows.length < 1000) break;
+         const cursor = rows[rows.length - 1].id;
+         if (!cursor) throw new Error('Identificação do perfil comportamental indisponível');
+         afterId = cursor;
+       }
 
        type BehavioralStats = {
          disc: Record<string, number>;
