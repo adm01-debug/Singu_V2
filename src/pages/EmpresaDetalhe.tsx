@@ -11,7 +11,7 @@ import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useLuxIntelligence } from '@/hooks/useLuxIntelligence';
 import { useCompanyPhones, useCompanyEmails, useCompanyAddresses, useCompanySocialMedia, useCompanyCnaes, useCompanyRfmScores, useCompanyStakeholders } from '@/hooks/useCompanyRelatedData';
 import { useCompanySummaryView } from '@/hooks/useCompanyViews';
-import { mapCompany, type Company } from '@/hooks/useCompanies';
+import { mapCompany, useCompanies, type Company } from '@/hooks/useCompanies';
 import { motion } from 'framer-motion';
 import {
   Building2, Users, Edit, Plus, MessageSquare,
@@ -74,6 +74,7 @@ const EmpresaDetalhe = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isAddContactOpen, setIsAddContactOpen] = useState(false);
   const [editSubmitting, setEditSubmitting] = useState(false);
+  const { updateCompany } = useCompanies({ enabled: false });
 
   const phonesHook = useCompanyPhones(id);
   const emailsHook = useCompanyEmails(id);
@@ -144,10 +145,8 @@ const EmpresaDetalhe = () => {
     if (!id) return;
     setEditSubmitting(true);
     try {
-      const { name, industry, tags, notes, phone, email, address, city, state, instagram, linkedin, facebook, youtube, twitter, tiktok, ...cleanData } = data as Record<string, unknown>;
-      const { error } = await updateExternalData('companies', id, cleanData);
-      if (error) throw error;
-      toast({ title: 'Empresa atualizada', description: 'As alterações foram salvas.' });
+      const updated = await updateCompany(id, data, company?.version);
+      if (!updated) return;
       setIsEditOpen(false);
       fetchCompanyData();
     } catch (error) {

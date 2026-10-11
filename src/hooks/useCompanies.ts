@@ -150,6 +150,66 @@ const addressInsertSchema = z.object({
   logradouro: text.optional(), numero: text.optional(), origem: text.optional(), pais: text.optional(),
   ponto_referencia: text.optional(), tipo: text.optional(), tipo_logradouro: text.optional(),
 }).strict();
+const phoneInputSchema = phoneInsertSchema.extend({
+  tipo: z.enum(['fixo', 'celular', 'whatsapp', 'outros']).optional(),
+  contato_nome: text.optional(),
+}).transform(({ tipo, contato_nome, ...phone }) => ({
+  ...phone,
+  ...(phone.phone_type === undefined && tipo ? {
+    phone_type: tipo === 'fixo' ? 'fixo_comercial' as const : tipo === 'celular' ? 'celular_corporativo' as const : null,
+  } : {}),
+  ...(tipo === 'whatsapp' ? { is_whatsapp: true } : {}),
+  ...(contato_nome ? { observacao: [phone.observacao, `Contato: ${contato_nome}`].filter(Boolean).join('\n') } : {}),
+}));
+const emailInputSchema = emailInsertSchema.extend({
+  tipo: z.enum(['comercial', 'financeiro', 'suporte', 'outros']).optional(),
+}).transform(({ tipo, ...email }) => ({
+  ...email,
+  ...(email.email_type === undefined && tipo ? {
+    email_type: tipo === 'comercial' || tipo === 'financeiro' ? tipo : null,
+  } : {}),
+  ...(tipo === 'suporte' && !email.departamento ? { departamento: 'suporte' } : {}),
+}));
+type CompanyCompositeInput = {
+  phones?: z.input<typeof phoneInputSchema>[];
+  emails?: z.input<typeof emailInputSchema>[];
+  addresses?: z.input<typeof addressInsertSchema>[];
+};
+
+export function prepareCompanyRelations(input: CompanyUpdate & CompanyCompositeInput) {
+  const phones = (input.phones ?? []).map(phone => phoneInputSchema.parse(phone));
+  const emails = (input.emails ?? []).map(email => emailInputSchema.parse(email));
+  const addresses = (input.addresses ?? []).map(address => addressInsertSchema.parse(address));
+  if (input.phone) {
+    const digits = input.phone.replace(/\D/g, '');
+    const existing = phones.find(phone => phone.numero.replace(/\D/g, '') === digits);
+    phones.forEach(phone => { phone.is_primary = false; });
+    if (existing) existing.is_primary = true;
+    else phones.push({ numero: input.phone, is_primary: true });
+  }
+  if (input.email) {
+    const existing = emails.find(email => email.email.toLowerCase() === input.email.trim().toLowerCase());
+    emails.forEach(email => { email.is_primary = false; });
+    if (existing) existing.is_primary = true;
+    else emails.push({ email: input.email.trim(), is_primary: true });
+  }
+  const basicAddress = {
+    logradouro: input.address, cidade: input.city, estado: input.state,
+    latitude: input.lat, longitude: input.lng,
+  };
+  const populatedAddress = Object.fromEntries(Object.entries(basicAddress).filter(([, value]) => value != null && value !== ''));
+  if (Object.keys(populatedAddress).length) {
+    const parsedAddress = addressInsertSchema.parse(populatedAddress);
+    const existing = addresses.find(address =>
+      (parsedAddress.logradouro === undefined || address.logradouro === parsedAddress.logradouro) &&
+      (parsedAddress.cidade === undefined || address.cidade === parsedAddress.cidade) &&
+      (parsedAddress.estado === undefined || address.estado === parsedAddress.estado));
+    addresses.forEach(address => { address.is_primary = false; });
+    if (existing) Object.assign(existing, parsedAddress, { is_primary: true });
+    else addresses.push({ ...parsedAddress, is_primary: true });
+  }
+  return { phones, emails, addresses };
+}
 const COMPANY_SEARCH_COLUMNS = [
   'nome_crm',
   'nome_fantasia',
@@ -369,17 +429,14 @@ export function useCompanies(options?: { enabled?: boolean }) {
     await queryClient.invalidateQueries({ queryKey: ['companies-infinite-v2'] });
   }, [queryClient]);
 
-  const createCompany = async (company: CompanyInsert & {
-    phones?: Array<Omit<TablesInsert<'company_phones'>, 'company_id' | 'numero_normalizado'> & { numero_normalizado?: string }>;
-    emails?: Array<Omit<TablesInsert<'company_emails'>, 'company_id'>>;
-    addresses?: Array<Omit<TablesInsert<'company_addresses'>, 'company_id'>>;
-  }) => {
+  const createCompany = async (company: CompanyInsert & CompanyCompositeInput) => {
     if (!user) return null;
     try {
-      const { phones: rawPhones, emails: rawEmails, addresses: rawAddresses, ...companyData } = company;
-      const phones = rawPhones?.map(phone => phoneInsertSchema.parse(phone));
-      const emails = rawEmails?.map(email => emailInsertSchema.parse(email));
-      const addresses = rawAddresses?.map(address => addressInsertSchema.parse(address));
+      const { phones, emails, addresses } = prepareCompanyRelations(company);
+      const companyData = { ...company };
+      delete companyData.phones;
+      delete companyData.emails;
+      delete companyData.addresses;
       const input = companyData;
       const record = { ...prepareCompanyWrite(input), user_id: user.id };
       z.object({ nome_crm: z.string().trim().min(1) }).parse(record);
@@ -407,7 +464,6 @@ export function useCompanies(options?: { enabled?: boolean }) {
         const results = await Promise.all(relatedPromises);
         const failure = results.find(result => result.error || result.data == null);
         if (failure) throw new Error(`Empresa criada, mas houve falha nos dados relacionados: ${failure.error?.message || 'Resposta vazia da relação.'}`);
-        await saveCompanyAliases(companyId, input, await fetchCompany(companyId));
         const mapped = await fetchCompany(companyId);
         data = mapped;
         queryClient.setQueryData<InfiniteData<CompaniesPage>>(queryKey, prev =>
@@ -470,6 +526,8 @@ export function useCompanies(options?: { enabled?: boolean }) {
       let data = mapCompany(raw);
       if (data) {
         await saveCompanyAliases(id, input, current);
+        await Promise.all(['company_phones', 'company_emails', 'company_addresses'].map(table =>
+          queryClient.invalidateQueries({ queryKey: [table, id] })));
         const mapped = await fetchCompany(id);
         data = mapped;
         queryClient.setQueryData<InfiniteData<CompaniesPage>>(queryKey, prev =>

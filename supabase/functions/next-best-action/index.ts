@@ -125,7 +125,6 @@ Por favor, gere:
     if (!toolCall?.function?.arguments) throw new Error("AI did not return a tool call");
     const result = JSON.parse(toolCall.function.arguments);
 
-    // 3. Persist Action (fire-and-forget — response uses in-memory nextActionData)
     const nextActionData = {
       user_id: userId,
       contact_id: contactId,
@@ -139,10 +138,11 @@ Por favor, gere:
       model: "gemini-2.0-flash"
     };
 
-    supabase.from('contact_next_actions').upsert(nextActionData, { onConflict: 'contact_id' })
-      .catch((e: unknown) => console.error('contact_next_actions upsert error:', e));
+    const { data: persisted, error: persistenceError } = await supabase.from('contact_next_actions')
+      .upsert(nextActionData, { onConflict: 'contact_id' }).select('id').single();
+    if (persistenceError || !persisted) throw new Error('Não foi possível persistir a próxima ação');
 
-    return jsonOk({ success: true, next_action: nextActionData });
+    return jsonOk({ success: true, next_action: { ...nextActionData, id: persisted.id } });
 
   } catch (error) {
     console.error("NBA Error:", error);

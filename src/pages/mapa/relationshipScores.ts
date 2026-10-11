@@ -5,14 +5,16 @@ const relationshipScoreSchema = z.number().int().min(0).max(100).nullable();
 const PAGE_SIZE = 500;
 
 /** Usa a medição mais recente da empresa; ausência de medição não equivale a zero. */
-export async function fetchCompanyRelationshipScores(companyIds: string[]): Promise<Map<string, number | null>> {
+export async function fetchCompanyRelationshipScores(companyIds: string[], userId: string): Promise<Map<string, number | null>> {
+  if (!userId) throw new Error('Usuário não autenticado');
   const scores = new Map<string, number | null>();
   const ids = [...new Set(companyIds)];
   for (let start = 0; start < ids.length; start += PAGE_SIZE) {
     const batch = ids.slice(start, start + PAGE_SIZE);
     for (let offset = 0; ; offset += PAGE_SIZE) {
       const { data, error } = await supabase.from('customer_health_scores')
-        .select('id, company_id, relationship_score, score_date, created_at')
+        .select('id, company_id, relationship_score, score_date, created_at, companies!inner(user_id)')
+        .eq('companies.user_id', userId)
         .in('company_id', batch)
         .order('score_date', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false, nullsFirst: false })

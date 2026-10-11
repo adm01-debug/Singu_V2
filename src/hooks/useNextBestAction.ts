@@ -36,7 +36,9 @@ const nextActionFields = {
   generated_at: z.string().datetime({ offset: true }),
   model: z.string().nullable(),
 };
-const generatedActionSchema = z.object({ success: z.literal(true), next_action: z.object(nextActionFields) });
+const generatedActionSchema = z.object({ success: z.literal(true), next_action: z.object({
+  ...nextActionFields, id: z.string().min(1).optional(),
+}) });
 const persistedActionSchema = z.object({
   ...nextActionFields,
   id: z.string().min(1),
@@ -89,14 +91,14 @@ export function useNextBestAction(contactId: string | undefined) {
       if (error) throw error;
       const generated = generatedActionSchema.parse(data).next_action;
       if (generated.contact_id !== contactId) throw new Error('A sugestão retornada pertence a outro contato');
-      // O produtor pode retornar a sugestão sem ID; a UI só recebe uma ação realmente persistida.
-      const { data: persisted, error: persistenceError } = await supabase
+      let confirmation = supabase
         .from('contact_next_actions')
         .select('id, contact_id, action, reason, channel, urgency, suggested_script, expected_outcome, generated_at, model, status, completed_at, completion_notes, edited_script, contextual_tone, was_successful')
         .eq('user_id', user.id)
         .eq('contact_id', contactId)
-        .eq('generated_at', generated.generated_at)
-        .single();
+        .eq('generated_at', generated.generated_at);
+      if (generated.id) confirmation = confirmation.eq('id', generated.id);
+      const { data: persisted, error: persistenceError } = await confirmation.single();
       if (persistenceError) throw persistenceError;
       if (!persisted) throw new Error('A sugestão foi gerada, mas sua gravação não foi confirmada');
       return persistedActionSchema.parse(persisted) as NextBestAction;

@@ -61,6 +61,16 @@ async function complete(hook: Awaited<ReturnType<typeof loadAction>>, id = 'acao
 }
 
 describe('Contrato real da próxima melhor ação', () => {
+  it('confirma pelo ID persistido enviado pelo produtor e mantém o escopo do contato', async () => {
+    const hook = await loadAction();
+    const persisted = queryResult(action);
+    mocks.from.mockReturnValue(persisted);
+    await act(async () => { await generate(hook); });
+    expect(persisted.eq).toHaveBeenCalledWith('id', 'acao-1');
+    expect(persisted.eq).toHaveBeenCalledWith('contact_id', 'contato-1');
+    expect(persisted.eq).toHaveBeenCalledWith('user_id', 'usuario-1');
+  });
+
   it('envia contactId e recupera o ID persistido quando o produtor não retorna ID', async () => {
     const hook = await loadAction();
     const { id: omittedId, ...generated } = action;

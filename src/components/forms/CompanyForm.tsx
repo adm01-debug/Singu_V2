@@ -14,7 +14,7 @@ import { CompanyPhonesForm } from '@/components/forms/company/CompanyPhonesForm'
 import { CompanyEmailsForm } from '@/components/forms/company/CompanyEmailsForm';
 import { CompanyAddressesForm } from '@/components/forms/company/CompanyAddressesForm';
 import { CompanySocialMediaForm } from '@/components/forms/company/CompanySocialMediaForm';
-import { companySchema, getCompanyField, type CompanyFormData } from './company/CompanyFormSchema';
+import { companySchema, companyBrandColorsSchema, getCompanyField, type CompanyFormData } from './company/CompanyFormSchema';
 import { CompanyFormBasicTab } from './company/CompanyFormBasicTab';
 import { CompanyFormFiscalTab } from './company/CompanyFormFiscalTab';
 import { CompanyFormClassificationTab } from './company/CompanyFormClassificationTab';
@@ -84,7 +84,7 @@ export function CompanyForm({ company, onSubmit, onCancel, isSubmitting }: Compa
       employee_count: getCompanyField(c, 'employee_count'),
       annual_revenue: getCompanyField(c, 'annual_revenue'),
       financial_health: getCompanyField(c, 'financial_health', 'unknown'),
-      cores_marca: getCompanyField(c, 'cores_marca'),
+      cores_marca: Array.isArray(company?.cores_marca) ? company.cores_marca.join(', ') : getCompanyField(c, 'cores_marca'),
       matriz_id: getCompanyField(c, 'matriz_id'),
       central_id: getCompanyField(c, 'central_id'),
       singular_id: getCompanyField(c, 'singular_id'),
@@ -111,6 +111,7 @@ export function CompanyForm({ company, onSubmit, onCancel, isSubmitting }: Compa
     if (Array.isArray(data.tags_array) && data.tags_array.length === 0) cleaned.tags_array = null;
     if (Array.isArray(data.challenges) && data.challenges.length === 0) cleaned.challenges = null;
     if (Array.isArray(data.competitors) && data.competitors.length === 0) cleaned.competitors = null;
+    cleaned.cores_marca = companyBrandColorsSchema.parse(data.cores_marca ?? '');
     cleaned.logo_url = logoUrl;
     delete cleaned.razao_social_fiscal;
     await onSubmit(cleaned);

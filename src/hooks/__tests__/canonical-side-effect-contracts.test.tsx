@@ -122,6 +122,16 @@ describe('Eventos de vida do dashboard são normalizados, não convertidos por c
 });
 
 describe('Histórico unificado usa campos canônicos e discriminantes validados', () => {
+  it('preserva interações sem tipo como anotação', async () => {
+    mocks.from.mockReturnValue(queryResult([{
+      id: 'interacao-sem-tipo', type: null, contact_id: 'contato-1', company_id: null,
+      title: 'Anotação', content: 'Conversa', transcription: null, audio_url: null,
+      data_interacao: '2026-01-01T00:00:00Z', direction: 'unknown', duracao_segundos: null,
+    }]));
+    const { result } = renderHook(() => useUnifiedHistory({ channels: ['note'] }), { wrapper });
+    await waitFor(() => expect(result.current.data?.[0]).toMatchObject({ id: 'int:interacao-sem-tipo', channel: 'note' }));
+  });
+
   it('usa data_interacao, direction e duracao_segundos sem inventar duration_seconds', async () => {
     const interactions = queryResult([{
       id: 'interacao-1', type: 'email', contact_id: 'contato-1', company_id: null,

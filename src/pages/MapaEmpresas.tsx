@@ -22,8 +22,8 @@ import { toast } from "sonner";
 import { MarkerClusterLayer, MappableCompany } from "./mapa/MapMarkerCluster";
 import { geocode, buildLocationString } from "./mapa/geocoding";
 import { useAuth } from "@/hooks/useAuth";
-import { mapCompany, type Company } from "@/hooks/useCompanies";
-import { fetchCompanyRelationshipScores } from "./mapa/relationshipScores";
+import type { Company } from "@/hooks/useCompanies";
+import { fetchMapCompanies } from "./mapa/companyQueries";
 
 // Fix default marker icon
 delete (L.Icon.Default.prototype as { _getIconUrl?: () => string })._getIconUrl;
@@ -61,13 +61,7 @@ export default function MapaEmpresas() {
     queryKey: ["companies-map-data", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await supabase.from("companies")
-        .select("id,nome_crm,nome_fantasia,razao_social,ramo_atividade,status,cnpj,website,extra_data_rf,version,company_addresses(id,is_primary,logradouro,numero,cidade,estado,latitude,longitude),company_emails(id,is_primary,email),company_phones(id,is_primary,numero)")
-        .eq("user_id", user!.id).order("updated_at", { ascending: false });
-      if (error) throw error;
-      const companies = (data || []).map(mapCompany);
-      const scores = await fetchCompanyRelationshipScores(companies.map(company => company.id));
-      return companies.map(company => ({ ...company, relationship_score: scores.get(company.id) ?? null }));
+      return fetchMapCompanies(user!.id);
     },
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,

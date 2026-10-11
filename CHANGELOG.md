@@ -10,6 +10,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ### Fixed
 - A captura do backup confia na CA oficial do Supabase e verifica certificado e hostname; o dump recebe a conexão por ambiente, sem URL nos argumentos, e falhas registram somente etapa e SQLSTATE.
 - O teste de restauração compara o destino com o snapshot do dump, exige manifesto correspondente e isola a cópia com senha efêmera e limpeza independente. Diagnósticos omitem conexões e dados; verificar um dump sem GPG não falha mais no cleanup.
+- Cadastro e edição de empresas convertem as cores e os dados compostos para o contrato canônico, preservam telefones/emails distintos sem duplicar aliases e salvam os campos de contato da tela detalhada. O mapa pagina a carteira por ID e mantém o score restrito ao usuário. A geração de próxima ação só retorna sucesso após a persistência; falhas na detecção de alertas liberam o botão para tentar novamente.
+- A checagem TypeScript passa a verificar o aplicativo e a configuração Node; tipos gerados do banco canônico e contratos de leitura/escrita validam os campos reais de contatos, empresas, relatórios, automações e páginas públicas.
 - As notificações de NPS incluem pesquisas pendentes, identificam links ainda não enviados e filtram a modalidade para não apresentar pesquisas CSAT como NPS.
 - Falhas no proxy externo e na persistência RFM canônica usam circuitos independentes, preservando o acesso à origem saudável.
 - Erros de autenticação, validação e permissão das RPCs canônicas não bloqueiam requisições válidas no circuito de disponibilidade. Ramificações de sequências validam suas condições também em bases parcialmente migradas.
@@ -36,6 +38,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - O helper de formatação `to_title_case_pt(text)` publicado no canônico deixa de ter execução anônima fora da lista de endpoints públicos; chamadas autenticadas e de serviço são preservadas.
 
 ### Security
+- Popups do mapa exibem os dados como texto, sem interpretar HTML do cadastro, e aceitam links de site somente com HTTP/HTTPS.
 - Leituras de dados pessoais pelo proxy respeitam o JWT e o RLS do usuário também nos relacionamentos; negócios próprios não expõem nomes de empresas ou contatos de outros usuários.
 - `supabase/functions/external-data/index.ts` + `supabase/migrations/20261007100000_external_rpc_user_scope.sql` — RPCs chamadas por usuários via `external-data` passam a rodar com o JWT do próprio usuário em vez da service role: os guards `assert_*` e o RLS voltam a valer, e um usuário deixa de conseguir ler ou alterar dados de outro passando o ID de uma empresa, contato ou tarefa. `get_instant_kpis` passa a SECURITY INVOKER (contagens respeitam o RLS).
 - `vercel.json` — cabeçalhos de segurança passam a ser enviados pela Vercel (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` e CSP mínima `frame-ancestors 'none'; object-src 'none'; base-uri 'self'`), além de cache imutável para `/assets/*` e `no-cache` para `index.html`, service workers e manifest.
