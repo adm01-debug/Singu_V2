@@ -171,7 +171,7 @@ Sem banco, valide o preparo com `node --test tests/rls/prepare-sql.node-test.mjs
 
 ### Credencial dos scripts administrativos
 
-Os scripts `apply-*.js`, `chunk-apply.js`, `fix-enums.js` e `retry-failed.js`
+Os scripts `apply-*.js`, `chunk-apply.js`, `fix-enums.js`, `retry-failed.js` e `tmp_view_check.js`
 exigem `SUPABASE_ACCESS_TOKEN` pelo ambiente e encerram antes de qualquer requisição
 se a variável estiver ausente. Não inclua tokens em arquivos versionados.
 Tokens expostos em versões anteriores permanecem no histórico e precisam ser
