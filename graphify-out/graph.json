@@ -89336,6 +89336,17 @@
       "source_location": ""
     },
     {
+      "id": "supabase_migrations_20261011120100_restrict_title_case_helper",
+      "label": "20261011120100_restrict_title_case_helper.sql",
+      "_origin": "ast",
+      "community": 1328,
+      "community_name": "20261011120100_restrict_title_case_helper.sql",
+      "file_type": "code",
+      "norm_label": "20261011120100_restrict_title_case_helper.sql",
+      "source_file": "supabase/migrations/20261011120100_restrict_title_case_helper.sql",
+      "source_location": null
+    },
+    {
       "id": "scripts_check_unified_comm",
       "label": "check_unified_comm.sql",
       "_origin": "ast",
@@ -510970,5 +510981,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "9a0e01989d2811ff21e18fcdd6a689d2cddaf9d3"
+  "built_at_commit": "c3a7f5dc31f45df669f881a469bfb985ed5ba0c7"
 }
