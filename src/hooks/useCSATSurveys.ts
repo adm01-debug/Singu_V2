@@ -30,7 +30,7 @@ export function useCSATSurveys(contactId?: string) {
     enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
-      let query = supabase.from('csat_surveys').select('id, user_id, contact_id, interaction_id, ticket_id, score, feedback, channel, status, sent_at, answered_at, expires_at, created_at').eq('user_id', user.id).order('created_at', { ascending: false });
+      let query = supabase.from('csat_surveys').select('id, user_id, contact_id, interaction_id, ticket_id, score, feedback, channel, status, sent_at, answered_at, expires_at, created_at').eq('user_id', user.id).eq('survey_type', 'csat').order('created_at', { ascending: false });
       if (contactId) query = query.eq('contact_id', contactId);
       const { data, error } = await query.limit(100);
       if (error) throw error;
@@ -46,29 +46,31 @@ export function useCSATSurveys(contactId?: string) {
       const { error } = await supabase.from('csat_surveys').insert({
         user_id: user.id,
         contact_id: input.contactId,
+        survey_type: 'csat',
         interaction_id: input.interactionId || null,
         ticket_id: input.ticketId || null,
         channel: input.channel || 'email',
-        status: 'sent',
-        sent_at: new Date().toISOString(),
+        status: 'pending',
       });
       if (error) throw error;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Pesquisa CSAT enviada!'); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Pesquisa CSAT criada!'); },
     onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
   const answer = useMutation({
     mutationFn: async ({ id, score, feedback }: { id: string; score: number; feedback?: string }) => {
       if (!user) throw new Error('Não autenticado');
-      if (score < 0 || score > 10) throw new Error('Score deve ser entre 0 e 10');
-      const { error } = await supabase.from('csat_surveys').update({
+      if (!Number.isInteger(score) || score < 1 || score > 5) throw new Error('A nota CSAT deve ser um inteiro entre 1 e 5');
+      const { data, error } = await supabase.from('csat_surveys').update({
         score,
         feedback: feedback || null,
         status: 'answered' as const,
         answered_at: new Date().toISOString(),
-      }).eq('user_id', user.id).eq('id', id);
+      }).eq('user_id', user.id).eq('survey_type', 'csat').eq('id', id)
+        .in('status', ['pending', 'sent']).select('id').maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Pesquisa não encontrada ou já respondida');
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: key }); toast.success('Resposta registrada!'); },
     onError: (e: Error) => toast.error(parseApiError(e)),

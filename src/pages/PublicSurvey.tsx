@@ -6,15 +6,20 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Star, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
-type Survey = {
-  id: string;
-  score: number | null;
-  feedback: string | null;
-  status: string;
-  channel: string | null;
-  expires_at: string | null;
-};
+const surveySchema = z.object({
+  id: z.string().uuid(),
+  score: z.number().int().nullable(),
+  feedback: z.string().nullable(),
+  status: z.enum(['pending', 'sent', 'answered', 'expired']),
+  channel: z.string().nullable(),
+  expires_at: z.string().nullable(),
+  survey_type: z.enum(['csat', 'nps', 'ces']),
+  rating_min: z.number().int().min(0).max(1),
+  rating_max: z.number().int().min(5).max(10),
+});
+type Survey = z.infer<typeof surveySchema>;
 
 export default function PublicSurvey() {
   const { token } = useParams<{ token: string }>();
@@ -37,15 +42,18 @@ export default function PublicSurvey() {
         { _token: currentToken } as never,
       ) as unknown as { data: Survey | null; error: unknown };
       if (cancelled) return;
+      const parsed = surveySchema.safeParse(data);
       if (error || !data) {
         setError('Pesquisa não encontrada ou expirada.');
       } else if (data.expires_at && new Date(data.expires_at) < new Date()) {
         setError('Esta pesquisa já expirou.');
-      } else if (data.status === 'answered') {
-        setSurvey(data as Survey);
+      } else if (!parsed.success) {
+        setError('Esta pesquisa não possui uma escala de resposta disponível.');
+      } else if (parsed.data.status === 'answered') {
+        setSurvey(parsed.data);
         setSuccess(true);
       } else {
-        setSurvey(data as Survey);
+        setSurvey(parsed.data);
       }
       setLoading(false);
     })();
@@ -54,7 +62,7 @@ export default function PublicSurvey() {
 
   const handleSubmit = async () => {
     if (score === null || !survey || !token) return;
-    if (score < 0 || score > 10 || !Number.isInteger(score)) return;
+    if (score < survey.rating_min || score > survey.rating_max || !Number.isInteger(score)) return;
     setSubmitting(true);
     const { data: answered, error } = await supabase.rpc(
       'submit_public_csat_survey' as never,
@@ -115,26 +123,35 @@ export default function PublicSurvey() {
           </div>
           <CardTitle className="text-2xl">Como você avalia sua experiência?</CardTitle>
           <CardDescription>
-            Em uma escala de 0 a 10, qual a probabilidade de você nos recomendar?
+            {survey?.survey_type === 'nps'
+              ? 'Em uma escala de 0 a 10, qual a probabilidade de você nos recomendar?'
+              : survey?.survey_type === 'ces'
+                ? 'Em uma escala de 1 a 7, quão fácil foi resolver sua necessidade?'
+                : 'Em uma escala de 1 a 5, qual é seu nível de satisfação?'}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
-            <div className="grid grid-cols-11 gap-1.5">
-              {Array.from({ length: 11 }, (_, i) => {
+            <div className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${survey ? survey.rating_max - survey.rating_min + 1 : 0}, minmax(0, 1fr))` }}>
+              {survey && Array.from({ length: survey.rating_max - survey.rating_min + 1 }, (_, index) => {
+                const i = index + survey.rating_min;
                 const isSelected = score === i;
+                const lowThreshold = survey.survey_type === 'nps' ? 6 : 2;
+                const midThreshold = survey.survey_type === 'nps' ? 8 : survey.rating_max - 1;
                 const colorClass =
-                  i <= 6 ? 'border-destructive/40 hover:bg-destructive/10'
-                  : i <= 8 ? 'border-warning/40 hover:bg-warning/10'
+                  i <= lowThreshold ? 'border-destructive/40 hover:bg-destructive/10'
+                  : i <= midThreshold ? 'border-warning/40 hover:bg-warning/10'
                   : 'border-success/40 hover:bg-success/10';
                 const selectedClass =
-                  i <= 6 ? 'bg-destructive text-destructive-foreground border-destructive'
-                  : i <= 8 ? 'bg-warning text-warning-foreground border-warning'
+                  i <= lowThreshold ? 'bg-destructive text-destructive-foreground border-destructive'
+                  : i <= midThreshold ? 'bg-warning text-warning-foreground border-warning'
                   : 'bg-success text-success-foreground border-success';
                 return (
                   <button
                     key={i}
                     type="button"
+                    aria-pressed={isSelected}
+                    aria-label={`Nota ${i}`}
                     onClick={() => setScore(i)}
                     className={`aspect-square rounded-md border-2 text-sm font-semibold transition-all ${
                       isSelected ? selectedClass : colorClass
@@ -146,8 +163,8 @@ export default function PublicSurvey() {
               })}
             </div>
             <div className="flex justify-between text-[11px] text-muted-foreground mt-1.5 px-0.5">
-              <span>Nada provável</span>
-              <span>Muito provável</span>
+              <span>{survey?.survey_type === 'nps' ? 'Nada provável' : survey?.survey_type === 'ces' ? 'Muito difícil' : 'Muito insatisfeito'}</span>
+              <span>{survey?.survey_type === 'nps' ? 'Muito provável' : survey?.survey_type === 'ces' ? 'Muito fácil' : 'Muito satisfeito'}</span>
             </div>
           </div>
 

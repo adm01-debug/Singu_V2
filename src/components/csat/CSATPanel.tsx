@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Star, Send, MessageSquare } from 'lucide-react';
+import { Star, Plus, MessageSquare } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -35,7 +35,7 @@ export function CSATPanel({ contactId, interactionId }: Props) {
             onClick={() => send.mutate({ contactId, interactionId })}
             disabled={send.isPending}
           >
-            <Send className="h-3 w-3 mr-1" /> Enviar Pesquisa
+            <Plus className="h-3 w-3 mr-1" /> Criar Pesquisa
           </Button>
         </CardTitle>
       </CardHeader>
@@ -58,7 +58,7 @@ export function CSATPanel({ contactId, interactionId }: Props) {
 
         {/* Survey list */}
         {surveys.length === 0 ? (
-          <p className="text-xs text-muted-foreground text-center py-3">Nenhuma pesquisa enviada.</p>
+          <p className="text-xs text-muted-foreground text-center py-3">Nenhuma pesquisa criada.</p>
         ) : (
           <div className="space-y-2 max-h-64 overflow-y-auto">
             {surveys.slice(0, 10).map(survey => (
@@ -83,7 +83,7 @@ export function CSATPanel({ contactId, interactionId }: Props) {
                       {SCORE_LABELS[survey.score]}
                     </span>
                   </div>
-                ) : survey.status === 'sent' ? (
+                ) : survey.status === 'pending' || survey.status === 'sent' ? (
                   <div className="space-y-1.5">
                     <div className="flex gap-0.5">
                       {[1, 2, 3, 4, 5].map(s => (
@@ -102,9 +102,11 @@ export function CSATPanel({ contactId, interactionId }: Props) {
                       <Button
                         size="sm"
                         className="h-6 text-[10px]"
+                        disabled={answer.isPending}
                         onClick={() => {
-                          answer.mutate({ id: survey.id, score: pendingScore[survey.id], feedback: pendingFeedback[survey.id] });
-                          setPendingScore(prev => { const n = { ...prev }; delete n[survey.id]; return n; });
+                          answer.mutate({ id: survey.id, score: pendingScore[survey.id], feedback: pendingFeedback[survey.id] }, {
+                            onSuccess: () => setPendingScore(prev => { const n = { ...prev }; delete n[survey.id]; return n; }),
+                          });
                         }}
                       >
                         Registrar Resposta

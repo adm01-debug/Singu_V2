@@ -41,10 +41,11 @@ export function useUnifiedNotifications() {
           .order('risk_score', { ascending: false })
           .limit(10),
         supabase.from('csat_surveys')
-          .select('id, contact_id, channel, sent_at, expires_at, status')
+          .select('id, contact_id, channel, sent_at, created_at, expires_at, status')
           .eq('user_id', uid)
-          .eq('status', 'sent')
-          .order('sent_at', { ascending: false })
+          .eq('survey_type', 'nps')
+          .in('status', ['pending', 'sent'])
+          .order('created_at', { ascending: false })
           .limit(10),
       ]);
 
@@ -80,9 +81,11 @@ export function useUnifiedNotifications() {
           source: 'nps',
           priority: 'low',
           title: 'Pesquisa NPS pendente',
-          description: `Aguardando resposta via ${s.channel ?? 'canal'}.`,
+          description: s.status === 'pending'
+            ? 'Link criado; compartilhe a pesquisa com o contato.'
+            : `Aguardando resposta via ${s.channel ?? 'canal'}.`,
           href: '/nps',
-          createdAt: s.sent_at ?? new Date().toISOString(),
+          createdAt: s.sent_at ?? s.created_at,
         });
       });
 

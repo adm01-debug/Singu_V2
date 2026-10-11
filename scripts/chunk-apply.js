@@ -2,7 +2,8 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import https from 'node:https';
 
-const PAT = 'sbp_5bf00619e37fa3d4705d6643f6c051d624fe2203';
+const PAT = process.env.SUPABASE_ACCESS_TOKEN;
+if (!PAT) throw new Error('SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro');
 const REF = 'pgxfvjmuubtbowutlide';
 const TIMEOUT_MS = 55000; //留5s de margem no limite de 60s
 const CHUNK_SIZE = 40;    // statements por chunk (conservativo)
