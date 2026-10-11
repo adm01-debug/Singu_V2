@@ -81,7 +81,7 @@ export const UnifiedCommunicationHistory = React.memo(function UnifiedCommunicat
       const matchesType = filterType === 'all' || item.channel === filterType || item.type === filterType;
       
       const matchesDate = !date || 
-        format(new Date(item.data_interacao), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd');
+        (item.data_interacao && format(new Date(item.data_interacao), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'));
 
       return matchesSearch && matchesType && matchesDate;
     });
@@ -195,7 +195,7 @@ export const UnifiedCommunicationHistory = React.memo(function UnifiedCommunicat
                         )}
                       </div>
                       <span className="text-[10px] text-muted-foreground tabular-nums shrink-0 font-medium">
-                        {format(new Date(item.data_interacao), "dd MMM, HH:mm", { locale: ptBR })}
+                        {item.data_interacao ? format(new Date(item.data_interacao), "dd MMM, HH:mm", { locale: ptBR }) : 'Data indisponível'}
                       </span>
                     </div>
                     

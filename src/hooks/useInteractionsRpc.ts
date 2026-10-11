@@ -13,7 +13,7 @@ export interface InteractionHistoryItem {
   channel: string;
   direction?: string;
   resumo?: string;
-  data_interacao: string;
+  data_interacao: string | null;
   follow_up_date?: string;
   company_name?: string;
   contact_name?: string;
@@ -56,12 +56,12 @@ export function useInteractionHistory(companyId?: string, tipo?: string, limit =
       );
       if (error) throw error;
       return z.array(z.object({
-        id: z.string(), tipo_interacao: z.string(), canal: z.string(),
-        resumo: z.string().nullable(), created_at: z.string(),
+        id: z.string(), tipo_interacao: z.string().nullable(), canal: z.string().nullable(),
+        resumo: z.string().nullable(), created_at: z.string().nullable(),
         usuario_responsavel_id: z.number().nullable(), vendedor_nome: z.string().nullable(),
       })).parse(data ?? []).map((it): InteractionHistoryItem => ({
-        id: it.id, company_id: companyId, type: it.tipo_interacao,
-        channel: it.canal, resumo: it.resumo ?? undefined, data_interacao: it.created_at,
+        id: it.id, company_id: companyId, type: it.tipo_interacao ?? 'other',
+        channel: it.canal ?? '', resumo: it.resumo ?? undefined, data_interacao: it.created_at,
       }));
     },
     enabled: !!companyId,

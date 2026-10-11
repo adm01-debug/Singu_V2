@@ -109,12 +109,8 @@ export function useEmailCampaigns() {
       const eligible = allContacts.filter(c => c.email && c.email.includes('@'));
       if (eligible.length === 0) throw new Error('Nenhum contato com email válido foi encontrado');
 
-      // Atualizar a contagem e buscar destinatários sem declarar um envio inexistente
-      const [{ error: sendingErr }, { data: existing, error: existingError }] = await Promise.all([
-        supabase.from('email_campaigns').update({ total_recipients: eligible.length }).eq('user_id', user.id).eq('id', campaignId),
-        supabase.from('campaign_recipients').select('contact_id').eq('user_id', user.id).eq('campaign_id', campaignId).limit(10000),
-      ]);
-      if (sendingErr) throw sendingErr;
+      const { data: existing, error: existingError } = await supabase.from('campaign_recipients')
+        .select('contact_id').eq('user_id', user.id).eq('campaign_id', campaignId).limit(10000);
       if (existingError) throw existingError;
       const existingIds = new Set((existing ?? []).map(r => r.contact_id));
 

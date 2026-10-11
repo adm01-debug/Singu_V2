@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import type { BehavioralInsightItem } from '@/hooks/useBehavioralProfile';
 import { z } from 'zod';
+import type { Tables } from '@/integrations/supabase/types';
 
 export interface BehavioralProfileListItem {
   id: string;
@@ -73,17 +74,21 @@ export function useBehavioralProfilesList(filters: BehavioralProfilesFilters) {
 
       const rows = data ?? [];
       const contactIds = [...new Set(rows.flatMap(row => row.contact_id ? [row.contact_id] : []))];
-      const { data: contacts, error: contactsError } = contactIds.length > 0
-        ? await supabase.from('contacts').select('id, full_name, avatar_url, company_id').in('id', contactIds).eq('user_id', user!.id)
-        : { data: [], error: null };
-      if (contactsError) throw contactsError;
-      const contactsById = new Map((contacts ?? []).map(contact => [contact.id, contact]));
-      const companyIds = [...new Set((contacts ?? []).flatMap(contact => contact.company_id ? [contact.company_id] : []))];
-      const { data: companies, error: companiesError } = companyIds.length > 0
-        ? await supabase.from('companies').select('id, nome_crm').in('id', companyIds)
-        : { data: [], error: null };
-      if (companiesError) throw companiesError;
-      const companiesById = new Map((companies ?? []).map(company => [company.id, company]));
+      const contactsById = new Map<string, Pick<Tables<'contacts'>, 'id' | 'full_name' | 'avatar_url' | 'company_id'>>();
+      for (let offset = 0; offset < contactIds.length; offset += 100) {
+        const { data: contacts, error: contactsError } = await supabase.from('contacts')
+          .select('id, full_name, avatar_url, company_id').in('id', contactIds.slice(offset, offset + 100)).eq('user_id', user!.id);
+        if (contactsError) throw contactsError;
+        for (const contact of contacts ?? []) contactsById.set(contact.id, contact);
+      }
+      const companyIds = [...new Set([...contactsById.values()].flatMap(contact => contact.company_id ? [contact.company_id] : []))];
+      const companiesById = new Map<string, Pick<Tables<'companies'>, 'id' | 'nome_crm'>>();
+      for (let offset = 0; offset < companyIds.length; offset += 100) {
+        const { data: companies, error: companiesError } = await supabase.from('companies')
+          .select('id, nome_crm').in('id', companyIds.slice(offset, offset + 100)).eq('user_id', user!.id);
+        if (companiesError) throw companiesError;
+        for (const company of companies ?? []) companiesById.set(company.id, company);
+      }
       return rows.map((r) => ({
         id: r.id,
         contact_id: z.string().parse(r.contact_id),

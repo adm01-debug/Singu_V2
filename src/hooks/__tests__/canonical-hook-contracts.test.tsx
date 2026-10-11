@@ -35,6 +35,16 @@ beforeEach(() => {
 });
 
 describe('Contratos canônicos dos históricos de interação', () => {
+  it('preserva registros legados com tipo, canal e data nulos sem fabricar uma data', async () => {
+    mocks.rpc.mockResolvedValue({ data: [{
+      id: 'interacao-legada', tipo_interacao: null, canal: null, resumo: null,
+      created_at: null, usuario_responsavel_id: null, vendedor_nome: null,
+    }], error: null });
+    const { result } = renderHook(() => useInteractionHistory('empresa-1'), { wrapper });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(result.current.data?.[0]).toMatchObject({ id: 'interacao-legada', type: 'other', channel: '', data_interacao: null });
+  });
+
   it('produz os aliases de domínio a partir dos campos reais da RPC', async () => {
     mocks.rpc.mockResolvedValue({ data: [{
       id: 'interacao-1', tipo_interacao: 'call', canal: 'phone', resumo: 'Ligação',

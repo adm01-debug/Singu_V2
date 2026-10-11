@@ -78,11 +78,14 @@ export function useContactSegmentation() {
        }
        
        if (!data?.length) return [];
-       const { data: behaviors, error: behaviorError } = await supabase.from('contact_behavior')
-         .select('contact_id, disc_primary, vak_primary, motivation_primary, preferred_channel, formality_level')
-         .in('contact_id', data.map(contact => contact.id));
-       if (behaviorError) throw behaviorError;
-       const byContact = new Map((behaviors ?? []).map(behavior => [behavior.contact_id, behavior]));
+       const byContact = new Map<string | null, ContactBehaviorRow>();
+       for (let offset = 0; offset < data.length; offset += 100) {
+         const { data: behaviors, error: behaviorError } = await supabase.from('contact_behavior')
+           .select('contact_id, disc_primary, vak_primary, motivation_primary, preferred_channel, formality_level')
+           .in('contact_id', data.slice(offset, offset + 100).map(contact => contact.id));
+         if (behaviorError) throw behaviorError;
+         for (const behavior of behaviors ?? []) byContact.set(behavior.contact_id, behavior);
+       }
        return data.map((c): FlattenedContact => {
          const behavior = byContact.get(c.id);
          return {
