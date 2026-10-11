@@ -38,6 +38,7 @@ export interface YourDayData {
   needsAttention: NeedsAttention[];
   newInsights: Insight[];
   loading: boolean;
+  error: Error | null;
 }
 
 const CONTACT_LIGHT_SELECT = 'id, first_name, last_name, email, phone, avatar_url, birthday, company_id, role, relationship_score, sentiment, updated_at, created_at';
@@ -64,9 +65,9 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const { data } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['your-day', user?.id],
-    queryFn: async (): Promise<Omit<YourDayData, 'loading'>> => {
+    queryFn: async (): Promise<Omit<YourDayData, 'loading' | 'error'>> => {
       if (!user) throw new Error('Not authenticated');
       try {
         const today = new Date();
@@ -205,7 +206,8 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
     upcomingBirthdays: data?.upcomingBirthdays || [],
     needsAttention: data?.needsAttention || [],
     newInsights: data?.newInsights || [],
-    loading: !data,
+    loading: !!user && isLoading,
+    error,
     refresh,
   };
 }

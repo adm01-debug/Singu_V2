@@ -107,6 +107,20 @@ describe('Contratos canônicos da comunicação WhatsApp', () => {
 });
 
 describe('Histórico de contatos não envia argumento inexistente à RPC empresarial', () => {
+  it.each([
+    { type: null, channel: 'whatsapp', expected: 'whatsapp' },
+    { type: null, channel: null, expected: 'note' },
+    { type: 'call', channel: null, expected: 'call' },
+  ])('normaliza tipo e canal nulos sem perder a interação: %j', async ({ type, channel, expected }) => {
+    mocks.from.mockReturnValue(queryResult([{
+      id: 'interacao-1', company_id: null, contact_id: 'contato-1', type, channel,
+      resumo: 'Conversa', content: null, data_interacao: '2026-01-01T00:00:00Z',
+    }]));
+    const { result } = renderHook(() => useUnifiedCommunicationHistory('contato-1', 50, 'contact'), { wrapper });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(result.current.data?.[0]).toMatchObject({ id: 'interacao-1', type: expected, channel: expected });
+  });
+
   it('consulta o contato com os mesmos campos reais utilizados pela RPC de empresa', async () => {
     const query = queryResult([{
       id: 'interacao-1', company_id: 'empresa-1', contact_id: 'contato-1', type: 'call', channel: 'phone',
@@ -166,6 +180,16 @@ describe('Notas NPS usam o campo canônico separado da nota CSAT', () => {
 });
 
 describe('Perfis comportamentais usam relações e JSON reais', () => {
+  it('aceita as strings do analisador social junto dos objetos com evidência', async () => {
+    mocks.from.mockImplementation(table => queryResult(table === 'contact_analytical_profiles'
+      ? [{ ...profile, preferences: ['Email', ...profile.preferences], hobbies: ['Leitura'] }] : []));
+    const { result } = renderHook(() => useBehavioralProfilesList({}), { wrapper });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(result.current.data?.[0]).toMatchObject({
+      preferences: [{ label: 'Email' }, { label: 'Email', evidence: 'Mensagem' }], hobbies: [{ label: 'Leitura' }],
+    });
+  });
+
   it('normaliza nomes a partir de full_name e nome_crm sem relação inexistente', async () => {
     const profiles = queryResult([profile]);
     const contacts = queryResult([{ id: 'contato-1', full_name: 'Nome Completo', avatar_url: null, company_id: 'empresa-1' }]);

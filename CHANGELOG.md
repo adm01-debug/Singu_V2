@@ -8,6 +8,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- A geolocalização do BI pagina a carteira, as contagens e os endereços por lotes, mantém o endereço primário com coordenadas válidas e restringe a leitura ao dono.
+- Históricos aceitam interações com tipo/canal nulos e conservam a duração dos áudios em metadata. Recomendações RFM e perfis sociais normalizam os formatos realmente persistidos sem inventar estimativas; falhas em Meu Dia encerram o carregamento e oferecem nova tentativa.
 - A captura do backup confia na CA oficial do Supabase e verifica certificado e hostname; o dump recebe a conexão por ambiente, sem URL nos argumentos, e falhas registram somente etapa e SQLSTATE.
 - O teste de restauração compara o destino com o snapshot do dump, exige manifesto correspondente e isola a cópia com senha efêmera e limpeza independente. Diagnósticos omitem conexões e dados; verificar um dump sem GPG não falha mais no cleanup.
 - Cadastro e edição de empresas convertem as cores e os dados compostos para o contrato canônico, preservam telefones/emails distintos sem duplicar aliases e salvam os campos de contato da tela detalhada. O mapa pagina a carteira por ID e mantém o score restrito ao usuário. A geração de próxima ação só retorna sucesso após a persistência; falhas na detecção de alertas liberam o botão para tentar novamente.

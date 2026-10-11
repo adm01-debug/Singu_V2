@@ -36,10 +36,10 @@ function periodToDate(period: BehavioralProfilesFilters['period']): string | nul
   return new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
 }
 
-const insightItemsSchema = z.array(z.object({ label: z.string(), evidence: z.string().optional() }));
+const insightItemsSchema = z.array(z.union([z.string(), z.object({ label: z.string(), evidence: z.string().optional() })]));
 
 function normalizeInsights(value: unknown): BehavioralInsightItem[] {
-  return insightItemsSchema.parse(value ?? []).map(item => ({ label: item.label, evidence: item.evidence }));
+  return insightItemsSchema.parse(value ?? []).map(item => typeof item === 'string' ? { label: item } : { label: item.label, evidence: item.evidence });
 }
 
 export interface BehavioralProfilesListResult {

@@ -180,7 +180,8 @@ export function useUnifiedCommunicationHistory(entityId?: string, limit = 50, en
         if (error) throw error;
         return (data ?? []).map((row): InteractionHistoryItem => ({
           id: row.id, company_id: row.company_id ?? undefined, contact_id: row.contact_id ?? undefined,
-          type: z.string().parse(row.type), channel: z.string().parse(row.channel),
+          type: z.string().nullable().parse(row.type) ?? row.channel ?? 'note',
+          channel: z.string().nullable().parse(row.channel) ?? row.type ?? 'note',
           resumo: row.resumo ?? row.content ?? undefined,
           data_interacao: z.string().parse(row.data_interacao),
         }));

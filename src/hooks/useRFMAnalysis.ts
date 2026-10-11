@@ -16,11 +16,11 @@ import { z } from 'zod';
 import { callExternalRpc } from '@/lib/externalData';
 
 const rfmActionsSchema = z.array(z.object({
-  id: z.string(), action: z.string(), description: z.string(), priority: z.number(),
-  channel: z.enum(['email', 'phone', 'whatsapp', 'meeting', 'any']), timing: z.string(), expectedImpact: z.string(),
+  id: z.string().min(1).nullish(), action: z.string(), description: z.string(), priority: z.number(),
+  channel: z.enum(['email', 'phone', 'whatsapp', 'meeting', 'any']), timing: z.string(), expectedImpact: z.string().nullish(),
 }));
 const rfmOffersSchema = z.array(z.object({
-  id: z.string(), offerType: z.string(), description: z.string(), discountPercent: z.number().optional(),
+  id: z.string().min(1).nullish(), offerType: z.string(), description: z.string(), discountPercent: z.number().optional(),
   validDays: z.number(), reason: z.string(),
 }));
 
@@ -59,8 +59,12 @@ export function useRFMAnalysis(contactId?: string) {
         predictedNextPurchaseDate: item.predicted_next_purchase_date ? new Date(item.predicted_next_purchase_date) : null,
         predictedLifetimeValue: item.predicted_lifetime_value ? Number(item.predicted_lifetime_value) : null,
         churnProbability: item.churn_probability ? Number(item.churn_probability) : null,
-        recommendedActions: rfmActionsSchema.parse(item.recommended_actions ?? []),
-        recommendedOffers: rfmOffersSchema.parse(item.recommended_offers ?? []),
+        recommendedActions: rfmActionsSchema.parse(item.recommended_actions ?? []).map((action, index) => ({
+          ...action, id: action.id ?? `${item.id}:action:${index}`, expectedImpact: action.expectedImpact ?? 'Impacto não estimado',
+        })),
+        recommendedOffers: rfmOffersSchema.parse(item.recommended_offers ?? []).map((offer, index) => ({
+          ...offer, id: offer.id ?? `${item.id}:offer:${index}`,
+        })),
         communicationPriority: item.communication_priority as CommunicationPriority || 'medium',
         analyzedAt: new Date(item.analyzed_at), createdAt: new Date(item.created_at), updatedAt: new Date(item.updated_at)
       })) as RFMAnalysis[];

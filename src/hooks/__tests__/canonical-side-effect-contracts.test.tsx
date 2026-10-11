@@ -122,6 +122,19 @@ describe('Eventos de vida do dashboard são normalizados, não convertidos por c
 });
 
 describe('Histórico unificado usa campos canônicos e discriminantes validados', () => {
+  it.each([12, 0, null])('preserva a duração do áudio WhatsApp guardada em metadata: %s', async duration => {
+    const messages = queryResult([{
+      id: 'audio-1', message_type: 'audio', content: null, contact_id: 'contato-1', company_id: null,
+      timestamp: '2026-01-01T00:00:00Z', created_at: '2026-01-01T00:00:00Z', from_me: false,
+      media_url: 'https://example.invalid/audio', status: 'delivered', metadata: { duration_seconds: duration },
+    }]);
+    mocks.from.mockReturnValue(messages);
+    const { result } = renderHook(() => useUnifiedHistory({ channels: ['whatsapp'] }), { wrapper });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(messages.select).toHaveBeenCalledWith(expect.stringContaining('metadata'));
+    expect(result.current.data?.[0]).toMatchObject({ id: 'wa:audio-1', duration_seconds: duration });
+  });
+
   it('preserva interações sem tipo como anotação', async () => {
     mocks.from.mockReturnValue(queryResult([{
       id: 'interacao-sem-tipo', type: null, contact_id: 'contato-1', company_id: null,

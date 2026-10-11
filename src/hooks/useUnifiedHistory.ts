@@ -34,8 +34,9 @@ export interface UnifiedHistoryFilters {
 
 const historyChannelSchema = z.enum(['whatsapp', 'call', 'email', 'meeting', 'note', 'social']);
 const directionSchema = z.enum(['inbound', 'outbound', 'unknown']);
+const whatsappMetadataSchema = z.object({ duration_seconds: z.number().nonnegative().nullable().optional() });
 
-function toItemFromWhatsapp(r: Pick<Tables<'whatsapp_messages'>, 'id' | 'message_type' | 'content' | 'timestamp' | 'created_at' | 'from_me' | 'contact_id' | 'company_id' | 'status' | 'media_url'>): HistoryItem {
+function toItemFromWhatsapp(r: Pick<Tables<'whatsapp_messages'>, 'id' | 'message_type' | 'content' | 'timestamp' | 'created_at' | 'from_me' | 'contact_id' | 'company_id' | 'status' | 'media_url' | 'metadata'>): HistoryItem {
   const type = r.message_type || 'text';
   const content = r.content || '';
   return {
@@ -50,6 +51,7 @@ function toItemFromWhatsapp(r: Pick<Tables<'whatsapp_messages'>, 'id' | 'message
     company_id: r.company_id,
     status: r.status ?? null,
     audio_url: r.media_url ?? null,
+    duration_seconds: whatsappMetadataSchema.parse(r.metadata ?? {}).duration_seconds ?? null,
   };
 }
 
@@ -109,7 +111,7 @@ export function useUnifiedHistory(filters: UnifiedHistoryFilters) {
       if (wantWA) {
         let q = supabase
           .from('whatsapp_messages')
-          .select('id, contact_id, company_id, from_me, message_type, content, media_url, status, timestamp, created_at')
+          .select('id, contact_id, company_id, from_me, message_type, content, media_url, status, timestamp, created_at, metadata')
           .eq('user_id', user!.id)
           .order('timestamp', { ascending: false })
           .limit(limit);

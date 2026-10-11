@@ -2,6 +2,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import type { Tables } from '@/integrations/supabase/types';
 
 // ── Demand Forecast ──
 export interface DemandForecast {
@@ -88,6 +89,58 @@ export interface GeoSalesPoint {
   contact_count: number;
 }
 
+type GeoCompanyAddress = Pick<Tables<'company_addresses'>, 'company_id' | 'latitude' | 'longitude' | 'cidade' | 'estado' | 'is_primary'>;
+
+async function fetchGeoCompanyAddresses(companyIds: string[], userId: string): Promise<Map<string, GeoCompanyAddress>> {
+  const addresses = new Map<string, GeoCompanyAddress>();
+  for (let offset = 0; offset < companyIds.length; offset += 100) {
+    const batch = companyIds.slice(offset, offset + 100);
+    let cursor: string | undefined;
+    for (;;) {
+      let query = supabase.from('company_addresses')
+        .select('id, company_id, latitude, longitude, cidade, estado, is_primary, companies!inner(user_id)')
+        .eq('companies.user_id', userId).in('company_id', batch)
+        .not('latitude', 'is', null).not('longitude', 'is', null)
+        .gte('latitude', -90).lte('latitude', 90).gte('longitude', -180).lte('longitude', 180)
+        .order('id', { ascending: true }).limit(500);
+      if (cursor) query = query.gt('id', cursor);
+      const { data, error } = await query;
+      if (error) throw error;
+      if (!data) throw new Error('Resposta inválida ao consultar endereços');
+      for (const address of data) {
+        const current = addresses.get(address.company_id);
+        if (!current || (!current.is_primary && address.is_primary)) addresses.set(address.company_id, address);
+      }
+      if (data.length < 500) break;
+      const nextCursor = data[data.length - 1].id;
+      if (cursor && nextCursor <= cursor) throw new Error('A paginação dos endereços não avançou');
+      cursor = nextCursor;
+    }
+  }
+  return addresses;
+}
+
+async function countGeoRelations(table: 'contacts' | 'interactions', userId: string): Promise<Map<string, number>> {
+  const counts = new Map<string, number>();
+  let cursor: string | undefined;
+  for (;;) {
+    let query = supabase.from(table).select('id, company_id').eq('user_id', userId)
+      .not('company_id', 'is', null).order('id', { ascending: true }).limit(500);
+    if (cursor) query = query.gt('id', cursor);
+    const { data, error } = await query;
+    if (error) throw error;
+    if (!data) throw new Error('Resposta inválida ao consultar vínculos');
+    for (const row of data) {
+      if (row.company_id) counts.set(row.company_id, (counts.get(row.company_id) ?? 0) + 1);
+    }
+    if (data.length < 500) break;
+    const nextCursor = data[data.length - 1].id;
+    if (cursor && nextCursor <= cursor) throw new Error('A paginação dos vínculos não avançou');
+    cursor = nextCursor;
+  }
+  return counts;
+}
+
 export function useGeoSalesData() {
   const { user } = useAuth();
   return useQuery({
@@ -95,38 +148,31 @@ export function useGeoSalesData() {
     enabled: !!user,
     queryFn: async () => {
       if (!user) return [];
-      const { data: companies, error: companiesError } = await supabase
-        .from('companies')
-        .select('id, nome_crm')
-        .eq('user_id', user.id);
-      if (companiesError) throw companiesError;
+      const companies: Pick<Tables<'companies'>, 'id' | 'nome_crm'>[] = [];
+      let companyCursor: string | undefined;
+      for (;;) {
+        let query = supabase.from('companies').select('id, nome_crm')
+          .eq('user_id', user.id).order('id', { ascending: true }).limit(500);
+        if (companyCursor) query = query.gt('id', companyCursor);
+        const { data, error } = await query;
+        if (error) throw error;
+        if (!data) throw new Error('Resposta inválida ao consultar empresas');
+        companies.push(...data);
+        if (data.length < 500) break;
+        const nextCursor = data[data.length - 1].id;
+        if (companyCursor && nextCursor <= companyCursor) throw new Error('A paginação das empresas não avançou');
+        companyCursor = nextCursor;
+      }
+      if (!companies.length) return [];
 
-      if (!companies?.length) return [];
-
-      // Both queries are independent of each other — run in parallel
-      const [{ data: contacts, error: contactsError }, { data: interactions, error: interactionsError }, { data: addresses, error: addressesError }] = await Promise.all([
-        supabase.from('contacts').select('company_id').eq('user_id', user.id).limit(10000),
-        supabase.from('interactions').select('company_id').eq('user_id', user.id).not('company_id', 'is', null).limit(10000),
-        supabase.from('company_addresses').select('company_id, latitude, longitude, cidade, estado, is_primary')
-          .in('company_id', companies.map(c => c.id)).not('latitude', 'is', null).not('longitude', 'is', null)
-          .order('is_primary', { ascending: false, nullsFirst: false }),
+      const [contactCount, interactionCount, addresses] = await Promise.all([
+        countGeoRelations('contacts', user.id),
+        countGeoRelations('interactions', user.id),
+        fetchGeoCompanyAddresses(companies.map(c => c.id), user.id),
       ]);
-      if (contactsError) throw contactsError;
-      if (interactionsError) throw interactionsError;
-      if (addressesError) throw addressesError;
-
-      const contactCount = new Map<string, number>();
-      for (const c of contacts || []) {
-        if (c.company_id) contactCount.set(c.company_id, (contactCount.get(c.company_id) || 0) + 1);
-      }
-
-      const interactionCount = new Map<string, number>();
-      for (const i of interactions || []) {
-        if (i.company_id) interactionCount.set(i.company_id, (interactionCount.get(i.company_id) || 0) + 1);
-      }
 
       return companies.flatMap(c => {
-        const address = addresses?.find(a => a.company_id === c.id && a.latitude != null && a.longitude != null);
+        const address = addresses.get(c.id);
         if (!address || address.latitude == null || address.longitude == null) return [];
         return [{
           lat: address.latitude,
