@@ -9,8 +9,8 @@ import { useAuth } from '@/hooks/useAuth';
 
 interface AuditIssue {
   type: string;
-  expected: string | number;
-  actual: string | number;
+  expected: string | number | null;
+  actual: string | number | null;
 }
 
 interface AuditResult {
@@ -20,13 +20,13 @@ interface AuditResult {
 
 export default function CRMRelationshipAuditPage() {
   const { user } = useAuth();
-  const { data: contacts, isLoading } = useQuery({
+  const { data: contacts, isLoading, error } = useQuery({
     queryKey: ['global-relationship-audit', user?.id],
     enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('contacts')
-        .select('id, first_name, last_name, relationship_score, relationship_stage, sentiment, interactions_count, last_interaction_at')
+        .select('id, first_name, last_name, relationship_score, relationship_stage, sentiment, last_interaction_at')
         .eq('user_id', user!.id)
         .limit(100);
       
@@ -39,8 +39,10 @@ export default function CRMRelationshipAuditPage() {
         const batch = data.slice(i, i + CONCURRENCY);
         const batchResults = await Promise.all(
           batch.map(async (contact) => {
-            const { data: result } = await supabase.rpc('check_relationship_consistency', { p_contact_id: contact.id });
-            return { contact, audit: (result as unknown as AuditResult) ?? { consistent: true, issues: [] } };
+            const { data: result, error: rpcError } = await supabase.rpc('check_relationship_consistency', { p_contact_id: contact.id });
+            if (rpcError) throw rpcError;
+            if (!result) throw new Error('Auditoria de relacionamento indisponível');
+            return { contact, audit: result as unknown as AuditResult };
           })
         );
         auditResults.push(...batchResults);
@@ -53,14 +55,12 @@ export default function CRMRelationshipAuditPage() {
   });
 
   const gapChecklist = [
-    { id: 1, label: 'Consistência Score vs Interações', status: 'verified' },
-    { id: 2, label: 'Integridade de Estágio de Funil', status: 'verified' },
-    { id: 3, label: 'Timestamp de Último Contato vs Logs', status: 'verified' },
-    { id: 4, label: 'Sincronização de Cadências Automáticas', status: 'verified' },
-    { id: 5, label: 'Rastreabilidade de Alterações Manuais', status: 'verified' },
+    { id: 1, label: 'Score no intervalo de 0 a 100' },
+    { id: 2, label: 'Última interação corresponde ao histórico registrado' },
   ];
 
   if (isLoading) return <Skeleton className="h-[600px] w-full" />;
+  if (error) return <div role="alert" className="p-6 text-destructive">Não foi possível verificar a integridade dos dados. Tente novamente.</div>;
 
   return (
     <div className="p-6 space-y-6">
@@ -68,9 +68,9 @@ export default function CRMRelationshipAuditPage() {
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <ShieldCheck className="h-6 w-6 text-primary" />
-            Auditoria Global de Relacionamento (Seção 2.1)
+            Auditoria de Relacionamento (Seção 2.1)
           </h1>
-          <p className="text-muted-foreground">Monitoramento de consistência e integridade de dados do CRM</p>
+          <p className="text-muted-foreground">Verificação de até 100 contatos acessíveis ao usuário</p>
         </div>
       </div>
 
@@ -83,7 +83,7 @@ export default function CRMRelationshipAuditPage() {
             {gapChecklist.map(item => (
               <div key={item.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30">
                 <span className="text-xs font-medium">{item.label}</span>
-                <CheckCircle2 className="h-4 w-4 text-success" />
+                <ShieldCheck className="h-4 w-4 text-muted-foreground" />
               </div>
             ))}
           </CardContent>
@@ -98,8 +98,8 @@ export default function CRMRelationshipAuditPage() {
               {contacts?.filter(c => !c.audit.consistent).length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed rounded-xl">
                   <CheckCircle2 className="h-10 w-10 text-success mb-2 opacity-20" />
-                  <p className="text-sm font-bold text-success">100% Consistente</p>
-                  <p className="text-xs text-muted-foreground">Nenhum gap de dados detectado no momento</p>
+                  <p className="text-sm font-bold text-success">{contacts.length ? 'Nenhuma inconsistência encontrada' : 'Nenhum contato disponível'}</p>
+                  <p className="text-xs text-muted-foreground">Resultado limitado aos controles e contatos consultados</p>
                 </div>
               ) : (
                 contacts?.filter(c => !c.audit.consistent).map(c => (
@@ -110,7 +110,7 @@ export default function CRMRelationshipAuditPage() {
                       <div className="mt-2 space-y-1">
                         {c.audit.issues.map((issue, idx) => (
                           <div key={idx} className="text-[10px] text-destructive-foreground bg-destructive/10 p-1.5 rounded">
-                            <span className="font-bold">Mismatched {issue.type}:</span> Esperado {issue.expected}, Encontrado {issue.actual}
+                            <span className="font-bold">Diferença em {issue.type}:</span> Esperado {issue.expected ?? 'sem registro'}, Encontrado {issue.actual ?? 'sem registro'}
                           </div>
                         ))}
                       </div>
@@ -125,7 +125,7 @@ export default function CRMRelationshipAuditPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Status de Verificação de Gaps (Front vs Back)</CardTitle>
+          <CardTitle className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Controles fora do escopo desta consulta</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="relative overflow-x-auto">
@@ -143,25 +143,25 @@ export default function CRMRelationshipAuditPage() {
                   <td className="px-4 py-3 font-medium">Relacionamento Stages</td>
                   <td className="px-4 py-3"><Badge variant="outline">CHECK (Constraint)</Badge></td>
                   <td className="px-4 py-3"><Badge variant="outline">Enums/Badges</Badge></td>
-                  <td className="px-4 py-3 text-success font-bold">OK</td>
+                  <td className="px-4 py-3 text-muted-foreground">Não avaliado</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-medium">Score 0-100</td>
                   <td className="px-4 py-3"><Badge variant="outline">CHECK (Range)</Badge></td>
                   <td className="px-4 py-3"><Badge variant="outline">RelationshipScore Component</Badge></td>
-                  <td className="px-4 py-3 text-success font-bold">OK</td>
+                  <td className="px-4 py-3 text-muted-foreground">Não avaliado</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-medium">Auditoria de Mudanças</td>
                   <td className="px-4 py-3"><Badge variant="outline">Trigger-based Logging</Badge></td>
                   <td className="px-4 py-3"><Badge variant="outline">RelationshipAuditPanel</Badge></td>
-                  <td className="px-4 py-3 text-success font-bold">OK</td>
+                  <td className="px-4 py-3 text-muted-foreground">Não avaliado</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-medium">Correção Manual</td>
                   <td className="px-4 py-3"><Badge variant="outline">Audit Log Injection</Badge></td>
                   <td className="px-4 py-3"><Badge variant="outline">MetricOverrideFlow</Badge></td>
-                  <td className="px-4 py-3 text-success font-bold">OK</td>
+                  <td className="px-4 py-3 text-muted-foreground">Não avaliado</td>
                 </tr>
               </tbody>
             </table>
