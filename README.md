@@ -169,6 +169,15 @@ Resultados de `\gset` recebem prefixo isolado para não alterar configurações
 do psql. `SKIP:` é reportado separadamente; qualquer falha retorna código não zero.
 Sem banco, valide o preparo com `node --test tests/rls/prepare-sql.node-test.mjs`.
 
+### Credencial dos scripts administrativos
+
+Os scripts `apply-*.js`, `chunk-apply.js`, `fix-enums.js`, `retry-failed.js` e `tmp_view_check.js`
+exigem `SUPABASE_ACCESS_TOKEN` pelo ambiente e encerram antes de qualquer requisição
+se a variável estiver ausente. Não inclua tokens em arquivos versionados.
+Tokens expostos em versões anteriores permanecem no histórico e precisam ser
+revogados em https://supabase.com/dashboard/account/tokens; remover do código
+atual não invalida uma credencial antiga.
+
 ## 🤝 Contribuindo
 
 Este projeto é mantido com auxílio de IA via [Lovable](https://lovable.dev). Mudanças podem vir tanto via Lovable quanto via PR direto no GitHub — ambos sincronizam automaticamente.
