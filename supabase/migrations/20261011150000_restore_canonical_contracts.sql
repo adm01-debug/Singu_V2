@@ -23,6 +23,15 @@ BEGIN
 END;
 $$;
 ALTER TABLE public.csat_surveys VALIDATE CONSTRAINT csat_surveys_answered_score_check;
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname='public' AND tablename='csat_surveys' AND policyname='csat_surveys_owner') THEN
+    CREATE POLICY csat_surveys_owner ON public.csat_surveys FOR ALL TO authenticated
+      USING ((SELECT auth.uid()) = user_id)
+      WITH CHECK ((SELECT auth.uid()) = user_id);
+  END IF;
+END;
+$$;
 ALTER TABLE public.rfm_analysis
   ADD COLUMN IF NOT EXISTS company_id uuid,
   ADD COLUMN IF NOT EXISTS segment_code text;
@@ -115,6 +124,7 @@ GRANT EXECUTE ON FUNCTION public.submit_public_csat_survey(uuid, integer, text) 
 -- nulabilidades exige que não existam pesquisas sem nota nem RFM sem empresa:
 -- não preencher respostas ou vínculos desconhecidos com valores artificiais.
 -- BEGIN;
+-- DROP POLICY IF EXISTS csat_surveys_owner ON public.csat_surveys;
 -- ALTER TABLE public.csat_surveys DROP CONSTRAINT IF EXISTS csat_surveys_answered_score_check;
 -- ALTER TABLE public.csat_surveys ALTER COLUMN score SET NOT NULL;
 -- ALTER TABLE public.csat_surveys ALTER COLUMN sent_at SET DEFAULT now();
