@@ -65,6 +65,8 @@ const canonicalDbBreaker = getCircuitBreaker('canonical-db', {
 
 const isAbortError = (e: unknown) => e instanceof Error && e.name === 'AbortError';
 
+class CanonicalRpcClientError extends Error {}
+
 const externalResponseSchema = z.object({
   error: z.string().nullish(),
   fallback: z.boolean().optional(),
@@ -76,7 +78,7 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
   const breaker = canonicalRpc ? canonicalDbBreaker : externalDbBreaker;
   return breaker.call(async () => {
     const accessToken = await getAccessToken();
-    if (canonicalRpc && accessToken === ANON_KEY) throw new Error('Autenticação necessária para a RPC do banco');
+    if (canonicalRpc && accessToken === ANON_KEY) throw new CanonicalRpcClientError('Autenticação necessária para a RPC do banco');
     const endpoint = canonicalRpc
       ? new URL(`/rest/v1/rpc/${encodeURIComponent(canonicalRpc.functionName)}`, import.meta.env.VITE_SUPABASE_URL).href
       : EDGE_URL;
@@ -94,7 +96,11 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
 
     if (!response.ok) {
       const errorText = await response.text();
-      if (canonicalRpc) throw new Error(`RPC do banco [${response.status}]: ${errorText}`);
+      if (canonicalRpc) {
+        const message = `RPC do banco [${response.status}]: ${errorText}`;
+        if (response.status >= 400 && response.status < 500) throw new CanonicalRpcClientError(message);
+        throw new Error(message);
+      }
       // 409 vem como JSON estruturado { error: "CONCURRENT_EDIT", entity, id, attemptedVersion, traceId }
       // Preserva o JSON cru na mensagem para o caller parsear (ver updateExternalDataWithVersion).
       throw new Error(`Edge function error [${response.status}]: ${errorText}`);
@@ -110,7 +116,7 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
     }
 
     return result;
-  }, isAbortError);
+  }, error => isAbortError(error) || error instanceof CanonicalRpcClientError);
 }
 
 export { CircuitOpenError };

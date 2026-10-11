@@ -10,6 +10,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ### Fixed
 - As notificações de NPS incluem pesquisas pendentes, identificam links ainda não enviados e filtram a modalidade para não apresentar pesquisas CSAT como NPS.
 - Falhas no proxy externo e na persistência RFM canônica usam circuitos independentes, preservando o acesso à origem saudável.
+- Erros de autenticação, validação e permissão das RPCs canônicas não bloqueiam requisições válidas no circuito de disponibilidade. Ramificações de sequências validam suas condições também em bases parcialmente migradas.
 - A atualização do contrato de pesquisas exige reconciliação explícita em bases com histórico, preserva a modalidade existente e impede classificações silenciosas de NPS como CSAT.
 - O painel CSAT separa suas pesquisas das NPS, cria registros pendentes sem simular envio e aceita somente notas inteiras de 1 a 5. O registro manual exige uma pesquisa aberta do dono e preserva a nota escolhida se a gravação falhar.
 - O forecast de confiança não atribui zero dias a negócios sem histórico de estágio; marca a estimativa como parcial ou indisponível e exclui negócios concluídos.

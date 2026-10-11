@@ -81,11 +81,20 @@ ALTER TABLE public.metaprogram_analysis
   ADD COLUMN IF NOT EXISTS is_validated boolean DEFAULT false,
   ADD COLUMN IF NOT EXISTS user_feedback text;
 ALTER TABLE public.sequence_steps
-  ADD COLUMN IF NOT EXISTS condition_type text NOT NULL DEFAULT 'always'
-    CHECK (condition_type IN ('always', 'if_opened', 'if_clicked', 'if_not_opened', 'if_not_replied', 'if_replied')),
+  ADD COLUMN IF NOT EXISTS condition_type text NOT NULL DEFAULT 'always',
   ADD COLUMN IF NOT EXISTS condition_wait_hours integer NOT NULL DEFAULT 0,
   ADD COLUMN IF NOT EXISTS branch_on_yes_step integer,
   ADD COLUMN IF NOT EXISTS branch_on_no_step integer;
+ALTER TABLE public.sequence_steps ALTER COLUMN condition_type SET DEFAULT 'always';
+ALTER TABLE public.sequence_steps ALTER COLUMN condition_type SET NOT NULL;
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.sequence_steps'::regclass AND conname='sequence_steps_condition_type_contract_check') THEN
+    ALTER TABLE public.sequence_steps ADD CONSTRAINT sequence_steps_condition_type_contract_check
+      CHECK (condition_type IN ('always', 'if_opened', 'if_clicked', 'if_not_opened', 'if_not_replied', 'if_replied'));
+  END IF;
+END;
+$$;
 
 CREATE OR REPLACE FUNCTION public.get_public_csat_survey(_token uuid)
 RETURNS jsonb

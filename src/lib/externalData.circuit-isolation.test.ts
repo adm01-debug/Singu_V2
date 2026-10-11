@@ -19,6 +19,32 @@ beforeEach(() => {
 afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
 
 describe('Isolamento dos circuitos canônico e externo', () => {
+  it.each([400, 401, 403, 404, 409, 429])('não bloqueia uma RPC válida depois de erros HTTP %i', async status => {
+    mocks.fetch.mockResolvedValue({ ok: false, status, text: async () => 'Requisição recusada' });
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const result = await callExternalRpc('persist_rfm_analysis', { _rows: [] });
+      expect(result.error).toBeInstanceOf(Error);
+      expect(result.error).not.toBeInstanceOf(CircuitOpenError);
+    }
+    mocks.fetch.mockResolvedValue({ ok: true, json: async () => 1 });
+    await expect(callExternalRpc<number>('persist_rfm_analysis', { _rows: [] }))
+      .resolves.toEqual({ data: 1, error: null });
+    expect(mocks.fetch).toHaveBeenCalledTimes(5);
+  });
+
+  it('não bloqueia o banco após tentativas sem sessão', async () => {
+    mocks.getSession.mockResolvedValue({ data: { session: null } });
+    for (let attempt = 0; attempt < 4; attempt++) {
+      expect((await callExternalRpc('persist_rfm_analysis', { _rows: [] })).error)
+        .toHaveProperty('message', 'Autenticação necessária para a RPC do banco');
+    }
+    expect(mocks.fetch).not.toHaveBeenCalled();
+    mocks.getSession.mockResolvedValue({ data: { session: { access_token: 'jwt-do-usuario' } } });
+    mocks.fetch.mockResolvedValue({ ok: true, json: async () => 1 });
+    await expect(callExternalRpc<number>('persist_rfm_analysis', { _rows: [] }))
+      .resolves.toEqual({ data: 1, error: null });
+  });
+
   it('continua persistindo RFM quando o proxy externo está indisponível', async () => {
     mocks.fetch.mockResolvedValue({ ok: false, status: 503, text: async () => 'Indisponível' });
     for (let attempt = 0; attempt < 3; attempt++) {
