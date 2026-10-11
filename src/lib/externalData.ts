@@ -56,10 +56,16 @@ const externalDbBreaker = getCircuitBreaker('external-db', {
   resetTimeoutMs: 30_000,
 });
 
+const canonicalDbBreaker = getCircuitBreaker('canonical-db', {
+  failureThreshold: 3,
+  resetTimeoutMs: 30_000,
+});
+
 const isAbortError = (e: unknown) => e instanceof Error && e.name === 'AbortError';
 
 async function callExternalData(body: Record<string, unknown>, signal?: AbortSignal, canonicalRpc?: { functionName: string; params: Record<string, unknown> }): Promise<Record<string, unknown>> {
-  return externalDbBreaker.call(async () => {
+  const breaker = canonicalRpc ? canonicalDbBreaker : externalDbBreaker;
+  return breaker.call(async () => {
     const accessToken = await getAccessToken();
     if (canonicalRpc && accessToken === ANON_KEY) throw new Error('Autenticação necessária para a RPC do banco');
     const endpoint = canonicalRpc
