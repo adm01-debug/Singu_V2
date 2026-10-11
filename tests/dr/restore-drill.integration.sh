@@ -3,11 +3,15 @@ set -euo pipefail
 umask 077
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 FIXTURE_DIR=$(mktemp -d "$ROOT/.drill-test-XXXXXX")
+report_dir="$FIXTURE_DIR/reports"
+mkdir "$report_dir"
 SOURCE="singu-drill-source-$$"
 TARGET="singu-drill-target-$$"
 cleanup() {
   docker rm -fv "$SOURCE" "$TARGET" >/dev/null 2>&1 || true
   rm -f "$FIXTURE_DIR/backup.dump" "$FIXTURE_DIR/counts.tsv"
+  rm -f "$report_dir"/restore-drill-*.md
+  rmdir "$report_dir"
   rmdir "$FIXTURE_DIR"
 }
 trap cleanup EXIT
@@ -51,6 +55,7 @@ run_restore() {
   docker exec --user "$(id -u):$(id -g)" -e PGPASSWORD -e PROD_DB_URL -e DRILL_DB_URL -e CRITICAL_TABLES \
     -e BACKUP_FILE="/workspace/$(basename "$FIXTURE_DIR")/backup.dump" \
     -e SOURCE_COUNTS_FILE="/workspace/$(basename "$FIXTURE_DIR")/counts.tsv" \
+    -e DRILL_REPORT_DIR="/workspace/$(basename "$FIXTURE_DIR")/reports" \
     -w /workspace "$TARGET" bash scripts/migration/dr/restore-drill.sh
 }
 if output=$(run_restore); then echo 'FALHA: origem sem EXECUTE passou no preflight'; exit 1;
@@ -81,7 +86,6 @@ SQL
 export DRILL_DB_URL="postgresql://singu_restore_denied_test:${DENIED_PASSWORD}@localhost:5432/drill_fixture"
 if run_restore; then echo 'FALHA: restore sem permissão passou'; exit 1;
 else test "$?" -eq 1; fi
-report_dir="$ROOT/scripts/migration/dr/out"
 if rg -q -- 'marker-nao-publicar|postgresql://' "$report_dir"/restore-drill-*.md || \
    rg -q -- "$POSTGRES_PASSWORD|$READER_PASSWORD|$DENIED_PASSWORD" "$report_dir"/restore-drill-*.md; then
   echo 'FALHA: conexão ou segredo no relatório'; exit 1

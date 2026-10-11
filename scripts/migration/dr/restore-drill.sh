@@ -17,7 +17,7 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 : "${DRIFT_MAX_PCT:=0}"
 umask 077
 
-OUT_DIR="$SCRIPT_DIR/out"
+OUT_DIR="${DRILL_REPORT_DIR:-$SCRIPT_DIR/out}"
 mkdir -p "$OUT_DIR"
 REPORT=$(mktemp "$OUT_DIR/restore-drill-$(date -u +%Y%m%dT%H%M%SZ)-XXXXXX")
 mv "$REPORT" "$REPORT.md"
