@@ -1,0 +1,135 @@
+name: Teste de restauração lógica
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/restore-drill.yml
+      - scripts/migration/dr/restore-drill.sh
+      - scripts/migration/dr/create-drill-backup.mjs
+      - scripts/migration/dr/backup-encryption-check.sh
+      - tests/dr/restore-drill.integration.sh
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - name: Instalar validador dos relatórios
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
+      - name: Validar restauração e bloqueios em duas instâncias sintéticas
+        run: bash tests/dr/restore-drill.integration.sh
+
+  restore:
+    needs: integration
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      PGHOST: ${{ secrets.PGHOST }}
+      PGPORT: ${{ secrets.PGPORT }}
+      PGUSER: ${{ secrets.PGUSER }}
+      PGPASSWORD: ${{ secrets.PGPASSWORD }}
+      PGDATABASE: ${{ secrets.PGDATABASE }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inicializar evidência antes dos preflights
+        run: |
+          umask 077
+          mkdir -p scripts/migration/dr/out
+          printf '# Teste de restauração lógica\n\nExecução: %s\nCommit: %s\n' \
+            "$GITHUB_RUN_ID" "$GITHUB_SHA" > scripts/migration/dr/out/restore-drill-workflow.md
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+
+      - name: Verificar conexão de origem
+        run: |
+          for name in PGHOST PGUSER PGPASSWORD PGDATABASE; do
+            if [[ -z "${!name}" ]]; then
+              echo "::error::Secret obrigatório ausente: $name"
+              exit 1
+            fi
+          done
+
+      - name: Restaurar cópia lógica em PostgreSQL isolado
+        run: |
+          set -euo pipefail
+          umask 077
+          export POSTGRES_PASSWORD="$(openssl rand -hex 32)"
+          echo "::add-mask::$POSTGRES_PASSWORD"
+          docker run -d --name singu-drill \
+            -e POSTGRES_PASSWORD \
+            -v "$GITHUB_WORKSPACE:/workspace" \
+            supabase/postgres:17.6.1.171
+          trap 'docker rm -fv singu-drill >/dev/null 2>&1 || true; rm -f "$GITHUB_WORKSPACE/.drill/backup.dump" "$GITHUB_WORKSPACE/.drill/counts.tsv" "$GITHUB_WORKSPACE/.drill/supabase-ca.crt"' EXIT
+          trap 'exit 130' INT TERM
+
+          for attempt in {1..90}; do
+            if docker exec singu-drill pg_isready -h localhost -U supabase_admin -d postgres >/dev/null 2>&1; then
+              break
+            fi
+            sleep 2
+          done
+          docker exec singu-drill pg_isready -h localhost -U supabase_admin -d postgres
+
+          mkdir -m 700 "$GITHUB_WORKSPACE/.drill"
+          curl --fail --silent --show-error --location --connect-timeout 15 --max-time 60 \
+            https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt \
+            --output "$GITHUB_WORKSPACE/.drill/supabase-ca.crt"
+          export NODE_EXTRA_CA_CERTS="$GITHUB_WORKSPACE/.drill/supabase-ca.crt"
+          export PGSSLROOTCERT=/workspace/.drill/supabase-ca.crt
+          export PROD_DB_URL="postgresql://${PGUSER}@${PGHOST}:${PGPORT:-5432}/${PGDATABASE}?sslmode=verify-full"
+          BACKUP_FILE="$GITHUB_WORKSPACE/.drill/backup.dump" \
+            SOURCE_COUNTS_FILE="$GITHUB_WORKSPACE/.drill/counts.tsv" \
+            node scripts/migration/dr/create-drill-backup.mjs
+
+          docker exec --user "$(id -u):$(id -g)" -e BACKUP_FILE=/workspace/.drill/backup.dump \
+            -w /workspace singu-drill \
+            bash scripts/migration/dr/backup-encryption-check.sh
+
+          export DRILL_DB_URL="postgresql://supabase_admin:${POSTGRES_PASSWORD}@localhost:5432/postgres"
+          docker exec --user "$(id -u):$(id -g)" -e PGPASSWORD -e PROD_DB_URL -e DRILL_DB_URL -e PGSSLROOTCERT \
+            -e BACKUP_FILE=/workspace/.drill/backup.dump \
+            -e SOURCE_COUNTS_FILE=/workspace/.drill/counts.tsv \
+            -w /workspace singu-drill \
+            bash scripts/migration/dr/restore-drill.sh
+
+      - name: Remover instância e arquivos temporários
+        if: always()
+        run: |
+          docker rm -fv singu-drill >/dev/null 2>&1 || true
+          rm -f "$GITHUB_WORKSPACE/.drill/backup.dump" "$GITHUB_WORKSPACE/.drill/counts.tsv" "$GITHUB_WORKSPACE/.drill/supabase-ca.crt" \
+            "$GITHUB_WORKSPACE"/scripts/migration/dr/out/.pg-restore-*
+          if docker inspect singu-drill >/dev/null 2>&1; then
+            echo '::error::A instância efêmera não foi removida'
+            exit 1
+          fi
+          test ! -e "$GITHUB_WORKSPACE/.drill/backup.dump"
+
+      - name: Preservar o resultado inclusive nas falhas de preparação
+        if: always()
+        env:
+          RESULTADO: ${{ job.status }}
+        run: |
+          printf '\nResultado do job: %s\n' "$RESULTADO" >> scripts/migration/dr/out/restore-drill-workflow.md
+
+      - name: Registrar resultado sem incluir dados do banco
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: restore-drill-report
+          path: scripts/migration/dr/out/restore-drill-*.md
+          if-no-files-found: ignore
+          retention-days: 14

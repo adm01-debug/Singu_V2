@@ -8,6 +8,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- A captura do backup confia na CA oficial do Supabase e verifica certificado e hostname; o dump recebe a conexão por ambiente, sem URL nos argumentos, e falhas registram somente etapa e SQLSTATE.
+- O teste de restauração compara o destino com o snapshot do dump, exige manifesto correspondente e isola a cópia com senha efêmera e limpeza independente. Diagnósticos omitem conexões e dados; verificar um dump sem GPG não falha mais no cleanup.
 - As notificações de NPS incluem pesquisas pendentes, identificam links ainda não enviados e filtram a modalidade para não apresentar pesquisas CSAT como NPS.
 - Falhas no proxy externo e na persistência RFM canônica usam circuitos independentes, preservando o acesso à origem saudável.
 - Erros de autenticação, validação e permissão das RPCs canônicas não bloqueiam requisições válidas no circuito de disponibilidade. Ramificações de sequências validam suas condições também em bases parcialmente migradas.
