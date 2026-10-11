@@ -69,7 +69,9 @@ Deno.serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient(supabaseUrl, supabaseKey, isServiceRoleCaller(authResult) ? {} : {
+      global: { headers: { Authorization: req.headers.get('Authorization') ?? '' } },
+    });
 
     let requestBody: z.infer<typeof RfmInput> = {};
     const parsed = RfmInput.safeParse(raw);
@@ -207,8 +209,6 @@ Deno.serve(async (req) => {
     };
 
     const results: RfmResult[] = [];
-    const rfmUpsertRows: typeof results = [];
-    const rfmHistoryRows: Array<Record<string, unknown>> = [];
 
     for (const [cId, metrics] of contactMetrics) {
       const recencyScore = calculateScore(metrics.daysSinceLastPurchase, recencyPercentiles, true);
@@ -265,30 +265,14 @@ Deno.serve(async (req) => {
         analyzed_at: now.toISOString()
       };
 
-      rfmUpsertRows.push(rfmResult);
-      rfmHistoryRows.push({
-        user_id: userId,
-        contact_id: cId,
-        recency_score: recencyScore,
-        frequency_score: frequencyScore,
-        monetary_score: monetaryScore,
-        segment,
-        total_monetary_value: metrics.totalValue
-      });
       results.push(rfmResult);
     }
 
-    // Bulk-flush all writes after the scoring loop
-    await Promise.all([
-      rfmUpsertRows.length > 0
-        ? supabase.from('rfm_analysis').upsert(rfmUpsertRows, { onConflict: 'user_id,contact_id' })
-            .then(({ error }) => { if (error) throw error; })
-        : Promise.resolve(),
-      rfmHistoryRows.length > 0
-        ? supabase.from('rfm_history').insert(rfmHistoryRows)
-            .then(({ error }) => { if (error) throw error; })
-        : Promise.resolve(),
-    ]);
+    if (results.length > 0) {
+      const { data, error } = await supabase.rpc('persist_rfm_analysis', { _rows: results, _user_id: userId });
+      if (error) throw error;
+      if (data !== results.length) throw new Error('Persistência RFM incompleta');
+    }
 
     return jsonOk({
       success: true,

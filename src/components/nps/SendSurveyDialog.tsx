@@ -133,7 +133,7 @@ export function SendSurveyDialog({ open, onOpenChange }: Props) {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={handleClose}>Cancelar</Button>
-              <Button onClick={handleSend} disabled={!contactId || isCreating}>Gerar link & enviar</Button>
+              <Button onClick={handleSend} disabled={!contactId || isCreating}>Gerar link</Button>
             </DialogFooter>
           </>
         )}

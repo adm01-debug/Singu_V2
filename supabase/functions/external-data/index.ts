@@ -33,6 +33,7 @@ const ALLOWED_RPCS = [
   'get_contact_intelligence_by_phone', 'get_contact_disc_profile',
   'get_contact_effectiveness', 'get_contact_engagement_score',
   'get_contact_statistics', 'get_contact_timeline',
+  'persist_rfm_analysis',
   // ── Timing ──
   'get_best_contact_time', 'get_best_contact_times',
   'get_days_without_contact', 'get_last_contact_date',

@@ -5,13 +5,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { useContacts } from '@/hooks/useContacts';
 import { useInteractions } from '@/hooks/useInteractions';
 import { differenceInDays } from 'date-fns';
-import type { TablesInsert } from '@/integrations/supabase/types';
+import type { Database } from '@/integrations/supabase/types';
 import {
   RFMAnalysis, RFMHistory, RFMSegment, RFMScore, RFMDashboardStats,
   RFMContactSummary, RFMAction, RFMOffer, RFMTrend, CommunicationPriority,
   RFM_SEGMENTS, determineRFMSegment, calculateRFMScore
 } from '@/types/rfm';
 import { logger } from "@/lib/logger";
+import { callExternalRpc } from '@/lib/externalData';
 
 interface PurchaseData {
   contactId: string;
@@ -87,7 +88,8 @@ export function useRFMAnalysis(contactId?: string) {
     if (!user?.id || contacts.length === 0) return;
     setAnalyzing(true);
     try {
-      const { data: purchaseData } = await supabase.from('purchase_history').select('contact_id, amount, purchase_date').eq('user_id', user.id).limit(10000);
+      const { data: purchaseData, error: purchaseError } = await supabase.from('purchase_history').select('contact_id, amount, purchase_date').eq('user_id', user.id).limit(10000);
+      if (purchaseError) throw purchaseError;
       const contactMetrics: Map<string, PurchaseData> = new Map();
       contacts.forEach(contact => {
         const contactInteractions = interactions.filter(i => i.contact_id === contact.id);
@@ -112,7 +114,7 @@ export function useRFMAnalysis(contactId?: string) {
       const recencyPercentiles = getPercentiles(recencyValues);
       const frequencyPercentiles = getPercentiles(frequencyValues);
       const monetaryPercentiles = getPercentiles(monetaryValues);
-      const rfmResults: TablesInsert<'rfm_analysis'>[] = [];
+      const rfmResults: Array<Database['public']['Tables']['rfm_analysis']['Insert'] & { segment_code: RFMSegment }> = [];
       for (const [cId, metrics] of contactMetrics) {
         const contact = contacts.find(c => c.id === cId);
         if (!contact) continue;
@@ -138,33 +140,25 @@ export function useRFMAnalysis(contactId?: string) {
           days_since_last_interaction: daysSinceLastInteraction < 999 ? daysSinceLastInteraction : null,
           total_purchases: metrics.totalPurchases, total_interactions: contactInts.length,
           total_monetary_value: metrics.totalValue, average_order_value: metrics.averageOrderValue,
-          segment, segment_description: segmentInfo.description, segment_color: segmentInfo.color,
+          segment, segment_code: segment, segment_description: segmentInfo.description, segment_color: segmentInfo.color,
           predicted_next_purchase_date: predictedNextPurchaseDate?.toISOString().split('T')[0],
           predicted_lifetime_value: predictedLifetimeValue, churn_probability: churnProbability,
-          recommended_actions: JSON.parse(JSON.stringify(recommendedActions)),
-          recommended_offers: JSON.parse(JSON.stringify(recommendedOffers)),
+          recommended_actions: recommendedActions.map(action => ({ ...action })),
+          recommended_offers: recommendedOffers.map(offer => ({ ...offer })),
           communication_priority: communicationPriority, analyzed_at: new Date().toISOString()
         });
       }
-      // Bulk upsert all results in two queries instead of 2N sequential writes
       if (rfmResults.length > 0) {
-        const { error: upsertError } = await supabase
-          .from('rfm_analysis')
-          .upsert(rfmResults, { onConflict: 'user_id,contact_id' });
-        if (upsertError) logger.error('Error upserting RFM:', upsertError);
-
-        const historyRows = rfmResults.map(r => ({
-          user_id: user.id, contact_id: r.contact_id, recency_score: r.recency_score,
-          frequency_score: r.frequency_score, monetary_score: r.monetary_score,
-          segment: r.segment, total_monetary_value: r.total_monetary_value,
-        }));
-        void (async () => { try { const { error: hErr } = await supabase.from('rfm_history').insert(historyRows as never); if (hErr) logger.error('rfm_history bulk insert error:', hErr); } catch (e) { logger.error('rfm_history bulk insert error:', e); } })();
+        const { data: saved, error } = await callExternalRpc<number>('persist_rfm_analysis', { _rows: rfmResults });
+        if (error) throw error;
+        if (saved !== rfmResults.length) throw new Error('Persistência RFM incompleta');
       }
       await queryClient.invalidateQueries({ queryKey: ['rfm-analysis'] });
       await queryClient.invalidateQueries({ queryKey: ['rfm-history'] });
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error running RFM analysis:', { error: msg });
+      throw error;
     } finally {
       setAnalyzing(false);
     }
