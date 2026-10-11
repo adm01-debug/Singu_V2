@@ -35,9 +35,11 @@ try {
     PGPASSWORD: connection.password ? decodeURIComponent(connection.password) : process.env.PGPASSWORD,
     PGSSLMODE: connection.searchParams.get('sslmode') ?? process.env.PGSSLMODE ?? 'prefer',
   };
-  client = new pg.Client({ connectionString: process.env.PROD_DB_URL });
+  console.log('Etapa: conexão TLS à origem.');
+  client = new pg.Client({ connectionString: process.env.PROD_DB_URL, connectionTimeoutMillis: 30_000 });
   await client.connect();
   stage = 'snapshot e contagens';
+  console.log('Etapa: snapshot e contagens.');
   await client.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
   const { rows: [{ snapshot }] } = await client.query('SELECT pg_export_snapshot() AS snapshot');
   const counts = [];
@@ -47,6 +49,7 @@ try {
   }
 
   stage = 'pg_dump';
+  console.log('Etapa: dump lógico.');
   dump = spawn('docker', [
     'exec', '--user', `${process.getuid()}:${process.getgid()}`,
     '-e', 'PGHOST', '-e', 'PGPORT', '-e', 'PGUSER', '-e', 'PGDATABASE', '-e', 'PGPASSWORD',

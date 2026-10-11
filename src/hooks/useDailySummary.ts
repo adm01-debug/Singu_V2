@@ -17,15 +17,19 @@ export interface DailySummary {
 
 export function useDailySummary(date?: string) {
   const { user } = useAuth();
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const parts = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
+    timeZone, year: 'numeric', month: '2-digit', day: '2-digit',
+  }).formatToParts(new Date()).map(({ type, value }) => [type, value]));
+  const targetDate = date || `${parts.year}-${parts.month}-${parts.day}`;
   return useQuery({
-    queryKey: ['daily-summary', date, user?.id],
+    queryKey: ['daily-summary', targetDate, user?.id, timeZone],
     enabled: !!user,
     queryFn: async () => {
       if (!user) throw new Error('Not authenticated');
-      const targetDate = date || new Date().toISOString().split('T')[0];
       const { data, error } = await callExternalRpc<DailySummary>(
         'get_daily_summary',
-        { p_date: targetDate }
+        { p_date: targetDate, p_timezone: timeZone }
       );
       if (error) throw error;
       return data;

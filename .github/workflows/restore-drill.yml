@@ -69,7 +69,7 @@ jobs:
           docker exec singu-drill pg_isready -h localhost -U supabase_admin -d postgres
 
           mkdir -m 700 "$GITHUB_WORKSPACE/.drill"
-          curl --fail --silent --show-error --location \
+          curl --fail --silent --show-error --location --connect-timeout 15 --max-time 60 \
             https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt \
             --output "$GITHUB_WORKSPACE/.drill/supabase-ca.crt"
           export NODE_EXTRA_CA_CERTS="$GITHUB_WORKSPACE/.drill/supabase-ca.crt"
