@@ -14,7 +14,8 @@ DECLARE
     'ensure_ai_gateway_metrics_partition','drop_old_ai_gateway_metrics_partitions',
     'record_rpc_perf_sample','cleanup_rpc_perf_samples',
     'evaluate_ai_gateway_alerts','auto_resolve_ai_gateway_alerts',
-    'set_rpc_plan_changed','capture_rpc_plan','capture_degraded_rpc_plans'
+    'set_rpc_plan_changed','capture_rpc_plan','capture_degraded_rpc_plans',
+    'rpc_plan_structure'
   ];
   -- cleanup_behavioral_regen_queue, publish_mtta_sla_breach_alert e compute_attribution
   -- são chamadas pelo frontend e checam admin/dono internamente; o contrato delas está
