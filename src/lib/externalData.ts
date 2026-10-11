@@ -49,6 +49,7 @@ async function getAccessToken(): Promise<string> {
 
 const EDGE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/external-data`;
 const ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const CANONICAL_RPCS = new Set(['persist_rfm_analysis']);
 
 const externalDbBreaker = getCircuitBreaker('external-db', {
   failureThreshold: 3,
@@ -57,28 +58,37 @@ const externalDbBreaker = getCircuitBreaker('external-db', {
 
 const isAbortError = (e: unknown) => e instanceof Error && e.name === 'AbortError';
 
-async function callExternalData(body: Record<string, unknown>, signal?: AbortSignal): Promise<Record<string, unknown>> {
+async function callExternalData(body: Record<string, unknown>, signal?: AbortSignal, canonicalRpc?: { functionName: string; params: Record<string, unknown> }): Promise<Record<string, unknown>> {
   return externalDbBreaker.call(async () => {
     const accessToken = await getAccessToken();
+    if (canonicalRpc && accessToken === ANON_KEY) throw new Error('Autenticação necessária para a RPC do banco');
+    const endpoint = canonicalRpc
+      ? new URL(`/rest/v1/rpc/${encodeURIComponent(canonicalRpc.functionName)}`, import.meta.env.VITE_SUPABASE_URL).href
+      : EDGE_URL;
 
-    const response = await fetch(EDGE_URL, {
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`,
         'apikey': ANON_KEY,
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(canonicalRpc ? canonicalRpc.params : body),
       signal,
     });
 
     if (!response.ok) {
       const errorText = await response.text();
+      if (canonicalRpc) throw new Error(`RPC do banco [${response.status}]: ${errorText}`);
       // 409 vem como JSON estruturado { error: "CONCURRENT_EDIT", entity, id, attemptedVersion, traceId }
       // Preserva o JSON cru na mensagem para o caller parsear (ver updateExternalDataWithVersion).
       throw new Error(`Edge function error [${response.status}]: ${errorText}`);
     }
 
+    if (canonicalRpc) {
+      const data: unknown = await response.json();
+      return { data };
+    }
     const result = await response.json();
     if (result?.error) {
       // Soft fallback from upstream gateway failures — degrade gracefully without tripping breaker
@@ -251,7 +261,8 @@ export async function callExternalRpc<T = unknown>(
   params: Record<string, unknown> = {}
 ): Promise<{ data: T | null; error: Error | null }> {
   try {
-    const result = await callExternalData({ action: 'rpc', functionName, params });
+    const canonicalRpc = CANONICAL_RPCS.has(functionName) ? { functionName, params } : undefined;
+    const result = await callExternalData({ action: 'rpc', functionName, params }, undefined, canonicalRpc);
     return { data: (result?.data as T) ?? null, error: null };
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';

@@ -36,6 +36,15 @@ ALTER TABLE public.rfm_analysis
   ADD COLUMN IF NOT EXISTS company_id uuid,
   ADD COLUMN IF NOT EXISTS segment_code text;
 ALTER TABLE public.rfm_analysis ALTER COLUMN company_id DROP NOT NULL;
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid = 'public.rfm_analysis'::regclass AND conname = 'rfm_analysis_entity_check') THEN
+    ALTER TABLE public.rfm_analysis ADD CONSTRAINT rfm_analysis_entity_check
+      CHECK (company_id IS NOT NULL OR contact_id IS NOT NULL) NOT VALID;
+  END IF;
+END;
+$$;
+ALTER TABLE public.rfm_analysis VALIDATE CONSTRAINT rfm_analysis_entity_check;
 UPDATE public.rfm_analysis SET segment_code = segment WHERE segment_code IS NULL;
 ALTER TABLE public.rfm_analysis ALTER COLUMN segment_code SET NOT NULL;
 
@@ -200,6 +209,7 @@ GRANT SELECT, INSERT ON TABLE public.rfm_history TO authenticated;
 -- ALTER TABLE public.csat_surveys ALTER COLUMN sent_at SET DEFAULT now();
 -- ALTER TABLE public.csat_surveys ALTER COLUMN sent_at SET NOT NULL;
 -- ALTER TABLE public.rfm_analysis ALTER COLUMN company_id SET NOT NULL;
+-- ALTER TABLE public.rfm_analysis DROP CONSTRAINT IF EXISTS rfm_analysis_entity_check;
 -- ALTER TABLE public.vak_analysis_history
 --   DROP COLUMN IF EXISTS is_validated, DROP COLUMN IF EXISTS user_feedback;
 -- ALTER TABLE public.metaprogram_analysis

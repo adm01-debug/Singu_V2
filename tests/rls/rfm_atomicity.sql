@@ -23,6 +23,7 @@ DO $$
 DECLARE
   uid uuid := current_setting('rls.rfm_owner')::uuid;
   cid uuid := current_setting('rls.rfm_contact')::uuid;
+  failed_field text;
   rows jsonb := jsonb_build_array(jsonb_build_object(
     'user_id', uid, 'contact_id', cid, 'recency_score', 5, 'frequency_score', 5,
     'monetary_score', 5, 'segment', 'champions', 'segment_code', 'champions',
@@ -30,6 +31,18 @@ DECLARE
     'average_order_value', 100, 'recommended_actions', '[]'::jsonb, 'recommended_offers', '[]'::jsonb
   ));
 BEGIN
+  BEGIN
+    INSERT INTO public.rfm_analysis (user_id, company_id, contact_id, segment, segment_code, recency_score, frequency_score, monetary_score)
+    VALUES (uid, NULL, NULL, 'champions', 'champions', 5, 5, 5);
+    RAISE EXCEPTION 'RFM aceita análise sem contato nem empresa';
+  EXCEPTION
+    WHEN check_violation THEN
+      GET STACKED DIAGNOSTICS failed_field = CONSTRAINT_NAME;
+      IF failed_field IS DISTINCT FROM 'rfm_analysis_entity_check' THEN RAISE; END IF;
+    WHEN not_null_violation THEN
+      GET STACKED DIAGNOSTICS failed_field = COLUMN_NAME;
+      IF failed_field IS DISTINCT FROM 'contact_id' THEN RAISE; END IF;
+  END;
   PERFORM set_config('rls.rfm_fail_history', 'true', true);
   BEGIN
     PERFORM public.persist_rfm_analysis(rows);
