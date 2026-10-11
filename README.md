@@ -126,7 +126,7 @@ Decisões técnicas fundamentais estão documentadas em [ADRs](docs/adr/README.m
 
 ## 🔐 Segurança
 
-- **RLS** versionado nas migrations; cobertura e políticas do banco remoto devem ser validadas pelo gate `test:rls`
+- **RLS** versionado nas migrations; cobertura e políticas do banco remoto devem ser validadas pelo gate `bash tests/rls/run.sh`
 - **RBAC** via tabela `user_roles` + função `has_role()` SECURITY DEFINER
 - **MFA/HIBP** dependem da configuração do projeto Supabase e não são inferidos pelo código
 - **Realtime** com políticas de canal escopadas por user ID
@@ -153,6 +153,21 @@ npm run test -- --coverage  # Com relatório de cobertura
 ```
 
 Cobertura inclui: lógica de negócio, validação de formulários, auditoria de filtros, integridade de dados, segurança, RLS, design system e voice AI.
+
+### Gate RLS com rollback
+
+`bash tests/rls/run.sh` usa as variáveis `PG*`, aplica apenas migrations posteriores
+ao ledger remoto e executa cada fixture dentro de uma transação revertida.
+Um advisory lock serializa os gates concorrentes. O preparo lexical mantém
+strings, comentários e blocos PL/pgSQL; remove apenas um wrapper transacional
+pareado. Migrations com outros controles de transação ou metacomandos psql
+são rejeitadas antes da execução.
+
+As fixtures aceitam `\echo`, `\set ON_ERROR_STOP on`, literais `test_*`,
+`\gset` com alias `rls_*`/`fixture_*` e condicionais `\if`/`\else`/`\endif`.
+Resultados de `\gset` recebem prefixo isolado para não alterar configurações
+do psql. `SKIP:` é reportado separadamente; qualquer falha retorna código não zero.
+Sem banco, valide o preparo com `node --test tests/rls/prepare-sql.node-test.mjs`.
 
 ## 🤝 Contribuindo
 
