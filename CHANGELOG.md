@@ -8,6 +8,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- Ambientes Supabase reconstruídos incluem telefones, emails e endereços de empresas com normalização, integridade referencial e acesso restrito ao dono ou administrador; o schema canônico existente é preservado. O perfil recebe o email do cadastro também no schema legado, evitando falha ao criar usuários.
 - Gerar uma nova próxima ação reabre a sugestão concluída e apaga os dados da conclusão anterior. Falha na consulta de métricas de concorrentes ocorre antes da gravação para evitar relatar uma operação concluída como erro. O mapa geolocaliza até 50 empresas por vez, pede continuação para as demais e interrompe a operação quando a tela é fechada. Marcadores acompanham inclusões, exclusões e alterações de coordenadas da carteira sem iniciar outro lote automático.
 - Históricos de empresa aceitam tipo/canal/data nulos sem inventar datas; consultas de segmentação/perfis dividem relações em lotes restritos ao usuário. Documentos privados removem o upload incompleto após falha e a contagem de destinatários só é gravada após concluir os lotes.
 - Inscrições em sequências salvam o contato e o contador na mesma transação e reconhecem tentativas repetidas; o banco exige que contato e sequência pertençam ao usuário. A busca conversacional filtra cidade/UF nas relações, e os alertas consultam contatos em lotes para evitar URLs excessivas. O mapa permite repetir geolocalizações não concluídas; o teste de webhook separa falhas HTTP de falhas de registro.
