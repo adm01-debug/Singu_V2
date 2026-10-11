@@ -1,50 +1,50 @@
-# Graph Report - chat-h389621  (2026-10-07)
+# Graph Report - chat-h389621  (2026-10-11)
 
 ## Corpus Check
-- 2782 files · ~1,613,519 words
+- 2786 files · ~1,620,394 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 15 file(s) not represented in the graph (top: (none) 5, .example 3, .lock 1)
 
 ## Summary
-- 17015 nodes · 27039 edges · 1939 communities (1023 shown, 916 thin omitted)
-- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 966 edges (avg confidence: 0.94)
+- 17072 nodes · 27119 edges · 1934 communities (1012 shown, 922 thin omitted)
+- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 970 edges (avg confidence: 0.94)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ef7eea38`
+- Built from commit: `9a0e0198`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - @tanstack/react-query
-- react
+- ContactBehaviorExtended.tsx
 - react-router-dom
 - ref_hooks
 - DealDetailDrawer.tsx
 - date-fns
-- Analytics.tsx
-- ref_integrations
 - ref_components
+- ref_integrations
+- react-helmet-async
 - 09_triggers.sql
 - AppLayout.tsx
 - ref_pages
-- forecastSimulation.ts
+- rfm-analyzer/index.ts
 - recharts
 - ContactBehavioralTab.tsx
-- CompatibilityScore.tsx
+- usePreContactBriefing.ts
 - framer-motion
 - dependencies
 - useAuth
-- _shared/auth.ts
+- ref_types
 - 02_tables.sql
-- ref_lib
+- neuromarketing/index.ts
 - fetch-utils.ts
 - package.json
 - ContactOverviewTab.tsx
 - 03_indexes.sql
 - copy-objects.ts
 - auth.users
-- PhonesCard.tsx
+- ContactDataTab.tsx
 - prontidaoWeightsHealth.ts
 - carnegieTalkRatio.ts
 - EntityMonthlyTimeline.tsx
@@ -53,8 +53,8 @@
 - 20261006140000_ai_gateway_observability.sql
 - leadScoring.ts
 - vitest
-- rateLimit
-- ObjectionsSpotlight.tsx
+- _shared/auth.ts
+- email-finder/index.ts
 - CompanyInsightsTab.tsx
 - micro-interactions/index.ts
 - useStakeholderAnalysis.ts
@@ -65,12 +65,12 @@
 - ReportsTab.tsx
 - CopywritingSalesTools.tsx
 - StakeholderMap.tsx
-- ContactBehaviorExtended.tsx
+- useProactiveIntelligence.ts
 - 📖 Dicionário de Dados — SINGU CRM
-- design-system-audit.test.ts
+- ref_path
 - useVoiceAgent.ts
 - ref_https
-- useFicha360Domain.ts
+- useFicha360.ts
 - PageSkeletons.tsx
 - carnegie.ts
 - CompanyForm.tsx
@@ -97,7 +97,7 @@
 - AppProviders.tsx
 - DashboardCharts.tsx
 - carnegieVulnerabilityYesLadderInterest.test.ts
-- useCompanyCommercial.ts
+- lucide-react
 - 20260417110650_9365a2d8-59c4-4df0-ae02-81957728485f.sql
 - devDependencies
 - 20260720000005_bd2_company_contact_ownership_checks.sql
@@ -106,9 +106,9 @@
 - useCustomerSuccess.ts
 - useInteractionsAdvancedFilter.ts
 - tab-utils.ts
-- PessoaForm.tsx
+- 20261008120000_fix_frontend_rpcs_canonical.sql
 - ConversationAnalysisCard.tsx
-- DISCTrainingMode.tsx
+- DISCCompatibilityAlerts.tsx
 - useTriggerHistory.ts
 - useReportsAnalytics.ts
 - evolution-bitrix-connector/index.ts
@@ -116,10 +116,10 @@
 - nlp-advanced.ts
 - rodizio.ts
 - 20260719000002_add_missing_performance_indexes.sql
-- company-form-exhaustive.test.tsx
-- CelebrationProvider.tsx
-- ux-rodada-m-federacao-dx.md
-- LifeEventsTab.tsx
+- CarnegieDashboard.tsx
+- CompanyProfileCard.tsx
+- PessoaForm.tsx
+- ContactIntelligenceTab.tsx
 - useFicha360FilterFavorites.ts
 - useFicha360PreferencesSync.ts
 - compilerOptions
@@ -128,7 +128,7 @@
 - LuxIntelligencePanel.tsx
 - 20260924181919_rodizio_bloco2_motor.sql
 - MapaEmpresas.tsx
-- IncomingWebhookCard.tsx
+- IncomingWebhookFormDialog.tsx
 - lead-scoring/LeadScoreCard.tsx
 - masked-input.tsx
 - useCompanyIntelligence.ts
@@ -143,7 +143,7 @@
 - 20260111130846_783060ff-715f-4433-b3e4-1c0ef5409533.sql
 - playwright_report_trace_assets_defaultsettingsview_ds6cboo0_h
 - feedback/index.ts
-- ✅ Resolvidos nesta rodada
+- 3. Riscos estruturais, por gravidade
 - ObjectionExamplesModal.tsx
 - usePlaybooks.ts
 - extractExcerpts.ts
@@ -157,7 +157,7 @@
 - EmailBuilder.tsx
 - Ficha360FilterPanel.tsx
 - WhyScoreDrawer.tsx
-- SentimentChartTooltip.tsx
+- OfferSuggestionsElite.tsx
 - useEntityBookmarks.ts
 - 🔍 AUDITORIA EXAUSTIVA — SINGU CRM
 - useLeadScore.ts
@@ -172,20 +172,20 @@
 - class-variance-authority
 - IntelStatusBar.tsx
 - PWAComponents.tsx
-- PortfolioContactCard.tsx
-- ContactDataTab.tsx
+- useBehaviorAlerts.ts
+- TriggerAnalyticsTabs.tsx
 - carnegieCriticismEmpathy.test.ts
 - carnegieEncouragementFaceSaving.test.ts
 - Tabela de evidências
 - 20260522142751_81b336f5-f4c5-4bae-af01-e2d61e04a945.sql
 - audit_trigger_fn
 - 20260417004129_55991427-8b13-48b9-a9ac-702dec46887e.sql
-- client-notifications/index.ts
-- NLPEvolutionCharts.tsx
+- tracedLogger
+- NLPEvolutionTimeline.tsx
 - RFMSubComponents.tsx
 - carnegieIdentityOwnership.test.ts
 - useCompanyRelatedData.ts
-- useContactSegmentation.ts
+- ✅ Resolvidos nesta rodada
 - 📋 SINGU CRM — Levantamento Completo de Funcionalidades
 - CircuitBreaker
 - Tabela de evidências
@@ -198,12 +198,12 @@
 - scripts
 - check-edge-cors.test.mjs
 - interactions
-- Ficha360.tsx
+- ProntidaoTrendChart.tsx
 - CompanyInteractionsTab.tsx
 - EvidenceDrillDownSheet.tsx
-- SentimentDistributionChart.tsx
-- ThemeExamplesDrawer.tsx
-- lead-score/LeadScoreCard.tsx
+- VoiceSearchOverlay.tsx
+- useAiGatewayCriticalToast.ts
+- OnboardingWizard.tsx
 - ThemeProvider.tsx
 - use-toast.ts
 - useChannelPerformanceMatrix.ts
@@ -212,21 +212,21 @@
 - proximoPassoDefaults.ts
 - InsightsContent.tsx
 - company-filters-audit.test.ts
-- useTasks.ts
+- replay.ts
 - 20260111183305_a7554561-ed71-4a77-a1b5-2ad2436f5356.sql
 - 20260721000071_fix_secdef_crlf_unguarded.sql
-- useTelemetryExport.ts
+- StrategicNextStepsCard.tsx
 - pool-saturation.js
 - dual-write-diverge.ts
-- ApproachRecommendationPanel.tsx
+- 4.4 Componentes de Analytics
 - DISCAnalyticsPanel.tsx
-- TimelineGroupCard.tsx
+- NavigationStackContext.tsx
 - PresetFiltersDiff.tsx
 - discAdvancedData.ts
-- Contatos.tsx
+- useSemanticSearch.ts
 - useContactBehavior.ts
 - SINGU CRM — Handoff Document
-- errorReporting.ts
+- SentimentChartTooltip.tsx
 - 20260416181618_cf783015-8b5c-48a9-8de2-acbf3d4a9fc0.sql
 - 20260720000023_create_phantom_tables.sql
 - public.multiplix_search_audience
@@ -237,11 +237,11 @@
 - reset-passwords.ts
 - ConnectionCard.tsx
 - Estado — Infraestrutura, CI, Testes e Documentação
-- 11. Nove páginas do escopo renderizam sem `AppLayout`
+- ObjectionsSpotlight.tsx
 - Verificação adversarial — camada de dados
 - useContacts.ts
 - PreContactBriefing.tsx
-- CompanyProfileCard.tsx
+- external-data-card.tsx
 - formatters.ts
 - rpcPlanDiff.ts
 - InsightFeedbackAnalytics.tsx
@@ -255,24 +255,24 @@
 - Fase 1 — Auditoria estática (findings)
 - password-migration-reset.tsx
 - useBulkImport.ts
-- ContactIntelligenceTab.tsx
+- Calendario.tsx
 - rls-parity.ts
 - useApproachRecommendation.ts
-- lucide-react
-- WeeklyReportPanel.tsx
+- ref_lib
+- PortfolioHealthDashboard.tsx
 - ContextualLoader.tsx
 - ErrorBoundary.tsx
 - RelatoriosFixosBar.tsx
 - Hooks (`src/hooks/`)
 - 1. A Missão Global dividida em 30 Etapas
-- 🧠 MÓDULO 2: 10 FRAMEWORKS DE COMPORTAMENTO HUMANO
+- Tabela de evidências
 - Guia de Contribuição — SINGU CRM
 - 🎨 ANÁLISE DE PRODUCT DESIGN STRATEGY - RelateIQ CRM
-- useAiAssistant.ts
+- EmptyStateIllustrations.tsx
 - 📋 Relatório de Análise QA - RelateIQ
 - useEnrichmentSuite.ts
-- Calendario.tsx
-- sheet.tsx
+- PortfolioContactCard.tsx
+- command.tsx
 - intelSnapshot.ts
 - interactionTags.ts
 - suggestPresetName.ts
@@ -291,24 +291,24 @@
 - toast.tsx
 - public.get_deal_room_by_token
 - check-rls-baseline.mjs
-- email-finder/index.ts
+- Contatos.tsx
 - 🛡️ Security Hardening Phase 3 — Final Report
 - ImportantDatesCalendar.tsx
-- ProfileBasedSuggestions.tsx
-- AdvancedSearchBar.tsx
+- Intelligence Hub (`/intelligence`)
+- CanaisQuickFilter.tsx
 - AutomationWizard.tsx
-- useProactiveIntelligence.ts
+- SentimentDistributionChart.tsx
 - analyticsData.ts
-- lgpd-snapshot.ts
+- InteractionForm.tsx
 - closingScore.ts
-- useAutomationRules.ts
-- AdminConexoesLogs.tsx
+- ThemeExamplesDrawer.tsx
+- Falsos positivos encontrados (o que **NÃO** pode ser apagado)
 - useTouchpointSequences.ts
 - useYourDay.ts
 - canaisInteracao.ts
 - rateLimiter.ts
-- WebhookSnippetsSheet.tsx
-- telemetry-helpers.test.ts
+- ADR-016 — Federação, Schema Discovery & Developer Experience (Rodada M)
+- lead-score/LeadScoreCard.tsx
 - 20260111162422_931d8ea9-50f0-4793-b167-51ddb862bc64.sql
 - 20260416234628_b8308aff-93ad-4104-a929-e8c91d30137c.sql
 - 20260417105530_03a1c9e4-218e-4962-a9e5-145c3627b96c.sql
@@ -321,20 +321,20 @@
 - public.rodizio_reverter_execucao
 - Achados
 - alert-dialog.tsx
-- Teste manual: Sincronização URL → UI dos filtros da Ficha 360
+- useFicha360Filters.ts
 - RPCs Disponíveis (Banco Externo)
 - run-all.sh
-- O que está BOM (auditado)
-- useChurnRisk.ts
-- OfferSuggestionsElite.tsx
-- error-budget/index.ts
+- ProviderErrorBoundary
+- Pipeline.tsx
+- AnalyticsShared.tsx
+- disc-badge.tsx
 - responsive-dialog.tsx
 - public.get_contact_sidebar_by_phone
-- IntelHealthPanel.tsx
+- AskTab.tsx
 - carnegieWarmth.ts
 - useScoreAutomations.ts
 - useContactDetail.ts
-- AdminSidebar.tsx
+- AdminDashboard.tsx
 - useStakeholderSimulator.ts
 - useBehavioralProfilesList.ts
 - useCompanyViews.ts
@@ -344,15 +344,15 @@
 - useEntityRelationships.ts
 - useErpData.ts
 - useNLPAnalyticsData.ts
-- useInteractionsRpc.ts
-- command.tsx
+- Fixed
+- AccountChurnPredictionPanel.tsx
 - deal-risk-constants.ts
 - intelExportUniversal.ts
 - sortInteractions.ts
-- BehavioralRegenAudit.tsx
+- TimelineGroupCard.tsx
 - 20261006130000_frontend_rpcs_authenticated.sql
-- useKeyboardShortcutsEnhanced.ts
-- badge.tsx
+- useKeyboardShortcutsEnhanced
+- ContactForm.tsx
 - lead-scorer/index.ts
 - 20260305204447_d9a65b36-83ab-434e-9699-aac2341f11e1.sql
 - 20260416181200_6d3557ca-038e-4e4c-b64e-bc3a706f929f.sql
@@ -366,7 +366,7 @@
 - log_behavioral_change
 - 20260723154109_ad0a12c4-62a1-4a6a-928e-686b828d2fe1.sql
 - 20260509180917_b4306156-1d1c-4efd-b41f-571c86e0d338.sql
-- useFicha360.ts
+- PlaybookSectionRenderer.tsx
 - fuzzyDedup.ts
 - ref_node_https
 - select.tsx
@@ -376,49 +376,49 @@
 - order-guard.ts
 - public.whatsapp_messages
 - AiGatewayHealthCard.tsx
-- IncomingWebhookFormDialog.tsx
+- AnomaliesWidget.tsx
 - CompanyCommercialTab.tsx
-- 4. Resiliência
-- ObjectionsTrendChart.tsx
+- AIEmailComposer.tsx
+- CommunicationTrainingMode.tsx
 - 📱 MÓDULO 1: PÁGINAS PRINCIPAIS
-- useAIWritingAssistant.ts
+- useIntelTelemetry.ts
 - 📊 CATÁLOGO DE FUNÇÕES (400 total)
-- useValidationQueue.ts
+- InteracoesPresetsMenu.tsx
 - Migração de Dados — Runbook (psql + \COPY)
-- triggersAdvancedData.ts
+- ProfileBasedSuggestions.tsx
 - Migração de Storage — Runbook (Supabase → Supabase)
 - useCompanyProfileAnalytics.ts
 - communicationTrainingData.ts
-- carnegieAppreciation.ts
-- TemplateHistoryByProfile.tsx
+- 🧠 MÓDULO 2: 10 FRAMEWORKS DE COMPORTAMENTO HUMANO
+- WeeklyReportPanel.tsx
 - sleightOfMouth.ts
 - triggerConflictsMatrix.ts
 - useAiGatewayHealth.ts
 - useBestTimeHeatmap.ts
-- Tabela de evidências
+- 3.4 Hooks de Analytics
 - useContactTagsHistory.ts
 - useDealForecastConfidence.ts
 - useEntity360.ts
-- useFicha360ConversationSummary.ts
+- ReminderCard.tsx
 - SINGU CRM — Guia de Onboarding para Desenvolvedores
 - useNextPagePrefetch.ts
 - useProximoPassoFeedback.ts
-- Auth.tsx
+- useAppliedResponses.ts
 - channelCountsCache.ts
 - filterProximosPassos.ts
 - excerptWindow.ts
 - keyboardShortcutRegistry.ts
-- prontidaoTrendMilestones.ts
+- useAutomationRules.ts
 - Validação da auditoria — o que quebrou quando testei meu próprio trabalho
 - rpcChurn.ts
 - Inbox.tsx
 - useContactRelationalData.ts
-- InteractionForm.tsx
+- Achados
 - external-data-telemetry.test.ts
 - behavior.ts
 - mbti.ts
-- ref_npm_supabase
-- SINGU CRM — Arquitetura Consolidada
+- rateLimit
+- CognitiveBiasesSubComponents.tsx
 - 20260411212046_c6a8c367-17de-4bf5-b40f-9c435f0288f4.sql
 - 20260416193918_2ab4e7fb-e095-44c9-aad7-00fcff26517d.sql
 - 20260420162044_c08b185e-609a-470a-8546-5c93290e3b34.sql
@@ -439,11 +439,11 @@
 - chunk-apply.js
 - public.interactions
 - row-diff.ts
-- Drift: repo × tipos gerados — quantificado
+- CategoryColumn.tsx
 - Achados
-- InboundActivityHeatmapCard.tsx
+- ObjectionsTrendChart.tsx
 - 3.8 Hooks de UX/UI
-- Checklist aplicado em todas as superfícies críticas
+- AriaLiveRegion.tsx
 - Estratégia de Backup e Disaster Recovery
 - DailyBriefingCard.tsx
 - useHapticFeedback.ts
@@ -451,22 +451,22 @@
 - useBulkRevalidate.ts
 - 📊 Resumo Executivo - v19.0
 - OnboardingTour.tsx
-- Categorias
-- useAskCrm.ts
+- stat-card.tsx
+- carnegieAppreciation.ts
 - SequenceFormDialog.tsx
-- disc-badge.tsx
-- useUnifiedNotifications.ts
-- DensityContext.tsx
-- RelativesSection.tsx
+- priority-indicator.tsx
+- radio-group.tsx
+- triggersAdvancedData.ts
+- DashboardErrorBoundary
 - AdminKnowledgeExport.tsx
 - NavigationPatterns.tsx
 - processTranscript.ts
 - useChannelHistory.ts
 - Arquitetura do SINGU CRM
-- AccountHierarchyTree.tsx
-- useFicha360Filters.ts
+- BehavioralRegenAudit.tsx
+- Auth.tsx
 - domain/validationSchemas.ts
-- useEmotionalIntelligence.ts
+- CommunicationCoherencePanel.tsx
 - marketing-automation-suite.md
 - sonner
 - useUnifiedHistory.ts
@@ -475,8 +475,8 @@
 - intelHealth.ts
 - useSmsCampaigns.ts
 - ☁️ MÓDULO 5: EDGE FUNCTIONS (12)
-- table.tsx
-- replay.ts
+- Configuracoes.tsx
+- AdminTelemetria.tsx
 - Migração das Edge Functions — Runbook
 - emotional-intelligence.ts
 - public.score_history
@@ -510,16 +510,16 @@
 - CadenceRulesConfig.tsx
 - 📊 ANÁLISE COMPLETA DO SISTEMA RelateIQ CRM
 - useWhatsAppImport.ts
-- useDailyKpis.test.tsx
+- EmpresaDetalhe.tsx
 - ProntidaoFactorBreakdownChart.tsx
 - ErrorState.tsx
-- CategoryColumn.tsx
-- Achados
+- useConversationalSearch.ts
+- telemetry-helpers.test.ts
 - 📊 Análise Exaustiva do Banco de Dados - RelateIQ
-- auth-flow.test.ts
+- useNetworkGraph.ts
 - 2. 👤 Gestão de Contatos (Contacts)
 - 20261005230000_fix_contacts_companies_write_triggers.sql
-- useRodizioOndas.ts
+- ChannelShortcutsHelpOverlay.tsx
 - Achados
 - PrefetchLink.tsx
 - Postmortem — Migração Origem para Destino
@@ -532,37 +532,35 @@
 - Rodada 29/10 — Onda C: Polimento ESLint Runtime & Ratchet CI
 - triggerBundles.ts
 - StatusIndicators.tsx
-- stat-card.tsx
+- Drift: repo × tipos gerados — quantificado
 - telemetry-data-integrity.test.ts
-- 3.4 Hooks de Analytics
-- view-mode-switcher.tsx
+- AskCrmChat.tsx
+- BulkRevalidateCard.tsx
 - useDedupEngine.ts
 - useExternalLookup.ts
 - ADR-014 — Connections Observability & Resilience
 - useIncomingWebhooks.ts
 - 🔍 RELATÓRIO DE AUDITORIA ENTERPRISE — SINGU CRM
-- ContactEmailThreadsSection.tsx
-- NavigationStackContext.tsx
+- InboundActivityHeatmapCard.tsx
+- UnifiedNotificationsBell.tsx
 - AgendarReuniaoForm.tsx
 - SINGU CRM — Disaster Recovery Plan
 - Estado — Camada de Dados e Backend
 - Migração DDL — Runbook
-- useSemanticSearch.ts
+- RelationshipKPIsDashboard.tsx
 - Post-Mortem — Indisponibilidade parcial do salvamento de contatos (external-data)
 - useSearchPresets.ts
-- nlpAdvancedData.ts
-- Tabela de evidências
+- useIntelPresentation.ts
+- react
 - Post-Mortem — {Título do Incidente}
 - Eliminação de `as any` - 12 Correções
 - Signing Key Rotation Runbook
-- Empresas.tsx
-- computeIsolatedFilterCounts.ts
 - form.tsx
 - useDISCAutoAnalysis.ts
-- useLuxIntelligence.ts
+- ConnectionFormDialog.tsx
 - big-five.ts
 - cognitive-biases.ts
-- 3. Cenários complementares
+- IntentScoreBadge.tsx
 - 20260111191156_64673555-e916-4e23-8303-a4c31c5fe62a.sql
 - 20260317190144_a4e52de8-ce69-4a34-b2aa-3a81dd6305e1.sql
 - 20260326234731_31c04988-7675-4baa-a736-d18d9911efeb.sql
@@ -594,7 +592,7 @@
 - 20260511190139_affdb8bf-798b-4f2b-bf9c-f8c9898717e0.sql
 - 20260715190421_5c51ba03-2b4a-4802-9896-a835854471e8.sql
 - 20260511191129_8b0d76c4-d9ed-4a6a-9a44-a23f1f423135.sql
-- ConsolidatedHealthPanel.tsx
+- useLandingPages.ts
 - apply-functions.js
 - apply-rls.js
 - public.score_history
@@ -602,52 +600,52 @@
 - public.vak_analysis_history
 - post-cutover-watch.sh
 - row-diff-deep.ts
-- TicketDetailDrawer.tsx
-- requireCronSecret
+- BackButton.tsx
+- withAuth
 - severity
 - RpcPlanDiffDialog.tsx
-- lovable/index.ts
+- CompatibilityScore.tsx
 - 🔍 RELATÓRIO DE AUDITORIA ENTERPRISE — SINGU CRM
-- RecentChannelCombos.tsx
-- DesignSystem.tsx
+- table.tsx
+- neuromarketingData.ts
 - adr/README.md
 - ProximosPassosCard.tsx
-- ADR-012 — Rodada I: Polimento Final & Hardening Profundo
+- BulkActionsBar.tsx
 - Decisão
 - ADR-018: Hardening — Strict Mode, Feature Flags e Optimistic Locking
-- ai-writing-assistant/index.ts
-- contact-detail/SentimentTrendChart.tsx
-- check-health-alerts/index.ts
+- useAIWritingAssistant.ts
+- useRodizioOndas.ts
+- prontidaoTrendMilestones.ts
 - Passo a passo
 - ContextualHelp.tsx
 - NotificationGroup.tsx
 - RelationshipStatsPanel.tsx
 - useCrossReference.ts
 - 🔴 Oportunidades Críticas
-- useEvidenceForLabel.ts
-- useDealVelocity.ts
+- design-system-audit.test.ts
+- AccountHierarchyTree.tsx
 - TopContactsCard.tsx
-- ReminderCard.tsx
-- AnalyticsShared.tsx
+- ProximaAcaoCTA.tsx
+- TicketDetailDrawer.tsx
 - emotionalIntelligenceData.ts
 - FrequenciaContatoCard.tsx
 - DealConfidenceBadge.tsx
 - SINGU CRM — Dicionário de Dados
-- useInsightFeedback.ts
+- DensityContext.tsx
 - Detalhamento por Categoria
 - channelPersistence.config.ts
-- Next-Best-Action (NBA) por Contato
+- copywritingAdvancedData.ts
 - Passo-a-passo (janela de cutover)
 - useVoiceAIHealth.ts
 - Reset de Senhas Pós-Migração — Runbook
-- AriaLiveRegion.tsx
+- nlpAdvancedData.ts
 - 🔴 Oportunidades Críticas
-- UltimasInteracoesCard.tsx
+- AdvancedSearchBar.tsx
 - 🔴 Oportunidades Críticas
 - Achados relevantes
-- scopedCorsHeaders
-- useEmailThreadSummary.ts
-- useSavedViews.ts
+- triggerTemplatesMetaprograms.ts
+- forecastSimulation.ts
+- DesignSystem.tsx
 - 🔴 Oportunidades Críticas
 - 🔴 Oportunidades Críticas
 - 🔴 Oportunidades Críticas
@@ -655,14 +653,14 @@
 - 🔴 Oportunidades Críticas
 - ForecastConfidencePanel.tsx
 - 🔴 Oportunidades Críticas
-- Reconstruibilidade do ambiente a partir do repositório
+- Empresas.tsx
 - 🔴 Oportunidades Críticas
 - 🔴 Oportunidades Críticas
 - providerGuard.ts
 - secretRotation.ts
-- ChannelShortcutsHelpOverlay.tsx
+- AdminConexoesLogs.tsx
 - 🔴 Oportunidades Críticas
-- useNetworkGraph.ts
+- sequence-processor/index.ts
 - Estado — Marketing, Campanhas e Automação
 - public.vak_analysis_history
 - 20260111024043_59300762-e425-469a-9e34-35f8ba7ca1e3.sql
@@ -742,22 +740,22 @@
 - check-bundle-size.mjs
 - RPC `get_contact_sidebar_by_phone(p_phone text)`
 - 🛠️ Melhorias Implementadas (Rodada Final)
-- priority-indicator.tsx
-- BehavioralRegenAlertsTrend.tsx
+- TouchpointSequenceCard.tsx
+- lovable/index.ts
 - useSmartNotifications.ts
 - Arquitetura
 - Lead Scoring Server-Side
 - Entregáveis
-- InsightFeedbackTrendChart.tsx
+- WhatsNewModal.tsx
 - Rodada 30/10 — Onda D: Zero-Warning Ratchet Final
-- TelemetryCharts.tsx
-- copywritingData.ts
-- BackButton.tsx
-- CopiarLinkFiltrosButton.tsx
-- neuromarketingData.ts
-- ProximosPassosFiltersBar.tsx
+- UltimasInteracoesCard.tsx
+- AdvancedFilters.tsx
+- InlineEdit.tsx
 - carnegieNobleCauses.ts
-- dealState.ts
+- triggersExtendedData.ts
+- ProximosPassosFiltersBar.tsx
+- useKeyboardShortcutsEnhanced.ts
+- zod
 - README.md
 - ADR-009: Rate Limiting em Múltiplas Camadas
 - DR Drills & Game Days — Índice
@@ -769,38 +767,38 @@
 - Testes E2E (Playwright)
 - nlpTrainingScenarios.ts
 - 5. 🧬 Módulo PNL/NLP Enterprise
-- useReducedMotion.ts
+- useDocumentTemplates.ts
 - Singu_V2 — Regras da Casa (Hermes) — suplemento
-- useTerritoryOptimization.ts
+- useSavedViews.ts
 - intent-data-module.md
 - useEmailPipelineHealth.ts
-- useTimelineByEntity.ts
+- Lead Score Threshold Automations + Behavioral Bridge
 - useEntityNotes.ts
-- logger.ts
-- useEnrichSocialProfiles.ts
-- useRecentlyViewed.ts
-- ProximaAcaoCTA.tsx
-- AdminFieldMapping.tsx
+- computeIsolatedFilterCounts.ts
+- architecture-compliance.test.ts
+- useFicha360DeeplinkToast.ts
+- Reconstruibilidade do ambiente a partir do repositório
+- useSequences.ts
 - Rodada 33/10 — Onda G Bucket B (parcial): DEFINER → INVOKER
-- 27. 📊 Dashboard — ✅ IMPLEMENTADO
-- 2. Roteiro principal (caminho feliz)
-- useDuplicateContacts.ts
-- searchable-select.tsx
+- SortChips.tsx
+- B1 — "Marketing/Automação é a dimensão mais frágil: apenas 6 de 38 funcionalidades ✅ (16%)"
 - AuditDiffViewer.tsx
-- progress.tsx
+- searchable-select.tsx
+- AccountPortfolioCard.tsx
+- DocumentsPanel.tsx
 - ADR-022 — Backend Linter Baseline Ratchet
-- AutomationTemplates.tsx
-- Intelligence Hub (`/intelligence`)
+- FavoritosFiltrosMenu.tsx
+- crossRefInsights.ts
 - ipMasking.ts
 - requestId.ts
 - Evidência — nenhuma camada injeta o header
 - Chaos Drill Runbook
 - sortArray
-- CompanyGrouping.tsx
-- triggerTemplatesMetaprograms.ts
+- HistoricoTagsCard.tsx
+- RecentChannelCombos.tsx
 - 📊 OUTRAS TABELAS
 - 🧠 NLP - Programação Neurolinguística
-- EngagementScoreWidget.tsx
+- relationship-score.tsx
 - 20260111010914_d0b0ab7c-31d9-4a05-99c5-bbd77320bdd8.sql
 - 20260111182124_be853165-a33d-4677-93dd-3ea9ebd15b45.sql
 - 20260317195052_91a69f5c-0ce8-4b32-be8d-cf6d9ccb9151.sql
@@ -833,9 +831,9 @@
 - 20260421115417_8822bf70-0a05-4ea5-afe2-8fc7b2e4af45.sql
 - ProximoPassoQuickForm.tsx
 - 🧪 TRIGGERS - Gatilhos Mentais
-- ScoreHistoryChart.tsx
-- useRestoreEntity.ts
-- ConversationAnalysesTable.tsx
+- useDeviceDetection.ts
+- errorReporting.ts
+- useEmailThreadSummary.ts
 - dry-run.sh
 - public.behavioral_insight_feedback
 - public.churn_risk_scores
@@ -869,13 +867,13 @@
 - restore-drill.sh
 - export-data.sh
 - rollback.sh script
-- DocumentsPanel.tsx
+- useEnrichSocialProfiles.ts
 - Auditoria SECURITY DEFINER — Rodada 49/10
 - 💰 Error Budget Policy
 - 📊 Monitoramento, Tracing & SLOs
 - forecasting-revenue-intelligence.md
 - revops-dashboard.md
-- ActivityTimeline.tsx
+- [2.7.4] - 2026-04-20 — Rodada S: Optimistic Locking End-to-End
 - Rodada 13/10 — Excelência Sustentada
 - Rodada 27/10 — QA Exaustivo & Hardening Funcional
 - Rodada 31/10 — Onda E: Global Zero-Warning Ratchet
@@ -885,9 +883,9 @@
 - useSentimentAnnotations.ts
 - CopyScriptMenu.tsx
 - ProximosPassosPresets.tsx
-- IntelBookmarksNotesBadge.tsx
-- 17. 🔔 Sistema de Alertas
-- MultiDiffPanel.tsx
+- 🎨 MÓDULO 8: DESIGN SYSTEM
+- SINGU CRM — Edge Functions API Reference
+- e2e-regression-suite.test.ts
 - ADR-008: Logger Estruturado com Supressão em Produção
 - ADR-010: Validação com Zod em Dupla Camada
 - ADR 019 — Observabilidade Externa e Alerting (Rodada 26/10)
@@ -895,7 +893,7 @@
 - anchorTrackingData.ts
 - exporterConfigs.ts
 - ADR-021 — Ratchet Global Zero-Warning (fora de `src/`)
-- ActivityHeatmapChart.tsx
+- RpcPerfCard.tsx
 - Estruturas Complexas
 - 👤 CORE - Entidades Principais
 - 🎯 DISC - Análise Comportamental
@@ -903,7 +901,7 @@
 - useBehavioralProfileVersions.ts
 - brazilianStates.ts
 - errorMessages.ts
-- QA Findings — Rodada 27/10
+- NLPAnalysisCard.tsx
 - 20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql
 - 20260111011309_3cf6eaa0-1797-40c2-88e3-ecf1283452bd.sql
 - 20260111014845_9ce8adb5-376f-4e58-aa9e-da013720eb79.sql
@@ -944,7 +942,7 @@
 - public.audit_log_2026_10
 - public.audit_log_2026_11
 - public.audit_log_default
-- relationship-score.tsx
+- ChannelPreferencesCard.tsx
 - rotate-jwt.sh
 - lag-watch.sh
 - inject.sh
@@ -1022,11 +1020,11 @@
 - log
 - check-runbook-coverage.sh
 - Graphify
-- ActiveFiltersBar.onAfterRemove.test.tsx
+- MeetingMode.tsx
 - neuroTrainingQuestions.ts
 - stateElicitationData.ts
 - ⚡ EXPLAIN ANALYZE — Top Core Queries
-- WinLossInsightCard.tsx
+- DailySummaryWidget.tsx
 - fileValidation.ts
 - intelExport.ts
 - jaccard.ts
@@ -1088,7 +1086,7 @@
 - on_disc_analysis_change
 - on_interaction_change
 - on_reframing_change
-- ReportResultView.tsx
+- MilestoneKanban.tsx
 - trg_record_family_history
 - tr_contact_family_history_versioning
 - export-identities.sh
@@ -1197,56 +1195,56 @@
 - 20260415123115_30dcc732-370f-4502-9f70-69eb4b3c43bb.sql
 - 20260712223208_00845b35-c2fa-4378-b2e8-2649a03c4c92.sql
 - useMarkObjectionHandled.ts
-- nlpAnalyticsConstants.ts
-- useStakeholderAlerts.ts
+- AplicarFavoritoCompartilhadoDialog.tsx
+- ReportBuilder.tsx
 - AdminSchemaDrift.tsx
-- StatusPage.tsx
-- 🎨 MÓDULO 8: DESIGN SYSTEM
-- FavoritosFiltrosMenu.tsx
-- SINGU CRM — Edge Functions API Reference
+- useBehavioralProfile.ts
+- CompanyAddressesForm.tsx
+- CompanyPhonesForm.tsx
+- DateRangePopover.tsx
 - useClosingScoreRanking.ts
 - usePortfolioHealth.ts
-- Plano — Estado atual: 10/10 sustentado
+- ViewModeChips.tsx
+- ActivityHeatmapChart.tsx
+- Header.tsx
+- DealRiskDrawer.tsx
+- FloatingQuickActions.tsx
+- ReportResultView.tsx
+- useRecentlyViewed.ts
+- Intelligence.tsx
+- aiGatewayLogger.ts
+- voice-system-exhaustive.test.ts
+- [2.7.1] - 2026-04-20 — Rodada P: Re-auditoria & Fechamento 10/10
+- GraphLegend.tsx
+- DirecaoQuickFilter.tsx
+- SchemaDiscoveryCard.tsx
 - [2.7.3] - 2026-04-20 — Rodada R: Tracing nas Edge Functions, Split Sidebar, ESLint warn
+- 🔒 MÓDULO 11: SEGURANÇA
+- FeatureSpotlight.tsx
+- 📊 MÓDULO 7: INTEGRAÇÕES
 - Tabelas sem RLS / sem política
 - Contradições com a documentação existente
-- ChannelPreferencesCard.tsx
-- TimeHeatmapCard.tsx
-- MeetingMode.tsx
-- DataGrid.tsx
-- ExportFormatMenu.tsx
-- voice-system-exhaustive.test.ts
-- DealRiskDrawer.tsx
-- GraphLegend.tsx
-- useAccountChurnPrediction.ts
-- SchemaDiscoveryCard.tsx
-- 7. ✍️ Copywriting & Sales Tools (Enterprise)
-- useAppliedResponses.ts
-- useBestTimeToContact.ts
-- useClientHealth.ts
-- useContactValidationStatus.ts
-- CompanyAddressesForm.tsx
-- CompanySocialMediaForm.tsx
-- useNeuromarketing.ts
-- usePurchasePatterns.ts
-- entityDiff.ts
-- Intelligence.tsx
-- telemetry-charts.test.ts
-- [2.7.1] - 2026-04-20 — Rodada P: Re-auditoria & Fechamento 10/10
-- 🔒 MÓDULO 11: SEGURANÇA
-- CompanyPhonesForm.tsx
-- 📊 MÓDULO 7: INTEGRAÇÕES
-- 20261007120000_rpc_plan_structural_hash.sql
-- radio-group.tsx
-- ProfitabilityPanel.tsx
-- ContactIntelligenceWidget.tsx
+- 20261011120000_rpc_plan_structural_hash.sql
+- AiGatewayPartitionsCard.tsx
+- MonthlyReportWidget.tsx
+- LeadMagnetList.tsx
+- QBRTimeline.tsx
+- DealsAtRiskCard.tsx
+- OnboardingChecklist.tsx
+- ExecutiveKpisWidget.tsx
+- ConversasRelacionadasCard.tsx
+- Ficha360ProfileHeader.tsx
+- PaginationBar.tsx
+- [1.7.0] - 2026-04-11
+- HealthSignalTimeline.tsx
+- CompanyErpProposalsWidget.tsx
 - useIntelTour.ts
-- RevOpsPeriodSelector.tsx
+- IntelCommandPalette.tsx
 - rls/run.sh
 - public.ai_recommendation_audit_logs_v2
-- JsonLd.tsx
+- useConnectionMetrics.ts
 - useGraphLayout.ts
-- useChurnPrediction.ts
+- CompanyProfileAnalytics.tsx
 - public.compatibility_settings
 - public.contact_cadence_audit
 - public.contact_preferences_audit
@@ -1258,7 +1256,7 @@
 - public.feature_flags
 - public.follow_up_approvals_v2
 - public.health_alert_settings
-- useIntelDensity.ts
+- NPSDistributionChart.tsx
 - 20261006120000_least_privilege_canonical.sql
 - public.lead_score_config
 - public.lead_score_thresholds
@@ -1268,12 +1266,10 @@
 - public.pipeline_stage_transitions
 - public.reframing_analysis_audit
 - public.rfm_segment_config
-- popover.tsx
-- separator.tsx
-- switch.tsx
-- TypewriterText.tsx
+- NPSResponseDialog.tsx
+- useFormDraft.ts
+- calendar.tsx
 - public.weekly_report_settings
-- useClientTriggers.ts
 - public.abm_account_plans
 - public.abm_accounts
 - public.abm_buying_committee
@@ -1293,7 +1289,6 @@
 - public.attribution_touchpoints
 - public.audit_log
 - public.automation_logs
-- useClientValues.ts
 - public.battle_cards
 - public.behavioral_insight_feedback
 - public.behavioral_profile_regen_queue
@@ -1500,7 +1495,6 @@
 - public.validation_queue
 - public.visit_checkins
 - public.webauthn_credentials
-- useIntelPresentation.ts
 - public.whatsapp_ingestion_logs
 - public.whatsapp_instances
 - scroll-area.tsx
@@ -1541,8 +1535,6 @@
 - public.contact_behavior
 - public.email_campaigns
 - public.contact_analytical_profiles
-- 🧪 VALIDAÇÃO REAL DE TESTES EXECUTADOS (2026-03-15)
-- StrategicAccountsWidget.tsx
 - vercel.json
 - public.automation_rules
 - public.weekly_reports
@@ -1615,89 +1607,89 @@
 10. `rateLimit()` - 93 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Riscos residuais` --references--> `EmailPipelineStatus()`  [INFERRED]
-  docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md → src/components/admin/EmailPipelineStatus.tsx
-- `Riscos residuais` --references--> `PasswordResetApproval()`  [INFERRED]
-  docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md → src/components/admin/PasswordResetApproval.tsx
-- `Webhook Templates` --references--> `IncomingWebhookFormDialog()`  [INFERRED]
-  .lovable/memory/features/ux-rodada-m-federacao-dx.md → src/components/admin/conexoes/IncomingWebhookFormDialog.tsx
+- `3. Snippets generators` --references--> `WebhookSnippetsSheet()`  [INFERRED]
+  docs/adr/016-connections-federation-dx.md → src/components/admin/conexoes/WebhookSnippetsSheet.tsx
 - `A-2 · 🔴 CRÍTICO — Webhook de entrada genérico aceita payload sem assinatura por padrão` --references--> `WebhookSnippetsSheet()`  [INFERRED]
   docs/estado/06_INTEGRACOES.md → src/components/admin/conexoes/WebhookSnippetsSheet.tsx
+- `Tabela de evidências` --references--> `AIEmailComposerTrigger()`  [INFERRED]
+  docs/estado/02_INTELIGENCIA_IA.md → src/components/ai/AIEmailComposerTrigger.tsx
+- `Tabela de evidências` --references--> `EmailThreadSummaryCard()`  [INFERRED]
+  docs/estado/02_INTELIGENCIA_IA.md → src/components/ai/EmailThreadSummaryCard.tsx
 - `4.4 Componentes de Analytics` --references--> `EmotionalIntelligencePanel()`  [INFERRED]
   docs/COMPLETE_SYSTEM_ANALYSIS.md → src/components/analytics/EmotionalIntelligencePanel.tsx
 
 ## Import Cycles
 - None detected.
 
-## Communities (1939 total, 916 thin omitted)
+## Communities (1934 total, 922 thin omitted)
 
 ### Community 0 - "@tanstack/react-query"
 Cohesion: 0.01
-Nodes (43): @tanstack/react-query, ActiveAlert, CriticalAlertRow, useAiGatewayCriticalToast(), ClosingMoment, BestContactTime, BirthdayContact, BusinessAlert (+35 more)
+Nodes (60): @tanstack/react-query, ActiveAlert, ClosingMoment, BestContactTime, BirthdayContact, BusinessAlert, SEVERITY_MAP, CadenceEnrollment (+52 more)
 
-### Community 1 - "react"
-Cohesion: 0.01
-Nodes (115): 4.10 Componentes de Navegação, qrcode.react, @radix-ui/react-checkbox, react, react-day-picker, ProviderEntry, FIELDS, Props (+107 more)
+### Community 1 - "ContactBehaviorExtended.tsx"
+Cohesion: 0.07
+Nodes (23): BusinessContextSubTab(), BusinessContextSubTabProps, CommunicationSubTab(), CommunicationSubTabProps, DecisionMakingSubTab(), DecisionMakingSubTabProps, DISCSubTab(), DISCSubTabProps (+15 more)
 
 ### Community 2 - "react-router-dom"
-Cohesion: 0.01
-Nodes (109): react-router-dom, RequireAdminProps, ChurnItem, ChurnRow(), WINDOW_LABELS, AccountChurnPredictionPanel(), AccountChurnPredictionPanelProps, getHealthIcon() (+101 more)
+Cohesion: 0.02
+Nodes (30): react-router-dom, RequireAdminProps, DuplicateRecord, commonTags, QuickActionsMenuProps, FormListProps, URGENCY_TONE, STATUS_LABEL (+22 more)
 
 ### Community 3 - "ref_hooks"
 Cohesion: 0.01
-Nodes (91): ref_hooks, channelOptions, AlertRow, Props, CohortAnalysisWidget, retentionColor(), DailyStatsWidget, HealthRecord (+83 more)
+Nodes (74): ref_hooks, channelOptions, roleConfig, roleOrder, BehavioralIntelSummaryWidget, TREND_COLOR, TREND_ICON, TagCloudWidget (+66 more)
 
 ### Community 4 - "DealDetailDrawer.tsx"
-Cohesion: 0.10
-Nodes (15): @hookform/resolvers, zod, emailSchema, ForgotPasswordFormProps, DealFormValues, dealSchema, Props, STAGES (+7 more)
+Cohesion: 0.15
+Nodes (9): @hookform/resolvers, DealFormValues, dealSchema, Props, STAGES, DealFormValues, dealSchema, Props (+1 more)
 
 ### Community 5 - "date-fns"
 Cohesion: 0.01
-Nodes (117): date-fns, SEVERITY_VARIANT, TYPE_META, WebhookDlqPanel(), EmailPipelineStatus(), statusConfig, CompaniesTableView, CompaniesTableViewProps (+109 more)
+Nodes (102): date-fns, EmailThreadSummaryCard(), Props, Props, STATUS_BADGE, CompaniesTableView, CompaniesTableViewProps, healthLabel (+94 more)
 
-### Community 6 - "Analytics.tsx"
-Cohesion: 0.08
-Nodes (15): AdvancedAnalyticsTab, AnalyticsEngagementTab(), AnalyticsEngagementTabProps, AnalyticsSentimentTab(), AnalyticsSentimentTabProps, SentimentItem, BehavioralIntelSummaryWidget, DailyStatsWidget (+7 more)
+### Community 6 - "ref_components"
+Cohesion: 0.02
+Nodes (87): ref_components, ActivityChart, AnalyticsTabProps, BestTimeToContactPanel, ChurnPredictionPanel, ContactDistributionChart, DailyInsightsWidget, DealVelocityPanel (+79 more)
 
 ### Community 7 - "ref_integrations"
-Cohesion: 0.02
-Nodes (52): 3.2 Hooks de Análise Comportamental, ref_integrations, HeartbeatRow, BreachRow, cn(), NeuroDominanceTab(), NeuroDominanceTabProps, ActivityType (+44 more)
-
-### Community 8 - "ref_components"
 Cohesion: 0.01
-Nodes (125): 7. Descoberta e navegação, ref_components, react-helmet-async, ICON_MAP, KpiRecord, ActivityChart, AnalyticsTabProps, BestTimeToContactPanel (+117 more)
+Nodes (83): ref_integrations, Props, HeartbeatRow, BreachRow, PHASE_LABELS, TestPhase, TestResult, ContactEmailThreadsSection() (+75 more)
+
+### Community 8 - "react-helmet-async"
+Cohesion: 0.02
+Nodes (44): 7. Descoberta e navegação, react-helmet-async, JsonLdProps, SEOHeadProps, ABM(), ABMAccountDetail(), ABMCampaigns(), statusTones (+36 more)
 
 ### Community 9 - "09_triggers.sql"
 Cohesion: 0.03
 Nodes (125): abm_accounts_updated_at, abm_campaigns_updated_at, abm_committee_updated_at, abm_plans_updated_at, abm_whitespace_updated_at, feature_flags_updated_at, set_landing_pages_updated_at, set_updated_at_client_values (+117 more)
 
 ### Community 10 - "AppLayout.tsx"
-Cohesion: 0.07
-Nodes (25): 4.1 Componentes de Layout, AIEmailComposer, AppLayout(), AppLayoutInner(), AppLayoutProps, AskCrmChat, getBreadcrumbs(), getDefaultOpen() (+17 more)
+Cohesion: 0.06
+Nodes (30): 4.1 Componentes de Layout, AIEmailComposer, AppLayout(), AppLayoutInner(), AppLayoutProps, AskCrmChat, getBreadcrumbs(), getDefaultOpen() (+22 more)
 
 ### Community 11 - "ref_pages"
 Cohesion: 0.02
 Nodes (111): ref_pages, ABM, ABMAccountDetail, ABMCampaigns, AdminAuditTrail, AdminBehavioralRegenAudit, AdminComponentGallery, AdminConexoes (+103 more)
 
-### Community 12 - "forecastSimulation.ts"
-Cohesion: 0.25
-Nodes (5): IntelligenceShape, ProfileShape, SIMULATION_PRESETS, SimulationPreset, SimulationResult
+### Community 12 - "rfm-analyzer/index.ts"
+Cohesion: 0.12
+Nodes (8): ContactMetrics, limiter, RfmInput, isServiceRoleCaller(), limiter, SocialBehaviorInput, bodySchema, limiter
 
 ### Community 13 - "recharts"
-Cohesion: 0.06
-Nodes (15): recharts, getColor(), RfmExternalDashboard, SEGMENT_COLORS, CATEGORY_COLORS, PERFORMANCE_DATA, VERSIONS, COLORS (+7 more)
+Cohesion: 0.02
+Nodes (48): recharts, BehavioralRegenAlertsTrend(), dayKey(), DayPoint, Props, Row, buildWeeks(), InsightFeedbackTrendChart() (+40 more)
 
 ### Community 14 - "ContactBehavioralTab.tsx"
 Cohesion: 0.03
-Nodes (70): BehavioralExecutiveSummary(), Props, BiasData, BiasesSubTab(), Props, BusinessContextSubTab(), Props, CommunicationDashboardCard() (+62 more)
+Nodes (71): TanStack Query (Estado do Servidor), BehavioralExecutiveSummary(), Props, BiasData, BiasesSubTab(), Props, BusinessContextSubTab(), Props (+63 more)
 
-### Community 15 - "CompatibilityScore.tsx"
-Cohesion: 0.33
-Nodes (7): DISC_COMPATIBILITY, getDISCTip(), VAK_COMPATIBILITY, CompatibilityFactor, CompatibilityScore(), CompatibilityScoreProps, SalespersonProfile
+### Community 15 - "usePreContactBriefing.ts"
+Cohesion: 0.17
+Nodes (15): analyzeEmotionalState(), analyzeVAK(), BriefingInteraction, Company, Contact, DISCProfileData, EmotionalProfile, generateOpeningTips() (+7 more)
 
 ### Community 16 - "framer-motion"
-Cohesion: 0.01
-Nodes (122): framer-motion, typeConfig, BulkActionsBarProps, commonTags, relationshipStages, CompanyDataTabProps, CRITERIA_ICONS, Props (+114 more)
+Cohesion: 0.02
+Nodes (56): framer-motion, typeConfig, channelIcons, ChannelsTab(), MessagesTab(), PhaseCard(), TechniquesTab(), TipsTab() (+48 more)
 
 ### Community 17 - "dependencies"
 Cohesion: 0.03
@@ -1705,31 +1697,31 @@ Nodes (77): dependencies, axe-core, canvas-confetti, class-variance-authority, c
 
 ### Community 19 - "useAuth"
 Cohesion: 0.01
-Nodes (172): Troubleshooting, ABMAccount, ABMAccountPlan, ABMCampaign, AccountStatus, AccountTier, BuyingCommitteeMember, CampaignType (+164 more)
+Nodes (208): 3.2 Hooks de Análise Comportamental, 3.7 Hooks de Templates, 🎣 MÓDULO 3: HOOKS CUSTOMIZADOS (75 hooks), Troubleshooting, CampaignDetailDrawer(), SuggestedRapportIntel, useAIApprovals(), AUTH_FALLBACK (+200 more)
 
-### Community 20 - "_shared/auth.ts"
-Cohesion: 0.06
-Nodes (36): [ALTO] EF-4. `evolution-webhook` — sem verificação de assinatura + fallback perigoso de `user_id`, Controles que realmente funcionam (verificados), 📂 Categorias, A2 — 🔴 Página pública `/status` exibe verde por padrão quando falha, A correção: existe, sim, um motor de automação — noutro lugar, Conteúdo preservado em PR #3 (branch `security/hardening-20260409-225244`), Plano de recuperação futuro, PR #3 — Fechado como referência histórica (+28 more)
+### Community 20 - "ref_types"
+Cohesion: 0.02
+Nodes (63): ref_types, EmotionalIntelligencePanel(), EQPanelProps, Interaction, Contact, Props, RelatedContactsSection, ContactsTableView (+55 more)
 
 ### Community 21 - "02_tables.sql"
 Cohesion: 0.03
 Nodes (73): public.abm_account_plans, public.abm_accounts, public.ai_chat_messages, public.ai_chat_threads, public.ai_recommendation_audit_logs, public.ai_recommendation_audit_logs_v2, public.ai_recommendation_logs, public.ai_tone_preferences (+65 more)
 
-### Community 22 - "ref_lib"
-Cohesion: 0.01
-Nodes (178): 6. 🧪 Neuromarketing Enterprise — ✅ IMPLEMENTADO, ref_lib, ref_types, EmotionalIntelligencePanel(), EQPanelProps, Interaction, AppreciationPanel(), AppreciationPanelProps (+170 more)
+### Community 22 - "neuromarketing/index.ts"
+Cohesion: 0.03
+Nodes (48): 6. 🧪 Neuromarketing Enterprise — ✅ IMPLEMENTADO, ApproachResult, ApproachStats, NeuroABTrackerProps, TrendDirection, NeuroAlert, NeuroAlertsProps, NeuroBriefingCard() (+40 more)
 
 ### Community 23 - "fetch-utils.ts"
 Cohesion: 0.04
-Nodes (54): A. Dado fictício apresentado como métrica, Achados, C. Funções órfãs (nenhum caminho de execução), D. Provedores de IA e secrets — mapa consolidado, E. Boas práticas observadas (contraponto), callLovableAI(), deterministicMapping(), flatten() (+46 more)
+Nodes (53): A. Dado fictício apresentado como métrica, Achados, C. Funções órfãs (nenhum caminho de execução), D. Provedores de IA e secrets — mapa consolidado, E. Boas práticas observadas (contraponto), callLovableAI(), INSTRUCTION_HINTS, limiter (+45 more)
 
 ### Community 24 - "package.json"
-Cohesion: 0.04
-Nodes (53): name, overrides, serialize-javascript, private, type, version, autoprefixer, axe-core (+45 more)
+Cohesion: 0.03
+Nodes (62): name, overrides, serialize-javascript, private, type, version, autoprefixer, axe-core (+54 more)
 
 ### Community 25 - "ContactOverviewTab.tsx"
-Cohesion: 0.06
-Nodes (25): BestContactTimeWidget(), CHANNEL_ICONS, DAYS_OF_WEEK, Props, LifeEventsSection(), LifeEventsSectionProps, Props, ContactStatisticsWidget() (+17 more)
+Cohesion: 0.04
+Nodes (53): BestContactTimeWidget(), CHANNEL_ICONS, DAYS_OF_WEEK, Props, churnRiskToScore(), ConsolidatedHealthPanel(), Dimension, getOverallHealth() (+45 more)
 
 ### Community 26 - "03_indexes.sql"
 Cohesion: 0.05
@@ -1743,9 +1735,9 @@ Nodes (44): BUCKET, buf, CHUNK, Ckpt, env, OBJECT, signed, THRESHOLD (+36 more)
 Cohesion: 0.04
 Nodes (57): custom_fields, auth.users, public.access_blocked_log, public.access_security_settings, public.activities, public.ai_recommendation_audit_logs, public.ai_recommendation_logs, public.alerts (+49 more)
 
-### Community 29 - "PhonesCard.tsx"
-Cohesion: 0.11
-Nodes (20): ADDRESS_TYPES, AddressesCard, Props, EMAIL_TYPES, EmailsCard, Props, EMAIL_TYPE_LABELS, formatPhoneDisplay() (+12 more)
+### Community 29 - "ContactDataTab.tsx"
+Cohesion: 0.06
+Nodes (38): Props, ADDRESS_TYPES, AddressesCard, Props, CadencePreferencesCard, Props, ConsentAuditCard(), ContactEnrichedCard() (+30 more)
 
 ### Community 30 - "prontidaoWeightsHealth.ts"
 Cohesion: 0.50
@@ -1756,12 +1748,12 @@ Cohesion: 0.18
 Nodes (7): IDEAL_TALK_RATIOS, INTERRUPTION_INDICATORS, LISTENING_INDICATORS, QUESTION_PATTERNS, SILENCE_TECHNIQUES, TALK_RATIO_QUALITY, TALK_RATIO_RECOMMENDATIONS
 
 ### Community 32 - "EntityMonthlyTimeline.tsx"
-Cohesion: 0.09
-Nodes (25): CommonEventsTimelineProps, InteractionLite, CrossRefInsightsPanelProps, SEV_LABEL, EntityCard(), EntityCardProps, EntityMonthlyTimelineProps, FILTERS (+17 more)
+Cohesion: 0.07
+Nodes (32): CommonEventsTimelineProps, InteractionLite, CrossRefInsightsPanelProps, SEV_LABEL, EntityCardProps, EntityMonthlyTimeline(), EntityMonthlyTimelineProps, FILTERS (+24 more)
 
 ### Community 33 - "Achados"
-Cohesion: 0.12
-Nodes (16): Achados, 🗄️ Achados — Banco de Dados & Migrations, [ALTA] BD-1. `DROP TABLE public.deals CASCADE` sem recriação na mesma migration, [BAIXA] BD-10. Inconsistência de precisão monetária, [BAIXA] BD-8. Índices redundantes candidatos, [BAIXA] BD-9. JSONB sem validação estrutural, [BAIXA-MÉDIA] BD-7. FKs sem `ON DELETE` → deleção bloqueada (NO ACTION), [INFORMATIVO] BD-11. `audit_log` recriada com DROP CASCADE (particionamento) (+8 more)
+Cohesion: 0.10
+Nodes (20): Achados, 🗄️ Achados — Banco de Dados & Migrations, [ALTA] BD-1. `DROP TABLE public.deals CASCADE` sem recriação na mesma migration, [BAIXA] BD-10. Inconsistência de precisão monetária, [BAIXA] BD-8. Índices redundantes candidatos, [BAIXA] BD-9. JSONB sem validação estrutural, [BAIXA-MÉDIA] BD-7. FKs sem `ON DELETE` → deleção bloqueada (NO ACTION), [INFORMATIVO] BD-11. `audit_log` recriada com DROP CASCADE (particionamento) (+12 more)
 
 ### Community 34 - "contacts"
 Cohesion: 0.04
@@ -1776,16 +1768,16 @@ Cohesion: 0.06
 Nodes (47): computeProntidaoTrend(), ComputeTrendArgs, endOfWeek(), fmtIso(), fmtLabel(), IntelligenceLike, ProfileLike, ProntidaoFactorContribution (+39 more)
 
 ### Community 37 - "vitest"
-Cohesion: 0.05
-Nodes (12): ref_data, @testing-library/react, vitest, vitest-axe, IncrementalLoadStickyBar, Props, ALL_DISC, ALL_VAK (+4 more)
+Cohesion: 0.02
+Nodes (43): ref_data, dompurify, @testing-library/react, @testing-library/user-event, vitest, vitest-axe, sendMutate, AdvancedDataExporterProps (+35 more)
 
-### Community 38 - "rateLimit"
+### Community 38 - "_shared/auth.ts"
 Cohesion: 0.04
-Nodes (89): Added, Decisão, limiter, ScoreBreakdown, AIOpportunity, limiter, InputSchema, limiter (+81 more)
+Nodes (79): Decisão, ref_npm_supabase, AIOpportunity, limiter, limiter, bodySchema, limiter, limiter (+71 more)
 
-### Community 39 - "ObjectionsSpotlight.tsx"
-Cohesion: 0.14
-Nodes (14): ObjectionExamplesModal, getSeverity(), ObjectionCard, ObjectionCardProps, ObjectionsSpotlight, objectionStorageKey(), PERIOD_TO_DAYS, Props (+6 more)
+### Community 39 - "email-finder/index.ts"
+Cohesion: 0.18
+Nodes (11): BodySchema, limiter, normalize(), permutations(), BodySchema, limiter, checkMx(), DISPOSABLE (+3 more)
 
 ### Community 40 - "CompanyInsightsTab.tsx"
 Cohesion: 0.05
@@ -1796,8 +1788,8 @@ Cohesion: 0.08
 Nodes (30): 4.9 Componentes de Microinterações, 7.4 Falta de Microanimações em Números, AnimatedBadge(), AnimatedBadgeProps, AnimatedCounterProps, CountUp(), CountUpProps, FlipCounter() (+22 more)
 
 ### Community 43 - "useStakeholderAnalysis.ts"
-Cohesion: 0.18
-Nodes (17): [BAIXO] FE-10. NaN silencioso em `generateRecommendations` (stakeholders), calculateEngagement(), calculateInfluence(), calculateInterest(), calculatePower(), calculatePriority(), calculateRiskLevel(), calculateSupport() (+9 more)
+Cohesion: 0.19
+Nodes (16): calculateEngagement(), calculateInfluence(), calculateInterest(), calculatePower(), calculatePriority(), calculateRiskLevel(), calculateSupport(), Contact (+8 more)
 
 ### Community 44 - "triggers-advanced.ts"
 Cohesion: 0.05
@@ -1824,20 +1816,20 @@ Cohesion: 0.06
 Nodes (27): AiSuggestion, CopywritingAiGeneratorTab(), Props, AnalysisResult, CopywritingAnalyzerTab(), getScoreColor(), Props, CopywritingEmojiTab() (+19 more)
 
 ### Community 51 - "StakeholderMap.tsx"
-Cohesion: 0.07
-Nodes (42): 4.7 Componentes de Stakeholders, react-force-graph-2d, COALITION_TYPE_CONFIG, CoalitionCard(), CoalitionDetail(), InfluenceClusterCard(), PowerBalanceIndicator(), RISK_CONFIG (+34 more)
+Cohesion: 0.06
+Nodes (45): 4.7 Componentes de Stakeholders, COALITION_TYPE_CONFIG, CoalitionCard(), CoalitionDetail(), InfluenceClusterCard(), PowerBalanceIndicator(), RISK_CONFIG, CoalitionDetectionPanel() (+37 more)
 
-### Community 52 - "ContactBehaviorExtended.tsx"
-Cohesion: 0.07
-Nodes (23): BusinessContextSubTab(), BusinessContextSubTabProps, CommunicationSubTab(), CommunicationSubTabProps, DecisionMakingSubTab(), DecisionMakingSubTabProps, DISCSubTab(), DISCSubTabProps (+15 more)
+### Community 52 - "useProactiveIntelligence.ts"
+Cohesion: 0.14
+Nodes (12): ActionCategory, ActionPriority, ApproachScript, CARNEGIE_PRINCIPLES, Contact, DISC_APPROACH_STYLE, IntelligenceInsight, Interaction (+4 more)
 
 ### Community 53 - "📖 Dicionário de Dados — SINGU CRM"
 Cohesion: 0.01
 Nodes (253): 📖 Dicionário de Dados — SINGU CRM, 📋 Tabela: `abm_account_plans`, 📋 Tabela: `abm_accounts`, 📋 Tabela: `abm_buying_committee`, 📋 Tabela: `abm_campaigns`, 📋 Tabela: `abm_whitespace_opportunities`, 📋 Tabela: `access_blocked_log`, 📋 Tabela: `access_security_settings` (+245 more)
 
-### Community 54 - "design-system-audit.test.ts"
-Cohesion: 0.07
-Nodes (23): ref_fs, ref_path, APP_FILE, DEPENDENCIES, fs, path, allFiles, allTs (+15 more)
+### Community 54 - "ref_path"
+Cohesion: 0.14
+Nodes (8): ref_fs, ref_path, APP_FILE, DEPENDENCIES, fs, path, root, REPO_ROOT
 
 ### Community 55 - "useVoiceAgent.ts"
 Cohesion: 0.31
@@ -1847,9 +1839,9 @@ Nodes (11): @elevenlabs/react, SCRIBE_CONNECT_OPTIONS, useVoiceAgent(), logVoice
 Cohesion: 0.08
 Nodes (16): ref_https, limiter, PayloadSchema, resolveSignatureContext(), SignatureContext, PrevSnapRow, STAGES, fetchAllPages() (+8 more)
 
-### Community 57 - "useFicha360Domain.ts"
-Cohesion: 0.26
-Nodes (7): ContactIntelligence, ContactView360, ExternalInteraction, Options, PassoFeedback, TrendWeeks, UseFicha360DomainProps
+### Community 57 - "useFicha360.ts"
+Cohesion: 0.13
+Nodes (18): ContactIntelligence, useContactIntelligence(), ContactView360, useContactView360(), ExternalInteraction, Options, useExternalInteractions(), useFicha360() (+10 more)
 
 ### Community 60 - "PageSkeletons.tsx"
 Cohesion: 0.12
@@ -1873,23 +1865,23 @@ Nodes (12): HandoffQueueTab, RoutingMetricsTab, RoutingRulesTab, SalesTeamTab, B
 
 ### Community 65 - "sidebar.tsx"
 Cohesion: 0.10
-Nodes (33): SIDEBAR_COOKIE_MAX_AGE, SIDEBAR_COOKIE_NAME, SIDEBAR_KEYBOARD_SHORTCUT, SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON, SIDEBAR_WIDTH_MOBILE, SidebarContext, SidebarContextValue (+25 more)
+Nodes (34): @radix-ui/react-slot, SIDEBAR_COOKIE_MAX_AGE, SIDEBAR_COOKIE_NAME, SIDEBAR_KEYBOARD_SHORTCUT, SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON, SIDEBAR_WIDTH_MOBILE, SidebarContext (+26 more)
 
 ### Community 67 - "ContactCommercialTab.tsx"
 Cohesion: 0.04
 Nodes (45): BestClosingMomentsCard(), Props, STATUS_CONFIG, CadenceEnrollmentsCard(), Props, statusIcons, ChurnRiskCard(), Props (+37 more)
 
 ### Community 68 - "types/index.ts"
-Cohesion: 0.07
-Nodes (28): Activity, Alert, BigFiveProfile, CAREER_STAGE_LABELS, CareerStage, CommunicationStyle, Company, Contact (+20 more)
+Cohesion: 0.06
+Nodes (34): 2.3 Frameworks de Personalidade, Activity, Alert, BigFiveProfile, CAREER_STAGE_LABELS, CareerStage, CommunicationStyle, Company (+26 more)
 
 ### Community 69 - "20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql"
 Cohesion: 0.12
 Nodes (30): idx_deal_rooms_company, idx_deal_rooms_status, idx_deal_rooms_token, idx_deal_rooms_user, idx_dr_activities_room, idx_dr_comments_room, idx_dr_docs_room, idx_dr_docs_user (+22 more)
 
 ### Community 70 - "Componentes (`src/components/intel/`)"
-Cohesion: 0.09
-Nodes (16): Componentes (`src/components/intel/`), CommonEventsTimeline(), CrossRefInsightsPanel(), EntityMonthlyTimeline(), matchesKind(), IntelDensityToggle(), IntelErrorState(), IntelErrorStateProps (+8 more)
+Cohesion: 0.05
+Nodes (33): Componentes (`src/components/intel/`), Página (`src/pages/Intelligence.tsx`), CommonEventsTimeline(), CrossRefInsightsPanel(), Column, DataGrid(), DataGridProps, EntityCard() (+25 more)
 
 ### Community 71 - "insights/SentimentTrendChart.tsx"
 Cohesion: 0.11
@@ -1904,16 +1896,16 @@ Cohesion: 0.13
 Nodes (26): public.handle_new_user, idx_activities_created_at, idx_activities_user_id, idx_alerts_dismissed, idx_alerts_user_id, idx_companies_user_id, idx_contacts_company_id, idx_contacts_user_id (+18 more)
 
 ### Community 74 - "GlobalSearch.tsx"
-Cohesion: 0.05
-Nodes (46): fuse.js, getColorClass(), getTypeIcon(), NavItem, Props, QuickAction, RecentItem, SearchLocalGroups() (+38 more)
+Cohesion: 0.08
+Nodes (26): fuse.js, getColorClass(), getTypeIcon(), NavItem, Props, QuickAction, RecentItem, SearchLocalGroups() (+18 more)
 
 ### Community 75 - "fetchAPI"
-Cohesion: 0.05
-Nodes (26): Agg, EXTERNAL_KEY, limiter, QueueRow, limiter, PushPayload, sendWebPush(), Subscription (+18 more)
+Cohesion: 0.06
+Nodes (22): Agg, ALLOWED_ACTIONS, EvolutionRequest, limiter, QueueRow, Body, FailedRow, SentRow (+14 more)
 
 ### Community 76 - "useConversationIntel.ts"
-Cohesion: 0.08
-Nodes (31): Coexistência com meeting-summary, Edge Functions (verify_jwt=false em config.toml, JWT validado em código), Hooks (`src/hooks/useConversationIntel.ts`), Não fazer, Schema, UI, CoachingScorecard, ConversationAnalysis (+23 more)
+Cohesion: 0.05
+Nodes (42): Coexistência com meeting-summary, Edge Functions (verify_jwt=false em config.toml, JWT validado em código), Hooks (`src/hooks/useConversationIntel.ts`), Integração, Não fazer, Schema, UI, ContactInteractionsTab() (+34 more)
 
 ### Community 77 - "20260315200326_43c901a9-2094-422f-b504-df2c4f11b3ea.sql"
 Cohesion: 0.13
@@ -1924,8 +1916,8 @@ Cohesion: 0.13
 Nodes (28): idx_assignments_assigned_to, idx_assignments_contact, idx_assignments_created, idx_assignments_status, idx_assignments_type, idx_handoff_created, idx_handoff_from, idx_handoff_status (+20 more)
 
 ### Community 79 - "external-data/index.ts"
-Cohesion: 0.10
-Nodes (18): ref_jsr_std, ALLOWED_RPCS, ALLOWED_TABLES, AllowedRpc, AllowedTable, GLOBAL_READ_ONLY_TABLES, limiter, assignContainerValue() (+10 more)
+Cohesion: 0.08
+Nodes (23): ref_jsr_std, ALLOWED_RPCS, ALLOWED_TABLES, AllowedRpc, AllowedTable, GLOBAL_READ_ONLY_TABLES, limiter, jsonConflict() (+15 more)
 
 ### Community 80 - "carnegieProgressStorytellingQuestions.test.ts"
 Cohesion: 0.13
@@ -1951,9 +1943,9 @@ Nodes (23): ComparisonBadge(), CustomTooltip(), CustomTooltipProps, PieTooltip()
 Cohesion: 0.12
 Nodes (21): calculateInterestScore(), countInterestIndicators(), GENUINE_INTEREST_PATTERNS, getInterestLevel(), getInterestSuggestions(), INTEREST_INDICATORS, INTEREST_SCORING, INTEREST_SUGGESTIONS (+13 more)
 
-### Community 87 - "useCompanyCommercial.ts"
-Cohesion: 0.10
-Nodes (16): ContactDeal, ContactMeeting, useContactMeetings(), ContactProposal, ContactTask, useContactTasks(), fetchInteractionsPage(), Interaction (+8 more)
+### Community 87 - "lucide-react"
+Cohesion: 0.01
+Nodes (70): lucide-react, react-force-graph-2d, CohortAnalysisWidget, retentionColor(), DISC_COLORS, DISC_LABELS, DiscRecord, TagExplorerWidget (+62 more)
 
 ### Community 88 - "20260417110650_9365a2d8-59c4-4df0-ae02-81957728485f.sql"
 Cohesion: 0.14
@@ -1976,8 +1968,8 @@ Cohesion: 0.10
 Nodes (18): InsightsPanel(), isCritical(), isObjectionFilter(), isPeriod(), isSentimentBucket(), KpiProps, ObjectionFilter, PERIOD_LABEL (+10 more)
 
 ### Community 93 - "useCustomerSuccess.ts"
-Cohesion: 0.09
-Nodes (29): AccountPortfolioCard(), STAGE_STYLES, TIER_STYLES, HealthScoreGauge(), CSAccount, CSAccountInsert, CSAccountUpdate, CSLifecycle (+21 more)
+Cohesion: 0.11
+Nodes (25): CSAccount, CSAccountInsert, CSAccountUpdate, CSLifecycle, CSTier, HealthSignal, NPSResponse, QBR (+17 more)
 
 ### Community 94 - "useInteractionsAdvancedFilter.ts"
 Cohesion: 0.11
@@ -1987,21 +1979,21 @@ Nodes (25): AdvancedFilters, DEFAULT_PER_PAGE, DensityMode, DirecaoFilter, KEYS,
 Cohesion: 0.10
 Nodes (25): createEITabHandler(), createEITabWithHistoryHandler(), createFocusTypeHandler(), createMetaprogramFocusHandler(), createPeriodFilterHandler(), createTabHandler(), createTriggerAnalyticsTabHandler(), createTriggerCategoryHandler() (+17 more)
 
-### Community 96 - "PessoaForm.tsx"
-Cohesion: 0.11
-Nodes (17): EmpresaForm(), empty, FormValues, Props, schema, EntityPicker(), EntityPickerProps, useEntitySearch() (+9 more)
+### Community 96 - "20261008120000_fix_frontend_rpcs_canonical.sql"
+Cohesion: 0.06
+Nodes (29): ai_recommendation_audit_logs, alerts, company_addresses, company_emails, company_phones, contact_emails, contact_phones, customers (+21 more)
 
 ### Community 97 - "ConversationAnalysisCard.tsx"
-Cohesion: 0.15
-Nodes (12): AnalyzeButton(), Props, Props, ICONS, KeyMomentsTimeline(), TONES, ObjectionsList(), Props (+4 more)
+Cohesion: 0.12
+Nodes (16): AnalyzeButton(), Props, CoachingScoreBadge(), ConversationAnalysesTable(), Row, sentimentVariant(), Props, ICONS (+8 more)
 
-### Community 98 - "DISCTrainingMode.tsx"
-Cohesion: 0.14
-Nodes (12): Lacunas: o que NÃO verifiquei e por quê, canvas-confetti, TRAINING_SCENARIOS, TrainingProgress, TrainingScenario, DISCSalesScriptGenerator(), DISCTemplateLibrary(), DISCTrainingMode() (+4 more)
+### Community 98 - "DISCCompatibilityAlerts.tsx"
+Cohesion: 0.08
+Nodes (20): Lacunas: o que NÃO verifiquei e por quê, TRAINING_SCENARIOS, TrainingProgress, TrainingScenario, AlertSettings, CompatibilityAlert, DISCCompatibilityAlertsProps, DISC_COLORS (+12 more)
 
 ### Community 99 - "useTriggerHistory.ts"
-Cohesion: 0.09
-Nodes (20): 3.3 Hooks de Persistência, 3.7 Hooks de Templates, 🎣 MÓDULO 3: HOOKS CUSTOMIZADOS (75 hooks), SATURATION_CONFIG, useAdvancedTriggers(), BiasEvolutionData, BiasHistoryRecord, convertCategoryDistribution() (+12 more)
+Cohesion: 0.13
+Nodes (15): 3.3 Hooks de Persistência, SATURATION_CONFIG, useAdvancedTriggers(), BiasEvolutionData, BiasHistoryRecord, convertCategoryDistribution(), convertDetectedBiases(), useCognitiveBiasPersistence() (+7 more)
 
 ### Community 100 - "useReportsAnalytics.ts"
 Cohesion: 0.08
@@ -2012,8 +2004,8 @@ Cohesion: 0.12
 Nodes (27): ref_jsr_supabase, b24(), BitrixAuth, BitrixContact, BitrixProfile, callBitrixAsUser(), ConnectorData, ConnectorPayload (+19 more)
 
 ### Community 102 - "company-health-score.tsx"
-Cohesion: 0.11
-Nodes (21): 4.3 Componentes de Empresa, @radix-ui/react-tooltip, Card, CardContent, CardDescription, CardFooter, CardHeader, CardProps (+13 more)
+Cohesion: 0.07
+Nodes (29): 4.3 Componentes de Empresa, @radix-ui/react-tooltip, Badge, BadgeGroupProps, BadgeProps, badgeVariants, NotificationBadgeProps, StatusBadgeProps (+21 more)
 
 ### Community 103 - "nlp-advanced.ts"
 Cohesion: 0.08
@@ -2027,21 +2019,21 @@ Nodes (23): BLOQUEIO_STATUS_LABELS, BloqueioStatus, EXECUCAO_MODO_LABELS, EXECUC
 Cohesion: 0.09
 Nodes (22): idx_activities_user_created, idx_bpr_queue_next_run, idx_contact_analytical_profiles_contact, idx_contact_next_actions_contact, idx_contacts_relationship_stage, idx_interactions_contact_created, idx_neuro_behavioral_contact_created, idx_seq_enroll_active_next_action (+14 more)
 
-### Community 106 - "company-form-exhaustive.test.tsx"
-Cohesion: 0.09
-Nodes (11): @testing-library/user-event, CampaignDetailDrawer(), Props, STATUS_BADGE, sendMutate, useEmailCampaigns(), fullExternalCompany, minimalCompany (+3 more)
+### Community 106 - "CarnegieDashboard.tsx"
+Cohesion: 0.07
+Nodes (40): AppreciationPanel(), AppreciationPanelProps, TYPE_COLORS, TYPE_ICONS, CarnegieDashboard(), CarnegieDashboardProps, CarnegieQuickAccess(), CarnegieQuickAccessProps (+32 more)
 
-### Community 107 - "CelebrationProvider.tsx"
-Cohesion: 0.11
-Nodes (17): CelebrationConfig, CelebrationContext, CelebrationContextType, CelebrationOverlayProps, CelebrationProvider(), CelebrationProviderProps, celebrationStyles, CelebrationType (+9 more)
+### Community 107 - "CompanyProfileCard.tsx"
+Cohesion: 0.06
+Nodes (30): CelebrationConfig, CelebrationContext, CelebrationContextType, CelebrationOverlayProps, CelebrationProvider(), CelebrationProviderProps, celebrationStyles, CelebrationType (+22 more)
 
-### Community 108 - "ux-rodada-m-federacao-dx.md"
-Cohesion: 0.20
-Nodes (7): MCP Server v1.2.0, Playground (cURL/Snippets), Tabelas/colunas novas, Webhook Templates, CodeExample(), TechTooltip(), VersionBadge()
+### Community 108 - "PessoaForm.tsx"
+Cohesion: 0.05
+Nodes (35): 11. Nove páginas do escopo renderizam sem `AppLayout`, Cadastro(), EmpresaForm(), empty, FormValues, Props, schema, EntityPicker() (+27 more)
 
-### Community 109 - "LifeEventsTab.tsx"
-Cohesion: 0.11
-Nodes (15): LifeEventsAuditTrail(), LifeEventsAuditTrailProps, LifeEventsGapChecklist(), LifeEventsGapChecklistProps, LifeEventsTimeline(), LifeEventsTimelineProps, LifeEventsVisualSummary(), LifeEventsVisualSummaryProps (+7 more)
+### Community 109 - "ContactIntelligenceTab.tsx"
+Cohesion: 0.04
+Nodes (40): ChurnPredictionsWidget, ChurnRiskWidget, RISK_CONFIG, ContactCommercialTab(), ContactDataTab(), ContactDaysWithoutWidget, ContactDetailHeader(), ChurnPredictionsWidget (+32 more)
 
 ### Community 110 - "useFicha360FilterFavorites.ts"
 Cohesion: 0.21
@@ -2075,9 +2067,9 @@ Nodes (18): public.sales_opportunities, public.fn_carga_atual_closer(), public.f
 Cohesion: 0.15
 Nodes (15): leaflet, leaflet.markercluster, react-leaflet, CompaniesInlineMapProps, buildLocationString(), geocode(), geocodeCache, blueIcon (+7 more)
 
-### Community 118 - "IncomingWebhookCard.tsx"
-Cohesion: 0.11
-Nodes (18): [2.4.0] - 2026-04-20 — Rodada L: Connections Governance (60/60), Added, SLO, UI, Constantes, Entregas (60/60), SLO, ConnectionFormDialog() (+10 more)
+### Community 118 - "IncomingWebhookFormDialog.tsx"
+Cohesion: 0.05
+Nodes (35): [2.5.0] - 2026-04-20 — Rodada M: Connections Federation & DX (65/65), Added, Added, Notes, Constantes, Entregas (60/60), SLO, MCP Server v1.2.0 (+27 more)
 
 ### Community 119 - "lead-scoring/LeadScoreCard.tsx"
 Cohesion: 0.09
@@ -2089,7 +2081,7 @@ Nodes (20): CEPInput, CEPInputProps, CNPJInput, CNPJInputProps, CPFInput, CPFInp
 
 ### Community 121 - "useCompanyIntelligence.ts"
 Cohesion: 0.10
-Nodes (6): AccountPlan, Company360, CompanyStatistics, CompanyTimelineEvent, NextBestAction, TouchpointSummary
+Nodes (5): AccountPlan, CompanyStatistics, CompanyTimelineEvent, NextBestAction, TouchpointSummary
 
 ### Community 122 - "20260125155610_a5f0704f-a377-42c0-8849-bc49b5254e28.sql"
 Cohesion: 0.16
@@ -2100,8 +2092,8 @@ Cohesion: 0.13
 Nodes (11): assertRouteLoads(), loginWithTestUser(), requireTestCredentials(), requireWritableEnvironment(), openContactsTable(), requireContactRows(), Entregas, Métricas (+3 more)
 
 ### Community 125 - "Changelog"
-Cohesion: 0.05
-Nodes (42): [1.0.0] - 2026-03-15, [1.1.0] - 2026-03-22, [1.2.0] - 2026-03-28, [1.3.0] - 2026-04-02, [1.4.0] - 2026-04-05, [1.5.0] - 2026-04-08, [1.6.0] - 2026-04-10, [1.7.0] - 2026-04-11 (+34 more)
+Cohesion: 0.06
+Nodes (33): [1.0.0] - 2026-03-15, [1.1.0] - 2026-03-22, [1.2.0] - 2026-03-28, [1.3.0] - 2026-04-02, [1.4.0] - 2026-04-05, [1.5.0] - 2026-04-08, [1.6.0] - 2026-04-10, [1.8.0] - 2026-04-12 (+25 more)
 
 ### Community 126 - "public.contacts"
 Cohesion: 0.12
@@ -2128,12 +2120,12 @@ Cohesion: 0.18
 Nodes (17): public.update_nlp_updated_at_column, idx_client_values_contact, idx_decision_criteria_contact, idx_emotional_anchors_contact, idx_emotional_states_contact, idx_emotional_states_created, idx_hidden_objections_contact, idx_hidden_objections_resolved (+9 more)
 
 ### Community 133 - "feedback/index.ts"
-Cohesion: 0.12
-Nodes (24): AnalyticsIllustration(), CompaniesIllustration(), ContactsIllustration(), IllustrationProps, Illustrations, InteractionsIllustration(), NoDataIllustration(), SearchIllustration() (+16 more)
+Cohesion: 0.18
+Nodes (16): AIProcessingLoader(), ButtonLoader(), CircularProgress(), CircularProgressProps, DataLoadingState(), DataLoadingStateProps, DotsLoader(), FullPageLoader() (+8 more)
 
-### Community 134 - "✅ Resolvidos nesta rodada"
-Cohesion: 0.07
-Nodes (27): ⏳ Pendentes (exigem decisão fora deste sandbox), ✅ Resolvidos nesta rodada, 📊 Score de excelência, 🚩 TECH DEBT BACKLOG — SINGU CRM, GlobalSyncIndicator(), ProgressStep, ProgressStepper(), ProgressStepperProps (+19 more)
+### Community 134 - "3. Riscos estruturais, por gravidade"
+Cohesion: 0.06
+Nodes (30): Arquivos que inspecionei, Contradições com a documentação existente, Estado — Inteligência, IA e Voz, Inventário das Edge Functions do escopo, Resumo, 1. Veredito em uma tela, 2. Contagem honesta, 3. Riscos estruturais, por gravidade (+22 more)
 
 ### Community 135 - "ObjectionExamplesModal.tsx"
 Cohesion: 0.17
@@ -2184,12 +2176,12 @@ Cohesion: 0.13
 Nodes (13): ChannelDef, CHANNELS, ContagemPorTipoBar(), Props, Ficha360FilterPanelProps, CHANNEL_META, FiltrosAtivosChips, PERIOD_LABEL (+5 more)
 
 ### Community 147 - "WhyScoreDrawer.tsx"
-Cohesion: 0.15
-Nodes (17): 📊 Analytics/KPIs por usuário (authenticated) — 6, BAND_META, deriveBand(), DIRECTION_META, ExplanationFeedbackEntry, ExplanationFeedbackValue, FACTOR_BAND_META, getFactorBand() (+9 more)
+Cohesion: 0.08
+Nodes (28): Allowlist — Funções `public.*` executáveis por `authenticated`, 📊 Analytics/KPIs por usuário (authenticated) — 6, 🔐 Auth helper (authenticated) — 1, 🔎 Busca full-text (authenticated) — 4, Categorias, 🌐 Endpoints públicos (anon + authenticated) — 9, 🧠 Gaps comportamentais (authenticated) — 4, Governança (+20 more)
 
-### Community 148 - "SentimentChartTooltip.tsx"
-Cohesion: 0.20
-Nodes (17): formatWeek(), formatWeekRange(), pctClass(), readShowAllRows(), SENTIMENT_ORDER, SENTIMENT_TOKENS, SentimentKey, TooltipExtra (+9 more)
+### Community 148 - "OfferSuggestionsElite.tsx"
+Cohesion: 0.19
+Nodes (8): AuditLogDrawer(), AuditLogEntry, Props, Props, SocialMatchDetails(), Props, SocialMatchPanel(), Props
 
 ### Community 149 - "useEntityBookmarks.ts"
 Cohesion: 0.24
@@ -2197,15 +2189,15 @@ Nodes (8): GENERIC, BookmarkType, EntityBookmark, read(), useEntityBookmarks(), 
 
 ### Community 150 - "🔍 AUDITORIA EXAUSTIVA — SINGU CRM"
 Cohesion: 0.06
-Nodes (32): 10. 📊 Análise RFM — ✅ IMPLEMENTADO, 11. 🎯 Inteligência Emocional — ✅ IMPLEMENTADO, 12. 🚫 Objeções Ocultas — ✅ IMPLEMENTADO, 13. 💰 Histórico de Compras — ✅ IMPLEMENTADO, 14. 🎁 Sugestões de Oferta — ✅ IMPLEMENTADO, 15. 📋 Critérios de Decisão — ✅ IMPLEMENTADO, 16. 💎 Valores do Cliente — ✅ IMPLEMENTADO, 17. 🔔 Sistema de Alertas — ✅ IMPLEMENTADO (+24 more)
+Nodes (34): 10. 📊 Análise RFM — ✅ IMPLEMENTADO, 11. 🎯 Inteligência Emocional — ✅ IMPLEMENTADO, 12. 🚫 Objeções Ocultas — ✅ IMPLEMENTADO, 13. 💰 Histórico de Compras — ✅ IMPLEMENTADO, 14. 🎁 Sugestões de Oferta — ✅ IMPLEMENTADO, 15. 📋 Critérios de Decisão — ✅ IMPLEMENTADO, 16. 💎 Valores do Cliente — ✅ IMPLEMENTADO, 17. 🔔 Sistema de Alertas — ✅ IMPLEMENTADO (+26 more)
 
 ### Community 151 - "useLeadScore.ts"
 Cohesion: 0.15
 Nodes (17): calculateEngagement(), calculateFit(), calculateIntent(), calculateRelationship(), computeLeadScore(), ContactData, getGrade(), GRADE_CONFIG (+9 more)
 
 ### Community 152 - "CompanyCardWithContext.tsx"
-Cohesion: 0.22
-Nodes (11): getAvatarInitial(), getAvatarStyle(), hashStringToHue(), industryIcons, IntelligenceStrip(), ScorecardTooltip(), StatusDot(), TimeAgo() (+3 more)
+Cohesion: 0.08
+Nodes (24): getAvatarInitial(), getAvatarStyle(), hashStringToHue(), industryIcons, IntelligenceStrip(), ScorecardTooltip(), StatusDot(), TimeAgo() (+16 more)
 
 ### Community 153 - "contact-utils.ts"
 Cohesion: 0.18
@@ -2236,24 +2228,24 @@ Cohesion: 0.38
 Nodes (6): public.rodizio_aplicar_onda(), public.rodizio_sugerir_distribuicao(), public.companies, public.customers, public.rodizio_distribuicao_staging, public.users
 
 ### Community 161 - "class-variance-authority"
-Cohesion: 0.16
-Nodes (12): class-variance-authority, @radix-ui/react-label, @radix-ui/react-slot, Alert, AlertDescription, AlertTitle, alertVariants, Button (+4 more)
+Cohesion: 0.18
+Nodes (11): class-variance-authority, @radix-ui/react-label, Alert, AlertDescription, AlertTitle, alertVariants, Button, ButtonProps (+3 more)
 
 ### Community 162 - "IntelStatusBar.tsx"
-Cohesion: 0.22
-Nodes (8): IntelDataSourceBadge(), Source, IntelInflightBadge(), IntelLatencyBadge(), percentile(), IntelStatusBar(), IntelTelemetryPanel(), KIND_COLOR
+Cohesion: 0.15
+Nodes (11): countBookmarks(), countNotes(), IntelBookmarksNotesBadge(), IntelDataSourceBadge(), Source, IntelInflightBadge(), IntelLatencyBadge(), percentile() (+3 more)
 
 ### Community 163 - "PWAComponents.tsx"
 Cohesion: 0.19
 Nodes (12): 7. src/components/pwa/PWAComponents.tsx - Navigator Connection API, BeforeInstallPromptEvent, InstallPrompt, Navigator, NetworkInformation, NetworkStatusBadge, OfflineIndicator(), AppSplashScreen() (+4 more)
 
-### Community 164 - "PortfolioContactCard.tsx"
-Cohesion: 0.20
-Nodes (12): PortfolioContactCard(), PortfolioContactCardProps, PortfolioStatsOverview(), PortfolioStatsOverviewProps, ContactWithCompatibility, DISC_COMPATIBILITY, LEVEL_CONFIG, PortfolioStats (+4 more)
+### Community 164 - "useBehaviorAlerts.ts"
+Cohesion: 0.17
+Nodes (10): 3.6 Hooks de Comunicação, ALERT_TYPE_CONFIG, AlertSeverity, AlertType, BehaviorAlert, useBehaviorAlerts(), CADENCE_PRESETS, CadenceAlert (+2 more)
 
-### Community 165 - "ContactDataTab.tsx"
-Cohesion: 0.12
-Nodes (14): Props, CadencePreferencesCard, Props, ConsentAuditCard(), ContactEnrichedCard(), Props, DataSummaryStrip, Props (+6 more)
+### Community 165 - "TriggerAnalyticsTabs.tsx"
+Cohesion: 0.08
+Nodes (26): 4.5 Componentes de Gatilhos/Templates, SmartTemplateSuggestions(), SmartTemplateSuggestionsProps, TAG_CONFIG, discColors, discLabels, ExpandedTemplateDetails(), formatDate() (+18 more)
 
 ### Community 166 - "carnegieCriticismEmpathy.test.ts"
 Cohesion: 0.21
@@ -2264,8 +2256,8 @@ Cohesion: 0.20
 Nodes (12): calculateEncouragementScore(), CONFIDENCE_BOOSTERS, detectDiscouragement(), DISCOURAGEMENT_PATTERNS, ENCOURAGEMENT_TEMPLATES, generateEncouragementScript(), getEncouragementForContext(), MINIMIZATION_PHRASES (+4 more)
 
 ### Community 168 - "Tabela de evidências"
-Cohesion: 0.02
-Nodes (63): 4. Código morto no frontend do escopo, Tabela de evidências, PixelSetupCard(), copy(), snippet(), DealRoom, DealRoomActivity, DealRoomComment (+55 more)
+Cohesion: 0.03
+Nodes (68): 4. Código morto no frontend do escopo, Tabela de evidências, PixelSetupCard(), copy(), snippet(), RevenueFunnelChart(), STAGES, CompetitorEditor() (+60 more)
 
 ### Community 169 - "20260522142751_81b336f5-f4c5-4bae-af01-e2d61e04a945.sql"
 Cohesion: 0.12
@@ -2279,13 +2271,13 @@ Nodes (16): audit_trigger_fn, abm_accounts_audit, abm_plans_audit, audit_battle_
 Cohesion: 0.17
 Nodes (14): public.sequence_event_to_intent_signal, idx_lsta_user_active, idx_lstl_automation, idx_lstl_contact, idx_lstl_user_fired, public.lead_score_threshold_automations, public.lead_score_threshold_log, public.sequence_event_to_intent_signal() (+6 more)
 
-### Community 172 - "client-notifications/index.ts"
-Cohesion: 0.22
-Nodes (7): AlertData, AlertRow, ContactRow, InteractionRow, LifeEventRow, RenewalRow, ADR-0020
+### Community 172 - "tracedLogger"
+Cohesion: 0.04
+Nodes (41): Added, 🟠 E mais seis que **não devem ser apagados sem checar o painel Supabase**, ✅ Itens concluídos e validados, 📊 Métricas objetivas, Plano — Estado atual: 10/10 sustentado, 🎯 Próxima ação, limiter, ScoreBreakdown (+33 more)
 
-### Community 173 - "NLPEvolutionCharts.tsx"
-Cohesion: 0.25
-Nodes (7): EmotionalDataPoint, NLPEvolutionCharts(), NLPEvolutionChartsProps, RadarDataPoint, tooltipStyle, VAK_COLORS, VAKDataPoint
+### Community 173 - "NLPEvolutionTimeline.tsx"
+Cohesion: 0.14
+Nodes (14): EmotionalDataPoint, NLPEvolutionCharts(), NLPEvolutionChartsProps, RadarDataPoint, tooltipStyle, VAK_COLORS, VAKDataPoint, AnalysisType (+6 more)
 
 ### Community 174 - "RFMSubComponents.tsx"
 Cohesion: 0.21
@@ -2299,21 +2291,21 @@ Nodes (9): IDENTITY_DETECTION_PATTERNS, IDENTITY_LABELS, IDENTITY_REINFORCEMENT_
 Cohesion: 0.18
 Nodes (15): CompanyAddress, CompanyCnae, CompanyEmail, CompanyPhone, CompanyRfmScore, CompanySocialMedia, CompanyStakeholder, useCompanyAddresses() (+7 more)
 
-### Community 177 - "useContactSegmentation.ts"
-Cohesion: 0.25
-Nodes (7): AVAILABLE_FIELDS, ContactBehaviorRow, FlattenedContact, RawContactRow, SegmentDefinition, SegmentFilter, useContactSegmentation()
+### Community 177 - "✅ Resolvidos nesta rodada"
+Cohesion: 0.05
+Nodes (34): ⏳ Pendentes (exigem decisão fora deste sandbox), ✅ Resolvidos nesta rodada, 📊 Score de excelência, 🚩 TECH DEBT BACKLOG — SINGU CRM, GlobalSyncIndicator(), ProgressStep, ProgressStepper(), ProgressStepperProps (+26 more)
 
 ### Community 178 - "📋 SINGU CRM — Levantamento Completo de Funcionalidades"
-Cohesion: 0.10
-Nodes (20): 10. 📊 Análise RFM (`rfm_analysis`), 11. 🎯 Inteligência Emocional (`eq_analysis_history`), 12. 🚫 Objeções Ocultas (`hidden_objections`), 13. 💰 Histórico de Compras (`purchase_history`), 14. 🎁 Sugestões de Oferta (`offer_suggestions`), 15. 📋 Critérios de Decisão (`decision_criteria`), 16. 💎 Valores do Cliente (`client_values`), 18. 📈 Atividades (`activities`) (+12 more)
+Cohesion: 0.06
+Nodes (31): 10. 📊 Análise RFM (`rfm_analysis`), 11. 🎯 Inteligência Emocional (`eq_analysis_history`), 12. 🚫 Objeções Ocultas (`hidden_objections`), 13. 💰 Histórico de Compras (`purchase_history`), 14. 🎁 Sugestões de Oferta (`offer_suggestions`), 15. 📋 Critérios de Decisão (`decision_criteria`), 16. 💎 Valores do Cliente (`client_values`), 17.1 Alertas Gerais (`alerts`) (+23 more)
 
 ### Community 179 - "CircuitBreaker"
 Cohesion: 0.19
 Nodes (6): CircuitBreaker, CircuitBreakerOptions, CircuitOpenError, CircuitState, getCircuitBreaker(), registry
 
 ### Community 180 - "Tabela de evidências"
-Cohesion: 0.20
-Nodes (16): Tabela de evidências, Fluxo de dados:, ThemeCustomizer(), callExternalData(), callExternalRpc(), ConcurrentEditError, deleteExternalData(), externalDbBreaker (+8 more)
+Cohesion: 0.15
+Nodes (19): Tabela de evidências, Fluxo de dados:, CustomFieldsManager(), FIELD_TYPE_LABELS, Props, ThemeCustomizer(), callExternalData(), callExternalRpc() (+11 more)
 
 ### Community 181 - "connection-tester/index.ts"
 Cohesion: 0.07
@@ -2351,9 +2343,9 @@ Nodes (12): ref_node_assert, ref_node_child_process, ref_node_os, ref_node_test,
 Cohesion: 0.13
 Nodes (15): interactions, public.cognitive_bias_history, public.conversation_analyses, public.csat_surveys, public.disc_analysis_history, public.disc_communication_logs, public.emotional_states_history, public.eq_analysis_history (+7 more)
 
-### Community 190 - "Ficha360.tsx"
-Cohesion: 0.12
-Nodes (12): Lacunas: o que NÃO verifiquei e por quê, Automacoes(), AutomacoesRulesList(), AutomacoesRulesListProps, RuleFormDialog(), RuleFormDialogProps, Ficha360(), MarketingHub() (+4 more)
+### Community 190 - "ProntidaoTrendChart.tsx"
+Cohesion: 0.08
+Nodes (19): ref_stores, makeTooltipContent(), MILESTONE_META, ProntidaoTrendChart, Props, trendMeta, TrendWeeks, WEEKS_OPTIONS (+11 more)
 
 ### Community 191 - "CompanyInteractionsTab.tsx"
 Cohesion: 0.14
@@ -2363,17 +2355,17 @@ Nodes (12): CompanyInteractionsTabProps, Contact, Interaction, interactionColors
 Cohesion: 0.17
 Nodes (9): EvidenceContext, EvidenceKind, highlightTerm(), HitCard(), KIND_LABEL, Props, SOURCE_LABEL, InsightFeedbackControls() (+1 more)
 
-### Community 193 - "SentimentDistributionChart.tsx"
+### Community 193 - "VoiceSearchOverlay.tsx"
 Cohesion: 0.15
-Nodes (8): COLORS, isSentimentKey(), LABELS, Props, SentimentDistributionChart, SentimentDistributionChartImpl(), Slice, baseData
+Nodes (20): FloatingParticles, FloatingParticlesProps, lerp(), Particle, PHASE_CONFIG, getThemeHSL(), hsl(), hsla() (+12 more)
 
-### Community 194 - "ThemeExamplesDrawer.tsx"
-Cohesion: 0.22
-Nodes (14): countTermMatches(), escapeRegex(), ExcerptItem, InteractionRow, isMatchMode(), MarkExcerpt, normalizeKey(), normalizeText() (+6 more)
+### Community 194 - "useAiGatewayCriticalToast.ts"
+Cohesion: 0.14
+Nodes (13): 5. Segurança, Edge function `validation-queue-worker`, pg_cron, Pipeline automático de validação, Tabela `validation_queue`, Trigger DB, UI, CriticalAlertRow (+5 more)
 
-### Community 195 - "lead-score/LeadScoreCard.tsx"
-Cohesion: 0.15
-Nodes (9): GRADE_STYLES, LeadScoreBadge, Props, SIZE_CLASSES, DIMENSION_CONFIG, LeadScoreCard, Props, LeadScoreWidget (+1 more)
+### Community 195 - "OnboardingWizard.tsx"
+Cohesion: 0.11
+Nodes (16): OnboardingData, OnboardingWizardProps, STEPS, CompletionStep(), CompletionStepProps, ImportStep(), ImportStepProps, ParsedContact (+8 more)
 
 ### Community 196 - "ThemeProvider.tsx"
 Cohesion: 0.23
@@ -2384,8 +2376,8 @@ Cohesion: 0.19
 Nodes (14): Action, ActionType, actionTypes, addToRemoveQueue(), dispatch(), genId(), listeners, memoryState (+6 more)
 
 ### Community 198 - "useChannelPerformanceMatrix.ts"
-Cohesion: 0.14
-Nodes (14): Channel, CHANNEL_LABELS, CHANNELS, MatrixCell, MatrixResult, normalizeChannel(), normalizeStage(), RawDeal (+6 more)
+Cohesion: 0.12
+Nodes (17): CHANNEL_ICONS, ChannelPerformanceMatrixCard(), intensityClass(), Channel, CHANNEL_LABELS, CHANNELS, MatrixCell, MatrixResult (+9 more)
 
 ### Community 199 - "useCompanies.ts"
 Cohesion: 0.15
@@ -2407,9 +2399,9 @@ Nodes (12): AIInsight, Company, Contact, AIInsight, categoryColors, categoryIcon
 Cohesion: 0.14
 Nodes (8): BOOLEAN_FIELDS, buildLookupOptions(), FilterOption, MockCompany, normalizeLookupValues(), Preset, Row, testCompanies
 
-### Community 204 - "useTasks.ts"
-Cohesion: 0.13
-Nodes (8): LazyPage(), LazySection(), Task, TaskListSnapshot, useCompleteTask(), useDeleteTask(), useReopenTask(), useUpdateTask()
+### Community 204 - "replay.ts"
+Cohesion: 0.20
+Nodes (6): DEST_KEY, DEST_URL, files, sb, WalChange, WalMessage
 
 ### Community 205 - "20260111183305_a7554561-ed71-4a77-a1b5-2ad2436f5356.sql"
 Cohesion: 0.25
@@ -2419,41 +2411,41 @@ Nodes (14): idx_communication_preferences_contact, idx_contact_time_analysis_con
 Cohesion: 0.14
 Nodes (8): inactivity_alerts, notifications, smart_reminders, public.create_notification(), public.log_activity(), pg_language, pg_namespace, pg_proc
 
-### Community 208 - "useTelemetryExport.ts"
-Cohesion: 0.24
-Nodes (7): jspdf, jspdf-autotable, ExportMeta, formatDuration(), severityLabel(), TelemetryRow, useTelemetryExport()
+### Community 208 - "StrategicNextStepsCard.tsx"
+Cohesion: 0.15
+Nodes (9): jspdf, jspdf-autotable, Contact, StrategicNextStepsCardProps, ExportMeta, formatDuration(), severityLabel(), TelemetryRow (+1 more)
 
 ### Community 209 - "pool-saturation.js"
 Cohesion: 0.14
 Nodes (9): ref_k6, options, QUESTIONS, options, options, errors, HEADERS, options (+1 more)
 
 ### Community 210 - "dual-write-diverge.ts"
-Cohesion: 0.14
-Nodes (12): dst, DST_KEY, DST_URL, leg, LEG_KEY, LEG_URL, Row, since (+4 more)
+Cohesion: 0.07
+Nodes (24): aggEnc, aggregate_hash, DEST_KEY, DEST_URL, entries, Entry, manifest, path (+16 more)
 
-### Community 211 - "ApproachRecommendationPanel.tsx"
-Cohesion: 0.04
-Nodes (46): 4.4 Componentes de Analytics, channelIcons, ChannelsTab(), MessagesTab(), PhaseCard(), TechniquesTab(), TipsTab(), ApproachRecommendationPanel() (+38 more)
+### Community 211 - "4.4 Componentes de Analytics"
+Cohesion: 0.06
+Nodes (25): 4.4 Componentes de Analytics, ApproachRecommendationPanel(), ALERT_ICONS, BehaviorAlertsPanel(), BehaviorAlertsPanelProps, SEVERITY_BORDER, SEVERITY_COLORS, BestTimeToContactPanel() (+17 more)
 
 ### Community 212 - "DISCAnalyticsPanel.tsx"
 Cohesion: 0.23
 Nodes (9): ContactsTab(), ContactWithDISC, DISC_BG_COLORS, DISC_COLORS, DistributionTab(), InsightsTab(), PerformanceTab(), ContactWithDISC (+1 more)
 
-### Community 213 - "TimelineGroupCard.tsx"
-Cohesion: 0.16
-Nodes (10): CHANNEL_OPTIONS, Props, TimelineFilterBar, eventColors, eventIcons, eventLabels, MinimalEvent, MinimalGroup (+2 more)
+### Community 213 - "NavigationStackContext.tsx"
+Cohesion: 0.29
+Nodes (8): loadDirection(), loadStack(), NavigationDirection, NavigationStackContext, NavigationStackContextType, NavigationStackProvider(), saveDirection(), saveStack()
 
 ### Community 214 - "PresetFiltersDiff.tsx"
-Cohesion: 0.24
-Nodes (7): arraysEqual(), defaultLabel(), DiffRow, FilterMap, normalize(), PresetFiltersDiff, Props
+Cohesion: 0.19
+Nodes (8): arraysEqual(), defaultLabel(), DiffRow, FilterMap, normalize(), PresetFiltersDiff, Props, SearchPresetsMenuProps
 
 ### Community 215 - "discAdvancedData.ts"
 Cohesion: 0.14
 Nodes (9): BlendProfileInfo, CompatibilityInfo, DetectionPattern, DISC_BLEND_PROFILES, DISC_COMPATIBILITY_MATRIX, DISC_DETECTION_PATTERNS, DISC_PROFILES, DISC_STRESS_SHIFTS (+1 more)
 
-### Community 216 - "Contatos.tsx"
-Cohesion: 0.14
-Nodes (9): react-window, ContatosContent(), DuplicateContactsPanel, ExternalContactLookupDialog, Props, ContatosSavedViewsProps, ContatosViewState, filterConfigs (+1 more)
+### Community 216 - "useSemanticSearch.ts"
+Cohesion: 0.20
+Nodes (8): EMPTY, SearchOpts, SemanticCompanyRow, SemanticContactRow, SemanticEntity, SemanticInteractionRow, SemanticProductRow, SemanticSearchResults
 
 ### Community 217 - "useContactBehavior.ts"
 Cohesion: 0.14
@@ -2463,9 +2455,9 @@ Nodes (12): BehavioralAuditLog, ContactBehavior, ContactBehaviorGap, ContactBusi
 Cohesion: 0.08
 Nodes (24): Administração, 🏗 Arquitetura, 📊 Banco de Dados Local (Principais Tabelas), Core CRM, Dados não aparecem no Dashboard, Edge Function retorna 401, 🔌 Integrações Externas, Inteligência (+16 more)
 
-### Community 219 - "errorReporting.ts"
-Cohesion: 0.23
-Nodes (13): captureError(), clearUserContext(), createErrorReport(), determineSeverity(), ErrorBatch, errorBuffer, ErrorReport, flushErrorBuffer() (+5 more)
+### Community 219 - "SentimentChartTooltip.tsx"
+Cohesion: 0.20
+Nodes (17): formatWeek(), formatWeekRange(), pctClass(), readShowAllRows(), SENTIMENT_ORDER, SENTIMENT_TOKENS, SentimentKey, TooltipExtra (+9 more)
 
 ### Community 220 - "20260416181618_cf783015-8b5c-48a9-8de2-acbf3d4a9fc0.sql"
 Cohesion: 0.23
@@ -2484,8 +2476,8 @@ Cohesion: 0.09
 Nodes (23): `ai-writing-assistant`, `disc-analyzer`, `elevenlabs-scribe-token`, `elevenlabs-tts`, 📡 Endpoints, `enrich-contacts`, `enrichlayer-linkedin`, `evolution-api` (+15 more)
 
 ### Community 224 - "CreateTaskDialog.tsx"
-Cohesion: 0.19
-Nodes (12): addDaysIso(), CHANNEL_NOTE_SUGGESTIONS, composeDescription(), CreateTaskDialog(), DUE_WINDOWS, FormErrors, taskSchema, todayIso() (+4 more)
+Cohesion: 0.14
+Nodes (16): addDaysIso(), CHANNEL_NOTE_SUGGESTIONS, composeDescription(), CreateTaskDialog(), DUE_WINDOWS, FormErrors, taskSchema, todayIso() (+8 more)
 
 ### Community 225 - "apply-all.js"
 Cohesion: 0.29
@@ -2493,51 +2485,51 @@ Nodes (11): FILES, main(), makeIndexIdempotent(), mgmt(), removeConcurrently(), 
 
 ### Community 226 - "ref_domain"
 Cohesion: 0.02
-Nodes (81): ref_domain, ref_stores, makeTooltipContent(), MILESTONE_META, ProntidaoTrendChart, Props, trendMeta, TrendWeeks (+73 more)
+Nodes (61): ref_domain, factorIcons, levelClasses, Props, ScoreProntidaoCard, statusBar, AnchorRecord, AnchorStrength (+53 more)
 
 ### Community 227 - "reset-passwords.ts"
 Cohesion: 0.19
 Nodes (11): admin, CountByStatus, counters, DRY_RUN, log(), processUser(), SERVICE_KEY, sha256Hex() (+3 more)
 
 ### Community 228 - "ConnectionCard.tsx"
-Cohesion: 0.13
-Nodes (17): [2.3.0] - 2026-04-20 — Rodada K: Connections Observability (55/55), Added, SLO, 1. Dead-Letter Queue com retry exponencial, 2. Métricas percentiladas via RPC, 3. Alertas proativos via triggers DB, 4. SLO formal, Decisão (+9 more)
+Cohesion: 0.22
+Nodes (11): [2.3.0] - 2026-04-20 — Rodada K: Connections Observability (55/55), Added, SLO, 2. Métricas percentiladas via RPC, 2. Métricas P50/P95/P99 + sparkline, ConnectionCard(), Props, ConnectionMetricsSparkline() (+3 more)
 
 ### Community 229 - "Estado — Infraestrutura, CI, Testes e Documentação"
 Cohesion: 0.09
 Nodes (22): `ci.yml` — job único `build-and-test`, Declaração explícita, Doc afirma × eu medi, Docs obsoletos ou duplicados, Dois pipelines concorrendo pelo mesmo alvo?, Estado — Infraestrutura, CI, Testes e Documentação, Estão conectados a algo real? **Não.**, Existe pipeline de DEPLOY? (+14 more)
 
-### Community 230 - "11. Nove páginas do escopo renderizam sem `AppLayout`"
-Cohesion: 0.16
-Nodes (12): 11. Nove páginas do escopo renderizam sem `AppLayout`, Cadastro(), ErpViewer(), formatBRL(), ProductsTab(), ProposalsTab(), Historico(), CHANNELS (+4 more)
+### Community 230 - "ObjectionsSpotlight.tsx"
+Cohesion: 0.14
+Nodes (14): ObjectionExamplesModal, getSeverity(), ObjectionCard, ObjectionCardProps, ObjectionsSpotlight, objectionStorageKey(), PERIOD_TO_DAYS, Props (+6 more)
 
 ### Community 231 - "Verificação adversarial — camada de dados"
 Cohesion: 0.06
 Nodes (33): 📋 Tabela: `lux_webhook_config`, A1 — Inventário quantitativo, A2 — Statements sem `CREATE TABLE` correspondente, A3 — Materialized views e schemas nunca criados, A4 — Órfãos, A5 — Cobertura de RLS, A6 — Jobs pg_cron, Afirmação original (+25 more)
 
 ### Community 232 - "useContacts.ts"
-Cohesion: 0.19
-Nodes (11): 26. 🗄️ Comunicação com Banco Externo, Contact, CONTACT_LISTING_SELECT, ContactInsert, ContactListItem, ContactUpdate, fetchContactsPage(), LOCAL_ONLY_FIELDS (+3 more)
+Cohesion: 0.24
+Nodes (10): 26. 🗄️ Comunicação com Banco Externo, Contact, CONTACT_LISTING_SELECT, ContactInsert, ContactListItem, ContactUpdate, fetchContactsPage(), LOCAL_ONLY_FIELDS (+2 more)
 
 ### Community 233 - "PreContactBriefing.tsx"
 Cohesion: 0.19
 Nodes (11): ClosingReadiness(), CollapsibleSectionProps, DISCStrategiesSection(), ObjectionsWarning(), OpeningTipsSection(), ValuesSection(), WordsSection(), interactionTypeIcons (+3 more)
 
-### Community 234 - "CompanyProfileCard.tsx"
-Cohesion: 0.15
-Nodes (13): Company, CompanyProfileCard(), CompanyProfileCardProps, formatPhone(), HealthStatus, platformIcon, safeInitial(), BusinessInfoCard() (+5 more)
+### Community 234 - "external-data-card.tsx"
+Cohesion: 0.25
+Nodes (7): Padrões Obrigatórios, Qualidade de Código, Resiliência, Segurança, 5. Banco externo (Supabase legado) inacessível, ExternalDataCard(), ExternalDataCardProps
 
 ### Community 235 - "formatters.ts"
 Cohesion: 0.18
 Nodes (6): formatContactName(), formatPhoneDisplay(), LOWERCASE_WORDS, normalizeForCompare(), toTitleCase(), UPPERCASE_WORDS
 
 ### Community 236 - "rpcPlanDiff.ts"
-Cohesion: 0.20
+Cohesion: 0.17
 Nodes (12): RpcPlanSnapshotsCard(), asRecord(), diffPlans(), flattenPlan(), hasScanRegression(), numberOrNull(), PlanDiffRow, PlanNode (+4 more)
 
 ### Community 237 - "InsightFeedbackAnalytics.tsx"
-Cohesion: 0.06
-Nodes (29): Ficha360DialogsProps, Ficha360Interaction, Ficha360Profile, buildContextLabel(), churnClass, Props, ResumoConversaIADialog(), signalClass (+21 more)
+Cohesion: 0.18
+Nodes (8): aggregateByLabel(), ContactsWithMostDownvotes(), InsightFeedbackAnalytics(), Kind, KIND_LABEL, LabelAgg, Row, useFeedbackData()
 
 ### Community 238 - "InteracoesContent.tsx"
 Cohesion: 0.15
@@ -2548,8 +2540,8 @@ Cohesion: 0.24
 Nodes (12): DISCAnalysisRecord, DISCAnalysisRequest, DISCAnalysisResponse, DISCAnalysisSource, DISCCommunicationLog, DISCConversionMetrics, DISCDashboardData, DISCFullProfile (+4 more)
 
 ### Community 240 - "Verificação adversarial — Marketing e Automação"
-Cohesion: 0.11
-Nodes (17): Achado 1 — a contagem publicada não bate com a tabela que ela resume, Achado 2 — duas linhas classificadas de forma errada ou injusta, Achado 3 — o terceiro "achado que domina o módulo" está errado, B1 — "Marketing/Automação é a dimensão mais frágil: apenas 6 de 38 funcionalidades ✅ (16%)", B2 — "Não existe motor de automação: nenhum trigger, EF ou cron consome `automation_rules`", B4 — "`send-transactional-email` é invocada mas não existe entre as 109 Edge Functions", B7 — "Métricas hardcoded em `MarketingHub.tsx:254,258,262` (CPL/CAC/LTV)", Evidência (+9 more)
+Cohesion: 0.13
+Nodes (13): B2 — "Não existe motor de automação: nenhum trigger, EF ou cron consome `automation_rules`", B4 — "`send-transactional-email` é invocada mas não existe entre as 109 Edge Functions", B7 — "Métricas hardcoded em `MarketingHub.tsx:254,258,262` (CPL/CAC/LTV)", Correções que devem entrar no `ESTADO_ATUAL.md`, Evidência, Evidência — nenhum consumidor de `automation_rules`, Evidência (`src/pages/MarketingHub.tsx:244-265`), O que fiz para derrubar (+5 more)
 
 ### Community 241 - "20260416005302_557a4633-8c05-46e2-9b4a-31f1341c9540.sql"
 Cohesion: 0.24
@@ -2568,8 +2560,8 @@ Cohesion: 0.21
 Nodes (9): public.enqueue_behavioral_profile_regen, public.update_bpr_queue_updated_at, idx_bpr_queue_next_run, public.behavioral_profile_regen_queue, public.contacts, trg_bpr_queue_updated_at, trg_enqueue_bpr_calls, trg_enqueue_bpr_interactions (+1 more)
 
 ### Community 247 - "Fase 1 — Auditoria estática (findings)"
-Cohesion: 0.08
-Nodes (23): Como reproduzir, Escopo auditado, 🔴 F1 — `idle-in-transaction-guard.sql` ignora `(aborted)`, 🔴 F2 — `function-search-path-reset-audit.sql` aceita `search_path` inseguro, 🔴 F3 — `checksum-failures-guard.sql` mascara clusters sem checksum, 🔴 F4 — `archive-command-health.sql` não detecta `archive_mode = off`, 🟡 F5 — `index-corruption-amcheck.sql` limitado a 100 índices, 🟡 F6 — `invalid-indexes-guard.sql` só olha `public` (+15 more)
+Cohesion: 0.10
+Nodes (19): Como reproduzir, Escopo auditado, 🔴 F1 — `idle-in-transaction-guard.sql` ignora `(aborted)`, 🔴 F2 — `function-search-path-reset-audit.sql` aceita `search_path` inseguro, 🔴 F3 — `checksum-failures-guard.sql` mascara clusters sem checksum, 🔴 F4 — `archive-command-health.sql` não detecta `archive_mode = off`, 🟡 F5 — `index-corruption-amcheck.sql` limitado a 100 índices, 🟡 F6 — `invalid-indexes-guard.sql` só olha `public` (+11 more)
 
 ### Community 248 - "password-migration-reset.tsx"
 Cohesion: 0.17
@@ -2579,25 +2571,25 @@ Nodes (10): ref_npm_react_18_3_1, ref_npm_react_email, button, container, h1, hr
 Cohesion: 0.23
 Nodes (10): papaparse, COMPANY_FIELDS, CONTACT_FIELDS, ImportEntityType, ImportResult, mapImportBatch(), mapImportRow(), MappedImportRecord (+2 more)
 
-### Community 250 - "ContactIntelligenceTab.tsx"
-Cohesion: 0.05
-Nodes (36): Integração, ChurnPredictionsWidget, ChurnRiskWidget, RISK_CONFIG, ContactCommercialTab(), ContactDataTab(), ContactDaysWithoutWidget, ContactDetailHeader() (+28 more)
+### Community 250 - "Calendario.tsx"
+Cohesion: 0.16
+Nodes (14): CalendarCompany, CalendarContact, CalendarInteraction, CalendarioContent(), FollowUp, interactionTypeIcons, interactionTypeLabels, Props (+6 more)
 
 ### Community 251 - "rls-parity.ts"
 Cohesion: 0.20
 Nodes (9): changed, DEST, destMap, extra, key(), missing, Policy, SRC (+1 more)
 
 ### Community 252 - "useApproachRecommendation.ts"
-Cohesion: 0.07
-Nodes (45): 3.6 Hooks de Comunicação, ApproachContext, ApproachPhase, ApproachRecommendation, CommunicationChannel, PersonalizedMessage, UseApproachRecommendationProps, calculateRiskLevel() (+37 more)
+Cohesion: 0.24
+Nodes (20): ApproachContext, ApproachPhase, ApproachRecommendation, CommunicationChannel, PersonalizedMessage, UseApproachRecommendationProps, calculateRiskLevel(), calculateSuccessRate() (+12 more)
 
-### Community 253 - "lucide-react"
+### Community 253 - "ref_lib"
 Cohesion: 0.01
-Nodes (89): lucide-react, roleConfig, roleOrder, AiGatewayPartitionsCard(), formatBytes(), partitionBadge(), PasswordResetApproval(), PHASE_LABELS (+81 more)
+Nodes (102): 4. Resiliência, ref_lib, LazyPage(), DailyStatsWidget, HealthRecord, DISC_COLORS, ICON_MAP, KpiRecord (+94 more)
 
-### Community 254 - "WeeklyReportPanel.tsx"
-Cohesion: 0.20
-Nodes (5): ContentToggleProps, LocalSettings, WeeklyReportSettingsTab(), WeeklyReportSettingsTabProps, ReportPreviewData
+### Community 254 - "PortfolioHealthDashboard.tsx"
+Cohesion: 0.10
+Nodes (16): 27. 📊 Dashboard — ✅ IMPLEMENTADO, 4.6 Componentes de Dashboard, AlertCardProps, HealthAlertsPanel(), ClientRow, PortfolioHealthDashboard(), PortfolioHealthDashboardProps, statusColors (+8 more)
 
 ### Community 255 - "ContextualLoader.tsx"
 Cohesion: 0.18
@@ -2612,16 +2604,16 @@ Cohesion: 0.23
 Nodes (10): buildSummary(), CHANNEL_LABELS, ChipProps, PresetChip(), Props, RelatoriosFixosBar, buildPreview(), CHANNEL_LABELS (+2 more)
 
 ### Community 258 - "Hooks (`src/hooks/`)"
-Cohesion: 0.24
-Nodes (9): Hooks (`src/hooks/`), useEntityHistory(), TAB_BY_KEY, useIntelHotkeys(), IntelTelemetryEvent, readEvents(), useIntelTabView(), useIntelTelemetry() (+1 more)
+Cohesion: 0.20
+Nodes (8): Hooks (`src/hooks/`), useEntityHistory(), IntelDensity, read(), useIntelDensity(), TAB_BY_KEY, useIntelHotkeys(), useIntelSnapshots()
 
 ### Community 259 - "1. A Missão Global dividida em 30 Etapas"
 Cohesion: 0.11
 Nodes (18): 0. Contexto do Sistema (ground truth medido), 1. A Missão Global dividida em 30 Etapas, 2. Plano de Execução em 50 Etapas, 3. Critérios de Severidade, 4. Artefatos desta Auditoria — ✅ CONCLUÍDOS (fase de descoberta), 5. Status de Execução, Bloco A — Fundações e Verdade Estrutural (1–6), Bloco B — Segurança (7–13) (+10 more)
 
-### Community 260 - "🧠 MÓDULO 2: 10 FRAMEWORKS DE COMPORTAMENTO HUMANO"
-Cohesion: 0.18
-Nodes (11): 2.10 Rapport & Espelhamento, 2.1 DISC Profile, 2.2 VAK/D (Visual, Auditivo, Cinestésico), 2.3 Metaprogramas, 2.4 Gatilhos Mentais, 2.5 Sleight of Mouth, 2.6 Estados Emocionais & Âncoras, 2.7 Valores & Critérios de Decisão (+3 more)
+### Community 260 - "Tabela de evidências"
+Cohesion: 0.20
+Nodes (12): D. Código morto / inalcançável, Resumo (contagem por classificação com denominador), Tabela de evidências, Três achados que dominam o módulo, BehavioralSegmentation(), useMarketingBehavioralInsights(), useEnrollContact(), escape() (+4 more)
 
 ### Community 261 - "Guia de Contribuição — SINGU CRM"
 Cohesion: 0.11
@@ -2631,9 +2623,9 @@ Nodes (17): Branches, 📬 Canais, Checklist do revisor, 🔍 Code Review, 📝 
 Cohesion: 0.11
 Nodes (17): 12.1 ContactCardWithContext, 12.2 AdvancedFilters, 12.3 Sidebar, Acessibilidade, 🎨 ANÁLISE DE PRODUCT DESIGN STRATEGY - RelateIQ CRM, 🏁 CONCLUSÃO, 📈 MÉTRICAS DE SUCESSO, 🧩 PILAR 12: COMPONENTES ESPECÍFICOS (+9 more)
 
-### Community 263 - "useAiAssistant.ts"
-Cohesion: 0.33
-Nodes (4): AskCrmChat(), ChatMessage, ChatThread, useAiAssistant()
+### Community 263 - "EmptyStateIllustrations.tsx"
+Cohesion: 0.22
+Nodes (8): AnalyticsIllustration(), CompaniesIllustration(), ContactsIllustration(), IllustrationProps, Illustrations, InteractionsIllustration(), NoDataIllustration(), SearchIllustration()
 
 ### Community 264 - "📋 Relatório de Análise QA - RelateIQ"
 Cohesion: 0.11
@@ -2643,13 +2635,13 @@ Nodes (17): Analytics.tsx - Recharts forwardRef Issue, 🏗️ Arquitetura Valid
 Cohesion: 0.12
 Nodes (10): Componentes, Fluxo, Restrições, EmailFinderDialog(), EmailVerificationRow, EmailVerifyResult, PhoneValidateResult, PhoneValidationRow (+2 more)
 
-### Community 266 - "Calendario.tsx"
-Cohesion: 0.16
-Nodes (14): CalendarCompany, CalendarContact, CalendarInteraction, CalendarioContent(), FollowUp, interactionTypeIcons, interactionTypeLabels, Props (+6 more)
+### Community 266 - "PortfolioContactCard.tsx"
+Cohesion: 0.20
+Nodes (12): PortfolioContactCard(), PortfolioContactCardProps, PortfolioStatsOverview(), PortfolioStatsOverviewProps, ContactWithCompatibility, DISC_COMPATIBILITY, LEVEL_CONFIG, PortfolioStats (+4 more)
 
-### Community 267 - "sheet.tsx"
-Cohesion: 0.12
-Nodes (11): @radix-ui/react-dialog, DialogContent, DialogDescription, DialogOverlay, DialogTitle, SheetContent, SheetContentProps, SheetDescription (+3 more)
+### Community 267 - "command.tsx"
+Cohesion: 0.07
+Nodes (21): cmdk, @radix-ui/react-dialog, Command, CommandDialog, CommandDialogProps, CommandEmpty, CommandGroup, CommandInput (+13 more)
 
 ### Community 268 - "intelSnapshot.ts"
 Cohesion: 0.21
@@ -2677,7 +2669,7 @@ Nodes (11): ActionFilter, ChunkSize, ComparisonStyle, METAPROGRAM_KEYWORDS, META
 
 ### Community 274 - "Achados"
 Cohesion: 0.08
-Nodes (31): Achados, ⚙️ Achados — Edge Functions (Correção & Resiliência), [ALTO] EF-3. Nenhum timeout em chamadas externas (AI Gateway, Firecrawl, EnrichLayer, Evolution, ElevenLabs, Twilio), [ALTO] EF-5. `nurturing-runner` — `completed_count` sempre gravado como 1 + duplo incremento, [ALTO] EF-6. Crons/workers sem claim atômico — double-processing sob concorrência, [ALTO] EF-7. `send-sms-campaign` — envio síncrono, sem atomicidade, sem paginação, sem timeout, [BAIXO] EF-15. Inconsistência de CORS/imports/auth entre funções, [BAIXO] EF-16. `bulk-revalidate` — teto de 5000 contatos silencioso (+23 more)
+Nodes (32): Achados, ⚙️ Achados — Edge Functions (Correção & Resiliência), [ALTO] EF-3. Nenhum timeout em chamadas externas (AI Gateway, Firecrawl, EnrichLayer, Evolution, ElevenLabs, Twilio), [ALTO] EF-4. `evolution-webhook` — sem verificação de assinatura + fallback perigoso de `user_id`, [ALTO] EF-5. `nurturing-runner` — `completed_count` sempre gravado como 1 + duplo incremento, [ALTO] EF-6. Crons/workers sem claim atômico — double-processing sob concorrência, [ALTO] EF-7. `send-sms-campaign` — envio síncrono, sem atomicidade, sem paginação, sem timeout, [BAIXO] EF-15. Inconsistência de CORS/imports/auth entre funções (+24 more)
 
 ### Community 275 - "20260124184935_7462f0ba-52a4-4ded-a9a4-316446a8223f.sql"
 Cohesion: 0.27
@@ -2723,9 +2715,9 @@ Nodes (11): public.audit_connection_changes(), public.get_buyer_document_path(),
 Cohesion: 0.18
 Nodes (9): AQUI, ARQ, atual, atualizar, baseline, falhas, melhorias, perfis (+1 more)
 
-### Community 286 - "email-finder/index.ts"
-Cohesion: 0.18
-Nodes (11): BodySchema, limiter, normalize(), permutations(), BodySchema, limiter, checkMx(), DISPOSABLE (+3 more)
+### Community 286 - "Contatos.tsx"
+Cohesion: 0.14
+Nodes (9): react-window, ContatosContent(), DuplicateContactsPanel, ExternalContactLookupDialog, Props, ContatosSavedViewsProps, ContatosViewState, filterConfigs (+1 more)
 
 ### Community 287 - "🛡️ Security Hardening Phase 3 — Final Report"
 Cohesion: 0.12
@@ -2735,45 +2727,45 @@ Nodes (16): 1. PR #3 Closed, 2. Edge Functions Hardened (2/45), 3. Database Audi
 Cohesion: 0.35
 Nodes (9): EventCard(), EventCardProps, getCardEventColor(), getCardEventIcon(), getEventColor(), getEventIcon(), getUrgencyColor(), ImportantDatesCalendar (+1 more)
 
-### Community 289 - "ProfileBasedSuggestions.tsx"
-Cohesion: 0.10
-Nodes (24): 4.5 Componentes de Gatilhos/Templates, generateCombinedMessage(), SuggestedTemplate, TemplatePreviewDialog(), TemplatePreviewDialogProps, categoryBadges, DISC_DESCRIPTIONS, ProfileBasedSuggestions() (+16 more)
+### Community 289 - "Intelligence Hub (`/intelligence`)"
+Cohesion: 0.13
+Nodes (12): Acessibilidade, Constraints, Intelligence Hub (`/intelligence`), Persistência, Tabs (`src/components/intelligence/`), Tokens (`src/index.css`), NetworkVisualization(), AskCrmMessage (+4 more)
 
-### Community 290 - "AdvancedSearchBar.tsx"
-Cohesion: 0.05
-Nodes (38): AdvancedSearchBar, CHANNEL_ICON_META, CompanyOption, ContactOption, EntityPickerProps, Props, arraysEqual(), CanaisQuickFilter (+30 more)
+### Community 290 - "CanaisQuickFilter.tsx"
+Cohesion: 0.29
+Nodes (9): arraysEqual(), CanaisQuickFilter, CHANNELS, clearPending(), Props, readApplied(), readPending(), readStoredArray() (+1 more)
 
 ### Community 291 - "AutomationWizard.tsx"
-Cohesion: 0.24
-Nodes (7): Correções que devem entrar no `ESTADO_ATUAL.md`, AUTOMATION_TEMPLATES, AutomationTemplate, Props, AutomationWizard(), GradeTarget, Props
+Cohesion: 0.36
+Nodes (5): AUTOMATION_TEMPLATES, AutomationTemplate, Props, GradeTarget, Props
 
-### Community 292 - "useProactiveIntelligence.ts"
-Cohesion: 0.14
-Nodes (12): ActionCategory, ActionPriority, ApproachScript, CARNEGIE_PRINCIPLES, Contact, DISC_APPROACH_STYLE, IntelligenceInsight, Interaction (+4 more)
+### Community 292 - "SentimentDistributionChart.tsx"
+Cohesion: 0.15
+Nodes (8): COLORS, isSentimentKey(), LABELS, Props, SentimentDistributionChart, SentimentDistributionChartImpl(), Slice, baseData
 
 ### Community 293 - "analyticsData.ts"
-Cohesion: 0.26
-Nodes (10): 1. Dado fictício, calcChange(), getEngagementByChannelData(), getEngagementRadarData(), getMetricsStats(), getRelationshipEvolutionData(), getSentimentDistributionData(), getTopPerformersData() (+2 more)
+Cohesion: 0.19
+Nodes (12): 1. Dado fictício, DealVelocityPanel(), DealVelocityPanelProps, calcChange(), getEngagementByChannelData(), getEngagementRadarData(), getMetricsStats(), getRelationshipEvolutionData() (+4 more)
 
-### Community 294 - "lgpd-snapshot.ts"
-Cohesion: 0.15
-Nodes (12): aggEnc, aggregate_hash, DEST_KEY, DEST_URL, entries, Entry, manifest, path (+4 more)
+### Community 294 - "InteractionForm.tsx"
+Cohesion: 0.11
+Nodes (15): 4.10 Componentes de Navegação, 4.11 Componentes de Formulário, 4.2 Componentes de Contato, 🔧 MÓDULO 4: COMPONENTES (150+), NextActionSuggestion, PredictiveRoadmapItem, Props, initiatedByOptions (+7 more)
 
-### Community 296 - "useAutomationRules.ts"
-Cohesion: 0.18
-Nodes (9): ACTION_OPTIONS, ActionType, AutomationAction, AutomationCondition, AutomationLog, AutomationRule, CreateRuleData, TRIGGER_OPTIONS (+1 more)
+### Community 296 - "ThemeExamplesDrawer.tsx"
+Cohesion: 0.22
+Nodes (14): countTermMatches(), escapeRegex(), ExcerptItem, InteractionRow, isMatchMode(), MarkExcerpt, normalizeKey(), normalizeText() (+6 more)
 
-### Community 297 - "AdminConexoesLogs.tsx"
-Cohesion: 0.07
-Nodes (25): 🔴 2. `crm-automation-monitor` — produtor exclusivo de widget da home, 🔴 3. `auto-regen-behavioral-profiles` — produtor exclusivo de alerta de admin, 🔴 4. `process-behavioral-regen-queue` — cron monitorado por UI viva, 🔴 5. Tabela `insights` — 5 leitores vivos, Falsos positivos encontrados (o que **NÃO** pode ser apagado), Método (os 10 testes), Placar: 5 REFUTADOS / 16 CONFIRMADOS / 6 INCONCLUSIVOS de 27 alvos, Riscos residuais (+17 more)
+### Community 297 - "Falsos positivos encontrados (o que **NÃO** pode ser apagado)"
+Cohesion: 0.12
+Nodes (14): 🔴 2. `crm-automation-monitor` — produtor exclusivo de widget da home, 🔴 3. `auto-regen-behavioral-profiles` — produtor exclusivo de alerta de admin, 🔴 4. `process-behavioral-regen-queue` — cron monitorado por UI viva, 🔴 5. Tabela `insights` — 5 leitores vivos, Falsos positivos encontrados (o que **NÃO** pode ser apagado), Método (os 10 testes), Placar: 5 REFUTADOS / 16 CONFIRMADOS / 6 INCONCLUSIVOS de 27 alvos, Verificação adversarial — classificações de código morto/órfão (+6 more)
 
 ### Community 298 - "useTouchpointSequences.ts"
-Cohesion: 0.12
-Nodes (14): CHANNEL_ICONS, Length, LENGTHS, TouchpointSequenceCard(), dealOutcome(), normalizeChannel(), RawDeal, RawInteraction (+6 more)
+Cohesion: 0.10
+Nodes (18): AnomalySeverity, AnomalyType, ConnectionAnomaly, ALERT_TYPES, SEVERITY_LEVELS, StakeholderAlert, StakeholderMetrics, StoredMetrics (+10 more)
 
 ### Community 299 - "useYourDay.ts"
 Cohesion: 0.05
-Nodes (37): 3.9 Hooks de Notificações, CompatibilitySettings, DISC_COMPATIBILITY, SalespersonProfile, useCompatibilityAlerts(), VAK_COMPATIBILITY, DEFAULT_SETTINGS, HealthAlert (+29 more)
+Nodes (40): 3.9 Hooks de Notificações, CompatibilitySettings, DISC_COMPATIBILITY, SalespersonProfile, useCompatibilityAlerts(), VAK_COMPATIBILITY, DEFAULT_SETTINGS, HealthAlert (+32 more)
 
 ### Community 300 - "canaisInteracao.ts"
 Cohesion: 0.24
@@ -2783,13 +2775,13 @@ Nodes (10): FICHA360_CHANNELS, FICHA360_CHANNELS_SET, Ficha360Channel, findIgnor
 Cohesion: 0.25
 Nodes (8): AttemptRecord, attempts, checkRateLimit(), getLockoutDuration(), getRecord(), getRemainingAttempts(), LOCKOUT_DURATIONS_MS, recordFailedAttempt()
 
-### Community 302 - "WebhookSnippetsSheet.tsx"
-Cohesion: 0.15
-Nodes (12): 1. Schema Discovery via `information_schema`, 2. Templates de Webhook, 3. Snippets generators, 4. MCP server v1.2.0, ADR-016 — Federação, Schema Discovery & Developer Experience (Rodada M), Alternativas descartadas, Consequências, Contexto (+4 more)
+### Community 302 - "ADR-016 — Federação, Schema Discovery & Developer Experience (Rodada M)"
+Cohesion: 0.20
+Nodes (9): 1. Schema Discovery via `information_schema`, 2. Templates de Webhook, 3. Snippets generators, 4. MCP server v1.2.0, ADR-016 — Federação, Schema Discovery & Developer Experience (Rodada M), Alternativas descartadas, Consequências, Contexto (+1 more)
 
-### Community 303 - "telemetry-helpers.test.ts"
-Cohesion: 0.07
-Nodes (20): [MÉDIO] TQ-5. Testes: suíte REAL e verde — número da doc desatualizado, Estado dos testes, Fragilidades adicionais dos testes, Números com denominador, Patologia 1 — Teste-espelho (reimplementa o alvo localmente), Patologia 1b — Teste-grep (asserção sobre o *texto* do fonte, não sobre comportamento), Patologia 2 — Suíte desligada, Patologia 3 — Asserção vacuamente verdadeira (+12 more)
+### Community 303 - "lead-score/LeadScoreCard.tsx"
+Cohesion: 0.15
+Nodes (9): GRADE_STYLES, LeadScoreBadge, Props, SIZE_CLASSES, DIMENSION_CONFIG, LeadScoreCard, Props, LeadScoreWidget (+1 more)
 
 ### Community 304 - "20260111162422_931d8ea9-50f0-4793-b167-51ddb862bc64.sql"
 Cohesion: 0.33
@@ -2832,16 +2824,16 @@ Cohesion: 0.18
 Nodes (10): public.rodizio_reverter_execucao(), public.rodizio_sugerir_distribuicao(), public.companies, public.customer_events, public.customer_ownership_history, public.customer_rotation_state, public.customers, public.rodizio_distribuicao_staging (+2 more)
 
 ### Community 316 - "Achados"
-Cohesion: 0.09
-Nodes (22): O que está BOM (controles reais e verificados), Achados, 🧪 Achados — Testes, Build, Config, CI & Docs-vs-Realidade, [ALTO] TQ-10. O workflow de CI referencia versões de actions inexistentes → falha no startup (0 jobs), [ALTO] TQ-1. ESLint quebra com 1.306 erros — o gate de qualidade da CI reprovaria, [ALTO] TQ-2. "Zero any" é falso — 108 usos de `any` (regra marcada como `error`), [ALTO] TQ-3. "0 erros TypeScript" com asterisco: o compilador está desligado, [ALTO] TQ-4. Documentação auto-contraditória com números fabricados (+14 more)
+Cohesion: 0.12
+Nodes (15): Achados, 🧪 Achados — Testes, Build, Config, CI & Docs-vs-Realidade, [ALTO] TQ-10. O workflow de CI referencia versões de actions inexistentes → falha no startup (0 jobs), [ALTO] TQ-1. ESLint quebra com 1.306 erros — o gate de qualidade da CI reprovaria, [ALTO] TQ-2. "Zero any" é falso — 108 usos de `any` (regra marcada como `error`), [ALTO] TQ-3. "0 erros TypeScript" com asterisco: o compilador está desligado, [ALTO] TQ-4. Documentação auto-contraditória com números fabricados, [BAIXO] TQ-11. Higiene de dependências: 3 lockfiles e classificação errada (+7 more)
 
 ### Community 317 - "alert-dialog.tsx"
 Cohesion: 0.20
 Nodes (7): @radix-ui/react-alert-dialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogOverlay, AlertDialogTitle
 
-### Community 318 - "Teste manual: Sincronização URL → UI dos filtros da Ficha 360"
-Cohesion: 0.20
-Nodes (9): 1. Pré-requisitos, 4.1 Período inválido, 4.2 Canais vazios, 4.3 Case misto, 4.4 Canal desconhecido, 4. Casos de borda, 5. Checklist de aprovação, 6. Como reportar falha (+1 more)
+### Community 318 - "useFicha360Filters.ts"
+Cohesion: 0.07
+Nodes (27): 1. Pré-requisitos, 2. Roteiro principal (caminho feliz), 3.1 Recarregar a página (F5), 3.2 Voltar/avançar do navegador, 3.3 Compartilhar o link (aba anônima logada), 3.4 Remover chip pela UI, 3.5 Clicar "Limpar tudo", 3.6 Comportamento esperado de "Limpar" / "Limpar tudo" (referência consolidada) (+19 more)
 
 ### Community 319 - "RPCs Disponíveis (Banco Externo)"
 Cohesion: 0.12
@@ -2851,29 +2843,29 @@ Nodes (15): Analytics & Reports, Arquitetura do Proxy, Contatos, Dashboard & KPI
 Cohesion: 0.22
 Nodes (8): PGDATABASE, PGHOST, PGPASSWORD, PGPORT, PGUSER, ROWS, run_one(), run-all.sh script
 
-### Community 321 - "O que está BOM (auditado)"
-Cohesion: 0.12
-Nodes (5): O que está BOM (auditado), ConversationAnalysisCard(), RelationshipKPIsDashboard(), DashboardErrorBoundary, ProviderErrorBoundary
+### Community 321 - "ProviderErrorBoundary"
+Cohesion: 0.20
+Nodes (3): Props, ProviderErrorBoundary, State
 
-### Community 322 - "useChurnRisk.ts"
-Cohesion: 0.13
-Nodes (9): ChurnRiskPanel(), ChurnRiskPanelProps, RISK_CONFIG, TREND_ICONS, ChurnPrediction, ChurnRiskData, LocalChurnRisk, useAnalyzeChurnRisk() (+1 more)
+### Community 322 - "Pipeline.tsx"
+Cohesion: 0.05
+Nodes (33): Lacunas: o que NÃO verifiquei e por quê, Arquitetura, Backend, Frontend, Next-Best-Action (NBA) por Contato, Sinais agregados, Tabela `contact_next_actions`, UX (+25 more)
 
-### Community 323 - "OfferSuggestionsElite.tsx"
-Cohesion: 0.19
-Nodes (8): AuditLogDrawer(), AuditLogEntry, Props, Props, SocialMatchDetails(), Props, SocialMatchPanel(), Props
+### Community 323 - "AnalyticsShared.tsx"
+Cohesion: 0.29
+Nodes (4): CustomTooltip, CustomTooltipProps, PieTooltip, TooltipPayloadItem
 
-### Community 324 - "error-budget/index.ts"
-Cohesion: 0.25
-Nodes (5): ActiveAlert, ALERT_THRESHOLDS, DailyPoint, limiter, Snapshot
+### Community 324 - "disc-badge.tsx"
+Cohesion: 0.29
+Nodes (4): DISC_TYPICAL_SCORES, DISCBadgeProps, DISCChartProps, DISCSelectorProps
 
 ### Community 326 - "public.get_contact_sidebar_by_phone"
 Cohesion: 0.13
 Nodes (14): public.contact_emails, public.contact_social_media, public.get_contact_sidebar_by_phone(), public.companies, public.contact_behavior, public.contact_business_context, public.contact_decision_making, public.contact_influence (+6 more)
 
-### Community 327 - "IntelHealthPanel.tsx"
-Cohesion: 0.13
-Nodes (12): Página (`src/pages/Intelligence.tsx`), HOOKS_TRACKED, HookStatus, IntelHealthPanel(), IntelTourOverlay(), STEPS, TourStep, KeyboardMapOverlay() (+4 more)
+### Community 327 - "AskTab.tsx"
+Cohesion: 0.50
+Nodes (3): AskTab(), AskTabProps, COMMANDS
 
 ### Community 328 - "carnegieWarmth.ts"
 Cohesion: 0.27
@@ -2887,9 +2879,9 @@ Nodes (4): AutomationAction, AutomationLogRow, AutomationTrigger, ScoreAutomatio
 Cohesion: 0.11
 Nodes (16): 3.1 Hooks de Dados Core, Alert, Company, Contact, ContactDetailData, Insight, Interaction, useContactDetail() (+8 more)
 
-### Community 331 - "AdminSidebar.tsx"
-Cohesion: 0.20
-Nodes (8): Edge Functions, Roteamento, Tabelas, AdminLayoutProps, ADMIN_LINKS, AdminMobileNav(), AdminSidebar(), AdminDashboard()
+### Community 331 - "AdminDashboard.tsx"
+Cohesion: 0.18
+Nodes (7): Roteamento, AdminLayoutProps, ADMIN_LINKS, AdminMobileNav(), AdminSidebar(), ADMIN_TOOLS, AdminDashboard()
 
 ### Community 332 - "useStakeholderSimulator.ts"
 Cohesion: 0.22
@@ -2904,36 +2896,36 @@ Cohesion: 0.29
 Nodes (9): CompanyContato, CompanyCores, CompanyStats, CompanySummary, useCompanyContatoView(), useCompanyCoresView(), useCompanyStatsView(), useCompanySummaryView() (+1 more)
 
 ### Community 335 - "InfiniteScrollSentinel.tsx"
-Cohesion: 0.20
-Nodes (5): ComfortableItemSkeletonProps, CompactItemSkeletonProps, InfiniteScrollSentinel, Props, SKELETON_VARIANTS
+Cohesion: 0.08
+Nodes (10): ref_contexts, ComfortableItemSkeletonProps, CompactItemSkeletonProps, InfiniteScrollSentinel, Props, SKELETON_VARIANTS, PageTransitionProps, ScrollToTopButton() (+2 more)
 
 ### Community 336 - "useContactSentimentTrend.ts"
 Cohesion: 0.29
 Nodes (9): formatLabel(), linearSlope(), SentimentPoint, SentimentStats, sentimentToValue(), SentimentTrendResult, startOfWeek(), TrendDirection (+1 more)
 
 ### Community 337 - "useEnrichmentExport.ts"
-Cohesion: 0.16
-Nodes (14): [MÉDIO] FE-6. 5 mutations sem invalidação de cache, refineEmail(), RefineParams, RefineResult, useEmailRefine(), ContactRow, csvEscape(), downloadBlob() (+6 more)
+Cohesion: 0.14
+Nodes (15): [MÉDIO] FE-6. 5 mutations sem invalidação de cache, refineEmail(), RefineParams, RefineResult, useEmailRefine(), ContactRow, csvEscape(), downloadBlob() (+7 more)
 
 ### Community 338 - "useEntityRelationships.ts"
 Cohesion: 0.22
 Nodes (7): EntityRelationship, EntityRelationshipRole, EntityType, key(), NewEntityRelationship, ROLE_LABELS, useEntityRelationships()
 
 ### Community 339 - "useErpData.ts"
-Cohesion: 0.27
-Nodes (9): CANDIDATE_PRODUCT_TABLES, CANDIDATE_PROPOSAL_TABLES, ErpProduct, ErpProposal, ErpStats, tryFetch(), useErpProducts(), useErpProposals() (+1 more)
+Cohesion: 0.24
+Nodes (10): 4. ERP: nenhuma das tabelas consultadas está liberada no proxy, CANDIDATE_PRODUCT_TABLES, CANDIDATE_PROPOSAL_TABLES, ErpProduct, ErpProposal, ErpStats, tryFetch(), useErpProducts() (+2 more)
 
 ### Community 340 - "useNLPAnalyticsData.ts"
 Cohesion: 0.29
 Nodes (9): buildTrend(), classify(), EMPTY, getPeriodDays(), NEGATIVE, NLPStats, PeriodFilter, POSITIVE (+1 more)
 
-### Community 341 - "useInteractionsRpc.ts"
-Cohesion: 0.17
-Nodes (6): ActivityHeatmapData, InteractionHistoryItem, OptimalContactWindow, PendingFollowup, useActivityHeatmap(), usePendingFollowups()
+### Community 341 - "Fixed"
+Cohesion: 0.29
+Nodes (7): Fixed, Security, [Unreleased], Company360, useInteractionHistory(), useOverdueTasks(), usePendingTasks()
 
-### Community 342 - "command.tsx"
-Cohesion: 0.17
-Nodes (10): cmdk, Command, CommandDialog, CommandDialogProps, CommandEmpty, CommandGroup, CommandInput, CommandItem (+2 more)
+### Community 342 - "AccountChurnPredictionPanel.tsx"
+Cohesion: 0.41
+Nodes (11): AccountChurnPredictionPanel(), AccountChurnPredictionPanelProps, getHealthIcon(), getRiskBadgeColor(), getRiskBgColor(), getRiskColor(), getRiskLabel(), getStakeholderIcon() (+3 more)
 
 ### Community 343 - "deal-risk-constants.ts"
 Cohesion: 0.20
@@ -2947,21 +2939,21 @@ Nodes (9): buildDelimited(), buildMarkdown(), collectHeaders(), escapeDelimited(
 Cohesion: 0.31
 Nodes (9): channelKey(), countOccurrences(), DateLike, entityKey(), getTime(), relevanceScore(), SortableItem, sortInteractions() (+1 more)
 
-### Community 346 - "BehavioralRegenAudit.tsx"
-Cohesion: 0.24
-Nodes (8): BehavioralRegenAudit(), exportCsv(), csvEscape(), formatDate(), PeriodKey, PERIODS, QueueRow, StatusFilter
+### Community 346 - "TimelineGroupCard.tsx"
+Cohesion: 0.16
+Nodes (10): CHANNEL_OPTIONS, Props, TimelineFilterBar, eventColors, eventIcons, eventLabels, MinimalEvent, MinimalGroup (+2 more)
 
 ### Community 347 - "20261006130000_frontend_rpcs_authenticated.sql"
 Cohesion: 0.14
 Nodes (8): public.compute_revops_kpis(), public.enroll_contact_in_workflow(), public.move_deal_atomic(), public.contacts, public.deals, public.lead_scores, public.mql_classifications, public.mql_criteria
 
-### Community 348 - "useKeyboardShortcutsEnhanced.ts"
-Cohesion: 0.09
-Nodes (17): [2.0.0] - 2026-04-19 — Excellence Sustained (40/40), Arquivos-chave criados/modificados na Rodada H, Rodada H — Acessibilidade WCAG AA, DX & Polimento (5 itens), Rodadas A-G — entregas anteriores, ADR-011 — Rodada H: Acessibilidade WCAG AA, DX e Polimento Final, Consequências, Contexto, Decisão (+9 more)
+### Community 348 - "useKeyboardShortcutsEnhanced"
+Cohesion: 0.13
+Nodes (13): [2.0.0] - 2026-04-19 — Excellence Sustained (40/40), Arquivos-chave criados/modificados na Rodada H, Rodada H — Acessibilidade WCAG AA, DX & Polimento (5 itens), Rodadas A-G — entregas anteriores, ADR-011 — Rodada H: Acessibilidade WCAG AA, DX e Polimento Final, Consequências, Contexto, Decisão (+5 more)
 
-### Community 349 - "badge.tsx"
+### Community 349 - "ContactForm.tsx"
 Cohesion: 0.18
-Nodes (8): Badge, BadgeGroupProps, BadgeProps, badgeVariants, NotificationBadgeProps, StatusBadgeProps, statusConfig, StatusType
+Nodes (10): ContactFormTabs(), Props, relationshipStageOptions, roleOptions, sexoOptions, ContactForm(), ContactFormData, ContactFormProps (+2 more)
 
 ### Community 350 - "lead-scorer/index.ts"
 Cohesion: 0.24
@@ -3015,9 +3007,9 @@ Nodes (8): idx_ai_gateway_metrics_created, idx_ai_gateway_metrics_fn_created, pu
 Cohesion: 0.25
 Nodes (7): public.log_contact_relationship_changes, public.check_relationship_consistency(), public.crm_relationship_audit_logs, auth.users, public.contacts, public.interactions, trigger_log_contact_relationship_changes
 
-### Community 363 - "useFicha360.ts"
-Cohesion: 0.26
-Nodes (8): useContactIntelligence(), useContactView360(), useFicha360(), UseFicha360Options, RapportIntel, useRapportIntel(), RapportPoints, useRapportPoints()
+### Community 363 - "PlaybookSectionRenderer.tsx"
+Cohesion: 0.27
+Nodes (8): O que está BOM (controles reais e verificados), [BAIXO] TQ-12. `sonarjs/dompurify-unsafe-config` em `src/lib/sanitize.ts`, ICONS, PlaybookSectionRenderer(), sanitizeDocumentHtml(), sanitizeHtml(), sanitizeText(), sanitizeUrl()
 
 ### Community 364 - "fuzzyDedup.ts"
 Cohesion: 0.31
@@ -3055,45 +3047,45 @@ Nodes (9): idx_whatsapp_messages_company_id, idx_whatsapp_messages_contact_id, i
 Cohesion: 0.33
 Nodes (7): AiGatewayErrorHeatmap(), cellColor(), DOW_LABELS, Props, AiGatewayHealthCard(), fmtMs(), toneForError()
 
-### Community 373 - "IncomingWebhookFormDialog.tsx"
-Cohesion: 0.16
-Nodes (15): [2.6.0] - 2026-04-20 — Rodada N: Connections AI & Self-Healing (70/70), Added, Notes, Capacidades, Contratos IA, Hooks/Componentes, AnomaliesWidget(), ENTITIES (+7 more)
+### Community 373 - "AnomaliesWidget.tsx"
+Cohesion: 0.20
+Nodes (10): [2.6.0] - 2026-04-20 — Rodada N: Connections AI & Self-Healing (70/70), Added, Notes, Capacidades, Contratos IA, Hooks/Componentes, AnomaliesWidget(), SEVERITY_VARIANT (+2 more)
 
 ### Community 374 - "CompanyCommercialTab.tsx"
 Cohesion: 0.28
 Nodes (8): BadgeVariant, CompanyCommercialTab(), dealStatusConfig, formatCurrency(), formatDate(), proposalStatusConfig, Props, taskStatusConfig
 
-### Community 375 - "4. Resiliência"
-Cohesion: 0.18
-Nodes (10): Padrões Obrigatórios, Qualidade de Código, Resiliência, Segurança, TanStack Query (Estado do Servidor), 4. Resiliência, 5. Banco externo (Supabase legado) inacessível, ExternalDataCard() (+2 more)
+### Community 375 - "AIEmailComposer.tsx"
+Cohesion: 0.17
+Nodes (9): ref_store, MESSAGE_TYPES, MessageType, REFINE_CHIPS, SuggestionState, Tone, TONES, AIEmailComposerTrigger() (+1 more)
 
-### Community 376 - "ObjectionsTrendChart.tsx"
-Cohesion: 0.27
-Nodes (9): DIRECTION_CLASS, DIRECTION_ICON, DIRECTION_LABEL, formatWeek(), formatWeekRange(), ObjectionsTrendChart, ObjectionsTrendChartImpl(), ObjectionsTrendTooltip() (+1 more)
+### Community 376 - "CommunicationTrainingMode.tsx"
+Cohesion: 0.21
+Nodes (6): TrainingPracticeTab(), TrainingPracticeTabProps, TrainingProgressTab(), TrainingProgressTabProps, TrainingTipsTab(), TrainingTipsTabProps
 
 ### Community 377 - "📱 MÓDULO 1: PÁGINAS PRINCIPAIS"
 Cohesion: 0.13
 Nodes (15): 1.10 Network (Network.tsx), 1.11 Configurações (Configuracoes.tsx), 1.12 Notificações (Notificacoes.tsx), 1.13 Auth (Auth.tsx), 1.14 Onboarding (Onboarding.tsx), 1.1 Dashboard (Index.tsx), 1.2 Contatos (Contatos.tsx), 1.3 Detalhe do Contato (ContatoDetalhe.tsx) (+7 more)
 
-### Community 378 - "useAIWritingAssistant.ts"
-Cohesion: 0.22
-Nodes (7): AISuggestion, ContactProfile, InteractionSummary, MessageTone, MessageType, PersuasionFramework, UseAIWritingAssistantResult
+### Community 378 - "useIntelTelemetry.ts"
+Cohesion: 0.47
+Nodes (5): IntelTelemetryEvent, readEvents(), useIntelTabView(), useIntelTelemetry(), writeEvents()
 
 ### Community 379 - "📊 CATÁLOGO DE FUNÇÕES (400 total)"
 Cohesion: 0.13
 Nodes (14): 🟢 AUTH, 🔍 Busca (7), 📊 CATÁLOGO DE FUNÇÕES (400 total), 📋 CHECKLIST PARA PINK, 🏢 Clientes & Análise (15), 📈 Dashboard Executivo (12), ⚡ EDGE FUNCTIONS (45/45), 🎯 ESTATÍSTICAS FINAIS (+6 more)
 
-### Community 380 - "useValidationQueue.ts"
-Cohesion: 0.20
-Nodes (9): Edge function `validation-queue-worker`, pg_cron, Pipeline automático de validação, Tabela `validation_queue`, Trigger DB, UI, QueueStats, useTriggerQueueWorker() (+1 more)
+### Community 380 - "InteracoesPresetsMenu.tsx"
+Cohesion: 0.31
+Nodes (7): ImportPresetsDialog, Props, InteracoesPresetsMenu, parseDate(), Props, SerializedPayload, summarize()
 
 ### Community 381 - "Migração de Dados — Runbook (psql + \COPY)"
 Cohesion: 0.13
 Nodes (15): 1. Aplicar DDL parcial no destino, 2. Exportar da origem, 3. Importar no destino, 4. Ligar RLS, policies, triggers, views, 5. Validar, Checklist final, Estratégia big-bang, Execução — passo a passo (+7 more)
 
-### Community 382 - "triggersAdvancedData.ts"
-Cohesion: 0.36
-Nodes (8): ADVANCED_MENTAL_TRIGGERS, ALL_TRIGGER_IDS, INTENSITY_LEVELS, NEUROCHEMICAL_TIMING, TRIGGER_CONFLICTS, TRIGGER_FALLBACKS, TRIGGER_SYNERGIES, VALIDATED_TRIGGER_CHAINS
+### Community 382 - "ProfileBasedSuggestions.tsx"
+Cohesion: 0.23
+Nodes (9): generateCombinedMessage(), SuggestedTemplate, TemplatePreviewDialog(), TemplatePreviewDialogProps, categoryBadges, DISC_DESCRIPTIONS, ProfileBasedSuggestions(), ProfileBasedSuggestionsProps (+1 more)
 
 ### Community 383 - "Migração de Storage — Runbook (Supabase → Supabase)"
 Cohesion: 0.13
@@ -3107,13 +3099,13 @@ Nodes (12): AnalyticsContact, AnalyticsInteraction, AnalyticsPreference, Analyti
 Cohesion: 0.28
 Nodes (8): DISC_TRAINING, generateScenarios(), getOptions(), getSituation(), SalespersonProfile, TrainingScenario, TrainingTip, VAK_TRAINING
 
-### Community 386 - "carnegieAppreciation.ts"
-Cohesion: 0.20
-Nodes (6): APPRECIATION_BY_DISC, APPRECIATION_FORMULAS, APPRECIATION_GAP_THRESHOLDS, APPRECIATION_TEMPLATES, APPRECIATION_TIMING, RECIPROCITY_INDICATORS
+### Community 386 - "🧠 MÓDULO 2: 10 FRAMEWORKS DE COMPORTAMENTO HUMANO"
+Cohesion: 0.18
+Nodes (11): 2.10 Rapport & Espelhamento, 2.1 DISC Profile, 2.2 VAK/D (Visual, Auditivo, Cinestésico), 2.3 Metaprogramas, 2.4 Gatilhos Mentais, 2.5 Sleight of Mouth, 2.6 Estados Emocionais & Âncoras, 2.7 Valores & Critérios de Decisão (+3 more)
 
-### Community 387 - "TemplateHistoryByProfile.tsx"
-Cohesion: 0.25
-Nodes (9): ProfileCard(), TemplateByProfileView(), ContactDISCInfo, DISC_CONFIG, ProfileMetrics, TemplateHistoryByProfileProps, TemplateProfileMetrics, useTemplateHistoryMetrics() (+1 more)
+### Community 387 - "WeeklyReportPanel.tsx"
+Cohesion: 0.20
+Nodes (5): ContentToggleProps, LocalSettings, WeeklyReportSettingsTab(), WeeklyReportSettingsTabProps, ReportPreviewData
 
 ### Community 388 - "sleightOfMouth.ts"
 Cohesion: 0.25
@@ -3128,12 +3120,12 @@ Cohesion: 0.20
 Nodes (8): AiGatewayActiveAlert, AiGatewayFunctionRow, AiGatewayHealth, AiGatewayHeatmapCell, AiGatewayModelRow, AiGatewayMttrRow, AiGatewayResolvedRow, AiGatewayWorstWindow
 
 ### Community 391 - "useBestTimeHeatmap.ts"
-Cohesion: 0.25
+Cohesion: 0.22
 Nodes (8): BestTimeHeatmapResult, buildEmpty(), DAY_LABELS, HEATMAP_CONSTANTS, HeatmapCell, InteractionRow, TopSlot, useBestTimeHeatmap()
 
-### Community 392 - "Tabela de evidências"
-Cohesion: 0.07
-Nodes (29): D. Código morto / inalcançável, Resumo (contagem por classificação com denominador), Tabela de evidências, Três achados que dominam o módulo, Linhas que reverifiquei e considero corretas (amostra de 22, ≥ 12 exigidas), DemandForecast, EmbeddableDashboard, GeoSalesPoint (+21 more)
+### Community 392 - "3.4 Hooks de Analytics"
+Cohesion: 0.08
+Nodes (19): 3.4 Hooks de Analytics, AccountChurnRisk, AccountRiskFactor, ContactRiskSummary, StakeholderHealthMetrics, useAccountChurnPrediction(), ContactTimeAnalysis, dayNames (+11 more)
 
 ### Community 393 - "useContactTagsHistory.ts"
 Cohesion: 0.28
@@ -3147,9 +3139,9 @@ Nodes (8): clamp(), ConfidenceFactor, ConfidenceLevel, DealForecastConfidence, l
 Cohesion: 0.28
 Nodes (8): Entity360Related, Entity360Result, Entity360TimelineEvent, Entity360Type, fetchPeopleIntel(), fetchRelatives(), tableMap, useEntity360()
 
-### Community 396 - "useFicha360ConversationSummary.ts"
-Cohesion: 0.22
-Nodes (7): ConversationSummary, ConversationSummaryPendency, ConversationSummaryResult, ConversationSummarySignal, GenerateSummaryParams, InteractionPayload, SummaryHistoryItem
+### Community 396 - "ReminderCard.tsx"
+Cohesion: 0.20
+Nodes (8): priorityBadgeColors, priorityColors, ReminderCard(), ReminderCardProps, typeColors, typeIcons, SmartRemindersPanelProps, typeLabels
 
 ### Community 397 - "SINGU CRM — Guia de Onboarding para Desenvolvedores"
 Cohesion: 0.13
@@ -3163,9 +3155,9 @@ Nodes (8): cancelIdle(), IdleCallback, IdleDeadline, IdleWindow, Options, Prefet
 Cohesion: 0.28
 Nodes (6): FEEDBACK_KEY(), PassoFeedback, PassoOutcome, RegisterFeedbackPayload, useProximoPassoFeedbacks(), useRegisterPassoFeedback()
 
-### Community 400 - "Auth.tsx"
-Cohesion: 0.22
-Nodes (7): AuthBranding(), AVATARS, FEATURES, AuthMode, emailSchema, nameSchema, passwordSchema
+### Community 400 - "useAppliedResponses.ts"
+Cohesion: 0.50
+Nodes (4): AppliedResponse, normalizeObjection(), QUERY_KEY, useAppliedResponses()
 
 ### Community 401 - "channelCountsCache.ts"
 Cohesion: 0.31
@@ -3180,12 +3172,12 @@ Cohesion: 0.22
 Nodes (5): DEFAULT_EXCERPT_PRESET, EXCERPT_PRESET_STORAGE_KEY, EXCERPT_WINDOW_PRESETS, ExcerptWindowPreset, FALLBACK_WINDOW_RATIO
 
 ### Community 404 - "keyboardShortcutRegistry.ts"
-Cohesion: 0.11
-Nodes (18): [2.1.0] - 2026-04-20 — Rodada I: Polimento Final (45/45), Added, Changed, Security, 2. Shortcut registry público, Coexistência, Edge Function, Hooks `src/hooks/useScoreAutomations.ts` (+10 more)
+Cohesion: 0.17
+Nodes (12): [2.1.0] - 2026-04-20 — Rodada I: Polimento Final (45/45), Added, Changed, Security, 2. Shortcut registry público, Edge Function, listeners, notify() (+4 more)
 
-### Community 405 - "prontidaoTrendMilestones.ts"
-Cohesion: 0.28
-Nodes (7): CHANNEL_TO_KIND, computeTrendMilestones(), findWeekPoint(), KIND_LABEL, MilestoneKind, refDate(), TrendMilestone
+### Community 405 - "useAutomationRules.ts"
+Cohesion: 0.18
+Nodes (9): ACTION_OPTIONS, ActionType, AutomationAction, AutomationCondition, AutomationLog, AutomationRule, CreateRuleData, TRIGGER_OPTIONS (+1 more)
 
 ### Community 406 - "Validação da auditoria — o que quebrou quando testei meu próprio trabalho"
 Cohesion: 0.08
@@ -3203,9 +3195,9 @@ Nodes (6): CHANNEL_META, ChannelFilter, channelFromInteractionType(), Inbox(), I
 Cohesion: 0.20
 Nodes (5): ContactRelationalData, ExternalAddress, ExternalEmail, ExternalPhone, ExternalSocialMedia
 
-### Community 410 - "InteractionForm.tsx"
-Cohesion: 0.10
-Nodes (20): 4.11 Componentes de Formulário, 4.2 Componentes de Contato, 🔧 MÓDULO 4: COMPONENTES (150+), ContactFormTabs(), Props, relationshipStageOptions, roleOptions, sexoOptions (+12 more)
+### Community 410 - "Achados"
+Cohesion: 0.20
+Nodes (9): Achados, 🔐 Achados — Segurança, [ALTA] SEC-2. `external-data` concede CRUD total na base externa a qualquer autenticado (RLS 100% contornado), [ALTA] SEC-3. Webhooks com service_role e SEM verificação de assinatura/segredo, [BAIXA] SEC-7. Injeção de filtro PostgREST no `mcp-server`, [CRÍTICA] SEC-1. Views `*_public` expõem tokens-segredo a `anon` → enumerar e assinar documentos de terceiros, [MÉDIA] SEC-5. CORS aberto a qualquer subdomínio `*.lovable.app`/`*.lovableproject.com`, e `*` literal em ~35 funções, [MÉDIA] SEC-6. SSRF autenticado em `connection-tester` (+1 more)
 
 ### Community 411 - "external-data-telemetry.test.ts"
 Cohesion: 0.25
@@ -3219,13 +3211,13 @@ Nodes (14): src/types/behavior.ts - CRIADO, BehaviorJson, getBehavior(), getDISC
 Cohesion: 0.22
 Nodes (7): MBTI_DICHOTOMIES, MBTI_TYPES, MBTIDichotomy, MBTIPreferences, MBTIProfile, MBTIType, MBTITypeInfo
 
-### Community 414 - "ref_npm_supabase"
-Cohesion: 0.03
-Nodes (50): ref_npm_libphonenumber_js_1_11_7, ref_npm_supabase, ref_npm_zod_3_23_8, BodySchema, ContactRow, limiter, VerificationRow, BodySchema (+42 more)
+### Community 414 - "rateLimit"
+Cohesion: 0.02
+Nodes (86): ❓ FAQ, ref_npm_libphonenumber_js_1_11_7, ref_npm_zod_3_23_8, ContactProfile, DISC_COMMUNICATION_STYLES, InteractionSummary, limiter, VAK_STYLES (+78 more)
 
-### Community 415 - "SINGU CRM — Arquitetura Consolidada"
-Cohesion: 0.12
-Nodes (14): 10. Padrões obrigatórios, 11. Estrutura de diretórios, 1. Visão Geral, 2. Stack, 3. Fluxo de dados, 5. Segurança, 6. Observabilidade, 7. Rotas críticas (+6 more)
+### Community 415 - "CognitiveBiasesSubComponents.tsx"
+Cohesion: 0.31
+Nodes (8): BiasCard(), getPolarityColor(), getPolarityIcon(), HistoryRecord, HistoryTabContent(), StrategiesTabContent(), CognitiveBiasesPanelProps, Interaction
 
 ### Community 416 - "20260411212046_c6a8c367-17de-4bf5-b40f-9c435f0288f4.sql"
 Cohesion: 0.33
@@ -3307,25 +3299,25 @@ Nodes (8): idx_interactions_company_id, idx_interactions_contact_id, idx_interac
 Cohesion: 0.25
 Nodes (7): orderFile, outDir, parts, SAMPLE, sqlLines, sqlPath, tables
 
-### Community 437 - "Drift: repo × tipos gerados — quantificado"
-Cohesion: 0.22
-Nodes (8): A explicação, com evidência, Achados graves com migration:linha, Consequência mensurável no código, Drift: repo × tipos gerados — quantificado, Os números, Correções aplicadas, Database, Json
+### Community 437 - "CategoryColumn.tsx"
+Cohesion: 0.31
+Nodes (4): CategoryBadge(), CONFIG, COLUMNS, HealthScoreIndicator()
 
 ### Community 438 - "Achados"
-Cohesion: 0.15
-Nodes (12): Achados, 🖥️ Achados — Frontend, [ALTO] FE-3. 65 arquivos-fonte violam o limite de 400 linhas (13 >600), [BAIXO] FE-8. `.find(...).prop` inseguro (2 casos, mitigados), [BAIXO] FE-9. `setInterval` sem `clearInterval`, [CRÍTICO] FE-1. "Zero any" é falso: 119 `any` + 183 double-casts, [CRÍTICO] FE-2. 72 arquivos fazem data-fetching dentro de `useEffect` (antipadrão proibido), [INFO] FE-11. Erros reais de tipo: 2 (leaflet) (+4 more)
+Cohesion: 0.14
+Nodes (13): Achados, 🖥️ Achados — Frontend, [ALTO] FE-3. 65 arquivos-fonte violam o limite de 400 linhas (13 >600), [BAIXO] FE-10. NaN silencioso em `generateRecommendations` (stakeholders), [BAIXO] FE-8. `.find(...).prop` inseguro (2 casos, mitigados), [BAIXO] FE-9. `setInterval` sem `clearInterval`, [CRÍTICO] FE-1. "Zero any" é falso: 119 `any` + 183 double-casts, [CRÍTICO] FE-2. 72 arquivos fazem data-fetching dentro de `useEffect` (antipadrão proibido) (+5 more)
 
-### Community 439 - "InboundActivityHeatmapCard.tsx"
-Cohesion: 0.24
-Nodes (6): BestTimeHeatmapCard(), MEDAL_LABEL, rateColor(), HOURS, InboundActivityHeatmapCard(), intensityClass()
+### Community 439 - "ObjectionsTrendChart.tsx"
+Cohesion: 0.27
+Nodes (9): DIRECTION_CLASS, DIRECTION_ICON, DIRECTION_LABEL, formatWeek(), formatWeekRange(), ObjectionsTrendChart, ObjectionsTrendChartImpl(), ObjectionsTrendTooltip() (+1 more)
 
 ### Community 440 - "3.8 Hooks de UX/UI"
-Cohesion: 0.14
-Nodes (9): 3.8 Hooks de UX/UI, useDebounce(), LazyOptions, useLazySection(), useOnlineStatus(), UseOnlineStatusOptions, UseOnlineStatusReturn, SavedFilter (+1 more)
+Cohesion: 0.08
+Nodes (17): 3.8 Hooks de UX/UI, canvas-confetti, useDebounce(), EasterEgg, useEasterEggs(), LazyOptions, useLazySection(), useOnlineStatus() (+9 more)
 
-### Community 441 - "Checklist aplicado em todas as superfícies críticas"
-Cohesion: 0.20
-Nodes (7): Checklist aplicado em todas as superfícies críticas, Referências de implementação, useAriaLiveRegion(), RouteAnnouncer(), routeTitles, KeyboardHint(), KeyboardHintProps
+### Community 441 - "AriaLiveRegion.tsx"
+Cohesion: 0.12
+Nodes (13): Checklist aplicado em todas as superfícies críticas, Referências de implementação, AriaLiveContext, AriaLiveContextValue, AriaLiveMode, AriaLiveProvider(), AriaLiveProviderProps, liveAnnouncements (+5 more)
 
 ### Community 442 - "Estratégia de Backup e Disaster Recovery"
 Cohesion: 0.14
@@ -3344,44 +3336,44 @@ Cohesion: 0.36
 Nodes (7): ActiveFiltersBar, CHANNEL_META, fmtDate(), pad2(), prettifyChannel(), Props, SENTIMENTO_META
 
 ### Community 446 - "useBulkRevalidate.ts"
-Cohesion: 0.12
-Nodes (13): Edge function `bulk-revalidate`, Hooks, Restrições, Revalidação em massa, UI, BulkRevalidateCard(), ValidationQueueCard(), BulkRevalidateFilters (+5 more)
+Cohesion: 0.18
+Nodes (9): Edge function `bulk-revalidate`, Hooks, Restrições, Revalidação em massa, BulkRevalidateFilters, BulkRevalidateKind, BulkRevalidateResult, BulkRevalidateStatus (+1 more)
 
 ### Community 447 - "📊 Resumo Executivo - v19.0"
 Cohesion: 0.14
 Nodes (14): 1. Padronização de Export Style, 1. Tipagem Segura em catch blocks, 2. Props com any → Tipos Explícitos, 2. Remoção de Imports Desnecessários, ✅ Correções v13, ✅ Correções v15, ✅ Correções v16, ✅ Correções v19 (+6 more)
 
 ### Community 448 - "OnboardingTour.tsx"
-Cohesion: 0.18
-Nodes (11): 21.1 AppLayout, 21.2 Engajamento & Retenção, 21. 🎨 Layout & UX, DEFAULT_TOUR_STEPS, OnboardingTour(), OnboardingTourProps, TourStep, useOnboardingTour() (+3 more)
+Cohesion: 0.21
+Nodes (10): 21.1 AppLayout, 21.2 Engajamento & Retenção, 21. 🎨 Layout & UX, DEFAULT_TOUR_STEPS, OnboardingTour(), OnboardingTourProps, TourStep, useOnboardingTour() (+2 more)
 
-### Community 449 - "Categorias"
-Cohesion: 0.15
-Nodes (11): Allowlist — Funções `public.*` executáveis por `authenticated`, 🔐 Auth helper (authenticated) — 1, 🔎 Busca full-text (authenticated) — 4, Categorias, 🌐 Endpoints públicos (anon + authenticated) — 9, 🧠 Gaps comportamentais (authenticated) — 4, Governança, ⚙️ Mutações de negócio (authenticated) — 4 (+3 more)
+### Community 449 - "stat-card.tsx"
+Cohesion: 0.20
+Nodes (3): iconColorMap, MiniStatProps, StatCardProps
 
-### Community 450 - "useAskCrm.ts"
-Cohesion: 0.22
-Nodes (7): Constraints, NetworkVisualization(), AskCrmMessage, AskCrmResponse, useAskCrm(), InstantKpis, useInstantKpis()
+### Community 450 - "carnegieAppreciation.ts"
+Cohesion: 0.20
+Nodes (6): APPRECIATION_BY_DISC, APPRECIATION_FORMULAS, APPRECIATION_GAP_THRESHOLDS, APPRECIATION_TEMPLATES, APPRECIATION_TIMING, RECIPROCITY_INDICATORS
 
 ### Community 451 - "SequenceFormDialog.tsx"
 Cohesion: 0.32
 Nodes (7): CHANNELS, CONDITION_OPTIONS, emptyStep(), nextSeqStepId(), Props, SequenceFormDialog(), StepDraft
 
-### Community 452 - "disc-badge.tsx"
-Cohesion: 0.13
-Nodes (11): 4.12 Componentes UI (shadcn + customizados), DISC_TYPICAL_SCORES, DISCBadge(), DISCBadgeProps, DISCChartProps, DISCSelectorProps, OptimizedAvatar(), RoleBadge() (+3 more)
+### Community 452 - "priority-indicator.tsx"
+Cohesion: 0.12
+Nodes (16): 4.12 Componentes UI (shadcn + customizados), DISCBadge(), OptimizedAvatar(), calculatePriority(), PriorityBar(), PriorityConfig, PriorityIndicator(), PriorityIndicatorProps (+8 more)
 
-### Community 453 - "useUnifiedNotifications.ts"
-Cohesion: 0.33
-Nodes (4): UnifiedNotificationsBell(), PRIORITY_RANK, UnifiedNotification, useUnifiedNotifications()
+### Community 453 - "radio-group.tsx"
+Cohesion: 0.21
+Nodes (6): @radix-ui/react-progress, @radix-ui/react-radio-group, Progress, ProgressProps, RadioGroup, RadioGroupItem
 
-### Community 454 - "DensityContext.tsx"
-Cohesion: 0.29
-Nodes (5): BASE_TABLE_DENSITY_KEY, DensityContext, ListDensity, readFromStorage(), useListDensity()
+### Community 454 - "triggersAdvancedData.ts"
+Cohesion: 0.36
+Nodes (8): ADVANCED_MENTAL_TRIGGERS, ALL_TRIGGER_IDS, INTENSITY_LEVELS, NEUROCHEMICAL_TIMING, TRIGGER_CONFLICTS, TRIGGER_FALLBACKS, TRIGGER_SYNERGIES, VALIDATED_TRIGGER_CHAINS
 
-### Community 455 - "RelativesSection.tsx"
-Cohesion: 0.25
-Nodes (8): RelativesSection(), RelativesSectionProps, RELATIONSHIP_TYPES, RelativeDialog(), RelativeDialogProps, RelativeInput, Props, RelativesCard()
+### Community 455 - "DashboardErrorBoundary"
+Cohesion: 0.22
+Nodes (3): DashboardErrorBoundary, Props, State
 
 ### Community 456 - "AdminKnowledgeExport.tsx"
 Cohesion: 0.32
@@ -3403,29 +3395,29 @@ Nodes (7): read(), sameCombo(), sanitize(), __test__, useChannelHistory(), VALID
 Cohesion: 0.15
 Nodes (12): 1. Dados Locais (CRUD direto), 2. Dados Externos (via proxy), 3. Análises Automáticas, Arquitetura do SINGU CRM, Decisões de Design e Trade-offs, Diagrama de Arquitetura, Estrutura de Diretórios, Fluxo de Dados (+4 more)
 
-### Community 461 - "AccountHierarchyTree.tsx"
-Cohesion: 0.32
-Nodes (5): AccountHierarchyTree(), buildTree(), TreeNode, AccountTierBadge(), tierConfig
+### Community 461 - "BehavioralRegenAudit.tsx"
+Cohesion: 0.24
+Nodes (8): BehavioralRegenAudit(), exportCsv(), csvEscape(), formatDate(), PeriodKey, PERIODS, QueueRow, StatusFilter
 
-### Community 462 - "useFicha360Filters.ts"
-Cohesion: 0.25
-Nodes (7): useExternalInteractions(), normalize(), useFicha360ChannelCounts(), Ficha360Period, KNOWN_TAGS_SET, SetterOptions, VALID_PERIODS
+### Community 462 - "Auth.tsx"
+Cohesion: 0.22
+Nodes (7): AuthBranding(), AVATARS, FEATURES, AuthMode, emailSchema, nameSchema, passwordSchema
 
 ### Community 463 - "domain/validationSchemas.ts"
 Cohesion: 0.17
 Nodes (11): cnpjSchema, CompanyFormData, companyFormSchema, ContactFormData, contactFormSchema, emailSchema, InteractionFormData, interactionFormSchema (+3 more)
 
-### Community 464 - "useEmotionalIntelligence.ts"
-Cohesion: 0.21
-Nodes (12): Erro de precisão em R9, CommunicationCoherencePanel(), generateProfileSummary(), Interaction, useCognitiveBiases(), generateProfileSummary(), getClosingStrategy(), getDecisionMakingStyle() (+4 more)
+### Community 464 - "CommunicationCoherencePanel.tsx"
+Cohesion: 0.12
+Nodes (17): Erro de precisão em R9, CoherenceAnalysis, CoherenceIssue, CommunicationCoherencePanel(), CommunicationCoherencePanelProps, MetaProgramsProfiler(), MetaProgramsProfilerProps, generateProfileSummary() (+9 more)
 
 ### Community 465 - "marketing-automation-suite.md"
-Cohesion: 0.07
-Nodes (28): 🔴 1. `attribution-calculator` — a auditoria inverteu produtor e substituto, AttributionBreakdownChart(), Allocation, AttributionModel, Touchpoint, useAttribution(), useRecordTouchpoint(), useTouchpoints() (+20 more)
+Cohesion: 0.08
+Nodes (27): 🔴 1. `attribution-calculator` — a auditoria inverteu produtor e substituto, Allocation, AttributionModel, Touchpoint, useAttribution(), useRecordTouchpoint(), useTouchpoints(), FormField (+19 more)
 
 ### Community 466 - "sonner"
-Cohesion: 0.02
-Nodes (66): sonner, BehavioralRegenCronHealth(), CronHealthRow, formatAgo(), minutesSince(), Props, QuickFollowUpGenerator, TONE_CHIPS (+58 more)
+Cohesion: 0.01
+Nodes (75): sonner, AlertRow, BehavioralRegenCronHealth(), CronHealthRow, formatAgo(), minutesSince(), dashboardColors, EmbeddableDashboards (+67 more)
 
 ### Community 467 - "useUnifiedHistory.ts"
 Cohesion: 0.36
@@ -3451,13 +3443,13 @@ Nodes (7): CreateSmsCampaignInput, SmsCampaign, SmsCampaignRecipient, SmsTemplat
 Cohesion: 0.15
 Nodes (13): 5.10 template-success-notifications, 5.11 voice-to-text, 5.12 weekly-digest, 5.1 ai-writing-assistant, 5.2 check-health-alerts, 5.3 check-notifications, 5.4 client-notifications, 5.5 generate-insights (+5 more)
 
-### Community 473 - "table.tsx"
-Cohesion: 0.04
-Nodes (34): HeatPoint, TemporalHeatmap, TemporalHeatmapProps, Table, TableBody, TableCaption, TableCell, TableFooter (+26 more)
+### Community 473 - "Configuracoes.tsx"
+Cohesion: 0.24
+Nodes (6): ConfigNotificationsTab(), ConfigNotificationsTabProps, NOTIFICATION_ITEMS, NotificationState, ConfigSecurityTab(), ProfileData
 
-### Community 474 - "replay.ts"
-Cohesion: 0.20
-Nodes (6): DEST_KEY, DEST_URL, files, sb, WalChange, WalMessage
+### Community 474 - "AdminTelemetria.tsx"
+Cohesion: 0.15
+Nodes (12): Estado dos testes, Fragilidades adicionais dos testes, Números com denominador, Patologia 1 — Teste-espelho (reimplementa o alvo localmente), Patologia 2 — Suíte desligada, Patologia 3 — Asserção vacuamente verdadeira, Patologia 4 — Sem runner (o achado mais grave dos testes), Patologia 5 — Alvo inexistente (+4 more)
 
 ### Community 475 - "Migração das Edge Functions — Runbook"
 Cohesion: 0.15
@@ -3587,9 +3579,9 @@ Nodes (11): 9.1 Navegação, 9.2 Gestos, 9.3 Feedback, 📊 ANÁLISE COMPLETA DO
 Cohesion: 0.22
 Nodes (5): FilterInput, WhatsAppImportInput, WhatsAppImportResult, WhatsAppMessageRow, WhatsAppMessageType
 
-### Community 508 - "useDailyKpis.test.tsx"
-Cohesion: 0.25
-Nodes (5): DailyKpi, DailyStats, mocks, queryClient, useDailyKpis()
+### Community 508 - "EmpresaDetalhe.tsx"
+Cohesion: 0.24
+Nodes (8): Contact, ContactsTabContent(), safeInitial(), Company, Contact, EmpresaDetalhe(), HealthStatus, Interaction
 
 ### Community 509 - "ProntidaoFactorBreakdownChart.tsx"
 Cohesion: 0.25
@@ -3599,29 +3591,33 @@ Nodes (7): buildRows(), ChartRow, FACTOR_META, FactorKey, ProntidaoFactorBreakdo
 Cohesion: 0.29
 Nodes (6): errorConfigs, ErrorState(), ErrorStateProps, ErrorType, InlineError(), LoadingWithError()
 
-### Community 511 - "CategoryColumn.tsx"
-Cohesion: 0.31
-Nodes (4): CategoryBadge(), CONFIG, COLUMNS, HealthScoreIndicator()
+### Community 511 - "useConversationalSearch.ts"
+Cohesion: 0.23
+Nodes (12): CompanyRow, ContactRow, ConvEntity, ConvFilters, ConvInterpretation, ConvResultItem, executeFilters(), InteractionRow (+4 more)
 
-### Community 512 - "Achados"
-Cohesion: 0.18
-Nodes (10): Achados, 🔐 Achados — Segurança, [ALTA] SEC-2. `external-data` concede CRUD total na base externa a qualquer autenticado (RLS 100% contornado), [ALTA] SEC-3. Webhooks com service_role e SEM verificação de assinatura/segredo, [ALTA] SEC-4. Crons sensíveis (envio de mensagens / massa) sem `CRON_SECRET`, com service_role, [BAIXA] SEC-7. Injeção de filtro PostgREST no `mcp-server`, [CRÍTICA] SEC-1. Views `*_public` expõem tokens-segredo a `anon` → enumerar e assinar documentos de terceiros, [MÉDIA] SEC-5. CORS aberto a qualquer subdomínio `*.lovable.app`/`*.lovableproject.com`, e `*` literal em ~35 funções (+2 more)
+### Community 512 - "telemetry-helpers.test.ts"
+Cohesion: 0.20
+Nodes (3): SeverityFilter, TelemetryRow, TimeFilter
 
 ### Community 513 - "📊 Análise Exaustiva do Banco de Dados - RelateIQ"
 Cohesion: 0.17
 Nodes (11): 📊 Análise Exaustiva do Banco de Dados - RelateIQ, Changelog, Contagem de Registros, Diagrama ER (Simplificado), Inventário de Tabelas, Resumo Executivo, Status Atual, 📋 Sumário (+3 more)
 
-### Community 514 - "auth-flow.test.ts"
-Cohesion: 0.25
-Nodes (6): mockGetSession, mockGetUser, mockOnAuthStateChange, mockRefreshSession, mockSignInWithPassword, mockSignOut
+### Community 514 - "useNetworkGraph.ts"
+Cohesion: 0.22
+Nodes (8): 3.5 Hooks de Stakeholders, GraphData, GraphLink, GraphNode, NetworkStats, NODE_COLORS, useNetworkGraph(), useStakeholderAlerts()
 
 ### Community 515 - "2. 👤 Gestão de Contatos (Contacts)"
-Cohesion: 0.12
-Nodes (14): 2.1 Relacionamento, 2.2 Perfil Comportamental Estendido (`ContactBehavior`), 2.3 Frameworks de Personalidade, 2.4 Eventos de Vida (`LifeEvent`), 2.5 Parentes/Relacionados (`contact_relatives`), 2.6 Preferências de Contato (`contact_preferences`), 2.7 Cadência de Contato (`contact_cadence`), 2.8 Análise Temporal (`contact_time_analysis`) (+6 more)
+Cohesion: 0.25
+Nodes (8): 2.1 Relacionamento, 2.2 Perfil Comportamental Estendido (`ContactBehavior`), 2.4 Eventos de Vida (`LifeEvent`), 2.5 Parentes/Relacionados (`contact_relatives`), 2.6 Preferências de Contato (`contact_preferences`), 2.7 Cadência de Contato (`contact_cadence`), 2.8 Análise Temporal (`contact_time_analysis`), 2. 👤 Gestão de Contatos (Contacts)
 
 ### Community 516 - "20261005230000_fix_contacts_companies_write_triggers.sql"
 Cohesion: 0.24
 Nodes (4): pg_attribute, pg_index, public.audit_trigger_func(), public.trigger_log_interaction_activity()
+
+### Community 517 - "ChannelShortcutsHelpOverlay.tsx"
+Cohesion: 0.33
+Nodes (5): CHANNELS, ChannelShortcutsHelpOverlay, KeyChipProps, Props, readPending()
 
 ### Community 518 - "Achados"
 Cohesion: 0.17
@@ -3648,8 +3644,8 @@ Cohesion: 0.17
 Nodes (11): 2. Row Level Security (RLS), 3. CORS, 4. Cabeçalhos HTTP (index.html), 5. Proteção contra Ataques, 6. Dados Sensíveis, 🔍 Auditoria, 🛡️ Camadas de Proteção, 🔄 Processo de Review (+3 more)
 
 ### Community 524 - "useNpsSurveys.ts"
-Cohesion: 0.29
-Nodes (5): AnswerSurveyDialog(), SendSurveyDialog(), CsatSurvey, NpsMetrics, useNpsSurveys()
+Cohesion: 0.18
+Nodes (7): AnswerSurveyDialog(), Props, Props, SendSurveyDialog(), CsatSurvey, NpsMetrics, useNpsSurveys()
 
 ### Community 525 - "celebrate.ts"
 Cohesion: 0.12
@@ -3671,17 +3667,17 @@ Nodes (5): getBundleByScenario(), getBundlesForProfile(), getRecommendedBundle()
 Cohesion: 0.17
 Nodes (10): colorClasses, ConnectionStatusProps, LiveIndicator(), LiveIndicatorProps, PulsingDot(), PulsingDotProps, sizeClasses, statusColors (+2 more)
 
-### Community 530 - "stat-card.tsx"
-Cohesion: 0.20
-Nodes (3): iconColorMap, MiniStatProps, StatCardProps
+### Community 530 - "Drift: repo × tipos gerados — quantificado"
+Cohesion: 0.22
+Nodes (8): A explicação, com evidência, Achados graves com migration:linha, Consequência mensurável no código, Drift: repo × tipos gerados — quantificado, Os números, Correções aplicadas, Database, Json
 
-### Community 532 - "3.4 Hooks de Analytics"
-Cohesion: 0.40
-Nodes (4): 3.4 Hooks de Analytics, useAccountChurnPrediction(), ClosingScoreAlert, useClosingScoreAlerts()
+### Community 532 - "AskCrmChat.tsx"
+Cohesion: 0.22
+Nodes (6): AskCrmChat(), MessageBubble, SUGGESTIONS, ChatMessage, ChatThread, useAiAssistant()
 
-### Community 533 - "view-mode-switcher.tsx"
-Cohesion: 0.25
-Nodes (5): columnOptions, GridColumns, modes, ViewMode, ViewModeSwitcherProps
+### Community 533 - "BulkRevalidateCard.tsx"
+Cohesion: 0.22
+Nodes (6): UI, BulkRevalidateCard(), LIMIT_OPTIONS, STATUS_OPTIONS, ValidationQueueCard(), useBulkRevalidatePreview()
 
 ### Community 534 - "useDedupEngine.ts"
 Cohesion: 0.38
@@ -3692,8 +3688,8 @@ Cohesion: 0.27
 Nodes (10): [2.7.2] - 2026-04-20 — Rodada Q: Tracing E2E nos Hooks Críticos, Changed, Roadmap incremental (gaps técnicos restantes — não-bloqueantes), Score, BatchDistinctResponse, DistinctResponse, fetchBatchDistinct(), fetchDistinctValues() (+2 more)
 
 ### Community 536 - "ADR-014 — Connections Observability & Resilience"
-Cohesion: 0.29
-Nodes (6): ADR-014 — Connections Observability & Resilience, Consequências, Contexto, Negativas, Positivas, Verificação
+Cohesion: 0.18
+Nodes (10): 1. Dead-Letter Queue com retry exponencial, 3. Alertas proativos via triggers DB, 4. SLO formal, ADR-014 — Connections Observability & Resilience, Consequências, Contexto, Decisão, Negativas (+2 more)
 
 ### Community 537 - "useIncomingWebhooks.ts"
 Cohesion: 0.16
@@ -3703,13 +3699,13 @@ Nodes (11): Hooks, ConnectionConfig, ConnectionTestLog, ConnectionType, useConne
 Cohesion: 0.18
 Nodes (10): 1. 📑 RESUMO EXECUTIVO, 2.1 Módulos Implementados (Core & Intel), 2.2 Módulos a Implementar / Em Evolução, 2. 🏗️ INVENTÁRIO DE MÓDULOS E FUNCIONALIDADES, 3. 🔍 EVIDÊNCIAS TÉCNICAS RASTREÁVEIS, 4. ⚖️ MATRIZ DE RISCO (AUDITORIA), 5. ✅ CHECKLIST OPERACIONAL DE AUDITORIA CONTÍNUA, 🔍 RELATÓRIO DE AUDITORIA ENTERPRISE — SINGU CRM (+2 more)
 
-### Community 539 - "ContactEmailThreadsSection.tsx"
-Cohesion: 0.40
-Nodes (5): ContactEmailThreadsSection(), EmailRow, normalizeSubject(), Props, ThreadGroup
+### Community 539 - "InboundActivityHeatmapCard.tsx"
+Cohesion: 0.28
+Nodes (6): BestTimeHeatmapCard(), MEDAL_LABEL, rateColor(), HOURS, InboundActivityHeatmapCard(), intensityClass()
 
-### Community 540 - "NavigationStackContext.tsx"
-Cohesion: 0.29
-Nodes (8): loadDirection(), loadStack(), NavigationDirection, NavigationStackContext, NavigationStackContextType, NavigationStackProvider(), saveDirection(), saveStack()
+### Community 540 - "UnifiedNotificationsBell.tsx"
+Cohesion: 0.22
+Nodes (6): PRIORITY_STYLES, SOURCE_META, UnifiedNotificationsBell(), PRIORITY_RANK, UnifiedNotification, useUnifiedNotifications()
 
 ### Community 541 - "AgendarReuniaoForm.tsx"
 Cohesion: 0.32
@@ -3727,9 +3723,9 @@ Nodes (11): Achados nos jobs, Arquivos de `src/data/` nunca importados — 16 de
 Cohesion: 0.18
 Nodes (11): Checklist de validação pós-aplicação, Conteúdo do pacote (`scripts/migration/ddl/`), Execução, ⚠ Limitações conhecidas desta extração, Migração DDL — Runbook, Ordem de aplicação (obrigatória), Origem, Próximas fases (fora deste pacote) (+3 more)
 
-### Community 545 - "useSemanticSearch.ts"
-Cohesion: 0.20
-Nodes (8): EMPTY, SearchOpts, SemanticCompanyRow, SemanticContactRow, SemanticEntity, SemanticInteractionRow, SemanticProductRow, SemanticSearchResults
+### Community 545 - "RelationshipKPIsDashboard.tsx"
+Cohesion: 0.13
+Nodes (12): O que está BOM (auditado), ConversationAnalysisCard(), AvgScoreDatum, LiveEvent, ObjectionRow, PieDatum, RelationshipKPIsDashboard(), STAGE_COLORS (+4 more)
 
 ### Community 546 - "Post-Mortem — Indisponibilidade parcial do salvamento de contatos (external-data)"
 Cohesion: 0.18
@@ -3739,13 +3735,9 @@ Nodes (11): 1. Resumo Executivo, 2. Impacto, 3. Timeline (BRT), 4. Análise de C
 Cohesion: 0.24
 Nodes (9): 20.1 Busca Global (`GlobalSearch`), 20.2 Predefinições de Busca (`useSearchPresets`), 20. 🔍 Busca & Navegação, comparePresets(), dateDesc(), PresetSortMode, SearchPreset, useSearchPresets() (+1 more)
 
-### Community 548 - "nlpAdvancedData.ts"
-Cohesion: 0.25
-Nodes (7): EMOTIONAL_STATE_INFO, EMOTIONAL_STATE_KEYWORDS, OBJECTION_PATTERNS, POWER_WORDS, RAPPORT_TEMPLATES, SALES_STAGE_INFO, VALUE_CATEGORY_INFO
-
-### Community 549 - "Tabela de evidências"
-Cohesion: 0.03
-Nodes (52): B. Fios quebrados (funcionalidade que não fecha o ciclo), Tabela de evidências, ref_store, MESSAGE_TYPES, MessageType, REFINE_CHIPS, SuggestionState, Tone (+44 more)
+### Community 549 - "react"
+Cohesion: 0.02
+Nodes (73): B. Fios quebrados (funcionalidade que não fecha o ciclo), Tabela de evidências, react, ProviderEntry, AIMessageGenerator(), AIMessageGeneratorProps, FRAMEWORKS, MESSAGE_TYPES (+65 more)
 
 ### Community 550 - "Post-Mortem — {Título do Incidente}"
 Cohesion: 0.18
@@ -3759,14 +3751,6 @@ Nodes (11): 1. src/pages/Index.tsx - JSONB Tipado, 2. src/hooks/usePersonalizedO
 Cohesion: 0.18
 Nodes (10): 1. Prepare (T+0h), 2. Activate (T+24h), 3. Grace period (T+24h → T+48h), 4. Retire (T+48h), Fluxo (T = timeline), Princípios, Quando rotacionar, Referências (+2 more)
 
-### Community 553 - "Empresas.tsx"
-Cohesion: 0.29
-Nodes (4): EmpresasContent(), Props, EmpresasSavedViewsProps, EmpresasViewState
-
-### Community 554 - "computeIsolatedFilterCounts.ts"
-Cohesion: 0.33
-Nodes (5): CHANNEL_LABELS, computeIsolatedFilterCounts(), IsolatedFilterCount, IsolatedFilterKey, normalize()
-
 ### Community 555 - "form.tsx"
 Cohesion: 0.23
 Nodes (10): FormControl, FormDescription, FormFieldContext, FormFieldContextValue, FormItem, FormItemContext, FormItemContextValue, FormLabel (+2 more)
@@ -3775,9 +3759,9 @@ Nodes (10): FormControl, FormDescription, FormFieldContext, FormFieldContextValu
 Cohesion: 0.18
 Nodes (10): 4.1 Análise Automática (`useDISCAutoAnalysis`), 4.2 Histórico de Análises (`disc_analysis_history`), 4.3 Componentes UI, 4.4 Configuração de Perfil (`disc_profile_config`), 4.5 Logs de Comunicação (`disc_communication_logs`), 4.6 Métricas de Conversão (`disc_conversion_metrics`), 4. 🧠 Módulo DISC Enterprise, DISCAnalysisResult (+2 more)
 
-### Community 557 - "useLuxIntelligence.ts"
-Cohesion: 0.22
-Nodes (7): LuxEducation, LuxFilial, LuxFiscalData, LuxIntelligenceRecord, LuxPersonalProfile, LuxSocialProfile, LuxStakeholder
+### Community 557 - "ConnectionFormDialog.tsx"
+Cohesion: 0.20
+Nodes (7): Edge Functions, Tabelas, UI, ConnectionFormDialog(), FIELDS, Props, McpInstructionsCard()
 
 ### Community 558 - "big-five.ts"
 Cohesion: 0.29
@@ -3787,9 +3771,9 @@ Nodes (5): BIG_FIVE_TRAITS, BigFiveProfile, BigFiveScore, BigFiveTrait, BigFiveT
 Cohesion: 0.29
 Nodes (6): BiasAnalysisResult, BiasCategory, BiasCategoryInfo, CognitiveBiasInfo, CognitiveBiasType, DetectedBias
 
-### Community 560 - "3. Cenários complementares"
-Cohesion: 0.25
-Nodes (8): 3.1 Recarregar a página (F5), 3.2 Voltar/avançar do navegador, 3.3 Compartilhar o link (aba anônima logada), 3.4 Remover chip pela UI, 3.5 Clicar "Limpar tudo", 3.6 Comportamento esperado de "Limpar" / "Limpar tudo" (referência consolidada), 3. Cenários complementares, useFicha360Filters()
+### Community 560 - "IntentScoreBadge.tsx"
+Cohesion: 0.28
+Nodes (4): Props, IntentScoreBadge(), Props, Props
 
 ### Community 561 - "20260111191156_64673555-e916-4e23-8303-a4c31c5fe62a.sql"
 Cohesion: 0.38
@@ -3911,9 +3895,9 @@ Nodes (4): public.touch_system_config, public.get_system_config_num(), public.sy
 Cohesion: 0.33
 Nodes (4): public.trigger_aggregate_nlp_to_company, public.aggregate_nlp_to_company(), public.contacts, tr_aggregate_nlp_on_contact_change
 
-### Community 595 - "ConsolidatedHealthPanel.tsx"
-Cohesion: 0.39
-Nodes (7): churnRiskToScore(), ConsolidatedHealthPanel(), Dimension, getOverallHealth(), Props, sentimentLabel(), sentimentToScore()
+### Community 595 - "useLandingPages.ts"
+Cohesion: 0.29
+Nodes (5): LandingPage, LandingPageBlock, LandingPageSubmission, useLandingPages(), useLandingPageSubmissions()
 
 ### Community 596 - "apply-functions.js"
 Cohesion: 0.67
@@ -3943,37 +3927,37 @@ Nodes (5): check(), green(), red(), post-cutover-watch.sh script, yel()
 Cohesion: 0.33
 Nodes (5): HEAD, parts, SAMPLE_PCT, tables, TAIL
 
-### Community 603 - "TicketDetailDrawer.tsx"
-Cohesion: 0.29
-Nodes (5): Props, SLABadge(), PRIORITY_LABELS, Props, STATUS_LABELS
+### Community 603 - "BackButton.tsx"
+Cohesion: 0.28
+Nodes (6): BackButton(), BackButtonProps, getReadableLabel(), ROUTE_LABELS, BreadcrumbSegment, PageHeaderProps
 
-### Community 604 - "requireCronSecret"
-Cohesion: 0.02
-Nodes (109): Decision, 🎯 Matriz de Risco Consolidada — Auditoria SINGU CRM v2, Placar por severidade, Sequência de remediação recomendada (Fase V — NÃO executada nesta entrega), Tema transversal (a "grande narrativa" da auditoria), Top 10 riscos prioritários (severidade × explorabilidade × impacto de dados), Arquivos que inspecionei, Contradições com a documentação existente (+101 more)
+### Community 604 - "withAuth"
+Cohesion: 0.03
+Nodes (85): Decision, [ALTA] SEC-4. Crons sensíveis (envio de mensagens / massa) sem `CRON_SECRET`, com service_role, Controles que realmente funcionam (verificados), 🎯 Matriz de Risco Consolidada — Auditoria SINGU CRM v2, Placar por severidade, Sequência de remediação recomendada (Fase V — NÃO executada nesta entrega), Tema transversal (a "grande narrativa" da auditoria), Top 10 riscos prioritários (severidade × explorabilidade × impacto de dados) (+77 more)
 
 ### Community 605 - "severity"
-Cohesion: 0.11
-Nodes (17): 📋 Tabela: `connection_anomalies`, 📋 Tabela: `crm_alerts`, 📋 Tabela: `error_logs`, 📋 Tabela: `hidden_objections`, 📋 Tabela: `query_telemetry`, 📋 Tabela: `revops_alerts`, 📋 Tabela: `stakeholder_alerts`, 📋 Tabela: `system_alerts` (+9 more)
+Cohesion: 0.09
+Nodes (20): 📋 Tabela: `connection_anomalies`, 📋 Tabela: `crm_alerts`, 📋 Tabela: `error_logs`, 📋 Tabela: `hidden_objections`, 📋 Tabela: `query_telemetry`, 📋 Tabela: `revops_alerts`, 📋 Tabela: `stakeholder_alerts`, 📋 Tabela: `system_alerts` (+12 more)
 
 ### Community 606 - "RpcPlanDiffDialog.tsx"
 Cohesion: 0.29
 Nodes (3): RpcPlanDiffDialog(), RpcPlanDiffDialogProps, STATUS_LABEL
 
-### Community 607 - "lovable/index.ts"
+### Community 607 - "CompatibilityScore.tsx"
 Cohesion: 0.33
-Nodes (5): @lovable.dev/cloud-auth-js, lovable, lovableAuth, SignInOptions, supabase
+Nodes (7): DISC_COMPATIBILITY, getDISCTip(), VAK_COMPATIBILITY, CompatibilityFactor, CompatibilityScore(), CompatibilityScoreProps, SalespersonProfile
 
 ### Community 608 - "🔍 RELATÓRIO DE AUDITORIA ENTERPRISE — SINGU CRM"
 Cohesion: 0.20
 Nodes (10): 1. 📑 RESUMO EXECUTIVO, 2.1 Módulos Implementados (Core & Intel), 2.2 Módulos a Implementar / Em Evolução, 2. 🏗️ INVENTÁRIO DE MÓDULOS E FUNCIONALIDADES, 3. 🔍 EVIDÊNCIAS TÉCNICAS RASTREÁVEIS, 4. ⚖️ MATRIZ DE RISCO (AUDITORIA), 5. ✅ CHECKLIST OPERACIONAL DE AUDITORIA CONTÍNUA, 🔍 RELATÓRIO DE AUDITORIA ENTERPRISE — SINGU CRM (+2 more)
 
-### Community 609 - "RecentChannelCombos.tsx"
-Cohesion: 0.47
-Nodes (5): CHANNEL_LABELS, comboLabel(), Props, RecentChannelCombos, sameCombo()
+### Community 609 - "table.tsx"
+Cohesion: 0.22
+Nodes (8): Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow
 
-### Community 610 - "DesignSystem.tsx"
-Cohesion: 0.25
-Nodes (5): entityTokens, motionCards, nexusPalette, surfaceLevels, utilityCards
+### Community 610 - "neuromarketingData.ts"
+Cohesion: 0.22
+Nodes (8): BIAS_BRAIN_MAPPING, BRAIN_SYSTEM_INFO, DISC_BRAIN_CORRELATION, GAIN_KEYWORDS, NEUROCHEMICAL_INFO, PAIN_KEYWORDS, PRIMAL_STIMULUS_INFO, TRIGGER_BRAIN_MAPPING
 
 ### Community 611 - "adr/README.md"
 Cohesion: 0.20
@@ -3983,9 +3967,9 @@ Nodes (7): ADR 001: Feature-Sliced Design Architecture, Consequences, Decision, 
 Cohesion: 0.28
 Nodes (8): channelIcon, outcomeMeta, priorityMeta, Props, ProximosPassosCard, ProximosPassosCardComponent(), relativeDays(), urgencyToClass()
 
-### Community 613 - "ADR-012 — Rodada I: Polimento Final & Hardening Profundo"
-Cohesion: 0.17
-Nodes (11): 1. Gate a11y no CI via vitest-axe, 3. Component Gallery v2, 4. CHANGELOG Keep-a-Changelog estrito, 5. Versionamento, ADR-012 — Rodada I: Polimento Final & Hardening Profundo, Arquivos-chave, Consequências, Contexto (+3 more)
+### Community 613 - "BulkActionsBar.tsx"
+Cohesion: 0.12
+Nodes (14): 1. Gate a11y no CI via vitest-axe, 3. Component Gallery v2, 4. CHANGELOG Keep-a-Changelog estrito, 5. Versionamento, ADR-012 — Rodada I: Polimento Final & Hardening Profundo, Arquivos-chave, Consequências, Contexto (+6 more)
 
 ### Community 614 - "Decisão"
 Cohesion: 0.20
@@ -3995,25 +3979,21 @@ Nodes (9): 1. Rate limiting + validação Zod nos endpoints públicos, 2. Cripto
 Cohesion: 0.20
 Nodes (9): 1. Strict Mode TypeScript em fases, 2. Feature Flags via banco, 3. Optimistic Locking, ADR-018: Hardening — Strict Mode, Feature Flags e Optimistic Locking, Alternativas consideradas, Consequências, Contexto, Decisão (+1 more)
 
-### Community 616 - "ai-writing-assistant/index.ts"
-Cohesion: 0.25
-Nodes (6): ContactProfile, DISC_COMMUNICATION_STYLES, InteractionSummary, limiter, VAK_STYLES, WritingInput
+### Community 616 - "useAIWritingAssistant.ts"
+Cohesion: 0.22
+Nodes (7): AISuggestion, ContactProfile, InteractionSummary, MessageTone, MessageType, PersuasionFramework, UseAIWritingAssistantResult
 
-### Community 617 - "contact-detail/SentimentTrendChart.tsx"
-Cohesion: 0.33
-Nodes (6): Props, sentimentLabel(), SentimentTrendChart(), TREND_COLOR, TREND_ICON, TREND_LABEL
-
-### Community 618 - "check-health-alerts/index.ts"
-Cohesion: 0.25
-Nodes (6): Contact, HealthAlertSettings, HealthScore, Interaction, NewAlert, PushTarget
+### Community 618 - "prontidaoTrendMilestones.ts"
+Cohesion: 0.28
+Nodes (7): CHANNEL_TO_KIND, computeTrendMilestones(), findWeekPoint(), KIND_LABEL, MilestoneKind, refDate(), TrendMilestone
 
 ### Community 619 - "Passo a passo"
 Cohesion: 0.20
 Nodes (10): 1. DDL, 2. Data, 3. Auth, 4. Edge Functions, 5. Storage, 6. Cutover, 7. Smoke tests, 8. Reset de senhas (assíncrono) (+2 more)
 
 ### Community 620 - "ContextualHelp.tsx"
-Cohesion: 0.25
-Nodes (7): 4.8 Componentes de Feedback/UX, ContextualHelp(), ContextualHelpProps, FeatureHighlight(), InlineHelp(), sizeClasses, ContextualLoader()
+Cohesion: 0.13
+Nodes (12): 4.8 Componentes de Feedback/UX, ContextualHelp(), ContextualHelpProps, FeatureHighlight(), InlineHelp(), sizeClasses, ContextualLoader(), PullToRefresh() (+4 more)
 
 ### Community 621 - "NotificationGroup.tsx"
 Cohesion: 0.33
@@ -4031,25 +4011,25 @@ Nodes (5): CrossRefInput, CrossRefInteraction, CrossRefInteractionWithMatches, C
 Cohesion: 0.20
 Nodes (10): 4.1 Contraste de Cores Insuficiente, 4.2 Falta de Anúncios para Screen Readers, 4.3 Formulários Sem Descrições Adequadas, 4.4 Ícones Decorativos Sem aria-hidden, 4.5 Reduced Motion Não Respeitado Universalmente, 4.6 Touch Targets Muito Pequenos no Mobile, 🔴 Oportunidades Críticas, 🟠 Oportunidades Importantes (+2 more)
 
-### Community 625 - "useEvidenceForLabel.ts"
-Cohesion: 0.47
-Nodes (5): EvidenceHit, EvidenceSource, highlight(), ilikeEscape(), useEvidenceForLabel()
+### Community 625 - "design-system-audit.test.ts"
+Cohesion: 0.22
+Nodes (8): allFiles, auditableFiles, componentFiles, COMPONENTS_DIR, EXCLUDED_FILES, findTsxFiles(), pageFiles, PAGES_DIR
 
-### Community 626 - "useDealVelocity.ts"
-Cohesion: 0.29
-Nodes (6): 10. Dados fictícios (`Math.random`) em hooks de inteligência, DealVelocityMetrics, MonthlyTrend, STAGE_CONFIG, StageVelocity, useDealVelocity()
+### Community 626 - "AccountHierarchyTree.tsx"
+Cohesion: 0.32
+Nodes (5): AccountHierarchyTree(), buildTree(), TreeNode, AccountTierBadge(), tierConfig
 
 ### Community 627 - "TopContactsCard.tsx"
 Cohesion: 0.38
 Nodes (5): getAvatarRing(), getScoreVisual(), StaggerAnimation, TopContactsCard(), TopContactsCardProps
 
-### Community 628 - "ReminderCard.tsx"
-Cohesion: 0.20
-Nodes (8): priorityBadgeColors, priorityColors, ReminderCard(), ReminderCardProps, typeColors, typeIcons, SmartRemindersPanelProps, typeLabels
-
-### Community 629 - "AnalyticsShared.tsx"
+### Community 628 - "ProximaAcaoCTA.tsx"
 Cohesion: 0.29
-Nodes (4): CustomTooltip, CustomTooltipProps, PieTooltip, TooltipPayloadItem
+Nodes (7): channelMeta, channelToTipo(), dayLabels, interactionTypes, Props, ProximaAcaoCTA, urgencyMeta
+
+### Community 629 - "TicketDetailDrawer.tsx"
+Cohesion: 0.29
+Nodes (5): Props, SLABadge(), PRIORITY_LABELS, Props, STATUS_LABELS
 
 ### Community 630 - "emotionalIntelligenceData.ts"
 Cohesion: 0.33
@@ -4067,9 +4047,9 @@ Nodes (5): DealConfidenceBadge(), formatCurrency(), LEVEL_LABEL, LEVEL_STYLES, P
 Cohesion: 0.22
 Nodes (8): 🔗 Chaves de Relacionamento, 📝 Convenções, 📊 Domínio: Analytics & Monitoramento, 🏢 Domínio: Gestão de Contatos, 🤖 Domínio: Inteligência Artificial, 🧠 Domínio: Inteligência Comportamental, 🔐 Domínio: Segurança & Auditoria, SINGU CRM — Dicionário de Dados
 
-### Community 634 - "useInsightFeedback.ts"
-Cohesion: 0.43
-Nodes (6): InsightFeedbackRow, InsightVote, key(), useInsightFeedback(), useRemoveInsightFeedback(), useSubmitInsightFeedback()
+### Community 634 - "DensityContext.tsx"
+Cohesion: 0.29
+Nodes (5): BASE_TABLE_DENSITY_KEY, DensityContext, ListDensity, readFromStorage(), useListDensity()
 
 ### Community 635 - "Detalhamento por Categoria"
 Cohesion: 0.22
@@ -4079,9 +4059,9 @@ Nodes (9): Detalhamento por Categoria, `rfm_analysis` (30 colunas), 📈 RFM - A
 Cohesion: 0.33
 Nodes (5): CHANNEL_PERSISTENCE_KEY, CHANNEL_PERSISTENCE_TTL_DAYS, CHANNEL_PERSISTENCE_TTL_MS, CHANNEL_PERSISTENCE_VALID_VALUES, PersistedChannel
 
-### Community 637 - "Next-Best-Action (NBA) por Contato"
-Cohesion: 0.20
-Nodes (10): Arquitetura, Backend, Frontend, Next-Best-Action (NBA) por Contato, Sinais agregados, Tabela `contact_next_actions`, UX, Visão geral (+2 more)
+### Community 637 - "copywritingAdvancedData.ts"
+Cohesion: 0.25
+Nodes (7): CHANNEL_LIMITS, EMOJI_CONTEXTS, FOUR_PS_TEMPLATES, PAS_TEMPLATES, READABILITY_LEVELS, STORYTELLING_TEMPLATES, TRIGGER_DETECTION_WORDS
 
 ### Community 638 - "Passo-a-passo (janela de cutover)"
 Cohesion: 0.22
@@ -4095,37 +4075,37 @@ Nodes (8): Arquitetura, Intenções Testadas, Serviços Verificados, fetchVoiceH
 Cohesion: 0.22
 Nodes (9): Arquivos envolvidos, Comunicação prévia (48h antes), Métricas de sucesso, Notas técnicas, Pré-requisitos, Reset de Senhas Pós-Migração — Runbook, Rollback, Ver também (+1 more)
 
-### Community 641 - "AriaLiveRegion.tsx"
-Cohesion: 0.29
-Nodes (6): AriaLiveContext, AriaLiveContextValue, AriaLiveMode, AriaLiveProvider(), AriaLiveProviderProps, liveAnnouncements
+### Community 641 - "nlpAdvancedData.ts"
+Cohesion: 0.25
+Nodes (7): EMOTIONAL_STATE_INFO, EMOTIONAL_STATE_KEYWORDS, OBJECTION_PATTERNS, POWER_WORDS, RAPPORT_TEMPLATES, SALES_STAGE_INFO, VALUE_CATEGORY_INFO
 
 ### Community 642 - "🔴 Oportunidades Críticas"
 Cohesion: 0.22
 Nodes (9): 10.1 Falta de Fuzzy Search, 10.2 Falta de Search Analytics, 10.3 Falta de Saved Searches, 10.4 Falta de Search Suggestions, 10.5 Falta de Filter Presets, 🔴 Oportunidades Críticas, 🟠 Oportunidades Importantes, 🔍 PILAR 10: SEARCH & DISCOVERY (+1 more)
 
-### Community 643 - "UltimasInteracoesCard.tsx"
-Cohesion: 0.48
-Nodes (6): channelIcon(), formatDate(), hashString(), Props, sentimentColor(), UltimasInteracoesCard
+### Community 643 - "AdvancedSearchBar.tsx"
+Cohesion: 0.20
+Nodes (6): AdvancedSearchBar, CHANNEL_ICON_META, CompanyOption, ContactOption, EntityPickerProps, Props
 
 ### Community 644 - "🔴 Oportunidades Críticas"
 Cohesion: 0.22
 Nodes (9): 11.1 Gráficos Não Acessíveis, 11.2 Falta de Drill-Down em Charts, 11.3 Comparação Temporal Limitada, 11.4 Falta de Export de Dados Visuais, 11.5 Falta de Custom Date Ranges, 🔴 Oportunidades Críticas, 🟠 Oportunidades Importantes, 📊 PILAR 11: DATA VISUALIZATION (+1 more)
 
 ### Community 645 - "Achados relevantes"
-Cohesion: 0.11
-Nodes (17): 12. Merge de duplicatas sem transação, 1. Split-brain de persistência: o mesmo domínio em dois bancos, 2. Pipeline: mover deal escreve em colunas que não existem, 3. `deals` tem duas migrations `CREATE TABLE` conflitantes, sem `IF NOT EXISTS`, 4. ERP: nenhuma das tabelas consultadas está liberada no proxy, 5. `types.ts` está dessincronizado das migrations e usa um tipo não declarado, 6. Três stores paralelos e concorrentes de preferência de notificação, 7. Quatro edge functions sem nenhum caminho de execução (+9 more)
+Cohesion: 0.08
+Nodes (22): 10. Dados fictícios (`Math.random`) em hooks de inteligência, 12. Merge de duplicatas sem transação, 1. Split-brain de persistência: o mesmo domínio em dois bancos, 2. Pipeline: mover deal escreve em colunas que não existem, 3. `deals` tem duas migrations `CREATE TABLE` conflitantes, sem `IF NOT EXISTS`, 5. `types.ts` está dessincronizado das migrations e usa um tipo não declarado, 6. Três stores paralelos e concorrentes de preferência de notificação, 7. Quatro edge functions sem nenhum caminho de execução (+14 more)
 
-### Community 646 - "scopedCorsHeaders"
-Cohesion: 0.04
-Nodes (28): ❓ FAQ, OutcomeRow, limiter, limiter, limiter, ContactRow, CritRow, DlqRow (+20 more)
+### Community 646 - "triggerTemplatesMetaprograms.ts"
+Cohesion: 0.25
+Nodes (3): METAPROGRAM_TRIGGER_TEMPLATES, MetaprogramTriggerTemplate, MetaprogramType
 
-### Community 647 - "useEmailThreadSummary.ts"
-Cohesion: 0.40
-Nodes (5): computeThreadKey(), EmailThreadSummary, GenerateInput, ThreadActionItem, useEmailThreadSummary()
+### Community 647 - "forecastSimulation.ts"
+Cohesion: 0.25
+Nodes (5): IntelligenceShape, ProfileShape, SIMULATION_PRESETS, SimulationPreset, SimulationResult
 
-### Community 648 - "useSavedViews.ts"
-Cohesion: 0.48
-Nodes (6): decodeState(), encodeState(), readAll(), SavedView, useSavedViews(), writeAll()
+### Community 648 - "DesignSystem.tsx"
+Cohesion: 0.25
+Nodes (5): entityTokens, motionCards, nexusPalette, surfaceLevels, utilityCards
 
 ### Community 649 - "🔴 Oportunidades Críticas"
 Cohesion: 0.22
@@ -4155,9 +4135,9 @@ Nodes (9): Bucket, clamp(), computeConfidence(), ForecastConfidencePanel(), form
 Cohesion: 0.22
 Nodes (9): 6.1 Falta de Optimistic UI, 6.2 Virtualization Ausente em Listas Longas, 6.3 Prefetch Não Utilizado Estrategicamente, 6.4 Bundle Splitting Não Otimizado, 6.5 Image Optimization Incompleta, 🔴 Oportunidades Críticas, 🟠 Oportunidades Importantes, 🚀 PILAR 6: PERFORMANCE PERCEBIDA (+1 more)
 
-### Community 656 - "Reconstruibilidade do ambiente a partir do repositório"
-Cohesion: 0.33
-Nodes (6): Prova 1 — statements não-guardados contra tabelas que nenhuma migration cria, Prova 2 — objetos referenciados que nada cria, Prova 3 — ordenação destrutiva no histórico, Prova 4 — o próprio repositório admite o problema, Reconstruibilidade do ambiente a partir do repositório, Veredito
+### Community 656 - "Empresas.tsx"
+Cohesion: 0.29
+Nodes (4): EmpresasContent(), Props, EmpresasSavedViewsProps, EmpresasViewState
 
 ### Community 657 - "🔴 Oportunidades Críticas"
 Cohesion: 0.25
@@ -4171,17 +4151,17 @@ Nodes (9): 8.1 Falta de Autosave/Draft, 8.2 Inline Validation Ausente, 8.3 Falta
 Cohesion: 0.33
 Nodes (4): assertProviderOrder(), PROVIDER_ORDER, ProviderDependency, validateProviderOrder()
 
-### Community 662 - "ChannelShortcutsHelpOverlay.tsx"
-Cohesion: 0.33
-Nodes (5): CHANNELS, ChannelShortcutsHelpOverlay, KeyChipProps, Props, readPending()
+### Community 662 - "AdminConexoesLogs.tsx"
+Cohesion: 0.11
+Nodes (14): Riscos residuais, AccessSecurityManager(), EmailPipelineStatus(), statusConfig, PasswordResetApproval(), formatDuration(), formatTime(), getSeverityBadge() (+6 more)
 
 ### Community 663 - "🔴 Oportunidades Críticas"
 Cohesion: 0.22
 Nodes (9): 9.1 Falta de Notification Preferences Granulares, 9.2 Ações em Notificações Limitadas, 9.3 Falta de Notification Grouping, 9.4 Falta de Notification Sound Options, 9.5 Falta de Schedule Delivery, 🔴 Oportunidades Críticas, 🟠 Oportunidades Importantes, 🔔 PILAR 9: NOTIFICAÇÕES & FEEDBACK SYSTEM (+1 more)
 
-### Community 664 - "useNetworkGraph.ts"
-Cohesion: 0.22
-Nodes (8): 3.5 Hooks de Stakeholders, GraphData, GraphLink, GraphNode, NetworkStats, NODE_COLORS, useNetworkGraph(), useStakeholderAlerts()
+### Community 664 - "sequence-processor/index.ts"
+Cohesion: 0.25
+Nodes (6): Contact, EmailJob, Enrollment, EnrRow, SendLogEntry, Step
 
 ### Community 665 - "Estado — Marketing, Campanhas e Automação"
 Cohesion: 0.13
@@ -4403,20 +4383,20 @@ Nodes (7): Ausência honesta nos campos de decisão, Como aplicar, Consumidor, C
 Cohesion: 0.25
 Nodes (7): 1. Segurança e Hardening (Infraestrutura), 2. Integridade de Dados e Resiliência, 3. Garantia de Qualidade (QA), 4. Documentação Viva, 🛠️ Melhorias Implementadas (Rodada Final), 🏆 SINGU CRM — Estado de Excelência Técnica 10/10, 📈 Status das Dimensões Auditadas
 
-### Community 744 - "priority-indicator.tsx"
-Cohesion: 0.38
-Nodes (6): calculatePriority(), PriorityBar(), PriorityConfig, PriorityIndicator(), PriorityIndicatorProps, PriorityLevel
+### Community 744 - "TouchpointSequenceCard.tsx"
+Cohesion: 0.29
+Nodes (4): CHANNEL_ICONS, Length, LENGTHS, TouchpointSequenceCard()
 
-### Community 745 - "BehavioralRegenAlertsTrend.tsx"
-Cohesion: 0.40
-Nodes (5): BehavioralRegenAlertsTrend(), dayKey(), DayPoint, Props, Row
+### Community 745 - "lovable/index.ts"
+Cohesion: 0.33
+Nodes (5): @lovable.dev/cloud-auth-js, lovable, lovableAuth, SignInOptions, supabase
 
 ### Community 746 - "useSmartNotifications.ts"
-Cohesion: 0.14
-Nodes (12): 1. DLQ + Retry exponencial, 3. Alertas automáticos, 4. Status público, 5. Documentação, Critério 10/10 atingido, Entrega (5 melhorias → 55/55), EnqueueInput, NotifStatus (+4 more)
+Cohesion: 0.12
+Nodes (13): 1. DLQ + Retry exponencial, 3. Alertas automáticos, 4. Status público, 5. Documentação, Critério 10/10 atingido, Entrega (5 melhorias → 55/55), WebhookDlqPanel(), EnqueueInput (+5 more)
 
 ### Community 747 - "Arquitetura"
-Cohesion: 0.25
+Cohesion: 0.22
 Nodes (7): Arquitetura, Edge Function: `lead-routing`, Functions (DB), Hooks, Tabelas (Lovable Cloud), UI, useRoutingMetrics()
 
 ### Community 748 - "Lead Scoring Server-Side"
@@ -4427,45 +4407,45 @@ Nodes (7): Coexistência, Edge Functions, Hooks (`src/hooks/useLeadScoring.ts`),
 Cohesion: 0.25
 Nodes (7): Entregáveis, P0 — Continuidade, P1 — Verificação profunda, P2 — Guardrails de IA, P3 — Compliance, P4 — Documentação, Padrões
 
-### Community 750 - "InsightFeedbackTrendChart.tsx"
-Cohesion: 0.47
-Nodes (5): buildWeeks(), InsightFeedbackTrendChart(), Row, startOfWeekISO(), WeekPoint
+### Community 750 - "WhatsNewModal.tsx"
+Cohesion: 0.29
+Nodes (4): categoryColors, defaultFeatures, Feature, WhatsNewModalProps
 
 ### Community 751 - "Rodada 30/10 — Onda D: Zero-Warning Ratchet Final"
 Cohesion: 0.25
 Nodes (7): Análise por categoria, Arquivos tocados, Ação aplicada, Baseline (pós Onda C), Estado final (10/10), Política vigente, Rodada 30/10 — Onda D: Zero-Warning Ratchet Final
 
-### Community 752 - "TelemetryCharts.tsx"
-Cohesion: 0.47
-Nodes (5): formatBucketTime(), getBucketMs(), TelemetryCharts(), TelemetryChartsProps, TelemetryRow
+### Community 752 - "UltimasInteracoesCard.tsx"
+Cohesion: 0.48
+Nodes (6): channelIcon(), formatDate(), hashString(), Props, sentimentColor(), UltimasInteracoesCard
 
-### Community 753 - "copywritingData.ts"
-Cohesion: 0.22
-Nodes (8): AIDA_TEMPLATES, CTA_TEMPLATES, DEFAULT_SEGMENTS, FAB_TEMPLATES, HEADLINE_FORMULAS, PERSUASIVE_CONNECTORS, POWER_WORDS_CATEGORIES, TRANSITION_WORDS
+### Community 753 - "AdvancedFilters.tsx"
+Cohesion: 0.29
+Nodes (5): AdvancedFiltersProps, FilterConfig, FilterOption, SortCriteria, SortOption
 
-### Community 754 - "BackButton.tsx"
-Cohesion: 0.09
-Nodes (13): ref_contexts, BackButton(), BackButtonProps, getReadableLabel(), ROUTE_LABELS, BreadcrumbSegment, PageHeaderProps, PageTransitionProps (+5 more)
+### Community 754 - "InlineEdit.tsx"
+Cohesion: 0.29
+Nodes (3): InlineDateEditProps, InlineEditProps, InlineNumberEditProps
 
-### Community 755 - "CopiarLinkFiltrosButton.tsx"
-Cohesion: 0.47
-Nodes (5): CHANNEL_LABELS, CopiarLinkFiltrosButton(), copyText(), describeFilters(), Props
+### Community 755 - "carnegieNobleCauses.ts"
+Cohesion: 0.29
+Nodes (3): NOBLE_CAUSE_INTENSIFIERS, NOBLE_CAUSE_KEYWORDS, NOBLE_CAUSES
 
-### Community 756 - "neuromarketingData.ts"
-Cohesion: 0.22
-Nodes (8): BIAS_BRAIN_MAPPING, BRAIN_SYSTEM_INFO, DISC_BRAIN_CORRELATION, GAIN_KEYWORDS, NEUROCHEMICAL_INFO, PAIN_KEYWORDS, PRIMAL_STIMULUS_INFO, TRIGGER_BRAIN_MAPPING
+### Community 756 - "triggersExtendedData.ts"
+Cohesion: 0.29
+Nodes (6): ALL_EXTENDED_TRIGGER_IDS, EXTENDED_MENTAL_TRIGGERS, EXTENDED_TRIGGER_CONFLICTS, EXTENDED_TRIGGER_FALLBACKS, EXTENDED_TRIGGER_SYNERGIES, ExtendedTriggerType
 
 ### Community 757 - "ProximosPassosFiltersBar.tsx"
 Cohesion: 0.33
 Nodes (4): CHANNELS, PRIORITIES, Props, ProximosPassosFiltersBar
 
-### Community 758 - "carnegieNobleCauses.ts"
+### Community 758 - "useKeyboardShortcutsEnhanced.ts"
 Cohesion: 0.29
-Nodes (3): NOBLE_CAUSE_INTENSIFIERS, NOBLE_CAUSE_KEYWORDS, NOBLE_CAUSES
+Nodes (4): ShortcutCategory, shortcutCategoryLabels, ShortcutConfig, UseKeyboardShortcutsOptions
 
-### Community 759 - "dealState.ts"
-Cohesion: 0.25
-Nodes (5): DealStage, dealStageSchema, ForecastConfidenceInput, ForecastConfidenceResult, forecastConfidenceSchema
+### Community 759 - "zod"
+Cohesion: 0.12
+Nodes (9): zod, emailSchema, ForgotPasswordFormProps, DealStage, dealStageSchema, ForecastConfidenceInput, ForecastConfidenceResult, forecastConfidenceSchema (+1 more)
 
 ### Community 761 - "ADR-009: Rate Limiting em Múltiplas Camadas"
 Cohesion: 0.29
@@ -4507,17 +4487,17 @@ Nodes (4): Difficulty, TRAINING_SCENARIOS, TrainingScenario, TrainingType
 Cohesion: 0.29
 Nodes (7): 5.1 Análise Automática (`useNLPAutoAnalysis`), 5.2 Componentes UI, 5.3 Rapport & Comunicação Avançada, 5.4 Estratégias de Decisão, 5.5 Âncoras & Estados Emocionais, 5.6 Tabelas de Suporte, 5. 🧬 Módulo PNL/NLP Enterprise
 
-### Community 771 - "useReducedMotion.ts"
-Cohesion: 0.43
-Nodes (4): useMotionSafe(), useReducedMotion(), StaggerConfig, useStaggerAnimation()
+### Community 771 - "useDocumentTemplates.ts"
+Cohesion: 0.29
+Nodes (7): DEFAULT_FIELDS, DocumentSignature, DocumentTemplate, extractMergeFields(), renderMergeFields(), useDocumentSignatures(), useDocumentTemplates()
 
 ### Community 772 - "Singu_V2 — Regras da Casa (Hermes) — suplemento"
 Cohesion: 0.29
 Nodes (6): Barreiras (cadeado físico), Comandos usuais, Identidade, Padrão de Chat (Hermes) — subpasta por sessão, Regra de Ouro (casa do Joaquim), Singu_V2 — Regras da Casa (Hermes) — suplemento
 
-### Community 773 - "useTerritoryOptimization.ts"
-Cohesion: 0.29
-Nodes (5): EMPTY, TerritoryChartPoint, TerritoryOptimizationResult, TerritoryRecommendation, TerritoryStatusRow
+### Community 773 - "useSavedViews.ts"
+Cohesion: 0.48
+Nodes (6): decodeState(), encodeState(), readAll(), SavedView, useSavedViews(), writeAll()
 
 ### Community 774 - "intent-data-module.md"
 Cohesion: 0.29
@@ -4527,69 +4507,73 @@ Nodes (6): Edge Functions, Hooks (`src/hooks/useIntent.ts`), Navegação, Snippe
 Cohesion: 0.28
 Nodes (7): Anomalias Detectadas, Arquitetura, Status, EmailPipelineHealth, fetchPipelineHealth(), useEmailPipelineHealth(), useRefreshPipelineHealth()
 
-### Community 776 - "useTimelineByEntity.ts"
+### Community 776 - "Lead Score Threshold Automations + Behavioral Bridge"
 Cohesion: 0.29
-Nodes (5): GroupBy, InteractionRow, TimelineEventItem, TimelineGroup, UseTimelineByEntityParams
+Nodes (6): Coexistência, Hooks `src/hooks/useScoreAutomations.ts`, Lead Score Threshold Automations + Behavioral Bridge, Navegação, Schema, UI
 
 ### Community 777 - "useEntityNotes.ts"
 Cohesion: 0.60
 Nodes (4): EntityNote, readNote(), useEntityNotes(), writeNote()
 
-### Community 779 - "useEnrichSocialProfiles.ts"
-Cohesion: 0.47
-Nodes (5): buildUrl(), EnrichResult, normalizePlatform(), Platform, useEnrichSocialProfiles()
+### Community 778 - "computeIsolatedFilterCounts.ts"
+Cohesion: 0.33
+Nodes (5): CHANNEL_LABELS, computeIsolatedFilterCounts(), IsolatedFilterCount, IsolatedFilterKey, normalize()
 
-### Community 780 - "useRecentlyViewed.ts"
-Cohesion: 0.60
-Nodes (4): getStoredItems(), RecentlyViewedItem, saveItems(), useRecentlyViewed()
-
-### Community 781 - "ProximaAcaoCTA.tsx"
+### Community 779 - "architecture-compliance.test.ts"
 Cohesion: 0.29
-Nodes (7): channelMeta, channelToTipo(), dayLabels, interactionTypes, Props, ProximaAcaoCTA, urgencyMeta
+Nodes (5): allFiles, allTs, allTsx, getFilesRecursive(), srcRoot
 
-### Community 782 - "AdminFieldMapping.tsx"
-Cohesion: 0.29
-Nodes (5): COMPANY_MAPPINGS, Discrepancy, FieldMapping, RPC_LIST, SchemaResult
+### Community 780 - "useFicha360DeeplinkToast.ts"
+Cohesion: 0.40
+Nodes (5): [MÉDIO] TQ-5. Testes: suíte REAL e verde — número da doc desatualizado, CHANNEL_LABELS, describe(), Options, useFicha360DeeplinkToast()
+
+### Community 781 - "Reconstruibilidade do ambiente a partir do repositório"
+Cohesion: 0.33
+Nodes (6): Prova 1 — statements não-guardados contra tabelas que nenhuma migration cria, Prova 2 — objetos referenciados que nada cria, Prova 3 — ordenação destrutiva no histórico, Prova 4 — o próprio repositório admite o problema, Reconstruibilidade do ambiente a partir do repositório, Veredito
+
+### Community 782 - "useSequences.ts"
+Cohesion: 0.40
+Nodes (4): CreateSequenceData, Sequence, SequenceEnrollment, SequenceStep
 
 ### Community 783 - "Rodada 33/10 — Onda G Bucket B (parcial): DEFINER → INVOKER"
 Cohesion: 0.29
 Nodes (6): Ajustes técnicos, Funções convertidas, Não convertidas (mantém DEFINER), Próximos alvos (Onda G restante), Resultado, Rodada 33/10 — Onda G Bucket B (parcial): DEFINER → INVOKER
 
-### Community 784 - "27. 📊 Dashboard — ✅ IMPLEMENTADO"
-Cohesion: 0.53
-Nodes (6): 27. 📊 Dashboard — ✅ IMPLEMENTADO, 4.6 Componentes de Dashboard, HealthAlertsPanel(), PortfolioHealthDashboard(), WeeklyReportPanel(), YourDaySection()
-
-### Community 785 - "2. Roteiro principal (caminho feliz)"
-Cohesion: 0.33
-Nodes (6): 2. Roteiro principal (caminho feliz), Passo 1 — Acessar o deep link, Passo 2 — Validar seletor de período (`FiltrosInteracoesBar`), Passo 3 — Validar seletor de canais (`FiltrosInteracoesBar`), Passo 4 — Validar chips de filtros ativos (`FiltrosAtivosChips`), Passo 5 — Validar lista (`UltimasInteracoesCard`)
-
-### Community 786 - "useDuplicateContacts.ts"
+### Community 784 - "SortChips.tsx"
 Cohesion: 0.29
-Nodes (4): DuplicateContact, useDuplicateContacts(), OrphanContact, useOrphanContacts()
+Nodes (4): Props, SORT_CONFIG, SortChips, SortConfigItem
+
+### Community 785 - "B1 — "Marketing/Automação é a dimensão mais frágil: apenas 6 de 38 funcionalidades ✅ (16%)""
+Cohesion: 0.33
+Nodes (6): Achado 1 — a contagem publicada não bate com a tabela que ela resume, Achado 2 — duas linhas classificadas de forma errada ou injusta, Achado 3 — o terceiro "achado que domina o módulo" está errado, B1 — "Marketing/Automação é a dimensão mais frágil: apenas 6 de 38 funcionalidades ✅ (16%)", O que fiz para derrubar, Observação de método
+
+### Community 786 - "AuditDiffViewer.tsx"
+Cohesion: 0.47
+Nodes (4): AuditDiffViewer(), AuditDiffViewerProps, formatValue(), getChangedFields()
 
 ### Community 787 - "searchable-select.tsx"
 Cohesion: 0.25
 Nodes (3): CustomValueMode, SearchableSelectProps, VariantProps
 
-### Community 788 - "AuditDiffViewer.tsx"
-Cohesion: 0.47
-Nodes (4): AuditDiffViewer(), AuditDiffViewerProps, formatValue(), getChangedFields()
+### Community 788 - "AccountPortfolioCard.tsx"
+Cohesion: 0.40
+Nodes (4): AccountPortfolioCard(), STAGE_STYLES, TIER_STYLES, HealthScoreGauge()
 
-### Community 789 - "progress.tsx"
-Cohesion: 0.50
-Nodes (3): @radix-ui/react-progress, Progress, ProgressProps
+### Community 789 - "DocumentsPanel.tsx"
+Cohesion: 0.40
+Nodes (5): DOC_TYPE_ICONS, DOC_TYPE_LABELS, DocumentsPanel(), formatFileSize(), Props
 
 ### Community 790 - "ADR-022 — Backend Linter Baseline Ratchet"
 Cohesion: 0.33
 Nodes (5): ADR-022 — Backend Linter Baseline Ratchet, Consequências, Contexto, Decisão, Rollback
 
-### Community 791 - "AutomationTemplates.tsx"
-Cohesion: 0.33
-Nodes (4): AutomationTemplatesProps, categoryColors, Template, templates
+### Community 791 - "FavoritosFiltrosMenu.tsx"
+Cohesion: 0.47
+Nodes (5): CHANNEL_LABELS, copyToClipboard(), FavoritosFiltrosMenu, formatCombo(), Props
 
-### Community 792 - "Intelligence Hub (`/intelligence`)"
-Cohesion: 0.15
-Nodes (11): Acessibilidade, Intelligence Hub (`/intelligence`), Lib (`src/lib/`), Persistência, Tabs (`src/components/intelligence/`), Tokens (`src/index.css`), buildCrossRefInsights(), CrossRefInsight (+3 more)
+### Community 792 - "crossRefInsights.ts"
+Cohesion: 0.18
+Nodes (10): Lib (`src/lib/`), buildCrossRefInsights(), CrossRefInsight, InsightEvent, InsightTemporalDay, WEEKDAYS, computeMetadataDiff(), DiffRow (+2 more)
 
 ### Community 793 - "ipMasking.ts"
 Cohesion: 0.60
@@ -4600,8 +4584,8 @@ Cohesion: 0.60
 Nodes (4): newTraceId(), TRACE_HEADER_NAME, uuid(), withTraceHeaders()
 
 ### Community 795 - "Evidência — nenhuma camada injeta o header"
-Cohesion: 0.15
-Nodes (12): B6 — "`sequence-processor` tem chamador que não envia `x-cron-secret`, então retorna 401", Evidência — nenhuma camada injeta o header, O que fiz para derrubar, Precisão sobre o status devolvido, useSequenceProcessor(), DEFAULT_RETRY_STATUSES, resilientFetch(), RetryOptions (+4 more)
+Cohesion: 0.18
+Nodes (11): B6 — "`sequence-processor` tem chamador que não envia `x-cron-secret`, então retorna 401", Evidência — nenhuma camada injeta o header, O que fiz para derrubar, Precisão sobre o status devolvido, DEFAULT_RETRY_STATUSES, resilientFetch(), RetryOptions, sleep() (+3 more)
 
 ### Community 796 - "Chaos Drill Runbook"
 Cohesion: 0.33
@@ -4611,9 +4595,13 @@ Nodes (5): Cenários e resposta esperada, Chaos Drill Runbook, Critérios de apr
 Cohesion: 0.70
 Nodes (4): compareDates(), compareValues(), getSortValue(), sortArray()
 
-### Community 799 - "triggerTemplatesMetaprograms.ts"
-Cohesion: 0.25
-Nodes (3): METAPROGRAM_TRIGGER_TEMPLATES, MetaprogramTriggerTemplate, MetaprogramType
+### Community 798 - "HistoricoTagsCard.tsx"
+Cohesion: 0.33
+Nodes (3): CATEGORY_META, HistoricoTagsCard, Props
+
+### Community 799 - "RecentChannelCombos.tsx"
+Cohesion: 0.47
+Nodes (5): CHANNEL_LABELS, comboLabel(), Props, RecentChannelCombos, sameCombo()
 
 ### Community 800 - "📊 OUTRAS TABELAS"
 Cohesion: 0.33
@@ -4623,9 +4611,9 @@ Nodes (6): `activities` (8 colunas), `alerts` (11 colunas), `insights` (13 colun
 Cohesion: 0.33
 Nodes (6): `cognitive_bias_history` (13 colunas), `emotional_anchors` (10 colunas), `emotional_states_history` (9 colunas), `eq_analysis_history` (16 colunas), `metaprogram_analysis` (18 colunas), 🧠 NLP - Programação Neurolinguística
 
-### Community 802 - "EngagementScoreWidget.tsx"
-Cohesion: 0.33
-Nodes (5): EngagementScoreWidget(), LEVEL_COLOR, Props, TREND_COLOR, TREND_ICON
+### Community 802 - "relationship-score.tsx"
+Cohesion: 0.53
+Nodes (5): getScoreBg(), getScoreLabel(), getTrend(), RelationshipScore(), RelationshipScoreProps
 
 ### Community 803 - "20260111010914_d0b0ab7c-31d9-4a05-99c5-bbd77320bdd8.sql"
 Cohesion: 0.70
@@ -4743,17 +4731,17 @@ Nodes (6): CHANNEL_OPTIONS, formatDateBr(), PRIORITY_OPTIONS, Props, ProximoPass
 Cohesion: 0.33
 Nodes (6): `trigger_ab_tests` (22 colunas), `trigger_bundles` (15 colunas), `trigger_channel_effectiveness` (11 colunas), `trigger_intensity_history` (9 colunas), `trigger_usage_history` (14 colunas), 🧪 TRIGGERS - Gatilhos Mentais
 
-### Community 836 - "ScoreHistoryChart.tsx"
-Cohesion: 0.47
-Nodes (5): ChartPoint, getScoreColor(), getScoreTextColor(), Props, ScoreHistoryChart()
+### Community 836 - "useDeviceDetection.ts"
+Cohesion: 0.53
+Nodes (5): DeviceInfo, generateFingerprint(), getBrowser(), getOS(), useDeviceDetection()
 
-### Community 838 - "useRestoreEntity.ts"
-Cohesion: 0.11
-Nodes (15): ADR-010: Excelência Sustentada — 35/35 Melhorias (Rodadas A–G), Consequências, Contexto, Decisão, Marco, Rodada G — entregues, Arquivos novos, Entregas (5/5) (+7 more)
+### Community 838 - "errorReporting.ts"
+Cohesion: 0.05
+Nodes (40): ADR-010: Excelência Sustentada — 35/35 Melhorias (Rodadas A–G), Consequências, Contexto, Decisão, Marco, Rodada G — entregues, 10. Padrões obrigatórios, 11. Estrutura de diretórios (+32 more)
 
-### Community 839 - "ConversationAnalysesTable.tsx"
-Cohesion: 0.47
-Nodes (4): CoachingScoreBadge(), ConversationAnalysesTable(), Row, sentimentVariant()
+### Community 839 - "useEmailThreadSummary.ts"
+Cohesion: 0.40
+Nodes (5): computeThreadKey(), EmailThreadSummary, GenerateInput, ThreadActionItem, useEmailThreadSummary()
 
 ### Community 840 - "dry-run.sh"
 Cohesion: 0.83
@@ -4879,13 +4867,13 @@ Nodes (3): cleanup(), log(), restore-drill.sh script
 Cohesion: 0.83
 Nodes (3): export_one(), export-data.sh script, skip_match()
 
-### Community 873 - "DocumentsPanel.tsx"
-Cohesion: 0.40
-Nodes (5): DOC_TYPE_ICONS, DOC_TYPE_LABELS, DocumentsPanel(), formatFileSize(), Props
+### Community 873 - "useEnrichSocialProfiles.ts"
+Cohesion: 0.47
+Nodes (5): buildUrl(), EnrichResult, normalizePlatform(), Platform, useEnrichSocialProfiles()
 
 ### Community 875 - "Auditoria SECURITY DEFINER — Rodada 49/10"
 Cohesion: 0.29
-Nodes (6): Auditoria SECURITY DEFINER — Rodada 49/10, Baseline atual — 103 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-10-06), Cenários de gap prevenidos, DEFINERs expostos a `anon` — inspeção manual detalhada (5 críticos), Invariantes, RPCs do frontend com sessão de usuário — resolvido em `20261006130000`
+Nodes (6): Auditoria SECURITY DEFINER — Rodada 49/10, Baseline atual — 102 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-10-07), Cenários de gap prevenidos, DEFINERs expostos a `anon` — inspeção manual detalhada (5 críticos), Invariantes, RPCs do frontend com sessão de usuário — resolvido em `20261006130000`
 
 ### Community 876 - "💰 Error Budget Policy"
 Cohesion: 0.33
@@ -4903,9 +4891,9 @@ Nodes (5): Edge Functions, Hooks, Navegação, Schema, UI
 Cohesion: 0.33
 Nodes (5): Edge Function, Hooks, Navegação, Schema, UI
 
-### Community 880 - "ActivityTimeline.tsx"
-Cohesion: 0.50
-Nodes (4): ActivityTimeline(), CHANNEL_META, normalizeChannel(), Props
+### Community 880 - "[2.7.4] - 2026-04-20 — Rodada S: Optimistic Locking End-to-End"
+Cohesion: 0.40
+Nodes (5): [2.7.4] - 2026-04-20 — Rodada S: Optimistic Locking End-to-End, Added, Changed, Score, Security & Reliability
 
 ### Community 881 - "Rodada 13/10 — Excelência Sustentada"
 Cohesion: 0.33
@@ -4943,17 +4931,17 @@ Nodes (3): channelMeta, CopyScriptMenu, Props
 Cohesion: 0.50
 Nodes (4): presetMatchesCurrent(), Props, ProximosPassosPresets, ProximosPassosPresetsComponent()
 
-### Community 890 - "IntelBookmarksNotesBadge.tsx"
-Cohesion: 0.47
-Nodes (3): countBookmarks(), countNotes(), IntelBookmarksNotesBadge()
+### Community 890 - "🎨 MÓDULO 8: DESIGN SYSTEM"
+Cohesion: 0.40
+Nodes (5): 8.1 Tokens de Cor, 8.2 Tipografia, 8.3 Animações, 8.4 Componentes shadcn/ui, 🎨 MÓDULO 8: DESIGN SYSTEM
 
-### Community 891 - "17. 🔔 Sistema de Alertas"
-Cohesion: 0.33
-Nodes (6): 17.1 Alertas Gerais (`alerts`), 17.2 Alertas de Compatibilidade (`compatibility_alerts`), 17.3 Alertas de Saúde (`health_alerts`), 17.4 Configurações de Alerta de Saúde (`health_alert_settings`), 17.5 Configurações de Compatibilidade (`compatibility_settings`), 17. 🔔 Sistema de Alertas
+### Community 891 - "SINGU CRM — Edge Functions API Reference"
+Cohesion: 0.40
+Nodes (4): 🔐 Autenticação, 🔄 Códigos de Resposta, ⚠️ Rate Limiting, SINGU CRM — Edge Functions API Reference
 
-### Community 892 - "MultiDiffPanel.tsx"
+### Community 892 - "e2e-regression-suite.test.ts"
 Cohesion: 0.50
-Nodes (4): MultiDiffEntity, MultiDiffPanel(), MultiDiffPanelProps, normalize()
+Nodes (4): Patologia 1b — Teste-grep (asserção sobre o *texto* do fonte, não sobre comportamento), getFiles(), getFilesFromAbs(), readSrcFile()
 
 ### Community 893 - "ADR-008: Logger Estruturado com Supressão em Produção"
 Cohesion: 0.40
@@ -4983,10 +4971,6 @@ Nodes (3): ColumnConfig, entityConfigs, EntityType
 Cohesion: 0.40
 Nodes (4): ADR-021 — Ratchet Global Zero-Warning (fora de `src/`), Consequências, Contexto, Decisão
 
-### Community 900 - "ActivityHeatmapChart.tsx"
-Cohesion: 0.50
-Nodes (4): ActivityHeatmapChart, DAYS, HOURS, intensityClass()
-
 ### Community 901 - "Estruturas Complexas"
 Cohesion: 0.40
 Nodes (5): `cognitive_bias_history.detected_biases`, Colunas JSONB, `contacts.behavior`, Estruturas Complexas, `rfm_analysis.recommended_actions`
@@ -5007,9 +4991,9 @@ Nodes (4): Cenário, Conclusão, 📂 Disaster Recovery Drill — 2026 Q2, Proce
 Cohesion: 0.38
 Nodes (4): asArr(), BehavioralProfileVersion, normalize(), useBehavioralProfileVersions()
 
-### Community 908 - "QA Findings — Rodada 27/10"
-Cohesion: 0.29
-Nodes (6): 🔴 Críticos, 🟡 Funcionais / técnicos (planejados para próxima rodada), Ondas de execução, 🔵 Polimento (backlog), QA Findings — Rodada 27/10, NLPAnalysisCard()
+### Community 908 - "NLPAnalysisCard.tsx"
+Cohesion: 0.17
+Nodes (10): 🔴 Críticos, 🟡 Funcionais / técnicos (planejados para próxima rodada), Ondas de execução, 🔵 Polimento (backlog), QA Findings — Rodada 27/10, MetaprogramProfile, NLPAnalysisCard(), Props (+2 more)
 
 ### Community 909 - "20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql"
 Cohesion: 0.50
@@ -5155,9 +5139,9 @@ Nodes (3): public.audit_log_2026_11, audit_log_2026_11_entity_type_entity_id_idx
 Cohesion: 0.67
 Nodes (3): public.audit_log_default, audit_log_default_entity_type_entity_id_idx, audit_log_default_user_id_created_at_idx
 
-### Community 951 - "relationship-score.tsx"
-Cohesion: 0.53
-Nodes (5): getScoreBg(), getScoreLabel(), getTrend(), RelationshipScore(), RelationshipScoreProps
+### Community 951 - "ChannelPreferencesCard.tsx"
+Cohesion: 0.50
+Nodes (4): CHANNEL_META, ChannelPreferencesCard(), formatWindow(), Props
 
 ### Community 957 - "applied_objection_responses_user_applied_at_idx"
 Cohesion: 0.67
@@ -5391,49 +5375,45 @@ Nodes (3): tr_sync_meta_to_contact, tr_sync_vak_to_contact, sync_nlp_to_contact
 Cohesion: 0.40
 Nodes (4): Artefatos versionados, Comandos, Graphify, Instalação
 
-### Community 1029 - "ActiveFiltersBar.onAfterRemove.test.tsx"
+### Community 1029 - "MeetingMode.tsx"
 Cohesion: 0.50
-Nodes (3): baseFilters(), renderBar(), RenderOpts
+Nodes (4): DISC_CONFIG, MeetingMode(), MeetingModeProps, useTimer()
 
 ### Community 1032 - "⚡ EXPLAIN ANALYZE — Top Core Queries"
 Cohesion: 0.40
 Nodes (4): 1. Listagem de Contatos (Busca por Nome), 2. Pipeline Kanban, 3. Timeline de Interações, ⚡ EXPLAIN ANALYZE — Top Core Queries
 
-### Community 1033 - "WinLossInsightCard.tsx"
-Cohesion: 0.33
-Nodes (4): config, Props, sevColors, sevIcon
-
-### Community 1107 - "ReportResultView.tsx"
+### Community 1033 - "DailySummaryWidget.tsx"
 Cohesion: 0.50
-Nodes (3): DataTable(), formatCell(), Props
+Nodes (4): DailySummaryWidget, formatCurrency(), MetricRow, MetricRowProps
 
 ### Community 1240 - "useMarkObjectionHandled.ts"
 Cohesion: 0.50
 Nodes (4): AnalysisObjection, normalize(), useMarkObjectionHandled(), Vars
 
-### Community 1241 - "nlpAnalyticsConstants.ts"
-Cohesion: 0.33
-Nodes (5): CHART_COLORS, discColors, emotionColors, periodOptions, vakColors
+### Community 1241 - "AplicarFavoritoCompartilhadoDialog.tsx"
+Cohesion: 0.50
+Nodes (4): AplicarFavoritoCompartilhadoDialog, CHANNEL_LABELS, periodLabel(), Props
 
-### Community 1242 - "useStakeholderAlerts.ts"
-Cohesion: 0.33
-Nodes (5): ALERT_TYPES, SEVERITY_LEVELS, StakeholderAlert, StakeholderMetrics, StoredMetrics
+### Community 1242 - "ReportBuilder.tsx"
+Cohesion: 0.25
+Nodes (6): Linhas que reverifiquei e considero corretas (amostra de 22, ≥ 12 exigidas), AVAILABLE_WIDGETS, DashboardLayout, DEFAULT_LAYOUTS, WidgetId, WidgetRenderer()
 
-### Community 1244 - "StatusPage.tsx"
-Cohesion: 0.33
-Nodes (3): COMPONENT_META, OVERALL_CONFIG, STATUS_CONFIG
-
-### Community 1245 - "🎨 MÓDULO 8: DESIGN SYSTEM"
-Cohesion: 0.40
-Nodes (5): 8.1 Tokens de Cor, 8.2 Tipografia, 8.3 Animações, 8.4 Componentes shadcn/ui, 🎨 MÓDULO 8: DESIGN SYSTEM
-
-### Community 1246 - "FavoritosFiltrosMenu.tsx"
+### Community 1244 - "useBehavioralProfile.ts"
 Cohesion: 0.47
-Nodes (5): CHANNEL_LABELS, copyToClipboard(), FavoritosFiltrosMenu, formatCombo(), Props
+Nodes (5): BehavioralInsightItem, BehavioralProfile, normalize(), useBehavioralProfile(), useGenerateBehavioralProfile()
 
-### Community 1247 - "SINGU CRM — Edge Functions API Reference"
+### Community 1245 - "CompanyAddressesForm.tsx"
+Cohesion: 0.50
+Nodes (4): addressTypes, CompanyAddressesForm(), emptyAddress(), Props
+
+### Community 1246 - "CompanyPhonesForm.tsx"
+Cohesion: 0.50
+Nodes (4): CompanyPhonesForm(), emptyPhone(), phoneTypes, Props
+
+### Community 1247 - "DateRangePopover.tsx"
 Cohesion: 0.40
-Nodes (4): 🔐 Autenticação, 🔄 Códigos de Resposta, ⚠️ Rate Limiting, SINGU CRM — Edge Functions API Reference
+Nodes (5): DateRangePopover, fmt(), Preset, PRESETS, Props
 
 ### Community 1248 - "useClosingScoreRanking.ts"
 Cohesion: 0.38
@@ -5443,129 +5423,109 @@ Nodes (6): defaultStats(), getScoreProbability(), PeriodFilter, ProbabilityFilte
 Cohesion: 0.33
 Nodes (6): ClientHealthSummary, HealthStatus, isValidContactName(), PortfolioAlert, PortfolioHealthMetrics, usePortfolioHealth()
 
-### Community 1250 - "Plano — Estado atual: 10/10 sustentado"
+### Community 1250 - "ViewModeChips.tsx"
+Cohesion: 0.33
+Nodes (5): Props, VIEW_CONFIG, ViewConfigItem, ViewMode, ViewModeChips
+
+### Community 1251 - "ActivityHeatmapChart.tsx"
+Cohesion: 0.50
+Nodes (4): ActivityHeatmapChart, DAYS, HOURS, intensityClass()
+
+### Community 1252 - "Header.tsx"
 Cohesion: 0.40
-Nodes (4): ✅ Itens concluídos e validados, 📊 Métricas objetivas, Plano — Estado atual: 10/10 sustentado, 🎯 Próxima ação
+Nodes (4): Header, HeaderMemo, HeaderProps, PARENT_ROUTES
 
-### Community 1251 - "[2.7.3] - 2026-04-20 — Rodada R: Tracing nas Edge Functions, Split Sidebar, ESLint warn"
-Cohesion: 0.50
-Nodes (4): [2.7.3] - 2026-04-20 — Rodada R: Tracing nas Edge Functions, Split Sidebar, ESLint warn, Changed, Roadmap remanescente, Score
-
-### Community 1252 - "Tabelas sem RLS / sem política"
-Cohesion: 0.50
-Nodes (4): Achado inverso — RLS habilitada em tabela que o repositório NÃO cria — 3, Criadas sem `ENABLE ROW LEVEL SECURITY` — 1, Criadas sem nenhuma `CREATE POLICY` — 1, Tabelas sem RLS / sem política
-
-### Community 1253 - "Contradições com a documentação existente"
-Cohesion: 0.50
-Nodes (4): Contradições com a documentação existente, `docs/auditoria/04_ACHADOS_BANCO.md`, `docs/DATA_DICTIONARY.md` / `docs/data-dictionary.md` / `docs/er-diagram.md`, `docs/DATABASE_ANALYSIS.md`
-
-### Community 1254 - "ChannelPreferencesCard.tsx"
-Cohesion: 0.50
-Nodes (4): CHANNEL_META, ChannelPreferencesCard(), formatWindow(), Props
-
-### Community 1255 - "TimeHeatmapCard.tsx"
-Cohesion: 0.40
-Nodes (4): DAY_LABELS, Props, TimeData, TimeHeatmapCard
-
-### Community 1256 - "MeetingMode.tsx"
-Cohesion: 0.50
-Nodes (4): DISC_CONFIG, MeetingMode(), MeetingModeProps, useTimer()
-
-### Community 1257 - "DataGrid.tsx"
-Cohesion: 0.50
-Nodes (3): Column, DataGrid(), DataGridProps
-
-### Community 1258 - "ExportFormatMenu.tsx"
-Cohesion: 0.50
-Nodes (3): ExportFormatMenu(), ExportFormatMenuProps, FORMATS
-
-### Community 1260 - "DealRiskDrawer.tsx"
+### Community 1253 - "DealRiskDrawer.tsx"
 Cohesion: 0.50
 Nodes (4): DealRiskDrawer(), indicatorClass(), levelMeta, Props
+
+### Community 1255 - "ReportResultView.tsx"
+Cohesion: 0.50
+Nodes (3): DataTable(), formatCell(), Props
+
+### Community 1256 - "useRecentlyViewed.ts"
+Cohesion: 0.60
+Nodes (4): getStoredItems(), RecentlyViewedItem, saveItems(), useRecentlyViewed()
+
+### Community 1257 - "Intelligence.tsx"
+Cohesion: 0.50
+Nodes (4): Intelligence(), isValidTab(), TABS, TabValue
+
+### Community 1258 - "aiGatewayLogger.ts"
+Cohesion: 0.50
+Nodes (4): AiGatewayStatus, logAiGatewayCall(), LogAiGatewayCallInput, withAiGatewayMetrics()
+
+### Community 1260 - "[2.7.1] - 2026-04-20 — Rodada P: Re-auditoria & Fechamento 10/10"
+Cohesion: 0.50
+Nodes (4): [2.7.1] - 2026-04-20 — Rodada P: Re-auditoria & Fechamento 10/10, Added, Changed, Notes
 
 ### Community 1261 - "GraphLegend.tsx"
 Cohesion: 0.50
 Nodes (3): GraphLegend(), GraphLegendProps, LegendItem
 
-### Community 1262 - "useAccountChurnPrediction.ts"
+### Community 1262 - "DirecaoQuickFilter.tsx"
 Cohesion: 0.40
-Nodes (4): AccountChurnRisk, AccountRiskFactor, ContactRiskSummary, StakeholderHealthMetrics
+Nodes (4): DirecaoQuickFilter, DirecaoValue, OPTIONS, Props
 
 ### Community 1263 - "SchemaDiscoveryCard.tsx"
-Cohesion: 0.20
-Nodes (9): [2.5.0] - 2026-04-20 — Rodada M: Connections Federation & DX (65/65), Added, Notes, Schema Discovery, ColumnInfo, DiscoveredSchema, Props, SchemaDiscoveryCard() (+1 more)
+Cohesion: 0.29
+Nodes (6): Schema Discovery, ColumnInfo, DiscoveredSchema, Props, SchemaDiscoveryCard(), TableInfo
 
-### Community 1264 - "7. ✍️ Copywriting & Sales Tools (Enterprise)"
-Cohesion: 0.40
-Nodes (5): 7.1 Frameworks de Persuasão, 7.2 Analisador de Copy, 7.3 Previews Multi-Canal, 7.4 Gerador de Scripts de Vendas com IA, 7. ✍️ Copywriting & Sales Tools (Enterprise)
-
-### Community 1265 - "useAppliedResponses.ts"
+### Community 1264 - "[2.7.3] - 2026-04-20 — Rodada R: Tracing nas Edge Functions, Split Sidebar, ESLint warn"
 Cohesion: 0.50
-Nodes (4): AppliedResponse, normalizeObjection(), QUERY_KEY, useAppliedResponses()
+Nodes (4): [2.7.3] - 2026-04-20 — Rodada R: Tracing nas Edge Functions, Split Sidebar, ESLint warn, Changed, Roadmap remanescente, Score
 
-### Community 1266 - "useBestTimeToContact.ts"
-Cohesion: 0.40
-Nodes (4): ContactTimeAnalysis, dayNames, TimeSlot, useBestTimeToContact()
-
-### Community 1267 - "useClientHealth.ts"
-Cohesion: 0.40
-Nodes (4): ClientHealth, HealthIndicator, HealthStatus, useClientHealth()
-
-### Community 1268 - "useContactValidationStatus.ts"
-Cohesion: 0.40
-Nodes (3): EmailStatus, PhoneStatus, ValidationStatus
-
-### Community 1269 - "CompanyAddressesForm.tsx"
-Cohesion: 0.50
-Nodes (4): addressTypes, CompanyAddressesForm(), emptyAddress(), Props
-
-### Community 1270 - "CompanySocialMediaForm.tsx"
-Cohesion: 0.50
-Nodes (4): CompanySocialMediaForm(), emptyItem(), platforms, Props
-
-### Community 1271 - "useNeuromarketing.ts"
-Cohesion: 0.40
-Nodes (3): BRAIN_SYSTEM_KEYWORDS, DISCProfile, STIMULUS_PATTERNS
-
-### Community 1272 - "usePurchasePatterns.ts"
-Cohesion: 0.40
-Nodes (4): CategoryPattern, PurchasePattern, PurchasePrediction, usePurchasePatterns()
-
-### Community 1273 - "entityDiff.ts"
-Cohesion: 0.50
-Nodes (4): computeMetadataDiff(), DiffRow, DiffStatus, normalize()
-
-### Community 1274 - "Intelligence.tsx"
-Cohesion: 0.50
-Nodes (4): Intelligence(), isValidTab(), TABS, TabValue
-
-### Community 1276 - "[2.7.1] - 2026-04-20 — Rodada P: Re-auditoria & Fechamento 10/10"
-Cohesion: 0.50
-Nodes (4): [2.7.1] - 2026-04-20 — Rodada P: Re-auditoria & Fechamento 10/10, Added, Changed, Notes
-
-### Community 1277 - "🔒 MÓDULO 11: SEGURANÇA"
+### Community 1265 - "🔒 MÓDULO 11: SEGURANÇA"
 Cohesion: 0.50
 Nodes (4): 11.1 Autenticação, 11.2 RLS (Row Level Security), 11.3 Edge Functions, 🔒 MÓDULO 11: SEGURANÇA
 
-### Community 1278 - "CompanyPhonesForm.tsx"
-Cohesion: 0.50
-Nodes (4): CompanyPhonesForm(), emptyPhone(), phoneTypes, Props
-
-### Community 1279 - "📊 MÓDULO 7: INTEGRAÇÕES"
+### Community 1267 - "📊 MÓDULO 7: INTEGRAÇÕES"
 Cohesion: 0.50
 Nodes (4): 7.1 Supabase (Lovable Cloud), 7.2 Lovable AI Gateway, 7.3 PWA, 📊 MÓDULO 7: INTEGRAÇÕES
 
-### Community 1281 - "radio-group.tsx"
+### Community 1268 - "Tabelas sem RLS / sem política"
 Cohesion: 0.50
-Nodes (3): @radix-ui/react-radio-group, RadioGroup, RadioGroupItem
+Nodes (4): Achado inverso — RLS habilitada em tabela que o repositório NÃO cria — 3, Criadas sem `ENABLE ROW LEVEL SECURITY` — 1, Criadas sem nenhuma `CREATE POLICY` — 1, Tabelas sem RLS / sem política
 
-### Community 1282 - "ProfitabilityPanel.tsx"
+### Community 1269 - "Contradições com a documentação existente"
+Cohesion: 0.50
+Nodes (4): Contradições com a documentação existente, `docs/auditoria/04_ACHADOS_BANCO.md`, `docs/DATA_DICTIONARY.md` / `docs/data-dictionary.md` / `docs/er-diagram.md`, `docs/DATABASE_ANALYSIS.md`
+
+### Community 1271 - "AiGatewayPartitionsCard.tsx"
 Cohesion: 0.83
-Nodes (3): ProfitabilityPanel, roiBarColor(), roiColor()
+Nodes (3): AiGatewayPartitionsCard(), formatBytes(), partitionBadge()
 
-### Community 1283 - "ContactIntelligenceWidget.tsx"
+### Community 1272 - "MonthlyReportWidget.tsx"
+Cohesion: 0.67
+Nodes (3): formatCurrency(), MonthlyReportWidget, MONTHS
+
+### Community 1274 - "QBRTimeline.tsx"
 Cohesion: 0.50
-Nodes (3): ContactIntelligenceWidget(), DAYS_OF_WEEK, Props
+Nodes (3): QBRTimeline(), STATUS_COLOR, STATUS_ICON
+
+### Community 1275 - "DealsAtRiskCard.tsx"
+Cohesion: 0.83
+Nodes (3): DealsAtRiskCard(), formatCurrency(), levelClass()
+
+### Community 1276 - "OnboardingChecklist.tsx"
+Cohesion: 0.50
+Nodes (3): ChecklistStep, OnboardingChecklist, OnboardingChecklistProps
+
+### Community 1277 - "ExecutiveKpisWidget.tsx"
+Cohesion: 0.67
+Nodes (3): ExecutiveKpisWidget, formatCurrency(), kpiConfig
+
+### Community 1278 - "ConversasRelacionadasCard.tsx"
+Cohesion: 0.50
+Nodes (3): Chip, ConversasRelacionadasCard, Props
+
+### Community 1280 - "PaginationBar.tsx"
+Cohesion: 0.67
+Nodes (3): buildWindow(), PaginationBar, Props
+
+### Community 1281 - "[1.7.0] - 2026-04-11"
+Cohesion: 0.67
+Nodes (3): [1.7.0] - 2026-04-11, Adicionado, Segurança
 
 ### Community 1284 - "useIntelTour.ts"
 Cohesion: 0.60
@@ -5575,21 +5535,9 @@ Nodes (4): read(), StoredTour, useIntelTour(), write()
 Cohesion: 0.60
 Nodes (4): GraphLayoutState, read(), useGraphLayout(), write()
 
-### Community 1301 - "useChurnPrediction.ts"
-Cohesion: 0.50
-Nodes (3): ChurnFactor, ChurnRisk, useChurnPrediction()
-
-### Community 1313 - "useIntelDensity.ts"
-Cohesion: 0.67
-Nodes (3): IntelDensity, read(), useIntelDensity()
-
 ### Community 1569 - "scroll-area.tsx"
 Cohesion: 0.50
 Nodes (3): @radix-ui/react-scroll-area, ScrollArea, ScrollBar
-
-### Community 1769 - "StrategicAccountsWidget.tsx"
-Cohesion: 0.83
-Nodes (3): formatCurrency(), healthColor(), StrategicAccountsWidget
 
 ### Community 1781 - "vercel.json"
 Cohesion: 0.50
@@ -5724,24 +5672,24 @@ Cohesion: 0.67
 Nodes (3): Exceções, Padrão de Segurança, Políticas RLS
 
 ## Knowledge Gaps
-- **5974 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+5969 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 9259 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **916 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **5972 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+5967 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 9285 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **922 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `react` to `@tanstack/react-query`, `react-router-dom`, `ref_hooks`, `DealDetailDrawer.tsx`, `date-fns`, `Analytics.tsx`, `ref_integrations`, `ref_components`, `PrefetchLink.tsx`, `AppLayout.tsx`, `empty-state.tsx`, `recharts`, `ContactBehavioralTab.tsx`, `CompatibilityScore.tsx`, `framer-motion`, `celebrate.ts`, `stat-card.tsx`, `useAuth`, `ref_lib`, `useDedupEngine.ts`, `package.json`, `ContactOverviewTab.tsx`, `ContactEmailThreadsSection.tsx`, `NavigationStackContext.tsx`, `PhonesCard.tsx`, `AgendarReuniaoForm.tsx`, `useIntelPresentation.ts`, `EntityMonthlyTimeline.tsx`, `scroll-area.tsx`, `useSemanticSearch.ts`, `useSearchPresets.ts`, `Tabela de evidências`, `vitest`, `ObjectionsSpotlight.tsx`, `CompanyInsightsTab.tsx`, `Empresas.tsx`, `micro-interactions/index.ts`, `form.tsx`, `useDISCAutoAnalysis.ts`, `useLuxIntelligence.ts`, `useStakeholderAnalysis.ts`, `ReportsTab.tsx`, `CopywritingSalesTools.tsx`, `StakeholderMap.tsx`, `ContactBehaviorExtended.tsx`, `useVoiceAgent.ts`, `useFicha360Domain.ts`, `PageSkeletons.tsx`, `CompanyForm.tsx`, `PassoFeedbackMenu.tsx`, `SalesTeamTab.tsx`, `sidebar.tsx`, `insights/SentimentTrendChart.tsx`, `GlobalSearch.tsx`, `useConversationIntel.ts`, `ConsolidatedHealthPanel.tsx`, `AppProviders.tsx`, `DashboardCharts.tsx`, `useCompanyCommercial.ts`, `lazyPages.tsx`, `InsightsPanel.tsx`, `TicketDetailDrawer.tsx`, `RpcPlanDiffDialog.tsx`, `useInteractionsAdvancedFilter.ts`, `PessoaForm.tsx`, `RecentChannelCombos.tsx`, `DISCTrainingMode.tsx`, `useTriggerHistory.ts`, `ProximosPassosCard.tsx`, `company-health-score.tsx`, `contact-detail/SentimentTrendChart.tsx`, `company-form-exhaustive.test.tsx`, `CelebrationProvider.tsx`, `ContextualHelp.tsx`, `NotificationGroup.tsx`, `LifeEventsTab.tsx`, `RelationshipStatsPanel.tsx`, `useFicha360FilterFavorites.ts`, `useFicha360PreferencesSync.ts`, `LuxIntelligencePanel.tsx`, `ReminderCard.tsx`, `AnalyticsShared.tsx`, `IncomingWebhookCard.tsx`, `MapaEmpresas.tsx`, `FrequenciaContatoCard.tsx`, `lead-scoring/LeadScoreCard.tsx`, `DealConfidenceBadge.tsx`, `masked-input.tsx`, `GlobalCommandBar.tsx`, `AriaLiveRegion.tsx`, `UltimasInteracoesCard.tsx`, `feedback/index.ts`, `useClientHealth.ts`, `ObjectionExamplesModal.tsx`, `useSavedViews.ts`, `ForecastConfidencePanel.tsx`, `optimized-avatar.tsx`, `useContacts.ts`, `EmailBuilder.tsx`, `Ficha360FilterPanel.tsx`, `WhyScoreDrawer.tsx`, `SentimentChartTooltip.tsx`, `useEntityBookmarks.ts`, `ChannelShortcutsHelpOverlay.tsx`, `useNeuromarketing.ts`, `CompanyCardWithContext.tsx`, `useNetworkGraph.ts`, `Estado — Marketing, Campanhas e Automação`, `useContactValidationStatus.ts`, `class-variance-authority`, `IntelStatusBar.tsx`, `PWAComponents.tsx`, `useSavedAskViews.ts`, `ContactDataTab.tsx`, `Tabela de evidências`, `useSmartNotifications.ts`, `NLPEvolutionCharts.tsx`, `RFMSubComponents.tsx`, `InteracoesContent.tsx`, `useContactSegmentation.ts`, `README.md`, `accordion.tsx`, `tabs.tsx`, `Ficha360.tsx`, `CompanyInteractionsTab.tsx`, `EvidenceDrillDownSheet.tsx`, `SentimentDistributionChart.tsx`, `ThemeExamplesDrawer.tsx`, `lead-score/LeadScoreCard.tsx`, `ThemeProvider.tsx`, `use-toast.ts`, `useCompanies.ts`, `useCompanyFilterOptions.ts`, `InsightsContent.tsx`, `ApproachRecommendationPanel.tsx`, `DISCAnalyticsPanel.tsx`, `TimelineGroupCard.tsx`, `PresetFiltersDiff.tsx`, `Contatos.tsx`, `useStakeholderAlerts.ts`, `AdminSchemaDrift.tsx`, `FavoritosFiltrosMenu.tsx`, `useClosingScoreRanking.ts`, `usePortfolioHealth.ts`, `ref_domain`, `CreateTaskDialog.tsx`, `11. Nove páginas do escopo renderizam sem `AppLayout``, `TimeHeatmapCard.tsx`, `MeetingMode.tsx`, `StrategicAccountsWidget.tsx`, `BehavioralRegenAlertsTrend.tsx`, `PreContactBriefing.tsx`, `DataGrid.tsx`, `InsightFeedbackAnalytics.tsx`, `InsightFeedbackTrendChart.tsx`, `SchemaDiscoveryCard.tsx`, `TelemetryCharts.tsx`, `ExportFormatMenu.tsx`, `BackButton.tsx`, `useAccountChurnPrediction.ts`, `useAppliedResponses.ts`, `ProximosPassosFiltersBar.tsx`, `CompanyAddressesForm.tsx`, `CompanySocialMediaForm.tsx`, `Fase 1 — Auditoria estática (findings)`, `useBestTimeToContact.ts`, `ContactIntelligenceTab.tsx`, `useBulkImport.ts`, `useApproachRecommendation.ts`, `lucide-react`, `WeeklyReportPanel.tsx`, `ContextualLoader.tsx`, `ErrorBoundary.tsx`, `RelatoriosFixosBar.tsx`, `ProfitabilityPanel.tsx`, `CompanyPhonesForm.tsx`, `radio-group.tsx`, `Hooks (`src/hooks/`)`, `useIntelTour.ts`, `useAiAssistant.ts`, `usePurchasePatterns.ts`, `useEntityNotes.ts`, `useReducedMotion.ts`, `sheet.tsx`, `useRecentlyViewed.ts`, `ProximaAcaoCTA.tsx`, `AdminFieldMapping.tsx`, `Calendario.tsx`, `Intelligence.tsx`, `searchable-select.tsx`, `AuditDiffViewer.tsx`, `progress.tsx`, `useChurnPrediction.ts`, `useGraphLayout.ts`, `context-menu.tsx`, `dropdown-menu.tsx`, `toast.tsx`, `CompanyGrouping.tsx`, `ImportantDatesCalendar.tsx`, `ProfileBasedSuggestions.tsx`, `AdvancedSearchBar.tsx`, `AutomationWizard.tsx`, `useIntelDensity.ts`, `useProactiveIntelligence.ts`, `useAutomationRules.ts`, `AdminConexoesLogs.tsx`, `useTouchpointSequences.ts`, `popover.tsx`, `separator.tsx`, `switch.tsx`, `TypewriterText.tsx`, `useYourDay.ts`, `useClientTriggers.ts`, `telemetry-helpers.test.ts`, `alert-dialog.tsx`, `useChurnRisk.ts`, `OfferSuggestionsElite.tsx`, `ScoreHistoryChart.tsx`, `ProximoPassoQuickForm.tsx`, `responsive-dialog.tsx`, `IntelHealthPanel.tsx`, `useRestoreEntity.ts`, `useContactDetail.ts`, `AdminSidebar.tsx`, `useStakeholderSimulator.ts`, `InfiniteScrollSentinel.tsx`, `useClientValues.ts`, `useNLPAnalyticsData.ts`, `command.tsx`, `BehavioralRegenAudit.tsx`, `useKeyboardShortcutsEnhanced.ts`, `badge.tsx`, `DocumentsPanel.tsx`, `useFicha360.ts`, `select.tsx`, `drawer.tsx`, `AiGatewayHealthCard.tsx`, `IncomingWebhookFormDialog.tsx`, `useRFMAnalysis.ts`, `4. Resiliência`, `CopyScriptMenu.tsx`, `ProximosPassosPresets.tsx`, `IntelBookmarksNotesBadge.tsx`, `ObjectionsTrendChart.tsx`, `MultiDiffPanel.tsx`, `useAIWritingAssistant.ts`, `useSentimentAnnotations.ts`, `useCompanyProfileAnalytics.ts`, `TemplateHistoryByProfile.tsx`, `ActivityHeatmapChart.tsx`, `useDealForecastConfidence.ts`, `useIntelTheme.ts`, `useNextPagePrefetch.ts`, `Auth.tsx`, `keyboardShortcutRegistry.ts`, `Inbox.tsx`, `InteractionForm.tsx`, `SINGU CRM — Arquitetura Consolidada`, `InboundActivityHeatmapCard.tsx`, `3.8 Hooks de UX/UI`, `Checklist aplicado em todas as superfícies críticas`, `DailyBriefingCard.tsx`, `useHapticFeedback.ts`, `ActiveFiltersBar.tsx`, `OnboardingTour.tsx`, `Categorias`, `useAskCrm.ts`, `SequenceFormDialog.tsx`, `DensityContext.tsx`, `RelativesSection.tsx`, `AdminKnowledgeExport.tsx`, `NavigationPatterns.tsx`, `useChannelHistory.ts`, `AccountHierarchyTree.tsx`, `useFicha360Filters.ts`, `useEmotionalIntelligence.ts`, `sonner`, `table.tsx`, `error-budget-dashboard.md`, `useCoalitionDetection.ts`, `ContactTimeHeatmap.tsx`, `CadenceRulesConfig.tsx`, `useDailyKpis.test.tsx`, `ProntidaoFactorBreakdownChart.tsx`?**
-  _High betweenness centrality (0.135) - this node is a cross-community bridge._
-- **Why does `lucide-react` connect `lucide-react` to `react`, `react-router-dom`, `ref_hooks`, `DealDetailDrawer.tsx`, `date-fns`, `Analytics.tsx`, `ref_integrations`, `ref_components`, `empty-state.tsx`, `AppLayout.tsx`, `WinLossInsightCard.tsx`, `recharts`, `ContactBehavioralTab.tsx`, `CompatibilityScore.tsx`, `framer-motion`, `stat-card.tsx`, `view-mode-switcher.tsx`, `ref_lib`, `package.json`, `ContactOverviewTab.tsx`, `ContactEmailThreadsSection.tsx`, `PhonesCard.tsx`, `AgendarReuniaoForm.tsx`, `EntityMonthlyTimeline.tsx`, `Tabela de evidências`, `vitest`, `ObjectionsSpotlight.tsx`, `CompanyInsightsTab.tsx`, `Empresas.tsx`, `ReportsTab.tsx`, `CopywritingSalesTools.tsx`, `StakeholderMap.tsx`, `ContactBehaviorExtended.tsx`, `CompanyForm.tsx`, `PassoFeedbackMenu.tsx`, `SalesTeamTab.tsx`, `sidebar.tsx`, `ContactCommercialTab.tsx`, `Componentes (`src/components/intel/`)`, `insights/SentimentTrendChart.tsx`, `GlobalSearch.tsx`, `ConsolidatedHealthPanel.tsx`, `DashboardCharts.tsx`, `TicketDetailDrawer.tsx`, `requireCronSecret`, `useCustomerSuccess.ts`, `RpcPlanDiffDialog.tsx`, `InsightsPanel.tsx`, `PessoaForm.tsx`, `ConversationAnalysisCard.tsx`, `DISCTrainingMode.tsx`, `RecentChannelCombos.tsx`, `ProximosPassosCard.tsx`, `DesignSystem.tsx`, `company-health-score.tsx`, `contact-detail/SentimentTrendChart.tsx`, `company-form-exhaustive.test.tsx`, `CelebrationProvider.tsx`, `ContextualHelp.tsx`, `LifeEventsTab.tsx`, `RelationshipStatsPanel.tsx`, `NotificationGroup.tsx`, `TopContactsCard.tsx`, `LuxIntelligencePanel.tsx`, `AnalyticsShared.tsx`, `IncomingWebhookCard.tsx`, `MapaEmpresas.tsx`, `FrequenciaContatoCard.tsx`, `lead-scoring/LeadScoreCard.tsx`, `DealConfidenceBadge.tsx`, `ReminderCard.tsx`, `GlobalCommandBar.tsx`, `UltimasInteracoesCard.tsx`, `feedback/index.ts`, `✅ Resolvidos nesta rodada`, `ObjectionExamplesModal.tsx`, `11. Nove páginas do escopo renderizam sem `AppLayout``, `ForecastConfidencePanel.tsx`, `EmailBuilder.tsx`, `Ficha360FilterPanel.tsx`, `WhyScoreDrawer.tsx`, `SentimentChartTooltip.tsx`, `ChannelShortcutsHelpOverlay.tsx`, `CompanyCardWithContext.tsx`, `Estado — Marketing, Campanhas e Automação`, `priority-indicator.tsx`, `IntelStatusBar.tsx`, `PWAComponents.tsx`, `PortfolioContactCard.tsx`, `ContactDataTab.tsx`, `Tabela de evidências`, `RFMSubComponents.tsx`, `Tabela de evidências`, `accordion.tsx`, `Ficha360.tsx`, `CompanyInteractionsTab.tsx`, `EvidenceDrillDownSheet.tsx`, `SentimentDistributionChart.tsx`, `ThemeExamplesDrawer.tsx`, `lead-score/LeadScoreCard.tsx`, `useCompanyFilterOptions.ts`, `InsightsContent.tsx`, `ApproachRecommendationPanel.tsx`, `DISCAnalyticsPanel.tsx`, `TimelineGroupCard.tsx`, `PresetFiltersDiff.tsx`, `Contatos.tsx`, `AdminSchemaDrift.tsx`, `StatusPage.tsx`, `FavoritosFiltrosMenu.tsx`, `CreateTaskDialog.tsx`, `SystemHealthWidget.tsx`, `ref_domain`, `ConnectionCard.tsx`, `ChannelPreferencesCard.tsx`, `TimeHeatmapCard.tsx`, `MeetingMode.tsx`, `BehavioralRegenAlertsTrend.tsx`, `PreContactBriefing.tsx`, `CompanyProfileCard.tsx`, `StrategicAccountsWidget.tsx`, `InsightFeedbackAnalytics.tsx`, `ExportFormatMenu.tsx`, `SchemaDiscoveryCard.tsx`, `TelemetryCharts.tsx`, `DealRiskDrawer.tsx`, `BackButton.tsx`, `CopiarLinkFiltrosButton.tsx`, `InteracoesContent.tsx`, `ProximosPassosFiltersBar.tsx`, `CompanyAddressesForm.tsx`, `CompanySocialMediaForm.tsx`, `Fase 1 — Auditoria estática (findings)`, `ContactIntelligenceTab.tsx`, `Intelligence.tsx`, `WeeklyReportPanel.tsx`, `ContextualLoader.tsx`, `ErrorBoundary.tsx`, `RelatoriosFixosBar.tsx`, `ProfitabilityPanel.tsx`, `ContactIntelligenceWidget.tsx`, `CompanyPhonesForm.tsx`, `radio-group.tsx`, `Calendario.tsx`, `sheet.tsx`, `ProximaAcaoCTA.tsx`, `AdminFieldMapping.tsx`, `searchable-select.tsx`, `AuditDiffViewer.tsx`, `AutomationTemplates.tsx`, `context-menu.tsx`, `dropdown-menu.tsx`, `toast.tsx`, `CompanyGrouping.tsx`, `ImportantDatesCalendar.tsx`, `ProfileBasedSuggestions.tsx`, `EngagementScoreWidget.tsx`, `AdvancedSearchBar.tsx`, `AutomationWizard.tsx`, `AdminConexoesLogs.tsx`, `useTouchpointSequences.ts`, `useChurnRisk.ts`, `OfferSuggestionsElite.tsx`, `ScoreHistoryChart.tsx`, `ProximoPassoQuickForm.tsx`, `ConversationAnalysesTable.tsx`, `IntelHealthPanel.tsx`, `AdminSidebar.tsx`, `InfiniteScrollSentinel.tsx`, `command.tsx`, `BehavioralRegenAudit.tsx`, `badge.tsx`, `DocumentsPanel.tsx`, `select.tsx`, `ActivityTimeline.tsx`, `AiGatewayHealthCard.tsx`, `IncomingWebhookFormDialog.tsx`, `CompanyCommercialTab.tsx`, `CopyScriptMenu.tsx`, `ProximosPassosPresets.tsx`, `IntelBookmarksNotesBadge.tsx`, `ObjectionsTrendChart.tsx`, `MultiDiffPanel.tsx`, `TemplateHistoryByProfile.tsx`, `ActivityHeatmapChart.tsx`, `Auth.tsx`, `Inbox.tsx`, `InteractionForm.tsx`, `InboundActivityHeatmapCard.tsx`, `relationship-score.tsx`, `DailyBriefingCard.tsx`, `ActiveFiltersBar.tsx`, `useBulkRevalidate.ts`, `OnboardingTour.tsx`, `SequenceFormDialog.tsx`, `RelativesSection.tsx`, `AdminKnowledgeExport.tsx`, `NavigationPatterns.tsx`, `AccountHierarchyTree.tsx`, `sonner`, `ContactTimeHeatmap.tsx`, `CadenceRulesConfig.tsx`, `ProntidaoFactorBreakdownChart.tsx`, `ErrorState.tsx`, `CategoryColumn.tsx`?**
-  _High betweenness centrality (0.044) - this node is a cross-community bridge._
-- **Why does `vitest` connect `vitest` to `ref_node_fs`, `auth-flow.test.ts`, `ActiveFiltersBar.onAfterRemove.test.tsx`, `✅ Resolvidos nesta rodada`, `extractExcerpts.ts`, `@supabase/supabase-js`, `telemetry-data-integrity.test.ts`, `SentimentChartTooltip.tsx`, `package.json`, `external-data-telemetry.test.ts`, `AdvancedSearchBar.tsx`, `carnegieCriticismEmpathy.test.ts`, `carnegieEncouragementFaceSaving.test.ts`, `rateLimit`, `WebhookSnippetsSheet.tsx`, `carnegieIdentityOwnership.test.ts`, `telemetry-helpers.test.ts`, `Tabela de evidências`, `design-system-audit.test.ts`, `Achados`, `SentimentDistributionChart.tsx`, `company-filters-audit.test.ts`, `InfiniteScrollSentinel.tsx`, `carnegieProgressStorytellingQuestions.test.ts`, `behavioralAlertStats.ts`, `carnegieVulnerabilityYesLadderInterest.test.ts`, `ref_domain`, `useContacts.ts`, `company-form-exhaustive.test.tsx`, `voice-system-exhaustive.test.ts`, `LifeEventsTab.tsx`, `IncomingWebhookCard.tsx`, `Fase 1 — Auditoria estática (findings)`, `useBulkImport.ts`, `telemetry-charts.test.ts`, `useDailyKpis.test.tsx`?**
+- **Why does `react` connect `react` to `@tanstack/react-query`, `ContactBehaviorExtended.tsx`, `react-router-dom`, `ref_hooks`, `DealDetailDrawer.tsx`, `date-fns`, `MeetingMode.tsx`, `ref_integrations`, `ref_components`, `DailySummaryWidget.tsx`, `ChannelShortcutsHelpOverlay.tsx`, `AppLayout.tsx`, `PrefetchLink.tsx`, `recharts`, `ContactBehavioralTab.tsx`, `useNpsSurveys.ts`, `framer-motion`, `empty-state.tsx`, `celebrate.ts`, `useAuth`, `ref_types`, `AskCrmChat.tsx`, `BulkRevalidateCard.tsx`, `neuromarketing/index.ts`, `package.json`, `ContactOverviewTab.tsx`, `useDedupEngine.ts`, `InboundActivityHeatmapCard.tsx`, `useNetworkGraph.ts`, `ContactDataTab.tsx`, `AgendarReuniaoForm.tsx`, `EntityMonthlyTimeline.tsx`, `RelationshipKPIsDashboard.tsx`, `scroll-area.tsx`, `useSearchPresets.ts`, `useIntelPresentation.ts`, `vitest`, `PessoaForm.tsx`, `Achados`, `CompanyInsightsTab.tsx`, `react-helmet-async`, `micro-interactions/index.ts`, `form.tsx`, `useDISCAutoAnalysis.ts`, `ConnectionFormDialog.tsx`, `useStakeholderAnalysis.ts`, `ReportsTab.tsx`, `CopywritingSalesTools.tsx`, `StakeholderMap.tsx`, `useProactiveIntelligence.ts`, `useVoiceAgent.ts`, `useFicha360.ts`, `PageSkeletons.tsx`, `CompanyForm.tsx`, `PassoFeedbackMenu.tsx`, `SalesTeamTab.tsx`, `sidebar.tsx`, `Componentes (`src/components/intel/`)`, `insights/SentimentTrendChart.tsx`, `GlobalSearch.tsx`, `useConversationIntel.ts`, `usePreContactBriefing.ts`, `MilestoneKanban.tsx`, `AppProviders.tsx`, `DashboardCharts.tsx`, `lucide-react`, `lazyPages.tsx`, `InsightsPanel.tsx`, `severity`, `RpcPlanDiffDialog.tsx`, `BackButton.tsx`, `CompatibilityScore.tsx`, `table.tsx`, `DISCCompatibilityAlerts.tsx`, `useTriggerHistory.ts`, `ProximosPassosCard.tsx`, `BulkActionsBar.tsx`, `company-health-score.tsx`, `useInteractionsAdvancedFilter.ts`, `useAIWritingAssistant.ts`, `CreateTaskDialog.tsx`, `CarnegieDashboard.tsx`, `CompanyProfileCard.tsx`, `ContextualHelp.tsx`, `ContactIntelligenceTab.tsx`, `RelationshipStatsPanel.tsx`, `NotificationGroup.tsx`, `useFicha360FilterFavorites.ts`, `useFicha360PreferencesSync.ts`, `AccountHierarchyTree.tsx`, `LuxIntelligencePanel.tsx`, `ProximaAcaoCTA.tsx`, `MapaEmpresas.tsx`, `IncomingWebhookFormDialog.tsx`, `FrequenciaContatoCard.tsx`, `lead-scoring/LeadScoreCard.tsx`, `DealConfidenceBadge.tsx`, `TicketDetailDrawer.tsx`, `masked-input.tsx`, `DensityContext.tsx`, `GlobalCommandBar.tsx`, `AdvancedSearchBar.tsx`, `feedback/index.ts`, `ObjectionExamplesModal.tsx`, `ForecastConfidencePanel.tsx`, `optimized-avatar.tsx`, `Empresas.tsx`, `EmailBuilder.tsx`, `Ficha360FilterPanel.tsx`, `WhyScoreDrawer.tsx`, `OfferSuggestionsElite.tsx`, `useEntityBookmarks.ts`, `AdminConexoesLogs.tsx`, `Calendario.tsx`, `CompanyCardWithContext.tsx`, `Estado — Marketing, Campanhas e Automação`, `class-variance-authority`, `IntelStatusBar.tsx`, `PWAComponents.tsx`, `useBehaviorAlerts.ts`, `TriggerAnalyticsTabs.tsx`, `Tabela de evidências`, `InsightFeedbackAnalytics.tsx`, `useSmartNotifications.ts`, `NLPEvolutionTimeline.tsx`, `RFMSubComponents.tsx`, `InteracoesContent.tsx`, `✅ Resolvidos nesta rodada`, `README.md`, `Tabela de evidências`, `Intelligence.tsx`, `accordion.tsx`, `tabs.tsx`, `ProntidaoTrendChart.tsx`, `CompanyInteractionsTab.tsx`, `EvidenceDrillDownSheet.tsx`, `VoiceSearchOverlay.tsx`, `useAiGatewayCriticalToast.ts`, `OnboardingWizard.tsx`, `ThemeProvider.tsx`, `use-toast.ts`, `useChannelPerformanceMatrix.ts`, `useCompanies.ts`, `useCompanyFilterOptions.ts`, `InsightsContent.tsx`, `StrategicNextStepsCard.tsx`, `4.4 Componentes de Analytics`, `DISCAnalyticsPanel.tsx`, `NavigationStackContext.tsx`, `PresetFiltersDiff.tsx`, `useSemanticSearch.ts`, `AplicarFavoritoCompartilhadoDialog.tsx`, `ReportBuilder.tsx`, `SentimentChartTooltip.tsx`, `AdminSchemaDrift.tsx`, `CompanyAddressesForm.tsx`, `CompanyPhonesForm.tsx`, `DateRangePopover.tsx`, `useClosingScoreRanking.ts`, `usePortfolioHealth.ts`, `ref_domain`, `ActivityHeatmapChart.tsx`, `ViewModeChips.tsx`, `Header.tsx`, `ObjectionsSpotlight.tsx`, `FloatingQuickActions.tsx`, `TouchpointSequenceCard.tsx`, `PreContactBriefing.tsx`, `external-data-card.tsx`, `useContacts.ts`, `rpcPlanDiff.ts`, `useRecentlyViewed.ts`, `WhatsNewModal.tsx`, `SchemaDiscoveryCard.tsx`, `UltimasInteracoesCard.tsx`, `AdvancedFilters.tsx`, `FeatureSpotlight.tsx`, `InlineEdit.tsx`, `DirecaoQuickFilter.tsx`, `ProximosPassosFiltersBar.tsx`, `useApproachRecommendation.ts`, `zod`, `MonthlyReportWidget.tsx`, `useBulkImport.ts`, `useKeyboardShortcutsEnhanced.ts`, `DealsAtRiskCard.tsx`, `OnboardingChecklist.tsx`, `ref_lib`, `PortfolioHealthDashboard.tsx`, `ExecutiveKpisWidget.tsx`, `ContextualLoader.tsx`, `ErrorBoundary.tsx`, `ConversasRelacionadasCard.tsx`, `RelatoriosFixosBar.tsx`, `PaginationBar.tsx`, `IntelCommandPalette.tsx`, `Hooks (`src/hooks/`)`, `useIntelTour.ts`, `useSavedAskViews.ts`, `useEntityNotes.ts`, `useSavedViews.ts`, `command.tsx`, `useFicha360DeeplinkToast.ts`, `SortChips.tsx`, `AuditDiffViewer.tsx`, `searchable-select.tsx`, `useGraphLayout.ts`, `DocumentsPanel.tsx`, `CompanyProfileAnalytics.tsx`, `FavoritosFiltrosMenu.tsx`, `context-menu.tsx`, `dropdown-menu.tsx`, `toast.tsx`, `HistoricoTagsCard.tsx`, `RecentChannelCombos.tsx`, `ImportantDatesCalendar.tsx`, `NPSDistributionChart.tsx`, `CanaisQuickFilter.tsx`, `AutomationWizard.tsx`, `SentimentDistributionChart.tsx`, `analyticsData.ts`, `InteractionForm.tsx`, `Intelligence Hub (`/intelligence`)`, `ThemeExamplesDrawer.tsx`, `useTouchpointSequences.ts`, `NPSResponseDialog.tsx`, `useYourDay.ts`, `calendar.tsx`, `useFormDraft.ts`, `lead-score/LeadScoreCard.tsx`, `alert-dialog.tsx`, `useFicha360Filters.ts`, `ProviderErrorBoundary`, `Pipeline.tsx`, `AnalyticsShared.tsx`, `ProximoPassoQuickForm.tsx`, `responsive-dialog.tsx`, `useDeviceDetection.ts`, `AskTab.tsx`, `errorReporting.ts`, `useContactDetail.ts`, `AdminDashboard.tsx`, `useStakeholderSimulator.ts`, `InfiniteScrollSentinel.tsx`, `useNLPAnalyticsData.ts`, `AccountChurnPredictionPanel.tsx`, `TimelineGroupCard.tsx`, `ContactForm.tsx`, `PlaybookSectionRenderer.tsx`, `select.tsx`, `drawer.tsx`, `AiGatewayHealthCard.tsx`, `useRFMAnalysis.ts`, `AIEmailComposer.tsx`, `CopyScriptMenu.tsx`, `ProximosPassosPresets.tsx`, `CommunicationTrainingMode.tsx`, `useIntelTelemetry.ts`, `InteracoesPresetsMenu.tsx`, `useSentimentAnnotations.ts`, `ProfileBasedSuggestions.tsx`, `useCompanyProfileAnalytics.ts`, `WeeklyReportPanel.tsx`, `3.4 Hooks de Analytics`, `useDealForecastConfidence.ts`, `NLPAnalysisCard.tsx`, `ReminderCard.tsx`, `useIntelTheme.ts`, `useNextPagePrefetch.ts`, `useAppliedResponses.ts`, `keyboardShortcutRegistry.ts`, `useAutomationRules.ts`, `Inbox.tsx`, `CognitiveBiasesSubComponents.tsx`, `Contatos.tsx`, `ObjectionsTrendChart.tsx`, `3.8 Hooks de UX/UI`, `AriaLiveRegion.tsx`, `DailyBriefingCard.tsx`, `useHapticFeedback.ts`, `ActiveFiltersBar.tsx`, `OnboardingTour.tsx`, `stat-card.tsx`, `SequenceFormDialog.tsx`, `radio-group.tsx`, `DashboardErrorBoundary`, `AdminKnowledgeExport.tsx`, `NavigationPatterns.tsx`, `useChannelHistory.ts`, `BehavioralRegenAudit.tsx`, `Auth.tsx`, `CommunicationCoherencePanel.tsx`, `sonner`, `Configuracoes.tsx`, `AdminTelemetria.tsx`, `error-budget-dashboard.md`, `useCoalitionDetection.ts`, `ContactTimeHeatmap.tsx`, `CadenceRulesConfig.tsx`, `EmpresaDetalhe.tsx`, `ProntidaoFactorBreakdownChart.tsx`, `useConversationalSearch.ts`?**
+  _High betweenness centrality (0.133) - this node is a cross-community bridge._
+- **Why does `lucide-react` connect `lucide-react` to `ContactBehaviorExtended.tsx`, `react-router-dom`, `ref_hooks`, `DealDetailDrawer.tsx`, `date-fns`, `MeetingMode.tsx`, `ref_integrations`, `ref_components`, `DailySummaryWidget.tsx`, `ChannelShortcutsHelpOverlay.tsx`, `AppLayout.tsx`, `useNpsSurveys.ts`, `recharts`, `ContactBehavioralTab.tsx`, `empty-state.tsx`, `framer-motion`, `react-helmet-async`, `ref_types`, `AskCrmChat.tsx`, `BulkRevalidateCard.tsx`, `neuromarketing/index.ts`, `package.json`, `ContactOverviewTab.tsx`, `InboundActivityHeatmapCard.tsx`, `UnifiedNotificationsBell.tsx`, `ContactDataTab.tsx`, `AgendarReuniaoForm.tsx`, `EntityMonthlyTimeline.tsx`, `RelationshipKPIsDashboard.tsx`, `Achados`, `react`, `vitest`, `CompanyInsightsTab.tsx`, `ConnectionFormDialog.tsx`, `IntentScoreBadge.tsx`, `ReportsTab.tsx`, `CopywritingSalesTools.tsx`, `StakeholderMap.tsx`, `CompanyForm.tsx`, `PassoFeedbackMenu.tsx`, `SalesTeamTab.tsx`, `sidebar.tsx`, `ContactCommercialTab.tsx`, `Componentes (`src/components/intel/`)`, `insights/SentimentTrendChart.tsx`, `GlobalSearch.tsx`, `useConversationIntel.ts`, `MilestoneKanban.tsx`, `DashboardCharts.tsx`, `BackButton.tsx`, `InsightsPanel.tsx`, `severity`, `RpcPlanDiffDialog.tsx`, `CompatibilityScore.tsx`, `ConversationAnalysisCard.tsx`, `DISCCompatibilityAlerts.tsx`, `ProximosPassosCard.tsx`, `BulkActionsBar.tsx`, `company-health-score.tsx`, `CarnegieDashboard.tsx`, `CompanyProfileCard.tsx`, `ContextualHelp.tsx`, `ContactIntelligenceTab.tsx`, `RelationshipStatsPanel.tsx`, `NotificationGroup.tsx`, `PessoaForm.tsx`, `AccountHierarchyTree.tsx`, `TopContactsCard.tsx`, `ProximaAcaoCTA.tsx`, `MapaEmpresas.tsx`, `IncomingWebhookFormDialog.tsx`, `FrequenciaContatoCard.tsx`, `lead-scoring/LeadScoreCard.tsx`, `LuxIntelligencePanel.tsx`, `DealConfidenceBadge.tsx`, `TicketDetailDrawer.tsx`, `GlobalCommandBar.tsx`, `AdvancedSearchBar.tsx`, `feedback/index.ts`, `ObjectionExamplesModal.tsx`, `DesignSystem.tsx`, `ForecastConfidencePanel.tsx`, `Empresas.tsx`, `EmailBuilder.tsx`, `Ficha360FilterPanel.tsx`, `WhyScoreDrawer.tsx`, `OfferSuggestionsElite.tsx`, `Calendario.tsx`, `AdminConexoesLogs.tsx`, `CompanyCardWithContext.tsx`, `Estado — Marketing, Campanhas e Automação`, `external-data-card.tsx`, `IntelStatusBar.tsx`, `PWAComponents.tsx`, `TriggerAnalyticsTabs.tsx`, `FloatingQuickActions.tsx`, `Tabela de evidências`, `NLPEvolutionTimeline.tsx`, `RFMSubComponents.tsx`, `InteracoesContent.tsx`, `✅ Resolvidos nesta rodada`, `Tabela de evidências`, `Intelligence.tsx`, `accordion.tsx`, `ProntidaoTrendChart.tsx`, `CompanyInteractionsTab.tsx`, `EvidenceDrillDownSheet.tsx`, `VoiceSearchOverlay.tsx`, `OnboardingWizard.tsx`, `useChannelPerformanceMatrix.ts`, `useCompanyFilterOptions.ts`, `InsightsContent.tsx`, `StrategicNextStepsCard.tsx`, `4.4 Componentes de Analytics`, `DISCAnalyticsPanel.tsx`, `PresetFiltersDiff.tsx`, `AplicarFavoritoCompartilhadoDialog.tsx`, `ReportBuilder.tsx`, `SentimentChartTooltip.tsx`, `AdminSchemaDrift.tsx`, `CompanyAddressesForm.tsx`, `CompanyPhonesForm.tsx`, `DateRangePopover.tsx`, `CreateTaskDialog.tsx`, `SystemHealthWidget.tsx`, `ref_domain`, `ConnectionCard.tsx`, `ActivityHeatmapChart.tsx`, `ObjectionsSpotlight.tsx`, `ViewModeChips.tsx`, `TouchpointSequenceCard.tsx`, `PreContactBriefing.tsx`, `useSmartNotifications.ts`, `Header.tsx`, `rpcPlanDiff.ts`, `DealRiskDrawer.tsx`, `WhatsNewModal.tsx`, `SchemaDiscoveryCard.tsx`, `UltimasInteracoesCard.tsx`, `AdvancedFilters.tsx`, `FeatureSpotlight.tsx`, `InlineEdit.tsx`, `DirecaoQuickFilter.tsx`, `ProximosPassosFiltersBar.tsx`, `InsightFeedbackAnalytics.tsx`, `zod`, `AiGatewayPartitionsCard.tsx`, `LeadMagnetList.tsx`, `QBRTimeline.tsx`, `MonthlyReportWidget.tsx`, `DealsAtRiskCard.tsx`, `ref_lib`, `PortfolioHealthDashboard.tsx`, `OnboardingChecklist.tsx`, `ExecutiveKpisWidget.tsx`, `ContextualLoader.tsx`, `HealthSignalTimeline.tsx`, `CompanyErpProposalsWidget.tsx`, `Tabela de evidências`, `ErrorBoundary.tsx`, `ConversasRelacionadasCard.tsx`, `Ficha360ProfileHeader.tsx`, `RelatoriosFixosBar.tsx`, `IntelCommandPalette.tsx`, `PortfolioContactCard.tsx`, `command.tsx`, `SortChips.tsx`, `AuditDiffViewer.tsx`, `searchable-select.tsx`, `AccountPortfolioCard.tsx`, `DocumentsPanel.tsx`, `FavoritosFiltrosMenu.tsx`, `context-menu.tsx`, `dropdown-menu.tsx`, `toast.tsx`, `HistoricoTagsCard.tsx`, `RecentChannelCombos.tsx`, `ImportantDatesCalendar.tsx`, `NPSDistributionChart.tsx`, `CanaisQuickFilter.tsx`, `AutomationWizard.tsx`, `SentimentDistributionChart.tsx`, `analyticsData.ts`, `InteractionForm.tsx`, `relationship-score.tsx`, `ThemeExamplesDrawer.tsx`, `PaginationBar.tsx`, `calendar.tsx`, `lead-score/LeadScoreCard.tsx`, `ProviderErrorBoundary`, `Pipeline.tsx`, `AnalyticsShared.tsx`, `ProximoPassoQuickForm.tsx`, `AskTab.tsx`, `AdminDashboard.tsx`, `InfiniteScrollSentinel.tsx`, `AccountChurnPredictionPanel.tsx`, `TimelineGroupCard.tsx`, `ContactForm.tsx`, `PlaybookSectionRenderer.tsx`, `select.tsx`, `AiGatewayHealthCard.tsx`, `AnomaliesWidget.tsx`, `CompanyCommercialTab.tsx`, `AIEmailComposer.tsx`, `CopyScriptMenu.tsx`, `ProximosPassosPresets.tsx`, `CommunicationTrainingMode.tsx`, `InteracoesPresetsMenu.tsx`, `ProfileBasedSuggestions.tsx`, `WeeklyReportPanel.tsx`, `RpcPerfCard.tsx`, `NLPAnalysisCard.tsx`, `ReminderCard.tsx`, `Inbox.tsx`, `CognitiveBiasesSubComponents.tsx`, `Contatos.tsx`, `CategoryColumn.tsx`, `ChannelPreferencesCard.tsx`, `ObjectionsTrendChart.tsx`, `DailyBriefingCard.tsx`, `ActiveFiltersBar.tsx`, `OnboardingTour.tsx`, `stat-card.tsx`, `SequenceFormDialog.tsx`, `priority-indicator.tsx`, `radio-group.tsx`, `DashboardErrorBoundary`, `AdminKnowledgeExport.tsx`, `NavigationPatterns.tsx`, `BehavioralRegenAudit.tsx`, `Auth.tsx`, `CommunicationCoherencePanel.tsx`, `sonner`, `Configuracoes.tsx`, `AdminTelemetria.tsx`, `ContactTimeHeatmap.tsx`, `CadenceRulesConfig.tsx`, `EmpresaDetalhe.tsx`, `ProntidaoFactorBreakdownChart.tsx`, `ErrorState.tsx`?**
+  _High betweenness centrality (0.043) - this node is a cross-community bridge._
+- **Why does `vitest` connect `vitest` to `telemetry-helpers.test.ts`, `ref_node_fs`, `ref_integrations`, `extractExcerpts.ts`, `architecture-compliance.test.ts`, `@supabase/supabase-js`, `SortChips.tsx`, `telemetry-data-integrity.test.ts`, `package.json`, `external-data-telemetry.test.ts`, `rateLimit`, `SentimentDistributionChart.tsx`, `carnegieCriticismEmpathy.test.ts`, `carnegieEncouragementFaceSaving.test.ts`, `carnegieIdentityOwnership.test.ts`, `✅ Resolvidos nesta rodada`, `Tabela de evidências`, `ref_path`, `company-filters-audit.test.ts`, `InfiniteScrollSentinel.tsx`, `carnegieProgressStorytellingQuestions.test.ts`, `behavioralAlertStats.ts`, `carnegieVulnerabilityYesLadderInterest.test.ts`, `SentimentChartTooltip.tsx`, `ref_domain`, `voice-system-exhaustive.test.ts`, `PlaybookSectionRenderer.tsx`, `ContactIntelligenceTab.tsx`, `design-system-audit.test.ts`, `IncomingWebhookFormDialog.tsx`, `useBulkImport.ts`, `e2e-regression-suite.test.ts`, `ref_lib`?**
   _High betweenness centrality (0.040) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
-  _5974 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _5972 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `@tanstack/react-query` be split into smaller, more focused modules?**
-  _Cohesion score 0.014920566766852727 - nodes in this community are weakly interconnected._
-- **Should `react` be split into smaller, more focused modules?**
-  _Cohesion score 0.009449071108263934 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.013259195893926433 - nodes in this community are weakly interconnected._
+- **Should `ContactBehaviorExtended.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.07394957983193277 - nodes in this community are weakly interconnected._
 - **Should `react-router-dom` be split into smaller, more focused modules?**
-  _Cohesion score 0.011844331641285956 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.024691358024691357 - nodes in this community are weakly interconnected._

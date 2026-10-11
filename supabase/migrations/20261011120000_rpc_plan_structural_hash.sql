@@ -24,6 +24,7 @@ BEGIN
     'strategy',    _node -> 'Strategy',
     'partial',     _node -> 'Partial Mode',
     'parallel',    _node -> 'Parallel Aware',
+    'workers',     _node -> 'Workers Planned',
     'async',       _node -> 'Async Capable',
     'join',        _node -> 'Join Type',
     'relation',    _node -> 'Relation Name',
@@ -177,3 +178,37 @@ BEGIN
     UPDATE public.rpc_plan_snapshots SET plan_changed = false WHERE id = v_id;
   END IF;
 END $$;
+
+-- DOWN MIGRATION (Rollback manual, na mesma transação)
+-- BEGIN;
+-- 1. Restaurar SOMENTE a definição de capture_rpc_plan(text,text) da migration
+--    20261006140000_ai_gateway_observability.sql (CREATE OR REPLACE ... $$;).
+--    Não reaplicar a migration inteira: ela também configura tabelas e jobs.
+--    Esse corpo usa o catálogo de partições e o hash legado abaixo.
+-- 2. Executar, após restaurar a função:
+-- UPDATE public.rpc_plan_snapshots
+-- SET plan_hash = md5(regexp_replace(plan::text,
+--   '"[^"]+": *-?[0-9.]+(e[-+]?[0-9]+)?', '', 'g'));
+-- UPDATE public.rpc_plan_snapshots s
+-- SET plan_changed = r.changed
+-- FROM (
+--   SELECT id, lag(plan_hash) OVER w IS NOT NULL
+--     AND lag(plan_hash) OVER w IS DISTINCT FROM plan_hash AS changed
+--   FROM public.rpc_plan_snapshots
+--   WINDOW w AS (PARTITION BY rpc_name ORDER BY captured_at, id)
+-- ) r WHERE r.id = s.id;
+-- DO $rollback$
+-- DECLARE v_id uuid;
+-- BEGIN
+--   v_id := public.capture_rpc_plan('get_ai_gateway_partition_stats', 'baseline');
+--   IF v_id IS NOT NULL THEN
+--     UPDATE public.rpc_plan_snapshots SET plan_changed = false WHERE id = v_id;
+--   END IF;
+-- END $rollback$;
+-- DROP FUNCTION IF EXISTS public.rpc_plan_structure(jsonb);
+-- COMMIT;
+-- Os planos JSON são preservados; hashes e flags são reconstruídos pelo
+-- algoritmo legado, sem apagar snapshots. A volta ao catálogo exige a nova
+-- baseline acima para não comparar consultas distintas como regressão.
+-- Para recuperar flags exatamente como eram (inclusive falsos positivos),
+-- exportar id/plan_hash/plan_changed antes do UP e restaurar por id no DOWN.

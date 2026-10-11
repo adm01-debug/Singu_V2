@@ -2,12 +2,12 @@
 
 > Objetivo: confirmar que **toda** função `SECURITY DEFINER` em `public.*` (a) trava `search_path`; e que nenhum DEFINER **exposto a `anon`** lê `auth.uid()` — combinação perigosa: `anon` sem JWT resulta em `auth.uid() = NULL` e o DEFINER escreve linhas órfãs ou cross-tenant.
 
-## Baseline atual — 103 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-10-06)
+## Baseline atual — 102 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-10-07)
 
 Medido no banco canônico com as migrations `20261006120000`, `20261006120100` e `20261006130000` aplicadas em transação revertida (`tests/rls/run.sh`).
 O baseline anterior (63) refletia o histórico local de migrations, não o banco real (93 DEFINERs antes desta rodada; +3 RPCs públicas novas).
 
-- **Total DEFINER em `public.*`**: 103 (`20261006130000` remove o overload quebrado `move_deal_atomic(uuid, text, numeric)`; `20261006140000` adiciona 8 do AI Gateway)
+- **Total DEFINER em `public.*`**: 102 (`20261006130000` remove o overload quebrado `move_deal_atomic(uuid, text, numeric)`; `20261006140000` adiciona 8 do AI Gateway; `20261007100000` passa `get_instant_kpis(uuid)` a INVOKER)
 - **Executáveis por `anon`**: 12 — exatamente a allowlist pública de `tests/rls/functions_authenticated_allowlist.sql` (Deal Room ×5, Forms ×2, Lead Magnets ×2, Landing Page ×1, CSAT ×2); nenhuma usa `auth.uid()`.
 - **Executáveis só por `authenticated` (além de service_role)**: 18 — `has_role(uuid, app_role)` + as 15 RPCs do frontend abaixo + `get_ai_gateway_health(integer)` e `get_ai_gateway_partition_stats()` (painel admin; ambas exigem `has_role(auth.uid(), 'admin')`).
 - **Somente `service_role`/owner**: 73 (triggers, jobs, RPCs administrativas; inclui os 6 jobs/helpers do AI Gateway de `20261006140000`).
