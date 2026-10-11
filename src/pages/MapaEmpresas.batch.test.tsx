@@ -6,17 +6,18 @@ import MapaEmpresas from './MapaEmpresas';
 const mocks = vi.hoisted(() => ({
   companies: Array.from({ length: 120 }, (_, i) => ({
     id: `empresa-${i}`, name: `Empresa ${i}`, city: 'São Paulo', state: 'SP',
-    address: null, extra_data_rf: null, lat: null, lng: null, company_addresses: [],
+    address: null, extra_data_rf: null, lat: null as number | null, lng: null as number | null, company_addresses: [],
     relationship_score: null,
   })),
   geocode: vi.fn<(location: string, signal?: AbortSignal, retryMissing?: boolean) => Promise<{ lat: number; lng: number } | null>>(),
   insert: vi.fn(), invalidate: vi.fn(), success: vi.fn(), warning: vi.fn(),
 }));
+const initialCompanies = mocks.companies;
 
 vi.mock('leaflet', () => ({ default: { Icon: { Default: { prototype: {}, mergeOptions: vi.fn() } } } }));
 vi.mock('leaflet.markercluster', () => ({}));
 vi.mock('react-leaflet', () => ({ MapContainer: ({ children }: { children: ReactNode }) => <div>{children}</div>, TileLayer: () => null }));
-vi.mock('./mapa/MapMarkerCluster', () => ({ MarkerClusterLayer: () => null }));
+vi.mock('./mapa/MapMarkerCluster', () => ({ MarkerClusterLayer: ({ companies }: { companies: { id: string; name: string; lat: number; lng: number }[] }) => <div data-testid="markers">{companies.map(c => `${c.id}:${c.name}:${c.lat},${c.lng}`).join('|')}</div> }));
 vi.mock('./mapa/companyQueries', () => ({ fetchMapCompanies: vi.fn() }));
 vi.mock('./mapa/geocoding', () => ({ geocode: mocks.geocode, buildLocationString: () => 'São Paulo, Brasil' }));
 vi.mock('@/integrations/supabase/client', () => ({ supabase: { from: () => ({ insert: mocks.insert }) } }));
@@ -33,6 +34,7 @@ vi.mock('@tanstack/react-query', () => ({
 
 beforeEach(() => {
   vi.resetAllMocks();
+  mocks.companies = [...initialCompanies];
   vi.stubGlobal('ResizeObserver', class {
     observe() {}
     unobserve() {}
@@ -71,6 +73,42 @@ describe('geolocalização do mapa', () => {
     unmount();
     expect(signal?.aborted).toBe(true);
     expect(mocks.insert).not.toHaveBeenCalled();
+  });
+
+  it('atualiza inclusões, exclusões e coordenadas no refetch sem iniciar outro lote', async () => {
+    vi.useFakeTimers();
+    const { rerender, unmount } = render(<MapaEmpresas />);
+    await act(async () => { await vi.runAllTimersAsync(); });
+    expect(mocks.geocode).toHaveBeenCalledTimes(50);
+
+    mocks.companies = [
+      ...mocks.companies.filter(c => c.id !== 'empresa-1').map(c =>
+        c.id === 'empresa-0' ? { ...c, name: 'Empresa atualizada', lat: -20, lng: -40 } : c,
+      ),
+      { ...mocks.companies[1], id: 'empresa-nova', name: 'Empresa nova', lat: -19, lng: -43 },
+    ];
+    rerender(<MapaEmpresas />);
+
+    expect(screen.getByTestId('markers')).toHaveTextContent('empresa-0:Empresa atualizada:-20,-40');
+    expect(screen.getByTestId('markers')).toHaveTextContent('empresa-nova:Empresa nova:-19,-43');
+    expect(screen.getByTestId('markers')).not.toHaveTextContent('empresa-1:');
+    expect(mocks.geocode).toHaveBeenCalledTimes(50);
+    expect(screen.getByRole('button', { name: 'Geolocalizar mais (70)' })).toBeInTheDocument();
+    unmount();
+  });
+
+  it('remove o marcador quando coordenadas antes salvas são apagadas', async () => {
+    vi.useFakeTimers();
+    mocks.companies = [{ ...mocks.companies[0], lat: -23, lng: -46 }];
+    const { rerender, unmount } = render(<MapaEmpresas />);
+    expect(screen.getByTestId('markers')).toHaveTextContent('empresa-0:');
+
+    mocks.companies = [{ ...mocks.companies[0], lat: null, lng: null }];
+    rerender(<MapaEmpresas />);
+    expect(screen.queryByTestId('markers')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Geolocalizar mais (1)' })).toBeInTheDocument();
+    expect(mocks.geocode).not.toHaveBeenCalled();
+    unmount();
   });
 
   it('não confirma um lote cancelado durante o último intervalo', async () => {

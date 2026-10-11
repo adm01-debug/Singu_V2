@@ -45,6 +45,16 @@ function toMappable(c: CompanyWithScore, lat: number, lng: number): MappableComp
   };
 }
 
+function syncMappedCompanies(companies: CompanyWithScore[], cached: Map<string, MappableCompany>, pending: ReadonlySet<string>): MappableCompany[] {
+  return companies.flatMap(c => {
+    if (c.lat != null && c.lng != null && Number.isFinite(c.lat) && Number.isFinite(c.lng)) {
+      return [toMappable(c, c.lat, c.lng)];
+    }
+    const local = pending.has(c.id) ? cached.get(c.id) : null;
+    return local ? [toMappable(c, local.lat, local.lng)] : [];
+  });
+}
+
 export default function MapaEmpresas() {
   usePageTitle("Mapa de Empresas");
   const { user } = useAuth();
@@ -61,6 +71,7 @@ export default function MapaEmpresas() {
   const processedRef = useRef<string | null>(null);
   const attemptedRef = useRef(new Set<string>());
   const failedRef = useRef(new Set<string>());
+  const recentlyGeocodedRef = useRef(new Set<string>());
   const controllerRef = useRef<AbortController | null>(null);
   const ownerId = user?.id;
 
@@ -68,6 +79,7 @@ export default function MapaEmpresas() {
     processedRef.current = null;
     attemptedRef.current.clear();
     failedRef.current.clear();
+    recentlyGeocodedRef.current.clear();
     setMappedCompanies([]);
     setGeocodingRemaining(0);
     setGeocodingFailed(0);
@@ -84,6 +96,7 @@ export default function MapaEmpresas() {
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
+  const currentCompaniesRef = useRef<CompanyWithScore[]>([]);
 
   const processAndGeocode = useCallback(async (retryMissing = false) => {
     if (!user || !rawCompanies || isGeocoding) return;
@@ -128,6 +141,7 @@ export default function MapaEmpresas() {
           if (geoError) throw geoError;
           if (controller.signal.aborted) return;
           newResults.set(c.id, toMappable(c, coords.lat, coords.lng));
+          recentlyGeocodedRef.current.add(c.id);
           failedRef.current.delete(c.id);
           geocoded++;
         } else {
@@ -147,10 +161,30 @@ export default function MapaEmpresas() {
     }
     if (controller.signal.aborted) return;
     controllerRef.current = null;
-    setMappedCompanies([...newResults.values()]); setGeocodingFailed(failedRef.current.size); setIsGeocoding(false);
+    setMappedCompanies(syncMappedCompanies(currentCompaniesRef.current, newResults, recentlyGeocodedRef.current)); setGeocodingFailed(failedRef.current.size); setIsGeocoding(false);
     if (failedRef.current.size > 0) toast.warning(`${failedRef.current.size} empresas não puderam ser geolocalizadas. Você pode tentar novamente.`);
     if (geocoded > 0) { toast.success(`${geocoded} empresas geolocalizadas com sucesso`); queryClient.invalidateQueries({ queryKey: ["companies-map-data"] }); }
   }, [user, rawCompanies, isGeocoding, queryClient, mappedCompanies]);
+
+  useEffect(() => {
+    currentCompaniesRef.current = rawCompanies ?? [];
+    if (!rawCompanies) return;
+    for (const c of rawCompanies) {
+      if (c.lat != null && c.lng != null && Number.isFinite(c.lat) && Number.isFinite(c.lng)) {
+        recentlyGeocodedRef.current.delete(c.id);
+        attemptedRef.current.delete(c.id);
+      }
+    }
+    setMappedCompanies(current => syncMappedCompanies(rawCompanies, new Map(current.map(c => [c.id, c])), recentlyGeocodedRef.current));
+    const needsGeocoding = rawCompanies.filter(c =>
+      (c.lat == null || c.lng == null || !Number.isFinite(c.lat) || !Number.isFinite(c.lng)) &&
+      buildLocationString({ city: c.city, state: c.state, address: c.address, extra_data_rf: c.extra_data_rf }),
+    );
+    const missingIds = new Set(needsGeocoding.map(c => c.id));
+    for (const id of failedRef.current) if (!missingIds.has(id)) failedRef.current.delete(id);
+    setGeocodingFailed(failedRef.current.size);
+    setGeocodingRemaining(needsGeocoding.filter(c => !attemptedRef.current.has(c.id)).length);
+  }, [rawCompanies, ownerId]);
 
   useEffect(() => {
     if (rawCompanies && user && processedRef.current !== user.id && !isGeocoding) {
