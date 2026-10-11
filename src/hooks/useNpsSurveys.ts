@@ -46,8 +46,9 @@ export function useNpsSurveys() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('csat_surveys')
-        .select('id, user_id, contact_id, ticket_id, interaction_id, channel, score, feedback, status, sent_at, answered_at, expires_at, public_token, created_at, updated_at')
+        .select('id, user_id, contact_id, ticket_id, interaction_id, channel, score:nps_score, feedback, status, sent_at, answered_at, expires_at, public_token, created_at, updated_at')
         .eq('user_id', user!.id)
+        .eq('survey_type', 'nps')
         .order('created_at', { ascending: false })
         .limit(500);
       if (error) throw error;
@@ -63,11 +64,11 @@ export function useNpsSurveys() {
         .insert({
           user_id: user.id,
           contact_id: input.contact_id,
+          survey_type: 'nps',
           channel: input.channel ?? 'email',
           ticket_id: input.ticket_id ?? null,
           interaction_id: input.interaction_id ?? null,
-          status: 'sent',
-          sent_at: new Date().toISOString(),
+          status: 'pending',
           expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
         })
         .select()
@@ -77,29 +78,37 @@ export function useNpsSurveys() {
       return data;
     },
     onSuccess: () => {
-      toast.success('Pesquisa enviada!');
+      toast.success('Pesquisa criada! Compartilhe o link com o contato.');
       qc.invalidateQueries({ queryKey: ['nps-surveys'] });
     },
     onError: (e) => {
       logger.error('Failed to create NPS survey', e);
-      toast.error('Falha ao enviar pesquisa');
+      toast.error('Falha ao criar pesquisa');
     },
   });
 
   const answer = useMutation({
     mutationFn: async (input: { id: string; score: number; feedback?: string }) => {
       if (!user) throw new Error('Não autenticado');
-      const { error } = await supabase
+      if (!Number.isInteger(input.score) || input.score < 0 || input.score > 10) {
+        throw new Error('A nota NPS deve ser um inteiro entre 0 e 10');
+      }
+      const { data, error } = await supabase
         .from('csat_surveys')
         .update({
-          score: input.score,
+          nps_score: input.score,
           feedback: input.feedback ?? null,
           status: 'answered',
           answered_at: new Date().toISOString(),
         })
         .eq('user_id', user!.id)
-        .eq('id', input.id);
+        .eq('survey_type', 'nps')
+        .eq('id', input.id)
+        .in('status', ['pending', 'sent'])
+        .select('id')
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error('Pesquisa não encontrada ou já respondida');
     },
     onSuccess: () => {
       toast.success('Resposta registrada!');
@@ -136,7 +145,7 @@ export function useNpsSurveys() {
   const metrics: NpsMetrics = {
     total: surveys.length,
     answered: answered.length,
-    pending: surveys.filter(s => s.status === 'sent').length,
+    pending: surveys.filter(s => s.status === 'pending' || s.status === 'sent').length,
     promoters,
     passives,
     detractors,

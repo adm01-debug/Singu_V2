@@ -28,7 +28,7 @@ export default function NPS() {
   const [tab, setTab] = useState('all');
 
   const filtered = surveys.filter(s => {
-    if (tab === 'pending') return s.status === 'sent';
+    if (tab === 'pending') return s.status === 'pending' || s.status === 'sent';
     if (tab === 'answered') return s.status === 'answered';
     if (tab === 'promoters') return s.status === 'answered' && (s.score ?? 0) >= 9;
     if (tab === 'detractors') return s.status === 'answered' && (s.score ?? 0) <= 6;
@@ -152,7 +152,7 @@ export default function NPS() {
                             </p>
                           </div>
                           <div className="flex items-center gap-1">
-                            {s.status === 'sent' && (
+                            {(s.status === 'pending' || s.status === 'sent') && (
                               <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => setAnswering(s)}>
                                 <CheckCircle2 className="h-3 w-3 mr-1" /> Registrar
                               </Button>

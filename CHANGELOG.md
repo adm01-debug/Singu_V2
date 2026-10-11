@@ -8,9 +8,18 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- As notificações de NPS incluem pesquisas pendentes, identificam links ainda não enviados e filtram a modalidade para não apresentar pesquisas CSAT como NPS.
+- Falhas no proxy externo e na persistência RFM canônica usam circuitos independentes, preservando o acesso à origem saudável.
+- Erros de autenticação, validação e permissão das RPCs canônicas não bloqueiam requisições válidas no circuito de disponibilidade. Ramificações de sequências validam suas condições também em bases parcialmente migradas.
+- A atualização do contrato de pesquisas exige reconciliação explícita em bases com histórico, preserva a modalidade existente e impede classificações silenciosas de NPS como CSAT.
+- O painel CSAT separa suas pesquisas das NPS, cria registros pendentes sem simular envio e aceita somente notas inteiras de 1 a 5. O registro manual exige uma pesquisa aberta do dono e preserva a nota escolhida se a gravação falhar.
 - O forecast de confiança não atribui zero dias a negócios sem histórico de estágio; marca a estimativa como parcial ou indisponível e exclui negócios concluídos.
 - O Pipeline preserva negócios com status vazio, evita contagens e auditorias indevidas durante a paginação, permite editar negócios sem empresa e atualiza os indicadores e as empresas envolvidas após alterações.
 - O gate RLS preserva o rollback externo mesmo quando migrations incluem `BEGIN`/`COMMIT`; o preparo lexical mantém blocos PL/pgSQL e rejeita controles transacionais ambíguos antes de executar alterações.
+- Análises RFM exigem um contato ou empresa vinculada e salvam lotes diretamente no banco com o login do usuário, preservando a transação única sem passar pelo limite de 128 KiB do proxy externo. A aba Pendentes do NPS inclui pesquisas recém-criadas e permite registrar suas respostas.
+- Pesquisas CSAT/NPS podem ser criadas sem uma nota fictícia; validações humanas de VAK/metaprogramas e ramificações de sequências recuperam os campos previstos. A análise RFM por contato deixa de exigir uma empresa artificial.
+- A pesquisa pública usa a escala e a coluna corretas (CSAT 1–5, NPS 0–10 e CES 1–7), exige nota ao responder, bloqueia reenvio e não inventa data de envio. O acesso do dono às pesquisas é restaurado no schema limpo. O analisador RFM grava `segment_code` e devolve erro quando a persistência falha.
+- O painel NPS cria pesquisas do tipo correto, calcula suas métricas a partir de `nps_score` e confirma criação do link sem prometer entrega. As análises RFM do painel e do servidor salvam a análise e o histórico na mesma transação, com escopo por usuário e rejeição de contatos de outro tenant.
 - Pipeline lê páginas de negócios pelo mesmo proxy externo usado nas gravações; ordenação por data e ID mantém a paginação estável mesmo com datas iguais.
 - Resumo do Pipeline mantém o envelope de empresas e obtém a UF de um único endereço prioritário, evitando coluna inexistente, contagem duplicada e falha para empresas sem status. O contrato TypeScript acompanha o retorno real da RPC.
 - Pipeline carrega negócios individuais sob RLS, preserva datas de fechamentos anteriores e atualiza relatórios/aba comercial ao fechar negócios. Status canônicos aparecem corretamente nos indicadores da empresa. O resumo diário usa a data e o fuso da interface, inclusive após a virada do dia UTC; chamadas legadas mantêm o fuso da sessão.
