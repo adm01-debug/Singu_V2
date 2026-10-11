@@ -48,7 +48,7 @@ export interface ConversionFunnel {
   stage: string;
   count: number;
   conversion_rate: number;
-  avg_days: number;
+  avg_days?: number;
 }
 
 export interface ParetoCustomer {
@@ -83,9 +83,9 @@ export interface IndustryAnalysis {
 export interface ChannelAnalysis {
   channel: string;
   interaction_count: number;
-  response_rate: number;
-  avg_response_time: number;
-  conversion_rate: number;
+  response_rate: number | null;
+  avg_response_time: number | null;
+  conversion_rate: number | null;
 }
 
 // ── Hooks ──────────────────────────────────────────
@@ -128,11 +128,11 @@ export function useSeasonalityAnalysis(months = 12) {
     queryKey: ['seasonality', months, user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await callExternalRpc<SeasonalityData[]>(
+      const { data, error } = await callExternalRpc<{ series: SeasonalityData[] }>(
         'get_seasonality_analysis', { p_months: months }
       );
       if (error) throw error;
-      return data || [];
+      return data?.series || [];
     },
     staleTime: 60 * 60 * 1000,
   });
@@ -178,11 +178,15 @@ export function useConversionFunnel(days = 30) {
     queryKey: ['conversion-funnel', days, user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await callExternalRpc<ConversionFunnel[]>(
+      const { data, error } = await callExternalRpc<{ stages: Array<{ stage: string; count: number; pct: number }> }>(
         'get_conversion_funnel', { p_days: days }
       );
       if (error) throw error;
-      return data || [];
+      return (data?.stages || []).map(stage => ({
+        stage: stage.stage,
+        count: stage.count,
+        conversion_rate: stage.pct,
+      }));
     },
     staleTime: 15 * 60 * 1000,
   });
@@ -274,11 +278,11 @@ export function useChannelAnalysis() {
     queryKey: ['channel-analysis', user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await callExternalRpc<ChannelAnalysis[]>(
-        'get_channel_analysis', {}
+      const { data, error } = await callExternalRpc<{ series: ChannelAnalysis[] }>(
+        'get_channel_analysis', { p_days: 30 }
       );
       if (error) throw error;
-      return data || [];
+      return data?.series || [];
     },
     staleTime: 30 * 60 * 1000,
   });

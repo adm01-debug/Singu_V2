@@ -21,6 +21,12 @@ const dealStatusConfig: Record<string, { label: string; variant: BadgeVariant }>
   won: { label: 'Ganho', variant: 'default' },
   lost: { label: 'Perdido', variant: 'destructive' },
   negotiation: { label: 'Negociação', variant: 'secondary' },
+  aberto: { label: 'Aberto', variant: 'outline' },
+  ganho: { label: 'Ganho', variant: 'default' },
+  perdido: { label: 'Perdido', variant: 'destructive' },
+  negociando: { label: 'Negociação', variant: 'secondary' },
+  proposta: { label: 'Proposta', variant: 'secondary' },
+  arquivado: { label: 'Arquivado', variant: 'outline' },
 };
 
 const proposalStatusConfig: Record<string, { label: string; variant: BadgeVariant }> = {
@@ -46,8 +52,8 @@ export function CompanyCommercialTab({ companyId }: Props) {
   const { data: activities = [], isLoading: activitiesLoading, error: activitiesError, refetch: refetchActivities } = useCompanySalesActivities(companyId);
 
   // KPIs
-  const openDeals = deals.filter(d => !['won', 'lost'].includes(d.status || ''));
-  const wonDeals = deals.filter(d => d.status === 'won');
+  const openDeals = deals.filter(d => !['won', 'lost', 'ganho', 'perdido', 'arquivado'].includes(d.status || ''));
+  const wonDeals = deals.filter(d => ['won', 'ganho'].includes(d.status || ''));
   const pipelineValue = openDeals.reduce((sum, d) => sum + (d.valor || 0), 0);
   const wonValue = wonDeals.reduce((sum, d) => sum + (d.valor || 0), 0);
   const pendingTasks = tasks.filter(t => t.status !== 'completed' && t.status !== 'cancelled');

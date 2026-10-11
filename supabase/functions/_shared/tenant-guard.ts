@@ -87,6 +87,19 @@ export function isSafeIdentifier(value: unknown): value is string {
   return typeof value === 'string' && /^[A-Za-z_]\w*$/.test(value);
 }
 
+export function parseQueryOrder(value: unknown): Array<{ column: string; ascending: boolean }> | null {
+  if (value === undefined || value === null) return [];
+  const entries: unknown[] = Array.isArray(value) ? value : [value];
+  if (entries.length > 10) return null;
+  const orders: Array<{ column: string; ascending: boolean }> = [];
+  for (const entry of entries) {
+    if (entry === null || typeof entry !== 'object' || !('column' in entry)
+      || !isSafeIdentifier(entry.column)) return null;
+    orders.push({ column: entry.column, ascending: 'ascending' in entry && entry.ascending === true });
+  }
+  return orders;
+}
+
 export function quotePostgrestValue(value: string): string {
   return `"${value.replaceAll("\\", "\\\\").replaceAll('"', '\\"')}"`;
 }

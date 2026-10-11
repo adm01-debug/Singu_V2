@@ -70,7 +70,7 @@ export const DailySummaryWidget = React.memo(function DailySummaryWidget() {
         <MetricRow icon={DollarSign} label="Receita" value={formatCurrency(data.revenue)} highlight={data.revenue > 0} />
         <MetricRow icon={Building2} label="Novas Empresas" value={data.new_companies} />
         <MetricRow icon={Users} label="Novos Contatos" value={data.new_contacts} />
-        <MetricRow icon={CheckCircle2} label="Follow-ups Feitos" value={data.followups_completed} />
+        <MetricRow icon={CheckCircle2} label="Follow-ups do Dia Concluídos" value={data.followups_completed} />
         <MetricRow icon={Clock} label="Follow-ups Pendentes" value={data.followups_pending} highlight={data.followups_pending > 3} />
       </CardContent>
     </Card>
