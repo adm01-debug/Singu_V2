@@ -21,7 +21,7 @@ HEADER=$(head -c 8 "$BACKUP_FILE" | od -An -tx1 | tr -d ' \n')
 log "magic=$HEADER"
 
 TMPFILE=""
-cleanup() { [[ -n "$TMPFILE" && -f "$TMPFILE" ]] && rm -f "$TMPFILE"; }
+cleanup() { if [[ -n "$TMPFILE" && -f "$TMPFILE" ]]; then rm -f "$TMPFILE"; fi; }
 trap cleanup EXIT
 INPUT="$BACKUP_FILE"
 
