@@ -34,7 +34,7 @@ describe('Contrato de pesquisas NPS', () => {
     const query = queryResult({ id: 'pesquisa', public_token: 'token' });
     const { result } = renderHook(() => useNpsSurveys(), { wrapper });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
-    mocks.from.mockReturnValue(query);
+    mocks.from.mockReturnValueOnce(query);
     await act(async () => { await result.current.createSurvey({ contact_id: 'contato' }); });
     expect(query.insert).toHaveBeenCalledWith(expect.objectContaining({ survey_type: 'nps', status: 'pending' }));
     expect(query.insert.mock.calls[0][0]).not.toHaveProperty('sent_at');
@@ -53,7 +53,7 @@ describe('Contrato de pesquisas NPS', () => {
   it('não confirma resposta quando nenhuma linha é atualizada', async () => {
     const { result } = renderHook(() => useNpsSurveys(), { wrapper });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
-    mocks.from.mockReturnValue(queryResult(null));
+    mocks.from.mockReturnValueOnce(queryResult(null));
     await act(async () => { await expect(result.current.answerSurvey({ id: 'pesquisa', score: 10 })).rejects.toThrow('já respondida'); });
     expect(mocks.success).not.toHaveBeenCalled();
   });
@@ -61,7 +61,7 @@ describe('Contrato de pesquisas NPS', () => {
     const { result } = renderHook(() => useNpsSurveys(), { wrapper });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     const query = queryResult({ id: 'pesquisa' });
-    mocks.from.mockReturnValue(query);
+    mocks.from.mockReturnValueOnce(query);
     await act(async () => { await result.current.answerSurvey({ id: 'pesquisa', score: 0 }); });
     expect(query.update).toHaveBeenCalledWith(expect.objectContaining({ nps_score: 0 }));
     expect(query.update.mock.calls[0][0]).not.toHaveProperty('score');
