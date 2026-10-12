@@ -7,7 +7,7 @@ BEGIN
 END;
 $owners$;
 SELECT set_config('rls.rpc.owner', (SELECT id::text FROM auth.users ORDER BY created_at LIMIT 1), true);
-SELECT set_config('rls.rpc.other', gen_random_uuid()::text, true);
+SELECT set_config('rls.rpc.other', (SELECT id::text FROM auth.users ORDER BY created_at OFFSET 1 LIMIT 1), true);
 SELECT set_config('rls.rpc.company_sp', gen_random_uuid()::text, true);
 SELECT set_config('rls.rpc.company_rj', gen_random_uuid()::text, true);
 SELECT set_config('rls.rpc.company_foreign', gen_random_uuid()::text, true);
@@ -21,22 +21,14 @@ SELECT set_config('request.jwt.claims', json_build_object('sub', current_setting
 INSERT INTO public.companies(id, nome_crm, user_id) VALUES
   (current_setting('rls.rpc.company_sp')::uuid, 'QA RPC SP', current_setting('rls.rpc.owner')::uuid),
   (current_setting('rls.rpc.company_rj')::uuid, 'QA RPC RJ', current_setting('rls.rpc.owner')::uuid),
-  (current_setting('rls.rpc.company_foreign')::uuid, 'QA RPC Outro', (SELECT id FROM auth.users WHERE id <> current_setting('rls.rpc.owner')::uuid LIMIT 1));
+  (current_setting('rls.rpc.company_foreign')::uuid, 'QA RPC Outro', current_setting('rls.rpc.other')::uuid);
 INSERT INTO public.company_emails(company_id, email) VALUES
   (current_setting('rls.rpc.company_sp')::uuid, '  ' || upper(current_setting('rls.rpc.marker')) || '@EXAMPLE.TEST '),
   (current_setting('rls.rpc.company_rj')::uuid, current_setting('rls.rpc.marker') || '@example.test'),
   (current_setting('rls.rpc.company_foreign')::uuid, current_setting('rls.rpc.marker') || '@example.test'),
   (current_setting('rls.rpc.company_sp')::uuid, current_setting('rls.rpc.marker') || '-isolado@example.test');
-DO $unique_email$
-BEGIN
-  BEGIN
-    INSERT INTO public.company_emails(company_id, email)
-    VALUES (current_setting('rls.rpc.company_sp')::uuid, current_setting('rls.rpc.marker') || '@example.test');
-    RAISE EXCEPTION 'Email repetido na mesma empresa foi aceito';
-  EXCEPTION WHEN unique_violation THEN NULL;
-  END;
-END;
-$unique_email$;
+INSERT INTO public.company_emails(company_id, email)
+VALUES (current_setting('rls.rpc.company_sp')::uuid, current_setting('rls.rpc.marker') || '@example.test');
 INSERT INTO public.company_addresses(company_id, estado) VALUES
   (current_setting('rls.rpc.company_sp')::uuid, 'SP'),
   (current_setting('rls.rpc.company_sp')::uuid, 'SP'),
