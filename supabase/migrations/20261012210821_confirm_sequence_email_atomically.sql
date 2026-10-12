@@ -1,3 +1,15 @@
+ALTER TABLE public.sequence_steps
+  ADD COLUMN IF NOT EXISTS user_id uuid,
+  ADD COLUMN IF NOT EXISTS step_number integer;
+UPDATE public.sequence_steps AS step
+SET user_id = sequence.user_id
+FROM public.sequences AS sequence
+WHERE step.sequence_id = sequence.id AND step.user_id IS NULL;
+UPDATE public.sequence_steps SET step_number = step_order WHERE step_number IS NULL;
+ALTER TABLE public.sequence_steps
+  ALTER COLUMN user_id SET NOT NULL,
+  ALTER COLUMN step_number SET NOT NULL;
+
 ALTER TABLE public.sequence_enrollments
   ADD COLUMN IF NOT EXISTS paused_at timestamptz,
   ADD COLUMN IF NOT EXISTS paused_reason text;
@@ -113,7 +125,8 @@ GRANT EXECUTE ON FUNCTION public.complete_sequence_email_delivery(
 
 -- Rollback: restaure o processador anterior antes de remover a função.
 -- DROP FUNCTION public.complete_sequence_email_delivery(uuid, uuid, uuid, integer, text, text, timestamptz, text);
--- Os campos de pausa já existem no banco canônico: preserve-os e seus dados.
+-- Os campos de pausa, proprietário e posição já existem no canônico: preserve-os e seus dados.
 -- Em reconstruções nas quais foram criados apenas por esta migration, após
 -- backup e retirada dos consumidores:
 -- ALTER TABLE public.sequence_enrollments DROP COLUMN paused_at, DROP COLUMN paused_reason;
+-- ALTER TABLE public.sequence_steps DROP COLUMN user_id, DROP COLUMN step_number;
