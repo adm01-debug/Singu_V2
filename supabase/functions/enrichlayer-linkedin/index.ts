@@ -141,10 +141,10 @@ Deno.serve(async (req) => {
         last_scraped_at: new Date().toISOString(),
       };
 
-      supabaseClient
+      const { error: profileError } = await supabaseClient
         .from("social_profiles")
-        .upsert(profileData, { onConflict: "contact_id,platform" })
-        .catch((e: unknown) => console.error("social_profiles upsert error:", e));
+        .upsert(profileData, { onConflict: "contact_id,platform" });
+      if (profileError) throw profileError;
     }
 
     return jsonOk({

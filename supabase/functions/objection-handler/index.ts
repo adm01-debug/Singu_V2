@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
@@ -121,8 +122,8 @@ Gere um script que:
     if (!toolArgs) throw new Error("AI did not return expected tool call");
     const result = JSON.parse(toolArgs);
 
-     // 3. Persist for Audit and Intelligence Dashboard (fire-and-forget — non-critical logs)
-     supabase.from('crm_objection_intelligence').insert({
+     // 3. Persist for Audit and Intelligence Dashboard
+     await bestEffortWrite(supabase.from('crm_objection_intelligence').insert({
        contact_id: contactId,
        user_id: userId,
        objection_type: objectionId,
@@ -130,16 +131,16 @@ Gere um script que:
        suggested_strategy: result.title,
        script_content: result.suggested_message,
        success_rate: result.confidence
-     }).catch((e: unknown) => console.error("crm_objection_intelligence insert error:", e));
+     }), "crm_objection_intelligence insert error:");
 
      // Also log in the older table for backward compatibility
-     supabase.from('contact_objection_scripts').insert({
+     await bestEffortWrite(supabase.from('contact_objection_scripts').insert({
        contact_id: contactId,
        user_id: userId,
        objection_type: objectionId,
        script_content: result.suggested_message,
        neurological_bias: result.reasoning
-     }).catch(e => console.error("Compatible log failed", e));
+     }), "Compatible log failed");
 
     return jsonOk({ suggestion: result }, req);
 

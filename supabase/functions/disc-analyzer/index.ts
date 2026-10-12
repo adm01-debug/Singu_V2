@@ -4,6 +4,7 @@
 // ==============================================
 
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { z } from "npm:zod@3.23.8";
 import { withAuth, jsonError, jsonOk, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
@@ -263,7 +264,7 @@ Deno.serve(async (req) => {
 
     if (contactOwnership) {
       const currentBehavior = (contactOwnership.behavior as Record<string, unknown>) || {};
-      supabase
+      await bestEffortWrite(supabase
         .from("contacts")
         .update({
           behavior: {
@@ -275,18 +276,16 @@ Deno.serve(async (req) => {
           }
         })
         .eq("id", contactId)
-        .eq("user_id", userId)
-        .catch((e: unknown) => console.error("contacts behavior update error:", e));
+        .eq("user_id", userId), "contacts behavior update error:");
     }
 
-    // Fire-and-forget communication log (non-critical)
-    supabase.from("disc_communication_logs").insert({
+    await bestEffortWrite(supabase.from("disc_communication_logs").insert({
       user_id: userId,
       contact_id: contactId,
       contact_disc_profile: primary,
       approach_adapted: false,
       adaptation_tips_shown: analysisResult.salesStrategies
-    }).catch((err: unknown) => console.error("disc_communication_logs insert error:", err));
+    }), "disc_communication_logs insert error:");
 
     return jsonOk({
       success: true,
