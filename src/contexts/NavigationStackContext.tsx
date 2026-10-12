@@ -1,151 +1,191 @@
-import { createContext, useContext, useCallback, useRef, useEffect, type ReactNode } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { createContext, useContext, useCallback, useRef, useEffect, useState, type ReactNode } from 'react';
+import { useLocation, useNavigate, useNavigationType } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 type NavigationDirection = 'forward' | 'back' | 'replace';
 
+interface NavigationEntry {
+  path: string;
+  key: string;
+  index: number | null;
+}
+
+interface NavigationSnapshot {
+  version: 2;
+  owner: string | null;
+  entries: NavigationEntry[];
+  position: number;
+}
+
 interface NavigationStackContextType {
-  /** Navigate back smartly: uses internal stack, deduplicates loops */
   goBack: (fallback?: string) => void;
-  /** The previous route in the internal stack (or null) */
+  goToIndex: (index: number) => void;
   previousPath: string | null;
-  /** Navigation direction: NavigationDirection */
   direction: NavigationDirection;
-  /** Full internal stack for debugging */
   stack: string[];
 }
 
 const NavigationStackContext = createContext<NavigationStackContextType | null>(null);
-
 const MAX_STACK_SIZE = 20;
 const STORAGE_KEY = 'singu_nav_stack';
-const DIRECTION_KEY = 'singu_nav_direction';
 
-function loadStack(): string[] {
+export function safeNavigationPath(path: string): string | null {
+  const hasControlCharacter = Array.from(path).some(character => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127);
+  if (!path.startsWith('/') || path.startsWith('//')
+    || path.includes('\\') || hasControlCharacter) return null;
   try {
-    const stored = sessionStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
+    return new URL(path, window.location.origin).origin === window.location.origin ? path : null;
   } catch {
-    return [];
+    return null;
   }
 }
 
-function loadDirection(): NavigationDirection {
+function browserIndex(): number | null {
+  const state: unknown = window.history.state;
+  if (state && typeof state === 'object' && 'idx' in state
+    && typeof state.idx === 'number' && Number.isSafeInteger(state.idx) && state.idx >= 0) {
+    return state.idx;
+  }
+  return null;
+}
+
+function currentEntry(location: { pathname: string; search: string; hash: string; key: string }): NavigationEntry {
+  return { path: location.pathname + location.search + location.hash, key: location.key, index: browserIndex() };
+}
+
+function freshSnapshot(owner: string | null, entry: NavigationEntry): NavigationSnapshot {
+  return { version: 2, owner, entries: [entry], position: 0 };
+}
+
+function loadSnapshot(owner: string | null, entry: NavigationEntry): NavigationSnapshot {
+  if (!owner) return freshSnapshot(owner, entry);
   try {
-    const stored = sessionStorage.getItem(DIRECTION_KEY);
-    if (stored === 'back' || stored === 'replace') return stored;
-    return 'forward';
+    const stored: unknown = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? 'null');
+    if (!stored || typeof stored !== 'object' || !('version' in stored) || stored.version !== 2
+      || !('owner' in stored) || stored.owner !== owner || !('entries' in stored)
+      || !Array.isArray(stored.entries) || stored.entries.length < 1
+      || stored.entries.length > MAX_STACK_SIZE || !('position' in stored)
+      || typeof stored.position !== 'number' || !Number.isInteger(stored.position)
+      || stored.position < 0 || stored.position >= stored.entries.length) return freshSnapshot(owner, entry);
+
+    const entries: unknown[] = stored.entries;
+    if (!entries.every((item): item is NavigationEntry => item !== null && typeof item === 'object'
+      && 'path' in item && typeof item.path === 'string' && safeNavigationPath(item.path) !== null
+      && 'key' in item && typeof item.key === 'string' && item.key.length <= 100
+      && 'index' in item && (item.index === null || typeof item.index === 'number'
+        && Number.isSafeInteger(item.index) && item.index >= 0))) return freshSnapshot(owner, entry);
+
+    const position = stored.position;
+    const active = entries[position];
+    if (active.key !== entry.key || active.path !== entry.path || active.index !== entry.index) {
+      return freshSnapshot(owner, entry);
+    }
+    return { version: 2, owner, entries, position };
   } catch {
-    return 'forward';
+    return freshSnapshot(owner, entry);
   }
 }
 
-function saveStack(stack: string[]) {
+function saveSnapshot(snapshot: NavigationSnapshot) {
   try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(stack));
+    if (snapshot.owner) sessionStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+    else sessionStorage.removeItem(STORAGE_KEY);
   } catch {
-    // sessionStorage unavailable
-  }
-}
-
-function saveDirection(direction: NavigationDirection) {
-  try {
-    sessionStorage.setItem(DIRECTION_KEY, direction);
-  } catch {
-    // ignora falhas de acesso ao sessionStorage (ex.: modo privado)
+    // sessionStorage pode estar indisponível no navegador.
   }
 }
 
 export function NavigationStackProvider({ children }: { children: ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const stackRef = useRef<string[]>(loadStack());
-  const directionRef = useRef<NavigationDirection>(loadDirection());
-  const isGoingBackRef = useRef(false);
+  const navigationType = useNavigationType();
+  const { user, loading } = useAuth();
+  const owner = user?.id ?? null;
+  const [snapshot, setSnapshot] = useState<NavigationSnapshot>(() => loadSnapshot(owner, currentEntry(location)));
+  const snapshotRef = useRef(snapshot);
+  const [direction, setDirection] = useState<NavigationDirection>('forward');
 
-  // Track route changes
   useEffect(() => {
-    const currentPath = location.pathname + location.search;
-    const stack = stackRef.current;
+    if (loading) return;
+    const entry = currentEntry(location);
+    let next = snapshotRef.current;
+    let nextDirection: NavigationDirection = 'forward';
 
-    if (isGoingBackRef.current) {
-      // We triggered this navigation via goBack — pop from stack
-      isGoingBackRef.current = false;
-      directionRef.current = 'back';
-      saveDirection('back');
+    if (next.owner !== owner) {
+      next = loadSnapshot(owner, entry);
+    } else if (next.entries[next.position].key === entry.key
+      && next.entries[next.position].path === entry.path
+      && next.entries[next.position].index === entry.index) {
+      saveSnapshot(next);
       return;
+    } else if (navigationType === 'POP') {
+      const position = next.entries.findIndex(item => item.key === entry.key
+        && item.index === entry.index && item.path === entry.path);
+      nextDirection = position >= 0 && position < next.position ? 'back' : 'forward';
+      next = position >= 0 ? { ...next, position } : freshSnapshot(owner, entry);
+    } else if (navigationType === 'REPLACE') {
+      const entries = [...next.entries];
+      entries[next.position] = entry;
+      next = { ...next, entries };
+      nextDirection = 'replace';
+    } else {
+      const entries = [...next.entries.slice(0, next.position + 1), entry].slice(-MAX_STACK_SIZE);
+      next = { ...next, entries, position: entries.length - 1 };
     }
 
-    // Deduplicate: don't push if same as current top
-    if (stack.length === 0 || stack[stack.length - 1] !== currentPath) {
-      stack.push(currentPath);
-      // Trim to max size
-      if (stack.length > MAX_STACK_SIZE) {
-        stack.splice(0, stack.length - MAX_STACK_SIZE);
-      }
-      saveStack(stack);
-    }
+    snapshotRef.current = next;
+    setSnapshot(next);
+    setDirection(nextDirection);
+    saveSnapshot(next);
+  }, [location, navigationType, owner, loading]);
 
-    directionRef.current = 'forward';
-    saveDirection('forward');
-  }, [location.pathname, location.search]);
+  const goToIndex = useCallback((index: number) => {
+    if (loading || snapshotRef.current.owner !== owner) return;
+    const { entries, position } = snapshotRef.current;
+    if (!Number.isInteger(index) || index < 0 || index >= position) return;
+    const target = entries[index];
+    if (!safeNavigationPath(target.path) || target.path.startsWith('/auth')) return;
+    const currentIndex = browserIndex();
+    if (currentIndex !== null && target.index !== null && target.index < currentIndex) {
+      navigate(target.index - currentIndex);
+    } else if (currentIndex === null && target.index === null) {
+      navigate(index - position);
+    } else {
+      navigate(target.path, { replace: true });
+    }
+  }, [navigate, owner, loading]);
 
   const goBack = useCallback((fallback: string = '/') => {
-    const stack = stackRef.current;
-    const currentPath = location.pathname + location.search;
-
-    // Pop current page from stack
-    if (stack.length > 0 && stack[stack.length - 1] === currentPath) {
-      stack.pop();
-    }
-
-    // Find previous page that's different from current (anti-loop)
-    let target: string | null = null;
-    while (stack.length > 0) {
-      const candidate = stack[stack.length - 1];
-      if (candidate !== currentPath) {
-        target = candidate;
-        stack.pop(); // Remove it since we're navigating there
-        break;
+    if (loading) return;
+    const { entries, position } = snapshotRef.current;
+    const currentPath = location.pathname + location.search + location.hash;
+    for (let index = snapshotRef.current.owner === owner ? position - 1 : -1; index >= 0; index--) {
+      const candidate = entries[index].path;
+      if (candidate !== currentPath && !candidate.startsWith('/auth') && safeNavigationPath(candidate)) {
+        goToIndex(index);
+        return;
       }
-      stack.pop();
     }
+    const destination = safeNavigationPath(fallback) ?? '/';
+    if (destination !== currentPath) navigate(destination, { replace: true });
+  }, [goToIndex, location.pathname, location.search, location.hash, navigate, owner, loading]);
 
-    saveStack(stack);
-    isGoingBackRef.current = true;
-
-    if (target) {
-      navigate(target);
-    } else {
-      navigate(fallback);
-    }
-  }, [location.pathname, location.search, navigate]);
-
-  // Listen for keyboard shortcut Alt+← event
   useEffect(() => {
     const handleNavigateBack = () => goBack('/');
     window.addEventListener('navigate-back', handleNavigateBack);
     return () => window.removeEventListener('navigate-back', handleNavigateBack);
   }, [goBack]);
 
-  const previousPath = (() => {
-    const stack = stackRef.current;
-    const currentPath = location.pathname + location.search;
-    // Find last entry that differs from current
-    for (let i = stack.length - 1; i >= 0; i--) {
-      if (stack[i] !== currentPath) return stack[i];
-    }
-    return null;
-  })();
+  const activeSnapshot = !loading && snapshot.owner === owner ? snapshot : freshSnapshot(owner, currentEntry(location));
+  const visible = activeSnapshot.entries.slice(0, activeSnapshot.position + 1);
+  const currentPath = location.pathname + location.search + location.hash;
+  const previousPath = [...visible].reverse().find(item => item.path !== currentPath
+    && !item.path.startsWith('/auth') && safeNavigationPath(item.path))?.path ?? null;
 
   return (
-    <NavigationStackContext.Provider
-      value={{
-        goBack,
-        previousPath,
-        direction: directionRef.current,
-        stack: stackRef.current,
-      }}
-    >
+    <NavigationStackContext.Provider value={{
+      goBack, goToIndex, previousPath, direction: activeSnapshot === snapshot ? direction : 'forward', stack: visible.map(item => item.path),
+    }}>
       {children}
     </NavigationStackContext.Provider>
   );
@@ -153,8 +193,6 @@ export function NavigationStackProvider({ children }: { children: ReactNode }) {
 
 export function useNavigationStack() {
   const ctx = useContext(NavigationStackContext);
-  if (!ctx) {
-    throw new Error('useNavigationStack must be used within NavigationStackProvider');
-  }
+  if (!ctx) throw new Error('useNavigationStack must be used within NavigationStackProvider');
   return ctx;
 }

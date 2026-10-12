@@ -33,7 +33,7 @@ export const PROVIDER_ORDER: ProviderDependency[] = [
   { name: 'TooltipProvider', requires: [] },
   { name: 'BrowserRouter', requires: [] },
   { name: 'AuthProvider', requires: ['BrowserRouter', 'QueryClientProvider'], contextHook: 'useAuth' },
-  { name: 'NavigationStackProvider', requires: ['BrowserRouter'] },
+  { name: 'NavigationStackProvider', requires: ['BrowserRouter', 'AuthProvider'] },
   { name: 'EasterEggsProvider', requires: ['AuthProvider'] },
 ];
 

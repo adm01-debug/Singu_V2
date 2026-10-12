@@ -9,6 +9,13 @@
  - **Exemplo Prático**: Posicionamento no canto superior esquerdo do header, com label dinâmico indicando o destino (ex: "← Voltar para Contatos"). No mobile, integrado à barra superior com gesto de swipe-to-back.
  - **Benefícios**: Redução da carga cognitiva e prevenção de erros de navegação.
  - **Impacto vs. Esforço**: Alto Impacto / Baixo Esforço.
+
+ #### Contrato de retorno
+ - Desktop e mobile percorrem o histórico interno; filtros e âncoras da tela anterior são preservados. O menu lateral permanece acessível no mobile.
+ - Sem entrada anterior, uma tela de detalhe retorna à seção pai; outras telas retornam ao início. A substituição do endereço evita ciclos em acessos diretos.
+ - Um destino explícito com filtros ou âncora é respeitado. Um destino de seção sem filtros reutiliza a entrada anterior da mesma seção, quando disponível.
+ - O rastro é limitado a 20 entradas na sessão da aba e separado por usuário. A autenticação e destinos externos não são oferecidos como retorno.
+ - Os testes de contrato cobrem retorno/avanço, índices do navegador, filtros, substituição, troca de usuário e fechamento da busca. A validação visual autenticada é uma etapa adicional.
  
  ### 1.2. Breadcrumbs Interativos e Histórico Contextual
  - **Descrição**: Evoluir os breadcrumbs atuais e o botão voltar com um menu de histórico rápido (clique longo ou botão secundário).

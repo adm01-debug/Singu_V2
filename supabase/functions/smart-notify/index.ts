@@ -24,7 +24,7 @@ Deno.serve(async (req) => {
 
     if (usersError) throw usersError;
 
-    const stats = { usersProcessed: 0, notificationsSent: 0, notificationsFailed: 0 };
+    const stats = { usersProcessed: 0, notificationsSent: 0, notificationsFailed: 0, notificationsPending: 0 };
 
     // Pre-batch: fetch all pending next actions for all users in one query
     const userIds = users.map((u: { id: string }) => u.id);
@@ -114,6 +114,10 @@ Deno.serve(async (req) => {
           const notifiedChannels = notifiedMap.get(reminderId) ?? new Map<string, string>();
           const whatsappStatus = notifiedChannels.get('whatsapp');
           const notifiedWhatsApp = whatsappStatus !== undefined;
+          if (whatsappStatus === 'pending') {
+            stats.notificationsPending++;
+            continue;
+          }
           if (notifiedWhatsApp && whatsappStatus !== 'sent') {
             stats.notificationsFailed++;
             continue;
@@ -145,8 +149,11 @@ Deno.serve(async (req) => {
                     .select('delivery_status').eq('reminder_id', reminderId).eq('channel', 'whatsapp')
                     .eq('user_id', user.id).maybeSingle();
                   if (existingError) throw existingError;
-                  if (existing?.delivery_status !== 'sent') throw new Error('A entrega existente não foi confirmada');
+                  if (existing?.delivery_status === 'pending') stats.notificationsPending++;
+                  else if (existing?.delivery_status !== 'sent') throw new Error('A entrega existente não foi confirmada');
                 }
+              } else {
+                throw new Error('WhatsApp não configurado');
               }
             } catch (err) {
               stats.notificationsFailed++;
@@ -158,6 +165,9 @@ Deno.serve(async (req) => {
     }
 
     if (stats.notificationsFailed > 0) return jsonError('Não foi possível concluir as entregas. As reservas existentes impedem a repetição automática.', 502, req);
+    if (stats.notificationsPending > 0) return new Response(JSON.stringify({ success: false, status: 'processing', stats }), {
+      status: 202, headers: { ...cors, 'Content-Type': 'application/json' },
+    });
 
     return jsonOk({ success: true, stats }, req);
 
