@@ -218,7 +218,7 @@ Deno.serve(async (req) => {
     }
 
     // Save/update profile
-    await bestEffortWrite(supabaseClient.from("social_profiles").upsert({
+    const { error: profileError } = await supabaseClient.from("social_profiles").upsert({
       contact_id: contactId, user_id: userId, platform, profile_url: profileUrl,
       profile_data: { markdown, metadata, parsed: parsedProfile },
       headline: parsedProfile.headline, current_company: parsedProfile.current_company,
@@ -226,7 +226,8 @@ Deno.serve(async (req) => {
       skills: parsedProfile.skills || [], followers_count: parsedProfile.followers_count,
       following_count: parsedProfile.following_count, recent_posts: parsedProfile.recent_posts,
       last_scraped_at: new Date().toISOString(),
-    }, { onConflict: "contact_id,platform" }), "social_profiles upsert error:");
+    }, { onConflict: "contact_id,platform" });
+    if (profileError) throw profileError;
 
     // Suggest hobbies and interests based on social profile (AI Enrichment)
     const suggestedIntel = [];

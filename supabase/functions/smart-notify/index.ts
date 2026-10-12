@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { bestEffortWrite } from "../_shared/best-effort-write.ts";
+import { sendTrackedNotification } from "../_shared/notification-delivery.ts";
 import { scopedCorsHeaders, jsonError, jsonOk, requireCronSecret } from "../_shared/auth.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 
@@ -24,11 +24,11 @@ Deno.serve(async (req) => {
 
     if (usersError) throw usersError;
 
-    const stats = { usersProcessed: 0, notificationsSent: 0 };
+    const stats = { usersProcessed: 0, notificationsSent: 0, notificationsFailed: 0 };
 
     // Pre-batch: fetch all pending next actions for all users in one query
     const userIds = users.map((u: { id: string }) => u.id);
-    const { data: allActions } = await supabaseClient
+    const { data: allActions, error: actionsError } = await supabaseClient
       .from('contact_next_actions')
       .select(`
         id, action, urgency, contact_id, user_id, generated_at,
@@ -37,6 +37,7 @@ Deno.serve(async (req) => {
       .in('user_id', userIds)
       .eq('status', 'pending')
       .limit(1000);
+    if (actionsError) throw actionsError;
 
     type ActionRow = { id: string; action: string; urgency: string; contact_id: string; user_id: string; generated_at: string; contacts: unknown };
     const allActionRows = (allActions ?? []) as ActionRow[];
@@ -55,13 +56,15 @@ Deno.serve(async (req) => {
         ? supabaseClient.from('contact_automation_settings')
             .select('contact_id, escalation_enabled, delay_hours, reminder_enabled, escalation_role')
             .in('contact_id', allContactIds)
-        : Promise.resolve({ data: [] }),
+        : Promise.resolve({ data: [], error: null }),
       allReminderIdsGlobal.length > 0
         ? supabaseClient.from('notification_logs')
             .select('reminder_id, channel')
             .in('reminder_id', allReminderIdsGlobal)
-        : Promise.resolve({ data: [] }),
+        : Promise.resolve({ data: [], error: null }),
     ]);
+    if (settingsResult.error) throw settingsResult.error;
+    if (logsResult.error) throw logsResult.error;
     const globalSettingsMap = new Map(
       ((settingsResult as { data: Array<{ contact_id: string }> }).data ?? []).map((s) => [s.contact_id, s])
     );
@@ -70,8 +73,6 @@ Deno.serve(async (req) => {
       if (!globalNotifiedMap.has(log.reminder_id)) globalNotifiedMap.set(log.reminder_id, new Set());
       globalNotifiedMap.get(log.reminder_id)!.add(log.channel);
     }
-
-    const allLogsToInsert: Array<{ reminder_id: string; contact_id: string; user_id: string; channel: string }> = [];
 
     for (const user of users) {
       stats.usersProcessed++;
@@ -82,8 +83,6 @@ Deno.serve(async (req) => {
         const now = new Date();
         const settingsMap = globalSettingsMap;
         const notifiedMap = globalNotifiedMap;
-
-        const logsToInsert: Array<{ reminder_id: string; contact_id: string; user_id: string; channel: string }> = [];
 
         for (const action of actions) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase joined relation type not fully typed
@@ -99,18 +98,14 @@ Deno.serve(async (req) => {
           const contactName = contactData ? `${(contactData as any).first_name} ${(contactData as any).last_name}` : 'Contato';
 
           let message = '';
-          let subject = '';
           let reminderId = '';
           const recipientPhone = user.phone;
-          const recipientEmail = user.email;
 
           if (isOverdue && settings.escalation_enabled) {
             reminderId = `nba-esc-${action.id}`;
-            subject = `🚨 ESCALONAMENTO: Ação Atrasada - ${contactName}`;
             message = `Olá, esta é uma notificação de escalonamento.\n\nA ação "${action.action}" para o contato *${contactName}* está atrasada há mais de ${delayHours} horas.\n\nPor favor, verifique o status desta negociação.`;
           } else if (settings.reminder_enabled && (action.urgency === 'high' || now > new Date(generatedAt.getTime() + (delayHours/2 * 60 * 60 * 1000)))) {
             reminderId = `nba-rem-${action.id}`;
-            subject = `🎯 Lembrete: Próxima Melhor Ação - ${contactName}`;
             message = `Olá ${user.first_name}, você tem uma ação prioritária pendente com *${contactName}*:\n\n👉 *${action.action}*\n\nUrgência: ${action.urgency}\n\nAcesse o CRM para concluir!`;
           } else {
             continue;
@@ -118,7 +113,6 @@ Deno.serve(async (req) => {
 
           const notifiedChannels = notifiedMap.get(reminderId) ?? new Set<string>();
           const notifiedWhatsApp = notifiedChannels.has('whatsapp');
-          const notifiedEmail = notifiedChannels.has('email');
 
           // Send WhatsApp
           if (!notifiedWhatsApp && recipientPhone) {
@@ -128,34 +122,27 @@ Deno.serve(async (req) => {
               if (evolutionUrl && evolutionKey) {
                 const baseUrl = evolutionUrl.replace(/\/$/, '');
                 const instanceName = Deno.env.get('EVOLUTION_INSTANCE_NAME') || 'main';
-                const resp = await fetchAPI(`${baseUrl}/message/sendText/${instanceName}`, {
+                const delivery = await sendTrackedNotification(supabaseClient, {
+                  reminder_id: reminderId, contact_id: action.contact_id, user_id: user.id, channel: 'whatsapp',
+                }, () => fetchAPI(`${baseUrl}/message/sendText/${instanceName}`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json', 'apikey': evolutionKey },
                   body: JSON.stringify({ number: recipientPhone.replace(/\D/g, ''), text: message }),
-                });
-                if (resp.ok) {
-                  logsToInsert.push({ reminder_id: reminderId, contact_id: action.contact_id, user_id: user.id, channel: 'whatsapp' });
+                }));
+                if (delivery === 'sent') {
                   stats.notificationsSent++;
                 }
               }
-            } catch (err) { console.error(`WhatsApp error for ${user.id}:`, err); }
-          }
-
-          if (!notifiedEmail && recipientEmail) {
-            logsToInsert.push({ reminder_id: reminderId, contact_id: action.contact_id, user_id: user.id, channel: 'email' });
-            console.log(`Email notification sent to ${recipientEmail}: ${subject}`);
-            stats.notificationsSent++;
+            } catch (err) {
+              stats.notificationsFailed++;
+              console.error(`WhatsApp error for ${user.id}:`, err);
+            }
           }
         }
-
-        allLogsToInsert.push(...logsToInsert);
       }
     }
 
-    // Flush all notification logs for all users in a single write
-    if (allLogsToInsert.length > 0) {
-      await bestEffortWrite(supabaseClient.from('notification_logs').insert(allLogsToInsert), 'notification_logs insert error:');
-    }
+    if (stats.notificationsFailed > 0) return jsonError('Não foi possível concluir as entregas. As reservas existentes impedem a repetição automática.', 502, req);
 
     return jsonOk({ success: true, stats });
 

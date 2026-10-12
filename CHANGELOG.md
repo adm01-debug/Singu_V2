@@ -9,6 +9,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Fixed
 - As funções Edge aguardam e verificam a gravação de logs opcionais, sem apresentar uma operação concluída como falha quando a auditoria não puder ser registrada.
+- Lembretes WhatsApp reservam um marcador único antes do envio; entregas incertas não são reenviadas automaticamente e envios de email não executados deixam de ser contabilizados. A sincronização social informa falha quando não consegue gravar o perfil.
 - Ambientes Supabase reconstruídos incluem telefones, emails e endereços de empresas com normalização, integridade referencial e acesso restrito ao dono ou administrador; o schema canônico existente é preservado. O perfil recebe o email do cadastro também no schema legado, evitando falha ao criar usuários.
 - Gerar uma nova próxima ação reabre a sugestão concluída e apaga os dados da conclusão anterior. Falha na consulta de métricas de concorrentes ocorre antes da gravação para evitar relatar uma operação concluída como erro. O mapa geolocaliza até 50 empresas por vez, pede continuação para as demais e interrompe a operação quando a tela é fechada. Marcadores acompanham inclusões, exclusões e alterações de coordenadas da carteira sem iniciar outro lote automático.
 - Históricos de empresa aceitam tipo/canal/data nulos sem inventar datas; consultas de segmentação/perfis dividem relações em lotes restritos ao usuário. Documentos privados removem o upload incompleto após falha e a contagem de destinatários só é gravada após concluir os lotes.
