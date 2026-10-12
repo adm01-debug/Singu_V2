@@ -92,11 +92,13 @@ export async function safeFetch(rawUrl: string, options: RequestInit = {}, netwo
     let connectionError: unknown;
     for (const [index, address] of destination.addresses.entries()) {
       signal.throwIfAborted();
+      let attemptTimer: ReturnType<typeof setTimeout> | undefined;
       try {
         const remaining = destination.addresses.length - index;
-        const attempt = AbortSignal.any([signal, AbortSignal.timeout(
-          Math.max(1, Math.floor((deadline - Date.now()) / remaining)),
-        )]);
+        const controller = new AbortController();
+        attemptTimer = setTimeout(() => controller.abort(new DOMException("Tempo de conexão excedido", "TimeoutError")),
+          Math.max(1, Math.floor((deadline - Date.now()) / remaining)));
+        const attempt = AbortSignal.any([signal, controller.signal]);
         const tcpConnection = await network.connect(address, destination.port, attempt);
         connection = tcpConnection;
         if (destination.url.protocol === "https:") {
@@ -125,6 +127,8 @@ export async function safeFetch(rawUrl: string, options: RequestInit = {}, netwo
         close();
         connection = undefined;
         connectionError = error;
+      } finally {
+        clearTimeout(attemptTimer);
       }
     }
     if (!connection) throw connectionError instanceof Error ? connectionError : new Error("Falha na conexão com o destino");
