@@ -46,7 +46,7 @@ Heads [108](https://github.com/adm01-debug/Singu_V2/pull/108)/[109](https://gith
 | EF-12 | AINDA REPRODUZÍVEL | lead-score-cron:23; forecast-snapshot-cron:14–51 | Paginação/erros/valores inválidos; null numérico não implica NaN necessariamente | >1000 registros, erro DB e número inválido explícitos |
 | EF-13 | AINDA REPRODUZÍVEL | next-best-action:124–126/abm-whitespace-analyzer:88–91 divergem | Há guards; JSON inválido/contrato sem validação uniforme; IA AD | Ausência/malformação não gera resultado falso |
 | EF-14 | AINDA REPRODUZÍVEL | evolution-webhook:532–536 usa avatar IS NOT NULL | Alinhar intenção/filtro; integração AD | Atualizar só avatar elegível |
-| EF-15 | RESOLVIDO NO CÓDIGO | Helpers scoped; gates imports/CORS passaram | Restam contratos específicos e drift remoto F/S7 | Preflight e resposta de cada rota coerentes |
+| EF-15 | AINDA REPRODUZÍVEL | Helpers scoped e gates imports/CORS passaram; auto-rebatch:35,44 exige segredo de cron e JWT de usuário na mesma chamada | Unificar autenticação do cron; contratos específicos e drift remoto F/S7 | Cabeçalho único autoriza o job e mantém escopo |
 | EF-16,INV/13 | AINDA REPRODUZÍVEL | bulk-revalidate:71–76 limit(5000), :119 cappedAt só do lote | Paginar universo/avisar truncamento | Contato elegível além do teto é encontrado |
 | EF-17 | AINDA REPRODUZÍVEL | evolution-webhook:348–372 usa tarefas assíncronas não aguardadas | Persistir/aguardar trabalho crítico; integração AD | Encerrar request não perde transcrição/análise |
 
