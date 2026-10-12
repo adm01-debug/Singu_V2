@@ -7,16 +7,30 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Shield, ShieldCheck, ShieldOff } from 'lucide-react';
 import { use2FA } from '@/hooks/use2FA';
 
-export function TwoFactorSetup() {
-  const { isEnabled, isEnrolling, isVerifying, qrUri, checkStatus, enroll, verify, unenroll } = use2FA();
+export function TwoFactorSetup({ onVerified, requireVerification = false }: { onVerified?: () => void; requireVerification?: boolean } = {}) {
+  const { isEnabled, isSessionVerified, isLoading, statusError, isEnrolling, isVerifying, qrUri, factorId, verifiedFactors, selectFactor, checkStatus, enroll, verify, unenroll } = use2FA();
   const [code, setCode] = useState('');
 
   useEffect(() => { checkStatus(); }, [checkStatus]);
 
   const handleVerify = async () => {
     const ok = await verify(code);
-    if (ok) setCode('');
+    if (ok) {
+      setCode('');
+      onVerified?.();
+    }
   };
+
+  const factorPicker = verifiedFactors.length > 1 && (
+    <div className="space-y-2">
+      <Label htmlFor="totp-factor">Aplicativo autenticador</Label>
+      <select id="totp-factor" value={factorId ?? ''} disabled={isVerifying}
+        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+        onChange={event => { selectFactor(event.target.value); setCode(''); }}>
+        {verifiedFactors.map(factor => <option key={factor.id} value={factor.id}>{factor.name}</option>)}
+      </select>
+    </div>
+  );
 
   return (
     <Card>
@@ -30,31 +44,47 @@ export function TwoFactorSetup() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {isEnabled ? (
-          <div className="flex items-center justify-between p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-green-500" />
-              <div>
-                <p className="text-sm font-medium">2FA ativo</p>
-                <p className="text-xs text-muted-foreground">Seu aplicativo autenticador está configurado</p>
-              </div>
-            </div>
-            <Button variant="destructive" size="sm" onClick={unenroll}>
-              <ShieldOff className="h-3.5 w-3.5 mr-1" />Desativar
-            </Button>
+        {isLoading ? <p role="status">Verificando autenticação em duas etapas...</p> : statusError ? (
+          <div role="alert" className="space-y-2">
+            <p>{statusError}</p>
+            <Button onClick={checkStatus} variant="outline">Tentar novamente</Button>
           </div>
-        ) : qrUri ? (
+        ) : isEnabled && isSessionVerified && !requireVerification ? (
+          <div className="space-y-3">
+            {factorPicker}
+            <div className="flex items-center justify-between p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5 text-green-500" />
+                <div>
+                  <p className="text-sm font-medium">2FA ativo</p>
+                  <p className="text-xs text-muted-foreground">Seu aplicativo autenticador está configurado</p>
+                </div>
+              </div>
+              <Button variant="destructive" size="sm" onClick={unenroll} disabled={!factorId}>
+                <ShieldOff className="h-3.5 w-3.5 mr-1" />
+                Desativar{verifiedFactors.length > 1 && ` ${verifiedFactors.find(factor => factor.id === factorId)?.name}`}
+              </Button>
+            </div>
+          </div>
+        ) : qrUri || isEnabled ? (
           <div className="space-y-4">
+            {qrUri && <>
             <div className="flex justify-center p-4 bg-white rounded-lg">
               <QRCodeSVG value={qrUri} size={180} />
             </div>
             <p className="text-xs text-muted-foreground text-center">
               Escaneie o QR code com Google Authenticator ou similar
             </p>
+            </>}
+            {isEnabled && <p className="text-sm">Digite o código do seu aplicativo autenticador para confirmar este acesso.</p>}
+            {factorPicker}
             <div className="space-y-2">
-              <Label>Código de verificação</Label>
+              <Label htmlFor="totp-code">Código de verificação</Label>
               <div className="flex gap-2">
                 <Input
+                  id="totp-code"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
                   value={code}
                   onChange={e => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                   placeholder="000000"
@@ -62,7 +92,7 @@ export function TwoFactorSetup() {
                   className="font-mono text-center"
                 />
                 <Button onClick={handleVerify} disabled={code.length !== 6 || isVerifying}>
-                  {isVerifying ? 'Verificando...' : 'Verificar'}
+                  {isVerifying ? 'Verificando...' : isEnabled ? 'Confirmar acesso' : 'Verificar'}
                 </Button>
               </div>
             </div>

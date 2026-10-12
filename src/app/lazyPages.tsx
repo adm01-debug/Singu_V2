@@ -100,6 +100,9 @@ export const DocsPage = lazy(() => import("@/pages/DocsPage"));
 export const RequireAdminLazy = lazy(() =>
   import("@/components/admin/RequireAdmin").then(m => ({ default: m.RequireAdmin }))
 );
+export const MFAGuardLazy = lazy(() =>
+  import("@/components/auth/MFAGuard").then(m => ({ default: m.MFAGuard }))
+);
 export const SchemaDriftBannerLazy = lazy(() =>
   import("@/components/admin/SchemaDriftBanner").then(m => ({ default: m.SchemaDriftBanner }))
 );

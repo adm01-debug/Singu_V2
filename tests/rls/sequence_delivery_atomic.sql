@@ -1,7 +1,7 @@
 BEGIN;
 SET LOCAL lock_timeout = '3s';
 SET LOCAL statement_timeout = '15s';
-SELECT set_config('rls.sequence_owner', :'user_a', true);
+SELECT set_config('rls.sequence_owner', (SELECT id::text FROM auth.users ORDER BY created_at LIMIT 1), true);
 SELECT set_config('rls.sequence_event_failure', 'on', true);
 INSERT INTO public.contacts(user_id, first_name, last_name)
 VALUES (current_setting('rls.sequence_owner')::uuid, 'Contrato', 'Entrega atômica')
