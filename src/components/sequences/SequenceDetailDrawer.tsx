@@ -5,6 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Mail, MousePointerClick, Eye, MessageCircle, AlertCircle, Send } from 'lucide-react';
 import { useSequenceEvents, useSequenceMetrics, useSequenceSendLogs } from '@/hooks/useSequenceEvents';
 import type { Sequence } from '@/hooks/useSequences';
+import { SequenceManualSteps } from './SequenceManualSteps';
 
 interface Props {
   sequence: Sequence | null;
@@ -19,6 +20,7 @@ const EVENT_ICONS: Record<string, typeof Mail> = {
   replied: MessageCircle,
   bounced: AlertCircle,
   failed: AlertCircle,
+  manual_completed: MessageCircle,
 };
 
 const EVENT_COLORS: Record<string, string> = {
@@ -28,6 +30,7 @@ const EVENT_COLORS: Record<string, string> = {
   replied: 'text-success',
   bounced: 'text-destructive',
   failed: 'text-destructive',
+  manual_completed: 'text-success',
 };
 
 export function SequenceDetailDrawer({ sequence, open, onOpenChange }: Props) {
@@ -55,6 +58,7 @@ export function SequenceDetailDrawer({ sequence, open, onOpenChange }: Props) {
         </SheetHeader>
 
         <div className="space-y-6 mt-6">
+          {open && <SequenceManualSteps key={sequence.id} sequenceId={sequence.id} active={sequence.status === 'active'} />}
           {/* Funil */}
           <div>
             <h4 className="text-xs font-semibold text-muted-foreground uppercase mb-2">Funil de Performance</h4>
@@ -93,7 +97,7 @@ export function SequenceDetailDrawer({ sequence, open, onOpenChange }: Props) {
                       <div key={ev.id} className="flex items-center gap-2 px-3 py-2 text-xs">
                         <Icon className={`w-3.5 h-3.5 ${cls} shrink-0`} />
                         <Badge variant="outline" className="text-[10px] h-5">step {ev.step_order ?? '-'}</Badge>
-                        <span className="capitalize">{ev.event_type}</span>
+                        <span className="capitalize">{ev.event_type === 'manual_completed' ? 'Execução manual confirmada' : ev.event_type}</span>
                         <span className="ml-auto text-muted-foreground text-[10px]">
                           {new Date(ev.created_at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}
                         </span>

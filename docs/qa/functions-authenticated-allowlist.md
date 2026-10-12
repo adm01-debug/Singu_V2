@@ -59,11 +59,12 @@ Callable sem sessão via token/slug; RLS por token dentro da função.
 | `get_contact_life_event_gaps(uuid)` | Ficha360 → recomendações |
 | `validate_behavioral_consistency(uuid)` | Ficha360 diagnóstico |
 
-### ⚙️ Mutações de negócio (authenticated) — 4
+### ⚙️ Mutações de negócio (authenticated) — 5
 | Função | Consumo |
 |---|---|
 | `dismiss_revops_alert(uuid)` | Dashboard RevOps |
 | `enroll_contact_in_workflow(uuid, uuid)` | Sequências |
+| `confirm_sequence_manual_step(uuid, uuid, text)` | Confirmação manual pelo dono; etapa pendente, evento e avanço na mesma transação |
 | `evaluate_mql(uuid)` | Lead scoring |
 | `move_deal_atomic(uuid, text, integer)` + overload numeric | Pipeline drag&drop |
 

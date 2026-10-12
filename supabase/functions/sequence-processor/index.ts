@@ -29,6 +29,7 @@ interface Enrollment {
   enrolled_at: string;
   replied_at: string | null;
   last_step_executed_at: string | null;
+  metadata?: Record<string, unknown> | null;
 }
 
 interface SendLogEntry {
@@ -240,6 +241,10 @@ Deno.serve(async (req) => {
             status: 'paused',
             paused_at: now.toISOString(),
             paused_reason: `Canal ${targetStep.channel} sem confirmação de execução`,
+            metadata: {
+              ...(enr.metadata ?? {}),
+              pending_manual_step: { step_id: targetStep.id, step_order: targetStep.step_order, channel: targetStep.channel },
+            },
           });
           stats.errors++;
         }
@@ -272,10 +277,12 @@ Deno.serve(async (req) => {
     ];
     for (const group of groups) {
       for (let offset = 0; offset < group.rows.length; offset += 10) {
-        const writes = await Promise.all(group.rows.slice(offset, offset + 10).map(row =>
-          supabase.from('sequence_enrollments').update(row).eq('id', row.id).eq('status', 'active')
-            .eq('current_step', originalSteps.get(row.id)).select('id').maybeSingle()
-        ));
+        const writes = await Promise.all(group.rows.slice(offset, offset + 10).map(row => {
+          const update = supabase.from('sequence_enrollments').update(row).eq('id', row.id).eq('status', 'active');
+          const step = originalSteps.get(row.id);
+          return (step === null || step === undefined ? update.is('current_step', null) : update.eq('current_step', step))
+            .select('id').maybeSingle();
+        }));
         for (const write of writes) {
           if (write.error) throw write.error;
           if (!write.data) stats.errors++;

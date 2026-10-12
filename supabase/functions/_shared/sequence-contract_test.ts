@@ -218,6 +218,10 @@ Deno.test('Sequências: canal manual sem execução confirmada fica pausado', ()
   assertEquals(result.stats.paused, 1);
   assertEquals(result.stats.advanced, 0);
   assert(!operations.some(operation => operation.body.event_type === 'sent' || operation.body.current_step === 1));
+  const pause = operations.find(operation => operation.table === 'sequence_enrollments' && operation.method === 'PATCH');
+  assertEquals(pause?.body.metadata, {
+    pending_manual_step: { step_id: step, step_order: 1, channel: 'phone' },
+  });
 }));
 
 Deno.test('Sequências: sequência pausada não envia nem muda inscrições', () => withProcessor('sequencia-pausada', async (call, operations) => {
