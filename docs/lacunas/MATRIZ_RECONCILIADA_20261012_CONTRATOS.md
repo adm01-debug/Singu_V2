@@ -14,7 +14,7 @@
 3. **Proxy/views divergentes:** `user_id` injetado onde não existe no tipo canônico. Corrigir projeção/RPC com isolamento, nunca simplesmente retirar o filtro. E-T07 está parcialmente corrigido; atividades sem vínculo foram desativadas.
 4. **Dados/envios fictícios:** EQ, velocidade, metaprogramas, Analytics/MarketingHub; sequências gravam `sent` antes da entrega, nurturing/assinatura sem envio. Campanhas corrigiram a mentira, mas só preparam destinatários.
 5. **Cron bloqueia UI/internos:** separar autorização manual/interna/agendada; conferir jobs remotos. Sequências/nurturing ainda usam `.catch` em builders: confirmei localmente `typeof builder.catch === 'undefined'`, sem rede.
-6. **E-C01 corrigido após esta revisão:** a ficha 360 usa `contact_id` e o código mergeado da auditoria reconhece esse identificador. Restam aplicação da migration e teste autenticado da leitura.
+6. **E-C01 corrigido após esta revisão:** a ficha 360 usa `contact_id` e o código mergeado da auditoria reconhece esse identificador; migration aplicada e fixture pós-aplicação aprovadas. Resta o reteste autenticado de leitura/exclusão na interface.
 
 ## Base e limites
 
