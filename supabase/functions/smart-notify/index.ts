@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { scopedCorsHeaders, jsonError, jsonOk, requireCronSecret } from "../_shared/auth.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 
@@ -153,8 +154,7 @@ Deno.serve(async (req) => {
 
     // Flush all notification logs for all users in a single write
     if (allLogsToInsert.length > 0) {
-      supabaseClient.from('notification_logs').insert(allLogsToInsert)
-        .catch((e: unknown) => console.error('notification_logs insert error:', e));
+      await bestEffortWrite(supabaseClient.from('notification_logs').insert(allLogsToInsert), 'notification_logs insert error:');
     }
 
     return jsonOk({ success: true, stats });

@@ -12,6 +12,7 @@ import { rateLimit } from "../_shared/rate-limit.ts";
  });
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
+const SuggestionSchema = z.object({ confidence: z.number(), action_type: z.string() }).passthrough();
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -159,15 +160,17 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
     }
 
      const aiResponse = await response.json();
-     let suggestion = null;
+     let suggestion: z.infer<typeof SuggestionSchema> | null = null;
      const toolCall = aiResponse.choices?.[0]?.message?.tool_calls?.[0];
      
      if (toolCall?.function?.arguments) {
        try {
-         suggestion = JSON.parse(toolCall.function.arguments);
+         const parsedSuggestion: unknown = JSON.parse(toolCall.function.arguments);
+         const nextSuggestion = SuggestionSchema.parse(parsedSuggestion);
+         suggestion = nextSuggestion;
          
          // 🔮 Roadmap Prediction Logic (Only if high confidence)
-         if (contactId && suggestion.confidence > 80) {
+         if (contactId && nextSuggestion.confidence > 80) {
            // Generate 3 milestone predictions for the roadmap
            const roadmapMonths = [1, 3, 6];
            const roadmapPromises = roadmapMonths.map(async (monthsAhead) => {
@@ -191,8 +194,8 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
                // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
                predicted_need: needs[Math.floor(Math.random() * needs.length)],
                suggested_offering: `Pacote de Serviços ${monthsAhead}m`,
-               probability: Math.max(40, suggestion.confidence - (monthsAhead * 5)),
-               rationale: `Projeção baseada na tendência atual de ${suggestion.action_type}.`
+               probability: Math.max(40, nextSuggestion.confidence - (monthsAhead * 5)),
+               rationale: `Projeção baseada na tendência atual de ${nextSuggestion.action_type}.`
              });
            });
            await Promise.all(roadmapPromises);

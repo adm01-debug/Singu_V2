@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { fetchScrape } from "../_shared/fetch-utils.ts";
@@ -165,11 +166,10 @@ Deno.serve(async (req) => {
     if (!scrapeResponse.ok) {
       const errorText = await scrapeResponse.text();
       console.error("Firecrawl error:", errorText);
-      supabaseClient
+      await bestEffortWrite(supabaseClient
         .from("social_scraping_schedule")
         .update({ last_run_at: new Date().toISOString(), consecutive_failures: 1, last_error: `Firecrawl error: ${scrapeResponse.status}` })
-        .eq("contact_id", contactId).eq("platform", platform)
-        .catch((e: unknown) => console.error("social_scraping_schedule error update error:", e));
+        .eq("contact_id", contactId).eq("platform", platform), "social_scraping_schedule error update error:");
       return jsonError("Failed to scrape profile", 500);
     }
 
@@ -218,7 +218,7 @@ Deno.serve(async (req) => {
     }
 
     // Save/update profile
-    supabaseClient.from("social_profiles").upsert({
+    await bestEffortWrite(supabaseClient.from("social_profiles").upsert({
       contact_id: contactId, user_id: userId, platform, profile_url: profileUrl,
       profile_data: { markdown, metadata, parsed: parsedProfile },
       headline: parsedProfile.headline, current_company: parsedProfile.current_company,
@@ -226,8 +226,7 @@ Deno.serve(async (req) => {
       skills: parsedProfile.skills || [], followers_count: parsedProfile.followers_count,
       following_count: parsedProfile.following_count, recent_posts: parsedProfile.recent_posts,
       last_scraped_at: new Date().toISOString(),
-    }, { onConflict: "contact_id,platform" })
-      .catch((e: unknown) => console.error("social_profiles upsert error:", e));
+    }, { onConflict: "contact_id,platform" }), "social_profiles upsert error:");
 
     // Suggest hobbies and interests based on social profile (AI Enrichment)
     const suggestedIntel = [];
@@ -263,7 +262,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    const flushPromises: Promise<unknown>[] = [
+    const flushPromises: PromiseLike<{ error: unknown }>[] = [
       supabaseClient.from("social_scraping_schedule").update({
         last_run_at: new Date().toISOString(), consecutive_failures: 0, last_error: null,
         next_run_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
@@ -281,7 +280,7 @@ Deno.serve(async (req) => {
       flushPromises.push(supabaseClient.from("social_life_events").insert(lifeEvents));
     }
 
-    Promise.all(flushPromises).catch((e: unknown) => console.error("social-profile-scraper flush error:", e));
+    await Promise.all(flushPromises.map(write => bestEffortWrite(write, "social-profile-scraper flush error:")));
 
     return jsonOk({ success: true, platform, profile: parsedProfile, lifeEvents: lifeEvents.length });
   } catch (error) {

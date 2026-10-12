@@ -2,6 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { validate } from "../_shared/validate.ts";
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
 
@@ -45,28 +46,27 @@ Deno.serve(async (req) => {
 
     result = { scoreResult };
 
-    // Log the automation execution (fire-and-forget — response uses in-memory result)
-    supabase.from('crm_automation_logs').insert({
+    await bestEffortWrite(supabase.from('crm_automation_logs').insert({
       user_id: userId,
       contact_id,
       automation_name: 'score_recalculation',
       status: 'success',
       execution_time_ms: Date.now() - start,
       result: result
-    }).catch((e: unknown) => console.error("crm_automation_logs insert error:", e));
+    }), "crm_automation_logs insert error:");
 
     return jsonOk({ success: true, result }, req);
 
   } catch (error) {
     console.error("Automation Log Error:", error);
 
-    supabase.from('crm_automation_logs').insert({
+    await bestEffortWrite(supabase.from('crm_automation_logs').insert({
       user_id: userId,
       automation_name: 'score_recalculation_failed',
       status: 'failed',
       result: { error: error instanceof Error ? error.message : String(error) },
       execution_time_ms: Date.now() - start
-    }).catch((e: unknown) => console.error("crm_automation_logs error insert error:", e));
+    }), "crm_automation_logs error insert error:");
 
     return jsonError("Internal server error", 500);
   }

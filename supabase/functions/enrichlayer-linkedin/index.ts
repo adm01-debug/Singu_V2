@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { z } from "npm:zod@3.23.8";
 import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
@@ -141,10 +142,9 @@ Deno.serve(async (req) => {
         last_scraped_at: new Date().toISOString(),
       };
 
-      supabaseClient
+      await bestEffortWrite(supabaseClient
         .from("social_profiles")
-        .upsert(profileData, { onConflict: "contact_id,platform" })
-        .catch((e: unknown) => console.error("social_profiles upsert error:", e));
+        .upsert(profileData, { onConflict: "contact_id,platform" }), "social_profiles upsert error:");
     }
 
     return jsonOk({

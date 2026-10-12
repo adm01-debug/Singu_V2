@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { z } from "npm:zod@3.23.8";
 import { scopedCorsHeaders, withAuthOrServiceRole, jsonError, jsonOk, isServiceRoleCaller, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
@@ -8,6 +9,7 @@ const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
 const SocialBehaviorInput = z.object({
   contactId: z.string().uuid('contactId deve ser UUID válido'),
+  userId: z.string().uuid().optional(),
 });
 
 Deno.serve(async (req) => {
@@ -44,7 +46,7 @@ Deno.serve(async (req) => {
        return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
      }
      const { contactId } = parsed.data;
-     const userId = isServiceRoleCaller(authResult) ? rawBody.userId : authResult;
+     const userId = isServiceRoleCaller(authResult) ? parsed.data.userId : authResult;
  
      if (!userId) return jsonError("User ID required", 400);
 
@@ -151,7 +153,7 @@ Responda APENAS com um JSON válido no formato especificado.`;
      if (saveError) console.error("Error saving analysis:", saveError);
 
      if (analysis.analytical_profile) {
-       supabaseClient
+       await bestEffortWrite(supabaseClient
          .from("contact_analytical_profiles")
          .upsert({
            contact_id: contactId,
@@ -161,8 +163,7 @@ Responda APENAS com um JSON válido no formato especificado.`;
            communication_style: analysis.analytical_profile.communication_style_tag,
            sentiment_trend: analysis.overall_sentiment,
            last_updated_at: new Date().toISOString()
-         }, { onConflict: 'contact_id' })
-         .catch((e: unknown) => console.error("contact_analytical_profiles upsert error:", e));
+         }, { onConflict: 'contact_id' }), "contact_analytical_profiles upsert error:");
      }
 
     return jsonOk({ success: true, analysis, savedId: savedAnalysis?.id });
