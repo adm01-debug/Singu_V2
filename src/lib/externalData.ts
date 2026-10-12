@@ -165,7 +165,8 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
         try {
           const { data: { session } } = await supabase.auth.getSession();
           if (queryUserId && session?.user?.id === queryUserId) {
-            const idFilter = queryOptions.filters?.find(filter => filter.type === 'eq' && filter.column === 'id');
+            const idColumn = queryOptions.table === 'vw_singu_contact_360' ? 'contact_id' : 'id';
+            const idFilter = queryOptions.filters?.find(filter => filter.type === 'eq' && filter.column === idColumn);
             const entityId = z.string().uuid().safeParse(idFilter?.value);
             const { error: auditErr } = await supabase.from('activities').insert({
               user_id: session.user.id,

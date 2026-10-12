@@ -41,6 +41,13 @@ describe('Auditoria de leitura', () => {
     }));
   });
 
+  it('identifica o contato acessado pela visão 360 mesmo sem o ID na seleção', async () => {
+    const id = '00000000-0000-4000-8000-000000000001';
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ data: [{ first_name: 'QA' }], count: 1 }) }));
+    expect((await queryExternalData({ table: 'vw_singu_contact_360', select: 'first_name', filters: [{ type: 'eq', column: 'contact_id', value: id }] })).error).toBeNull();
+    expect(mocks.insert).toHaveBeenCalledWith(expect.objectContaining({ type: 'contact_viewed', entity_id: id }));
+  });
+
   it('mantém os dados lidos mesmo que a auditoria lance uma exceção', async () => {
     mocks.insert.mockRejectedValue(new Error('Auditoria indisponível'));
     expect(await queryExternalData({ table: 'contacts' })).toEqual({ data: [{ id: 'registro' }], count: 1, error: null });
