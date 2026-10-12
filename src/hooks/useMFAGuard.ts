@@ -6,9 +6,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { logger } from '@/lib/logger';
 
 export function useMFAGuard() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, session, loading: authLoading } = useAuth();
   const { isAdmin, isLoading: adminLoading } = useIsAdmin();
-  const [mfaVerified, setMfaVerified] = useState<boolean | null>(null);
+  const [verification, setVerification] = useState<{ token: string | undefined; verified: boolean } | null>(null);
+  const token = session?.access_token;
+  const mfaVerified = verification?.token === token ? verification?.verified ?? null : null;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -17,7 +19,7 @@ export function useMFAGuard() {
     async function checkMFA() {
       if (authLoading || adminLoading || !user || !isAdmin) {
         if (!authLoading && !adminLoading && (!user || !isAdmin)) {
-          if (!cancelled) setMfaVerified(true);
+          if (!cancelled) setVerification({ token, verified: true });
         }
         return;
       }
@@ -28,29 +30,36 @@ export function useMFAGuard() {
         if (error) throw error;
 
         const isVerified = data.currentLevel === 'aal2';
-        setMfaVerified(isVerified);
+        setVerification({ token, verified: isVerified });
 
         if (!isVerified && location.pathname !== '/seguranca') {
           navigate('/seguranca', {
+            replace: true,
             state: {
               mfaRequired: true,
-              from: location.pathname
+              from: location.pathname + location.search + location.hash
             }
           });
         }
       } catch (err) {
         if (cancelled) return;
-        logger.error('MFA Check Error:', err);
-        setMfaVerified(false);
+        logger.error('Falha ao verificar MFA:', err);
+        setVerification({ token, verified: false });
+        if (location.pathname !== '/seguranca') {
+          navigate('/seguranca', { replace: true, state: {
+            mfaRequired: true,
+            from: location.pathname + location.search + location.hash,
+          } });
+        }
       }
     }
 
     checkMFA();
     return () => { cancelled = true; };
-  }, [user, isAdmin, authLoading, adminLoading, navigate, location.pathname]);
+  }, [user, token, isAdmin, authLoading, adminLoading, navigate, location.pathname, location.search, location.hash]);
 
   return {
-    isCheckingMFA: mfaVerified === null && isAdmin,
+    isCheckingMFA: authLoading || adminLoading || (mfaVerified === null && isAdmin),
     isMfaVerified: mfaVerified,
     isMfaRequired: isAdmin && mfaVerified === false
   };

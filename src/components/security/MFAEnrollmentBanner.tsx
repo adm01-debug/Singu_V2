@@ -70,7 +70,7 @@ export const MFAEnrollmentBanner = ({ className }: { className?: string }) => {
         </span>
       </div>
       <Button asChild size="sm" variant="outline" className="h-7">
-        <Link to="/configuracoes?tab=seguranca">Ativar agora</Link>
+        <Link to="/seguranca">Ativar agora</Link>
       </Button>
       <Button
         size="icon"

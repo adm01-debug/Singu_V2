@@ -28,9 +28,9 @@ const LazyPage = ({ children, fallback }: { children: React.ReactNode; fallback?
   </ErrorBoundary>
 );
 
- const Protected = ({ children, fallback }: { children: React.ReactNode; fallback?: React.ReactNode }) => (
+ const Protected = ({ children, fallback, allowMfaSetup = false }: { children: React.ReactNode; fallback?: React.ReactNode; allowMfaSetup?: boolean }) => (
    <RequireAuth>
-     <MFAGuard>
+     <MFAGuard setupFallback={allowMfaSetup ? <P.SecurityPage recoveryOnly /> : undefined}>
        <LazyPage fallback={fallback}>{children}</LazyPage>
      </MFAGuard>
    </RequireAuth>
@@ -151,7 +151,7 @@ export const AppRoutes = () => {
       <Route path="/erp" element={<Protected><P.ErpViewer /></Protected>} />
       <Route path="/documentos" element={<Protected><P.Documentos /></Protected>} />
       <Route path="/whatsapp" element={<RequireAuth><Navigate to="/interacoes?canal=whatsapp" replace /></RequireAuth>} />
-      <Route path="/seguranca" element={<Protected><P.SecurityPage /></Protected>} />
+      <Route path="/seguranca" element={<Protected allowMfaSetup><P.SecurityPage /></Protected>} />
 
       {/* Admin routes */}
       <Route path="/admin" element={<Admin><P.AdminDashboard /></Admin>} />

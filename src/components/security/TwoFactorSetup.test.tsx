@@ -1,0 +1,85 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { TwoFactorSetup } from './TwoFactorSetup';
+
+const mfa = vi.hoisted(() => ({
+  listFactors: vi.fn(), getAuthenticatorAssuranceLevel: vi.fn(),
+  enroll: vi.fn(), challenge: vi.fn(), verify: vi.fn(), unenroll: vi.fn(),
+}));
+const auth = vi.hoisted(() => ({ token: 'sessao-aal1' }));
+vi.mock('@/integrations/supabase/client', () => ({ supabase: { auth: { mfa } } }));
+vi.mock('@/hooks/useAuth', () => ({ useAuth: () => ({ session: { access_token: auth.token } }) }));
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
+
+describe('Configuração e confirmação MFA', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    auth.token = 'sessao-aal1';
+    mfa.listFactors.mockResolvedValue({ data: { totp: [], all: [] }, error: null });
+    mfa.getAuthenticatorAssuranceLevel.mockResolvedValue({ data: { currentLevel: 'aal1' }, error: null });
+    mfa.enroll.mockResolvedValue({ data: { id: 'novo-fator', totp: { uri: 'otpauth://totp/Singu?secret=JBSWY3DPEHPK3PXP' } }, error: null });
+    mfa.challenge.mockResolvedValue({ data: { id: 'desafio' }, error: null });
+    mfa.verify.mockResolvedValue({ error: null });
+    mfa.unenroll.mockResolvedValue({ error: null });
+  });
+
+  it('solicita código para um fator já cadastrado em uma sessão AAL1', async () => {
+    const verified = { id: 'fator-existente', status: 'verified', factor_type: 'totp' };
+    mfa.listFactors.mockResolvedValue({ data: { totp: [verified], all: [verified] }, error: null });
+    const onVerified = vi.fn();
+    render(<TwoFactorSetup onVerified={onVerified} />);
+    const input = await screen.findByLabelText('Código de verificação');
+    expect(screen.queryByRole('button', { name: 'Desativar' })).not.toBeInTheDocument();
+    fireEvent.change(input, { target: { value: '123456' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Confirmar acesso' }));
+    await waitFor(() => expect(onVerified).toHaveBeenCalledOnce());
+    expect(mfa.challenge).toHaveBeenCalledWith({ factorId: 'fator-existente' });
+    expect(mfa.verify).toHaveBeenCalledWith({ factorId: 'fator-existente', challengeId: 'desafio', code: '123456' });
+    expect(screen.getByText('2FA ativo')).toBeInTheDocument();
+    expect(mfa.enroll).not.toHaveBeenCalled();
+  });
+
+  it('retoma configuração interrompida e não libera acesso com código inválido', async () => {
+    const pending = { id: 'fator-pendente', status: 'unverified', factor_type: 'totp' };
+    mfa.listFactors.mockResolvedValue({ data: { totp: [pending], all: [pending] }, error: null });
+    mfa.verify.mockResolvedValueOnce({ error: new Error('código inválido') });
+    const onVerified = vi.fn();
+    render(<TwoFactorSetup onVerified={onVerified} />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Ativar 2FA' }));
+    const input = await screen.findByLabelText('Código de verificação');
+    expect(mfa.unenroll).toHaveBeenCalledWith({ factorId: 'fator-pendente' });
+    fireEvent.change(input, { target: { value: '111111' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Verificar' }));
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Verificar' })).toBeEnabled());
+    expect(onVerified).not.toHaveBeenCalled();
+    fireEvent.change(input, { target: { value: '222222' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Verificar' }));
+    await waitFor(() => expect(onVerified).toHaveBeenCalledOnce());
+  });
+
+  it('preserva o fator em configuração quando o token é renovado', async () => {
+    const onVerified = vi.fn();
+    const { rerender } = render(<TwoFactorSetup onVerified={onVerified} />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Ativar 2FA' }));
+    await screen.findByLabelText('Código de verificação');
+    const pending = { id: 'novo-fator', status: 'unverified', factor_type: 'totp' };
+    mfa.listFactors.mockResolvedValue({ data: { totp: [pending], all: [pending] }, error: null });
+    auth.token = 'sessao-renovada';
+    rerender(<TwoFactorSetup onVerified={onVerified} />);
+    const input = await screen.findByLabelText('Código de verificação');
+    fireEvent.change(input, { target: { value: '123456' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Verificar' }));
+    await waitFor(() => expect(onVerified).toHaveBeenCalledOnce());
+    expect(mfa.challenge).toHaveBeenCalledWith({ factorId: 'novo-fator' });
+    expect(mfa.enroll).toHaveBeenCalledOnce();
+  });
+
+  it('distingue uma consulta indisponível de ausência de MFA e permite repetir', async () => {
+    mfa.listFactors.mockResolvedValueOnce({ data: null, error: new Error('rede indisponível') });
+    render(<TwoFactorSetup />);
+    expect(await screen.findByRole('alert')).toHaveTextContent('Não foi possível consultar');
+    expect(screen.queryByRole('button', { name: 'Ativar 2FA' })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Tentar novamente' }));
+    expect(await screen.findByRole('button', { name: 'Ativar 2FA' })).toBeEnabled();
+  });
+});

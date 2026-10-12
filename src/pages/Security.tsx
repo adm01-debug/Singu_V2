@@ -11,9 +11,30 @@ import { Key, Globe, Settings } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useIPMaskingPreference } from '@/hooks/useIPMaskingPreference';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function Security() {
+export default function Security({ recoveryOnly = false }: { recoveryOnly?: boolean }) {
   const { masked, setMasked } = useIPMaskingPreference();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const handleVerified = () => {
+    const state = location.state as { mfaRequired?: boolean; from?: string } | null;
+    if (!state?.mfaRequired) return;
+    let destination = '/';
+    try {
+      const target = new URL(state.from ?? '/', window.location.origin);
+      if (target.origin === window.location.origin && !['/seguranca', '/auth'].includes(target.pathname)) {
+        destination = target.pathname + target.search + target.hash;
+      }
+    } catch { /* Retorno padrão para um destino inválido. */ }
+    navigate(destination, { replace: true });
+  };
+  if (recoveryOnly) {
+    return <div className="container mx-auto p-4 md:p-6 max-w-4xl space-y-4">
+      <h1 className="text-2xl font-bold tracking-tight">Confirme seu acesso</h1>
+      <TwoFactorSetup onVerified={handleVerified} />
+    </div>;
+  }
   return (
     <>
       <Helmet>
@@ -41,7 +62,7 @@ export default function Security() {
             <TabsTrigger value="settings" className="gap-2"><Settings className="h-3.5 w-3.5" />Geral</TabsTrigger>
           </TabsList>
           <TabsContent value="auth" className="mt-4 space-y-4">
-            <TwoFactorSetup />
+            <TwoFactorSetup onVerified={handleVerified} />
             <PasskeyManager />
           </TabsContent>
           <TabsContent value="access" className="mt-4 space-y-4">
