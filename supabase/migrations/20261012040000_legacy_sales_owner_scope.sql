@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS public.salespeople (
 );
 
 ALTER TABLE public.salespeople ADD COLUMN IF NOT EXISTS auth_user_id uuid;
+CREATE UNIQUE INDEX IF NOT EXISTS salespeople_auth_user_id_key ON public.salespeople(auth_user_id);
 
 CREATE TABLE IF NOT EXISTS public.sales (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),

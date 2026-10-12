@@ -14,6 +14,15 @@ SELECT set_config('rls.sales.activity_conflict', gen_random_uuid()::text, true);
 INSERT INTO public.salespeople(id, name, auth_user_id) VALUES
   (current_setting('rls.sales.sp_a')::uuid, 'QA Legado A', current_setting('rls.sales.owner')::uuid),
   (current_setting('rls.sales.sp_b')::uuid, 'QA Legado B', current_setting('rls.sales.other')::uuid);
+DO $$
+BEGIN
+  BEGIN
+    INSERT INTO public.salespeople(name, auth_user_id)
+    VALUES ('QA Vínculo Duplicado', current_setting('rls.sales.owner')::uuid);
+    RAISE EXCEPTION 'A conta foi vinculada a mais de um vendedor';
+  EXCEPTION WHEN unique_violation THEN NULL;
+  END;
+END $$;
 INSERT INTO public.sales(id, client_name, product_name, amount, salesperson_id) VALUES
   (current_setting('rls.sales.sale_a')::uuid, 'QA Contrato', 'Rollback', 1, current_setting('rls.sales.sp_a')::uuid),
   (current_setting('rls.sales.sale_b')::uuid, 'QA Contrato', 'Rollback', 1, current_setting('rls.sales.sp_b')::uuid);
