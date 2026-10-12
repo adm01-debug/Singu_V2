@@ -140,6 +140,76 @@ export function useSequenceManualSteps(sequenceId?: string, enabled = true) {
   return { ...pending, confirm: confirm.mutateAsync, confirming: confirm.isPending };
 }
 
+export function useSequencePausedEmails(sequenceId: string) {
+  const { user } = useAuth();
+  const qc = useQueryClient();
+  const pending = useQuery({
+    queryKey: ['sequence-paused-emails', sequenceId, user?.id],
+    enabled: !!sequenceId && !!user,
+    queryFn: async () => {
+      const { data: steps, error: stepError } = await supabase.from('sequence_steps')
+        .select('step_order, channel').eq('sequence_id', sequenceId).eq('user_id', user!.id);
+      if (stepError) throw stepError;
+      const rows: Array<{
+        enrollmentId: string; contactId: string; contactName: string; email: string | null;
+        currentStep: number; pausedAt: string | null; reason: string; valid: boolean;
+      }> = [];
+      const pageSize = 100;
+      for (let offset = 0; ; offset += pageSize) {
+        const { data, error } = await supabase.from('sequence_enrollments')
+          .select('id, contact_id, current_step, paused_at, paused_reason')
+          .eq('sequence_id', sequenceId).eq('user_id', user!.id).eq('status', 'paused')
+          .in('paused_reason', ['Envio não confirmado; revise a integração antes de retomar',
+            'Provedor confirmou o envio; persistência ou avanço exigem revisão'])
+          .order('id').range(offset, offset + pageSize - 1);
+        if (error) throw error;
+        if (!data?.length) return rows;
+        const { data: contacts, error: contactError } = await supabase.from('contacts')
+          .select('id, first_name, last_name, email').eq('user_id', user!.id).is('deleted_at', null)
+          .in('id', data.map(row => row.contact_id));
+        if (contactError) throw contactError;
+        const contactsById = new Map((contacts ?? []).map(contact => [contact.id, contact]));
+        for (const row of data) {
+          const contact = contactsById.get(row.contact_id);
+          rows.push({
+            enrollmentId: row.id, contactId: row.contact_id,
+            contactName: [contact?.first_name, contact?.last_name].filter(Boolean).join(' ') || 'Contato indisponível',
+            email: contact?.email ?? null, currentStep: row.current_step ?? 0,
+            pausedAt: row.paused_at, reason: row.paused_reason ?? '',
+            valid: !!contact && !!row.paused_at && row.current_step !== null &&
+              !!steps?.some(step => step.step_order === row.current_step! + 1 && step.channel === 'email'),
+          });
+        }
+        if (data.length < pageSize) return rows;
+      }
+    },
+    staleTime: 30_000,
+  });
+  const resume = useMutation({
+    mutationFn: async ({ enrollmentId, currentStep, pausedAt }: { enrollmentId: string; currentStep: number; pausedAt: string }) => {
+      if (!user) throw new Error('Não autenticado');
+      const { data, error } = await callExternalRpc<unknown>('resume_sequence_email', {
+        p_enrollment_id: enrollmentId, p_current_step: currentStep, p_paused_at: pausedAt,
+      });
+      if (error) throw error;
+      const result = z.object({
+        enrollment_id: z.string().uuid(), receipt_id: z.string().uuid(),
+        status: z.string(), already_resumed: z.boolean(),
+      }).parse(data);
+      if (result.enrollment_id !== enrollmentId) throw new Error('Retomada confirmada para outra inscrição');
+      return result;
+    },
+    onSuccess: result => {
+      qc.invalidateQueries({ queryKey: ['sequence-paused-emails'] });
+      qc.invalidateQueries({ queryKey: ['sequence-events'] });
+      qc.invalidateQueries({ queryKey: ['sequences'] });
+      toast.success(result.already_resumed ? 'Solicitação de retomada já registrada' : 'Retomada registrada; aguardando processamento');
+    },
+    onError: (error: Error) => toast.error(parseApiError(error)),
+  });
+  return { ...pending, resume: resume.mutateAsync, resuming: resume.isPending };
+}
+
 export function useSequences() {
   const { user } = useAuth();
   const qc = useQueryClient();
