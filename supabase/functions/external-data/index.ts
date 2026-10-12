@@ -14,6 +14,7 @@ import {
   type RelationScope,
 } from "../_shared/tenant-guard.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
+import { isAllowedSelectProjection } from "../_shared/select-projection.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 100, message: "Rate limit exceeded for external data. Please wait." });
 
@@ -502,6 +503,10 @@ Deno.serve(async (req) => {
         }
       }
       const selectedColumns = typeof select === 'string' ? select : '*';
+      if (!isAllowedSelectProjection(selectedColumns, relation =>
+        !GLOBAL_READ_ONLY_TABLES.has(table) && isAllowedTable(relation) && !GLOBAL_READ_ONLY_TABLES.has(relation))) {
+        return jsonError('Projeção de consulta inválida ou relação não permitida', 400, req);
+      }
       const searchConfig = search && typeof search === 'object'
         ? search as Record<string, unknown>
         : undefined;

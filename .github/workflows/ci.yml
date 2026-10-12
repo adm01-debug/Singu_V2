@@ -34,7 +34,7 @@ jobs:
       - name: Edge Function import guard
         run: npm run check:edge-imports
 
-      - name: Preparar Deno para os testes de conexões
+      - name: Preparar Deno para os testes das funções
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.9.7
@@ -44,6 +44,12 @@ jobs:
 
       - name: Verificar tipos da função de conexões
         run: deno check --node-modules-dir=none supabase/functions/connection-tester/index.ts
+
+      - name: Validar projeções e isolamento tenant
+        run: deno test --node-modules-dir=none supabase/functions/_shared/select-projection_test.ts supabase/functions/_shared/tenant-guard_test.ts
+
+      - name: Verificar tipos do gateway de dados
+        run: deno check --node-modules-dir=none supabase/functions/external-data/index.ts
 
       - name: Validate required test secrets
         env:
