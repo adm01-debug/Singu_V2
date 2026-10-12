@@ -55,12 +55,16 @@ interface BackButtonProps {
      if (to) {
        const destination = safeNavigationPath(to);
        if (!destination) return goBack(fallback);
-       if (!to.includes('?') && !to.includes('#') && previousPath
-         && new URL(previousPath, window.location.origin).pathname === destination) {
-         goBack(destination);
-       } else {
-         navigate(destination, { replace: true });
+       if (!to.includes('?') && !to.includes('#')) {
+         for (let index = stack.length - 2; index >= 0; index--) {
+           const path = safeNavigationPath(stack[index]);
+           if (path && new URL(path, window.location.origin).pathname === destination) {
+             goToIndex(index);
+             return;
+           }
+         }
        }
+       navigate(destination, { replace: true });
      } else {
        goBack(fallback);
      }
@@ -107,7 +111,7 @@ interface BackButtonProps {
              <Button
                variant="ghost"
                size="icon"
-               className="h-8 w-8 text-muted-foreground/70 hover:text-foreground rounded-lg"
+               className="h-11 w-11 md:h-8 md:w-8 text-muted-foreground/70 hover:text-foreground rounded-lg"
                aria-label="Histórico de navegação"
              >
                <History className="h-3.5 w-3.5" />

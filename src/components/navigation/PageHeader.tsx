@@ -18,6 +18,7 @@ interface BreadcrumbSegment {
 interface PageHeaderProps {
   /** Back button destination. If omitted, uses navigation stack. */
   backTo?: string;
+  backFallback?: string;
   /** Back button label. Defaults to parent breadcrumb label or "Voltar". */
   backLabel?: string;
   /** Breadcrumb segments (excluding current page). */
@@ -41,6 +42,7 @@ interface PageHeaderProps {
  */
 export function PageHeader({
   backTo,
+  backFallback,
   backLabel,
   breadcrumbs = [],
   title,
@@ -53,9 +55,10 @@ export function PageHeader({
   return (
     <div className={cn('flex items-center justify-between gap-3', className)}>
       {/* Left: Back + Breadcrumbs */}
-      <nav aria-label="Navegação de contexto" className="flex items-center gap-1 min-w-0">
+      <nav aria-label="Navegação de contexto" className="hidden md:flex items-center gap-1 min-w-0">
         <BackButton
           to={backTo}
+          fallback={backFallback}
           label={resolvedBackLabel}
           variant={backVariant}
           showLabelOnMobile={breadcrumbs.length === 0}

@@ -3,6 +3,7 @@ import { BrowserRouter, MemoryRouter, useLocation, useNavigate } from 'react-rou
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { NavigationStackProvider, safeNavigationPath, useNavigationStack } from './NavigationStackContext';
 import { BackButton } from '@/components/navigation/BackButton';
+import { getSectionFallback } from '@/lib/navigationLabels';
 import { useState } from 'react';
 import { useModalHistory } from '@/hooks/useModalHistory';
 
@@ -12,7 +13,7 @@ vi.mock('@/hooks/useAuth', () => ({
   useAuth: () => ({ user: authState.userId ? { id: authState.userId } : null, loading: false }),
 }));
 
-function Harness() {
+function Harness({ fallbackOnly = false }: { fallbackOnly?: boolean }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { stack, direction, goToIndex, previousPath } = useNavigationStack();
@@ -28,12 +29,14 @@ function Harness() {
     <button onClick={() => setSearchOpen(true)}>Abrir busca</button>
     <button onClick={() => { setSearchOpen(false); navigate('/empresas'); }}>Resultado da busca</button>
     <button onClick={() => navigate('/contatos/1')}>Abrir contato</button>
+    <button onClick={() => navigate('/empresas/2')}>Abrir empresa</button>
     <button onClick={() => navigate('/empresas')}>Abrir empresas</button>
     <button onClick={() => navigate('/contatos?q=novo', { replace: true })}>Filtrar</button>
     <button onClick={() => navigate(1)}>Avançar</button>
     <button onClick={() => navigate(-1)}>Retorno nativo</button>
     <button onClick={() => goToIndex(0)}>Primeira tela</button>
-    <BackButton to="/contatos" />
+    <BackButton to={fallbackOnly ? undefined : '/contatos'} fallback={getSectionFallback(location.pathname)} />
+    <BackButton to="/empresas" />
   </div>;
 }
 
@@ -60,6 +63,28 @@ describe('Histórico e retorno de navegação', () => {
     await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/contatos?q=vip#lista'));
     expect(window.history.state.idx).toBe(0);
     fireEvent.click(screen.getByText('Avançar'));
+    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/contatos/1'));
+    expect(window.history.state.idx).toBe(1);
+  });
+
+  it('usa uma visita anterior filtrada da seção, mesmo após visitar outra rota', async () => {
+    window.history.replaceState(null, '', '/empresas?q=vip#lista');
+    render(<BrowserRouter><NavigationStackProvider><Harness /></NavigationStackProvider></BrowserRouter>);
+    fireEvent.click(screen.getByText('Abrir contato'));
+    fireEvent.click(screen.getByText('Abrir empresa'));
+    fireEvent.click(screen.getByRole('button', { name: 'Voltar para Empresas' }));
+    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/empresas?q=vip#lista'));
+    expect(window.history.state.idx).toBe(0);
+    fireEvent.click(screen.getByText('Avançar'));
+    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/contatos/1'));
+  });
+
+  it('prioriza o retorno contextual quando a seção é apenas um fallback', async () => {
+    window.history.replaceState(null, '', '/empresas?q=vip#lista');
+    render(<BrowserRouter><NavigationStackProvider><Harness fallbackOnly /></NavigationStackProvider></BrowserRouter>);
+    fireEvent.click(screen.getByText('Abrir contato'));
+    fireEvent.click(screen.getByText('Abrir empresa'));
+    fireEvent.click(screen.getByRole('button', { name: 'Voltar para Contatos' }));
     await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/contatos/1'));
     expect(window.history.state.idx).toBe(1);
   });

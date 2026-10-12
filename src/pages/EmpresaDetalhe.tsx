@@ -167,7 +167,7 @@ const EmpresaDetalhe = () => {
       <SEOHead title={toTitleCase(company.name)} description={`Detalhes da empresa ${toTitleCase(company.name)}`} />
       <div className="min-h-screen pt-2 md:pt-4">
         <div className="px-4 md:px-6 pt-3 md:pt-4">
-          <PageHeader backTo="/empresas" backLabel="Empresas" title={toTitleCase(company.name)} />
+          <PageHeader backFallback="/empresas" title={toTitleCase(company.name)} />
         </div>
 
         {isDeleted && (
