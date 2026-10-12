@@ -112,6 +112,40 @@ Deno.test("usa IPv6 público quando o IPv4 validado não aceita conexões", asyn
   } finally { listener.close(); }
 });
 
+Deno.test("tenta o endereço seguinte quando o primeiro TLS não responde", async () => {
+  const listener = Deno.listen({ hostname: "127.0.0.1", port: 0 });
+  const attempts: string[] = [];
+  const network: HttpTransport = {
+    ...networkWithRecords([]),
+    resolve: (_hostname, type) => Promise.resolve(type === "A" ? ["8.8.8.8"] : ["2606:4700:4700::1111"]),
+    connect: (address) => {
+      attempts.push(address);
+      return Deno.connect({ hostname: "127.0.0.1", port: listener.addr.port });
+    },
+    startTls: async connection => Object.assign(connection, {
+      handshake: () => attempts.length === 1
+        ? new Promise<never>(() => {})
+        : Promise.resolve({ alpnProtocol: null }),
+    }),
+  };
+  const server = (async () => {
+    const first = await listener.accept();
+    const second = await listener.accept();
+    try {
+      assertEquals(await first.read(new Uint8Array(1024)), null);
+      const buffer = new Uint8Array(1024);
+      const length = await second.read(buffer);
+      assert(new TextDecoder().decode(buffer.subarray(0, length ?? 0)).includes("host: public.test\r\n"));
+      await second.write(new TextEncoder().encode("HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n"));
+    } finally { first.close(); second.close(); }
+  })();
+  try {
+    assertEquals((await safeFetch("https://public.test/", {}, network)).status, 200);
+    await server;
+    assertEquals(attempts, ["8.8.8.8", "2606:4700:4700::1111"]);
+  } finally { listener.close(); }
+});
+
 Deno.test("mantém a conexão saudável após o prazo fracionado de estabelecimento", async () => {
   const listener = Deno.listen({ hostname: "127.0.0.1", port: 0 });
   const network: HttpTransport = {
