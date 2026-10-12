@@ -1,5 +1,5 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { guardBody, scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecret, timingSafeStringEqual } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { validate } from "../_shared/validate.ts";
 
@@ -51,16 +51,13 @@ Deno.serve(async (req) => {
   // Bind cors to module-scope json() helper
   const jsonWithCors = (body: unknown, status = 200) => json(body, status, cors);
 
-  const cronCheck = await requireCronSecret(req);
-  if (cronCheck) return cronCheck;
-
   const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
   if (bodyError) return bodyError;
 
   try {
     const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const internalKey = req.headers.get('x-internal-key') ?? '';
-    const isInternal = internalKey && internalKey === SERVICE_KEY;
+    const isInternal = Boolean(internalKey) && await timingSafeStringEqual(internalKey, SERVICE_KEY);
 
     const vbp = validate(rawBody, {
       contact_id: { type: 'string', required: true, maxLength: 36 },
@@ -73,14 +70,16 @@ Deno.serve(async (req) => {
     let supabase;
 
     if (isInternal) {
+      const cronCheck = await requireCronSecret(req);
+      if (cronCheck) return cronCheck;
       supabase = createClient(Deno.env.get('SUPABASE_URL')!, SERVICE_KEY);
-      if (body.user_id) {
-        userId = body.user_id;
-      } else {
-        const { data: c } = await supabase.from('contacts').select('user_id').eq('id', body.contact_id).maybeSingle();
-        userId = (c as { user_id?: string } | null)?.user_id ?? null;
+      const { data: contact, error: contactError } = await supabase.from('contacts')
+        .select('user_id').eq('id', body.contact_id).maybeSingle();
+      if (contactError) return jsonWithCors({ error: 'Consulta de propriedade indisponível' }, 503);
+      if (!contact?.user_id || (body.user_id && contact.user_id !== body.user_id)) {
+        return jsonWithCors({ error: 'contato não pertence ao usuário' }, 403);
       }
-      if (!userId) return jsonWithCors({ error: 'contato não encontrado' }, 404);
+      userId = contact.user_id;
     } else {
       const authHeader = req.headers.get('Authorization') ?? '';
       if (!authHeader) return jsonWithCors({ error: 'Não autenticado' }, 401);
@@ -241,8 +240,7 @@ Deno.serve(async (req) => {
 
     if (upErr) { console.error("generate-behavioral-profile save error:", upErr); return jsonWithCors({ error: "Internal server error" }, 500); }
 
-    // Snapshot de versão (best-effort — não bloqueia a resposta)
-    supabase.from('contact_analytical_profile_versions').insert({
+    const { error: snapshotError } = await supabase.from('contact_analytical_profile_versions').insert({
       contact_id: body.contact_id,
       user_id: userId,
       profile_id: (saved as { id?: string } | null)?.id ?? null,
@@ -257,7 +255,8 @@ Deno.serve(async (req) => {
       model: row.model,
       trigger_source: isInternal ? 'auto' : 'manual',
       generated_at: row.last_updated_at,
-    }).catch((e: unknown) => console.warn('Snapshot save failed (non-critical):', (e as Error).message));
+    }).abortSignal(AbortSignal.timeout(5_000));
+    if (snapshotError) console.warn('Não foi possível salvar a versão auxiliar:', snapshotError.message);
 
     return jsonWithCors({ profile: saved });
   } catch (e) {

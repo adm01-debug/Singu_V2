@@ -7,6 +7,7 @@ interface QueueRow {
   contact_id: string;
   user_id: string;
   attempts: number;
+  claim_token: string;
 }
 
 Deno.serve(async (req) => {
@@ -35,15 +36,6 @@ Deno.serve(async (req) => {
   const items = (due ?? []) as QueueRow[];
   const results: Array<{ contact_id: string; ok: boolean; error?: string }> = [];
 
-  const toDelete: string[] = [];
-  const toUpdate: Array<{
-    contact_id: string;
-    attempts: number;
-    last_error: string;
-    last_processed_at: string;
-    next_run_at: string;
-  }> = [];
-
   // All items are independent — fire concurrently, not sequentially
   const settled = await Promise.allSettled(
     items.map((item) =>
@@ -54,6 +46,7 @@ Deno.serve(async (req) => {
           'x-internal-key': SERVICE_KEY,
           'Authorization': `Bearer ${SERVICE_KEY}`,
           'apikey': SERVICE_KEY,
+          'x-cron-secret': Deno.env.get('CRON_SECRET') ?? '',
         },
         body: JSON.stringify({ contact_id: item.contact_id, user_id: item.user_id }),
       }).then(async (resp) => {
@@ -71,7 +64,6 @@ Deno.serve(async (req) => {
     const item = items[i];
     const outcome = settled[i];
     if (outcome.status === 'fulfilled') {
-      toDelete.push(item.contact_id);
       results.push({
         contact_id: item.contact_id,
         ok: outcome.value.status === 200,
@@ -79,30 +71,30 @@ Deno.serve(async (req) => {
       });
     } else {
       const msg = (outcome.reason as Error).message;
-      const nextAttempts = item.attempts + 1;
-      const backoffMin = Math.min(60, 5 * Math.pow(2, item.attempts));
-      toUpdate.push({
-        contact_id: item.contact_id,
-        attempts: nextAttempts,
-        last_error: msg.slice(0, 500),
-        last_processed_at: new Date().toISOString(),
-        next_run_at: new Date(Date.now() + backoffMin * 60_000).toISOString(),
-      });
       results.push({ contact_id: item.contact_id, ok: false, error: msg });
     }
   }
 
-  // Batch all DB writes after the loop
-  await Promise.all([
-    toDelete.length > 0
-      ? admin.from('behavioral_profile_regen_queue').delete().in('contact_id', toDelete)
-      : Promise.resolve(),
-    toUpdate.length > 0
-      ? admin.from('behavioral_profile_regen_queue').upsert(toUpdate, { onConflict: 'contact_id' })
-      : Promise.resolve(),
-  ]);
+  const writes = await Promise.all(items.map((item, index) => {
+    const outcome = settled[index];
+    const row = admin.from('behavioral_profile_regen_queue');
+    if (outcome.status === 'fulfilled') {
+      return row.delete().eq('contact_id', item.contact_id).eq('claim_token', item.claim_token).select('contact_id').maybeSingle();
+    }
+    const backoffMin = Math.min(60, 5 * Math.pow(2, item.attempts - 1));
+    return row.update({
+      last_error: String(outcome.reason).slice(0, 500),
+      next_run_at: new Date(Date.now() + backoffMin * 60_000).toISOString(),
+    }).eq('contact_id', item.contact_id).eq('claim_token', item.claim_token).select('contact_id').maybeSingle();
+  }));
+  if (writes.some((write) => write.error)) {
+    return json({ error: 'Não foi possível confirmar todos os itens da fila', results }, 503, cors);
+  }
+  writes.forEach((write, index) => {
+    if (!write.data) results[index] = { contact_id: items[index].contact_id, ok: false, error: 'Reserva substituída por uma nova solicitação' };
+  });
 
-  return json({ processed: items.length, results }, 200, cors);
+  return json({ processed: writes.filter((write) => write.data).length, results }, 200, cors);
 });
 
 function json(body: unknown, status = 200, corsHeaders: Record<string, string> = {}) {

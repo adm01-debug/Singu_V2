@@ -1,14 +1,15 @@
-import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { parsePhoneNumberFromString } from "npm:libphonenumber-js@1.11.7/max";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
+import { resolveValidationOwner } from "../_shared/validation-owner.ts";
 
 
 const BodySchema = z.object({
   phone: z.string().min(5).max(30),
   defaultCountry: z.string().length(2).optional().default("BR"),
   contactId: z.string().uuid().optional().nullable(),
+  userId: z.string().uuid().optional(),
   persist: z.boolean().optional().default(true),
 });
 
@@ -46,21 +47,12 @@ Deno.serve(async (req) => {
   if (bodyError) return bodyError;
 
   try {
-    const auth = req.headers.get("Authorization");
-    if (!auth) return new Response(JSON.stringify({ error: "Missing auth" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
-
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: auth } } }
-    );
-    const { data: userData } = await supabase.auth.getUser();
-    if (!userData?.user) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
-
     const parsed = BodySchema.safeParse(rawBody);
     if (!parsed.success) return new Response(JSON.stringify({ error: parsed.error.flatten() }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
 
-    const { phone, defaultCountry, contactId, persist } = parsed.data;
+    const { phone, defaultCountry, contactId, persist, userId } = parsed.data;
+    const owner = await resolveValidationOwner(req, userId, contactId);
+    if (owner instanceof Response) return owner;
     const reasons: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- libphonenumber-js CountryCode not re-exported from this Deno path
     const parsedPhone = parsePhoneNumberFromString(phone, defaultCountry as any);
@@ -85,9 +77,8 @@ Deno.serve(async (req) => {
     }
 
     if (persist) {
-      const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-      admin.from("phone_validations").insert({
-        user_id: userData.user.id,
+      const { error } = await owner.admin.from("phone_validations").insert({
+        user_id: owner.userId,
         contact_id: contactId ?? null,
         phone_input: phone,
         phone_e164: result.phone_e164,
@@ -99,7 +90,8 @@ Deno.serve(async (req) => {
         reasons: result.reasons,
         provider: "libphonenumber",
         raw: result,
-      }).catch((e: unknown) => console.error("phone_validations insert error:", e));
+      }).abortSignal(AbortSignal.timeout(5_000));
+      if (error) return new Response(JSON.stringify({ error: "Não foi possível salvar a validação" }), { status: 503, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
     return new Response(JSON.stringify(result), { headers: { ...cors, "Content-Type": "application/json" } });

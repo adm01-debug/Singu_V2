@@ -1,13 +1,14 @@
-import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { verifyEmail } from "../_shared/email-verify.ts";
 import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
+import { resolveValidationOwner } from "../_shared/validation-owner.ts";
 
 
 const BodySchema = z.object({
   email: z.string().email().max(255),
   contactId: z.string().uuid().optional().nullable(),
+  userId: z.string().uuid().optional(),
   persist: z.boolean().optional().default(true),
 });
 
@@ -26,33 +27,24 @@ Deno.serve(async (req) => {
   if (bodyError) return bodyError;
 
   try {
-    const auth = req.headers.get("Authorization");
-    if (!auth) return new Response(JSON.stringify({ error: "Missing auth" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
-
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: auth } } }
-    );
-    const { data: userData } = await supabase.auth.getUser();
-    if (!userData?.user) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
-
     const parsed = BodySchema.safeParse(rawBody);
     if (!parsed.success) return new Response(JSON.stringify({ error: parsed.error.flatten() }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
 
-    const { email, contactId, persist } = parsed.data;
+    const { email, contactId, persist, userId } = parsed.data;
+    const owner = await resolveValidationOwner(req, userId, contactId);
+    if (owner instanceof Response) return owner;
     const result = await verifyEmail(email);
 
     if (persist) {
-      const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-      admin.from("email_verifications").insert({
-        user_id: userData.user.id,
+      const { error } = await owner.admin.from("email_verifications").insert({
+        user_id: owner.userId,
         contact_id: contactId ?? null,
         email,
         ...result,
         provider: "internal",
         raw: result,
-      }).catch((e: unknown) => console.error("email_verifications insert error:", e));
+      }).abortSignal(AbortSignal.timeout(5_000));
+      if (error) return new Response(JSON.stringify({ error: "Não foi possível salvar a validação" }), { status: 503, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
     return new Response(JSON.stringify({ email, ...result }), {
