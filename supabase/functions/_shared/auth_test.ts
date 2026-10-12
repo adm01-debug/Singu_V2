@@ -183,3 +183,25 @@ Deno.test("scopedCorsHeaders: autoriza os headers assinados de webhook", () => {
   assertEquals(allowedHeaders.includes("x-webhook-idempotency-key"), true);
   assertEquals(allowedHeaders.includes("x-lovable-signature"), true);
 });
+
+Deno.test("scopedCorsHeaders: permite o site canônico e seus previews, sem aceitar domínios alheios", () => {
+  for (const origin of [
+    "https://singu-v2.vercel.app",
+    "https://singu-v2-git-fix-hermes-h761328-ux-navegacao-juca1.vercel.app",
+    "https://singu-v2-75ystiviarfvmcg-vk-juca1.vercel.app",
+    "http://localhost:8080",
+  ]) {
+    const headers = scopedCorsHeaders(new Request("https://example.test", { headers: { Origin: origin } }));
+    assertEquals(headers["Access-Control-Allow-Origin"], origin);
+  }
+
+  for (const origin of [
+    "http://127.0.0.1:8080",
+    "https://singu-v2.vercel.app.evil.test",
+    "https://outro-projeto-juca1.vercel.app",
+    "https://singu-v2-git-hack-juca1.vercel.app.evil.test",
+  ]) {
+    const headers = scopedCorsHeaders(new Request("https://example.test", { headers: { Origin: origin } }));
+    assertEquals(headers["Access-Control-Allow-Origin"], "https://singu-v2.vercel.app");
+  }
+});

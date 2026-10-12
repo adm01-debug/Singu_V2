@@ -68,6 +68,7 @@ export async function timingSafeStringEqual(a: string, b: string): Promise<boole
 
 // Allowed origins for CORS — restrict to known app domains
 const ALLOWED_ORIGINS = [
+  "https://singu-v2.vercel.app",
   "https://dialogue-diamond.lovable.app",
   "https://id-preview--08cba815-22fa-42db-9361-0cffd81afd61.lovable.app",
   "http://localhost:8080",
@@ -83,7 +84,8 @@ function getOrigin(req?: Request): string {
   if (!req) return ALLOWED_ORIGINS[0];
   const origin = req.headers.get("Origin") || "";
   const isKnownOrigin = ALLOWED_ORIGINS.includes(origin);
-  const isAllowedPreviewOrigin = ALLOWED_ORIGIN_SUFFIXES.some((suffix) => origin.endsWith(suffix));
+  const isAllowedPreviewOrigin = ALLOWED_ORIGIN_SUFFIXES.some((suffix) => origin.endsWith(suffix))
+    || /^https:\/\/singu-v2-[a-z0-9-]+-juca1\.vercel\.app$/.test(origin);
 
   if (isKnownOrigin || isAllowedPreviewOrigin) {
     return origin;

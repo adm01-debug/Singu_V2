@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { CustomFieldsDisplay } from '@/components/custom-fields/CustomFieldsDisplay';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
 import { useParams, Link } from 'react-router-dom';
@@ -71,6 +71,8 @@ const EmpresaDetalhe = () => {
   const [company, setCompany] = useState<Company | null>(null);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const requestRef = useRef<AbortController | null>(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isAddContactOpen, setIsAddContactOpen] = useState(false);
   const [editSubmitting, setEditSubmitting] = useState(false);
@@ -102,13 +104,21 @@ const EmpresaDetalhe = () => {
   };
 
   const fetchCompanyData = useCallback(async () => {
+    requestRef.current?.abort();
+    const controller = new AbortController();
+    requestRef.current = controller;
     setLoading(true);
+    setLoadError(false);
+    setCompany(null);
+    setContacts([]);
     try {
       const { data: companyResult, error: companyError } = await queryExternalData<unknown>({
         table: 'companies',
         select: '*,company_addresses(id,is_primary,logradouro,numero,cidade,estado,latitude,longitude),company_emails(id,is_primary,email),company_phones(id,is_primary,numero)',
         filters: [{ type: 'eq', column: 'id', value: id }],
+        signal: controller.signal,
       });
+      if (controller.signal.aborted) return;
       if (companyError) throw companyError;
       const companyData = companyResult?.[0] ? mapCompany(companyResult[0]) : null;
       setCompany(companyData);
@@ -118,7 +128,8 @@ const EmpresaDetalhe = () => {
       }
 
       if (companyData) {
-        const { data: contactsResult, error: contactsError } = await queryExternalData<unknown>({ table: 'contacts', filters: [{ type: 'eq', column: 'company_id', value: id }], order: { column: 'relationship_score', ascending: false } });
+        const { data: contactsResult, error: contactsError } = await queryExternalData<unknown>({ table: 'contacts', filters: [{ type: 'eq', column: 'company_id', value: id }], order: { column: 'relationship_score', ascending: false }, signal: controller.signal });
+        if (controller.signal.aborted) return;
         if (contactsError) throw contactsError;
         const normalizedContacts = (contactsResult || []).map(normalizeExternalContact);
         setContacts(normalizedContacts);
@@ -126,10 +137,20 @@ const EmpresaDetalhe = () => {
         // As interações agora são gerenciadas pelo hook useInteractions(undefined, id)
         // Isso remove o fetch manual e garante resiliência e cache via React Query.
       }
-    } catch (error) { logger.error('Error fetching company data:', error); toast({ title: 'Erro ao carregar empresa', description: parseApiError(error, 'Tente novamente'), variant: 'destructive' }); } finally { setLoading(false); }
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      setLoadError(true);
+      logger.error('Error fetching company data:', error);
+      toast({ title: 'Erro ao carregar empresa', description: parseApiError(error, 'Tente novamente'), variant: 'destructive' });
+    } finally {
+      if (!controller.signal.aborted) setLoading(false);
+    }
   }, [id, trackView, toast]);
 
-  useEffect(() => { if (id && user) fetchCompanyData(); }, [id, user, fetchCompanyData]);
+  useEffect(() => {
+    if (id && user) fetchCompanyData();
+    return () => requestRef.current?.abort();
+  }, [id, user, fetchCompanyData]);
 
   const stats = useMemo(() => {
     const avgScore = contacts.length > 0 ? Math.round(contacts.reduce((sum, c) => sum + (c.relationship_score || 0), 0) / contacts.length) : 0;
@@ -155,8 +176,8 @@ const EmpresaDetalhe = () => {
     } finally { setEditSubmitting(false); }
   };
 
-  if (loading) return (<AppLayout><EntityDetailPageSkeleton /></AppLayout>);
-  if (!company) { return (<AppLayout><div className="p-6 text-center"><Building2 className="w-16 h-16 text-muted-foreground mx-auto mb-4" /><h2 className="text-xl font-semibold mb-2">Empresa não encontrada</h2><p className="text-muted-foreground mb-4">A empresa que você procura não existe ou foi removida.</p><Link to="/empresas"><Button>Voltar para Empresas</Button></Link></div></AppLayout>); }
+  if (loading || (company && company.id !== id)) return (<AppLayout><EntityDetailPageSkeleton /></AppLayout>);
+  if (!company) { return (<AppLayout><div className="p-6 text-center" role={loadError ? 'alert' : undefined}>{loadError ? <AlertTriangle className="w-16 h-16 text-destructive mx-auto mb-4" /> : <Building2 className="w-16 h-16 text-muted-foreground mx-auto mb-4" />}<h2 className="text-xl font-semibold mb-2">{loadError ? 'Não foi possível carregar a empresa' : 'Empresa não encontrada'}</h2><p className="text-muted-foreground mb-4">{loadError ? 'Confira sua conexão e tente novamente.' : 'A empresa que você procura não existe ou foi removida.'}</p>{loadError && <Button onClick={fetchCompanyData} className="mr-2">Tentar novamente</Button>}<Link to="/empresas"><Button variant={loadError ? 'outline' : 'default'}>Voltar para Empresas</Button></Link></div></AppLayout>); }
 
    const healthStatus = (company.financial_health as HealthStatus) || 'unknown';
    const companyName = company.name || 'Empresa';
@@ -169,6 +190,13 @@ const EmpresaDetalhe = () => {
         <div className="px-4 md:px-6 pt-3 md:pt-4">
           <PageHeader backTo="/empresas" backLabel="Empresas" title={toTitleCase(company.name)} />
         </div>
+
+        {loadError && (
+          <div role="alert" className="mx-4 md:mx-6 mt-2 p-3 rounded-lg border border-destructive/30 text-destructive flex items-center justify-between gap-2">
+            <span>Não foi possível carregar os contatos desta empresa.</span>
+            <Button variant="outline" size="sm" onClick={fetchCompanyData}>Tentar novamente</Button>
+          </div>
+        )}
 
         {isDeleted && (
           <div className="mx-4 md:mx-6 mt-2 mb-2 px-4 py-3 bg-destructive/10 border border-destructive/30 rounded-xl flex items-center justify-between gap-3">
