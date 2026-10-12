@@ -147,7 +147,7 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
     const count = result.count;
 
     // Log access for auditing
-    if (auditAccess && data.length > 0) {
+    if (auditAccess && data.length > 0 && queryOptions.table !== 'sales_activities') {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user?.id) {
         const auditType = queryOptions.table === 'contacts' ? 'contact_viewed'
