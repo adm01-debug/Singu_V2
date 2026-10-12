@@ -76,7 +76,7 @@ function createErrorReport(
     timestamp: new Date().toISOString(),
     url: window.location.href,
     userAgent: navigator.userAgent,
-    userId: (() => { try { return localStorage.getItem('userId') ?? undefined; } catch { return undefined; } })(),
+    userId: reportingSession?.user.id ?? (() => { try { return localStorage.getItem('userId') ?? undefined; } catch { return undefined; } })(),
     metadata,
     severity: determineSeverity(error),
     fingerprint: generateFingerprint(error),
@@ -118,7 +118,9 @@ async function flushErrorBuffer(keepalive = false): Promise<void> {
   if (!supabaseUrl || !supabaseKey) return;
 
   try {
+    const principal = reportingSession?.user.id;
     const session = keepalive ? reportingSession : (await supabase.auth.getSession()).data.session;
+    if (reportingSession?.user.id !== principal) return;
     if (!session || (keepalive && session.expires_at && session.expires_at * 1000 <= Date.now())) return;
 
     const rows = batch.errors.filter(e => !e.userId || e.userId === session.user.id).map(e => ({
@@ -177,7 +179,7 @@ export function captureError(
 // Captura exceções não tratadas
 export function initGlobalErrorHandlers(): void {
   supabase.auth.onAuthStateChange((_event, session) => {
-    if (reportingSession && reportingSession.user.id !== session?.user.id) errorBuffer.length = 0;
+    if (reportingSession?.user.id !== session?.user.id) errorBuffer.length = 0;
     reportingSession = session;
   });
   // Erros JavaScript não capturados
