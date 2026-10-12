@@ -148,10 +148,11 @@ Deno.test("worker usa o token reservado, conta uma tentativa e não confirma gra
 
 Deno.test("perfil admite usuário autenticado e exige cron e proprietário nas chamadas internas", async () => {
   let reads = 0;
+  let contactOwner = ownerId;
   const close = await startHandler("generate-behavioral-profile", (req) => {
     const url = new URL(req.url);
     if (url.pathname === "/auth/v1/user") return Response.json({ id: ownerId });
-    if (url.pathname === "/rest/v1/contacts") return Response.json([{ user_id: ownerId }]);
+    if (url.pathname === "/rest/v1/contacts") return Response.json([{ user_id: contactOwner }]);
     if (url.pathname.startsWith("/rest/v1/")) { reads++; return Response.json([]); }
     return new Response(null, { status: 404 });
   });
@@ -164,11 +165,21 @@ Deno.test("perfil admite usuário autenticado e exige cron e proprietário nas c
     assertEquals((await submit(ownerId, {})).status, 401);
     assertEquals((await submit(foreignId, { Authorization: "Bearer sessao-teste" })).status, 422);
     assertEquals(reads, 3);
+    contactOwner = foreignId;
+    assertEquals((await submit(ownerId, { Authorization: "Bearer sessao-teste" })).status, 403);
+    assertEquals(reads, 3);
+    contactOwner = ownerId;
     assertEquals((await submit(ownerId, { Authorization: "Bearer servico-teste", "x-internal-key": "servico-teste" })).status, 401);
     const internalHeaders = { Authorization: "Bearer servico-teste", "x-internal-key": "servico-teste", "x-cron-secret": "cron-teste" };
     assertEquals((await submit(foreignId, internalHeaders)).status, 403);
     assertEquals(reads, 3);
     assertEquals((await submit(ownerId, internalHeaders)).status, 422);
+    for (let attempt = 0; attempt < 9; attempt++) {
+      assertEquals((await submit(ownerId, { Authorization: "Bearer sessao-teste" })).status, 422);
+    }
+    const limited = await submit(ownerId, { Authorization: "Bearer sessao-teste" });
+    assertEquals(limited.status, 429);
+    assert(limited.headers.get("Retry-After"));
   } finally {
     await close();
   }

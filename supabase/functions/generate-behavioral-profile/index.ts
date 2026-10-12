@@ -2,7 +2,9 @@ import { createClient } from 'npm:@supabase/supabase-js@2';
 import { guardBody, scopedCorsHeaders, requireCronSecret, timingSafeStringEqual } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { validate } from "../_shared/validate.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
+const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Limite de gerações atingido. Aguarde um minuto." });
 
 interface Body { contact_id: string }
 
@@ -74,13 +76,7 @@ Deno.serve(async (req) => {
       const cronCheck = await requireCronSecret(req);
       if (cronCheck) return cronCheck;
       supabase = createClient(Deno.env.get('SUPABASE_URL')!, SERVICE_KEY);
-      const { data: contact, error: contactError } = await supabase.from('contacts')
-        .select('user_id').eq('id', body.contact_id).maybeSingle();
-      if (contactError) return jsonWithCors({ error: 'Consulta de propriedade indisponível' }, 503);
-      if (!contact?.user_id || (body.user_id && contact.user_id !== body.user_id)) {
-        return jsonWithCors({ error: 'contato não pertence ao usuário' }, 403);
-      }
-      userId = contact.user_id;
+      userId = body.user_id ?? null;
     } else {
       const authHeader = req.headers.get('Authorization') ?? '';
       if (!authHeader) return jsonWithCors({ error: 'Não autenticado' }, 401);
@@ -92,6 +88,19 @@ Deno.serve(async (req) => {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData?.user) return jsonWithCors({ error: 'Não autenticado' }, 401);
       userId = userData.user.id;
+    }
+
+    const { data: contact, error: contactError } = await supabase.from('contacts')
+      .select('user_id').eq('id', body.contact_id)
+      .abortSignal(AbortSignal.timeout(5_000)).maybeSingle();
+    if (contactError) return jsonWithCors({ error: 'Consulta de propriedade indisponível' }, 503);
+    if (typeof contact?.user_id !== 'string' || !contact.user_id || (userId && contact.user_id !== userId)) {
+      return jsonWithCors({ error: 'contato não pertence ao usuário' }, 403);
+    }
+    userId = contact.user_id;
+    if (!isInternal) {
+      const limited = limiter.check(userId, req);
+      if (limited) return limited;
     }
 
     const startedAt = new Date().toISOString();
