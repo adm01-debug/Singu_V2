@@ -1,29 +1,16 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, Search, Bell, Zap, ArrowLeft, ChevronRight } from 'lucide-react';
+import { Menu, Search, Bell, Zap, ChevronRight } from 'lucide-react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { MobileSidebarDrawer } from './MobileSidebarDrawer';
-import { useNavigationStack } from '@/contexts/NavigationStackContext';
+import { BackButton } from '@/components/navigation/BackButton';
+import { getSectionFallback } from '@/lib/navigationLabels';
 
 /** Routes that are considered "detail" or "nested" — show back arrow instead of hamburger */
 const NESTED_ROUTE_PATTERNS = [
   /^\/contatos\/.+/,
   /^\/empresas\/.+/,
   /^\/relatorio\/.+/,
-];
-
-/** Top-level sub-pages — show back arrow to go to dashboard */
-const SUB_PAGES = [
-  '/contatos',
-  '/empresas',
-  '/interacoes',
-  '/analytics',
-  '/insights',
-  '/calendario',
-  '/notificacoes',
-  '/network',
-  '/automacoes',
-  '/configuracoes',
 ];
 
 /** Route-to-title mapping */
@@ -49,12 +36,10 @@ export function MobileHeader({ onSearchClick, title }: MobileHeaderProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { goBack } = useNavigationStack();
 
   const isRoot = location.pathname === '/';
   const isNested = NESTED_ROUTE_PATTERNS.some(p => p.test(location.pathname));
-  const isSubPage = SUB_PAGES.includes(location.pathname);
-  const showBackButton = !isRoot && (isNested || isSubPage);
+  const showBackButton = !isRoot;
 
   // Build micro-breadcrumb for nested pages
   const parentSegment = (() => {
@@ -77,31 +62,27 @@ export function MobileHeader({ onSearchClick, title }: MobileHeaderProps) {
     return undefined;
   })();
 
-  const handleLeftAction = () => {
-    if (showBackButton) {
-      goBack();
-    } else {
-      setDrawerOpen(true);
-    }
-  };
-
   return (
     <>
       <header className="sticky top-0 z-20 md:hidden border-b border-border/40 bg-background/80 backdrop-blur-md safe-area-inset-top">
         <div className="flex items-center justify-between px-4 py-3">
-          {/* Left: Menu or Back */}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={handleLeftAction}
-            className="p-2 -ml-2 rounded-xl hover:bg-muted transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-            aria-label={showBackButton ? 'Voltar' : 'Abrir menu'}
-          >
-            {showBackButton ? (
-              <ArrowLeft className="w-5 h-5 text-foreground" />
-            ) : (
-              <Menu className="w-5 h-5 text-foreground" />
+          <div className="flex items-center">
+            {showBackButton && (
+              <BackButton
+                fallback={getSectionFallback(location.pathname)}
+                variant="ghost"
+                className="min-h-[44px] min-w-[44px] p-2"
+              />
             )}
-          </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setDrawerOpen(true)}
+              className="p-2 -ml-2 rounded-xl hover:bg-muted transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+              aria-label="Abrir menu"
+            >
+              <Menu className="w-5 h-5 text-foreground" />
+            </motion.button>
+          </div>
 
           {/* Center: Logo, Title, or Micro-breadcrumb */}
           <AnimatePresence mode="wait" initial={false}>
@@ -117,11 +98,11 @@ export function MobileHeader({ onSearchClick, title }: MobileHeaderProps) {
                 <div className="flex items-center gap-1 min-w-0">
                   <Link
                     to={parentSegment.path}
-                    className="text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                    className="hidden sm:inline text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
                   >
                     {parentSegment.label}
                   </Link>
-                  <ChevronRight className="w-3 h-3 text-muted-foreground/70 shrink-0" aria-hidden="true" />
+                  <ChevronRight className="hidden sm:inline w-3 h-3 text-muted-foreground/70 shrink-0" aria-hidden="true" />
                   <h1 className="text-sm font-semibold text-foreground truncate">{resolvedTitle}</h1>
                 </div>
               ) : resolvedTitle ? (

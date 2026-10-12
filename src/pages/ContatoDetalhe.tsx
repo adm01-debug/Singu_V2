@@ -145,8 +145,7 @@ const ContatoDetalhe = () => {
       <div className="min-h-screen p-4 md:p-6 space-y-4">
         {/* Breadcrumb + Lux */}
         <PageHeader
-          backTo="/contatos"
-          backLabel="Contatos"
+          backFallback="/contatos"
           title={formatContactName(contact.first_name, contact.last_name)}
           actions={
             <div className="flex items-center gap-2">

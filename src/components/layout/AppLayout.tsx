@@ -1,6 +1,6 @@
 import { ReactNode, useMemo, useState, useEffect, lazy, Suspense } from 'react';
 import { useRageClickDetector } from '@/hooks/useRageClickDetector';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Search, Command, Settings, LogOut, Mic } from 'lucide-react';
 import { AppSidebar } from './AppSidebar';
 import { MobileHeader } from './MobileHeader';
@@ -228,9 +228,9 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild className="gap-2 cursor-pointer">
-                    <a href="/configuracoes">
+                    <Link to="/configuracoes">
                       <Settings className="h-3.5 w-3.5" /> Configurações
-                    </a>
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="gap-2 cursor-pointer text-destructive focus:text-destructive">
