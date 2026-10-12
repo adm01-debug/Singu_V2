@@ -32,7 +32,17 @@ Deno.test("configuração inválida não reserva o lembrete e permite enviar ap�
       claims++;
       return Promise.resolve(new Response(null, { status: 201 }));
     }
-    if (options?.method === "PATCH") return Promise.resolve(new Response(null, { status: 204 }));
+    if (options?.method === "PATCH") {
+      if (url.searchParams.has("claim_expires_at")) {
+        assertEquals(url.searchParams.get("delivery_status"), "eq.pending");
+        return Promise.resolve(new Response(null, { status: 204 }));
+      }
+      assertEquals(JSON.parse(String(options.body)).delivery_status, "sent");
+      assertEquals(url.searchParams.get("claim_token")?.startsWith("eq."), true);
+      return Promise.resolve(new Response(JSON.stringify({ id: "notification-test" }), {
+        headers: { "Content-Type": "application/json" },
+      }));
+    }
     const table = url.pathname.split("/").at(-1);
     const rows = table === "profiles" ? [{ id: user, first_name: "Teste", email: null, phone: "5511999999999" }]
       : table === "contact_next_actions" ? [{

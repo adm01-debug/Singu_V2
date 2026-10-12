@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
+import { assertEquals, assertRejects } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { sendTrackedNotification } from "../_shared/notification-delivery.ts";
 
@@ -71,22 +71,65 @@ Deno.test("reservas ativas ficam em processamento e órfãs exigem reconciliaç�
 
 Deno.test("405, 413 e 415 liberam somente a reserva rejeitada para uma nova tentativa", async () => {
   for (const status of [405, 413, 415]) {
-    let reserved = false;
+    let state: "pending" | "rejected" | "sent" | null = null;
     let expiry: unknown;
-    const client = createClient("https://supabase.example.test", "service-test", { global: { fetch: (_input, init) => {
+    let token: string | null = null;
+    let sends = 0;
+    const methods: string[] = [];
+    const client = createClient("https://supabase.example.test", "service-test", { global: { fetch: (input, init) => {
+      const url = new URL(input instanceof Request ? input.url : String(input));
+      methods.push(init?.method ?? "GET");
+      if (init?.method === "GET") {
+        return Promise.resolve(new Response(JSON.stringify([{ delivery_status: state }]), {
+          headers: { "Content-Type": "application/json" },
+        }));
+      }
+      const body = JSON.parse(String(init?.body)) as {
+        delivery_status: "pending" | "rejected" | "sent";
+        claim_expires_at?: string;
+        claim_token?: string;
+      };
       if (init?.method === "POST") {
-        reserved = true;
-        expiry = JSON.parse(String(init.body)).claim_expires_at;
-      } else if (init?.method === "DELETE") reserved = false;
-      return Promise.resolve(new Response(null, { status: 204 }));
+        if (state) return Promise.resolve(new Response(JSON.stringify({ code: "23505" }), { status: 409 }));
+        state = "pending";
+        expiry = body.claim_expires_at;
+        token = body.claim_token ?? null;
+        return Promise.resolve(new Response(null, { status: 201 }));
+      }
+      assertEquals(init?.method, "PATCH");
+      assertEquals(url.searchParams.get("user_id"), "eq.user");
+      if (body.delivery_status === "pending") {
+        assertEquals(url.searchParams.get("delivery_status"), "eq.rejected");
+        if (state !== "rejected") return Promise.resolve(new Response("[]"));
+        token = body.claim_token ?? null;
+        expiry = body.claim_expires_at;
+      } else {
+        assertEquals(url.searchParams.get("claim_token"), `eq.${token}`);
+      }
+      state = body.delivery_status;
+      return Promise.resolve(new Response(JSON.stringify({ id: "notification-test" }), {
+        headers: { "Content-Type": "application/json" },
+      }));
     } } });
     const delivery = { reminder_id: "local", user_id: "user", contact_id: "contact", channel: "whatsapp" as const };
-    let rejected = false;
-    try { await sendTrackedNotification(client, delivery, () => Promise.resolve(new Response(null, { status }))); }
-    catch { rejected = true; }
-    assertEquals(rejected, true);
-    assertEquals(reserved, false);
+    await assertRejects(() => sendTrackedNotification(client, delivery, () => {
+      sends++;
+      return Promise.resolve(new Response(null, { status }));
+    }), Error, `Entrega rejeitada: HTTP ${status}`);
+    assertEquals(state, "rejected");
     assertEquals(typeof expiry, "string");
-    assertEquals(await sendTrackedNotification(client, delivery, () => Promise.resolve(new Response())), "sent");
+    const rejectedToken = token;
+    assertEquals(await sendTrackedNotification(client, delivery, () => {
+      sends++;
+      assertEquals(token === rejectedToken, false);
+      return Promise.resolve(new Response());
+    }), "sent");
+    assertEquals(state, "sent");
+    assertEquals(await sendTrackedNotification(client, delivery, () => {
+      sends++;
+      return Promise.resolve(new Response());
+    }), "skipped");
+    assertEquals(sends, 2);
+    assertEquals(methods.includes("DELETE"), false);
   }
 });
