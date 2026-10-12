@@ -119,7 +119,7 @@ Deno.serve(async (req) => {
 
           const notifiedChannels = notifiedMap.get(reminderId) ?? new Map<string, string>();
           const whatsappStatus = notifiedChannels.get('whatsapp');
-          const notifiedWhatsApp = whatsappStatus !== undefined;
+          const notifiedWhatsApp = whatsappStatus !== undefined && whatsappStatus !== 'rejected';
           if (whatsappStatus === 'pending') {
             stats.notificationsPending++;
             continue;
