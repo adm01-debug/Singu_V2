@@ -2,8 +2,9 @@ import { useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
+import { MFA_STATUS_CHANGED_EVENT, MFA_VERIFIED_EVENT } from '@/lib/mfaEvents';
 
-export const MFA_STATUS_CHANGED_EVENT = 'singu:mfa-status-changed';
+export { MFA_STATUS_CHANGED_EVENT, MFA_VERIFIED_EVENT } from '@/lib/mfaEvents';
 
 interface TwoFactorState {
   isEnrolling: boolean;
@@ -103,6 +104,7 @@ export function use2FA() {
       if (verifyResult.error) throw verifyResult.error;
 
       setState(s => ({ ...s, isVerifying: false, isEnabled: true, isSessionVerified: true, qrUri: null }));
+      window.dispatchEvent(new Event(MFA_VERIFIED_EVENT));
       toast.success(state.isEnabled ? 'Acesso confirmado com 2FA.' : '2FA ativado com sucesso!');
       return true;
     } catch {

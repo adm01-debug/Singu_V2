@@ -7,7 +7,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Shield, ShieldCheck, ShieldOff } from 'lucide-react';
 import { use2FA } from '@/hooks/use2FA';
 
-export function TwoFactorSetup({ onVerified }: { onVerified?: () => void } = {}) {
+export function TwoFactorSetup({ onVerified, requireVerification = false }: { onVerified?: () => void; requireVerification?: boolean } = {}) {
   const { isEnabled, isSessionVerified, isLoading, statusError, isEnrolling, isVerifying, qrUri, factorId, verifiedFactors, selectFactor, checkStatus, enroll, verify, unenroll } = use2FA();
   const [code, setCode] = useState('');
 
@@ -38,7 +38,7 @@ export function TwoFactorSetup({ onVerified }: { onVerified?: () => void } = {})
             <p>{statusError}</p>
             <Button onClick={checkStatus} variant="outline">Tentar novamente</Button>
           </div>
-        ) : isEnabled && isSessionVerified ? (
+        ) : isEnabled && isSessionVerified && !requireVerification ? (
           <div className="flex items-center justify-between p-3 rounded-lg bg-green-500/10 border border-green-500/20">
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-5 w-5 text-green-500" />

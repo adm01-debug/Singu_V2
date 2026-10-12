@@ -42,6 +42,19 @@ describe('Configuração e confirmação MFA', () => {
     expect(mfa.enroll).not.toHaveBeenCalled();
   });
 
+  it('oferece confirmação explícita na recuperação mesmo que o SDK ainda retorne AAL2', async () => {
+    const verified = { id: 'reserva', status: 'verified', factor_type: 'totp' };
+    mfa.listFactors.mockResolvedValue({ data: { totp: [verified], all: [verified] }, error: null });
+    mfa.getAuthenticatorAssuranceLevel.mockResolvedValue({ data: { currentLevel: 'aal2' }, error: null });
+    const onVerified = vi.fn();
+    render(<TwoFactorSetup onVerified={onVerified} requireVerification />);
+    fireEvent.change(await screen.findByLabelText('Código de verificação'), { target: { value: '123456' } });
+    expect(screen.queryByText('2FA ativo')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Confirmar acesso' }));
+    await waitFor(() => expect(onVerified).toHaveBeenCalledOnce());
+    expect(mfa.verify).toHaveBeenCalledWith({ factorId: 'reserva', challengeId: 'desafio', code: '123456' });
+  });
+
   it('retoma configuração interrompida e não libera acesso com código inválido', async () => {
     const pending = { id: 'fator-pendente', status: 'unverified', factor_type: 'totp' };
     mfa.listFactors.mockResolvedValue({ data: { totp: [pending], all: [pending] }, error: null });

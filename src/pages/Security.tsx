@@ -32,7 +32,7 @@ export default function Security({ recoveryOnly = false }: { recoveryOnly?: bool
   if (recoveryOnly) {
     return <div className="container mx-auto p-4 md:p-6 max-w-4xl space-y-4">
       <h1 className="text-2xl font-bold tracking-tight">Confirme seu acesso</h1>
-      <TwoFactorSetup onVerified={handleVerified} />
+      <TwoFactorSetup onVerified={handleVerified} requireVerification />
     </div>;
   }
   return (

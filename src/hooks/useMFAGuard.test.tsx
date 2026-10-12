@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { MFAGuard } from '@/components/auth/MFAGuard';
-import { MFA_STATUS_CHANGED_EVENT } from '@/hooks/use2FA';
+import { MFA_STATUS_CHANGED_EVENT, MFA_VERIFIED_EVENT } from '@/hooks/use2FA';
 
 const mocks = vi.hoisted(() => ({
   user: { id: 'administrador' },
@@ -45,6 +45,7 @@ describe('MFA administrativo', () => {
     mocks.roleError = null;
     mocks.assurance.mockResolvedValue({ data: { currentLevel: 'aal1' }, error: null });
     mocks.factors.mockResolvedValue({ data: { all: [{ id: 'fator', status: 'verified' }] }, error: null });
+    localStorage.clear();
   });
 
   it('permite configurar MFA em AAL1 e preserva a URL sem mostrar a administração', async () => {
@@ -96,12 +97,16 @@ describe('MFA administrativo', () => {
     await screen.findByText(/Configurar MFA/);
   });
 
-  it('mantém a administração bloqueada em falha de consulta e permite recuperação', async () => {
+  it('mantém a administração bloqueada em falha de consulta e repete a verificação do guard', async () => {
     mocks.assurance.mockResolvedValue({ data: null, error: new Error('consulta indisponível') });
     render(<Harness />);
-    await screen.findByText(/Configurar MFA/);
+    await screen.findByRole('alert');
     await waitFor(() => expect(mocks.assurance).toHaveBeenCalled());
     expect(screen.queryByText('Conteúdo administrativo')).not.toBeInTheDocument();
+    mocks.assurance.mockResolvedValue({ data: { currentLevel: 'aal2' }, error: null });
+    fireEvent.click(screen.getByRole('button', { name: 'Tentar novamente' }));
+    await screen.findByText('Configurações completas');
+    expect(mocks.assurance.mock.calls.length).toBeGreaterThanOrEqual(2);
   });
 
   it('revoga a aprovação do mesmo token quando o último fator é removido', async () => {
@@ -127,6 +132,24 @@ describe('MFA administrativo', () => {
     expect(screen.queryByText('Configurações completas')).not.toBeInTheDocument();
     mocks.token = 'sessao-confirmada-novamente';
     view.rerender(<Harness start="/seguranca" />);
+    await waitFor(() => expect(mocks.assurance).toHaveBeenCalledTimes(3));
+    expect(screen.queryByText('Configurações completas')).not.toBeInTheDocument();
+    act(() => window.dispatchEvent(new Event(MFA_VERIFIED_EVENT)));
     await screen.findByText('Configurações completas');
+  });
+
+  it('não esquece a revogação ao trocar de rota ou de aba', async () => {
+    mocks.assurance.mockResolvedValue({ data: { currentLevel: 'aal2' }, error: null });
+    const view = render(<Harness start="/seguranca" />);
+    await screen.findByText('Configurações completas');
+    act(() => window.dispatchEvent(new Event(MFA_STATUS_CHANGED_EVENT)));
+    await screen.findByText(/Configurar MFA/);
+    view.unmount();
+    render(<Harness start="/seguranca" />);
+    await screen.findByText(/Configurar MFA/);
+    expect(localStorage.getItem('singu:mfa-revalidar:administrador')).toBe('1');
+    act(() => window.dispatchEvent(new Event(MFA_VERIFIED_EVENT)));
+    await screen.findByText('Configurações completas');
+    expect(localStorage.getItem('singu:mfa-revalidar:administrador')).toBeNull();
   });
 });

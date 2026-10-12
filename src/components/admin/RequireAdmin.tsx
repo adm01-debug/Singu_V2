@@ -39,7 +39,7 @@ export function RequireAdmin({ children }: RequireAdminProps) {
     queryKey: ["mfa-enrolled", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase.auth.mfa.listFactors();
-      if (error) return false;
+      if (error) throw error;
       return data.all.some(factor => factor.status === 'verified');
     },
     enabled: !!user && !!isAdmin,
