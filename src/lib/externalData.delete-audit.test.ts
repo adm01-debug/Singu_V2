@@ -61,6 +61,16 @@ describe('Auditoria única após exclusão confirmada', () => {
     }
   });
 
+  it('não atribui a exclusão a outra sessão que entra durante a operação', async () => {
+    mocks.getSession.mockResolvedValueOnce({ data: { session: { access_token: 'jwt-dono', user: { id: 'dono' } } } })
+      .mockResolvedValue({ data: { session: { access_token: 'jwt-outro', user: { id: 'outro' } } } });
+    expect(await deleteExternalData('contacts', 'registro')).toEqual({ success: true, error: null });
+    expect(mocks.fetch).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({
+      headers: expect.objectContaining({ Authorization: 'Bearer jwt-dono' }),
+    }));
+    expect(mocks.insert).not.toHaveBeenCalled();
+  });
+
   it('não inventa uma interação excluída para outras tabelas', async () => {
     expect((await deleteExternalData('tasks', 'registro')).success).toBe(true);
     expect(mocks.insert).not.toHaveBeenCalled();

@@ -76,10 +76,11 @@ const externalResponseSchema = z.object({
   count: z.number().int().nonnegative().nullable().optional(),
 });
 
-async function callExternalData(body: Record<string, unknown>, signal?: AbortSignal, canonicalRpc?: { functionName: string; params: Record<string, unknown> }): Promise<z.infer<typeof externalResponseSchema>> {
+async function callExternalData(body: Record<string, unknown>, signal?: AbortSignal, canonicalRpc?: { functionName: string; params: Record<string, unknown> }, onAccessToken?: (accessToken: string) => void): Promise<z.infer<typeof externalResponseSchema>> {
   const breaker = canonicalRpc ? canonicalDbBreaker : externalDbBreaker;
   return breaker.call(async () => {
     const accessToken = await getAccessToken();
+    onAccessToken?.(accessToken);
     if (canonicalRpc && accessToken === ANON_KEY) throw new CanonicalRpcClientError('Autenticação necessária para a RPC do banco');
     const endpoint = canonicalRpc
       ? new URL(`/rest/v1/rpc/${encodeURIComponent(canonicalRpc.functionName)}`, import.meta.env.VITE_SUPABASE_URL).href
@@ -262,14 +263,15 @@ export async function updateExternalDataWithVersion<T = Record<string, unknown>>
 
 export async function deleteExternalData(table: string, id: string, audit?: { entityName?: string; description?: string; reason?: string }): Promise<{ success: boolean; error: Error | null }> {
   try {
-    await callExternalData({ action: 'delete', table, id });
+    let deletionToken: string | undefined;
+    await callExternalData({ action: 'delete', table, id }, undefined, undefined, token => { deletionToken = token; });
     const entity = table === 'contacts' ? 'contact' : table === 'companies' ? 'company' : table === 'interactions' ? 'interaction' : null;
     if (entity) {
       let auditTimeout: ReturnType<typeof setTimeout> | undefined;
       const auditTask = (async () => {
         try {
           const { data: { session } } = await supabase.auth.getSession();
-          if (session?.user?.id) {
+          if (session?.user?.id && session.access_token === deletionToken) {
             const { error: auditErr } = await supabase.from('activities').insert({
               user_id: session.user.id,
               type: `${entity}_deleted`,

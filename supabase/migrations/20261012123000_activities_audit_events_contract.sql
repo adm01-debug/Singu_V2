@@ -9,7 +9,11 @@ DECLARE
   event_types text[] := ARRAY[
     'contact_created', 'contact_updated', 'contact_deleted', 'contact_viewed',
     'company_created', 'company_updated', 'company_deleted', 'company_viewed',
-    'interaction_created', 'interaction_updated', 'interaction_deleted'
+    'interaction_created', 'interaction_updated', 'interaction_deleted',
+    'contact_merged', 'call_made', 'message_sent', 'email_sent', 'meeting_scheduled',
+    'note_added', 'disc_analyzed', 'sentiment_analyzed', 'emotion_analyzed',
+    'alert_created', 'alert_actioned', 'alert_dismissed', 'login', 'logout',
+    'settings_changed', 'export_data', 'import_data'
   ];
 BEGIN
   SELECT pg_get_expr(conbin, conrelid) INTO predicate
