@@ -4,16 +4,18 @@ const ownerId = "11111111-1111-4111-8111-111111111111";
 const foreignId = "22222222-2222-4222-8222-222222222222";
 const contactId = "33333333-3333-4333-8333-333333333333";
 
-async function startHandler(name: string, handler: (req: Request) => Response | Promise<Response>) {
+async function startHandler(name: string, handler: (req: Request) => Response | Promise<Response>, mockAI = false) {
   const api = Deno.serve({ hostname: "127.0.0.1", port: 0, onListen: () => {} }, handler);
   const child = new Deno.Command(Deno.execPath(), {
-    args: ["run", "--node-modules-dir=none", "--allow-net", "--allow-env", `supabase/functions/${name}/index.ts`],
+    args: ["run", "--node-modules-dir=none", "--allow-net", "--allow-env",
+      mockAI ? "supabase/functions/_shared/behavioral-generation-mock.ts" : `supabase/functions/${name}/index.ts`],
     env: {
       HOME: Deno.env.get("HOME")!,
       SUPABASE_URL: `http://127.0.0.1:${api.addr.port}`,
       SUPABASE_ANON_KEY: "anon-teste",
       SUPABASE_SERVICE_ROLE_KEY: "servico-teste",
       CRON_SECRET: "cron-teste",
+      ...(mockAI ? { LOVABLE_API_KEY: "ia-simulada" } : {}),
     },
     clearEnv: true,
     stdout: "piped",
@@ -89,6 +91,53 @@ Deno.test("validador interno exige proprietário, bloqueia outro contato e aguar
     assertEquals((await submit({ userId: ownerId, contactId })).status, 503);
   } finally {
     releaseInsert();
+    await close();
+  }
+});
+
+Deno.test("geração manual lê com o usuário e confirma pelo serviço após validar o proprietário", async () => {
+  const readTokens: Array<string | null> = [];
+  const confirmations: Array<Record<string, unknown>> = [];
+  let rejectOwner = false;
+  const close = await startHandler("generate-behavioral-profile", async (req) => {
+    const url = new URL(req.url);
+    if (url.pathname === "/auth/v1/user") return Response.json({ id: ownerId });
+    if (url.pathname === "/rest/v1/contacts") return Response.json([{ user_id: ownerId }]);
+    if (url.pathname === "/rest/v1/rpc/save_behavioral_profile_if_fresh") {
+      assertEquals(req.headers.get("Authorization"), "Bearer servico-teste");
+      const body: Record<string, unknown> = await req.json();
+      confirmations.push(body);
+      return rejectOwner
+        ? Response.json({ message: "Proprietário do perfil divergente", code: "42501" }, { status: 403 })
+        : Response.json({ id: contactId, contact_id: contactId, user_id: ownerId, summary: "Análise confirmada" });
+    }
+    if (url.pathname.startsWith("/rest/v1/")) {
+      if (["/rest/v1/whatsapp_messages", "/rest/v1/call_logs", "/rest/v1/interactions", "/rest/v1/behavioral_insight_feedback"].includes(url.pathname)) {
+        readTokens.push(req.headers.get("Authorization"));
+      }
+      return Response.json(url.pathname === "/rest/v1/interactions"
+        ? [{ content: "Histórico do proprietário", type: "note", created_at: new Date().toISOString() }] : []);
+    }
+    return new Response(null, { status: 404 });
+  }, true);
+  const submit = () => fetch("http://127.0.0.1:8000/", {
+    method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer sessao-teste" },
+    body: JSON.stringify({ contact_id: contactId, user_id: foreignId, claim_token: foreignId }),
+  });
+  try {
+    const confirmed = await submit();
+    assertEquals(confirmed.status, 200);
+    await confirmed.json();
+    assert(readTokens.length >= 3);
+    assertEquals(readTokens, readTokens.map(() => "Bearer sessao-teste"));
+    assertEquals(confirmations[0].p_claim_token, null);
+    assertEquals(confirmations[0].p_trigger_source, "manual");
+    assertEquals((confirmations[0].p_profile as { user_id: string }).user_id, ownerId);
+    rejectOwner = true;
+    const refused = await submit();
+    assertEquals(refused.status, 503);
+    await refused.json();
+  } finally {
     await close();
   }
 });

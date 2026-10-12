@@ -252,6 +252,47 @@ BEGIN
   END IF;
 END;
 $manual_pending$;
+DO $enqueue_fence$
+DECLARE
+  fixture_contact_id uuid := current_setting('rls.queue_contact')::uuid;
+  started_at timestamptz := clock_timestamp();
+  old_claim uuid := gen_random_uuid();
+  new_claim uuid;
+  saved jsonb;
+  affected integer;
+BEGIN
+  UPDATE public.behavioral_profile_regen_queue q
+  SET claim_token = old_claim, attempts = 1, last_processed_at = started_at,
+      next_run_at = started_at + interval '15 minutes'
+  WHERE q.contact_id = fixture_contact_id;
+  INSERT INTO queue_enqueue_fixture VALUES (fixture_contact_id);
+  SELECT q.claim_token INTO new_claim FROM public.behavioral_profile_regen_queue q
+  WHERE q.contact_id = fixture_contact_id;
+  IF new_claim IS NULL OR new_claim = old_claim
+    OR (SELECT q.last_processed_at FROM public.behavioral_profile_regen_queue q WHERE q.contact_id = fixture_contact_id) IS NOT NULL
+    OR (SELECT q.next_run_at FROM public.behavioral_profile_regen_queue q WHERE q.contact_id = fixture_contact_id) >= started_at + interval '6 minutes' THEN
+    RAISE EXCEPTION 'Histórico novo não invalidou a reserva anterior e sua espera';
+  END IF;
+  saved := public.save_behavioral_profile_if_fresh(
+    fixture_contact_id, old_claim, '{"summary":"worker antigo"}'::jsonb, started_at, 'auto'
+  );
+  IF saved IS NOT NULL OR NOT EXISTS (SELECT 1 FROM public.behavioral_profile_regen_queue q
+      WHERE q.contact_id = fixture_contact_id AND q.claim_token = new_claim AND q.attempts = 0) THEN
+    RAISE EXCEPTION 'Worker antigo concluiu o pedido de histórico posterior';
+  END IF;
+  UPDATE public.behavioral_profile_regen_queue q SET last_error = 'worker antigo'
+  WHERE q.contact_id = fixture_contact_id AND q.claim_token = old_claim;
+  GET DIAGNOSTICS affected = ROW_COUNT;
+  IF affected <> 0 THEN RAISE EXCEPTION 'Erro do worker antigo alterou o pedido novo'; END IF;
+  BEGIN
+    PERFORM public.save_behavioral_profile_if_fresh(
+      fixture_contact_id, NULL, jsonb_build_object('user_id', gen_random_uuid()), clock_timestamp(), 'manual'
+    );
+    RAISE EXCEPTION 'Perfil de outro proprietário foi aceito' USING ERRCODE = 'XX000';
+  EXCEPTION WHEN insufficient_privilege THEN NULL;
+  END;
+END;
+$enqueue_fence$;
 DO $manual$
 DECLARE
   contact_id uuid := current_setting('rls.retry_contact')::uuid;

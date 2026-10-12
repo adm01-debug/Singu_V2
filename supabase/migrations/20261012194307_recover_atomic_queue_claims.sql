@@ -42,7 +42,9 @@ BEGIN
     TG_TABLE_NAME, clock_timestamp(), clock_timestamp()
   )
   ON CONFLICT (contact_id) DO UPDATE
-  SET next_run_at = GREATEST(behavioral_profile_regen_queue.next_run_at, EXCLUDED.next_run_at),
+  SET next_run_at = EXCLUDED.next_run_at,
+      claim_token = gen_random_uuid(),
+      last_processed_at = NULL,
       trigger_source = EXCLUDED.trigger_source,
       enqueued_at = EXCLUDED.enqueued_at,
       updated_at = EXCLUDED.updated_at,
@@ -247,6 +249,9 @@ BEGIN
     AND (current_user = 'service_role' OR c.user_id = auth.uid());
   IF v_owner IS NULL THEN
     RAISE EXCEPTION 'Contato não pertence ao usuário' USING ERRCODE = '42501';
+  END IF;
+  IF p_profile ? 'user_id' AND (p_profile->>'user_id')::uuid IS DISTINCT FROM v_owner THEN
+    RAISE EXCEPTION 'Proprietário do perfil divergente' USING ERRCODE = '42501';
   END IF;
 
   IF p_claim_token IS NOT NULL AND current_user <> 'service_role' THEN

@@ -245,7 +245,8 @@ Deno.serve(async (req) => {
       last_updated_at: startedAt,
     };
 
-    const { data: saved, error: saveError } = await supabase.rpc(
+    const persistence = isInternal ? supabase : createClient(Deno.env.get('SUPABASE_URL')!, SERVICE_KEY);
+    const { data: saved, error: saveError } = await persistence.rpc(
       'save_behavioral_profile_if_fresh',
       {
         p_contact_id: body.contact_id,
