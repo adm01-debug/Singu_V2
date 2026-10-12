@@ -7,6 +7,9 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added
+- Matriz reconciliada das auditorias e lacunas com estado por achado, evidências e próximos passos, organizada em cinco áreas e vinculada pelo índice.
+
 ### Fixed
 - Consultas externas validam todas as relações embutidas, inclusive aliases e aninhamentos, pela lista de tabelas permitidas. Consultas globais com credencial administrativa recusam relações para preservar o isolamento; sintaxe não suportada e projeções excessivas são rejeitadas antes de consultar o banco.
 - Sugestões de Rodízio filtram UF pelo endereço prioritário da empresa; a busca legada de emails duplicados usa os emails relacionados, considera empresas distintas e mantém o escopo do usuário.
