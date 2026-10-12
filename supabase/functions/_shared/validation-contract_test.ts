@@ -181,6 +181,47 @@ Deno.test("worker de perfis encerra conflito atual e preserva reserva substituí
   }
 });
 
+Deno.test("worker de perfis aceita conclusão atômica e rejeita recibo ausente", async () => {
+  const claimToken = "55555555-5555-4555-8555-555555555555";
+  let missingReceipt = false;
+  const writes: string[] = [];
+  const close = await startHandler("process-behavioral-regen-queue", (req) => {
+    const url = new URL(req.url);
+    if (url.pathname === "/rest/v1/rpc/claim_regen_batch") {
+      return Response.json([{ contact_id: contactId, user_id: ownerId, attempts: 1, claim_token: claimToken }]);
+    }
+    if (url.pathname === "/functions/v1/generate-behavioral-profile") {
+      return Response.json(missingReceipt ? { ok: true } : { profile: { contact_id: contactId, user_id: ownerId } });
+    }
+    if (url.pathname === "/rest/v1/behavioral_profile_regen_queue") {
+      writes.push(req.method);
+      assertEquals(url.searchParams.get("claim_token"), `eq.${claimToken}`);
+      return Response.json([]);
+    }
+    return new Response(null, { status: 404 });
+  });
+  const submit = () => fetch("http://127.0.0.1:8000/", {
+    method: "POST", headers: { "x-cron-secret": "cron-teste" },
+  });
+  try {
+    const confirmed = await submit();
+    assertEquals(confirmed.status, 200);
+    const receipt = await confirmed.json();
+    assertEquals(receipt.processed, 1);
+    assertEquals(receipt.results[0].ok, true);
+    assertEquals(writes, []);
+
+    missingReceipt = true;
+    const unconfirmed = await submit();
+    const failure = await unconfirmed.json();
+    assertEquals(failure.processed, 0);
+    assertEquals(failure.results[0].ok, false);
+    assertEquals(writes, ["PATCH"]);
+  } finally {
+    await close();
+  }
+});
+
 Deno.test("perfil admite usuário autenticado e exige cron e proprietário nas chamadas internas", async () => {
   let reads = 0;
   let contactOwner = ownerId;

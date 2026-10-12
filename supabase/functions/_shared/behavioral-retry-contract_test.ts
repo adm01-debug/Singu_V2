@@ -1,6 +1,6 @@
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 
-type Scenario = 'confirmado' | 'sem-perfil' | 'falha' | 'substituido' | 'pausa' | 'nao-admin';
+type Scenario = 'confirmado' | 'concluida-na-rpc' | 'sem-perfil' | 'falha' | 'substituido' | 'pausa' | 'nao-admin';
 type Operation = { table: string; method: string; body: Record<string, unknown>; query: URLSearchParams };
 const owner = '11111111-1111-4111-8111-111111111111';
 const contact = '22222222-2222-4222-8222-222222222222';
@@ -22,9 +22,10 @@ async function withRetry(scenario: Scenario, test: (response: Response, operatio
     }
     if (table === 'generate-behavioral-profile') {
       if (scenario === 'falha') return json({ error: 'IA não disponível' }, 503);
+      if (scenario === 'substituido') return json({ error: 'Reserva substituída' }, 409);
       return json(scenario === 'sem-perfil' ? { ok: true } : { profile: { contact_id: contact, user_id: owner } });
     }
-    if (table === 'behavioral_profile_regen_queue') return json(scenario === 'substituido' ? null : { contact_id: contact });
+    if (table === 'behavioral_profile_regen_queue') return json(scenario === 'concluida-na-rpc' || scenario === 'substituido' ? null : { contact_id: contact });
     return json(null);
   });
   const process = new Deno.Command(Deno.execPath(), {
@@ -56,16 +57,14 @@ async function withRetry(scenario: Scenario, test: (response: Response, operatio
   }
 }
 
-Deno.test('Reanálise: admin reserva, confirma perfil e finaliza somente seu token', () => withRetry('confirmado', async (response, operations) => {
+Deno.test('Reanálise: admin reserva e confirma perfil pelo token da transação', () => withRetry('confirmado', async (response, operations) => {
   assertEquals(response.status, 200);
   assertEquals((await response.json()).ok, true);
   assertEquals(operations.find(operation => operation.table === 'claim_behavioral_profile_retry')?.body.p_actor_id, owner);
   const generate = operations.find(operation => operation.table === 'generate-behavioral-profile');
   assertEquals(generate?.body.claim_token, token);
   assertEquals(generate?.body.manual_retry, true);
-  const finish = operations.find(operation => operation.table === 'behavioral_profile_regen_queue');
-  assertEquals(finish?.method, 'DELETE');
-  assertEquals(finish?.query.get('claim_token'), `eq.${token}`);
+  assert(!operations.some(operation => operation.table === 'behavioral_profile_regen_queue'));
 }));
 
 for (const scenario of ['sem-perfil', 'falha'] as const) {
@@ -83,6 +82,12 @@ for (const scenario of ['sem-perfil', 'falha'] as const) {
 Deno.test('Reanálise: worker substituído não declara conclusão', () => withRetry('substituido', async (response) => {
   assertEquals(response.status, 409);
   assertEquals((await response.json()).ok, false);
+}));
+
+Deno.test('Reanálise: exclusão pela RPC conserva a confirmação do perfil', () => withRetry('concluida-na-rpc', async (response, operations) => {
+  assertEquals(response.status, 200);
+  assertEquals((await response.json()).ok, true);
+  assert(!operations.some(operation => operation.table === 'behavioral_profile_regen_queue'));
 }));
 
 for (const [scenario, status] of [['pausa', 429], ['nao-admin', 403]] as const) {

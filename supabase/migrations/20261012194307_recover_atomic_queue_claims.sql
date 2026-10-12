@@ -191,6 +191,10 @@ BEGIN
     v_saved.hobbies, v_saved.recurrent_topics, v_saved.based_on_count,
     v_saved.model, p_trigger_source, p_started_at
   );
+  IF p_claim_token IS NOT NULL THEN
+    DELETE FROM public.behavioral_profile_regen_queue
+    WHERE contact_id = p_contact_id AND claim_token = p_claim_token;
+  END IF;
   RETURN to_jsonb(v_saved);
 END;
 $$;

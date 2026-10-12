@@ -56,6 +56,10 @@ Deno.serve(async (req) => {
           if (resp.status === 409) return { status: 409 as const };
           throw new Error(`[${resp.status}] ${txt.slice(0, 200)}`);
         }
+        const receipt: { profile?: { contact_id?: string; user_id?: string } } | null = await resp.json();
+        if (receipt?.profile?.contact_id !== item.contact_id || receipt.profile.user_id !== item.user_id) {
+          throw new Error('Perfil persistido não confirmado');
+        }
         return { status: 200 as const };
       })
     )
@@ -79,6 +83,9 @@ Deno.serve(async (req) => {
 
   const writes = await Promise.all(items.map((item, index) => {
     const outcome = settled[index];
+    if (outcome.status === 'fulfilled' && outcome.value.status === 200) {
+      return { data: { contact_id: item.contact_id }, error: null };
+    }
     const row = admin.from('behavioral_profile_regen_queue');
     if (outcome.status === 'fulfilled') {
       return row.delete().eq('contact_id', item.contact_id).eq('claim_token', item.claim_token).select('contact_id').maybeSingle();

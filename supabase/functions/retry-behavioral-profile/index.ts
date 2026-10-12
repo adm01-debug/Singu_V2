@@ -119,14 +119,6 @@ Deno.serve(async (req) => {
       return json({ ok: false, error: invokeError, requestId }, 502, cors);
     }
 
-    const { data: completed, error: completeError } = await admin
-      .from("behavioral_profile_regen_queue")
-      .delete()
-      .eq("contact_id", contactId).eq("claim_token", claim.claim_token)
-      .abortSignal(AbortSignal.timeout(5_000)).select("contact_id").maybeSingle();
-    if (completeError) throw completeError;
-    if (!completed) return json({ ok: false, error: "Reserva substituída por uma nova solicitação", requestId }, 409, cors);
-
     return json({ ok: true, requestId, contact_id: contactId, trigger: triggerSource }, 200, cors);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);

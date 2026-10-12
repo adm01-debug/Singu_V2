@@ -120,8 +120,10 @@ BEGIN
   IF saved_profile->>'summary' IS DISTINCT FROM 'perfil recente' THEN
     RAISE EXCEPTION 'Perfil e versão não foram salvos com reserva atual';
   END IF;
-  UPDATE public.behavioral_profile_regen_queue SET next_run_at = now()
-  WHERE contact_id = fixture_contact_id;
+  IF EXISTS (SELECT 1 FROM public.behavioral_profile_regen_queue WHERE contact_id = fixture_contact_id)
+    OR EXISTS (SELECT 1 FROM public.claim_regen_batch(1, 15) WHERE contact_id = fixture_contact_id) THEN
+    RAISE EXCEPTION 'Perfil persistido sem concluir a reserva na mesma transação';
+  END IF;
   IF public.save_behavioral_profile_if_fresh(
     fixture_contact_id, current_claim, '{"summary":"perfil obsoleto"}'::jsonb,
     now(), 'auto'
@@ -130,8 +132,13 @@ BEGIN
     OR (SELECT count(*) FROM public.contact_analytical_profile_versions WHERE contact_id = fixture_contact_id) <> 1 THEN
     RAISE EXCEPTION 'Reserva antiga sobrescreveu o perfil ou criou histórico';
   END IF;
-  SELECT claim_token INTO current_claim FROM public.behavioral_profile_regen_queue
+  INSERT INTO public.behavioral_profile_regen_queue(contact_id, user_id, next_run_at)
+  VALUES (fixture_contact_id, owner_id, '-infinity');
+  SELECT claim_token INTO current_claim FROM public.claim_regen_batch(1, 15)
   WHERE contact_id = fixture_contact_id;
+  IF current_claim IS NULL OR current_claim = regen_claim.claim_token THEN
+    RAISE EXCEPTION 'Nova solicitação não criou uma reserva independente';
+  END IF;
   IF public.save_behavioral_profile_if_fresh(
     fixture_contact_id, current_claim, '{"summary":"perfil atualizado"}'::jsonb,
     now(), 'auto'
@@ -147,6 +154,8 @@ BEGIN
   ) IS NOT NULL THEN
     RAISE EXCEPTION 'Geração manual antiga sobrescreveu um perfil recente';
   END IF;
+  INSERT INTO public.behavioral_profile_regen_queue(contact_id, user_id, next_run_at)
+  VALUES (fixture_contact_id, owner_id, now());
   UPDATE public.behavioral_profile_regen_queue
   SET attempts = 5, next_run_at = now() - interval '1 day', last_error = 'Limite de tentativas'
   WHERE contact_id = fixture_contact_id;
@@ -218,6 +227,10 @@ BEGIN
   saved := public.save_behavioral_profile_if_fresh(contact_id, next_claim.claim_token,
     jsonb_build_object('summary', 'Confirmação manual'), clock_timestamp(), 'manual');
   IF saved IS NULL THEN RAISE EXCEPTION 'Perfil manual não foi confirmado'; END IF;
+  IF EXISTS (SELECT 1 FROM public.behavioral_profile_regen_queue q WHERE q.contact_id = next_claim.contact_id)
+    OR EXISTS (SELECT 1 FROM public.claim_regen_batch(1, 15) q WHERE q.contact_id = next_claim.contact_id) THEN
+    RAISE EXCEPTION 'Confirmação manual deixou reserva ativa após gravar o perfil';
+  END IF;
   DELETE FROM public.behavioral_profile_regen_queue q
   WHERE q.contact_id = next_claim.contact_id AND q.claim_token = next_claim.claim_token;
   BEGIN
