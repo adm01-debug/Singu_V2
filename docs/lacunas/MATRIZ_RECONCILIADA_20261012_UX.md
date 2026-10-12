@@ -155,7 +155,8 @@ Base exclusiva: `a2b73c7dee837f19aa756e6afe385eba837b5d54`. Árvore versionada l
 | EF-10, EF-12, EF-15, EF-16, PM-42 | AINDA REPRODUZÍVEL | `20260720000002_ef6_atomic_queue_claim.sql:26` só pending; lead-score-cron:23/bulk-revalidate:76 limit5000; auto-rebatch:35,44 exige duas guardas | Reclaim/paginação/auth consistente; remoto não inferido | Crash recuperável; >5000 itens; header único |
 | EF-11 | AINDA REPRODUZÍVEL | external-data:474 ainda HTTP200; `src/lib/externalData.ts` interpreta erro | Status HTTP correto; mitigação frontend existe | Cliente não confunde erro/vazio |
 | BD-2 | AINDA REPRODUZÍVEL | `src/hooks/useSocialInsights.ts:56-92` | Remover mock no catch; integração adiada | Erro nunca vira promoção fictícia |
-| BD-1, BD-4, MR-10, RA-2 | OBSOLETO/DUPLICADO | `.github/workflows/restore-drill.yml` já existe | Não equivale replay integral/periódico | Agente DR comprova cadeia completa |
+| BD-1, MR-10, RA-2 | AINDA REPRODUZÍVEL | `restore-drill.yml` restaura um dump do banco existente; replay desde banco vazio falha na primeira migration sem `contact_phones` (H-04) | Recuperar fundação histórica e comprovar replay integral | Banco vazio reproduz o catálogo canônico via migrations |
+| BD-4 | NÃO VERIFICADO NO RUNTIME | `restore-drill.yml` comprova restauração de dump, não replay periódico das migrations | Validar periodicidade e critérios distintos | Restaurar dump e reproduzir cadeia do zero em testes separados |
 | BD-5, BD-6, BD-7, BD-8, BD-9, BD-10, PM-39, PM-44, DA-2 | NÃO VERIFICADO NO RUNTIME | Migrations históricas; canônico não consultado nesta unidade | Validar catálogo/constraints/índices | Não inferir ausência por grep |
 | PM-45, RA-4, DD-1, DG-1, DG-2, DG-4, GS-2, SE-3 | NÃO VERIFICADO NO RUNTIME | types canônicos atualizados; scripts/tabelas-ausentes fotografia antiga | Confrontar schema real/DDL/doc | Inventário remoto atual, sem alegar 119 ausências |
 | TQ-3, PM-40, MR-O3 | AINDA REPRODUZÍVEL | `tsconfig.app.json:17-19` permissivo | Endurecimento incremental | strictNullChecks real |
@@ -165,7 +166,8 @@ Base exclusiva: `a2b73c7dee837f19aa756e6afe385eba837b5d54`. Árvore versionada l
 | TQ-11 | AINDA REPRODUZÍVEL | bun.lock/bun.lockb/package-lock; @types em dependencies | Lockfile/deps consistentes | Instalação reprodutível |
 | TQ-12 | AINDA REPRODUZÍVEL | `src/lib/sanitize.ts:18` options após restrições | Precedência segura | Override não reabre atributo proibido |
 | PM-47, RA-5, AR-7 | AINDA REPRODUZÍVEL | `vitest.config.ts` sem thresholds | Piso por domínio | Regressão cobertura bloqueada |
-| PM-48, MR-O4, RA-3, CE-1 | NÃO VERIFICADO NO RUNTIME | CONTRIBUTING:proteção alegada; certificação histórica com aviso | API de proteção/CI pelo agente Infra | Não repetir protected:false antigo |
+| PM-48, MR-O4, RA-3 | AINDA REPRODUZÍVEL | API da `main` responde 404 para proteção de branch; rulesets vazios, como registrado nas matrizes de segurança e banco | Configurar proteção da `main` com checks executados no SHA de PR | Bloquear push direto e merge com check obrigatório falho |
+| CE-1 | NÃO VERIFICADO NO RUNTIME | Certificação histórica com aviso; demais critérios de proteção requerem prova própria | Revalidar no GitHub após ativar proteção | Configuração remota e checks obrigatórios comprovados |
 | PM-49, PM-50, SE-5 | AINDA REPRODUZÍVEL | DocsPage/ONBOARDING ainda contradizem fonte | Relatório reconciliado honesto | Sem selo universal por código existente |
 | TD-7, QF-5b, TD-P4 | NÃO VERIFICADO NO RUNTIME | Migration de partições; dívida DEFINER; promessa cross-region | Catálogo/jobs/infra reais | Prova remota sem supor ausência |
 | TD-P1, AR-6 | AINDA REPRODUZÍVEL | `src/hooks/useMFAGuard.ts:18,30-34`; Auth sem challenge | Política por papel/desafio/enforcement | Admin AAL1 conclui desafio; RLS validada |

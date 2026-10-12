@@ -34,7 +34,7 @@ Heads [108](https://github.com/adm01-debug/Singu_V2/pull/108)/[109](https://gith
 |---|---|---|---|---|
 | EF-1 | RESOLVIDO NO CÓDIGO | evolution-webhook:75–79 sem referência indefinida | Deploy/fluxo real NR; outros bugs F/F28 | Caminho de sucesso sem ReferenceError |
 | EF-2,INV/106 | RESOLVIDO NO CÓDIGO | whatsapp-import:1–4 usa helpers locais | Deploy NR | Import/boot e importação autenticada |
-| EF-3 | AINDA REPRODUZÍVEL | _shared/fetch-utils.ts existe; lux-trigger:27–35/evolution-bitrix-connector têm fetch sem deadline | A alegação “nenhum timeout” é obsoleta; cobrir chamadas restantes | Provedor travado termina em prazo limitado |
+| EF-3 | AINDA REPRODUZÍVEL | _shared/fetch-utils.ts existe; lux-trigger:14–22,155–170 já aplica timeout em cada tentativa; evolution-bitrix-connector mantém chamadas sem deadline | Cobrir apenas as chamadas restantes | Provedor travado termina em prazo limitado |
 | EF-4 | AINDA REPRODUZÍVEL | evolution-webhook:20 exige segredo; :150–155,177–183 escolhe primeiro perfil | Remover fallback cross-owner; integração AD | Instância sem dono é rejeitada, sem atribuição arbitrária |
 | EF-5 | AINDA REPRODUZÍVEL | nurturing-runner:75–78,143–145 chama RPC ausente | Antigo contador=1/duplo incremento mudou; contador continua sem contrato | Duas conclusões incrementam exatamente duas vezes |
 | EF-6 | AINDA REPRODUZÍVEL | validation:38–39/regen:27–28 têm RPC; DLQ:43–73/nurturing:33–38/sequence:66–90 não | Claims parcialmente resolvidos; deploy NR | Dois workers reivindicam lotes disjuntos |
