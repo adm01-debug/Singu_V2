@@ -2,11 +2,17 @@
 // SLA: não reprocessa o mesmo contato mais de 1x a cada 24h
 import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { AI_TIMEOUT_MS } from "../_shared/fetch-utils.ts";
 
 
-const SLA_HOURS = 24;
 const MIN_DOWNVOTES = 3;
-const MAX_BATCH = 25; // limita por execução para evitar timeout
+const MAX_BATCH = 10;
+
+interface ClaimedContact {
+  contact_id: string;
+  user_id: string;
+  claim_token: string;
+}
 
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
@@ -67,74 +73,33 @@ Deno.serve(async (req) => {
       return json({ requestId, processed: 0, skipped: 0, message: "nenhum contato elegível" });
     }
 
-    // 2. Filtrar por SLA — single query fetches both last_processed_at and attempts
-    const contactIds = eligible.map((e) => e.contactId);
-    const { data: queueData, error: queueError } = await admin
-      .from("behavioral_profile_regen_queue")
-      .select("contact_id, last_processed_at, attempts")
-      .in("contact_id", contactIds);
-
-    if (queueError) throw queueError;
-
-    const slaCutoff = Date.now() - SLA_HOURS * 3600 * 1000;
-    const recentMap = new Map(
-      (queueData ?? []).map((r) => [r.contact_id as string, r.last_processed_at as string | null]),
-    );
-    // Derived from the same single query — no second round-trip needed
-    const attemptsMap = new Map<string, number>(
-      (queueData ?? []).map((r: { contact_id: string; attempts: number | null }) => [
-        r.contact_id as string,
-        r.attempts ?? 0,
-      ]),
-    );
-
-    const toProcess = eligible
-      .filter((e) => {
-        const last = recentMap.get(e.contactId);
-        if (!last) return true;
-        return new Date(last).getTime() < slaCutoff;
-      })
-      .slice(0, MAX_BATCH);
-
     let processed = 0;
     const failures: Array<{ contactId: string; error: string }> = [];
-
-    // Batch-upsert all items to mark as queued before invoking
-    const nowIso = new Date().toISOString();
-    const queueRows = toProcess.map((item) => ({
-      contact_id: item.contactId,
-      user_id: item.userId,
-      enqueued_at: nowIso,
-      next_run_at: nowIso,
-      trigger_source: "cron_auto_regen_downvotes",
-    }));
-    const { error: batchQueueError, data: batchQueueData } = await admin
-      .from("behavioral_profile_regen_queue")
-      .upsert(queueRows, { onConflict: "contact_id" })
-      .select("contact_id");
-
-    const enqueuedSet = new Set(
-      (batchQueueData ?? []).map((r: { contact_id: string }) => r.contact_id)
-    );
-    if (batchQueueError) {
-      // If batch fails entirely, fall back to per-item failure recording
-      failures.push(...toProcess.map((item) => ({ contactId: item.contactId, error: batchQueueError.message })));
+    const claimed: ClaimedContact[] = [];
+    for (const item of eligible) {
+      if (claimed.length >= MAX_BATCH) break;
+      const { data, error } = await admin.rpc('claim_behavioral_profile_sla', {
+        p_contact_id: item.contactId, p_user_id: item.userId,
+      });
+      if (error) {
+        failures.push({ contactId: item.contactId, error: error.message });
+      } else if (data) {
+        const claim = data as ClaimedContact;
+        if (claim.contact_id !== item.contactId || claim.user_id !== item.userId || !claim.claim_token) {
+          throw new Error('Reserva comportamental inválida');
+        }
+        claimed.push(claim);
+      }
     }
 
-    // Accumulators for success/failure outcome updates
-    type OutcomeRow = { contact_id: string; last_processed_at: string; last_error: string | null; attempts?: number };
-    const successRows: OutcomeRow[] = [];
-    const failureRows: OutcomeRow[] = [];
-
-    for (const item of toProcess) {
-      // Skip items that failed to enqueue
-      if (batchQueueError && !enqueuedSet.has(item.contactId)) continue;
-
+    async function processClaim(item: ClaimedContact) {
       try {
-        const { error: invokeError } = await admin.functions.invoke(
+        const { data: receipt, error: invokeError } = await admin.functions.invoke<{ profile?: { contact_id?: string; user_id?: string } }>(
           "generate-behavioral-profile",
           {
-            body: { contact_id: item.contactId, trigger: "auto_regen_sla" },
+            signal: AbortSignal.timeout(AI_TIMEOUT_MS + 15_000),
+            body: { contact_id: item.contact_id, user_id: item.user_id,
+              claim_token: item.claim_token, trigger: "auto_regen_sla" },
             headers: {
               "x-internal-key": serviceKey,
               "x-cron-secret": Deno.env.get("CRON_SECRET") ?? "",
@@ -142,39 +107,28 @@ Deno.serve(async (req) => {
           },
         );
         if (invokeError) throw invokeError;
+        if (receipt?.profile?.contact_id !== item.contact_id || receipt.profile.user_id !== item.user_id) {
+          throw new Error('Perfil persistido não confirmado');
+        }
         processed += 1;
-        successRows.push({ contact_id: item.contactId, last_processed_at: new Date().toISOString(), last_error: null });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        failures.push({ contactId: item.contactId, error: msg });
-        const prevAttempts = attemptsMap.get(item.contactId) ?? 0;
-        failureRows.push({
-          contact_id: item.contactId,
-          last_error: msg.slice(0, 500),
-          attempts: prevAttempts + 1,
-          last_processed_at: new Date().toISOString(),
-        });
+        failures.push({ contactId: item.contact_id, error: msg });
+        const { error: writeError } = await admin.from('behavioral_profile_regen_queue')
+          .update({ last_error: msg.slice(0, 500) })
+          .eq('contact_id', item.contact_id).eq('claim_token', item.claim_token);
+        if (writeError) failures.push({ contactId: item.contact_id, error: writeError.message });
       }
-
-      // pequena pausa para não saturar edge function
-      await new Promise((r) => setTimeout(r, 500));
     }
-
-    // Flush all outcome updates in two batched upserts
-    await Promise.all([
-      successRows.length > 0
-        ? admin.from("behavioral_profile_regen_queue").upsert(successRows, { onConflict: "contact_id" })
-        : Promise.resolve(),
-      failureRows.length > 0
-        ? admin.from("behavioral_profile_regen_queue").upsert(failureRows, { onConflict: "contact_id" })
-        : Promise.resolve(),
-    ]);
+    for (let offset = 0; offset < claimed.length; offset += 5) {
+      await Promise.all(claimed.slice(offset, offset + 5).map(processClaim));
+    }
 
     return json({
       requestId,
       eligible: eligible.length,
       processed,
-      skipped: eligible.length - toProcess.length,
+      skipped: eligible.length - claimed.length,
       failures,
       elapsedMs: Date.now() - startedAt,
       alert: await maybeRaiseErrorRateAlert(admin, requestId),

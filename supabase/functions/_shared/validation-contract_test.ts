@@ -142,6 +142,59 @@ Deno.test("geração manual lê com o usuário e confirma pelo serviço após va
   }
 });
 
+Deno.test("cron SLA só invoca com reserva e exige recibo sem recriar a fila concluída", async () => {
+  const claimToken = "55555555-5555-4555-8555-555555555555";
+  let reserved = false;
+  let missingReceipt = false;
+  let calls = 0;
+  const writes: string[] = [];
+  const close = await startHandler("auto-regen-behavioral-profiles", async (req) => {
+    const url = new URL(req.url);
+    if (url.pathname === "/rest/v1/behavioral_insight_feedback") {
+      return Response.json(Array.from({ length: 3 }, () => ({
+        contact_id: contactId, user_id: ownerId, vote: -1, created_at: new Date().toISOString(),
+      })));
+    }
+    if (url.pathname === "/rest/v1/rpc/claim_behavioral_profile_sla") {
+      assertEquals(await req.json(), { p_contact_id: contactId, p_user_id: ownerId });
+      return Response.json(reserved ? { contact_id: contactId, user_id: ownerId, claim_token: claimToken } : null);
+    }
+    if (url.pathname === "/functions/v1/generate-behavioral-profile") {
+      calls++;
+      assertEquals(await req.json(), { contact_id: contactId, user_id: ownerId,
+        claim_token: claimToken, trigger: "auto_regen_sla" });
+      assertEquals(req.headers.get("x-cron-secret"), "cron-teste");
+      return Response.json(missingReceipt ? { ok: true } : { profile: { contact_id: contactId, user_id: ownerId } });
+    }
+    if (url.pathname === "/rest/v1/behavioral_profile_regen_queue") {
+      if (req.method !== "GET") {
+        writes.push(req.method);
+        assertEquals(url.searchParams.get("claim_token"), `eq.${claimToken}`);
+      }
+      return Response.json([]);
+    }
+    if (url.pathname === "/rest/v1/system_alerts") return Response.json([]);
+    return new Response(null, { status: 404 });
+  });
+  const run = () => fetch("http://127.0.0.1:8000/", { method: "POST", headers: { "x-cron-secret": "cron-teste" } });
+  try {
+    assertEquals((await (await run()).json()).processed, 0);
+    assertEquals(calls, 0);
+    assertEquals(writes, []);
+    reserved = true;
+    assertEquals((await (await run()).json()).processed, 1);
+    assertEquals(writes, []);
+    missingReceipt = true;
+    const failed = await (await run()).json();
+    assertEquals(failed.processed, 0);
+    assertEquals(failed.failures[0].error, "Perfil persistido não confirmado");
+    assertEquals(calls, 2);
+    assertEquals(writes, ["PATCH"]);
+  } finally {
+    await close();
+  }
+});
+
 Deno.test("worker usa o token reservado, conta uma tentativa e não confirma gravações rejeitadas", async () => {
   const itemId = "44444444-4444-4444-8444-444444444444";
   const claimToken = "55555555-5555-4555-8555-555555555555";
