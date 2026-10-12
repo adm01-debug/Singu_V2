@@ -14,7 +14,7 @@ export async function sendTrackedNotification(
   send: () => Promise<Response>,
 ): Promise<"sent" | "skipped"> {
   const { error: claimError } = await client.from("notification_logs")
-    .insert({ ...delivery, delivery_status: "pending" });
+    .insert({ ...delivery, delivery_status: "pending", claim_expires_at: new Date(Date.now() + 15 * 60_000).toISOString() });
   if (claimError?.code === "23505") return "skipped";
   if (claimError) throw new Error("Não foi possível reservar a entrega", { cause: claimError });
 
@@ -29,7 +29,7 @@ export async function sendTrackedNotification(
     throw error;
   }
 
-  if ([400, 401, 403, 404, 422, 429].includes(response.status)) {
+  if ([400, 401, 403, 404, 405, 413, 415, 422, 429].includes(response.status)) {
     const { error: releaseError } = await client.from("notification_logs")
       .delete().eq("reminder_id", delivery.reminder_id).eq("channel", delivery.channel)
       .eq("user_id", delivery.user_id).eq("delivery_status", "pending");

@@ -17,6 +17,12 @@ Deno.serve(async (req) => {
   );
 
   try {
+    const { error: expiryError } = await supabaseClient.from('notification_logs')
+      .update({ delivery_status: 'unknown' })
+      .eq('delivery_status', 'pending')
+      .lte('claim_expires_at', new Date().toISOString());
+    if (expiryError) throw expiryError;
+
     // 1. Fetch all users to check reminders for
     const { data: users, error: usersError } = await supabaseClient
       .from('profiles')
