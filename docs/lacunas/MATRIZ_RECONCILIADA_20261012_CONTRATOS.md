@@ -98,7 +98,7 @@ Base: snapshot, exceto PRs. Prefixos: **H**=`src/hooks/`, **C**=`src/components/
 |---|---|---|---|---|
 | C01, X06 | AINDA REPRODUZÍVEL | H/useTeamDashboard.ts:25–54 | Equipe antiga; `value/stage` incompatíveis; erros ignorados | Gestor vê equipe/valores reais, não zeros por falha |
 | C02, C03 | RESOLVIDO NO CÓDIGO | H/useCompanyProfileAnalytics.ts:107–112; H/usePipeline.ts:219; M/20261006130000:321–350 | Banco único/movimento atômico implementados; runtime e baseline pendentes | Analytics e drag persistem na mesma carteira |
-| C04 | OBSOLETO/DUPLICADO | M/20260712215719:90–128; T:entity_relationships | Trigger já valida FROM/TO; tese “nenhuma validação” refutada; tipos agora existem | Confirmar trigger remoto e rejeição de ID inexistente |
+| C04 | AINDA REPRODUZÍVEL | M/20260712215719:90–128 valida FROM/TO apenas no INSERT/UPDATE; não há limpeza após excluir contato/empresa | Definir limpeza ou retenção histórica e impedir vínculos ativos órfãos | Criar vínculo, excluir cada ponta e verificar integridade; confirmar trigger remoto |
 | C05 | AINDA REPRODUZÍVEL | H/useDedupEngine.ts:63–84; PR 108 | Teto 2000 permanece; emails relacionais corrigidos só no PR | Duplicata além do limite também detectada |
 | C06 | AINDA REPRODUZÍVEL | H/useMergeRecords.ts:46–66 | Transação não cobre caminho da deduplicação | Falha intermediária deixa zero mudança parcial |
 | C07, C18 | AINDA REPRODUZÍVEL | H/useTasks.ts:238–243 | Mesmo E-R01: RPC barrada, fallback persiste | Reabertura autorizada pelo contrato |
