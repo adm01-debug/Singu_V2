@@ -7,11 +7,16 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added
+- Matriz reconciliada das auditorias e lacunas com estado por achado, evidências e próximos passos, organizada em cinco áreas e vinculada pelo índice.
+
 ### Fixed
 - A tela de 2FA permite escolher o autenticador a desativar quando há vários fatores, exibindo seu nome na ação e preservando os demais.
 - Administradores podem configurar e confirmar o MFA em AAL1 numa tela de recuperação restrita; as configurações de segurança e demais telas permanecem bloqueadas até AAL2. Um fator já cadastrado oferece confirmação do acesso atual, erros de consulta permitem nova tentativa e o retorno preserva a página, a pesquisa e a âncora sem duplicar o histórico. A troca de sessão exige nova verificação.
 - A recuperação MFA espera a confirmação do papel, preserva o QR contra consultas atrasadas e permite escolher entre autenticadores verificados; remover um fator invalida imediatamente a aprovação do token anterior e exige nova confirmação.
 - A exigência de novo código após remover um fator persiste mesmo com renovação do token e navegação; consultas MFA indisponíveis oferecem nova tentativa sem anunciar falsamente que não há fator cadastrado.
+- O teste de conexões limita a cinco segundos a consulta de propriedade e as gravações auxiliares; o histórico é persistido pelo servidor somente após confirmar o dono, preservando o bloqueio de escrita direta aos usuários.
+- Testes de conexões verificam o proprietário antes de executar ou registrar o teste, usam a sessão autenticada para consultar e atualizar a configuração e identificam o responsável também nas falhas. Endereços privados e reservados, DNS misto, redirecionamentos e porta zero são bloqueados; a conexão usa um dos IPs validados, preservando o hostname na validação TLS e tentando IPv6 quando IPv4 falha. A espera pelo TLS também respeita o prazo global; URLs do Supabase exigem HTTPS antes do envio de credenciais.
 - Consultas externas validam todas as relações embutidas, inclusive aliases e aninhamentos, pela lista de tabelas permitidas. Consultas globais com credencial administrativa recusam relações para preservar o isolamento; sintaxe não suportada e projeções excessivas são rejeitadas antes de consultar o banco.
 - Sugestões de Rodízio filtram UF pelo endereço prioritário da empresa; a busca legada de emails duplicados usa os emails relacionados, considera empresas distintas e mantém o escopo do usuário.
 - Auditorias de contato, empresa e interação aceitam os eventos atuais também no banco reconstruído, preservando os tipos anteriores; os campos opcionais de motivo e metadados são criados quando ausentes. Leituras agregadas usam identificador nulo e contagem de registros; consultas por ID preservam a entidade. Consultas e exclusões confirmadas esperam no máximo cinco segundos pela auditoria auxiliar, sem repetir a gravação atrasada nem perder o dono após a renovação do login.

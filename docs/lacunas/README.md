@@ -1,5 +1,7 @@
 # Anexos — Planejado × Executado (2026-10-11)
 
+> **Reavaliação de 12/10/2026:** consulte a [matriz reconciliada](MATRIZ_RECONCILIADA_20261012.md) para o estado dos achados após as correções recentes. Ela preserva os IDs destes anexos e distingue correção no código, PR aberto e validação em produção.
+
 Evidência completa (`arquivo:linha`) do levantamento consolidado em [`../../PLANEJADO_NAO_EXECUTADO.md`](../../PLANEJADO_NAO_EXECUTADO.md).
 
 Base: `main` @ `e616c20` (fotografia de 11/10/2026). `main` avançou para `36dfc19` durante a auditoria; o que mudou de status depois da base está na **§0 do documento consolidado** e prevalece sobre estes anexos (ex.: CORS da Vercel e `types.ts` já resolvidos; token removido dos arquivos). Auditoria estática, com checagens de runtime somente leitura (API do GitHub, `OPTIONS` nas Edge Functions, `GET /auth/v1/settings`, API da Vercel). Sem acesso SQL ao banco de produção: o que depende dele está marcado **NÃO VERIFICADO**.
