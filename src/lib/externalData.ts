@@ -32,21 +32,24 @@ interface ExternalQueryOptions {
 
 // Cached auth token to avoid calling getSession() on every request
 let _cachedToken: string | null = null;
+let _cachedUserId: string | null = null;
 let _tokenExpiresAt = 0;
 
 supabase.auth.onAuthStateChange((_event, session) => {
   _cachedToken = session?.access_token ?? null;
+  _cachedUserId = session?.user.id ?? null;
   _tokenExpiresAt = session?.expires_at ? session.expires_at * 1000 : 0;
 });
 
-async function getAccessToken(): Promise<string> {
+async function getAccessToken(): Promise<{ token: string; userId: string | null }> {
   if (_cachedToken && Date.now() < _tokenExpiresAt - 30_000) {
-    return _cachedToken;
+    return { token: _cachedToken, userId: _cachedUserId };
   }
   const { data } = await supabase.auth.getSession();
   _cachedToken = data?.session?.access_token ?? null;
+  _cachedUserId = data?.session?.user?.id ?? null;
   _tokenExpiresAt = data?.session?.expires_at ? data.session.expires_at * 1000 : 0;
-  return _cachedToken || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  return { token: _cachedToken || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, userId: _cachedUserId };
 }
 
 const EDGE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/external-data`;
@@ -76,11 +79,11 @@ const externalResponseSchema = z.object({
   count: z.number().int().nonnegative().nullable().optional(),
 });
 
-async function callExternalData(body: Record<string, unknown>, signal?: AbortSignal, canonicalRpc?: { functionName: string; params: Record<string, unknown> }, onAccessToken?: (accessToken: string) => void): Promise<z.infer<typeof externalResponseSchema>> {
+async function callExternalData(body: Record<string, unknown>, signal?: AbortSignal, canonicalRpc?: { functionName: string; params: Record<string, unknown> }, onRequestIdentity?: (userId: string | null) => void): Promise<z.infer<typeof externalResponseSchema>> {
   const breaker = canonicalRpc ? canonicalDbBreaker : externalDbBreaker;
   return breaker.call(async () => {
-    const accessToken = await getAccessToken();
-    onAccessToken?.(accessToken);
+    const { token: accessToken, userId } = await getAccessToken();
+    onRequestIdentity?.(userId);
     if (canonicalRpc && accessToken === ANON_KEY) throw new CanonicalRpcClientError('Autenticação necessária para a RPC do banco');
     const endpoint = canonicalRpc
       ? new URL(`/rest/v1/rpc/${encodeURIComponent(canonicalRpc.functionName)}`, import.meta.env.VITE_SUPABASE_URL).href
@@ -134,10 +137,22 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
 
 export { CircuitOpenError };
 
+async function waitForOptionalAudit(task: Promise<void>): Promise<void> {
+  let auditTimeout: ReturnType<typeof setTimeout> | undefined;
+  try {
+    await Promise.race([task, new Promise<void>(resolve => {
+      auditTimeout = setTimeout(resolve, 5000);
+    })]);
+  } finally {
+    clearTimeout(auditTimeout);
+  }
+}
+
 export async function queryExternalData<T = Record<string, unknown>>(options: ExternalQueryOptions): Promise<{ data: T[] | null; count: number | null; error: Error | null }> {
   const { signal, auditAccess = true, ...queryOptions } = options;
   try {
-    const result = await callExternalData({ action: 'select', ...queryOptions }, signal);
+    let queryUserId: string | null = null;
+    const result = await callExternalData({ action: 'select', ...queryOptions }, signal, undefined, userId => { queryUserId = userId; });
     if (!Array.isArray(result.data)) throw new Error('Resposta externa inválida: data deve ser uma lista');
     if (result.count === undefined) throw new Error('Resposta externa inválida: count ausente');
     const data = result.data as T[];
@@ -146,17 +161,26 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
     const auditEntity = queryOptions.table === 'contacts' || queryOptions.table === 'vw_singu_contact_360'
       ? 'contact' : queryOptions.table === 'companies' ? 'company' : null;
     if (auditAccess && data.length > 0 && auditEntity) {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user?.id) {
-        const { error: auditErr } = await supabase.from('activities').insert({
-          user_id: session.user.id,
-          type: `${auditEntity}_viewed`,
-          entity_type: auditEntity,
-          description: `Acesso a ${data.length} registros da tabela ${queryOptions.table}`,
-          metadata: { query_options: queryOptions },
-        } as never);
-        if (auditErr) logger.warn('Failed to write access audit log', { error: auditErr.message });
-      }
+      await waitForOptionalAudit((async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (queryUserId && session?.user?.id === queryUserId) {
+            const idFilter = queryOptions.filters?.find(filter => filter.type === 'eq' && filter.column === 'id');
+            const entityId = z.string().uuid().safeParse(idFilter?.value);
+            const { error: auditErr } = await supabase.from('activities').insert({
+              user_id: session.user.id,
+              type: `${auditEntity}_viewed`,
+              entity_type: auditEntity,
+              entity_id: entityId.success ? entityId.data : null,
+              description: `Acesso a ${data.length} registros da tabela ${queryOptions.table}`,
+              metadata: { query_options: queryOptions, record_count: data.length },
+            } as never);
+            if (auditErr) logger.warn('Failed to write access audit log', { error: auditErr.message });
+          }
+        } catch (error) {
+          logger.warn('Failed to write access audit log', { error: error instanceof Error ? error.message : String(error) });
+        }
+      })());
     }
 
     return { data, count, error: null };
@@ -263,15 +287,14 @@ export async function updateExternalDataWithVersion<T = Record<string, unknown>>
 
 export async function deleteExternalData(table: string, id: string, audit?: { entityName?: string; description?: string; reason?: string }): Promise<{ success: boolean; error: Error | null }> {
   try {
-    let deletionToken: string | undefined;
-    await callExternalData({ action: 'delete', table, id }, undefined, undefined, token => { deletionToken = token; });
+    let deletionUserId: string | null = null;
+    await callExternalData({ action: 'delete', table, id }, undefined, undefined, userId => { deletionUserId = userId; });
     const entity = table === 'contacts' ? 'contact' : table === 'companies' ? 'company' : table === 'interactions' ? 'interaction' : null;
     if (entity) {
-      let auditTimeout: ReturnType<typeof setTimeout> | undefined;
       const auditTask = (async () => {
         try {
           const { data: { session } } = await supabase.auth.getSession();
-          if (session?.user?.id && session.access_token === deletionToken) {
+          if (deletionUserId && session?.user?.id === deletionUserId) {
             const { error: auditErr } = await supabase.from('activities').insert({
               user_id: session.user.id,
               type: `${entity}_deleted`,
@@ -287,13 +310,7 @@ export async function deleteExternalData(table: string, id: string, audit?: { en
           logger.warn('Failed to write delete audit log', { error: error instanceof Error ? error.message : String(error) });
         }
       })();
-      try {
-        await Promise.race([auditTask, new Promise<void>(resolve => {
-          auditTimeout = setTimeout(resolve, 5000);
-        })]);
-      } finally {
-        clearTimeout(auditTimeout);
-      }
+      await waitForOptionalAudit(auditTask);
     }
     return { success: true, error: null };
   } catch (err) {

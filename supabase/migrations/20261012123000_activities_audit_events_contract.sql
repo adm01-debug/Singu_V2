@@ -1,5 +1,6 @@
 ALTER TABLE public.activities ADD COLUMN IF NOT EXISTS reason text;
 ALTER TABLE public.activities ADD COLUMN IF NOT EXISTS metadata jsonb;
+ALTER TABLE public.activities ALTER COLUMN entity_id DROP NOT NULL;
 
 DO $events$
 DECLARE
@@ -39,6 +40,7 @@ $events$;
 -- No banco canônico a constraint já aceita os eventos atuais e permanece inalterada.
 -- As colunas adicionais permanecem para preservar os dados. O rollback falha sem remover linhas
 -- se já houver eventos atuais; restaurar primeiro o código e arquivar esses eventos com backup.
+-- A nulabilidade de entity_id permanece para preservar auditorias agregadas de listas.
 -- BEGIN;
 -- ALTER TABLE public.activities DROP CONSTRAINT activities_type_check;
 -- ALTER TABLE public.activities ADD CONSTRAINT activities_type_check CHECK (type IN (

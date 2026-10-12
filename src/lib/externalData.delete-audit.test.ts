@@ -71,6 +71,17 @@ describe('Auditoria única após exclusão confirmada', () => {
     expect(mocks.insert).not.toHaveBeenCalled();
   });
 
+  it('mantém a auditoria após renovação do token da mesma conta', async () => {
+    mocks.getSession.mockResolvedValueOnce({ data: { session: { access_token: 'jwt-antigo', user: { id: 'dono' } } } })
+      .mockResolvedValue({ data: { session: { access_token: 'jwt-renovado', user: { id: 'dono' } } } });
+    expect(await deleteExternalData('contacts', 'registro')).toEqual({ success: true, error: null });
+    expect(mocks.fetch).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({
+      headers: expect.objectContaining({ Authorization: 'Bearer jwt-antigo' }),
+    }));
+    expect(mocks.insert).toHaveBeenCalledTimes(1);
+    expect(mocks.insert).toHaveBeenCalledWith(expect.objectContaining({ user_id: 'dono' }));
+  });
+
   it('não inventa uma interação excluída para outras tabelas', async () => {
     expect((await deleteExternalData('tasks', 'registro')).success).toBe(true);
     expect(mocks.insert).not.toHaveBeenCalled();
