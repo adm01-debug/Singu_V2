@@ -4,17 +4,19 @@
 // - Invoca generate-behavioral-profile com x-internal-key (bypass RLS)
 // - Atualiza a fila com o resultado (sucesso ou erro)
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { guardBody, scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 import { validate } from "../_shared/validate.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const limiter = rateLimit({ windowMs: 60_000, max: 20, message: "Limite de reanálises atingido. Aguarde um minuto." });
+interface RetryClaim { contact_id: string; user_id: string; claim_token: string; attempts: number }
 
 
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
 
-  const cronCheck = await requireCronSecret(req);
-  if (cronCheck) return cronCheck;
   const requestId = crypto.randomUUID();
 
   const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
@@ -50,6 +52,8 @@ Deno.serve(async (req) => {
     if (!isAdmin) {
       return json({ error: "Acesso negado: requer admin", requestId }, 403, cors);
     }
+    const limited = limiter.check(callerId, req);
+    if (limited) return limited;
 
     // 3) Valida input
     const vr = validate(rawBody, {
@@ -60,58 +64,15 @@ Deno.serve(async (req) => {
     const { contact_id: contactId, trigger } = vr.data as { contact_id: string; trigger?: string };
     const triggerSource = trigger || `manual_retry:${callerId.slice(0, 8)}`;
 
-    // 4) Busca user_id dono do contato + estado atual da fila (cooldown)
-    const { data: contactRow, error: contactErr } = await admin
-      .from("contacts")
-      .select("user_id")
-      .eq("id", contactId)
-      .maybeSingle();
-    if (contactErr) throw contactErr;
-    if (!contactRow?.user_id) {
-      return json({ error: "Contato não encontrado", requestId }, 404, cors);
-    }
-    const ownerId = contactRow.user_id as string;
-
-    // 4.1) Cooldown: 5 min entre retries manuais do mesmo contato
-    //      Evita cliques repetidos, race entre admins e custo de LLM.
-    const COOLDOWN_MS = 5 * 60 * 1000;
-    const { data: queueRow } = await admin
-      .from("behavioral_profile_regen_queue")
-      .select("last_processed_at, trigger_source")
-      .eq("contact_id", contactId)
-      .maybeSingle();
-    if (queueRow?.last_processed_at) {
-      const lastMs = new Date(queueRow.last_processed_at as string).getTime();
-      const ageMs = Date.now() - lastMs;
-      const wasManual = String(queueRow.trigger_source ?? "").startsWith("manual_retry");
-      if (wasManual && ageMs < COOLDOWN_MS) {
-        const retryInSec = Math.ceil((COOLDOWN_MS - ageMs) / 1000);
-        return json(
-          {
-            error: `Aguarde ${retryInSec}s antes de reenfileirar este contato novamente.`,
-            requestId,
-            cooldown: true,
-            retry_in_seconds: retryInSec,
-          },
-          429,
-          cors,
-        );
-      }
-    }
-
-    // 5) Marca fila como retry em andamento (sem tocar last_processed_at ainda)
-    const enqueuedIso = new Date().toISOString();
-    await admin.from("behavioral_profile_regen_queue").upsert(
-      {
-        contact_id: contactId,
-        user_id: ownerId,
-        enqueued_at: enqueuedIso,
-        next_run_at: enqueuedIso,
-        trigger_source: triggerSource,
-        last_error: null,
-      },
-      { onConflict: "contact_id" },
-    );
+    const { data: claim, error: claimError } = await admin.rpc("claim_behavioral_profile_retry", {
+      p_contact_id: contactId, p_actor_id: callerId,
+    }).abortSignal(AbortSignal.timeout(5_000)).single<RetryClaim>();
+    if (claimError?.code === "P0001") return json({ ok: false, error: claimError.message, cooldown: true, requestId }, 429, cors);
+    if (claimError?.code === "22023") return json({ ok: false, error: "Contato não encontrado", requestId }, 404, cors);
+    if (claimError?.code === "42501") return json({ ok: false, error: "Reanálise não autorizada", requestId }, 403, cors);
+    if (claimError) throw claimError;
+    if (!claim?.claim_token || !claim.user_id) throw new Error("Reserva da reanálise não confirmada");
+    const ownerId = claim.user_id;
 
     // 6) Invoca gerador com service-role (bypass RLS: admin não precisa ter acesso ao histórico)
     let invokeError: string | null = null;
@@ -128,6 +89,8 @@ Deno.serve(async (req) => {
         body: JSON.stringify({
           contact_id: contactId,
           user_id: ownerId,
+          claim_token: claim.claim_token,
+          manual_retry: true,
           trigger: triggerSource,
         }),
       });
@@ -135,40 +98,34 @@ Deno.serve(async (req) => {
         const txt = await resp.text();
         invokeError = `[${resp.status}] ${txt.slice(0, 300)}`;
       } else {
-        // consome body para evitar leak
-        await resp.text();
+        const receipt: { profile?: { contact_id?: string; user_id?: string } } | null = await resp.json();
+        if (receipt?.profile?.contact_id !== contactId || receipt.profile.user_id !== ownerId) invokeError = "Perfil persistido não confirmado";
       }
     } catch (e) {
       invokeError = e instanceof Error ? e.message : String(e);
     }
 
-    const finishedIso = new Date().toISOString();
     if (invokeError) {
-      // Incrementa attempts corretamente
-      const { data: cur } = await admin
-        .from("behavioral_profile_regen_queue")
-        .select("attempts")
-        .eq("contact_id", contactId)
-        .maybeSingle();
-      const prev = (cur as { attempts?: number } | null)?.attempts ?? 0;
-      await admin
+      const { data: failed, error: failError } = await admin
         .from("behavioral_profile_regen_queue")
         .update({
           last_error: `manual_retry_failed: ${invokeError}`.slice(0, 500),
-          attempts: prev + 1,
-          last_processed_at: finishedIso,
+          next_run_at: new Date(Date.now() + Math.min(60, 5 * 2 ** (claim.attempts - 1)) * 60_000).toISOString(),
         })
-        .eq("contact_id", contactId);
+        .eq("contact_id", contactId).eq("claim_token", claim.claim_token)
+        .abortSignal(AbortSignal.timeout(5_000)).select("contact_id").maybeSingle();
+      if (failError) throw failError;
+      if (!failed) return json({ ok: false, error: "Reserva substituída por uma nova solicitação", requestId }, 409, cors);
       return json({ ok: false, error: invokeError, requestId }, 502, cors);
     }
 
-    await admin
+    const { data: completed, error: completeError } = await admin
       .from("behavioral_profile_regen_queue")
-      .update({
-        last_error: null,
-        last_processed_at: finishedIso,
-      })
-      .eq("contact_id", contactId);
+      .delete()
+      .eq("contact_id", contactId).eq("claim_token", claim.claim_token)
+      .abortSignal(AbortSignal.timeout(5_000)).select("contact_id").maybeSingle();
+    if (completeError) throw completeError;
+    if (!completed) return json({ ok: false, error: "Reserva substituída por uma nova solicitação", requestId }, 409, cors);
 
     return json({ ok: true, requestId, contact_id: contactId, trigger: triggerSource }, 200, cors);
   } catch (err) {

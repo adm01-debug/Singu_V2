@@ -3,6 +3,11 @@ SELECT set_config('rls.queue_owner', (SELECT id::text FROM auth.users ORDER BY c
 INSERT INTO public.contacts(user_id, first_name, last_name)
 VALUES (current_setting('rls.queue_owner')::uuid, 'Contrato', 'Fila atômica')
 RETURNING set_config('rls.queue_contact', id::text, true);
+INSERT INTO public.contacts(user_id, first_name, last_name)
+VALUES (current_setting('rls.queue_owner')::uuid, 'Contrato', 'Reanálise manual')
+RETURNING set_config('rls.retry_contact', id::text, true);
+INSERT INTO public.user_roles(user_id, role)
+VALUES (current_setting('rls.queue_owner')::uuid, 'admin') ON CONFLICT DO NOTHING;
 SET LOCAL ROLE service_role;
 DO $test$
 DECLARE
@@ -20,7 +25,9 @@ BEGIN
   IF has_function_privilege('anon', 'public.claim_validation_batch(integer,integer)', 'EXECUTE')
     OR has_function_privilege('authenticated', 'public.claim_validation_batch(integer,integer)', 'EXECUTE')
     OR has_function_privilege('anon', 'public.claim_regen_batch(integer,integer)', 'EXECUTE')
-    OR has_function_privilege('authenticated', 'public.claim_regen_batch(integer,integer)', 'EXECUTE') THEN
+    OR has_function_privilege('authenticated', 'public.claim_regen_batch(integer,integer)', 'EXECUTE')
+    OR has_function_privilege('anon', 'public.claim_behavioral_profile_retry(uuid,uuid)', 'EXECUTE')
+    OR has_function_privilege('authenticated', 'public.claim_behavioral_profile_retry(uuid,uuid)', 'EXECUTE') THEN
     RAISE EXCEPTION 'Claim de fila exposto a um usuário público';
   END IF;
   IF has_column_privilege('authenticated', 'public.validation_queue', 'claim_token', 'UPDATE')
@@ -169,6 +176,57 @@ BEGIN
   END IF;
 END;
 $test$;
+DO $manual$
+DECLARE
+  contact_id uuid := current_setting('rls.retry_contact')::uuid;
+  actor_id uuid := current_setting('rls.queue_owner')::uuid;
+  first_claim public.behavioral_profile_regen_queue;
+  next_claim public.behavioral_profile_regen_queue;
+  affected integer;
+  saved jsonb;
+BEGIN
+  BEGIN
+    PERFORM public.claim_behavioral_profile_retry(contact_id, gen_random_uuid());
+    RAISE EXCEPTION 'Reanálise aceitou operador sem papel administrativo';
+  EXCEPTION WHEN insufficient_privilege THEN NULL;
+  END;
+  first_claim := public.claim_behavioral_profile_retry(contact_id, actor_id);
+  IF first_claim.user_id <> actor_id OR first_claim.attempts <> 1 OR first_claim.claim_token IS NULL THEN
+    RAISE EXCEPTION 'Reserva manual não confirmou dono, tentativa ou token';
+  END IF;
+  BEGIN
+    PERFORM public.claim_behavioral_profile_retry(contact_id, actor_id);
+    RAISE EXCEPTION 'Reanálise substituiu uma reserva vigente' USING ERRCODE = 'XX000';
+  EXCEPTION WHEN raise_exception THEN NULL;
+  END;
+  IF NOT EXISTS (SELECT 1 FROM public.behavioral_profile_regen_queue q
+    WHERE q.contact_id = first_claim.contact_id AND q.claim_token = first_claim.claim_token AND q.attempts = 1) THEN
+    RAISE EXCEPTION 'Repetição manual alterou uma reserva vigente';
+  END IF;
+  UPDATE public.behavioral_profile_regen_queue q
+  SET next_run_at = clock_timestamp() - interval '1 second',
+      last_processed_at = clock_timestamp() - interval '6 minutes'
+  WHERE q.contact_id = first_claim.contact_id;
+  next_claim := public.claim_behavioral_profile_retry(contact_id, actor_id);
+  IF next_claim.attempts <> 2 OR next_claim.claim_token = first_claim.claim_token THEN
+    RAISE EXCEPTION 'Nova reserva manual zerou tentativas ou reutilizou token';
+  END IF;
+  DELETE FROM public.behavioral_profile_regen_queue q
+  WHERE q.contact_id = first_claim.contact_id AND q.claim_token = first_claim.claim_token;
+  GET DIAGNOSTICS affected = ROW_COUNT;
+  IF affected <> 0 THEN RAISE EXCEPTION 'Operador antigo removeu a reserva nova'; END IF;
+  saved := public.save_behavioral_profile_if_fresh(contact_id, next_claim.claim_token,
+    jsonb_build_object('summary', 'Confirmação manual'), clock_timestamp(), 'manual');
+  IF saved IS NULL THEN RAISE EXCEPTION 'Perfil manual não foi confirmado'; END IF;
+  DELETE FROM public.behavioral_profile_regen_queue q
+  WHERE q.contact_id = next_claim.contact_id AND q.claim_token = next_claim.claim_token;
+  BEGIN
+    PERFORM public.claim_behavioral_profile_retry(contact_id, actor_id);
+    RAISE EXCEPTION 'Conclusão manual perdeu a pausa de cinco minutos' USING ERRCODE = 'XX000';
+  EXCEPTION WHEN raise_exception THEN NULL;
+  END;
+END;
+$manual$;
 SET LOCAL ROLE authenticated;
 DO $denied$
 BEGIN

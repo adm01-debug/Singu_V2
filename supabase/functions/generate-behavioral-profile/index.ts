@@ -65,9 +65,10 @@ Deno.serve(async (req) => {
       contact_id: { type: 'string', required: true, maxLength: 36 },
       user_id:    { type: 'string', maxLength: 36 },
       claim_token: { type: 'string', maxLength: 36 },
+      manual_retry: { type: 'boolean' },
     });
     if (!vbp.ok) return jsonWithCors({ error: vbp.error }, 400);
-    const body = vbp.data as { contact_id: string; user_id?: string; claim_token?: string };
+    const body = vbp.data as { contact_id: string; user_id?: string; claim_token?: string; manual_retry?: boolean };
 
     let userId: string | null = null;
     let supabase;
@@ -251,7 +252,7 @@ Deno.serve(async (req) => {
         p_claim_token: isInternal ? body.claim_token ?? null : null,
         p_profile: row,
         p_started_at: startedAt,
-        p_trigger_source: isInternal ? 'auto' : 'manual',
+        p_trigger_source: isInternal && !body.manual_retry ? 'auto' : 'manual',
       },
     ).abortSignal(AbortSignal.timeout(5_000));
     if (saveError) {
