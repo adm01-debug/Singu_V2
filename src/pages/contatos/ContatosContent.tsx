@@ -173,6 +173,7 @@ export function ContatosContent(props: Props) {
           onAddClick={() => onSetIsFormOpen(true)}
           hideBack
           showSearch
+          searchValue={searchTerm}
           onSearchChange={onSearchChange}
           className="shadow-none border-b-0"
         />

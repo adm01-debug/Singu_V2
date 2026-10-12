@@ -8,6 +8,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- A pesquisa de contatos mostra e aplica o termo preservado na URL após Voltar, recarregar e aplicar uma pesquisa salva.
 - A lista de empresas diferencia consulta indisponível de carteira vazia, oferece nova tentativa e preserva os registros confirmados quando uma atualização falha.
 - Voltar e o histórico usam as entradas do navegador, mantêm filtros e âncoras (inclusive URLs extensas) e permitem avançar novamente sem criar ciclos. Destinos explícitos são respeitados e o rastro é validado e ocultado imediatamente na troca de usuário. O menu distingue buscas e visitas; abrir/fechar a busca não duplica índices nem desfaz o destino escolhido.
 - O site publicado e seus previews podem consultar as funções Supabase a partir das suas próprias origens; quando a consulta de uma empresa falha, a tela indica o erro e permite tentar de novo, sem confundi-la com um registro inexistente.
