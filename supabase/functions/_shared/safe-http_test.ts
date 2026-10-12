@@ -20,7 +20,7 @@ Deno.test("bloqueia redes IPv4 e IPv6 especiais, inclusive formas mapeadas", () 
 
 function networkWithRecords(records: string[]): HttpTransport {
   return {
-    resolve: () => Promise.resolve(records),
+    resolve: (_hostname, type) => Promise.resolve(type === "A" ? records : []),
     connect: () => { throw new Error("A conexão não deveria ser aberta"); },
     startTls: () => { throw new Error("TLS não deveria ser iniciado"); },
   };
@@ -117,18 +117,19 @@ Deno.test("encerra a espera quando o handshake TLS não termina", async () => {
   const network: HttpTransport = {
     ...networkWithRecords(["8.8.8.8"]),
     connect: () => Deno.connect({ hostname: "127.0.0.1", port: listener.addr.port }),
-    startTls: () => new Promise<Deno.TlsConn>(() => {}),
+    startTls: (connection, hostname) => Deno.startTls(connection, { hostname }),
   };
   const serverConnection = listener.accept();
   try {
     const attempt = safeFetch("https://public.test/", {}, network);
     const accepted = await serverConnection;
+    let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       const result = await Promise.race([
         attempt.then(() => "conectou", () => "cancelou"),
-        new Promise<string>((resolve) => setTimeout(() => resolve("travou"), 12_000)),
+        new Promise<string>((resolve) => { timer = setTimeout(() => resolve("travou"), 12_000); }),
       ]);
       assertEquals(result, "cancelou");
-    } finally { accepted.close(); }
+    } finally { clearTimeout(timer); accepted.close(); }
   } finally { listener.close(); }
 });
