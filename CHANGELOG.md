@@ -7,6 +7,9 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added
+- Matriz reconciliada das auditorias e lacunas com estado por achado, evidências e próximos passos, organizada em cinco áreas e vinculada pelo índice.
+
 ### Fixed
 - Sugestões de Rodízio filtram UF pelo endereço prioritário da empresa; a busca legada de emails duplicados usa os emails relacionados, considera empresas distintas e mantém o escopo do usuário.
 - Auditorias de contato, empresa e interação aceitam os eventos atuais também no banco reconstruído, preservando os tipos anteriores; os campos opcionais de motivo e metadados são criados quando ausentes. Leituras agregadas usam identificador nulo e contagem de registros; consultas por ID preservam a entidade. Consultas e exclusões confirmadas esperam no máximo cinco segundos pela auditoria auxiliar, sem repetir a gravação atrasada nem perder o dono após a renovação do login.
