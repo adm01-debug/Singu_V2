@@ -36,10 +36,10 @@ BEGIN
     LEFT JOIN public.customer_rotation_state crs ON crs.customer_id = c.id
     WHERE c.deleted_at IS NULL
       AND (NOT (p_filtros ? 'vendedor_id') OR c.vendedor_id = (p_filtros->>'vendedor_id')::integer)
-      AND (NOT (p_filtros ? 'uf') OR EXISTS (
-        SELECT 1 FROM public.company_addresses ca
-        WHERE ca.company_id = c.company_id AND ca.estado = p_filtros->>'uf'
-      ))
+      AND (NOT (p_filtros ? 'uf') OR (SELECT ca.estado
+        FROM public.company_addresses ca WHERE ca.company_id = c.company_id
+        ORDER BY ca.is_primary DESC NULLS LAST, ca.created_at DESC LIMIT 1
+      ) = p_filtros->>'uf')
       AND (NOT (p_filtros ? 'ramo_atividade') OR c.ramo_atividade = p_filtros->>'ramo_atividade')
       AND (NOT (p_filtros ? 'grupo_clientes') OR c.grupo_clientes = p_filtros->>'grupo_clientes')
       AND (NOT (p_filtros ? 'valor_min') OR c.valor_total_compras >= (p_filtros->>'valor_min')::numeric)

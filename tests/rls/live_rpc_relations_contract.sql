@@ -32,10 +32,12 @@ INSERT INTO public.company_emails(company_id, email) VALUES
 INSERT INTO public.company_emails(company_id, email)
 VALUES (current_setting('rls.rpc.company_sp')::uuid, current_setting('rls.rpc.marker') || '@example.test')
 ON CONFLICT DO NOTHING;
-INSERT INTO public.company_addresses(company_id, estado) VALUES
-  (current_setting('rls.rpc.company_sp')::uuid, 'SP'),
-  (current_setting('rls.rpc.company_sp')::uuid, 'SP'),
-  (current_setting('rls.rpc.company_rj')::uuid, 'RJ');
+INSERT INTO public.company_addresses(company_id, estado, is_primary, created_at) VALUES
+  (current_setting('rls.rpc.company_sp')::uuid, 'SP', true, '2026-01-01T00:00:00Z'),
+  (current_setting('rls.rpc.company_sp')::uuid, 'SP', false, '2026-03-01T00:00:00Z'),
+  (current_setting('rls.rpc.company_sp')::uuid, 'RJ', false, '2026-02-01T00:00:00Z'),
+  (current_setting('rls.rpc.company_rj')::uuid, 'SP', false, '2026-01-01T00:00:00Z'),
+  (current_setting('rls.rpc.company_rj')::uuid, 'RJ', false, '2026-02-01T00:00:00Z');
 INSERT INTO public.customers(id, company_id, ramo_atividade) VALUES
   (current_setting('rls.rpc.customer_sp')::uuid, current_setting('rls.rpc.company_sp')::uuid, current_setting('rls.rpc.marker')),
   (current_setting('rls.rpc.customer_rj')::uuid, current_setting('rls.rpc.company_rj')::uuid, current_setting('rls.rpc.marker'));
@@ -82,6 +84,14 @@ BEGIN
     SELECT 1 FROM public.rodizio_distribuicao_staging
     WHERE onda = wave AND customer_id = current_setting('rls.rpc.customer_rj')::uuid) THEN
     RAISE EXCEPTION 'Segundo estado não foi sugerido';
+  END IF;
+  saved := public.rodizio_sugerir_distribuicao(wave + 1, jsonb_build_object('uf', 'RJ', 'ramo_atividade', current_setting('rls.rpc.marker')));
+  IF (saved->>'clientes_sugeridos')::integer <> 1 OR NOT EXISTS (
+    SELECT 1 FROM public.rodizio_distribuicao_staging
+    WHERE onda = wave + 1 AND customer_id = current_setting('rls.rpc.customer_rj')::uuid)
+    OR EXISTS (SELECT 1 FROM public.rodizio_distribuicao_staging
+      WHERE onda = wave + 1 AND customer_id = current_setting('rls.rpc.customer_sp')::uuid) THEN
+    RAISE EXCEPTION 'UF secundária prevaleceu sobre endereço principal ou mais recente';
   END IF;
 END;
 $rotation$;
