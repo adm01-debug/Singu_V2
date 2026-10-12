@@ -56,7 +56,9 @@ BEGIN
     OR coalesce(v_enrollment.paused_reason, '') NOT IN (
       'Envio não confirmado; revise a integração antes de retomar',
       'Provedor confirmou o envio; persistência ou avanço exigem revisão')
-    OR coalesce(v_enrollment.metadata, '{}'::jsonb) ? 'pending_manual_step'
+  OR coalesce(v_enrollment.metadata, '{}'::jsonb) ? 'pending_manual_step'
+  OR NOT EXISTS (SELECT 1 FROM public.contacts AS contact
+    WHERE contact.id = v_enrollment.contact_id AND NULLIF(btrim(contact.email), '') IS NOT NULL)
     OR NOT EXISTS (SELECT 1 FROM public.sequences AS sequence
       WHERE sequence.id = v_enrollment.sequence_id AND sequence.status = 'active') THEN
     RAISE EXCEPTION 'Pausa alterada ou indisponível para retomada de email' USING ERRCODE = '55000';
@@ -80,7 +82,10 @@ BEGIN
   ) RETURNING id INTO v_receipt;
 
   UPDATE public.sequence_enrollments
-  SET status = 'active', paused_at = NULL, paused_reason = NULL, next_action_at = now()
+  SET status = 'active', paused_at = NULL, paused_reason = NULL, next_action_at = now(),
+      metadata = coalesce(metadata, '{}'::jsonb) || jsonb_build_object(
+        'retry_unconfirmed_email', jsonb_build_object('receipt_id', v_receipt, 'step_order', p_current_step + 1)
+      )
   WHERE id = p_enrollment_id AND user_id = v_uid;
 
   RETURN jsonb_build_object('enrollment_id', p_enrollment_id, 'receipt_id', v_receipt,

@@ -176,7 +176,7 @@ export function useSequencePausedEmails(sequenceId: string) {
             contactName: [contact?.first_name, contact?.last_name].filter(Boolean).join(' ') || 'Contato indisponível',
             email: contact?.email ?? null, currentStep: row.current_step ?? 0,
             pausedAt: row.paused_at, reason: row.paused_reason ?? '',
-            valid: !!contact && !!row.paused_at && row.current_step !== null &&
+            valid: !!contact?.email?.trim() && !!row.paused_at && row.current_step !== null &&
               !!steps?.some(step => step.step_order === row.current_step! + 1 && step.channel === 'email'),
           });
         }

@@ -36,8 +36,9 @@ export function SequencePausedEmails({ sequenceId, active }: { sequenceId: strin
               <Link to={`/contatos/${row.contactId}`} className="font-medium underline">{row.contactName}</Link>
               {row.email && <p className="text-muted-foreground">{row.email}</p>}
               <p>Etapa {row.currentStep + 1} · {row.reason}</p>
-              {!row.valid && <p role="alert" className="text-destructive">Contato, etapa ou pausa alterados. Revise a inscrição.</p>}
-              <Button size="sm" variant="outline" disabled={!active || !row.valid || resuming}
+              {!row.email?.trim() ? <p role="alert" className="text-destructive">Adicione um endereço de email ao contato antes de retomar.</p>
+                : !row.valid && <p role="alert" className="text-destructive">Contato, etapa ou pausa alterados. Revise a inscrição.</p>}
+              <Button size="sm" variant="outline" disabled={!active || !row.valid || !row.email?.trim() || resuming}
                 onClick={() => setSelectedId(row.enrollmentId)}>Retomar email</Button>
             </li>
           ))}
@@ -54,7 +55,7 @@ export function SequencePausedEmails({ sequenceId, active }: { sequenceId: strin
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={resuming}>Cancelar</AlertDialogCancel>
-            <Button onClick={() => void confirmResume()} disabled={resuming || !active || !selected?.valid}>
+            <Button onClick={() => void confirmResume()} disabled={resuming || !active || !selected?.valid || !selected?.email?.trim()}>
               {resuming ? 'Registrando…' : 'Revisei — retomar'}
             </Button>
           </AlertDialogFooter>

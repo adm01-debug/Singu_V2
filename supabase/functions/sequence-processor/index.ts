@@ -347,11 +347,14 @@ async function sendEmailStep(
   nextAction: string | null,
   confirmedLog?: SendLogEntry,
 ): Promise<EmailResult> {
-  let accepted = !!confirmedLog?.message_id;
+  let accepted = !!confirmedLog?.message_id?.trim();
   let newlySent = false;
   try {
     if (!contact || contact.user_id !== enr.user_id) throw new Error('Contato não pertence ao proprietário da inscrição');
-    if (confirmedLog && !confirmedLog.message_id) throw new Error('Envio anterior sem confirmação do provedor; revise antes de retomar');
+    if (confirmedLog && !confirmedLog.message_id?.trim()) {
+      await requireLegacyEmailResume(supabase, enr, step);
+      confirmedLog = undefined;
+    }
 
     const idempotencyKey = `seq-${enr.id}-step-${step.step_order}`;
     const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(idempotencyKey));
@@ -412,6 +415,19 @@ async function sendEmailStep(
     }
     return { sent: newlySent, advanced: false, paused: !!paused && !pauseError };
   }
+}
+
+async function requireLegacyEmailResume(supabase: SupabaseClient, enr: Enrollment, step: Step) {
+  const retry = enr.metadata?.retry_unconfirmed_email;
+  if (!retry || typeof retry !== 'object' || !('receipt_id' in retry) ||
+    typeof retry.receipt_id !== 'string' || !('step_order' in retry) || retry.step_order !== step.step_order) {
+    throw new Error('Envio anterior sem confirmação do provedor; revise antes de retomar');
+  }
+  const { data, error } = await supabase.from('sequence_events').select('id')
+    .eq('id', retry.receipt_id).eq('enrollment_id', enr.id).eq('user_id', enr.user_id)
+    .eq('sequence_id', enr.sequence_id).eq('contact_id', enr.contact_id)
+    .eq('step_order', step.step_order).eq('event_type', 'email_resumed').maybeSingle();
+  if (error || data?.id !== retry.receipt_id) throw new Error('Recibo de retomada do envio legado não confirmado');
 }
 
 async function completeEmailDelivery(

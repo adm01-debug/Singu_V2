@@ -1,6 +1,6 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 
-type Scenario = 'ausente' | 'sem-id' | 'confirmado' | 'log-falha' | 'evento-falha' | 'avanco-vazio' | 'consulta-falha' | 'contato-alheio' | 'legado' | 'confirmado-existente' | 'manual' | 'sequencia-pausada' | 'resposta' | 'bounce-espera' | 'bounce-apos' | 'progresso-nulo' | 'progresso-nulo-falha' | 'logs-paginados';
+type Scenario = 'ausente' | 'sem-id' | 'confirmado' | 'log-falha' | 'evento-falha' | 'avanco-vazio' | 'consulta-falha' | 'contato-alheio' | 'legado' | 'legado-retomado' | 'legado-sem-recibo' | 'confirmado-existente' | 'manual' | 'sequencia-pausada' | 'resposta' | 'bounce-espera' | 'bounce-apos' | 'progresso-nulo' | 'progresso-nulo-falha' | 'logs-paginados';
 interface Operation { table: string; method: string; body: Record<string, unknown>; query: URLSearchParams }
 
 const owner = '11111111-1111-4111-8111-111111111111';
@@ -19,6 +19,9 @@ function mockRead(table: string, scenario: Scenario, query: URLSearchParams): Re
     id: enrollment, sequence_id: sequence, contact_id: contact, user_id: owner,
     status: 'active', current_step: scenario.startsWith('bounce-') ? 1 : currentStep, next_action_at: '2020-01-01T00:00:00Z',
     enrolled_at: '2020-01-01T00:00:00Z', replied_at: null, last_step_executed_at: null,
+    metadata: scenario.startsWith('legado-') ? { retry_unconfirmed_email: {
+      step_order: 1, receipt_id: '88888888-8888-4888-8888-888888888888',
+    } } : {},
   }]);
   if (table === 'sequences') return json([{ id: sequence, user_id: owner, status: scenario === 'sequencia-pausada' ? 'paused' : 'active', pause_on_reply: true }]);
   if (table === 'sequence_steps') {
@@ -36,16 +39,26 @@ function mockRead(table: string, scenario: Scenario, query: URLSearchParams): Re
     );
     return json(steps);
   }
-  if (table === 'sequence_events') return json(scenario === 'resposta' ? [{ enrollment_id: enrollment }] : []);
+  if (table === 'sequence_events') {
+    if (query.get('event_type') === 'eq.email_resumed') {
+      assertEquals(query.get('user_id'), `eq.${owner}`);
+      assertEquals(query.get('enrollment_id'), `eq.${enrollment}`);
+      assertEquals(query.get('sequence_id'), `eq.${sequence}`);
+      assertEquals(query.get('contact_id'), `eq.${contact}`);
+      assertEquals(query.get('step_order'), 'eq.1');
+      return json(scenario === 'legado-retomado' ? { id: '88888888-8888-4888-8888-888888888888' } : null);
+    }
+    return json(scenario === 'resposta' ? [{ enrollment_id: enrollment }] : []);
+  }
   if (table === 'contacts') return json([{ id: contact, user_id: scenario === 'contato-alheio' ? sequence : owner, first_name: 'Pessoa', last_name: 'Teste', email: 'teste@example.invalid' }]);
   if (table === 'sequence_send_log' && scenario === 'logs-paginados') return json(query.get('offset') === '1000' ? [{
     enrollment_id: enrollment, step_order: 1, sent_at: '2020-01-01T00:00:00Z', opened_at: null, clicked_at: null, status: 'sent', message_id: 'provedor-123',
   }] : Array.from({ length: 1000 }, (_, index) => ({
     enrollment_id: enrollment, step_order: 100 + index, sent_at: '2019-01-01T00:00:00Z', opened_at: null, clicked_at: null, status: 'sent', message_id: `antigo-${index}`,
   })));
-  if (table === 'sequence_send_log') return json(['legado', 'confirmado-existente', 'bounce-espera', 'bounce-apos'].includes(scenario) ? [{
+  if (table === 'sequence_send_log') return json(scenario.startsWith('legado') || ['confirmado-existente', 'bounce-espera', 'bounce-apos'].includes(scenario) ? [{
     enrollment_id: enrollment, step_order: 1, sent_at: scenario === 'bounce-espera' ? new Date().toISOString() : '2020-01-01T00:00:00Z',
-    opened_at: null, clicked_at: null, status: scenario.startsWith('bounce-') ? 'bounced' : 'sent', message_id: scenario === 'legado' ? null : 'provedor-123',
+    opened_at: null, clicked_at: null, status: scenario.startsWith('bounce-') ? 'bounced' : 'sent', message_id: scenario.startsWith('legado') ? null : 'provedor-123',
   }] : []);
   return json([]);
 }
@@ -95,6 +108,20 @@ async function withProcessor(scenario: Scenario, test: (call: (manual?: boolean,
     await process.status;
     await backend.shutdown();
   }
+}
+
+for (const scenario of ['legado-retomado', 'legado-sem-recibo'] as const) {
+  Deno.test(`Sequências: ${scenario} valida o recibo antes de consumir a retomada`, () => withProcessor(scenario, async (call, operations) => {
+    const result = await (await call()).json();
+    const resumed = scenario === 'legado-retomado';
+    assertEquals(result.stats.sent, resumed ? 1 : 0);
+    assertEquals(result.stats.advanced, resumed ? 1 : 0);
+    assertEquals(result.stats.paused, resumed ? 0 : 1);
+    const delivery = operations.find(operation => operation.table === 'send-transactional-email');
+    assertEquals(!!delivery, resumed);
+    if (delivery) assertEquals(delivery.body.idempotencyKey, `seq-${enrollment}-step-1`);
+    assertEquals(operations.some(operation => operation.table === 'complete_sequence_email_delivery'), resumed);
+  }));
 }
 
 function atomicResponse(scenario: Scenario): Response {

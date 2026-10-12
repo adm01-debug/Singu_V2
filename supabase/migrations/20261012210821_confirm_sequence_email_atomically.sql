@@ -12,7 +12,8 @@ ALTER TABLE public.sequence_steps
 
 ALTER TABLE public.sequence_enrollments
   ADD COLUMN IF NOT EXISTS paused_at timestamptz,
-  ADD COLUMN IF NOT EXISTS paused_reason text;
+  ADD COLUMN IF NOT EXISTS paused_reason text,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb;
 UPDATE public.sequence_enrollments SET current_step = 0 WHERE current_step IS NULL;
 ALTER TABLE public.sequence_enrollments
   ALTER COLUMN current_step SET DEFAULT 0,
@@ -77,7 +78,33 @@ BEGIN
     AND l.status = 'sent'
   ORDER BY l.sent_at DESC
   LIMIT 1;
-  IF FOUND THEN
+  IF v_log.id IS NOT NULL AND (
+    v_log.user_id IS DISTINCT FROM p_user_id
+    OR v_log.sequence_id IS DISTINCT FROM v_enrollment.sequence_id
+    OR v_log.contact_id IS DISTINCT FROM v_enrollment.contact_id
+    OR v_log.step_id IS DISTINCT FROM p_step_id
+  ) THEN
+    RAISE EXCEPTION 'Proprietário ou alvo do registro de envio divergente' USING ERRCODE = '42501';
+  END IF;
+  IF FOUND AND NULLIF(btrim(v_log.message_id), '') IS NULL THEN
+    IF NOT EXISTS (
+      SELECT 1 FROM public.sequence_events AS receipt
+      WHERE receipt.id::text = v_enrollment.metadata->'retry_unconfirmed_email'->>'receipt_id'
+        AND receipt.enrollment_id = p_enrollment_id AND receipt.user_id = p_user_id
+        AND receipt.sequence_id = v_enrollment.sequence_id
+        AND receipt.contact_id = v_enrollment.contact_id
+        AND receipt.step_order = v_step.step_order AND receipt.event_type = 'email_resumed'
+    ) THEN
+      RAISE EXCEPTION 'Retomada explícita do envio legado obrigatória' USING ERRCODE = '55000';
+    END IF;
+    UPDATE public.sequence_send_log AS legacy
+    SET status = 'failed', error_message = 'Registro legado sem comprovante; substituído após retomada explícita'
+    WHERE legacy.enrollment_id = p_enrollment_id AND legacy.step_order = v_step.step_order
+      AND legacy.user_id = p_user_id AND legacy.status = 'sent'
+      AND NULLIF(btrim(legacy.message_id), '') IS NULL;
+    v_log := NULL;
+  END IF;
+  IF v_log.id IS NOT NULL THEN
     IF v_log.message_id IS DISTINCT FROM p_message_id OR v_log.user_id <> p_user_id THEN
       RAISE EXCEPTION 'Confirmação anterior divergente' USING ERRCODE = '22023';
     END IF;
@@ -91,6 +118,15 @@ BEGIN
       'email', 'sent', p_message_id, p_tracking_token
     ) RETURNING * INTO v_log;
   END IF;
+
+  UPDATE public.sequence_events AS legacy_event
+  SET metadata = coalesce(legacy_event.metadata, '{}'::jsonb) || jsonb_strip_nulls(jsonb_build_object(
+    'channel', 'email', 'subject', p_subject,
+    'tracking_token', v_log.tracking_token, 'message_id', v_log.message_id
+  ))
+  WHERE legacy_event.enrollment_id = p_enrollment_id AND legacy_event.user_id = p_user_id
+    AND legacy_event.step_order = v_step.step_order AND legacy_event.event_type = 'sent'
+    AND NULLIF(btrim(legacy_event.metadata->>'message_id'), '') IS NULL;
 
   INSERT INTO public.sequence_events (
     enrollment_id, sequence_id, contact_id, user_id, step_order,
@@ -114,7 +150,8 @@ BEGIN
     last_step_executed_at = v_log.sent_at,
     status = CASE WHEN p_next_action_at IS NULL THEN 'completed' ELSE 'active' END,
     completed_at = CASE WHEN p_next_action_at IS NULL THEN now() ELSE NULL END,
-    paused_at = NULL, paused_reason = NULL
+    paused_at = NULL, paused_reason = NULL,
+    metadata = coalesce(metadata, '{}'::jsonb) - 'retry_unconfirmed_email'
   WHERE id = p_enrollment_id;
   RETURN p_enrollment_id;
 END;
@@ -131,7 +168,7 @@ GRANT EXECUTE ON FUNCTION public.complete_sequence_email_delivery(
 -- DROP FUNCTION public.complete_sequence_email_delivery(uuid, uuid, uuid, integer, text, text, timestamptz, text);
 -- ALTER TABLE public.sequence_enrollments ALTER COLUMN current_step DROP NOT NULL;
 -- Preserve o progresso normalizado; restaurar NULL reabre a repetição de envios.
--- Os campos de pausa, proprietário e posição já existem no canônico: preserve-os e seus dados.
+-- Os campos de pausa, metadados, proprietário e posição já existem no canônico: preserve-os e seus dados.
 -- Em reconstruções nas quais foram criados apenas por esta migration, após
 -- backup e retirada dos consumidores:
 -- ALTER TABLE public.sequence_enrollments DROP COLUMN paused_at, DROP COLUMN paused_reason;

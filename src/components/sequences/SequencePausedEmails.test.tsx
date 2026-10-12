@@ -55,4 +55,12 @@ describe('Retomada de email pausado', () => {
     expect(screen.getByRole('button', { name: 'Retomar email' })).toBeDisabled();
     expect(mocks.resume).not.toHaveBeenCalled();
   });
+  it('orienta corrigir o contato e bloqueia retomada de email vazio', () => {
+    mocks.hook.mockReturnValue({ data: [{ ...row, email: '  ' }], isLoading: false,
+      resume: mocks.resume, resuming: false });
+    show();
+    expect(screen.getByRole('button', { name: 'Retomar email' })).toBeDisabled();
+    expect(screen.getByRole('alert')).toHaveTextContent('Adicione um endereço de email ao contato');
+    expect(mocks.resume).not.toHaveBeenCalled();
+  });
 });

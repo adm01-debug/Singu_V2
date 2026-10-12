@@ -10,8 +10,8 @@ BEGIN
   END IF;
 END;
 $test$;
-INSERT INTO public.contacts(user_id, first_name, last_name)
-VALUES (current_setting('rls.resume_owner')::uuid, 'Contrato', 'Retomada email')
+INSERT INTO public.contacts(user_id, first_name, last_name, email)
+VALUES (current_setting('rls.resume_owner')::uuid, 'Contrato', 'Retomada email', 'retomada@example.invalid')
 RETURNING set_config('rls.resume_contact', id::text, true);
 INSERT INTO public.sequences(user_id, name, status)
 VALUES (current_setting('rls.resume_owner')::uuid, 'Contrato retomada', 'active')
@@ -97,6 +97,14 @@ BEGIN
   END;
   IF NOT failed THEN RAISE EXCEPTION 'Etapa manual foi retomada como email'; END IF;
   UPDATE public.sequence_steps SET channel = 'email' WHERE id = current_setting('rls.resume_step')::uuid;
+  UPDATE public.contacts SET email = '  ' WHERE id = current_setting('rls.resume_contact')::uuid;
+  failed := false;
+  BEGIN
+    PERFORM public.resume_sequence_email(eid, 0, stamp);
+  EXCEPTION WHEN object_not_in_prerequisite_state THEN failed := true;
+  END;
+  IF NOT failed THEN RAISE EXCEPTION 'Contato sem email foi retomado'; END IF;
+  UPDATE public.contacts SET email = 'retomada@example.invalid' WHERE id = current_setting('rls.resume_contact')::uuid;
   result := public.resume_sequence_email(eid, 0, stamp);
   retried := public.resume_sequence_email(eid, 0, stamp);
   IF result->>'status' <> 'active' OR retried->>'already_resumed' <> 'true'
