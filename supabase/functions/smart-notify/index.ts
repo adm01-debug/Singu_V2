@@ -144,10 +144,10 @@ Deno.serve(async (req) => {
 
     if (stats.notificationsFailed > 0) return jsonError('Não foi possível concluir as entregas. As reservas existentes impedem a repetição automática.', 502, req);
 
-    return jsonOk({ success: true, stats });
+    return jsonOk({ success: true, stats }, req);
 
   } catch (error: unknown) {
     console.error("smart-notify error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

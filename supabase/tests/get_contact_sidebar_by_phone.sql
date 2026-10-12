@@ -64,6 +64,14 @@ CREATE TABLE IF NOT EXISTS public.contact_social_media (
   updated_at timestamptz DEFAULT now()
 );
 
+-- Produção e previews têm conjuntos diferentes de triggers legados, alguns
+-- incompatíveis com o schema atual (auditoria sem `table_name`, incremento de
+-- `contacts.version` ausente, sincronizações em cascata). As fixtures já
+-- preenchem diretamente todos os campos que a RPC lê. `SET LOCAL` desativa
+-- esses efeitos apenas nesta sessão/transação; ROLLBACK restaura o modo e
+-- nenhuma fixture chega ao banco.
+SET LOCAL session_replication_role = replica;
+
 DO $$
 DECLARE
   v_base    uuid := gen_random_uuid();
@@ -92,8 +100,8 @@ BEGIN
     INSERT INTO auth.users (id) VALUES (v_user);
   END IF;
 
-  INSERT INTO public.companies (id, user_id, name, nome_fantasia, logo_url)
-  VALUES (v_company, v_user, 'Empresa XPTO SA', 'XPTO', 'https://exemplo.com/logo.png');
+  INSERT INTO public.companies (id, user_id, name, nome_crm, nome_fantasia, logo_url)
+  VALUES (v_company, v_user, 'Empresa XPTO SA', 'Empresa XPTO SA', 'XPTO', 'https://exemplo.com/logo.png');
 
   INSERT INTO public.contacts (id, user_id, company_id, first_name, last_name,
     cargo, departamento, role_title, data_nascimento, behavior, is_duplicate)

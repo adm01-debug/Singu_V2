@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
     }
 
     if (!localContacts || localContacts.length === 0) {
-      return jsonOk({ status: 'success', message: 'No contacts to enrich', enriched: 0 });
+      return jsonOk({ status: 'success', message: 'No contacts to enrich', enriched: 0 }, req);
     }
 
     console.log(`Found ${localContacts.length} contacts to enrich`);
@@ -174,10 +174,10 @@ Deno.serve(async (req) => {
       enriched: enrichedCount,
       errors: errorCount,
       results,
-    });
+    }, req);
 
   } catch (error) {
     console.error('Enrich contacts error:', error);
-    return jsonError('Internal server error', 500);
+    return jsonError('Internal server error', 500, req);
   }
 });

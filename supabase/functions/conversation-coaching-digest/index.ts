@@ -20,7 +20,7 @@ Deno.serve(async (req) => {
   const vcc = validate(rawBody ?? {}, {
     period_days: { type: 'integer', min: 1, max: 90 },
   });
-  if (!vcc.ok) return jsonError(vcc.error, 400);
+  if (!vcc.ok) return jsonError(vcc.error, 400, req);
   const days = (vcc.data.period_days as number | undefined) ?? 7;
   const since = new Date(Date.now() - days * 86400_000).toISOString();
 

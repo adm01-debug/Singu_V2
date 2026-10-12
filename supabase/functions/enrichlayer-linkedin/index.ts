@@ -82,14 +82,14 @@ Deno.serve(async (req) => {
     });
     const parsed = InputSchema.safeParse(rawBody);
     if (!parsed.success) {
-      return jsonError(`Entrada inválida: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
+      return jsonError(`Entrada inválida: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
     }
     const { linkedinUrl, contactId } = parsed.data;
 
     const apiKey = Deno.env.get("ENRICHLAYER_API_KEY");
     if (!apiKey) {
       console.error("ENRICHLAYER_API_KEY not configured");
-      return jsonError("EnrichLayer API key not configured", 500);
+      return jsonError("EnrichLayer API key not configured", 500, req);
     }
 
     // Enriching LinkedIn profile
@@ -106,14 +106,14 @@ Deno.serve(async (req) => {
 
     if (!enrichResponse.ok) {
       console.error("EnrichLayer API error:", enrichResponse.status, responseText);
-      return jsonError(`EnrichLayer API error: ${enrichResponse.status}`, enrichResponse.status);
+      return jsonError(`EnrichLayer API error: ${enrichResponse.status}`, enrichResponse.status, req);
     }
 
     let profile: EnrichLayerProfile;
     try {
       profile = JSON.parse(responseText);
     } catch {
-      return jsonError("Failed to parse API response", 500);
+      return jsonError("Failed to parse API response", 500, req);
     }
 
     // If contactId provided, save to social_profiles table using JWT-scoped client
@@ -172,9 +172,9 @@ Deno.serve(async (req) => {
         experienceCount: profile.experiences?.length || 0,
         educationCount: profile.education?.length || 0,
       },
-    });
+    }, req);
   } catch (error) {
     console.error("enrichlayer-linkedin error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

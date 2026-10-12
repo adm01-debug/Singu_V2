@@ -8,6 +8,9 @@ import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import { assertInstanceOf } from "https://deno.land/std@0.224.0/assert/assert_instance_of.ts";
 import {
   isServiceRoleCaller,
+  guardBody,
+  jsonOk,
+  jsonError,
   scopedCorsHeaders,
   timingSafeStringEqual,
   withAuthOrServiceRole,
@@ -182,4 +185,38 @@ Deno.test("scopedCorsHeaders: autoriza os headers assinados de webhook", () => {
   assertEquals(allowedHeaders.includes("x-lovable-timestamp"), true);
   assertEquals(allowedHeaders.includes("x-webhook-idempotency-key"), true);
   assertEquals(allowedHeaders.includes("x-lovable-signature"), true);
+});
+
+Deno.test("scopedCorsHeaders: permite o site canônico e seus previews, sem aceitar domínios alheios", () => {
+  for (const origin of [
+    "https://singu-v2.vercel.app",
+    "https://singu-v2-git-fix-hermes-h761328-ux-navegacao-juca1.vercel.app",
+    "https://singu-v2-75ystiviarfvmcg-vk-juca1.vercel.app",
+    "http://localhost:8080",
+  ]) {
+    const headers = scopedCorsHeaders(new Request("https://example.test", { headers: { Origin: origin } }));
+    assertEquals(headers["Access-Control-Allow-Origin"], origin);
+  }
+
+  for (const origin of [
+    "http://127.0.0.1:8080",
+    "https://singu-v2.vercel.app.evil.test",
+    "https://outro-projeto-juca1.vercel.app",
+    "https://singu-v2-git-hack-juca1.vercel.app.evil.test",
+  ]) {
+    const headers = scopedCorsHeaders(new Request("https://example.test", { headers: { Origin: origin } }));
+    assertEquals(headers["Access-Control-Allow-Origin"], "https://dialogue-diamond.lovable.app");
+  }
+});
+
+Deno.test("respostas JSON e validação do corpo preservam a origem da requisição", async () => {
+  for (const origin of ["https://singu-v2.vercel.app", "https://dialogue-diamond.lovable.app", "http://localhost:8080"]) {
+    const req = new Request("https://example.test", { method: "POST", headers: { Origin: origin }, body: "invalid-json" });
+    assertEquals(jsonOk({ ok: true }, req).headers.get("Access-Control-Allow-Origin"), origin);
+    assertEquals(jsonError("bad request", 400, req).headers.get("Access-Control-Allow-Origin"), origin);
+    const result = await guardBody(req);
+    assertInstanceOf(result.error, Response);
+    assertEquals(result.error.headers.get("Access-Control-Allow-Origin"), origin);
+  }
+  assertEquals(jsonOk({ ok: true }).headers.get("Access-Control-Allow-Origin"), "https://dialogue-diamond.lovable.app");
 });

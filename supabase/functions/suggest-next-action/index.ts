@@ -152,11 +152,11 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
     });
 
     if (!response.ok) {
-      if (response.status === 429) return jsonError("Limite de requisições excedido. Tente novamente em alguns minutos.", 429);
-      if (response.status === 402) return jsonError("Créditos insuficientes. Adicione créditos em Configurações > Workspace > Uso.", 402);
+      if (response.status === 429) return jsonError("Limite de requisições excedido. Tente novamente em alguns minutos.", 429, req);
+      if (response.status === 402) return jsonError("Créditos insuficientes. Adicione créditos em Configurações > Workspace > Uso.", 402, req);
       const errorText = await response.text();
       console.error("AI gateway error:", response.status, errorText);
-      return jsonError("Erro ao gerar sugestão", 500);
+      return jsonError("Erro ao gerar sugestão", 500, req);
     }
 
      const aiResponse = await response.json();
@@ -205,9 +205,9 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
        }
      }
  
-     return jsonOk({ suggestion });
+     return jsonOk({ suggestion }, req);
   } catch (error) {
     console.error("suggest-next-action error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

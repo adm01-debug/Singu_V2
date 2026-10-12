@@ -68,6 +68,6 @@ Deno.serve(async (req) => {
       execution_time_ms: Date.now() - start
     }), "crm_automation_logs error insert error:");
 
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });
