@@ -118,7 +118,8 @@ Base exclusiva: `a2b73c7dee837f19aa756e6afe385eba837b5d54`. Árvore versionada l
 
 | ID | Estado | Evidência atual | Falta | Teste/aceite |
 |---|---|---|---|---|
-| PD-1.1, PD-1.4 | AINDA REPRODUZÍVEL | `src/index.css`: sem --space; radius-card isolado | Tokens/consumidores | Usados, não apenas definidos |
+| PD-1.1 | RESOLVIDO NO CÓDIGO | `src/index.css:157–180` define --space-*; `tailwind.config.ts:20–30` mapeia a escala | Validar consistência visual | Espaçamento consumido nas telas |
+| PD-1.4 | AINDA REPRODUZÍVEL | `src/index.css:215` define radius-card isolado | Tokens semânticos de raio e consumidores | Raios coerentes em botões, cartões e modais |
 | PD-2.2, PD-12.3b, PD-12.3c | AINDA REPRODUZÍVEL | `src/components/layout/AppSidebar.tsx:20-78` | Recentes/favoritos/badges/quick-add | Acesso contextual acionável |
 | PD-2.3, PD-10.4 | AINDA REPRODUZÍVEL | `src/components/search/GlobalSearch.tsx:37,69-72` | Prefixos/sugestões | @empresa filtra corretamente |
 | PD-3.2, PD-5.2, CS-5 | AINDA REPRODUZÍVEL | useHapticFeedback só MobileBottomNav; gestos ContatosContent | Cobertura planejada | Empresas/interações com gesto acessível |
@@ -132,10 +133,13 @@ Base exclusiva: `a2b73c7dee837f19aa756e6afe385eba837b5d54`. Árvore versionada l
 | PD-10.2, PD-MET | AINDA REPRODUZÍVEL | Sem product/search analytics; rage-click não mede conclusão | Instrumentação com privacidade | Eventos/metas verificáveis |
 | PD-10.3, PD-12.2c | AINDA REPRODUZÍVEL | `src/hooks/useSavedFilters.ts:19` sem consumidor | Filtros salvos; views existentes não equivalem | Preset reaplicável |
 | PD-11.1, PD-11.2 | AINDA REPRODUZÍVEL | Gráficos Analytics/Recharts; tabelas/drill-down pontuais | Alternativa acessível/cross-filter | Teclado/leitor abre dados |
-| PD-11.3, PD-11.4 | AINDA REPRODUZÍVEL | Sem previousPeriod/toPng no src | Comparativo/exportação | Mesmo dataset/períodos reais |
+| PD-11.3 | NÃO VERIFICADO NO RUNTIME | ReportsTab monta YoyComparisonWidget, que usa useYoyComparison; contrato remoto de get_yoy_comparison não comprovado | Verificar RPC e comparar períodos com dados reais | Mesmo dataset/períodos reais |
+| PD-11.4 | AINDA REPRODUZÍVEL | Sem exportação PNG/PDF dos gráficos | Exportar a visualização atual | Arquivo gerado com os mesmos filtros |
 | PD-13.5, CS-1, PR3-1 | DECISÃO DE PRODUTO/INTEGRAÇÃO ADIADA | Sem tutoriais/simulador/dashboards separados prometidos | Escopo/conteúdo/visões gerenciais | Não vender feature inexistente |
 | PD-13.2 | AINDA REPRODUZÍVEL | ContextualHelpTooltip órfão; ModuleHelp existe | Cobertura prometida das métricas | Explicação alcançável sem mouse |
-| PD-1.2, PD-1.3, PD-2.1, PD-3.1, PD-3.4, PD-4.2, PD-4.3, PD-4.5, PD-5.5, PD-6.1, PD-6.3, PD-6.4, PD-7.4, PD-8.1, PD-8.3, PD-9.2, PD-9.3, PD-10.1, PD-10.5, PD-11.5, PD-12.2a, PD-13.3, PD-13.4, PD-14.2, PD-14.4, PD-14.5 | RESOLVIDO NO CÓDIGO | index.css tokens; MotionConfig; drawer/form; lazyPages; useFormDraft; NotificationCenter; filtros/presets; SessionExpiryHandler/ConcurrentEditError | Visual/produção continuam pendentes | Não generalizar cobertura universal |
+| PD-9.2 | AINDA REPRODUZÍVEL | NotificationCenter não preenche actions ao mapear as notificações; NotificationGroup só mostra ações quando presentes | Ligar ações rápidas a handlers reais | Ação executada sem sair do contexto |
+| PD-14.2 | AINDA REPRODUZÍVEL | CompanyProfileAnalytics mostra erro sem refetch e mantém skeletons após esgotar tentativas | Oferecer nova tentativa manual após erro final | Consulta recuperável sem recarregar a página |
+| PD-1.2, PD-1.3, PD-2.1, PD-3.1, PD-3.4, PD-4.2, PD-4.3, PD-4.5, PD-5.5, PD-6.1, PD-6.3, PD-6.4, PD-7.4, PD-8.1, PD-8.3, PD-9.3, PD-10.1, PD-10.5, PD-11.5, PD-12.2a, PD-13.3, PD-13.4, PD-14.4, PD-14.5 | RESOLVIDO NO CÓDIGO | index.css tokens; MotionConfig; drawer/form; lazyPages; useFormDraft; NotificationCenter; filtros/presets; SessionExpiryHandler/ConcurrentEditError | Visual/produção continuam pendentes | Não generalizar cobertura universal |
 | PD-4.1, PD-14.3, PD-1.5, PD-2.4, PD-3.5, PD-4.4, PD-5.3, PD-5.4, PD-7.1, PD-7.2, PD-7.3, PD-7.5, PD-8.4, PD-8.5, PD-12.1a, PD-12.1b, PD-12.1c, PD-12.2b, PD-12.3a, PD-13.1 | NÃO VERIFICADO NO RUNTIME | C1:209-250 distingue itens visuais não comprovados; AppSidebar/Header têm ARIA | Auditoria visual/contraste/foco/contexto | Desktop/mobile/leitor/reduced-motion |
 | PD-2.5 | AINDA REPRODUZÍVEL | `src/components/import/BulkImportDialog.tsx:61-72`: div clicável sem teclado | Upload acessível | Tab/Enter seleciona arquivo |
 | N-1, EA-3 | AINDA REPRODUZÍVEL | `useSequenceProcessor.ts:9`; sequence-processor:54; nurturing-runner:22; process-webhook-dlq:27 | JWT autorizado ou retirar botões | Sem segredo cron no navegador |
