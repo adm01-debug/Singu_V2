@@ -34,6 +34,17 @@ jobs:
       - name: Edge Function import guard
         run: npm run check:edge-imports
 
+      - name: Preparar Deno para os testes de conexões
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.9.7
+
+      - name: Testar isolamento e proteção SSRF das conexões
+        run: deno test --node-modules-dir=none --allow-net --allow-run --allow-env=HOME supabase/functions/_shared/safe-http_test.ts supabase/functions/connection-tester/index_test.ts
+
+      - name: Verificar tipos da função de conexões
+        run: deno check --node-modules-dir=none supabase/functions/connection-tester/index.ts
+
       - name: Validate required test secrets
         env:
           PGHOST: ${{ secrets.PGHOST }}
