@@ -10,6 +10,8 @@ Deno.test("não testa conexões alheias, não grava sem dono e registra erros co
   const writes: Array<{ path: string; query: string; body: Record<string, unknown>; authorization: string | null }> = [];
   let outsideRequests = 0;
   let rejectAudit = false;
+  let delayAudit = false;
+  let finishAudit = () => {};
   const fakeApi = Deno.serve({ hostname: "127.0.0.1", port: 0, onListen: () => {} }, async (request) => {
     const url = new URL(request.url);
     if (url.pathname === "/auth/v1/user") {
@@ -24,6 +26,9 @@ Deno.test("não testa conexões alheias, não grava sem dono e registra erros co
     }
     if (url.pathname.startsWith("/rest/v1/") && ["PATCH", "POST"].includes(request.method)) {
       const body = await request.json();
+      if (delayAudit && url.pathname.endsWith("connection_test_logs")) {
+        await new Promise<void>(resolve => { finishAudit = resolve; });
+      }
       await new Promise((resolve) => setTimeout(resolve, 25));
       writes.push({ path: url.pathname, query: url.search, body, authorization: request.headers.get("Authorization") });
       if (rejectAudit && url.pathname.endsWith("connection_test_logs")) {
@@ -40,6 +45,7 @@ Deno.test("não testa conexões alheias, não grava sem dono e registra erros co
       HOME: Deno.env.get("HOME")!,
       SUPABASE_URL: `http://127.0.0.1:${fakeApi.addr.port}`,
       SUPABASE_ANON_KEY: "anon-teste",
+      SUPABASE_SERVICE_ROLE_KEY: "servico-teste",
     },
     clearEnv: true,
     stdout: "piped",
@@ -57,9 +63,10 @@ Deno.test("não testa conexões alheias, não grava sem dono e registra erros co
     }
     assert(ready, "Handler não iniciou");
 
-    const submit = (connectionId?: string, token = "sessao-teste") =>
+    const submit = (connectionId?: string, token = "sessao-teste", signal?: AbortSignal) =>
       fetch("http://127.0.0.1:8000/", {
         method: "POST",
+        signal,
         headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}) },
         body: JSON.stringify({ connection_type: "custom", connection_id: connectionId, config: { url: `http://127.0.0.1:${fakeApi.addr.port}/outside` } }),
       });
@@ -80,7 +87,7 @@ Deno.test("não testa conexões alheias, não grava sem dono e registra erros co
     assertEquals(writes.length, 2);
     assert(writes.some((write) => write.path.endsWith("connection_test_logs") && write.body.tested_by === userId));
     assert(writes.some((write) => write.path.endsWith("connection_configs") && write.body.last_test_status === "error" && write.query.includes(`created_by=eq.${userId}`)));
-    assert(writes.every((write) => write.authorization === "Bearer sessao-teste"));
+    assert(writes.every((write) => write.authorization === (write.path.endsWith("connection_test_logs") ? "Bearer servico-teste" : "Bearer sessao-teste")));
     assertEquals(outsideRequests, 0);
 
     const insecureResponse = await fetch("http://127.0.0.1:8000/", {
@@ -105,7 +112,14 @@ Deno.test("não testa conexões alheias, não grava sem dono e registra erros co
     assertEquals((await response.json()).success, false);
     assertEquals(writes.length, 6);
     assertEquals(outsideRequests, 0);
+
+    delayAudit = true;
+    const delayedResponse = await submit(ownedId, "sessao-teste", AbortSignal.timeout(7_000));
+    assertEquals(delayedResponse.status, 200);
+    assertEquals((await delayedResponse.json()).success, false);
+    assertEquals(outsideRequests, 0);
   } finally {
+    finishAudit();
     child.kill("SIGTERM");
     await child.output();
     await fakeApi.shutdown();

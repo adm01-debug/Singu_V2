@@ -117,20 +117,25 @@ async function recordTest(
   message: string,
   latencyMs: number | null = null,
 ) {
+  const signal = AbortSignal.timeout(5_000);
+  const logWrite = Promise.resolve().then(() => createClient<Database>(
+    Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    { auth: { persistSession: false, autoRefreshToken: false } },
+  ).from("connection_test_logs").insert({
+    connection_id: connectionId,
+    status,
+    latency_ms: latencyMs,
+    message,
+    tested_by: userId,
+  }).abortSignal(signal));
   await Promise.all([
     bestEffortWrite(client.from("connection_configs").update({
       last_tested_at: new Date().toISOString(),
       last_test_status: status,
       last_test_latency_ms: latencyMs,
       last_test_message: message,
-    }).eq("id", connectionId).eq("created_by", userId), "Falha ao atualizar o teste da conexão:"),
-    bestEffortWrite(client.from("connection_test_logs").insert({
-      connection_id: connectionId,
-      status,
-      latency_ms: latencyMs,
-      message,
-      tested_by: userId,
-    }), "Falha ao registrar o teste da conexão:"),
+    }).eq("id", connectionId).eq("created_by", userId).abortSignal(signal), "Falha ao atualizar o teste da conexão:"),
+    bestEffortWrite(logWrite, "Falha ao registrar o teste da conexão:"),
   ]);
 }
 
@@ -174,7 +179,7 @@ Deno.serve(async (req) => {
         auth: { persistSession: false, autoRefreshToken: false },
       });
       const { data, error } = await client.from("connection_configs").select("id")
-        .eq("id", payload.connection_id).eq("created_by", userId).maybeSingle();
+        .eq("id", payload.connection_id).eq("created_by", userId).abortSignal(AbortSignal.timeout(5_000)).maybeSingle();
       if (error) throw new Error("Não foi possível verificar o proprietário da conexão");
       if (!data) return new Response(JSON.stringify({ success: false, error: "Conexão não encontrada" }), {
         status: 404,
