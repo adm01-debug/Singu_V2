@@ -9,12 +9,13 @@ const state = vi.hoisted(() => ({
   error: null as Error | null,
   isFetching: false,
   retry: vi.fn(),
+  search: vi.fn(),
 }));
 
 vi.mock('@/hooks/useCompanies', () => ({ useCompanies: () => ({
   companies: state.companies, error: state.error, loading: false,
   isFetching: state.isFetching, totalCount: state.companies.length,
-  fetchCompanies: state.retry, setSearchTerm: vi.fn(), createCompany: vi.fn(),
+  fetchCompanies: state.retry, setSearchTerm: state.search, createCompany: vi.fn(),
   updateCompany: vi.fn(), deleteCompany: vi.fn(), fetchNextPage: vi.fn(),
   hasNextPage: false, isFetchingNextPage: false,
 }) }));
@@ -41,8 +42,8 @@ vi.mock('./empresas/EmpresasContent', () => ({ EmpresasContent: ({ filteredAndSo
   </section>
 ) }));
 
-function Page() {
-  return <MemoryRouter><Empresas /></MemoryRouter>;
+function Page({ route = '/empresas' }: { route?: string }) {
+  return <MemoryRouter initialEntries={[route]}><Empresas /></MemoryRouter>;
 }
 
 beforeEach(() => {
@@ -51,9 +52,20 @@ beforeEach(() => {
   state.isFetching = false;
   state.retry.mockReset();
   state.retry.mockResolvedValue(undefined);
+  state.search.mockReset();
 });
 
 describe('erros de consulta na carteira de empresas', () => {
+  it('permite limpar uma pesquisa que falhou sem registros em cache', () => {
+    state.error = new Error('Busca indisponível');
+    render(<Page route="/empresas?q=Acme" />);
+    expect(screen.queryByText('Nenhuma empresa cadastrada')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Limpar pesquisa' }));
+    expect(state.search).toHaveBeenCalledWith('');
+    expect(screen.queryByRole('button', { name: 'Limpar pesquisa' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Tentar novamente' })).toBeEnabled();
+  });
+
   it('distingue erro sem dados de carteira vazia e permite recuperar a consulta', () => {
     state.error = new Error('Consulta indisponível');
     const { rerender } = render(<Page />);

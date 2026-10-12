@@ -231,6 +231,7 @@ const Empresas = () => {
           description={companies.length > 0 ? 'Os dados exibidos são da última consulta concluída. Tente atualizar novamente.' : 'A consulta falhou. Tente novamente para carregar suas empresas.'}
           onRetry={() => { void fetchCompanies(); }}
           isRetrying={isFetching}
+          secondaryAction={companies.length === 0 && isSearching ? { label: 'Limpar pesquisa', onClick: clearSearch } : undefined}
         />
       )}
       {(!queryError || companies.length > 0) && <EmpresasContent
