@@ -42,12 +42,12 @@ Deno.serve(async (req) => {
       userId: { type: 'string', maxLength: 36 },
       action: { type: 'string', maxLength: 50 },
     });
-    if (!vsr.ok) return jsonError(vsr.error, 400);
+    if (!vsr.ok) return jsonError(vsr.error, 400, req);
     const { userId: bodyUserId, action } = vsr.data as { userId?: string; action?: string };
 
     let userId: string;
     if (isServiceRoleCaller(authResult)) {
-      if (!bodyUserId) return jsonError('userId required for service-role calls', 400);
+      if (!bodyUserId) return jsonError('userId required for service-role calls', 400, req);
       userId = bodyUserId;
     } else {
       userId = authResult;

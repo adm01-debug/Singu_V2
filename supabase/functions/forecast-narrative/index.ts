@@ -21,14 +21,14 @@ Deno.serve(async (req) => {
   const vn = validate(rawBody, {
     period_id: { type: 'string', required: true, maxLength: 36 },
   });
-  if (!vn.ok) return jsonError(vn.error, 400);
+  if (!vn.ok) return jsonError(vn.error, 400, req);
   const { period_id } = vn.data as { period_id: string };
 
   try {
 
     const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
     const { data: period } = await admin.from("forecast_periods").select("*").eq("id", period_id).eq("user_id", userId).maybeSingle();
-    if (!period) return jsonError("Período não encontrado", 404);
+    if (!period) return jsonError("Período não encontrado", 404, req);
     const { data: forecasts } = await admin.from("deal_forecasts").select("*").eq("period_id", period_id).order("forecasted_amount", { ascending: false }).limit(50);
 
     const commit = (forecasts ?? []).filter(f => f.category === "commit").reduce((s, f) => s + Number(f.forecasted_amount), 0);
@@ -36,7 +36,7 @@ Deno.serve(async (req) => {
     const atRisk = (forecasts ?? []).filter(f => f.health_score < 40).slice(0, 10);
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) return jsonError("LOVABLE_API_KEY not configured", 500);
+    if (!LOVABLE_API_KEY) return jsonError("LOVABLE_API_KEY not configured", 500, req);
 
     const prompt = `Gere uma narrativa executiva (2-3 parágrafos curtos) sobre o forecast atual:
 
@@ -65,16 +65,16 @@ Inclua: status vs quota, principais riscos, recomendações de ação. Tom execu
     });
 
     if (!aiResp.ok) {
-      if (aiResp.status === 429) return jsonError("Rate limit", 429);
-      if (aiResp.status === 402) return jsonError("Créditos esgotados", 402);
+      if (aiResp.status === 429) return jsonError("Rate limit", 429, req);
+      if (aiResp.status === 402) return jsonError("Créditos esgotados", 402, req);
       throw new Error(`AI ${aiResp.status}`);
     }
     const result = await aiResp.json();
     const narrative = result.choices?.[0]?.message?.content ?? "";
 
-    return jsonOk({ narrative, commit, best_case: bestCase, quota: Number(period.quota_amount), at_risk_count: atRisk.length });
+    return jsonOk({ narrative, commit, best_case: bestCase, quota: Number(period.quota_amount), at_risk_count: atRisk.length }, req);
   } catch (e) {
     console.error("forecast-narrative error:", e);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

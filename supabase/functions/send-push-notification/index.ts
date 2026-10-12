@@ -90,7 +90,7 @@ Deno.serve(async (req) => {
     userId: { type: 'string', maxLength: 36 },
     tag:  { type: 'string', maxLength: 64 },
   });
-  if (!v.ok) return jsonError(v.error, 400);
+  if (!v.ok) return jsonError(v.error, 400, req);
 
   try {
     const supabaseClient = createClient(
@@ -103,13 +103,13 @@ Deno.serve(async (req) => {
     let targetUserId: string;
     if (isServiceRoleCaller(authResult)) {
       // Service-role callers (crons) must specify userId
-      if (!payload.userId) return jsonError('userId required for service-role calls', 400);
+      if (!payload.userId) return jsonError('userId required for service-role calls', 400, req);
       targetUserId = payload.userId;
     } else {
       // User JWT — only allow sending to self
       targetUserId = authResult;
       if (payload.userId && payload.userId !== authResult) {
-        return jsonError('Cannot send notifications to other users', 403);
+        return jsonError('Cannot send notifications to other users', 403, req);
       }
     }
 
@@ -121,7 +121,7 @@ Deno.serve(async (req) => {
     if (error) throw error;
 
     if (!subscriptions || subscriptions.length === 0) {
-      return jsonOk({ success: true, message: 'No subscriptions found', sent: 0 });
+      return jsonOk({ success: true, message: 'No subscriptions found', sent: 0 }, req);
     }
 
     const results = await Promise.all(
@@ -134,9 +134,9 @@ Deno.serve(async (req) => {
       success: true, 
       sent: successCount,
       total: subscriptions.length
-    });
+    }, req);
   } catch (error: unknown) {
     console.error('Error:', error);
-    return jsonError('Internal server error', 500);
+    return jsonError('Internal server error', 500, req);
   }
 });

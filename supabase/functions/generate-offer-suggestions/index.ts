@@ -48,7 +48,7 @@ Deno.serve(async (req) => {
     const vgo = validate(rawBody ?? {}, {
       contactId: { type: 'string', maxLength: 36 },
     });
-    if (!vgo.ok) return jsonError(vgo.error, 400);
+    if (!vgo.ok) return jsonError(vgo.error, 400, req);
     const { contactId } = vgo.data as { contactId?: string };
 
     // Generating offer suggestions — scoped to authenticated user
@@ -61,7 +61,7 @@ Deno.serve(async (req) => {
     if (contactsError) throw contactsError;
 
     if (!contacts || contacts.length === 0) {
-      return jsonOk({ success: true, suggestions: [] });
+      return jsonOk({ success: true, suggestions: [] }, req);
     }
 
     // Fetch all dependent data in parallel — all 6 queries depend only on contactIds
@@ -255,10 +255,10 @@ Deno.serve(async (req) => {
       success: true, 
       suggestionsGenerated: topSuggestions.length,
       suggestions: topSuggestions 
-    });
+    }, req);
 
   } catch (error: unknown) {
     console.error("Error generating offer suggestions:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

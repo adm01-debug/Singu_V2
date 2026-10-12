@@ -138,13 +138,13 @@ Deno.serve(async (req) => {
 
     const parsed = DiscAnalyzerInput.safeParse(rawBody);
     if (!parsed.success) {
-      return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
+      return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
     }
     const { texts, contactId, interactionId } = parsed.data;
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
-      return jsonError("LOVABLE_API_KEY não configurada", 500);
+      return jsonError("LOVABLE_API_KEY não configurada", 500, req);
     }
 
     const combinedText = texts.join("\n\n---\n\n");
@@ -167,10 +167,10 @@ Deno.serve(async (req) => {
 
     if (!aiResponse.ok) {
       if (aiResponse.status === 429) {
-        return jsonError("Rate limit exceeded. Tente novamente em alguns segundos.", 429);
+        return jsonError("Rate limit exceeded. Tente novamente em alguns segundos.", 429, req);
       }
       if (aiResponse.status === 402) {
-        return jsonError("Créditos insuficientes. Adicione créditos ao workspace.", 402);
+        return jsonError("Créditos insuficientes. Adicione créditos ao workspace.", 402, req);
       }
       const errorText = await aiResponse.text();
       console.error("AI error:", errorText);
@@ -305,10 +305,10 @@ Deno.serve(async (req) => {
         avoidBehaviors: analysisResult.avoidBehaviors,
         profileSummary: analysisResult.profileSummary
       }
-    });
+    }, req);
 
   } catch (error) {
     console.error("disc-analyzer error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

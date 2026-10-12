@@ -82,3 +82,12 @@ DDL em produção via pipeline do projeto (não aplicar a partir de branch abert
 ```bash
 psql "$DATABASE_URL" -f supabase/tests/get_contact_sidebar_by_phone.sql   # roda com ROLLBACK
 ```
+
+## Verificação em produção — 03/10/2026
+
+- Migration registrada no ledger como `20261003145227_get_contact_sidebar_by_phone`.
+- Teste SQL completo executado com `ROLLBACK`, sem resíduos e sem falhas.
+- 60 chamadas sobre três contatos reais: p95 **8,29 ms**, média **5,46 ms** e máximo **31,43 ms**.
+- Maior payload medido: **1.050 bytes**; as 60 respostas retornaram `found=true`.
+- Metadados conferidos: `STABLE`, `SECURITY DEFINER`, `search_path=public`, sem `EXECUTE` para `anon`/`authenticated` e com `EXECUTE` para `service_role`.
+- Advisors de segurança e desempenho não associaram nenhum novo achado a esta função; os avisos retornados pertencem a objetos preexistentes do projeto.

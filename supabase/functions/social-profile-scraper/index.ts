@@ -150,7 +150,7 @@ Deno.serve(async (req) => {
 
     const parsed = bodySchema.safeParse(rawBody);
     if (!parsed.success) {
-      return jsonError(parsed.error.issues[0]?.message ?? "Invalid request body", 400);
+      return jsonError(parsed.error.issues[0]?.message ?? "Invalid request body", 400, req);
     }
     const { contactId, platform, profileUrl } = parsed.data;
 
@@ -170,7 +170,7 @@ Deno.serve(async (req) => {
         .update({ last_run_at: new Date().toISOString(), consecutive_failures: 1, last_error: `Firecrawl error: ${scrapeResponse.status}` })
         .eq("contact_id", contactId).eq("platform", platform)
         .catch((e: unknown) => console.error("social_scraping_schedule error update error:", e));
-      return jsonError("Failed to scrape profile", 500);
+      return jsonError("Failed to scrape profile", 500, req);
     }
 
     const scrapeData = await scrapeResponse.json();
@@ -283,9 +283,9 @@ Deno.serve(async (req) => {
 
     Promise.all(flushPromises).catch((e: unknown) => console.error("social-profile-scraper flush error:", e));
 
-    return jsonOk({ success: true, platform, profile: parsedProfile, lifeEvents: lifeEvents.length });
+    return jsonOk({ success: true, platform, profile: parsedProfile, lifeEvents: lifeEvents.length }, req);
   } catch (error) {
     console.error("social-profile-scraper error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });
