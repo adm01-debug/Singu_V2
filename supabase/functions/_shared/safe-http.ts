@@ -29,6 +29,7 @@ export async function resolveDestination(rawUrl: string, signal: AbortSignal, ne
   if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) {
     throw new Error("URL de conexão não permitida");
   }
+  if (url.port === "0") throw new Error("Porta zero não permitida");
   const hostname = url.hostname.replace(/^\[|\]$/g, "");
   const addresses = ipaddr.isValid(hostname) ? [hostname] : (await Promise.all([
     network.resolve(hostname, "A", signal).catch(() => [] as string[]),

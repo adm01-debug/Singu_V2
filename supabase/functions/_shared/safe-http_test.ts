@@ -30,7 +30,7 @@ Deno.test("rejeita DNS misto, sem endereços e URLs alternativas de loopback", a
   for (const records of [[], ["8.8.8.8", "10.0.0.1"], ["8.8.8.8", "::ffff:c0a8:1"]]) {
     await assertRejects(() => resolveDestination("https://public.test/", signal(), networkWithRecords(records)));
   }
-  for (const url of ["http://2130706433", "http://0x7f000001", "http://0177.0.0.1", "http://[::ffff:192.168.0.1]", "file:///etc/hosts", "https://user:password@public.test/"]) {
+  for (const url of ["http://2130706433", "http://0x7f000001", "http://0177.0.0.1", "http://[::ffff:192.168.0.1]", "file:///etc/hosts", "https://user:password@public.test/", "https://public.test:0/"]) {
     await assertRejects(() => resolveDestination(url, signal(), networkWithRecords(["8.8.8.8"])));
   }
 });
