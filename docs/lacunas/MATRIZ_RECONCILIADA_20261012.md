@@ -10,7 +10,7 @@ Reconciliação de `docs/auditoria/` e `docs/lacunas/`, baseada no commit `a2b73
 
 | Item | Evidência posterior | Estado de entrega | Próxima ação |
 |---|---|---|---|
-| Rodízio e emails duplicados | [PR 108](https://github.com/adm01-debug/Singu_V2/pull/108) mergeado em `1c213a112ae29646fc2ce571d3dc55272ab7a712`; deploy de produção READY para esse commit; migration `20261012120000` aplicada; provas pós-aplicação com dois proprietários reais, índice único, admin preexistente e rollback passaram | MERGEADO, PUBLICADO E VALIDADO NO BANCO; CI do `main` ainda em execução | Confirmar CI e validar fluxo autenticado na interface; ingestão ERP não comprovada |
+| Rodízio e emails duplicados | [PR 108](https://github.com/adm01-debug/Singu_V2/pull/108) mergeado em `1c213a112ae29646fc2ce571d3dc55272ab7a712`; deploy de produção READY para esse commit; migration `20261012120000` aplicada; provas pós-aplicação com dois proprietários reais, índice único, admin preexistente e rollback passaram; [CI principal aprovado](https://github.com/adm01-debug/Singu_V2/actions/runs/38271442385) | MERGEADO, PUBLICADO E VALIDADO NO BANCO; Supabase Preview ainda falha | Validar fluxo autenticado na interface e reconstrução histórica; ingestão ERP não comprovada |
 | Auditoria identificada e agregada, E-C01 | [PR 109](https://github.com/adm01-debug/Singu_V2/pull/109) mergeado em `a8f50e53027b37512d46c6f3daa2575798ec9f9e`; deploy de produção READY; migration `20261012123000` aplicada; fixture pós-aplicação confirmou eventos atuais/legados, propriedade e rollback | MERGEADO, PUBLICADO E VALIDADO NO BANCO; leitura/exclusão na interface pendentes | Retestar leitura/exclusão autenticadas; não reabrir o achado de `contact_id` |
 | Ledger canônico | Versões `20261012120000` e `20261012123000` registradas em ordem, com SQL completo igual aos arquivos da `main`; 661 versões remotas, das quais 595 sem arquivo local correspondente | NOVAS MIGRATIONS APLICADAS; REPLAY HISTÓRICO AINDA DIVERGENTE | Recuperar e testar o SQL histórico preservado no ledger em ambiente isolado; não fazer `repair` para mascarar a divergência |
 | Integrações externas | Usuário optou por seguir sem chaves de IA, WhatsApp/Evolution, Bitrix, ElevenLabs, Firecrawl e Twilio | DECISÃO DE PRODUTO/INTEGRAÇÃO ADIADA | Corrigir contratos e estados honestos; manter entrega/IA reais fora das funcionalidades operacionais declaradas |
@@ -18,7 +18,7 @@ Reconciliação de `docs/auditoria/` e `docs/lacunas/`, baseada no commit `a2b73
 
 ## Ordem de execução
 
-1. Concluir o CI do `main` e reconciliar o histórico de migrations para recuperar o Preview; manter as provas permanentes dos PRs 108/109.
+1. Reconciliar o histórico de migrations para recuperar o Preview e provar a reconstrução; manter as provas permanentes dos PRs 108/109 e do CI principal aprovado.
 2. SEC-6: bloquear URLs privadas/reservadas corretamente, IPv6 mapeado e logs de conexão de outro proprietário; registrar o risco residual de DNS/egress.
 3. A9: permitir enrollment/challenge de MFA na tela de segurança em AAL1; manter conteúdo administrativo protegido por AAL2.
 4. A6: efetivar proteção da main e checks que realmente são emitidos; conferir o gate de deploy.
