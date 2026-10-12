@@ -77,11 +77,7 @@ const externalResponseSchema = z.object({
 });
 
 async function callExternalData(body: Record<string, unknown>, signal?: AbortSignal, canonicalRpc?: { functionName: string; params: Record<string, unknown> }): Promise<z.infer<typeof externalResponseSchema>> {
-  const breaker = canonicalRpc ? canonicalDbBreaker
-    : typeof body.table === 'string' ? getCircuitBreaker(`external-db:${body.table}`, {
-      failureThreshold: 3,
-      resetTimeoutMs: 30_000,
-    }) : externalDbBreaker;
+  const breaker = canonicalRpc ? canonicalDbBreaker : externalDbBreaker;
   return breaker.call(async () => {
     const accessToken = await getAccessToken();
     if (canonicalRpc && accessToken === ANON_KEY) throw new CanonicalRpcClientError('Autenticação necessária para a RPC do banco');
@@ -104,13 +100,13 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
       const errorText = await response.text();
       if (canonicalRpc) {
         const message = `RPC do banco [${response.status}]: ${errorText}`;
-        if (response.status >= 400 && response.status < 500) throw new CanonicalRpcClientError(message);
+        if (response.status >= 400 && response.status < 500 && ![408, 429].includes(response.status)) throw new CanonicalRpcClientError(message);
         throw new Error(message);
       }
       // 409 vem como JSON estruturado { error: "CONCURRENT_EDIT", entity, id, attemptedVersion, traceId }
       // Preserva o JSON cru na mensagem para o caller parsear (ver updateExternalDataWithVersion).
       const message = `Edge function error [${response.status}]: ${errorText}`;
-      if (response.status >= 400 && response.status < 500) throw new ExternalDataClientError(message);
+      if (response.status >= 400 && response.status < 500 && ![408, 429].includes(response.status)) throw new ExternalDataClientError(message);
       throw new Error(message);
     }
 
