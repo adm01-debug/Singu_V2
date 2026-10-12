@@ -107,5 +107,7 @@ export function useErpStats() {
     stats,
     isLoading: products.isLoading || proposals.isLoading,
     isError: products.isError || proposals.isError,
+    productsState: { isLoading: products.isLoading, isError: products.isError },
+    proposalsState: { isLoading: proposals.isLoading, isError: proposals.isError },
   };
 }

@@ -264,20 +264,28 @@ export async function updateExternalDataWithVersion<T = Record<string, unknown>>
   }
 }
 
-export async function deleteExternalData(table: string, id: string): Promise<{ success: boolean; error: Error | null }> {
+export async function deleteExternalData(table: string, id: string, audit?: { entityName?: string; description?: string; reason?: string }): Promise<{ success: boolean; error: Error | null }> {
   try {
     await callExternalData({ action: 'delete', table, id });
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user?.id) {
-      const { error: auditErr } = await supabase.from('activities').insert({
-        user_id: session.user.id,
-        type: table === 'contacts' ? 'contact_deleted' : table === 'companies' ? 'company_deleted' : 'interaction_deleted',
-        entity_type: table === 'contacts' ? 'contact' : table === 'companies' ? 'company' : 'interaction',
-        entity_id: id,
-        description: `Exclusão de registro na tabela ${table}`,
-        reason: 'Solicitação via interface',
-      } as never);
-      if (auditErr) logger.warn('Failed to write delete audit log', { error: auditErr.message });
+    const entity = table === 'contacts' ? 'contact' : table === 'companies' ? 'company' : table === 'interactions' ? 'interaction' : null;
+    if (entity) {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user?.id) {
+          const { error: auditErr } = await supabase.from('activities').insert({
+            user_id: session.user.id,
+            type: `${entity}_deleted`,
+            entity_type: entity,
+            entity_id: id,
+            entity_name: audit?.entityName ?? null,
+            description: audit?.description ?? `Exclusão de registro na tabela ${table}`,
+            reason: audit?.reason ?? 'Solicitação via interface',
+          });
+          if (auditErr) logger.warn('Failed to write delete audit log', { error: auditErr.message });
+        }
+      } catch (error) {
+        logger.warn('Failed to write delete audit log', { error: error instanceof Error ? error.message : String(error) });
+      }
     }
     return { success: true, error: null };
   } catch (err) {

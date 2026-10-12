@@ -564,10 +564,12 @@ export function useCompanies(options?: { enabled?: boolean }) {
         : prev
     );
     try {
-      const { success, error } = await deleteExternalData('companies', id);
-      if (error || !success) throw error || new Error('Delete failed');
       const deleted = previous?.pages.flatMap(p => p.companies).find(c => c.id === id);
-      logActivity({ type: 'deleted', entityType: 'company', entityId: id, entityName: deleted?.name || undefined, description: 'Empresa excluída' });
+      const { success, error } = await deleteExternalData('companies', id, {
+        entityName: deleted?.name || undefined,
+        description: 'Empresa excluída',
+      });
+      if (error || !success) throw error || new Error('Delete failed');
       toast({ title: 'Empresa removida', description: 'A empresa foi excluída com sucesso.' });
       return true;
     } catch (error) {

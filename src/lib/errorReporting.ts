@@ -4,6 +4,7 @@
  */
 import { logger } from '@/lib/logger';
 import { supabase } from '@/integrations/supabase/client';
+import type { Session } from '@supabase/supabase-js';
 
 interface ErrorReport {
   id: string;
@@ -27,6 +28,7 @@ interface ErrorBatch {
 
 // Armazena erros em memória para batch reporting
 const errorBuffer: ErrorReport[] = [];
+let reportingSession: Session | null = null;
 const MAX_BUFFER_SIZE = 10;
 const FLUSH_INTERVAL = 30000; // 30 segundos
 
@@ -116,8 +118,8 @@ async function flushErrorBuffer(keepalive = false): Promise<void> {
   if (!supabaseUrl || !supabaseKey) return;
 
   try {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return;
+    const session = keepalive ? reportingSession : (await supabase.auth.getSession()).data.session;
+    if (!session || (keepalive && session.expires_at && session.expires_at * 1000 <= Date.now())) return;
 
     const rows = batch.errors.filter(e => !e.userId || e.userId === session.user.id).map(e => ({
       message: e.message.slice(0, 1000),
@@ -174,6 +176,10 @@ export function captureError(
 
 // Captura exceções não tratadas
 export function initGlobalErrorHandlers(): void {
+  supabase.auth.onAuthStateChange((_event, session) => {
+    if (reportingSession && reportingSession.user.id !== session?.user.id) errorBuffer.length = 0;
+    reportingSession = session;
+  });
   // Erros JavaScript não capturados
   window.addEventListener('error', (event) => {
     captureError(
@@ -213,6 +219,7 @@ export function initGlobalErrorHandlers(): void {
 
 export function clearUserContext() {
   errorBuffer.length = 0;
+  reportingSession = null;
   try { localStorage.removeItem('userId'); } catch { /* quota/private */ }
 }
 
