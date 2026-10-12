@@ -146,17 +146,15 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
     const data = result.data as T[];
     const count = result.count;
 
-    // Log access for auditing
-    if (auditAccess && data.length > 0 && queryOptions.table !== 'sales_activities') {
+    const auditEntity = queryOptions.table === 'contacts' || queryOptions.table === 'vw_singu_contact_360'
+      ? 'contact' : queryOptions.table === 'companies' ? 'company' : null;
+    if (auditAccess && data.length > 0 && auditEntity) {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user?.id) {
-        const auditType = queryOptions.table === 'contacts' ? 'contact_viewed'
-          : queryOptions.table === 'companies' ? 'company_viewed'
-          : 'interaction_created';
         const { error: auditErr } = await supabase.from('activities').insert({
           user_id: session.user.id,
-          type: auditType,
-          entity_type: queryOptions.table === 'contacts' ? 'contact' : queryOptions.table === 'companies' ? 'company' : 'interaction',
+          type: `${auditEntity}_viewed`,
+          entity_type: auditEntity,
           description: `Acesso a ${data.length} registros da tabela ${queryOptions.table}`,
           metadata: { query_options: queryOptions },
         } as never);

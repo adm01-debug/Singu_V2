@@ -318,7 +318,12 @@ export function useContacts(
     queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
       if (!prev) return prev;
 
-      return { ...prev, pages: prev.pages.map(page => ({ ...page, items: page.items.filter(c => c.id !== id) })) };
+      if (!prev.pages.some(page => page.items.some(c => c.id === id))) return prev;
+      return { ...prev, pages: prev.pages.map(page => ({
+        ...page,
+        items: page.items.filter(c => c.id !== id),
+        totalCount: page.totalCount == null ? null : Math.max(0, page.totalCount - 1),
+      })) };
     });
 
     try {

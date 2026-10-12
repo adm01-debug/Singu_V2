@@ -3,6 +3,7 @@
  * Captura, agrega e reporta erros para análise
  */
 import { logger } from '@/lib/logger';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ErrorReport {
   id: string;
@@ -89,7 +90,7 @@ const SEVERITY_MAP: Record<ErrorReport['severity'], string> = {
 };
 
 // Envia batch de erros para a tabela error_logs via Supabase REST API
-async function flushErrorBuffer(): Promise<void> {
+async function flushErrorBuffer(keepalive = false): Promise<void> {
   if (errorBuffer.length === 0) return;
 
   const batch: ErrorBatch = {
@@ -111,35 +112,40 @@ async function flushErrorBuffer(): Promise<void> {
   }
 
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   if (!supabaseUrl || !supabaseKey) return;
 
-  const rows = batch.errors.map(e => ({
-    message: e.message.slice(0, 1000),
-    stack: e.stack?.slice(0, 4000) ?? null,
-    context: {
-      componentStack: e.componentStack?.slice(0, 2000),
-      fingerprint: e.fingerprint,
-      sessionId: batch.sessionId,
-      appVersion: batch.appVersion,
-      ...e.metadata,
-    },
-    user_id: e.userId ?? null,
-    severity: SEVERITY_MAP[e.severity] ?? 'error',
-    url: e.url.slice(0, 500),
-    user_agent: e.userAgent.slice(0, 500),
-  }));
-
   try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+
+    const rows = batch.errors.filter(e => !e.userId || e.userId === session.user.id).map(e => ({
+      message: e.message.slice(0, 1000),
+      stack: e.stack?.slice(0, 4000) ?? null,
+      context: {
+        componentStack: e.componentStack?.slice(0, 2000),
+        fingerprint: e.fingerprint,
+        sessionId: batch.sessionId,
+        appVersion: batch.appVersion,
+        ...e.metadata,
+      },
+      user_id: session.user.id,
+      severity: SEVERITY_MAP[e.severity] ?? 'error',
+      url: e.url.slice(0, 500),
+      user_agent: e.userAgent.slice(0, 500),
+    }));
+    if (rows.length === 0) return;
+
     await fetch(`${supabaseUrl}/rest/v1/error_logs`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'apikey': supabaseKey,
-        'Authorization': `Bearer ${supabaseKey}`,
+        'Authorization': `Bearer ${session.access_token}`,
         'Prefer': 'return=minimal',
       },
       body: JSON.stringify(rows),
+      keepalive,
     });
   } catch {
     // Never throw from error reporter — silently discard on network failure
@@ -193,27 +199,8 @@ export function initGlobalErrorHandlers(): void {
   // Flush periódico
   setInterval(flushErrorBuffer, FLUSH_INTERVAL);
   
-  // sendBeacon is more reliable on page unload than fetch
   window.addEventListener('beforeunload', () => {
-    if (errorBuffer.length === 0) return;
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-    if (supabaseUrl && supabaseKey && import.meta.env.PROD) {
-      const rows = errorBuffer.map(e => ({
-        message: e.message.slice(0, 1000),
-        stack: e.stack?.slice(0, 4000) ?? null,
-        context: { fingerprint: e.fingerprint, sessionId },
-        user_id: e.userId ?? null,
-        severity: SEVERITY_MAP[e.severity] ?? 'error',
-        url: e.url.slice(0, 500),
-        user_agent: e.userAgent.slice(0, 500),
-      }));
-      navigator.sendBeacon(
-        `${supabaseUrl}/rest/v1/error_logs?apikey=${supabaseKey}`,
-        new Blob([JSON.stringify(rows)], { type: 'application/json' }),
-      );
-    }
-    errorBuffer.length = 0;
+    void flushErrorBuffer(true);
   });
   
   // Flush ao visibility change (mobile)
@@ -225,6 +212,7 @@ export function initGlobalErrorHandlers(): void {
 }
 
 export function clearUserContext() {
+  errorBuffer.length = 0;
   try { localStorage.removeItem('userId'); } catch { /* quota/private */ }
 }
 

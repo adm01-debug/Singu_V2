@@ -180,7 +180,7 @@ function ProposalsTab() {
 }
 
 export default function ErpViewer() {
-  const { stats, isLoading } = useErpStats();
+  const { stats, isLoading, isError } = useErpStats();
 
   return (
     <>
@@ -197,10 +197,10 @@ export default function ErpViewer() {
         </header>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <StatCard icon={Boxes} label="Produtos" value={isLoading ? '…' : stats.totalProducts} hint={`${stats.activeProducts} ativos`} />
-          <StatCard icon={Package} label="Ativos" value={isLoading ? '…' : stats.activeProducts} />
-          <StatCard icon={FileText} label="Propostas" value={isLoading ? '…' : stats.totalProposals} />
-          <StatCard icon={DollarSign} label="Valor total" value={isLoading ? '…' : formatBRL(stats.proposalsValueSum)} hint="Soma de propostas" />
+          <StatCard icon={Boxes} label="Produtos" value={isLoading ? '…' : isError ? '—' : stats.totalProducts} hint={isError ? 'Consulta indisponível' : `${stats.activeProducts} ativos`} />
+          <StatCard icon={Package} label="Ativos" value={isLoading ? '…' : isError ? '—' : stats.activeProducts} />
+          <StatCard icon={FileText} label="Propostas" value={isLoading ? '…' : isError ? '—' : stats.totalProposals} />
+          <StatCard icon={DollarSign} label="Valor total" value={isLoading ? '…' : isError ? '—' : formatBRL(stats.proposalsValueSum)} hint="Soma de propostas" />
         </div>
 
         <Tabs defaultValue="products" className="w-full">
