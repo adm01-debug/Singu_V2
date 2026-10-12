@@ -37,7 +37,7 @@ let _tokenExpiresAt = 0;
 
 supabase.auth.onAuthStateChange((_event, session) => {
   _cachedToken = session?.access_token ?? null;
-  _cachedUserId = session?.user.id ?? null;
+  _cachedUserId = session?.user?.id ?? null;
   _tokenExpiresAt = session?.expires_at ? session.expires_at * 1000 : 0;
 });
 
