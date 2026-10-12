@@ -77,8 +77,8 @@ Heads [108](https://github.com/adm01-debug/Singu_V2/pull/108)/[109](https://gith
 | F/F12,INV/21 | AINDA REPRODUZÍVEL | conversation-analyzer:41,45 | duration_seconds não existe em interactions canônicas | Interação existente não vira 404 de schema |
 | F/F15,INV/24 | AINDA REPRODUZÍVEL | crm-automation-monitor:49,63 usa bestEffortWrite, mas não há chamador conhecido para alimentar o widget | Ligar o monitor ao produtor ou remover a promessa | Gravação auxiliar sem TypeError e widget alimentado |
 | F/F16,F/F23,INV/25,INV/40 | AINDA REPRODUZÍVEL | cs-health-recalc:99–105;enrich-contacts:152–155 | Upsert omite campos obrigatórios; enriquecimento ainda órfão | Atualizar existente sem inserir linha incompleta |
-| F/F19,INV/32 | RESOLVIDO NO CÓDIGO | disc-analyzer:267,282 usa bestEffortWrite | Service-role downstream ainda incompatível com withAuth; IA AD | Correção do catch isolada passa; chamada interna autorizada |
-| F/F20,INV/33 | RESOLVIDO NO CÓDIGO | dual-write-proxy:2,37–41 | Execução pelo legado NR; kill-switch B/N04 quebrado | Rejeita segredo inválido; retorno indisponível explícito |
+| F/F19,INV/32 | AINDA REPRODUZÍVEL | disc-analyzer:267,282 usa bestEffortWrite, mas evolution-webhook:419–428 chama com service-role um handler que exige JWT de usuário | Autorizar a chamada interna com escopo comprovado; IA AD | Chamada interna autorizada sem acesso cruzado |
+| F/F20,INV/33 | AINDA REPRODUZÍVEL | dual-write-proxy:2,37–41 falha fechado, mas não existe consumidor de x-dual-write-secret | Ligar produtor comprovado; reparar kill-switch B/N04 | Escrita canônica espelhada no cutover autorizado |
 | F/F24,INV/41 | RESOLVIDO NO CÓDIGO | enrichlayer-linkedin:146 aguarda builder | Deploy/provedor NR | Perfil persiste ou erro explícito |
 | F/F25,INV/42 | AINDA REPRODUZÍVEL | error-budget:141;useErrorBudget.ts:58 | Sem amostra assume 100%; cadência remota NR | Falta de amostra exibida como desconhecida |
 | F/F34,INV/62 | AINDA REPRODUZÍVEL | intent-tracker:27,72,123; preflight remoto Lovable | Origem/assinatura e catch; não basta liberar Vercel para sites clientes | Cliente permitido envia; origem não autorizada não forja sinais |

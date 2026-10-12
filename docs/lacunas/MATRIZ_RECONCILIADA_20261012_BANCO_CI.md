@@ -51,7 +51,7 @@ IDs agrupados preservam rastreabilidade; última coluna é pendência/aceite.
 | TQ-6, H-17 | AINDA REPRODUZÍVEL | CI completo sem deno test/check; testes Deno existem | Rodar backend no CI; antiga “ausência total” é obsoleta. |
 | TQ-7 | AINDA REPRODUZÍVEL | index.html:9/public/_headers:7 permitem scripts inline; vercel.json limita frame-ancestors/object-src/base-uri | Unificar CSP por header, restringir scripts e alinhar origens ao Supabase canônico; retestar funcionalidades, H-32/AUDC-08. |
 | TQ-8 | RESOLVIDO NO CÓDIGO | vite.config.ts:60–64 runtimeCaching=[] | Logout/relogin sem PII em caches; não adicionar cache de dados implicitamente. |
-| TQ-9 | RESOLVIDO NO CÓDIGO | CI:37–58 exige PG*/E2E secrets | Pulados por fixture/escrita continuam H-18/H-28. |
+| TQ-9 | AINDA REPRODUZÍVEL | CI:37–58 exige PG*/E2E secrets, mas CI:95–102 não define E2E_ALLOW_WRITES e e2e/support/auth.ts:10–14 pula jornadas graváveis | Executar as jornadas de escrita com fixture e limpeza seguras; H-18/H-28. |
 | TQ-10 | OBSOLETO/DUPLICADO | setup-node/upload-artifact usados em CI que concluiu success | Alegação de versões inexistentes refutada pelo run. |
 | TQ-11, H-33 | AINDA REPRODUZÍVEL | package-lock.json, bun.lock, bun.lockb presentes | Escolher npm e demonstrar instalação reprodutível única. |
 | TQ-12 | AINDA REPRODUZÍVEL | src/lib/sanitize.ts:9–18 espalha options após allowlist | Travar opções de segurança; payload adversarial rejeitado. |
@@ -129,14 +129,14 @@ IDs agrupados preservam rastreabilidade; última coluna é pendência/aceite.
 | H-43 | DECISÃO DE PRODUTO/INTEGRAÇÃO ADIADA | vite.config:64 sem cache runtime | Definir escopo offline/PII antes de persistência; não prometer offline-first. |
 | H-44 | AINDA REPRODUZÍVEL | vite.config:35/38–54 sem lang/maskable dedicado | Manifest pt-BR/ícones/orientação aprovados. |
 | H-45 | AINDA REPRODUZÍVEL | .env.example:11–18 omite APP_VERSION; errorReporting:101/117 tem fallback/publishable | ANON_KEY obsoleto; documentar versão e provar ingestão. |
-| H-46, MEF-2 | DECISÃO DE PRODUTO/INTEGRAÇÃO ADIADA | preflight-secrets.sh:16–19 só literais index; templates incompletos | Não solicitar Evolution/Bitrix adiados; completar preflight antes de ativar cada canal. |
+| H-46, MEF-2 | AINDA REPRODUZÍVEL | preflight-secrets.sh:16–19 só detecta Deno.env.get; secrets.template.env omite LUX_WEBHOOK_SECRET exigido pelo callback consumido por useLuxIntelligence.ts:141 | Completar template/preflight e provisionar Lux; Evolution/Bitrix seguem adiados. |
 | H-48 | AINDA REPRODUZÍVEL | apply-all.js:5 lê env, continua ferramenta avulsa fora CI | Inventariar uso/arquivar; credencial removida, rotação H-14. |
 | H-49 | RESOLVIDO NO CÓDIGO | tmp_view_check.js:1–4 agora ESM/env, sem token embutido | Validar necessidade/arquivar; revogação histórica H-14. |
 | H-50, PERF-1 | AINDA REPRODUZÍVEL | run_explain_analyze.py:11 admite simulação; artefatos congelados | Substituir conclusões por EXPLAIN real; não decidir índice por doc simulada. |
 | H-51, SCR-2 | AINDA REPRODUZÍVEL | scripts/lint-providers.cjs ausente CI/package scripts | Integrar guard e injetar ordem inválida. |
 | H-52 | AINDA REPRODUZÍVEL | graphify-out e types.ts.lovable.bak versionados | Política de artefatos; preservar grafo útil, eliminar churn deliberadamente. |
 | H-54, SEC-1, SEC-3 | AINDA REPRODUZÍVEL | docs/SECURITY:12/54/79–80; strict false; exceptions cron/webhook/public | Corrigir promessas; JWT não é universal, typecheck já não é no-op. |
-| H-55, BS-7 | RESOLVIDO NO CÓDIGO | DRW:29–30/66–107 snapshot restore, hash/contagens | Só manual/PR; DD-2 cobre recorrência. Não afirma restore completo/PITR. |
+| H-55, BS-7 | AINDA REPRODUZÍVEL | DRW:29–30/66–107 valida snapshot restore, hash/contagens, mas não possui schedule nem evidência mensal | Agendar e comprovar execução recorrente; DD-2. Não afirma restore completo/PITR. |
 | H-56 | NÃO VERIFICADO NO RUNTIME | diag-db ausente main; histórico Actions citado no anexo | Conferir workflow ativo pela API antes de desabilitar; não usar como prova SQL. |
 | H-57 | AINDA REPRODUZÍVEL | .dependency-cruiser.cjs no-orphans warn | Triagem/ratchet; não dropar consumidores externos. |
 | H-58 | NÃO VERIFICADO NO RUNTIME | CI:104–110 retém relatório 30d; Playwright trace/vídeo | Inspecionar mascaramento/acesso dos artefatos sem expor PII; reter mínimo necessário. |

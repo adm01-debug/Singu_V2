@@ -58,7 +58,7 @@ Base: snapshot, exceto PRs. Prefixos: **H**=`src/hooks/`, **C**=`src/components/
 | E-C05 | AINDA REPRODUZÍVEL | H/useMetaprogramAnalysis.ts:98 × T:31670–31692 | Seis scores continuam ausentes na tabela consultada | Agregação consulta dimensões existentes |
 | E-C06, E-H01, E-P16 | AINDA REPRODUZÍVEL | H/useSocialInsights.ts:48–86; M/20260720000023:95–105 | Select inválido cai em biografia fictícia; não há produtor versionado | Erro/vazio honesto; nenhum insight inventado |
 | E-C07 | AINDA REPRODUZÍVEL | H/useCadenceEnrollments.ts:27; T:cadence_enrollments | Ordenar por `enrolled_at`, não `created_at` | Lista ordenada sem coluna inexistente |
-| E-C08 | RESOLVIDO NO CÓDIGO | C/company-detail/CompanyCommercialTab.tsx:232–244; C/contact-detail/SalesActivitiesWidget.tsx:4–17 | Consulta insegura removida; vínculo real ainda não implementado | UI informa indisponibilidade; não atribui por nome |
+| E-C08 | AINDA REPRODUZÍVEL | C/company-detail/CompanyCommercialTab.tsx:232–244; C/contact-detail/SalesActivitiesWidget.tsx:4–17 informam indisponibilidade permanente | Implementar vínculo canônico e consulta segura do histórico | Histórico real da empresa/contato sem atribuição por nome |
 | E-C09 | AINDA REPRODUZÍVEL | H/useCompanyIntelligence.ts:326 × T:51763–51779 | View usa `id`, não `company_id` | Duplicatas próprias realmente aparecem |
 | E-C10 | NÃO VERIFICADO NO RUNTIME | H/usePipeline.ts:92–109; M/20260317213221:3; M/20260512184042:24 | Baseline canônico de deals; ALTERs parciais não bastam | Banco reconstruído aceita leitura/movimento |
 | E-C11 | NÃO VERIFICADO NO RUNTIME | H/useContacts.ts:70–108 | Normalização/versão corrigidas; ainda provar paridade DDL/canônico | Replay aceita seleção e escrita sem campos gerados |

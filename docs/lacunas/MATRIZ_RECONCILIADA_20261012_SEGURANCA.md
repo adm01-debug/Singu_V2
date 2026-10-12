@@ -43,7 +43,8 @@ Não houve acesso SQL nesta unidade. **Ausência de prova não significa ausênc
 | A9 | AINDA REPRODUZÍVEL | R:31–35,154; H/useMFAGuard.ts:30–39; C/security/TwoFactorSetup.tsx:33–46 | Enrollment/challenge navegável | Admin novo e existente elevam AAL1→AAL2; código errado bloqueia |
 | A10 | AINDA REPRODUZÍVEL | F/evolution-api/index.ts:24–47: ações destrutivas após withAuth | Admin; integração segue adiada | Usuário comum recebe 403 antes de qualquer ação externa |
 | SEC-1 | RESOLVIDO NO CÓDIGO | M/20260720000001*:18–68; M/20261006120000*:61–108 revoga anon/policies; RPC pública por token | ACL/policies publicadas | Anon não enumera tokens; token específico permite resposta válida |
-| SEC-2; SEC-2b | RESOLVIDO NO CÓDIGO | F/external-data:184–195,455–475,495–534,602–655: RLS nas leituras/RPC e ownership nas mutações | Confirmar RLS inclusive embeddings no remoto | Dois usuários reais não cruzam dados, relações ou identidade |
+| SEC-2 | RESOLVIDO NO CÓDIGO | F/external-data:184–195,455–475,495–534,602–655: RLS nas leituras/RPC e ownership nas mutações | Confirmar RLS no remoto | Dois usuários reais não cruzam dados ou identidade |
+| SEC-2b | AINDA REPRODUZÍVEL | F/external-data:504,531 encaminha selectedColumns sem validar relações embutidas | Aplicar whitelist também às relações de select | Relação fora da whitelist recusada antes da consulta |
 | SEC-2c | RESOLVIDO NO CÓDIGO | F/external-data:547–575; F/_shared/tenant-guard.ts:86–105; 6 testes passaram | Regressão completa no endpoint | Colunas/métodos inválidos não alteram escopo |
 | SEC-3 | RESOLVIDO NO CÓDIGO | F/bitrix24-webhook:40; evolution-webhook:20; lux-webhook:18 exigem secrets | Deploy; Bitrix/Evolution adiadas | Header ausente/errado recusado antes de mutação |
 | SEC-4 | RESOLVIDO NO CÓDIGO | F/_shared/auth.ts:239–249; guards em nurturing:22, DLQ:27, validation:24 e demais crons citados | Secret/agendamentos efetivos; X-02 | Sem segredo não executa; job autorizado só uma vez |
@@ -58,12 +59,12 @@ Não houve acesso SQL nesta unidade. **Ausência de prova não significa ausênc
 | PLAN-01; AUDS-01 | AINDA REPRODUZÍVEL | `.lovable/plan.md:1–20`; `AUDITORIA_SISTEMA.md:7`; lacunas confirmadas acima | Retirar “10/10”/“100%” sem prova | Claims rastreáveis a execução datada |
 | PLAN-02; MEM-F09 | NÃO VERIFICADO NO RUNTIME | F/system-health-snapshot e R/admin/error-budget; agendamentos prometidos A:133 | Jobs, retenção e alertas reais | Janela medida, snapshot recente e alerta entregue |
 | PLAN-03; MEM-A02; NV-05 | NÃO VERIFICADO NO RUNTIME | `scripts/check-backend-linter-baseline.mjs:17–23` aceita stdin vazio; não chamado pelos workflows | Linter remoto; ligar ratchet alimentado | Relatório atual; aumento bloqueia CI, vazio falha |
-| PLAN-04 | RESOLVIDO NO CÓDIGO | `package.json:14`; `.github/workflows/ci.yml:70` chama typecheck explícito | Atualizar referência tsgo | Erro inserido em src faz typecheck falhar |
+| PLAN-04 | AINDA REPRODUZÍVEL | `package.json:14`; `.github/workflows/ci.yml:70` chama tsc, mas `.lovable/plan.md:16` declara tsgo e tsconfig.app.json permanece permissivo | Alinhar documentação e nível de checagem | Plano corresponde ao gate e suas limitações |
 | IDX-01; CL-05 | AINDA REPRODUZÍVEL | `.lovable/memory/index.md:5`; H/useWinLoss.ts:479; `tsconfig.app.json` permissivo | Conciliar regras e exceções | Docs não afirmam zero any/400 linhas universal |
 | IDX-02 | DECISÃO DE PRODUTO/INTEGRAÇÃO ADIADA | `.lovable/memory/index.md:9`; `ARCHITECTURE.md:125–126` proíbem módulos | Não construir; decidir buscas IA residuais de produtos | Inventário distingue leitura ERP de módulo novo |
 | MEM-F01 | AINDA REPRODUZÍVEL | C/admin/AdminQuickActions.tsx:36–38 somente recarrega | Limpeza real ou rótulo honesto | Cache-alvo eliminado, não só reload |
 | MEM-F02 | AINDA REPRODUZÍVEL | C/admin/AdminQuickActions.tsx:65–88 executa três pings | Renomear diagnóstico ou ligar testes | Não anunciar suíte completa por três checks |
-| MEM-F03 | RESOLVIDO NO CÓDIGO | `src/pages/AdminDashboard.tsx:105–158` deriva status dos checks | Prova de indisponibilidade real | Falha de banco não aparece saudável |
+| MEM-F03 | AINDA REPRODUZÍVEL | `src/pages/AdminDashboard.tsx:148–152,193–196` reutiliza dbStatus para WhatsApp, Email e Voice AI | Derivar cada integração de seu check real | Banco saudável não implica integração saudável |
 | MEM-F04 | AINDA REPRODUZÍVEL | F/audit-analytics existe; busca src sem consumidor | Ligar agregação ou corrigir doc | UI consulta agregados reais, não só amostra local |
 | MEM-F05 | NÃO VERIFICADO NO RUNTIME | F/cs-health-recalc:7 exige cron; promessa A:129 | Agenda/alertas | Recalcular em horário comprovado e alertar queda |
 | MEM-F06 | AINDA REPRODUZÍVEL | H/useEmailCampaigns.ts:85–145 agora mantém pending e declara deliveryConfirmed:false | Produtor de entrega | Só enviado após confirmação; erro nunca simula envio |
@@ -73,7 +74,7 @@ Não houve acesso SQL nesta unidade. **Ausência de prova não significa ausênc
 | MEM-F11 | AINDA REPRODUZÍVEL | H/useForecasting.ts:119–136; sem consumidor de useClosePeriod | Ação navegável | Fechar período grava estado e data |
 | MEM-F12 | AINDA REPRODUZÍVEL | C/intelligence/GraphTab.tsx:45–55,215–255 anuncia BFS; busca sem algoritmo | Calcular caminho ou retirar BFS | Caminho usa arestas reais; desconectado não inventa conexão |
 | MEM-F13; MEM-F16 | AINDA REPRODUZÍVEL | C/intent/IntentSignalCard e C/lead-scoring/LeadScoreCard definidos sem consumidores | Montar widgets previstos; não confundir outro LeadScoreCard | Contato/empresa exibem sinais e score servidor |
-| MEM-F14 | OBSOLETO/DUPLICADO | C/lead-routing/LeadRoutingModule.tsx:62–73; QuickDistributeWidget:31–44 utiliza Rodízio DRY_RUN | Atualizar memória antiga; validar motor real | Não chamar EF removida; simulação não movimenta carteira |
+| MEM-F14 | AINDA REPRODUZÍVEL | C/lead-routing/LeadRoutingModule.tsx:62–73 remove redistribuição por inatividade sem equivalente; QuickDistributeWidget:31–44 oferece Rodízio DRY_RUN genérico | Repor redistribuição após N dias; atualizar referência à EF removida | Regra de inatividade seleciona e redistribui somente leads elegíveis |
 | MEM-F15 | NÃO VERIFICADO NO RUNTIME | F/lead-score-cron:40; M/20261011204000*:41 marca fila processada | Agendador/drainer real | Item enfileirado termina processado uma vez |
 | MEM-F17 | NÃO VERIFICADO NO RUNTIME | F/nurturing-runner:22; F/mql-evaluator:10; A:141 | Agenda remota | Avanço periódico e classificação registrados |
 | MEM-F18; MEM-F19 | AINDA REPRODUZÍVEL | F/nurturing-runner:64–112 produz ações pendentes; F/sequence-processor existe | Entrega efetiva; WhatsApp adiado | Não marcar sucesso/avançar sem resultado confirmado |
