@@ -11,6 +11,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Matriz reconciliada das auditorias e lacunas com estado por achado, evidências e próximos passos, organizada em cinco áreas e vinculada pelo índice.
 
 ### Fixed
+- A atualização de emails por RPC encontra o índice único exigido pelo `ON CONFLICT`, preserva o registro nas novas tentativas com diferenças de maiúsculas e mantém o isolamento por proprietário.
 - A tela de 2FA permite escolher o autenticador a desativar quando há vários fatores, exibindo seu nome na ação e preservando os demais.
 - Administradores podem configurar e confirmar o MFA em AAL1 numa tela de recuperação restrita; as configurações de segurança e demais telas permanecem bloqueadas até AAL2. Um fator já cadastrado oferece confirmação do acesso atual, erros de consulta permitem nova tentativa e o retorno preserva a página, a pesquisa e a âncora sem duplicar o histórico. A troca de sessão exige nova verificação.
 - A recuperação MFA espera a confirmação do papel, preserva o QR contra consultas atrasadas e permite escolher entre autenticadores verificados; remover um fator invalida imediatamente a aprovação do token anterior e exige nova confirmação.
