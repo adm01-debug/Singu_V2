@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
   const vnb = validate(rawBody, {
     contactId: { type: 'string', required: true, maxLength: 36 },
   });
-  if (!vnb.ok) return jsonError(vnb.error, 400);
+  if (!vnb.ok) return jsonError(vnb.error, 400, req);
   const { contactId } = vnb.data as { contactId: string };
 
   try {
@@ -37,7 +37,7 @@ Deno.serve(async (req) => {
     // Verify contact ownership before fetching any related data
     const { data: contact, error: contactErr } = await supabase
       .from('contacts').select('*').eq('id', contactId).eq('user_id', userId).single();
-    if (contactErr || !contact) { return jsonError("Contact not found", 404); }
+    if (contactErr || !contact) { return jsonError("Contact not found", 404, req); }
 
     // 1. Gather Rich Context (ownership already verified above)
      const [interactionsRes, neuroRes, analyticalRes, whatsappRes] = await Promise.all([
@@ -54,7 +54,7 @@ Deno.serve(async (req) => {
 
     // 2. Call AI Gateway for Intelligent Suggestion
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
-    if (!apiKey) return jsonError("AI Gateway misconfigured", 500);
+    if (!apiKey) return jsonError("AI Gateway misconfigured", 500, req);
 
     const systemPrompt = `Você é um Estrategista de Vendas e Customer Success de elite.
 Sua missão é sugerir a "Próxima Melhor Ação" para um contato no CRM, baseando-se no estágio do funil, perfil comportamental (DISC) e histórico recente.
@@ -149,10 +149,10 @@ Por favor, gere:
       .upsert(nextActionData, { onConflict: 'user_id,contact_id' }).select('id').single();
     if (persistenceError || !persisted) throw new Error('Não foi possível persistir a próxima ação');
 
-    return jsonOk({ success: true, next_action: { ...nextActionData, id: persisted.id } });
+    return jsonOk({ success: true, next_action: { ...nextActionData, id: persisted.id } }, req);
 
   } catch (error) {
     console.error("NBA Error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

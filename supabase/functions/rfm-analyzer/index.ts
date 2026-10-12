@@ -75,13 +75,13 @@ Deno.serve(async (req) => {
 
     let requestBody: z.infer<typeof RfmInput> = {};
     const parsed = RfmInput.safeParse(raw);
-    if (!parsed.success) return jsonError(`Entrada inválida: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
+    if (!parsed.success) return jsonError(`Entrada inválida: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
     requestBody = parsed.data;
     const { contactId } = requestBody;
 
     let userId: string;
     if (isServiceRoleCaller(authResult)) {
-      if (!requestBody.userId) return jsonError("userId required for service-role calls", 400);
+      if (!requestBody.userId) return jsonError("userId required for service-role calls", 400, req);
       userId = requestBody.userId;
     } else {
       userId = authResult;
@@ -278,11 +278,11 @@ Deno.serve(async (req) => {
       success: true,
       analyzed: results.length,
       results
-    });
+    }, req);
 
   } catch (error: unknown) {
     console.error('RFM analysis error:', error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });
 

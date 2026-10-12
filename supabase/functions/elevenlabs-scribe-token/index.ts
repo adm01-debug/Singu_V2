@@ -37,13 +37,13 @@ Deno.serve(async (req) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error("ElevenLabs token error:", response.status, errorText);
-      return jsonError(`ElevenLabs API error: ${response.status}`, 500);
+      return jsonError(`ElevenLabs API error: ${response.status}`, 500, req);
     }
 
     const { token } = await response.json();
-    return jsonOk({ token });
+    return jsonOk({ token }, req);
   } catch (error: unknown) {
     console.error("Error generating scribe token:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });
