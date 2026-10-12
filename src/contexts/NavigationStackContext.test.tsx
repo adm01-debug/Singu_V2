@@ -3,8 +3,11 @@ import { BrowserRouter, MemoryRouter, useLocation, useNavigate } from 'react-rou
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { NavigationStackProvider, safeNavigationPath, useNavigationStack } from './NavigationStackContext';
 import { BackButton } from '@/components/navigation/BackButton';
+import { useState } from 'react';
+import { useModalHistory } from '@/hooks/useModalHistory';
 
 const authState = vi.hoisted(() => ({ userId: 'user-a' }));
+const exposedHistory: { owner: string; stack: string[] }[] = [];
 vi.mock('@/hooks/useAuth', () => ({
   useAuth: () => ({ user: authState.userId ? { id: authState.userId } : null, loading: false }),
 }));
@@ -13,11 +16,17 @@ function Harness() {
   const location = useLocation();
   const navigate = useNavigate();
   const { stack, direction, goToIndex, previousPath } = useNavigationStack();
+  const [searchOpen, setSearchOpen] = useState(false);
+  useModalHistory(searchOpen, () => setSearchOpen(false), 'search');
+  exposedHistory.push({ owner: authState.userId, stack: [...stack] });
   return <div>
     <output data-testid="location">{location.pathname + location.search + location.hash}</output>
     <output data-testid="count">{stack.length}</output>
     <output data-testid="direction">{direction}</output>
     <output data-testid="previous">{previousPath}</output>
+    <output data-testid="search">{searchOpen ? 'aberta' : 'fechada'}</output>
+    <button onClick={() => setSearchOpen(true)}>Abrir busca</button>
+    <button onClick={() => { setSearchOpen(false); navigate('/empresas'); }}>Resultado da busca</button>
     <button onClick={() => navigate('/contatos/1')}>Abrir contato</button>
     <button onClick={() => navigate('/empresas')}>Abrir empresas</button>
     <button onClick={() => navigate('/contatos?q=novo', { replace: true })}>Filtrar</button>
@@ -61,6 +70,40 @@ describe('Histórico e retorno de navegação', () => {
     expect(screen.queryByRole('button', { name: 'Histórico de navegação' })).not.toBeInTheDocument();
     fireEvent.click(screen.getByText('Primeira tela'));
     expect(screen.getByTestId('location')).toHaveTextContent('/contatos/1');
+  });
+
+  it('volta à lista em um clique após abrir modal, voltar e avançar pelo histórico real', async () => {
+    window.history.replaceState(null, '', '/contatos?q=vip#lista');
+    render(<BrowserRouter><NavigationStackProvider><Harness /></NavigationStackProvider></BrowserRouter>);
+    fireEvent.click(screen.getByText('Abrir contato'));
+    fireEvent.click(screen.getByText('Abrir busca'));
+    expect(window.history.state.idx).toBe(2);
+    fireEvent.click(screen.getByText('Retorno nativo'));
+    await waitFor(() => expect(screen.getByTestId('search')).toHaveTextContent('fechada'));
+    expect(window.history.state.idx).toBe(1);
+    fireEvent.click(screen.getByText('Avançar'));
+    await waitFor(() => expect(window.history.state.idx).toBe(2));
+    fireEvent.click(screen.getByRole('button', { name: 'Voltar para Contatos' }));
+    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/contatos?q=vip#lista'));
+    expect(window.history.state.idx).toBe(0);
+  });
+
+  it('não desfaz a navegação escolhida no resultado da busca', async () => {
+    window.history.replaceState(null, '', '/contatos');
+    render(<BrowserRouter><NavigationStackProvider><Harness /></NavigationStackProvider></BrowserRouter>);
+    fireEvent.click(screen.getByText('Abrir busca'));
+    fireEvent.click(screen.getByText('Resultado da busca'));
+    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/empresas'));
+    expect(window.history.state.idx).toBe(2);
+    expect(screen.getByTestId('search')).toHaveTextContent('fechada');
+  });
+
+  it('restaura URLs internas extensas sem perder filtros', async () => {
+    const path = `/contatos?q=${'a'.repeat(2200)}#lista`;
+    render(<Shell initialPath={path} />);
+    fireEvent.click(screen.getByText('Abrir contato'));
+    fireEvent.click(screen.getByRole('button', { name: 'Voltar para Contatos' }));
+    await waitFor(() => expect(screen.getByTestId('location').textContent).toBe(path));
   });
 
   it('retorna com filtros e âncora, permite avançar e retornar novamente', async () => {
@@ -111,8 +154,10 @@ describe('Histórico e retorno de navegação', () => {
     const view = render(<Shell />);
     fireEvent.click(screen.getByText('Abrir contato'));
     expect(screen.getByTestId('count')).toHaveTextContent('2');
+    exposedHistory.length = 0;
     authState.userId = 'user-b';
     view.rerender(<Shell />);
+    expect(exposedHistory.filter(rendered => rendered.owner === 'user-b').every(rendered => rendered.stack.length === 1)).toBe(true);
     expect(screen.getByTestId('count')).toHaveTextContent('1');
     expect(screen.getByTestId('previous')).toBeEmptyDOMElement();
   });

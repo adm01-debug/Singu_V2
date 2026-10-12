@@ -13,7 +13,7 @@
  import { cn } from '@/lib/utils';
  import { safeNavigationPath, useNavigationStack } from '@/contexts/NavigationStackContext';
  import { useNavigate } from 'react-router-dom';
- import { getReadableLabel } from '@/lib/navigationLabels';
+ import { getNavigationDescription, getReadableLabel } from '@/lib/navigationLabels';
 
 interface BackButtonProps {
   /** Explicit path to navigate to. If omitted, uses internal navigation stack. */
@@ -49,7 +49,7 @@ interface BackButtonProps {
    const navigate = useNavigate();
    const [showFullHistory, setShowFullHistory] = useState(false);
    const historyEntries = stack.slice(0, -1).map((path, index) => ({ path, index }))
-     .filter(({ path }) => !path.startsWith('/auth')).reverse();
+     .filter(({ path }) => !path.startsWith('/auth') && path !== stack[stack.length - 1]).reverse();
  
    const handleBack = () => {
      if (to) {
@@ -113,7 +113,7 @@ interface BackButtonProps {
                <History className="h-3.5 w-3.5" />
              </Button>
            </DropdownMenuTrigger>
-           <DropdownMenuContent align="start" className="w-56 p-1 max-h-80 overflow-y-auto">
+           <DropdownMenuContent align="start" className="w-64 p-1 max-h-80 overflow-y-auto">
              <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold px-2 py-1.5">
                Histórico Recente
              </DropdownMenuLabel>
@@ -125,10 +125,11 @@ interface BackButtonProps {
                  className="text-xs py-2 px-2 cursor-pointer gap-2"
                >
                  <div className="w-1 h-1 rounded-full bg-primary/40 shrink-0" />
-                 <span className="truncate flex-1">{getReadableLabel(path)}</span>
-                 <span className="text-[10px] text-muted-foreground font-mono">
-                   {path.split(/[?#]/)[0].length > 20 ? path.split(/[?#]/)[0].substring(0, 17) + '...' : path.split(/[?#]/)[0]}
+                 <span className="min-w-0 flex-1">
+                   <span className="block truncate">{getReadableLabel(path)}</span>
+                   <span className="block truncate text-[10px] text-muted-foreground">{getNavigationDescription(path)}</span>
                  </span>
+                 <span className="text-[10px] text-muted-foreground shrink-0">Visita {index + 1}</span>
                </DropdownMenuItem>
              ))}
              {historyEntries.length > 5 && !showFullHistory && (

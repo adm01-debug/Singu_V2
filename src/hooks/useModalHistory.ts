@@ -1,4 +1,5 @@
 import { useEffect, useCallback, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 /**
  * Hook that integrates modals with browser history.
@@ -15,7 +16,12 @@ export function useModalHistory(
   onClose: () => void,
   id: string = 'modal'
 ) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const locationRef = useRef(location);
+  locationRef.current = location;
   const pushedRef = useRef(false);
+  const closingRef = useRef(false);
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -35,28 +41,35 @@ export function useModalHistory(
   const handlePopState = useCallback(() => {
     if (pushedRef.current) {
       pushedRef.current = false;
+      closingRef.current = true;
       handleClose();
     }
   }, [handleClose]);
 
   useEffect(() => {
-    if (isOpen && !pushedRef.current) {
-      // Push a state entry so browser back closes the modal
-      const routerState: unknown = window.history.state;
-      window.history.pushState({
-        ...(routerState && typeof routerState === 'object' ? routerState : {}),
-        modal: id,
-      }, '');
+    if (isOpen && !pushedRef.current && !closingRef.current) {
+      const route = locationRef.current;
       pushedRef.current = true;
+      navigate({ pathname: route.pathname, search: route.search, hash: route.hash }, {
+        state: route.state,
+      });
+      const routerState: unknown = window.history.state;
+      window.history.replaceState({ ...(routerState && typeof routerState === 'object' ? routerState : {}), modal: id }, '');
       setIsClosing(false);
     }
 
-    if (!isOpen && pushedRef.current) {
-      // Modal closed programmatically — clean up history entry
-      pushedRef.current = false;
-      window.history.back();
+    if (!isOpen) {
+      closingRef.current = false;
+      if (timerRef.current) clearTimeout(timerRef.current);
+      setIsClosing(false);
+      if (pushedRef.current) {
+        pushedRef.current = false;
+        const routerState: unknown = window.history.state;
+        if (routerState && typeof routerState === 'object' && 'modal' in routerState
+          && routerState.modal === id) navigate(-1);
+      }
     }
-  }, [isOpen, id]);
+  }, [isOpen, id, navigate]);
 
   useEffect(() => {
     window.addEventListener('popstate', handlePopState);

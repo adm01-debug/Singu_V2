@@ -31,7 +31,7 @@ const STORAGE_KEY = 'singu_nav_stack';
 
 export function safeNavigationPath(path: string): string | null {
   const hasControlCharacter = Array.from(path).some(character => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127);
-  if (path.length > 2048 || !path.startsWith('/') || path.startsWith('//')
+  if (!path.startsWith('/') || path.startsWith('//')
     || path.includes('\\') || hasControlCharacter) return null;
   try {
     return new URL(path, window.location.origin).origin === window.location.origin ? path : null;
@@ -140,6 +140,7 @@ export function NavigationStackProvider({ children }: { children: ReactNode }) {
   }, [location, navigationType, owner, loading]);
 
   const goToIndex = useCallback((index: number) => {
+    if (loading || snapshotRef.current.owner !== owner) return;
     const { entries, position } = snapshotRef.current;
     if (!Number.isInteger(index) || index < 0 || index >= position) return;
     const target = entries[index];
@@ -152,12 +153,13 @@ export function NavigationStackProvider({ children }: { children: ReactNode }) {
     } else {
       navigate(target.path, { replace: true });
     }
-  }, [navigate]);
+  }, [navigate, owner, loading]);
 
   const goBack = useCallback((fallback: string = '/') => {
+    if (loading) return;
     const { entries, position } = snapshotRef.current;
     const currentPath = location.pathname + location.search + location.hash;
-    for (let index = position - 1; index >= 0; index--) {
+    for (let index = snapshotRef.current.owner === owner ? position - 1 : -1; index >= 0; index--) {
       const candidate = entries[index].path;
       if (candidate !== currentPath && !candidate.startsWith('/auth') && safeNavigationPath(candidate)) {
         goToIndex(index);
@@ -166,7 +168,7 @@ export function NavigationStackProvider({ children }: { children: ReactNode }) {
     }
     const destination = safeNavigationPath(fallback) ?? '/';
     if (destination !== currentPath) navigate(destination, { replace: true });
-  }, [goToIndex, location.pathname, location.search, location.hash, navigate]);
+  }, [goToIndex, location.pathname, location.search, location.hash, navigate, owner, loading]);
 
   useEffect(() => {
     const handleNavigateBack = () => goBack('/');
@@ -174,14 +176,15 @@ export function NavigationStackProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('navigate-back', handleNavigateBack);
   }, [goBack]);
 
-  const visible = snapshot.entries.slice(0, snapshot.position + 1);
+  const activeSnapshot = !loading && snapshot.owner === owner ? snapshot : freshSnapshot(owner, currentEntry(location));
+  const visible = activeSnapshot.entries.slice(0, activeSnapshot.position + 1);
   const currentPath = location.pathname + location.search + location.hash;
   const previousPath = [...visible].reverse().find(item => item.path !== currentPath
     && !item.path.startsWith('/auth') && safeNavigationPath(item.path))?.path ?? null;
 
   return (
     <NavigationStackContext.Provider value={{
-      goBack, goToIndex, previousPath, direction, stack: visible.map(item => item.path),
+      goBack, goToIndex, previousPath, direction: activeSnapshot === snapshot ? direction : 'forward', stack: visible.map(item => item.path),
     }}>
       {children}
     </NavigationStackContext.Provider>

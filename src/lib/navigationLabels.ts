@@ -30,3 +30,10 @@ export function getSectionFallback(pathname: string): string {
   return segments.length > 1 && Object.keys(ROUTE_LABELS).includes(segments[0])
     ? `/${segments[0]}` : '/';
 }
+
+export function getNavigationDescription(path: string): string {
+  const url = new URL(path, window.location.origin);
+  const search = url.searchParams.get('q')?.replace(/\s+/g, ' ').trim().slice(0, 80);
+  return [search ? `Busca: ${search}` : '', url.searchParams.has('filters') ? 'Filtros ativos' : '']
+    .filter(Boolean).join(' · ') || url.pathname;
+}
