@@ -1,6 +1,6 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 
-type Scenario = 'ausente' | 'sem-id' | 'confirmado' | 'log-falha' | 'evento-falha' | 'avanco-vazio' | 'consulta-falha' | 'contato-alheio' | 'legado' | 'confirmado-existente' | 'manual' | 'sequencia-pausada' | 'resposta' | 'bounce-espera' | 'bounce-apos';
+type Scenario = 'ausente' | 'sem-id' | 'confirmado' | 'log-falha' | 'evento-falha' | 'avanco-vazio' | 'consulta-falha' | 'contato-alheio' | 'legado' | 'confirmado-existente' | 'manual' | 'sequencia-pausada' | 'resposta' | 'bounce-espera' | 'bounce-apos' | 'progresso-nulo' | 'progresso-nulo-falha' | 'logs-paginados';
 interface Operation { table: string; method: string; body: Record<string, unknown>; query: URLSearchParams }
 
 const owner = '11111111-1111-4111-8111-111111111111';
@@ -13,10 +13,11 @@ function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json' } });
 }
 
-function mockRead(table: string, scenario: Scenario): Response {
+function mockRead(table: string, scenario: Scenario, query: URLSearchParams): Response {
+  const currentStep = scenario.startsWith('progresso-nulo') ? null : 0;
   if (table === 'sequence_enrollments') return json([{
     id: enrollment, sequence_id: sequence, contact_id: contact, user_id: owner,
-    status: 'active', current_step: scenario.startsWith('bounce-') ? 1 : 0, next_action_at: '2020-01-01T00:00:00Z',
+    status: 'active', current_step: scenario.startsWith('bounce-') ? 1 : currentStep, next_action_at: '2020-01-01T00:00:00Z',
     enrolled_at: '2020-01-01T00:00:00Z', replied_at: null, last_step_executed_at: null,
   }]);
   if (table === 'sequences') return json([{ id: sequence, user_id: owner, status: scenario === 'sequencia-pausada' ? 'paused' : 'active', pause_on_reply: true }]);
@@ -37,6 +38,11 @@ function mockRead(table: string, scenario: Scenario): Response {
   }
   if (table === 'sequence_events') return json(scenario === 'resposta' ? [{ enrollment_id: enrollment }] : []);
   if (table === 'contacts') return json([{ id: contact, user_id: scenario === 'contato-alheio' ? sequence : owner, first_name: 'Pessoa', last_name: 'Teste', email: 'teste@example.invalid' }]);
+  if (table === 'sequence_send_log' && scenario === 'logs-paginados') return json(query.get('offset') === '1000' ? [{
+    enrollment_id: enrollment, step_order: 1, sent_at: '2020-01-01T00:00:00Z', opened_at: null, clicked_at: null, status: 'sent', message_id: 'provedor-123',
+  }] : Array.from({ length: 1000 }, (_, index) => ({
+    enrollment_id: enrollment, step_order: 100 + index, sent_at: '2019-01-01T00:00:00Z', opened_at: null, clicked_at: null, status: 'sent', message_id: `antigo-${index}`,
+  })));
   if (table === 'sequence_send_log') return json(['legado', 'confirmado-existente', 'bounce-espera', 'bounce-apos'].includes(scenario) ? [{
     enrollment_id: enrollment, step_order: 1, sent_at: scenario === 'bounce-espera' ? new Date().toISOString() : '2020-01-01T00:00:00Z',
     opened_at: null, clicked_at: null, status: scenario.startsWith('bounce-') ? 'bounced' : 'sent', message_id: scenario === 'legado' ? null : 'provedor-123',
@@ -53,11 +59,11 @@ async function withProcessor(scenario: Scenario, test: (call: (manual?: boolean,
     operations.push({ table, method: req.method, body, query: url.searchParams });
     if (url.pathname === '/auth/v1/user') return json({ id: owner });
     if (url.pathname.startsWith('/functions/')) {
-      if (scenario === 'ausente') return json({ error: 'Função não encontrada' }, 404);
+      if (scenario === 'ausente' || scenario === 'progresso-nulo-falha') return json({ error: 'Função não encontrada' }, 404);
       return json(scenario === 'sem-id' ? { ok: true } : { ok: true, messageId: 'provedor-123' });
     }
     if (table === 'complete_sequence_email_delivery') return atomicResponse(scenario);
-    if (req.method === 'GET') return mockRead(table, scenario);
+    if (req.method === 'GET') return mockRead(table, scenario, url.searchParams);
     if (req.method === 'PATCH') return json(scenario === 'avanco-vazio' ? null : { id: enrollment });
     if ((scenario === 'log-falha' && table === 'sequence_send_log' && body.status === 'sent') || (scenario === 'evento-falha' && table === 'sequence_events')) return json({ code: 'XX000', message: 'Falha de gravação' }, 500);
     return json(null);
@@ -127,6 +133,29 @@ Deno.test('Sequências: confirmação precede log, evento e avanço canônico', 
   assertEquals(writes[1].body.p_next_action_at, null);
   assertEquals(writes[1].body.p_subject, 'Olá Pessoa');
   assertEquals(writes[0].body.idempotencyKey, `seq-${enrollment}-step-1`);
+}));
+
+Deno.test('Sequências: progresso nulo usa a primeira etapa após normalização', () => withProcessor('progresso-nulo', async (call, operations) => {
+  const result = await (await call()).json();
+  assertEquals(result.stats.sent, 1);
+  assertEquals(result.stats.advanced, 1);
+  assertEquals(operations.find(operation => operation.table === 'complete_sequence_email_delivery')?.body.p_current_step, 0);
+}));
+
+Deno.test('Sequências: confirmação após 1.000 logs evita novo envio', () => withProcessor('logs-paginados', async (call, operations) => {
+  const result = await (await call()).json();
+  assertEquals(result.stats.sent, 0);
+  assertEquals(result.stats.advanced, 1);
+  assert(!operations.some(operation => operation.table === 'send-transactional-email'));
+  assertEquals(operations.filter(operation => operation.table === 'sequence_send_log' && operation.method === 'GET').map(operation => operation.query.get('offset')), ['0', '1000']);
+}));
+
+Deno.test('Sequências: falha com progresso nulo pausa sem repetir o envio', () => withProcessor('progresso-nulo-falha', async (call, operations) => {
+  const result = await (await call()).json();
+  assertEquals(result.stats.sent, 0);
+  assertEquals(result.stats.paused, 1);
+  assertEquals(operations.find(operation => operation.table === 'sequence_enrollments' && operation.method === 'PATCH')?.query.get('current_step'), 'is.null');
+  assert(!operations.some(operation => operation.table === 'complete_sequence_email_delivery'));
 }));
 
 for (const scenario of ['log-falha', 'evento-falha', 'avanco-vazio'] as const) {

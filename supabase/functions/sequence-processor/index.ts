@@ -24,7 +24,7 @@ interface Enrollment {
   contact_id: string;
   user_id: string;
   status: string;
-  current_step: number;
+  current_step: number | null;
   next_action_at: string | null;
   enrolled_at: string;
   replied_at: string | null;
@@ -117,7 +117,7 @@ Deno.serve(async (req) => {
       supabase.from('sequences').select('id, user_id, status, pause_on_reply, pause_on_meeting').in('id', sequenceIds),
       supabase.from('sequence_steps').select('*').in('sequence_id', sequenceIds).order('step_order'),
       supabase.from('sequence_events').select('enrollment_id').in('enrollment_id', enrollmentIds).eq('event_type', 'replied'),
-      supabase.from('sequence_send_log').select('enrollment_id, step_order, sent_at, opened_at, clicked_at, status, message_id').in('enrollment_id', enrollmentIds).in('status', ['sent', 'bounced']).order('sent_at', { ascending: true }),
+      fetchSendLogs(supabase, enrollmentIds),
       supabase.from('contacts').select('id, user_id, first_name, last_name, email').in('id', contactIds),
     ]);
     if (sequenceError || stepsError || replyError || sendLogError || contactError) {
@@ -186,12 +186,13 @@ Deno.serve(async (req) => {
           continue;
         }
 
-        const nextStepOrder = enr.current_step + 1;
+        const currentStep = enr.current_step ?? 0;
+        const nextStepOrder = currentStep + 1;
         let targetStep = steps.find((s) => s.step_order === nextStepOrder);
 
         // 4. Avaliar branching do step ANTERIOR — in-memory, no DB call
-        if (enr.current_step > 0) {
-          const prevStep = steps.find((s) => s.step_order === enr.current_step);
+        if (currentStep > 0) {
+          const prevStep = steps.find((s) => s.step_order === currentStep);
           if (prevStep && prevStep.condition_type !== 'always') {
             const sendLog = sendLogByEnrollment.get(enr.id)?.get(prevStep.step_order);
             const conditionMet = evaluateConditionInMemory(enr.id, prevStep, sendLog, enrollmentsWithReply);
@@ -296,6 +297,21 @@ Deno.serve(async (req) => {
 });
 
 // Pure in-memory condition evaluation — no DB calls, uses pre-fetched Maps
+async function fetchSendLogs(supabase: SupabaseClient, enrollmentIds: string[]) {
+  const pageSize = 1000;
+  const rows: SendLogEntry[] = [];
+  for (let offset = 0; ; offset += pageSize) {
+    const { data, error } = await supabase.from('sequence_send_log')
+      .select('enrollment_id, step_order, sent_at, opened_at, clicked_at, status, message_id')
+      .in('enrollment_id', enrollmentIds).in('status', ['sent', 'bounced'])
+      .order('sent_at', { ascending: true }).order('id', { ascending: true })
+      .range(offset, offset + pageSize - 1);
+    if (error) return { data: null, error };
+    rows.push(...((data ?? []) as SendLogEntry[]));
+    if (!data || data.length < pageSize) return { data: rows, error: null };
+  }
+}
+
 function evaluateConditionInMemory(
   enrollmentId: string,
   step: Step,
@@ -363,12 +379,15 @@ async function sendEmailStep(
     return { sent: newlySent, advanced: true, paused: false };
   } catch (e) {
     console.error('sendEmailStep erro:', e);
-    const { data: paused, error: pauseError } = await supabase.from('sequence_enrollments').update({
+    const pause = supabase.from('sequence_enrollments').update({
       status: 'paused',
       paused_at: new Date().toISOString(),
       paused_reason: accepted ? 'Provedor confirmou o envio; persistência ou avanço exigem revisão' : 'Envio não confirmado; revise a integração antes de retomar',
     })
-      .eq('id', enr.id).eq('status', 'active').eq('current_step', enr.current_step).select('id').maybeSingle();
+      .eq('id', enr.id).eq('status', 'active');
+    const { data: paused, error: pauseError } = await (enr.current_step === null
+      ? pause.is('current_step', null)
+      : pause.eq('current_step', enr.current_step)).select('id').maybeSingle();
     if (pauseError) console.error('Não foi possível pausar a inscrição:', pauseError);
     if (!accepted) {
       const { error: failureError } = await supabase.from('sequence_send_log').insert({
@@ -394,7 +413,7 @@ async function completeEmailDelivery(
 ) {
   const { data, error } = await supabase.rpc('complete_sequence_email_delivery', {
     p_enrollment_id: enr.id, p_user_id: enr.user_id, p_step_id: step.id,
-    p_current_step: enr.current_step, p_message_id: messageId,
+    p_current_step: enr.current_step ?? 0, p_message_id: messageId,
     p_tracking_token: trackingToken, p_next_action_at: nextAction, p_subject: subject,
   });
   if (error || data !== enr.id) throw error || new Error('Inscrição alterada durante o envio');

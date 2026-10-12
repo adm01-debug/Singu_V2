@@ -13,6 +13,10 @@ ALTER TABLE public.sequence_steps
 ALTER TABLE public.sequence_enrollments
   ADD COLUMN IF NOT EXISTS paused_at timestamptz,
   ADD COLUMN IF NOT EXISTS paused_reason text;
+UPDATE public.sequence_enrollments SET current_step = 0 WHERE current_step IS NULL;
+ALTER TABLE public.sequence_enrollments
+  ALTER COLUMN current_step SET DEFAULT 0,
+  ALTER COLUMN current_step SET NOT NULL;
 
 CREATE OR REPLACE FUNCTION public.complete_sequence_email_delivery(
   p_enrollment_id uuid,
@@ -125,6 +129,8 @@ GRANT EXECUTE ON FUNCTION public.complete_sequence_email_delivery(
 
 -- Rollback: restaure o processador anterior antes de remover a função.
 -- DROP FUNCTION public.complete_sequence_email_delivery(uuid, uuid, uuid, integer, text, text, timestamptz, text);
+-- ALTER TABLE public.sequence_enrollments ALTER COLUMN current_step DROP NOT NULL;
+-- Preserve o progresso normalizado; restaurar NULL reabre a repetição de envios.
 -- Os campos de pausa, proprietário e posição já existem no canônico: preserve-os e seus dados.
 -- Em reconstruções nas quais foram criados apenas por esta migration, após
 -- backup e retirada dos consumidores:

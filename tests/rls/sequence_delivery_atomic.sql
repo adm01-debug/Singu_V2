@@ -35,8 +35,16 @@ DECLARE
   sid uuid := current_setting('rls.sequence_step')::uuid;
   token text := replace(gen_random_uuid()::text, '-', '');
   failed boolean := false;
+  null_rejected boolean := false;
   saved uuid;
 BEGIN
+  BEGIN
+    UPDATE public.sequence_enrollments SET current_step = NULL WHERE id = eid;
+  EXCEPTION WHEN not_null_violation THEN null_rejected := true;
+  END;
+  IF NOT null_rejected OR (SELECT current_step FROM public.sequence_enrollments WHERE id = eid) <> 0 THEN
+    RAISE EXCEPTION 'Progresso nulo permite repetição de envio';
+  END IF;
   BEGIN
     PERFORM public.complete_sequence_email_delivery(eid, uid, sid, 0, 'provedor-teste', token, NULL, 'Assunto');
   EXCEPTION WHEN check_violation THEN failed := true;
