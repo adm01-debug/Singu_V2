@@ -38,6 +38,29 @@ describe('Auditoria única após exclusão confirmada', () => {
     expect(mocks.insert).not.toHaveBeenCalled();
   });
 
+  it('confirma a exclusão após o limite de espera e não repete a auditoria atrasada', async () => {
+    vi.useFakeTimers();
+    let finishAudit: (value: { error: null }) => void = () => {};
+    mocks.insert.mockReturnValue(new Promise<{ error: null }>(resolve => { finishAudit = resolve; }));
+    try {
+      const deletion = deleteExternalData('contacts', 'registro');
+      await vi.advanceTimersByTimeAsync(4999);
+      let completed = false;
+      void deletion.then(() => { completed = true; });
+      await Promise.resolve();
+      expect(completed).toBe(false);
+      await vi.advanceTimersByTimeAsync(1);
+      expect(await deletion).toEqual({ success: true, error: null });
+      finishAudit({ error: null });
+      await Promise.resolve();
+      expect(mocks.insert).toHaveBeenCalledTimes(1);
+      expect(mocks.fetch).toHaveBeenCalledTimes(1);
+      expect(vi.getTimerCount()).toBe(0);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('não inventa uma interação excluída para outras tabelas', async () => {
     expect((await deleteExternalData('tasks', 'registro')).success).toBe(true);
     expect(mocks.insert).not.toHaveBeenCalled();

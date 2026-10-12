@@ -8,6 +8,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- Auditorias de contato, empresa e interação aceitam os eventos atuais também no banco reconstruído, preservando os tipos anteriores; os campos opcionais de motivo e metadados são criados quando ausentes. A exclusão confirmada espera no máximo cinco segundos pela auditoria auxiliar, sem repetir a gravação atrasada.
 - O envio de erros ao ocultar a página usa a sessão em memória e keepalive; a migração comercial também adiciona o vínculo único de login em tabelas antigas sem essa coluna, sem atribuir vendedores por nome.
 - As funções Edge aguardam e verificam a gravação de logs opcionais, sem apresentar uma operação concluída como falha quando a auditoria não puder ser registrada.
 - Lembretes WhatsApp reservam um marcador único antes do envio; entregas incertas não são reenviadas automaticamente nem anunciadas como sucesso, e rejeições HTTP confirmadas permitem nova tentativa. A rejeição fica registrada, sem excluir a reserva; apenas uma execução pode retomá-la, e o identificador da tentativa protege sua confirmação. A URL do provedor é validada antes de reservar a entrega. Envios de email não executados deixam de ser contabilizados. A sincronização social e a validação de sugestões informam falha quando o resultado principal não é confirmado.

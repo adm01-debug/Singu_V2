@@ -265,22 +265,32 @@ export async function deleteExternalData(table: string, id: string, audit?: { en
     await callExternalData({ action: 'delete', table, id });
     const entity = table === 'contacts' ? 'contact' : table === 'companies' ? 'company' : table === 'interactions' ? 'interaction' : null;
     if (entity) {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user?.id) {
-          const { error: auditErr } = await supabase.from('activities').insert({
-            user_id: session.user.id,
-            type: `${entity}_deleted`,
-            entity_type: entity,
-            entity_id: id,
-            entity_name: audit?.entityName ?? null,
-            description: audit?.description ?? `Exclusão de registro na tabela ${table}`,
-            reason: audit?.reason ?? 'Solicitação via interface',
-          });
-          if (auditErr) logger.warn('Failed to write delete audit log', { error: auditErr.message });
+      let auditTimeout: ReturnType<typeof setTimeout> | undefined;
+      const auditTask = (async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user?.id) {
+            const { error: auditErr } = await supabase.from('activities').insert({
+              user_id: session.user.id,
+              type: `${entity}_deleted`,
+              entity_type: entity,
+              entity_id: id,
+              entity_name: audit?.entityName ?? null,
+              description: audit?.description ?? `Exclusão de registro na tabela ${table}`,
+              reason: audit?.reason ?? 'Solicitação via interface',
+            });
+            if (auditErr) logger.warn('Failed to write delete audit log', { error: auditErr.message });
+          }
+        } catch (error) {
+          logger.warn('Failed to write delete audit log', { error: error instanceof Error ? error.message : String(error) });
         }
-      } catch (error) {
-        logger.warn('Failed to write delete audit log', { error: error instanceof Error ? error.message : String(error) });
+      })();
+      try {
+        await Promise.race([auditTask, new Promise<void>(resolve => {
+          auditTimeout = setTimeout(resolve, 5000);
+        })]);
+      } finally {
+        clearTimeout(auditTimeout);
       }
     }
     return { success: true, error: null };
