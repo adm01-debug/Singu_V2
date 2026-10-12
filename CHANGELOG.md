@@ -11,6 +11,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Matriz reconciliada das auditorias e lacunas com estado por achado, evidências e próximos passos, organizada em cinco áreas e vinculada pelo índice.
 
 ### Fixed
+- A atualização de emails por RPC encontra o índice único exigido pelo `ON CONFLICT`, preserva o registro nas novas tentativas com diferenças de maiúsculas e mantém o isolamento por proprietário.
 - O teste de conexões limita a cinco segundos a consulta de propriedade e as gravações auxiliares; o histórico é persistido pelo servidor somente após confirmar o dono, preservando o bloqueio de escrita direta aos usuários.
 - Testes de conexões verificam o proprietário antes de executar ou registrar o teste, usam a sessão autenticada para consultar e atualizar a configuração e identificam o responsável também nas falhas. Endereços privados e reservados, DNS misto, redirecionamentos e porta zero são bloqueados; a conexão usa um dos IPs validados, preservando o hostname na validação TLS e tentando IPv6 quando IPv4 falha. A espera pelo TLS também respeita o prazo global; URLs do Supabase exigem HTTPS antes do envio de credenciais.
 - Consultas externas validam todas as relações embutidas, inclusive aliases e aninhamentos, pela lista de tabelas permitidas. Consultas globais com credencial administrativa recusam relações para preservar o isolamento; sintaxe não suportada e projeções excessivas são rejeitadas antes de consultar o banco.
