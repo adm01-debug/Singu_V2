@@ -167,4 +167,24 @@ describe('Configuração e confirmação MFA', () => {
     expect(mfa.challenge).toHaveBeenCalledWith({ factorId: 'reserva' });
     expect(mfa.verify).toHaveBeenCalledWith({ factorId: 'reserva', challengeId: 'desafio', code: '123456' });
   });
+
+  it('permite escolher o autenticador a desativar e mantém o outro disponível', async () => {
+    const factors = [
+      { id: 'principal', status: 'verified', factor_type: 'totp', friendly_name: 'Celular principal' },
+      { id: 'reserva', status: 'verified', factor_type: 'totp', friendly_name: 'Autenticador reserva' },
+    ];
+    mfa.listFactors.mockResolvedValue({ data: { totp: factors, all: factors }, error: null });
+    mfa.getAuthenticatorAssuranceLevel.mockResolvedValue({ data: { currentLevel: 'aal2' }, error: null });
+    render(<TwoFactorSetup />);
+    const selector = await screen.findByLabelText('Aplicativo autenticador');
+    expect(selector).toHaveValue('principal');
+    expect(screen.getByRole('button', { name: 'Desativar Celular principal' })).toBeEnabled();
+    fireEvent.change(selector, { target: { value: 'reserva' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Desativar Autenticador reserva' }));
+    await waitFor(() => expect(mfa.unenroll).toHaveBeenCalledWith({ factorId: 'reserva' }));
+    expect(mfa.unenroll).toHaveBeenCalledTimes(1);
+    fireEvent.change(await screen.findByLabelText('Código de verificação'), { target: { value: '123456' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Confirmar acesso' }));
+    await waitFor(() => expect(mfa.challenge).toHaveBeenCalledWith({ factorId: 'principal' }));
+  });
 });
