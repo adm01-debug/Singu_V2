@@ -85,9 +85,11 @@ Deno.serve(async (req) => {
     // 1. Buscar enrollments ativos com next_action_at vencido
     let enrollmentQuery = supabase
       .from('sequence_enrollments')
-      .select('*')
+      .select('*, sequences!inner(status)')
       .eq('status', 'active')
+      .eq('sequences.status', 'active')
       .lte('next_action_at', now.toISOString())
+      .order('next_action_at', { ascending: true })
       .limit(100);
     if (userId) enrollmentQuery = enrollmentQuery.eq('user_id', userId);
     const { data: enrollments, error: enrErr } = await enrollmentQuery;
@@ -115,7 +117,7 @@ Deno.serve(async (req) => {
       supabase.from('sequences').select('id, user_id, status, pause_on_reply, pause_on_meeting').in('id', sequenceIds),
       supabase.from('sequence_steps').select('*').in('sequence_id', sequenceIds).order('step_order'),
       supabase.from('sequence_events').select('enrollment_id').in('enrollment_id', enrollmentIds).eq('event_type', 'replied'),
-      supabase.from('sequence_send_log').select('enrollment_id, step_order, sent_at, opened_at, clicked_at, status, message_id').in('enrollment_id', enrollmentIds).eq('status', 'sent'),
+      supabase.from('sequence_send_log').select('enrollment_id, step_order, sent_at, opened_at, clicked_at, status, message_id').in('enrollment_id', enrollmentIds).in('status', ['sent', 'bounced']).order('sent_at', { ascending: true }),
       supabase.from('contacts').select('id, user_id, first_name, last_name, email').in('id', contactIds),
     ]);
     if (sequenceError || stepsError || replyError || sendLogError || contactError) {
@@ -142,6 +144,7 @@ Deno.serve(async (req) => {
     // enrollment_id -> step_order -> send log entry
     const sendLogByEnrollment = new Map<string, Map<number, SendLogEntry>>();
     for (const log of (sendLogRows ?? []) as SendLogEntry[]) {
+      if (log.status === 'bounced' && !log.message_id) continue;
       const inner = sendLogByEnrollment.get(log.enrollment_id) ?? new Map<number, SendLogEntry>();
       inner.set(log.step_order, log);
       sendLogByEnrollment.set(log.enrollment_id, inner);
@@ -194,7 +197,7 @@ Deno.serve(async (req) => {
             const conditionMet = evaluateConditionInMemory(enr.id, prevStep, sendLog, enrollmentsWithReply);
             if (conditionMet === null) {
               const waitUntil = new Date(
-                new Date(enr.last_step_executed_at ?? enr.enrolled_at).getTime() +
+                new Date(sendLog?.sent_at ?? enr.last_step_executed_at ?? enr.enrolled_at).getTime() +
                   prevStep.condition_wait_hours * 3600_000,
               );
               waitRows.push({ id: enr.id, next_action_at: waitUntil.toISOString() });
@@ -223,7 +226,13 @@ Deno.serve(async (req) => {
 
         // 6. Accumulate work per channel
         if (targetStep.channel === 'email') {
-          emailJobs.push({ enr, step: targetStep, contact: contactMap.get(enr.contact_id) ?? null, nextAction, log: sendLogByEnrollment.get(enr.id)?.get(targetStep.step_order) });
+          const log = sendLogByEnrollment.get(enr.id)?.get(targetStep.step_order);
+          if (log?.status === 'bounced') {
+            pausedRows.push({ id: enr.id, status: 'paused', paused_at: now.toISOString(), paused_reason: 'Envio devolvido; revise o endereço antes de retomar' });
+            stats.errors++;
+            continue;
+          }
+          emailJobs.push({ enr, step: targetStep, contact: contactMap.get(enr.contact_id) ?? null, nextAction, log });
         } else {
           pausedRows.push({
             id: enr.id,
@@ -318,24 +327,24 @@ async function sendEmailStep(
   let accepted = !!confirmedLog?.message_id;
   let newlySent = false;
   try {
-    if (!contact?.email) throw new Error('Contato sem email');
-    if (contact.user_id !== enr.user_id) throw new Error('Contato não pertence ao proprietário da inscrição');
+    if (!contact || contact.user_id !== enr.user_id) throw new Error('Contato não pertence ao proprietário da inscrição');
     if (confirmedLog && !confirmedLog.message_id) throw new Error('Envio anterior sem confirmação do provedor; revise antes de retomar');
 
+    const idempotencyKey = `seq-${enr.id}-step-${step.step_order}`;
+    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(idempotencyKey));
+    const trackingToken = Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('').slice(0, 32);
     if (confirmedLog) {
-      await advanceEmailEnrollment(supabase, enr, step, nextAction);
+      await completeEmailDelivery(supabase, enr, step, nextAction, confirmedLog.message_id!, trackingToken, null);
       return { sent: false, advanced: true, paused: false };
     }
+    if (!contact.email) throw new Error('Contato sem email');
     const body = (step.message_template ?? '')
       .replaceAll('{{first_name}}', contact.first_name ?? '')
       .replaceAll('{{last_name}}', contact.last_name ?? '');
     const subject = (step.subject ?? 'Mensagem')
       .replaceAll('{{first_name}}', contact.first_name ?? '');
 
-    const idempotencyKey = `seq-${enr.id}-step-${step.step_order}`;
-    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(idempotencyKey));
-    const trackingToken = Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('').slice(0, 32);
-    const { data: delivery, error: deliveryError } = await supabase.functions.invoke('send-transactional-email', {
+    const { data: delivery, error: deliveryError } = await supabase.functions.invoke<{ ok: boolean; messageId: string }>('send-transactional-email', {
       signal: AbortSignal.timeout(20_000),
       body: {
         templateName: 'sequence-step',
@@ -344,37 +353,13 @@ async function sendEmailStep(
         templateData: { subject, body, trackingToken },
       },
     });
-    if (deliveryError || delivery?.ok !== true || typeof delivery.messageId !== 'string' || !delivery.messageId) {
+    if (deliveryError || delivery?.ok !== true || typeof delivery.messageId !== 'string' || !delivery.messageId.trim()) {
       throw new Error('Envio transacional não confirmado pelo provedor');
     }
     accepted = true;
     newlySent = true;
 
-    const { error: logError } = await supabase.from('sequence_send_log').insert({
-      enrollment_id: enr.id,
-      step_id: step.id,
-      sequence_id: enr.sequence_id,
-      contact_id: enr.contact_id,
-      user_id: enr.user_id,
-      step_order: step.step_order,
-      channel: 'email',
-      status: 'sent',
-      message_id: delivery.messageId,
-      tracking_token: trackingToken,
-    });
-    if (logError) throw logError;
-
-    const { error: eventError } = await supabase.from('sequence_events').insert({
-        enrollment_id: enr.id,
-        sequence_id: enr.sequence_id,
-        contact_id: enr.contact_id,
-        user_id: enr.user_id,
-        step_order: step.step_order,
-        event_type: 'sent',
-        metadata: { channel: 'email', subject, tracking_token: trackingToken },
-      });
-    if (eventError) throw eventError;
-    await advanceEmailEnrollment(supabase, enr, step, nextAction);
+    await completeEmailDelivery(supabase, enr, step, nextAction, delivery.messageId, trackingToken, subject);
     return { sent: newlySent, advanced: true, paused: false };
   } catch (e) {
     console.error('sendEmailStep erro:', e);
@@ -403,13 +388,14 @@ async function sendEmailStep(
   }
 }
 
-async function advanceEmailEnrollment(supabase: SupabaseClient, enr: Enrollment, step: Step, nextAction: string | null) {
-  const { data: updated, error } = await supabase.from('sequence_enrollments').update({
-    current_step: step.step_order,
-    next_action_at: nextAction,
-    last_step_executed_at: new Date().toISOString(),
-    status: nextAction ? 'active' : 'completed',
-    completed_at: nextAction ? null : new Date().toISOString(),
-  }).eq('id', enr.id).eq('status', 'active').eq('current_step', enr.current_step).select('id').maybeSingle();
-  if (error || !updated) throw error || new Error('Inscrição alterada durante o envio');
+async function completeEmailDelivery(
+  supabase: SupabaseClient, enr: Enrollment, step: Step, nextAction: string | null,
+  messageId: string, trackingToken: string, subject: string | null,
+) {
+  const { data, error } = await supabase.rpc('complete_sequence_email_delivery', {
+    p_enrollment_id: enr.id, p_user_id: enr.user_id, p_step_id: step.id,
+    p_current_step: enr.current_step, p_message_id: messageId,
+    p_tracking_token: trackingToken, p_next_action_at: nextAction, p_subject: subject,
+  });
+  if (error || data !== enr.id) throw error || new Error('Inscrição alterada durante o envio');
 }
