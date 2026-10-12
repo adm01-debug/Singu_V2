@@ -111,3 +111,24 @@ Deno.test("usa IPv6 público quando o IPv4 validado não aceita conexões", asyn
     assertEquals(attempts, ["8.8.8.8", "2606:4700:4700::1111"]);
   } finally { listener.close(); }
 });
+
+Deno.test("encerra a espera quando o handshake TLS não termina", async () => {
+  const listener = Deno.listen({ hostname: "127.0.0.1", port: 0 });
+  const network: HttpTransport = {
+    ...networkWithRecords(["8.8.8.8"]),
+    connect: () => Deno.connect({ hostname: "127.0.0.1", port: listener.addr.port }),
+    startTls: () => new Promise<Deno.TlsConn>(() => {}),
+  };
+  const serverConnection = listener.accept();
+  try {
+    const attempt = safeFetch("https://public.test/", {}, network);
+    const accepted = await serverConnection;
+    try {
+      const result = await Promise.race([
+        attempt.then(() => "conectou", () => "cancelou"),
+        new Promise<string>((resolve) => setTimeout(() => resolve("travou"), 12_000)),
+      ]);
+      assertEquals(result, "cancelou");
+    } finally { accepted.close(); }
+  } finally { listener.close(); }
+});

@@ -100,7 +100,21 @@ export async function safeFetch(rawUrl: string, options: RequestInit = {}, netwo
         const tcpConnection = await network.connect(address, destination.port, attempt);
         connection = tcpConnection;
         if (destination.url.protocol === "https:") {
-          connection = await network.startTls(tcpConnection, destination.hostname);
+          signal.throwIfAborted();
+          let stopWaiting = () => {};
+          const deadlineExceeded = new Promise<never>((_, reject) => {
+            stopWaiting = () => reject(signal.reason);
+            signal.addEventListener("abort", stopWaiting, { once: true });
+          });
+          try {
+            const handshake = network.startTls(tcpConnection, destination.hostname);
+            void handshake.then(tlsConnection => {
+              if (signal.aborted) tlsConnection.close();
+            }, () => {});
+            connection = await Promise.race([handshake, deadlineExceeded]);
+          } finally {
+            signal.removeEventListener("abort", stopWaiting);
+          }
         }
         break;
       } catch (error) {
