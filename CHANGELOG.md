@@ -8,7 +8,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
-- Testes de conexões verificam o proprietário antes de executar ou registrar o teste, usam a sessão autenticada nas gravações e identificam o responsável também nas falhas. Endereços privados e reservados, DNS misto e redirecionamentos são bloqueados; a conexão usa o IP validado, preservando o hostname na validação TLS.
+- Testes de conexões verificam o proprietário antes de executar ou registrar o teste, usam a sessão autenticada nas gravações e identificam o responsável também nas falhas. Endereços privados e reservados, DNS misto e redirecionamentos são bloqueados; a conexão usa um dos IPs validados, preservando o hostname na validação TLS e tentando IPv6 quando IPv4 falha. URLs do Supabase exigem HTTPS antes do envio de credenciais.
 - Sugestões de Rodízio filtram UF pelo endereço prioritário da empresa; a busca legada de emails duplicados usa os emails relacionados, considera empresas distintas e mantém o escopo do usuário.
 - Auditorias de contato, empresa e interação aceitam os eventos atuais também no banco reconstruído, preservando os tipos anteriores; os campos opcionais de motivo e metadados são criados quando ausentes. Leituras agregadas usam identificador nulo e contagem de registros; consultas por ID preservam a entidade. Consultas e exclusões confirmadas esperam no máximo cinco segundos pela auditoria auxiliar, sem repetir a gravação atrasada nem perder o dono após a renovação do login.
 - O envio de erros ao ocultar a página usa a sessão em memória e keepalive; a migração comercial também adiciona o vínculo único de login em tabelas antigas sem essa coluna, sem atribuir vendedores por nome.

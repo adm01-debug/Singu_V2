@@ -40,7 +40,7 @@ Deno.test("literal público dispensa DNS, preservando IPv6 e porta", async () =>
     ...networkWithRecords([]),
     resolve: () => { throw new Error("Literal não deve passar por DNS"); },
   });
-  assertEquals(result.address, "2606:4700:4700::1111");
+  assertEquals(result.addresses, ["2606:4700:4700::1111"]);
   assertEquals(result.hostname, "2606:4700:4700::1111");
   assertEquals(result.port, 8443);
 });
@@ -83,3 +83,31 @@ async function testExchange(status: number) {
 
 Deno.test("fixa o endereço validado sem segunda resolução e conserva Host/caminho", () => testExchange(200));
 Deno.test("não segue redirecionamento de endereço público para rede interna", () => testExchange(302));
+
+Deno.test("usa IPv6 público quando o IPv4 validado não aceita conexões", async () => {
+  const listener = Deno.listen({ hostname: "127.0.0.1", port: 0 });
+  const attempts: string[] = [];
+  const server = (async () => {
+    const conn = await listener.accept();
+    try {
+      const buffer = new Uint8Array(1024);
+      const length = await conn.read(buffer);
+      assert(new TextDecoder().decode(buffer.subarray(0, length ?? 0)).includes("host: public.test\r\n"));
+      await conn.write(new TextEncoder().encode("HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n"));
+    } finally { conn.close(); }
+  })();
+  const network: HttpTransport = {
+    ...networkWithRecords([]),
+    resolve: (_hostname, type) => Promise.resolve(type === "A" ? ["8.8.8.8"] : ["2606:4700:4700::1111"]),
+    connect: (address) => {
+      attempts.push(address);
+      if (address === "8.8.8.8") throw new Error("IPv4 indisponível");
+      return Deno.connect({ hostname: "127.0.0.1", port: listener.addr.port });
+    },
+  };
+  try {
+    assertEquals((await safeFetch("http://public.test/", {}, network)).status, 200);
+    await server;
+    assertEquals(attempts, ["8.8.8.8", "2606:4700:4700::1111"]);
+  } finally { listener.close(); }
+});

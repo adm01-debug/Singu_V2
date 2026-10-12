@@ -83,11 +83,27 @@ Deno.test("não testa conexões alheias, não grava sem dono e registra erros co
     assert(writes.every((write) => write.authorization === "Bearer sessao-teste"));
     assertEquals(outsideRequests, 0);
 
+    const insecureResponse = await fetch("http://127.0.0.1:8000/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: "Bearer sessao-teste" },
+      body: JSON.stringify({
+        connection_type: "supabase_external",
+        connection_id: ownedId,
+        config: { url: `http://127.0.0.1:${fakeApi.addr.port}/outside`, anon_key: "chave-teste" },
+      }),
+    });
+    assertEquals(insecureResponse.status, 200);
+    const insecureBody = await insecureResponse.json();
+    assertEquals(insecureBody.success, false);
+    assert(insecureBody.error.includes("HTTPS"));
+    assertEquals(outsideRequests, 0);
+    assertEquals(writes.length, 4);
+
     rejectAudit = true;
     const response = await submit(ownedId);
     assertEquals(response.status, 200);
     assertEquals((await response.json()).success, false);
-    assertEquals(writes.length, 4);
+    assertEquals(writes.length, 6);
     assertEquals(outsideRequests, 0);
   } finally {
     child.kill("SIGTERM");

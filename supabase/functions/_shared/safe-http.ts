@@ -38,7 +38,7 @@ export async function resolveDestination(rawUrl: string, signal: AbortSignal, ne
   if (!addresses.length || addresses.some(address => !isPublicAddress(address))) {
     throw new Error("Destino de URL bloqueado: endereço privado, reservado ou não resolvido");
   }
-  return { url, hostname, address: addresses[0], port: Number(url.port) || (url.protocol === "https:" ? 443 : 80) };
+  return { url, hostname, addresses, port: Number(url.port) || (url.protocol === "https:" ? 443 : 80) };
 }
 
 async function writeAll(connection: Deno.Conn, bytes: Uint8Array) {
@@ -74,6 +74,7 @@ async function readStatus(connection: Deno.Conn): Promise<number> {
 }
 
 export async function safeFetch(rawUrl: string, options: RequestInit = {}, network = transport): Promise<Response> {
+  const deadline = Date.now() + 10_000;
   const signal = AbortSignal.timeout(10_000);
   const destination = await resolveDestination(rawUrl, signal, network);
   const request = new Request(destination.url, options);
@@ -81,17 +82,33 @@ export async function safeFetch(rawUrl: string, options: RequestInit = {}, netwo
   const body = new Uint8Array(await request.arrayBuffer());
   if (body.length > 64 * 1024) throw new Error("Corpo de requisição excede o limite permitido");
   signal.throwIfAborted();
-  const tcpConnection = await network.connect(destination.address, destination.port, signal);
-  let connection: Deno.Conn = tcpConnection;
+  let connection: Deno.Conn | undefined;
   const close = () => {
-    try { connection.close(); } catch { /* Conexão já encerrada. */ }
+    try { connection?.close(); } catch { /* Conexão já encerrada. */ }
   };
   signal.addEventListener("abort", close, { once: true });
   try {
-    signal.throwIfAborted();
-    if (destination.url.protocol === "https:") {
-      connection = await network.startTls(tcpConnection, destination.hostname);
+    let connectionError: unknown;
+    for (const [index, address] of destination.addresses.entries()) {
+      signal.throwIfAborted();
+      try {
+        const remaining = destination.addresses.length - index;
+        const attempt = AbortSignal.any([signal, AbortSignal.timeout(
+          Math.max(1, Math.floor((deadline - Date.now()) / remaining)),
+        )]);
+        const tcpConnection = await network.connect(address, destination.port, attempt);
+        connection = tcpConnection;
+        if (destination.url.protocol === "https:") {
+          connection = await network.startTls(tcpConnection, destination.hostname);
+        }
+        break;
+      } catch (error) {
+        close();
+        connection = undefined;
+        connectionError = error;
+      }
     }
+    if (!connection) throw connectionError instanceof Error ? connectionError : new Error("Falha na conexão com o destino");
     signal.throwIfAborted();
     const headers = new Headers(request.headers);
     headers.delete("transfer-encoding");

@@ -29,6 +29,7 @@ async function testSupabase(config: Record<string, unknown>): Promise<TestResult
   const url = trimTrailingSlashes(String(config.url ?? ""));
   const key = String(config.anon_key ?? config.service_role_key ?? "");
   if (!url || !key) throw new Error("URL e chave (anon ou service role) obrigatórias");
+  if (new URL(url).protocol !== "https:") throw new Error("URL do Supabase deve usar HTTPS");
   const t0 = Date.now();
   const res = await safeFetch(`${url}/rest/v1/`, {
     headers: { apikey: key, Authorization: `Bearer ${key}` },
