@@ -8,6 +8,8 @@ END;
 $owners$;
 SELECT set_config('rls.rpc.owner', (SELECT id::text FROM auth.users ORDER BY created_at LIMIT 1), true);
 SELECT set_config('rls.rpc.other', (SELECT id::text FROM auth.users ORDER BY created_at OFFSET 1 LIMIT 1), true);
+DELETE FROM public.user_roles
+WHERE user_id IN (current_setting('rls.rpc.owner')::uuid, current_setting('rls.rpc.other')::uuid);
 SELECT set_config('rls.rpc.company_sp', gen_random_uuid()::text, true);
 SELECT set_config('rls.rpc.company_rj', gen_random_uuid()::text, true);
 SELECT set_config('rls.rpc.company_foreign', gen_random_uuid()::text, true);
@@ -28,7 +30,8 @@ INSERT INTO public.company_emails(company_id, email) VALUES
   (current_setting('rls.rpc.company_foreign')::uuid, current_setting('rls.rpc.marker') || '@example.test'),
   (current_setting('rls.rpc.company_sp')::uuid, current_setting('rls.rpc.marker') || '-isolado@example.test');
 INSERT INTO public.company_emails(company_id, email)
-VALUES (current_setting('rls.rpc.company_sp')::uuid, current_setting('rls.rpc.marker') || '@example.test');
+VALUES (current_setting('rls.rpc.company_sp')::uuid, current_setting('rls.rpc.marker') || '@example.test')
+ON CONFLICT DO NOTHING;
 INSERT INTO public.company_addresses(company_id, estado) VALUES
   (current_setting('rls.rpc.company_sp')::uuid, 'SP'),
   (current_setting('rls.rpc.company_sp')::uuid, 'SP'),
