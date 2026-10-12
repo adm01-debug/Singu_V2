@@ -150,6 +150,15 @@ BEGIN
     RAISE EXCEPTION 'Regeneração esgotada foi executada ou perdeu o erro';
   END IF;
   UPDATE public.behavioral_profile_regen_queue
+  SET last_error = NULL WHERE contact_id = fixture_contact_id;
+  SELECT count(*) INTO affected
+  FROM public.claim_regen_batch(100, 1) WHERE contact_id = fixture_contact_id;
+  IF affected <> 0
+    OR (SELECT last_error FROM public.behavioral_profile_regen_queue WHERE contact_id = fixture_contact_id)
+    IS DISTINCT FROM 'Limite de tentativas após expiração da reserva' THEN
+    RAISE EXCEPTION 'Reserva esgotada sem confirmação ficou sem indicação de falha';
+  END IF;
+  UPDATE public.behavioral_profile_regen_queue
   SET attempts = 0, next_run_at = now(), last_error = NULL
   WHERE contact_id = fixture_contact_id;
   IF NOT EXISTS (

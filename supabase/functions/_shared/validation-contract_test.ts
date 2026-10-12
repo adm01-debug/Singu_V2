@@ -146,6 +146,41 @@ Deno.test("worker usa o token reservado, conta uma tentativa e não confirma gra
   }
 });
 
+Deno.test("worker de perfis encerra conflito atual e preserva reserva substituída", async () => {
+  const claimToken = "55555555-5555-4555-8555-555555555555";
+  let stale = false;
+  let retries = 0;
+  const close = await startHandler("process-behavioral-regen-queue", async (req) => {
+    const url = new URL(req.url);
+    if (url.pathname === "/rest/v1/rpc/claim_regen_batch") {
+      return Response.json([{ contact_id: contactId, user_id: ownerId, attempts: 1, claim_token: claimToken }]);
+    }
+    if (url.pathname === "/functions/v1/generate-behavioral-profile") {
+      assertEquals(await req.json(), { contact_id: contactId, user_id: ownerId, claim_token: claimToken });
+      return Response.json({ error: "Perfil superado" }, { status: 409 });
+    }
+    if (url.pathname === "/rest/v1/behavioral_profile_regen_queue") {
+      assertEquals(url.searchParams.get("claim_token"), `eq.${claimToken}`);
+      if (req.method === "PATCH") retries++;
+      else assertEquals(req.method, "DELETE");
+      return Response.json(stale ? [] : [{ contact_id: contactId }]);
+    }
+    return new Response(null, { status: 404 });
+  });
+  const run = () => fetch("http://127.0.0.1:8000/", { method: "POST", headers: { "x-cron-secret": "cron-teste" } });
+  try {
+    assertEquals(await (await run()).json(), { processed: 1, results: [{ contact_id: contactId, ok: false, superseded: true }] });
+    stale = true;
+    assertEquals(await (await run()).json(), {
+      processed: 0,
+      results: [{ contact_id: contactId, ok: false, error: "Reserva substituída por uma nova solicitação" }],
+    });
+    assertEquals(retries, 0);
+  } finally {
+    await close();
+  }
+});
+
 Deno.test("perfil admite usuário autenticado e exige cron e proprietário nas chamadas internas", async () => {
   let reads = 0;
   let contactOwner = ownerId;
@@ -174,7 +209,7 @@ Deno.test("perfil admite usuário autenticado e exige cron e proprietário nas c
     assertEquals((await submit(foreignId, internalHeaders)).status, 403);
     assertEquals(reads, 3);
     assertEquals((await submit(ownerId, internalHeaders)).status, 422);
-    for (let attempt = 0; attempt < 9; attempt++) {
+    for (let attempt = 0; attempt < 19; attempt++) {
       assertEquals((await submit(ownerId, { Authorization: "Bearer sessao-teste" })).status, 422);
     }
     const limited = await submit(ownerId, { Authorization: "Bearer sessao-teste" });

@@ -80,6 +80,12 @@ BEGIN
     RAISE EXCEPTION 'Limites inválidos para a fila de perfis' USING ERRCODE = '22023';
   END IF;
 
+  UPDATE public.behavioral_profile_regen_queue
+  SET last_error = 'Limite de tentativas após expiração da reserva',
+      updated_at = clock_timestamp()
+  WHERE attempts >= 5 AND next_run_at <= clock_timestamp()
+    AND NULLIF(last_error, '') IS NULL;
+
   RETURN QUERY
     UPDATE public.behavioral_profile_regen_queue AS q
     SET next_run_at = clock_timestamp() + make_interval(mins => p_lock_minutes),

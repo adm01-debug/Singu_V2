@@ -4,7 +4,7 @@ import { fetchAI } from "../_shared/fetch-utils.ts";
 import { validate } from "../_shared/validate.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
-const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Limite de gerações atingido. Aguarde um minuto." });
+const limiter = rateLimit({ windowMs: 60_000, max: 20, message: "Limite de gerações atingido. Aguarde um minuto." });
 
 interface Body { contact_id: string }
 

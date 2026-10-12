@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
   }
 
   const items = (due ?? []) as QueueRow[];
-  const results: Array<{ contact_id: string; ok: boolean; error?: string }> = [];
+  const results: Array<{ contact_id: string; ok: boolean; error?: string; superseded?: boolean }> = [];
 
   // All items are independent — fire concurrently, not sequentially
   const settled = await Promise.allSettled(
@@ -53,6 +53,7 @@ Deno.serve(async (req) => {
         if (!resp.ok) {
           const txt = await resp.text();
           if (resp.status === 422) return { status: 422 as const };
+          if (resp.status === 409) return { status: 409 as const };
           throw new Error(`[${resp.status}] ${txt.slice(0, 200)}`);
         }
         return { status: 200 as const };
@@ -68,6 +69,7 @@ Deno.serve(async (req) => {
         contact_id: item.contact_id,
         ok: outcome.value.status === 200,
         ...(outcome.value.status === 422 ? { error: 'sem histórico' } : {}),
+        ...(outcome.value.status === 409 ? { superseded: true } : {}),
       });
     } else {
       const msg = (outcome.reason as Error).message;
