@@ -1,4 +1,11 @@
 BEGIN;
+DO $owners$
+BEGIN
+  IF (SELECT count(*) FROM auth.users) < 2 THEN
+    RAISE EXCEPTION 'O contrato de isolamento exige dois proprietários reais';
+  END IF;
+END;
+$owners$;
 SELECT set_config('rls.rpc.owner', (SELECT id::text FROM auth.users ORDER BY created_at LIMIT 1), true);
 SELECT set_config('rls.rpc.other', gen_random_uuid()::text, true);
 SELECT set_config('rls.rpc.company_sp', gen_random_uuid()::text, true);
