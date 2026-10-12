@@ -125,11 +125,15 @@ Deno.serve(async (req) => {
               const evolutionUrl = Deno.env.get('EVOLUTION_API_URL');
               const evolutionKey = Deno.env.get('EVOLUTION_API_KEY');
               if (evolutionUrl && evolutionKey) {
+                const providerUrl = new URL(evolutionUrl);
+                if (!['http:', 'https:'].includes(providerUrl.protocol) || providerUrl.username || providerUrl.password || providerUrl.search || providerUrl.hash) {
+                  throw new Error('Configuração de URL do WhatsApp inválida');
+                }
                 const baseUrl = evolutionUrl.replace(/\/$/, '');
                 const instanceName = Deno.env.get('EVOLUTION_INSTANCE_NAME') || 'main';
                 const delivery = await sendTrackedNotification(supabaseClient, {
                   reminder_id: reminderId, contact_id: action.contact_id, user_id: user.id, channel: 'whatsapp',
-                }, () => fetchAPI(`${baseUrl}/message/sendText/${instanceName}`, {
+                }, () => fetchAPI(`${baseUrl}/message/sendText/${encodeURIComponent(instanceName)}`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json', 'apikey': evolutionKey },
                   body: JSON.stringify({ number: recipientPhone.replace(/\D/g, ''), text: message }),
