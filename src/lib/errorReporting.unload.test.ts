@@ -27,6 +27,23 @@ function unload() {
 }
 
 describe('Envio final autenticado de erros', () => {
+  it('inicia o envio em segundo plano sem consultar a sessão nem repetir no fechamento', () => {
+    mocks.onAuthStateChange.mock.calls[0][0]('SIGNED_IN', {
+      access_token: 'jwt-mobile', expires_at: Date.now() / 1000 + 600, user: { id: 'dono' },
+    });
+    captureError(new Error('Erro antes de ocultar'));
+    vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('hidden');
+    const listener = vi.mocked(document.addEventListener).mock.calls.find(([name]) => name === 'visibilitychange')?.[1];
+    if (typeof listener !== 'function') throw new Error('Handler de visibilidade ausente');
+    listener(new Event('visibilitychange'));
+    expect(mocks.getSession).not.toHaveBeenCalled();
+    expect(mocks.fetch).toHaveBeenCalledTimes(1);
+    expect(mocks.fetch.mock.calls[0][1]).toMatchObject({ keepalive: true, headers: { Authorization: 'Bearer jwt-mobile' } });
+    expect(JSON.parse(mocks.fetch.mock.calls[0][1].body)[0].user_id).toBe('dono');
+    unload();
+    expect(mocks.fetch).toHaveBeenCalledTimes(1);
+  });
+
   it('descarta erros anteriores ao login sem descartar os capturados após autenticar', () => {
     const notify = mocks.onAuthStateChange.mock.calls[0][0];
     notify('INITIAL_SESSION', null);

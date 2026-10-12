@@ -214,7 +214,7 @@ export function initGlobalErrorHandlers(): void {
   // Flush ao visibility change (mobile)
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
-      flushErrorBuffer();
+      void flushErrorBuffer(true);
     }
   });
 }

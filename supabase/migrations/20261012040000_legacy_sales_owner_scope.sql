@@ -25,6 +25,8 @@ CREATE TABLE IF NOT EXISTS public.salespeople (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+ALTER TABLE public.salespeople ADD COLUMN IF NOT EXISTS auth_user_id uuid;
+
 CREATE TABLE IF NOT EXISTS public.sales (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   client_name text NOT NULL,
