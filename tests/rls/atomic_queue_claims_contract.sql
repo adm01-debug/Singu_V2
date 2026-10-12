@@ -139,6 +139,21 @@ BEGIN
   IF current_claim IS NULL OR current_claim = regen_claim.claim_token THEN
     RAISE EXCEPTION 'Nova solicitação não criou uma reserva independente';
   END IF;
+  saved_profile := public.save_behavioral_profile_if_fresh(
+    fixture_contact_id, current_claim, '{"summary":"perfil superado"}'::jsonb,
+    now() - interval '2 hours', 'auto'
+  );
+  IF saved_profile IS NOT NULL
+    OR EXISTS (SELECT 1 FROM public.behavioral_profile_regen_queue WHERE contact_id = fixture_contact_id)
+    OR EXISTS (SELECT 1 FROM public.claim_regen_batch(1, 15) WHERE contact_id = fixture_contact_id)
+    OR (SELECT summary FROM public.contact_analytical_profiles WHERE contact_id = fixture_contact_id) IS DISTINCT FROM 'perfil recente'
+    OR (SELECT count(*) FROM public.contact_analytical_profile_versions WHERE contact_id = fixture_contact_id) <> 1 THEN
+    RAISE EXCEPTION 'Perfil superado deixou reserva ativa ou alterou o perfil vencedor';
+  END IF;
+  INSERT INTO public.behavioral_profile_regen_queue(contact_id, user_id, next_run_at)
+  VALUES (fixture_contact_id, owner_id, '-infinity');
+  SELECT claim_token INTO current_claim FROM public.claim_regen_batch(1, 15)
+  WHERE contact_id = fixture_contact_id;
   IF public.save_behavioral_profile_if_fresh(
     fixture_contact_id, current_claim, '{"summary":"perfil atualizado"}'::jsonb,
     now(), 'auto'
