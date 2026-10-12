@@ -65,7 +65,8 @@ const canonicalDbBreaker = getCircuitBreaker('canonical-db', {
 
 const isAbortError = (e: unknown) => e instanceof Error && e.name === 'AbortError';
 
-class CanonicalRpcClientError extends Error {}
+class ExternalDataClientError extends Error {}
+class CanonicalRpcClientError extends ExternalDataClientError {}
 
 const externalResponseSchema = z.object({
   error: z.string().nullish(),
@@ -75,7 +76,11 @@ const externalResponseSchema = z.object({
 });
 
 async function callExternalData(body: Record<string, unknown>, signal?: AbortSignal, canonicalRpc?: { functionName: string; params: Record<string, unknown> }): Promise<z.infer<typeof externalResponseSchema>> {
-  const breaker = canonicalRpc ? canonicalDbBreaker : externalDbBreaker;
+  const breaker = canonicalRpc ? canonicalDbBreaker
+    : typeof body.table === 'string' ? getCircuitBreaker(`external-db:${body.table}`, {
+      failureThreshold: 3,
+      resetTimeoutMs: 30_000,
+    }) : externalDbBreaker;
   return breaker.call(async () => {
     const accessToken = await getAccessToken();
     if (canonicalRpc && accessToken === ANON_KEY) throw new CanonicalRpcClientError('Autenticação necessária para a RPC do banco');
@@ -103,7 +108,9 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
       }
       // 409 vem como JSON estruturado { error: "CONCURRENT_EDIT", entity, id, attemptedVersion, traceId }
       // Preserva o JSON cru na mensagem para o caller parsear (ver updateExternalDataWithVersion).
-      throw new Error(`Edge function error [${response.status}]: ${errorText}`);
+      const message = `Edge function error [${response.status}]: ${errorText}`;
+      if (response.status >= 400 && response.status < 500) throw new ExternalDataClientError(message);
+      throw new Error(message);
     }
 
     if (canonicalRpc) {
@@ -111,12 +118,14 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
       return { data };
     }
     const result = externalResponseSchema.parse(await response.json());
-    if (result.error != null || result.fallback === true) {
+    if (result.fallback === true) {
       throw new Error(result.error || 'A fonte externa está indisponível; tente novamente');
     }
+    if (result.error != null) throw new Error(result.error);
 
     return result;
-  }, error => isAbortError(error) || error instanceof CanonicalRpcClientError);
+  }, error => isAbortError(error) || error instanceof ExternalDataClientError
+    || error instanceof z.ZodError || error instanceof SyntaxError);
 }
 
 export { CircuitOpenError };

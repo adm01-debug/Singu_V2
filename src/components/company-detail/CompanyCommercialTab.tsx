@@ -3,7 +3,7 @@ import { DollarSign, FileText, CalendarDays, CheckSquare, Activity, TrendingUp, 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ExternalDataCard } from '@/components/ui/external-data-card';
-import { useCompanyDeals, useCompanyProposals, useCompanyMeetings, useCompanyTasks, useCompanySalesActivities } from '@/hooks/useCompanyCommercial';
+import { useCompanyDeals, useCompanyProposals, useCompanyMeetings, useCompanyTasks } from '@/hooks/useCompanyCommercial';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -49,7 +49,6 @@ export function CompanyCommercialTab({ companyId }: Props) {
   const { data: proposals = [], isLoading: proposalsLoading, error: proposalsError, refetch: refetchProposals } = useCompanyProposals(companyId);
   const { data: meetings = [], isLoading: meetingsLoading, error: meetingsError, refetch: refetchMeetings } = useCompanyMeetings(companyId);
   const { data: tasks = [], isLoading: tasksLoading, error: tasksError, refetch: refetchTasks } = useCompanyTasks(companyId);
-  const { data: activities = [], isLoading: activitiesLoading, error: activitiesError, refetch: refetchActivities } = useCompanySalesActivities(companyId);
 
   // KPIs
   const openDeals = deals.filter(d => !['won', 'lost', 'ganho', 'perdido', 'arquivado'].includes(d.status || ''));
@@ -231,34 +230,19 @@ export function CompanyCommercialTab({ companyId }: Props) {
       </div>
 
       {/* Sales Activities */}
-      <ExternalDataCard title="Atividades de Vendas" icon={<Activity className="h-4 w-4" />} isLoading={activitiesLoading} error={activitiesError} onRetry={refetchActivities} hasData={!!activities.length} emptyMessage="Nenhuma atividade de vendas registrada">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center justify-between text-sm font-medium">
-              <span className="flex items-center gap-2"><Activity className="h-4 w-4" /> Atividades de Vendas</span>
-              <Badge variant="outline" className="text-[10px]">{activities.length}</Badge>
-            </CardTitle>
-            <CardDescription className="text-xs">Histórico de ações comerciais</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2 max-h-72 overflow-y-auto">
-              {activities.map(a => (
-                <div key={a.id} className="p-2.5 rounded-md border border-border/50 hover:bg-muted/30 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium capitalize">{a.activity_type?.replace(/_/g, ' ') || 'Atividade'}</span>
-                    {a.outcome && <Badge variant="secondary" className="text-[10px] ml-2 shrink-0 capitalize">{a.outcome}</Badge>}
-                  </div>
-                  <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                    {a.contact_name && <span>{a.contact_name}</span>}
-                    {a.duration_minutes && <span>{a.duration_minutes}min</span>}
-                    <span>{formatDate(a.created_at)}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </ExternalDataCard>
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2 text-sm font-medium">
+            <Activity className="h-4 w-4" /> Atividades de Vendas
+          </CardTitle>
+          <CardDescription className="text-xs">Histórico por empresa indisponível</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p role="status" className="text-sm text-muted-foreground">
+            O banco ainda não possui um vínculo entre atividades de vendas e empresas. As atividades não podem ser atribuídas com segurança a esta empresa.
+          </p>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 }
