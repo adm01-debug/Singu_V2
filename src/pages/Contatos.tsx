@@ -180,8 +180,9 @@ const Contatos = () => {
     setSearchParams(params, { replace: true });
   }, [ownPathname, searchTerm, viewMode, activeFilters, sortBy, sortOrder, gridColumns, multiSort, setSearchParams]);
 
-  const { results: fuzzyResults, setQuery: setFuzzyQuery } = useFuzzySearch(contacts, { keys: ['first_name', 'last_name', 'email', 'role_title', 'hobbies', 'interests'], threshold: 0.4 });
-  const handleSearchChange = useCallback((value: string) => { setSearchTerm(value); setFuzzyQuery(value); }, [setFuzzyQuery]);
+  const { results: fuzzyResults, setQuery: setFuzzyQuery } = useFuzzySearch(contacts, { keys: ['first_name', 'last_name', 'email', 'role_title', 'hobbies', 'interests'], threshold: 0.4, initialQuery: searchTerm });
+  useEffect(() => { setFuzzyQuery(searchTerm); }, [searchTerm, setFuzzyQuery]);
+  const handleSearchChange = useCallback((value: string) => { setSearchTerm(value); }, []);
 
   const filteredAndSortedContacts = useMemo(() => {
     let result = searchTerm ? fuzzyResults : contacts;

@@ -21,6 +21,7 @@ interface HeaderProps {
   backTo?: string;
   hideBack?: boolean;
   showSearch?: boolean;
+  searchValue?: string;
   onSearchChange?: (val: string) => void;
   className?: string;
 }
@@ -35,6 +36,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
   backTo,
   hideBack = false,
   showSearch,
+  searchValue,
   onSearchChange,
 }, ref) {
   const location = useLocation();
@@ -84,6 +86,8 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
               <Input 
                 placeholder="Buscar..." 
+                aria-label={`Buscar em ${title}`}
+                value={searchValue}
                 className="pl-8 h-8 text-[11px] bg-muted/40 border-none focus-visible:ring-1 focus-visible:ring-primary/20"
                 onChange={(e) => onSearchChange?.(e.target.value)}
               />
