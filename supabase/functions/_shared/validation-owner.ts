@@ -5,7 +5,7 @@ export async function resolveValidationOwner(
   req: Request,
   requestedUserId: string | undefined,
   contactId: string | null | undefined,
-): Promise<{ userId: string; admin: SupabaseClient } | Response> {
+): Promise<{ userId: string; admin: SupabaseClient; internal: boolean } | Response> {
   const caller = await withAuthOrServiceRole(req);
   if (caller instanceof Response) return caller;
 
@@ -23,5 +23,5 @@ export async function resolveValidationOwner(
     if (!data) return jsonError("Contato não pertence ao usuário", 403, req);
   }
 
-  return { userId, admin };
+  return { userId, admin, internal: isServiceRoleCaller(caller) };
 }

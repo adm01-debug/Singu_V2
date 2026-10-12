@@ -52,12 +52,12 @@ Deno.serve(async (req) => {
     let errCount = 0;
 
     const outcomes = await Promise.allSettled(queue.map(async (item) => {
-      let status: "done" | "pending" | "error" = "done";
+      const status = item.attempts >= MAX_ATTEMPTS ? "error" : "pending";
       let lastError: string | null = null;
       try {
         if (item.kind !== "email" && item.kind !== "phone") throw new Error("Tipo de validação desconhecido");
         const fnName = item.kind === "email" ? "email-verifier" : "phone-validator";
-        const body = item.kind === "email"
+        const payload = item.kind === "email"
           ? { email: item.value, contactId: item.contact_id, userId: item.user_id, persist: true }
           : { phone: item.value, contactId: item.contact_id, userId: item.user_id, persist: true };
 
@@ -69,14 +69,20 @@ Deno.serve(async (req) => {
             Authorization: `Bearer ${SERVICE_KEY}`,
             apikey: SERVICE_KEY,
           },
-          body: JSON.stringify(body),
+          body: JSON.stringify({ ...payload, queueId: item.id, claimToken: item.claim_token }),
         });
 
+        if (resp.status === 409) { await resp.arrayBuffer(); return; }
         if (!resp.ok) {
           throw new Error(`${fnName}: HTTP ${resp.status}`);
         }
+        const receipt: { queueId?: string; validationId?: string } | null = await resp.json();
+        if (receipt?.queueId !== item.id || receipt.validationId !== item.id) {
+          throw new Error("Validação persistida não confirmada");
+        }
+        okCount++;
+        return;
       } catch (err) {
-        status = item.attempts >= MAX_ATTEMPTS ? "error" : "pending";
         lastError = String(err).slice(0, 500);
       }
       const { data, error } = await admin.from("validation_queue").update({
@@ -89,10 +95,7 @@ Deno.serve(async (req) => {
       }).eq("id", item.id).eq("status", "processing")
         .eq("claim_token", item.claim_token).select("id").maybeSingle();
       if (error) throw error;
-      if (data) {
-        if (status === "done") okCount++;
-        else errCount++;
-      }
+      if (data) errCount++;
     }));
     if (outcomes.some((outcome) => outcome.status === "rejected")) {
       throw new Error("Não foi possível confirmar todos os itens da fila");

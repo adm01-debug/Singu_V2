@@ -1,6 +1,6 @@
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 
-type Scenario = 'confirmado' | 'concluida-na-rpc' | 'sem-perfil' | 'falha' | 'substituido' | 'pausa' | 'nao-admin';
+type Scenario = 'confirmado' | 'concluida-na-rpc' | 'sem-perfil' | 'falha' | 'substituido' | 'pausa' | 'nao-admin' | 'lenta';
 type Operation = { table: string; method: string; body: Record<string, unknown>; query: URLSearchParams };
 const owner = '11111111-1111-4111-8111-111111111111';
 const contact = '22222222-2222-4222-8222-222222222222';
@@ -21,6 +21,7 @@ async function withRetry(scenario: Scenario, test: (response: Response, operatio
       return json({ contact_id: contact, user_id: owner, claim_token: token, attempts: 2 });
     }
     if (table === 'generate-behavioral-profile') {
+      if (scenario === 'lenta') await new Promise(resolve => setTimeout(resolve, 31_000));
       if (scenario === 'falha') return json({ error: 'IA não disponível' }, 503);
       if (scenario === 'substituido') return json({ error: 'Reserva substituída' }, 409);
       return json(scenario === 'sem-perfil' ? { ok: true } : { profile: { contact_id: contact, user_id: owner } });
@@ -97,3 +98,9 @@ for (const [scenario, status] of [['pausa', 429], ['nao-admin', 403]] as const) 
     assert(!operations.some(operation => operation.table === 'generate-behavioral-profile'));
   }));
 }
+
+Deno.test('Reanálise: geração confirmada após 31 segundos não perde a reserva', () => withRetry('lenta', async (response, operations) => {
+  assertEquals(response.status, 200);
+  assertEquals((await response.json()).ok, true);
+  assert(!operations.some(operation => operation.table === 'behavioral_profile_regen_queue'));
+}));

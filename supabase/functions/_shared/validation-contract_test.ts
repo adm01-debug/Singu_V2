@@ -100,6 +100,7 @@ Deno.test("worker usa o token reservado, conta uma tentativa e não confirma gra
   let rejectValidation = false;
   let rejectUpdate = false;
   let stale = false;
+  let missingReceipt = false;
   const updates: Array<Record<string, unknown>> = [];
   const close = await startHandler("validation-queue-worker", async (req) => {
     const url = new URL(req.url);
@@ -109,8 +110,8 @@ Deno.test("worker usa o token reservado, conta uma tentativa e não confirma gra
     }
     if (url.pathname === "/functions/v1/phone-validator") {
       assertEquals(req.headers.get("Authorization"), "Bearer servico-teste");
-      assertEquals(await req.json(), { phone: "+5511999999999", contactId, userId: ownerId, persist: true });
-      return Response.json({}, { status: rejectValidation ? 503 : 200 });
+      assertEquals(await req.json(), { phone: "+5511999999999", contactId, userId: ownerId, persist: true, queueId: itemId, claimToken });
+      return Response.json(missingReceipt ? {} : { queueId: itemId, validationId: itemId }, { status: rejectValidation ? 503 : 200 });
     }
     if (url.pathname === "/rest/v1/validation_queue") {
       assertEquals(req.method, "PATCH");
@@ -127,23 +128,73 @@ Deno.test("worker usa o token reservado, conta uma tentativa e não confirma gra
   const run = () => fetch("http://127.0.0.1:8000/", { method: "POST", headers: { "x-cron-secret": "cron-teste" } });
   try {
     assertEquals(await (await run()).json(), { processed: 1, ok: 1, errors: 0 });
+    assertEquals(updates.length, 0);
+    rejectValidation = true;
+    assertEquals(await (await run()).json(), { processed: 1, ok: 0, errors: 1 });
+    assertEquals(updates[0].status, "pending");
     assertEquals(updates[0].attempts, 1);
     assertEquals(updates[0].claim_token, null);
     assertEquals(updates[0].lease_expires_at, null);
-    rejectValidation = true;
-    assertEquals(await (await run()).json(), { processed: 1, ok: 0, errors: 1 });
-    assertEquals(updates[1].status, "pending");
     attempts = 3;
     await run();
-    assertEquals(updates[2].status, "error");
-    assert(updates[2].processed_at);
+    assertEquals(updates[1].status, "error");
+    assert(updates[1].processed_at);
     stale = true;
     assertEquals(await (await run()).json(), { processed: 0, ok: 0, errors: 0 });
     rejectUpdate = true;
     assertEquals((await run()).status, 500);
+    rejectValidation = false;
+    rejectUpdate = false;
+    stale = false;
+    missingReceipt = true;
+    assertEquals(await (await run()).json(), { processed: 1, ok: 0, errors: 1 });
+    assertEquals(updates.at(-1)?.status, "error");
   } finally {
     await close();
   }
+});
+
+Deno.test("validação da fila aguarda o recibo atômico e recusa confirmação sem reserva interna", async () => {
+  const queueId = "44444444-4444-4444-8444-444444444444";
+  const claimToken = "55555555-5555-4555-8555-555555555555";
+  let rejected = false;
+  let replaced = false;
+  const receipts: Array<Record<string, unknown>> = [];
+  const close = await startHandler("phone-validator", async req => {
+    const url = new URL(req.url);
+    if (url.pathname === "/auth/v1/user") return Response.json({ id: ownerId });
+    if (url.pathname === "/rest/v1/contacts") return Response.json([{ id: contactId }]);
+    if (url.pathname === "/rest/v1/rpc/complete_validation_queue_item") {
+      const payload = await req.json();
+      assertEquals(payload.p_queue_id, queueId);
+      assertEquals(payload.p_claim_token, claimToken);
+      assertEquals(payload.p_user_id, ownerId);
+      assertEquals(payload.p_contact_id, contactId);
+      assertEquals(payload.p_kind, "phone");
+      assertEquals(payload.p_value, "+5511999999999");
+      receipts.push(payload);
+      return rejected ? Response.json({ message: "Falha na transação" }, { status: 503 })
+        : Response.json(replaced ? null : queueId);
+    }
+    throw new Error("Operação inesperada: " + url.pathname);
+  });
+  const submit = (token = "servico-teste", fields: Record<string, unknown> = {}) => fetch("http://127.0.0.1:8000/", {
+    method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+    body: JSON.stringify({ phone: "+5511999999999", userId: ownerId, contactId, queueId, claimToken, ...fields }),
+  });
+  try {
+    assertEquals((await submit("sessao-teste")).status, 403);
+    assertEquals((await submit("servico-teste", { claimToken: null })).status, 400);
+    assertEquals(receipts.length, 0);
+    const confirmed = await submit();
+    assertEquals(confirmed.status, 200);
+    assertEquals((await confirmed.json()).validationId, queueId);
+    assertEquals((await submit()).status, 200);
+    replaced = true;
+    assertEquals((await submit()).status, 409);
+    rejected = true;
+    assertEquals((await submit()).status, 503);
+  } finally { await close(); }
 });
 
 Deno.test("worker de perfis encerra conflito atual e preserva reserva substituída", async () => {

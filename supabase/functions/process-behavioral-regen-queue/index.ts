@@ -1,6 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
-import { fetchAPI } from "../_shared/fetch-utils.ts";
+import { AI_TIMEOUT_MS, fetchWithTimeout } from "../_shared/fetch-utils.ts";
 
 
 interface QueueRow {
@@ -39,7 +39,7 @@ Deno.serve(async (req) => {
   // All items are independent — fire concurrently, not sequentially
   const settled = await Promise.allSettled(
     items.map((item) =>
-      fetchAPI(`${SUPABASE_URL}/functions/v1/generate-behavioral-profile`, {
+      fetchWithTimeout(`${SUPABASE_URL}/functions/v1/generate-behavioral-profile`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ Deno.serve(async (req) => {
           'x-cron-secret': Deno.env.get('CRON_SECRET') ?? '',
         },
         body: JSON.stringify({ contact_id: item.contact_id, user_id: item.user_id, claim_token: item.claim_token }),
-      }).then(async (resp) => {
+      }, AI_TIMEOUT_MS + 15_000).then(async (resp) => {
         if (!resp.ok) {
           const txt = await resp.text();
           if (resp.status === 422) return { status: 422 as const };

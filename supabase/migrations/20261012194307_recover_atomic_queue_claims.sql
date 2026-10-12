@@ -23,6 +23,37 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION public.enqueue_behavioral_profile_regen()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER
+SET search_path TO public, pg_temp
+AS $$
+DECLARE
+  v_contact_id uuid := NEW.contact_id;
+  v_user_id uuid;
+BEGIN
+  IF v_contact_id IS NULL THEN RETURN NEW; END IF;
+  SELECT user_id INTO v_user_id FROM public.contacts WHERE id = v_contact_id;
+  IF v_user_id IS NULL THEN RETURN NEW; END IF;
+
+  INSERT INTO public.behavioral_profile_regen_queue (
+    contact_id, user_id, next_run_at, trigger_source, enqueued_at, updated_at
+  ) VALUES (
+    v_contact_id, v_user_id, clock_timestamp() + interval '5 minutes',
+    TG_TABLE_NAME, clock_timestamp(), clock_timestamp()
+  )
+  ON CONFLICT (contact_id) DO UPDATE
+  SET next_run_at = GREATEST(behavioral_profile_regen_queue.next_run_at, EXCLUDED.next_run_at),
+      trigger_source = EXCLUDED.trigger_source,
+      enqueued_at = EXCLUDED.enqueued_at,
+      updated_at = EXCLUDED.updated_at,
+      attempts = 0,
+      last_error = NULL;
+  RETURN NEW;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.enqueue_behavioral_profile_regen() FROM PUBLIC, anon, authenticated;
+
 CREATE OR REPLACE FUNCTION public.claim_validation_batch(
   p_batch_size integer DEFAULT 50,
   p_max_attempts integer DEFAULT 3
@@ -65,6 +96,89 @@ $$;
 
 REVOKE ALL ON FUNCTION public.claim_validation_batch(integer, integer) FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.claim_validation_batch(integer, integer) TO service_role;
+
+CREATE OR REPLACE FUNCTION public.complete_validation_queue_item(
+  p_queue_id uuid,
+  p_claim_token uuid,
+  p_user_id uuid,
+  p_contact_id uuid,
+  p_kind text,
+  p_value text,
+  p_result jsonb
+)
+RETURNS uuid LANGUAGE plpgsql SECURITY INVOKER
+SET search_path TO public, pg_temp
+AS $$
+DECLARE
+  v_queue public.validation_queue;
+BEGIN
+  IF current_user <> 'service_role' THEN
+    RAISE EXCEPTION 'Confirmação exclusiva do serviço' USING ERRCODE = '42501';
+  END IF;
+  IF p_queue_id IS NULL OR p_claim_token IS NULL OR p_user_id IS NULL
+    OR p_kind IS NULL OR p_kind NOT IN ('email', 'phone') OR p_value IS NULL
+    OR p_result IS NULL OR jsonb_typeof(p_result) <> 'object' THEN
+    RAISE EXCEPTION 'Validação incompleta' USING ERRCODE = '22023';
+  END IF;
+  SELECT q.* INTO v_queue FROM public.validation_queue q
+  WHERE q.id = p_queue_id FOR UPDATE;
+  IF NOT FOUND OR v_queue.claim_token IS DISTINCT FROM p_claim_token THEN RETURN NULL; END IF;
+  IF v_queue.user_id <> p_user_id OR v_queue.contact_id IS DISTINCT FROM p_contact_id
+    OR v_queue.kind::text <> p_kind OR v_queue.value <> p_value
+    OR (p_contact_id IS NOT NULL AND NOT EXISTS (
+      SELECT 1 FROM public.contacts c WHERE c.id = p_contact_id AND c.user_id = p_user_id
+    )) THEN
+    RAISE EXCEPTION 'Proprietário ou alvo da validação divergente' USING ERRCODE = '42501';
+  END IF;
+  IF v_queue.status = 'done' THEN
+    IF (p_kind = 'email' AND EXISTS (
+      SELECT 1 FROM public.email_verifications v
+      WHERE v.id = p_queue_id AND v.user_id = p_user_id
+        AND v.contact_id IS NOT DISTINCT FROM p_contact_id AND v.email = p_value
+    )) OR (p_kind = 'phone' AND EXISTS (
+      SELECT 1 FROM public.phone_validations v
+      WHERE v.id = p_queue_id AND v.user_id = p_user_id
+        AND v.contact_id IS NOT DISTINCT FROM p_contact_id AND v.phone_input = p_value
+    )) THEN RETURN p_queue_id; END IF;
+    RAISE EXCEPTION 'Recibo persistido ausente' USING ERRCODE = '55000';
+  END IF;
+  IF v_queue.status <> 'processing' THEN RETURN NULL; END IF;
+
+  IF p_kind = 'email' THEN
+    INSERT INTO public.email_verifications (
+      id, user_id, contact_id, email, status, score, mx_found, smtp_check,
+      disposable, role_account, free_provider, reasons, provider, raw
+    ) VALUES (
+      p_queue_id, p_user_id, p_contact_id, p_value, p_result->>'status',
+      (p_result->>'score')::integer, (p_result->>'mx_found')::boolean,
+      (p_result->>'smtp_check')::boolean, (p_result->>'disposable')::boolean,
+      (p_result->>'role_account')::boolean, (p_result->>'free_provider')::boolean,
+      ARRAY(SELECT jsonb_array_elements_text(COALESCE(p_result->'reasons', '[]'::jsonb))),
+      'internal', p_result
+    );
+  ELSE
+    INSERT INTO public.phone_validations (
+      id, user_id, contact_id, phone_input, phone_e164, status, line_type,
+      country, country_code, is_active, reasons, provider, raw
+    ) VALUES (
+      p_queue_id, p_user_id, p_contact_id, p_value, p_result->>'phone_e164',
+      p_result->>'status', p_result->>'line_type', p_result->>'country',
+      p_result->>'country_code', p_result->>'status' = 'valid',
+      ARRAY(SELECT jsonb_array_elements_text(COALESCE(p_result->'reasons', '[]'::jsonb))),
+      'libphonenumber', p_result
+    );
+  END IF;
+  UPDATE public.validation_queue
+  SET status = 'done', processed_at = clock_timestamp(), last_error = NULL, lease_expires_at = NULL
+  WHERE id = p_queue_id;
+  RETURN p_queue_id;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.complete_validation_queue_item(uuid, uuid, uuid, uuid, text, text, jsonb)
+FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.complete_validation_queue_item(uuid, uuid, uuid, uuid, text, text, jsonb)
+TO service_role;
 
 CREATE OR REPLACE FUNCTION public.claim_regen_batch(
   p_batch_size integer DEFAULT 10,
@@ -119,7 +233,7 @@ SET search_path TO public, pg_temp
 AS $$
 DECLARE
   v_owner uuid;
-  v_claim_owner uuid;
+  v_pending public.behavioral_profile_regen_queue;
   v_saved public.contact_analytical_profiles;
 BEGIN
   IF p_contact_id IS NULL OR p_profile IS NULL OR p_started_at IS NULL
@@ -135,16 +249,17 @@ BEGIN
     RAISE EXCEPTION 'Contato não pertence ao usuário' USING ERRCODE = '42501';
   END IF;
 
-  IF p_claim_token IS NOT NULL THEN
-    IF current_user <> 'service_role' THEN
-      RAISE EXCEPTION 'Reserva exclusiva do serviço' USING ERRCODE = '42501';
-    END IF;
-    SELECT q.user_id INTO v_claim_owner
+  IF p_claim_token IS NOT NULL AND current_user <> 'service_role' THEN
+    RAISE EXCEPTION 'Reserva exclusiva do serviço' USING ERRCODE = '42501';
+  END IF;
+  IF current_user = 'service_role' THEN
+    SELECT q.* INTO v_pending
     FROM public.behavioral_profile_regen_queue AS q
-    WHERE q.contact_id = p_contact_id AND q.claim_token = p_claim_token
+    WHERE q.contact_id = p_contact_id
+      AND (p_claim_token IS NULL OR q.claim_token = p_claim_token)
     FOR UPDATE;
-    IF v_claim_owner IS NULL THEN RETURN NULL; END IF;
-    IF v_claim_owner <> v_owner THEN
+    IF p_claim_token IS NOT NULL AND v_pending.contact_id IS NULL THEN RETURN NULL; END IF;
+    IF v_pending.user_id IS NOT NULL AND v_pending.user_id <> v_owner THEN
       RAISE EXCEPTION 'Proprietário da reserva divergente' USING ERRCODE = '42501';
     END IF;
   END IF;
@@ -184,6 +299,11 @@ BEGIN
     WHERE contact_id = p_contact_id AND claim_token = p_claim_token;
   END IF;
   IF v_saved.id IS NULL THEN RETURN NULL; END IF;
+  IF current_user = 'service_role' AND p_claim_token IS NULL AND p_trigger_source = 'manual'
+    AND v_pending.enqueued_at <= p_started_at THEN
+    DELETE FROM public.behavioral_profile_regen_queue
+    WHERE contact_id = p_contact_id AND claim_token = v_pending.claim_token;
+  END IF;
 
   INSERT INTO public.contact_analytical_profile_versions (
     contact_id, user_id, profile_id, summary, tone, communication_style,
@@ -272,7 +392,11 @@ GRANT EXECUTE ON FUNCTION public.claim_behavioral_profile_retry(uuid, uuid) TO s
 -- Rollback: pare ambos os workers, restaure as funções anteriores da migration
 -- 20260720000002 e libere manualmente os itens 'processing' após conferir o
 -- provedor. Em instalações sem essas funções, remova-as antes das colunas:
+-- Restaure enqueue_behavioral_profile_regen da migration 20260712221610,
+-- preservando as datas dos registros posteriores; somente pedidos futuros
+-- voltarão a manter o enqueued_at original após ON CONFLICT.
 -- DROP FUNCTION public.claim_validation_batch(integer, integer);
+-- DROP FUNCTION public.complete_validation_queue_item(uuid, uuid, uuid, uuid, text, text, jsonb);
 -- DROP FUNCTION public.claim_regen_batch(integer, integer);
 -- DROP FUNCTION public.save_behavioral_profile_if_fresh(uuid, uuid, jsonb, timestamptz, text);
 -- DROP FUNCTION public.claim_behavioral_profile_retry(uuid, uuid);

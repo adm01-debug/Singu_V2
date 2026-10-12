@@ -8,6 +8,10 @@ VALUES (current_setting('rls.queue_owner')::uuid, 'Contrato', 'Reanálise manual
 RETURNING set_config('rls.retry_contact', id::text, true);
 INSERT INTO public.user_roles(user_id, role)
 VALUES (current_setting('rls.queue_owner')::uuid, 'admin') ON CONFLICT DO NOTHING;
+CREATE TEMP TABLE queue_enqueue_fixture(contact_id uuid) ON COMMIT DROP;
+CREATE TRIGGER queue_enqueue_fixture_insert AFTER INSERT ON queue_enqueue_fixture
+FOR EACH ROW EXECUTE FUNCTION public.enqueue_behavioral_profile_regen();
+GRANT ALL ON queue_enqueue_fixture TO service_role;
 SET LOCAL ROLE service_role;
 DO $test$
 DECLARE
@@ -200,6 +204,54 @@ BEGIN
   END IF;
 END;
 $test$;
+DO $manual_pending$
+DECLARE
+  fixture_contact_id uuid := current_setting('rls.queue_contact')::uuid;
+  started_at timestamptz;
+  enqueued_at timestamptz;
+  pending_claim uuid;
+  saved jsonb;
+BEGIN
+  UPDATE public.behavioral_profile_regen_queue q
+  SET enqueued_at = clock_timestamp() - interval '1 hour',
+      next_run_at = clock_timestamp() + interval '5 minutes', attempts = 0
+  WHERE q.contact_id = fixture_contact_id;
+  started_at := clock_timestamp();
+  saved := public.save_behavioral_profile_if_fresh(
+    fixture_contact_id, NULL, '{"summary":"geração manual"}'::jsonb, started_at, 'manual'
+  );
+  IF saved->>'summary' IS DISTINCT FROM 'geração manual'
+    OR EXISTS (SELECT 1 FROM public.behavioral_profile_regen_queue q WHERE q.contact_id = fixture_contact_id) THEN
+    RAISE EXCEPTION 'Geração manual não concluiu a pendência anterior';
+  END IF;
+
+  INSERT INTO queue_enqueue_fixture VALUES (fixture_contact_id);
+  SELECT q.enqueued_at INTO enqueued_at FROM public.behavioral_profile_regen_queue q
+  WHERE q.contact_id = fixture_contact_id;
+  started_at := clock_timestamp();
+  INSERT INTO queue_enqueue_fixture VALUES (fixture_contact_id);
+  IF (SELECT q.enqueued_at FROM public.behavioral_profile_regen_queue q WHERE q.contact_id = fixture_contact_id) <= enqueued_at THEN
+    RAISE EXCEPTION 'Novo histórico não atualizou a data do enqueue existente';
+  END IF;
+  SELECT q.claim_token INTO pending_claim FROM public.behavioral_profile_regen_queue q
+  WHERE q.contact_id = fixture_contact_id;
+  saved := public.save_behavioral_profile_if_fresh(
+    fixture_contact_id, NULL, '{"summary":"histórico anterior"}'::jsonb, started_at, 'manual'
+  );
+  IF saved->>'summary' IS DISTINCT FROM 'histórico anterior'
+    OR NOT EXISTS (SELECT 1 FROM public.behavioral_profile_regen_queue q
+      WHERE q.contact_id = fixture_contact_id AND q.claim_token = pending_claim) THEN
+    RAISE EXCEPTION 'Geração manual apagou a solicitação de histórico posterior';
+  END IF;
+  saved := public.save_behavioral_profile_if_fresh(
+    fixture_contact_id, NULL, '{"summary":"manual obsoleto"}'::jsonb, started_at - interval '1 hour', 'manual'
+  );
+  IF saved IS NOT NULL OR NOT EXISTS (SELECT 1 FROM public.behavioral_profile_regen_queue q
+      WHERE q.contact_id = fixture_contact_id AND q.claim_token = pending_claim) THEN
+    RAISE EXCEPTION 'Geração obsoleta alterou uma solicitação nova';
+  END IF;
+END;
+$manual_pending$;
 DO $manual$
 DECLARE
   contact_id uuid := current_setting('rls.retry_contact')::uuid;
