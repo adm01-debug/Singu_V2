@@ -3,6 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 
+export const MFA_STATUS_CHANGED_EVENT = 'singu:mfa-status-changed';
+
 interface TwoFactorState {
   isEnrolling: boolean;
   isVerifying: boolean;
@@ -17,6 +19,7 @@ interface TwoFactorState {
 export function use2FA() {
   const { session } = useAuth();
   const activeToken = useRef(session?.access_token);
+  const statusGeneration = useRef(0);
   activeToken.current = session?.access_token;
   const [state, setState] = useState<TwoFactorState>({
     isEnrolling: false,
@@ -31,6 +34,7 @@ export function use2FA() {
 
   const checkStatus = useCallback(async () => {
     const token = session?.access_token;
+    const generation = ++statusGeneration.current;
     setState(s => ({ ...s, isLoading: true, statusError: null }));
     try {
       const [factors, assurance] = await Promise.all([
@@ -39,7 +43,7 @@ export function use2FA() {
       ]);
       if (factors.error) throw factors.error;
       if (assurance.error) throw assurance.error;
-      if (activeToken.current !== token) return;
+      if (activeToken.current !== token || statusGeneration.current !== generation) return;
       const verified = factors.data.totp.filter(f => f.status === 'verified');
       setState(s => {
         const pending = factors.data.all.some(f => f.id === s.factorId && f.factor_type === 'totp' && f.status === 'unverified');
@@ -49,12 +53,13 @@ export function use2FA() {
           isSessionVerified: assurance.data.currentLevel === 'aal2' };
       });
     } catch {
-      if (activeToken.current !== token) return;
+      if (activeToken.current !== token || statusGeneration.current !== generation) return;
       setState(s => ({ ...s, isLoading: false, statusError: 'Não foi possível consultar a autenticação em duas etapas.' }));
     }
   }, [session?.access_token]);
 
   const enroll = useCallback(async () => {
+    statusGeneration.current++;
     setState(s => ({ ...s, isEnrolling: true }));
     try {
       const factors = await supabase.auth.mfa.listFactors();
@@ -65,11 +70,13 @@ export function use2FA() {
       }
       const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'SINGU CRM' });
       if (error) throw error;
-      setState(s => ({ ...s, isEnrolling: false, factorId: data.id, qrUri: data.totp.uri }));
+      statusGeneration.current++;
+      setState(s => ({ ...s, isEnrolling: false, isLoading: false, statusError: null, factorId: data.id, qrUri: data.totp.uri }));
       return data;
     } catch {
+      statusGeneration.current++;
       toast.error('Erro ao configurar 2FA.');
-      setState(s => ({ ...s, isEnrolling: false }));
+      setState(s => ({ ...s, isEnrolling: false, isLoading: false }));
       return null;
     }
   }, []);
@@ -100,10 +107,18 @@ export function use2FA() {
 
   const unenroll = useCallback(async () => {
     if (!state.factorId) return;
+    statusGeneration.current++;
     try {
       const { error } = await supabase.auth.mfa.unenroll({ factorId: state.factorId });
       if (error) throw error;
-      setState(s => ({ ...s, isEnabled: false, isSessionVerified: false, factorId: null, qrUri: null }));
+      statusGeneration.current++;
+      setState(s => ({ ...s, isLoading: false, isEnabled: false, isSessionVerified: false, factorId: null, qrUri: null }));
+      window.dispatchEvent(new Event(MFA_STATUS_CHANGED_EVENT));
+      const refresh = await supabase.auth.refreshSession().catch(() => ({ error: new Error('Falha na renovação da sessão') }));
+      if (refresh.error) {
+        toast.warning('2FA desativado. Não foi possível renovar sua sessão; o acesso administrativo permanece bloqueado.');
+        return;
+      }
       toast.success('2FA desativado.');
     } catch {
       toast.error('Erro ao desativar 2FA.');

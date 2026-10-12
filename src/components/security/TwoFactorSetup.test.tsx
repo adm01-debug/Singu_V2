@@ -1,20 +1,23 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { TwoFactorSetup } from './TwoFactorSetup';
+import { MFA_STATUS_CHANGED_EVENT } from '@/hooks/use2FA';
+import { toast } from 'sonner';
 
 const mfa = vi.hoisted(() => ({
   listFactors: vi.fn(), getAuthenticatorAssuranceLevel: vi.fn(),
   enroll: vi.fn(), challenge: vi.fn(), verify: vi.fn(), unenroll: vi.fn(),
 }));
-const auth = vi.hoisted(() => ({ token: 'sessao-aal1' }));
-vi.mock('@/integrations/supabase/client', () => ({ supabase: { auth: { mfa } } }));
+const auth = vi.hoisted(() => ({ token: 'sessao-aal1', refreshSession: vi.fn() }));
+vi.mock('@/integrations/supabase/client', () => ({ supabase: { auth: { mfa, refreshSession: auth.refreshSession } } }));
 vi.mock('@/hooks/useAuth', () => ({ useAuth: () => ({ session: { access_token: auth.token } }) }));
-vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn(), warning: vi.fn() } }));
 
 describe('Configuração e confirmação MFA', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     auth.token = 'sessao-aal1';
+    auth.refreshSession.mockResolvedValue({ error: null });
     mfa.listFactors.mockResolvedValue({ data: { totp: [], all: [] }, error: null });
     mfa.getAuthenticatorAssuranceLevel.mockResolvedValue({ data: { currentLevel: 'aal1' }, error: null });
     mfa.enroll.mockResolvedValue({ data: { id: 'novo-fator', totp: { uri: 'otpauth://totp/Singu?secret=JBSWY3DPEHPK3PXP' } }, error: null });
@@ -81,5 +84,54 @@ describe('Configuração e confirmação MFA', () => {
     expect(screen.queryByRole('button', { name: 'Ativar 2FA' })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Tentar novamente' }));
     expect(await screen.findByRole('button', { name: 'Ativar 2FA' })).toBeEnabled();
+  });
+
+  it('ignora a consulta antiga que termina depois da criação do novo QR', async () => {
+    let finishEnrollment!: () => void;
+    let finishAssurance!: () => void;
+    const enrollment = new Promise<void>(resolve => { finishEnrollment = resolve; });
+    const assurance = new Promise<void>(resolve => { finishAssurance = resolve; });
+    mfa.enroll.mockImplementationOnce(async () => {
+      await enrollment;
+      return { data: { id: 'novo-fator', totp: { uri: 'otpauth://totp/Singu?secret=JBSWY3DPEHPK3PXP' } }, error: null };
+    });
+    const onVerified = vi.fn();
+    const view = render(<TwoFactorSetup onVerified={onVerified} />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Ativar 2FA' }));
+    await waitFor(() => expect(mfa.enroll).toHaveBeenCalledOnce());
+    mfa.getAuthenticatorAssuranceLevel.mockImplementationOnce(async () => {
+      await assurance;
+      return { data: { currentLevel: 'aal1' }, error: null };
+    });
+    auth.token = 'sessao-renovada';
+    view.rerender(<TwoFactorSetup onVerified={onVerified} />);
+    await waitFor(() => expect(mfa.getAuthenticatorAssuranceLevel).toHaveBeenCalledTimes(2));
+    await act(async () => finishEnrollment());
+    await screen.findByLabelText('Código de verificação');
+    await act(async () => finishAssurance());
+    fireEvent.change(screen.getByLabelText('Código de verificação'), { target: { value: '123456' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Verificar' }));
+    await waitFor(() => expect(onVerified).toHaveBeenCalledOnce());
+    expect(mfa.challenge).toHaveBeenCalledWith({ factorId: 'novo-fator' });
+    expect(mfa.enroll).toHaveBeenCalledOnce();
+  });
+
+  it('invalida a confirmação após remover MFA mesmo se a renovação falhar', async () => {
+    const verified = { id: 'fator-existente', status: 'verified', factor_type: 'totp' };
+    mfa.listFactors.mockResolvedValue({ data: { totp: [verified], all: [verified] }, error: null });
+    mfa.getAuthenticatorAssuranceLevel.mockResolvedValue({ data: { currentLevel: 'aal2' }, error: null });
+    auth.refreshSession.mockResolvedValueOnce({ error: new Error('rede indisponível') });
+    const changed = vi.fn();
+    window.addEventListener(MFA_STATUS_CHANGED_EVENT, changed);
+    try {
+      render(<TwoFactorSetup />);
+      fireEvent.click(await screen.findByRole('button', { name: 'Desativar' }));
+      await screen.findByRole('button', { name: 'Ativar 2FA' });
+      await waitFor(() => expect(toast.warning).toHaveBeenCalledWith(expect.stringContaining('acesso administrativo permanece bloqueado')));
+      expect(changed).toHaveBeenCalledOnce();
+      expect(auth.refreshSession).toHaveBeenCalledOnce();
+      expect(toast.error).not.toHaveBeenCalled();
+      expect(mfa.unenroll).toHaveBeenCalledWith({ factorId: 'fator-existente' });
+    } finally { window.removeEventListener(MFA_STATUS_CHANGED_EVENT, changed); }
   });
 });
