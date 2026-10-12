@@ -73,7 +73,7 @@ Deno.serve(async (req) => {
       period_id: { type: 'string', required: true, maxLength: 36 },
       deals:     { type: 'array',  required: true, maxItems: 100 },
     });
-    if (!vf.ok) return jsonError(vf.error, 400);
+    if (!vf.ok) return jsonError(vf.error, 400, req);
     const { period_id, deals } = vf.data as { period_id: string; deals: DealInput[] };
 
     const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
@@ -88,7 +88,7 @@ Deno.serve(async (req) => {
     const inactivityDays = settings?.inactivity_threshold_days ?? 14;
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) return jsonError("LOVABLE_API_KEY not configured", 500);
+    if (!LOVABLE_API_KEY) return jsonError("LOVABLE_API_KEY not configured", 500, req);
 
     const enriched = deals.map(d => {
       const { score, risks } = calcHealthScore(d, weights, inactivityDays);
@@ -146,8 +146,8 @@ Regras:
     });
 
     if (!aiResp.ok) {
-      if (aiResp.status === 429) return jsonError("Rate limit no AI Gateway", 429);
-      if (aiResp.status === 402) return jsonError("Créditos AI esgotados", 402);
+      if (aiResp.status === 429) return jsonError("Rate limit no AI Gateway", 429, req);
+      if (aiResp.status === 402) return jsonError("Créditos AI esgotados", 402, req);
       throw new Error(`AI Gateway error ${aiResp.status}`);
     }
 
@@ -183,9 +183,9 @@ Regras:
       .upsert(upserts, { onConflict: "deal_id,period_id" });
     if (upErr) throw upErr;
 
-    return jsonOk({ analyzed: upserts.length, categorizations: cats });
+    return jsonOk({ analyzed: upserts.length, categorizations: cats }, req);
   } catch (e) {
     console.error("forecast-analyzer error:", e);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

@@ -68,9 +68,9 @@ export async function timingSafeStringEqual(a: string, b: string): Promise<boole
 
 // Allowed origins for CORS — restrict to known app domains
 const ALLOWED_ORIGINS = [
-  "https://singu-v2.vercel.app",
   "https://dialogue-diamond.lovable.app",
   "https://id-preview--08cba815-22fa-42db-9361-0cffd81afd61.lovable.app",
+  "https://singu-v2.vercel.app",
   "http://localhost:8080",
   "http://localhost:3000",
 ];
@@ -240,11 +240,11 @@ export async function requireCronSecret(req: Request): Promise<Response | null> 
   const secret = Deno.env.get("CRON_SECRET");
   if (!secret) {
     console.error("CRON_SECRET not configured");
-    return jsonError("Server misconfigured", 500);
+    return jsonError("Server misconfigured", 500, req);
   }
   const provided = req.headers.get("x-cron-secret") ?? "";
   if (!await timingSafeStringEqual(provided, secret)) {
-    return jsonError("Unauthorized", 401);
+    return jsonError("Unauthorized", 401, req);
   }
   return null;
 }
@@ -270,22 +270,22 @@ export async function guardBody(
 ): Promise<{ body: unknown; error: null } | { body: null; error: Response }> {
   const cl = parseInt(req.headers.get("content-length") ?? "0", 10);
   if (!isNaN(cl) && cl > maxBytes) {
-    return { body: null, error: jsonError("Payload too large", 413) };
+    return { body: null, error: jsonError("Payload too large", 413, req) };
   }
   let buf: ArrayBuffer;
   try {
     buf = await req.arrayBuffer();
   } catch {
-    return { body: null, error: jsonError("Failed to read request body", 400) };
+    return { body: null, error: jsonError("Failed to read request body", 400, req) };
   }
   if (buf.byteLength > maxBytes) {
-    return { body: null, error: jsonError("Payload too large", 413) };
+    return { body: null, error: jsonError("Payload too large", 413, req) };
   }
   try {
     const body = JSON.parse(new TextDecoder().decode(buf));
     return { body, error: null };
   } catch {
-    return { body: null, error: jsonError("Invalid JSON body", 400) };
+    return { body: null, error: jsonError("Invalid JSON body", 400, req) };
   }
 }
 
@@ -307,11 +307,11 @@ export async function requireWebhookSecret(
   const secret = Deno.env.get(envName);
   if (!secret) {
     console.error(`${envName} not configured`);
-    return jsonError("Server misconfigured", 500);
+    return jsonError("Server misconfigured", 500, req);
   }
   const provided = req.headers.get(headerName) ?? "";
   if (!await timingSafeStringEqual(provided, secret)) {
-    return jsonError("Unauthorized", 401);
+    return jsonError("Unauthorized", 401, req);
   }
   return null;
 }

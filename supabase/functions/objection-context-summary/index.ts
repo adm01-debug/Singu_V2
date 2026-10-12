@@ -52,7 +52,7 @@ Deno.serve(async (req) => {
     if (!parsed.success) {
       return jsonError(
         `Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`,
-        400,
+        400, req,
       );
     }
     const { objection, category, interactionIds, usefulInteractionIds } = parsed.data;
@@ -60,7 +60,7 @@ Deno.serve(async (req) => {
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
-      return jsonError("LOVABLE_API_KEY não configurada", 500);
+      return jsonError("LOVABLE_API_KEY não configurada", 500, req);
     }
 
     // Busca conteúdo das interações respeitando RLS (token do usuário).
@@ -79,7 +79,7 @@ Deno.serve(async (req) => {
 
     if (error) {
       console.error("interactions fetch error:", error);
-      return jsonError("Falha ao carregar conversas relacionadas", 500);
+      return jsonError("Falha ao carregar conversas relacionadas", 500, req);
     }
 
     // Ordena: úteis primeiro (sinal explícito do vendedor), depois o restante.
@@ -107,7 +107,7 @@ Deno.serve(async (req) => {
       return jsonOk({
         summary: "Não há conteúdo textual disponível nas conversas relacionadas.",
         empty: true,
-      });
+      }, req);
     }
 
     const systemPrompt = `Você é um analista de vendas que escreve resumos
@@ -179,44 +179,44 @@ Gere o resumo do contexto.`;
       if (aiResponse.status === 429) {
         return jsonError(
           "Limite de requisições da IA atingido. Tente novamente em instantes.",
-          429,
+          429, req,
         );
       }
       if (aiResponse.status === 402) {
         return jsonError(
           "Créditos da IA esgotados. Adicione créditos em Settings > Workspace > Usage.",
-          402,
+          402, req,
         );
       }
       const t = await aiResponse.text();
       console.error("AI gateway error:", aiResponse.status, t);
-      return jsonError("Falha ao gerar resumo via IA", 502);
+      return jsonError("Falha ao gerar resumo via IA", 502, req);
     }
 
     const data = await aiResponse.json();
     const toolCall = data?.choices?.[0]?.message?.tool_calls?.[0];
     if (!toolCall?.function?.arguments) {
-      return jsonError("Resposta da IA em formato inesperado", 502);
+      return jsonError("Resposta da IA em formato inesperado", 502, req);
     }
 
     let parsedArgs: { summary?: string };
     try {
       parsedArgs = JSON.parse(toolCall.function.arguments);
     } catch {
-      return jsonError("Não foi possível interpretar a resposta da IA", 502);
+      return jsonError("Não foi possível interpretar a resposta da IA", 502, req);
     }
 
     const summary = (parsedArgs.summary ?? "").trim();
     if (!summary) {
-      return jsonError("IA não devolveu resumo", 502);
+      return jsonError("IA não devolveu resumo", 502, req);
     }
 
     return jsonOk({
       summary: summary.slice(0, 320),
       basedOn: snippets.length,
-    });
+    }, req);
   } catch (err) {
     console.error("objection-context-summary error:", err);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

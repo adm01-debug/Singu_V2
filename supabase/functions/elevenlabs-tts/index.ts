@@ -36,10 +36,10 @@ Deno.serve(async (req) => {
       text:    { type: 'string', required: true, maxLength: 5000 },
       voiceId: { type: 'string', maxLength: 30, pattern: VOICE_ID_REGEX },
     });
-    if (!ve.ok) return jsonError(ve.error, 400);
+    if (!ve.ok) return jsonError(ve.error, 400, req);
     const { text, voiceId } = ve.data as { text: string; voiceId?: string };
 
-    if (!text.trim()) return jsonError("Invalid text (required, max 5000 chars)", 400);
+    if (!text.trim()) return jsonError("Invalid text (required, max 5000 chars)", 400, req);
 
     const selectedVoiceId = voiceId ?? "4tRn1lSkEn13EVTuqb0g";
 
@@ -69,9 +69,9 @@ Deno.serve(async (req) => {
       console.error("ElevenLabs TTS error:", response.status, errorText);
 
       if (response.status === 429) {
-        return jsonError("TTS rate limit exceeded. Try again shortly.", 429);
+        return jsonError("TTS rate limit exceeded. Try again shortly.", 429, req);
       }
-      return jsonError(`TTS failed: ${response.status}`, 500);
+      return jsonError(`TTS failed: ${response.status}`, 500, req);
     }
 
     const audioBuffer = await response.arrayBuffer();
@@ -84,6 +84,6 @@ Deno.serve(async (req) => {
     });
   } catch (error: unknown) {
     console.error("TTS error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

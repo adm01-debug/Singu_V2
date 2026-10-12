@@ -130,7 +130,7 @@ Deno.serve(async (req) => {
     const vt = validate(rawBody, {
       transcript: { type: 'string', required: true, maxLength: 1000 },
     });
-    if (!vt.ok) return jsonError(vt.error, 400);
+    if (!vt.ok) return jsonError(vt.error, 400, req);
     const { transcript } = vt.data as { transcript: string };
 
     const response = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -151,11 +151,11 @@ Deno.serve(async (req) => {
     });
 
     if (!response.ok) {
-      if (response.status === 429) return jsonError("Rate limit exceeded. Please try again later.", 429);
-      if (response.status === 402) return jsonError("AI credits exhausted. Please add funds.", 402);
+      if (response.status === 429) return jsonError("Rate limit exceeded. Please try again later.", 429, req);
+      if (response.status === 402) return jsonError("AI credits exhausted. Please add funds.", 402, req);
       const errText = await response.text();
       console.error("AI gateway error:", response.status, errText);
-      return jsonError("AI processing failed", 500);
+      return jsonError("AI processing failed", 500, req);
     }
 
     const aiData = await response.json();
@@ -181,9 +181,9 @@ Deno.serve(async (req) => {
       result = { action: "answer", response: result.response || "Desculpe, ocorreu um erro.", data: {} };
     }
 
-    return jsonOk(result);
+    return jsonOk(result, req);
   } catch (error: unknown) {
     console.error("Voice agent error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

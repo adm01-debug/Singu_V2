@@ -41,12 +41,12 @@ Deno.serve(async (req) => {
 
      const parsed = SocialBehaviorInput.safeParse(rawBody);
      if (!parsed.success) {
-       return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
+       return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
      }
      const { contactId } = parsed.data;
      const userId = isServiceRoleCaller(authResult) ? rawBody.userId : authResult;
  
-     if (!userId) return jsonError("User ID required", 400);
+     if (!userId) return jsonError("User ID required", 400, req);
 
     // All three reads are independent — fetch in parallel
     const [
@@ -64,7 +64,7 @@ Deno.serve(async (req) => {
     ]);
 
     if (profilesError || !socialProfiles || socialProfiles.length === 0) {
-      return jsonError("No social profiles found for this contact", 404);
+      return jsonError("No social profiles found for this contact", 404, req);
     }
 
     const profilesSummary = socialProfiles.map(p => ({
@@ -112,8 +112,8 @@ Responda APENAS com um JSON válido no formato especificado.`;
     });
 
     if (!response.ok) {
-      if (response.status === 429) return jsonError("Rate limit exceeded. Please try again later.", 429);
-      if (response.status === 402) return jsonError("Insufficient credits.", 402);
+      if (response.status === 429) return jsonError("Rate limit exceeded. Please try again later.", 429, req);
+      if (response.status === 402) return jsonError("Insufficient credits.", 402, req);
       throw new Error(`AI gateway error: ${response.status}`);
     }
 
@@ -131,7 +131,7 @@ Responda APENAS com um JSON válido no formato especificado.`;
       console.error("Error parsing AI response:", parseError);
     }
 
-    if (!analysis) { return jsonError("Failed to parse analysis results", 500); }
+    if (!analysis) { return jsonError("Failed to parse analysis results", 500, req); }
 
      const { data: savedAnalysis, error: saveError } = await supabaseClient
        .from("social_behavior_analysis")
@@ -165,9 +165,9 @@ Responda APENAS com um JSON válido no formato especificado.`;
          .catch((e: unknown) => console.error("contact_analytical_profiles upsert error:", e));
      }
 
-    return jsonOk({ success: true, analysis, savedId: savedAnalysis?.id });
+    return jsonOk({ success: true, analysis, savedId: savedAnalysis?.id }, req);
   } catch (error) {
     console.error("social-behavior-analyzer error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

@@ -141,7 +141,7 @@ Gere um script que:
        neurological_bias: result.reasoning
      }).catch(e => console.error("Compatible log failed", e));
 
-    return jsonOk({ suggestion: result });
+    return jsonOk({ suggestion: result }, req);
 
   } catch (error) {
     console.error("Objection Handler Error:", error);

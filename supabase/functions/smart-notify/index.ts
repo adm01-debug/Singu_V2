@@ -157,10 +157,10 @@ Deno.serve(async (req) => {
         .catch((e: unknown) => console.error('notification_logs insert error:', e));
     }
 
-    return jsonOk({ success: true, stats });
+    return jsonOk({ success: true, stats }, req);
 
   } catch (error: unknown) {
     console.error("smart-notify error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

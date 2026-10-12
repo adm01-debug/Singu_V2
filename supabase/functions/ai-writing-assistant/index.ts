@@ -129,7 +129,7 @@ Deno.serve(async (req) => {
   try {
     const parsed = WritingInput.safeParse(rawBody);
     if (!parsed.success) {
-      return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
+      return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
     }
      const { contact, recentInteractions, messageType, customContext, tone, framework, storyArc } = parsed.data;
     
@@ -259,10 +259,10 @@ ${vakStyle ? `3. Conselho VAK: ${vakStyle.advice}` : ''}
 
     if (!response.ok) {
       if (response.status === 429) {
-        return jsonError("Limite de requisições excedido. Tente novamente em alguns minutos.", 429);
+        return jsonError("Limite de requisições excedido. Tente novamente em alguns minutos.", 429, req);
       }
       if (response.status === 402) {
-        return jsonError("Créditos insuficientes. Adicione créditos na sua conta Lovable.", 402);
+        return jsonError("Créditos insuficientes. Adicione créditos na sua conta Lovable.", 402, req);
       }
       const errorText = await response.text();
       console.error("AI gateway error:", response.status, errorText);
@@ -278,10 +278,10 @@ ${vakStyle ? `3. Conselho VAK: ${vakStyle.advice}` : ''}
 
     const result = JSON.parse(toolCall.function.arguments);
 
-    return jsonOk(result);
+    return jsonOk(result, req);
   } catch (error) {
     console.error("ai-writing-assistant error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });
 
