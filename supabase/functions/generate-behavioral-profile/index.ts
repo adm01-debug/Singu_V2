@@ -62,9 +62,10 @@ Deno.serve(async (req) => {
     const vbp = validate(rawBody, {
       contact_id: { type: 'string', required: true, maxLength: 36 },
       user_id:    { type: 'string', maxLength: 36 },
+      claim_token: { type: 'string', maxLength: 36 },
     });
     if (!vbp.ok) return jsonWithCors({ error: vbp.error }, 400);
-    const body = vbp.data as { contact_id: string; user_id?: string };
+    const body = vbp.data as { contact_id: string; user_id?: string; claim_token?: string };
 
     let userId: string | null = null;
     let supabase;
@@ -92,6 +93,8 @@ Deno.serve(async (req) => {
       if (!userData?.user) return jsonWithCors({ error: 'Não autenticado' }, 401);
       userId = userData.user.id;
     }
+
+    const startedAt = new Date().toISOString();
 
     // Coleta histórico (RLS aplica escopo do usuário)
     const [wa, calls, ints] = await Promise.all([
@@ -229,34 +232,24 @@ Deno.serve(async (req) => {
       summary: parsed.summary ?? null,
       based_on_count: total,
       model,
-      last_updated_at: new Date().toISOString(),
+      last_updated_at: startedAt,
     };
 
-    const { data: saved, error: upErr } = await supabase
-      .from('contact_analytical_profiles')
-      .upsert(row, { onConflict: 'contact_id' })
-      .select()
-      .single();
-
-    if (upErr) { console.error("generate-behavioral-profile save error:", upErr); return jsonWithCors({ error: "Internal server error" }, 500); }
-
-    const { error: snapshotError } = await supabase.from('contact_analytical_profile_versions').insert({
-      contact_id: body.contact_id,
-      user_id: userId,
-      profile_id: (saved as { id?: string } | null)?.id ?? null,
-      summary: row.summary,
-      tone: row.tone,
-      communication_style: row.communication_style,
-      sentiment_trend: row.sentiment_trend,
-      preferences: row.preferences,
-      hobbies: row.hobbies,
-      recurrent_topics: row.recurrent_topics,
-      based_on_count: row.based_on_count,
-      model: row.model,
-      trigger_source: isInternal ? 'auto' : 'manual',
-      generated_at: row.last_updated_at,
-    }).abortSignal(AbortSignal.timeout(5_000));
-    if (snapshotError) console.warn('Não foi possível salvar a versão auxiliar:', snapshotError.message);
+    const { data: saved, error: saveError } = await supabase.rpc(
+      'save_behavioral_profile_if_fresh',
+      {
+        p_contact_id: body.contact_id,
+        p_claim_token: isInternal ? body.claim_token ?? null : null,
+        p_profile: row,
+        p_started_at: startedAt,
+        p_trigger_source: isInternal ? 'auto' : 'manual',
+      },
+    ).abortSignal(AbortSignal.timeout(5_000));
+    if (saveError) {
+      console.error("generate-behavioral-profile save error:", saveError);
+      return jsonWithCors({ error: "Não foi possível salvar o perfil" }, 503);
+    }
+    if (!saved) return jsonWithCors({ error: "Reserva substituída por uma nova geração" }, 409);
 
     return jsonWithCors({ profile: saved });
   } catch (e) {

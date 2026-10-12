@@ -1,6 +1,6 @@
 // Cron job: reanalisa perfis comportamentais de contatos com 3+ reprovações
 // SLA: não reprocessa o mesmo contato mais de 1x a cada 24h
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
 
@@ -135,7 +135,10 @@ Deno.serve(async (req) => {
           "generate-behavioral-profile",
           {
             body: { contact_id: item.contactId, trigger: "auto_regen_sla" },
-            headers: { "x-internal-key": serviceKey },
+            headers: {
+              "x-internal-key": serviceKey,
+              "x-cron-secret": Deno.env.get("CRON_SECRET") ?? "",
+            },
           },
         );
         if (invokeError) throw invokeError;
@@ -186,7 +189,7 @@ Deno.serve(async (req) => {
 const ERROR_RATE_THRESHOLD = 10; // percentual
 const MIN_SAMPLE = 5; // ignora janelas com pouquíssimas execuções para evitar falso positivo
 
-async function maybeRaiseErrorRateAlert(admin: ReturnType<typeof createClient>, requestId: string) {
+async function maybeRaiseErrorRateAlert(admin: SupabaseClient, requestId: string) {
   try {
     const sinceIso = new Date(Date.now() - 60 * 60 * 1000).toISOString();
     // Fetch recent runs and open alert in parallel — both queries are independent

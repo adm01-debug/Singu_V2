@@ -48,7 +48,7 @@ Deno.serve(async (req) => {
           'apikey': SERVICE_KEY,
           'x-cron-secret': Deno.env.get('CRON_SECRET') ?? '',
         },
-        body: JSON.stringify({ contact_id: item.contact_id, user_id: item.user_id }),
+        body: JSON.stringify({ contact_id: item.contact_id, user_id: item.user_id, claim_token: item.claim_token }),
       }).then(async (resp) => {
         if (!resp.ok) {
           const txt = await resp.text();

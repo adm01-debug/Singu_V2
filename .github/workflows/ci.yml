@@ -43,7 +43,7 @@ jobs:
         run: deno test --node-modules-dir=none --allow-net --allow-run --allow-env=HOME supabase/functions/_shared/safe-http_test.ts supabase/functions/connection-tester/index_test.ts supabase/functions/_shared/validation-contract_test.ts
 
       - name: Verificar tipos da função de conexões
-        run: deno check --node-modules-dir=none supabase/functions/connection-tester/index.ts supabase/functions/email-verifier/index.ts supabase/functions/phone-validator/index.ts supabase/functions/validation-queue-worker/index.ts supabase/functions/process-behavioral-regen-queue/index.ts supabase/functions/generate-behavioral-profile/index.ts
+        run: deno check --node-modules-dir=none supabase/functions/connection-tester/index.ts supabase/functions/email-verifier/index.ts supabase/functions/phone-validator/index.ts supabase/functions/validation-queue-worker/index.ts supabase/functions/process-behavioral-regen-queue/index.ts supabase/functions/generate-behavioral-profile/index.ts supabase/functions/retry-behavioral-profile/index.ts supabase/functions/auto-regen-behavioral-profiles/index.ts supabase/functions/auto-rebatch-behavioral/index.ts
 
       - name: Validar projeções e isolamento tenant
         run: deno test --node-modules-dir=none supabase/functions/_shared/select-projection_test.ts supabase/functions/_shared/tenant-guard_test.ts

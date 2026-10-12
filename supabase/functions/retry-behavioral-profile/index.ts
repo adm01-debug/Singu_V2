@@ -123,6 +123,7 @@ Deno.serve(async (req) => {
           "x-internal-key": SERVICE_KEY,
           "Authorization": `Bearer ${SERVICE_KEY}`,
           "apikey": SERVICE_KEY,
+          "x-cron-secret": Deno.env.get("CRON_SECRET") ?? "",
         },
         body: JSON.stringify({
           contact_id: contactId,

@@ -14,12 +14,24 @@ DECLARE
   regen_claim public.behavioral_profile_regen_queue;
   affected integer;
   invalid_size integer;
+  current_claim uuid;
+  saved_profile jsonb;
 BEGIN
   IF has_function_privilege('anon', 'public.claim_validation_batch(integer,integer)', 'EXECUTE')
     OR has_function_privilege('authenticated', 'public.claim_validation_batch(integer,integer)', 'EXECUTE')
     OR has_function_privilege('anon', 'public.claim_regen_batch(integer,integer)', 'EXECUTE')
     OR has_function_privilege('authenticated', 'public.claim_regen_batch(integer,integer)', 'EXECUTE') THEN
     RAISE EXCEPTION 'Claim de fila exposto a um usuário público';
+  END IF;
+  IF has_column_privilege('authenticated', 'public.validation_queue', 'claim_token', 'UPDATE')
+    OR has_column_privilege('authenticated', 'public.validation_queue', 'lease_expires_at', 'UPDATE')
+    OR has_column_privilege('authenticated', 'public.behavioral_profile_regen_queue', 'claim_token', 'UPDATE')
+    OR has_table_privilege('authenticated', 'public.validation_queue', 'UPDATE')
+    OR has_table_privilege('authenticated', 'public.behavioral_profile_regen_queue', 'UPDATE') THEN
+    RAISE EXCEPTION 'Usuário pode interferir na reserva de uma fila';
+  END IF;
+  IF has_function_privilege('anon', 'public.save_behavioral_profile_if_fresh(uuid,uuid,jsonb,timestamptz,text)', 'EXECUTE') THEN
+    RAISE EXCEPTION 'Persistência de perfil exposta anonimamente';
   END IF;
 
   FOREACH invalid_size IN ARRAY ARRAY[-1, 0, 101, NULL] LOOP
@@ -92,6 +104,60 @@ BEGIN
   WHERE contact_id = current_setting('rls.queue_contact')::uuid AND claim_token = regen_claim.claim_token;
   GET DIAGNOSTICS affected = ROW_COUNT;
   IF affected <> 0 THEN RAISE EXCEPTION 'Worker antigo sobrescreveu a regeneração nova'; END IF;
+  SELECT claim_token INTO current_claim FROM public.behavioral_profile_regen_queue
+  WHERE contact_id = fixture_contact_id;
+  saved_profile := public.save_behavioral_profile_if_fresh(
+    fixture_contact_id, current_claim, '{"summary":"perfil recente"}'::jsonb,
+    now() - interval '1 hour', 'auto'
+  );
+  IF saved_profile->>'summary' IS DISTINCT FROM 'perfil recente' THEN
+    RAISE EXCEPTION 'Perfil e versão não foram salvos com reserva atual';
+  END IF;
+  UPDATE public.behavioral_profile_regen_queue SET next_run_at = now()
+  WHERE contact_id = fixture_contact_id;
+  IF public.save_behavioral_profile_if_fresh(
+    fixture_contact_id, current_claim, '{"summary":"perfil obsoleto"}'::jsonb,
+    now(), 'auto'
+  ) IS NOT NULL
+    OR (SELECT summary FROM public.contact_analytical_profiles WHERE contact_id = fixture_contact_id) IS DISTINCT FROM 'perfil recente'
+    OR (SELECT count(*) FROM public.contact_analytical_profile_versions WHERE contact_id = fixture_contact_id) <> 1 THEN
+    RAISE EXCEPTION 'Reserva antiga sobrescreveu o perfil ou criou histórico';
+  END IF;
+  SELECT claim_token INTO current_claim FROM public.behavioral_profile_regen_queue
+  WHERE contact_id = fixture_contact_id;
+  IF public.save_behavioral_profile_if_fresh(
+    fixture_contact_id, current_claim, '{"summary":"perfil atualizado"}'::jsonb,
+    now(), 'auto'
+  )->>'summary' IS DISTINCT FROM 'perfil atualizado' THEN
+    RAISE EXCEPTION 'Nova reserva não substituiu o perfil anterior';
+  END IF;
+  IF (SELECT count(*) FROM public.contact_analytical_profile_versions WHERE contact_id = fixture_contact_id) <> 2 THEN
+    RAISE EXCEPTION 'Versões do perfil não foram gravadas junto com a atualização';
+  END IF;
+  IF public.save_behavioral_profile_if_fresh(
+    fixture_contact_id, NULL, '{"summary":"manual antigo"}'::jsonb,
+    now() - interval '1 hour', 'manual'
+  ) IS NOT NULL THEN
+    RAISE EXCEPTION 'Geração manual antiga sobrescreveu um perfil recente';
+  END IF;
+  UPDATE public.behavioral_profile_regen_queue
+  SET attempts = 5, next_run_at = now() - interval '1 day', last_error = 'Limite de tentativas'
+  WHERE contact_id = fixture_contact_id;
+  IF EXISTS (
+    SELECT 1 FROM public.claim_regen_batch(100, 1) WHERE contact_id = fixture_contact_id
+  ) OR (SELECT last_error FROM public.behavioral_profile_regen_queue WHERE contact_id = fixture_contact_id)
+    IS DISTINCT FROM 'Limite de tentativas' THEN
+    RAISE EXCEPTION 'Regeneração esgotada foi executada ou perdeu o erro';
+  END IF;
+  UPDATE public.behavioral_profile_regen_queue
+  SET attempts = 0, next_run_at = now(), last_error = NULL
+  WHERE contact_id = fixture_contact_id;
+  IF NOT EXISTS (
+    SELECT 1 FROM public.claim_regen_batch(100, 1)
+    WHERE contact_id = fixture_contact_id AND attempts = 1
+  ) THEN
+    RAISE EXCEPTION 'Nova solicitação não reabriu a regeneração';
+  END IF;
 END;
 $test$;
 SET LOCAL ROLE authenticated;
@@ -105,6 +171,18 @@ BEGIN
   BEGIN
     PERFORM public.claim_regen_batch(1, 15);
     RAISE EXCEPTION 'Usuário conseguiu reservar perfis';
+  EXCEPTION WHEN insufficient_privilege THEN NULL;
+  END;
+  BEGIN
+    UPDATE public.validation_queue SET claim_token = gen_random_uuid()
+    WHERE contact_id = current_setting('rls.queue_contact')::uuid;
+    RAISE EXCEPTION 'Usuário conseguiu editar o token da validação';
+  EXCEPTION WHEN insufficient_privilege THEN NULL;
+  END;
+  BEGIN
+    UPDATE public.behavioral_profile_regen_queue SET next_run_at = now()
+    WHERE contact_id = current_setting('rls.queue_contact')::uuid;
+    RAISE EXCEPTION 'Usuário conseguiu editar a reserva do perfil';
   EXCEPTION WHEN insufficient_privilege THEN NULL;
   END;
 END;
