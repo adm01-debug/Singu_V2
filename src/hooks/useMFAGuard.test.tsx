@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { Suspense } from 'react';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { MFAGuard } from '@/components/auth/MFAGuard';
+import { MFAGuardLazy } from '@/app/lazyPages';
 import { MFA_STATUS_CHANGED_EVENT, MFA_VERIFIED_EVENT } from '@/hooks/use2FA';
 
 const mocks = vi.hoisted(() => ({
@@ -54,6 +56,26 @@ describe('MFA administrativo', () => {
     expect(screen.getByText('/admin?tab=usuarios#permissoes')).toBeInTheDocument();
     expect(screen.queryByText('Conteúdo administrativo')).not.toBeInTheDocument();
     expect(screen.queryByText('Configurações completas')).not.toBeInTheDocument();
+  });
+
+  it('não monta a tela protegida durante o carregamento do guard ou da confirmação MFA', async () => {
+    const mount = vi.fn();
+    function ProtectedContent() {
+      mount();
+      return <div>Conteúdo protegido carregado</div>;
+    }
+    let confirm = (_result: { data: { currentLevel: 'aal2' }; error: null }) => {};
+    mocks.assurance.mockReturnValue(new Promise(resolve => { confirm = resolve; }));
+    render(<MemoryRouter><Suspense fallback={<div>Carregando proteção</div>}>
+      <MFAGuardLazy><ProtectedContent /></MFAGuardLazy>
+    </Suspense></MemoryRouter>);
+    expect(screen.getByText('Carregando proteção')).toBeInTheDocument();
+    expect(mount).not.toHaveBeenCalled();
+    await waitFor(() => expect(mocks.assurance).toHaveBeenCalled());
+    expect(mount).not.toHaveBeenCalled();
+    act(() => confirm({ data: { currentLevel: 'aal2' }, error: null }));
+    await screen.findByText('Conteúdo protegido carregado');
+    expect(mount).toHaveBeenCalled();
   });
 
   it('aguarda a consulta de papel antes de mostrar qualquer conteúdo protegido', async () => {

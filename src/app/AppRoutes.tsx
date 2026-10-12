@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
  import { RequireAuth } from '@/hooks/useAuth';
- import { MFAGuard } from '@/components/auth/MFAGuard';
 import { ErrorBoundary } from '@/components/feedback/ErrorBoundary';
 import { PageLoadingFallback } from '@/components/feedback/PageLoadingFallback';
 import { useWebVitals } from '@/hooks/useWebVitals';
@@ -30,19 +29,21 @@ const LazyPage = ({ children, fallback }: { children: React.ReactNode; fallback?
 
  const Protected = ({ children, fallback, allowMfaSetup = false }: { children: React.ReactNode; fallback?: React.ReactNode; allowMfaSetup?: boolean }) => (
    <RequireAuth>
-     <MFAGuard setupFallback={allowMfaSetup ? <P.SecurityPage recoveryOnly /> : undefined}>
-       <LazyPage fallback={fallback}>{children}</LazyPage>
-     </MFAGuard>
+     <LazyPage fallback={fallback}>
+       <P.MFAGuardLazy setupFallback={allowMfaSetup ? <P.SecurityPage recoveryOnly /> : undefined}>
+         {children}
+       </P.MFAGuardLazy>
+     </LazyPage>
    </RequireAuth>
  );
 
 const Admin = ({ children }: { children: React.ReactNode }) => (
   <RequireAuth>
-    <MFAGuard>
-      <LazyPage>
+    <LazyPage>
+      <P.MFAGuardLazy>
         <P.RequireAdminLazy>{children}</P.RequireAdminLazy>
-      </LazyPage>
-    </MFAGuard>
+      </P.MFAGuardLazy>
+    </LazyPage>
   </RequireAuth>
 );
 
