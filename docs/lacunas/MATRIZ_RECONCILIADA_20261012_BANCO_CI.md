@@ -49,7 +49,7 @@ IDs agrupados preservam rastreabilidade; última coluna é pendência/aceite.
 | TQ-4, TQ-13, H-53, ADR-IDX-1, HF-2 | AINDA REPRODUZÍVEL | README; docs/adr/README:7–14; inventários divergem de 456 migrations/T | Atualizar números por snapshot; índice sem ADR duplicado. |
 | TQ-5 | OBSOLETO/DUPLICADO | CI:113–114 roda Vitest/coverage, check success | 5.494 é fotografia antiga; não inferir cobertura alta. |
 | TQ-6, H-17 | AINDA REPRODUZÍVEL | CI completo sem deno test/check; testes Deno existem | Rodar backend no CI; antiga “ausência total” é obsoleta. |
-| TQ-7 | RESOLVIDO NO CÓDIGO | index.html:9 e vercel.json headers têm CSP | Conferir headers publicados; inconsistências restantes H-32. |
+| TQ-7 | AINDA REPRODUZÍVEL | index.html:9/public/_headers:7 permitem scripts inline; vercel.json limita frame-ancestors/object-src/base-uri | Unificar CSP por header, restringir scripts e alinhar origens ao Supabase canônico; retestar funcionalidades, H-32/AUDC-08. |
 | TQ-8 | RESOLVIDO NO CÓDIGO | vite.config.ts:60–64 runtimeCaching=[] | Logout/relogin sem PII em caches; não adicionar cache de dados implicitamente. |
 | TQ-9 | RESOLVIDO NO CÓDIGO | CI:37–58 exige PG*/E2E secrets | Pulados por fixture/escrita continuam H-18/H-28. |
 | TQ-10 | OBSOLETO/DUPLICADO | setup-node/upload-artifact usados em CI que concluiu success | Alegação de versões inexistentes refutada pelo run. |

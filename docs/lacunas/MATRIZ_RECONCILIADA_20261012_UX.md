@@ -27,7 +27,7 @@ Base exclusiva: `a2b73c7dee837f19aa756e6afe385eba837b5d54`. Árvore versionada l
 |---|---|---|---|---|
 | ROT-01 | AINDA REPRODUZÍVEL | `src/pages/AdminConexoes.tsx:44`; `src/app/AppRoutes.tsx:156-177` | Registrar logs/lazy | Link abre logs, não 404 |
 | ROT-02 | AINDA REPRODUZÍVEL | `src/app/lazyPages.tsx:3`; `src/pages/admin/Observability.tsx:59,69,79` | Rota e métricas reais | Sem percentuais fixos |
-| ROT-03 | AINDA REPRODUZÍVEL | `src/components/admin/RequireAdmin.tsx:60` | Usar `/seguranca` | Configurar MFA sem 404 |
+| ROT-03 | AINDA REPRODUZÍVEL | `src/components/admin/RequireAdmin.tsx:60`; `/seguranca` também passa pelo MFAGuard | Corrigir destino e permitir enrollment/challenge em AAL1, preservando bloqueio administrativo até AAL2 | Configurar ou confirmar MFA sem 404, tela vazia ou loop |
 | ROT-04 | AINDA REPRODUZÍVEL | `src/components/dashboard/HealthAlertsPanel.tsx:150`; `ImportantDatesCalendar.tsx:65,151,158` | Usar `/contatos/:id` | Quatro links abrem contato |
 | ROT-05 | AINDA REPRODUZÍVEL | `src/pages/ContatoDetalhe.tsx:165` | Usar `/relatorio/:id` | Relatório abre |
 | ROT-06 | AINDA REPRODUZÍVEL | `src/components/nlp/NLPInsightsDashboard.tsx:84` | Corrigir destino PDF | Aba não retorna 404 |
