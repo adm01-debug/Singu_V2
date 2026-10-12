@@ -11,6 +11,7 @@ export function useMFAGuard() {
   const { isAdmin, isLoading: adminLoading, error: roleError, refetch: retryRoleCheck } = useIsAdmin();
   const [verification, setVerification] = useState<{ token: string | undefined; verified: boolean } | null>(null);
   const [revision, setRevision] = useState(0);
+  const [revokedToken, setRevokedToken] = useState<string>();
   const token = session?.access_token;
   const mfaVerified = verification?.token === token ? verification?.verified ?? null : null;
   const navigate = useNavigate();
@@ -19,11 +20,12 @@ export function useMFAGuard() {
   useEffect(() => {
     const recheck = () => {
       setVerification(null);
+      setRevokedToken(token);
       setRevision(value => value + 1);
     };
     window.addEventListener(MFA_STATUS_CHANGED_EVENT, recheck);
     return () => window.removeEventListener(MFA_STATUS_CHANGED_EVENT, recheck);
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     let cancelled = false;
@@ -45,7 +47,7 @@ export function useMFAGuard() {
         if (assurance.error) throw assurance.error;
         if (factors.error) throw factors.error;
 
-        const isVerified = assurance.data.currentLevel === 'aal2' && factors.data.all.some(factor => factor.status === 'verified');
+        const isVerified = token !== revokedToken && assurance.data.currentLevel === 'aal2' && factors.data.all.some(factor => factor.status === 'verified');
         setVerification({ token, verified: isVerified });
 
         if (!isVerified && location.pathname !== '/seguranca') {
@@ -72,7 +74,7 @@ export function useMFAGuard() {
 
     checkMFA();
     return () => { cancelled = true; };
-  }, [user, token, revision, isAdmin, authLoading, adminLoading, roleError, navigate, location.pathname, location.search, location.hash]);
+  }, [user, token, revision, revokedToken, isAdmin, authLoading, adminLoading, roleError, navigate, location.pathname, location.search, location.hash]);
 
   return {
     isCheckingIdentity: authLoading || adminLoading,

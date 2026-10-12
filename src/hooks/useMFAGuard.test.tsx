@@ -116,4 +116,17 @@ describe('MFA administrativo', () => {
     expect(mocks.token).toBe('sessao-inicial');
     expect(screen.queryByText('Conteúdo administrativo')).not.toBeInTheDocument();
   });
+
+  it('não reutiliza o token anterior à remoção mesmo se outro fator continuar ativo', async () => {
+    mocks.assurance.mockResolvedValue({ data: { currentLevel: 'aal2' }, error: null });
+    const view = render(<Harness start="/seguranca" />);
+    await screen.findByText('Configurações completas');
+    act(() => window.dispatchEvent(new Event(MFA_STATUS_CHANGED_EVENT)));
+    await screen.findByText(/Configurar MFA/);
+    await waitFor(() => expect(mocks.assurance).toHaveBeenCalledTimes(2));
+    expect(screen.queryByText('Configurações completas')).not.toBeInTheDocument();
+    mocks.token = 'sessao-confirmada-novamente';
+    view.rerender(<Harness start="/seguranca" />);
+    await screen.findByText('Configurações completas');
+  });
 });

@@ -8,7 +8,7 @@ import { Shield, ShieldCheck, ShieldOff } from 'lucide-react';
 import { use2FA } from '@/hooks/use2FA';
 
 export function TwoFactorSetup({ onVerified }: { onVerified?: () => void } = {}) {
-  const { isEnabled, isSessionVerified, isLoading, statusError, isEnrolling, isVerifying, qrUri, checkStatus, enroll, verify, unenroll } = use2FA();
+  const { isEnabled, isSessionVerified, isLoading, statusError, isEnrolling, isVerifying, qrUri, factorId, verifiedFactors, selectFactor, checkStatus, enroll, verify, unenroll } = use2FA();
   const [code, setCode] = useState('');
 
   useEffect(() => { checkStatus(); }, [checkStatus]);
@@ -62,6 +62,14 @@ export function TwoFactorSetup({ onVerified }: { onVerified?: () => void } = {})
             </p>
             </>}
             {isEnabled && <p className="text-sm">Digite o código do seu aplicativo autenticador para confirmar este acesso.</p>}
+            {verifiedFactors.length > 1 && <div className="space-y-2">
+              <Label htmlFor="totp-factor">Aplicativo autenticador</Label>
+              <select id="totp-factor" value={factorId ?? ''} disabled={isVerifying}
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                onChange={event => { selectFactor(event.target.value); setCode(''); }}>
+                {verifiedFactors.map(factor => <option key={factor.id} value={factor.id}>{factor.name}</option>)}
+              </select>
+            </div>}
             <div className="space-y-2">
               <Label htmlFor="totp-code">Código de verificação</Label>
               <div className="flex gap-2">

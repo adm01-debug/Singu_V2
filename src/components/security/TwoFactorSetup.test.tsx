@@ -134,4 +134,24 @@ describe('Configuração e confirmação MFA', () => {
       expect(mfa.unenroll).toHaveBeenCalledWith({ factorId: 'fator-existente' });
     } finally { window.removeEventListener(MFA_STATUS_CHANGED_EVENT, changed); }
   });
+
+  it('permite confirmar com o segundo autenticador e preserva a escolha ao renovar o token', async () => {
+    const factors = [
+      { id: 'celular-antigo', status: 'verified', factor_type: 'totp', friendly_name: 'Celular antigo' },
+      { id: 'reserva', status: 'verified', factor_type: 'totp', friendly_name: 'Autenticador reserva' },
+    ];
+    mfa.listFactors.mockResolvedValue({ data: { totp: factors, all: factors }, error: null });
+    const onVerified = vi.fn();
+    const view = render(<TwoFactorSetup onVerified={onVerified} />);
+    fireEvent.change(await screen.findByLabelText('Aplicativo autenticador'), { target: { value: 'reserva' } });
+    auth.token = 'sessao-renovada';
+    view.rerender(<TwoFactorSetup onVerified={onVerified} />);
+    await waitFor(() => expect(mfa.listFactors).toHaveBeenCalledTimes(2));
+    expect(await screen.findByLabelText('Aplicativo autenticador')).toHaveValue('reserva');
+    fireEvent.change(screen.getByLabelText('Código de verificação'), { target: { value: '123456' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Confirmar acesso' }));
+    await waitFor(() => expect(onVerified).toHaveBeenCalledOnce());
+    expect(mfa.challenge).toHaveBeenCalledWith({ factorId: 'reserva' });
+    expect(mfa.verify).toHaveBeenCalledWith({ factorId: 'reserva', challengeId: 'desafio', code: '123456' });
+  });
 });

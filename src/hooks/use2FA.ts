@@ -14,6 +14,7 @@ interface TwoFactorState {
   isSessionVerified: boolean;
   isLoading: boolean;
   statusError: string | null;
+  verifiedFactors: { id: string; name: string }[];
 }
 
 export function use2FA() {
@@ -30,6 +31,7 @@ export function use2FA() {
     isSessionVerified: false,
     isLoading: true,
     statusError: null,
+    verifiedFactors: [],
   });
 
   const checkStatus = useCallback(async () => {
@@ -48,7 +50,8 @@ export function use2FA() {
       setState(s => {
         const pending = factors.data.all.some(f => f.id === s.factorId && f.factor_type === 'totp' && f.status === 'unverified');
         return { ...s, isLoading: false, isEnabled: verified.length > 0,
-          factorId: verified[0]?.id ?? (pending ? s.factorId : null),
+          verifiedFactors: verified.map((factor, index) => ({ id: factor.id, name: factor.friendly_name || `Autenticador ${index + 1}` })),
+          factorId: verified.some(factor => factor.id === s.factorId) ? s.factorId : verified[0]?.id ?? (pending ? s.factorId : null),
           qrUri: verified.length === 0 && pending ? s.qrUri : null,
           isSessionVerified: assurance.data.currentLevel === 'aal2' };
       });
@@ -57,6 +60,10 @@ export function use2FA() {
       setState(s => ({ ...s, isLoading: false, statusError: 'Não foi possível consultar a autenticação em duas etapas.' }));
     }
   }, [session?.access_token]);
+
+  const selectFactor = useCallback((factorId: string) => {
+    setState(s => s.verifiedFactors.some(factor => factor.id === factorId) ? { ...s, factorId } : s);
+  }, []);
 
   const enroll = useCallback(async () => {
     statusGeneration.current++;
@@ -112,7 +119,11 @@ export function use2FA() {
       const { error } = await supabase.auth.mfa.unenroll({ factorId: state.factorId });
       if (error) throw error;
       statusGeneration.current++;
-      setState(s => ({ ...s, isLoading: false, isEnabled: false, isSessionVerified: false, factorId: null, qrUri: null }));
+      setState(s => {
+        const verifiedFactors = s.verifiedFactors.filter(factor => factor.id !== state.factorId);
+        return { ...s, isLoading: false, isEnabled: verifiedFactors.length > 0, isSessionVerified: false,
+          verifiedFactors, factorId: verifiedFactors[0]?.id ?? null, qrUri: null };
+      });
       window.dispatchEvent(new Event(MFA_STATUS_CHANGED_EVENT));
       const refresh = await supabase.auth.refreshSession().catch(() => ({ error: new Error('Falha na renovação da sessão') }));
       if (refresh.error) {
@@ -125,5 +136,5 @@ export function use2FA() {
     }
   }, [state.factorId]);
 
-  return { ...state, checkStatus, enroll, verify, unenroll };
+  return { ...state, checkStatus, selectFactor, enroll, verify, unenroll };
 }
