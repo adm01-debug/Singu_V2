@@ -36,9 +36,21 @@ BEGIN
       RAISE EXCEPTION 'ACL fora do contrato: %', relation_name;
     END IF;
   END LOOP;
-  IF to_regclass('reporting.mv_daily_kpis') IS NOT NULL
-    AND has_any_column_privilege('authenticated', 'reporting.mv_daily_kpis', 'SELECT') THEN
-    RAISE EXCEPTION 'Agregado global do legado acessível sem o serviço autorizado';
+  IF EXISTS (
+    WITH RECURSIVE dependent(oid) AS (
+      SELECT unnest(ARRAY['public.sales'::regclass::oid, 'public.salespeople'::regclass::oid, 'public.sales_activities'::regclass::oid])
+      UNION
+      SELECT rw.ev_class FROM dependent dep
+      JOIN pg_depend d ON d.refobjid = dep.oid AND d.classid = 'pg_rewrite'::regclass
+      JOIN pg_rewrite rw ON rw.oid = d.objid
+      JOIN pg_class c ON c.oid = rw.ev_class WHERE c.relkind IN ('v', 'm')
+    )
+    SELECT 1 FROM dependent dep JOIN pg_class c ON c.oid = dep.oid
+    WHERE c.relkind IN ('v', 'm')
+      AND (has_any_column_privilege('authenticated', dep.oid, 'SELECT')
+        OR has_any_column_privilege('anon', dep.oid, 'SELECT'))
+  ) THEN
+    RAISE EXCEPTION 'Visão comercial acessível sem o serviço autorizado';
   END IF;
 END $$;
 

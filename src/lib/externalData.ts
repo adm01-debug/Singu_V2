@@ -70,6 +70,7 @@ class CanonicalRpcClientError extends ExternalDataClientError {}
 
 const externalResponseSchema = z.object({
   error: z.string().nullish(),
+  errorCode: z.string().optional(),
   fallback: z.boolean().optional(),
   data: z.unknown().optional(),
   count: z.number().int().nonnegative().nullable().optional(),
@@ -121,7 +122,13 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
     if (result.fallback === true) {
       throw new Error(result.error || 'A fonte externa está indisponível; tente novamente');
     }
-    if (result.error != null) throw new Error(result.error);
+    if (result.error != null) {
+      if (typeof body.functionName === 'string' && result.errorCode &&
+        /^(22|23|42|P0001|PGRST[12])/.test(result.errorCode)) {
+        throw new ExternalDataClientError(result.error);
+      }
+      throw new Error(result.error);
+    }
 
     return result;
   }, error => isAbortError(error) || error instanceof ExternalDataClientError

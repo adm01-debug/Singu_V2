@@ -63,6 +63,7 @@ DECLARE
   relation_name text;
   policy_name text;
   columns_list text;
+  inherited_role text;
 BEGIN
   FOREACH relation_name IN ARRAY ARRAY['salespeople', 'sales', 'sales_activities'] LOOP
     EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', relation_name);
@@ -71,11 +72,21 @@ BEGIN
     LOOP
       EXECUTE format('DROP POLICY %I ON public.%I', policy_name, relation_name);
     END LOOP;
-    EXECUTE format('REVOKE ALL ON TABLE public.%I FROM PUBLIC, anon, authenticated', relation_name);
+    EXECUTE format('REVOKE ALL ON TABLE public.%I FROM PUBLIC', relation_name);
     SELECT string_agg(format('%I', attname), ', ') INTO columns_list
     FROM pg_attribute
     WHERE attrelid = format('public.%I', relation_name)::regclass AND attnum > 0 AND NOT attisdropped;
-    EXECUTE format('REVOKE ALL (%s) ON TABLE public.%I FROM PUBLIC, anon, authenticated', columns_list, relation_name);
+    EXECUTE format('REVOKE ALL (%s) ON TABLE public.%I FROM PUBLIC', columns_list, relation_name);
+    FOR inherited_role IN
+      SELECT rolname FROM pg_roles
+      WHERE pg_has_role('authenticated', oid, 'USAGE') OR pg_has_role('anon', oid, 'USAGE')
+    LOOP
+      IF inherited_role = 'service_role' THEN
+        RAISE EXCEPTION 'Usuários comuns herdam os privilégios do serviço';
+      END IF;
+      EXECUTE format('REVOKE ALL ON TABLE public.%I FROM %I', relation_name, inherited_role);
+      EXECUTE format('REVOKE ALL (%s) ON TABLE public.%I FROM %I', columns_list, relation_name, inherited_role);
+    END LOOP;
     EXECUTE format('GRANT SELECT ON TABLE public.%I TO authenticated', relation_name);
     EXECUTE format('GRANT ALL ON TABLE public.%I TO service_role', relation_name);
     EXECUTE format('CREATE POLICY legacy_sales_service ON public.%I FOR ALL TO service_role USING (true) WITH CHECK (true)', relation_name);
@@ -106,6 +117,7 @@ DO $$
 DECLARE
   relation_name regclass;
   columns_list text;
+  inherited_role text;
 BEGIN
   FOR relation_name IN
     WITH RECURSIVE dependent(oid) AS (
@@ -119,10 +131,24 @@ BEGIN
     )
     SELECT dep.oid::regclass FROM dependent dep JOIN pg_class c ON c.oid = dep.oid WHERE c.relkind IN ('v', 'm')
   LOOP
-    EXECUTE format('REVOKE ALL ON TABLE %s FROM PUBLIC, anon, authenticated', relation_name);
+    EXECUTE format('REVOKE ALL ON TABLE %s FROM PUBLIC', relation_name);
     SELECT string_agg(format('%I', attname), ', ') INTO columns_list
     FROM pg_attribute WHERE attrelid = relation_name AND attnum > 0 AND NOT attisdropped;
-    EXECUTE format('REVOKE ALL (%s) ON TABLE %s FROM PUBLIC, anon, authenticated', columns_list, relation_name);
+    EXECUTE format('REVOKE ALL (%s) ON TABLE %s FROM PUBLIC', columns_list, relation_name);
+    FOR inherited_role IN
+      SELECT rolname FROM pg_roles
+      WHERE pg_has_role('authenticated', oid, 'USAGE') OR pg_has_role('anon', oid, 'USAGE')
+    LOOP
+      IF inherited_role = 'service_role' THEN
+        RAISE EXCEPTION 'Usuários comuns herdam os privilégios do serviço';
+      END IF;
+      EXECUTE format('REVOKE ALL ON TABLE %s FROM %I', relation_name, inherited_role);
+      EXECUTE format('REVOKE ALL (%s) ON TABLE %s FROM %I', columns_list, relation_name, inherited_role);
+    END LOOP;
+    IF has_any_column_privilege('authenticated', relation_name, 'SELECT')
+      OR has_any_column_privilege('anon', relation_name, 'SELECT') THEN
+      RAISE EXCEPTION 'Visão comercial continua acessível: %', relation_name;
+    END IF;
     EXECUTE format('GRANT SELECT ON TABLE %s TO service_role', relation_name);
   END LOOP;
 END $$;
