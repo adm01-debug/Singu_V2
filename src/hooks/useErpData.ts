@@ -32,8 +32,8 @@ export interface ErpProposal {
 const CANDIDATE_PRODUCT_TABLES = ['vw_produtos', 'produtos', 'vw_products', 'products'];
 const CANDIDATE_PROPOSAL_TABLES = ['vw_propostas', 'propostas', 'vw_proposals'];
 
-/** Resilient fetch — tries multiple table names; returns [] if none exist (schema drift safe) */
 async function tryFetch<T>(tables: string[], limit: number, filters?: Parameters<typeof queryExternalData>[0]['filters']): Promise<T[]> {
+  let lastError = new Error('Não foi possível consultar os dados do ERP.');
   for (const table of tables) {
     try {
       const { data, error } = await queryExternalData<T>({
@@ -42,12 +42,15 @@ async function tryFetch<T>(tables: string[], limit: number, filters?: Parameters
         range: { from: 0, to: limit - 1 },
         filters,
       });
-      if (!error && Array.isArray(data)) return data;
+      if (error) throw error;
+      if (!Array.isArray(data)) throw new Error('Resposta inválida do ERP.');
+      return data;
     } catch (e) {
+      lastError = e instanceof Error ? e : new Error('Não foi possível consultar os dados do ERP.');
       logger.warn(`[ERP] Table ${table} unavailable:`, e);
     }
   }
-  return [];
+  throw lastError;
 }
 
 export function useErpProducts(limit = 100, search?: string) {
@@ -103,6 +106,8 @@ export function useErpStats() {
   return {
     stats,
     isLoading: products.isLoading || proposals.isLoading,
-    isError: products.isError && proposals.isError,
+    isError: products.isError || proposals.isError,
+    productsState: { isLoading: products.isLoading, isError: products.isError },
+    proposalsState: { isLoading: proposals.isLoading, isError: proposals.isError },
   };
 }

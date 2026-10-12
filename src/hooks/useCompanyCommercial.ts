@@ -80,31 +80,3 @@ export function useCompanyTasks(companyId?: string) {
     staleTime: 5 * 60 * 1000,
   });
 }
-
-export function useCompanySalesActivities(companyId?: string) {
-  return useQuery({
-    queryKey: ['company-sales-activities', companyId],
-    queryFn: async () => {
-      const { data, error } = await queryExternalData<{
-        id: string;
-        company_id?: string;
-        activity_type?: string;
-        outcome?: string;
-        notes?: string;
-        duration_minutes?: number;
-        contact_name?: string;
-        created_at?: string;
-      }>({
-        table: 'sales_activities',
-        select: '*',
-        filters: [{ type: 'eq', column: 'company_id', value: companyId }],
-        order: { column: 'created_at', ascending: false },
-        range: { from: 0, to: 99 },
-      });
-      if (error) throw error;
-      return data || [];
-    },
-    enabled: !!companyId,
-    staleTime: 5 * 60 * 1000,
-  });
-}

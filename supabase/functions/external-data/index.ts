@@ -160,6 +160,8 @@ const ALLOWED_TABLES = [
 
 type AllowedTable = typeof ALLOWED_TABLES[number];
 
+const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>(['sales_activities']);
+
 const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([
   'mv_daily_kpis',
   'mv_daily_stats',
@@ -469,7 +471,7 @@ Deno.serve(async (req) => {
       const { data, error } = await rpcClient.rpc(functionName, params as Record<string, unknown>);
       if (error) {
         log.warn("RPC failed", { rpc: functionName, error: error.message });
-        return jsonOk({ data: null, error: `RPC ${functionName} failed` }, req);
+        return jsonOk({ data: null, error: `RPC ${functionName} failed`, errorCode: error.code }, req);
       }
       return jsonOk({ data }, req);
     }
@@ -480,6 +482,9 @@ Deno.serve(async (req) => {
     }
     if (GLOBAL_READ_ONLY_TABLES.has(table) && operation !== 'select') {
       return jsonError('Global metrics are read-only', 405, req);
+    }
+    if (!isSvc && USER_RLS_READ_ONLY_TABLES.has(table) && operation !== 'select') {
+      return jsonError('O legado comercial aceita somente leitura nesta sessão', 405, req);
     }
 
     // ─── SELECT (read) ───
@@ -524,7 +529,7 @@ Deno.serve(async (req) => {
         const countMode = countMethod === null ? undefined : countMethod === 'planned' ? 'planned' : 'exact';
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TS2589 deep type instantiation with dynamic Supabase queries
         let query: any = readClient.from(table).select(selectedColumns, { count: countMode });
-        if (!isSvc && !GLOBAL_READ_ONLY_TABLES.has(table) && !relationScope) {
+        if (!isSvc && !GLOBAL_READ_ONLY_TABLES.has(table) && !USER_RLS_READ_ONLY_TABLES.has(table) && !relationScope) {
           query = query.eq('user_id', userId);
         }
 

@@ -318,15 +318,21 @@ export function useContacts(
     queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
       if (!prev) return prev;
 
-      return { ...prev, pages: prev.pages.map(page => ({ ...page, items: page.items.filter(c => c.id !== id) })) };
+      if (!prev.pages.some(page => page.items.some(c => c.id === id))) return prev;
+      return { ...prev, pages: prev.pages.map(page => ({
+        ...page,
+        items: page.items.filter(c => c.id !== id),
+        totalCount: page.totalCount == null ? null : Math.max(0, page.totalCount - 1),
+      })) };
     });
 
     try {
-      const { success, error } = await deleteExternalData('contacts', id);
-      if (error || !success) throw error || new Error('Não foi possível excluir o contato.');
-
       const deleted = previous?.pages.flatMap(p => p.items).find(c => c.id === id);
-      logActivity({ type: 'deleted', entityType: 'contact', entityId: id, entityName: deleted ? `${deleted.first_name} ${deleted.last_name}`.trim() : undefined, description: 'Contato excluído' });
+      const { success, error } = await deleteExternalData('contacts', id, {
+        entityName: deleted ? `${deleted.first_name} ${deleted.last_name}`.trim() : undefined,
+        description: 'Contato excluído',
+      });
+      if (error || !success) throw error || new Error('Não foi possível excluir o contato.');
       return true;
     } catch (error) {
       // Automatic Rollback on error

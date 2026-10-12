@@ -23,7 +23,6 @@ import { useMiniCelebration } from '@/components/celebrations/MiniCelebration';
 import { useKeyboardShortcutsEnhanced } from '@/hooks/useKeyboardShortcutsEnhanced';
 import { hapticHeavy, hapticSuccess } from '@/lib/haptics';
 import { useSuccessCelebration } from '@/hooks/useSuccessCelebration';
-import { useActivityLogger } from '@/hooks/useActivityLogger';
 import type { ViewMode, GridColumns } from '@/components/ui/view-mode-switcher';
 import { ContatosContent } from './contatos/ContatosContent';
 import { SavedViewsBar } from '@/components/views/SavedViewsBar';
@@ -144,7 +143,6 @@ const Contatos = () => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const celebration = useMiniCelebration();
   const { celebrate } = useSuccessCelebration();
-  const { logActivity } = useActivityLogger();
   const { destructive } = useActionToast();
   const { restore } = useRestoreEntity();
 
@@ -222,7 +220,6 @@ const Contatos = () => {
     setIsSubmitting(false);
     if (result) {
       setIsFormOpen(false); hapticSuccess();
-      logActivity({ type: 'created', entityType: 'contact', entityId: result.id || '', entityName: `${data.first_name} ${data.last_name}`.trim() });
       if (contacts.length === 0) celebrate('confetti');
       const pos = event ? event : { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
       celebration.trigger(pos, { variant: 'success', message: 'Contato criado!' });
@@ -252,7 +249,6 @@ const Contatos = () => {
         description: 'Clique em Desfazer para restaurar',
         onUndo: () => { void restore('contacts', snapshot, [['contacts']]); },
       });
-      logActivity({ type: 'deleted', entityType: 'contact', entityId: ct.id, entityName: ct.first_name });
     }
   };
 

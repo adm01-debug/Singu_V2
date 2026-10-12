@@ -17,7 +17,6 @@ import { useInteractions, type Interaction } from '@/hooks/useInteractions';
 import { useContacts } from '@/hooks/useContacts';
 import { useMiniCelebration } from '@/components/celebrations/MiniCelebration';
 import { useNLPAutoAnalysis } from '@/hooks/useNLPAutoAnalysis';
-import { useActivityLogger } from '@/hooks/useActivityLogger';
 import type { FilterConfig, SortOption } from '@/components/filters/AdvancedFilters';
 import { InteracoesContent } from './interacoes/InteracoesContent';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -53,7 +52,6 @@ const Interacoes = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const celebration = useMiniCelebration();
   const { triggerAnalysis } = useNLPAutoAnalysis();
-  const { logActivity } = useActivityLogger();
 
   const contactMap = useMemo(() => {
     const map = new Map<string, typeof contacts[0]>();
@@ -73,7 +71,6 @@ const Interacoes = () => {
     setIsSubmitting(false);
     if (result) {
       setIsFormOpen(false);
-      logActivity({ type: 'created', entityType: 'interaction', entityId: result.id || '', entityName: data.title, description: `Tipo: ${data.type}` });
       if (result.id && data.contact_id) triggerAnalysis(data.contact_id, result.id, data.content || null, null, data.type);
       const pos = event || { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
       celebration.trigger(pos, { variant: 'success', message: 'Interação criada!' });

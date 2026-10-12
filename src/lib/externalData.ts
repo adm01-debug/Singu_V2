@@ -65,10 +65,12 @@ const canonicalDbBreaker = getCircuitBreaker('canonical-db', {
 
 const isAbortError = (e: unknown) => e instanceof Error && e.name === 'AbortError';
 
-class CanonicalRpcClientError extends Error {}
+class ExternalDataClientError extends Error {}
+class CanonicalRpcClientError extends ExternalDataClientError {}
 
 const externalResponseSchema = z.object({
   error: z.string().nullish(),
+  errorCode: z.string().optional(),
   fallback: z.boolean().optional(),
   data: z.unknown().optional(),
   count: z.number().int().nonnegative().nullable().optional(),
@@ -98,12 +100,14 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
       const errorText = await response.text();
       if (canonicalRpc) {
         const message = `RPC do banco [${response.status}]: ${errorText}`;
-        if (response.status >= 400 && response.status < 500) throw new CanonicalRpcClientError(message);
+        if (response.status >= 400 && response.status < 500 && ![408, 429].includes(response.status)) throw new CanonicalRpcClientError(message);
         throw new Error(message);
       }
       // 409 vem como JSON estruturado { error: "CONCURRENT_EDIT", entity, id, attemptedVersion, traceId }
       // Preserva o JSON cru na mensagem para o caller parsear (ver updateExternalDataWithVersion).
-      throw new Error(`Edge function error [${response.status}]: ${errorText}`);
+      const message = `Edge function error [${response.status}]: ${errorText}`;
+      if (response.status >= 400 && response.status < 500 && ![408, 429].includes(response.status)) throw new ExternalDataClientError(message);
+      throw new Error(message);
     }
 
     if (canonicalRpc) {
@@ -111,12 +115,20 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
       return { data };
     }
     const result = externalResponseSchema.parse(await response.json());
-    if (result.error != null || result.fallback === true) {
+    if (result.fallback === true) {
       throw new Error(result.error || 'A fonte externa está indisponível; tente novamente');
+    }
+    if (result.error != null) {
+      if (typeof body.functionName === 'string' && result.errorCode &&
+        /^(22|23|42|P0001|PGRST[12])/.test(result.errorCode)) {
+        throw new ExternalDataClientError(result.error);
+      }
+      throw new Error(result.error);
     }
 
     return result;
-  }, error => isAbortError(error) || error instanceof CanonicalRpcClientError);
+  }, error => isAbortError(error) || error instanceof ExternalDataClientError
+    || error instanceof z.ZodError || error instanceof SyntaxError);
 }
 
 export { CircuitOpenError };
@@ -130,17 +142,15 @@ export async function queryExternalData<T = Record<string, unknown>>(options: Ex
     const data = result.data as T[];
     const count = result.count;
 
-    // Log access for auditing
-    if (auditAccess && data.length > 0) {
+    const auditEntity = queryOptions.table === 'contacts' || queryOptions.table === 'vw_singu_contact_360'
+      ? 'contact' : queryOptions.table === 'companies' ? 'company' : null;
+    if (auditAccess && data.length > 0 && auditEntity) {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user?.id) {
-        const auditType = queryOptions.table === 'contacts' ? 'contact_viewed'
-          : queryOptions.table === 'companies' ? 'company_viewed'
-          : 'interaction_created';
         const { error: auditErr } = await supabase.from('activities').insert({
           user_id: session.user.id,
-          type: auditType,
-          entity_type: queryOptions.table === 'contacts' ? 'contact' : queryOptions.table === 'companies' ? 'company' : 'interaction',
+          type: `${auditEntity}_viewed`,
+          entity_type: auditEntity,
           description: `Acesso a ${data.length} registros da tabela ${queryOptions.table}`,
           metadata: { query_options: queryOptions },
         } as never);
@@ -250,20 +260,28 @@ export async function updateExternalDataWithVersion<T = Record<string, unknown>>
   }
 }
 
-export async function deleteExternalData(table: string, id: string): Promise<{ success: boolean; error: Error | null }> {
+export async function deleteExternalData(table: string, id: string, audit?: { entityName?: string; description?: string; reason?: string }): Promise<{ success: boolean; error: Error | null }> {
   try {
     await callExternalData({ action: 'delete', table, id });
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user?.id) {
-      const { error: auditErr } = await supabase.from('activities').insert({
-        user_id: session.user.id,
-        type: table === 'contacts' ? 'contact_deleted' : table === 'companies' ? 'company_deleted' : 'interaction_deleted',
-        entity_type: table === 'contacts' ? 'contact' : table === 'companies' ? 'company' : 'interaction',
-        entity_id: id,
-        description: `Exclusão de registro na tabela ${table}`,
-        reason: 'Solicitação via interface',
-      } as never);
-      if (auditErr) logger.warn('Failed to write delete audit log', { error: auditErr.message });
+    const entity = table === 'contacts' ? 'contact' : table === 'companies' ? 'company' : table === 'interactions' ? 'interaction' : null;
+    if (entity) {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user?.id) {
+          const { error: auditErr } = await supabase.from('activities').insert({
+            user_id: session.user.id,
+            type: `${entity}_deleted`,
+            entity_type: entity,
+            entity_id: id,
+            entity_name: audit?.entityName ?? null,
+            description: audit?.description ?? `Exclusão de registro na tabela ${table}`,
+            reason: audit?.reason ?? 'Solicitação via interface',
+          });
+          if (auditErr) logger.warn('Failed to write delete audit log', { error: auditErr.message });
+        }
+      } catch (error) {
+        logger.warn('Failed to write delete audit log', { error: error instanceof Error ? error.message : String(error) });
+      }
     }
     return { success: true, error: null };
   } catch (err) {
