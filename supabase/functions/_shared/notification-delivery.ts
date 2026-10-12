@@ -29,6 +29,14 @@ export async function sendTrackedNotification(
     throw error;
   }
 
+  if ([400, 401, 403, 404, 422, 429].includes(response.status)) {
+    const { error: releaseError } = await client.from("notification_logs")
+      .delete().eq("reminder_id", delivery.reminder_id).eq("channel", delivery.channel)
+      .eq("user_id", delivery.user_id).eq("delivery_status", "pending");
+    if (releaseError) throw new Error("Não foi possível liberar a entrega rejeitada", { cause: releaseError });
+    throw new Error(`Entrega rejeitada: HTTP ${response.status}`);
+  }
+
   const { error: statusError } = await client.from("notification_logs")
     .update({ delivery_status: response.ok ? "sent" : "unknown", ...(response.ok ? { sent_at: new Date().toISOString() } : {}) })
     .eq("reminder_id", delivery.reminder_id).eq("channel", delivery.channel).eq("user_id", delivery.user_id);

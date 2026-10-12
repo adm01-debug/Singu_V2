@@ -202,8 +202,11 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
          }
        } catch (parseError) {
          console.error("Error parsing/persisting prediction:", parseError);
+         throw parseError;
        }
      }
+
+     if (!suggestion) throw new Error("O gateway não retornou uma sugestão válida");
  
      return jsonOk({ suggestion }, req);
   } catch (error) {

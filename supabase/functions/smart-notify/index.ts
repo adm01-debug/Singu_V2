@@ -59,7 +59,7 @@ Deno.serve(async (req) => {
         : Promise.resolve({ data: [], error: null }),
       allReminderIdsGlobal.length > 0
         ? supabaseClient.from('notification_logs')
-            .select('reminder_id, channel')
+            .select('reminder_id, channel, delivery_status')
             .in('reminder_id', allReminderIdsGlobal)
         : Promise.resolve({ data: [], error: null }),
     ]);
@@ -68,10 +68,10 @@ Deno.serve(async (req) => {
     const globalSettingsMap = new Map(
       ((settingsResult as { data: Array<{ contact_id: string }> }).data ?? []).map((s) => [s.contact_id, s])
     );
-    const globalNotifiedMap = new Map<string, Set<string>>();
-    for (const log of (logsResult as { data: Array<{ reminder_id: string; channel: string }> }).data ?? []) {
-      if (!globalNotifiedMap.has(log.reminder_id)) globalNotifiedMap.set(log.reminder_id, new Set());
-      globalNotifiedMap.get(log.reminder_id)!.add(log.channel);
+    const globalNotifiedMap = new Map<string, Map<string, string>>();
+    for (const log of (logsResult as { data: Array<{ reminder_id: string; channel: string; delivery_status: string }> }).data ?? []) {
+      if (!globalNotifiedMap.has(log.reminder_id)) globalNotifiedMap.set(log.reminder_id, new Map());
+      globalNotifiedMap.get(log.reminder_id)!.set(log.channel, log.delivery_status);
     }
 
     for (const user of users) {
@@ -111,8 +111,13 @@ Deno.serve(async (req) => {
             continue;
           }
 
-          const notifiedChannels = notifiedMap.get(reminderId) ?? new Set<string>();
-          const notifiedWhatsApp = notifiedChannels.has('whatsapp');
+          const notifiedChannels = notifiedMap.get(reminderId) ?? new Map<string, string>();
+          const whatsappStatus = notifiedChannels.get('whatsapp');
+          const notifiedWhatsApp = whatsappStatus !== undefined;
+          if (notifiedWhatsApp && whatsappStatus !== 'sent') {
+            stats.notificationsFailed++;
+            continue;
+          }
 
           // Send WhatsApp
           if (!notifiedWhatsApp && recipientPhone) {
@@ -131,6 +136,12 @@ Deno.serve(async (req) => {
                 }));
                 if (delivery === 'sent') {
                   stats.notificationsSent++;
+                } else {
+                  const { data: existing, error: existingError } = await supabaseClient.from('notification_logs')
+                    .select('delivery_status').eq('reminder_id', reminderId).eq('channel', 'whatsapp')
+                    .eq('user_id', user.id).maybeSingle();
+                  if (existingError) throw existingError;
+                  if (existing?.delivery_status !== 'sent') throw new Error('A entrega existente não foi confirmada');
                 }
               }
             } catch (err) {
