@@ -20,7 +20,7 @@
 
 Snapshot **a2b73c7dee837f19aa756e6afe385eba837b5d54**; HEAD/origin/main iguais após fetch. Checkout limpo, não shallow; sem alteração versionada/escrita SQL/publicação. Anexos/consolidado lidos; Graphify (`9e96cb5`) apenas orientou, código confirmou.
 
-**49 testes dirigidos passaram, nove arquivos**; roundtrip do snapshot sem localStorage também passou. [PR 108](https://github.com/adm01-debug/Singu_V2/pull/108) (`df79c59`) e [PR 109](https://github.com/adm01-debug/Singu_V2/pull/109) (`55b6ad7`) abertos; CI/Preview não prova publicação.
+**49 testes dirigidos passaram, nove arquivos**; roundtrip do snapshot sem localStorage também passou. [PR 108](https://github.com/adm01-debug/Singu_V2/pull/108) e [PR 109](https://github.com/adm01-debug/Singu_V2/pull/109) mergeados; deploy e migrations confirmados separadamente, Preview do `main` falha pela divergência histórica de versões.
 
 Base: snapshot, exceto PRs. Prefixos: **H**=`src/hooks/`, **C**=`src/components/`, **P**=`src/pages/`, **L**=`src/lib/`, **F**=`supabase/functions/`, **M**=`supabase/migrations/`, **T**=`src/integrations/supabase/types.ts`. SQL abreviado por timestamp único. Todos os itens têm **runtime não verificado**. Ausência de produtor/DDL versionado não comprova ausência remota.
 
@@ -52,7 +52,7 @@ Base: snapshot, exceto PRs. Prefixos: **H**=`src/hooks/`, **C**=`src/components/
 | E-R14 | OBSOLETO/DUPLICADO | F/external-data/index.ts:20–101 | RPC permitida sem chamador não prova vulnerabilidade nem feature faltante | Revisar necessidade/autorizações, não apagar por contagem |
 | E-F01 | AINDA REPRODUZÍVEL | L/pushNotifications.ts:4–6; F/send-push-notification/index.ts:44–52 | VAPID real/criptografia; JSON cru ainda enviado | Push recebido e autenticado no navegador |
 | E-F03 | AINDA REPRODUZÍVEL | H/useEdgeFunctionActions.ts:15–22 | Resposta/erro tipados; toast genérico persiste | Erro acionável sem confundir falha com resultado |
-| E-C01 | RESOLVIDO NO CÓDIGO | PR 109 mergeado; T:442–477; H/useActivityLogger.ts:27–35 | `contact_id` reconhecido; migration e runtime autenticado pendentes | Lista NULL+contagem; individual UUID; troca/renovação de conta |
+| E-C01 | VALIDADO NO BANCO | PR 109 mergeado; T:442–477; H/useActivityLogger.ts:27–35 | `contact_id` reconhecido; migration aplicada e fixture de auditoria/autorização passou no banco; leitura/exclusão autenticadas na interface pendentes | Lista NULL+contagem; individual UUID; troca/renovação de conta |
 | E-C02, E-C03 | AINDA REPRODUZÍVEL | H/useInboundActivityHeatmap.ts:75; H/useCrossReference.ts:42–48; H/useEntity360.ts:106–108; T:28486–28530 | `tipo`/`occurred_at` incompatíveis; cross-reference ignora erro | Heatmap/timeline usam colunas reais, falha explícita |
 | E-C04 | OBSOLETO/DUPLICADO | T:28515; H/usePrefetch.ts:74–81 | `outcome` existe; prefetch agora verifica erro | Prefetch aquece cache sem esconder falha |
 | E-C05 | AINDA REPRODUZÍVEL | H/useMetaprogramAnalysis.ts:98 × T:31670–31692 | Seis scores continuam ausentes na tabela consultada | Agregação consulta dimensões existentes |
