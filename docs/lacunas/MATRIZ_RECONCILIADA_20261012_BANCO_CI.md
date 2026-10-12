@@ -37,7 +37,7 @@ IDs agrupados preservam rastreabilidade; última coluna é pendência/aceite.
 | IDs | Estado | Evidência | Falta / aceite |
 |---|---|---|---|
 | BD-1 | NÃO VERIFICADO NO RUNTIME | M(20260317213904):1 DROP; M(20260512184042):24 recria deals | Não alegar perda histórica; replay e comparação de backup pré/pós. |
-| BD-2 | RESOLVIDO NO CÓDIGO | M(20260720000023):95–132 cria social_insights/RLS | Confirmar objeto/contrato remoto e consulta pelo usuário. |
+| BD-2 | AINDA REPRODUZÍVEL | M(20260720000023):95–132 cria social_insights/RLS; H/useSocialInsights.ts:48–86 consulta campos ausentes nessa migration e retorna dados fictícios no catch | Alinhar contrato e produtor; remover fallback fictício; distinguir ausência de dados e erro na consulta autenticada. |
 | BD-3 | NÃO VERIFICADO NO RUNTIME | Hardening posterior em M(20260721000071); guards de catálogo existentes | Conferir definição final/search_path de cada assinatura, não contar CREATE históricos. |
 | BD-4 | OBSOLETO/DUPLICADO | Migrations são forward-only; duplicações históricas não equivalem a rerun necessário | Reconstrução/ledger seguem em G07/H-04; testar cadeia inteira. |
 | BD-5, BD-6 | NÃO VERIFICADO NO RUNTIME | Busca em migrations não encontra índice simples/unicidade contacts(email); houve drops de trigram | Medir plano real; decidir unicidade por proprietário antes de constraint. |
