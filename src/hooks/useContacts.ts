@@ -187,8 +187,11 @@ export function useContacts(
     (hasNextPage || isFetchingNextPage);
 
   const fetchContacts = useCallback(async () => {
-    await queryClient.invalidateQueries({ queryKey });
-  }, [queryClient, queryKey]);
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey }),
+      queryClient.invalidateQueries({ queryKey: ['sequence-enroll-contacts', user?.id] }),
+    ]);
+  }, [queryClient, queryKey, user?.id]);
 
   const loadMore = useCallback(async () => {
     if (!hasNextPage || isFetchingNextPage) return;

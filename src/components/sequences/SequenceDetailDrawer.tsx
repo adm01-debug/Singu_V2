@@ -42,6 +42,7 @@ export function SequenceDetailDrawer({ sequence, open, onOpenChange, onEnroll }:
   const { data: sendLogs = [] } = useSequenceSendLogs(sequence?.id);
 
   if (!sequence) return null;
+  const capacityReached = sequence.total_enrolled >= (sequence.max_enrollments ?? 100);
 
   const funnel = [
     { label: 'Enviados', value: metrics?.sent ?? 0, icon: Send, cls: 'bg-primary/10 text-primary' },
@@ -61,8 +62,8 @@ export function SequenceDetailDrawer({ sequence, open, onOpenChange, onEnroll }:
         </SheetHeader>
 
         {sequence.status === 'active' && (
-          <Button className="mt-6 w-full" onClick={() => onEnroll(sequence.id)}>
-            Inscrever contato
+          <Button className="mt-6 w-full" disabled={capacityReached} onClick={() => onEnroll(sequence.id)}>
+            {capacityReached ? 'Limite de inscrições atingido' : 'Inscrever contato'}
           </Button>
         )}
 

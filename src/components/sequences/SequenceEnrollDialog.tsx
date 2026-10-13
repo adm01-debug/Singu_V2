@@ -30,10 +30,11 @@ export function SequenceEnrollDialog({ sequence, open, onOpenChange, onEnroll, l
   const [search, setSearch] = useState('');
   const [contactId, setContactId] = useState('');
   const [submitError, setSubmitError] = useState('');
-  const { data: contacts = [], isFetching, error } = useQuery({
+  const { data: contacts = [], isFetching, error, refetch } = useQuery({
     queryKey: ['sequence-enroll-contacts', user?.id, search],
     enabled: open && !!user,
     retry: false,
+    staleTime: 0,
     queryFn: async () => {
       const { data, error: queryError } = await queryExternalData<ContactOption>({
         table: 'contacts',
@@ -42,7 +43,7 @@ export function SequenceEnrollDialog({ sequence, open, onOpenChange, onEnroll, l
           { type: 'eq', column: 'user_id', value: user!.id },
           { type: 'is', column: 'deleted_at', value: null },
         ],
-        search: { term: search, columns: ['first_name', 'last_name', 'email'] },
+        search: { term: search, columns: ['first_name', 'last_name', 'email'], matchAllTerms: true },
         order: { column: 'first_name', ascending: true },
         range: { from: 0, to: 19 },
         countMethod: null,
@@ -52,8 +53,10 @@ export function SequenceEnrollDialog({ sequence, open, onOpenChange, onEnroll, l
     },
   });
 
+  const selectedContact = contacts.find(contact => contact.id === contactId);
+
   const handleEnroll = async () => {
-    if (!contactId || loading) return;
+    if (!selectedContact || loading || isFetching || error) return;
     setSubmitError('');
     try {
       await onEnroll(contactId);
@@ -74,7 +77,9 @@ export function SequenceEnrollDialog({ sequence, open, onOpenChange, onEnroll, l
         <form onSubmit={event => {
           event.preventDefault();
           setContactId('');
-          setSearch(draft.trim());
+          const term = draft.trim();
+          if (term === search) void refetch();
+          else setSearch(term);
         }} className="space-y-2">
           <Label htmlFor="sequence-contact-search">Buscar contato por nome ou email</Label>
           <div className="flex gap-2">
@@ -106,7 +111,7 @@ export function SequenceEnrollDialog({ sequence, open, onOpenChange, onEnroll, l
         {submitError && <p role="alert" className="text-sm text-destructive">{submitError}</p>}
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>Cancelar</Button>
-          <Button onClick={() => void handleEnroll()} disabled={!contactId || loading || isFetching || !!error}>
+          <Button onClick={() => void handleEnroll()} disabled={!selectedContact || loading || isFetching || !!error}>
             {loading ? 'Inscrevendo…' : 'Inscrever contato'}
           </Button>
         </DialogFooter>

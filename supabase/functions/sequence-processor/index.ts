@@ -119,7 +119,7 @@ Deno.serve(async (req) => {
       supabase.from('sequence_steps').select('*').in('sequence_id', sequenceIds).order('step_order'),
       supabase.from('sequence_events').select('enrollment_id').in('enrollment_id', enrollmentIds).eq('event_type', 'replied'),
       fetchSendLogs(supabase, enrollmentIds),
-      supabase.from('contacts').select('id, user_id, first_name, last_name, email').in('id', contactIds),
+      supabase.from('contacts').select('id, user_id, first_name, last_name, email').in('id', contactIds).is('deleted_at', null),
     ]);
     if (sequenceError || stepsError || replyError || sendLogError || contactError) {
       throw sequenceError || stepsError || replyError || sendLogError || contactError;
@@ -170,6 +170,13 @@ Deno.serve(async (req) => {
         const seq = sequenceMap.get(enr.sequence_id);
         if (!seq || seq.user_id !== enr.user_id) throw new Error('Inscrição não pertence ao proprietário da sequência');
         if (seq.status !== 'active') continue;
+
+        const contact = contactMap.get(enr.contact_id);
+        if (!contact || contact.user_id !== enr.user_id) {
+          pausedRows.push({ id: enr.id, status: 'paused', paused_at: now.toISOString(), paused_reason: 'Contato arquivado ou indisponível' });
+          stats.errors++;
+          continue;
+        }
 
         // 2. Pause-on-reply: se contato respondeu, pausa (Map lookup, no DB call)
         if (seq?.pause_on_reply) {
