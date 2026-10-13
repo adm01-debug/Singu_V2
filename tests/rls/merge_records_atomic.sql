@@ -119,6 +119,25 @@ END;
 $test$;
 RESET ROLE;
 DELETE FROM public.merge_nullable_scope_polymorph;
+SELECT set_config('rls.merge_legacy_secondary', gen_random_uuid()::text, true);
+INSERT INTO public.contacts(id, user_id, first_name, deleted_at, is_duplicate, duplicate_of)
+VALUES (current_setting('rls.merge_legacy_secondary')::uuid,
+  current_setting('rls.merge_owner')::uuid, 'Mesclado no legado', now(), true,
+  current_setting('rls.merge_contact_primary')::uuid);
+SET LOCAL ROLE authenticated;
+DO $test$
+DECLARE rejected boolean := false;
+BEGIN
+  BEGIN
+    PERFORM public.merge_records_atomically('contacts',
+      current_setting('rls.merge_contact_primary')::uuid,
+      current_setting('rls.merge_legacy_secondary')::uuid);
+  EXCEPTION WHEN object_not_in_prerequisite_state THEN rejected := true;
+  END;
+  IF NOT rejected THEN RAISE EXCEPTION 'Mesclagem legada foi confundida com retry atômico'; END IF;
+END;
+$test$;
+RESET ROLE;
 SET LOCAL ROLE authenticated;
 DO $test$
 DECLARE

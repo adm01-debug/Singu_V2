@@ -61,11 +61,23 @@ BEGIN
   END IF;
   IF v_secondary.deleted_at IS NOT NULL THEN
     IF p_entity = 'contacts' THEN
-      IF v_secondary.duplicate_of = p_primary_id THEN
+      IF v_secondary.duplicate_of = p_primary_id AND EXISTS (
+        SELECT 1 FROM public.audit_log AS audit
+        WHERE audit.user_id = v_owner AND audit.entity_type = p_entity
+          AND audit.entity_id = p_primary_id
+          AND audit.old_data->>'merged_from' = p_secondary_id::text
+          AND audit.new_data->>'operation' = 'merge'
+      ) THEN
         RETURN jsonb_build_object('success', true, 'primary_id', p_primary_id,
           'secondary_id', p_secondary_id, 'already_merged', true);
       END IF;
-    ELSIF v_secondary.merge_notes->>'merged_into' = p_primary_id::text THEN
+    ELSIF v_secondary.merge_notes->>'merged_into' = p_primary_id::text AND EXISTS (
+      SELECT 1 FROM public.audit_log AS audit
+      WHERE audit.user_id = v_owner AND audit.entity_type = p_entity
+        AND audit.entity_id = p_primary_id
+        AND audit.old_data->>'merged_from' = p_secondary_id::text
+        AND audit.new_data->>'operation' = 'merge'
+    ) THEN
       RETURN jsonb_build_object('success', true, 'primary_id', p_primary_id,
         'secondary_id', p_secondary_id, 'already_merged', true);
     END IF;
