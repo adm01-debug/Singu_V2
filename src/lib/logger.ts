@@ -27,18 +27,20 @@ export function generateRequestId(): string {
 }
 
 async function persistError(message: string, severity: 'info' | 'warning' | 'error' | 'critical', args: unknown[]) {
+  const userId = _userId;
+  if (!userId) return;
   try {
     const errorObj = args.find(a => a instanceof Error) as Error | undefined;
     // Converte para string para garantir compatibilidade com o tipo Json do Supabase
     const contextStr = JSON.stringify(args.filter(a => !(a instanceof Error)));
 
-     await supabase.from?.('error_logs').insert([{
+    await supabase.from('error_logs').insert([{
       message,
       severity,
       stack: errorObj?.stack || null,
       url: typeof window !== 'undefined' ? window.location.href : null,
       user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
-      user_id: _userId || null,
+      user_id: userId,
       context: {
         rid: _requestId,
         extra: contextStr,

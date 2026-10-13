@@ -108,6 +108,7 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
   // Set user for logging
   useEffect(() => {
     setLogUser(user?.id || null);
+    return () => setLogUser(null);
   }, [user?.id]);
 
   // Track Request ID per route change for correlation

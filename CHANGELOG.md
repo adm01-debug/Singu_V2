@@ -7,6 +7,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- Consultas de alertas, pendências e qualidade de dados respeitam a carteira autenticada e ocultam relações de outros usuários ou contatos arquivados. O cache do dashboard é separado por conta, e erros anteriores ao login não são associados ao próximo usuário.
+
 - Retomadas de email legado exigem recibo do proprietário antes de uma nova tentativa. A confirmação real substitui registros sem comprovante atomicamente e consome a autorização, sem duplicar o evento; contatos sem endereço não podem ser retomados.
 
 - Sequências permitem retomar explicitamente emails pausados após revisão da integração, com recibo, isolamento por proprietário e proteção contra uma pausa substituída. A retomada preserva o progresso e não inventa confirmação de envio.

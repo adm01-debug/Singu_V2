@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { queryExternalData } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface ActiveAlert {
   id: string;
@@ -21,8 +22,10 @@ export interface ActiveAlert {
 }
 
 export function useActiveAlerts() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['active-alerts'],
+    queryKey: ['active-alerts', user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await queryExternalData<ActiveAlert>({
         table: 'vw_active_alerts',

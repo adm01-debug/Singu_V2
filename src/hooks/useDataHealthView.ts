@@ -10,7 +10,6 @@ export function useDataHealthView() {
       const { data, error } = await queryExternalData({
         table: 'vw_singu_data_health',
         select: '*',
-        filters: [{ type: 'eq', column: 'user_id', value: user!.id }],
         range: { from: 0, to: 99 },
       });
       if (error) throw error;
