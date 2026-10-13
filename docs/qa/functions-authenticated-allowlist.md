@@ -6,9 +6,25 @@
 
 ## Regra
 
-- **Baseline**: exatamente 33 funções ganham `GRANT EXECUTE ... TO authenticated`. Novas funções nascem sem grant e devem ser explicitamente adicionadas via migração + PR revisado.
-- **anon** só recebe `EXECUTE` para endpoints públicos (Deal Rooms, Landing Pages, Forms). Total: 9 funções.
-- **service_role** sempre recebe `EXECUTE` (defesa em profundidade). Não faz parte deste baseline.
+### Mesclagem transacional — atualização autorizada em 2026-10-13
+
+A lista autenticada do teste contém 36 assinaturas, incluindo as 12 RPCs públicas. A lista pública permanece inalterada. A migration `20261013033431_merge_records_atomically.sql` acrescenta à lista autenticada somente:
+
+| Assinatura | Validação |
+|---|---|
+| `merge_records_atomically(text, uuid, uuid, jsonb)` | Exige sessão autenticada, dois registros do mesmo dono, relações com escopo verificável e campos permitidos; dados e auditoria na mesma transação |
+| `merge_companies(uuid, uuid)` | Alias legado; delega à operação central |
+| `merge_duplicate_companies(uuid, uuid)` | Alias legado; delega à operação central |
+| `merge_contacts(uuid, uuid)` | Alias legado; delega à operação central |
+| `merge_duplicate_contacts(uuid, uuid)` | Alias legado; delega à operação central |
+
+Todas fixam `search_path = public, pg_temp`. EXECUTE é revogado de PUBLIC, anon e service_role e concedido apenas a authenticated. Os aliases mantêm a validação central de `auth.role()` e `auth.uid()`, sem permitir acesso administrativo a registros de outro dono. `tests/rls/merge_records_atomic.sql` verifica isolamento, aliases, repetição, conflitos e rollback por falha de auditoria. O teste da allowlist continua rejeitando qualquer assinatura adicional e qualquer grant esperado ausente.
+
+As categorias abaixo conservam o inventário histórico; a lista verificável atual está em `tests/rls/functions_authenticated_allowlist.sql`.
+
+- **Baseline atual**: lista exata de assinaturas autenticadas auditadas no teste. Novas funções nascem sem grant e devem ser explicitamente adicionadas via migração + PR revisado.
+- **anon** só recebe `EXECUTE` para as 12 RPCs públicas auditadas.
+- **service_role** tem grants explícitos conforme o contrato de cada função; não recebe EXECUTE nas cinco funções de mesclagem.
 
 ## Categorias
 
@@ -80,4 +96,4 @@ Callable sem sessão via token/slug; RLS por token dentro da função.
 1. Nova função em `public.*` **não** recebe `EXECUTE` a `authenticated` por padrão.
 2. Para adicionar: (a) atualizar tabela acima; (b) atualizar array em `tests/rls/functions_authenticated_allowlist.sql`; (c) migração com `GRANT EXECUTE ON FUNCTION public.<fn>(<args>) TO authenticated`.
 3. Para remover: `REVOKE EXECUTE ... FROM authenticated` + remover dos dois locais acima.
-4. Teste automatizado falha se contagem ≠ 33 ou se aparecer função fora da allowlist.
+4. Teste automatizado falha se aparecer função fora da allowlist ou se faltar um grant declarado. O total de DEFINERs é verificado separadamente em `tests/rls/security_definer_hardening.sql`.

@@ -2,7 +2,21 @@
 
 > Objetivo: confirmar que **toda** função `SECURITY DEFINER` em `public.*` (a) trava `search_path`; e que nenhum DEFINER **exposto a `anon`** lê `auth.uid()` — combinação perigosa: `anon` sem JWT resulta em `auth.uid() = NULL` e o DEFINER escreve linhas órfãs ou cross-tenant.
 
-## Baseline atual — 104 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-10-12)
+## Baseline atual — 109 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-10-13)
+
+A migration `20261013033431_merge_records_atomically.sql` acrescenta uma RPC central DEFINER e transforma quatro aliases legados INVOKER em DEFINER, passando de 104 para 109. Esse total foi observado no gate de 2026-10-13, com a migration aplicada em transação revertida. A atualização do inventário foi autorizada pelo proprietário, preservando os controles de acesso anônimo, `search_path` e isolamento. A aplicação permanente continua pendente.
+
+| Função | Escopo e proteção |
+|---|---|
+| `merge_records_atomically(text, uuid, uuid, jsonb)` | `auth.role() = 'authenticated'`, `auth.uid()` presente, ambos os registros do dono, relações com dono verificável, overrides limitados, locks ordenados, auditoria e dados na mesma transação |
+| `merge_companies(uuid, uuid)` | Alias; delega à RPC central sem contornar a validação |
+| `merge_duplicate_companies(uuid, uuid)` | Alias; delega à RPC central sem contornar a validação |
+| `merge_contacts(uuid, uuid)` | Alias; delega à RPC central sem contornar a validação |
+| `merge_duplicate_contacts(uuid, uuid)` | Alias; delega à RPC central sem contornar a validação |
+
+As cinco funções fixam `search_path = public, pg_temp`, revogam EXECUTE de PUBLIC, anon e service_role e concedem EXECUTE apenas a authenticated. A prova `merge_records_atomic.sql` passou com rollback, cobrindo isolamento, aliases, conflitos, repetição e falha de auditoria. A lista pública não muda. As verificações de função extra, grant ausente, `search_path` e exposição insegura a anon permanecem integrais.
+
+### Baseline anterior — 104 DEFINERs
 
 Medido no banco canônico com as migrations pendentes até `20261011140000` aplicadas em transação revertida (`tests/rls/run.sh`).
 O baseline anterior (63) refletia o histórico local de migrations, não o banco real (93 DEFINERs antes desta rodada; +3 RPCs públicas novas).
