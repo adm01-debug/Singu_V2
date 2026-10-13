@@ -7,7 +7,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
-- O painel de saúde usa a pontuação agregada do banco na escala de 0 a 10 e exibe os indicadores e totais reais. Alertas têm leitura protegida por proprietário, e pendências usam o histórico DISC ativo, sem liberar as avaliações legadas bloqueadas.
+- O painel de saúde usa a pontuação agregada do banco na escala de 0 a 10 e exibe os indicadores e totais reais. Alertas têm leitura protegida por proprietário, inclusive em instalações com bloqueio legado na fonte, e pendências usam o histórico DISC ativo, sem liberar as avaliações legadas bloqueadas.
 
 - A reconstrução do dashboard provisiona nomes gerados, fontes de contato e a view agregada quando ausentes, preservando as estruturas e permissões já existentes no banco canônico.
 

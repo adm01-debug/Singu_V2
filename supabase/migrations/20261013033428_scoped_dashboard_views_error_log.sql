@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS _dormant.inactivity_alerts (
   created_at timestamptz DEFAULT now()
 );
 ALTER TABLE _dormant.inactivity_alerts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS dormant_deny_all_inactivity_alerts ON _dormant.inactivity_alerts;
 DROP POLICY IF EXISTS dashboard_alert_owner_select ON _dormant.inactivity_alerts;
 CREATE POLICY dashboard_alert_owner_select ON _dormant.inactivity_alerts
 FOR SELECT TO authenticated USING (
