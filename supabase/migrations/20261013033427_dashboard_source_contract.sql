@@ -44,7 +44,8 @@ BEGIN
       contexto varchar(200),
       confiabilidade smallint DEFAULT 0
     );
-    CREATE INDEX contact_emails_contact_id_idx ON public.contact_emails(contact_id);
+    CREATE UNIQUE INDEX contact_emails_contact_lower_idx
+      ON public.contact_emails(contact_id, lower(email));
     new_relations := array_append(new_relations, 'contact_emails');
   END IF;
   IF to_regclass('public.contact_phones') IS NULL THEN
@@ -63,19 +64,42 @@ BEGIN
       fonte varchar(100),
       contexto varchar(200),
       confiabilidade smallint,
-      numero varchar(50) NOT NULL
+      numero varchar(50) NOT NULL,
+      CONSTRAINT contact_phones_contact_id_numero_norm_unique UNIQUE (contact_id, numero_normalizado)
     );
     CREATE INDEX contact_phones_contact_id_idx ON public.contact_phones(contact_id);
+    CREATE FUNCTION public.dashboard_normalize_contact_phone() RETURNS trigger
+      LANGUAGE plpgsql SET search_path = pg_catalog, public AS $phone$
+    BEGIN
+      NEW.numero_normalizado := regexp_replace(NEW.numero, '[^0-9]', '', 'g');
+      IF NEW.numero_normalizado = '' THEN
+        RAISE EXCEPTION 'Número de telefone inválido';
+      END IF;
+      RETURN NEW;
+    END;
+    $phone$;
+    CREATE TRIGGER dashboard_normalize_contact_phone
+      BEFORE INSERT OR UPDATE OF numero, numero_normalizado ON public.contact_phones
+      FOR EACH ROW EXECUTE FUNCTION public.dashboard_normalize_contact_phone();
     new_relations := array_append(new_relations, 'contact_phones');
   END IF;
   FOREACH relation_table IN ARRAY new_relations LOOP
     EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', relation_table);
     EXECUTE format('REVOKE ALL ON public.%I FROM PUBLIC, anon, authenticated', relation_table);
-    EXECUTE format('GRANT SELECT ON public.%I TO authenticated', relation_table);
+    EXECUTE format('GRANT SELECT, INSERT, UPDATE, DELETE ON public.%I TO authenticated', relation_table);
     EXECUTE format('GRANT ALL ON public.%I TO service_role', relation_table);
     EXECUTE format('CREATE POLICY dashboard_contact_owner_read ON public.%I FOR SELECT TO authenticated
       USING (EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = %I.contact_id
         AND c.user_id = (SELECT auth.uid()) AND c.deleted_at IS NULL))', relation_table, relation_table);
+    EXECUTE format('CREATE POLICY dashboard_contact_owner_scope ON public.%I AS RESTRICTIVE
+      FOR ALL TO authenticated
+      USING (EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = %I.contact_id
+        AND c.user_id = (SELECT auth.uid()) AND c.deleted_at IS NULL))
+      WITH CHECK (EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = %I.contact_id
+        AND c.user_id = (SELECT auth.uid()) AND c.deleted_at IS NULL))',
+      relation_table, relation_table, relation_table);
+    EXECUTE format('CREATE POLICY dashboard_contact_owner_write ON public.%I FOR ALL
+      TO authenticated USING (true) WITH CHECK (true)', relation_table);
   END LOOP;
 END;
 $sources$;
@@ -144,3 +168,8 @@ $health$;
 -- Se uma instalação nova precisar retirar o dashboard, remova primeiro as views
 -- e arquive os dados antes de remover somente os objetos criados por este UP.
 -- Nunca remover tabelas, policies ou colunas que já existiam antes desta migration.
+-- Somente depois de comprovar que as fontes foram criadas por este UP e arquivar
+-- seus dados, retirar as views dependentes e executar, se necessário:
+-- DROP TABLE IF EXISTS public.contact_emails;
+-- DROP TABLE IF EXISTS public.contact_phones;
+-- DROP FUNCTION IF EXISTS public.dashboard_normalize_contact_phone();

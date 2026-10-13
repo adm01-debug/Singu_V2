@@ -46,7 +46,7 @@ export function useApplyFoundEmail() {
       const { error } = await insertExternalData("contact_emails", {
         contact_id: contactId,
         email,
-        email_type: "profissional",
+        email_type: "corporativo",
         is_primary: !hasPrimary,
         is_verified: !!(score && score >= 70),
         confiabilidade: score ?? null,
