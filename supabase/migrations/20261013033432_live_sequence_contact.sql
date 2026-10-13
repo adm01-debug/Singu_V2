@@ -12,13 +12,13 @@ BEGIN
   IF actor IS NULL THEN
     RAISE EXCEPTION 'Autenticação obrigatória' USING ERRCODE = '42501';
   END IF;
-  SELECT max_enrollments INTO enrollment_limit FROM public.sequences
-  WHERE id = _sequence_id AND user_id = actor AND status = 'active' FOR UPDATE;
+  PERFORM 1 FROM public.contacts
+  WHERE id = _contact_id AND user_id = actor AND deleted_at IS NULL FOR SHARE;
   IF NOT FOUND THEN
     RAISE EXCEPTION 'Sequência ou contato indisponível' USING ERRCODE = '42501';
   END IF;
-  PERFORM 1 FROM public.contacts
-  WHERE id = _contact_id AND user_id = actor AND deleted_at IS NULL FOR SHARE;
+  SELECT max_enrollments INTO enrollment_limit FROM public.sequences
+  WHERE id = _sequence_id AND user_id = actor AND status = 'active' FOR UPDATE;
   IF NOT FOUND THEN
     RAISE EXCEPTION 'Sequência ou contato indisponível' USING ERRCODE = '42501';
   END IF;
