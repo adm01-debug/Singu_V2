@@ -14,7 +14,7 @@ import {
 } from "../_shared/tenant-guard.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 import { isAllowedSelectProjection } from "../_shared/select-projection.ts";
-import { buildSearchFilter } from "../_shared/search-filter.ts";
+import { buildSearchFilter, SearchFilterInputError } from "../_shared/search-filter.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 100, message: "Rate limit exceeded for external data. Please wait." });
 
@@ -751,6 +751,7 @@ Deno.serve(async (req) => {
     return jsonError(`Unknown action: ${operation}`, 400, req);
 
   } catch (error) {
+    if (error instanceof SearchFilterInputError) return jsonError(error.message, 400, req);
     const elapsed = Math.round(performance.now() - startTime);
     const message = error instanceof Error ? error.message : String(error);
     return jsonError(`Handler error: ${message} [t=${elapsed}ms]`, 500, req);

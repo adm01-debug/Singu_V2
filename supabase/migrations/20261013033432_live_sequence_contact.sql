@@ -29,7 +29,10 @@ BEGIN
     RAISE EXCEPTION 'Limite de inscrições atingido' USING ERRCODE = '23514';
   END IF;
   INSERT INTO public.sequence_enrollments(sequence_id, contact_id, user_id, next_action_at)
-  VALUES (_sequence_id, _contact_id, actor, now())
+  VALUES (_sequence_id, _contact_id, actor, COALESCE((
+    SELECT now() + make_interval(days => COALESCE(step.delay_days, 0), hours => COALESCE(step.delay_hours, 0))
+    FROM public.sequence_steps step WHERE step.sequence_id = _sequence_id AND step.step_order = 1
+  ), now()))
   ON CONFLICT (sequence_id, contact_id) DO NOTHING RETURNING id INTO enrollment_id;
   was_created := FOUND;
   IF NOT was_created THEN

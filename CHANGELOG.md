@@ -7,6 +7,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- A primeira etapa da sequência respeita o atraso configurado; repetir a inscrição preserva a data já agendada. Buscas compostas aceitam até dez palavras e retornam erro de entrada quando ultrapassam esse limite.
+
 - Inscrições exigem sequência ativa no banco e não permitem fechar o diálogo enquanto aguardam confirmação. O processador consulta novamente o proprietário e o arquivamento do contato imediatamente antes de despachar um email.
 
 - Sequências ativas permitem buscar contatos da própria carteira e inscrevê-los pelo detalhe, com confirmação da operação atômica no banco e sem listar contatos arquivados.
