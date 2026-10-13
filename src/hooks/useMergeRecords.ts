@@ -4,6 +4,7 @@ import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { parseApiError } from '@/lib/errorMessages';
+import { areUuidsEqual } from '@/lib/utils';
 
 export type MergeEntity = 'contacts' | 'companies';
 
@@ -44,7 +45,7 @@ export function useMergeRecords() {
         p_field_overrides: overrides,
       });
       if (error) throw error;
-      if (data?.success !== true || data.primary_id !== primaryId || data.secondary_id !== secondaryId) {
+      if (data?.success !== true || !areUuidsEqual(data.primary_id, primaryId) || !areUuidsEqual(data.secondary_id, secondaryId)) {
         throw new Error('Mesclagem não confirmada pelo banco');
       }
       return { primaryId, secondaryId };

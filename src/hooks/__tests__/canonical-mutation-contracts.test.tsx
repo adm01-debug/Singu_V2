@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useMergeRecords } from '../useMergeRecords';
+import { useMergeCompanies } from '../useCompanyActions';
 import { usePortfolioCompatibility } from '../usePortfolioCompatibility';
 
 const mocks = vi.hoisted(() => ({ from: vi.fn(), rpc: vi.fn(), user: { id: 'usuario-1' }, successToast: vi.fn(), errorToast: vi.fn(), warningToast: vi.fn() }));
@@ -96,6 +97,29 @@ describe('Mesclagem valida overrides antes de qualquer operação', () => {
     expect(mocks.from).not.toHaveBeenCalled();
     expect(invalidate).not.toHaveBeenCalled();
     expect(mocks.successToast).not.toHaveBeenCalled();
+  });
+
+  it('confirma contatos quando o banco devolve os UUIDs na forma canônica', async () => {
+    const primaryId = 'a0000000-0000-0000-0000-000000000001';
+    const secondaryId = 'b0000000-0000-0000-0000-000000000002';
+    mocks.rpc.mockResolvedValueOnce({ data: { success: true, primary_id: primaryId, secondary_id: secondaryId }, error: null });
+    const { result } = renderHook(() => useMergeRecords(), { wrapper });
+    await expect(result.current.mutateAsync({
+      entity: 'contacts', primaryId: primaryId.toUpperCase(), secondaryId: `{${secondaryId.replaceAll('-', '')}}`,
+    })).resolves.toMatchObject({ primaryId: primaryId.toUpperCase() });
+    expect(mocks.successToast).toHaveBeenCalled();
+    expect(mocks.errorToast).not.toHaveBeenCalled();
+  });
+
+  it('confirma empresas quando o banco normaliza os UUIDs enviados', async () => {
+    const primaryId = 'a0000000-0000-0000-0000-000000000001';
+    const secondaryId = 'b0000000-0000-0000-0000-000000000002';
+    mocks.rpc.mockResolvedValueOnce({ data: { success: true, primary_id: primaryId, secondary_id: secondaryId }, error: null });
+    const { result } = renderHook(() => useMergeCompanies(), { wrapper });
+    await expect(result.current.mutateAsync({ primaryId: `{${primaryId.toUpperCase()}}`, secondaryId: secondaryId.replaceAll('-', '') }))
+      .resolves.toMatchObject({ success: true });
+    expect(mocks.successToast).toHaveBeenCalled();
+    expect(mocks.errorToast).not.toHaveBeenCalled();
   });
 });
 

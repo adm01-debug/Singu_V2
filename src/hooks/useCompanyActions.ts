@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { callExternalRpc } from '@/lib/externalData';
 import { toast } from 'sonner';
 import { parseApiError } from '@/lib/errorMessages';
+import { areUuidsEqual } from '@/lib/utils';
 
 export function useMergeCompanies() {
   const qc = useQueryClient();
@@ -16,7 +17,7 @@ export function useMergeCompanies() {
         p_field_overrides: {},
       });
       if (error) throw error;
-      if (data?.success !== true || data.primary_id !== primaryId || data.secondary_id !== secondaryId) {
+      if (data?.success !== true || !areUuidsEqual(data.primary_id, primaryId) || !areUuidsEqual(data.secondary_id, secondaryId)) {
         throw new Error('Mesclagem não confirmada pelo banco');
       }
       return data;
