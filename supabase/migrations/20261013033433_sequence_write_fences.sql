@@ -87,6 +87,27 @@ USING (user_id = (SELECT auth.uid()) OR (
   (SELECT public.has_role(auth.uid(), 'admin'::public.app_role)) AND (SELECT auth.jwt()->>'aal') = 'aal2'
 ));
 
+CREATE OR REPLACE FUNCTION public.guard_sequence_status_while_send()
+RETURNS trigger LANGUAGE plpgsql SECURITY INVOKER SET search_path = pg_catalog, public
+AS $$
+BEGIN
+  IF NEW.status IS DISTINCT FROM OLD.status AND NEW.status <> 'active'
+    AND EXISTS (
+      SELECT 1 FROM public.sequence_email_reservations reservation
+      JOIN public.sequence_enrollments enrollment ON enrollment.id = reservation.enrollment_id
+      WHERE enrollment.sequence_id = OLD.id
+    ) THEN
+    RAISE EXCEPTION 'Envio pendente de confirmação; aguarde antes de pausar a sequência'
+      USING ERRCODE = '55000';
+  END IF;
+  RETURN NEW;
+END;
+$$;
+REVOKE ALL ON FUNCTION public.guard_sequence_status_while_send() FROM PUBLIC, anon, authenticated;
+DROP TRIGGER IF EXISTS sequence_status_send_guard ON public.sequences;
+CREATE TRIGGER sequence_status_send_guard BEFORE UPDATE OF status ON public.sequences
+FOR EACH ROW EXECUTE FUNCTION public.guard_sequence_status_while_send();
+
 CREATE OR REPLACE FUNCTION public.reserve_sequence_email_send(
   p_enrollment_id uuid, p_user_id uuid, p_step_id uuid, p_current_step integer, p_token uuid,
   p_step_order integer
@@ -245,11 +266,13 @@ GRANT EXECUTE ON FUNCTION public.enroll_lead_score_contact(uuid,uuid,uuid,jsonb)
 -- Rollback: retire os consumidores das reservas e mantenha envios suspensos antes de remover as proteções.
 -- Não remova reservas cujo resultado ainda não foi confirmado pelo provedor.
 -- DROP TRIGGER IF EXISTS contact_sequence_archive_guard ON public.contacts;
+-- DROP TRIGGER IF EXISTS sequence_status_send_guard ON public.sequences;
 -- DROP TRIGGER IF EXISTS sequence_enrollment_write_guard ON public.sequence_enrollments;
 -- DROP TRIGGER IF EXISTS sequence_enrollment_counter ON public.sequence_enrollments;
 -- DROP TRIGGER IF EXISTS sequence_email_reservation_settle ON public.sequence_enrollments;
 -- DROP FUNCTION IF EXISTS public.enroll_lead_score_contact(uuid,uuid,uuid,jsonb);
 -- DROP FUNCTION IF EXISTS public.guard_contact_sequence_archive();
+-- DROP FUNCTION IF EXISTS public.guard_sequence_status_while_send();
 -- DROP FUNCTION IF EXISTS public.reserve_sequence_email_send(uuid,uuid,uuid,integer,uuid,integer);
 -- DROP FUNCTION IF EXISTS public.release_sequence_email_send(uuid,uuid);
 -- DROP FUNCTION IF EXISTS public.guard_sequence_enrollment_write();

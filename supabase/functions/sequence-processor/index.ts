@@ -377,6 +377,8 @@ async function sendEmailStep(
   let accepted = !!confirmedLog?.message_id?.trim();
   let newlySent = false;
   let reservationToken: string | null = null;
+  let reservationRequested = false;
+  let reservationAcknowledged = false;
   let invocationStarted = false;
   let persisted = false;
   try {
@@ -402,6 +404,8 @@ async function sendEmailStep(
     }
     if (!activeContact.email) throw new Error('Contato sem email');
     const token = crypto.randomUUID();
+    reservationToken = token;
+    reservationRequested = true;
     const { data: payload, error: reservationError } = await supabase.rpc('reserve_sequence_email_send', {
       p_enrollment_id: enr.id, p_user_id: enr.user_id, p_step_id: step.id,
       p_current_step: enr.current_step ?? 0, p_token: token, p_step_order: step.step_order,
@@ -409,10 +413,10 @@ async function sendEmailStep(
     const reservation: unknown = payload;
     if (reservationError) throw reservationError;
     if (!reservation) return { sent: false, advanced: false, paused: false, skipped: true };
-    reservationToken = token;
     if (!isEmailReservation(reservation) || reservation.token !== token || reservation.user_id !== enr.user_id) {
       throw new Error('Reserva de envio divergente');
     }
+    reservationAcknowledged = true;
     const body = (step.message_template ?? '')
       .replaceAll('{{first_name}}', reservation.first_name ?? '')
       .replaceAll('{{last_name}}', reservation.last_name ?? '');
@@ -441,6 +445,10 @@ async function sendEmailStep(
     return { sent: newlySent, advanced: true, paused: false };
   } catch (e) {
     console.error('sendEmailStep erro:', e);
+    if (reservationRequested && !reservationAcknowledged) {
+      console.error('Resultado da reserva de envio incerto; verifique a reserva antes de retomar:', enr.id);
+      return { sent: false, advanced: false, paused: false };
+    }
     const pause = supabase.from('sequence_enrollments').update({
       status: 'paused',
       paused_at: new Date().toISOString(),
@@ -469,7 +477,7 @@ async function sendEmailStep(
     }
     return { sent: newlySent, advanced: false, paused: !!paused && !pauseError };
   } finally {
-    if (reservationToken && (persisted || !invocationStarted)) {
+    if (reservationToken && reservationAcknowledged && (persisted || !invocationStarted)) {
       const { error } = await supabase.rpc('release_sequence_email_send', {
         p_enrollment_id: enr.id, p_token: reservationToken,
       }).abortSignal(AbortSignal.timeout(5_000));

@@ -1,6 +1,6 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 
-type Scenario = 'ausente' | 'sem-id' | 'confirmado' | 'log-falha' | 'evento-falha' | 'avanco-vazio' | 'consulta-falha' | 'contato-alheio' | 'legado' | 'legado-retomado' | 'legado-sem-recibo' | 'confirmado-existente' | 'manual' | 'sequencia-pausada' | 'resposta' | 'bounce-espera' | 'bounce-apos' | 'progresso-nulo' | 'progresso-nulo-falha' | 'logs-paginados' | 'arquivado-apos-preload' | 'arquivado-antes-reserva' | 'reserva-ocupada' | 'provedor-incerto';
+type Scenario = 'ausente' | 'sem-id' | 'confirmado' | 'log-falha' | 'evento-falha' | 'avanco-vazio' | 'consulta-falha' | 'contato-alheio' | 'legado' | 'legado-retomado' | 'legado-sem-recibo' | 'confirmado-existente' | 'manual' | 'sequencia-pausada' | 'resposta' | 'bounce-espera' | 'bounce-apos' | 'progresso-nulo' | 'progresso-nulo-falha' | 'logs-paginados' | 'arquivado-apos-preload' | 'arquivado-antes-reserva' | 'reserva-ocupada' | 'reserva-resposta-perdida' | 'provedor-incerto';
 interface Operation { table: string; method: string; body: Record<string, unknown>; query: URLSearchParams }
 
 const owner = '11111111-1111-4111-8111-111111111111';
@@ -85,6 +85,7 @@ async function withProcessor(scenario: Scenario, test: (call: (manual?: boolean,
       if (heldToken || scenario === 'reserva-ocupada') return json(null);
       assertEquals(typeof body.p_token, 'string');
       heldToken = String(body.p_token);
+      if (scenario === 'reserva-resposta-perdida') return json({ code: '503', message: 'Resposta perdida após a reserva' }, 503);
       return json({
         id: contact, user_id: owner, first_name: 'Pessoa', last_name: 'Silva',
         email: 'maria@example.test', token: heldToken,
@@ -169,6 +170,17 @@ Deno.test('Sequências: reserva ocupada não envia nem pausa o trabalho de outro
   assertEquals(result.stats.sent, 0);
   assertEquals(result.stats.paused, 0);
   assert(!operations.some(operation => operation.table === 'send-transactional-email' || operation.method === 'PATCH'));
+}));
+
+Deno.test('Sequências: resposta perdida após a reserva não oferece retomada nem repete envio', () => withProcessor('reserva-resposta-perdida', async (call, operations) => {
+  const first = await (await call()).json();
+  assertEquals(first.stats.errors, 1);
+  assertEquals(first.stats.paused, 0);
+  const retry = await (await call()).json();
+  assertEquals(retry.stats.sent, 0);
+  assertEquals(retry.stats.paused, 0);
+  assertEquals(operations.filter(operation => operation.table === 'reserve_sequence_email_send').length, 2);
+  assert(!operations.some(operation => operation.table === 'send-transactional-email' || operation.table === 'release_sequence_email_send' || operation.method === 'PATCH'));
 }));
 
 Deno.test('Sequências: arquivamento entre consulta e reserva impede a chamada externa', () => withProcessor('arquivado-antes-reserva', async (call, operations) => {

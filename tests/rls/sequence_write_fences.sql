@@ -112,6 +112,14 @@ BEGIN
   IF public.release_sequence_email_send((saved->>'id')::uuid,gen_random_uuid()) THEN
     RAISE EXCEPTION 'Outro token liberou a reserva';
   END IF;
+  denied := false;
+  BEGIN
+    UPDATE public.sequences SET status = 'paused' WHERE id = sid;
+  EXCEPTION WHEN object_not_in_prerequisite_state THEN denied := true;
+  END;
+  IF NOT denied OR (SELECT status FROM public.sequences WHERE id = sid) <> 'active' THEN
+    RAISE EXCEPTION 'Sequência pausou durante envio reservado';
+  END IF;
   UPDATE public.sequence_email_reservations SET created_at = now() - interval '7 days' WHERE token = reservation_token;
   denied := false;
   BEGIN
@@ -131,6 +139,8 @@ BEGIN
   IF NOT public.release_sequence_email_send((saved->>'id')::uuid,reservation_token) THEN
     RAISE EXCEPTION 'Reserva não liberada pelo serviço responsável';
   END IF;
+  UPDATE public.sequences SET status = 'paused' WHERE id = sid;
+  UPDATE public.sequences SET status = 'active' WHERE id = sid;
   UPDATE public.sequence_enrollments SET status = 'active' WHERE id = (saved->>'id')::uuid;
   UPDATE public.contacts SET deleted_at = now() WHERE id = cid;
   IF (SELECT status FROM public.sequence_enrollments WHERE id = (saved->>'id')::uuid) <> 'paused' THEN

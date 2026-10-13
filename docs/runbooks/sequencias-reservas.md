@@ -20,6 +20,8 @@ Se o arquivamento vence a disputa, a inscrição é pausada e o envio não adqui
 reserva. Se a reserva vence, arquivar, transferir ou excluir o contato retorna
 `55000`: aguarde a confirmação e tente novamente. Retomar ou mesclar uma inscrição
 com reserva pendente também é bloqueado.
+Pausar ou arquivar a sequência com um envio reservado retorna `55000`;
+confirme o envio antes de mudar o status.
 
 A chamada HTTP ao provedor não faz parte da transação PostgreSQL.
 
@@ -32,6 +34,9 @@ A chamada HTTP ao provedor não faz parte da transação PostgreSQL.
 - Rollback da confirmação restaura a reserva. O worker só libera explicitamente
   depois da persistência ou quando o gateway comprova que a função de email
   não existe (`404` com `code = NOT_FOUND`), antes de alcançar um provedor.
+- Se a resposta da própria reserva se perder, o worker não envia, não pausa a
+  inscrição e não libera o token desconhecido. A próxima tentativa identifica
+  uma reserva já existente; confira-a na consulta abaixo antes de retomar.
 - Resposta sem identificador, falha HTTP incerta ou falha de persistência após
   envio mantém a reserva e suspende a inscrição. A passagem do tempo não comprova
   que o provedor deixou de processar a solicitação; não existe expiração automática.
@@ -65,7 +70,7 @@ demonstrar uma entrega real permanece uma etapa separada.
 ## Validação e rollback
 
 `tests/rls/sequence_write_fences.sql` cobre duas contas, permissões, capacidade,
-retry, arquivamento, confirmação e rollback. O gate aplica migrations pendentes
+retry, pausa, arquivamento, confirmação e rollback. O gate aplica migrations pendentes
 sob advisory lock e desfaz todas as alterações ao final.
 
 Para retirar as proteções, suspenda os workers, reconcilie todas as reservas e
