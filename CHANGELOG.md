@@ -7,6 +7,16 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- O painel de saúde usa a pontuação agregada do banco na escala de 0 a 10 e exibe os indicadores e totais reais. Alertas têm leitura protegida por proprietário, inclusive em instalações com bloqueio legado na fonte, e pendências usam o histórico DISC ativo, sem liberar as avaliações legadas bloqueadas.
+
+- A reconstrução do dashboard provisiona nomes gerados, fontes de contato e a view agregada quando ausentes, preservando as estruturas e permissões já existentes no banco canônico. As novas fontes permitem gravação somente para o proprietário do contato ativo, normalizam telefones e mantêm o email único nas tentativas de atualização.
+
+- Os formulários de email e telefone oferecem os tipos aceitos pelo banco canônico; WhatsApp permanece uma opção independente do tipo de telefone.
+
+- A pontuação geral de saúde passa a combinar as notas exibidas com os pesos já existentes, tanto na reconstrução quanto na view do banco publicado, sem regravar histórico.
+
+- Consultas de alertas, pendências e qualidade de dados respeitam a carteira autenticada e ocultam relações de outros usuários ou contatos arquivados. O cache do dashboard é separado por conta, e erros anteriores ao login não são associados ao próximo usuário.
+
 - Retomadas de email legado exigem recibo do proprietário antes de uma nova tentativa. A confirmação real substitui registros sem comprovante atomicamente e consome a autorização, sem duplicar o evento; contatos sem endereço não podem ser retomados.
 
 - Sequências permitem retomar explicitamente emails pausados após revisão da integração, com recibo, isolamento por proprietário e proteção contra uma pausa substituída. A retomada preserva o progresso e não inventa confirmação de envio.
