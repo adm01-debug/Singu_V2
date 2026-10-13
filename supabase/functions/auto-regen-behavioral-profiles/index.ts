@@ -6,7 +6,7 @@ import { AI_TIMEOUT_MS } from "../_shared/fetch-utils.ts";
 
 
 const MIN_DOWNVOTES = 3;
-const MAX_BATCH = 10;
+const MAX_BATCH = 5;
 
 interface ClaimedContact {
   contact_id: string;
@@ -120,9 +120,7 @@ Deno.serve(async (req) => {
         if (writeError) failures.push({ contactId: item.contact_id, error: writeError.message });
       }
     }
-    for (let offset = 0; offset < claimed.length; offset += 5) {
-      await Promise.all(claimed.slice(offset, offset + 5).map(processClaim));
-    }
+    await Promise.all(claimed.map(processClaim));
 
     return json({
       requestId,

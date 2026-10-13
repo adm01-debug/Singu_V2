@@ -11,6 +11,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 - Sequências permitem retomar explicitamente emails pausados após revisão da integração, com recibo, isolamento por proprietário e proteção contra uma pausa substituída. A retomada preserva o progresso e não inventa confirmação de envio.
 
+- Cron de reanálise reserva até cinco contatos por execução e processa todos na mesma onda, evitando somar prazos de invocação da IA.
+
 - Regenerações por SLA reservam cada contato atomicamente e encaminham o token ao gerador, impedindo chamadas concorrentes e preservando pedidos posteriores. O cron exige perfil confirmado e processa até dez reservas em grupos de cinco, sem recriar filas já concluídas.
 
 - Geração manual de perfil comportamental verifica o proprietário antes de ler o histórico e limita requisições por usuário em cada instância da função.
