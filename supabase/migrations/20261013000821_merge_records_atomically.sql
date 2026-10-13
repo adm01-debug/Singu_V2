@@ -1,4 +1,7 @@
 ALTER TABLE public.companies ADD COLUMN IF NOT EXISTS merge_notes jsonb;
+ALTER TABLE public.contacts
+  ADD COLUMN IF NOT EXISTS is_duplicate boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS duplicate_of uuid REFERENCES public.contacts(id);
 
 CREATE OR REPLACE FUNCTION public.merge_records_atomically(
   p_entity text,
@@ -401,4 +404,5 @@ GRANT EXECUTE ON FUNCTION public.merge_companies(uuid, uuid),
 -- quatro aliases a partir das migrations originais antes de remover a RPC.
 -- Mesclagens já concluídas exigem reconciliação manual a partir de audit_log.old_data.
 -- Manter merge_notes preserva os marcadores históricos de idempotência.
+-- Preserve is_duplicate e duplicate_of enquanto houver contatos mesclados.
 -- DROP FUNCTION IF EXISTS public.merge_records_atomically(text, uuid, uuid, jsonb);

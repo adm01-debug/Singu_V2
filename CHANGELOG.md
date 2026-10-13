@@ -7,7 +7,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
-- Mesclagem de contatos e empresas usa uma transação com bloqueio por proprietário, validação de vínculos, exclusão lógica e auditoria. Falhas revertem o conjunto sem declarar sucesso. Emails e telefones equivalentes conservam seus metadados na cópia arquivada, e registros arquivados deixam de aparecer na deduplicação.
+- Mesclagem de contatos e empresas usa uma transação com bloqueio por proprietário, validação de vínculos, exclusão lógica e auditoria. Falhas revertem o conjunto sem declarar sucesso. Emails e telefones equivalentes conservam seus metadados na cópia arquivada, e registros arquivados deixam de aparecer na deduplicação. A reconstrução do banco inclui as marcações de duplicidade necessárias para arquivar o contato mesclado.
 
 - Retomadas de email legado exigem recibo do proprietário antes de uma nova tentativa. A confirmação real substitui registros sem comprovante atomicamente e consome a autorização, sem duplicar o evento; contatos sem endereço não podem ser retomados.
 
