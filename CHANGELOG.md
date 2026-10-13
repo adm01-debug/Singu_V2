@@ -7,6 +7,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- Restaura no banco o vínculo entre inscrições e sequências, desbloqueando o processador. Requisições que podem gravar dados deixam de ser repetidas automaticamente após erros HTTP ou de rede.
+
 - Todas as inscrições em sequências validam contato, proprietário, status e capacidade no banco. O lead score grava inscrição, histórico e contador em uma transação. Reservas de envio impedem arquivamento ou pausa concorrente da sequência; resultados incertos exigem revisão e rejeições confirmadas sem reserva pausam a inscrição.
 
 - A primeira etapa da sequência respeita o atraso configurado; repetir a inscrição preserva a data já agendada. Buscas compostas aceitam até dez palavras e retornam erro de entrada quando ultrapassam esse limite.
