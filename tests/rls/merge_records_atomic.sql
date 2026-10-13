@@ -263,6 +263,47 @@ BEGIN
 END;
 $test$;
 RESET ROLE;
+SELECT set_config('rls.merge_profile_primary', gen_random_uuid()::text, true);
+SELECT set_config('rls.merge_profile_secondary', gen_random_uuid()::text, true);
+INSERT INTO public.contacts(id, user_id, first_name) VALUES
+  (current_setting('rls.merge_profile_primary')::uuid, current_setting('rls.merge_owner')::uuid, 'Perfil principal'),
+  (current_setting('rls.merge_profile_secondary')::uuid, current_setting('rls.merge_owner')::uuid, 'Perfil secundário');
+INSERT INTO public.contact_behavior(contact_id, disc_primary) VALUES
+  (current_setting('rls.merge_profile_primary')::uuid, 'D'),
+  (current_setting('rls.merge_profile_secondary')::uuid, 'I');
+INSERT INTO public.contact_automation_settings(user_id, contact_id, reminder_enabled) VALUES
+  (current_setting('rls.merge_owner')::uuid, current_setting('rls.merge_profile_primary')::uuid, false),
+  (current_setting('rls.merge_owner')::uuid, current_setting('rls.merge_profile_secondary')::uuid, true);
+SET LOCAL ROLE authenticated;
+DO $test$
+DECLARE reply jsonb;
+BEGIN
+  reply := public.merge_records_atomically('contacts',
+    current_setting('rls.merge_profile_primary')::uuid,
+    current_setting('rls.merge_profile_secondary')::uuid);
+  IF reply->>'success' <> 'true' THEN
+    RAISE EXCEPTION 'Mesclagem dos perfis não foi confirmada';
+  END IF;
+END;
+$test$;
+RESET ROLE;
+DO $test$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM public.contact_behavior
+      WHERE contact_id = current_setting('rls.merge_profile_primary')::uuid AND disc_primary = 'D')
+    OR NOT EXISTS (SELECT 1 FROM public.contact_behavior
+      WHERE contact_id = current_setting('rls.merge_profile_secondary')::uuid AND disc_primary = 'I')
+    OR NOT EXISTS (SELECT 1 FROM public.contact_automation_settings
+      WHERE contact_id = current_setting('rls.merge_profile_primary')::uuid AND NOT reminder_enabled)
+    OR NOT EXISTS (SELECT 1 FROM public.contact_automation_settings
+      WHERE contact_id = current_setting('rls.merge_profile_secondary')::uuid AND reminder_enabled)
+    OR NOT EXISTS (SELECT 1 FROM public.contacts
+      WHERE id = current_setting('rls.merge_profile_secondary')::uuid AND deleted_at IS NOT NULL) THEN
+    RAISE EXCEPTION 'Relações individuais existentes impediram a mesclagem ou perderam seus valores';
+  END IF;
+END;
+$test$;
+RESET ROLE;
 SELECT set_config('request.jwt.claim.sub', '', true);
 SELECT set_config('request.jwt.claims', '{"role":"authenticated"}', true);
 SET LOCAL ROLE authenticated;

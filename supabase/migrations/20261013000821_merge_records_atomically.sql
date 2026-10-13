@@ -1,3 +1,5 @@
+ALTER TABLE public.companies ADD COLUMN IF NOT EXISTS merge_notes jsonb;
+
 CREATE OR REPLACE FUNCTION public.merge_records_atomically(
   p_entity text,
   p_primary_id uuid,
@@ -118,7 +120,12 @@ BEGIN
       EXISTS (SELECT 1 FROM pg_catalog.pg_attribute AS owner_column
         WHERE owner_column.attrelid = child.oid
           AND owner_column.attname = 'user_id' AND owner_column.atttypid = 'uuid'::regtype
-          AND NOT owner_column.attisdropped) AS has_owner
+          AND NOT owner_column.attisdropped) AS has_owner,
+      EXISTS (SELECT 1 FROM pg_catalog.pg_index AS unique_reference
+        WHERE unique_reference.indrelid = child.oid AND unique_reference.indisunique
+          AND unique_reference.indnkeyatts = 1 AND unique_reference.indkey[0] = attribute.attnum
+          AND unique_reference.indpred IS NULL AND unique_reference.indexprs IS NULL
+      ) AS has_unique_reference
     FROM pg_catalog.pg_class AS child
     JOIN pg_catalog.pg_namespace AS n ON n.oid = child.relnamespace
     JOIN pg_catalog.pg_attribute AS attribute
@@ -229,6 +236,15 @@ BEGIN
         AND NOT EXISTS (SELECT 1 FROM public.company_phones AS existing
           WHERE existing.company_id = p_primary_id
             AND existing.numero_normalizado = child.numero_normalizado);
+    ELSIF v_relation.has_unique_reference THEN
+      EXECUTE format('UPDATE %I.%I AS child SET %I = $1::%s
+        WHERE child.%I = $2::%s %s %s AND NOT EXISTS (
+          SELECT 1 FROM %I.%I AS existing WHERE existing.%I = $1::%s
+        )', v_relation.nspname, v_relation.relname, v_relation.attname, v_relation.attribute_type,
+        v_relation.attname, v_relation.attribute_type, v_filter,
+        CASE WHEN v_relation.has_owner THEN 'AND child.user_id = $3' ELSE '' END,
+        v_relation.nspname, v_relation.relname, v_relation.attname, v_relation.attribute_type)
+      USING p_primary_id, p_secondary_id, v_owner;
     ELSIF v_relation.has_owner THEN
       EXECUTE format('UPDATE %I.%I AS child SET %I = $1::%s
         WHERE child.%I = $2::%s %s AND child.user_id = $3',
@@ -372,4 +388,5 @@ GRANT EXECUTE ON FUNCTION public.merge_companies(uuid, uuid),
 -- DOWN: retire os chamadores da nova RPC e restaure as definições anteriores dos
 -- quatro aliases a partir das migrations originais antes de remover a RPC.
 -- Mesclagens já concluídas exigem reconciliação manual a partir de audit_log.old_data.
+-- Manter merge_notes preserva os marcadores históricos de idempotência.
 -- DROP FUNCTION IF EXISTS public.merge_records_atomically(text, uuid, uuid, jsonb);
