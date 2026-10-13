@@ -370,18 +370,25 @@ async function sendEmailStep(
       await completeEmailDelivery(supabase, enr, step, nextAction, confirmedLog.message_id!, trackingToken, null);
       return { sent: false, advanced: true, paused: false };
     }
-    if (!contact.email) throw new Error('Contato sem email');
+    const { data: activeContacts, error: contactError } = await supabase.from('contacts')
+      .select('id, user_id, first_name, last_name, email').eq('id', enr.contact_id)
+      .eq('user_id', enr.user_id).is('deleted_at', null).limit(1).returns<Contact[]>();
+    const activeContact = activeContacts?.[0];
+    if (contactError || !activeContact || activeContact.user_id !== enr.user_id) {
+      throw new Error('Contato arquivado ou indisponível antes do envio');
+    }
+    if (!activeContact.email) throw new Error('Contato sem email');
     const body = (step.message_template ?? '')
-      .replaceAll('{{first_name}}', contact.first_name ?? '')
-      .replaceAll('{{last_name}}', contact.last_name ?? '');
+      .replaceAll('{{first_name}}', activeContact.first_name ?? '')
+      .replaceAll('{{last_name}}', activeContact.last_name ?? '');
     const subject = (step.subject ?? 'Mensagem')
-      .replaceAll('{{first_name}}', contact.first_name ?? '');
+      .replaceAll('{{first_name}}', activeContact.first_name ?? '');
 
     const { data: delivery, error: deliveryError } = await supabase.functions.invoke<{ ok: boolean; messageId: string }>('send-transactional-email', {
       signal: AbortSignal.timeout(20_000),
       body: {
         templateName: 'sequence-step',
-        recipientEmail: contact.email,
+        recipientEmail: activeContact.email,
         idempotencyKey,
         templateData: { subject, body, trackingToken },
       },

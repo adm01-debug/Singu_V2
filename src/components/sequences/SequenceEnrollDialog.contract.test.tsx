@@ -37,6 +37,22 @@ describe('Inscrição com busca e cache da carteira', () => {
     client.clear();
   });
 
+  it('impede fechar pelo X ou Escape durante uma inscrição pendente', async () => {
+    vi.mocked(queryExternalData).mockResolvedValue({ data: [contact], count: 1, error: null });
+    const onOpenChange = vi.fn();
+    render(
+      <QueryClientProvider client={client}>
+        <SequenceEnrollDialog sequence={sequence} open onOpenChange={onOpenChange} onEnroll={vi.fn()} loading />
+      </QueryClientProvider>,
+    );
+    await screen.findByRole('button', { name: 'Maria Silva' });
+    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' });
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Cancelar' })).toBeDisabled();
+  });
+
   it('repete o mesmo termo depois de falha transitória e oferece o contato recuperado', async () => {
     vi.mocked(queryExternalData)
       .mockResolvedValueOnce({ data: [], count: 0, error: null })

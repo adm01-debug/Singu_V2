@@ -1,6 +1,6 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 
-type Scenario = 'ausente' | 'sem-id' | 'confirmado' | 'log-falha' | 'evento-falha' | 'avanco-vazio' | 'consulta-falha' | 'contato-alheio' | 'legado' | 'legado-retomado' | 'legado-sem-recibo' | 'confirmado-existente' | 'manual' | 'sequencia-pausada' | 'resposta' | 'bounce-espera' | 'bounce-apos' | 'progresso-nulo' | 'progresso-nulo-falha' | 'logs-paginados';
+type Scenario = 'ausente' | 'sem-id' | 'confirmado' | 'log-falha' | 'evento-falha' | 'avanco-vazio' | 'consulta-falha' | 'contato-alheio' | 'legado' | 'legado-retomado' | 'legado-sem-recibo' | 'confirmado-existente' | 'manual' | 'sequencia-pausada' | 'resposta' | 'bounce-espera' | 'bounce-apos' | 'progresso-nulo' | 'progresso-nulo-falha' | 'logs-paginados' | 'arquivado-apos-preload';
 interface Operation { table: string; method: string; body: Record<string, unknown>; query: URLSearchParams }
 
 const owner = '11111111-1111-4111-8111-111111111111';
@@ -50,7 +50,10 @@ function mockRead(table: string, scenario: Scenario, query: URLSearchParams): Re
     }
     return json(scenario === 'resposta' ? [{ enrollment_id: enrollment }] : []);
   }
-  if (table === 'contacts') return json([{ id: contact, user_id: scenario === 'contato-alheio' ? sequence : owner, first_name: 'Pessoa', last_name: 'Teste', email: 'teste@example.invalid' }]);
+  if (table === 'contacts') {
+    if (scenario === 'arquivado-apos-preload' && query.get('id') === `eq.${contact}`) return json([]);
+    return json([{ id: contact, user_id: scenario === 'contato-alheio' ? sequence : owner, first_name: 'Pessoa', last_name: 'Teste', email: 'teste@example.invalid' }]);
+  }
   if (table === 'sequence_send_log' && scenario === 'logs-paginados') return json(query.get('offset') === '1000' ? [{
     enrollment_id: enrollment, step_order: 1, sent_at: '2020-01-01T00:00:00Z', opened_at: null, clicked_at: null, status: 'sent', message_id: 'provedor-123',
   }] : Array.from({ length: 1000 }, (_, index) => ({
@@ -280,4 +283,15 @@ Deno.test('Sequências: cron inválido e serviço sem cron são recusados', () =
     await response.arrayBuffer();
   }
   assertEquals(operations.length, 0);
+}));
+
+Deno.test('Sequências: arquivamento após preload bloqueia o disparo e pausa a inscrição', () => withProcessor('arquivado-apos-preload', async (call, operations) => {
+  const result = await (await call()).json();
+  assertEquals(result.stats.sent, 0);
+  assertEquals(result.stats.advanced, 0);
+  assertEquals(result.stats.paused, 1);
+  assert(!operations.some(operation => operation.table === 'send-transactional-email'));
+  const revalidation = operations.find(operation => operation.table === 'contacts' && operation.query.get('id') === `eq.${contact}`);
+  assertEquals(revalidation?.query.get('user_id'), `eq.${owner}`);
+  assertEquals(revalidation?.query.get('deleted_at'), 'is.null');
 }));

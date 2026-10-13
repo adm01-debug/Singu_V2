@@ -7,6 +7,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- Inscrições exigem sequência ativa no banco e não permitem fechar o diálogo enquanto aguardam confirmação. O processador consulta novamente o proprietário e o arquivamento do contato imediatamente antes de despachar um email.
+
 - Sequências ativas permitem buscar contatos da própria carteira e inscrevê-los pelo detalhe, com confirmação da operação atômica no banco e sem listar contatos arquivados.
 - A inscrição revalida o contato no banco e o processador pausa contatos arquivados; a busca aceita nome completo, renova a carteira alterada e permite tentar o mesmo termo após falha.
 - A capacidade da sequência é verificada atomicamente pela quantidade real de inscrições, preservando o retry de inscrições existentes e sinalizando o limite no detalhe.

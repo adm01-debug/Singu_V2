@@ -67,7 +67,7 @@ export function SequenceEnrollDialog({ sequence, open, onOpenChange, onEnroll, l
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={nextOpen => { if (!loading) onOpenChange(nextOpen); }}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Inscrever contato em {sequence.name}</DialogTitle>
