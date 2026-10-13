@@ -37,6 +37,9 @@ A chamada HTTP ao provedor não faz parte da transação PostgreSQL.
 - Se a resposta da própria reserva se perder, o worker não envia, não pausa a
   inscrição e não libera o token desconhecido. A próxima tentativa identifica
   uma reserva já existente; confira-a na consulta abaixo antes de retomar.
+- Uma rejeição conhecida da reserva por contato ou etapa indisponível pausa a
+  inscrição somente depois de confirmar que não existe outra reserva da mesma
+  inscrição. Se essa consulta falhar, o estado permanece incerto e exige revisão.
 - Resposta sem identificador, falha HTTP incerta ou falha de persistência após
   envio mantém a reserva e suspende a inscrição. A passagem do tempo não comprova
   que o provedor deixou de processar a solicitação; não existe expiração automática.

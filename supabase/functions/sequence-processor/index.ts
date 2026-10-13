@@ -379,6 +379,7 @@ async function sendEmailStep(
   let reservationToken: string | null = null;
   let reservationRequested = false;
   let reservationAcknowledged = false;
+  let reservationRejected = false;
   let invocationStarted = false;
   let persisted = false;
   try {
@@ -411,7 +412,17 @@ async function sendEmailStep(
       p_current_step: enr.current_step ?? 0, p_token: token, p_step_order: step.step_order,
     });
     const reservation: unknown = payload;
-    if (reservationError) throw reservationError;
+    if (reservationError) {
+      if (reservationError.code === '42501' && (
+        reservationError.message === 'Contato indisponível para envio' ||
+        reservationError.message === 'Etapa indisponível para envio'
+      )) {
+        const { data: pending, error: pendingError } = await supabase.from('sequence_email_reservations')
+          .select('token').eq('enrollment_id', enr.id).limit(1);
+        reservationRejected = !pendingError && Array.isArray(pending) && pending.length === 0;
+      }
+      throw reservationError;
+    }
     if (!reservation) return { sent: false, advanced: false, paused: false, skipped: true };
     if (!isEmailReservation(reservation) || reservation.token !== token || reservation.user_id !== enr.user_id) {
       throw new Error('Reserva de envio divergente');
@@ -445,7 +456,7 @@ async function sendEmailStep(
     return { sent: newlySent, advanced: true, paused: false };
   } catch (e) {
     console.error('sendEmailStep erro:', e);
-    if (reservationRequested && !reservationAcknowledged) {
+    if (reservationRequested && !reservationAcknowledged && !reservationRejected) {
       console.error('Resultado da reserva de envio incerto; verifique a reserva antes de retomar:', enr.id);
       return { sent: false, advanced: false, paused: false };
     }

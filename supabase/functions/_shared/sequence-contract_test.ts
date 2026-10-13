@@ -1,6 +1,6 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 
-type Scenario = 'ausente' | 'sem-id' | 'confirmado' | 'log-falha' | 'evento-falha' | 'avanco-vazio' | 'consulta-falha' | 'contato-alheio' | 'legado' | 'legado-retomado' | 'legado-sem-recibo' | 'confirmado-existente' | 'manual' | 'sequencia-pausada' | 'resposta' | 'bounce-espera' | 'bounce-apos' | 'progresso-nulo' | 'progresso-nulo-falha' | 'logs-paginados' | 'arquivado-apos-preload' | 'arquivado-antes-reserva' | 'reserva-ocupada' | 'reserva-resposta-perdida' | 'provedor-incerto';
+type Scenario = 'ausente' | 'sem-id' | 'confirmado' | 'log-falha' | 'evento-falha' | 'avanco-vazio' | 'consulta-falha' | 'contato-alheio' | 'legado' | 'legado-retomado' | 'legado-sem-recibo' | 'confirmado-existente' | 'manual' | 'sequencia-pausada' | 'resposta' | 'bounce-espera' | 'bounce-apos' | 'progresso-nulo' | 'progresso-nulo-falha' | 'logs-paginados' | 'arquivado-apos-preload' | 'arquivado-antes-reserva' | 'reserva-ocupada' | 'reserva-resposta-perdida' | 'reserva-rejeitada-sem-reserva' | 'reserva-rejeitada-com-reserva' | 'provedor-incerto';
 interface Operation { table: string; method: string; body: Record<string, unknown>; query: URLSearchParams }
 
 const owner = '11111111-1111-4111-8111-111111111111';
@@ -13,7 +13,10 @@ function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json' } });
 }
 
+const pendingReservations: Partial<Record<Scenario, unknown[]>> = { 'reserva-rejeitada-com-reserva': [{ token: 'reserva-anterior' }] };
+
 function mockRead(table: string, scenario: Scenario, query: URLSearchParams): Response {
+  if (table === 'sequence_email_reservations') return json(pendingReservations[scenario] ?? []);
   const currentStep = scenario.startsWith('progresso-nulo') ? null : 0;
   if (table === 'sequence_enrollments') return json([{
     id: enrollment, sequence_id: sequence, contact_id: contact, user_id: owner,
@@ -81,7 +84,7 @@ async function withProcessor(scenario: Scenario, test: (call: (manual?: boolean,
       return json(scenario === 'sem-id' ? { ok: true } : { ok: true, messageId: 'provedor-123' });
     }
     if (table === 'reserve_sequence_email_send') {
-      if (scenario === 'arquivado-antes-reserva') return json({ code: '42501', message: 'Contato indisponível para envio' }, 403);
+      if (scenario === 'arquivado-antes-reserva' || scenario.startsWith('reserva-rejeitada-')) return json({ code: '42501', message: 'Contato indisponível para envio' }, 403);
       if (heldToken || scenario === 'reserva-ocupada') return json(null);
       assertEquals(typeof body.p_token, 'string');
       heldToken = String(body.p_token);
@@ -181,6 +184,19 @@ Deno.test('Sequências: resposta perdida após a reserva não oferece retomada n
   assertEquals(retry.stats.paused, 0);
   assertEquals(operations.filter(operation => operation.table === 'reserve_sequence_email_send').length, 2);
   assert(!operations.some(operation => operation.table === 'send-transactional-email' || operation.table === 'release_sequence_email_send' || operation.method === 'PATCH'));
+}));
+
+Deno.test('Sequências: rejeição confirmada sem reserva pausa e registra falha', () => withProcessor('reserva-rejeitada-sem-reserva', async (call, operations) => {
+  const result = await (await call()).json();
+  assertEquals(result.stats.paused, 1);
+  assert(operations.some(operation => operation.table === 'sequence_send_log' && operation.body.status === 'failed'));
+  assert(!operations.some(operation => operation.table === 'send-transactional-email' || operation.table === 'release_sequence_email_send'));
+}));
+
+Deno.test('Sequências: rejeição confirmada com reserva concorrente não pausa', () => withProcessor('reserva-rejeitada-com-reserva', async (call, operations) => {
+  const result = await (await call()).json();
+  assertEquals(result.stats.paused, 0);
+  assert(!operations.some(operation => operation.method === 'PATCH' || operation.table === 'send-transactional-email' || operation.table === 'release_sequence_email_send'));
 }));
 
 Deno.test('Sequências: arquivamento entre consulta e reserva impede a chamada externa', () => withProcessor('arquivado-antes-reserva', async (call, operations) => {
