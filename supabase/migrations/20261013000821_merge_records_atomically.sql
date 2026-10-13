@@ -18,6 +18,7 @@ DECLARE
   v_columns text := '';
   v_relation record;
   v_scope record;
+  v_scope_count integer;
   v_other_owner boolean;
   v_parent uuid;
   v_parent_owner uuid;
@@ -161,6 +162,7 @@ BEGIN
       v_relation.nspname, v_relation.relname, v_relation.attname, v_relation.attribute_type, v_filter)
     USING p_secondary_id;
     IF NOT v_relation.has_owner THEN
+      v_scope_count := 0;
       FOR v_scope IN
         SELECT parent_namespace.nspname, parent.relname,
           child_column.attname AS child_column, parent_column.attname AS parent_column
@@ -178,10 +180,11 @@ BEGIN
               AND owner_column.attname = 'user_id' AND owner_column.atttypid = 'uuid'::regtype
               AND NOT owner_column.attisdropped)
       LOOP
+        v_scope_count := v_scope_count + 1;
         EXECUTE format('SELECT EXISTS (SELECT 1 FROM %I.%I AS child
           LEFT JOIN %I.%I AS parent ON child.%I = parent.%I
-          WHERE child.%I = $1::%s %s AND child.%I IS NOT NULL
-            AND parent.user_id IS DISTINCT FROM $2)',
+          WHERE child.%I = $1::%s %s
+            AND (child.%I IS NULL OR parent.user_id IS DISTINCT FROM $2))',
           v_relation.nspname, v_relation.relname, v_scope.nspname, v_scope.relname,
           v_scope.child_column, v_scope.parent_column, v_relation.attname,
           v_relation.attribute_type, v_filter, v_scope.child_column)
@@ -191,6 +194,17 @@ BEGIN
             v_relation.nspname, v_relation.relname USING ERRCODE = '42501';
         END IF;
       END LOOP;
+      IF v_relation.attname = 'entity_id' AND v_scope_count = 0 THEN
+        EXECUTE format('SELECT EXISTS (SELECT 1 FROM %I.%I AS child
+          WHERE child.%I = $1::%s %s)',
+          v_relation.nspname, v_relation.relname, v_relation.attname,
+          v_relation.attribute_type, v_filter)
+        INTO v_other_owner USING p_secondary_id;
+        IF v_other_owner THEN
+          RAISE EXCEPTION 'Vínculo polimórfico sem proprietário: %.%',
+            v_relation.nspname, v_relation.relname USING ERRCODE = '42501';
+        END IF;
+      END IF;
     ELSE
       EXECUTE format('SELECT EXISTS (SELECT 1 FROM %I.%I AS child
         WHERE child.%I = $1::%s %s AND child.user_id IS DISTINCT FROM $2)',
@@ -201,7 +215,21 @@ BEGIN
           v_relation.nspname, v_relation.relname USING ERRCODE = '42501';
       END IF;
     END IF;
-    IF v_relation.has_owner THEN
+    IF p_entity = 'companies' AND v_relation.relname = 'company_emails'
+       AND v_relation.attname = 'company_id' THEN
+      UPDATE public.company_emails AS child SET company_id = p_primary_id
+      WHERE child.company_id = p_secondary_id
+        AND NOT EXISTS (SELECT 1 FROM public.company_emails AS existing
+          WHERE existing.company_id = p_primary_id
+            AND lower(existing.email::text) = lower(child.email::text));
+    ELSIF p_entity = 'companies' AND v_relation.relname = 'company_phones'
+       AND v_relation.attname = 'company_id' THEN
+      UPDATE public.company_phones AS child SET company_id = p_primary_id
+      WHERE child.company_id = p_secondary_id
+        AND NOT EXISTS (SELECT 1 FROM public.company_phones AS existing
+          WHERE existing.company_id = p_primary_id
+            AND existing.numero_normalizado = child.numero_normalizado);
+    ELSIF v_relation.has_owner THEN
       EXECUTE format('UPDATE %I.%I AS child SET %I = $1::%s
         WHERE child.%I = $2::%s %s AND child.user_id = $3',
         v_relation.nspname, v_relation.relname, v_relation.attname, v_relation.attribute_type,

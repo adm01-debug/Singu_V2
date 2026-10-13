@@ -23,6 +23,14 @@ INSERT INTO public.contacts(id, user_id, first_name, email, company_id) VALUES
   (current_setting('rls.merge_contact_primary')::uuid, current_setting('rls.merge_owner')::uuid, 'Principal', 'principal@example.test', NULL),
   (current_setting('rls.merge_contact_secondary')::uuid, current_setting('rls.merge_owner')::uuid, 'Secundário', 'secundario@example.test', current_setting('rls.merge_company_secondary')::uuid),
   (current_setting('rls.merge_contact_other')::uuid, current_setting('rls.merge_other')::uuid, 'Outro proprietário', 'outro@example.test', NULL);
+INSERT INTO public.company_emails(company_id, email) VALUES
+  (current_setting('rls.merge_company_primary')::uuid, 'duplicado@example.test'),
+  (current_setting('rls.merge_company_secondary')::uuid, 'DUPLICADO@example.test'),
+  (current_setting('rls.merge_company_secondary')::uuid, 'distinto@example.test');
+INSERT INTO public.company_phones(company_id, numero, numero_normalizado) VALUES
+  (current_setting('rls.merge_company_primary')::uuid, '11 90000-0001', '11900000001'),
+  (current_setting('rls.merge_company_secondary')::uuid, '11 90000-0001', '11900000001'),
+  (current_setting('rls.merge_company_secondary')::uuid, '11 90000-0002', '11900000002');
 INSERT INTO public.contact_behavior(contact_id)
 VALUES (current_setting('rls.merge_contact_secondary')::uuid);
 INSERT INTO public.contact_automation_settings(user_id, contact_id)
@@ -49,6 +57,19 @@ CREATE TABLE public.merge_contract_conflicts(
   UNIQUE(contact_id, label)
 );
 GRANT SELECT, INSERT, UPDATE ON public.merge_contract_conflicts TO authenticated;
+CREATE TABLE public.merge_unscoped_polymorph(
+  owner_id uuid NOT NULL,
+  entity_type text NOT NULL,
+  entity_id uuid NOT NULL
+);
+CREATE TABLE public.merge_nullable_scope_polymorph(
+  entity_type text NOT NULL,
+  entity_id uuid NOT NULL,
+  scope_id uuid REFERENCES public.companies(id)
+);
+INSERT INTO public.merge_unscoped_polymorph(owner_id, entity_type, entity_id)
+VALUES (current_setting('rls.merge_other')::uuid, 'contact',
+  current_setting('rls.merge_contact_secondary')::uuid);
 
 CREATE FUNCTION pg_temp.reject_merge_audit() RETURNS trigger LANGUAGE plpgsql AS $trigger$
 BEGIN
@@ -62,6 +83,42 @@ END;
 $trigger$;
 CREATE TRIGGER merge_contract_reject_audit BEFORE INSERT ON public.audit_log
 FOR EACH ROW EXECUTE FUNCTION pg_temp.reject_merge_audit();
+SET LOCAL ROLE authenticated;
+DO $test$
+DECLARE rejected boolean := false;
+BEGIN
+  BEGIN
+    PERFORM public.merge_records_atomically('contacts',
+      current_setting('rls.merge_contact_primary')::uuid,
+      current_setting('rls.merge_contact_secondary')::uuid);
+  EXCEPTION WHEN insufficient_privilege THEN rejected := true;
+  END;
+  IF NOT rejected THEN
+    RAISE EXCEPTION 'Mesclagem alterou vínculo polimórfico sem proprietário verificável';
+  END IF;
+END;
+$test$;
+RESET ROLE;
+DELETE FROM public.merge_unscoped_polymorph;
+INSERT INTO public.merge_nullable_scope_polymorph(entity_type, entity_id)
+VALUES ('contact', current_setting('rls.merge_contact_secondary')::uuid);
+SET LOCAL ROLE authenticated;
+DO $test$
+DECLARE rejected boolean := false;
+BEGIN
+  BEGIN
+    PERFORM public.merge_records_atomically('contacts',
+      current_setting('rls.merge_contact_primary')::uuid,
+      current_setting('rls.merge_contact_secondary')::uuid);
+  EXCEPTION WHEN insufficient_privilege THEN rejected := true;
+  END;
+  IF NOT rejected THEN
+    RAISE EXCEPTION 'FK nula autorizou vínculo polimórfico';
+  END IF;
+END;
+$test$;
+RESET ROLE;
+DELETE FROM public.merge_nullable_scope_polymorph;
 SET LOCAL ROLE authenticated;
 DO $test$
 DECLARE
@@ -142,7 +199,22 @@ BEGIN
     OR EXISTS (SELECT 1 FROM public.contacts WHERE id = secondary_id
       AND company_id IS DISTINCT FROM current_setting('rls.merge_company_primary')::uuid)
     OR NOT EXISTS (SELECT 1 FROM public.companies
-      WHERE id = current_setting('rls.merge_company_secondary')::uuid AND deleted_at IS NOT NULL) THEN
+      WHERE id = current_setting('rls.merge_company_secondary')::uuid AND deleted_at IS NOT NULL)
+    OR (result->'relations_by_table'->>'company_emails')::integer <> 1
+    OR (result->'relations_by_table'->>'company_phones')::integer <> 1
+    OR (SELECT count(*) FROM public.company_emails WHERE
+      company_id = current_setting('rls.merge_company_primary')::uuid) <> 2
+    OR (SELECT count(*) FROM public.company_phones WHERE
+      company_id = current_setting('rls.merge_company_primary')::uuid) <> 2
+    OR NOT EXISTS (SELECT 1 FROM public.company_emails WHERE
+      company_id = current_setting('rls.merge_company_secondary')::uuid
+      AND lower(email::text) = 'duplicado@example.test')
+    OR NOT EXISTS (SELECT 1 FROM public.company_phones WHERE
+      company_id = current_setting('rls.merge_company_secondary')::uuid
+      AND numero_normalizado = '11900000001')
+    OR (SELECT count(*) FROM public.audit_log WHERE
+      entity_id = current_setting('rls.merge_company_primary')::uuid
+      AND old_data ? 'merged_from') <> 1 THEN
     RAISE EXCEPTION 'Mesclagem de empresa perdeu o vínculo do contato';
   END IF;
   result := public.merge_records_atomically('companies',
