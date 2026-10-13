@@ -30,3 +30,7 @@ BEGIN
 END $migration$;
 
 NOTIFY pgrst, 'reload schema';
+
+-- Rollback: somente se esta migration criou a constraint, com o processador suspenso.
+-- ALTER TABLE public.sequence_enrollments DROP CONSTRAINT sequence_enrollments_sequence_id_fkey;
+-- NOTIFY pgrst, 'reload schema';
