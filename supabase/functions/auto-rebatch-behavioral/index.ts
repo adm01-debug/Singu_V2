@@ -127,6 +127,9 @@ Deno.serve(async (req) => {
           headers: {
             'Content-Type': 'application/json',
             'x-internal-key': SERVICE_KEY,
+            'Authorization': 'Bearer ' + SERVICE_KEY,
+            'apikey': SERVICE_KEY,
+            'x-cron-secret': Deno.env.get('CRON_SECRET') ?? '',
           },
           body: JSON.stringify({ contact_id: item.contact_id, user_id: item.userId }),
         });

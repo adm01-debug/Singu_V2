@@ -5,7 +5,7 @@ import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 
 const limiter = rateLimit({ windowMs: 60_000, max: 12 });
-const BATCH_SIZE = 50;
+const BATCH_SIZE = 10;
 const MAX_ATTEMPTS = 3;
 
 interface QueueItem {
@@ -15,6 +15,7 @@ interface QueueItem {
   kind: "email" | "phone";
   value: string;
   attempts: number;
+  claim_token: string;
 }
 
 Deno.serve(async (req) => {
@@ -50,17 +51,15 @@ Deno.serve(async (req) => {
     let okCount = 0;
     let errCount = 0;
 
-    type DoneRow = { id: string; status: string; processed_at: string; attempts: number };
-    type ErrRow = { id: string; status: string; attempts: number; last_error: string; processed_at: string | null };
-    const doneRows: DoneRow[] = [];
-    const errRows: ErrRow[] = [];
-
-    for (const item of queue) {
+    const outcomes = await Promise.allSettled(queue.map(async (item) => {
+      const status = item.attempts >= MAX_ATTEMPTS ? "error" : "pending";
+      let lastError: string | null = null;
       try {
+        if (item.kind !== "email" && item.kind !== "phone") throw new Error("Tipo de validação desconhecido");
         const fnName = item.kind === "email" ? "email-verifier" : "phone-validator";
-        const body = item.kind === "email"
-          ? { email: item.value, contactId: item.contact_id, persist: true }
-          : { phone: item.value, contactId: item.contact_id, persist: true };
+        const payload = item.kind === "email"
+          ? { email: item.value, contactId: item.contact_id, userId: item.user_id, persist: true }
+          : { phone: item.value, contactId: item.contact_id, userId: item.user_id, persist: true };
 
         // Invoca função interna com service role
         const resp = await fetchAPI(`${SUPABASE_URL}/functions/v1/${fnName}`, {
@@ -70,38 +69,40 @@ Deno.serve(async (req) => {
             Authorization: `Bearer ${SERVICE_KEY}`,
             apikey: SERVICE_KEY,
           },
-          body: JSON.stringify(body),
+          body: JSON.stringify({ ...payload, queueId: item.id, claimToken: item.claim_token }),
         });
 
+        if (resp.status === 409) { await resp.arrayBuffer(); return; }
         if (!resp.ok) {
-          const txt = await resp.text();
-          throw new Error(`${fnName} ${resp.status}: ${txt.slice(0, 200)}`);
+          throw new Error(`${fnName}: HTTP ${resp.status}`);
         }
-
-        doneRows.push({ id: item.id, status: "done", processed_at: new Date().toISOString(), attempts: item.attempts + 1 });
+        const receipt: { queueId?: string; validationId?: string } | null = await resp.json();
+        if (receipt?.queueId !== item.id || receipt.validationId !== item.id) {
+          throw new Error("Validação persistida não confirmada");
+        }
         okCount++;
+        return;
       } catch (err) {
-        const nextAttempts = item.attempts + 1;
-        const finalStatus = nextAttempts >= MAX_ATTEMPTS ? "error" : "pending";
-        errRows.push({
-          id: item.id,
-          status: finalStatus,
-          attempts: nextAttempts,
-          last_error: String(err).slice(0, 500),
-          processed_at: finalStatus === "error" ? new Date().toISOString() : null,
-        });
-        errCount++;
+        lastError = String(err).slice(0, 500);
       }
+      const { data, error } = await admin.from("validation_queue").update({
+        status,
+        attempts: item.attempts,
+        last_error: lastError,
+        processed_at: status === "pending" ? null : new Date().toISOString(),
+        claim_token: null,
+        lease_expires_at: null,
+      }).eq("id", item.id).eq("status", "processing")
+        .eq("claim_token", item.claim_token).select("id").maybeSingle();
+      if (error) throw error;
+      if (data) errCount++;
+    }));
+    if (outcomes.some((outcome) => outcome.status === "rejected")) {
+      throw new Error("Não foi possível confirmar todos os itens da fila");
     }
 
-    // Flush all outcome updates in two batched upserts
-    await Promise.all([
-      doneRows.length > 0 ? admin.from("validation_queue").upsert(doneRows, { onConflict: "id" }) : Promise.resolve(),
-      errRows.length > 0 ? admin.from("validation_queue").upsert(errRows, { onConflict: "id" }) : Promise.resolve(),
-    ]);
-
     return new Response(
-      JSON.stringify({ processed: queue.length, ok: okCount, errors: errCount }),
+      JSON.stringify({ processed: okCount + errCount, ok: okCount, errors: errCount }),
       { headers: { ...cors, "Content-Type": "application/json" } }
     );
   } catch (err) {
