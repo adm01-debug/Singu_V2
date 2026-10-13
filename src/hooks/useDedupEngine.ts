@@ -65,6 +65,7 @@ async function fetchContacts(userId: string): Promise<DedupRecord[]> {
     .from('contacts')
     .select('id, first_name, last_name, email, phone, whatsapp, company_id')
     .eq('user_id', userId)
+    .is('deleted_at', null)
     .limit(2000);
   if (error) throw error;
   return (data ?? []).map(c => ({
@@ -81,6 +82,7 @@ async function fetchCompanies(userId: string): Promise<DedupRecord[]> {
     .from('companies')
     .select('id, nome_crm, cnpj')
     .eq('user_id', userId)
+    .is('deleted_at', null)
     .limit(2000);
   if (error) throw error;
   if (!data?.length) return [];
