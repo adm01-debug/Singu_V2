@@ -9,7 +9,7 @@ import { QuickAddButton } from '@/components/quick-add/QuickAddButton';
 import { SlowQueryIndicator } from '@/components/feedback/SlowQueryIndicator';
 import { AIEmailComposerTrigger } from '@/components/ai/AIEmailComposerTrigger';
 import { NotificationCenter } from '@/components/notifications/NotificationCenter';
-import { generateRequestId, setRequestId, setLogUser } from '@/lib/logger';
+import { generateRequestId, setRequestId } from '@/lib/logger';
 
 // Heavy global chrome — lazy + deferred to idle to avoid blocking route transitions
 const AskCrmChat = lazy(() => import('@/components/ask-crm/AskCrmChat').then(m => ({ default: m.AskCrmChat })));
@@ -104,12 +104,6 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
   const { user, signOut } = useAuth();
 
   useKeyboardShortcutsEnhanced();
-
-  // Set user for logging
-  useEffect(() => {
-    setLogUser(user?.id || null);
-    return () => setLogUser(null);
-  }, [user?.id]);
 
   // Track Request ID per route change for correlation
   useEffect(() => {

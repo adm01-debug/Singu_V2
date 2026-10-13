@@ -1,4 +1,42 @@
 -- Isola as views do dashboard e vincula logs de erro à sessão autenticada.
+CREATE SCHEMA IF NOT EXISTS _dormant;
+CREATE TABLE IF NOT EXISTS _dormant.inactivity_alerts (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  contact_id uuid REFERENCES public.contacts(id) ON DELETE CASCADE,
+  company_id uuid REFERENCES public.companies(id) ON DELETE CASCADE,
+  alert_type varchar(50) NOT NULL,
+  days_inactive integer,
+  last_interaction_date timestamptz,
+  previous_interaction_frequency numeric(5,2),
+  current_interaction_frequency numeric(5,2),
+  severity varchar(20),
+  risk_score integer,
+  context_data jsonb,
+  recommended_actions text[],
+  urgency_reason text,
+  status varchar(20) DEFAULT 'active',
+  acknowledged_by uuid REFERENCES public.profiles(id),
+  acknowledged_at timestamptz,
+  resolution_notes text,
+  resolved_at timestamptz,
+  notification_sent boolean DEFAULT false,
+  notification_sent_at timestamptz,
+  detected_at timestamptz DEFAULT now(),
+  created_at timestamptz DEFAULT now()
+);
+ALTER TABLE _dormant.inactivity_alerts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS dashboard_alert_owner_select ON _dormant.inactivity_alerts;
+CREATE POLICY dashboard_alert_owner_select ON _dormant.inactivity_alerts
+FOR SELECT TO authenticated USING (
+  (contact_id IS NOT NULL OR company_id IS NOT NULL)
+  AND (contact_id IS NULL OR EXISTS (SELECT 1 FROM public.contacts c
+    WHERE c.id = inactivity_alerts.contact_id AND c.user_id = auth.uid() AND c.deleted_at IS NULL))
+  AND (company_id IS NULL OR EXISTS (SELECT 1 FROM public.companies c
+    WHERE c.id = inactivity_alerts.company_id AND c.user_id = auth.uid() AND c.deleted_at IS NULL))
+);
+GRANT USAGE ON SCHEMA _dormant TO authenticated;
+GRANT SELECT ON _dormant.inactivity_alerts TO authenticated;
+
 CREATE OR REPLACE VIEW public.vw_active_alerts
 WITH (security_invoker = true) AS
 SELECT ia.id, ia.alert_type, ia.contact_id,
@@ -88,8 +126,11 @@ JOIN public.contacts c ON c.id = i.contact_id
 LEFT JOIN public.companies co ON co.id = c.company_id
   AND co.user_id = auth.uid() AND co.deleted_at IS NULL
 LEFT JOIN public.profiles p ON p.id = i.user_id
-LEFT JOIN _dormant.disc_assessments da ON da.contact_id = c.id AND da.user_id = auth.uid()
-  AND (da.is_current = true OR da.is_current IS NULL)
+LEFT JOIN LATERAL (
+  SELECT d.primary_profile FROM public.disc_analysis_history d
+  WHERE d.contact_id = c.id AND d.user_id = auth.uid()
+  ORDER BY d.analyzed_at DESC, d.id DESC LIMIT 1
+) da ON true
 WHERE i.user_id = auth.uid()
   AND (i.follow_up_required = true OR i.requer_followup = true)
   AND (i.followup_concluido = false OR i.followup_concluido IS NULL)
@@ -115,6 +156,9 @@ ON public.error_logs TO authenticated
 WITH CHECK (auth.uid() IS NOT NULL AND user_id = auth.uid());
 
 -- Rollback: restaurar as definições anteriores das views abaixo e a policy de INSERT.
+-- Preserva a fonte de alertas e seus dados. No canônico, seu RLS estava desabilitado.
+-- DROP POLICY IF EXISTS dashboard_alert_owner_select ON _dormant.inactivity_alerts;
+-- ALTER TABLE _dormant.inactivity_alerts DISABLE ROW LEVEL SECURITY;
 -- ALTER POLICY "Authenticated users can insert error logs" ON public.error_logs
 -- TO authenticated WITH CHECK ((SELECT auth.uid()) IS NOT NULL);
 -- CREATE OR REPLACE VIEW public.vw_active_alerts WITH (security_invoker = true) AS

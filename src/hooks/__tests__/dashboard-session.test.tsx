@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { PropsWithChildren } from 'react';
 import { useActiveAlerts } from '@/hooks/useActiveAlerts';
 import { usePendingFollowups } from '@/hooks/usePendingFollowups';
+import { useDataHealthView } from '@/hooks/useDataHealthView';
 import { queryExternalData } from '@/lib/externalData';
 
 const session = vi.hoisted(() => ({ user: null as { id: string } | null }));
@@ -21,6 +22,7 @@ afterEach(() => {
 describe.each([
   ['alertas', useActiveAlerts],
   ['pendências', usePendingFollowups],
+  ['saúde dos dados', useDataHealthView],
 ])('cache de %s', (_label, useDashboardQuery) => {
   it('não consulta sem login e separa as consultas após troca de conta', async () => {
     const cache = new QueryClient({ defaultOptions: { queries: { retry: false } } });

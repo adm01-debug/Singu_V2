@@ -34,8 +34,20 @@ BEGIN
   INSERT INTO _dormant.inactivity_alerts (contact_id, company_id, alert_type, severity, status)
   VALUES (contact_a, company_b, 'contact_inactive', 'high', 'active') RETURNING id INTO alert_mixed;
 
+  INSERT INTO public.disc_analysis_history (user_id, contact_id, primary_profile, confidence,
+    dominance_score, influence_score, steadiness_score, conscientiousness_score)
+  VALUES (actor_a, contact_a, 'D', 1, 80, 10, 5, 5),
+    (actor_b, contact_b, 'I', 1, 10, 80, 5, 5),
+    (actor_b, contact_a, 'C', 1, 5, 5, 10, 80);
+
   PERFORM set_config('request.jwt.claim.sub', actor_a::text, true);
   EXECUTE 'SET LOCAL ROLE authenticated';
+  IF current_user <> 'authenticated' THEN RAISE EXCEPTION 'Prova A fora do papel autenticado'; END IF;
+  IF NOT EXISTS (SELECT 1 FROM _dormant.inactivity_alerts WHERE id = alert_a)
+    OR EXISTS (SELECT 1 FROM _dormant.inactivity_alerts WHERE id IN (alert_b, alert_mixed))
+  THEN RAISE EXCEPTION 'Fonte de alertas não respeita RLS para A'; END IF;
+  IF NOT EXISTS (SELECT 1 FROM public.vw_pending_followups WHERE interaction_id = interaction_a AND contact_disc = 'D')
+  THEN RAISE EXCEPTION 'Pendência não lê o perfil DISC do proprietário A'; END IF;
   IF (SELECT interactions_total FROM public.vw_singu_data_health) IS DISTINCT FROM
     (SELECT count(*) FROM public.interactions WHERE user_id = actor_a)
   THEN RAISE EXCEPTION 'Saúde dos dados inclui interações de outro usuário para A'; END IF;
@@ -57,6 +69,11 @@ BEGIN
 
   PERFORM set_config('request.jwt.claim.sub', actor_b::text, true);
   EXECUTE 'SET LOCAL ROLE authenticated';
+  IF NOT EXISTS (SELECT 1 FROM _dormant.inactivity_alerts WHERE id = alert_b)
+    OR EXISTS (SELECT 1 FROM _dormant.inactivity_alerts WHERE id IN (alert_a, alert_mixed))
+  THEN RAISE EXCEPTION 'Fonte de alertas não respeita RLS para B'; END IF;
+  IF NOT EXISTS (SELECT 1 FROM public.vw_pending_followups WHERE interaction_id = interaction_b AND contact_disc = 'I')
+  THEN RAISE EXCEPTION 'Pendência não lê o perfil DISC do proprietário B'; END IF;
   IF (SELECT interactions_total FROM public.vw_singu_data_health) IS DISTINCT FROM
     (SELECT count(*) FROM public.interactions WHERE user_id = actor_b)
   THEN RAISE EXCEPTION 'Saúde dos dados inclui interações de outro usuário para B'; END IF;

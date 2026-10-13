@@ -16,7 +16,7 @@ export interface PendingFollowup {
   owner_email: string | null;
   followup_status: string | null;
   days_overdue: number | null;
-  priority: string | null;
+  priority: number | null;
   contact_disc: string | null;
   closing_score: number | null;
 }

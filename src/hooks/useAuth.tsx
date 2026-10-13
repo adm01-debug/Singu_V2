@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { logger } from "@/lib/logger";
+import { logger, setLogUser } from "@/lib/logger";
 import { clearUserContext } from '@/lib/errorReporting';
 import { PageLoadingFallback } from '@/components/feedback/PageLoadingFallback';
 
@@ -34,6 +34,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isHandling401Ref = useRef(false);
   const qc = useQueryClient();
+
+  useEffect(() => {
+    setLogUser(user?.id || null);
+    return () => setLogUser(null);
+  }, [user?.id]);
 
   // Função para agendar refresh automático
   const scheduleTokenRefresh = useCallback((currentSession: Session | null) => {
