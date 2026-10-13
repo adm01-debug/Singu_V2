@@ -150,14 +150,9 @@ Deno.test("cron SLA só invoca com reserva e exige recibo sem recriar a fila con
   const writes: string[] = [];
   const close = await startHandler("auto-regen-behavioral-profiles", async (req) => {
     const url = new URL(req.url);
-    if (url.pathname === "/rest/v1/behavioral_insight_feedback") {
-      return Response.json(Array.from({ length: 3 }, () => ({
-        contact_id: contactId, user_id: ownerId, vote: -1, created_at: new Date().toISOString(),
-      })));
-    }
-    if (url.pathname === "/rest/v1/rpc/claim_behavioral_profile_sla") {
-      assertEquals(await req.json(), { p_contact_id: contactId, p_user_id: ownerId });
-      return Response.json(reserved ? { contact_id: contactId, user_id: ownerId, claim_token: claimToken } : null);
+    if (url.pathname === "/rest/v1/rpc/claim_behavioral_profile_sla_batch") {
+      assertEquals(await req.json(), { p_limit: 5 });
+      return Response.json(reserved ? [{ contact_id: contactId, user_id: ownerId, claim_token: claimToken }] : []);
     }
     if (url.pathname === "/functions/v1/generate-behavioral-profile") {
       calls++;

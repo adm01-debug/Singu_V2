@@ -5,7 +5,6 @@ import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 import { AI_TIMEOUT_MS } from "../_shared/fetch-utils.ts";
 
 
-const MIN_DOWNVOTES = 3;
 const MAX_BATCH = 5;
 
 interface ClaimedContact {
@@ -38,59 +37,20 @@ Deno.serve(async (req) => {
       auth: { persistSession: false },
     });
 
-    // 1. Buscar contatos elegíveis (>=3 downvotes)
-    const sinceIso = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
-    const { data: feedback, error: feedbackError } = await admin
-      .from("behavioral_insight_feedback")
-      .select("contact_id, user_id, vote, created_at")
-      .eq("vote", -1)
-      .gte("created_at", sinceIso);
-
-    if (feedbackError) throw feedbackError;
-
-    const tally = new Map<string, { count: number; userId: string; last: string }>();
-    for (const row of feedback ?? []) {
-      if (!row.contact_id) continue;
-      const key = row.contact_id as string;
-      const existing = tally.get(key);
-      if (existing) {
-        existing.count += 1;
-        if (row.created_at > existing.last) existing.last = row.created_at;
-      } else {
-        tally.set(key, {
-          count: 1,
-          userId: row.user_id as string,
-          last: row.created_at as string,
-        });
-      }
-    }
-
-    const eligible = Array.from(tally.entries())
-      .filter(([, v]) => v.count >= MIN_DOWNVOTES)
-      .map(([contactId, v]) => ({ contactId, ...v }));
-
-    if (eligible.length === 0) {
-      return json({ requestId, processed: 0, skipped: 0, message: "nenhum contato elegível" });
+    const { data, error } = await admin.rpc('claim_behavioral_profile_sla_batch', {
+      p_limit: MAX_BATCH,
+    });
+    if (error) throw error;
+    const claimed = (data ?? []) as ClaimedContact[];
+    if (claimed.length > MAX_BATCH || claimed.some((claim) =>
+      !claim.contact_id || !claim.user_id || !claim.claim_token
+    )) throw new Error('Lote de reservas comportamentais inválido');
+    if (claimed.length === 0) {
+      return json({ requestId, processed: 0, claimed: 0, message: "nenhum contato elegível" });
     }
 
     let processed = 0;
     const failures: Array<{ contactId: string; error: string }> = [];
-    const claimed: ClaimedContact[] = [];
-    for (const item of eligible) {
-      if (claimed.length >= MAX_BATCH) break;
-      const { data, error } = await admin.rpc('claim_behavioral_profile_sla', {
-        p_contact_id: item.contactId, p_user_id: item.userId,
-      });
-      if (error) {
-        failures.push({ contactId: item.contactId, error: error.message });
-      } else if (data) {
-        const claim = data as ClaimedContact;
-        if (claim.contact_id !== item.contactId || claim.user_id !== item.userId || !claim.claim_token) {
-          throw new Error('Reserva comportamental inválida');
-        }
-        claimed.push(claim);
-      }
-    }
 
     async function processClaim(item: ClaimedContact) {
       try {
@@ -124,9 +84,8 @@ Deno.serve(async (req) => {
 
     return json({
       requestId,
-      eligible: eligible.length,
+      claimed: claimed.length,
       processed,
-      skipped: eligible.length - claimed.length,
       failures,
       elapsedMs: Date.now() - startedAt,
       alert: await maybeRaiseErrorRateAlert(admin, requestId),

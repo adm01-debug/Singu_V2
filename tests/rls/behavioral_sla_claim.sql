@@ -15,13 +15,21 @@ DECLARE
   fixture_contact_id uuid := current_setting('rls.sla_contact')::uuid;
   first_claim public.behavioral_profile_regen_queue;
   renewed public.behavioral_profile_regen_queue;
+  batch_claim public.behavioral_profile_regen_queue;
+  waiting_contact uuid;
+  ready_contact uuid;
   affected integer;
   failed boolean := false;
   saved jsonb;
 BEGIN
   IF has_function_privilege('authenticated', 'public.claim_behavioral_profile_sla(uuid,uuid)', 'EXECUTE')
-    OR has_function_privilege('anon', 'public.claim_behavioral_profile_sla(uuid,uuid)', 'EXECUTE') THEN
+    OR has_function_privilege('anon', 'public.claim_behavioral_profile_sla(uuid,uuid)', 'EXECUTE')
+    OR has_function_privilege('authenticated', 'public.claim_behavioral_profile_sla_batch(integer)', 'EXECUTE')
+    OR has_function_privilege('anon', 'public.claim_behavioral_profile_sla_batch(integer)', 'EXECUTE') THEN
     RAISE EXCEPTION 'Reserva SLA exposta fora do serviço';
+  END IF;
+  IF EXISTS (SELECT 1 FROM public.claim_behavioral_profile_sla_batch(5)) THEN
+    RAISE EXCEPTION 'Lote ignorou pedido em espera';
   END IF;
   BEGIN
     PERFORM public.claim_behavioral_profile_sla(fixture_contact_id, gen_random_uuid());
@@ -57,6 +65,23 @@ BEGIN
   IF saved IS NULL OR (public.claim_behavioral_profile_sla(fixture_contact_id, owner_id)).contact_id IS NOT NULL
     OR EXISTS (SELECT 1 FROM public.behavioral_profile_regen_queue AS q WHERE q.contact_id = fixture_contact_id) THEN
     RAISE EXCEPTION 'SLA recriou fila concluída ou ignorou perfil recente';
+  END IF;
+  INSERT INTO public.contacts(user_id, first_name, last_name)
+  VALUES (owner_id, 'Aguardando', 'Lote') RETURNING id INTO waiting_contact;
+  INSERT INTO public.contacts(user_id, first_name, last_name)
+  VALUES (owner_id, 'Pronto', 'Lote') RETURNING id INTO ready_contact;
+  INSERT INTO public.behavioral_insight_feedback(user_id, contact_id, insight_kind, insight_label, vote)
+  SELECT owner_id, candidates.id, 'preference', 'Contrato lote ' || n, -1
+  FROM (VALUES (waiting_contact), (ready_contact)) AS candidates(id)
+  CROSS JOIN generate_series(1, 3) AS n;
+  INSERT INTO public.behavioral_profile_regen_queue (
+    contact_id, user_id, enqueued_at, next_run_at, trigger_source
+  ) VALUES (waiting_contact, owner_id, clock_timestamp(), clock_timestamp() + interval '1 hour',
+    'cron_auto_regen_downvotes');
+  SELECT * INTO batch_claim FROM public.claim_behavioral_profile_sla_batch(5);
+  IF batch_claim.contact_id IS DISTINCT FROM ready_contact OR batch_claim.claim_token IS NULL
+    OR EXISTS (SELECT 1 FROM public.claim_behavioral_profile_sla_batch(5)) THEN
+    RAISE EXCEPTION 'Lote não ignorou contato reservado ou recriou reserva concluída';
   END IF;
 END;
 $test$;
