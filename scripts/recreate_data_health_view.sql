@@ -1,5 +1,5 @@
 DROP VIEW IF EXISTS public.vw_singu_data_health;
-CREATE VIEW public.vw_singu_data_health AS
+CREATE VIEW public.vw_singu_data_health WITH (security_invoker = true) AS
 WITH metrics AS (
   SELECT
     ((SELECT count(*) FROM companies WHERE user_id IS NOT NULL))::numeric

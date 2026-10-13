@@ -101,7 +101,7 @@ SELECT i.id AS interaction_id, i.contact_id,
   (SELECT ce.email FROM public.contact_emails ce
    WHERE ce.contact_id = c.id AND ce.is_primary = true LIMIT 1) AS contact_email,
   COALESCE(co.nome_crm, co.razao_social) AS company_name,
-  i.title AS interaction_title, i.type AS interaction_type,
+  i.title AS interaction_title, i.type::text AS interaction_type,
   COALESCE(i.follow_up_date::timestamptz, i.data_followup) AS follow_up_date,
   i.conteudo AS follow_up_notes, p.full_name AS owner_name, p.email AS owner_email,
   CASE
@@ -151,14 +151,18 @@ LEFT JOIN public.companies co ON co.id = i.company_id
   AND co.user_id = auth.uid() AND co.deleted_at IS NULL
 WHERE i.user_id = auth.uid();
 
+ALTER VIEW public.vw_singu_data_health SET (security_invoker = true);
+
+GRANT SELECT ON public.vw_active_alerts, public.vw_contacts_sem_apelido,
+  public.vw_pending_followups, public.vw_interacoes_sem_apelido TO authenticated, service_role;
+
 ALTER POLICY "Authenticated users can insert error logs"
 ON public.error_logs TO authenticated
 WITH CHECK (auth.uid() IS NOT NULL AND user_id = auth.uid());
 
 -- Rollback: restaurar as definições anteriores das views abaixo e a policy de INSERT.
--- Preserva a fonte de alertas e seus dados. No canônico, seu RLS estava desabilitado.
--- DROP POLICY IF EXISTS dashboard_alert_owner_select ON _dormant.inactivity_alerts;
--- ALTER TABLE _dormant.inactivity_alerts DISABLE ROW LEVEL SECURITY;
+-- Preserva a fonte de alertas, seus dados e a leitura por proprietário com RLS ativo.
+-- As definições legadas abaixo só se aplicam a instalações onde já existiam essas views.
 -- ALTER POLICY "Authenticated users can insert error logs" ON public.error_logs
 -- TO authenticated WITH CHECK ((SELECT auth.uid()) IS NOT NULL);
 -- CREATE OR REPLACE VIEW public.vw_active_alerts WITH (security_invoker = true) AS
