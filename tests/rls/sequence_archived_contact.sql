@@ -8,8 +8,8 @@ RETURNING set_config('rls.sequence_contact', id::text, true);
 INSERT INTO public.contacts(user_id, first_name, last_name, deleted_at)
 VALUES (current_setting('rls.sequence_owner')::uuid, 'Inscrição', 'Contato arquivado', now())
 RETURNING set_config('rls.sequence_archived', id::text, true);
-INSERT INTO public.sequences(user_id, name)
-VALUES (current_setting('rls.sequence_owner')::uuid, 'Contrato de contato vivo')
+INSERT INTO public.sequences(user_id, name, status)
+VALUES (current_setting('rls.sequence_owner')::uuid, 'Contrato de contato vivo', 'active')
 RETURNING set_config('rls.sequence_id', id::text, true);
 SET LOCAL ROLE authenticated;
 DO $test$

@@ -8,8 +8,8 @@ RETURNING set_config('rls.sequence_contact', id::text, true);
 INSERT INTO public.contacts(user_id, first_name, last_name)
 VALUES (current_setting('rls.sequence_owner')::uuid, 'Limite', 'Segundo')
 RETURNING set_config('rls.sequence_other', id::text, true);
-INSERT INTO public.sequences(user_id, name, max_enrollments)
-VALUES (current_setting('rls.sequence_owner')::uuid, 'Contrato de capacidade', 1)
+INSERT INTO public.sequences(user_id, name, max_enrollments, status)
+VALUES (current_setting('rls.sequence_owner')::uuid, 'Contrato de capacidade', 1, 'active')
 RETURNING set_config('rls.sequence_id', id::text, true);
 SET LOCAL ROLE authenticated;
 DO $test$
