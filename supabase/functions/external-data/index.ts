@@ -161,7 +161,14 @@ const ALLOWED_TABLES = [
 
 type AllowedTable = typeof ALLOWED_TABLES[number];
 
-const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>(['sales_activities']);
+const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>([
+  'sales_activities',
+  'vw_active_alerts',
+  'vw_contacts_sem_apelido',
+  'vw_pending_followups',
+  'vw_interacoes_sem_apelido',
+  'vw_singu_data_health',
+]);
 
 const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([
   'mv_daily_kpis',

@@ -9,14 +9,33 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 - Mesclagem de contatos e empresas usa uma transação com bloqueio por proprietário, validação de vínculos, exclusão lógica e auditoria. Falhas revertem o conjunto sem declarar sucesso. Emails e telefones equivalentes conservam seus metadados na cópia arquivada, e registros arquivados deixam de aparecer na deduplicação. A reconstrução do banco inclui as marcações de duplicidade necessárias para arquivar o contato mesclado.
 
+- O painel de saúde usa a pontuação agregada do banco na escala de 0 a 10 e exibe os indicadores e totais reais. Alertas têm leitura protegida por proprietário, inclusive em instalações com bloqueio legado na fonte, e pendências usam o histórico DISC ativo, sem liberar as avaliações legadas bloqueadas.
+
+- A reconstrução do dashboard provisiona nomes gerados, fontes de contato e a view agregada quando ausentes, preservando as estruturas e permissões já existentes no banco canônico. As novas fontes permitem gravação somente para o proprietário do contato ativo, normalizam telefones e mantêm o email único nas tentativas de atualização.
+
+- Os formulários de email e telefone oferecem os tipos aceitos pelo banco canônico; WhatsApp permanece uma opção independente do tipo de telefone.
+
+- A pontuação geral de saúde passa a combinar as notas exibidas com os pesos já existentes, tanto na reconstrução quanto na view do banco publicado, sem regravar histórico.
+
+- Consultas de alertas, pendências e qualidade de dados respeitam a carteira autenticada e ocultam relações de outros usuários ou contatos arquivados. O cache do dashboard é separado por conta, e erros anteriores ao login não são associados ao próximo usuário.
+
 - Retomadas de email legado exigem recibo do proprietário antes de uma nova tentativa. A confirmação real substitui registros sem comprovante atomicamente e consome a autorização, sem duplicar o evento; contatos sem endereço não podem ser retomados.
 
 - Sequências permitem retomar explicitamente emails pausados após revisão da integração, com recibo, isolamento por proprietário e proteção contra uma pausa substituída. A retomada preserva o progresso e não inventa confirmação de envio.
+
+- Cron de reanálise seleciona e reserva até cinco contatos em uma operação do banco e processa todos na mesma onda, sem varrer milhares de candidatos com chamadas sequenciais à API.
+
+- Regenerações por SLA reservam cada contato atomicamente e encaminham o token ao gerador, impedindo chamadas concorrentes e preservando pedidos posteriores. O cron exige perfil confirmado e processa até dez reservas em grupos de cinco, sem recriar filas já concluídas.
+
+- Geração manual de perfil comportamental verifica o proprietário antes de ler o histórico e limita requisições por usuário em cada instância da função.
 
 ### Added
 - Matriz reconciliada das auditorias e lacunas com estado por achado, evidências e próximos passos, organizada em cinco áreas e vinculada pelo índice.
 
 ### Fixed
+- Histórico novo invalida a reserva comportamental anterior e reinicia a espera, impedindo que a análise ou o erro de um worker antigo consumam o pedido posterior. A geração manual mantém as leituras sob o login do usuário e confirma perfil, histórico e fila pelo serviço após validar a propriedade, rejeitando trocas de proprietário durante a geração.
+- Validações enfileiradas gravam resultado e conclusão da tarefa na mesma transação, com recibo idempotente e token da reserva, evitando registros duplicados após perda da resposta. Gerações manuais concluem pedidos anteriores e preservam os criados após o início da análise; o worker e a reanálise aguardam o prazo completo da IA mais uma margem para persistência.
+- As filas de validação e perfis reservam lotes atomicamente, recuperam tentativas interrompidas e impedem workers antigos de sobrescrever novos pedidos; usuários não podem alterar reservas e a gravação do perfil e seu histórico conclui a reserva atual na mesma transação, evitando regeneração repetida após uma interrupção. Os validadores e workers conferem a propriedade do contato e o recibo persistido antes de anunciar sucesso. Reanálises administrativas usam uma reserva controlada pelo servidor, preservam tentativas e respeitam reservas e pausas vigentes; o painel deixa de editar a fila diretamente.
 - Etapas manuais das sequências ficam disponíveis nos detalhes com instruções e confirmação explícita pelo dono; a execução, o histórico e a retomada são atômicos e idempotentes, sem contar confirmação manual como email entregue. Contatos arquivados não podem confirmar etapas pendentes.
 - O processador de sequências só registra emails como enviados e avança a inscrição após confirmação do provedor e persistência, sinaliza falhas na interface e não chama o contador inexistente. Atualizações usam campos canônicos e conferem o passo vigente; chamadas manuais ficam restritas ao usuário autenticado, sequências pausadas não executam e canais sem confirmação ficam pausados em vez de produzir envios fictícios.
 - Confirmação de email, evento e avanço da sequência passam a ser atômicos; retomadas recuperam eventos ausentes de envios confirmados sem reenviar nem duplicar o histórico. Os campos de pausa, proprietário e posição dos passos do banco canônico também são garantidos por migration nas reconstruções. Inscrições de sequências pausadas deixam de ocupar o limite de processamento; devoluções confirmadas respeitam a espera das condições.
