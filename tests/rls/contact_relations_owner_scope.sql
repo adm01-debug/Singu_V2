@@ -9,6 +9,8 @@ DECLARE
   archived_a uuid;
   email_a uuid;
   phone_a uuid;
+  admin_email uuid;
+  admin_phone uuid;
   changed integer;
 BEGIN
   SELECT id INTO actor_admin FROM auth.users
@@ -101,12 +103,53 @@ BEGIN
       OR EXISTS (SELECT 1 FROM public.contact_phones WHERE id=phone_a) THEN
     RAISE EXCEPTION 'Administrador sem MFA atravessou carteira';
   END IF;
+  UPDATE public.contact_emails SET is_primary=true WHERE id=email_a;
+  GET DIAGNOSTICS changed=ROW_COUNT;
+  IF changed <> 0 THEN RAISE EXCEPTION 'Administrador sem MFA alterou email alheio'; END IF;
+  UPDATE public.contact_phones SET numero='11999997003' WHERE id=phone_a;
+  GET DIAGNOSTICS changed=ROW_COUNT;
+  IF changed <> 0 THEN RAISE EXCEPTION 'Administrador sem MFA alterou telefone alheio'; END IF;
+  DELETE FROM public.contact_emails WHERE id=email_a;
+  GET DIAGNOSTICS changed=ROW_COUNT;
+  IF changed <> 0 THEN RAISE EXCEPTION 'Administrador sem MFA excluiu email alheio'; END IF;
+  DELETE FROM public.contact_phones WHERE id=phone_a;
+  GET DIAGNOSTICS changed=ROW_COUNT;
+  IF changed <> 0 THEN RAISE EXCEPTION 'Administrador sem MFA excluiu telefone alheio'; END IF;
+  BEGIN
+    INSERT INTO public.contact_emails(contact_id,email) VALUES (contact_a,'admin-sem-mfa@example.invalid');
+    RAISE EXCEPTION 'Administrador sem MFA criou email alheio';
+  EXCEPTION WHEN insufficient_privilege THEN NULL;
+  END;
+  BEGIN
+    INSERT INTO public.contact_phones(contact_id,numero) VALUES (contact_a,'11999997003');
+    RAISE EXCEPTION 'Administrador sem MFA criou telefone alheio';
+  EXCEPTION WHEN insufficient_privilege THEN NULL;
+  END;
   PERFORM set_config('request.jwt.claims',
     jsonb_build_object('sub',actor_admin,'role','authenticated','aal','aal2')::text,true);
   IF NOT EXISTS (SELECT 1 FROM public.contact_emails WHERE id=email_a)
       OR NOT EXISTS (SELECT 1 FROM public.contact_phones WHERE id=phone_a) THEN
     RAISE EXCEPTION 'Administrador com MFA perdeu acesso legítimo';
   END IF;
+  INSERT INTO public.contact_emails(contact_id,email)
+    VALUES (archived_a,'admin-com-mfa@example.invalid') RETURNING id INTO admin_email;
+  INSERT INTO public.contact_phones(contact_id,numero)
+    VALUES (archived_a,'11999997004') RETURNING id INTO admin_phone;
+  UPDATE public.contact_emails SET is_primary=true WHERE id=admin_email;
+  GET DIAGNOSTICS changed=ROW_COUNT;
+  IF changed <> 1 THEN RAISE EXCEPTION 'Administrador com MFA não alterou email alheio arquivado'; END IF;
+  UPDATE public.contact_phones SET numero='(11) 99999-7005' WHERE id=admin_phone;
+  GET DIAGNOSTICS changed=ROW_COUNT;
+  IF changed <> 1 OR NOT EXISTS (SELECT 1 FROM public.contact_phones
+      WHERE id=admin_phone AND numero_normalizado='11999997005') THEN
+    RAISE EXCEPTION 'Administrador com MFA não alterou telefone alheio arquivado';
+  END IF;
+  DELETE FROM public.contact_emails WHERE id=admin_email;
+  GET DIAGNOSTICS changed=ROW_COUNT;
+  IF changed <> 1 THEN RAISE EXCEPTION 'Administrador com MFA não excluiu email alheio arquivado'; END IF;
+  DELETE FROM public.contact_phones WHERE id=admin_phone;
+  GET DIAGNOSTICS changed=ROW_COUNT;
+  IF changed <> 1 THEN RAISE EXCEPTION 'Administrador com MFA não excluiu telefone alheio arquivado'; END IF;
   EXECUTE 'RESET ROLE';
   PERFORM set_config('request.jwt.claim.sub',actor_a::text,true);
   PERFORM set_config('request.jwt.claims',
