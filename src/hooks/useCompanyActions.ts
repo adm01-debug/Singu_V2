@@ -7,16 +7,22 @@ export function useMergeCompanies() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ primaryId, secondaryId }: { primaryId: string; secondaryId: string }) => {
-      const { data, error } = await callExternalRpc('merge_companies', {
+      const { data, error } = await callExternalRpc<{
+        success: boolean; primary_id: string; secondary_id: string;
+      }>('merge_records_atomically', {
+        p_entity: 'companies',
         p_primary_id: primaryId,
         p_secondary_id: secondaryId,
+        p_field_overrides: {},
       });
       if (error) throw error;
+      if (data?.success !== true || data.primary_id !== primaryId || data.secondary_id !== secondaryId) {
+        throw new Error('Mesclagem não confirmada pelo banco');
+      }
       return data;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['companies'] });
-      qc.invalidateQueries({ queryKey: ['external-companies'] });
+      qc.invalidateQueries();
       toast.success('Empresas mescladas com sucesso');
     },
     onError: (err: Error) => toast.error(`Erro ao mesclar: ${parseApiError(err)}`),
