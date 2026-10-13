@@ -35,7 +35,7 @@ FOR SELECT TO authenticated USING (
   AND (company_id IS NULL OR EXISTS (SELECT 1 FROM public.companies c
     WHERE c.id = inactivity_alerts.company_id AND c.user_id = auth.uid() AND c.deleted_at IS NULL))
 );
-GRANT SELECT ON _dormant.inactivity_alerts TO authenticated;
+GRANT SELECT ON _dormant.inactivity_alerts TO authenticated, service_role;
 
 CREATE OR REPLACE VIEW public.vw_active_alerts
 WITH (security_invoker = true) AS
