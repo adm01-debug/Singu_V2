@@ -1,3 +1,5 @@
+ALTER TABLE public.contacts ADD COLUMN IF NOT EXISTS deleted_at timestamptz;
+
 ALTER TABLE public.sequence_enrollments ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb;
 
 ALTER TABLE public.sequence_events DROP CONSTRAINT IF EXISTS sequence_events_event_type_check;
@@ -45,7 +47,8 @@ BEGIN
   FOR SHARE OF s, sequence;
   IF NOT FOUND OR v_step.step_order IS NULL OR NOT EXISTS (
     SELECT 1 FROM public.contacts AS c
-    WHERE c.id = v_enrollment.contact_id AND c.user_id = v_uid
+    WHERE c.id = v_enrollment.contact_id AND c.user_id = v_uid AND c.deleted_at IS NULL
+    FOR SHARE
   ) THEN
     RAISE EXCEPTION 'Proprietário ou etapa divergente' USING ERRCODE = '42501';
   END IF;

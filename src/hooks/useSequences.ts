@@ -93,7 +93,7 @@ export function useSequenceManualSteps(sequenceId?: string, enabled = true) {
         if (error) throw error;
         const { data: contacts, error: contactError } = await supabase.from('contacts')
           .select('id, first_name, last_name, email').eq('user_id', user!.id)
-          .in('id', (data ?? []).map(row => row.contact_id));
+          .in('id', (data ?? []).map(row => row.contact_id)).is('deleted_at', null);
         if (contactError) throw contactError;
         const contactsById = new Map((contacts ?? []).map(contact => [contact.id, contact]));
         for (const row of data ?? []) {

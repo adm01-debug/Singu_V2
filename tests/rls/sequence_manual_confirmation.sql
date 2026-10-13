@@ -105,6 +105,35 @@ BEGIN
 END;
 $test$;
 RESET ROLE;
+INSERT INTO public.contacts(user_id, first_name, last_name)
+VALUES (current_setting('rls.manual_owner')::uuid, 'Arquivado', 'Sem confirmação')
+RETURNING set_config('rls.manual_archived_contact', id::text, true);
+INSERT INTO public.sequence_enrollments(sequence_id, contact_id, user_id, current_step, status, metadata)
+VALUES (current_setting('rls.manual_sequence')::uuid, current_setting('rls.manual_archived_contact')::uuid,
+  current_setting('rls.manual_owner')::uuid, 0, 'paused', jsonb_build_object(
+    'pending_manual_step', jsonb_build_object('step_id', current_setting('rls.manual_step'),
+      'step_order', 1, 'channel', 'call')))
+RETURNING set_config('rls.manual_archived_enrollment', id::text, true);
+UPDATE public.contacts SET deleted_at = now()
+WHERE id = current_setting('rls.manual_archived_contact')::uuid;
+SET LOCAL ROLE authenticated;
+DO $test$
+DECLARE
+  archived_id uuid := current_setting('rls.manual_archived_enrollment')::uuid;
+  denied boolean := false;
+BEGIN
+  BEGIN
+    PERFORM public.confirm_sequence_manual_step(archived_id, current_setting('rls.manual_step')::uuid);
+  EXCEPTION WHEN insufficient_privilege THEN denied := true;
+  END;
+  IF NOT denied OR EXISTS (SELECT 1 FROM public.sequence_events WHERE enrollment_id = archived_id)
+    OR (SELECT current_step FROM public.sequence_enrollments WHERE id = archived_id) <> 0
+    OR (SELECT status FROM public.sequence_enrollments WHERE id = archived_id) <> 'paused' THEN
+    RAISE EXCEPTION 'Contato arquivado teve etapa confirmada ou avanço parcial';
+  END IF;
+END;
+$test$;
+RESET ROLE;
 UPDATE public.sequence_steps SET channel = 'call'
 WHERE id = current_setting('rls.manual_email_step')::uuid;
 UPDATE public.sequence_enrollments SET status = 'paused',
