@@ -13,6 +13,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - A inscrição revalida o contato no banco e o processador pausa contatos arquivados; a busca aceita nome completo, renova a carteira alterada e permite tentar o mesmo termo após falha.
 - A capacidade da sequência é verificada atomicamente pela quantidade real de inscrições, preservando o retry de inscrições existentes e sinalizando o limite no detalhe.
 
+- A confirmação de mesclagem compara a identidade dos UUIDs mesmo com maiúsculas, chaves ou ausência de hífens, evitando apresentar falha depois de uma operação confirmada pelo banco. IDs de outras operações e respostas sem confirmação continuam rejeitados.
+
+- Mesclagem de contatos e empresas usa uma transação com bloqueio por proprietário, validação de vínculos, exclusão lógica e auditoria. Falhas revertem o conjunto sem declarar sucesso. Emails e telefones equivalentes conservam seus metadados na cópia arquivada, e registros arquivados deixam de aparecer na deduplicação. A reconstrução do banco inclui as marcações de duplicidade necessárias para arquivar o contato mesclado.
+
 - O painel de saúde usa a pontuação agregada do banco na escala de 0 a 10 e exibe os indicadores e totais reais. Alertas têm leitura protegida por proprietário, inclusive em instalações com bloqueio legado na fonte, e pendências usam o histórico DISC ativo, sem liberar as avaliações legadas bloqueadas.
 
 - A reconstrução do dashboard provisiona nomes gerados, fontes de contato e a view agregada quando ausentes, preservando as estruturas e permissões já existentes no banco canônico. As novas fontes permitem gravação somente para o proprietário do contato ativo, normalizam telefones e mantêm o email único nas tentativas de atualização.
@@ -37,6 +41,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Matriz reconciliada das auditorias e lacunas com estado por achado, evidências e próximos passos, organizada em cinco áreas e vinculada pelo índice.
 
 ### Fixed
+- Emails e telefones relacionados exigem o dono do contato ativo para leitura e escrita de contas comuns, mesmo com policies permissivas antigas; administradores conservam o acesso global somente com MFA confirmado em AAL2. O proprietário também pode manter seus telefones nas instalações que antes permitiam apenas administradores.
 - Histórico novo invalida a reserva comportamental anterior e reinicia a espera, impedindo que a análise ou o erro de um worker antigo consumam o pedido posterior. A geração manual mantém as leituras sob o login do usuário e confirma perfil, histórico e fila pelo serviço após validar a propriedade, rejeitando trocas de proprietário durante a geração.
 - Validações enfileiradas gravam resultado e conclusão da tarefa na mesma transação, com recibo idempotente e token da reserva, evitando registros duplicados após perda da resposta. Gerações manuais concluem pedidos anteriores e preservam os criados após o início da análise; o worker e a reanálise aguardam o prazo completo da IA mais uma margem para persistência.
 - As filas de validação e perfis reservam lotes atomicamente, recuperam tentativas interrompidas e impedem workers antigos de sobrescrever novos pedidos; usuários não podem alterar reservas e a gravação do perfil e seu histórico conclui a reserva atual na mesma transação, evitando regeneração repetida após uma interrupção. Os validadores e workers conferem a propriedade do contato e o recibo persistido antes de anunciar sucesso. Reanálises administrativas usam uma reserva controlada pelo servidor, preservam tentativas e respeitam reservas e pausas vigentes; o painel deixa de editar a fila diretamente.

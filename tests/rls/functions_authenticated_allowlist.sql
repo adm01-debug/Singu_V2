@@ -3,6 +3,7 @@
 -- Invariante 2: authenticated executa, entre as SECURITY DEFINER (que ignoram RLS), EXATAMENTE as
 --               RPCs públicas + has_role + as 15 RPCs do frontend
 --               com escopo por auth.uid() (20261006130000) + 2 RPCs admin do AI Gateway (20261006140000).
+--               Inclui a confirmação manual de sequência e a mesclagem com seus quatro aliases.
 --               Funções SECURITY INVOKER rodam sob RLS e não entram aqui.
 -- Falha se aparecer função extra ou se alguma da allowlist perder o grant.
 
@@ -46,6 +47,12 @@ INSERT INTO _definer_auth(sig) VALUES
   ('confirm_sequence_manual_step(p_enrollment_id uuid, p_step_id uuid, p_note text)'),
   ('get_ai_gateway_health(_hours integer)'),
   ('get_ai_gateway_partition_stats()');
+INSERT INTO _definer_auth(sig) VALUES
+  ('merge_records_atomically(p_entity text, p_primary_id uuid, p_secondary_id uuid, p_field_overrides jsonb)'),
+  ('merge_companies(p_company_keep uuid, p_company_remove uuid)'),
+  ('merge_duplicate_companies(p_keep_id uuid, p_merge_id uuid)'),
+  ('merge_contacts(p_keep_contact_id uuid, p_merge_contact_id uuid)'),
+  ('merge_duplicate_contacts(p_keep_id uuid, p_merge_id uuid)');
 
 CREATE TEMP TABLE _fn AS
 SELECT p.proname || '(' || pg_get_function_identity_arguments(p.oid) || ')' AS sig,
@@ -89,7 +96,8 @@ BEGIN
     RAISE EXCEPTION 'allowlist declara função(ões) sem EXECUTE para authenticated: %', missing;
   END IF;
 
-  RAISE NOTICE 'OK — anon: 12 RPCs públicas; authenticated: 30 SECURITY DEFINER da allowlist.';
+  RAISE NOTICE 'OK — anon: % RPCs públicas; authenticated: % assinaturas da allowlist.',
+    (SELECT count(*) FROM _public_rpc), (SELECT count(*) FROM _definer_auth);
 END $$;
 
 ROLLBACK;

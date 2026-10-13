@@ -1,18 +1,39 @@
+import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { fetchCompanyDedupRelations } from '../useDedupEngine';
+import { fetchCompanyDedupRelations, useDedupEngine } from '../useDedupEngine';
 
 const mocks = vi.hoisted(() => ({ from: vi.fn() }));
 vi.mock('@/integrations/supabase/client', () => ({ supabase: { from: mocks.from } }));
-vi.mock('@/hooks/useAuth', () => ({ useAuth: vi.fn() }));
+vi.mock('@/hooks/useAuth', () => ({ useAuth: () => ({ user: { id: 'usuario-1' } }) }));
 
 function queryResult(data: unknown, error: Error | null = null) {
   const response = Promise.resolve({ data, error });
-  const query = { select: vi.fn(), eq: vi.fn(), order: vi.fn(), limit: vi.fn(), in: vi.fn(), gt: vi.fn(), then: response.then.bind(response) };
-  for (const method of [query.select, query.eq, query.order, query.limit, query.in, query.gt]) method.mockReturnValue(query);
+  const query = { select: vi.fn(), eq: vi.fn(), is: vi.fn(), order: vi.fn(), limit: vi.fn(), in: vi.fn(), gt: vi.fn(), then: response.then.bind(response) };
+  for (const method of [query.select, query.eq, query.is, query.order, query.limit, query.in, query.gt]) method.mockReturnValue(query);
   return query;
 }
 
 beforeEach(() => vi.resetAllMocks());
+
+describe('Origem da deduplicação', () => {
+  it.each(['contacts', 'companies'] as const)('exclui registros arquivados da consulta de %s', async entity => {
+    const source = queryResult(entity === 'contacts'
+      ? [{ id: 'contato-1', first_name: 'Ativo', last_name: null, email: null, phone: null, whatsapp: null, company_id: null }]
+      : [{ id: 'empresa-1', nome_crm: 'Ativa', cnpj: null }]);
+    mocks.from.mockImplementation(table => table === entity ? source : queryResult([]));
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    const wrapper = ({ children }: { children: React.ReactNode }) =>
+      React.createElement(QueryClientProvider, { client }, children);
+    const { result } = renderHook(() => useDedupEngine(entity), { wrapper });
+
+    await waitFor(() => expect(result.current.totalScanned).toBe(1));
+    expect(source.eq).toHaveBeenCalledWith('user_id', 'usuario-1');
+    expect(source.is).toHaveBeenCalledWith('deleted_at', null);
+    client.clear();
+  });
+});
 
 describe('Relações da deduplicação', () => {
   it('divide IDs em lotes, pagina relações e encontra o primário após a primeira página', async () => {

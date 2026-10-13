@@ -55,7 +55,7 @@ async function getAccessToken(): Promise<{ token: string; userId: string | null 
 
 const EDGE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/external-data`;
 const ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-const CANONICAL_RPCS = new Set(['persist_rfm_analysis', 'persist_company_composite', 'enroll_sequence_contact', 'confirm_sequence_manual_step', 'resume_sequence_email']);
+const CANONICAL_RPCS = new Set(['persist_rfm_analysis', 'persist_company_composite', 'enroll_sequence_contact', 'confirm_sequence_manual_step', 'resume_sequence_email', 'merge_records_atomically']);
 
 const externalDbBreaker = getCircuitBreaker('external-db', {
   failureThreshold: 3,

@@ -5,6 +5,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function areUuidsEqual(left: unknown, right: string): boolean {
+  if (typeof left !== 'string') return false;
+  return left.trim().replace(/[-{}]/g, '').toLowerCase()
+    === right.trim().replace(/[-{}]/g, '').toLowerCase();
+}
+
 const SAFE_URL_RE = /^(https?:\/\/|mailto:|tel:|\/(?!\/))/i;
 
 /** Sanitize a user-supplied URL before setting as href. Returns '#' for unsafe protocols (e.g. javascript:).
