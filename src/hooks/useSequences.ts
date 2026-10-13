@@ -342,6 +342,7 @@ export function useSequences() {
     deleteSequence: deleteSequence.mutateAsync,
     fetchSteps,
     enrollContact: enrollContact.mutateAsync,
+    enrolling: enrollContact.isPending,
     creating: createSequence.isPending,
   };
 }

@@ -2,6 +2,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
 import { Mail, MousePointerClick, Eye, MessageCircle, AlertCircle, Send } from 'lucide-react';
 import { useSequenceEvents, useSequenceMetrics, useSequenceSendLogs } from '@/hooks/useSequenceEvents';
 import type { Sequence } from '@/hooks/useSequences';
@@ -12,6 +13,7 @@ interface Props {
   sequence: Sequence | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onEnroll: (sequenceId: string) => void;
 }
 
 const EVENT_ICONS: Record<string, typeof Mail> = {
@@ -34,7 +36,7 @@ const EVENT_COLORS: Record<string, string> = {
   manual_completed: 'text-success',
 };
 
-export function SequenceDetailDrawer({ sequence, open, onOpenChange }: Props) {
+export function SequenceDetailDrawer({ sequence, open, onOpenChange, onEnroll }: Props) {
   const { data: metrics } = useSequenceMetrics(sequence?.id);
   const { data: events = [] } = useSequenceEvents(sequence?.id);
   const { data: sendLogs = [] } = useSequenceSendLogs(sequence?.id);
@@ -57,6 +59,12 @@ export function SequenceDetailDrawer({ sequence, open, onOpenChange }: Props) {
             <p className="text-xs text-muted-foreground">{sequence.description}</p>
           )}
         </SheetHeader>
+
+        {sequence.status === 'active' && (
+          <Button className="mt-6 w-full" onClick={() => onEnroll(sequence.id)}>
+            Inscrever contato
+          </Button>
+        )}
 
         <div className="space-y-6 mt-6">
           {open && <SequenceManualSteps key={sequence.id} sequenceId={sequence.id} active={sequence.status === 'active'} />}

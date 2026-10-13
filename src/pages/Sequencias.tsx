@@ -12,16 +12,19 @@ import { SequenceCard } from '@/components/sequences/SequenceCard';
 import { SequenceFormDialog } from '@/components/sequences/SequenceFormDialog';
 import { SequenceMetricsCard } from '@/components/sequences/SequenceMetricsCard';
 import { SequenceDetailDrawer } from '@/components/sequences/SequenceDetailDrawer';
+import { SequenceEnrollDialog } from '@/components/sequences/SequenceEnrollDialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 export default function Sequencias() {
   usePageTitle('Sequências');
-  const { sequences, loading, createSequence, toggleStatus, deleteSequence, creating } = useSequences();
+  const { sequences, loading, createSequence, toggleStatus, deleteSequence, enrollContact, creating, enrolling } = useSequences();
   const processor = useSequenceProcessor();
   const [formOpen, setFormOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [detailId, setDetailId] = useState<string | null>(null);
+  const [enrollId, setEnrollId] = useState<string | null>(null);
   const detailSequence = sequences.find(s => s.id === detailId) ?? null;
+  const enrollSequence = sequences.find(s => s.id === enrollId && s.status === 'active') ?? null;
 
   const activeCount = sequences.filter(s => s.status === 'active').length;
   const totalEnrolled = sequences.reduce((sum, s) => sum + s.total_enrolled, 0);
@@ -130,7 +133,18 @@ export default function Sequencias() {
         sequence={detailSequence}
         open={!!detailId}
         onOpenChange={(o) => { if (!o) setDetailId(null); }}
+        onEnroll={(id) => { setDetailId(null); setEnrollId(id); }}
       />
+
+      {enrollSequence && (
+        <SequenceEnrollDialog
+          sequence={enrollSequence}
+          open={!!enrollId}
+          onOpenChange={(o) => { if (!o) setEnrollId(null); }}
+          onEnroll={(contactId) => enrollContact({ sequenceId: enrollSequence.id, contactId })}
+          loading={enrolling}
+        />
+      )}
 
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
