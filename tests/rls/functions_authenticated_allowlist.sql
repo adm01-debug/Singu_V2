@@ -43,6 +43,7 @@ INSERT INTO _definer_auth(sig) VALUES
   ('seed_conversation_topics(_user_id uuid)'),
   ('seed_forecast_period(_user_id uuid, _type text)');
 INSERT INTO _definer_auth(sig) VALUES
+  ('confirm_sequence_manual_step(p_enrollment_id uuid, p_step_id uuid, p_note text)'),
   ('get_ai_gateway_health(_hours integer)'),
   ('get_ai_gateway_partition_stats()');
 

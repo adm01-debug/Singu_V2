@@ -8,7 +8,7 @@ export interface SequenceEvent {
   sequence_id: string;
   contact_id: string;
   step_order: number | null;
-  event_type: 'sent' | 'delivered' | 'opened' | 'clicked' | 'replied' | 'bounced' | 'unsubscribed' | 'visited_page' | 'meeting_booked' | 'failed';
+  event_type: 'sent' | 'delivered' | 'opened' | 'clicked' | 'replied' | 'bounced' | 'unsubscribed' | 'visited_page' | 'meeting_booked' | 'failed' | 'manual_completed' | 'email_resumed';
   metadata: Record<string, unknown>;
   created_at: string;
 }

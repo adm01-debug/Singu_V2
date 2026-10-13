@@ -8,7 +8,9 @@ export function useSequenceProcessor() {
     mutationFn: async () => {
       const { data, error } = await supabase.functions.invoke('sequence-processor', { body: {} });
       if (error) throw error;
-      return data as { ok: boolean; stats: Record<string, number> };
+      const result = data as { ok: boolean; stats: Record<string, number> };
+      if (!result.ok) throw new Error(`Processamento incompleto: ${result.stats.errors} falha(s); verifique as inscrições pausadas.`);
+      return result;
     },
     onSuccess: (data) => {
       const { stats } = data;

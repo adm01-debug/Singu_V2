@@ -7,10 +7,18 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- Retomadas de email legado exigem recibo do proprietário antes de uma nova tentativa. A confirmação real substitui registros sem comprovante atomicamente e consome a autorização, sem duplicar o evento; contatos sem endereço não podem ser retomados.
+
+- Sequências permitem retomar explicitamente emails pausados após revisão da integração, com recibo, isolamento por proprietário e proteção contra uma pausa substituída. A retomada preserva o progresso e não inventa confirmação de envio.
+
 ### Added
 - Matriz reconciliada das auditorias e lacunas com estado por achado, evidências e próximos passos, organizada em cinco áreas e vinculada pelo índice.
 
 ### Fixed
+- Etapas manuais das sequências ficam disponíveis nos detalhes com instruções e confirmação explícita pelo dono; a execução, o histórico e a retomada são atômicos e idempotentes, sem contar confirmação manual como email entregue. Contatos arquivados não podem confirmar etapas pendentes.
+- O processador de sequências só registra emails como enviados e avança a inscrição após confirmação do provedor e persistência, sinaliza falhas na interface e não chama o contador inexistente. Atualizações usam campos canônicos e conferem o passo vigente; chamadas manuais ficam restritas ao usuário autenticado, sequências pausadas não executam e canais sem confirmação ficam pausados em vez de produzir envios fictícios.
+- Confirmação de email, evento e avanço da sequência passam a ser atômicos; retomadas recuperam eventos ausentes de envios confirmados sem reenviar nem duplicar o histórico. Os campos de pausa, proprietário e posição dos passos do banco canônico também são garantidos por migration nas reconstruções. Inscrições de sequências pausadas deixam de ocupar o limite de processamento; devoluções confirmadas respeitam a espera das condições.
+- Inscrições antigas sem progresso começam na primeira etapa, novas inscrições não aceitam progresso nulo e a busca de confirmações percorre todas as páginas, evitando reenvio depois de 1.000 registros.
 - A atualização de emails por RPC encontra o índice único exigido pelo `ON CONFLICT`, preserva o registro nas novas tentativas com diferenças de maiúsculas e mantém o isolamento por proprietário.
 - A tela de 2FA permite escolher o autenticador a desativar quando há vários fatores, exibindo seu nome na ação e preservando os demais.
 - Administradores podem configurar e confirmar o MFA em AAL1 numa tela de recuperação restrita; as configurações de segurança e demais telas permanecem bloqueadas até AAL2. Um fator já cadastrado oferece confirmação do acesso atual, erros de consulta permitem nova tentativa e o retorno preserva a página, a pesquisa e a âncora sem duplicar o histórico. A troca de sessão exige nova verificação.

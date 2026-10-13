@@ -1,7 +1,7 @@
 // Sequence Processor — cron a cada 5min
 // Avança enrollments, avalia branching condicional, envia emails e respeita pause-on-reply
-import { createClient } from 'npm:@supabase/supabase-js@2';
-import { scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2';
+import { scopedCorsHeaders, requireCronSecret, withAuthOrServiceRole, isServiceRoleCaller } from "../_shared/auth.ts";
 
 interface Step {
   id: string;
@@ -24,11 +24,12 @@ interface Enrollment {
   contact_id: string;
   user_id: string;
   status: string;
-  current_step: number;
+  current_step: number | null;
   next_action_at: string | null;
   enrolled_at: string;
   replied_at: string | null;
-  last_step_sent_at: string | null;
+  last_step_executed_at: string | null;
+  metadata?: Record<string, unknown> | null;
 }
 
 interface SendLogEntry {
@@ -37,13 +38,22 @@ interface SendLogEntry {
   sent_at: string;
   opened_at: string | null;
   clicked_at: string | null;
+  status: string;
+  message_id: string | null;
 }
 
 interface Contact {
   id: string;
+  user_id: string;
   first_name: string;
   last_name: string;
   email: string;
+}
+
+interface EmailResult {
+  sent: boolean;
+  advanced: boolean;
+  paused: boolean;
 }
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -51,8 +61,18 @@ Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === 'OPTIONS') return new Response(null, { headers: cors });
 
-  const cronCheck = await requireCronSecret(req);
-  if (cronCheck) return cronCheck;
+  let userId: string | null = null;
+  if (req.headers.has('x-cron-secret')) {
+    const cronCheck = await requireCronSecret(req);
+    if (cronCheck) return cronCheck;
+  } else {
+    const auth = await withAuthOrServiceRole(req);
+    if (auth instanceof Response) return auth;
+    if (isServiceRoleCaller(auth)) {
+      const cronCheck = await requireCronSecret(req);
+      if (cronCheck) return cronCheck;
+    } else userId = auth;
+  }
 
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
@@ -64,12 +84,16 @@ Deno.serve(async (req) => {
 
   try {
     // 1. Buscar enrollments ativos com next_action_at vencido
-    const { data: enrollments, error: enrErr } = await supabase
+    let enrollmentQuery = supabase
       .from('sequence_enrollments')
-      .select('*')
+      .select('*, sequences!inner(status)')
       .eq('status', 'active')
+      .eq('sequences.status', 'active')
       .lte('next_action_at', now.toISOString())
+      .order('next_action_at', { ascending: true })
       .limit(100);
+    if (userId) enrollmentQuery = enrollmentQuery.eq('user_id', userId);
+    const { data: enrollments, error: enrErr } = await enrollmentQuery;
 
     if (enrErr) throw enrErr;
     if (!enrollments || enrollments.length === 0) {
@@ -85,22 +109,25 @@ Deno.serve(async (req) => {
     const contactIds = [...new Set(enrList.map(e => e.contact_id))];
 
     const [
-      { data: sequenceRows },
-      { data: allStepsRows },
-      { data: replyEventRows },
-      { data: sendLogRows },
-      { data: contactRows },
+      { data: sequenceRows, error: sequenceError },
+      { data: allStepsRows, error: stepsError },
+      { data: replyEventRows, error: replyError },
+      { data: sendLogRows, error: sendLogError },
+      { data: contactRows, error: contactError },
     ] = await Promise.all([
-      supabase.from('sequences').select('id, pause_on_reply, pause_on_meeting').in('id', sequenceIds),
+      supabase.from('sequences').select('id, user_id, status, pause_on_reply, pause_on_meeting').in('id', sequenceIds),
       supabase.from('sequence_steps').select('*').in('sequence_id', sequenceIds).order('step_order'),
       supabase.from('sequence_events').select('enrollment_id').in('enrollment_id', enrollmentIds).eq('event_type', 'replied'),
-      supabase.from('sequence_send_log').select('enrollment_id, step_order, sent_at, opened_at, clicked_at').in('enrollment_id', enrollmentIds),
-      supabase.from('contacts').select('id, first_name, last_name, email').in('id', contactIds),
+      fetchSendLogs(supabase, enrollmentIds),
+      supabase.from('contacts').select('id, user_id, first_name, last_name, email').in('id', contactIds),
     ]);
+    if (sequenceError || stepsError || replyError || sendLogError || contactError) {
+      throw sequenceError || stepsError || replyError || sendLogError || contactError;
+    }
 
     // Build in-memory lookup structures
     const sequenceMap = new Map(
-      (sequenceRows ?? []).map((s: { id: string; pause_on_reply: boolean; pause_on_meeting: boolean }) => [s.id, s])
+      (sequenceRows ?? []).map((s: { id: string; user_id: string; status: string; pause_on_reply: boolean; pause_on_meeting: boolean }) => [s.id, s])
     );
 
     const stepsBySeqId = new Map<string, Step[]>();
@@ -118,6 +145,7 @@ Deno.serve(async (req) => {
     // enrollment_id -> step_order -> send log entry
     const sendLogByEnrollment = new Map<string, Map<number, SendLogEntry>>();
     for (const log of (sendLogRows ?? []) as SendLogEntry[]) {
+      if (log.status === 'bounced' && !log.message_id) continue;
       const inner = sendLogByEnrollment.get(log.enrollment_id) ?? new Map<number, SendLogEntry>();
       inner.set(log.step_order, log);
       sendLogByEnrollment.set(log.enrollment_id, inner);
@@ -128,25 +156,25 @@ Deno.serve(async (req) => {
     );
 
     // Bulk-write accumulators — populate in pure computation loop, flush in parallel after
-    type EnrRow = Record<string, unknown>;
+    type EnrRow = { id: string; [key: string]: unknown };
     const repliedRows: EnrRow[] = [];
+    const pausedRows: EnrRow[] = [];
     const completedRows: EnrRow[] = [];
     const waitRows: EnrRow[] = [];
-    const advanceRows: EnrRow[] = [];
-    const nonEmailEventRows: EnrRow[] = [];
-    type EmailJob = { enr: Enrollment; step: Step; contact: Contact | null; nextAction: string | null };
+    type EmailJob = { enr: Enrollment; step: Step; contact: Contact | null; nextAction: string | null; log?: SendLogEntry };
     const emailJobs: EmailJob[] = [];
 
     for (const enr of enrList) {
       stats.processed++;
       try {
         const seq = sequenceMap.get(enr.sequence_id);
+        if (!seq || seq.user_id !== enr.user_id) throw new Error('Inscrição não pertence ao proprietário da sequência');
+        if (seq.status !== 'active') continue;
 
         // 2. Pause-on-reply: se contato respondeu, pausa (Map lookup, no DB call)
         if (seq?.pause_on_reply) {
           if (enrollmentsWithReply.has(enr.id) || enr.replied_at) {
             repliedRows.push({ id: enr.id, status: 'replied', replied_at: enr.replied_at ?? now.toISOString() });
-            stats.paused++;
             continue;
           }
         }
@@ -156,22 +184,22 @@ Deno.serve(async (req) => {
 
         if (steps.length === 0) {
           completedRows.push({ id: enr.id, status: 'completed', completed_at: now.toISOString() });
-          stats.completed++;
           continue;
         }
 
-        const nextStepOrder = enr.current_step + 1;
+        const currentStep = enr.current_step ?? 0;
+        const nextStepOrder = currentStep + 1;
         let targetStep = steps.find((s) => s.step_order === nextStepOrder);
 
         // 4. Avaliar branching do step ANTERIOR — in-memory, no DB call
-        if (enr.current_step > 0) {
-          const prevStep = steps.find((s) => s.step_order === enr.current_step);
+        if (currentStep > 0) {
+          const prevStep = steps.find((s) => s.step_order === currentStep);
           if (prevStep && prevStep.condition_type !== 'always') {
             const sendLog = sendLogByEnrollment.get(enr.id)?.get(prevStep.step_order);
             const conditionMet = evaluateConditionInMemory(enr.id, prevStep, sendLog, enrollmentsWithReply);
             if (conditionMet === null) {
               const waitUntil = new Date(
-                new Date(enr.last_step_sent_at ?? enr.enrolled_at).getTime() +
+                new Date(sendLog?.sent_at ?? enr.last_step_executed_at ?? enr.enrolled_at).getTime() +
                   prevStep.condition_wait_hours * 3600_000,
               );
               waitRows.push({ id: enr.id, next_action_at: waitUntil.toISOString() });
@@ -186,7 +214,6 @@ Deno.serve(async (req) => {
 
         if (!targetStep) {
           completedRows.push({ id: enr.id, status: 'completed', completed_at: now.toISOString() });
-          stats.completed++;
           continue;
         }
 
@@ -201,63 +228,70 @@ Deno.serve(async (req) => {
 
         // 6. Accumulate work per channel
         if (targetStep.channel === 'email') {
-          emailJobs.push({ enr, step: targetStep, contact: contactMap.get(enr.contact_id) ?? null, nextAction });
+          const log = sendLogByEnrollment.get(enr.id)?.get(targetStep.step_order);
+          if (log?.status === 'bounced') {
+            pausedRows.push({ id: enr.id, status: 'paused', paused_at: now.toISOString(), paused_reason: 'Envio devolvido; revise o endereço antes de retomar' });
+            stats.errors++;
+            continue;
+          }
+          emailJobs.push({ enr, step: targetStep, contact: contactMap.get(enr.contact_id) ?? null, nextAction, log });
         } else {
-          nonEmailEventRows.push({
-            enrollment_id: enr.id,
-            sequence_id: enr.sequence_id,
-            contact_id: enr.contact_id,
-            user_id: enr.user_id,
-            step_order: targetStep.step_order,
-            event_type: 'sent',
-            metadata: { channel: targetStep.channel, manual_task: true },
+          pausedRows.push({
+            id: enr.id,
+            status: 'paused',
+            paused_at: now.toISOString(),
+            paused_reason: `Canal ${targetStep.channel} sem confirmação de execução`,
+            metadata: {
+              ...(enr.metadata ?? {}),
+              pending_manual_step: { step_id: targetStep.id, step_order: targetStep.step_order, channel: targetStep.channel },
+            },
           });
+          stats.errors++;
         }
-
-        advanceRows.push({
-          id: enr.id,
-          current_step: targetStep.step_order,
-          next_action_at: nextAction,
-          last_step_sent_at: now.toISOString(),
-          last_event_at: now.toISOString(),
-          status: nextAction ? 'active' : 'completed',
-          completed_at: nextAction ? null : now.toISOString(),
-        });
-        stats.advanced++;
       } catch (e) {
         console.error(`Erro enrollment ${enr.id}:`, e);
         stats.errors++;
       }
     }
 
-    // Flush all accumulated writes in parallel (4 bulk upserts + parallel email sends)
+    // Envio de email e atualização da inscrição dependem da confirmação do provedor.
     const emailResults = await Promise.allSettled(
-      emailJobs.map((job) => sendEmailStep(supabase, job.enr, job.step, job.contact))
+      emailJobs.map((job) => sendEmailStep(supabase, job.enr, job.step, job.contact, job.nextAction, job.log))
     );
-    for (const result of emailResults) {
-      if (result.status === 'fulfilled' && result.value) stats.sent++;
-      else if (result.status === 'rejected' || (result.status === 'fulfilled' && !result.value)) stats.errors++;
+    for (const [index, result] of emailResults.entries()) {
+      if (result.status === 'fulfilled' && result.value.sent) stats.sent++;
+      if (result.status === 'fulfilled' && result.value.paused) stats.paused++;
+      if (result.status === 'fulfilled' && result.value.advanced) {
+        stats.advanced++;
+        if (!emailJobs[index].nextAction) stats.completed++;
+      }
+      else stats.errors++;
     }
 
-    await Promise.all([
-      repliedRows.length > 0
-        ? supabase.from('sequence_enrollments').upsert(repliedRows, { onConflict: 'id' })
-        : Promise.resolve(),
-      completedRows.length > 0
-        ? supabase.from('sequence_enrollments').upsert(completedRows, { onConflict: 'id' })
-        : Promise.resolve(),
-      waitRows.length > 0
-        ? supabase.from('sequence_enrollments').upsert(waitRows, { onConflict: 'id' })
-        : Promise.resolve(),
-      advanceRows.length > 0
-        ? supabase.from('sequence_enrollments').upsert(advanceRows, { onConflict: 'id' })
-        : Promise.resolve(),
-      nonEmailEventRows.length > 0
-        ? supabase.from('sequence_events').insert(nonEmailEventRows)
-        : Promise.resolve(),
-    ]);
+    const originalSteps = new Map(enrList.map(enr => [enr.id, enr.current_step]));
+    const groups: Array<{ rows: EnrRow[]; stat: 'paused' | 'completed' | null }> = [
+      { rows: repliedRows, stat: 'paused' },
+      { rows: pausedRows, stat: 'paused' },
+      { rows: completedRows, stat: 'completed' },
+      { rows: waitRows, stat: null },
+    ];
+    for (const group of groups) {
+      for (let offset = 0; offset < group.rows.length; offset += 10) {
+        const writes = await Promise.all(group.rows.slice(offset, offset + 10).map(row => {
+          const update = supabase.from('sequence_enrollments').update(row).eq('id', row.id).eq('status', 'active');
+          const step = originalSteps.get(row.id);
+          return (step === null || step === undefined ? update.is('current_step', null) : update.eq('current_step', step))
+            .select('id').maybeSingle();
+        }));
+        for (const write of writes) {
+          if (write.error) throw write.error;
+          if (!write.data) stats.errors++;
+          else if (group.stat) stats[group.stat]++;
+        }
+      }
+    }
 
-    return new Response(JSON.stringify({ ok: true, stats }), {
+    return new Response(JSON.stringify({ ok: stats.errors === 0, stats }), {
       headers: { ...cors, 'Content-Type': 'application/json' },
     });
   } catch (e) {
@@ -270,6 +304,21 @@ Deno.serve(async (req) => {
 });
 
 // Pure in-memory condition evaluation — no DB calls, uses pre-fetched Maps
+async function fetchSendLogs(supabase: SupabaseClient, enrollmentIds: string[]) {
+  const pageSize = 1000;
+  const rows: SendLogEntry[] = [];
+  for (let offset = 0; ; offset += pageSize) {
+    const { data, error } = await supabase.from('sequence_send_log')
+      .select('enrollment_id, step_order, sent_at, opened_at, clicked_at, status, message_id')
+      .in('enrollment_id', enrollmentIds).in('status', ['sent', 'bounced'])
+      .order('sent_at', { ascending: true }).order('id', { ascending: true })
+      .range(offset, offset + pageSize - 1);
+    if (error) return { data: null, error };
+    rows.push(...((data ?? []) as SendLogEntry[]));
+    if (!data || data.length < pageSize) return { data: rows, error: null };
+  }
+}
+
 function evaluateConditionInMemory(
   enrollmentId: string,
   step: Step,
@@ -291,14 +340,67 @@ function evaluateConditionInMemory(
 }
 
 async function sendEmailStep(
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClient,
   enr: Enrollment,
   step: Step,
   contact: Contact | null,
-): Promise<boolean> {
+  nextAction: string | null,
+  confirmedLog?: SendLogEntry,
+): Promise<EmailResult> {
+  let accepted = !!confirmedLog?.message_id?.trim();
+  let newlySent = false;
   try {
-    if (!contact?.email) {
-      await supabase.from('sequence_send_log').insert({
+    if (!contact || contact.user_id !== enr.user_id) throw new Error('Contato não pertence ao proprietário da inscrição');
+    if (confirmedLog && !confirmedLog.message_id?.trim()) {
+      await requireLegacyEmailResume(supabase, enr, step);
+      confirmedLog = undefined;
+    }
+
+    const idempotencyKey = `seq-${enr.id}-step-${step.step_order}`;
+    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(idempotencyKey));
+    const trackingToken = Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('').slice(0, 32);
+    if (confirmedLog) {
+      await completeEmailDelivery(supabase, enr, step, nextAction, confirmedLog.message_id!, trackingToken, null);
+      return { sent: false, advanced: true, paused: false };
+    }
+    if (!contact.email) throw new Error('Contato sem email');
+    const body = (step.message_template ?? '')
+      .replaceAll('{{first_name}}', contact.first_name ?? '')
+      .replaceAll('{{last_name}}', contact.last_name ?? '');
+    const subject = (step.subject ?? 'Mensagem')
+      .replaceAll('{{first_name}}', contact.first_name ?? '');
+
+    const { data: delivery, error: deliveryError } = await supabase.functions.invoke<{ ok: boolean; messageId: string }>('send-transactional-email', {
+      signal: AbortSignal.timeout(20_000),
+      body: {
+        templateName: 'sequence-step',
+        recipientEmail: contact.email,
+        idempotencyKey,
+        templateData: { subject, body, trackingToken },
+      },
+    });
+    if (deliveryError || delivery?.ok !== true || typeof delivery.messageId !== 'string' || !delivery.messageId.trim()) {
+      throw new Error('Envio transacional não confirmado pelo provedor');
+    }
+    accepted = true;
+    newlySent = true;
+
+    await completeEmailDelivery(supabase, enr, step, nextAction, delivery.messageId, trackingToken, subject);
+    return { sent: newlySent, advanced: true, paused: false };
+  } catch (e) {
+    console.error('sendEmailStep erro:', e);
+    const pause = supabase.from('sequence_enrollments').update({
+      status: 'paused',
+      paused_at: new Date().toISOString(),
+      paused_reason: accepted ? 'Provedor confirmou o envio; persistência ou avanço exigem revisão' : 'Envio não confirmado; revise a integração antes de retomar',
+    })
+      .eq('id', enr.id).eq('status', 'active');
+    const { data: paused, error: pauseError } = await (enr.current_step === null
+      ? pause.is('current_step', null)
+      : pause.eq('current_step', enr.current_step)).select('id').maybeSingle();
+    if (pauseError) console.error('Não foi possível pausar a inscrição:', pauseError);
+    if (!accepted) {
+      const { error: failureError } = await supabase.from('sequence_send_log').insert({
         enrollment_id: enr.id,
         step_id: step.id,
         sequence_id: enr.sequence_id,
@@ -307,61 +409,35 @@ async function sendEmailStep(
         step_order: step.step_order,
         channel: 'email',
         status: 'failed',
-        error_message: 'Contato sem email',
+        error_message: e instanceof Error ? e.message : 'Envio não confirmado',
       });
-      return false;
+      if (failureError) console.error('Não foi possível registrar a falha:', failureError);
     }
-
-    const body = (step.message_template ?? '')
-      .replaceAll('{{first_name}}', contact.first_name ?? '')
-      .replaceAll('{{last_name}}', contact.last_name ?? '');
-    const subject = (step.subject ?? 'Mensagem')
-      .replaceAll('{{first_name}}', contact.first_name ?? '');
-
-    const { data: log } = await supabase
-      .from('sequence_send_log')
-      .insert({
-        enrollment_id: enr.id,
-        step_id: step.id,
-        sequence_id: enr.sequence_id,
-        contact_id: enr.contact_id,
-        user_id: enr.user_id,
-        step_order: step.step_order,
-        channel: 'email',
-        status: 'sent',
-      })
-      .select('id, tracking_token')
-      .single();
-
-    try {
-      await supabase.functions.invoke('send-transactional-email', {
-        body: {
-          templateName: 'sequence-step',
-          recipientEmail: contact.email,
-          idempotencyKey: `seq-${enr.id}-step-${step.step_order}`,
-          templateData: { subject, body, trackingToken: log?.tracking_token },
-        },
-      });
-    } catch (e) {
-      console.warn('send-transactional-email indisponível, log apenas:', e);
-    }
-
-    await Promise.all([
-      supabase.from('sequence_events').insert({
-        enrollment_id: enr.id,
-        sequence_id: enr.sequence_id,
-        contact_id: enr.contact_id,
-        user_id: enr.user_id,
-        step_order: step.step_order,
-        event_type: 'sent',
-        metadata: { channel: 'email', subject, tracking_token: log?.tracking_token },
-      }),
-      supabase.rpc('increment', { table_name: 'sequences' }).catch(() => {}),
-    ]);
-
-    return true;
-  } catch (e) {
-    console.error('sendEmailStep erro:', e);
-    return false;
+    return { sent: newlySent, advanced: false, paused: !!paused && !pauseError };
   }
+}
+
+async function requireLegacyEmailResume(supabase: SupabaseClient, enr: Enrollment, step: Step) {
+  const retry = enr.metadata?.retry_unconfirmed_email;
+  if (!retry || typeof retry !== 'object' || !('receipt_id' in retry) ||
+    typeof retry.receipt_id !== 'string' || !('step_order' in retry) || retry.step_order !== step.step_order) {
+    throw new Error('Envio anterior sem confirmação do provedor; revise antes de retomar');
+  }
+  const { data, error } = await supabase.from('sequence_events').select('id')
+    .eq('id', retry.receipt_id).eq('enrollment_id', enr.id).eq('user_id', enr.user_id)
+    .eq('sequence_id', enr.sequence_id).eq('contact_id', enr.contact_id)
+    .eq('step_order', step.step_order).eq('event_type', 'email_resumed').maybeSingle();
+  if (error || data?.id !== retry.receipt_id) throw new Error('Recibo de retomada do envio legado não confirmado');
+}
+
+async function completeEmailDelivery(
+  supabase: SupabaseClient, enr: Enrollment, step: Step, nextAction: string | null,
+  messageId: string, trackingToken: string, subject: string | null,
+) {
+  const { data, error } = await supabase.rpc('complete_sequence_email_delivery', {
+    p_enrollment_id: enr.id, p_user_id: enr.user_id, p_step_id: step.id,
+    p_current_step: enr.current_step ?? 0, p_message_id: messageId,
+    p_tracking_token: trackingToken, p_next_action_at: nextAction, p_subject: subject,
+  });
+  if (error || data !== enr.id) throw error || new Error('Inscrição alterada durante o envio');
 }
