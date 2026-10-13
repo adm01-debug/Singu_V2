@@ -137,26 +137,29 @@ BEGIN
           WHERE n.nspname = 'public' AND c.contype = 'c' AND c.conname LIKE 'chk_%') AS chks,
         (SELECT count(*) FROM pg_catalog.pg_tables WHERE schemaname = 'public') AS tt,
         (SELECT count(*) FROM pg_catalog.pg_views WHERE schemaname = 'public') AS tv
+    ), scores AS (
+      SELECT round(pct_companies_uid / 10, 1) AS score_user_id_companies,
+        round(pct_contacts_uid / 10, 1) AS score_user_id_contacts,
+        round(pct_cnpj / 10, 1) AS score_cnpj,
+        CASE WHEN interactions_total > 1000 THEN 10 WHEN interactions_total > 0 THEN 4 ELSE 0 END AS score_interactions,
+        round(pct_rls / 10, 1) AS score_rls,
+        round(pct_singu / 10, 1) AS score_singu_tables,
+        CASE WHEN s1 > 0 AND s2 > 0 AND s3 > 0 THEN 10 ELSE 5 END AS score_seeds,
+        CASE WHEN vs >= 9 THEN 10 WHEN vs >= 5 THEN 7 ELSE 3 END AS score_views,
+        CASE WHEN chks >= 20 THEN 10 WHEN chks >= 10 THEN 7 ELSE 3 END AS score_constraints
+      FROM metrics
     )
     SELECT NULL::uuid AS user_id,
-      round(pct_companies_uid / 10, 1) AS score_user_id_companies,
-      round(pct_contacts_uid / 10, 1) AS score_user_id_contacts,
-      round(pct_cnpj / 10, 1) AS score_cnpj,
-      CASE WHEN interactions_total > 1000 THEN 10 WHEN interactions_total > 0 THEN 4 ELSE 0 END AS score_interactions,
-      round(pct_rls / 10, 1) AS score_rls,
-      round(pct_singu / 10, 1) AS score_singu_tables,
-      CASE WHEN s1 > 0 AND s2 > 0 AND s3 > 0 THEN 10 ELSE 5 END AS score_seeds,
-      CASE WHEN vs >= 9 THEN 10 WHEN vs >= 5 THEN 7 ELSE 3 END AS score_views,
-      CASE WHEN chks >= 20 THEN 10 WHEN chks >= 10 THEN 7 ELSE 3 END AS score_constraints,
-      round((pct_companies_uid / 10 + pct_contacts_uid / 10 + pct_rls / 10 * 2 + pct_singu / 10 * 2 +
-        CASE WHEN interactions_total > 1000 THEN 10 WHEN interactions_total > 0 THEN 4 ELSE 0 END * 1.5 +
-        CASE WHEN s1 > 0 AND s2 > 0 THEN 10 ELSE 5 END * 0.5 +
-        CASE WHEN vs >= 9 THEN 10 ELSE 5 END * 0.5 +
-        CASE WHEN chks >= 20 THEN 10 ELSE 5 END * 0.5 + pct_cnpj / 10 * 0.5) / 9.5, 1) AS health_score,
+      score_user_id_companies, score_user_id_contacts, score_cnpj, score_interactions,
+      score_rls, score_singu_tables, score_seeds, score_views, score_constraints,
+      round((score_user_id_companies + score_user_id_contacts +
+        score_rls * 2 + score_singu_tables * 2 + score_interactions * 1.5 +
+        score_seeds * 0.5 + score_views * 0.5 + score_constraints * 0.5 +
+        score_cnpj * 0.5) / 9.5, 1) AS health_score,
       tt AS total_tables, tv AS total_views, interactions_total,
       s1 AS seeds_compat, s2 AS seeds_health, s3 AS seeds_auto, vs AS views_singu,
       chks AS check_constraints, now() AS measured_at
-    FROM metrics;
+    FROM metrics CROSS JOIN scores;
     REVOKE ALL ON public.vw_singu_data_health FROM PUBLIC, anon, authenticated;
     GRANT SELECT ON public.vw_singu_data_health TO authenticated, service_role;
   END IF;
