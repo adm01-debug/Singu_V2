@@ -7,6 +7,16 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- Todas as inscrições em sequências validam contato, proprietário, status e capacidade no banco. O lead score grava inscrição, histórico e contador em uma transação. Reservas de envio impedem arquivamento ou pausa concorrente da sequência; resultados incertos exigem revisão e rejeições confirmadas sem reserva pausam a inscrição.
+
+- A primeira etapa da sequência respeita o atraso configurado; repetir a inscrição preserva a data já agendada. Buscas compostas aceitam até dez palavras e retornam erro de entrada quando ultrapassam esse limite.
+
+- Inscrições exigem sequência ativa no banco e não permitem fechar o diálogo enquanto aguardam confirmação. O processador consulta novamente o proprietário e o arquivamento do contato imediatamente antes de despachar um email.
+
+- Sequências ativas permitem buscar contatos da própria carteira e inscrevê-los pelo detalhe, com confirmação da operação atômica no banco e sem listar contatos arquivados.
+- A inscrição revalida o contato no banco e o processador pausa contatos arquivados; a busca aceita nome completo, renova a carteira alterada e permite tentar o mesmo termo após falha.
+- A capacidade da sequência é verificada atomicamente pela quantidade real de inscrições, preservando o retry de inscrições existentes e sinalizando o limite no detalhe.
+
 - A confirmação de mesclagem compara a identidade dos UUIDs mesmo com maiúsculas, chaves ou ausência de hífens, evitando apresentar falha depois de uma operação confirmada pelo banco. IDs de outras operações e respostas sem confirmação continuam rejeitados.
 
 - Mesclagem de contatos e empresas usa uma transação com bloqueio por proprietário, validação de vínculos, exclusão lógica e auditoria. Falhas revertem o conjunto sem declarar sucesso. Emails e telefones equivalentes conservam seus metadados na cópia arquivada, e registros arquivados deixam de aparecer na deduplicação. A reconstrução do banco inclui as marcações de duplicidade necessárias para arquivar o contato mesclado.

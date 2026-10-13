@@ -14,6 +14,7 @@ interface ExternalQueryOptions {
   search?: {
     term: string;
     columns: string[];
+    matchAllTerms?: boolean;
   };
   order?: {
     column: string;

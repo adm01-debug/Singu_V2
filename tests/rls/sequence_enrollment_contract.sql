@@ -6,8 +6,8 @@ SELECT set_config('rls.fail_counter', 'on', true);
 INSERT INTO public.contacts(user_id, first_name, last_name)
 VALUES (current_setting('rls.sequence_owner')::uuid, 'Contrato', 'Sequência')
 RETURNING set_config('rls.sequence_contact', id::text, true);
-INSERT INTO public.sequences(user_id, name)
-VALUES (current_setting('rls.sequence_owner')::uuid, 'Contrato de inscrição')
+INSERT INTO public.sequences(user_id, name, status)
+VALUES (current_setting('rls.sequence_owner')::uuid, 'Contrato de inscrição', 'active')
 RETURNING set_config('rls.sequence_id', id::text, true);
 CREATE FUNCTION pg_temp.reject_sequence_counter() RETURNS trigger LANGUAGE plpgsql AS $trigger$
 BEGIN

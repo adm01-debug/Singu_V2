@@ -1,6 +1,6 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 
-type Scenario = 'ausente' | 'sem-id' | 'confirmado' | 'log-falha' | 'evento-falha' | 'avanco-vazio' | 'consulta-falha' | 'contato-alheio' | 'legado' | 'legado-retomado' | 'legado-sem-recibo' | 'confirmado-existente' | 'manual' | 'sequencia-pausada' | 'resposta' | 'bounce-espera' | 'bounce-apos' | 'progresso-nulo' | 'progresso-nulo-falha' | 'logs-paginados';
+type Scenario = 'ausente' | 'sem-id' | 'confirmado' | 'log-falha' | 'evento-falha' | 'avanco-vazio' | 'consulta-falha' | 'contato-alheio' | 'legado' | 'legado-retomado' | 'legado-sem-recibo' | 'confirmado-existente' | 'manual' | 'sequencia-pausada' | 'resposta' | 'bounce-espera' | 'bounce-apos' | 'progresso-nulo' | 'progresso-nulo-falha' | 'logs-paginados' | 'arquivado-apos-preload' | 'arquivado-antes-reserva' | 'reserva-ocupada' | 'reserva-resposta-perdida' | 'reserva-rejeitada-sem-reserva' | 'reserva-rejeitada-com-reserva' | 'provedor-incerto';
 interface Operation { table: string; method: string; body: Record<string, unknown>; query: URLSearchParams }
 
 const owner = '11111111-1111-4111-8111-111111111111';
@@ -13,7 +13,10 @@ function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json' } });
 }
 
+const pendingReservations: Partial<Record<Scenario, unknown[]>> = { 'reserva-rejeitada-com-reserva': [{ token: 'reserva-anterior' }] };
+
 function mockRead(table: string, scenario: Scenario, query: URLSearchParams): Response {
+  if (table === 'sequence_email_reservations') return json(pendingReservations[scenario] ?? []);
   const currentStep = scenario.startsWith('progresso-nulo') ? null : 0;
   if (table === 'sequence_enrollments') return json([{
     id: enrollment, sequence_id: sequence, contact_id: contact, user_id: owner,
@@ -50,7 +53,10 @@ function mockRead(table: string, scenario: Scenario, query: URLSearchParams): Re
     }
     return json(scenario === 'resposta' ? [{ enrollment_id: enrollment }] : []);
   }
-  if (table === 'contacts') return json([{ id: contact, user_id: scenario === 'contato-alheio' ? sequence : owner, first_name: 'Pessoa', last_name: 'Teste', email: 'teste@example.invalid' }]);
+  if (table === 'contacts') {
+    if (scenario === 'arquivado-apos-preload' && query.get('id') === `eq.${contact}`) return json([]);
+    return json([{ id: contact, user_id: scenario === 'contato-alheio' ? sequence : owner, first_name: 'Pessoa', last_name: 'Teste', email: 'teste@example.invalid' }]);
+  }
   if (table === 'sequence_send_log' && scenario === 'logs-paginados') return json(query.get('offset') === '1000' ? [{
     enrollment_id: enrollment, step_order: 1, sent_at: '2020-01-01T00:00:00Z', opened_at: null, clicked_at: null, status: 'sent', message_id: 'provedor-123',
   }] : Array.from({ length: 1000 }, (_, index) => ({
@@ -65,6 +71,7 @@ function mockRead(table: string, scenario: Scenario, query: URLSearchParams): Re
 
 async function withProcessor(scenario: Scenario, test: (call: (manual?: boolean, headers?: Record<string, string>) => Promise<Response>, operations: Operation[]) => Promise<void>) {
   const operations: Operation[] = [];
+  let heldToken: string | null = null;
   const backend = Deno.serve({ hostname: '127.0.0.1', port: 0, onListen() {} }, async req => {
     const url = new URL(req.url);
     const table = url.pathname.split('/').pop()!;
@@ -72,8 +79,25 @@ async function withProcessor(scenario: Scenario, test: (call: (manual?: boolean,
     operations.push({ table, method: req.method, body, query: url.searchParams });
     if (url.pathname === '/auth/v1/user') return json({ id: owner });
     if (url.pathname.startsWith('/functions/')) {
-      if (scenario === 'ausente' || scenario === 'progresso-nulo-falha') return json({ error: 'Função não encontrada' }, 404);
+      if (scenario === 'ausente' || scenario === 'progresso-nulo-falha') return json({ code: 'NOT_FOUND', message: 'Função não encontrada' }, 404);
+      if (scenario === 'provedor-incerto') return json({ error: 'Resposta perdida após a solicitação ao provedor' }, 500);
       return json(scenario === 'sem-id' ? { ok: true } : { ok: true, messageId: 'provedor-123' });
+    }
+    if (table === 'reserve_sequence_email_send') {
+      if (scenario === 'arquivado-antes-reserva' || scenario.startsWith('reserva-rejeitada-')) return json({ code: '42501', message: 'Contato indisponível para envio' }, 403);
+      if (heldToken || scenario === 'reserva-ocupada') return json(null);
+      assertEquals(typeof body.p_token, 'string');
+      heldToken = String(body.p_token);
+      if (scenario === 'reserva-resposta-perdida') return json({ code: '503', message: 'Resposta perdida após a reserva' }, 503);
+      return json({
+        id: contact, user_id: owner, first_name: 'Pessoa', last_name: 'Silva',
+        email: 'maria@example.test', token: heldToken,
+      });
+    }
+    if (table === 'release_sequence_email_send') {
+      assertEquals(body.p_token, heldToken);
+      heldToken = null;
+      return json(true);
     }
     if (table === 'complete_sequence_email_delivery') return atomicResponse(scenario);
     if (req.method === 'GET') return mockRead(table, scenario, url.searchParams);
@@ -131,6 +155,65 @@ function atomicResponse(scenario: Scenario): Response {
   });
 }
 
+for (const scenario of ['sem-id', 'provedor-incerto', 'log-falha', 'evento-falha', 'avanco-vazio'] as const) {
+  Deno.test(`Sequências: ${scenario} mantém a reserva e impede uma segunda chamada ao provedor`, () => withProcessor(scenario, async (call, operations) => {
+    const first = await (await call()).json();
+    assertEquals(first.stats.advanced, 0);
+    const retry = await (await call()).json();
+    assertEquals(retry.stats.sent, 0);
+    assertEquals(retry.stats.advanced, 0);
+    assertEquals(operations.filter(operation => operation.table === 'send-transactional-email').length, 1);
+    assert(!operations.some(operation => operation.table === 'release_sequence_email_send'));
+  }));
+}
+
+Deno.test('Sequências: reserva ocupada não envia nem pausa o trabalho de outro processador', () => withProcessor('reserva-ocupada', async (call, operations) => {
+  const result = await (await call()).json();
+  assertEquals(result.ok, true);
+  assertEquals(result.stats.sent, 0);
+  assertEquals(result.stats.paused, 0);
+  assert(!operations.some(operation => operation.table === 'send-transactional-email' || operation.method === 'PATCH'));
+}));
+
+Deno.test('Sequências: resposta perdida após a reserva não oferece retomada nem repete envio', () => withProcessor('reserva-resposta-perdida', async (call, operations) => {
+  const first = await (await call()).json();
+  assertEquals(first.stats.errors, 1);
+  assertEquals(first.stats.paused, 0);
+  const retry = await (await call()).json();
+  assertEquals(retry.stats.sent, 0);
+  assertEquals(retry.stats.paused, 0);
+  assertEquals(operations.filter(operation => operation.table === 'reserve_sequence_email_send').length, 2);
+  assert(!operations.some(operation => operation.table === 'send-transactional-email' || operation.table === 'release_sequence_email_send' || operation.method === 'PATCH'));
+}));
+
+Deno.test('Sequências: rejeição confirmada sem reserva pausa e registra falha', () => withProcessor('reserva-rejeitada-sem-reserva', async (call, operations) => {
+  const result = await (await call()).json();
+  assertEquals(result.stats.paused, 1);
+  assert(operations.some(operation => operation.table === 'sequence_send_log' && operation.body.status === 'failed'));
+  assert(!operations.some(operation => operation.table === 'send-transactional-email' || operation.table === 'release_sequence_email_send'));
+}));
+
+Deno.test('Sequências: rejeição confirmada com reserva concorrente não pausa', () => withProcessor('reserva-rejeitada-com-reserva', async (call, operations) => {
+  const result = await (await call()).json();
+  assertEquals(result.stats.paused, 0);
+  assert(!operations.some(operation => operation.method === 'PATCH' || operation.table === 'send-transactional-email' || operation.table === 'release_sequence_email_send'));
+}));
+
+Deno.test('Sequências: arquivamento entre consulta e reserva impede a chamada externa', () => withProcessor('arquivado-antes-reserva', async (call, operations) => {
+  const result = await (await call()).json();
+  assertEquals(result.stats.sent, 0);
+  assertEquals(result.stats.advanced, 0);
+  assert(!operations.some(operation => operation.table === 'send-transactional-email'));
+}));
+
+Deno.test('Sequências: função comprovadamente ausente libera a reserva sem registrar envio', () => withProcessor('ausente', async (call, operations) => {
+  const result = await (await call()).json();
+  assertEquals(result.stats.sent, 0);
+  assertEquals(result.stats.advanced, 0);
+  assertEquals(operations.filter(operation => operation.table === 'release_sequence_email_send').length, 1);
+  assert(!operations.some(operation => operation.table === 'complete_sequence_email_delivery'));
+}));
+
 for (const scenario of ['ausente', 'sem-id', 'contato-alheio', 'legado'] as const) {
   Deno.test(`Sequências: ${scenario} não confirma envio nem avança`, () => withProcessor(scenario, async (call, operations) => {
     const response = await call();
@@ -152,14 +235,18 @@ Deno.test('Sequências: confirmação precede log, evento e avanço canônico', 
   assertEquals(result.stats.advanced, 1);
   assertEquals(result.stats.completed, 1);
   const writes = operations.filter(operation => operation.method !== 'GET');
-  assertEquals(writes.map(operation => operation.table), ['send-transactional-email', 'complete_sequence_email_delivery']);
-  assertEquals(writes[1].body.p_message_id, 'provedor-123');
-  assertEquals(writes[1].body.p_current_step, 0);
-  assertEquals(writes[1].body.p_user_id, owner);
-  assertEquals(writes[1].body.p_step_id, step);
-  assertEquals(writes[1].body.p_next_action_at, null);
-  assertEquals(writes[1].body.p_subject, 'Olá Pessoa');
-  assertEquals(writes[0].body.idempotencyKey, `seq-${enrollment}-step-1`);
+  assertEquals(writes.map(operation => operation.table), [
+    'reserve_sequence_email_send', 'send-transactional-email',
+    'complete_sequence_email_delivery', 'release_sequence_email_send',
+  ]);
+  assertEquals(writes[2].body.p_message_id, 'provedor-123');
+  assertEquals(writes[2].body.p_current_step, 0);
+  assertEquals(writes[2].body.p_user_id, owner);
+  assertEquals(writes[2].body.p_step_id, step);
+  assertEquals(writes[2].body.p_next_action_at, null);
+  assertEquals(writes[2].body.p_subject, 'Olá Pessoa');
+  assertEquals(writes[1].body.idempotencyKey, `seq-${enrollment}-step-1`);
+  assertEquals(writes[3].body.p_token, writes[0].body.p_token);
 }));
 
 Deno.test('Sequências: progresso nulo usa a primeira etapa após normalização', () => withProcessor('progresso-nulo', async (call, operations) => {
@@ -280,4 +367,15 @@ Deno.test('Sequências: cron inválido e serviço sem cron são recusados', () =
     await response.arrayBuffer();
   }
   assertEquals(operations.length, 0);
+}));
+
+Deno.test('Sequências: arquivamento após preload bloqueia o disparo e pausa a inscrição', () => withProcessor('arquivado-apos-preload', async (call, operations) => {
+  const result = await (await call()).json();
+  assertEquals(result.stats.sent, 0);
+  assertEquals(result.stats.advanced, 0);
+  assertEquals(result.stats.paused, 1);
+  assert(!operations.some(operation => operation.table === 'send-transactional-email'));
+  const revalidation = operations.find(operation => operation.table === 'contacts' && operation.query.get('id') === `eq.${contact}`);
+  assertEquals(revalidation?.query.get('user_id'), `eq.${owner}`);
+  assertEquals(revalidation?.query.get('deleted_at'), 'is.null');
 }));

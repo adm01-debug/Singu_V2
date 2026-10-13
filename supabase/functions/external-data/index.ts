@@ -10,11 +10,11 @@ import {
   isSafeIdentifier,
   MAX_QUERY_FILTERS,
   parseQueryOrder,
-  quotePostgrestValue,
   type RelationScope,
 } from "../_shared/tenant-guard.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 import { isAllowedSelectProjection } from "../_shared/select-projection.ts";
+import { buildSearchFilter, SearchFilterInputError } from "../_shared/search-filter.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 100, message: "Rate limit exceeded for external data. Please wait." });
 
@@ -550,10 +550,7 @@ Deno.serve(async (req) => {
           searchConfig.term.trim() &&
           searchColumns.length > 0
         ) {
-          const term = quotePostgrestValue(`%${searchConfig.term.trim().slice(0, 200)}%`);
-          if (searchColumns.length > 0) {
-            query = query.or(searchColumns.map((col) => `${col}.ilike.${term}`).join(','));
-          }
+          query = query.or(buildSearchFilter(searchConfig.term, searchColumns, searchConfig.matchAllTerms === true));
         }
 
         // Allowlist of safe PostgREST filter methods — prevents method injection
@@ -754,6 +751,7 @@ Deno.serve(async (req) => {
     return jsonError(`Unknown action: ${operation}`, 400, req);
 
   } catch (error) {
+    if (error instanceof SearchFilterInputError) return jsonError(error.message, 400, req);
     const elapsed = Math.round(performance.now() - startTime);
     const message = error instanceof Error ? error.message : String(error);
     return jsonError(`Handler error: ${message} [t=${elapsed}ms]`, 500, req);

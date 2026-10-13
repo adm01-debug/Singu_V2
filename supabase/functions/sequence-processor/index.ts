@@ -1,6 +1,6 @@
 // Sequence Processor — cron a cada 5min
 // Avança enrollments, avalia branching condicional, envia emails e respeita pause-on-reply
-import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2';
+import { createClient, FunctionsHttpError, type SupabaseClient } from 'npm:@supabase/supabase-js@2';
 import { scopedCorsHeaders, requireCronSecret, withAuthOrServiceRole, isServiceRoleCaller } from "../_shared/auth.ts";
 
 interface Step {
@@ -54,6 +54,26 @@ interface EmailResult {
   sent: boolean;
   advanced: boolean;
   paused: boolean;
+  skipped?: boolean;
+}
+
+interface EmailReservation {
+  id: string;
+  user_id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string;
+  token: string;
+}
+
+function isEmailReservation(value: unknown): value is EmailReservation {
+  if (!value || typeof value !== 'object') return false;
+  return 'id' in value && typeof value.id === 'string'
+    && 'user_id' in value && typeof value.user_id === 'string'
+    && 'first_name' in value && (value.first_name === null || typeof value.first_name === 'string')
+    && 'last_name' in value && (value.last_name === null || typeof value.last_name === 'string')
+    && 'email' in value && typeof value.email === 'string' && !!value.email.trim()
+    && 'token' in value && typeof value.token === 'string';
 }
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -119,7 +139,7 @@ Deno.serve(async (req) => {
       supabase.from('sequence_steps').select('*').in('sequence_id', sequenceIds).order('step_order'),
       supabase.from('sequence_events').select('enrollment_id').in('enrollment_id', enrollmentIds).eq('event_type', 'replied'),
       fetchSendLogs(supabase, enrollmentIds),
-      supabase.from('contacts').select('id, user_id, first_name, last_name, email').in('id', contactIds),
+      supabase.from('contacts').select('id, user_id, first_name, last_name, email').in('id', contactIds).is('deleted_at', null),
     ]);
     if (sequenceError || stepsError || replyError || sendLogError || contactError) {
       throw sequenceError || stepsError || replyError || sendLogError || contactError;
@@ -170,6 +190,13 @@ Deno.serve(async (req) => {
         const seq = sequenceMap.get(enr.sequence_id);
         if (!seq || seq.user_id !== enr.user_id) throw new Error('Inscrição não pertence ao proprietário da sequência');
         if (seq.status !== 'active') continue;
+
+        const contact = contactMap.get(enr.contact_id);
+        if (!contact || contact.user_id !== enr.user_id) {
+          pausedRows.push({ id: enr.id, status: 'paused', paused_at: now.toISOString(), paused_reason: 'Contato arquivado ou indisponível' });
+          stats.errors++;
+          continue;
+        }
 
         // 2. Pause-on-reply: se contato respondeu, pausa (Map lookup, no DB call)
         if (seq?.pause_on_reply) {
@@ -265,7 +292,7 @@ Deno.serve(async (req) => {
         stats.advanced++;
         if (!emailJobs[index].nextAction) stats.completed++;
       }
-      else stats.errors++;
+      else if (result.status !== 'fulfilled' || !result.value.skipped) stats.errors++;
     }
 
     const originalSteps = new Map(enrList.map(enr => [enr.id, enr.current_step]));
@@ -349,6 +376,12 @@ async function sendEmailStep(
 ): Promise<EmailResult> {
   let accepted = !!confirmedLog?.message_id?.trim();
   let newlySent = false;
+  let reservationToken: string | null = null;
+  let reservationRequested = false;
+  let reservationAcknowledged = false;
+  let reservationRejected = false;
+  let invocationStarted = false;
+  let persisted = false;
   try {
     if (!contact || contact.user_id !== enr.user_id) throw new Error('Contato não pertence ao proprietário da inscrição');
     if (confirmedLog && !confirmedLog.message_id?.trim()) {
@@ -363,22 +396,55 @@ async function sendEmailStep(
       await completeEmailDelivery(supabase, enr, step, nextAction, confirmedLog.message_id!, trackingToken, null);
       return { sent: false, advanced: true, paused: false };
     }
-    if (!contact.email) throw new Error('Contato sem email');
+    const { data: activeContacts, error: contactError } = await supabase.from('contacts')
+      .select('id, user_id, first_name, last_name, email').eq('id', enr.contact_id)
+      .eq('user_id', enr.user_id).is('deleted_at', null).limit(1).returns<Contact[]>();
+    const activeContact = activeContacts?.[0];
+    if (contactError || !activeContact || activeContact.user_id !== enr.user_id) {
+      throw new Error('Contato arquivado ou indisponível antes do envio');
+    }
+    if (!activeContact.email) throw new Error('Contato sem email');
+    const token = crypto.randomUUID();
+    reservationToken = token;
+    reservationRequested = true;
+    const { data: payload, error: reservationError } = await supabase.rpc('reserve_sequence_email_send', {
+      p_enrollment_id: enr.id, p_user_id: enr.user_id, p_step_id: step.id,
+      p_current_step: enr.current_step ?? 0, p_token: token, p_step_order: step.step_order,
+    });
+    const reservation: unknown = payload;
+    if (reservationError) {
+      if (reservationError.code === '42501' && (
+        reservationError.message === 'Contato indisponível para envio' ||
+        reservationError.message === 'Etapa indisponível para envio'
+      )) {
+        const { data: pending, error: pendingError } = await supabase.from('sequence_email_reservations')
+          .select('token').eq('enrollment_id', enr.id).limit(1);
+        reservationRejected = !pendingError && Array.isArray(pending) && pending.length === 0;
+      }
+      throw reservationError;
+    }
+    if (!reservation) return { sent: false, advanced: false, paused: false, skipped: true };
+    if (!isEmailReservation(reservation) || reservation.token !== token || reservation.user_id !== enr.user_id) {
+      throw new Error('Reserva de envio divergente');
+    }
+    reservationAcknowledged = true;
     const body = (step.message_template ?? '')
-      .replaceAll('{{first_name}}', contact.first_name ?? '')
-      .replaceAll('{{last_name}}', contact.last_name ?? '');
+      .replaceAll('{{first_name}}', reservation.first_name ?? '')
+      .replaceAll('{{last_name}}', reservation.last_name ?? '');
     const subject = (step.subject ?? 'Mensagem')
-      .replaceAll('{{first_name}}', contact.first_name ?? '');
+      .replaceAll('{{first_name}}', reservation.first_name ?? '');
 
+    invocationStarted = true;
     const { data: delivery, error: deliveryError } = await supabase.functions.invoke<{ ok: boolean; messageId: string }>('send-transactional-email', {
       signal: AbortSignal.timeout(20_000),
       body: {
         templateName: 'sequence-step',
-        recipientEmail: contact.email,
+        recipientEmail: reservation.email,
         idempotencyKey,
         templateData: { subject, body, trackingToken },
       },
     });
+    if (await isMissingEmailFunction(deliveryError)) invocationStarted = false;
     if (deliveryError || delivery?.ok !== true || typeof delivery.messageId !== 'string' || !delivery.messageId.trim()) {
       throw new Error('Envio transacional não confirmado pelo provedor');
     }
@@ -386,13 +452,20 @@ async function sendEmailStep(
     newlySent = true;
 
     await completeEmailDelivery(supabase, enr, step, nextAction, delivery.messageId, trackingToken, subject);
+    persisted = true;
     return { sent: newlySent, advanced: true, paused: false };
   } catch (e) {
     console.error('sendEmailStep erro:', e);
+    if (reservationRequested && !reservationAcknowledged && !reservationRejected) {
+      console.error('Resultado da reserva de envio incerto; verifique a reserva antes de retomar:', enr.id);
+      return { sent: false, advanced: false, paused: false };
+    }
     const pause = supabase.from('sequence_enrollments').update({
       status: 'paused',
       paused_at: new Date().toISOString(),
-      paused_reason: accepted ? 'Provedor confirmou o envio; persistência ou avanço exigem revisão' : 'Envio não confirmado; revise a integração antes de retomar',
+      paused_reason: accepted ? 'Provedor confirmou o envio; persistência ou avanço exigem revisão'
+        : reservationToken && invocationStarted ? 'Envio sem confirmação; reserva impede repetição e arquivamento até revisão do provedor'
+        : 'Envio não confirmado; revise a integração antes de retomar',
     })
       .eq('id', enr.id).eq('status', 'active');
     const { data: paused, error: pauseError } = await (enr.current_step === null
@@ -414,7 +487,20 @@ async function sendEmailStep(
       if (failureError) console.error('Não foi possível registrar a falha:', failureError);
     }
     return { sent: newlySent, advanced: false, paused: !!paused && !pauseError };
+  } finally {
+    if (reservationToken && reservationAcknowledged && (persisted || !invocationStarted)) {
+      const { error } = await supabase.rpc('release_sequence_email_send', {
+        p_enrollment_id: enr.id, p_token: reservationToken,
+      }).abortSignal(AbortSignal.timeout(5_000));
+      if (error) console.error('Reserva de envio mantida até revisão:', error);
+    }
   }
+}
+
+async function isMissingEmailFunction(error: unknown): Promise<boolean> {
+  if (!(error instanceof FunctionsHttpError) || error.context.status !== 404) return false;
+  const body: unknown = await error.context.clone().json().catch(() => null);
+  return body !== null && typeof body === 'object' && 'code' in body && body.code === 'NOT_FOUND';
 }
 
 async function requireLegacyEmailResume(supabase: SupabaseClient, enr: Enrollment, step: Step) {
