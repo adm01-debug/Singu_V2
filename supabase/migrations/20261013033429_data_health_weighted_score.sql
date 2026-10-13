@@ -56,5 +56,8 @@ FROM metrics CROSS JOIN scores;
 -- DOWN MIGRATION: nenhuma nota histórica é regravada; apenas a definição da view muda.
 -- Se a view já existia, restaurar sua definição anterior salva com pg_get_viewdef antes
 -- deste UP usando CREATE OR REPLACE VIEW WITH (security_invoker = true), sem DROP.
+-- Leitura antes do UP que gera o SQL executável da reversão:
+-- SELECT 'CREATE OR REPLACE VIEW public.vw_singu_data_health WITH (security_invoker = true) AS '
+--   || pg_get_viewdef('public.vw_singu_data_health'::regclass, true);
 -- Em reconstruções novas, manter a view da migration 20261013033427, que já contém
 -- a mesma pontuação. Preservar os grants e a RLS das tabelas subjacentes.
