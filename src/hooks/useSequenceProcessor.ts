@@ -5,6 +5,7 @@ import { parseApiError } from '@/lib/errorMessages';
 
 export function useSequenceProcessor() {
   return useMutation({
+    retry: 0,
     mutationFn: async () => {
       const { data, error } = await supabase.functions.invoke('sequence-processor', { body: {} });
       if (error) throw error;
