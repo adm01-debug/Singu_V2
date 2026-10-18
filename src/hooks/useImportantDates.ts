@@ -1,6 +1,6 @@
  import { useMemo } from 'react';
  import { Contact, Interaction } from '@/types';
- import { differenceInDays, addYears, isBefore } from 'date-fns';
+ import { differenceInCalendarDays, addYears, isBefore, parseISO, startOfDay } from 'date-fns';
  import { useQuery } from '@tanstack/react-query';
  import { supabase } from '@/integrations/supabase/client';
  import { useAuth } from './useAuth';
@@ -67,7 +67,7 @@ export interface DateReminders {
   });
 
    const reminders = useMemo<DateReminders>(() => {
-    const now = new Date();
+    const now = startOfDay(new Date());
     const allDates: ImportantDate[] = [];
 
     contacts.forEach(contact => {
@@ -83,7 +83,7 @@ export interface DateReminders {
           nextBirthday = addYears(nextBirthday, 1);
         }
 
-        const daysUntil = differenceInDays(nextBirthday, now);
+        const daysUntil = differenceInCalendarDays(nextBirthday, now);
         const isPast = daysUntil < 0;
 
         let urgency: ImportantDate['urgency'] = 'future';
@@ -127,7 +127,7 @@ export interface DateReminders {
         }
 
         const yearsOfRelationship = now.getFullYear() - firstInteraction.getFullYear();
-        const daysUntil = differenceInDays(nextAnniversary, now);
+        const daysUntil = differenceInCalendarDays(nextAnniversary, now);
 
         if (yearsOfRelationship >= 1) {
           let urgency: ImportantDate['urgency'] = 'future';
@@ -179,7 +179,7 @@ export interface DateReminders {
        // 5. Unified Life events from separate table
        const contactEvents = lifeEvents.filter(le => le.contact_id === contact.id);
        contactEvents.forEach(event => {
-         const eventDate = new Date(event.event_date);
+         const eventDate = parseISO(event.event_date);
          let nextEventDate = new Date(eventDate);
 
          if (event.recurring) {
@@ -189,7 +189,7 @@ export interface DateReminders {
            }
          }
 
-         const daysUntil = differenceInDays(nextEventDate, now);
+         const daysUntil = differenceInCalendarDays(nextEventDate, now);
 
          if (Math.abs(daysUntil) <= 90) { // Show up to 90 days out in calendar
            let urgency: ImportantDate['urgency'];
@@ -218,7 +218,7 @@ export interface DateReminders {
        // 6. Relatives Birthdays
        const contactRelatives = relatives.filter(r => r.contact_id === contact.id && r.birthday);
        contactRelatives.forEach(rel => {
-         const bday = new Date(rel.birthday!);
+         const bday = parseISO(rel.birthday!);
          let nextBday = new Date(bday);
          nextBday.setFullYear(now.getFullYear());
 
@@ -226,7 +226,7 @@ export interface DateReminders {
            nextBday = addYears(nextBday, 1);
          }
 
-         const daysUntil = differenceInDays(nextBday, now);
+         const daysUntil = differenceInCalendarDays(nextBday, now);
 
          if (daysUntil <= 60) {
            let urgency: ImportantDate['urgency'];

@@ -168,6 +168,7 @@ export const AppRoutes = () => {
       <Route path="/admin/lux-config" element={<Admin><P.AdminLuxConfig /></Admin>} />
       <Route path="/admin/secrets-management" element={<Admin><P.AdminSecretsManagement /></Admin>} />
       <Route path="/admin/conexoes" element={<Admin><P.AdminConexoes /></Admin>} />
+      <Route path="/admin/conexoes/logs" element={<Admin><P.AdminConexoesLogs /></Admin>} />
       <Route path="/admin/audit-trail" element={<Admin><P.AdminAuditTrail /></Admin>} />
       <Route path="/admin/knowledge-export" element={<Admin><P.AdminKnowledgeExport /></Admin>} />
       <Route path="/admin/error-logs" element={<Admin><P.AdminErrorLogs /></Admin>} />

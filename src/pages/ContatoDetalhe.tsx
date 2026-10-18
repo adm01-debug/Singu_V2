@@ -162,7 +162,7 @@ const ContatoDetalhe = () => {
                 fallbackPhone={contact.phone}
               />
               <Button asChild variant="outline" size="sm" className="gap-1.5">
-                <Link to={`/contatos/${contact.id}/relatorio`}>
+                <Link to={`/relatorio/${contact.id}`}>
                   <FileText className="h-4 w-4" />
                   Relatório Completo
                 </Link>

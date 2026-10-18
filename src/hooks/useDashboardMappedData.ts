@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { parseISO } from 'date-fns';
 import type { Tables } from '@/integrations/supabase/types';
 import type { Contact, Interaction, ContactRole, SentimentType, InteractionType, RelationshipStage, LifeEvent } from '@/types';
 import { getBehavior } from '@/types/behavior';
@@ -97,7 +98,7 @@ export function useDashboardMappedData(
         lifeEvents: normalizeDashboardLifeEvents(c.life_events),
         relationshipStage: (c.relationship_stage as RelationshipStage) || 'unknown',
         roleTitle: c.role_title || '',
-        birthday: c.birthday ? new Date(c.birthday) : undefined,
+        birthday: c.birthday ? parseISO(c.birthday) : undefined,
       } as Contact;
     });
   }, [contacts, companyMap, interactionsByContact, enabled]);

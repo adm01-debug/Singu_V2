@@ -72,6 +72,7 @@ export const AdminEmailDiagnostics = lazy(() => import("@/pages/AdminEmailDiagno
 export const AdminVoiceDiagnostics = lazy(() => import("@/pages/AdminVoiceDiagnostics"));
 export const AdminLuxConfig = lazy(() => import("@/pages/AdminLuxConfig"));
 export const AdminConexoes = lazy(() => import("@/pages/AdminConexoes"));
+export const AdminConexoesLogs = lazy(() => import("@/pages/AdminConexoesLogs"));
 export const AdminSecretsManagement = lazy(() => import("@/pages/AdminSecretsManagement"));
 export const AdminKnowledgeExport = lazy(() => import("@/pages/AdminKnowledgeExport"));
 export const AdminAuditTrail = lazy(() => import("@/pages/AdminAuditTrail"));
