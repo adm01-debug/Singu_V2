@@ -35,10 +35,17 @@ async function contar(tabela, jwt) {
   } catch (e) {
     return { erro: `rede: ${e.message}` };
   }
-  if (res.status === 401 || res.status === 403) return { n: -1 };
+  if (res.status === 401 || res.status === 403) {
+    const body = await res.json().catch(() => null);
+    return body?.code === '42501' ? { n: -1 } : { erro: `autenticacao/permissao nao confirmada: http ${res.status}` };
+  }
   if (!res.ok) return { erro: `http ${res.status}` };
-  const linhas = await res.json();
-  return { n: Array.isArray(linhas) ? linhas.length : -1 };
+  try {
+    const linhas = await res.json();
+    return Array.isArray(linhas) ? { n: linhas.length } : { erro: 'resposta nao e uma lista' };
+  } catch {
+    return { erro: 'JSON invalido' };
+  }
 }
 
 const perfis = [{ nome: 'anon', jwt: null }];
@@ -66,7 +73,10 @@ for (const [tabela, esperado] of Object.entries(baseline.tabelas)) {
   }
 }
 
-if (falhas.length) console.warn(`avisos:\n  ${falhas.join('\n  ')}\n`);
+if (falhas.length) {
+  console.error(`VERIFICACAO INCOMPLETA (${falhas.length}):\n  ${falhas.join('\n  ')}\n`);
+  process.exit(1);
+}
 if (melhorias.length) console.log(`exposicao reduzida (rode com --update para fixar):\n  ${melhorias.join('\n  ')}\n`);
 
 if (atualizar) {

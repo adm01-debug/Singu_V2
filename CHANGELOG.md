@@ -7,6 +7,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- Verificações de RLS e publicação rejeitam coletas incompletas, inventários inválidos e health checks sem confirmação real de saúde. Uma falha de coleta preserva o baseline mesmo com `--update`.
+
 - O calendário compacto usa os nomes do modelo de contatos; aniversários e eventos contam dias de calendário, preservando a data local e os eventos de hoje.
 
 - Alertas e datas importantes abrem a ficha correta do contato; os relatórios e o checklist de sequências usam as rotas existentes. A ação de insights PNL se apresenta como abertura do relatório, onde é possível imprimir ou salvar PDF. O painel de logs de conexões passa a ter rota protegida por autenticação, administração e MFA.
