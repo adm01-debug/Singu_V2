@@ -16,7 +16,7 @@ import { SentimentIndicator } from '@/components/ui/sentiment-indicator';
  import { NextBestActionCard } from './NextBestActionCard';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn, safehref } from '@/lib/utils';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { formatContactName, pluralize } from '@/lib/formatters';
 import { useContactRelationalData } from '@/hooks/useContactRelationalData';
 import { useContactView360 } from '@/hooks/useContactView360';
@@ -256,7 +256,7 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
               {contact.birthday && (
                 <span className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Calendar className="h-3 w-3" />
-                  {format(new Date(contact.birthday), "dd/MM/yyyy")}
+                  {format(parseISO(contact.birthday), "dd/MM/yyyy")}
                 </span>
               )}
             </div>

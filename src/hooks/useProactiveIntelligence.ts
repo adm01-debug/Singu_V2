@@ -5,7 +5,7 @@
 // ==============================================
 
 import { useMemo } from 'react';
-import { differenceInDays, parseISO, format } from 'date-fns';
+import { differenceInCalendarDays, differenceInDays, parseISO, format, startOfDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import type { Tables } from '@/integrations/supabase/types';
 import { getDISCProfile, getVAKPrimary } from '@/types/behavior';
@@ -249,11 +249,11 @@ export function useProactiveIntelligence(
 
       // 5. BIRTHDAY / RELATIONSHIP NURTURE
       if (contact.birthday) {
-        const today = new Date();
-        const birthday = new Date(contact.birthday);
+        const today = startOfDay(new Date());
+        const birthday = startOfDay(parseISO(contact.birthday));
         birthday.setFullYear(today.getFullYear());
         if (birthday < today) birthday.setFullYear(today.getFullYear() + 1);
-        const daysUntilBirthday = differenceInDays(birthday, today);
+        const daysUntilBirthday = differenceInCalendarDays(birthday, today);
         if (daysUntilBirthday <= 7 && daysUntilBirthday >= 0) {
           actions.push({
             id: 'birthday-nurture',

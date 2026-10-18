@@ -7,6 +7,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- A Inteligência Proativa distingue aniversários de hoje e amanhã pelo dia local. Editar um contato atualiza sua ficha sem recarregar a página, e o cabeçalho preserva a data de aniversário em fusos negativos.
+
 - O calendário compacto usa os nomes do modelo de contatos; aniversários e eventos contam dias de calendário, preservando a data local e os eventos de hoje.
 
 - Alertas e datas importantes abrem a ficha correta do contato; os relatórios e o checklist de sequências usam as rotas existentes. A ação de insights PNL se apresenta como abertura do relatório, onde é possível imprimir ou salvar PDF. O painel de logs de conexões passa a ter rota protegida por autenticação, administração e MFA.
