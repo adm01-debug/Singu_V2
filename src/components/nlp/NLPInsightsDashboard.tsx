@@ -80,7 +80,7 @@ export function NLPInsightsDashboard({ contactId, className }: Props) {
     refetchOnWindowFocus: false,
   });
 
-  const handleExportPDF = () => {
+  const handleOpenReport = () => {
     window.open(`/relatorio/${contactId}`, '_blank', 'noopener,noreferrer');
   };
 
@@ -97,9 +97,9 @@ export function NLPInsightsDashboard({ contactId, className }: Props) {
           <CardDescription>Ações recomendadas baseadas no perfil PNL</CardDescription>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="h-8 gap-1.5" onClick={handleExportPDF}>
+          <Button variant="outline" size="sm" className="h-8 gap-1.5" onClick={handleOpenReport} aria-label="Abrir relatório">
             <FileText className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Exportar PDF</span>
+            <span className="hidden sm:inline">Abrir relatório</span>
           </Button>
         </div>
       </CardHeader>

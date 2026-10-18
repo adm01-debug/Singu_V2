@@ -328,7 +328,8 @@ Deno.test('Sequências: devolução confirmada segue o ramo não aberto após pr
 
 Deno.test('Sequências: canal manual sem execução confirmada fica pausado', () => withProcessor('manual', async (call, operations) => {
   const result = await (await call()).json();
-  assertEquals(result.ok, false);
+  assertEquals(result.ok, true);
+  assertEquals(result.stats.errors, 0);
   assertEquals(result.stats.paused, 1);
   assertEquals(result.stats.advanced, 0);
   assert(!operations.some(operation => operation.body.event_type === 'sent' || operation.body.current_step === 1));

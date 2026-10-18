@@ -7,7 +7,9 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
-- Alertas e datas importantes abrem a ficha correta do contato; os relatórios e o checklist de sequências usam as rotas existentes. O painel de logs de conexões passa a ter rota protegida por autenticação, administração e MFA.
+- Alertas e datas importantes abrem a ficha correta do contato; os relatórios e o checklist de sequências usam as rotas existentes. A ação de insights PNL se apresenta como abertura do relatório, onde é possível imprimir ou salvar PDF. O painel de logs de conexões passa a ter rota protegida por autenticação, administração e MFA.
+
+- A espera por confirmação de uma etapa manual deixa de ser contada como falha do processador. A inscrição continua pausada, sem envio nem avanço até a confirmação.
 
 - Restaura no banco o vínculo entre inscrições e sequências, desbloqueando o processador. Requisições que podem gravar dados deixam de ser repetidas automaticamente após erros HTTP ou de rede.
 
