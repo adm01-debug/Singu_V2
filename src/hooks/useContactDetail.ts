@@ -95,7 +95,7 @@ export function useContactDetail(contactId: string | undefined) {
     refetchOnWindowFocus: false,
   });
 
-  const error = queryError instanceof Error ? queryError.message : null;
+  const error = queryError instanceof Error ? queryError.message : queryError ? 'Não foi possível carregar o contato.' : null;
 
 
   // Set up realtime subscription for updates — wrapped in try/catch so a

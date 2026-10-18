@@ -9,6 +9,7 @@ import { differenceInCalendarDays, differenceInDays, parseISO, format, startOfDa
 import { ptBR } from 'date-fns/locale';
 import type { Tables } from '@/integrations/supabase/types';
 import { getDISCProfile, getVAKPrimary } from '@/types/behavior';
+import { useLocalDay } from '@/hooks/useLocalDay';
 
 type Contact = Tables<'contacts'>;
 type Interaction = Tables<'interactions'>;
@@ -115,6 +116,7 @@ export function useProactiveIntelligence(
   contact: Contact | null,
   interactions: Interaction[],
 ): ProactiveIntelligenceResult {
+  const currentDay = useLocalDay();
   // eslint-disable-next-line sonarjs/cognitive-complexity
   return useMemo(() => {
     if (!contact) {
@@ -249,7 +251,7 @@ export function useProactiveIntelligence(
 
       // 5. BIRTHDAY / RELATIONSHIP NURTURE
       if (contact.birthday) {
-        const today = startOfDay(new Date());
+        const today = new Date(currentDay);
         const birthday = startOfDay(parseISO(contact.birthday));
         birthday.setFullYear(today.getFullYear());
         if (birthday < today) birthday.setFullYear(today.getFullYear() + 1);
@@ -452,5 +454,5 @@ export function useProactiveIntelligence(
     } catch {
       return { actions: [], scripts: [], insights: [], healthScore: 0, urgencyLevel: 'low' as ActionPriority, summary: 'Erro ao processar inteligência' };
     }
-  }, [contact, interactions]);
+  }, [contact, interactions, currentDay]);
 }

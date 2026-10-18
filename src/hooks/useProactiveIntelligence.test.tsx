@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, renderHook } from '@testing-library/react';
+import { act, cleanup, renderHook } from '@testing-library/react';
 import { parseISO } from 'date-fns';
 import { normalizeExternalContact } from './useContacts';
 import { useProactiveIntelligence } from './useProactiveIntelligence';
@@ -12,7 +12,7 @@ function contact(birthday: string | null) {
 }
 
 beforeEach(() => {
-  vi.useFakeTimers({ toFake: ['Date'] });
+  vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout'] });
   vi.setSystemTime(parseISO('2026-10-18T18:30:00'));
 });
 
@@ -55,5 +55,29 @@ describe('aniversários na Inteligência Proativa', () => {
     expect(result.current.actions.find(item => item.id === 'birthday-nurture')?.timing).toBe('Em 1 dia(s)');
     rerender({ birthday: '1990-10-18' });
     expect(result.current.actions.find(item => item.id === 'birthday-nurture')?.timing).toBe('Agora!');
+  });
+
+  it('atravessa a meia-noite e o ano com as mesmas referências e limpa o timer ao desmontar', () => {
+    vi.setSystemTime(parseISO('2026-12-31T23:59:59'));
+    const props = { contact: contact('1990-01-01'), interactions: [] };
+    const { result, unmount } = renderHook(() => useProactiveIntelligence(props.contact, props.interactions));
+    expect(result.current.actions.find(item => item.id === 'birthday-nurture')?.timing).toBe('Em 1 dia(s)');
+    act(() => { vi.advanceTimersByTime(1000); });
+    expect(result.current.actions.find(item => item.id === 'birthday-nurture')?.timing).toBe('Agora!');
+    act(() => { vi.advanceTimersByTime(24 * 60 * 60 * 1000); });
+    expect(result.current.actions.some(item => item.id === 'birthday-nurture')).toBe(false);
+    unmount();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it.each(['focus', 'visibilitychange'])('atualiza o dia ao retomar uma aba suspensa por %s', event => {
+    vi.setSystemTime(parseISO('2026-10-18T23:30:00'));
+    const props = { contact: contact('1990-10-19'), interactions: [] };
+    const { result } = renderHook(() => useProactiveIntelligence(props.contact, props.interactions));
+    expect(result.current.actions.find(item => item.id === 'birthday-nurture')?.timing).toBe('Em 1 dia(s)');
+    vi.setSystemTime(parseISO('2026-10-19T08:30:00'));
+    act(() => { (event === 'focus' ? window : document).dispatchEvent(new Event(event)); });
+    expect(result.current.actions.find(item => item.id === 'birthday-nurture')?.timing).toBe('Agora!');
+    expect(vi.getTimerCount()).toBe(1);
   });
 });

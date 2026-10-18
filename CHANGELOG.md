@@ -8,6 +8,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 - A Inteligência Proativa distingue aniversários de hoje e amanhã pelo dia local. Editar um contato atualiza sua ficha sem recarregar a página, e o cabeçalho preserva a data de aniversário em fusos negativos.
+- A ficha preserva os dados carregados quando a atualização falha e oferece nova tentativa. As recomendações se atualizam na virada do dia e ao retomar uma aba suspensa.
 
 - O calendário compacto usa os nomes do modelo de contatos; aniversários e eventos contam dias de calendário, preservando a data local e os eventos de hoje.
 
