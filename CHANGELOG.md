@@ -11,6 +11,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - A ficha preserva os dados carregados quando a atualização falha e oferece nova tentativa. As recomendações se atualizam na virada do dia e ao retomar uma aba suspensa.
 - O funil da ficha só confirma a mudança de estágio quando a gravação retorna o contato atualizado; falhas mantêm o estágio anterior e permitem tentar novamente.
 - A ficha deixa de oferecer dados e ações anteriores quando a consulta confirma que o contato não existe mais; falhas de consulta continuam preservando os dados para nova tentativa.
+- Falhas nas consultas da empresa, interações, insights ou alertas preservam a ficha anterior e oferecem nova tentativa. A restauração pelo desfazer omite o nome gerado pelo banco; mover para a lixeira e restaurar renovam o detalhe da conta correta e só anunciam sucesso com confirmação. O diálogo fecha após arquivamento confirmado.
+- O calendário de datas importantes também se atualiza à meia-noite local e ao retomar a aba, sem depender de alterações nos contatos ou nas interações.
 
 - O calendário compacto usa os nomes do modelo de contatos; aniversários e eventos contam dias de calendário, preservando a data local e os eventos de hoje.
 
