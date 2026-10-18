@@ -60,6 +60,18 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('recuperação da ficha do contato', () => {
+  it('fecha a ficha anterior quando uma recarga confirma a ausência do contato', async () => {
+    const { rerender } = render(<Page />);
+    expect(await screen.findByRole('heading', { name: 'Ana Silva' })).toBeVisible();
+
+    state.contact = null;
+    rerender(<Page />);
+    expect(screen.getByText('Contato não encontrado')).toBeVisible();
+    expect(screen.queryByRole('heading', { name: 'Ana Silva' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Tentar novamente' })).not.toBeInTheDocument();
+  });
+
   it('preserva a ficha e a aba aberta após falha de recarga e permite repetir a consulta', async () => {
     const { rerender } = render(<Page />);
     fireEvent.mouseDown(screen.getByRole('tab', { name: 'Dados' }), { button: 0, ctrlKey: false });
