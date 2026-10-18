@@ -81,7 +81,7 @@ export function NLPInsightsDashboard({ contactId, className }: Props) {
   });
 
   const handleExportPDF = () => {
-    window.open(`/relatorio-contato/${contactId}`, '_blank', 'noopener,noreferrer');
+    window.open(`/relatorio/${contactId}`, '_blank', 'noopener,noreferrer');
   };
 
   if (isLoading) return <div className="h-64 animate-pulse bg-muted rounded-xl" />;
