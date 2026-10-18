@@ -71,7 +71,8 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
     
     setIsChangingStage(true);
     try {
-      await updateContact(contact.id, { relationship_stage: newStage });
+      const updated = await updateContact(contact.id, { relationship_stage: newStage });
+      if (!updated) return;
       toast.success(`Estágio atualizado para ${newStage}`);
     } catch {
       toast.error('Erro ao atualizar estágio');
