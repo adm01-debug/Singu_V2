@@ -35,9 +35,9 @@ jobs:
           TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
         run: |
-          if [ -z "$TEST_USER_EMAIL" ]; then
-            echo "TEST_USER_EMAIL/TEST_USER_PASSWORD não configurados — perfil authenticated_sem_role não será verificado."
-            exit 0
+          if [ -z "$TEST_USER_EMAIL" ] || [ -z "$TEST_USER_PASSWORD" ]; then
+            echo "::error::TEST_USER_EMAIL/TEST_USER_PASSWORD obrigatórios para verificar authenticated_sem_role."
+            exit 1
           fi
           TOKEN=$(curl -sS -X POST "$SUPABASE_URL/auth/v1/token?grant_type=password" \
             -H "apikey: $SUPABASE_ANON_KEY" -H "Content-Type: application/json" \

@@ -3,7 +3,7 @@
 // Mede via PostgREST (o mesmo caminho do front), nao via SQL direto — e o que o cliente real enxerga.
 //
 //   SUPABASE_URL=https://xxx.supabase.co SUPABASE_ANON_KEY=... node check-rls-baseline.mjs
-//   TEST_USER_JWT=<jwt de usuario sem role/carteira>   (opcional; sem ele so o perfil anon roda)
+//   TEST_USER_JWT=<jwt de usuario sem role/carteira>   (obrigatorio quando o baseline exige esse perfil)
 //   --update  regrava o baseline com o estado atual (use no MESMO PR que reduz exposicao)
 //
 // Exit 1 se alguma tabela expuser MAIS linhas que o baseline.
@@ -49,8 +49,16 @@ async function contar(tabela, jwt) {
 }
 
 const perfis = [{ nome: 'anon', jwt: null }];
-if (TEST_USER_JWT) perfis.push({ nome: 'authenticated_sem_role', jwt: TEST_USER_JWT });
-else console.warn('! TEST_USER_JWT ausente — perfil authenticated_sem_role nao verificado\n');
+if (TEST_USER_JWT?.trim()) perfis.push({ nome: 'authenticated_sem_role', jwt: TEST_USER_JWT.trim() });
+const exigidos = new Set([
+  ...Object.keys(baseline._meta?.perfis ?? {}),
+  ...Object.values(baseline.tabelas).flatMap(esperado => Object.keys(esperado)),
+]);
+const ausentes = [...exigidos].filter(nome => !perfis.some(perfil => perfil.nome === nome));
+if (ausentes.length) {
+  console.error(`VERIFICACAO INCOMPLETA: perfis exigidos nao disponiveis: ${ausentes.join(', ')}`);
+  process.exit(1);
+}
 
 const regressoes = [];
 const melhorias = [];
