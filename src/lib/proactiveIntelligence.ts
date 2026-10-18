@@ -1,5 +1,5 @@
 // ============================================
-// TYPES
+// TIPOS
 // ============================================
 
 export type ActionPriority = 'critical' | 'high' | 'medium' | 'low';
@@ -16,7 +16,7 @@ export interface NextBestAction {
   channel: string;
   timing: string;
   reason: string;
-  frameworks: string[]; // Which frameworks generated this
+  frameworks: string[]; // Modelos que geraram a ação
   confidence: number;
   estimatedImpact: number; // 0-100
 }
@@ -30,11 +30,11 @@ export interface ApproachScript {
   closing: string;
   channel: string;
   tone: string;
-  adaptedFor: string; // DISC+VAK adaptation
+  adaptedFor: string; // Adaptação DISC+VAK
   keyPhrases: string[];
   wordsToAvoid: string[];
   emotionalHook: string;
-  neuralTarget: string; // Which brain system
+  neuralTarget: string; // Sistema cerebral
 }
 
 export interface IntelligenceInsight {
@@ -56,7 +56,7 @@ export interface ProactiveIntelligenceResult {
 }
 
 // ============================================
-// DISC + VAK LANGUAGE MAPS
+// MAPAS DE LINGUAGEM DISC + VAK
 // ============================================
 
 export const DISC_APPROACH_STYLE: Record<string, { tone: string; pace: string; focus: string; openWith: string; avoid: string }> = {
