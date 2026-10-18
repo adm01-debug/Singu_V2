@@ -273,7 +273,6 @@ Deno.serve(async (req) => {
               pending_manual_step: { step_id: targetStep.id, step_order: targetStep.step_order, channel: targetStep.channel },
             },
           });
-          stats.errors++;
         }
       } catch (e) {
         console.error(`Erro enrollment ${enr.id}:`, e);
