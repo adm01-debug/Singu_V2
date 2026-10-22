@@ -21,16 +21,30 @@
 | RLS matrix (`security_definer_hardening.sql`) | ❌ baseline 109, banco = 110 |
 | RLS matrix (`functions_authenticated_allowlist.sql`) | ❌ `update_company_fields` fora da allowlist |
 
-### Baseline pós-PR #136 commit `5aab49c` (2026-10-22T20:38Z — verificado localmente)
+### Baseline pós-PR #136 commit `4e6bc8a` (2026-10-22T22:44Z — verificado localmente)
 
 | Verificação | Exit | Resultado |
 |---|---|---|
-| `npm run typecheck` | 0 | ✅ 0 erros |
-| `npm run lint` | 0 | ✅ 0 erros |
+| `npm ci` | 0 | ✅ dependências instaladas |
+| `npm run typecheck` | 0 | ✅ 0 erros TypeScript |
+| `npx eslint src --max-warnings=0` | 0 | ✅ 0 warnings/erros |
 | `npm run build` | 0 | ✅ dist gerado (PWA, 446 entradas, 8686 KiB) |
-| `npx vitest run` | 0 | ✅ 158 arquivos / **6026 testes passando** |
+| `npx vitest run` | 0 | ✅ 158 arquivos / **6026 testes passando** (52.73s) |
 
-**Conclusão:** Zero regressões. Testes passando = baseline inicial (6026/6026).
+**Comparação baseline × final:**
+
+| Verificação | Antes (commit `6c064a6`) | Depois (commit `4e6bc8a`) | Regressão? |
+|---|---|---|---|
+| typecheck | ✅ 0 erros | ✅ 0 erros | Não |
+| lint | ✅ 0 erros | ✅ 0 erros | Não |
+| build | ✅ exit 0 | ✅ exit 0 | Não |
+| vitest | ✅ 6026/6026 | ✅ 6026/6026 | Não |
+| `npm audit --audit-level=high` | ❌ 3 CVEs | ✅ 0 CVEs | **MELHORIA** |
+| RLS guard (contacts) | ❌ failure | ✅ success | **MELHORIA** |
+| RLS matrix security_definer_hardening | ❌ baseline 109≠110 | ✅ baseline=110 | **MELHORIA** |
+| RLS matrix functions_authenticated_allowlist | ❌ update_company_fields fora | ✅ na allowlist | **MELHORIA** |
+
+**Conclusão:** Zero regressões. Todos 6026 testes passando antes e depois. Quatro melhorias confirmadas.
 
 ---
 
