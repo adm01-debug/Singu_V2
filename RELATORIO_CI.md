@@ -19,6 +19,7 @@
 
 ## Etapa 2 — Baseline pré-correção
 
+### Baseline CI (GitHub Actions) — pré-merge PR #136
 **Fonte:** run 39838063160 (PR #134, SHA pré-merge, último run verde antes da falha)
 
 | Check | Resultado | Evidência |
@@ -34,6 +35,16 @@
 | psychographic_matrix TEST 10 | ❌ `1 funcoes SECURITY DEFINER sem search_path` | run 39841424107 |
 
 **Causa raiz identificada:** `public.update_company_fields(uuid, jsonb)` era `SECURITY DEFINER` sem `SET search_path` fixo e com `EXECUTE` concedido a `PUBLIC`.
+
+### Baseline local — executado em 2026-10-22 na branch `claude/loving-shannon-2i1k7o`
+
+| Check | Resultado | Evidência |
+|---|---|---|
+| Typecheck (`npm run typecheck`) | ✅ sem erros | executado localmente, saída limpa |
+| Lint (`npx eslint src --max-warnings=0`) | ✅ sem warnings | executado localmente, exit 0 |
+| Build | ⚠️ não executado localmente | requer secrets VITE_SUPABASE_URL/KEY — validado pelo CI (step 21 ✅ em run anterior) |
+| Vitest (unit tests) | ⚠️ não executado localmente | requer conexão Supabase — validado pelo CI (step 26 ✅ em run anterior) |
+| RLS matrix tests | ⚠️ não executado localmente | requer secrets PGHOST/PGUSER/etc — validado pelo CI |
 
 ---
 
