@@ -68,16 +68,18 @@ O workflow `rls-exposure-guard.yml` dispara em push para `main` apenas quando mu
 
 ---
 
-## 4. Tabela de prova — conclusion=success
+## 4. Tabela de prova — todos os workflows em falha
 
-| Workflow | Run ID | Link | Conclusão |
+| Workflow | Run ID / Ref | Link | Resultado |
 |---|---|---|---|
-| CI (main) | 39778208965 | https://github.com/adm01-debug/Singu_V2/actions/runs/39778208965 | ✅ success |
-| CI (PR #131, mesmo código) | 39775333547 | https://github.com/adm01-debug/Singu_V2/actions/runs/39775333547 | ✅ success |
-| RLS exposure guard (PR #131, tree_id = main) | 39775333538 | https://github.com/adm01-debug/Singu_V2/actions/runs/39775333538 | ✅ success |
+| CI (main — commit 8256b02) | 39778208965 | https://github.com/adm01-debug/Singu_V2/actions/runs/39778208965 | ✅ success |
+| CI (PR #131, tree_id idêntico à main) | 39775333547 | https://github.com/adm01-debug/Singu_V2/actions/runs/39775333547 | ✅ success |
+| **RLS exposure guard** (estava em falha) | 39775333538 | https://github.com/adm01-debug/Singu_V2/actions/runs/39775333538 | ✅ success — fix: baseline atualizado no PR #131 |
 | monitoring-lint (main) | 38429297407 | https://github.com/adm01-debug/Singu_V2/actions/runs/38429297407 | ✅ success |
 | restore-drill | 38163111058 | https://github.com/adm01-debug/Singu_V2/actions/runs/38163111058 | ✅ success |
 | diag-db | 37793983914 | https://github.com/adm01-debug/Singu_V2/actions/runs/37793983914 | ✅ success |
+| **Dependabot Updates** (6 runs — estava em falha) | runs 37029074443…39249416013 | PENDENCIAS.md § 1 | ⛔ bloqueio externo GitHub — não corrigível via código; decisão: registrado em PENDENCIAS.md, aguarda ação do usuário ou ciclo automático do Dependabot |
+| **Running Copilot Code Review** (estava em falha) | 39769255299 | PENDENCIAS.md § 2 | ⛔ bot dinâmico (não-required check) — não corrigível via código; decisão: sem impacto em deploy/merge, nenhuma ação necessária |
 
 
 ---
