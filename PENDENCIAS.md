@@ -52,9 +52,24 @@ serialize-javascript | dependency_file_not_resolvable |
 
 ---
 
+## 3. Run histórico 39841270943 — failure permanente (não corrigível)
+
+**Workflow:** CI (`.github/workflows/ci.yml`)
+**Run:** https://github.com/adm01-debug/Singu_V2/actions/runs/39841270943
+**Commit:** `6d7b0b9` — push direto na main sem PR (violou proteção de branch)
+
+**Por que permanece failure:** O GitHub não permite reexecutar runs históricos para alterar seu `conclusion`. O problema de origem (push direto na main) foi um evento único; não se repetiu e a proteção de branch continuou ativa para todos os commits subsequentes.
+
+**Impacto:** Nenhum. O run `39841270943` é um registro histórico. Todos os runs na main após esse commit são `success` (vide §4 do RELATORIO_CI.md).
+
+**O que você precisa fazer:** Nenhuma ação. Apenas ciência de que o histórico de runs mostrará esse run como failure permanente.
+
+---
+
 ## Resumo
 
 | Item | Bloqueador externo | Ação necessária |
 |---|---|---|
 | Dependabot serialize-javascript (6 runs) | Estado interno GitHub | Descartar alerta manualmente ou aguardar ciclo |
 | Copilot Code Review | Bot dinâmico GitHub Copilot | Remover de required checks (opcional) |
+| Run 39841270943 (CI main, commit 6d7b0b9) | Histórico imutável GitHub | Nenhuma — registro histórico permanente |
