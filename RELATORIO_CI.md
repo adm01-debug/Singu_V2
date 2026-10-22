@@ -8,11 +8,15 @@
 
 ## 1. Baseline local (antes × depois)
 
-| Verificação | Antes (main `6c064a6`) | Depois (PR #131 `efd48cd`) |
+| Verificação | Antes (main `6c064a6`) | Depois (branch `95565dd`) |
 |---|---|---|
 | `npm run typecheck` | ✅ exit 0 | ✅ exit 0 |
+| `npm run lint` | ✅ exit 0 | ✅ exit 0 |
 | `npm run build` | ✅ exit 0 (PWA v0.21.2) | ✅ exit 0 (PWA v0.21.2) |
+| `vitest run` (unit) | ✅ 158 arquivos / 6026 testes | ✅ 158 arquivos / 6026 testes |
 | RLS guard (`check-rls-baseline.mjs`) | ❌ failure (contacts: 0→6) | ✅ success |
+
+> Testes E2E (Playwright) e RLS matrix requerem secrets — validados via CI (run #39773356499).
 
 ---
 
