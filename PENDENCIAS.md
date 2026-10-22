@@ -52,9 +52,27 @@ serialize-javascript | dependency_file_not_resolvable |
 
 ---
 
+## 3. Push direto na main — histórico imutável
+
+**Run com falha:** https://github.com/adm01-debug/Singu_V2/actions/runs/39841270943  
+**Commit:** `6d7b0b9` — disparado por push direto na main sem PR (violação da proteção de branch)  
+**Data:** 2026-10-22
+
+**Por que trava:** O histórico de execuções do GitHub Actions é imutável — runs passados não podem ser apagados ou alterados. O commit `6d7b0b9` foi feito diretamente na main sem PR, violando a proteção de branch configurada.
+
+**O que você precisa fazer (opcional):**
+1. Para evitar recorrência: verifique as regras de branch protection em https://github.com/adm01-debug/Singu_V2/settings/branches
+2. Confirme que "Require a pull request before merging" está ativado para a branch `main`
+3. O run histórico com falha permanece no histórico de Actions — não há ação corretiva possível além de não repetir
+
+**Impacto:** Zero — histórico imutável, sem impacto no código atual ou em deploys futuros. Os testes atuais passam normalmente após o merge do PR #136.
+
+---
+
 ## Resumo
 
 | Item | Bloqueador externo | Ação necessária |
 |---|---|---|
 | Dependabot serialize-javascript (6 runs) | Estado interno GitHub | Descartar alerta manualmente ou aguardar ciclo |
 | Copilot Code Review | Bot dinâmico GitHub Copilot | Remover de required checks (opcional) |
+| Push direto na main (run 39841270943) | Histórico imutável GitHub Actions | Verificar branch protection; sem ação corretiva possível |

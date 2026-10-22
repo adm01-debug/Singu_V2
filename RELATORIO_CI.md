@@ -99,17 +99,17 @@ Dois testes falharam no step 26 (RLS matrix):
 - `security_definer_hardening.sql`: `baseline DEFINER esperado = 109; atual = 110`
 - `functions_authenticated_allowlist.sql`: `authenticated executa SECURITY DEFINER fora da allowlist: update_company_fields(p_company_id uuid, p_data jsonb)`
 
-**Fix (commits `c1fb09e` + `5aab49c` no PR #136):**
+**Fix (commits `c1fb09e` + `5aab49c` + `15aa230` no PR #136):**
 - `tests/rls/security_definer_hardening.sql`: baseline 109 → 110
 - `tests/rls/functions_authenticated_allowlist.sql`: `update_company_fields` adicionada à `_definer_auth`
 - `docs/qa/security-definer-audit.md`: documentação da nova entrada (baseline 110, revisão manual de segurança)
-- `supabase/migrations/...`: 3 bugs de segurança corrigidos (commit `5aab49c`):
-  - HIGH: `AND user_id = auth.uid()` adicionado ao WHERE (prevenção cross-tenant)
-  - Medium: `public.companies` schema-qualificado (prevenção pg_temp shadowing)
-  - P2: `cardinality(v_sets) = 0` substituindo `array_length` (que retorna NULL para array vazio)
-  - Extra: `pg_temp` ao final do `search_path`; `user_id` bloqueado no loop de campos
+- `supabase/migrations/...`: migration com `REVOKE EXECUTE FROM PUBLIC` + `GRANT TO authenticated, service_role` + 3 bugs adicionais corrigidos (commit `15aa230`):
+  - **Bug 1 (HIGH):** `auth.uid()` retorna NULL para chamadas `service_role` sem JWT → `EXECUTE NULL` explodia; Fix: guard `IF auth.uid() IS NULL THEN RAISE EXCEPTION`
+  - **Bug 2 (P2):** `p_data` com `'updated_at'` gerava `"multiple assignments to same column"`; Fix: `'updated_at'` adicionado à blocklist
+  - **Bug 3 (P2):** `jsonb_each_text` retorna `'["a"]'` para arrays (não `'{"a"}'` PG); Fix: rejeitar `jsonb_typeof IN ('array', 'object')`
+- `ci.yml` (commit `15aa230`): `actions/cache@v4` para `~/.cache/ms-playwright` (~500MB), evita hang no step 22
 
-**Revisão de segurança:** corpo usa `user_id = auth.uid()` para ownership, não exposta a `anon`, `search_path = public, pg_catalog, pg_temp` fixo. Sem risco de cross-tenant.
+**Revisão de segurança:** `EXECUTE` revogado de `PUBLIC`/`anon`; re-emitido apenas para `authenticated` e `service_role`; `search_path = public, pg_catalog, pg_temp` fixo; `AND user_id = auth.uid()` no WHERE garante isolamento tenant. Sem risco de cross-tenant.
 
 ### 3.6 Push direto na main — HISTÓRICO PERMANENTE (ver PENDENCIAS.md §3)
 
@@ -130,9 +130,8 @@ Run #39841270943 (commit `6d7b0b9`) disparado por push direto na main sem PR —
 | **Security audit step 20** (dompurify CVE fix, PR #134) | 39838063160 step 20 | https://github.com/adm01-debug/Singu_V2/actions/runs/39838063160 | ✅ success (19:19:56Z) |
 | **CI PR #134** (dompurify 3.4.17, todos 29 steps) | 39838063160 | https://github.com/adm01-debug/Singu_V2/actions/runs/39838063160 | ✅ success — **PR #134 MERGEADO** (squash `7ee8e71`) |
 | **CI main pós-merge #134** | 39841424107 | https://github.com/adm01-debug/Singu_V2/actions/runs/39841424107 | ✅ success |
-| **CI PR #136** (commit `36c4f3c` HEAD, steps 1-19 ✅) | 39851405289 | https://github.com/adm01-debug/Singu_V2/actions/runs/39851405289 | ⏳ in_progress (step 19/29 Lint @ 20:49Z) |
-| **RLS exposure guard PR #136** (commit `36c4f3c`) | 39851405248 | https://github.com/adm01-debug/Singu_V2/actions/runs/39851405248 | ✅ success |
-| **CI main pós-merge #136** | — | — | ⏳ aguardando CI do PR #136 (check-in 21:14Z) |
+| **CI PR #136** (commit `15aa230` HEAD, steps 1-18 ✅, step 19 Lint in_progress @ 22:38Z) | 39866092374 | https://github.com/adm01-debug/Singu_V2/actions/runs/39866092374 | ⏳ in_progress |
+| **CI main pós-merge #136** | — | — | ⏳ aguardando merge do PR #136 |
 | **Dependabot Updates** (6 runs) | runs 37029074443…39249416013 | PENDENCIAS.md §1 | 🟡 bloqueio externo GitHub — não corrigível via código |
 | **Running Copilot Code Review** | 39769255299 | PENDENCIAS.md §2 | 🟡 bot dinâmico não-required — sem impacto em deploy/merge |
 | **Push direto main** (run 39841270943) | 39841270943 | PENDENCIAS.md §3 | 🟡 histórico imutável — registrado em PENDENCIAS.md |
@@ -160,9 +159,9 @@ Run #39841270943 (commit `6d7b0b9`) disparado por push direto na main sem PR —
 - **PR #135** — `docs/relatorio-final-prova` → `main` — **FECHADO** (stale, CI sempre failure)  
   https://github.com/adm01-debug/Singu_V2/pull/135
 
-- **PR #136** — `claude/loving-shannon-2i1k7o` → `main` — **PENDENTE CI** (run 39850809429 in_progress, commit `5aab49c`)  
+- **PR #136** — `claude/loving-shannon-2i1k7o` → `main` — **PENDENTE CI** (run 39866092374 in_progress, commit `15aa230`)  
   https://github.com/adm01-debug/Singu_V2/pull/136  
-  Fix: migration `update_company_fields` — 3 bugs de segurança + baseline RLS 109→110 + allowlist
+  Fix: migration `update_company_fields` — REVOKE PUBLIC + 3 bugs HIGH/P2 corrigidos + baseline RLS 109→110 + allowlist + cache Playwright
 
 - **PR #137** — `fix/pendencias-s3` → `main` — **PENDENTE** (CI bloqueado por §3.5 — será desbloqueado após merge do #136)  
   https://github.com/adm01-debug/Singu_V2/pull/137  
@@ -177,7 +176,7 @@ Run #39841270943 (commit `6d7b0b9`) disparado por push direto na main sem PR —
 | RLS exposure guard (contacts baseline) | ✅ CORRIGIDO — PR #131 |
 | dompurify CVEs críticos (3 CVEs) | ✅ CORRIGIDO — PR #134 |
 | Bot guard / `TOO_MANY_ROWS` | ✅ CORRIGIDO — PR #133 |
-| RLS matrix `update_company_fields` (baseline 109→110, allowlist, 3 bugs seg.) | ⏳ CORRIGIDO no código — PR #136 CI run 39851405289 steps 1-19 ✅, RLS guard 39851405248 ✅ success |
+| RLS matrix `update_company_fields` (baseline 109→110, allowlist, REVOKE PUBLIC, 3 bugs HIGH/P2) | ⏳ CORRIGIDO no código — PR #136 CI run 39866092374 (commit 15aa230) steps 1-18 ✅, Lint in_progress |
 | Dependabot serialize-javascript (6 runs) | 🟡 BLOQUEIO EXTERNO — PENDENCIAS.md §1 |
 | Copilot Code Review (não-required) | 🟡 BLOQUEIO EXTERNO — PENDENCIAS.md §2 |
 | Push direto main (histórico imutável) | 🟡 IMUTÁVEL — PENDENCIAS.md §3 |
