@@ -33,6 +33,10 @@
 | diag-db | `.github/workflows/diag-db.yml` | estático | #37793983914 (anterior) | ✅ success |
 | Dependabot #1635572883 | dinâmico GitHub | dinâmico | #39200622409 (2026-10-19) | ✅ success |
 | Dependabot #1624592857 | dinâmico GitHub | dinâmico | #38377743747 (2026-10-13) | ✅ success |
+| Dependabot #1605423674 | dinâmico GitHub | dinâmico | #37029074443 (2026-10-02) | ❌ failure → **PENDENCIAS.md item 1** |
+| Dependabot #1610192361 | dinâmico GitHub | dinâmico | #37307601995 (2026-10-05) | ❌ failure → **PENDENCIAS.md item 1** |
+| Dependabot #1611682242 | dinâmico GitHub | dinâmico | #37392180540 (2026-10-06) | ❌ failure → **PENDENCIAS.md item 1** |
+| Dependabot #1611893757 | dinâmico GitHub | dinâmico | #37403320679 (2026-10-06) | ❌ failure → **PENDENCIAS.md item 1** |
 | Dependabot #1624592914 | dinâmico GitHub | dinâmico | #38377749239 (2026-10-13) | ❌ failure → **PENDENCIAS.md item 1** |
 | Dependabot #1636782066 | dinâmico GitHub | dinâmico | #39249416013 (2026-10-19) | ❌ failure → **PENDENCIAS.md item 1** |
 | Running Copilot Code Review | `dynamic/agents/copilot-pull-request-reviewer` | dinâmico bot | #39769255299 | ❌ failure → **PENDENCIAS.md item 2** |

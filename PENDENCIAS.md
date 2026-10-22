@@ -7,14 +7,18 @@ Itens que **não podem ser corrigidos** por mudança de código no repositório 
 
 ---
 
-## 1. Dependabot Updates — serialize-javascript (dois runs)
+## 1. Dependabot Updates — serialize-javascript (seis runs)
 
 **Workflow:** `dynamic/dependabot/dependabot-updates` (dinâmico, sem arquivo no repositório)  
 **Runs com falha:**
-- https://github.com/adm01-debug/Singu_V2/actions/runs/39249416013 (Update #1636782066 — 2026-10-19)
+- https://github.com/adm01-debug/Singu_V2/actions/runs/39249416013 (Update #1636782066 — 2026-10-19, npm_and_yarn em /)
 - https://github.com/adm01-debug/Singu_V2/actions/runs/38377749239 (Update #1624592914 — 2026-10-13, pacotes: @tanstack/react-query, react-force-graph-2d, @types/node, pg)
+- https://github.com/adm01-debug/Singu_V2/actions/runs/37403320679 (Update #1611893757 — 2026-10-06, pacotes: @tanstack/react-query, react-force-graph-2d, @types/node, pg)
+- https://github.com/adm01-debug/Singu_V2/actions/runs/37392180540 (Update #1611682242 — 2026-10-06, pacotes: @tanstack/react-query, react-force-graph-2d, @types/node, pg)
+- https://github.com/adm01-debug/Singu_V2/actions/runs/37307601995 (Update #1610192361 — 2026-10-05, npm_and_yarn em /)
+- https://github.com/adm01-debug/Singu_V2/actions/runs/37029074443 (Update #1605423674 — 2026-10-02, pacotes: @supabase/supabase-js, @tanstack/react-query, dompurify, libphonenumber-js, react-window, @commitlint/cli, @commitlint/config-conventional, @types/node, lovable-tagger, typescript-eslint)
 
-**Erro exato (idêntico nos dois runs):**
+**Erro exato (idêntico em todos os runs):**
 ```
 serialize-javascript | dependency_file_not_resolvable |
 "Override for serialize-javascript@7.1.2 conflicts with direct dependency."
@@ -52,5 +56,5 @@ serialize-javascript | dependency_file_not_resolvable |
 
 | Item | Bloqueador externo | Ação necessária |
 |---|---|---|
-| Dependabot serialize-javascript (2 runs) | Estado interno GitHub | Descartar alerta manualmente ou aguardar ciclo |
+| Dependabot serialize-javascript (6 runs) | Estado interno GitHub | Descartar alerta manualmente ou aguardar ciclo |
 | Copilot Code Review | Bot dinâmico GitHub Copilot | Remover de required checks (opcional) |
