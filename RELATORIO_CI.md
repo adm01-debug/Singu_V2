@@ -18,15 +18,20 @@
 
 ## 2. Inventário de workflows
 
-| Workflow | Arquivo | Tipo | Status em main |
-|---|---|---|---|
-| CI | `.github/workflows/ci.yml` | estático | ✅ success (run #39268683650) |
-| RLS exposure guard | `.github/workflows/rls-exposure-guard.yml` | estático | ✅ success (run #39769242318 no PR) |
-| monitoring-lint | `.github/workflows/monitoring-lint.yml` | estático | ✅ success (run #38429297407) |
-| restore-drill | `.github/workflows/restore-drill.yml` | estático | ✅ success (run #38163111058) |
-| diag-db | `.github/workflows/diag-db.yml` | estático | ✅ success (run #37793983914) |
-| Dependabot Updates | `dynamic/dependabot/dependabot-updates` | dinâmico GitHub | ❌ failure (estado interno) |
-| Running Copilot Code Review | `dynamic/agents/copilot-pull-request-reviewer` | dinâmico bot | ❌ failure (bot GitHub) |
+Última execução de cada workflow em `main` (fonte: GitHub Actions API, 2026-10-22):
+
+| Workflow | Arquivo | Tipo | Último run em main | Status/Conclusão |
+|---|---|---|---|---|
+| CI | `.github/workflows/ci.yml` | estático | #39268683650 (2026-10-19) | ✅ success |
+| RLS exposure guard | `.github/workflows/rls-exposure-guard.yml` | estático | #39268683550 (2026-10-19) | ❌ failure → **corrigido pelo PR #131** |
+| monitoring-lint | `.github/workflows/monitoring-lint.yml` | estático | #38429297407 (2026-10-13) | ✅ success |
+| restore-drill | `.github/workflows/restore-drill.yml` | estático | #38163111058 (anterior) | ✅ success |
+| diag-db | `.github/workflows/diag-db.yml` | estático | #37793983914 (anterior) | ✅ success |
+| Dependabot #1635572883 | dinâmico GitHub | dinâmico | #39200622409 (2026-10-19) | ✅ success |
+| Dependabot #1624592857 | dinâmico GitHub | dinâmico | #38377743747 (2026-10-13) | ✅ success |
+| Dependabot #1624592914 | dinâmico GitHub | dinâmico | #38377749239 (2026-10-13) | ❌ failure → **PENDENCIAS.md item 1** |
+| Dependabot #1636782066 | dinâmico GitHub | dinâmico | #39249416013 (2026-10-19) | ❌ failure → **PENDENCIAS.md item 1** |
+| Running Copilot Code Review | `dynamic/agents/copilot-pull-request-reviewer` | dinâmico bot | #39769255299 | ❌ failure → **PENDENCIAS.md item 2** |
 
 ---
 
