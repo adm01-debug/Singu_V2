@@ -1,7 +1,7 @@
 {
   "_meta": {
     "descricao": "Baseline de exposicao RLS do Singu (pgxfvjmuubtbowutlide). Linhas visiveis por perfil, medidas via PostgREST. Contador satura em 1001.",
-    "gerado_em": "2026-09-25",
+    "gerado_em": "2026-10-22",
     "etapa_plano": "84",
     "regra": "O teste FALHA se qualquer tabela expuser MAIS linhas que o baseline para um perfil. Reduzir exposicao (Fase 3) exige atualizar o baseline no mesmo PR que reduz.",
     "perfis": {
@@ -12,107 +12,107 @@
   },
   "tabelas": {
     "customers": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "contact_phones": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "company_phones": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "suppliers": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 754
     },
     "carriers": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 114
     },
     "role_permissions": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 63
     },
     "permissions": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 29
     },
     "users_public": {
       "anon": -1,
-      "authenticated_sem_role": 26
+      "authenticated_sem_role": 0
     },
     "salespeople": {
-      "anon": 0,
-      "authenticated_sem_role": 12
+      "anon": -1,
+      "authenticated_sem_role": 0
     },
     "customer_ownership_history": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 12
     },
     "disc_profile_config": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 4
     },
     "companies": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "contacts": {
-      "anon": 0,
-      "authenticated_sem_role": 0
+      "anon": -1,
+      "authenticated_sem_role": 6
     },
     "interactions": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "deals": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "proposals": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "company_rfm_scores": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "sales_team_members": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "workspace_accounts": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "users": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "user_roles": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "login_attempts": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "password_reset_requests": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "csat_surveys": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "document_signatures": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "forms": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "landing_pages": {
@@ -124,7 +124,7 @@
       "authenticated_sem_role": 0
     },
     "product_novelties": {
-      "anon": 0,
+      "anon": -1,
       "authenticated_sem_role": 0
     },
     "feature_flags": {
