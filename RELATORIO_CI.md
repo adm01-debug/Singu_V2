@@ -26,7 +26,7 @@
 
 | Workflow | Arquivo | Tipo | Último run em main | Status/Conclusão |
 |---|---|---|---|---|
-| CI | `.github/workflows/ci.yml` | estático | #39778208965 (2026-10-22) | ⏳ in_progress (step 18/29) |
+| CI | `.github/workflows/ci.yml` | estático | #39778208965 (2026-10-22) | ✅ success |
 | RLS exposure guard | `.github/workflows/rls-exposure-guard.yml` | estático | #39268683550 (2026-10-19) | ❌ failure → **corrigido pelo PR #131** (ver nota §3.1) |
 | monitoring-lint | `.github/workflows/monitoring-lint.yml` | estático | #38429297407 (2026-10-13) | ✅ success |
 | restore-drill | `.github/workflows/restore-drill.yml` | estático | #38163111058 (anterior) | ✅ success |
