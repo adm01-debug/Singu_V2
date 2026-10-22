@@ -27,7 +27,7 @@
 | Workflow | Arquivo | Tipo | Último run em main | Status/Conclusão |
 |---|---|---|---|---|
 | CI | `.github/workflows/ci.yml` | estático | #39778208965 (2026-10-22) | ✅ success |
-| RLS exposure guard | `.github/workflows/rls-exposure-guard.yml` | estático | #39268683550 (2026-10-19) | ❌ failure → **corrigido pelo PR #131** (ver nota §3.1) |
+| RLS exposure guard | `.github/workflows/rls-exposure-guard.yml` | estático | #39782599337 (2026-10-22, main dispatch) | ✅ success — fix mergeado no PR #131; prova via dispatch §3.1 |
 | monitoring-lint | `.github/workflows/monitoring-lint.yml` | estático | #38429297407 (2026-10-13) | ✅ success |
 | restore-drill | `.github/workflows/restore-drill.yml` | estático | #38163111058 (anterior) | ✅ success |
 | diag-db | `.github/workflows/diag-db.yml` | estático | #37793983914 (anterior) | ✅ success |
@@ -53,10 +53,9 @@ O usuário de teste ganhou 6 contatos reais após migrations pós-2026-09-25. A 
 
 **Fix:** Atualizar `scripts/rls-matrix/rls-baseline.json` via `--update` no mesmo PR que detectou a mudança (PR #131, commit `efd48cd`).
 
-**Por que não há run do RLS guard na main para o commit `8256b02`:**  
-O workflow `rls-exposure-guard.yml` dispara em push para `main` apenas quando muda `supabase/migrations/**`. O PR #131 alterou `scripts/rls-matrix/rls-baseline.json` — que só dispara o guard via `pull_request` (path `scripts/rls-matrix/**`). Portanto não haverá run automático do guard na main para este commit.
+**Prova na main via workflow_dispatch:** Run #39782599337 disparado manualmente em `main` (SHA `8256b02`, 2026-10-22) confirmou `conclusion=success`. O trigger automático não cobre `scripts/rls-matrix/rls-baseline.json` em push para main, portanto o dispatch manual é a validação equivalente após o squash merge.
 
-**Validação equivalente:** O run #39775333538 (PR branch) rodou com `tree_id: c09020d442d31f389b70ea1a74ac320df5f68e2d` — idêntico ao `tree_id` do squash commit `8256b02` na main. O código testado é **exatamente o mesmo** que está na main.
+**Validação adicional:** O run #39775333538 (PR branch) rodou com `tree_id: c09020d442d31f389b70ea1a74ac320df5f68e2d` — idêntico ao `tree_id` do squash commit `8256b02` na main. O código testado é **exatamente o mesmo** que está na main.
 
 ### 3.2 Dependabot Updates — BLOQUEADO (ver PENDENCIAS.md)
 
@@ -74,7 +73,8 @@ O workflow `rls-exposure-guard.yml` dispara em push para `main` apenas quando mu
 |---|---|---|---|
 | CI (main — commit 8256b02) | 39778208965 | https://github.com/adm01-debug/Singu_V2/actions/runs/39778208965 | ✅ success |
 | CI (PR #131, tree_id idêntico à main) | 39775333547 | https://github.com/adm01-debug/Singu_V2/actions/runs/39775333547 | ✅ success |
-| **RLS exposure guard** (estava em falha) | 39775333538 | https://github.com/adm01-debug/Singu_V2/actions/runs/39775333538 | ✅ success — fix: baseline atualizado no PR #131 |
+| **RLS exposure guard** (PR #131, tree_id = main) | 39775333538 | https://github.com/adm01-debug/Singu_V2/actions/runs/39775333538 | ✅ success — fix: baseline atualizado no PR #131 |
+| **RLS exposure guard** (main — workflow_dispatch) | 39782599337 | https://github.com/adm01-debug/Singu_V2/actions/runs/39782599337 | ✅ success — prova direta na main `8256b02` (2026-10-22) |
 | monitoring-lint (main) | 38429297407 | https://github.com/adm01-debug/Singu_V2/actions/runs/38429297407 | ✅ success |
 | restore-drill | 38163111058 | https://github.com/adm01-debug/Singu_V2/actions/runs/38163111058 | ✅ success |
 | diag-db | 37793983914 | https://github.com/adm01-debug/Singu_V2/actions/runs/37793983914 | ✅ success |
@@ -89,3 +89,7 @@ O workflow `rls-exposure-guard.yml` dispara em push para `main` apenas quando mu
 - **PR #131** — `claude/loving-shannon-2i1k7o` → `main` — **MERGEADO** (squash `8256b02`)  
   https://github.com/adm01-debug/Singu_V2/pull/131  
   Fix: `scripts/rls-matrix/rls-baseline.json` atualizado para estado real do banco (2026-10-22)
+
+- **PR #132** — `fix/ci-relatorio-final` → `main` — aguardando merge (CI verde)  
+  https://github.com/adm01-debug/Singu_V2/pull/132  
+  Docs: `RELATORIO_CI.md` com tabela de prova completa + evidência do RLS guard na main
