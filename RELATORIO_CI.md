@@ -8,15 +8,16 @@
 
 ## 1. Baseline local (antes × depois)
 
-| Verificação | Antes (main `6c064a6`) | Depois (main `8256b02`) |
+| Verificação | Antes (main `6c064a6`) | Depois (main `7ee8e71`) |
 |---|---|---|
 | `npm run typecheck` | ✅ exit 0 | ✅ exit 0 |
 | `npm run lint` | ✅ exit 0 | ✅ exit 0 |
 | `npm run build` | ✅ exit 0 (PWA v0.21.2) | ✅ exit 0 (PWA v0.21.2) |
 | `vitest run` (unit) | ✅ 158 arquivos / 6026 testes | ✅ 158 arquivos / 6026 testes |
 | RLS guard (`check-rls-baseline.mjs`) | ❌ failure (contacts: 0→6) | ✅ success |
+| `npm audit --omit=dev --audit-level=high` | ❌ 3 CVEs críticos dompurify | ✅ exit 0 (dompurify 3.4.17) |
 
-> Testes E2E (Playwright) e RLS matrix requerem secrets — validados via CI (run #39773356499 no PR branch e run #39778208965 na main).
+> Testes E2E (Playwright) e RLS matrix requerem secrets — validados via CI (run #39838063160 no PR #134, todos os 29 steps `success`).
 
 ---
 
@@ -96,7 +97,9 @@ Dependabot PRs e outros bots não são mais bloqueados pelo step `Validate PR Ti
 | restore-drill | 38163111058 | https://github.com/adm01-debug/Singu_V2/actions/runs/38163111058 | ✅ success |
 | diag-db | 37793983914 | https://github.com/adm01-debug/Singu_V2/actions/runs/37793983914 | ✅ success |
 | **Security audit** (step 20, dompurify CVE) | run 39838063160 step 20 | https://github.com/adm01-debug/Singu_V2/actions/runs/39838063160 | ✅ success (19:19:56Z) |
-| **CI PR #134** (dompurify fix, steps 1-25 success) | 39838063160 | https://github.com/adm01-debug/Singu_V2/actions/runs/39838063160 | ⏳ in_progress (step 26/29 RLS matrix) — merge pendente |
+| **CI PR #134** (dompurify fix, todos 29 steps) | 39838063160 | https://github.com/adm01-debug/Singu_V2/actions/runs/39838063160 | ✅ success (concluído 2026-10-22T19:33:17Z) |
+| **CI main** (commit 7ee8e71, pós-merge PR #134) | 39841424107 | https://github.com/adm01-debug/Singu_V2/actions/runs/39841424107 | ⏳ in_progress (step 10/29, 2026-10-22T19:37Z) |
+| **CI main** (commit 6d7b0b9, RELATORIO update) | 39841270943 | https://github.com/adm01-debug/Singu_V2/actions/runs/39841270943 | ⏳ in_progress (2026-10-22T19:34Z) |
 | **Dependabot Updates** (6 runs — estava em falha) | runs 37029074443…39249416013 | PENDENCIAS.md §1 | 🟡 bloqueio externo GitHub — não corrigível via código; decisão: registrado em PENDENCIAS.md, aguarda ação do usuário ou ciclo automático do Dependabot |
 | **Running Copilot Code Review** (estava em falha) | 39769255299 | PENDENCIAS.md §2 | 🟡 bot dinâmico (não-required check) — não corrigível via código; decisão: sem impacto em deploy/merge, nenhuma ação necessária |
 
@@ -116,7 +119,6 @@ Dependabot PRs e outros bots não são mais bloqueados pelo step `Validate PR Ti
   https://github.com/adm01-debug/Singu_V2/pull/133  
   Fix: bot guard `endsWith('[bot]')` em 9 places do `ci.yml`; bug `TOO_MANY_ROWS` em `rls-coverage.sql`
 
-- **PR #134** — `claude/loving-shannon-2i1k7o` → `main` — **PENDENTE** (CI run 39838063160 in_progress, step 26/29)  
+- **PR #134** — `claude/loving-shannon-2i1k7o` → `main` — **MERGEADO** (squash `7ee8e71`, 2026-10-22T19:35Z)  
   https://github.com/adm01-debug/Singu_V2/pull/134  
-  Fix: `dompurify` 3.4.16→3.4.17 (3 CVEs críticos); step 20 Security audit: `conclusion=success`  
-  Merge via check-in agendado para 19:51Z (trigger `trig_013UVZJgRuFaBRsZYKBRyyTJ`)
+  Fix: `dompurify` 3.4.16→3.4.17 (3 CVEs críticos); CI run 39838063160 `conclusion=success` (todos 29 steps); branch deletada
