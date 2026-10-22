@@ -37,8 +37,8 @@ SELECT * FROM gaps ORDER BY gap, tabela;
 DO $$
 DECLARE v_gaps int;
 BEGIN
-  -- Subquery wrapper necessário: sem ele, SELECT INTO scalar com GROUP BY lança
-  -- TOO_MANY_ROWS quando N≥2 tabelas falham, ocultando a contagem real.
+  -- Subquery wrapper necessário: sem ele, SELECT INTO scalar com GROUP BY
+  -- atribui a contagem do 1º grupo (sempre 1), não o total de tabelas com gap.
   SELECT COUNT(*) INTO v_gaps FROM (
     SELECT c.oid
       FROM pg_class c
