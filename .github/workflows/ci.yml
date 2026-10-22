@@ -109,7 +109,6 @@ jobs:
         run: npm audit --omit=dev --audit-level=high
 
       - name: Build
-        if: ${{ github.event_name != 'pull_request' || !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.event.pull_request.user.login) }}
         run: npm run build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
@@ -165,7 +164,6 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f scripts/migration/verify/rls-coverage.sql
 
       - name: Check bundle size budget
-        if: ${{ github.event_name != 'pull_request' || !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.event.pull_request.user.login) }}
         run: node scripts/check-bundle-size.mjs
 
       - name: Lighthouse CI (performance budgets)
