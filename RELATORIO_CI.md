@@ -72,14 +72,13 @@ O workflow `rls-exposure-guard.yml` dispara em push para `main` apenas quando mu
 
 | Workflow | Run ID | Link | Conclusão |
 |---|---|---|---|
-| CI (main — em andamento) | 39778208965 | https://github.com/adm01-debug/Singu_V2/actions/runs/39778208965 | ⏳ in_progress (step 18/29 — Typecheck) |
+| CI (main) | 39778208965 | https://github.com/adm01-debug/Singu_V2/actions/runs/39778208965 | ✅ success |
 | CI (PR #131, mesmo código) | 39775333547 | https://github.com/adm01-debug/Singu_V2/actions/runs/39775333547 | ✅ success |
 | RLS exposure guard (PR #131, tree_id = main) | 39775333538 | https://github.com/adm01-debug/Singu_V2/actions/runs/39775333538 | ✅ success |
 | monitoring-lint (main) | 38429297407 | https://github.com/adm01-debug/Singu_V2/actions/runs/38429297407 | ✅ success |
 | restore-drill | 38163111058 | https://github.com/adm01-debug/Singu_V2/actions/runs/38163111058 | ✅ success |
 | diag-db | 37793983914 | https://github.com/adm01-debug/Singu_V2/actions/runs/37793983914 | ✅ success |
 
-> **Nota:** Quando o run #39778208965 concluir com `success`, a linha "CI (main — em andamento)" será atualizada.
 
 ---
 
