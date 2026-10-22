@@ -43,9 +43,19 @@ serialize-javascript | dependency_file_not_resolvable |
 
 ---
 
+## 3. CI em andamento — aguardando conclusão (não é bloqueio permanente)
+
+**Run:** https://github.com/adm01-debug/Singu_V2/actions/runs/39770286422  
+**Status em 2026-10-22T11:25:** `in_progress` — passo 10/29 "Testar isolamento e proteção SSRF das conexões" (Deno + Supabase real)  
+**Causa:** CI tem 29 passos (Deno tests, typecheck, lint, build, Playwright E2E, testes unitários, RLS matrix, Lighthouse). Tempo típico: 30-60 min.  
+**Ação necessária:** Aguardar conclusão automática. PR #131 será mergeado quando CI concluir com success.
+
+---
+
 ## Resumo
 
 | Item | Bloqueador externo | Ação necessária |
 |---|---|---|
 | Dependabot serialize-javascript | Estado interno GitHub | Descartar alerta manualmente ou aguardar ciclo |
 | Copilot Code Review | Bot dinâmico GitHub Copilot | Remover de required checks (opcional) |
+| CI run 39770286422 | CI em execução (externo) | Aguardar — não é bloqueio permanente |
