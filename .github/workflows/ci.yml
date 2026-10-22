@@ -58,7 +58,7 @@ jobs:
         run: deno check --no-lock --node-modules-dir=none supabase/functions/sequence-processor/index.ts
 
       - name: Validate required test secrets
-        if: ${{ !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.actor) }}
+        if: ${{ github.event_name != 'pull_request' || !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.event.pull_request.user.login) }}
         env:
           PGHOST: ${{ secrets.PGHOST }}
           PGUSER: ${{ secrets.PGUSER }}
@@ -82,7 +82,7 @@ jobs:
           exit "$missing"
 
       - name: Invalid indexes guard (public.*)
-        if: ${{ !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.actor) }}
+        if: ${{ github.event_name != 'pull_request' || !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.event.pull_request.user.login) }}
         env:
           PGHOST: ${{ secrets.PGHOST }}
           PGPORT: ${{ secrets.PGPORT }}
@@ -109,18 +109,18 @@ jobs:
         run: npm audit --omit=dev --audit-level=high
 
       - name: Build
-        if: ${{ !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.actor) }}
+        if: ${{ github.event_name != 'pull_request' || !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.event.pull_request.user.login) }}
         run: npm run build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
 
       - name: Install Playwright Browsers
-        if: ${{ !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.actor) }}
+        if: ${{ github.event_name != 'pull_request' || !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.event.pull_request.user.login) }}
         run: npx playwright install --with-deps
 
       - name: Run Playwright E2E Tests
-        if: ${{ !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.actor) }}
+        if: ${{ github.event_name != 'pull_request' || !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.event.pull_request.user.login) }}
         run: npx playwright test
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
@@ -131,7 +131,7 @@ jobs:
 
       - name: Upload Playwright report and artifacts
         uses: actions/upload-artifact@v7
-        if: ${{ always() && !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.actor) }}
+        if: ${{ always() && (github.event_name != 'pull_request' || !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.event.pull_request.user.login)) }}
         with:
           name: playwright-report
           path: playwright-report/
@@ -142,7 +142,7 @@ jobs:
         run: npm run test:coverage
 
       - name: Run RLS matrix tests (anon / user_a / user_b / user_admin)
-        if: ${{ !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.actor) }}
+        if: ${{ github.event_name != 'pull_request' || !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.event.pull_request.user.login) }}
         env:
           PGHOST: ${{ secrets.PGHOST }}
           PGPORT: ${{ secrets.PGPORT }}
@@ -155,7 +155,7 @@ jobs:
         run: bash tests/rls/run.sh
 
       - name: RLS coverage (public.* tables must have RLS + policy)
-        if: ${{ !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.actor) }}
+        if: ${{ github.event_name != 'pull_request' || !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.event.pull_request.user.login) }}
         env:
           PGHOST: ${{ secrets.PGHOST }}
           PGPORT: ${{ secrets.PGPORT }}
@@ -165,9 +165,9 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f scripts/migration/verify/rls-coverage.sql
 
       - name: Check bundle size budget
-        if: ${{ !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.actor) }}
+        if: ${{ github.event_name != 'pull_request' || !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.event.pull_request.user.login) }}
         run: node scripts/check-bundle-size.mjs
 
       - name: Lighthouse CI (performance budgets)
-        if: ${{ !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.actor) }}
+        if: ${{ github.event_name != 'pull_request' || !contains(fromJSON('["dependabot[bot]","devin-ai-integration[bot]"]'), github.event.pull_request.user.login) }}
         run: npx --yes @lhci/cli@0.13.x autorun
