@@ -47,7 +47,7 @@
 
 ### 3.1 RLS exposure guard — CORRIGIDO
 
-**Causa:** `check-rls-baseline.mjs` detectou que `contacts [authenticated_sem_role]` subiu de 0 → 6.  
+**Causa:** `check-rls-baseline.mjs` detectou que `contacts [authenticated_sem_role]` subiu de 0 →6.  
 O usuário de teste ganhou 6 contatos reais após migrations pós-2026-09-25. A policy RLS (`auth.uid() = user_id`) está correta — o banco simplesmente tem mais dados agora.  
 **Paralelamente**, 26+ tabelas com `anon: 0` passaram a retornar `403` (sem grant), o que é uma **melhoria** de segurança que também precisava ser registrada.
 
@@ -65,6 +65,23 @@ O usuário de teste ganhou 6 contatos reais após migrations pós-2026-09-25. A 
 
 **Causa:** Workflow dinâmico `dynamic/agents/copilot-pull-request-reviewer` executado pelo bot Copilot. Não há arquivo editável no repositório — o bot falhou por razão interna. Não é required check do CI e não bloqueia merge.
 
+### 3.4 dompurify CVEs críticos — CORRIGIDO (PR #133 + #134)
+
+**CVEs corrigidos:**
+- GHSA-cg2g-xh64-v4q7: SAFE_FOR_TEMPLATES bypass via shadow root
+- GHSA-mrv2-3pqr-j5jr: IN_PLACE hook remove parent/sibling
+- GHSA-c6gr-qvv4-5v3f: SMIL attributeName=href guard skip em XHTML
+
+**Fix:** `dompurify` atualizado de 3.4.16 → 3.4.17 em `package-lock.json` (commit `f6b3462` no PR #134).  
+**Prova:** Step 20 (`Security audit (high+ severity)`) no run 39838063160 — `conclusion: success` (concluído às 19:19:56Z).  
+`react-router` CVEs são moderadas e não falham em `--audit-level=high` — sem ação necessária.
+
+**Bot guard adicionado (PR #133, merged):**  
+Dependabot PRs e outros bots não são mais bloqueados pelo step `Validate PR Title` nem por steps que requerem secrets. Detecção dinâmica `endsWith('[bot]')` substituiu allowlist fechada em 9 guards no `ci.yml`.
+
+**Bug `TOO_MANY_ROWS` em `rls-coverage.sql` (PR #133, merged):**  
+`SELECT COUNT(*) INTO v_gaps FROM (...) _gaps` — subquery wrapper evita `ERROR: query returned more than one row` quando N≥2 tabelas sem RLS/policy.
+
 ---
 
 ## 4. Tabela de prova — todos os workflows em falha
@@ -78,9 +95,10 @@ O usuário de teste ganhou 6 contatos reais após migrations pós-2026-09-25. A 
 | monitoring-lint (main) | 38429297407 | https://github.com/adm01-debug/Singu_V2/actions/runs/38429297407 | ✅ success |
 | restore-drill | 38163111058 | https://github.com/adm01-debug/Singu_V2/actions/runs/38163111058 | ✅ success |
 | diag-db | 37793983914 | https://github.com/adm01-debug/Singu_V2/actions/runs/37793983914 | ✅ success |
-| **Dependabot Updates** (6 runs — estava em falha) | runs 37029074443…39249416013 | PENDENCIAS.md § 1 | ⛔ bloqueio externo GitHub — não corrigível via código; decisão: registrado em PENDENCIAS.md, aguarda ação do usuário ou ciclo automático do Dependabot |
-| **Running Copilot Code Review** (estava em falha) | 39769255299 | PENDENCIAS.md § 2 | ⛔ bot dinâmico (não-required check) — não corrigível via código; decisão: sem impacto em deploy/merge, nenhuma ação necessária |
-
+| **Security audit** (step 20, dompurify CVE) | run 39838063160 step 20 | https://github.com/adm01-debug/Singu_V2/actions/runs/39838063160 | ✅ success (19:19:56Z) |
+| **CI PR #134** (dompurify fix, steps 1-25 success) | 39838063160 | https://github.com/adm01-debug/Singu_V2/actions/runs/39838063160 | ⏳ in_progress (step 26/29 RLS matrix) — merge pendente |
+| **Dependabot Updates** (6 runs — estava em falha) | runs 37029074443…39249416013 | PENDENCIAS.md §1 | 🟡 bloqueio externo GitHub — não corrigível via código; decisão: registrado em PENDENCIAS.md, aguarda ação do usuário ou ciclo automático do Dependabot |
+| **Running Copilot Code Review** (estava em falha) | 39769255299 | PENDENCIAS.md §2 | 🟡 bot dinâmico (não-required check) — não corrigível via código; decisão: sem impacto em deploy/merge, nenhuma ação necessária |
 
 ---
 
@@ -90,6 +108,15 @@ O usuário de teste ganhou 6 contatos reais após migrations pós-2026-09-25. A 
   https://github.com/adm01-debug/Singu_V2/pull/131  
   Fix: `scripts/rls-matrix/rls-baseline.json` atualizado para estado real do banco (2026-10-22)
 
-- **PR #132** — `fix/ci-relatorio-final` → `main` — aguardando merge (CI verde)  
+- **PR #132** — `fix/ci-relatorio-final` → `main` — **MERGEADO** (2026-10-22T13:23:15Z)  
   https://github.com/adm01-debug/Singu_V2/pull/132  
   Docs: `RELATORIO_CI.md` com tabela de prova completa + evidência do RLS guard na main
+
+- **PR #133** — `claude/loving-shannon-2i1k7o` → `main` — **MERGEADO**  
+  https://github.com/adm01-debug/Singu_V2/pull/133  
+  Fix: bot guard `endsWith('[bot]')` em 9 places do `ci.yml`; bug `TOO_MANY_ROWS` em `rls-coverage.sql`
+
+- **PR #134** — `claude/loving-shannon-2i1k7o` → `main` — **PENDENTE** (CI run 39838063160 in_progress, step 26/29)  
+  https://github.com/adm01-debug/Singu_V2/pull/134  
+  Fix: `dompurify` 3.4.16→3.4.17 (3 CVEs críticos); step 20 Security audit: `conclusion=success`  
+  Merge via check-in agendado para 19:51Z (trigger `trig_013UVZJgRuFaBRsZYKBRyyTJ`)
