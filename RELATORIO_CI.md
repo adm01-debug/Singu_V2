@@ -130,9 +130,9 @@ Run #39841270943 (commit `6d7b0b9`) disparado por push direto na main sem PR —
 | **Security audit step 20** (dompurify CVE fix, PR #134) | 39838063160 step 20 | https://github.com/adm01-debug/Singu_V2/actions/runs/39838063160 | ✅ success (19:19:56Z) |
 | **CI PR #134** (dompurify 3.4.17, todos 29 steps) | 39838063160 | https://github.com/adm01-debug/Singu_V2/actions/runs/39838063160 | ✅ success — **PR #134 MERGEADO** (squash `7ee8e71`) |
 | **CI main pós-merge #134** | 39841424107 | https://github.com/adm01-debug/Singu_V2/actions/runs/39841424107 | ✅ success |
-| **CI PR #136** (security fix `5aab49c`, 3 bugs corrigidos) | 39850809429 | https://github.com/adm01-debug/Singu_V2/actions/runs/39850809429 | ⏳ in_progress |
-| **RLS exposure guard PR #136** (commit `5aab49c`) | 39850809589 | https://github.com/adm01-debug/Singu_V2/actions/runs/39850809589 | ⏳ in_progress |
-| **CI main pós-merge #136** | — | — | ⏳ aguardando merge do PR #136 |
+| **CI PR #136** (commit `36c4f3c` HEAD, steps 1-19 ✅) | 39851405289 | https://github.com/adm01-debug/Singu_V2/actions/runs/39851405289 | ⏳ in_progress (step 19/29 Lint @ 20:49Z) |
+| **RLS exposure guard PR #136** (commit `36c4f3c`) | 39851405248 | https://github.com/adm01-debug/Singu_V2/actions/runs/39851405248 | ✅ success |
+| **CI main pós-merge #136** | — | — | ⏳ aguardando CI do PR #136 (check-in 21:14Z) |
 | **Dependabot Updates** (6 runs) | runs 37029074443…39249416013 | PENDENCIAS.md §1 | 🟡 bloqueio externo GitHub — não corrigível via código |
 | **Running Copilot Code Review** | 39769255299 | PENDENCIAS.md §2 | 🟡 bot dinâmico não-required — sem impacto em deploy/merge |
 | **Push direto main** (run 39841270943) | 39841270943 | PENDENCIAS.md §3 | 🟡 histórico imutável — registrado em PENDENCIAS.md |
@@ -177,7 +177,7 @@ Run #39841270943 (commit `6d7b0b9`) disparado por push direto na main sem PR —
 | RLS exposure guard (contacts baseline) | ✅ CORRIGIDO — PR #131 |
 | dompurify CVEs críticos (3 CVEs) | ✅ CORRIGIDO — PR #134 |
 | Bot guard / `TOO_MANY_ROWS` | ✅ CORRIGIDO — PR #133 |
-| RLS matrix `update_company_fields` (baseline 109→110, allowlist, 3 bugs seg.) | ⏳ CORRIGIDO no código — PR #136 aguardando CI (run 39850809429) |
+| RLS matrix `update_company_fields` (baseline 109→110, allowlist, 3 bugs seg.) | ⏳ CORRIGIDO no código — PR #136 CI run 39851405289 steps 1-19 ✅, RLS guard 39851405248 ✅ success |
 | Dependabot serialize-javascript (6 runs) | 🟡 BLOQUEIO EXTERNO — PENDENCIAS.md §1 |
 | Copilot Code Review (não-required) | 🟡 BLOQUEIO EXTERNO — PENDENCIAS.md §2 |
 | Push direto main (histórico imutável) | 🟡 IMUTÁVEL — PENDENCIAS.md §3 |
