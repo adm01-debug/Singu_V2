@@ -53,6 +53,8 @@ INSERT INTO _definer_auth(sig) VALUES
   ('merge_duplicate_companies(p_keep_id uuid, p_merge_id uuid)'),
   ('merge_contacts(p_keep_contact_id uuid, p_merge_contact_id uuid)'),
   ('merge_duplicate_contacts(p_keep_id uuid, p_merge_id uuid)');
+INSERT INTO _definer_auth(sig) VALUES
+  ('update_company_fields(p_company_id uuid, p_data jsonb)');
 
 CREATE TEMP TABLE _fn AS
 SELECT p.proname || '(' || pg_get_function_identity_arguments(p.oid) || ')' AS sig,

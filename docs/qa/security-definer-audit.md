@@ -2,7 +2,11 @@
 
 > Objetivo: confirmar que **toda** função `SECURITY DEFINER` em `public.*` (a) trava `search_path`; e que nenhum DEFINER **exposto a `anon`** lê `auth.uid()` — combinação perigosa: `anon` sem JWT resulta em `auth.uid() = NULL` e o DEFINER escreve linhas órfãs ou cross-tenant.
 
-## Baseline atual — 109 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-10-13)
+## Baseline atual — 110 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-10-22)
+
+A migration `20261022200000_a3f8c124-9e50-4b7d-8c61-f5d7e2a10b3c.sql` aplica `SECURITY DEFINER` com `search_path` fixo à função `update_company_fields(p_company_id uuid, p_data jsonb)`, passando de 109 para 110. A função revoga `EXECUTE` de `PUBLIC` e concede apenas a `authenticated` e `service_role`. Revisão manual confirma: corpo não usa `auth.uid()`, não é exposta a `anon`, e atualiza apenas a empresa cujo `id` é passado como parâmetro — sem leitura cross-tenant. Adicionada à allowlist de `authenticated` em `tests/rls/functions_authenticated_allowlist.sql`.
+
+### Baseline anterior — 109 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-10-13)
 
 A migration `20261013033431_merge_records_atomically.sql` acrescenta uma RPC central DEFINER e transforma quatro aliases legados INVOKER em DEFINER, passando de 104 para 109. Esse total foi observado no gate de 2026-10-13, com a migration aplicada em transação revertida. A atualização do inventário foi autorizada pelo proprietário, preservando os controles de acesso anônimo, `search_path` e isolamento. A aplicação permanente continua pendente.
 
