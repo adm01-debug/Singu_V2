@@ -56,32 +56,40 @@ export function useContactDetail(contactId: string | undefined) {
       if (localContact) {
         contactData = normalizeExternalContact(localContact as unknown as Record<string, unknown>);
       } else {
-        const { data: externalContacts } = await queryExternalData<Contact>({
+        const { data: externalContacts, error: externalError } = await queryExternalData<Contact>({
           table: 'contacts',
           filters: [{ type: 'eq', column: 'id', value: contactId! }],
         });
+        if (externalError) throw externalError;
         contactData = externalContacts?.[0] ? normalizeExternalContact(externalContacts[0] as unknown as Record<string, unknown>) : null;
       }
 
-      if (!contactData) throw new Error('Contato não encontrado');
+      if (!contactData) {
+        return { contact: null, company: null, interactions: [], insights: [], alerts: [] };
+      }
 
       // 2. Fetch company (depends on contactData.company_id — must be sequential)
       let companyData: Company | null = null;
       if (contactData.company_id) {
-        const { data: localCompany } = await supabase.from('companies').select('*').eq('id', contactData.company_id).eq('user_id', user!.id).maybeSingle();
+        const { data: localCompany, error: companyError } = await supabase.from('companies').select('*').eq('id', contactData.company_id).eq('user_id', user!.id).maybeSingle();
+        if (companyError) throw companyError;
         if (localCompany) {
           companyData = localCompany;
         } else {
-          const { data: companyResult } = await queryExternalData<Company>({
+          const { data: companyResult, error: externalCompanyError } = await queryExternalData<Company>({
             table: 'companies',
             filters: [{ type: 'eq', column: 'id', value: contactData.company_id }],
           });
+          if (externalCompanyError) throw externalCompanyError;
           companyData = companyResult?.[0] || null;
         }
       }
 
       // 3. Collect secondary data (already in-flight since query start)
       const [interactionsRes, insightsRes, alertsRes] = await secondaryPromise;
+      for (const result of [interactionsRes, insightsRes, alertsRes]) {
+        if (result.error) throw result.error;
+      }
 
       return {
         contact: contactData,
@@ -95,7 +103,7 @@ export function useContactDetail(contactId: string | undefined) {
     refetchOnWindowFocus: false,
   });
 
-  const error = queryError instanceof Error ? queryError.message : null;
+  const error = queryError instanceof Error ? queryError.message : queryError ? 'Não foi possível carregar o contato.' : null;
 
 
   // Set up realtime subscription for updates — wrapped in try/catch so a

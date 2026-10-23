@@ -289,7 +289,7 @@ export function useContacts(
           };
         });
         logActivity({ type: 'updated', entityType: 'contact', entityId: id, entityName: `${normalized.first_name} ${normalized.last_name}`.trim(), description: 'Contato atualizado' });
-
+        await queryClient.invalidateQueries({ queryKey: ['contact', user?.id, id], exact: true });
 
         // Registra alterações de score
         if (updates.relationship_score !== undefined && user) {
