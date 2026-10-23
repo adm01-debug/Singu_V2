@@ -15,7 +15,7 @@ const contactOverridesSchema = z.object({
   notes: z.string().nullable(), family_info: z.string().nullable(),
 }).partial().strict();
 const companyOverridesSchema = z.object({
-  nome_crm: z.string().nullable(), cnpj: z.string().nullable(), industry: z.string().nullable(),
+  nome_crm: z.string().regex(/\S/, 'Nome principal obrigatório'), cnpj: z.string().nullable(), industry: z.string().nullable(),
   website: z.string().nullable(), notes: z.string().nullable(), tags: z.array(z.string()).nullable(),
 }).partial().strict();
 
