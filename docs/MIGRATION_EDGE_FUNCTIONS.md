@@ -97,13 +97,52 @@ vazios/reservados e `Concluído.` ao final.
 
 ## 6. Verificação
 
+Os quatro endpoints exigem um JWT de usuário válido do **destino**, além da chave
+anônima desse mesmo projeto. O PAT usado pela CLI e a chave `service_role` não
+substituem essa sessão. Prepare o ambiente na raiz do repositório com a conta de
+teste já cadastrada no destino (`TEST_EMAIL`/`TEST_PASSWORD` no arquivo local de
+migração; não versionar valores reais):
+
 ```bash
-./verify-deploy.sh --old-ref "$OLD_REF"
+set -a
+source scripts/migration/.env
+set +a
+export DEST_REF="${DEST_REF:-$NEW_REF}"
+export SUPABASE_ANON_KEY="$DEST_ANON_KEY"
+HEALTH_JWT="$(node --input-type=module -e '
+  const { DEST_REF, SUPABASE_ANON_KEY, TEST_EMAIL, TEST_PASSWORD } = process.env;
+  if (!DEST_REF || !SUPABASE_ANON_KEY || !TEST_EMAIL || !TEST_PASSWORD) {
+    throw new Error("Preencha destino, chave anônima e credenciais de teste locais");
+  }
+  const response = await fetch(`https://${DEST_REF}.supabase.co/auth/v1/token?grant_type=password`, {
+    method: "POST",
+    headers: { apikey: SUPABASE_ANON_KEY, "Content-Type": "application/json" },
+    body: JSON.stringify({ email: TEST_EMAIL, password: TEST_PASSWORD }),
+  });
+  const body = await response.json().catch(() => null);
+  if (!response.ok || typeof body?.access_token !== "string" || !body.access_token.trim()) {
+    throw new Error(`Autenticação de teste não confirmada (HTTP ${response.status})`);
+  }
+  process.stdout.write(body.access_token);
+')" && export HEALTH_JWT
+```
+
+Se o login falhar, pare e corrija o acesso antes de verificar. Não imprima o JWT
+nem execute esses comandos com `set -x`. A sessão expira; repita o login quando
+necessário. Os valores reservados são preparados somente no shell local, não em
+`secrets.env` nem por `supabase secrets set`.
+
+```bash
+./scripts/migration/functions/verify-deploy.sh --project-ref "$DEST_REF" --old-ref "${OLD_REF:-}"
 ```
 
 - Diff `local vs remoto` (funções faltando ou órfãs).
-- `curl -I` em endpoints de health (`health`, `system-health`,
-  `voice-ai-health`, `email-pipeline-health`) — 200 ou 401 são OK.
+- GET autenticado nos endpoints de health (`health`, `system-health`,
+  `voice-ai-health`, `email-pipeline-health`): HTTP 200 com JSON `status: "healthy"`.
+  HTTP 401/403, falhas de rede, JSON inválido e demais estados impedem a aprovação.
+- `email-pipeline-health` mede atividade recente: sem email na última hora retorna
+  `degraded`, e após 24 horas ou sem histórico retorna `offline`. O gate mantém
+  esses estados como pendentes; acesso ao endpoint não comprova entrega de email.
 - Imprime **SQL de auditoria** para achar cron jobs que ainda apontam
   para o `OLD_REF` no banco de destino.
 
