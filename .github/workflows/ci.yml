@@ -51,6 +51,9 @@ jobs:
       - name: Validar projeções e isolamento tenant
         run: deno test --node-modules-dir=none supabase/functions/_shared/select-projection_test.ts supabase/functions/_shared/tenant-guard_test.ts
 
+      - name: Validar JWT nas escritas e conflitos de concorrência
+        run: deno test --no-lock --node-modules-dir=none --allow-net=127.0.0.1,0.0.0.0 --allow-run --allow-env=HOME supabase/functions/external-data/actor-writes_test.ts supabase/functions/_shared/write-error_test.ts
+
       - name: Verificar tipos do gateway de dados
         run: deno check --node-modules-dir=none supabase/functions/external-data/index.ts
 
