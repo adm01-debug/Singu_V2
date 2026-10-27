@@ -32,6 +32,7 @@ Logs do baseline em `/tmp/ci-baseline/` (máquina da sessão).
 | **R1 — zod@3.25.76 → GHSA-mrhx-c7xc-m3w5** (alta; esgotamento de memória via `z.array()` sem limite; fix só na linha 4.x, sem backport 3.x) | CI | `npm audit` local reproduz exatamente o step que falha no run |
 | **R2 — `overrides.serialize-javascript` desalinhado** (advisory exige ≥7.1.3; override fixado `^7.0.7` → `EOVERRIDE` "conflicts with direct dependency") | Dependabot Updates | Erro reproduzido ao tentar `npm install serialize-javascript@^7.1.3` |
 | R3 — fast-uri@3.1.8 (moderada, transitiva workbox-build→ajv) | CI (mesmo step, severidade moderada) | Resolvida por `npm audit fix` — sem mudança de código |
+| R4 — entry chunk acima do budget (detectada no CI do PR; `jspdf`/`jspdf-autotable`/`pako` ~395KB raw importados estaticamente no entry) | CI (step `check-bundle-size`) | Entry 350,4KB gzip vs limite 350KB; na main estava 349,8KB |
 
 ## 4. Correções aplicadas (um commit por causa raiz)
 
@@ -43,6 +44,8 @@ Logs do baseline em `/tmp/ci-baseline/` (máquina da sessão).
    - `.partial()`/`.optional()` sobre campos com `.default()` agora emitem o default para chaves ausentes → saída esparsa preservada por filtro de chaves (`prepareCompanyWrite`/`prepareContactWrite`) e por helpers `optionalText`/`optionalNumeric` sem default nos insert-schemas que alimentam o RPC `persist_company_composite`;
    - `zodResolver` v5 tipa `input ≠ output` → cast local para `Resolver<FormData>` mantém a tipagem de saída produzida pela v3;
    - ajustes pontuais de inferência (`pais` no appendAddress; `direction`/`channel` opcionais em `useInteractions` com cast no insert — o banco já aplica os valores vigentes, **zero mudança de runtime**).
+3. `perf(bundle)` — `jspdf`/`jspdf-autotable` carregados sob demanda no `exportToPDF` de `StrategicNextStepsCard` (mesmo padrão do `useTelemetryExport`). Entry 350,4KB → **224,6KB gzip**; jspdf vira chunk separado (125,7KB) baixado só no clique.
+4. `fix(export-pdf)` — `try/catch` nos imports dinâmicos com toast destrutivo + `logger.error` (endereça achado do Devin Review: rejeição não tratada se a rede cair antes do clique).
 
 ## 5. Comparação baseline × final (anti-regressão)
 
@@ -66,7 +69,7 @@ Nenhum teste removido/enfraquecido, nenhum snapshot atualizado, nenhuma regra de
 
 | Workflow | Última execução | Situação |
 |---|---|---|
-| CI | [40489421925](https://github.com/adm01-debug/Singu_V2/actions/runs/40489421925) | causa raiz corrigida no PR `fix/ci-workflows` — merge retido (ver PENDENCIAS.md); validação final pós-merge pendente |
+| CI | [40525170349](https://github.com/adm01-debug/Singu_V2/actions/runs/40525170349) | ✅ success na branch `fix/ci-workflows` (build-and-test, incl. audit gate + check-bundle-size) — merge retido (ver PENDENCIAS.md); nova execução na `main` confirmará |
 | Dependabot Updates | [40320109211](https://github.com/adm01-debug/Singu_V2/actions/runs/40320109211) | causa raiz corrigida no PR; nova execução do Dependabot confirmará |
 | RLS exposure guard | [40489422048](https://github.com/adm01-debug/Singu_V2/actions/runs/40489422048) | segue verde |
 | monitoring-lint | [38429297407](https://github.com/adm01-debug/Singu_V2/actions/runs/38429297407) | segue verde |
