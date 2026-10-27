@@ -1,4 +1,6 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import type { Database } from "../../../src/integrations/supabase/types.ts";
 import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
@@ -28,7 +30,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const supabase = createClient(
+    const supabase = createClient<Database>(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_ANON_KEY")!,
       { global: { headers: { Authorization: authHeader } } },
@@ -63,10 +65,7 @@ Deno.serve(async (req) => {
 
     if (recErr) throw recErr;
 
-    type Record = typeof records extends (infer T)[] | null ? T : never;
-    type ReasonJoin = { id: string; label: string; category: string } | null;
-
-    const list = (records ?? []) as (Omit<Record, 'win_loss_reasons'> & { win_loss_reasons: ReasonJoin })[];
+    const list = records ?? [];
     const won = list.filter((r) => r.outcome === "won");
     const lost = list.filter((r) => r.outcome === "lost");
     const totalDecided = won.length + lost.length;
@@ -192,7 +191,7 @@ Deno.serve(async (req) => {
     const args = toolCall ? JSON.parse(toolCall.function.arguments) : { insights: [] };
     const insights = args.insights ?? [];
 
-    // Persist (best-effort — não bloqueia resposta)
+    // Persist (best-effort)
     if (insights.length > 0) {
       const rows = insights.map((i: { insight_type: string; title: string; description: string; severity: string }) => ({
         user_id: userId,
@@ -204,8 +203,7 @@ Deno.serve(async (req) => {
         severity: i.severity,
         supporting_data: aggregate,
       }));
-      supabase.from("win_loss_insights").insert(rows)
-        .catch((e: unknown) => console.error("win_loss_insights insert error:", e));
+      await bestEffortWrite(supabase.from("win_loss_insights").insert(rows), "win_loss_insights insert error:");
     }
 
     return new Response(JSON.stringify({ aggregate, insights }), {
