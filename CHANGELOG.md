@@ -6,13 +6,14 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
-
 - A Inteligência Proativa distingue aniversários de hoje e amanhã pelo dia local. Editar um contato atualiza sua ficha sem recarregar a página, e o cabeçalho preserva a data de aniversário em fusos negativos.
 - A ficha preserva os dados carregados quando a atualização falha e oferece nova tentativa. As recomendações se atualizam na virada do dia e ao retomar uma aba suspensa.
 - O funil da ficha só confirma a mudança de estágio quando a gravação retorna o contato atualizado; falhas mantêm o estágio anterior e permitem tentar novamente.
 - A ficha deixa de oferecer dados e ações anteriores quando a consulta confirma que o contato não existe mais; falhas de consulta continuam preservando os dados para nova tentativa.
 - Falhas nas consultas da empresa, interações, insights ou alertas preservam a ficha anterior e oferecem nova tentativa. A restauração pelo desfazer omite o nome gerado pelo banco; mover para a lixeira e restaurar renovam o detalhe da conta correta e só anunciam sucesso com confirmação. O diálogo fecha após arquivamento confirmado, e a confirmação de exclusão informa a opção Desfazer.
 - O calendário de datas importantes também se atualiza à meia-noite local e ao retomar a aba, sem depender de alterações nos contatos ou nas interações.
+
+- O CI verifica os tipos das 108 Edge Functions. Gravações auxiliares usam a rotina best-effort existente; os eventos Evolution têm validação explícita e contratos locais para o webhook, logger e proxy.
 
 - Correção do gate de segurança do CI: zod atualizado para a linha 4.x (vulnerabilidade alta GHSA-mrhx-c7xc-m3w5 só corrigida na 4.x) e serialize-javascript para ^7.1.3, alinhando `dependencies` e `overrides` (o conflito EOVERRIDE também derrubava o Dependabot). Compatibilidade do zod v4 aplicada em hooks e formulários sem mudança de comportamento; `@hookform/resolvers` atualizado para a versão compatível com zod v4.
 

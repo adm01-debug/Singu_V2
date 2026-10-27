@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
@@ -89,12 +90,11 @@ Deno.serve(async (req) => {
       console.error("AI error", e);
     }
 
-    supabase.from("deal_rooms").update({
+    await bestEffortWrite(supabase.from("deal_rooms").update({
       health_score: baseHealth,
       health_recommendations: recommendations,
       health_analyzed_at: new Date().toISOString(),
-    }).eq("id", room_id)
-      .catch((e: unknown) => console.error("deal_rooms health update error:", e));
+    }).eq("id", room_id), "deal_rooms health update error:");
 
     return jsonOk({ health_score: baseHealth, recommendations }, req);
   } catch (e) {
