@@ -17,7 +17,7 @@ Retorna `jsonb`. Sem contato resolvido: `{"found": false}` — sem eco do telefo
   "professional": {
     "whatsapp":          { "numero_e164", "numero", "phone_type" } | null,
     "email_corporativo": { "email", "is_verified" } | null,
-    "empresa":           { "id", "nome", "logo_url" } | null,   // nome = nome_fantasia ?? nome_crm ?? name
+    "empresa":           { "id", "nome", "logo_url" } | null,   // nome = nome_fantasia ?? nome_crm ?? razao_social
     "departamento":      string | null,
     "cargo":             string | null                           // cargo ?? role_title
   },

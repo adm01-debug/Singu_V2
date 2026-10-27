@@ -394,3 +394,8 @@ REVOKE ALL ON FUNCTION public.get_contact_sidebar_by_phone(text) FROM authentica
 GRANT EXECUTE ON FUNCTION public.get_contact_sidebar_by_phone(text) TO service_role;
 
 COMMIT;
+
+-- ROLLBACK (manual, se necessário): reaplicar a migration
+-- 20261003145227_get_contact_sidebar_by_phone.sql, que contém o corpo anterior
+-- da função. ATENÇÃO: a versão anterior quebra em produção (referencia a coluna
+-- inexistente companies.name) — só use para diagnóstico, nunca como fix final.
