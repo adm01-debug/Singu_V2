@@ -7,6 +7,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- A ficha e a lista descartam leituras anteriores à gravação e respostas de escrita com versão inferior à já confirmada. Edições e exclusões mantêm os dados confirmados até a resposta do servidor, sem rollback integral que apague outra edição. Excluir/Desfazer atualiza a ficha exata do proprietário; restaurar exige identidade e estado ativo confirmados.
+
 - O CI verifica os tipos das 108 Edge Functions. Gravações auxiliares usam a rotina best-effort existente; os eventos Evolution têm validação explícita e contratos locais para o webhook, logger e proxy.
 
 - Correção do gate de segurança do CI: zod atualizado para a linha 4.x (vulnerabilidade alta GHSA-mrhx-c7xc-m3w5 só corrigida na 4.x) e serialize-javascript para ^7.1.3, alinhando `dependencies` e `overrides` (o conflito EOVERRIDE também derrubava o Dependabot). Compatibilidade do zod v4 aplicada em hooks e formulários sem mudança de comportamento; `@hookform/resolvers` atualizado para a versão compatível com zod v4.
