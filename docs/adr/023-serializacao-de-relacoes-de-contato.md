@@ -30,6 +30,9 @@ A espera pode atrasar uma edição ou transferência concorrente. Se a transfer�
 vencer, a edição do antigo dono é recusada sem gravação parcial. Se a edição
 vencer, a transferência aguarda sua conclusão. `UPDATE_WITH_VERSION` conserva
 `CONCURRENT_EDIT`, e DELETE só declara sucesso após confirmar uma linha afetada.
+Abortamentos transitórios (`40P01`, `40001`, `55P03`) retornam `WRITE_CONFLICT`
+com indicação de repetição possível; não são apresentados como versão obsoleta
+nem provocam repetição automática de gravações no navegador.
 
 O runner em `tests/rls/contact-relation-concurrency.mjs` exige banco local
 descartável `aut03_*` e confirmação explícita de isolamento. As duas ordens,

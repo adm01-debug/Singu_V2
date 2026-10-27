@@ -68,10 +68,18 @@ Deno.test('handler converte recusa do guard após precheck e não mascara confli
     if (code === 'vazio') return Response.json([]);
     return Response.json({ code, message: 'recusa simulada' }, { status: 403 });
   }, async submit => {
-    for (const [errorCode, status] of [['42501', 403], ['40001', 409], ['40P01', 409]] as const) {
+    for (const [errorCode, status] of [['42501', 403], ['40001', 409], ['40P01', 409], ['55P03', 409]] as const) {
       code = errorCode;
-      const res = await submit({ action: 'update', table: 'contact_emails', id: row, updates: { email: 'negado@example.invalid' } }, jwt);
-      assertEquals(res.status, status); await res.body?.cancel();
+      for (const action of ['update', 'update_with_version']) {
+        const res = await submit({ action, table: 'contact_emails', id: row, version: 1, updates: { email: 'negado@example.invalid' } }, jwt);
+        assertEquals(res.status, status);
+        const payload = await res.json();
+        assertEquals(payload.error, status === 403 ? 'Forbidden' : 'WRITE_CONFLICT');
+        if (status === 409) {
+          assertEquals(payload.retryable, true);
+          assertEquals(payload.sqlState, errorCode);
+        }
+      }
     }
     const unauth = await submit({ action: 'delete', table: 'contact_emails', id: row });
     assertEquals(unauth.status, 401); assert((await unauth.text()).includes('Unauthorized'));

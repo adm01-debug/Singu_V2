@@ -61,3 +61,18 @@ $install$;
 
 -- Forward-only: não remover o guard para contornar erros de autorização/concorrência.
 -- Reversão operacional exige outra migration revisada; nenhuma policy/ACL de tabela é ampliada.
+-- DOWN MIGRATION (somente após revisão; reabre a corrida AUT-03 enquanto não reaplicado):
+-- BEGIN;
+-- DO $uninstall$
+-- DECLARE relation_name text;
+-- BEGIN
+--   FOREACH relation_name IN ARRAY ARRAY[
+--     'contact_emails', 'contact_phones', 'contact_addresses', 'contact_social_media'
+--   ] LOOP
+--     IF to_regclass(format('public.%I', relation_name)) IS NULL THEN CONTINUE; END IF;
+--     EXECUTE format('DROP TRIGGER IF EXISTS serialize_contact_relation_write ON public.%I', relation_name);
+--   END LOOP;
+-- END;
+-- $uninstall$;
+-- DROP FUNCTION IF EXISTS public.guard_contact_relation_write();
+-- COMMIT;

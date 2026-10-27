@@ -9,3 +9,15 @@ for (const [code, status] of [
     assertEquals(databaseWriteError({ code, message: 'falha simulada' }, req).status, status);
   });
 }
+
+for (const code of ['40P01', '40001', '55P03']) {
+  Deno.test(`conflito transitório ${code} não declara versão obsoleta`, async () => {
+    const req = new Request('http://127.0.0.1/', { headers: { Origin: 'https://singu-v2.vercel.app' } });
+    const res = databaseWriteError({ code, message: 'falha simulada' }, req);
+    assertEquals(res.status, 409);
+    assertEquals(res.headers.get('Access-Control-Allow-Origin'), 'https://singu-v2.vercel.app');
+    assertEquals(await res.json(), {
+      error: 'WRITE_CONFLICT', message: 'Write conflict; retry the transaction', retryable: true, sqlState: code,
+    });
+  });
+}

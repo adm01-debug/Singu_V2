@@ -108,8 +108,7 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
         if (response.status >= 400 && response.status < 500 && ![408, 429].includes(response.status)) throw new CanonicalRpcClientError(message);
         throw new Error(message);
       }
-      // 409 vem como JSON estruturado { error: "CONCURRENT_EDIT", entity, id, attemptedVersion, traceId }
-      // Preserva o JSON cru na mensagem para o caller parsear (ver updateExternalDataWithVersion).
+      // Preserva o JSON cru para distinguir versão obsoleta de conflito transitório.
       const message = `Edge function error [${response.status}]: ${errorText}`;
       if (response.status >= 400 && response.status < 500 && ![408, 429].includes(response.status)) throw new ExternalDataClientError(message);
       throw new Error(message);
@@ -237,24 +236,21 @@ export class ConcurrentEditError extends Error {
  */
 function parseConcurrentEditPayload(msg: string, fallbackTable: string, fallbackId: string): {
   table: string; id: string; attemptedVersion?: number; traceId?: string;
-} {
-  // Formato novo: "Edge function error [409]: {"error":"CONCURRENT_EDIT","entity":"...","id":"...",...}"
-  // eslint-disable-next-line sonarjs/super-linear-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
-  const jsonMatch = msg.match(/\{.*"error"\s*:\s*"CONCURRENT_EDIT".*\}/);
-  if (jsonMatch) {
-    try {
-      const parsed = JSON.parse(jsonMatch[0]);
-      return {
-        table: parsed.entity ?? fallbackTable,
-        id: parsed.id ?? fallbackId,
-        attemptedVersion: typeof parsed.attemptedVersion === 'number' ? parsed.attemptedVersion : undefined,
-        traceId: typeof parsed.traceId === 'string' ? parsed.traceId : undefined,
-      };
-    } catch {
-      // fall through para retrocompat
-    }
+} | null {
+  const payload = msg.replace(/^Edge function error \[\d+\]:\s*/, '');
+  try {
+    const parsed = JSON.parse(payload);
+    if (parsed?.error !== 'CONCURRENT_EDIT') return null;
+    return {
+      table: typeof parsed.entity === 'string' ? parsed.entity : fallbackTable,
+      id: typeof parsed.id === 'string' ? parsed.id : fallbackId,
+      attemptedVersion: typeof parsed.attemptedVersion === 'number' ? parsed.attemptedVersion : undefined,
+      traceId: typeof parsed.traceId === 'string' ? parsed.traceId : undefined,
+    };
+  } catch {
+    if (!/^CONCURRENT_EDIT(?:\s|$)/.test(payload)) return null;
+    return { table: fallbackTable, id: fallbackId };
   }
-  return { table: fallbackTable, id: fallbackId };
 }
 
 /**
@@ -274,8 +270,8 @@ export async function updateExternalDataWithVersion<T = Record<string, unknown>>
     return { data, error: null };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    if (/\b409\b/.test(msg) || /CONCURRENT_EDIT/i.test(msg)) {
-      const parsed = parseConcurrentEditPayload(msg, table, id);
+    const parsed = parseConcurrentEditPayload(msg, table, id);
+    if (parsed) {
       return {
         data: null,
         error: new ConcurrentEditError(parsed.table, parsed.id, parsed.attemptedVersion, parsed.traceId),
