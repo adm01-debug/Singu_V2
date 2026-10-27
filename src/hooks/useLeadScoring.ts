@@ -137,7 +137,7 @@ export function useLeadScoreHistory(contactId?: string) {
         .eq('contact_id', contactId).eq('user_id', user.id)
         .order('recorded_at', { ascending: true }).limit(100);
       if (error) throw error;
-      return (data ?? []).map(row => ({ ...row, grade: row.grade ? displayLeadGrade(row.grade) : null, breakdown: z.record(z.unknown()).parse(row.breakdown ?? {}) }));
+      return (data ?? []).map(row => ({ ...row, grade: row.grade ? displayLeadGrade(row.grade) : null, breakdown: z.record(z.string(), z.unknown()).parse(row.breakdown ?? {}) }));
     },
     enabled: !!contactId && !!user?.id,
     staleTime: STALE,

@@ -1,60 +1,31 @@
-# Pendências CI — Singu_V2
+# PENDENCIAS.md — Bloqueios e itens fora do escopo (fix/ci-workflows)
 
-**Atualizado em:** 2026-10-22  
-**Sessão:** https://claude.ai/code/session_019NVLqsk6G3A9gsgXz44mTC
+## P0 — Merge do PR `fix/ci-workflows` retido propositalmente
 
-Itens que **não podem ser corrigidos** por mudança de código no repositório — dependem de ação externa do usuário ou são restrições do GitHub.
+- **Workflow:** CI / Dependabot Updates
+- **Erro corrigido:** gate `npm audit --omit=dev --audit-level=high` (zod GHSA-mrhx-c7xc-m3w5) + EOVERRIDE do Dependabot.
+- **Por que pendente:** a correção altera código da aplicação (migração zod v3→v4 em `src/`), e o merge na `main` dispara deploy de produção (Vercel). Regra da sessão: "se a correção alterar código da aplicação, não faça merge — deixe o PR pronto e registre em PENDENCIAS.md".
+- **O que preciso fazer (Joaquim):** revisar e mergear o PR quando quiser publicar a mudança; em seguida reexecutar os workflows de push na main e confirmar `success`.
 
----
+## P1 — react-router-dom 6 → 7 (2 vulnerabilidades moderadas)
 
-## 1. Dependabot Updates — serialize-javascript (seis runs)
+- `npm audit --omit=dev` reporta 2 moderadas em `react-router`/`react-router-dom` (GHSA-wrjc-x8rr-h8h6, GHSA-337j-9hxr-rhxg); fix só na linha 7.x (breaking change).
+- Abaixo do gate `high` — não derruba o CI. Upgrade major fica fora do escopo "menor mudança possível"; sugerido avaliar migração para RR7 em tarefa dedicada.
 
-**Workflow:** `dynamic/dependabot/dependabot-updates` (dinâmico, sem arquivo no repositório)  
-**Runs com falha:**
-- https://github.com/adm01-debug/Singu_V2/actions/runs/39249416013 (Update #1636782066 — 2026-10-19, npm_and_yarn em /)
-- https://github.com/adm01-debug/Singu_V2/actions/runs/38377749239 (Update #1624592914 — 2026-10-13, pacotes: @tanstack/react-query, react-force-graph-2d, @types/node, pg)
-- https://github.com/adm01-debug/Singu_V2/actions/runs/37403320679 (Update #1611893757 — 2026-10-06, pacotes: @tanstack/react-query, react-force-graph-2d, @types/node, pg)
-- https://github.com/adm01-debug/Singu_V2/actions/runs/37392180540 (Update #1611682242 — 2026-10-06, pacotes: @tanstack/react-query, react-force-graph-2d, @types/node, pg)
-- https://github.com/adm01-debug/Singu_V2/actions/runs/37307601995 (Update #1610192361 — 2026-10-05, npm_and_yarn em /)
-- https://github.com/adm01-debug/Singu_V2/actions/runs/37029074443 (Update #1605423674 — 2026-10-02, pacotes: @supabase/supabase-js, @tanstack/react-query, dompurify, libphonenumber-js, react-window, @commitlint/cli, @commitlint/config-conventional, @types/node, lovable-tagger, typescript-eslint)
+## P2 — zod 3.23.8 pinado nas edge functions (Deno)
 
-**Erro exato (idêntico em todos os runs):**
-```
-serialize-javascript | dependency_file_not_resolvable |
-"Override for serialize-javascript@7.1.2 conflicts with direct dependency."
-```
+- `supabase/functions/` importa `npm:zod@3.23.8` inline — fora do `package-lock.json`, invisível ao `npm audit`.
+- **O que fazer:** avaliar se as edges validam arrays de entrada externa (vetor da GHSA-mrhx-c7xc-m3w5) e atualizar os pins para uma versão corrigida, ou confirmar que nenhuma edge expõe o vetor.
 
-**Por que trava:** O Dependabot detectou um conflito interno entre um override que ele mesmo tentou aplicar e a versão declarada como dependência direta. Esse estado é mantido pelo GitHub, não por um arquivo editável no repositório (`.github/dependabot.yml` não contém override para `serialize-javascript`).
+## P3 — Vulnerabilidades em devDependencies (vitest/tinypool crítica, @vitest/mocker, postcss-selector-parser)
 
-**O que você precisa fazer:**
-1. Acesse https://github.com/adm01-debug/Singu_V2/network/alerts ou https://github.com/adm01-debug/Singu_V2/security/dependabot
-2. Procure o alerta de `serialize-javascript` e feche/descarte manualmente se estiver preso
-3. Ou aguarde o próximo ciclo automático do Dependabot — o conflito costuma se resolver sozinho quando as versões upstream são atualizadas
+- O gate do CI usa `--omit=dev`, então não quebram o workflow — mas continuam no lockfile. Requerem bump major de vitest; fora do escopo desta correção.
 
----
+## P4 — Tokens Supabase da org inválidos
 
-## 2. Running Copilot Code Review
+- `SINGU_SUPABASE_ACCESS_TOKEN` e `SUPABASE_ACCESS_TOKEN` retornam "Invalid access token" na Management API — impediu validação direta do banco `pgxfvjmuubtbowutlide` durante a correção.
+- **O que preciso fazer (Joaquim):** renovar o Personal Access Token do Supabase (org → Secrets → Actions) se quiser que sessões validem o banco.
 
-**Workflow:** `dynamic/agents/copilot-pull-request-reviewer` (dinâmico, bot do GitHub Copilot)  
-**Run com falha:** https://github.com/adm01-debug/Singu_V2/actions/runs/39769255299  
-**Erro:** Falha interna do bot Copilot ao revisar PR #131. Não é required check do CI e não bloqueia merge.
+## P5 — Banco informado diverge do canônico
 
-**Por que trava:** O workflow é criado e executado pelo bot GitHub Copilot, não por um arquivo em `.github/workflows/`. Não há código editável no repositório que controle esse workflow.
-
-**O que você precisa fazer (opcional):**
-1. Se o Copilot Code Review for um required check, acesse as configurações de branch protection: https://github.com/adm01-debug/Singu_V2/settings/branches
-2. Remova `Running Copilot Code Review` dos required checks, OU
-3. Aguarde o bot reexecutar na próxima abertura/atualização de PR
-
-**Impacto:** Zero — não bloqueia deploy nem merge dos PRs normais.
-
----
-
----
-
-## Resumo
-
-| Item | Bloqueador externo | Ação necessária |
-|---|---|---|
-| Dependabot serialize-javascript (6 runs) | Estado interno GitHub | Descartar alerta manualmente ou aguardar ciclo |
-| Copilot Code Review | Bot dinâmico GitHub Copilot | Remover de required checks (opcional) |
+- A URL passada (`doufsxqlfjyuvxuezpln`) é o Catálogo de Produtos (Projeto Gifts), não o banco canônico do Singu (`pgxfvjmuubtbowutlide` — Gestão de Clientes/CRM). Não bloqueou a correção; registrar para futuras sessões que precisem de SQL direto.

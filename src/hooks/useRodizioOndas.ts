@@ -161,7 +161,7 @@ export function useRodizioExecucoes() {
         tipo: z.enum(['CLOSER', 'SDR', 'SEGMENTAR', 'DISTRIBUICAO_INICIAL']).parse(row.tipo),
         modo: z.enum(['DRY_RUN', 'REAL', 'ROLLBACK']).parse(row.modo),
         foi_revertida: z.boolean().parse(row.foi_revertida),
-        parametros: z.record(z.unknown()).nullable().parse(row.parametros),
+        parametros: z.record(z.string(), z.unknown()).nullable().parse(row.parametros),
       }));
     },
     enabled: !!user,

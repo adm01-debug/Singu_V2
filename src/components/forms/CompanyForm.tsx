@@ -1,6 +1,6 @@
  import { useUnsavedChangesGuard } from '@/hooks/useUnsavedChangesGuard';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFormDraft } from '@/hooks/useFormDraft';
 import { useExternalLookup } from '@/hooks/useExternalLookup';
@@ -43,7 +43,8 @@ export function CompanyForm({ company, onSubmit, onCancel, isSubmitting }: Compa
   const socialMediaHook = useCompanySocialMedia(companyId);
 
   const form = useForm<CompanyFormData>({
-    resolver: zodResolver(companySchema),
+    // zod v4 + resolvers v5: input (campos) e output (parseado) divergem; o form segue tipado pelo output como na v3.
+    resolver: zodResolver(companySchema) as unknown as Resolver<CompanyFormData>,
     mode: 'onBlur',
     defaultValues: {
       nome_crm: getCompanyField(c, 'nome_crm') || getCompanyField(c, 'name') || getCompanyField(c, 'nome_fantasia'),
