@@ -1,4 +1,4 @@
-import { test } from 'node:test';
+import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
@@ -10,10 +10,11 @@ import { spawn } from 'node:child_process';
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const slugs = ['health', 'system-health', 'voice-ai-health', 'email-pipeline-health'];
 
-// Prova lenta opcional: curl real, somente loopback, sem destino Supabase.
+// Curl real, somente loopback; provas independentes executadas em paralelo.
+describe('Prazo real dos health checks', { concurrency: true }, () => {
 for (const seconds of [18, 74, 76]) {
   test(`Publicação com curl real e resposta local em ${seconds}s`, {
-    skip: process.env.RUN_SLOW_DEPLOY_CHECKS !== '1', concurrency: true, timeout: 95000,
+    timeout: 95000,
   }, async t => {
     const dir = mkdtempSync(join(tmpdir(), 'singu-deploy-timeout-'));
     t.after(() => rmSync(dir, { recursive: true, force: true }));
@@ -76,3 +77,4 @@ for (const seconds of [18, 74, 76]) {
     }
   });
 }
+});
