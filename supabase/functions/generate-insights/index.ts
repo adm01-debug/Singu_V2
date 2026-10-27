@@ -136,7 +136,7 @@ Gere entre 3 e 8 insights relevantes baseados nestes dados. Retorne um JSON com 
         insights = parsed.insights || [];
       }
     } catch (parseError) {
-      log.error("json_parse_failed", { error: parseError.message, content });
+      log.error("json_parse_failed", { error: parseError instanceof Error ? parseError.message : String(parseError), content });
     }
 
     log.info("generation_complete", { count: insights.length });

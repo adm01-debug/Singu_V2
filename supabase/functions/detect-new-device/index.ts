@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { jsonError, jsonOk, handleCorsAndMethod, withAuth, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
@@ -50,11 +51,10 @@ Deno.serve(async (req) => {
 
     if (existing) {
       // Update last used (best-effort, does not affect response)
-      supabase
+      await bestEffortWrite(supabase
         .from("user_known_devices")
         .update({ last_used_at: new Date().toISOString() })
-        .eq("id", existing.id)
-        .catch((e: unknown) => console.error("user_known_devices update error:", e));
+        .eq("id", existing.id), "user_known_devices update error:");
 
       return jsonOk({ is_new: false, is_trusted: existing.is_trusted }, req);
     }
@@ -75,12 +75,12 @@ Deno.serve(async (req) => {
 
     // Create notification (best-effort)
     if (newDevice) {
-      supabase.from("device_login_notifications").insert({
+      await bestEffortWrite(supabase.from("device_login_notifications").insert({
         user_id: userId,
         device_id: newDevice.id,
         ip_address,
         location: location ?? null,
-      }).catch((e: unknown) => console.error("device_login_notifications insert error:", e));
+      }), "device_login_notifications insert error:");
     }
 
     return jsonOk({ is_new: true, is_trusted: false }, req);

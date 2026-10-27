@@ -42,8 +42,11 @@ jobs:
       - name: Testar isolamento e proteção SSRF das conexões
         run: deno test --node-modules-dir=none --allow-net --allow-run --allow-env=HOME supabase/functions/_shared/safe-http_test.ts supabase/functions/connection-tester/index_test.ts supabase/functions/_shared/validation-contract_test.ts supabase/functions/_shared/behavioral-retry-contract_test.ts
 
-      - name: Verificar tipos da função de conexões
-        run: deno check --node-modules-dir=none supabase/functions/connection-tester/index.ts supabase/functions/email-verifier/index.ts supabase/functions/phone-validator/index.ts supabase/functions/validation-queue-worker/index.ts supabase/functions/process-behavioral-regen-queue/index.ts supabase/functions/generate-behavioral-profile/index.ts supabase/functions/retry-behavioral-profile/index.ts supabase/functions/auto-regen-behavioral-profiles/index.ts supabase/functions/auto-rebatch-behavioral/index.ts
+      - name: Verificar tipos de todas as Edge Functions
+        run: deno check --no-lock --node-modules-dir=none supabase/functions/*/index.ts
+
+      - name: Validar contratos de tipos, webhook e SDK
+        run: deno test --no-lock --node-modules-dir=none --allow-net=127.0.0.1,0.0.0.0 --allow-run --allow-env=HOME,SUPABASE_URL,SUPABASE_SERVICE_ROLE_KEY supabase/functions/_shared/edge-types-contract_test.ts supabase/functions/_shared/evolution-dispatch-contract_test.ts supabase/functions/_shared/sdk-runtime-contract_test.ts
 
       - name: Validar projeções e isolamento tenant
         run: deno test --node-modules-dir=none supabase/functions/_shared/select-projection_test.ts supabase/functions/_shared/tenant-guard_test.ts
