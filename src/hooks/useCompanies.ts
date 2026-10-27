@@ -46,9 +46,13 @@ export type CompanyUpdate = TablesUpdate<'companies'> & Partial<CompanyAliases>;
 const text = z.string().nullable().default(null);
 const numeric = z.number().finite().nullable().default(null);
 const boolean = z.boolean().nullable().default(null);
+// Variantes sem .default() para schemas de insert: zod v4 aplica o default mesmo em
+// campos .optional() ausentes; na v3 a chave ficava fora do payload (esparsa).
+const optionalText = z.string().nullable().optional();
+const optionalNumeric = z.number().finite().nullable().optional();
 const strings = z.array(z.string()).nullable().default(null);
 const json: z.ZodType<Json> = z.lazy(() => z.union([
-  z.string(), z.number().finite(), z.boolean(), z.null(), z.array(json), z.record(json),
+  z.string(), z.number().finite(), z.boolean(), z.null(), z.array(json), z.record(z.string(), json),
 ]));
 const nullableJson = json.nullable().default(null);
 // Todos os campos canônicos são validados; campos omitidos na listagem ficam nulos no domínio.
@@ -74,7 +78,7 @@ const companyShape = {
   nicho_cliente: text, nome_crm_atualizado_em: text, nome_fantasia: text, notes: text,
   numero_cooperativa: text, numero_cooperativa_singular: text, porte_rf: text,
   ramo_atividade: text, razao_social: text, reference_frame: text, regime_tributario: text,
-  search_vector: z.unknown(), singular_id: text, situacao_rf: text,
+  search_vector: z.unknown().optional(), singular_id: text, situacao_rf: text,
   situacao_rf_data: text, social_media_searched_at: text,
   status: z.enum(Constants.public.Enums.company_status).nullable().default(null),
   tags: strings, tags_array: strings, tipo_cooperativa: text, updated_at: text,
@@ -126,33 +130,33 @@ const companyAliasSchema = z.object({
   lat: z.number().finite().nullable(), lng: z.number().finite().nullable(),
 }).partial();
 const relationMetadata = {
-  id: z.string().optional(), created_at: text.optional(), updated_at: text.optional(),
+  id: z.string().optional(), created_at: optionalText, updated_at: optionalText,
   is_primary: z.boolean().nullable().optional(),
 };
 const phoneInsertSchema = z.object({
-  ...relationMetadata, numero: z.string().min(1), numero_normalizado: text.optional(),
-  numero_e164: text.optional(), phone_type: z.enum(Constants.public.Enums.phone_type).nullable().optional(),
-  ramal: text.optional(), is_whatsapp: z.boolean().nullable().optional(),
-  departamento: text.optional(), observacao: text.optional(), fonte: text.optional(),
-  contexto: text.optional(), confiabilidade: numeric.optional(),
+  ...relationMetadata, numero: z.string().min(1), numero_normalizado: optionalText,
+  numero_e164: optionalText, phone_type: z.enum(Constants.public.Enums.phone_type).nullable().optional(),
+  ramal: optionalText, is_whatsapp: z.boolean().nullable().optional(),
+  departamento: optionalText, observacao: optionalText, fonte: optionalText,
+  contexto: optionalText, confiabilidade: optionalNumeric,
 }).strict();
 const emailInsertSchema = z.object({
-  ...relationMetadata, email: z.string().email(), email_normalizado: text.optional(),
+  ...relationMetadata, email: z.string().email(), email_normalizado: optionalText,
   email_type: z.enum(Constants.public.Enums.email_type).nullable().optional(),
-  departamento: text.optional(), observacao: text.optional(), fonte: text.optional(),
-  contexto: text.optional(), confiabilidade: numeric.optional(), is_verified: z.boolean().nullable().optional(),
+  departamento: optionalText, observacao: optionalText, fonte: optionalText,
+  contexto: optionalText, confiabilidade: optionalNumeric, is_verified: z.boolean().nullable().optional(),
 }).strict();
 const addressInsertSchema = z.object({
-  ...relationMetadata, bairro: text.optional(), cep: text.optional(), cidade: text.optional(),
-  cidade_ibge: numeric.optional(), complemento: text.optional(), estado: text.optional(),
-  google_maps_url: text.optional(), google_place_id: text.optional(), horario_funcionamento: text.optional(),
-  instrucoes_entrega: text.optional(), latitude: numeric.optional(), longitude: numeric.optional(),
-  logradouro: text.optional(), numero: text.optional(), origem: text.optional(), pais: text.optional(),
-  ponto_referencia: text.optional(), tipo: text.optional(), tipo_logradouro: text.optional(),
+  ...relationMetadata, bairro: optionalText, cep: optionalText, cidade: optionalText,
+  cidade_ibge: optionalNumeric, complemento: optionalText, estado: optionalText,
+  google_maps_url: optionalText, google_place_id: optionalText, horario_funcionamento: optionalText,
+  instrucoes_entrega: optionalText, latitude: optionalNumeric, longitude: optionalNumeric,
+  logradouro: optionalText, numero: optionalText, origem: optionalText, pais: optionalText,
+  ponto_referencia: optionalText, tipo: optionalText, tipo_logradouro: optionalText,
 }).strict();
 const phoneInputSchema = phoneInsertSchema.extend({
   tipo: z.enum(['fixo', 'celular', 'whatsapp', 'outros']).optional(),
-  contato_nome: text.optional(),
+  contato_nome: optionalText,
 }).transform(({ tipo, contato_nome, ...phone }) => ({
   ...phone,
   ...(phone.phone_type === undefined && tipo ? {
@@ -281,7 +285,11 @@ export function prepareCompanyWrite(input: CompanyUpdate): Record<string, unknow
   if (name !== undefined && record.nome_crm === undefined) record.nome_crm = name;
   if (input.industry !== undefined && record.ramo_atividade === undefined) record.ramo_atividade = input.industry;
   if (input.tags !== undefined && record.tags_array === undefined) record.tags_array = input.tags;
-  return companyRowSchema.omit({ id: true, version: true }).partial().strict().parse(record);
+  const parsed = companyRowSchema.omit({ id: true, version: true }).partial().strict().parse(record) as Record<string, unknown>;
+  // zod v4: .partial() aplica .default() de chaves ausentes; filtrar para preservar a saída esparsa da v3.
+  return Object.fromEntries(
+    Object.keys(record).map((key) => [key, record[key as keyof typeof record] === undefined ? undefined : parsed[key]]),
+  );
 }
 
 async function fetchCompany(id: string): Promise<Company> {

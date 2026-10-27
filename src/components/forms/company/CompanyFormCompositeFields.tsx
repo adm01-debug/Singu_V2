@@ -227,7 +227,7 @@ export function CompanyFormCompositeFields({ form }: Props) {
             type="button"
             variant="outline"
             size="sm"
-            onClick={() => appendAddress({ tipo: 'comercial', logradouro: '', cidade: '', estado: '', is_primary: addressFields.length === 0 })}
+            onClick={() => appendAddress({ tipo: 'comercial', logradouro: '', cidade: '', estado: '', pais: 'Brasil', is_primary: addressFields.length === 0 })}
           >
             <Plus className="w-4 h-4 mr-1" /> Adicionar
           </Button>
