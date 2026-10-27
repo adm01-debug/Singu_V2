@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
@@ -115,12 +116,11 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Update pixel stats (best-effort, fire-and-forget)
-    admin
+    // Update pixel stats (best-effort)
+    await bestEffortWrite(admin
       .from("intent_tracking_pixels")
       .update({ last_signal_at: new Date().toISOString() })
-      .eq("pixel_key", data.pixel_key)
-      .catch((e: unknown) => console.error("intent_tracking_pixels update error:", e));
+      .eq("pixel_key", data.pixel_key), "intent_tracking_pixels update error:");
 
     return new Response(JSON.stringify({ ok: true }), {
       status: 200, headers: { ...cors, "Content-Type": "application/json" },

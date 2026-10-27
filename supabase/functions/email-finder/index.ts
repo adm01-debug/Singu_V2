@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
@@ -73,7 +74,7 @@ Deno.serve(async (req) => {
     const best = candidates[0];
 
     const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-    admin.from("email_finder_results").insert({
+    await bestEffortWrite(admin.from("email_finder_results").insert({
       user_id: userData.user.id,
       contact_id: contactId ?? null,
       full_name: `${firstName} ${lastName}`,
@@ -84,7 +85,7 @@ Deno.serve(async (req) => {
       best_email: best?.email ?? null,
       best_confidence: best?.score ?? 0,
       sources: [{ type: "permutation_heuristic" }],
-    }).catch((e: unknown) => console.error("email_finder_results insert error:", e));
+    }), "email_finder_results insert error:");
 
     return new Response(JSON.stringify({ best, candidates }), {
       headers: { ...cors, "Content-Type": "application/json" },

@@ -1,5 +1,5 @@
 // Dual-write proxy — espelha writes críticos no banco LEGADO durante bake.
-import { createClient } from "npm:@supabase/supabase-js@2.45.0";
+import { createClient } from "npm:@supabase/supabase-js@2.117.3";
 import { z } from "npm:zod@3.23.8";
 import {
   guardBody,
