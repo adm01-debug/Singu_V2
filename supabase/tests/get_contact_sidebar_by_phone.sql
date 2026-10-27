@@ -76,6 +76,8 @@ DO $$
 DECLARE
   v_base    uuid := gen_random_uuid();
   v_company uuid := gen_random_uuid();
+  v_company_rs uuid := gen_random_uuid();
+  v_contato_rs uuid := gen_random_uuid();
   v_other   uuid := gen_random_uuid();
   v_dup     uuid := gen_random_uuid();
   v_template uuid := gen_random_uuid();
@@ -100,7 +102,7 @@ BEGIN
     INSERT INTO auth.users (id) VALUES (v_user);
   END IF;
 
-  INSERT INTO public.companies (id, user_id, name, nome_crm, nome_fantasia, logo_url)
+  INSERT INTO public.companies (id, user_id, razao_social, nome_crm, nome_fantasia, logo_url)
   VALUES (v_company, v_user, 'Empresa XPTO SA', 'Empresa XPTO SA', 'XPTO', 'https://exemplo.com/logo.png');
 
   INSERT INTO public.contacts (id, user_id, company_id, first_name, last_name,
@@ -229,6 +231,18 @@ BEGIN
   ASSERT v_res#>>'{professional,departamento}' = 'Comercial', 'departamento errado';
   ASSERT v_res#>>'{professional,cargo}' = 'Diretor', 'cargo errado';
 
+  -- empresa só com razao_social preenchida (schema real: sem coluna `name`,
+  -- nome_fantasia/nome_crm nulos → coalesce deve chegar em razao_social)
+  INSERT INTO public.companies (id, user_id, razao_social)
+  VALUES (v_company_rs, v_user, 'XPTO Razao Social LTDA');
+  INSERT INTO public.contacts (id, user_id, company_id, first_name, last_name, is_duplicate)
+  VALUES (v_contato_rs, v_user, v_company_rs, 'Razao', 'Social', false);
+  INSERT INTO public.contact_phones (contact_id, numero, numero_normalizado, numero_e164)
+  VALUES (v_contato_rs, '1133334444', '1133334444', '+551133334444');
+  v_res := public.get_contact_sidebar_by_phone('1133334444');
+  ASSERT v_res#>>'{professional,empresa,nome}' = 'XPTO Razao Social LTDA', 'razao_social fallback errado';
+  v_res := public.get_contact_sidebar_by_phone('11988776655');
+
   -- ============ 13. bloco personal ============
   ASSERT jsonb_array_length(v_res#>'{personal,social}') = 2, 'social != 2 itens';
   ASSERT v_res#>>'{personal,data_nascimento}' IN ('1985-03-14', '1985-03-14T00:00:00'), 'data_nascimento errada';
@@ -254,12 +268,13 @@ BEGIN
   INSERT INTO public.contact_behavior (
     contact_id, main_fear, motivation_primary, decision_speed,
     decision_criteria, needs_approval, approver_id, budget_authority,
-    decision_role, decision_power
+    decision_role, decision_power, influencer_ids
   ) VALUES (
     v_base, 'Perder previsibilidade', 'Crescimento', 'slow',
     '{quality}', false,
     (SELECT id FROM public.contacts WHERE first_name = 'Aprovador' LIMIT 1),
-    true, 'technical', 7
+    true, 'technical', 7,
+    ARRAY[(SELECT id FROM public.contacts WHERE first_name = 'Aprovador' LIMIT 1)]
   );
   v_res := public.get_contact_sidebar_by_phone('11988776655');
   ASSERT v_res#>>'{singu_profile,fears_motivation,main_fear}' = 'Perder previsibilidade', 'fears fallback errado';
@@ -269,6 +284,8 @@ BEGIN
   ASSERT v_res#>>'{singu_profile,budget,authority}' = 'yes', 'budget boolean não foi mapeado';
   ASSERT v_res#>>'{singu_profile,budget,decision_role}' = 'technical', 'role não veio de contact_behavior';
   ASSERT (v_res#>>'{singu_profile,budget,decision_power}')::int = 7, 'power não veio de contact_behavior';
+  -- influencers: sem linha em contact_influence, cai no fallback de contact_behavior
+  ASSERT jsonb_array_length(v_res#>'{singu_profile,influencers}') = 1, 'influencers fallback de contact_behavior errado';
 
   -- ============ 15. big_five / mbti / enneagram ============
   INSERT INTO public.contact_personality (contact_id, big_five_openness, big_five_confidence,

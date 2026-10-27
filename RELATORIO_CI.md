@@ -1,95 +1,75 @@
-# Relatório CI — Singu_V2
+# RELATORIO_CI.md — Correção dos workflows com falha (Singu_V2)
 
-**Data:** 2026-10-22  
-**Sessão:** https://claude.ai/code/session_019NVLqsk6G3A9gsgXz44mTC  
-**Escopo:** Todos os workflows com falha em `adm01-debug/Singu_V2/actions?query=is%3Afailure`
+Data: 2026-10-27 · Branch: `fix/ci-workflows` · Idioma: pt-BR
 
----
+## 1. Inventário (última execução de cada workflow na `main`)
 
-## 1. Baseline local (antes × depois)
-
-| Verificação | Antes (main `6c064a6`) | Depois (main `8256b02`) |
-|---|---|---|
-| `npm run typecheck` | ✅ exit 0 | ✅ exit 0 |
-| `npm run lint` | ✅ exit 0 | ✅ exit 0 |
-| `npm run build` | ✅ exit 0 (PWA v0.21.2) | ✅ exit 0 (PWA v0.21.2) |
-| `vitest run` (unit) | ✅ 158 arquivos / 6026 testes | ✅ 158 arquivos / 6026 testes |
-| RLS guard (`check-rls-baseline.mjs`) | ❌ failure (contacts: 0→6) | ✅ success |
-
-> Testes E2E (Playwright) e RLS matrix requerem secrets — validados via CI (run #39773356499 no PR branch e run #39778208965 na main).
-
----
-
-## 2. Inventário de workflows
-
-Última execução de cada workflow em `main` (fonte: GitHub Actions API, 2026-10-22):
-
-| Workflow | Arquivo | Tipo | Último run em main | Status/Conclusão |
-|---|---|---|---|---|
-| CI | `.github/workflows/ci.yml` | estático | #39778208965 (2026-10-22) | ✅ success |
-| RLS exposure guard | `.github/workflows/rls-exposure-guard.yml` | estático | #39782599337 (2026-10-22, main dispatch) | ✅ success — fix mergeado no PR #131; prova via dispatch §3.1 |
-| monitoring-lint | `.github/workflows/monitoring-lint.yml` | estático | #38429297407 (2026-10-13) | ✅ success |
-| restore-drill | `.github/workflows/restore-drill.yml` | estático | #38163111058 (anterior) | ✅ success |
-| diag-db | `.github/workflows/diag-db.yml` | estático | #37793983914 (anterior) | ✅ success |
-| Dependabot #1635572883 | dinâmico GitHub | dinâmico | #39200622409 (2026-10-19) | ✅ success |
-| Dependabot #1624592857 | dinâmico GitHub | dinâmico | #38377743747 (2026-10-13) | ✅ success |
-| Dependabot #1605423674 | dinâmico GitHub | dinâmico | #37029074443 (2026-10-02) | ❌ failure → **PENDENCIAS.md item 1** |
-| Dependabot #1610192361 | dinâmico GitHub | dinâmico | #37307601995 (2026-10-05) | ❌ failure → **PENDENCIAS.md item 1** |
-| Dependabot #1611682242 | dinâmico GitHub | dinâmico | #37392180540 (2026-10-06) | ❌ failure → **PENDENCIAS.md item 1** |
-| Dependabot #1611893757 | dinâmico GitHub | dinâmico | #37403320679 (2026-10-06) | ❌ failure → **PENDENCIAS.md item 1** |
-| Dependabot #1624592914 | dinâmico GitHub | dinâmico | #38377749239 (2026-10-13) | ❌ failure → **PENDENCIAS.md item 1** |
-| Dependabot #1636782066 | dinâmico GitHub | dinâmico | #39249416013 (2026-10-19) | ❌ failure → **PENDENCIAS.md item 1** |
-| Running Copilot Code Review | `dynamic/agents/copilot-pull-request-reviewer` | dinâmico bot | #39769255299 | ❌ failure → **PENDENCIAS.md item 2** |
-
----
-
-## 3. Causa raiz por falha
-
-### 3.1 RLS exposure guard — CORRIGIDO
-
-**Causa:** `check-rls-baseline.mjs` detectou que `contacts [authenticated_sem_role]` subiu de 0 → 6.  
-O usuário de teste ganhou 6 contatos reais após migrations pós-2026-09-25. A policy RLS (`auth.uid() = user_id`) está correta — o banco simplesmente tem mais dados agora.  
-**Paralelamente**, 26+ tabelas com `anon: 0` passaram a retornar `403` (sem grant), o que é uma **melhoria** de segurança que também precisava ser registrada.
-
-**Fix:** Atualizar `scripts/rls-matrix/rls-baseline.json` via `--update` no mesmo PR que detectou a mudança (PR #131, commit `efd48cd`).
-
-**Prova na main via workflow_dispatch:** Run #39782599337 disparado manualmente em `main` (SHA `8256b02`, 2026-10-22) confirmou `conclusion=success`. O trigger automático não cobre `scripts/rls-matrix/rls-baseline.json` em push para main, portanto o dispatch manual é a validação equivalente após o squash merge.
-
-**Validação adicional:** O run #39775333538 (PR branch) rodou com `tree_id: c09020d442d31f389b70ea1a74ac320df5f68e2d` — idêntico ao `tree_id` do squash commit `8256b02` na main. O código testado é **exatamente o mesmo** que está na main.
-
-### 3.2 Dependabot Updates — BLOQUEADO (ver PENDENCIAS.md)
-
-**Causa:** `serialize-javascript | dependency_file_not_resolvable | "Override for serialize-javascript@7.1.2 conflicts with direct dependency."` — conflito interno no estado de dependências do Dependabot no GitHub. Workflow dinâmico, sem arquivo editável no repositório.
-
-### 3.3 Running Copilot Code Review — BLOQUEADO (ver PENDENCIAS.md)
-
-**Causa:** Workflow dinâmico `dynamic/agents/copilot-pull-request-reviewer` executado pelo bot Copilot. Não há arquivo editável no repositório — o bot falhou por razão interna. Não é required check do CI e não bloqueia merge.
-
----
-
-## 4. Tabela de prova — todos os workflows em falha
-
-| Workflow | Run ID / Ref | Link | Resultado |
+| Workflow | Última execução | Status | Causa provável |
 |---|---|---|---|
-| CI (main — commit 8256b02) | 39778208965 | https://github.com/adm01-debug/Singu_V2/actions/runs/39778208965 | ✅ success |
-| CI (PR #131, tree_id idêntico à main) | 39775333547 | https://github.com/adm01-debug/Singu_V2/actions/runs/39775333547 | ✅ success |
-| **RLS exposure guard** (PR #131, tree_id = main) | 39775333538 | https://github.com/adm01-debug/Singu_V2/actions/runs/39775333538 | ✅ success — fix: baseline atualizado no PR #131 |
-| **RLS exposure guard** (main — workflow_dispatch) | 39782599337 | https://github.com/adm01-debug/Singu_V2/actions/runs/39782599337 | ✅ success — prova direta na main `8256b02` (2026-10-22) |
-| monitoring-lint (main) | 38429297407 | https://github.com/adm01-debug/Singu_V2/actions/runs/38429297407 | ✅ success |
-| restore-drill | 38163111058 | https://github.com/adm01-debug/Singu_V2/actions/runs/38163111058 | ✅ success |
-| diag-db | 37793983914 | https://github.com/adm01-debug/Singu_V2/actions/runs/37793983914 | ✅ success |
-| **Dependabot Updates** (6 runs — estava em falha) | runs 37029074443…39249416013 | PENDENCIAS.md § 1 | ⛔ bloqueio externo GitHub — não corrigível via código; decisão: registrado em PENDENCIAS.md, aguarda ação do usuário ou ciclo automático do Dependabot |
-| **Running Copilot Code Review** (estava em falha) | 39769255299 | PENDENCIAS.md § 2 | ⛔ bot dinâmico (não-required check) — não corrigível via código; decisão: sem impacto em deploy/merge, nenhuma ação necessária |
+| **CI** | [run 40489421925](https://github.com/adm01-debug/Singu_V2/actions/runs/40489421925) | ❌ failure | Step `Security audit (high+ severity)` (`npm audit --omit=dev --audit-level=high`): zod@3.25.76 vulnerável a GHSA-mrhx-c7xc-m3w5 (alta) |
+| **Dependabot Updates** | [run 40320109211](https://github.com/adm01-debug/Singu_V2/actions/runs/40320109211) | ❌ failure | EOVERRIDE: `overrides.serialize-javascript` fixado em `^7.0.7` conflitava com o bump necessário (advisory exige ≥7.1.3) |
+| RLS exposure guard | [run 40489422048](https://github.com/adm01-debug/Singu_V2/actions/runs/40489422048) | ✅ success | — (verde) |
+| monitoring-lint | [run 38429297407](https://github.com/adm01-debug/Singu_V2/actions/runs/38429297407) | ✅ success | — (verde; última execução 2026-10-13) |
+| restore-drill | sem execução recente na janela analisada | — | — |
 
+## 2. Baseline local (antes de qualquer alteração)
 
----
+| Etapa | Resultado |
+|---|---|
+| `npm ci` (install) | ✅ exit 0 |
+| `npx tsc -b` (typecheck) | ✅ exit 0 |
+| `npm run lint` (eslint .) | ✅ exit 0 |
+| `npx vitest run` (suíte completa) | ✅ 158 arquivos / **6026 testes** passando |
+| `npm run build` | ✅ exit 0 |
+| `npm audit --omit=dev --audit-level=high` | ❌ reproduz a falha do CI: zod alta + fast-uri moderada |
 
-## 5. PR
+Logs do baseline em `/tmp/ci-baseline/` (máquina da sessão).
 
-- **PR #131** — `claude/loving-shannon-2i1k7o` → `main` — **MERGEADO** (squash `8256b02`)  
-  https://github.com/adm01-debug/Singu_V2/pull/131  
-  Fix: `scripts/rls-matrix/rls-baseline.json` atualizado para estado real do banco (2026-10-22)
+## 3. Diagnóstico — agrupamento por causa raiz
 
-- **PR #132** — `fix/ci-relatorio-final` → `main` — aguardando merge (CI verde)  
-  https://github.com/adm01-debug/Singu_V2/pull/132  
-  Docs: `RELATORIO_CI.md` com tabela de prova completa + evidência do RLS guard na main
+| Causa raiz | Workflows afetados | Evidência |
+|---|---|---|
+| **R1 — zod@3.25.76 → GHSA-mrhx-c7xc-m3w5** (alta; esgotamento de memória via `z.array()` sem limite; fix só na linha 4.x, sem backport 3.x) | CI | `npm audit` local reproduz exatamente o step que falha no run |
+| **R2 — `overrides.serialize-javascript` desalinhado** (advisory exige ≥7.1.3; override fixado `^7.0.7` → `EOVERRIDE` "conflicts with direct dependency") | Dependabot Updates | Erro reproduzido ao tentar `npm install serialize-javascript@^7.1.3` |
+| R3 — fast-uri@3.1.8 (moderada, transitiva workbox-build→ajv) | CI (mesmo step, severidade moderada) | Resolvida por `npm audit fix` — sem mudança de código |
+| R4 — entry chunk acima do budget (detectada no CI do PR; `jspdf`/`jspdf-autotable`/`pako` ~395KB raw importados estaticamente no entry) | CI (step `check-bundle-size`) | Entry 350,4KB gzip vs limite 350KB; na main estava 349,8KB |
+
+## 4. Correções aplicadas (um commit por causa raiz)
+
+1. `fix(deps)` — `zod ^3.25.76 → ^4.6.7`; `serialize-javascript ^7.0.7 → ^7.1.3` em `dependencies` **e** `overrides` (alinha o override que causava o EOVERRIDE); `@hookform/resolvers ^3.10.0 → ^5.9.2` (a 3.x lia `error.errors`, removido no zod v4 — quebrava todo formulário via `zodResolver`; a 5.x detecta `issues` da v4 e continua compatível com a v3).
+2. `fix(zod)` — adaptações de compatibilidade zod v3→v4 em `src/` (ver corpo do commit para o detalhe por arquivo):
+   - `z.record()` agora exige key+value (2 args);
+   - `ZodError.errors` → `.issues`; `z.ZodTypeDef` removido;
+   - `z.unknown()` passa a exigir a chave presente → `.optional()` em `search_vector`;
+   - `.partial()`/`.optional()` sobre campos com `.default()` agora emitem o default para chaves ausentes → saída esparsa preservada por filtro de chaves (`prepareCompanyWrite`/`prepareContactWrite`) e por helpers `optionalText`/`optionalNumeric` sem default nos insert-schemas que alimentam o RPC `persist_company_composite`;
+   - `zodResolver` v5 tipa `input ≠ output` → cast local para `Resolver<FormData>` mantém a tipagem de saída produzida pela v3;
+   - ajustes pontuais de inferência (`pais` no appendAddress; `direction`/`channel` opcionais em `useInteractions` com cast no insert — o banco já aplica os valores vigentes, **zero mudança de runtime**).
+3. `perf(bundle)` — `jspdf`/`jspdf-autotable` carregados sob demanda no `exportToPDF` de `StrategicNextStepsCard` (mesmo padrão do `useTelemetryExport`). Entry 350,4KB → **224,6KB gzip**; jspdf vira chunk separado (125,7KB) baixado só no clique.
+4. `fix(export-pdf)` — `try/catch` nos imports dinâmicos com toast destrutivo + `logger.error` (endereça achado do Devin Review: rejeição não tratada se a rede cair antes do clique).
+
+## 5. Comparação baseline × final (anti-regressão)
+
+| Etapa | Baseline | Após correção |
+|---|---|---|
+| typecheck | exit 0 | exit 0 |
+| lint | exit 0 | exit 0 |
+| testes | 6026 passando | **6026 passando** (158 arquivos) |
+| build | exit 0 | exit 0 |
+| audit (`--omit=dev --audit-level=high`) | 1 alta + 1 moderada | **exit 0** — só 2 moderadas (react-router, fora do gate) |
+
+Nenhum teste removido/enfraquecido, nenhum snapshot atualizado, nenhuma regra de lint/TS afrouxada.
+
+## 6. Melhorias/gaps registrados
+
+- Gate de audit cobre apenas deps de produção (`--omit=dev`): vulnerabilidades críticas em devDeps (vitest/tinypool, @vitest/mocker, postcss-selector-parser) não quebram o CI — ver PENDENCIAS.md.
+- Edge functions pinam `npm:zod@3.23.8` inline (Deno) — invisíveis ao `npm audit`; ver PENDENCIAS.md.
+- react-router-dom@^6.30.6 tem 2 moderadas com fix apenas na major 7 — deixado fora do escopo mínimo; ver PENDENCIAS.md.
+
+## 7. Prova de conclusão
+
+| Workflow | Última execução | Situação |
+|---|---|---|
+| CI | [40525170349](https://github.com/adm01-debug/Singu_V2/actions/runs/40525170349) | ✅ success na branch `fix/ci-workflows` (build-and-test, incl. audit gate + check-bundle-size) — merge retido (ver PENDENCIAS.md); nova execução na `main` confirmará |
+| Dependabot Updates | [40320109211](https://github.com/adm01-debug/Singu_V2/actions/runs/40320109211) | causa raiz corrigida no PR; nova execução do Dependabot confirmará |
+| RLS exposure guard | [40489422048](https://github.com/adm01-debug/Singu_V2/actions/runs/40489422048) | segue verde |
+| monitoring-lint | [38429297407](https://github.com/adm01-debug/Singu_V2/actions/runs/38429297407) | segue verde |

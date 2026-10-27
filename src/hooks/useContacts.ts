@@ -21,7 +21,7 @@ export type ContactUpdate = Omit<TablesUpdate<'contacts'>, 'full_name'>;
 const text = z.string().nullable().default(null);
 const numeric = z.number().finite().nullable().default(null);
 const json: z.ZodType<Json> = z.lazy(() => z.union([
-  z.string(), z.number().finite(), z.boolean(), z.null(), z.array(json), z.record(json),
+  z.string(), z.number().finite(), z.boolean(), z.null(), z.array(json), z.record(z.string(), json),
 ]));
 const nullableJson = json.nullable().default(null);
 function normalizeArray(value: unknown): string[] | null {
@@ -54,11 +54,11 @@ const contactShape = {
   most_frequent_objection: text, motivation_direction: text, nome_tratamento: text,
   notes: text, objection_patterns: nullableJson, personal_notes: text, phone: text,
   reference_frame: text, relationship_score: numeric, relationship_stage: text,
-  role: text, role_title: text, search_vector: z.unknown(), sentiment: text, sexo: text,
+  role: text, role_title: text, search_vector: z.unknown().optional(), sentiment: text, sexo: text,
   source: z.enum(Constants.public.Enums.data_source).nullable().default(null),
   tags: strings, tags_array: strings, twitter: text, updated_at: text,
   vak_dominant: text, vak_profile: nullableJson, whatsapp: text, working_style: text,
-} satisfies { [K in keyof Tables<'contacts'>]: z.ZodType<Tables<'contacts'>[K], z.ZodTypeDef, unknown> };
+} satisfies { [K in keyof Tables<'contacts'>]: z.ZodType<Tables<'contacts'>[K], unknown> };
 const contactRowSchema = z.object(contactShape);
 
 export type ContactListItem = Pick<Contact,
@@ -86,7 +86,11 @@ export function prepareContactWrite(input: ContactUpdate): Record<string, unknow
   if (record.role_title !== undefined && record.cargo === undefined) record.cargo = record.role_title;
   if (record.tags !== undefined && record.tags_array === undefined) record.tags_array = record.tags;
   if (record.interests !== undefined && record.interests_array === undefined) record.interests_array = record.interests;
-  return contactRowSchema.omit({ id: true, version: true, full_name: true }).partial().strict().parse(record);
+  const parsed = contactRowSchema.omit({ id: true, version: true, full_name: true }).partial().strict().parse(record) as Record<string, unknown>;
+  // zod v4: .partial() aplica .default() de chaves ausentes; filtrar para preservar a saída esparsa da v3.
+  return Object.fromEntries(
+    Object.keys(record).map((key) => [key, record[key as keyof typeof record] === undefined ? undefined : parsed[key]]),
+  );
 }
 
 const PAGE_SIZE = 50;

@@ -42,7 +42,7 @@ export function useLuxWebhookConfig() {
         is_active: z.boolean().nullable().transform(value => value ?? true),
         timeout_ms: z.number().nullable().transform(value => value ?? 60000),
         max_retries: z.number().nullable().transform(value => value ?? 3),
-        headers: z.record(z.string()).nullable().transform(value => value ?? {}),
+        headers: z.record(z.string(), z.string()).nullable().transform(value => value ?? {}),
         last_test_at: z.string().nullable(), last_test_status: z.string().nullable(),
         created_at: z.string(), updated_at: z.string(),
       })).parse(data ?? []).map(row => ({
