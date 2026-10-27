@@ -283,10 +283,22 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
     if (!contact) return;
 
     // jsPDF/autotable carregados sob demanda (~360KB raw fora do entry)
-    const [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
-      import('jspdf'),
-      import('jspdf-autotable'),
-    ]);
+    let jsPDF: (typeof import('jspdf'))['default'];
+    let autoTable: (typeof import('jspdf-autotable'))['default'];
+    try {
+      [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
+        import('jspdf'),
+        import('jspdf-autotable'),
+      ]);
+    } catch (error) {
+      logger.error('Erro ao carregar bibliotecas de exportação de PDF', error);
+      toast({
+        title: "Erro na exportação",
+        description: "Não foi possível carregar as bibliotecas de PDF. Verifique sua conexão e tente novamente.",
+        variant: "destructive",
+      });
+      return;
+    }
     const doc = new jsPDF();
     const fullName = `${contact.first_name} ${contact.last_name}`;
     
