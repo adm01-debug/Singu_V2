@@ -100,6 +100,9 @@ function runDeploy(t, options = {}) {
   writeFileSync(join(bin, 'curl'), `#!/usr/bin/env node
     const { writeFileSync } = require('node:fs');
     if (process.argv.includes('-I')) process.exit(2);
+    const timeout = Number(process.argv[process.argv.indexOf('--max-time') + 1]);
+    if (timeout !== 75) process.exit(2);
+    if (Number(process.env.LATENCY_SECONDS || 0) >= timeout) process.exit(28);
     writeFileSync(process.argv[process.argv.indexOf('-o') + 1], process.env.MOCK_HEALTH_BODY);
     process.stdout.write(process.env.HTTP_CODE);
     process.exit(Number(process.env.CURL_EXIT));
@@ -143,4 +146,19 @@ test('Publicação aprova inventário ativo e quatro respostas healthy', t => {
   assert.equal(result.status, 0, result.stderr);
   assert.equal((result.stdout.match(/HTTP 200, healthy/g) ?? []).length, 4);
   assert.match(result.stdout, /^OK - inventário ativo/m);
+});
+
+for (const seconds of [18, 74]) {
+  test(`Publicação aceita healthy com latência simulada de ${seconds}s`, t => {
+    const result = runDeploy(t, { LATENCY_SECONDS: String(seconds) });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal((result.stdout.match(/HTTP 200, healthy/g) ?? []).length, 4);
+  });
+}
+
+test('Publicação falha quando o curl excede o limite finito de 75s', t => {
+  const result = runDeploy(t, { LATENCY_SECONDS: '76' });
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stderr, /não consegui consultar email-pipeline-health/);
+  assert.doesNotMatch(result.stdout, /^OK -/m);
 });

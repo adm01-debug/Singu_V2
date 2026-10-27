@@ -97,6 +97,9 @@ vazios/reservados e `Concluído.` ao final.
 
 ## 6. Verificação
 
+Cada health check tem prazo finito de 75s: até duas consultas de 30s no fluxo
+de email (incluindo fallback), mais 15s de margem. Timeout continua sendo falha.
+
 Os quatro endpoints exigem um JWT de usuário válido do **destino**, além da chave
 anônima desse mesmo projeto. O PAT usado pela CLI e a chave `service_role` não
 substituem essa sessão. Prepare o ambiente na raiz do repositório com a conta de
@@ -104,6 +107,7 @@ teste já cadastrada no destino (`TEST_EMAIL`/`TEST_PASSWORD` no arquivo local d
 migração; não versionar valores reais):
 
 ```bash
+cd "$(git rev-parse --show-toplevel)"
 set -a
 source scripts/migration/.env
 set +a

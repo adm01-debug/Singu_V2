@@ -76,13 +76,15 @@ comm -13 <(printf '%s\n' "${LOCAL[@]}") <(printf '%s\n' "${REMOTE[@]}")
 echo
 echo "== 2. Health endpoints =="
 HEALTH_FNS=(health system-health voice-ai-health email-pipeline-health)
+# fetchAPI permite 30s por consulta; o fallback de email pode consumir outros 30s.
+HEALTH_TIMEOUT_SECONDS=75
 CURL_AUTH=()
 if [[ -n "${HEALTH_JWT:-}" ]]; then CURL_AUTH+=(-H "Authorization: Bearer $HEALTH_JWT"); fi
 if [[ -n "${SUPABASE_ANON_KEY:-}" ]]; then CURL_AUTH+=(-H "apikey: $SUPABASE_ANON_KEY"); fi
 FALHAS=0
 for fn in "${HEALTH_FNS[@]}"; do
   url="$BASE_URL/$fn"
-  if ! code="$(curl -sS --max-time 15 "${CURL_AUTH[@]}" -o "$HEALTH_BODY" -w '%{http_code}' "$url")"; then
+  if ! code="$(curl -sS --max-time "$HEALTH_TIMEOUT_SECONDS" "${CURL_AUTH[@]}" -o "$HEALTH_BODY" -w '%{http_code}' "$url")"; then
     echo "ERRO: não consegui consultar $fn." >&2
     FALHAS=$((FALHAS + 1))
     continue
