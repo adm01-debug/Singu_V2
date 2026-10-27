@@ -45,8 +45,6 @@ import { useContactDetail } from '@/hooks/useContactDetail';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { supabase } from '@/integrations/supabase/client';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import { useAuth } from '@/hooks/useAuth';
 import { useQueryClient } from '@tanstack/react-query';
 import { logger } from '@/lib/logger';
@@ -281,9 +279,14 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
   const { mutate: logAudit } = useRecommendationAudit();
   const queryClient = useQueryClient();
 
-  const exportToPDF = useCallback(() => {
+  const exportToPDF = useCallback(async () => {
     if (!contact) return;
 
+    // jsPDF/autotable carregados sob demanda (~360KB raw fora do entry)
+    const [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable'),
+    ]);
     const doc = new jsPDF();
     const fullName = `${contact.first_name} ${contact.last_name}`;
     
