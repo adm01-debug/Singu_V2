@@ -12,7 +12,9 @@ export const messageUpsertData = z.object({
   key: messageKey.nullish(),
   pushName: text,
   status: text,
-  messageTimestamp: z.number().nullish(),
+  messageTimestamp: z.union([
+    z.number(), z.string().trim().min(1).transform(value => Number(value)),
+  ]).pipe(z.number().finite()).nullish(),
   messageType: text,
   participant: text,
   instanceId: text,

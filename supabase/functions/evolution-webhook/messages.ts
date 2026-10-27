@@ -83,7 +83,7 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
       content: messageContent,
       status,
       sender_name: senderName,
-      timestamp: data.messageTimestamp
+      timestamp: data.messageTimestamp != null
         ? new Date(data.messageTimestamp * 1000).toISOString()
         : new Date().toISOString(),
       metadata: {

@@ -1,9 +1,67 @@
 import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import { withHandler } from "./edge-test-harness.ts";
+import { messageUpsertData } from "../evolution-webhook/payload.ts";
 
 const auth = { apikey: "evolution-teste" };
 const owner = "11111111-1111-4111-8111-111111111111";
 const contact = "22222222-2222-4222-8222-222222222222";
+
+Deno.test("Evolution normaliza timestamps numéricos finitos sem coagir valores inválidos", () => {
+  for (const timestamp of [1760000000, "1760000000", " 1760000000 ", "1760000000.125", 0, "0", -1, "-1"]) {
+    assertEquals(messageUpsertData.parse({ messageTimestamp: timestamp }).messageTimestamp, Number(timestamp));
+  }
+  for (const timestamp of [null, undefined]) {
+    assertEquals(messageUpsertData.parse({ messageTimestamp: timestamp }).messageTimestamp, timestamp);
+  }
+  for (const timestamp of ["", "  ", "não é uma data", "NaN", "Infinity", "-Infinity", Infinity, -Infinity, NaN, true, {}, []]) {
+    assertEquals(messageUpsertData.safeParse({ messageTimestamp: timestamp }).success, false);
+  }
+});
+
+Deno.test("Evolution grava mensagem e interação com timestamp textual e preserva a época zero", async () => {
+  const messages: Array<Record<string, unknown>> = [];
+  const interactions: Array<Record<string, unknown>> = [];
+  await withHandler("evolution-webhook", async req => {
+    const table = new URL(req.url).pathname.split("/").pop();
+    if (req.method === "GET" && table === "contacts") {
+      return Response.json([{ id: contact, user_id: owner, company_id: null }]);
+    }
+    assertEquals(req.method, "POST");
+    const body = await req.json();
+    if (table === "whatsapp_messages") {
+      messages.push(body);
+      return Response.json({ id: "mensagem-banco" });
+    }
+    if (table === "interactions") {
+      interactions.push(body);
+      return Response.json({ id: "interacao-banco" });
+    }
+    assertEquals(table, "whatsapp_ingestion_logs");
+    return new Response(null, { status: 201 });
+  }, async submit => {
+    for (const [timestamp, iso] of [
+      [1760000000, "2025-10-09T08:53:20.000Z"],
+      ["1760000000", "2025-10-09T08:53:20.000Z"],
+      [" 1760000000 ", "2025-10-09T08:53:20.000Z"],
+      ["1760000000.125", "2025-10-09T08:53:20.125Z"],
+      [0, "1970-01-01T00:00:00.000Z"],
+      ["0", "1970-01-01T00:00:00.000Z"],
+    ] as const) {
+      const previousCount = messages.length;
+      const response = await submit({ event: "messages.upsert", instance: "teste", data: {
+        key: { id: `mensagem-${previousCount}`, remoteJid: "5511999999999@s.whatsapp.net", fromMe: false },
+        message: { conversation: "Olá" }, messageTimestamp: timestamp,
+      } }, auth);
+      assertEquals(response.status, 200);
+      assertEquals((await response.json()).contactId, contact);
+      assertEquals(messages.length, previousCount + 1);
+      assertEquals(interactions.length, previousCount + 1);
+      assertEquals(messages.at(-1)?.timestamp, iso);
+      assertEquals(messages.at(-1)?.user_id, owner);
+      assertEquals(interactions.at(-1)?.contact_id, contact);
+    }
+  });
+});
 
 Deno.test("dispatcher Evolution mantém mensagens.update e ignora atualização sem chave", async () => {
   const writes: Array<Record<string, unknown>> = [];
