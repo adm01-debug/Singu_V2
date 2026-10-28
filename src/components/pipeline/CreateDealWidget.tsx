@@ -16,8 +16,8 @@ export const CreateDealWidget = React.memo(function CreateDealWidget({ companyId
     try {
       await createDeal.mutateAsync({
         p_company_id: companyId,
-        p_title: title.trim(),
-        p_value: value ? parseFloat(value) : 0,
+        p_titulo: title.trim(),
+        p_valor: value ? parseFloat(value) : 0,
       });
       toast.success('Deal criado com sucesso!');
       setTitle('');
