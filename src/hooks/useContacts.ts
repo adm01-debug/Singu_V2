@@ -163,8 +163,9 @@ export function useContacts(
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       const loaded = allPages.reduce((sum, p) => sum + p.items.length, 0);
-      if (lastPage.totalCount != null) {
-        return loaded < lastPage.totalCount ? allPages.length : undefined;
+      const total = allPages.find(page => page.totalCount != null)?.totalCount;
+      if (total != null) {
+        return loaded < total ? allPages.length : undefined;
       }
       return lastPage.items.length === PAGE_SIZE ? allPages.length : undefined;
     },
