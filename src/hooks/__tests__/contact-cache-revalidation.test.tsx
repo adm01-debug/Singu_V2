@@ -166,7 +166,7 @@ describe('Carga inicial e paginação reais do hook durante gravações', () => 
 });
 
 describe('Redistribuição das páginas carregadas após criação', () => {
-  it.each([51, 100, 101])('preserva contagem e offsets num total inicial de %i contatos', async total => {
+  it.each([51, 99, 100, 101])('preserva contagem e offsets num total inicial de %i contatos', async total => {
     let rows = Array.from({ length: total }, (_, i) => ({ ...old, id: `contato-${i}` }));
     state.query.mockImplementation(({ range, countMethod }) => Promise.resolve(
       response(rows.slice(range.from, range.to + 1), countMethod === 'exact' ? rows.length : null),
@@ -182,6 +182,13 @@ describe('Redistribuição das páginas carregadas após criação', () => {
     await act(async () => { await result.current.createContact({ first_name: 'Novo' }); });
     await waitFor(() => expect(result.current.contacts).toEqual(rows.slice(0, 100)));
     expect(result.current.totalCount).toBe(total + 1);
+    if (total < 100) {
+      expect(result.current.hasMore).toBe(false);
+      const reads = state.query.mock.calls.length;
+      await act(async () => { result.current.loadMore(); });
+      expect(state.query).toHaveBeenCalledTimes(reads);
+      expect(state.query).not.toHaveBeenCalledWith(expect.objectContaining({ range: { from: 100, to: 149 } }));
+    }
     expect(cache.getQueryData<{ pages: { items: unknown[] }[] }>(listKey)?.pages.every(page => page.items.length <= 50)).toBe(true);
     if (total >= 100) await act(async () => { result.current.loadMore(); });
     await waitFor(() => expect(result.current.contacts).toEqual(rows));
@@ -231,6 +238,8 @@ describe('Revalidação dos dados relacionados da ficha após confirmação', ()
     state.read.mockResolvedValue({ data: null, error: new Error('GET indisponível') });
     const { result } = renderHook(() => useContactDetail(old.id), { wrapper });
     await act(async () => { expect(await result.current.updateContact({ first_name: saved.first_name })).toEqual(saved); });
+    await waitFor(() => expect(result.current.error).toBeTruthy());
+    expect(result.current.contact).toEqual(saved);
     expect(cache.getQueryData<ContactDetailData>(key)?.contact).toEqual(saved);
     expect(cache.getQueryData(otherKey)).toEqual(detail());
     expect(cache.getQueryState(otherKey)?.isInvalidated).toBe(false);
