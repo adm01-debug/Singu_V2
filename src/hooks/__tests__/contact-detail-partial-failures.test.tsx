@@ -4,13 +4,15 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useContactDetail } from '@/hooks/useContactDetail';
 import { normalizeExternalContact } from '@/hooks/useContacts';
+import { queryClient as appQueryClient } from '@/app/queryClient';
 
-const state = vi.hoisted(() => ({ read: vi.fn(), related: vi.fn(), external: vi.fn(), write: vi.fn() }));
+const state = vi.hoisted(() => ({ read: vi.fn(), related: vi.fn(), external: vi.fn(), write: vi.fn(), network: vi.fn() }));
 vi.mock('@/hooks/useAuth', () => ({ useAuth: () => ({ user: { id: 'proprietario' } }) }));
 vi.mock('@/hooks/use-toast', () => ({ useToast: () => ({ toast: vi.fn() }) }));
 vi.mock('@/hooks/useActivityLogger', () => ({ useActivityLogger: () => ({ logActivity: vi.fn() }) }));
 vi.mock('@/lib/trackScoreChange', () => ({ trackScoreChange: vi.fn() }));
 vi.mock('@/lib/logger', () => ({ logger: { error: vi.fn(), warn: vi.fn() } }));
+vi.mock('@/lib/queryErrorReporter', () => ({ attachQueryErrorReporter: vi.fn() }));
 vi.mock('@/lib/externalData', () => ({
   queryExternalData: state.external, insertExternalData: vi.fn(), updateExternalDataWithVersion: vi.fn(),
   deleteExternalData: vi.fn(), ConcurrentEditError: class extends Error {},
@@ -44,7 +46,9 @@ let cache: QueryClient;
 let currentContact = contact;
 const wrapper = ({ children }: PropsWithChildren) => <QueryClientProvider client={cache}>{children}</QueryClientProvider>;
 
-function configure(target: Target, error: Error | { message: string; code: string } | null) {
+type ReadError = Error | { message: string; code?: string; status?: number };
+
+function configure(target: Target, error: ReadError | null) {
   state.read.mockImplementation((table: string) => Promise.resolve(table === 'contacts'
     ? { data: currentContact, error: null }
     : target === 'companies-local' && error ? { data: null, error }
@@ -57,11 +61,130 @@ function configure(target: Target, error: Error | { message: string; code: strin
 
 beforeEach(() => {
   vi.clearAllMocks();
+  vi.stubGlobal('fetch', state.network.mockRejectedValue(new Error('Rede externa bloqueada neste teste')));
   currentContact = contact;
-  cache = new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: Infinity } } });
+  cache = new QueryClient({ defaultOptions: { queries: { retryDelay: 0, gcTime: Infinity } } });
   cache.setQueryData(otherKey, populated);
 });
-afterEach(() => { cleanup(); cache.clear(); });
+afterEach(() => {
+  cleanup();
+  cache.clear();
+  vi.unstubAllGlobals();
+  expect(state.network).not.toHaveBeenCalled();
+});
+
+describe('Política real de repetição da ficha', () => {
+  beforeEach(() => {
+    cache.clear();
+    cache = new QueryClient({ defaultOptions: { queries: {
+      ...appQueryClient.getDefaultOptions().queries, retryDelay: 0, staleTime: Infinity, gcTime: Infinity,
+    } } });
+    cache.setQueryData(key, populated);
+    cache.setQueryData(otherKey, populated);
+  });
+
+  const permanent = ['42501', '42P01', 'PGRST204'];
+  it('não repete erro permanente na carga inicial sem cache', async () => {
+    cache.removeQueries({ queryKey: key, exact: true });
+    configure('interactions', { message: 'Acesso negado', code: '42501' });
+    const { result } = renderHook(() => useContactDetail(contact.id), { wrapper });
+    await waitFor(() => expect(result.current.error).toBeTruthy());
+    expect(state.read.mock.calls.filter(([table]) => table === 'contacts')).toHaveLength(1);
+    expect(cache.getQueryData(key)).toBeUndefined();
+    expect(cache.getQueryData(otherKey)).toEqual(populated);
+  });
+
+  it.each(targets.flatMap(target => permanent.map(code => ({ target, code }))))(
+    'não repete erro permanente $code de $target, mas permite nova tentativa manual', async ({ target, code }) => {
+      configure(target, { message: 'Falha definitiva', code });
+      const { result } = renderHook(() => useContactDetail(contact.id), { wrapper });
+      await act(async () => { await result.current.refetch(); });
+      expect(state.read.mock.calls.filter(([table]) => table === 'contacts')).toHaveLength(1);
+      expect(cache.getQueryData(key)).toEqual(populated);
+      expect(cache.getQueryData(otherKey)).toEqual(populated);
+      await waitFor(() => expect(result.current.error).toBeTruthy());
+
+      configure(target, null);
+      await act(async () => { await result.current.refetch(); });
+      await waitFor(() => expect(result.current.error).toBeNull());
+      expect(cache.getQueryData(key)).toEqual({ contact, ...fresh });
+    },
+  );
+
+  const transient: ReadError[] = [
+    { message: 'Serviço indisponível', status: 503 },
+    Object.assign(new Error('Serviço indisponível'), { status: 503 }),
+    { message: 'Serviço indisponível', code: '503' },
+    { message: 'Limite temporário', status: 429 },
+    { message: 'Consulta excedeu o prazo', status: 408 },
+    { message: 'Timeout do pool', code: 'PGRST003' },
+    { message: 'Transação interrompida', code: '40001' },
+    { message: 'Conexão perdida', code: '08006' },
+    ...['40P01', '53000', '55P03', '57014', '57P01', '57P02', '57P03', 'PGRST000', 'PGRST001', 'PGRST002']
+      .map(code => ({ message: 'Falha transitória', code })),
+    ...[500, 502, 504].map(status => ({ message: 'Servidor indisponível', status })),
+    { message: 'TypeError: Failed to fetch', code: '', status: 0 },
+    new TypeError('Failed to fetch'),
+    new Error('Edge function error [503]: unavailable'),
+  ];
+  it.each(targets.flatMap(target => transient.map(error => ({ target, error }))))(
+    'recupera automaticamente a falha transitória de $target: $error', async ({ target, error }) => {
+      configure(target, error);
+      const mock = target === 'companies-external' ? state.external : target === 'companies-local' ? state.read : state.related;
+      const failing = mock.getMockImplementation()!;
+      mock.mockImplementation((table: unknown) => {
+        const response = failing(table);
+        if (target === 'companies-external' || table === (target === 'companies-local' ? 'companies' : target)) configure(target, null);
+        return response;
+      });
+      const { result } = renderHook(() => useContactDetail(contact.id), { wrapper });
+      await act(async () => { await result.current.refetch(); });
+      await waitFor(() => expect(cache.getQueryData(key)).toEqual({ contact, ...fresh }));
+      expect(state.read.mock.calls.filter(([table]) => table === 'contacts')).toHaveLength(2);
+      expect(result.current.error).toBeNull();
+      expect(cache.getQueryData(otherKey)).toEqual(populated);
+    },
+  );
+
+  it.each([
+    { message: 'Acesso negado', status: 403 },
+    Object.assign(new Error('Acesso negado'), { status: 403 }),
+    Object.assign(new Error('Acesso negado'), { status: 401 }),
+    { message: 'Formato inválido', code: '22P02' },
+    { message: 'Campo inválido', code: '23502' },
+    { message: 'Não encontrado', code: 'PGRST116' },
+    { message: 'Token inválido', code: 'PGRST301' },
+    ...['42703', '28P01', 'PGRST200', 'PGRST202', 'PGRST303', '08P01', '40002']
+      .map(code => ({ message: 'Falha permanente', code })),
+    ...[400, 404, 409, 422, 501, 505].map(status => ({ message: 'Falha permanente', status })),
+    new Error('Edge function error [403]: forbidden'),
+    { message: 'Falha de permissão', code: '42501', status: 503 },
+    { message: 'Erro não classificado', code: 'DESCONHECIDO' },
+    new Error('Falha não classificada'),
+    Object.assign(new Error('Network abort'), { name: 'AbortError' }),
+  ])('não repete falha não transitória: %j', async error => {
+    configure('interactions', error);
+    const { result } = renderHook(() => useContactDetail(contact.id), { wrapper });
+    await act(async () => { await result.current.refetch(); });
+    expect(state.read.mock.calls.filter(([table]) => table === 'contacts')).toHaveLength(1);
+    expect(cache.getQueryData(key)).toEqual(populated);
+  });
+
+  it('limita a três retries mesmo quando a falha transitória persiste', async () => {
+    configure('interactions', { message: 'Serviço indisponível', status: 503 });
+    const { result } = renderHook(() => useContactDetail(contact.id), { wrapper });
+    await act(async () => { await result.current.refetch(); });
+    expect(state.read.mock.calls.filter(([table]) => table === 'contacts')).toHaveLength(4);
+    expect(cache.getQueryData(key)).toEqual(populated);
+    await waitFor(() => expect(result.current.error).toBeTruthy());
+    configure('interactions', null);
+    await act(async () => { await result.current.refetch(); });
+    await waitFor(() => expect(result.current.error).toBeNull());
+    expect(state.read.mock.calls.filter(([table]) => table === 'contacts')).toHaveLength(5);
+    expect(cache.getQueryData(key)).toEqual({ contact, ...fresh });
+    expect(cache.getQueryData(otherKey)).toEqual(populated);
+  });
+});
 
 describe('Falhas parciais da ficha com QueryClient real', () => {
   const cases = targets.flatMap(target => [false, true].flatMap(cached => [

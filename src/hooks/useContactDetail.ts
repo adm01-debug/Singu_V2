@@ -24,6 +24,27 @@ export interface ContactDetailData {
   alerts: Alert[];
 }
 
+function shouldRetryContactDetail(failureCount: number, error: unknown): boolean {
+  if (failureCount >= 3 || !error || typeof error !== 'object') return false;
+  const { code, status, name, message } = error as {
+    code?: unknown; status?: unknown; name?: unknown; message?: unknown;
+  };
+  if (name === 'AbortError') return false;
+
+  if (typeof code === 'string' && /^(?:[0-9A-Z]{5}|PGRST\d{3})$/.test(code)) {
+    if (code === '08P01') return false;
+    return /^(?:08|53)/.test(code)
+      || ['40001', '40P01', '55P03', '57014', '57P01', '57P02', '57P03', 'PGRST000', 'PGRST001', 'PGRST002', 'PGRST003'].includes(code);
+  }
+
+  const httpStatus = Number(status
+    ?? (typeof code === 'string' && /^\d{3}$/.test(code) ? code : undefined)
+    ?? (typeof message === 'string' ? message.match(/^Edge function error \[(\d{3})\]:/)?.[1] : undefined));
+  if (httpStatus > 0) return [408, 429, 500, 502, 503, 504].includes(httpStatus);
+
+  return typeof message === 'string' && /network|failed to fetch|fetch failed|timeout|timed out/i.test(message);
+}
+
 export function useContactDetail(contactId: string | undefined) {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -31,9 +52,10 @@ export function useContactDetail(contactId: string | undefined) {
 
   const queryKey = useMemo(() => ['contact', user?.id, contactId], [user?.id, contactId]);
 
-  const { data, isLoading: loading, error: queryError, refetch } = useQuery({
+  const { data, isLoading: loading, error: queryError, refetch } = useQuery<ContactDetailData>({
     queryKey,
     enabled: !!user && !!contactId,
+    retry: shouldRetryContactDetail,
     queryFn: async (): Promise<ContactDetailData> => {
       // Start secondary queries immediately — they only need contactId (known upfront)
       const secondaryPromise = Promise.all([
