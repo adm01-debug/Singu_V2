@@ -7,6 +7,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- **Ficha de contato:** erros ao consultar empresa, interações, insights ou alertas preservam o último conjunto confirmado no cache e expõem a falha para nova tentativa, inclusive erros Supabase que não são instâncias de `Error`. A ficha só repete automaticamente falhas transitórias identificadas, incluindo indisponibilidade declarada pela fonte externa e gateways 520–524; erros permanentes de permissão, esquema e requisição aguardam tentativa manual. As mensagens usam o filtro existente, incluindo respostas de schema cache e Edge Functions, sem expor detalhes internos nem alterar os códigos usados pelo retry.
+
 - A ficha e a lista descartam leituras anteriores à gravação e respostas de escrita com versão inferior à já confirmada. Edições e exclusões mantêm os dados confirmados até a resposta do servidor, sem rollback integral que apague outra edição. Excluir/Desfazer atualiza a ficha exata do proprietário; restaurar exige identidade e estado ativo confirmados.
 
 - O CI verifica os tipos das 108 Edge Functions. Gravações auxiliares usam a rotina best-effort existente; os eventos Evolution têm validação explícita e contratos locais para o webhook, logger e proxy.
