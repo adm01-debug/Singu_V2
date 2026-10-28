@@ -56,14 +56,15 @@ export function useContactDetail(contactId: string | undefined) {
       if (localContact) {
         contactData = normalizeExternalContact(localContact as unknown as Record<string, unknown>);
       } else {
-        const { data: externalContacts } = await queryExternalData<Contact>({
+        const { data: externalContacts, error: externalError } = await queryExternalData<Contact>({
           table: 'contacts',
           filters: [{ type: 'eq', column: 'id', value: contactId! }],
         });
+        if (externalError) throw externalError;
         contactData = externalContacts?.[0] ? normalizeExternalContact(externalContacts[0] as unknown as Record<string, unknown>) : null;
       }
 
-      if (!contactData) throw new Error('Contato não encontrado');
+      if (!contactData) return { contact: null, company: null, interactions: [], insights: [], alerts: [] };
 
       const confirmed = queryClient.getQueryData<ContactDetailData>(queryKey)?.contact;
       if (confirmed && confirmed.version > contactData.version) contactData = confirmed;
@@ -98,7 +99,7 @@ export function useContactDetail(contactId: string | undefined) {
     refetchOnWindowFocus: false,
   });
 
-  const error = queryError instanceof Error ? queryError.message : null;
+  const error = queryError ? queryError.message || 'Não foi possível consultar o contato.' : null;
 
 
   // Set up realtime subscription for updates — wrapped in try/catch so a

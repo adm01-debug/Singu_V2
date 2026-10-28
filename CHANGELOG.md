@@ -7,7 +7,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
-- Criar ou editar durante a carga inicial recarrega a lista completa sem páginas sintéticas nem contatos duplicados. A paginação respeita o total confirmado, inclusive ao completar exatamente 100 contatos. Salvar a ficha revalida interações, insights e alertas, preservando a versão mais recente confirmada e sem reabrir fichas excluídas. Falhas de recarga mantêm a ficha visível com aviso e nova tentativa.
+- Criar ou editar durante a carga inicial recarrega a lista completa sem páginas sintéticas nem contatos duplicados. A paginação respeita o total e o fim real das respostas, inclusive nos limites exatos após criações. Salvar a ficha revalida interações, insights e alertas, preservando a versão mais recente confirmada. Falhas de recarga mantêm a ficha visível com aviso e nova tentativa; ausência confirmada nas duas fontes limpa a ficha e suas relações, sem reabrir contatos excluídos.
 
 - A ficha e a lista descartam leituras anteriores à gravação e respostas de escrita com versão inferior à já confirmada. Edições e exclusões mantêm os dados confirmados até a resposta do servidor, sem rollback integral que apague outra edição. Excluir/Desfazer atualiza a ficha exata do proprietário; restaurar exige identidade e estado ativo confirmados.
 

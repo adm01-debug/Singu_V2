@@ -131,6 +131,7 @@ async function fetchContactsPage(companyId?: string, page = 0) {
   return {
     items: (data || []).map(normalizeExternalContact),
     totalCount: isFirstPage ? count : null,
+    endReached: (data?.length ?? 0) < PAGE_SIZE,
   };
 }
 
@@ -146,7 +147,7 @@ export function useContacts(
   const queryKey = useMemo(() => ['contacts', companyId ?? '__all__', user?.id], [companyId, user?.id]);
   const externalEnabled = options?.enabled ?? true;
 
-  type Page = { items: Contact[]; totalCount: number | null };
+  type Page = { items: Contact[]; totalCount: number | null; endReached?: boolean };
 
   const {
     data,
@@ -162,6 +163,7 @@ export function useContacts(
     queryFn: ({ pageParam = 0 }) => fetchContactsPage(companyId, pageParam as number),
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.endReached || lastPage.items.length === 0) return undefined;
       const loaded = allPages.reduce((sum, p) => sum + p.items.length, 0);
       const total = allPages.find(page => page.totalCount != null)?.totalCount;
       if (total != null) {
@@ -239,6 +241,7 @@ export function useContacts(
           const items = [normalized, ...prev.pages.flatMap(page => page.items)];
           return { ...prev, pages: prev.pages.map((page, index) => ({
             ...page, items: items.slice(index * PAGE_SIZE, (index + 1) * PAGE_SIZE),
+            endReached: page.endReached && items.length <= prev.pages.length * PAGE_SIZE,
             totalCount: page.totalCount == null ? null : page.totalCount + 1,
           })) };
         });
