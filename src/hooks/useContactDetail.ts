@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { queryExternalData } from '@/lib/externalData';
+import { parseApiError } from '@/lib/errorMessages';
 import { normalizeExternalContact } from '@/hooks/useContacts';
 // To reuse normalization logic if possible, but let's define it or import it properly.
 // Wait, useContacts is a hook. I should probably move normalizeExternalContact to a lib file.
@@ -122,7 +123,7 @@ export function useContactDetail(contactId: string | undefined) {
     refetchOnWindowFocus: false,
   });
 
-  const error = queryError ? queryError.message || 'Não foi possível consultar o contato.' : null;
+  const error = queryError ? parseApiError(queryError, 'Não foi possível consultar o contato.') : null;
 
 
   // Set up realtime subscription for updates — wrapped in try/catch so a

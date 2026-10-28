@@ -66,14 +66,19 @@ describe('Recuperação da ficha com o cliente externo real e transporte simulad
     expect(mocks.audit).toHaveBeenCalledOnce();
   });
 
-  it.each(['42501', '42P01', 'PGRST204'].flatMap(errorCode => [false, true].map(fallback => ({ errorCode, fallback }))))(
-    'não repete erro permanente no envelope: %j', async ({ errorCode, fallback }) => {
-      mocks.fetch.mockResolvedValue(response({ fallback, errorCode, error: 'Network: acesso recusado', data: [], count: 0 }));
+  it.each([
+    ['42501', 'Permissão negada para esta operação.'],
+    ['42P01', 'Recurso não encontrado.'],
+    ['PGRST204', 'Não foi possível consultar o contato.'],
+  ].flatMap(([errorCode, safe]) => [false, true].map(fallback => ({ errorCode, safe, fallback }))))(
+    'não repete erro permanente no envelope: %j', async ({ errorCode, safe, fallback }) => {
+      const message = "Could not find the 'cpf' column of 'crm_privado' in the schema cache";
+      mocks.fetch.mockResolvedValue(response({ fallback, errorCode, error: message, data: [], count: 0 }));
       const { result } = renderHook(() => useContactDetail(contact.id), { wrapper });
       await act(async () => { await result.current.refetch(); });
-      await waitFor(() => expect(result.current.error).toBe('Network: acesso recusado'));
+      await waitFor(() => expect(result.current.error).toBe(safe));
       expect(mocks.fetch).toHaveBeenCalledOnce();
-      expect(cache.getQueryState(key)?.error).toMatchObject({ code: errorCode });
+      expect(cache.getQueryState(key)?.error).toMatchObject({ code: errorCode, message });
       expect(cache.getQueryData(key)).toEqual(saved);
       expect(cache.getQueryData(otherKey)).toEqual(saved);
       expect(mocks.audit).not.toHaveBeenCalled();

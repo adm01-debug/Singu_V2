@@ -186,6 +186,62 @@ describe('Política real de repetição da ficha', () => {
   });
 });
 
+describe('Mensagens seguras da ficha', () => {
+  const cases = [
+    { code: '42501', message: 'permission denied for table "crm_privado"', safe: 'Permissão negada para esta operação.' },
+    { code: '42501', message: 'NetworkError in policy "crm_privado_admin"', safe: 'Permissão negada para esta operação.' },
+    { code: '42P01', message: 'relation "crm_privado" does not exist', safe: 'Recurso não encontrado.' },
+    { code: '42703', message: 'column crm_privado.cpf does not exist', safe: 'Não foi possível consultar o contato.' },
+    { code: '23505', message: 'duplicate key violates constraint "crm_privado_cpf_key"', safe: 'Registro duplicado. Este item já existe.' },
+    { code: 'PGRST204', message: "Could not find the 'cpf' column of 'crm_privado' in the schema cache", safe: 'Não foi possível consultar o contato.' },
+    { message: 'Insert violates check constraint "crm_privado_check"', safe: 'Não foi possível consultar o contato.' },
+    { message: 'Insert violates row-level security policy "crm_privado_admin"', safe: 'Não foi possível consultar o contato.' },
+    { message: 'PostgREST JWT failure at https://interno.supabase.co', safe: 'Não foi possível consultar o contato.' },
+    { message: 'Failed to fetch', safe: 'Erro de conexão. Verifique sua internet e tente novamente.' },
+    { code: '40001', message: 'could not serialize access due to concurrent update', safe: 'Não foi possível consultar o contato.' },
+    { message: 'Não autenticado', safe: 'Sessão expirada. Faça login novamente.' },
+    { message: 'Contato não encontrado', safe: 'Contato não encontrado' },
+    { message: '', safe: 'Não foi possível consultar o contato.' },
+  ];
+  it.each(targets.flatMap(target => [false, true].flatMap(cached => [false, true].flatMap(instance =>
+    cases.map(payload => ({ target, cached, instance, ...payload })),
+  ))))('protege mensagem de $target com cache=$cached, Error=$instance: $code/$message', async ({ target, cached, instance, code, message, safe }) => {
+    if (cached) cache.setQueryData(key, populated);
+    const error = instance ? Object.assign(new Error(message), { code }) : { code, message };
+    configure(target, error);
+    const { result } = renderHook(() => useContactDetail(contact.id), { wrapper });
+    await act(async () => { await result.current.refetch(); });
+    await waitFor(() => expect(result.current.error).toBe(safe));
+    expect(cache.getQueryState(key)?.error).toBe(error);
+    expect(cache.getQueryState(key)?.error).toMatchObject({ code, message });
+    expect(state.read.mock.calls.filter(([table]) => table === 'contacts')).toHaveLength(message === 'Failed to fetch' || code === '40001' ? 4 : 1);
+    expect(cache.getQueryData(key)).toEqual(cached ? populated : undefined);
+    expect(cache.getQueryData(otherKey)).toEqual(populated);
+    configure(target, null);
+    await act(async () => { await result.current.refetch(); });
+    await waitFor(() => expect(result.current.error).toBeNull());
+    expect(cache.getQueryData(key)).toEqual({ contact, ...fresh });
+  });
+
+  it.each([false, true])('protege também a consulta principal com cache=%s', async cached => {
+    if (cached) cache.setQueryData(key, populated);
+    const error = { code: '42501', message: 'permission denied for table "crm_privado"' };
+    configure('companies-local', null);
+    state.read.mockResolvedValue({ data: null, error });
+    const { result } = renderHook(() => useContactDetail(contact.id), { wrapper });
+    await act(async () => { await result.current.refetch(); });
+    await waitFor(() => expect(result.current.error).toBe('Permissão negada para esta operação.'));
+    expect(cache.getQueryState(key)?.error).toBe(error);
+    expect(state.read).toHaveBeenCalledOnce();
+    expect(cache.getQueryData(key)).toEqual(cached ? populated : undefined);
+    expect(cache.getQueryData(otherKey)).toEqual(populated);
+    configure('companies-local', null);
+    await act(async () => { await result.current.refetch(); });
+    await waitFor(() => expect(result.current.error).toBeNull());
+    expect(cache.getQueryData(key)).toEqual({ contact, ...fresh });
+  });
+});
+
 describe('Falhas parciais da ficha com QueryClient real', () => {
   const cases = targets.flatMap(target => [false, true].flatMap(cached => [
     { target, cached, error: new Error('Serviço indisponível') },
