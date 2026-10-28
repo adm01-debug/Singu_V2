@@ -1,4 +1,4 @@
-# Changelog
+﻿# Changelog
 
 Todas as mudanças notáveis do SINGU CRM são documentadas neste arquivo.
 
@@ -28,6 +28,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - O baseline de RLS exige todos os perfis declarados e bloqueia a coleta sem o JWT necessário; os runbooks de publicação preparam a sessão de teste no destino e distinguem ausência de atividade de email de saúde comprovada.
 
 - Criar uma oportunidade usa os argumentos de título e valor definidos pela RPC, com tipos derivados do banco. O formulário só anuncia sucesso e limpa os campos após receber o identificador do negócio criado; falhas preservam os dados preenchidos.
+- O webhook Evolution exige dono único para a instância, restringe contatos e atualizações ao proprietário e impede que um identificador de mensagem sobrescreva outra conta ou instância. Instâncias sem vínculo inequívoco são recusadas, sem atribuição ao primeiro perfil.
 
 - **Ficha de contato:** erros ao consultar empresa, interações, insights ou alertas preservam o último conjunto confirmado no cache e expõem a falha para nova tentativa, inclusive erros Supabase que não são instâncias de `Error`. A ficha só repete automaticamente falhas transitórias identificadas, incluindo indisponibilidade declarada pela fonte externa e gateways 520–524; erros permanentes de permissão, esquema e requisição aguardam tentativa manual. As mensagens usam o filtro existente, incluindo respostas de schema cache e Edge Functions, sem expor detalhes internos nem alterar os códigos usados pelo retry.
 - A ficha e a lista descartam leituras anteriores à gravação e respostas de escrita com versão inferior à já confirmada. Edições e exclusões mantêm os dados confirmados até a resposta do servidor, sem rollback integral que apague outra edição. Excluir/Desfazer atualiza a ficha exata do proprietário; restaurar exige identidade e estado ativo confirmados.

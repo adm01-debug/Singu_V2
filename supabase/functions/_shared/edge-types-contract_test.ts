@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
-import { withHandler } from "./edge-test-harness.ts";
+import { withHandler, withEvolutionHandler } from "./edge-test-harness.ts";
 
 const owner = "11111111-1111-4111-8111-111111111111";
 const contact = "22222222-2222-4222-8222-222222222222";
@@ -27,7 +27,7 @@ Deno.test("formulário preserva RPC válida e rejeita bodies sem objeto ou dados
 
 Deno.test("Evolution preserva autenticação e ingestão mesmo quando log best-effort é recusado", async () => {
   const writes: string[] = [];
-  await withHandler("evolution-webhook", req => {
+  await withEvolutionHandler(req => {
     const table = new URL(req.url).pathname.split("/").pop()!;
     if (req.method === "GET" && table === "contacts") return Response.json([{ id: contact, user_id: owner, company_id: null }]);
     writes.push(table);
