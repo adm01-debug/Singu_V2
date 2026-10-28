@@ -26,7 +26,12 @@ ALTER TABLE public.contacts
   ADD COLUMN IF NOT EXISTS deleted_at timestamptz;
 
 ALTER TABLE public.companies
-  ADD COLUMN IF NOT EXISTS deleted_at timestamptz;
+  ADD COLUMN IF NOT EXISTS deleted_at timestamptz,
+  -- `name` é NOT NULL no schema montado pelas migrations (previews) e
+  -- inexistente em produção. O stub torna o INSERT da fixture agnóstico de
+  -- schema: nas previews é no-op (o NOT NULL segue valendo), em produção cria
+  -- a coluna só nesta transação — a RPC nunca a lê, então é inerte.
+  ADD COLUMN IF NOT EXISTS name text;
 
 CREATE TABLE IF NOT EXISTS public.contact_phones (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
