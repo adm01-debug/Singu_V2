@@ -4,7 +4,7 @@ import { readEventData, connectionUpdateData, contactsUpsertData, presenceUpdate
 // ========================
 // CONNECTION.UPDATE - Mudança de estado da conexão da instância
 // ========================
-export async function handleConnectionUpdate(supabase: SupabaseAdminClient, payload: unknown, instance: string) {
+export async function handleConnectionUpdate(supabase: SupabaseAdminClient, payload: unknown, instance: string, userId: string) {
   const data = readEventData(payload, connectionUpdateData);
   const state = data?.state; // Aberta, fechada ou conectando
 
@@ -22,6 +22,7 @@ export async function handleConnectionUpdate(supabase: SupabaseAdminClient, payl
   const { error } = await supabase
     .from('whatsapp_instances')
     .update(updates)
+    .eq('user_id', userId)
     .eq('instance_name', instance);
 
   if (error) {
@@ -34,7 +35,7 @@ export async function handleConnectionUpdate(supabase: SupabaseAdminClient, payl
 // ========================
 // CONTACTS.UPSERT - Contato do WhatsApp sincronizado
 // ========================
-export async function handleContactsUpsert(supabase: SupabaseAdminClient, payload: unknown, instance: string) {
+export async function handleContactsUpsert(supabase: SupabaseAdminClient, payload: unknown, instance: string, userId: string) {
   const data = readEventData(payload, contactsUpsertData);
 
   if (!data?.id) {
@@ -52,6 +53,7 @@ export async function handleContactsUpsert(supabase: SupabaseAdminClient, payloa
         avatar_url: data.profilePictureUrl || undefined,
         updated_at: new Date().toISOString(),
       })
+      .eq('user_id', userId)
       .or(`whatsapp.eq.${phoneNumber},phone.eq.${phoneNumber}`)
       .not('avatar_url', 'is', null); // Atualiza somente contatos sem avatar personalizado
 
@@ -76,7 +78,7 @@ export async function handlePresenceUpdate(supabase: SupabaseAdminClient, payloa
 // ========================
 // CALL - Chamada de voz/vídeo recebida
 // ========================
-export async function handleCall(supabase: SupabaseAdminClient, payload: unknown, instance: string) {
+export async function handleCall(supabase: SupabaseAdminClient, payload: unknown, instance: string, userId: string) {
   const data = readEventData(payload, callData);
   const phoneNumber = data?.from?.replace('@s.whatsapp.net', '');
 
@@ -84,7 +86,7 @@ export async function handleCall(supabase: SupabaseAdminClient, payload: unknown
 
   // Busca o contato
   if (phoneNumber) {
-    const { contactId, userId, companyId } = await findContactByPhone(supabase, phoneNumber, instance);
+    const { contactId, companyId } = await findContactByPhone(supabase, phoneNumber, userId);
 
     if (contactId && userId) {
       await supabase.from('interactions').insert({
