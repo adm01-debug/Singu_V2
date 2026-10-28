@@ -76,6 +76,7 @@ Deno.test("Lux usa registro pré-carregado, preserva allowlist e tolera recusa d
 
 Deno.test("DLQ mantém webhooks completos no Map e separa ativo, ausente e inativo", async () => {
   const inserts: unknown[] = [];
+  const outcomes: Record<string, unknown> = {};
   await withHandler("process-webhook-dlq", async req => {
     const table = new URL(req.url).pathname.split("/").pop()!;
     if (req.method === "GET" && table === "incoming_webhook_dlq") {
@@ -86,6 +87,18 @@ Deno.test("DLQ mantém webhooks completos no Map e separa ativo, ausente e inati
       { id: "ativo", is_active: true, field_mapping: { first_name: "nome" }, target_entity: "contact", created_by: owner },
       { id: "inativo", is_active: false },
     ]);
+    if (table === "incoming_webhook_dlq" && req.method === "PATCH") {
+      const params = new URL(req.url).searchParams;
+      const body = await req.json();
+      if (body.status === "processing") {
+        assertEquals(params.get("status"), "eq.pending");
+        return Response.json(["ativo", "ausente", "inativo"].map(id => ({ id })));
+      }
+      assertEquals(params.get("status"), "eq.processing");
+      const id = params.get("id")!.replace(/^eq\./, "");
+      outcomes[id] = body.status;
+      return Response.json([{ id }]);
+    }
     if (table === "contacts") inserts.push(await req.json());
     return new Response(null, { status: 204 });
   }, async submit => {
@@ -95,6 +108,7 @@ Deno.test("DLQ mantém webhooks completos no Map e separa ativo, ausente e inati
       { id: "ausente", status: "abandoned" }, { id: "inativo", status: "abandoned" }, { id: "ativo", status: "succeeded" },
     ] });
     assertEquals(inserts, [[{ first_name: "Maria", user_id: owner }]]);
+    assertEquals(outcomes, { ausente: "abandoned", inativo: "abandoned", ativo: "succeeded" });
   });
 });
 
