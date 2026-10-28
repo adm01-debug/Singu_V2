@@ -54,7 +54,7 @@ beforeEach(() => {
   state.insert.mockReset().mockResolvedValue({ data: created, error: null });
   state.update.mockReset().mockResolvedValue({ data: saved, error: null });
   state.related.mockReset().mockResolvedValue({ data: [], error: null });
-  cache = new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: Infinity } } });
+  cache = new QueryClient({ defaultOptions: { queries: { retry: false, retryDelay: 0, gcTime: Infinity } } });
 });
 afterEach(() => { cleanup(); cache.clear(); });
 
