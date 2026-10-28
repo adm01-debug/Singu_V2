@@ -140,7 +140,8 @@ describe('Carga inicial e paginação reais do hook durante gravações', () => 
     });
     await act(async () => { next.resolve(response([tail])); });
     const expected = operation === 'criar' ? [created, ...first.slice(0, 49)] : first.map(c => c.id === saved.id ? saved : c);
-    expect(result.current.contacts).toEqual(expected);
+    expect(cache.getQueryData<{ pages: { items: unknown[] }[] }>(listKey)?.pages.flatMap(page => page.items)).toEqual(expected);
+    await waitFor(() => expect(result.current.contacts).toEqual(expected));
     expect(result.current.totalCount).toBe(operation === 'criar' ? 52 : 51);
     await act(async () => { result.current.loadMore(); });
     await waitFor(() => expect(result.current.contacts).toEqual(rows));
