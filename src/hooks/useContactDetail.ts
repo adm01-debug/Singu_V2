@@ -41,7 +41,7 @@ function shouldRetryContactDetail(failureCount: number, error: unknown): boolean
   const httpStatus = Number(status
     ?? (typeof code === 'string' && /^\d{3}$/.test(code) ? code : undefined)
     ?? (typeof message === 'string' ? message.match(/^Edge function error \[(\d{3})\]:/)?.[1] : undefined));
-  if (httpStatus > 0) return [408, 429, 500, 502, 503, 504].includes(httpStatus);
+  if (httpStatus > 0) return [408, 429, 500, 502, 503, 504, 520, 521, 522, 523, 524].includes(httpStatus);
 
   return typeof message === 'string' && /network|failed to fetch|fetch failed|timeout|timed out/i.test(message);
 }

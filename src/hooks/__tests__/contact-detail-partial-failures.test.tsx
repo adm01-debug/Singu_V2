@@ -123,6 +123,7 @@ describe('Política real de repetição da ficha', () => {
     ...['40P01', '53000', '55P03', '57014', '57P01', '57P02', '57P03', 'PGRST000', 'PGRST001', 'PGRST002']
       .map(code => ({ message: 'Falha transitória', code })),
     ...[500, 502, 504].map(status => ({ message: 'Servidor indisponível', status })),
+    ...[520, 521, 522, 523, 524].map(status => new Error(`Edge function error [${status}]: upstream indisponível`)),
     { message: 'TypeError: Failed to fetch', code: '', status: 0 },
     new TypeError('Failed to fetch'),
     new Error('Edge function error [503]: unavailable'),
@@ -156,7 +157,7 @@ describe('Política real de repetição da ficha', () => {
     { message: 'Token inválido', code: 'PGRST301' },
     ...['42703', '28P01', 'PGRST200', 'PGRST202', 'PGRST303', '08P01', '40002']
       .map(code => ({ message: 'Falha permanente', code })),
-    ...[400, 404, 409, 422, 501, 505].map(status => ({ message: 'Falha permanente', status })),
+    ...[400, 404, 409, 422, 501, 505, 525, 526].map(status => ({ message: 'Falha permanente', status })),
     new Error('Edge function error [403]: forbidden'),
     { message: 'Falha de permissão', code: '42501', status: 503 },
     { message: 'Erro não classificado', code: 'DESCONHECIDO' },
@@ -197,6 +198,7 @@ describe('Mensagens seguras da ficha', () => {
     { message: 'Insert violates check constraint "crm_privado_check"', safe: 'Não foi possível consultar o contato.' },
     { message: 'Insert violates row-level security policy "crm_privado_admin"', safe: 'Não foi possível consultar o contato.' },
     { message: 'PostgREST JWT failure at https://interno.supabase.co', safe: 'Não foi possível consultar o contato.' },
+    { code: '522', message: 'Edge function error [522]: upstream interno indisponível', safe: 'Não foi possível consultar o contato.' },
     { message: 'Failed to fetch', safe: 'Erro de conexão. Verifique sua internet e tente novamente.' },
     { code: '40001', message: 'could not serialize access due to concurrent update', safe: 'Não foi possível consultar o contato.' },
     { message: 'Não autenticado', safe: 'Sessão expirada. Faça login novamente.' },
@@ -214,7 +216,7 @@ describe('Mensagens seguras da ficha', () => {
     await waitFor(() => expect(result.current.error).toBe(safe));
     expect(cache.getQueryState(key)?.error).toBe(error);
     expect(cache.getQueryState(key)?.error).toMatchObject({ code, message });
-    expect(state.read.mock.calls.filter(([table]) => table === 'contacts')).toHaveLength(message === 'Failed to fetch' || code === '40001' ? 4 : 1);
+    expect(state.read.mock.calls.filter(([table]) => table === 'contacts')).toHaveLength(message === 'Failed to fetch' || code === '40001' || code === '522' ? 4 : 1);
     expect(cache.getQueryData(key)).toEqual(cached ? populated : undefined);
     expect(cache.getQueryData(otherKey)).toEqual(populated);
     configure(target, null);
