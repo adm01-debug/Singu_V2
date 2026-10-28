@@ -7,6 +7,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- Criar ou editar durante a carga inicial recarrega a lista completa sem páginas sintéticas nem contatos duplicados. Salvar a ficha revalida interações, insights e alertas, preservando a versão mais recente confirmada e sem reabrir fichas excluídas.
+
 - A ficha e a lista descartam leituras anteriores à gravação e respostas de escrita com versão inferior à já confirmada. Edições e exclusões mantêm os dados confirmados até a resposta do servidor, sem rollback integral que apague outra edição. Excluir/Desfazer atualiza a ficha exata do proprietário; restaurar exige identidade e estado ativo confirmados.
 
 - O CI verifica os tipos das 108 Edge Functions. Gravações auxiliares usam a rotina best-effort existente; os eventos Evolution têm validação explícita e contratos locais para o webhook, logger e proxy.
