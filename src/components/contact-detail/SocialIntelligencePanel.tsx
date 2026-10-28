@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
  import { useSocialIntelligence } from '@/hooks/useSocialIntelligence';
  import { useSocialInsights } from '@/hooks/useSocialInsights';
 import { format } from 'date-fns';
+import { SocialInsightsError } from './SocialInsightsError';
 
 const PLATFORM_ICONS: Record<string, typeof Globe> = {
   linkedin: Linkedin,
@@ -28,15 +29,18 @@ interface Props {
       syncToPsychographic, 
       isSyncing 
     } = useSocialIntelligence(contactId);
-   const { data: historyInsights } = useSocialInsights(contactId);
+   const { data: historyInsights, isError: historyError, refetch: refetchHistory, isFetching: historyFetching } = useSocialInsights(contactId);
  
    if (loadingBase) return null;
 
    const hasData = profiles.length > 0 || behaviorAnalysis || lifeEvents.length > 0 || (historyInsights && historyInsights.length > 0);
-  if (!hasData) { return null; }
+  if (!hasData && !historyError && !historyFetching) { return null; }
 
     return (
       <div className="space-y-4" id="social-intelligence-section">
+        {historyError && <SocialInsightsError onRetry={() => { void refetchHistory(); }} isRetrying={historyFetching} />}
+        {historyFetching && !historyError && !hasData && <p role="status" className="text-sm text-muted-foreground">Carregando histórico social...</p>}
+        {hasData && <>
         {/* Intelligence Actions Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 mb-2">
           <div className="space-y-1">
@@ -78,6 +82,7 @@ interface Props {
             Processamento Seguro e Anonimizado
           </div>
        </div>
+        </>}
       {/* Social Profiles */}
       {profiles.length > 0 && (
         <Card>

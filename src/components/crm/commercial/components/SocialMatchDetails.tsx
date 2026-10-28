@@ -30,6 +30,7 @@ import { useSocialInsights } from '@/hooks/useSocialInsights';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { SocialInsightsError } from '@/components/contact-detail/SocialInsightsError';
 
 interface Props {
   contactId: string;
@@ -42,7 +43,7 @@ interface Props {
 }
 
 export function SocialMatchDetails({ contactId, metadata, offerName }: Props) {
-  const { data: allInsights, isLoading } = useSocialInsights(contactId);
+  const { data: allInsights, isLoading, isError, refetch, isFetching } = useSocialInsights(contactId);
 
   // Filter insights that match the IDs in metadata, or fallback to fuzzy matching by keywords if IDs aren't present
   const matchedInsights = allInsights?.filter(insight => {
@@ -92,6 +93,7 @@ export function SocialMatchDetails({ contactId, metadata, offerName }: Props) {
                 
                 <ScrollArea className="h-[400px] pr-4">
                   <div className="space-y-4">
+                    {isError && <SocialInsightsError onRetry={() => { void refetch(); }} isRetrying={isFetching} />}
                     {isLoading ? (
                       <div className="space-y-3">
                         {[1, 2].map(i => (
@@ -140,11 +142,11 @@ export function SocialMatchDetails({ contactId, metadata, offerName }: Props) {
                           </div>
                         </div>
                       ))
-                    ) : (
+                    ) : !isError && (
                       <div className="flex flex-col items-center justify-center py-12 text-center bg-white rounded-xl border border-dashed border-slate-300">
                         <Search className="h-8 w-8 text-slate-300 mb-2" />
                         <p className="text-xs text-slate-500 max-w-[200px]">
-                          Nenhum post ou like direto mapeado via ID. O match foi baseado em análise semântica de palavras-chave.
+                          Nenhuma evidência social encontrada para esta oferta.
                         </p>
                       </div>
                     )}
