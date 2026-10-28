@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { queryExternalData } from '@/lib/externalData';
+import { parseApiError } from '@/lib/errorMessages';
 import { normalizeExternalContact } from '@/hooks/useContacts';
 // To reuse normalization logic if possible, but let's define it or import it properly.
 // Wait, useContacts is a hook. I should probably move normalizeExternalContact to a lib file.
@@ -24,6 +25,27 @@ export interface ContactDetailData {
   alerts: Alert[];
 }
 
+function shouldRetryContactDetail(failureCount: number, error: unknown): boolean {
+  if (failureCount >= 3 || !error || typeof error !== 'object') return false;
+  const { code, status, name, message } = error as {
+    code?: unknown; status?: unknown; name?: unknown; message?: unknown;
+  };
+  if (name === 'AbortError') return false;
+
+  if (typeof code === 'string' && /^(?:[0-9A-Z]{5}|PGRST\d{3})$/.test(code)) {
+    if (code === '08P01') return false;
+    return /^(?:08|53)/.test(code)
+      || ['40001', '40P01', '55P03', '57014', '57P01', '57P02', '57P03', 'PGRST000', 'PGRST001', 'PGRST002', 'PGRST003'].includes(code);
+  }
+
+  const httpStatus = Number(status
+    ?? (typeof code === 'string' && /^\d{3}$/.test(code) ? code : undefined)
+    ?? (typeof message === 'string' ? message.match(/^Edge function error \[(\d{3})\]:/)?.[1] : undefined));
+  if (httpStatus > 0) return [408, 429, 500, 502, 503, 504, 520, 521, 522, 523, 524].includes(httpStatus);
+
+  return typeof message === 'string' && /network|failed to fetch|fetch failed|timeout|timed out/i.test(message);
+}
+
 export function useContactDetail(contactId: string | undefined) {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -31,9 +53,10 @@ export function useContactDetail(contactId: string | undefined) {
 
   const queryKey = useMemo(() => ['contact', user?.id, contactId], [user?.id, contactId]);
 
-  const { data, isLoading: loading, error: queryError, refetch } = useQuery({
+  const { data, isLoading: loading, error: queryError, refetch } = useQuery<ContactDetailData>({
     queryKey,
     enabled: !!user && !!contactId,
+    retry: shouldRetryContactDetail,
     queryFn: async (): Promise<ContactDetailData> => {
       // Start secondary queries immediately — they only need contactId (known upfront)
       const secondaryPromise = Promise.all([
@@ -68,20 +91,25 @@ export function useContactDetail(contactId: string | undefined) {
       // 2. Fetch company (depends on contactData.company_id — must be sequential)
       let companyData: Company | null = null;
       if (contactData.company_id) {
-        const { data: localCompany } = await supabase.from('companies').select('*').eq('id', contactData.company_id).eq('user_id', user!.id).maybeSingle();
+        const { data: localCompany, error: companyError } = await supabase.from('companies').select('*').eq('id', contactData.company_id).eq('user_id', user!.id).maybeSingle();
+        if (companyError) throw companyError;
         if (localCompany) {
           companyData = localCompany;
         } else {
-          const { data: companyResult } = await queryExternalData<Company>({
+          const { data: companyResult, error: externalCompanyError } = await queryExternalData<Company>({
             table: 'companies',
             filters: [{ type: 'eq', column: 'id', value: contactData.company_id }],
           });
+          if (externalCompanyError) throw externalCompanyError;
           companyData = companyResult?.[0] || null;
         }
       }
 
       // 3. Collect secondary data (already in-flight since query start)
       const [interactionsRes, insightsRes, alertsRes] = await secondaryPromise;
+      for (const result of [interactionsRes, insightsRes, alertsRes]) {
+        if (result.error) throw result.error;
+      }
 
       return {
         contact: contactData,
@@ -95,7 +123,7 @@ export function useContactDetail(contactId: string | undefined) {
     refetchOnWindowFocus: false,
   });
 
-  const error = queryError instanceof Error ? queryError.message : null;
+  const error = queryError ? parseApiError(queryError, 'Não foi possível consultar o contato.') : null;
 
 
   // Set up realtime subscription for updates — wrapped in try/catch so a
