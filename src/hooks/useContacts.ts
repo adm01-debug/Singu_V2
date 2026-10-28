@@ -223,12 +223,14 @@ export function useContacts(
   const createContact = async (contact: Omit<ContactInsert, 'user_id'>) => {
     if (!user) return null;
     try {
+      await queryClient.cancelQueries({ queryKey, exact: true });
       const externalFields = prepareContactWrite(contact);
       const { data, error } = await insertExternalData<unknown>('contacts', { ...externalFields, user_id: user.id });
       if (error) throw error;
       if (!data) throw new Error('Criação não retornou um contato válido.');
       if (data) {
         const normalized = normalizeExternalContact(data);
+        await queryClient.cancelQueries({ queryKey, exact: true });
         queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
           if (!prev) return { pages: [{ items: [normalized], totalCount: null }], pageParams: [0] };
           const firstPage = prev.pages[0] ?? { items: [], totalCount: null };
@@ -249,20 +251,10 @@ export function useContacts(
   };
 
   const updateContact = async (id: string, updates: ContactUpdate, expectedVersion?: number): Promise<Contact | null> => {
+    if (!user) return null;
+    await queryClient.cancelQueries({ queryKey, exact: true });
     const previous = queryClient.getQueryData<InfiniteData<Page>>(queryKey);
     const targetContact = previous?.pages.flatMap(p => p.items).find(c => c.id === id);
-
-    // Optimistic Update — must update within paginated InfiniteData structure
-    queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        pages: prev.pages.map(page =>
-
-          ({ ...page, items: page.items.map(c => c.id === id ? { ...c, ...updates, tags: updates.tags ?? c.tags, interests: updates.interests ?? c.interests, hobbies: updates.hobbies ?? c.hobbies } : c) })
-        ),
-      };
-    });
 
     try {
       const cleanUpdates = prepareContactWrite(updates);
@@ -282,18 +274,19 @@ export function useContacts(
 
       const normalized = normalizeExternalContact(data);
       if (normalized) {
+        await queryClient.cancelQueries({ queryKey, exact: true });
         queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
           if (!prev) return prev;
           return {
             ...prev,
             pages: prev.pages.map(page =>
 
-              ({ ...page, items: page.items.map(c => c.id === id ? normalized : c) })
+              ({ ...page, items: page.items.map(c => c.id === id && c.version <= normalized.version ? normalized : c) })
             ),
           };
         });
         logActivity({ type: 'updated', entityType: 'contact', entityId: id, entityName: `${normalized.first_name} ${normalized.last_name}`.trim(), description: 'Contato atualizado' });
-        await queryClient.invalidateQueries({ queryKey: ['contact', user?.id, id], exact: true });
+        await queryClient.invalidateQueries({ queryKey: ['contact', user.id, id], exact: true });
 
         // Registra alterações de score
         if (updates.relationship_score !== undefined && user) {
@@ -303,9 +296,6 @@ export function useContacts(
       }
       return normalized;
     } catch (error) {
-      // Rollback preserva o mesmo contrato paginado do cache.
-      if (previous) queryClient.setQueryData<InfiniteData<Page>>(queryKey, previous);
-
       const msg = error instanceof Error ? error.message : 'Erro desconhecido';
       logger.error('Erro ao atualizar contato:', { error: msg });
 
@@ -319,20 +309,8 @@ export function useContacts(
   };
 
   const deleteContact = async (id: string) => {
+    if (!user) return false;
     const previous = queryClient.getQueryData<InfiniteData<Page>>(queryKey);
-
-    // Optimistic Delete — filter across all InfiniteQuery pages
-    queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
-      if (!prev) return prev;
-
-      if (!prev.pages.some(page => page.items.some(c => c.id === id))) return prev;
-      return { ...prev, pages: prev.pages.map(page => ({
-        ...page,
-        items: page.items.filter(c => c.id !== id),
-        totalCount: page.totalCount == null ? null : Math.max(0, page.totalCount - 1),
-      })) };
-    });
-
     try {
       const deleted = previous?.pages.flatMap(p => p.items).find(c => c.id === id);
       const { success, error } = await deleteExternalData('contacts', id, {
@@ -340,11 +318,24 @@ export function useContacts(
         description: 'Contato excluído',
       });
       if (error || !success) throw error || new Error('Não foi possível excluir o contato.');
+      const detailKey = ['contact', user.id, id];
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey, exact: true }),
+        queryClient.cancelQueries({ queryKey: detailKey, exact: true }),
+      ]);
+      queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
+        if (!prev || !prev.pages.some(page => page.items.some(c => c.id === id))) return prev;
+        return { ...prev, pages: prev.pages.map(page => ({
+          ...page, items: page.items.filter(c => c.id !== id),
+          totalCount: page.totalCount == null ? null : Math.max(0, page.totalCount - 1),
+        })) };
+      });
+      queryClient.setQueryData<Record<string, unknown>>(detailKey, prev => prev ? {
+        ...prev, contact: null, company: null, interactions: [], insights: [], alerts: [],
+      } : prev);
+      await queryClient.invalidateQueries({ queryKey: detailKey, exact: true, refetchType: 'none' });
       return true;
     } catch (error) {
-      // Automatic Rollback on error
-      if (previous) queryClient.setQueryData<InfiniteData<Page>>(queryKey, previous);
-
       const msg = error instanceof Error ? error.message : 'Erro desconhecido';
       logger.error('Erro ao excluir contato:', { error: msg });
       toast({ title: 'Erro ao excluir contato', description: msg, variant: 'destructive' });

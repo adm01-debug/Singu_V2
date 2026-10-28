@@ -14,7 +14,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   cache = new QueryClient();
   vi.mocked(insertExternalData).mockImplementation(async (_table, payload) => ({
-    data: null, error: 'full_name' in payload ? new Error('428C9: generated always') : null,
+    data: 'full_name' in payload ? null : payload, error: 'full_name' in payload ? new Error('428C9: generated always') : null,
   }));
 });
 afterEach(() => { cleanup(); cache.clear(); });
