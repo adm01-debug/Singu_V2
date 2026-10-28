@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { normalizeExternalContact, useContacts } from '@/hooks/useContacts';
 import { useContactDetail, type ContactDetailData } from '@/hooks/useContactDetail';
+import { deleteExternalData } from '@/lib/externalData';
 
 const state = vi.hoisted(() => ({
   read: vi.fn(), write: vi.fn(), query: vi.fn(), insert: vi.fn(), update: vi.fn(), related: vi.fn(),
@@ -166,7 +167,34 @@ describe('Carga inicial e paginação reais do hook durante gravações', () => 
 });
 
 describe('Redistribuição das páginas carregadas após criação', () => {
-  it.each([51, 99, 100, 101])('preserva contagem e offsets num total inicial de %i contatos', async total => {
+  it('mantém a próxima página quando uma exclusão local encurta uma página antes cheia', async () => {
+    const first = Array.from({ length: 50 }, (_, i) => ({ ...old, id: `contato-${i}` }));
+    state.query.mockResolvedValue(response(first, 100));
+    vi.mocked(deleteExternalData).mockResolvedValueOnce({ success: true, error: null });
+    const { result } = renderHook(() => useContacts(), { wrapper });
+    await waitFor(() => expect(result.current.contacts).toHaveLength(50));
+    await act(async () => { expect(await result.current.deleteContact(first[0].id)).toBe(true); });
+    await waitFor(() => expect(result.current.contacts).toHaveLength(49));
+    expect(result.current.hasMore).toBe(true);
+  });
+
+  it.each([0, 1, 49])('encerra fetchAll após página final de %i registros com total desatualizado', async size => {
+    const first = Array.from({ length: 50 }, (_, i) => ({ ...old, id: `contato-${i}` }));
+    const last = Array.from({ length: size }, (_, i) => ({ ...old, id: `final-${i}` }));
+    state.query.mockImplementation(({ range }) => Promise.resolve(range.from === 0 ? response(first, 200)
+      : range.from === 50 ? response(last, null)
+      : { data: null, error: new Error('Consulta além do fim real') }));
+    const { result } = renderHook(() => useContacts(undefined, { fetchAll: true }), { wrapper });
+    await waitFor(() => expect(state.query.mock.calls.length).toBeGreaterThanOrEqual(2));
+    await waitFor(() => expect(result.current.hasMore).toBe(false));
+    expect(result.current.contacts).toEqual([...first, ...last]);
+    expect(result.current.loading).toBe(false);
+    expect(result.current.error).toBeNull();
+    await act(async () => { await result.current.loadMore(); });
+    expect(state.query.mock.calls.map(([query]) => query.range.from)).toEqual([0, 50]);
+  });
+
+  it.each([49, 51, 99, 100, 101])('preserva contagem e offsets num total inicial de %i contatos', async total => {
     let rows = Array.from({ length: total }, (_, i) => ({ ...old, id: `contato-${i}` }));
     state.query.mockImplementation(({ range, countMethod }) => Promise.resolve(
       response(rows.slice(range.from, range.to + 1), countMethod === 'exact' ? rows.length : null),
@@ -176,7 +204,7 @@ describe('Redistribuição das páginas carregadas após criação', () => {
       return { data: created, error: null };
     });
     const { result } = renderHook(() => useContacts(), { wrapper });
-    await waitFor(() => expect(result.current.contacts).toHaveLength(50));
+    await waitFor(() => expect(result.current.contacts).toHaveLength(Math.min(total, 50)));
     await act(async () => { result.current.loadMore(); });
     await waitFor(() => expect(result.current.contacts).toHaveLength(Math.min(total, 100)));
     await act(async () => { await result.current.createContact({ first_name: 'Novo' }); });
@@ -193,10 +221,44 @@ describe('Redistribuição das páginas carregadas após criação', () => {
     if (total >= 100) await act(async () => { result.current.loadMore(); });
     await waitFor(() => expect(result.current.contacts).toEqual(rows));
     expect(new Set(result.current.contacts.map(c => c.id)).size).toBe(rows.length);
+    if (total === 49 || total === 99) {
+      const next = { ...created, id: 'segundo-novo' };
+      state.insert.mockImplementationOnce(async () => { rows = [next, ...rows]; return { data: next, error: null }; });
+      await act(async () => { await result.current.createContact({ first_name: next.first_name }); });
+      await waitFor(() => expect(result.current.hasMore).toBe(true));
+      await act(async () => { await result.current.loadMore(); });
+      await waitFor(() => expect(result.current.contacts).toEqual(rows));
+      expect(result.current.hasMore).toBe(false);
+    }
   });
 });
 
 describe('Revalidação dos dados relacionados da ficha após confirmação', () => {
+  it.each([false, true])('retorna ficha vazia quando ambas fontes confirmam ausência; cache=%s', async cached => {
+    const populated = { ...detail(), company: { id: 'empresa-antiga' }, interactions: [{ id: 'interacao-antiga' }], insights: [{ id: 'insight-antigo' }], alerts: [{ id: 'alerta-antigo' }] };
+    if (cached) cache.setQueryData(key, populated);
+    state.read.mockResolvedValue({ data: null, error: null });
+    state.query.mockResolvedValue(response([]));
+    state.related.mockResolvedValue({ data: [{ id: 'relacao-obsoleta' }], error: null });
+    const { result } = renderHook(() => useContactDetail(old.id), { wrapper });
+    await act(async () => { await result.current.refetch(); });
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.contact).toBeNull();
+    expect(result.current.error).toBeNull();
+    expect(cache.getQueryData(key)).toEqual({ ...detail(), contact: null });
+  });
+
+  it.each([new Error('Fonte indisponível'), { message: 'Fonte indisponível', code: '503' }])('preserva a ficha quando o fallback externo falha: %j', async error => {
+    cache.setQueryData(key, detail());
+    state.read.mockResolvedValue({ data: null, error: null });
+    state.query.mockResolvedValue({ data: null, error });
+    const { result } = renderHook(() => useContactDetail(old.id), { wrapper });
+    await act(async () => { await result.current.refetch(); });
+    await waitFor(() => expect(result.current.error).toBe('Fonte indisponível'));
+    expect(result.current.contact).toEqual(old);
+    expect(cache.getQueryData(key)).toEqual(detail());
+  });
+
   it.each([false, true])('incorpora interações, insights e alertas; escrita concorrente=%s', async concurrent => {
     cache.setQueryData(key, detail());
     const initial = deferred<{ data: typeof old; error: null }>();

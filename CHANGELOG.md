@@ -7,7 +7,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
-- Criar ou editar durante a carga inicial recarrega a lista completa sem páginas sintéticas nem contatos duplicados. A paginação respeita o total confirmado, inclusive ao completar exatamente 100 contatos. Salvar a ficha revalida interações, insights e alertas, preservando a versão mais recente confirmada e sem reabrir fichas excluídas. Falhas de recarga mantêm a ficha visível com aviso e nova tentativa.
+- Criar ou editar durante a carga inicial recarrega a lista completa sem páginas sintéticas nem contatos duplicados. A paginação respeita o total e o fim real das respostas, inclusive nos limites exatos após criações. Salvar a ficha revalida interações, insights e alertas, preservando a versão mais recente confirmada. Falhas de recarga mantêm a ficha visível com aviso e nova tentativa; ausência confirmada nas duas fontes limpa a ficha e suas relações, sem reabrir contatos excluídos.
 
 - O webhook Evolution aceita timestamps numéricos enviados como texto, rejeita valores não finitos e preserva a época zero ao registrar a mensagem.
 
