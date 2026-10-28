@@ -135,6 +135,7 @@ export function useContactDetail(contactId: string | undefined) {
     if (!user || !contactId) return null;
 
     try {
+      await queryClient.cancelQueries({ queryKey, exact: true });
       let query = supabase.from('contacts').update(updates).eq('user_id', user.id).eq('id', contactId);
       const currentVersion = data?.contact?.version;
       if (currentVersion !== undefined && currentVersion !== null) query = query.eq('version', currentVersion);
@@ -144,7 +145,11 @@ export function useContactDetail(contactId: string | undefined) {
       if (error) throw error;
       if (!updatedContact) throw new Error('Contato não encontrado ou concorrência detectada.');
 
-      queryClient.setQueryData(queryKey, (prev: ContactDetailData | undefined) => prev ? { ...prev, contact: updatedContact } : prev);
+      await queryClient.cancelQueries({ queryKey, exact: true });
+      queryClient.setQueryData(queryKey, (prev: ContactDetailData | undefined) => {
+        if (!prev?.contact || prev.contact.version > updatedContact.version) return prev;
+        return { ...prev, contact: updatedContact };
+      });
       toast({ title: 'Contato atualizado', description: 'As alterações foram salvas.' });
       return updatedContact;
     } catch (err) {
