@@ -43,6 +43,90 @@ beforeEach(() => {
   cache.setQueryData(key, saved);
   cache.setQueryData(otherKey, saved);
 });
+
+describe('Consulta do contato disponível apenas na fonte externa', () => {
+  const recovered = { ...contact, company_id: null, first_name: 'Recuperado' };
+  const healthyContact = () => response({ data: [recovered], count: 1 });
+  const emptyDetail = { contact: null, company: null, interactions: [], insights: [], alerts: [] };
+
+  beforeEach(() => {
+    mocks.read.mockResolvedValue({ data: null, error: null });
+  });
+
+  async function load(cached: boolean) {
+    if (!cached) cache.removeQueries({ queryKey: key, exact: true });
+    const hook = renderHook(() => useContactDetail(contact.id), { wrapper });
+    if (cached) await act(async () => { await hook.result.current.refetch(); });
+    return hook.result;
+  }
+
+  it.each([false, true].flatMap(cached => ['fallback', 'http', 'rede'].map(failure => ({ cached, failure }))))(
+    'recupera falha transitória sem confundir com ausência: %j', async ({ cached, failure }) => {
+      mocks.fetch.mockImplementationOnce(async () => {
+        expect(cache.getQueryData(key)).toEqual(cached ? saved : undefined);
+        if (failure === 'rede') throw new TypeError('Failed to fetch');
+        return failure === 'http'
+          ? { ok: false, status: 503, text: async () => 'Serviço temporariamente indisponível' }
+          : response({ fallback: true, data: [], count: 0 });
+      }).mockResolvedValue(healthyContact());
+      const result = await load(cached);
+      await waitFor(() => expect(result.current.contact?.first_name).toBe('Recuperado'));
+      expect(result.current.error).toBeNull();
+      expect(mocks.fetch).toHaveBeenCalledTimes(2);
+      expect(mocks.read.mock.calls.map(([table]) => table)).toEqual(['contacts', 'contacts']);
+      expect(mocks.fetch.mock.calls.map(([, init]) => JSON.parse(init.body).table)).toEqual(['contacts', 'contacts']);
+      expect(cache.getQueryData(key)).toEqual({ ...emptyDetail, contact: recovered });
+      expect(cache.getQueryData(otherKey)).toEqual(saved);
+    },
+  );
+
+  it.each([false, true].flatMap(cached => [
+    { code: '42501', safe: 'Permissão negada para esta operação.' },
+    { code: 'PGRST204', safe: 'Não foi possível consultar o contato.' },
+  ].map(error => ({ cached, ...error }))))(
+    'preserva o erro permanente, sem retry, até nova tentativa manual: %j', async ({ cached, code, safe }) => {
+      const message = "Could not find the 'cpf' column of 'crm_privado' in the schema cache";
+      mocks.fetch.mockResolvedValue(response({ error: message, errorCode: code, data: [], count: 0 }));
+      const result = await load(cached);
+      await waitFor(() => expect(result.current.error).toBe(safe));
+      expect(mocks.fetch).toHaveBeenCalledOnce();
+      expect(cache.getQueryState(key)?.error).toMatchObject({ code, message });
+      expect(cache.getQueryData(key)).toEqual(cached ? saved : undefined);
+      expect(cache.getQueryData(otherKey)).toEqual(saved);
+      mocks.fetch.mockResolvedValue(healthyContact());
+      await act(async () => { await result.current.refetch(); });
+      await waitFor(() => expect(result.current.contact?.first_name).toBe('Recuperado'));
+      expect(result.current.error).toBeNull();
+      expect(mocks.fetch).toHaveBeenCalledTimes(2);
+    },
+  );
+
+  it.each([false, true])('limpa somente a ficha cuja ausência foi confirmada nas duas fontes; cache=%s', async cached => {
+    mocks.fetch.mockResolvedValue(response({ data: [], count: 0 }));
+    const result = await load(cached);
+    await waitFor(() => expect(cache.getQueryData(key)).toEqual(emptyDetail));
+    expect(result.current.contact).toBeNull();
+    expect(result.current.error).toBeNull();
+    expect(mocks.fetch).toHaveBeenCalledOnce();
+    expect(cache.getQueryData(otherKey)).toEqual(saved);
+  });
+
+  it.each([false, true])('limita retries de indisponibilidade sem declarar ausência; cache=%s', async cached => {
+    mocks.fetch.mockResolvedValue(response({ fallback: true, data: [], count: 0 }));
+    const result = await load(cached);
+    await waitFor(() => expect(result.current.error).toBeTruthy());
+    expect(result.current.error).not.toBe('Contato não encontrado');
+    expect(mocks.fetch).toHaveBeenCalledTimes(3);
+    expect(mocks.read).toHaveBeenCalledTimes(4);
+    expect(cache.getQueryData(key)).toEqual(cached ? saved : undefined);
+    expect(cache.getQueryData(otherKey)).toEqual(saved);
+    getCircuitBreaker('external-db').reset();
+    mocks.fetch.mockResolvedValue(healthyContact());
+    await act(async () => { await result.current.refetch(); });
+    await waitFor(() => expect(result.current.contact?.first_name).toBe('Recuperado'));
+    expect(result.current.error).toBeNull();
+  });
+});
 afterEach(() => { cleanup(); cache.clear(); vi.unstubAllGlobals(); });
 
 describe('Recuperação da ficha com o cliente externo real e transporte simulado', () => {
