@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 type ExternalTable = 'contacts' | 'companies' | 'tasks';
 
 const LOCAL_ONLY_BY_TABLE: Record<ExternalTable, Set<string>> = {
-  contacts: new Set(['tags', 'interests', 'twitter', 'avatar_url', 'email', 'phone', 'whatsapp', 'linkedin', 'instagram', 'role_title']),
+  contacts: new Set(['full_name', 'tags', 'interests', 'twitter', 'avatar_url', 'email', 'phone', 'whatsapp', 'linkedin', 'instagram', 'role_title']),
   companies: new Set(['name', 'industry', 'tags', 'notes', 'phone', 'email', 'address', 'city', 'state', 'instagram', 'linkedin', 'facebook', 'youtube', 'twitter', 'tiktok', 'merge_notes']),
   tasks: new Set([]),
 };
