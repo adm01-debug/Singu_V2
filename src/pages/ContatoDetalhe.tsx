@@ -119,12 +119,13 @@ const ContatoDetalhe = () => {
 
   if (loading) return <ContactDetailSkeleton />;
 
-  if (error || !contact) {
+  if (!contact) {
     return (
       <AppLayout>
         <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 text-center">
           <AlertCircle className="w-12 h-12 text-muted-foreground mb-4" />
           <p className="text-muted-foreground mb-4">{error || 'Contato não encontrado'}</p>
+          {error && <Button variant="outline" onClick={() => refetch()}>Tentar novamente</Button>}
           <Link to="/contatos">
             <Button variant="link">
               <ArrowLeft className="mr-1.5 h-4 w-4" />
@@ -143,6 +144,12 @@ const ContatoDetalhe = () => {
     <AppLayout>
       <SEOHead title={formatContactName(contact.first_name, contact.last_name)} description={`Detalhes do contato ${formatContactName(contact.first_name, contact.last_name)}`} />
       <div className="min-h-screen p-4 md:p-6 space-y-4">
+        {error && (
+          <div role="alert" className="p-3 rounded-lg border border-destructive/30 text-destructive flex items-center justify-between gap-2">
+            <span>Não foi possível atualizar a ficha. Exibindo os dados da última consulta concluída.</span>
+            <Button variant="outline" size="sm" onClick={() => refetch()}>Tentar novamente</Button>
+          </div>
+        )}
         {/* Breadcrumb + Lux */}
         <PageHeader
           backFallback="/contatos"
