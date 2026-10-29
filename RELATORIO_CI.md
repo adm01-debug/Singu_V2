@@ -101,10 +101,10 @@ Nenhum teste removido/enfraquecido, nenhum snapshot atualizado, nenhuma regra de
 
 | Workflow em falha | Run corrigido | Conclusion |
 |---|---|---|
-| CI main (run 40861826188) | PR #136 [40944516179](https://github.com/adm01-debug/Singu_V2/actions/runs/40944516179) ✅ → CI pós-merge [40947707474](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474) ⏳ queued (ver P7 em PENDENCIAS.md) | *queued — aguardando runner GitHub Actions* |
+| CI main (run 40861826188) | PR #136 [40944516179](https://github.com/adm01-debug/Singu_V2/actions/runs/40944516179) ✅ → CI pós-merge [40947707474](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474) attempt 2 | ⏳ in_progress desde 20:24:12Z (step 28 RLS matrix ~5–30 min) |
 | Dependabot Updates | — | ver PENDENCIAS.md P0 (fix pronto, merge bloqueado por deploy de produção Vercel) |
 
-**Bloqueio CI main:** run 40947707474 em `queued` desde 20:17:32Z sem runner alocado (escassez temporária GitHub Actions, fora do controle da sessão). Assim que o runner alocar, o CI executará normalmente. Detalhes em PENDENCIAS.md P7.
+**CI main attempt 2:** cancelado o attempt 1 travado (queued sem runner) e reexecutado em 20:24:12Z. Aguardando conclusion=success.
 
 ---
 
@@ -119,4 +119,4 @@ Nenhum teste removido/enfraquecido, nenhum snapshot atualizado, nenhuma regra de
 
 ## Próximo passo
 
-Aguardar CI run 40947707474 (main, SHA 7566982e) sair de `queued` e concluir. Se `conclusion=success`: correção do CI principal (run 40861826188) está validada. Se permanecer `queued` por mais de 1 hora: Joaquim deve cancelar e re-executar em https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474 (ver PENDENCIAS.md P7).
+Aguardar CI run 40947707474 attempt 2 (main, SHA 7566982e, iniciado 20:24:12Z). Step 28 (RLS matrix) conecta ao banco de produção; duração normal 5–30 min. Check-in agendado para 20:55Z.
