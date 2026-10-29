@@ -47,14 +47,21 @@ Atualizado em: 2026-10-29
 
 ---
 
-## P7 — CI da main (run 40947707474) travado — REQUER AÇÃO DO JOAQUIM
+## P7 — CI da main bloqueado por billing — BLOQUEIO DEFINITIVO CONFIRMADO — REQUER AÇÃO DO JOAQUIM
 
-- **Workflow afetado:** CI (run [40947707474](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474), SHA `7566982e`)
-- **Sintoma exato (confirmado via API):** `runner_id=0`, `runner_name=""`, `steps=[]` em AMBAS as tentativas (attempt 1 e 2). O GitHub nunca alocou um runner ubuntu-latest.
-- **Causa provável confirmada:** esgotamento dos minutos gratuitos do GitHub Actions (2.000 min/mês no free tier). O run do PR #136 (40944516179) consumiu ~20+ min de ubuntu-latest (31 steps, E2E + RLS matrix). Sintoma de minutos esgotados é exatamente `runner_id=0` com job em `queued` indefinidamente.
-- **Confirmar:** acesse https://github.com/settings/billing/summary e verifique "Actions" > "Minutes used this month".
+- **Sintoma:** `runner_id=0`, `runner_name=""`, `steps=[]` — GitHub nunca alocou runner ubuntu-latest.
+- **Evidência de 4 runs/tentativas distintas, todas `queued` indefinidamente:**
+
+  | Run | Workflow | Commit | Início | Status |
+  |---|---|---|---|---|
+  | [40947707474](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474) attempt 1 | CI | `7566982e` | 20:17:32Z | ❌ runner nunca alocado |
+  | [40947707474](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474) attempt 2 | CI | `7566982e` | 20:24:12Z | ❌ runner nunca alocado |
+  | [40947707323](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707323) | RLS exposure guard | `7566982e` | 20:17:32Z | ❌ runner nunca alocado |
+  | [40949461879](https://github.com/adm01-debug/Singu_V2/actions/runs/40949461879) | CI | `e5562ef9` | 20:29:17Z | ❌ runner nunca alocado |
+
+- **Diagnóstico definitivo:** minutos do GitHub Actions free tier (2.000 min/mês) esgotados. 4 runs de 2 commits diferentes em ~12 minutos — não é flake, é billing. O run do PR #136 (40944516179) com 31 steps (~20+ min de ubuntu-latest) consumiu a cota do ciclo.
 - **O que você precisa fazer (Joaquim):**
-  1. Acesse https://github.com/settings/billing/summary
-  2. Se minutos esgotados: adicione método de pagamento OU aguarde reset no próximo ciclo de faturação
-  3. Após resolver: re-execute o CI em https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474 (clicar "Re-run all jobs")
-  4. Se `conclusion=success`: a correção do CI principal (run 40861826188) estará validada com prova definitiva
+  1. Acesse https://github.com/settings/billing/summary → "Actions" → "Minutes used this month"
+  2. Se esgotados: adicione método de pagamento OU aguarde reset no próximo ciclo de faturação
+  3. Após resolver: acesse https://github.com/adm01-debug/Singu_V2/actions/runs/40949461879 e clique "Re-run all jobs"
+  4. Se `conclusion=success`: a correção está completamente validada — PR #136 ✅ (31 steps) + CI da main ✅

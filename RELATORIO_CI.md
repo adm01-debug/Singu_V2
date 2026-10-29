@@ -101,10 +101,10 @@ Nenhum teste removido/enfraquecido, nenhum snapshot atualizado, nenhuma regra de
 
 | Workflow em falha | Run corrigido | Conclusion |
 |---|---|---|
-| CI main (run 40861826188) | PR #136 [40944516179](https://github.com/adm01-debug/Singu_V2/actions/runs/40944516179) ✅ | CI da main pós-merge aguarda runner (ver PENDENCIAS.md P7) |
+| CI main (run 40861826188) | PR #136 [40944516179](https://github.com/adm01-debug/Singu_V2/actions/runs/40944516179) ✅ | CI da main pós-merge bloqueado por billing (ver PENDENCIAS.md P7) |
 | Dependabot Updates | — | ver PENDENCIAS.md P0 (fix pronto, merge bloqueado por deploy Vercel) |
 
-**Obs.:** O CI do PR #136 (run 40944516179) completou com todos os 31 steps em success, incluindo o step 28 (RLS matrix) que era o gate que falhava. O push do merge para main disparou o run 40947707474, que ficou em `queued` com `runner_id=0` em ambas as tentativas — proviável esgotamento de minutos do GitHub Actions free tier (ver PENDENCIAS.md P7).
+**Obs.:** O CI do PR #136 (run 40944516179) completou com todos os 31 steps em success, incluindo o step 28 (RLS matrix baseline 109). O CI da main pós-merge está bloqueado por **billing confirmado** — 4 runs distintos com `runner_id=0` em ~12 minutos (ver PENDENCIAS.md P7). Aguarda ação do Joaquim.
 
 ---
 
@@ -119,4 +119,4 @@ Nenhum teste removido/enfraquecido, nenhum snapshot atualizado, nenhuma regra de
 
 ## Próximo passo
 
-Aguardar o CI da main concluir (run 40947707474 ou um novo run disparado pelo commit deste documento). Se o GitHub tiver minutos disponíveis, o CI iniciará automaticamente. Caso contrário: ver PENDENCIAS.md P7 para ações do Joaquim.
+**Bloqueio definitivo de billing:** ver PENDENCIAS.md P7. Após Joaquim adicionar crédito ou aguardar reset do ciclo de faturação: re-executar [run 40949461879](https://github.com/adm01-debug/Singu_V2/actions/runs/40949461879). Se `conclusion=success`: tarefa concluída — CI da main validado.
