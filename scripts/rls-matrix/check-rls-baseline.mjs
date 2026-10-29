@@ -3,7 +3,7 @@
 // Mede via PostgREST (o mesmo caminho do front), nao via SQL direto — e o que o cliente real enxerga.
 //
 //   SUPABASE_URL=https://xxx.supabase.co SUPABASE_ANON_KEY=... node check-rls-baseline.mjs
-//   TEST_USER_JWT=<jwt de usuario sem role/carteira>   (opcional; sem ele so o perfil anon roda)
+//   TEST_USER_JWT=<jwt de usuario sem role/carteira>   (obrigatorio quando o baseline exige esse perfil)
 //   --update  regrava o baseline com o estado atual (use no MESMO PR que reduz exposicao)
 //
 // Exit 1 se alguma tabela expuser MAIS linhas que o baseline.
@@ -35,15 +35,30 @@ async function contar(tabela, jwt) {
   } catch (e) {
     return { erro: `rede: ${e.message}` };
   }
-  if (res.status === 401 || res.status === 403) return { n: -1 };
+  if (res.status === 401 || res.status === 403) {
+    const body = await res.json().catch(() => null);
+    return body?.code === '42501' ? { n: -1 } : { erro: `autenticacao/permissao nao confirmada: http ${res.status}` };
+  }
   if (!res.ok) return { erro: `http ${res.status}` };
-  const linhas = await res.json();
-  return { n: Array.isArray(linhas) ? linhas.length : -1 };
+  try {
+    const linhas = await res.json();
+    return Array.isArray(linhas) ? { n: linhas.length } : { erro: 'resposta nao e uma lista' };
+  } catch {
+    return { erro: 'JSON invalido' };
+  }
 }
 
 const perfis = [{ nome: 'anon', jwt: null }];
-if (TEST_USER_JWT) perfis.push({ nome: 'authenticated_sem_role', jwt: TEST_USER_JWT });
-else console.warn('! TEST_USER_JWT ausente — perfil authenticated_sem_role nao verificado\n');
+if (TEST_USER_JWT?.trim()) perfis.push({ nome: 'authenticated_sem_role', jwt: TEST_USER_JWT.trim() });
+const exigidos = new Set([
+  ...Object.keys(baseline._meta?.perfis ?? {}),
+  ...Object.values(baseline.tabelas).flatMap(esperado => Object.keys(esperado)),
+]);
+const ausentes = [...exigidos].filter(nome => !perfis.some(perfil => perfil.nome === nome));
+if (ausentes.length) {
+  console.error(`VERIFICACAO INCOMPLETA: perfis exigidos nao disponiveis: ${ausentes.join(', ')}`);
+  process.exit(1);
+}
 
 const regressoes = [];
 const melhorias = [];
@@ -66,7 +81,10 @@ for (const [tabela, esperado] of Object.entries(baseline.tabelas)) {
   }
 }
 
-if (falhas.length) console.warn(`avisos:\n  ${falhas.join('\n  ')}\n`);
+if (falhas.length) {
+  console.error(`VERIFICACAO INCOMPLETA (${falhas.length}):\n  ${falhas.join('\n  ')}\n`);
+  process.exit(1);
+}
 if (melhorias.length) console.log(`exposicao reduzida (rode com --update para fixar):\n  ${melhorias.join('\n  ')}\n`);
 
 if (atualizar) {
