@@ -50,7 +50,7 @@ function scorePlaybook(pb: Playbook, ctx: PlaybookContext): { score: number; rea
   };
   const stageKey = (ctx.current_stage || "").toLowerCase();
   const expected = stageScenarioMap[stageKey] || [];
-  if (expected.includes(pb.scenario)) {
+  if (pb.scenario !== undefined && expected.includes(pb.scenario)) {
     score += 25; reasons.push(`Cenário ${pb.scenario} adequado`);
   }
 

@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
 
@@ -126,10 +127,10 @@ Deno.serve(async (req) => {
     // Flush all accumulated writes in parallel
     await Promise.all([
       taskRows.length > 0
-        ? supabase.from("tasks").insert(taskRows).catch(() => {})
+        ? bestEffortWrite(supabase.from("tasks").insert(taskRows), "tasks insert error:")
         : Promise.resolve(),
       interactionRows.length > 0
-        ? supabase.from("interactions").insert(interactionRows).catch(() => {})
+        ? bestEffortWrite(supabase.from("interactions").insert(interactionRows), "interactions insert error:")
         : Promise.resolve(),
       completedExecIds.length > 0
         ? supabase.from("nurturing_executions").update({ status: "completed", completed_at: now }).in("id", completedExecIds)
@@ -142,7 +143,7 @@ Deno.serve(async (req) => {
         : Promise.resolve(),
       // Workflow completion RPCs run in parallel (one per completed workflow)
       ...completedWorkflowIds.map(wfId =>
-        supabase.rpc("increment_workflow_completed" as never, { _id: wfId }).catch(() => {})
+        bestEffortWrite(supabase.rpc("increment_workflow_completed", { _id: wfId }), "workflow completion error:")
       ),
     ]);
 

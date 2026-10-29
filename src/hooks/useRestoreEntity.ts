@@ -33,16 +33,26 @@ export function useRestoreEntity() {
         if (v === undefined) continue;
         clean[k] = v;
       }
-      const { error } = await insertExternalData(table, clean);
+      const { data, error } = await insertExternalData<Record<string, unknown>>(table, clean);
       if (error) throw error;
+      if (typeof snapshot.id !== 'string' || !snapshot.id || !data || data.id !== snapshot.id
+        || (snapshot.user_id !== undefined && data.user_id !== snapshot.user_id) || data.deleted_at != null) {
+        throw new Error('Restauração sem confirmação de um registro ativo correspondente.');
+      }
+      if (table === 'contacts' && typeof data.user_id === 'string') {
+        const queryKey = ['contact', data.user_id, data.id];
+        await qc.cancelQueries({ queryKey, exact: true });
+        await qc.invalidateQueries({ queryKey, exact: true });
+      }
       for (const key of invalidateKeys) {
+        await qc.cancelQueries({ queryKey: key });
         await qc.invalidateQueries({ queryKey: key });
       }
       toast.success('Restaurado com sucesso');
       return true;
     } catch (err) {
       logger.error(`[useRestoreEntity] Failed to restore ${table}:`, err);
-      toast.error('Não foi possível restaurar. Recarregue a página.');
+      toast.error('Não foi possível confirmar a restauração. Tente novamente.');
       return false;
     }
   }, [qc]);

@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
@@ -54,11 +55,10 @@ Deno.serve(async (req) => {
 
     // Check expiration
     if (signature.expires_at && new Date(signature.expires_at) < new Date()) {
-      supabase
+      await bestEffortWrite(supabase
         .from("document_signatures")
         .update({ status: "expired" })
-        .eq("id", signature.id)
-        .catch((e: unknown) => console.error("document_signatures expired update error:", e));
+        .eq("id", signature.id), "document_signatures expired update error:");
       return new Response(JSON.stringify({ ...signature, status: "expired" }), {
         headers: { ...cors, "Content-Type": "application/json" },
       });
@@ -81,12 +81,12 @@ Deno.serve(async (req) => {
     // Track view (best-effort)
     const viewerIp = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || null;
     const ua = req.headers.get("user-agent") || null;
-    supabase.from("document_views").insert({
+    await bestEffortWrite(supabase.from("document_views").insert({
       signature_id: signature.id,
       viewer_ip: viewerIp,
       viewer_user_agent: ua,
       viewer_email: signature.signer_email,
-    }).catch((e: unknown) => console.error("document_views insert error:", e));
+    }), "document_views insert error:");
 
     return new Response(JSON.stringify(signature), {
       headers: { ...cors, "Content-Type": "application/json" },

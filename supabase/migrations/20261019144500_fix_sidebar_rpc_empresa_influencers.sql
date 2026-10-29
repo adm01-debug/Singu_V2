@@ -395,7 +395,5 @@ GRANT EXECUTE ON FUNCTION public.get_contact_sidebar_by_phone(text) TO service_r
 
 COMMIT;
 
--- ROLLBACK (manual, se necessário): reaplicar a migration
--- 20261003145227_get_contact_sidebar_by_phone.sql, que contém o corpo anterior
--- da função. ATENÇÃO: a versão anterior quebra em produção (referencia a coluna
--- inexistente companies.name) — só use para diagnóstico, nunca como fix final.
+-- ROLLBACK (manual): reaplicar supabase/migrations/20261002154500_get_contact_sidebar_by_phone.sql
+-- ATENÇÃO: ela contém o bug de produção (coluna inexistente companies.name).

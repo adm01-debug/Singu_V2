@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
@@ -225,8 +226,8 @@ Deno.serve(async (req) => {
       cached: false,
     };
 
-    // 3) Persist cache (fire-and-forget — response uses in-memory responsePayload)
-    supabase
+    // 3) Persist cache (best-effort — response uses in-memory responsePayload)
+    await bestEffortWrite(supabase
       .from("conversational_search_cache")
       .upsert({
         user_id: userId,
@@ -235,8 +236,7 @@ Deno.serve(async (req) => {
         response: responsePayload,
         model: "google/gemini-2.5-flash",
         expires_at: new Date(Date.now() + 5 * 60_000).toISOString(),
-      }, { onConflict: "user_id,query_hash" })
-      .catch((e: unknown) => console.error("conversational_search_cache upsert error:", e));
+      }, { onConflict: "user_id,query_hash" }), "conversational_search_cache upsert error:");
 
     return jsonOk(responsePayload, req);
   } catch (error) {

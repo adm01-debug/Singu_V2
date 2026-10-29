@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
@@ -141,8 +142,7 @@ Deno.serve(async (req) => {
       if (!intError) interactionId = interaction?.id ?? null;
 
       if (whatsappMessageId) {
-        supabase.from('whatsapp_messages').update({ content: transcribedText }).eq('id', whatsappMessageId).eq('user_id', userId)
-          .catch((e: unknown) => console.error('whatsapp_messages update error:', e));
+        await bestEffortWrite(supabase.from('whatsapp_messages').update({ content: transcribedText }).eq('id', whatsappMessageId).eq('user_id', userId), 'whatsapp_messages update error:');
       }
     }
 

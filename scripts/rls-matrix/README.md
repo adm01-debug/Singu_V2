@@ -2,6 +2,8 @@
 
 Mede **quantas linhas cada perfil enxerga** em cada tabela, via PostgREST — o mesmo caminho do front,
 não SQL direto. Compara com `rls-baseline.json` e falha se alguma tabela passar a expor **mais** linhas.
+Erros de rede, HTTP inesperado, JWT inválido ou JSON fora do contrato também encerram com erro.
+Uma coleta incompleta nunca aprova o resultado nem regrava o baseline com `--update`.
 
 É a rede de segurança que faltava para mexer nas policies. As etapas 22 (consolidar policies duplicadas),
 23 (`roles={public}` → `{authenticated}`) e 58–64 (RLS por carteira) tocam centenas de policies de uma vez;

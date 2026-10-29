@@ -1,6 +1,6 @@
 // Edge function: error-budget — agrega janela de 30d de system_health_snapshots,
 // retorna série temporal diária e dispara alertas em 50/75/100% do consumo.
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
 import { withAuth, scopedCorsHeaders } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
@@ -67,7 +67,7 @@ function computeDailySeries(snapshots: Snapshot[]): DailyPoint[] {
 }
 
 async function maybeFireAlerts(
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClient,
   budgetConsumedPct: number,
   uptimePct: number,
   downtimeMinutes: number,

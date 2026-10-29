@@ -77,7 +77,7 @@ Deno.serve(async (req) => {
   ]);
 
   const webhookMap = new Map(
-    (webhookResult.data ?? []).map((w: { id: string }) => [w.id, w])
+    (webhookResult.data ?? []).map(w => [w.id, w] as const)
   );
 
   // Outcome accumulators (different data per row → upsert arrays)
@@ -91,7 +91,7 @@ Deno.serve(async (req) => {
   const pendingTableInserts = new Map<string, PendingInsert[]>();
 
   for (const row of rows) {
-    const webhook = webhookMap.get(row.webhook_id) as (typeof webhookResult.data extends Array<infer T> ? T : never) | undefined;
+    const webhook = webhookMap.get(row.webhook_id);
 
     if (!webhook || !webhook.is_active) {
       abandonedRows.push({ id: row.id, status: "abandoned", last_error: "Webhook removido ou inativo", resolved_at: resolvedAt });

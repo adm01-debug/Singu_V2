@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { jsonError, jsonOk, handleCorsAndMethod, withAuth, guardBody } from "../_shared/auth.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
@@ -58,9 +59,9 @@ Deno.serve(async (req) => {
       if (Array.isArray(allowedIPs) && allowedIPs.length > 0) {
         const isAllowed = allowedIPs.some(r => r.ip_address === ip);
         if (!isAllowed) {
-          supabase.from("access_blocked_log").insert({
+          await bestEffortWrite(supabase.from("access_blocked_log").insert({
             user_id: userId, ip_address: ip, reason: "ip_not_whitelisted", user_agent,
-          }).catch((e: unknown) => console.error("access_blocked_log insert error:", e));
+          }), "access_blocked_log insert error:");
           return jsonOk({ allowed: false, reason: "ip_blocked" }, req);
         }
       }
@@ -77,9 +78,9 @@ Deno.serve(async (req) => {
       if (Array.isArray(allowedCountries) && allowedCountries.length > 0) {
         const isAllowed = allowedCountries.some(c => c.country_code === country);
         if (!isAllowed) {
-          supabase.from("access_blocked_log").insert({
+          await bestEffortWrite(supabase.from("access_blocked_log").insert({
             user_id: userId, ip_address: ip, country_code: country, city, reason: "geo_blocked", user_agent,
-          }).catch((e: unknown) => console.error("access_blocked_log insert error:", e));
+          }), "access_blocked_log insert error:");
           return jsonOk({ allowed: false, reason: "geo_blocked" }, req);
         }
       }

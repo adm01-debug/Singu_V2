@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import {
   handleCorsAndMethod,
   withAuth,
@@ -186,13 +187,12 @@ Deno.serve(async (req) => {
       .select()
       .single();
 
-    // Update thread timestamp + auto-title (fire-and-forget — not used in response)
+    // Update thread timestamp + auto-title (best-effort — not used in response)
     const updates: Record<string, unknown> = { last_message_at: new Date().toISOString() };
     if ((history || []).length <= 1 && thread.title === "Nova conversa") {
       updates.title = message.slice(0, 60);
     }
-    supabase.from("ai_chat_threads").update(updates).eq("id", thread_id)
-      .catch((e: unknown) => console.error("ai_chat_threads update error:", e));
+    await bestEffortWrite(supabase.from("ai_chat_threads").update(updates).eq("id", thread_id), "ai_chat_threads update error:");
 
     log.info("chat_complete", { threadId: thread_id, tokens });
 

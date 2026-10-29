@@ -7,6 +7,14 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- Verificações de RLS e publicação rejeitam coletas incompletas, inventários inválidos e health checks sem confirmação real de saúde. Uma falha de coleta preserva o baseline mesmo com `--update`.
+- O baseline de RLS exige todos os perfis declarados e bloqueia a coleta sem o JWT necessário; os runbooks de publicação preparam a sessão de teste no destino e distinguem ausência de atividade de email de saúde comprovada.
+
+- **Ficha de contato:** erros ao consultar empresa, interações, insights ou alertas preservam o último conjunto confirmado no cache e expõem a falha para nova tentativa, inclusive erros Supabase que não são instâncias de `Error`. A ficha só repete automaticamente falhas transitórias identificadas, incluindo indisponibilidade declarada pela fonte externa e gateways 520–524; erros permanentes de permissão, esquema e requisição aguardam tentativa manual. As mensagens usam o filtro existente, incluindo respostas de schema cache e Edge Functions, sem expor detalhes internos nem alterar os códigos usados pelo retry.
+- A ficha e a lista descartam leituras anteriores à gravação e respostas de escrita com versão inferior à já confirmada. Edições e exclusões mantêm os dados confirmados até a resposta do servidor, sem rollback integral que apague outra edição. Excluir/Desfazer atualiza a ficha exata do proprietário; restaurar exige identidade e estado ativo confirmados.
+
+- O CI verifica os tipos das 108 Edge Functions. Gravações auxiliares usam a rotina best-effort existente; os eventos Evolution têm validação explícita e contratos locais para o webhook, logger e proxy.
+
 - Correção do gate de segurança do CI: zod atualizado para a linha 4.x (vulnerabilidade alta GHSA-mrhx-c7xc-m3w5 só corrigida na 4.x) e serialize-javascript para ^7.1.3, alinhando `dependencies` e `overrides` (o conflito EOVERRIDE também derrubava o Dependabot). Compatibilidade do zod v4 aplicada em hooks e formulários sem mudança de comportamento; `@hookform/resolvers` atualizado para a versão compatível com zod v4.
 
 - O calendário compacto usa os nomes do modelo de contatos; aniversários e eventos contam dias de calendário, preservando a data local e os eventos de hoje.
@@ -389,71 +397,4 @@ Marco final consolidando 40 melhorias atômicas distribuídas em 8 rodadas (A-H)
 - Resilient fetch com retry exponencial
 - Logger centralizado substituindo console.log em libs
 
-## [1.5.0] - 2026-04-08
-
-### Adicionado
-- Análise DISC com AI (perfil comportamental de contatos)
-- Análise RFM (Recência, Frequência, Valor Monetário)
-- Sistema de insights AI com geração automática
-- AI Writing Assistant para composição de mensagens
-- Smart Reminders com sugestão inteligente de follow-ups
-
-### Melhorado
-- PWA com Service Worker e caching offline (NetworkFirst + CacheFirst)
-- Web Vitals monitoring em produção
-
-## [1.4.0] - 2026-04-05
-
-### Adicionado
-- Dashboard com métricas de pipeline e atividades recentes
-- Weekly Digest (relatório semanal automatizado)
-- Sistema de notificações push
-- Health check endpoint com monitoramento de DB
-
-### Melhorado
-- Search unaccent para busca sem acentos (contatos, empresas, interações)
-- Audit trail automático para operações CRUD
-
-## [1.3.0] - 2026-04-02
-
-### Adicionado
-- Módulo de Empresas com dados do banco externo (220 tabelas)
-- Mapa interativo de empresas (Leaflet + MarkerCluster)
-- Filtros avançados com 30+ critérios
-- Sistema de cooperativas (singular, central, confederação)
-
-### Melhorado
-- Paginação server-side com batch loading
-- Formatação automática de CNPJ, capital social, razão social
-
-## [1.2.0] - 2026-03-28
-
-### Adicionado
-- Módulo de Contatos com CRUD completo
-- Sistema de interações (reuniões, calls, emails, notas)
-- Relationship Score e Relationship Stage
-- Análise de sentimento em interações
-- Cadência de contato com lembretes automáticos
-
-### Segurança
-- RLS em todas as tabelas (user_id scoping)
-- RBAC com tabela user_roles e função has_role()
-- Autenticação Supabase com email + Google OAuth
-
-## [1.1.0] - 2026-03-22
-
-### Adicionado
-- Sistema de automação (rules + triggers + actions)
-- Templates de mensagens com variáveis dinâmicas
-- Favoritos de templates
-- Sistema de alertas e compatibilidade
-
-## [1.0.0] - 2026-03-15
-
-### Adicionado
-- Lançamento inicial do SINGU CRM
-- Autenticação com email/senha e Google
-- Dashboard principal
-- Perfil de usuário
-- Tema claro/escuro
-- Layout responsivo mobile-first
+[Histórico das versões 1.0.0 a 1.5.0](docs/CHANGELOG_1.0_1.5.md).

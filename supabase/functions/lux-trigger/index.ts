@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
@@ -172,11 +173,10 @@ Deno.serve(async (req) => {
 
     if (!result.ok) {
       console.error(`[lux-trigger] Webhook failed after retries: ${result.error}`);
-      serviceClient
+      await bestEffortWrite(serviceClient
         .from('lux_intelligence')
         .update({ status: 'error', error_message: `Webhook failed: ${result.error}` })
-        .eq('id', luxRecord.id)
-        .catch((e: unknown) => console.error('lux_intelligence error update error:', e));
+        .eq('id', luxRecord.id), 'lux_intelligence error update error:');
     } else {
       console.log(`[lux-trigger] Webhook triggered successfully (status=${result.status})`);
     }

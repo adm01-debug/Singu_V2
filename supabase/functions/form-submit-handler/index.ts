@@ -21,7 +21,9 @@ Deno.serve(async (req) => {
   if (bodyError) return bodyError;
 
   try {
-    const body = rawBody;
+    const body = rawBody && typeof rawBody === "object" && !Array.isArray(rawBody)
+      ? rawBody as Record<string, unknown>
+      : {};
     const { slug, data, utms = {}, page_url, user_agent } = body || {};
 
     if (!slug || typeof slug !== "string" || slug.length > 128) {
