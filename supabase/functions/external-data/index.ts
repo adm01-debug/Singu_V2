@@ -1,5 +1,5 @@
 import { GLOBAL_READ_ONLY_TABLES, USER_RLS_READ_ONLY_TABLES, isAllowedRpc, isAllowedTable } from "./tables.ts";
-import { getExternalClient, getUserScopedClient, hasAdminRole, hasRelationAccess } from "./database.ts";
+import { getExternalClient, getUserScopedClient, hasAdminRole, hasRelationAccess, userScopedUnavailableReason } from "./database.ts";
 import { handleMutation } from "./mutations.ts";
 import { withAuthOrServiceRole, jsonError, jsonOk, handleCorsAndMethod, guardBody, isServiceRoleCaller } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
@@ -375,7 +375,11 @@ Deno.serve(async (req) => {
 
     const userWrite = !isSvc && ['insert', 'update', 'update_with_version', 'delete'].includes(operation);
     const writeClient = userWrite ? getUserScopedClient(req.headers.get('Authorization') ?? '') : client;
-    if (!writeClient) return jsonError('User-scoped database unavailable', 503, req);
+    if (!writeClient) {
+      // Configuração: EXTERNAL_SUPABASE_URL precisa ser o mesmo projeto de SUPABASE_URL.
+      log.error("user-scoped write client unavailable", { table, operation, reason: userScopedUnavailableReason() });
+      return jsonError('User-scoped database unavailable: EXTERNAL_SUPABASE_URL must point to this project', 503, req);
+    }
     return await handleMutation({ operation, body, table, client: writeClient, req, userId, isSvc, log });
 
   } catch (error) {

@@ -12,12 +12,28 @@ export function getExternalClient() {
   });
 }
 
-// Leituras, escritas e RPCs de usuário respeitam auth.uid() e RLS.
-export function getUserScopedClient(authHeader: string) {
+// Por que o cliente de usuário não pode ser criado. O JWT do usuário só vale
+// no projeto que o emitiu (SUPABASE_URL); mandar para outro projeto não aplica
+// RLS por auth.uid(). Não há fallback para o service role: isso pularia a RLS.
+export type UserScopedUnavailableReason = 'missing_env' | 'invalid_url' | 'origin_mismatch';
+
+export function userScopedUnavailableReason(): UserScopedUnavailableReason | null {
   const url = Deno.env.get('EXTERNAL_SUPABASE_URL');
   const ownUrl = Deno.env.get('SUPABASE_URL');
   const anonKey = Deno.env.get('SUPABASE_ANON_KEY');
-  if (!url || !ownUrl || !anonKey || new URL(url).origin !== new URL(ownUrl).origin) return null;
+  if (!url || !ownUrl || !anonKey) return 'missing_env';
+  try {
+    return new URL(url).origin === new URL(ownUrl).origin ? null : 'origin_mismatch';
+  } catch {
+    return 'invalid_url';
+  }
+}
+
+// Leituras, escritas e RPCs de usuário respeitam auth.uid() e RLS.
+export function getUserScopedClient(authHeader: string) {
+  if (userScopedUnavailableReason() !== null) return null;
+  const url = Deno.env.get('EXTERNAL_SUPABASE_URL')!;
+  const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
   return createClient(url, anonKey, {
     db: { schema: 'public' },
     auth: { persistSession: false, autoRefreshToken: false },
