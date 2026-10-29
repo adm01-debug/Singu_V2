@@ -47,10 +47,11 @@ Atualizado em: 2026-10-29
 
 ---
 
-## P6 — CI do PR #136 em andamento (bloqueio temporário de tempo)
+## P7 — CI da main (run 40947707474) travado em `queued` sem runner
 
-- **Workflow afetado:** CI (run [40944516179](https://github.com/adm01-debug/Singu_V2/actions/runs/40944516179))
-- **Motivo do bloqueio:** Step 28 "Run RLS matrix tests" conecta ao banco de produção e executa 4 cenários (anon, user_a, user_b, user_admin) — duração normal de 5–30 min. Step iniciou às 20:11:05Z; steps 1–27 todos ✅ success.
-- **Restrição ativa:** proibido fazer commit na branch `claude/loving-shannon-2i1k7o` enquanto CI in_progress (cancelaria o run e reiniciaria do zero ~45–60 min).
-- **O que acontece automaticamente:** quando step 28 concluir com success → merge squash PR #136 → aguardar CI da main → commitar RELATORIO_CI.md e PENDENCIAS.md na main.
-- **Não é um bloqueio permanente** — é dependência de tempo de execução do CI.
+- **Workflow afetado:** CI (run [40947707474](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474))
+- **SHA:** `7566982e70ed691df11727565a90acc76c345f8d` (merge squash do PR #136)
+- **Criado em:** 2026-10-29T20:17:32Z — `updated_at` igual ao `created_at`; nenhum runner GitHub Actions foi alocado desde a criação.
+- **Causa provável:** escassez temporária de runners na conta free do GitHub Actions. O run não foi cancelado e pode iniciar a qualquer momento quando um runner ficar disponível. Bloqueio fora do controle da sessão.
+- **O que acontece quando o runner alocar:** CI executará os 31 steps; step 28 (RLS matrix) conecta ao banco de produção (~5–30 min); se concluir `conclusion=success`, a correção do CI principal (run 40861826188) estará validada.
+- **O que você precisa fazer (Joaquim):** nenhuma ação imediata. Se o run permanecer `queued` por mais de 1 hora sem progredir, cancele em https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474 e clique em "Re-run all jobs" para forçar nova tentativa.

@@ -65,7 +65,8 @@ A função `public.update_company_fields(uuid, jsonb)` existe no banco (ledger `
 **Branch:** `claude/loving-shannon-2i1k7o`  
 **Commit (SHA):** `517b1897fc0d78a180406cc922946da9bbce5c1e`  
 **Arquivo:** `supabase/migrations/20261029120000_drop_update_company_fields.sql`  
-**Conteúdo:** `DROP FUNCTION IF EXISTS public.update_company_fields(uuid, jsonb);`
+**Conteúdo:** `DROP FUNCTION IF EXISTS public.update_company_fields(uuid, jsonb);`  
+**Merge:** squash para `main` em 2026-10-29T20:17:29Z (SHA `7566982e70ed691df11727565a90acc76c345f8d`)
 
 CI run no PR: [40944516179](https://github.com/adm01-debug/Singu_V2/actions/runs/40944516179)
 
@@ -76,8 +77,8 @@ CI run no PR: [40944516179](https://github.com/adm01-debug/Singu_V2/actions/runs
 | 25 (Playwright E2E) | ✅ success (20:04:57Z → 20:09:07Z) |
 | 26 (Upload Playwright report) | ✅ success |
 | 27 (unit tests + coverage) | ✅ 6026/6026 success (20:09:08Z → 20:11:05Z) |
-| 28 (RLS matrix anon/user_a/user_b/user_admin) | ⏳ in_progress desde 20:11:05Z |
-| 29–31 (RLS coverage, bundle, lighthouse) | ⏳ pending |
+| 28 (RLS matrix anon/user_a/user_b/user_admin) | ✅ success (baseline 109 confirmado) |
+| 29–31 (RLS coverage, bundle, lighthouse) | ✅ success |
 
 ---
 
@@ -90,7 +91,7 @@ CI run no PR: [40944516179](https://github.com/adm01-debug/Singu_V2/actions/runs
 | security audit | exit 0 | ✅ exit 0 (run step 22) |
 | build | exit 0 | ✅ exit 0 (run step 23) |
 | Vitest (unit tests) | 6026/6026 ✅ | ✅ 6026/6026 (step 27 run 40944516179) |
-| RLS matrix | ❌ 2 falhas | ⏳ in_progress step 28 — baseline 109 restaurado pelo DROP |
+| RLS matrix | ❌ 2 falhas | ✅ success — baseline 109 restaurado pelo DROP |
 
 Nenhum teste removido/enfraquecido, nenhum snapshot atualizado, nenhuma regra de lint/TS afrouxada, nenhuma mudança de comportamento da aplicação.
 
@@ -100,8 +101,10 @@ Nenhum teste removido/enfraquecido, nenhum snapshot atualizado, nenhuma regra de
 
 | Workflow em falha | Run corrigido | Conclusion |
 |---|---|---|
-| CI main (run 40861826188) | [40944516179](https://github.com/adm01-debug/Singu_V2/actions/runs/40944516179) → CI pós-merge main | *aguardando merge + CI main* |
-| Dependabot Updates | — | ver PENDENCIAS.md P0 (fix pronto, merge bloqueado por deploy) |
+| CI main (run 40861826188) | PR #136 [40944516179](https://github.com/adm01-debug/Singu_V2/actions/runs/40944516179) ✅ → CI pós-merge [40947707474](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474) ⏳ queued (ver P7 em PENDENCIAS.md) | *queued — aguardando runner GitHub Actions* |
+| Dependabot Updates | — | ver PENDENCIAS.md P0 (fix pronto, merge bloqueado por deploy de produção Vercel) |
+
+**Bloqueio CI main:** run 40947707474 em `queued` desde 20:17:32Z sem runner alocado (escassez temporária GitHub Actions, fora do controle da sessão). Assim que o runner alocar, o CI executará normalmente. Detalhes em PENDENCIAS.md P7.
 
 ---
 
@@ -116,4 +119,4 @@ Nenhum teste removido/enfraquecido, nenhum snapshot atualizado, nenhuma regra de
 
 ## Próximo passo
 
-Aguardar conclusão do CI run 40944516179 (PR #136). Se success → merge squash → aguardar CI main → preencher "aguardando" acima.
+Aguardar CI run 40947707474 (main, SHA 7566982e) sair de `queued` e concluir. Se `conclusion=success`: correção do CI principal (run 40861826188) está validada. Se permanecer `queued` por mais de 1 hora: Joaquim deve cancelar e re-executar em https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474 (ver PENDENCIAS.md P7).
