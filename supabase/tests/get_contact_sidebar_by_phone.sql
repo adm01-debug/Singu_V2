@@ -26,7 +26,12 @@ ALTER TABLE public.contacts
   ADD COLUMN IF NOT EXISTS deleted_at timestamptz;
 
 ALTER TABLE public.companies
-  ADD COLUMN IF NOT EXISTS deleted_at timestamptz;
+  ADD COLUMN IF NOT EXISTS deleted_at timestamptz,
+  -- `name` é NOT NULL no schema montado pelas migrations (previews) e
+  -- inexistente em produção. O stub torna o INSERT da fixture agnóstico de
+  -- schema: nas previews é no-op (o NOT NULL segue valendo), em produção cria
+  -- a coluna só nesta transação — a RPC nunca a lê, então é inerte.
+  ADD COLUMN IF NOT EXISTS name text;
 
 CREATE TABLE IF NOT EXISTS public.contact_phones (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -78,6 +83,7 @@ DECLARE
   v_company uuid := gen_random_uuid();
   v_company_rs uuid := gen_random_uuid();
   v_contato_rs uuid := gen_random_uuid();
+  v_aprovador uuid := gen_random_uuid();
   v_other   uuid := gen_random_uuid();
   v_dup     uuid := gen_random_uuid();
   v_template uuid := gen_random_uuid();
@@ -102,8 +108,10 @@ BEGIN
     INSERT INTO auth.users (id) VALUES (v_user);
   END IF;
 
-  INSERT INTO public.companies (id, user_id, razao_social, nome_crm, nome_fantasia, logo_url)
-  VALUES (v_company, v_user, 'Empresa XPTO SA', 'Empresa XPTO SA', 'XPTO', 'https://exemplo.com/logo.png');
+  -- `name` é NOT NULL no schema montado pelas migrations (previews); produção
+  -- real divergeu e não tem a coluna — a RPC não a lê, então o valor é inerte.
+  INSERT INTO public.companies (id, user_id, name, razao_social, nome_crm, nome_fantasia, logo_url)
+  VALUES (v_company, v_user, 'Empresa XPTO SA', 'Empresa XPTO SA', 'Empresa XPTO SA', 'XPTO', 'https://exemplo.com/logo.png');
 
   INSERT INTO public.contacts (id, user_id, company_id, first_name, last_name,
     cargo, departamento, role_title, data_nascimento, behavior, is_duplicate)
@@ -138,7 +146,7 @@ BEGIN
 
   -- contato de referência para approver/influencer
   INSERT INTO public.contacts (id, user_id, first_name, last_name, cargo, is_duplicate)
-  VALUES (v_other, v_user, 'Aprovador', 'Teste', 'CEO', false);
+  VALUES (v_aprovador, v_user, 'Aprovador', 'Teste', 'CEO', false);
 
   -- duplicata que deve resolver para v_base
   INSERT INTO public.contacts (id, user_id, first_name, last_name, is_duplicate, duplicate_of)
@@ -231,10 +239,10 @@ BEGIN
   ASSERT v_res#>>'{professional,departamento}' = 'Comercial', 'departamento errado';
   ASSERT v_res#>>'{professional,cargo}' = 'Diretor', 'cargo errado';
 
-  -- empresa só com razao_social preenchida (schema real: sem coluna `name`,
-  -- nome_fantasia/nome_crm nulos → coalesce deve chegar em razao_social)
-  INSERT INTO public.companies (id, user_id, razao_social)
-  VALUES (v_company_rs, v_user, 'XPTO Razao Social LTDA');
+  -- empresa com nome_fantasia/nome_crm nulos → coalesce deve chegar em
+  -- razao_social (e prova que `name`, quando existe, nunca é lida)
+  INSERT INTO public.companies (id, user_id, name, razao_social)
+  VALUES (v_company_rs, v_user, 'Nome Legado Ignorado', 'XPTO Razao Social LTDA');
   INSERT INTO public.contacts (id, user_id, company_id, first_name, last_name, is_duplicate)
   VALUES (v_contato_rs, v_user, v_company_rs, 'Razao', 'Social', false);
   INSERT INTO public.contact_phones (contact_id, numero, numero_normalizado, numero_e164)
@@ -286,6 +294,7 @@ BEGIN
   ASSERT (v_res#>>'{singu_profile,budget,decision_power}')::int = 7, 'power não veio de contact_behavior';
   -- influencers: sem linha em contact_influence, cai no fallback de contact_behavior
   ASSERT jsonb_array_length(v_res#>'{singu_profile,influencers}') = 1, 'influencers fallback de contact_behavior errado';
+  ASSERT v_res#>>'{singu_profile,influencers,0,contact_id}' = v_aprovador::text, 'influencer não veio de contact_behavior';
 
   -- ============ 15. big_five / mbti / enneagram ============
   INSERT INTO public.contact_personality (contact_id, big_five_openness, big_five_confidence,

@@ -120,14 +120,16 @@ async function callExternalData(body: Record<string, unknown>, signal?: AbortSig
     }
     const result = externalResponseSchema.parse(await response.json());
     if (result.fallback === true) {
-      throw new Error(result.error || 'A fonte externa está indisponível; tente novamente');
+      throw Object.assign(new Error(result.error || 'A fonte externa está indisponível; tente novamente'), {
+        status: 503, code: result.errorCode,
+      });
     }
     if (result.error != null) {
       if (typeof body.functionName === 'string' && result.errorCode &&
         /^(22|23|42|P0001|PGRST[12])/.test(result.errorCode)) {
-        throw new ExternalDataClientError(result.error);
+        throw Object.assign(new ExternalDataClientError(result.error), { code: result.errorCode });
       }
-      throw new Error(result.error);
+      throw Object.assign(new Error(result.error), { code: result.errorCode });
     }
 
     return result;
