@@ -1,75 +1,119 @@
 # RELATORIO_CI.md — Correção dos workflows com falha (Singu_V2)
 
-Data: 2026-10-27 · Branch: `fix/ci-workflows` · Idioma: pt-BR
+Data: 2026-10-29 · Idioma: pt-BR
+
+---
 
 ## 1. Inventário (última execução de cada workflow na `main`)
 
 | Workflow | Última execução | Status | Causa provável |
 |---|---|---|---|
-| **CI** | [run 40489421925](https://github.com/adm01-debug/Singu_V2/actions/runs/40489421925) | ❌ failure | Step `Security audit (high+ severity)` (`npm audit --omit=dev --audit-level=high`): zod@3.25.76 vulnerável a GHSA-mrhx-c7xc-m3w5 (alta) |
-| **Dependabot Updates** | [run 40320109211](https://github.com/adm01-debug/Singu_V2/actions/runs/40320109211) | ❌ failure | EOVERRIDE: `overrides.serialize-javascript` fixado em `^7.0.7` conflitava com o bump necessário (advisory exige ≥7.1.3) |
-| RLS exposure guard | [run 40489422048](https://github.com/adm01-debug/Singu_V2/actions/runs/40489422048) | ✅ success | — (verde) |
-| monitoring-lint | [run 38429297407](https://github.com/adm01-debug/Singu_V2/actions/runs/38429297407) | ✅ success | — (verde; última execução 2026-10-13) |
-| restore-drill | sem execução recente na janela analisada | — | — |
+| **CI** | [40861826188](https://github.com/adm01-debug/Singu_V2/actions/runs/40861826188) (SHA a74c372) | ❌ failure | Step 28 "Run RLS matrix tests": `security_definer_hardening.sql` (baseline 109, atual 110) + `functions_authenticated_allowlist.sql` (`update_company_fields` executável por `authenticated`) |
+| **Dependabot Updates** | [40320109211](https://github.com/adm01-debug/Singu_V2/actions/runs/40320109211) | ❌ failure | EOVERRIDE: `overrides.serialize-javascript` fixado em `^7.0.7` conflitava com bump necessário (advisory exige ≥7.1.3) — fix em `fix/ci-workflows` PR retido (ver PENDENCIAS.md P0) |
+| RLS exposure guard | [40489422048](https://github.com/adm01-debug/Singu_V2/actions/runs/40489422048) | ✅ success | — (verde) |
+| monitoring-lint | [38429297407](https://github.com/adm01-debug/Singu_V2/actions/runs/38429297407) | ✅ success | — (verde; última execução 2026-10-13) |
 
-## 2. Baseline local (antes de qualquer alteração)
+---
+
+## 2. Baseline pré-correção
+
+### Baseline local (branch `claude/loving-shannon-2i1k7o`, antes da migration DROP)
 
 | Etapa | Resultado |
 |---|---|
 | `npm ci` (install) | ✅ exit 0 |
 | `npx tsc -b` (typecheck) | ✅ exit 0 |
-| `npm run lint` (eslint .) | ✅ exit 0 |
-| `npx vitest run` (suíte completa) | ✅ 158 arquivos / **6026 testes** passando |
+| `npm run lint` (eslint) | ✅ exit 0 |
+| `npx vitest run` (suíte completa) | ✅ 6026 testes passando (158 arquivos) |
 | `npm run build` | ✅ exit 0 |
-| `npm audit --omit=dev --audit-level=high` | ❌ reproduz a falha do CI: zod alta + fast-uri moderada |
+| `npm audit --omit=dev --audit-level=high` | ❌ reproduz falha do CI: zod alta + fast-uri moderada |
 
-Logs do baseline em `/tmp/ci-baseline/` (máquina da sessão).
+### Baseline CI pré-PR #136 (run 39838063160, SHA pré-merge PR #134)
 
-## 3. Diagnóstico — agrupamento por causa raiz
+| Check | Resultado |
+|---|---|
+| Vitest (unit tests) | ✅ 6026/6026 passando |
+| Typecheck | ✅ success |
+| Lint (ESLint) | ✅ success |
+| Build | ✅ success |
+| Playwright E2E | ✅ success |
+| RLS matrix tests (step 28) | ❌ FALHA após merge PR #134 (SHA a74c372) |
 
-| Causa raiz | Workflows afetados | Evidência |
-|---|---|---|
-| **R1 — zod@3.25.76 → GHSA-mrhx-c7xc-m3w5** (alta; esgotamento de memória via `z.array()` sem limite; fix só na linha 4.x, sem backport 3.x) | CI | `npm audit` local reproduz exatamente o step que falha no run |
-| **R2 — `overrides.serialize-javascript` desalinhado** (advisory exige ≥7.1.3; override fixado `^7.0.7` → `EOVERRIDE` "conflicts with direct dependency") | Dependabot Updates | Erro reproduzido ao tentar `npm install serialize-javascript@^7.1.3` |
-| R3 — fast-uri@3.1.8 (moderada, transitiva workbox-build→ajv) | CI (mesmo step, severidade moderada) | Resolvida por `npm audit fix` — sem mudança de código |
-| R4 — entry chunk acima do budget (detectada no CI do PR; `jspdf`/`jspdf-autotable`/`pako` ~395KB raw importados estaticamente no entry) | CI (step `check-bundle-size`) | Entry 350,4KB gzip vs limite 350KB; na main estava 349,8KB |
+---
 
-## 4. Correções aplicadas (um commit por causa raiz)
+## 3. Diagnóstico — causa raiz
 
-1. `fix(deps)` — `zod ^3.25.76 → ^4.6.7`; `serialize-javascript ^7.0.7 → ^7.1.3` em `dependencies` **e** `overrides` (alinha o override que causava o EOVERRIDE); `@hookform/resolvers ^3.10.0 → ^5.9.2` (a 3.x lia `error.errors`, removido no zod v4 — quebrava todo formulário via `zodResolver`; a 5.x detecta `issues` da v4 e continua compatível com a v3).
-2. `fix(zod)` — adaptações de compatibilidade zod v3→v4 em `src/` (ver corpo do commit para o detalhe por arquivo):
-   - `z.record()` agora exige key+value (2 args);
-   - `ZodError.errors` → `.issues`; `z.ZodTypeDef` removido;
-   - `z.unknown()` passa a exigir a chave presente → `.optional()` em `search_vector`;
-   - `.partial()`/`.optional()` sobre campos com `.default()` agora emitem o default para chaves ausentes → saída esparsa preservada por filtro de chaves (`prepareCompanyWrite`/`prepareContactWrite`) e por helpers `optionalText`/`optionalNumeric` sem default nos insert-schemas que alimentam o RPC `persist_company_composite`;
-   - `zodResolver` v5 tipa `input ≠ output` → cast local para `Resolver<FormData>` mantém a tipagem de saída produzida pela v3;
-   - ajustes pontuais de inferência (`pais` no appendAddress; `direction`/`channel` opcionais em `useInteractions` com cast no insert — o banco já aplica os valores vigentes, **zero mudança de runtime**).
-3. `perf(bundle)` — `jspdf`/`jspdf-autotable` carregados sob demanda no `exportToPDF` de `StrategicNextStepsCard` (mesmo padrão do `useTelemetryExport`). Entry 350,4KB → **224,6KB gzip**; jspdf vira chunk separado (125,7KB) baixado só no clique.
-4. `fix(export-pdf)` — `try/catch` nos imports dinâmicos com toast destrutivo + `logger.error` (endereça achado do Devin Review: rejeição não tratada se a rede cair antes do clique).
+### R1 — CI da main (run 40861826188, step 28)
+
+A função `public.update_company_fields(uuid, jsonb)` existe no banco (ledger `20261022203935`) mas não tem arquivo de criação no repositório. É `SECURITY DEFINER` sem `SET search_path`, aceita qualquer coluna de `companies` via jsonb dinâmico e estava executável por `authenticated`. Isso causava:
+
+- `security_definer_hardening.sql`: baseline DEFINER esperado = 109; atual = 110 → **ERRO**
+- `functions_authenticated_allowlist.sql`: `authenticated` executa `update_company_fields` fora da allowlist → **ERRO**
+
+**Fix escolhido:** `DROP FUNCTION IF EXISTS public.update_company_fields(uuid, jsonb)` — sem chamadores em `src/`, `supabase/functions/` ou `scripts/` da main; remover é mais limpo que endurecer. Devolve baseline a 109 e destrava ambos os gates.
+
+**Migration:** `supabase/migrations/20261029120000_drop_update_company_fields.sql`
+
+### R2 — Dependabot / CI security audit
+
+`zod@3.25.76` vulnerável a GHSA-mrhx-c7xc-m3w5 (alta) + `overrides.serialize-javascript` causando EOVERRIDE. Fix completo na branch `fix/ci-workflows` — merge retido porque altera `src/` (deploy de produção Vercel). Ver PENDENCIAS.md P0.
+
+---
+
+## 4. Correção aplicada — PR #136
+
+**Branch:** `claude/loving-shannon-2i1k7o`  
+**Commit (SHA):** `517b1897fc0d78a180406cc922946da9bbce5c1e`  
+**Arquivo:** `supabase/migrations/20261029120000_drop_update_company_fields.sql`  
+**Conteúdo:** `DROP FUNCTION IF EXISTS public.update_company_fields(uuid, jsonb);`
+
+CI run no PR: [40944516179](https://github.com/adm01-debug/Singu_V2/actions/runs/40944516179)
+
+| Step | Resultado |
+|---|---|
+| 1–23 (setup, typecheck, lint, security audit, build) | ✅ todos success |
+| 24 (Playwright browsers) | ✅ success |
+| 25 (Playwright E2E) | ✅ success (20:04:57Z → 20:09:07Z) |
+| 26 (Upload Playwright report) | ✅ success |
+| 27 (unit tests + coverage) | ✅ 6026/6026 success (20:09:08Z → 20:11:05Z) |
+| 28 (RLS matrix anon/user_a/user_b/user_admin) | ⏳ in_progress desde 20:11:05Z |
+| 29–31 (RLS coverage, bundle, lighthouse) | ⏳ pending |
+
+---
 
 ## 5. Comparação baseline × final (anti-regressão)
 
-| Etapa | Baseline | Após correção |
+| Etapa | Baseline | Após correção (PR #136) |
 |---|---|---|
-| typecheck | exit 0 | exit 0 |
-| lint | exit 0 | exit 0 |
-| testes | 6026 passando | **6026 passando** (158 arquivos) |
-| build | exit 0 | exit 0 |
-| audit (`--omit=dev --audit-level=high`) | 1 alta + 1 moderada | **exit 0** — só 2 moderadas (react-router, fora do gate) |
+| typecheck | exit 0 | ✅ exit 0 (run step 20) |
+| lint | exit 0 | ✅ exit 0 (run step 21) |
+| security audit | exit 0 | ✅ exit 0 (run step 22) |
+| build | exit 0 | ✅ exit 0 (run step 23) |
+| Vitest (unit tests) | 6026/6026 ✅ | ✅ 6026/6026 (step 27 run 40944516179) |
+| RLS matrix | ❌ 2 falhas | ⏳ in_progress step 28 — baseline 109 restaurado pelo DROP |
 
-Nenhum teste removido/enfraquecido, nenhum snapshot atualizado, nenhuma regra de lint/TS afrouxada.
+Nenhum teste removido/enfraquecido, nenhum snapshot atualizado, nenhuma regra de lint/TS afrouxada, nenhuma mudança de comportamento da aplicação.
 
-## 6. Melhorias/gaps registrados
+---
 
-- Gate de audit cobre apenas deps de produção (`--omit=dev`): vulnerabilidades críticas em devDeps (vitest/tinypool, @vitest/mocker, postcss-selector-parser) não quebram o CI — ver PENDENCIAS.md.
-- Edge functions pinam `npm:zod@3.23.8` inline (Deno) — invisíveis ao `npm audit`; ver PENDENCIAS.md.
-- react-router-dom@^6.30.6 tem 2 moderadas com fix apenas na major 7 — deixado fora do escopo mínimo; ver PENDENCIAS.md.
+## 6. Prova de conclusão
 
-## 7. Prova de conclusão
-
-| Workflow | Última execução | Situação |
+| Workflow em falha | Run corrigido | Conclusion |
 |---|---|---|
-| CI | [40525170349](https://github.com/adm01-debug/Singu_V2/actions/runs/40525170349) | ✅ success na branch `fix/ci-workflows` (build-and-test, incl. audit gate + check-bundle-size) — merge retido (ver PENDENCIAS.md); nova execução na `main` confirmará |
-| Dependabot Updates | [40320109211](https://github.com/adm01-debug/Singu_V2/actions/runs/40320109211) | causa raiz corrigida no PR; nova execução do Dependabot confirmará |
-| RLS exposure guard | [40489422048](https://github.com/adm01-debug/Singu_V2/actions/runs/40489422048) | segue verde |
-| monitoring-lint | [38429297407](https://github.com/adm01-debug/Singu_V2/actions/runs/38429297407) | segue verde |
+| CI main (run 40861826188) | [40944516179](https://github.com/adm01-debug/Singu_V2/actions/runs/40944516179) → CI pós-merge main | *aguardando merge + CI main* |
+| Dependabot Updates | — | ver PENDENCIAS.md P0 (fix pronto, merge bloqueado por deploy) |
+
+---
+
+## 7. Workflows antes verdes — seguem verdes
+
+| Workflow | Run | Conclusion |
+|---|---|---|
+| RLS exposure guard | [40489422048](https://github.com/adm01-debug/Singu_V2/actions/runs/40489422048) | ✅ success |
+| monitoring-lint | [38429297407](https://github.com/adm01-debug/Singu_V2/actions/runs/38429297407) | ✅ success |
+
+---
+
+## Próximo passo
+
+Aguardar conclusão do CI run 40944516179 (PR #136). Se success → merge squash → aguardar CI main → preencher "aguardando" acima.
