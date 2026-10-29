@@ -8,6 +8,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 - Criar uma oportunidade usa os argumentos de título e valor definidos pela RPC, com tipos derivados do banco. O formulário só anuncia sucesso e limpa os campos após receber o identificador do negócio criado; falhas preservam os dados preenchidos.
+- **Recuperação da ficha:** falhas de recarga mantêm os dados confirmados visíveis, com aviso e nova tentativa. Erros da busca externa do próprio contato preservam seus códigos para retry e mensagens seguras; somente ausência confirmada nas duas fontes limpa a ficha e suas relações.
 
 - Verificações de RLS e publicação rejeitam coletas incompletas, inventários inválidos e health checks sem confirmação real de saúde. Uma falha de coleta preserva o baseline mesmo com `--update`.
 - O baseline de RLS exige todos os perfis declarados e bloqueia a coleta sem o JWT necessário; os runbooks de publicação preparam a sessão de teste no destino e distinguem ausência de atividade de email de saúde comprovada.
