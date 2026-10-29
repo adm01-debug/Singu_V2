@@ -7,6 +7,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+- O webhook Evolution exige dono único para a instância, restringe contatos e atualizações ao proprietário e impede que um identificador de mensagem sobrescreva outra conta ou instância. Instâncias sem vínculo inequívoco são recusadas, sem atribuição ao primeiro perfil.
+
 - Verificações de RLS e publicação rejeitam coletas incompletas, inventários inválidos e health checks sem confirmação real de saúde. Uma falha de coleta preserva o baseline mesmo com `--update`.
 - O baseline de RLS exige todos os perfis declarados e bloqueia a coleta sem o JWT necessário; os runbooks de publicação preparam a sessão de teste no destino e distinguem ausência de atividade de email de saúde comprovada.
 

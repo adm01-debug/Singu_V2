@@ -5,7 +5,7 @@ import { readEventData, requireMessageData, requireMessageKey, messageUpdateData
 // ========================
 // MESSAGES.UPSERT - Nova mensagem recebida/enviada
 // ========================
-export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload: unknown, instance: string) {
+export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload: unknown, instance: string, ownerId: string) {
   const data = requireMessageData(payload);
   const phoneNumber = data.key?.remoteJid?.replace('@s.whatsapp.net', '').replace('@g.us', '');
   const isFromMe = data.key?.fromMe;
@@ -67,7 +67,7 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
   // SERVER_ACK mantém o valor inicial 'sent'
 
   // Busca contato local, depois externo; cria se necessário
-  const { contactId, userId, companyId, source } = await findContactByPhone(supabase, phoneNumber || '', instance);
+  const { contactId, userId, companyId, source } = await findContactByPhone(supabase, phoneNumber || '', ownerId);
 
   // Ingestão de mensagens, vínculo com empresa e tratamento de áudio
   let dbMessageId: string | null = null;
@@ -95,11 +95,22 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
       },
     };
 
-    const { data: upsertedMsg, error: msgError } = await supabase
+    let { data: upsertedMsg, error: msgError } = await supabase
       .from('whatsapp_messages')
-      .upsert(messageData, { onConflict: 'message_id' })
+      .insert(messageData)
       .select('id')
       .single();
+
+    if (msgError?.code === '23505') {
+      const retry = await supabase.from('whatsapp_messages').update(messageData)
+        .eq('message_id', messageId).eq('user_id', userId).eq('instance_name', instance)
+        .select('id').maybeSingle();
+      upsertedMsg = retry.data;
+      msgError = retry.error;
+    }
+    if (msgError || !upsertedMsg) {
+      return jsonResponse({ error: 'Não foi possível confirmar a mensagem no escopo da instância' }, 500);
+    }
 
     if (!msgError && upsertedMsg) {
       await bestEffortWrite(supabase.from('whatsapp_ingestion_logs').insert({
@@ -111,11 +122,6 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
         details: { dbMessageId: upsertedMsg.id, source, companyId }
       }), 'ingestion_log insert error:');
       dbMessageId = upsertedMsg.id;
-    } else if (msgError) {
-      console.error('Error upserting whatsapp_message:', msgError.message);
-      // Recupera a mensagem criada em paralelo
-      const { data: fallbackMsg } = await supabase.from('whatsapp_messages').select('id').eq('message_id', messageId).single();
-      if (fallbackMsg) dbMessageId = fallbackMsg.id;
     }
 
     // Transcrição automática de áudio e anexos de voz
@@ -165,7 +171,7 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
       await bestEffortWrite(supabase
         .from('contacts')
         .update({ first_name: senderName, last_name: '' })
-        .eq('id', contactId), 'contact name update error:');
+        .eq('id', contactId).eq('user_id', userId), 'contact name update error:');
     }
 
     const safeSenderName = senderName ? String(senderName).slice(0, 200) : 'Desconhecido';
@@ -226,7 +232,7 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
 // ========================
 // MESSAGES.UPDATE - Atualização do status da mensagem (entregue, lida etc.)
 // ========================
-export async function handleMessageUpdate(supabase: SupabaseAdminClient, payload: unknown, instance: string) {
+export async function handleMessageUpdate(supabase: SupabaseAdminClient, payload: unknown, instance: string, userId: string) {
   const data = readEventData(payload, messageUpdateData);
 
   if (!data?.key?.id) {
@@ -252,6 +258,7 @@ export async function handleMessageUpdate(supabase: SupabaseAdminClient, payload
     const { error } = await supabase
       .from('whatsapp_messages')
       .update(updates)
+      .eq('user_id', userId).eq('instance_name', instance)
       .eq('message_id', data.key.id);
 
     if (error) {
@@ -265,7 +272,7 @@ export async function handleMessageUpdate(supabase: SupabaseAdminClient, payload
 // ========================
 // SEND.MESSAGE - Confirmação da mensagem enviada
 // ========================
-export async function handleSendMessage(supabase: SupabaseAdminClient, payload: unknown, instance: string) {
+export async function handleSendMessage(supabase: SupabaseAdminClient, payload: unknown, instance: string, userId: string) {
   const data = readEventData(payload, sendMessageData);
 
   if (data?.key?.id) {
@@ -275,6 +282,7 @@ export async function handleSendMessage(supabase: SupabaseAdminClient, payload: 
         status: 'sent',
         updated_at: new Date().toISOString(),
       })
+      .eq('user_id', userId).eq('instance_name', instance)
       .eq('message_id', data.key.id);
   }
 

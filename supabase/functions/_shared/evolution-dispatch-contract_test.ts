@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
-import { withHandler } from "./edge-test-harness.ts";
+import { withEvolutionHandler } from "./edge-test-harness.ts";
 
 const auth = { apikey: "evolution-teste" };
 const owner = "11111111-1111-4111-8111-111111111111";
@@ -7,7 +7,7 @@ const contact = "22222222-2222-4222-8222-222222222222";
 
 Deno.test("dispatcher Evolution mantém mensagens.update e ignora atualização sem chave", async () => {
   const writes: Array<Record<string, unknown>> = [];
-  await withHandler("evolution-webhook", async req => {
+  await withEvolutionHandler(async req => {
     assertEquals(req.method, "PATCH");
     const url = new URL(req.url);
     assertEquals(url.pathname, "/rest/v1/whatsapp_messages");
@@ -31,7 +31,7 @@ Deno.test("dispatcher Evolution mantém mensagens.update e ignora atualização 
 
 Deno.test("dispatcher Evolution mantém transições de conexão por instância", async () => {
   const writes: Array<Record<string, unknown>> = [];
-  await withHandler("evolution-webhook", async req => {
+  await withEvolutionHandler(async req => {
     const url = new URL(req.url);
     assertEquals(req.method, "PATCH");
     assertEquals(url.pathname, "/rest/v1/whatsapp_instances");
@@ -50,7 +50,7 @@ Deno.test("dispatcher Evolution mantém transições de conexão por instância"
 
 Deno.test("dispatcher Evolution mantém contato e seus filtros sem criar gravação para corpo vazio", async () => {
   let writes = 0;
-  await withHandler("evolution-webhook", async req => {
+  await withEvolutionHandler(async req => {
     writes++;
     const url = new URL(req.url);
     assertEquals(req.method, "PATCH");
@@ -71,7 +71,7 @@ Deno.test("dispatcher Evolution mantém contato e seus filtros sem criar gravaç
 });
 
 Deno.test("dispatcher Evolution mantém presença e eventos desconhecidos sem gravar", async () => {
-  await withHandler("evolution-webhook", () => { throw new Error("Gravação indevida"); }, async submit => {
+  await withEvolutionHandler(() => { throw new Error("Gravação indevida"); }, async submit => {
     let response = await submit({ event: "presence.update", instance: "teste", data: { id: "presenca-1" } }, auth);
     assertEquals(await response.json(), { status: "logged", presenceId: "presenca-1" });
     response = await submit({ event: "evento.novo", instance: "teste", data: {} }, auth);
@@ -81,7 +81,7 @@ Deno.test("dispatcher Evolution mantém presença e eventos desconhecidos sem gr
 
 Deno.test("dispatcher Evolution mantém chamada, contato e interação de vídeo", async () => {
   const interactions: Array<Record<string, unknown>> = [];
-  await withHandler("evolution-webhook", async req => {
+  await withEvolutionHandler(async req => {
     const url = new URL(req.url);
     if (req.method === "GET") {
       assertEquals(url.pathname, "/rest/v1/contacts");
@@ -105,7 +105,7 @@ Deno.test("dispatcher Evolution mantém chamada, contato e interação de vídeo
 
 Deno.test("dispatcher Evolution mantém confirmação de envio e chave de mensagem", async () => {
   let writes = 0;
-  await withHandler("evolution-webhook", async req => {
+  await withEvolutionHandler(async req => {
     writes++;
     const url = new URL(req.url);
     assertEquals(req.method, "PATCH");
@@ -124,7 +124,7 @@ Deno.test("dispatcher Evolution mantém confirmação de envio e chave de mensag
 
 Deno.test("dispatcher Evolution conserva o tratamento anterior para data em lista", async () => {
   const writes: Array<{ path: string; body: unknown }> = [];
-  await withHandler("evolution-webhook", async req => {
+  await withEvolutionHandler(async req => {
     writes.push({ path: new URL(req.url).pathname, body: await req.json() });
     return new Response(null, { status: 204 });
   }, async submit => {

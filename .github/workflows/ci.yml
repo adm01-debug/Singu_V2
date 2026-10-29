@@ -49,7 +49,7 @@ jobs:
         run: deno check --no-lock --node-modules-dir=none supabase/functions/*/index.ts
 
       - name: Validar contratos de tipos, webhook e SDK
-        run: deno test --no-lock --node-modules-dir=none --allow-net=127.0.0.1,0.0.0.0 --allow-run --allow-env=HOME,SUPABASE_URL,SUPABASE_SERVICE_ROLE_KEY supabase/functions/_shared/edge-types-contract_test.ts supabase/functions/_shared/evolution-dispatch-contract_test.ts supabase/functions/_shared/sdk-runtime-contract_test.ts
+        run: deno test --no-lock --node-modules-dir=none --allow-net=127.0.0.1,0.0.0.0 --allow-run --allow-env=HOME,SUPABASE_URL,SUPABASE_SERVICE_ROLE_KEY supabase/functions/_shared/edge-types-contract_test.ts supabase/functions/_shared/evolution-dispatch-contract_test.ts supabase/functions/_shared/sdk-runtime-contract_test.ts supabase/functions/_shared/evolution-ownership-contract_test.ts
 
       - name: Validar projeções e isolamento tenant
         run: deno test --node-modules-dir=none supabase/functions/_shared/select-projection_test.ts supabase/functions/_shared/tenant-guard_test.ts

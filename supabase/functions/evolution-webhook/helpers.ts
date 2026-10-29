@@ -9,8 +9,15 @@ export function jsonResponse(data: unknown, status = 200) {
   });
 }
 
+export async function resolveInstanceOwner(supabase: SupabaseAdminClient, instance: string): Promise<string | null> {
+  const { data, error } = await supabase.from('whatsapp_instances')
+    .select('user_id').eq('instance_name', instance).limit(2);
+  if (error) throw new Error('Não foi possível confirmar o proprietário da instância');
+  return data?.length === 1 && data[0].user_id ? data[0].user_id : null;
+}
+
 // Busca contato pelo telefone: primeiro no banco local, depois no externo
-export async function findContactByPhone(supabase: SupabaseAdminClient, phoneNumber: string, instance: string): Promise<{
+export async function findContactByPhone(supabase: SupabaseAdminClient, phoneNumber: string, userId: string): Promise<{
   contactId: string | null;
   userId: string | null;
   companyId: string | null;
@@ -32,16 +39,18 @@ export async function findContactByPhone(supabase: SupabaseAdminClient, phoneNum
 
   // 1. Busca contatos LOCAIS numa consulta com todas as variantes via OR
   const localOrFilter = phoneVariants.map(v => `whatsapp.eq.${v},phone.eq.${v}`).join(',');
-  const { data: localContacts } = await supabase
+  const { data: localContacts, error: localError } = await supabase
     .from('contacts')
     .select('id, user_id, company_id')
+    .eq('user_id', userId)
     .or(localOrFilter)
     .limit(1);
+  if (localError) throw new Error('Não foi possível consultar os contatos locais');
 
   if (localContacts && localContacts.length > 0) {
     return {
       contactId: localContacts[0].id,
-      userId: localContacts[0].user_id,
+      userId,
       companyId: localContacts[0].company_id,
       source: 'local',
     };
@@ -59,40 +68,18 @@ export async function findContactByPhone(supabase: SupabaseAdminClient, phoneNum
     const { data: extContacts, error: extError } = await externalSupabase
       .from('contacts')
       .select('id, company_id, first_name, last_name, cargo, whatsapp, phone')
+      .eq('user_id', userId)
       .or(extOrFilter)
       .limit(1);
 
     if (extError) {
-      console.error('Error searching external contacts:', extError.message);
+      throw new Error('Não foi possível consultar os contatos externos');
     } else if (extContacts && extContacts.length > 0) {
       const extContact = extContacts[0];
 
-      // Primeiro tenta encontrar o usuário associado à instância
-      const { data: instanceData } = await supabase
-        .from('whatsapp_instances')
-        .select('user_id')
-        .eq('instance_name', instance)
-        .maybeSingle();
-
-      let defaultUserId = instanceData?.user_id;
-
-      if (!defaultUserId) {
-        // Em último caso, usa o primeiro usuário de profiles
-        const { data: profiles } = await supabase
-          .from('profiles')
-          .select('id')
-          .limit(1);
-        defaultUserId = profiles?.[0]?.id || null;
-      }
-
-      if (!defaultUserId) {
-        console.error('No user found in profiles to assign interaction');
-        return { contactId: extContact.id, userId: null, companyId: extContact.company_id, source: 'external' };
-      }
-
       return {
         contactId: extContact.id,
-        userId: defaultUserId,
+        userId,
         companyId: extContact.company_id,
         source: 'external',
       };
@@ -104,23 +91,10 @@ export async function findContactByPhone(supabase: SupabaseAdminClient, phoneNum
   // 3. Se não houver correspondência, cria contato local
   // Criação de contato para telefone sem correspondência;
 
-  // Busca o usuário padrão
-  const { data: profiles } = await supabase
-    .from('profiles')
-    .select('id')
-    .limit(1);
-
-  const defaultUserId = profiles?.[0]?.id || null;
-
-  if (!defaultUserId) {
-    console.error('No user found to create contact');
-    return { contactId: null, userId: null, companyId: null, source: null };
-  }
-
   const { data: newContact, error: createError } = await supabase
     .from('contacts')
     .insert({
-      user_id: defaultUserId,
+      user_id: userId,
       first_name: 'WhatsApp',
       last_name: cleanPhone,
       whatsapp: cleanPhone,
@@ -134,13 +108,13 @@ export async function findContactByPhone(supabase: SupabaseAdminClient, phoneNum
 
   if (createError) {
     console.error('Error creating contact:', createError.message);
-    return { contactId: null, userId: defaultUserId, companyId: null, source: null };
+    throw new Error('Não foi possível criar o contato');
   }
 
   // Novo contato criado: ${newContact.id}`);
   return {
     contactId: newContact.id,
-    userId: defaultUserId,
+    userId,
     companyId: null,
     source: 'created',
   };

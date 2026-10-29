@@ -82,3 +82,18 @@ export async function withHandler(
     await api.shutdown();
   }
 }
+
+export function withEvolutionHandler(
+  backend: (req: Request) => Response | Promise<Response>,
+  check: (submit: (body: unknown, headers?: Record<string, string>) => Promise<Response>) => Promise<void>,
+) {
+  return withHandler("evolution-webhook", req => {
+    const url = new URL(req.url);
+    if (req.method === "GET" && url.pathname === "/rest/v1/whatsapp_instances") {
+      assertEquals(url.searchParams.get("instance_name"), "eq.teste");
+      assertEquals(url.searchParams.get("limit"), "2");
+      return Response.json([{ user_id: owner }]);
+    }
+    return backend(req);
+  }, check);
+}
