@@ -79,14 +79,18 @@ export function useContactDetail(contactId: string | undefined) {
       if (localContact) {
         contactData = normalizeExternalContact(localContact as unknown as Record<string, unknown>);
       } else {
-        const { data: externalContacts } = await queryExternalData<Contact>({
+        const { data: externalContacts, error: externalError } = await queryExternalData<Contact>({
           table: 'contacts',
           filters: [{ type: 'eq', column: 'id', value: contactId! }],
         });
+        if (externalError) throw externalError;
         contactData = externalContacts?.[0] ? normalizeExternalContact(externalContacts[0] as unknown as Record<string, unknown>) : null;
       }
 
-      if (!contactData) throw new Error('Contato não encontrado');
+      if (!contactData) return { contact: null, company: null, interactions: [], insights: [], alerts: [] };
+
+      const confirmed = queryClient.getQueryData<ContactDetailData>(queryKey)?.contact;
+      if (confirmed && confirmed.version > contactData.version) contactData = confirmed;
 
       // 2. Fetch company (depends on contactData.company_id — must be sequential)
       let companyData: Company | null = null;
@@ -178,6 +182,9 @@ export function useContactDetail(contactId: string | undefined) {
         if (!prev?.contact || prev.contact.version > updatedContact.version) return prev;
         return { ...prev, contact: updatedContact };
       });
+      if (queryClient.getQueryData<ContactDetailData>(queryKey)?.contact) {
+        await queryClient.invalidateQueries({ queryKey, exact: true });
+      }
       toast({ title: 'Contato atualizado', description: 'As alterações foram salvas.' });
       return updatedContact;
     } catch (err) {

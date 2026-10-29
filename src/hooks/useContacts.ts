@@ -131,6 +131,7 @@ async function fetchContactsPage(companyId?: string, page = 0) {
   return {
     items: (data || []).map(normalizeExternalContact),
     totalCount: isFirstPage ? count : null,
+    endReached: (data?.length ?? 0) < PAGE_SIZE,
   };
 }
 
@@ -146,7 +147,7 @@ export function useContacts(
   const queryKey = useMemo(() => ['contacts', companyId ?? '__all__', user?.id], [companyId, user?.id]);
   const externalEnabled = options?.enabled ?? true;
 
-  type Page = { items: Contact[]; totalCount: number | null };
+  type Page = { items: Contact[]; totalCount: number | null; endReached?: boolean };
 
   const {
     data,
@@ -162,9 +163,11 @@ export function useContacts(
     queryFn: ({ pageParam = 0 }) => fetchContactsPage(companyId, pageParam as number),
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.endReached || lastPage.items.length === 0) return undefined;
       const loaded = allPages.reduce((sum, p) => sum + p.items.length, 0);
-      if (lastPage.totalCount != null) {
-        return loaded < lastPage.totalCount ? allPages.length : undefined;
+      const total = allPages.find(page => page.totalCount != null)?.totalCount;
+      if (total != null) {
+        return loaded < total ? allPages.length : undefined;
       }
       return lastPage.items.length === PAGE_SIZE ? allPages.length : undefined;
     },
@@ -223,7 +226,7 @@ export function useContacts(
   const createContact = async (contact: Omit<ContactInsert, 'user_id'>) => {
     if (!user) return null;
     try {
-      await queryClient.cancelQueries({ queryKey, exact: true });
+      if (queryClient.getQueryData(queryKey)) await queryClient.cancelQueries({ queryKey, exact: true });
       const externalFields = prepareContactWrite(contact);
       const { data, error } = await insertExternalData<unknown>('contacts', { ...externalFields, user_id: user.id });
       if (error) throw error;
@@ -231,11 +234,16 @@ export function useContacts(
       if (data) {
         const normalized = normalizeExternalContact(data);
         await queryClient.cancelQueries({ queryKey, exact: true });
-        queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
-          if (!prev) return { pages: [{ items: [normalized], totalCount: null }], pageParams: [0] };
-          const firstPage = prev.pages[0] ?? { items: [], totalCount: null };
-          const updatedFirst = { ...firstPage, items: [normalized, ...firstPage.items], totalCount: firstPage.totalCount == null ? null : firstPage.totalCount + 1 };
-          return { ...prev, pages: [updatedFirst, ...prev.pages.slice(1)] };
+        if (!queryClient.getQueryData<InfiniteData<Page>>(queryKey)?.pages.length) {
+          await queryClient.invalidateQueries({ queryKey, exact: true });
+        } else queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
+          if (!prev || prev.pages.some(page => page.items.some(c => c.id === normalized.id))) return prev;
+          const items = [normalized, ...prev.pages.flatMap(page => page.items)];
+          return { ...prev, pages: prev.pages.map((page, index) => ({
+            ...page, items: items.slice(index * PAGE_SIZE, (index + 1) * PAGE_SIZE),
+            endReached: page.endReached && items.length <= prev.pages.length * PAGE_SIZE,
+            totalCount: page.totalCount == null ? null : page.totalCount + 1,
+          })) };
         });
         toast({ title: 'Contato criado', description: `${normalized.first_name} ${normalized.last_name} foi adicionado com sucesso.` });
         logActivity({ type: 'created', entityType: 'contact', entityId: normalized.id, entityName: `${normalized.first_name} ${normalized.last_name}`.trim(), description: 'Contato criado' });
@@ -252,7 +260,7 @@ export function useContacts(
 
   const updateContact = async (id: string, updates: ContactUpdate, expectedVersion?: number): Promise<Contact | null> => {
     if (!user) return null;
-    await queryClient.cancelQueries({ queryKey, exact: true });
+    if (queryClient.getQueryData(queryKey)) await queryClient.cancelQueries({ queryKey, exact: true });
     const previous = queryClient.getQueryData<InfiniteData<Page>>(queryKey);
     const targetContact = previous?.pages.flatMap(p => p.items).find(c => c.id === id);
 
@@ -275,6 +283,9 @@ export function useContacts(
       const normalized = normalizeExternalContact(data);
       if (normalized) {
         await queryClient.cancelQueries({ queryKey, exact: true });
+        if (!queryClient.getQueryData<InfiniteData<Page>>(queryKey)?.pages.length) {
+          await queryClient.invalidateQueries({ queryKey, exact: true });
+        }
         queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
           if (!prev) return prev;
           return {
