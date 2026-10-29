@@ -57,11 +57,16 @@ psql "$DEST_DB_URL" -f sql/mark-must-reset.sql  # marca provider=email
 
 ### 4. Edge Functions
 
+Antes da verificação, prepare `SUPABASE_ANON_KEY` e um `HEALTH_JWT` de usuário do
+destino pelo [login de teste documentado](MIGRATION_EDGE_FUNCTIONS.md#6-verificação).
+Na preparação, `DEST_REF` deve ser o mesmo projeto de `NEW_REF`. Não use o PAT da
+CLI como JWT. Sessão ausente ou expirada não confirma a saúde das funções.
+
 ```bash
 ./functions/preflight-secrets.sh          # P0.3 — falha se faltar secret
 ./functions/set-secrets.sh                # aplica secrets.env no destino
 ./functions/deploy-all.sh                 # 108 funções
-./functions/verify-deploy.sh
+./functions/verify-deploy.sh --project-ref "$NEW_REF"
 OLD_REF=$OLD_REF NEW_REF=$NEW_REF ./functions/rewrite-cron-urls.sh > /tmp/cron.sql
 psql "$DEST_DB_URL" -f /tmp/cron.sql      # P0.4
 ```

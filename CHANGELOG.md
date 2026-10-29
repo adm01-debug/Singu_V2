@@ -8,6 +8,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 - O webhook Evolution aceita timestamps numéricos enviados como texto, rejeita valores não finitos e preserva a época zero ao registrar a mensagem.
+- Verificações de RLS e publicação rejeitam coletas incompletas, inventários inválidos e health checks sem confirmação real de saúde. Uma falha de coleta preserva o baseline mesmo com `--update`.
+- O baseline de RLS exige todos os perfis declarados e bloqueia a coleta sem o JWT necessário; os runbooks de publicação preparam a sessão de teste no destino e distinguem ausência de atividade de email de saúde comprovada.
 
 - **Ficha de contato:** erros ao consultar empresa, interações, insights ou alertas preservam o último conjunto confirmado no cache e expõem a falha para nova tentativa, inclusive erros Supabase que não são instâncias de `Error`. A ficha só repete automaticamente falhas transitórias identificadas, incluindo indisponibilidade declarada pela fonte externa e gateways 520–524; erros permanentes de permissão, esquema e requisição aguardam tentativa manual. As mensagens usam o filtro existente, incluindo respostas de schema cache e Edge Functions, sem expor detalhes internos nem alterar os códigos usados pelo retry.
 - A ficha e a lista descartam leituras anteriores à gravação e respostas de escrita com versão inferior à já confirmada. Edições e exclusões mantêm os dados confirmados até a resposta do servidor, sem rollback integral que apague outra edição. Excluir/Desfazer atualiza a ficha exata do proprietário; restaurar exige identidade e estado ativo confirmados.
