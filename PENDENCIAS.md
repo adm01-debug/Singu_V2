@@ -47,11 +47,15 @@ Atualizado em: 2026-10-29
 
 ---
 
-## P7 — CI da main (run 40947707474) travado em `queued` sem runner
+## P7 — CI da main travado: `runner_id=0` em ambas as tentativas — REQUER AÇÃO DO JOAQUIM
 
-- **Workflow afetado:** CI (run [40947707474](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474))
-- **SHA:** `7566982e70ed691df11727565a90acc76c345f8d` (merge squash do PR #136)
-- **Criado em:** 2026-10-29T20:17:32Z — `updated_at` igual ao `created_at`; nenhum runner GitHub Actions foi alocado desde a criação.
-- **Causa provável:** escassez temporária de runners na conta free do GitHub Actions. O run não foi cancelado e pode iniciar a qualquer momento quando um runner ficar disponível. Bloqueio fora do controle da sessão.
-- **O que acontece quando o runner alocar:** CI executará os 31 steps; step 28 (RLS matrix) conecta ao banco de produção (~5–30 min); se concluir `conclusion=success`, a correção do CI principal (run 40861826188) estará validada.
-- **O que você precisa fazer (Joaquim):** nenhuma ação imediata. Se o run permanecer `queued` por mais de 1 hora sem progredir, cancele em https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474 e clique em "Re-run all jobs" para forçar nova tentativa.
+- **Workflow afetado:** CI (run [40947707474](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474), SHA `7566982e`, merge do PR #136)
+- **Sintoma exato:** ambas as tentativas (attempt 1 e attempt 2) ficaram em `status=queued` com `runner_id=0`, `runner_name=""` e `steps=[]` — o GitHub nunca alocou um runner ubuntu-latest.
+- **Causa provável:** esgotamento dos minutos gratuitos de GitHub Actions (2.000 min/mês no free tier). O run do PR #136 (40944516179) consumiu ~20 min de ubuntu-latest (31 steps, incluindo E2E e RLS matrix) logo antes do merge; os minutos podem ter se esgotado durante esse run.
+- **Por que é um bloqueio real:** a sessão não tem como forar alocação de runner — isso depende de billing/cota do GitHub. Nenhum workaround disponível: `rerun_workflow` já foi executado e gerou attempt 2 com o mesmo sintoma.
+- **O que você precisa fazer (Joaquim):**
+  1. Acesse https://github.com/settings/billing/summary (ou https://github.com/adm01-debug/settings/billing se for conta de org)
+  2. Verifique se os minutos do GitHub Actions estão esgotados ou se há débito pendente
+  3. Se esgotados: adicione um método de pagamento OU aguarde o reset no início do próximo ciclo de faturação
+  4. Após resolver, re-execute o CI em: https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474 (clicar em "Re-run all jobs")
+  5. Se `conclusion=success`: a correção do CI principal (run 40861826188) estará validada
