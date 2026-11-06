@@ -8,6 +8,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 - O webhook Evolution aceita timestamps numéricos enviados como texto, rejeita valores não finitos e preserva a época zero ao registrar a mensagem.
+
+- **Histórico social:** falhas da consulta não geram biografias, promoções ou pontuações fictícias. Os dois painéis distinguem erro de ausência confirmada, oferecem nova tentativa manual e mantêm dados reais após falha de recarga; consulta e cache são isolados por usuário. Não ativa coleta social nem altera o catálogo do banco.
+- **Recuperação da ficha:** falhas de recarga mantêm os dados confirmados visíveis, com aviso e nova tentativa. Erros da busca externa do próprio contato preservam seus códigos para retry e mensagens seguras; somente ausência confirmada nas duas fontes limpa a ficha e suas relações.
+
 - Verificações de RLS e publicação rejeitam coletas incompletas, inventários inválidos e health checks sem confirmação real de saúde. Uma falha de coleta preserva o baseline mesmo com `--update`.
 - O baseline de RLS exige todos os perfis declarados e bloqueia a coleta sem o JWT necessário; os runbooks de publicação preparam a sessão de teste no destino e distinguem ausência de atividade de email de saúde comprovada.
 
@@ -64,6 +68,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Matriz reconciliada das auditorias e lacunas com estado por achado, evidências e próximos passos, organizada em cinco áreas e vinculada pelo índice.
 
 ### Fixed
+- Transferências de contato e gravações de emails, telefones, endereços e redes sociais aguardam o mesmo bloqueio no banco; o antigo proprietário é recusado quando a transferência termina primeiro. O proxy conserva o JWT do usuário nas escritas, não declara exclusão sem linha afetada e distingue conflitos transitórios (`WRITE_CONFLICT`) de versão obsoleta (`CONCURRENT_EDIT`), sem repetição automática nem contorno de permissões.
 - Emails e telefones relacionados exigem o dono do contato ativo para leitura e escrita de contas comuns, mesmo com policies permissivas antigas; administradores conservam o acesso global somente com MFA confirmado em AAL2. O proprietário também pode manter seus telefones nas instalações que antes permitiam apenas administradores.
 - Histórico novo invalida a reserva comportamental anterior e reinicia a espera, impedindo que a análise ou o erro de um worker antigo consumam o pedido posterior. A geração manual mantém as leituras sob o login do usuário e confirma perfil, histórico e fila pelo serviço após validar a propriedade, rejeitando trocas de proprietário durante a geração.
 - Validações enfileiradas gravam resultado e conclusão da tarefa na mesma transação, com recibo idempotente e token da reserva, evitando registros duplicados após perda da resposta. Gerações manuais concluem pedidos anteriores e preservam os criados após o início da análise; o worker e a reanálise aguardam o prazo completo da IA mais uma margem para persistência.
