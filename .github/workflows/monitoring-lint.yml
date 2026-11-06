@@ -16,7 +16,7 @@ jobs:
   promtool:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: promtool check rules
         run: |
           docker run --rm -v "$PWD:/w" -w /w --entrypoint promtool prom/prometheus:latest \
@@ -25,7 +25,7 @@ jobs:
   amtool:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: amtool check-config
         run: |
           docker run --rm -v "$PWD:/w" -w /w --entrypoint amtool prom/alertmanager:latest \
@@ -34,14 +34,14 @@ jobs:
   runbook-coverage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: check-runbook-coverage
         run: bash scripts/monitoring/check-runbook-coverage.sh
 
   secret-leak-scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: scan exporter for secrets
         run: |
           if grep -REn '(password|secret|token|postgres://)' scripts/migration/verify/exporter/ ; then
