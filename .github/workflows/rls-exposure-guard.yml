@@ -9,7 +9,7 @@ name: RLS exposure guard
 on:
   pull_request:
     paths:
-      - 'supabase/miggrations/**'
+      - 'supabase/migrations/**'
       - 'scripts/rls-matrix/**'
   push:
     branches: [main]
