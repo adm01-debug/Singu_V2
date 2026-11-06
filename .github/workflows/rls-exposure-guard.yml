@@ -9,7 +9,7 @@ name: RLS exposure guard
 on:
   pull_request:
     paths:
-      - 'supabase/migrations/**'
+      - 'supabase/miggrations/**'
       - 'scripts/rls-matrix/**'
   push:
     branches: [main]
@@ -23,7 +23,7 @@ jobs:
   rls-baseline:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-node@v7
         with:
           node-version: '20'
