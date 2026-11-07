@@ -1,11 +1,12 @@
--- replication-slot-idle-guard.sql — Rodada 24/10 (F/gap 21)
+-- replication-slot-idle-guard.sql â€” Rodada 24/10 (F/gap 21)
 -- Slots ativos porem inativos ha > 24h retem WAL indefinidamente ate encher disco.
 \echo '== replication-slot-idle-guard =='
-SELECT slot_name, slot_type, active, restart_lsn,
-       pg_size_pretty(pg_wal_lsn_diff(pg_current_wal_lsn(), restart_lsn)) AS retained,
-       now() - COALESCE(active_pid::text::timestamptz, now()) AS pid_age
-  FROM pg_replication_slots
- ORDER BY pg_wal_lsn_diff(pg_current_wal_lsn(), restart_lsn) DESC NULLS LAST;
+SELECT s.slot_name, s.slot_type, s.active, s.restart_lson,
+       pg_size_pretty(pg_wal_lsn_diff(pg_current_wal_lsn(), s.restart_lsn)) AS retained,
+       now() - a.backend_start AS pid_age
+  FROM pg_replication_slots s
+  LEFT JOIN pg_stat_activity a ON a.pid = s.active_pid
+ ORDER BY pg_wal_lsn_diff(pg_current_wal_lsn(), s.restart_lsn) DESC NULLs LAST;
 DO $$
 DECLARE v_bad int;
 BEGIN
