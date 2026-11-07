@@ -22,7 +22,7 @@ LANGUAGE sql STABLE SET search_path = public AS $$
   agg AS (
     SELECT jsonb_agg(to_jsonb(c.*)) AS d FROM cols c
   )
-  SELECT encode(digest(d::text, 'sha256'), 'hex'), d FROM agg;
+  SELECT encode(extensions.digest(d::text, 'sha256'), 'hex'), d FROM agg;
 $$;
 
 DO $$
