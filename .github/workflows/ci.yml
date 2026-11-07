@@ -159,7 +159,26 @@ jobs:
           PGHOST: ${{ secrets.PGHOST }}
           PGPORT: ${{ secrets.PGPORT }}
           PGUSER: ${{ secrets.PGUSER }}
-          QÔTÔÕÓÔ‘ˆ	ŞÈÙXÜ™]Ë”ÔTÔÕÓÔ‘_BˆÑUPTÑNˆ	ŞÈÙXÜ™]Ë”ÑUPTÑH_Bˆ“×ÕTÑT—ĞNˆ	ŞÈÙXÜ™]Ë”“×ÕTÑT—ĞH_Bˆ“×ÕTÑT—Ğˆ	ŞÈÙXÜ™]Ë”“×ÕTÑT—Ğˆ_Bˆ“×ÕTÑT—ĞQRSˆ	ŞÈÙXÜ™]Ë”“×ÕTÑT—ĞQRSˆ_Bˆ[ˆ˜\Ú\İËÜ›ËÜ[‹œÚ‚ˆH˜[YNˆ“ÈÛİ™\˜YÙH
-X›XËŠˆX›\È]\İ]™H“È
-ÈÛXŞJBˆYˆ	ŞÈÚ]X‹™]™[Û˜[YHOH	Ü[Ü™\]Y\İ	ÈY[™ÕÚ]
-Ú]X‹™]™[œ[Ü™\]Y\İ\Ù\‹›ÙÚ[‹	ÖØ›İIÊH_Bˆ[‚ˆÒÔÕˆ	ŞÈÙXÜ™]Ë”ÒÔÕ_BˆÔÔ•ˆ	ŞÈÙXÜ™]Ë”ÔÔ•_BˆÕTÑTˆ	ŞÈÙXÜ™]Ë”ÕTÑTˆ_Bˆu55tõ$C¢G·²6V7&WG2åu55tõ$B×Ğ¢tDD$4S¢G·²6V7&WG2åtDD$4R×Ğ¢'Vã¢7Â×bôåôU%$õ%õ5DõÓÖb67&—G2öÖ–w&F–öâ÷fW&–g’÷&Ç2Ö6÷fW&vRç7À ¢ÒæÖS¢6†V6²'VæFÆR6—¦R'VFvW@¢'Vã¢æöFR67&—G2ö6†V6²Ö'VæFÆR×6—¦RæÖ§0 ¢ÒæÖS¢Æ–v‡F†÷W6R4’‡W&f÷&Öæ6R'VFvWG2¢–c¢G·²v—F‡V"æWfVçEöæÖRÒwVÆÅ÷&WVW7BrÇÂVæG5v—F‚†v—F‡V"æWfVçBçVÆÅ÷&WVW7BçW6W"æÆöv–âÂu¶&÷EÒr’×Ğ¢'Vã¢ç‚Ò×–W2Æ†6’ö6Æ”ã2ç‚WF÷'Và 
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+          RLS_USER_A: ${{ secrets.RLS_USER_A }}
+          RLS_USER_B: ${{ secrets.RLS_USER_B }}
+          RLS_USER_ADMIN: ${{ secrets.RLS_USER_ADMIN }}
+        run: bash tests/rls/run.sh
+
+      - name: RLS coverage (public.* tables must have RLS + policy)
+        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
+        env:
+          PGHOST: ${{ secrets.PGHOST }}
+          PGPORT: ${{ secrets.PGPORT }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+        run: psql -v ON_ERROR_STOP=1 -f scripts/migration/verify/rls-coverage.sql
+
+      - name: Check bundle size budget
+        run: node scripts/check-bundle-size.mjs
+
+      - name: Lighthouse CI (performance budgets)
+        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
+        run: npx --yes @lhci/cli@0.13.x autorun

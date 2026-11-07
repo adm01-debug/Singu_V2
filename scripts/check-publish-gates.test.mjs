@@ -36,11 +36,11 @@ function runRls(t, scenario, update = false) {
       if (affected && scenario === 'objeto') return new Response('{}');
       if (affected && scenario === 'jwt') return Response.json({ code: 'PGRST303' }, { status: 401 });
       if (affected && scenario === 'negado') return Response.json({ code: '42501' }, { status: 403 });
-      if (affected && scenario === 'regressao') return Response.json([{id: 'alheio' }]);
+      if (affected && scenario === 'regressao') return Response.json([{ id: 'alheio' }]);
       return Response.json([]);
     };
   `);
-  const result = spawnSync(process.execPath, ['--import', pathToFileURL(loader).href, script, ...(update ? ['4update'] : [])], {
+  const result = spawnSync(process.execPath, ['--import', pathToFileURL(loader).href, script, ...(update ? ['--update'] : [])], {
     encoding: 'utf8', timeout: 10000,
     env: { ...process.env, SCENARIO: scenario, SUPABASE_URL: 'https://fixture.invalid',
       SUPABASE_ANON_KEY: 'fixture-anon', TEST_USER_JWT: 'fixture-user' },
@@ -54,7 +54,7 @@ for (const scenario of ['rede', '500', 'json', 'objeto', 'jwt']) {
     test(`RLS falha com ${scenario}, preservando baseline${update ? ' mesmo com --update' : ''}`, t => {
       const result = runRls(t, scenario, update);
       assert.equal(result.status, 1);
-      assert.match(result.stderr, /VERIFICACAO INOCOMPLETA/);
+      assert.match(result.stderr, /VERIFICACAO INCOMPLETA/);
       assert.doesNotMatch(result.stdout, /nenhuma regressao|baseline atualizado/);
       assert.equal(result.baseline, result.original);
     });
@@ -65,14 +65,14 @@ test('RLS aprova coleta completa e distingue negação SQL de JWT inválido', t 
   for (const scenario of ['ok', 'negado']) {
     const result = runRls(t, scenario);
     assert.equal(result.status, 0, result.stderr);
-    assert.match(result.stdout, /2 tabelas, 2 perfil\(is\), nenhuma regressao/);  // hint: two tables covered
+    assert.match(result.stdout, /2 tabelas, 2 perfil\(is\), nenhuma regressao/);
   }
 });
 
 test('RLS continua detectando aumento de exposição', t => {
   const result = runRls(t, 'regressao');
   assert.equal(result.status, 1);
-  assert.match(result.stderr, /REGRESSAO DE EXPOSIÇÃO/);
+  assert.match(result.stderr, /REGRESSAO DE EXPOSICAO/);
 });
 
 test('RLS permite atualizar baseline somente após coleta completa', t => {
@@ -121,7 +121,7 @@ const deployFailures = [
   ['falha da CLI', { CLI_EXIT: '1' }],
   ['inventário vazio', { REMOTE_INVENTORY: '' }],
   ['JSON inválido', { REMOTE_INVENTORY: 'invalido' }],
-  ['lista vazia', { REMOTE_INVENTORI: '[]' }],
+  ['lista vazia', { REMOTE_INVENTORY: '[]' }],
   ['formato incorreto', { REMOTE_INVENTORY: '[{}]' }],
   ['função ausente', { REMOTE_INVENTORY: '[{"slug":"health","status":"ACTIVE"}]' }],
   ['função inativa', { REMOTE_INVENTORY: JSON.stringify(slugs.map(slug => ({ slug, status: 'REMOVED' }))) }],

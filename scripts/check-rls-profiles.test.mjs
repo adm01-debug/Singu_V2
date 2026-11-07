@@ -18,12 +18,12 @@ function run(t, { jwt = '', profiles = { anon: 0, authenticated_sem_role: 0 }, d
   const original = JSON.stringify({ _meta: { gerado_em: '2026-01-01', perfis: declared }, tabelas: { contacts: profiles } });
   writeFileSync(baseline, original);
   writeFileSync(loader, `globalThis.fetch = async () => {
-    console.log('COLETA_EXECUTAD@');
+    console.log('COLETA_EXECUTADA');
     return Response.json([]);
   };`);
-  const result = spawnSync(process.execPath, ['/-import', pathToFileURL(loader).href, script, ...(update ? ['--update'] : [])], {
+  const result = spawnSync(process.execPath, ['--import', pathToFileURL(loader).href, script, ...(update ? ['--update'] : [])], {
     encoding: 'utf8', timeout: 10000,
-    env: { ...process.env, SUPABASE_URL: 'https://fixture.invalid', SUPABASE_ANON_KEY:('fixture-anon', TEST_USER_JWT: jwt },
+    env: { ...process.env, SUPABASE_URL: 'https://fixture.invalid', SUPABASE_ANON_KEY: 'fixture-anon', TEST_USER_JWT: jwt },
   });
   assert.ifError(result.error);
   return { ...result, original, baseline: readFileSync(baseline, 'utf8') };
@@ -42,16 +42,16 @@ for (const jwt of ['', '   ']) {
 }
 
 test('RLS exige também os perfis declarados nos metadados', t => {
-  const result = run(t, { profiles: { anon: 0 }, declared: { authenticated_sem_role: 'Usu'irio sem papel' } });
+  const result = run(t, { profiles: { anon: 0 }, declared: { authenticated_sem_role: 'Usuário sem papel' } });
   assert.equal(result.status, 1);
-  assert.match(result.stderr, /VERIFICACAO INOCOMPLETA.*authenticated_sem_role/);
+  assert.match(result.stderr, /VERIFICACAO INCOMPLETA.*authenticated_sem_role/);
   assert.equal(result.baseline, result.original);
 });
 
 test('RLS não ignora perfil desconhecido no baseline', t => {
   const result = run(t, { jwt: 'fixture-user', profiles: { anon: 0, perfil_desconhecido: 0 }, update: true });
   assert.equal(result.status, 1);
-  assert.match(result.stderr, /VERIFICACAO INOCOMPLETA.*perfil_desconhecido/);
+  assert.match(result.stderr, /VERIFICACAO INCOMPLETA.*perfil_desconhecido/);
   assert.equal(result.baseline, result.original);
 });
 
