@@ -15,7 +15,7 @@ Detalhamento das regras resumidas em `AGENTS.md` (seção "Banco, Edge Functions
 ## Edge Functions (`supabase/functions/`)
 
 - Autenticação: `withAuth()` (JWT) para chamadas do front; `requireCronSecret()` para cron; `requireWebhookSecret()` para webhooks; `withAuthOrServiceRole()` para S2S. Helpers em `_shared/auth.ts`.
-- CORS: `scopedCorsHeaders()` (`_shared/`). `Access-Control-Allow-Origin: *` só com ADR e entrada em `scripts/edge-cors-allowlist.txt`; `scripts/check-edge-cors.mjs` bloqueia o resto.
+- CORS: `scopedCorsHeaders()` (em `_shared/auth.ts`, não há `cors.ts`). `Access-Control-Allow-Origin: *` só com ADR e entrada em `scripts/edge-cors-allowlist.txt`; `scripts/check-edge-cors.mjs` bloqueia o resto.
 - Imports: `npm:pacote@versao`. `https://esm.sh/` é bloqueado por `scripts/check-edge-imports.mjs` (esm.sh retorna 502/503 e quebra o boot).
 - Payloads validados com Zod; rate limit em `_shared/rate-limit.ts`; HTTP externo via `_shared/safe-http.ts` (proteção SSRF).
 - Typecheck: `deno check --no-lock --node-modules-dir=none supabase/functions/*/index.ts`. Testes: `deno test` nos `*_test.ts` de `_shared/` e das funções.
@@ -23,7 +23,7 @@ Detalhamento das regras resumidas em `AGENTS.md` (seção "Banco, Edge Functions
 
 ## CI (`.github/workflows/ci.yml`)
 
-Ordem dos gates: commitlint do título da PR (Conventional Commits) → depcruise (`.dependency-cruiser.cjs`) → guard CORS → guard de imports → testes dos guards (`node --test scripts/*.test.mjs`) → deno test/check das edge functions → secrets obrigatórios → invalid indexes guard → `npm run typecheck` → ESLint `--max-warnings=0` em `src`, `supabase/functions`, `scripts` e raiz → `npm audit --omit=dev --audit-level=high` → `npm run build` → Playwright E2E → `npm run test:coverage` → matriz RLS → RLS coverage → bundle size (`scripts/check-bundle-size.mjs`) → Lighthouse CI.
+Ordem dos gates: commitlint do título da PR (Conventional Commits) → depcruise (`.dependency-cruiser.cjs`) → guard CORS → guard de imports → testes dos guards (`node --test scripts/check-publish-gates.test.mjs scripts/check-rls-profiles.test.mjs scripts/check-deploy-timeout.test.mjs`; `check-edge-cors.test.mjs` existe mas não roda no CI) → deno test/check das edge functions → secrets obrigatórios → invalid indexes guard → `npm run typecheck` → ESLint `--max-warnings=0` em `src`, `supabase/functions`, `scripts` e raiz → `npm audit --omit=dev --audit-level=high` → `npm run build` → Playwright E2E → `npm run test:coverage` → matriz RLS → RLS coverage → bundle size (`scripts/check-bundle-size.mjs`) → Lighthouse CI.
 
 - Nova violação de lint só com `eslint-disable-next-line <regra> -- <motivo>` (ADR-020 e ADR-021 em `docs/adr/`).
 - Passos que dependem de secrets não rodam em PR de bot.
