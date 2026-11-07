@@ -99,79 +99,21 @@ jobs:
           PGHOST: ${{ secrets.PGHOST }}
           PGPORT: ${{ secrets.PGPORT }}
           PGUSER: ${{ secrets.PGUSER }}
-          PGPASSWORD: ${{ secrets.PGPASSWORD }}
-          PGDATABASE: ${{ secrets.PGDATABASE }}
-        run: psql -v ON_ERROR_STOP=1 -f scripts/migration/verify/invalid-indexes-guard.sql
-
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Lint (ESLint)
-        # Rodada 31/10 â€“ Onda E ratchet GLOBAL:
-        # Todo o repo travado em 0/0 (src + supabase/functions + scripts + specs).
-        # Novas violaÃ§Ãµes devem vir com `eslint-disable-next-line <regra> -- <motivo>`
-        # (ver docs/adr/ADR-020-zero-warning-ratchet.md e ADR-021-onda-e-external-ratchet.md).
-        run: |
-          npx eslint src --max-warnings=0
-          npx eslint supabase/functions --max-warnings=0
-          npx eslint scripts --max-warnings=0
-          npx eslint . --max-warnings=0
-
-      - name: Security audit (high+ severity)
-        run: npm audit --omit=dev --audit-level=high
-
-      - name: Build
-        run: npm run build
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-
-      - name: Install Playwright Browsers
-        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
-        run: npx playwright install --with-deps
-
-      - name: Run Playwright E2E Tests
-        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
-        run: npx playwright test
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-          E2E_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
-          E2E_USER_PASS: ${{ secrets.TEST_USER_PASSWORD }}
-          CI: true
-
-      - name: Upload Playwright report and artifacts
-        uses: actions/upload-artifact@v7
-        if: ${{ always() && (github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]')) }}
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
-          if-no-files-found: war
-
-
-      - name: Run unit tests with coverage
-        run: npm run test:coverage
-
-      - name: Run RLS matrix tests (anon / user_a / user_b / user_admin)
-        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
-        env:
-          PGHOST: ${{ secrets.PGHOST }}
-          PGPORT: ${{ secrets.PGPORT }}
-          PGUSER: ${{ secrets.PGUSER }}
-          PGPASSWORD: ${{ secrets.PGPASSWORD }}
-          PGDATABASE: ${{ secrets.PGDATABASE }}
-          RLS_USER_A: ${{ secrets.RLS_USER_A }}
-          RLS_USER_B: ${{ secrets.RLS_USER_B }}
-          RLS_USER_ADMIN: ${{ secrets.RLS_USER_ADMIN }}
-        run: bash tests/rls/run.sh
-
-      - name: RLS coverage (public.* tables must have RLS + policy)
-        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
-        env:
-          PGHOST: ${{ secrets.PGHOST }}
-          PGPORT: ${{ secrets.PGPORT }}
-          PGUSER: ${{ secrets.PGUSER }}
-          QÔTÔÕÓÔ‘ˆ	ŞÈÙXÜ™]Ë”ÔTÔÕÓÔ‘_BˆÑUPTÑNˆ	ŞÈÙXÜ™]Ë”ÑUPTÑH_Bˆ[ˆÜ[]ˆÓ—ÑT”“Ô—ÔÕÔLHYˆØÜš\ËÛZYÜ˜][Û‹İ™\šYKÜ›ËXÛİ™\˜YÙKœÜ[‚ˆH˜[YNˆÚXÚÈ[™HÚ^™HYÙ]ˆ[ˆ›ÙHØÜš\ËØÚXÚËX[™K\Ú^™K›ZœÂ‚ˆH˜[YNˆYÚİ\ÙHÒH
-\™›Ü›X[˜ÙHYÙ]ÊBˆYˆ	ŞÈÚ]X‹™]™[Û˜[YHOH	Ü[Ü™\]Y\İ	ÈY[™ÕÚ]
-Ú]X‹™]™[œ[Ü™\]Y\İ\Ù\‹›ÙÚ[‹	ÖØ›İIÊH_Bˆ[ˆœK^Y\ÈÚKØÛPŒLË]]Ü[‚
+          QÔTÔÕÓÔ‘ˆ	ŞÈÙXÜ™]Ë”ÔTÔÕÓÔ‘_BˆÑUPTÑNˆ	ŞÈÙXÜ™]Ë”ÑUPTÑH_Bˆ[ˆÜ[]ˆÓ—ÑT”“Ô—ÔÕÔLHYˆØÜš\ËÛZYÜ˜][Û‹İ™\šYKÚ[˜[YZ[™^\ËYİX\™œÜ[‚ˆH˜[YNˆ\XÚXÚÂˆ[ˆœH[ˆ\XÚXÚÂ‚ˆH˜[YNˆ[
+TÓ[
+BˆÈ›ÙYHÌKÌL8 $ÈÛ™HH˜]Ú]ÓĞS‚ˆÈÙÈÈ™\È˜]˜YÈ[HÌ
+Ü˜È
+Èİ\X˜\ÙKÙ[˜İ[ÛœÈ
+ÈØÜš\È
+ÈÜXÜÊK‚ˆÈ›İ˜\Èš[ÛpéğíY\È]™[Hš\ˆÛÛH\Û[Y\ØX›K[™^[[™H™YÜ˜OˆKH[İ]›Ï˜ˆÈ
+™\ˆØÜËØY‹ĞQ‹LŒ^™\›Ë]Ø\›š[™Ë\˜]Ú]›YHQ‹LŒK[Û™KYKY^\›˜[\˜]Ú]›Y
+K‚ˆ[ˆˆœ\Û[Ü˜ÈK[X^]Ø\›š[™ÜÏLˆœ\Û[İ\X˜\ÙKÙ[˜İ[ÛœÈK[X^]Ø\›š[™ÜÏLˆœ\Û[ØÜš\ÈK[X^]Ø\›š[™ÜÏLˆœ\Û[ˆK[X^]Ø\›š[™ÜÏL‚ˆH˜[YNˆÙXİ\š]H]Y]
+YÚ
+ÈÙ]™\š]JBˆ[ˆœH]Y]K[ÛZ]Y]ˆKX]Y][]™[ZYÚ‚ˆH˜[YNˆZ[ˆ[ˆœH[ˆZ[ˆ[‚ˆ’UWÔÕTPTÑWÕT“ˆ	ŞÈÙXÜ™]Ë•’UWÔÕTPTÑWÕT“_Bˆ’UWÔÕTPTÑWÔP“TÒP“WÒÑVNˆ	ŞÈÙXÜ™]Ë•’UWÔÕTPTÑWÔP“TÒP“WÒÑVH_B‚ˆH˜[YNˆ[œİ[^]ÜšYÚœ›İÜÙ\œÂˆYˆ	ŞÈÚ]X‹™]™[Û˜[YHOH	Ü[Ü™\]Y\İ	ÈY[™ÕÚ]
+Ú]X‹™]™[œ[Ü™\]Y\İ\Ù\‹›ÙÚ[‹	ÖØ›İIÊH_Bˆ[ˆœ^]ÜšYÚ[œİ[K]Ú]Y\Â‚ˆH˜[YNˆ[ˆ^]ÜšYÚL‘H\İÂˆYˆ	ŞÈÚ]X‹™]™[Û˜[YHOH	Ü[Ü™\]Y\İ	ÈY[™ÕÚ]
+Ú]X‹™]™[œ[Ü™\]Y\İ\Ù\‹›ÙÚ[‹	ÖØ›İIÊH_Bˆ[ˆœ^]ÜšYÚ\İˆ[‚ˆ’UWÔÕTPTÑWÕT“ˆ	ŞÈÙXÜ™]Ë•’UWÔÕTPTÑWÕT“_Bˆ’UWÔÕTPTÑWÔP“TÒP“WÒÑVNˆ	ŞÈÙXÜ™]Ë•’UWÔÕTPTÑWÔP“TÒP“WÒÑVH_BˆL‘WÕTÑT—ÑSPRSˆ	ŞÈÙXÜ™]Ë•TÕÕTÑT—ÑSPRS_BˆL‘WÕTÑT—ÔTÔÎˆ	ŞÈÙXÜ™]Ë•TÕÕTÑT—ÔTÔÕÓÔ‘_BˆÒNˆYB‚ˆH˜[YNˆ\ØY^]ÜšYÚ™\Ü[™\Y˜XİÂˆ\Ù\ÎˆXİ[ÛœËİ\ØYX\Y˜XİÂˆYˆ	ŞÈ[Ø^\Ê
+H	‰ˆ
+Ú]X‹™]™[Û˜[YHOH	Ü[Ü™\]Y\İ	ÈY[™ÕÚ]
+Ú]X‹™]™[œ[Ü™\]Y\İ\Ù\‹›ÙÚ[‹	ÖØ›İIÊJH_BˆÚ]‚ˆ˜[YNˆ^]ÜšYÚ\™\Üˆ]ˆ^]ÜšYÚ\™\ÜÂˆ™][[Û‹Y^\ÎˆÌˆY‹[›ËYš[\ËY›İ[™ˆØ\‚‚‚ˆH˜[YNˆ[ˆ[š]\İÈÚ]Ûİ™\˜YÙBˆ[ˆœH[ˆ\İ˜Ûİ™\˜YÙB‚ˆH˜[YNˆ[ˆ“ÈX]š^\İÈ
+[›ÛˆÈ\Ù\—ØHÈ\Ù\—ØˆÈ\Ù\—ØYZ[ŠBˆYˆ	ŞÈÚ]X‹™]™[Û˜[YHOH	Ü[Ü™\]Y\İ	ÈY[™ÕÚ]
+Ú]X‹™]™[œ[Ü™\]Y\İ\Ù\‹›ÙÚ[‹	ÖØ›İIÊH_Bˆ[‚ˆÒÔÕˆ	ŞÈÙXÜ™]Ë”ÒÔÕ_BˆÔÔ•ˆ	ŞÈÙXÜ™]Ë”ÔÔ•_BˆÕTÑTˆ	ŞÈÙXÜ™]Ë”ÕTÑTˆ_Bˆu55tõ$C¢G·²6V7&WG2åu55tõ$B×Ğ¢tDD$4S¢G·²6V7&WG2åtDD$4R×Ğ¢$Å5õU4U%ô¢G·²6V7&WG2å$Å5õU4U%ô×Ğ¢$Å5õU4U%ô#¢G·²6V7&WG2å$Å5õU4U%ô"×Ğ¢$Å5õU4U%ôDÔ”ã¢G·²6V7&WG2å$Å5õU4U%ôDÔ”â×Ğ¢'Vã¢&6‚FW7G2÷&Ç2÷'Vâç6€ ¢ÒæÖS¢$Å26÷fW&vR‡V&Æ–2â¢F&ÆW2×W7B†fR$Å2²öÆ–7’¢–c¢G·²v—F‡V"æWfVçEöæÖRÒwVÆÅ÷&WVW7BrÇÂVæG5v—F‚†v—F‡V"æWfVçBçVÆÅ÷&WVW7BçW6W"æÆöv–âÂu¶&÷EÒr’×Ğ¢Vçc ¢t„õ5C¢G·²6V7&WG2åt„õ5B×Ğ¢uõ%C¢G·²6V7&WG2åuõ%B×Ğ¢uU4U#¢G·²6V7&WG2åuU4U"×Ğ¢u55tõ$C¢G·²6V7&WG2åu55tõ$B×Ğ¢tDD$4S¢G·²6V7&WG2åtDD$4R×Ğ¢'Vã¢7Â×bôåôU%$õ%õ5DõÓÖb67&—G2öÖ–w&F–öâ÷fW&–g’÷&Ç2Ö6÷fW&vRç7À ¢ÒæÖS¢6†V6²'VæFÆR6—¦R'VFvW@¢'Vã¢æöFR67&—G2ö6†V6²Ö'VæFÆR×6—¦RæÖ§0 ¢ÒæÖS¢Æ–v‡F†÷W6R4’‡W&f÷&Öæ6R'VFvWG2¢–c¢G·²v—F‡V"æWfVçEöæÖRÒwVÆÅ÷&WVW7BrÇÂVæG5v—F‚†v—F‡V"æWfVçBçVÆÅ÷&WVW7BçW6W"æÆöv–âÂu¶&÷EÒr’×Ğ¢'Vã¢ç‚Ò×–W2Æ†6’ö6Æ”ã2ç‚WF÷'Và 
