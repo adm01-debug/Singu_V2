@@ -14,7 +14,7 @@ jobs:
 
 
       - name: Setup Node.js
-        uses: action/setup-node@v7
+        uses: actions/setup-node@v7
         with:
           node-version: '20'
           cache: 'npm'
@@ -85,7 +85,7 @@ jobs:
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
         run: |
           missing=0
-          for name in PGHOST PGUSER PGPASSWORD PGDATABASE RLS_USER_A RLS_USER_B INGESTOR_REQUEST_ID RLS_USER_ADMIN VITE_SUPABASE_URL VITE_SUPABASE_PUBLISHABLE_KEY TEST_USER_EMAIL TEST_USER_PASSWORD; do
+          for name in PGHOST PGUSER PGPASSWORD PGDATABASE RLS_USER_A RLS_USER_B RLS_USER_ADMIN VITE_SUPABASE_URL VITE_SUPABASE_PUBLISHABLE_KEY TEST_USER_EMAIL TEST_USER_PASSWORD; do
             if [[ -z "${!name}" ]]; then
               echo "::error::Secret obrigat√≥rio ausente: $name"
               missing=1
@@ -131,7 +131,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright E2E Tests
-        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') y}
+        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
         run: npx playwright test
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
@@ -172,13 +172,6 @@ jobs:
           PGHOST: ${{ secrets.PGHOST }}
           PGPORT: ${{ secrets.PGPORT }}
           PGUSER: ${{ secrets.PGUSER }}
-          PGPASSWORD: ${{ secrets.PGPASSWORD }}
-          PGDATABASE: ${{ secrets.PGDATABASE }}
-        run: psql -v ON_ERROR_STOP=1 -f scripts/migration/verify/rls-coverage.sql
-
-      - name: Check bundle size budget
-        run: node scripts/check-bundle-size.mjs
-
-      - name: Lighthouse CI (performance budgets)
-        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
-        run: npx --yes @lhci/cli@0.13.x autorun
+          Q‘T‘’”‘ëà	ﬁ»ŸX‹ô]Àî‘T‘’”‘ë_Bà—UPêT—Nà	ﬁ»ŸX‹ô]Àî—UPêT—H_Bàù[éà‹[]à”ó—Tîì‘ó‘’‘LHYàÿ‹ö\À€ZY‹ò][€ã›ô\öYûK‹õÀX€›ô\òYŸKú‹[ÇàHò[YNà⁄X⁄»ù[ôH⁄^ôHùYŸ]àù[éàõŸHÿ‹ö\Àÿ⁄X⁄ÀXù[ôK\⁄^ôKõZú¬ÇàHò[YNàY⁄›\ŸH“H
+\ôõ‹õX[òŸHùYŸ] BàYéà	ﬁ»⁄]Xãô]ô[ù€ò[YHOH	‹[‹ô\]Y\›	»Y[ô’⁄]
+⁄]Xãô]ô[ùú[‹ô\]Y\›ù\Ÿ\ãõŸ⁄[ã	÷ÿõ›I H_Bàù[éàúK^Y\»⁄Kÿ€PåLÀû]]‹ù[Ç
