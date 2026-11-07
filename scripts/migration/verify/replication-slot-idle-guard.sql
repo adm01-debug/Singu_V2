@@ -1,4 +1,4 @@
--- replication-slot-idle-guard.sql â€” Rodada 24/10 (F/gap 21)
+-- replication-slot-idle-guard.sql — Rodada 24/10 (F/gap 21)
 -- Slots ativos porem inativos ha > 24h retem WAL indefinidamente ate encher disco.
 \echo '== replication-slot-idle-guard =='
 SELECT s.slot_name, s.slot_type, s.active, s.restart_lsn,
