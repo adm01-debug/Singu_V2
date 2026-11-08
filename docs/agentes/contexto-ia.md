@@ -48,6 +48,10 @@ A saída é ignorada pelo `.gitignore` em `main` — ela só existe na branch `c
 | Secret | Usado por | Sem ele |
 |---|---|---|
 | `PGHOST` / `PGPORT` / `PGUSER` / `PGPASSWORD` / `PGDATABASE` (já existem no repo, usados pelo `restore-drill.yml`) | job `banco` do `contexto.yml`: monta a conexão com `sslmode=verify-full`; a senha fica em `PGPASSWORD`, nunca na URL | o job sai verde com aviso e a pasta `supabase/` fica como estava |
+
+O banco oficial é o projeto **`pgxfvjmuubtbowutlide`** (o linkado, "Singu - V2 | Cadastro de Empresas /
+Contatos"). O `hjhthvzwtvwgdrochcam` que aparece em `supabase/config.toml:1` é o projeto antigo
+(`OLD_REF`, ver `ESTADO_ATUAL.md:98`) — não é de onde sai o retrato.
 | `SUPABASE_DB_URL` (opcional) | mesmo job; se existir, tem precedência sobre os `PG*` | nada — é só um override |
 
 Os produtores de código e de regras não usam secret nenhum: leem apenas arquivos do repositório e `git log`.

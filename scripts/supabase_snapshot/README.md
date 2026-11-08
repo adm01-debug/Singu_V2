@@ -1,6 +1,6 @@
 # supabase-snapshot
 
-Mantém um retrato completo do banco OFICIAL (`hjhthvzwtvwgdrochcam`) para agentes de IA lerem **antes** de
+Mantém um retrato completo do banco OFICIAL (`pgxfvjmuubtbowutlide`) para agentes de IA lerem **antes** de
 qualquer tarefa ou planejamento que toque banco, RLS, functions, cron, storage ou edge functions.
 
 ## Onde está o resultado (neste repo)
