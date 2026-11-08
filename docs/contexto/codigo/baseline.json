@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "33752b40a62b873b5a5b5baa4add1cfef979c359",
+  "commit": "4ba718045b6fc695bf074c6f9859fc4327691b0c",
   "branch": "main",
-  "data_commit": "2026-11-08T15:44:09-03:00",
+  "data_commit": "2026-11-08T16:27:34-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "4ba71804",
+    "data": "2026-11-08",
+    "assunto": "fix(ci): retry rls-baseline em http 500 transitório (57014 lock contention)"
+   },
    {
     "sha": "33752b40",
     "data": "2026-11-08",
@@ -126,14 +131,9 @@
     "sha": "d85622d0",
     "data": "2026-10-29",
     "assunto": "build(deps): Bump the minor-and-patch group across 1 directory with 36 updates (#138)"
-   },
-   {
-    "sha": "22882c7a",
-    "data": "2026-10-29",
-    "assunto": "docs: confirma bloqueio definitivo billing GitHub Actions (4 runs queued)"
    }
   ],
-  "arquivos_mudados_7d": 60,
+  "arquivos_mudados_7d": 61,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "CHANGELOG.md",
@@ -305,7 +305,7 @@
    },
    {
     "autor": "adm01-debug",
-    "commits": 31
+    "commits": 32
    },
    {
     "autor": "dependabot[bot]",
@@ -320,7 +320,7 @@
  "contagens": {
   "arquivos_total": 2973,
   "arquivos_codigo": 2063,
-  "linhas_codigo": 388226,
+  "linhas_codigo": 388232,
   "rotas": 114,
   "rotas_http_backend": 12,
   "vistas_por_id": 0,
@@ -500,7 +500,7 @@
   },
   "scripts/rls-matrix": {
    "arquivos": 1,
-   "linhas": 104
+   "linhas": 110
   },
   "scripts/run_explain_analyze.py": {
    "arquivos": 1,

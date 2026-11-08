@@ -2032,7 +2032,7 @@
   {
    "arquivo": "scripts/rls-matrix/check-rls-baseline.mjs",
    "descricao": "Etapa 84 do plano banco-unico: detector de regressao de exposicao RLS. Mede via PostgREST (o mesmo caminho do front), nao via SQL direto — e o que o cliente real enxerga.",
-   "linhas": 104,
+   "linhas": 110,
    "env": [],
    "npm_scripts": [],
    "workflows": [

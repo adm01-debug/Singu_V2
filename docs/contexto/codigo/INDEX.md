@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `33752b40a62b873b5a5b5baa4add1cfef979c359` (2026-11-08T15:44:09-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `4ba718045b6fc695bf074c6f9859fc4327691b0c` (2026-11-08T16:27:34-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 2973 |
 | arquivos_codigo | 2063 |
-| linhas_codigo | 388226 |
+| linhas_codigo | 388232 |
 | rotas | 114 |
 | rotas_http_backend | 12 |
 | vistas_por_id | 0 |
@@ -421,7 +421,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 4 — ex.: scripts/ai-context/cenarios.mjs:102, supabase/functions/_shared/auth_test.ts:61, supabase/functions/_shared/auth_test.ts:68
 
 ## Grafo de código (graphify)
-- 18904 nós · 30859 arestas · 2037 comunidades · grafo do commit `33752b40`
+- 18904 nós · 30859 arestas · 2037 comunidades · grafo do commit `4ba71804`
 - comunidades maiores: react (285), ref_types (253), _shared/auth.ts (253), ref_lib (251), react-router-dom (233), 📖 Dicionário de Dados — SINGU CRM (232), framer-motion (225), lucide-react (223), ref_components (209), date-fns (204), useAuth (201), ref_hooks (185)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), jsonError() (supabase/functions/_shared/auth.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), uniq() (scripts/ai-context/gerar.mjs), readText() (scripts/ai-context/gerar.mjs), md_table() (scripts/regras_negocio/generate.py), function() (scripts/supabase_snapshot/test_snapshot.py), getContactBehavior() (src/lib/contact-utils.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -534,6 +534,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-08 `4ba71804` fix(ci): retry rls-baseline em http 500 transitório (57014 lock contention)
 - 2026-11-08 `33752b40` feat(db): agenda retenção de 7 dias no histórico do pg_cron
 - 2026-11-08 `3570870d` chore(inventario): cataloga as 43 edge functions de outro sistema
 - 2026-11-08 `79380cd7` feat(inventario): liga a conferência deployada × versionada das edge functions
@@ -548,7 +549,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-07 `d8475aa3` fix: qualifica digest() com schema extensions no schema-freeze-guard (#166)
 - 2026-11-06 `f665f675` fix(ci): remove script injection no step de validação do título da PR (#162)
 - 2026-11-06 `d00de592` fix(ci): corrige corrupção de texto nos workflows restore-drill e rls-exposure-guard (#161)
-- 2026-11-06 `b911f821` chore: sobe actions/checkout para v5 nos workflows de monitoramento, restore e RLS (#160)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

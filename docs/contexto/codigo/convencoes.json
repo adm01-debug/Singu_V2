@@ -58,11 +58,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(ci): retry rls-baseline em http 500 transitório (57014 lock contention)",
    "feat(db): agenda retenção de 7 dias no histórico do pg_cron",
    "chore(inventario): cataloga as 43 edge functions de outro sistema",
    "feat(inventario): liga a conferência deployada × versionada das edge functions",
-   "fix(snapshot): coleta de grants por coluna sai do information_schema (#172)",
-   "fix(inventario): não alerta partição cujo pai define o acesso (#171)"
+   "fix(snapshot): coleta de grants por coluna sai do information_schema (#172)"
   ]
  },
  "pr_template": null,
