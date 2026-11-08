@@ -9,7 +9,7 @@
 | Workflow | Arquivo | Gatilho | O que prova | Quando falha | Quem é avisado | Custo/sem (min) | Falha (7 d) |
 |---|---|---|---|---|---|---|---|
 | Contexto para agentes de IA (10 min) | [`contexto.yml`](../../.github/workflows/contexto.yml) | push em main que toque código, banco, scripts das automações ou docs/contexto/regras/manual/; a cada 10 min (minuto 3); dispatch | branch contexto com docs/contexto/{codigo,supabase,regras}/ regerados das três fontes de verdade (código em main, banco oficial, código+migrations+manual/) e docs/contexto/00-INDEX.md montado a partir dos manifests | falha fatal de produtor reprova o workflow; fontes com artefato publicam e as demais mantêm a última versão; erro de download impede a publicação | ninguém (a branch contexto é a prova; errors.md em supabase/ e erros_do_gerador em codigo/ listam seções com falha) | — | — |
-| Docs de CI sem drift | [`docs-ci.yml`](../../.github/workflows/docs-ci.yml) | pull_request e push em main que toquem .github/workflows/, scripts/ci/ ou docs/ci/ | docs/ci/README.md e a projecao exata dos blocos "# docs:" dos workflows, e o gerador passa nos proprios testes | PR vermelha com o comando a rodar (node scripts/ci/render-workflow-docs.mjs) e commitar | ninguem — o check da PR e o aviso | — | — |
+| Documentação sem drift | [`docs-ci.yml`](../../.github/workflows/docs-ci.yml) | pull_request e push em main que toquem workflows, scripts/ci/, scripts/docs/, qualquer .md, src/ ou supabase/ | docs/ci/README.md e a projecao exata dos blocos "# docs:" dos workflows, e nenhuma citacao arquivo:linha nova quebrada nos .md | PR vermelha nomeando o comando a rodar (render-workflow-docs.mjs ou verificar-citacoes.mjs) | ninguem — o check da PR e o aviso | — | — |
 | Fix JWT proxies externas | [`fix-jwt-proxies-externas.yml`](../../.github/workflows/fix-jwt-proxies-externas.yml) | so manual (workflow_dispatch) — Actions, Fix JWT proxies externas, Run workflow | as 23 proxies externas deployadas sem codigo no repositorio ficam com verify_jwt = false fechado, e a conferencia final sai vazia | alguma proxy nao aceitou a mudanca; o job fica vermelho e o estado final lista quem sobrou | ninguem — quem disparou le o resumo do run | — | — |
 | Inventário do estado real (semanal) | [`inventario-estado-semanal.yml`](../../.github/workflows/inventario-estado-semanal.yml) | agendado (seg 10:23 UTC) e dispatch | inventario/estado (banco, edge functions, uso de tabelas, rotas do front, alcance das edges) regerado do banco oficial e do codigo | o job fica vermelho e o inventario nao e atualizado | PR automation/inventario-estado com o inventario novo | — | — |
 | monitoring-lint | [`monitoring-lint.yml`](../../.github/workflows/monitoring-lint.yml) | push e pull_request que toquem monitoring/, docs/runbooks/, scripts/monitoring/ ou este workflow | regras do Prometheus (promtool) e config do Alertmanager (amtool) validas, todo alerta com runbook e nenhum segredo no exporter | PR vermelha no job correspondente (promtool, amtool, runbook-coverage ou secret-leak-scan) | ninguem — o proprio check da PR e o aviso | — | — |
@@ -25,11 +25,11 @@
 - **Quando falha:** falha fatal de produtor reprova o workflow; fontes com artefato publicam e as demais mantêm a última versão; erro de download impede a publicação
 - **Quem é avisado:** ninguém (a branch contexto é a prova; errors.md em supabase/ e erros_do_gerador em codigo/ listam seções com falha)
 
-### Docs de CI sem drift (`docs-ci.yml`)
+### Documentação sem drift (`docs-ci.yml`)
 
-- **Gatilho:** pull_request e push em main que toquem .github/workflows/, scripts/ci/ ou docs/ci/
-- **O que prova:** docs/ci/README.md e a projecao exata dos blocos "# docs:" dos workflows, e o gerador passa nos proprios testes
-- **Quando falha:** PR vermelha com o comando a rodar (node scripts/ci/render-workflow-docs.mjs) e commitar
+- **Gatilho:** pull_request e push em main que toquem workflows, scripts/ci/, scripts/docs/, qualquer .md, src/ ou supabase/
+- **O que prova:** docs/ci/README.md e a projecao exata dos blocos "# docs:" dos workflows, e nenhuma citacao arquivo:linha nova quebrada nos .md
+- **Quando falha:** PR vermelha nomeando o comando a rodar (render-workflow-docs.mjs ou verificar-citacoes.mjs)
 - **Quem é avisado:** ninguem — o check da PR e o aviso
 
 ### Fix JWT proxies externas (`fix-jwt-proxies-externas.yml`)
@@ -76,6 +76,7 @@
 | [`contexto.yml`](../../.github/workflows/contexto.yml) | **sem-commit** | "nada mudou" no publicar significa que nenhuma das três fontes mudou desde a última publicação |
 | [`contexto.yml`](../../.github/workflows/contexto.yml) | **metricas** | métricas/manifests do banco aguardam 60 min desde a coleta publicada; commits de código não reiniciam o prazo; data ausente/inválida/futura e mudanças de saúde/estado do índice publicam sem espera |
 | [`contexto.yml`](../../.github/workflows/contexto.yml) | **banco-pulado** | sem o secret SUPABASE_DB_URL o job do banco sai verde com aviso e a pasta supabase/ fica como estava |
+| [`docs-ci.yml`](../../.github/workflows/docs-ci.yml) | **catraca-citacoes** | as 184 citacoes já quebradas em 2026-11-08 estao no baseline e nao reprovam ninguem; a lista so pode encolher |
 
 ## Sem bloco `# docs:`
 

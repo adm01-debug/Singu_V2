@@ -1,25 +1,34 @@
 # docs:
-#   gatilho: pull_request e push em main que toquem .github/workflows/, scripts/ci/ ou docs/ci/
-#   prova: docs/ci/README.md e a projecao exata dos blocos "# docs:" dos workflows, e o gerador passa nos proprios testes
-#   falha: PR vermelha com o comando a rodar (node scripts/ci/render-workflow-docs.mjs) e commitar
+#   gatilho: pull_request e push em main que toquem workflows, scripts/ci/, scripts/docs/, qualquer .md, src/ ou supabase/
+#   prova: docs/ci/README.md e a projecao exata dos blocos "# docs:" dos workflows, e nenhuma citacao arquivo:linha nova quebrada nos .md
+#   falha: PR vermelha nomeando o comando a rodar (render-workflow-docs.mjs ou verificar-citacoes.mjs)
 #   avisa: ninguem — o check da PR e o aviso
-name: Docs de CI sem drift
+# nao-e-bug:
+#   - catraca-citacoes: as 184 citacoes já quebradas em 2026-11-08 estao no baseline e nao reprovam ninguem; a lista so pode encolher
+name: Documentação sem drift
 
-# Mexer num gatilho de workflow sem atualizar docs/ci/README.md deixa a documentacao mentindo.
-# Este job nao gera nada: ele so confere que o README commitado bate com os YAMLs.
+# Dois jeitos de a documentacao mentir, os dois cobrados aqui e nenhum deles gerando arquivo:
+#   1. mexer num gatilho de workflow e nao atualizar docs/ci/README.md;
+#   2. mover codigo e deixar `arquivo:linha` apontando para o lugar errado num .md.
 
 on:
   pull_request:
     paths:
       - '.github/workflows/**'
       - 'scripts/ci/**'
-      - 'docs/ci/**'
+      - 'scripts/docs/**'
+      - '**/*.md'
+      - 'src/**'
+      - 'supabase/**'
   push:
     branches: [main]
     paths:
       - '.github/workflows/**'
       - 'scripts/ci/**'
-      - 'docs/ci/**'
+      - 'scripts/docs/**'
+      - '**/*.md'
+      - 'src/**'
+      - 'supabase/**'
 
 concurrency:
   group: docs-ci-${{ github.ref }}
@@ -34,7 +43,7 @@ defaults:
 
 jobs:
   sem-drift:
-    name: docs/ci/README.md bate com os workflows
+    name: README de CI e citações dos .md
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -49,8 +58,11 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Testes do gerador
-        run: node --test scripts/ci/render-workflow-docs.test.mjs
+      - name: Testes dos verificadores
+        run: node --test scripts/ci/render-workflow-docs.test.mjs scripts/docs/verificar-citacoes.test.mjs
 
       - name: Conferir docs/ci/README.md
         run: node scripts/ci/render-workflow-docs.mjs --check
+
+      - name: Conferir as citações arquivo:linha dos .md
+        run: node scripts/docs/verificar-citacoes.mjs
