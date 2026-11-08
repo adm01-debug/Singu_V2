@@ -166,9 +166,26 @@ export function edgesNoRepo(raiz) {
     .map((d) => d.name).sort();
 }
 
+/**
+ * Slugs catalogados em scripts/inventario/edges-externas.txt: funcoes deployadas sem codigo
+ * neste repo que o dono decidiu manter (pertencem a outro sistema no mesmo projeto Supabase).
+ * Lista vazia se o arquivo nao existir. Analise: docs/agentes/edges-externas.md
+ */
+export function edgesExternasCatalogadas(raiz) {
+  const arquivo = path.join(raiz, 'scripts/inventario/edges-externas.txt');
+  if (!fs.existsSync(arquivo)) return [];
+  return fs.readFileSync(arquivo, 'utf8').split('\n')
+    .map((l) => l.trim()).filter((l) => l && !l.startsWith('#')).sort();
+}
+
 /** Edges publicadas (resposta de GET /functions) x repo. `publicadas` null = nao consultado. */
-export function compararEdges(publicadasApi, noRepo) {
-  if (!publicadasApi) return { publicadas: null, no_repo: noRepo.length, publicadas_sem_codigo_no_repo: null, no_repo_sem_deploy: null };
+export function compararEdges(publicadasApi, noRepo, externas = []) {
+  if (!publicadasApi) {
+    return {
+      publicadas: null, no_repo: noRepo.length, publicadas_sem_codigo_no_repo: null,
+      no_repo_sem_deploy: null, externas: { catalogadas: externas.length, no_ar: null, sem_jwt: null, catalogadas_sem_deploy: null },
+    };
+  }
   const publicadas = publicadasApi.map((f) => ({
     slug: f.slug,
     versao: f.version,
@@ -177,11 +194,22 @@ export function compararEdges(publicadasApi, noRepo) {
     atualizada_em: f.updated_at ? new Date(f.updated_at).toISOString().slice(0, 16) + 'Z' : null,
   })).sort((a, b) => a.slug.localeCompare(b.slug));
   const slugs = new Set(publicadas.map((f) => f.slug));
+  const catalogadas = new Set(externas);
+  // Sem codigo no repo E sem catalogo: e isso que merece alerta (uma funcao nova e desconhecida
+  // no ar). As catalogadas saem em `externas`, com a contagem das que aceitam chamada sem JWT —
+  // fato que fica visivel toda semana sem virar alarme que ninguem mais le.
+  const semCodigo = [...slugs].filter((s) => !noRepo.includes(s)).sort();
   return {
     publicadas,
     no_repo: noRepo.length,
-    publicadas_sem_codigo_no_repo: [...slugs].filter((s) => !noRepo.includes(s)).sort(),
+    publicadas_sem_codigo_no_repo: semCodigo.filter((s) => !catalogadas.has(s)),
     no_repo_sem_deploy: noRepo.filter((s) => !slugs.has(s)),
+    externas: {
+      catalogadas: externas.length,
+      no_ar: semCodigo.filter((s) => catalogadas.has(s)),
+      sem_jwt: publicadas.filter((f) => catalogadas.has(f.slug) && f.verify_jwt === false).map((f) => f.slug),
+      catalogadas_sem_deploy: externas.filter((s) => !slugs.has(s)),
+    },
   };
 }
 
@@ -311,7 +339,7 @@ async function main(argv) {
   const dado = extrairInventario(bruto);
   conferirOrigem(dado, tabelasDoManifesto(RAIZ), versoesDoRepo(RAIZ));
   const uso = contarUsoNoCodigo(RAIZ, dado.tabelas.map((t) => t.nome));
-  const inventario = montarInventario(dado, uso, compararEdges(publicadasApi, edgesNoRepo(RAIZ)));
+  const inventario = montarInventario(dado, uso, compararEdges(publicadasApi, edgesNoRepo(RAIZ), edgesExternasCatalogadas(RAIZ)));
   const texto = JSON.stringify(inventario, null, 2) + '\n';
   if (PARECE_CREDENCIAL.test(texto)) {
     throw new Error('a saida tem algo com cara de credencial; nada foi gravado. Revise banco.sql.');
@@ -321,7 +349,7 @@ async function main(argv) {
   const ed = inventario.edge_functions;
   console.log(`banco.json: ${inventario.tabelas.length} tabelas, ${inventario.cron.jobs.length} cron jobs, `
     + `${inventario.tabelas_orfas.lista.length} orfas, ${inventario.alertas.length} alertas, `
-    + `edges ${ed.publicadas ? `${ed.publicadas.length} publicadas/${ed.no_repo} no repo` : `${ed.no_repo} no repo (publicadas nao consultadas)`} `
+    + `edges ${ed.publicadas ? `${ed.publicadas.length} publicadas/${ed.no_repo} no repo/${ed.externas?.no_ar?.length ?? 0} externas catalogadas` : `${ed.no_repo} no repo (publicadas nao consultadas)`} `
     + `(medido_em ${inventario.medido_em}).`);
 }
 

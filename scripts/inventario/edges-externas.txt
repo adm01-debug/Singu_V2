@@ -1,0 +1,57 @@
+# Edge functions deployadas no projeto pgxfvjmuubtbowutlide que NAO tem codigo neste
+# repositorio e que a decisao do dono (2026-11-08) e MANTER. Elas pertencem a outro
+# sistema que compartilha o mesmo projeto Supabase.
+#
+# Serve de allowlist para scripts/inventario/gerar-banco.mjs: o alerta
+# `edge_publicada_sem_codigo` passa a apontar so o que NAO esta nesta lista — ou seja,
+# uma 44a funcao desconhecida aparecendo. Analise completa e o que cada bloco faz:
+# docs/agentes/edges-externas.md
+#
+# Uma por linha. Linha vazia e linha comecando com # sao ignoradas.
+
+# --- Proxies de integracao e executores (verify_jwt = false: chamaveis sem autenticacao)
+bigquery-cnpj-proxy
+bigquery-proxy
+bitrix-extract-companies
+bitrix24-proxy
+bling-proxy
+cloudflare-proxy
+comtele-proxy
+coop003-executor
+coop004-pacs-report
+evolution-proxy
+fornecedores-proxy
+lalamove-uapi-proxy
+lalamove-unified
+lalamove-v3-proxy
+leadcontact-proxy
+lusha-proxy
+mapbox-proxy
+mcp-query
+phantombuster-proxy
+rodonaves-unified
+spot-unified
+xbz-api-proxy
+xbz-unified
+
+# --- Bloco de IA/ML (verify_jwt = true: exigem JWT)
+agent-card-generator
+ai-compliance
+autotrain-config-generator
+context-optimizer
+cost-calculator
+doc-layout-analyzer
+eval-engine-v2
+guardrails-ml
+health-monitor
+hf-space-tool
+hf-toolbox
+media-pipeline
+nlp-pipeline
+product-description-gen
+rag-embed-v2
+rag-rerank-v2
+sentence-similarity
+smart-model-router
+smolagent-runtime-v2
+synthetic-data-gen
