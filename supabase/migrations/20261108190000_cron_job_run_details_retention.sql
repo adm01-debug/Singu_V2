@@ -31,7 +31,12 @@ $$;
 COMMENT ON FUNCTION public.cleanup_cron_job_run_details(integer) IS
   'Apaga execucoes do pg_cron com mais de _dias (default 7) de cron.job_run_details. Agendada em cleanup_cron_job_run_details_daily.';
 
+-- REVOKE em cascata: PUBLIC remove herança padrão; authenticated e anon revocados
+-- explicitamente porque Supabase pode conceder EXECUTE implicitamente a authenticated
+-- em schemas públicos — has_function_privilege() mostraria true sem estes REVOKEs.
 REVOKE ALL ON FUNCTION public.cleanup_cron_job_run_details(integer) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.cleanup_cron_job_run_details(integer) FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.cleanup_cron_job_run_details(integer) FROM anon;
 GRANT EXECUTE ON FUNCTION public.cleanup_cron_job_run_details(integer) TO service_role;
 
 -- Agendamento diário (idempotente). 04:37 UTC = 01:37 BRT: fora do minuto 0 e sem colidir
