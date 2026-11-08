@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Sparkles,
   Clock,
@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/select';
 import { useNextBestAction } from '@/hooks/useNextBestAction';
 import { useBestContactTime } from '@/hooks/useBestContactTime';
-import { useCreateQuickInteraction } from '@/hooks/useInteractionsRpc';
+import { useCreateContactQuickInteraction } from '@/hooks/useInteractionsRpc';
 import { useCreateTask } from '@/hooks/useTasks';
 import { toast } from 'sonner';
 
@@ -70,10 +70,20 @@ const channelToTipo = (channel: string): string => {
   return 'note';
 };
 
-export const ProximaAcaoCTA = React.memo(function ProximaAcaoCTA({ contactId, contactName }: Props) {
+export const ProximaAcaoCTA = React.memo(function ProximaAcaoCTA(props: Props) {
+  return <ContactProximaAcaoCTA key={props.contactId} {...props} />;
+});
+
+function ContactProximaAcaoCTA({ contactId, contactName }: Props) {
   const { nextAction, isLoading, isGenerating, generate } = useNextBestAction(contactId);
   const { data: bestTime } = useBestContactTime(contactId);
-  const createInteraction = useCreateQuickInteraction();
+  const createInteraction = useCreateContactQuickInteraction();
+  const registerPending = useRef(false);
+  const active = useRef(true);
+  useEffect(() => {
+    active.current = true;
+    return () => { active.current = false; };
+  }, []);
   const createTask = useCreateTask();
 
   const [scriptOpen, setScriptOpen] = useState(false);
@@ -97,22 +107,27 @@ export const ProximaAcaoCTA = React.memo(function ProximaAcaoCTA({ contactId, co
   };
 
   const handleConfirmRegister = async () => {
+    if (registerPending.current) return;
     if (!resumo.trim()) {
       toast.warning('Informe um resumo');
       return;
     }
+    registerPending.current = true;
     try {
       await createInteraction.mutateAsync({
         p_contact_id: contactId,
         p_tipo: tipo,
         p_resumo: resumo.trim(),
       });
+      if (!active.current) return;
       toast.success('Interação registrada!');
       setRegisterOpen(false);
       setResumo('');
       generate();
     } catch {
       toast.error('Erro ao registrar interação');
+    } finally {
+      registerPending.current = false;
     }
   };
 
@@ -319,6 +334,6 @@ export const ProximaAcaoCTA = React.memo(function ProximaAcaoCTA({ contactId, co
       </CardContent>
     </Card>
   );
-});
+}
 
 export default ProximaAcaoCTA;

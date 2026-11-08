@@ -4,6 +4,7 @@ import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
+import type { Database } from '@/integrations/supabase/types';
 
 export interface InteractionHistoryItem {
   id: string;
@@ -109,13 +110,7 @@ export function useCompleteFollowup() {
 export function useCreateQuickInteraction() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (params: {
-      p_company_id?: string;
-      p_contact_id?: string;
-      p_tipo: string;
-      p_resumo: string;
-      p_followup_dias?: number;
-    }) => {
+    mutationFn: async (params: Database['public']['Functions']['create_quick_interaction']['Args']) => {
       const { data, error } = await callExternalRpc(
         'create_quick_interaction',
         params
@@ -127,6 +122,42 @@ export function useCreateQuickInteraction() {
       queryClient.invalidateQueries({ queryKey: ['interaction-history'] });
       queryClient.invalidateQueries({ queryKey: ['pending-followups'] });
       queryClient.invalidateQueries({ queryKey: ['complete-dashboard'] });
+    },
+    onError: () => toast.error('Erro ao registrar interação'),
+  });
+}
+
+export function useCreateContactQuickInteraction() {
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: async (params: { p_contact_id: string; p_tipo: string; p_resumo: string }) => {
+      if (!user) throw new Error('Usuário não autenticado');
+      const { data, error } = await callExternalRpc('create_quick_interaction', {
+        p_contact_interaction: {
+          contact_id: params.p_contact_id,
+          tipo: params.p_tipo,
+          resumo: params.p_resumo,
+        },
+      });
+      if (error) throw error;
+      return z.object({
+        success: z.literal(true),
+        interaction_id: z.string().uuid(),
+        contact_id: z.literal(params.p_contact_id),
+      }).parse(data);
+    },
+    onSuccess: (_data, params) => {
+      for (const queryKey of [
+        ['external-interactions', params.p_contact_id],
+        ['contact-intelligence', params.p_contact_id],
+        ['contact-view-360', user?.id, params.p_contact_id],
+        ['contact', user?.id, params.p_contact_id],
+        ['interactions', params.p_contact_id],
+        ['complete-dashboard'],
+      ]) {
+        queryClient.invalidateQueries({ queryKey });
+      }
     },
     onError: () => toast.error('Erro ao registrar interação'),
   });

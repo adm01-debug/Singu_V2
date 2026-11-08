@@ -22,6 +22,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 - A recuperação de webhooks recusa destinos inválidos, reserva somente registros pendentes e exige confirmação de todas as gravações antes de anunciar sucesso. Atualizações parciais não tentam inserir novas entradas; falhas após o efeito permanecem em processamento para evitar repetição cega.
 
+- Registrar uma interação na Ficha 360 usa um contrato próprio de contato na RPC existente, sem alterar o fluxo de empresas. A gravação exige contato ativo do usuário autenticado e aguarda transferências concorrentes. A ficha só confirma e atualiza seus caches após receber o identificador da interação para o contato solicitado; falhas preservam o resumo e Enter repetido não duplica a requisição pendente.
+
 - Verificações de RLS e publicação rejeitam coletas incompletas, inventários inválidos e health checks sem confirmação real de saúde. Uma falha de coleta preserva o baseline mesmo com `--update`.
 - O baseline de RLS exige todos os perfis declarados e bloqueia a coleta sem o JWT necessário; os runbooks de publicação preparam a sessão de teste no destino e distinguem ausência de atividade de email de saúde comprovada.
 

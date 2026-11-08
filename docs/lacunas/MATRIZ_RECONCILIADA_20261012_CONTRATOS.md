@@ -26,6 +26,12 @@ Base: snapshot, exceto PRs. Prefixos: **H**=`src/hooks/`, **C**=`src/components/
 
 ## Matriz E — 101 IDs
 
+### Atualização local de E-R03 — 28/10/2026
+
+O CTA usa uma sobrecarga `create_quick_interaction(p_contact_interaction jsonb)`, com `contact_id`, `tipo` e `resumo`, sem alterar os argumentos da RPC empresarial. A função exige JWT, contato ativo do próprio usuário e bloqueio compartilhado contra transferência/arquivamento concorrentes. A confirmação exige identificador válido e o contato solicitado; o cache só é invalidado após sucesso. Trocar de contato isola o formulário e impede uma resposta antiga de limpar outro rascunho.
+
+Passaram 15 regressões de componente/hook/transporte e sete provas com PostgreSQL/PostgREST locais, incluindo duas contas, rejeições, handler real, compatibilidade empresarial e ambas as ordens de transferência. A reversão local preservou corpo e permissões da RPC empresarial. A fixture é mínima, não uma réplica do banco remoto: aplicação da migration, grants/RLS reais, login no navegador e produção continuam pendentes. Os demais IDs mantêm o corte histórico desta matriz.
+
 | ID | Estado | Evidência atual | O que falta | Teste/aceite |
 |---|---|---|---|---|
 | E-T01, E-H07 | DECISÃO DE PRODUTO/INTEGRAÇÃO ADIADA | H/useErpData.ts:32–53; F/external-data/index.ts:109–159 | Candidatos ERP não permitidos; erro agora explícito, não vazio; escopo Produtos/Propostas vetado no consolidado §10 | Decidir visualização ERP antes de liberar contratos |
@@ -42,7 +48,7 @@ Base: snapshot, exceto PRs. Prefixos: **H**=`src/hooks/`, **C**=`src/components/
 | E-T18, E-T19, E-D03, E-D04 | NÃO VERIFICADO NO RUNTIME | H/useRodizioEquipe.ts:77,99; M/20261011195900:44–133; M/20261012040000:15–94 | Baseline avançou para relações de empresa/atividades, mas `users`, configuração e várias views seguem sem CREATE em migrations | Replay isolado + comparação do catálogo |
 | E-R01 | AINDA REPRODUZÍVEL | H/useTasks.ts:238–243; F/external-data/index.ts:83–85 | `reopen_task` fora da allowlist; fallback não equivale à RPC | Reabrir pelo contrato e negar dono diferente |
 | E-R02 | AINDA REPRODUZÍVEL | H/useCompanyActions.ts:10–12 × T:66968–66970 | `p_company_keep/p_company_remove` | Mesclagem sem PGRST202 e sem perda de vínculos |
-| E-R03 | AINDA REPRODUZÍVEL | C/ficha-360/ProximaAcaoCTA.tsx:105–109 × T:61950–61957 | Contrato por contato/empresa correto | CTA registra a interação correta |
+| E-R03 | CORRIGIDO E VALIDADO LOCALMENTE; REMOTO PENDENTE | C/ficha-360/ProximaAcaoCTA.contract.test.tsx; H/useInteractionsRpc.ts; M/20261028224000_contact_quick_interaction.sql | Aplicar contrato no banco externo autorizado e validar catálogo, permissões e interface reais | CTA registra no contato correto; falhas não anunciam sucesso |
 | E-R04 | AINDA REPRODUZÍVEL | C/pipeline/CreateDealWidget.tsx:17–21 × T:61825–61833 | `p_titulo/p_valor` | Widget cria título/valor corretos |
 | E-R05 | AINDA REPRODUZÍVEL | H/useInteractionsRpc.ts:79–82; M/20261008120000:807 | Hook RPC sem consumidor envia `p_user_id`, não vendedor | Corrigir antes de ligar; widget vivo usa outro hook |
 | E-R06, E-R07, E-R08 | NÃO VERIFICADO NO RUNTIME | H/usePipeline.ts:146–200; H/useReportsAnalytics.ts:99–313; H/useGamification.ts:76–159 | RPCs tipadas, mas definições citadas não versionadas | Replay e amostras de respostas por carteira |
