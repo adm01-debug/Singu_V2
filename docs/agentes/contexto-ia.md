@@ -36,7 +36,7 @@ o que existe no banco é o que a fonte `supabase/` diz.
 ```bash
 npm run contexto:ia        # código  -> docs/contexto/codigo/
 npm run contexto:regras    # regras  -> docs/contexto/regras/
-npm run contexto:banco     # banco   -> docs/contexto/supabase/ (precisa de SUPABASE_DB_URL)
+npm run contexto:banco     # banco   -> docs/contexto/supabase/ (precisa de SUPABASE_DB_URL no ambiente)
 npm run contexto:indice    # monta docs/contexto/00-INDEX.md a partir dos manifests
 npm run contexto:ia:test   # suíte do gerador de código
 ```
@@ -47,6 +47,7 @@ A saída é ignorada pelo `.gitignore` em `main` — ela só existe na branch `c
 
 | Secret | Usado por | Sem ele |
 |---|---|---|
-| `SUPABASE_DB_URL` | job `banco` do `contexto.yml` (somente leitura, projeto `hjhthvzwtvwgdrochcam`) | o job sai verde com aviso e a pasta `supabase/` fica como estava |
+| `PGHOST` / `PGPORT` / `PGUSER` / `PGPASSWORD` / `PGDATABASE` (já existem no repo, usados pelo `restore-drill.yml`) | job `banco` do `contexto.yml`: monta a conexão com `sslmode=verify-full`; a senha fica em `PGPASSWORD`, nunca na URL | o job sai verde com aviso e a pasta `supabase/` fica como estava |
+| `SUPABASE_DB_URL` (opcional) | mesmo job; se existir, tem precedência sobre os `PG*` | nada — é só um override |
 
 Os produtores de código e de regras não usam secret nenhum: leem apenas arquivos do repositório e `git log`.

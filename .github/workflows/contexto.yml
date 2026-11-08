@@ -225,12 +225,29 @@ jobs:
       - name: Gerar supabase/
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          PGHOST: ${{ secrets.PGHOST }}
+          PGPORT: ${{ secrets.PGPORT }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
           EVENTO: ${{ github.event_name }}
         run: |
+          # Sem SUPABASE_DB_URL, monta a conexão com os mesmos secrets PG* que o restore-drill.yml
+          # já usa. A senha NUNCA entra na URL: o libpq a lê de PGPASSWORD no ambiente.
+          if [ -z "${SUPABASE_DB_URL:-}" ] && [ -n "${PGHOST:-}" ] && [ -n "${PGUSER:-}" ] \
+             && [ -n "${PGPASSWORD:-}" ] && [ -n "${PGDATABASE:-}" ]; then
+            mkdir -m 700 -p "$RUNNER_TEMP/ssl"
+            curl --fail --silent --show-error --location --connect-timeout 15 --max-time 60 \
+              https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt \
+              --output "$RUNNER_TEMP/ssl/supabase-ca.crt"
+            export PGSSLROOTCERT="$RUNNER_TEMP/ssl/supabase-ca.crt"
+            export SUPABASE_DB_URL="postgresql://${PGUSER}@${PGHOST}:${PGPORT:-5432}/${PGDATABASE}?sslmode=verify-full"
+            echo "Conexão montada a partir dos secrets PG* (sslmode=verify-full)."
+          fi
           if [ -z "${SUPABASE_DB_URL:-}" ]; then
-            # Sem o secret não há o que coletar. No agendamento sai verde com aviso para não pintar
+            # Sem conexão não há o que coletar. No agendamento sai verde com aviso para não pintar
             # 144 runs/dia de vermelho; no dispatch manual falha para a pessoa ver.
-            echo "::warning::Secret SUPABASE_DB_URL não definido — snapshot pulado (ver scripts/supabase_snapshot/README.md)"
+            echo "::warning::Sem SUPABASE_DB_URL e sem os secrets PGHOST/PGUSER/PGPASSWORD/PGDATABASE — snapshot pulado (ver scripts/supabase_snapshot/README.md)"
             echo "SNAPSHOT_SKIPPED=1" >> "$GITHUB_ENV"
             if [ "$EVENTO" = "workflow_dispatch" ]; then exit 1; fi
             exit 0
