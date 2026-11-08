@@ -93,4 +93,20 @@
 
 ## Grants
 
-_nenhum_
+| role | privilégios |
+|---|---|
+| authenticated | DELETE, INSERT, SELECT, UPDATE |
+| service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+
+
+Grants por coluna:
+
+| coluna | role | privilégios |
+|---|---|---|
+| description | anon | SELECT |
+| id | anon | SELECT |
+| is_published | anon | SELECT |
+| slug | anon | SELECT |
+| thumbnail_url | anon | SELECT |
+| title | anon | SELECT |
+| type | anon | SELECT |

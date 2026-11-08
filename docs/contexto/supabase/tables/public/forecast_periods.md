@@ -101,4 +101,7 @@
 
 ## Grants
 
-_nenhum_
+| role | privilégios |
+|---|---|
+| authenticated | DELETE, INSERT, SELECT, UPDATE |
+| service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
