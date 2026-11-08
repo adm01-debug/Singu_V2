@@ -1,3 +1,8 @@
+# docs:
+#   gatilho: pull_request e push em main que toquem supabase/migrations/ ou scripts/rls-matrix/; agendado (seg 06:00 UTC); dispatch
+#   prova: a exposicao real de RLS medida com a anon key e com um usuario logado sem role bate com scripts/rls-matrix/rls-baseline.json
+#   falha: o job fica vermelho e aponta a tabela que passou a expor mais do que o baseline
+#   avisa: ninguem — o check da PR e o run agendado vermelho sao o aviso
 name: RLS exposure guard
 
 # Etapa 84 do plano banco-único: trava regressão de exposição de RLS.

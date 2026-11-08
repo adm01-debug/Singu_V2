@@ -1,0 +1,56 @@
+# docs:
+#   gatilho: pull_request e push em main que toquem .github/workflows/, scripts/ci/ ou docs/ci/
+#   prova: docs/ci/README.md e a projecao exata dos blocos "# docs:" dos workflows, e o gerador passa nos proprios testes
+#   falha: PR vermelha com o comando a rodar (node scripts/ci/render-workflow-docs.mjs) e commitar
+#   avisa: ninguem — o check da PR e o aviso
+name: Docs de CI sem drift
+
+# Mexer num gatilho de workflow sem atualizar docs/ci/README.md deixa a documentacao mentindo.
+# Este job nao gera nada: ele so confere que o README commitado bate com os YAMLs.
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'scripts/ci/**'
+      - 'docs/ci/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - 'scripts/ci/**'
+      - 'docs/ci/**'
+
+concurrency:
+  group: docs-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -euo pipefail {0}
+
+jobs:
+  sem-drift:
+    name: docs/ci/README.md bate com os workflows
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Testes do gerador
+        run: node --test scripts/ci/render-workflow-docs.test.mjs
+
+      - name: Conferir docs/ci/README.md
+        run: node scripts/ci/render-workflow-docs.mjs --check

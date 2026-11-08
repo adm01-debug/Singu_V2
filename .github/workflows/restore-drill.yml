@@ -1,3 +1,8 @@
+# docs:
+#   gatilho: pull_request que toque o workflow, os scripts de DR ou o teste de integracao; e dispatch
+#   prova: copia logica do banco restaura em PostgreSQL efemero, os bloqueios funcionam e a instancia e removida no fim
+#   falha: o job fica vermelho; a evidencia e preservada inclusive nas falhas de preparacao e a instancia efemera nao removida tambem derruba o run
+#   avisa: ninguem — evidencia fica no artifact do run, sem dados do banco
 name: Teste de restauração lógica
 
 on:
