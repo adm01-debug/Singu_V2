@@ -4,12 +4,12 @@
  "stack": {
   "linguagens": [
    "TypeScript (2012)",
-   "SQL (640)",
-   "Markdown (146)",
+   "SQL (641)",
+   "Markdown (147)",
    "Shell (70)",
-   "JavaScript (39)",
-   "JSON (11)",
-   "YAML (11)",
+   "JavaScript (42)",
+   "JSON (14)",
+   "YAML (12)",
    "Python (10)"
   ],
   "linguagem_principal": "TypeScript",
@@ -207,6 +207,44 @@
     "actions/download-artifact",
     "actions/setup-node",
     "actions/upload-artifact"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/inventario-estado-semanal.yml",
+   "nome": "Inventário do estado real (semanal)",
+   "gatilhos": [
+    "schedule",
+    "workflow_dispatch"
+   ],
+   "crons": [
+    "23 10 * * 1"
+   ],
+   "branches": [],
+   "jobs": [
+    "gerar"
+   ],
+   "permissoes": [
+    "contents: read"
+   ],
+   "scripts_usados": [
+    "scripts/inventario/gerar-banco.mjs",
+    "scripts/inventario/gerar-repo.mjs",
+    "scripts/inventario/mudou-conteudo.mjs"
+   ],
+   "npm_scripts": [],
+   "secrets": [
+    "PGDATABASE",
+    "PGHOST",
+    "PGPASSWORD",
+    "PGPORT",
+    "PGUSER"
+   ],
+   "actions": [
+    "actions/checkout",
+    "actions/github-script",
+    "actions/setup-node",
+    "actions/upload-artifact",
+    "peter-evans/create-pull-request"
    ]
   },
   {
@@ -840,6 +878,10 @@
    },
    {
     "host": "api.resend.com",
+    "arquivos": 1
+   },
+   {
+    "host": "api.supabase.com",
     "arquivos": 1
    },
    {

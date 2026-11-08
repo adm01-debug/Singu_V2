@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `77990bc30cbcef0f2ed6d1fd854f53117a004ec4` (2026-11-08T12:40:31-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `de99442c539a4e630038c92fe9d958febec43478` (2026-11-08T12:40:56-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2012), SQL (640), Markdown (146), Shell (70), JavaScript (39), JSON (11), YAML (11), Python (10)
+- linguagens: TypeScript (2012), SQL (641), Markdown (147), Shell (70), JavaScript (42), JSON (14), YAML (12), Python (10)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,9 +34,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 2961 |
-| arquivos_codigo | 2060 |
-| linhas_codigo | 387676 |
+| arquivos_total | 2970 |
+| arquivos_codigo | 2063 |
+| linhas_codigo | 388167 |
 | rotas | 114 |
 | rotas_http_backend | 12 |
 | vistas_por_id | 0 |
@@ -49,9 +49,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | migrations | 475 |
 | cron_jobs | 19 |
 | testes | 202 |
-| workflows | 5 |
-| scripts | 209 |
-| docs_md | 146 |
+| workflows | 6 |
+| scripts | 213 |
+| docs_md | 147 |
 
 ## Onde ficam as coisas
 - telas: src/components (1), src/pages (1)
@@ -61,7 +61,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - testes: co-localizado (__tests__) (88), co-localizado (*.test) (80), tests/ (22)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
-- scripts: scripts/migration (159), scripts/hardening (9), scripts/monitoring (4)
+- scripts: scripts/migration (159), scripts/hardening (9), scripts/inventario (4)
 - docs: docs (39), (raiz) (16)
 - nomenclatura: {"componentes":"PascalCase (93%)","hooks":"use + PascalCase","servicos":"camelCase (92%)","edge_functions":"kebab-case (99%)","tabelas":"snake_case (90%)"}
 - instruções para agentes no repo: AGENTS.md, CLAUDE.md
@@ -420,8 +420,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 4 — ex.: scripts/ai-context/cenarios.mjs:102, supabase/functions/_shared/auth_test.ts:61, supabase/functions/_shared/auth_test.ts:68
 
 ## Grafo de código (graphify)
-- 18844 nós · 30775 arestas · 1997 comunidades · grafo do commit `77990bc3`
-- comunidades maiores: ref_components (344), ref_lib (258), ref_types (249), useAuth (247), _shared/auth.ts (244), framer-motion (232), 📖 Dicionário de Dados — SINGU CRM (229), date-fns (224), ref_hooks (216), react-router-dom (211), lucide-react (207), react (206)
+- 18892 nós · 30847 arestas · 2049 comunidades · grafo do commit `de99442c`
+- comunidades maiores: ref_components (304), _shared/auth.ts (270), useAuth (258), framer-motion (240), react-router-dom (238), sonner (235), ref_lib (233), 📖 Dicionário de Dados — SINGU CRM (232), date-fns (214), react (186), ref_hooks (171), @tanstack/react-query (167)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), jsonError() (supabase/functions/_shared/auth.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), uniq() (scripts/ai-context/gerar.mjs), readText() (scripts/ai-context/gerar.mjs), md_table() (scripts/regras_negocio/generate.py), function() (scripts/supabase_snapshot/test_snapshot.py), getContactBehavior() (src/lib/contact-utils.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -445,6 +445,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Workflows
 - `ci.yml` — CI (pull_request, push)
 - `contexto.yml` — Contexto para agentes de IA (10 min) (push, schedule, workflow_dispatch; cron 3-59/10 * * * *)
+- `inventario-estado-semanal.yml` — Inventário do estado real (semanal) (schedule, workflow_dispatch; cron 23 10 * * 1)
 - `monitoring-lint.yml` — monitoring-lint (pull_request, push)
 - `restore-drill.yml` — Teste de restauração lógica (pull_request, workflow_dispatch)
 - `rls-exposure-guard.yml` — RLS exposure guard (pull_request, push, schedule, workflow_dispatch; cron 0 6 * * 1)
@@ -532,6 +533,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-08 `de99442c` feat(inventario): inventário semanal do estado real do banco e das edges, com PR automática (#170)
 - 2026-11-08 `77990bc3` feat(contexto): produtores autônomos que mantêm o estado real do repositório para agentes de IA (#169)
 - 2026-11-08 `01fc3928` fix(ci): corrige YAML fatal do CI, secret fantasma e portabilidade dos gate tests (#164)
 - 2026-11-07 `3e4b9701` feat: teste de auditoria de cobertura RLS (check-rls-coverage.sql) (#168)
@@ -546,7 +548,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-05 `738a2a40` fix(webhook): preserva timestamps textuais do Evolution (#157)
 - 2026-11-05 `8ed532a9` chore: atualizar AGENTS.md com texto mestre
 - 2026-11-05 `36786632` build(deps): bump minor-and-patch dependencies
-- 2026-10-31 `09ddc77a` fix(segurança): serializa transferência e edição de relações (#143)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "77990bc30cbcef0f2ed6d1fd854f53117a004ec4",
+  "sha": "de99442c539a4e630038c92fe9d958febec43478",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-08 15:40 UTC",
-  "files_total": 3064,
-  "code_files": 2701,
-  "code_lines": 380185
+  "generated_at": "2026-11-08 15:42 UTC",
+  "files_total": 3073,
+  "code_files": 2705,
+  "code_lines": 380834
  },
  "version": "1.3.2",
- "facts_hash": "81a75b640adc3ea5",
+ "facts_hash": "2e91e125fa9398ae",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -158,6 +158,14 @@
     ]
    },
    {
+    "file": ".github/workflows/inventario-estado-semanal.yml",
+    "name": "Inventário do estado real (semanal)",
+    "triggers": [
+     "schedule",
+     "workflow_dispatch"
+    ]
+   },
+   {
     "file": ".github/workflows/monitoring-lint.yml",
     "name": "monitoring-lint",
     "triggers": [
@@ -188,8 +196,8 @@
   "languages": {
    ".tsx": 1145,
    ".ts": 867,
-   ".sql": 640,
-   ".mjs": 19,
+   ".sql": 641,
+   ".mjs": 22,
    ".js": 18,
    ".py": 10,
    ".cjs": 3
@@ -63440,6 +63448,11 @@
    },
    {
     "kind": "GitHub Actions cron",
+    "detail": "23 10 * * 1",
+    "file": ".github/workflows/inventario-estado-semanal.yml"
+   },
+   {
+    "kind": "GitHub Actions cron",
     "detail": "0 6 * * 1",
     "file": ".github/workflows/rls-exposure-guard.yml"
    }
@@ -66528,8 +66541,8 @@
   },
   {
    "module": "scripts",
-   "files": 170,
-   "lines": 25166,
+   "files": 174,
+   "lines": 25815,
    "tables": [
     "_migration_cdc_checkpoint",
     "a",
@@ -66547,12 +66560,15 @@
     "system_alerts",
     "t",
     "t1",
+    "tabela",
     "tools_runtime",
     "tx",
     "x"
    ],
    "exports": [
     "gerar.unit.mjs: AppRoutes, useContacts",
+    "gerar-banco.mjs: PROJETO_OFICIAL, LIMIARES, PARECE_CREDENCIAL, extrairInventario, contarUsoNoCodigo, LEDGER_TOLERANCIA",
+    "mudou-conteudo.mjs: PADRAO, semCarimbos, mudou",
     "_lib.ts: Env, Bucket, StorageObject, loadEnv, redact, retryFetch",
     "generate.py: is_app_code, log, read_text, redact, rel, is_archived_sql",
     "indice.py: git, parse_dt, read_manifest, producer_health, entry_file, main",
@@ -66654,6 +66670,10 @@
     "scripts/hardening/check-replication-config.sql",
     "scripts/hardening/check-security-definer-search-path.sql",
     "scripts/hardening/check-tables-without-pk.sql",
+    "scripts/inventario/banco.sql",
+    "scripts/inventario/gerar-banco.mjs",
+    "scripts/inventario/gerar-repo.mjs",
+    "scripts/inventario/mudou-conteudo.mjs",
     "scripts/migration/reset-passwords.ts",
     "scripts/migration/table-order.sql",
     "scripts/migration/cdc/checkpoint.sql",
@@ -66682,11 +66702,7 @@
     "scripts/migration/sql/mark-must-reset.sql",
     "scripts/migration/storage/_lib.ts",
     "scripts/migration/storage/copy-large.ts",
-    "scripts/migration/storage/copy-objects.ts",
-    "scripts/migration/storage/create-buckets.ts",
-    "scripts/migration/storage/list-buckets.ts",
-    "scripts/migration/storage/verify-counts.ts",
-    "scripts/migration/verify/access-exclusive-locks-guard.sql"
+    "scripts/migration/storage/copy-objects.ts"
    ]
   },
   {
@@ -71224,6 +71240,12 @@
      "scripts/ai-context/cenarios.mjs"
     ]
    },
+   "tabela": {
+    "ref": [
+     "scripts/inventario/gerar-banco.mjs",
+     "scripts/inventario/gerar-repo.mjs"
+    ]
+   },
    "tasks": {
     "insert": [
      "supabase/functions/nurturing-runner/index.ts"
@@ -74305,6 +74327,9 @@
    "INTERVAL_MS": [
     "scripts/migration/monitoring/synthetic-checks.ts"
    ],
+   "INVENTARIO_PERMITIR_OUTRO_PROJETO": [
+    "scripts/inventario/gerar-banco.mjs"
+   ],
    "LARGE_THRESHOLD": [
     "scripts/migration/storage/copy-large.ts"
    ],
@@ -74483,6 +74508,7 @@
     "scripts/apply-triggers-views.js",
     "scripts/chunk-apply.js",
     "scripts/fix-enums.js",
+    "scripts/inventario/gerar-banco.mjs",
     "scripts/retry-failed.js",
     "scripts/supabase_snapshot/snapshot.py",
     "tmp_view_check.js"
@@ -74517,6 +74543,9 @@
     "supabase/functions/win-loss-analyzer/index.ts",
     "supabase/functions/win-loss-record-deal/index.ts"
    ],
+   "SUPABASE_API_URL": [
+    "scripts/inventario/gerar-banco.mjs"
+   ],
    "SUPABASE_DB_URL": [
     "scripts/supabase_snapshot/snapshot.py",
     "supabase/functions/email-pipeline-health/index.ts"
@@ -74525,6 +74554,7 @@
     "scripts/gen-supabase-types.mjs"
    ],
    "SUPABASE_PROJECT_REF": [
+    "scripts/inventario/gerar-banco.mjs",
     "scripts/supabase_snapshot/snapshot.py"
    ],
    "SUPABASE_SERVICE_ROLE_KEY": [
@@ -75365,6 +75395,10 @@
   },
   "dynamic_from": [
    {
+    "file": "scripts/inventario/gerar-banco.mjs",
+    "count": 1
+   },
+   {
     "file": "scripts/migration/cdc/replay.ts",
     "count": 2
    },
@@ -75800,6 +75834,7 @@
    "so_teste",
    "t",
    "t1",
+   "tabela",
    "tools_runtime",
    "tx",
    "users",
@@ -78801,6 +78836,62 @@
    {
     "file": "scripts/ai-context/cenarios.mjs",
     "msg": "${msg}: esperado ${JSON.stringify(b)} obtido ${JSON.stringify(a)}"
+   },
+   {
+    "file": "scripts/inventario/gerar-banco.mjs",
+    "msg": "--entrada exige o caminho do arquivo com a resposta do banco.sql"
+   },
+   {
+    "file": "scripts/inventario/gerar-banco.mjs",
+    "msg": "Management API ${caminho} respondeu HTTP ${res.status}"
+   },
+   {
+    "file": "scripts/inventario/gerar-banco.mjs",
+    "msg": "SUPABASE_PROJECT_REF=${ref} nao e o banco oficial (${PROJETO_OFICIAL})."
+   },
+   {
+    "file": "scripts/inventario/gerar-banco.mjs",
+    "msg": "a resposta nao parece ser do banco oficial: ${comuns} tabelas em comum com o manifesto "
+   },
+   {
+    "file": "scripts/inventario/gerar-banco.mjs",
+    "msg": "a resposta nao parece ser do banco oficial: ledger com ${registros} registros e maior versao ${max}; "
+   },
+   {
+    "file": "scripts/inventario/gerar-banco.mjs",
+    "msg": "a resposta nao traz resumo.ledger_versao_max/ledger_registros; rode o banco.sql atual."
+   },
+   {
+    "file": "scripts/inventario/gerar-banco.mjs",
+    "msg": "a saida tem algo com cara de credencial; nada foi gravado. Revise banco.sql."
+   },
+   {
+    "file": "scripts/inventario/gerar-banco.mjs",
+    "msg": "entrada sem as chaves: ${faltando.join("
+   },
+   {
+    "file": "scripts/inventario/gerar-banco.mjs",
+    "msg": "entrada sem tabelas"
+   },
+   {
+    "file": "scripts/inventario/gerar-banco.mjs",
+    "msg": "format_version ${dado.format_version} desconhecido (esperado 1)"
+   },
+   {
+    "file": "scripts/inventario/gerar-banco.mjs",
+    "msg": "sem --entrada e sem SUPABASE_ACCESS_TOKEN: nada para ler (veja o cabecalho do script)."
+   },
+   {
+    "file": "scripts/inventario/gerar-banco.mjs",
+    "msg": "sem supabase/schema-manifest.json e sem migrations em supabase/migrations/ "
+   },
+   {
+    "file": "scripts/inventario/gerar-repo.mjs",
+    "msg": "ripgrep (rg) falhou com exit ${status}; o inventário não foi gerado."
+   },
+   {
+    "file": "scripts/inventario/gerar-repo.mjs",
+    "msg": "ripgrep (rg) não encontrado; o inventário não pode ser gerado com segurança."
    },
    {
     "file": "scripts/migration/cdc/replay.ts",
@@ -149858,6 +149949,7 @@
    "scripts/ai-context/cenarios.mjs",
    "scripts/ai-context/gerar.unit.mjs",
    "scripts/gen-supabase-types.mjs",
+   "scripts/inventario/gerar-banco.mjs",
    "scripts/migration/cdc/checkpoint.sql",
    "scripts/migration/cdc/replay.ts",
    "scripts/migration/compliance/lgpd-snapshot.ts",
@@ -162228,6 +162320,14 @@
    },
    {
     "kind": "tabela",
+    "msg": "tabela `tabela` usada no código não existe nas migrations/types do repo",
+    "where": [
+     "scripts/inventario/gerar-banco.mjs",
+     "scripts/inventario/gerar-repo.mjs"
+    ]
+   },
+   {
+    "kind": "tabela",
     "msg": "tabela `tools_runtime` usada no código não existe nas migrations/types do repo",
     "where": [
      "scripts/ai-context/gerar.unit.mjs"
@@ -162482,6 +162582,13 @@
     "msg": "RPC `x` chamada mas não definida nas migrations/types",
     "where": [
      "scripts/diff-tables.mjs"
+    ]
+   },
+   {
+    "kind": "dinâmico",
+    "msg": "1 chamada(s) `.from(variável)` — tabela só conhecida em runtime",
+    "where": [
+     "scripts/inventario/gerar-banco.mjs"
     ]
    },
    {
@@ -164041,6 +164148,107 @@
   "scripts/hardening/check-tables-without-pk.sql": {
    "path": "scripts/hardening/check-tables-without-pk.sql",
    "lines": 50
+  },
+  "scripts/inventario/banco.sql": {
+   "path": "scripts/inventario/banco.sql",
+   "lines": 158,
+   "temporal": [
+    "'mais_de_7_dias', (SELECT count(*) FROM cron.job_run_details WHERE start_time <= now() - interval '7 days'),",
+    "'mensagens_7d', (SELECT count(*) FROM public.whatsapp_messages WHERE created_at > now() - interval '7 days')",
+    "WHERE d.start_time > now() - interval '7 days'",
+    "count(*) FILTER (WHERE e.start_time > now() - interval '24 hours' AND e.status = 'failed')::int AS falhas_24h,",
+    "count(*) FILTER (WHERE e.start_time > now() - interval '24 hours')::int AS exec_24h,"
+   ]
+  },
+  "scripts/inventario/gerar-banco.mjs": {
+   "path": "scripts/inventario/gerar-banco.mjs",
+   "lines": 326,
+   "exports": [
+    "const PROJETO_OFICIAL",
+    "const LIMIARES",
+    "const PARECE_CREDENCIAL",
+    "function extrairInventario",
+    "function contarUsoNoCodigo",
+    "const LEDGER_TOLERANCIA",
+    "function conferirOrigem",
+    "const versoesDoRepo",
+    "function edgesNoRepo",
+    "function compararEdges",
+    "function rodaTodoDia",
+    "function montarInventario"
+   ],
+   "tables": [
+    {
+     "table": "tabela",
+     "op": "ref"
+    },
+    {
+     "table": "tabela",
+     "op": "ref"
+    }
+   ],
+   "dyn_from": 1,
+   "env": [
+    "INVENTARIO_PERMITIR_OUTRO_PROJETO",
+    "SUPABASE_ACCESS_TOKEN",
+    "SUPABASE_API_URL",
+    "SUPABASE_PROJECT_REF"
+   ],
+   "errors": [
+    "--entrada exige o caminho do arquivo com a resposta do banco.sql",
+    "Management API ${caminho} respondeu HTTP ${res.status}",
+    "SUPABASE_PROJECT_REF=${ref} nao e o banco oficial (${PROJETO_OFICIAL}).",
+    "a resposta nao parece ser do banco oficial: ${comuns} tabelas em comum com o manifesto ",
+    "a resposta nao parece ser do banco oficial: ledger com ${registros} registros e maior versao ${max}; ",
+    "a resposta nao traz resumo.ledger_versao_max/ledger_registros; rode o banco.sql atual.",
+    "a saida tem algo com cara de credencial; nada foi gravado. Revise banco.sql.",
+    "entrada sem as chaves: ${faltando.join(",
+    "entrada sem tabelas",
+    "format_version ${dado.format_version} desconhecido (esperado 1)",
+    "sem --entrada e sem SUPABASE_ACCESS_TOKEN: nada para ler (veja o cabecalho do script).",
+    "sem supabase/schema-manifest.json e sem migrations em supabase/migrations/ "
+   ],
+   "params": [
+    {
+     "name": "PROJETO_OFICIAL",
+     "value": "'pgxfvjmuubtbowutlide'"
+    }
+   ],
+   "rule_comments": [
+    "Limite conhecido: `.from(variavel)` nao e resolvido."
+   ],
+   "doc": "!/usr/bin/env node",
+   "percents": [
+    "* producao mantida pelo types-sync), fonte independente do arquivo de entrada: pelo menos 90%",
+    "// 475 arquivos em supabase/migrations/ (medido em 2026-11-08), diferenca de 42% que nao indica",
+    "// Cron 100% parado nao grava linha em job_run_details: some de horas_paradas_7d e a taxa fica 0."
+   ],
+   "uses_service_role": true
+  },
+  "scripts/inventario/gerar-repo.mjs": {
+   "path": "scripts/inventario/gerar-repo.mjs",
+   "lines": 81,
+   "tables": [
+    {
+     "table": "tabela",
+     "op": "ref"
+    }
+   ],
+   "errors": [
+    "ripgrep (rg) falhou com exit ${status}; o inventário não foi gerado.",
+    "ripgrep (rg) não encontrado; o inventário não pode ser gerado com segurança."
+   ],
+   "doc": "!/usr/bin/env node Inventario gerado do lado do repositorio (sem acesso ao banco): - edge functions: linhas, segredos lidos (Deno.env.get) e quem as invoca (src, migrations, outras edges, e2e, CI) - tabelas: para cada nome recebido em stdin (uma por linha), quantos .from('tabela') ha em src/ e supab …"
+  },
+  "scripts/inventario/mudou-conteudo.mjs": {
+   "path": "scripts/inventario/mudou-conteudo.mjs",
+   "lines": 84,
+   "exports": [
+    "const PADRAO",
+    "function semCarimbos",
+    "function mudou"
+   ],
+   "doc": "!/usr/bin/env node"
   },
   "scripts/migration/reset-passwords.ts": {
    "path": "scripts/migration/reset-passwords.ts",
@@ -222589,10 +222797,27 @@
   }
  },
  "git": {
-  "sha": "77990bc30cbcef0f2ed6d1fd854f53117a004ec4",
+  "sha": "de99442c539a4e630038c92fe9d958febec43478",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "de99442",
+    "date": "2026-11-08",
+    "author": "adm01-debug",
+    "subject": "feat(inventario): inventário semanal do estado real do banco e das edges, com PR automática (#170)",
+    "files": [
+     ".github/workflows/inventario-estado-semanal.yml",
+     "inventario/estado/README.md",
+     "inventario/estado/banco.json",
+     "inventario/estado/edges.json",
+     "inventario/estado/tabelas-uso.json",
+     "scripts/inventario/banco.sql",
+     "scripts/inventario/gerar-banco.mjs",
+     "scripts/inventario/gerar-repo.mjs",
+     "scripts/inventario/mudou-conteudo.mjs"
+    ]
+   },
    {
     "sha": "77990bc",
     "date": "2026-11-08",
@@ -223001,17 +223226,6 @@
      "supabase/migrations/20261019144500_fix_sidebar_rpc_empresa_influencers.sql",
      "supabase/tests/get_contact_sidebar_by_phone.sql"
     ]
-   },
-   {
-    "sha": "7ee8e71",
-    "date": "2026-10-22",
-    "author": "adm01-debug",
-    "subject": "fix(ci): bot guard por sufixo, skip PR title em bots, rls-coverage count, dompurify CVEs (#134)",
-    "files": [
-     ".github/workflows/ci.yml",
-     "package-lock.json",
-     "scripts/migration/verify/rls-coverage.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -223021,18 +223235,18 @@
    ],
    [
     ".github/workflows/ci.yml",
-    7
+    6
    ],
    [
     "package.json",
     4
    ],
    [
-    "package-lock.json",
-    4
+    ".github/workflows/rls-exposure-guard.yml",
+    3
    ],
    [
-    ".github/workflows/rls-exposure-guard.yml",
+    "package-lock.json",
     3
    ],
    [
@@ -223088,11 +223302,11 @@
     2
    ],
    [
-    ".github/workflows/contexto.yml",
+    ".github/workflows/inventario-estado-semanal.yml",
     1
    ],
    [
-    ".gitignore",
+    "inventario/estado/README.md",
     1
    ]
   ]

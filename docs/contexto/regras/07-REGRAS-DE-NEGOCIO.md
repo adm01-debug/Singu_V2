@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `77990bc30c` · branch `main` · 2026-11-08 15:40 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `de99442c53` · branch `main` · 2026-11-08 15:42 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4050,6 +4050,20 @@ _nenhum item encontrado_
 | SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro | `scripts/fix-enums.js` |
 | SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro | `scripts/retry-failed.js` |
 | ${msg}: esperado ${JSON.stringify(b)} obtido ${JSON.stringify(a)} | `scripts/ai-context/cenarios.mjs` |
+| --entrada exige o caminho do arquivo com a resposta do banco.sql | `scripts/inventario/gerar-banco.mjs` |
+| Management API ${caminho} respondeu HTTP ${res.status} | `scripts/inventario/gerar-banco.mjs` |
+| SUPABASE_PROJECT_REF=${ref} nao e o banco oficial (${PROJETO_OFICIAL}). | `scripts/inventario/gerar-banco.mjs` |
+| a resposta nao parece ser do banco oficial: ${comuns} tabelas em comum com o manifesto  | `scripts/inventario/gerar-banco.mjs` |
+| a resposta nao parece ser do banco oficial: ledger com ${registros} registros e maior versao ${max};  | `scripts/inventario/gerar-banco.mjs` |
+| a resposta nao traz resumo.ledger_versao_max/ledger_registros; rode o banco.sql atual. | `scripts/inventario/gerar-banco.mjs` |
+| a saida tem algo com cara de credencial; nada foi gravado. Revise banco.sql. | `scripts/inventario/gerar-banco.mjs` |
+| entrada sem as chaves: ${faltando.join( | `scripts/inventario/gerar-banco.mjs` |
+| entrada sem tabelas | `scripts/inventario/gerar-banco.mjs` |
+| format_version ${dado.format_version} desconhecido (esperado 1) | `scripts/inventario/gerar-banco.mjs` |
+| sem --entrada e sem SUPABASE_ACCESS_TOKEN: nada para ler (veja o cabecalho do script). | `scripts/inventario/gerar-banco.mjs` |
+| sem supabase/schema-manifest.json e sem migrations em supabase/migrations/  | `scripts/inventario/gerar-banco.mjs` |
+| ripgrep (rg) falhou com exit ${status}; o inventário não foi gerado. | `scripts/inventario/gerar-repo.mjs` |
+| ripgrep (rg) não encontrado; o inventário não pode ser gerado com segurança. | `scripts/inventario/gerar-repo.mjs` |
 | delete ${table}: ${error.message} | `scripts/migration/cdc/replay.ts` |
 | upsert ${table}: ${error.message} | `scripts/migration/cdc/replay.ts` |
 | HTTP ${r.status} | `scripts/migration/cutover/smoke-tests.ts` |
@@ -4321,21 +4335,7 @@ _nenhum item encontrado_
 | Selecione pelo menos um perfil DISC | `src/components/triggers/TemplateNotificationSettings.tsx` |
 | Não foi possível copiar | `src/components/triggers/profile-based/TemplatePreviewDialog.tsx` |
 | Não foi possível copiar | `src/components/triggers/smart-template/TemplatePreviewContent.tsx` |
-|  className={cn(alertVariants({ variant }), className)} {...props} /> )); Alert.displayName =  | `src/components/ui/alert.tsx` |
-| useFormField should be used within <FormField> | `src/components/ui/form.tsx` |
-| Usuário indisponível para auditoria. | `src/components/ui/searchable-select.tsx` |
-| Valor selecionado, mas não foi possível registrar a auditoria. | `src/components/ui/searchable-select.tsx` |
-| useSidebar must be used within a SidebarProvider. | `src/components/ui/sidebar/sidebar-context.tsx` |
-| Dê um nome à view | `src/components/views/SavedViewsBar.tsx` |
-| Não foi possível copiar | `src/components/views/SavedViewsBar.tsx` |
-| Não foi possível gerar link | `src/components/views/SavedViewsBar.tsx` |
-| Erro ao gravar | `src/components/voice/VoiceInput.tsx` |
-| Erro na transcrição | `src/components/voice/VoiceInput.tsx` |
-| Nenhum texto reconhecido | `src/components/voice/VoiceInput.tsx` |
-| Erro ao adicionar | `src/components/win-loss/CompetitorEditor.tsx` |
-| Erro ao adicionar | `src/components/win-loss/ReasonsEditor.tsx` |
-| Erro ao popular padrões | `src/components/win-loss/ReasonsEditor.tsx` |
-| … +689 linhas — lista completa em `context.json` | |
+| … +703 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

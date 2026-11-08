@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "77990bc30cbcef0f2ed6d1fd854f53117a004ec4",
+  "commit": "de99442c539a4e630038c92fe9d958febec43478",
   "branch": "main",
-  "data_commit": "2026-11-08T12:40:31-03:00",
+  "data_commit": "2026-11-08T12:40:56-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "de99442c",
+    "data": "2026-11-08",
+    "assunto": "feat(inventario): inventário semanal do estado real do banco e das edges, com PR automática (#170)"
+   },
    {
     "sha": "77990bc3",
     "data": "2026-11-08",
@@ -126,14 +131,9 @@
     "sha": "2473883c",
     "data": "2026-10-28",
     "assunto": "fix(test): stub companies.name p/ rodar teste da rpc sidebar em produção (#146)"
-   },
-   {
-    "sha": "45e77ce2",
-    "data": "2026-10-28",
-    "assunto": "fix(cache): preserva confirmações concorrentes de contatos (#145)"
    }
   ],
-  "arquivos_mudados_7d": 48,
+  "arquivos_mudados_7d": 57,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "CHANGELOG.md",
@@ -305,7 +305,7 @@
    },
    {
     "autor": "adm01-debug",
-    "commits": 25
+    "commits": 26
    },
    {
     "autor": "dependabot[bot]",
@@ -318,9 +318,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 2961,
-  "arquivos_codigo": 2060,
-  "linhas_codigo": 387676,
+  "arquivos_total": 2970,
+  "arquivos_codigo": 2063,
+  "linhas_codigo": 388167,
   "rotas": 114,
   "rotas_http_backend": 12,
   "vistas_por_id": 0,
@@ -333,9 +333,9 @@
   "migrations": 475,
   "cron_jobs": 19,
   "testes": 202,
-  "workflows": 5,
-  "scripts": 209,
-  "docs_md": 146
+  "workflows": 6,
+  "scripts": 213,
+  "docs_md": 147
  },
  "por_pasta": {
   "commitlint.config.cjs": {
@@ -477,6 +477,10 @@
   "scripts/generate_real_er.py": {
    "arquivos": 1,
    "linhas": 27
+  },
+  "scripts/inventario": {
+   "arquivos": 3,
+   "linhas": 491
   },
   "scripts/lint-providers.cjs": {
    "arquivos": 1,
@@ -739,7 +743,7 @@
  ],
  "qualidade": {
   "any": 27,
-  "console_log": 220,
+  "console_log": 224,
   "ts_ignore": 2,
   "eslint_disable": 1,
   "todos": 8,
