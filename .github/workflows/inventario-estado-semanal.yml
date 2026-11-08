@@ -1,13 +1,14 @@
 # docs:
 #   gatilho: agendado (seg 10:23 UTC) e dispatch
-#   prova: inventario/estado (banco, edge functions, uso de tabelas) regerado do banco oficial e do codigo
+#   prova: inventario/estado (banco, edge functions, uso de tabelas, rotas do front) regerado do banco oficial e do codigo
 #   falha: o job fica vermelho e o inventario nao e atualizado
 #   avisa: PR automation/inventario-estado com o inventario novo
 name: Inventário do estado real (semanal)
 
-# Refaz inventario/estado/ (banco, edge functions, uso de tabelas no codigo) a partir do banco
-# oficial (somente leitura) e do codigo, e abre PR se algo mudou de verdade.
-# Scripts: scripts/inventario/gerar-banco.mjs e gerar-repo.mjs; mudanca via mudou-conteudo.mjs.
+# Refaz inventario/estado/ (banco, edge functions, uso de tabelas, rotas do front) a partir do
+# banco oficial (somente leitura) e do codigo, e abre PR se algo mudou de verdade.
+# Scripts: scripts/inventario/gerar-banco.mjs, gerar-repo.mjs e gerar-rotas.mjs; mudanca via
+# mudou-conteudo.mjs.
 # Nunca faz push direto em main — entrega via PR na branch automation/inventario-estado.
 #
 # Secrets (os mesmos do restore-drill.yml, nenhum novo):
@@ -102,6 +103,15 @@ jobs:
             > "$RUNNER_TEMP/inv/tabelas.txt"
           node scripts/inventario/gerar-repo.mjs < "$RUNNER_TEMP/inv/tabelas.txt"
 
+      - name: Inventário das rotas do front
+        # Le AppRoutes.tsx, lazyPages.tsx, AppSidebar.tsx e MobileBottomNav.tsx e segue os imports
+        # de cada pagina; so codigo, nenhum acesso a rede. O teste roda antes porque o parser e
+        # regex sobre JSX: se o formato do AppRoutes mudar, falha aqui em vez de gravar inventario
+        # vazio.
+        run: |
+          node --test scripts/inventario/gerar-rotas.test.mjs
+          node scripts/inventario/gerar-rotas.mjs
+
       - name: Decidir se vale PR
         id: mudou
         # Compara o JSON sem os carimbos de data (medido_em/gerado_em), arquivo a arquivo contra o
@@ -134,6 +144,7 @@ jobs:
           add-paths: |
             inventario/estado/banco.json
             inventario/estado/edges.json
+            inventario/estado/rotas.json
             inventario/estado/tabelas-uso.json
 
       # PR aberto com GITHUB_TOKEN não dispara workflows: os checks nascem em action_required.

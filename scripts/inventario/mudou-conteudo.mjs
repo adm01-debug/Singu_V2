@@ -16,7 +16,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-export const PADRAO = ['inventario/estado/banco.json', 'inventario/estado/edge-tabela.json', 'inventario/estado/edges.json', 'inventario/estado/rotas.json', 'inventario/estado/tabelas-uso.json'];
+export const PADRAO = ['inventario/estado/banco.json', 'inventario/estado/edge-tabela.json', 'inventario/estado/edges.json', 'inventario/estado/rotas.json', 'inventario/estado/tabelas-uso.json']
 const CARIMBOS = new Set(['medido_em', 'gerado_em']);
 // Telemetria viva do cron/WhatsApp: muda quase toda semana so pela janela rolante de 7 dias, sem
 // mudanca estrutural nenhuma (achado da revisao de 2026-11-02 em scripts/inventario/gerar-banco.mjs:
