@@ -346,7 +346,7 @@ const Contatos = () => {
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Excluir contato?</AlertDialogTitle>
-              <AlertDialogDescription>Tem certeza que deseja excluir <strong>{deletingContact?.first_name} {deletingContact?.last_name}</strong>? Esta ação não pode ser desfeita.</AlertDialogDescription>
+              <AlertDialogDescription>Tem certeza que deseja excluir <strong>{deletingContact?.first_name} {deletingContact?.last_name}</strong>? Após a exclusão, você terá a opção Desfazer na mensagem de confirmação.</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancelar</AlertDialogCancel>

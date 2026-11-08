@@ -10,6 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { logger } from '@/lib/logger';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Props {
   contactId: string;
@@ -18,18 +19,25 @@ interface Props {
 }
 
 export function SoftDeletePanel({ contactId, contactName, deletedAt }: Props) {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const handleSoftDelete = async () => {
     setLoading(true);
     try {
-      const { error } = await updateExternalData('contacts', contactId, {
+      const { data, error } = await updateExternalData('contacts', contactId, {
         deleted_at: new Date().toISOString(),
       });
       if (error) throw error;
+      if (!data || data.id !== contactId || !data.deleted_at) throw new Error('Arquivamento não confirmado');
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['contacts'] }),
+        queryClient.invalidateQueries({ queryKey: ['contact', user?.id, contactId], exact: true }),
+      ]);
+      setOpen(false);
       toast.success('Contato movido para lixeira');
-      queryClient.invalidateQueries({ queryKey: ['contacts'] });
     } catch (err) {
       logger.error('Error soft-deleting:', err);
       toast.error('Erro ao mover para lixeira');
@@ -41,12 +49,16 @@ export function SoftDeletePanel({ contactId, contactName, deletedAt }: Props) {
   const handleRestore = async () => {
     setLoading(true);
     try {
-      const { error } = await updateExternalData('contacts', contactId, {
+      const { data, error } = await updateExternalData('contacts', contactId, {
         deleted_at: null,
       });
       if (error) throw error;
+      if (!data || data.id !== contactId || data.deleted_at !== null) throw new Error('Restauração não confirmada');
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['contacts'] }),
+        queryClient.invalidateQueries({ queryKey: ['contact', user?.id, contactId], exact: true }),
+      ]);
       toast.success('Contato restaurado com sucesso!');
-      queryClient.invalidateQueries({ queryKey: ['contacts'] });
     } catch (err) {
       logger.error('Error restoring:', err);
       toast.error('Erro ao restaurar contato');
@@ -81,7 +93,7 @@ export function SoftDeletePanel({ contactId, contactName, deletedAt }: Props) {
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={nextOpen => { if (!loading) setOpen(nextOpen); }}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-destructive hover:text-destructive hover:bg-destructive/10">
           <Trash2 className="h-3 w-3" />

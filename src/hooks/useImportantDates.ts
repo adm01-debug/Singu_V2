@@ -1,9 +1,10 @@
  import { useMemo } from 'react';
  import { Contact, Interaction } from '@/types';
- import { differenceInCalendarDays, addYears, isBefore, parseISO, startOfDay } from 'date-fns';
+ import { differenceInCalendarDays, addYears, isBefore, parseISO } from 'date-fns';
  import { useQuery } from '@tanstack/react-query';
  import { supabase } from '@/integrations/supabase/client';
  import { useAuth } from './useAuth';
+ import { useLocalDay } from './useLocalDay';
 
 export interface ImportantDate {
   id: string;
@@ -33,6 +34,7 @@ export interface DateReminders {
 
  export function useImportantDates(contacts: Contact[], interactions: Interaction[]) {
    const { user } = useAuth();
+   const currentDay = useLocalDay();
 
   const { data: lifeEvents = [] } = useQuery({
     queryKey: ['all-life-events', user?.id],
@@ -67,7 +69,7 @@ export interface DateReminders {
   });
 
    const reminders = useMemo<DateReminders>(() => {
-    const now = startOfDay(new Date());
+    const now = new Date(currentDay);
     const allDates: ImportantDate[] = [];
 
     contacts.forEach(contact => {
@@ -287,7 +289,7 @@ export interface DateReminders {
       hasUrgent,
       summary
     };
-  }, [contacts, interactions, lifeEvents, relatives]);
+  }, [contacts, interactions, lifeEvents, relatives, currentDay]);
 
   return reminders;
 }
