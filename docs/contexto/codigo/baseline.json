@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "c3cc11d3a5b17e2f0f10813daf7d565dac4b3548",
+  "commit": "d664a7bbccba481b66bd83491ca143509a7951e6",
   "branch": "main",
-  "data_commit": "2026-11-08T13:06:28-03:00",
+  "data_commit": "2026-11-08T14:33:20-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "d664a7bb",
+    "data": "2026-11-08",
+    "assunto": "fix(snapshot): coleta de grants por coluna sai do information_schema (#172)"
+   },
    {
     "sha": "c3cc11d3",
     "data": "2026-11-08",
@@ -126,11 +131,6 @@
     "sha": "a74c3729",
     "data": "2026-10-29",
     "assunto": "fix(gates): rejeita coletas incompletas de RLS e publicação (#126)"
-   },
-   {
-    "sha": "3d9e9a8a",
-    "data": "2026-10-28",
-    "assunto": "fix(contatos): preserva relações durante falhas parciais (#148)"
    }
   ],
   "arquivos_mudados_7d": 57,
@@ -305,7 +305,7 @@
    },
    {
     "autor": "adm01-debug",
-    "commits": 27
+    "commits": 28
    },
    {
     "autor": "dependabot[bot]",
@@ -320,7 +320,7 @@
  "contagens": {
   "arquivos_total": 2970,
   "arquivos_codigo": 2063,
-  "linhas_codigo": 388175,
+  "linhas_codigo": 388198,
   "rotas": 114,
   "rotas_http_backend": 12,
   "vistas_por_id": 0,
@@ -508,7 +508,7 @@
   },
   "scripts/supabase_snapshot": {
    "arquivos": 2,
-   "linhas": 2669
+   "linhas": 2692
   },
   "src/App.tsx": {
    "arquivos": 1,
@@ -650,7 +650,7 @@
   },
   {
    "arquivo": "scripts/supabase_snapshot/snapshot.py",
-   "linhas": 1791
+   "linhas": 1814
   },
   {
    "arquivo": "src/components/interactions/insights/ObjectionExamplesModal.tsx",

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "c3cc11d3a5b17e2f0f10813daf7d565dac4b3548",
+  "sha": "d664a7bbccba481b66bd83491ca143509a7951e6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-08 16:13 UTC",
+  "generated_at": "2026-11-08 17:33 UTC",
   "files_total": 3073,
   "code_files": 2705,
-  "code_lines": 380846
+  "code_lines": 380869
  },
  "version": "1.3.2",
- "facts_hash": "6101c4cd851a9688",
+ "facts_hash": "a851b13cf015b673",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -66542,7 +66542,7 @@
   {
    "module": "scripts",
    "files": 174,
-   "lines": 25827,
+   "lines": 25850,
    "tables": [
     "_migration_cdc_checkpoint",
     "a",
@@ -165251,7 +165251,7 @@
   },
   "scripts/supabase_snapshot/snapshot.py": {
    "path": "scripts/supabase_snapshot/snapshot.py",
-   "lines": 1791,
+   "lines": 1814,
    "exports": [
     "def env_int",
     "def log",
@@ -222798,10 +222798,19 @@
   }
  },
  "git": {
-  "sha": "c3cc11d3a5b17e2f0f10813daf7d565dac4b3548",
+  "sha": "d664a7bbccba481b66bd83491ca143509a7951e6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "d664a7b",
+    "date": "2026-11-08",
+    "author": "adm01-debug",
+    "subject": "fix(snapshot): coleta de grants por coluna sai do information_schema (#172)",
+    "files": [
+     "scripts/supabase_snapshot/snapshot.py"
+    ]
+   },
    {
     "sha": "c3cc11d",
     "date": "2026-11-08",
@@ -223198,41 +223207,12 @@
      "supabase/functions/voice-to-text/index.ts",
      "supabase/functions/win-loss-analyzer/index.ts"
     ]
-   },
-   {
-    "sha": "7efda55",
-    "date": "2026-10-27",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(ci): zod v4 + serialize-javascript 7.1.3 — destrava audit gate e Dependabot (#140)",
-    "files": [
-     "CHANGELOG.md",
-     "PENDENCIAS.md",
-     "RELATORIO_CI.md",
-     "bun.lock",
-     "package-lock.json",
-     "package.json",
-     "src/components/auth/ForgotPasswordForm.tsx",
-     "src/components/dashboard/StrategicNextStepsCard.tsx",
-     "src/components/forms/CompanyForm.tsx",
-     "src/components/forms/ContactForm.tsx",
-     "src/components/forms/company/CompanyFormCompositeFields.tsx",
-     "src/components/pipeline/DealDetailDrawer.tsx",
-     "src/components/pipeline/DealDialog.tsx",
-     "src/hooks/useCompanies.ts",
-     "src/hooks/useContacts.ts",
-     "src/hooks/useInteractions.ts",
-     "src/hooks/useLeadScoring.ts",
-     "src/hooks/useLuxWebhookConfig.ts",
-     "src/hooks/useRodizioOndas.ts",
-     "src/pages/Auth.tsx",
-     "src/pages/ResetPassword.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "CHANGELOG.md",
-    9
+    8
    ],
    [
     ".github/workflows/ci.yml",
@@ -223240,14 +223220,10 @@
    ],
    [
     "package.json",
-    4
-   ],
-   [
-    ".github/workflows/rls-exposure-guard.yml",
     3
    ],
    [
-    "package-lock.json",
+    ".github/workflows/rls-exposure-guard.yml",
     3
    ],
    [
@@ -223255,12 +223231,8 @@
     3
    ],
    [
-    "PENDENCIAS.md",
-    3
-   ],
-   [
-    "RELATORIO_CI.md",
-    3
+    "scripts/supabase_snapshot/snapshot.py",
+    2
    ],
    [
     "inventario/estado/banco.json",
@@ -223295,6 +223267,10 @@
     2
    ],
    [
+    "package-lock.json",
+    2
+   ],
+   [
     "src/lib/externalData.ts",
     2
    ],
@@ -223303,11 +223279,15 @@
     2
    ],
    [
-    "supabase/tests/get_contact_sidebar_by_phone.sql",
+    "PENDENCIAS.md",
     2
    ],
    [
-    "src/hooks/useContacts.ts",
+    "RELATORIO_CI.md",
+    2
+   ],
+   [
+    "supabase/tests/get_contact_sidebar_by_phone.sql",
     2
    ]
   ]
