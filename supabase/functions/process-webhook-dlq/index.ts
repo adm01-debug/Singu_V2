@@ -27,7 +27,15 @@ Deno.serve(async (req) => {
   const cronCheck = await requireCronSecret(req);
   if (cronCheck) return cronCheck;
 
-  const { body: rawBody } = await guardBody(req, 32 * 1024);
+  const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
+  if (bodyError) return bodyError;
+
+  const failure = (stage: string) => {
+    console.error(`process-webhook-dlq: falha em ${stage}`);
+    return new Response(JSON.stringify({ error: "Não foi possível confirmar o processamento da fila" }), {
+      status: 500, headers: { ...cors, "Content-Type": "application/json" },
+    });
+  };
 
   const admin = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -37,7 +45,12 @@ Deno.serve(async (req) => {
   let manualId: string | null = null;
   if (req.method === "POST" && rawBody) {
     const vdq = validate(rawBody, { id: { type: 'string', maxLength: 36 } });
-    if (vdq.ok && vdq.data.id) manualId = vdq.data.id as string;
+    if (!vdq.ok) {
+      return new Response(JSON.stringify({ error: "Identificador de fila inválido" }), {
+        status: 400, headers: { ...cors, "Content-Type": "application/json" },
+      });
+    }
+    if (vdq.data.id) manualId = vdq.data.id as string;
   }
 
   const query = admin.from("incoming_webhook_dlq")
@@ -67,14 +80,16 @@ Deno.serve(async (req) => {
   const rowIds = rows.map(r => r.id);
   const resolvedAt = new Date().toISOString();
 
-  // Batch-mark all as "processing" and pre-fetch all webhooks in parallel
   const uniqueWebhookIds = [...new Set(rows.map(r => r.webhook_id))];
-  const [, webhookResult] = await Promise.all([
-    admin.from("incoming_webhook_dlq").update({ status: "processing" }).in("id", rowIds),
-    admin.from("incoming_webhooks")
-      .select("id, target_entity, created_by, field_mapping, is_active")
-      .in("id", uniqueWebhookIds),
-  ]);
+  const webhookResult = await admin.from("incoming_webhooks")
+    .select("id, target_entity, created_by, field_mapping, is_active")
+    .in("id", uniqueWebhookIds);
+  if (webhookResult.error) return failure("consulta dos webhooks");
+
+  const claim = await admin.from("incoming_webhook_dlq")
+    .update({ status: "processing" }).in("id", rowIds).eq("status", "pending").select("id");
+  if (claim.error) return failure("reserva dos registros");
+  const claimedIds = new Set((claim.data ?? []).map(row => row.id));
 
   const webhookMap = new Map(
     (webhookResult.data ?? []).map(w => [w.id, w] as const)
@@ -91,6 +106,7 @@ Deno.serve(async (req) => {
   const pendingTableInserts = new Map<string, PendingInsert[]>();
 
   for (const row of rows) {
+    if (!claimedIds.has(row.id)) continue;
     const webhook = webhookMap.get(row.webhook_id);
 
     if (!webhook || !webhook.is_active) {
@@ -107,7 +123,7 @@ Deno.serve(async (req) => {
       if (v !== undefined) mapped[target] = v;
     }
     const finalRow = Object.keys(mapped).length ? mapped : row.payload;
-    const targetTable = TABLE_MAP[webhook.target_entity];
+    const targetTable = Object.hasOwn(TABLE_MAP, webhook.target_entity) ? TABLE_MAP[webhook.target_entity] : undefined;
 
     // Accumulate payload for bulk insert after the loop
     if (targetTable) {
@@ -115,9 +131,8 @@ Deno.serve(async (req) => {
       tableInserts.push({ rowId: row.id, attempts: row.attempts, payload: { ...finalRow, user_id: webhook.created_by } });
       pendingTableInserts.set(targetTable, tableInserts);
     } else {
-      // No target table — mark as succeeded immediately
-      succeededRows.push({ id: row.id, status: "succeeded", attempts: row.attempts + 1, resolved_at: resolvedAt, last_error: null });
-      results.push({ id: row.id, status: "succeeded" });
+      failedRows.push({ id: row.id, status: "failed", attempts: row.attempts + 1, resolved_at: resolvedAt, last_error: "Destino do webhook não permite reprocessamento" });
+      results.push({ id: row.id, status: "failed" });
     }
   }
 
@@ -151,13 +166,13 @@ Deno.serve(async (req) => {
     }
   }
 
-  // Flush all outcome updates in parallel
-  await Promise.all([
-    abandonedRows.length > 0 ? admin.from("incoming_webhook_dlq").upsert(abandonedRows, { onConflict: "id" }) : Promise.resolve(),
-    succeededRows.length > 0 ? admin.from("incoming_webhook_dlq").upsert(succeededRows, { onConflict: "id" }) : Promise.resolve(),
-    failedRows.length > 0 ? admin.from("incoming_webhook_dlq").upsert(failedRows, { onConflict: "id" }) : Promise.resolve(),
-    retryRows.length > 0 ? admin.from("incoming_webhook_dlq").upsert(retryRows, { onConflict: "id" }) : Promise.resolve(),
-  ]);
+  const outcomes = [...abandonedRows, ...succeededRows, ...failedRows, ...retryRows];
+  const confirmed = await Promise.all(outcomes.map(async ({ id, ...values }) => {
+    const { data, error: updateError } = await admin.from("incoming_webhook_dlq")
+      .update(values).eq("id", id).eq("status", "processing").select("id");
+    return !updateError && data?.length === 1 && data[0].id === id;
+  }));
+  if (confirmed.some(ok => !ok)) return failure("confirmação dos resultados");
 
   return new Response(JSON.stringify({ processed: results.length, results }), {
     status: 200, headers: { ...cors, "Content-Type": "application/json" },

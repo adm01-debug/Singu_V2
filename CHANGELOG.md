@@ -20,6 +20,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - **Histórico social:** falhas da consulta não geram biografias, promoções ou pontuações fictícias. Os dois painéis distinguem erro de ausência confirmada, oferecem nova tentativa manual e mantêm dados reais após falha de recarga; consulta e cache são isolados por usuário. Não ativa coleta social nem altera o catálogo do banco.
 - **Recuperação da ficha:** falhas de recarga mantêm os dados confirmados visíveis, com aviso e nova tentativa. Erros da busca externa do próprio contato preservam seus códigos para retry e mensagens seguras; somente ausência confirmada nas duas fontes limpa a ficha e suas relações.
 
+- A recuperação de webhooks recusa destinos inválidos, reserva somente registros pendentes e exige confirmação de todas as gravações antes de anunciar sucesso. Atualizações parciais não tentam inserir novas entradas; falhas após o efeito permanecem em processamento para evitar repetição cega.
+
 - Verificações de RLS e publicação rejeitam coletas incompletas, inventários inválidos e health checks sem confirmação real de saúde. Uma falha de coleta preserva o baseline mesmo com `--update`.
 - O baseline de RLS exige todos os perfis declarados e bloqueia a coleta sem o JWT necessário; os runbooks de publicação preparam a sessão de teste no destino e distinguem ausência de atividade de email de saúde comprovada.
 
