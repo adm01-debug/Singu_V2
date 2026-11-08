@@ -58,11 +58,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(db): remove trigger duplicado e adiciona índices parciais em contact_phones (#178)",
    "feat(segurança): workflow para fechar verify_jwt nas 23 proxies externas (#176)",
    "chore: instruções enxutas para agentes (#163)",
    "fix(ficha): registra interações pelo contrato de contato (#153)",
-   "fix(filas): confirma reservas e resultados da DLQ (#150)",
-   "fix(db): preserva o nome da empresa durante a mesclagem (#127)"
+   "fix(filas): confirma reservas e resultados da DLQ (#150)"
   ]
  },
  "pr_template": null,

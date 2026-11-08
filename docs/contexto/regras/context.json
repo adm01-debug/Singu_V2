@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "9836e3aefec585cacb3ada0f5f3c8762337fc998",
+  "sha": "b7f73b43b0a73641b63b723aa7e9fa717d3ff4a9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-08 19:50 UTC",
-  "files_total": 3096,
-  "code_files": 2723,
-  "code_lines": 382256
+  "generated_at": "2026-11-08 21:51 UTC",
+  "files_total": 3097,
+  "code_files": 2724,
+  "code_lines": 382277
  },
  "version": "1.3.2",
- "facts_hash": "278abd9d6f501d19",
+ "facts_hash": "8a0a67ed80a4fd40",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -203,7 +203,7 @@
   "languages": {
    ".tsx": 1156,
    ".ts": 870,
-   ".sql": 645,
+   ".sql": 646,
    ".mjs": 22,
    ".js": 18,
    ".py": 10,
@@ -46699,6 +46699,22 @@
     "unique": true,
     "where": "",
     "src": "supabase/migrations/20261012192604_fix_company_email_case_insensitive_conflict.sql"
+   },
+   {
+    "name": "idx_contact_phones_primary",
+    "table": "contact_phones",
+    "columns": "contact_id",
+    "unique": false,
+    "where": "WHERE is_primary = true",
+    "src": "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql"
+   },
+   {
+    "name": "idx_contact_emails_primary",
+    "table": "contact_emails",
+    "columns": "contact_id",
+    "unique": false,
+    "where": "WHERE is_primary = true",
+    "src": "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql"
    }
   ],
   "cron_jobs": [
@@ -47423,6 +47439,7 @@
    "supabase/migrations/20261028224000_contact_quick_interaction.sql",
    "supabase/migrations/20261029120000_drop_update_company_fields.sql",
    "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
+   "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql",
    "supabase/tests/check-rls-coverage.sql",
    "supabase/tests/get_contact_sidebar_by_phone.sql",
    "tests/rls/report_schema_compatibility.sql"
@@ -68569,8 +68586,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 478,
-   "lines": 42344,
+   "files": 479,
+   "lines": 42365,
    "tables": [
     "users"
    ],
@@ -222889,6 +222906,10 @@
    "lines": 67,
    "uses_service_role": true
   },
+  "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql": {
+   "path": "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql",
+   "lines": 21
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -223468,10 +223489,19 @@
   }
  },
  "git": {
-  "sha": "9836e3aefec585cacb3ada0f5f3c8762337fc998",
+  "sha": "b7f73b43b0a73641b63b723aa7e9fa717d3ff4a9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "b7f73b4",
+    "date": "2026-11-08",
+    "author": "adm01-debug",
+    "subject": "fix(db): remove trigger duplicado e adiciona índices parciais em contact_phones (#178)",
+    "files": [
+     "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql"
+    ]
+   },
    {
     "sha": "9836e3a",
     "date": "2026-11-08",
@@ -223842,25 +223872,12 @@
      "src/hooks/useSocialInsights.test.tsx",
      "src/hooks/useSocialInsights.ts"
     ]
-   },
-   {
-    "sha": "f612362",
-    "date": "2026-10-29",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(contatos): preserva ficha e recupera falhas da fonte externa (#149)",
-    "files": [
-     "CHANGELOG.md",
-     "src/hooks/__tests__/contact-detail-external-retry.test.tsx",
-     "src/hooks/useContactDetail.ts",
-     "src/pages/ContatoDetalhe.errors.test.tsx",
-     "src/pages/ContatoDetalhe.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "CHANGELOG.md",
-    8
+    7
    ],
    [
     ".github/workflows/ci.yml",
@@ -223927,15 +223944,15 @@
     2
    ],
    [
+    "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql",
+    1
+   ],
+   [
     ".github/workflows/fix-jwt-proxies-externas.yml",
     1
    ],
    [
     "docs/agentes/banco-edge-ci.md",
-    1
-   ],
-   [
-    "docs/agentes/texto-mestre.md",
     1
    ]
   ]

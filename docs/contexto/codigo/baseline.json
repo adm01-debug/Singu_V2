@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "9836e3aefec585cacb3ada0f5f3c8762337fc998",
+  "commit": "b7f73b43b0a73641b63b723aa7e9fa717d3ff4a9",
   "branch": "main",
-  "data_commit": "2026-11-08T16:34:43-03:00",
+  "data_commit": "2026-11-08T17:37:53-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "b7f73b43",
+    "data": "2026-11-08",
+    "assunto": "fix(db): remove trigger duplicado e adiciona índices parciais em contact_phones (#178)"
+   },
    {
     "sha": "9836e3ae",
     "data": "2026-11-08",
@@ -126,14 +131,9 @@
     "sha": "cf83f3a4",
     "data": "2026-11-06",
     "assunto": "fix(ci): baseline SECURITY DEFINER 109 → 110 (guard_contact_relation_write) (#158)"
-   },
-   {
-    "sha": "738a2a40",
-    "data": "2026-11-05",
-    "assunto": "fix(webhook): preserva timestamps textuais do Evolution (#157)"
    }
   ],
-  "arquivos_mudados_7d": 93,
+  "arquivos_mudados_7d": 94,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "CHANGELOG.md",
@@ -305,7 +305,7 @@
    },
    {
     "autor": "adm01-debug",
-    "commits": 34
+    "commits": 35
    },
    {
     "autor": "dependabot[bot]",
@@ -318,7 +318,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 2993,
+  "arquivos_total": 2994,
   "arquivos_codigo": 2077,
   "linhas_codigo": 389310,
   "rotas": 114,
@@ -330,7 +330,7 @@
   "hooks": 408,
   "edge_functions": 108,
   "tabelas": 418,
-  "migrations": 478,
+  "migrations": 479,
   "cron_jobs": 20,
   "testes": 212,
   "workflows": 7,

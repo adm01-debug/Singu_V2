@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-08 21:48 UTC
+
+- **functions** alterado (3): `public.get_birthday_contacts(p_days_ahead integer)`, `public.get_duplicate_contacts(p_limit integer)`, `public.set_updated_at()`
+
 ## 2026-11-08 20:48 UTC
 
 - **functions** alterado (1): `public.set_updated_at()`

@@ -201068,8 +201068,13 @@
       {
         "args": "p_days_ahead integer",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -205757,8 +205762,13 @@
       {
         "args": "p_limit integer",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -225896,9 +225906,13 @@
             {
               "file": "supabase/migrations/20261011195900_company_relations_baseline.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [],
           "db": [],
           "triggers": [

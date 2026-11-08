@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 478,
+ "migrations": 479,
  "seeds": [],
  "avisos": [
   "130 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -11901,6 +11901,11 @@
      "nome": "contact_emails_contact_lower_idx",
      "colunas": "contact_id, lower(email",
      "unico": true
+    },
+    {
+     "nome": "idx_contact_emails_primary",
+     "colunas": "contact_id",
+     "unico": false
     }
    ],
    "fks": [
@@ -12995,6 +13000,11 @@
    "indices": [
     {
      "nome": "contact_phones_contact_id_idx",
+     "colunas": "contact_id",
+     "unico": false
+    },
+    {
+     "nome": "idx_contact_phones_primary",
      "colunas": "contact_id",
      "unico": false
     }
