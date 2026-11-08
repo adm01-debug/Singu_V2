@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "de99442c539a4e630038c92fe9d958febec43478",
+  "commit": "c3cc11d3a5b17e2f0f10813daf7d565dac4b3548",
   "branch": "main",
-  "data_commit": "2026-11-08T12:40:56-03:00",
+  "data_commit": "2026-11-08T13:06:28-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "c3cc11d3",
+    "data": "2026-11-08",
+    "assunto": "fix(inventario): não alerta partição cujo pai define o acesso (#171)"
+   },
    {
     "sha": "de99442c",
     "data": "2026-11-08",
@@ -126,11 +131,6 @@
     "sha": "3d9e9a8a",
     "data": "2026-10-28",
     "assunto": "fix(contatos): preserva relações durante falhas parciais (#148)"
-   },
-   {
-    "sha": "2473883c",
-    "data": "2026-10-28",
-    "assunto": "fix(test): stub companies.name p/ rodar teste da rpc sidebar em produção (#146)"
    }
   ],
   "arquivos_mudados_7d": 57,
@@ -305,7 +305,7 @@
    },
    {
     "autor": "adm01-debug",
-    "commits": 26
+    "commits": 27
    },
    {
     "autor": "dependabot[bot]",
@@ -320,7 +320,7 @@
  "contagens": {
   "arquivos_total": 2970,
   "arquivos_codigo": 2063,
-  "linhas_codigo": 388167,
+  "linhas_codigo": 388175,
   "rotas": 114,
   "rotas_http_backend": 12,
   "vistas_por_id": 0,
@@ -480,7 +480,7 @@
   },
   "scripts/inventario": {
    "arquivos": 3,
-   "linhas": 491
+   "linhas": 499
   },
   "scripts/lint-providers.cjs": {
    "arquivos": 1,

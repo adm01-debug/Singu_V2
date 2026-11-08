@@ -58,11 +58,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(inventario): não alerta partição cujo pai define o acesso (#171)",
    "feat(inventario): inventário semanal do estado real do banco e das edges, com PR automática (#170)",
    "feat(contexto): produtores autônomos que mantêm o estado real do repositório para agentes de IA (#169)",
    "fix(ci): corrige YAML fatal do CI, secret fantasma e portabilidade dos gate tests (#164)",
-   "feat: teste de auditoria de cobertura RLS (check-rls-coverage.sql) (#168)",
-   "feat: scripts de verificação de índices/perf e hardening (auditoria read-only) (#167)"
+   "feat: teste de auditoria de cobertura RLS (check-rls-coverage.sql) (#168)"
   ]
  },
  "pr_template": null,

@@ -367,7 +367,7 @@
   {
    "arquivo": "scripts/inventario/banco.sql",
    "descricao": null,
-   "linhas": 158,
+   "linhas": 162,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -376,7 +376,7 @@
   {
    "arquivo": "scripts/inventario/gerar-banco.mjs",
    "descricao": "* Inventario do banco oficial -> inventario/estado/banco.json (fonte de consulta dos agentes).",
-   "linhas": 326,
+   "linhas": 334,
    "env": [
     "INVENTARIO_PERMITIR_OUTRO_PROJETO",
     "SUPABASE_ACCESS_TOKEN",

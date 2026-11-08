@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "de99442c539a4e630038c92fe9d958febec43478",
+  "sha": "c3cc11d3a5b17e2f0f10813daf7d565dac4b3548",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-08 15:46 UTC",
+  "generated_at": "2026-11-08 16:13 UTC",
   "files_total": 3073,
   "code_files": 2705,
-  "code_lines": 380834
+  "code_lines": 380846
  },
  "version": "1.3.2",
- "facts_hash": "2e91e125fa9398ae",
+ "facts_hash": "6101c4cd851a9688",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -66542,7 +66542,7 @@
   {
    "module": "scripts",
    "files": 174,
-   "lines": 25815,
+   "lines": 25827,
    "tables": [
     "_migration_cdc_checkpoint",
     "a",
@@ -164151,7 +164151,7 @@
   },
   "scripts/inventario/banco.sql": {
    "path": "scripts/inventario/banco.sql",
-   "lines": 158,
+   "lines": 162,
    "temporal": [
     "'mais_de_7_dias', (SELECT count(*) FROM cron.job_run_details WHERE start_time <= now() - interval '7 days'),",
     "'mensagens_7d', (SELECT count(*) FROM public.whatsapp_messages WHERE created_at > now() - interval '7 days')",
@@ -164162,7 +164162,7 @@
   },
   "scripts/inventario/gerar-banco.mjs": {
    "path": "scripts/inventario/gerar-banco.mjs",
-   "lines": 326,
+   "lines": 334,
    "exports": [
     "const PROJETO_OFICIAL",
     "const LIMIARES",
@@ -164215,7 +164215,8 @@
     }
    ],
    "rule_comments": [
-    "Limite conhecido: `.from(variavel)` nao e resolvido."
+    "Limite conhecido: `.from(variavel)` nao e resolvido.",
+    "ai_gateway_metrics, que tem RLS e a policy ALL de service_role. Sem esta regra o alerta"
    ],
    "doc": "!/usr/bin/env node",
    "percents": [
@@ -222797,10 +222798,21 @@
   }
  },
  "git": {
-  "sha": "de99442c539a4e630038c92fe9d958febec43478",
+  "sha": "c3cc11d3a5b17e2f0f10813daf7d565dac4b3548",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "c3cc11d",
+    "date": "2026-11-08",
+    "author": "adm01-debug",
+    "subject": "fix(inventario): não alerta partição cujo pai define o acesso (#171)",
+    "files": [
+     "inventario/estado/banco.json",
+     "scripts/inventario/banco.sql",
+     "scripts/inventario/gerar-banco.mjs"
+    ]
+   },
    {
     "sha": "de99442",
     "date": "2026-11-08",
@@ -223215,17 +223227,6 @@
      "src/pages/Auth.tsx",
      "src/pages/ResetPassword.tsx"
     ]
-   },
-   {
-    "sha": "0d59026",
-    "date": "2026-10-27",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(test): fixture da rpc sidebar alinhada ao schema real + cobertura razao_social/influencer_ids (#139)",
-    "files": [
-     "docs/GET_CONTACT_SIDEBAR_BY_PHONE.md",
-     "supabase/migrations/20261019144500_fix_sidebar_rpc_empresa_influencers.sql",
-     "supabase/tests/get_contact_sidebar_by_phone.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -223262,8 +223263,16 @@
     3
    ],
    [
-    "supabase/tests/get_contact_sidebar_by_phone.sql",
-    3
+    "inventario/estado/banco.json",
+    2
+   ],
+   [
+    "scripts/inventario/banco.sql",
+    2
+   ],
+   [
+    "scripts/inventario/gerar-banco.mjs",
+    2
    ],
    [
     "scripts/check-deploy-timeout.test.mjs",
@@ -223294,20 +223303,12 @@
     2
    ],
    [
+    "supabase/tests/get_contact_sidebar_by_phone.sql",
+    2
+   ],
+   [
     "src/hooks/useContacts.ts",
     2
-   ],
-   [
-    "supabase/migrations/20261019144500_fix_sidebar_rpc_empresa_influencers.sql",
-    2
-   ],
-   [
-    ".github/workflows/inventario-estado-semanal.yml",
-    1
-   ],
-   [
-    "inventario/estado/README.md",
-    1
    ]
   ]
  }
