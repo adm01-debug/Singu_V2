@@ -230,6 +230,7 @@
     "useLeaderboard",
     "useListDensity",
     "useListNavigation",
+    "useLocalDay",
     "useLocation",
     "useLossReasonAnalysis",
     "useMQLClassifications",
@@ -595,6 +596,7 @@
     "useLeaderboard",
     "useListDensity",
     "useListNavigation",
+    "useLocalDay",
     "useLossReasonAnalysis",
     "useMQLClassifications",
     "useMQLCriteria",
@@ -934,7 +936,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 831
+   "arquivos_puxados": 832
   },
   {
    "protegida": false,

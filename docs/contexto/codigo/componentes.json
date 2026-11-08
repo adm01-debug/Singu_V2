@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1056,
+ "total": 1057,
  "orfaos": 44,
  "nomes_duplicados": {
   "ABM": [
@@ -4169,7 +4169,7 @@
     "ContactDetailHeader"
    ],
    "export_default": null,
-   "linhas": 408,
+   "linhas": 365,
    "dominio": "components/contact-detail",
    "hooks_locais": [
     "useContactRelationalData",
@@ -4193,6 +4193,20 @@
    "tabelas": [
     "interactions"
    ],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/contact-detail/ContactIntelligenceStrip.tsx",
+   "exports": [
+    "ContactIntelligenceStrip"
+   ],
+   "export_default": null,
+   "linhas": 52,
+   "dominio": "components/contact-detail",
+   "hooks_locais": [],
+   "tabelas": [],
    "edges": [],
    "usado_por": 1,
    "orfao": false
@@ -4989,9 +5003,11 @@
     "SoftDeletePanel"
    ],
    "export_default": null,
-   "linhas": 108,
+   "linhas": 120,
    "dominio": "components/contact-detail",
-   "hooks_locais": [],
+   "hooks_locais": [
+    "useAuth"
+   ],
    "tabelas": [],
    "edges": [],
    "usado_por": 1,
@@ -13830,7 +13846,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 541,
+   "usado_por": 542,
    "orfao": false
   },
   {
@@ -15172,7 +15188,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 333,
+   "usado_por": 334,
    "orfao": false
   },
   {

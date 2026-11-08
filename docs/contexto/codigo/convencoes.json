@@ -7,23 +7,23 @@
    "src/pages (1)"
   ],
   "componentes": [
-   "src/components (907)",
+   "src/components (908)",
    "src/pages (140)",
    "src/app (4)"
   ],
   "hooks": [
-   "src/hooks (376)",
+   "src/hooks (377)",
    "src/components (20)",
    "src/stores (5)"
   ],
   "servicos_logica": [
-   "src/lib (71)",
+   "src/lib (72)",
    "src/data (46)",
    "src/domain (8)"
   ],
   "testes": [
+   "co-localizado (*.test) (88)",
    "co-localizado (__tests__) (88)",
-   "co-localizado (*.test) (80)",
    "tests/ (22)"
   ],
   "edge_functions": "supabase/functions",
@@ -47,7 +47,7 @@
  },
  "barrels_index": 8,
  "extensao_componentes": [
-  ".tsx (1056)"
+  ".tsx (1057)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -58,11 +58,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(contatos): atualiza a ficha e preserva aniversários locais (#125)",
    "fix(ci): retry rls-baseline em http 500 transitório (57014 lock contention)",
    "feat(db): agenda retenção de 7 dias no histórico do pg_cron",
    "chore(inventario): cataloga as 43 edge functions de outro sistema",
-   "feat(inventario): liga a conferência deployada × versionada das edge functions",
-   "fix(snapshot): coleta de grants por coluna sai do information_schema (#172)"
+   "feat(inventario): liga a conferência deployada × versionada das edge functions"
   ]
  },
  "pr_template": null,

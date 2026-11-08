@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `4ba718045b` · branch `main` · 2026-11-08 19:29 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7747549982` · branch `main` · 2026-11-08 19:33 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1534,8 +1534,6 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | PlaybookScenario | discovery \| demo \| negotiation \| objection \| closing \| winback \| onboarding \| custom | `src/hooks/usePlaybooks.ts` |
 | PlaybookSectionType | talktrack \| questions \| objections \| next_steps \| resources | `src/hooks/usePlaybooks.ts` |
 | HealthStatus | healthy \| warning \| critical | `src/hooks/usePortfolioHealth.ts` |
-| ActionPriority | critical \| high \| medium \| low | `src/hooks/useProactiveIntelligence.ts` |
-| ActionCategory | follow_up \| relationship \| closing \| rescue \| nurture \| celebrate \| intelligence | `src/hooks/useProactiveIntelligence.ts` |
 | PassoOutcome | respondeu_positivo \| respondeu_neutro \| nao_respondeu \| nao_atendeu \| pulou | `src/hooks/useProximoPassoFeedback.ts` |
 | NbaPriority | alta \| media \| baixa | `src/hooks/useProximosPassosFilters.ts` |
 | NbaSort | sugerido \| recomendacao \| prioridade \| canal | `src/hooks/useProximosPassosFilters.ts` |
@@ -1571,6 +1569,8 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | GroupMode | by-contact \| by-company | `src/lib/groupInteractions.ts` |
 | IntelExportFormat | csv \| json \| tsv \| markdown | `src/lib/intelExportUniversal.ts` |
 | INTEL_STORAGE_KEYS | 'intel-bookmarks-v1', 'intel-saved-views-v1', 'intel-density-v1', 'intel-pres-v1', 'intel-snapshots-v1', 'intel-ask-history', 'intel-graph-layout-v1', | `src/lib/intelHealth.ts` |
+| ActionPriority | critical \| high \| medium \| low | `src/lib/proactiveIntelligence.ts` |
+| ActionCategory | follow_up \| relationship \| closing \| rescue \| nurture \| celebrate \| intelligence | `src/lib/proactiveIntelligence.ts` |
 | MilestoneKind | first-call \| first-whatsapp \| first-email \| first-meeting \| peak | `src/lib/prontidaoTrendMilestones.ts` |
 | WeightsHealth | zero \| low \| ok | `src/lib/prontidaoWeightsHealth.ts` |
 | RodizioTable | vw_rodizio_carga_closers \| vw_rodizio_carga_sdrs \| vw_rodizio_execucoes \| vw_rodizio_bloqueios \| vw_rodizio_kpis \| rodizio_distribuicao_staging | `src/lib/rodizioRpc.ts` |
@@ -4165,8 +4165,10 @@ _nenhum item encontrado_
 | Usuário não autenticado | `src/components/contact-detail/MetricOverrideFlow.tsx` |
 | Não foi possível copiar | `src/components/contact-detail/NextBestActionCard.tsx` |
 |  className= | `src/components/contact-detail/SocialInsightsError.tsx` |
+| Arquivamento não confirmado | `src/components/contact-detail/SoftDeletePanel.tsx` |
 | Erro ao mover para lixeira | `src/components/contact-detail/SoftDeletePanel.tsx` |
 | Erro ao restaurar contato | `src/components/contact-detail/SoftDeletePanel.tsx` |
+| Restauração não confirmada | `src/components/contact-detail/SoftDeletePanel.tsx` |
 | Por favor, insira um e-mail válido | `src/components/contact-detail/data-tab/RelativeDialog.tsx` |
 | ;  interface LifeEventsGapChecklistProps {   lifeEvents: Tables< | `src/components/contact-detail/life-events/LifeEventsGapChecklist.tsx` |
 | Erro ao importar contato | `src/components/contacts/ExternalContactLookupDialog.tsx` |
@@ -4334,9 +4336,7 @@ _nenhum item encontrado_
 | Erro ao verificar templates | `src/components/triggers/TemplateNotificationSettings.tsx` |
 | Não foi possível ativar notificações push. Verifique as permissões do navegador. | `src/components/triggers/TemplateNotificationSettings.tsx` |
 | Selecione pelo menos um perfil DISC | `src/components/triggers/TemplateNotificationSettings.tsx` |
-| Não foi possível copiar | `src/components/triggers/profile-based/TemplatePreviewDialog.tsx` |
-| Não foi possível copiar | `src/components/triggers/smart-template/TemplatePreviewContent.tsx` |
-| … +703 linhas — lista completa em `context.json` | |
+| … +705 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -4369,7 +4369,7 @@ _nenhum item encontrado_
 | `admin` | `tests/rls/contact_relations_owner_scope.sql` |
 | `admin` | `tests/rls/psychographic_matrix.sql` |
 
-## K. Testes como especificação (2595 testes em 187 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (2623 testes em 195 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4470,6 +4470,7 @@ _nenhum item encontrado_
 | `src/hooks/useContacts.test.tsx` | 6 | useContacts CRUD & Pagination · should fetch first page of contacts (50 per page) · should fetch every page when the consumer requires the full dataset · should stop the full-dataset loading state when a later page fails … |
 | `src/hooks/useImportantDates.test.tsx` | 6 | datas importantes respeitam o dia local · aniversário em %s ocorre em %s (%i dias) · mantém eventos recorrentes de hoje e distingue ontem e amanhã · preserva o dia do aniversário de um familiar … |
 | `src/hooks/usePipeline.contract.test.tsx` | 6 | Contrato de negócios individuais do Pipeline · consulta registros do dono e preserva o fechamento e os nomes relacionados · preserva status vazio e exclui negócios perdidos e arquivados depois da consulta · carrega todas as páginas quando há mais de mil negócios … |
+| `src/hooks/useProactiveIntelligence.test.tsx` | 6 | aniversários na Inteligência Proativa · não recomenda aniversário fora da janela: %s · prepara amanhã na virada do ano · reflete a data editada sem remontar a ficha … |
 | `src/hooks/__tests__/canonical-rfm-day-contracts.test.tsx` | 6 | RFM conserva recomendações do produtor e metadados existentes · normaliza IDs locais estáveis e marca o impacto ausente sem inventar uma estimativa · Meu Dia distingue falha, carregamento e ausência de login · encerra carregamento ao falhar e recupera os dados após nova tentativa … |
 | `src/hooks/__tests__/company-composite.contract.test.ts` | 6 | dados compostos da empresa no contrato canônico · converte os três formatos reais do formulário sem perder dados · identifica WhatsApp sem assumir um tipo de aparelho e mantém o enum canônico explícito · deduplica os aliases básicos sem substituir os metadados compostos … |
 | `src/hooks/__tests__/contact-detail-external-retry.test.tsx` | 6 | Consulta do contato disponível apenas na fonte externa · limpa somente a ficha cuja ausência foi confirmada nas duas fontes; cache=%s · limita retries de indisponibilidade sem declarar ausência; cache=%s · Recuperação da ficha com o cliente externo real e transporte simulado … |
@@ -4479,6 +4480,7 @@ _nenhum item encontrado_
 | `src/pages/MapaEmpresas.batch.test.tsx` | 6 | geolocalização do mapa · limita o trabalho automático, conserva as empresas mapeadas e exige continuação manual · cancela a requisição em andamento ao sair do mapa · atualiza inclusões, exclusões e coordenadas no refetch sem iniciar outro lote … |
 | `e2e/gap-modules-smoke.spec.ts` | 5 | Gap modules smoke (Rodada 28/10) · carrega ${label} (${path}) sem runtime error · Ask CRM: abre chat flutuante e envia pergunta · Landing page pública (Rodada 28/10) … |
 | `scripts/check-rls-profiles.test.mjs` | 5 | RLS rejeita JWT ${jwt ?  · RLS exige também os perfis declarados nos metadados · RLS não ignora perfil desconhecido no baseline · RLS permite coleta anônima quando somente esse perfil é exigido … |
+| `src/components/contact-detail/SoftDeletePanel.test.tsx` | 5 | confirmação da lixeira sem depender de realtime · fecha o diálogo e invalida somente a ficha correta após arquivamento confirmado · invalida a ficha após restauração confirmada · mantém o diálogo e não anuncia sucesso com resposta inválida: %j … |
 | `src/components/interactions/__tests__/DateRangePopover.clear.integration.test.tsx` | 5 | DateRangePopover › Limpar período (integração com URL/hook) · remove  · remove apenas  · remove apenas  … |
 | `src/components/interactions/__tests__/ViewModeChips.test.tsx` | 5 | ViewModeChips · renderiza 3 chips · chip ativo tem aria-pressed=true · click chama onChange com a key correta … |
 | `src/components/pipeline/DealDetailDrawer.contract.test.tsx` | 5 | Fechamento de negócios e atualização dos relatórios · grava o status canônico e uma data válida ao fechar um negócio aberto · preserva o fechamento anterior de um negócio %s · não inventa data para um negócio histórico fechado sem timestamp … |
@@ -4501,6 +4503,7 @@ _nenhum item encontrado_
 | `src/components/contact-detail/__tests__/LifeEventsTab.test.tsx` | 4 | LifeEventsTab · renders correctly and shows the title · displays the gap checklist tab · displays the audit trail tab |
 | `src/components/crm/NextBestAction.contract.test.tsx` | 4 | Contrato canônico de conclusão de próxima ação · preserva o tipo permitido %s e informa canal e direção · registra %s como nota sem violar a constraint de tipo · não anuncia conclusão quando a gravação da interação falha |
 | `src/components/sequences/SequenceEnrollDialog.contract.test.tsx` | 4 | Inscrição com busca e cache da carteira · impede fechar pelo X ou Escape durante uma inscrição pendente · repete o mesmo termo depois de falha transitória e oferece o contato recuperado · não inscreve um contato selecionado que desapareceu do cache após arquivamento |
+| `src/hooks/useContactDetail.presence.test.tsx` | 4 | presença confirmada na recarga da ficha · retira a ficha anterior do cache quando ambas as fontes confirmam ausência · preserva a ficha se a consulta %s falhar e recupera no retry · mantém o contato da lixeira da fonte %s disponível para restauração |
 | `src/hooks/useDailySummary.contract.test.tsx` | 4 | Contrato do dia e fuso do resumo diário · usa o dia brasileiro no instante %s · preserva a data selecionada ao consultar um dia anterior · expõe a falha da RPC sem apresentar dados de sucesso |
 | `src/lib/errorReporting.auth.test.ts` | 4 | Relatórios de erros autenticados · envia o JWT e atribui os erros ao usuário da sessão · não tenta gravar com a chave pública quando não há sessão · descarta erros identificados como pertencentes a outra conta |
 | `src/lib/externalQueryOrder.contract.test.ts` | 4 | Ordenação de páginas pelo proxy externo · preserva a ordenação legada e sua direção padrão · preserva o desempate por ID na ordem recebida · aceita consultas sem ordenação |
@@ -4513,12 +4516,15 @@ _nenhum item encontrado_
 | `tests/stress/thousand-scenarios.test.ts` | 4 | Meticulous Audit: Thousands of Scenarios · should handle 1000 unique rate limit keys efficiently · should validate 100 different phone formats · should simulate lead scoring matrix (100 permutations) |
 | `e2e/interacoes-prefs-back-button.spec.ts` | 3 | /interacoes — preferências sobrevivem ao botão Voltar · aplicar prefs → ir pro dashboard → voltar → prefs restauradas · reload da rota com prefs na URL ainda restaura o estado |
 | `src/components/admin/RequireAdmin.test.tsx` | 3 | Banner MFA administrativo · não anuncia ausência de MFA quando a consulta dos fatores está indisponível · mostra o aviso quando a ausência de fatores verificados foi confirmada |
+| `src/components/contact-detail/ContactDetailHeader.test.tsx` | 3 | confirmação de estágio na ficha · não anuncia sucesso após uma atualização rejeitada e permite nova tentativa · libera o controle e mostra erro se a atualização lançar uma exceção |
 | `src/components/dashboard/widgets/PendingFollowupsWidget.contract.test.tsx` | 3 | Prioridade canônica das pendências · distingue as quatro prioridades numéricas sem rebaixar as críticas · não apresenta falha de consulta como ausência de pendências |
 | `src/components/erp/CompanyErpProposalsWidget.test.tsx` | 3 | Propostas ERP da empresa · propaga a falha de todas as origens e recupera os dados ao repetir · confirma ausência somente após uma consulta bem-sucedida, inclusive no fallback |
 | `src/components/forms/company/CompanyFormSchema.contract.test.ts` | 3 | cores da marca no formulário canônico · valida o texto do formulário e grava o enum em lista · permite limpar as cores e rejeita valores fora do enum antes do envio |
 | `src/components/pipeline/ForecastConfidencePanel.contract.test.tsx` | 3 | Previsão com duração de estágio desconhecida · não inventa duração nem receita prevista quando todos os negócios estão sem histórico · marca a estimativa como parcial e exclui apenas os dados sem duração |
 | `src/hooks/useActivityLogger.test.tsx` | 3 | Eventos canônicos de auditoria · persiste eventos de %s aceitos pelo banco · não transforma uma falha de auditoria em falha da operação principal |
+| `src/hooks/useContacts.cache.test.tsx` | 3 | edição na lista renova o detalhe sem depender de realtime · renova somente a ficha correta, ativa=%s, fora da primeira página · preserva a ficha após %s |
 | `src/hooks/useDailyKpis.test.tsx` | 3 | useDailyKpis · não consulta métricas globais para usuário comum · consulta métricas globais para administrador |
+| `src/hooks/useImportantDates.midnight.test.tsx` | 3 | calendário com as mesmas referências após mudança de dia · recalcula amanhã, hoje e o próximo ano por timer sem remontar · recalcula ao retomar uma aba suspensa por %s |
 | `src/hooks/__tests__/canonical-competitor-save-contract.test.tsx` | 3 | gravação de concorrentes · não grava quando a consulta prévia das métricas falha · confirma a criação sem depender de uma consulta posterior de métricas |
 | `src/hooks/__tests__/restore-response-contract.test.tsx` | 3 | Desfazer usa o envelope do wrapper externo real, com transporte simulado · HTTP 200 com data=%j não confirma restauração · HTTP 200 com registro correspondente mantém o sucesso |
 | `src/lib/contactBehaviorAudit.test.ts` | 3 | Histórico comportamental canônico · preserva análises e validações humanas junto das alterações em ordem cronológica · expõe a falha de %s sem apresentar histórico parcial como completo |
@@ -4542,9 +4548,11 @@ _nenhum item encontrado_
 | `src/components/csat/CSATPanel.contract.test.tsx` | 2 | Registro manual de satisfação · oferece criar uma pesquisa e mantém a nota selecionada até confirmar a gravação |
 | `src/components/layout/Header.search.test.tsx` | 2 | Pesquisa contextual do cabeçalho · restaura o termo recebido e acompanha mudanças de contexto e limpeza |
 | `src/hooks/useBulkImport.test.ts` | 2 | mapImportBatch · preserva o número original das linhas válidas após descartar uma linha inválida |
+| `src/hooks/useContactDetail.sections.test.tsx` | 2 | falha em uma seção preserva a consulta composta da ficha · preserva o snapshot e recupera após falha de %s |
 | `src/hooks/useContacts.pagination-deletion.test.tsx` | 2 | Paginação após excluir o último contato · não pede a página que deixou de existir após exclusão confirmada e refetch |
 | `src/hooks/useErpData.partial-failure.test.tsx` | 2 | Indicadores ERP com falha parcial · preserva a origem saudável quando %s falha |
 | `src/hooks/useIsAdmin.test.tsx` | 2 | Consulta de papel administrativo · diferencia falha de consulta e permite recuperar a permissão confirmada |
+| `src/hooks/useRestoreEntity.test.tsx` | 2 | restauração do snapshot de um contato · preserva a identidade sem reenviar nome gerado nem alterar o snapshot original |
 | `src/hooks/__tests__/auth-logger.contract.test.tsx` | 2 | Identidade global do logger · mantém o usuário em rotas sem AppLayout e limpa a identidade na troca e saída |
 | `src/hooks/__tests__/company-history-null-contract.test.tsx` | 2 | Nulabilidade do histórico unificado de empresa · preserva todas as interações legadas com fallback de tipo e canal |
 | `src/hooks/__tests__/dashboard-session.test.tsx` | 2 | cache de %s · não consulta sem login e separa as consultas após troca de conta |

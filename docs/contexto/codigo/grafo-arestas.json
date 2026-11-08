@@ -1666,6 +1666,7 @@
    "src/lib/utils.ts"
   ],
   "src/components/contact-detail/ContactDetailHeader.tsx": [
+   "src/components/contact-detail/ContactIntelligenceStrip.tsx",
    "src/components/contact-detail/DuplicateManagementPanel.tsx",
    "src/components/contact-detail/NextBestActionCard.tsx",
    "src/components/contact-detail/SoftDeletePanel.tsx",
@@ -1690,6 +1691,10 @@
    "src/components/ui/card.tsx",
    "src/components/ui/skeleton.tsx",
    "src/integrations/supabase/client.ts"
+  ],
+  "src/components/contact-detail/ContactIntelligenceStrip.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/hooks/useContactView360.ts"
   ],
   "src/components/contact-detail/ContactIntelligenceTab.tsx": [
    "src/components/analytics/EmotionalIntelligencePanel.tsx",
@@ -1992,6 +1997,7 @@
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/dialog.tsx",
+   "src/hooks/useAuth.tsx",
    "src/lib/externalData.ts",
    "src/lib/logger.ts"
   ],
@@ -8212,6 +8218,7 @@
   ],
   "src/hooks/useImportantDates.ts": [
    "src/hooks/useAuth.tsx",
+   "src/hooks/useLocalDay.ts",
    "src/integrations/supabase/client.ts",
    "src/types/index.ts"
   ],
@@ -8515,7 +8522,9 @@
    "src/integrations/supabase/client.ts"
   ],
   "src/hooks/useProactiveIntelligence.ts": [
+   "src/hooks/useLocalDay.ts",
    "src/integrations/supabase/types.ts",
+   "src/lib/proactiveIntelligence.ts",
    "src/types/behavior.ts"
   ],
   "src/hooks/useProximoPassoFeedback.ts": [

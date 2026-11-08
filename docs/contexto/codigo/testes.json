@@ -5,21 +5,21 @@
   "vitest",
   "playwright"
  ],
- "total": 202,
+ "total": 210,
  "por_tipo": {
   "contrato": 37,
   "e2e": 12,
   "pytest": 2,
-  "unit": 149
+  "unit": 157
  },
  "onde_ficam": [
   {
-   "padrao": "co-localizado (__tests__)",
+   "padrao": "co-localizado (*.test)",
    "arquivos": 88
   },
   {
-   "padrao": "co-localizado (*.test)",
-   "arquivos": 80
+   "padrao": "co-localizado (__tests__)",
+   "arquivos": 88
   },
   {
    "padrao": "tests/",
@@ -273,6 +273,18 @@
    "casos": 3
   },
   {
+   "arquivo": "src/components/contact-detail/ContactDetailHeader.test.tsx",
+   "tipo": "unit",
+   "linhas": 64,
+   "testa": [
+    "src/components/contact-detail/ContactDetailHeader.tsx",
+    "src/components/ui/tooltip.tsx",
+    "src/hooks/useContacts.ts",
+    "src/types/index.ts"
+   ],
+   "casos": 2
+  },
+  {
    "arquivo": "src/components/contact-detail/SalesActivitiesWidget.test.tsx",
    "tipo": "unit",
    "linhas": 17,
@@ -281,6 +293,16 @@
     "src/lib/externalData.ts"
    ],
    "casos": 1
+  },
+  {
+   "arquivo": "src/components/contact-detail/SoftDeletePanel.test.tsx",
+   "tipo": "unit",
+   "linhas": 69,
+   "testa": [
+    "src/components/contact-detail/SoftDeletePanel.tsx",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 4
   },
   {
    "arquivo": "src/components/crm/NextBestAction.contract.test.tsx",
@@ -1077,6 +1099,36 @@
    "casos": 1
   },
   {
+   "arquivo": "src/hooks/useContactDetail.presence.test.tsx",
+   "tipo": "unit",
+   "linhas": 96,
+   "testa": [
+    "src/hooks/useContactDetail.ts",
+    "src/hooks/useContacts.ts"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/hooks/useContactDetail.sections.test.tsx",
+   "tipo": "unit",
+   "linhas": 60,
+   "testa": [
+    "src/hooks/useContactDetail.ts",
+    "src/hooks/useContacts.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/hooks/useContacts.cache.test.tsx",
+   "tipo": "unit",
+   "linhas": 87,
+   "testa": [
+    "src/hooks/useContacts.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 2
+  },
+  {
    "arquivo": "src/hooks/useContacts.pagination-deletion.test.tsx",
    "tipo": "unit",
    "linhas": 48,
@@ -1136,6 +1188,16 @@
    "casos": 1
   },
   {
+   "arquivo": "src/hooks/useImportantDates.midnight.test.tsx",
+   "tipo": "unit",
+   "linhas": 57,
+   "testa": [
+    "src/hooks/useImportantDates.ts",
+    "src/types/index.ts"
+   ],
+   "casos": 2
+  },
+  {
    "arquivo": "src/hooks/useImportantDates.test.tsx",
    "tipo": "unit",
    "linhas": 101,
@@ -1191,6 +1253,26 @@
     "src/hooks/usePipeline.ts"
    ],
    "casos": 5
+  },
+  {
+   "arquivo": "src/hooks/useProactiveIntelligence.test.tsx",
+   "tipo": "unit",
+   "linhas": 84,
+   "testa": [
+    "src/hooks/useContacts.ts",
+    "src/hooks/useProactiveIntelligence.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/hooks/useRestoreEntity.test.tsx",
+   "tipo": "unit",
+   "linhas": 35,
+   "testa": [
+    "src/hooks/useRestoreEntity.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 1
   },
   {
    "arquivo": "src/hooks/useRFMAnalysis.persistence.test.tsx",
@@ -1854,9 +1936,11 @@
   "src/components/auth/MFAGuard.tsx": 1,
   "src/components/campaigns/CampaignDetailDrawer.tsx": 1,
   "src/components/company-detail/CompanyCommercialTab.tsx": 1,
+  "src/components/contact-detail/ContactDetailHeader.tsx": 1,
   "src/components/contact-detail/LifeEventsTab.tsx": 1,
   "src/components/contact-detail/SalesActivitiesWidget.tsx": 1,
   "src/components/contact-detail/SocialIntelligencePanel.tsx": 1,
+  "src/components/contact-detail/SoftDeletePanel.tsx": 1,
   "src/components/crm/NextBestAction.tsx": 1,
   "src/components/crm/commercial/components/SocialMatchDetails.tsx": 1,
   "src/components/csat/CSATPanel.tsx": 1,
@@ -1890,6 +1974,7 @@
   "src/components/ui/button.tsx": 1,
   "src/components/ui/empty-state.tsx": 1,
   "src/components/ui/toaster.tsx": 1,
+  "src/components/ui/tooltip.tsx": 1,
   "src/contexts/DensityContext.tsx": 1,
   "src/contexts/NavigationStackContext.tsx": 1,
   "src/data/carnegieAppreciation.ts": 1,
@@ -1937,9 +2022,9 @@
   "src/hooks/useCSATSurveys.ts": 2,
   "src/hooks/useCompanies.ts": 3,
   "src/hooks/useCompanyActions.ts": 1,
-  "src/hooks/useContactDetail.ts": 4,
+  "src/hooks/useContactDetail.ts": 6,
   "src/hooks/useContactSegmentation.ts": 1,
-  "src/hooks/useContacts.ts": 8,
+  "src/hooks/useContacts.ts": 13,
   "src/hooks/useConversationIntel.ts": 2,
   "src/hooks/useDailyKpis.ts": 1,
   "src/hooks/useDailySummary.ts": 1,
@@ -1949,7 +2034,7 @@
   "src/hooks/useDocuments.ts": 1,
   "src/hooks/useEmailCampaigns.ts": 4,
   "src/hooks/useErpData.ts": 1,
-  "src/hooks/useImportantDates.ts": 1,
+  "src/hooks/useImportantDates.ts": 2,
   "src/hooks/useInteractionsAdvancedFilter.ts": 4,
   "src/hooks/useInteractionsInsights.ts": 1,
   "src/hooks/useInteractionsRpc.ts": 3,
@@ -1962,8 +2047,9 @@
   "src/hooks/usePendingFollowups.ts": 2,
   "src/hooks/usePipeline.ts": 3,
   "src/hooks/usePortfolioCompatibility.ts": 1,
+  "src/hooks/useProactiveIntelligence.ts": 1,
   "src/hooks/useRFMAnalysis.ts": 2,
-  "src/hooks/useRestoreEntity.ts": 2,
+  "src/hooks/useRestoreEntity.ts": 3,
   "src/hooks/useSequenceProcessor.ts": 1,
   "src/hooks/useSequences.ts": 2,
   "src/hooks/useSocialInsights.ts": 1,
@@ -1978,7 +2064,7 @@
   "src/lib/circuitBreaker.ts": 4,
   "src/lib/contactBehaviorAudit.ts": 1,
   "src/lib/errorReporting.ts": 2,
-  "src/lib/externalData.ts": 19,
+  "src/lib/externalData.ts": 22,
   "src/lib/formatters.ts": 1,
   "src/lib/insights/extractExcerpts.ts": 1,
   "src/lib/insights/pickTopPassages.ts": 1,
@@ -2002,7 +2088,7 @@
   "src/pages/mapa/companyQueries.ts": 1,
   "src/pages/mapa/geocoding.ts": 1,
   "src/pages/mapa/relationshipScores.ts": 1,
-  "src/types/index.ts": 2,
+  "src/types/index.ts": 4,
   "src/types/rfm.ts": 1,
   "src/types/vak.ts": 1,
   "supabase/functions/_shared/lead-score-contract.ts": 1,
@@ -2244,6 +2330,7 @@
    "src/hooks/useLeadScore.ts",
    "src/hooks/useLeadScoring.ts",
    "src/hooks/useLeadsFullView.ts",
+   "src/hooks/useLocalDay.ts",
    "src/hooks/useLuxIntelligence.ts",
    "src/hooks/useMarketingInsights.ts",
    "src/hooks/useMarkObjectionHandled.ts",
@@ -2278,7 +2365,6 @@
    "src/hooks/usePortfolioHealth.ts",
    "src/hooks/usePreContactBriefing.ts",
    "src/hooks/usePrefetch.ts",
-   "src/hooks/useProactiveIntelligence.ts",
    "src/hooks/useProximoPassoFeedback.ts",
    "src/hooks/useProximosPassosFilters.ts",
    "src/hooks/usePurchasePatterns.ts",

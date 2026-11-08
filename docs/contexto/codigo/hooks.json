@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 407,
+ "total": 408,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -1218,7 +1218,7 @@
     "useState"
    ],
    "canais_realtime": [],
-   "usado_por": 333,
+   "usado_por": 334,
    "usado_por_arquivos": [
     "src/app/AppChrome.tsx",
     "src/app/AppProviders.tsx",
@@ -1235,6 +1235,7 @@
     "src/components/contact-detail/LifeEventsTab.tsx",
     "src/components/contact-detail/MetricOverrideFlow.tsx",
     "src/components/contact-detail/SocialMediaIntelligenceCard.tsx",
+    "src/components/contact-detail/SoftDeletePanel.tsx",
     "src/components/contact-detail/behavioral-tab/MetaprogramsSubTab.tsx",
     "src/components/contact-detail/behavioral-tab/NeuroDominanceTab.tsx",
     "src/components/contact-detail/behavioral-tab/VakSubTab.tsx",
@@ -1248,8 +1249,7 @@
     "src/components/crm/behavior/NeuromarketingTimeline.tsx",
     "src/components/crm/behavior/PredictiveRoadmap.tsx",
     "src/components/crm/commercial/OfferSuggestionsElite.tsx",
-    "src/components/crm/consent/ConsentAuditLog.tsx",
-    "src/components/dashboard/DailyBriefingCard.tsx"
+    "src/components/crm/consent/ConsentAuditLog.tsx"
    ],
    "coberto_por_testes": 2
   },
@@ -2790,7 +2790,7 @@
     "src/components/dashboard/StrategicNextStepsCard.tsx",
     "src/pages/ContatoDetalhe.tsx"
    ],
-   "coberto_por_testes": 4
+   "coberto_por_testes": 6
   },
   {
    "arquivo": "src/hooks/useContactEffectiveness.ts",
@@ -3036,7 +3036,7 @@
     "src/pages/Interacoes.tsx",
     "src/pages/contatos/ContatosContent.tsx"
    ],
-   "coberto_por_testes": 8
+   "coberto_por_testes": 13
   },
   {
    "arquivo": "src/hooks/useContactsCompletoView.ts",
@@ -3339,9 +3339,10 @@
     "useQuery"
    ],
    "canais_realtime": [],
-   "usado_por": 5,
+   "usado_por": 6,
    "usado_por_arquivos": [
     "src/components/contact-detail/ContactDetailHeader.tsx",
+    "src/components/contact-detail/ContactIntelligenceStrip.tsx",
     "src/components/ficha-360/FrequenciaContatoCard.tsx",
     "src/components/ficha-360/PerfilComportamentalCard.tsx",
     "src/hooks/useFicha360.ts",
@@ -5746,7 +5747,7 @@
    "hooks_exportados": [
     "useImportantDates"
    ],
-   "linhas": 294,
+   "linhas": 296,
    "dominio": "hooks",
    "tabelas": [
     "contact_relatives",
@@ -5756,6 +5757,7 @@
    "edges": [],
    "hooks_internos": [
     "useAuth",
+    "useLocalDay",
     "useQuery"
    ],
    "canais_realtime": [],
@@ -5764,7 +5766,7 @@
     "src/components/dashboard/ImportantDatesCalendar.tsx",
     "src/components/dashboard/important-dates/EventCard.tsx"
    ],
-   "coberto_por_testes": 1
+   "coberto_por_testes": 2
   },
   {
    "arquivo": "src/hooks/useInactivityAlerts.ts",
@@ -6601,6 +6603,28 @@
    "usado_por": 1,
    "usado_por_arquivos": [
     "src/components/contact-detail/commercial-tab/DealsLeadsPipelineCard.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useLocalDay.ts",
+   "hooks_exportados": [
+    "useLocalDay"
+   ],
+   "linhas": 29,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/hooks/useImportantDates.ts",
+    "src/hooks/useProactiveIntelligence.ts"
    ],
    "coberto_por_testes": 0
   },
@@ -7730,12 +7754,13 @@
    "hooks_exportados": [
     "useProactiveIntelligence"
    ],
-   "linhas": 457,
+   "linhas": 368,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
    "edges": [],
    "hooks_internos": [
+    "useLocalDay",
     "useMemo"
    ],
    "canais_realtime": [],
@@ -7744,7 +7769,7 @@
     "src/components/proactive-intelligence/ProactiveIntelligencePanel.tsx",
     "src/pages/ContatoDetalhe.tsx"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useProximoPassoFeedback.ts",
@@ -8168,7 +8193,7 @@
     "src/pages/Contatos.tsx",
     "src/pages/Empresas.tsx"
    ],
-   "coberto_por_testes": 2
+   "coberto_por_testes": 3
   },
   {
    "arquivo": "src/hooks/useRevOps.ts",

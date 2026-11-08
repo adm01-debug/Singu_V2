@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "4ba718045b6fc695bf074c6f9859fc4327691b0c",
+  "commit": "77475499826534562324282e34d6cca326f0cce7",
   "branch": "main",
-  "data_commit": "2026-11-08T16:27:34-03:00",
+  "data_commit": "2026-11-08T16:31:44-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "77475499",
+    "data": "2026-11-08",
+    "assunto": "fix(contatos): atualiza a ficha e preserva aniversários locais (#125)"
+   },
    {
     "sha": "4ba71804",
     "data": "2026-11-08",
@@ -126,18 +131,13 @@
     "sha": "f6123624",
     "data": "2026-10-29",
     "assunto": "fix(contatos): preserva ficha e recupera falhas da fonte externa (#149)"
-   },
-   {
-    "sha": "d85622d0",
-    "data": "2026-10-29",
-    "assunto": "build(deps): Bump the minor-and-patch group across 1 directory with 36 updates (#138)"
    }
   ],
-  "arquivos_mudados_7d": 61,
+  "arquivos_mudados_7d": 78,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "CHANGELOG.md",
-    "mudancas": 38
+    "mudancas": 39
    },
    {
     "pasta": "supabase/functions/_shared",
@@ -148,16 +148,16 @@
     "mudancas": 25
    },
    {
+    "pasta": "src/components/contact-detail",
+    "mudancas": 15
+   },
+   {
     "pasta": ".github/workflows/ci.yml",
     "mudancas": 13
    },
    {
     "pasta": "supabase/functions/external-data",
     "mudancas": 11
-   },
-   {
-    "pasta": "src/components/contact-detail",
-    "mudancas": 10
    },
    {
     "pasta": "src/components/dashboard",
@@ -199,7 +199,7 @@
   "arquivos_mais_mudados_90d": [
    {
     "arquivo": "CHANGELOG.md",
-    "mudancas": 42
+    "mudancas": 43
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -294,14 +294,14 @@
     "mudancas": 4
    },
    {
-    "arquivo": "src/pages/Empresas.tsx",
+    "arquivo": "src/pages/Contatos.tsx",
     "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 41
+    "commits": 42
    },
    {
     "autor": "adm01-debug",
@@ -318,21 +318,21 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 2973,
-  "arquivos_codigo": 2063,
-  "linhas_codigo": 388232,
+  "arquivos_total": 2984,
+  "arquivos_codigo": 2074,
+  "linhas_codigo": 388841,
   "rotas": 114,
   "rotas_http_backend": 12,
   "vistas_por_id": 0,
   "itens_menu": 56,
   "modulos": 141,
-  "componentes": 1056,
-  "hooks": 407,
+  "componentes": 1057,
+  "hooks": 408,
   "edge_functions": 108,
   "tabelas": 418,
   "migrations": 476,
   "cron_jobs": 20,
-  "testes": 202,
+  "testes": 210,
   "workflows": 6,
   "scripts": 213,
   "docs_md": 148
@@ -523,8 +523,8 @@
    "linhas": 589
   },
   "src/components": {
-   "arquivos": 980,
-   "linhas": 147703
+   "arquivos": 983,
+   "linhas": 147857
   },
   "src/config": {
    "arquivos": 1,
@@ -543,16 +543,16 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 426,
-   "linhas": 56394
+   "arquivos": 433,
+   "linhas": 56755
   },
   "src/integrations": {
    "arquivos": 3,
    "linhas": 69375
   },
   "src/lib": {
-   "arquivos": 97,
-   "linhas": 8642
+   "arquivos": 98,
+   "linhas": 8736
   },
   "src/main.tsx": {
    "arquivos": 1,

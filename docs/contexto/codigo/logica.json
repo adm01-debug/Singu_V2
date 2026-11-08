@@ -1,13 +1,13 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 143,
+ "total": 144,
  "por_camada": {
   "config": 1,
   "data": 46,
   "domain": 8,
   "integrations": 3,
-  "lib": 71,
+  "lib": 72,
   "python": 8,
   "store": 1,
   "stores": 5
@@ -2627,7 +2627,7 @@
     "pages",
     "pages/cadastro"
    ],
-   "coberto_por_testes": 19,
+   "coberto_por_testes": 22,
    "orfao": false
   },
   {
@@ -3277,6 +3277,38 @@
    "usado_por": 1,
    "usado_por_modulos": [
     "pages/interacoes"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/proactiveIntelligence.ts",
+   "camada": "lib",
+   "exports": [
+    "ActionCategory",
+    "ActionPriority",
+    "ApproachScript",
+    "CARNEGIE_PRINCIPLES",
+    "DISC_APPROACH_STYLE",
+    "IntelligenceInsight",
+    "NEURO_BRAIN_HOOKS",
+    "NextBestAction",
+    "ProactiveIntelligenceResult",
+    "VAK_LANGUAGE"
+   ],
+   "export_default": null,
+   "linhas": 94,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
    ],
    "coberto_por_testes": 0,
    "orfao": false

@@ -3,7 +3,7 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2012)",
+   "TypeScript (2023)",
    "SQL (642)",
    "Markdown (148)",
    "Shell (70)",
@@ -366,7 +366,7 @@
   {
    "arquivo": "CHANGELOG.md",
    "titulo": "Changelog",
-   "linhas": 407
+   "linhas": 411
   },
   {
    "arquivo": "CLAUDE.md",
@@ -1105,12 +1105,12 @@
     "ocorrencias": 7
    },
    {
-    "papel": "region",
+    "papel": "contact",
     "ocorrencias": 5
    },
    {
-    "papel": "contact",
-    "ocorrencias": 4
+    "papel": "region",
+    "ocorrencias": 5
    },
    {
     "papel": "dialog",

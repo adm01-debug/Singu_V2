@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 1863,
- "arestas": 8242,
+ "nos": 1866,
+ "arestas": 8249,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -10,7 +10,7 @@
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
-   "importado_por": 542
+   "importado_por": 543
   },
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -22,7 +22,7 @@
   },
   {
    "arquivo": "src/hooks/useAuth.tsx",
-   "importado_por": 335
+   "importado_por": 336
   },
   {
    "arquivo": "src/integrations/supabase/client.ts",
@@ -46,7 +46,7 @@
   },
   {
    "arquivo": "src/lib/externalData.ts",
-   "importado_por": 125
+   "importado_por": 128
   },
   {
    "arquivo": "src/components/ui/select.tsx",
@@ -54,7 +54,7 @@
   },
   {
    "arquivo": "src/types/index.ts",
-   "importado_por": 118
+   "importado_por": 120
   },
   {
    "arquivo": "src/lib/errorMessages.ts",
@@ -94,7 +94,7 @@
   },
   {
    "arquivo": "src/components/ui/tooltip.tsx",
-   "importado_por": 81
+   "importado_por": 82
   },
   {
    "arquivo": "supabase/functions/_shared/fetch-utils.ts",
@@ -109,16 +109,16 @@
    "importado_por": 47
   },
   {
+   "arquivo": "src/hooks/useContacts.ts",
+   "importado_por": 40
+  },
+  {
    "arquivo": "src/components/ui/separator.tsx",
    "importado_por": 39
   },
   {
    "arquivo": "src/types/vak.ts",
    "importado_por": 36
-  },
-  {
-   "arquivo": "src/hooks/useContacts.ts",
-   "importado_por": 35
   },
   {
    "arquivo": "supabase/functions/_shared/validate.ts",
