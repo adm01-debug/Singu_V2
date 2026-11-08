@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -21,7 +21,7 @@ function run(t, { jwt = '', profiles = { anon: 0, authenticated_sem_role: 0 }, d
     console.log('COLETA_EXECUTADA');
     return Response.json([]);
   };`);
-  const result = spawnSync(process.execPath, ['--import', loader, script, ...(update ? ['--update'] : [])], {
+  const result = spawnSync(process.execPath, ['--import', pathToFileURL(loader).href, script, ...(update ? ['--update'] : [])], {
     encoding: 'utf8', timeout: 10000,
     env: { ...process.env, SUPABASE_URL: 'https://fixture.invalid', SUPABASE_ANON_KEY: 'fixture-anon', TEST_USER_JWT: jwt },
   });

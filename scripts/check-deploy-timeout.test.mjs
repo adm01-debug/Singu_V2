@@ -43,10 +43,10 @@ for (const seconds of [18, 74, 76]) {
       process.stdout.write(${JSON.stringify(JSON.stringify(slugs.map(slug => ({ slug, status: 'ACTIVE' }))))});
     `, { mode: 0o755 });
     writeFileSync(join(bin, 'curl'), `#!/usr/bin/env node
-      const { spawnSync } = require('node:child_process');
+      const { spawnSync } = require('node:child_process');\r\n      const { existsSync } = require('node:fs');
       const args = process.argv.slice(2).map(arg => arg.replace(
         'https://fixture.supabase.co/functions/v1', 'http://127.0.0.1:${port}'));
-      const result = spawnSync('/usr/bin/curl', args, { stdio: 'inherit' });
+      const curlBin = existsSync('/usr/bin/curl') ? '/usr/bin/curl' : 'curl';\r\n      const result = spawnSync(curlBin, args, { stdio: 'inherit' });
       if (result.error) throw result.error;
       process.exit(result.status ?? 1);
     `, { mode: 0o755 });

@@ -32,7 +32,7 @@ function walk(dir) {
     const content = readFileSync(full, "utf8");
     if (WILDCARD.test(content) || WILDCARD_ALT.test(content)) {
       const rel = relative(ROOT, full);
-      const fn = rel.split("/")[0];
+      const fn = rel.split(/[\\/]/)[0];
       if (!allowlist.has(fn)) violations.push({ file: full, fn });
     }
   }
