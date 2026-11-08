@@ -68,18 +68,18 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-08 18:47:00 | succeeded | 0.06 | 1 row |
-| 2026-11-08 18:46:00 | succeeded | 0.02 | 1 row |
-| 2026-11-08 18:45:00 | succeeded | 0.16 | 1 row |
+| 2026-11-08 18:57:00 | succeeded | 0.05 | 1 row |
+| 2026-11-08 18:56:00 | succeeded | 0.03 | 1 row |
+| 2026-11-08 18:55:00 | succeeded | 0.03 | 1 row |
 
 
 ## 10 · zapp-reconcile-nlp-30s
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-08 18:47:00 | succeeded | 30.07 | 1 row |
-| 2026-11-08 18:46:00 | succeeded | 30.04 | 1 row |
-| 2026-11-08 18:45:00 | succeeded | 30.07 | 1 row |
+| 2026-11-08 18:57:00 | running |  |  |
+| 2026-11-08 18:56:00 | succeeded | 30.04 | 1 row |
+| 2026-11-08 18:55:00 | succeeded | 30.14 | 1 row |
 
 
 ## 11 · zapp-gc-zombie-messages
@@ -127,18 +127,18 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-08 18:55:00 | succeeded | 0.05 | 1 row |
+| 2026-11-08 18:50:00 | succeeded | 0.07 | 1 row |
 | 2026-11-08 18:45:00 | succeeded | 0.16 | 1 row |
-| 2026-11-08 18:40:00 | succeeded | 0.02 | 1 row |
-| 2026-11-08 18:35:00 | succeeded | 0.18 | 1 row |
 
 
 ## 289 · auto_resolve_ai_gateway_alerts
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-08 18:57:00 | succeeded | 0.03 | 1 row |
+| 2026-11-08 18:52:00 | succeeded | 0.06 | 1 row |
 | 2026-11-08 18:47:00 | succeeded | 0.06 | 1 row |
-| 2026-11-08 18:42:01 | succeeded | 0.13 | 1 row |
-| 2026-11-08 18:37:00 | succeeded | 0.03 | 1 row |
 
 
 ## 290 · ai-gateway-metrics-ensure-partition
