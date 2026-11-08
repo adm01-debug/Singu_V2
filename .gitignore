@@ -46,3 +46,14 @@ graphify-out/memory/
 graphify-out/reflections/
 graphify-out/needs_update
 graphify-out/20??-??-??/
+
+# gerado pelo contexto.yml na branch contexto (nunca em main); manual/ é texto humano e fica em main
+docs/contexto/*
+!docs/contexto/regras/
+docs/contexto/regras/*
+!docs/contexto/regras/manual/
+
+# Python dos produtores de contexto (scripts/regras_negocio, scripts/supabase_snapshot)
+__pycache__/
+*.py[cod]
+.pytest_cache/

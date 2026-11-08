@@ -7,6 +7,11 @@
 
 ---
 
+## 🤖 Agentes de IA
+
+Estado real do sistema (código, banco e regras de negócio) é regerado sozinho a cada 10 minutos e
+publicado na branch `contexto`. Comece por [docs/agentes/contexto-ia.md](docs/agentes/contexto-ia.md).
+
 ## 📌 Sobre
 
 SINGU é um CRM construído para equipes que tratam relacionamento como ativo estratégico. Vai além do CRM tradicional ao combinar gestão de contatos com análise comportamental profunda, frameworks de inteligência emocional e automações de comunicação.
