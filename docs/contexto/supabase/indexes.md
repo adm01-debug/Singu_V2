@@ -1,7 +1,5 @@
 # Índices
 
-> ⚠️ Seção `indexes` não pôde ser atualizada nesta coleta (ver errors.md); mostrando a versão anterior.
-
 Uso e tamanho em `stats.md`.
 
 | tabela | índice | método | colunas | único | válido | predicado |

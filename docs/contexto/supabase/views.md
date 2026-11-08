@@ -1,7 +1,5 @@
 # Views
 
-> ⚠️ Seção `views` não pôde ser atualizada nesta coleta (ver errors.md); mostrando a versão anterior.
-
 
 ## public.document_signatures_public (view)
 
