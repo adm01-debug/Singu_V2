@@ -15,6 +15,8 @@ import { dirname, join } from 'node:path';
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const ARQ = join(AQUI, 'rls-baseline.json');
 const LIMITE = 1001;
+const MAX_RETRIES = 2;
+const RETRY_DELAY_MS = 2000;
 
 const { SUPABASE_URL, SUPABASE_ANON_KEY, TEST_USER_JWT } = process.env;
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
@@ -30,10 +32,14 @@ async function contar(tabela, jwt) {
   const url = `${SUPABASE_URL}/rest/v1/${tabela}?select=*&limit=${LIMITE}`;
   const headers = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${jwt ?? SUPABASE_ANON_KEY}` };
   let res;
-  try {
-    res = await fetch(url, { headers });
-  } catch (e) {
-    return { erro: `rede: ${e.message}` };
+  for (let tentativa = 0; tentativa <= MAX_RETRIES; tentativa++) {
+    if (tentativa > 0) await new Promise(r => setTimeout(r, RETRY_DELAY_MS));
+    try {
+      res = await fetch(url, { headers });
+    } catch (e) {
+      return { erro: `rede: ${e.message}` };
+    }
+    if (res.status !== 500) break;
   }
   if (res.status === 401 || res.status === 403) {
     const body = await res.json().catch(() => null);
