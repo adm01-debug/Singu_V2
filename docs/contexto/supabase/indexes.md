@@ -636,6 +636,7 @@ Uso e tamanho em `stats.md`.
 | public.contact_emails | contact_emails_contact_id_email_ci_unique | btree | contact_id | sim | sim |  |
 | public.contact_emails | contact_emails_pkey | btree | id | sim | sim |  |
 | public.contact_emails | idx_contact_emails_contact_id | btree | contact_id | não | sim |  |
+| public.contact_emails | idx_contact_emails_primary | btree | contact_id | não | sim | `(is_primary = true)` |
 | public.contact_family_history | contact_family_history_pkey | btree | id | sim | sim |  |
 | public.contact_family_history | idx_contact_family_history_contact | btree | contact_id, changed_at | não | sim |  |
 | public.contact_influence | contact_influence_contact_id_key | btree | contact_id | sim | sim |  |
@@ -656,6 +657,7 @@ Uso e tamanho em `stats.md`.
 | public.contact_phones | contact_phones_contact_id_numero_norm_unique | btree | contact_id, numero_normalizado | sim | sim |  |
 | public.contact_phones | contact_phones_pkey | btree | id | sim | sim |  |
 | public.contact_phones | idx_contact_phones_normalizado | btree | numero_normalizado | não | sim |  |
+| public.contact_phones | idx_contact_phones_primary | btree | contact_id | não | sim | `(is_primary = true)` |
 | public.contact_phones | idx_contact_phones_whatsapp | btree | contact_id | não | sim | `(is_whatsapp = true)` |
 | public.contact_predictive_roadmap | contact_predictive_roadmap_pkey | btree | id | sim | sim |  |
 | public.contact_predictive_roadmap | idx_contact_roadmap_month | btree | contact_id, forecast_month | sim | sim |  |

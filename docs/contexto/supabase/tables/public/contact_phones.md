@@ -50,6 +50,7 @@
 | contact_phones_contact_id_numero_norm_unique | btree | contact_id, numero_normalizado | sim | sim |  | `CREATE UNIQUE INDEX contact_phones_contact_id_numero_norm_unique ON public.contact_phones USING btree (contact_id, numero_normalizado)` |
 | contact_phones_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX contact_phones_pkey ON public.contact_phones USING btree (id)` |
 | idx_contact_phones_normalizado | btree | numero_normalizado | não | sim |  | `CREATE INDEX idx_contact_phones_normalizado ON public.contact_phones USING btree (numero_normalizado)` |
+| idx_contact_phones_primary | btree | contact_id | não | sim | `(is_primary = true)` | `CREATE INDEX idx_contact_phones_primary ON public.contact_phones USING btree (contact_id) WHERE (is_primary = true)` |
 | idx_contact_phones_whatsapp | btree | contact_id | não | sim | `(is_whatsapp = true)` | `CREATE INDEX idx_contact_phones_whatsapp ON public.contact_phones USING btree (contact_id) WHERE (is_whatsapp = true)` |
 
 
@@ -120,7 +121,6 @@
 
 | nome | timing | eventos | nível | status | função |
 |---|---|---|---|---|---|
-| set_updated_at | BEFORE | UPDATE | ROW | enabled | public.set_updated_at |
 | trg_contact_phones_normalizar | BEFORE | INSERT OR UPDATE | ROW | enabled | public.trg_normalizar_telefone_contact |
 | trg_set_updated_at | BEFORE | UPDATE | ROW | enabled | public.set_updated_at |
 | trg_singu_sync_contact_phone | AFTER | INSERT OR DELETE OR UPDATE | ROW | enabled | public.singu_sync_contact_phone |

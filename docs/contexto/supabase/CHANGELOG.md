@@ -2,6 +2,13 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-08 20:48 UTC
+
+- **functions** alterado (1): `public.set_updated_at()`
+- **indexes** adicionado (2): `public.idx_contact_emails_primary`, `public.idx_contact_phones_primary`
+- **migrations** adicionado (1): `20261108203932_fix_contact_phones_trigger_primary_indexes`
+- **triggers** removido (1): `public.contact_phones.set_updated_at`
+
 ## 2026-11-08 19:57 UTC
 
 - **functions** alterado (1): `public.merge_records_atomically(p_entity text, p_primary_id uuid, p_secondary_id uuid, p_field_overrides jsonb)`

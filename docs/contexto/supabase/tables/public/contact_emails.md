@@ -46,6 +46,7 @@
 | contact_emails_contact_id_email_ci_unique | btree | contact_id | sim | sim |  | `CREATE UNIQUE INDEX contact_emails_contact_id_email_ci_unique ON public.contact_emails USING btree (contact_id, lower((email)::text))` |
 | contact_emails_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX contact_emails_pkey ON public.contact_emails USING btree (id)` |
 | idx_contact_emails_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_contact_emails_contact_id ON public.contact_emails USING btree (contact_id)` |
+| idx_contact_emails_primary | btree | contact_id | não | sim | `(is_primary = true)` | `CREATE INDEX idx_contact_emails_primary ON public.contact_emails USING btree (contact_id) WHERE (is_primary = true)` |
 
 
 ## Policies (RLS)

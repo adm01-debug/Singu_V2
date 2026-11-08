@@ -225941,7 +225941,6 @@
             "public.contact_cadence.trg_set_updated_at",
             "public.contact_emails.set_updated_at",
             "public.contact_emails.trg_set_updated_at",
-            "public.contact_phones.set_updated_at",
             "public.contact_phones.trg_set_updated_at",
             "public.contact_preferences.set_updated_at",
             "public.contact_preferences.trg_set_updated_at",
@@ -255638,6 +255637,20 @@
       },
       {
         "columns": [
+          "contact_id"
+        ],
+        "definition": "CREATE INDEX idx_contact_emails_primary ON public.contact_emails USING btree (contact_id) WHERE (is_primary = true)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_contact_emails_primary",
+        "predicate": "(is_primary = true)",
+        "schema": "public",
+        "table": "contact_emails"
+      },
+      {
+        "columns": [
           "id"
         ],
         "definition": "CREATE UNIQUE INDEX contact_family_history_pkey ON public.contact_family_history USING btree (id)",
@@ -255918,6 +255931,20 @@
         "method": "btree",
         "name": "idx_contact_phones_normalizado",
         "predicate": null,
+        "schema": "public",
+        "table": "contact_phones"
+      },
+      {
+        "columns": [
+          "contact_id"
+        ],
+        "definition": "CREATE INDEX idx_contact_phones_primary ON public.contact_phones USING btree (contact_id) WHERE (is_primary = true)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_contact_phones_primary",
+        "predicate": "(is_primary = true)",
         "schema": "public",
         "table": "contact_phones"
       },
@@ -276666,6 +276693,12 @@
         "statements": 1,
         "statements_sha": "21c1d43b866b9d6e",
         "version": "20261022203935"
+      },
+      {
+        "name": "fix_contact_phones_trigger_primary_indexes",
+        "statements": 1,
+        "statements_sha": "248510aec34355d6",
+        "version": "20261108203932"
       }
     ],
     "policies": [
@@ -309165,17 +309198,6 @@
         "schema": "public",
         "status": "enabled",
         "table": "contact_personality",
-        "timing": "BEFORE"
-      },
-      {
-        "definition": "CREATE TRIGGER set_updated_at BEFORE UPDATE ON contact_phones FOR EACH ROW EXECUTE FUNCTION set_updated_at()",
-        "events": "UPDATE",
-        "function": "public.set_updated_at",
-        "level": "ROW",
-        "name": "set_updated_at",
-        "schema": "public",
-        "status": "enabled",
-        "table": "contact_phones",
         "timing": "BEFORE"
       },
       {
