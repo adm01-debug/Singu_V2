@@ -191733,9 +191733,13 @@
             {
               "file": "supabase/migrations/20261006140000_ai_gateway_observability.sql",
               "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [
             "292:cleanup_rpc_perf_samples_daily"
           ],
