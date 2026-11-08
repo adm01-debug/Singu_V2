@@ -1,6 +1,6 @@
 # docs:
 #   gatilho: agendado (seg 10:23 UTC) e dispatch
-#   prova: inventario/estado (banco, edge functions, uso de tabelas, rotas do front) regerado do banco oficial e do codigo
+#   prova: inventario/estado (banco, edge functions, uso de tabelas, rotas do front, alcance das edges) regerado do banco oficial e do codigo
 #   falha: o job fica vermelho e o inventario nao e atualizado
 #   avisa: PR automation/inventario-estado com o inventario novo
 name: Inventário do estado real (semanal)
@@ -103,14 +103,15 @@ jobs:
             > "$RUNNER_TEMP/inv/tabelas.txt"
           node scripts/inventario/gerar-repo.mjs < "$RUNNER_TEMP/inv/tabelas.txt"
 
-      - name: Inventário das rotas do front
-        # Le AppRoutes.tsx, lazyPages.tsx, AppSidebar.tsx e MobileBottomNav.tsx e segue os imports
-        # de cada pagina; so codigo, nenhum acesso a rede. O teste roda antes porque o parser e
-        # regex sobre JSX: se o formato do AppRoutes mudar, falha aqui em vez de gravar inventario
-        # vazio.
+      - name: Inventário das rotas do front e do alcance das edge functions
+        # Rotas: le AppRoutes.tsx, lazyPages.tsx, AppSidebar.tsx e MobileBottomNav.tsx e segue os
+        # imports de cada pagina. Edges: le supabase/functions/<funcao>/**/*.ts seguindo _shared/.
+        # So codigo, nenhum acesso a rede. Os testes rodam antes porque os dois parsers sao regex
+        # sobre o codigo: se o formato mudar, falha aqui em vez de gravar inventario vazio.
         run: |
-          node --test scripts/inventario/gerar-rotas.test.mjs
+          node --test scripts/inventario/gerar-rotas.test.mjs scripts/inventario/gerar-edge-tabela.test.mjs
           node scripts/inventario/gerar-rotas.mjs
+          node scripts/inventario/gerar-edge-tabela.mjs
 
       - name: Decidir se vale PR
         id: mudou
@@ -143,6 +144,7 @@ jobs:
           labels: inventario
           add-paths: |
             inventario/estado/banco.json
+            inventario/estado/edge-tabela.json
             inventario/estado/edges.json
             inventario/estado/rotas.json
             inventario/estado/tabelas-uso.json

@@ -1,0 +1,2468 @@
+{
+  "format_version": 1,
+  "fonte": "scripts/inventario/gerar-edge-tabela.mjs (le supabase/functions/<funcao>/**/*.ts, sem teste, seguindo _shared/ uma vez)",
+  "limites": "leitura estatica: nome de tabela em variavel nao constante, concatenacao e SQL cru ficam de fora; alcance nao prova execucao",
+  "resumo": {
+    "funcoes": 108,
+    "funcoes_sem_tabela": 5,
+    "tabelas_distintas": 131,
+    "rpcs_distintas": 25
+  },
+  "funcoes": {
+    "abm-account-scorer": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/tracing.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "abm_accounts",
+        "abm_buying_committee"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "abm-whitespace-analyzer": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/tracing.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "abm_accounts",
+        "abm_buying_committee",
+        "abm_whitespace_opportunities",
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "ai-assistant": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/tracing.ts"
+      ],
+      "tabelas": [
+        "ai_chat_messages",
+        "ai_chat_threads",
+        "ai_gateway_metrics",
+        "companies",
+        "contacts"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "ai-email-refine": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "ai-suggest-mapping": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/tracing.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "ai-writing-assistant": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "ask-crm": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/tracing.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "user_roles"
+      ],
+      "rpcs": [
+        "execute_readonly_query"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "attribution-calculator": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/tracing.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [],
+      "rpcs": [
+        "compute_attribution"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "audit-analytics": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/pagination.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/tracing.ts"
+      ],
+      "tabelas": [
+        "audit_log"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "auto-rebatch-behavioral": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "behavioral_insight_feedback",
+        "contact_analytical_profiles",
+        "cron_secrets"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": [
+        "generate-behavioral-profile"
+      ]
+    },
+    "auto-regen-behavioral-profiles": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "behavioral_profile_regen_queue",
+        "system_alerts"
+      ],
+      "rpcs": [
+        "claim_behavioral_profile_sla_batch"
+      ],
+      "buckets": [],
+      "invoca_edges": [
+        "generate-behavioral-profile"
+      ]
+    },
+    "bitrix24-webhook": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/tracing.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "interactions"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "bulk-revalidate": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "validation_queue"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "check-health-alerts": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/tracing.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "health_alert_settings",
+        "health_alerts",
+        "interactions"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": [
+        "send-push-notification"
+      ]
+    },
+    "check-notifications": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/tracing.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "contact_relatives",
+        "contacts",
+        "insights",
+        "interactions",
+        "life_events"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": [
+        "send-push-notification"
+      ]
+    },
+    "clear-must-reset-flag": {
+      "arquivos": 1,
+      "compartilhados": [],
+      "tabelas": [
+        "migration_password_reset_log"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "client-notifications": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/tracing.ts"
+      ],
+      "tabelas": [
+        "alerts",
+        "contacts",
+        "interactions",
+        "life_events",
+        "purchase_history"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "connection-anomaly-detector": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/tracing.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "connection_anomalies",
+        "incoming_webhook_logs",
+        "incoming_webhooks"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "connection-introspect": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "connection_configs"
+      ],
+      "rpcs": [
+        "has_role"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "connection-tester": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/safe-http.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "connection_configs",
+        "connection_test_logs"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "conversation-analyzer": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "conversation_analyses",
+        "conversation_topics_catalog",
+        "interactions",
+        "reframing_analysis",
+        "suggested_life_events"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "conversation-coaching-digest": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "conversation_analyses"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "conversational-search": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "conversational_search_cache"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "crm-automation-monitor": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "crm_automation_logs"
+      ],
+      "rpcs": [
+        "calculate_relationship_metrics_for_contact"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "cs-health-recalc": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts"
+      ],
+      "tabelas": [
+        "alerts",
+        "cs_accounts",
+        "cs_health_signals"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "deal-room-buyer-view": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [],
+      "rpcs": [
+        "record_buyer_view"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "deal-room-health": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "deal_room_milestones",
+        "deal_room_stakeholders",
+        "deal_rooms"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "deal-room-share": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "deal_rooms"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "demand-forecast": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "interactions"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "detect-churn-risk": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "churn_risk_scores",
+        "contacts",
+        "interactions"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "detect-new-device": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "device_login_notifications",
+        "user_known_devices"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "disc-analyzer": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "contacts",
+        "disc_analysis_history",
+        "disc_communication_logs"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "dual-write-proxy": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts"
+      ],
+      "tabelas": [],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "elevenlabs-scribe-token": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "elevenlabs-tts": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "email-finder": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/email-verify.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "email_finder_results"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "email-pipeline-health": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": [
+        "external-data"
+      ]
+    },
+    "email-thread-summary": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "email_thread_summaries",
+        "interactions"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "email-verifier": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/email-verify.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validation-owner.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "email_verifications"
+      ],
+      "rpcs": [
+        "complete_validation_queue_item"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "enrich-contacts": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "contacts"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "enrichlayer-linkedin": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "social_profiles"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "error-budget": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "system_alerts",
+        "system_health_snapshots"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "evolution-api": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "evolution-bitrix-connector": {
+      "arquivos": 1,
+      "compartilhados": [],
+      "tabelas": [
+        "connector_log",
+        "oauth_tokens"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "evolution-webhook": {
+      "arquivos": 5,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "interactions",
+        "profiles",
+        "whatsapp_ingestion_logs",
+        "whatsapp_instances",
+        "whatsapp_messages"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": [
+        "disc-analyzer",
+        "social-behavior-analyzer",
+        "voice-to-text"
+      ]
+    },
+    "external-data": {
+      "arquivos": 4,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/search-filter.ts",
+        "supabase/functions/_shared/select-projection.ts",
+        "supabase/functions/_shared/tenant-guard.ts",
+        "supabase/functions/_shared/tracing.ts",
+        "supabase/functions/_shared/version-guard.ts",
+        "supabase/functions/_shared/write-error.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [
+        "has_role"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "ficha360-conversation-summary": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "ficha360_conversation_summaries"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "firecrawl-scrape": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "forecast-analyzer": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "deal_forecasts",
+        "forecast_quota_settings"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "forecast-narrative": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "deal_forecasts",
+        "forecast_periods"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "forecast-snapshot-cron": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts"
+      ],
+      "tabelas": [
+        "deal_forecasts",
+        "forecast_periods",
+        "forecast_snapshots"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "form-submit-handler": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [],
+      "rpcs": [
+        "submit_public_form"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "generate-behavioral-profile": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "behavioral_insight_feedback",
+        "call_logs",
+        "contacts",
+        "interactions",
+        "whatsapp_messages"
+      ],
+      "rpcs": [
+        "save_behavioral_profile_if_fresh"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "generate-insights": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/tracing.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "generate-offer-suggestions": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "contact_analytical_profiles",
+        "contacts",
+        "interactions",
+        "offer_suggestions",
+        "purchase_history",
+        "social_behavior_analysis",
+        "social_insights"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "get-signature": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "document_signatures",
+        "document_views"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "health": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "companies",
+        "profiles"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "health-aggregate": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "alerts",
+        "companies",
+        "connection_configs",
+        "connection_test_logs",
+        "email_logs",
+        "incoming_webhook_logs",
+        "profiles"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "incoming-webhook": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/tracing.ts",
+        "supabase/functions/_shared/webhook-signature.ts"
+      ],
+      "tabelas": [
+        "incoming_webhook_dlq",
+        "incoming_webhook_logs",
+        "incoming_webhook_nonces",
+        "incoming_webhooks"
+      ],
+      "rpcs": [
+        "has_role",
+        "increment_webhook_quota"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "intent-aggregator": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "intent_scores",
+        "intent_signals"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "intent-pixel-snippet": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": [
+        "intent-tracker"
+      ]
+    },
+    "intent-tracker": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "intent_signals",
+        "intent_tracking_pixels"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "lead-score-cron": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts"
+      ],
+      "tabelas": [
+        "interactions",
+        "lead_score_recompute_queue"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "lead-score-threshold-runner": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "alerts",
+        "contacts",
+        "lead_score_threshold_automations",
+        "lead_score_threshold_log"
+      ],
+      "rpcs": [
+        "enroll_lead_score_contact"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "lead-scorer": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/lead-score-contract.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "intent_signals",
+        "interactions",
+        "lead_score_recompute_queue",
+        "lead_score_rules",
+        "lead_score_thresholds",
+        "lead_scores"
+      ],
+      "rpcs": [
+        "persist_lead_score_results",
+        "seed_lead_score_defaults"
+      ],
+      "buckets": [],
+      "invoca_edges": [
+        "lead-score-threshold-runner"
+      ]
+    },
+    "lux-trigger": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "lux_intelligence",
+        "lux_webhook_config"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": [
+        "lux-webhook"
+      ]
+    },
+    "lux-webhook": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "lux_intelligence"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "mcp-server": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "companies",
+        "connection_configs",
+        "contacts",
+        "deals",
+        "interactions",
+        "mcp_tool_calls"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "meeting-summary": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "interactions",
+        "meeting_summaries"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "mql-evaluator": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "mql_classifications",
+        "mql_criteria"
+      ],
+      "rpcs": [
+        "evaluate_mql"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "next-best-action": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "contact_analytical_profiles",
+        "contact_next_actions",
+        "contacts",
+        "interactions",
+        "neuro_behavioral_history",
+        "whatsapp_messages"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "nurturing-runner": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts"
+      ],
+      "tabelas": [
+        "interactions",
+        "nurturing_executions",
+        "nurturing_workflows",
+        "tasks"
+      ],
+      "rpcs": [
+        "increment_workflow_completed"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "objection-context-summary": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "interactions"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "objection-handler": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "contact_objection_scripts",
+        "contacts",
+        "crm_objection_intelligence"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "phone-validator": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validation-owner.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "phone_validations"
+      ],
+      "rpcs": [
+        "complete_validation_queue_item"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "playbook-generator": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "sales_playbooks"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "playbook-recommender": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "battle_cards",
+        "sales_playbooks"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "process-behavioral-regen-queue": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "behavioral_profile_regen_queue"
+      ],
+      "rpcs": [
+        "claim_regen_batch"
+      ],
+      "buckets": [],
+      "invoca_edges": [
+        "generate-behavioral-profile"
+      ]
+    },
+    "process-webhook-dlq": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "incoming_webhook_dlq",
+        "incoming_webhooks"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "retry-behavioral-profile": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "behavioral_profile_regen_queue"
+      ],
+      "rpcs": [
+        "claim_behavioral_profile_retry",
+        "has_role"
+      ],
+      "buckets": [],
+      "invoca_edges": [
+        "generate-behavioral-profile"
+      ]
+    },
+    "revops-snapshot-builder": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/pagination.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "deal_forecasts",
+        "mql_classifications",
+        "revops_alerts",
+        "revops_snapshots"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "rfm-analyzer": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "interactions",
+        "purchase_history"
+      ],
+      "rpcs": [
+        "persist_rfm_analysis"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "semantic-search": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "semantic_search_cache"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "send-push-notification": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "push_subscriptions"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "send-sms-campaign": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "contacts",
+        "sms_campaign_recipients",
+        "sms_campaigns",
+        "sms_opt_outs"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "sequence-processor": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "sequence_email_reservations",
+        "sequence_enrollments",
+        "sequence_events",
+        "sequence_send_log",
+        "sequence_steps",
+        "sequences"
+      ],
+      "rpcs": [
+        "complete_sequence_email_delivery",
+        "release_sequence_email_send",
+        "reserve_sequence_email_send"
+      ],
+      "buckets": [],
+      "invoca_edges": [
+        "send-transactional-email"
+      ]
+    },
+    "sequence-track": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "sequence_events",
+        "sequence_send_log"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "smart-notify": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/notification-delivery.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "contact_automation_settings",
+        "contact_next_actions",
+        "notification_logs",
+        "profiles"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "smart-reminders": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "contact_automation_settings",
+        "contact_next_actions",
+        "contacts",
+        "interactions",
+        "life_events"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "social-behavior-analyzer": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "contact_analytical_profiles",
+        "contacts",
+        "interactions",
+        "social_behavior_analysis",
+        "social_profiles"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "social-events-detector": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "notifications",
+        "social_life_events",
+        "social_profiles",
+        "social_scraping_schedule"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "social-profile-scraper": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "social_life_events",
+        "social_profiles",
+        "social_scraping_schedule",
+        "suggested_rapport_intel"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "submit-signature": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "document_signatures"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "suggest-next-action": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "contact_predictive_roadmap",
+        "contacts",
+        "interactions"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "sync-social-interests": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "psychographic_audit_log",
+        "social_behavior_analysis",
+        "social_sync_queue"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": [
+        "generate-offer-suggestions"
+      ]
+    },
+    "system-health": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "alerts",
+        "companies",
+        "email_logs",
+        "profiles",
+        "system_health_snapshots"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "template-success-notifications": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "alerts",
+        "contacts",
+        "favorite_templates",
+        "profiles",
+        "push_subscriptions",
+        "trigger_usage_history"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": [
+        "send-push-notification"
+      ]
+    },
+    "territory-optimization": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "sales_team_members"
+      ],
+      "rpcs": [
+        "get_territories",
+        "get_territory_performance"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "validate-access": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "access_blocked_log",
+        "access_security_settings",
+        "geo_allowed_countries",
+        "ip_whitelist"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "validation-queue-worker": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "validation_queue"
+      ],
+      "rpcs": [
+        "claim_validation_batch"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "visual-search": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [
+        "search_products_semantic"
+      ],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "voice-agent": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "voice-ai-health": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "voice-to-text": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "interactions",
+        "whatsapp_messages"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "weekly-digest": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "contacts",
+        "interactions",
+        "profiles",
+        "weekly_report_settings",
+        "weekly_reports"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "whatsapp-import": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "companies",
+        "contacts",
+        "whatsapp_ingestion_logs",
+        "whatsapp_messages",
+        "whatsapp_transcriptions"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "win-loss-analyzer": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/best-effort-write.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/rate-limit.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics",
+        "win_loss_insights",
+        "win_loss_records"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
+    "win-loss-record-deal": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts"
+      ],
+      "tabelas": [
+        "win_loss_records"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    }
+  },
+  "por_tabela": {
+    "abm_accounts": [
+      "abm-account-scorer",
+      "abm-whitespace-analyzer"
+    ],
+    "abm_buying_committee": [
+      "abm-account-scorer",
+      "abm-whitespace-analyzer"
+    ],
+    "abm_whitespace_opportunities": [
+      "abm-whitespace-analyzer"
+    ],
+    "access_blocked_log": [
+      "validate-access"
+    ],
+    "access_security_settings": [
+      "validate-access"
+    ],
+    "ai_chat_messages": [
+      "ai-assistant"
+    ],
+    "ai_chat_threads": [
+      "ai-assistant"
+    ],
+    "ai_gateway_metrics": [
+      "abm-whitespace-analyzer",
+      "ai-assistant",
+      "ai-email-refine",
+      "ai-suggest-mapping",
+      "ai-writing-assistant",
+      "ask-crm",
+      "auto-rebatch-behavioral",
+      "auto-regen-behavioral-profiles",
+      "check-notifications",
+      "connection-anomaly-detector",
+      "conversation-analyzer",
+      "conversation-coaching-digest",
+      "conversational-search",
+      "deal-room-health",
+      "demand-forecast",
+      "disc-analyzer",
+      "elevenlabs-scribe-token",
+      "elevenlabs-tts",
+      "email-pipeline-health",
+      "email-thread-summary",
+      "enrichlayer-linkedin",
+      "evolution-api",
+      "external-data",
+      "ficha360-conversation-summary",
+      "firecrawl-scrape",
+      "forecast-analyzer",
+      "forecast-narrative",
+      "generate-behavioral-profile",
+      "generate-insights",
+      "meeting-summary",
+      "next-best-action",
+      "objection-context-summary",
+      "objection-handler",
+      "playbook-generator",
+      "process-behavioral-regen-queue",
+      "retry-behavioral-profile",
+      "semantic-search",
+      "send-push-notification",
+      "send-sms-campaign",
+      "smart-notify",
+      "smart-reminders",
+      "social-behavior-analyzer",
+      "social-events-detector",
+      "social-profile-scraper",
+      "suggest-next-action",
+      "template-success-notifications",
+      "territory-optimization",
+      "validation-queue-worker",
+      "visual-search",
+      "voice-agent",
+      "voice-ai-health",
+      "voice-to-text",
+      "win-loss-analyzer"
+    ],
+    "alerts": [
+      "client-notifications",
+      "cs-health-recalc",
+      "health-aggregate",
+      "lead-score-threshold-runner",
+      "system-health",
+      "template-success-notifications"
+    ],
+    "audit_log": [
+      "audit-analytics"
+    ],
+    "battle_cards": [
+      "playbook-recommender"
+    ],
+    "behavioral_insight_feedback": [
+      "auto-rebatch-behavioral",
+      "generate-behavioral-profile"
+    ],
+    "behavioral_profile_regen_queue": [
+      "auto-regen-behavioral-profiles",
+      "process-behavioral-regen-queue",
+      "retry-behavioral-profile"
+    ],
+    "call_logs": [
+      "generate-behavioral-profile"
+    ],
+    "churn_risk_scores": [
+      "detect-churn-risk"
+    ],
+    "companies": [
+      "ai-assistant",
+      "health",
+      "health-aggregate",
+      "mcp-server",
+      "system-health",
+      "whatsapp-import"
+    ],
+    "connection_anomalies": [
+      "connection-anomaly-detector"
+    ],
+    "connection_configs": [
+      "connection-introspect",
+      "connection-tester",
+      "health-aggregate",
+      "mcp-server"
+    ],
+    "connection_test_logs": [
+      "connection-tester",
+      "health-aggregate"
+    ],
+    "connector_log": [
+      "evolution-bitrix-connector"
+    ],
+    "contact_analytical_profiles": [
+      "auto-rebatch-behavioral",
+      "generate-offer-suggestions",
+      "next-best-action",
+      "social-behavior-analyzer"
+    ],
+    "contact_automation_settings": [
+      "smart-notify",
+      "smart-reminders"
+    ],
+    "contact_next_actions": [
+      "next-best-action",
+      "smart-notify",
+      "smart-reminders"
+    ],
+    "contact_objection_scripts": [
+      "objection-handler"
+    ],
+    "contact_predictive_roadmap": [
+      "suggest-next-action"
+    ],
+    "contact_relatives": [
+      "check-notifications"
+    ],
+    "contacts": [
+      "ai-assistant",
+      "bitrix24-webhook",
+      "bulk-revalidate",
+      "check-health-alerts",
+      "check-notifications",
+      "client-notifications",
+      "crm-automation-monitor",
+      "detect-churn-risk",
+      "disc-analyzer",
+      "email-verifier",
+      "enrich-contacts",
+      "evolution-webhook",
+      "generate-behavioral-profile",
+      "generate-offer-suggestions",
+      "intent-tracker",
+      "lead-score-threshold-runner",
+      "lead-scorer",
+      "lux-webhook",
+      "mcp-server",
+      "mql-evaluator",
+      "next-best-action",
+      "objection-handler",
+      "phone-validator",
+      "revops-snapshot-builder",
+      "rfm-analyzer",
+      "send-sms-campaign",
+      "sequence-processor",
+      "smart-reminders",
+      "social-behavior-analyzer",
+      "suggest-next-action",
+      "template-success-notifications",
+      "weekly-digest",
+      "whatsapp-import"
+    ],
+    "conversation_analyses": [
+      "conversation-analyzer",
+      "conversation-coaching-digest"
+    ],
+    "conversation_topics_catalog": [
+      "conversation-analyzer"
+    ],
+    "conversational_search_cache": [
+      "conversational-search"
+    ],
+    "crm_automation_logs": [
+      "crm-automation-monitor"
+    ],
+    "crm_objection_intelligence": [
+      "objection-handler"
+    ],
+    "cron_secrets": [
+      "auto-rebatch-behavioral"
+    ],
+    "cs_accounts": [
+      "cs-health-recalc"
+    ],
+    "cs_health_signals": [
+      "cs-health-recalc"
+    ],
+    "deal_forecasts": [
+      "forecast-analyzer",
+      "forecast-narrative",
+      "forecast-snapshot-cron",
+      "revops-snapshot-builder"
+    ],
+    "deal_room_milestones": [
+      "deal-room-health"
+    ],
+    "deal_room_stakeholders": [
+      "deal-room-health"
+    ],
+    "deal_rooms": [
+      "deal-room-health",
+      "deal-room-share"
+    ],
+    "deals": [
+      "mcp-server"
+    ],
+    "device_login_notifications": [
+      "detect-new-device"
+    ],
+    "disc_analysis_history": [
+      "disc-analyzer"
+    ],
+    "disc_communication_logs": [
+      "disc-analyzer"
+    ],
+    "document_signatures": [
+      "get-signature",
+      "submit-signature"
+    ],
+    "document_views": [
+      "get-signature"
+    ],
+    "email_finder_results": [
+      "email-finder"
+    ],
+    "email_logs": [
+      "health-aggregate",
+      "system-health"
+    ],
+    "email_thread_summaries": [
+      "email-thread-summary"
+    ],
+    "email_verifications": [
+      "email-verifier"
+    ],
+    "favorite_templates": [
+      "template-success-notifications"
+    ],
+    "ficha360_conversation_summaries": [
+      "ficha360-conversation-summary"
+    ],
+    "forecast_periods": [
+      "forecast-narrative",
+      "forecast-snapshot-cron"
+    ],
+    "forecast_quota_settings": [
+      "forecast-analyzer"
+    ],
+    "forecast_snapshots": [
+      "forecast-snapshot-cron"
+    ],
+    "geo_allowed_countries": [
+      "validate-access"
+    ],
+    "health_alert_settings": [
+      "check-health-alerts"
+    ],
+    "health_alerts": [
+      "check-health-alerts"
+    ],
+    "incoming_webhook_dlq": [
+      "incoming-webhook",
+      "process-webhook-dlq"
+    ],
+    "incoming_webhook_logs": [
+      "connection-anomaly-detector",
+      "health-aggregate",
+      "incoming-webhook"
+    ],
+    "incoming_webhook_nonces": [
+      "incoming-webhook"
+    ],
+    "incoming_webhooks": [
+      "connection-anomaly-detector",
+      "incoming-webhook",
+      "process-webhook-dlq"
+    ],
+    "insights": [
+      "check-notifications"
+    ],
+    "intent_scores": [
+      "intent-aggregator"
+    ],
+    "intent_signals": [
+      "intent-aggregator",
+      "intent-tracker",
+      "lead-scorer"
+    ],
+    "intent_tracking_pixels": [
+      "intent-tracker"
+    ],
+    "interactions": [
+      "bitrix24-webhook",
+      "check-health-alerts",
+      "check-notifications",
+      "client-notifications",
+      "conversation-analyzer",
+      "demand-forecast",
+      "detect-churn-risk",
+      "email-thread-summary",
+      "evolution-webhook",
+      "generate-behavioral-profile",
+      "generate-offer-suggestions",
+      "lead-score-cron",
+      "lead-scorer",
+      "mcp-server",
+      "meeting-summary",
+      "next-best-action",
+      "nurturing-runner",
+      "objection-context-summary",
+      "rfm-analyzer",
+      "smart-reminders",
+      "social-behavior-analyzer",
+      "suggest-next-action",
+      "voice-to-text",
+      "weekly-digest"
+    ],
+    "ip_whitelist": [
+      "validate-access"
+    ],
+    "lead_score_recompute_queue": [
+      "lead-score-cron",
+      "lead-scorer"
+    ],
+    "lead_score_rules": [
+      "lead-scorer"
+    ],
+    "lead_score_threshold_automations": [
+      "lead-score-threshold-runner"
+    ],
+    "lead_score_threshold_log": [
+      "lead-score-threshold-runner"
+    ],
+    "lead_score_thresholds": [
+      "lead-scorer"
+    ],
+    "lead_scores": [
+      "lead-scorer"
+    ],
+    "life_events": [
+      "check-notifications",
+      "client-notifications",
+      "smart-reminders"
+    ],
+    "lux_intelligence": [
+      "lux-trigger",
+      "lux-webhook"
+    ],
+    "lux_webhook_config": [
+      "lux-trigger"
+    ],
+    "mcp_tool_calls": [
+      "mcp-server"
+    ],
+    "meeting_summaries": [
+      "meeting-summary"
+    ],
+    "migration_password_reset_log": [
+      "clear-must-reset-flag"
+    ],
+    "mql_classifications": [
+      "mql-evaluator",
+      "revops-snapshot-builder"
+    ],
+    "mql_criteria": [
+      "mql-evaluator"
+    ],
+    "neuro_behavioral_history": [
+      "next-best-action"
+    ],
+    "notification_logs": [
+      "smart-notify"
+    ],
+    "notifications": [
+      "social-events-detector"
+    ],
+    "nurturing_executions": [
+      "nurturing-runner"
+    ],
+    "nurturing_workflows": [
+      "nurturing-runner"
+    ],
+    "oauth_tokens": [
+      "evolution-bitrix-connector"
+    ],
+    "offer_suggestions": [
+      "generate-offer-suggestions"
+    ],
+    "phone_validations": [
+      "phone-validator"
+    ],
+    "profiles": [
+      "evolution-webhook",
+      "health",
+      "health-aggregate",
+      "smart-notify",
+      "system-health",
+      "template-success-notifications",
+      "weekly-digest"
+    ],
+    "psychographic_audit_log": [
+      "sync-social-interests"
+    ],
+    "purchase_history": [
+      "client-notifications",
+      "generate-offer-suggestions",
+      "rfm-analyzer"
+    ],
+    "push_subscriptions": [
+      "send-push-notification",
+      "template-success-notifications"
+    ],
+    "reframing_analysis": [
+      "conversation-analyzer"
+    ],
+    "revops_alerts": [
+      "revops-snapshot-builder"
+    ],
+    "revops_snapshots": [
+      "revops-snapshot-builder"
+    ],
+    "sales_playbooks": [
+      "playbook-generator",
+      "playbook-recommender"
+    ],
+    "sales_team_members": [
+      "territory-optimization"
+    ],
+    "semantic_search_cache": [
+      "semantic-search"
+    ],
+    "sequence_email_reservations": [
+      "sequence-processor"
+    ],
+    "sequence_enrollments": [
+      "sequence-processor"
+    ],
+    "sequence_events": [
+      "sequence-processor",
+      "sequence-track"
+    ],
+    "sequence_send_log": [
+      "sequence-processor",
+      "sequence-track"
+    ],
+    "sequence_steps": [
+      "sequence-processor"
+    ],
+    "sequences": [
+      "sequence-processor"
+    ],
+    "sms_campaign_recipients": [
+      "send-sms-campaign"
+    ],
+    "sms_campaigns": [
+      "send-sms-campaign"
+    ],
+    "sms_opt_outs": [
+      "send-sms-campaign"
+    ],
+    "social_behavior_analysis": [
+      "generate-offer-suggestions",
+      "social-behavior-analyzer",
+      "sync-social-interests"
+    ],
+    "social_insights": [
+      "generate-offer-suggestions"
+    ],
+    "social_life_events": [
+      "social-events-detector",
+      "social-profile-scraper"
+    ],
+    "social_profiles": [
+      "enrichlayer-linkedin",
+      "social-behavior-analyzer",
+      "social-events-detector",
+      "social-profile-scraper"
+    ],
+    "social_scraping_schedule": [
+      "social-events-detector",
+      "social-profile-scraper"
+    ],
+    "social_sync_queue": [
+      "sync-social-interests"
+    ],
+    "suggested_life_events": [
+      "conversation-analyzer"
+    ],
+    "suggested_rapport_intel": [
+      "social-profile-scraper"
+    ],
+    "system_alerts": [
+      "auto-regen-behavioral-profiles",
+      "error-budget"
+    ],
+    "system_health_snapshots": [
+      "error-budget",
+      "system-health"
+    ],
+    "tasks": [
+      "nurturing-runner"
+    ],
+    "trigger_usage_history": [
+      "template-success-notifications"
+    ],
+    "user_known_devices": [
+      "detect-new-device"
+    ],
+    "user_roles": [
+      "ask-crm"
+    ],
+    "validation_queue": [
+      "bulk-revalidate",
+      "validation-queue-worker"
+    ],
+    "weekly_report_settings": [
+      "weekly-digest"
+    ],
+    "weekly_reports": [
+      "weekly-digest"
+    ],
+    "whatsapp_ingestion_logs": [
+      "evolution-webhook",
+      "whatsapp-import"
+    ],
+    "whatsapp_instances": [
+      "evolution-webhook"
+    ],
+    "whatsapp_messages": [
+      "evolution-webhook",
+      "generate-behavioral-profile",
+      "next-best-action",
+      "voice-to-text",
+      "whatsapp-import"
+    ],
+    "whatsapp_transcriptions": [
+      "whatsapp-import"
+    ],
+    "win_loss_insights": [
+      "win-loss-analyzer"
+    ],
+    "win_loss_records": [
+      "win-loss-analyzer",
+      "win-loss-record-deal"
+    ]
+  },
+  "por_rpc": {
+    "calculate_relationship_metrics_for_contact": [
+      "crm-automation-monitor"
+    ],
+    "claim_behavioral_profile_retry": [
+      "retry-behavioral-profile"
+    ],
+    "claim_behavioral_profile_sla_batch": [
+      "auto-regen-behavioral-profiles"
+    ],
+    "claim_regen_batch": [
+      "process-behavioral-regen-queue"
+    ],
+    "claim_validation_batch": [
+      "validation-queue-worker"
+    ],
+    "complete_sequence_email_delivery": [
+      "sequence-processor"
+    ],
+    "complete_validation_queue_item": [
+      "email-verifier",
+      "phone-validator"
+    ],
+    "compute_attribution": [
+      "attribution-calculator"
+    ],
+    "enroll_lead_score_contact": [
+      "lead-score-threshold-runner"
+    ],
+    "evaluate_mql": [
+      "mql-evaluator"
+    ],
+    "execute_readonly_query": [
+      "ask-crm"
+    ],
+    "get_territories": [
+      "territory-optimization"
+    ],
+    "get_territory_performance": [
+      "territory-optimization"
+    ],
+    "has_role": [
+      "connection-introspect",
+      "external-data",
+      "incoming-webhook",
+      "retry-behavioral-profile"
+    ],
+    "increment_webhook_quota": [
+      "incoming-webhook"
+    ],
+    "increment_workflow_completed": [
+      "nurturing-runner"
+    ],
+    "persist_lead_score_results": [
+      "lead-scorer"
+    ],
+    "persist_rfm_analysis": [
+      "rfm-analyzer"
+    ],
+    "record_buyer_view": [
+      "deal-room-buyer-view"
+    ],
+    "release_sequence_email_send": [
+      "sequence-processor"
+    ],
+    "reserve_sequence_email_send": [
+      "sequence-processor"
+    ],
+    "save_behavioral_profile_if_fresh": [
+      "generate-behavioral-profile"
+    ],
+    "search_products_semantic": [
+      "visual-search"
+    ],
+    "seed_lead_score_defaults": [
+      "lead-scorer"
+    ],
+    "submit_public_form": [
+      "form-submit-handler"
+    ]
+  }
+}
