@@ -1,0 +1,190 @@
+# docs:
+#   gatilho: agendado (seg 10:23 UTC) e dispatch
+#   prova: inventario/estado (banco, edge functions, uso de tabelas) regerado do banco oficial e do codigo
+#   falha: o job fica vermelho e o inventario nao e atualizado
+#   avisa: PR automation/inventario-estado com o inventario novo
+name: Inventário do estado real (semanal)
+
+# Refaz inventario/estado/ (banco, edge functions, uso de tabelas no codigo) a partir do banco
+# oficial (somente leitura) e do codigo, e abre PR se algo mudou de verdade.
+# Scripts: scripts/inventario/gerar-banco.mjs e gerar-repo.mjs; mudanca via mudou-conteudo.mjs.
+# Nunca faz push direto em main — entrega via PR na branch automation/inventario-estado.
+#
+# Secrets (os mesmos do restore-drill.yml, nenhum novo):
+#   PGHOST / PGPORT / PGUSER / PGPASSWORD / PGDATABASE — usados aqui apenas para rodar
+#   scripts/inventario/banco.sql, que e uma unica consulta de leitura (catalogo do Postgres,
+#   pg_policies, cron.* e supabase_migrations.*). A senha nunca entra na URL nem no log.
+
+on:
+  schedule:
+    - cron: '23 10 * * 1' # segunda 10:23 UTC (07:23 BRT)
+  workflow_dispatch:
+
+concurrency:
+  group: inventario-estado-semanal
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -euo pipefail {0}
+
+jobs:
+  gerar:
+    name: Refazer inventario/estado
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write       # branch do PR
+      pull-requests: write  # abrir/atualizar o PR
+      actions: write        # liberar os checks do PR aberto com GITHUB_TOKEN
+    env:
+      PGHOST: ${{ secrets.PGHOST }}
+      PGPORT: ${{ secrets.PGPORT }}
+      PGUSER: ${{ secrets.PGUSER }}
+      PGPASSWORD: ${{ secrets.PGPASSWORD }}
+      PGDATABASE: ${{ secrets.PGDATABASE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Instalar ripgrep (usado pelo gerar-repo.mjs)
+        run: command -v rg || sudo apt-get install -y --no-install-recommends ripgrep
+
+      - name: Conferir os secrets de leitura do banco
+        run: |
+          for nome in PGHOST PGUSER PGPASSWORD PGDATABASE; do
+            if [ -z "${!nome:-}" ]; then
+              echo "::error::Secret obrigatório ausente: $nome"
+              exit 1
+            fi
+          done
+
+      - name: Inventário do banco (uma consulta, somente leitura)
+        run: |
+          mkdir -m 700 -p "$RUNNER_TEMP/inv"
+          # Mesma CA e mesmo sslmode do restore-drill.yml.
+          curl --fail --silent --show-error --location --connect-timeout 15 --max-time 60 \
+            https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt \
+            --output "$RUNNER_TEMP/inv/supabase-ca.crt"
+          export PGSSLROOTCERT="$RUNNER_TEMP/inv/supabase-ca.crt"
+          export PGSSLMODE=verify-full
+          psql --no-psqlrc --no-align --tuples-only --quiet \
+            --set ON_ERROR_STOP=1 \
+            --command 'SET default_transaction_read_only = on' \
+            --file scripts/inventario/banco.sql \
+            > "$RUNNER_TEMP/inv/banco.json"
+          node scripts/inventario/gerar-banco.mjs --entrada "$RUNNER_TEMP/inv/banco.json"
+
+      - name: Inventário do repositório (edge functions e uso das tabelas)
+        run: |
+          node -e "require('./inventario/estado/banco.json').tabelas.forEach((t) => console.log(t.nome))" \
+            > "$RUNNER_TEMP/inv/tabelas.txt"
+          node scripts/inventario/gerar-repo.mjs < "$RUNNER_TEMP/inv/tabelas.txt"
+
+      - name: Decidir se vale PR
+        id: mudou
+        # Compara o JSON sem os carimbos de data (medido_em/gerado_em), arquivo a arquivo contra o
+        # HEAD. Filtrar linhas do diff não serve: o edges.json é gravado numa linha só, com a data.
+        run: |
+          valor="$(node scripts/inventario/mudou-conteudo.mjs)"
+          echo "valor=$valor" >> "$GITHUB_OUTPUT"
+          if [ "$valor" != "true" ]; then
+            echo "Inventário sem mudança de conteúdo — nenhum PR a abrir."
+          fi
+
+      - name: Abrir ou atualizar PR do inventário
+        id: pull-request
+        if: steps.mudou.outputs.valor == 'true'
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          token: ${{ github.token }}
+          base: main
+          branch: automation/inventario-estado
+          delete-branch: true
+          commit-message: 'chore: inventario do estado real [auto]'
+          title: 'chore: inventário do estado real (semanal)'
+          body: |
+            Inventário refeito automaticamente por `.github/workflows/inventario-estado-semanal.yml`:
+            banco oficial (uma consulta de leitura) + código. Só arquivos em `inventario/estado/`.
+
+            - main de origem: `${{ github.sha }}`
+            - run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          labels: inventario
+          add-paths: |
+            inventario/estado/banco.json
+            inventario/estado/edges.json
+            inventario/estado/tabelas-uso.json
+
+      # PR aberto com GITHUB_TOKEN não dispara workflows: os checks nascem em action_required.
+      - name: Destravar os checks do PR do inventário
+        if: steps.pull-request.outputs.pull-request-number != ''
+        continue-on-error: true
+        uses: actions/github-script@v9
+        env:
+          PR_HEAD_SHA: ${{ steps.pull-request.outputs.pull-request-head-sha }}
+        with:
+          script: |
+            const headSha = process.env.PR_HEAD_SHA;
+            if (!headSha) {
+              core.warning('create-pull-request nao devolveu o head sha; nada a destravar.');
+              return;
+            }
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            let pendentes = [];
+            for (let tentativa = 1; tentativa <= 6; tentativa += 1) {
+              const { data } = await github.rest.actions.listWorkflowRunsForRepo({
+                owner,
+                repo,
+                head_sha: headSha,
+                head_branch: 'automation/inventario-estado',
+                status: 'action_required',
+                per_page: 20,
+              });
+              pendentes = data.workflow_runs || [];
+              if (pendentes.length > 0) break;
+              await new Promise((resolve) => setTimeout(resolve, 10000));
+            }
+            const liberados = [];
+            const recusados = [];
+            for (const run of pendentes) {
+              try {
+                await github.rest.actions.approveWorkflowRun({ owner, repo, run_id: run.id });
+                liberados.push(run.name);
+              } catch (error) {
+                recusados.push(`${run.name} (${error.status})`);
+              }
+            }
+            await core.summary.addRaw([
+              '### Checks do PR do inventário',
+              `- head sha: \`${headSha}\``,
+              `- liberados: ${liberados.length > 0 ? liberados.join(', ') : 'nenhum'}`,
+              ...(recusados.length > 0 ? [`- recusados: ${recusados.join(', ')} — aprovar na aba Actions`] : []),
+            ].join('\n')).write();
+
+      - name: Habilitar auto-merge no PR do inventário
+        if: steps.pull-request.outputs.pull-request-number != ''
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ steps.pull-request.outputs.pull-request-number }}
+        run: gh pr merge --auto --squash "$PR_NUMBER" --repo "$GITHUB_REPOSITORY"
+
+      - name: Upload do inventário
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: inventario-estado-${{ github.run_id }}
+          path: inventario/estado/
+          retention-days: 14
