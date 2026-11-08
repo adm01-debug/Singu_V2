@@ -1,20 +1,26 @@
-# Auditoria SECURITY DEFINER — Rodada 49/10
+# Auditoria SECURITY DEFINER — Rodada 50/11
 
 > Objetivo: confirmar que **toda** função `SECURITY DEFINER` em `public.*` (a) trava `search_path`; e que nenhum DEFINER **exposto a `anon`** lê `auth.uid()` — combinação perigosa: `anon` sem JWT resulta em `auth.uid() = NULL` e o DEFINER escreve linhas órfãs ou cross-tenant.
 
-## Baseline atual — 109 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-10-13)
+## Baseline atual — 110 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-11-06)
 
-A migration `20261013033431_merge_records_atomically.sql` acrescenta uma RPC central DEFINER e transforma quatro aliases legados INVOKER em DEFINER, passando de 104 para 109. Esse total foi observado no gate de 2026-10-13, com a migration aplicada em transação revertida. A atualização do inventário foi autorizada pelo proprietário, preservando os controles de acesso anônimo, `search_path` e isolamento. A aplicação permanente continua pendente.
+A migration `20261027220000_serialize_contact_relation_writes.sql` acrescenta `guard_contact_relation_write()` (DEFINER trigger; EXECUTE revogado de PUBLIC, anon, authenticated e service_role — somente postgres/supabase_admin chamam via trigger), passando de 109 para 110. Total verificado no gate de 2026-11-06.
 
 | Função | Escopo e proteção |
 |---|---|
+| `guard_contact_relation_write()` | Trigger DEFINER; EXECUTE revogado de todos os roles; chamado apenas pelo sistema de triggers; aplica lock no contato pai e valida ownership ou trusted_service antes de permitir INSERT/UPDATE/DELETE nas tabelas de relação (contact_emails, contact_phones, contact_addresses, contact_social_media); `search_path = ''` fixo |
 | `merge_records_atomically(text, uuid, uuid, jsonb)` | `auth.role() = 'authenticated'`, `auth.uid()` presente, ambos os registros do dono, relações com dono verificável, overrides limitados, locks ordenados, auditoria e dados na mesma transação |
 | `merge_companies(uuid, uuid)` | Alias; delega à RPC central sem contornar a validação |
 | `merge_duplicate_companies(uuid, uuid)` | Alias; delega à RPC central sem contornar a validação |
 | `merge_contacts(uuid, uuid)` | Alias; delega à RPC central sem contornar a validação |
 | `merge_duplicate_contacts(uuid, uuid)` | Alias; delega à RPC central sem contornar a validação |
 
-As cinco funções fixam `search_path = public, pg_temp`, revogam EXECUTE de PUBLIC, anon e service_role e concedem EXECUTE apenas a authenticated. A prova `merge_records_atomic.sql` passou com rollback, cobrindo isolamento, aliases, conflitos, repetição e falha de auditoria. A lista pública não muda. As verificações de função extra, grant ausente, `search_path` e exposição insegura a anon permanecem integrais.
+Todas as funções acima fixam `search_path` e revogam EXECUTE de roles não autorizados. A lista pública não muda. As verificações de função extra, grant ausente, `search_path` e exposição insegura a anon permanecem integrais.
+
+### Baseline anterior — 109 DEFINERs
+
+Medido no banco canônico com as migrations pendentes até `20261013033435` aplicadas em transação revertida.
+A migration `20261013033431_merge_records_atomically.sql` acrescentou uma RPC central DEFINER e transformou quatro aliases legados INVOKER em DEFINER, passando de 104 para 109.
 
 ### Baseline anterior — 104 DEFINERs
 

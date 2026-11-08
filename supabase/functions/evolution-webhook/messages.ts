@@ -69,7 +69,7 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
   // Busca contato local, depois externo; cria se necessário
   const { contactId, userId, companyId, source } = await findContactByPhone(supabase, phoneNumber || '', instance);
 
-  // Ingestão de mensagens, vínculo com empresa e tratamento de áudio
+  // Ingestião de mensagens, vínculo com empresa e tratamento de áudio
   let dbMessageId: string | null = null;
   if (userId) {
     const messageData = {
@@ -198,7 +198,7 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
     if (interactionError) {
       console.error('Error creating interaction:', interactionError.message);
     } else {
-      // Interação criada: ${interaction.id} (origem do contato: ${source})`);
+      // Interação criada: ${interaction.id} (origem do contato: ${source})`)
 
       // Aciona análise DISC para mensagens longas (contactId existe neste bloco)
       if (messageContent.length >= 100) {
