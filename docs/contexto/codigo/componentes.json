@@ -7995,11 +7995,11 @@
     "ProximaAcaoCTA"
    ],
    "export_default": "ProximaAcaoCTA",
-   "linhas": 325,
+   "linhas": 340,
    "dominio": "components/ficha-360",
    "hooks_locais": [
     "useBestContactTime",
-    "useCreateQuickInteraction",
+    "useCreateContactQuickInteraction",
     "useCreateTask",
     "useNextBestAction"
    ],

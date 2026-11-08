@@ -44,6 +44,7 @@
   "supabase/functions/_shared/validation-owner.ts",
   "supabase/functions/_shared/version-guard.ts",
   "supabase/functions/_shared/version-guard_test.ts",
+  "supabase/functions/_shared/webhook-dlq-contract_test.ts",
   "supabase/functions/_shared/webhook-signature.ts",
   "supabase/functions/_shared/webhook-signature_test.ts",
   "supabase/functions/_shared/write-error.ts",
@@ -2804,7 +2805,7 @@
    "nome": "process-webhook-dlq",
    "entrada": "supabase/functions/process-webhook-dlq/index.ts",
    "arquivos": 1,
-   "linhas": 166,
+   "linhas": 181,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS",

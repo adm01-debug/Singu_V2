@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "77475499826534562324282e34d6cca326f0cce7",
+  "sha": "9836e3aefec585cacb3ada0f5f3c8762337fc998",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-08 19:33 UTC",
-  "files_total": 3087,
-  "code_files": 2717,
-  "code_lines": 381579
+  "generated_at": "2026-11-08 19:50 UTC",
+  "files_total": 3096,
+  "code_files": 2723,
+  "code_lines": 382256
  },
  "version": "1.3.2",
- "facts_hash": "413c0ff09beef997",
+ "facts_hash": "278abd9d6f501d19",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -158,6 +158,13 @@
     ]
    },
    {
+    "file": ".github/workflows/fix-jwt-proxies-externas.yml",
+    "name": "Fix JWT proxies externas",
+    "triggers": [
+     "workflow_dispatch"
+    ]
+   },
+   {
     "file": ".github/workflows/inventario-estado-semanal.yml",
     "name": "Inventário do estado real (semanal)",
     "triggers": [
@@ -194,9 +201,9 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".tsx": 1154,
-   ".ts": 869,
-   ".sql": 642,
+   ".tsx": 1156,
+   ".ts": 870,
+   ".sql": 645,
    ".mjs": 22,
    ".js": 18,
    ".py": 10,
@@ -39351,16 +39358,24 @@
     ]
    },
    "create_quick_interaction": {
-    "args": "p_company_id uuid, p_tipo text, p_resumo text, p_vendedor_id integer DEFAULT NULL::integer, p_followup_dias integer DEFAULT NULL::integer",
+    "args": "p_contact_interaction jsonb",
     "returns": "jsonb",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261008120000_fix_frontend_rpcs_canonical.sql",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql",
     "security_definer": false,
     "search_path": true,
-    "body": "DECLARE new_id uuid; BEGIN PERFORM public.assert_company_access(p_company_id); INSERT INTO interactions (company_id, type, resumo, usuario_responsavel_id, requer_followup, data_followup, follow_up_required, follow_up_date, user_id, created_by) VALUES (p_company_id, p_tipo, p_resumo, p_vendedor_id, p_followup_dias IS NOT NULL, CASE WHEN p_followup_dias IS NOT NULL THEN now() + (p_followup_dias || ' days')::interval END, p_followup_dias IS NOT NULL, CASE WHEN p_followup_dias IS NOT NULL THEN now() + (p_followup_dias || ' days')::interval END, auth.uid(), auth.uid()) RETURNING id INTO new_id; RETURN jsonb_build_object('success', true, 'interaction_id', new_id); END;",
-    "raises": [],
+    "body": "DECLARE actor_id uuid := auth.uid(); target_id uuid; interaction_type text; summary text; new_id uuid; BEGIN IF actor_id IS NULL THEN RAISE EXCEPTION 'Authentication required' USING ERRCODE = '42501'; END IF; IF jsonb_typeof(p_contact_interaction) IS DISTINCT FROM 'object' OR jsonb_typeof(p_contact_interaction -> 'contact_id') IS DISTINCT FROM 'string' OR jsonb_typeof(p_contact_interaction -> 'tipo') IS DISTINCT FROM 'string' OR jsonb_typeof(p_contact_interaction -> 'resumo') IS DISTINCT FROM 'string' THEN RAISE EXCEPTION 'Invalid interaction' USING ERRCODE = '22023'; END IF; IF EXISTS (SELECT 1 FROM jsonb_object_keys(p_contact_interaction) AS k(key) WHERE key NOT IN ('contact_id', 'tipo', ' …",
+    "raises": [
+     "Authentication required",
+     "Invalid interaction",
+     "Invalid interaction",
+     "Invalid interaction",
+     "Contact unavailable"
+    ],
     "tables": [
+     "contacts",
      "interactions",
+     "jsonb_object_keys",
      "new_id"
     ]
    },
@@ -47402,8 +47417,10 @@
    "supabase/migrations/20261013033432_live_sequence_contact.sql",
    "supabase/migrations/20261013033433_sequence_write_fences.sql",
    "supabase/migrations/20261013033434_restore_sequence_enrollment_relation.sql",
+   "supabase/migrations/20261013033435_guard_company_merge_name.sql",
    "supabase/migrations/20261019144500_fix_sidebar_rpc_empresa_influencers.sql",
    "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql",
+   "supabase/migrations/20261028224000_contact_quick_interaction.sql",
    "supabase/migrations/20261029120000_drop_update_company_fields.sql",
    "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
    "supabase/tests/check-rls-coverage.sql",
@@ -56022,6 +56039,22 @@
    {
     "kind": "revoke",
     "privs": "all",
+    "object": "create_quick_interaction",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "create_quick_interaction",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
     "object": "cleanup_cron_job_run_details",
     "objkind": "function",
     "roles": "PUBLIC",
@@ -56967,6 +57000,31 @@
     "function": "guard_contact_relation_write",
     "msg": "Contact relation write forbidden",
     "src": "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql"
+   },
+   {
+    "function": "create_quick_interaction",
+    "msg": "Authentication required",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
+   },
+   {
+    "function": "create_quick_interaction",
+    "msg": "Invalid interaction",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
+   },
+   {
+    "function": "create_quick_interaction",
+    "msg": "Invalid interaction",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
+   },
+   {
+    "function": "create_quick_interaction",
+    "msg": "Invalid interaction",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
+   },
+   {
+    "function": "create_quick_interaction",
+    "msg": "Contact unavailable",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
    },
    {
     "function": "cleanup_cron_job_run_details",
@@ -63510,7 +63568,7 @@
     "file": ".github/workflows/rls-exposure-guard.yml"
    }
   ],
-  "components_count": 983,
+  "components_count": 984,
   "hooks": [
    {
     "name": "useContacts",
@@ -65090,6 +65148,10 @@
    },
    {
     "name": "useCreateQuickInteraction",
+    "file": "src/hooks/useInteractionsRpc.ts"
+   },
+   {
+    "name": "useCreateContactQuickInteraction",
     "file": "src/hooks/useInteractionsRpc.ts"
    },
    {
@@ -66861,8 +66923,8 @@
   },
   {
    "module": "src/components",
-   "files": 983,
-   "lines": 147857,
+   "files": 984,
+   "lines": 148027,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -67308,8 +67370,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 433,
-   "lines": 56755,
+   "files": 434,
+   "lines": 56834,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -68234,8 +68296,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 169,
-   "lines": 26099,
+   "files": 170,
+   "lines": 26319,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -68461,6 +68523,7 @@
     "supabase/functions/_shared/validation-owner.ts",
     "supabase/functions/_shared/version-guard.ts",
     "supabase/functions/_shared/version-guard_test.ts",
+    "supabase/functions/_shared/webhook-dlq-contract_test.ts",
     "supabase/functions/_shared/webhook-signature.ts",
     "supabase/functions/_shared/webhook-signature_test.ts",
     "supabase/functions/_shared/write-error.ts",
@@ -68501,14 +68564,13 @@
     "supabase/functions/disc-analyzer/index.ts",
     "supabase/functions/dual-write-proxy/index.ts",
     "supabase/functions/elevenlabs-scribe-token/index.ts",
-    "supabase/functions/elevenlabs-tts/index.ts",
-    "supabase/functions/email-finder/index.ts"
+    "supabase/functions/elevenlabs-tts/index.ts"
    ]
   },
   {
    "module": "supabase/migrations",
-   "files": 476,
-   "lines": 42239,
+   "files": 478,
+   "lines": 42344,
    "tables": [
     "users"
    ],
@@ -68615,8 +68677,8 @@
   },
   {
    "module": "tests",
-   "files": 69,
-   "lines": 6284,
+   "files": 70,
+   "lines": 6387,
    "tables": [],
    "exports": [
     "ask-crm.js: options, function",
@@ -68687,6 +68749,7 @@
     "tests/rls/lead_score_persistence_contract.sql",
     "tests/rls/legacy_sales_owner_scope.sql",
     "tests/rls/live_rpc_relations_contract.sql",
+    "tests/rls/merge_company_name_override.sql",
     "tests/rls/merge_records_atomic.sql",
     "tests/rls/mtta_sla_breach.sql",
     "tests/rls/pipeline_summary_contract.sql",
@@ -70157,9 +70220,6 @@
      "supabase/functions/incoming-webhook/index.ts"
     ],
     "update": [
-     "supabase/functions/process-webhook-dlq/index.ts"
-    ],
-    "upsert": [
      "supabase/functions/process-webhook-dlq/index.ts"
     ]
    },
@@ -76921,7 +76981,7 @@
     "file": "src/hooks/useMergeRecords.ts",
     "name": "companyOverridesSchema",
     "kind": "object",
-    "body": "{ nome_crm: z.string().nullable(), cnpj: z.string().nullable(), industry: z.string().nullable(), website: z.string().nullable(), notes: z.string().nullable(), tags: z.array(z.string()).nullable(), }",
+    "body": "{ nome_crm: z.string().regex(/\\S/, 'Nome principal obrigatório'), cnpj: z.string().nullable(), industry: z.string().nullable(), website: z.string().nullable(), notes: z.string().nullable(), tags: z.array(z.string()).nullable(), }",
     "refines": [],
     "chain": []
    },
@@ -81061,6 +81121,10 @@
    {
     "file": "src/hooks/useInteractionsRpc.ts",
     "msg": "Não autenticado"
+   },
+   {
+    "file": "src/hooks/useInteractionsRpc.ts",
+    "msg": "Usuário não autenticado"
    },
    {
     "file": "src/hooks/useKnowledgeBase.ts",
@@ -105508,6 +105572,12 @@
     "kind": "escreve"
    },
    {
+    "file": "supabase/functions/_shared/edge-types-contract_test.ts",
+    "field": "status",
+    "value": "processing",
+    "kind": "compara"
+   },
+   {
     "file": "supabase/functions/_shared/email-verify.ts",
     "field": "status",
     "value": "invalid",
@@ -105992,6 +106062,42 @@
     "field": "type",
     "value": "note",
     "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/webhook-dlq-contract_test.ts",
+    "field": "status",
+    "value": "pending",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/webhook-dlq-contract_test.ts",
+    "field": "status",
+    "value": "failed",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/webhook-dlq-contract_test.ts",
+    "field": "status",
+    "value": "succeeded",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/webhook-dlq-contract_test.ts",
+    "field": "status",
+    "value": "abandoned",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/webhook-dlq-contract_test.ts",
+    "field": "status",
+    "value": "processing",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/_shared/webhook-dlq-contract_test.ts",
+    "field": "status",
+    "value": "pending",
+    "kind": "compara"
    },
    {
     "file": "supabase/functions/abm-account-scorer/index.ts",
@@ -108990,13 +109096,13 @@
    {
     "file": "supabase/functions/process-webhook-dlq/index.ts",
     "field": "status",
-    "value": "succeeded",
+    "value": "failed",
     "kind": "escreve"
    },
    {
     "file": "supabase/functions/process-webhook-dlq/index.ts",
     "field": "status",
-    "value": "succeeded",
+    "value": "failed",
     "kind": "escreve"
    },
    {
@@ -109039,6 +109145,18 @@
     "file": "supabase/functions/process-webhook-dlq/index.ts",
     "field": "status",
     "value": "pending",
+    "kind": "filtra"
+   },
+   {
+    "file": "supabase/functions/process-webhook-dlq/index.ts",
+    "field": "status",
+    "value": "pending",
+    "kind": "filtra"
+   },
+   {
+    "file": "supabase/functions/process-webhook-dlq/index.ts",
+    "field": "status",
+    "value": "processing",
     "kind": "filtra"
    },
    {
@@ -116440,6 +116558,38 @@
     "name": "confirma ausência somente após uma consulta bem-sucedida, inclusive no fallback"
    },
    {
+    "file": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
+    "name": "Registro da próxima ação com contrato de contato"
+   },
+   {
+    "file": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
+    "name": "registra %s no contato, sem inventar empresa"
+   },
+   {
+    "file": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
+    "name": "não anuncia sucesso sem a confirmação correta: %j"
+   },
+   {
+    "file": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
+    "name": "preserva o resumo quando o banco rejeita a chamada"
+   },
+   {
+    "file": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
+    "name": "não envia resumo vazio"
+   },
+   {
+    "file": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
+    "name": "não envia sem usuário autenticado"
+   },
+   {
+    "file": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
+    "name": "bloqueia Enter repetido enquanto aguarda a confirmação"
+   },
+   {
+    "file": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
+    "name": "uma confirmação atrasada não apaga o rascunho de outro contato"
+   },
+   {
     "file": "src/components/forms/company/CompanyFormSchema.contract.test.ts",
     "name": "cores da marca no formulário canônico"
    },
@@ -121986,6 +122136,18 @@
    {
     "file": "src/hooks/__tests__/dedup-relations.contract.test.ts",
     "name": "não ignora falha no lote seguinte nem retorna relações incompletas"
+   },
+   {
+    "file": "src/hooks/__tests__/merge-company-name-override.test.tsx",
+    "name": "DB-01: nome obrigatório no override de empresa"
+   },
+   {
+    "file": "src/hooks/__tests__/merge-company-name-override.test.tsx",
+    "name": "rejeita %j antes da RPC"
+   },
+   {
+    "file": "src/hooks/__tests__/merge-company-name-override.test.tsx",
+    "name": "preserva o payload válido %j sem normalização"
    },
    {
     "file": "src/hooks/__tests__/restore-response-contract.test.tsx",
@@ -139465,16 +139627,24 @@
     ]
    },
    "create_quick_interaction": {
-    "args": "p_company_id uuid, p_tipo text, p_resumo text, p_vendedor_id integer DEFAULT NULL::integer, p_followup_dias integer DEFAULT NULL::integer",
+    "args": "p_contact_interaction jsonb",
     "returns": "jsonb",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261008120000_fix_frontend_rpcs_canonical.sql",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql",
     "security_definer": false,
     "search_path": true,
-    "body": "DECLARE new_id uuid; BEGIN PERFORM public.assert_company_access(p_company_id); INSERT INTO interactions (company_id, type, resumo, usuario_responsavel_id, requer_followup, data_followup, follow_up_required, follow_up_date, user_id, created_by) VALUES (p_company_id, p_tipo, p_resumo, p_vendedor_id, p_followup_dias IS NOT NULL, CASE WHEN p_followup_dias IS NOT NULL THEN now() + (p_followup_dias || ' days')::interval END, p_followup_dias IS NOT NULL, CASE WHEN p_followup_dias IS NOT NULL THEN now() + (p_followup_dias || ' days')::interval END, auth.uid(), auth.uid()) RETURNING id INTO new_id; RETURN jsonb_build_object('success', true, 'interaction_id', new_id); END;",
-    "raises": [],
+    "body": "DECLARE actor_id uuid := auth.uid(); target_id uuid; interaction_type text; summary text; new_id uuid; BEGIN IF actor_id IS NULL THEN RAISE EXCEPTION 'Authentication required' USING ERRCODE = '42501'; END IF; IF jsonb_typeof(p_contact_interaction) IS DISTINCT FROM 'object' OR jsonb_typeof(p_contact_interaction -> 'contact_id') IS DISTINCT FROM 'string' OR jsonb_typeof(p_contact_interaction -> 'tipo') IS DISTINCT FROM 'string' OR jsonb_typeof(p_contact_interaction -> 'resumo') IS DISTINCT FROM 'string' THEN RAISE EXCEPTION 'Invalid interaction' USING ERRCODE = '22023'; END IF; IF EXISTS (SELECT 1 FROM jsonb_object_keys(p_contact_interaction) AS k(key) WHERE key NOT IN ('contact_id', 'tipo', ' …",
+    "raises": [
+     "Authentication required",
+     "Invalid interaction",
+     "Invalid interaction",
+     "Invalid interaction",
+     "Contact unavailable"
+    ],
     "tables": [
+     "contacts",
      "interactions",
+     "jsonb_object_keys",
      "new_id"
     ]
    },
@@ -141289,6 +141459,31 @@
     "function": "guard_contact_relation_write",
     "msg": "Contact relation write forbidden",
     "src": "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql"
+   },
+   {
+    "function": "create_quick_interaction",
+    "msg": "Authentication required",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
+   },
+   {
+    "function": "create_quick_interaction",
+    "msg": "Invalid interaction",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
+   },
+   {
+    "function": "create_quick_interaction",
+    "msg": "Invalid interaction",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
+   },
+   {
+    "function": "create_quick_interaction",
+    "msg": "Invalid interaction",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
+   },
+   {
+    "function": "create_quick_interaction",
+    "msg": "Contact unavailable",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
    },
    {
     "function": "cleanup_cron_job_run_details",
@@ -144969,6 +145164,7 @@
       "compara:src/pages/Documentos.tsx",
       "compara:src/pages/NPS.tsx",
       "compara:src/pages/admin/AdminSegurancaPage.tsx",
+      "compara:supabase/functions/_shared/webhook-dlq-contract_test.ts",
       "compara:supabase/functions/get-signature/index.ts",
       "compara:supabase/functions/validation-queue-worker/index.ts",
       "escreve:src/components/crm/CRMAutomationAuditLog.tsx",
@@ -144991,6 +145187,7 @@
       "escreve:src/pages/tarefas/TaskDetailDrawer.tsx",
       "escreve:supabase/functions/_shared/edge-types-contract_test.ts",
       "escreve:supabase/functions/_shared/notification-delivery_test.ts",
+      "escreve:supabase/functions/_shared/webhook-dlq-contract_test.ts",
       "escreve:supabase/functions/bulk-revalidate/index.ts",
       "escreve:supabase/functions/conversation-analyzer/index.ts",
       "escreve:supabase/functions/evolution-webhook/messages.ts",
@@ -145091,6 +145288,7 @@
       "compara:src/pages/SmsMarketing.tsx",
       "compara:supabase/functions/_shared/sequence-contract_test.ts",
       "escreve:src/hooks/commercial/useSocialSync.ts",
+      "escreve:supabase/functions/_shared/webhook-dlq-contract_test.ts",
       "escreve:supabase/functions/crm-automation-monitor/index.ts",
       "escreve:supabase/functions/nurturing-runner/index.ts",
       "escreve:supabase/functions/process-webhook-dlq/index.ts",
@@ -145189,10 +145387,13 @@
       "compara:src/hooks/useLuxIntelligence.ts",
       "compara:src/pages/ContatoDetalhe.tsx",
       "compara:src/pages/EmpresaDetalhe.tsx",
+      "compara:supabase/functions/_shared/edge-types-contract_test.ts",
+      "compara:supabase/functions/_shared/webhook-dlq-contract_test.ts",
       "escreve:supabase/functions/lux-trigger/index.ts",
       "escreve:supabase/functions/process-webhook-dlq/index.ts",
       "escreve:supabase/functions/smart-notify/index.ts",
       "escreve:supabase/functions/sync-social-interests/index.ts",
+      "filtra:supabase/functions/process-webhook-dlq/index.ts",
       "filtra:supabase/functions/validation-queue-worker/index.ts"
      ],
      "granted": [
@@ -145453,10 +145654,12 @@
      ],
      "abandoned": [
       "escreve:supabase/functions/_shared/edge-types-contract_test.ts",
+      "escreve:supabase/functions/_shared/webhook-dlq-contract_test.ts",
       "escreve:supabase/functions/process-webhook-dlq/index.ts"
      ],
      "succeeded": [
       "escreve:supabase/functions/_shared/edge-types-contract_test.ts",
+      "escreve:supabase/functions/_shared/webhook-dlq-contract_test.ts",
       "escreve:supabase/functions/process-webhook-dlq/index.ts"
      ],
      "invalid": [
@@ -158910,6 +159113,22 @@
     "objkind": "function",
     "roles": "PUBLIC, anon, authenticated, service_role",
     "src": "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "create_quick_interaction",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "create_quick_interaction",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261028224000_contact_quick_interaction.sql"
    },
    {
     "kind": "revoke",
@@ -174018,9 +174237,24 @@
     }
    ]
   },
+  "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx": {
+   "path": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
+   "lines": 155,
+   "is_test": true,
+   "tests": [
+    "Registro da próxima ação com contrato de contato",
+    "registra %s no contato, sem inventar empresa",
+    "não anuncia sucesso sem a confirmação correta: %j",
+    "preserva o resumo quando o banco rejeita a chamada",
+    "não envia resumo vazio",
+    "não envia sem usuário autenticado",
+    "bloqueia Enter repetido enquanto aguarda a confirmação",
+    "uma confirmação atrasada não apaga o rascunho de outro contato"
+   ]
+  },
   "src/components/ficha-360/ProximaAcaoCTA.tsx": {
    "path": "src/components/ficha-360/ProximaAcaoCTA.tsx",
-   "lines": 325,
+   "lines": 340,
    "exports": [
     "const ProximaAcaoCTA"
    ],
@@ -194232,7 +194466,7 @@
   },
   "src/hooks/useInteractionsRpc.ts": {
    "path": "src/hooks/useInteractionsRpc.ts",
-   "lines": 207,
+   "lines": 238,
    "exports": [
     "interface InteractionHistoryItem",
     "interface PendingFollowup",
@@ -194242,6 +194476,7 @@
     "function usePendingFollowups",
     "function useCompleteFollowup",
     "function useCreateQuickInteraction",
+    "function useCreateContactQuickInteraction",
     "function useActivityHeatmap",
     "function useOptimalContactWindows",
     "function useUnifiedCommunicationHistory"
@@ -194269,7 +194504,8 @@
     "Erro ao concluir follow-up",
     "Erro ao registrar interação",
     "Not authenticated",
-    "Não autenticado"
+    "Não autenticado",
+    "Usuário não autenticado"
    ],
    "rule_comments": [
     "A RPC canônica aceita somente p_company_id; contatos usam os mesmos campos reais."
@@ -194279,6 +194515,7 @@
     "usePendingFollowups",
     "useCompleteFollowup",
     "useCreateQuickInteraction",
+    "useCreateContactQuickInteraction",
     "useActivityHeatmap",
     "useOptimalContactWindows",
     "useUnifiedCommunicationHistory"
@@ -195361,7 +195598,7 @@
     {
      "name": "companyOverridesSchema",
      "kind": "object",
-     "body": "{ nome_crm: z.string().nullable(), cnpj: z.string().nullable(), industry: z.string().nullable(), website: z.string().nullable(), notes: z.string().nullable(), tags: z.array(z.string()).nullable(), }",
+     "body": "{ nome_crm: z.string().regex(/\\S/, 'Nome principal obrigatório'), cnpj: z.string().nullable(), industry: z.string().nullable(), website: z.string().nullable(), notes: z.string().nullable(), tags: z.array(z.string()).nullable(), }",
      "refines": [],
      "chain": []
     }
@@ -202237,6 +202474,16 @@
     "Relações da deduplicação",
     "divide IDs em lotes, pagina relações e encontra o primário após a primeira página",
     "não ignora falha no lote seguinte nem retorna relações incompletas"
+   ]
+  },
+  "src/hooks/__tests__/merge-company-name-override.test.tsx": {
+   "path": "src/hooks/__tests__/merge-company-name-override.test.tsx",
+   "lines": 48,
+   "is_test": true,
+   "tests": [
+    "DB-01: nome obrigatório no override de empresa",
+    "rejeita %j antes da RPC",
+    "preserva o payload válido %j sem normalização"
    ]
   },
   "src/hooks/__tests__/restore-response-contract.test.tsx": {
@@ -209921,7 +210168,7 @@
   },
   "supabase/functions/_shared/edge-types-contract_test.ts": {
    "path": "supabase/functions/_shared/edge-types-contract_test.ts",
-   "lines": 256,
+   "lines": 270,
    "errors": [
     "Consulta inesperada: ${table}",
     "Simulação de indisponibilidade"
@@ -209986,6 +210233,11 @@
      "field": "type",
      "value": "email",
      "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "processing",
+     "kind": "compara"
     }
    ]
   },
@@ -210861,6 +211113,42 @@
    "path": "supabase/functions/_shared/version-guard_test.ts",
    "lines": 63,
    "doc": "Teste unitário do helper `assertVersionMatch`. Garante o contrato do guard de optimistic locking: - Versão bateu (>=1 linha): retorna `null` → handler segue fluxo normal - Conflito (0 linhas): retorna `Response` 409 com payload JSON estruturado - Defensivo (não-array): retorna 409 ao invés de crasha …"
+  },
+  "supabase/functions/_shared/webhook-dlq-contract_test.ts": {
+   "path": "supabase/functions/_shared/webhook-dlq-contract_test.ts",
+   "lines": 191,
+   "status_values": [
+    {
+     "field": "status",
+     "value": "pending",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "failed",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "succeeded",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "abandoned",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "processing",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "pending",
+     "kind": "compara"
+    }
+   ]
   },
   "supabase/functions/_shared/webhook-signature.ts": {
    "path": "supabase/functions/_shared/webhook-signature.ts",
@@ -217381,15 +217669,11 @@
   },
   "supabase/functions/process-webhook-dlq/index.ts": {
    "path": "supabase/functions/process-webhook-dlq/index.ts",
-   "lines": 166,
+   "lines": 181,
    "tables": [
     {
      "table": "incoming_webhook_dlq",
      "op": "select"
-    },
-    {
-     "table": "incoming_webhook_dlq",
-     "op": "update"
     },
     {
      "table": "incoming_webhooks",
@@ -217397,19 +217681,11 @@
     },
     {
      "table": "incoming_webhook_dlq",
-     "op": "upsert"
+     "op": "select,update"
     },
     {
      "table": "incoming_webhook_dlq",
-     "op": "upsert"
-    },
-    {
-     "table": "incoming_webhook_dlq",
-     "op": "upsert"
-    },
-    {
-     "table": "incoming_webhook_dlq",
-     "op": "upsert"
+     "op": "select,update"
     }
    ],
    "table_cols": {
@@ -217457,12 +217733,12 @@
     },
     {
      "field": "status",
-     "value": "succeeded",
+     "value": "failed",
      "kind": "escreve"
     },
     {
      "field": "status",
-     "value": "succeeded",
+     "value": "failed",
      "kind": "escreve"
     },
     {
@@ -217498,6 +217774,16 @@
     {
      "field": "status",
      "value": "pending",
+     "kind": "filtra"
+    },
+    {
+     "field": "status",
+     "value": "pending",
+     "kind": "filtra"
+    },
+    {
+     "field": "status",
+     "value": "processing",
      "kind": "filtra"
     }
    ],
@@ -222572,6 +222858,10 @@
    "path": "supabase/migrations/20261013033434_restore_sequence_enrollment_relation.sql",
    "lines": 37
   },
+  "supabase/migrations/20261013033435_guard_company_merge_name.sql": {
+   "path": "supabase/migrations/20261013033435_guard_company_merge_name.sql",
+   "lines": 44
+  },
   "supabase/migrations/20261019144500_fix_sidebar_rpc_empresa_influencers.sql": {
    "path": "supabase/migrations/20261019144500_fix_sidebar_rpc_empresa_influencers.sql",
    "lines": 400,
@@ -222584,6 +222874,10 @@
     "admin"
    ],
    "uses_service_role": true
+  },
+  "supabase/migrations/20261028224000_contact_quick_interaction.sql": {
+   "path": "supabase/migrations/20261028224000_contact_quick_interaction.sql",
+   "lines": 61
   },
   "supabase/migrations/20261029120000_drop_update_company_fields.sql": {
    "path": "supabase/migrations/20261029120000_drop_update_company_fields.sql",
@@ -222950,6 +223244,10 @@
    "path": "tests/rls/live_rpc_relations_contract.sql",
    "lines": 127
   },
+  "tests/rls/merge_company_name_override.sql": {
+   "path": "tests/rls/merge_company_name_override.sql",
+   "lines": 103
+  },
   "tests/rls/merge_records_atomic.sql": {
    "path": "tests/rls/merge_records_atomic.sql",
    "lines": 371,
@@ -223170,10 +223468,71 @@
   }
  },
  "git": {
-  "sha": "77475499826534562324282e34d6cca326f0cce7",
+  "sha": "9836e3aefec585cacb3ada0f5f3c8762337fc998",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "9836e3a",
+    "date": "2026-11-08",
+    "author": "adm01-debug",
+    "subject": "feat(segurança): workflow para fechar verify_jwt nas 23 proxies externas (#176)",
+    "files": [
+     ".github/workflows/fix-jwt-proxies-externas.yml"
+    ]
+   },
+   {
+    "sha": "ac006d9",
+    "date": "2026-11-08",
+    "author": "adm01-debug",
+    "subject": "chore: instruções enxutas para agentes (#163)",
+    "files": [
+     "AGENTS.md",
+     "CLAUDE.md",
+     "docs/agentes/banco-edge-ci.md",
+     "docs/agentes/texto-mestre.md"
+    ]
+   },
+   {
+    "sha": "edf5b51",
+    "date": "2026-11-08",
+    "author": "devin-ai-integration[bot]",
+    "subject": "fix(ficha): registra interações pelo contrato de contato (#153)",
+    "files": [
+     "CHANGELOG.md",
+     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_CONTRATOS.md",
+     "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
+     "src/components/ficha-360/ProximaAcaoCTA.tsx",
+     "src/hooks/useInteractionsRpc.ts",
+     "supabase/migrations/20261028224000_contact_quick_interaction.sql"
+    ]
+   },
+   {
+    "sha": "1108672",
+    "date": "2026-11-08",
+    "author": "devin-ai-integration[bot]",
+    "subject": "fix(filas): confirma reservas e resultados da DLQ (#150)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "CHANGELOG.md",
+     "supabase/functions/_shared/edge-types-contract_test.ts",
+     "supabase/functions/_shared/webhook-dlq-contract_test.ts",
+     "supabase/functions/process-webhook-dlq/index.ts"
+    ]
+   },
+   {
+    "sha": "661cb41",
+    "date": "2026-11-08",
+    "author": "devin-ai-integration[bot]",
+    "subject": "fix(db): preserva o nome da empresa durante a mesclagem (#127)",
+    "files": [
+     "CHANGELOG.md",
+     "src/hooks/__tests__/merge-company-name-override.test.tsx",
+     "src/hooks/useMergeRecords.ts",
+     "supabase/migrations/20261013033435_guard_company_merge_name.sql",
+     "tests/rls/merge_company_name_override.sql"
+    ]
+   },
    {
     "sha": "7747549",
     "date": "2026-11-08",
@@ -223496,70 +223855,12 @@
      "src/pages/ContatoDetalhe.errors.test.tsx",
      "src/pages/ContatoDetalhe.tsx"
     ]
-   },
-   {
-    "sha": "d85622d",
-    "date": "2026-10-29",
-    "author": "dependabot[bot]",
-    "subject": "build(deps): Bump the minor-and-patch group across 1 directory with 36 updates (#138)",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
-   },
-   {
-    "sha": "22882c7",
-    "date": "2026-10-29",
-    "author": "adm01-debug",
-    "subject": "docs: confirma bloqueio definitivo billing GitHub Actions (4 runs queued)",
-    "files": [
-     "PENDENCIAS.md",
-     "RELATORIO_CI.md"
-    ]
-   },
-   {
-    "sha": "e5562ef",
-    "date": "2026-10-29",
-    "author": "adm01-debug",
-    "subject": "docs: RELATORIO_CI.md e PENDENCIAS.md pós-correção PR #136",
-    "files": [
-     "PENDENCIAS.md",
-     "RELATORIO_CI.md"
-    ]
-   },
-   {
-    "sha": "7566982",
-    "date": "2026-10-29",
-    "author": "adm01-debug",
-    "subject": "fix(security): remove update_company_fields sem chamador (DEFINER com UPDATE dinâmico)",
-    "files": [
-     "supabase/migrations/20261029120000_drop_update_company_fields.sql"
-    ]
-   },
-   {
-    "sha": "a74c372",
-    "date": "2026-10-29",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(gates): rejeita coletas incompletas de RLS e publicação (#126)",
-    "files": [
-     ".github/workflows/ci.yml",
-     ".github/workflows/rls-exposure-guard.yml",
-     "CHANGELOG.md",
-     "docs/MIGRATION_EDGE_FUNCTIONS.md",
-     "docs/MIGRATION_MASTER_RUNBOOK.md",
-     "scripts/check-deploy-timeout.test.mjs",
-     "scripts/check-publish-gates.test.mjs",
-     "scripts/check-rls-profiles.test.mjs",
-     "scripts/migration/functions/verify-deploy.sh",
-     "scripts/rls-matrix/README.md",
-     "scripts/rls-matrix/check-rls-baseline.mjs"
-    ]
    }
   ],
   "hot_files": [
    [
     "CHANGELOG.md",
-    6
+    8
    ],
    [
     ".github/workflows/ci.yml",
@@ -223570,15 +223871,15 @@
     3
    ],
    [
-    "package.json",
-    3
+    "AGENTS.md",
+    2
    ],
    [
-    ".github/workflows/rls-exposure-guard.yml",
-    3
+    "CLAUDE.md",
+    2
    ],
    [
-    "scripts/rls-matrix/check-rls-baseline.mjs",
+    "docs/lacunas/MATRIZ_RECONCILIADA_20261012_CONTRATOS.md",
     2
    ],
    [
@@ -223614,15 +223915,7 @@
     2
    ],
    [
-    "scripts/check-deploy-timeout.test.mjs",
-    2
-   ],
-   [
-    "scripts/check-publish-gates.test.mjs",
-    2
-   ],
-   [
-    "scripts/check-rls-profiles.test.mjs",
+    "package.json",
     2
    ],
    [
@@ -223630,12 +223923,20 @@
     2
    ],
    [
-    "package-lock.json",
+    ".github/workflows/rls-exposure-guard.yml",
     2
    ],
    [
-    "PENDENCIAS.md",
-    2
+    ".github/workflows/fix-jwt-proxies-externas.yml",
+    1
+   ],
+   [
+    "docs/agentes/banco-edge-ci.md",
+    1
+   ],
+   [
+    "docs/agentes/texto-mestre.md",
+    1
    ]
   ]
  }

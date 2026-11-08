@@ -3,13 +3,13 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2023)",
-   "SQL (642)",
-   "Markdown (148)",
+   "TypeScript (2026)",
+   "SQL (645)",
+   "Markdown (150)",
    "Shell (70)",
    "JavaScript (42)",
    "JSON (14)",
-   "YAML (12)",
+   "YAML (13)",
    "Python (10)"
   ],
   "linguagem_principal": "TypeScript",
@@ -210,6 +210,25 @@
    ]
   },
   {
+   "arquivo": ".github/workflows/fix-jwt-proxies-externas.yml",
+   "nome": "Fix JWT proxies externas",
+   "gatilhos": [
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "fix-verify-jwt"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "actions": []
+  },
+  {
    "arquivo": ".github/workflows/inventario-estado-semanal.yml",
    "nome": "Inventário do estado real (semanal)",
    "gatilhos": [
@@ -346,7 +365,7 @@
   {
    "arquivo": "AGENTS.md",
    "titulo": "AGENTS.md — Singu_V2",
-   "linhas": 223
+   "linhas": 74
   },
   {
    "arquivo": "ARCHITECTURE.md",
@@ -366,12 +385,12 @@
   {
    "arquivo": "CHANGELOG.md",
    "titulo": "Changelog",
-   "linhas": 411
+   "linhas": 417
   },
   {
    "arquivo": "CLAUDE.md",
-   "titulo": "CLAUDE.md — Singu_V2",
-   "linhas": 4
+   "titulo": null,
+   "linhas": 2
   },
   {
    "arquivo": "CONTRIBUTING.md",
@@ -642,7 +661,7 @@
   },
   {
    "pasta": "docs/agentes",
-   "arquivos_md": 2
+   "arquivos_md": 4
   },
   {
    "pasta": "docs/contexto",
@@ -819,15 +838,15 @@
     "arquivos": 4
    },
    {
+    "host": "test.supabase.co",
+    "arquivos": 4
+   },
+   {
     "host": "api.firecrawl.dev",
     "arquivos": 3
    },
    {
     "host": "singu-v2.vercel.app",
-    "arquivos": 3
-   },
-   {
-    "host": "test.supabase.co",
     "arquivos": 3
    },
    {

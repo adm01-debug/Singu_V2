@@ -5,21 +5,21 @@
   "vitest",
   "playwright"
  ],
- "total": 210,
+ "total": 212,
  "por_tipo": {
-  "contrato": 37,
+  "contrato": 38,
   "e2e": 12,
   "pytest": 2,
-  "unit": 157
+  "unit": 158
  },
  "onde_ficam": [
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 88
+   "arquivos": 89
   },
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 88
+   "arquivos": 89
   },
   {
    "padrao": "tests/",
@@ -341,6 +341,15 @@
     "src/lib/externalData.ts"
    ],
    "casos": 2
+  },
+  {
+   "arquivo": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 155,
+   "testa": [
+    "src/components/ficha-360/ProximaAcaoCTA.tsx"
+   ],
+   "casos": 7
   },
   {
    "arquivo": "src/components/forms/company/CompanyFormSchema.contract.test.ts",
@@ -1070,6 +1079,15 @@
     "src/hooks/useDedupEngine.ts"
    ],
    "casos": 3
+  },
+  {
+   "arquivo": "src/hooks/__tests__/merge-company-name-override.test.tsx",
+   "tipo": "unit",
+   "linhas": 48,
+   "testa": [
+    "src/hooks/useMergeRecords.ts"
+   ],
+   "casos": 2
   },
   {
    "arquivo": "src/hooks/__tests__/restore-response-contract.test.tsx",
@@ -1947,6 +1965,7 @@
   "src/components/dashboard/YourDaySection.tsx": 1,
   "src/components/dashboard/widgets/PendingFollowupsWidget.tsx": 1,
   "src/components/erp/CompanyErpProposalsWidget.tsx": 1,
+  "src/components/ficha-360/ProximaAcaoCTA.tsx": 1,
   "src/components/forms/CompanyForm.tsx": 1,
   "src/components/forms/company/CompanyFormSchema.ts": 2,
   "src/components/interactions/ActiveFiltersBar.tsx": 1,
@@ -2040,7 +2059,7 @@
   "src/hooks/useInteractionsRpc.ts": 3,
   "src/hooks/useIsAdmin.ts": 1,
   "src/hooks/useLuxWebhookConfig.ts": 2,
-  "src/hooks/useMergeRecords.ts": 1,
+  "src/hooks/useMergeRecords.ts": 2,
   "src/hooks/useModalHistory.ts": 2,
   "src/hooks/useNextBestAction.ts": 2,
   "src/hooks/useNpsSurveys.ts": 3,

@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7747549982` · branch `main` · 2026-11-08 19:33 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `9836e3aefe` · branch `main` · 2026-11-08 19:50 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -714,7 +714,7 @@ Middleware matcher (Next.js): nenhum
 | grant | anon, authenticated | execute | `get_deal_room_by_token`, `record_buyer_view`, `buyer_toggle_milestone`, `buyer_add_comment`, `get_buyer_document_path`, `increment_magnet_view`, `track_magnet_download`, `increment_form_view`, `submit_public_form` |
 | grant | anon, authenticated | select | `csat_surveys_public`, `forms_public`, `landing_pages_public`, `document_signatures_public` |
 | grant | anon, authenticated, service_role | execute | `get_public_csat_survey`, `submit_public_csat_survey`, `increment_landing_page_view`, `get_public_csat_survey`, `submit_public_csat_survey` |
-| grant | authenticated | execute | `seed_deal_room`, `encrypt_connection_config`, `decrypt_connection_config`, `get_connection_metrics`, `compute_attribution`, `check_relationship_consistency`, `get_contact_behavior_gaps`, `validate_behavioral_consistency`, `get_contact_framework_gaps`, `get_contact_life_event_gaps`, `get_connection_metrics`, `seed_conversation_topics`, `compute_account_health`, `cs_renewal_pipeline`, `seed_forecast_period` … +32 |
+| grant | authenticated | execute | `seed_deal_room`, `encrypt_connection_config`, `decrypt_connection_config`, `get_connection_metrics`, `compute_attribution`, `check_relationship_consistency`, `get_contact_behavior_gaps`, `validate_behavioral_consistency`, `get_contact_framework_gaps`, `get_contact_life_event_gaps`, `get_connection_metrics`, `seed_conversation_topics`, `compute_account_health`, `cs_renewal_pipeline`, `seed_forecast_period` … +33 |
 | grant | authenticated | select | `v_life_events_audit`, `slow_queries_audit`, `v_entities`, `behavioral_profile_regen_queue`, `contact_analytical_profile_versions`, `system_config`, `document_signatures_public`, `csat_surveys_public`, `data_retention_policies`, `ai_gateway_metrics`, `rpc_perf_samples`, `rpc_plan_snapshots`, `rpc_perf_samples`, `rpc_plan_snapshots`, `sequence_email_reservations` |
 | grant | authenticated | select, insert | `audit_log`, `rfm_history` |
 | grant | authenticated | select, insert, update | `migration_password_reset_log` |
@@ -727,7 +727,7 @@ Middleware matcher (Next.js): nenhum
 | grant | service_role, authenticated | execute | `ensure_audit_log_partition`, `ensure_audit_log_partition` |
 | revoke | PUBLIC | all | `get_connection_metrics`, `cleanup_behavioral_regen_queue`, `cleanup_simulated_alerts`, `assert_self_user_id`, `assert_self_user_id`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `record_rpc_perf_sample`, `get_rpc_perf_stats`, `cleanup_rpc_perf_samples`, `get_top_slow_rpcs` … +10 |
 | revoke | PUBLIC | execute | `execute_readonly_query`, `handle_new_user`, `publish_mtta_sla_breach_alert`, `execute_readonly_query`, `claim_validation_batch`, `claim_regen_batch`, `net` |
-| revoke | PUBLIC, anon | all | `auto_ack_stale_mtta_sla_breaches`, `get_system_config_num`, `assert_company_access`, `assert_contact_access`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_visit_access`, `assert_notification_access`, `assert_proposal_access`, `assert_goal_access`, `assert_violation_access` … +20 |
+| revoke | PUBLIC, anon | all | `auto_ack_stale_mtta_sla_breaches`, `get_system_config_num`, `assert_company_access`, `assert_contact_access`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_visit_access`, `assert_notification_access`, `assert_proposal_access`, `assert_goal_access`, `assert_violation_access` … +21 |
 | revoke | PUBLIC, anon | execute | `ensure_audit_log_partition`, `ensure_audit_log_partition`, `get_ai_gateway_health` |
 | revoke | PUBLIC, anon, authenticated | all | `_connection_encryption_key`, `check_mtta_auto_ack_heartbeat`, `assert_alert_access`, `assert_cadence_access`, `assert_company_access`, `assert_contact_access`, `assert_customer_access`, `assert_deal_access`, `assert_event_access`, `assert_goal_access`, `assert_interaction_access`, `assert_note_access`, `assert_notification_access`, `assert_opportunity_access`, `assert_proposal_access` … +67 |
 | revoke | PUBLIC, anon, authenticated | execute | `evaluate_ai_gateway_alerts` |

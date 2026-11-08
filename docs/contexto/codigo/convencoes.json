@@ -22,8 +22,8 @@
    "src/domain (8)"
   ],
   "testes": [
-   "co-localizado (*.test) (88)",
-   "co-localizado (__tests__) (88)",
+   "co-localizado (*.test) (89)",
+   "co-localizado (__tests__) (89)",
    "tests/ (22)"
   ],
   "edge_functions": "supabase/functions",
@@ -58,11 +58,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
-   "fix(contatos): atualiza a ficha e preserva aniversários locais (#125)",
-   "fix(ci): retry rls-baseline em http 500 transitório (57014 lock contention)",
-   "feat(db): agenda retenção de 7 dias no histórico do pg_cron",
-   "chore(inventario): cataloga as 43 edge functions de outro sistema",
-   "feat(inventario): liga a conferência deployada × versionada das edge functions"
+   "feat(segurança): workflow para fechar verify_jwt nas 23 proxies externas (#176)",
+   "chore: instruções enxutas para agentes (#163)",
+   "fix(ficha): registra interações pelo contrato de contato (#153)",
+   "fix(filas): confirma reservas e resultados da DLQ (#150)",
+   "fix(db): preserva o nome da empresa durante a mesclagem (#127)"
   ]
  },
  "pr_template": null,

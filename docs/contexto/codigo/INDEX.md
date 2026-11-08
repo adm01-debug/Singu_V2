@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `77475499826534562324282e34d6cca326f0cce7` (2026-11-08T16:31:44-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `9836e3aefec585cacb3ada0f5f3c8762337fc998` (2026-11-08T16:34:43-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2023), SQL (642), Markdown (148), Shell (70), JavaScript (42), JSON (14), YAML (12), Python (10)
+- linguagens: TypeScript (2026), SQL (645), Markdown (150), Shell (70), JavaScript (42), JSON (14), YAML (13), Python (10)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,9 +34,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 2984 |
-| arquivos_codigo | 2074 |
-| linhas_codigo | 388841 |
+| arquivos_total | 2993 |
+| arquivos_codigo | 2077 |
+| linhas_codigo | 389310 |
 | rotas | 114 |
 | rotas_http_backend | 12 |
 | vistas_por_id | 0 |
@@ -46,19 +46,19 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 408 |
 | edge_functions | 108 |
 | tabelas | 418 |
-| migrations | 476 |
+| migrations | 478 |
 | cron_jobs | 20 |
-| testes | 210 |
-| workflows | 6 |
+| testes | 212 |
+| workflows | 7 |
 | scripts | 213 |
-| docs_md | 148 |
+| docs_md | 150 |
 
 ## Onde ficam as coisas
 - telas: src/components (1), src/pages (1)
 - componentes: src/components (908), src/pages (140), src/app (4)
 - hooks: src/hooks (377), src/components (20), src/stores (5)
 - servicos_logica: src/lib (72), src/data (46), src/domain (8)
-- testes: co-localizado (*.test) (88), co-localizado (__tests__) (88), tests/ (22)
+- testes: co-localizado (*.test) (89), co-localizado (__tests__) (89), tests/ (22)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/migration (159), scripts/hardening (9), scripts/inventario (4)
@@ -69,14 +69,14 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Módulos (menu → domínio)
 | módulo | itens de menu | telas/rotas | arquivos | hooks locais | edges | tabelas |
 |---|---|---|---|---|---|---|
-| app | 0 | 0 | 6 | 637 | 68 | 228 |
+| app | 0 | 0 | 6 | 638 | 68 | 228 |
 | components/abm | 0 | 0 | 8 | 19 | 2 | 6 |
 | components/admin | 0 | 0 | 44 | 35 | 12 | 19 |
 | components/analytics | 0 | 0 | 42 | 79 | 2 | 26 |
 | components/bi | 0 | 0 | 5 | 20 | 2 | 6 |
 | components/carnegie | 0 | 0 | 12 | 1 | 0 | 0 |
 | components/companies | 0 | 0 | 5 | 7 | 1 | 2 |
-| components/company-detail | 0 | 0 | 29 | 65 | 2 | 11 |
+| components/company-detail | 0 | 0 | 29 | 66 | 2 | 11 |
 | components/contact-detail | 0 | 0 | 110 | 123 | 14 | 75 |
 | components/contacts | 0 | 0 | 10 | 15 | 2 | 10 |
 | components/conversation-intel | 0 | 0 | 11 | 12 | 1 | 5 |
@@ -87,20 +87,20 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/disc | 0 | 0 | 9 | 5 | 0 | 5 |
 | components/enrichment | 0 | 0 | 11 | 25 | 4 | 15 |
 | components/feedback | 0 | 0 | 16 | 9 | 0 | 1 |
-| components/ficha-360 | 0 | 0 | 36 | 48 | 4 | 14 |
+| components/ficha-360 | 0 | 0 | 36 | 49 | 4 | 14 |
 | components/forecasting | 0 | 0 | 9 | 14 | 2 | 5 |
 | components/forms | 0 | 0 | 17 | 23 | 3 | 11 |
 | components/gamification | 0 | 0 | 5 | 8 | 1 | 2 |
 | components/intel | 0 | 0 | 34 | 13 | 1 | 4 |
 | components/intelligence | 0 | 0 | 5 | 15 | 2 | 7 |
 | components/intent | 0 | 0 | 5 | 11 | 2 | 4 |
-| components/interactions | 0 | 0 | 42 | 43 | 3 | 17 |
-| components/layout | 0 | 0 | 6 | 306 | 24 | 89 |
+| components/interactions | 0 | 0 | 42 | 44 | 3 | 17 |
+| components/layout | 0 | 0 | 6 | 307 | 24 | 89 |
 | components/lead-routing | 0 | 0 | 6 | 16 | 0 | 10 |
 | components/lead-scoring | 0 | 0 | 13 | 17 | 1 | 7 |
 | components/lux | 0 | 0 | 6 | 3 | 1 | 3 |
 | components/micro-interactions | 0 | 0 | 6 | 0 | 0 | 0 |
-| components/navigation | 0 | 0 | 12 | 306 | 24 | 89 |
+| components/navigation | 0 | 0 | 12 | 307 | 24 | 89 |
 | components/neuromarketing | 0 | 0 | 17 | 1 | 0 | 0 |
 | components/nlp | 0 | 0 | 33 | 10 | 2 | 9 |
 | components/onboarding | 0 | 0 | 8 | 5 | 0 | 3 |
@@ -117,11 +117,11 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/win-loss | 0 | 0 | 8 | 17 | 1 | 5 |
 | data | 0 | 0 | 46 | 3 | 0 | 6 |
 | domain | 0 | 0 | 8 | 1 | 1 | 2 |
-| hooks | 0 | 0 | 375 | 628 | 53 | 206 |
+| hooks | 0 | 0 | 375 | 629 | 53 | 206 |
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
 | lib | 0 | 0 | 68 | 16 | 2 | 13 |
-| pages | 2 | 1 | 105 | 614 | 66 | 222 |
-| pages/admin | 0 | 0 | 9 | 322 | 26 | 96 |
+| pages | 2 | 1 | 105 | 615 | 66 | 222 |
+| pages/admin | 0 | 0 | 9 | 323 | 26 | 96 |
 | pages/mapa | 0 | 0 | 5 | 5 | 1 | 4 |
 | stores | 0 | 0 | 5 | 1 | 0 | 0 |
 | types | 0 | 0 | 20 | 0 | 0 | 0 |
@@ -393,7 +393,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 
 ## Integrações externas
 - SDKs: ElevenLabs, Supabase, react-query, zod
-- hosts mais citados: ai.gateway.lovable.dev, canonical.supabase.co, example.test, api.elevenlabs.io, wa.me, example.invalid, api.firecrawl.dev, singu-v2.vercel.app, test.supabase.co, cdnjs.cloudflare.com, dialogue-diamond.lovable.app, fixture.invalid, instagram.com, provider.example.test, supabase.example.test
+- hosts mais citados: ai.gateway.lovable.dev, canonical.supabase.co, example.test, api.elevenlabs.io, wa.me, example.invalid, test.supabase.co, api.firecrawl.dev, singu-v2.vercel.app, cdnjs.cloudflare.com, dialogue-diamond.lovable.app, fixture.invalid, instagram.com, provider.example.test, supabase.example.test
 - webhooks recebidos: nenhum
 - env de integração (só nomes): BITRIX_APPLICATION_TOKEN, BITRIX_CLIENT_ID, BITRIX_CLIENT_SECRET, BITRIX_WEBHOOK_URL, CRON_SECRET, ELEVENLABS_API_KEY, ENRICHLAYER_API_KEY, EVOLUTION_API_KEY, EVOLUTION_API_URL, EVOLUTION_BITRIX_CONNECTOR_URL, EVOLUTION_INSTANCE_NAME, EVOLUTION_WEBHOOK_SECRET, FIRECRAWL_API_KEY, LOVABLE_API_KEY, N8N_LUX_WEBHOOK_URL, TWILIO_API_KEY
 
@@ -421,14 +421,14 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 4 — ex.: scripts/ai-context/cenarios.mjs:102, supabase/functions/_shared/auth_test.ts:61, supabase/functions/_shared/auth_test.ts:68
 
 ## Grafo de código (graphify)
-- 18945 nós · 30973 arestas · 2016 comunidades · grafo do commit `77475499`
-- comunidades maiores: ref_hooks (276), ref_types (271), _shared/auth.ts (264), ref_lib (249), lucide-react (237), useAuth (235), 📖 Dicionário de Dados — SINGU CRM (232), framer-motion (231), react-router-dom (220), react (206), ref_components (206), date-fns (205)
+- 18980 nós · 31028 arestas · 2082 comunidades · grafo do commit `9836e3ae`
+- comunidades maiores: @tanstack/react-query (308), _shared/auth.ts (233), 📖 Dicionário de Dados — SINGU CRM (232), framer-motion (212), react (204), ref_hooks (188), react-router-dom (187), ref_components (174), date-fns (172), ref_lib (170), lucide-react (162), vitest (147)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), jsonError() (supabase/functions/_shared/auth.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), uniq() (scripts/ai-context/gerar.mjs), readText() (scripts/ai-context/gerar.mjs), md_table() (scripts/regras_negocio/generate.py), function() (scripts/supabase_snapshot/test_snapshot.py), getContactBehavior() (src/lib/contact-utils.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
 ## Hotspots (arquivos mais alterados, 90 dias)
-- CHANGELOG.md (43)
-- .github/workflows/ci.yml (16)
+- CHANGELOG.md (46)
+- .github/workflows/ci.yml (17)
 - supabase/functions/external-data/index.ts (15)
 - package.json (14)
 - package-lock.json (11)
@@ -446,6 +446,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Workflows
 - `ci.yml` — CI (pull_request, push)
 - `contexto.yml` — Contexto para agentes de IA (10 min) (push, schedule, workflow_dispatch; cron 3-59/10 * * * *)
+- `fix-jwt-proxies-externas.yml` — Fix JWT proxies externas (workflow_dispatch)
 - `inventario-estado-semanal.yml` — Inventário do estado real (semanal) (schedule, workflow_dispatch; cron 23 10 * * 1)
 - `monitoring-lint.yml` — monitoring-lint (pull_request, push)
 - `restore-drill.yml` — Teste de restauração lógica (pull_request, workflow_dispatch)
@@ -475,12 +476,12 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `contexto:indice`: `python3 scripts/regras_negocio/indice.py --repo . --out docs/contexto/00-INDEX.md --remote adm01-debug/Singu_V2 --fonte "banco real=docs/contexto/supabase" --fonte "código=docs/contexto/codigo" --fonte "regras de negócio=docs/contexto/regras"`
 
 ## Documentos (raiz e docs/)
-- `AGENTS.md` — AGENTS.md — Singu_V2 (223 linhas)
+- `AGENTS.md` — AGENTS.md — Singu_V2 (74 linhas)
 - `ARCHITECTURE.md` — Arquitetura do SINGU CRM (150 linhas)
 - `AUDITORIA_COMPLETA_SISTEMA.md` — AUDITORIA COMPLETA DO SISTEMA SINGU CRM v2 (425 linhas)
 - `AUDITORIA_SISTEMA.md` — 🔍 AUDITORIA EXAUSTIVA — SINGU CRM (307 linhas)
-- `CHANGELOG.md` — Changelog (411 linhas)
-- `CLAUDE.md` — CLAUDE.md — Singu_V2 (4 linhas)
+- `CHANGELOG.md` — Changelog (417 linhas)
+- `CLAUDE.md` (2 linhas)
 - `CONTRIBUTING.md` — Guia de Contribuição — SINGU CRM (179 linhas)
 - `ESTADO_ATUAL.md` — ESTADO ATUAL DO SISTEMA — SINGU CRM v2 (372 linhas)
 - `FIELD_MAPPING.md` — Mapeamento Campo-a-Campo: Banco Local ↔ Banco Externo (288 linhas)
@@ -530,10 +531,15 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `docs/postmortem-example.md` — Post-Mortem — Indisponibilidade parcial do salvamento de contatos (external-data) (99 linhas)
 - `docs/postmortem-template.md` — Post-Mortem — {Título do Incidente} (96 linhas)
 - `docs/ux_improvement_strategy.md` (73 linhas)
-- subpastas de docs/: docs/adr (25), docs/lacunas (17), docs/estado (12), docs/auditoria (8), docs/qa (8), docs/agentes (2), docs/contexto (2), docs/dr (2), docs/dr-drills (2), docs/runbooks (2), docs/perf (1)
+- subpastas de docs/: docs/adr (25), docs/lacunas (17), docs/estado (12), docs/auditoria (8), docs/qa (8), docs/agentes (4), docs/contexto (2), docs/dr (2), docs/dr-drills (2), docs/runbooks (2), docs/perf (1)
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-08 `9836e3ae` feat(segurança): workflow para fechar verify_jwt nas 23 proxies externas (#176)
+- 2026-11-08 `ac006d96` chore: instruções enxutas para agentes (#163)
+- 2026-11-08 `edf5b517` fix(ficha): registra interações pelo contrato de contato (#153)
+- 2026-11-08 `11086727` fix(filas): confirma reservas e resultados da DLQ (#150)
+- 2026-11-08 `661cb412` fix(db): preserva o nome da empresa durante a mesclagem (#127)
 - 2026-11-08 `77475499` fix(contatos): atualiza a ficha e preserva aniversários locais (#125)
 - 2026-11-08 `4ba71804` fix(ci): retry rls-baseline em http 500 transitório (57014 lock contention)
 - 2026-11-08 `33752b40` feat(db): agenda retenção de 7 dias no histórico do pg_cron
@@ -544,11 +550,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-08 `de99442c` feat(inventario): inventário semanal do estado real do banco e das edges, com PR automática (#170)
 - 2026-11-08 `77990bc3` feat(contexto): produtores autônomos que mantêm o estado real do repositório para agentes de IA (#169)
 - 2026-11-08 `01fc3928` fix(ci): corrige YAML fatal do CI, secret fantasma e portabilidade dos gate tests (#164)
-- 2026-11-07 `3e4b9701` feat: teste de auditoria de cobertura RLS (check-rls-coverage.sql) (#168)
-- 2026-11-07 `ab7efa8e` feat: scripts de verificação de índices/perf e hardening (auditoria read-only) (#167)
-- 2026-11-07 `f0aea23a` fix: corrige cast inválido de active_pid no replication-slot-idle-guard (#165)
-- 2026-11-07 `d8475aa3` fix: qualifica digest() com schema extensions no schema-freeze-guard (#166)
-- 2026-11-06 `f665f675` fix(ci): remove script injection no step de validação do título da PR (#162)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -2,11 +2,36 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "77475499826534562324282e34d6cca326f0cce7",
+  "commit": "9836e3aefec585cacb3ada0f5f3c8762337fc998",
   "branch": "main",
-  "data_commit": "2026-11-08T16:31:44-03:00",
+  "data_commit": "2026-11-08T16:34:43-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "9836e3ae",
+    "data": "2026-11-08",
+    "assunto": "feat(segurança): workflow para fechar verify_jwt nas 23 proxies externas (#176)"
+   },
+   {
+    "sha": "ac006d96",
+    "data": "2026-11-08",
+    "assunto": "chore: instruções enxutas para agentes (#163)"
+   },
+   {
+    "sha": "edf5b517",
+    "data": "2026-11-08",
+    "assunto": "fix(ficha): registra interações pelo contrato de contato (#153)"
+   },
+   {
+    "sha": "11086727",
+    "data": "2026-11-08",
+    "assunto": "fix(filas): confirma reservas e resultados da DLQ (#150)"
+   },
+   {
+    "sha": "661cb412",
+    "data": "2026-11-08",
+    "assunto": "fix(db): preserva o nome da empresa durante a mesclagem (#127)"
+   },
    {
     "sha": "77475499",
     "data": "2026-11-08",
@@ -106,46 +131,21 @@
     "sha": "738a2a40",
     "data": "2026-11-05",
     "assunto": "fix(webhook): preserva timestamps textuais do Evolution (#157)"
-   },
-   {
-    "sha": "8ed532a9",
-    "data": "2026-11-05",
-    "assunto": "chore: atualizar AGENTS.md com texto mestre"
-   },
-   {
-    "sha": "36786632",
-    "data": "2026-11-05",
-    "assunto": "build(deps): bump minor-and-patch dependencies"
-   },
-   {
-    "sha": "09ddc77a",
-    "data": "2026-10-31",
-    "assunto": "fix(segurança): serializa transferência e edição de relações (#143)"
-   },
-   {
-    "sha": "2b44ae7a",
-    "data": "2026-10-31",
-    "assunto": "fix(social): remove biografias fictícias e expõe falhas da consulta (#154)"
-   },
-   {
-    "sha": "f6123624",
-    "data": "2026-10-29",
-    "assunto": "fix(contatos): preserva ficha e recupera falhas da fonte externa (#149)"
    }
   ],
-  "arquivos_mudados_7d": 78,
+  "arquivos_mudados_7d": 93,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "CHANGELOG.md",
-    "mudancas": 39
+    "mudancas": 42
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 28
+    "mudancas": 30
    },
    {
     "pasta": "src/hooks/__tests__",
-    "mudancas": 25
+    "mudancas": 26
    },
    {
     "pasta": "src/components/contact-detail",
@@ -153,7 +153,7 @@
    },
    {
     "pasta": ".github/workflows/ci.yml",
-    "mudancas": 13
+    "mudancas": 14
    },
    {
     "pasta": "supabase/functions/external-data",
@@ -199,11 +199,11 @@
   "arquivos_mais_mudados_90d": [
    {
     "arquivo": "CHANGELOG.md",
-    "mudancas": 43
+    "mudancas": 46
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 16
+    "mudancas": 17
    },
    {
     "arquivo": "supabase/functions/external-data/index.ts",
@@ -301,11 +301,11 @@
   "autores_30d": [
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 42
+    "commits": 45
    },
    {
     "autor": "adm01-debug",
-    "commits": 32
+    "commits": 34
    },
    {
     "autor": "dependabot[bot]",
@@ -318,9 +318,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 2984,
-  "arquivos_codigo": 2074,
-  "linhas_codigo": 388841,
+  "arquivos_total": 2993,
+  "arquivos_codigo": 2077,
+  "linhas_codigo": 389310,
   "rotas": 114,
   "rotas_http_backend": 12,
   "vistas_por_id": 0,
@@ -330,12 +330,12 @@
   "hooks": 408,
   "edge_functions": 108,
   "tabelas": 418,
-  "migrations": 476,
+  "migrations": 478,
   "cron_jobs": 20,
-  "testes": 210,
-  "workflows": 6,
+  "testes": 212,
+  "workflows": 7,
   "scripts": 213,
-  "docs_md": 148
+  "docs_md": 150
  },
  "por_pasta": {
   "commitlint.config.cjs": {
@@ -523,8 +523,8 @@
    "linhas": 589
   },
   "src/components": {
-   "arquivos": 983,
-   "linhas": 147857
+   "arquivos": 984,
+   "linhas": 148027
   },
   "src/config": {
    "arquivos": 1,
@@ -543,8 +543,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 433,
-   "linhas": 56755
+   "arquivos": 434,
+   "linhas": 56834
   },
   "src/integrations": {
    "arquivos": 3,
@@ -579,8 +579,8 @@
    "linhas": 5967
   },
   "supabase/functions": {
-   "arquivos": 169,
-   "linhas": 26099
+   "arquivos": 170,
+   "linhas": 26319
   },
   "tailwind.config.ts": {
    "arquivos": 1,

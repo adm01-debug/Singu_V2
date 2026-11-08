@@ -6253,13 +6253,14 @@
    "hooks_exportados": [
     "useActivityHeatmap",
     "useCompleteFollowup",
+    "useCreateContactQuickInteraction",
     "useCreateQuickInteraction",
     "useInteractionHistory",
     "useOptimalContactWindows",
     "usePendingFollowups",
     "useUnifiedCommunicationHistory"
    ],
-   "linhas": 207,
+   "linhas": 238,
    "dominio": "hooks",
    "tabelas": [
     "interactions"
@@ -6787,7 +6788,7 @@
     "src/components/contacts/MergeContactsDialog.tsx",
     "src/pages/Deduplicacao.tsx"
    ],
-   "coberto_por_testes": 1
+   "coberto_por_testes": 2
   },
   {
    "arquivo": "src/hooks/useMetaprogramAnalysis.ts",

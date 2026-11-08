@@ -8294,6 +8294,7 @@
   "src/hooks/useInteractionsRpc.ts": [
    "src/hooks/useAuth.tsx",
    "src/integrations/supabase/client.ts",
+   "src/integrations/supabase/types.ts",
    "src/lib/externalData.ts"
   ],
   "src/hooks/useIsAdmin.ts": [
@@ -10949,6 +10950,9 @@
   ],
   "supabase/functions/_shared/version-guard_test.ts": [
    "supabase/functions/_shared/version-guard.ts"
+  ],
+  "supabase/functions/_shared/webhook-dlq-contract_test.ts": [
+   "supabase/functions/_shared/edge-test-harness.ts"
   ],
   "supabase/functions/_shared/webhook-signature_test.ts": [
    "supabase/functions/_shared/webhook-signature.ts"

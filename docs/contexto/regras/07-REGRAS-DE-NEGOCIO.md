@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7747549982` · branch `main` · 2026-11-08 19:33 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `9836e3aefe` · branch `main` · 2026-11-08 19:50 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1010,6 +1010,11 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `enroll_lead_score_contact` | Inscrição indisponível | `supabase/migrations/20261013033433_sequence_write_fences.sql` |
 | `guard_contact_relation_write` | Contact relation write forbidden | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 | `guard_contact_relation_write` | Contact relation write forbidden | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
+| `create_quick_interaction` | Authentication required | `supabase/migrations/20261028224000_contact_quick_interaction.sql` |
+| `create_quick_interaction` | Invalid interaction | `supabase/migrations/20261028224000_contact_quick_interaction.sql` |
+| `create_quick_interaction` | Invalid interaction | `supabase/migrations/20261028224000_contact_quick_interaction.sql` |
+| `create_quick_interaction` | Invalid interaction | `supabase/migrations/20261028224000_contact_quick_interaction.sql` |
+| `create_quick_interaction` | Contact unavailable | `supabase/migrations/20261028224000_contact_quick_interaction.sql` |
 | `cleanup_cron_job_run_details` | retencao minima de 1 dia (recebido: %) | `supabase/migrations/20261108190000_cron_job_run_details_retention.sql` |
 
 ## E. Estados, máquinas de estado e transições
@@ -1395,7 +1400,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `PLAYED` | compara | `supabase/functions/evolution-webhook/messages.ts` |
 | `status` | `RASCUNHO` | compara, filtra | `src/components/lead-routing/tabs/RoutingRulesTab.tsx`<br>`src/hooks/useRodizioOndas.ts` |
 | `status` | `READ` | compara, escreve | `supabase/functions/_shared/evolution-dispatch-contract_test.ts`<br>`supabase/functions/evolution-webhook/messages.ts` |
-| `status` | `abandoned` | escreve | `supabase/functions/_shared/edge-types-contract_test.ts`<br>`supabase/functions/process-webhook-dlq/index.ts` |
+| `status` | `abandoned` | escreve | `supabase/functions/_shared/edge-types-contract_test.ts`<br>`supabase/functions/_shared/webhook-dlq-contract_test.ts`<br>`supabase/functions/process-webhook-dlq/index.ts` |
 | `status` | `accepted` | compara, escreve | `src/components/contact-detail/LifeEventsTab.tsx`<br>`src/components/crm/commercial/OfferSuggestionsElite.tsx` |
 | `status` | `active` | compara, escreve, filtra | `src/components/sequences/SequenceCard.tsx`<br>`src/components/sequences/SequenceDetailDrawer.tsx`<br>`src/hooks/useNurturingExecutions.ts`<br>`src/hooks/useNurturingWorkflows.ts`<br>`src/hooks/useSequences.ts`<br>… +6 |
 | `status` | `added` | compara, escreve | `src/components/admin/RpcPlanDiffDialog.tsx`<br>`src/components/intel/MetadataDiffPanel.tsx`<br>`src/components/search/PresetFiltersDiff.tsx` |
@@ -1864,7 +1869,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
   ```
 - **companyOverridesSchema** (`src/hooks/useMergeRecords.ts`, z.object):
   ```ts
-  { nome_crm: z.string().nullable(), cnpj: z.string().nullable(), industry: z.string().nullable(), website: z.string().nullable(), notes: z.string().nullable(), tags: z.array(z.string()).nullable(), }
+  { nome_crm: z.string().regex(/\S/, 'Nome principal obrigatório'), cnpj: z.string().nullable(), industry: z.string().nullable(), website: z.string().nullable(), notes: z.string().nullable(), tags: z.array(z.string()).nullable(), }
   ```
 - **generatedActionSchema** (`src/hooks/useNextBestAction.ts`, z.object):
   ```ts
@@ -4336,7 +4341,7 @@ _nenhum item encontrado_
 | Erro ao verificar templates | `src/components/triggers/TemplateNotificationSettings.tsx` |
 | Não foi possível ativar notificações push. Verifique as permissões do navegador. | `src/components/triggers/TemplateNotificationSettings.tsx` |
 | Selecione pelo menos um perfil DISC | `src/components/triggers/TemplateNotificationSettings.tsx` |
-| … +705 linhas — lista completa em `context.json` | |
+| … +706 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -4369,7 +4374,7 @@ _nenhum item encontrado_
 | `admin` | `tests/rls/contact_relations_owner_scope.sql` |
 | `admin` | `tests/rls/psychographic_matrix.sql` |
 
-## K. Testes como especificação (2623 testes em 195 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (2634 testes em 197 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4451,6 +4456,7 @@ _nenhum item encontrado_
 | `tests/e2e/hubs-smoke.spec.ts` | 9 | Hubs — smoke E2E (Rodada 50/10) · /abm redireciona anônimo para /auth · /abm/campanhas redireciona anônimo para /auth · /intent redireciona anônimo para /auth … |
 | `tests/e2e/navigation.spec.ts` | 9 | Autenticação e Navegação E2E · deve redirecionar usuário não autenticado para /auth · deve alternar entre Login e Cadastro no formulário · deve validar campos obrigatórios no login … |
 | `scripts/check-publish-gates.test.mjs` | 8 | RLS falha com ${scenario}, preservando baseline${update ?  · RLS aprova coleta completa e distingue negação SQL de JWT inválido · RLS continua detectando aumento de exposição · RLS permite atualizar baseline somente após coleta completa … |
+| `src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx` | 8 | Registro da próxima ação com contrato de contato · registra %s no contato, sem inventar empresa · não anuncia sucesso sem a confirmação correta: %j · preserva o resumo quando o banco rejeita a chamada … |
 | `src/components/interactions/__tests__/DateRangePopover.shortcut.test.tsx` | 8 | DateRangePopover · atalho Alt+D · chama applyDateRange(undefined, undefined) quando há datas aplicadas · aceita Alt+D em maiúsculas (case-insensitive) · é no-op silencioso quando não há datas aplicadas … |
 | `src/components/interactions/__tests__/DensityChips.test.tsx` | 8 | DensityChips · renderiza dois botões com aria-pressed correto (comfortable ativo) · renderiza com aria-pressed refletindo compact quando ativo · expõe role= … |
 | `src/data/__tests__/carnegieAppreciation.test.ts` | 8 | Carnegie Appreciation Templates · has at least 3 appreciation types · Type %s · has name … |
@@ -4526,6 +4532,7 @@ _nenhum item encontrado_
 | `src/hooks/useDailyKpis.test.tsx` | 3 | useDailyKpis · não consulta métricas globais para usuário comum · consulta métricas globais para administrador |
 | `src/hooks/useImportantDates.midnight.test.tsx` | 3 | calendário com as mesmas referências após mudança de dia · recalcula amanhã, hoje e o próximo ano por timer sem remontar · recalcula ao retomar uma aba suspensa por %s |
 | `src/hooks/__tests__/canonical-competitor-save-contract.test.tsx` | 3 | gravação de concorrentes · não grava quando a consulta prévia das métricas falha · confirma a criação sem depender de uma consulta posterior de métricas |
+| `src/hooks/__tests__/merge-company-name-override.test.tsx` | 3 | DB-01: nome obrigatório no override de empresa · rejeita %j antes da RPC · preserva o payload válido %j sem normalização |
 | `src/hooks/__tests__/restore-response-contract.test.tsx` | 3 | Desfazer usa o envelope do wrapper externo real, com transporte simulado · HTTP 200 com data=%j não confirma restauração · HTTP 200 com registro correspondente mantém o sucesso |
 | `src/lib/contactBehaviorAudit.test.ts` | 3 | Histórico comportamental canônico · preserva análises e validações humanas junto das alterações em ordem cronológica · expõe a falha de %s sem apresentar histórico parcial como completo |
 | `src/lib/externalData.rpc-errors.test.ts` | 3 | Erros de RPC no envelope HTTP 200 · não bloqueia outra RPC após três recusas de contrato (%s) · contabiliza indisponibilidade do banco e interrompe a quarta tentativa |
